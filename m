@@ -1,1338 +1,1011 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  9 Jul 2012 08:32:04 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-07-08
-Message-ID: <20120709063204.C957D52CE87@lolut.humanoidz.org>
+From: gregory hermant <gregory.hermant@calao-systems.com>
+Date: Mon, 09 Jul 2012 08:39:05 +0200
+Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems USB-A9263
+Message-ID: <4FFA7C89.4010505@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Hello,
-
-On 2012-07-08, 100 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 84 builds have been successful
- 16 builds have failed
-
-Build ce334c7be58a35e23fe27d531a4206ffaf6d0546
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 00:01:04
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/ce334c7be58a35e23fe27d531a4206ffaf6d0546/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ce334c7be58a35e23fe27d531a4206ffaf6d0546/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ce334c7be58a35e23fe27d531a4206ffaf6d0546/config
-Defconfig      : http://autobuild.buildroot.net/results/ce334c7be58a35e23fe27d531a4206ffaf6d0546/defconfig
-
-Build 676b8a76221106b4c5b5869079d630b136cc79db
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 00:04:06
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/676b8a76221106b4c5b5869079d630b136cc79db/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/676b8a76221106b4c5b5869079d630b136cc79db/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/676b8a76221106b4c5b5869079d630b136cc79db/config
-Defconfig      : http://autobuild.buildroot.net/results/676b8a76221106b4c5b5869079d630b136cc79db/defconfig
-
-Build c87ffeb1a6f5b87d1448954da2a0e27a46701507
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 00:32:50
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c87ffeb1a6f5b87d1448954da2a0e27a46701507/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c87ffeb1a6f5b87d1448954da2a0e27a46701507/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c87ffeb1a6f5b87d1448954da2a0e27a46701507/config
-Defconfig      : http://autobuild.buildroot.net/results/c87ffeb1a6f5b87d1448954da2a0e27a46701507/defconfig
-
-Build 5f9c04047624cf796c6b21a00032e36e730bdb0a
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 00:41:05
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/5f9c04047624cf796c6b21a00032e36e730bdb0a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5f9c04047624cf796c6b21a00032e36e730bdb0a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5f9c04047624cf796c6b21a00032e36e730bdb0a/config
-Defconfig      : http://autobuild.buildroot.net/results/5f9c04047624cf796c6b21a00032e36e730bdb0a/defconfig
-
-Build 1566c1ab1acb20ec0b2c25fa0d74c2d6408f9e64
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 01:07:05
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/1566c1ab1acb20ec0b2c25fa0d74c2d6408f9e64/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1566c1ab1acb20ec0b2c25fa0d74c2d6408f9e64/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1566c1ab1acb20ec0b2c25fa0d74c2d6408f9e64/config
-Defconfig      : http://autobuild.buildroot.net/results/1566c1ab1acb20ec0b2c25fa0d74c2d6408f9e64/defconfig
-
-Build a1ad5829c03de37ed104d807dddfed810adc8a5c
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 01:07:21
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/a1ad5829c03de37ed104d807dddfed810adc8a5c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a1ad5829c03de37ed104d807dddfed810adc8a5c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a1ad5829c03de37ed104d807dddfed810adc8a5c/config
-Defconfig      : http://autobuild.buildroot.net/results/a1ad5829c03de37ed104d807dddfed810adc8a5c/defconfig
-
-Build 4942d14ac19927837fcb3c8e8ba09edf5f79ec3c
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 01:11:23
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/4942d14ac19927837fcb3c8e8ba09edf5f79ec3c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4942d14ac19927837fcb3c8e8ba09edf5f79ec3c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4942d14ac19927837fcb3c8e8ba09edf5f79ec3c/config
-Defconfig      : http://autobuild.buildroot.net/results/4942d14ac19927837fcb3c8e8ba09edf5f79ec3c/defconfig
-
-Build 47d88bcee8d2a79d6d7e538867b5177873586505
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 01:32:07
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/47d88bcee8d2a79d6d7e538867b5177873586505/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/47d88bcee8d2a79d6d7e538867b5177873586505/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/47d88bcee8d2a79d6d7e538867b5177873586505/config
-Defconfig      : http://autobuild.buildroot.net/results/47d88bcee8d2a79d6d7e538867b5177873586505/defconfig
-
-Build 3fa7be75ce91168bf03245fb453e6c792accbacd
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 01:51:17
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/3fa7be75ce91168bf03245fb453e6c792accbacd/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3fa7be75ce91168bf03245fb453e6c792accbacd/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3fa7be75ce91168bf03245fb453e6c792accbacd/config
-Defconfig      : http://autobuild.buildroot.net/results/3fa7be75ce91168bf03245fb453e6c792accbacd/defconfig
-
-Build 60a4c8f0c51e79cf04909d243cc193476b503bcf
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 01:56:54
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/60a4c8f0c51e79cf04909d243cc193476b503bcf/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/60a4c8f0c51e79cf04909d243cc193476b503bcf/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/60a4c8f0c51e79cf04909d243cc193476b503bcf/config
-Defconfig      : http://autobuild.buildroot.net/results/60a4c8f0c51e79cf04909d243cc193476b503bcf/defconfig
-
-Build 6e3fbfcbd48e9c6cad753d7a2569d91b44d9dcc5
-==============================================
-
-Status         : NOK
-Failure reason : gnutls-2.12.19
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 01:58:53
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/6e3fbfcbd48e9c6cad753d7a2569d91b44d9dcc5/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/6e3fbfcbd48e9c6cad753d7a2569d91b44d9dcc5/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/6e3fbfcbd48e9c6cad753d7a2569d91b44d9dcc5/config
-Defconfig      : http://autobuild.buildroot.net/results/6e3fbfcbd48e9c6cad753d7a2569d91b44d9dcc5/defconfig
-
-Build fd72e6c7f5dd100468ca73a9c5645dcf6107065d
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 02:12:14
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/fd72e6c7f5dd100468ca73a9c5645dcf6107065d/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/fd72e6c7f5dd100468ca73a9c5645dcf6107065d/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/fd72e6c7f5dd100468ca73a9c5645dcf6107065d/config
-Defconfig      : http://autobuild.buildroot.net/results/fd72e6c7f5dd100468ca73a9c5645dcf6107065d/defconfig
-
-Build 42f742c17d9e9958e7ce8c3a58e3b7bde59de566
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 02:36:53
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/42f742c17d9e9958e7ce8c3a58e3b7bde59de566/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/42f742c17d9e9958e7ce8c3a58e3b7bde59de566/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/42f742c17d9e9958e7ce8c3a58e3b7bde59de566/config
-Defconfig      : http://autobuild.buildroot.net/results/42f742c17d9e9958e7ce8c3a58e3b7bde59de566/defconfig
-
-Build 56c054d7422bbf5f86cd5cfc525f4c2803ee2ebc
-==============================================
-
-Status         : NOK
-Failure reason : php-5.3.14
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 02:49:31
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/56c054d7422bbf5f86cd5cfc525f4c2803ee2ebc/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/56c054d7422bbf5f86cd5cfc525f4c2803ee2ebc/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/56c054d7422bbf5f86cd5cfc525f4c2803ee2ebc/config
-Defconfig      : http://autobuild.buildroot.net/results/56c054d7422bbf5f86cd5cfc525f4c2803ee2ebc/defconfig
-
-Build d4ead401480103243b710d980d6ac9f3c79c5eea
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 02:58:20
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/d4ead401480103243b710d980d6ac9f3c79c5eea/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d4ead401480103243b710d980d6ac9f3c79c5eea/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d4ead401480103243b710d980d6ac9f3c79c5eea/config
-Defconfig      : http://autobuild.buildroot.net/results/d4ead401480103243b710d980d6ac9f3c79c5eea/defconfig
-
-Build 3331d677b5bd023b032dc4c5f99736f610fb9257
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 03:22:40
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/3331d677b5bd023b032dc4c5f99736f610fb9257/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3331d677b5bd023b032dc4c5f99736f610fb9257/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3331d677b5bd023b032dc4c5f99736f610fb9257/config
-Defconfig      : http://autobuild.buildroot.net/results/3331d677b5bd023b032dc4c5f99736f610fb9257/defconfig
-
-Build b7aa7407cc9f404971c6eb54dc69ac90d5a1da53
-==============================================
-
-Status         : NOK
-Failure reason : quota-4.00
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 03:26:34
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/b7aa7407cc9f404971c6eb54dc69ac90d5a1da53/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b7aa7407cc9f404971c6eb54dc69ac90d5a1da53/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b7aa7407cc9f404971c6eb54dc69ac90d5a1da53/config
-Defconfig      : http://autobuild.buildroot.net/results/b7aa7407cc9f404971c6eb54dc69ac90d5a1da53/defconfig
-
-Build a2950e0787222178d1e5dad9aa1e223388750f98
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 03:48:33
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/a2950e0787222178d1e5dad9aa1e223388750f98/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a2950e0787222178d1e5dad9aa1e223388750f98/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a2950e0787222178d1e5dad9aa1e223388750f98/config
-Defconfig      : http://autobuild.buildroot.net/results/a2950e0787222178d1e5dad9aa1e223388750f98/defconfig
-
-Build 80863c0db40c04bbaa94fa83dbf1cd8ee5a11866
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 04:08:05
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/80863c0db40c04bbaa94fa83dbf1cd8ee5a11866/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/80863c0db40c04bbaa94fa83dbf1cd8ee5a11866/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/80863c0db40c04bbaa94fa83dbf1cd8ee5a11866/config
-Defconfig      : http://autobuild.buildroot.net/results/80863c0db40c04bbaa94fa83dbf1cd8ee5a11866/defconfig
-
-Build 1e0d8e0768f9ee09e24a6a2596f94037f678518f
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 04:09:56
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/1e0d8e0768f9ee09e24a6a2596f94037f678518f/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1e0d8e0768f9ee09e24a6a2596f94037f678518f/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1e0d8e0768f9ee09e24a6a2596f94037f678518f/config
-Defconfig      : http://autobuild.buildroot.net/results/1e0d8e0768f9ee09e24a6a2596f94037f678518f/defconfig
-
-Build e049f37c0e5cbabd2e302d7c4fdf7d78f6050c70
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 04:17:13
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e049f37c0e5cbabd2e302d7c4fdf7d78f6050c70/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e049f37c0e5cbabd2e302d7c4fdf7d78f6050c70/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e049f37c0e5cbabd2e302d7c4fdf7d78f6050c70/config
-Defconfig      : http://autobuild.buildroot.net/results/e049f37c0e5cbabd2e302d7c4fdf7d78f6050c70/defconfig
-
-Build b2a995b643f66e8884f84479454c6017d48d793b
-==============================================
-
-Status         : NOK
-Failure reason : rrdtool-1.2.30
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 04:23:24
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/b2a995b643f66e8884f84479454c6017d48d793b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b2a995b643f66e8884f84479454c6017d48d793b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b2a995b643f66e8884f84479454c6017d48d793b/config
-Defconfig      : http://autobuild.buildroot.net/results/b2a995b643f66e8884f84479454c6017d48d793b/defconfig
-
-Build 150dfdbd7a0e37788c5a4c847305445aa58c8204
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 04:28:26
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/150dfdbd7a0e37788c5a4c847305445aa58c8204/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/150dfdbd7a0e37788c5a4c847305445aa58c8204/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/150dfdbd7a0e37788c5a4c847305445aa58c8204/config
-Defconfig      : http://autobuild.buildroot.net/results/150dfdbd7a0e37788c5a4c847305445aa58c8204/defconfig
-
-Build d8fa56e9a85debe6d6d3c8334efacf0ef963c232
-==============================================
-
-Status         : NOK
-Failure reason : libglib2-2.30.2
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 04:38:14
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/d8fa56e9a85debe6d6d3c8334efacf0ef963c232/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d8fa56e9a85debe6d6d3c8334efacf0ef963c232/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d8fa56e9a85debe6d6d3c8334efacf0ef963c232/config
-Defconfig      : http://autobuild.buildroot.net/results/d8fa56e9a85debe6d6d3c8334efacf0ef963c232/defconfig
-
-Build ed9b0bba1ee1337e1fc692c2c2e9831afe33932b
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 04:54:06
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/ed9b0bba1ee1337e1fc692c2c2e9831afe33932b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ed9b0bba1ee1337e1fc692c2c2e9831afe33932b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ed9b0bba1ee1337e1fc692c2c2e9831afe33932b/config
-Defconfig      : http://autobuild.buildroot.net/results/ed9b0bba1ee1337e1fc692c2c2e9831afe33932b/defconfig
-
-Build e3bd5362a21df9a9313a444e741df03bb606bdbb
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 05:13:28
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e3bd5362a21df9a9313a444e741df03bb606bdbb/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e3bd5362a21df9a9313a444e741df03bb606bdbb/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e3bd5362a21df9a9313a444e741df03bb606bdbb/config
-Defconfig      : http://autobuild.buildroot.net/results/e3bd5362a21df9a9313a444e741df03bb606bdbb/defconfig
-
-Build d1e3818fcc0b443a6876610f7b63d858c35204b6
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 05:29:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/d1e3818fcc0b443a6876610f7b63d858c35204b6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d1e3818fcc0b443a6876610f7b63d858c35204b6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d1e3818fcc0b443a6876610f7b63d858c35204b6/config
-Defconfig      : http://autobuild.buildroot.net/results/d1e3818fcc0b443a6876610f7b63d858c35204b6/defconfig
-
-Build 23983cf7e1f146f91ec3bfdfd6544490b7279945
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 05:36:13
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/23983cf7e1f146f91ec3bfdfd6544490b7279945/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/23983cf7e1f146f91ec3bfdfd6544490b7279945/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/23983cf7e1f146f91ec3bfdfd6544490b7279945/config
-Defconfig      : http://autobuild.buildroot.net/results/23983cf7e1f146f91ec3bfdfd6544490b7279945/defconfig
-
-Build 20c2303c99f8c3794f95912c07aac37c42a6c8eb
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 06:00:26
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/20c2303c99f8c3794f95912c07aac37c42a6c8eb/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/20c2303c99f8c3794f95912c07aac37c42a6c8eb/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/20c2303c99f8c3794f95912c07aac37c42a6c8eb/config
-Defconfig      : http://autobuild.buildroot.net/results/20c2303c99f8c3794f95912c07aac37c42a6c8eb/defconfig
-
-Build c99b19148c902d81a2b278ae46b6230d6da2fd92
-==============================================
-
-Status         : NOK
-Failure reason : audiofile-0.3.4
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 06:02:28
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c99b19148c902d81a2b278ae46b6230d6da2fd92/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c99b19148c902d81a2b278ae46b6230d6da2fd92/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c99b19148c902d81a2b278ae46b6230d6da2fd92/config
-Defconfig      : http://autobuild.buildroot.net/results/c99b19148c902d81a2b278ae46b6230d6da2fd92/defconfig
-
-Build ccb9aa73b0d9a7fa7d2a2d5c6813326a6406fa69
-==============================================
-
-Status         : OK
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 06:29:40
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/ccb9aa73b0d9a7fa7d2a2d5c6813326a6406fa69/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ccb9aa73b0d9a7fa7d2a2d5c6813326a6406fa69/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ccb9aa73b0d9a7fa7d2a2d5c6813326a6406fa69/config
-Defconfig      : http://autobuild.buildroot.net/results/ccb9aa73b0d9a7fa7d2a2d5c6813326a6406fa69/defconfig
-
-Build a3328fcac1df7bfecb4a5eb7174246ca9d0db730
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 06:39:28
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/a3328fcac1df7bfecb4a5eb7174246ca9d0db730/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a3328fcac1df7bfecb4a5eb7174246ca9d0db730/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a3328fcac1df7bfecb4a5eb7174246ca9d0db730/config
-Defconfig      : http://autobuild.buildroot.net/results/a3328fcac1df7bfecb4a5eb7174246ca9d0db730/defconfig
-
-Build 872a174606d4fc16d2f1aae30cb6377549f9606f
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 06:43:25
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/872a174606d4fc16d2f1aae30cb6377549f9606f/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/872a174606d4fc16d2f1aae30cb6377549f9606f/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/872a174606d4fc16d2f1aae30cb6377549f9606f/config
-Defconfig      : http://autobuild.buildroot.net/results/872a174606d4fc16d2f1aae30cb6377549f9606f/defconfig
-
-Build a5529bfbc7d6395aac15de8b4f4dff106e1a24f1
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 06:51:25
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/a5529bfbc7d6395aac15de8b4f4dff106e1a24f1/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a5529bfbc7d6395aac15de8b4f4dff106e1a24f1/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a5529bfbc7d6395aac15de8b4f4dff106e1a24f1/config
-Defconfig      : http://autobuild.buildroot.net/results/a5529bfbc7d6395aac15de8b4f4dff106e1a24f1/defconfig
-
-Build d8ccf0a8066ee12121d4a5d437cbc07b30ffb5f6
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 07:01:16
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/d8ccf0a8066ee12121d4a5d437cbc07b30ffb5f6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d8ccf0a8066ee12121d4a5d437cbc07b30ffb5f6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d8ccf0a8066ee12121d4a5d437cbc07b30ffb5f6/config
-Defconfig      : http://autobuild.buildroot.net/results/d8ccf0a8066ee12121d4a5d437cbc07b30ffb5f6/defconfig
-
-Build 1fa07839c4773a74cd9f95235ae27bff1a912c5a
-==============================================
-
-Status         : OK
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 07:08:45
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/1fa07839c4773a74cd9f95235ae27bff1a912c5a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1fa07839c4773a74cd9f95235ae27bff1a912c5a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1fa07839c4773a74cd9f95235ae27bff1a912c5a/config
-Defconfig      : http://autobuild.buildroot.net/results/1fa07839c4773a74cd9f95235ae27bff1a912c5a/defconfig
-
-Build 1a458637cad7bf109f5288dbb6c0516e492dc15d
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 07:42:27
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/1a458637cad7bf109f5288dbb6c0516e492dc15d/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1a458637cad7bf109f5288dbb6c0516e492dc15d/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1a458637cad7bf109f5288dbb6c0516e492dc15d/config
-Defconfig      : http://autobuild.buildroot.net/results/1a458637cad7bf109f5288dbb6c0516e492dc15d/defconfig
-
-Build 3d8c3b1e4c5dd40306f91de6761fa97bcf329a49
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 07:47:42
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/3d8c3b1e4c5dd40306f91de6761fa97bcf329a49/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3d8c3b1e4c5dd40306f91de6761fa97bcf329a49/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3d8c3b1e4c5dd40306f91de6761fa97bcf329a49/config
-Defconfig      : http://autobuild.buildroot.net/results/3d8c3b1e4c5dd40306f91de6761fa97bcf329a49/defconfig
-
-Build 21fbc4df97251c078cde99a7028dea6ac054e928
-==============================================
-
-Status         : NOK
-Failure reason : strace-4.5.20
-Architecture   : mipsel
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 07:49:10
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/21fbc4df97251c078cde99a7028dea6ac054e928/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/21fbc4df97251c078cde99a7028dea6ac054e928/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/21fbc4df97251c078cde99a7028dea6ac054e928/config
-Defconfig      : http://autobuild.buildroot.net/results/21fbc4df97251c078cde99a7028dea6ac054e928/defconfig
-
-Build 9480fbdddb1d637d1950ea30a206c682c0bdea14
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 08:37:52
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/9480fbdddb1d637d1950ea30a206c682c0bdea14/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9480fbdddb1d637d1950ea30a206c682c0bdea14/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9480fbdddb1d637d1950ea30a206c682c0bdea14/config
-Defconfig      : http://autobuild.buildroot.net/results/9480fbdddb1d637d1950ea30a206c682c0bdea14/defconfig
-
-Build 86178ab2e657918da82654f5b48af79d52575bcf
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 08:40:39
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/86178ab2e657918da82654f5b48af79d52575bcf/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/86178ab2e657918da82654f5b48af79d52575bcf/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/86178ab2e657918da82654f5b48af79d52575bcf/config
-Defconfig      : http://autobuild.buildroot.net/results/86178ab2e657918da82654f5b48af79d52575bcf/defconfig
-
-Build 5eeb424e366762287fd5f95b5defc302885dcdd0
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 08:54:57
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/5eeb424e366762287fd5f95b5defc302885dcdd0/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5eeb424e366762287fd5f95b5defc302885dcdd0/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5eeb424e366762287fd5f95b5defc302885dcdd0/config
-Defconfig      : http://autobuild.buildroot.net/results/5eeb424e366762287fd5f95b5defc302885dcdd0/defconfig
-
-Build 46b34a33b123d075fa6721d3f5ef975d5a9050a0
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 09:06:09
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/46b34a33b123d075fa6721d3f5ef975d5a9050a0/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/46b34a33b123d075fa6721d3f5ef975d5a9050a0/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/46b34a33b123d075fa6721d3f5ef975d5a9050a0/config
-Defconfig      : http://autobuild.buildroot.net/results/46b34a33b123d075fa6721d3f5ef975d5a9050a0/defconfig
-
-Build 03650d53f83a5facc1b4d3f2232430eaff0b9b04
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 09:11:04
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/03650d53f83a5facc1b4d3f2232430eaff0b9b04/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/03650d53f83a5facc1b4d3f2232430eaff0b9b04/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/03650d53f83a5facc1b4d3f2232430eaff0b9b04/config
-Defconfig      : http://autobuild.buildroot.net/results/03650d53f83a5facc1b4d3f2232430eaff0b9b04/defconfig
-
-Build 9c3bff6ba963dc3c070a668dd0f5f8c541d7b557
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 09:36:02
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/9c3bff6ba963dc3c070a668dd0f5f8c541d7b557/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9c3bff6ba963dc3c070a668dd0f5f8c541d7b557/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9c3bff6ba963dc3c070a668dd0f5f8c541d7b557/config
-Defconfig      : http://autobuild.buildroot.net/results/9c3bff6ba963dc3c070a668dd0f5f8c541d7b557/defconfig
-
-Build e7bd6dd78460f371af04dd4154a4d68f63c4e1ef
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 10:20:06
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e7bd6dd78460f371af04dd4154a4d68f63c4e1ef/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e7bd6dd78460f371af04dd4154a4d68f63c4e1ef/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e7bd6dd78460f371af04dd4154a4d68f63c4e1ef/config
-Defconfig      : http://autobuild.buildroot.net/results/e7bd6dd78460f371af04dd4154a4d68f63c4e1ef/defconfig
-
-Build 6bc77967a73342604ad424ee53edb97078d284c9
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 10:22:43
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/6bc77967a73342604ad424ee53edb97078d284c9/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/6bc77967a73342604ad424ee53edb97078d284c9/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/6bc77967a73342604ad424ee53edb97078d284c9/config
-Defconfig      : http://autobuild.buildroot.net/results/6bc77967a73342604ad424ee53edb97078d284c9/defconfig
-
-Build 4c73b5f4ee0df8aac20b531d4b839f5aaa3418a0
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 10:33:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/4c73b5f4ee0df8aac20b531d4b839f5aaa3418a0/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4c73b5f4ee0df8aac20b531d4b839f5aaa3418a0/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4c73b5f4ee0df8aac20b531d4b839f5aaa3418a0/config
-Defconfig      : http://autobuild.buildroot.net/results/4c73b5f4ee0df8aac20b531d4b839f5aaa3418a0/defconfig
-
-Build 3c95516c103b3d159c9909ddb80fc395188545bd
-==============================================
-
-Status         : NOK
-Failure reason : mediastreamer-2.8.2
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 10:53:44
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/3c95516c103b3d159c9909ddb80fc395188545bd/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3c95516c103b3d159c9909ddb80fc395188545bd/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3c95516c103b3d159c9909ddb80fc395188545bd/config
-Defconfig      : http://autobuild.buildroot.net/results/3c95516c103b3d159c9909ddb80fc395188545bd/defconfig
-
-Build 5822e1e09d472835f3d3359adbab0c8c59b91e34
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 11:16:11
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/5822e1e09d472835f3d3359adbab0c8c59b91e34/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5822e1e09d472835f3d3359adbab0c8c59b91e34/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5822e1e09d472835f3d3359adbab0c8c59b91e34/config
-Defconfig      : http://autobuild.buildroot.net/results/5822e1e09d472835f3d3359adbab0c8c59b91e34/defconfig
-
-Build 56e9f5aab8445d4242cf9eaf7ad354feb67980e1
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 11:21:52
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/56e9f5aab8445d4242cf9eaf7ad354feb67980e1/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/56e9f5aab8445d4242cf9eaf7ad354feb67980e1/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/56e9f5aab8445d4242cf9eaf7ad354feb67980e1/config
-Defconfig      : http://autobuild.buildroot.net/results/56e9f5aab8445d4242cf9eaf7ad354feb67980e1/defconfig
-
-Build 7ac3e9c9e3231ceb4ae449ebf6628ee46ac9be08
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 12:01:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/7ac3e9c9e3231ceb4ae449ebf6628ee46ac9be08/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7ac3e9c9e3231ceb4ae449ebf6628ee46ac9be08/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7ac3e9c9e3231ceb4ae449ebf6628ee46ac9be08/config
-Defconfig      : http://autobuild.buildroot.net/results/7ac3e9c9e3231ceb4ae449ebf6628ee46ac9be08/defconfig
-
-Build 9646e06d68317467cd6932946243176562a0555d
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 12:02:27
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/9646e06d68317467cd6932946243176562a0555d/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9646e06d68317467cd6932946243176562a0555d/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9646e06d68317467cd6932946243176562a0555d/config
-Defconfig      : http://autobuild.buildroot.net/results/9646e06d68317467cd6932946243176562a0555d/defconfig
-
-Build aba99b509c2492fecbbc74b9d8e789cfb01a06d9
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 12:02:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/aba99b509c2492fecbbc74b9d8e789cfb01a06d9/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/aba99b509c2492fecbbc74b9d8e789cfb01a06d9/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/aba99b509c2492fecbbc74b9d8e789cfb01a06d9/config
-Defconfig      : http://autobuild.buildroot.net/results/aba99b509c2492fecbbc74b9d8e789cfb01a06d9/defconfig
-
-Build c02b47879b0ae0a213b495bb852883a1da2eb728
-==============================================
-
-Status         : NOK
-Failure reason : host-vala-0.15.2
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 12:32:33
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c02b47879b0ae0a213b495bb852883a1da2eb728/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c02b47879b0ae0a213b495bb852883a1da2eb728/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c02b47879b0ae0a213b495bb852883a1da2eb728/config
-Defconfig      : http://autobuild.buildroot.net/results/c02b47879b0ae0a213b495bb852883a1da2eb728/defconfig
-
-Build 77219a9a4b3a331f6724b1a375a716d093612035
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 12:40:58
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/77219a9a4b3a331f6724b1a375a716d093612035/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/77219a9a4b3a331f6724b1a375a716d093612035/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/77219a9a4b3a331f6724b1a375a716d093612035/config
-Defconfig      : http://autobuild.buildroot.net/results/77219a9a4b3a331f6724b1a375a716d093612035/defconfig
-
-Build 1fd23159a491548140d6e112cde253598036a152
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 13:04:24
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/1fd23159a491548140d6e112cde253598036a152/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1fd23159a491548140d6e112cde253598036a152/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1fd23159a491548140d6e112cde253598036a152/config
-Defconfig      : http://autobuild.buildroot.net/results/1fd23159a491548140d6e112cde253598036a152/defconfig
-
-Build f42d662a3ac52bc4fd8d9b65f977123e1c3c28a9
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 13:16:34
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/f42d662a3ac52bc4fd8d9b65f977123e1c3c28a9/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/f42d662a3ac52bc4fd8d9b65f977123e1c3c28a9/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/f42d662a3ac52bc4fd8d9b65f977123e1c3c28a9/config
-Defconfig      : http://autobuild.buildroot.net/results/f42d662a3ac52bc4fd8d9b65f977123e1c3c28a9/defconfig
-
-Build e4f823dcc235bf3db37ef01a4600319452b7e967
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 13:38:53
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e4f823dcc235bf3db37ef01a4600319452b7e967/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e4f823dcc235bf3db37ef01a4600319452b7e967/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e4f823dcc235bf3db37ef01a4600319452b7e967/config
-Defconfig      : http://autobuild.buildroot.net/results/e4f823dcc235bf3db37ef01a4600319452b7e967/defconfig
-
-Build e93ff7bcda178fa74a730ccdff4969ba6234c4ce
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 13:48:38
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e93ff7bcda178fa74a730ccdff4969ba6234c4ce/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e93ff7bcda178fa74a730ccdff4969ba6234c4ce/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e93ff7bcda178fa74a730ccdff4969ba6234c4ce/config
-Defconfig      : http://autobuild.buildroot.net/results/e93ff7bcda178fa74a730ccdff4969ba6234c4ce/defconfig
-
-Build 60d0844c594621bd11e91049d6ed52fa820faf9b
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 13:57:11
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/60d0844c594621bd11e91049d6ed52fa820faf9b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/60d0844c594621bd11e91049d6ed52fa820faf9b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/60d0844c594621bd11e91049d6ed52fa820faf9b/config
-Defconfig      : http://autobuild.buildroot.net/results/60d0844c594621bd11e91049d6ed52fa820faf9b/defconfig
-
-Build 2586faaa2744023463c4f8e85580818b247c7a7a
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 14:03:33
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/2586faaa2744023463c4f8e85580818b247c7a7a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2586faaa2744023463c4f8e85580818b247c7a7a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2586faaa2744023463c4f8e85580818b247c7a7a/config
-Defconfig      : http://autobuild.buildroot.net/results/2586faaa2744023463c4f8e85580818b247c7a7a/defconfig
-
-Build f33b9f7d91fe4524f7be2463e2d7585a240e830c
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 14:25:44
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/f33b9f7d91fe4524f7be2463e2d7585a240e830c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/f33b9f7d91fe4524f7be2463e2d7585a240e830c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/f33b9f7d91fe4524f7be2463e2d7585a240e830c/config
-Defconfig      : http://autobuild.buildroot.net/results/f33b9f7d91fe4524f7be2463e2d7585a240e830c/defconfig
-
-Build c7908282111dadd1e50f53386ae7787a4c4519b2
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 14:52:39
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c7908282111dadd1e50f53386ae7787a4c4519b2/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c7908282111dadd1e50f53386ae7787a4c4519b2/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c7908282111dadd1e50f53386ae7787a4c4519b2/config
-Defconfig      : http://autobuild.buildroot.net/results/c7908282111dadd1e50f53386ae7787a4c4519b2/defconfig
-
-Build 83e114e72db900c91b1ce05e3f073c43377f6484
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 14:57:11
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/83e114e72db900c91b1ce05e3f073c43377f6484/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/83e114e72db900c91b1ce05e3f073c43377f6484/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/83e114e72db900c91b1ce05e3f073c43377f6484/config
-Defconfig      : http://autobuild.buildroot.net/results/83e114e72db900c91b1ce05e3f073c43377f6484/defconfig
-
-Build c3090e36f3be0c72ecba90692a18bdfeaa9b5511
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 15:07:52
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c3090e36f3be0c72ecba90692a18bdfeaa9b5511/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c3090e36f3be0c72ecba90692a18bdfeaa9b5511/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c3090e36f3be0c72ecba90692a18bdfeaa9b5511/config
-Defconfig      : http://autobuild.buildroot.net/results/c3090e36f3be0c72ecba90692a18bdfeaa9b5511/defconfig
-
-Build 7c2a6113ca2829bb596efb974ecc4ec172fdc0fc
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 15:25:39
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/7c2a6113ca2829bb596efb974ecc4ec172fdc0fc/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7c2a6113ca2829bb596efb974ecc4ec172fdc0fc/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7c2a6113ca2829bb596efb974ecc4ec172fdc0fc/config
-Defconfig      : http://autobuild.buildroot.net/results/7c2a6113ca2829bb596efb974ecc4ec172fdc0fc/defconfig
-
-Build b0443134937de408eb012498464895c973de5051
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 15:59:28
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/b0443134937de408eb012498464895c973de5051/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b0443134937de408eb012498464895c973de5051/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b0443134937de408eb012498464895c973de5051/config
-Defconfig      : http://autobuild.buildroot.net/results/b0443134937de408eb012498464895c973de5051/defconfig
-
-Build fb2cb4ff6630f63a224eb21bd2edcc23770dc672
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 16:12:54
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/fb2cb4ff6630f63a224eb21bd2edcc23770dc672/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/fb2cb4ff6630f63a224eb21bd2edcc23770dc672/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/fb2cb4ff6630f63a224eb21bd2edcc23770dc672/config
-Defconfig      : http://autobuild.buildroot.net/results/fb2cb4ff6630f63a224eb21bd2edcc23770dc672/defconfig
-
-Build 0f30225e5cb26ba8d130a58577f75f261a604f02
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 16:39:52
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/0f30225e5cb26ba8d130a58577f75f261a604f02/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/0f30225e5cb26ba8d130a58577f75f261a604f02/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/0f30225e5cb26ba8d130a58577f75f261a604f02/config
-Defconfig      : http://autobuild.buildroot.net/results/0f30225e5cb26ba8d130a58577f75f261a604f02/defconfig
-
-Build 5ed0a5b46ff019d8398885c50c3cffbd06ee0480
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 17:02:15
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/5ed0a5b46ff019d8398885c50c3cffbd06ee0480/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5ed0a5b46ff019d8398885c50c3cffbd06ee0480/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5ed0a5b46ff019d8398885c50c3cffbd06ee0480/config
-Defconfig      : http://autobuild.buildroot.net/results/5ed0a5b46ff019d8398885c50c3cffbd06ee0480/defconfig
-
-Build d264c7994473ae2ca1f1e414335c80edba34abb7
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 17:07:03
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/d264c7994473ae2ca1f1e414335c80edba34abb7/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d264c7994473ae2ca1f1e414335c80edba34abb7/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d264c7994473ae2ca1f1e414335c80edba34abb7/config
-Defconfig      : http://autobuild.buildroot.net/results/d264c7994473ae2ca1f1e414335c80edba34abb7/defconfig
-
-Build efe77eb235428825c662432062bf51296fdfd646
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 17:13:34
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/efe77eb235428825c662432062bf51296fdfd646/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/efe77eb235428825c662432062bf51296fdfd646/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/efe77eb235428825c662432062bf51296fdfd646/config
-Defconfig      : http://autobuild.buildroot.net/results/efe77eb235428825c662432062bf51296fdfd646/defconfig
-
-Build 7faf4139158afd314d661a70c3767f5f82f61611
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 17:18:47
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/7faf4139158afd314d661a70c3767f5f82f61611/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7faf4139158afd314d661a70c3767f5f82f61611/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7faf4139158afd314d661a70c3767f5f82f61611/config
-Defconfig      : http://autobuild.buildroot.net/results/7faf4139158afd314d661a70c3767f5f82f61611/defconfig
-
-Build 2fd250fedbadb22422e4774cd07a315cd826ad99
-==============================================
-
-Status         : NOK
-Failure reason : libusb-1.0.9
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 17:20:40
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/2fd250fedbadb22422e4774cd07a315cd826ad99/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2fd250fedbadb22422e4774cd07a315cd826ad99/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2fd250fedbadb22422e4774cd07a315cd826ad99/config
-Defconfig      : http://autobuild.buildroot.net/results/2fd250fedbadb22422e4774cd07a315cd826ad99/defconfig
-
-Build a1c6cb3e215ef92b5d8635125d401a5336b24aab
-==============================================
-
-Status         : NOK
-Failure reason : alsa-lib-1.0.25
-Architecture   : sh2a
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 17:21:15
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/a1c6cb3e215ef92b5d8635125d401a5336b24aab/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a1c6cb3e215ef92b5d8635125d401a5336b24aab/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a1c6cb3e215ef92b5d8635125d401a5336b24aab/config
-Defconfig      : http://autobuild.buildroot.net/results/a1c6cb3e215ef92b5d8635125d401a5336b24aab/defconfig
-
-Build 3b07bc76ebeb7b12ef73a39aebb6bcdaa7afd02b
-==============================================
-
-Status         : NOK
-Failure reason : libffi-3.0.11
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 17:45:44
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/3b07bc76ebeb7b12ef73a39aebb6bcdaa7afd02b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3b07bc76ebeb7b12ef73a39aebb6bcdaa7afd02b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3b07bc76ebeb7b12ef73a39aebb6bcdaa7afd02b/config
-Defconfig      : http://autobuild.buildroot.net/results/3b07bc76ebeb7b12ef73a39aebb6bcdaa7afd02b/defconfig
-
-Build 0bfbc7fe224e2870a0d1d32a17af182cdf7c8647
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 17:58:08
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/0bfbc7fe224e2870a0d1d32a17af182cdf7c8647/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/0bfbc7fe224e2870a0d1d32a17af182cdf7c8647/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/0bfbc7fe224e2870a0d1d32a17af182cdf7c8647/config
-Defconfig      : http://autobuild.buildroot.net/results/0bfbc7fe224e2870a0d1d32a17af182cdf7c8647/defconfig
-
-Build 8bc048c4a4131b01e139e334342118ba00ea4d5b
-==============================================
-
-Status         : OK
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 18:12:57
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/8bc048c4a4131b01e139e334342118ba00ea4d5b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/8bc048c4a4131b01e139e334342118ba00ea4d5b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/8bc048c4a4131b01e139e334342118ba00ea4d5b/config
-Defconfig      : http://autobuild.buildroot.net/results/8bc048c4a4131b01e139e334342118ba00ea4d5b/defconfig
-
-Build bfe38624d86573bc0392a8ac1eca7384fcb62b31
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 18:38:23
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/bfe38624d86573bc0392a8ac1eca7384fcb62b31/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/bfe38624d86573bc0392a8ac1eca7384fcb62b31/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/bfe38624d86573bc0392a8ac1eca7384fcb62b31/config
-Defconfig      : http://autobuild.buildroot.net/results/bfe38624d86573bc0392a8ac1eca7384fcb62b31/defconfig
-
-Build ce11ba0115d5aba302d81a4510557b34abcc5e84
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 18:42:41
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/ce11ba0115d5aba302d81a4510557b34abcc5e84/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ce11ba0115d5aba302d81a4510557b34abcc5e84/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ce11ba0115d5aba302d81a4510557b34abcc5e84/config
-Defconfig      : http://autobuild.buildroot.net/results/ce11ba0115d5aba302d81a4510557b34abcc5e84/defconfig
-
-Build 2812131bf3a1ad31fc52700f8129fb49e9ad4b1c
-==============================================
-
-Status         : NOK
-Failure reason : zlib-1.2.7
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 18:45:54
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/2812131bf3a1ad31fc52700f8129fb49e9ad4b1c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2812131bf3a1ad31fc52700f8129fb49e9ad4b1c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2812131bf3a1ad31fc52700f8129fb49e9ad4b1c/config
-Defconfig      : http://autobuild.buildroot.net/results/2812131bf3a1ad31fc52700f8129fb49e9ad4b1c/defconfig
-
-Build 3272a7302daba92c1e66d7e592dbd28a5b19d369
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 18:49:32
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/3272a7302daba92c1e66d7e592dbd28a5b19d369/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3272a7302daba92c1e66d7e592dbd28a5b19d369/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3272a7302daba92c1e66d7e592dbd28a5b19d369/config
-Defconfig      : http://autobuild.buildroot.net/results/3272a7302daba92c1e66d7e592dbd28a5b19d369/defconfig
-
-Build 5d9c35a0b5d5f47c67d765e1df8e25145bee8e9a
-==============================================
-
-Status         : NOK
-Failure reason : gmp-5.0.5
-Architecture   : mipsel
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 19:06:59
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/5d9c35a0b5d5f47c67d765e1df8e25145bee8e9a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5d9c35a0b5d5f47c67d765e1df8e25145bee8e9a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5d9c35a0b5d5f47c67d765e1df8e25145bee8e9a/config
-Defconfig      : http://autobuild.buildroot.net/results/5d9c35a0b5d5f47c67d765e1df8e25145bee8e9a/defconfig
-
-Build c7a5f36152df9a119e4e5dd02698a6f2612af571
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 19:32:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c7a5f36152df9a119e4e5dd02698a6f2612af571/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c7a5f36152df9a119e4e5dd02698a6f2612af571/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c7a5f36152df9a119e4e5dd02698a6f2612af571/config
-Defconfig      : http://autobuild.buildroot.net/results/c7a5f36152df9a119e4e5dd02698a6f2612af571/defconfig
-
-Build 84ef1dcb09e086ae392c47ce34293df77e146794
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 19:42:51
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/84ef1dcb09e086ae392c47ce34293df77e146794/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/84ef1dcb09e086ae392c47ce34293df77e146794/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/84ef1dcb09e086ae392c47ce34293df77e146794/config
-Defconfig      : http://autobuild.buildroot.net/results/84ef1dcb09e086ae392c47ce34293df77e146794/defconfig
-
-Build e16fd84887b26c8b38f29cd4f076f54c6be568e8
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 19:56:47
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e16fd84887b26c8b38f29cd4f076f54c6be568e8/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e16fd84887b26c8b38f29cd4f076f54c6be568e8/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e16fd84887b26c8b38f29cd4f076f54c6be568e8/config
-Defconfig      : http://autobuild.buildroot.net/results/e16fd84887b26c8b38f29cd4f076f54c6be568e8/defconfig
-
-Build c97547219302e4772a2375a067824bc31c021962
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 20:13:26
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/c97547219302e4772a2375a067824bc31c021962/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c97547219302e4772a2375a067824bc31c021962/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c97547219302e4772a2375a067824bc31c021962/config
-Defconfig      : http://autobuild.buildroot.net/results/c97547219302e4772a2375a067824bc31c021962/defconfig
-
-Build a2e9f21c21964fe3bc9475e7e402f9903a8c59ca
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 20:30:25
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/a2e9f21c21964fe3bc9475e7e402f9903a8c59ca/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a2e9f21c21964fe3bc9475e7e402f9903a8c59ca/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a2e9f21c21964fe3bc9475e7e402f9903a8c59ca/config
-Defconfig      : http://autobuild.buildroot.net/results/a2e9f21c21964fe3bc9475e7e402f9903a8c59ca/defconfig
-
-Build 2f6cb346091c4fe305060e2ed577ed7816696bba
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 20:53:12
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/2f6cb346091c4fe305060e2ed577ed7816696bba/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2f6cb346091c4fe305060e2ed577ed7816696bba/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2f6cb346091c4fe305060e2ed577ed7816696bba/config
-Defconfig      : http://autobuild.buildroot.net/results/2f6cb346091c4fe305060e2ed577ed7816696bba/defconfig
-
-Build 2d593740f0776528ac70c2148831436311f8235f
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 21:27:29
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/2d593740f0776528ac70c2148831436311f8235f/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2d593740f0776528ac70c2148831436311f8235f/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2d593740f0776528ac70c2148831436311f8235f/config
-Defconfig      : http://autobuild.buildroot.net/results/2d593740f0776528ac70c2148831436311f8235f/defconfig
-
-Build edf798af95eb96f486dbaeac607cd1a6a8dd9add
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 21:31:39
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/edf798af95eb96f486dbaeac607cd1a6a8dd9add/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/edf798af95eb96f486dbaeac607cd1a6a8dd9add/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/edf798af95eb96f486dbaeac607cd1a6a8dd9add/config
-Defconfig      : http://autobuild.buildroot.net/results/edf798af95eb96f486dbaeac607cd1a6a8dd9add/defconfig
-
-Build e0dc6307b1e1e7a8da63332c9fc4114276fd38d9
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 21:33:16
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/e0dc6307b1e1e7a8da63332c9fc4114276fd38d9/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e0dc6307b1e1e7a8da63332c9fc4114276fd38d9/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e0dc6307b1e1e7a8da63332c9fc4114276fd38d9/config
-Defconfig      : http://autobuild.buildroot.net/results/e0dc6307b1e1e7a8da63332c9fc4114276fd38d9/defconfig
-
-Build 1752fff3e1d06be32d20f400506fc37bf8cdd87e
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 21:39:30
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/1752fff3e1d06be32d20f400506fc37bf8cdd87e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1752fff3e1d06be32d20f400506fc37bf8cdd87e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1752fff3e1d06be32d20f400506fc37bf8cdd87e/config
-Defconfig      : http://autobuild.buildroot.net/results/1752fff3e1d06be32d20f400506fc37bf8cdd87e/defconfig
-
-Build 56b240aa688eacf836d7cba27669fbf8c9a13abb
-==============================================
-
-Status         : NOK
-Failure reason : xenomai-2.6.0
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 22:07:06
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/56b240aa688eacf836d7cba27669fbf8c9a13abb/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/56b240aa688eacf836d7cba27669fbf8c9a13abb/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/56b240aa688eacf836d7cba27669fbf8c9a13abb/config
-Defconfig      : http://autobuild.buildroot.net/results/56b240aa688eacf836d7cba27669fbf8c9a13abb/defconfig
-
-Build ce071942dbd884c75f40c2323e840d0ae716fee6
-==============================================
-
-Status         : NOK
-Failure reason : boost-1.49.0
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-07-08 22:16:31
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/ce071942dbd884c75f40c2323e840d0ae716fee6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ce071942dbd884c75f40c2323e840d0ae716fee6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ce071942dbd884c75f40c2323e840d0ae716fee6/config
-Defconfig      : http://autobuild.buildroot.net/results/ce071942dbd884c75f40c2323e840d0ae716fee6/defconfig
-
-Build fac3751dbfa10361923abbf47452db0f41485986
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 22:20:34
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/fac3751dbfa10361923abbf47452db0f41485986/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/fac3751dbfa10361923abbf47452db0f41485986/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/fac3751dbfa10361923abbf47452db0f41485986/config
-Defconfig      : http://autobuild.buildroot.net/results/fac3751dbfa10361923abbf47452db0f41485986/defconfig
-
-Build 5b39b0aa397083fc4bbdfe183a5aa55b6946f9ba
-==============================================
-
-Status         : OK
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-07-08 23:13:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/5b39b0aa397083fc4bbdfe183a5aa55b6946f9ba/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5b39b0aa397083fc4bbdfe183a5aa55b6946f9ba/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5b39b0aa397083fc4bbdfe183a5aa55b6946f9ba/config
-Defconfig      : http://autobuild.buildroot.net/results/5b39b0aa397083fc4bbdfe183a5aa55b6946f9ba/defconfig
-
-Build 713431cf904d119b32a4b739fd6b2d4cb46cea39
-==============================================
-
-Status         : OK
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-07-08 23:22:21
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/713431cf904d119b32a4b739fd6b2d4cb46cea39/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/713431cf904d119b32a4b739fd6b2d4cb46cea39/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/713431cf904d119b32a4b739fd6b2d4cb46cea39/config
-Defconfig      : http://autobuild.buildroot.net/results/713431cf904d119b32a4b739fd6b2d4cb46cea39/defconfig
-
-Build ae7612a05ac95e97a01694be9232805c6cc5118b
-==============================================
-
-Status         : OK
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-07-08 23:41:43
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
-End of log     : http://autobuild.buildroot.net/results/ae7612a05ac95e97a01694be9232805c6cc5118b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ae7612a05ac95e97a01694be9232805c6cc5118b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ae7612a05ac95e97a01694be9232805c6cc5118b/config
-Defconfig      : http://autobuild.buildroot.net/results/ae7612a05ac95e97a01694be9232805c6cc5118b/defconfig
-
-
-
+Hi,
+Attached a new patch for the USB-A9263.
+More info at <http://www.calao-systems.com>. 
+
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+---
+ .../usb-a9263/at91bootstrap-1.16-usb-a9263.patch   |  851 ++++++++++++++++++++
+ board/calao/usb-a9263/usb-a9263_defconfig          |  102 +++
+ configs/usb_a9263_defconfig                        |   14 +
+ 3 files changed, 967 insertions(+), 0 deletions(-)
+ create mode 100644 board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch
+ create mode 100644 board/calao/usb-a9263/usb-a9263_defconfig
+ create mode 100644 configs/usb_a9263_defconfig
+
+diff --git a/board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch b/board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch
+new file mode 100644
+index 0000000..5798930
+--- /dev/null
++++ b/board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch
+@@ -0,0 +1,851 @@
++From 74796655212d321f50ab89e8c5570245901f4cba Mon Sep 17 00:00:00 2001
++From: Gregory Hermant <gregory.hermant@calao-systems.com>
++Date: Thu, 5 Jul 2012 18:44:07 +0200
++Subject: [PATCH] Add support for the Calao-systems USB-A9263
++
++
++Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
++---
++ board/usb_a9263/dataflash/Makefile    |  115 +++++++++++++
++ board/usb_a9263/dataflash/usb-a9263.h |   97 +++++++++++
++ board/usb_a9263/nandflash/Makefile    |  117 ++++++++++++++
++ board/usb_a9263/nandflash/usb-a9263.h |  116 +++++++++++++
++ board/usb_a9263/usb_a9263.c           |  285 +++++++++++++++++++++++++++++++++
++ crt0_gnu.S                            |    7 +
++ driver/dataflash.c                    |    6 +-
++ include/part.h                        |    6 +-
++ 8 files changed, 745 insertions(+), 4 deletions(-)
++ create mode 100644 board/usb_a9263/dataflash/Makefile
++ create mode 100644 board/usb_a9263/dataflash/usb-a9263.h
++ create mode 100644 board/usb_a9263/nandflash/Makefile
++ create mode 100644 board/usb_a9263/nandflash/usb-a9263.h
++ create mode 100644 board/usb_a9263/usb_a9263.c
++
++diff --git a/board/usb_a9263/dataflash/Makefile b/board/usb_a9263/dataflash/Makefile
++new file mode 100644
++index 0000000..332685e
++--- /dev/null
+++++ b/board/usb_a9263/dataflash/Makefile
++@@ -0,0 +1,115 @@
+++# TODO: set this appropriately for your local toolchain
+++#SHELL=C:\CYGWIN_REP\dwn_071004\bin\BASH.exe
+++CROSS_COMPILE=arm-elf-
+++#CROSS_COMPILE = arm-softfloat-linux-gnu-
+++
+++TOOLCHAIN=gcc
+++
+++BOOTSTRAP_PATH=../../..
+++
+++# DataFlashBoot Configuration for USB-A9263
+++
+++# Target name (case sensitive!!!)
+++TARGET=AT91SAM9263
+++# Board name (case sensitive!!!)
+++BOARD=usb_a9263
+++# Link Address and Top_of_Memory
+++LINK_ADDR=0x300000
+++TOP_OF_MEMORY=0x314000
+++# Name of current directory
+++PROJECT=dataflash
+++
+++ifndef BOOT_NAME
+++BOOT_NAME=$(PROJECT)_$(BOARD)
+++endif
+++
+++INCL=./$(BOOTSTRAP_PATH)/board/$(BOARD)/$(PROJECT)
+++
+++ifeq ($(TOOLCHAIN), gcc)
+++
+++AS=$(CROSS_COMPILE)gcc
+++CC=$(CROSS_COMPILE)gcc
+++LD=$(CROSS_COMPILE)gcc
+++NM= $(CROSS_COMPILE)nm
+++SIZE=$(CROSS_COMPILE)size
+++OBJCOPY=$(CROSS_COMPILE)objcopy
+++OBJDUMP=$(CROSS_COMPILE)objdump
+++CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
+++ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
+++
+++# Linker flags.
+++#  -Wl,...:     tell GCC to pass this to linker.
+++#    -Map:      create map file
+++#    --cref:    add cross reference to map file
+++LDFLAGS+=-nostartfiles -nostdlib  -Wl,-Map=$(BOOT_NAME).map,--cref
+++LDFLAGS+=-T $(BOOTSTRAP_PATH)/elf32-littlearm.lds -Ttext $(LINK_ADDR)
+++OBJS=crt0_gnu.o
+++
+++endif
+++
+++OBJS+=\
+++	$(BOARD).o \
+++	main.o \
+++	gpio.o \
+++	pmc.o \
+++	debug.o \
+++	sdramc.o \
+++	dataflash.o \
+++	_udivsi3.o \
+++	_umodsi3.o \
+++	div0.o \
+++	udiv.o \
+++	string.o
+++
+++rebuild: clean all
+++
+++all: 	$(BOOT_NAME)
+++
+++ifeq ($(TOOLCHAIN), gcc)
+++$(BOOT_NAME): $(OBJS)
+++	$(LD) $(LDFLAGS) -n -o $(BOOT_NAME).elf $(OBJS)
+++	$(OBJCOPY) --strip-debug --strip-unneeded $(BOOT_NAME).elf -O binary $(BOOT_NAME).bin
+++endif
+++	
+++	
+++$(BOARD).o: $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c -o $(BOARD).o
+++
+++main.o: $(BOOTSTRAP_PATH)/main.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/main.c -o main.o
+++
+++gpio.o: $(BOOTSTRAP_PATH)/driver/gpio.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/gpio.c -o gpio.o
+++
+++pmc.o:  $(BOOTSTRAP_PATH)/driver/pmc.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/pmc.c -o pmc.o
+++
+++debug.o: $(BOOTSTRAP_PATH)/driver/debug.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/debug.c -o debug.o
+++
+++sdramc.o:  $(BOOTSTRAP_PATH)/driver/sdramc.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/sdramc.c -o sdramc.o
+++
+++dataflash.o:  $(BOOTSTRAP_PATH)/driver/dataflash.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/dataflash.c -o dataflash.o
+++
+++crt0_gnu.o:  $(BOOTSTRAP_PATH)/crt0_gnu.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/crt0_gnu.S -o crt0_gnu.o
+++
+++div0.o:  $(BOOTSTRAP_PATH)/lib/div0.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/div0.c -o div0.o
+++
+++string.o:  $(BOOTSTRAP_PATH)/lib/string.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/string.c -o string.o
+++
+++udiv.o:  $(BOOTSTRAP_PATH)/lib/udiv.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/udiv.c -o udiv.o
+++
+++_udivsi3.o:  $(BOOTSTRAP_PATH)/lib/_udivsi3.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_udivsi3.S -o _udivsi3.o
+++
+++_umodsi3.o:  $(BOOTSTRAP_PATH)/lib/_umodsi3.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_umodsi3.S -o _umodsi3.o
+++
+++clean:
+++	rm -f *.o *.bin *.elf *.map
++diff --git a/board/usb_a9263/dataflash/usb-a9263.h b/board/usb_a9263/dataflash/usb-a9263.h
++new file mode 100644
++index 0000000..40a3af8
++--- /dev/null
+++++ b/board/usb_a9263/dataflash/usb-a9263.h
++@@ -0,0 +1,97 @@
+++/* ----------------------------------------------------------------------------
+++ *         ATMEL Microcontroller Software Support  -  ROUSSET  -
+++ * ----------------------------------------------------------------------------
+++ * Copyright (c) 2006, Atmel Corporation
+++
+++ * All rights reserved.
+++ *
+++ * Redistribution and use in source and binary forms, with or without
+++ * modification, are permitted provided that the following conditions are met:
+++ *
+++ * - Redistributions of source code must retain the above copyright notice,
+++ * this list of conditions and the disclaimer below.
+++ *
+++ * Atmel's name may not be used to endorse or promote products derived from
+++ * this software without specific prior written permission.
+++ *
+++ * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+++ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+++ * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+++ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+++ * ----------------------------------------------------------------------------
+++ * File Name           : usb-a9263.h
+++ * Object              :
+++ * Creation            : GH Jun 28th 2012
+++ *-----------------------------------------------------------------------------
+++ */
+++#ifndef _USB_A9263_H
+++#define _USB_A9263_H
+++
+++/* ******************************************************************* */
+++/* PMC Settings                                                        */
+++/*                                                                     */
+++/* The main oscillator is enabled as soon as possible in the c_startup */
+++/* and MCK is switched on the main oscillator.                         */
+++/* PLL initialization is done later in the hw_init() function          */
+++/* ******************************************************************* */
+++#define MASTER_CLOCK		(180000000/2)
+++#define PLL_LOCK_TIMEOUT	1000000
+++
+++#define PLLA_SETTINGS	0x20593F06
+++#define PLLB_SETTINGS	0x10483F0E
+++
+++/* Switch MCK on PLLA output PCK = PLLA = 2 * MCK */
+++#define MCKR_SETTINGS		(AT91C_PMC_PRES_CLK | AT91C_PMC_MDIV_2)
+++#define MCKR_CSS_SETTINGS	(AT91C_PMC_CSS_PLLA_CLK | MCKR_SETTINGS)
+++
+++/* ******************************************************************* */
+++/* DataFlash Settings                                                  */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_BASE_SPI	AT91C_BASE_SPI0
+++#define AT91C_ID_SPI	AT91C_ID_SPI0
+++
+++/* SPI CLOCK */
+++#define AT91C_SPI_CLK 		 8000000
+++/* AC characteristics */
+++/* DLYBS = tCSS= 250ns min and DLYBCT = tCSH = 250ns */
+++#define DATAFLASH_TCSS		(0x1a << 16)	/* 250ns min (tCSS) <=> 12/48000000 = 250ns */
+++#define DATAFLASH_TCHS		(0x1 << 24)	/* 250ns min (tCSH) <=> (64*1+SCBR)/(2*48000000) */
+++
+++#define DF_CS_SETTINGS 		(AT91C_SPI_NCPHA | (AT91C_SPI_DLYBS & DATAFLASH_TCSS) | (AT91C_SPI_DLYBCT & DATAFLASH_TCHS) | ((MASTER_CLOCK / AT91C_SPI_CLK) << 8))
+++
+++/* ******************************************************************* */
+++/* SDRAMC Settings                                                     */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_BASE_SDRAMC 	AT91C_BASE_SDRAMC0
+++#define AT91C_EBI_SDRAM		AT91C_EBI0_SDRAM
+++
+++/* ******************************************************************* */
+++/* BootStrap Settings                                                  */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
+++
+++#define IMG_ADDRESS 			0x4000			/* Image Address in DataFlash */
+++#define	IMG_SIZE			0x40000			/* Image Size in DataFlash    */
+++
+++#define MACH_TYPE       		0x6AE       		/* USB-A9263 */
+++#define JUMP_ADDR			0x23F00000		/* Final Jump Address 	      */
+++
+++/* ******************************************************************* */
+++/* Application Settings                                                */
+++/* ******************************************************************* */
+++#define CFG_HW_INIT
+++#define CFG_SDRAM
+++#undef	CFG_DEBUG
+++
+++#define CFG_DATAFLASH
+++
+++#endif	/* _USB_A9263_H */
++diff --git a/board/usb_a9263/nandflash/Makefile b/board/usb_a9263/nandflash/Makefile
++new file mode 100644
++index 0000000..c453098
++--- /dev/null
+++++ b/board/usb_a9263/nandflash/Makefile
++@@ -0,0 +1,117 @@
+++# TODO: set this appropriately for your local toolchain
+++#SHELL=C:\CYGWIN_REP\dwn_071004\bin\BASH.exe
+++CROSS_COMPILE=arm-elf-
+++
+++TOOLCHAIN=gcc
+++
+++BOOTSTRAP_PATH=../../..
+++
+++# NandFlashBoot Configuration for USB-A9263
+++
+++# Target name (case sensitive!!!)
+++TARGET=AT91SAM9263
+++# Board name (case sensitive!!!)
+++BOARD=usb_a9263
+++# Link Address and Top_of_Memory
+++LINK_ADDR=0x300000
+++TOP_OF_MEMORY=0x314000
+++# Name of current directory
+++PROJECT=nandflash
+++
+++ifndef BOOT_NAME
+++BOOT_NAME=$(PROJECT)_$(BOARD)
+++endif
+++
+++INCL=./$(BOOTSTRAP_PATH)/board/$(BOARD)/$(PROJECT)
+++
+++ifeq ($(TOOLCHAIN), gcc)
+++
+++AS=$(CROSS_COMPILE)gcc
+++CC=$(CROSS_COMPILE)gcc
+++LD=$(CROSS_COMPILE)gcc
+++NM= $(CROSS_COMPILE)nm
+++SIZE=$(CROSS_COMPILE)size
+++OBJCOPY=$(CROSS_COMPILE)objcopy
+++OBJDUMP=$(CROSS_COMPILE)objdump
+++CCFLAGS=-g -mcpu=arm9 -O0 -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
+++ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
+++
+++# Linker flags.
+++#  -Wl,...:     tell GCC to pass this to linker.
+++#    -Map:      create map file
+++#    --cref:    add cross reference to map file
+++LDFLAGS+=-nostartfiles -nostdlib  -Wl,-Map=$(BOOT_NAME).map,--cref
+++LDFLAGS+=-T $(BOOTSTRAP_PATH)/elf32-littlearm.lds -Ttext $(LINK_ADDR)
+++OBJS=crt0_gnu.o
+++
+++endif
+++
+++OBJS+=\
+++	$(BOARD).o \
+++	main.o \
+++	gpio.o \
+++	pmc.o \
+++	debug.o \
+++	sdramc.o \
+++	nandflash.o \
+++	_udivsi3.o \
+++	_umodsi3.o \
+++	div0.o \
+++	udiv.o \
+++	string.o
+++
+++rebuild: clean all
+++
+++all: 	$(BOOT_NAME)
+++
+++ifeq ($(TOOLCHAIN), gcc)
+++$(BOOT_NAME): $(OBJS)
+++	$(LD) $(LDFLAGS) -n -o $(BOOT_NAME).elf $(OBJS)
+++	$(OBJCOPY) --strip-debug --strip-unneeded $(BOOT_NAME).elf -O binary $(BOOT_NAME).bin
+++endif
+++	
+++	
+++$(BOARD).o: $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c -o $(BOARD).o
+++
+++main.o: $(BOOTSTRAP_PATH)/main.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/main.c -o main.o
+++
+++gpio.o: $(BOOTSTRAP_PATH)/driver/gpio.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/gpio.c -o gpio.o
+++
+++pmc.o:  $(BOOTSTRAP_PATH)/driver/pmc.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/pmc.c -o pmc.o
+++
+++debug.o: $(BOOTSTRAP_PATH)/driver/debug.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/debug.c -o debug.o
+++
+++sdramc.o:  $(BOOTSTRAP_PATH)/driver/sdramc.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/sdramc.c -o sdramc.o
+++
+++dataflash.o:  $(BOOTSTRAP_PATH)/driver/dataflash.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/dataflash.c -o dataflash.o
+++
+++nandflash.o:  $(BOOTSTRAP_PATH)/driver/nandflash.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/nandflash.c -o nandflash.o
+++
+++crt0_gnu.o:  $(BOOTSTRAP_PATH)/crt0_gnu.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/crt0_gnu.S -o crt0_gnu.o
+++
+++div0.o:  $(BOOTSTRAP_PATH)/lib/div0.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/div0.c -o div0.o
+++
+++string.o:  $(BOOTSTRAP_PATH)/lib/string.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/string.c -o string.o
+++
+++udiv.o:  $(BOOTSTRAP_PATH)/lib/udiv.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/udiv.c -o udiv.o
+++
+++_udivsi3.o:  $(BOOTSTRAP_PATH)/lib/_udivsi3.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_udivsi3.S -o _udivsi3.o
+++
+++_umodsi3.o:  $(BOOTSTRAP_PATH)/lib/_umodsi3.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_umodsi3.S -o _umodsi3.o
+++
+++clean:
+++	rm -f *.o *.bin *.elf *.map
++diff --git a/board/usb_a9263/nandflash/usb-a9263.h b/board/usb_a9263/nandflash/usb-a9263.h
++new file mode 100644
++index 0000000..24e2cf1
++--- /dev/null
+++++ b/board/usb_a9263/nandflash/usb-a9263.h
++@@ -0,0 +1,116 @@
+++/* ----------------------------------------------------------------------------
+++ *         ATMEL Microcontroller Software Support  -  ROUSSET  -
+++ * ----------------------------------------------------------------------------
+++ * Copyright (c) 2006, Atmel Corporation
+++
+++ * All rights reserved.
+++ *
+++ * Redistribution and use in source and binary forms, with or without
+++ * modification, are permitted provided that the following conditions are met:
+++ *
+++ * - Redistributions of source code must retain the above copyright notice,
+++ * this list of conditions and the disclaimer below.
+++ *
+++ * Atmel's name may not be used to endorse or promote products derived from
+++ * this software without specific prior written permission.
+++ *
+++ * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+++ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+++ * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+++ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+++ * ----------------------------------------------------------------------------
+++ * File Name           : usb-a9263.h
+++ * Object              :
+++ * Creation            : GH Jun 28th 2012
+++ *-----------------------------------------------------------------------------
+++ */
+++#ifndef _USB_A9263_H
+++#define _USB_A9263_H
+++
+++/* ******************************************************************* */
+++/* PMC Settings                                                        */
+++/*                                                                     */
+++/* The main oscillator is enabled as soon as possible in the c_startup */
+++/* and MCK is switched on the main oscillator.                         */
+++/* PLL initialization is done later in the hw_init() function          */
+++/* ******************************************************************* */
+++#define MASTER_CLOCK		(180000000/2)
+++#define PLL_LOCK_TIMEOUT	1000000
+++
+++#define PLLA_SETTINGS	0x20593F06
+++#define PLLB_SETTINGS	0x10483F0E
+++
+++/* Switch MCK on PLLA output PCK = PLLA = 2 * MCK */
+++#define MCKR_SETTINGS		(AT91C_PMC_PRES_CLK | AT91C_PMC_MDIV_2)
+++#define MCKR_CSS_SETTINGS	(AT91C_PMC_CSS_PLLA_CLK | MCKR_SETTINGS)
+++
+++/* ******************************************************************* */
+++/* NandFlash Settings                                                  */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_SMARTMEDIA_BASE	0x40000000
+++
+++#define AT91_SMART_MEDIA_ALE    (1 << 21)	/* our ALE is AD21 */
+++#define AT91_SMART_MEDIA_CLE    (1 << 22)	/* our CLE is AD22 */
+++
+++#define NAND_DISABLE_CE() do { *(volatile unsigned int *)AT91C_PIOD_SODR = AT91C_PIO_PD15;} while(0)
+++#define NAND_ENABLE_CE()  do { *(volatile unsigned int *)AT91C_PIOD_CODR = AT91C_PIO_PD15;} while(0)
+++#define NAND_WAIT_READY() while (!(*(volatile unsigned int *)AT91C_PIOA_PDSR & AT91C_PIO_PA22))
+++
+++/* ******************************************************************* */
+++/* SDRAMC Settings                                                     */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_BASE_SDRAMC 	AT91C_BASE_SDRAMC0
+++#define AT91C_EBI_SDRAM		AT91C_EBI0_SDRAM
+++
+++/* ******************************************************************** */
+++/* SMC Chip Select 3 Timings for NandFlash for MASTER_CLOCK = 90000000. */
+++/* Please refer to SMC section in AT91SAM9x datasheet to learn how 	*/
+++/* to generate these values. 						*/
+++/* ******************************************************************** */
+++#define AT91C_SM_NWE_SETUP	(1 << 0)
+++#define AT91C_SM_NCS_WR_SETUP	(0 << 8)
+++#define AT91C_SM_NRD_SETUP	(1 << 16)
+++#define AT91C_SM_NCS_RD_SETUP	(0 << 24)
+++  
+++#define AT91C_SM_NWE_PULSE 	(3 << 0)
+++#define AT91C_SM_NCS_WR_PULSE	(3 << 8)
+++#define AT91C_SM_NRD_PULSE	(3 << 16)
+++#define AT91C_SM_NCS_RD_PULSE	(3 << 24)
+++  
+++#define AT91C_SM_NWE_CYCLE 	(5 << 0)
+++#define AT91C_SM_NRD_CYCLE	(5 << 16)
+++
+++#define AT91C_SM_TDF	        (2 << 16)
+++
+++/* ******************************************************************* */
+++/* BootStrap Settings                                                  */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define IMG_ADDRESS 	0x20000		/* Image Address in NandFlash */
+++#define	IMG_SIZE	0x40000		/* Image Size in NandFlash    */
+++
+++#define MACH_TYPE       0x6AE  		/* USB-A9263 */
+++#define JUMP_ADDR	0x23F00000	/* Final Jump Address 	      */
+++
+++/* ******************************************************************* */
+++/* Application Settings                                                */
+++/* ******************************************************************* */
+++#undef CFG_DEBUG
+++#undef CFG_DATAFLASH
+++
+++#define CFG_NANDFLASH
+++#undef	NANDFLASH_SMALL_BLOCKS	/* NANDFLASH_LARGE_BLOCKS used instead */
+++
+++#define CFG_HW_INIT
+++#define CFG_SDRAM
+++
+++
+++#endif	/* _USB_A9263_H */
++diff --git a/board/usb_a9263/usb_a9263.c b/board/usb_a9263/usb_a9263.c
++new file mode 100644
++index 0000000..5630f99
++--- /dev/null
+++++ b/board/usb_a9263/usb_a9263.c
++@@ -0,0 +1,285 @@
+++/* ----------------------------------------------------------------------------
+++ *         ATMEL Microcontroller Software Support  -  ROUSSET  -
+++ * ----------------------------------------------------------------------------
+++ * Copyright (c) 2006, Atmel Corporation
+++
+++ * All rights reserved.
+++ *
+++ * Redistribution and use in source and binary forms, with or without
+++ * modification, are permitted provided that the following conditions are met:
+++ *
+++ * - Redistributions of source code must retain the above copyright notice,
+++ * this list of conditions and the disclaiimer below.
+++ *
+++ * Atmel's name may not be used to endorse or promote products derived from
+++ * this software without specific prior written permission.
+++ *
+++ * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+++ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+++ * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+++ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+++ * ----------------------------------------------------------------------------
+++ * File Name           : usb_a9263.c
+++ * Object              :
+++ * Creation            : GH Jun 28th 2012
+++ *-----------------------------------------------------------------------------
+++ */
+++#include "../../include/part.h"
+++#include "../../include/gpio.h"
+++#include "../../include/pmc.h"
+++#include "../../include/debug.h"
+++#include "../../include/sdramc.h"
+++#include "../../include/main.h"
+++#ifdef CFG_NANDFLASH
+++#include "../../include/nandflash.h"
+++#endif
+++#ifdef CFG_DATAFLASH
+++#include "../../include/dataflash.h"
+++#endif
+++
+++static inline unsigned int get_cp15(void)
+++{
+++	unsigned int value;
+++	__asm__("mrc p15, 0, %0, c1, c0, 0" : "=r" (value));
+++	return value;
+++}
+++
+++static inline void set_cp15(unsigned int value)
+++{
+++	__asm__("mcr p15, 0, %0, c1, c0, 0" : : "r" (value));
+++}
+++
+++
+++#ifdef CFG_HW_INIT
+++/*---------------------------------------------------------------------------- */
+++/* \fn    hw_init							       */
+++/* \brief This function performs very low level HW initialization	       */
+++/* This function is invoked as soon as possible during the c_startup	       */
+++/* The bss segment must be initialized					       */
+++/*---------------------------------------------------------------------------- */
+++void hw_init(void)
+++{
+++	/* Configure PIOs */
+++	const struct pio_desc hw_pio[] = {
+++#ifdef CFG_DEBUG
+++		{"RXD", AT91C_PIN_PC(30), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"TXD", AT91C_PIN_PC(31), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++#endif
+++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
+++	};
+++
+++	/* Disable watchdog */
+++	writel(AT91C_WDTC_WDDIS, AT91C_BASE_WDTC + WDTC_WDMR);
+++
+++	/* At this stage the main oscillator is supposed to be enabled
+++	 * PCK = MCK = MOSC */
+++
+++	/* Configure PLLA = MOSC * (PLL_MULA + 1) / PLL_DIVA */
+++	pmc_cfg_plla(PLLA_SETTINGS, PLL_LOCK_TIMEOUT);
+++
+++	/* PCK = PLLA = 2 * MCK */
+++	pmc_cfg_mck(MCKR_SETTINGS, PLL_LOCK_TIMEOUT);
+++	/* Switch MCK on PLLA output */
+++	pmc_cfg_mck(MCKR_CSS_SETTINGS, PLL_LOCK_TIMEOUT);
+++
+++
+++	/* Configure PLLB */
+++	pmc_cfg_pllb(PLLB_SETTINGS, PLL_LOCK_TIMEOUT);
+++
+++	/* Configure the PIO controller to output PCK0 */
+++	pio_setup(hw_pio);
+++
+++	/* Configure the EBI0 Slave Slot Cycle to 64 */
+++	writel( (readl((AT91C_BASE_MATRIX + MATRIX_SCFG4)) & ~0xFF) | 0x40, (AT91C_BASE_MATRIX + MATRIX_SCFG4));
+++
+++#ifdef CFG_DEBUG
+++	/* Enable Debug messages on the DBGU */
+++	dbg_init(BAUDRATE(MASTER_CLOCK, 115200));
+++	dbg_print("Start AT91Bootstrap...\n\r");
+++#endif /* CFG_DEBUG */
+++
+++#ifdef CFG_SDRAM
+++	/* Initialize the matrix */
+++	/* VDDIOMSEL = 1 -> Memories are 3.3V powered */
+++	writel(readl(AT91C_BASE_CCFG + CCFG_EBI0CSA) | (1 << 16) | AT91C_EBI_CS1A_SDRAMC, AT91C_BASE_CCFG + CCFG_EBI0CSA);
+++
+++	/* Configure SDRAM Controller */
+++	sdram_init(	AT91C_SDRAMC_NC_9  |
+++				AT91C_SDRAMC_NR_13 |
+++				AT91C_SDRAMC_CAS_2 |
+++				AT91C_SDRAMC_NB_4_BANKS |
+++				AT91C_SDRAMC_DBW_32_BITS |
+++				AT91C_SDRAMC_TWR_2 |
+++				AT91C_SDRAMC_TRC_7 |
+++				AT91C_SDRAMC_TRP_2 |
+++				AT91C_SDRAMC_TRCD_2 |
+++				AT91C_SDRAMC_TRAS_5 |
+++				AT91C_SDRAMC_TXSR_8,		/* Control Register       */
+++				(MASTER_CLOCK * 7)/1000000,	/* Refresh Timer Register */
+++				AT91C_SDRAMC_MD_SDRAM);		/* SDRAM (no low power)   */ 
+++#endif	/* CFG_SDRAM */
+++}
+++#endif /* CFG_HW_INIT */
+++
+++
+++#ifdef CFG_SDRAM
+++//*----------------------------------------------------------------------------
+++//* \fn    sdramc_hw_init
+++//* \brief This function performs SDRAMC HW initialization
+++//*----------------------------------------------------------------------------*/
+++void sdramc_hw_init(void)
+++{
+++	/* Configure PIOs */
+++	const struct pio_desc sdramc_pio[] = {
+++		{"D16", AT91C_PIN_PD(16), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D17", AT91C_PIN_PD(17), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D18", AT91C_PIN_PD(18), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D19", AT91C_PIN_PD(19), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D20", AT91C_PIN_PD(20), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D21", AT91C_PIN_PD(21), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D22", AT91C_PIN_PD(22), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D23", AT91C_PIN_PD(23), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D24", AT91C_PIN_PD(24), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D25", AT91C_PIN_PD(25), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D26", AT91C_PIN_PD(26), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D27", AT91C_PIN_PD(27), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D28", AT91C_PIN_PD(28), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D29", AT91C_PIN_PD(29), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D30", AT91C_PIN_PD(30), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D31", AT91C_PIN_PD(31), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
+++	};
+++
+++	/* Configure the SDRAMC PIO controller */
+++	pio_setup(sdramc_pio);
+++}
+++#endif
+++
+++#ifdef CFG_DATAFLASH
+++/*------------------------------------------------------------------------------*/
+++/* \fn    df_recovery								*/
+++/* \brief This function erases DataFlash Page 0 if USER PB is pressed 		*/
+++/*        during boot sequence							*/
+++/*------------------------------------------------------------------------------*/
+++void df_recovery(AT91PS_DF pDf)
+++{
+++#if (AT91C_SPI_PCS_DATAFLASH == AT91C_SPI_PCS0_DATAFLASH)
+++	/* Configure PIOs */
+++	const struct pio_desc usrpb_pio[] = {
+++		{"USRPB", AT91C_PIN_PB(10), 0, PIO_PULLUP, PIO_INPUT},
+++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
+++	};
+++
+++	/* Configure the PIO controller */
+++	writel((1 << AT91C_ID_PIOB), PMC_PCER + AT91C_BASE_PMC);
+++	pio_setup(usrpb_pio);
+++	
+++	/* If USER PB is pressed during Boot sequence */
+++	/* Erase NandFlash block 0*/
+++	if ( !pio_get_value(AT91C_PIN_PB(10)) )
+++		df_page_erase(pDf, 0);
+++#endif
+++}
+++/*------------------------------------------------------------------------------*/
+++/* \fn    df_hw_init								*/
+++/* \brief This function performs DataFlash HW initialization			*/
+++/*------------------------------------------------------------------------------*/
+++void df_hw_init(void)
+++{
+++	/* Configure PIOs */
+++	const struct pio_desc df_pio[] = {
+++		{"MISO",  AT91C_PIN_PA(0), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{"MOSI",  AT91C_PIN_PA(1), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{"SPCK",  AT91C_PIN_PA(2), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{"NPCS0", AT91C_PIN_PA(5), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
+++	};
+++
+++	/* Configure the PIO controller */
+++	pio_setup(df_pio);
+++}
+++#endif /* CFG_DATAFLASH */
+++
+++
+++#ifdef CFG_NANDFLASH
+++/*------------------------------------------------------------------------------*/
+++/* \fn    nand_recovery								*/
+++/* \brief This function erases NandFlash Block 0 if USER PB is pressed 		*/
+++/*        during boot sequence							*/
+++/*------------------------------------------------------------------------------*/
+++static void nand_recovery(void)
+++{
+++	/* Configure PIOs */
+++	const struct pio_desc usrpb_pio[] = {
+++		{"USRPB", AT91C_PIN_PB(10), 0, PIO_PULLUP, PIO_INPUT},
+++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
+++	};
+++
+++	/* Configure the PIO controller */
+++	writel((1 << AT91C_ID_PIOB), PMC_PCER + AT91C_BASE_PMC);
+++	pio_setup(usrpb_pio);
+++	
+++	/* If USER PB is pressed during Boot sequence */
+++	/* Erase NandFlash block 0*/
+++	if (!pio_get_value(AT91C_PIN_PB(10)) )
+++		AT91F_NandEraseBlock0();
+++}
+++/*------------------------------------------------------------------------------*/
+++/* \fn    nandflash_hw_init							*/
+++/* \brief NandFlash HW init							*/
+++/*------------------------------------------------------------------------------*/
+++void nandflash_hw_init(void)
+++{
+++	/* Configure PIOs */
+++	const struct pio_desc nand_pio[] = {
+++		{"RDY_BSY", AT91C_PIN_PA(22), 0, PIO_PULLUP, PIO_INPUT},
+++		{"NANDCS",  AT91C_PIN_PD(15), 0, PIO_PULLUP, PIO_OUTPUT},
+++		{(char *) 0, 0, 0,  PIO_DEFAULT, PIO_PERIPH_A},
+++	};
+++
+++	/* Setup Smart Media, first enable the address range of CS3 in HMATRIX user interface */
+++	writel(readl(AT91C_BASE_CCFG + CCFG_EBI0CSA) | AT91C_EBI_CS3A_SM, AT91C_BASE_CCFG + CCFG_EBI0CSA);
+++		    
+++	/* Configure SMC CS3 */
+++ 	writel((AT91C_SM_NWE_SETUP | AT91C_SM_NCS_WR_SETUP | AT91C_SM_NRD_SETUP | AT91C_SM_NCS_RD_SETUP), AT91C_BASE_SMC0 + SMC_SETUP3);
+++  	writel((AT91C_SM_NWE_PULSE | AT91C_SM_NCS_WR_PULSE | AT91C_SM_NRD_PULSE | AT91C_SM_NCS_RD_PULSE), AT91C_BASE_SMC0 + SMC_PULSE3);
+++	writel((AT91C_SM_NWE_CYCLE | AT91C_SM_NRD_CYCLE)						, AT91C_BASE_SMC0 + SMC_CYCLE3);
+++	writel((AT91C_SMC_READMODE | AT91C_SMC_WRITEMODE | AT91C_SMC_NWAITM_NWAIT_DISABLE | 
+++  		AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS | AT91C_SM_TDF)						, AT91C_BASE_SMC0 + SMC_CTRL3);
+++
+++	/* Configure the PIO controller */
+++	writel((1 << AT91C_ID_PIOA), PMC_PCER + AT91C_BASE_PMC);
+++	writel((1 << AT91C_ID_PIOCDE), PMC_PCER + AT91C_BASE_PMC);
+++
+++	pio_setup(nand_pio);
+++
+++	nand_recovery();
+++}
+++
+++/*------------------------------------------------------------------------------*/
+++/* \fn    nandflash_cfg_16bits_dbw_init						*/
+++/* \brief Configure SMC in 16 bits mode						*/
+++/*------------------------------------------------------------------------------*/
+++void nandflash_cfg_16bits_dbw_init(void)
+++{
+++	writel(readl(AT91C_BASE_SMC0 + SMC_CTRL3) | AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS, AT91C_BASE_SMC0 + SMC_CTRL3);
+++}
+++
+++/*------------------------------------------------------------------------------*/
+++/* \fn    nandflash_cfg_8bits_dbw_init						*/
+++/* \brief Configure SMC in 8 bits mode						*/
+++/*------------------------------------------------------------------------------*/
+++void nandflash_cfg_8bits_dbw_init(void)
+++{
+++	writel((readl(AT91C_BASE_SMC0 + SMC_CTRL3) & ~(AT91C_SMC_DBW)) | AT91C_SMC_DBW_WIDTH_EIGTH_BITS, AT91C_BASE_SMC0 + SMC_CTRL3);
+++}
+++
+++#endif /* #ifdef CFG_NANDFLASH */
+++
+++
++diff --git a/crt0_gnu.S b/crt0_gnu.S
++index 042b617..002feef 100644
++--- a/crt0_gnu.S
+++++ b/crt0_gnu.S
++@@ -106,6 +106,13 @@ _relocate_to_sram:
++ #endif /* CFG_NORFLASH */
++ 
++ _setup_clocks:
+++/* Test if main osc is bypassed */
+++	ldr 	r0,=AT91C_PMC_MOR
+++	ldr 	r1, [r0]
+++	ldr 	r2,=AT91C_CKGR_OSCBYPASS 
+++	ands 	r1, r1, r2
+++	bne	_init_data	/* branch if OSCBYPASS=1 */
+++
++ /* Test if main oscillator is enabled */
++ 	ldr 	r0,=AT91C_PMC_SR
++ 	ldr 	r1, [r0]
++diff --git a/driver/dataflash.c b/driver/dataflash.c
++index e28e49e..4de295a 100644
++--- a/driver/dataflash.c
+++++ b/driver/dataflash.c
++@@ -293,14 +293,14 @@ static int df_init (AT91PS_DF pDf)
++ 			pDf->dfDescription.pages_size = 264;
++ 			pDf->dfDescription.page_offset = 9;
++ 			break;
++-
+++*/
++ 		case AT45DB021B:
++ 			pDf->dfDescription.pages_number = 1024;
++ 			pDf->dfDescription.pages_size = 264;
++ 			pDf->dfDescription.page_offset = 9;
++ 			break;
++ 
++-		case AT45DB041B:
+++/*		case AT45DB041B:
++ 			pDf->dfDescription.pages_number = 2048;
++ 			pDf->dfDescription.pages_size = 264;
++ 			pDf->dfDescription.page_offset = 9;
++@@ -373,7 +373,7 @@ int load_df(unsigned int pcs, unsigned int img_addr, unsigned int img_size, unsi
++     if (!df_init(pDf))
++         return -1;
++ 
++-#if defined(AT91SAM9260) || defined(AT91SAM9XE) || defined(AT91SAM9G20)
+++#if defined(AT91SAM9260) || defined(AT91SAM9263) || defined(AT91SAM9XE) || defined(AT91SAM9G20)
++     /* Test if a button has been pressed or not */
++     /* Erase Page 0 to avoid infinite loop */
++     df_recovery(pDf);
++diff --git a/include/part.h b/include/part.h
++index ba5985a..a1863d0 100644
++--- a/include/part.h
+++++ b/include/part.h
++@@ -61,7 +61,11 @@
++ 
++ #ifdef AT91SAM9263
++ #include "AT91SAM9263_inc.h"
++-#include "at91sam9263ek.h"
+++	#ifdef at91sam9263ek
+++	#include "at91sam9263ek.h"
+++	#elif usb_a9263
+++	#include "usb-a9263.h"
+++	#endif
++ #endif
++ 
++ #ifdef AT91CAP9
++-- 
++1.5.6.3
++
+diff --git a/board/calao/usb-a9263/usb-a9263_defconfig b/board/calao/usb-a9263/usb-a9263_defconfig
+new file mode 100644
+index 0000000..8c71231
+--- /dev/null
++++ b/board/calao/usb-a9263/usb-a9263_defconfig
+@@ -0,0 +1,102 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++# CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_SLAB=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++# CONFIG_BLK_DEV_BSG is not set
++# CONFIG_IOSCHED_DEADLINE is not set
++# CONFIG_IOSCHED_CFQ is not set
++CONFIG_ARCH_AT91=y
++CONFIG_ARCH_AT91SAM9263=y
++CONFIG_MACH_USB_A9263=y
++CONFIG_AT91_SLOW_CLOCK=y
++# CONFIG_ARM_THUMB is not set
++CONFIG_AEABI=y
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_CMDLINE="mem=64M console=ttyS0,115200"
++CONFIG_FPE_NWFPE=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_IP_ROUTE_VERBOSE=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_BOOTP=y
++CONFIG_IP_PNP_RARP=y
++CONFIG_IP_MROUTE=y
++CONFIG_IP_PIMSM_V1=y
++CONFIG_IP_PIMSM_V2=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_CHAR=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_DATAFLASH=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_ATMEL=y
++CONFIG_MTD_NAND_ATMEL_ECC_SOFT=y
++CONFIG_MTD_UBI=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_SCSI=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_MULTI_LUN=y
++CONFIG_NETDEVICES=y
++CONFIG_MII=y
++CONFIG_MACB=y
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_EVBUG=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_GPIO=y
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO is not set
++CONFIG_SERIAL_ATMEL=y
++CONFIG_SERIAL_ATMEL_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_SPI=y
++CONFIG_SPI_ATMEL=y
++# CONFIG_HWMON is not set
++# CONFIG_USB_HID is not set
++CONFIG_USB=y
++CONFIG_USB_DEVICEFS=y
++CONFIG_USB_MON=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_ETH=m
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_EXT2_FS=y
++CONFIG_FUSE_FS=m
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_JFFS2_FS=y
++CONFIG_UBIFS_FS=y
++CONFIG_UBIFS_FS_XATTR=y
++CONFIG_UBIFS_FS_ADVANCED_COMPR=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_850=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_DEBUG_KERNEL=y
++CONFIG_DEBUG_USER=y
++CONFIG_DEBUG_LL=y
+diff --git a/configs/usb_a9263_defconfig b/configs/usb_a9263_defconfig
+new file mode 100644
+index 0000000..d16bdc0
+--- /dev/null
++++ b/configs/usb_a9263_defconfig
+@@ -0,0 +1,14 @@
++BR2_arm=y
++BR2_arm926t=y
++BR2_JLEVEL=2
++BR2_PACKAGE_HOST_SAM_BA=y
++BR2_TARGET_ROOTFS_UBIFS=y
++BR2_TARGET_AT91BOOTSTRAP=y
++BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/usb-a9263/"
++BR2_TARGET_AT91BOOTSTRAP_BOARD="usb_a9263"
++BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
++BR2_TARGET_BAREBOX=y
++BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9263"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9263/usb-a9263_defconfig"
 -- 
-http://autobuild.buildroot.net
+1.5.6.3
