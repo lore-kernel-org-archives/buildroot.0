@@ -1,42 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2012 00:30:19 +0200
-Subject: [Buildroot] Unable to boot via initrd
-In-Reply-To: <07221C471CA1C044B6D10EC0D483C95708D30B6D@hercules.clumpton.homeip.net>
-References: <07221C471CA1C044B6D10EC0D483C95708D30B6D@hercules.clumpton.homeip.net>
-Message-ID: <4FFCACFB.4030601@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 11 Jul 2012 00:30:36 +0200
+Subject: [Buildroot] [PATCH] libnss: fix 64-bit build
+Message-ID: <1341959436-31277-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/10/12 23:24, Bart J. Smit wrote:
-> Another buildroot newbie looking at this. I'm looking to create a PXE boot for generic x86.
->
-> I've created the initial ramdisk with:
->   mount -o loop rootfs.ext2 ../initrd
->   cd ../initrd
->   find . | cpio -o -H newc | gzip>  ../initrd.img
+On some architectures (found on x86_64, but probably others too),
+libnss builds with -m32 unless it is configured for 64-bit build.  So
+force 64-bit build on 64-bit architectures.
 
-  An easier way to create the initrd is to choose the CPIO image from the
-buildroot menuconfig.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> When I PXE boot the client, it gets to:
->    VFS Cannot open root device, please append a correct root= boot option; here are the available partitions
->    Kernel panic - not syncing: VFS; Unable to mount root fs on unknown-block(2,0)
+---
+ package/libnss/libnss.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-  Does the kernel have support for gzipped initramfs?  Do you give a root= option
-on the kernel command line?  (Shouldn't be necessary, since your initramfs is the
-final root filesystem.)
-
-
-  Regards,
-  Arnout
-
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index ea6a329..93547d9 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -28,6 +28,10 @@ LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
+ 		OS_RELEASE="2.6" \
+ 		OS_TEST="$(ARCH)"
+ 
++ifeq ($(BR2_ARCH_IS_64),y)
++LIBNSS_BUILD_VARS += USE_64=1
++endif
++
+ 
+ define LIBNSS_BUILD_CMDS
+ 	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf build_dbm all \
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (b8b57bb..) t/libnss-64 (depends on: master)
