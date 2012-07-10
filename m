@@ -1,77 +1,112 @@
-From: Nathan Lynch <ntl@pobox.com>
-Date: Tue, 10 Jul 2012 12:37:22 -0500
-Subject: [Buildroot] [PATCH] unexport TERMINFO to correct ncurses behavior
-Message-ID: <1341941842-22303-1-git-send-email-ntl@pobox.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Tue, 10 Jul 2012 13:13:29 -0700
+Subject: [Buildroot] A libtool question
+In-Reply-To: <CALo-6+i876a7Pi+TAJ+1TuiHnzvYWPDqHXt+9TB=PCYGtEketw@mail.gmail.com>
+References: <CALo-6+g5zr8MVVVjG9fEFo5sgsVOk2uxwxzkPbb=e=U0zNwcZw@mail.gmail.com>
+ <4FFB3F22.8090206@mind.be>
+ <CALo-6+i876a7Pi+TAJ+1TuiHnzvYWPDqHXt+9TB=PCYGtEketw@mail.gmail.com>
+Message-ID: <CALo-6+gKacOX3LhTyH52Ue_gNBJCFCw1HaLbNN6kQKde1KUPhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ncurses build can become polluted by the user's TERMINFO
-environment variable, causing the user's ~/.terminfo to be modified
-and preventing the install from succeeding:
+Dear Arnout:
 
-/bin/sh ./run_tic.sh
-** Building terminfo database, please wait...
-Running tic to install /home/nathanl/devel/buildroot.git/output/host/usr/i686-unknown-linux-gnu/sysroot/usr/share/emacs/24.0.97/etc/ ...
+This libtool issues seems to be unique to arm and not powerpc.
 
-	You may see messages regarding extended capabilities, e.g., AX.
-	These are extended terminal capabilities which are compiled
-	using
-		tic -x
-	If you have ncurses 4.2 applications, you should read the INSTALL
-	document, and install the terminfo without the -x option.
+When I go back to the buildroot I have been working with for the last
+year and 3 months, that is, 2011.02, when I do a make clean && make
+with arch=powerpc, no libtool issue, but if I change to arch=arm, I
+get the same error.
 
-1562 entries written to /home/nathanl/.terminfo
-** built new /home/nathanl/devel/buildroot.git/output/host/usr/i686-unknown-linux-gnu/sysroot/usr/share/emacs/24.0.97/etc/
-installing std
-installing stdcrt
-installing vt100
-installing vt300
-make[2]: Leaving directory `/home/nathanl/devel/buildroot.git/output/build/ncurses-5.7/misc'
-make[1]: Leaving directory `/home/nathanl/devel/buildroot.git/output/build/ncurses-5.7'
-for i in $(find /home/nathanl/devel/buildroot.git/output/host/usr/i686-unknown-linux-gnu/sysroot/usr/lib* -name "*.la"); do cp -f $i $i~; /usr/bin/sed -i -e "s:\(['= ]\)/usr:\\1/home/nathanl/devel/buildroot.git/output/host/usr/i686-unknown-linux-gnu/sysroot/usr:g" $i; done
->>> ncurses 5.7 Installing to target
-mkdir -p /home/nathanl/devel/buildroot.git/output/target/usr/lib
-cp -dpf /home/nathanl/devel/buildroot.git/output/build/ncurses-5.7/lib/libncurses.so* /home/nathanl/devel/buildroot.git/output/target/usr/lib/
-ln -snf /usr/share/terminfo /home/nathanl/devel/buildroot.git/output/target/usr/lib/terminfo
-mkdir -p /home/nathanl/devel/buildroot.git/output/target/usr/share/terminfo/x
-cp -dpf /home/nathanl/devel/buildroot.git/output/host/usr/i686-unknown-linux-gnu/sysroot/usr/share/terminfo/x/xterm /home/nathanl/devel/buildroot.git/output/target/usr/share/terminfo/x
-cp: cannot stat `/home/nathanl/devel/buildroot.git/output/host/usr/i686-unknown-linux-gnu/sysroot/usr/share/terminfo/x/xterm': No such file or directory
-make: *** [/home/nathanl/devel/buildroot.git/output/build/ncurses-5.7/.stamp_target_installed] Error 1
+Charles
 
-So unexport TERMINFO in the top-level Makefile.
+On Tue, Jul 10, 2012 at 10:15 AM, Charles Krinke
+<charles.krinke@gmail.com> wrote:
+> Dear Arnout:
+>
+> I did a "make host-pkg-config-dirclean" and then a "make clean &&
+> make" and got a similar result. I am posting the defconfig resulting
+> from "make savedefconfig" and greatly appreciate your kindness in
+> helping me understand what is going on.
+>
+> Charles
+>
+> On Mon, Jul 9, 2012 at 1:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 07/09/12 18:41, Charles Krinke wrote:
+>>>
+>>> make[5]: Entering directory
+>>>
+>>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>>> /bin/sh ./libtool --tag=CC   --mode=compile /usr/bin/gcc
+>>> -DHAVE_CONFIG_H -I. -DG_LOG_DOMAIN=g_log_domain_glib     -O2
+>>> -I/home/ckrinke/buildroot-2012.05/output/host/include
+>>> -I/home/ckrinke/buildroot-2012.05/output/host/usr/include -Wall
+>>> -D_REENTRANT -MT garray.lo -MD -MP -MF .deps/garray.Tpo -c -o
+>>> garray.lo garray.c
+>>> /bin/sh ./libtool --tag=CC   --mode=compile /usr/bin/gcc
+>>> -DHAVE_CONFIG_H -I. -DG_LOG_DOMAIN=g_log_domain_glib     -O2
+>>> -I/home/ckrinke/buildroot-2012.05/output/host/include
+>>> -I/home/ckrinke/buildroot-2012.05/output/host/usr/include -Wall
+>>> -D_REENTRANT -MT gcache.lo -MD -MP -MF .deps/gcache.Tpo -c -o
+>>> gcache.lo gcache.c
+>>> libtool: Version mismatch error.  This is libtool 2.2.10, but the
+>>> libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+>>> libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+>>> libtool: and run autoconf again.
+>>> make[5]: *** [garray.lo] Error 63
+>>> make[5]: *** Waiting for unfinished jobs....
+>>> libtool: Version mismatch error.  This is libtool 2.2.10, but the
+>>> libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+>>> libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+>>> libtool: and run autoconf again.
+>>> make[5]: *** [gcache.lo] Error 63
+>>> make[5]: Leaving directory
+>>>
+>>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>>> make[4]: *** [all-recursive] Error 1
+>>> make[4]: Leaving directory
+>>>
+>>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>>> make[3]: *** [all] Error 2
+>>> make[3]: Leaving directory
+>>>
+>>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>>> make[2]: *** [all-recursive] Error 1
+>>> make[2]: Leaving directory
+>>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25'
+>>> make[1]: *** [all] Error 2
+>>> make[1]: Leaving directory
+>>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25'
+>>> make: ***
+>>> [/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/.stamp_built]
+>>> Error 2
+>>> ckrinke at dellx:~/buildroot-2012.05$
+>>>
+>>  aclocal.m4 should have been regenerated by buildroot, setting the LT_INIT
+>> version to 2.2.10.  Was this a clean build?  If not, retry after
+>> 'make host-pkg-config-dirclean'.  If that doesn't help, please run a 'make
+>> savedefconfig'
+>> and post the resulting defconfig.
+>>
+>>  Regards,
+>>  Arnout
+>> --
+>> Arnout Vandecappelle                               arnout at mind be
+>> Senior Embedded Software Architect                 +32-16-286540
+>> Essensium/Mind                                     http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+>
+>
+> --
+> Charles Krinke
 
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
 
----
 
-Noticed this when building in emacs ansi-term.  The following
-defconfig is enough to recreate it:
-
-BR2_x86_i686=y
-BR2_TOOLCHAIN_EXTERNAL=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_NCURSES=y
-
-Verified that menuconfig still works; is there anything else I should
-check?
-
- Makefile |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Makefile b/Makefile
-index b80477f..6ec7a57 100644
---- a/Makefile
-+++ b/Makefile
-@@ -199,6 +199,7 @@ unexport CFLAGS
- unexport CXXFLAGS
- unexport GREP_OPTIONS
- unexport CONFIG_SITE
-+unexport TERMINFO
- 
- GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- 
 -- 
-1.7.10.4
+Charles Krinke
