@@ -1,36 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 11 Jul 2012 00:25:45 +0200
-Subject: [Buildroot] [PATCH] libnspr: fix 64-bit build
-Message-ID: <1341959145-20368-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Jul 2012 00:30:19 +0200
+Subject: [Buildroot] Unable to boot via initrd
+In-Reply-To: <07221C471CA1C044B6D10EC0D483C95708D30B6D@hercules.clumpton.homeip.net>
+References: <07221C471CA1C044B6D10EC0D483C95708D30B6D@hercules.clumpton.homeip.net>
+Message-ID: <4FFCACFB.4030601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures (found on x86_64, but probably others too),
-libnspr builds with -m32 unless it is configured for 64-bit build.  So
-force 64-bit build on 64-bit architectures.
+On 07/10/12 23:24, Bart J. Smit wrote:
+> Another buildroot newbie looking at this. I'm looking to create a PXE boot for generic x86.
+>
+> I've created the initial ramdisk with:
+>   mount -o loop rootfs.ext2 ../initrd
+>   cd ../initrd
+>   find . | cpio -o -H newc | gzip>  ../initrd.img
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  An easier way to create the initrd is to choose the CPIO image from the
+buildroot menuconfig.
 
----
- package/libnspr/libnspr.mk |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> When I PXE boot the client, it gets to:
+>    VFS Cannot open root device, please append a correct root= boot option; here are the available partitions
+>    Kernel panic - not syncing: VFS; Unable to mount root fs on unknown-block(2,0)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 24b5370..cd7cf73 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
- 		   HOST_LDFLAGS="-lc"
- # NSPR mixes up --build and --host
--LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
-+LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
-+LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
-+LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
- 
- $(eval $(call AUTOTARGETS))
+  Does the kernel have support for gzipped initramfs?  Do you give a root= option
+on the kernel command line?  (Shouldn't be necessary, since your initramfs is the
+final root filesystem.)
+
+
+  Regards,
+  Arnout
+
 -- 
-tg: (8f6fc94..) t/libnspr-64 (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
