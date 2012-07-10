@@ -1,83 +1,100 @@
-From: =?UTF-8?Q?Mihajlo_Jovanovi=C4=87?= <jovanovic.mihajlo@gmail.com>
-Date: Tue, 10 Jul 2012 17:13:16 +0200
-Subject: [Buildroot] /dev/ttyS0 in filesystem created by Buildroot can't
- be opened in Qemu
-In-Reply-To: <20120710125411.GC4206@sapphire.tkos.co.il>
-References: <CAM1vXnbUXsTaCbtRnS5z8SdqKTTY-EV3=o79vcGbwnSjukYmNw@mail.gmail.com>
- <20120709084152.GJ22116@sapphire.tkos.co.il>
- <CAM1vXnZsLGimtxeVZ3k6n+K6k3OdV=VwWPVEuujAD0-ZT176Bg@mail.gmail.com>
- <20120709161602.GG3783@tarshish>
- <CAM1vXnaJ2c1NY1CRqcAwo0ZY8M-MTBwEsx_gGQzZkXRLf+gvVA@mail.gmail.com>
- <20120710102910.GA4206@sapphire.tkos.co.il>
- <20120710144610.2d5599aa@skate>
- <20120710125411.GC4206@sapphire.tkos.co.il>
-Message-ID: <CAM1vXnbQ8PFkT7rDvhC5kVEUv4Nxserx8CTQUFZz8TnoXh7skg@mail.gmail.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Tue, 10 Jul 2012 10:15:04 -0700
+Subject: [Buildroot] A libtool question
+In-Reply-To: <4FFB3F22.8090206@mind.be>
+References: <CALo-6+g5zr8MVVVjG9fEFo5sgsVOk2uxwxzkPbb=e=U0zNwcZw@mail.gmail.com>
+ <4FFB3F22.8090206@mind.be>
+Message-ID: <CALo-6+i876a7Pi+TAJ+1TuiHnzvYWPDqHXt+9TB=PCYGtEketw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch, Thomas,
+Dear Arnout:
 
-I have managed to launch Qemu after clean build. Configuration file was
-qemu_arm_vexpress_defconfig. There was no need to specify "rw" to avoid
-filesystem being read only.
+I did a "make host-pkg-config-dirclean" and then a "make clean &&
+make" and got a similar result. I am posting the defconfig resulting
+from "make savedefconfig" and greatly appreciate your kindness in
+helping me understand what is going on.
 
-I made sure that ttyAMA0 is console output.
+Charles
 
-Qemu window is framebuffer (only Tux is there) and all console input/output
-is in terminal window where I launched Qemu. I got command prompt.
-
-However, just for testing purposes, I have launched qemu with
-"console=tty1" and then I got correct output in terminal window, whereas in
-Qemu window there was Tux and outputs were finished with "Starting
-network...". Probably the reason for that is discrepancy between specifying
-"tty1" in Qemu invocation, and at the same time selecting "ttyAMA0" in
-menuconfig
-
-Many thanks for your suggestions.
-
-I find Buildroot very handy, and in my future work I will continue to use
-it. I'm sure there will be more questions and it's good to know that
-there's somebody who can help.
-
-Best regards,
-
-Mihajlo
-
-2012/7/10 Baruch Siach <baruch@tkos.co.il>
-
-> Hi Thomas,
+On Mon, Jul 9, 2012 at 1:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 07/09/12 18:41, Charles Krinke wrote:
+>>
+>> make[5]: Entering directory
+>>
+>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>> /bin/sh ./libtool --tag=CC   --mode=compile /usr/bin/gcc
+>> -DHAVE_CONFIG_H -I. -DG_LOG_DOMAIN=g_log_domain_glib     -O2
+>> -I/home/ckrinke/buildroot-2012.05/output/host/include
+>> -I/home/ckrinke/buildroot-2012.05/output/host/usr/include -Wall
+>> -D_REENTRANT -MT garray.lo -MD -MP -MF .deps/garray.Tpo -c -o
+>> garray.lo garray.c
+>> /bin/sh ./libtool --tag=CC   --mode=compile /usr/bin/gcc
+>> -DHAVE_CONFIG_H -I. -DG_LOG_DOMAIN=g_log_domain_glib     -O2
+>> -I/home/ckrinke/buildroot-2012.05/output/host/include
+>> -I/home/ckrinke/buildroot-2012.05/output/host/usr/include -Wall
+>> -D_REENTRANT -MT gcache.lo -MD -MP -MF .deps/gcache.Tpo -c -o
+>> gcache.lo gcache.c
+>> libtool: Version mismatch error.  This is libtool 2.2.10, but the
+>> libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+>> libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+>> libtool: and run autoconf again.
+>> make[5]: *** [garray.lo] Error 63
+>> make[5]: *** Waiting for unfinished jobs....
+>> libtool: Version mismatch error.  This is libtool 2.2.10, but the
+>> libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+>> libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+>> libtool: and run autoconf again.
+>> make[5]: *** [gcache.lo] Error 63
+>> make[5]: Leaving directory
+>>
+>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>> make[4]: *** [all-recursive] Error 1
+>> make[4]: Leaving directory
+>>
+>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>> make[3]: *** [all] Error 2
+>> make[3]: Leaving directory
+>>
+>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/glib-1.2.10'
+>> make[2]: *** [all-recursive] Error 1
+>> make[2]: Leaving directory
+>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25'
+>> make[1]: *** [all] Error 2
+>> make[1]: Leaving directory
+>> `/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25'
+>> make: ***
+>> [/home/ckrinke/buildroot-2012.05/output/build/host-pkg-config-0.25/.stamp_built]
+>> Error 2
+>> ckrinke at dellx:~/buildroot-2012.05$
+>>
+>  aclocal.m4 should have been regenerated by buildroot, setting the LT_INIT
+> version to 2.2.10.  Was this a clean build?  If not, retry after
+> 'make host-pkg-config-dirclean'.  If that doesn't help, please run a 'make
+> savedefconfig'
+> and post the resulting defconfig.
 >
-> On Tue, Jul 10, 2012 at 02:46:10PM +0200, Thomas Petazzoni wrote:
-> > Le Tue, 10 Jul 2012 13:29:11 +0300,
-> > Baruch Siach <baruch@tkos.co.il> a ?crit :
-> >
-> > > Did you make a clean build after changing the configuration? The
-> Buildroot
-> > > configuration system can't detect all configuration changes so
-> sometimes you
-> > > must start from clean. Specifically, make sure that your /etc/inittab
-> has the
-> > > right getty command with ttyAMA0.
-> >
-> > This specific part (munging the tty used for getty) is actually done as
-> > a post-build process, so it's updated as per the configuration at every
-> > build, without having to do a make clean.
->
-> Thanks for clarifying this. However, the console output that Mihajlo has
-> posted seems to indicate that something is wrong with the getty
-> configuration.
->
-> baruch
->
+>  Regards,
+>  Arnout
 > --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+
+
+-- 
+Charles Krinke
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120710/7823676f/attachment.html>
+A non-text attachment was scrubbed...
+Name: defconfig
+Type: application/octet-stream
+Size: 584 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120710/e83a289a/attachment.obj>
