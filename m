@@ -1,42 +1,38 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 11 Jul 2012 00:01:20 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: make sure cross compiling is enabled
-	when host == target
-Message-ID: <1341957681-22303-1-git-send-email-arnout@mind.be>
+Date: Wed, 11 Jul 2012 00:03:05 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: remove self-dependency from host
+	packages
+Message-ID: <1341957785-3763-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling for the same architecture and libc as the host,
-GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
-these to detect cross-compilation, and will decide that we're doing
-native compilation.  This may trigger running of executables,
-which fail because of missing libraries in the host environment.
+When HOST_XXX_DEPENDENCIES are derived automatically from
+XXX_DEPENDENCIES, a self-dependency is created if host-xxx is a dependency
+of xxx.  This was the case for miniperl.
 
-To solve this, set the vendor part in GNU_HOST_NAME to buildroot_cross.
-
-This problem exists for instance in xserver_xorg-server on x86_64.
+Filter out the self-dependency.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- Makefile |    2 +-
+ package/pkg-gentargets.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index b80477f..9d1b9d6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -200,7 +200,7 @@ unexport CXXFLAGS
- unexport GREP_OPTIONS
- unexport CONFIG_SITE
+diff --git a/package/pkg-gentargets.mk b/package/pkg-gentargets.mk
+index 1c9b458..5da9cdc 100644
+--- a/package/pkg-gentargets.mk
++++ b/package/pkg-gentargets.mk
+@@ -245,7 +245,7 @@ $(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
+ endif
+ endif
  
--GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
-+GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess | sed s/-unknown-/-buildroot_cross-/)
+-$(2)_DEPENDENCIES ?= $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES)))
++$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
  
- ##############################################################
- #
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
 -- 
-tg: (b8b57bb..) t/force-cross (depends on: master)
+tg: (b8b57bb..) t/host-no-circular-dep (depends on: master)
