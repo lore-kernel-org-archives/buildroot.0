@@ -1,60 +1,62 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 11 Jul 2012 14:57:18 +0200
-Subject: [Buildroot] [PATCH v3] Remove -fPIC on x86_64
-Message-ID: <1342011438-13433-1-git-send-email-arnout@mind.be>
+From: Bart J. Smit <bart@smits.co.uk>
+Date: Wed, 11 Jul 2012 13:54:32 +0000
+Subject: [Buildroot] Unable to boot via initrd
+In-Reply-To: <4FFCACFB.4030601@mind.be>
+References: <07221C471CA1C044B6D10EC0D483C95708D30B6D@hercules.clumpton.homeip.net>
+ <4FFCACFB.4030601@mind.be>
+Message-ID: <07221C471CA1C044B6D10EC0D483C95708D30D15@hercules.clumpton.homeip.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The -fPIC breaks the purgatory of kexec (= the code that passes command-line
-arguments to the kernel): kexec doesn't know how to handle the GOT and PLT
-relocation entries.
+Hi Arnout,
 
-There is also no reason at all to pass -fPIC.  Shared libraries that require
-it will add it to their local Makefiles, and normal executables have no
-business with -fPIC (plus it adds overhead...).
+That fixed it and it no longer needs the external compression of the root filesystem. These steps did the trick:
 
-The -fPIC was added by Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-in commit 8027784c.  That commit adds sysroot parameters to CFLAGS.
-There is no explanation why -fPIC is also added for x86_64.
+make menuconfig
+Filesystem images --->
+Only select 'initramfs for initial ramdisk of linux kernel'
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Build-tested with Sourcery toolchain and full-featured internal toolchain
-on a x86_64 host with allyesconfig (but without the packages that fail to
-build in the first place).
+This sets it to gzipped cpio automagically.
 
-v3:
- - Rebase on master (v2 was accidentally diffed against the rejected 
-   libgcrypt-config patch)
- - Remove CCACHE_DISABLE again (I couldn't reproduce it on clean rebuild
-   of the allyesconfig)
+Bedankt!
 
-v2:
- - Add CCACHE_DISABLE to TARGET_CONFIGURE_ARGS
- - Test with allyesconfig
+Bart...
 
- package/Makefile.in |    6 ------
- 1 file changed, 6 deletions(-)
+-----Original Message-----
+From: Arnout Vandecappelle [mailto:arnout at mind.be] 
+Sent: 10 July 2012 23:30
+To: Bart J. Smit
+Cc: 'buildroot at busybox.net'
+Subject: Re: [Buildroot] Unable to boot via initrd
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c5ad00a..1c3ce48 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -87,12 +87,6 @@ endif
- 
- TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- 
--ifneq ($(BR2_PREFER_STATIC_LIB),y)
--ifeq ($(BR2_x86_64),y)
--TARGET_CFLAGS+=-fPIC -DPIC
--endif # PIC for dynamic objects on x86_64
--endif
--
- ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_ABI64)),yy)
- TARGET_CFLAGS+=-fno-pic -mno-abicalls
- endif
+On 07/10/12 23:24, Bart J. Smit wrote:
+> Another buildroot newbie looking at this. I'm looking to create a PXE boot for generic x86.
+>
+> I've created the initial ramdisk with:
+>   mount -o loop rootfs.ext2 ../initrd
+>   cd ../initrd
+>   find . | cpio -o -H newc | gzip>  ../initrd.img
+
+  An easier way to create the initrd is to choose the CPIO image from the buildroot menuconfig.
+
+> When I PXE boot the client, it gets to:
+>    VFS Cannot open root device, please append a correct root= boot option; here are the available partitions
+>    Kernel panic - not syncing: VFS; Unable to mount root fs on 
+> unknown-block(2,0)
+
+  Does the kernel have support for gzipped initramfs?  Do you give a root= option on the kernel command line?  (Shouldn't be necessary, since your initramfs is the final root filesystem.)
+
+
+  Regards,
+  Arnout
+
 -- 
-tg: (9546394..) t/remove-pic (depends on: t/force-cross)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
