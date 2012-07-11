@@ -1,21 +1,41 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Tue, 10 Jul 2012 16:06:59 -0700
-Subject: [Buildroot] A libtool question
-In-Reply-To: <CALo-6+gKacOX3LhTyH52Ue_gNBJCFCw1HaLbNN6kQKde1KUPhQ@mail.gmail.com>
-References: <CALo-6+g5zr8MVVVjG9fEFo5sgsVOk2uxwxzkPbb=e=U0zNwcZw@mail.gmail.com>
- <4FFB3F22.8090206@mind.be>
- <CALo-6+i876a7Pi+TAJ+1TuiHnzvYWPDqHXt+9TB=PCYGtEketw@mail.gmail.com>
- <CALo-6+gKacOX3LhTyH52Ue_gNBJCFCw1HaLbNN6kQKde1KUPhQ@mail.gmail.com>
-Message-ID: <CALo-6+gXE8JqGYDohOMKdGxkXYK2NP8CNsk47=g-tQLK4hXM4w@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 11 Jul 2012 00:14:36 -0400
+Subject: [Buildroot] [PATCH] avahi: only install
+	default.script/S05avahi-setup.sh if not present in fs skeleton
+Message-ID: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I think I have a little further on the libtool issue I am seeing. It
-seems to follow the use of an external toolchain
-(arm-arago-linux-gnueabi-). If I allow buildroot to create its own
-uclibc toolchain, I dont get this error.
+To allow custom scripts in the target skeletons.
 
-Charles
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/avahi/avahi.mk |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 32e3df7..481da03 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -144,8 +144,14 @@ AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_REMOVE_INITSCRIPT
+ 
+ define AVAHI_INSTALL_AUTOIPD
+ 	rm -rf $(TARGET_DIR)/etc/dhcp3/
+-	$(INSTALL) -D -m 0755 package/avahi/busybox-udhcpc-default.script $(TARGET_DIR)/usr/share/udhcpc/default.script
+-	$(INSTALL) -m 0755 package/avahi/S05avahi-setup.sh $(TARGET_DIR)/etc/init.d/
++	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
++		$(INSTALL) -m 0755 -D package/avahi/busybox-udhcpc-default.script \
++			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
++	fi
++	if [ ! -f $(TARGET_DIR)/etc/init.d/S05avahi-setup.sh ]; then \
++		$(INSTALL) -m 0755 -D package/avahi/S05avahi-setup.sh \
++			$(TARGET_DIR)/etc/init.d/S05avahi-setup.sh; \
++	fi
+ 	rm -f $(TARGET_DIR)/var/lib/avahi-autoipd
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/lib
+ 	ln -sf /tmp/avahi-autoipd $(TARGET_DIR)/var/lib/avahi-autoipd
+-- 
+1.7.9.5
