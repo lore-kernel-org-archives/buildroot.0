@@ -1,26 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2012 13:51:21 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Jul 2012 14:39:53 +0200
 Subject: [Buildroot] [PATCH v2] Remove -fPIC on x86_64
-In-Reply-To: <1342007359-8910-1-git-send-email-arnout@mind.be>
+In-Reply-To: <4FFD68B9.9090202@mind.be>
 References: <1342007359-8910-1-git-send-email-arnout@mind.be>
-Message-ID: <4FFD68B9.9090202@mind.be>
+ <4FFD68B9.9090202@mind.be>
+Message-ID: <20120711143953.183c8a0c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/12 13:49, Arnout Vandecappelle (Essensium/Mind) wrote:
->   package/libgcrypt/libgcrypt.mk |    9 ---------
+Le Wed, 11 Jul 2012 13:51:21 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-  Oops, that one shouldn't have slipped in...
+> On 07/11/12 13:49, Arnout Vandecappelle (Essensium/Mind) wrote:
+> >   package/libgcrypt/libgcrypt.mk |    9 ---------
+> 
+>   Oops, that one shouldn't have slipped in...
 
-  Regards,
-  Arnout
+And also the CCACHE_DISABLE bit I guess?
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
