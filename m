@@ -1,29 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jul 2012 11:43:59 +0200
-Subject: [Buildroot] [PATCH] libgcrypt: install libgcrypt-config in host
- directory
-In-Reply-To: <4FFD47B8.8060007@mind.be>
-References: <1341958748-9024-1-git-send-email-arnout@mind.be>
- <20120711112444.5b5cbad0@skate> <4FFD47B8.8060007@mind.be>
-Message-ID: <20120711114359.3615c9b4@skate>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 11 Jul 2012 11:50:10 +0200
+Subject: [Buildroot] [PATCH] libxslt: use libgcrypt-config from STAGING_DIR
+Message-ID: <1342000210-20798-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Jul 2012 11:30:32 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Otherwise, if the host has a libgcrypt-config, that one will be used.
 
->   Unfortunately I forgot which was the dependency that triggered the error
-> in the first place...  Probably libxslt, so I'll try if I can reproduce it
-> with that package.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-That would be good, thanks.
+---
+ package/libxslt/libxslt.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 15b6e6a..a40a8a9 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -16,6 +16,7 @@ LIBXSLT_DEPENDENCIES = libxml2
+ # If we have enabled libgcrypt then use it, else disable crypto support.
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ LIBXSLT_DEPENDENCIES += libgcrypt
++LIBXSLT_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+ else
+ LIBXSLT_CONF_OPT += --without-crypto
+ endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+tg: (b8b57bb..) t/xslt-libgcrypt-config (depends on: master)
