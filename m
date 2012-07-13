@@ -1,52 +1,88 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 13 Jul 2012 06:51:34 -0700
-Subject: [Buildroot] Qt tribulations take 2
-Message-ID: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Fri, 13 Jul 2012 16:28:33 +0200 (CEST)
+Subject: [Buildroot] [PATCH] libmad: Add optimization config options
+In-Reply-To: <702722447.1326180.1342189637611.JavaMail.root@advansee.com>
+Message-ID: <1655432189.1326270.1342189713400.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Let me start over with my Qt question.
+Configuring libmad with --enable-speed compromises accuracy and can cause audio
+clipping in some cases (heard on ARM platform with some loud MP3s), so give
+users the choice of MAD optimizations.
 
-I downloaded buildroot-2011.05 and ran several tests, each with "make
-clean && make" and each with C++ support checked, both with powerpc
-and arm and the results are the same, so either my understanding of
-what to click in xconfig is faulty (probable) or there is an issue in
-the Qt package scripts. In both cases, I can compile successfully
-without Qt checked and in both cases, I get into problems with Qt
-checked. I would have expected one of powerpc or arm to successfully
-compile and wonder if a suggestion could be made.
+The default config corresponds to the default behavior of libmad's configure.
 
-You have asked to use pkg-config and are cross-compiling.
-Please make sure you have a correctly set-up pkg-config
-environment!
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+---
+ .../package/libmad/Config.in                       |   41 ++++++++++++++++++++
+ .../package/libmad/libmad.mk                       |    6 ++-
+ 2 files changed, 46 insertions(+), 1 deletion(-)
 
-
-This is the Qt for Embedded Linux Open Source Edition.
-
-You are licensed to use this software under the terms of
-the Lesser GNU General Public License (LGPL) versions 2.1.
-You are also licensed to use this software under the terms of
-the GNU General Public License (GPL) versions 3.
-
-Type '3' to view the GNU General Public License version 3.
-Type 'L' to view the Lesser GNU General Public License version 2.1.
-Type 'yes' to accept this license offer.
-Type 'no' to decline this license offer.
-
-Do you accept the terms of either license? yes
-
-Creating qmake. Please wait...
-make[1]: Entering directory
-`/home/ckrinke/buildroot-2012.05/output/build/qt-4.8.1/qmake'
-make[1]: c: Command not found
-make[1]: [project.o] Error 127 (ignored)
-make[1]: c: Command not found
-make[1]: [property.o] Error 127 (ignored)
-
-
-
--- 
-Charles Krinke
+diff --git buildroot.orig/package/libmad/Config.in buildroot/package/libmad/Config.in
+index 4d4f930..d4d08de 100644
+--- buildroot.orig/package/libmad/Config.in
++++ buildroot/package/libmad/Config.in
+@@ -6,3 +6,44 @@ config BR2_PACKAGE_LIBMAD
+ 	  without a floating-point unit.
+ 
+ 	  http://www.underbit.com/products/mad/
++
++if BR2_PACKAGE_LIBMAD
++
++choice
++	prompt "Speed vs. accuracy"
++	default BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
++
++config BR2_PACKAGE_LIBMAD_SPEED
++	bool "Optimize for speed over accuracy"
++	help
++	  Compromise accuracy for speed.
++
++config BR2_PACKAGE_LIBMAD_ACCURACY
++	bool "Optimize for accuracy over speed"
++	help
++	  Compromise speed for accuracy.
++
++config BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
++	bool "Optimize for both speed and accuracy"
++	help
++	  Keep optimizations balanced between speed and accuracy.
++
++endchoice
++
++config BR2_PACKAGE_LIBMAD_SSO
++	bool "Subband synthesis optimization"
++	help
++	  Use the subband synthesis optimization, with reduced accuracy.
++
++config BR2_PACKAGE_LIBMAD_ASO
++	bool "Architecture-specific optimizations"
++	default y
++	help
++	  Use certain architecture-specific optimizations.
++
++config BR2_PACKAGE_LIBMAD_STRICT_ISO
++	bool "Strict ISO/IEC interpretations"
++	help
++	  Use strict ISO/IEC interpretations.
++
++endif
+diff --git buildroot.orig/package/libmad/libmad.mk buildroot/package/libmad/libmad.mk
+index 6e53cf2..ce9b9f6 100644
+--- buildroot.orig/package/libmad/libmad.mk
++++ buildroot/package/libmad/libmad.mk
+@@ -30,6 +30,10 @@ LIBMAD_POST_INSTALL_TARGET_HOOKS += LIBMAD_INSTALL_TARGET_PC
+ 
+ LIBMAD_CONF_OPT = \
+ 		--disable-debugging \
+-		--enable-speed
++		$(if $(BR2_PACKAGE_LIBMAD_SPEED),--enable-speed) \
++		$(if $(BR2_PACKAGE_LIBMAD_ACCURACY),--enable-accuracy) \
++		--$(if $(BR2_PACKAGE_LIBMAD_SSO),enable,disable)-sso \
++		--$(if $(BR2_PACKAGE_LIBMAD_ASO),enable,disable)-aso \
++		--$(if $(BR2_PACKAGE_LIBMAD_STRICT_ISO),enable,disable)-strict-iso
+ 
+ $(eval $(call AUTOTARGETS))
