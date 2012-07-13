@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 23:06:11 +0200
-Subject: [Buildroot] (no subject)
-In-Reply-To: <1341825748.43055.YahooMailNeo@web160701.mail.bf1.yahoo.com>
-References: <1341825748.43055.YahooMailNeo@web160701.mail.bf1.yahoo.com>
-Message-ID: <20120713230611.54db932d@skate>
+Date: Fri, 13 Jul 2012 23:07:40 +0200
+Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems
+ USB-A9263
+In-Reply-To: <4FFA7C89.4010505@calao-systems.com>
+References: <4FFA7C89.4010505@calao-systems.com>
+Message-ID: <20120713230740.6938b378@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 9 Jul 2012 02:22:28 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+Le Mon, 09 Jul 2012 08:39:05 +0200,
+gregory hermant <gregory.hermant@calao-systems.com> a ?crit :
 
-> As a newbie in?embedded linux world, I have many questions but for the 
-> begininig those two.
-> I'm trying to build XOrg, using Buildroot for my Mini2440 ARM board.
-> Building passed Ok and when I login as root and type startx -
-> I receive an error stating that there is no /dev/tty0 - which is true.
-> I wonder, why udev didn't fill /dev node with tty entries.
+> Hi,
+> Attached a new patch for the USB-A9263.
 
-Depending on your Buildroot configuration, udev may or may not be used.
-In the default Buildroot configuration, udev is not used.
+This should not be part of the commit log, as it repeats the title.
 
-In menuconfig, look at the "System configuration" menu, it contains a
-choice named "/dev management", which tells Buildroot how /dev should
-be handled.
+> More info at <http://www.calao-systems.com>. 
+> 
+> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+> ---
+>  .../usb-a9263/at91bootstrap-1.16-usb-a9263.patch   |  851 ++++++++++++++++++++
+>  board/calao/usb-a9263/usb-a9263_defconfig          |  102 +++
 
-The default configuration is to use a static /dev, and from a quick
-look to our device table, /dev/tty0 is created in this configuration.
-So I'm a bit surprised. Could you post your Buildroot .config file?
+This file should be named linux-<version>.config.
 
-> What I checked in menuconfig?is support for C++, large files, wchar.
-> Then: ?modular XOrg, xf86-input-keyboard?, xf86-input-mouse,
-> xf86-video-fbdev,? xf86-input-evdev, without window manager 
-> (I think X should start even without?it).
-> Also, if anyone can help how to change run level - inittab says that 
-> Busybox init doesn't support run levels and instead to use sysvinit ?
+>  configs/usb_a9263_defconfig                        |   14 +
 
-Why do you need run levels? For most embedded systems, they are pretty
-useless.
+And this one should be named calao_usb_a9263_defconfig.
 
 Best regards,
 
