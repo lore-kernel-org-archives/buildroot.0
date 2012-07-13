@@ -1,79 +1,96 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Fri, 13 Jul 2012 12:08:58 -0400
-Subject: [Buildroot] Systemd update
-Message-ID: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Fri, 13 Jul 2012 19:25:12 +0200 (CEST)
+Subject: [Buildroot] [PATCH v2] libmad: Add optimization config options
+In-Reply-To: <1655432189.1326270.1342189713400.JavaMail.root@advansee.com>
+Message-ID: <1218634753.1336082.1342200312454.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Configuring libmad with --enable-speed compromises accuracy and can cause audio
+clipping in some cases (heard on ARM platform with some loud MP3s), so give
+users the choice of MAD optimizations.
 
-I have reached some progress with adopting systemd for Buidlroot with
-proper PAM login support and working system journal.
+The default config corresponds to the default behavior of libmad's configure.
 
-I suggested some of my patches for upstream [1], but systemd
-maintainers were not very much interested in fixes around uclibc
-missing features [2], so let's keep these patches with Buildroot.
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+---
+Note that, if applicable, the options are always passed with either '--enable-'
+or '--disable-' to be more robust than a simple omission, since this can avoid a
+mismatch in config options if the package version is changed and its new default
+configure options are different.
 
-My patches and package configs are collected under this Gitorious
-project [3] which is my test bench for packages being adopted for
-Buildroot, and in particular under [4]. Patches are applicable to the
-v186 snapshot of systemd (the latest avalable).
+Changes for v2:
+   - Factorize the 'able' in the $(if ).
 
-The patches are not 100% final at the moment I am writing this (there
-are few typos I spotted and will fix them ASAP). However I am
-announcing these patches for early review by the Buildroot community.
+ .../package/libmad/Config.in                       |   41 ++++++++++++++++++++
+ .../package/libmad/libmad.mk                       |    6 ++-
+ 2 files changed, 46 insertions(+), 1 deletion(-)
 
-I provided some details in [1] so will not repeat them here. In
-general, I am addressing the missing features at the configure.ac
-level by implementing tests and setting HAVE_... flags in config.h.
-
-The patch for getty.unit may be questionable. I need to be flexible on
-what program to use as user greeter, so there is a level of
-indirection added where actual getty program is symlinked to a
-getty-wrapper in /sbin, and this getty-wrapper is what systemd starts.
-An option to start standard busybox getty is added automatically.
-
-As of now, I can boot a buidroot-produced image, get to the login
-prompt, login with PAM, and systemd indeed places the logged-on user
-session in a separate cgroup. I haven't tried whether it works with
-pam_namespace though.
-
-Few important notes (it took me some time to find out why certain
-things did not work, so I am posting them here)
-
-1. busybox should be configured with PAM support in login (under
-"login utilities"), and linux-pam should be a dependency of busybox
-otherwise it will not compile (PAM header files will be missing).
-2. it is very important to run logged-in session in a child process
-(configured sameplace, next to PAM support in login). Systemd creates
-a user session and passes some pipe file descriptor to the parent
-process (i. e. login). User session lives as long as that descriptor
-is not closed by the parent. Busybox login, if not running logged-in
-session in a child process cleans up most of it open file descriptiors
-before jumping to user login shell, so new session gets killed even
-before it starts ;) If using child process for logged in session,
-login keeps its file descriptiors open, and the session is not killed
-(it took me a lot of digging through systemd sources to trace this
-down).
-
-For now I would like to get a feedback from the Buildroot community on
-this. If anybody wants to play with these additions privately please
-let me know, and I'll provide more information.
-
-Hopefully working systemd will be a useful addition to buildroot.
-
-Thanks.
-
----------------------
-[1] http://lists.freedesktop.org/pipermail/systemd-devel/2012-July/005920.html
-[2] http://lists.freedesktop.org/pipermail/systemd-devel/2012-July/005928.htm
-[3] https://gitorious.org/lfa/
-[4] https://gitorious.org/lfa/myroot/trees/master/systemd-pam
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+diff --git buildroot.orig/package/libmad/Config.in buildroot/package/libmad/Config.in
+index 4d4f930..d4d08de 100644
+--- buildroot.orig/package/libmad/Config.in
++++ buildroot/package/libmad/Config.in
+@@ -6,3 +6,44 @@ config BR2_PACKAGE_LIBMAD
+ 	  without a floating-point unit.
+ 
+ 	  http://www.underbit.com/products/mad/
++
++if BR2_PACKAGE_LIBMAD
++
++choice
++	prompt "Speed vs. accuracy"
++	default BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
++
++config BR2_PACKAGE_LIBMAD_SPEED
++	bool "Optimize for speed over accuracy"
++	help
++	  Compromise accuracy for speed.
++
++config BR2_PACKAGE_LIBMAD_ACCURACY
++	bool "Optimize for accuracy over speed"
++	help
++	  Compromise speed for accuracy.
++
++config BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
++	bool "Optimize for both speed and accuracy"
++	help
++	  Keep optimizations balanced between speed and accuracy.
++
++endchoice
++
++config BR2_PACKAGE_LIBMAD_SSO
++	bool "Subband synthesis optimization"
++	help
++	  Use the subband synthesis optimization, with reduced accuracy.
++
++config BR2_PACKAGE_LIBMAD_ASO
++	bool "Architecture-specific optimizations"
++	default y
++	help
++	  Use certain architecture-specific optimizations.
++
++config BR2_PACKAGE_LIBMAD_STRICT_ISO
++	bool "Strict ISO/IEC interpretations"
++	help
++	  Use strict ISO/IEC interpretations.
++
++endif
+diff --git buildroot.orig/package/libmad/libmad.mk buildroot/package/libmad/libmad.mk
+index 6e53cf2..1c77e28 100644
+--- buildroot.orig/package/libmad/libmad.mk
++++ buildroot/package/libmad/libmad.mk
+@@ -30,6 +30,10 @@ LIBMAD_POST_INSTALL_TARGET_HOOKS += LIBMAD_INSTALL_TARGET_PC
+ 
+ LIBMAD_CONF_OPT = \
+ 		--disable-debugging \
+-		--enable-speed
++		$(if $(BR2_PACKAGE_LIBMAD_SPEED),--enable-speed) \
++		$(if $(BR2_PACKAGE_LIBMAD_ACCURACY),--enable-accuracy) \
++		--$(if $(BR2_PACKAGE_LIBMAD_SSO),en,dis)able-sso \
++		--$(if $(BR2_PACKAGE_LIBMAD_ASO),en,dis)able-aso \
++		--$(if $(BR2_PACKAGE_LIBMAD_STRICT_ISO),en,dis)able-strict-iso
+ 
+ $(eval $(call AUTOTARGETS))
