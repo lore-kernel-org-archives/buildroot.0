@@ -1,9 +1,9 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 13 Jul 2012 11:35:55 +0200
-Subject: [Buildroot] [PATCH] New package: LuaExpat
-In-Reply-To: <1338857115-4148-1-git-send-email-danomimanchego123@gmail.com>
-References: <1338857115-4148-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAB0FRssTdf-1nYWsrZ-P2Yr+hEJb8-xu8CqkMYsLR6TWa3JTiw@mail.gmail.com>
+Date: Fri, 13 Jul 2012 11:45:14 +0200
+Subject: [Buildroot] [PATCH] New package: lua-cjson
+In-Reply-To: <1339463981-11070-1-git-send-email-danomimanchego123@gmail.com>
+References: <1339463981-11070-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <CAB0FRssoNUiN+u0j4S+Vf63aWM968s1ebeOQTY9RJYonhNtyVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,89 +12,90 @@ To: buildroot@busybox.net
 
 this package works for me.
 but Config.in contains an useless line :
-   depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+       depends on BR2_PACKAGE_LUA
+and the upstream package comes with a CMakeLists.txt file,
+so lua-cjson.mk could be simplified by the use of the CMake
+infrastructure supplied by Buildroot.
 
 Fran?ois
 
-
-2012/6/5 Danomi Manchego <danomimanchego123@gmail.com>:
+2012/6/12 Danomi Manchego <danomimanchego123@gmail.com>:
 > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 > ---
->  package/Config.in            |    1 +
->  package/luaexpat/Config.in   |    8 ++++++++
->  package/luaexpat/luaexpat.mk |   39 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 48 insertions(+)
->  create mode 100644 package/luaexpat/Config.in
->  create mode 100644 package/luaexpat/luaexpat.mk
+>  package/Config.in              |    1 +
+>  package/lua-cjson/Config.in    |   14 ++++++++++++++
+>  package/lua-cjson/lua-cjson.mk |   32 ++++++++++++++++++++++++++++++++
+>  3 files changed, 47 insertions(+)
+>  create mode 100644 package/lua-cjson/Config.in
+>  create mode 100644 package/lua-cjson/lua-cjson.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index ca8fc96..2adf311 100644
+> index ca8fc96..39a88e2 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -244,6 +244,7 @@ menu "LUA libraries/modules"
 >  source "package/cgilua/Config.in"
 >  source "package/copas/Config.in"
 >  source "package/coxpcall/Config.in"
-> +source "package/luaexpat/Config.in"
+> +source "package/lua-cjson/Config.in"
 >  source "package/luafilesystem/Config.in"
 >  source "package/luasocket/Config.in"
 >  source "package/rings/Config.in"
-> diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
+> diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
 > new file mode 100644
-> index 0000000..dd58aeb
+> index 0000000..c0690c7
 > --- /dev/null
-> +++ b/package/luaexpat/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LUAEXPAT
-> +       bool "luaexpat"
-> +       depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
-> +       select BR2_PACKAGE_EXPAT
+> +++ b/package/lua-cjson/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_LUA_CJSON
+> +       depends on BR2_PACKAGE_LUA
+> +       bool "lua_cjson"
 > +       help
-> +         LuaExpat is a SAX XML parser based on the Expat library.
+> +         The Lua CJSON module provides JSON support for Lua. It features:
+> +         - Fast, standards compliant encoding/parsing routines
+> +         - Full support for JSON with UTF-8, including decoding surrogate pairs
+> +         - Optional run-time support for common exceptions to the JSON
+> +           specification (infinity, NaN, ...)
+> +         - No dependencies on other libraries
 > +
-> +         http://matthewwild.co.uk/projects/luaexpat/
-> diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+> +         (C-module)
+> +
+> +         http://www.kyne.com.au/~mark/software/lua-cjson.php
+> diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
 > new file mode 100644
-> index 0000000..e23473e
+> index 0000000..05087ea
 > --- /dev/null
-> +++ b/package/luaexpat/luaexpat.mk
-> @@ -0,0 +1,39 @@
+> +++ b/package/lua-cjson/lua-cjson.mk
+> @@ -0,0 +1,32 @@
 > +#############################################################
 > +#
-> +# luaexpat
+> +# lua-cjson
 > +#
 > +#############################################################
+> +LUA_CJSON_VERSION      = 2.1.0
+> +LUA_CJSON_SOURCE       = lua-cjson-$(LUA_CJSON_VERSION).tar.gz
+> +LUA_CJSON_SITE         = http://www.kyne.com.au/~mark/software/download
+> +LUA_CJSON_DEPENDENCIES = lua
 > +
-> +LUAEXPAT_VERSION      = 1.2.0
-> +LUAEXPAT_SOURCE       = luaexpat-$(LUAEXPAT_VERSION).tar.gz
-> +LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
-> +LUAEXPAT_DEPENDENCIES = lua expat
-> +
-> +
-> +LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
-> +LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
-> +LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
-> +LUAEXPAT_MFLAGS += LIBNAME=lxp.so
-> +LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
-> +LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
-> +
-> +
-> +define LUAEXPAT_BUILD_CMDS
-> +       $(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
+> +define LUA_CJSON_BUILD_CMDS
+> +       $(MAKE) -C $(@D) \
+> +               CFLAGS="$(TARGET_CFLAGS)"   \
+> +               LDFLAGS="$(TARGET_LDFLAGS)" \
+> +               CC="$(TARGET_CC)"           \
+> +               LD="$(TARGET_LD)"           \
+> +               PREFIX=$(STAGING_DIR)/usr
 > +endef
 > +
-> +define LUAEXPAT_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
-> +       $(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
+> +define LUA_CJSON_INSTALL_TARGET_CMDS
+> +       install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
 > +endef
 > +
-> +define LUAEXPAT_UNINSTALL_TARGET_CMDS
-> +       rm -f "$(TARGET_DIR)/usr/lib/lua/lxp.so"
-> +       rm -f "$(TARGET_DIR)/usr/share/lua/lxp/lom.lua"
+> +define LUA_CJSON_CLEAN_CMDS
+> +       $(MAKE) -C $(@D) clean
 > +endef
 > +
-> +define LUAEXPAT_CLEAN_CMDS
-> +       $(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS) clean
+> +define LUA_CJSON_UNINSTALL_TARGET_CMDS
+> +       rm -f "$(TARGET_DIR)/usr/lib/lua/cjson.so"
 > +endef
 > +
 > +$(eval $(call GENTARGETS))
