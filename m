@@ -1,56 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 13 Jul 2012 18:21:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 5360] New: buildroot fails when building
- "host-libglib2 2.30.2 Building"
-Message-ID: <bug-5360-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Jul 2012 21:41:47 +0200
+Subject: [Buildroot] [PATCH v2] libmad: Add optimization config options
+In-Reply-To: <1218634753.1336082.1342200312454.JavaMail.root@advansee.com>
+References: <1655432189.1326270.1342189713400.JavaMail.root@advansee.com>
+ <1218634753.1336082.1342200312454.JavaMail.root@advansee.com>
+Message-ID: <20120713214147.7fd4d1e8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5360
-
-           Summary: buildroot fails when building "host-libglib2 2.30.2
-                    Building"
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: anton at fit.com.ru
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created attachment 4406
-  --> https://bugs.busybox.net/attachment.cgi?id=4406
-configuration file buildroot
-
 Hello,
 
-I have attached the config file that reproduces this bug (basically i think to
-reproduce this bug what you need to do is try to build the libglib2).
+Le Fri, 13 Jul 2012 19:25:12 +0200 (CEST),
+Beno?t Th?baudeau <benoit.thebaudeau@advansee.com> a ?crit :
 
-The following final error is given:
-SyntaxErrorSyntaxError: : Non-ASCII character '\xd0' in file
-../../gio/gdbus-2.0/codegen/gdbus-codegen on line 36, but no encoding declared;
-see http://www.python.org/peps/pep-0263.html for detailsNon-ASCII character
-'\xd0' in file ../../gio/gdbus-2.0/codegen/gdbus-codegen on line 36, but no
-encoding declared; see http://www.python.org/peps/pep-0263.html for details
+> Changes for v2:
+>    - Factorize the 'able' in the $(if ).
 
-Anton
+I prefer the solution in v1 with regard to this, as it is much easier
+to read.
 
-PS
-This is a very strange bug.
-Honestly i was expecting that such standard libraries are building correctly by
-now.
+> +choice
+> +	prompt "Speed vs. accuracy"
+> +	default BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
 
+What about calling those options:
+
+ BR2_PACKAGE_LIBMAD_OPTIMIZATION_SPEED
+ BR2_PACKAGE_LIBMAD_OPTIMIZATION_ACCURACY
+ BR2_PACKAGE_LIBMAD_OPTIMIZATION_DEFAULT
+
+> +config BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
+> +	bool "Optimize for both speed and accuracy"
+
+This should rather be:
+
+	bool "Default"
+
+or something like that. Technically, this option does not enable any
+special optimization for both speed and accuracy, it just uses the
+default options.
+
+Thanks,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
