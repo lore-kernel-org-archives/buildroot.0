@@ -1,26 +1,46 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Fri, 13 Jul 2012 11:34:58 +0100
-Subject: [Buildroot] Buildroot and top-level parallel make
-In-Reply-To: <CA+wH296VRn4UY+cLAZUPjcprVcuZY9AHNw5QsEscvJ0oSszunw@mail.gmail.com>
-References: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
- <CA+wH296VRn4UY+cLAZUPjcprVcuZY9AHNw5QsEscvJ0oSszunw@mail.gmail.com>
-Message-ID: <CA+wH297K1Fh6cgFaHo2dd=ihgujo_nMkyicJLnOvAm9jnonBcQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 13 Jul 2012 12:32:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 5354] New: host-lua doesn't build for EFL
+	elementary
+Message-ID: <bug-5354-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4 July 2012 13:20, Alex Bradbury <asb@asbradbury.org> wrote:
-> On 28 June 2012 13:34, Alex Bradbury <asb@asbradbury.org> wrote:
->> I was wondering what the outcome of experiments to allow top-level
->> parallelism were? What are the major barriers to allowing this? Is it
->> still something seen as feasible to add to buildroot, or is it looking
->> like it would add too much complexity?
->
-> Thomas, I was wondering if you'd been able to recall what issues your
-> initial experiments with top-level parallel make faced?
+https://bugs.busybox.net/show_bug.cgi?id=5354
 
-I hate to be a pain...but ping?
+           Summary: host-lua doesn't build for EFL elementary
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: belzo2005-dolphin at yahoo.fr
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Alex
+
+Hi all,
+
+I used qemu_x86_defconfig on x86_64 ubuntu precise host, activating more EFL
+packages with elementary default dependencies.
+
+In building host-lua package, it complains about missing symbols.
+
+Using GCC4.7, same status but not exactly the same reason.
+
+I am bulding with uptodate GIT tree master on July 13rd.
+
+Anyone can help me??
+Regards,
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
