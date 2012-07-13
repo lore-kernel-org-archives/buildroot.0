@@ -1,73 +1,79 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 13 Jul 2012 08:41:37 -0700
-Subject: [Buildroot] Qt tribulations take 2
-In-Reply-To: <20120713165557.1b39651c@skate>
-References: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
- <20120713165557.1b39651c@skate>
-Message-ID: <CALo-6+gv+zb1peT7ngOGLL7VnS6xpCUOZRn_J6CD86Kmn7vX=A@mail.gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Fri, 13 Jul 2012 12:08:58 -0400
+Subject: [Buildroot] Systemd update
+Message-ID: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My apologies, Thomas, I did mean buildroot-2012.05 and here is its
-.config renamed as dotconfig. In the mean time, I am frustrating
-myself with !#$%* openembedded in an attempt to glean some knowledge
-about how Qt fits together in an embedded environment as I slide into
-this new project.
+Hi,
 
-Charles
+I have reached some progress with adopting systemd for Buidlroot with
+proper PAM login support and working system journal.
 
-On Fri, Jul 13, 2012 at 7:55 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Fri, 13 Jul 2012 06:51:34 -0700,
-> Charles Krinke <charles.krinke@gmail.com> a ?crit :
->
->> Let me start over with my Qt question.
->>
->> I downloaded buildroot-2011.05 and ran several tests, each with "make
->
-> I presume you wanted to say 2012.05, right?
->
->> clean && make" and each with C++ support checked, both with powerpc
->> and arm and the results are the same, so either my understanding of
->> what to click in xconfig is faulty (probable) or there is an issue in
->> the Qt package scripts. In both cases, I can compile successfully
->> without Qt checked and in both cases, I get into problems with Qt
->> checked. I would have expected one of powerpc or arm to successfully
->> compile and wonder if a suggestion could be made.
->> Creating qmake. Please wait...
->> make[1]: Entering directory
->> `/home/ckrinke/buildroot-2012.05/output/build/qt-4.8.1/qmake'
->> make[1]: c: Command not found
->> make[1]: [project.o] Error 127 (ignored)
->> make[1]: c: Command not found
->> make[1]: [property.o] Error 127 (ignored)
->
-> Please send your Buildroot .config file.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I suggested some of my patches for upstream [1], but systemd
+maintainers were not very much interested in fixes around uclibc
+missing features [2], so let's keep these patches with Buildroot.
 
+My patches and package configs are collected under this Gitorious
+project [3] which is my test bench for packages being adopted for
+Buildroot, and in particular under [4]. Patches are applicable to the
+v186 snapshot of systemd (the latest avalable).
 
+The patches are not 100% final at the moment I am writing this (there
+are few typos I spotted and will fix them ASAP). However I am
+announcing these patches for early review by the Buildroot community.
+
+I provided some details in [1] so will not repeat them here. In
+general, I am addressing the missing features at the configure.ac
+level by implementing tests and setting HAVE_... flags in config.h.
+
+The patch for getty.unit may be questionable. I need to be flexible on
+what program to use as user greeter, so there is a level of
+indirection added where actual getty program is symlinked to a
+getty-wrapper in /sbin, and this getty-wrapper is what systemd starts.
+An option to start standard busybox getty is added automatically.
+
+As of now, I can boot a buidroot-produced image, get to the login
+prompt, login with PAM, and systemd indeed places the logged-on user
+session in a separate cgroup. I haven't tried whether it works with
+pam_namespace though.
+
+Few important notes (it took me some time to find out why certain
+things did not work, so I am posting them here)
+
+1. busybox should be configured with PAM support in login (under
+"login utilities"), and linux-pam should be a dependency of busybox
+otherwise it will not compile (PAM header files will be missing).
+2. it is very important to run logged-in session in a child process
+(configured sameplace, next to PAM support in login). Systemd creates
+a user session and passes some pipe file descriptor to the parent
+process (i. e. login). User session lives as long as that descriptor
+is not closed by the parent. Busybox login, if not running logged-in
+session in a child process cleans up most of it open file descriptiors
+before jumping to user login shell, so new session gets killed even
+before it starts ;) If using child process for logged in session,
+login keeps its file descriptiors open, and the session is not killed
+(it took me a lot of digging through systemd sources to trace this
+down).
+
+For now I would like to get a feedback from the Buildroot community on
+this. If anybody wants to play with these additions privately please
+let me know, and I'll provide more information.
+
+Hopefully working systemd will be a useful addition to buildroot.
+
+Thanks.
+
+---------------------
+[1] http://lists.freedesktop.org/pipermail/systemd-devel/2012-July/005920.html
+[2] http://lists.freedesktop.org/pipermail/systemd-devel/2012-July/005928.htm
+[3] https://gitorious.org/lfa/
+[4] https://gitorious.org/lfa/myroot/trees/master/systemd-pam
 
 -- 
-Charles Krinke
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: dotconfig
-Type: application/octet-stream
-Size: 29673 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120713/ab4eeb89/attachment-0001.obj>
+Dmitry Golubovsky
+
+Anywhere on the Web
