@@ -1,41 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 21:47:17 +0200
-Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems
- USB-A9G20-LPW
-In-Reply-To: <4FFD9086.20804@calao-systems.com>
-References: <4FFD9086.20804@calao-systems.com>
-Message-ID: <20120713214717.78bcb790@skate>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Fri, 13 Jul 2012 21:51:19 +0200 (CEST)
+Subject: [Buildroot] [PATCH v2] libmad: Add optimization config options
+In-Reply-To: <20120713214147.7fd4d1e8@skate>
+Message-ID: <17811032.1339793.1342209079006.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Jul 2012 16:41:10 +0200,
-gregory hermant <gregory.hermant@calao-systems.com> a ?crit :
+Hi Thomas,
 
-> Hi,
-> Attached a new patch for the USB-A9G20-LPW. 
-> I2C and RTC support added in the linux kernel defconfig file. 
+> > Changes for v2:
+> >    - Factorize the 'able' in the $(if ).
+> 
+> I prefer the solution in v1 with regard to this, as it is much easier
+> to read.
 
-This shouldn't be part of the commit log. If you want to provide a
-changelog from the previous version, put it after the --- line below.
+As you prefer.
 
->  .../at91bootstrap-1.16-usb-a9g20-lpw.patch         |  610 ++++++++++++++++++++
->  .../barebox-2012.07.0-usb-a9g20-lpw.patch          |   12 +
+> > +choice
+> > +	prompt "Speed vs. accuracy"
+> > +	default BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
+> 
+> What about calling those options:
+> 
+>  BR2_PACKAGE_LIBMAD_OPTIMIZATION_SPEED
+>  BR2_PACKAGE_LIBMAD_OPTIMIZATION_ACCURACY
+>  BR2_PACKAGE_LIBMAD_OPTIMIZATION_DEFAULT
+> 
+> > +config BR2_PACKAGE_LIBMAD_SPEED_ACCURACY
+> > +	bool "Optimize for both speed and accuracy"
+> 
+> This should rather be:
+> 
+> 	bool "Default"
+> 
+> or something like that. Technically, this option does not enable any
+> special optimization for both speed and accuracy, it just uses the
+> default options.
 
-Is the barebox patch really necessary? Has it been submitted upstream?
+Actually, libmad's README says that the default options (neither --enable-speed
+nor --enable-accuracy) imply an optimization of both:
 
->  board/calao/usb-a9g20-lpw/usb_a9g20_lpw_defconfig  |  105 ++++
+"Note that you need not specify one of --enable-speed or --enable-accuracy; in
+its default configuration, MAD is optimized for both."
 
-This file is the kernel configuration, it should rather be named
-linux-<version>.config (see other boards in board/).
+But it refuses to configure with both options, and there is indeed technically
+nothing special done by default.
 
-Thanks,
+I'll post a v3 doing all that.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Beno?t
