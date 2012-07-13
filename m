@@ -1,54 +1,107 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 13 Jul 2012 10:36:53 +0200
-Subject: [Buildroot] [PATCH 2/2] luajit: fix dependencies of Lua modules
-In-Reply-To: <CAB0FRsuwMKK5LFnhLLY4SVrW5BGyMw4FLwG=17JJ7ExYOF5tkQ@mail.gmail.com>
-References: <CAB0FRssu7PT0PFZm32zwsiMRi3ZtFH0V5Pt=BQykiqwrhUQWzw@mail.gmail.com>
- <20120601182029.5496758d@skate>
- <CAB0FRsuwMKK5LFnhLLY4SVrW5BGyMw4FLwG=17JJ7ExYOF5tkQ@mail.gmail.com>
-Message-ID: <CAB0FRsuowMWqTeNU-UKCwWthf2nAYQWBsxW_W3vwu-5Nojk31w@mail.gmail.com>
+Date: Fri, 13 Jul 2012 11:35:55 +0200
+Subject: [Buildroot] [PATCH] New package: LuaExpat
+In-Reply-To: <1338857115-4148-1-git-send-email-danomimanchego123@gmail.com>
+References: <1338857115-4148-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <CAB0FRssTdf-1nYWsrZ-P2Yr+hEJb8-xu8CqkMYsLR6TWa3JTiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/6/1 Fran?ois Perrad <francois.perrad@gadz.org>:
-> 2012/6/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> Le Fri, 1 Jun 2012 11:58:27 +0200,
->> Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
->>
->>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->>
->> I am not a Lua guy, so maybe I'm missing something obvious, but you
->> could expand the justification for this patch, and include this
->> justification in the commit log?
->>
->
-> luajit is another Lua 5.1 interpreter, API- and ABI-compatible to the
-> standard one (lua package).
-> A Lua module (luasocket for example) depends on lua OR luajit (only
-> one is deployed on the target).
-> The dependency against BR2_PACKAGE_LUA_SHARED_LIBRARY must be removed,
-> because it's an internal of lua package.
->
->
-
-As side effect, this patch solves the building issue of lua in
-autobuild.builroot.net.
+this package works for me.
+but Config.in contains an useless line :
+   depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
 
 Fran?ois
 
-> Fran?ois
+
+2012/6/5 Danomi Manchego <danomimanchego123@gmail.com>:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/Config.in            |    1 +
+>  package/luaexpat/Config.in   |    8 ++++++++
+>  package/luaexpat/luaexpat.mk |   39 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 48 insertions(+)
+>  create mode 100644 package/luaexpat/Config.in
+>  create mode 100644 package/luaexpat/luaexpat.mk
 >
->> Thanks!
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/Config.in b/package/Config.in
+> index ca8fc96..2adf311 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -244,6 +244,7 @@ menu "LUA libraries/modules"
+>  source "package/cgilua/Config.in"
+>  source "package/copas/Config.in"
+>  source "package/coxpcall/Config.in"
+> +source "package/luaexpat/Config.in"
+>  source "package/luafilesystem/Config.in"
+>  source "package/luasocket/Config.in"
+>  source "package/rings/Config.in"
+> diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
+> new file mode 100644
+> index 0000000..dd58aeb
+> --- /dev/null
+> +++ b/package/luaexpat/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LUAEXPAT
+> +       bool "luaexpat"
+> +       depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+> +       select BR2_PACKAGE_EXPAT
+> +       help
+> +         LuaExpat is a SAX XML parser based on the Expat library.
+> +
+> +         http://matthewwild.co.uk/projects/luaexpat/
+> diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+> new file mode 100644
+> index 0000000..e23473e
+> --- /dev/null
+> +++ b/package/luaexpat/luaexpat.mk
+> @@ -0,0 +1,39 @@
+> +#############################################################
+> +#
+> +# luaexpat
+> +#
+> +#############################################################
+> +
+> +LUAEXPAT_VERSION      = 1.2.0
+> +LUAEXPAT_SOURCE       = luaexpat-$(LUAEXPAT_VERSION).tar.gz
+> +LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
+> +LUAEXPAT_DEPENDENCIES = lua expat
+> +
+> +
+> +LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
+> +LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
+> +LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
+> +LUAEXPAT_MFLAGS += LIBNAME=lxp.so
+> +LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
+> +LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
+> +
+> +
+> +define LUAEXPAT_BUILD_CMDS
+> +       $(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
+> +endef
+> +
+> +define LUAEXPAT_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
+> +       $(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
+> +endef
+> +
+> +define LUAEXPAT_UNINSTALL_TARGET_CMDS
+> +       rm -f "$(TARGET_DIR)/usr/lib/lua/lxp.so"
+> +       rm -f "$(TARGET_DIR)/usr/share/lua/lxp/lom.lua"
+> +endef
+> +
+> +define LUAEXPAT_CLEAN_CMDS
+> +       $(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS) clean
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
+> --
+> 1.7.9.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
