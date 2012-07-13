@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 22:48:15 +0200
-Subject: [Buildroot] [PATCH v3] libmad: Add optimization config options
-In-Reply-To: <1591143229.1340033.1342210445309.JavaMail.root@advansee.com>
-References: <17811032.1339793.1342209079006.JavaMail.root@advansee.com>
- <1591143229.1340033.1342210445309.JavaMail.root@advansee.com>
-Message-ID: <20120713224815.563f916a@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 13 Jul 2012 21:49:12 +0100
+Subject: [Buildroot] [PATCH] protobuf: fix circular dependency warning
+Message-ID: <1342212552-6567-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 13 Jul 2012 22:14:05 +0200 (CEST),
-Beno?t Th?baudeau <benoit.thebaudeau@advansee.com> a ?crit :
+From: Simon Dawson <spdawson@gmail.com>
 
-> Configuring libmad with --enable-speed compromises accuracy and can cause audio
-> clipping in some cases (heard on ARM platform with some loud MP3s), so give
-> users the choice of MAD optimizations.
-> 
-> The default config corresponds to the default behavior of libmad's configure.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+The protobuf package depends on host-protobuf, which leads to a
+circular dependency of host-protobuf on host-protobuf. The following
+warning is output.
 
-Applied, thanks.
+  make: Circular host-protobuf-depends <- host-protobuf dependency dropped.
 
-Thomas
+This patch breaks the circular dependency, by explictly asserting the
+dependencies of host-protobuf (currently none).
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/protobuf/protobuf.mk |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index f18261e..e0214ed 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -9,6 +9,7 @@ PROTOBUF_SITE = http://protobuf.googlecode.com/files/
+ 
+ # N.B. Need to use host protoc during cross compilation.
+ PROTOBUF_DEPENDENCIES = host-protobuf
++HOST_PROTOBUF_DEPENDENCIES =
+ PROTOBUF_CONF_OPT = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+ 
+ PROTOBUF_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
