@@ -1,29 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 22:37:03 +0200
-Subject: [Buildroot] [PATCH v3] Remove -fPIC on x86_64
-In-Reply-To: <1342011438-13433-1-git-send-email-arnout@mind.be>
-References: <1342011438-13433-1-git-send-email-arnout@mind.be>
-Message-ID: <20120713223703.60bd042c@skate>
+Date: Fri, 13 Jul 2012 22:37:23 +0200
+Subject: [Buildroot] [PATCH] libxslt: use libgcrypt-config from
+ STAGING_DIR
+In-Reply-To: <1342000210-20798-1-git-send-email-arnout@mind.be>
+References: <1342000210-20798-1-git-send-email-arnout@mind.be>
+Message-ID: <20120713223723.375d0d91@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Jul 2012 14:57:18 +0200,
+Le Wed, 11 Jul 2012 11:50:10 +0200,
 "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-> The -fPIC breaks the purgatory of kexec (= the code that passes command-line
-> arguments to the kernel): kexec doesn't know how to handle the GOT and PLT
-> relocation entries.
-> 
-> There is also no reason at all to pass -fPIC.  Shared libraries that require
-> it will add it to their local Makefiles, and normal executables have no
-> business with -fPIC (plus it adds overhead...).
-> 
-> The -fPIC was added by Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-> in commit 8027784c.  That commit adds sysroot parameters to CFLAGS.
-> There is no explanation why -fPIC is also added for x86_64.
+> Otherwise, if the host has a libgcrypt-config, that one will be used.
 > 
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
