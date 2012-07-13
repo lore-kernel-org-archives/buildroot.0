@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 23:07:40 +0200
-Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems
- USB-A9263
-In-Reply-To: <4FFA7C89.4010505@calao-systems.com>
-References: <4FFA7C89.4010505@calao-systems.com>
-Message-ID: <20120713230740.6938b378@skate>
+Date: Fri, 13 Jul 2012 23:12:12 +0200
+Subject: [Buildroot] New temp maintainer (was Re: pending patches)
+In-Reply-To: <87zk76yd2r.fsf@macbook.be.48ers.dk>
+References: <87d346z8az.fsf@macbook.be.48ers.dk>
+ <87zk76yd2r.fsf@macbook.be.48ers.dk>
+Message-ID: <20120713231212.64a7bf94@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 09 Jul 2012 08:39:05 +0200,
-gregory hermant <gregory.hermant@calao-systems.com> a ?crit :
+Hello,
 
-> Hi,
-> Attached a new patch for the USB-A9263.
+Le Wed, 11 Jul 2012 09:25:00 +0200,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
-This should not be part of the commit log, as it repeats the title.
-
-> More info at <http://www.calao-systems.com>. 
+>  Peter> Hi, Sorry about the low amount of patch review/commits lately,
+>  Peter> but I'm on antibiotics since Wednesday, and it's only improving
+>  Peter> very slowly.
 > 
-> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-> ---
->  .../usb-a9263/at91bootstrap-1.16-usb-a9263.patch   |  851 ++++++++++++++++++++
->  board/calao/usb-a9263/usb-a9263_defconfig          |  102 +++
+> Turns out it is worse than first expected. The Xrays show I have
+> Pneumonia and need to rest as much as possible. Luckily Thomas Petazzoni
+> has agreed to step up and take over maintainership for the 2012.08
+> release.
+> 
+> I should be back alive for for the 2012.11 cycle though.
 
-This file should be named linux-<version>.config.
+I'm sorry to hear that the situation is worse than expected, and I
+definitely wish you a very prompt recovery. I will try to handle the
+2012.08 release as best as I can, hoping that my lack of experience as a
+maintainer will not cause too much troubles.
 
->  configs/usb_a9263_defconfig                        |   14 +
+I'm looking forward to having you again on board for the 2012.11 cycle.
 
-And this one should be named calao_usb_a9263_defconfig.
-
-Best regards,
+Kind regards,
 
 Thomas
 -- 
