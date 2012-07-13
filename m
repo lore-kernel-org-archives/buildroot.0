@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 22:55:22 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: make sure cross compiling is
- enabled when host == target
-In-Reply-To: <1341957681-22303-1-git-send-email-arnout@mind.be>
-References: <1341957681-22303-1-git-send-email-arnout@mind.be>
-Message-ID: <20120713225522.62040e4f@skate>
+Date: Fri, 13 Jul 2012 22:59:52 +0200
+Subject: [Buildroot] [PATCH] protobuf: fix circular dependency warning
+In-Reply-To: <1342212552-6567-1-git-send-email-spdawson@gmail.com>
+References: <1342212552-6567-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120713225952.67925f4e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Jul 2012 00:01:20 +0200,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+Le Fri, 13 Jul 2012 21:49:12 +0100,
+spdawson at gmail.com a ?crit :
 
-> When compiling for the same architecture and libc as the host,
-> GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
-> these to detect cross-compilation, and will decide that we're doing
-> native compilation.  This may trigger running of executables,
-> which fail because of missing libraries in the host environment.
+> From: Simon Dawson <spdawson@gmail.com>
 > 
-> To solve this, set the vendor part in GNU_HOST_NAME to buildroot_cross.
+> The protobuf package depends on host-protobuf, which leads to a
+> circular dependency of host-protobuf on host-protobuf. The following
+> warning is output.
+> 
+>   make: Circular host-protobuf-depends <- host-protobuf dependency dropped.
+> 
+> This patch breaks the circular dependency, by explictly asserting the
+> dependencies of host-protobuf (currently none).
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-Do you see a problem with setting it just to "buildroot"?
-buildroot_cross looks a bit ugly to me.
+I think
+http://lists.busybox.net/pipermail/buildroot/2012-July/055442.html
+solves that problem in a much more generic way. Could you test this
+patch and report if it solves the problem for you?
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
