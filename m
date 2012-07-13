@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 23:12:12 +0200
-Subject: [Buildroot] New temp maintainer (was Re: pending patches)
-In-Reply-To: <87zk76yd2r.fsf@macbook.be.48ers.dk>
-References: <87d346z8az.fsf@macbook.be.48ers.dk>
- <87zk76yd2r.fsf@macbook.be.48ers.dk>
-Message-ID: <20120713231212.64a7bf94@skate>
+Date: Fri, 13 Jul 2012 23:13:31 +0200
+Subject: [Buildroot] msgpack-python (0.1.10) and libmsgpack (0.5.7)
+ packaged for buildroot-2011.11
+In-Reply-To: <CAMduVEc6PwEARbD7ABkEamjzJ5MyDM_wfn_mBJXhqTiqMwMmCg@mail.gmail.com>
+References: <CAMduVEc6PwEARbD7ABkEamjzJ5MyDM_wfn_mBJXhqTiqMwMmCg@mail.gmail.com>
+Message-ID: <20120713231331.40ca1781@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Wojciech,
 
-Le Wed, 11 Jul 2012 09:25:00 +0200,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+Le Sat, 7 Jul 2012 13:58:56 +0100,
+Wojciech Zabolotny <wzab01@gmail.com> a ?crit :
 
->  Peter> Hi, Sorry about the low amount of patch review/commits lately,
->  Peter> but I'm on antibiotics since Wednesday, and it's only improving
->  Peter> very slowly.
-> 
-> Turns out it is worse than first expected. The Xrays show I have
-> Pneumonia and need to rest as much as possible. Luckily Thomas Petazzoni
-> has agreed to step up and take over maintainership for the 2012.08
-> release.
-> 
-> I should be back alive for for the 2012.11 cycle though.
+> I had to add two packages msgpack-python and libmsgpack to my embedded
+> system running Linux compiled with buildroot-2011.11
+> Unfortunately this version of buildroot does not support setuptools,
+> so I couldn't use the msgpack-python v. 0.2.0, and had to use older v.
+> 0.1.10.
+> As my buildroot is compiled without C++ support, I had also to disable
+> the C++ API in libmsgpack.
+> Adding of those packages to buildroot required small modifications.
+> Attached is the patch, which adds definition for those packages in the
+> "package" directory.
 
-I'm sorry to hear that the situation is worse than expected, and I
-definitely wish you a very prompt recovery. I will try to handle the
-2012.08 release as best as I can, hoping that my lack of experience as a
-maintainer will not cause too much troubles.
+Thanks for this work!
 
-I'm looking forward to having you again on board for the 2012.11 cycle.
+Could you send a proper Git patch that contains all the needed
+modification? We have a quick start guide on using Git to contribute to
+Buildroot at http://elinux.org/Buildroot_how_to_contribute. If you have
+questions about this, don't hesitate to ask.
 
-Kind regards,
+Best regards,
 
 Thomas
 -- 
