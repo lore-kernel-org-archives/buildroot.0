@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jul 2012 23:13:31 +0200
-Subject: [Buildroot] msgpack-python (0.1.10) and libmsgpack (0.5.7)
- packaged for buildroot-2011.11
-In-Reply-To: <CAMduVEc6PwEARbD7ABkEamjzJ5MyDM_wfn_mBJXhqTiqMwMmCg@mail.gmail.com>
-References: <CAMduVEc6PwEARbD7ABkEamjzJ5MyDM_wfn_mBJXhqTiqMwMmCg@mail.gmail.com>
-Message-ID: <20120713231331.40ca1781@skate>
+Date: Fri, 13 Jul 2012 23:26:22 +0200
+Subject: [Buildroot] [PATCH v4 1/5] target: add symbols for i386/x86_64
+ cpu features
+In-Reply-To: <4FFBC796.9030204@mind.be>
+References: <1341528156-4197-1-git-send-email-s.martin49@gmail.com>
+ <1341528156-4197-2-git-send-email-s.martin49@gmail.com>
+ <4FFBC796.9030204@mind.be>
+Message-ID: <20120713232622.5a42e405@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Wojciech,
+Le Tue, 10 Jul 2012 08:11:34 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Le Sat, 7 Jul 2012 13:58:56 +0100,
-Wojciech Zabolotny <wzab01@gmail.com> a ?crit :
+>   I don't like these SSE4 configs which are not selected by anything.  I understand
+> that you need them for OpenCV, but it's not ideal.
+> 
+>   Maybe we need an extra subarchitecture config option to explicitly enable these?
 
-> I had to add two packages msgpack-python and libmsgpack to my embedded
-> system running Linux compiled with buildroot-2011.11
-> Unfortunately this version of buildroot does not support setuptools,
-> so I couldn't use the msgpack-python v. 0.2.0, and had to use older v.
-> 0.1.10.
-> As my buildroot is compiled without C++ support, I had also to disable
-> the C++ API in libmsgpack.
-> Adding of those packages to buildroot required small modifications.
-> Attached is the patch, which adds definition for those packages in the
-> "package" directory.
+Agreed, we should either have subarchitecture options that use those
+SSE4 options, or we should not add those SSE4 options, and only add
+them when those subarchitectures are added.
 
-Thanks for this work!
+Samuel, can you take this into account and respin the patch set?
 
-Could you send a proper Git patch that contains all the needed
-modification? We have a quick start guide on using Git to contribute to
-Buildroot at http://elinux.org/Buildroot_how_to_contribute. If you have
-questions about this, don't hesitate to ask.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
