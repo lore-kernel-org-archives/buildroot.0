@@ -1,31 +1,114 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 14 Jul 2012 23:47:04 +0200
-Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
- scripts instead of only one
-In-Reply-To: <31760_1341837606_4FFAD125_31760_18_1_1341837621-14884-1-git-send-email-philippe.reynes@sagemcom.com>
-References: <31760_1341837606_4FFAD125_31760_18_1_1341837621-14884-1-git-send-email-philippe.reynes@sagemcom.com>
-Message-ID: <5001E8D8.2020609@mind.be>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Sat, 14 Jul 2012 15:00:18 -0700
+Subject: [Buildroot] Qt tribulations take 2
+In-Reply-To: <20120714182555.4b7b267d@jl-desk-LL>
+References: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
+ <20120713165557.1b39651c@skate>
+ <CALo-6+gv+zb1peT7ngOGLL7VnS6xpCUOZRn_J6CD86Kmn7vX=A@mail.gmail.com>
+ <20120714182555.4b7b267d@jl-desk-LL>
+Message-ID: <CALo-6+hSrFrqua1s48qzYn9J8qF0F6=zCpgfbguO2hf3VmqeOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/09/12 14:40, Philippe Reynes wrote:
-> Using severals post build scripts is usefull to share
-> script between severals boards/projects.
+Dear Julian:
+
+You were right as usual. It was an environment variable. It was
+QMAKESPEC which was set by my installation of the TI SDK a week ago. I
+should have checked my  .bashrc after installing the SDK, but I did
+not expect any environment changes as a result of installing a
+toolchain and u-boot source.
+
+I can compile successfully Qt with the buildroot generated toolchain
+now. However, that gets me to the next step. When I try to go back to
+using TI's external toolchain, I get this error with libtool. I get no
+corresponding libtool error with the buildroot compiled toolchain.
+Would you be willing to comment on what might be going on here?
+
+Charles
+
+libtool: Version mismatch error.  This is libtool 2.2.10, but the
+libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+libtool: and run autoconf again.
+make[5]: *** [gcache.lo] Error 63
+make[5]: *** Waiting for unfinished jobs....
+libtool: Version mismatch error.  This is libtool 2.2.10, but the
+libtool: definition of this LT_INIT comes from libtool 2.2.6b.
+libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
+libtool: and run autoconf again.
+m
+
+On Sat, Jul 14, 2012 at 9:25 AM, Julian Lunz <git@jlunz.de> wrote:
+> Took your provided config and gave it a try on my machine (32bit-Ubuntu
+> 10.04).
+> Went through without any hassles :/
+> What's your environment?
 >
-> Signed-off-by: Philippe Reynes<philippe.reynes@sagemcom.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  On Fri, 13 Jul 2012 08:41:37 -0700
+> Charles Krinke <charles.krinke@gmail.com> wrote:
+>
+>> My apologies, Thomas, I did mean buildroot-2012.05 and here is its
+>> .config renamed as dotconfig. In the mean time, I am frustrating
+>> myself with !#$%* openembedded in an attempt to glean some knowledge
+>> about how Qt fits together in an embedded environment as I slide into
+>> this new project.
+>>
+>> Charles
+>>
+>> On Fri, Jul 13, 2012 at 7:55 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Le Fri, 13 Jul 2012 06:51:34 -0700,
+>> > Charles Krinke <charles.krinke@gmail.com> a ?crit :
+>> >
+>> >> Let me start over with my Qt question.
+>> >>
+>> >> I downloaded buildroot-2011.05 and ran several tests, each with
+>> >> "make
+>> >
+>> > I presume you wanted to say 2012.05, right?
+>> >
+>> >> clean && make" and each with C++ support checked, both with powerpc
+>> >> and arm and the results are the same, so either my understanding of
+>> >> what to click in xconfig is faulty (probable) or there is an issue
+>> >> in the Qt package scripts. In both cases, I can compile
+>> >> successfully without Qt checked and in both cases, I get into
+>> >> problems with Qt checked. I would have expected one of powerpc or
+>> >> arm to successfully compile and wonder if a suggestion could be
+>> >> made. Creating qmake. Please wait...
+>> >> make[1]: Entering directory
+>> >> `/home/ckrinke/buildroot-2012.05/output/build/qt-4.8.1/qmake'
+>> >> make[1]: c: Command not found
+>> >> make[1]: [project.o] Error 127 (ignored)
+>> >> make[1]: c: Command not found
+>> >> make[1]: [property.o] Error 127 (ignored)
+>> >
+>> > Please send your Buildroot .config file.
+>> >
+>> > Thanks!
+>> >
+>> > Thomas
+>> > --
+>> > Thomas Petazzoni, Free Electrons
+>> > Kernel, drivers, real-time and embedded Linux
+>> > development, consulting, training and support.
+>> > http://free-electrons.com
+>> > _______________________________________________
+>> > buildroot mailing list
+>> > buildroot at busybox.net
+>> > http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  I assume you tested it with the $(sep)?  I didn't, I just reviewed.
 
-  Regards,
-  Arnout
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Charles Krinke
