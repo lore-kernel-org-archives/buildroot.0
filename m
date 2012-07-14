@@ -1,22 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 14 Jul 2012 23:43:07 +0200
-Subject: [Buildroot] [PATCH] avahi: only install
- default.script/S05avahi-setup.sh if not present in fs skeleton
-In-Reply-To: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
-References: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <5001E7EB.3050406@mind.be>
+Date: Sat, 14 Jul 2012 23:47:04 +0200
+Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
+ scripts instead of only one
+In-Reply-To: <31760_1341837606_4FFAD125_31760_18_1_1341837621-14884-1-git-send-email-philippe.reynes@sagemcom.com>
+References: <31760_1341837606_4FFAD125_31760_18_1_1341837621-14884-1-git-send-email-philippe.reynes@sagemcom.com>
+Message-ID: <5001E8D8.2020609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/12 06:14, Danomi Manchego wrote:
-> To allow custom scripts in the target skeletons.
+On 07/09/12 14:40, Philippe Reynes wrote:
+> Using severals post build scripts is usefull to share
+> script between severals boards/projects.
 >
-> Signed-off-by: Danomi Manchego<danomimanchego123@gmail.com>
-
+> Signed-off-by: Philippe Reynes<philippe.reynes@sagemcom.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  I assume you tested it with the $(sep)?  I didn't, I just reviewed.
+
+  Regards,
+  Arnout
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
