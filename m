@@ -1,39 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Jul 2012 12:51:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
- 2.30.2 Building"
-In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
-References: <bug-5360-163@https.bugs.busybox.net/>
-Message-ID: <20120714125106.6169D81F63@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Jul 2012 15:03:29 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/mips: kill EABI and fix N32
+In-Reply-To: <1342268918-3235-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1342268918-3235-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120714150329.65ae632c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5360
+Le Sat, 14 Jul 2012 09:28:37 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
---- Comment #6 from s.martin49 at gmail.com 2012-07-14 12:51:06 UTC ---
-(In reply to comment #4)
-> (In reply to comment #2)
-> > I have taken your .config, and the build ended succesfully, so I strongly
-> > suspect something on your host that influences the build.
-> 
-> I also suspect this, but shouldn't the build script check for such things?
-> (like the python version)
+> MIPS EABI is a bare-metal ABI so remove it.
+> Also fix uClibc to really work with N32 ABI, which used the EABI knob
+> previously.
 
-Currently, there is no check to check/detect python version, but there are few
-patches about that in the pipe:
-http://patchwork.ozlabs.org/patch/162456/
-http://patchwork.ozlabs.org/patch/162457/
+There is no support in uClibc for o64. Is this ABI really used? I see
+that gcc has support for it
+(http://gcc.gnu.org/projects/mipso64-abi.html), but is it used in
+practice?
 
-Note that in your case, 'python' points to python2.x while 'python3' to
-python3.x, which is the standard currently. So, the problem is not here.
+Also, is the BR2_MIPS_ABI_none knob actually useful?
 
-BTW, these 2 patches intend to fix this kind of issues on system/distro, such
-as archlinux, in which 'python' points to python3.
+Thanks,
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
