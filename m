@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jul 2012 19:15:30 +0200
-Subject: [Buildroot] [PATCH 1/1] skeleton: add default login port to
- /etc/securetty
-In-Reply-To: <5001A4D3.1030802@mind.be>
-References: <1342149545-10417-1-git-send-email-roylee17@gmail.com>
- <5001A4D3.1030802@mind.be>
-Message-ID: <20120714191530.539ca71c@skate>
+Date: Sat, 14 Jul 2012 19:16:12 +0200
+Subject: [Buildroot] [PATCH] lua: bump version to 5.1.5
+In-Reply-To: <CAB0FRsu0QDjFTzNNpZY-XeJou5COQaavaZnoZf7DvYiP4wivcQ@mail.gmail.com>
+References: <CAB0FRsu0QDjFTzNNpZY-XeJou5COQaavaZnoZf7DvYiP4wivcQ@mail.gmail.com>
+Message-ID: <20120714191612.785ed0b7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 14 Jul 2012 18:56:51 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Le Wed, 30 May 2012 09:20:28 +0200,
+Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 
->   But perhaps it's even better to remove securetty completely?  If it just
-> enumerates all possible ttys (even non-existent ones), it doesn't really add
-> security...  (Note: I haven't verified if util-linux's login allows root login if
-> /etc/securetty is missing.)
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Or we just add the tty that is selected to have the getty on (i.e the
-skeleton would no longer have a etc/securetty file, and it would only
-be created with one entry, as done by the patch being discussed).
+Applied, thanks. I had to rewrite your patch as it had been
+line-wrapped by your mailer. Can you use git send-email next time to
+send your patches?
+
+Thanks!
 
 Thomas
 -- 
