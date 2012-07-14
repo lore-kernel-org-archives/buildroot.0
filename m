@@ -1,49 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 14 Jul 2012 09:28:37 -0300
-Subject: [Buildroot] [PATCH 1/2] toolchain/mips: kill EABI and fix N32
-Message-ID: <1342268918-3235-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 14 Jul 2012 09:28:38 -0300
+Subject: [Buildroot] [PATCH 2/2] toolchain/mips: add the mips64 tuple
+In-Reply-To: <1342268918-3235-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1342268918-3235-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1342268918-3235-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MIPS EABI is a bare-metal ABI so remove it.
-Also fix uClibc to really work with N32 ABI, which used the EABI knob
-previously.
+We need to use mips64 in the tuple for 64-bit variants (N32, N64 and O64
+ABIs), otherwise we get assembly failures.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- target/Config.in.arch      |    3 ---
- toolchain/uClibc/uclibc.mk |    2 +-
- 2 files changed, 1 insertions(+), 4 deletions(-)
+ target/Config.in.arch |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
 diff --git a/target/Config.in.arch b/target/Config.in.arch
-index c9bbc12..bad0f4c 100644
+index bad0f4c..ae90a1d 100644
 --- a/target/Config.in.arch
 +++ b/target/Config.in.arch
-@@ -280,9 +280,6 @@ config BR2_MIPS_OABI32
- config BR2_MIPS_ABI32
- 	bool "n32"
- 	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
--config BR2_MIPS_EABI
--	bool "eabi"
--	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
- config BR2_MIPS_ABI64
- 	bool "n64"
- 	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index f40fe36..9d0b6db 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -158,7 +158,7 @@ ifeq ($(UCLIBC_TARGET_ARCH),mips)
- ifeq ($(BR2_MIPS_OABI),y)
- 	$(SED) 's/.*\(CONFIG_MIPS_O32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
- endif
--ifeq ($(BR2_MIPS_EABI),y)
-+ifeq ($(BR2_MIPS_ABI32),y)
- 	$(SED) 's/.*\(CONFIG_MIPS_N32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ($(BR2_MIPS_ABI64),y)
+@@ -600,6 +600,8 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_athlon_4
+ 	default "m68k"		if BR2_m68k
+ 	default "microblaze"	if BR2_microblaze
++	default "mips64"	if (BR2_MIPS_ABI64 || BR2_MIPS_OABI64 || BR2_MIPS_ABI32) && BR2_mips
++	default "mips64el"	if (BR2_MIPS_ABI64 || BR2_MIPS_OABI64 || BR2_MIPS_ABI32) && BR2_mipsel
+ 	default "mips"		if BR2_mips
+ 	default "mipsel"	if BR2_mipsel
+ 	default "powerpc"	if BR2_powerpc
 -- 
 1.7.8.6
