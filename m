@@ -1,69 +1,45 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 14 Jul 2012 23:34:36 +0200
-Subject: [Buildroot] [PATCH v2] libplayer: fix handling of cflags in
-	configure
-Message-ID: <1342301676-23857-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 14 Jul 2012 23:37:48 +0200
+Subject: [Buildroot] Buildroot and top-level parallel make
+In-Reply-To: <CA+wH297K1Fh6cgFaHo2dd=ihgujo_nMkyicJLnOvAm9jnonBcQ@mail.gmail.com>
+References: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
+ <CA+wH296VRn4UY+cLAZUPjcprVcuZY9AHNw5QsEscvJ0oSszunw@mail.gmail.com>
+ <CA+wH297K1Fh6cgFaHo2dd=ihgujo_nMkyicJLnOvAm9jnonBcQ@mail.gmail.com>
+Message-ID: <5001E6AC.2040501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Problem was found when compiling libplayer with GStreamer support
-on x86_64 with a Sourcery toolchain.
+On 07/13/12 12:34, Alex Bradbury wrote:
+> On 4 July 2012 13:20, Alex Bradbury<asb@asbradbury.org>  wrote:
+>> >  On 28 June 2012 13:34, Alex Bradbury<asb@asbradbury.org>  wrote:
+>>> >>  I was wondering what the outcome of experiments to allow top-level
+>>> >>  parallelism were? What are the major barriers to allowing this? Is it
+>>> >>  still something seen as feasible to add to buildroot, or is it looking
+>>> >>  like it would add too much complexity?
+>> >
+>> >  Thomas, I was wondering if you'd been able to recall what issues your
+>> >  initial experiments with top-level parallel make faced?
+> I hate to be a pain...but ping?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: document error situation in commit log
- .../libplayer/libplayer-fix-configure-cflags.patch |   41 ++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+  I guess Thomas doesn't remember :-)
 
-diff --git a/package/libplayer/libplayer-fix-configure-cflags.patch b/package/libplayer/libplayer-fix-configure-cflags.patch
-new file mode 100644
-index 0000000..186afd5
---- /dev/null
-+++ b/package/libplayer/libplayer-fix-configure-cflags.patch
-@@ -0,0 +1,41 @@
-+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+Subject: [PATCH] libplayer: Fix handling of cflags in configure.
-+
-+The cflags returned by pkg-config or another config script may consist
-+of several arguments for the compiler.  These should not be quoted together
-+into a single argument.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+Sent upstream to devel at geexbox.org on July 11, 2012.
-+---
-+diff -rup libplayer-2.0.1.orig/configure libplayer-2.0.1/configure
-+--- libplayer-2.0.1.orig/configure	2010-10-03 19:26:11.000000000 +0200
-++++ libplayer-2.0.1/configure	2012-07-10 23:33:02.783701852 +0200
-+@@ -342,7 +342,7 @@ check_libconfig(){
-+   err=1
-+   if `which "$config" 1>/dev/null 2>&1`; then
-+     cflags=`$config $ccflags`
-+-    [ -n "$cflags" ] && check_cflags "$cflags"
-++    [ -n "$cflags" ] && check_cflags $cflags
-+     libs=`$config $clibs`
-+     if [ -n "$libs" ]; then
-+       temp_extralibs "$libs"
-+@@ -364,7 +364,7 @@ check_libconfig_exists(){
-+   err=1
-+   if `which "$config" 1>/dev/null 2>&1`; then
-+     cflags=`$config $ccflags`
-+-    [ -n "$cflags" ] && temp_cflags "$cflags"
-++    [ -n "$cflags" ] && temp_cflags $cflags
-+     libs=`$config $clibs`
-+     if [ -n "$libs" ]; then
-+       temp_extralibs "$libs"
-+@@ -386,7 +386,7 @@ check_pkgconfig(){
-+   err=1
-+   if `which pkg-config 1>/dev/null 2>&1`; then
-+     cflags=`pkg-config $pkg $ccflags`
-+-    [ -n "$cflags" ] && check_cflags "$cflags"
-++    [ -n "$cflags" ] && check_cflags $cflags
-+     libs=`pkg-config $pkg $clibs`
-+     if [ -n "$libs" ]; then
-+       temp_extralibs "$libs"
+  I believe the main problem is in the non-package targets, e.g.
+target-generic-hostname.  They are just added to TARGETS without
+further dependencies.  Same is true for the toolchain: it is just
+prepended to TARGETS.
+
+  Changing that requires careful thinking about how the TARGETS work,
+and is not easy to verify because there are a lot of corner cases involved.
+
+  Regards,
+  Arnout
 -- 
-tg: (b8b57bb..) t/libplayer-cflags (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
