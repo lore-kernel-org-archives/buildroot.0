@@ -1,29 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jul 2012 19:16:12 +0200
-Subject: [Buildroot] [PATCH] lua: bump version to 5.1.5
-In-Reply-To: <CAB0FRsu0QDjFTzNNpZY-XeJou5COQaavaZnoZf7DvYiP4wivcQ@mail.gmail.com>
-References: <CAB0FRsu0QDjFTzNNpZY-XeJou5COQaavaZnoZf7DvYiP4wivcQ@mail.gmail.com>
-Message-ID: <20120714191612.785ed0b7@skate>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 14 Jul 2012 21:40:04 +0200
+Subject: [Buildroot] [PATCH] linux: clarify the BR2_LINUX_KERNEL_DEFCONFIG
+	help text
+Message-ID: <1342294805-11428-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 30 May 2012 09:20:28 +0200,
-Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
+The help text of BR2_LINUX_KERNEL_DEFCONFIG is confusing: it seems to
+point to the defconfigs in the buildroot tree.  So explicitly refer to
+the kernel tree in the help text.
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Applied, thanks. I had to rewrite your patch as it had been
-line-wrapped by your mailer. Can you use git send-email next time to
-send your patches?
+---
+ linux/Config.in |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index 9c26439..c969be6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -115,8 +115,9 @@ config BR2_LINUX_KERNEL_DEFCONFIG
+ 	string "Defconfig name"
+ 	depends on BR2_LINUX_KERNEL_USE_DEFCONFIG
+ 	help
+-	 Name of the defconfig file to use, without the trailing
+-	 _defconfig
++	 Name of the kernel defconfig file to use, without the
++	 trailing _defconfig.  The defconfig is located in
++	 arch/<arch>/configs in the kernel tree.
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ 	string "Configuration file path"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+tg: (830c586..) t/linux-clarify-defconfig (depends on: master)
