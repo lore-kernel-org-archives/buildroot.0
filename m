@@ -1,33 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Jul 2012 08:12:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
- 2.30.2 Building"
-In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
-References: <bug-5360-163@https.bugs.busybox.net/>
-Message-ID: <20120714081238.606DA90BED@busybox.osuosl.org>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sat, 14 Jul 2012 10:07:06 +0100
+Subject: [Buildroot] [PATCH] protobuf: fix circular dependency warning
+In-Reply-To: <20120713225952.67925f4e@skate>
+References: <1342212552-6567-1-git-send-email-spdawson@gmail.com>
+ <20120713225952.67925f4e@skate>
+Message-ID: <CAHt8ZCMqmpRRva26M9XpC-NYUHyEyf9mE33yMHSrqtJEYNm6wA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5360
+On 13 July 2012 21:59, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> I think
+> http://lists.busybox.net/pipermail/buildroot/2012-July/055442.html
+> solves that problem in a much more generic way. Could you test this
+> patch and report if it solves the problem for you?
 
---- Comment #4 from Shokurov Anton V. <anton@fit.com.ru> 2012-07-14 08:12:38 UTC ---
-(In reply to comment #2)
-> I have taken your .config, and the build ended succesfully, so I strongly
-> suspect something on your host that influences the build.
+Hi Thomas. This generic mechanism does indeed work in the present case
+(package protobuf). However, the indicated patch is only for the
+gentargets package mechanism; to apply to the protobuf package, a
+similar modification of pkg-autotargets.mk is required.
 
-I also suspect this, but shouldn't the build script check for such things?
-(like the python version)
+I'm happy to do this modification, if you think it appropriate.
 
-> 
-> Can you attach the file
-> output/build/libglib-2.30.2/gio/gdbus-2.0/codegen/gdbus-codegen ?
-
-It gets deleted, after the build ends with an error.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Simon.
