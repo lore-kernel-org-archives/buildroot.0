@@ -1,36 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jul 2012 12:16:44 +0200
-Subject: [Buildroot] [PATCH] protobuf: fix circular dependency warning
-In-Reply-To: <CAHt8ZCMqmpRRva26M9XpC-NYUHyEyf9mE33yMHSrqtJEYNm6wA@mail.gmail.com>
-References: <1342212552-6567-1-git-send-email-spdawson@gmail.com>
- <20120713225952.67925f4e@skate>
- <CAHt8ZCMqmpRRva26M9XpC-NYUHyEyf9mE33yMHSrqtJEYNm6wA@mail.gmail.com>
-Message-ID: <20120714121644.6d62142b@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 14 Jul 2012 10:20:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
+ 2.30.2 Building"
+In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
+References: <bug-5360-163@https.bugs.busybox.net/>
+Message-ID: <20120714102026.41A8E90DFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 14 Jul 2012 10:07:06 +0100,
-Simon Dawson <spdawson@gmail.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=5360
 
-> Hi Thomas. This generic mechanism does indeed work in the present case
-> (package protobuf). However, the indicated patch is only for the
-> gentargets package mechanism; to apply to the protobuf package, a
-> similar modification of pkg-autotargets.mk is required.
-> 
-> I'm happy to do this modification, if you think it appropriate.
+--- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-07-14 10:20:26 UTC ---
+I have an idea. Can you tell me what is the full path to your Buildroot
+directory?
 
-Arnout, can you extend your patch to take this into account (including
-pkg-autotargets and pkg-cmaketargets)? Or if you don't have the time,
-tell Simon to extend your patch.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
