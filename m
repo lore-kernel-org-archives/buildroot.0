@@ -1,41 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 14 Jul 2012 23:37:48 +0200
-Subject: [Buildroot] Buildroot and top-level parallel make
-In-Reply-To: <CA+wH297K1Fh6cgFaHo2dd=ihgujo_nMkyicJLnOvAm9jnonBcQ@mail.gmail.com>
-References: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
- <CA+wH296VRn4UY+cLAZUPjcprVcuZY9AHNw5QsEscvJ0oSszunw@mail.gmail.com>
- <CA+wH297K1Fh6cgFaHo2dd=ihgujo_nMkyicJLnOvAm9jnonBcQ@mail.gmail.com>
-Message-ID: <5001E6AC.2040501@mind.be>
+Date: Sat, 14 Jul 2012 23:43:07 +0200
+Subject: [Buildroot] [PATCH] avahi: only install
+ default.script/S05avahi-setup.sh if not present in fs skeleton
+In-Reply-To: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
+References: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <5001E7EB.3050406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/13/12 12:34, Alex Bradbury wrote:
-> On 4 July 2012 13:20, Alex Bradbury<asb@asbradbury.org>  wrote:
->> >  On 28 June 2012 13:34, Alex Bradbury<asb@asbradbury.org>  wrote:
->>> >>  I was wondering what the outcome of experiments to allow top-level
->>> >>  parallelism were? What are the major barriers to allowing this? Is it
->>> >>  still something seen as feasible to add to buildroot, or is it looking
->>> >>  like it would add too much complexity?
->> >
->> >  Thomas, I was wondering if you'd been able to recall what issues your
->> >  initial experiments with top-level parallel make faced?
-> I hate to be a pain...but ping?
+On 07/11/12 06:14, Danomi Manchego wrote:
+> To allow custom scripts in the target skeletons.
+>
+> Signed-off-by: Danomi Manchego<danomimanchego123@gmail.com>
 
-  I guess Thomas doesn't remember :-)
-
-  I believe the main problem is in the non-package targets, e.g.
-target-generic-hostname.  They are just added to TARGETS without
-further dependencies.  Same is true for the toolchain: it is just
-prepended to TARGETS.
-
-  Changing that requires careful thinking about how the TARGETS work,
-and is not easy to verify because there are a lot of corner cases involved.
-
-  Regards,
-  Arnout
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
