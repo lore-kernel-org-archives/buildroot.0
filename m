@@ -1,52 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Jul 2012 01:08:48 +0200
-Subject: [Buildroot] [PATCH 1/1] skeleton: add default login port to
- /etc/securetty
-In-Reply-To: <5001E2B2.6070509@mind.be>
-References: <1342149545-10417-1-git-send-email-roylee17@gmail.com>
- <5001A4D3.1030802@mind.be> <20120714191530.539ca71c@skate>
- <5001E2B2.6070509@mind.be>
-Message-ID: <20120715010848.0290501a@skate>
+Date: Sun, 15 Jul 2012 01:09:40 +0200
+Subject: [Buildroot] [git commit] dependencies.sh: suppress output of locale
+Message-ID: <20120714231012.169CF90BCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 14 Jul 2012 23:20:50 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=99dd58418daee463074d7fd38d6ea98aca97d304
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->   I wouldn't like that.  I often use the default skeleton but override e.g.
-> inittab in the post-build script.  I can't be bothered with setting
-> BR2_TARGET_GENERIC_GETTY_PORT to empty.  So the result is
-> that a /etc/securetty would be created which bears no relation with
-> the actual login ports defined in inittab...  And all this happens on the
-> sly, without any consent from the user or warning in the config menus.
-> 
->   Bottom line: automatically adding BR2_TARGET_GENERIC_GETTY_PORT
-> to securetty is OK for me, but emptying it is not.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Hmm, ok. But if you're modifying the inittab through a post-build
-script, we could also say that it's your responsibility to also
-adjust /etc/securetty accordingly, no?
-
-I don't have a strong opinion here, just trying to find the right
-balance.
-
->   BTW I can't think of many circumstances where securetty makes sense
-> on an embedded system to begin with: why would you allow shell login
-> on some port but not root login?
-
-Is removing /etc/securetty sufficient? Both for Busybox getty, the
-full-featured getty, and things like dropbear, openssh, telnet and al?
-I think telnet needs pts/[0-n] to be in /etc/securetty otherwise it
-doesn't allow root login.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index c47ffcf..9f0f6a9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -153,7 +153,7 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
+        /bin/echo -e "\nYou need locale support on your build machine to build a toolchain supporting locales\n"
+        exit 1 ;
+    fi
+-   if ! locale -a | grep -i utf8$ ; then
++   if ! locale -a | grep -q -i utf8$ ; then
+        /bin/echo -e "\nYou need at least one UTF8 locale to build a toolchain supporting locales\n"
+        exit 1 ;
+    fi
