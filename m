@@ -1,40 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Jul 2012 23:37:13 +0200
-Subject: [Buildroot] [PATCH] tcl: replace option to install library only
- with positive option to install tclsh
-In-Reply-To: <1329263337-14994-1-git-send-email-arnout@mind.be>
-References: <201202150046.57364.arnout@mind.be>
- <1329263337-14994-1-git-send-email-arnout@mind.be>
-Message-ID: <20120715233713.609720f8@skate>
+From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
+Date: Mon, 16 Jul 2012 00:54:21 +0200
+Subject: [Buildroot] log4cxx, xcursor-transparent-theme package to add
+Message-ID: <jtvhmt$u1m$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 15 Feb 2012 00:48:57 +0100,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+Hi all,
 
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> 
-> Without this patch, it was impossible for a package that relies on
-> the tclsh interpreter to select it.  This patch replaces the
-> negative BR2_PACKAGE_TCL_SHLIB_ONLY config with the positive
-> BR2_PACKAGE_TCL_TCLSH config.
-> 
-> Also a few minor fixes to the mk-file:
-> 
-> - Stripping the library didn't work because it was installed read-only.
-> 
-> - Create a symlink tclsh -> tclsh8.4.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+this is my first time adding package to community so hope I'm doing all 
+well.
+This time I'd like to contribute with two projects:
+* Apache log4cxx (includes additional two depending libraries and 
+log4cxx patch)
+* xcursor-transparent-theme (includes patch for cross-compile)
+that I use on my project. My project is based on BR 2011.05 version so I 
+assume patch cannot be applied to latest version directly. I also tested 
+packages only on version 2011.05 including x86 and arm(didn't try with 
+xcursor-transparent-theme) configuration with glibc.
+I hope BR community will have benefit from this.
 
-Is this still needed?
+Regards,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Aleksandar
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: xcursor-transparent-theme.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/0a1b6c14/attachment-0002.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: log4cxx.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/0a1b6c14/attachment-0003.ksh>
