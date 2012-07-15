@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 15 Jul 2012 10:47:41 -0300
-Subject: [Buildroot] [PATCH 2/6] radvd: bump to version 1.9.1
+Date: Sun, 15 Jul 2012 10:47:42 -0300
+Subject: [Buildroot] [PATCH 3/6] freetype: bump to version 2.4.10
 In-Reply-To: <1342360065-10106-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1342360065-10106-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1342360065-10106-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1342360065-10106-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,76 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/radvd/Config.in                            |    1 +
- package/radvd/radvd-configure.ac-fix-bashism.patch |   31 --------------------
- package/radvd/radvd.mk                             |    4 +-
- 3 files changed, 3 insertions(+), 33 deletions(-)
- delete mode 100644 package/radvd/radvd-configure.ac-fix-bashism.patch
+ package/freetype/freetype.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-index 20e7e55..90c1fd4 100644
---- a/package/radvd/Config.in
-+++ b/package/radvd/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_RADVD
- 	bool "radvd"
- 	select BR2_PACKAGE_FLEX
- 	select BR2_PACKAGE_FLEX_LIBFL
-+	select BR2_PACKAGE_LIBDAEMON
- 	depends on BR2_INET_IPV6
- 	help
- 	  IPv6 Router Advertisement Daemon.
-diff --git a/package/radvd/radvd-configure.ac-fix-bashism.patch b/package/radvd/radvd-configure.ac-fix-bashism.patch
-deleted file mode 100644
-index a635cf8..0000000
---- a/package/radvd/radvd-configure.ac-fix-bashism.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From ce34738107678cb76e3da34cd16dc9a34d8dd242 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <jacmet@sunsite.dk>
--Date: Mon, 18 Jun 2012 23:12:05 +0200
--Subject: [PATCH] configure.ac: fix bashism
--
--'==' is a bashism, breaking configure on systems where /bin/sh isn't bash
--(E.G. Ubuntu).  Fixes:
--
--http://autobuild.buildroot.net/results/c3d0d04f8b3df63b3206cecf54dfdd67a4c7ccfb/build-end.log
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- configure.ac |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 3ab6667..c3b907b 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -176,7 +176,7 @@ dnl Checks for library functions.
-- AC_CHECK_FUNCS(getopt_long)
-- 
-- CONDITIONAL_SOURCES="device-${arch}.${OBJEXT} ${CONDITIONAL_SOURCES}"
---if test x${arch} == xlinux ; then
--+if test x${arch} = xlinux ; then
-- 	CONDITIONAL_SOURCES="privsep-${arch}.${OBJEXT} ${CONDITIONAL_SOURCES}"
-- 	AC_DEFINE(USE_PRIVSEP, 1, [Use privsep])
-- fi
---- 
--1.7.10
--
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 474a299..3471f9d 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index ded10d2..f351fd2 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--RADVD_VERSION = 1.8.5
-+RADVD_VERSION = 1.9.1
- RADVD_SITE = http://www.litech.org/radvd/dist
--RADVD_DEPENDENCIES = flex host-flex
-+RADVD_DEPENDENCIES = flex libdaemon host-flex host-pkg-config
- RADVD_AUTORECONF = YES
- 
- define RADVD_INSTALL_INITSCRIPT
+-FREETYPE_VERSION = 2.4.9
++FREETYPE_VERSION = 2.4.10
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
 -- 
 1.7.8.6
