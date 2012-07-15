@@ -1,50 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 Jul 2012 13:16:40 +0200
-Subject: [Buildroot] [PATCH v2] Make external toolchain relocatable
-In-Reply-To: <CAHXCMMKEWFS82V0wGLGD4Le66zKzGHs2UHd2bzxEvwU7bPbo3A@mail.gmail.com>
-References: <1341087767-20528-1-git-send-email-arnout@mind.be>
- <CAHXCMMKEWFS82V0wGLGD4Le66zKzGHs2UHd2bzxEvwU7bPbo3A@mail.gmail.com>
-Message-ID: <5002A698.6030808@mind.be>
+Date: Sun, 15 Jul 2012 13:24:24 +0200
+Subject: [Buildroot] [PATCH 1 of 6 resend] pkg-download.mk: allow using
+ localfiles outside of package infrastructure
+In-Reply-To: <1dcdff3e9437fc63cd4b.1340343754@beantl019720>
+References: <patchbomb.1340343753@beantl019720>
+ <1dcdff3e9437fc63cd4b.1340343754@beantl019720>
+Message-ID: <5002A868.70107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/07/12 23:18, Samuel Martin wrote:
-> Hi Arnout, all,
+On 06/22/12 07:42, Thomas De Schampheleire wrote:
+> The localfiles download method uses $($(PKG)_SITE))) and
+> $($(PKG)_SOURCE) instead of $(1) and $(2). This means that it can only
+> be used for package downloads (through gentargets, autotargets, ...)
+> and not for other downloads like external toolchains.
 >
-> 2012/6/30 Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>:
-> > The external toolchain wrapper sets sysroot etc. to an absolute path.
-> > By changing this to a relative path, it is possible to move the host
-> > directory to a different location and still have a working build
-> > system.
+> This patch changes localfiles to allow this, just as the wget and scp
+> download methods already did.
+> For the version control download methods, nothing changes.
+
+  Is there any reason not to do it for the VCS download methods?
+
 >
-> I've just tested your patch on top of my branch, it seems working well
-> but doesn't do all the job.
-> You have probably focused on the wrapper code and forgot to update
-> target of the symlinks of all other tools, pointing to the relative
-> location of them instead of the absolute one.
-
-  I just sent a v3.  Care to test it again?
-
-> > This only works for a downloaded external toolchain.  For a pre-installed
-> > external toolchain, it is possible to move the host directory to a
-> > different location, but not the external toolchain directory (it does work
-> > if the external toolchain directory lies within the host directory).  For
-> > an internal or crosstool-ng toolchain, there is no wrapper so updating the
-> > sysroot path should be done in a different way.
+> Signed-off-by: Thomas De Schampheleire<thomas.de.schampheleire@gmail.com>
 >
-> For internal and crosstool-ng toolchains, I think if we want to ensure
-> the tools are called with the correct sysroot argument, tehn we should
-> use  the wrapper too.
+> ---
+>   package/pkg-download.mk |  8 ++++----
+>   1 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -174,16 +174,16 @@ define SHOW_EXTERNAL_DEPS_WGET
+>   endef
+>
+>   define DOWNLOAD_LOCALFILES
+> -	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+> -		$(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
+> +	test -e $(DL_DIR)/$(2) || \
+> +		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
 
-   Good idea.  But then it should be installed in a different place as well.  But
-on the other hand, we don't want to go and copy the sysroot directory for
-internal/crosstool-NG toolchains...  Bottom line: I'm not going to try it :-)
+  Shouldn't this be
+		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)/$(2)
+
+>   endef
+>
+>   define SOURCE_CHECK_LOCALFILES
+> -  test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
+> +  test -e $(call qstrip,$(subst file://,,$(1)))
+>   endef
+>
+>   define SHOW_EXTERNAL_DEPS_LOCALFILES
+> -  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
+> +  echo $(2)
+
+  Funny, the original was actually wrong...
 
   Regards,
   Arnout
+
+>   endef
+>
+>   ################################################################################
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
