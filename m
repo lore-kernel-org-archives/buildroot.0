@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Jul 2012 21:45:12 +0200
-Subject: [Buildroot] [git commit] grep: bump to version 2.13
-Message-ID: <20120715202018.1BF769540B@busybox.osuosl.org>
+Date: Sun, 15 Jul 2012 21:45:07 +0200
+Subject: [Buildroot] [git commit] freetype: bump to version 2.4.10
+Message-ID: <20120715202017.DC52C9540B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e163bcb2aaa498b4afdc0ce5a91dac443692a69
+commit: http://git.buildroot.net/buildroot/commit/?id=82f83c6122837acd4daed5649ad4ccb8fec42e83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/grep/grep.mk |    2 +-
+ package/freetype/freetype.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 389aa3b..31ccaa6 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index ded10d2..f351fd2 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--GREP_VERSION = 2.12
-+GREP_VERSION = 2.13
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
+-FREETYPE_VERSION = 2.4.9
++FREETYPE_VERSION = 2.4.10
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
