@@ -1,67 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 15 Jul 2012 12:36:23 +0200
-Subject: [Buildroot] [git commit] pkg-infra: remove self-dependency from
-	host packages
-Message-ID: <20120715103641.570398DC41@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libcap: remove redundant
+	HOST_LIBCAP_DEPENDENCIES
+Message-ID: <20120715103641.8CD2A8DC41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbf1691ef48f8a87587713f981054c9fef22e2c4
+commit: http://git.buildroot.net/buildroot/commit/?id=8db1cb467eda44a9269d2a60ced90b064b5431ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-When HOST_XXX_DEPENDENCIES are derived automatically from
-XXX_DEPENDENCIES, a self-dependency is created if host-xxx is a dependency
-of xxx.  This was the case for miniperl.
-
-Filter out the self-dependency.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotargets.mk  |    2 +-
- package/pkg-cmaketargets.mk |    2 +-
- package/pkg-gentargets.mk   |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcap/libcap.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-autotargets.mk b/package/pkg-autotargets.mk
-index c9887c2..d31230d 100644
---- a/package/pkg-autotargets.mk
-+++ b/package/pkg-autotargets.mk
-@@ -201,7 +201,7 @@ endef
- # This must be repeated from GENTARGETS_INNER, otherwise we get an empty
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
- # away from the non-host rule
--$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool,\
-+$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool $(1),\
-     $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 4683121..9d6acf2 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -10,7 +10,6 @@ LIBCAP_VERSION = 2.22
+ LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
+ LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
+ LIBCAP_DEPENDENCIES = host-libcap
+-HOST_LIBCAP_DEPENDENCIES =
+ LIBCAP_INSTALL_STAGING = YES
  
- 
-diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
-index 371ab11..b405df5 100644
---- a/package/pkg-cmaketargets.mk
-+++ b/package/pkg-cmaketargets.mk
-@@ -98,7 +98,7 @@ endif
- 
- # This must be repeated from GENTARGETS_INNER, otherwise we only get
- # host-cmake in _DEPENDENCIES because of the following line
--$(2)_DEPENDENCIES ?= $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES)))
-+$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
- $(2)_DEPENDENCIES += host-cmake
- 
-diff --git a/package/pkg-gentargets.mk b/package/pkg-gentargets.mk
-index 1c9b458..5da9cdc 100644
---- a/package/pkg-gentargets.mk
-+++ b/package/pkg-gentargets.mk
-@@ -245,7 +245,7 @@ $(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
- endif
- endif
- 
--$(2)_DEPENDENCIES ?= $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES)))
-+$(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
- 
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
+ define LIBCAP_BUILD_CMDS
