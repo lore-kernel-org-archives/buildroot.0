@@ -1,28 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 15 Jul 2012 21:33:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 5354] host-lua doesn't build for EFL elementary
-In-Reply-To: <bug-5354-163@https.bugs.busybox.net/>
-References: <bug-5354-163@https.bugs.busybox.net/>
-Message-ID: <20120715213306.968F690B1B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Jul 2012 23:37:13 +0200
+Subject: [Buildroot] [PATCH] tcl: replace option to install library only
+ with positive option to install tclsh
+In-Reply-To: <1329263337-14994-1-git-send-email-arnout@mind.be>
+References: <201202150046.57364.arnout@mind.be>
+ <1329263337-14994-1-git-send-email-arnout@mind.be>
+Message-ID: <20120715233713.609720f8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5354
+Le Wed, 15 Feb 2012 00:48:57 +0100,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> 
+> Without this patch, it was impossible for a package that relies on
+> the tclsh interpreter to select it.  This patch replaces the
+> negative BR2_PACKAGE_TCL_SHLIB_ONLY config with the positive
+> BR2_PACKAGE_TCL_TCLSH config.
+> 
+> Also a few minor fixes to the mk-file:
+> 
+> - Stripping the library didn't work because it was installed read-only.
+> 
+> - Create a symlink tclsh -> tclsh8.4.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Is this still needed?
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-07-15 21:33:06 UTC ---
-Thanks.
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
