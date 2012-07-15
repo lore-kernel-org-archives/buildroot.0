@@ -1,59 +1,56 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Sun, 15 Jul 2012 13:27:31 -0400
-Subject: [Buildroot] Systemd update
-In-Reply-To: <CALR4fEKHpNy-TyCBWigS-9gLySp_d3Amy_N=xZqSWbif-9H97A@mail.gmail.com>
-References: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
- <CALR4fEKHpNy-TyCBWigS-9gLySp_d3Amy_N=xZqSWbif-9H97A@mail.gmail.com>
-Message-ID: <CADiAo4K8uDUatAYeVvppkEhs1bxEqCg-rcsHLOFhcMEEwxPjEw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Jul 2012 20:00:56 +0200
+Subject: [Buildroot] [PATCH] luajit: new package
+In-Reply-To: <CAB0FRsv-bQnLUZvq_8xm4CkQsbxF3z6quUW5jwGhhbr0KK6nZQ@mail.gmail.com>
+References: <20120715004755.4cc159e9@skate>
+ <1342306252-19152-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAB0FRsv-bQnLUZvq_8xm4CkQsbxF3z6quUW5jwGhhbr0KK6nZQ@mail.gmail.com>
+Message-ID: <20120715200056.390b3d03@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Sun, 15 Jul 2012 19:19:03 +0200,
+Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 
-On Sun, Jul 15, 2012 at 10:19 AM, Diego Iastrubni <diegoiast@gmail.com> wrote:
-> How does it compare with a similar setup, using "normal" logins and
-> busybox's init?
+> -Wl,-rpath,/home/user/build/qarm/host/usr/lib" -C
+> /home/user/build/qarm/build/luajit-2.0.0-beta10 amalg
+> /usr/bin/make: invalid option -- '3'
+> /usr/bin/make: invalid option -- '2'
+> 
+> so, I remove extra quote :
+> ifeq ($(BR2_ARCH_IS_64),y)
+> LUAJIT_HOST_CC=$(HOSTCC)
+> else
+> LUAJIT_HOST_CC=$(HOSTCC) -m32
+> endif
 
-It may be a bit more complicated than "traditional" sequential setup,
-but infinitely more flexible. I needed such a parallel dependency
-driven init program and thought of porting Android's setup, but
-systemd is the same but on big steroids.
+Hum, yes, this part was a last-minute addition, which was wrong
+apparently. But this doesn't answer my initial question: it is not
+possible to build luajit for a 64 bits architecture on a 32 bits host.
+If this isn't solved, we can't include luajit as is.
 
->
-> How much time does it take to boot under both setups?
+> and the build command could be rewrite with CROSS :
+> define LUAJIT_BUILD_CMDS
+> 	$(MAKE) PREFIX="/usr" \
+> 		HOST_CC="$(LUAJIT_HOST_CC)" \
+> 		CROSS="$(TARGET_CROSS)" \
+> 		-C $(@D) amalg
+> endef
 
-I do not remember how much it took under traditional setup. I get 24
-sec by kernel timestamp until the moment I can login, but this also
-involves setting up DHCP (since my setting is diskless) on a KVM
-running on a 2 GHz AMD64. Plus it takes some time to unpack the initrd
-image (mune is about 40M) So I'd discount 5 to 10 seconds for "pure
-boot time"
+No, using TARGET_CROSS directly doesn't work when ccache is enabled.
+ccache is only used in TARGET_CC and TARGET_CXX, that's why I've done
+this this way.
 
-I'll try to boot my test image later and give better measurements then.
+Can you look at the bitness problem?
 
-> How much memory does it take to login a single user?
+Thanks!
 
-I am not sure how to measure this. Besides, in my case initrd unpacks
-into memory anyway so it alone eats tens of megs.
-
->
->  - I know this is only for your setup, but it might give us real numbers.
->
-> BTW: is PAM mandatory?
-
-No it is not. It is the login program that lets the user in. What
-systemd-pam does is to notify the session manager of new session (so
-it can watch it and clean up afterwards), and set up a cgroup for the
-new session. If you do not include systemd-pam in the PAM stack (or do
-not use PAM at all) systemd starts getty and you can login normal way.
-Again, it is just something I need for my project.
-
-Thanks.
-
+Thomas
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
