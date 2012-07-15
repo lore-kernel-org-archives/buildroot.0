@@ -1,39 +1,42 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 15 Jul 2012 16:26:07 +0200
-Subject: [Buildroot] [PATCH] lua : some small fixes and refactors
-Message-ID: <CAB0FRsseuUxx-eKm2gcNYDotg+U-x-+cmwc_6sMVqGURn7oYrQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 15 Jul 2012 16:20:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
+ 2.30.2 Building"
+In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
+References: <bug-5360-163@https.bugs.busybox.net/>
+Message-ID: <20120715162024.2390B90E83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=5360
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-lua-fix-autobuild.buildroot.patch
-Type: application/octet-stream
-Size: 786 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120715/f738bffc/attachment-0004.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-lua-don-t-install-static-library-in-target.patch
-Type: application/octet-stream
-Size: 836 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120715/f738bffc/attachment-0005.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0003-lua-don-t-install-shared-library-in-staging.patch
-Type: application/octet-stream
-Size: 986 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120715/f738bffc/attachment-0006.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0004-lua-refactor-with-POST_PATH_HOOKS.patch
-Type: application/octet-stream
-Size: 1445 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120715/f738bffc/attachment-0007.obj>
+--- Comment #10 from Shokurov Anton V. <anton@fit.com.ru> 2012-07-15 16:20:23 UTC ---
+(In reply to comment #9)
+> The name is cyrilic chars is the problem.
+
+Yes. You are right. After moving the directory the build was successful.
+After extending the package list i got a new error,
+
+output/build/gcc-4.7.1-target/arm-unknown-linux-uclibcgnueabi/libstdc++-v3/include/fenv.h:36:24
+
+can't find fenv.h
+
+I have included the new config file as an attachment
+
+> This gdbus-codegen Python script is
+> generated from gdbus-codegen.in by replacing some paths into the script. And as
+> the script doesn't declare any encoding, it doesn't like having non-ascii
+> characters into the path. This also explains why it was working for me.
+> 
+> One option is to declare the script encoding as utf-8, but that would only work
+> on utf-8 configured systems. On other systems, it would probably not work. This
+> problem is not Buildroot's fault, so I think it should rather be reported to
+> the glib maintainers.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
