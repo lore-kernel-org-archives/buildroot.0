@@ -1,35 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 15 Jul 2012 10:47:44 -0300
-Subject: [Buildroot] [PATCH 5/6] cifs-utils: bump to version 5.5
+Date: Sun, 15 Jul 2012 10:47:45 -0300
+Subject: [Buildroot] [PATCH 6/6] grep: bump to version 2.13
 In-Reply-To: <1342360065-10106-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1342360065-10106-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1342360065-10106-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1342360065-10106-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump cifs-utils to version 5.5
-Also switch to http source instead of ftp.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cifs-utils/cifs-utils.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/grep/grep.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 0fdb689..15ed17a 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -1,6 +1,6 @@
--CIFS_UTILS_VERSION = 5.4
-+CIFS_UTILS_VERSION = 5.5
- CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
--CIFS_UTILS_SITE    = ftp://ftp.samba.org/pub/linux-cifs/cifs-utils/
-+CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 389aa3b..31ccaa6 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- define CIFS_UTILS_NO_WERROR
- 	$(SED) 's/-Werror//' $(@D)/Makefile.in
+-GREP_VERSION = 2.12
++GREP_VERSION = 2.13
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
 -- 
 1.7.8.6
