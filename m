@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 Jul 2012 14:42:38 +0200
-Subject: [Buildroot] [PATCH 3/4] Factorise the u-boot images code
-In-Reply-To: <1341309676-18681-4-git-send-email-maxime.ripard@free-electrons.com>
+Date: Sun, 15 Jul 2012 14:43:41 +0200
+Subject: [Buildroot] [PATCH 4/4] Add cuImage(powerpc) and
+ simpleImage(microblaze) as Linux kernel images variants
+In-Reply-To: <1341309676-18681-5-git-send-email-maxime.ripard@free-electrons.com>
 References: <1341309676-18681-1-git-send-email-maxime.ripard@free-electrons.com>
- <1341309676-18681-4-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <5002BABE.6010809@mind.be>
+ <1341309676-18681-5-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <5002BAFD.4000101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,6 +16,12 @@ On 07/03/12 12:01, Maxime Ripard wrote:
 > Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+  Note: untested
+
+  Note: depends on the other DTS patches, which I didn't ACK.
+
+  Regards,
+  Arnout
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
