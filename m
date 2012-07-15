@@ -1,29 +1,29 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 Jul 2012 13:50:36 +0200
-Subject: [Buildroot] [PATCH v3 2/2] libglib2: fix install even if the
- host python binary refers to python3
-In-Reply-To: <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
-References: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
- <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <5002AE8C.7060905@mind.be>
+Date: Sun, 15 Jul 2012 14:07:17 +0200
+Subject: [Buildroot] [PATCH v2 1/2] Convert gettext to autotargets
+In-Reply-To: <1338674861-1716-1-git-send-email-s.martin49@gmail.com>
+References: <1338674861-1716-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <5002B275.8020206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/12 00:08, Samuel Martin wrote:
-> The libglib2's build system uses some python2 scripts in the install rules.
+On 06/03/12 00:07, Samuel Martin wrote:
+> From: Maxime Ripard<maxime.ripard@free-electrons.com>
 >
-> This patch ensures to have a valid host python2 binary and enforces this python2
-> binary at configure-time.
->
-> Signed-off-by: Samuel Martin<s.martin49@gmail.com>
+> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
+> Acked-by: Samuel MARTIN<s.martin49@gmail.com>
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  And a bump.
+  I can't imagine that all the _cv_ variables that were set in gettext
+are really unnecessary, but I guess the autobuild infrastructure will
+find out if they aren't...
 
+  Regards,
+  Arnout
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
