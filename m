@@ -1,115 +1,95 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 15 Jul 2012 14:22:37 +0200
-Subject: [Buildroot] [PATCH v2 2/2] gettext: get rid of LIBINTL stuff
-In-Reply-To: <1338674861-1716-2-git-send-email-s.martin49@gmail.com>
-References: <1338674861-1716-1-git-send-email-s.martin49@gmail.com>
- <1338674861-1716-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <5002B60D.4040200@mind.be>
+Date: Sun, 15 Jul 2012 14:34:26 +0200
+Subject: [Buildroot] [PATCH 1/4] Rework support for the device tree
+In-Reply-To: <1341309676-18681-2-git-send-email-maxime.ripard@free-electrons.com>
+References: <1341309676-18681-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1341309676-18681-2-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <5002B8D2.6050401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/03/12 00:07, Samuel Martin wrote:
-> The AUTOTARGET conversion of gettext introduces some changes:
-> - the target 'gettext' now builds and installs libintl if locale
->    support is enabled. The target 'libintl' no longer exists, so the
->    libintl dependency is no longer needed;
-> - the gettext binaries (usr/bin/gettext{,.sh,ize}), formerly installed
->    together with 'libintl', are now installed together with 'gettext'.
->    Because the gettext binaries have a rather small footprints, they
->    are now alway installed together with 'gettext'.
-
-  I don't agree.  I'll comment on this below.
-
+On 07/03/12 12:01, Maxime Ripard wrote:
+> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
+> ---
+>   linux/Config.in |   46 +++++++++++++++++++++++++++++++++++++++-------
+>   linux/linux.mk  |   38 +++++++++++++++++++++++---------------
+>   2 files changed, 62 insertions(+), 22 deletions(-)
 >
-> This patch does:
-> - update the gettext package;
-> - warn about libintl availability depending on the locale support
->    enabled in the toolchain;
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 4562b1b..6f704b0 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -124,14 +124,46 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+>   	help
+>   	  Path to the kernel configuration file
+>
+> +config BR2_LINUX_KERNEL_DTS_SUPPORT
+> +	bool "Device tree support"
+> +	help
+> +	  Compile a device tree source into a device tree blob.
+> +	  Select the dts file to compile in the options below.
+> +
+> +if BR2_LINUX_KERNEL_DTS_SUPPORT
 
-  Why is this needed?
+  Maybe it's better to remove this option, and instead just
+detect if BR2_LINUX_KERNEL_DTS_FILE is defined.  Or would
+that make things more confusing?
 
-> - cleanup all remaining  gettext/libintl dependencies;
-> - fix/cleanup some BR2_NEEDS_GETTEXT/BR2_NEEDS_GETTEXT_IF_LOCALE
->    dependencies.
-
-  These should be in a separate patch.
-
-
-  Note: I do think this is a very valuable patch, so I hope you still
-have the energy to work on it, even though it hasn't been met with a lot
-of enthusiasm on the list...
 
 [snip]
-> diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-> index 0ee4065..cc48b98 100644
-> --- a/package/gettext/Config.in
-> +++ b/package/gettext/Config.in
-> @@ -12,12 +12,5 @@ config BR2_PACKAGE_GETTEXT
->   comment "gettext requires a toolchain with WCHAR support"
->   	depends on BR2_NEEDS_GETTEXT&&  !BR2_USE_WCHAR
+> +ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+> +define LINUX_BUILD_DTB
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
+> +endef
+> +endif
+> +
+>   # Compilation. We make sure the kernel gets rebuilt when the
+>   # configuration has changed.
+>   define LINUX_BUILD_CMDS
+> +	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+> +		mkdir $(KERNEL_ARCH_PATH)/boot/dts
+
+  Should be mkdir -p
+
+> +		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE) $(KERNEL_ARCH_PATH)/boot/dts/)
+>   	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
+>   	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+>   		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+>   	fi
+> +	$(LINUX_BUILD_DTB)
+>   endef
 >
-> -config BR2_PACKAGE_LIBINTL
-> -	bool "libintl"
-> -	depends on BR2_NEEDS_GETTEXT
-> -	depends on BR2_USE_WCHAR
-> -	help
-> -	  Selecting this package installs all of gettext in the staging
-> -	  directory and the shared library for it's use in the target.
-> -
-> -	  http://www.gnu.org/software/gettext/
-
-  This could become something like:
-
-if BR2_PACKAGE_GETTEXT
-config BR2_PACKAGE_GETTEXT_BINARIES
-	bool "Install gettext binaries"
-	help
-	  Keep the gettext binaries (gettext, gettextize, gettext.sh)
-	  on the target filesystem.  This is typically only necessary
-	  if the target is itself a development system.
-endif
-
-
-> +comment "libintl requires a toolchain with locale/i18n support"
-> +	depends on BR2_PACKAGE_GETTEXT && !BR2_ENABLE_LOCALE
-
-  I don't understand this comment...  The gettext package builds libintl, right?
-
-
-> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-> index 7c7b26c..a9dac28 100644
-> --- a/package/gettext/gettext.mk
-> +++ b/package/gettext/gettext.mk
-> @@ -9,16 +9,6 @@ GETTEXT_INSTALL_STAGING = YES
 >
->   GETTEXT_CONF_OPT += \
->   	--disable-libasprintf \
-> -	--disable-openmp \
-> -
-> -define GETTEXT_REMOVE_BINARIES
-> -	rm -f $(TARGET_DIR)/usr/bin/gettext
-> -	rm -f $(TARGET_DIR)/usr/bin/gettext.sh
-> -	rm -f $(TARGET_DIR)/usr/bin/gettextize
-> -endef
-> -
-> -ifeq ($(BR2_PACKAGE_LIBINTL),y)
-
-  So this would become
-ifeq ($(BR2_PACKAGE_GETTEXT_BINARIES),)
-
-> -	GETTEXT_POST_INSTALL_TARGET_HOOKS += GETTEXT_REMOVE_BINARIES
-> -endif
-> +	--disable-openmp
+> @@ -183,12 +184,19 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+>   endef
+>   endif
 >
->   $(eval $(call AUTOTARGETS))
-[snip]
+> +ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+> +define LINUX_INSTALL_DTB
+> +	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+> +endef
 
+  I would move this definition to the same place as LINUX_BUILD_DTB.
 
   Regards,
   Arnout
+
+> +endif
+> +
+>   define LINUX_INSTALL_IMAGES_CMDS
+>   	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+>   endef
+>
+>   define LINUX_INSTALL_TARGET_CMDS
+>   	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+> +	$(LINUX_INSTALL_DTB)
+>   	# Install modules and remove symbolic links pointing to build
+>   	# directories, not relevant on the target
+>   	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
