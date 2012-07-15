@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Jul 2012 12:36:23 +0200
-Subject: [Buildroot] [git commit] libcap: remove redundant
-	HOST_LIBCAP_DEPENDENCIES
-Message-ID: <20120715103641.8CD2A8DC41@busybox.osuosl.org>
+Date: Sun, 15 Jul 2012 12:38:54 +0200
+Subject: [Buildroot] Qt tribulations take 2
+In-Reply-To: <50029C65.9010004@mind.be>
+References: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
+ <20120713165557.1b39651c@skate>
+ <CALo-6+gv+zb1peT7ngOGLL7VnS6xpCUOZRn_J6CD86Kmn7vX=A@mail.gmail.com>
+ <20120714182555.4b7b267d@jl-desk-LL>
+ <CALo-6+hSrFrqua1s48qzYn9J8qF0F6=zCpgfbguO2hf3VmqeOQ@mail.gmail.com>
+ <20120715010542.1a23ba0f@skate> <50029C65.9010004@mind.be>
+Message-ID: <20120715123854.3d6c11f1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8db1cb467eda44a9269d2a60ced90b064b5431ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 15 Jul 2012 12:33:09 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libcap/libcap.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+>   We could define MAKE as env -i $(MAKE), but there are some environment
+> variables that are passed to sub-makes that you loose this way.  Maybe
+> better is to define SHELL as env -i sh, but that could have huge side
+> effects...
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 4683121..9d6acf2 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -10,7 +10,6 @@ LIBCAP_VERSION = 2.22
- LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
- LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
- LIBCAP_DEPENDENCIES = host-libcap
--HOST_LIBCAP_DEPENDENCIES =
- LIBCAP_INSTALL_STAGING = YES
- 
- define LIBCAP_BUILD_CMDS
+Hm, ok.
+
+>   But maybe we shouldn't exaggerate here.  Putting a QMAKESPEC in your
+> environment would make any qt build fail, so it's not really a
+> buildroot problem.  Maybe a better idea is to put in the documentation
+> that the safe way is to use 'env -i make' to start a build...
+
+Well, there are already many other environment variables that may break
+the build and that we are either checking in
+support/dependencies/dependencies.sh, or unsetting in main Makefile.
+Shouldn't we do the same for QMAKESPEC?
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
