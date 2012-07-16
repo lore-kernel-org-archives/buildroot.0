@@ -1,92 +1,104 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 15 Jul 2012 23:00:27 -0400
-Subject: [Buildroot] [PATCH] New package: lua-cjson [v2]
-In-Reply-To: <1342407627-2861-1-git-send-email-danomimanchego123@gmail.com>
-References: <1342407627-2861-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1342407627-2861-2-git-send-email-danomimanchego123@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 16 Jul 2012 05:14:32 +0200
+Subject: [Buildroot] [PATCH 1 of 6 resend] pkg-download.mk: allow using
+ localfiles outside of package infrastructure
+In-Reply-To: <5002A868.70107@mind.be>
+References: <patchbomb.1340343753@beantl019720>
+ <1dcdff3e9437fc63cd4b.1340343754@beantl019720>
+ <5002A868.70107@mind.be>
+Message-ID: <CAAXf6LV10=X629e14iQA8Fx1m0R=YKnQzGUFNw6vOiGCHJiwvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/Config.in              |    1 +
- package/lua-cjson/Config.in    |   13 +++++++++++++
- package/lua-cjson/lua-cjson.mk |   32 ++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
- create mode 100644 package/lua-cjson/Config.in
- create mode 100644 package/lua-cjson/lua-cjson.mk
+Hi Arnout,
 
-diff --git a/package/Config.in b/package/Config.in
-index 99257b4..9cbf1e2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -250,6 +250,7 @@ menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
-+source "package/lua-cjson/Config.in"
- source "package/luafilesystem/Config.in"
- source "package/luasocket/Config.in"
- source "package/rings/Config.in"
-diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
-new file mode 100644
-index 0000000..c9d6abd
---- /dev/null
-+++ b/package/lua-cjson/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUA_CJSON
-+	bool "lua_cjson"
-+	help
-+	  The Lua CJSON module provides JSON support for Lua. It features:
-+	  - Fast, standards compliant encoding/parsing routines
-+	  - Full support for JSON with UTF-8, including decoding surrogate pairs
-+	  - Optional run-time support for common exceptions to the JSON
-+	    specification (infinity, NaN, ...)
-+	  - No dependencies on other libraries
-+
-+	  (C-module)
-+
-+	  http://www.kyne.com.au/~mark/software/lua-cjson.php
-diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
-new file mode 100644
-index 0000000..05087ea
---- /dev/null
-+++ b/package/lua-cjson/lua-cjson.mk
-@@ -0,0 +1,32 @@
-+#############################################################
-+#
-+# lua-cjson
-+#
-+#############################################################
-+LUA_CJSON_VERSION      = 2.1.0
-+LUA_CJSON_SOURCE       = lua-cjson-$(LUA_CJSON_VERSION).tar.gz
-+LUA_CJSON_SITE         = http://www.kyne.com.au/~mark/software/download
-+LUA_CJSON_DEPENDENCIES = lua
-+
-+define LUA_CJSON_BUILD_CMDS
-+	$(MAKE) -C $(@D) \
-+		CFLAGS="$(TARGET_CFLAGS)"   \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CC="$(TARGET_CC)"           \
-+		LD="$(TARGET_LD)"           \
-+		PREFIX=$(STAGING_DIR)/usr
-+endef
-+
-+define LUA_CJSON_INSTALL_TARGET_CMDS
-+	install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
-+endef
-+
-+define LUA_CJSON_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+define LUA_CJSON_UNINSTALL_TARGET_CMDS
-+	rm -f "$(TARGET_DIR)/usr/lib/lua/cjson.so"
-+endef
-+
-+$(eval $(call GENTARGETS))
--- 
-1.7.9.5
+Thanks for your review and acks.
+
+Op 15 jul. 2012 05:24 schreef "Arnout Vandecappelle" <arnout@mind.be> het
+volgende:
+>
+> On 06/22/12 07:42, Thomas De Schampheleire wrote:
+>>
+>> The localfiles download method uses $($(PKG)_SITE))) and
+>> $($(PKG)_SOURCE) instead of $(1) and $(2). This means that it can only
+>> be used for package downloads (through gentargets, autotargets, ...)
+>> and not for other downloads like external toolchains.
+>>
+>> This patch changes localfiles to allow this, just as the wget and scp
+>> download methods already did.
+>> For the version control download methods, nothing changes.
+>
+>
+>  Is there any reason not to do it for the VCS download methods?
+>
+
+Just because I didn't really see how you'd use that. For non-package
+downloads you'd be downloading a single file (typically a tarball). It
+seems odd to me to take that from a version control system. I guess you'll
+need to express the version you want in the URL, which may not be possible
+for all the systems we support.
+Thomas basically asked the same question. Do any of you do see a use case?
+
+>
+>>
+>> Signed-off-by: Thomas De Schampheleire<thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>>   package/pkg-download.mk |  8 ++++----
+>>   1 files changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+>> --- a/package/pkg-download.mk
+>> +++ b/package/pkg-download.mk
+>> @@ -174,16 +174,16 @@ define SHOW_EXTERNAL_DEPS_WGET
+>>   endef
+>>
+>>   define DOWNLOAD_LOCALFILES
+>> -       test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>> -               $(LOCALFILES) $(call qstrip,$(subst
+file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
+>> +       test -e $(DL_DIR)/$(2) || \
+>> +               $(LOCALFILES) $(call qstrip,$(subst file://,,$(1)))
+$(DL_DIR)
+>
+>
+>  Shouldn't this be
+>                 $(LOCALFILES) $(call qstrip,$(subst file://,,$(1)))
+$(DL_DIR)/$(2)
+
+Well, the behavior is the same as before. But I guess you could safely add
+the explicit destination. I can't test it as I'm on holiday, though.
+
+Maybe you could submit that as a separate patch?
+
+>
+>
+>>   endef
+>>
+>>   define SOURCE_CHECK_LOCALFILES
+>> -  test -e $(call qstrip,$(subst
+file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
+>> +  test -e $(call qstrip,$(subst file://,,$(1)))
+>>   endef
+>>
+>>   define SHOW_EXTERNAL_DEPS_LOCALFILES
+>> -  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
+>> +  echo $(2)
+>
+>
+>  Funny, the original was actually wrong...
+>
+>  Regards,
+>  Arnout
+>
+>>   endef
+>>
+
+Best regards,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/4400a2a2/attachment.html>
