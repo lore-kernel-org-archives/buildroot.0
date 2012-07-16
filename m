@@ -1,107 +1,57 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 16 Jul 2012 16:47:54 +0200
-Subject: [Buildroot] [PATCH] New package: LuaExpat [v2]
-In-Reply-To: <1342407566-2819-2-git-send-email-danomimanchego123@gmail.com>
-References: <1342407566-2819-1-git-send-email-danomimanchego123@gmail.com>
- <1342407566-2819-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAB0FRssLDN0PZ2eqUV44DzYM=KsfGxWYv4=6_hLuazahzDcauQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Jul 2012 17:39:58 +0200
+Subject: [Buildroot] [PATCH 1/5] lua : fix autobuild.buildroot
+In-Reply-To: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
+References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20120716173958.39ab39b3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-in luaexpat.mk :
-- the variable LUAEXPAT_SOURCE is useless, because the default scheme
-(packagename-$(LIBFOO_VERSION).tar.gz) is used
+Le Mon, 16 Jul 2012 15:45:48 +0200,
+Francois Perrad <fperrad@gmail.com> a ?crit :
 
-Fran?ois
-
-
-2012/7/16 Danomi Manchego <danomimanchego123@gmail.com>:
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> BR2_PACKAGE_LUA_SHARED_LIBRARY is an option for install, not for build
 > ---
->  package/Config.in            |    1 +
->  package/luaexpat/Config.in   |    7 +++++++
->  package/luaexpat/luaexpat.mk |   39 +++++++++++++++++++++++++++++++++++++++
->  3 files changed, 47 insertions(+)
->  create mode 100644 package/luaexpat/Config.in
->  create mode 100644 package/luaexpat/luaexpat.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 99257b4..5126f1a 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -250,6 +250,7 @@ menu "LUA libraries/modules"
->  source "package/cgilua/Config.in"
->  source "package/copas/Config.in"
->  source "package/coxpcall/Config.in"
-> +source "package/luaexpat/Config.in"
->  source "package/luafilesystem/Config.in"
->  source "package/luasocket/Config.in"
->  source "package/rings/Config.in"
-> diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
-> new file mode 100644
-> index 0000000..186c5c9
-> --- /dev/null
-> +++ b/package/luaexpat/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LUAEXPAT
-> +       bool "luaexpat"
-> +       select BR2_PACKAGE_EXPAT
-> +       help
-> +         LuaExpat is a SAX XML parser based on the Expat library.
-> +
-> +         http://matthewwild.co.uk/projects/luaexpat/
-> diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-> new file mode 100644
-> index 0000000..e23473e
-> --- /dev/null
-> +++ b/package/luaexpat/luaexpat.mk
-> @@ -0,0 +1,39 @@
-> +#############################################################
-> +#
-> +# luaexpat
-> +#
-> +#############################################################
-> +
-> +LUAEXPAT_VERSION      = 1.2.0
-> +LUAEXPAT_SOURCE       = luaexpat-$(LUAEXPAT_VERSION).tar.gz
-> +LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
-> +LUAEXPAT_DEPENDENCIES = lua expat
-> +
-> +
-> +LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
-> +LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
-> +LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
-> +LUAEXPAT_MFLAGS += LIBNAME=lxp.so
-> +LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
-> +LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
-> +
-> +
-> +define LUAEXPAT_BUILD_CMDS
-> +       $(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
-> +endef
-> +
-> +define LUAEXPAT_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
-> +       $(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
-> +endef
-> +
-> +define LUAEXPAT_UNINSTALL_TARGET_CMDS
-> +       rm -f "$(TARGET_DIR)/usr/lib/lua/lxp.so"
-> +       rm -f "$(TARGET_DIR)/usr/share/lua/lxp/lom.lua"
-> +endef
-> +
-> +define LUAEXPAT_CLEAN_CMDS
-> +       $(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS) clean
-> +endef
-> +
-> +$(eval $(call GENTARGETS))
-> --
-> 1.7.9.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  package/lua/lua.mk |    5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+> index baa459c..2fc838b 100644
+> --- a/package/lua/lua.mk
+> +++ b/package/lua/lua.mk
+> @@ -8,10 +8,7 @@ LUA_VERSION = 5.1.5
+>  LUA_SITE = http://www.lua.org/ftp
+>  LUA_INSTALL_STAGING = YES
+>  
+> -ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+> -	LUA_MYCFLAGS += -fPIC
+> -endif
+> -
+> +LUA_MYCFLAGS += -fPIC
+>  LUA_MYLIBS += -ldl
+>  
+>  ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+
+If Lua is not build as a shared library, there is no point in building
+the object files with the -fPIC argument, so the existing code seems to
+make sense to me. The BR2_PACKAGE_LUA_SHARED_LIBRARY affects both the
+build time (we don't build with -fPIC) and the install time (we install
+the shared libraries).
+
+But I'm confused: during the Libre Software Meeting, didn't we discussed
+that the BR2_PACKAGE_LUA_SHARED_LIBRARY option should go away, and that
+the BR2_PACKAGE_LUA option should unconditionally install the shared
+libraries, and then there would be sub-options for the interpreter and
+compiler?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
