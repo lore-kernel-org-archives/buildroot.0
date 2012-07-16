@@ -1,35 +1,43 @@
-From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
-Date: Mon, 16 Jul 2012 00:54:21 +0200
-Subject: [Buildroot] log4cxx, xcursor-transparent-theme package to add
-Message-ID: <jtvhmt$u1m$1@dough.gmane.org>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Sun, 15 Jul 2012 22:17:14 -0400
+Subject: [Buildroot] Systemd update (cc the list)
+Message-ID: <CADiAo4JS71qm3fphCE2ica_SZPO1zTvWvkB-g84h2Q1+Ru6mxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi,
 
-this is my first time adding package to community so hope I'm doing all 
-well.
-This time I'd like to contribute with two projects:
-* Apache log4cxx (includes additional two depending libraries and 
-log4cxx patch)
-* xcursor-transparent-theme (includes patch for cross-compile)
-that I use on my project. My project is based on BR 2011.05 version so I 
-assume patch cannot be applied to latest version directly. I also tested 
-packages only on version 2011.05 including x86 and arm(didn't try with 
-xcursor-transparent-theme) configuration with glibc.
-I hope BR community will have benefit from this.
+On Sun, Jul 15, 2012 at 10:19 AM, Diego Iastrubni <diegoiast@gmail.com> wrote:
+> How does it compare with a similar setup, using "normal" logins and
+> busybox's init?
+>
+> How much time does it take to boot under both setups?
 
-Regards,
+Here is dmesg output on a VM:
 
-Aleksandar
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: xcursor-transparent-theme.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/0a1b6c14/attachment-0002.ksh>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: log4cxx.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/0a1b6c14/attachment-0003.ksh>
+http://pastebin.com/ZbQmMiTU
+
+[   16.881460] systemd[1]: Startup finished in 14s 40ms 662us (kernel)
++ 2s 840ms 704us (userspace) = 16s 881ms 366us.
+
+of these 16sec:
+
+[    0.392041] Trying to unpack rootfs image as initramfs...
+[   13.790005] Freeing initrd memory: 37216k freed
+
+13 secs were spent to unpack initrd. So it could be under 10sec from
+boot to DHCP ready.
+
+--
+Dmitry Golubovsky
+
+Anywhere on the Web
+
+
+-- 
+Dmitry Golubovsky
+
+Anywhere on the Web
