@@ -1,61 +1,37 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 16 Jul 2012 23:37:25 +0200
-Subject: [Buildroot] [PATCH v5 0/5] OpenCV update and CPU fetures
-Message-ID: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
+Date: Mon, 16 Jul 2012 23:37:28 +0200
+Subject: [Buildroot] [PATCH v5 3/5] sdl_gfx: refactor *_CONF_OPT assignment
+	with cpu-feature options
+In-Reply-To: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
+References: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1342474650-10084-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series add symbols for some of the features of the x86/x86_64
-architectures.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-These new symbols are used in the opencv.mk file, as well as in some other
-packages.
-
-
-Changelog:
-
-v5:
-- remove unused CPU features symbols.
-- opencv: bump to version 2.4.2
-
-v4:
-- remove CPU features symbols for PowerPC
-- opencv: fix the configure option for PowerPC and comment it.
-
-v3:
-- rename x86/x86_64 cpu feature symbols: BR2_CPU_HAS_* -> BR2_X86_CPU_HAS_*
-- add CPU features symbols for PowerPC
-- opencv: bump to version 2.4.1
-- fix/cleanup menuconfig
-- update opencv configure options
-
-v2:
-- add CPU features symbols for x86 and x86_64
-- use those symbols in the opencv, sdl_gfx and sdl_sound packages
-- opencv: add missing zlib dependency
-
-v1:
-- opencv: bump to version 2.4.0
-
-Samuel Martin (5):
-  target: add symbols for i386/x86_64 cpu features
-  libevas: refactor *_CONF_OPT assignment with cpu-feature options
-  sdl_gfx: refactor *_CONF_OPT assignment with cpu-feature options
-  sdl_sound: refactor *_CONF_OPT assignment with cpu-feature options
-  opencv: bump to version 2.4.2
-
- package/efl/libevas/libevas.mk                     |  24 ++--
- package/opencv/Config.in                           | 155 ++++++++++++++++++---
- ...pencv-uclibc-optional-long-double-support.patch |  40 ------
- package/opencv/opencv.mk                           | 144 +++++++++++++------
- package/sdl_gfx/sdl_gfx.mk                         |  10 +-
- package/sdl_sound/sdl_sound.mk                     |   3 +-
- target/Config.in.arch                              | 101 +++++++++++++-
- 7 files changed, 353 insertions(+), 124 deletions(-)
- delete mode 100644 package/opencv/opencv-uclibc-optional-long-double-support.patch
-
---
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index 5503bbd..343c7a1 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -11,13 +11,7 @@ SDL_GFX_DEPENDENCIES = sdl
+ SDL_GFX_CONF_OPT = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--disable-sdltest \
+-	--enable-static
+-
+-# enable mmx for newer x86's
+-ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
+-SDL_GFX_CONF_OPT += --enable-mmx
+-else
+-SDL_GFX_CONF_OPT += --disable-mmx
+-endif
++	--enable-static \
++	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx)
+ 
+ $(eval $(call AUTOTARGETS))
+-- 
 1.7.11.2
