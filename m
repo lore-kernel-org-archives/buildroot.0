@@ -1,29 +1,33 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Mon, 16 Jul 2012 20:39:59 +0000
-Subject: [Buildroot] [PATCH v5] vlc: New package
-In-Reply-To: <20120716132359.57fee2d6@skate>
-References: <1332381260-15711-1-git-send-email-ismael.luceno@gmail.com>
- <201203252148.58501.arnout@mind.be>
- <20120327213610.72c77611@gmail.com> <20120716132359.57fee2d6@skate>
-Message-ID: <CADThq4JFsdiy9_YzLzHQJj1v+1+4DxQiDuvAvoF5tW50Fz+0OA@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 16 Jul 2012 23:07:02 +0200
+Subject: [Buildroot] [PATCH v3] Make external toolchain relocatable
+In-Reply-To: <1342350726-29970-1-git-send-email-arnout@mind.be>
+References: <1342350726-29970-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMMJ8FRbEHGY-Aq8NifiFXaBTjNUP8+d=S0a2q2BNw-RAYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 16, 2012 at 11:23 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
-
-Hi.
-
-> Le Tue, 27 Mar 2012 21:36:10 -0300,
-> Ismael Luceno <ismael.luceno@gmail.com> a ?crit :
+2012/7/15 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>:
+> The external toolchain wrapper sets sysroot etc. to an absolute path.
+> By changing this to a relative path, it is possible to move the host
+> directory to a different location and still have a working build
+> system.
 >
->> Thanks for the suggestions. I'll try to address the issues and send a
->> new patch soon :).
+> This only works for a downloaded external toolchain.  For a pre-installed
+> external toolchain, it is possible to move the host directory to a
+> different location, but not the external toolchain directory (it does work
+> if the external toolchain directory lies within the host directory).  For
+> an internal or crosstool-ng toolchain, there is no wrapper so updating the
+> sysroot path should be done in a different way.
 >
-> In the end, do you plan to post an updated patch?
+> See http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html
+> for information about others things to do to make the host directory
+> relocatable.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-I've had no time to work on it yet, but it's on my to-do list...
+Also tested.
