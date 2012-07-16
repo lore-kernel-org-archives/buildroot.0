@@ -1,34 +1,39 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 16 Jul 2012 15:45:49 +0200
-Subject: [Buildroot] [PATCH 2/5] lua : don't install static library in target
+Date: Mon, 16 Jul 2012 15:45:50 +0200
+Subject: [Buildroot] [PATCH 3/5] lua : don't install shared library in
+	staging
 In-Reply-To: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
 References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1342446352-31231-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1342446352-31231-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+dead code, LUA_INSTALL_STAGING_SHARED_LIB not used
 ---
- package/lua/lua.mk |    5 -----
- 1 file changed, 5 deletions(-)
+ package/lua/lua.mk |    8 --------
+ 1 file changed, 8 deletions(-)
 
 diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 2fc838b..ab9a1a2 100644
+index ab9a1a2..5b8022a 100644
 --- a/package/lua/lua.mk
 +++ b/package/lua/lua.mk
-@@ -79,11 +79,6 @@ define LUA_INSTALL_LIBRARY
- 	$(INSTALL) $(@D)/src/liblua.so.$(LUA_VERSION) \
- 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
--	$(INSTALL) $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
--endef
--else
--define LUA_INSTALL_LIBRARY
--	$(INSTALL) $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
+@@ -42,14 +42,6 @@ define HOST_LUA_BUILD_CMDS
+ 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
  endef
- endif
  
+-ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+-define LUA_INSTALL_STAGING_SHARED_LIB
+-	$(INSTALL) -D $(@D)/src/liblua.so.$(LUA_VERSION) \
+-		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
+-	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
+-endef
+-endif
+-
+ define LUA_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
 -- 
 1.7.9.5
