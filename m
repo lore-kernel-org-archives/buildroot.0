@@ -1,191 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Jul 2012 14:57:08 +0200
-Subject: [Buildroot] [PATCH 1/4] Rework support for the device tree
-In-Reply-To: <1341309676-18681-2-git-send-email-maxime.ripard@free-electrons.com>
+Date: Mon, 16 Jul 2012 15:01:46 +0200
+Subject: [Buildroot] [PATCH 2/4] Add support for appended device tree
+ blobs for arm
+In-Reply-To: <1341309676-18681-3-git-send-email-maxime.ripard@free-electrons.com>
 References: <1341309676-18681-1-git-send-email-maxime.ripard@free-electrons.com>
- <1341309676-18681-2-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <20120716145708.5f2a1bf7@skate>
+ <1341309676-18681-3-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <20120716150146.3a47c3c9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue,  3 Jul 2012 12:01:13 +0200,
+Le Tue,  3 Jul 2012 12:01:14 +0200,
 Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 
 > Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 > ---
->  linux/Config.in |   46 +++++++++++++++++++++++++++++++++++++++-------
->  linux/linux.mk  |   38 +++++++++++++++++++++++---------------
->  2 files changed, 62 insertions(+), 22 deletions(-)
+>  linux/Config.in |    8 ++++++++
+>  linux/linux.mk  |   38 +++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 45 insertions(+), 1 deletion(-)
 > 
 > diff --git a/linux/Config.in b/linux/Config.in
-> index 4562b1b..6f704b0 100644
+> index 6f704b0..46b9756 100644
 > --- a/linux/Config.in
 > +++ b/linux/Config.in
-> @@ -124,14 +124,46 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
->  	help
->  	  Path to the kernel configuration file
+> @@ -132,6 +132,14 @@ config BR2_LINUX_KERNEL_DTS_SUPPORT
 >  
-> +config BR2_LINUX_KERNEL_DTS_SUPPORT
-> +	bool "Device tree support"
+>  if BR2_LINUX_KERNEL_DTS_SUPPORT
+>  
+> +config BR2_LINUX_KERNEL_APPENDED_DTB
+> +	bool "Append the Device Tree binary to the kernel"
+
+				Blob
+
+> +	depends on BR2_arm || BR2_armeb
 > +	help
-> +	  Compile a device tree source into a device tree blob.
-> +	  Select the dts file to compile in the options below.
-> +
-> +if BR2_LINUX_KERNEL_DTS_SUPPORT
-> +
-> +choice
-> +	prompt "Device tree source"
-> +	default BR2_LINUX_KERNEL_USE_DEFAULT_DTS
-> +
-> +config BR2_LINUX_KERNEL_USE_DEFAULT_DTS
+> +	  After building the device tree blob, append it to the
+> +	  kernel image. If necessary generates a uImage from that
+> +	  new kernel image afterward.
 
-I don't really like "USE_DEFAULT_DTS", it isn't really a "default"
-device tree. What about BR2_LINUX_KERNEL_USE_INTREE_DTS or something
-like that?
+This should rather be *after* the Device Tree Source choice and
+selection, in my opinion. It would be more logical: (1) what I include,
+(2) how I include it.
 
-> +	bool "Use a device tree present in the kernel.
-
-Missing " at the end of the line, and the final "." shouldn't be there.
-
-> +	help
-> +	   Use a device tree source distributed with
-> +	   the kernel sources. The dts files are to be
-> +	   found in the arch/<arch>/boot/dts folder.
-
-"are to be found" -> "are located" ?
-
-> +config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> +	bool "Use a custom device tree file"
-> +	help
-> +	  Use a custom device tree file.
-
-"i.e, a device tree file that does not belong to the kernel source
-tree."
-
-> +
-> +endchoice
-> +
->  config BR2_LINUX_KERNEL_DTS_FILE
-> -    string "Device Tree dts file location"
-> -    depends on BR2_microblaze
-> -    help
-> -      Path from where the dts file has to be copied
-> -      The final "custom target" name depends on the
-> -      dts file name:
-> -          <name>.dts --> simpleImage.<name>
-> +	string "DTS name"
-
-	string "Device Tree Source file name" ?
-
-> +	depends on BR2_LINUX_KERNEL_USE_DEFAULT_DTS
-> +	help
-> +	 Name of the default device tree, without the
-> +	 trailing .dts
-> +
-> +config BR2_LINUX_KERNEL_CUSTOM_DTS_FILE
-> +	string "Device tree file path"
-
-	string "Device Tree Source file path" ?
-
-or at least be consistent in the naming, either DTS everywhere, or
-Device Tree Source everywhere.
-
-> +	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-> +	help
-> +	  Path to the kernel configuration file
-> +
-> +endif
->  #
->  # Binary format
->  #
+>  choice
+>  	prompt "Device tree source"
+>  	default BR2_LINUX_KERNEL_USE_DEFAULT_DTS
 > diff --git a/linux/linux.mk b/linux/linux.mk
-> index 34f8623..0540aeb 100644
+> index 0540aeb..483974c 100644
 > --- a/linux/linux.mk
 > +++ b/linux/linux.mk
-> @@ -46,6 +46,12 @@ LINUX_MAKE_FLAGS = \
->  # going to be installed in the target filesystem.
->  LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
+> @@ -52,6 +52,13 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+>  KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE)))
+>  endif
 >  
-> +ifeq ($(BR2_LINUX_KERNEL_USE_DEFAULT_DTS),y)
-> +KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_DTS_FILE)
-> +else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-> +KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE)))
+> +ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+> +ifneq ($(words $(KERNEL_DTS_NAME)),1)
+> +$(error Kernel with appended device tree needs exactly one DTS source.\
+> +  Check BR2_LINUX_KERNEL_DTS_FILE or BR2_LINUX_KERNEL_CUSTOM_DTS_FILE.)
+> +endif
 > +endif
 > +
 >  ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
 >  LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
 >  else
-> @@ -117,19 +123,6 @@ endef
+> @@ -76,6 +83,12 @@ LINUX_IMAGE_NAME=vmlinuz
+>  endif
+>  endif
 >  
->  LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
->  
-> -ifeq ($(KERNEL_ARCH),microblaze)
-> -# on microblaze, we always want mkimage
-> -LINUX_DEPENDENCIES+=host-uboot-tools
-> -
-> -define LINUX_COPY_DTS
-> -    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
-> -        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
-> -    else \
-> -        echo "Cannot copy dts file!" ; \
-> -    fi
-> -endef
-> -endif
-> -
->  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
->  KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
->  else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-> @@ -143,8 +136,6 @@ define LINUX_CONFIGURE_CMDS
->  	$(if $(BR2_ARM_EABI),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
->  		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-> -    $(if $(BR2_microblaze),
-> -        $(call LINUX_COPY_DTS))
->  	# As the kernel gets compiled before root filesystems are
->  	# built, we create a fake cpio file. It'll be
->  	# replaced later by the real cpio archive, and the kernel will be
-> @@ -167,13 +158,23 @@ define LINUX_CONFIGURE_CMDS
+> +ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+> +LINUX_IMAGE_TARGET=zImage
+> +else
+> +LINUX_IMAGE_TARGET=$(LINUX_IMAGE_NAME)
+> +endif
+> +
+>  # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
+>  # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
+>  # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
+> @@ -155,6 +168,8 @@ define LINUX_CONFIGURE_CMDS
+>  		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+>  	$(if $(BR2_PACKAGE_SYSTEMD),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
+> +	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
 >  	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
 >  endef
 >  
-> +ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-> +define LINUX_BUILD_DTB
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
-> +endef
-> +endif
-> +
->  # Compilation. We make sure the kernel gets rebuilt when the
->  # configuration has changed.
->  define LINUX_BUILD_CMDS
-> +	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-> +		mkdir $(KERNEL_ARCH_PATH)/boot/dts
-
-Do you really need to create the directory here? I would suspect that
-all arches supporting the Device Tree already have their boot/dts/
-directory, no?
-
-> +		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE) $(KERNEL_ARCH_PATH)/boot/dts/)
->  	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
->  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
->  		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
->  	fi
-> +	$(LINUX_BUILD_DTB)
->  endef
->  
->  
-> @@ -183,12 +184,19 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+> @@ -164,17 +179,38 @@ define LINUX_BUILD_DTB
 >  endef
 >  endif
 >  
-> +ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-> +define LINUX_INSTALL_DTB
-> +	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+> +ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+> +ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
+> +define LINUX_APPEND_DTB
+> +	cat $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb > $(KERNEL_ARCH_PATH)/boot/zImage_dtb
+> +	mv $(KERNEL_ARCH_PATH)/boot/zImage_dtb $(KERNEL_ARCH_PATH)/boot/zImage
+> +	LOAD=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) | sed -n 's/Load Address: \([0-9]*\)/\1/p'`; \
+> +	ENTRY=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) | sed -n 's/Entry Point: \([0-9]*\)/\1/p'`; \
+> +	$(MKIMAGE) -A $(KERNEL_ARCH) -O linux -T kernel -C none -a $${LOAD} -e $${ENTRY} -n 'Linux Buildroot' \
+> +		-d $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(LINUX_IMAGE_NAME)
+> +endef
+> +else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
+> +define LINUX_APPEND_DTB
+> +	cat $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb > $(KERNEL_ARCH_PATH)/boot/zImage_dtb
+> +	mv $(KERNEL_ARCH_PATH)/boot/zImage_dtb $(KERNEL_ARCH_PATH)/boot/zImage
+> +endef
+> +else
+> +$(error Appending DTB to the kernel image is only possible for u-boot images and zImage.)
 
-Hum, here when I do a make foobar.dtb, the foobar.dtb file ends up in
-the main kernel source tree, not in arch/arm/boot/.
+Can't this be verified at the Kconfig level instead.
+
+> +endif
+> +endif
+
+A big comment on top of this mkimage magic would be necessary.
 
 Thomas
 -- 
