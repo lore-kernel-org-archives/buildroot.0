@@ -1,37 +1,209 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 16 Jul 2012 23:37:28 +0200
-Subject: [Buildroot] [PATCH v5 3/5] sdl_gfx: refactor *_CONF_OPT assignment
-	with cpu-feature options
+Date: Mon, 16 Jul 2012 23:37:26 +0200
+Subject: [Buildroot] [PATCH v5 1/5] target: add symbols for i386/x86_64 cpu
+	features
 In-Reply-To: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
 References: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1342474650-10084-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1342474650-10084-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Selecting the target subarchitecture variant automatically selects the
+appropriated set of features.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
-index 5503bbd..343c7a1 100644
---- a/package/sdl_gfx/sdl_gfx.mk
-+++ b/package/sdl_gfx/sdl_gfx.mk
-@@ -11,13 +11,7 @@ SDL_GFX_DEPENDENCIES = sdl
- SDL_GFX_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
--	--enable-static
--
--# enable mmx for newer x86's
--ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
--SDL_GFX_CONF_OPT += --enable-mmx
--else
--SDL_GFX_CONF_OPT += --disable-mmx
--endif
-+	--enable-static \
-+	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx)
+---
+
+Notes:
+- Only CPU features used by some packages have been added.
+- Subarchitecture options select their features accordingly gcc manual.
+- The dependencies are explained with a list of "select" for each
+subarchitecture, because, IMO, this makes the code clearer and easy to maintain
+instaed of having a long list of symbols in the "depends on" statement for each
+CPU feature.
+- MMX support is one of these CPU features. Some variants of the Geode
+subarchitecture have MMX, others do not. To keep the same behavior as before,
+which is IMO, the safe way, selecting Geode as architecture variant does not
+enable MMX support.
+
+
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index bad0f4c..d94bed5 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -322,6 +322,30 @@ endchoice
+ # gcc builds libstdc++ differently depending on the
+ # host tuplet given to it, so let people choose
+ #
++
++# i386/x86_64 cpu features
++config BR2_X86_CPU_HAS_MMX
++	depends on BR2_i386 || BR2_x86_64
++	bool
++config BR2_X86_CPU_HAS_SSE
++	depends on BR2_i386 || BR2_x86_64
++	bool
++config BR2_X86_CPU_HAS_SSE2
++	depends on BR2_i386 || BR2_x86_64
++	bool
++config BR2_X86_CPU_HAS_SSE3
++	depends on BR2_i386 || BR2_x86_64
++	bool
++config BR2_X86_CPU_HAS_SSSE3
++	depends on BR2_i386 || BR2_x86_64
++	bool
++config BR2_X86_CPU_HAS_SSE41
++	depends on BR2_i386 || BR2_x86_64
++	bool
++config BR2_X86_CPU_HAS_SSE42
++	depends on BR2_i386 || BR2_x86_64
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_i386
+@@ -341,46 +365,95 @@ config BR2_x86_pentiumpro
+ 	bool "pentium pro"
+ config BR2_x86_pentium_mmx
+ 	bool "pentium MMX"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_pentium_m
+ 	bool "pentium mobile"
+ config BR2_x86_pentium2
+ 	bool "pentium2"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_pentium3
+ 	bool "pentium3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
+ config BR2_x86_pentium4
+ 	bool "pentium4"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
+ config BR2_x86_prescott
+ 	bool "prescott"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_nocona
+ 	bool "nocona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_core2
+ 	bool "core2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_atom
+ 	bool "atom"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_k6
+ 	bool "k6"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_k6_2
+ 	bool "k6-2"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_athlon
+ 	bool "athlon"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_athlon_4
+ 	bool "athlon-4"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
+ config BR2_x86_opteron
+ 	bool "opteron"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
+ config BR2_x86_opteron_sse3
+ 	bool "opteron w/ SSE3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_barcelona
+ 	bool "barcelona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_geode
+ 	bool "geode"
++	# Don't include MMX support because there several variant of geode
++	# processor, some with MMX support, some without.
++	# See: http://en.wikipedia.org/wiki/Geode_%28processor%29
+ config BR2_x86_c3
+ 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_c32
+ 	bool "Via C3-2 (Nehemiah cores)"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
+ config BR2_x86_winchip_c6
+ 	bool "IDT Winchip C6"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_winchip2
+ 	bool "IDT Winchip 2"
++	select BR2_X86_CPU_HAS_MMX
+ endchoice
  
- $(eval $(call AUTOTARGETS))
+ choice
+@@ -394,16 +467,42 @@ config BR2_x86_64_generic
+ 	bool "generic"
+ config BR2_x86_64_barcelona
+ 	bool "barcelona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_64_opteron_sse3
+ 	bool "opteron w/ sse3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_64_opteron
+ 	bool "opteron"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
+ config BR2_x86_64_nocona
+ 	bool "nocona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_64_core2
+ 	bool "core2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_64_atom
+ 	bool "atom"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ endchoice
+ 
+ choice
 -- 
 1.7.11.2
