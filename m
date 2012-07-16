@@ -1,29 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jul 2012 08:51:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
- 2.30.2 Building"
-In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
-References: <bug-5360-163@https.bugs.busybox.net/>
-Message-ID: <20120716085141.12CC89540B@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 16 Jul 2012 11:09:41 +0200
+Subject: [Buildroot] Systemd update
+In-Reply-To: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
+References: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
+Message-ID: <5003DA55.1010703@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5360
+Hi Dmitry,
 
---- Comment #16 from Shokurov Anton V. <anton@fit.com.ru> 2012-07-16 08:51:40 UTC ---
-(In reply to comment #14)
-> On which package did the fenv.h build problem occured?
+Le 13/07/2012 18:08, Dmitry Golubovsky a ?crit :
+> I have reached some progress with adopting systemd for Buidlroot with
+> proper PAM login support and working system journal.
 > 
-> Also, could you report your libglib2 problem to the upstream libglib
-> developers?
+> I suggested some of my patches for upstream [1], but systemd
+> maintainers were not very much interested in fixes around uclibc
+> missing features [2], so let's keep these patches with Buildroot.
+> 
+> My patches and package configs are collected under this Gitorious
+> project [3] which is my test bench for packages being adopted for
+> Buildroot, and in particular under [4]. Patches are applicable to the
+> v186 snapshot of systemd (the latest avalable).
+> 
+> The patches are not 100% final at the moment I am writing this (there
+> are few typos I spotted and will fix them ASAP). However I am
+> announcing these patches for early review by the Buildroot community.
 
-It's at
-https://bugzilla.gnome.org/show_bug.cgi?id=679993
+Could you send these patches to the mailing list using git send-email
+please ? You can find a nice tutorial here:
+http://lists.busybox.net/pipermail/buildroot/2010-December/039181.html
+
+This way, we will be able to properly review these changes.
+
+Thanks,
+Maxime
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
