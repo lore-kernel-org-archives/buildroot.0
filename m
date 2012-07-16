@@ -1,43 +1,29 @@
-From: Zoran Djordjevic <djdjdjole@yahoo.com>
-Date: Mon, 16 Jul 2012 02:29:06 -0700 (PDT)
-Subject: [Buildroot] X11
-Message-ID: <1342430946.70457.YahooMailNeo@web160701.mail.bf1.yahoo.com>
+From: Alex Bradbury <asb@asbradbury.org>
+Date: Mon, 16 Jul 2012 10:32:43 +0100
+Subject: [Buildroot] Systemd update
+In-Reply-To: <CALR4fE+nyZZXCGVOSRJM=rir4eYE4L0_Y7K+KZE5wvmUL8dFTA@mail.gmail.com>
+References: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
+ <CALR4fEKHpNy-TyCBWigS-9gLySp_d3Amy_N=xZqSWbif-9H97A@mail.gmail.com>
+ <CADiAo4KwLhtG-ZpaBBSRQAeDBjKW9XCxAm00ZHUKw2NF97dEMg@mail.gmail.com>
+ <CALR4fE+nyZZXCGVOSRJM=rir4eYE4L0_Y7K+KZE5wvmUL8dFTA@mail.gmail.com>
+Message-ID: <CA+wH294OCgYwtavEVYFUaDv1zpPPcXxEc8nDr4K_fkh2ydo9gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello 
-?
-I am trying to build XOrg server for ARM based board, using Buildroot . 
-When starting it, I received error: 
-FBDEV(0): FBIOPUT_VSCREENINFO: Invalid argument;
-Fatal server error:Addscreen/ScreenInit failed for driver 0- ?and later:
-xinit: giving up
-xinit: unable to connect to X server - no such file or directory
-xinit: server error
-?
-?File /usr/bin/X -exists on my device (ie. at?NFS).
-Attached is my Buildroot?.config file and xorg.conf that I created in etc/X11 folder.
-Kernel is build independently ie. out of Buildroot.
-Any help ?
-?
-Thanks
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/60c52ccb/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 33446 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/60c52ccb/attachment-0002.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: xorg.conf
-Type: application/octet-stream
-Size: 501 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/60c52ccb/attachment-0003.obj>
+On 16 July 2012 07:03, Diego Iastrubni <diegoiast@gmail.com> wrote:
+> I would like to review a similar setup for something like the RPI and
+> measure there. I need to find time for this (I am still fighting my RPI
+> setup... the biggest problem is that its not trivial to get a console.. so
+> all I have to test is my 40" TV... not ideal for kernel messages...)
+
+I'm interested in buildroot + the Raspberry Pi also (I'm currently
+responsible for the official Debian wheezy based images). You might
+want to have a look at
+https://github.com/nezticle/RaspberryPi-BuildRoot and feel free to
+contact me off-list if you're having problems building and booting a
+kernel (or drop by #raspberrypi-dev on Freenode).
+
+Alex
