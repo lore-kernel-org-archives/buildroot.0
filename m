@@ -1,32 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jul 2012 17:05:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
- 2.30.2 Building"
-In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
-References: <bug-5360-163@https.bugs.busybox.net/>
-Message-ID: <20120716170553.20F5790E65@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Mon, 16 Jul 2012 10:40:23 -0700
+Subject: [Buildroot] Qt on AM3517EVM
+Message-ID: <CALo-6+hhvCkfT_4Rz4POqw5j_BPPLKHZ0saqEyeiKsp-tSJLdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5360
+First of all, +100 for Thomas, Arnout and Julian. This morning, I was
+able to load the jffs2 compiled file system from buildroot and run
+"ts_calibrate" and got a functioning touch screen and color LCD with
+Qt on the LogicPD AM3517EVM after *removing* the environment variable
+QMAKESPEC which the TI-SDK insisted on adding to my .bashrc.
 
---- Comment #17 from Shokurov Anton V. <anton@fit.com.ru> 2012-07-16 17:05:52 UTC ---
-(In reply to comment #14)
-> On which package did the fenv.h build problem occured?
-> 
-> Also, could you report your libglib2 problem to the upstream libglib
-> developers?
+Of course, no sooner had I gotten it to work then my customer says
+"Thats cool, how about Qt5?"
 
-This is crazy...
-Now I can't login. (In the previous build of buildroot i had no problem, at
-least after i disabled WCHAR).
-I can login if i remove the 'x' from the second field of the /etc/passwd file.
-The rest of the files (securitty, inittab) look fine (unaltered).
+So, ... are we considering either a Qt5 bump or either Qt4/Qt5 with an
+xconfig option?
+
+This proves, *again*, that no good deed ever goes unpunished.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Charles Krinke
