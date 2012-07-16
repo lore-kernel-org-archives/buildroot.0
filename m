@@ -1,40 +1,43 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Mon, 16 Jul 2012 05:19:09 -0400
-Subject: [Buildroot] Systemd update
-In-Reply-To: <CALR4fE+nyZZXCGVOSRJM=rir4eYE4L0_Y7K+KZE5wvmUL8dFTA@mail.gmail.com>
-References: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
- <CALR4fEKHpNy-TyCBWigS-9gLySp_d3Amy_N=xZqSWbif-9H97A@mail.gmail.com>
- <CADiAo4KwLhtG-ZpaBBSRQAeDBjKW9XCxAm00ZHUKw2NF97dEMg@mail.gmail.com>
- <CALR4fE+nyZZXCGVOSRJM=rir4eYE4L0_Y7K+KZE5wvmUL8dFTA@mail.gmail.com>
-Message-ID: <CADiAo4L327kizCmCZ1zzt+QWzV9V4iQ5+5T-5UGq=NevzLjZhw@mail.gmail.com>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Mon, 16 Jul 2012 02:29:06 -0700 (PDT)
+Subject: [Buildroot] X11
+Message-ID: <1342430946.70457.YahooMailNeo@web160701.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-On Mon, Jul 16, 2012 at 2:03 AM, Diego Iastrubni <diegoiast@gmail.com> wrote:
-> (forwarding to the list, I hope you don't mind)
-
-Sure, in fact I made such a forward myself shortly after I replied you.
-
->> [    0.392041] Trying to unpack rootfs image as initramfs...
->> [   13.790005] Freeing initrd memory: 37216k freed
->>
->> 13 secs were spent to unpack initrd. So it could be under 10sec from
->> boot to DHCP ready.
->>
->
-> I concern is this: *is* systemd faster then traditional int? Does paralyzing
-
-Well, like I said boot time is not a criterion for me, and I am not
-exactly doing an embedded project, portable rather,
-
-Thanks.
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Hello 
+?
+I am trying to build XOrg server for ARM based board, using Buildroot . 
+When starting it, I received error: 
+FBDEV(0): FBIOPUT_VSCREENINFO: Invalid argument;
+Fatal server error:Addscreen/ScreenInit failed for driver 0- ?and later:
+xinit: giving up
+xinit: unable to connect to X server - no such file or directory
+xinit: server error
+?
+?File /usr/bin/X -exists on my device (ie. at?NFS).
+Attached is my Buildroot?.config file and xorg.conf that I created in etc/X11 folder.
+Kernel is build independently ie. out of Buildroot.
+Any help ?
+?
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/60c52ccb/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 33446 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/60c52ccb/attachment-0002.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: xorg.conf
+Type: application/octet-stream
+Size: 501 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/60c52ccb/attachment-0003.obj>
