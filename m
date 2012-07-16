@@ -1,41 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jul 2012 05:12:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
- 2.30.2 Building"
-In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
-References: <bug-5360-163@https.bugs.busybox.net/>
-Message-ID: <20120716051221.D726B90BED@busybox.osuosl.org>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Mon, 16 Jul 2012 09:03:31 +0300
+Subject: [Buildroot] Systemd update
+In-Reply-To: <CADiAo4KwLhtG-ZpaBBSRQAeDBjKW9XCxAm00ZHUKw2NF97dEMg@mail.gmail.com>
+References: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
+ <CALR4fEKHpNy-TyCBWigS-9gLySp_d3Amy_N=xZqSWbif-9H97A@mail.gmail.com>
+ <CADiAo4KwLhtG-ZpaBBSRQAeDBjKW9XCxAm00ZHUKw2NF97dEMg@mail.gmail.com>
+Message-ID: <CALR4fE+nyZZXCGVOSRJM=rir4eYE4L0_Y7K+KZE5wvmUL8dFTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5360
+(forwarding to the list, I hope you don't mind)
 
---- Comment #13 from Shokurov Anton V. <anton@fit.com.ru> 2012-07-16 05:12:21 UTC ---
-(In reply to comment #12)
-> (In reply to comment #11)
-> > Created attachment 4412 [details]
-> > new config file
-> > 
-> > the build ends with the can't find fenv.h file error.
-> 
-> fenv.h comes with uClibc when C99 floating point environment is enabled.
-> This feature is disabled in the default uclibc-0.9.33 defconfig file.
-> 
-> You can change this running 'make uclibc-menuconfig' in "Target Architecture
-> Features and Options >> Enable C99 Floating-point environment", but this will
-> require to rebuild the cross-toolchain.
 
-It builds now perfectly.
-Thank you!
+On Mon, Jul 16, 2012 at 5:15 AM, Dmitry Golubovsky <golubovsky@gmail.com>wrote:
 
-PS
-How would i have know to run 'make uclibc-menuconfig' ... ? There was no such
-problem in the previous version (release) of buildroot.
+>
+> Here is dmesg output on a VM:
+>
+> http://pastebin.com/ZbQmMiTU
+>
+> [   16.881460] systemd[1]: Startup finished in 14s 40ms 662us (kernel)
+> + 2s 840ms 704us (userspace) = 16s 881ms 366us.
+>
+> of these 16sec:
+>
+> [    0.392041] Trying to unpack rootfs image as initramfs...
+> [   13.790005] Freeing initrd memory: 37216k freed
+>
+> 13 secs were spent to unpack initrd. So it could be under 10sec from
+> boot to DHCP ready.
+>
+>
+I concern is this: *is* systemd faster then traditional int?
+Does paralyzing those things decrease boot time? Can this benefit the
+embedded community?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+I would like to review a similar setup for something like the RPI and
+measure there. I need to find time for this (I am still fighting my RPI
+setup... the biggest problem is that its not trivial to get a console.. so
+all I have to test is my 40" TV... not ideal for kernel messages...)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/301e312c/attachment.html>
