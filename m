@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Jul 2012 15:03:18 +0200
-Subject: [Buildroot] [PATCH 3/4] Factorise the u-boot images code
-In-Reply-To: <1341309676-18681-4-git-send-email-maxime.ripard@free-electrons.com>
+Date: Mon, 16 Jul 2012 15:10:06 +0200
+Subject: [Buildroot] [PATCH 2/4] Add support for appended device tree
+ blobs for arm
+In-Reply-To: <1341309676-18681-3-git-send-email-maxime.ripard@free-electrons.com>
 References: <1341309676-18681-1-git-send-email-maxime.ripard@free-electrons.com>
- <1341309676-18681-4-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <20120716150318.41804739@skate>
+ <1341309676-18681-3-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <20120716151006.5b93bd4e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue,  3 Jul 2012 12:01:15 +0200,
+Le Tue,  3 Jul 2012 12:01:14 +0200,
 Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-> ---
->  linux/Config.in |    4 ++++
->  linux/linux.mk  |    5 ++++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 46b9756..c5488e8 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -176,12 +176,16 @@ endif
->  # Binary format
->  #
->  
-> +config BR2_LINUX_KERNEL_UBOOT_IMAGE
-> +       bool
+> +config BR2_LINUX_KERNEL_APPENDED_DTB
+> +	bool "Append the Device Tree binary to the kernel"
+> +	depends on BR2_arm || BR2_armeb
+> +	help
+> +	  After building the device tree blob, append it to the
+> +	  kernel image. If necessary generates a uImage from that
+> +	  new kernel image afterward.
 
-Maybe this should rather be BR2_LINUX_KERNEL_NEEDS_MKIMAGE ?
+Just got another idea here. Since cuImage and simpleImage on PowerPC
+and Microblaze bundle their DTB, can't we define the Appended DTB
+feature as an additional kernel image type?
+
+I.e, on ARM, you would typically have:
+
+	zImage
+	zImage + appended DTB
+	uImage
+	uImage + appended DTB
 
 Thomas
 -- 
