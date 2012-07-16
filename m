@@ -1,64 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Jul 2012 17:44:46 +0200
-Subject: [Buildroot] [PATCH 3/5] lua : don't install shared library in
- staging
-In-Reply-To: <1342446352-31231-3-git-send-email-francois.perrad@gadz.org>
+Date: Mon, 16 Jul 2012 17:46:22 +0200
+Subject: [Buildroot] [PATCH 4/5] lua : refactor with POST_PATH_HOOKS
+In-Reply-To: <1342446352-31231-4-git-send-email-francois.perrad@gadz.org>
 References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
- <1342446352-31231-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20120716174446.5e112599@skate>
+ <1342446352-31231-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20120716174622.6ea0ffea@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 16 Jul 2012 15:45:50 +0200,
+Le Mon, 16 Jul 2012 15:45:51 +0200,
 Francois Perrad <fperrad@gmail.com> a ?crit :
 
-> dead code, LUA_INSTALL_STAGING_SHARED_LIB not used
-> ---
->  package/lua/lua.mk |    8 --------
->  1 file changed, 8 deletions(-)
-> 
-> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-> index ab9a1a2..5b8022a 100644
-> --- a/package/lua/lua.mk
-> +++ b/package/lua/lua.mk
-> @@ -42,14 +42,6 @@ define HOST_LUA_BUILD_CMDS
->  	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
->  endef
->  
-> -ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
-> -define LUA_INSTALL_STAGING_SHARED_LIB
-> -	$(INSTALL) -D $(@D)/src/liblua.so.$(LUA_VERSION) \
-> -		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
-> -	ln -sf liblua.so.$(LUA_VERSION)
-> $(STAGING_DIR)/usr/lib/liblua.so -endef
-> -endif
-> -
->  define LUA_INSTALL_STAGING_CMDS
->  	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
->  		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
+> +define LUA_PREFIX_FIX_PKG_CONFIG
+> +	$(SED) 's/\/usr\/local/\/usr/' $(@D)/etc/lua.pc
+> +endef
+> +LUA_POST_PATCH_HOOKS += LUA_PREFIX_FIX_PKG_CONFIG
+> +HOST_LUA_POST_PATCH_HOOKS += LUA_PREFIX_FIX_PKG_CONFIG
+> +
+> +define LUA_OPTIM_FIX_MAKEFILE
+> +	$(SED) 's/-O2//' $(@D)/src/Makefile
+> +endef
+> +LUA_POST_PATCH_HOOKS += LUA_OPTIM_FIX_MAKEFILE
+> +HOST_LUA_POST_PATCH_HOOKS += LUA_OPTIM_FIX_MAKEFILE
 
-Doh? The code is probably dead, but the right thing here is not to
-remove, but to make it work: the liblua.so.* files *SHOULD* definitely
-be installed in the staging directory, just like all other shared
-libraries. They are needed so that other packages (that rely on the
-Lua shared library) can be linked against this library.
-
-The installation code in this package tries to be smart, but is in fact
-very complicated. It should just:
-
- * Install the shared library + .pc file + .h files + .a file to both
-   the staging directory and target directory, unconditionally
-
- * Install the Lua compiler in the target directory if the compiler is
-   enabled in the config
-
- * Install the Lua interpreter in the target directory if the
-   interpreter is enabled in the config.
-
-Best regards,
+It sounds odd to me to have a patch to fix the /usr prefix in
+src/luaconf.h on one side, and on the other side, fix other problems by
+using sed in the .mk file. Either one or the other, but not both in the
+same package.
 
 Thomas
 -- 
