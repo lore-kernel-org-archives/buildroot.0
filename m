@@ -1,47 +1,52 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Mon, 16 Jul 2012 09:03:31 +0300
-Subject: [Buildroot] Systemd update
-In-Reply-To: <CADiAo4KwLhtG-ZpaBBSRQAeDBjKW9XCxAm00ZHUKw2NF97dEMg@mail.gmail.com>
-References: <CADiAo4KdxANfaB4xZyWBZe_w+y-p9UTJ1FVjcX7=KgRHkinVHQ@mail.gmail.com>
- <CALR4fEKHpNy-TyCBWigS-9gLySp_d3Amy_N=xZqSWbif-9H97A@mail.gmail.com>
- <CADiAo4KwLhtG-ZpaBBSRQAeDBjKW9XCxAm00ZHUKw2NF97dEMg@mail.gmail.com>
-Message-ID: <CALR4fE+nyZZXCGVOSRJM=rir4eYE4L0_Y7K+KZE5wvmUL8dFTA@mail.gmail.com>
+From: Philippe REYNES <philippe.reynes@sagemcom.com>
+Date: Mon, 16 Jul 2012 08:09:21 +0200
+Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
+ scripts instead of only one
+In-Reply-To: <5001E8D8.2020609@mind.be>
+References: <31760_1341837606_4FFAD125_31760_18_1_1341837621-14884-1-git-send-email-philippe.reynes@sagemcom.com>
+ <5001E8D8.2020609@mind.be>
+Message-ID: <10968_1342418966_5003B014_10968_5623_1_OF40AFAC51.E365A676-ONC1257A3D.0021B371-C1257A3D.0021D0AB@sagemcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(forwarding to the list, I hope you don't mind)
 
 
-On Mon, Jul 16, 2012 at 5:15 AM, Dmitry Golubovsky <golubovsky@gmail.com>wrote:
+Arnout Vandecappelle <arnout@mind.be> wrote on 07/14/2012 23:47:04:
 
+> >
+> > Signed-off-by: Philippe Reynes<philippe.reynes@sagemcom.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 >
-> Here is dmesg output on a VM:
+>   I assume you tested it with the $(sep)?  I didn't, I just reviewed.
 >
-> http://pastebin.com/ZbQmMiTU
->
-> [   16.881460] systemd[1]: Startup finished in 14s 40ms 662us (kernel)
-> + 2s 840ms 704us (userspace) = 16s 881ms 366us.
->
-> of these 16sec:
->
-> [    0.392041] Trying to unpack rootfs image as initramfs...
-> [   13.790005] Freeing initrd memory: 37216k freed
->
-> 13 secs were spent to unpack initrd. So it could be under 10sec from
-> boot to DHCP ready.
->
->
-I concern is this: *is* systemd faster then traditional int?
-Does paralyzing those things decrease boot time? Can this benefit the
-embedded community?
 
-I would like to review a similar setup for something like the RPI and
-measure there. I need to find time for this (I am still fighting my RPI
-setup... the biggest problem is that its not trivial to get a console.. so
-all I have to test is my 40" TV... not ideal for kernel messages...)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/301e312c/attachment.html>
+Yes, I've tested, it works fine.
+Thanks a lot for the feedback.
+
+Regards,
+Philippe
+
+
+#
+" Ce courriel et les documents qui lui sont joints peuvent contenir des
+informations confidentielles ou ayant un caract?re priv?. S'ils ne vous sont
+pas destin?s, nous vous signalons qu'il est strictement interdit de les
+divulguer, de les reproduire ou d'en utiliser de quelque mani?re que ce
+soit le contenu. Si ce message vous a ?t? transmis par erreur, merci d'en
+informer l'exp?diteur et de supprimer imm?diatement de votre syst?me
+informatique ce courriel ainsi que tous les documents qui y sont attach?s."
+
+
+                               ******
+
+" This e-mail and any attached documents may contain confidential or
+proprietary information. If you are not the intended recipient, you are
+notified that any dissemination, copying of this e-mail and any attachments
+thereto or use of their contents by any means whatsoever is strictly
+prohibited. If you have received this e-mail in error, please advise the
+sender immediately and delete this e-mail and all attached documents
+from your computer system."
+#
