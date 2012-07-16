@@ -1,112 +1,111 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jul 2012 14:08:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 5354] host-lua doesn't build for EFL elementary
-In-Reply-To: <bug-5354-163@https.bugs.busybox.net/>
-References: <bug-5354-163@https.bugs.busybox.net/>
-Message-ID: <20120716140847.085F496974@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 16 Jul 2012 16:29:54 +0200
+Subject: [Buildroot] [PATCH] New package: lua-cjson [v2]
+In-Reply-To: <1342407627-2861-2-git-send-email-danomimanchego123@gmail.com>
+References: <1342407627-2861-1-git-send-email-danomimanchego123@gmail.com>
+ <1342407627-2861-2-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <CAB0FRss+UK1cuQgkvmgb+sg3rAG74yCD1ooMc2NJQJPguO1VAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5354
+in lua-cjson.mk :
+- the variable LUA_CJSON_SOURCE is useless, because the default scheme
+(packagename-$(LIBFOO_VERSION).tar.gz) is used
+- PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
 
---- Comment #7 from Vincent de RIBOU <belzo2005-dolphin@yahoo.fr> 2012-07-16 14:08:46 UTC ---
-my new log during host-lua build
+a good use of PREFIX & DESTDIR is, for example :
+    define LUA_FOO_INSTALL_TARGET_CMDS
+	     $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
+    endef
 
+Fran?ois
 
->>> host-lua 5.1.5 Extracting
-gzip -d -c /home/vincent/BR2/buildroot/dl/lua-5.1.5.tar.gz | tar
---strip-components=1 -C /home/vincent/BR2/qemu-i686-build/build/host-lua-5.1.5 
--xf -
->>> host-lua 5.1.5 Patching package//lua
-
-Applying lua-root-path.patch using patch: 
-patching file src/luaconf.h
-
-Applying lua-shared-libs.patch using patch: 
-patching file Makefile
-patching file src/ldo.h
-patching file src/lfunc.h
-patching file src/lmem.h
-patching file src/lstring.h
-patching file src/lundump.h
-patching file src/Makefile
->>> host-lua 5.1.5 Configuring
->>> host-lua 5.1.5 Building
-sed -i -e 's/-O2//'
-/home/vincent/BR2/qemu-i686-build/build/host-lua-5.1.5/src/Makefile
-sed -i -e 's/\/usr\/local/\/usr/'
-/home/vincent/BR2/qemu-i686-build/build/host-lua-5.1.5/etc/lua.pc
-/usr/bin/make -j8 MYCFLAGS="-fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX"
-MYLIBS="-ldl" PKG_VERSION=5.1.5 -C
-/home/vincent/BR2/qemu-i686-build/build/host-lua-5.1.5/src all
-make[2]: warning: -jN forced in submake: disabling jobserver mode.
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lapi.o lapi.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lcode.o lcode.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ldebug.o ldebug.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ldo.o ldo.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ldump.o ldump.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lfunc.o lfunc.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lgc.o lgc.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o llex.o llex.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lmem.o lmem.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lobject.o lobject.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lopcodes.o lopcodes.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lparser.o lparser.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lstate.o lstate.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lstring.o lstring.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ltable.o ltable.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ltm.o ltm.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lundump.o lundump.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lvm.o lvm.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lzio.o lzio.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lauxlib.o lauxlib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lbaselib.o lbaselib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ldblib.o ldblib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o liolib.o liolib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lmathlib.o lmathlib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o loslib.o loslib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o ltablib.o ltablib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lstrlib.o lstrlib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o loadlib.o loadlib.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o linit.o linit.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o lua.o lua.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o luac.o luac.c
-gcc -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX   -c -o print.o print.c
-ar rcu liblua.a lapi.o lcode.o ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o
-lmem.o lobject.o lopcodes.o lparser.o lstate.o lstring.o ltable.o ltm.o
-lundump.o lvm.o lzio.o lauxlib.o lbaselib.o ldblib.o liolib.o lmathlib.o
-loslib.o ltablib.o lstrlib.o loadlib.o linit.o    # DLL needs all object files
-gcc -o liblua.so.5.1.5 -shared -Wl,-soname="liblua.so.5.1.5" lapi.o lcode.o
-ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o
-lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o lauxlib.o
-lbaselib.o ldblib.o liolib.o lmathlib.o loslib.o ltablib.o lstrlib.o loadlib.o
-linit.o -nostdlib -lgcc
-ranlib liblua.a
-gcc -o lua -L. -llua  lua.o liblua.a -lm -ldl
-gcc -o luac -L. -llua  luac.o print.o lopcodes.o liblua.a -lm -ldl
-ldebug.o: In function `addinfo':
-ldebug.c:(.text+0x1822): undefined reference to `__stack_chk_fail_local'
-ldo.o: In function `luaD_callhook':
-ldo.c:(.text+0x825): undefined reference to `__stack_chk_fail_local'
-ldump.o: In function `DumpHeader':
-ldump.c:(.text+0x54a): undefined reference to `__stack_chk_fail_local'
-llex.o: In function `luaX_lexerror':
-llex.c:(.text+0x31b): undefined reference to `__stack_chk_fail_local'
-lobject.o: In function `luaO_pushvfstring':
-lobject.c:(.text+0x632): undefined reference to `__stack_chk_fail_local'
-lundump.o:lundump.c:(.text+0x9a9): more undefined references to
-`__stack_chk_fail_local' follow
-collect2: ld returned 1 exit status
-make[2]: *** [liblua.so] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: ***
-[/home/vincent/BR2/qemu-i686-build/build/host-lua-5.1.5/.stamp_built] Error 2
-make: *** [all] Error 2
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+2012/7/16 Danomi Manchego <danomimanchego123@gmail.com>:
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/Config.in              |    1 +
+>  package/lua-cjson/Config.in    |   13 +++++++++++++
+>  package/lua-cjson/lua-cjson.mk |   32 ++++++++++++++++++++++++++++++++
+>  3 files changed, 46 insertions(+)
+>  create mode 100644 package/lua-cjson/Config.in
+>  create mode 100644 package/lua-cjson/lua-cjson.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 99257b4..9cbf1e2 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -250,6 +250,7 @@ menu "LUA libraries/modules"
+>  source "package/cgilua/Config.in"
+>  source "package/copas/Config.in"
+>  source "package/coxpcall/Config.in"
+> +source "package/lua-cjson/Config.in"
+>  source "package/luafilesystem/Config.in"
+>  source "package/luasocket/Config.in"
+>  source "package/rings/Config.in"
+> diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
+> new file mode 100644
+> index 0000000..c9d6abd
+> --- /dev/null
+> +++ b/package/lua-cjson/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_LUA_CJSON
+> +       bool "lua_cjson"
+> +       help
+> +         The Lua CJSON module provides JSON support for Lua. It features:
+> +         - Fast, standards compliant encoding/parsing routines
+> +         - Full support for JSON with UTF-8, including decoding surrogate pairs
+> +         - Optional run-time support for common exceptions to the JSON
+> +           specification (infinity, NaN, ...)
+> +         - No dependencies on other libraries
+> +
+> +         (C-module)
+> +
+> +         http://www.kyne.com.au/~mark/software/lua-cjson.php
+> diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
+> new file mode 100644
+> index 0000000..05087ea
+> --- /dev/null
+> +++ b/package/lua-cjson/lua-cjson.mk
+> @@ -0,0 +1,32 @@
+> +#############################################################
+> +#
+> +# lua-cjson
+> +#
+> +#############################################################
+> +LUA_CJSON_VERSION      = 2.1.0
+> +LUA_CJSON_SOURCE       = lua-cjson-$(LUA_CJSON_VERSION).tar.gz
+> +LUA_CJSON_SITE         = http://www.kyne.com.au/~mark/software/download
+> +LUA_CJSON_DEPENDENCIES = lua
+> +
+> +define LUA_CJSON_BUILD_CMDS
+> +       $(MAKE) -C $(@D) \
+> +               CFLAGS="$(TARGET_CFLAGS)"   \
+> +               LDFLAGS="$(TARGET_LDFLAGS)" \
+> +               CC="$(TARGET_CC)"           \
+> +               LD="$(TARGET_LD)"           \
+> +               PREFIX=$(STAGING_DIR)/usr
+> +endef
+> +
+> +define LUA_CJSON_INSTALL_TARGET_CMDS
+> +       install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
+> +endef
+> +
+> +define LUA_CJSON_CLEAN_CMDS
+> +       $(MAKE) -C $(@D) clean
+> +endef
+> +
+> +define LUA_CJSON_UNINSTALL_TARGET_CMDS
+> +       rm -f "$(TARGET_DIR)/usr/lib/lua/cjson.so"
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
+> --
+> 1.7.9.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
