@@ -1,31 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 11:54:39 +0200
-Subject: [Buildroot] [PATCH] opencv: get rid of unused SSE41 and SSE42
-	options
-Message-ID: <1342518879-30779-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 17 Jul 2012 12:10:54 +0200
+Subject: [Buildroot] [PATCH] luajit: new package
+In-Reply-To: <20120717101146.596352c7@skate>
+References: <20120715004755.4cc159e9@skate>
+ <1342306252-19152-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAB0FRsv-bQnLUZvq_8xm4CkQsbxF3z6quUW5jwGhhbr0KK6nZQ@mail.gmail.com>
+ <20120715200056.390b3d03@skate>
+ <CAB0FRsv1Xq-rDK++oQJXOC-EUuh2b4_y-b=AbSTUsrSFx8wNQw@mail.gmail.com>
+ <20120717101146.596352c7@skate>
+Message-ID: <CAB0FRsuOQPxsPbd_szyGOc5qEeNQmOuvAp+nPaJtW-PZCctoaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opencv/opencv.mk |    2 --
- 1 file changed, 2 deletions(-)
+2012/7/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Tue, 17 Jul 2012 10:07:21 +0200,
+> Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
+>
+>> > No, using TARGET_CROSS directly doesn't work when ccache is enabled.
+>> > ccache is only used in TARGET_CC and TARGET_CXX, that's why I've done
+>> > this this way.
+>> >
+>> > Can you look at the bitness problem?
+>>
+>> see http://www.freelists.org/post/luajit/crosscompiling-with-different-bitness
+>
+> Ok, the reply is:
+> http://www.freelists.org/post/luajit/crosscompiling-with-different-bitness,1
+>
+> Essentially the first sentence shows that Mike Pall has not seen that
+> we were talking about cross-compilation. It's not because you're
+> running under a x86 kernel that you cannot generate binaries for x86-64.
+>
+> The second sentence shows that the cross-compilation support in luajit
+> is not really nice.
+>
+> So the only solution that I see is to integrate the proposal of
+> Jean-Christophe Plagnol-Villard that allows to have a kconfig option
+> defining the host architecture, and then do some depends on magic to
+> only show the package when we have the right architecture combination.
+> Can you look into this?
+>
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 10ed5bd..8ae2fd5 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -62,8 +62,6 @@ OPENCV_CONF_OPT += \
- 	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF)     \
- 	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)   \
- 	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
--	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE41),ON,OFF) \
--	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
- 	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
- 
- # Software/3rd-party support options.
--- 
-1.7.9.5
+I applied this patch http://patchwork.ozlabs.org/patch/153235/
+
+now, we could write :
+    config BR2_PACKAGE_LUAJIT
+	    bool "luajit"
+	    depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') ||
+BR2_powerpc || BR2_arm || BR2_armeb
+
+Fran?ois
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
