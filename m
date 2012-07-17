@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 19:07:30 +0200
-Subject: [Buildroot] [git commit] pcre: define license
-Message-ID: <20120717173301.604E596A7C@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 19:06:36 +0200
+Subject: [Buildroot] [git commit] mpc: define license
+Message-ID: <20120717173300.CEE4696A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41633ecc24aee2e1938be80945015d4f9ae98803
+commit: http://git.buildroot.net/buildroot/commit/?id=bd9135e72ad83b752fd3d93a96076d0879ed9e9b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pcre/pcre.mk |    2 ++
+ package/mpc/mpc.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index db896fd..d01ca84 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index e5ee489..5ad47a9 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
 @@ -6,6 +6,8 @@
  
- PCRE_VERSION = 8.30
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
-+PCRE_LICENSE = BSD-3c
-+PCRE_LICENSE_FILES = LICENCE
- PCRE_INSTALL_STAGING = YES
- 
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ MPC_VERSION = 0.9
+ MPC_SITE = http://www.multiprecision.org/mpc/download
++MPC_LICENSE = LGPLv2.1+
++MPC_LICENSE_FILES = COPYING.LIB
+ MPC_INSTALL_STAGING = YES
+ MPC_DEPENDENCIES = gmp mpfr
+ MPC_AUTORECONF = YES
