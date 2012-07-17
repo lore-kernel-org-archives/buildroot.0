@@ -1,41 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 09:32:12 +0200
-Subject: [Buildroot] Qt on AM3517EVM
-In-Reply-To: <CALo-6+hhvCkfT_4Rz4POqw5j_BPPLKHZ0saqEyeiKsp-tSJLdA@mail.gmail.com>
-References: <CALo-6+hhvCkfT_4Rz4POqw5j_BPPLKHZ0saqEyeiKsp-tSJLdA@mail.gmail.com>
-Message-ID: <20120717093212.0c7d5415@skate>
+Date: Tue, 17 Jul 2012 09:33:12 +0200
+Subject: [Buildroot] [PATCH v5 1/5] target: add symbols for i386/x86_64
+ cpu features
+In-Reply-To: <1342474650-10084-2-git-send-email-s.martin49@gmail.com>
+References: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
+ <1342474650-10084-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120717093312.5ea8e89e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 16 Jul 2012 10:40:23 -0700,
-Charles Krinke <charles.krinke@gmail.com> a ?crit :
+Le Mon, 16 Jul 2012 23:37:26 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-> First of all, +100 for Thomas, Arnout and Julian. This morning, I was
-> able to load the jffs2 compiled file system from buildroot and run
-> "ts_calibrate" and got a functioning touch screen and color LCD with
-> Qt on the LogicPD AM3517EVM after *removing* the environment variable
-> QMAKESPEC which the TI-SDK insisted on adding to my .bashrc.
+> +# i386/x86_64 cpu features
+> +config BR2_X86_CPU_HAS_MMX
+> +	depends on BR2_i386 || BR2_x86_64
+> +	bool
 
-Great.
+Is there any reason to have all those depends on BR2_i386 || BR2_x86_64
+on those hidden options? Since they are hidden and only selected by
+i386/x86_64 options, I don't think there's a point in keeping those
+dependencies. If you agree, I can just fix that up when committing.
 
-> Of course, no sooner had I gotten it to work then my customer says
-> "Thats cool, how about Qt5?"
-> 
-> So, ... are we considering either a Qt5 bump or either Qt4/Qt5 with an
-> xconfig option?
-
-I think Qt5 needs a separate package from qt4, because many, many
-things have changed in Qt5. Also Qt5 apparently requires an OpenGL
-renderer, which wasn't the case in Qt4, so we will probably be keeping
-Qt4 around for quite a while for low-end platforms.
-
-Anyone willing to work on packaging Qt5 is definitely more than welcome
-to contribute such effort.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
