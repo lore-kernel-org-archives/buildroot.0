@@ -1,37 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 23:49:10 +0200
-Subject: [Buildroot] [git commit] libnspr: fix 64-bit build
-Message-ID: <20120717221540.DCFBC90B5F@busybox.osuosl.org>
+Date: Wed, 18 Jul 2012 00:15:58 +0200
+Subject: [Buildroot] [PATCH] libnspr: fix 64-bit build
+In-Reply-To: <1341959145-20368-1-git-send-email-arnout@mind.be>
+References: <1341959145-20368-1-git-send-email-arnout@mind.be>
+Message-ID: <20120718001558.066dfd4b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20b2199d30f9c00abd51ae199d0934f4eb70d870
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Wed, 11 Jul 2012 00:25:45 +0200,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-On some architectures (found on x86_64, but probably others too),
-libnspr builds with -m32 unless it is configured for 64-bit build.  So
-force 64-bit build on 64-bit architectures.
+> On some architectures (found on x86_64, but probably others too),
+> libnspr builds with -m32 unless it is configured for 64-bit build.  So
+> force 64-bit build on 64-bit architectures.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnspr/libnspr.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index c2cc996..689caa4 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
- 		   HOST_LDFLAGS="-lc"
- # NSPR mixes up --build and --host
--LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
-+LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
-+LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
-+LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
