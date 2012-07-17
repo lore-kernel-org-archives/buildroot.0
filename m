@@ -1,63 +1,32 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Tue, 17 Jul 2012 05:38:50 -0400
-Subject: [Buildroot] [PATCH] Added package v86d which provides a
- real-mode helper for uvesafb driver.
-In-Reply-To: <20120717100151.3948f42e@skate>
-References: <1342495023-17145-1-git-send-email-golubovsky@gmail.com>
- <20120717100151.3948f42e@skate>
-Message-ID: <CADiAo4J_8Q6+5i=X+qAVb5ry828uo_nFeT9BC=rU9mk_-xCnqA@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 17 Jul 2012 11:43:58 +0200
+Subject: [Buildroot] [PATCH v5 1/5] target: add symbols for i386/x86_64
+ cpu features
+In-Reply-To: <20120717111703.3adbb357@skate>
+References: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
+ <1342474650-10084-2-git-send-email-s.martin49@gmail.com>
+ <20120717111703.3adbb357@skate>
+Message-ID: <CAHXCMMK8_vif95DakvjAhV8RGmS=SLFuR1C=FoZLDFGn_oSDCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-
-On Tue, Jul 17, 2012 at 4:01 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Mon, 16 Jul 2012 23:17:03 -0400,
-> Dmitry <golubovsky@gmail.com> a ?crit :
+2012/7/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Mon, 16 Jul 2012 23:37:26 +0200,
+> Samuel Martin <s.martin49@gmail.com> a ?crit :
 >
->> +define V86D_BUILD_CMDS
->> +     $(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
->> +endef
+>> Selecting the target subarchitecture variant automatically selects the
+>> appropriated set of features.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >
-> Can you try using $(TARGET_CONFIGURE_OPTS) instead, so that CFLAGS and
-> al. are also passed?
-
-This patch some was discussed some time ago:
-
-http://lists.busybox.net/pipermail/buildroot/2012-May/053825.html
-http://lists.busybox.net/pipermail/buildroot/2012-May/053790.html
-etc.
-
-and other discussion in May. My initial patch missed installation
-instructions, but that was fixed.
-
-and I thouhgt we reached agreement.
-
->
-> Something like:
->
->         $(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D__i386__" -C $(@D) all
->
-> I'm a bit surprised by the -D__i386__, because this is normally defined
-> by the compiler. Why is it needed?
-
-Because of manually-written Makefile which somehow does not let these
-flags through. I tried many ways.
-
-I submitted this patch in May after many iterations, and I believe it
-was just lost in space because of preparations for the May release.
-
-http://lists.busybox.net/pipermail/buildroot/2012-May/053824.html
-
-I am just resubmitting it again.
-
-Thanks.
+> Applied, after removing the depends on, and the SSE41/SSE42 options
+> that were unused. The other 4 patches were also applied, with no
+> changes.
+arf!... SSE41/SSE42 options are useb by the opencv patch that has just
+been merged.
 
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Sam
