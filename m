@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 19:06:21 +0200
-Subject: [Buildroot] [git commit] newt: warn that legal-info is not
-	implemented
-Message-ID: <20120717173300.3F0B296A7C@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 19:06:34 +0200
+Subject: [Buildroot] [git commit] m4: define license
+Message-ID: <20120717173300.B8CCA96A7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75672c122c20a2c041bb50650227b43fefa4e2ce
+commit: http://git.buildroot.net/buildroot/commit/?id=6f6d7677fd51ae2d1b69a6d8feb1d4f3dab2b237
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/newt/newt.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/m4/m4.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/newt/newt.mk b/package/newt/newt.mk
-index ac450e0..b10e4f8 100644
---- a/package/newt/newt.mk
-+++ b/package/newt/newt.mk
-@@ -58,6 +58,9 @@ $(TARGET_DIR)/usr/lib/libnewt.so.$(NEWT_VERSION): $(STAGING_DIR)/usr/lib/libnewt
- 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnewt.so*
- 	touch -c $@
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 173bba8..1e891c5 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -7,6 +7,8 @@
+ M4_VERSION = 1.4.16
+ M4_SOURCE = m4-$(M4_VERSION).tar.bz2
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
++M4_LICENSE = GPLv3+
++M4_LICENSE_FILES = COPYING
+ M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
  
-+newt-legal-info:
-+	@$(call legal-warning-pkg,newt,legal-info not yet implemented)
-+
- newt: slang $(TARGET_DIR)/usr/lib/libnewt.so.$(NEWT_VERSION)
- 
- newt-source: $(DL_DIR)/$(NEWT_SOURCE)
+ ifneq ($(BR2_USE_WCHAR),y)
