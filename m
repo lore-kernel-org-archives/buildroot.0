@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 23:52:22 +0200
-Subject: [Buildroot] [git commit] libnss: fix 64-bit build
-Message-ID: <20120717221541.023D390B5F@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 23:49:10 +0200
+Subject: [Buildroot] [git commit] libnspr: fix 64-bit build
+Message-ID: <20120717221540.DCFBC90B5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adbe85c752651bc147bc4deb6419d162b2c6417e
+commit: http://git.buildroot.net/buildroot/commit/?id=20b2199d30f9c00abd51ae199d0934f4eb70d870
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 On some architectures (found on x86_64, but probably others too),
-libnss builds with -m32 unless it is configured for 64-bit build.  So
+libnspr builds with -m32 unless it is configured for 64-bit build.  So
 force 64-bit build on 64-bit architectures.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnss/libnss.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/libnspr/libnspr.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 2e28c75..f7fd682 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -28,6 +28,10 @@ LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
- 		OS_RELEASE="2.6" \
- 		OS_TEST="$(ARCH)"
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index c2cc996..689caa4 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
+ 		   HOST_LDFLAGS="-lc"
+ # NSPR mixes up --build and --host
+-LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
++LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
++LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
++LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
  
-+ifeq ($(BR2_ARCH_IS_64),y)
-+LIBNSS_BUILD_VARS += USE_64=1
-+endif
-+
- 
- define LIBNSS_BUILD_CMDS
- 	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf build_dbm all \
+ $(eval $(autotools-package))
