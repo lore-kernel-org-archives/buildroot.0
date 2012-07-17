@@ -1,35 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 20:58:03 +0200
-Subject: [Buildroot] [PATCH v4 00/22] Automatically produce legal
- compliance info
-In-Reply-To: <20120717193610.638fabb2@skate>
-References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
- <20120717193610.638fabb2@skate>
-Message-ID: <20120717205803.1dca9f8c@skate>
+Date: Tue, 17 Jul 2012 21:07:18 +0200
+Subject: [Buildroot] [PATCH resend 3/4] Added the pth package.
+In-Reply-To: <1338649758-11225-3-git-send-email-stijn.souffriau@essensium.com>
+References: <1338649758-11225-1-git-send-email-stijn.souffriau@essensium.com>
+ <1338649758-11225-3-git-send-email-stijn.souffriau@essensium.com>
+Message-ID: <20120717210718.212397ed@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 17 Jul 2012 19:36:10 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Hello Stijn,
 
-> Following the comments of several Buildroot contributors, I have merged
-> the 22 patches of your series. Thanks a lot for your perseverance in
-> getting this merged!
+Le Sat,  2 Jun 2012 17:09:17 +0200,
+Stijn Souffriau <stijn.souffriau@essensium.com> a ?crit :
 
-I have also added the execution of 'make legal-info' to my autobuilder.
-So all builds coming from the Free Electrons build server visible at
-http://autobuild.buildroot.org will have the CSV file of the licenses.
-It is not directly visible in the webpage, but if you go in the "dir"
-link, and then look at the licenses-manifest.csv file, it corresponds
-to the output/legal-info/manifest.csv file.
+> ---
+>  package/Config.in                                  |    1 +
+>  package/pth/Config.in                              |   10 ++++++
+>  ...mmited-L-usr-lib-I-usr-include-from-paths.patch |   34 ++++++++++++++++++++
+>  package/pth/pth-0002-dependencyfix.patch           |   25 ++++++++++++++
+>  .../pth/pth-0003-fixed-install-dependency.patch    |   34 ++++++++++++++++++++
+>  package/pth/pth.mk                                 |   12 +++++++
+>  6 files changed, 116 insertions(+)
+>  create mode 100644 package/pth/Config.in
+>  create mode 100644 package/pth/pth-0001-ommited-L-usr-lib-I-usr-include-from-paths.patch
+>  create mode 100644 package/pth/pth-0002-dependencyfix.patch
+>  create mode 100644 package/pth/pth-0003-fixed-install-dependency.patch
+>  create mode 100644 package/pth/pth.mk
 
-Example:
-http://autobuild.buildroot.org/results/a07c8611de688b6dccbfae00ff153ad89f3e7f77/licenses-manifest.csv
+I have tried to integrate your work, but unfortunately, the GNU Pth
+library doesn't even build on ARM glibc-based systems. It simply fails with:
 
-This way, the legal-info machinery will be exercised on many packages.
+pth_mctx.c: In function '__pth_mctx_set':
+pth_mctx.c:480:2: error: #error "Unsupported Linux (g)libc version and/or platform"
+
+Also, I don't think it's worth putting too much effort into this since
+GnuPG is currently migrating to a new library named nPth, which
+apparently should cause a lot less portability problems. See:
+http://lists.gnupg.org/pipermail/gnupg-announce/2012q2/000315.html.
+
+Therefore, I would rather suggest:
+
+ (1) To package the 1.4.x version of gnupg, which is used in current
+ distros (at least Debian/Ubuntu based distros), so it shouldn't be too
+ old, and apparently has less dependencies.
+
+ (2) Wait for the 2.1 development version of gnupg to become a stable
+ version, and create a package for both nPth or Pth.
+
+In the mean time, I've put an updated version of your work at
+http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=gnupg,
+with a few fixes.
 
 Best regards,
 
