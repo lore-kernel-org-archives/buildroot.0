@@ -1,77 +1,60 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Tue, 17 Jul 2012 14:27:17 +0200
-Subject: [Buildroot] [PATCH 1/6] Revert "Microblaze: build kernel with
-	device tree"
-In-Reply-To: <1342528042-10038-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1342528042-10038-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <1342528042-10038-2-git-send-email-maxime.ripard@free-electrons.com>
+Date: Tue, 17 Jul 2012 14:27:16 +0200
+Subject: [Buildroot] [PATCHv3 0/6] Add some support for device tree kernels
+Message-ID: <1342528042-10038-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is way too specific to microblaze-only. Remove this support to
-introduce a more generic way to do support device tree kernels.
+Hi everyone,
 
-This reverts commit aaed42d15643e0cb64c96fa400a6097a19d19ef4.
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- linux/Config.in |    8 --------
- linux/linux.mk  |   14 --------------
- 2 files changed, 22 deletions(-)
+This is a refactoring of the previous basic device tree
+options available for microblaze.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4562b1b..550371d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -124,14 +124,6 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
- 
--config BR2_LINUX_KERNEL_DTS_FILE
--    string "Device Tree dts file location"
--    depends on BR2_microblaze
--    help
--      Path from where the dts file has to be copied
--      The final "custom target" name depends on the
--      dts file name:
--          <name>.dts --> simpleImage.<name>
- #
- # Binary format
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 34f8623..09c8e79 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -117,18 +117,6 @@ endef
- 
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
- 
--ifeq ($(KERNEL_ARCH),microblaze)
--# on microblaze, we always want mkimage
--LINUX_DEPENDENCIES+=host-uboot-tools
--
--define LINUX_COPY_DTS
--    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
--        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
--    else \
--        echo "Cannot copy dts file!" ; \
--    fi
--endef
--endif
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
-@@ -143,8 +131,6 @@ define LINUX_CONFIGURE_CMDS
- 	$(if $(BR2_ARM_EABI),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
--    $(if $(BR2_microblaze),
--        $(call LINUX_COPY_DTS))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
+The previous option only made it possible for microblaze targets
+to give a path to an external device tree, and build a simpleImage
+with it. This involved using a custom target name as simpleImages
+are built with the simpleImage.dt_name.
+This is also the case on powerpc with cuImages.
+
+This patchset replaces the existing mechanism with a more generic one.
+First, it allows to build device tree sources to blobs, both taking
+dts present in the kernel sources and external ones, using a path.
+
+Then, it adds support for kernel images with appended device tree blobs.
+This option is only for ARM because it is the only architecture I can
+think of that has such feature.
+
+Finally, it adds the simpleImage and cuImage as regular image variants,
+with the necessary logic to append the device tree name to use, while
+doing a bit of code factorisation for u-boot images along the way.
+
+Thanks,
+Maxime
+
+Changes since v2:
+  * Hide the BR2_LINUX_KERNEL_APPENDED_DTB option and introduce images
+    with appended DTs as image variants instead.
+  * Change various option names. Removed the behaviour modification of
+    the BR2_LINUX_KERNEL_DTS_FILE doing so.
+  * Various changes in help messages, added some comments, etc... 
+
+Maxime Ripard (6):
+  Revert "Microblaze: build kernel with device tree"
+  Rework support for the device tree
+  Factorize the u-boot images code
+  Add support for appended device tree blobs for arm
+  Add cuImage(powerpc) and simpleImage(microblaze) as Linux kernel
+    images variants
+  Update s6lx9 microblaze default configuration
+
+ configs/s6lx9_microboard_defconfig |   12 +----
+ linux/Config.in                    |  100 +++++++++++++++++++++++++++++++++---
+ linux/linux.mk                     |   87 +++++++++++++++++++++++++------
+ 3 files changed, 165 insertions(+), 34 deletions(-)
+
 -- 
 1.7.9.5
