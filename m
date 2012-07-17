@@ -1,164 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 19:06:27 +0200
-Subject: [Buildroot] [git commit] manual: document usage of the legal-info
-	feature
-Message-ID: <20120717173300.786BE96A7C@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 19:36:10 +0200
+Subject: [Buildroot] [PATCH v4 00/22] Automatically produce legal
+ compliance info
+In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
+References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20120717193610.638fabb2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00ba118fcaa9ae398c138d7823b3acdea3bfb0bf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Thu, 17 May 2012 19:32:59 +0200,
+Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-gentargets.txt |   21 ++++++
- docs/manual/using.txt                      |  103 ++++++++++++++++++++++++++++
- 2 files changed, 124 insertions(+), 0 deletions(-)
+> here is the third version of the legal-info feature implementation.
+> 
+> Links to discussion of previous versions:
+> v1: http://lists.busybox.net/pipermail/buildroot/2012-January/049590.html
+> v2: http://lists.busybox.net/pipermail/buildroot/2012-March/051132.html
+> v3: http://lists.busybox.net/pipermail/buildroot/2012-May/053574.html
+> 
+> This version is only a minor update to fix various issues reported by other
+> developers. There are not changes to the general structure, so please see
+> the link above for v3 for a detailed presentation.
 
-diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
-index 84cf06b..6e9dc89 100644
---- a/docs/manual/adding-packages-gentargets.txt
-+++ b/docs/manual/adding-packages-gentargets.txt
-@@ -245,6 +245,27 @@ information is (assuming the package name is +libfoo+) :
-   You can find some documentation for this syntax in the xref:makedev-syntax[].
-   This variable is optional.
- 
-+* +LIBFOO_LICENSE+ defines the license (or licenses) under which the package
-+  is released.
-+  This name will appear in the manifest file produced by +make legal-info+.
-+  If the license is one of those listed in xref:legal-info[],
-+  use the same string to make the manifest file uniform.
-+  Otherwise, describe the license in a precise and concise way, avoiding
-+  ambiguous names such as +BSD+ which actually name a family of licenses.
-+  If the root filesystem you generate contains non-opensource packages, you
-+  can define their license as +PROPRIETARY+: Buildroot will not save any
-+  licensing info or source code for this package.
-+  This variable is optional. If it is not defined, +unknown+ will appear in
-+  the +license+ field of the manifest file for this package.
-+
-+* +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
-+  tarball that contain the license(s) under which the package is released.
-+  +make legal-info+ copies all of these files in the +legal-info+ directory.
-+  See xref:legal-info[] for more information.
-+  This variable is optional. If it is not defined, a warning will be produced
-+  to let you know, and +not saved+ will appear in the +license files+ field
-+  of the manifest file for this package.
-+
- The recommended way to define these variables is to use the following
- syntax:
- 
-diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-index a5dc9e1..42d4061 100644
---- a/docs/manual/using.txt
-+++ b/docs/manual/using.txt
-@@ -181,3 +181,106 @@ or +g+++ for building helper-binaries on your host, then do
- --------------------
-  $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
- --------------------
-+
-+Complying with opensource licenses
-+----------------------------------
-+[[legal-info]]
-+
-+All of the end products of Buildroot (toolchain, root filesystem, kernel,
-+bootloaders) contain opensource software, released under various licenses.
-+
-+Using opensource software gives you the freedom to build rich embedded
-+systems choosing from a wide range of packages, but also gives some
-+obligations that you must know and honour.
-+Some licenses require you to publish the license text in the documentation of
-+your product. Other require you to redistribute the source code of the
-+software to those that receive your product.
-+
-+The exact requirements of each license is documented in each package, and it is
-+your (or your legal office's) responsibility to comply with these requirements.
-+To make this easier for you, Buildroot can collect for you some material you
-+will probably need. To produce this material, after you configured Buildroot
-+with +make menuconfig+, +make xconfig+ or +make gconfig+, run:
-+
-+--------------------
-+make legal-info
-+--------------------
-+
-+Buildroot will collect legally-relevant material in your output directory,
-+under the +legal-info/+ subdirectory.
-+There you will find:
-+
-+* A +README+ file, that summarizes the produced material and contains warnings
-+  about material that Buildroot could not produce.
-+* +buildroot.config+: this is the Buildroot configuration file that is usually
-+  produced with +make menuconfig+, and which is necessary to reproduce the
-+  build.
-+* The source code for all packages; this is saved in the +sources/+
-+  subdirectory (except for proprietary packages, whose source code is not
-+  saved);
-+  patches applied to some packages by Buildroot are distributed with the
-+  Buildroot sources and are not duplicated in the +sources/+ subdirectory.
-+* A manifest file listing the configured packages, their version, license and
-+  related information.
-+  Some of these information might be not defined in Buildroot; in this case
-+  they are clearly marked as "unknown" or similar.
-+* A +licenses/+ subdirectory, which contains the license text of packages.
-+  If the license file(s) are not defined in Buildroot, the file is not produced
-+  and a warning in the +README+ indicates this.
-+
-+Please note that the aim of the +legal-info+ feature of Buildroot is to
-+produce all the material that is somehow relevant for legal compliance with the
-+package licenses. Buildroot does not try to produce the exact material that
-+you must somehow make public. It does surely produce some more material than is
-+needed for a strict legal compliance. For example, it produces the source code
-+for packages released under BSD-like licenses, that you might not want to
-+redistribute in source form.
-+
-+Moreover, due to technical limitations, Buildroot does not produce some
-+material that you will or may need, such as the toolchain source code and the
-+Buildroot source code itself.
-+When you run +make legal-info+, Buildroot produces warnings in the +README+
-+file to inform you of relevant material that could not be saved.
-+
-+Here is a list of the licenses that are most widely used by packages in
-+Buildroot, with the name used in the manifest file:
-+
-+* +GPLv2+:
-+  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
-+  GNU General Public License, version 2];
-+* +GPLv2++:
-+  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
-+  GNU General Public License, version 2]
-+  or (at your option) any later version;
-+* +GPLv3+:
-+  http://www.gnu.org/licenses/gpl.html[
-+  GNU General Public License, version 3];
-+* +GPLv3++:
-+  http://www.gnu.org/licenses/gpl.html[
-+  GNU General Public License, version 3]
-+  or (at your option) any later version;
-+* +GPL+:
-+  http://www.gnu.org/licenses/gpl.html[
-+  GNU General Public License] (any version);
-+* +LGPLv2.1+:
-+  http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html[
-+  GNU Lesser General Public License, version 2.1];
-+* +LGPLv2.1++:
-+  http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html[
-+  GNU Lesser General Public License, version 2.1]
-+  or (at your option) any later version;
-+* +LGPLv3+:
-+  http://www.gnu.org/licenses/lgpl.html[
-+  GNU Lesser General Public License, version 3];
-+* +LGPLv3++:
-+  http://www.gnu.org/licenses/lgpl.html[
-+  GNU Lesser General Public License, version 3]
-+  or (at your option) any later version;
-+* +LGPL+:
-+  http://www.gnu.org/licenses/lgpl.html[
-+  GNU Lesser General Public License] (any version);
-+* +BSD-4c+: Original BSD 4-clause license;
-+* +BSD-3c+: BSD 3-clause license;
-+* +BSD-2c+: BSD 2-clause license;
-+* +PROPRIETARY+: marks a non-opensource package;
-+  Buildroot does not save any licensing info or source code for these packages.
+Following the comments of several Buildroot contributors, I have merged
+the 22 patches of your series. Thanks a lot for your perseverance in
+getting this merged!
+
+Now, I'd like to point something: the SPDX standard, documented at
+http://spdx.org/. It is precisely designed to describe the list of
+packages that compose a system. Since it's a big XML nightmare, I'm not
+sure we want to support this, but at least they have a list of
+licenses, each associated with a short name, that would be good to
+follow as a convention, I think. See http://www.spdx.org/licenses/.
+What do you think about this?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
