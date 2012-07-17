@@ -1,42 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 23:35:47 +0200
-Subject: [Buildroot] [UNSURE]Re: [UNSURE]Re: [PATCH 1/5] lua : fix
- autobuild.buildroot
-In-Reply-To: <CAB0FRsuBVmsA66yUYw4+g-t2EnVXqvgfV1z5yhuqJi=eUga5GA@mail.gmail.com>
-References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
- <20120716173958.39ab39b3@skate>
- <CAB0FRsszFbq5_yMhpxeW4NzQHJ1oG24S1+SGoj8qgR0-3A3rBw@mail.gmail.com>
- <20120717104000.695658f8@skate>
- <CAB0FRss38A4p+34=D+L42tdkyevrpFV5M5ZcZt4UDGksh8Nvvw@mail.gmail.com>
- <20120717165710.7b1a0dd0@skate>
- <CAB0FRsuBVmsA66yUYw4+g-t2EnVXqvgfV1z5yhuqJi=eUga5GA@mail.gmail.com>
-Message-ID: <20120717233547.3b9c5db1@skate>
+Date: Tue, 17 Jul 2012 23:45:35 +0200
+Subject: [Buildroot] [PATCH] avahi: only install
+ default.script/S05avahi-setup.sh if not present in fs skeleton
+In-Reply-To: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
+References: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20120717234535.6ae0b109@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 17 Jul 2012 17:20:58 +0200,
-Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
+Le Wed, 11 Jul 2012 00:14:36 -0400,
+Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
 
-> as you suggest, I use (with success) the proposal of Jean-Christophe
-> Plagnol-Villard
-> (http://patchwork.ozlabs.org/patch/153235/)
-> so now, in fact, I wait you integrate it.
+> +	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
+> +		$(INSTALL) -m 0755 -D package/avahi/busybox-udhcpc-default.script \
+> +			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+> +	fi
 
-Please send a proper patch set with all the patches that are needed. If
-you want your changes to be integrated, they need to be easy to review
-and integrate. And for the moment, you're just sending multiple
-individual patches, hoping that someone will figure out which patch
-still makes sense, how the patches relate between each other, etc.
+This doesn't work: the Busybox package already installs a
+default.script file in usr/share/udhcpc. If avahi is built before
+Busybox, then you'll have the Avahi script. If Busybox is built before
+Avahi, then you'll have the Busybox script. This doesn't look correct.
 
-I have applied your patches that rework the Lua interpreter patches,
-but for the luajit package, I'm waiting for a clean patch series from
-you in order to merge things. And when you send updated versions of
-your patches, please send a new complete series of patches.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
