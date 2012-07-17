@@ -1,156 +1,91 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 16 Jul 2012 19:23:45 -0400
-Subject: [Buildroot] [PATCH] New package: lua-cjson [v2]
-In-Reply-To: <CAB0FRss+UK1cuQgkvmgb+sg3rAG74yCD1ooMc2NJQJPguO1VAw@mail.gmail.com>
-References: <1342407627-2861-1-git-send-email-danomimanchego123@gmail.com>
- <1342407627-2861-2-git-send-email-danomimanchego123@gmail.com>
- <CAB0FRss+UK1cuQgkvmgb+sg3rAG74yCD1ooMc2NJQJPguO1VAw@mail.gmail.com>
-Message-ID: <CANxTyt5U0RsfyQMWgLiAc3wEku59CdwW_izUD0sBDdTxnGxGMg@mail.gmail.com>
+From: Dmitry <golubovsky@gmail.com>
+Date: Mon, 16 Jul 2012 23:17:03 -0400
+Subject: [Buildroot] [PATCH] Added package v86d which provides a real-mode
+	helper for uvesafb driver.
+Message-ID: <1342495023-17145-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+Signed-off-by: Dmitry <golubovsky@gmail.com>
+---
+ package/Config.in      |    1 +
+ package/v86d/Config.in |    9 +++++++++
+ package/v86d/v86d.mk   |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/v86d/Config.in
+ create mode 100644 package/v86d/v86d.mk
 
-> - the variable LUA_CJSON_SOURCE is useless, because the default scheme
-> (packagename-$(LIBFOO_VERSION).tar.gz) is used
-
-True.
-
-> - PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
->
-> a good use of PREFIX & DESTDIR is, for example :
->     define LUA_FOO_INSTALL_TARGET_CMDS
->       $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
->     endef
-
-Not quite true.  If you look at the Makefile in lua-cjson, you will see
-that DESTDIR is only used for the install targets, which I have avoided in
-the .mk.  But the PREFIX is used in the build phase for -I:
-
-LUA_INCLUDE_DIR =   $(PREFIX)/include
-...
-BUILD_CFLAGS =      -I$(LUA_INCLUDE_DIR) $(CJSON_CFLAGS)
-...
-.c.o:
-$(CC) -c $(CFLAGS) $(CPPFLAGS) $(BUILD_CFLAGS) -o $@ $<
-
-Since we need header files to come from staging rather than /usr, I set
-PREFIX=$(STAGING_DIR)/usr.  If you prefer, I can override BUILD_CFLAGS or
-LUA_INCLUDE_DIR, but I think that proper compilation is obtained with the
-file as-is.
-
-Danomi -
-
-
-On Mon, Jul 16, 2012 at 10:29 AM, Fran?ois Perrad
-<francois.perrad@gadz.org>wrote:
-
-> in lua-cjson.mk :
-> - the variable LUA_CJSON_SOURCE is useless, because the default scheme
-> (packagename-$(LIBFOO_VERSION).tar.gz) is used
-> - PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
->
-> a good use of PREFIX & DESTDIR is, for example :
->     define LUA_FOO_INSTALL_TARGET_CMDS
->              $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
->     endef
->
-> Fran?ois
->
-> 2012/7/16 Danomi Manchego <danomimanchego123@gmail.com>:
-> > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> > ---
-> >  package/Config.in              |    1 +
-> >  package/lua-cjson/Config.in    |   13 +++++++++++++
-> >  package/lua-cjson/lua-cjson.mk |   32 ++++++++++++++++++++++++++++++++
-> >  3 files changed, 46 insertions(+)
-> >  create mode 100644 package/lua-cjson/Config.in
-> >  create mode 100644 package/lua-cjson/lua-cjson.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 99257b4..9cbf1e2 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -250,6 +250,7 @@ menu "LUA libraries/modules"
-> >  source "package/cgilua/Config.in"
-> >  source "package/copas/Config.in"
-> >  source "package/coxpcall/Config.in"
-> > +source "package/lua-cjson/Config.in"
-> >  source "package/luafilesystem/Config.in"
-> >  source "package/luasocket/Config.in"
-> >  source "package/rings/Config.in"
-> > diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
-> > new file mode 100644
-> > index 0000000..c9d6abd
-> > --- /dev/null
-> > +++ b/package/lua-cjson/Config.in
-> > @@ -0,0 +1,13 @@
-> > +config BR2_PACKAGE_LUA_CJSON
-> > +       bool "lua_cjson"
-> > +       help
-> > +         The Lua CJSON module provides JSON support for Lua. It
-> features:
-> > +         - Fast, standards compliant encoding/parsing routines
-> > +         - Full support for JSON with UTF-8, including decoding
-> surrogate pairs
-> > +         - Optional run-time support for common exceptions to the JSON
-> > +           specification (infinity, NaN, ...)
-> > +         - No dependencies on other libraries
-> > +
-> > +         (C-module)
-> > +
-> > +         http://www.kyne.com.au/~mark/software/lua-cjson.php
-> > diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/
-> lua-cjson.mk
-> > new file mode 100644
-> > index 0000000..05087ea
-> > --- /dev/null
-> > +++ b/package/lua-cjson/lua-cjson.mk
-> > @@ -0,0 +1,32 @@
-> > +#############################################################
-> > +#
-> > +# lua-cjson
-> > +#
-> > +#############################################################
-> > +LUA_CJSON_VERSION      = 2.1.0
-> > +LUA_CJSON_SOURCE       = lua-cjson-$(LUA_CJSON_VERSION).tar.gz
-> > +LUA_CJSON_SITE         = http://www.kyne.com.au/~mark/software/download
-> > +LUA_CJSON_DEPENDENCIES = lua
-> > +
-> > +define LUA_CJSON_BUILD_CMDS
-> > +       $(MAKE) -C $(@D) \
-> > +               CFLAGS="$(TARGET_CFLAGS)"   \
-> > +               LDFLAGS="$(TARGET_LDFLAGS)" \
-> > +               CC="$(TARGET_CC)"           \
-> > +               LD="$(TARGET_LD)"           \
-> > +               PREFIX=$(STAGING_DIR)/usr
-> > +endef
-> > +
-> > +define LUA_CJSON_INSTALL_TARGET_CMDS
-> > +       install -D -m 0644 $(@D)/cjson.so
-> $(TARGET_DIR)/usr/lib/lua/cjson.so
-> > +endef
-> > +
-> > +define LUA_CJSON_CLEAN_CMDS
-> > +       $(MAKE) -C $(@D) clean
-> > +endef
-> > +
-> > +define LUA_CJSON_UNINSTALL_TARGET_CMDS
-> > +       rm -f "$(TARGET_DIR)/usr/lib/lua/cjson.so"
-> > +endef
-> > +
-> > +$(eval $(call GENTARGETS))
-> > --
-> > 1.7.9.5
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120716/d1193a8d/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 99257b4..23583d2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -238,6 +238,7 @@ source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/v86d/Config.in"
+ source "package/wipe/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/v86d/Config.in b/package/v86d/Config.in
+new file mode 100644
+index 0000000..ba1baca
+--- /dev/null
++++ b/package/v86d/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_V86D
++	bool "v86d"
++	depends on (BR2_i386 || BR2_x86_64)
++	help
++	  v86d is the userspace helper that runs x86 code in an emulated
++	  environment. uvesafb will not work without v86d. v86d currently
++	  supports the x86 and amd64 (x86-64) architectures.
++
++	  http://dev.gentoo.org/~spock/projects/uvesafb/
+diff --git a/package/v86d/v86d.mk b/package/v86d/v86d.mk
+new file mode 100644
+index 0000000..59187fc
+--- /dev/null
++++ b/package/v86d/v86d.mk
+@@ -0,0 +1,36 @@
++############################################
++#
++# v86d
++# 
++############################################
++
++V86D_VERSION = 0.1.10
++V86D_SOURCE = v86d-$(V86D_VERSION).tar.bz2
++V86D_SITE = http://dev.gentoo.org/~spock/projects/uvesafb/archive
++
++# The configure script autodetects the host architecture, 
++# and assumes the target architecture to be the same as the host,
++# so we must use the target architecture flags provided 
++# by Buildroot for proper cross-compilation. The x86emu 
++# configure option should be 'n' for i386, and 'y' for x86-64.
++
++X86EMU = $(if $(BR2_i386),n,y)
++
++# v86d's configure script is not autoconf-based.
++# GENTARGETS macro will be used rather than AUTOTARGETS.
++
++define V86D_CONFIGURE_CMDS
++	(cd $(@D) ; ./configure --with-debug=n --with-klibc=n --with-x86emu=$(X86EMU))
++endef
++
++# It is necessary to define __i386__ explicitly for successful compilation.
++
++define V86D_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++define V86D_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/v86d $(TARGET_DIR)/sbin/v86d	
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.2.5
