@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 09:54:57 +0200
-Subject: [Buildroot] [git commit] sdl_gfx: refactor *_CONF_OPT assignment
-	with cpu-feature options
-Message-ID: <20120717091322.38F9596A73@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 11:17:03 +0200
+Subject: [Buildroot] [PATCH v5 1/5] target: add symbols for i386/x86_64
+ cpu features
+In-Reply-To: <1342474650-10084-2-git-send-email-s.martin49@gmail.com>
+References: <1342474650-10084-1-git-send-email-s.martin49@gmail.com>
+ <1342474650-10084-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120717111703.3adbb357@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c044a2d3830d20d26efcd53407a76a050a04d93
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Mon, 16 Jul 2012 23:37:26 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sdl_gfx/sdl_gfx.mk |   10 ++--------
- 1 files changed, 2 insertions(+), 8 deletions(-)
+> Selecting the target subarchitecture variant automatically selects the
+> appropriated set of features.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
-index 5503bbd..343c7a1 100644
---- a/package/sdl_gfx/sdl_gfx.mk
-+++ b/package/sdl_gfx/sdl_gfx.mk
-@@ -11,13 +11,7 @@ SDL_GFX_DEPENDENCIES = sdl
- SDL_GFX_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
--	--enable-static
--
--# enable mmx for newer x86's
--ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
--SDL_GFX_CONF_OPT += --enable-mmx
--else
--SDL_GFX_CONF_OPT += --disable-mmx
--endif
-+	--enable-static \
-+	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx)
- 
- $(eval $(call AUTOTARGETS))
+Applied, after removing the depends on, and the SSE41/SSE42 options
+that were unused. The other 4 patches were also applied, with no
+changes.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
