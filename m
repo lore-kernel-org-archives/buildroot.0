@@ -1,63 +1,51 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 17 Jul 2012 12:10:54 +0200
-Subject: [Buildroot] [PATCH] luajit: new package
-In-Reply-To: <20120717101146.596352c7@skate>
-References: <20120715004755.4cc159e9@skate>
- <1342306252-19152-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAB0FRsv-bQnLUZvq_8xm4CkQsbxF3z6quUW5jwGhhbr0KK6nZQ@mail.gmail.com>
- <20120715200056.390b3d03@skate>
- <CAB0FRsv1Xq-rDK++oQJXOC-EUuh2b4_y-b=AbSTUsrSFx8wNQw@mail.gmail.com>
- <20120717101146.596352c7@skate>
-Message-ID: <CAB0FRsuOQPxsPbd_szyGOc5qEeNQmOuvAp+nPaJtW-PZCctoaA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 17 Jul 2012 12:47:26 +0200
+Subject: [Buildroot] [PATCH v2] libplayer: fix handling of cflags in
+	configure
+In-Reply-To: <20120715215100.7e280618@skate>
+References: <1342301676-23857-1-git-send-email-arnout@mind.be>
+ <20120715215100.7e280618@skate>
+Message-ID: <500542BE.40504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/7/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Le Tue, 17 Jul 2012 10:07:21 +0200,
-> Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
+On 07/15/12 21:51, Thomas Petazzoni wrote:
+> Le Sat, 14 Jul 2012 23:34:36 +0200,
+> "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>  a ?crit :
 >
->> > No, using TARGET_CROSS directly doesn't work when ccache is enabled.
->> > ccache is only used in TARGET_CC and TARGET_CXX, that's why I've done
->> > this this way.
->> >
->> > Can you look at the bitness problem?
->>
->> see http://www.freelists.org/post/luajit/crosscompiling-with-different-bitness
+>> Problem was found when compiling libplayer with GStreamer support
+>> on x86_64 with a Sourcery toolchain.
 >
-> Ok, the reply is:
-> http://www.freelists.org/post/luajit/crosscompiling-with-different-bitness,1
+> I've tried to build libplayer with gstreamer support for x86_64 with a
+> Sourcery toolchain, and I didn't had an issue. Since your problem was
+> quoting related, I thought that it could be caused by the ccache
+> support, but it isn't.
 >
-> Essentially the first sentence shows that Mike Pall has not seen that
-> we were talking about cross-compilation. It's not because you're
-> running under a x86 kernel that you cannot generate binaries for x86-64.
->
-> The second sentence shows that the cross-compilation support in luajit
-> is not really nice.
->
-> So the only solution that I see is to integrate the proposal of
-> Jean-Christophe Plagnol-Villard that allows to have a kconfig option
-> defining the host architecture, and then do some depends on magic to
-> only show the package when we have the right architecture combination.
-> Can you look into this?
->
+> Can you post the .config that triggers the problem, or provide more
+> details on the problem? It's not that I don't believe that there is a
+> problem, but without producing it, I feel a bit out of infos to review
+> the patch.
 
-I applied this patch http://patchwork.ozlabs.org/patch/153235/
+  The config is an allpackageyesconfig from which I removed a few packages
+that don't work on x86_64 or that can't be downloaded anymore.  I've attached
+the defconfig.  You'd best interrupt the build after the cross-compiler is
+extracted and then run 'make libplayer' explicitly, or you'll have to wait
+for hours for the build to finish...
 
-now, we could write :
-    config BR2_PACKAGE_LUAJIT
-	    bool "luajit"
-	    depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') ||
-BR2_powerpc || BR2_arm || BR2_armeb
 
-Fran?ois
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: defconfig
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120717/e7bb9b87/attachment-0001.ksh>
