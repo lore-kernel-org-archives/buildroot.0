@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 10:21:31 +0200
-Subject: [Buildroot] [PATCH v2 2/2] gettext: get rid of LIBINTL stuff
-In-Reply-To: <5002B60D.4040200@mind.be>
-References: <1338674861-1716-1-git-send-email-s.martin49@gmail.com>
- <1338674861-1716-2-git-send-email-s.martin49@gmail.com>
- <5002B60D.4040200@mind.be>
-Message-ID: <20120717102131.2b088260@skate>
+Date: Tue, 17 Jul 2012 10:22:11 +0200
+Subject: [Buildroot] [PATCH v3 2/2] libglib2: fix install even if the
+ host python binary refers to python3
+In-Reply-To: <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
+References: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
+ <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120717102211.0a8f59b9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 15 Jul 2012 14:22:37 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Le Sun,  3 Jun 2012 00:08:17 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
->   Note: I do think this is a very valuable patch, so I hope you still
-> have the energy to work on it, even though it hasn't been met with a lot
-> of enthusiasm on the list...
+> The libglib2's build system uses some python2 scripts in the install rules.
+> 
+> This patch ensures to have a valid host python2 binary and enforces this python2
+> binary at configure-time.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Just to say that I clearly agree with Arnout here: I really would like
-to get this work merged, I think it's a very good clean up. So please
-keep up the good work, and continue to take into account the review
-comments. This is definitely appreciated.
+Isn't there a way to make the libglib2 python script python2 *and*
+python3 compatible?
 
 Thomas
 -- 
