@@ -1,29 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 14:48:07 +0200
-Subject: [Buildroot] [PATCH] opencv: get rid of unused SSE41 and SSE42
- options
-In-Reply-To: <CAHXCMMK0AmTdkE-B-rN1SETEsLbZSwCP_MCB8xnLpKj_3Pth4w@mail.gmail.com>
-References: <1342518879-30779-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20120717134655.1c2fecc7@skate>
- <CAHXCMMK0AmTdkE-B-rN1SETEsLbZSwCP_MCB8xnLpKj_3Pth4w@mail.gmail.com>
-Message-ID: <20120717144807.54e3c0b2@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Jul 2012 09:54:27 -0300
+Subject: [Buildroot] [PATCH] libexif: security bump to version 0.6.21
+Message-ID: <1342529667-7441-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 17 Jul 2012 14:01:32 +0200,
-Samuel Martin <s.martin49@gmail.com> a ?crit :
+Fixes CVE-2012-2812, CVE-2012-2813, CVE-2012-2814, CVE-2012-2836,
+CVE-2012-2837, CVE-2012-2840, CVE-2012-2841 and CVE-2012-2845.
 
-> > Any objections to this patch before I merge it?
-> None.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libexif/libexif.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-So I can add your Acked-by on it? :-)
-
-Thomas
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index 1832a7e..cd74fa0 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBEXIF_VERSION = 0.6.20
++LIBEXIF_VERSION = 0.6.21
+ LIBEXIF_SOURCE = libexif-$(LIBEXIF_VERSION).tar.bz2
+ LIBEXIF_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libexif/libexif/$(LIBEXIF_VERSION)
+ LIBEXIF_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
