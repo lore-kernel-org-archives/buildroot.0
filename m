@@ -1,76 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 21:19:36 +0200
-Subject: [Buildroot] [git commit] lua: refactor root path tuning
-Message-ID: <20120717213057.7469896A92@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 23:30:42 +0200
+Subject: [Buildroot] [git commit] new package: LuaExpat
+Message-ID: <20120717213057.9883B9692C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=641f5dcb764f63c086a23a2018aca952e83ef666
+commit: http://git.buildroot.net/buildroot/commit/?id=198bc9631aff65f5fe90db068cb1936850736910
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use a patch rather than sed'ing files in the build process.
-
-Signed-off-by: Francois Perrad <fperrad@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua/lua-01-root-path.patch |   24 ++++++++++++++++++++++++
- package/lua/lua.mk                 |    2 --
- 2 files changed, 24 insertions(+), 2 deletions(-)
+ package/Config.in            |    1 +
+ package/luaexpat/Config.in   |    7 +++++++
+ package/luaexpat/luaexpat.mk |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
 
-diff --git a/package/lua/lua-01-root-path.patch b/package/lua/lua-01-root-path.patch
-index c5dbf32..f82c9c5 100644
---- a/package/lua/lua-01-root-path.patch
-+++ b/package/lua/lua-01-root-path.patch
-@@ -1,5 +1,29 @@
- Adjust installation location to /usr.
-+Remove version in module paths.
- 
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+diff --git a/package/Config.in b/package/Config.in
+index 99257b4..5126f1a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -250,6 +250,7 @@ menu "LUA libraries/modules"
+ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
++source "package/luaexpat/Config.in"
+ source "package/luafilesystem/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/rings/Config.in"
+diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
+new file mode 100644
+index 0000000..186c5c9
+--- /dev/null
++++ b/package/luaexpat/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUAEXPAT
++	bool "luaexpat"
++	select BR2_PACKAGE_EXPAT
++	help
++	  LuaExpat is a SAX XML parser based on the Expat library.
 +
-+Index: b/etc/lua.pc
-+===================================================================
-+--- a/etc/lua.pc
-++++ b/etc/lua.pc
-+@@ -8,13 +8,13 @@
-+ R= 5.1.5
-+ 
-+ # grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
-+-prefix= /usr/local
-++prefix= /usr
-+ INSTALL_BIN= ${prefix}/bin
-+ INSTALL_INC= ${prefix}/include
-+ INSTALL_LIB= ${prefix}/lib
-+ INSTALL_MAN= ${prefix}/man/man1
-+-INSTALL_LMOD= ${prefix}/share/lua/${V}
-+-INSTALL_CMOD= ${prefix}/lib/lua/${V}
-++INSTALL_LMOD= ${prefix}/share/lua
-++INSTALL_CMOD= ${prefix}/lib/lua
-+ 
-+ # canonical vars
-+ exec_prefix=${prefix}
- Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index b61d6f1..1e52075 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -28,7 +28,6 @@ HOST_LUA_MYLIBS = -ldl
- 
- define LUA_BUILD_CMDS
- 	sed -i -e 's/-O2//' $(@D)/src/Makefile
--	sed -i -e 's/\/usr\/local/\/usr/' $(@D)/etc/lua.pc
- 	$(MAKE) \
- 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
- 	MYCFLAGS="$(TARGET_CFLAGS) $(LUA_MYCFLAGS)" \
-@@ -38,7 +37,6 @@ endef
- 
- define HOST_LUA_BUILD_CMDS
- 	sed -i -e 's/-O2//' $(@D)/src/Makefile
--	sed -i -e 's/\/usr\/local/\/usr/' $(@D)/etc/lua.pc
- 	$(MAKE) \
- 	MYCFLAGS="$(HOST_LUA_MYCFLAGS)" \
- 	MYLIBS="$(HOST_LUA_MYLIBS)" \
++	  http://matthewwild.co.uk/projects/luaexpat/
+diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+new file mode 100644
+index 0000000..400d7b4
+--- /dev/null
++++ b/package/luaexpat/luaexpat.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# luaexpat
++#
++#############################################################
++
++LUAEXPAT_VERSION      = 1.2.0
++LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
++LUAEXPAT_DEPENDENCIES = lua expat
++
++
++LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
++LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
++LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
++LUAEXPAT_MFLAGS += LIBNAME=lxp.so
++LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
++LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
++
++
++define LUAEXPAT_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
++endef
++
++define LUAEXPAT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
++	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
++endef
++
++define LUAEXPAT_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/lib/lua/lxp.so
++	rm -f $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
++endef
++
++define LUAEXPAT_CLEAN_CMDS
++	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS) clean
++endef
++
++$(eval $(generic-package))
