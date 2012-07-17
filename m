@@ -1,71 +1,54 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 17 Jul 2012 16:55:26 +0200
-Subject: [Buildroot] [PATCH v4 00/22] Automatically produce legal
- compliance info
-In-Reply-To: <20120716175524.4ecb6b99@skate>
-References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
- <20120716175524.4ecb6b99@skate>
-Message-ID: <CAAXf6LXQVpMO0n8R-__zRro=3_+RjFowATsfZtqj3PcPDf_q8w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Jul 2012 16:57:10 +0200
+Subject: [Buildroot] [UNSURE]Re: [PATCH 1/5] lua : fix
+ autobuild.buildroot
+In-Reply-To: <CAB0FRss38A4p+34=D+L42tdkyevrpFV5M5ZcZt4UDGksh8Nvvw@mail.gmail.com>
+References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
+ <20120716173958.39ab39b3@skate>
+ <CAB0FRsszFbq5_yMhpxeW4NzQHJ1oG24S1+SGoj8qgR0-3A3rBw@mail.gmail.com>
+ <20120717104000.695658f8@skate>
+ <CAB0FRss38A4p+34=D+L42tdkyevrpFV5M5ZcZt4UDGksh8Nvvw@mail.gmail.com>
+Message-ID: <20120717165710.7b1a0dd0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 16 jul. 2012 09:55 schreef "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> het volgende:
->
-> Le Thu, 17 May 2012 19:32:59 +0200,
-> Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
->
-> > here is the third version of the legal-info feature implementation.
-> >
-> > Links to discussion of previous versions:
-> > v1:
-> > http://lists.busybox.net/pipermail/buildroot/2012-January/049590.html
-> > v2:
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051132.html
-> > v3: http://lists.busybox.net/pipermail/buildroot/2012-May/053574.html
-> >
-> > This version is only a minor update to fix various issues reported by
-> > other developers. There are not changes to the general structure, so
-> > please see the link above for v3 for a detailed presentation.
-> >
-> > Let me repeat only my plea to all Buildroot developers to read and
-> > give feedback on patch 9.
-> > It gives an advice from Buildroot developers to Buildroot users about
-> > how to comply with both Buildroot's and the packages' licenses.
-> > Of course this must match as much as possible what the developers
-> > think, so please read it and give either your different views or your
-> > ack (preferably with a formal Acked-by tag).
->
-> Ok, this series has been around for a while. I think that the overall
-> idea has been accepted by everybody, and has been discussed during the
-> Buildroot Developers Meeting in February.
->
-> Even though I think there might be a few possibilities to make the code
-> a bit nicer in patch 01/22, that's only internal implementation details
-> that can be improved at a later point.
->
-> Therefore, I'm now hesitating between those two solutions:
->
->  (1) Pulling all this in the current master, so that it will be part of
->      the next 2012.08 release. The chance of breaking seems fairly
->      limited to me, and this code has been around for a while, and I'd
->      like us to make progress on this.
->
->  (2) Be a bit safer, and wait the end of July to merge this into the
->      -next branch, once 2012.08-rc1 has been released.
->
-> What's the community opinion on this? At the moment, I'm leaning
-> towards (1), but I'd like to hear others opinion on this.
+Le Tue, 17 Jul 2012 16:46:32 +0200,
+Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 
-I'd go for (1). As you say, chances of breaking something is small. Plus,
-if we can get this into the August release, we'll start getting further
-feedback right away instead of waiting another three months.
+> There are 3 series of patches :
+> 
+> a serie for luajit
+> [1/2] luajit: new package
+>       work in progress
+> [2/2] luajit: fix dependencies of Lua modules
 
-Best regards,
+Ok, so I need to wait for both of these that you prepare a nice patch
+set that solves the bitness building problem for luajit. Correct?
+
+> a serie for refactor lua
+> [PATCH 1/5] lua : fix autobuild.buildroot
+> [PATCH 2/5] lua : don't install static library in target
+> [PATCH 3/5] lua : don't install shared library in staging
+> [PATCH 4/5] lua : refactor with POST_PATH_HOOKS
+> [PATCH 5/5] lua: split and rename patches
+> trash them, only the last one deserves to be saved by a new version
+
+Ok, so I ignore those 5 patches, correct?
+
+> a new serie for refactor lua
+> [PATCH 1/2] lua: split and rename patches v2
+> [PATCH 2/2] lua: refactor root path
+
+Ok, I will merge them.
+
+Thanks,
+
 Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120717/4e7f7ef6/attachment.html>
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
