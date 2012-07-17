@@ -1,55 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 10:01:51 +0200
-Subject: [Buildroot] [PATCH] Added package v86d which provides a
- real-mode helper for uvesafb driver.
-In-Reply-To: <1342495023-17145-1-git-send-email-golubovsky@gmail.com>
-References: <1342495023-17145-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <20120717100151.3948f42e@skate>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 17 Jul 2012 10:03:32 +0200
+Subject: [Buildroot] [UNSURE]Re:  [PATCH] New package: lua-cjson [v2]
+In-Reply-To: <CANxTyt5U0RsfyQMWgLiAc3wEku59CdwW_izUD0sBDdTxnGxGMg@mail.gmail.com>
+References: <1342407627-2861-1-git-send-email-danomimanchego123@gmail.com>
+ <1342407627-2861-2-git-send-email-danomimanchego123@gmail.com>
+ <CAB0FRss+UK1cuQgkvmgb+sg3rAG74yCD1ooMc2NJQJPguO1VAw@mail.gmail.com>
+ <CANxTyt5U0RsfyQMWgLiAc3wEku59CdwW_izUD0sBDdTxnGxGMg@mail.gmail.com>
+Message-ID: <CAB0FRstXLAAeKbBBPghzBLFTw939WyRK7V7_1TUtz1fxkq174g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 16 Jul 2012 23:17:03 -0400,
-Dmitry <golubovsky@gmail.com> a ?crit :
+2012/7/17 Danomi Manchego <danomimanchego123@gmail.com>:
+> Fran?ois,
+>
+>> - the variable LUA_CJSON_SOURCE is useless, because the default scheme
+>> (packagename-$(LIBFOO_VERSION).tar.gz) is used
+>
+> True.
+>
+>> - PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
+>>
+>> a good use of PREFIX & DESTDIR is, for example :
+>>     define LUA_FOO_INSTALL_TARGET_CMDS
+>>       $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
+>>     endef
+>
+> Not quite true.  If you look at the Makefile in lua-cjson, you will see that
+> DESTDIR is only used for the install targets, which I have avoided in the
+> .mk.  But the PREFIX is used in the build phase for -I:
+>
+> LUA_INCLUDE_DIR =   $(PREFIX)/include
+> ...
+> BUILD_CFLAGS =      -I$(LUA_INCLUDE_DIR) $(CJSON_CFLAGS)
+> ...
+> .c.o:
+> $(CC) -c $(CFLAGS) $(CPPFLAGS) $(BUILD_CFLAGS) -o $@ $<
+>
+> Since we need header files to come from staging rather than /usr, I set
+> PREFIX=$(STAGING_DIR)/usr.  If you prefer, I can override BUILD_CFLAGS or
+> LUA_INCLUDE_DIR, but I think that proper compilation is obtained with the
+> file as-is.
+>
 
-> +define V86D_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
-> +endef
+in order to explain your intention, I prefer
+LUA_INCLUDE_DIR="$(STAGING_DIR)/usr/include"
 
-Can you try using $(TARGET_CONFIGURE_OPTS) instead, so that CFLAGS and
-al. are also passed?
+Fran?ois
 
-Something like:
-
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D__i386__" -C $(@D) all
-
-I'm a bit surprised by the -D__i386__, because this is normally defined
-by the compiler. Why is it needed?
-
-See:
-
-thomas at skate:/tmp$ cat toto.c 
-#ifdef __i386__
-#error "You are on x86"
-#elif defined(__x86_64__)
-#error "You are on x86-64"
-#elif defined(__arm__)
-#error "You are on ARM"
-#endif
-thomas at skate:/tmp$ ~/x-tools/ia32-2012.03/bin/i686-pc-linux-gnu-gcc -c toto.c 
-toto.c:3:2: error: #error "You are on x86"
-thomas at skate:/tmp$ ~/x-tools/ia32-2012.03/bin/i686-pc-linux-gnu-gcc -m64 -c toto.c 
-toto.c:5:2: error: #error "You are on x86-64"
-thomas at skate:/tmp$ ~/x-tools/arm-2011.03/bin/arm-none-linux-gnueabi-gcc -c toto.c 
-toto.c:7:2: error: #error "You are on ARM"
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Danomi -
+>
+>
+> On Mon, Jul 16, 2012 at 10:29 AM, Fran?ois Perrad <francois.perrad@gadz.org>
+> wrote:
+>>
+>> in lua-cjson.mk :
+>> - the variable LUA_CJSON_SOURCE is useless, because the default scheme
+>> (packagename-$(LIBFOO_VERSION).tar.gz) is used
+>> - PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
+>>
+>> a good use of PREFIX & DESTDIR is, for example :
+>>     define LUA_FOO_INSTALL_TARGET_CMDS
+>>              $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
+>>     endef
+>>
+>> Fran?ois
+>>
