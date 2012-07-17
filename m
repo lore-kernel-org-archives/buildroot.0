@@ -1,32 +1,26 @@
-From: Beren Scott <berenscott@gmail.com>
-Date: Tue, 17 Jul 2012 21:51:49 +1000
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Jul 2012 13:53:26 +0200
 Subject: [Buildroot] Buildroot + udev
-Message-ID: <CAK9Ae0OU+XtBVn1JEatDfSjRx-BFQ81U7=R4ZkCdrOHih45s1A@mail.gmail.com>
+In-Reply-To: <CAK9Ae0OU+XtBVn1JEatDfSjRx-BFQ81U7=R4ZkCdrOHih45s1A@mail.gmail.com>
+References: <CAK9Ae0OU+XtBVn1JEatDfSjRx-BFQ81U7=R4ZkCdrOHih45s1A@mail.gmail.com>
+Message-ID: <20120717135326.1a7cc5f0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Tue, 17 Jul 2012 21:51:49 +1000,
+Beren Scott <berenscott@gmail.com> a ?crit :
 
-I am trying to build a buildroot setup with udev based on the current git.
-What I was wondering, is if someone might be able to post maybe the steps
-involved with this, as I seem to be having a lot of issue with it.
+> Basically to display the hard drive sizes, and I'm not getting hard
+> drives.
 
-What seems to be mucking up, is the hard drives. I don't seem to be getting
-any.
+Do you see them in /proc/partitions and/or /sys/block/ ?
 
-I have a short sysinit script which basically goes:
-
-for i in /dev/[hs]d[a-h]
-do
-hdparm -I $i | grep "1000\*1000"
-done
-
-Basically to display the hard drive sizes, and I'm not getting hard drives.
-
-Thanks for your time.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120717/f537793a/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
