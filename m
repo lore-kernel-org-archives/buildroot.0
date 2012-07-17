@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 19:02:19 +0200
-Subject: [Buildroot] [git commit] opencv: get rid of unused SSE41 and SSE42
-	options
-Message-ID: <20120717170250.12DF396A7C@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 19:06:15 +0200
+Subject: [Buildroot] [git commit] gettext: warn that legal-info is not
+	implemented
+Message-ID: <20120717173300.1013296A87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d19377d24b2b1d6ded278559c16252ec320bef6
+commit: http://git.buildroot.net/buildroot/commit/?id=16bc6efeab3ccc44d9cfaaab4cbbd37e323952ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/opencv/opencv.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/gettext/gettext.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 10ed5bd..8ae2fd5 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -62,8 +62,6 @@ OPENCV_CONF_OPT += \
- 	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF)     \
- 	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)   \
- 	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
--	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE41),ON,OFF) \
--	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
- 	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index f3605da..9778007 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -113,6 +113,9 @@ $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY): $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+ 		autopoint envsubst gettext.sh gettextize msg* ?gettext)
+ 	touch -c $@
  
- # Software/3rd-party support options.
++gettext-legal-info:
++	@$(call legal-warning-pkg,gettext,legal-info not yet implemented)
++
+ gettext: host-pkg-config $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 
+ gettext-unpacked: $(GETTEXT_DIR)/.unpacked
