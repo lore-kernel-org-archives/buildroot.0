@@ -1,42 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 10:40:00 +0200
-Subject: [Buildroot] [PATCH 1/5] lua : fix autobuild.buildroot
-In-Reply-To: <CAB0FRsszFbq5_yMhpxeW4NzQHJ1oG24S1+SGoj8qgR0-3A3rBw@mail.gmail.com>
-References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
- <20120716173958.39ab39b3@skate>
- <CAB0FRsszFbq5_yMhpxeW4NzQHJ1oG24S1+SGoj8qgR0-3A3rBw@mail.gmail.com>
-Message-ID: <20120717104000.695658f8@skate>
+Date: Tue, 17 Jul 2012 09:54:59 +0200
+Subject: [Buildroot] [git commit] sdl_sound: refactor *_CONF_OPT assignment
+	with cpu-feature options
+Message-ID: <20120717091322.539E296A73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 17 Jul 2012 10:35:15 +0200,
-Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=cae0947b053bec39508c3c2e922ddcbd1f512225
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I want remove BR2_PACKAGE_LUA_SHARED_LIBRARY only in Lua modules,
-> because it is an internal of the lua package, and Lua modules must be
-> used with Lua or LuaJIT.
-> 
-> see http://patchwork.ozlabs.org/patch/162294/
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sdl_sound/sdl_sound.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-Yes, you said that to me during the Libre Software Meeting, but this
-modification isn't part of the 5 patches patch set you have sent
-yesterday, so I was a bit confused.
-
-Can we have a complete patch set, with *all* your proposed changes to
-the Lua packaging?
-
-It's really complex to review patches for which you say that anyway
-such or such option is removed by a later patch, which is not in the
-same patch series.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index a5d9a26..620b3b4 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -32,8 +32,7 @@ SDL_SOUND_CONF_OPT = \
+ 	--disable-sdltest \
+ 	--enable-static
+ 
+-# enable mmx for newer x86's
+-ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
++ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ SDL_SOUND_CONF_OPT += --enable-mmx
+ else
+ SDL_SOUND_CONF_OPT += --disable-mmx
