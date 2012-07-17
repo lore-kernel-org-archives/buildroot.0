@@ -1,51 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Jul 2012 12:47:26 +0200
-Subject: [Buildroot] [PATCH v2] libplayer: fix handling of cflags in
-	configure
-In-Reply-To: <20120715215100.7e280618@skate>
-References: <1342301676-23857-1-git-send-email-arnout@mind.be>
- <20120715215100.7e280618@skate>
-Message-ID: <500542BE.40504@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Jul 2012 13:46:55 +0200
+Subject: [Buildroot] [PATCH] opencv: get rid of unused SSE41 and SSE42
+ options
+In-Reply-To: <1342518879-30779-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1342518879-30779-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20120717134655.1c2fecc7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/15/12 21:51, Thomas Petazzoni wrote:
-> Le Sat, 14 Jul 2012 23:34:36 +0200,
-> "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>  a ?crit :
->
->> Problem was found when compiling libplayer with GStreamer support
->> on x86_64 with a Sourcery toolchain.
->
-> I've tried to build libplayer with gstreamer support for x86_64 with a
-> Sourcery toolchain, and I didn't had an issue. Since your problem was
-> quoting related, I thought that it could be caused by the ccache
-> support, but it isn't.
->
-> Can you post the .config that triggers the problem, or provide more
-> details on the problem? It's not that I don't believe that there is a
-> problem, but without producing it, I feel a bit out of infos to review
-> the patch.
+Le Tue, 17 Jul 2012 11:54:39 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-  The config is an allpackageyesconfig from which I removed a few packages
-that don't work on x86_64 or that can't be downloaded anymore.  I've attached
-the defconfig.  You'd best interrupt the build after the cross-compiler is
-extracted and then run 'make libplayer' explicitly, or you'll have to wait
-for hours for the build to finish...
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/opencv/opencv.mk |    2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 10ed5bd..8ae2fd5 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -62,8 +62,6 @@ OPENCV_CONF_OPT += \
+>  	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF)     \
+>  	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)   \
+>  	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
+> -	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE41),ON,OFF) \
+> -	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
+>  	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
+>  
+>  # Software/3rd-party support options.
 
+Any objections to this patch before I merge it?
 
-  Regards,
-  Arnout
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120717/e7bb9b87/attachment-0001.ksh>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
