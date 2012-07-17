@@ -1,70 +1,63 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 17 Jul 2012 10:03:32 +0200
-Subject: [Buildroot] [UNSURE]Re:  [PATCH] New package: lua-cjson [v2]
-In-Reply-To: <CANxTyt5U0RsfyQMWgLiAc3wEku59CdwW_izUD0sBDdTxnGxGMg@mail.gmail.com>
-References: <1342407627-2861-1-git-send-email-danomimanchego123@gmail.com>
- <1342407627-2861-2-git-send-email-danomimanchego123@gmail.com>
- <CAB0FRss+UK1cuQgkvmgb+sg3rAG74yCD1ooMc2NJQJPguO1VAw@mail.gmail.com>
- <CANxTyt5U0RsfyQMWgLiAc3wEku59CdwW_izUD0sBDdTxnGxGMg@mail.gmail.com>
-Message-ID: <CAB0FRstXLAAeKbBBPghzBLFTw939WyRK7V7_1TUtz1fxkq174g@mail.gmail.com>
+Date: Tue, 17 Jul 2012 10:07:21 +0200
+Subject: [Buildroot] [PATCH] luajit: new package
+In-Reply-To: <20120715200056.390b3d03@skate>
+References: <20120715004755.4cc159e9@skate>
+ <1342306252-19152-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAB0FRsv-bQnLUZvq_8xm4CkQsbxF3z6quUW5jwGhhbr0KK6nZQ@mail.gmail.com>
+ <20120715200056.390b3d03@skate>
+Message-ID: <CAB0FRsv1Xq-rDK++oQJXOC-EUuh2b4_y-b=AbSTUsrSFx8wNQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/7/17 Danomi Manchego <danomimanchego123@gmail.com>:
-> Fran?ois,
+2012/7/15 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Sun, 15 Jul 2012 19:19:03 +0200,
+> Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 >
->> - the variable LUA_CJSON_SOURCE is useless, because the default scheme
->> (packagename-$(LIBFOO_VERSION).tar.gz) is used
->
-> True.
->
->> - PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
+>> -Wl,-rpath,/home/user/build/qarm/host/usr/lib" -C
+>> /home/user/build/qarm/build/luajit-2.0.0-beta10 amalg
+>> /usr/bin/make: invalid option -- '3'
+>> /usr/bin/make: invalid option -- '2'
 >>
->> a good use of PREFIX & DESTDIR is, for example :
->>     define LUA_FOO_INSTALL_TARGET_CMDS
->>       $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
->>     endef
+>> so, I remove extra quote :
+>> ifeq ($(BR2_ARCH_IS_64),y)
+>> LUAJIT_HOST_CC=$(HOSTCC)
+>> else
+>> LUAJIT_HOST_CC=$(HOSTCC) -m32
+>> endif
 >
-> Not quite true.  If you look at the Makefile in lua-cjson, you will see that
-> DESTDIR is only used for the install targets, which I have avoided in the
-> .mk.  But the PREFIX is used in the build phase for -I:
+> Hum, yes, this part was a last-minute addition, which was wrong
+> apparently. But this doesn't answer my initial question: it is not
+> possible to build luajit for a 64 bits architecture on a 32 bits host.
+> If this isn't solved, we can't include luajit as is.
 >
-> LUA_INCLUDE_DIR =   $(PREFIX)/include
-> ...
-> BUILD_CFLAGS =      -I$(LUA_INCLUDE_DIR) $(CJSON_CFLAGS)
-> ...
-> .c.o:
-> $(CC) -c $(CFLAGS) $(CPPFLAGS) $(BUILD_CFLAGS) -o $@ $<
+>> and the build command could be rewrite with CROSS :
+>> define LUAJIT_BUILD_CMDS
+>>       $(MAKE) PREFIX="/usr" \
+>>               HOST_CC="$(LUAJIT_HOST_CC)" \
+>>               CROSS="$(TARGET_CROSS)" \
+>>               -C $(@D) amalg
+>> endef
 >
-> Since we need header files to come from staging rather than /usr, I set
-> PREFIX=$(STAGING_DIR)/usr.  If you prefer, I can override BUILD_CFLAGS or
-> LUA_INCLUDE_DIR, but I think that proper compilation is obtained with the
-> file as-is.
+> No, using TARGET_CROSS directly doesn't work when ccache is enabled.
+> ccache is only used in TARGET_CC and TARGET_CXX, that's why I've done
+> this this way.
 >
+> Can you look at the bitness problem?
 
-in order to explain your intention, I prefer
-LUA_INCLUDE_DIR="$(STAGING_DIR)/usr/include"
+see http://www.freelists.org/post/luajit/crosscompiling-with-different-bitness
 
-Fran?ois
+Fran?ois.
 
-> Danomi -
 >
+> Thanks!
 >
-> On Mon, Jul 16, 2012 at 10:29 AM, Fran?ois Perrad <francois.perrad@gadz.org>
-> wrote:
->>
->> in lua-cjson.mk :
->> - the variable LUA_CJSON_SOURCE is useless, because the default scheme
->> (packagename-$(LIBFOO_VERSION).tar.gz) is used
->> - PREFIX=$(STAGING_DIR)/usr in LUA_CJSON_BUILD_CMDS is useless
->>
->> a good use of PREFIX & DESTDIR is, for example :
->>     define LUA_FOO_INSTALL_TARGET_CMDS
->>              $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX="/usr" install
->>     endef
->>
->> Fran?ois
->>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
