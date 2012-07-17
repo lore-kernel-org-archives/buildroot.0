@@ -1,42 +1,41 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 17 Jul 2012 14:01:32 +0200
-Subject: [Buildroot] [PATCH] opencv: get rid of unused SSE41 and SSE42
-	options
-In-Reply-To: <20120717134655.1c2fecc7@skate>
-References: <1342518879-30779-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20120717134655.1c2fecc7@skate>
-Message-ID: <CAHXCMMK0AmTdkE-B-rN1SETEsLbZSwCP_MCB8xnLpKj_3Pth4w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Jul 2012 09:24:26 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0,
+	4}.x stable versions
+Message-ID: <1342527867-9992-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/7/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Le Tue, 17 Jul 2012 11:54:39 +0200,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
->
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> ---
->>  package/opencv/opencv.mk |    2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
->> index 10ed5bd..8ae2fd5 100644
->> --- a/package/opencv/opencv.mk
->> +++ b/package/opencv/opencv.mk
->> @@ -62,8 +62,6 @@ OPENCV_CONF_OPT += \
->>       -DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF)     \
->>       -DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)   \
->>       -DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
->> -     -DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE41),ON,OFF) \
->> -     -DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
->>       -DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
->>
->>  # Software/3rd-party support options.
->
-> Any objections to this patch before I merge it?
-None.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index ac16c7f..c24dd86 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -64,10 +64,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.36"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.37"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.23"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.4"		if BR2_KERNEL_HEADERS_3_4
++	default "3.4.5"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-Sam
+1.7.8.6
