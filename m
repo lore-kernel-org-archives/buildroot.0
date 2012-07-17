@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jul 2012 21:17:50 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0,
-	4}.x stable versions
-Message-ID: <20120717191817.0AC6696A7F@busybox.osuosl.org>
+Date: Tue, 17 Jul 2012 21:28:32 +0200
+Subject: [Buildroot] [git commit] lua: embed sub-options into a if...endif
+	instead of depends on
+Message-ID: <20120717213057.86B5C9692C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88bd697e0eadf1c0da40d59329d03c11194f2fe3
+commit: http://git.buildroot.net/buildroot/commit/?id=b16c6ac4740cc0534a6b6dc1a51338296c1def92
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua/Config.in |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index ac16c7f..c24dd86 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -64,10 +64,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.36"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.37"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.23"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.4"		if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.5"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 56eba35..76359c0 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -5,16 +5,16 @@ config BR2_PACKAGE_LUA
+ 
+ 	  http://www.lua.org/
+ 
++if BR2_PACKAGE_LUA
++
+ config BR2_PACKAGE_LUA_COMPILER
+ 	bool "lua compiler"
+-	depends on BR2_PACKAGE_LUA
+ 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Install luac binary
+ 
+ config BR2_PACKAGE_LUA_INTERPRETER
+ 	bool "lua interpreter"
+-	depends on BR2_PACKAGE_LUA
+ 	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Install lua binary
+@@ -29,6 +29,7 @@ config BR2_PACKAGE_LUA_INTERPRETER_READLINE
+ 
+ config BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	bool "shared library"
+-	depends on BR2_PACKAGE_LUA
+ 	help
+ 	  Install shared liblua.so
++
++endif
