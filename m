@@ -1,34 +1,72 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 17 Jul 2012 10:33:09 +0200
-Subject: [Buildroot] [PATCH v2 2/2] gettext: get rid of LIBINTL stuff
-In-Reply-To: <20120717102131.2b088260@skate>
-References: <1338674861-1716-1-git-send-email-s.martin49@gmail.com>
- <1338674861-1716-2-git-send-email-s.martin49@gmail.com>
- <5002B60D.4040200@mind.be> <20120717102131.2b088260@skate>
-Message-ID: <CAHXCMMLo3-++HVzCeWMBRDza7xZeh8JgoQ4s-opU4Avb8kGodw@mail.gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 17 Jul 2012 10:35:15 +0200
+Subject: [Buildroot] [PATCH 1/5] lua : fix autobuild.buildroot
+In-Reply-To: <20120716173958.39ab39b3@skate>
+References: <1342446352-31231-1-git-send-email-francois.perrad@gadz.org>
+ <20120716173958.39ab39b3@skate>
+Message-ID: <CAB0FRsszFbq5_yMhpxeW4NzQHJ1oG24S1+SGoj8qgR0-3A3rBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/7/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Le Sun, 15 Jul 2012 14:22:37 +0200,
-> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+2012/7/16 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Mon, 16 Jul 2012 15:45:48 +0200,
+> Francois Perrad <fperrad@gmail.com> a ?crit :
 >
->>   Note: I do think this is a very valuable patch, so I hope you still
->> have the energy to work on it, even though it hasn't been met with a lot
->> of enthusiasm on the list...
+>> BR2_PACKAGE_LUA_SHARED_LIBRARY is an option for install, not for build
+>> ---
+>>  package/lua/lua.mk |    5 +----
+>>  1 file changed, 1 insertion(+), 4 deletions(-)
+>>
+>> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+>> index baa459c..2fc838b 100644
+>> --- a/package/lua/lua.mk
+>> +++ b/package/lua/lua.mk
+>> @@ -8,10 +8,7 @@ LUA_VERSION = 5.1.5
+>>  LUA_SITE = http://www.lua.org/ftp
+>>  LUA_INSTALL_STAGING = YES
+>>
+>> -ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+>> -     LUA_MYCFLAGS += -fPIC
+>> -endif
+>> -
+>> +LUA_MYCFLAGS += -fPIC
+>>  LUA_MYLIBS += -ldl
+>>
+>>  ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
 >
-> Just to say that I clearly agree with Arnout here: I really would like
-> to get this work merged, I think it's a very good clean up. So please
-> keep up the good work, and continue to take into account the review
-> comments. This is definitely appreciated.
+> If Lua is not build as a shared library, there is no point in building
+> the object files with the -fPIC argument, so the existing code seems to
+> make sense to me. The BR2_PACKAGE_LUA_SHARED_LIBRARY affects both the
+> build time (we don't build with -fPIC) and the install time (we install
+> the shared libraries).
 >
-Don't worry, I won't give up so easily since I cannot use br on my
-system without this patch series.
+> But I'm confused: during the Libre Software Meeting, didn't we discussed
+> that the BR2_PACKAGE_LUA_SHARED_LIBRARY option should go away, and that
+> the BR2_PACKAGE_LUA option should unconditionally install the shared
+> libraries, and then there would be sub-options for the interpreter and
+> compiler?
+>
 
-Cheers,
+I want remove BR2_PACKAGE_LUA_SHARED_LIBRARY only in Lua modules,
+because it is an internal of the lua package, and Lua modules must be
+used with Lua or LuaJIT.
 
--- 
-Sam
+see http://patchwork.ozlabs.org/patch/162294/
+
+Fran?ois
+
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
