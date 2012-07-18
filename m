@@ -1,26 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jul 2012 18:51:01 +0200
-Subject: [Buildroot] mysql server support ?
-In-Reply-To: <6BA6D3917E4B40DFB3D76D91A24A648D@DUMARJOPC>
-References: <6BA6D3917E4B40DFB3D76D91A24A648D@DUMARJOPC>
-Message-ID: <20120718185101.4b7725f5@skate>
+Date: Wed, 18 Jul 2012 09:48:24 +0200
+Subject: [Buildroot] [git commit] sqlite: do not assume thread support is
+	available
+Message-ID: <20120718170623.2D03696B26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 18 Jul 2012 11:46:13 -0400,
-"Jonathan Dumaresq" <jdumaresq@cimeq.qc.ca> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=856ba320975740542bc4525efabc3cb63f76869f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I would like to know if there is a package for mysql server 5.1 into
-> buildroot. I take a look at package and I see only clinet package. 
+The --enable-threadsafe option was unconditionally passed, without
+taking into account whether the underlying toolchain had thread
+support or not. Now, we properly pass --enable-threadsafe or
+--disable-threadsafe depending on the availability of thread support.
 
-No, we don't have a package for the server side of MySQL.
+Fixes
+http://autobuild.buildroot.net/results/defdc098cff293baabf2f89587476eba71f1c0d0/build-end.log.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sqlite/sqlite.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 5b85ecc..9e63b52 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -23,9 +23,14 @@ endif
+ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+ 
+ SQLITE_CONF_OPT = \
+-	--enable-threadsafe \
+ 	--localstatedir=/var
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++SQLITE_CONF_OPT += --enable-threadsafe
++else
++SQLITE_CONF_OPT += --disable-threadsafe
++endif
++
+ ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
+ SQLITE_DEPENDENCIES += ncurses readline
+ SQLITE_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
