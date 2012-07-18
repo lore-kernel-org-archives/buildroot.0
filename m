@@ -1,18 +1,85 @@
-From: Jonathan Dumaresq <jdumaresq@cimeq.qc.ca>
-Date: Wed, 18 Jul 2012 11:46:13 -0400
-Subject: [Buildroot] mysql server support ?
-Message-ID: <6BA6D3917E4B40DFB3D76D91A24A648D@DUMARJOPC>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 18 Jul 2012 18:02:42 +0200
+Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
+Message-ID: <1342627363-3941-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Eric Jarrige <eric.jarrige@armadeus.org>
 
-I would like to know if there is a package for mysql server 5.1 into
-buildroot. I take a look at package and I see only clinet package. 
+Elftosb is a Freescale toolset to build binary image files (like U-Boot.sb)
+to be used with CPUs imx23, imx28, stp37xx
 
-regards
+Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
+Acked-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+ package/elftosb/elftosb.mk                         |   28 ++++++++++++++++++++
+ .../elftosb/elftosb10.12.01-fixes_includes.patch   |   19 +++++++++++++
+ 2 files changed, 47 insertions(+)
+ create mode 100644 package/elftosb/elftosb.mk
+ create mode 100644 package/elftosb/elftosb10.12.01-fixes_includes.patch
 
-Jonathan
+diff --git a/package/elftosb/elftosb.mk b/package/elftosb/elftosb.mk
+new file mode 100644
+index 0000000..75b95a5
+--- /dev/null
++++ b/package/elftosb/elftosb.mk
+@@ -0,0 +1,28 @@
++#############################################################
++#
++# elftosb
++#
++#############################################################
++ELFTOSB_VERSION = 10.12.01
++ELFTOSB_SOURCE = elftosb-$(ELFTOSB_VERSION).tar.gz
++ELFTOSB_SITE = http://repository.timesys.com/buildsources/e/elftosb/elftosb-$(ELFTOSB_VERSION)
++
++define HOST_ELFTOSB_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define HOST_ELFTOSB_INSTALL_CMDS
++	$(INSTALL) -D $(@D)/bld/linux/elftosb $(HOST_DIR)/usr/bin/elftosb
++	$(INSTALL) -D $(@D)/bld/linux/keygen $(HOST_DIR)/usr/bin/keygen
++	$(INSTALL) -D $(@D)/bld/linux/sbtool $(HOST_DIR)/usr/bin/sbtool
++endef
++
++define HOST_ELFTOSB_CLEAN_CMDS
++	rm -rf $(@D)/bld/linux
++	rm -f $(HOST_DIR)/usr/bin/elftosb
++	rm -f $(HOST_DIR)/usr/bin/keygen
++	rm -f $(HOST_DIR)/usr/bin/sbtool
++endef
++
++$(eval $(call GENTARGETS,host))
++
+diff --git a/package/elftosb/elftosb10.12.01-fixes_includes.patch b/package/elftosb/elftosb10.12.01-fixes_includes.patch
+new file mode 100644
+index 0000000..eaf8eba
+--- /dev/null
++++ b/package/elftosb/elftosb10.12.01-fixes_includes.patch
+@@ -0,0 +1,19 @@
++This patch uses system include files instead of a hard coded system path to fixe
++potential compilation failure on systems that do not populate system header
++files in /usr/include/..
++
++Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
++---
++Index: host-elftosb-10.12.01/common/stdafx.h
++===================================================================
++--- host-elftosb-10.12.01.orig/common/stdafx.h	2012-01-30 12:43:35.000000000 +0100
+++++ host-elftosb-10.12.01/common/stdafx.h	2012-01-30 12:43:54.000000000 +0100
++@@ -27,7 +27,7 @@
++ // For Linux systems only, types.h only defines the signed
++ // integer types.  This is not professional code.
++ // Update: They are defined in the header files in the more recent version of redhat enterprise gcc.
++-#include "/usr/include/sys/types.h"
+++#include <sys/types.h>
++ #include <stdint.h>
++ //typedef unsigned long uint32_t;
++ //typedef unsigned short uint16_t;
+-- 
+1.7.9.5
