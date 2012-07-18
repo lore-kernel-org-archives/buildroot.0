@@ -1,68 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 18 Jul 2012 15:59:12 +0200
-Subject: [Buildroot] [PATCH 4/4] lua: refactor without sed
-In-Reply-To: <1342619953-15512-1-git-send-email-francois.perrad@gadz.org>
-References: <1342619953-15512-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1342619953-15512-4-git-send-email-francois.perrad@gadz.org>
+From: Daniel Mack <zonque@gmail.com>
+Date: Wed, 18 Jul 2012 17:40:16 +0200
+Subject: [Buildroot] [PATCH v2] package/usbutils: bump to version 006
+In-Reply-To: <4FFB3CA9.8000303@mind.be>
+References: <4FFB3CA9.8000303@mind.be>
+Message-ID: <1342626016-11680-1-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/lua.mk |   16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+Also, as the kernel.org archives are back up, use them as official site
+again.
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 1e52075..8f71fc2 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -8,8 +8,9 @@ LUA_VERSION = 5.1.5
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+ package/usbutils/usbutils.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index a242f93..0554682 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
  
-+LUA_CFLAGS = -Wall
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
--	LUA_MYCFLAGS += -fPIC
-+	LUA_CFLAGS += -fPIC
- endif
- 
- LUA_MYLIBS += -ldl
-@@ -17,28 +18,25 @@ LUA_MYLIBS += -ldl
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
--	LUA_MYCFLAGS += -DLUA_USE_LINUX
-+	LUA_CFLAGS += -DLUA_USE_LINUX
- else
--	LUA_MYCFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-+	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
- endif
- 
--HOST_LUA_DEPENDENCIES =
--HOST_LUA_MYCFLAGS = -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
-+HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
- HOST_LUA_MYLIBS = -ldl
- 
- define LUA_BUILD_CMDS
--	sed -i -e 's/-O2//' $(@D)/src/Makefile
- 	$(MAKE) \
- 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
--	MYCFLAGS="$(TARGET_CFLAGS) $(LUA_MYCFLAGS)" \
-+	CFLAGS="$(TARGET_CFLAGS) $(LUA_CFLAGS)" \
- 	MYLIBS="$(LUA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" \
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
- 
- define HOST_LUA_BUILD_CMDS
--	sed -i -e 's/-O2//' $(@D)/src/Makefile
- 	$(MAKE) \
--	MYCFLAGS="$(HOST_LUA_MYCFLAGS)" \
-+	CFLAGS="$(HOST_LUA_CFLAGS)" \
- 	MYLIBS="$(HOST_LUA_MYLIBS)" \
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
+-USBUTILS_VERSION = 005
+-USBUTILS_SITE = http://snapshot.debian.org/archive/debian/20111211T214105Z/pool/main/u/usbutils/
+-USBUTILS_SOURCE = usbutils_$(USBUTILS_VERSION).orig.tar.gz
++USBUTILS_VERSION = 006
++USBUTILS_SITE = http://www.kernel.org/pub/linux/utils/usb/usbutils/
++USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.gz
+ USBUTILS_DEPENDENCIES = host-pkg-config libusb
+ USBUTILS_INSTALL_STAGING = YES
+ # no configure in tarball
 -- 
-1.7.9.5
+1.7.10.4
