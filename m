@@ -1,41 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jul 2012 18:50:01 +0200
-Subject: [Buildroot] [git commit] package/usbutils: bump to version 006
-Message-ID: <20120718170623.3E43A96B26@busybox.osuosl.org>
+Date: Wed, 18 Jul 2012 19:06:41 +0200
+Subject: [Buildroot] [PATCH] sqlite: do not assume thread support is
+ available
+In-Reply-To: <1342597816-16767-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1342597816-16767-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20120718190641.3f3fb1ee@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3a91caccbfa6e2adcb134f8f2f457aef4a27786
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Wed, 18 Jul 2012 09:50:15 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Also, as the kernel.org archives are back up, use them as official site
-again.
+> The --enable-threadsafe option was unconditionally passed, without
+> taking into account whether the underlying toolchain had thread
+> support or not. Now, we properly pass --enable-threadsafe or
+> --disable-threadsafe depending on the availability of thread support.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/defdc098cff293baabf2f89587476eba71f1c0d0/build-end.log.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-[thomas.petazzoni at free-electrons.com: use BR2_KERNEL_MIRROR]
+Applied.
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/usbutils/usbutils.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 53a29c5..6e29571 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
- 
--USBUTILS_VERSION = 005
--USBUTILS_SITE = http://snapshot.debian.org/archive/debian/20111211T214105Z/pool/main/u/usbutils/
--USBUTILS_SOURCE = usbutils_$(USBUTILS_VERSION).orig.tar.gz
-+USBUTILS_VERSION = 006
-+USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils/
-+USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.gz
- USBUTILS_DEPENDENCIES = host-pkg-config libusb
- USBUTILS_INSTALL_STAGING = YES
- # no configure in tarball
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
