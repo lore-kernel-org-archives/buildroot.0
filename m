@@ -1,28 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jul 2012 19:09:20 +0200
-Subject: [Buildroot] [PATCH] libexif: security bump to version 0.6.21
-In-Reply-To: <1342529667-7441-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1342529667-7441-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120718190920.4eb376d0@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 18 Jul 2012 18:10:25 +0100
+Subject: [Buildroot] [PATCH] libfreefare: bump version to 0.3.4
+Message-ID: <1342631426-3229-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 17 Jul 2012 09:54:27 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+From: Simon Dawson <spdawson@gmail.com>
 
-> Fixes CVE-2012-2812, CVE-2012-2813, CVE-2012-2814, CVE-2012-2836,
-> CVE-2012-2837, CVE-2012-2840, CVE-2012-2841 and CVE-2012-2845.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch bumps the libfreefare package from version 0.3.2 to version 0.3.4.
 
-Applied, thanks.
+Version 0.3.4 requires a minium libnfc version of 1.6. A separate patch has
+been submitted to bump the libnfc version; that patch should be regarded as
+a prerequisite for the present patch.
 
-Thomas
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/libfreefare/libfreefare.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+index 3f0036a..3c96839 100644
+--- a/package/libfreefare/libfreefare.mk
++++ b/package/libfreefare/libfreefare.mk
+@@ -3,7 +3,7 @@
+ # libfreefare
+ #
+ #############################################################
+-LIBFREEFARE_VERSION = 0.3.2
++LIBFREEFARE_VERSION = 0.3.4
+ LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
+ LIBFREEFARE_DEPENDENCIES = libnfc openssl
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
