@@ -1,115 +1,94 @@
 From: Dmitry <golubovsky@gmail.com>
-Date: Wed, 18 Jul 2012 17:03:57 -0400
-Subject: [Buildroot] [PATCH] Add package linux-pam
-Message-ID: <1342645437-12690-1-git-send-email-golubovsky@gmail.com>
+Date: Wed, 18 Jul 2012 17:17:13 -0400
+Subject: [Buildroot] [PATCH] Added package v86d which provides a real-mode
+	helper for uvesafb driver.
+Message-ID: <1342646233-14254-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-1. Add the linux-pam package building instructions
-2. If the linux-pam package is selected, make sure it builds before
-   busybox just in case busybox is configured with PAM support
-   (make linux-pam a dependency of busybox)
+Re-submitting the patch with updated build macro name and license info.
 
 Signed-off-by: Dmitry <golubovsky@gmail.com>
 ---
- package/Config.in              |    1 +
- package/busybox/busybox.mk     |    3 +++
- package/linux-pam/Config.in    |   13 +++++++++++++
- package/linux-pam/linux-pam.mk |   37 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 54 insertions(+), 0 deletions(-)
- create mode 100644 package/linux-pam/Config.in
- create mode 100644 package/linux-pam/linux-pam.mk
+ package/Config.in      |    1 +
+ package/v86d/Config.in |    9 +++++++++
+ package/v86d/v86d.mk   |   37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/v86d/Config.in
+ create mode 100644 package/v86d/v86d.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6aabb8e..4bbb293 100644
+index 6aabb8e..a494641 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -660,6 +660,7 @@ source "package/bootutils/Config.in"
- endif
- source "package/htop/Config.in"
- source "package/kmod/Config.in"
-+source "package/linux-pam/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- endif
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 394a1ae..4a1de33 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -11,6 +11,9 @@ else
- BUSYBOX_VERSION = $(call qstrip,$(BR2_BUSYBOX_VERSION))
- BUSYBOX_SITE = http://www.busybox.net/downloads
- endif
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+BUSYBOX_DEPENDENCIES += linux-pam
-+endif
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
- # Allows the build system to tweak CFLAGS
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
+@@ -238,6 +238,7 @@ source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/v86d/Config.in"
+ source "package/wipe/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/v86d/Config.in b/package/v86d/Config.in
 new file mode 100644
-index 0000000..1e3d080
+index 0000000..ba1baca
 --- /dev/null
-+++ b/package/linux-pam/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LINUX_PAM
-+	bool "linux-pam"
-+	select BR2_PACKAGE_LIBINTL
-+	select BR2_PACKAGE_GETTEXT
-+	select BR2_PACKAGE_FLEX
-+	select BR2_PACKAGE_FLEX_LIBFL
-+	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
++++ b/package/v86d/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_V86D
++	bool "v86d"
++	depends on (BR2_i386 || BR2_x86_64)
 +	help
-+	   A Security Framework that Provides Authentication for Applications
++	  v86d is the userspace helper that runs x86 code in an emulated
++	  environment. uvesafb will not work without v86d. v86d currently
++	  supports the x86 and amd64 (x86-64) architectures.
 +
-+comment "linux-pam requires a toolchain with WCHAR and locale support"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-+
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
++	  http://dev.gentoo.org/~spock/projects/uvesafb/
+diff --git a/package/v86d/v86d.mk b/package/v86d/v86d.mk
 new file mode 100644
-index 0000000..5024033
+index 0000000..f381787
 --- /dev/null
-+++ b/package/linux-pam/linux-pam.mk
++++ b/package/v86d/v86d.mk
 @@ -0,0 +1,37 @@
 +############################################
 +#
-+# linux-pam
++# v86d
 +# 
 +############################################
 +
-+LINUX_PAM_VERSION = 1.1.4
-+LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
-+LINUX_PAM_SITE = http://linux-pam.org/library/
-+LINUX_PAM_INSTALL_STAGING = YES
-+LINUX_PAM_INSTALL_TARGET = YES
-+LINUX_PAM_CONF_OPT = --disable-prelude --disable-isadir --disable-nis --disable-regenerate-docu
-+LINUX_PAM_CONF_OPT += --enable-securedir=/lib/security --libdir=/lib
-+LINUX_PAM_DEPENDENCIES = gettext libintl flex
-+LINUX_PAM_LICENSE = BSD
-+LINUX_PAM_LICENSE_FILES = COPYING
++V86D_VERSION = 0.1.10
++V86D_SOURCE = v86d-$(V86D_VERSION).tar.bz2
++V86D_SITE = http://dev.gentoo.org/~spock/projects/uvesafb/archive
++V86D_LICENSE = GPLv2
 +
-+define LINUX_PAM_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC) -lintl -lfl" LD="$(TARGET_LD)" -C $(@D) all
++# The configure script autodetects the host architecture, 
++# and assumes the target architecture to be the same as the host,
++# so we must use the target architecture flags provided 
++# by Buildroot for proper cross-compilation. The x86emu 
++# configure option should be 'n' for i386, and 'y' for x86-64.
++
++X86EMU = $(if $(BR2_i386),n,y)
++
++# v86d's configure script is not autoconf-based.
++# GENTARGETS macro will be used rather than AUTOTARGETS.
++
++define V86D_CONFIGURE_CMDS
++	(cd $(@D) ; ./configure --with-debug=n --with-klibc=n --with-x86emu=$(X86EMU))
 +endef
 +
-+define LINUX_PAM_DISABLE_INNETGR
-+	echo >>$(@D)/config.h
-+	echo "#undef HAVE_RUSEROK">>$(@D)/config.h
-+	echo "#define HAVE_RUSEROK_AF">>$(@D)/config.h
-+	echo "#define ruserok_af(a, b, c, d, e) (-1)" >>$(@D)/config.h
-+	echo "#undef innetgr">>$(@D)/config.h
-+	echo "#define innetgr(a, b, c, d) 0" >>$(@D)/config.h
-+	echo "all:" >$(@D)/doc/Makefile
-+	echo "" >>$(@D)/doc/Makefile
-+	echo "install:" >>$(@D)/doc/Makefile
-+	echo "" >>$(@D)/doc/Makefile
++# It is necessary to define __i386__ explicitly for successful compilation.
++
++define V86D_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
 +endef
 +
-+LINUX_PAM_POST_CONFIGURE_HOOKS += LINUX_PAM_DISABLE_INNETGR
++define V86D_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/v86d $(TARGET_DIR)/sbin/v86d	
++endef
 +
-+$(eval $(autotools-package))
++$(eval $(gentargets-package))
 -- 
 1.7.2.5
