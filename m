@@ -1,28 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jul 2012 19:06:41 +0200
-Subject: [Buildroot] [PATCH] sqlite: do not assume thread support is
- available
-In-Reply-To: <1342597816-16767-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1342597816-16767-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20120718190641.3f3fb1ee@skate>
+Date: Wed, 18 Jul 2012 19:06:53 +0200
+Subject: [Buildroot] [PATCH] libnfc: bump version to recent svn revision
+In-Reply-To: <1342598410-30593-1-git-send-email-spdawson@gmail.com>
+References: <1342598410-30593-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120718190653.51a3d42d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 18 Jul 2012 09:50:15 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Le Wed, 18 Jul 2012 09:00:10 +0100,
+spdawson at gmail.com a ?crit :
 
-> The --enable-threadsafe option was unconditionally passed, without
-> taking into account whether the underlying toolchain had thread
-> support or not. Now, we properly pass --enable-threadsafe or
-> --disable-threadsafe depending on the availability of thread support.
+> From: Simon Dawson <spdawson@gmail.com>
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/defdc098cff293baabf2f89587476eba71f1c0d0/build-end.log.
+> The libnfc package is currently at version 1.5.1 in Buildroot. This patch
+> bumps the version to a recent svn revision, for the following reasons.
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> * Version 1.5.1 is marked as "unstable" on the libnfc download site.
+> 
+> * The nfc-tools project at
+> 
+>     http://code.google.com/p/nfc-tools/
+> 
+>   includes a library that extends libnfc with LLCP functionality.
+>   Unfortunately, to build this requires a libnfc version no lower than 1.6.
+>   The version 1.6.0-rc1 Release Candidate does not build; svn commits to fix
+>   the build problems have not yet been back-ported into a Release Candidate.
+> 
+> * The libfreefare package is currently at version 0.3.2 in Buildroot. To bump
+>   this to the most recent version (0.3.4) also requires a libnfc version no
+>   lower than 1.6.
+> 
+> I suggest that this patch be regarded as a temporary fix, pending the release
+> of libnfc 1.6, which will allow other dependent packages to be progressed in
+> the interim.
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
 Applied.
 
