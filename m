@@ -1,45 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jul 2012 19:06:53 +0200
-Subject: [Buildroot] [PATCH] libnfc: bump version to recent svn revision
-In-Reply-To: <1342598410-30593-1-git-send-email-spdawson@gmail.com>
-References: <1342598410-30593-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120718190653.51a3d42d@skate>
+Date: Wed, 18 Jul 2012 19:07:20 +0200
+Subject: [Buildroot] [PATCH v2] package/usbutils: bump to version 006
+In-Reply-To: <1342626016-11680-1-git-send-email-zonque@gmail.com>
+References: <4FFB3CA9.8000303@mind.be>
+ <1342626016-11680-1-git-send-email-zonque@gmail.com>
+Message-ID: <20120718190720.311b3429@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 18 Jul 2012 09:00:10 +0100,
-spdawson at gmail.com a ?crit :
+Le Wed, 18 Jul 2012 17:40:16 +0200,
+Daniel Mack <zonque@gmail.com> a ?crit :
 
-> From: Simon Dawson <spdawson@gmail.com>
+> Also, as the kernel.org archives are back up, use them as official site
+> again.
 > 
-> The libnfc package is currently at version 1.5.1 in Buildroot. This patch
-> bumps the version to a recent svn revision, for the following reasons.
-> 
-> * Version 1.5.1 is marked as "unstable" on the libnfc download site.
-> 
-> * The nfc-tools project at
-> 
->     http://code.google.com/p/nfc-tools/
-> 
->   includes a library that extends libnfc with LLCP functionality.
->   Unfortunately, to build this requires a libnfc version no lower than 1.6.
->   The version 1.6.0-rc1 Release Candidate does not build; svn commits to fix
->   the build problems have not yet been back-ported into a Release Candidate.
-> 
-> * The libfreefare package is currently at version 0.3.2 in Buildroot. To bump
->   this to the most recent version (0.3.4) also requires a libnfc version no
->   lower than 1.6.
-> 
-> I suggest that this patch be regarded as a temporary fix, pending the release
-> of libnfc 1.6, which will allow other dependent packages to be progressed in
-> the interim.
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> Signed-off-by: Daniel Mack <zonque@gmail.com>
 
-Applied.
+Applied, with a minor change to use BR2_KERNEL_MIRROR as Arnout
+suggested.
 
 Thomas
 -- 
