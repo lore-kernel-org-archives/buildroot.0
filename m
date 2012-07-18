@@ -1,58 +1,254 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 18 Jul 2012 15:59:09 +0200
-Subject: [Buildroot] [PATCH 1/4] add host arch detection and Kconfig
-	BR2_HOSTARCH
-Message-ID: <1342619953-15512-1-git-send-email-francois.perrad@gadz.org>
+Date: Wed, 18 Jul 2012 15:59:10 +0200
+Subject: [Buildroot] [PATCH 2/4] luajit: new package
+In-Reply-To: <1342619953-15512-1-git-send-email-francois.perrad@gadz.org>
+References: <1342619953-15512-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1342619953-15512-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will allow to install binary package only if they are supported by the
-host. As example Atmel SAM-BA (x86 only).
-
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- Config.in |    4 ++++
- Makefile  |   10 ++++++++++
- 2 files changed, 14 insertions(+)
+ package/Config.in                             |    3 +-
+ package/luajit/Config.in                      |   10 ++++
+ package/luajit/luajit-01-root-path.patch      |   22 +++++++++
+ package/luajit/luajit-02-shared-lib.patch     |   17 +++++++
+ package/luajit/luajit-03-dont-strip.patch     |   23 ++++++++++
+ package/luajit/luajit-04-no-bin-symlink.patch |   40 ++++++++++++++++
+ package/luajit/luajit.mk                      |   61 +++++++++++++++++++++++++
+ 7 files changed, 175 insertions(+), 1 deletion(-)
+ create mode 100644 package/luajit/Config.in
+ create mode 100644 package/luajit/luajit-01-root-path.patch
+ create mode 100644 package/luajit/luajit-02-shared-lib.patch
+ create mode 100644 package/luajit/luajit-03-dont-strip.patch
+ create mode 100644 package/luajit/luajit-04-no-bin-symlink.patch
+ create mode 100644 package/luajit/luajit.mk
 
-diff --git a/Config.in b/Config.in
-index 925c247..c182f70 100644
---- a/Config.in
-+++ b/Config.in
-@@ -10,6 +10,10 @@ config BR2_VERSION
- 	string
- 	option env="BR2_VERSION_FULL"
- 
-+config BR2_HOSTARCH
-+	string
-+	option env="HOSTARCH"
+diff --git a/package/Config.in b/package/Config.in
+index 8529777..6aabb8e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -245,7 +245,8 @@ endmenu
+ menu "Interpreter languages and scripting"
+ source "package/haserl/Config.in"
+ source "package/lua/Config.in"
+-if BR2_PACKAGE_LUA
++source "package/luajit/Config.in"
++if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
+ menu "LUA libraries/modules"
+ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+diff --git a/package/luajit/Config.in b/package/luajit/Config.in
+new file mode 100644
+index 0000000..4a6bcdf
+--- /dev/null
++++ b/package/luajit/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LUAJIT
++	bool "luajit"
++	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
++	help
++	  LuaJIT implements the full set of language features defined
++	  by Lua 5.1. The virtual machine (VM) is API- and
++	  ABI-compatible to the standard Lua interpreter and can be
++	  deployed as a drop-in replacement.
 +
- source "target/Config.in.arch"
- 
- menu "Build options"
-diff --git a/Makefile b/Makefile
-index d55b136..639fdaa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -32,6 +32,16 @@ ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSI
- $(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
- endif
- 
-+export HOSTARCH := $(shell uname -m | \
-+	sed -e s/i.86/x86/ \
-+	    -e s/sun4u/sparc64/ \
-+	    -e s/arm.*/arm/ \
-+	    -e s/sa110/arm/ \
-+	    -e s/ppc64/powerpc/ \
-+	    -e s/ppc/powerpc/ \
-+	    -e s/macppc/powerpc/\
-+	    -e s/sh.*/sh/)
++	  http://luajit.org/
+diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
+new file mode 100644
+index 0000000..3b0a585
+--- /dev/null
++++ b/package/luajit/luajit-01-root-path.patch
+@@ -0,0 +1,22 @@
++Adjust installation location to /usr
 +
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
- 
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/luaconf.h
++===================================================================
++--- a/src/luaconf.h
+++++ b/src/luaconf.h
++@@ -22,9 +22,9 @@
++ #define LUA_CPATH_DEFAULT \
++   ".\\?.dll;" LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
++ #else
++-#define LUA_ROOT	"/usr/local/"
++-#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
++-#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
+++#define LUA_ROOT	"/usr/"
+++#define LUA_LDIR	LUA_ROOT "share/lua/"
+++#define LUA_CDIR	LUA_ROOT "lib/lua/"
++ #ifdef LUA_XROOT
++ #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta10/"
++ #define LUA_XPATH \
+diff --git a/package/luajit/luajit-02-shared-lib.patch b/package/luajit/luajit-02-shared-lib.patch
+new file mode 100644
+index 0000000..d5122ba
+--- /dev/null
++++ b/package/luajit/luajit-02-shared-lib.patch
+@@ -0,0 +1,17 @@
++Compile the luajit binary dynamically against the luajit library
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/Makefile
++===================================================================
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -629,7 +629,7 @@
++ 
++ $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
++ 	$(E) "LINK      $@"
++-	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) $(TARGET_O) $(TARGET_ALIBS)
+++	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
++ 	$(Q)$(TARGET_STRIP) $@
++ 	$(E) "OK        Successfully built LuaJIT"
++ 
+diff --git a/package/luajit/luajit-03-dont-strip.patch b/package/luajit/luajit-03-dont-strip.patch
+new file mode 100644
+index 0000000..9651cdf
+--- /dev/null
++++ b/package/luajit/luajit-03-dont-strip.patch
+@@ -0,0 +1,23 @@
++Don't strip the library and binary
++
++This allows Buildroot to do it if needed, but only if needed.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/src/Makefile
++===================================================================
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -625,12 +625,10 @@
++ $(LUAJIT_SO): $(LJVMCORE_O)
++ 	$(E) "DYNLINK   $@"
++ 	$(Q)$(TARGET_LD) $(TARGET_ASHLDFLAGS) -o $@ $(LJVMCORE_DYNO) $(TARGET_ALIBS)
++-	$(Q)$(TARGET_STRIP) $@
++ 
++ $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
++ 	$(E) "LINK      $@"
++ 	$(Q)$(TARGET_LD) $(TARGET_ALDFLAGS) -o $@ $(LUAJIT_O) -lluajit -L. $(TARGET_ALIBS)
++-	$(Q)$(TARGET_STRIP) $@
++ 	$(E) "OK        Successfully built LuaJIT"
++ 
++ ##############################################################################
+diff --git a/package/luajit/luajit-04-no-bin-symlink.patch b/package/luajit/luajit-04-no-bin-symlink.patch
+new file mode 100644
+index 0000000..3eed7de
+--- /dev/null
++++ b/package/luajit/luajit-04-no-bin-symlink.patch
+@@ -0,0 +1,40 @@
++Do not use a symlink for the binary, simply name if luajit
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -41,8 +41,7 @@
++ INSTALL_MAN= $(INSTALL_SHARE)/man/man1
++ INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
++ 
++-INSTALL_TNAME= luajit-$(VERSION)
++-INSTALL_TSYMNAME= luajit
+++INSTALL_TNAME= luajit
++ INSTALL_ANAME= libluajit-$(ABIVER).a
++ INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
++ INSTALL_SOSHORT= libluajit-$(ABIVER).so
++@@ -56,7 +55,6 @@
++ INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
++ INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
++ INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
++-INSTALL_TSYM= $(INSTALL_BIN)/$(INSTALL_TSYMNAME)
++ INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
++ 
++ INSTALL_DIRS= $(INSTALL_BIN) $(INSTALL_LIB) $(INSTALL_INC) $(INSTALL_MAN) \
++@@ -114,13 +112,6 @@
++ 	  $(RM) $(FILE_PC).tmp
++ 	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
++ 	cd lib && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
++-	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
++-	@echo ""
++-	@echo "Note: the beta releases deliberately do NOT install a symlink for luajit"
++-	@echo "You can do this now by running this command (with sudo):"
++-	@echo ""
++-	@echo "  $(SYMLINK) $(INSTALL_TNAME) $(INSTALL_TSYM)"
++-	@echo ""
++ 
++ ##############################################################################
++ 
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+new file mode 100644
+index 0000000..84af2e6
+--- /dev/null
++++ b/package/luajit/luajit.mk
+@@ -0,0 +1,61 @@
++#############################################################
++#
++# luajit
++#
++#############################################################
++
++LUAJIT_VERSION = 2.0.0-beta10
++LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
++LUAJIT_SITE    = http://luajit.org/download
++
++LUAJIT_INSTALL_STAGING = YES
++
++define LUAJIT_NOLARGEFILE_FIX_MAKEFILE
++	$(SED) 's/TARGET_XCFLAGS= -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE/TARGET_XCFLAGS=/' $(@D)/src/Makefile
++endef
++
++ifneq ($(BR2_LARGEFILE),y)
++LUAJIT_POST_PATCH_HOOKS += LUAJIT_NOLARGEFILE_FIX_MAKEFILE
++endif
++
++# The luajit build procedure requires the host compiler to have the
++# same bitness as the target compiler. So when the target is a 32 bits
++# target, we pass -m32 to ensure that even on 64 bits hosts, a
++# compiler of the same bitness is used. However, this doesn't work for
++# x86 hosts targetting a x86_64 machine.
++ifeq ($(BR2_ARCH_IS_64),y)
++LUAJIT_HOST_CC=$(HOSTCC)
++else
++LUAJIT_HOST_CC=$(HOSTCC) -m32
++endif
++
++# We unfortunately can't use TARGET_CONFIGURE_OPTS, because the luajit
++# build system uses non conventional variable names.
++define LUAJIT_BUILD_CMDS
++	$(MAKE) PREFIX="/usr" \
++		STATIC_CC="$(TARGET_CC)" \
++		DYNAMIC_CC="$(TARGET_CC) -fPIC" \
++		TARGET_LD="$(TARGET_CC)" \
++		TARGET_AR="$(TARGET_AR) rcus" \
++		TARGET_STRIP="$(TARGET_STRIP)" \
++		CFLAGS="$(TARGET_CFLAGS)" \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
++		HOST_CC="$(LUAJIT_HOST_CC)" \
++		HOST_CFLAGS="$(HOST_CFLAGS)" \
++		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
++		-C $(@D) amalg
++endef
++
++define LUAJIT_INSTALL_STAGING_CMDS
++	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
++endef
++
++define LUAJIT_INSTALL_TARGET_CMDS
++	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
++endef
++
++define LUAJIT_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
