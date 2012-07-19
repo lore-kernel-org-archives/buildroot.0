@@ -1,35 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 19 Jul 2012 13:53:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 5366] can't login (root or default)
-In-Reply-To: <bug-5366-163@https.bugs.busybox.net/>
-References: <bug-5366-163@https.bugs.busybox.net/>
-Message-ID: <20120719135315.3719296BD5@busybox.osuosl.org>
+From: =?ISO-8859-1?B?Qmr2cm4=?= Kirchner <bjoern@am-soft.de>
+Date: Thu, 19 Jul 2012 15:24:58 +0200
+Subject: [Buildroot] Network problem with buildroot 2012.05
+Message-ID: <20120719152458.1945a8f6@hp>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5366
+Hello list,
 
---- Comment #2 from Shokurov Anton V. <anton@fit.com.ru> 2012-07-19 13:53:15 UTC ---
-(In reply to comment #1)
-> Can you try disabling BR2_PACKAGE_UTIL_LINUX_AGETTY=y and doing a full rebuild
-> (make clean; make) ?
+I built a buildroot system for a Mini2440 system and tried
+different configurations for the linux kernel. But with
+all configurations tested so far, the network was unusable.
+Pinging the device from my developement host let to dropped
+packets between 66 to 75 % of the sent packats. There were
+also messages about broken or malformed answers received.
+To exclude a hardware problem I exchanged network cables.
+This did not change anything.
 
-Yup,...
-It did not help.
-I have a feeling it has to do with the WCHAR (the last time i had such a
-problem disabling it and everything that depended on it solved the problem).
+With the linux system supplied by the manufactor of the
+Mini2440 system, network worked flawlessly. Also there
+were no network problems when the u-boot bootloader was
+loaded. Pinging the device then worked without errors.
+
+I also tried ptxdist with the board support package which
+is especially designed for the Mini2440. Surprisingly the
+same ping problem occured.
+
+I am quite lost here. Does anybody have an idea what can
+cause this behaviour or what to test to narrow the cause
+down?
 
 
+Thank you for any help in advance.
 
-> 
-> We generally only use the getty program from Busybox, so if you use the getty
-> program from util-linux, there may be a need to adapt certain configuration
-> files.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bj?rn
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config-buildroot-2012.05-mini2440
+Type: application/octet-stream
+Size: 25432 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120719/211ecf22/attachment-0001.obj>
