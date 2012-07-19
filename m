@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jul 2012 23:45:25 +0200
-Subject: [Buildroot] [git commit] bwm-ng: move bwm-ng from "Networking
-	applications" to "System tools".
-Message-ID: <20120719214536.8878896B2B@busybox.osuosl.org>
+Date: Thu, 19 Jul 2012 23:50:41 +0200
+Subject: [Buildroot] [PATCH  2/2] New package: cpuload
+In-Reply-To: <1342688049-12065-2-git-send-email-keguang.zhang@gmail.com>
+References: <1342688049-12065-1-git-send-email-keguang.zhang@gmail.com>
+ <1342688049-12065-2-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <20120719235041.46ba9c2c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b3e06f239b9c12074f88bdfd3c95b3cad0e9f1e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Thu, 19 Jul 2012 16:54:09 +0800,
+Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
 
-bwm-ng can monitor not only network bandwidth but also disk-io
-bandwidth, so it is more appropriate to put bwm-ng into System tools.
+> Add new package: cpuload
+> 
+> cpuload is a simple tool to obtain intuitive vision of CPU load
+> (including total, user, system, irq and softirq) within a certain
+> time, which is especially useful for embedded system without GUI.
+> 
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Your code includes <wchar.h>, but the package does not depend on
+BR2_USE_WCHAR. Did you try to build your package with the minimal
+uClibc settings (i.e wchar, IPv6, RPC, locale, etc. disabled) to see if
+it builds without requiring any special toolchain feature?
 
-diff --git a/package/Config.in b/package/Config.in
-index 6aabb8e..154b82c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -511,7 +511,6 @@ endif
- source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
--source "package/bwm-ng/Config.in"
- source "package/can-utils/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
-@@ -658,6 +657,7 @@ source "package/attr/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
-+source "package/bwm-ng/Config.in"
- source "package/htop/Config.in"
- source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
