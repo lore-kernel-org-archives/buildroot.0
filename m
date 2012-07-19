@@ -1,72 +1,47 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Thu, 19 Jul 2012 16:54:09 +0800
-Subject: [Buildroot]  [PATCH  2/2] New package: cpuload
-In-Reply-To: <1342688049-12065-1-git-send-email-keguang.zhang@gmail.com>
-References: <1342688049-12065-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <1342688049-12065-2-git-send-email-keguang.zhang@gmail.com>
+From: gregory hermant <gregory.hermant@calao-systems.com>
+Date: Thu, 19 Jul 2012 11:34:48 +0200
+Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems
+	USB-A9G20-LPW
+In-Reply-To: <20120713214717.78bcb790@skate>
+References: <4FFD9086.20804@calao-systems.com> <20120713214717.78bcb790@skate>
+Message-ID: <5007D4B8.4010906@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new package: cpuload
+Hi thomas,
 
-cpuload is a simple tool to obtain intuitive vision of CPU load
-(including total, user, system, irq and softirq) within a certain
-time, which is especially useful for embedded system without GUI.
+Thomas Petazzoni wrote:
+> Le Wed, 11 Jul 2012 16:41:10 +0200,
+> gregory hermant <gregory.hermant@calao-systems.com> a ?crit :
+> 
+>> Hi,
+>> Attached a new patch for the USB-A9G20-LPW. 
+>> I2C and RTC support added in the linux kernel defconfig file. 
+> 
+> This shouldn't be part of the commit log. If you want to provide a
+> changelog from the previous version, put it after the --- line below.
+> 
+>>  .../at91bootstrap-1.16-usb-a9g20-lpw.patch         |  610 ++++++++++++++++++++
+>>  .../barebox-2012.07.0-usb-a9g20-lpw.patch          |   12 +
+> 
+> Is the barebox patch really necessary? Has it been submitted upstream?
+> 
+Not yet submitted.
+Actually with the default config file, barebox.bin is > 256KB.
+I have to see how to solve this minor issue.
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
----
- package/Config.in          |    1 +
- package/cpuload/Config.in  |    8 ++++++++
- package/cpuload/cpuload.mk |   11 +++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/cpuload/Config.in
- create mode 100644 package/cpuload/cpuload.mk
+>>  board/calao/usb-a9g20-lpw/usb_a9g20_lpw_defconfig  |  105 ++++
+> 
+> This file is the kernel configuration, it should rather be named
+> linux-<version>.config (see other boards in board/).
+> 
+ok
+> Thanks,
+> 
+> Thomas
 
-diff --git a/package/Config.in b/package/Config.in
-index 154b82c..817716b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -658,6 +658,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
- source "package/bwm-ng/Config.in"
-+source "package/cpuload/Config.in"
- source "package/htop/Config.in"
- source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/cpuload/Config.in b/package/cpuload/Config.in
-new file mode 100644
-index 0000000..82bc450
---- /dev/null
-+++ b/package/cpuload/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CPULOAD
-+	bool "cpuload"
-+	help
-+	  cpuload is a simple tool to obtain intuitive vision of CPU load
-+	  (including total, user, system, irq and softirq) within a certain
-+	  time, which is especially useful for embedded system without GUI.
-+
-+	  https://github.com/kelvincheung/cpuload
-diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
-new file mode 100644
-index 0000000..2cbe82a
---- /dev/null
-+++ b/package/cpuload/cpuload.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# cpuload
-+#
-+#############################################################
-+
-+CPULOAD_VERSION = v0.2
-+CPULOAD_SITE = git://github.com/kelvincheung/cpuload.git
-+
-+
-+$(eval $(autotools-package))
--- 
-1.7.1
+Thanks
+gregory
