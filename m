@@ -1,48 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jul 2012 09:42:03 +0200
-Subject: [Buildroot] [PATCH 1/4] Rework support for the device tree
-In-Reply-To: <5006E601.4080807@essensium.com>
-References: <1341309676-18681-1-git-send-email-maxime.ripard@free-electrons.com>
- <1341309676-18681-2-git-send-email-maxime.ripard@free-electrons.com>
- <20120716145708.5f2a1bf7@skate> <5006E601.4080807@essensium.com>
-Message-ID: <20120719094203.493bd336@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 19 Jul 2012 07:50:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 5366] New: can't login (root or default)
+Message-ID: <bug-5366-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 18 Jul 2012 18:36:17 +0200,
-Arnout Vandecappelle <arnout.vandecappelle@essensium.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=5366
 
-> > Do you really need to create the directory here? I would suspect that
-> > all arches supporting the Device Tree already have their boot/dts/
-> > directory, no?
-> 
->   Nope.  For instance in 3.0 there was preliminary DTS support for ARM,
-> but no arch/arm/boot/dts directory.  That said, I'm not entirely sure if the
-> foo.dtb target would even work, because I don't see a rule for producing
-> it for arm in 3.0...
+           Summary: can't login (root or default)
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: anton at fit.com.ru
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Realistically, the ARM DT support was so limited (in number of
-platforms supported) in 3.0 that I don't think it's worth the effort. I
-think we can safely assume that for all practical cases,
-arch/<ARCH>/boot/dts exists.
 
-> > Hum, here when I do a make foobar.dtb, the foobar.dtb file ends up in
-> > the main kernel source tree, not in arch/arm/boot/.
->   That's strange... For which architecture and kernel version?
+Created attachment 4424
+  --> https://bugs.busybox.net/attachment.cgi?id=4424
+config file for the buildroot
 
-That's just complete crap from my side. I got confused by the big
-command line I typically use to build the kernel and concatenate the
-DTB. The DTB indeed ends up in arch/arm/boot and Maxime's code is
-correct in that respect.
+After building the rootfs it seems that i can't login.
+For instance, after the login prompt i type 'root', then it asks for the
+password (from what i understand it should have skipped that and show the shell
+prompt).
 
-Thanks!
+"
+Welcome to Buildroot
+buildroot login: root
+Password: 
+Login incorrect
 
-Thomas
+buildroot login: default
+Password: 
+Login incorrect
+
+buildroot login: 
+"
+
+The corresponding config file is included in the attachment.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
