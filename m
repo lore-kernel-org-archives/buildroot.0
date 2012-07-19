@@ -1,77 +1,300 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 20 Jul 2012 00:07:49 +0200
-Subject: [Buildroot] [git commit] Add support for the Calao-systems
-	USB-A9G20-LPW
-Message-ID: <20120719220836.7379C96BF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Add support for the Calao-systems USB-A9263
+Message-ID: <20120719220836.5926F96BB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9dbea60df834372d4586ab9fa74d68ccf5ad57a3
+commit: http://git.buildroot.net/buildroot/commit/?id=393829dae063896d6288c06787101341b706a63f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../at91bootstrap-1.16-usb-a9g20-lpw.patch         |  610 ++++++++++++++++++++
- .../barebox-2012.07.0-usb-a9g20-lpw.patch          |   12 +
- board/calao/usb-a9g20-lpw/linux-3.4.4.config       |  105 ++++
- configs/calao_usb_a9g20_lpw_defconfig              |   15 +
- 4 files changed, 742 insertions(+), 0 deletions(-)
+ .../usb-a9263/at91bootstrap-1.16-usb-a9263.patch   |  851 ++++++++++++++++++++
+ board/calao/usb-a9263/linux-3.4.4.config           |  102 +++
+ configs/calao_usb_a9263_defconfig                  |   14 +
+ 3 files changed, 967 insertions(+), 0 deletions(-)
 
-diff --git a/board/calao/usb-a9g20-lpw/at91bootstrap-1.16-usb-a9g20-lpw.patch b/board/calao/usb-a9g20-lpw/at91bootstrap-1.16-usb-a9g20-lpw.patch
+diff --git a/board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch b/board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch
 new file mode 100644
-index 0000000..06a89ed
+index 0000000..5798930
 --- /dev/null
-+++ b/board/calao/usb-a9g20-lpw/at91bootstrap-1.16-usb-a9g20-lpw.patch
-@@ -0,0 +1,610 @@
-+From 8d84757d5170969e8bdfebc7951f43c5aa2b05fd Mon Sep 17 00:00:00 2001
++++ b/board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch
+@@ -0,0 +1,851 @@
++From 74796655212d321f50ab89e8c5570245901f4cba Mon Sep 17 00:00:00 2001
 +From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Fri, 6 Jul 2012 16:32:47 +0200
-+Subject: [PATCH] Add support for the Calao-systems USB-A9G20-LPW
++Date: Thu, 5 Jul 2012 18:44:07 +0200
++Subject: [PATCH] Add support for the Calao-systems USB-A9263
 +
 +
 +Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 +---
-+ board/usb_a9g20_lpw/nandflash/Makefile        |  121 ++++++++++
-+ board/usb_a9g20_lpw/nandflash/usb-a9g20-lpw.h |  112 +++++++++
-+ board/usb_a9g20_lpw/usb_a9g20_lpw.c           |  303 +++++++++++++++++++++++++
-+ crt0_gnu.S                                    |    7 +
-+ include/part.h                                |    6 +-
-+ 5 files changed, 548 insertions(+), 1 deletions(-)
-+ create mode 100644 board/usb_a9g20_lpw/nandflash/Makefile
-+ create mode 100644 board/usb_a9g20_lpw/nandflash/usb-a9g20-lpw.h
-+ create mode 100644 board/usb_a9g20_lpw/usb_a9g20_lpw.c
++ board/usb_a9263/dataflash/Makefile    |  115 +++++++++++++
++ board/usb_a9263/dataflash/usb-a9263.h |   97 +++++++++++
++ board/usb_a9263/nandflash/Makefile    |  117 ++++++++++++++
++ board/usb_a9263/nandflash/usb-a9263.h |  116 +++++++++++++
++ board/usb_a9263/usb_a9263.c           |  285 +++++++++++++++++++++++++++++++++
++ crt0_gnu.S                            |    7 +
++ driver/dataflash.c                    |    6 +-
++ include/part.h                        |    6 +-
++ 8 files changed, 745 insertions(+), 4 deletions(-)
++ create mode 100644 board/usb_a9263/dataflash/Makefile
++ create mode 100644 board/usb_a9263/dataflash/usb-a9263.h
++ create mode 100644 board/usb_a9263/nandflash/Makefile
++ create mode 100644 board/usb_a9263/nandflash/usb-a9263.h
++ create mode 100644 board/usb_a9263/usb_a9263.c
 +
-+diff --git a/board/usb_a9g20_lpw/nandflash/Makefile b/board/usb_a9g20_lpw/nandflash/Makefile
++diff --git a/board/usb_a9263/dataflash/Makefile b/board/usb_a9263/dataflash/Makefile
 +new file mode 100644
-+index 0000000..8c9d99a
++index 0000000..332685e
 +--- /dev/null
-++++ b/board/usb_a9g20_lpw/nandflash/Makefile
-+@@ -0,0 +1,121 @@
+++++ b/board/usb_a9263/dataflash/Makefile
++@@ -0,0 +1,115 @@
 ++# TODO: set this appropriately for your local toolchain
-++ifndef ERASE_FCT
-++ERASE_FCT=rm -f
-++endif
-++ifndef CROSS_COMPILE
+++#SHELL=C:\CYGWIN_REP\dwn_071004\bin\BASH.exe
 ++CROSS_COMPILE=arm-elf-
-++endif
+++#CROSS_COMPILE = arm-softfloat-linux-gnu-
 ++
 ++TOOLCHAIN=gcc
 ++
 ++BOOTSTRAP_PATH=../../..
 ++
-++# NandFlashBoot Configuration for USB-A9G20-LPW
+++# DataFlashBoot Configuration for USB-A9263
 ++
 ++# Target name (case sensitive!!!)
-++TARGET=AT91SAM9G20
+++TARGET=AT91SAM9263
 ++# Board name (case sensitive!!!)
-++BOARD=usb_a9g20_lpw
+++BOARD=usb_a9263
 ++# Link Address and Top_of_Memory
-++LINK_ADDR=0x200000
-++TOP_OF_MEMORY=0x301000
+++LINK_ADDR=0x300000
+++TOP_OF_MEMORY=0x314000
+++# Name of current directory
+++PROJECT=dataflash
+++
+++ifndef BOOT_NAME
+++BOOT_NAME=$(PROJECT)_$(BOARD)
+++endif
+++
+++INCL=./$(BOOTSTRAP_PATH)/board/$(BOARD)/$(PROJECT)
+++
+++ifeq ($(TOOLCHAIN), gcc)
+++
+++AS=$(CROSS_COMPILE)gcc
+++CC=$(CROSS_COMPILE)gcc
+++LD=$(CROSS_COMPILE)gcc
+++NM= $(CROSS_COMPILE)nm
+++SIZE=$(CROSS_COMPILE)size
+++OBJCOPY=$(CROSS_COMPILE)objcopy
+++OBJDUMP=$(CROSS_COMPILE)objdump
+++CCFLAGS=-g -mcpu=arm9 -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
+++ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
+++
+++# Linker flags.
+++#  -Wl,...:     tell GCC to pass this to linker.
+++#    -Map:      create map file
+++#    --cref:    add cross reference to map file
+++LDFLAGS+=-nostartfiles -nostdlib  -Wl,-Map=$(BOOT_NAME).map,--cref
+++LDFLAGS+=-T $(BOOTSTRAP_PATH)/elf32-littlearm.lds -Ttext $(LINK_ADDR)
+++OBJS=crt0_gnu.o
+++
+++endif
+++
+++OBJS+=\
+++	$(BOARD).o \
+++	main.o \
+++	gpio.o \
+++	pmc.o \
+++	debug.o \
+++	sdramc.o \
+++	dataflash.o \
+++	_udivsi3.o \
+++	_umodsi3.o \
+++	div0.o \
+++	udiv.o \
+++	string.o
+++
+++rebuild: clean all
+++
+++all: 	$(BOOT_NAME)
+++
+++ifeq ($(TOOLCHAIN), gcc)
+++$(BOOT_NAME): $(OBJS)
+++	$(LD) $(LDFLAGS) -n -o $(BOOT_NAME).elf $(OBJS)
+++	$(OBJCOPY) --strip-debug --strip-unneeded $(BOOT_NAME).elf -O binary $(BOOT_NAME).bin
+++endif
+++	
+++	
+++$(BOARD).o: $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c -o $(BOARD).o
+++
+++main.o: $(BOOTSTRAP_PATH)/main.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/main.c -o main.o
+++
+++gpio.o: $(BOOTSTRAP_PATH)/driver/gpio.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/gpio.c -o gpio.o
+++
+++pmc.o:  $(BOOTSTRAP_PATH)/driver/pmc.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/pmc.c -o pmc.o
+++
+++debug.o: $(BOOTSTRAP_PATH)/driver/debug.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/debug.c -o debug.o
+++
+++sdramc.o:  $(BOOTSTRAP_PATH)/driver/sdramc.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/sdramc.c -o sdramc.o
+++
+++dataflash.o:  $(BOOTSTRAP_PATH)/driver/dataflash.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/driver/dataflash.c -o dataflash.o
+++
+++crt0_gnu.o:  $(BOOTSTRAP_PATH)/crt0_gnu.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/crt0_gnu.S -o crt0_gnu.o
+++
+++div0.o:  $(BOOTSTRAP_PATH)/lib/div0.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/div0.c -o div0.o
+++
+++string.o:  $(BOOTSTRAP_PATH)/lib/string.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/string.c -o string.o
+++
+++udiv.o:  $(BOOTSTRAP_PATH)/lib/udiv.c 
+++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/lib/udiv.c -o udiv.o
+++
+++_udivsi3.o:  $(BOOTSTRAP_PATH)/lib/_udivsi3.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_udivsi3.S -o _udivsi3.o
+++
+++_umodsi3.o:  $(BOOTSTRAP_PATH)/lib/_umodsi3.S
+++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_umodsi3.S -o _umodsi3.o
+++
+++clean:
+++	rm -f *.o *.bin *.elf *.map
++diff --git a/board/usb_a9263/dataflash/usb-a9263.h b/board/usb_a9263/dataflash/usb-a9263.h
++new file mode 100644
++index 0000000..40a3af8
++--- /dev/null
+++++ b/board/usb_a9263/dataflash/usb-a9263.h
++@@ -0,0 +1,97 @@
+++/* ----------------------------------------------------------------------------
+++ *         ATMEL Microcontroller Software Support  -  ROUSSET  -
+++ * ----------------------------------------------------------------------------
+++ * Copyright (c) 2006, Atmel Corporation
+++
+++ * All rights reserved.
+++ *
+++ * Redistribution and use in source and binary forms, with or without
+++ * modification, are permitted provided that the following conditions are met:
+++ *
+++ * - Redistributions of source code must retain the above copyright notice,
+++ * this list of conditions and the disclaimer below.
+++ *
+++ * Atmel's name may not be used to endorse or promote products derived from
+++ * this software without specific prior written permission.
+++ *
+++ * DISCLAIMER: THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR
+++ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+++ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+++ * DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA,
+++ * OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+++ * ----------------------------------------------------------------------------
+++ * File Name           : usb-a9263.h
+++ * Object              :
+++ * Creation            : GH Jun 28th 2012
+++ *-----------------------------------------------------------------------------
+++ */
+++#ifndef _USB_A9263_H
+++#define _USB_A9263_H
+++
+++/* ******************************************************************* */
+++/* PMC Settings                                                        */
+++/*                                                                     */
+++/* The main oscillator is enabled as soon as possible in the c_startup */
+++/* and MCK is switched on the main oscillator.                         */
+++/* PLL initialization is done later in the hw_init() function          */
+++/* ******************************************************************* */
+++#define MASTER_CLOCK		(180000000/2)
+++#define PLL_LOCK_TIMEOUT	1000000
+++
+++#define PLLA_SETTINGS	0x20593F06
+++#define PLLB_SETTINGS	0x10483F0E
+++
+++/* Switch MCK on PLLA output PCK = PLLA = 2 * MCK */
+++#define MCKR_SETTINGS		(AT91C_PMC_PRES_CLK | AT91C_PMC_MDIV_2)
+++#define MCKR_CSS_SETTINGS	(AT91C_PMC_CSS_PLLA_CLK | MCKR_SETTINGS)
+++
+++/* ******************************************************************* */
+++/* DataFlash Settings                                                  */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_BASE_SPI	AT91C_BASE_SPI0
+++#define AT91C_ID_SPI	AT91C_ID_SPI0
+++
+++/* SPI CLOCK */
+++#define AT91C_SPI_CLK 		 8000000
+++/* AC characteristics */
+++/* DLYBS = tCSS= 250ns min and DLYBCT = tCSH = 250ns */
+++#define DATAFLASH_TCSS		(0x1a << 16)	/* 250ns min (tCSS) <=> 12/48000000 = 250ns */
+++#define DATAFLASH_TCHS		(0x1 << 24)	/* 250ns min (tCSH) <=> (64*1+SCBR)/(2*48000000) */
+++
+++#define DF_CS_SETTINGS 		(AT91C_SPI_NCPHA | (AT91C_SPI_DLYBS & DATAFLASH_TCSS) | (AT91C_SPI_DLYBCT & DATAFLASH_TCHS) | ((MASTER_CLOCK / AT91C_SPI_CLK) << 8))
+++
+++/* ******************************************************************* */
+++/* SDRAMC Settings                                                     */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_BASE_SDRAMC 	AT91C_BASE_SDRAMC0
+++#define AT91C_EBI_SDRAM		AT91C_EBI0_SDRAM
+++
+++/* ******************************************************************* */
+++/* BootStrap Settings                                                  */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
+++
+++#define IMG_ADDRESS 			0x4000			/* Image Address in DataFlash */
+++#define	IMG_SIZE			0x40000			/* Image Size in DataFlash    */
+++
+++#define MACH_TYPE       		0x6AE       		/* USB-A9263 */
+++#define JUMP_ADDR			0x23F00000		/* Final Jump Address 	      */
+++
+++/* ******************************************************************* */
+++/* Application Settings                                                */
+++/* ******************************************************************* */
+++#define CFG_HW_INIT
+++#define CFG_SDRAM
+++#undef	CFG_DEBUG
+++
+++#define CFG_DATAFLASH
+++
+++#endif	/* _USB_A9263_H */
++diff --git a/board/usb_a9263/nandflash/Makefile b/board/usb_a9263/nandflash/Makefile
++new file mode 100644
++index 0000000..c453098
++--- /dev/null
+++++ b/board/usb_a9263/nandflash/Makefile
++@@ -0,0 +1,117 @@
+++# TODO: set this appropriately for your local toolchain
+++#SHELL=C:\CYGWIN_REP\dwn_071004\bin\BASH.exe
+++CROSS_COMPILE=arm-elf-
+++
+++TOOLCHAIN=gcc
+++
+++BOOTSTRAP_PATH=../../..
+++
+++# NandFlashBoot Configuration for USB-A9263
+++
+++# Target name (case sensitive!!!)
+++TARGET=AT91SAM9263
+++# Board name (case sensitive!!!)
+++BOARD=usb_a9263
+++# Link Address and Top_of_Memory
+++LINK_ADDR=0x300000
+++TOP_OF_MEMORY=0x314000
 ++# Name of current directory
 ++PROJECT=nandflash
 ++
@@ -90,14 +313,14 @@ index 0000000..06a89ed
 ++SIZE=$(CROSS_COMPILE)size
 ++OBJCOPY=$(CROSS_COMPILE)objcopy
 ++OBJDUMP=$(CROSS_COMPILE)objdump
-++CCFLAGS=-g -mcpu=arm926ej-s -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
-++ASFLAGS=-g -mcpu=arm926ej-s -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
+++CCFLAGS=-g -mcpu=arm9 -O0 -Wall -D$(TARGET) -D$(BOARD) -I$(INCL)
+++ASFLAGS=-g -mcpu=arm9 -c -Os -Wall -D$(TARGET) -D$(BOARD) -I$(INCL) -DTOP_OF_MEM=$(TOP_OF_MEMORY)
 ++
 ++# Linker flags.
 ++#  -Wl,...:     tell GCC to pass this to linker.
 ++#    -Map:      create map file
 ++#    --cref:    add cross reference to map file
-++LDFLAGS+=-nostartfiles -nostdlib -Wl,-Map=$(BOOT_NAME).map,--cref
+++LDFLAGS+=-nostartfiles -nostdlib  -Wl,-Map=$(BOOT_NAME).map,--cref
 ++LDFLAGS+=-T $(BOOTSTRAP_PATH)/elf32-littlearm.lds -Ttext $(LINK_ADDR)
 ++OBJS=crt0_gnu.o
 ++
@@ -126,9 +349,9 @@ index 0000000..06a89ed
 ++	$(LD) $(LDFLAGS) -n -o $(BOOT_NAME).elf $(OBJS)
 ++	$(OBJCOPY) --strip-debug --strip-unneeded $(BOOT_NAME).elf -O binary $(BOOT_NAME).bin
 ++endif
-++
-++
-++$(BOARD).o: $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c
+++	
+++	
+++$(BOARD).o: $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c 
 ++	$(CC) -c $(CCFLAGS) $(BOOTSTRAP_PATH)/board/$(BOARD)/$(BOARD).c -o $(BOARD).o
 ++
 ++main.o: $(BOOTSTRAP_PATH)/main.c 
@@ -171,17 +394,17 @@ index 0000000..06a89ed
 ++	$(AS) $(ASFLAGS) $(BOOTSTRAP_PATH)/lib/_umodsi3.S -o _umodsi3.o
 ++
 ++clean:
-++	$(ERASE_FCT) *.o *.bin *.elf *.map
-+diff --git a/board/usb_a9g20_lpw/nandflash/usb-a9g20-lpw.h b/board/usb_a9g20_lpw/nandflash/usb-a9g20-lpw.h
+++	rm -f *.o *.bin *.elf *.map
++diff --git a/board/usb_a9263/nandflash/usb-a9263.h b/board/usb_a9263/nandflash/usb-a9263.h
 +new file mode 100644
-+index 0000000..c0bdc6e
++index 0000000..24e2cf1
 +--- /dev/null
-++++ b/board/usb_a9g20_lpw/nandflash/usb-a9g20-lpw.h
-+@@ -0,0 +1,112 @@
+++++ b/board/usb_a9263/nandflash/usb-a9263.h
++@@ -0,0 +1,116 @@
 ++/* ----------------------------------------------------------------------------
 ++ *         ATMEL Microcontroller Software Support  -  ROUSSET  -
 ++ * ----------------------------------------------------------------------------
-++ * Copyright (c) 2008, Atmel Corporation
+++ * Copyright (c) 2006, Atmel Corporation
 ++
 ++ * All rights reserved.
 ++ *
@@ -205,13 +428,13 @@ index 0000000..06a89ed
 ++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 ++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ++ * ----------------------------------------------------------------------------
-++ * File Name           : usb-a9g20-lpw.h
+++ * File Name           : usb-a9263.h
 ++ * Object              :
-++ * Creation            : GH July 6th 2012
+++ * Creation            : GH Jun 28th 2012
 ++ *-----------------------------------------------------------------------------
 ++ */
-++#ifndef _USB_A9G20_LPW_H
-++#define _USB_A9G20_LPW_H
+++#ifndef _USB_A9263_H
+++#define _USB_A9263_H
 ++
 ++/* ******************************************************************* */
 ++/* PMC Settings                                                        */
@@ -220,15 +443,14 @@ index 0000000..06a89ed
 ++/* and MCK is switched on the main oscillator.                         */
 ++/* PLL initialization is done later in the hw_init() function          */
 ++/* ******************************************************************* */
-++#define MASTER_CLOCK		(133000000)
+++#define MASTER_CLOCK		(180000000/2)
 ++#define PLL_LOCK_TIMEOUT	1000000
 ++
-++/* Set PLLA to 798Mhz */
-++#define PLLA_SETTINGS	0x20843F02
-++#define PLLB_SETTINGS	0x100F3F02
+++#define PLLA_SETTINGS	0x20593F06
+++#define PLLB_SETTINGS	0x10483F0E
 ++
-++/* Switch MCK on PLLA output PCK = PLLA/2 = 3 * MCK */
-++#define MCKR_SETTINGS		0x1300
+++/* Switch MCK on PLLA output PCK = PLLA = 2 * MCK */
+++#define MCKR_SETTINGS		(AT91C_PMC_PRES_CLK | AT91C_PMC_MDIV_2)
 ++#define MCKR_CSS_SETTINGS	(AT91C_PMC_CSS_PLLA_CLK | MCKR_SETTINGS)
 ++
 ++/* ******************************************************************* */
@@ -240,41 +462,46 @@ index 0000000..06a89ed
 ++#define AT91_SMART_MEDIA_ALE    (1 << 21)	/* our ALE is AD21 */
 ++#define AT91_SMART_MEDIA_CLE    (1 << 22)	/* our CLE is AD22 */
 ++
-++#define NAND_DISABLE_CE() do { *(volatile unsigned int *)AT91C_PIOC_SODR = AT91C_PIO_PC14;} while(0)
-++#define NAND_ENABLE_CE() do { *(volatile unsigned int *)AT91C_PIOC_CODR = AT91C_PIO_PC14;} while(0)
+++#define NAND_DISABLE_CE() do { *(volatile unsigned int *)AT91C_PIOD_SODR = AT91C_PIO_PD15;} while(0)
+++#define NAND_ENABLE_CE()  do { *(volatile unsigned int *)AT91C_PIOD_CODR = AT91C_PIO_PD15;} while(0)
+++#define NAND_WAIT_READY() while (!(*(volatile unsigned int *)AT91C_PIOA_PDSR & AT91C_PIO_PA22))
 ++
-++#define NAND_WAIT_READY() while (!(*(volatile unsigned int *)AT91C_PIOC_PDSR & AT91C_PIO_PC13))
-++
+++/* ******************************************************************* */
+++/* SDRAMC Settings                                                     */
+++/*                                                                     */
+++/* ******************************************************************* */
+++#define AT91C_BASE_SDRAMC 	AT91C_BASE_SDRAMC0
+++#define AT91C_EBI_SDRAM		AT91C_EBI0_SDRAM
 ++
 ++/* ******************************************************************** */
-++/* SMC Chip Select 3 Timings for NandFlash for MASTER_CLOCK = 133000000.*/
-++/* Please refer to SMC section in AT91SAM9 datasheet to learn how 	*/
+++/* SMC Chip Select 3 Timings for NandFlash for MASTER_CLOCK = 90000000. */
+++/* Please refer to SMC section in AT91SAM9x datasheet to learn how 	*/
 ++/* to generate these values. 						*/
 ++/* ******************************************************************** */
-++#define AT91C_SM_NWE_SETUP	(2 << 0)
+++#define AT91C_SM_NWE_SETUP	(1 << 0)
 ++#define AT91C_SM_NCS_WR_SETUP	(0 << 8)
-++#define AT91C_SM_NRD_SETUP	(2 << 16)
+++#define AT91C_SM_NRD_SETUP	(1 << 16)
 ++#define AT91C_SM_NCS_RD_SETUP	(0 << 24)
 ++  
-++#define AT91C_SM_NWE_PULSE 	(4 << 0)
-++#define AT91C_SM_NCS_WR_PULSE	(4 << 8)
-++#define AT91C_SM_NRD_PULSE	(4 << 16)
-++#define AT91C_SM_NCS_RD_PULSE	(4 << 24)
+++#define AT91C_SM_NWE_PULSE 	(3 << 0)
+++#define AT91C_SM_NCS_WR_PULSE	(3 << 8)
+++#define AT91C_SM_NRD_PULSE	(3 << 16)
+++#define AT91C_SM_NCS_RD_PULSE	(3 << 24)
 ++  
-++#define AT91C_SM_NWE_CYCLE 	(7 << 0)
-++#define AT91C_SM_NRD_CYCLE	(7 << 16)
+++#define AT91C_SM_NWE_CYCLE 	(5 << 0)
+++#define AT91C_SM_NRD_CYCLE	(5 << 16)
 ++
-++#define AT91C_SM_TDF	        (3 << 16)
+++#define AT91C_SM_TDF	        (2 << 16)
 ++
 ++/* ******************************************************************* */
 ++/* BootStrap Settings                                                  */
 ++/*                                                                     */
 ++/* ******************************************************************* */
-++#define IMG_ADDRESS 		0x20000			/* Image Address in NandFlash */
-++#define	IMG_SIZE		0x40000			/* Image Size in NandFlash */
+++#define IMG_ADDRESS 	0x20000		/* Image Address in NandFlash */
+++#define	IMG_SIZE	0x40000		/* Image Size in NandFlash    */
 ++
-++#define MACH_TYPE		0x731			/* USB-A9G20 */
-++#define JUMP_ADDR		0x23F00000		/* Final Jump Address */
+++#define MACH_TYPE       0x6AE  		/* USB-A9263 */
+++#define JUMP_ADDR	0x23F00000	/* Final Jump Address 	      */
 ++
 ++/* ******************************************************************* */
 ++/* Application Settings                                                */
@@ -284,22 +511,22 @@ index 0000000..06a89ed
 ++
 ++#define CFG_NANDFLASH
 ++#undef	NANDFLASH_SMALL_BLOCKS	/* NANDFLASH_LARGE_BLOCKS used instead */
-++#undef  CFG_NANDFLASH_RECOVERY
 ++
-++#define	CFG_SDRAM
-++#define	CFG_HW_INIT
+++#define CFG_HW_INIT
+++#define CFG_SDRAM
 ++
-++#endif	/* _USB_A9G20_LPW_H */
-+diff --git a/board/usb_a9g20_lpw/usb_a9g20_lpw.c b/board/usb_a9g20_lpw/usb_a9g20_lpw.c
+++
+++#endif	/* _USB_A9263_H */
++diff --git a/board/usb_a9263/usb_a9263.c b/board/usb_a9263/usb_a9263.c
 +new file mode 100644
-+index 0000000..c372307
++index 0000000..5630f99
 +--- /dev/null
-++++ b/board/usb_a9g20_lpw/usb_a9g20_lpw.c
-+@@ -0,0 +1,303 @@
+++++ b/board/usb_a9263/usb_a9263.c
++@@ -0,0 +1,285 @@
 ++/* ----------------------------------------------------------------------------
 ++ *         ATMEL Microcontroller Software Support  -  ROUSSET  -
 ++ * ----------------------------------------------------------------------------
-++ * Copyright (c) 2008, Atmel Corporation
+++ * Copyright (c) 2006, Atmel Corporation
 ++
 ++ * All rights reserved.
 ++ *
@@ -307,7 +534,7 @@ index 0000000..06a89ed
 ++ * modification, are permitted provided that the following conditions are met:
 ++ *
 ++ * - Redistributions of source code must retain the above copyright notice,
-++ * this list of conditions and the disclaimer below.
+++ * this list of conditions and the disclaiimer below.
 ++ *
 ++ * Atmel's name may not be used to endorse or promote products derived from
 ++ * this software without specific prior written permission.
@@ -323,9 +550,9 @@ index 0000000..06a89ed
 ++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 ++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ++ * ----------------------------------------------------------------------------
-++ * File Name           : usb_a9g20_lpw.c
+++ * File Name           : usb_a9263.c
 ++ * Object              :
-++ * Creation            : GH July 6th 2012
+++ * Creation            : GH Jun 28th 2012
 ++ *-----------------------------------------------------------------------------
 ++ */
 ++#include "../../include/part.h"
@@ -353,22 +580,21 @@ index 0000000..06a89ed
 ++	__asm__("mcr p15, 0, %0, c1, c0, 0" : : "r" (value));
 ++}
 ++
+++
 ++#ifdef CFG_HW_INIT
-++/*----------------------------------------------------------------------------*/
-++/* \fn    hw_init							      */
-++/* \brief This function performs very low level HW initialization	      */
-++/* This function is invoked as soon as possible during the c_startup	      */
-++/* The bss segment must be initialized					      */
-++/*----------------------------------------------------------------------------*/
+++/*---------------------------------------------------------------------------- */
+++/* \fn    hw_init							       */
+++/* \brief This function performs very low level HW initialization	       */
+++/* This function is invoked as soon as possible during the c_startup	       */
+++/* The bss segment must be initialized					       */
+++/*---------------------------------------------------------------------------- */
 ++void hw_init(void)
 ++{
-++	unsigned int cp15;
-++	
 ++	/* Configure PIOs */
 ++	const struct pio_desc hw_pio[] = {
 ++#ifdef CFG_DEBUG
-++		{"RXD", AT91C_PIN_PB(14), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"TXD", AT91C_PIN_PB(15), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"RXD", AT91C_PIN_PC(30), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"TXD", AT91C_PIN_PC(31), 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++#endif
 ++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++	};
@@ -378,124 +604,113 @@ index 0000000..06a89ed
 ++
 ++	/* At this stage the main oscillator is supposed to be enabled
 ++	 * PCK = MCK = MOSC */
-++	writel(0x00, AT91C_BASE_PMC + PMC_PLLICPR);
 ++
 ++	/* Configure PLLA = MOSC * (PLL_MULA + 1) / PLL_DIVA */
 ++	pmc_cfg_plla(PLLA_SETTINGS, PLL_LOCK_TIMEOUT);
 ++
-++	/* PCK = PLLA/2 = 3 * MCK */
+++	/* PCK = PLLA = 2 * MCK */
 ++	pmc_cfg_mck(MCKR_SETTINGS, PLL_LOCK_TIMEOUT);
 ++	/* Switch MCK on PLLA output */
 ++	pmc_cfg_mck(MCKR_CSS_SETTINGS, PLL_LOCK_TIMEOUT);
 ++
+++
 ++	/* Configure PLLB */
 ++	pmc_cfg_pllb(PLLB_SETTINGS, PLL_LOCK_TIMEOUT);
 ++
-++	/* Configure CP15 */
-++	cp15 = get_cp15();
-++	cp15 |= I_CACHE;
-++	set_cp15(cp15);
-++
-++	/* Configure the PIO controller */
+++	/* Configure the PIO controller to output PCK0 */
 ++	pio_setup(hw_pio);
 ++
-++	/* Configure the EBI Slave Slot Cycle to 64 */
-++	writel((readl((AT91C_BASE_MATRIX + MATRIX_SCFG3)) & ~0xFF) | 0x40, (AT91C_BASE_MATRIX + MATRIX_SCFG3));
+++	/* Configure the EBI0 Slave Slot Cycle to 64 */
+++	writel( (readl((AT91C_BASE_MATRIX + MATRIX_SCFG4)) & ~0xFF) | 0x40, (AT91C_BASE_MATRIX + MATRIX_SCFG4));
 ++
 ++#ifdef CFG_DEBUG
 ++	/* Enable Debug messages on the DBGU */
 ++	dbg_init(BAUDRATE(MASTER_CLOCK, 115200));
-++
 ++	dbg_print("Start AT91Bootstrap...\n\r");
 ++#endif /* CFG_DEBUG */
 ++
 ++#ifdef CFG_SDRAM
-++	/* Initialize the matrix (VDDIOSEL=0: memory voltage = 1.8V ) */
-++	writel((readl(AT91C_BASE_CCFG + CCFG_EBICSA) & ~0x00010000) | AT91C_EBI_CS1A_SDRAMC , AT91C_BASE_CCFG + CCFG_EBICSA);
+++	/* Initialize the matrix */
+++	/* VDDIOMSEL = 1 -> Memories are 3.3V powered */
+++	writel(readl(AT91C_BASE_CCFG + CCFG_EBI0CSA) | (1 << 16) | AT91C_EBI_CS1A_SDRAMC, AT91C_BASE_CCFG + CCFG_EBI0CSA);
 ++
 ++	/* Configure SDRAM Controller */
 ++	sdram_init(	AT91C_SDRAMC_NC_9  |
 ++				AT91C_SDRAMC_NR_13 |
-++				AT91C_SDRAMC_CAS_3 |
+++				AT91C_SDRAMC_CAS_2 |
 ++				AT91C_SDRAMC_NB_4_BANKS |
 ++				AT91C_SDRAMC_DBW_32_BITS |
-++				AT91C_SDRAMC_TWR_3 |
-++				AT91C_SDRAMC_TRC_9 |
-++				AT91C_SDRAMC_TRP_3 |
-++				AT91C_SDRAMC_TRCD_3 |
-++				AT91C_SDRAMC_TRAS_6 |
-++				AT91C_SDRAMC_TXSR_10,		/* Control Register */
+++				AT91C_SDRAMC_TWR_2 |
+++				AT91C_SDRAMC_TRC_7 |
+++				AT91C_SDRAMC_TRP_2 |
+++				AT91C_SDRAMC_TRCD_2 |
+++				AT91C_SDRAMC_TRAS_5 |
+++				AT91C_SDRAMC_TXSR_8,		/* Control Register       */
 ++				(MASTER_CLOCK * 7)/1000000,	/* Refresh Timer Register */
-++                                AT91C_SDRAMC_MD_SDRAM);         /* SDRAM (no low power)   */
-++
-++#endif /* CFG_SDRAM */
+++				AT91C_SDRAMC_MD_SDRAM);		/* SDRAM (no low power)   */ 
+++#endif	/* CFG_SDRAM */
 ++}
 ++#endif /* CFG_HW_INIT */
 ++
+++
 ++#ifdef CFG_SDRAM
-++/*------------------------------------------------------------------------------*/
-++/* \fn    sdramc_hw_init							*/
-++/* \brief This function performs SDRAMC HW initialization			*/
-++/*------------------------------------------------------------------------------*/
+++//*----------------------------------------------------------------------------
+++//* \fn    sdramc_hw_init
+++//* \brief This function performs SDRAMC HW initialization
+++//*----------------------------------------------------------------------------*/
 ++void sdramc_hw_init(void)
 ++{
 ++	/* Configure PIOs */
-++/*	const struct pio_desc sdramc_pio[] = {
-++		{"D16", AT91C_PIN_PC(16), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D17", AT91C_PIN_PC(17), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D18", AT91C_PIN_PC(18), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D19", AT91C_PIN_PC(19), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D20", AT91C_PIN_PC(20), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D21", AT91C_PIN_PC(21), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D22", AT91C_PIN_PC(22), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D23", AT91C_PIN_PC(23), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D24", AT91C_PIN_PC(24), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D25", AT91C_PIN_PC(25), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D26", AT91C_PIN_PC(26), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D27", AT91C_PIN_PC(27), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D28", AT91C_PIN_PC(28), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D29", AT91C_PIN_PC(29), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D30", AT91C_PIN_PC(30), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"D31", AT91C_PIN_PC(31), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++	const struct pio_desc sdramc_pio[] = {
+++		{"D16", AT91C_PIN_PD(16), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D17", AT91C_PIN_PD(17), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D18", AT91C_PIN_PD(18), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D19", AT91C_PIN_PD(19), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D20", AT91C_PIN_PD(20), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D21", AT91C_PIN_PD(21), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D22", AT91C_PIN_PD(22), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D23", AT91C_PIN_PD(23), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D24", AT91C_PIN_PD(24), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D25", AT91C_PIN_PD(25), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D26", AT91C_PIN_PD(26), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D27", AT91C_PIN_PD(27), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D28", AT91C_PIN_PD(28), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D29", AT91C_PIN_PD(29), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D30", AT91C_PIN_PD(30), 0, PIO_DEFAULT, PIO_PERIPH_A},
+++		{"D31", AT91C_PIN_PD(31), 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++	};
-++*/
-++	/* Configure the SDRAMC PIO controller to output PCK0 */
-++/*	pio_setup(sdramc_pio); */
 ++
-++	writel(0xFFFF0000, AT91C_BASE_PIOC + PIO_ASR(0));
-++	writel(0xFFFF0000, AT91C_BASE_PIOC + PIO_PDR(0));
-++
+++	/* Configure the SDRAMC PIO controller */
+++	pio_setup(sdramc_pio);
 ++}
-++#endif /* CFG_SDRAM */
+++#endif
 ++
 ++#ifdef CFG_DATAFLASH
-++
 ++/*------------------------------------------------------------------------------*/
 ++/* \fn    df_recovery								*/
-++/* \brief This function erases DataFlash Page 0 if USR PB is pressed 		*/
+++/* \brief This function erases DataFlash Page 0 if USER PB is pressed 		*/
 ++/*        during boot sequence							*/
 ++/*------------------------------------------------------------------------------*/
 ++void df_recovery(AT91PS_DF pDf)
 ++{
-++#if (AT91C_SPI_PCS_DATAFLASH == AT91C_SPI_PCS1_DATAFLASH)
+++#if (AT91C_SPI_PCS_DATAFLASH == AT91C_SPI_PCS0_DATAFLASH)
 ++	/* Configure PIOs */
-++	const struct pio_desc usrpb[] = {
+++	const struct pio_desc usrpb_pio[] = {
 ++		{"USRPB", AT91C_PIN_PB(10), 0, PIO_PULLUP, PIO_INPUT},
 ++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++	};
 ++
 ++	/* Configure the PIO controller */
 ++	writel((1 << AT91C_ID_PIOB), PMC_PCER + AT91C_BASE_PMC);
-++	pio_setup(usrpb);
+++	pio_setup(usrpb_pio);
 ++	
-++	/* If USR PB is pressed during Boot sequence */
+++	/* If USER PB is pressed during Boot sequence */
 ++	/* Erase NandFlash block 0*/
 ++	if ( !pio_get_value(AT91C_PIN_PB(10)) )
 ++		df_page_erase(pDf, 0);
 ++#endif
 ++}
-++
 ++/*------------------------------------------------------------------------------*/
 ++/* \fn    df_hw_init								*/
 ++/* \brief This function performs DataFlash HW initialization			*/
@@ -504,15 +719,10 @@ index 0000000..06a89ed
 ++{
 ++	/* Configure PIOs */
 ++	const struct pio_desc df_pio[] = {
-++		{"MISO",  AT91C_PIN_PA(0), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"MOSI",  AT91C_PIN_PA(1), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++		{"SPCK",  AT91C_PIN_PA(2), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++#if (AT91C_SPI_PCS_DATAFLASH == AT91C_SPI_PCS0_DATAFLASH)
-++		{"NPCS0", AT91C_PIN_PA(3), 0, PIO_DEFAULT, PIO_PERIPH_A},
-++#endif
-++#if (AT91C_SPI_PCS_DATAFLASH == AT91C_SPI_PCS1_DATAFLASH)
-++		{"NPCS1", AT91C_PIN_PC(11), 0, PIO_DEFAULT, PIO_PERIPH_B},
-++#endif
+++		{"MISO",  AT91C_PIN_PA(0), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{"MOSI",  AT91C_PIN_PA(1), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{"SPCK",  AT91C_PIN_PA(2), 0, PIO_DEFAULT, PIO_PERIPH_B},
+++		{"NPCS0", AT91C_PIN_PA(5), 0, PIO_DEFAULT, PIO_PERIPH_B},
 ++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++	};
 ++
@@ -522,34 +732,29 @@ index 0000000..06a89ed
 ++#endif /* CFG_DATAFLASH */
 ++
 ++
-++
 ++#ifdef CFG_NANDFLASH
 ++/*------------------------------------------------------------------------------*/
-++/* \fn    nand_recovery						*/
+++/* \fn    nand_recovery								*/
 ++/* \brief This function erases NandFlash Block 0 if USER PB is pressed 		*/
 ++/*        during boot sequence							*/
 ++/*------------------------------------------------------------------------------*/
-++#ifdef CFG_NANDFLASH_RECOVERY
 ++static void nand_recovery(void)
 ++{
 ++	/* Configure PIOs */
-++	const struct pio_desc usrpb[] = {
+++	const struct pio_desc usrpb_pio[] = {
 ++		{"USRPB", AT91C_PIN_PB(10), 0, PIO_PULLUP, PIO_INPUT},
 ++		{(char *) 0, 0, 0, PIO_DEFAULT, PIO_PERIPH_A},
 ++	};
 ++
 ++	/* Configure the PIO controller */
 ++	writel((1 << AT91C_ID_PIOB), PMC_PCER + AT91C_BASE_PMC);
-++	pio_setup(usrpb);
+++	pio_setup(usrpb_pio);
 ++	
 ++	/* If USER PB is pressed during Boot sequence */
 ++	/* Erase NandFlash block 0*/
 ++	if (!pio_get_value(AT91C_PIN_PB(10)) )
 ++		AT91F_NandEraseBlock0();
 ++}
-++#else
-++static void nand_recovery(void) {}
-++#endif
 ++/*------------------------------------------------------------------------------*/
 ++/* \fn    nandflash_hw_init							*/
 ++/* \brief NandFlash HW init							*/
@@ -558,25 +763,27 @@ index 0000000..06a89ed
 ++{
 ++	/* Configure PIOs */
 ++	const struct pio_desc nand_pio[] = {
-++		{"RDY_BSY", AT91C_PIN_PC(13), 0, PIO_PULLUP, PIO_INPUT},
-++		{"NANDCS",  AT91C_PIN_PC(14), 0, PIO_PULLUP, PIO_OUTPUT},
+++		{"RDY_BSY", AT91C_PIN_PA(22), 0, PIO_PULLUP, PIO_INPUT},
+++		{"NANDCS",  AT91C_PIN_PD(15), 0, PIO_PULLUP, PIO_OUTPUT},
 ++		{(char *) 0, 0, 0,  PIO_DEFAULT, PIO_PERIPH_A},
 ++	};
 ++
 ++	/* Setup Smart Media, first enable the address range of CS3 in HMATRIX user interface */
-++	writel(readl(AT91C_BASE_CCFG + CCFG_EBICSA) | AT91C_EBI_CS3A_SM, AT91C_BASE_CCFG + CCFG_EBICSA);
+++	writel(readl(AT91C_BASE_CCFG + CCFG_EBI0CSA) | AT91C_EBI_CS3A_SM, AT91C_BASE_CCFG + CCFG_EBI0CSA);
 ++		    
 ++	/* Configure SMC CS3 */
-++ 	writel((AT91C_SM_NWE_SETUP | AT91C_SM_NCS_WR_SETUP | AT91C_SM_NRD_SETUP | AT91C_SM_NCS_RD_SETUP), AT91C_BASE_SMC + SMC_SETUP3);
-++  	writel((AT91C_SM_NWE_PULSE | AT91C_SM_NCS_WR_PULSE | AT91C_SM_NRD_PULSE | AT91C_SM_NCS_RD_PULSE), AT91C_BASE_SMC + SMC_PULSE3);
-++	writel((AT91C_SM_NWE_CYCLE | AT91C_SM_NRD_CYCLE)						, AT91C_BASE_SMC + SMC_CYCLE3);
+++ 	writel((AT91C_SM_NWE_SETUP | AT91C_SM_NCS_WR_SETUP | AT91C_SM_NRD_SETUP | AT91C_SM_NCS_RD_SETUP), AT91C_BASE_SMC0 + SMC_SETUP3);
+++  	writel((AT91C_SM_NWE_PULSE | AT91C_SM_NCS_WR_PULSE | AT91C_SM_NRD_PULSE | AT91C_SM_NCS_RD_PULSE), AT91C_BASE_SMC0 + SMC_PULSE3);
+++	writel((AT91C_SM_NWE_CYCLE | AT91C_SM_NRD_CYCLE)						, AT91C_BASE_SMC0 + SMC_CYCLE3);
 ++	writel((AT91C_SMC_READMODE | AT91C_SMC_WRITEMODE | AT91C_SMC_NWAITM_NWAIT_DISABLE | 
-++  		AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS | AT91C_SM_TDF)						, AT91C_BASE_SMC + SMC_CTRL3);
+++  		AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS | AT91C_SM_TDF)						, AT91C_BASE_SMC0 + SMC_CTRL3);
 ++
 ++	/* Configure the PIO controller */
-++	writel((1 << AT91C_ID_PIOC), PMC_PCER + AT91C_BASE_PMC);
+++	writel((1 << AT91C_ID_PIOA), PMC_PCER + AT91C_BASE_PMC);
+++	writel((1 << AT91C_ID_PIOCDE), PMC_PCER + AT91C_BASE_PMC);
+++
 ++	pio_setup(nand_pio);
-++	
+++
 ++	nand_recovery();
 ++}
 ++
@@ -586,7 +793,7 @@ index 0000000..06a89ed
 ++/*------------------------------------------------------------------------------*/
 ++void nandflash_cfg_16bits_dbw_init(void)
 ++{
-++	writel(readl(AT91C_BASE_SMC + SMC_CTRL3) | AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS, AT91C_BASE_SMC + SMC_CTRL3);
+++	writel(readl(AT91C_BASE_SMC0 + SMC_CTRL3) | AT91C_SMC_DBW_WIDTH_SIXTEEN_BITS, AT91C_BASE_SMC0 + SMC_CTRL3);
 ++}
 ++
 ++/*------------------------------------------------------------------------------*/
@@ -595,10 +802,12 @@ index 0000000..06a89ed
 ++/*------------------------------------------------------------------------------*/
 ++void nandflash_cfg_8bits_dbw_init(void)
 ++{
-++	writel((readl(AT91C_BASE_SMC + SMC_CTRL3) & ~(AT91C_SMC_DBW)) | AT91C_SMC_DBW_WIDTH_EIGTH_BITS, AT91C_BASE_SMC + SMC_CTRL3);
+++	writel((readl(AT91C_BASE_SMC0 + SMC_CTRL3) & ~(AT91C_SMC_DBW)) | AT91C_SMC_DBW_WIDTH_EIGTH_BITS, AT91C_BASE_SMC0 + SMC_CTRL3);
 ++}
 ++
 ++#endif /* #ifdef CFG_NANDFLASH */
+++
+++
 +diff --git a/crt0_gnu.S b/crt0_gnu.S
 +index 042b617..002feef 100644
 +--- a/crt0_gnu.S
@@ -617,50 +826,62 @@ index 0000000..06a89ed
 + /* Test if main oscillator is enabled */
 + 	ldr 	r0,=AT91C_PMC_SR
 + 	ldr 	r1, [r0]
++diff --git a/driver/dataflash.c b/driver/dataflash.c
++index e28e49e..4de295a 100644
++--- a/driver/dataflash.c
+++++ b/driver/dataflash.c
++@@ -293,14 +293,14 @@ static int df_init (AT91PS_DF pDf)
++ 			pDf->dfDescription.pages_size = 264;
++ 			pDf->dfDescription.page_offset = 9;
++ 			break;
++-
+++*/
++ 		case AT45DB021B:
++ 			pDf->dfDescription.pages_number = 1024;
++ 			pDf->dfDescription.pages_size = 264;
++ 			pDf->dfDescription.page_offset = 9;
++ 			break;
++ 
++-		case AT45DB041B:
+++/*		case AT45DB041B:
++ 			pDf->dfDescription.pages_number = 2048;
++ 			pDf->dfDescription.pages_size = 264;
++ 			pDf->dfDescription.page_offset = 9;
++@@ -373,7 +373,7 @@ int load_df(unsigned int pcs, unsigned int img_addr, unsigned int img_size, unsi
++     if (!df_init(pDf))
++         return -1;
++ 
++-#if defined(AT91SAM9260) || defined(AT91SAM9XE) || defined(AT91SAM9G20)
+++#if defined(AT91SAM9260) || defined(AT91SAM9263) || defined(AT91SAM9XE) || defined(AT91SAM9G20)
++     /* Test if a button has been pressed or not */
++     /* Erase Page 0 to avoid infinite loop */
++     df_recovery(pDf);
 +diff --git a/include/part.h b/include/part.h
-+index ba5985a..1d7392a 100644
++index ba5985a..a1863d0 100644
 +--- a/include/part.h
 ++++ b/include/part.h
-+@@ -46,7 +46,11 @@
++@@ -61,7 +61,11 @@
 + 
-+ #ifdef AT91SAM9G20
-+ #include "AT91SAM9260_inc.h"
-+-#include "at91sam9g20ek.h"
-++	#ifdef at91sam9g20ek
-++	#include "at91sam9g20ek.h"
-++	#elif usb_a9g20_lpw
-++	#include "usb-a9g20-lpw.h"
++ #ifdef AT91SAM9263
++ #include "AT91SAM9263_inc.h"
++-#include "at91sam9263ek.h"
+++	#ifdef at91sam9263ek
+++	#include "at91sam9263ek.h"
+++	#elif usb_a9263
+++	#include "usb-a9263.h"
 ++	#endif
 + #endif
 + 
-+ #ifdef AT91SAM9261
++ #ifdef AT91CAP9
 +-- 
 +1.5.6.3
 +
-diff --git a/board/calao/usb-a9g20-lpw/barebox-2012.07.0-usb-a9g20-lpw.patch b/board/calao/usb-a9g20-lpw/barebox-2012.07.0-usb-a9g20-lpw.patch
+diff --git a/board/calao/usb-a9263/linux-3.4.4.config b/board/calao/usb-a9263/linux-3.4.4.config
 new file mode 100644
-index 0000000..cea8bb8
+index 0000000..8c71231
 --- /dev/null
-+++ b/board/calao/usb-a9g20-lpw/barebox-2012.07.0-usb-a9g20-lpw.patch
-@@ -0,0 +1,12 @@
-+diff --git a/arch/arm/configs/usb_a9g20_defconfig b/arch/arm/configs/usb_a9g20_defconfig
-+index 30bf380..7716e0e 100644
-+--- a/arch/arm/configs/usb_a9g20_defconfig
-++++ b/arch/arm/configs/usb_a9g20_defconfig
-+@@ -15,6 +15,7 @@ CONFIG_HUSH_FANCY_PROMPT=y
-+ CONFIG_CMDLINE_EDITING=y
-+ CONFIG_AUTO_COMPLETE=y
-+ CONFIG_MENU=y
-++# CONFIG_ERRNO_MESSAGES is not set
-+ # CONFIG_CONSOLE_ACTIVATE_FIRST is not set
-+ CONFIG_CONSOLE_ACTIVATE_ALL=y
-+ CONFIG_PARTITION=y
-diff --git a/board/calao/usb-a9g20-lpw/linux-3.4.4.config b/board/calao/usb-a9g20-lpw/linux-3.4.4.config
-new file mode 100644
-index 0000000..56eb04b
---- /dev/null
-+++ b/board/calao/usb-a9g20-lpw/linux-3.4.4.config
-@@ -0,0 +1,105 @@
++++ b/board/calao/usb-a9263/linux-3.4.4.config
+@@ -0,0 +1,102 @@
 +CONFIG_EXPERIMENTAL=y
 +# CONFIG_LOCALVERSION_AUTO is not set
 +# CONFIG_SWAP is not set
@@ -673,8 +894,8 @@ index 0000000..56eb04b
 +# CONFIG_IOSCHED_DEADLINE is not set
 +# CONFIG_IOSCHED_CFQ is not set
 +CONFIG_ARCH_AT91=y
-+CONFIG_ARCH_AT91SAM9G20=y
-+CONFIG_MACH_USB_A9G20=y
++CONFIG_ARCH_AT91SAM9263=y
++CONFIG_MACH_USB_A9263=y
 +CONFIG_AT91_SLOW_CLOCK=y
 +# CONFIG_ARM_THUMB is not set
 +CONFIG_AEABI=y
@@ -709,6 +930,7 @@ index 0000000..56eb04b
 +CONFIG_MTD_DATAFLASH=y
 +CONFIG_MTD_NAND=y
 +CONFIG_MTD_NAND_ATMEL=y
++CONFIG_MTD_NAND_ATMEL_ECC_SOFT=y
 +CONFIG_MTD_UBI=y
 +CONFIG_BLK_DEV_LOOP=y
 +CONFIG_SCSI=y
@@ -727,8 +949,6 @@ index 0000000..56eb04b
 +CONFIG_SERIAL_ATMEL=y
 +CONFIG_SERIAL_ATMEL_CONSOLE=y
 +CONFIG_HW_RANDOM=y
-+CONFIG_I2C=y
-+CONFIG_I2C_GPIO=y
 +CONFIG_SPI=y
 +CONFIG_SPI_ATMEL=y
 +# CONFIG_HWMON is not set
@@ -745,8 +965,6 @@ index 0000000..56eb04b
 +CONFIG_LEDS_GPIO=y
 +CONFIG_LEDS_TRIGGERS=y
 +CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_RV3029C2=y
 +CONFIG_EXT2_FS=y
 +CONFIG_FUSE_FS=m
 +CONFIG_VFAT_FS=y
@@ -766,24 +984,23 @@ index 0000000..56eb04b
 +CONFIG_DEBUG_KERNEL=y
 +CONFIG_DEBUG_USER=y
 +CONFIG_DEBUG_LL=y
-diff --git a/configs/calao_usb_a9g20_lpw_defconfig b/configs/calao_usb_a9g20_lpw_defconfig
+diff --git a/configs/calao_usb_a9263_defconfig b/configs/calao_usb_a9263_defconfig
 new file mode 100644
-index 0000000..580972a
+index 0000000..6612d2c
 --- /dev/null
-+++ b/configs/calao_usb_a9g20_lpw_defconfig
-@@ -0,0 +1,15 @@
++++ b/configs/calao_usb_a9263_defconfig
+@@ -0,0 +1,14 @@
 +BR2_arm=y
 +BR2_arm926t=y
 +BR2_JLEVEL=2
 +BR2_PACKAGE_HOST_SAM_BA=y
 +BR2_TARGET_ROOTFS_UBIFS=y
 +BR2_TARGET_AT91BOOTSTRAP=y
-+BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/usb-a9g20-lpw/"
-+BR2_TARGET_AT91BOOTSTRAP_BOARD="usb_a9g20_lpw"
++BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR="board/calao/usb-a9263/"
++BR2_TARGET_AT91BOOTSTRAP_BOARD="usb_a9263"
 +BR2_TARGET_AT91BOOTSTRAP_NANDFLASH=y
 +BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR="board/calao/usb-a9g20-lpw/"
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9g20"
++BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9263"
 +BR2_LINUX_KERNEL=y
 +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9g20-lpw/linux-3.4.4.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9263/linux-3.4.4.config"
