@@ -1,46 +1,82 @@
-From: =?ISO-8859-1?B?Qmr2cm4=?= Kirchner <bjoern@am-soft.de>
-Date: Thu, 19 Jul 2012 15:24:58 +0200
-Subject: [Buildroot] Network problem with buildroot 2012.05
-Message-ID: <20120719152458.1945a8f6@hp>
+From: Julian Lunz <git@jlunz.de>
+Date: Thu, 19 Jul 2012 18:11:09 +0200
+Subject: [Buildroot] Qt on AM3517EVM
+In-Reply-To: <CALo-6+hsekD6L5pZhmsZD_4mW0CQTLbearUxdr-F_HitXq5W9Q@mail.gmail.com>
+References: <CALo-6+hhvCkfT_4Rz4POqw5j_BPPLKHZ0saqEyeiKsp-tSJLdA@mail.gmail.com>
+ <20120717093212.0c7d5415@skate>
+ <CALo-6+hsekD6L5pZhmsZD_4mW0CQTLbearUxdr-F_HitXq5W9Q@mail.gmail.com>
+Message-ID: <20120719181109.481c2882@jl-desk-LL>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello list,
+Hi Charles:
 
-I built a buildroot system for a Mini2440 system and tried
-different configurations for the linux kernel. But with
-all configurations tested so far, the network was unusable.
-Pinging the device from my developement host let to dropped
-packets between 66 to 75 % of the sent packats. There were
-also messages about broken or malformed answers received.
-To exclude a hardware problem I exchanged network cables.
-This did not change anything.
+Glad to hear that you succeeded in building!
 
-With the linux system supplied by the manufactor of the
-Mini2440 system, network worked flawlessly. Also there
-were no network problems when the u-boot bootloader was
-loaded. Pinging the device then worked without errors.
+Since you're targeting a TI-chip, have a look at these links:
+http://gpupowered.org/node/8
+https://github.com/prabindh/qt-configs
 
-I also tried ptxdist with the board support package which
-is especially designed for the Mini2440. Surprisingly the
-same ping problem occured.
+For a Qt5 package, I'd wait a bit longer until it reaches final, current
+release plan:
 
-I am quite lost here. Does anybody have an idea what can
-cause this behaviour or what to test to narrow the cause
-down?
+Beta : release expected by mid-July 2012
+Final: release expected by September 2012
+
+Julian
 
 
-Thank you for any help in advance.
+On Tue, 17 Jul 2012 06:44:49 -0700
+Charles Krinke <charles.krinke@gmail.com> wrote:
 
-
-Bj?rn
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config-buildroot-2012.05-mini2440
-Type: application/octet-stream
-Size: 25432 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120719/211ecf22/attachment-0001.obj>
+> Dear Thomas:
+> 
+> Could you give us (me) a few pointers on the pre-requisite packages
+> and the path to move along to get Qt5 put together for buildroot?
+> Maybe with your guidance one of us can get at least partway down that
+> path.
+> 
+> Charles
+> 
+> On 7/17/12, Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> wrote:
+> > Le Mon, 16 Jul 2012 10:40:23 -0700,
+> > Charles Krinke <charles.krinke@gmail.com> a ?crit :
+> >
+> >> First of all, +100 for Thomas, Arnout and Julian. This morning, I
+> >> was able to load the jffs2 compiled file system from buildroot and
+> >> run "ts_calibrate" and got a functioning touch screen and color
+> >> LCD with Qt on the LogicPD AM3517EVM after *removing* the
+> >> environment variable QMAKESPEC which the TI-SDK insisted on adding
+> >> to my .bashrc.
+> >
+> > Great.
+> >
+> >> Of course, no sooner had I gotten it to work then my customer says
+> >> "Thats cool, how about Qt5?"
+> >>
+> >> So, ... are we considering either a Qt5 bump or either Qt4/Qt5
+> >> with an xconfig option?
+> >
+> > I think Qt5 needs a separate package from qt4, because many, many
+> > things have changed in Qt5. Also Qt5 apparently requires an OpenGL
+> > renderer, which wasn't the case in Qt4, so we will probably be
+> > keeping Qt4 around for quite a while for low-end platforms.
+> >
+> > Anyone willing to work on packaging Qt5 is definitely more than
+> > welcome to contribute such effort.
+> >
+> > Thanks!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, Free Electrons
+> > Kernel, drivers, real-time and embedded Linux
+> > development, consulting, training and support.
+> > http://free-electrons.com
+> >
+> 
+> 
