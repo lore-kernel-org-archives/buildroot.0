@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jul 2012 23:32:04 +0200
-Subject: [Buildroot] Network problem with buildroot 2012.05
-In-Reply-To: <20120719152458.1945a8f6@hp>
-References: <20120719152458.1945a8f6@hp>
-Message-ID: <20120719233204.6f131f5e@skate>
+Date: Thu, 19 Jul 2012 23:45:25 +0200
+Subject: [Buildroot] [git commit] bwm-ng: move bwm-ng from "Networking
+	applications" to "System tools".
+Message-ID: <20120719214536.8878896B2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 19 Jul 2012 15:24:58 +0200,
-Bj?rn Kirchner <bjoern@am-soft.de> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=0b3e06f239b9c12074f88bdfd3c95b3cad0e9f1e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I am quite lost here. Does anybody have an idea what can
-> cause this behaviour or what to test to narrow the cause
-> down?
+bwm-ng can monitor not only network bandwidth but also disk-io
+bandwidth, so it is more appropriate to put bwm-ng into System tools.
 
-Most likely this is completely unrelated to Buildroot or PTXdist, but
-related to your Linux kernel. Maybe the network support is somehow
-buggy for your platforms with certain kernel versions or
-configurations. If you use a recent mainline kernel version, please
-report your problem to the S3C kernel maintainers, i.e:
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-ARM/SAMSUNG ARM ARCHITECTURES
-M:      Ben Dooks <ben-linux@fluff.org>
-M:      Kukjin Kim <kgene.kim@samsung.com>
-L:      linux-arm-kernel at lists.infradead.org (moderated for non-subscribers)
-L:      linux-samsung-soc at vger.kernel.org (moderated for non-subscribers)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 6aabb8e..154b82c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -511,7 +511,6 @@ endif
+ source "package/bind/Config.in"
+ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
+-source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/connman/Config.in"
+ source "package/ctorrent/Config.in"
+@@ -658,6 +657,7 @@ source "package/attr/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
++source "package/bwm-ng/Config.in"
+ source "package/htop/Config.in"
+ source "package/kmod/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
