@@ -1,41 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 20:03:53 +0200
-Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.4.6
-Message-ID: <20120720180404.1FF6296C58@busybox.osuosl.org>
+Date: Fri, 20 Jul 2012 20:03:52 +0200
+Subject: [Buildroot] [git commit] lua: fix build issue with gcc 4.6
+Message-ID: <20120720180403.E4C5E96BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3a362169321f2c5c9e2c7815c414984e94c56bc
+commit: http://git.buildroot.net/buildroot/commit/?id=02f5589d6fe85e73a965359f5dfa2a49930ae3e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+gcc 4.6 has become more sensitive about option ordering, especially
+libraries. It requires the -l flags to be placed after the object
+files that need that library. See for example
+http://nick.zoic.org/art/etc/gcc-linker-libs.html. We had -llua at the
+beginning of the link command line, causing build issues (here on gcc
+4.6 with host-lua).
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua/lua-02-shared-libs-for-lua.patch  |    2 +-
+ package/lua/lua-03-shared-libs-for-luac.patch |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 00f852e..e0c1c7e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_4
- 
- config BR2_LINUX_KERNEL_3_4
--	bool "3.4.5"
-+	bool "3.4.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.4.5" if BR2_LINUX_KERNEL_3_4
-+	default "3.4.6" if BR2_LINUX_KERNEL_3_4
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/package/lua/lua-02-shared-libs-for-lua.patch b/package/lua/lua-02-shared-libs-for-lua.patch
+index afe2ac8..454e660 100644
+--- a/package/lua/lua-02-shared-libs-for-lua.patch
++++ b/package/lua/lua-02-shared-libs-for-lua.patch
+@@ -43,7 +43,7 @@ Index: b/src/Makefile
+ +	ln -fs $@.$(PKG_VERSION) $@
+ +
+ +$(LUA_T): $(LUA_O) $(LUA_SO)
+-+	$(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUA_O) $(LIBS)
+++	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUA_O) -llua $(LIBS)
+  
+  $(LUAC_T): $(LUAC_O) $(LUA_A)
+  	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
+diff --git a/package/lua/lua-03-shared-libs-for-luac.patch b/package/lua/lua-03-shared-libs-for-luac.patch
+index ebe5337..33f9183 100644
+--- a/package/lua/lua-03-shared-libs-for-luac.patch
++++ b/package/lua/lua-03-shared-libs-for-luac.patch
+@@ -91,7 +91,7 @@ Index: b/src/Makefile
+ -$(LUAC_T): $(LUAC_O) $(LUA_A)
+ -	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
+ +$(LUAC_T): $(LUAC_O) $(LUA_SO)
+-+	$(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUAC_O) $(LIBS)
+++	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUAC_O) -llua $(LIBS)
+  
+  clean:
+  	$(RM) $(ALL_T) $(ALL_O)
