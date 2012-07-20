@@ -1,16 +1,41 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 20 Jul 2012 13:44:44 +0200
-Subject: [Buildroot] luajit failure at http://autobuild.buildroot.org
-Message-ID: <CAB0FRsvj9vK2wWQDiY-spbz5NSzkKvASPQ4xDs0OUzMcG=sJ9A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 20 Jul 2012 08:53:29 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to kernel version 3.4.6
+In-Reply-To: <1342785209-7823-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1342785209-7823-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1342785209-7823-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-as I understand the log :
-- the host is a 64 bits
-- the selected target is an ARM 32 bits
-- and the package gcc-multilib seems not installed on host
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Fran?ois.
+diff --git a/linux/Config.in b/linux/Config.in
+index 00f852e..e0c1c7e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_4
+ 
+ config BR2_LINUX_KERNEL_3_4
+-	bool "3.4.5"
++	bool "3.4.6"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.4.5" if BR2_LINUX_KERNEL_3_4
++	default "3.4.6" if BR2_LINUX_KERNEL_3_4
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+1.7.8.6
