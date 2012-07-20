@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 09:42:05 +0200
-Subject: [Buildroot] [git commit branch/next] libfreefare: bump version to
-	0.3.4
-Message-ID: <20120802195256.9536B8E8F3@busybox.osuosl.org>
+Date: Fri, 20 Jul 2012 20:03:53 +0200
+Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
+	version 3.4.6
+Message-ID: <20120802195257.064288D2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d38cf852248764b633750d210f71cac983ec451
+commit: http://git.buildroot.net/buildroot/commit/?id=a3a362169321f2c5c9e2c7815c414984e94c56bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the libfreefare package from version 0.3.2 to version 0.3.4.
-
-Version 0.3.4 requires a minium libnfc version of 1.6. A separate patch has
-been submitted to bump the libnfc version; that patch should be regarded as
-a prerequisite for the present patch.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfreefare/libfreefare.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 3f0036a..3c96839 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -3,7 +3,7 @@
- # libfreefare
- #
- #############################################################
--LIBFREEFARE_VERSION = 0.3.2
-+LIBFREEFARE_VERSION = 0.3.4
- LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
- LIBFREEFARE_DEPENDENCIES = libnfc openssl
+diff --git a/linux/Config.in b/linux/Config.in
+index 00f852e..e0c1c7e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_4
  
+ config BR2_LINUX_KERNEL_3_4
+-	bool "3.4.5"
++	bool "3.4.6"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.4.5" if BR2_LINUX_KERNEL_3_4
++	default "3.4.6" if BR2_LINUX_KERNEL_3_4
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
