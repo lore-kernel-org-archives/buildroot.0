@@ -1,52 +1,128 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 20 Jul 2012 20:03:52 +0200
-Subject: [Buildroot] [git commit] lua: fix build issue with gcc 4.6
-Message-ID: <20120720180403.E4C5E96BBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lua: use install -D everywhere
+Message-ID: <20120720180404.0014596BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02f5589d6fe85e73a965359f5dfa2a49930ae3e0
+commit: http://git.buildroot.net/buildroot/commit/?id=c8da6d1dd656caf5454c50ee5dddb4beead60326
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gcc 4.6 has become more sensitive about option ordering, especially
-libraries. It requires the -l flags to be placed after the object
-files that need that library. See for example
-http://nick.zoic.org/art/etc/gcc-linker-libs.html. We had -llua at the
-beginning of the link command line, causing build issues (here on gcc
-4.6 with host-lua).
+Installation of host-lua was failing because it was the first package
+to be built, and $(HOST_DIR)/usr/lib didn't exist. Therefore, use
+install -D everywhere so that intermediate directories are created as
+needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua/lua-02-shared-libs-for-lua.patch  |    2 +-
- package/lua/lua-03-shared-libs-for-luac.patch |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lua/lua.mk |   50 +++++++++++++++++++++++++-------------------------
+ 1 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/package/lua/lua-02-shared-libs-for-lua.patch b/package/lua/lua-02-shared-libs-for-lua.patch
-index afe2ac8..454e660 100644
---- a/package/lua/lua-02-shared-libs-for-lua.patch
-+++ b/package/lua/lua-02-shared-libs-for-lua.patch
-@@ -43,7 +43,7 @@ Index: b/src/Makefile
- +	ln -fs $@.$(PKG_VERSION) $@
- +
- +$(LUA_T): $(LUA_O) $(LUA_SO)
--+	$(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUA_O) $(LIBS)
-++	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUA_O) -llua $(LIBS)
-  
-  $(LUAC_T): $(LUAC_O) $(LUA_A)
-  	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
-diff --git a/package/lua/lua-03-shared-libs-for-luac.patch b/package/lua/lua-03-shared-libs-for-luac.patch
-index ebe5337..33f9183 100644
---- a/package/lua/lua-03-shared-libs-for-luac.patch
-+++ b/package/lua/lua-03-shared-libs-for-luac.patch
-@@ -91,7 +91,7 @@ Index: b/src/Makefile
- -$(LUAC_T): $(LUAC_O) $(LUA_A)
- -	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
- +$(LUAC_T): $(LUAC_O) $(LUA_SO)
--+	$(CC) -o $@ -L. -llua $(MYLDFLAGS) $(LUAC_O) $(LIBS)
-++	$(CC) -o $@ -L. $(MYLDFLAGS) $(LUAC_O) -llua $(LIBS)
-  
-  clean:
-  	$(RM) $(ALL_T) $(ALL_O)
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 074b9ad..fa1e7b1 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -46,7 +46,7 @@ endef
+ 
+ ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+ define LUA_INSTALL_STAGING_SHARED_LIB
+-	$(INSTALL) -D $(@D)/src/liblua.so.$(LUA_VERSION) \
++	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
+ 		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
+ 	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
+ endef
+@@ -55,37 +55,37 @@ endif
+ define LUA_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
+-	$(INSTALL) $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib
+-	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
+-	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
+-	$(INSTALL) $(@D)/src/lua.h $(STAGING_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/lualib.h $(STAGING_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include
++	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
++	$(INSTALL) -m 0755 -D $(@D)/src/lua $(STAGING_DIR)/usr/bin/lua
++	$(INSTALL) -m 0755 -D $(@D)/src/luac $(STAGING_DIR)/usr/bin/luac
++	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(STAGING_DIR)/usr/include/lua.h
++	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include/luaconf.h
++	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(STAGING_DIR)/usr/include/lualib.h
++	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER),y)
+ define LUA_INSTALL_INTERPRETER
+-	$(INSTALL) $(@D)/src/lua $(TARGET_DIR)/usr/bin
++	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LUA_COMPILER),y)
+ define LUA_INSTALL_COMPILER
+-	$(INSTALL) $(@D)/src/luac $(TARGET_DIR)/usr/bin
++	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+ define LUA_INSTALL_LIBRARY
+-	$(INSTALL) $(@D)/src/liblua.so.$(LUA_VERSION) \
++	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
+ 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
+ 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
+-	$(INSTALL) $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
++	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
+ endef
+ else
+ define LUA_INSTALL_LIBRARY
+-	$(INSTALL) $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
++	$(INSTALL) -m 0644 -D$(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
+ endef
+ endif
+ 
+@@ -93,10 +93,10 @@ ifeq ($(BR2_HAVE_DEVFILES),y)
+ define LUA_INSTALL_DEVFILES
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
+-	$(INSTALL) $(@D)/src/lua.h $(TARGET_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/lualib.h $(TARGET_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include
++	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(TARGET_DIR)/usr/include/lua.h
++	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include/luaconf.h
++	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(TARGET_DIR)/usr/include/lualib.h
++	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include/lauxlib.h
+ endef
+ endif
+ 
+@@ -108,18 +108,18 @@ define LUA_INSTALL_TARGET_CMDS
+ endef
+ 
+ define HOST_LUA_INSTALL_CMDS
+-	$(INSTALL) $(@D)/src/lua $(HOST_DIR)/usr/bin
+-	$(INSTALL) $(@D)/src/luac $(HOST_DIR)/usr/bin
+-	$(INSTALL) $(@D)/src/liblua.so.$(LUA_VERSION) \
++	$(INSTALL) -m 0755 -D $(@D)/src/lua $(HOST_DIR)/usr/bin/lua
++	$(INSTALL) -m 0755 -D $(@D)/src/luac $(HOST_DIR)/usr/bin/luac
++	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
+ 		$(HOST_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
+ 	ln -sf liblua.so.$(LUA_VERSION) $(HOST_DIR)/usr/lib/liblua.so
+-	$(INSTALL) $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
++	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+ 		$(HOST_DIR)/usr/lib/pkgconfig/lua.pc
+-	$(INSTALL) $(@D)/src/lua.h $(HOST_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/luaconf.h $(HOST_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/lualib.h $(HOST_DIR)/usr/include
+-	$(INSTALL) $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include
++	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(HOST_DIR)/usr/include/lua.h
++	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(HOST_DIR)/usr/include/luaconf.h
++	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(HOST_DIR)/usr/include/lualib.h
++	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include/lauxlib.h
+ endef
+ 
+ LUA_INSTALLED_FILES = \
