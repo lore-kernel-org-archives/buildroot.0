@@ -1,58 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 16:53:25 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain-external: adjust
-	logic to support Linaro 2012.05
-Message-ID: <20120802195258.35B3A8E8F3@busybox.osuosl.org>
+Date: Fri, 20 Jul 2012 21:08:53 +0200
+Subject: [Buildroot] [git commit branch/next] sound-theme-borealis: new
+	package
+Message-ID: <20120802195257.451B58E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68973cca23bbbaff1d763a434114021e5a695515
+commit: http://git.buildroot.net/buildroot/commit/?id=594610a39ed94fb6bf9c5b6b9b52580c82944635
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The check_glibc function verifies that the C library of the external
-toolchain is glibc. To do so, it verified that a file matching
-ld-linux*.so.* or ld.so.* was found in the lib/ directory of the
-toolchain's sysroot. However, with the Linaro 2012.05 toolchain, the
-lib/ directory contains two links named ld-linux-armhf.so.3 and
-ld-linux.so.3, which means that the first ld-linux*.so.* wildcard
-expression expands to two files, which generates a syntax error for
-the "test" program. We replace that with a more elaborate find+wc
-combination to determine whether at least one matching file is
-present.
+[thomas.petazzoni at free-electrons.com:
+  slightly adjust the installation process to just do a loop of calls
+  to $(INSTALL).]
 
-The check_arm_abi function verifies the ABI of an ARM toolchain. For
-EABI, it tested that the target name ends with eabi. However, with
-Linaro 2012.05, the tuple is now arm-linux-gnueabihf (for hard float),
-so we have to adjust the logic to accept this additional "hf"
-specification in the tuple.
-
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in                                  |    1 +
+ package/sound-theme-borealis/Config.in             |    6 +++++
+ .../sound-theme-borealis/sound-theme-borealis.mk   |   21 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 649b91b..49a9044 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -196,7 +196,7 @@ check_glibc_feature = \
- #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if ! test -f $${SYSROOT_DIR}/lib/ld-linux*.so.* -o -f $${SYSROOT_DIR}/lib/ld.so.* ; then \
-+	if test `find $${SYSDROOT_DIR}/lib/ -maxdepth 1 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
-@@ -263,7 +263,7 @@ check_uclibc = \
- check_arm_abi = \
- 	__CROSS_CC=$(strip $1) ; \
- 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
--	if echo $${EXT_TOOLCHAIN_TARGET} | grep -q 'eabi$$' ; then \
-+	if echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
- 		EXT_TOOLCHAIN_ABI="eabi" ; \
- 	else \
- 		EXT_TOOLCHAIN_ABI="oabi" ; \
+diff --git a/package/Config.in b/package/Config.in
+index 46747d9..ab5781c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -499,6 +499,7 @@ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
++source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+diff --git a/package/sound-theme-borealis/Config.in b/package/sound-theme-borealis/Config.in
+new file mode 100644
+index 0000000..fcc109f
+--- /dev/null
++++ b/package/sound-theme-borealis/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_SOUND_THEME_BOREALIS
++	bool "sound-theme-borealis"
++	help
++	  Borealis sound theme.
++
++	  http://kde-look.org/content/show.php?content=12584
+diff --git a/package/sound-theme-borealis/sound-theme-borealis.mk b/package/sound-theme-borealis/sound-theme-borealis.mk
+new file mode 100644
+index 0000000..afca72a
+--- /dev/null
++++ b/package/sound-theme-borealis/sound-theme-borealis.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# sound-theme-borealis
++#
++#############################################################
++SOUND_THEME_BOREALIS_VERSION = 0.9a
++SOUND_THEME_BOREALIS_SITE = http://ico.bukvic.net/Linux/Borealis_soundtheme
++SOUND_THEME_BOREALIS_SOURCE = \
++	Borealis_sound_theme_ogg-$(SOUND_THEME_BOREALIS_VERSION).tar.bz2
++
++define SOUND_THEME_BOREALIS_INSTALL_TARGET_CMDS
++	for f in $(@D)/*.ogg ; do \
++		$(INSTALL) -D -m 0644 $$f $(TARGET_DIR)/usr/share/sounds/borealis/stereo/`basename $$f` ; \
++	done
++endef
++
++define SOUND_THEME_BOREALIS_UNINSTALL_TARGET_CMDS
++	$(RM) -r $(TARGET_DIR)/usr/share/sounds/borealis
++endef
++
++$(eval $(generic-package))
