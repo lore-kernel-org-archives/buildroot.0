@@ -1,56 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 11:10:58 +0200
-Subject: [Buildroot] [PATCH] avahi: only install
- default.script/S05avahi-setup.sh if not present in fs skeleton
-In-Reply-To: <87r4s6u7wq.fsf@macbook.be.48ers.dk>
-References: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
- <20120717234535.6ae0b109@skate>
- <CANxTyt4p2hR7StT27=SXN40KcYY4L-oBVfZ5V=dOYKLuY7GTfw@mail.gmail.com>
- <20120720100219.0317a30e@skate>
- <87r4s6u7wq.fsf@macbook.be.48ers.dk>
-Message-ID: <20120720111058.7d61e9cf@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 20 Jul 2012 10:20:03 +0100
+Subject: [Buildroot] [PATCH] sound-theme-borealis: new package
+Message-ID: <1342776003-29430-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+From: Simon Dawson <spdawson@gmail.com>
 
-Le Fri, 20 Jul 2012 10:57:25 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in                                  |    1 +
+ package/sound-theme-borealis/Config.in             |    6 ++++++
+ .../sound-theme-borealis/sound-theme-borealis.mk   |   21 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/sound-theme-borealis/Config.in
+ create mode 100644 package/sound-theme-borealis/sound-theme-borealis.mk
 
->  Thomas> Well, I think the whole idea of testing whether a
->  Thomas> configuration file has already been copied or not to the
->  Thomas> target filesystem to avoid overwriting files from the
->  Thomas> skeleton is not nice (I think using the post-build script to
->  Thomas> overwrite configuration files is a much better idea), but I
->  Thomas> know Peter wants this to work.
-> 
-> I don't really feel that strongly about it.
-
-Ok, but either we support it, and we support it completely, or we don't
-support it and we remove all those conditional file installations (by
-making them unconditional).
-
->  Thomas> The parts around avahi-autoipd are obviously here for a
->  Thomas> reason, but why does it need to test for ip= and nfsroot= in
->  Thomas> the kernel command line in Avahi case and not in Busybox
->  Thomas> case?
-> 
->  Thomas> One possibility would be to simply put the Avahi variant of
->  Thomas> the script into the Busybox package. When Avahi is not
->  Thomas> installed, the avahi-autoipd tests would simply ensure that
->  Thomas> the script does not try to use Avahi.
-> 
-> That was my thought exactly. I had a quick look at it just before I
-> got ill, but then forgot about it.
-
-Ok, thanks for your input!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index d0daa18..ee523d9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -498,6 +498,7 @@ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
++source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+diff --git a/package/sound-theme-borealis/Config.in b/package/sound-theme-borealis/Config.in
+new file mode 100644
+index 0000000..fcc109f
+--- /dev/null
++++ b/package/sound-theme-borealis/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_SOUND_THEME_BOREALIS
++	bool "sound-theme-borealis"
++	help
++	  Borealis sound theme.
++
++	  http://kde-look.org/content/show.php?content=12584
+diff --git a/package/sound-theme-borealis/sound-theme-borealis.mk b/package/sound-theme-borealis/sound-theme-borealis.mk
+new file mode 100644
+index 0000000..c6db344
+--- /dev/null
++++ b/package/sound-theme-borealis/sound-theme-borealis.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# sound-theme-borealis
++#
++#############################################################
++SOUND_THEME_BOREALIS_VERSION = 0.9a
++SOUND_THEME_BOREALIS_SITE = http://ico.bukvic.net/Linux/Borealis_soundtheme
++SOUND_THEME_BOREALIS_SOURCE = \
++	Borealis_sound_theme_ogg-$(SOUND_THEME_BOREALIS_VERSION).tar.bz2
++
++define SOUND_THEME_BOREALIS_INSTALL_TARGET_CMDS
++	$(INSTALL) -d $(TARGET_DIR)/usr/share/sounds/borealis/stereo
++	cp -a $(@D)/*.ogg	$(TARGET_DIR)/usr/share/sounds/borealis/stereo
++	chmod 0644 $(TARGET_DIR)/usr/share/sounds/borealis/stereo/*.ogg
++endef
++
++define SOUND_THEME_BOREALIS_UNINSTALL_TARGET_CMDS
++	$(RM) -r $(TARGET_DIR)/usr/share/sounds/borealis
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
