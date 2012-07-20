@@ -1,62 +1,73 @@
 From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Fri, 20 Jul 2012 14:05:12 +0800
-Subject: [Buildroot] [PATCH 2/2] New package: cpuload
-In-Reply-To: <20120719235041.46ba9c2c@skate>
-References: <1342688049-12065-1-git-send-email-keguang.zhang@gmail.com>
- <1342688049-12065-2-git-send-email-keguang.zhang@gmail.com>
- <20120719235041.46ba9c2c@skate>
-Message-ID: <CAJhJPsWtEALX7PJjSfoQK9X5xjJxi83j5=EKpcA13ZdndLVJ=w@mail.gmail.com>
+Date: Fri, 20 Jul 2012 14:03:40 +0800
+Subject: [Buildroot]  [PATCH 2/2] New package: cpuload (Updated)
+Message-ID: <1342764221-16660-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/7/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Add new package: cpuload
 
-> Le Thu, 19 Jul 2012 16:54:09 +0800,
-> Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
->
-> > Add new package: cpuload
-> >
-> > cpuload is a simple tool to obtain intuitive vision of CPU load
-> > (including total, user, system, irq and softirq) within a certain
-> > time, which is especially useful for embedded system without GUI.
-> >
-> > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
->
-> Your code includes <wchar.h>, but the package does not depend on
-> BR2_USE_WCHAR. Did you try to build your package with the minimal
-> uClibc settings (i.e wchar, IPv6, RPC, locale, etc. disabled) to see if
-> it builds without requiring any special toolchain feature?
->
+cpuload is a simple tool to obtain intuitive vision of CPU load
+(including total, user, system, irq and softirq) within a certain
+time, which is especially useful for embedded system without GUI.
 
-Thanks for reminding me.
-I have removed the unnecessary wide-character string code in cpuload,
-and upgrade it to version 0.3.
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+Updated cpuload to version 0.3 to remove unnecessary
+wide-character string code.
+---
+ package/Config.in          |    1 +
+ package/cpuload/Config.in  |    8 ++++++++
+ package/cpuload/cpuload.mk |   11 +++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/cpuload/Config.in
+ create mode 100644 package/cpuload/cpuload.mk
 
-Please review the new patch.
-
-In addtion, I have tested 'cpuload' on several architectures: x86, MIPS
-and ARM. It works well so far.
-
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 154b82c..817716b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -658,6 +658,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
+ source "package/bwm-ng/Config.in"
++source "package/cpuload/Config.in"
+ source "package/htop/Config.in"
+ source "package/kmod/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/cpuload/Config.in b/package/cpuload/Config.in
+new file mode 100644
+index 0000000..82bc450
+--- /dev/null
++++ b/package/cpuload/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CPULOAD
++	bool "cpuload"
++	help
++	  cpuload is a simple tool to obtain intuitive vision of CPU load
++	  (including total, user, system, irq and softirq) within a certain
++	  time, which is especially useful for embedded system without GUI.
++
++	  https://github.com/kelvincheung/cpuload
+diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
+new file mode 100644
+index 0000000..62a9138
+--- /dev/null
++++ b/package/cpuload/cpuload.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# cpuload
++#
++#############################################################
++
++CPULOAD_VERSION = v0.3
++CPULOAD_SITE = git://github.com/kelvincheung/cpuload.git
++
++
++$(eval $(autotools-package))
 -- 
-Best Regards!
-Kelvin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120720/6db05983/attachment.html>
+1.7.1
