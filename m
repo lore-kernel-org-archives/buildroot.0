@@ -1,65 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Fri, 20 Jul 2012 20:03:53 +0200
-Subject: [Buildroot] [git commit] dfu-util: new package
-Message-ID: <20120720180404.30BA396BBF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0,
+	4}.x stable versions
+Message-ID: <20120720180404.0FB9896BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3c1ee9a598d470956d029a16b64a33c10aee06d
+commit: http://git.buildroot.net/buildroot/commit/?id=3096b09abdbd9ff1ecf73b0c723df9113e1787fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in.host          |    1 +
- package/dfu-util/Config.in.host |    8 ++++++++
- package/dfu-util/dfu-util.mk    |   13 +++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 9fcfede..79050f2 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+source "package/dfu-util/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
- source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
-diff --git a/package/dfu-util/Config.in.host b/package/dfu-util/Config.in.host
-new file mode 100644
-index 0000000..cfeebdc
---- /dev/null
-+++ b/package/dfu-util/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_DFU_UTIL
-+	bool "host dfu-util"
-+	help
-+	  Dfu-util is the host side implementation of the DFU 1.0 
-+	  specification of the USB forum. DFU is intended to download
-+	  and upload firmware to devices connected over USB. 
-+
-+	  http://dfu-util.gnumonks.org/
-diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
-new file mode 100644
-index 0000000..4ba7014
---- /dev/null
-+++ b/package/dfu-util/dfu-util.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# dfu-util
-+#
-+#############################################################
-+DFU_UTIL_VERSION:=0.6
-+DFU_UTIL_SOURCE = dfu-util-$(DFU_UTIL_VERSION).tar.gz
-+DFU_UTIL_SITE = http://dfu-util.gnumonks.org/releases/
-+
-+HOST_DFU_UTIL_DEPENDENCIES = host-libusb
-+
-+$(eval $(host-autotools-package))
-+
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index c24dd86..63a1ae8 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -64,10 +64,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.37"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.38"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.23"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.5"		if BR2_KERNEL_HEADERS_3_4
++	default "3.4.6"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.37-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch
