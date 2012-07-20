@@ -1,50 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 14:09:02 +0200
-Subject: [Buildroot] [PATCH resend v3] owl-linux: new package
-In-Reply-To: <1342777953-31144-1-git-send-email-spdawson@gmail.com>
-References: <1342777953-31144-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120720140902.641f193e@skate>
+Date: Fri, 20 Jul 2012 14:14:36 +0200
+Subject: [Buildroot] [UNSURE]Re: [PATCH 1/4] add host arch detection and
+ Kconfig BR2_HOSTARCH
+In-Reply-To: <CAB0FRsth=O9vVnLJEhXWnCUExPo+3yzkp0PPVZfmn+p_JToxKQ@mail.gmail.com>
+References: <1342619953-15512-1-git-send-email-francois.perrad@gadz.org>
+ <20120718193750.2020db34@skate>
+ <CAB0FRsuN7f=0PehFg9XvythsfJh9oCwPcikz8Dtmig=LnDWQEQ@mail.gmail.com>
+ <20120719150310.294327e5@skate>
+ <CAB0FRsth=O9vVnLJEhXWnCUExPo+3yzkp0PPVZfmn+p_JToxKQ@mail.gmail.com>
+Message-ID: <20120720141436.5e13d45e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 20 Jul 2012 10:52:33 +0100,
-spdawson at gmail.com a ?crit :
+Le Fri, 20 Jul 2012 13:40:14 +0200,
+Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 
-> diff --git a/package/owl-linux/owl-linux-fix-for-linux-3.3.x.patch b/package/owl-linux/owl-linux-fix-for-linux-3.3.x.patch
-> new file mode 100644
-> index 0000000..e807de2
-> --- /dev/null
-> +++ b/package/owl-linux/owl-linux-fix-for-linux-3.3.x.patch
-> @@ -0,0 +1,23 @@
-> +Kernel commit b81693d9149c598302e8eb9c20cb20330d922c8e changed the
-> +net_device_ops structure, removing the ndo_set_multicast_list callback. The
-> +ndo_set_rx_mode has also been added to this structure.
-> +
-> +The upshot of these changes is that owl-linux fails to compile with 3.3.x
-> +and later kernels.
-> +
-> +Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> +diff -Nurp a/owl_net.c b/owl_net.c
-> +--- a/owl_net.c	2012-06-14 10:51:45.000000000 +0100
-> ++++ b/owl_net.c	2012-07-20 10:46:55.332751539 +0100
-> +@@ -384,7 +384,11 @@ static const struct net_device_ops netde
-> + #endif /* OWL_CONFIG_IFUPDOWN */
-> +         .ndo_start_xmit         = owl_net_tx,
-> +         .ndo_get_stats          = owl_net_get_stats,
-> ++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)
-> +         .ndo_set_multicast_list = NULL,
-> ++#else
-> ++        .ndo_set_rx_mode = NULL,
-> ++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0) */
+> take as example a target with luajit and luasocket.
+> nothing from lua is needed at runtime.
+> but at compile time of luasocket, include files from lua (lua.h,
+> luaconf.h, lualib.h, lauxlib.h) are mandatory in staging.
+> so, luasocket.mk contains : LUASOCKET_DEPENDENCIES = lua
+> 
+> so, it is useful that BR2_PACKAGE_LUA installs nothing on target.
+> the 3 sub-options BR2_PACKAGE_LUA_COMPILER,
+> BR2_PACKAGE_LUA_INTERPRETER and  BR2_PACKAGE_LUA_SHARED_LIBRARY are
+> install flags (as said in there help doc).
+> so, BR2_PACKAGE_LUA_SHARED_LIBRARY shouldn't be removed.
 
-I would rather suggest to simply remove the .ndo_set_multicast_list =
-NULL line, and to not add the .ndo_set_rx_mode line. When using C99
-structure initializers, the compiler guarantees you that all fields
-that are not listed are initialized to zero, so all
-those .something=NULL initializations are useless.
+So this means luajit is not a complete replacement for lua?
+
+Note that you did:
+
+if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
+menu "LUA libraries/modules"
+source "package/cgilua/Config.in"
+source "package/copas/Config.in"
+source "package/coxpcall/Config.in"
+source "package/luacjson/Config.in"
+source "package/luaexpat/Config.in"
+source "package/luafilesystem/Config.in"
+source "package/luasocket/Config.in"
+source "package/rings/Config.in"
+source "package/wsapi/Config.in"
+source "package/xavante/Config.in"
+endmenu
+
+So this means that Lua modules can currently be compiled without the
+Lua package being selected. Of course, the Lua package will be built
+because the Lua modules packages depend on it (in terms of .mk), but
+that's really not how things are supposed to work.
 
 Thomas
 -- 
