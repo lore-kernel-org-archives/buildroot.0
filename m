@@ -1,35 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 23:39:12 +0200
-Subject: [Buildroot] [PATCH 4/5] libglib2: define
- __GCC_HAVE_SYNC_COMPARE_AND_SWAP_4
-In-Reply-To: <1342646260-11203-5-git-send-email-s.neumann@raumfeld.com>
+Date: Fri, 20 Jul 2012 23:39:42 +0200
+Subject: [Buildroot] [PATCH 5/5] libglib2: do not use xlocale
+In-Reply-To: <1342646260-11203-6-git-send-email-s.neumann@raumfeld.com>
 References: <1342646260-11203-1-git-send-email-s.neumann@raumfeld.com>
- <1342646260-11203-5-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <20120720233912.4a6bb4ea@skate>
+ <1342646260-11203-6-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <20120720233942.353b4c7e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 18 Jul 2012 23:17:39 +0200,
+Le Wed, 18 Jul 2012 23:17:40 +0200,
 Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
-> On ARMv5 atomic operations are not actually available as inlines
-> but libgcc does still provide them as functions. Trick glib into
-> using the functions instead of using the mutex-based fallbacks.
-> 
-> This should probably be platform-dependant. The inline functions
-> are available for ARMv6 and above and probably for other platforms
-> as well. Please advice on how to fix this properly.
-> 
-> Without this change performance of atomic operations is horrible
-> on ARMv5 systems.
+> The xlocale based implementations of g_ascii_strto{d,ll,ull}
+> and g_ascii_formatd crash with uClibC 0.9.32 (and probably other
+> versions as well). So trick the configure script into believing
+> that this functionality was not available so that the good old
+> home-grown code is used again (as was the case with glib 2.30).
 > 
 > Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
-But isn't the compiler supposed to define
-__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 by itself?
+Have you tried with uClibc 0.9.33 ? Is there a fix available ?
 
 Thomas
 -- 
