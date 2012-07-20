@@ -1,52 +1,48 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 19 Jul 2012 21:53:45 -0400
-Subject: [Buildroot] [PATCH] avahi: only install
- default.script/S05avahi-setup.sh if not present in fs skeleton
-In-Reply-To: <20120717234535.6ae0b109@skate>
-References: <1341980076-28347-1-git-send-email-danomimanchego123@gmail.com>
- <20120717234535.6ae0b109@skate>
-Message-ID: <CANxTyt4p2hR7StT27=SXN40KcYY4L-oBVfZ5V=dOYKLuY7GTfw@mail.gmail.com>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Fri, 20 Jul 2012 14:05:12 +0800
+Subject: [Buildroot] [PATCH 2/2] New package: cpuload
+In-Reply-To: <20120719235041.46ba9c2c@skate>
+References: <1342688049-12065-1-git-send-email-keguang.zhang@gmail.com>
+ <1342688049-12065-2-git-send-email-keguang.zhang@gmail.com>
+ <20120719235041.46ba9c2c@skate>
+Message-ID: <CAJhJPsWtEALX7PJjSfoQK9X5xjJxi83j5=EKpcA13ZdndLVJ=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+2012/7/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> If avahi is built before
-> Busybox, then you'll have the Avahi script. If Busybox is built before
-> Avahi, then you'll have the Busybox script. This doesn't look correct.
-
-Would it be appropriate to add something like this to busybox.mk, so that
-Avahi always gets built first?
-
-ifeq ($(BR2_PACKAGE_AVAHI),y)
-# Compile Avahi first, to ensure proper preference of conditional
-udhcpc/default.script installations
-BUSYBOX_DEPENDENCIES += avahi
-endif
-
-Dan -
-
-On Tue, Jul 17, 2012 at 5:45 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Le Wed, 11 Jul 2012 00:14:36 -0400,
-> Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
+> Le Thu, 19 Jul 2012 16:54:09 +0800,
+> Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
 >
-> > +     if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
-> > +             $(INSTALL) -m 0755 -D
-> package/avahi/busybox-udhcpc-default.script \
-> > +                     $(TARGET_DIR)/usr/share/udhcpc/default.script; \
-> > +     fi
+> > Add new package: cpuload
+> >
+> > cpuload is a simple tool to obtain intuitive vision of CPU load
+> > (including total, user, system, irq and softirq) within a certain
+> > time, which is especially useful for embedded system without GUI.
+> >
+> > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 >
-> This doesn't work: the Busybox package already installs a
-> default.script file in usr/share/udhcpc. If avahi is built before
-> Busybox, then you'll have the Avahi script. If Busybox is built before
-> Avahi, then you'll have the Busybox script. This doesn't look correct.
+> Your code includes <wchar.h>, but the package does not depend on
+> BR2_USE_WCHAR. Did you try to build your package with the minimal
+> uClibc settings (i.e wchar, IPv6, RPC, locale, etc. disabled) to see if
+> it builds without requiring any special toolchain feature?
 >
-> Best regards,
+
+Thanks for reminding me.
+I have removed the unnecessary wide-character string code in cpuload,
+and upgrade it to version 0.3.
+
+Please review the new patch.
+
+In addtion, I have tested 'cpuload' on several architectures: x86, MIPS
+and ARM. It works well so far.
+
+
+>
+> Thanks,
 >
 > Thomas
 > --
@@ -55,6 +51,12 @@ thomas.petazzoni@free-electrons.com> wrote:
 > development, consulting, training and support.
 > http://free-electrons.com
 >
+
+
+
+-- 
+Best Regards!
+Kelvin
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120719/82c9d98f/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120720/6db05983/attachment.html>
