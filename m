@@ -1,34 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 10:15:33 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-07-19
-In-Reply-To: <20120720100738.434746e8@skate>
-References: <20120720063154.B72D2521B8C@lolut.humanoidz.org>
- <20120720100738.434746e8@skate>
-Message-ID: <20120720101533.54b4fcb3@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 20 Jul 2012 08:20:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 5366] can't login (root or default)
+In-Reply-To: <bug-5366-163@https.bugs.busybox.net/>
+References: <bug-5366-163@https.bugs.busybox.net/>
+Message-ID: <20120720082059.DB20996C39@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 20 Jul 2012 10:07:38 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=5366
 
->      It also means that having a multilib capable compiler is not a
->      prerequisite of Buildroot on x86_64, at least to build Luajit for
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-07-20 08:20:59 UTC ---
+Can you repost your new .config and confirm that you did a complete "make
+clean;  make" ?
 
-Of course, as Maxime pointed me, I wanted to say:
-
-      It also means that having a multilib capable compiler is *NOW* a
-      prerequisite of Buildroot on x86_64, at least to build Luajit for
-
-Which, of course is quite the opposite of what my initial e-mail was
-saying. Thanks for pointing this!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
