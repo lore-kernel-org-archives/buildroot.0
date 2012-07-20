@@ -1,38 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 16:53:24 +0200
-Subject: [Buildroot] [git commit branch/next] pkg-download.mk: use
-	stripurischeme function in localfiles download method
-Message-ID: <20120802195257.D628D8E8F3@busybox.osuosl.org>
+Date: Fri, 20 Jul 2012 20:05:24 +0200
+Subject: [Buildroot] [git commit branch/next] dfu-util: cosmetic fix
+Message-ID: <20120802195257.24A128D2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d57669271d079b3bf09c5ae81f42871260d60c49
+commit: http://git.buildroot.net/buildroot/commit/?id=1677d40822f032fc09ab271a3d14eb6f445cc91b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-download.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/dfu-util/dfu-util.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index fb51540..ca5b404 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -178,11 +178,11 @@ endef
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index 4ba7014..77470fa 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -3,7 +3,7 @@
+ # dfu-util
+ #
+ #############################################################
+-DFU_UTIL_VERSION:=0.6
++DFU_UTIL_VERSION = 0.6
+ DFU_UTIL_SOURCE = dfu-util-$(DFU_UTIL_VERSION).tar.gz
+ DFU_UTIL_SITE = http://dfu-util.gnumonks.org/releases/
  
- define DOWNLOAD_LOCALFILES
- 	test -e $(DL_DIR)/$(2) || \
--		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
-+		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
- endef
- 
- define SOURCE_CHECK_LOCALFILES
--  test -e $(call qstrip,$(subst file://,,$(1)))
-+  test -e $(call stripurischeme,$(call qstrip,$(1)))
- endef
- 
- define SHOW_EXTERNAL_DEPS_LOCALFILES
