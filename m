@@ -1,128 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 20:03:52 +0200
-Subject: [Buildroot] [git commit] lua: use install -D everywhere
-Message-ID: <20120720180404.0014596BBF@busybox.osuosl.org>
+Date: Fri, 20 Jul 2012 20:03:53 +0200
+Subject: [Buildroot] [git commit] dfu-util: new package
+Message-ID: <20120720180404.30BA396BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8da6d1dd656caf5454c50ee5dddb4beead60326
+commit: http://git.buildroot.net/buildroot/commit/?id=f3c1ee9a598d470956d029a16b64a33c10aee06d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Installation of host-lua was failing because it was the first package
-to be built, and $(HOST_DIR)/usr/lib didn't exist. Therefore, use
-install -D everywhere so that intermediate directories are created as
-needed.
-
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua/lua.mk |   50 +++++++++++++++++++++++++-------------------------
- 1 files changed, 25 insertions(+), 25 deletions(-)
+ package/Config.in.host          |    1 +
+ package/dfu-util/Config.in.host |    8 ++++++++
+ package/dfu-util/dfu-util.mk    |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 074b9ad..fa1e7b1 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -46,7 +46,7 @@ endef
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 9fcfede..79050f2 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
  
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
- define LUA_INSTALL_STAGING_SHARED_LIB
--	$(INSTALL) -D $(@D)/src/liblua.so.$(LUA_VERSION) \
-+	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
- 		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
- endef
-@@ -55,37 +55,37 @@ endif
- define LUA_INSTALL_STAGING_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib
--	$(INSTALL) $(@D)/src/lua $(STAGING_DIR)/usr/bin
--	$(INSTALL) $(@D)/src/luac $(STAGING_DIR)/usr/bin
--	$(INSTALL) $(@D)/src/lua.h $(STAGING_DIR)/usr/include
--	$(INSTALL) $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include
--	$(INSTALL) $(@D)/src/lualib.h $(STAGING_DIR)/usr/include
--	$(INSTALL) $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include
-+	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
-+	$(INSTALL) -m 0755 -D $(@D)/src/lua $(STAGING_DIR)/usr/bin/lua
-+	$(INSTALL) -m 0755 -D $(@D)/src/luac $(STAGING_DIR)/usr/bin/luac
-+	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(STAGING_DIR)/usr/include/lua.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include/luaconf.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(STAGING_DIR)/usr/include/lualib.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
- endef
- 
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER),y)
- define LUA_INSTALL_INTERPRETER
--	$(INSTALL) $(@D)/src/lua $(TARGET_DIR)/usr/bin
-+	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_LUA_COMPILER),y)
- define LUA_INSTALL_COMPILER
--	$(INSTALL) $(@D)/src/luac $(TARGET_DIR)/usr/bin
-+	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
- define LUA_INSTALL_LIBRARY
--	$(INSTALL) $(@D)/src/liblua.so.$(LUA_VERSION) \
-+	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
- 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
--	$(INSTALL) $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
-+	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
- endef
- else
- define LUA_INSTALL_LIBRARY
--	$(INSTALL) $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
-+	$(INSTALL) -m 0644 -D$(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
- endef
- endif
- 
-@@ -93,10 +93,10 @@ ifeq ($(BR2_HAVE_DEVFILES),y)
- define LUA_INSTALL_DEVFILES
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
- 		$(TARGET_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) $(@D)/src/lua.h $(TARGET_DIR)/usr/include
--	$(INSTALL) $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include
--	$(INSTALL) $(@D)/src/lualib.h $(TARGET_DIR)/usr/include
--	$(INSTALL) $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include
-+	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(TARGET_DIR)/usr/include/lua.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(TARGET_DIR)/usr/include/luaconf.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(TARGET_DIR)/usr/include/lualib.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(TARGET_DIR)/usr/include/lauxlib.h
- endef
- endif
- 
-@@ -108,18 +108,18 @@ define LUA_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_LUA_INSTALL_CMDS
--	$(INSTALL) $(@D)/src/lua $(HOST_DIR)/usr/bin
--	$(INSTALL) $(@D)/src/luac $(HOST_DIR)/usr/bin
--	$(INSTALL) $(@D)/src/liblua.so.$(LUA_VERSION) \
-+	$(INSTALL) -m 0755 -D $(@D)/src/lua $(HOST_DIR)/usr/bin/lua
-+	$(INSTALL) -m 0755 -D $(@D)/src/luac $(HOST_DIR)/usr/bin/luac
-+	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
- 		$(HOST_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
- 	ln -sf liblua.so.$(LUA_VERSION) $(HOST_DIR)/usr/lib/liblua.so
--	$(INSTALL) $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
-+	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
- 		$(HOST_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) $(@D)/src/lua.h $(HOST_DIR)/usr/include
--	$(INSTALL) $(@D)/src/luaconf.h $(HOST_DIR)/usr/include
--	$(INSTALL) $(@D)/src/lualib.h $(HOST_DIR)/usr/include
--	$(INSTALL) $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include
-+	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(HOST_DIR)/usr/include/lua.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(HOST_DIR)/usr/include/luaconf.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(HOST_DIR)/usr/include/lualib.h
-+	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include/lauxlib.h
- endef
- 
- LUA_INSTALLED_FILES = \
++source "package/dfu-util/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+diff --git a/package/dfu-util/Config.in.host b/package/dfu-util/Config.in.host
+new file mode 100644
+index 0000000..cfeebdc
+--- /dev/null
++++ b/package/dfu-util/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_DFU_UTIL
++	bool "host dfu-util"
++	help
++	  Dfu-util is the host side implementation of the DFU 1.0 
++	  specification of the USB forum. DFU is intended to download
++	  and upload firmware to devices connected over USB. 
++
++	  http://dfu-util.gnumonks.org/
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+new file mode 100644
+index 0000000..4ba7014
+--- /dev/null
++++ b/package/dfu-util/dfu-util.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# dfu-util
++#
++#############################################################
++DFU_UTIL_VERSION:=0.6
++DFU_UTIL_SOURCE = dfu-util-$(DFU_UTIL_VERSION).tar.gz
++DFU_UTIL_SITE = http://dfu-util.gnumonks.org/releases/
++
++HOST_DFU_UTIL_DEPENDENCIES = host-libusb
++
++$(eval $(host-autotools-package))
++
