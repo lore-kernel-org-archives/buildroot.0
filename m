@@ -1,46 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:57:54 +0200
-Subject: [Buildroot] Approaching 2012.08-rc1, and beyond
-Message-ID: <20120731235754.56bc0b11@skate>
+Date: Fri, 20 Jul 2012 20:03:53 +0200
+Subject: [Buildroot] [git commit branch/next] dfu-util: new package
+Message-ID: <20120802195257.15F838D2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=f3c1ee9a598d470956d029a16b64a33c10aee06d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Within a few minutes, we will be August, 1st. I am therefore planning
-on releasing 2012.08-rc1 tomorrow evening in order to comply with our
-traditional release schedule.
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in.host          |    1 +
+ package/dfu-util/Config.in.host |    8 ++++++++
+ package/dfu-util/dfu-util.mk    |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-Even though I have tried to aggressively merge many patches in order to
-reduce the backlog, I unfortunately haven't been able to merge as much
-things as I wanted. Some packages (like gpsd) have caused various
-problems that have consumed quite some time to solve. So things like the
-Lua improvements, MIPS architecture support cleanups, gettext
-conversion to autotools-package and related cleanups, many new
-packages, etc. will have to wait until the next release.
-
-As usual, as soon as 2012.08-rc1 is released, we will have to work in
-two directions:
-
- * Continue the work on the 2012.08 release. I mostly will be interested
-   in build fixes (please help by proposing patches to fix build issues
-   found through http://autobuild.buildroot.org). I will however also
-   be accepting documentation improvements and addition of license
-   metadata to package .mk files since those have no chance of breaking
-   the build. This direction is obviously the most important one.
-
- * Continue to reduce the backlog by merging new features and major
-   changes in the 'next' branch, that will lend into the 'master'
-   branch as soon as 2012.08 is released.
-
-Thanks for the contribution of everyone!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 9fcfede..79050f2 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
+ 
++source "package/dfu-util/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+diff --git a/package/dfu-util/Config.in.host b/package/dfu-util/Config.in.host
+new file mode 100644
+index 0000000..cfeebdc
+--- /dev/null
++++ b/package/dfu-util/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_DFU_UTIL
++	bool "host dfu-util"
++	help
++	  Dfu-util is the host side implementation of the DFU 1.0 
++	  specification of the USB forum. DFU is intended to download
++	  and upload firmware to devices connected over USB. 
++
++	  http://dfu-util.gnumonks.org/
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+new file mode 100644
+index 0000000..4ba7014
+--- /dev/null
++++ b/package/dfu-util/dfu-util.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# dfu-util
++#
++#############################################################
++DFU_UTIL_VERSION:=0.6
++DFU_UTIL_SOURCE = dfu-util-$(DFU_UTIL_VERSION).tar.gz
++DFU_UTIL_SITE = http://dfu-util.gnumonks.org/releases/
++
++HOST_DFU_UTIL_DEPENDENCIES = host-libusb
++
++$(eval $(host-autotools-package))
++
