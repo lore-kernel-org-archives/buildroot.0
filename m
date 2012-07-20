@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jul 2012 23:45:25 +0200
-Subject: [Buildroot] [git commit branch/next] bwm-ng: move bwm-ng from
-	"Networking applications" to "System tools".
-Message-ID: <20120802195256.3EA2C8E8F3@busybox.osuosl.org>
+Date: Fri, 20 Jul 2012 09:42:05 +0200
+Subject: [Buildroot] [git commit branch/next] libfreefare: bump version to
+	0.3.4
+Message-ID: <20120802195256.9536B8E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b3e06f239b9c12074f88bdfd3c95b3cad0e9f1e
+commit: http://git.buildroot.net/buildroot/commit/?id=6d38cf852248764b633750d210f71cac983ec451
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-bwm-ng can monitor not only network bandwidth but also disk-io
-bandwidth, so it is more appropriate to put bwm-ng into System tools.
+This patch bumps the libfreefare package from version 0.3.2 to version 0.3.4.
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+Version 0.3.4 requires a minium libnfc version of 1.6. A separate patch has
+been submitted to bump the libnfc version; that patch should be regarded as
+a prerequisite for the present patch.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in |    2 +-
+ package/libfreefare/libfreefare.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 6aabb8e..154b82c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -511,7 +511,6 @@ endif
- source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
--source "package/bwm-ng/Config.in"
- source "package/can-utils/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
-@@ -658,6 +657,7 @@ source "package/attr/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
-+source "package/bwm-ng/Config.in"
- source "package/htop/Config.in"
- source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+index 3f0036a..3c96839 100644
+--- a/package/libfreefare/libfreefare.mk
++++ b/package/libfreefare/libfreefare.mk
+@@ -3,7 +3,7 @@
+ # libfreefare
+ #
+ #############################################################
+-LIBFREEFARE_VERSION = 0.3.2
++LIBFREEFARE_VERSION = 0.3.4
+ LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
+ LIBFREEFARE_DEPENDENCIES = libnfc openssl
+ 
