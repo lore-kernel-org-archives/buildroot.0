@@ -1,76 +1,62 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 21 Jul 2012 18:14:52 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: limit -reconfigure and -rebuild
-	actions
-In-Reply-To: <20120721151730.GA2543@mail.sceen.net>
-References: <1342791572-18657-1-git-send-email-rbraun@sceen.net>
- <20120720222722.5f89af04@skate> <20120720233136.GA25851@mail.sceen.net>
- <20120721145411.6e291ad2@skate> <20120721151730.GA2543@mail.sceen.net>
-Message-ID: <CAHXCMMK0J9pvVcXTfRApAcSYG+yxxOVffD_5goqF1OaBGEKROg@mail.gmail.com>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Sat, 21 Jul 2012 14:01:11 -0400
+Subject: [Buildroot] [PATCH v5 1/2] usb_modeswitch: update to 1.2.3
+In-Reply-To: <20120715231223.5a77873f@skate>
+References: <1332034235-17423-1-git-send-email-jwoltz@gmail.com>
+ <1332034235-17423-2-git-send-email-jwoltz@gmail.com>
+ <20120715231223.5a77873f@skate>
+Message-ID: <CAC78GpdpNkFPe+MwdO5tS_6FmpL_yB9m-eXwRUqtCFAM4_X4vA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Thomas,
 
-Here, I'll try to sum up what we talked few days ago on the IRC
-channel, plus give my opinion about this.
+I used TARGET_MAKE_ENV for the reason you specified. Arnout (or others)
+told me to use it.
+Also since this is an old thread, I was assuming my patch would not be
+accepted at this point. I just gave up hope and kept my other packages to
+myself.
 
-To be honest, the first time i tried these -reconfigure and -rebuild
-targets, I was surprised they didn't behave as I would expect from
-targets named like that, rebuilding not only the package but the
-images too. So, I keep doing things by hands... though I understand
-why things were implemented like this.
+JC
 
-IMO, for anyone who wants to re-{configure,build} a package, there are
-several use cases (some of these have already been mentioned in this
-thread):
-1) integrate a (new) package in BR;
-2) experimenting, on the target, the result of modifications in the
-source code of a package;
-3) add a new package in an image.
+On Sun, Jul 15, 2012 at 5:12 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-IMO, goals 3) is the combination of the first 2 ones, though it's
-often the first thing coming in mind.
-
-Because of what BR is, people working with it may follow one or
-another of these goals:
-- people working on targets and what the target will do at the end
-mostly aims goal 2) or 3) (or both!);
-- people working on BR, considering it as a distribution (working on
-the package integration/upgrade, the infrastructure, etc) focus on 1).
-
-So, depending on the end goal, the expected behavior of the make
-targets '-reconfigure' and '-rebuild' may differ:
-- for the goal 1) followers: these targets should only rebuild the
-given package;
-- for the goals 2) and/or 3) followers: these targets should, not only
-rebuild the given package, but also the whole regenerate the whole
-image.
-
-I'd like 4 targets in BR:
-- "-rebuild-single": re-building and re-installing only the given package;
-- "-reconfigure-single": re-configuring the given package, then
-running 'make <pkg>-rebuild-single';
-- "-rebuild-all": running: 'make <pkg>-rebuild-single all';
-- "-reconfigure-all": running: 'make <pkg>-reconfigure-single all';
-
-The name of these targets may differ, but the semantic is here.
-
-
-2012/7/21 Richard Braun <rbraun@sceen.net>:
-> On Sat, Jul 21, 2012 at 02:54:11PM +0200, Thomas Petazzoni wrote:
->> However, I don't agree with the change you did on -reconfigure that
->> would only to the configure step. If -rebuild does build+install, then
->> -reconfigure should do configure+build+install.
+> Hello,
 >
-> Right, after a bit more thinking, I agree.
-Of course, I second.
-
-
-Cheers,
-
--- 
-Sam
+> [ Reviving an old thread... ]
+>
+> Le Sat, 17 Mar 2012 21:30:34 -0400,
+> "J.C. Woltz" <jwoltz@gmail.com> a ?crit :
+>
+> > This patch updates usb_modeswitch to version 1.2.3.
+> > The usb_modeswitch.mk needed to be modified for usb_modeswitch to
+> compile.
+> > Also added extra remove section for the added help scripts and files.
+> >
+> > Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+> > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > ---
+> > replace TARGET_MAKE_ENV and add USB_MODESWITCH_UNINSTALL_CMDS
+> > as recommended by Arnout Vandecappelle
+>
+> Why do you use TARGET_MAKE_ENV here? It seems much better to use
+> TARGET_CONFIGURE_OPTS as you were doing in previous versions of your
+> patch. Arnout, can you explain why you suggested using TARGET_MAKE_ENV
+> instead of TARGET_CONFIGURE_OPTS?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120721/aef743a9/attachment.html>
