@@ -1,244 +1,100 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 21 Jul 2012 12:58:49 +0200
-Subject: [Buildroot] [PATCH] luajit: complete replacement for lua v2
-Message-ID: <1342868329-4814-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Jul 2012 14:47:03 +0200
+Subject: [Buildroot] [PATCH] Add package linux-pam (resending,
+ fixed indentation, mentioned website)
+In-Reply-To: <CADiAo4LmN0eWpTfasuD9UdnVwLv36ggNuqDJsMzTcmbL4gBP5A@mail.gmail.com>
+References: <1342647267-20745-1-git-send-email-golubovsky@gmail.com>
+ <20120720224538.189830cc@skate>
+ <CADiAo4LmN0eWpTfasuD9UdnVwLv36ggNuqDJsMzTcmbL4gBP5A@mail.gmail.com>
+Message-ID: <20120721144703.1602c705@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the mutual exclusion is done by a choice
----
- Makefile                                        |    6 ++++++
- package/Config.in                               |    1 -
- package/copas/copas.mk                          |    2 +-
- package/coxpcall/coxpcall.mk                    |    1 -
- package/lua/Config.in                           |   25 +++++++++++++++++++++++
- package/luacjson/luacjson.mk                    |    2 +-
- package/luaexpat/luaexpat.mk                    |    2 +-
- package/luafilesystem/luafilesystem.mk          |    2 +-
- package/luajit/Config.in                        |   12 -----------
- package/luajit/luajit-05-install-like-lua.patch |   17 +++++++++++++++
- package/luasocket/luasocket.mk                  |    2 +-
- package/rings/rings.mk                          |    2 +-
- package/xavante/xavante.mk                      |    2 +-
- 13 files changed, 55 insertions(+), 21 deletions(-)
- delete mode 100644 package/luajit/Config.in
- create mode 100644 package/luajit/luajit-05-install-like-lua.patch
+Le Fri, 20 Jul 2012 21:19:23 -0400,
+Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
 
-diff --git a/Makefile b/Makefile
-index 639fdaa..479556b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -283,6 +283,12 @@ HOSTCC  := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
- endif
- 
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+    LUA_INTERPRETER = lua
-+else ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+    LUA_INTERPRETER = luajit
-+endif
-+
- #############################################################
- #
- # You should probably leave this stuff alone unless you know
-diff --git a/package/Config.in b/package/Config.in
-index f664b8e..7e7d8a6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -246,7 +246,6 @@ endmenu
- menu "Interpreter languages and scripting"
- source "package/haserl/Config.in"
- source "package/lua/Config.in"
--source "package/luajit/Config.in"
- if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
- menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
-diff --git a/package/copas/copas.mk b/package/copas/copas.mk
-index cd9ab7a..5ffa190 100644
---- a/package/copas/copas.mk
-+++ b/package/copas/copas.mk
-@@ -6,7 +6,7 @@
- 
- COPAS_VERSION = 1.1.6
- COPAS_SITE = http://github.com/downloads/keplerproject/copas
--COPAS_DEPENDENCIES = lua coxpcall luasocket
-+COPAS_DEPENDENCIES = coxpcall luasocket
- 
- define COPAS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/copas/copas.lua \
-diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
-index 94fc16c..9f8d8fa 100644
---- a/package/coxpcall/coxpcall.mk
-+++ b/package/coxpcall/coxpcall.mk
-@@ -6,7 +6,6 @@
- 
- COXPCALL_VERSION = 1.13.0
- COXPCALL_SITE = http://luaforge.net/frs/download.php/3406
--COXPCALL_DEPENDENCIES = lua
- 
- define COXPCALL_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/src/coxpcall.lua \
-diff --git a/package/lua/Config.in b/package/lua/Config.in
-index 76359c0..06f3046 100644
---- a/package/lua/Config.in
-+++ b/package/lua/Config.in
-@@ -1,3 +1,13 @@
-+
-+choice
-+	prompt "Lua Interpreter"
-+	default BR2_PACKAGE_LUA_NONE
-+
-+config BR2_PACKAGE_LUA_NONE
-+	bool "none"
-+	help
-+	 Do not compress the tarball.
-+
- config BR2_PACKAGE_LUA
- 	bool "lua"
- 	help
-@@ -5,6 +15,21 @@ config BR2_PACKAGE_LUA
- 
- 	  http://www.lua.org/
- 
-+config BR2_PACKAGE_LUAJIT
-+	bool "luajit"
-+	# Luajit is only available for some target architectures, and
-+	# has some complexity wrt 32/64. See luajit.mk for details.
-+	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
-+	help
-+	  LuaJIT implements the full set of language features defined
-+	  by Lua 5.1. The virtual machine (VM) is API- and
-+	  ABI-compatible to the standard Lua interpreter and can be
-+	  deployed as a drop-in replacement.
-+
-+	  http://luajit.org/
-+
-+endchoice
-+
- if BR2_PACKAGE_LUA
- 
- config BR2_PACKAGE_LUA_COMPILER
-diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-index fe92f16..64cc4b8 100644
---- a/package/luacjson/luacjson.mk
-+++ b/package/luacjson/luacjson.mk
-@@ -6,7 +6,7 @@
- LUACJSON_VERSION      = 2.1.0
- LUACJSON_SOURCE       = lua-cjson-$(LUACJSON_VERSION).tar.gz
- LUACJSON_SITE         = http://www.kyne.com.au/~mark/software/download
--LUACJSON_DEPENDENCIES = lua
-+LUACJSON_DEPENDENCIES = $(LUA_INTERPRETER)
- 
- define LUACJSON_BUILD_CMDS
- 	$(MAKE) -C $(@D) \
-diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-index 400d7b4..3f84976 100644
---- a/package/luaexpat/luaexpat.mk
-+++ b/package/luaexpat/luaexpat.mk
-@@ -6,7 +6,7 @@
- 
- LUAEXPAT_VERSION      = 1.2.0
- LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
--LUAEXPAT_DEPENDENCIES = lua expat
-+LUAEXPAT_DEPENDENCIES = $(LUA_INTERPRETER) expat
- 
- 
- LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
-diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
-index 17f2bd6..eaac029 100644
---- a/package/luafilesystem/luafilesystem.mk
-+++ b/package/luafilesystem/luafilesystem.mk
-@@ -6,7 +6,7 @@
- 
- LUAFILESYSTEM_VERSION = 1.5.0
- LUAFILESYSTEM_SITE = http://github.com/downloads/keplerproject/luafilesystem
--LUAFILESYSTEM_DEPENDENCIES = lua
-+LUAFILESYSTEM_DEPENDENCIES = $(LUA_INTERPRETER)
- 
- ifeq ($(BR2_LARGEFILE),y)
- LFS_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-deleted file mode 100644
-index 23b2650..0000000
---- a/package/luajit/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_LUAJIT
--	bool "luajit"
--	# Luajit is only available for some target architectures, and
--	# has some complexity wrt 32/64. See luajit.mk for details.
--	depends on BR2_i386 || (BR2_x86_64 && BR2_HOSTARCH='x86_64') || BR2_powerpc || BR2_arm || BR2_armeb
--	help
--	  LuaJIT implements the full set of language features defined
--	  by Lua 5.1. The virtual machine (VM) is API- and
--	  ABI-compatible to the standard Lua interpreter and can be
--	  deployed as a drop-in replacement.
--
--	  http://luajit.org/
-diff --git a/package/luajit/luajit-05-install-like-lua.patch b/package/luajit/luajit-05-install-like-lua.patch
-new file mode 100644
-index 0000000..8b91805
---- /dev/null
-+++ b/package/luajit/luajit-05-install-like-lua.patch
-@@ -0,0 +1,17 @@
-+Install includes in /usr/include
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -33,7 +33,7 @@
-+ INSTALL_BIN=   $(DPREFIX)/bin
-+ INSTALL_LIB=   $(DPREFIX)/lib
-+ INSTALL_SHARE= $(DPREFIX)/share
-+-INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
-++INSTALL_INC=   $(DPREFIX)/include
-+ 
-+ INSTALL_JITLIB= $(INSTALL_SHARE)/luajit-$(VERSION)/jit
-+ INSTALL_LMOD= $(INSTALL_SHARE)/lua/$(ABIVER)
-diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
-index 755b61a..509b85d 100644
---- a/package/luasocket/luasocket.mk
-+++ b/package/luasocket/luasocket.mk
-@@ -6,7 +6,7 @@
- 
- LUASOCKET_VERSION = 2.0.2
- LUASOCKET_SITE = http://luaforge.net/frs/download.php/2664
--LUASOCKET_DEPENDENCIES = lua
-+LUASOCKET_DEPENDENCIES = $(LUA_INTERPRETER)
- 
- define LUASOCKET_BUILD_CMDS
- 	$(MAKE) -C $(@D) -f makefile \
-diff --git a/package/rings/rings.mk b/package/rings/rings.mk
-index c196d85..c9f99f1 100644
---- a/package/rings/rings.mk
-+++ b/package/rings/rings.mk
-@@ -6,7 +6,7 @@
- 
- RINGS_VERSION = 1.2.3
- RINGS_SITE = http://github.com/downloads/keplerproject/rings
--RINGS_DEPENDENCIES = lua
-+RINGS_DEPENDENCIES = $(LUA_INTERPRETER)
- 
- define RINGS_BUILD_CMDS
- 	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS) -fPIC"
-diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
-index f885fbd..37773dc 100644
---- a/package/xavante/xavante.mk
-+++ b/package/xavante/xavante.mk
-@@ -6,7 +6,7 @@
- 
- XAVANTE_VERSION = 2.2.1
- XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
--XAVANTE_DEPENDENCIES = cgilua copas coxpcall lua luafilesystem luasocket wsapi
-+XAVANTE_DEPENDENCIES = cgilua copas coxpcall luafilesystem luasocket wsapi
- 
- define XAVANTE_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) PREFIX=/usr \
+> Apart from the comment regarding config.h patching (this is a separate
+> undertaking):
+
+Be careful: you can't patch config.h, it is generated
+during ./configure. So the best option is probably to see *why* you
+need to do these changes and see if by passing options or environment
+variables to the ./configure it isn't possible to achieve the same goal.
+
+> > This Busybox change should be part of a separate patch (so your patch
+> > series should have two patches: one adding the linux-pam package, one
+> > tweaking Busybox to use linux-pam).
+> 
+> Well, I thought about splitting the patch into two, but both parts can
+> only be applied together then.
+
+Yes, no problem.
+
+> > Also, shouldn't you ensure that CONFIG_PAM is enabled in the Busybox
+> > configuration in that case?
+> 
+> IMHO these things are orthogonal.
+> 
+> If BR2_PACKAGE_LINUX_PAM is selected, it will be built before busybox
+> - what's the difference? If BR2_PACKAGE_LINUX_PAM is not selected,
+> busybox.mk extra dependencies are not in effect - correct?
+
+Correct.
+
+> If CONFIG_PAM is not selected in busybox, it is not affected by PAM
+> other than the fact that PAM will be built earlier. The only situation
+> when bad outcome is possible:  CONFIG_PAM is selected in busybox, and
+> BR2_PACKAGE_LINUX_PAM is not selected. But this will be obvious to the
+> user, why busybox does not build.
+> 
+> I don't really want to force PAM support in busybox as a consequence
+> of user selection of BR2_PACKAGE_LINUX_PAM alone. The reverse makes
+> more sense: I may add a sub-item in busybox config which enables PAM
+> in both buildroot an busybox.
+> 
+> Please let me know if this is acceptable.
+
+Well, the thing is that this generally not really how we handle things
+in Buildroot. In general, as soon as some library is available and
+provide a feature that can be used by a package, then we automatically
+use it. Some examples:
+
+ (1) Having RPC or IPv6 support in the toolchain will automatically
+     enable certain Busybox applet or options.
+
+ (2) Many packages use a library if available, without having a
+     specific option for it. See for example how bind, ctorrent or
+     libecore use openssl when available.
+
+We could have thought of doing the opposite: if CONFIG_PAM is enabled
+in the Busybox configuration, then we add linux-pam to the
+dependencies. But unfortunately, this is not possible: we cannot add
+things to <foo>_DEPENDENCIES depending on the Busybox configuration :-(
+
+So, I'd say I would prefer to follow what we do for all other packages.
+Basically, my understanding of our rule is that we do something that
+makes sense by default, and if someone really wants linux-pam for
+something else, but not for Busybox, that someone can do a very simple
+modification to busybox.mk to change this. Just like if someone wants
+openssl for something in its system, but not for bind or ctorrent,
+(s)he would have to make changes in the bind.mk or ctorrent.mk files.
+
+> > No, see
+> > http://buildroot.org/downloads/manual/manual.html#_gettext_integration_and_interaction_with_packages.
+> 
+> I probably missed this, will fix.
+> 
+> For the rest of your comment (fixing config.h  post-configure) I need
+> a closer look and some more time.
+
+Ok, no problem.
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
