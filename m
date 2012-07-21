@@ -1,45 +1,476 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jul 2012 15:26:03 +0200
-Subject: [Buildroot] [PATCH] Bump gpsd from version 2.95 to version 3.7
-In-Reply-To: <CAHt8ZCN-KYmfjbp4R3zwhLnRKrPUnrS1TziaECh8zvcEWZYddg@mail.gmail.com>
-References: <1342779078-2927-1-git-send-email-spdawson@gmail.com>
- <20120720201626.707f66a2@skate>
- <CAHt8ZCN-KYmfjbp4R3zwhLnRKrPUnrS1TziaECh8zvcEWZYddg@mail.gmail.com>
-Message-ID: <20120721152603.01df6a00@skate>
+Date: Sat, 21 Jul 2012 15:57:42 +0200
+Subject: [Buildroot] [git commit] toolchain-external/Config.in: fix
+	indentation
+Message-ID: <20120721135821.226E396C85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 21 Jul 2012 10:07:38 +0100,
-Simon Dawson <spdawson@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=5022fa823cc3c124a97588a3191ba10a25b5f004
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Is there a non-ugly variant of this in the works?
-> 
-> Not at present, I'm afraid. What would you suggest? Obviously, I can
-> kick off the process of trying to get a fix into gpsd upstream. That
-> could be a slow process; so, in the meantime, is it acceptable to have
-> this (ugly, but small) patch in Buildroot?
+Fix the indentation of the external toolchain Config file, where tabs
+and spaces are mixed as indentation even within the same block.
 
-Yes, it is perfectly acceptable. It's just that we generally try to
-start the process of getting problems fixed upstream at the same time,
-so hopefully at some point in the future (which may be a distant
-point), such patches can be removed.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in |  342 ++++++++++++++++----------------
+ 1 files changed, 171 insertions(+), 171 deletions(-)
 
-> >> +GPSD_DEPENDENCIES = host-scons host-python
-> >
-> > Do we really need a host-python here?
-> 
-> You're quite right: there is no need for the Python version to be the
-> same on host and target. I'll remove this spurious dependency in the
-> next iteration of the patch.
-
-Excellent, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index f58523f..172e3e3 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -69,16 +69,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	  Mentor Graphics. It uses gcc 4.6.1, binutils 2.21.53, glibc
+ 	  2.13 and gdb 7.2.50, kernel headers 3.0.1. It has support
+ 	  for the following variants:
+-            - ARMv5TE, little endian, soft-float, glibc
+-              Select ARM926T, ARM10T, XScale or another ARMv5 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv4T, little endian, soft-float, glibc
+-              Select ARM720T, ARM920T, ARM922T or another ARMv4 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+-              Select Cortex-A8, Cortex-A9 or another ARMv7-A core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mthumb
++	    - ARMv5TE, little endian, soft-float, glibc
++	      Select ARM926T, ARM10T, XScale or another ARMv5 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	bool "Sourcery CodeBench ARM 2011.03"
+@@ -90,16 +90,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
+ 	  2.13 and gdb 7.2.50, kernel headers 2.6.38. It has support
+ 	  for the following variants:
+-            - ARMv5TE, little endian, soft-float, glibc
+-              Select ARM926T, ARM10T, XScale or another ARMv5 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv4T, little endian, soft-float, glibc
+-              Select ARM720T, ARM920T, ARM922T or another ARMv4 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+-              Select Cortex-A8, Cortex-A9 or another ARMv7-A core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mthumb
++	    - ARMv5TE, little endian, soft-float, glibc
++	      Select ARM926T, ARM10T, XScale or another ARMv5 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	bool "Sourcery CodeBench ARM 2010.09"
+@@ -111,16 +111,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	  Mentor Graphics. It uses gcc 4.5.1, binutils 2.20, glibc
+ 	  2.11 and gdb 7.2.50, kernel headers 2.6.35.2. It has support
+ 	  for the following variants:
+-            - ARMv5TE, little endian, soft-float, glibc
++	    - ARMv5TE, little endian, soft-float, glibc
+ 	      Select ARM926T, ARM10T, XScale or another ARMv5 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv4T, little endian, soft-float, glibc
+-              Select ARM720T, ARM920T, ARM922T or another ARMv4 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+-              Select Cortex-A8, Cortex-A9 or another ARMv7-A core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mthumb
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+ 	bool "Sourcery CodeBench ARM 2010q1"
+@@ -132,16 +132,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+ 	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
+ 	  2.11, gdb 7.0.50 and kernel headers 2.6.32. It has support
+ 	  for the following variants:
+-             - ARMv5T, little endian, soft-float, glibc
+-               Select ARM926T, ARM10T, XScale or another ARMv5 core
+-               Select BR2_SOFT_FLOAT
+-             - ARMv4T, little endian, soft-float, glibc
+-               Select ARM720T, ARM920T, ARM922T or another ARMv4 core
+-               Select BR2_SOFT_FLOAT
+-             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+-               Select Cortex-A8, Cortex-A9 or another ARMv7-A core
+-               Select BR2_SOFT_FLOAT
+-               Set BR2_TARGET_OPTIMIZATION to -mthumb
++	     - ARMv5T, little endian, soft-float, glibc
++	       Select ARM926T, ARM10T, XScale or another ARMv5 core
++	       Select BR2_SOFT_FLOAT
++	     - ARMv4T, little endian, soft-float, glibc
++	       Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	       Select BR2_SOFT_FLOAT
++	     - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	       Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	       Select BR2_SOFT_FLOAT
++	       Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
+ 	bool "Sourcery CodeBench ARM 2009q3"
+@@ -153,16 +153,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
+ 	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
+ 	  2.10 and gdb 6.8 and kernel headers 2.6.30. It has support
+ 	  for the following variants:
+-            - ARMv5T, little endian, soft-float, glibc
+-              Select ARM926T, ARM10T, XScale or another ARMv5 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv4T, little endian, soft-float, glibc
+-              Select ARM720T, ARM920T, ARM922T or another ARMv4 core
+-              Select BR2_SOFT_FLOAT
+-            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+-              Select Cortex-A8, Cortex-A9 or another ARMv7-A core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mthumb
++	    - ARMv5T, little endian, soft-float, glibc
++	      Select ARM926T, ARM10T, XScale or another ARMv5 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	bool "Sourcery CodeBench MIPS 2011.03"
+@@ -174,44 +174,44 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
+ 	  2.13, uClibc 0.9.30 and gdb 7.2.50, kernel headers
+ 	  2.6.38. It has support for the following variants:
+-            - MIPS32 O32 big endian glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-            - MIPS32 O32 little endian glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL
+-            - MIPS32 big endian soft float glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-            - MIPS32 little endian soft float glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL
+-            - MIPS32 big endian microMIPS glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mips16
+-            - MIPS32 little endian microMIPS glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL -mips16
+-            - MIPS32 big endian soft float microMIPS glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mips16
+-            - MIPS32 little endian soft float microMIPS glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL -mips16
+-            - MIPS32 big endian uclibc
+-              Not usable in Buildroot yet.
+-            - MIPS32 little endian uclibc
+-              Not usable in Buildroot yet.
+-            - MIPS32 big endian soft float uclibc
+-              Not usable in Buildroot yet.
+-            - MIPS32 little endian soft float uclibc
+-              Not usable in Buildroot yet.
++	    - MIPS32 O32 big endian glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	    - MIPS32 O32 little endian glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS32 big endian soft float glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	    - MIPS32 little endian soft float glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS32 big endian microMIPS glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mips16
++	    - MIPS32 little endian microMIPS glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
++	    - MIPS32 big endian soft float microMIPS glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mips16
++	    - MIPS32 little endian soft float microMIPS glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
++	    - MIPS32 big endian uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 little endian uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 big endian soft float uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 little endian soft float uclibc
++	      Not usable in Buildroot yet.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	bool "Sourcery CodeBench MIPS 4.4"
+@@ -223,44 +223,44 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
+ 	  2.11, uClibc 0.9.30 and gdb 7.0, kernel headers 2.6.32. It
+ 	  has support for the following variants:
+-            - MIPS32 O32 big endian glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-            - MIPS32 O32 little endian glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL
+-            - MIPS32 big endian soft float glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-            - MIPS32 little endian soft float glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL
+-            - MIPS32 big endian microMIPS glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mips16
+-            - MIPS32 little endian microMIPS glibc
+-              Select a MIPS generic core
+-              Disable BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL -mips16
+-            - MIPS32 big endian soft float microMIPS glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -mips16
+-            - MIPS32 little endian soft float microMIPS glibc
+-              Select a MIPS generic core
+-              Select BR2_SOFT_FLOAT
+-              Set BR2_TARGET_OPTIMIZATION to -EL -mips16
+-            - MIPS32 big endian uclibc
+-              Not usable in Buildroot yet.
+-            - MIPS32 little endian uclibc
+-              Not usable in Buildroot yet.
+-            - MIPS32 big endian soft float uclibc
+-              Not usable in Buildroot yet.
+-            - MIPS32 little endian soft float uclibc
+-              Not usable in Buildroot yet.
++	    - MIPS32 O32 big endian glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	    - MIPS32 O32 little endian glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS32 big endian soft float glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	    - MIPS32 little endian soft float glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS32 big endian microMIPS glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mips16
++	    - MIPS32 little endian microMIPS glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
++	    - MIPS32 big endian soft float microMIPS glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mips16
++	    - MIPS32 little endian soft float microMIPS glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
++	    - MIPS32 big endian uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 little endian uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 big endian soft float uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 little endian soft float uclibc
++	      Not usable in Buildroot yet.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	bool "Sourcery CodeBench PowerPC 2011.03"
+@@ -272,22 +272,22 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51,
+ 	  glibc 2.13, gdb 7.2.50 and kernel headers 2.6.38. It has
+ 	  support for the following variants:
+-            - 603 glibc, 32 bits
++	    - 603 glibc, 32 bits
+ 	      Select a generic PowerPC core
+ 	      Disable BR2_SOFT_FLOAT
+-            - 603 soft float glibc, 32 bits
++	    - 603 soft float glibc, 32 bits
+ 	      Select a generic PowerPC core
+ 	      Enable BR2_SOFT_FLOAT
+-            - e600 altivec glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te600
+-            - e500v1 glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te500v1
+-            - e500v2 glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te500v2
+-            - e500mc glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te500mc
+-            - 970 glibc hard-float, 64 bits
+-              Set BR2_TARGET_OPTIMIZATION to -m64
++	    - e600 altivec glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te600
++	    - e500v1 glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500v1
++	    - e500v2 glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500v2
++	    - e500mc glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500mc
++	    - 970 glibc hard-float, 64 bits
++	      Set BR2_TARGET_OPTIMIZATION to -m64
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	bool "Sourcery CodeBench PowerPC 2010.09"
+@@ -299,22 +299,22 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+ 	  glibc 2.11, gdb 7.2.50 and kernel headers 2.6.35.2. It has
+ 	  support for the following variants:
+-            - 603 glibc, 32 bits
++	    - 603 glibc, 32 bits
+ 	      Select a generic PowerPC core
+ 	      Disable BR2_SOFT_FLOAT
+-            - 603 soft float glibc, 32 bits
++	    - 603 soft float glibc, 32 bits
+ 	      Select a generic PowerPC core
+ 	      Enable BR2_SOFT_FLOAT
+-            - e600 altivec glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te600
+-            - e500v1 glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te500v1
+-            - e500v2 glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te500v2
+-            - e500mc glibc, 32 bits
+-              Set BR2_TARGET_OPTIMIZATION to -te500mc
+-            - 970 glibc hard-float, 64 bits
+-              Set BR2_TARGET_OPTIMIZATION to -m64
++	    - e600 altivec glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te600
++	    - e500v1 glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500v1
++	    - e500v2 glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500v2
++	    - e500mc glibc, 32 bits
++	      Set BR2_TARGET_OPTIMIZATION to -te500mc
++	    - 970 glibc hard-float, 64 bits
++	      Set BR2_TARGET_OPTIMIZATION to -m64
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	bool "Sourcery CodeBench SH 2011.03"
+@@ -326,14 +326,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+ 	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
+ 	  2.6.38. It has support for the following variants:
+-            - SH4A, glibc, little endian
+-              Default.
+-            - SH4A, glibc, big endian
+-              Add -mb to BR2_TARGET_OPTIMIZATION
+-            - SH4A, uClibc, little endian
+-              Not usable in Buildroot yet.
+-            - SH4A, uClibc, big endian
+-              Not usable in Buildroot yet.
++	    - SH4A, glibc, little endian
++	      Default.
++	    - SH4A, glibc, big endian
++	      Add -mb to BR2_TARGET_OPTIMIZATION
++	    - SH4A, uClibc, little endian
++	      Not usable in Buildroot yet.
++	    - SH4A, uClibc, big endian
++	      Not usable in Buildroot yet.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	bool "Sourcery CodeBench SH 2010.09"
+@@ -345,14 +345,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+ 	  glibc 2.11, uClibc 0.9.30, gdb 7.2.50 and kernel headers
+ 	  2.6.35.2. It has support for the following variants:
+-            - SH4A, glibc, little endian
+-              Default.
+-            - SH4A, glibc, big endian
+-              Add -mb to BR2_TARGET_OPTIMIZATION
+-            - SH4A, uClibc, little endian
+-              Not usable in Buildroot yet.
+-            - SH4A, uClibc, big endian
+-              Not usable in Buildroot yet.
++	    - SH4A, glibc, little endian
++	      Default.
++	    - SH4A, glibc, big endian
++	      Add -mb to BR2_TARGET_OPTIMIZATION
++	    - SH4A, uClibc, little endian
++	      Not usable in Buildroot yet.
++	    - SH4A, uClibc, big endian
++	      Not usable in Buildroot yet.
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	bool "Sourcery CodeBench SH 2011.03"
+@@ -369,7 +369,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+ 	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
+ 	  support for the following variants:
+-            - SH2A, uClibc, big endian
++	    - SH2A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	bool "Sourcery CodeBench SH 2010.09"
+@@ -386,7 +386,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+ 	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
+ 	  has support for the following variants:
+-            - SH2A, uClibc, big endian
++	    - SH2A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	bool "Sourcery CodeBench x86/x86_64 2011.09"
+@@ -485,10 +485,10 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	  http://wiki.xilinx.com/mb-gnu-tools
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+-       bool "Custom toolchain"
+-       help
+-         Use this option to use a custom toolchain pre-installed on
+-         your system.
++	bool "Custom toolchain"
++	help
++	  Use this option to use a custom toolchain pre-installed on
++	  your system.
+ 
+ endchoice
+ 
