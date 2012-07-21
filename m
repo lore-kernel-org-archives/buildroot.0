@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jul 2012 14:54:11 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: limit -reconfigure and -rebuild
- actions
-In-Reply-To: <20120720233136.GA25851@mail.sceen.net>
-References: <1342791572-18657-1-git-send-email-rbraun@sceen.net>
- <20120720222722.5f89af04@skate>
- <20120720233136.GA25851@mail.sceen.net>
-Message-ID: <20120721145411.6e291ad2@skate>
+Date: Sat, 21 Jul 2012 15:26:03 +0200
+Subject: [Buildroot] [PATCH] Bump gpsd from version 2.95 to version 3.7
+In-Reply-To: <CAHt8ZCN-KYmfjbp4R3zwhLnRKrPUnrS1TziaECh8zvcEWZYddg@mail.gmail.com>
+References: <1342779078-2927-1-git-send-email-spdawson@gmail.com>
+ <20120720201626.707f66a2@skate>
+ <CAHt8ZCN-KYmfjbp4R3zwhLnRKrPUnrS1TziaECh8zvcEWZYddg@mail.gmail.com>
+Message-ID: <20120721152603.01df6a00@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 21 Jul 2012 01:31:36 +0200,
-Richard Braun <rbraun@sceen.net> a ?crit :
+Le Sat, 21 Jul 2012 10:07:38 +0100,
+Simon Dawson <spdawson@gmail.com> a ?crit :
 
-> To clarify my point of view: the intended behaviour is obvious, and
-> I assumed the original author knew what he wanted when these targets
-> were added.
-
-Actually, the original author was me :-)
-
-See 4ed4e5016b741341059ed826416dad3291df0b2c.
-
-> But my use cases are rather the following: I am making
-> modifications to the source code of a package, and I want to easily use
-> the environment provided by buildroot (the toolchain, the staging
-> directory and the target optimizations, maybe others). If it fails, it
-> will stop in either case. But if it succeeds, I want to easily check the
-> output and make sure the build process produced the expected results
-> (I mostly check compiler warnings, sometimes the generated code). If I
-> am confident in the results, I just add && make (which is short and
-> simple enough) to get the current behaviour.
+> > Is there a non-ugly variant of this in the works?
 > 
-> I usually use buildroot with two flavors of configuration: a production
-> one, and a developer one (with debugging symbols, target debugging tools
-> such as valgrind, sometimes -O0 executables). This can result in huge
-> images, so getting to that step while the build of the package I'm
-> working on didn't reach a state I can confidently validate doesn't make
-> sense. And when it does (and even if it doesn't), simply adding
-> "&& make" does the job.
+> Not at present, I'm afraid. What would you suggest? Obviously, I can
+> kick off the process of trying to get a fix into gpsd upstream. That
+> could be a slow process; so, in the meantime, is it acceptable to have
+> this (ugly, but small) patch in Buildroot?
 
-It does make some sense, but I'd like to see the opinion of others.
+Yes, it is perfectly acceptable. It's just that we generally try to
+start the process of getting problems fixed upstream at the same time,
+so hopefully at some point in the future (which may be a distant
+point), such patches can be removed.
 
-However, I don't agree with the change you did on -reconfigure that
-would only to the configure step. If -rebuild does build+install, then
--reconfigure should do configure+build+install.
+> >> +GPSD_DEPENDENCIES = host-scons host-python
+> >
+> > Do we really need a host-python here?
+> 
+> You're quite right: there is no need for the Python version to be the
+> same on host and target. I'll remove this spurious dependency in the
+> next iteration of the patch.
+
+Excellent, thanks.
 
 Thomas
 -- 
