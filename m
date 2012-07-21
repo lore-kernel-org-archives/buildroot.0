@@ -1,172 +1,28 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sat, 21 Jul 2012 19:47:51 +0100
-Subject: [Buildroot] [PATCH v6] lighttpd: use standard web root directory
-Message-ID: <1342896471-4573-1-git-send-email-spdawson@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 21 Jul 2012 16:36:58 -0300
+Subject: [Buildroot] [PATCH] curlftpfs: new package
+In-Reply-To: <20120721173144.1f50021f@skate>
+References: <1342884438-5325-1-git-send-email-rbraun@sceen.net>
+ <20120721173144.1f50021f@skate>
+Message-ID: <500B04DA.4000906@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 07/21/12 12:31, Thomas Petazzoni wrote:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Acked-By: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- v6: Fix server.document-root in configuration (problem found by
- Thomas Petazzoni)
- v5: Add acked-by for Maxime Ripard
- v4: Add signed off by line to lighttpd patch, as suggested by Maxime Ripard
- v3: Update patch to reduce fuzz caused by changes to package build
- infrastructure.
- v2: Fixed creation of web root directory during install. Also fixed makefile
- to use $(INSTALL) and $(RM) instead of mkdir and rm -f
+> This "Hardware handling" menu is becoming quite crazy. curlftpfs
+> clearly has nothing to do with Hardware handling (and many other things
+> in there).
+> 
+> Even "cramfs" for example is not quite Hardware handling related. Maybe
+> we should put more things in the "System tools" menu, or create a
+> "Filesystems tools" menu or something. Suggestions welcome.
+> 
+> Otherwise, looks good.
+> 
+> Thomas
 
- .../lighttpd-Fix-default-config-file.patch         |   62 +++++++++++---------
- package/lighttpd/lighttpd.mk                       |   11 ++--
- 2 files changed, 39 insertions(+), 34 deletions(-)
-
-diff --git a/package/lighttpd/lighttpd-Fix-default-config-file.patch b/package/lighttpd/lighttpd-Fix-default-config-file.patch
-index 59ce907..88d2c6f 100644
---- a/package/lighttpd/lighttpd-Fix-default-config-file.patch
-+++ b/package/lighttpd/lighttpd-Fix-default-config-file.patch
-@@ -8,25 +8,35 @@ Modify the default lighttpd configuration file to have one a starting conf
-   * Change the network backend to writev since linux-sendfile fails on buildroot
- 
- Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-----
-- doc/config/conf.d/access_log.conf |    2 +-
-- doc/config/lighttpd.conf          |   18 +++++++++---------
-- 2 files changed, 10 insertions(+), 10 deletions(-)
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
- 
--Index: lighttpd-1.4.30/doc/config/lighttpd.conf
--===================================================================
----- lighttpd-1.4.30.orig/doc/config/lighttpd.conf
--+++ lighttpd-1.4.30/doc/config/lighttpd.conf
--@@ -13,7 +13,7 @@
-+diff -Nurp a/doc/config/conf.d/access_log.conf b/doc/config/conf.d/access_log.conf
-+--- a/doc/config/conf.d/access_log.conf	2010-07-11 18:01:32.000000000 +0100
-++++ b/doc/config/conf.d/access_log.conf	2012-07-21 19:37:58.453207990 +0100
-+@@ -9,7 +9,7 @@ server.modules += ( "mod_accesslog" )
-+ ##
-+ ## Default access log.
-+ ##
-+-accesslog.filename          = log_root + "/access.log"
-++accesslog.filename          = log_root + "/lighttpd-access.log"
-+ 
-+ ##
-+ ## The default format produces CLF compatible output.
-+diff -Nurp a/doc/config/lighttpd.conf b/doc/config/lighttpd.conf
-+--- a/doc/config/lighttpd.conf	2011-12-18 12:57:25.000000000 +0000
-++++ b/doc/config/lighttpd.conf	2012-07-21 19:40:45.281200552 +0100
-+@@ -13,8 +13,8 @@
-  ## if you add a variable here. Add the corresponding variable in the
-  ## chroot example aswell.
-  ##
- -var.log_root    = "/var/log/lighttpd"
-+-var.server_root = "/srv/www"
- +var.log_root    = "/var/log"
-- var.server_root = "/srv/www"
-++var.server_root = "/var/www"
-  var.state_dir   = "/var/run"
-  var.home_dir    = "/var/lib/lighttpd"
--@@ -90,7 +90,7 @@
-+ var.conf_dir    = "/etc/lighttpd"
-+@@ -90,7 +90,7 @@ server.port = 80
-  ##
-  ## Use IPv6?
-  ##
-@@ -35,7 +45,7 @@ Index: lighttpd-1.4.30/doc/config/lighttpd.conf
-  
-  ##
-  ## bind to a specific IP
--@@ -101,8 +101,8 @@
-+@@ -101,8 +101,8 @@ server.use-ipv6 = "enable"
-  ## Run as a different username/groupname.
-  ## This requires root permissions during startup. 
-  ##
-@@ -46,7 +56,16 @@ Index: lighttpd-1.4.30/doc/config/lighttpd.conf
-  
-  ## 
-  ## enable core files.
--@@ -138,7 +138,7 @@
-+@@ -112,7 +112,7 @@ server.groupname = "lighttpd"
-+ ##
-+ ## Document root
-+ ##
-+-server.document-root = server_root + "/htdocs"
-++server.document-root = server_root
-+ 
-+ ##
-+ ## The value for the "Server:" response field.
-+@@ -138,7 +138,7 @@ server.pid-file = state_dir + "/lighttpd
-  ##
-  ## Path to the error log file
-  ##
-@@ -55,7 +74,7 @@ Index: lighttpd-1.4.30/doc/config/lighttpd.conf
-  
-  ##
-  ## If you want to log to syslog you have to unset the 
--@@ -188,7 +188,7 @@
-+@@ -188,7 +188,7 @@ server.event-handler = "linux-sysepoll"
-  ## linux-sendfile - is recommended for small files.
-  ## writev         - is recommended for sending many large files
-  ##
-@@ -64,7 +83,7 @@ Index: lighttpd-1.4.30/doc/config/lighttpd.conf
-  
-  ##
-  ## As lighttpd is a single-threaded server, its main resource limit is
--@@ -311,9 +311,9 @@
-+@@ -311,9 +311,9 @@ url.access-deny             = ( "~", ".i
-  ## disable range requests for pdf files
-  ## workaround for a bug in the Acrobat Reader plugin.
-  ##
-@@ -77,16 +96,3 @@ Index: lighttpd-1.4.30/doc/config/lighttpd.conf
-  
-  ##
-  ## url handling modules (rewrite, redirect)
--Index: lighttpd-1.4.30/doc/config/conf.d/access_log.conf
--===================================================================
----- lighttpd-1.4.30.orig/doc/config/conf.d/access_log.conf
--+++ lighttpd-1.4.30/doc/config/conf.d/access_log.conf
--@@ -9,7 +9,7 @@
-- ##
-- ## Default access log.
-- ##
---accesslog.filename          = log_root + "/access.log"
--+accesslog.filename          = log_root + "/lighttpd-access.log"
-- 
-- ##
-- ## The default format produces CLF compatible output.
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 5ff4ce6..48f733a 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -57,9 +57,8 @@ LIGHTTPD_CONF_OPT += --without-lua
- endif
- 
- define LIGHTTPD_INSTALL_CONFIG
--	mkdir -p $(TARGET_DIR)/etc/lighttpd
--	mkdir -p $(TARGET_DIR)/etc/lighttpd/conf.d
--	mkdir -p $(TARGET_DIR)/srv/www/htdocs
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
- 
- 	[ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
- 		$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
-@@ -89,9 +88,9 @@ endef
- LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
- 
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
--	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
--	rm -rf $(TARGET_DIR)/usr/lib/lighttpd
-+	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd
-+	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd-angel
-+	$(RM) -r $(TARGET_DIR)/usr/lib/lighttpd
- endef
- 
- $(eval $(autotools-package))
--- 
-1.7.9.5
+Filesystems++ :)
