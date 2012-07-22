@@ -1,124 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:23:42 +0200
-Subject: [Buildroot] [git commit branch/next] elftosb: fix build forcing g++
-	compiler
-Message-ID: <20120802195259.401158E8F3@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:32:13 +0200
+Subject: [Buildroot] [git commit branch/next] tar: fix build with glibc
+	>=2.16
+Message-ID: <20120802195259.92FFF96CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=844f19133975fe9aa517e4be7702b9b2dd76d54c
+commit: http://git.buildroot.net/buildroot/commit/?id=9664e610716d24bdfb784c0e0414b88a2879a4e1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+ create mode 100644 package/tar/tar-1.26-no-gets.patch
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../elftosb10.12.01-force_cxx_compiler.patch       |   98 ++++++++++++++++++++
- 1 files changed, 98 insertions(+), 0 deletions(-)
+ package/tar/tar-1.26-no-gets.patch |   47 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 47 insertions(+), 0 deletions(-)
 
-diff --git a/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch b/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch
+diff --git a/package/tar/tar-1.26-no-gets.patch b/package/tar/tar-1.26-no-gets.patch
 new file mode 100644
-index 0000000..14df0db
+index 0000000..fb9d188
 --- /dev/null
-+++ b/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch
-@@ -0,0 +1,98 @@
-+Subject: [PATCH 1/1] elftosb: force host C++ compiler
++++ b/package/tar/tar-1.26-no-gets.patch
+@@ -0,0 +1,47 @@
++Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
++No tar version synchronized with gnulib since [1] has been released yet.
 +
-+Because Freescale provides *.cpp sources and elftosb links again libstdc++,
-+force to use the host c++ compiler.
++This patch avoids the following error occurs when building tar <=1.4.16 on host using
++a glibc >=2.16:
 +
-+This patch avoids the following error occurs:
++make[5]: Entering directory `/home/samuel/data/workspace/src/buildroot/master/output/build/host-tar-1.26/gnu'
++  CC     areadlink.o
++  CC     areadlinkat.o
++  CC     argp-ba.o
++  CC     argp-eexst.o
++  CC     argp-fmtstream.o
++  CC     argp-fs-xinl.o
++In file included from argp.h:24:0,
++                 from argp-eexst.c:27:
++./stdio.h:479:1: error ???gets??? undeclared here (not in a function)
++make[5]: *** [argp-eexst.o] Error 1
++make[5]: *** Waiting for unfinished jobs....
++In file included from argp-fmtstream.h:29:0,
++                 from argp-fs-xinl.c:28:
++./stdio.h:479:1: error ???gets??? undeclared here (not in a function)
++make[5]: *** [argp-fs-xinl.o] Error 1
++In file included from argp-fmtstream.h:29:0,
++                 from argp-fmtstream.c:35:
++./stdio.h:479:1: error ???gets??? undeclared here (not in a function)
++make[5]: *** [argp-fmtstream.o] Error 1
 +
-+gcc AESKey.o Blob.o crc.o DataSource.o DataTarget.o ELFSourceFile.o EncoreBootImage.o EvalContext.o GHSSecInfo.o GlobMatcher.o HexValues.o Logging.o Operation.o OptionDictionary.o options.o OutputSection.o Random.o RijndaelCBCMAC.o rijndael.o SHA1.o SourceFile.o SRecordSourceFile.o stdafx.o StELFFile.o StExecutableImage.o StSRecordFile.o Value.o Version.o format_string.o ExcludesListMatcher.o SearchPath.o DataSourceImager.o IVTDataSource.o BootImageGenerator.o ConversionController.o ElftosbAST.o elftosb.o elftosb_lexer.o ElftosbLexer.o elftosb_parser.tab.o EncoreBootImageGenerator.o -lstdc++ -o elftosb
-+/usr/bin/ld: ElftosbAST.o: undefined reference to symbol 'powf@@GLIBC_2.2.5'
-+/usr/bin/ld: note: 'powf@@GLIBC_2.2.5' is defined in DSO /lib64/libm.so.6 so try adding it to the linker command line
-+/lib64/libm.so.6: could not read symbols: Invalid operation
-+collect2: error: ld returned 1 exit status
-+
-+When compiling with gcc and linking against libstdc++, ld uses libc instead of
-+libstdc++.
-+However, libc does not provide all functions libstdc++ does.
-+Indeed, maths functions are provided by libm, not libc.
-+Thus, elftosb should either:
-+- use gcc and link against libc and libm;
-+- or use g++ and link against libstdc++.
-+
-+Because elftosb is written in C++, this patch implement the sencond option, using
-+g++ and linking against libstdc++.
++References:
++[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
++[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
 +
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +
 +---
-+Index: host-elftosb-10.12.01/makefile.rules
-+===================================================================
-+--- host-elftosb-10.12.01.orig/makefile.rules	2012-06-09 21:12:23.557526100 +0200
-++++ host-elftosb-10.12.01/makefile.rules	2012-06-09 21:15:21.659894571 +0200
-+@@ -15,6 +15,8 @@
-+ # UNAMES is going to be set to either "Linux" or "CYGWIN_NT-5.1"
-+ UNAMES = $(shell uname -s)
-+
-++CXX ?= g++
-++
-+ #*******************************************************************************
-+ #                               Directories
-+
-+@@ -37,9 +39,9 @@
-+ #*******************************************************************************
-+ #                               Build flags
-+-# gcc Compiler flags
-++# Compiler flags
-+ #    -g						: Produce debugging information.
-+
-+-CFLAGS	    = -g $(INC_PATH) -D${UNAMES}
-++CXXFLAGS	= -g $(INC_PATH) -D${UNAMES}
-+
-+ #*******************************************************************************
-+ #                               File lists
-+@@ -137,13 +139,13 @@ clean:
-+ 		${EXEC_FILE_ELFTOSB2} ${EXEC_FILE_SBTOOL} ${EXEC_FILE_KEYGEN}
-+
-+ elftosb: ${OBJ_FILES_ELFTOSB2}
-+-	gcc ${OBJ_FILES_ELFTOSB2} ${LIBS} -o ${EXEC_FILE_ELFTOSB2}
-++	$(CXX) ${OBJ_FILES_ELFTOSB2} ${LIBS} -o ${EXEC_FILE_ELFTOSB2}
-+
-+ sbtool: ${OBJ_FILES_SBTOOL}
-+-	gcc ${OBJ_FILES_SBTOOL} ${LIBS} -o ${EXEC_FILE_SBTOOL}
-++	$(CXX) ${OBJ_FILES_SBTOOL} ${LIBS} -o ${EXEC_FILE_SBTOOL}
-+
-+ keygen: ${OBJ_FILES_KEYGEN}
-+-	gcc ${OBJ_FILES_KEYGEN} ${LIBS} -o ${EXEC_FILE_KEYGEN}
-++	$(CXX) ${OBJ_FILES_KEYGEN} ${LIBS} -o ${EXEC_FILE_KEYGEN}
-+
-+
-+ #ifeq ("${UNAMES}", "Linux")
-+@@ -153,10 +155,10 @@ keygen: ${OBJ_FILES_KEYGEN}
-+ .SUFFIXES : .c .cpp
-+
-+ .c.o :
-+-	gcc ${CFLAGS} -c $<
-++	$(CC) ${CXXFLAGS} -c $<
-+
-+ .cpp.o :
-+-	gcc ${CFLAGS} -c $<
-++	$(CXX) ${CXXFLAGS} -c $<
-+
-+ #endif
-+
-+@@ -165,13 +167,13 @@ keygen: ${OBJ_FILES_KEYGEN}
-+
-+ %.d: %.c
-+ 	@set -e; \
-+-	$(CC) -MM $(CFLAGS) $< | \
-++	$(CC) -MM $(CXXFLAGS) $< | \
-+ 	sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; \
-+ 	[ -s $@ ]  || rm -f $@
-+
-+ %.d: %.cpp
-+ 	@set -e; \
-+-	$(CC) -MM $(CFLAGS) $< | \
-++	$(CXX) -MM $(CXXFLAGS) $< | \
-+ 	sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; \
-+ 	[ -s $@ ]  || rm -f $@
-+
++diff -purN host-tar-1.26.orig/gnu/stdio.in.h host-tar-1.26/gnu/stdio.in.h
++--- host-tar-1.26.orig/gnu/stdio.in.h	2012-07-21 21:17:12.392403084 +0200
+++++ host-tar-1.26/gnu/stdio.in.h	2012-07-21 21:18:27.991993525 +0200
++@@ -164,7 +164,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
++    so any use of gets warrants an unconditional warning.  Assume it is
++    always declared, since it is required by C89.  */
++ #undef gets
+++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
++ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+++#endif
++ 
++ #if @GNULIB_FOPEN@
++ # if @REPLACE_FOPEN@
