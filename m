@@ -1,112 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 16:53:24 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain-external: allow
-	downloading a custom toolchain
-Message-ID: <20120802195258.046478E8F3@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 18:29:33 +0200
+Subject: [Buildroot] [git commit branch/next] Package downloads: allow
+	restricting to primary site only
+Message-ID: <20120802195258.C0B798E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df0c12599487e49a6fe390a89f2f9ee5ee93222e
+commit: http://git.buildroot.net/buildroot/commit/?id=5a83e0849964c5160b980bb57ce89e28684a7dbb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch adds the possibility to download a custom external
-toolchain, in addition to the existing support of preinstalled custom
-external toolchains.
+This patch adds a new config option BR2_PRIMARY_SITE_ONLY that, when set,
+restricts package downloads to the specified BR2_PRIMARY_SITE. If the package
+is not present on the primary site, the download fails.
 
-With the modified configuration, the user is presented with the
-following options:
-- Toolchain type: Buildroot toolchain | External toolchain | Ct-ng toolchain
+This is useful for project developers who want to ensure that the project can
+be built even if the upstream tarball locations disappear.
 
-In case of External toolchain:
-- Toolchain: the CodeSourcery toolchains | Custom toolchain
-- Toolchain origin: Toolchain to be downloaded and installed | Pre-installed toolchain
-
-In case of Toolchain to be downloaded, the user is presented with:
-- Toolchain URL
-In case of Pre-installed toolchain, the users sees:
-- Toolchain Path
-
-For CodeSourcery toolchains, the toolchain URL field is not used (the
-URLs are directly coded in ext-tool.mk).
+[thomas.petazzoni at free-electrons.com:
+ Extend config option help message with more details coming from the
+ commit log. Added a dependency on the fact that a primary site has
+ been defined. Without any primary site (the default configuration),
+ this new option does not make any sense.]
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   29 ++++++++++++++++++++++-------
- toolchain/toolchain-external/ext-tool.mk |    6 ++++++
- 2 files changed, 28 insertions(+), 7 deletions(-)
+ Config.in               |   18 ++++++++++++++++++
+ package/pkg-download.mk |    7 +++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 172e3e3..dceeed2 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -492,22 +492,37 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+diff --git a/Config.in b/Config.in
+index c182f70..b18c927 100644
+--- a/Config.in
++++ b/Config.in
+@@ -123,6 +123,22 @@ config BR2_PRIMARY_SITE
+ 	  NOTE: This works for all packages using the central package
+ 	  infrastructure (generic, autotools, cmake, ...)
  
- endchoice
- 
-+choice
-+	prompt "Toolchain origin"
-+
- config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
--	bool "Download toolchain automatically"
--	default y
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-+	bool "Toolchain to be downloaded and installed"
++config BR2_PRIMARY_SITE_ONLY
++	bool "Only allow downloads from primary download site"
++	depends on BR2_PRIMARY_SITE != ""
 +	help
-+	  Select this option if you want Buildroot to download and install the
-+	  toolchain. If you have selected a custom toolchain, specify the URL
-+	  in BR2_TOOLCHAIN_EXTERNAL_URL.
++	  If this option is enabled, downloads will only be attempted
++	  from the primary download site. Other locations, like the
++	  package's official download location or the backup download
++	  site, will not be considered. Therefore, if the package is
++	  not present on the primary site, the download fails.
 +
-+config BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
-+	bool "Pre-installed toolchain"
- 	help
--	  When enabled, Buildroot will automatically download and
--	  install the selected external toolchain. When disabled,
--	  Buildroot will use a pre-installed toolchain.
-+	  Select this option if you want to use a pre-installed toolchain.
-+	  Specify the path to this toolchain in BR2_TOOLCHAIN_EXTERNAL_PATH.
++	  This is useful for project developers who want to ensure
++	  that the project can be built even if the upstream tarball
++	  locations disappear.
 +
-+endchoice
++if !BR2_PRIMARY_SITE_ONLY
++
+ config BR2_BACKUP_SITE
+ 	string "Backup download site"
+ 	default "http://sources.buildroot.net/"
+@@ -179,6 +195,8 @@ config BR2_DEBIAN_MIRROR
+ 	  Usually, just add your country code like XX here:
+ 	  http://ftp.XX.debian.org
  
- config BR2_TOOLCHAIN_EXTERNAL_PATH
- 	string "Toolchain path"
- 	default "/path/to/toolchain/usr"
--	depends on !BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+	depends on BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED
- 	help
- 	  Path to where the external toolchain is installed.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_URL
-+	string "Toolchain URL"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM && BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
-+	help
-+	  URL of the custom toolchain tarball to download and install.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 	string "Toolchain prefix"
- 	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 3f58aad..49dd0e2 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -252,11 +252,17 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
- TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=569081301f0f1d8d3b24335a364e8ff1774190d4;f=
- TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
- else
-+# Custom toolchain
-+TOOLCHAIN_EXTERNAL_SITE=$(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+TOOLCHAIN_EXTERNAL_SOURCE=$(notdir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
-+
- # A value must be set (even if unused), otherwise the
- # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
- # $(DL_DIR) rule
-+ifeq (,$(TOOLCHAIN_EXTERNAL_SOURCE))
- TOOLCHAIN_EXTERNAL_SOURCE=none
- endif
 +endif
++
+ endmenu
  
- # Special handling for Blackfin toolchain, because of the split in two
- # tarballs, and the organization of tarball contents. The tarballs
+ config BR2_JLEVEL
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index e938759..9e98581 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -192,8 +192,8 @@ endef
+ ################################################################################
+ # DOWNLOAD -- Download helper. Will try to download source from:
+ # 1) BR2_PRIMARY_SITE if enabled
+-# 2) Download site
+-# 3) BR2_BACKUP_SITE if enabled
++# 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
++# 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+ #
+ # Argument 1 is the source location
+ # Argument 2 is the source filename
+@@ -213,6 +213,9 @@ define DOWNLOAD_INNER
+ 			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+ 		esac ; \
+ 	fi ; \
++	if test "$(BR2_PRIMARY_SITE_ONLY)" = "y" ; then \
++		exit 1 ; \
++	fi ; \
+ 	if test -n "$(1)" ; then \
+ 		if test -z "$($(PKG)_SITE_METHOD)" ; then \
+ 			scheme="$(call geturischeme,$(1))" ; \
