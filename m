@@ -1,31 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 21:04:39 +0200
-Subject: [Buildroot] [PATCH 2/6] radvd: bump to version 1.9.1
-In-Reply-To: <1342360065-10106-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1342360065-10106-1-git-send-email-gustavo@zacarias.com.ar>
- <1342360065-10106-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120722210439.5b3c0dec@skate>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Sun, 22 Jul 2012 21:20:41 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: limit -reconfigure and -rebuild
+ actions
+In-Reply-To: <20120720222722.5f89af04@skate>
+References: <1342791572-18657-1-git-send-email-rbraun@sceen.net>
+ <20120720222722.5f89af04@skate>
+Message-ID: <500C5289.2050006@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 15 Jul 2012 10:47:41 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Am 20.07.2012 22:27, schrieb Thomas Petazzoni:
+> That's the original idea of those targets. That said, I am personally
+> open to making changes to their semantic, but I'd prefer to see what
+> the opinion of other people in the community.
+>
+> Best regards,
+>
+> Thomas
+Hello all,
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+for my point of view the targets do what I expect. I would opt for
+keeping the targets as they are and adding other targets that just
+rebuild or reconfiguere a single package.
 
-I don't know if it is related to this bump, but we have build failures
-on radvd since a few days. See
-http://autobuild.buildroot.org/results/48aabbc41dff2e4196dfd6e1e942cf6dbe050deb/build-end.log
-for example. Do you have the time to look into this?
+Kind regards
 
-Thanks a lot!
+Stephan
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
