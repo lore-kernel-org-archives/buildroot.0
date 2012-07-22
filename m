@@ -1,104 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 19:21:47 +0200
-Subject: [Buildroot] [git commit] pkg-utils.mk: fix/clean indentation
-Message-ID: <20120722182025.C8CC996B3C@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 19:28:42 +0200
+Subject: [Buildroot] [git commit] pkg-*targets.mk: factorize and fix
+	$(PKG)_SRCDIR and $(PKG)_BUILDDIR declaration
+Message-ID: <20120722182025.E29919692E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=736ce2f3da29558544a38b0404e0c4ff4d41c9ac
+commit: http://git.buildroot.net/buildroot/commit/?id=9ba9bfb9a02706fa414bcf4c6dcceac1b68a5c9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-utils.mk |   40 ++++++++++++++++------------------------
- 1 files changed, 16 insertions(+), 24 deletions(-)
+ package/pkg-autotools.mk |   10 ----------
+ package/pkg-cmake.mk     |    9 ---------
+ package/pkg-generic.mk   |   11 +++++++++++
+ 3 files changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 35abb17..293bf4f 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -17,11 +17,11 @@
- [TO]   := A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _ _
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index e454050..785daab 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -54,15 +54,6 @@ endef
  
- UPPERCASE = $(strip $(eval __tmp := $1) \
--     $(foreach c, $(join $(addsuffix :,$([FROM])),$([TO])), \
--	$(eval __tmp :=	\
-+	$(foreach c, $(join $(addsuffix :,$([FROM])),$([TO])), \
-+		$(eval __tmp :=	\
- 		$(subst $(word 1,$(subst :, ,$c)),$(word 2,$(subst :, ,$c)),\
--			$(__tmp)))) \
--     $(__tmp))
-+	$(__tmp)))) \
-+	$(__tmp))
+ define inner-autotools-package
+ 
+-# define package-specific variables to default values
+-ifndef $(2)_SUBDIR
+- ifdef $(3)_SUBDIR
+-  $(2)_SUBDIR = $($(3)_SUBDIR)
+- else
+-  $(2)_SUBDIR ?=
+- endif
+-endif
+-
+ ifndef $(2)_LIBTOOL_PATCH
+  ifdef $(3)_LIBTOOL_PATCH
+   $(2)_LIBTOOL_PATCH = $($(3)_LIBTOOL_PATCH)
+@@ -91,7 +82,6 @@ $(2)_CLEAN_OPT			?= clean
+ $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
+ $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
+ 
+-$(2)_SRCDIR                     = $$($(2)_DIR)/$$($(2)_SUBDIR)
  
  #
- # Manipulation of .config files based on the Kconfig
-@@ -30,18 +30,18 @@ UPPERCASE = $(strip $(eval __tmp := $1) \
- #
+ # Configure step. Only define it if not already defined by the package
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index f9a5934..626a0b0 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -37,15 +37,6 @@
  
- define KCONFIG_ENABLE_OPT
--       $(SED) "/\\<$(1)\\>/d" $(2)
--       echo "$(1)=y" >> $(2)
-+	$(SED) "/\\<$(1)\\>/d" $(2)
-+	echo "$(1)=y" >> $(2)
- endef
+ define inner-cmake-package
  
- define KCONFIG_SET_OPT
--       $(SED) "/\\<$(1)\\>/d" $(3)
--       echo "$(1)=$(2)" >> $(3)
-+	$(SED) "/\\<$(1)\\>/d" $(3)
-+	echo "$(1)=$(2)" >> $(3)
- endef
- 
- define KCONFIG_DISABLE_OPT
--       $(SED) "/\\<$(1)\\>/d" $(2)
--       echo "# $(1) is not set" >> $(2)
-+	$(SED) "/\\<$(1)\\>/d" $(2)
-+	echo "# $(1) is not set" >> $(2)
- endef
- 
- # Helper functions to determine the name of a package and its
-@@ -50,17 +50,9 @@ endef
- # automagically find where the package is located. Note that the
- # pkgdir macro is carefully written to handle the case of the Linux
- # package, for which the package directory is an empty string.
--define pkgdir
--$(dir $(lastword $(MAKEFILE_LIST)))
--endef
+-# define package-specific variables to default values
+-ifndef $(2)_SUBDIR
+- ifdef $(3)_SUBDIR
+-  $(2)_SUBDIR = $($(3)_SUBDIR)
+- else
+-  $(2)_SUBDIR ?=
+- endif
+-endif
 -
--define pkgname
--$(lastword $(subst /, ,$(call pkgdir)))
--endef
--
--define pkgparentdir
--$(patsubst %$(call pkgname)/,%,$(call pkgdir))
--endef
-+pkgdir       = $(dir $(lastword $(MAKEFILE_LIST)))
-+pkgname      = $(lastword $(subst /, ,$(call pkgdir)))
-+pkgparentdir = $(patsubst %$(call pkgname)/,%,$(call pkgdir))
+ $(2)_CONF_ENV			?=
+ $(2)_CONF_OPT			?=
+ $(2)_MAKE			?= $(MAKE)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c01440e..8a730c0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -204,6 +204,17 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
  
- # Define extractors for different archive suffixes
- INFLATE.bz2  = $(BZCAT)
-@@ -72,15 +64,15 @@ INFLATE.xz   = $(XZCAT)
- INFLATE.tar  = cat
- 
- # MESSAGE Macro -- display a message in bold type
--MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
--TERM_BOLD := $(shell tput smso)
-+MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-+TERM_BOLD  := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
- 
- # Utility functions for 'find'
- # findfileclauses(filelist) => -name 'X' -o -name 'Y'
- findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
- # finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
--finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
-+finddirclauses  = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
- 
- # Miscellaneous utility functions
- # notfirstword(wordlist): returns all but the first word in wordlist
++ifndef $(3)_SUBDIR
++ ifdef $(2)_SUBDIR
++  $(3)_SUBDIR = $$($(2)_SUBDIR)
++ else
++  $(3)_SUBDIR ?=
++ endif
++endif
++
++$(2)_SRCDIR		       = $$($(2)_DIR)/$$($(2)_SUBDIR)
++$(2)_BUILDDIR		       ?= $$($(2)_SRCDIR)
++
+ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_VERSION = custom
+ endif
