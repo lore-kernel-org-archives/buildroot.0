@@ -1,65 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:32:11 +0200
-Subject: [Buildroot] [git commit] m4: fix build with glibc >=2.16
-Message-ID: <20120722185833.1523481DE8@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 21:04:39 +0200
+Subject: [Buildroot] [PATCH 2/6] radvd: bump to version 1.9.1
+In-Reply-To: <1342360065-10106-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1342360065-10106-1-git-send-email-gustavo@zacarias.com.ar>
+ <1342360065-10106-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120722210439.5b3c0dec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=600375d18e6ccd08505153863666f2e8b10251be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 15 Jul 2012 10:47:41 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- create mode 100644 package/m4/m4-1.4.16-no-gets.patch
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/m4/m4-1.4.16-no-gets.patch |   38 ++++++++++++++++++++++++++++++++++++
- 1 files changed, 38 insertions(+), 0 deletions(-)
+I don't know if it is related to this bump, but we have build failures
+on radvd since a few days. See
+http://autobuild.buildroot.org/results/48aabbc41dff2e4196dfd6e1e942cf6dbe050deb/build-end.log
+for example. Do you have the time to look into this?
 
-diff --git a/package/m4/m4-1.4.16-no-gets.patch b/package/m4/m4-1.4.16-no-gets.patch
-new file mode 100644
-index 0000000..a057377
---- /dev/null
-+++ b/package/m4/m4-1.4.16-no-gets.patch
-@@ -0,0 +1,38 @@
-+Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
-+No m4 version synchronized with gnulib since [1] has been released yet.
-+
-+This patch avoids the following error occurs when building m4 <=1.4.16 on host using
-+a glibc >=2.16:
-+
-+make[4]: Entering directory `/opt/buildroot/output/build/host-m4-1.4.16/lib'
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT gl_avltree_oset.o -MD -MP -MF .deps/gl_avltree_oset.Tpo -c -o gl_avltree_oset.o gl_avltree_oset.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-ctype.o -MD -MP -MF .deps/c-ctype.Tpo -c -o c-ctype.o c-ctype.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-stack.o -MD -MP -MF .deps/c-stack.Tpo -c -o c-stack.o c-stack.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
-+mv -f .deps/c-ctype.Tpo .deps/c-ctype.Po
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT close-hook.o -MD -MP -MF .deps/close-hook.Tpo -c -o close-hook.o close-hook.c
-+In file included from clean-temp.h:22:0,
-+                 from clean-temp.c:23:
-+./stdio.h:477:20: error 'gets' undeclared here (not in a function)
-+make[4]: *** [clean-temp.o] Error 1
-+
-+References:
-+[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
-+[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+---
-+diff -purN host-m4-1.4.16.orig/lib/stdio.in.h host-m4-1.4.16/lib/stdio.in.h
-+--- host-m4-1.4.16.orig/lib/stdio.in.h	2012-07-21 19:11:40.196541826 +0200
-++++ host-m4-1.4.16/lib/stdio.in.h	2012-07-21 20:46:05.405850751 +0200
-+@@ -162,7 +162,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+ #undef gets
-++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++#endif
-+ 
-+ #if @GNULIB_FOPEN@
-+ # if @REPLACE_FOPEN@
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
