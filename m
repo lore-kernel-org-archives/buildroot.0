@@ -1,82 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 19:17:48 +0200
-Subject: [Buildroot] [git commit branch/next] lighttpd: add simple startup
-	script
-Message-ID: <20120802195258.F3A5D8E8F3@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 17:17:03 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain-external: add
+	Blackfin toolchain 2012R1-BETA1
+Message-ID: <20120802195258.97D2D8E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccda74f3c72d1c8809ee171e39a7712b23a03dc2
+commit: http://git.buildroot.net/buildroot/commit/?id=adf586ecb9f3e0cce0da19ddc736bf7ddc27f1d6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lighttpd/S50lighttpd |   37 +++++++++++++++++++++++++++++++++++++
- package/lighttpd/lighttpd.mk |    8 ++++++++
- 2 files changed, 45 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in   |   17 +++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    8 +++++++-
+ 2 files changed, 24 insertions(+), 1 deletions(-)
 
-diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
-new file mode 100644
-index 0000000..752402c
---- /dev/null
-+++ b/package/lighttpd/S50lighttpd
-@@ -0,0 +1,37 @@
-+#!/bin/sh
-+#
-+# Starts lighttpd.
-+#
-+
-+start() {
-+	echo -n "Starting lighttpd: "
-+	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
-+	echo "OK"
-+}
-+stop() {
-+	echo -n "Stopping lighttpd: "
-+	start-stop-daemon -K -q -p /var/run/lighttpd.pid
-+	echo "OK"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-+
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 48f733a..9f554cb 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -87,6 +87,14 @@ endef
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 3b1d792..f53ec88 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -427,6 +427,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+ 	  Other architecture variants (beyond Pentium-4/Xeon) are
+ 	  supported as well, but glibc is not optimised for it.
  
- LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
++	bool "Blackfin.uclinux.org 2012R1-BETA1"
++	depends on BR2_bfin
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_INET_RPC
++	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	help
++	  Toolchain for the Blackfin architecture, from
++	  http://blackfin.uclinux.org.
++
+ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
+ 	bool "Blackfin.uclinux.org 2011R1-RC4"
+ 	depends on BR2_bfin
+@@ -552,6 +567,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && !BR2_BFIN_FDPIC
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BFIN_FDPIC
++	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && !BR2_BFIN_FDPIC
++	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BFIN_FDPIC
+ 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
-+define LIGHTTPD_INSTALL_INIT_SCRIPT
-+	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
-+		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
-+			$(TARGET_DIR)/etc/init.d/S50lighttpd
-+endef
-+
-+LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_INIT_SCRIPT
-+
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
- 	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd
- 	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd-angel
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 14804d6..388eccc 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -244,6 +244,12 @@ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
+ TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
++TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/544/9749/
++TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2012R1-BETA1.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/544/9773/
++TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2012R1-BETA1.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0_le.git;a=blob;h=d7b493c5dbcc24ba9cc3be2e4c14d6d9701e6805;hb=00163583b771bb4e937632765dd0c5516b3e31c4;f=
+ TOOLCHAIN_EXTERNAL_SOURCE=microblazeel-unknown-linux-gnu.tgz
+@@ -268,7 +274,7 @@ endif
+ # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+ # which themselves contain the toolchain. This is why we strip more
+ # components than usual.
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
+ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
+ 	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
+ 
