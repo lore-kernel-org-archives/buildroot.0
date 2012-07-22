@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:22:35 +0200
-Subject: [Buildroot] [PATCH 06/11] pkg-*targets.mk: factorize and fix
- $(PKG)_SRCDIR and $(PKG)_BUILDDIR declaration
-In-Reply-To: <1342963719-1810-7-git-send-email-s.martin49@gmail.com>
-References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
- <1342963719-1810-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20120722202235.523511ee@skate>
+Date: Sun, 22 Jul 2012 20:24:18 +0200
+Subject: [Buildroot] [git commit] elftosb: remove version number of patch
+	filenames
+Message-ID: <20120722183038.4CF9396D7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 22 Jul 2012 15:28:34 +0200,
-Samuel Martin <s.martin49@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=be07ff19cbeae0c18a8a1604f07a682e1cfbfc26
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...includes.patch => elftosb-fixes-includes.patch} |    0
+ ...iler.patch => elftosb-force-cxx-compiler.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/elftosb/elftosb10.12.01-fixes_includes.patch b/package/elftosb/elftosb-fixes-includes.patch
+similarity index 100%
+rename from package/elftosb/elftosb10.12.01-fixes_includes.patch
+rename to package/elftosb/elftosb-fixes-includes.patch
+diff --git a/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch b/package/elftosb/elftosb-force-cxx-compiler.patch
+similarity index 100%
+rename from package/elftosb/elftosb10.12.01-force_cxx_compiler.patch
+rename to package/elftosb/elftosb-force-cxx-compiler.patch
