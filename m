@@ -1,39 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:57:26 +0200
-Subject: [Buildroot] [git commit] toolchain-external: make preinstall the
-	default for custom toolchains
-Message-ID: <20120722185833.3513D81E5C@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:32:11 +0200
+Subject: [Buildroot] [git commit] m4: fix build with glibc >=2.16
+Message-ID: <20120722185833.1523481DE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=701940770b658e25cfe7219e35e808ba62052843
+commit: http://git.buildroot.net/buildroot/commit/?id=600375d18e6ccd08505153863666f2e8b10251be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-All the defconfig files used by the autobuilders that use
-pre-installed external toolchains are making the assumption that the
-default for a custom external toolchain is "pre-installed". We keep
-this default for now, since changing it breaks the autobuilders.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
+ create mode 100644 package/m4/m4-1.4.16-no-gets.patch
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/m4/m4-1.4.16-no-gets.patch |   38 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5c29ecd..e34802d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -573,6 +573,10 @@ endchoice
- 
- choice
- 	prompt "Toolchain origin"
-+	# Keep compatibility with old defconfig files that are using
-+	# custom toolchains, and which are therefore assuming that
-+	# "preinstalled" in the default choice.
-+	default BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
- config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
- 	bool "Toolchain to be downloaded and installed"
+diff --git a/package/m4/m4-1.4.16-no-gets.patch b/package/m4/m4-1.4.16-no-gets.patch
+new file mode 100644
+index 0000000..a057377
+--- /dev/null
++++ b/package/m4/m4-1.4.16-no-gets.patch
+@@ -0,0 +1,38 @@
++Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
++No m4 version synchronized with gnulib since [1] has been released yet.
++
++This patch avoids the following error occurs when building m4 <=1.4.16 on host using
++a glibc >=2.16:
++
++make[4]: Entering directory `/opt/buildroot/output/build/host-m4-1.4.16/lib'
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT gl_avltree_oset.o -MD -MP -MF .deps/gl_avltree_oset.Tpo -c -o gl_avltree_oset.o gl_avltree_oset.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-ctype.o -MD -MP -MF .deps/c-ctype.Tpo -c -o c-ctype.o c-ctype.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-stack.o -MD -MP -MF .deps/c-stack.Tpo -c -o c-stack.o c-stack.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
++mv -f .deps/c-ctype.Tpo .deps/c-ctype.Po
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT close-hook.o -MD -MP -MF .deps/close-hook.Tpo -c -o close-hook.o close-hook.c
++In file included from clean-temp.h:22:0,
++                 from clean-temp.c:23:
++./stdio.h:477:20: error 'gets' undeclared here (not in a function)
++make[4]: *** [clean-temp.o] Error 1
++
++References:
++[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
++[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++---
++diff -purN host-m4-1.4.16.orig/lib/stdio.in.h host-m4-1.4.16/lib/stdio.in.h
++--- host-m4-1.4.16.orig/lib/stdio.in.h	2012-07-21 19:11:40.196541826 +0200
+++++ host-m4-1.4.16/lib/stdio.in.h	2012-07-21 20:46:05.405850751 +0200
++@@ -162,7 +162,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
++    so any use of gets warrants an unconditional warning.  Assume it is
++    always declared, since it is required by C89.  */
++ #undef gets
+++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
++ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+++#endif
++ 
++ #if @GNULIB_FOPEN@
++ # if @REPLACE_FOPEN@
