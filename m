@@ -1,73 +1,61 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 22 Jul 2012 15:28:38 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_10/11=5D_tar=3A_fix_build_with_gli?=
-	=?utf-8?b?YmMgPj0yLjE2?=
-In-Reply-To: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Jul 2012 16:20:52 +0200
+Subject: [Buildroot] [PATCH 01/11] libgpg-error: add optional nls support
+In-Reply-To: <1342963719-1810-2-git-send-email-s.martin49@gmail.com>
 References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1342963719-1810-11-git-send-email-s.martin49@gmail.com>
+ <1342963719-1810-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120722162052.544460b7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Sun, 22 Jul 2012 15:28:29 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> +ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+> +LIBGPG_ERROR_DEPENDENCIES += gettext libintl
+> +LIBGPG_ERROR_CONF_OPT += --enable-nls
+> +else
+> +LIBGPG_ERROR_CONF_OPT += --disable-nls
+> +endif
 
- create mode 100644 package/tar/tar-1.26-no-gets.patch
+This means that NLS support will always be enabled for uClibc
+toolchains, and never be enabled for (e)glibc toolchains.
 
-diff --git a/package/tar/tar-1.26-no-gets.patch b/package/tar/tar-1.26-no-gets.patch
-new file mode 100644
-index 0000000..fb9d188
---- /dev/null
-+++ b/package/tar/tar-1.26-no-gets.patch
-@@ -0,0 +1,47 @@
-+Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
-+No tar version synchronized with gnulib since [1] has been released yet.
-+
-+This patch avoids the following error occurs when building tar <=1.4.16 on host using
-+a glibc >=2.16:
-+
-+make[5]: Entering directory `/home/samuel/data/workspace/src/buildroot/master/output/build/host-tar-1.26/gnu'
-+  CC     areadlink.o
-+  CC     areadlinkat.o
-+  CC     argp-ba.o
-+  CC     argp-eexst.o
-+  CC     argp-fmtstream.o
-+  CC     argp-fs-xinl.o
-+In file included from argp.h:24:0,
-+                 from argp-eexst.c:27:
-+./stdio.h:479:1: error ?gets? undeclared here (not in a function)
-+make[5]: *** [argp-eexst.o] Error 1
-+make[5]: *** Waiting for unfinished jobs....
-+In file included from argp-fmtstream.h:29:0,
-+                 from argp-fs-xinl.c:28:
-+./stdio.h:479:1: error ?gets? undeclared here (not in a function)
-+make[5]: *** [argp-fs-xinl.o] Error 1
-+In file included from argp-fmtstream.h:29:0,
-+                 from argp-fmtstream.c:35:
-+./stdio.h:479:1: error ?gets? undeclared here (not in a function)
-+make[5]: *** [argp-fmtstream.o] Error 1
-+
-+References:
-+[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
-+[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+---
-+diff -purN host-tar-1.26.orig/gnu/stdio.in.h host-tar-1.26/gnu/stdio.in.h
-+--- host-tar-1.26.orig/gnu/stdio.in.h	2012-07-21 21:17:12.392403084 +0200
-++++ host-tar-1.26/gnu/stdio.in.h	2012-07-21 21:18:27.991993525 +0200
-+@@ -164,7 +164,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+ #undef gets
-++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++#endif
-+ 
-+ #if @GNULIB_FOPEN@
-+ # if @REPLACE_FOPEN@
+See the definition of BR2_NEEDS_GETTEXT and BR2_NEEDS_GETTEXT_IF_LOCALE:
+
+---
+
+# glibc and eglibc directly include gettext, so a separatly compiled
+# gettext isn't needed and shouldn't be built to avoid conflicts. Some
+# packages always need gettext, other packages only need gettext when
+# locale support is enabled. See the documentation for how packages
+# should rely on the following two options.
+
+config BR2_NEEDS_GETTEXT
+        bool
+        default y if BR2_TOOLCHAIN_BUILDROOT
+        default y if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+        default y if BR2_TOOLCHAIN_CTNG_uClibc
+
+config BR2_NEEDS_GETTEXT_IF_LOCALE
+        bool
+        default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+
+---
+
+The fact that there is a dependency on gettext+libintl for i18n support
+on uClibc toolchains is correct. The fact that
+--enable-nls/--disable-nls is decided depending on
+BR2_NEEDS_GETTEXT_IF_LOCALE is not correct.
+
+Best regards,
+
+Thomas
 -- 
-1.7.11.2
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
