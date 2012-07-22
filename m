@@ -1,32 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 19:20:37 +0200
-Subject: [Buildroot] [PATCH 04/11] elftosb: fix build forcing g++
- compiler
-In-Reply-To: <1342963719-1810-5-git-send-email-s.martin49@gmail.com>
-References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
- <1342963719-1810-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20120722192037.5a72654c@skate>
+Date: Sun, 22 Jul 2012 19:28:18 +0200
+Subject: [Buildroot] [PATCH v6] lighttpd: use standard web root directory
+In-Reply-To: <1342896471-4573-1-git-send-email-spdawson@gmail.com>
+References: <1342896471-4573-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120722192818.50fd4bfb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 22 Jul 2012 15:28:32 +0200,
-Samuel Martin <s.martin49@gmail.com> a ?crit :
+Le Sat, 21 Jul 2012 19:47:51 +0100,
+spdawson at gmail.com a ?crit :
 
-> + .c.o :
-> +-	gcc ${CFLAGS} -c $<
-> ++	$(CXX) ${CXXFLAGS} -c $<
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> Acked-By: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-It should be $(CC) here, no?
-
-> + %.d: %.c
-> + 	@set -e; \
-> +-	$(CC) -MM $(CFLAGS) $< | \
-> ++	$(CXX) -MM $(CXXFLAGS) $< | \
-
-And it should remain $(CC) here, no?
+Applied, thanks.
 
 Thomas
 -- 
