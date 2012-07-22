@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 16:27:56 +0200
-Subject: [Buildroot] [PATCH 08/11] libpng: fix host-libpng build on
- system on which zlib.h is missing.
-In-Reply-To: <1342963719-1810-9-git-send-email-s.martin49@gmail.com>
+Date: Sun, 22 Jul 2012 16:45:48 +0200
+Subject: [Buildroot] [PATCH 11/11] libecore: fix build with glibc >=2.16
+In-Reply-To: <1342963719-1810-12-git-send-email-s.martin49@gmail.com>
 References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
- <1342963719-1810-9-git-send-email-s.martin49@gmail.com>
-Message-ID: <20120722162756.2d508583@skate>
+ <1342963719-1810-12-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120722164548.63a45db3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 22 Jul 2012 15:28:36 +0200,
+Le Sun, 22 Jul 2012 15:28:39 +0200,
 Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-> +-	$(CPP) @LIBPNG_DEFINES@ $(CPPFLAGS) -DPNG_BUILDSYMS $(srcdir)/png.h | \
-> ++	$(CPP) @LIBPNG_DEFINES@ $(CPPFLAGS) $(CFLAGS) -DPNG_BUILDSYMS $(srcdir)/png.h | \
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Shouldn't we be passing the right arguments in CPPFLAGS instead?
+Wouldn't it be better to backport the upstream fix, i.e
+http://trac.enlightenment.org/e/changeset/72684/ ?
+
+Thanks,
 
 Thomas
 -- 
