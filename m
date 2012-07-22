@@ -1,32 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 19:18:51 +0200
-Subject: [Buildroot] [git commit] cleanup trailing white space
-Message-ID: <20120722182025.B973D9692E@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:22:10 +0200
+Subject: [Buildroot] [PATCH 03/11] cleanup trailing white space
+In-Reply-To: <1342963719-1810-4-git-send-email-s.martin49@gmail.com>
+References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
+ <1342963719-1810-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120722202210.6f6d2225@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff2ee34086a24bd23eff054d7a51eaee5e721e11
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 22 Jul 2012 15:28:31 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- target/Config.in.arch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 64c6dea..e7aec56 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -242,7 +242,7 @@ choice
- 	default BR2_mips_1 if BR2_mipsel
- 	help
- 	  Specific CPU variant to use
--	
-+
- 	  64bit cabable: 3, 4, 64, 64r2
- 	  non-64bit capable: 1, 2, 32, 32r2
- 
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
