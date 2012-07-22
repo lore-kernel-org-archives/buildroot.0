@@ -1,123 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:23:42 +0200
-Subject: [Buildroot] [git commit] elftosb: fix build forcing g++ compiler
-Message-ID: <20120722183038.3C94295401@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:32:02 +0200
+Subject: [Buildroot] [PATCH 04/11] elftosb: fix build forcing g++
+ compiler
+In-Reply-To: <1342963719-1810-5-git-send-email-s.martin49@gmail.com>
+References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
+ <1342963719-1810-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120722203202.06137639@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=844f19133975fe9aa517e4be7702b9b2dd76d54c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 22 Jul 2012 15:28:32 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../elftosb10.12.01-force_cxx_compiler.patch       |   98 ++++++++++++++++++++
- 1 files changed, 98 insertions(+), 0 deletions(-)
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch b/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch
-new file mode 100644
-index 0000000..14df0db
---- /dev/null
-+++ b/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch
-@@ -0,0 +1,98 @@
-+Subject: [PATCH 1/1] elftosb: force host C++ compiler
-+
-+Because Freescale provides *.cpp sources and elftosb links again libstdc++,
-+force to use the host c++ compiler.
-+
-+This patch avoids the following error occurs:
-+
-+gcc AESKey.o Blob.o crc.o DataSource.o DataTarget.o ELFSourceFile.o EncoreBootImage.o EvalContext.o GHSSecInfo.o GlobMatcher.o HexValues.o Logging.o Operation.o OptionDictionary.o options.o OutputSection.o Random.o RijndaelCBCMAC.o rijndael.o SHA1.o SourceFile.o SRecordSourceFile.o stdafx.o StELFFile.o StExecutableImage.o StSRecordFile.o Value.o Version.o format_string.o ExcludesListMatcher.o SearchPath.o DataSourceImager.o IVTDataSource.o BootImageGenerator.o ConversionController.o ElftosbAST.o elftosb.o elftosb_lexer.o ElftosbLexer.o elftosb_parser.tab.o EncoreBootImageGenerator.o -lstdc++ -o elftosb
-+/usr/bin/ld: ElftosbAST.o: undefined reference to symbol 'powf@@GLIBC_2.2.5'
-+/usr/bin/ld: note: 'powf@@GLIBC_2.2.5' is defined in DSO /lib64/libm.so.6 so try adding it to the linker command line
-+/lib64/libm.so.6: could not read symbols: Invalid operation
-+collect2: error: ld returned 1 exit status
-+
-+When compiling with gcc and linking against libstdc++, ld uses libc instead of
-+libstdc++.
-+However, libc does not provide all functions libstdc++ does.
-+Indeed, maths functions are provided by libm, not libc.
-+Thus, elftosb should either:
-+- use gcc and link against libc and libm;
-+- or use g++ and link against libstdc++.
-+
-+Because elftosb is written in C++, this patch implement the sencond option, using
-+g++ and linking against libstdc++.
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+---
-+Index: host-elftosb-10.12.01/makefile.rules
-+===================================================================
-+--- host-elftosb-10.12.01.orig/makefile.rules	2012-06-09 21:12:23.557526100 +0200
-++++ host-elftosb-10.12.01/makefile.rules	2012-06-09 21:15:21.659894571 +0200
-+@@ -15,6 +15,8 @@
-+ # UNAMES is going to be set to either "Linux" or "CYGWIN_NT-5.1"
-+ UNAMES = $(shell uname -s)
-+
-++CXX ?= g++
-++
-+ #*******************************************************************************
-+ #                               Directories
-+
-+@@ -37,9 +39,9 @@
-+ #*******************************************************************************
-+ #                               Build flags
-+-# gcc Compiler flags
-++# Compiler flags
-+ #    -g						: Produce debugging information.
-+
-+-CFLAGS	    = -g $(INC_PATH) -D${UNAMES}
-++CXXFLAGS	= -g $(INC_PATH) -D${UNAMES}
-+
-+ #*******************************************************************************
-+ #                               File lists
-+@@ -137,13 +139,13 @@ clean:
-+ 		${EXEC_FILE_ELFTOSB2} ${EXEC_FILE_SBTOOL} ${EXEC_FILE_KEYGEN}
-+
-+ elftosb: ${OBJ_FILES_ELFTOSB2}
-+-	gcc ${OBJ_FILES_ELFTOSB2} ${LIBS} -o ${EXEC_FILE_ELFTOSB2}
-++	$(CXX) ${OBJ_FILES_ELFTOSB2} ${LIBS} -o ${EXEC_FILE_ELFTOSB2}
-+
-+ sbtool: ${OBJ_FILES_SBTOOL}
-+-	gcc ${OBJ_FILES_SBTOOL} ${LIBS} -o ${EXEC_FILE_SBTOOL}
-++	$(CXX) ${OBJ_FILES_SBTOOL} ${LIBS} -o ${EXEC_FILE_SBTOOL}
-+
-+ keygen: ${OBJ_FILES_KEYGEN}
-+-	gcc ${OBJ_FILES_KEYGEN} ${LIBS} -o ${EXEC_FILE_KEYGEN}
-++	$(CXX) ${OBJ_FILES_KEYGEN} ${LIBS} -o ${EXEC_FILE_KEYGEN}
-+
-+
-+ #ifeq ("${UNAMES}", "Linux")
-+@@ -153,10 +155,10 @@ keygen: ${OBJ_FILES_KEYGEN}
-+ .SUFFIXES : .c .cpp
-+
-+ .c.o :
-+-	gcc ${CFLAGS} -c $<
-++	$(CC) ${CXXFLAGS} -c $<
-+
-+ .cpp.o :
-+-	gcc ${CFLAGS} -c $<
-++	$(CXX) ${CXXFLAGS} -c $<
-+
-+ #endif
-+
-+@@ -165,13 +167,13 @@ keygen: ${OBJ_FILES_KEYGEN}
-+
-+ %.d: %.c
-+ 	@set -e; \
-+-	$(CC) -MM $(CFLAGS) $< | \
-++	$(CC) -MM $(CXXFLAGS) $< | \
-+ 	sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; \
-+ 	[ -s $@ ]  || rm -f $@
-+
-+ %.d: %.cpp
-+ 	@set -e; \
-+-	$(CC) -MM $(CFLAGS) $< | \
-++	$(CXX) -MM $(CXXFLAGS) $< | \
-+ 	sed 's/\($*\)\.o[ :]*/\1.o $@ : /g' > $@; \
-+ 	[ -s $@ ]  || rm -f $@
-+
+Thanks, applied with the CC usage instead of CXX we discussed on IRC.
+
+I've also applied two other patches: one renaming the patches without a
+version number, and one that uses HOST_CONFIGURE_OPTS instead of
+HOST_MAKE_ENV when doing the make invocation to build elftosb. This
+allows to pass the correct CC, CXX, CFLAGS, CXXFLAGS and al. to the
+build process, which for example, allows to use ccache when building
+elftosb.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
