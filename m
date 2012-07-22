@@ -1,76 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 17:17:03 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain-external: remove ARM
-	CodeSourcery 2009q3
-Message-ID: <20120802195258.802CA96CE6@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 19:28:42 +0200
+Subject: [Buildroot] [git commit branch/next] pkg-*targets.mk: factorize and
+	fix $(PKG)_SRCDIR and $(PKG)_BUILDDIR declaration
+Message-ID: <20120802195259.30EA28E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67ef65600d59879c31901088be0ed8606ab6fa5c
+commit: http://git.buildroot.net/buildroot/commit/?id=9ba9bfb9a02706fa414bcf4c6dcceac1b68a5c9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   22 ----------------------
- toolchain/toolchain-external/ext-tool.mk |    5 +----
- 2 files changed, 1 insertions(+), 26 deletions(-)
+ package/pkg-autotools.mk |   10 ----------
+ package/pkg-cmake.mk     |    9 ---------
+ package/pkg-generic.mk   |   11 +++++++++++
+ 3 files changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 835763a..3b1d792 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -161,27 +161,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	       Select BR2_SOFT_FLOAT
- 	       Set BR2_TARGET_OPTIMIZATION to -mthumb
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index e454050..785daab 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -54,15 +54,6 @@ endef
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
--	bool "Sourcery CodeBench ARM 2009q3"
--	depends on BR2_arm
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_INSTALL_LIBSTDCPP
--	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
--	  2.10 and gdb 6.8 and kernel headers 2.6.30. It has support
--	  for the following variants:
--	    - ARMv5T, little endian, soft-float, glibc
--	      Select ARM926T, ARM10T, XScale or another ARMv5 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv4T, little endian, soft-float, glibc
--	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
--	      Select BR2_SOFT_FLOAT
--	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
--	      Select BR2_SOFT_FLOAT
--	      Set BR2_TARGET_OPTIMIZATION to -mthumb
+ define inner-autotools-package
+ 
+-# define package-specific variables to default values
+-ifndef $(2)_SUBDIR
+- ifdef $(3)_SUBDIR
+-  $(2)_SUBDIR = $($(3)_SUBDIR)
+- else
+-  $(2)_SUBDIR ?=
+- endif
+-endif
 -
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	bool "Sourcery CodeBench MIPS 2011.03"
- 	depends on BR2_mips || BR2_mipsel
-@@ -553,7 +532,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_04
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_05
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_06
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 35fcb7b..14804d6 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -175,10 +175,7 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
- endif
+ ifndef $(2)_LIBTOOL_PATCH
+  ifdef $(3)_LIBTOOL_PATCH
+   $(2)_LIBTOOL_PATCH = $($(3)_LIBTOOL_PATCH)
+@@ -91,7 +82,6 @@ $(2)_CLEAN_OPT			?= clean
+ $(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
+ $(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
  
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package5383/public/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009),y)
+-$(2)_SRCDIR                     = $$($(2)_DIR)/$$($(2)_SUBDIR)
+ 
+ #
+ # Configure step. Only define it if not already defined by the package
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index f9a5934..626a0b0 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -37,15 +37,6 @@
+ 
+ define inner-cmake-package
+ 
+-# define package-specific variables to default values
+-ifndef $(2)_SUBDIR
+- ifdef $(3)_SUBDIR
+-  $(2)_SUBDIR = $($(3)_SUBDIR)
+- else
+-  $(2)_SUBDIR ?=
+- endif
+-endif
+-
+ $(2)_CONF_ENV			?=
+ $(2)_CONF_OPT			?=
+ $(2)_MAKE			?= $(MAKE)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c01440e..8a730c0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -204,6 +204,17 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ 
++ifndef $(3)_SUBDIR
++ ifdef $(2)_SUBDIR
++  $(3)_SUBDIR = $$($(2)_SUBDIR)
++ else
++  $(3)_SUBDIR ?=
++ endif
++endif
++
++$(2)_SRCDIR		       = $$($(2)_DIR)/$$($(2)_SUBDIR)
++$(2)_BUILDDIR		       ?= $$($(2)_SRCDIR)
++
+ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_VERSION = custom
+ endif
