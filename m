@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 20 Jul 2012 14:40:18 +0200
-Subject: [Buildroot] [git commit branch/next] lua: ensure that host-lua does
-	not depend on host-readline and host-ncurses
-Message-ID: <20120802195256.B99A78E8F3@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 16:53:24 +0200
+Subject: [Buildroot] [git commit branch/next] pkg-download.mk: use
+	stripurischeme function in localfiles download method
+Message-ID: <20120802195257.D628D8E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ebbec054545df978655eda88af78f531ff25f17
+commit: http://git.buildroot.net/buildroot/commit/?id=d57669271d079b3bf09c5ae81f42871260d60c49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit ad6af5819f88bac9ca7f50e565c4fc68d3e408cc removed the
-HOST_LUA_DEPENDENCIES assignement to the empty variable, so from that
-commit, the dependencies of host-lua are automatically computed from
-the dependencies of lua. Since lua can depend on readline and ncurses,
-it means that host-lua can depend on host-readline and host-ncurses,
-and the host-readline package does not exist in Buildroot. Since there
-is no reason to build host-lua with readline/ncurses support, just
-re-add the HOST_LUA_DEPENDENCIES variable.
-
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Francois Perrad <fperrad@gmail.com>
 ---
- package/lua/lua.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/pkg-download.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 8f71fc2..074b9ad 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -23,6 +23,9 @@ else
- 	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
- endif
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index fb51540..ca5b404 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -178,11 +178,11 @@ endef
  
-+# We never want to have host-readline and host-ncurses as dependencies
-+# of host-lua.
-+HOST_LUA_DEPENDENCIES =
- HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
- HOST_LUA_MYLIBS = -ldl
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
++		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
+ endef
  
+ define SOURCE_CHECK_LOCALFILES
+-  test -e $(call qstrip,$(subst file://,,$(1)))
++  test -e $(call stripurischeme,$(call qstrip,$(1)))
+ endef
+ 
+ define SHOW_EXTERNAL_DEPS_LOCALFILES
