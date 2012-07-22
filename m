@@ -1,9 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 22 Jul 2012 15:28:37 +0200
-Subject: [Buildroot] [PATCH 09/11] m4: fix build with glibc >=2.16
+Date: Sun, 22 Jul 2012 15:28:38 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_10/11=5D_tar=3A_fix_build_with_gli?=
+	=?utf-8?b?YmMgPj0yLjE2?=
 In-Reply-To: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
 References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1342963719-1810-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <1342963719-1810-11-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +14,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 package/m4/m4-1.4.16-no-gets.patch
+ create mode 100644 package/tar/tar-1.26-no-gets.patch
 
-diff --git a/package/m4/m4-1.4.16-no-gets.patch b/package/m4/m4-1.4.16-no-gets.patch
+diff --git a/package/tar/tar-1.26-no-gets.patch b/package/tar/tar-1.26-no-gets.patch
 new file mode 100644
-index 0000000..a057377
+index 0000000..fb9d188
 --- /dev/null
-+++ b/package/m4/m4-1.4.16-no-gets.patch
-@@ -0,0 +1,38 @@
++++ b/package/tar/tar-1.26-no-gets.patch
+@@ -0,0 +1,47 @@
 +Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
-+No m4 version synchronized with gnulib since [1] has been released yet.
++No tar version synchronized with gnulib since [1] has been released yet.
 +
-+This patch avoids the following error occurs when building m4 <=1.4.16 on host using
++This patch avoids the following error occurs when building tar <=1.4.16 on host using
 +a glibc >=2.16:
 +
-+make[4]: Entering directory `/opt/buildroot/output/build/host-m4-1.4.16/lib'
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT gl_avltree_oset.o -MD -MP -MF .deps/gl_avltree_oset.Tpo -c -o gl_avltree_oset.o gl_avltree_oset.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-ctype.o -MD -MP -MF .deps/c-ctype.Tpo -c -o c-ctype.o c-ctype.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-stack.o -MD -MP -MF .deps/c-stack.Tpo -c -o c-stack.o c-stack.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
-+mv -f .deps/c-ctype.Tpo .deps/c-ctype.Po
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT close-hook.o -MD -MP -MF .deps/close-hook.Tpo -c -o close-hook.o close-hook.c
-+In file included from clean-temp.h:22:0,
-+                 from clean-temp.c:23:
-+./stdio.h:477:20: error 'gets' undeclared here (not in a function)
-+make[4]: *** [clean-temp.o] Error 1
++make[5]: Entering directory `/home/samuel/data/workspace/src/buildroot/master/output/build/host-tar-1.26/gnu'
++  CC     areadlink.o
++  CC     areadlinkat.o
++  CC     argp-ba.o
++  CC     argp-eexst.o
++  CC     argp-fmtstream.o
++  CC     argp-fs-xinl.o
++In file included from argp.h:24:0,
++                 from argp-eexst.c:27:
++./stdio.h:479:1: error ?gets? undeclared here (not in a function)
++make[5]: *** [argp-eexst.o] Error 1
++make[5]: *** Waiting for unfinished jobs....
++In file included from argp-fmtstream.h:29:0,
++                 from argp-fs-xinl.c:28:
++./stdio.h:479:1: error ?gets? undeclared here (not in a function)
++make[5]: *** [argp-fs-xinl.o] Error 1
++In file included from argp-fmtstream.h:29:0,
++                 from argp-fmtstream.c:35:
++./stdio.h:479:1: error ?gets? undeclared here (not in a function)
++make[5]: *** [argp-fmtstream.o] Error 1
 +
 +References:
 +[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
@@ -46,10 +56,10 @@ index 0000000..a057377
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +
 +---
-+diff -purN host-m4-1.4.16.orig/lib/stdio.in.h host-m4-1.4.16/lib/stdio.in.h
-+--- host-m4-1.4.16.orig/lib/stdio.in.h	2012-07-21 19:11:40.196541826 +0200
-++++ host-m4-1.4.16/lib/stdio.in.h	2012-07-21 20:46:05.405850751 +0200
-+@@ -162,7 +162,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
++diff -purN host-tar-1.26.orig/gnu/stdio.in.h host-tar-1.26/gnu/stdio.in.h
++--- host-tar-1.26.orig/gnu/stdio.in.h	2012-07-21 21:17:12.392403084 +0200
+++++ host-tar-1.26/gnu/stdio.in.h	2012-07-21 21:18:27.991993525 +0200
++@@ -164,7 +164,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
 +    so any use of gets warrants an unconditional warning.  Assume it is
 +    always declared, since it is required by C89.  */
 + #undef gets
