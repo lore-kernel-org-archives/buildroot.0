@@ -1,81 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 19:17:48 +0200
-Subject: [Buildroot] [git commit] lighttpd: add simple startup script
-Message-ID: <20120722171812.9FE0096C85@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 19:20:37 +0200
+Subject: [Buildroot] [PATCH 04/11] elftosb: fix build forcing g++
+ compiler
+In-Reply-To: <1342963719-1810-5-git-send-email-s.martin49@gmail.com>
+References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
+ <1342963719-1810-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20120722192037.5a72654c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccda74f3c72d1c8809ee171e39a7712b23a03dc2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 22 Jul 2012 15:28:32 +0200,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lighttpd/S50lighttpd |   37 +++++++++++++++++++++++++++++++++++++
- package/lighttpd/lighttpd.mk |    8 ++++++++
- 2 files changed, 45 insertions(+), 0 deletions(-)
+> + .c.o :
+> +-	gcc ${CFLAGS} -c $<
+> ++	$(CXX) ${CXXFLAGS} -c $<
 
-diff --git a/package/lighttpd/S50lighttpd b/package/lighttpd/S50lighttpd
-new file mode 100644
-index 0000000..752402c
---- /dev/null
-+++ b/package/lighttpd/S50lighttpd
-@@ -0,0 +1,37 @@
-+#!/bin/sh
-+#
-+# Starts lighttpd.
-+#
-+
-+start() {
-+	echo -n "Starting lighttpd: "
-+	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
-+	echo "OK"
-+}
-+stop() {
-+	echo -n "Stopping lighttpd: "
-+	start-stop-daemon -K -q -p /var/run/lighttpd.pid
-+	echo "OK"
-+}
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+  start)
-+	start
-+	;;
-+  stop)
-+	stop
-+	;;
-+  restart|reload)
-+	restart
-+	;;
-+  *)
-+	echo "Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-+
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 48f733a..9f554cb 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -87,6 +87,14 @@ endef
- 
- LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
- 
-+define LIGHTTPD_INSTALL_INIT_SCRIPT
-+	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
-+		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
-+			$(TARGET_DIR)/etc/init.d/S50lighttpd
-+endef
-+
-+LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_INIT_SCRIPT
-+
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
- 	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd
- 	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd-angel
+It should be $(CC) here, no?
+
+> + %.d: %.c
+> + 	@set -e; \
+> +-	$(CC) -MM $(CFLAGS) $< | \
+> ++	$(CXX) -MM $(CXXFLAGS) $< | \
+
+And it should remain $(CC) here, no?
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
