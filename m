@@ -1,65 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 16:53:25 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain-external: line up
-	comments with reality
-Message-ID: <20120802195258.137F990D8D@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 17:17:02 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain-external: remove
+	Linaro 2012.01
+Message-ID: <20120802195258.6D5F28E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=163aeb14e23213a67d7b99a1c0cd9a5b28b75f77
+commit: http://git.buildroot.net/buildroot/commit/?id=9d1fd3affbaec495ce4b046bb6e3826f2d3c25f1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Line-up with changes from commit 3367d5ce770ac409e7b3f5bba2c7ed1a819b3ef7
-"external-toolchain: run checks even on extracted toolchains"
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/ext-tool.mk |   13 ++++++-------
- 1 files changed, 6 insertions(+), 7 deletions(-)
+ toolchain/toolchain-external/Config.in   |   15 ---------------
+ toolchain/toolchain-external/ext-tool.mk |    3 ---
+ 2 files changed, 0 insertions(+), 18 deletions(-)
 
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 2b2e763..835763a 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -77,20 +77,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
+ 	  Thumb 2, with the softfp calling convention, and uses the
+ 	  VFPv3-D16 FPU instructions.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_01
+-	bool "Linaro 2012.01"
+-	depends on BR2_arm
+-	depends on BR2_cortex_a8 || BR2_cortex_a9
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_INSTALL_LIBSTDCPP
+-	help
+-	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2012.01 (based on gcc 4.6), Linaro GDB 2011.12, eglibc
+-	  2.13. It generates code that runs on all Cortex-A profile
+-	  devices, but tuned for the Cortex-A9. The code generated is
+-	  Thumb 2, with the softfp calling convention, and uses the
+-	  VFPv3-D16 FPU instructions.
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	bool "Sourcery CodeBench ARM 2011.09"
+ 	depends on BR2_arm
+@@ -562,7 +548,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	string
+-	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_01
+ 	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
+ 	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_03
+ 	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_04
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 49dd0e2..9c88776 100644
+index e0515f1..35fcb7b 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -14,11 +14,10 @@
- #
- # The basic principle is the following
- #
--#  1. a. For toolchains downloaded from the Web, Buildroot already
--#  knows their configuration, so it just downloads them and extract
--#  them in $(TOOLCHAIN_EXTERNAL_DIR).
-+#  1. If the toolchain is not pre-installed, download and extract it
-+#  in $(TOOLCHAIN_EXTERNAL_DIR).
- #
--#  1. b. For pre-installed toolchains, perform some checks on the
-+#  2. For all external toolchains, perform some checks on the
- #  conformity between the toolchain configuration described in the
- #  Buildroot menuconfig system, and the real configuration of the
- #  external toolchain. This is for example important to make sure that
-@@ -30,19 +29,19 @@
- #  options. And at configuration time, we are not able to retrieve the
- #  external toolchain configuration.
- #
--#  2. Copy the libraries needed at runtime to the target directory,
-+#  3. Copy the libraries needed at runtime to the target directory,
- #  $(TARGET_DIR). Obviously, things such as the C library, the dynamic
- #  loader and a few other utility libraries are needed if dynamic
- #  applications are to be executed on the target system.
- #
--#  3. Copy the libraries and headers to the staging directory. This
-+#  4. Copy the libraries and headers to the staging directory. This
- #  will allow all further calls to gcc to be made using --sysroot
- #  $(STAGING_DIR), which greatly simplifies the compilation of the
- #  packages when using external toolchains. So in the end, only the
- #  cross-compiler binaries remains external, all libraries and headers
- #  are imported into the Buildroot tree.
- #
--#  4. Build a toolchain wrapper which executes the external toolchain
-+#  5. Build a toolchain wrapper which executes the external toolchain
- #  with a number of arguments (sysroot/march/mtune/..) hardcoded,
- #  so we're sure the correct configuration is always used and the
- #  toolchain behaves similar to an internal toolchain.
+@@ -190,9 +190,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_01),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://launchpad.net/linaro-toolchain-binaries/trunk/2012.01/+download/
+-TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.01-20120125_linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://launchpad.net/linaro-toolchain-binaries/trunk/2012.02/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.02-20120222_linux.tar.bz2
