@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 19:18:51 +0200
-Subject: [Buildroot] [git commit branch/next] cleanup trailing white space
-Message-ID: <20120802195259.0F7CE8E8F3@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:24:18 +0200
+Subject: [Buildroot] [git commit branch/next] elftosb: remove version number
+	of patch filenames
+Message-ID: <20120802195259.512D896CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ff2ee34086a24bd23eff054d7a51eaee5e721e11
+commit: http://git.buildroot.net/buildroot/commit/?id=be07ff19cbeae0c18a8a1604f07a682e1cfbfc26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in.arch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...includes.patch => elftosb-fixes-includes.patch} |    0
+ ...iler.patch => elftosb-force-cxx-compiler.patch} |    0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 64c6dea..e7aec56 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -242,7 +242,7 @@ choice
- 	default BR2_mips_1 if BR2_mipsel
- 	help
- 	  Specific CPU variant to use
--	
-+
- 	  64bit cabable: 3, 4, 64, 64r2
- 	  non-64bit capable: 1, 2, 32, 32r2
- 
+diff --git a/package/elftosb/elftosb10.12.01-fixes_includes.patch b/package/elftosb/elftosb-fixes-includes.patch
+similarity index 100%
+rename from package/elftosb/elftosb10.12.01-fixes_includes.patch
+rename to package/elftosb/elftosb-fixes-includes.patch
+diff --git a/package/elftosb/elftosb10.12.01-force_cxx_compiler.patch b/package/elftosb/elftosb-force-cxx-compiler.patch
+similarity index 100%
+rename from package/elftosb/elftosb10.12.01-force_cxx_compiler.patch
+rename to package/elftosb/elftosb-force-cxx-compiler.patch
