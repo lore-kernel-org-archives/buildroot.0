@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 22 Jul 2012 15:28:39 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_11/11=5D_libecore=3A_fix_build_wit?=
-	=?utf-8?q?h_glibc_=3E=3D2=2E16?=
+Date: Sun, 22 Jul 2012 15:28:37 +0200
+Subject: [Buildroot] [PATCH 09/11] m4: fix build with glibc >=2.16
 In-Reply-To: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
 References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1342963719-1810-12-git-send-email-s.martin49@gmail.com>
+Message-ID: <1342963719-1810-10-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +13,51 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 package/efl/libecore/libecore-ecore_exec-c-fix-build-with-glibc-2-16.patch
+ create mode 100644 package/m4/m4-1.4.16-no-gets.patch
 
-diff --git a/package/efl/libecore/libecore-ecore_exec-c-fix-build-with-glibc-2-16.patch b/package/efl/libecore/libecore-ecore_exec-c-fix-build-with-glibc-2-16.patch
+diff --git a/package/m4/m4-1.4.16-no-gets.patch b/package/m4/m4-1.4.16-no-gets.patch
 new file mode 100644
-index 0000000..9d53dfd
+index 0000000..a057377
 --- /dev/null
-+++ b/package/efl/libecore/libecore-ecore_exec-c-fix-build-with-glibc-2-16.patch
-@@ -0,0 +1,62 @@
-+This patch fix build with glibc-2.16, avoiding the following error occurs:
++++ b/package/m4/m4-1.4.16-no-gets.patch
+@@ -0,0 +1,38 @@
++Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
++No m4 version synchronized with gnulib since [1] has been released yet.
 +
-+Making all in ecore
-+make[6]: Entering directory `/opt/buildroot/output/build/host-libecore-1.1.0/src/lib/ecore'
-+  CC     ecore.lo
-+  CC     ecore_anim.lo
-+  CC     ecore_app.lo
-+  CC     ecore_events.lo
-+  CC     ecore_getopt.lo
-+  CC     ecore_idle_enterer.lo
-+  CC     ecore_idle_exiter.lo
-+  CC     ecore_idler.lo
-+  CC     ecore_job.lo
-+  CC     ecore_main.lo
-+  CC     ecore_pipe.lo
-+  CC     ecore_poll.lo
-+  CC     ecore_time.lo
-+  CC     ecore_timer.lo
-+  CC     ecore_thread.lo
-+  CC     ecore_glib.lo
-+  CC     ecore_throttle.lo
-+  CC     ecore_signal.lo
-+  CC     ecore_exe.lo
-+ecore_exe.c: In function ?ecore_exe_pipe_run?:
-+ecore_exe.c:486:15: warning: implicit declaration of function ?setpriority? [-Wimplicit-function-declaration]
-+ecore_exe.c:486:27: error ?PRIO_PROCESS? undeclared (first use in this function)
-+ecore_exe.c:486:27: note: each undeclared identifier is reported only once for each function it appears in
-+make[6]: *** [ecore_exe.lo] Error 1
++This patch avoids the following error occurs when building m4 <=1.4.16 on host using
++a glibc >=2.16:
 +
++make[4]: Entering directory `/opt/buildroot/output/build/host-m4-1.4.16/lib'
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT gl_avltree_oset.o -MD -MP -MF .deps/gl_avltree_oset.Tpo -c -o gl_avltree_oset.o gl_avltree_oset.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-ctype.o -MD -MP -MF .deps/c-ctype.Tpo -c -o c-ctype.o c-ctype.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-stack.o -MD -MP -MF .deps/c-stack.Tpo -c -o c-stack.o c-stack.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
++mv -f .deps/c-ctype.Tpo .deps/c-ctype.Po
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT close-hook.o -MD -MP -MF .deps/close-hook.Tpo -c -o close-hook.o close-hook.c
++In file included from clean-temp.h:22:0,
++                 from clean-temp.c:23:
++./stdio.h:477:20: error 'gets' undeclared here (not in a function)
++make[4]: *** [clean-temp.o] Error 1
++
++References:
++[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
++[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
 +
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +
 +---
-+diff -purN host-libecore-1.1.0.orig/src/lib/ecore/ecore_exe.c host-libecore-1.1.0/src/lib/ecore/ecore_exe.c
-+--- host-libecore-1.1.0.orig/src/lib/ecore/ecore_exe.c	2011-10-21 07:37:11.000000000 +0200
-++++ host-libecore-1.1.0/src/lib/ecore/ecore_exe.c	2012-07-22 10:46:00.362956073 +0200
-+@@ -2,11 +2,6 @@
-+ # include <config.h>
-+ #endif
-+ 
-+-#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
-+-# include <sys/time.h>
-+-# include <sys/resource.h>
-+-#endif
-+-
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+@@ -15,6 +10,13 @@
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ 
-++#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__) || ( defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__) && __GLIBC_PREREQ(2, 16) )
-++# if !defined(__linux__)
-++#  include <sys/time.h>
-++# endif
-++# include <sys/resource.h>
++diff -purN host-m4-1.4.16.orig/lib/stdio.in.h host-m4-1.4.16/lib/stdio.in.h
++--- host-m4-1.4.16.orig/lib/stdio.in.h	2012-07-21 19:11:40.196541826 +0200
+++++ host-m4-1.4.16/lib/stdio.in.h	2012-07-21 20:46:05.405850751 +0200
++@@ -162,7 +162,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
++    so any use of gets warrants an unconditional warning.  Assume it is
++    always declared, since it is required by C89.  */
++ #undef gets
+++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
++ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
 ++#endif
-++
-+ #ifdef HAVE_SYS_PRCTL_H
-+ # include <sys/prctl.h>
-+ #endif
++ 
++ #if @GNULIB_FOPEN@
++ # if @REPLACE_FOPEN@
 -- 
 1.7.11.2
