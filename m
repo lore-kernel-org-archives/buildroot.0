@@ -1,57 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jul 2012 22:11:25 +0200
-Subject: [Buildroot] [git commit branch/next] radvd: fix high jobcount build
-	failure
-Message-ID: <20120802195259.B477196CE6@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:32:11 +0200
+Subject: [Buildroot] [git commit branch/next] m4: fix build with glibc >=2.16
+Message-ID: <20120802195259.7ECFB96CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=060622d6d1696f3d946557e116505f859d9b6d3f
+commit: http://git.buildroot.net/buildroot/commit/?id=600375d18e6ccd08505153863666f2e8b10251be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix build failure:
-http://autobuild.buildroot.org/results/48aabbc41dff2e4196dfd6e1e942cf6dbe050deb/build-end.log
-because of a typo/missed update in the Makefile
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ create mode 100644 package/m4/m4-1.4.16-no-gets.patch
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/radvd/radvd-highjob.patch |   27 +++++++++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ package/m4/m4-1.4.16-no-gets.patch |   38 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 38 insertions(+), 0 deletions(-)
 
-diff --git a/package/radvd/radvd-highjob.patch b/package/radvd/radvd-highjob.patch
+diff --git a/package/m4/m4-1.4.16-no-gets.patch b/package/m4/m4-1.4.16-no-gets.patch
 new file mode 100644
-index 0000000..5945435
+index 0000000..a057377
 --- /dev/null
-+++ b/package/radvd/radvd-highjob.patch
-@@ -0,0 +1,27 @@
-+From ce4911c13a3ab6877c0288c8a1874decb5d0e90a Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 23 Jul 2012 09:14:24 -0300
-+Subject: [PATCH] Makefile: fix high jobcount build failures
++++ b/package/m4/m4-1.4.16-no-gets.patch
+@@ -0,0 +1,38 @@
++Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
++No m4 version synchronized with gnulib since [1] has been released yet.
 +
-+gram.h is a dependency for scanner.c rather than scanner.o which is
-+unused.
++This patch avoids the following error occurs when building m4 <=1.4.16 on host using
++a glibc >=2.16:
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++make[4]: Entering directory `/opt/buildroot/output/build/host-m4-1.4.16/lib'
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT gl_avltree_oset.o -MD -MP -MF .deps/gl_avltree_oset.Tpo -c -o gl_avltree_oset.o gl_avltree_oset.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-ctype.o -MD -MP -MF .deps/c-ctype.Tpo -c -o c-ctype.o c-ctype.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-stack.o -MD -MP -MF .deps/c-stack.Tpo -c -o c-stack.o c-stack.c
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
++mv -f .deps/c-ctype.Tpo .deps/c-ctype.Po
++/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT close-hook.o -MD -MP -MF .deps/close-hook.Tpo -c -o close-hook.o close-hook.c
++In file included from clean-temp.h:22:0,
++                 from clean-temp.c:23:
++./stdio.h:477:20: error 'gets' undeclared here (not in a function)
++make[4]: *** [clean-temp.o] Error 1
++
++References:
++[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
++[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
 +---
-+ Makefile.am |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 04b834b..8a90ca7 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -131,5 +131,5 @@ dist-hook:
-+ 	rm -f $(distdir)/gram.h
-+ 	rm -f $(distdir)/scanner.c
++diff -purN host-m4-1.4.16.orig/lib/stdio.in.h host-m4-1.4.16/lib/stdio.in.h
++--- host-m4-1.4.16.orig/lib/stdio.in.h	2012-07-21 19:11:40.196541826 +0200
+++++ host-m4-1.4.16/lib/stdio.in.h	2012-07-21 20:46:05.405850751 +0200
++@@ -162,7 +162,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
++    so any use of gets warrants an unconditional warning.  Assume it is
++    always declared, since it is required by C89.  */
++ #undef gets
+++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
++ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+++#endif
 + 
-+-scanner.o: gram.h
-++scanner.c: gram.h
-+ 
-+-- 
-+1.7.8.6
-+
++ #if @GNULIB_FOPEN@
++ # if @REPLACE_FOPEN@
