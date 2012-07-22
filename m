@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:29:50 +0200
-Subject: [Buildroot] [git commit branch/next] elftosb: use
-	HOST_CONFIGURE_OPTS instead of HOST_MAKE_ENV
-Message-ID: <20120802195259.66B2196CE6@busybox.osuosl.org>
+Date: Sun, 22 Jul 2012 20:57:26 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain-external: make
+	preinstall the default for custom toolchains
+Message-ID: <20120802195259.A3D4596CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e75a2d229b42aa8f0e6e0f0f04dc1a34988d996
+commit: http://git.buildroot.net/buildroot/commit/?id=701940770b658e25cfe7219e35e808ba62052843
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-HOST_CONFIGURE_OPTS allows to pass the correct CC, CXX, CFLAGS,
-CXXFLAGS, etc. For example, it allows the elftosb build process to
-properly use ccache when available.
+All the defconfig files used by the autobuilders that use
+pre-installed external toolchains are making the assumption that the
+default for a custom external toolchain is "pre-installed". We keep
+this default for now, since changing it breaks the autobuilders.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/elftosb/elftosb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-external/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/elftosb/elftosb.mk b/package/elftosb/elftosb.mk
-index b2e50f7..5803b75 100644
---- a/package/elftosb/elftosb.mk
-+++ b/package/elftosb/elftosb.mk
-@@ -8,7 +8,7 @@ ELFTOSB_SOURCE = elftosb-$(ELFTOSB_VERSION).tar.gz
- ELFTOSB_SITE = http://repository.timesys.com/buildsources/e/elftosb/elftosb-$(ELFTOSB_VERSION)
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 5c29ecd..e34802d 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -573,6 +573,10 @@ endchoice
  
- define HOST_ELFTOSB_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) all
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
- endef
+ choice
+ 	prompt "Toolchain origin"
++	# Keep compatibility with old defconfig files that are using
++	# custom toolchains, and which are therefore assuming that
++	# "preinstalled" in the default choice.
++	default BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
  
- define HOST_ELFTOSB_INSTALL_CMDS
+ config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+ 	bool "Toolchain to be downloaded and installed"
