@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 23 Jul 2012 14:49:02 +0100
-Subject: [Buildroot] [PATCH] sconeserver: new package
-Message-ID: <1343051342-12829-1-git-send-email-spdawson@gmail.com>
+Date: Mon, 23 Jul 2012 15:24:54 +0100
+Subject: [Buildroot] [PATCH] googlefontdirectory: new package
+Message-ID: <1343053494-21248-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,185 +12,85 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/Config.in                  |    1 +
- package/sconeserver/Config.in      |  100 ++++++++++++++++++++++++++++++++++++
- package/sconeserver/sconeserver.mk |   49 ++++++++++++++++++
- 3 files changed, 150 insertions(+)
- create mode 100644 package/sconeserver/Config.in
- create mode 100644 package/sconeserver/sconeserver.mk
+ package/Config.in                                  |    1 +
+ package/googlefontdirectory/Config.in              |   13 +++++++
+ package/googlefontdirectory/googlefontdirectory.mk |   36 ++++++++++++++++++++
+ 3 files changed, 50 insertions(+)
+ create mode 100644 package/googlefontdirectory/Config.in
+ create mode 100644 package/googlefontdirectory/googlefontdirectory.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f664b8e..a88e639 100644
+index f664b8e..89dc036 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -591,6 +591,7 @@ source "package/rsh-redone/Config.in"
- source "package/rsync/Config.in"
- source "package/rtorrent/Config.in"
- source "package/samba/Config.in"
-+source "package/sconeserver/Config.in"
- source "package/ser2net/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+@@ -498,6 +498,7 @@ endmenu
+ menu "Miscellaneous"
+ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
++source "package/googlefontdirectory/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+diff --git a/package/googlefontdirectory/Config.in b/package/googlefontdirectory/Config.in
 new file mode 100644
-index 0000000..7290ec0
+index 0000000..2ff81b7
 --- /dev/null
-+++ b/package/sconeserver/Config.in
-@@ -0,0 +1,100 @@
-+config BR2_PACKAGE_SCONESERVER
-+	bool "sconeserver"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_PCRE
++++ b/package/googlefontdirectory/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_GOOGLEFONTDIRECTORY
++	bool "Google Web Fonts"
 +	help
-+	  Sconeserver is a modular, object-orientated and extremely versatile
-+	  network server framework for GNU/Linux and UNIX-like platforms.
++	  Download Google Web Fonts
 +
-+	  http://www.sconemad.com/sconeserver/
++	  http://code.google.com/p/googlefontdirectory/
 +
-+comment "sconeserver requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+menu "Modules"
-+	depends on BR2_PACKAGE_SCONESERVER
-+
-+config BR2_PACKAGE_SCONESERVER_EXAMPLES
-+	bool "examples"
-+	default n
++config BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS
++	string "List of fonts to install"
++	default "droid"
++	depends on BR2_PACKAGE_GOOGLEFONTDIRECTORY
 +	help
-+	  Example modules for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_SSL
-+	bool "ssl"
-+	default y
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  SSL module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-+	bool "http::sconesite"
-+	default y
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  http::sconesite module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
-+	bool "http::sconesite::image"
-+	default n
-+	depends on BR2_PACKAGE_IMAGEMAGICK
-+	select BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-+	help
-+	  http::sconesite::image module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_MYSQL
-+	bool "mysql"
-+	default n
-+	depends on BR2_PACKAGE_MYSQL_CLIENT
-+	help
-+	  MySQL module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_BLUETOOTH
-+	bool "bluetooth"
-+	default n
-+	depends on BR2_PACKAGE_BLUEZ_UTILS
-+	help
-+	  Bluetooth module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_RSS
-+	bool "rss"
-+	default y
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  RSS module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_LOCATION
-+	bool "location"
-+	default n
-+	depends on BR2_PACKAGE_GPSD
-+	help
-+	  Location module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_LETTUCE
-+	bool "lettuce"
-+	default n
-+	help
-+	  Lettuce module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_MATHS
-+	bool "maths"
-+	default n
-+	depends on BR2_PACKAGE_GMP
-+	depends on BR2_PACKAGE_MPFR
-+	help
-+	  Maths module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_TESTBUILDER
-+	bool "testbuilder"
-+	default n
-+	help
-+	  Testbuilder module for SconeServer
-+
-+config BR2_PACKAGE_SCONESERVER_UI
-+	bool "ui"
-+	default n
-+	depends on BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  UI module for SconeServer
-+
-+endmenu
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
++	  Specify a space-separated list of fonts to install
+diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
 new file mode 100644
-index 0000000..dba5fe6
+index 0000000..f13c100
 --- /dev/null
-+++ b/package/sconeserver/sconeserver.mk
-@@ -0,0 +1,49 @@
++++ b/package/googlefontdirectory/googlefontdirectory.mk
+@@ -0,0 +1,36 @@
 +#############################################################
 +#
-+# sconeserver
++# googlefontdirectory
 +#
 +#############################################################
-+# Release tarball doesn't build cleanly, so use a recent
-+# Subversion trunk snapshot.
-+SCONESERVER_VERSION = 177
-+SCONESERVER_SITE = \
-+	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
-+SCONESERVER_SITE_METHOD = svn
++GOOGLEFONTDIRECTORY_VERSION = 1.0
++GOOGLEFONTDIRECTORY_SITE = \
++	https://s3.amazonaws.com/joemaller_google_webfonts
++GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
 +
-+SCONESERVER_LICENSE = GPLv2+
-+SCONESERVER_LICENSE_FILES = COPYING
++GOOGLEFONTDIRECTORY_FONTS = \
++	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
 +
-+SCONESERVER_CONF_OPT += \
-+	--with-ip \
-+	--with-local \
-+	$(if $(BR2_INET_IPV6),--with-ip6,--without-ip6) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_EXAMPLES),--with-examples,--without-examples) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_LETTUCE),--with-lettuce,--without-lettuce) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_TESTBUILDER),--with-testbuilder,--without-testbuilder) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_SSL),--with-ssl,--without-ssl) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),--with-sconesite,--without-sconesite) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),--with-sconesite-image,--without-sconesite-image) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_MYSQL),--with-mysql,--without-mysql) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_BLUETOOTH),--with-bluetooth,--without-bluetooth) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_RSS),--with-rss,--without-rss) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_LOCATION),--with-location,--without-location) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_MATHS),--with-maths,--without-maths) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_UI),--with-ui,--without-ui)
++define GOOGLEFONTDIRECTORY_INSTALL_SINGLE_FONT
++	$(info Installing single font $(1))
++	$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$(1)
++	cp -a $(@D)/$(1)/*.ttf	$(TARGET_DIR)/usr/share/fonts/$(1)
++	chmod 0644 $(TARGET_DIR)/usr/share/fonts/$(1)/*.ttf
++endef
 +
-+# Help SconeServer to find the libxml2 headers.
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+	SCONESERVER_CONF_OPT += CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2"
-+endif
++define GOOGLEFONTDIRECTORY_UNINSTALL_SINGLE_FONT
++	$(info Uninstalling single font $(1))
++	$(RM) -r $(TARGET_DIR)/usr/share/fonts/$(1)
++endef
 +
-+SCONESERVER_DEPENDENCIES = \
-+	pcre \
-+	$(if $(BR2_PACKAGE_SCONESERVER_SSL),openssl) \
-+	$(if $(or $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),$(BR2_PACKAGE_SCONESERVER_RSS)),libxml2) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),imagemagick) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_MYSQL),mysql_client) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_BLUETOOTH),bluez_utils) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_LOCATION),gpsd) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_MATHS),gmp mpfr) \
-+	$(if $(BR2_PACKAGE_SCONESERVER_UI),xlib_libX11)
++define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
++	$(foreach thing,$(GOOGLEFONTDIRECTORY_FONTS),\
++		$(call GOOGLEFONTDIRECTORY_INSTALL_SINGLE_FONT,$(thing)))
++endef
 +
-+$(eval $(autotools-package))
++define GOOGLEFONTDIRECTORY_UNINSTALL_TARGET_CMDS
++	$(foreach thing,$(GOOGLEFONTDIRECTORY_FONTS),\
++		$(call GOOGLEFONTDIRECTORY_UNINSTALL_SINGLE_FONT,$(thing)))
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
