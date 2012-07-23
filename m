@@ -1,35 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jul 2012 22:11:41 +0200
-Subject: [Buildroot] [git commit] php: security bump to version 5.3.15
-Message-ID: <20120723204911.EFB6096DF1@busybox.osuosl.org>
+Date: Mon, 23 Jul 2012 22:51:11 +0200
+Subject: [Buildroot] [PATCH] radvd: fix high jobcount build failure
+In-Reply-To: <1343047358-26801-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1343047358-26801-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120723225111.4253deb3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=60279fb153319504093e0d04cf9fb19689c23e6f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Mon, 23 Jul 2012 09:42:38 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Fix for CVE-2012-2688 (potential overflow in _php_stream_scandir),
-CVE-2012-3365 (SQLite open_basedir bypass) and other misc bugfixes.
+> Fix build failure:
+> http://autobuild.buildroot.org/results/48aabbc41dff2e4196dfd6e1e942cf6dbe050deb/build-end.log
+> because of a typo/missed update in the Makefile
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 31de289..0544659 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--PHP_VERSION = 5.3.14
-+PHP_VERSION = 5.3.15
- PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
