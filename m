@@ -1,48 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 23 Jul 2012 03:43:19 +0000 (UTC)
-Subject: [Buildroot] [Bug 5384] Can't build packages relying on gets on
-	newer glibc
-In-Reply-To: <bug-5384-163@https.bugs.busybox.net/>
-References: <bug-5384-163@https.bugs.busybox.net/>
-Message-ID: <20120723034319.3AB0596DAE@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 23 Jul 2012 05:44:28 +0200
+Subject: [Buildroot] [PATCH 5/5] gettext: convert to autotools-package
+In-Reply-To: <CAHXCMMK6B_qmuTS0z9agEWY05zz+GqgvsJuw0qF0Gf=mFx32XQ@mail.gmail.com>
+References: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
+ <66a7689f733357af7bb277467bc2198817fc9b69.1342732829.git.thomas.petazzoni@free-electrons.com>
+ <CAHXCMMK6B_qmuTS0z9agEWY05zz+GqgvsJuw0qF0Gf=mFx32XQ@mail.gmail.com>
+Message-ID: <CAHXCMMLsfSjtf2Cfx=kQHqEgKR8h5Yc_QHRUcy9+bdVnKLVwaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5384
+Hi,
 
---- Comment #1 from Samuel Martin <s.martin49@gmail.com> 2012-07-23 03:43:18 UTC ---
-(In reply to comment #0)
-> On newer versions of glibc, gets is no longer included so host packages relying
-> on it will not compile properly.
-> 
-> Patches:
-> https://raw.github.com/OpenELEC/OpenELEC.tv/f7f4d70fd78621137745a2c5e08b10685dfc84b7/packages/toolchain/devel/autotools/m4/patches/m4-1.4.16-fgets.patch
-> https://raw.github.com/OpenELEC/OpenELEC.tv/3b2e87a6955627c122588bc4963b7aae5150c095/packages/toolchain/archivers/cpio/patches/cpio-2.11-fgets.patch
-> https://raw.github.com/OpenELEC/OpenELEC.tv/e2c5feecdb2cfd6e343a6a152612f6fcf3aae8e9/packages/toolchain/devel/autotools/gettext/patches/gettext-0.18.1.1-gets.patch
+2012/7/22 Samuel Martin <s.martin49@gmail.com>:
+[...]
+> ifeq ($(BR2_PACKAGE_GETTEXT_TOOLS),)
 
-Yes, for now, AFAIK only glibc-2.16 has removed 'gets'.
+> ifeq ($(BR2_ENABLE_LOCALE)\
+> $(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)\
+> $(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC),yy)
+Just realize that this statement can be simplify like that:
+ifeq ($(BR2_ENABLE_LOCALE)$(BR2_NEEDS_GETTEXT),yy)
 
-For m4, a patch fixing this has already been merged: [1].
+In this case, maybe BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC should
+trigger BR2_NEEDS_GETTEXT too?
 
-For cpio and gettext on the host system, Buildroot relies on the package
-provided by the host distribution.
-So, if you are experiencing issues with these packages, this should be more
-likely reported to the maintainers of the distribution you're using.
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index cc7b4de..4f1c8fb 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -86,6 +86,7 @@ config BR2_NEEDS_GETTEXT
+ 	bool
+ 	default y if BR2_TOOLCHAIN_BUILDROOT
+ 	default y if BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	default y if BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ 	default y if BR2_TOOLCHAIN_CTNG_uClibc
 
-BTW, do you know from where does the definition of HAVE_RAW_DECL_GETS come
-from?
-Grepping it in /usr/include of systems using glibc-2.15, glibc-2.16 and
-eglibc-2.15 gives no result.
+ config BR2_NEEDS_GETTEXT_IF_LOCALE
 
-Thx for the report.
 
-[1]
-http://git.buildroot.net/buildroot/commit/?id=600375d18e6ccd08505153863666f2e8b10251be
+Tell me if you need I post a proper patch.
+
+Cheers,
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Sam
