@@ -1,43 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jul 2012 09:26:43 +0200
-Subject: [Buildroot] [PATCH 5/5] gettext: convert to autotools-package
-In-Reply-To: <CAHXCMMLsfSjtf2Cfx=kQHqEgKR8h5Yc_QHRUcy9+bdVnKLVwaA@mail.gmail.com>
-References: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
- <66a7689f733357af7bb277467bc2198817fc9b69.1342732829.git.thomas.petazzoni@free-electrons.com>
- <CAHXCMMK6B_qmuTS0z9agEWY05zz+GqgvsJuw0qF0Gf=mFx32XQ@mail.gmail.com>
- <CAHXCMMLsfSjtf2Cfx=kQHqEgKR8h5Yc_QHRUcy9+bdVnKLVwaA@mail.gmail.com>
-Message-ID: <20120723092643.2b64e2bd@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 23 Jul 2012 11:49:19 +0200
+Subject: [Buildroot] [PATCH] mediastreamer: fix build with libX11 and sdl
+	without x11 support
+Message-ID: <1343036959-7639-1-git-send-email-jacmet@sunsite.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 23 Jul 2012 05:44:28 +0200,
-Samuel Martin <s.martin49@gmail.com> a ?crit :
+Fixes http://autobuild.buildroot.net/results/a8f2db4a40c0f53c0d25b2632fe87c2ce136f770
 
-> > ifeq ($(BR2_ENABLE_LOCALE)\
-> > $(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)\
-> > $(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC),yy)
-> Just realize that this statement can be simplify like that:
-> ifeq ($(BR2_ENABLE_LOCALE)$(BR2_NEEDS_GETTEXT),yy)
+Mediastreamer assumes SDL has X11 support if SDL and libX11 are found,
+which is not necessarily true in BR.
 
-Yes, I will think about this in more details.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mediastreamer/mediastreamer.mk |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> In this case, maybe BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC should
-> trigger BR2_NEEDS_GETTEXT too?
-
-No, because BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC already selects
-BR2_TOOLCHAIN_EXTERNAL_UCLIBC. Basically BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-is an hidden bool which is selected either by the external toolchain
-profiles (when they are uClibc based) and by the
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC choice.
-
-Best regards,
-
-Thomas
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 9e67ed4..1f4e1d4 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -48,9 +48,10 @@ else
+ MEDIASTREAMER_CONF_OPT += --disable-sdl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++# mediastreamer assumes SDL has X11 support if --enable-x11 (and X11 support
++# is only used for SDL output)
++ifeq ($(BR2_PACKAGE_SDL_X11),y)
+ MEDIASTREAMER_CONF_OPT += --enable-x11
+-MEDIASTREAMER_DEPENDENCIES += xlib_libX11
+ else
+ MEDIASTREAMER_CONF_OPT += --disable-x11
+ endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10
