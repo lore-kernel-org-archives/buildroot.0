@@ -1,55 +1,196 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 23 Jul 2012 09:42:38 -0300
-Subject: [Buildroot] [PATCH] radvd: fix high jobcount build failure
-Message-ID: <1343047358-26801-1-git-send-email-gustavo@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Mon, 23 Jul 2012 14:49:02 +0100
+Subject: [Buildroot] [PATCH] sconeserver: new package
+Message-ID: <1343051342-12829-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure:
-http://autobuild.buildroot.org/results/48aabbc41dff2e4196dfd6e1e942cf6dbe050deb/build-end.log
-because of a typo/missed update in the Makefile
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/radvd/radvd-highjob.patch |   27 +++++++++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/radvd/radvd-highjob.patch
+ package/Config.in                  |    1 +
+ package/sconeserver/Config.in      |  100 ++++++++++++++++++++++++++++++++++++
+ package/sconeserver/sconeserver.mk |   49 ++++++++++++++++++
+ 3 files changed, 150 insertions(+)
+ create mode 100644 package/sconeserver/Config.in
+ create mode 100644 package/sconeserver/sconeserver.mk
 
-diff --git a/package/radvd/radvd-highjob.patch b/package/radvd/radvd-highjob.patch
+diff --git a/package/Config.in b/package/Config.in
+index f664b8e..a88e639 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -591,6 +591,7 @@ source "package/rsh-redone/Config.in"
+ source "package/rsync/Config.in"
+ source "package/rtorrent/Config.in"
+ source "package/samba/Config.in"
++source "package/sconeserver/Config.in"
+ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
 new file mode 100644
-index 0000000..5945435
+index 0000000..7290ec0
 --- /dev/null
-+++ b/package/radvd/radvd-highjob.patch
-@@ -0,0 +1,27 @@
-+From ce4911c13a3ab6877c0288c8a1874decb5d0e90a Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 23 Jul 2012 09:14:24 -0300
-+Subject: [PATCH] Makefile: fix high jobcount build failures
++++ b/package/sconeserver/Config.in
+@@ -0,0 +1,100 @@
++config BR2_PACKAGE_SCONESERVER
++	bool "sconeserver"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PCRE
++	help
++	  Sconeserver is a modular, object-orientated and extremely versatile
++	  network server framework for GNU/Linux and UNIX-like platforms.
 +
-+gram.h is a dependency for scanner.c rather than scanner.o which is
-+unused.
++	  http://www.sconemad.com/sconeserver/
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ Makefile.am |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
++comment "sconeserver requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 04b834b..8a90ca7 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -131,5 +131,5 @@ dist-hook:
-+ 	rm -f $(distdir)/gram.h
-+ 	rm -f $(distdir)/scanner.c
-+ 
-+-scanner.o: gram.h
-++scanner.c: gram.h
-+ 
-+-- 
-+1.7.8.6
++menu "Modules"
++	depends on BR2_PACKAGE_SCONESERVER
 +
++config BR2_PACKAGE_SCONESERVER_EXAMPLES
++	bool "examples"
++	default n
++	help
++	  Example modules for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_SSL
++	bool "ssl"
++	default y
++	select BR2_PACKAGE_OPENSSL
++	help
++	  SSL module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
++	bool "http::sconesite"
++	default y
++	select BR2_PACKAGE_LIBXML2
++	help
++	  http::sconesite module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
++	bool "http::sconesite::image"
++	default n
++	depends on BR2_PACKAGE_IMAGEMAGICK
++	select BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
++	help
++	  http::sconesite::image module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_MYSQL
++	bool "mysql"
++	default n
++	depends on BR2_PACKAGE_MYSQL_CLIENT
++	help
++	  MySQL module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_BLUETOOTH
++	bool "bluetooth"
++	default n
++	depends on BR2_PACKAGE_BLUEZ_UTILS
++	help
++	  Bluetooth module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_RSS
++	bool "rss"
++	default y
++	select BR2_PACKAGE_LIBXML2
++	help
++	  RSS module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_LOCATION
++	bool "location"
++	default n
++	depends on BR2_PACKAGE_GPSD
++	help
++	  Location module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_LETTUCE
++	bool "lettuce"
++	default n
++	help
++	  Lettuce module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_MATHS
++	bool "maths"
++	default n
++	depends on BR2_PACKAGE_GMP
++	depends on BR2_PACKAGE_MPFR
++	help
++	  Maths module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_TESTBUILDER
++	bool "testbuilder"
++	default n
++	help
++	  Testbuilder module for SconeServer
++
++config BR2_PACKAGE_SCONESERVER_UI
++	bool "ui"
++	default n
++	depends on BR2_PACKAGE_XLIB_LIBX11
++	help
++	  UI module for SconeServer
++
++endmenu
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+new file mode 100644
+index 0000000..dba5fe6
+--- /dev/null
++++ b/package/sconeserver/sconeserver.mk
+@@ -0,0 +1,49 @@
++#############################################################
++#
++# sconeserver
++#
++#############################################################
++# Release tarball doesn't build cleanly, so use a recent
++# Subversion trunk snapshot.
++SCONESERVER_VERSION = 177
++SCONESERVER_SITE = \
++	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
++SCONESERVER_SITE_METHOD = svn
++
++SCONESERVER_LICENSE = GPLv2+
++SCONESERVER_LICENSE_FILES = COPYING
++
++SCONESERVER_CONF_OPT += \
++	--with-ip \
++	--with-local \
++	$(if $(BR2_INET_IPV6),--with-ip6,--without-ip6) \
++	$(if $(BR2_PACKAGE_SCONESERVER_EXAMPLES),--with-examples,--without-examples) \
++	$(if $(BR2_PACKAGE_SCONESERVER_LETTUCE),--with-lettuce,--without-lettuce) \
++	$(if $(BR2_PACKAGE_SCONESERVER_TESTBUILDER),--with-testbuilder,--without-testbuilder) \
++	$(if $(BR2_PACKAGE_SCONESERVER_SSL),--with-ssl,--without-ssl) \
++	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),--with-sconesite,--without-sconesite) \
++	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),--with-sconesite-image,--without-sconesite-image) \
++	$(if $(BR2_PACKAGE_SCONESERVER_MYSQL),--with-mysql,--without-mysql) \
++	$(if $(BR2_PACKAGE_SCONESERVER_BLUETOOTH),--with-bluetooth,--without-bluetooth) \
++	$(if $(BR2_PACKAGE_SCONESERVER_RSS),--with-rss,--without-rss) \
++	$(if $(BR2_PACKAGE_SCONESERVER_LOCATION),--with-location,--without-location) \
++	$(if $(BR2_PACKAGE_SCONESERVER_MATHS),--with-maths,--without-maths) \
++	$(if $(BR2_PACKAGE_SCONESERVER_UI),--with-ui,--without-ui)
++
++# Help SconeServer to find the libxml2 headers.
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++	SCONESERVER_CONF_OPT += CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2"
++endif
++
++SCONESERVER_DEPENDENCIES = \
++	pcre \
++	$(if $(BR2_PACKAGE_SCONESERVER_SSL),openssl) \
++	$(if $(or $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),$(BR2_PACKAGE_SCONESERVER_RSS)),libxml2) \
++	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),imagemagick) \
++	$(if $(BR2_PACKAGE_SCONESERVER_MYSQL),mysql_client) \
++	$(if $(BR2_PACKAGE_SCONESERVER_BLUETOOTH),bluez_utils) \
++	$(if $(BR2_PACKAGE_SCONESERVER_LOCATION),gpsd) \
++	$(if $(BR2_PACKAGE_SCONESERVER_MATHS),gmp mpfr) \
++	$(if $(BR2_PACKAGE_SCONESERVER_UI),xlib_libX11)
++
++$(eval $(autotools-package))
 -- 
-1.7.8.6
+1.7.9.5
