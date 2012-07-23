@@ -1,96 +1,212 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 23 Jul 2012 15:24:54 +0100
-Subject: [Buildroot] [PATCH] googlefontdirectory: new package
-Message-ID: <1343053494-21248-1-git-send-email-spdawson@gmail.com>
+From: Avishay Orpaz <avishorp@gmail.com>
+Date: Mon, 23 Jul 2012 17:57:42 +0300
+Subject: [Buildroot] [PATCH] Added local package support
+Message-ID: <CAMkyJgASQJkgf7oXD+9M-UU0p3fTQB2PkXtkiFyLmkty3H8y+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Added local package support.
+ Local packages are packages that are local to the build and not
+distributed with buildroot.
+ They are placed in a directory named "locals" (by default) and follow the
+same rules
+ as other packages (Config.in, <pkgname>.mk, patches ..). Their
+configuration options
+ are automatically collected and placed under the "Local Packages" menu in
+x/menu/.../config.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/Config.in                                  |    1 +
- package/googlefontdirectory/Config.in              |   13 +++++++
- package/googlefontdirectory/googlefontdirectory.mk |   36 ++++++++++++++++++++
- 3 files changed, 50 insertions(+)
- create mode 100644 package/googlefontdirectory/Config.in
- create mode 100644 package/googlefontdirectory/googlefontdirectory.mk
+ Makefile          |   48 ++++++++++++++++++++++++++++++------------------
+ package/Config.in |    4 ++++
+ 2 files changed, 34 insertions(+), 18 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 639fdaa..e9342e9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -192,6 +192,7 @@ $(if $(BASE_DIR),, $(error output directory "$(O)" does
+not exist))
+
+ BUILD_DIR:=$(BASE_DIR)/build
+
++LOCAL_PACKAGES_DIR:=locals
+
+ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+
+@@ -315,6 +316,9 @@ endif
+
+ include package/*/*.mk
+
++# Include local packages
++include $(LOCAL_PACKAGES_DIR)/*/*.mk
++
+ include boot/common.mk
+ include target/Makefile.in
+ include linux/linux.mk
+@@ -565,43 +569,51 @@ COMMON_CONFIG_ENV = \
+     KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+     BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
+
+-xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
++LOCALS_CONFIG_FILE = .locals.Config.in
++
++$(LOCALS_CONFIG_FILE):
++    rm -f $(@)
++    find $(LOCAL_PACKAGES_DIR)  \
++    -regex '^$(LOCAL_PACKAGES_DIR)/[^/]*/Config.in$$' \
++    -exec cat {} \; >> $@ || true
++
++xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+
+-gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
++gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
+
+-menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
++menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+
+-nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
++nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+
+-config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+
+-oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++oldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --oldconfig $(CONFIG_CONFIG_IN)
+
+-randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++randconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --randconfig $(CONFIG_CONFIG_IN)
+
+-allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allyesconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --allyesconfig $(CONFIG_CONFIG_IN)
+
+-allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --allnoconfig $(CONFIG_CONFIG_IN)
+
+-randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @grep -v BR2_PACKAGE_ $(CONFIG_DIR)/.config >
+$(CONFIG_DIR)/.config.nopkg
+     @$(COMMON_CONFIG_ENV) \
+@@ -609,7 +621,7 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf
+outputmakefile
+         $< --randconfig $(CONFIG_CONFIG_IN)
+     @rm -f $(CONFIG_DIR)/.config.nopkg
+
+-allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @grep -v BR2_PACKAGE_ $(CONFIG_DIR)/.config >
+$(CONFIG_DIR)/.config.nopkg
+     @$(COMMON_CONFIG_ENV) \
+@@ -617,7 +629,7 @@ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf
+outputmakefile
+         $< --allyesconfig $(CONFIG_CONFIG_IN)
+     @rm -f $(CONFIG_DIR)/.config.nopkg
+
+-allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @grep -v BR2_PACKAGE_ $(CONFIG_DIR)/.config >
+$(CONFIG_DIR)/.config.nopkg
+     @$(COMMON_CONFIG_ENV) \
+@@ -625,19 +637,19 @@ allnopackageconfig:
+$(BUILD_DIR)/buildroot-config/conf outputmakefile
+         $< --allnoconfig $(CONFIG_CONFIG_IN)
+     @rm -f $(CONFIG_DIR)/.config.nopkg
+
+-silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     $(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
+
+-defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --defconfig$(if
+$(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
+
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf
+$(TOPDIR)/configs/%_defconfig outputmakefile
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf
+$(TOPDIR)/configs/%_defconfig outputmakefile $(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@
+$(CONFIG_CONFIG_IN)
+
+-savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
++savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+$(LOCALS_CONFIG_FILE)
+     @mkdir -p $(BUILD_DIR)/buildroot-config
+     @$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig
+$(CONFIG_CONFIG_IN)
+
+@@ -664,7 +676,7 @@ endif
+ clean:
+     rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+         $(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
+-        $(LEGAL_INFO_DIR)
++        $(LEGAL_INFO_DIR) $(LOCALS_CONFIG_FILE)
+
+ distclean: clean
+ ifeq ($(DL_DIR),$(TOPDIR)/dl)
+@@ -760,5 +772,5 @@ print-version:
+
+ include docs/manual/manual.mk
+
+-.PHONY: $(noconfig_targets)
++.PHONY: $(noconfig_targets) $(LOCALS_CONFIG_FILE)
 
 diff --git a/package/Config.in b/package/Config.in
-index f664b8e..89dc036 100644
+index f664b8e..06a779c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -498,6 +498,7 @@ endmenu
- menu "Miscellaneous"
- source "package/collectd/Config.in"
- source "package/empty/Config.in"
-+source "package/googlefontdirectory/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
- source "package/sound-theme-borealis/Config.in"
-diff --git a/package/googlefontdirectory/Config.in b/package/googlefontdirectory/Config.in
-new file mode 100644
-index 0000000..2ff81b7
---- /dev/null
-+++ b/package/googlefontdirectory/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_GOOGLEFONTDIRECTORY
-+	bool "Google Web Fonts"
-+	help
-+	  Download Google Web Fonts
+@@ -695,4 +695,8 @@ source "package/vim/Config.in"
+ endif
+ endmenu
+
++menu "Local Packages"
++source ".locals.Config.in"
++endmenu
 +
-+	  http://code.google.com/p/googlefontdirectory/
-+
-+config BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS
-+	string "List of fonts to install"
-+	default "droid"
-+	depends on BR2_PACKAGE_GOOGLEFONTDIRECTORY
-+	help
-+	  Specify a space-separated list of fonts to install
-diff --git a/package/googlefontdirectory/googlefontdirectory.mk b/package/googlefontdirectory/googlefontdirectory.mk
-new file mode 100644
-index 0000000..f13c100
---- /dev/null
-+++ b/package/googlefontdirectory/googlefontdirectory.mk
-@@ -0,0 +1,36 @@
-+#############################################################
-+#
-+# googlefontdirectory
-+#
-+#############################################################
-+GOOGLEFONTDIRECTORY_VERSION = 1.0
-+GOOGLEFONTDIRECTORY_SITE = \
-+	https://s3.amazonaws.com/joemaller_google_webfonts
-+GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
-+
-+GOOGLEFONTDIRECTORY_FONTS = \
-+	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
-+
-+define GOOGLEFONTDIRECTORY_INSTALL_SINGLE_FONT
-+	$(info Installing single font $(1))
-+	$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$(1)
-+	cp -a $(@D)/$(1)/*.ttf	$(TARGET_DIR)/usr/share/fonts/$(1)
-+	chmod 0644 $(TARGET_DIR)/usr/share/fonts/$(1)/*.ttf
-+endef
-+
-+define GOOGLEFONTDIRECTORY_UNINSTALL_SINGLE_FONT
-+	$(info Uninstalling single font $(1))
-+	$(RM) -r $(TARGET_DIR)/usr/share/fonts/$(1)
-+endef
-+
-+define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
-+	$(foreach thing,$(GOOGLEFONTDIRECTORY_FONTS),\
-+		$(call GOOGLEFONTDIRECTORY_INSTALL_SINGLE_FONT,$(thing)))
-+endef
-+
-+define GOOGLEFONTDIRECTORY_UNINSTALL_TARGET_CMDS
-+	$(foreach thing,$(GOOGLEFONTDIRECTORY_FONTS),\
-+		$(call GOOGLEFONTDIRECTORY_UNINSTALL_SINGLE_FONT,$(thing)))
-+endef
-+
-+$(eval $(generic-package))
+ endmenu
 -- 
-1.7.9.5
+1.7.1
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120723/8bbd2a98/attachment-0001.html>
