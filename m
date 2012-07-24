@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jul 2012 09:26:42 +0200
-Subject: [Buildroot] [git commit] mediastreamer: fix build with libX11 and
-	sdl without x11 support
-Message-ID: <20120724072703.DEFF496D8A@busybox.osuosl.org>
+Date: Tue, 24 Jul 2012 09:17:56 +0200
+Subject: [Buildroot] [git commit] pkg-generic: fix SUBDIR handling
+Message-ID: <20120724072703.CDE2696E28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f66236e0a9e18045cb1566bc368368de5a5cc499
+commit: http://git.buildroot.net/buildroot/commit/?id=8e26abecd00f4899fb122c3eeb03fbdf20cda32e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/a8f2db4a40c0f53c0d25b2632fe87c2ce136f770
+Commit 9ba9bfb9a02706fa414bcf4c6dcceac1b68a5c9a inverted the logic to
+define $(2)_SUBDIR, breaking the build of things using the _SUBDIR
+feature, like the tcl package.
 
-Mediastreamer assumes SDL has X11 support if SDL and libX11 are found,
-which is not necessarily true in BR.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mediastreamer/mediastreamer.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 9e67ed4..1f4e1d4 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -48,9 +48,10 @@ else
- MEDIASTREAMER_CONF_OPT += --disable-sdl
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8a730c0..d1f4f2a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -204,11 +204,11 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ 
+-ifndef $(3)_SUBDIR
+- ifdef $(2)_SUBDIR
+-  $(3)_SUBDIR = $$($(2)_SUBDIR)
++ifndef $(2)_SUBDIR
++ ifdef $(3)_SUBDIR
++  $(2)_SUBDIR = $$($(3)_SUBDIR)
+  else
+-  $(3)_SUBDIR ?=
++  $(2)_SUBDIR ?=
+  endif
  endif
  
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+# mediastreamer assumes SDL has X11 support if --enable-x11 (and X11 support
-+# is only used for SDL output)
-+ifeq ($(BR2_PACKAGE_SDL_X11),y)
- MEDIASTREAMER_CONF_OPT += --enable-x11
--MEDIASTREAMER_DEPENDENCIES += xlib_libX11
- else
- MEDIASTREAMER_CONF_OPT += --disable-x11
- endif
