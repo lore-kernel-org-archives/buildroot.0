@@ -1,33 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Jul 2012 17:54:15 +0200
-Subject: [Buildroot] Qt on AM3517EVM
-In-Reply-To: <CALo-6+j_ZrbQhRWE9vyLs2aWh=7Hm7r3+4qN8xSKbFtxOLbrEA@mail.gmail.com>
-References: <CALo-6+hhvCkfT_4Rz4POqw5j_BPPLKHZ0saqEyeiKsp-tSJLdA@mail.gmail.com>
- <20120717093212.0c7d5415@skate>
- <CALo-6+hsekD6L5pZhmsZD_4mW0CQTLbearUxdr-F_HitXq5W9Q@mail.gmail.com>
- <20120719181109.481c2882@jl-desk-LL>
- <CALo-6+j_ZrbQhRWE9vyLs2aWh=7Hm7r3+4qN8xSKbFtxOLbrEA@mail.gmail.com>
-Message-ID: <500EC527.8090606@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jul 2012 18:32:11 +0200
+Subject: [Buildroot] [git commit] gpsd: disallow profiling support with
+	uClibc toolchain
+Message-ID: <20120724163239.6DCED8FF3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/19/12 18:32, Charles Krinke wrote:
-> But, what doesnt work is respawning the console as ttyO2 in inittab or
-> $ echo "astring">  /dev/ttyO2
+commit: http://git.buildroot.net/buildroot/commit/?id=23c9aeccde52d30c26d92866be0b094793aba712
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  You're not, by any chance, using a static /dev ?  ttyO2 is not in
-target/generic/device_table_dev.txt I'm afraid...
+The following problem was reported by Thomas Petazzoni.
 
+If BR2_PACKAGE_GPSD_PROFILING is enabled with a uClibc-based toolchain, then
+gpsd fails to build. See the following for details.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+  http://autobuild.buildroot.org/results/be707893f4bf0e7e964d183e4a655c5bb72d1889/build-end.log
+  http://autobuild.buildroot.org/results/be707893f4bf0e7e964d183e4a655c5bb72d1889/defconfig.
+
+The issue is that uClibc lacks the necessary infrastructure to support
+profiling. This patch disallows selection of the gpsd profiling feature when
+a uClibc-based toolchain is selected.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gpsd/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 18e21e5..db6bec2 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -31,6 +31,10 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
+ 
+ config BR2_PACKAGE_GPSD_PROFILING
+ 	bool "profiling support"
++	depends on !BR2_TOOLCHAIN_BUILDROOT && !BR2_TOOLCHAIN_CTNG_uClibc && !BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++
++comment "profiling support not available with uClibc-based toolchain"
++	depends on BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_CTNG_uClibc || BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 
+ config BR2_PACKAGE_GPSD_NTP_SHM
+ 	bool "NTP time hinting support"
