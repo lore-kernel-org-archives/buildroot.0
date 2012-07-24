@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:57:26 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain-external: make
-	preinstall the default for custom toolchains
-Message-ID: <20120802195259.A3D4596CE6@busybox.osuosl.org>
+Date: Tue, 24 Jul 2012 09:17:56 +0200
+Subject: [Buildroot] [git commit branch/next] pkg-generic: fix SUBDIR
+	handling
+Message-ID: <20120802195300.27ECF96CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=701940770b658e25cfe7219e35e808ba62052843
+commit: http://git.buildroot.net/buildroot/commit/?id=8e26abecd00f4899fb122c3eeb03fbdf20cda32e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-All the defconfig files used by the autobuilders that use
-pre-installed external toolchains are making the assumption that the
-default for a custom external toolchain is "pre-installed". We keep
-this default for now, since changing it breaks the autobuilders.
+Commit 9ba9bfb9a02706fa414bcf4c6dcceac1b68a5c9a inverted the logic to
+define $(2)_SUBDIR, breaking the build of things using the _SUBDIR
+feature, like the tcl package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/pkg-generic.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5c29ecd..e34802d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -573,6 +573,10 @@ endchoice
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8a730c0..d1f4f2a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -204,11 +204,11 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
  
- choice
- 	prompt "Toolchain origin"
-+	# Keep compatibility with old defconfig files that are using
-+	# custom toolchains, and which are therefore assuming that
-+	# "preinstalled" in the default choice.
-+	default BR2_TOOLCHAIN_EXTERNAL_PREINSTALLED if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+-ifndef $(3)_SUBDIR
+- ifdef $(2)_SUBDIR
+-  $(3)_SUBDIR = $$($(2)_SUBDIR)
++ifndef $(2)_SUBDIR
++ ifdef $(3)_SUBDIR
++  $(2)_SUBDIR = $$($(3)_SUBDIR)
+  else
+-  $(3)_SUBDIR ?=
++  $(2)_SUBDIR ?=
+  endif
+ endif
  
- config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
- 	bool "Toolchain to be downloaded and installed"
