@@ -1,27 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jul 2012 09:28:18 +0200
-Subject: [Buildroot] [PATCH] mediastreamer: fix build with libX11 and
- sdl without x11 support
-In-Reply-To: <1343036959-7639-1-git-send-email-jacmet@sunsite.dk>
-References: <1343036959-7639-1-git-send-email-jacmet@sunsite.dk>
-Message-ID: <20120724092818.3b407317@skate>
+Date: Tue, 24 Jul 2012 09:34:17 +0200
+Subject: [Buildroot] Upcoming Buildroot Developer Days meeting
+Message-ID: <20120724093417.1c81f9fd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 23 Jul 2012 11:49:19 +0200,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+Hello,
 
-> Fixes http://autobuild.buildroot.net/results/a8f2db4a40c0f53c0d25b2632fe87c2ce136f770
-> 
-> Mediastreamer assumes SDL has X11 support if SDL and libX11 are found,
-> which is not necessarily true in BR.
-> 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+As discussed on the list in the past weeks, the next Buildroot
+Developer Days meeting will take place on November 3-4 in Barcelona,
+Spain, just before the Embedded Linux Conference Europe.
 
-Applied, thanks!
+I have added an announcement of the meeting on
+http://buildroot.org/news.html, I have closed the Doodle survey now
+that the dates are decided, and I have created a section our wiki page
+to collect:
+
+ * The list of participants, their arrival time, and hotel location
+ * The list of topics to discuss
+
+See
+http://elinux.org/Buildroot#Buildroot_Developers_Meeting.2C_3-4_November_2012.2C_Barcelona_Spain.
+
+Please feel free to add yourself to the list of participants, add
+your flight informations, or suggest topics to be discussed or worked
+on.
+
+Thanks for your participation,
 
 Thomas
 -- 
