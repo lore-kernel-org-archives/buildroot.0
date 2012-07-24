@@ -1,41 +1,33 @@
-From: Dirk Lohse <d.lohse@meier-nt.de>
-Date: Tue, 24 Jul 2012 16:51:09 +0200
-Subject: [Buildroot] Buildroot 2012.02 new user can't login,
-	su exit with errno 137
-Message-ID: <3C32AECB8207924A9A228348325DB2D2904EDF@mntserv.meier-nt.local>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 24 Jul 2012 17:54:15 +0200
+Subject: [Buildroot] Qt on AM3517EVM
+In-Reply-To: <CALo-6+j_ZrbQhRWE9vyLs2aWh=7Hm7r3+4qN8xSKbFtxOLbrEA@mail.gmail.com>
+References: <CALo-6+hhvCkfT_4Rz4POqw5j_BPPLKHZ0saqEyeiKsp-tSJLdA@mail.gmail.com>
+ <20120717093212.0c7d5415@skate>
+ <CALo-6+hsekD6L5pZhmsZD_4mW0CQTLbearUxdr-F_HitXq5W9Q@mail.gmail.com>
+ <20120719181109.481c2882@jl-desk-LL>
+ <CALo-6+j_ZrbQhRWE9vyLs2aWh=7Hm7r3+4qN8xSKbFtxOLbrEA@mail.gmail.com>
+Message-ID: <500EC527.8090606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 07/19/12 18:32, Charles Krinke wrote:
+> But, what doesnt work is respawning the console as ttyO2 in inittab or
+> $ echo "astring">  /dev/ttyO2
 
-i build an embedded system based on Karo TX28 with Kernel 3.3.
+  You're not, by any chance, using a static /dev ?  ttyO2 is not in
+target/generic/device_table_dev.txt I'm afraid...
 
-All works fine, but I can't login with other user accounts than root.
-I can give root an password and can login over serial or ssh. But I
-can't add a new user and login with this one.
 
-What I've done:
-# whoami
-root
-# adduser test
-New password: 123456
-Retype password: 123456
-# su test
-Killed
-# echo $?
-137
-# exit
-Welcome to Buildroot...
-tx28 login: test
-Password: 123456
-
-Welcome to Buildroot...
-
-Can anybody help me to solve this issue?
-
-Thanks
---
-Dirk Lohse
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
