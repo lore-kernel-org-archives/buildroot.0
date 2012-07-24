@@ -1,36 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jul 2012 22:48:19 +0200
-Subject: [Buildroot] [PATCH] gpsd: remove timing configuration option
-In-Reply-To: <1343160239-18430-1-git-send-email-spdawson@gmail.com>
-References: <1343160239-18430-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120724224819.420d8352@skate>
+Date: Tue, 24 Jul 2012 23:00:41 +0200
+Subject: [Buildroot] [PATCH] gpsd: fix qt build problem
+In-Reply-To: <1343161749-23289-1-git-send-email-spdawson@gmail.com>
+References: <1343161749-23289-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120724230041.29d9502f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 24 Jul 2012 21:03:59 +0100,
+Le Tue, 24 Jul 2012 21:29:09 +0100,
 spdawson at gmail.com a ?crit :
 
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> When gpsd is built with RECONFIGURE_ENABLE disabled, the min_cycle
-> field of the gps_type_t field does not exist, but the code still uses
-> it if TIMING_ENABLE is enabled.
-> 
-> This can be seen in the following test build failure.
-> 
->   http://autobuild.buildroot.org/results/dd01fa0220bfd3a8aabcc85d89d624afeeda757b/build-end.log
-> 
-> This patch removes the configuration option that, ultimately, drives
-> TIMING_ENABLE.
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+>  GPSD_LDFLAGS = $(TARGET_LDFLAGS)
+> +GPSD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/QtCore -I$(STAGING_DIR)/usr/include/QtNetwork
 
-Oops, sorry, I had done and applied a similar in the mean time.
+I'm sorry but no, this is not the right way of fixing it. The QtCore
+and QtNetwork header paths are already on the build command line. It's
+just that they are wrong because they have two times the sysroot
+location:
 
-Thanks!
+/home/test/outputs/gpsd/host/usr/bin/arm-linux-gnueabi-g++ -o gpsutils-qt.os -c -pipe -Os -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -Wextra -Wall -Wno-uninitialized -Wno-missing-field-initializers -Wcast-align -Wmissing-declarations -Wpointer-arith -Wreturn-type -O2 -fPIC -DUSE_QT -DQT_SHARED -I/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/include -I/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/include/QtNetwork -I/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/include/QtCore gpsutils.c
+gpsutils.c:26:21: fatal error: QDateTime: No such file or directory
+compilation terminated.
+
+See
+the /home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/home/test/outputs/gpsd/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/include/QtCore
+path. The problem is in the directory arguments passed to Scons.
+
+Best regards,
 
 Thomas
 -- 
