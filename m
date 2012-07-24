@@ -1,49 +1,33 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 24 Jul 2012 13:34:32 +0100
-Subject: [Buildroot] [PATCH v2] gpsd: disallow profiling support with uClibc
-	toolchain
-Message-ID: <1343133272-3099-1-git-send-email-spdawson@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 24 Jul 2012 12:46:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 5396] Boot hangs when starting samba if
+ BR2_ENABLE_LOCALE is enabled
+In-Reply-To: <bug-5396-163@https.bugs.busybox.net/>
+References: <bug-5396-163@https.bugs.busybox.net/>
+Message-ID: <20120724124638.0718481EDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=5396
 
-The following problem was reported by Thomas Petazzoni.
+--- Comment #3 from Jonathan Liu <net147@gmail.com> 2012-07-24 12:46:37 UTC ---
+(In reply to comment #2)
+> I haven't looked in details, but I think the fix will probably have to have
+> some special casing depending on whether the toolchain uses uClibc or (e)glibc.
+> Those C libraries already have iconv support, but maybe the iconv
+> implementation of uClibc isn't capable enough. But in the case of (e)glibc, I
+> don't think the separate libiconv is needed.
+> 
+> So clearly, a proper fix will need investigation and testing for both uClibc
+> and glibc toolchains.
 
-If BR2_PACKAGE_GPSD_PROFILING is enabled with a uClibc-based toolchain, then
-gpsd fails to build. See the following for details.
+How about we use --with-libiconv= if BR2_TOOLCHAIN_BUILDROOT=y since we know it
+is not working in that case?
 
-  http://autobuild.buildroot.org/results/be707893f4bf0e7e964d183e4a655c5bb72d1889/build-end.log
-  http://autobuild.buildroot.org/results/be707893f4bf0e7e964d183e4a655c5bb72d1889/defconfig.
-
-The issue is that uClibc lacks the necessary infrastructure to support
-profiling. This patch disallows selection of the gpsd profiling feature when
-a uClibc-based toolchain is selected.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v2: Correct logic to handle all uClibc-based toolchains.
-
- package/gpsd/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 18e21e5..db6bec2 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -31,6 +31,10 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
- 
- config BR2_PACKAGE_GPSD_PROFILING
- 	bool "profiling support"
-+	depends on !BR2_TOOLCHAIN_BUILDROOT && !BR2_TOOLCHAIN_CTNG_uClibc && !BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+
-+comment "profiling support not available with uClibc-based toolchain"
-+	depends on BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_CTNG_uClibc || BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 
- config BR2_PACKAGE_GPSD_NTP_SHM
- 	bool "NTP time hinting support"
 -- 
-1.7.9.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
