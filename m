@@ -1,55 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jul 2012 00:10:31 +0200
-Subject: [Buildroot] [PATCH 3/3] qt: tune .pc files after installation in
-	staging directory
-In-Reply-To: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1343167832-14198-3-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 25 Jul 2012 00:20:12 +0200
+Subject: [Buildroot] [PATCH v5 1/2] usb_modeswitch: update to 1.2.3
+In-Reply-To: <CAC78GpdpNkFPe+MwdO5tS_6FmpL_yB9m-eXwRUqtCFAM4_X4vA@mail.gmail.com>
+References: <1332034235-17423-1-git-send-email-jwoltz@gmail.com>
+ <1332034235-17423-2-git-send-email-jwoltz@gmail.com>
+ <20120715231223.5a77873f@skate>
+ <CAC78GpdpNkFPe+MwdO5tS_6FmpL_yB9m-eXwRUqtCFAM4_X4vA@mail.gmail.com>
+Message-ID: <500F1F9C.9080105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Qt configuration and installation process is a bit strange, and it
-leads the .pc files to contain absolute paths to the staging
-directory, while it should only contains paths relative to the staging
-directory, because pkg-config already adds the path of the sysroot
-automatically to the headers and libraries locations.
+On 07/21/12 20:01, J.C. Woltz wrote:
+> Thomas,
+>
+> I used TARGET_MAKE_ENV for the reason you specified. Arnout (or others) told me to use it.
 
-This allows the 'pkg-config --cflags' results for Qt libraries to be
-correct.
+  I checked the first versions of the patch and I _think_ I meant to
+say that TARGET_MAKE_ENV should not be removed, not that
+TARGET_CONFIGURE_OPTS should be removed.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt/qt.mk |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index feb0d6f..3b40ea4 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -577,13 +577,20 @@ endef
- # everything in the STAGING_DIR), we move host programs such as qmake,
- # rcc or uic to the HOST_DIR so that they are available at the usual
- # location. A qt.conf file is generated to make sure that all host
--# programs still find all files they need.
-+# programs still find all files they need. The .pc files are tuned to
-+# remove the sysroot path from them, since pkg-config already adds it
-+# automatically.
- define QT_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) install
- 	mkdir -p $(HOST_DIR)/usr/bin
- 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
- 	ln -sf $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr/mkspecs
- 	$(QT_INSTALL_QT_CONF)
-+	for i in moc uic rcc lupdate lrelease ; do \
-+		$(SED) "s,^$${i}_location=.*,$${i}_location=$(HOST_DIR)/usr/bin/$${i}," \
-+			$(STAGING_DIR)/usr/lib/pkgconfig/Qt*.pc ; \
-+	done
-+	$(SED) "s,$(STAGING_DIR)/,,g" $(STAGING_DIR)/usr/lib/pkgconfig/Qt*.pc
- endef
- 
- # Library installation
+> Also since this is an old thread, I was assuming my patch would not be accepted at this point. I just gave up hope and
+> kept my other packages to myself.
+
+  I can imagine that when you create 5 versions of a patch, and after that
+it just dies, you give up...  Care to create a 6th version, which reinstates
+TARGET_CONFIGURE_OPTS, like so:
+
+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+
+  Regards,
+  Arnout
+
+[snip]
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
