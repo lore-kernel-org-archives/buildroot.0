@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jul 2012 08:58:53 +0200
-Subject: [Buildroot] [PATCH 2/2] New package: cpuload (Updated)
-In-Reply-To: <CAJhJPsWzOPq_M=XqQuiuXnJLybnD4r3JCsfw8pO8y=G1txCesQ@mail.gmail.com>
-References: <1342764221-16660-1-git-send-email-keguang.zhang@gmail.com>
- <CAJhJPsWzOPq_M=XqQuiuXnJLybnD4r3JCsfw8pO8y=G1txCesQ@mail.gmail.com>
-Message-ID: <20120724085853.03429284@skate>
+Date: Tue, 24 Jul 2012 09:26:42 +0200
+Subject: [Buildroot] [git commit] mediastreamer: fix build with libX11 and
+	sdl without x11 support
+Message-ID: <20120724072703.DEFF496D8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kelvin,
+commit: http://git.buildroot.net/buildroot/commit/?id=f66236e0a9e18045cb1566bc368368de5a5cc499
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le Tue, 24 Jul 2012 14:45:18 +0800,
-Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
+Fixes http://autobuild.buildroot.net/results/a8f2db4a40c0f53c0d25b2632fe87c2ce136f770
 
-> What about this package?
-> I had updated cpuload to version 0.3 to remove unnecessary
-> wide-character string code.
+Mediastreamer assumes SDL has X11 support if SDL and libX11 are found,
+which is not necessarily true in BR.
 
-It is still on my list of patches pending for merging. However, I have
-merged a number of package updates and toolchain changes recently, and
-the results of the autobuilders have degraded in quality, see
-http://autobuild.buildroot.org/. I'd like to fix those new build issues
-before accepting too many new packages.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mediastreamer/mediastreamer.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-In other words: if you want your package to be added quickly, please
-send patches to fix the build issues first :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 9e67ed4..1f4e1d4 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -48,9 +48,10 @@ else
+ MEDIASTREAMER_CONF_OPT += --disable-sdl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++# mediastreamer assumes SDL has X11 support if --enable-x11 (and X11 support
++# is only used for SDL output)
++ifeq ($(BR2_PACKAGE_SDL_X11),y)
+ MEDIASTREAMER_CONF_OPT += --enable-x11
+-MEDIASTREAMER_DEPENDENCIES += xlib_libX11
+ else
+ MEDIASTREAMER_CONF_OPT += --disable-x11
+ endif
