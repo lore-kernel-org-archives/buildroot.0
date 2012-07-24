@@ -1,31 +1,32 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 24 Jul 2012 21:03:59 +0100
-Subject: [Buildroot] [PATCH] gpsd: remove timing configuration option
-Message-ID: <1343160239-18430-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jul 2012 22:18:18 +0200
+Subject: [Buildroot] [git commit] gpsd: remove option to enable latency
+	measurement capabilities
+Message-ID: <20120724202026.14AAB96DEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=c4cb627010545343e425396c90dd62639516274d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When gpsd is built with RECONFIGURE_ENABLE disabled, the min_cycle field
-of the gps_type_t field does not exist, but the code still uses it if
-TIMING_ENABLE is enabled.
+It currently fails to build with:
 
-This can be seen in the following test build failure.
+libgpsd_core.c: In function 'gpsd_poll':
+libgpsd_core.c:881: error: 'const struct gps_type_t' has no member named 'min_cycle'
+libgpsd_core.c:884: error: 'const struct gps_type_t' has no member named 'min_cycle'
 
-  http://autobuild.buildroot.org/results/dd01fa0220bfd3a8aabcc85d89d624afeeda757b/build-end.log
+and is probably not a very important feature for normal users of gpsd.
 
-This patch removes the configuration option that, ultimately, drives
-TIMING_ENABLE.
+The build problem has been reported to the gpsd-users mailing list.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/gpsd/Config.in |    3 ---
  package/gpsd/gpsd.mk   |    3 ---
- 2 files changed, 6 deletions(-)
+ 2 files changed, 0 insertions(+), 6 deletions(-)
 
 diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
 index db6bec2..8643492 100644
@@ -42,10 +43,10 @@ index db6bec2..8643492 100644
  	bool "client debugging support"
  
 diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index dd15386..3a2697f 100644
+index 7d1dbcd..c5270bd 100644
 --- a/package/gpsd/gpsd.mk
 +++ b/package/gpsd/gpsd.mk
-@@ -175,9 +175,6 @@ endif
+@@ -176,9 +176,6 @@ endif
  ifeq ($(BR2_PACKAGE_GPSD_PROFILING),y)
  	GPSD_SCONS_OPTS += profiling=yes
  endif
@@ -55,5 +56,3 @@ index dd15386..3a2697f 100644
  ifneq ($(BR2_PACKAGE_GPSD_CLIENT_DEBUG),y)
  	GPSD_SCONS_OPTS += clientdebug=no
  endif
--- 
-1.7.9.5
