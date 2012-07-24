@@ -1,47 +1,47 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 24 Jul 2012 09:42:17 +0100
-Subject: [Buildroot] [PATCH] gpsd: disallow profiling support with Buildroot
-	toolchain
-Message-ID: <1343119337-18817-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jul 2012 10:50:47 +0200
+Subject: [Buildroot] [PATCH v3] Bump gpsd from version 2.95 to version
+ 3.7
+In-Reply-To: <CAHt8ZCNtCKA+KCvEaubBEwvfkDzLaSpCsUSLa2cU1G_pPY1+fw@mail.gmail.com>
+References: <1343071776-1689-1-git-send-email-spdawson@gmail.com>
+ <20120724084545.6c0cedab@skate> <20120724101103.6a11efda@skate>
+ <CAHt8ZCNtCKA+KCvEaubBEwvfkDzLaSpCsUSLa2cU1G_pPY1+fw@mail.gmail.com>
+Message-ID: <20120724105047.7e49f624@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Le Tue, 24 Jul 2012 09:23:42 +0100,
+Simon Dawson <spdawson@gmail.com> a ?crit :
 
-The following problem was reported by Thomas Petazzoni.
+> I've reproduced the profiling problem with uClibc (Buildroot
+> toolchain). But I haven't managed to reproduce the other build
+> problems yet (using Linaro 2012.02 toolchain). I wonder if it might be
+> better to revert this for the time being; what do you think?
 
-If BR2_PACKAGE_GPSD_PROFILING is enabled with a Buildroot toolchain, then
-gpsd fails to build. See the following for details.
+Well, let's try to fix the problems for now :-)
 
-  http://autobuild.buildroot.org/results/be707893f4bf0e7e964d183e4a655c5bb72d1889/build-end.log
-  http://autobuild.buildroot.org/results/be707893f4bf0e7e964d183e4a655c5bb72d1889/defconfig.
+Problem (1) appears when PPS support is enabled. I think it should
+appear with all toolchains.
 
-The issue is that uClibc lacks the necessary infrastructure to support
-profiling. This patch disallows selection of the gpsd profiling feature when
-the Buildroot toolchain is selected.
+Problem (2) appears when Qt is available.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/gpsd/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
+I have no idea for problem (3), but I think it should easily be
+reproducible.
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 18e21e5..6aa2deb 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -31,6 +31,10 @@ config BR2_PACKAGE_GPSD_OLDSTYLE
- 
- config BR2_PACKAGE_GPSD_PROFILING
- 	bool "profiling support"
-+	depends on !BR2_TOOLCHAIN_BUILDROOT
-+
-+comment "profiling support not available with Buildroot toolchain"
-+	depends on BR2_TOOLCHAIN_BUILDROOT
- 
- config BR2_PACKAGE_GPSD_NTP_SHM
- 	bool "NTP time hinting support"
+Problem (4) is due to the fact that the gcc14 build machine has Python
+2.5 installed. First option: the SConstruct file should be patched to
+avoid using the "with" Python thing, that has been introduced in Python
+2.6. Second option: we merge the patches from Samuel Martin that checks
+whether the version of the host Python is good enough or not, and if
+not, builds its own host Python version. Considering that the patch to
+apply on SConstruct is fairly small, I think option 1) is easy.
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
