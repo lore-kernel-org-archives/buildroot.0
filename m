@@ -1,31 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Jul 2012 19:39:46 +0200
-Subject: [Buildroot] [PATCH 08/11] libpng: fix host-libpng build on
- system on which zlib.h is missing.
-In-Reply-To: <20120722162756.2d508583@skate>
-References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
- <1342963719-1810-9-git-send-email-s.martin49@gmail.com>
- <20120722162756.2d508583@skate>
-Message-ID: <50102F62.70005@mind.be>
+Date: Wed, 25 Jul 2012 19:50:55 +0200
+Subject: [Buildroot] opengl
+In-Reply-To: <20120725191343.0f1f0b9c@skate>
+References: <CALo-6+jTYZCiEz8zApGC20xo=zgMOfM0wTakoRV4=dVBgp6oCA@mail.gmail.com>
+ <20120725191343.0f1f0b9c@skate>
+Message-ID: <501031FF.6050302@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/22/12 16:27, Thomas Petazzoni wrote:
-> Le Sun, 22 Jul 2012 15:28:36 +0200,
-> Samuel Martin<s.martin49@gmail.com>  a ?crit :
+On 07/25/12 19:13, Thomas Petazzoni wrote:
+> Le Wed, 25 Jul 2012 10:02:56 -0700,
+> Charles Krinke<charles.krinke@gmail.com>  a ?crit :
 >
->> +-	$(CPP) @LIBPNG_DEFINES@ $(CPPFLAGS) -DPNG_BUILDSYMS $(srcdir)/png.h | \
->> ++	$(CPP) @LIBPNG_DEFINES@ $(CPPFLAGS) $(CFLAGS) -DPNG_BUILDSYMS $(srcdir)/png.h | \
->
-> Shouldn't we be passing the right arguments in CPPFLAGS instead?
+>> >  I have a question about opengl and Qt in working with a TI AM3517EVM.
+>> >  I can compile and run Qt, no problem, with buildroot, but my
+>> >  application guy says opengl will speed up rendering.
+>> >
+>> >  In looking at make xconfig, I see that libevas, the Enlightment
+>> >  libraries have a opengl sub-setting, which is grayed out. It looks
+>> >  like this depends on X11.
+>> >
+>> >  My question is "Is there a way to use opengl wtih Qt with buildroot
+>> >  and a) how does opengl connect logically with Qt and b) How to enable
+>> >  opengl so Qt can use it?"
+> OpenGL on TI stuff requires the proprietary OpenGL implementation from
+> TI, and we don't have a package for it in Buildroot at the moment. It
+> would however be really great to have it packaged, but if you want to
+> work on it, be ready for a fairly complex adventure. Those proprietary
+> libraries typically have really nasty build systems, and cause lots of
+> pain to integrate properly in a build environment like Buildroot.
 
-  Good point.  HOST_CONFIGURE_OPTS doesn't set CPPFLAGS at all...
+  Having gone through that venture myself, I can confirm that this is
+painful. I posted patches in January [1], but it was just too complicated
+to get it in a form that could be maintainable, so I gave up.
 
   Regards,
   Arnout
+
+[1] http://lists.busybox.net/pipermail/buildroot/2012-January/049264.html
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
