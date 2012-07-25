@@ -1,35 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jul 2012 09:43:41 +0200
-Subject: [Buildroot] [PATCH 3/3] qt: tune .pc files after installation
- in staging directory
-In-Reply-To: <CAHt8ZCPANkaSd0NeFB52H5NED1X8zbn2emphrUz9JhLU-nxxmg@mail.gmail.com>
-References: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1343167832-14198-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAHt8ZCPANkaSd0NeFB52H5NED1X8zbn2emphrUz9JhLU-nxxmg@mail.gmail.com>
-Message-ID: <20120725094341.0e5f90ae@skate>
+Date: Wed, 25 Jul 2012 09:52:59 +0200
+Subject: [Buildroot] [PATCH] gnutls: requires WCHAR support
+Message-ID: <1343202779-18144-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 25 Jul 2012 08:26:43 +0100,
-Simon Dawson <spdawson@gmail.com> a ?crit :
+gnutls uses wctomb(), which is available only on C libraries with
+wide-char support. This fixes the following build failure:
 
-> On 24 July 2012 23:10, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > This allows the 'pkg-config --cflags' results for Qt libraries to be
-> > correct.
-> 
-> Acked-by: Simon Dawson <spdawson@gmail.com>
+ http://autobuild.buildroot.org/results/cd4e73be80fbb64858f4cf911d2b893b0fc06465/build-end.log
 
-Is this an Acked-by solely for PATCH 3/3, or for all patches?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/connman/Config.in         |    2 +-
+ package/gnutls/Config.in          |    4 ++++
+ package/libsoup/Config.in         |    2 +-
+ package/network-manager/Config.in |    2 +-
+ 4 files changed, 7 insertions(+), 3 deletions(-)
 
-Thanks for looking at them!
-
-Thomas
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index c9bc94f..2fcb6c1 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+-	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_INET_IPV6
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index cedf120..556caea 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_LIBGCRYPT
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  GnuTLS is a secure communications library implementing the SSL
+ 	  and TLS protocols and technologies around them.
+ 
+ 	  http://www.gnu.org/software/gnutls/gnutls.html
++
++comment "gnutls requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index eee6ade..f40625d 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBSOUP
+ 	bool "libsoup"
+-	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_USE_WCHAR # glib2 and gnutls
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index fb0c0e9..a120d01 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_DBUS
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE # acl
+-	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_UDEV
+ 	select BR2_PACKAGE_UDEV_ALL_EXTRAS
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
