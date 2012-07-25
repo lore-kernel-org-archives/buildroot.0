@@ -1,42 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jul 2012 20:27:58 +0200
-Subject: [Buildroot] [git commit branch/next] Remove unused TARGET_ABI values
-Message-ID: <20120802195301.6686C8E8F3@busybox.osuosl.org>
+Date: Wed, 25 Jul 2012 18:25:43 +0200
+Subject: [Buildroot] [git commit branch/next] gnutls: requires WCHAR support
+Message-ID: <20120802195301.2C3478E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd08153b9d677d654add6c580b9ccc5c27d672e2
+commit: http://git.buildroot.net/buildroot/commit/?id=6845c4f7103bc3d0105f25b4c02ccb5ceeb9fe80
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The BR2_mmix and BR2_arm_dunno configuration options do not exist, so
-there is no chance for these values to be useful in any way.
+gnutls uses wctomb(), which is available only on C libraries with
+wide-char support. This fixes the following build failure:
+
+ http://autobuild.buildroot.org/results/cd4e73be80fbb64858f4cf911d2b893b0fc06465/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in.arch |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/connman/Config.in         |    2 +-
+ package/gnutls/Config.in          |    4 ++++
+ package/libsoup/Config.in         |    2 +-
+ package/network-manager/Config.in |    2 +-
+ 4 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index e7aec56..75c5499 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -900,16 +900,12 @@ config BR2_GCC_TARGET_ARCH
- config BR2_GCC_TARGET_ABI
- 	string
- 	default apcs-gnu	if BR2_ARM_OABI
--	default atpcs		if BR2_arm_dunno
--	default aapcs		if BR2_arm_dunno
- 	default aapcs-linux	if BR2_ARM_EABI
- 	default 32		if BR2_MIPS_OABI32
- 	default n32		if BR2_MIPS_ABI32
- 	default eabi		if BR2_MIPS_EABI
- 	default o64		if BR2_MIPS_OABI64
- 	default 64		if BR2_MIPS_ABI64
--	default mmixware	if BR2_mmix && BR2_MMIX_ABI_native
--	default gnu		if BR2_mmix && !BR2_MMIX_ABI_native
- 	default altivec		if BR2_powerpc && BR2_PPC_ABI_altivec
- 	default no-altivec	if BR2_powerpc && BR2_PPC_ABI_no-altivec
- 	default spe		if BR2_powerpc && BR2_PPC_ABI_spe
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index c9bc94f..2fcb6c1 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+-	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_INET_IPV6
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index cedf120..556caea 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_LIBGCRYPT
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  GnuTLS is a secure communications library implementing the SSL
+ 	  and TLS protocols and technologies around them.
+ 
+ 	  http://www.gnu.org/software/gnutls/gnutls.html
++
++comment "gnutls requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index eee6ade..f40625d 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBSOUP
+ 	bool "libsoup"
+-	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_USE_WCHAR # glib2 and gnutls
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index fb0c0e9..a120d01 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_DBUS
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE # acl
+-	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_UDEV
+ 	select BR2_PACKAGE_UDEV_ALL_EXTRAS
