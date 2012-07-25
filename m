@@ -1,62 +1,101 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Jul 2012 13:40:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 4327] I use the i686-linux-gcc-4.6.1 compiled
- grub-0.97 does not work
-In-Reply-To: <bug-4327-163@https.bugs.busybox.net/>
-References: <bug-4327-163@https.bugs.busybox.net/>
-Message-ID: <20120725134041.D346696E4A@busybox.osuosl.org>
+From: Jonathan Liu <net147@gmail.com>
+Date: Wed, 25 Jul 2012 23:59:36 +1000
+Subject: [Buildroot] [PATCH] grub: fix stage2 link with recent binutils
+Message-ID: <1343224776-1322-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4327
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ boot/grub/grub.500-add-stage2-ldscripts.patch | 77 +++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 boot/grub/grub.500-add-stage2-ldscripts.patch
 
---- Comment #5 from Jonathan Liu <net147@gmail.com> 2012-07-25 13:40:41 UTC ---
-(In reply to comment #4)
-> Could you test the patch applied on the Ubuntu package, as discussed at
-> https://bugs.launchpad.net/ubuntu/+source/grub/+bug/837815 ?
-> 
-> Something like:
-> 
-> --- grub-0.97.orig/debian/patches/no-reorder-functions.diff
-> +++ grub-0.97/debian/patches/no-reorder-functions.diff
-> @@ -0,0 +1,27 @@
-> +Index: b/configure.ac
-> +===================================================================
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -113,6 +113,22 @@
-> +     if test "x$no_stack_protector_flag" = xyes; then
-> +       STAGE2_CFLAGS="$STAGE2_CFLAGS -fno-stack-protector"
-> +     fi
-> ++    # GCC >= 3.3 supports -fno-reorder-functions; this defends us against
-> ++    # unlikely-to-be-executed functions being linked before _start with GCC
-> ++    # >= 4.6.
-> ++    AC_CACHE_CHECK([whether gcc has -fno-reorder-functions],
-> ++           no_reorder_functions_flag, [
-> ++      saved_CFLAGS=$CFLAGS
-> ++      CFLAGS="-fno-reorder-functions"
-> ++      AC_TRY_COMPILE(,
-> ++             ,
-> ++             no_reorder_functions_flag=yes,
-> ++             no_reorder_functions_flag=no)
-> ++      CFLAGS=$saved_CFLAGS
-> ++    ])
-> ++    if test "x$no_reorder_functions_flag" = xyes; then
-> ++      STAGE2_CFLAGS="$STAGE2_CFLAGS -fno-reorder-functions"
-> ++    fi
-> +   fi
-> + fi
-> +
-
-The patch does not work for me. Even after configure is regenerated,
-STAGE2_CFLAGS is empty. However, the patch from
-https://dev.openwrt.org/browser/trunk/package/grub/patches/030-add-stage2-ldscripts.patch
-works for me.
-
+diff --git a/boot/grub/grub.500-add-stage2-ldscripts.patch b/boot/grub/grub.500-add-stage2-ldscripts.patch
+new file mode 100644
+index 0000000..aff7ed4
+--- /dev/null
++++ b/boot/grub/grub.500-add-stage2-ldscripts.patch
+@@ -0,0 +1,77 @@
++From 8858927ddc6797489cad322fc2d2134aeae543cd Mon Sep 17 00:00:00 2001
++From: Arnaud Lacombe <lacombar@gmail.com>
++Date: Sun, 11 Dec 2011 16:44:02 -0500
++Subject: [PATCH] add-stage2-ldscripts 
++
++---
++ stage2/Makefile.am      |    2 +-
++ stage2/Makefile.in      |    2 +-
++ stage2/stage2.ldscripts |   30 ++++++++++++++++++++++++++++++
++ 3 files changed, 32 insertions(+), 2 deletions(-)
++ create mode 100644 stage2/stage2.ldscripts
++
++diff --git a/stage2/Makefile.am b/stage2/Makefile.am
++index f8e6d42..ea28a4d 100644
++--- a/stage2/Makefile.am
+++++ b/stage2/Makefile.am
++@@ -55,7 +55,7 @@ noinst_PROGRAMS = pre_stage2.exec start.exec start_eltorito.exec \
++ endif
++ MOSTLYCLEANFILES = $(noinst_PROGRAMS)
++ 
++-PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8200
+++PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Tstage2.ldscripts
++ START_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8000
++ NBLOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,0
++ PXELOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00
++diff --git a/stage2/Makefile.in b/stage2/Makefile.in
++index d0062bd..7bee2d5 100644
++--- a/stage2/Makefile.in
+++++ b/stage2/Makefile.in
++@@ -468,7 +468,7 @@ libgrub_a_CFLAGS = $(GRUB_CFLAGS) -I$(top_srcdir)/lib \
++ @DISKLESS_SUPPORT_FALSE at noinst_DATA = pre_stage2 start start_eltorito
++ @DISKLESS_SUPPORT_TRUE at noinst_DATA = pre_stage2 start start_eltorito nbloader pxeloader diskless
++ MOSTLYCLEANFILES = $(noinst_PROGRAMS)
++-PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8200
+++PRE_STAGE2_LINK = -nostdlib -Wl,-N -Wl,-Tstage2.ldscripts
++ START_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,8000
++ NBLOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,0
++ PXELOADER_LINK = -nostdlib -Wl,-N -Wl,-Ttext -Wl,7C00
++diff --git a/stage2/stage2.ldscripts b/stage2/stage2.ldscripts
++new file mode 100644
++index 0000000..2c8b8e1
++--- /dev/null
+++++ b/stage2/stage2.ldscripts
++@@ -0,0 +1,30 @@
+++/* Script for -N: mix text and data on same page; don't align data */
+++OUTPUT_FORMAT("elf32-i386", "elf32-i386",
+++	      "elf32-i386")
+++OUTPUT_ARCH(i386)
+++ENTRY(_start)
+++SECTIONS
+++{
+++  . = 0x8200;
+++  .text           :
+++  {
+++    _start = .;
+++    *(.text .text.* )
+++  }
+++  .rodata         : { *(.rodata .rodata.* ) }
+++  /* Adjust the address for the data segment.  We want to adjust up to
+++     the same address within the page on the next page up.  */
+++  . = .;
+++  .data           : { *(.data .data.* ) }
+++  __bss_start = .;
+++  .bss            :
+++  {
+++   *(.bss .bss.* )
+++   *(COMMON)
+++   . = ALIGN(. != 0 ? 32 / 8 : 1);
+++  }
+++  . = ALIGN(32 / 8);
+++  . = ALIGN(32 / 8);
+++  _end = .; PROVIDE (end = .);
+++  .comment       0 : { *(.comment) }
+++}
++-- 
++1.7.6.153.g78432
++
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.11.2
