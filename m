@@ -1,58 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jul 2012 22:18:18 +0200
-Subject: [Buildroot] [git commit branch/next] gpsd: remove option to enable
-	latency measurement capabilities
-Message-ID: <20120802195300.973E496CE6@busybox.osuosl.org>
+Date: Wed, 25 Jul 2012 18:25:43 +0200
+Subject: [Buildroot] [git commit branch/next] qt: tune .pc files after
+	installation in staging directory
+Message-ID: <20120802195301.118588E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4cb627010545343e425396c90dd62639516274d
+commit: http://git.buildroot.net/buildroot/commit/?id=aa457d3b240bd4f6049191988eee8a5b160f0439
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It currently fails to build with:
+The Qt configuration and installation process is a bit strange, and it
+leads the .pc files to contain absolute paths to the staging
+directory, while it should only contains paths relative to the staging
+directory, because pkg-config already adds the path of the sysroot
+automatically to the headers and libraries locations.
 
-libgpsd_core.c: In function 'gpsd_poll':
-libgpsd_core.c:881: error: 'const struct gps_type_t' has no member named 'min_cycle'
-libgpsd_core.c:884: error: 'const struct gps_type_t' has no member named 'min_cycle'
-
-and is probably not a very important feature for normal users of gpsd.
-
-The build problem has been reported to the gpsd-users mailing list.
+This allows the 'pkg-config --cflags' results for Qt libraries to be
+correct.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gpsd/Config.in |    3 ---
- package/gpsd/gpsd.mk   |    3 ---
- 2 files changed, 0 insertions(+), 6 deletions(-)
+ package/qt/qt.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index db6bec2..8643492 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -20,9 +20,6 @@ config BR2_PACKAGE_GPSD_DEVICES
- menu "Features"
- 	depends on BR2_PACKAGE_GPSD
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index feb0d6f..3b40ea4 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -577,13 +577,20 @@ endef
+ # everything in the STAGING_DIR), we move host programs such as qmake,
+ # rcc or uic to the HOST_DIR so that they are available at the usual
+ # location. A qt.conf file is generated to make sure that all host
+-# programs still find all files they need.
++# programs still find all files they need. The .pc files are tuned to
++# remove the sysroot path from them, since pkg-config already adds it
++# automatically.
+ define QT_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) install
+ 	mkdir -p $(HOST_DIR)/usr/bin
+ 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
+ 	ln -sf $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr/mkspecs
+ 	$(QT_INSTALL_QT_CONF)
++	for i in moc uic rcc lupdate lrelease ; do \
++		$(SED) "s,^$${i}_location=.*,$${i}_location=$(HOST_DIR)/usr/bin/$${i}," \
++			$(STAGING_DIR)/usr/lib/pkgconfig/Qt*.pc ; \
++	done
++	$(SED) "s,$(STAGING_DIR)/,,g" $(STAGING_DIR)/usr/lib/pkgconfig/Qt*.pc
+ endef
  
--config BR2_PACKAGE_GPSD_TIMING
--	bool "latency timing support"
--
- config BR2_PACKAGE_GPSD_CLIENT_DEBUG
- 	bool "client debugging support"
- 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 7d1dbcd..c5270bd 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -176,9 +176,6 @@ endif
- ifeq ($(BR2_PACKAGE_GPSD_PROFILING),y)
- 	GPSD_SCONS_OPTS += profiling=yes
- endif
--ifeq ($(BR2_PACKAGE_GPSD_TIMING),y)
--	GPSD_SCONS_OPTS += timing=yes
--endif
- ifneq ($(BR2_PACKAGE_GPSD_CLIENT_DEBUG),y)
- 	GPSD_SCONS_OPTS += clientdebug=no
- endif
+ # Library installation
