@@ -1,54 +1,164 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 16:53:24 +0200
-Subject: [Buildroot] [git commit branch/next] pkg-download.mk: allow using
-	localfiles outside of package infrastructure
-Message-ID: <20120802195257.C60488E8F3@busybox.osuosl.org>
+Date: Wed, 25 Jul 2012 18:23:34 +0200
+Subject: [Buildroot] [git commit branch/next] xserver_xorg-server: add
+	upstream patches to fix build issue
+Message-ID: <20120802195300.AF99C96CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=060312567323024ec6fd90e4cec1485816cec811
+commit: http://git.buildroot.net/buildroot/commit/?id=30d2b422e53da8dcb4c13b6fdd47a959607807c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The localfiles download method uses $($(PKG)_SITE))) and
-$($(PKG)_SOURCE) instead of $(1) and $(2). This means that it can only
-be used for package downloads (through gentargets, autotargets, ...)
-and not for other downloads like external toolchains.
+Fixes the following build issue with gcc 4.6:
 
-This patch changes localfiles to allow this, just as the wget and scp
-download methods already did.
-For the version control download methods, nothing changes.
+  LINK  Xfbdev
+.../host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.1/../../../../arm-none-linux-gnueabi/bin/ld: ../../../os/.libs/libos.a(backtrace.o): undefined reference to symbol 'dladdr@@GLIBC_2.4'
+.../host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.1/../../../../arm-none-linux-gnueabi/bin/ld: note: 'dladdr@@GLIBC_2.4' is defined in DSO .../host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libdl.so.2 so try adding it to the linker command line
+.../host/usr/arm-unknown-linux-gnueabi/sysroot/lib/libdl.so.2: could not read symbols: Invalid operation
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-download.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ ...server-01-add-dlopen-libs-flags-to-kdrive.patch |   25 ++++++
+ ...server-02-supply-dl-code-with-dlopen-libs.patch |   87 ++++++++++++++++++++
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
+ 3 files changed, 113 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7983706..fb51540 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -177,16 +177,16 @@ define SHOW_EXTERNAL_DEPS_WGET
- endef
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-add-dlopen-libs-flags-to-kdrive.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-add-dlopen-libs-flags-to-kdrive.patch
+new file mode 100644
+index 0000000..53304be
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-01-add-dlopen-libs-flags-to-kdrive.patch
+@@ -0,0 +1,25 @@
++From 8613e4b0eb04150b1e377871f02b164be5d001e9 Mon Sep 17 00:00:00 2001
++From: Mikhail Gusarov <dottedmag@dottedmag.net>
++Date: Wed, 28 Oct 2009 18:44:27 +0000
++Subject: Add missing DLOPEN_LIBS to kdrive compilation flags
++
++Xfbdev failed to build due to dladdr being used by xorg_backtrace.
++Explicitly add DLOPEN_LIBS to KDRIVE_LIBS as there does not
++seem to be a better place for it.
++
++Signed-off-by: Mikhail Gusarov <dottedmag@dottedmag.net>
++Signed-off-by: Keith Packard <keithp@keithp.com>
++---
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1982,7 +1982,7 @@
++     KDRIVE_LOCAL_LIBS="$MAIN_LIB $DIX_LIB $KDRIVE_LIB $KDRIVE_STUB_LIB $CONFIG_LIB"
++     KDRIVE_LOCAL_LIBS="$KDRIVE_LOCAL_LIBS $FB_LIB $MI_LIB $KDRIVE_PURE_LIBS"
++     KDRIVE_LOCAL_LIBS="$KDRIVE_LOCAL_LIBS $KDRIVE_OS_LIB $OS_LIB"
++-    KDRIVE_LIBS="$TSLIB_LIBS $KDRIVE_LOCAL_LIBS $XSERVER_SYS_LIBS $GLX_SYS_LIBS"
+++    KDRIVE_LIBS="$TSLIB_LIBS $KDRIVE_LOCAL_LIBS $XSERVER_SYS_LIBS $GLX_SYS_LIBS $DLOPEN_LIBS"
++ 
++     AC_SUBST([XEPHYR_LIBS])
++     AC_SUBST([XEPHYR_INCS])
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-supply-dl-code-with-dlopen-libs.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-supply-dl-code-with-dlopen-libs.patch
+new file mode 100644
+index 0000000..63d723b
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-02-supply-dl-code-with-dlopen-libs.patch
+@@ -0,0 +1,87 @@
++From d30637339963950910e5f5fb755b8465ac7dddb4 Mon Sep 17 00:00:00 2001
++From: Mikhail Gusarov <dottedmag@dottedmag.net>
++Date: Thu, 29 Oct 2009 18:46:22 +0000
++Subject: Supply all code using dl*() with DLOPEN_LIBS
++
++Previously DLOPEN_LIBS was managed in top-level configure.ac.
++Instead bundle it with the code using dl*() functions to
++avoid breakages in uncommon configurations.
++
++Signed-off-by: Mikhail Gusarov <dottedmag@dottedmag.net>
++Reviewed-by: Dan Nicholson <dbn.lists@gmail.com>
++Signed-off-by: Keith Packard <keithp@keithp.com>
++---
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -196,6 +196,7 @@
++ dnl has it in libc), or if libdl is needed to get it.
++ AC_CHECK_FUNC([dlopen], [],
++ 	AC_CHECK_LIB([dl], [dlopen], DLOPEN_LIBS="-ldl"))
+++AC_SUBST(DLOPEN_LIBS)
++ 
++ dnl Checks for library functions.
++ AC_FUNC_VPRINTF
++@@ -927,7 +928,7 @@
++ 	AC_SUBST(XLIB_CFLAGS)
++ 	AC_DEFINE(GLXEXT, 1, [Build GLX extension])
++ 	GLX_LIBS='$(top_builddir)/glx/libglx.la'
++-	GLX_SYS_LIBS="$GLX_SYS_LIBS $DLOPEN_LIBS"
+++	GLX_SYS_LIBS="$GLX_SYS_LIBS"
++ else
++         GLX=no
++ fi
++@@ -1483,7 +1484,7 @@
++ 	AC_CHECK_FUNCS([pci_device_vgaarb_init])
++ 	LIBS=$SAVE_LIBS
++ 	CFLAGS=$SAVE_CFLAGS
++-	XORG_SYS_LIBS="$XORG_SYS_LIBS $PCIACCESS_LIBS $DLOPEN_LIBS $GLX_SYS_LIBS $SELINUX_LIB"
+++	XORG_SYS_LIBS="$XORG_SYS_LIBS $PCIACCESS_LIBS $GLX_SYS_LIBS $SELINUX_LIB"
++ 	XORG_CFLAGS="$XORG_CFLAGS $PCIACCESS_CFLAGS"
++ 
++ 	case $host_os in
++Index: b/glx/Makefile.am
++===================================================================
++--- a/glx/Makefile.am
+++++ b/glx/Makefile.am
++@@ -58,6 +58,8 @@
++ libglxdri_la_SOURCES += glxdri2.c
++ endif
++ 
+++libglxdri_la_LIBADD = $(DLOPEN_LIBS)
+++
++ libglx_la_SOURCES = \
++ 	$(indirect_sources) \
++ 	$(glapi_sources) \
++@@ -95,3 +97,5 @@
++         swap_interval.c \
++         unpack.h \
++         xfont.c
+++
+++libglx_la_LIBADD = $(DLOPEN_LIBS)
++Index: b/hw/xfree86/loader/Makefile.am
++===================================================================
++--- a/hw/xfree86/loader/Makefile.am
+++++ b/hw/xfree86/loader/Makefile.am
++@@ -21,6 +21,7 @@
++         dlloader.c \
++ 	os.c \
++ 	sdksyms.c
+++libloader_la_LIBADD = $(DLOPEN_LIBS)
++ 
++ CLEANFILES = sdksyms.c sdksyms.dep
++ 
++Index: b/os/Makefile.am
++===================================================================
++--- a/os/Makefile.am
+++++ b/os/Makefile.am
++@@ -26,6 +26,8 @@
++ 	xprintf.c	\
++ 	$(XORG_SRCS)
++ 
+++libos_la_LIBADD = $(DLOPEN_LIBS)
+++
++ if SECURE_RPC
++ libos_la_SOURCES += $(SECURERPC_SRCS)
++ endif
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index f221632..5913f79 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -10,6 +10,7 @@ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserv
+ XSERVER_XORG_SERVER_MAKE = $(MAKE1) # make install fails with parallel make
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
++XSERVER_XORG_SERVER_AUTORECONF = YES
  
- define DOWNLOAD_LOCALFILES
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--		$(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
-+	test -e $(DL_DIR)/$(2) || \
-+		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
- endef
- 
- define SOURCE_CHECK_LOCALFILES
--  test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
-+  test -e $(call qstrip,$(subst file://,,$(1)))
- endef
- 
- define SHOW_EXTERNAL_DEPS_LOCALFILES
--  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
-+  echo $(2)
- endef
- 
- ################################################################################
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xutil_util-macros 		\
