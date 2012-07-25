@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jul 2012 18:28:07 +0200
-Subject: [Buildroot] [PATCH 1/3] gpsd: proper usage of prefix and DESTDIR
-In-Reply-To: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20120725182807.16c6af26@skate>
+Date: Wed, 25 Jul 2012 18:28:21 +0200
+Subject: [Buildroot] [PATCH] gnutls: requires WCHAR support
+In-Reply-To: <1343202779-18144-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1343202779-18144-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20120725182821.5eafbdca@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 25 Jul 2012 00:10:29 +0200,
+Le Wed, 25 Jul 2012 09:52:59 +0200,
 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-> prefix should always be /usr, and destdir must be passed as DESTDIR,
-> and in the environment, not as a scons argument. Finally, we pass the
-> sysroot= argument to scons so that it doesn't add -L/usr/lib
-> parameters when compiling.
+> gnutls uses wctomb(), which is available only on C libraries with
+> wide-char support. This fixes the following build failure:
+> 
+>  http://autobuild.buildroot.org/results/cd4e73be80fbb64858f4cf911d2b893b0fc06465/build-end.log
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Applied all 3 patches, with the TARGET_DIR -> STAGING_DIR fix
-mentioned by Simon.
+Applied.
 
 Thomas
 -- 
