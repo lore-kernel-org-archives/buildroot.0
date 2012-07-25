@@ -1,54 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jul 2012 22:38:24 +0200
-Subject: [Buildroot] [PATCH] Clarify MIPS ABIs support
-In-Reply-To: <50105627.6010905@zacarias.com.ar>
-References: <1343162828-13060-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <50102DAA.1030400@mind.be> <20120725202503.7ecae923@skate>
- <50105627.6010905@zacarias.com.ar>
-Message-ID: <20120725223824.4881c01a@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 25 Jul 2012 18:24:11 -0300
+Subject: [Buildroot] [PATCH 0/2] qemu mips64 sample config
+Message-ID: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 25 Jul 2012 17:25:11 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+This is a small set that introduces the mips64 qemu sample configuration.
+It's prerequisite is my mips64 tuple patch or Thomas's updated patch that
+enables the mips64 tuple also.
+Tested with qemu 1.1.1 it's flaky, i can't say for sure if it's a toolchain,
+qemu and/or kernel configuration issue since i lack real mips64 hardware to
+test on.
+The biggest issue is login segfaulting so you can't login to the new sample
+shiny emulation, though you can append the old init=/bin/sh to get things
+rolling somehow, though you'll get some other segfaults eventually.
 
-> > Makes sense. Gustavo, what do you think?
-> 
-> Yes, it's the best option since we'll have the same dilemma sooner or
-> latter with powerpc(64) for example.
+Gustavo Zacarias (2):
+  mips64: remove toolchain kludge
+  qemu/mips64-malta: add new sample config
 
-Ok.
+ board/qemu/mips64-malta/linux-3.3.config |   78 ++++++++++++++++++++++++++++++
+ board/qemu/mips64-malta/readme.txt       |    7 +++
+ configs/qemu_mips64_malta_defconfig      |   24 +++++++++
+ package/Makefile.in                      |    4 --
+ 4 files changed, 109 insertions(+), 4 deletions(-)
+ create mode 100644 board/qemu/mips64-malta/linux-3.3.config
+ create mode 100644 board/qemu/mips64-malta/readme.txt
+ create mode 100644 configs/qemu_mips64_malta_defconfig
 
-> > No, it could be this way. The bigger question is:
-> > 
-> >>>   TARGET_CFLAGS+=-fno-pic -mno-abicalls
-> > 
-> > Why are those special CFLAGS needed from the beginning?
-> 
-> From what i could unearth it basically breaks dynamic linking though it
-> makes for smaller binaries.
-> I've tried removing it in my tests to get uClibc dynamic linking working
-> but something else is wrong, seemingly in the uClibc side.
-> For starters the loader is wrong, ld-linux in the target vs. ld64-linux
-> wanted by ELF files. And it seems there's something funky in the uClibc
-> Makefile about that (wants mips64 arch to build it, but they're using
-> unified ARCH as the kernel, so...)
-
-Do you have a working mips64 kernel under Qemu? I vaguely remember that
-you said that it was working with statically linked binary, but not
-dynamically linked ones. Is this correct?
-
-If you have a working mips64 kernel under Qemu, I'm interested by the
-kernel config and Qemu config.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
