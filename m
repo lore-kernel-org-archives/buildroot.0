@@ -1,80 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Jul 2012 09:52:59 +0200
-Subject: [Buildroot] [PATCH] gnutls: requires WCHAR support
-Message-ID: <1343202779-18144-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Wed, 25 Jul 2012 08:53:54 +0100
+Subject: [Buildroot] [PATCH 1/3] gpsd: proper usage of prefix and DESTDIR
+In-Reply-To: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1343167832-14198-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAHt8ZCM=ZcbkOSpGzOJg-1sRK8tbrcZe8z5q5vbsy2-vG0p4wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnutls uses wctomb(), which is available only on C libraries with
-wide-char support. This fixes the following build failure:
+On 24 July 2012 23:10, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> prefix should always be /usr, and destdir must be passed as DESTDIR,
+> and in the environment, not as a scons argument. Finally, we pass the
+> sysroot= argument to scons so that it doesn't add -L/usr/lib
+> parameters when compiling.
 
- http://autobuild.buildroot.org/results/cd4e73be80fbb64858f4cf911d2b893b0fc06465/build-end.log
+Hi Thomas. The build is now falling over for me:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/connman/Config.in         |    2 +-
- package/gnutls/Config.in          |    4 ++++
- package/libsoup/Config.in         |    2 +-
- package/network-manager/Config.in |    2 +-
- 4 files changed, 7 insertions(+), 3 deletions(-)
+/opt/tfx/arch/arm/usr/bin/ccache /usr/lib/ccache/gcc -pthread -o
+strl-py_2_7_2_final_0.so -c -fno-strict-aliasing -O2 -fPIC -DNDEBUG -g
+-O3 -Wall -Wstrict-prototypes
+-I/opt/tfx/arch/arm/usr/include/python2.7 strl.c
+/opt/tfx/arch/arm/usr/bin/ccache /usr/lib/ccache/gcc -pthread -shared
+-L/opt/tfx/arch/arm/lib -L/opt/tfx/arch/arm/usr/lib
+-Wl,-rpath,/opt/tfx/arch/arm/usr/lib -o gps/clienthelpers.so
+gpsclient-py_2_7_2_final_0.so geoid-py_2_7_2_final_0.so
+gpsdclient-py_2_7_2_final_0.so strl-py_2_7_2_final_0.so -L.
+-L/opt/tfx/arch/arm/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib
+-lrt
+/usr/bin/ld: skipping incompatible
+/opt/tfx/arch/arm/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/librt.so
+when searching for -lrt
+/usr/bin/ld: skipping incompatible
+/opt/tfx/arch/arm/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/librt.a
+when searching for -lrt
+/usr/bin/ld: cannot find /lib/libpthread.so.0 inside
+/usr/bin/ld: cannot find /usr/lib/libpthread_nonshared.a inside
+collect2: ld returned 1 exit status
+scons: *** [gps/clienthelpers.so] Error 1
+scons: building terminated because of errors.
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index c9bc94f..2fcb6c1 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_IPTABLES
- 	select BR2_PACKAGE_GNUTLS
- 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
--	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	depends on BR2_INET_IPV6
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon for
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index cedf120..556caea 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
- 	select BR2_PACKAGE_LIBGCRYPT
-+	depends on BR2_USE_WCHAR
- 	help
- 	  GnuTLS is a secure communications library implementing the SSL
- 	  and TLS protocols and technologies around them.
- 
- 	  http://www.gnu.org/software/gnutls/gnutls.html
-+
-+comment "gnutls requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index eee6ade..f40625d 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBSOUP
- 	bool "libsoup"
--	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_USE_WCHAR # glib2 and gnutls
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index fb0c0e9..a120d01 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	select BR2_PACKAGE_DBUS
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE # acl
--	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_UDEV
- 	select BR2_PACKAGE_UDEV_ALL_EXTRAS
--- 
-1.7.9.5
+> @@ -223,10 +224,9 @@ endef
+>  define GPSD_INSTALL_STAGING_CMDS
+>         (cd $(@D); \
+>                 $(GPSD_SCONS_ENV) \
+> +               DESTDIR=$(TARGET_DIR) \
+>                 $(SCONS) \
+>                 $(GPSD_SCONS_OPTS) \
+> -               destdir=$(STAGING_DIR) \
+> -               includedir="$(STAGING_DIR)/usr/include" \
+>                 install)
+>  endef
+
+Should DESTDIR be set to $(STAGING_DIR), rather than $(TARGET_DIR), here?
+
+Simon.
