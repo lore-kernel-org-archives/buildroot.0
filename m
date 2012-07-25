@@ -1,65 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jul 2012 20:32:11 +0200
-Subject: [Buildroot] [git commit branch/next] m4: fix build with glibc >=2.16
-Message-ID: <20120802195259.7ECFB96CE6@busybox.osuosl.org>
+Date: Wed, 25 Jul 2012 18:25:42 +0200
+Subject: [Buildroot] [git commit branch/next] gpsd: proper usage of prefix
+	and DESTDIR
+Message-ID: <20120802195300.CB0D696CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=600375d18e6ccd08505153863666f2e8b10251be
+commit: http://git.buildroot.net/buildroot/commit/?id=4c0f75e444846f6436a3c49b40dab9d56032acfb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+prefix should always be /usr, and destdir must be passed as DESTDIR,
+and in the environment, not as a scons argument. Finally, we pass the
+sysroot= argument to scons so that it doesn't add -L/usr/lib
+parameters when compiling.
 
- create mode 100644 package/m4/m4-1.4.16-no-gets.patch
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/m4/m4-1.4.16-no-gets.patch |   38 ++++++++++++++++++++++++++++++++++++
- 1 files changed, 38 insertions(+), 0 deletions(-)
+ package/gpsd/gpsd.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/m4/m4-1.4.16-no-gets.patch b/package/m4/m4-1.4.16-no-gets.patch
-new file mode 100644
-index 0000000..a057377
---- /dev/null
-+++ b/package/m4/m4-1.4.16-no-gets.patch
-@@ -0,0 +1,38 @@
-+Since the 2.16 release of the glibc, 'gets' is not any more defined in the gnulib.
-+No m4 version synchronized with gnulib since [1] has been released yet.
-+
-+This patch avoids the following error occurs when building m4 <=1.4.16 on host using
-+a glibc >=2.16:
-+
-+make[4]: Entering directory `/opt/buildroot/output/build/host-m4-1.4.16/lib'
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT gl_avltree_oset.o -MD -MP -MF .deps/gl_avltree_oset.Tpo -c -o gl_avltree_oset.o gl_avltree_oset.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-ctype.o -MD -MP -MF .deps/c-ctype.Tpo -c -o c-ctype.o c-ctype.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT c-stack.o -MD -MP -MF .deps/c-stack.Tpo -c -o c-stack.o c-stack.c
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT clean-temp.o -MD -MP -MF .deps/clean-temp.Tpo -c -o clean-temp.o clean-temp.c
-+mv -f .deps/c-ctype.Tpo .deps/c-ctype.Po
-+/opt/buildroot/output/host/usr/bin/ccache /usr/bin/gcc -std=gnu99  -I.     -O2 -I/opt/buildroot/output/host/include -I/opt/buildroot/output/host/usr/include -MT close-hook.o -MD -MP -MF .deps/close-hook.Tpo -c -o close-hook.o close-hook.c
-+In file included from clean-temp.h:22:0,
-+                 from clean-temp.c:23:
-+./stdio.h:477:20: error 'gets' undeclared here (not in a function)
-+make[4]: *** [clean-temp.o] Error 1
-+
-+References:
-+[1] http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=66712c23388e93e5c518ebc8515140fa0c807348
-+[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-devel/m4/files/m4-1.4.16-no-gets.patch?diff_format=h&revision=1.1&view=markup
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+---
-+diff -purN host-m4-1.4.16.orig/lib/stdio.in.h host-m4-1.4.16/lib/stdio.in.h
-+--- host-m4-1.4.16.orig/lib/stdio.in.h	2012-07-21 19:11:40.196541826 +0200
-++++ host-m4-1.4.16/lib/stdio.in.h	2012-07-21 20:46:05.405850751 +0200
-+@@ -162,7 +162,9 @@ _GL_WARN_ON_USE (fflush, "fflush is not
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+ #undef gets
-++#if defined(__GLIBC__) && !defined(__UCLIBC__) && !__GLIBC_PREREQ(2, 16)
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++#endif
-+ 
-+ #if @GNULIB_FOPEN@
-+ # if @REPLACE_FOPEN@
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index c5270bd..e96d979 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -17,8 +17,9 @@ GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
+ 
+ GPSD_SCONS_OPTS = \
+ 	arch=$(ARCH)\
+-	prefix=$(TARGET_DIR)/usr\
++	prefix=/usr\
+ 	chrpath=no\
++	sysroot=$(STAGING_DIR)\
+ 	strip=no
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+@@ -207,9 +208,9 @@ endef
+ define GPSD_INSTALL_TARGET_CMDS
+ 	(cd $(@D); \
+ 		$(GPSD_SCONS_ENV) \
++		DESTDIR=$(TARGET_DIR) \
+ 		$(SCONS) \
+ 		$(GPSD_SCONS_OPTS) \
+-		destdir=$(TARGET_DIR) \
+ 		install)
+ 	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
+ 		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
+@@ -220,10 +221,9 @@ endef
+ define GPSD_INSTALL_STAGING_CMDS
+ 	(cd $(@D); \
+ 		$(GPSD_SCONS_ENV) \
++		DESTDIR=$(STAGING_DIR) \
+ 		$(SCONS) \
+ 		$(GPSD_SCONS_OPTS) \
+-		destdir=$(STAGING_DIR) \
+-		includedir="$(STAGING_DIR)/usr/include" \
+ 		install)
+ endef
+ 
