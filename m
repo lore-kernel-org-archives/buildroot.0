@@ -1,42 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jul 2012 08:53:27 +0200
-Subject: [Buildroot] [PATCH 0/2] qemu mips64 sample config
-In-Reply-To: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120726085327.34b7add7@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 26 Jul 2012 07:41:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 5366] can't login (root or default)
+In-Reply-To: <bug-5366-163@https.bugs.busybox.net/>
+References: <bug-5366-163@https.bugs.busybox.net/>
+Message-ID: <20120726074123.7006A96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=5366
 
-Le Wed, 25 Jul 2012 18:24:11 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+--- Comment #10 from Jonathan Liu <net147@gmail.com> 2012-07-26 07:41:23 UTC ---
+Have you tried changing root:x: to root:: in /etc/passwd?
 
-> This is a small set that introduces the mips64 qemu sample configuration.
-> It's prerequisite is my mips64 tuple patch or Thomas's updated patch that
-> enables the mips64 tuple also.
-> Tested with qemu 1.1.1 it's flaky, i can't say for sure if it's a toolchain,
-> qemu and/or kernel configuration issue since i lack real mips64 hardware to
-> test on.
-> The biggest issue is login segfaulting so you can't login to the new sample
-> shiny emulation, though you can append the old init=/bin/sh to get things
-> rolling somehow, though you'll get some other segfaults eventually.
-
-Do you mind if I ask this information to the readme.txt file, so that
-the documentation doesn't pretend that it works perfectly if it
-doesn't?
-
-Also, with which Qemu version did you try? Did you try with the latest
-Git? I was told that some mips64 fixes were merged recently in Qemu.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
