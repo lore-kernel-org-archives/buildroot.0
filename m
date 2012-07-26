@@ -1,220 +1,214 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 26 Jul 2012 18:57:45 +0200
-Subject: [Buildroot] [PATCH] sconeserver: new package
-In-Reply-To: <1343051342-12829-1-git-send-email-spdawson@gmail.com>
-References: <1343051342-12829-1-git-send-email-spdawson@gmail.com>
-Message-ID: <50117709.8060209@mind.be>
+Date: Thu, 26 Jul 2012 18:35:47 +0200
+Subject: [Buildroot] [PATCH] at91bootstrap: bump version to 3.2
+In-Reply-To: <1343248264-6435-1-git-send-email-spdawson@gmail.com>
+References: <1343248264-6435-1-git-send-email-spdawson@gmail.com>
+Message-ID: <501171E3.5030506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/23/12 15:49, spdawson at gmail.com wrote:
+On 07/25/12 22:31, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
+>
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+
+  Since there are quite a few more changes than a simple version bump, a more
+extended commit message would be appropriate.
+
+> ---
+>   boot/at91bootstrap/Config.in                       |   28 +-
+>   .../at91bootstrap-1.16-eabi-fix.patch              |  334 ---------
+>   .../at91bootstrap-1.16-u-boot-relocation-fix.patch |  299 --------
+>   .../at91bootstrap-3.2-u-boot-relocation-fix.patch  |  750 ++++++++++++++++++++
+>   boot/at91bootstrap/at91bootstrap.mk                |   34 +-
+>   5 files changed, 769 insertions(+), 676 deletions(-)
+>   delete mode 100644 boot/at91bootstrap/at91bootstrap-1.16-eabi-fix.patch
+>   delete mode 100644 boot/at91bootstrap/at91bootstrap-1.16-u-boot-relocation-fix.patch
+>   create mode 100644 boot/at91bootstrap/at91bootstrap-3.2-u-boot-relocation-fix.patch
+>
+> diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+> index 9cbaf81..d4adabd 100644
+> --- a/boot/at91bootstrap/Config.in
+> +++ b/boot/at91bootstrap/Config.in
+> @@ -19,32 +19,10 @@ config BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
+>
+>   	  Most users may leave this empty
+>
+> -config BR2_TARGET_AT91BOOTSTRAP_BOARD
+> -	string "Bootstrap board"
+> +config BR2_TARGET_AT91BOOTSTRAP_DEFCONFIG
+> +	string "Bootstrap defconfig"
+>   	default ""
+>   	help
 [snip]
-> diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+> +	  This is used to do a make<DEFCONFIG>_defconfig
+
+  This help text is a bit limited.  How about
+
+Name of the defconfig file to use, without the trailing
+_defconfig.  The defconfig is located in ...
+
+
+  With this change from a config.h to a Kconfig, some of the
+buildroot defconfigs will also have to be adapted:
+
+$ git grep -l BR2_TARGET_AT91BOOTSTRAP configs 
+
+configs/at91sam9260dfc_defconfig 
+
+configs/at91sam9261ek_defconfig 
+
+configs/at91sam9263ek_defconfig 
+
+configs/at91sam9g20dfc_defconfig 
+
+configs/calao_usb_a9263_defconfig 
+
+configs/calao_usb_a9g20_lpw_defconfig
+
+
+  Also it would be nice to have the choice to use a custom config rather than
+a defconfig (which is the whole point of having a Kconfig system to begin
+with).  That could be in a separate patch, though.
+
+  Another nice-to-have is to get add the targets to run xxxconfig directly from
+buildroot, like for busybox, for the kernel, etc.  I've been thinking about
+creating a generic-kconfig infrastructure (or maybe kconfig-package?) to make
+that easier.
+
+[snip]
+> diff --git a/boot/at91bootstrap/at91bootstrap-3.2-u-boot-relocation-fix.patch b/boot/at91bootstrap/at91bootstrap-3.2-u-boot-relocation-fix.patch
 > new file mode 100644
-> index 0000000..7290ec0
+> index 0000000..51000e6
 > --- /dev/null
-> +++ b/package/sconeserver/Config.in
-> @@ -0,0 +1,100 @@
-> +config BR2_PACKAGE_SCONESERVER
-> +	bool "sconeserver"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	select BR2_PACKAGE_PCRE
-> +	help
-> +	  Sconeserver is a modular, object-orientated and extremely versatile
-> +	  network server framework for GNU/Linux and UNIX-like platforms.
+> +++ b/boot/at91bootstrap/at91bootstrap-3.2-u-boot-relocation-fix.patch
+
+  Nowadays, we prefer to leave out the version number from the patches, unless
+we support several versions of the package (like e.g. busybox).
+
+> @@ -0,0 +1,750 @@
+> +Every AT91SAM plaforms were broken between 2010.12 and 2011.03 because
+> +of the relocation changes.
 > +
-> +	  http://www.sconemad.com/sconeserver/
+> +We have to get JUMP_ADDR consistant with what is used by u-boot
+> +(CONFIG_SYS_TEXT_BASE).
 > +
-> +comment "sconeserver requires a toolchain with C++ support enabled"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> +
-> +menu "Modules"
+> +I didn't know what to do with at91sam9m10g45ek as it doesn't seems to be
+> +converted yet. But anyway, that means that it is either not working or
+> +doesn't care so changing it here shouldn't harm.
 
-  I think a menuconfig is nicer in this case.  Cfr. OpenCV.
-
-> +	depends on BR2_PACKAGE_SCONESERVER
-> +
-> +config BR2_PACKAGE_SCONESERVER_EXAMPLES
-> +	bool "examples"
-> +	default n
-
-  n is the default, so this statement is redundant.
-
-> +	help
-> +	  Example modules for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_SSL
-> +	bool "ssl"
-> +	default y
-
-  Why does this default to y?
-
-  Maybe you want
-default y if BR2_PACKAGE_OPENSSL
-
-  however, I think that conflicts with the select statement below...
-
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  SSL module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-> +	bool "http::sconesite"
-> +	default y
-> +	select BR2_PACKAGE_LIBXML2
-> +	help
-> +	  http::sconesite module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
-> +	bool "http::sconesite::image"
-> +	default n
-> +	depends on BR2_PACKAGE_IMAGEMAGICK
-> +	select BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-
-  Shouldn't this be
-depends on BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-select BR2_PACKAGE_IMAGEMAGICK
-
-> +	help
-> +	  http::sconesite::image module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_MYSQL
-> +	bool "mysql"
-> +	default n
-> +	depends on BR2_PACKAGE_MYSQL_CLIENT
-
-  Why depends on rather than select?
-
-  Same for all the following...
-
-> +	help
-> +	  MySQL module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_BLUETOOTH
-> +	bool "bluetooth"
-> +	default n
-> +	depends on BR2_PACKAGE_BLUEZ_UTILS
-> +	help
-> +	  Bluetooth module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_RSS
-> +	bool "rss"
-> +	default y
-> +	select BR2_PACKAGE_LIBXML2
-> +	help
-> +	  RSS module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_LOCATION
-> +	bool "location"
-> +	default n
-> +	depends on BR2_PACKAGE_GPSD
-> +	help
-> +	  Location module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_LETTUCE
-> +	bool "lettuce"
-> +	default n
-> +	help
-> +	  Lettuce module for SconeServer
-
-  This one could use some explanation of what lettuce is...
+  Is this paragraph still true?
 
 > +
-> +config BR2_PACKAGE_SCONESERVER_MATHS
-> +	bool "maths"
-> +	default n
-> +	depends on BR2_PACKAGE_GMP
-> +	depends on BR2_PACKAGE_MPFR
-> +	help
-> +	  Maths module for SconeServer
+> +I also chose to "repartition" the dataflash. u-boot is now living at
+> +0x4000, letting 16kB for the bootstrap. We also have to increase the
+> +IMG_SIZE as u-boot as grown larger than the default value.
+> +As requested on the u-boot ML, we assume that it could be up to 512kB
+> +big.
+> +
+> +It means that now, you have to flash your kernel at 0x0008C000 instead
+> +of 0x00042000. And so you also have to load it from that adress from
+> +u-boot.
+> +
+> +Then, remember that you could decrease IMG_SIZE to boot faster.
+> +
+> +Signed-off-by: Alexandre Belloni<alexandre.belloni@piout.net>
+> +Signed-off-by: Simon Dawson<spdawson@gmail.com>
+[snip]
+> diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+> index d8caed7..00199e4 100644
+> --- a/boot/at91bootstrap/at91bootstrap.mk
+> +++ b/boot/at91bootstrap/at91bootstrap.mk
+> @@ -3,23 +3,14 @@
+>   # at91bootstrap
+>   #
+>   #############################################################
+> -AT91BOOTSTRAP_VERSION = 1.16
+> -AT91BOOTSTRAP_SITE = http://www.atmel.com/dyn/resources/prod_documents/
+> -AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+> -
+> -AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+> -AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+> -AT91BOOTSTRAP_MAKE_SUBDIR = board/$(AT91BOOTSTRAP_BOARD)/$(AT91BOOTSTRAP_MEMORY)
+> -AT91BOOTSTRAP_BINARY = $(AT91BOOTSTRAP_MAKE_SUBDIR)/$(AT91BOOTSTRAP_MEMORY)_$(AT91BOOTSTRAP_BOARD).bin
+> +AT91BOOTSTRAP_VERSION = 3.2
+> +AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap/AT91Bootstrap3.2
 
-  Maybe this one as well.
+  Maybe this could be .../AT91Bootstrap$(AT91BOOTSTRAP_VERSION)
 
-> +
-> +config BR2_PACKAGE_SCONESERVER_TESTBUILDER
-> +	bool "testbuilder"
-> +	default n
-> +	help
-> +	  Testbuilder module for SconeServer
-> +
-> +config BR2_PACKAGE_SCONESERVER_UI
-> +	bool "ui"
-> +	default n
-> +	depends on BR2_PACKAGE_XLIB_LIBX11
-> +	help
-> +	  UI module for SconeServer
-> +
-> +endmenu
-> diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-> new file mode 100644
-> index 0000000..dba5fe6
-> --- /dev/null
-> +++ b/package/sconeserver/sconeserver.mk
-> @@ -0,0 +1,49 @@
-> +#############################################################
-> +#
-> +# sconeserver
-> +#
-> +#############################################################
-> +# Release tarball doesn't build cleanly, so use a recent
-> +# Subversion trunk snapshot.
+> +AT91BOOTSTRAP_SOURCE = at91bootstrap_9n12.tar.gz
 
-  Mention which is the release that doesn't build cleanly, this will
-help version bumpers.
+  What does the 9n12 stand for, do you know?
 
-> +SCONESERVER_VERSION = 177
-> +SCONESERVER_SITE = \
-> +	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
-> +SCONESERVER_SITE_METHOD = svn
-> +
-> +SCONESERVER_LICENSE = GPLv2+
-> +SCONESERVER_LICENSE_FILES = COPYING
-> +
-> +SCONESERVER_CONF_OPT += \
-> +	--with-ip \
-> +	--with-local \
-> +	$(if $(BR2_INET_IPV6),--with-ip6,--without-ip6) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_EXAMPLES),--with-examples,--without-examples) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_LETTUCE),--with-lettuce,--without-lettuce) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_TESTBUILDER),--with-testbuilder,--without-testbuilder) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_SSL),--with-ssl,--without-ssl) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),--with-sconesite,--without-sconesite) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),--with-sconesite-image,--without-sconesite-image) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_MYSQL),--with-mysql,--without-mysql) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_BLUETOOTH),--with-bluetooth,--without-bluetooth) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_RSS),--with-rss,--without-rss) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_LOCATION),--with-location,--without-location) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_MATHS),--with-maths,--without-maths) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_UI),--with-ui,--without-ui)
-> +
-> +# Help SconeServer to find the libxml2 headers.
-> +ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> +	SCONESERVER_CONF_OPT += CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2"
+>
+>   AT91BOOTSTRAP_INSTALL_IMAGES = YES
+>   AT91BOOTSTRAP_INSTALL_TARGET = NO
+>
+> -define AT91BOOTSTRAP_EXTRACT_CMDS
+> -	unzip -d $(BUILD_DIR) $(DL_DIR)/$(AT91BOOTSTRAP_SOURCE)
+> -	mv $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)/* $(@D)
+> -	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
+> -endef
+> +AT91BOOTSTRAP_MAKE_OPT += CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
 
-  Why doesn't pkg-config find this path?  Are they missing a check for
-libxml-2.0 maybe?
+  Not a biggie, but the += is actually pointless; = is enough.
 
-> +endif
-> +
-> +SCONESERVER_DEPENDENCIES = \
-> +	pcre \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_SSL),openssl) \
-> +	$(if $(or $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),$(BR2_PACKAGE_SCONESERVER_RSS)),libxml2) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),imagemagick) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_MYSQL),mysql_client) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_BLUETOOTH),bluez_utils) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_LOCATION),gpsd) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_MATHS),gmp mpfr) \
-> +	$(if $(BR2_PACKAGE_SCONESERVER_UI),xlib_libX11)
-> +
-> +$(eval $(autotools-package))
+>
+>   ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
+>   define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
+> @@ -30,21 +21,28 @@ endef
+>   AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
+>   endif
+>
+> +define AT91BOOTSTRAP_CONFIGURE_CMDS
+> +	cp $(@D)/board/*/$(BR2_TARGET_AT91BOOTSTRAP_DEFCONFIG)_defconfig \
+> +		$(@D)/.config
+> +	$(info Fixing Linux kernel image filename in configuration)
+> +	/bin/sed -r -i -e 's/image.bin/uImage/' $(@D)/.config
 
+  The $(info ...) call seems redundant to me.  And in any case, it could use
+either @echo or $(call MESSAGE,...).
+
+  The sed call should use $(SED) (which already includes the -i).  The -r
+option is redundant since you're not actually using extended regexps.
+
+
+> +endef
+> +
+>   define AT91BOOTSTRAP_BUILD_CMDS
+> -	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
+> +	$(MAKE) $(AT91BOOTSTRAP_MAKE_OPT) -C $(@D) boot
+>   endef
+>
+>   define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
+> -	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
+> +	$(MAKE) $(AT91BOOTSTRAP_MAKE_OPT) -C $(@D) bootstrap
+>   endef
+>
+>   $(eval $(generic-package))
+>
+>   ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+> -# we NEED a board name unless we're at make source
+> +# we NEED a defconfig name unless we're at make source
+>   ifeq ($(filter source,$(MAKECMDGOALS)),)
+> -ifeq ($(AT91BOOTSTRAP_BOARD),)
+> -$(error No AT91Bootstrap board name set. Check your BR2_TARGET_AT91BOOTSTRAP_BOARD setting)
+> +ifeq ($(BR2_TARGET_AT91BOOTSTRAP_DEFCONFIG),)
+
+  I think you're missing a qstrip here - BR2_TARGET_AT91BOOTSTRAP_DEFCONFIG
+is "" when it's not set.
 
   Regards,
   Arnout
+
+> +$(error No AT91Bootstrap defconfig name set. Check your BR2_TARGET_AT91BOOTSTRAP_DEFCONFIG setting)
+>   endif
+>   endif
+>   endif
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
