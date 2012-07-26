@@ -1,32 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jul 2012 17:10:00 -0300
-Subject: [Buildroot] [PATCH] dhcp: security bump to version 4.1-ESV-R6
-Message-ID: <1343333400-27886-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Jul 2012 22:33:02 +0200
+Subject: [Buildroot] [PATCH 2/3] ncurses: bump to 5.9
+In-Reply-To: <50119743.3090505@zacarias.com.ar>
+References: <1343328590-1803-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1343328590-1803-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <50119743.3090505@zacarias.com.ar>
+Message-ID: <20120726223302.4f773e96@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2012-3571 and CVE-2012-3954.
+Le Thu, 26 Jul 2012 16:15:15 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dhcp/dhcp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> > After this bump, I build tested a large number of the ncurses reverse
+> > dependencies we have in Buildroot, and they all built fine.
+> > 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Nack.
+> The version bump to 5.8 and 5.9 had issues in the past and still has.
+> It may compile just fine but it segfaults miserably in a target, chroot
+> or qemu image.
+> Simple test, i586 target with external toolchain, build less and see.
+> Regards.
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 22b068a..e5c9968 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--DHCP_VERSION  = 4.1-ESV-R4
-+DHCP_VERSION  = 4.1-ESV-R6
- DHCP_SITE     = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_CONF_ENV = ac_cv_file__dev_random=yes
- DHCP_CONF_OPT = \
+Yes, I just did some runtime testing, and also faced segfaults. Now
+that you say it, I also remember what you said.
+
+Thanks!
+
+Thomas
 -- 
-1.7.8.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
