@@ -1,61 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jul 2012 13:44:50 +0200
-Subject: [Buildroot] (no subject)
-In-Reply-To: <1343300170.3681.YahooMailNeo@web164604.mail.gq1.yahoo.com>
-References: <1343300170.3681.YahooMailNeo@web164604.mail.gq1.yahoo.com>
-Message-ID: <20120726134450.5f97558b@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Jul 2012 08:47:08 -0300
+Subject: [Buildroot] [PATCH 0/2] qemu mips64 sample config
+In-Reply-To: <20120726085327.34b7add7@skate>
+References: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
+ <20120726085327.34b7add7@skate>
+Message-ID: <50112E3C.70201@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 07/26/12 03:53, Thomas Petazzoni wrote:
 
-Next time, could you please put a meaningful topic in the "Subject:"
-line of your e-mail client?
+> Do you mind if I ask this information to the readme.txt file, so that
+> the documentation doesn't pretend that it works perfectly if it
+> doesn't?
+> 
+> Also, with which Qemu version did you try? Did you try with the latest
+> Git? I was told that some mips64 fixes were merged recently in Qemu.
+> 
+> Thanks!
+> 
+> Thomas
 
-Le Thu, 26 Jul 2012 03:56:10 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
-
-> I somehow managed to start Thiny X server (ARM board) with twm.
-
-Tiny X, not Thiny X.
-
-> However I didn't succeed to attach neither USB keyboard
-> nor USB mouse, although messages (at serial console) reported
-> recognition of that devices. 
-> There is no mouse node (in /dev) - I am using mdev. 
-
-You should have a /dev/input/event[0-9] device file for your keyboard
-and for your mouse. You can test it easily: do cat /dev/input/event0,
-can then move your mouse. If you see crap displayed on the screen,
-you're all set, your mouse works. If not, try with /dev/input/event1
-and the following ones.
-
-If you have no /dev/input/eventX device files, then adjust your kernel
-configuration.
-
-> So I am stucked at the moment. I don't know if Thiny X can 
-> work with USB mouse/keyboard at all ?
-
-KDrive (which is the new name for TinyX) supports all evdev-compliant
-devices, which means all devices that use the Linux input subsystem. So
-basically, yes USB keyboard and mice should just work.
-
-> Also interested if applications that are intended for X server
-> will run with Thiny X ?
-
-Yes, they will work. KDrive implements the X11 protocol, so basically
-all X applications should work. However, applications using OpenGL, or
-maybe requiring some advanced X protocol extensions may not work, but
-for most basic 2D applications, it just works.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I wouldn't mind of course, no need to ask.
+With 1.1.1 as i said, i can't get the latest git qemu to build at the
+moment (some undefined references to pit_*).
+We should probably do our own host-qemu as you said once, it would
+enable us to get a precise target with, if needed, necessary patches to
+fix some particular scenarios.
+Unfortunately i'm terribly busy on weekdays, maybe i can look into it
+during the weekend.
+Regards.
