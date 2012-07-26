@@ -1,37 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Jul 2012 06:50:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 5366] can't login (root or default)
-In-Reply-To: <bug-5366-163@https.bugs.busybox.net/>
-References: <bug-5366-163@https.bugs.busybox.net/>
-Message-ID: <20120726065042.7D50996EC4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Jul 2012 08:53:27 +0200
+Subject: [Buildroot] [PATCH 0/2] qemu mips64 sample config
+In-Reply-To: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120726085327.34b7add7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5366
+Hello,
 
---- Comment #9 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-07-26 06:50:42 UTC ---
-(In reply to comment #8)
+Le Wed, 25 Jul 2012 18:24:11 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-> I think i figures out the cause of the problem.
-> What should the '/bin/login' be? In the versions that work it points to
-> 'busybox'. In the version that does not work (this version) it's a standard
-> executable.
-> 
-> Could this be the reason that i can't login?
+> This is a small set that introduces the mips64 qemu sample configuration.
+> It's prerequisite is my mips64 tuple patch or Thomas's updated patch that
+> enables the mips64 tuple also.
+> Tested with qemu 1.1.1 it's flaky, i can't say for sure if it's a toolchain,
+> qemu and/or kernel configuration issue since i lack real mips64 hardware to
+> test on.
+> The biggest issue is login segfaulting so you can't login to the new sample
+> shiny emulation, though you can append the old init=/bin/sh to get things
+> rolling somehow, though you'll get some other segfaults eventually.
 
-Ah, yes, good point! /bin/login can be provided by util-linux. I thought about
-getty (which I told you already), but I forgot about /bin/login. Can you try
-disabling BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS to see if it works better?
+Do you mind if I ask this information to the readme.txt file, so that
+the documentation doesn't pretend that it works perfectly if it
+doesn't?
 
-It would be nice to figure out why the /bin/login from util-linux doesn't work.
-My initial suspicion would be that it lacks the SUID-root bit set, but on my
-system /bin/login doesn't have this bit set. Or maybe the util-linux /bin/login
-requires some configuration file that we don't have or something.
+Also, with which Qemu version did you try? Did you try with the latest
+Git? I was told that some mips64 fixes were merged recently in Qemu.
 
+Thanks!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
