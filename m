@@ -1,53 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Jul 2012 18:49:05 +0200
-Subject: [Buildroot] [PATCH] crosstool-ng: bump to version 1.15.3
-In-Reply-To: <1343312375-8339-1-git-send-email-net147@gmail.com>
-References: <1343312375-8339-1-git-send-email-net147@gmail.com>
-Message-ID: <201207261849.05831.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Jul 2012 14:19:41 -0300
+Subject: [Buildroot] [PATCH] libpng: security bump to version 1.4.12
+Message-ID: <1343323181-26998-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan, All,
+Fixes CVE-2012-3386
 
-On Thursday 26 July 2012 16:19:35 Jonathan Liu wrote:
-> Signed-off-by: Jonathan Liu <net147@gmail.com>
-> ---
->  package/crosstool-ng/crosstool-ng.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-> index 4bf0258..379d400 100644
-> --- a/package/crosstool-ng/crosstool-ng.mk
-> +++ b/package/crosstool-ng/crosstool-ng.mk
-> @@ -1,4 +1,4 @@
-> -CROSSTOOL_NG_VERSION           = 1.15.2
-> +CROSSTOOL_NG_VERSION           = 1.15.3
->  CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
->  CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
->  CROSSTOOL_NG_INSTALL_TARGET    = NO
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libpng/libpng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Yes, there's a new release for crosstool-NG.
-
-But the next major release is due end of the month (Real Soon Now!), so I
-believe we can wait until then before we update the version in buildroot.
-Hence the reason why I did not push 1.15.3 to buildroot when I released it.
-
-Of course, it's up to the maintainer (or his current substitute!) to accept
-your change, to which I do not object on a technical basis.
-
-Thomas, if you want to pull this change, you can add my:
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index dd295c6..6edabc4 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBPNG_VERSION = 1.4.11
++LIBPNG_VERSION = 1.4.12
+ LIBPNG_SERIES = 14
+ LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.8.6
