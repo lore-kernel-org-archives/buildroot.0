@@ -1,30 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jul 2012 14:48:03 -0300
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.2.x stable version
-Message-ID: <1343324883-25907-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Jul 2012 20:49:48 +0200
+Subject: [Buildroot] [PATCH 1/3] ncurses: get the post staging installation
+	hook called properly
+Message-ID: <1343328590-1803-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+There was a typo in the name of the variable to register the hook,
+which prevent the hook from actually being called.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 63a1ae8..514d299 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.38"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.23"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.24"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.6"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ncurses/ncurses.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 421d855..72a8030 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -57,7 +57,7 @@ define NCURSES_PATCH_NCURSES_CONFIG
+ 		$(STAGING_DIR)/usr/bin/ncurses5-config
+ endef
+ 
+-NCURSES_POST_STAGING_INSTALL_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_PATCH_NCURSES_CONFIG
+ 
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ define NCURSES_INSTALL_TARGET_DEVFILES
 -- 
-1.7.8.6
+1.7.9.5
