@@ -1,153 +1,150 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jul 2012 20:49:49 +0200
-Subject: [Buildroot] [PATCH 2/3] ncurses: bump to 5.9
+Date: Thu, 26 Jul 2012 20:49:50 +0200
+Subject: [Buildroot] [PATCH 3/3] gpsd: remove patch to handle
+	ncurses5-config custom location
 In-Reply-To: <1343328590-1803-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1343328590-1803-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1343328590-1803-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1343328590-1803-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to 5.9 has two nice side-effects:
+Now that ncurses has been bumped to 5.9, it installs .pc files for
+pkg-config, which allows gpsd to find it properly without the need to
+specify a custom location for ncurses5-config.
 
- * It builds fine on noMMU architectures such as Blackfin, which will
-   fix build failures like
-   http://autobuild.buildroot.org/results/cf3e6a95c82b60d63da041293db576a8f21f9136/build-end.log.
-
- * It installs a pkg-config file, which will allow gpsd to find
-   ncurses properly, without the need to use ncurses5-config, which
-   means we can get rid of one of our gpsd patches. Thanks to Mike
-   Frysinger for pointing the new --enable-pc-files option.
-
-After this bump, I build tested a large number of the ncurses reverse
-dependencies we have in Buildroot, and they all built fine.
+Since gpsd now uses pkg-config to find the ncurses library, we also
+add host-pkg-config in the dependencies.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../ncurses-01-fixup-pkg-config-handling.patch     |   89 ++++++++++++++++++++
- package/ncurses/ncurses.mk                         |    5 +-
- 2 files changed, 92 insertions(+), 2 deletions(-)
- create mode 100644 package/ncurses/ncurses-01-fixup-pkg-config-handling.patch
+ .../gpsd/gpsd-02-sconstruct-disable-rpath.patch    |   17 ++++++++
+ .../gpsd-02-sconstruct-ncurses-config-path.patch   |   44 --------------------
+ .../gpsd/gpsd-03-sconstruct-disable-rpath.patch    |   17 --------
+ package/gpsd/gpsd.mk                               |    3 +-
+ 4 files changed, 18 insertions(+), 63 deletions(-)
+ create mode 100644 package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+ delete mode 100644 package/gpsd/gpsd-02-sconstruct-ncurses-config-path.patch
+ delete mode 100644 package/gpsd/gpsd-03-sconstruct-disable-rpath.patch
 
-diff --git a/package/ncurses/ncurses-01-fixup-pkg-config-handling.patch b/package/ncurses/ncurses-01-fixup-pkg-config-handling.patch
+diff --git a/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
 new file mode 100644
-index 0000000..e1cfc75
+index 0000000..5476450
 --- /dev/null
-+++ b/package/ncurses/ncurses-01-fixup-pkg-config-handling.patch
-@@ -0,0 +1,89 @@
-+Change handling of PKG_CONFIG_LIBDIR
-+
-+When PKG_CONFIG_LIBDIR was unset in the environment, the configure
-+script was deducing the PKG_CONFIG_LIBDIR from the location of the
-+pkg-config binary, which doesn't make a lot of sense, and isn't done
-+by other autotools based packages.
-+
-+Also, the configure script was checking that the directory really
-+exists. This forced to create the directory *and* provide an absolute
-+path in PKG_CONFIG_LIBDIR, which didn't play well with the fact that
-+at installation time, PKG_CONFIG_LIBDIR is suffixed to DESTDIR, which
-+means that we got two times the staging directory location.
-+
-+This patch fixes both of those issues. Also, since ncurses uses a fork
-+of autoconf 2.13, we can't simply use _AUTORECONF=YES, so we also fix
-+the configure script in this patch.
++++ b/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
+@@ -0,0 +1,17 @@
++Disable addition of RPATH to the generated libraries
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+Index: b/configure
++Index: b/SConstruct
 +===================================================================
-+--- a/configure
-++++ b/configure
-+@@ -3623,27 +3623,20 @@
++--- a/SConstruct
+++++ b/SConstruct
++@@ -273,8 +273,6 @@
++     env.Prepend(LIBPATH=[installdir('libdir')])
++ else:
++     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir')])
++-if env["shared"]:
++-    env.Prepend(RPATH=[installdir('libdir')])
 + 
-+ 	# Leave this as something that can be overridden in the environment.
-+ 	if test -z "$PKG_CONFIG_LIBDIR" ; then
-+-		PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG" | sed -e 's,/[^/]*/[^/]*$,,'`/lib/pkgconfig
-++		PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig"
-+ 	fi
-++
-+ 	PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG_LIBDIR" | sed -e 's/^://' -e 's/:.*//'`
-+-	if test -n "$PKG_CONFIG_LIBDIR" && test -d "$PKG_CONFIG_LIBDIR" ; then
-+ 
-+-# Check whether --enable-pc-files or --disable-pc-files was given.
-+-if test "${enable_pc_files+set}" = set; then
-+-  enableval="$enable_pc_files"
-+-  enable_pc_files=$enableval
-+-else
-+-  enable_pc_files=no
-+-fi;
-+-		echo "$as_me:3638: result: $enable_pc_files" >&5
-+-echo "${ECHO_T}$enable_pc_files" >&6
-++        # Check whether --enable-pc-files or --disable-pc-files was given.
-++	if test "${enable_pc_files+set}" = set; then
-++	    enableval="$enable_pc_files"
-++	    enable_pc_files=$enableval
-+ 	else
-+-		echo "$as_me:3641: result: no" >&5
-+-echo "${ECHO_T}no" >&6
-+-		{ echo "$as_me:3643: WARNING: did not find library $PKG_CONFIG_LIBDIR" >&5
-+-echo "$as_me: WARNING: did not find library $PKG_CONFIG_LIBDIR" >&2;}
-+-		enable_pc_files=no
-+-	fi
-++	    enable_pc_files=no
-++	fi;
-++	echo "$as_me:3638: result: $enable_pc_files" >&5
-++	echo "${ECHO_T}$enable_pc_files" >&6
-+ fi
-+ 
-+ echo "$as_me:3649: checking if we should assume mixed-case filenames" >&5
-+Index: b/configure.in
-+===================================================================
-+--- a/configure.in
-++++ b/configure.in
-+@@ -174,20 +174,14 @@
-+ 
-+ 	# Leave this as something that can be overridden in the environment.
-+ 	if test -z "$PKG_CONFIG_LIBDIR" ; then
-+-		PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG" | sed -e 's,/[[^/]]*/[[^/]]*$,,'`/lib/pkgconfig
-++		PKG_CONFIG_LIBDIR="/usr/lib/pkgconfig"
-+ 	fi
-+ 	PKG_CONFIG_LIBDIR=`echo "$PKG_CONFIG_LIBDIR" | sed -e 's/^://' -e 's/:.*//'`
-+-	if test -n "$PKG_CONFIG_LIBDIR" && test -d "$PKG_CONFIG_LIBDIR" ; then
-+-		AC_ARG_ENABLE(pc-files,
-++	AC_ARG_ENABLE(pc-files,
-+ 			[  --enable-pc-files       generate and install .pc files for pkg-config],
-+ 			[enable_pc_files=$enableval],
-+ 			[enable_pc_files=no])
-+-		AC_MSG_RESULT($enable_pc_files)
-+-	else
-+-		AC_MSG_RESULT(no)
-+-		AC_MSG_WARN(did not find library $PKG_CONFIG_LIBDIR)
-+-		enable_pc_files=no
-+-	fi
-++	AC_MSG_RESULT($enable_pc_files)
-+ fi
-+ AC_SUBST(PKG_CONFIG_LIBDIR)
-+ 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 72a8030..e0df2aa 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -23,7 +23,7 @@
- # USA
++ # Give deheader a way to set compiler flags
++ if 'MORECFLAGS' in os.environ:
+diff --git a/package/gpsd/gpsd-02-sconstruct-ncurses-config-path.patch b/package/gpsd/gpsd-02-sconstruct-ncurses-config-path.patch
+deleted file mode 100644
+index 5c440bf..0000000
+--- a/package/gpsd/gpsd-02-sconstruct-ncurses-config-path.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-Add option to specify the path to ncurses5-config
+-
+-By default, gpsd's SConstruct looks in the PATH to find
+-ncurses5-config, which means that it finds our HOST_DIR
+-ncurses5-config. We add an option that allows to specify a custom path
+-to the ncurses5-config script.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/SConstruct
+-===================================================================
+---- a/SConstruct
+-+++ b/SConstruct
+-@@ -172,6 +172,7 @@
+-     ("fixed_stop_bits",     0,             "fixed serial port stop bits"),
+-     ("target",              "",            "cross-development target"),
+-     ("sysroot",             "",            "cross-development system root"),
+-+    ("ncurses_config",      "",            "ncurses5-config path"),
+-     )
+- for (name, default, help) in nonboolopts:
+-     opts.Add(name, help, default)
+-@@ -447,6 +448,11 @@
+- else:
+-     pkg_config = lambda pkg: ['!%s --cflags --libs --static %s' %(env['PKG_CONFIG'], pkg, )]
+- 
+-+if env['ncurses_config']:
+-+    ncurses_config = env['ncurses_config']
+-+else:
+-+    ncurses_config = "ncurses5-config"
+-+
+- # The actual distinction here is whether the platform has ncurses in the
+- # base system or not. If it does, pkg-config is not likely to tell us
+- # anything useful. FreeBSD does, Linux doesn't. Most likely other BSDs
+-@@ -455,8 +461,8 @@
+- if env['ncurses']:
+-     if config.CheckPKG('ncurses'):
+-         ncurseslibs = pkg_config('ncurses')
+--    elif config.CheckExecutable('ncurses5-config --version', 'ncurses5-config'):
+--        ncurseslibs = ['!ncurses5-config --libs --cflags']
+-+    elif config.CheckExecutable('%s --version' % ncurses_config, 'ncurses5-config'):
+-+        ncurseslibs = ['!%s --libs --cflags' % ncurses_config]
+-     elif sys.platform.startswith('freebsd'):
+-         ncurseslibs= [ '-lncurses' ]
+-     elif sys.platform.startswith('openbsd'):
+diff --git a/package/gpsd/gpsd-03-sconstruct-disable-rpath.patch b/package/gpsd/gpsd-03-sconstruct-disable-rpath.patch
+deleted file mode 100644
+index 5476450..0000000
+--- a/package/gpsd/gpsd-03-sconstruct-disable-rpath.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Disable addition of RPATH to the generated libraries
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/SConstruct
+-===================================================================
+---- a/SConstruct
+-+++ b/SConstruct
+-@@ -273,8 +273,6 @@
+-     env.Prepend(LIBPATH=[installdir('libdir')])
+- else:
+-     env.Prepend(LIBPATH=[env["sysroot"] + installdir('libdir')])
+--if env["shared"]:
+--    env.Prepend(RPATH=[installdir('libdir')])
+- 
+- # Give deheader a way to set compiler flags
+- if 'MORECFLAGS' in os.environ:
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 190732f..4482a11 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -9,7 +9,7 @@ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
+ GPSD_INSTALL_STAGING = YES
  
- # TARGETS
--NCURSES_VERSION = 5.7
-+NCURSES_VERSION = 5.9
- NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
- NCURSES_INSTALL_STAGING = YES
- NCURSES_DEPENDENCIES = host-ncurses
-@@ -41,7 +41,8 @@ NCURSES_CONF_OPT = \
- 	--enable-echo \
- 	--enable-const \
- 	--enable-overwrite \
--	--enable-broken_linker
-+	--enable-broken_linker \
-+	--enable-pc-files
+-GPSD_DEPENDENCIES = host-scons
++GPSD_DEPENDENCIES = host-scons host-pkg-config
  
- ifneq ($(BR2_ENABLE_DEBUG),y)
- NCURSES_CONF_OPT += --without-debug
+ GPSD_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+@@ -25,7 +25,6 @@ GPSD_SCONS_OPTS = \
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ 	GPSD_DEPENDENCIES += ncurses
+-	GPSD_SCONS_OPTS += ncurses_config=$(STAGING_DIR)/usr/bin/ncurses5-config
+ else
+ 	GPSD_SCONS_OPTS += ncurses=no
+ endif
 -- 
 1.7.9.5
