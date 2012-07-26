@@ -1,35 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jul 2012 08:47:08 -0300
-Subject: [Buildroot] [PATCH 0/2] qemu mips64 sample config
-In-Reply-To: <20120726085327.34b7add7@skate>
-References: <1343251453-6462-1-git-send-email-gustavo@zacarias.com.ar>
- <20120726085327.34b7add7@skate>
-Message-ID: <50112E3C.70201@zacarias.com.ar>
+From: Jonathan Liu <net147@gmail.com>
+Date: Fri, 27 Jul 2012 00:19:35 +1000
+Subject: [Buildroot] [PATCH] crosstool-ng: bump to version 1.15.3
+Message-ID: <1343312375-8339-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/26/12 03:53, Thomas Petazzoni wrote:
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ package/crosstool-ng/crosstool-ng.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Do you mind if I ask this information to the readme.txt file, so that
-> the documentation doesn't pretend that it works perfectly if it
-> doesn't?
-> 
-> Also, with which Qemu version did you try? Did you try with the latest
-> Git? I was told that some mips64 fixes were merged recently in Qemu.
-> 
-> Thanks!
-> 
-> Thomas
-
-I wouldn't mind of course, no need to ask.
-With 1.1.1 as i said, i can't get the latest git qemu to build at the
-moment (some undefined references to pit_*).
-We should probably do our own host-qemu as you said once, it would
-enable us to get a precise target with, if needed, necessary patches to
-fix some particular scenarios.
-Unfortunately i'm terribly busy on weekdays, maybe i can look into it
-during the weekend.
-Regards.
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index 4bf0258..379d400 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -1,4 +1,4 @@
+-CROSSTOOL_NG_VERSION           = 1.15.2
++CROSSTOOL_NG_VERSION           = 1.15.3
+ CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
+ CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
+ CROSSTOOL_NG_INSTALL_TARGET    = NO
+-- 
+1.7.11.2
