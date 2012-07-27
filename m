@@ -1,34 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jul 2012 08:59:45 +0200
-Subject: [Buildroot] [PATCH 2/3] ncurses: bump to 5.9
-In-Reply-To: <50119743.3090505@zacarias.com.ar>
-References: <1343328590-1803-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1343328590-1803-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <50119743.3090505@zacarias.com.ar>
-Message-ID: <20120727085945.1b6339ab@skate>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Fri, 27 Jul 2012 09:00:59 +0100
+Subject: [Buildroot] [PATCH] at91bootstrap: bump version to 3.2
+In-Reply-To: <20120727085540.211a4709@skate>
+References: <1343248264-6435-1-git-send-email-spdawson@gmail.com>
+ <20120727085540.211a4709@skate>
+Message-ID: <CAHt8ZCM8XYw54Z6m-4eZ0K9_PN0MaiSi_qOBXOysUdiODM2WoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 26 Jul 2012 16:15:15 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Hi Arnout, Thomas. Thanks for taking the time to study this patch and
+give such detailed and helpful feedback.
 
-> Nack.
-> The version bump to 5.8 and 5.9 had issues in the past and still has.
-> It may compile just fine but it segfaults miserably in a target, chroot
-> or qemu image.
-> Simple test, i586 target with external toolchain, build less and see.
+On 27 July 2012 07:55, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Therefore, I'm wondering whether we should kee at91bootstrap as it is,
+> and create a separate package at91bootstrap3 for the 3.x generation.
 
-There must something odd: both Yocto and PTXdist are using ncurses 5.9,
-so I presume it works for them. So it's not as simple as
-"cross-compilation breaks ncurses 5.9", it's something more subtle than
-that.
+Yes, I was wondering exactly the same thing. It would appear to be a
+much safer solution.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Simon.
