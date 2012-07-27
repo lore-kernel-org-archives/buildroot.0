@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jul 2012 08:55:40 +0200
-Subject: [Buildroot] [PATCH] at91bootstrap: bump version to 3.2
-In-Reply-To: <1343248264-6435-1-git-send-email-spdawson@gmail.com>
-References: <1343248264-6435-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120727085540.211a4709@skate>
+Date: Fri, 27 Jul 2012 08:56:35 +0200
+Subject: [Buildroot] [PATCH] Clarify MIPS ABIs support
+In-Reply-To: <50119CC0.5050303@zacarias.com.ar>
+References: <1343162828-13060-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <50102DAA.1030400@mind.be> <20120725202503.7ecae923@skate>
+ <20120725203109.5d295941@skate> <20120725211514.1ee35d6a@skate>
+ <20120726210102.6f65719c@skate> <50119CC0.5050303@zacarias.com.ar>
+Message-ID: <20120727085635.788abcc3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Thu, 26 Jul 2012 16:38:40 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Le Wed, 25 Jul 2012 21:31:04 +0100,
-spdawson at gmail.com a ?crit :
+> Looks good in principle.
 
-> From: Simon Dawson <spdawson@gmail.com>
+Ok, thanks.
+
+> A small addition...
 > 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  boot/at91bootstrap/Config.in                       |   28 +-
->  .../at91bootstrap-1.16-eabi-fix.patch              |  334 ---------
->  .../at91bootstrap-1.16-u-boot-relocation-fix.patch |  299 --------
->  .../at91bootstrap-3.2-u-boot-relocation-fix.patch  |  750 ++++++++++++++++++++
->  boot/at91bootstrap/at91bootstrap.mk                |   34 +-
->  5 files changed, 769 insertions(+), 676 deletions(-)
->  delete mode 100644 boot/at91bootstrap/at91bootstrap-1.16-eabi-fix.patch
->  delete mode 100644 boot/at91bootstrap/at91bootstrap-1.16-u-boot-relocation-fix.patch
->  create mode 100644 boot/at91bootstrap/at91bootstrap-3.2-u-boot-relocation-fix.patch
+> config BR2_x86_pentium_m
+>         bool "pentium mobile"
+> +	select BR2_X86_CPU_HAS_MMX
+> +	select BR2_X86_CPU_HAS_SSE
+>         depends on !BR2_x86_64
 
-For this package, I am not sure we can do a simple version bump. Since
-there is (was?) no upstream for AT91Bootstrap 1.x, many
-vendors/companies had to maintain their patches on top of AT91Bootstrap
-1.x. See for example
-board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch. Therefore,
-removing AT91Bootstrap 1.x from the tree will prevent those platforms
-to work. I know people should upgrade, but AT91Bootstrap 3.x is quite
-significantly different, so the porting effort is not that simple.
+Ok.
 
-Therefore, I'm wondering whether we should kee at91bootstrap as it is,
-and create a separate package at91bootstrap3 for the 3.x generation.
+> Also i'd go for a more generic naming for the opterons, i.e. k8,
+> k8-sse3, amdfam10 (instead of barcelona) but they're just details that
+> can be addressed later with a few additions for newer gcc versions in
+> another patch.
 
-Best regards,
+Yes, you'll send a patch later for this. My knowledge of the x86
+variants is somewhat rusty :-)
 
 Thomas
 -- 
