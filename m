@@ -1,27 +1,32 @@
-From: Scott Moore <scott.moore@sri.com>
-Date: Fri, 27 Jul 2012 15:27:23 -0700
-Subject: [Buildroot] Help adding a prerequisite to GCC
-Message-ID: <501315CB.2080809@sri.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Jul 2012 20:31:28 -0300
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.6-ESV-R7-P2
+Message-ID: <1343431888-30127-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I'm trying to compile a toolchain with LTO support in gcc.
-I tried to do this by adding the additional gcc flag "--enable-lto", but 
-the build fails (unsurprisingly) because building gcc with lto support 
-requires libelf, which is not currently a prerequisite for gcc in buildroot.
+Fixes CVE-2012-3817
 
-To fix this, I tried adding libelf to gcc-uclibc-4.x.mk by adding:
-GCC_HOST_PREREQ += host-libelf
-GCC_TARGET_PREREQ += libelf
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-The resulting build fails because their is "no make target host-libelf, 
-required for gcc_initial". Can anyone help me figure out where I went 
-wrong? I realize just hacking it in to the .mk like that probably isn't 
-ideal. I was planning to add it as a menuconfig option once I get it 
-building at all.
-Thanks in advance,
-Scott
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 5de451c..736001c 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.6-ESV-R7-P1
++BIND_VERSION = 9.6-ESV-R7-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+-- 
+1.7.8.6
