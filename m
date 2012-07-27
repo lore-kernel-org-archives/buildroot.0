@@ -1,40 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jul 2012 10:39:46 +0200
+From: Simon Dawson <spdawson@gmail.com>
+Date: Fri, 27 Jul 2012 09:42:40 +0100
 Subject: [Buildroot] [PATCH] sconeserver: new package
-In-Reply-To: <50125101.8080300@mind.be>
+In-Reply-To: <50117709.8060209@mind.be>
 References: <1343051342-12829-1-git-send-email-spdawson@gmail.com>
- <50117709.8060209@mind.be> <20120727084503.045fbb14@skate>
- <50125101.8080300@mind.be>
-Message-ID: <20120727103946.08887d2e@skate>
+ <50117709.8060209@mind.be>
+Message-ID: <CAHt8ZCMbT-WsfozU4F+0uy9uzi6NzRdPH6Y4Dhs0it1JB7WqNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 27 Jul 2012 10:27:45 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+On 26 July 2012 17:57, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  Why doesn't pkg-config find this path?  Are they missing a check for
+> libxml-2.0 maybe?
 
->   I think it depends a bit on the situation.  For openssl support, it
-> makes more sense to just add it when available, because it normally
-> doesn't increase the size of the binary (much) to have openssl support
-> enabled.
-> 
->   However, sconeserver (and vlc as well) are modular packages, which
-> you can basically view as a collection of sub-packages.  So in that
-> case, it does make more sense to select which modules you want to have
-> enabled.
-> 
->   So for sconeserver, I prefer to keep all the sub-options.  Except
-> maybe the SSL module, that's not really a separate server but a
-> library wrapper, so it should probably be selected automatically if
-> openssl is.
+Sorry to backtrack the thread a little, but I just want to reply to
+this question before it gets forgotten. Yes, the package configure
+script does check for libxml2; but the check doesn't appear to be
+doing quite the right thing. I haven't yet got to the bottom of what's
+wrong here.
 
-So the patch should be adjusted for the SSL case at least.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Simon.
