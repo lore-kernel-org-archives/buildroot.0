@@ -1,54 +1,35 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 27 Jul 2012 01:23:39 +0200
-Subject: [Buildroot] [PATCH] less: build after busybox
-In-Reply-To: <5011CED2.4060105@zacarias.com.ar>
-References: <1343330317-24730-1-git-send-email-gustavo@zacarias.com.ar>
- <CAHXCMM+ORAKWNqQJ34FEZ+AbQ5dfpVuZAF3Y85xz6Wf9pmccmg@mail.gmail.com>
- <5011CED2.4060105@zacarias.com.ar>
-Message-ID: <CAHXCMMJgpShM7M09zC4zdubMESd-RTdwiee3-Jn754MDasSccg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Jul 2012 08:31:27 +0200
+Subject: [Buildroot] [PATCH] Clarify MIPS ABIs support
+In-Reply-To: <50117274.6030703@mind.be>
+References: <1343162828-13060-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <50102DAA.1030400@mind.be> <20120725202503.7ecae923@skate>
+ <20120725203109.5d295941@skate> <20120725211514.1ee35d6a@skate>
+ <50117274.6030703@mind.be>
+Message-ID: <20120727083127.1ad79932@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/7/27 Gustavo Zacarias <gustavo@zacarias.com.ar>:
-> On 07/26/12 19:30, Samuel Martin wrote:
->
->> Though I understand why you prefer this one, I somehow don't really
->> like it... because it's not about build dependency, but build/install
->> order...
->>
->> At least it would be worth to document which binary works if using the
->> one provided by the busybox built instead of the one provided by
->> another package, which doesn't.
->> This makes echo to some other recent thread about using login from
->> util-linux or busybox.
->>
->>
->> Regards,
->
-> It's pretty much standard issue in buildroot for busybox command
-> alternatives that are richer in functionality when they're selected.
-> If less is in the configuration it's because someone wants it, specially
-> since it's hidden by the BUSYBOX_SHOW_OTHERS kludge to avoid
-> big/duplicate alternatives.
-> Just hit this particular one when testing the ncurses bump, got busybox
-> less which doesn't use it even though i selected standalone less.
-> Maybe i don't understand what you mean about build dependency, but it's
-> the only way at the moment to ensure it's built after busybox in a
-> simple way.
-> And it's been done for a ton of other packages already like iproute2,
-> gawk, grep, sysklogd, usbutils and so on...
-Fair enough.
+Le Thu, 26 Jul 2012 18:38:12 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> Granted that util-linux might have a heavier hand since the options
-> aren't so granular and there are several binaries with differing
-> functionality that overlap busybox, but it's a completely different case
-> than this.
-> Regards.
->
+>   I haven't tested it, but looks good at first sight.
+> 
+>   That said, you still agree with a separate BR2_mips and BR2_mips64, right?
 
+Yes: just like x86/x86-64. Separate architecture options, but a single
+"Target Architecture Variant" choice, with the relevant "if" conditions
+to show/hide the right processors depending on whether they are 64 bits
+capable or not.
 
+Best regards,
+
+Thomas
 -- 
-Sam
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
