@@ -1,59 +1,88 @@
-From: Jonathan Liu <net147@gmail.com>
-Date: Sat, 28 Jul 2012 00:17:32 +1000
-Subject: [Buildroot] [PATCH] xorg-xserver: always enable forced outputs
-Message-ID: <1343398652-2631-1-git-send-email-net147@gmail.com>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 27 Jul 2012 16:26:23 +0100
+Subject: [Buildroot] [PATCH] sysprof: New package.
+Message-ID: <CAFbHwiTWnB+EtB=Du5bkAa7mtKfJ7nHeyWGshpq7Rcvjf9O__g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the user has gone to the effort of manually enabling an output in
-the configuration file assume that they know what they're doing.
-
-X.org Bug 14611 <http://bugs.freedesktop.org/show_bug.cgi?id=14611>
-
-Signed-off-by: Jonathan Liu <net147@gmail.com>
+Signed-off-by: Will Newton <will.newton@imgtec.com>
 ---
- ...rg-server-03-always-enable-forced-outputs.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-03-always-enable-forced-outputs.patch
+ package/Config.in          |    1 +
+ package/sysprof/Config.in  |   21 +++++++++++++++++++++
+ package/sysprof/sysprof.mk |   15 +++++++++++++++
+ 3 files changed, 37 insertions(+), 0 deletions(-)
+ create mode 100644 package/sysprof/Config.in
+ create mode 100644 package/sysprof/sysprof.mk
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-03-always-enable-forced-outputs.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-03-always-enable-forced-outputs.patch
+diff --git a/package/Config.in b/package/Config.in
+index 4ac02c8..f97ca16 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -39,6 +39,7 @@ source "package/ramspeed/Config.in"
+ source "package/rt-tests/Config.in"
+ source "package/strace/Config.in"
+ source "package/stress/Config.in"
++source "package/sysprof/Config.in"
+ source "package/whetstone/Config.in"
+ source "package/valgrind/Config.in"
+ source "package/pv/Config.in"
+diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
 new file mode 100644
-index 0000000..bf27977
+index 0000000..bd71728
 --- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-03-always-enable-forced-outputs.patch
-@@ -0,0 +1,30 @@
-+From 93ff1bc5884cdfca1132af7fbc06c48e06f218c8 Mon Sep 17 00:00:00 2001
-+From: Simon Farnsworth <simon.farnsworth@onelan.co.uk>
-+Date: Mon, 15 Feb 2010 12:18:00 +0000
-+Subject: Always enable outputs that have been forced on in the configuration file
++++ b/package/sysprof/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_SYSPROF
++	bool "sysprof"
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # glib2
++	help
++	  Sysprof is a statistical, system-wide profiler that can
++	  profile user and kernel code using the perf API.
 +
-+If the user has gone to the effort of manually enabling an output in
-+the configuration file assume that they know what they're doing.
++	  http://sysprof.com
 +
-+X.org Bug 14611 <http://bugs.freedesktop.org/show_bug.cgi?id=14611>
++config BR2_PACKAGE_SYSPROF_GUI
++	bool "sysprof GUI"
++	depends on BR2_PACKAGE_SYSPROF
++	depends on BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_LIBGLADE
++	select BR2_PACKAGE_GDK_PIXBUF
++	help
++	  GUI for the sysprof system-wide statistical profiler.
 +
-+Signed-off-by: Simon Farnsworth <simon.farnsworth@onelan.co.uk>
-+Reviewed-by: Alex Deucher <alexdeucher@gmail.com>
-+Signed-off-by: Keith Packard <keithp@keithp.com>
-+---
-+diff --git a/hw/xfree86/modes/xf86Crtc.c b/hw/xfree86/modes/xf86Crtc.c
-+index 573fe96..9b1ff28 100644
-+--- a/hw/xfree86/modes/xf86Crtc.c
-++++ b/hw/xfree86/modes/xf86Crtc.c
-+@@ -1573,7 +1573,8 @@ xf86ProbeOutputModes (ScrnInfoPtr scrn, int maxX, int maxY)
-+ 	 */
-+ 	output->status = (*output->funcs->detect)(output);
-+ 
-+-	if (output->status == XF86OutputStatusDisconnected)
-++	if (output->status == XF86OutputStatusDisconnected &&
-++		!xf86ReturnOptValBool(output->options, OPTION_ENABLE, FALSE))
-+ 	{
-+ 	    xf86OutputSetEDID (output, NULL);
-+ 	    continue;
-+--
-+cgit v0.9.0.2-2-gbebe
++comment "sysprof requires a toolchain with WCHAR support"
++        depends on !BR2_USE_WCHAR
+diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
+new file mode 100644
+index 0000000..c7dd8ca
+--- /dev/null
++++ b/package/sysprof/sysprof.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# sysprof
++#
++#############################################################
++
++SYSPROF_VERSION = 1.1.8
++SYSPROF_SITE = http://sysprof.com
++SYSPROF_DEPENDENCIES = libglib2
++
++ifeq ($(BR2_PACKAGE_SYSPROF_GUI),y)
++SYSPROF_DEPENDENCIES += libgtk2 libglade gdk-pixbuf
++endif
++
++$(eval $(call AUTOTARGETS))
 -- 
-1.7.11.2
+1.7.1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-sysprof-New-package.patch
+Type: application/octet-stream
+Size: 2300 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120727/d2e568fa/attachment.obj>
