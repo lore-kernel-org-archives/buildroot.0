@@ -1,24 +1,21 @@
 From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 27 Jul 2012 09:42:40 +0100
+Date: Fri, 27 Jul 2012 09:43:05 +0100
 Subject: [Buildroot] [PATCH] sconeserver: new package
-In-Reply-To: <50117709.8060209@mind.be>
+In-Reply-To: <20120727103946.08887d2e@skate>
 References: <1343051342-12829-1-git-send-email-spdawson@gmail.com>
- <50117709.8060209@mind.be>
-Message-ID: <CAHt8ZCMbT-WsfozU4F+0uy9uzi6NzRdPH6Y4Dhs0it1JB7WqNw@mail.gmail.com>
+ <50117709.8060209@mind.be> <20120727084503.045fbb14@skate>
+ <50125101.8080300@mind.be> <20120727103946.08887d2e@skate>
+Message-ID: <CAHt8ZCNOLYpHfewWhDoE2405qCYA1ATJ2VCOzD690UmAW_PAAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26 July 2012 17:57, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Why doesn't pkg-config find this path?  Are they missing a check for
-> libxml-2.0 maybe?
+On 27 July 2012 09:39, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> So the patch should be adjusted for the SSL case at least.
 
-Sorry to backtrack the thread a little, but I just want to reply to
-this question before it gets forgotten. Yes, the package configure
-script does check for libxml2; but the check doesn't appear to be
-doing quite the right thing. I haven't yet got to the bottom of what's
-wrong here.
+Yes, agreed.
 
 Simon.
