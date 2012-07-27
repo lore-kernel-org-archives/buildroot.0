@@ -1,5 +1,5 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 27 Jul 2012 09:48:29 +0100
+From: Richard Braun <rbraun@sceen.net>
+Date: Fri, 27 Jul 2012 10:53:50 +0200
 Subject: [Buildroot] [PATCH] Added local package support.
 In-Reply-To: <20120727101253.15d1af71@skate>
 References: <20120724042408.GA11558@sapphire.tkos.co.il>
@@ -7,29 +7,31 @@ References: <20120724042408.GA11558@sapphire.tkos.co.il>
  <50107EAF.3030302@mind.be>
  <CAMkyJgA3+icHUKQ6AS==QQG--RuuptTjgy3KSdJvcwiAPxF3Rg@mail.gmail.com>
  <50124C6D.8050608@mind.be> <20120727101253.15d1af71@skate>
-Message-ID: <CAHt8ZCO704n1KgBQ_5neO=oG4D=DRJnwo-U6c6Ju-yuyQ_kLBA@mail.gmail.com>
+Message-ID: <20120727085350.GA8573@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27 July 2012 09:12, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+On Fri, Jul 27, 2012 at 10:12:53AM +0200, Thomas Petazzoni wrote:
+> Le Fri, 27 Jul 2012 10:08:13 +0200,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> >   What do the others think?
+> 
 > I am also a bit skeptical, but it's not yet a final and definitive
 > opinion. Custom packages is one thing, but one also very often need to
 > put stuff in board/ to keep kernel config, patches and various other
 > stuff, though it's true nothing prevent you to use $(TOPDIR)/../ to
 > keep track of all those things.
 
-I can sort of see that this might be useful. But I wonder if there's a
-more subtle sociological reason not to add the local package support.
-Specifically, does it encourage a culture of users building up
-stockpiles of local packages, because that's perceived to be "how you
-add support for a package in Buildroot"? If so, then users might be
-less likely to push their new packages upstream to Buildroot, and the
-community as a whole loses out.
+I don't really see the point of the feature either. Keeping custom files
+in board and local packages in package/<company>/ is very easy to do and
+should suit most people fine. Local packages (those that use the local
+method) have one purpose : ease software development through the
+buildroot environment. I don't think people spend that much time on the
+.mk or Config.in files when using local packages. They spend time on
+the packaged software itself.
 
-Maybe that's overthinking it somewhat though.
-
-Simon.
+-- 
+Richard Braun
