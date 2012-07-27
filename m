@@ -1,42 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jul 2012 08:56:35 +0200
-Subject: [Buildroot] [PATCH] Clarify MIPS ABIs support
-In-Reply-To: <50119CC0.5050303@zacarias.com.ar>
-References: <1343162828-13060-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <50102DAA.1030400@mind.be> <20120725202503.7ecae923@skate>
- <20120725203109.5d295941@skate> <20120725211514.1ee35d6a@skate>
- <20120726210102.6f65719c@skate> <50119CC0.5050303@zacarias.com.ar>
-Message-ID: <20120727085635.788abcc3@skate>
+Date: Fri, 27 Jul 2012 08:59:45 +0200
+Subject: [Buildroot] [PATCH 2/3] ncurses: bump to 5.9
+In-Reply-To: <50119743.3090505@zacarias.com.ar>
+References: <1343328590-1803-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1343328590-1803-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <50119743.3090505@zacarias.com.ar>
+Message-ID: <20120727085945.1b6339ab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 26 Jul 2012 16:38:40 -0300,
+Le Thu, 26 Jul 2012 16:15:15 -0300,
 Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-> Looks good in principle.
+> Nack.
+> The version bump to 5.8 and 5.9 had issues in the past and still has.
+> It may compile just fine but it segfaults miserably in a target, chroot
+> or qemu image.
+> Simple test, i586 target with external toolchain, build less and see.
 
-Ok, thanks.
-
-> A small addition...
-> 
-> config BR2_x86_pentium_m
->         bool "pentium mobile"
-> +	select BR2_X86_CPU_HAS_MMX
-> +	select BR2_X86_CPU_HAS_SSE
->         depends on !BR2_x86_64
-
-Ok.
-
-> Also i'd go for a more generic naming for the opterons, i.e. k8,
-> k8-sse3, amdfam10 (instead of barcelona) but they're just details that
-> can be addressed later with a few additions for newer gcc versions in
-> another patch.
-
-Yes, you'll send a patch later for this. My knowledge of the x86
-variants is somewhat rusty :-)
+There must something odd: both Yocto and PTXdist are using ncurses 5.9,
+so I presume it works for them. So it's not as simple as
+"cross-compilation breaks ncurses 5.9", it's something more subtle than
+that.
 
 Thomas
 -- 
