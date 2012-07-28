@@ -1,66 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jul 2012 21:31:20 +0200
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 28 Jul 2012 22:00:13 +0200
 Subject: [Buildroot] [PATCH 1/1] libglib2: add
- libglib2-libtool-remove-builddir-from-rpath.patch
-In-Reply-To: <1343493006-5152-1-git-send-email-s.martin49@gmail.com>
+	libglib2-libtool-remove-builddir-from-rpath.patch
+In-Reply-To: <20120728213120.7408f668@skate>
 References: <1343493006-5152-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20120728213120.7408f668@skate>
+ <20120728213120.7408f668@skate>
+Message-ID: <CAHXCMMKURaAkPjAZr2q-eN_dWNEfEcKcN-+5ascQ1eEU3LTxDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+HI Thomas,
 
-A description + sign-off in the patch is missing. Also ltmain.sh is
-used in all packages using libtool, so why is this patch specific to
-libglib2? Will we have to carry a similar patch for all
-libtool-based packages?
+2012/7/28 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> A description + sign-off in the patch is missing.
+Oops! Forgot to add it.
 
-Thomas
+>  Also ltmain.sh isused in all packages using libtool, so why is this patch specific to
+> libglib2? Will we have to carry a similar patch for all libtool-based packages?
+AFAIK, so far, libglib2 is the only package messing up rpath.
 
-Le Sat, 28 Jul 2012 18:30:06 +0200,
-Samuel Martin <s.martin49@gmail.com> a ?crit :
+I wondered the same thing about making it available for all
+autotools/libtool-based packages before posting the patch.
+But the truth is, outside libglib2, I don't know what could be  the
+side effects (hope there is none ;-) ).
 
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
->  create mode 100644 package/libglib2/libglib2-libtool-remove-builddir-from-rpath.patch
-> 
-> diff --git a/package/libglib2/libglib2-libtool-remove-builddir-from-rpath.patch b/package/libglib2/libglib2-libtool-remove-builddir-from-rpath.patch
-> new file mode 100644
-> index 0000000..a3d1af2
-> --- /dev/null
-> +++ b/package/libglib2/libglib2-libtool-remove-builddir-from-rpath.patch
-> @@ -0,0 +1,22 @@
-> +--- host-libglib2-2.30.2.orig/ltmain.sh	2012-07-28 11:46:14.976439251 +0200
-> ++++ host-libglib2-2.30.2/ltmain.sh	2012-07-28 17:42:45.547223248 +0200
-> +@@ -398,6 +398,8 @@ case $progpath in
-> +      ;;
-> + esac
-> + 
-> ++top_builddir="$progdir"
-> ++
-> + # Sed substitution that helps us do robust quoting.  It backslashifies
-> + # metacharacters that are still active within double-quoted strings.
-> + Xsed="${SED}"' -e 1s/^X//'
-> +@@ -8027,6 +8029,10 @@ EOF
-> + 	  rpath="$finalize_rpath"
-> + 	  test "$opt_mode" != relink && rpath="$compile_rpath$rpath"
-> + 	  for libdir in $rpath; do
-> ++	    case "$libdir" in
-> ++	    "$top_buiddir"*) continue ;;
-> ++	    *) ;;
-> ++	    esac
-> + 	    if test -n "$hardcode_libdir_flag_spec"; then
-> + 	      if test -n "$hardcode_libdir_separator"; then
-> + 		func_replace_sysroot "$libdir"
+Besides, checking support/libtool, I've noticed 3 versions of libtool;
+I know libglib2 is patched with buildroot-libtool-v2.4.patch, so this
+patch fits for libtool-2.4, but I don't know about the other versions.
 
 
+Anyway, before reposting the patch, I'll try making it available for
+all libtool-based packages and I'll report here.
+
+
+Regards,
 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Sam
