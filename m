@@ -1,62 +1,61 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Sat, 28 Jul 2012 11:27:30 -0700
-Subject: [Buildroot] Understanding More about applying patches
-In-Reply-To: <CAHXCMMLicAFHLWXR9McW+AARUmQiUC4=ZaFPCkvJGMPqem306A@mail.gmail.com>
-References: <CALo-6+igesYYe2-Wj342CauvCgUZAFnUm9TtmW8+ObmUQvmkNQ@mail.gmail.com>
- <CALo-6+h1H16cYK9HZ7=gf98X3KNSc79D8xMkf=JCQ9d7ph_8Sg@mail.gmail.com>
- <CALo-6+icxYrcFpMD=GtSjfhcMzOAhQ0quKxhgHxf006quMmo5g@mail.gmail.com>
- <CAHXCMMLicAFHLWXR9McW+AARUmQiUC4=ZaFPCkvJGMPqem306A@mail.gmail.com>
-Message-ID: <CALo-6+h_UD7_AaZemHaMTgeqiDDtKbNOCqLBDyBHbeU4Qw5OcQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Jul 2012 21:29:51 +0200
+Subject: [Buildroot] [PATCH 4/6] Add support for appended device tree
+ blobs for arm
+In-Reply-To: <5013FBFE.5030702@mind.be>
+References: <1342528042-10038-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1342528042-10038-5-git-send-email-maxime.ripard@free-electrons.com>
+ <5013FBFE.5030702@mind.be>
+Message-ID: <20120728212951.1671073f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you both. I think I get enough to move forward.
+Le Sat, 28 Jul 2012 16:49:34 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Charles
-On Jul 28, 2012 10:32 AM, "Samuel Martin" <s.martin49@gmail.com> wrote:
+> > @@ -66,10 +73,14 @@ LINUX_IMAGE_NAME=vmImage
+> >   else
+> >   LINUX_IMAGE_NAME=uImage
+> >   endif
+> > +else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+> > +LINUX_IMAGE_NAME=uImage
+> >   else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
+> >   LINUX_IMAGE_NAME=bzImage
+> >   else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
+> >   LINUX_IMAGE_NAME=zImage
+> > +else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
+> > +LINUX_IMAGE_NAME=zImage
+> >   else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+> >   LINUX_IMAGE_NAME=vmlinux.bin
+> >   else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+> 
+>   I think this whole blob should move to Config.in, like we
+> do it for many other strings...  But that's of course unrelated
+> to this patch.
 
-> Hi Charles,
->
-> 2012/7/28 Charles Krinke <charles.krinke@gmail.com>:
-> > Assuming I have the last part correct, the next step is to add a patch
-> > after the configure step but before the build step.
-> You have nothing to do here, this is automatically handled by the
-> package infrastructure,
-> unless the package uses handwritten *.mk file.
->
-> >
-> > To do this, I need to add the patch to output/build/qt* somehow. So, I
-> > guess my patching question is extending a bit.
-> The only thing to do is put the patch in the package directory:
-> package/<packagename>/<packagename>-<some_description>.patch
->
-> >
-> > On Sat, Jul 28, 2012 at 9:55 AM, Charles Krinke
-> > <charles.krinke@gmail.com> wrote:
-> >> Doing a bit of research and trying to answer at least part of my own
-> >> question, I can see in pkg-gentargets.mk a statement applying patches
-> >> and it looks like if I prefix the patches with the name of the
-> >> package, "qt-" in this  case, then buildroot should automagically
-> >> apply the patches I am trying to add. Is this correct?
-> Yes, it is.
->
->
-> BTW, here is a bunch of the doc refactoring (still in progress)
-> talking about patch integration:
->
-> https://github.com/tSed/buildroot/blob/sma/docs/docs/manual/patch-policy.txt
->
-> Any feedback is welcome.
->
->
-> Cheers,
->
-> --
-> Sam
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120728/fb1cc506/attachment.html>
+I don't necessarily agree here. Generally speaking my preference is to
+not use too much kconfig to define a bunch of strings when those are
+not related to visible options.
+
+> ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
+> define LINUX_APPEND_DTB
+> 	cat ...
+> ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+> 	$(MAKE) ... uImage
+> endif
+> endef
+> endif
+> 
+> (I'm not sure if you can still use an ifeq inside a define.)
+
+No, you can't, and it's a shame :-(
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
