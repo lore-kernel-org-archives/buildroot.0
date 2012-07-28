@@ -1,61 +1,54 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Sat, 28 Jul 2012 09:30:08 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.08/systemd
-In-Reply-To: <cover.1343460025.git.maxime.ripard@free-electrons.com>
-References: <cover.1343460025.git.maxime.ripard@free-electrons.com>
-Message-ID: <50139500.3000302@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Jul 2012 09:37:29 +0200
+Subject: [Buildroot] Help adding a prerequisite to GCC
+In-Reply-To: <501315CB.2080809@sri.com>
+References: <501315CB.2080809@sri.com>
+Message-ID: <20120728093729.45429122@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Scott,
 
-I sent these patches a bit too quickly...
+Le Fri, 27 Jul 2012 15:27:23 -0700,
+Scott Moore <scott.moore@sri.com> a ?crit :
 
-Basically, here, not much changed since version 3 of this pull request,
-since I didn't have any comment on it, except a private comment from
-Thomas to add the new _INSTALL_INIT_ variables to the documentation,
-which I did.
+> I'm trying to compile a toolchain with LTO support in gcc.
+> I tried to do this by adding the additional gcc flag "--enable-lto", but 
+> the build fails (unsurprisingly) because building gcc with lto support 
+> requires libelf, which is not currently a prerequisite for gcc in buildroot.
+> 
+> To fix this, I tried adding libelf to gcc-uclibc-4.x.mk by adding:
+> GCC_HOST_PREREQ += host-libelf
+> GCC_TARGET_PREREQ += libelf
 
-Maxime
+This sounds good.
 
-Le 28/07/2012 09:21, Maxime Ripard a ?crit :
-> The following changes since commit fd08153b9d677d654add6c580b9ccc5c27d672e2:
-> 
->   Remove unused TARGET_ABI values (2012-07-25 20:27:58 +0200)
-> 
-> are available in the git repository at:
-> 
->   git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.08/systemd
-> 
-> for you to fetch changes up to 6784a19dec70861969e093a123abe92f4ace3e56:
-> 
->   doc: Update the documentation to mention the new PKG_INSTALL_INIT_ variables (2012-07-28 09:17:04 +0200)
-> 
-> ----------------------------------------------------------------
-> Maxime Ripard (3):
->       Rework of the init system
->       Add systemd unit for lighttpd
->       doc: Update the documentation to mention the new PKG_INSTALL_INIT_ variables
-> 
->  docs/manual/adding-packages-generic.txt |    7 +++++++
->  package/busybox/busybox.mk              |    7 +++++++
->  package/lighttpd/lighttpd.mk            |   13 +++++++++++--
->  package/lighttpd/lighttpd.service       |   10 ++++++++++
->  package/pkg-generic.mk                  |    8 ++++++++
->  target/generic/Config.in                |   25 +++++++++++++++++++++++++
->  6 files changed, 68 insertions(+), 2 deletions(-)
->  create mode 100644 package/lighttpd/lighttpd.service
-> 
-> Thanks,
-> 
+> The resulting build fails because their is "no make target host-libelf, 
+> required for gcc_initial". Can anyone help me figure out where I went 
+> wrong? I realize just hacking it in to the .mk like that probably isn't 
+> ideal. I was planning to add it as a menuconfig option once I get it 
+> building at all.
 
+If you look at package/libelf/libelf.mk, you'll see that there is only
+a target variant of this package, and no host variant.
 
+So you should add a line:
+
+$(eval $(host-autotools-package))
+
+at the bottom of the file, and try again. You may need to define some
+addition HOST_* variables to adjust the configuration options and
+others, if the build fails or if the resulting host libelf doesn't work
+properly for what you're trying to do.
+
+Hope this helps,
+
+Thomas
 -- 
-Maxime Ripard, Free Electrons
+Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
