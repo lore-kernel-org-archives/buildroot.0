@@ -1,841 +1,92 @@
 From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Sun, 29 Jul 2012 23:59:49 +0800
-Subject: [Buildroot] [PATCH 1/2] config: split Config.in two stages
-Message-ID: <1343577590-14362-1-git-send-email-roylee17@gmail.com>
+Date: Mon, 30 Jul 2012 00:23:43 +0800
+Subject: [Buildroot] [PATCH 2/2] config: support overlay
+In-Reply-To: <1343577590-14362-2-git-send-email-roylee17@gmail.com>
+References: <1343577590-14362-1-git-send-email-roylee17@gmail.com>
+ <1343577590-14362-2-git-send-email-roylee17@gmail.com>
+Message-ID: <CAEvN+1gRp2wnwMfQf+toNSxr6pGwCJrB1czB-MLhWXodh6Snow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a preparation for the next patch for supporting overlay.
+On Sun, Jul 29, 2012 at 11:59 PM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
+> Change-Id: I2c2b03ed1dde44bfb3ae6c1aaa8c548bbb3d1e9d
+> Signed-off-by: Tzu-Jung Lee <roylee17@gmail.com>
+> ---
+>  Makefile |   13 +++++++++++++
+>  1 files changed, 13 insertions(+), 0 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 98e1a51..665251a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -37,7 +37,11 @@ endif
+>
+>  # absolute path
+>  TOPDIR:=$(shell pwd)
+> +ifneq ($(OVERLAY_DIR),)
+> +CONFIG_CONFIG_IN=$(OVERLAY_DIR)/Config.in
+> +else
+>  CONFIG_CONFIG_IN=Config.in
+> +endif
+>  CONFIG=support/kconfig
+>  DATE:=$(shell date +%Y%m%d)
+>
+> @@ -60,8 +64,13 @@ empty:=
+>  space:=$(empty) $(empty)
+>
+>  ifneq ("$(origin O)", "command line")
+> +ifneq ($(OVERLAY_DIR),)
+>  O:=output
+> +CONFIG_DIR:=$(OVERLAY_DIR)
+> +else
+> +O:=$(TOPDIR)/../output
+>  CONFIG_DIR:=$(TOPDIR)
+> +endif
+>  NEED_WRAPPER=
+>  else
+>  # other packages might also support Linux-style out of tree builds
+> @@ -576,6 +585,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+>         @mkdir -p $(BUILD_DIR)/buildroot-config
+>         @$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
+>
+> +%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(OVERLAY_DIR)/configs/%_defconfig outputmakefile
+> +       @mkdir -p $(BUILD_DIR)/buildroot-config
+> +       @$(COMMON_CONFIG_ENV) $< --defconfig=$(OVERLAY_DIR)/configs/$@ $(CONFIG_CONFIG_IN)
+> +
+>  %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+>         @mkdir -p $(BUILD_DIR)/buildroot-config
+>         @$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
+> --
+> 1.7.8.6
+>
 
-The overlay support allows user to specify another Config.in, instead of
-the default one.  Of course, in most circumstances, we'd like to include
-the original one as the base.  However, the kconf parser mandates that
-the "mainmenu" statement (if there is one) should be the very first
-statement, and this prevent any Config.in to "source" the default one,
-since the "mainmenu" statement will never be the first statement.
+The patch aims to do the same thing as the previous thread "Added
+local package support", but is more ambitious.
+It enables users, usually BSP providers such as chip vendors to create
+an buildroot overlay.
 
-After the split, the Overlay Config.in can include the root.in directly.
+The goal is to give users a "staging area" holding those bits that are
+not yet going back to upstream or never will be (ex. proprietary
+packages).
+Once those bits has been merged into upstream, the overlay can be
+shrunken after the in-used buildroot upgrade to newer releases.
+Since most of the job can be done outside the buildroot, the upgrade
+will be more trivial.
+Internal changes can also be confined in a smaller part of codebase,
+instead of the whole buildroot tree.
 
-Change-Id: Ibad146af9f1797f0f417924bb855d7138476a2e0
-Signed-off-by: Tzu-Jung Lee <roylee17@gmail.com>
----
- Config.in |  399 +------------------------------------------------------------
- root.in   |  397 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 398 insertions(+), 398 deletions(-)
- create mode 100644 root.in
+Let me post the link of a reference overlay first, since the patches
+may look obscure without it.
 
-diff --git a/Config.in b/Config.in
-index 95c2e8c..e31df2f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -1,401 +1,4 @@
- #
--
- mainmenu "Buildroot $BR2_VERSION Configuration"
- 
--config BR2_HAVE_DOT_CONFIG
--	bool
--	default y
--
--config BR2_VERSION
--	string
--	option env="BR2_VERSION_FULL"
--
--source "target/Config.in.arch"
--
--menu "Build options"
--
--menu "Commands"
--
--config BR2_WGET
--	string "Wget command"
--	default "wget --passive-ftp -nd -t 3"
--
--config BR2_SVN
--	string "Subversion (svn) command"
--	default "svn"
--
--config BR2_BZR
--	string "Bazaar (bzr) command"
--	default "bzr"
--
--config BR2_GIT
--	string "Git command"
--	default "git"
--
--config BR2_LOCALFILES
--	string "Local files retrieval command"
--	default "cp"
--
--config BR2_SCP
--	string "Secure copy (scp) command"
--	default "scp"
--
--config BR2_SSH
--	string "Secure shell (ssh) command"
--	default "ssh"
--
--config BR2_HG
--	string "Mercurial (hg) command"
--	default "hg"
--
--config BR2_ZCAT
--	string "zcat command"
--	default "gzip -d -c"
--	help
--	  Command to be used to extract a gzip'ed file to stdout.
--	  zcat is identical to gunzip -c except that the former may
--	  not be available on your system.
--	  Default is "gzip -d -c"
--	  Other possible values include "gunzip -c" or "zcat".
--
--config BR2_BZCAT
--	string "bzcat command"
--	default "bzcat"
--	help
--	  Command to be used to extract a bzip2'ed file to stdout.
--	  bzcat is identical to bunzip2 -c except that the former may
--	  not be available on your system.
--	  Default is "bzcat"
--	  Other possible values include "bunzip2 -c" or "bzip2 -d -c".
--
--config BR2_XZCAT
--	string "xzcat command"
--	default "xzcat"
--	help
--	  Command to be used to extract a xz'ed file to stdout.
--	  Default is "xzcat"
--
--config BR2_TAR_OPTIONS
--	string "Tar options"
--	default ""
--	help
--	  Options to pass to tar when extracting the sources.
--	  E.g. " -v --exclude='*.svn*'" to exclude all .svn internal files
--	  and to be verbose.
--
--endmenu
--
--config BR2_DL_DIR
--	string "Download dir"
--	default "$(TOPDIR)/dl"
--	help
--	  Directory to store all the source files that we need to fetch.
--	  If the Linux shell environment has defined the BUILDROOT_DL_DIR
--	  environment variable, then this overrides this configuration item.
--
--	  The default is $(TOPDIR)/dl
--
--config BR2_HOST_DIR
--	string "Host dir"
--	default "$(BASE_DIR)/host"
--	help
--	  Directory to store all the binary files that are built for the host.
--	  This includes the cross compilation toolchain when building the
--	  internal buildroot toolchain.
--
--	  The default is $(BASE_DIR)/host
--
--menu "Mirrors and Download locations"
--
--config BR2_PRIMARY_SITE
--	string "Primary download site"
--	default ""
--	help
--	  Primary site to download from. If this option is set then buildroot
--	  will try to download package source first from this site and try the
--	  default if the file is not found.
--	  Valid URIs are URIs recognized by $(WGET) and scp URIs of the form
--	  scp://[user@]host:path.
--	  NOTE: This works for all packages using the central package
--	  infrastructure (generic, autotools, cmake, ...)
--
--config BR2_BACKUP_SITE
--	string "Backup download site"
--	default "http://sources.buildroot.net/"
--	help
--	  Backup site to download from. If this option is set then buildroot
--	  will fall back to download package sources from here if the
--	  normal location fails.
--
--config BR2_SOURCEFORGE_MIRROR
--	string "Sourceforge mirror site"
--	default "kent"
--	help
--	  Sourceforge has a system of mirror sites.  Some sites may be
--	  closer to your location, and sometimes mirror sites go down
--	  and are no longer available.  This option allows you to select
--	  your preferred Sourceforge mirror site.
--
--	  The list of mirrors is available here:
--	  http://sourceforge.net/apps/trac/sourceforge/wiki/Mirrors
--
--config BR2_KERNEL_MIRROR
--	string "Kernel.org mirror"
--	default "http://www.kernel.org/pub/"
--	help
--	  kernel.org is mirrored on a number of servers around the world.
--	  The following allows you to select your preferred mirror.
--
--	  Have a look on the kernel.org site for a list of mirrors, then enter
--	  the URL to the base directory.  Examples:
--
--	     http://www.XX.kernel.org/pub (XX = country code)
--	     http://mirror.aarnet.edu.au/pub/ftp.kernel.org
--
--config BR2_GNU_MIRROR
--	string "GNU Software mirror"
--	default "http://ftp.gnu.org/pub/gnu"
--	help
--	  GNU has multiple software mirrors scattered around the world.
--	  The following allows you to select your preferred mirror.
--
--	  Have a look on the gnu.org site for a list of mirrors, then enter
--	  the URL to the base directory.  Examples:
--
--	     http://ftp.gnu.org/pub/gnu
--	     http://mirror.aarnet.edu.au/pub/gnu
--
--config BR2_DEBIAN_MIRROR
--	string "Debian Software mirror"
--	default "http://ftp.debian.org"
--	help
--	  Debian has multiple software mirrors scattered around the world.
--	  The following allows you to select your preferred mirror.
--
--	  Usually, just add your country code like XX here:
--	  http://ftp.XX.debian.org
--
--endmenu
--
--config BR2_JLEVEL
--	int "Number of jobs to run simultaneously"
--	default "2"
--	help
--	  Number of jobs to run simultaneously
--
--config BR2_CCACHE
--	bool "Enable compiler cache"
--	help
--	  This option will enable the use of ccache, a compiler
--	  cache. It will cache the result of previous builds to speed
--	  up future builds. The cache is stored in
--	  $HOME/.buildroot-ccache.
--
--	  Note that Buildroot does not try to invalidate the cache
--	  contents when the compiler changes in an incompatible
--	  way. Therefore, if you make a change to the compiler version
--	  and/or configuration, you are responsible for purging the
--	  ccache cache by removing the $HOME/.buildroot-ccache
--	  directory.
--
--config BR2_CCACHE_DIR
--	string "Compiler cache location"
--	depends on BR2_CCACHE
--	default "$(HOME)/.buildroot-ccache"
--	help
--	  Where ccache should store cached files.
--
--config BR2_DEPRECATED
--	bool "Show packages that are deprecated or obsolete"
--	help
--	  This option hides outdated/obsolete versions of packages.
--
--config BR2_ENABLE_DEBUG
--	bool "build packages with debugging symbols"
--	help
--	  Build packages with debugging symbols enabled. All libraries
--	  and binaries in the 'staging' directory will have debugging
--	  symbols, which allows remote debugging even if libraries and
--	  binaries are stripped on the target. Whether libraries and
--	  binaries are stripped on the target is controlled by the
--	  BR2_STRIP_* options below.
--
--if BR2_ENABLE_DEBUG
--choice
--	prompt "gcc debug level"
--	default BR2_DEBUG_2
--	help
--	  Set the debug level for gcc
--
--config BR2_DEBUG_1
--	bool "debug level 1"
--	help
--	  Debug level 1 produces minimal information, enough
--	  for making backtraces in parts of the program that
--	  you don't plan to debug. This includes descriptions
--	  of functions and external variables, but no information
--	  about local variables and no line numbers.
--
--config BR2_DEBUG_2
--	bool "debug level 2"
--	help
--	  The default gcc debug level is 2
--
--config BR2_DEBUG_3
--	bool "debug level 3"
--	help
--	  Level 3 includes extra information, such as all the
--	  macro definitions present in the program. Some debuggers
--	  support macro expansion when you use -g3.
--endchoice
--endif
--
--choice
--	prompt "strip command for binaries on target"
--	default BR2_STRIP_strip
--
--config BR2_STRIP_strip
--	bool "strip"
--	depends on !BR2_ELF2FLT
--	help
--	  Binaries and libraries in the target filesystem will be
--	  stripped using the normal 'strip' command. This allows to
--	  save space, mainly by removing debugging symbols. Debugging
--	  symbols on the target are needed for native debugging, but
--	  not when remote debugging is used.
--
--config BR2_STRIP_sstrip
--	bool "sstrip"
--	select BR2_PACKAGE_SSTRIP_HOST
--	depends on !BR2_ELF2FLT
--	help
--	  Binaries and libraries in the target filesystem will be
--	  stripped using the 'sstrip' command, which strips a little
--	  bit more than the traditional 'strip' command. This allows to
--	  save space, mainly by removing debugging symbols. Debugging
--	  symbols on the target are needed for native debugging, but
--	  not when remote debugging is used.
--
--config BR2_STRIP_none
--	bool "none"
--	help
--	  Do not strip binaries and libraries in the target
--	  filesystem.
--endchoice
--
--choice
--	prompt "gcc optimization level"
--	default BR2_OPTIMIZE_S
--	help
--	  Set the optimization level for gcc
--
--config BR2_OPTIMIZE_0
--	bool "optimization level 0"
--	help
--	  Do not optimize. This is the default.
--
--config BR2_OPTIMIZE_1
--	bool "optimization level 1"
--	help
--	  Optimize. Optimizing compilation takes somewhat more time,
--	  and a lot more memory for a large function. With -O, the
--	  compiler tries to reduce code size and execution time,
--	  without performing any optimizations that take a great deal
--	  of compilation time. -O turns on the following optimization
--	  flags: -fdefer-pop -fdelayed-branch -fguess-branch-probability
--	  -fcprop-registers -floop-optimize -fif-conversion
--	  -fif-conversion2 -ftree-ccp -ftree-dce -ftree-dominator-opts
--	  -ftree-dse -ftree-ter -ftree-lrs -ftree-sra -ftree-copyrename
--	  -ftree-fre -ftree-ch -funit-at-a-time -fmerge-constants
--	  -O also turns on -fomit-frame-pointer on machines where doing
--	  so does not interfere with debugging.
--
--config BR2_OPTIMIZE_2
--	bool "optimization level 2"
--	help
--	  Optimize even more. GCC performs nearly all supported optimizations
--	  that do not involve a space-speed tradeoff. The compiler does not
--	  perform loop unrolling or function inlining when you specify -O2.
--	  As compared to -O, this option increases both compilation time and
--	  the performance of the generated code. -O2 turns on all optimization
--	  flags specified by -O. It also turns on the following optimization
--	  flags: -fthread-jumps -fcrossjumping -foptimize-sibling-calls
--	  -fcse-follow-jumps -fcse-skip-blocks -fgcse  -fgcse-lm
--	  -fexpensive-optimizations -fstrength-reduce -frerun-cse-after-loop
--	  -frerun-loop-opt -fcaller-saves -fpeephole2 -fschedule-insns
--	  -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove
--	  -fstrict-aliasing -fdelete-null-pointer-checks -freorder-blocks
--	  -freorder-functions -falign-functions -falign-jumps -falign-loops
--	  -falign-labels -ftree-vrp -ftree-pre
--	  Please note the warning under -fgcse about invoking -O2 on programs
--	  that use computed gotos.
--
--config BR2_OPTIMIZE_3
--	bool "optimization level 3"
--	help
--	  Optimize yet more. -O3 turns on all optimizations specified by -O2
--	  and also turns on the -finline-functions, -funswitch-loops and
--	  -fgcse-after-reload options.
--
--config BR2_OPTIMIZE_S
--	bool "optimize for size"
--	help
--	  Optimize for size. -Os enables all -O2 optimizations that do not
--	  typically increase code size. It also performs further optimizations
--	  designed to reduce code size. -Os disables the following optimization
--	  flags: -falign-functions -falign-jumps -falign-loops -falign-labels
--	  -freorder-blocks -freorder-blocks-and-partition -fprefetch-loop-arrays
--	  -ftree-vect-loop-version
--
--endchoice
--
--config BR2_PREFER_STATIC_LIB
--	bool "prefer static libraries"
--	help
--	  Where possible, build and use static libraries for the target.
--	  This potentially increases your code size and should only be
--	  used if you know what you do.
--	  The default is to build dynamic libraries and use those on
--	  the target filesystem.
--
--	  WARNING: This is highly experimental at the moment.
--
--config BR2_HAVE_DOCUMENTATION
--	bool "documentation on the target"
--	help
--	  Install the documentation, including manual pages and info
--	  pages, on the target.
--	  If you say n here, your target will not contain any
--	  documentation.
--
--config BR2_HAVE_DEVFILES
--	bool "development files in target filesystem"
--	help
--	  Install headers and static libraries in the
--	  target filesystem
--
--config BR2_PACKAGE_OVERRIDE_FILE
--	string "location of a package override file"
--	default "$(TOPDIR)/local.mk"
--	help
--	  A package override file is a short makefile that contains
--	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
--	  which allows to tell Buildroot to use an existing directory
--	  as the source directory for a particular package. See the
--	  Buildroot documentation for more details on this feature.
--
--endmenu
--
--source "toolchain/Config.in"
--
--source "target/generic/Config.in"
--
--source "package/Config.in"
--
--source "package/Config.in.host"
--
--source "fs/Config.in"
--
--source "boot/Config.in"
--
--source "linux/Config.in"
-+source "root.in"
-diff --git a/root.in b/root.in
-new file mode 100644
-index 0000000..30f98ac
---- /dev/null
-+++ b/root.in
-@@ -0,0 +1,397 @@
-+config BR2_HAVE_DOT_CONFIG
-+	bool
-+	default y
-+
-+config BR2_VERSION
-+	string
-+	option env="BR2_VERSION_FULL"
-+
-+source "target/Config.in.arch"
-+
-+menu "Build options"
-+
-+menu "Commands"
-+
-+config BR2_WGET
-+	string "Wget command"
-+	default "wget --passive-ftp -nd -t 3"
-+
-+config BR2_SVN
-+	string "Subversion (svn) command"
-+	default "svn"
-+
-+config BR2_BZR
-+	string "Bazaar (bzr) command"
-+	default "bzr"
-+
-+config BR2_GIT
-+	string "Git command"
-+	default "git"
-+
-+config BR2_LOCALFILES
-+	string "Local files retrieval command"
-+	default "cp"
-+
-+config BR2_SCP
-+	string "Secure copy (scp) command"
-+	default "scp"
-+
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
-+
-+config BR2_HG
-+	string "Mercurial (hg) command"
-+	default "hg"
-+
-+config BR2_ZCAT
-+	string "zcat command"
-+	default "gzip -d -c"
-+	help
-+	  Command to be used to extract a gzip'ed file to stdout.
-+	  zcat is identical to gunzip -c except that the former may
-+	  not be available on your system.
-+	  Default is "gzip -d -c"
-+	  Other possible values include "gunzip -c" or "zcat".
-+
-+config BR2_BZCAT
-+	string "bzcat command"
-+	default "bzcat"
-+	help
-+	  Command to be used to extract a bzip2'ed file to stdout.
-+	  bzcat is identical to bunzip2 -c except that the former may
-+	  not be available on your system.
-+	  Default is "bzcat"
-+	  Other possible values include "bunzip2 -c" or "bzip2 -d -c".
-+
-+config BR2_XZCAT
-+	string "xzcat command"
-+	default "xzcat"
-+	help
-+	  Command to be used to extract a xz'ed file to stdout.
-+	  Default is "xzcat"
-+
-+config BR2_TAR_OPTIONS
-+	string "Tar options"
-+	default ""
-+	help
-+	  Options to pass to tar when extracting the sources.
-+	  E.g. " -v --exclude='*.svn*'" to exclude all .svn internal files
-+	  and to be verbose.
-+
-+endmenu
-+
-+config BR2_DL_DIR
-+	string "Download dir"
-+	default "$(TOPDIR)/dl"
-+	help
-+	  Directory to store all the source files that we need to fetch.
-+	  If the Linux shell environment has defined the BUILDROOT_DL_DIR
-+	  environment variable, then this overrides this configuration item.
-+
-+	  The default is $(TOPDIR)/dl
-+
-+config BR2_HOST_DIR
-+	string "Host dir"
-+	default "$(BASE_DIR)/host"
-+	help
-+	  Directory to store all the binary files that are built for the host.
-+	  This includes the cross compilation toolchain when building the
-+	  internal buildroot toolchain.
-+
-+	  The default is $(BASE_DIR)/host
-+
-+menu "Mirrors and Download locations"
-+
-+config BR2_PRIMARY_SITE
-+	string "Primary download site"
-+	default ""
-+	help
-+	  Primary site to download from. If this option is set then buildroot
-+	  will try to download package source first from this site and try the
-+	  default if the file is not found.
-+	  Valid URIs are URIs recognized by $(WGET) and scp URIs of the form
-+	  scp://[user@]host:path.
-+	  NOTE: This works for all packages using the central package
-+	  infrastructure (generic, autotools, cmake, ...)
-+
-+config BR2_BACKUP_SITE
-+	string "Backup download site"
-+	default "http://sources.buildroot.net/"
-+	help
-+	  Backup site to download from. If this option is set then buildroot
-+	  will fall back to download package sources from here if the
-+	  normal location fails.
-+
-+config BR2_SOURCEFORGE_MIRROR
-+	string "Sourceforge mirror site"
-+	default "kent"
-+	help
-+	  Sourceforge has a system of mirror sites.  Some sites may be
-+	  closer to your location, and sometimes mirror sites go down
-+	  and are no longer available.  This option allows you to select
-+	  your preferred Sourceforge mirror site.
-+
-+	  The list of mirrors is available here:
-+	  http://sourceforge.net/apps/trac/sourceforge/wiki/Mirrors
-+
-+config BR2_KERNEL_MIRROR
-+	string "Kernel.org mirror"
-+	default "http://www.kernel.org/pub/"
-+	help
-+	  kernel.org is mirrored on a number of servers around the world.
-+	  The following allows you to select your preferred mirror.
-+
-+	  Have a look on the kernel.org site for a list of mirrors, then enter
-+	  the URL to the base directory.  Examples:
-+
-+	     http://www.XX.kernel.org/pub (XX = country code)
-+	     http://mirror.aarnet.edu.au/pub/ftp.kernel.org
-+
-+config BR2_GNU_MIRROR
-+	string "GNU Software mirror"
-+	default "http://ftp.gnu.org/pub/gnu"
-+	help
-+	  GNU has multiple software mirrors scattered around the world.
-+	  The following allows you to select your preferred mirror.
-+
-+	  Have a look on the gnu.org site for a list of mirrors, then enter
-+	  the URL to the base directory.  Examples:
-+
-+	     http://ftp.gnu.org/pub/gnu
-+	     http://mirror.aarnet.edu.au/pub/gnu
-+
-+config BR2_DEBIAN_MIRROR
-+	string "Debian Software mirror"
-+	default "http://ftp.debian.org"
-+	help
-+	  Debian has multiple software mirrors scattered around the world.
-+	  The following allows you to select your preferred mirror.
-+
-+	  Usually, just add your country code like XX here:
-+	  http://ftp.XX.debian.org
-+
-+endmenu
-+
-+config BR2_JLEVEL
-+	int "Number of jobs to run simultaneously"
-+	default "2"
-+	help
-+	  Number of jobs to run simultaneously
-+
-+config BR2_CCACHE
-+	bool "Enable compiler cache"
-+	help
-+	  This option will enable the use of ccache, a compiler
-+	  cache. It will cache the result of previous builds to speed
-+	  up future builds. The cache is stored in
-+	  $HOME/.buildroot-ccache.
-+
-+	  Note that Buildroot does not try to invalidate the cache
-+	  contents when the compiler changes in an incompatible
-+	  way. Therefore, if you make a change to the compiler version
-+	  and/or configuration, you are responsible for purging the
-+	  ccache cache by removing the $HOME/.buildroot-ccache
-+	  directory.
-+
-+config BR2_CCACHE_DIR
-+	string "Compiler cache location"
-+	depends on BR2_CCACHE
-+	default "$(HOME)/.buildroot-ccache"
-+	help
-+	  Where ccache should store cached files.
-+
-+config BR2_DEPRECATED
-+	bool "Show packages that are deprecated or obsolete"
-+	help
-+	  This option hides outdated/obsolete versions of packages.
-+
-+config BR2_ENABLE_DEBUG
-+	bool "build packages with debugging symbols"
-+	help
-+	  Build packages with debugging symbols enabled. All libraries
-+	  and binaries in the 'staging' directory will have debugging
-+	  symbols, which allows remote debugging even if libraries and
-+	  binaries are stripped on the target. Whether libraries and
-+	  binaries are stripped on the target is controlled by the
-+	  BR2_STRIP_* options below.
-+
-+if BR2_ENABLE_DEBUG
-+choice
-+	prompt "gcc debug level"
-+	default BR2_DEBUG_2
-+	help
-+	  Set the debug level for gcc
-+
-+config BR2_DEBUG_1
-+	bool "debug level 1"
-+	help
-+	  Debug level 1 produces minimal information, enough
-+	  for making backtraces in parts of the program that
-+	  you don't plan to debug. This includes descriptions
-+	  of functions and external variables, but no information
-+	  about local variables and no line numbers.
-+
-+config BR2_DEBUG_2
-+	bool "debug level 2"
-+	help
-+	  The default gcc debug level is 2
-+
-+config BR2_DEBUG_3
-+	bool "debug level 3"
-+	help
-+	  Level 3 includes extra information, such as all the
-+	  macro definitions present in the program. Some debuggers
-+	  support macro expansion when you use -g3.
-+endchoice
-+endif
-+
-+choice
-+	prompt "strip command for binaries on target"
-+	default BR2_STRIP_strip
-+
-+config BR2_STRIP_strip
-+	bool "strip"
-+	depends on !BR2_ELF2FLT
-+	help
-+	  Binaries and libraries in the target filesystem will be
-+	  stripped using the normal 'strip' command. This allows to
-+	  save space, mainly by removing debugging symbols. Debugging
-+	  symbols on the target are needed for native debugging, but
-+	  not when remote debugging is used.
-+
-+config BR2_STRIP_sstrip
-+	bool "sstrip"
-+	select BR2_PACKAGE_SSTRIP_HOST
-+	depends on !BR2_ELF2FLT
-+	help
-+	  Binaries and libraries in the target filesystem will be
-+	  stripped using the 'sstrip' command, which strips a little
-+	  bit more than the traditional 'strip' command. This allows to
-+	  save space, mainly by removing debugging symbols. Debugging
-+	  symbols on the target are needed for native debugging, but
-+	  not when remote debugging is used.
-+
-+config BR2_STRIP_none
-+	bool "none"
-+	help
-+	  Do not strip binaries and libraries in the target
-+	  filesystem.
-+endchoice
-+
-+choice
-+	prompt "gcc optimization level"
-+	default BR2_OPTIMIZE_S
-+	help
-+	  Set the optimization level for gcc
-+
-+config BR2_OPTIMIZE_0
-+	bool "optimization level 0"
-+	help
-+	  Do not optimize. This is the default.
-+
-+config BR2_OPTIMIZE_1
-+	bool "optimization level 1"
-+	help
-+	  Optimize. Optimizing compilation takes somewhat more time,
-+	  and a lot more memory for a large function. With -O, the
-+	  compiler tries to reduce code size and execution time,
-+	  without performing any optimizations that take a great deal
-+	  of compilation time. -O turns on the following optimization
-+	  flags: -fdefer-pop -fdelayed-branch -fguess-branch-probability
-+	  -fcprop-registers -floop-optimize -fif-conversion
-+	  -fif-conversion2 -ftree-ccp -ftree-dce -ftree-dominator-opts
-+	  -ftree-dse -ftree-ter -ftree-lrs -ftree-sra -ftree-copyrename
-+	  -ftree-fre -ftree-ch -funit-at-a-time -fmerge-constants
-+	  -O also turns on -fomit-frame-pointer on machines where doing
-+	  so does not interfere with debugging.
-+
-+config BR2_OPTIMIZE_2
-+	bool "optimization level 2"
-+	help
-+	  Optimize even more. GCC performs nearly all supported optimizations
-+	  that do not involve a space-speed tradeoff. The compiler does not
-+	  perform loop unrolling or function inlining when you specify -O2.
-+	  As compared to -O, this option increases both compilation time and
-+	  the performance of the generated code. -O2 turns on all optimization
-+	  flags specified by -O. It also turns on the following optimization
-+	  flags: -fthread-jumps -fcrossjumping -foptimize-sibling-calls
-+	  -fcse-follow-jumps -fcse-skip-blocks -fgcse  -fgcse-lm
-+	  -fexpensive-optimizations -fstrength-reduce -frerun-cse-after-loop
-+	  -frerun-loop-opt -fcaller-saves -fpeephole2 -fschedule-insns
-+	  -fschedule-insns2 -fsched-interblock -fsched-spec -fregmove
-+	  -fstrict-aliasing -fdelete-null-pointer-checks -freorder-blocks
-+	  -freorder-functions -falign-functions -falign-jumps -falign-loops
-+	  -falign-labels -ftree-vrp -ftree-pre
-+	  Please note the warning under -fgcse about invoking -O2 on programs
-+	  that use computed gotos.
-+
-+config BR2_OPTIMIZE_3
-+	bool "optimization level 3"
-+	help
-+	  Optimize yet more. -O3 turns on all optimizations specified by -O2
-+	  and also turns on the -finline-functions, -funswitch-loops and
-+	  -fgcse-after-reload options.
-+
-+config BR2_OPTIMIZE_S
-+	bool "optimize for size"
-+	help
-+	  Optimize for size. -Os enables all -O2 optimizations that do not
-+	  typically increase code size. It also performs further optimizations
-+	  designed to reduce code size. -Os disables the following optimization
-+	  flags: -falign-functions -falign-jumps -falign-loops -falign-labels
-+	  -freorder-blocks -freorder-blocks-and-partition -fprefetch-loop-arrays
-+	  -ftree-vect-loop-version
-+
-+endchoice
-+
-+config BR2_PREFER_STATIC_LIB
-+	bool "prefer static libraries"
-+	help
-+	  Where possible, build and use static libraries for the target.
-+	  This potentially increases your code size and should only be
-+	  used if you know what you do.
-+	  The default is to build dynamic libraries and use those on
-+	  the target filesystem.
-+
-+	  WARNING: This is highly experimental at the moment.
-+
-+config BR2_HAVE_DOCUMENTATION
-+	bool "documentation on the target"
-+	help
-+	  Install the documentation, including manual pages and info
-+	  pages, on the target.
-+	  If you say n here, your target will not contain any
-+	  documentation.
-+
-+config BR2_HAVE_DEVFILES
-+	bool "development files in target filesystem"
-+	help
-+	  Install headers and static libraries in the
-+	  target filesystem
-+
-+config BR2_PACKAGE_OVERRIDE_FILE
-+	string "location of a package override file"
-+	default "$(TOPDIR)/local.mk"
-+	help
-+	  A package override file is a short makefile that contains
-+	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
-+	  which allows to tell Buildroot to use an existing directory
-+	  as the source directory for a particular package. See the
-+	  Buildroot documentation for more details on this feature.
-+
-+endmenu
-+
-+source "toolchain/Config.in"
-+
-+source "target/generic/Config.in"
-+
-+source "package/Config.in"
-+
-+source "package/Config.in.host"
-+
-+source "fs/Config.in"
-+
-+source "boot/Config.in"
-+
-+source "linux/Config.in"
--- 
-1.7.8.6
+   https://github.com/roylee17/overlay.git
+
+Usage:
+   1.  put this overlay next to the patched buildroot (2012.05)
+   2.  cd overlay
+   3.  make product_a_defconfig
+
+Regards,
+Roy
