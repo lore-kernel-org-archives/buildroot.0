@@ -1,57 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jul 2012 18:43:08 +0200
-Subject: [Buildroot] [PATCH] toolchain: add Sourcery CodeBench ARM
- 2012.03
-In-Reply-To: <1343565250-21699-1-git-send-email-tremyfr@yahoo.fr>
-References: <1343565250-21699-1-git-send-email-tremyfr@yahoo.fr>
-Message-ID: <20120729184308.37a046a1@skate>
+From: Avishay Orpaz <avishorp@gmail.com>
+Date: Sun, 29 Jul 2012 23:09:34 +0300
+Subject: [Buildroot] [PATCH] Added local package support.
+In-Reply-To: <50155D32.9030702@mind.be>
+References: <20120724042408.GA11558@sapphire.tkos.co.il>
+ <1343247448-19993-1-git-send-email-avishorp@gmail.com>
+ <50107EAF.3030302@mind.be>
+ <CAMkyJgA3+icHUKQ6AS==QQG--RuuptTjgy3KSdJvcwiAPxF3Rg@mail.gmail.com>
+ <50124C6D.8050608@mind.be> <20120727101253.15d1af71@skate>
+ <20120727085350.GA8573@mail.sceen.net>
+ <CAMkyJgD7JqwLaOV46YHqjOBOf4yZWBa9OkOeOqGZkktuYmOQHA@mail.gmail.com>
+ <50155D32.9030702@mind.be>
+Message-ID: <CAMkyJgA4g2ODTxWtVbJMhQQQmYK_fYENjREccqsQmEQ1x8rLhw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Philippe,
+2012/7/29 Arnout Vandecappelle <arnout@mind.be>
 
-Le Sun, 29 Jul 2012 14:34:10 +0200,
-Philippe Reynes <tremyfr@yahoo.fr> a ?crit :
+> On 07/29/12 09:02, Avishay Orpaz wrote:
+>
+>> Let me try to make my point with an example. Let's say I'm designing a
+>> linux based digital camera. The software stack
+>> will probably include a bunch of standard software component (kernel,
+>> busybox, flash utils etc.), but there would also
+>> be at least one software component that is unique to the design, and not
+>> intended to be shared with other designs - for
+>> example, the GUI implementation of that specific model. This is the kind
+>> of software I expect to see in the "local"
+>> directory. Of course this software component can be put in the "package"
+>> directory, but I would think of buildroot as a
+>> tool, which should not be modified and can be easily upgraded.
+>>
+>
+>  But putting it in a subdirectory 'local' within the buildroot directory
+> still
+> has the same problem...
+>
 
-> Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
-> ---
->  toolchain/toolchain-external/Config.in   |   22 ++++++++++++++++++++++
->  toolchain/toolchain-external/ext-tool.mk |    3 +++
->  2 files changed, 25 insertions(+), 0 deletions(-)
+That's exactly why I made the local directory name configurable. All the
+other stuff is already configurable.
 
-Thanks!
 
-This patch has already been posted by Fabio Porcedda on July, 18th. And
-even before that, on June, 3rd, I had posted the addition of other
-glibc 2.15-based toolchains. Unfortunately, we cannot add them to
-Buildroot as simply as your patch does: Buildroot currently makes the
-assumption that the glibc toolchains always have RPC support. This was
-effectively true until glibc 2.14, which got rid of the RPC support:
-people are now supposed to use the separate libtirpc.
-
-On June, 27th, I have posted an e-mail entitled "RPC support for modern
-(e)glibc toolchains" which starts the discussion on how to integrate
-libtirpc properly, and even though not impossible, things are not
-completely simple.
-
-So my plan is :
-
- * For 2012.08, don't add external toolchains using glibc 2.15, because
-   it requires too much changes on how the RPC support is handled so
-   late in the release cycle.
- 
- * For 2012.11, continue the work to integrate libtirpc, so that we can
-   add support for external toolchains that rely on glibc 2.15 and
-   above.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+>  As for ease of upgrading buildroot when there is a package/<company name>
+> directory: Peter Korsgaard (the main buildroot maintainer) does exactly
+> that
+> at his work, and I don't think he has any issue with it.  You just need one
+> additional line at the top of package/Config.in to include
+> package/<company name>/Config.in
+>
+>
+>  That said, I would also like the possibility to extend buildroot with
+> "local"
+> packages, board-specific files, rootfs skeletons, etc.  That gives my
+> customers
+> the possibility to fully separate the open source stuff from the custom
+> stuff.
+> (I know I'm changing my opinion here, but only idiots never change their
+> mind :-)
+> But then, the local directory should be completely outside the buildroot
+> directory.
+> And I still don't really like the automatic creation of the Config.in file.
+> I'm not sure what could be the alternative, though, because as you mention
+> the source-ing of a Config.in can't be done conditionally or using a
+> variable
+> name.  Perhaps Kconfig itself should be extended to support that?
+>
+>
+>
+>  Regarding to the comment that other files in other directories may need
+>> to be customized - it's very easy to put those
+>> files in any directory using make variables according to one's project
+>> organization preference.
+>>
+>
+>  Or better yet, define a default project directory layout that sets
+> paths like BR2_LINUX_KERNEL_PATCH automatically.
+>
+>
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120729/19d58db0/attachment.html>
