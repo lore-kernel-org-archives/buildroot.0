@@ -1,26 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 22:19:23 +0200
-Subject: [Buildroot] [PATCHv2] libusb: needs thread support
-In-Reply-To: <1340847325-4326-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1340847325-4326-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120730221923.0f20e236@skate>
+Date: Mon, 30 Jul 2012 22:19:51 +0200
+Subject: [Buildroot] [PATCH 1/2] udev: fix stopping execution of udev
+ events in init.d script
+In-Reply-To: <1343397117-1864-1-git-send-email-net147@gmail.com>
+References: <1343397117-1864-1-git-send-email-net147@gmail.com>
+Message-ID: <20120730221951.08554051@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 27 Jun 2012 22:35:25 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Le Fri, 27 Jul 2012 23:51:56 +1000,
+Jonathan Liu <net147@gmail.com> a ?crit :
 
-> libusb needs thread support, and so do other packages that depend on it.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Jonathan Liu <net147@gmail.com>
 
 Applied, thanks.
-
-I have added the same dependency on the libnfc-llrp, which had been
-added in the mean time, and selects libnfc.
 
 Thomas
 -- 
