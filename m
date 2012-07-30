@@ -1,27 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:17:16 +0200
-Subject: [Buildroot] [PATCH v2] libnfc: add license information
-In-Reply-To: <1343633528-10335-1-git-send-email-spdawson@gmail.com>
-References: <1343633528-10335-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120730191716.236b0764@skate>
+Date: Mon, 30 Jul 2012 19:17:52 +0200
+Subject: [Buildroot] [git commit] bind: security bump to version
+	9.6-ESV-R7-P2
+Message-ID: <20120730171813.2014B96FAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 30 Jul 2012 08:32:08 +0100,
-spdawson at gmail.com a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=c53e14e30c3df40c579032f3c50e5b3db34efd98
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Fixes CVE-2012-3817
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 5de451c..736001c 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.6-ESV-R7-P1
++BIND_VERSION = 9.6-ESV-R7-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
