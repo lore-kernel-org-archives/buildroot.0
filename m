@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:12:50 +0200
-Subject: [Buildroot] [git commit] libnfc: add license information
-Message-ID: <20120730171639.8F79996FA8@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 19:16:52 +0200
+Subject: [Buildroot] [PATCH] gpsd: fix Python 2.5 build failure
+In-Reply-To: <1343632101-7179-1-git-send-email-spdawson@gmail.com>
+References: <1343632101-7179-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120730191652.562a15e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94d462331c4a21fa874184aa074dd019a9a4e144
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Mon, 30 Jul 2012 08:08:21 +0100,
+spdawson at gmail.com a ?crit :
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnfc/libnfc.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> The platform.linux_distribution method was introduced in Python 2.6. Some
+> of the Buildroot autobuilders still use Python 2.5, which is causing build
+> failures such as the following.
+> 
+>   http://autobuild.buildroot.net/results/045f1f69bac170d8e75cb4952a2e5b4e85a677b8/build-end.log
+> 
+> This patch removes the linux distribution check from the gpsd SConstruct file.
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
-index ab062bb..08892b3 100644
---- a/package/libnfc/libnfc.mk
-+++ b/package/libnfc/libnfc.mk
-@@ -6,6 +6,8 @@
- LIBNFC_VERSION = 1446
- LIBNFC_SITE = http://libnfc.googlecode.com/svn/trunk/
- LIBNFC_SITE_METHOD = svn
-+LIBNFC_LICENSE = LGPLv3+
-+LIBNFC_LICENSE_FILES = COPYING
- LIBNFC_AUTORECONF = YES
- LIBNFC_INSTALL_STAGING = YES
- 
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
