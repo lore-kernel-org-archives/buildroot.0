@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:08:28 +0200
-Subject: [Buildroot] [git commit branch/next] Update s6lx9 microblaze
-	default configuration
-Message-ID: <20120802195304.3F4DA827F7@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 21:20:02 +0200
+Subject: [Buildroot] [git commit branch/next] bash: add depends on MMU
+Message-ID: <20120802195303.02DEE827F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd1180b7cf5140d291741416e13bdb444712892d
+commit: http://git.buildroot.net/buildroot/commit/?id=99492e0dfacc53d1fbfa50ac10dac35630e120a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Fixes the build failure at
+
+  http://autobuild.buildroot.org/results/0434d99b51f535ac73bfcf1968b1c2b81b44ba61/build-end.log.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/s6lx9_microboard_defconfig |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/bash/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
-index 5011766..05b4443 100644
---- a/configs/s6lx9_microboard_defconfig
-+++ b/configs/s6lx9_microboard_defconfig
-@@ -12,6 +12,5 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
--BR2_LINUX_KERNEL_DTS_FILE="board/avnet/s6lx9_microboard/lx9_mmu.dts"
--BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="simpleImage.lx9_mmu"
-+BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/avnet/s6lx9_microboard/lx9_mmu.dts"
+diff --git a/package/bash/Config.in b/package/bash/Config.in
+index 9ee46e8..228d5a4 100644
+--- a/package/bash/Config.in
++++ b/package/bash/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_BASH
+ 	bool "bash"
+ 	select BR2_PACKAGE_NCURSES
++	# uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  The standard GNU Bourne again shell.
+ 
