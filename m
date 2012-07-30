@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 30 Jul 2012 08:22:20 +0100
-Subject: [Buildroot] [PATCH] gpsd: PPS feature depends on NTPSHM feature
-Message-ID: <1343632940-8604-1-git-send-email-spdawson@gmail.com>
+Date: Mon, 30 Jul 2012 08:32:08 +0100
+Subject: [Buildroot] [PATCH v2] libnfc: add license information
+Message-ID: <1343633528-10335-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,29 +10,25 @@ To: buildroot@busybox.net
 
 From: Simon Dawson <spdawson@gmail.com>
 
-The PPS feature of gpsd depends on the NTP shared memory time hinting feature.
-
-This patch caused the NTPSHM feature to be enabled whenever the PPS feature
-is enabled. This should fix build failures such as the following.
-
-  http://autobuild.buildroot.net/results/e58a9a9f884acb6834a8afe4a8a3d056dc509359/build-end.log
-
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/gpsd/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ v2: License is LGPL, and not GPL as incorrectly claimed by v1 of this patch.
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 8643492..a11c553 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -38,6 +38,7 @@ config BR2_PACKAGE_GPSD_NTP_SHM
+ package/libnfc/libnfc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
+index ab062bb..08892b3 100644
+--- a/package/libnfc/libnfc.mk
++++ b/package/libnfc/libnfc.mk
+@@ -6,6 +6,8 @@
+ LIBNFC_VERSION = 1446
+ LIBNFC_SITE = http://libnfc.googlecode.com/svn/trunk/
+ LIBNFC_SITE_METHOD = svn
++LIBNFC_LICENSE = LGPLv3+
++LIBNFC_LICENSE_FILES = COPYING
+ LIBNFC_AUTORECONF = YES
+ LIBNFC_INSTALL_STAGING = YES
  
- config BR2_PACKAGE_GPSD_PPS
- 	bool "PPS time syncing support"
-+	select BR2_PACKAGE_GPSD_NTP_SHM
- 
- config BR2_PACKAGE_GPSD_USER
- 	bool "GPSD privilege revocation user"
 -- 
 1.7.9.5
