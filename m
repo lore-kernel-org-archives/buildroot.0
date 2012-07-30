@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 21:18:06 +0200
-Subject: [Buildroot] [git commit branch/next] udev: use /dev if udev_root
-	not defined in init.d script
-Message-ID: <20120802195302.BE46F8E8F3@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 19:19:09 +0200
+Subject: [Buildroot] [git commit branch/next] connman: bump to version 1.4
+Message-ID: <20120802195302.28D438E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b08fd56ae82ad2d003512e6128ae60016d0186df
+commit: http://git.buildroot.net/buildroot/commit/?id=f5dc8bebb8b937a11f788f1b84868d058ede70c3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Jonathan Liu <net147@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/udev/S10udev |    2 +-
+ package/connman/connman.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/udev/S10udev b/package/udev/S10udev
-index 13dfdf5..7bb4309 100755
---- a/package/udev/S10udev
-+++ b/package/udev/S10udev
-@@ -27,7 +27,7 @@ test -r $UDEV_CONFIG || exit 6
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 1046cdf..726cb73 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ #######################################################
  
- case "$1" in
-     start)
--        echo -n "Populating $udev_root using udev: "
-+        echo -n "Populating ${udev_root:-/dev} using udev: "
-         echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || (echo "FAIL" && exit 1)
-         echo "done"
+-CONNMAN_VERSION = 1.0
++CONNMAN_VERSION = 1.4
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ CONNMAN_INSTALL_STAGING = YES
