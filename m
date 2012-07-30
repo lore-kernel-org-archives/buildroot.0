@@ -1,184 +1,140 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 30 Jul 2012 14:32:47 +0200
-Subject: [Buildroot] [PATCH 4/6] Add support for appended device tree blobs
-	for arm
+Date: Mon, 30 Jul 2012 14:32:45 +0200
+Subject: [Buildroot] [PATCH 2/6] Rework support for the device tree
 In-Reply-To: <1343651569-6450-1-git-send-email-maxime.ripard@free-electrons.com>
 References: <1343651569-6450-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <1343651569-6450-5-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <1343651569-6450-3-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for the ARM-only appended device tree
-mechanism present in the kernel.
+This patch introduces some support for device tree-enabled kernels.
 
-This option allows to add at the end of the kernel image the
-device tree blob so that we can still boot device tree enabled
-kernels with old bootloaders.
+It replaces the former BR2_LINUX_KERNEL_DTS_FILE option that was
+microblaze-only, that was quite limited. This option was quite
+limited, first obviously because it was restricted to microblaze,
+but also because it targetted only external device tree source files,
+and allowed only to build simpleImages using the custom image name
+mechanism.
 
-This patch also adds the needed logic to genereate such an image
-when building zImages or uImages, also adding the necessary parts
-to rebuild the uImage.
+This patch adds a much more generic one, that can work on basically
+every architecture that supports device tree. It allows to build
+both device tree source file that comes with the kernel source or to
+set the path to the device tree file to use so that one can use a
+custom device tree.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- linux/Config.in |   33 +++++++++++++++++++++++++++++++++
- linux/linux.mk  |   37 ++++++++++++++++++++++++++++++++++++-
- 2 files changed, 69 insertions(+), 1 deletion(-)
+ linux/Config.in |   42 ++++++++++++++++++++++++++++++++++++++++++
+ linux/linux.mk  |   19 +++++++++++++++++++
+ 2 files changed, 61 insertions(+)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index ff705cb..37aef74 100644
+index 550371d..8ede89c 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
-@@ -139,6 +139,13 @@ config BR2_LINUX_KERNEL_UIMAGE
- 	depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
- 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
+@@ -174,6 +174,48 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	  Specify the kernel make target to build the kernel that you
+ 	  need.
  
-+config BR2_LINUX_KERNEL_APPENDED_UIMAGE
-+	bool "uImage with appended DT"
-+	depends on BR2_arm || BR2_armeb
-+	select BR2_LINUX_KERNEL_DTS_SUPPORT
-+	select BR2_LINUX_KERNEL_APPENDED_DTB
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
++config BR2_LINUX_KERNEL_DTS_SUPPORT
++	bool "Device tree support"
++	help
++	  Compile a device tree source into a device tree blob.
++	  Select the dts file to compile in the options below.
 +
- config BR2_LINUX_KERNEL_BZIMAGE
- 	bool "bzImage"
- 	depends on BR2_i386 || BR2_x86_64
-@@ -147,6 +154,12 @@ config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
- 	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64 || BR2_xtensa
- 
-+config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
-+	bool "zImage with appended DT"
-+	depends on BR2_arm || BR2_armeb
-+	select BR2_LINUX_KERNEL_DTS_SUPPORT
-+	select BR2_LINUX_KERNEL_APPENDED_DTB
++if BR2_LINUX_KERNEL_DTS_SUPPORT
 +
- config BR2_LINUX_KERNEL_VMLINUX_BIN
- 	bool "vmlinux.bin"
- 	depends on BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
-@@ -186,6 +199,26 @@ config BR2_LINUX_KERNEL_DTS_SUPPORT
- 
- if BR2_LINUX_KERNEL_DTS_SUPPORT
- 
-+# We have mainly three cases when it comes to device tree support:
-+#   1) We don't want any support at all. Then the ..DTS_SUPPORT
-+#      variable won't be set
-+#   2) We want device tree support, so we need the user to enter
-+#      the device tree name or the the path to the custom device
-+#      he uses, but the kernel abstracts this from us and only
-+#      build an image that looks like a regular kernel image. In
-+#      this case, we only need to derive the kernel image name from
-+#      the given device tree name, and all the rest is as usual
-+#   3) We want device tree support, but the kernel requires us to
-+#      build the device tree blob separately. In this case, some
-+#      more logic will be needed.
-+# The variable below address the second case, were you only want
-+# limited actions from buildroot.
-+config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
-+	bool
++choice
++	prompt "Device tree source"
++	default BR2_LINUX_KERNEL_USE_INTREE_DTS
 +
-+config BR2_LINUX_KERNEL_APPENDED_DTB
-+	bool
++config BR2_LINUX_KERNEL_USE_INTREE_DTS
++	bool "Use a device tree present in the kernel."
++	help
++	   Use a device tree source distributed with
++	   the kernel sources. The dts files are located
++           in the arch/<arch>/boot/dts folder.
 +
- choice
- 	prompt "Device tree source"
- 	default BR2_LINUX_KERNEL_USE_INTREE_DTS
++config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
++	bool "Use a custom device tree file"
++	help
++	  Use a custom device tree file, i.e, a device
++	  tree file that does not belong to the kernel
++	  source tree.
++endchoice
++
++config BR2_LINUX_KERNEL_INTREE_DTS_NAME
++	string "Device Tree Source file name"
++	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
++	help
++	 Name of the device tree source file, without
++	 the trailing .dts
++
++config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
++	string "Device Tree Source file path"
++	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
++	help
++	  Path to the device tree source file
++
++endif
++
+ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	bool "Install kernel image to /boot in target"
+ 	depends on !BR2_TARGET_ROOTFS_INITRAMFS
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 5ba6c60..d24a11a 100644
+index 09c8e79..25f5a05 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -56,6 +56,13 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
- KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
- endif
+@@ -46,6 +46,12 @@ LINUX_MAKE_FLAGS = \
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
  
-+ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
-+ifneq ($(words $(KERNEL_DTS_NAME)),1)
-+$(error Kernel with appended device tree needs exactly one DTS source.\
-+  Check BR2_LINUX_KERNEL_INTREE_DTS_NAME or BR2_LINUX_KERNEL_CUSTOM_DTS_PATH.)
-+endif
++ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
++KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
++KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
 +endif
 +
  ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
  LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
  else
-@@ -66,10 +73,14 @@ LINUX_IMAGE_NAME=vmImage
- else
- LINUX_IMAGE_NAME=uImage
- endif
-+else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
-+LINUX_IMAGE_NAME=uImage
- else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
- LINUX_IMAGE_NAME=bzImage
- else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
- LINUX_IMAGE_NAME=zImage
-+else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
-+LINUX_IMAGE_NAME=zImage
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
- LINUX_IMAGE_NAME=vmlinux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-@@ -79,6 +90,12 @@ LINUX_IMAGE_NAME=vmlinuz
- endif
- endif
- 
-+ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
-+LINUX_IMAGE_TARGET=zImage
-+else
-+LINUX_IMAGE_TARGET=$(LINUX_IMAGE_NAME)
-+endif
-+
- # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
- # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
- # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
-@@ -159,10 +176,13 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
-+	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+@@ -153,13 +159,25 @@ define LINUX_CONFIGURE_CMDS
  	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
  endef
  
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-+ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
- endef
-@@ -170,17 +190,32 @@ define LINUX_INSTALL_DTB
- 	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
- endef
- endif
++ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
++define LINUX_BUILD_DTB
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
++endef
++define LINUX_INSTALL_DTB
++	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
++endef
 +endif
 +
-+ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
-+define LINUX_APPEND_DTB
-+	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
-+	# We need to generate the uImage here after that so that the uImage is
-+	# generated with the right image size.
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
-+endef
-+else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
-+define LINUX_APPEND_DTB
-+	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
-+endef
-+endif
- 
  # Compilation. We make sure the kernel gets rebuilt when the
  # configuration has changed.
  define LINUX_BUILD_CMDS
- 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
- 		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
++	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
++		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
  		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
  	fi
- 	$(LINUX_BUILD_DTB)
-+	$(LINUX_APPEND_DTB)
++	$(LINUX_BUILD_DTB)
  endef
  
  
+@@ -175,6 +193,7 @@ endef
+ 
+ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
++	$(LINUX_INSTALL_DTB)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
 -- 
 1.7.9.5
