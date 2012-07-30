@@ -1,54 +1,131 @@
-From: Avery Pennarun <apenwarr@gmail.com>
-Date: Mon, 30 Jul 2012 17:41:06 -0400
-Subject: [Buildroot] populating an initramfs
-In-Reply-To: <CAE9DZUShfQcSCGpvimXDr86rF26qo9oOsjZVMW=q2Mv5UO9WOQ@mail.gmail.com>
-References: <CAE9DZURcJ-4nb5-xA+yVyLf8msVr=ca6DAX2ZTY_OD0w+1n6vQ@mail.gmail.com>
- <CAHqTa-0Ek0+Tc8E6TgcS9acDe6NDhABoHadxEdRArKf3WurzWA@mail.gmail.com>
- <CAE9DZUShfQcSCGpvimXDr86rF26qo9oOsjZVMW=q2Mv5UO9WOQ@mail.gmail.com>
-Message-ID: <CAHqTa-0ovAeKYSiDqqmy54=odMEA-6h=LXhENUHjR29L5+_DYQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Jul 2012 23:50:11 +0200
+Subject: [Buildroot] [git commit] sysprof: New package.
+Message-ID: <20120730215613.F1B8296BA4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We just switched to devtmpfs and have been happy ever since :)  I
-highly recommend it.  Much less insane than udev.
+commit: http://git.buildroot.net/buildroot/commit/?id=58a62766a1869c913845a649890855515aebb016
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, Jul 30, 2012 at 5:37 PM, Dallas Clement
-<dallas.a.clement@gmail.com> wrote:
-> Thanks Avery.  This helps tremendously.
->
-> One more question:  How did you create device nodes in your initramfs?
->
-> On Mon, Jul 30, 2012 at 4:34 PM, Avery Pennarun <apenwarr@gmail.com> wrote:
->> On Mon, Jul 30, 2012 at 5:13 PM, Dallas Clement
->> <dallas.a.clement@gmail.com> wrote:
->>> Forgive me in advance for asking a newb question.  I'm in the process
->>> of converting from Yocto/OE.
->>>
->>> I have the need to populate both an initramfs as well as a rootfs with
->>> the contents of packages I build using buildroot.  What is the best
->>> way to do this?   Should I create two separate projects, one for the
->>> initramfs and one for the rootfs?  Or is there a way to select which
->>> contents go in each and keep it all in the same project?
->>
->> What we did on our project is we made a new package that we called
->> simpleramfs.  It hand-copies a specific list of filenames from the
->> "real" output/target/ directory into the simpleramfs project, then
->> generates an initramfs cpio in time for the kernel to be compiled.
->>
->> We experimented with building twice (once for initramfs and once for
->> rootfs), but that's both slow and a maintenance nightmare, and
->> resulted in much huger initramfs than we wanted (as well as a lot of
->> duplication between initramfs and rootfs).
->>
->> Hope this helps.
->>
->> Have fun,
->>
->> Avery
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[thomas.petazzoni at free-electrons.com:
+ - add dependencies on the supported architectures to avoid build
+   failures on ARM and other unsupported arches
+ - add a patch that removes an useless warning about the kernel
+   version. This patch is present upstream. However since it modifies
+   configure.ac, we need to autoreconf the package.]
+
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/sysprof/Config.in                          |   24 ++++++++++++++++++
+ .../sysprof-01-fix-kernel-version-warning.patch    |   26 ++++++++++++++++++++
+ package/sysprof/sysprof.mk                         |   22 ++++++++++++++++
+ 4 files changed, 73 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index f664b8e..f308de7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -39,6 +39,7 @@ source "package/ramspeed/Config.in"
+ source "package/rt-tests/Config.in"
+ source "package/strace/Config.in"
+ source "package/stress/Config.in"
++source "package/sysprof/Config.in"
+ source "package/whetstone/Config.in"
+ source "package/valgrind/Config.in"
+ source "package/pv/Config.in"
+diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
+new file mode 100644
+index 0000000..513a32c
+--- /dev/null
++++ b/package/sysprof/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_SYSPROF
++	bool "sysprof"
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # glib2
++	# In its util.h file, sysprof contains architecture-specific
++	# code
++	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sh4a || BR2_sh4aeb
++	help
++	  Sysprof is a statistical, system-wide profiler that can
++	  profile user and kernel code using the perf API.
++
++	  http://sysprof.com
++
++config BR2_PACKAGE_SYSPROF_GUI
++	bool "sysprof GUI"
++	depends on BR2_PACKAGE_SYSPROF
++	depends on BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_LIBGLADE
++	select BR2_PACKAGE_GDK_PIXBUF
++	help
++	  GUI for the sysprof system-wide statistical profiler.
++
++comment "sysprof requires a toolchain with WCHAR support"
++        depends on !BR2_USE_WCHAR
+diff --git a/package/sysprof/sysprof-01-fix-kernel-version-warning.patch b/package/sysprof/sysprof-01-fix-kernel-version-warning.patch
+new file mode 100644
+index 0000000..7b45b30
+--- /dev/null
++++ b/package/sysprof/sysprof-01-fix-kernel-version-warning.patch
+@@ -0,0 +1,26 @@
++From 6a5dfd385ca86b9e40b1a73237408f76b671b490 Mon Sep 17 00:00:00 2001
++From: Pauli Nieminen <suokkos@gmail.com>
++Date: Mon, 09 Apr 2012 18:12:59 +0000
++Subject: Don't complain about old kernel for 3.0+ kernels
++
++Linux kernel version received bump to 3.0 that causes configure to
++complain about older kernel. To avoid the warning configure needs to
++check major and minor versions before micro.
++
++Signed-off-by: Pauli Nieminen <suokkos@gmail.com>
++---
++diff --git a/configure.ac b/configure.ac
++index 34fdc43..e4f6d5d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -83,7 +83,7 @@ Makefile
++ 
++ AC_OUTPUT
++ 
++-if [[ $KMICRO -lt 31 ]] ; then
+++if [[ $KMAJOR -eq 2 -a $KMINOR -eq 6 -a $KMICRO -lt 31 ]] ; then
++    echo
++    echo "%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%"
++    echo "@"  
++--
++cgit v0.9.0.2
+diff --git a/package/sysprof/sysprof.mk b/package/sysprof/sysprof.mk
+new file mode 100644
+index 0000000..03355d8
+--- /dev/null
++++ b/package/sysprof/sysprof.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# sysprof
++#
++#############################################################
++
++SYSPROF_VERSION = 1.1.8
++SYSPROF_SITE = http://sysprof.com
++SYSPROF_DEPENDENCIES = libglib2
++SYSPROF_AUTORECONF = YES
++
++ifeq ($(BR2_PACKAGE_SYSPROF_GUI),y)
++SYSPROF_DEPENDENCIES += libgtk2 libglade gdk-pixbuf
++endif
++
++define SYSPROF_CREATE_M4_DIR
++	mkdir -p $(@D)/m4
++endef
++
++SYSPROF_POST_PATCH_HOOKS += SYSPROF_CREATE_M4_DIR
++
++$(eval $(autotools-package))
