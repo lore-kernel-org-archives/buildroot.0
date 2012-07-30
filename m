@@ -1,65 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 30 Jul 2012 23:12:17 +0200
-Subject: [Buildroot] [git commit] Add systemd unit for lighttpd
-Message-ID: <20120730211657.93D8F96FBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] doc: Update the documentation to mention
+	the new PKG_INSTALL_INIT_ variables
+Message-ID: <20120730211657.A440C96FBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7eb4104b32a6cfca15c081649065659da75d9c1
+commit: http://git.buildroot.net/buildroot/commit/?id=e61153cf972e1f060bc0905df61381a9548cb16e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lighttpd/lighttpd.mk      |   13 +++++++++++--
- package/lighttpd/lighttpd.service |   10 ++++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-generic.txt |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 9f554cb..c9decb1 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -87,13 +87,22 @@ endef
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index d264f40..d3a4abb 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -311,6 +311,13 @@ different steps of the build process.
+ * +LIBFOO_UNINSTALL_STAGING_CMDS+, used to list the actions to
+   uninstall the package from the staging directory +$(STAGING_DIR)+.
  
- LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
++* +LIBFOO_INSTALL_INIT_SYSV+ and +LIBFOO_INSTALL_INIT_SYSTEMD+, used
++  to install init scripts either for the systemV-like init systems
++  (busybox, sysvinit, etc.) or for the systemd units. These commands
++  will be run only when the relevant init system is installed (i.e. if
++  systemd is selected as the init system in the configuration, only
++  +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
++
+ The preferred way to define these variables is:
  
--define LIGHTTPD_INSTALL_INIT_SCRIPT
-+define LIGHTTPD_INSTALL_INIT_SYSV
- 	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
- 		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
- 			$(TARGET_DIR)/etc/init.d/S50lighttpd
- endef
- 
--LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_INIT_SCRIPT
-+define LIGHTTPD_INSTALL_INIT_SYSTEMD
-+	[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
-+		$(INSTALL) -D -m 755 package/lighttpd/lighttpd.service \
-+			$(TARGET_DIR)/etc/systemd/system/lighttpd.service
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -fs ../lighttpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
-+endef
- 
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
- 	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd
-diff --git a/package/lighttpd/lighttpd.service b/package/lighttpd/lighttpd.service
-new file mode 100644
-index 0000000..0ca5357
---- /dev/null
-+++ b/package/lighttpd/lighttpd.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Lighttpd Web Server
-+After=network.target
-+
-+[Service]
-+ExecStart=/usr/sbin/lighttpd-angel -f /etc/lighttpd/lighttpd.conf -D
-+ExecReload=/bin/kill -HUP $MAINPID
-+
-+[Install]
-+WantedBy=multi-user.target
+ ----------------------
