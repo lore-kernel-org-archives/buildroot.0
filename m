@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:22:43 +0200
-Subject: [Buildroot] [git commit branch/next] less: build after busybox
-Message-ID: <20120802195302.90E6E8E8F3@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 19:17:52 +0200
+Subject: [Buildroot] [git commit branch/next] bind: security bump to version
+	9.6-ESV-R7-P2
+Message-ID: <20120802195302.1830096CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe355d22785479a646b7875c8b0404ca5d6292e8
+commit: http://git.buildroot.net/buildroot/commit/?id=c53e14e30c3df40c579032f3c50e5b3db34efd98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Build less after busybox if it's enabled, since we prefer the full-blown
-version over the light one if it's enabled (and busybox would overwrite
-the link when built afterwards).
+Fixes CVE-2012-3817
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/less/less.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/less/less.mk b/package/less/less.mk
-index b758e46..c0ecf20 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -6,7 +6,8 @@
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 5de451c..736001c 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- LESS_VERSION = 444
- LESS_SITE = http://www.greenwoodsoftware.com/less
--LESS_DEPENDENCIES = ncurses
-+# Build after busybox, full-blown is better
-+LESS_DEPENDENCIES = ncurses $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- 
- define LESS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
+-BIND_VERSION = 9.6-ESV-R7-P1
++BIND_VERSION = 9.6-ESV-R7-P2
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
