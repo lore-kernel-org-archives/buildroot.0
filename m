@@ -1,55 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 22:54:58 +0200
-Subject: [Buildroot] [PATCH 2/4] luajit: allow building for the host
-In-Reply-To: <1343629890-4657-2-git-send-email-francois.perrad@gadz.org>
+Date: Mon, 30 Jul 2012 22:56:45 +0200
+Subject: [Buildroot] [PATCH 3/4] lua: remove 3 sub-options,
+ always install all
+In-Reply-To: <1343629890-4657-3-git-send-email-francois.perrad@gadz.org>
 References: <1343629890-4657-1-git-send-email-francois.perrad@gadz.org>
- <1343629890-4657-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20120730225458.02059be3@skate>
+ <1343629890-4657-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20120730225645.6ed17e9f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Le Mon, 30 Jul 2012 08:31:28 +0200,
+Le Mon, 30 Jul 2012 08:31:29 +0200,
 Francois Perrad <fperrad@gmail.com> a ?crit :
 
-> diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-> index b35cdb4..19bf659 100644
-> --- a/package/luajit/luajit.mk
-> +++ b/package/luajit/luajit.mk
-> @@ -48,6 +48,11 @@ define LUAJIT_BUILD_CMDS
->  		-C $(@D) amalg
->  endef
+> ---
+>  package/lua/Config.in |   18 ------------------
+>  package/lua/lua.mk    |   17 +----------------
+>  2 files changed, 1 insertion(+), 34 deletions(-)
+> 
+> diff --git a/package/lua/Config.in b/package/lua/Config.in
+> index 06f3046..fc6bb4c 100644
+> --- a/package/lua/Config.in
+> +++ b/package/lua/Config.in
+> @@ -32,29 +32,11 @@ endchoice
 >  
-> +define HOST_LUAJIT_BUILD_CMDS
-> +	$(MAKE) PREFIX="/usr" \
-> +		-C $(@D) amalg
-> +endef
-> +
->  define LUAJIT_INSTALL_STAGING_CMDS
->  	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
->  endef
-> @@ -56,8 +61,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
->  	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
->  endef
+>  if BR2_PACKAGE_LUA
 >  
-> +define HOST_LUAJIT_INSTALL_CMDS
-> +	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
-> +endef
-> +
->  define LUAJIT_CLEAN_CMDS
->  	-$(MAKE) -C $(@D) clean
->  endef
->  
->  $(eval $(generic-package))
-> +$(eval $(host-generic-package))
+> -config BR2_PACKAGE_LUA_COMPILER
+> -	bool "lua compiler"
+> -	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+> -	help
+> -	  Install luac binary
+> -
+> -config BR2_PACKAGE_LUA_INTERPRETER
+> -	bool "lua interpreter"
+> -	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+> -	help
+> -	  Install lua binary
 
-What is the use case for building luajit on the host?
+Wouldn't it make sense to keep options for the compiler and
+interpreter? I presume using the compiler on the target is fairly
+uncommon (you would rather do the compilation at build time, no?).
 
-Thanks!
+And Lua can be used as a library without the separate /usr/bin/lua
+interpreter, no?
+
+But maybe this last option (the interpreter) is more complicated to
+handle with the choice between lua and luajit.
 
 Thomas
 -- 
