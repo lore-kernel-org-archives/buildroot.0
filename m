@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 21:18:04 +0200
-Subject: [Buildroot] [git commit] udev: fix stopping execution of udev
-	events in init.d script
-Message-ID: <20120730191827.9CBA981EC9@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 21:18:06 +0200
+Subject: [Buildroot] [git commit] udev: use /dev if udev_root not defined in
+	init.d script
+Message-ID: <20120730191827.B533481EC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f870c626dc128955be6a27b800465ab38059eb97
+commit: http://git.buildroot.net/buildroot/commit/?id=b08fd56ae82ad2d003512e6128ae60016d0186df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jonathan Liu <net147@gmail.com>
@@ -19,15 +19,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/udev/S10udev b/package/udev/S10udev
-index 70a7c34..13dfdf5 100755
+index 13dfdf5..7bb4309 100755
 --- a/package/udev/S10udev
 +++ b/package/udev/S10udev
-@@ -34,7 +34,7 @@ case "$1" in
-         ;;
-     stop)
-         # Stop execution of events
--        udevadm control --stop_exec_queue
-+        udevadm control --stop-exec-queue
-         killall udevd
-         ;;
-     *)
+@@ -27,7 +27,7 @@ test -r $UDEV_CONFIG || exit 6
+ 
+ case "$1" in
+     start)
+-        echo -n "Populating $udev_root using udev: "
++        echo -n "Populating ${udev_root:-/dev} using udev: "
+         echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
+         $UDEV_BIN -d || (echo "FAIL" && exit 1)
+         echo "done"
