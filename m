@@ -1,35 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:17:52 +0200
-Subject: [Buildroot] [git commit] bind: security bump to version
-	9.6-ESV-R7-P2
-Message-ID: <20120730171813.2014B96FAE@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 19:18:07 +0200
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.6-ESV-R7-P2
+In-Reply-To: <1343431888-30127-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1343431888-30127-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120730191807.4026904a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c53e14e30c3df40c579032f3c50e5b3db34efd98
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Fri, 27 Jul 2012 20:31:28 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Fixes CVE-2012-3817
+> Fixes CVE-2012-3817
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/bind/bind.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 5de451c..736001c 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BIND_VERSION = 9.6-ESV-R7-P1
-+BIND_VERSION = 9.6-ESV-R7-P2
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_MAKE = $(MAKE1)
- BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
