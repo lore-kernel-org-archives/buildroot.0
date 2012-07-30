@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 30 Jul 2012 19:19:09 +0200
-Subject: [Buildroot] [git commit] connman: bump to version 1.4
-Message-ID: <20120730171950.3EB2D96F8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
+Message-ID: <20120730171950.92FF196F8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5dc8bebb8b937a11f788f1b84868d058ede70c3
+commit: http://git.buildroot.net/buildroot/commit/?id=42934cac767177562488a9083decd5df312e8216
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jonathan Liu <net147@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/connman/connman.mk |    2 +-
+ toolchain/kernel-headers/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 1046cdf..726cb73 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- #######################################################
- 
--CONNMAN_VERSION = 1.0
-+CONNMAN_VERSION = 1.4
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
- CONNMAN_INSTALL_STAGING = YES
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 63a1ae8..514d299 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.38"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.23"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.24"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.6"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
