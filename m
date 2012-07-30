@@ -1,21 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:23:05 +0200
-Subject: [Buildroot] [PATCH] less: build after busybox
-In-Reply-To: <1343330317-24730-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1343330317-24730-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120730192305.58e21f66@skate>
+Date: Mon, 30 Jul 2012 19:23:17 +0200
+Subject: [Buildroot] [PATCH] dhcp: security bump to version 4.1-ESV-R6
+In-Reply-To: <1343333400-27886-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1343333400-27886-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120730192317.417edfce@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 26 Jul 2012 16:18:37 -0300,
+Le Thu, 26 Jul 2012 17:10:00 -0300,
 Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-> Build less after busybox if it's enabled, since we prefer the full-blown
-> version over the light one if it's enabled (and busybox would overwrite
-> the link when built afterwards).
+> Fixes CVE-2012-3571 and CVE-2012-3954.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
