@@ -1,50 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 23:21:06 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
- for-2012.08/systemd
-In-Reply-To: <cover.1343460025.git.maxime.ripard@free-electrons.com>
-References: <cover.1343460025.git.maxime.ripard@free-electrons.com>
-Message-ID: <20120730232106.07e25afb@skate>
+From: Avery Pennarun <apenwarr@gmail.com>
+Date: Mon, 30 Jul 2012 17:34:00 -0400
+Subject: [Buildroot] populating an initramfs
+In-Reply-To: <CAE9DZURcJ-4nb5-xA+yVyLf8msVr=ca6DAX2ZTY_OD0w+1n6vQ@mail.gmail.com>
+References: <CAE9DZURcJ-4nb5-xA+yVyLf8msVr=ca6DAX2ZTY_OD0w+1n6vQ@mail.gmail.com>
+Message-ID: <CAHqTa-0Ek0+Tc8E6TgcS9acDe6NDhABoHadxEdRArKf3WurzWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 28 Jul 2012 09:21:19 +0200,
-Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
+On Mon, Jul 30, 2012 at 5:13 PM, Dallas Clement
+<dallas.a.clement@gmail.com> wrote:
+> Forgive me in advance for asking a newb question.  I'm in the process
+> of converting from Yocto/OE.
+>
+> I have the need to populate both an initramfs as well as a rootfs with
+> the contents of packages I build using buildroot.  What is the best
+> way to do this?   Should I create two separate projects, one for the
+> initramfs and one for the rootfs?  Or is there a way to select which
+> contents go in each and keep it all in the same project?
 
-> Maxime Ripard (3):
->       Rework of the init system
->       Add systemd unit for lighttpd
->       doc: Update the documentation to mention the new PKG_INSTALL_INIT_ variables
+What we did on our project is we made a new package that we called
+simpleramfs.  It hand-copies a specific list of filenames from the
+"real" output/target/ directory into the simpleramfs project, then
+generates an initramfs cpio in time for the kernel to be compiled.
 
-I have applied your changes. I had to make a change on PATCH 1/3,
-because the systemd init choice was visible even if the requirements
-for the systemd package were not met (thread support and
-udev-based /dev).
+We experimented with building twice (once for initramfs and once for
+rootfs), but that's both slow and a maintenance nightmare, and
+resulted in much huger initramfs than we wanted (as well as a lot of
+duplication between initramfs and rootfs).
 
-Also, it would be good to investigate the newer versions of systemd. If
-I remember correctly, they integrate udev directly, but is it possible
-to still have udev separately? This of course will not be for 2012.08,
-but it would be nice to continue to integrate those technologies into
-Buildroot.
+Hope this helps.
 
-Also, in the testing I've done with the vexpress Qemu target, I have
-not been particularly impressed by the boot speed, but I should
-probably try on a real target.
+Have fun,
 
-And final comment: it seems lighttpd is started even before the web
-server is accessed. Wasn't systemd supposed to start such daemons
-on-demand? Or maybe lighttpd does not have the necessary code to
-support such kind of startup where the already opened socket is passed
-by systemd?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Avery
