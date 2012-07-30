@@ -1,58 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 22:56:45 +0200
-Subject: [Buildroot] [PATCH 3/4] lua: remove 3 sub-options,
- always install all
-In-Reply-To: <1343629890-4657-3-git-send-email-francois.perrad@gadz.org>
-References: <1343629890-4657-1-git-send-email-francois.perrad@gadz.org>
- <1343629890-4657-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20120730225645.6ed17e9f@skate>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Mon, 30 Jul 2012 16:13:58 -0500
+Subject: [Buildroot] populating an initramfs
+Message-ID: <CAE9DZURcJ-4nb5-xA+yVyLf8msVr=ca6DAX2ZTY_OD0w+1n6vQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 30 Jul 2012 08:31:29 +0200,
-Francois Perrad <fperrad@gmail.com> a ?crit :
+Hi All,
 
-> ---
->  package/lua/Config.in |   18 ------------------
->  package/lua/lua.mk    |   17 +----------------
->  2 files changed, 1 insertion(+), 34 deletions(-)
-> 
-> diff --git a/package/lua/Config.in b/package/lua/Config.in
-> index 06f3046..fc6bb4c 100644
-> --- a/package/lua/Config.in
-> +++ b/package/lua/Config.in
-> @@ -32,29 +32,11 @@ endchoice
->  
->  if BR2_PACKAGE_LUA
->  
-> -config BR2_PACKAGE_LUA_COMPILER
-> -	bool "lua compiler"
-> -	select BR2_PACKAGE_LUA_SHARED_LIBRARY
-> -	help
-> -	  Install luac binary
-> -
-> -config BR2_PACKAGE_LUA_INTERPRETER
-> -	bool "lua interpreter"
-> -	select BR2_PACKAGE_LUA_SHARED_LIBRARY
-> -	help
-> -	  Install lua binary
+Forgive me in advance for asking a newb question.  I'm in the process
+of converting from Yocto/OE.
 
-Wouldn't it make sense to keep options for the compiler and
-interpreter? I presume using the compiler on the target is fairly
-uncommon (you would rather do the compilation at build time, no?).
+I have the need to populate both an initramfs as well as a rootfs with
+the contents of packages I build using buildroot.  What is the best
+way to do this?   Should I create two separate projects, one for the
+initramfs and one for the rootfs?  Or is there a way to select which
+contents go in each and keep it all in the same project?
 
-And Lua can be used as a library without the separate /usr/bin/lua
-interpreter, no?
+Thanks,
 
-But maybe this last option (the interpreter) is more complicated to
-handle with the choice between lua and luajit.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Dallas
