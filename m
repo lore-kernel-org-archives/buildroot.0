@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:22:43 +0200
-Subject: [Buildroot] [git commit] less: build after busybox
-Message-ID: <20120730172300.1552D96FB8@busybox.osuosl.org>
+Date: Mon, 30 Jul 2012 19:22:36 +0200
+Subject: [Buildroot] [git commit] dhcp: security bump to version 4.1-ESV-R6
+Message-ID: <20120730172259.F1C9496FB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe355d22785479a646b7875c8b0404ca5d6292e8
+commit: http://git.buildroot.net/buildroot/commit/?id=a2a4bf429b9bdaf00675b10d6a8a808ae688471a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build less after busybox if it's enabled, since we prefer the full-blown
-version over the light one if it's enabled (and busybox would overwrite
-the link when built afterwards).
+Fixes CVE-2012-3571 and CVE-2012-3954.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/less/less.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/dhcp/dhcp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/less/less.mk b/package/less/less.mk
-index b758e46..c0ecf20 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -6,7 +6,8 @@
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 22b068a..e5c9968 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- LESS_VERSION = 444
- LESS_SITE = http://www.greenwoodsoftware.com/less
--LESS_DEPENDENCIES = ncurses
-+# Build after busybox, full-blown is better
-+LESS_DEPENDENCIES = ncurses $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- 
- define LESS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
+-DHCP_VERSION  = 4.1-ESV-R4
++DHCP_VERSION  = 4.1-ESV-R6
+ DHCP_SITE     = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_CONF_ENV = ac_cv_file__dev_random=yes
+ DHCP_CONF_OPT = \
