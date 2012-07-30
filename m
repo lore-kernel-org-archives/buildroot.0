@@ -1,33 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 21:18:06 +0200
-Subject: [Buildroot] [git commit] udev: use /dev if udev_root not defined in
+Date: Mon, 30 Jul 2012 21:18:09 +0200
+Subject: [Buildroot] [git commit] udev: process udev events on startup in
 	init.d script
-Message-ID: <20120730191827.B533481EC9@busybox.osuosl.org>
+Message-ID: <20120730191827.CAEF081EC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b08fd56ae82ad2d003512e6128ae60016d0186df
+commit: http://git.buildroot.net/buildroot/commit/?id=29afecace95d0687477bf42f7ce4e918bcd0f271
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+udev rules are not processed for kernel events that occur before
+the udev daemon is started. Call udevadm trigger to replay these
+missed events.
 
 Signed-off-by: Jonathan Liu <net147@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/udev/S10udev |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/udev/S10udev |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
 diff --git a/package/udev/S10udev b/package/udev/S10udev
-index 13dfdf5..7bb4309 100755
+index 7bb4309..2c7b7e9 100755
 --- a/package/udev/S10udev
 +++ b/package/udev/S10udev
-@@ -27,7 +27,7 @@ test -r $UDEV_CONFIG || exit 6
- 
- case "$1" in
-     start)
--        echo -n "Populating $udev_root using udev: "
-+        echo -n "Populating ${udev_root:-/dev} using udev: "
+@@ -30,6 +30,7 @@ case "$1" in
+         echo -n "Populating ${udev_root:-/dev} using udev: "
          echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
          $UDEV_BIN -d || (echo "FAIL" && exit 1)
++        udevadm trigger
          echo "done"
+         ;;
+     stop)
