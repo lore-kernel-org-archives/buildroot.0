@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:16:52 +0200
-Subject: [Buildroot] [PATCH] gpsd: fix Python 2.5 build failure
-In-Reply-To: <1343632101-7179-1-git-send-email-spdawson@gmail.com>
-References: <1343632101-7179-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120730191652.562a15e2@skate>
+Date: Mon, 30 Jul 2012 19:17:02 +0200
+Subject: [Buildroot] [PATCH] gpsd: PPS feature depends on NTPSHM feature
+In-Reply-To: <1343632940-8604-1-git-send-email-spdawson@gmail.com>
+References: <1343632940-8604-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120730191702.30a566d6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 30 Jul 2012 08:08:21 +0100,
+Le Mon, 30 Jul 2012 08:22:20 +0100,
 spdawson at gmail.com a ?crit :
 
 > From: Simon Dawson <spdawson@gmail.com>
 > 
-> The platform.linux_distribution method was introduced in Python 2.6. Some
-> of the Buildroot autobuilders still use Python 2.5, which is causing build
-> failures such as the following.
+> The PPS feature of gpsd depends on the NTP shared memory time hinting feature.
 > 
->   http://autobuild.buildroot.net/results/045f1f69bac170d8e75cb4952a2e5b4e85a677b8/build-end.log
+> This patch caused the NTPSHM feature to be enabled whenever the PPS feature
+> is enabled. This should fix build failures such as the following.
 > 
-> This patch removes the linux distribution check from the gpsd SConstruct file.
+>   http://autobuild.buildroot.net/results/e58a9a9f884acb6834a8afe4a8a3d056dc509359/build-end.log
 > 
 > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
