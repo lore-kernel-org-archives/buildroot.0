@@ -1,26 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 19:17:02 +0200
-Subject: [Buildroot] [PATCH] gpsd: PPS feature depends on NTPSHM feature
-In-Reply-To: <1343632940-8604-1-git-send-email-spdawson@gmail.com>
-References: <1343632940-8604-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120730191702.30a566d6@skate>
+Date: Mon, 30 Jul 2012 19:17:16 +0200
+Subject: [Buildroot] [PATCH v2] libnfc: add license information
+In-Reply-To: <1343633528-10335-1-git-send-email-spdawson@gmail.com>
+References: <1343633528-10335-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120730191716.236b0764@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 30 Jul 2012 08:22:20 +0100,
+Le Mon, 30 Jul 2012 08:32:08 +0100,
 spdawson at gmail.com a ?crit :
 
 > From: Simon Dawson <spdawson@gmail.com>
-> 
-> The PPS feature of gpsd depends on the NTP shared memory time hinting feature.
-> 
-> This patch caused the NTPSHM feature to be enabled whenever the PPS feature
-> is enabled. This should fix build failures such as the following.
-> 
->   http://autobuild.buildroot.net/results/e58a9a9f884acb6834a8afe4a8a3d056dc509359/build-end.log
 > 
 > Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
