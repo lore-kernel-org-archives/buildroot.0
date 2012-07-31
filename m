@@ -1,51 +1,78 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Tue, 31 Jul 2012 17:24:27 +0800
-Subject: [Buildroot] [PATCH] linux: enable ubi and ubifs if we build a
- ubifs root filesystem
-In-Reply-To: <1343721051-8380-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1343721051-8380-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAEvN+1hTzsgFn_QiNsm4dHmdy5Wd1N9KsbYpwPkkpwtBfgnahA@mail.gmail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Tue, 31 Jul 2012 12:13:37 +0200
+Subject: [Buildroot] [PATCHv4 0/6] Add some support for device tree
+	kernels
+In-Reply-To: <20120730211616.424941a8@skate>
+References: <1343651569-6450-1-git-send-email-maxime.ripard@free-electrons.com>
+ <20120730211616.424941a8@skate>
+Message-ID: <5017AFD1.50501@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 31, 2012 at 3:50 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  linux/linux.mk | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index ca216a3..cf43818 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -166,6 +166,9 @@ define LINUX_CONFIGURE_CMDS
->                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
->         $(if $(BR2_PACKAGE_SYSTEMD),
->                 $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
-> +       $(if $(BR2_TARGET_ROOTFS_UBIFS),
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_MTD_UBI,$(@D)/.config)
-> +               $(call KCONFIG_ENABLE_OPT,CONFIG_UBIFS_FS,$(@D)/.config))
->         yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
->  endef
->
+Hi Thomas,
 
-I'm a little bit concerning about post modifications to kernel configs
-during the build process (not only this patch).
-It may not be so explicit that the kernel was "changed" when the users
-were only peaking and poking the root file system.
+Le 30/07/2012 21:16, Thomas Petazzoni a ?crit :
+> Le Mon, 30 Jul 2012 14:32:43 +0200,
+> Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
+> 
+>> This is a refactoring of the previous basic device tree
+>> options available for microblaze.
+> 
+> I am fine with the general design, but it doesn't work: the
+> qemu_microblazeel_defconfig doesn't build.
+> 
+> I had to make some changes:
+> 
+>  *) Change the defconfig to limit the number of modifications compared
+>     to the previous versions (keep architecture, toolchain, etc.)
+>     properties.
+> 
+>  *) Create a special kconfig entry for the linux.bin image format
+>     (Microblaze specific). This format requires mkimage to generate
+>     linux.bin, so we need to select BR2_LINUX_KERNEL_UBOOT_IMAGE. It
+>     probably worked on your system because you have mkimage installed
+>     system-wide, but since it isn't part of our required dependencies,
+>     you shouldn't rely on it.
+> 
+> However, even with those fixes, building the DTB doesn't work.
+> Apparently, system.dts/system.dtb are kind of "reserved" names for
+> Microblaze (from a quick reading of arch/microblaze/boot/Makefile). I
+> have the following build error:
+> 
+> Kernel: arch/microblaze/boot/linux.bin is ready  (#1)
+>   CHK     include/linux/version.h
+>   CHK     include/generated/utsrelease.h
+>   CALL    scripts/checksyscalls.sh
+>   Building modules, stage 2.
+>   MODPOST 0 modules
+> PATH="/home/test/outputs/t/host/bin:/home/test/outputs/t/host/usr/bin:/home/test/outputs/t/host/usr/sbin/:/usr/local/bin:/usr/bin:/bin:/usr/games" PERLLIB="/home/test/outputs/t/host/usr/lib/perl" /usr/bin/make -j2 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=microblaze INSTALL_MOD_PATH=/home/test/outputs/t/target CROSS_COMPILE=" /home/test/outputs/t/host/usr/bin/microblazeel-unknown-linux-gnu-" DEPMOD=/home/test/outputs/t/host/usr/sbin/depmod -C /home/test/outputs/t/build/linux-3.3.7 system.dtb
+> make[2]: *** No rule to make target `system.dtb'.  Stop.
+> make[1]: *** [/home/test/outputs/t/build/linux-3.3.7/.stamp_built] Error 2
+> make: *** [all] Error 2
+> 
+> It would be good if you could fix this problem and resubmit. Please
+> base your new work using the following branch, which includes the two
+> changes I've mentioned above:
 
-Since the Kernel may only be tested and released with certain configurations.
-It will be helpful if customer feedback on errors could include what
-they did explicitly as possible.
+It looks like in the previous patchset, the custom system.dts file was
+copied (and as such, overwriting the original system.dts file), and
+never built.
 
-Would it be better to issue warnings or even fail-stop the building
-process after sanity checks?
-If users really need to change the kernel configuration, make sure
-they are aware of their changes. :)
+From a quick test here, adding a
+select BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
+to the linux.bin image is putting back the same behaviour as before, and
+do not fail to build anymore.
 
-Thanks,
-Roy
+Do you want me to send an updated version?
+
+Maxime
+
+
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
