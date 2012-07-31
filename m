@@ -1,51 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:39:03 +0200
-Subject: [Buildroot] [git commit] qemu/ppc-mpc8544ds: update to use kernel
-	3.4.7
-Message-ID: <20120731214056.68C3B96FBA@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:40:15 +0200
+Subject: [Buildroot] [git commit] qemu/microblaze: update to use kernel 3.4.7
+Message-ID: <20120731214056.CF0BB96FBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e7051da75ea62b783a5418bf68fac825d9b12af
+commit: http://git.buildroot.net/buildroot/commit/?id=ece2f746d2f262e8da77ec486c36aaa2a84b6419
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/powerpc-mpc8544ds/readme.txt |    1 +
- configs/qemu_ppc_mpc8544ds_defconfig    |    6 +++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .../{kernel-3.3.config => kernel-3.4.config}       |    0
+ board/qemu/microblazebe-mmu/readme.txt             |    1 +
+ .../{kernel-3.3.config => kernel-3.4.config}       |    0
+ board/qemu/microblazeel-mmu/readme.txt             |    1 +
+ configs/qemu_microblazebe_mmu_defconfig            |    4 ++--
+ configs/qemu_microblazeel_mmu_defconfig            |    4 ++--
+ 6 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
-index 6ecdc4b..646f459 100644
---- a/board/qemu/powerpc-mpc8544ds/readme.txt
-+++ b/board/qemu/powerpc-mpc8544ds/readme.txt
+diff --git a/board/qemu/microblazebe-mmu/kernel-3.3.config b/board/qemu/microblazebe-mmu/kernel-3.4.config
+similarity index 100%
+rename from board/qemu/microblazebe-mmu/kernel-3.3.config
+rename to board/qemu/microblazebe-mmu/kernel-3.4.config
+diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+index c59c0bd..5281a0f 100644
+--- a/board/qemu/microblazebe-mmu/readme.txt
++++ b/board/qemu/microblazebe-mmu/readme.txt
 @@ -4,3 +4,4 @@ Run the emulation with:
  
  The login prompt will appear in the terminal that started Qemu.
  
 +Tested with QEMU 1.1.1
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 44c81de..8855961 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -6,13 +6,13 @@ BR2_powerpc_8548=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/board/qemu/microblazeel-mmu/kernel-3.3.config b/board/qemu/microblazeel-mmu/kernel-3.4.config
+similarity index 100%
+rename from board/qemu/microblazeel-mmu/kernel-3.3.config
+rename to board/qemu/microblazeel-mmu/kernel-3.4.config
+diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
+index 43a40e8..003d2a8 100644
+--- a/board/qemu/microblazeel-mmu/readme.txt
++++ b/board/qemu/microblazeel-mmu/readme.txt
+@@ -4,3 +4,4 @@ Run the emulation with:
  
--# Lock to 3.3 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_3=y
-+# Lock to 3.4 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_4=y
+ The login prompt will appear in the terminal that started Qemu.
  
++Tested with QEMU 1.1.1
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index 619ecbf..11c6f95 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/kernel-3.3.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/kernel-3.4.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index ad5f045..1ce9ac8 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/kernel-3.3.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/kernel-3.4.config"
+ BR2_LINUX_KERNEL_LINUX_BIN=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazeel-mmu/system.dts"
