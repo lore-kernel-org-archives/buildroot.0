@@ -1,273 +1,390 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 00:00:29 +0200
-Subject: [Buildroot] [git commit branch/next] Simplify x86 target
-	architecture variant handling
-Message-ID: <20120802195303.74DCF827F7@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 21:32:25 +0200
+Subject: [Buildroot] [git commit branch/next] pkg-stats: add license
+	information, rework information displayed
+Message-ID: <20120802195303.96B2B827F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ff012b3c70ea41cc6f241426320d1b168985f79
+commit: http://git.buildroot.net/buildroot/commit/?id=1ed1a83f1c415a77ab23f74c7a909f331319facd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Instead of having two separate list of choices for select the target
-architecture variant for i386 and x86_64, with many CPU choices
-duplicated (because all modern x86 CPUs can be both used as i386 or
-x86_64), merge them into a single list. In the x86_64 case, all the
-x86 CPUs that do not support the 64 bits instruction set are hidden.
+Now that most packages have been converted over to package
+infrastructures, keep only one column to show the package
+infrastructures.
+
+A new column, showing of the package has license information, has been
+added. This will help in increasing the number of packages having
+license metadata.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in.arch   |  113 ++++++++++++++--------------------------------
- toolchain/gcc/Config.in |    4 +-
- 2 files changed, 37 insertions(+), 80 deletions(-)
+ support/scripts/pkg-stats |  261 +++++++++++++++++++-------------------------
+ 1 files changed, 113 insertions(+), 148 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 75c5499..342066e 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -337,44 +337,60 @@ config BR2_X86_CPU_HAS_SSSE3
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ac5d8ec..ca2d0ec 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -36,53 +36,65 @@ td {
+ td.centered {
+   text-align: center;
+ }
+-tr.wrong td {
++td.wrong {
+   background: #ff9a69;
+ }
+-tr.correct td {
++td.correct {
+   background: #d2ffc4;
+ }
++td.nopatches {
++  background: #d2ffc4;
++}
++
++td.somepatches {
++  background: #ffd870;
++}
++
++td.lotsofpatches {
++  background: #ff9a69;
++}
+ </style>
++<title>Statistics of Buildroot packages</title>
+ </head>
  
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_i386
--	default BR2_x86_i586
-+	depends on BR2_i386 || BR2_x86_64
-+	default BR2_x86_i586 if BR2_i386
-+	default BR2_x86_generic if BR2_x86_64
- 	help
- 	  Specific CPU variant to use
+ <a href=\"#results\">Results</a><br/>
  
-+config BR2_x86_generic
-+	bool "generic"
- config BR2_x86_i386
- 	bool "i386"
-+	depends on !BR2_x86_64
- config BR2_x86_i486
- 	bool "i486"
-+	depends on !BR2_x86_64
- config BR2_x86_i586
- 	bool "i586"
-+	depends on !BR2_x86_64
- config BR2_x86_i686
- 	bool "i686"
-+	depends on !BR2_x86_64
- config BR2_x86_pentiumpro
- 	bool "pentium pro"
-+	depends on !BR2_x86_64
- config BR2_x86_pentium_mmx
- 	bool "pentium MMX"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_pentium_m
- 	bool "pentium mobile"
-+	select BR2_X86_CPU_HAS_MMX
-+	select BR2_X86_CPU_HAS_SSE
-+	depends on !BR2_x86_64
- config BR2_x86_pentium2
- 	bool "pentium2"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_pentium3
- 	bool "pentium3"
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
-+	depends on !BR2_x86_64
- config BR2_x86_pentium4
- 	bool "pentium4"
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
- 	select BR2_X86_CPU_HAS_SSE2
-+	depends on !BR2_x86_64
- config BR2_x86_prescott
- 	bool "prescott"
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
- 	select BR2_X86_CPU_HAS_SSE2
- 	select BR2_X86_CPU_HAS_SSE3
-+	depends on !BR2_x86_64
- config BR2_x86_nocona
- 	bool "nocona"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -398,16 +414,20 @@ config BR2_x86_atom
- config BR2_x86_k6
- 	bool "k6"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_k6_2
- 	bool "k6-2"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_athlon
- 	bool "athlon"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_athlon_4
- 	bool "athlon-4"
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
-+	depends on !BR2_x86_64
- config BR2_x86_opteron
- 	bool "opteron"
- 	select BR2_X86_CPU_HAS_MMX
-@@ -430,68 +450,24 @@ config BR2_x86_geode
- 	# Don't include MMX support because there several variant of geode
- 	# processor, some with MMX support, some without.
- 	# See: http://en.wikipedia.org/wiki/Geode_%28processor%29
-+	depends on !BR2_x86_64
- config BR2_x86_c3
- 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_c32
- 	bool "Via C3-2 (Nehemiah cores)"
- 	select BR2_X86_CPU_HAS_MMX
- 	select BR2_X86_CPU_HAS_SSE
-+	depends on !BR2_x86_64
- config BR2_x86_winchip_c6
- 	bool "IDT Winchip C6"
- 	select BR2_X86_CPU_HAS_MMX
-+	depends on !BR2_x86_64
- config BR2_x86_winchip2
- 	bool "IDT Winchip 2"
- 	select BR2_X86_CPU_HAS_MMX
--endchoice
+ <table>
+ <tr>
+-<td rowspan=\"2\">Id</td>
+-<td rowspan=\"2\">Package</td>
+-<td rowspan=\"2\">Patch count</td>
+-<td colspan=\"2\" class=\"centered\">autotools-package</td>
+-<td colspan=\"2\" class=\"centered\">generic-package</td>
+-<td colspan=\"2\" class=\"centered\">cmake-package</td>
+-<td colspan=\"2\" class=\"centered\">manual</td>
+-<td rowspan=\"2\" class=\"centered\">Actions</td>
++<td>Id</td>
++<td>Package</td>
++<td class=\"centered\">Patch count</td>
++<td class=\"centered\">Infrastructure</td>
++<td class=\"centered\">License</td>
+ </tr>
+-<tr>
+-<td class=\"centered\">host</td>
+-<td class=\"centered\">target</td>
+-<td class=\"centered\">host</td>
+-<td class=\"centered\">target</td>
+-<td class=\"centered\">host</td>
+-<td class=\"centered\">target</td>
+-<td class=\"centered\">host</td>
+-<td class=\"centered\">target</td>
+-</tr>"
 -
--choice
--	prompt "Target Architecture Variant"
--	depends on BR2_x86_64
--	default BR2_x86_64_generic
--	help
--	  Specific CPU variant to use
+-convert_to_generic_target=0
+-convert_to_generic_host=0
+-convert_to_target_autotools=0
+-convert_to_host_autotools=0
++"
++
++autotools_packages=0
++cmake_packages=0
++generic_packages=0
++manual_packages=0
++packages_with_licence=0
++packages_without_licence=0
+ total_patch_count=0
+ cnt=0
+-for i in $(find package/ -name '*.mk') ; do
++
++for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 
+     if test \
++	$i = "boot/common.mk" -o \
++	$i = "linux/linux-ext-xenomai.mk" -o \
++	$i = "linux/linux-ext-rtai.mk" -o \
++	$i = "linux/linux-ext-ocf-linux.mk" -o \
+ 	$i = "package/efl/efl.mk" -o \
+ 	$i = "package/games/games.mk" -o \
+ 	$i = "package/gtk2-themes/gtk2-themes.mk" -o \
+ 	$i = "package/multimedia/multimedia.mk" -o \
+-	$i = "package/customize/customize.mk" -o \
++ 	$i = "package/customize/customize.mk" -o \
++ 	$i = "package/pkg-autotools.mk" -o \
++ 	$i = "package/pkg-cmake.mk" -o \
++ 	$i = "package/pkg-generic.mk" -o \
++ 	$i = "package/pkg-utils.mk" -o \
++ 	$i = "package/pkg-download.mk" -o \
+ 	$i = "package/matchbox/matchbox.mk" -o \
+ 	$i = "package/x11r7/x11r7.mk" ; then
+ 	echo "skipping $i" 1>&2
+@@ -91,78 +103,67 @@ for i in $(find package/ -name '*.mk') ; do
+ 
+     cnt=$((cnt+1))
+ 
+-    is_auto_host=0
+-    is_auto_target=0
+-    is_cmake_host=0
+-    is_cmake_target=0
+-    is_pkg_target=0
+-    is_pkg_host=0
+-    is_manual_target=0
+-    is_manual_host=0
++    hashost=0
++    hastarget=0
+ 
++    # Determine package infrastructure
+     if grep -E "\(host-autotools-package\)" $i > /dev/null ; then
+-	is_auto_host=1
++	infratype="autotools"
++	hashost=1
+     fi
+ 
+     if grep -E "\(autotools-package\)" $i > /dev/null ; then
+-	is_auto_target=1
++	infratype="autotools"
++	hastarget=1
+     fi
+ 
+     if grep -E "\(host-generic-package\)" $i > /dev/null ; then
+-	is_pkg_host=1
++	infratype="generic"
++	hashost=1
+     fi
+ 
+     if grep -E "\(generic-package\)" $i > /dev/null ; then
+-	is_pkg_target=1
++	infratype="generic"
++	hastarget=1
+     fi
+ 
+     if grep -E "\(host-cmake-package\)" $i > /dev/null ; then
+-	is_cmake_host=1
++	infratype="cmake"
++	hashost=1
+     fi
+ 
+     if grep -E "\(cmake-package\)" $i > /dev/null ; then
+-	is_cmake_target=1
++	infratype="cmake"
++	hastarget=1
+     fi
+ 
+     pkg=$(basename $i)
+     pkg=${pkg%.mk}
++    pkgvariable=$(echo ${pkg} | tr "a-z-" "A-Z_")
+ 
+-    if grep "^host-$pkg:" $i > /dev/null ; then
+-	is_manual_host=1
+-    fi
 -
--config BR2_x86_64_generic
--	bool "generic"
--config BR2_x86_64_barcelona
--	bool "barcelona"
--	select BR2_X86_CPU_HAS_MMX
--	select BR2_X86_CPU_HAS_3DNOW
--	select BR2_X86_CPU_HAS_SSE
--	select BR2_X86_CPU_HAS_SSE2
--	select BR2_X86_CPU_HAS_SSE3
--config BR2_x86_64_opteron_sse3
--	bool "opteron w/ sse3"
--	select BR2_X86_CPU_HAS_MMX
--	select BR2_X86_CPU_HAS_SSE
--	select BR2_X86_CPU_HAS_SSE2
--	select BR2_X86_CPU_HAS_SSE3
--config BR2_x86_64_opteron
--	bool "opteron"
--	select BR2_X86_CPU_HAS_MMX
--	select BR2_X86_CPU_HAS_SSE
--	select BR2_X86_CPU_HAS_SSE2
--config BR2_x86_64_nocona
--	bool "nocona"
--	select BR2_X86_CPU_HAS_MMX
--	select BR2_X86_CPU_HAS_SSE
--	select BR2_X86_CPU_HAS_SSE2
--	select BR2_X86_CPU_HAS_SSE3
--config BR2_x86_64_core2
--	bool "core2"
--	select BR2_X86_CPU_HAS_MMX
--	select BR2_X86_CPU_HAS_SSE
--	select BR2_X86_CPU_HAS_SSE2
--	select BR2_X86_CPU_HAS_SSE3
--	select BR2_X86_CPU_HAS_SSSE3
--config BR2_x86_64_atom
--	bool "atom"
--	select BR2_X86_CPU_HAS_MMX
--	select BR2_X86_CPU_HAS_SSE
--	select BR2_X86_CPU_HAS_SSE2
--	select BR2_X86_CPU_HAS_SSE3
--	select BR2_X86_CPU_HAS_SSSE3
-+	depends on !BR2_x86_64
- endchoice
+-    if test $is_pkg_target -eq 0 -a $is_auto_target -eq 0 -a $is_cmake_target -eq 0; then
+-	is_manual_target=1
+-    fi
+-
+-    tasks=""
+-
+-    if [ $is_manual_target -eq 1 ] ; then
+-	if grep "/configure" $i > /dev/null ; then
+-	    tasks=$tasks"<li>convert package to autotools ?</li>"
+-	    convert_to_target_autotools=$((convert_to_target_autotools+1))
+-	else
+-	    tasks=$tasks"<li>convert to generic target</li>"
+-	    convert_to_generic_target=$((convert_to_generic_target+1))
+-	fi
+-    fi
  
- choice
-@@ -676,16 +652,17 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_pentium_m
- 	default "i686"		if BR2_x86_pentiumpro
- 	default "i686"		if BR2_x86_prescott
--	default "i686"		if BR2_x86_nocona
--	default "i686"		if BR2_x86_core2
--	default "i686"		if BR2_x86_atom
--	default "i686"		if BR2_x86_opteron
--	default "i686"		if BR2_x86_opteron_sse3
--	default "i686"		if BR2_x86_barcelona
-+	default "i686"		if BR2_x86_nocona && BR2_i386
-+	default "i686"		if BR2_x86_core2 && BR2_i386
-+	default "i686"		if BR2_x86_atom && BR2_i386
-+	default "i686"		if BR2_x86_opteron && BR2_i386
-+	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
-+	default "i686"		if BR2_x86_barcelona && BR2_i386
- 	default "i686"		if BR2_x86_k6
- 	default "i686"		if BR2_x86_k6_2
- 	default "i686"		if BR2_x86_athlon
- 	default "i686"		if BR2_x86_athlon_4
-+	default "x86_64"	if BR2_x86_64
- 	default "m68k"		if BR2_m68k
- 	default "microblaze"	if BR2_microblaze
- 	default "mips"		if BR2_mips
-@@ -701,14 +678,6 @@ config BR2_ARCH
- 	default "sh4aeb"	if BR2_sh4aeb
- 	default "sh64"		if BR2_sh64
- 	default "sparc"		if BR2_sparc
--	default "x86_64"	if BR2_x86_64
--	default "x86_64"	if BR2_x86_64_generic
--	default "x86_64"	if BR2_x86_64_nocona
--	default "x86_64"	if BR2_x86_64_core2
--	default "x86_64"	if BR2_x86_64_atom
--	default "x86_64"	if BR2_x86_64_opteron
--	default "x86_64"	if BR2_x86_64_opteron_sse3
--	default "x86_64"	if BR2_x86_64_barcelona
- 	default "xtensa"	if BR2_xtensa
+-    if [ $is_manual_host -eq 1 ]; then
+-	if grep "/configure" $i > /dev/null ; then
+-	    tasks=$tasks"<li>convert package to autotools ?</li>"
+-	    convert_to_host_autotools=$((convert_to_host_autotools+1))
+-	else
+-	    tasks=$tasks"<li>convert to generic host</li>"
+-	    convert_to_generic_host=$((convert_to_generic_host+1))
+-	fi
++    # Count packages per infrastructure
++    if [ -z ${infratype} ] ; then
++	infratype="manual"
++	manual_packages=$(($manual_packages+1))
++    elif [ ${infratype} = "autotools" ]; then
++	autotools_packages=$(($autotools_packages+1))
++    elif [ ${infratype} = "cmake" ]; then
++	cmake_packages=$(($cmake_packages+1))
++    elif [ ${infratype} = "generic" ]; then
++	generic_packages=$(($generic_packages+1))
+     fi
  
+-    if test -n "$tasks" ; then
+-	echo "<tr class=\"wrong\">"
++    if grep -qE "^${pkgvariable}_LICENSE =" $i ; then
++	packages_with_license=$(($packages_with_license+1))
++	license=1
+     else
+-	echo "<tr class=\"correct\">"
++	packages_without_license=$(($packages_without_license+1))
++	license=0
+     fi
  
-@@ -750,13 +719,7 @@ config BR2_GCC_TARGET_TUNE
- 	default c3		if BR2_x86_c3
- 	default c3-2		if BR2_x86_c32
- 	default geode		if BR2_x86_geode
--	default generic		if BR2_x86_64_generic
--	default nocona		if BR2_x86_64_nocona
--	default core2		if BR2_x86_64_core2
--	default atom		if BR2_x86_64_atom
--	default k8		if BR2_x86_64_opteron
--	default k8-sse3		if BR2_x86_64_opteron_sse3
--	default barcelona	if BR2_x86_64_barcelona
-+	default generic		if BR2_x86_generic
- 	default arm600		if BR2_arm600
- 	default arm610		if BR2_arm610
- 	default arm620		if BR2_arm620
-@@ -864,12 +827,6 @@ config BR2_GCC_TARGET_ARCH
- 	default athlon-4	if BR2_x86_athlon_4
- 	default winchip-c6	if BR2_x86_winchip_c6
- 	default winchip2	if BR2_x86_winchip2
--	default nocona		if BR2_x86_64_nocona
--	default core2		if BR2_x86_64_core2
--	default atom		if BR2_x86_64_atom
--	default k8		if BR2_x86_64_opteron
--	default k8-sse3		if BR2_x86_64_opteron_sse3
--	default barcelona	if BR2_x86_64_barcelona
- 	default c3		if BR2_x86_c3
- 	default c3-2		if BR2_x86_c32
- 	default geode		if BR2_x86_geode
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index fa526bb..d08efbc 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -15,11 +15,11 @@ choice
- 	       bool "gcc 4.2.2-avr32-2.1.5"
++    echo "<tr>"
++
+     echo "<td>$cnt</td>"
+     echo "<td>$i</td>"
  
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_x86_64_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc
-+		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc
- 		bool "gcc 4.3.x"
+@@ -171,86 +172,37 @@ for i in $(find package/ -name '*.mk') ; do
+     total_patch_count=$(($total_patch_count+$patch_count))
  
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_avr32 && !BR2_x86_atom && !BR2_x86_64_atom
-+		depends on !BR2_avr32 && !BR2_x86_atom
- 		bool "gcc 4.4.x"
+     if test $patch_count -lt 1 ; then
+-	patch_count_color="#00ff00"
++	patch_count_class="nopatches"
+     elif test $patch_count -lt 5 ; then
+-	patch_count_color="#ffc600"
+-    else
+-	patch_count_color="#ff0000"
+-    fi
+-
+-    echo "<td class=\"centered\" style=\"color: $patch_count_color; font-weight: bold;\">"
+-    echo $patch_count
+-    echo "</td>"
+-
+-    echo "<td class=\"centered\">"
+-    if [ $is_auto_host -eq 1 ] ; then
+-	echo "<b>YES</b>"
++	patch_count_class="somepatches"
+     else
+-	echo "NO"
++	patch_count_class="lotsofpatches"
+     fi
+-    echo "</td>"
  
- 	config BR2_GCC_VERSION_4_5_X
+-    echo "<td class=\"centered\">"
+-    if [ $is_auto_target -eq 1 ] ; then
+-	echo "<b>YES</b>"
+-    else
+-	echo "NO"
+-    fi
++    echo "<td class=\"centered ${patch_count_class}\">"
++    echo "<b>$patch_count</b>"
+     echo "</td>"
+ 
+-    echo "<td class=\"centered\">"
+-    if [ $is_pkg_host -eq 1 ] ; then
+-	echo "<b>YES</b>"
++    if [ ${infratype} = "manual" ] ; then
++	echo "<td class=\"centered wrong\"><b>manual</b></td>"
+     else
+-	echo "NO"
+-    fi
+-    echo "</td>"
+-
+-    echo "<td class=\"centered\">"
+-    if [ $is_pkg_target -eq 1 ] ; then
+-	echo "<b>YES</b>"
+-    else
+-	echo "NO"
+-    fi
+-    echo "</td>"
+-
+-    echo "<td class=\"centered\">"
+-    if [ $is_cmake_host -eq 1 ] ; then
+-	echo "<b>YES</b>"
+-    else
+-	echo "NO"
+-    fi
+-    echo "</td>"
+-
+-    echo "<td class=\"centered\">"
+-    if [ $is_cmake_target -eq 1 ] ; then
+-	echo "<b>YES</b>"
+-    else
+-	echo "NO"
+-    fi
+-    echo "</td>"
+-
+-    echo "<td class=\"centered\">"
+-    if [ $is_manual_host -eq 1 ] ; then
+-	echo "<b>YES</b>"
+-    else
+-	echo "NO"
++	echo "<td class=\"centered correct\">"
++	echo "<b>${infratype}</b><br/>"
++	if [ ${hashost} -eq 1 -a ${hastarget} -eq 1 ]; then
++	    echo "target + host"
++	elif [ ${hashost} -eq 1 ]; then
++	    echo "host"
++	else
++	    echo "target"
++	fi
++	echo "</td>"
+     fi
+-    echo "</td>"
+ 
+-    echo "<td class=\"centered\">"
+-    if [ $is_manual_target -eq 1 ] ; then
+-	echo "<b>YES</b>"
++    if [ ${license} -eq 0 ] ; then
++	echo "<td class=\"centered wrong\">No</td>"
+     else
+-	echo "NO"
++	echo "<td class=\"centered correct\">Yes</td>"
+     fi
+-    echo "</td>"
+-
+-    echo "<td>"
+-    echo "<ul>"
+-    echo $tasks
+-    echo "</ul>"
+-    echo "</td>"
+ 
+     echo "</tr>"
+ 
+@@ -259,20 +211,28 @@ echo "</table>"
+ 
+ echo "<table>"
+ echo "<tr>"
+-echo "<td>Packages to convert to generic target</td>"
+-echo "<td>$convert_to_generic_target</td>"
++echo "<td>Packages using the <i>generic</i> infrastructure</td>"
++echo "<td>$generic_packages</td>"
++echo "</tr>"
++echo "<tr>"
++echo "<td>Packages using the <i>cmake</i> infrastructure</td>"
++echo "<td>$cmake_packages</td>"
+ echo "</tr>"
+ echo "<tr>"
+-echo "<td>Packages to convert to generic host</td>"
+-echo "<td>$convert_to_generic_host</td>"
++echo "<td>Packages using the <i>autotools</i> infrastructure</td>"
++echo "<td>$autotools_packages</td>"
+ echo "</tr>"
+ echo "<tr>"
+-echo "<td>Packages to convert to target autotools</td>"
+-echo "<td>$convert_to_target_autotools</td>"
++echo "<td>Packages not using any infrastructure</td>"
++echo "<td>$manual_packages</td>"
+ echo "</tr>"
+ echo "<tr>"
+-echo "<td>Packages to convert to host autotools</td>"
+-echo "<td>$convert_to_host_autotools</td>"
++echo "<td>Packages having license information</td>"
++echo "<td>$packages_with_license</td>"
++echo "</tr>"
++echo "<tr>"
++echo "<td>Packages not having licence information</td>"
++echo "<td>$packages_without_license</td>"
+ echo "</tr>"
+ echo "<tr>"
+ echo "<td>Number of patches in all packages</td>"
+@@ -283,3 +243,8 @@ echo "<td>TOTAL</td>"
+ echo "<td>$cnt</td>"
+ echo "</tr>"
+ echo "</table>"
++
++echo "<hr/>"
++echo "<i>Updated on $(LANG=C date), Git commit $(git log master -n 1 --pretty=format:%H)</i>"
++echo "</body>"
++echo "</html>"
+\ No newline at end of file
