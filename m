@@ -1,23 +1,35 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 31 Jul 2012 09:36:49 +0100
-Subject: [Buildroot] [PATCH] protobuf: add license information
-In-Reply-To: <20120731083054.GC9675@sapphire.tkos.co.il>
-References: <1343722559-10028-1-git-send-email-spdawson@gmail.com>
- <20120731083054.GC9675@sapphire.tkos.co.il>
-Message-ID: <CAHt8ZCNq4cZC0d4kAD4CtmxEbcsqL_cOHHsrcFHA3cUxqLOgjw@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue, 31 Jul 2012 09:37:01 +0100
+Subject: [Buildroot] [PATCH v2] protobuf: add license information
+Message-ID: <1343723821-11642-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch, thanks for your feedback.
+From: Simon Dawson <spdawson@gmail.com>
 
-On 31 July 2012 09:30, Baruch Siach <baruch@tkos.co.il> wrote:
-> The text at https://code.google.com/p/protobuf/source/browse/trunk/COPYING.txt
-> looks more like a 3-clause BSD licence (see
-> http://en.wikipedia.org/wiki/BSD_licenses). Is this considered proprietary?
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v2: As pointed out by Baruch Siach, the correct license is three-clause BSD,
+ and not "PROPRIETARY" as claimed by v1 of this patch.
 
-You are right. I'll fix the license information, and resubmit.
+ package/protobuf/protobuf.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Simon.
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 6e49dd3..5032d70 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -6,6 +6,8 @@
+ PROTOBUF_VERSION = 2.4.1
+ PROTOBUF_SOURCE = protobuf-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = http://protobuf.googlecode.com/files/
++PROTOBUF_LICENSE = BSD-3c
++PROTOBUF_LICENSE_FILES = COPYING.txt
+ 
+ # N.B. Need to use host protoc during cross compilation.
+ PROTOBUF_DEPENDENCIES = host-protobuf
+-- 
+1.7.9.5
