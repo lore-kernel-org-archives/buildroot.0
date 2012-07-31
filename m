@@ -1,34 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 12:35:22 +0200
-Subject: [Buildroot] [PATCH] sysprof: New package.
-In-Reply-To: <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
-References: <CAFbHwiTWnB+EtB=Du5bkAa7mtKfJ7nHeyWGshpq7Rcvjf9O__g@mail.gmail.com>
- <20120730235830.27770869@skate> <20120731110420.76490dd1@skate>
- <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
-Message-ID: <20120731123522.501dae00@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 31 Jul 2012 16:30:59 +0200
+Subject: [Buildroot] [PATCH] less: build after busybox
+In-Reply-To: <50126CD8.7010201@zacarias.com.ar>
+References: <1343330317-24730-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAHXCMM+ORAKWNqQJ34FEZ+AbQ5dfpVuZAF3Y85xz6Wf9pmccmg@mail.gmail.com>
+ <50124E38.6040504@mind.be> <50126CD8.7010201@zacarias.com.ar>
+Message-ID: <5017EC23.2080001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 31 Jul 2012 11:31:20 +0100,
-Will Newton <will.newton@gmail.com> a ?crit :
+On 07/27/12 12:26, Gustavo Zacarias wrote:
+> On 07/27/12 05:15, Arnout Vandecappelle wrote:
+>
+>> >    One alternative could be to automatically deselect less from busybox
+>> >  when the full-blown less is selected.  But also that is a bit complex
+>> >  I think.
+>> >
+> I'm not a big fan of that either, it's not buildroot's resposability to
+> do effort deduplication.
+> With that reasoning should we disable busybox's httpd if
+> lighttpd/hiawatha/boa/some other web server is enabled?
+> It's a thin line to walk on, lighttpd>  boa so boa should be disabled,
+> and things like that...
 
-> Would something like the below be acceptable? It's not very clean but
-> until uClibc supports this define I don't know if there is a better
-> alternative.
+  There's a big difference: for busybox, people often use the default config,
+so the decision to include httpd in unconscious.  boa or lighttpd can only
+be selected explicitly.
 
-It's similar to
-http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-kernel/sysprof/files/define-NT_GNU_BUILD_ID.patch,
-so I guess it's acceptable. The perf people are also doing the same
-thing apparently.
+  The difficulty you mention does exist for libxml2 vs. expat, because those
+are often selected automatically.
 
-Thanks, I will commit this!
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
