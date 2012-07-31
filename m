@@ -1,77 +1,141 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Tue, 31 Jul 2012 23:08:28 +0200
-Subject: [Buildroot] [git commit branch/next] Revert "Microblaze: build
-	kernel with device tree"
-Message-ID: <20120802195303.DC37A827F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Rework support for the device
+	tree
+Message-ID: <20120802195303.EE223827F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=942fc4c554f4850810118dba3f9036fc9e39a830
+commit: http://git.buildroot.net/buildroot/commit/?id=69fc497df0ae51bcc8a067c849447abdeb3cb2be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is way too specific to microblaze-only. Remove this support to
-introduce a more generic way to do support device tree kernels.
+This patch introduces some support for device tree-enabled kernels.
 
-This reverts commit aaed42d15643e0cb64c96fa400a6097a19d19ef4.
+It replaces the former BR2_LINUX_KERNEL_DTS_FILE option that was
+microblaze-only, that was quite limited. This option was quite
+limited, first obviously because it was restricted to microblaze,
+but also because it targetted only external device tree source files,
+and allowed only to build simpleImages using the custom image name
+mechanism.
+
+This patch adds a much more generic one, that can work on basically
+every architecture that supports device tree. It allows to build
+both device tree source file that comes with the kernel source or to
+set the path to the device tree file to use so that one can use a
+custom device tree.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    8 --------
- linux/linux.mk  |   14 --------------
- 2 files changed, 0 insertions(+), 22 deletions(-)
+ linux/Config.in |   42 ++++++++++++++++++++++++++++++++++++++++++
+ linux/linux.mk  |   19 +++++++++++++++++++
+ 2 files changed, 61 insertions(+), 0 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index e0c1c7e..915b1b6 100644
+index 915b1b6..16c7ea7 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
-@@ -125,14 +125,6 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
+@@ -175,6 +175,48 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	  Specify the kernel make target to build the kernel that you
+ 	  need.
  
--config BR2_LINUX_KERNEL_DTS_FILE
--    string "Device Tree dts file location"
--    depends on BR2_microblaze
--    help
--      Path from where the dts file has to be copied
--      The final "custom target" name depends on the
--      dts file name:
--          <name>.dts --> simpleImage.<name>
- #
- # Binary format
- #
++config BR2_LINUX_KERNEL_DTS_SUPPORT
++	bool "Device tree support"
++	help
++	  Compile a device tree source into a device tree blob.
++	  Select the dts file to compile in the options below.
++
++if BR2_LINUX_KERNEL_DTS_SUPPORT
++
++choice
++	prompt "Device tree source"
++	default BR2_LINUX_KERNEL_USE_INTREE_DTS
++
++config BR2_LINUX_KERNEL_USE_INTREE_DTS
++	bool "Use a device tree present in the kernel."
++	help
++	   Use a device tree source distributed with
++	   the kernel sources. The dts files are located
++           in the arch/<arch>/boot/dts folder.
++
++config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
++	bool "Use a custom device tree file"
++	help
++	  Use a custom device tree file, i.e, a device
++	  tree file that does not belong to the kernel
++	  source tree.
++endchoice
++
++config BR2_LINUX_KERNEL_INTREE_DTS_NAME
++	string "Device Tree Source file name"
++	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
++	help
++	 Name of the device tree source file, without
++	 the trailing .dts
++
++config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
++	string "Device Tree Source file path"
++	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
++	help
++	  Path to the device tree source file
++
++endif
++
+ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	bool "Install kernel image to /boot in target"
+ 	depends on !BR2_TARGET_ROOTFS_INITRAMFS
 diff --git a/linux/linux.mk b/linux/linux.mk
-index ca216a3..1b7e0b7 100644
+index 1b7e0b7..099f8ba 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -119,18 +119,6 @@ endef
+@@ -48,6 +48,12 @@ LINUX_MAKE_FLAGS = \
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
  
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
++ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
++KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_INTREE_DTS_NAME)
++else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
++KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
++endif
++
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+ LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+ else
+@@ -155,13 +161,25 @@ define LINUX_CONFIGURE_CMDS
+ 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
+ endef
  
--ifeq ($(KERNEL_ARCH),microblaze)
--# on microblaze, we always want mkimage
--LINUX_DEPENDENCIES+=host-uboot-tools
--
--define LINUX_COPY_DTS
--    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
--        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
--    else \
--        echo "Cannot copy dts file!" ; \
--    fi
--endef
--endif
++ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
++define LINUX_BUILD_DTB
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
++endef
++define LINUX_INSTALL_DTB
++	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
++endef
++endif
++
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
++	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
++		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
++	$(LINUX_BUILD_DTB)
+ endef
  
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
-@@ -145,8 +133,6 @@ define LINUX_CONFIGURE_CMDS
- 	$(if $(BR2_ARM_EABI),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
--    $(if $(BR2_microblaze),
--        $(call LINUX_COPY_DTS))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
+ 
+@@ -186,6 +204,7 @@ endef
+ 
+ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
++	$(LINUX_INSTALL_DTB)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
