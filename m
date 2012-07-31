@@ -1,31 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 21:38:16 +0200
-Subject: [Buildroot] [git commit branch/next] pkg-stats: ensure infratype is
-	reset for every package
-Message-ID: <20120802195303.A878C827F7@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 20:30:04 +0200
+Subject: [Buildroot] [git commit branch/next] sysprof: add patch to fix
+	build failures related to NT_GNU_BUILD_ID
+Message-ID: <20120802195303.8437F827F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=697f034f589e0cacaf01f57baa2b9015f7f3227d
+commit: http://git.buildroot.net/buildroot/commit/?id=ed7e0927f8e4c480b3efde9928fb886f47d36b85
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/pkg-stats |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../sysprof-02-define-NT_GNU_BUILD_ID.patch        |   22 ++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index ca2d0ec..de73eeb 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -105,6 +105,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 
-     hashost=0
-     hastarget=0
-+    infratype=""
- 
-     # Determine package infrastructure
-     if grep -E "\(host-autotools-package\)" $i > /dev/null ; then
+diff --git a/package/sysprof/sysprof-02-define-NT_GNU_BUILD_ID.patch b/package/sysprof/sysprof-02-define-NT_GNU_BUILD_ID.patch
+new file mode 100644
+index 0000000..dcc2cbe
+--- /dev/null
++++ b/package/sysprof/sysprof-02-define-NT_GNU_BUILD_ID.patch
+@@ -0,0 +1,22 @@
++On uclibc elf.h does not have GNU extentions but we need this define
++so we define it locally if its not getting it from elf.h
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++
++Upstream-Status: Pending
++
++Index: git/elfparser.h
++===================================================================
++--- git.orig/elfparser.h	2011-07-16 18:57:41.000000000 -0700
+++++ git/elfparser.h	2011-07-16 20:28:54.733829895 -0700
++@@ -17,6 +17,10 @@
++  */
++ #include <glib.h>
++ 
+++#ifndef NT_GNU_BUILD_ID
+++#define NT_GNU_BUILD_ID 3
+++#endif
+++
++ typedef struct ElfSym ElfSym;
++ typedef struct ElfParser ElfParser;
++ 
