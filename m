@@ -1,51 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:39:10 +0200
-Subject: [Buildroot] [git commit branch/next] qemu/arm-vexpress: update to
-	use kernel 3.4.7
-Message-ID: <20120802195304.E460596CE6@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:39:08 +0200
+Subject: [Buildroot] [git commit branch/next] qemu/sh4-r2d: update to use
+	kernel 3.2.24
+Message-ID: <20120802195304.CEE4396CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71bcaa69d09d8cad9274a8b7ec6c7055f6102a55
+commit: http://git.buildroot.net/buildroot/commit/?id=14bd1e4c501ba24826fb9110dce563d06f1ce898
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/arm-vexpress/readme.txt  |    2 ++
- configs/qemu_arm_vexpress_defconfig |    6 +++---
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ board/qemu/sh4-r2d/readme.txt  |    1 +
+ configs/qemu_sh4_r2d_defconfig |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
-index 0d3631c..aeea842 100644
---- a/board/qemu/arm-vexpress/readme.txt
-+++ b/board/qemu/arm-vexpress/readme.txt
-@@ -4,3 +4,5 @@ Run the emulation with:
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 875e3d0..c9b4a10 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -5,3 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
  
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-+
 +Tested with QEMU 1.1.1
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 9596fe5..03ea6e0 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -11,12 +11,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.3 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_3=y
-+# Lock to 3.4 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_4=y
- 
- # Kernel
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index a580870..0edd583 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ # Linux kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.18"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.24"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
  BR2_LINUX_KERNEL_ZIMAGE=y
