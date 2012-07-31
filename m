@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:39:03 +0200
-Subject: [Buildroot] [git commit branch/next] qemu/ppc-mpc8544ds: update to
+Date: Tue, 31 Jul 2012 23:39:10 +0200
+Subject: [Buildroot] [git commit branch/next] qemu/arm-vexpress: update to
 	use kernel 3.4.7
-Message-ID: <20120802195304.AAE6096CE6@busybox.osuosl.org>
+Message-ID: <20120802195304.E460596CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e7051da75ea62b783a5418bf68fac825d9b12af
+commit: http://git.buildroot.net/buildroot/commit/?id=71bcaa69d09d8cad9274a8b7ec6c7055f6102a55
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/powerpc-mpc8544ds/readme.txt |    1 +
- configs/qemu_ppc_mpc8544ds_defconfig    |    6 +++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ board/qemu/arm-vexpress/readme.txt  |    2 ++
+ configs/qemu_arm_vexpress_defconfig |    6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
-index 6ecdc4b..646f459 100644
---- a/board/qemu/powerpc-mpc8544ds/readme.txt
-+++ b/board/qemu/powerpc-mpc8544ds/readme.txt
-@@ -4,3 +4,4 @@ Run the emulation with:
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index 0d3631c..aeea842 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
+@@ -4,3 +4,5 @@ Run the emulation with:
  
- The login prompt will appear in the terminal that started Qemu.
- 
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
++
 +Tested with QEMU 1.1.1
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 44c81de..8855961 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -6,13 +6,13 @@ BR2_powerpc_8548=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 9596fe5..03ea6e0 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -11,12 +11,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
  
 -# Lock to 3.3 headers to avoid breaking with newer kernels
 -BR2_KERNEL_HEADERS_3_3=y
@@ -46,6 +47,5 @@ index 44c81de..8855961 100644
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
