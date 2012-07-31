@@ -1,57 +1,77 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 31 Jul 2012 18:13:14 -0300
-Subject: [Buildroot] [PATCH 10/11] qemu/x86_64: update to use kernel 3.4.7
-In-Reply-To: <1343769195-25220-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1343769195-25220-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1343769195-25220-10-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 Jul 2012 23:08:28 +0200
+Subject: [Buildroot] [git commit] Revert "Microblaze: build kernel with
+	device tree"
+Message-ID: <20120731213818.A489D96FB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../x86_64/{linux-3.3.config => linux-3.4.config}  |    0
- board/qemu/x86_64/readme.txt                       |    2 ++
- configs/qemu_x86_64_defconfig                      |    8 ++++----
- 3 files changed, 6 insertions(+), 4 deletions(-)
- rename board/qemu/x86_64/{linux-3.3.config => linux-3.4.config} (100%)
+commit: http://git.buildroot.net/buildroot/commit/?id=942fc4c554f4850810118dba3f9036fc9e39a830
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/board/qemu/x86_64/linux-3.3.config b/board/qemu/x86_64/linux-3.4.config
-similarity index 100%
-rename from board/qemu/x86_64/linux-3.3.config
-rename to board/qemu/x86_64/linux-3.4.config
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index c06d24f..de50f3c 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -3,3 +3,5 @@ Run the emulation with:
-   qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda
+This is way too specific to microblaze-only. Remove this support to
+introduce a more generic way to do support device tree kernels.
+
+This reverts commit aaed42d15643e0cb64c96fa400a6097a19d19ef4.
+
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    8 --------
+ linux/linux.mk  |   14 --------------
+ 2 files changed, 0 insertions(+), 22 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index e0c1c7e..915b1b6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,14 +125,6 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the kernel configuration file
  
- The login prompt will appear in the graphical window.
-+
-+Tested with QEMU 1.1.1
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 7c6f311..91f5fc9 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -9,12 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
+-config BR2_LINUX_KERNEL_DTS_FILE
+-    string "Device Tree dts file location"
+-    depends on BR2_microblaze
+-    help
+-      Path from where the dts file has to be copied
+-      The final "custom target" name depends on the
+-      dts file name:
+-          <name>.dts --> simpleImage.<name>
+ #
+ # Binary format
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index ca216a3..1b7e0b7 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -119,18 +119,6 @@ endef
  
--# Lock to 3.3 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_3=y
-+# Lock to 3.4 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_4=y
+ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
  
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.3.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.4.config"
--- 
-1.7.8.6
+-ifeq ($(KERNEL_ARCH),microblaze)
+-# on microblaze, we always want mkimage
+-LINUX_DEPENDENCIES+=host-uboot-tools
+-
+-define LINUX_COPY_DTS
+-    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
+-        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
+-    else \
+-        echo "Cannot copy dts file!" ; \
+-    fi
+-endef
+-endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+@@ -145,8 +133,6 @@ define LINUX_CONFIGURE_CMDS
+ 	$(if $(BR2_ARM_EABI),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
+ 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+-    $(if $(BR2_microblaze),
+-        $(call LINUX_COPY_DTS))
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake cpio file. It'll be
+ 	# replaced later by the real cpio archive, and the kernel will be
