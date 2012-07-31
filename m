@@ -1,43 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 11:19:10 +0200
-Subject: [Buildroot] Building u-boot inside buildroot
-In-Reply-To: <648F84CCD71C458D8FBBF53B5FFF8E34@M58p>
-References: <648F84CCD71C458D8FBBF53B5FFF8E34@M58p>
-Message-ID: <20120731111910.1f1e36a8@skate>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Tue, 31 Jul 2012 17:24:27 +0800
+Subject: [Buildroot] [PATCH] linux: enable ubi and ubifs if we build a
+ ubifs root filesystem
+In-Reply-To: <1343721051-8380-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1343721051-8380-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAEvN+1hTzsgFn_QiNsm4dHmdy5Wd1N9KsbYpwPkkpwtBfgnahA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 31 Jul 2012 11:04:59 +0200,
-"Herr post" <post61@gmx.de> a ?crit :
+On Tue, Jul 31, 2012 at 3:50 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  linux/linux.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index ca216a3..cf43818 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -166,6 +166,9 @@ define LINUX_CONFIGURE_CMDS
+>                 $(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+>         $(if $(BR2_PACKAGE_SYSTEMD),
+>                 $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
+> +       $(if $(BR2_TARGET_ROOTFS_UBIFS),
+> +               $(call KCONFIG_ENABLE_OPT,CONFIG_MTD_UBI,$(@D)/.config)
+> +               $(call KCONFIG_ENABLE_OPT,CONFIG_UBIFS_FS,$(@D)/.config))
+>         yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
+>  endef
+>
 
-> I installed buildroot as my embedded linux environment. For first time I can
-> build u-boot. But if i change a c-file and try to recompile u-boot. It
-> doesn,t work. Buildroot doesn,t notice this changing and does nothing.
+I'm a little bit concerning about post modifications to kernel configs
+during the build process (not only this patch).
+It may not be so explicit that the kernel was "changed" when the users
+were only peaking and poking the root file system.
 
-That's expected. Buildroot keeps stamp files (hidden files) in the
-build directory of each component, so that it doesn't restart the
-configuration/compilation/installation of every component every time
-you run 'make'.
+Since the Kernel may only be tested and released with certain configurations.
+It will be helpful if customer feedback on errors could include what
+they did explicitly as possible.
 
-Moreover, making changes to the build directories created by Buildroot
-is a *very* bad idea: those build directories are destroyed when you
-restart the build from scratch (doing a Buildroot 'make clean'). So
-unless you're doing some quick experiments just to verify something,
-you shouldn't be touching any files in output/.
+Would it be better to issue warnings or even fail-stop the building
+process after sanity checks?
+If users really need to change the kernel configuration, make sure
+they are aware of their changes. :)
 
-If you want to make quick experiments in
-output/build/uboot-<version>/, and then get Buildroot to rebuild it,
-you can run 'make uboot-rebuild'. But again, be careful about making
-source code changes in output/ : those will be lost.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks,
+Roy
