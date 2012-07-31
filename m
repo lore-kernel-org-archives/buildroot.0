@@ -1,44 +1,104 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 31 Jul 2012 16:30:59 +0200
-Subject: [Buildroot] [PATCH] less: build after busybox
-In-Reply-To: <50126CD8.7010201@zacarias.com.ar>
-References: <1343330317-24730-1-git-send-email-gustavo@zacarias.com.ar>
- <CAHXCMM+ORAKWNqQJ34FEZ+AbQ5dfpVuZAF3Y85xz6Wf9pmccmg@mail.gmail.com>
- <50124E38.6040504@mind.be> <50126CD8.7010201@zacarias.com.ar>
-Message-ID: <5017EC23.2080001@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 31 Jul 2012 16:55:52 +0200
+Subject: [Buildroot] Manual password entry for DOWNLOAD_SCP scheme
+In-Reply-To: <BLU145-W4DD32AE633EE92CAAD36DD6C50@phx.gbl>
+References: <BLU145-W509744A25C67F5562EF92D6C50@phx.gbl>
+ <CAAXf6LUXNqAHCCLkkNDRO8AA79fzpp9xmQhBDZJWBXF0aNae5g@mail.gmail.com>
+ <BLU145-W160B8971C18907119E0961D6C50@phx.gbl>
+ <BLU145-W4DD32AE633EE92CAAD36DD6C50@phx.gbl>
+Message-ID: <CAAXf6LVtNQuR0Loh0pTibdjQrnb-TkaMzjU0K3HOAxX5LkHGHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/27/12 12:26, Gustavo Zacarias wrote:
-> On 07/27/12 05:15, Arnout Vandecappelle wrote:
+Please keep the buildroot mailing list in copy of all mails.
+
+On Tue, Jul 31, 2012 at 1:18 PM, Steve Goldberg
+<indeliblesteve@hotmail.com> wrote:
+> Thomas,
 >
->> >    One alternative could be to automatically deselect less from busybox
->> >  when the full-blown less is selected.  But also that is a bit complex
->> >  I think.
->> >
-> I'm not a big fan of that either, it's not buildroot's resposability to
-> do effort deduplication.
-> With that reasoning should we disable busybox's httpd if
-> lighttpd/hiawatha/boa/some other web server is enabled?
-> It's a thin line to walk on, lighttpd>  boa so boa should be disabled,
-> and things like that...
+> Problem solved.  The DOWNLOAD_SCP requires two arguments, full path with
+> filename and filename.
+>
+> Reading package/pkg-download.mk shows
+>
+> DOWNLOAD $(FOO_SITE),$(FOO_SOURCE)
+>
+> but scp seems to need
+>
+> DOWNLOAD $(FOO_SITE)/$(FOO_SOURCE), $(FOO_SOURCE)
+>
+[...]
+> This is a summary of the ti-tools.mk.
+>
+> XDC_VERSION=3_16_01_27
+> XDC_SITE=scp://host:/home/steve/TI_Tools
+> XDC_SOURCE=xdctools_setuplinux_$(XDC_VERSION).bin
+>
+> $(DL_DIR)/$(XDC_SOURCE) :
+>         $(call DOWNLOAD_SCP,$(XDC_SITE)/$(XDC_SOURCE))
 
-  There's a big difference: for busybox, people often use the default config,
-so the decision to include httpd in unconscious.  boa or lighttpd can only
-be selected explicitly.
+Note that you should call DOWNLOAD instead of DOWNLOAD_SCP directly.
+This will make sure to respect the primary site and other mechanisms
+that are in place.
 
-  The difficulty you mention does exist for libxml2 vs. expat, because those
-are often selected automatically.
+Best regards,
+Thomas
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+
+> From: indeliblesteve at hotmail.com
+> To: patrickdepinguin+buildroot at gmail.com
+> Subject: RE: [Buildroot] Manual password entry for DOWNLOAD_SCP scheme
+> Date: Tue, 31 Jul 2012 04:07:15 -0700
+>
+>
+> Thomas,
+>
+>> <indeliblesteve@hotmail.com> wrote:
+>> > I'm putting together a TI toolchain package but as some of the required
+>> > packages are export controlled I need to host them on my institutional
+>> > machine to control access. I think scp is the best choice for this but
+>> > the
+>> > scp scheme does not prompt for passwords and users who haven't setup
+>> > public-key ssh access are unable to download the packages. Why does the
+>> > DOWNLOAD_SCP scheme not prompt the user for a password?
+>>
+>> In my test, using scp as primary site, it does ask for a password if
+>> one is required.
+>> How have you configured the package? Have you specified a user?
+>
+> This is a summary of the ti-tools.mk.
+>
+> XDC_VERSION=3_16_01_27
+> XDC_SITE=scp://host:/home/steve/TI_Tools
+> XDC_SOURCE=xdctools_setuplinux_$(XDC_VERSION).bin
+>
+> $(DL_DIR)/$(XDC_SOURCE) :
+>         $(call DOWNLOAD_SCP,$(XDC_SITE)/$(XDC_SOURCE))
+>
+>> Have you tried running scp manually? Is a password requested there? Is
+>> the same command used as Buildroot does?
+>
+> Yes, I've manually run the scp command that is generated and it does prompt
+> for a password.
+>
+> This is what buildroot generates.
+>
+> make -C /home/steve/plat/overo/src/buildroot O=/home/steve/plat/overo/.
+> mkdir -p /home/steve/plat/overo/host/ti/tools
+> test -e /home/isteve/plat/overo/download/ || scp
+> 'host:/home/steve/TI_Tools/xdctools_setuplinux_3_16_01_27.bin'
+> /home/isteve/plat/overo/download/
+>
+> manually running scp
+> 'host:/home/steve/TI_Tools/xdctools_setuplinux_3_16_01_27.bin'
+> /home/isteve/plat/overo/download/
+> prompts me for password.  I do not specify username as scp assumes the
+> username of the current user which is okay for my purposes.
+>
+> Thanks.
+>
+> Steve
