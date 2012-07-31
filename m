@@ -1,65 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jul 2012 23:12:17 +0200
-Subject: [Buildroot] [git commit branch/next] Add systemd unit for lighttpd
-Message-ID: <20120802195303.45CDB827F7@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:08:28 +0200
+Subject: [Buildroot] [git commit branch/next] Update qemu microblazeel
+	default configuration
+Message-ID: <20120802195304.4D18896CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7eb4104b32a6cfca15c081649065659da75d9c1
+commit: http://git.buildroot.net/buildroot/commit/?id=2ab74b2e25693ec135e1cacb151fe834a4b93f59
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lighttpd/lighttpd.mk      |   13 +++++++++++--
- package/lighttpd/lighttpd.service |   10 ++++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
+ configs/qemu_microblazeel_mmu_defconfig |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 9f554cb..c9decb1 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -87,13 +87,22 @@ endef
- 
- LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
- 
--define LIGHTTPD_INSTALL_INIT_SCRIPT
-+define LIGHTTPD_INSTALL_INIT_SYSV
- 	[ -f $(TARGET_DIR)/etc/init.d/S50lighttpd ] || \
- 		$(INSTALL) -D -m 755 package/lighttpd/S50lighttpd \
- 			$(TARGET_DIR)/etc/init.d/S50lighttpd
- endef
- 
--LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_INIT_SCRIPT
-+define LIGHTTPD_INSTALL_INIT_SYSTEMD
-+	[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
-+		$(INSTALL) -D -m 755 package/lighttpd/lighttpd.service \
-+			$(TARGET_DIR)/etc/systemd/system/lighttpd.service
-+
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+	ln -fs ../lighttpd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
-+endef
- 
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
- 	$(RM) $(TARGET_DIR)/usr/sbin/lighttpd
-diff --git a/package/lighttpd/lighttpd.service b/package/lighttpd/lighttpd.service
-new file mode 100644
-index 0000000..0ca5357
---- /dev/null
-+++ b/package/lighttpd/lighttpd.service
-@@ -0,0 +1,10 @@
-+[Unit]
-+Description=Lighttpd Web Server
-+After=network.target
-+
-+[Service]
-+ExecStart=/usr/sbin/lighttpd-angel -f /etc/lighttpd/lighttpd.conf -D
-+ExecReload=/bin/kill -HUP $MAINPID
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index 7034447..ad5f045 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -22,6 +22,6 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/kernel-3.3.config"
+-BR2_LINUX_KERNEL_DTS_FILE="board/qemu/microblazeel-mmu/system.dts"
+-BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="linux.bin"
++BR2_LINUX_KERNEL_LINUX_BIN=y
++BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
++BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazeel-mmu/system.dts"
