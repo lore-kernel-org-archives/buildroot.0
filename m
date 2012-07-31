@@ -1,45 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 21:48:23 +0200
-Subject: [Buildroot] [PATCH] linux: enable ubi and ubifs if we build a
- ubifs root filesystem
-In-Reply-To: <1343721051-8380-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1343721051-8380-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20120731214823.6060b684@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 31 Jul 2012 18:13:15 -0300
+Subject: [Buildroot] [PATCH 11/11] qemu/x86: update to use kernel 3.4.7
+In-Reply-To: <1343769195-25220-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1343769195-25220-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1343769195-25220-11-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../x86/{linux-3.3.config => linux-3.4.config}     |    0
+ board/qemu/x86/readme.txt                          |    2 ++
+ configs/qemu_x86_defconfig                         |    8 ++++----
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+ rename board/qemu/x86/{linux-3.3.config => linux-3.4.config} (100%)
 
-Thanks for proposing this patch!
-
-Le Tue, 31 Jul 2012 09:50:51 +0200,
-Fabio Porcedda <fabio.porcedda@gmail.com> a ?crit :
-
-> +	$(if $(BR2_TARGET_ROOTFS_UBIFS),
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_MTD_UBI,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_UBIFS_FS,$(@D)/.config))
-
-As Tzu-Jung said, the topic of automatically adjusting the kernel
-configuration depending on other configuration options is a sensitive
-topic. For example: should we enable Netfilter in the kernel if
-iptables package is enabled? Should we enable the MTD subsystem in the
-kernel if the mtd-utils package is enabled? Since we definitely don't
-want to fiddle too much with the kernel configuration of the user, we
-trying to limit the number of such automatic tweaks.
-
-At the moment, I'm leaning towards not doing automatic modification of
-the kernel configuration depending on the root filesystem type selected
-in Buildroot. Let's keep this up to the user. But I'll listen to the
-comments of the other developers/users.
-
-Best regards,
-
-Thomas
+diff --git a/board/qemu/x86/linux-3.3.config b/board/qemu/x86/linux-3.4.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.3.config
+rename to board/qemu/x86/linux-3.4.config
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 4ba6607..f6f5437 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -3,3 +3,5 @@ Run the emulation with:
+   qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda
+ 
+ The login prompt will appear in the graphical window.
++
++Tested with QEMU 1.1.1
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 118cd7f..1851cec 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.3 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_3=y
++# Lock to 3.4 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_3_4=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.3.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.4.config"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
