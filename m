@@ -1,508 +1,184 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jul 2012 23:23:27 +0200
-Subject: [Buildroot] [git commit branch/next] Bump gpsd from version 2.95 to
-	version 3.7
-Message-ID: <20120802195300.08ABE96CE6@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:08:28 +0200
+Subject: [Buildroot] [git commit branch/next] Add support for appended
+	device tree blobs for arm
+Message-ID: <20120802195304.1F2BB827F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b3afe4657615a0d5454668927041842ed33bbc97
+commit: http://git.buildroot.net/buildroot/commit/?id=978928e4acb0ee4e335eaf4bf8feca895f372418
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+This patch adds support for the ARM-only appended device tree
+mechanism present in the kernel.
+
+This option allows to add at the end of the kernel image the
+device tree blob so that we can still boot device tree enabled
+kernels with old bootloaders.
+
+This patch also adds the needed logic to genereate such an image
+when building zImages or uImages, also adding the necessary parts
+to rebuild the uImage.
+
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gpsd/Config.in                             |   22 ++-
- package/gpsd/gpsd-fix-acs_map-compile-errors.patch |   29 +++
- package/gpsd/gpsd-fix-libgpsmm.patch               |   23 ---
- package/gpsd/gpsd-navcom.patch                     |   47 -----
- package/gpsd/gpsd.mk                               |  189 ++++++++++++--------
- 5 files changed, 162 insertions(+), 148 deletions(-)
+ linux/Config.in |   33 +++++++++++++++++++++++++++++++++
+ linux/linux.mk  |   37 ++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 69 insertions(+), 1 deletions(-)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 16635dc..18e21e5 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -38,10 +38,6 @@ config BR2_PACKAGE_GPSD_NTP_SHM
- config BR2_PACKAGE_GPSD_PPS
- 	bool "PPS time syncing support"
+diff --git a/linux/Config.in b/linux/Config.in
+index 84fae91..553aa39 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -140,6 +140,13 @@ config BR2_LINUX_KERNEL_UIMAGE
+ 	depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
+ 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
  
--config BR2_PACKAGE_GPSD_PPS_ON_CTS
--	bool "PPS pulse on CTS rather than DCD"
--	depends on BR2_PACKAGE_GPSD_PPS
--
- config BR2_PACKAGE_GPSD_USER
- 	bool "GPSD privilege revocation user"
- config BR2_PACKAGE_GPSD_USER_VALUE
-@@ -85,9 +81,6 @@ config BR2_PACKAGE_GPSD_CONTROLSEND
- 	bool "allow gpsctl/gpsmon to change device settings"
- 	default y
++config BR2_LINUX_KERNEL_APPENDED_UIMAGE
++	bool "uImage with appended DT"
++	depends on BR2_arm || BR2_armeb
++	select BR2_LINUX_KERNEL_DTS_SUPPORT
++	select BR2_LINUX_KERNEL_APPENDED_DTB
++	select BR2_LINUX_KERNEL_UBOOT_IMAGE
++
+ config BR2_LINUX_KERNEL_BZIMAGE
+ 	bool "bzImage"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -148,6 +155,12 @@ config BR2_LINUX_KERNEL_ZIMAGE
+ 	bool "zImage"
+ 	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64 || BR2_xtensa
  
--config BR2_PACKAGE_GPSD_RAW
--	bool "enable raw measurement processing"
--
- config BR2_PACKAGE_GPSD_SQUELCH
- 	bool "squelch gpsd_report and gpsd_hexdump to save cpu"
++config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
++	bool "zImage with appended DT"
++	depends on BR2_arm || BR2_armeb
++	select BR2_LINUX_KERNEL_DTS_SUPPORT
++	select BR2_LINUX_KERNEL_APPENDED_DTB
++
+ config BR2_LINUX_KERNEL_VMLINUX_BIN
+ 	bool "vmlinux.bin"
+ 	depends on BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
+@@ -187,6 +200,26 @@ config BR2_LINUX_KERNEL_DTS_SUPPORT
  
-@@ -116,6 +109,11 @@ config BR2_PACKAGE_GPSD_EVERMORE
- 	help
- 	  EverMore binary support
+ if BR2_LINUX_KERNEL_DTS_SUPPORT
  
-+config BR2_PACKAGE_GPSD_FURY
-+	bool "Fury"
-+	help
-+	  Jackson Labs Fury and Firefly support
++# We have mainly three cases when it comes to device tree support:
++#   1) We don't want any support at all. Then the ..DTS_SUPPORT
++#      variable won't be set
++#   2) We want device tree support, so we need the user to enter
++#      the device tree name or the the path to the custom device
++#      he uses, but the kernel abstracts this from us and only
++#      build an image that looks like a regular kernel image. In
++#      this case, we only need to derive the kernel image name from
++#      the given device tree name, and all the rest is as usual
++#   3) We want device tree support, but the kernel requires us to
++#      build the device tree blob separately. In this case, some
++#      more logic will be needed.
++# The variable below address the second case, were you only want
++# limited actions from buildroot.
++config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
++	bool
 +
- config BR2_PACKAGE_GPSD_FV18
- 	bool "FV-18"
- 	help
-@@ -131,6 +129,11 @@ config BR2_PACKAGE_GPSD_GARMIN_SIMPLE_TXT
- 	help
- 	  Garmin Simple Text support
++config BR2_LINUX_KERNEL_APPENDED_DTB
++	bool
++
+ choice
+ 	prompt "Device tree source"
+ 	default BR2_LINUX_KERNEL_USE_INTREE_DTS
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 844ce55..d466228 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -58,6 +58,13 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
+ KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
+ endif
  
-+config BR2_PACKAGE_GPSD_GEOSTAR
-+	bool "Geostar"
-+	help
-+	  Geostar Protocol support
-+
- config BR2_PACKAGE_GPSD_GPSCLOCK
- 	bool "GPSClock"
- 	help
-@@ -162,6 +165,11 @@ config BR2_PACKAGE_GPSD_NAVCOM
- 	help
- 	  Navcom binary support
- 
-+config BR2_PACKAGE_GPSD_NMEA2000
-+	bool "nmea2000"
-+	help
-+	  NMEA2000/CAN support
-+
- config BR2_PACKAGE_GPSD_OCEANSERVER
- 	bool "OceanServer"
- 	help
-diff --git a/package/gpsd/gpsd-fix-acs_map-compile-errors.patch b/package/gpsd/gpsd-fix-acs_map-compile-errors.patch
-new file mode 100644
-index 0000000..14d9287
---- /dev/null
-+++ b/package/gpsd/gpsd-fix-acs_map-compile-errors.patch
-@@ -0,0 +1,29 @@
-+Hack gpsd to prevent undefined references to acs_map from ncurses.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+diff -Nurp a/gpsmon.c b/gpsmon.c
-+--- a/gpsmon.c	2012-05-18 09:45:37.000000000 +0100
-++++ b/gpsmon.c	2012-06-07 12:41:31.257807969 +0100
-+@@ -24,6 +24,9 @@
-+ #include <unistd.h>
-+ #endif /* S_SPLINT_S */
-+ 
-++/* Ugly hack to prevent undefined reference to acs_map */
-++unsigned long acs_map[128];
-++
-+ #include "gpsd_config.h"
-+ #ifdef HAVE_BLUEZ
-+ #include <bluetooth/bluetooth.h>
-+diff -Nurp a/monitor_nmea.c b/monitor_nmea.c
-+--- a/monitor_nmea.c	2011-11-22 08:49:33.000000000 +0000
-++++ b/monitor_nmea.c	2012-06-07 12:41:37.081807709 +0100
-+@@ -15,6 +15,9 @@
-+ #include <unistd.h>
-+ #endif /* S_SPLINT_S */
-+ 
-++/* Ugly hack to prevent undefined reference to acs_map */
-++unsigned long acs_map[128];
-++
-+ #include "gpsd.h"
-+ #include "gpsmon.h"
-+ #include "gpsdclient.h"
-diff --git a/package/gpsd/gpsd-fix-libgpsmm.patch b/package/gpsd/gpsd-fix-libgpsmm.patch
-deleted file mode 100644
-index 893965e..0000000
---- a/package/gpsd/gpsd-fix-libgpsmm.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--diff -Nura gpsd-2.95.orig/Makefile.in gpsd-2.95.x/Makefile.in
----- gpsd-2.95.orig/Makefile.in	2010-07-13 19:48:24.000000000 -0300
--+++ gpsd-2.95.x/Makefile.in	2010-07-27 17:40:28.902568874 -0300
--@@ -546,7 +546,7 @@
-- libgps_VERSION__REVISION = 0
-- libgps_VERSION_AGE = 0
-- libgps_VERSION_NUMBER = $(libgps_VERSION_AGE):$(libgps_VERSION__REVISION):$(libgps_VERSION_AGE)
---libgps_la_LDFLAGS = -version-number $(libgps_VERSION_CURRENT):$(libgps_VERSION__REVISION):$(libgps_VERSION_AGE)
--+libgps_la_LDFLAGS = -version-number $(libgps_VERSION_CURRENT):$(libgps_VERSION__REVISION):$(libgps_VERSION_AGE) $(LDFLAGS)
-- lib_LTLIBRARIES = libgps.la libgpsd.la
-- libgps_SONAME = $(shell expr $(libgps_VERSION_CURRENT) - $(libgps_VERSION_AGE))
-- libgps_VERSION = $(libgps_SONAME).$(libgps_VERSION_AGE).$(libgps_VERSION__REVISION)
--@@ -612,8 +612,8 @@
-- libgpsd_la_SOURCES = $(libgpsd_c_sources) $(libgpsd_h_sources) \
-- 				driver_rtcm2.h packet_states.h
-- 
--- at LIBGPSMM_ENABLE_FALSE@libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link gcc $(libgps_la_LDFLAGS) -o $@
--- at LIBGPSMM_ENABLE_TRUE@libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link g++ $(libgps_la_LDFLAGS) -o $@
--+ at LIBGPSMM_ENABLE_FALSE@libgps_la_LINK = /bin/sh ./libtool --tag=CC --mode=link $(CC) $(libgps_la_LDFLAGS) -o $@
--+ at LIBGPSMM_ENABLE_TRUE@libgps_la_LINK = /bin/sh ./libtool --tag=CXX --mode=link $(CXX) $(libgps_la_LDFLAGS) -o $@
-- nodist_libgpsd_la_SOURCES = packet_names.h ais_json.i
-- libgps_la_LIBADD = $(LIBM) $(LIBC) $(LIBNSL) $(LIBSOCKET) $(LIBPTHREAD)
-- libgpsd_la_LIBADD = $(LIBM) $(LIBC) $(LIBNSL) $(LIBSOCKET) $(LIBPTHREAD) $(BLUEZ_LIBS) libgps.la
-diff --git a/package/gpsd/gpsd-navcom.patch b/package/gpsd/gpsd-navcom.patch
-deleted file mode 100644
-index 659cea1..0000000
---- a/package/gpsd/gpsd-navcom.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--[PATCH] Navcom needs binary support
--
--Enable binary support when navcom driver is enabled, otherwise the build
--errors out with:
--
--./libgpsd.so: undefined reference to `navcom_binary'
--
--If no other drivers needing binary support are enabled.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- driver_navcom.c |    4 ++--
-- gpsd.h-tail     |    2 +-
-- 2 files changed, 3 insertions(+), 3 deletions(-)
--
--Index: gpsd-2.95/driver_navcom.c
--===================================================================
----- gpsd-2.95.orig/driver_navcom.c
--+++ gpsd-2.95/driver_navcom.c
--@@ -44,7 +44,7 @@
-- #include <stdio.h>
-- #include "gpsd.h"
-- 
---#if defined(NAVCOM_ENABLE) && defined(BINARY_ENABLE)
--+#if defined(NAVCOM_ENABLE)
-- #include "bits.h"
-- 
-- /* Have data which is 24 bits long */
--@@ -1339,4 +1339,4 @@
-- };
-- /* *INDENT-ON* */
-- 
---#endif /* defined(NAVCOM_ENABLE) && defined(BINARY_ENABLE) */
--+#endif /* defined(NAVCOM_ENABLE) */
--Index: gpsd-2.95/gpsd.h-tail
--===================================================================
----- gpsd-2.95.orig/gpsd.h-tail
--+++ gpsd-2.95/gpsd.h-tail
--@@ -30,7 +30,7 @@
-- #ifdef EARTHMATE_ENABLE
-- #define ZODIAC_ENABLE	
-- #endif
---#if defined(ZODIAC_ENABLE) || defined(SIRF_ENABLE) || defined(GARMIN_ENABLE) || defined(TSIP_ENABLE) || defined(EVERMORE_ENABLE) || defined(ITRAX_ENABLE) || defined(UBX_ENABLE) || defined(SUPERSTAR2_ENABLE) || defined(ONCORE_ENABLE)
--+#if defined(ZODIAC_ENABLE) || defined(SIRF_ENABLE) || defined(GARMIN_ENABLE) || defined(TSIP_ENABLE) || defined(EVERMORE_ENABLE) || defined(ITRAX_ENABLE) || defined(UBX_ENABLE) || defined(SUPERSTAR2_ENABLE) || defined(ONCORE_ENABLE) || defined(NAVCOM_ENABLE)
-- #define BINARY_ENABLE	
-- #endif
-- #if defined(TRIPMATE_ENABLE) || defined(BINARY_ENABLE)
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 2ba5f71..dd15386 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -3,183 +3,230 @@
- # gpsd
- #
- #############################################################
--
--GPSD_VERSION = 2.95
--GPSD_SITE = http://download.berlios.de/gpsd
-+GPSD_VERSION = 3.7
-+GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd/
-+GPSD_LICENSE = BSD-3c
-+GPSD_LICENSE_FILES = COPYING
- GPSD_INSTALL_STAGING = YES
--GPSD_TARGET_BINS = cgps gpsctl gpsdecode gpsmon gpspipe gpxlogger lcdgps
-+
-+GPSD_DEPENDENCIES = host-scons
-+
-+GPSD_LDFLAGS = $(TARGET_LDFLAGS)
-+
-+GPSD_SCONS_ENV = $(TARGET_CONFIGURE_OPTS)
-+
-+GPSD_SCONS_OPTS = \
-+	arch=$(ARCH)\
-+	prefix=$(TARGET_DIR)/usr\
-+	chrpath=no\
-+	strip=no
-+
-+ifeq ($(BR2_PACKAGE_NCURSES),y)
-+	GPSD_DEPENDENCIES += ncurses
-+else
-+	GPSD_SCONS_OPTS += ncurses=no
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
++ifneq ($(words $(KERNEL_DTS_NAME)),1)
++$(error Kernel with appended device tree needs exactly one DTS source.\
++  Check BR2_LINUX_KERNEL_INTREE_DTS_NAME or BR2_LINUX_KERNEL_CUSTOM_DTS_PATH.)
++endif
 +endif
 +
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+	GPSD_DEPENDENCIES += python
-+else
-+	GPSD_SCONS_OPTS += python=no
-+endif
-+
-+# Disable IPv6, if we don't support it
-+ifneq ($(BR2_INET_IPV6),y)
-+	GPSD_SCONS_OPTS += ipv6=no
-+endif
- 
- # Build libgpsmm if we've got C++
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--	GPSD_CONF_OPT += --enable-libgpsmm LDFLAGS="$(TARGET_LDFLAGS) -lstdc++"
-+	GPSD_LDFLAGS += -lstdc++
-+	GPSD_SCONS_OPTS += libgpsmm=yes
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+ LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
  else
--	GPSD_CONF_OPT += --disable-libgpsmm
-+	GPSD_SCONS_OPTS += libgpsmm=no
- endif
- 
- # Enable or disable Qt binding
- ifeq ($(BR2_PACKAGE_QT_NETWORK),y)
--	GPSD_CONF_ENV += QMAKE="$(QT_QMAKE)"
--	GPSD_CONF_OPT += --enable-libQgpsmm
-+	GPSD_SCONS_ENV += QMAKE="$(QT_QMAKE)"
- 	GPSD_DEPENDENCIES += qt host-pkg-config
+@@ -68,10 +75,14 @@ LINUX_IMAGE_NAME=vmImage
  else
--	GPSD_CONF_OPT += --disable-libQgpsmm
-+	GPSD_SCONS_OPTS += libQgpsmm=no
+ LINUX_IMAGE_NAME=uImage
+ endif
++else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
++LINUX_IMAGE_NAME=uImage
+ else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
+ LINUX_IMAGE_NAME=bzImage
+ else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
+ LINUX_IMAGE_NAME=zImage
++else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
++LINUX_IMAGE_NAME=zImage
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+ LINUX_IMAGE_NAME=vmlinux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+@@ -81,6 +92,12 @@ LINUX_IMAGE_NAME=vmlinuz
+ endif
  endif
  
- # If libusb is available build it before so the package can use it
- ifeq ($(BR2_PACKAGE_LIBUSB),y)
- 	GPSD_DEPENDENCIES += libusb
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
++LINUX_IMAGE_TARGET=zImage
 +else
-+	GPSD_SCONS_OPTS += usb=no
- endif
- 
--ifeq ($(BR2_PACKAGE_DBUS_GLIB),y)
--	GPSD_CONF_OPT += --enable-dbus
--	GPSD_DEPENDENCIES += dbus-glib
-+# If bluetooth is available build it before so the package can use it
-+ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
-+	GPSD_DEPENDENCIES += bluez_utils
-+else
-+	GPSD_SCONS_OPTS += bluez=no
- endif
- 
--ifeq ($(BR2_PACKAGE_NCURSES),y)
--	GPSD_DEPENDENCIES += ncurses
-+ifeq ($(BR2_PACKAGE_DBUS_GLIB),y)
-+	GPSD_SCONS_OPTS += dbus_export=yes
-+	GPSD_DEPENDENCIES += dbus-glib
- endif
- 
- # Protocol support
- ifneq ($(BR2_PACKAGE_GPSD_ASHTECH),y)
--	GPSD_CONF_OPT += --disable-ashtech
-+	GPSD_SCONS_OPTS += ashtech=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_AIVDM),y)
--	GPSD_CONF_OPT += --disable-aivdm
-+	GPSD_SCONS_OPTS += aivdm=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_EARTHMATE),y)
--	GPSD_CONF_OPT += --disable-earthmate
-+	GPSD_SCONS_OPTS += earthmate=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_EVERMORE),y)
--	GPSD_CONF_OPT += --disable-evermore
-+	GPSD_SCONS_OPTS += evermore=no
++LINUX_IMAGE_TARGET=$(LINUX_IMAGE_NAME)
 +endif
-+ifneq ($(BR2_PACKAGE_GPSD_FURY),y)
-+	GPSD_SCONS_OPTS += fury=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_FV18),y)
--	GPSD_CONF_OPT += --disable-fv18
-+	GPSD_SCONS_OPTS += fv18=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_GARMIN),y)
--	GPSD_CONF_OPT += --disable-garmin
-+	GPSD_SCONS_OPTS += garmin=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_GARMIN_SIMPLE_TXT),y)
--	GPSD_CONF_OPT += --disable-garmintxt
-+	GPSD_SCONS_OPTS += garmintxt=no
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_GEOSTAR),y)
-+	GPSD_SCONS_OPTS += geostar=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_GPSCLOCK),y)
--	GPSD_CONF_OPT += --disable-gpsclock
-+	GPSD_SCONS_OPTS += gpsclock=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_ITRAX),y)
--	GPSD_CONF_OPT += --disable-itrax
-+	GPSD_SCONS_OPTS += itrax=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_MTK3301),y)
--	GPSD_CONF_OPT += --disable-mtk3301
-+	GPSD_SCONS_OPTS += mtk3301=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_NMEA),y)
--	GPSD_CONF_OPT += --disable-nmea
-+	GPSD_SCONS_OPTS += nmea=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_NTRIP),y)
--	GPSD_CONF_OPT += --disable-ntrip
-+	GPSD_SCONS_OPTS += ntrip=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_NAVCOM),y)
--	GPSD_CONF_OPT += --disable-navcom
-+	GPSD_SCONS_OPTS += navcom=no
-+endif
-+ifneq ($(BR2_PACKAGE_GPSD_NMEA2000),y)
-+	GPSD_SCONS_OPTS += nmea2000=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_OCEANSERVER),y)
--	GPSD_CONF_OPT += --disable-oceanserver
-+	GPSD_SCONS_OPTS += oceanserver=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_ONCORE),y)
--	GPSD_CONF_OPT += --disable-oncore
-+	GPSD_SCONS_OPTS += oncore=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_RTCM104V2),y)
--	GPSD_CONF_OPT += --disable-rtcm104v2
-+	GPSD_SCONS_OPTS += rtcm104v2=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_RTCM104V3),y)
--	GPSD_CONF_OPT += --disable-rtcm104v3
-+	GPSD_SCONS_OPTS += rtcm104v3=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_SIRF),y)
--	GPSD_CONF_OPT += --disable-sirf
-+	GPSD_SCONS_OPTS += sirf=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_SUPERSTAR2),y)
--	GPSD_CONF_OPT += --disable-superstar2
-+	GPSD_SCONS_OPTS += superstar2=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_TRIMBLE_TSIP),y)
--	GPSD_CONF_OPT += --disable-tsip
-+	GPSD_SCONS_OPTS += tsip=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_TRIPMATE),y)
--	GPSD_CONF_OPT += --disable-tripmate
-+	GPSD_SCONS_OPTS += tripmate=no
- endif
--ifeq ($(BR2_PACKAGE_GPSD_TRUE_NORTH),y)
--	GPSD_CONF_OPT += --enable-tnt
-+ifneq ($(BR2_PACKAGE_GPSD_TRUE_NORTH),y)
-+	GPSD_SCONS_OPTS += tnt=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_UBX),y)
--	GPSD_CONF_OPT += --disable-ubx
-+	GPSD_SCONS_OPTS += ubx=no
- endif
- 
- # Features
- ifneq ($(BR2_PACKAGE_GPSD_NTP_SHM),y)
--	GPSD_CONF_OPT += --disable-ntpshm
-+	GPSD_SCONS_OPTS += ntpshm=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_PPS),y)
--	GPSD_CONF_OPT += --disable-pps
--endif
--ifeq ($(BR2_PACKAGE_GPSD_PPS_ON_CTS),y)
--	GPSD_CONF_OPT += --enable-pps-on-cts
-+	GPSD_SCONS_OPTS += pps=no
- endif
- ifeq ($(BR2_PACKAGE_GPSD_SQUELCH),y)
--	GPSD_CONF_OPT += --enable-squelch
-+	GPSD_SCONS_OPTS += squelch=yes
- endif
- ifneq ($(BR2_PACKAGE_GPSD_RECONFIGURE),y)
--	GPSD_CONF_OPT += --disable-reconfigure
-+	GPSD_SCONS_OPTS += reconfigure=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_CONTROLSEND),y)
--	GPSD_CONF_OPT += --disable-controlsend
--endif
--ifeq ($(BR2_PACKAGE_GPSD_RAW),y)
--	GPSD_CONF_OPT += --enable-raw
-+	GPSD_SCONS_OPTS += controlsend=no
- endif
- ifneq ($(BR2_PACKAGE_GPSD_OLDSTYLE),y)
--	GPSD_CONF_OPT += --disable-oldstyle
-+	GPSD_SCONS_OPTS += oldstyle=no
- endif
- ifeq ($(BR2_PACKAGE_GPSD_PROFILING),y)
--	GPSD_CONF_OPT += --enable-profiling
-+	GPSD_SCONS_OPTS += profiling=yes
- endif
--ifneq ($(BR2_PACKAGE_GPSD_TIMING),y)
--	GPSD_CONF_OPT += --disable-timing
-+ifeq ($(BR2_PACKAGE_GPSD_TIMING),y)
-+	GPSD_SCONS_OPTS += timing=yes
- endif
- ifneq ($(BR2_PACKAGE_GPSD_CLIENT_DEBUG),y)
--	GPSD_CONF_OPT += --disable-clientdebug
-+	GPSD_SCONS_OPTS += clientdebug=no
- endif
- ifeq ($(BR2_PACKAGE_GPSD_USER),y)
--	GPSD_CONF_OPT += --enable-gpsd-user=$(BR2_PACKAGE_GPSD_USER_VALUE)
-+	GPSD_SCONS_OPTS += gpsd_user=$(BR2_PACKAGE_GPSD_USER_VALUE)
- endif
- ifeq ($(BR2_PACKAGE_GPSD_GROUP),y)
--	GPSD_CONF_OPT += --enable-gpsd-group=$(BR2_PACKAGE_GPSD_GROUP_VALUE)
-+	GPSD_SCONS_OPTS += gpsd_group=$(BR2_PACKAGE_GPSD_GROUP_VALUE)
- endif
- ifeq ($(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED),y)
--	GPSD_CONF_OPT += --enable-fixed-port-speed=$(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE)
-+	GPSD_SCONS_OPTS += fixed_port_speed=$(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE)
- endif
- ifeq ($(BR2_PACKAGE_GPSD_MAX_CLIENT),y)
--	GPSD_CONF_OPT += --enable-max-clients=$(BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE)
-+	GPSD_SCONS_OPTS += limited_max_clients=$(BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE)
- endif
- ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
--	GPSD_CONF_OPT += --enable-max-devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
-+	GPSD_SCONS_OPTS += limited_max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
- endif
- 
--define GPSD_BUILDS_CMDS
--	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(GPSD_DIR)/libtool
--	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(GPSD_DIR)/libtool
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all libgpsmm
-+GPSD_SCONS_ENV += LDFLAGS="$(GPSD_LDFLAGS)"
 +
-+define GPSD_BUILD_CMDS
-+	(cd $(@D); \
-+		$(GPSD_SCONS_ENV) \
-+		$(SCONS) \
-+		$(GPSD_SCONS_OPTS))
+ # Compute the arch path, since i386 and x86_64 are in arch/x86 and not
+ # in arch/$(KERNEL_ARCH). Even if the kernel creates symbolic links
+ # for bzImage, arch/i386 and arch/x86_64 do not exist when copying the
+@@ -161,10 +178,13 @@ define LINUX_CONFIGURE_CMDS
+ 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_SYSTEMD),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
++	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+ 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
  endef
  
- define GPSD_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	(cd $(@D); \
-+		$(GPSD_SCONS_ENV) \
-+		$(SCONS) \
-+		$(GPSD_SCONS_OPTS) \
-+		destdir=$(TARGET_DIR) \
-+		install)
- 	if [ ! -f $(TARGET_DIR)/etc/init.d/S50gpsd ]; then \
- 		$(INSTALL) -m 0755 -D package/gpsd/S50gpsd $(TARGET_DIR)/etc/init.d/S50gpsd; \
- 		$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd; \
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
++ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
+ endef
+@@ -172,17 +192,32 @@ define LINUX_INSTALL_DTB
+ 	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+ endef
+ endif
++endif
++
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
++define LINUX_APPEND_DTB
++	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
++	# We need to generate the uImage here after that so that the uImage is
++	# generated with the right image size.
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
++endef
++else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
++define LINUX_APPEND_DTB
++	cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >> $(KERNEL_ARCH_PATH)/boot/zImage
++endef
++endif
+ 
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+ 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+ 		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_TARGET)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
  	fi
+ 	$(LINUX_BUILD_DTB)
++	$(LINUX_APPEND_DTB)
  endef
  
--define GPSD_UNINSTALL_TARGET_CMDS
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(GPSD_TARGET_BINS))
--	rm -f $(TARGET_DIR)/usr/lib/libgps.*
--	rm -f $(TARGET_DIR)/usr/lib/libgpsd.*
--	rm -f $(TARGET_DIR)/usr/sbin/gpsd
--	rm -f $(TARGET_DIR)/etc/init.d/S50gpsd
-+define GPSD_INSTALL_STAGING_CMDS
-+	(cd $(@D); \
-+		$(GPSD_SCONS_ENV) \
-+		$(SCONS) \
-+		$(GPSD_SCONS_OPTS) \
-+		destdir=$(STAGING_DIR) \
-+		includedir="$(STAGING_DIR)/usr/include" \
-+		install)
- endef
  
--$(eval $(autotools-package))
-+$(eval $(generic-package))
