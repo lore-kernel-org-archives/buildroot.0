@@ -1,140 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:08:28 +0200
-Subject: [Buildroot] [git commit] Rework support for the device tree
-Message-ID: <20120731213818.BA55996FB7@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:38:36 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.4.x stable version
+Message-ID: <20120731214056.48AE396FB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69fc497df0ae51bcc8a067c849447abdeb3cb2be
+commit: http://git.buildroot.net/buildroot/commit/?id=588cc81c0ab645ffa3a12d03ae0c6a056c9ab74f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch introduces some support for device tree-enabled kernels.
-
-It replaces the former BR2_LINUX_KERNEL_DTS_FILE option that was
-microblaze-only, that was quite limited. This option was quite
-limited, first obviously because it was restricted to microblaze,
-but also because it targetted only external device tree source files,
-and allowed only to build simpleImages using the custom image name
-mechanism.
-
-This patch adds a much more generic one, that can work on basically
-every architecture that supports device tree. It allows to build
-both device tree source file that comes with the kernel source or to
-set the path to the device tree file to use so that one can use a
-custom device tree.
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |   42 ++++++++++++++++++++++++++++++++++++++++++
- linux/linux.mk  |   19 +++++++++++++++++++
- 2 files changed, 61 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 915b1b6..16c7ea7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -175,6 +175,48 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	  Specify the kernel make target to build the kernel that you
- 	  need.
- 
-+config BR2_LINUX_KERNEL_DTS_SUPPORT
-+	bool "Device tree support"
-+	help
-+	  Compile a device tree source into a device tree blob.
-+	  Select the dts file to compile in the options below.
-+
-+if BR2_LINUX_KERNEL_DTS_SUPPORT
-+
-+choice
-+	prompt "Device tree source"
-+	default BR2_LINUX_KERNEL_USE_INTREE_DTS
-+
-+config BR2_LINUX_KERNEL_USE_INTREE_DTS
-+	bool "Use a device tree present in the kernel."
-+	help
-+	   Use a device tree source distributed with
-+	   the kernel sources. The dts files are located
-+           in the arch/<arch>/boot/dts folder.
-+
-+config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	bool "Use a custom device tree file"
-+	help
-+	  Use a custom device tree file, i.e, a device
-+	  tree file that does not belong to the kernel
-+	  source tree.
-+endchoice
-+
-+config BR2_LINUX_KERNEL_INTREE_DTS_NAME
-+	string "Device Tree Source file name"
-+	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
-+	help
-+	 Name of the device tree source file, without
-+	 the trailing .dts
-+
-+config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
-+	string "Device Tree Source file path"
-+	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	help
-+	  Path to the device tree source file
-+
-+endif
-+
- config BR2_LINUX_KERNEL_INSTALL_TARGET
- 	bool "Install kernel image to /boot in target"
- 	depends on !BR2_TARGET_ROOTFS_INITRAMFS
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 1b7e0b7..099f8ba 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -48,6 +48,12 @@ LINUX_MAKE_FLAGS = \
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
- 
-+ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
-+KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-+else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-+KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
- LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- else
-@@ -155,13 +161,25 @@ define LINUX_CONFIGURE_CMDS
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
- endef
- 
-+ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-+define LINUX_BUILD_DTB
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
-+endef
-+define LINUX_INSTALL_DTB
-+	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
-+endef
-+endif
-+
- # Compilation. We make sure the kernel gets rebuilt when the
- # configuration has changed.
- define LINUX_BUILD_CMDS
-+	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-+		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
- 	fi
-+	$(LINUX_BUILD_DTB)
- endef
- 
- 
-@@ -186,6 +204,7 @@ endef
- 
- define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
-+	$(LINUX_INSTALL_DTB)
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 514d299..96dd129 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -68,6 +68,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.24"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.6"		if BR2_KERNEL_HEADERS_3_4
++	default "3.4.7"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
