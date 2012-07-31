@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 21:37:29 +0200
-Subject: [Buildroot] Package informations, online and updated
-Message-ID: <20120731213729.49c4b3ee@skate>
+Date: Tue, 31 Jul 2012 21:38:16 +0200
+Subject: [Buildroot] [git commit] pkg-stats: ensure infratype is reset for
+	every package
+Message-ID: <20120731193835.1F52296F91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=697f034f589e0cacaf01f57baa2b9015f7f3227d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After the update to the pkg-stats package, I've set up the necessary
-infrastructure to keep an updated online result of this script. It can
-be seen at any time at:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/pkg-stats |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- http://autobuild.buildroot.org/stats/
-
-I will run the script every day in a crontab, after doing a git pull,
-so it will reflect the daily status of our packages.
-
-There are probably more metrics to add, even small things like presence
-of ':=' operators. Don't hesitate to share your ideas and patches about
-this.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index ca2d0ec..de73eeb 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -105,6 +105,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 
+     hashost=0
+     hastarget=0
++    infratype=""
+ 
+     # Determine package infrastructure
+     if grep -E "\(host-autotools-package\)" $i > /dev/null ; then
