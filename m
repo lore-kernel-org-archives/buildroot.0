@@ -1,77 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:08:28 +0200
-Subject: [Buildroot] [git commit branch/next] linux: Add new image formats
-	for PowerPC and Microblaze
-Message-ID: <20120802195304.3148A827F7@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:39:16 +0200
+Subject: [Buildroot] [git commit branch/next] qemu/mips-malta: update to use
+	kernel 3.4.7
+Message-ID: <20120802195305.16A1D80110@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18e752de8712df676b31b32003acea57ace95cb3
+commit: http://git.buildroot.net/buildroot/commit/?id=7accc51ebf44ed1f3c0d2c3afcafc1a0641dcca7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add the following Linux kernel image formats:
-
- * cuImage(powerpc)
- * simpleImage(microblaze)
- * linux.bin(microblaze)
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |   21 +++++++++++++++++++++
- linux/linux.mk  |    6 ++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+ .../{linux-3.3.config => linux-3.4.config}         |    0
+ board/qemu/mips-malta/readme.txt                   |    2 ++
+ configs/qemu_mips_malta_defconfig                  |    8 ++++----
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 553aa39..9bd88e1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -161,6 +161,27 @@ config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
- 	select BR2_LINUX_KERNEL_DTS_SUPPORT
- 	select BR2_LINUX_KERNEL_APPENDED_DTB
+diff --git a/board/qemu/mips-malta/linux-3.3.config b/board/qemu/mips-malta/linux-3.4.config
+similarity index 100%
+rename from board/qemu/mips-malta/linux-3.3.config
+rename to board/qemu/mips-malta/linux-3.4.config
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index 0e21a3c..0288df5 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -5,3 +5,5 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
++
++Tested with QEMU 1.1.1
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index 57f3ae1..f9ec326 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,15 +6,15 @@ BR2_mips_32r2=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
-+config BR2_LINUX_KERNEL_CUIMAGE
-+	bool "cuImage"
-+	depends on BR2_powerpc
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-+	select BR2_LINUX_KERNEL_DTS_SUPPORT
-+	select BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
-+
-+config BR2_LINUX_KERNEL_SIMPLEIMAGE
-+	bool "simpleImage"
-+	depends on BR2_microblaze
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-+	select BR2_LINUX_KERNEL_DTS_SUPPORT
-+	select BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
-+
-+config BR2_LINUX_KERNEL_LINUX_BIN
-+	bool "linux.bin"
-+	depends on BR2_microblaze
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-+	select BR2_LINUX_KERNEL_DTS_SUPPORT
-+	select BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
-+
- config BR2_LINUX_KERNEL_VMLINUX_BIN
- 	bool "vmlinux.bin"
- 	depends on BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d466228..5365d5f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -83,6 +83,12 @@ else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
- LINUX_IMAGE_NAME=zImage
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
- LINUX_IMAGE_NAME=zImage
-+else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
-+LINUX_IMAGE_NAME=cuImage.$(KERNEL_DTS_NAME)
-+else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
-+LINUX_IMAGE_NAME=simpleImage.$(KERNEL_DTS_NAME)
-+else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
-+LINUX_IMAGE_NAME=linux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
- LINUX_IMAGE_NAME=vmlinux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+-# Lock to 3.3 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_3=y
++# Lock to 3.4 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_3_4=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.3.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.4.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
