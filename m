@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:08:29 +0200
-Subject: [Buildroot] [git commit branch/next] Update qemu microblazebe
-	default configuration
-Message-ID: <20120802195304.6183E827F7@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 23:38:55 +0200
+Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
+	version 3.4.7
+Message-ID: <20120802195304.97740827F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27f7eca576ef6a8f1bb333cf982c1173bc05c480
+commit: http://git.buildroot.net/buildroot/commit/?id=8d99481199aafbf3244589310260974e08e76917
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/qemu_microblazebe_mmu_defconfig |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 387466b..619ecbf 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -22,6 +22,6 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/kernel-3.3.config"
--BR2_LINUX_KERNEL_DTS_FILE="board/qemu/microblazebe-mmu/system.dts"
--BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
--BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="linux.bin"
-+BR2_LINUX_KERNEL_LINUX_BIN=y
-+BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
+diff --git a/linux/Config.in b/linux/Config.in
+index 9bd88e1..9c63215 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_4
+ 
+ config BR2_LINUX_KERNEL_3_4
+-	bool "3.4.6"
++	bool "3.4.7"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.4.6" if BR2_LINUX_KERNEL_3_4
++	default "3.4.7" if BR2_LINUX_KERNEL_3_4
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
