@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 31 Jul 2012 09:15:59 +0100
-Subject: [Buildroot] [PATCH] protobuf: add license information
-Message-ID: <1343722559-10028-1-git-send-email-spdawson@gmail.com>
+Date: Tue, 31 Jul 2012 09:16:12 +0100
+Subject: [Buildroot] [PATCH] lcdproc: add license information
+Message-ID: <1343722572-10070-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/protobuf/protobuf.mk |    2 ++
+ package/lcdproc/lcdproc.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 6e49dd3..653e90e 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index 1275ddf..da2909d 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
 @@ -6,6 +6,8 @@
- PROTOBUF_VERSION = 2.4.1
- PROTOBUF_SOURCE = protobuf-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = http://protobuf.googlecode.com/files/
-+PROTOBUF_LICENSE = PROPRIETARY
-+PROTOBUF_LICENSE_FILES = COPYING.txt
+ LCDPROC_VERSION = 0.5.5
+ LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
+ LCDPROC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
++LCDPROC_LICENSE = LGPLv2+
++LCDPROC_LICENSE_FILES = COPYING
  
- # N.B. Need to use host protoc during cross compilation.
- PROTOBUF_DEPENDENCIES = host-protobuf
+ LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
+ 
 -- 
 1.7.9.5
