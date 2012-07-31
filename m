@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 23:43:25 +0200
-Subject: [Buildroot] [PATCH 01/11] kernel-headers: bump 3.4.x stable
- version
-In-Reply-To: <1343769195-25220-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1343769195-25220-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120731234325.1d75005c@skate>
+Date: Tue, 31 Jul 2012 23:44:41 +0200
+Subject: [Buildroot] [PATCHv4 0/6] Add some support for device tree
+ kernels
+In-Reply-To: <1343651569-6450-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1343651569-6450-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <20120731234441.72e899d1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 31 Jul 2012 18:13:05 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Le Mon, 30 Jul 2012 14:32:43 +0200,
+Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>  configs/s6lx9_microboard_defconfig |   12 +----
+>  linux/Config.in                    |  101 +++++++++++++++++++++++++++++++++---
+>  linux/linux.mk                     |   79 ++++++++++++++++++++++------
+>  3 files changed, 158 insertions(+), 34 deletions(-)
 
-Applied all 11 patches, after fixing minor conflicts on the Microblaze
-configs due to the device tree changes.
+I have now applied this patch set, including the small fix you
+suggested for the linux.bin image problem I reported yesterday.
 
-It would be great it you could check that the device tree changes have
-broken anything. I know the configs build, but I haven't tested them.
+Thanks a lot for your persistence, I think it's great to have proper
+support in Buildroot to generate DT-related kernel images.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
