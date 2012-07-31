@@ -1,47 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jul 2012 20:30:04 +0200
-Subject: [Buildroot] [git commit] sysprof: add patch to fix build failures
-	related to NT_GNU_BUILD_ID
-Message-ID: <20120731193352.A16AA96FCE@busybox.osuosl.org>
+Date: Tue, 31 Jul 2012 21:37:29 +0200
+Subject: [Buildroot] Package informations, online and updated
+Message-ID: <20120731213729.49c4b3ee@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed7e0927f8e4c480b3efde9928fb886f47d36b85
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../sysprof-02-define-NT_GNU_BUILD_ID.patch        |   22 ++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+After the update to the pkg-stats package, I've set up the necessary
+infrastructure to keep an updated online result of this script. It can
+be seen at any time at:
 
-diff --git a/package/sysprof/sysprof-02-define-NT_GNU_BUILD_ID.patch b/package/sysprof/sysprof-02-define-NT_GNU_BUILD_ID.patch
-new file mode 100644
-index 0000000..dcc2cbe
---- /dev/null
-+++ b/package/sysprof/sysprof-02-define-NT_GNU_BUILD_ID.patch
-@@ -0,0 +1,22 @@
-+On uclibc elf.h does not have GNU extentions but we need this define
-+so we define it locally if its not getting it from elf.h
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+Upstream-Status: Pending
-+
-+Index: git/elfparser.h
-+===================================================================
-+--- git.orig/elfparser.h	2011-07-16 18:57:41.000000000 -0700
-++++ git/elfparser.h	2011-07-16 20:28:54.733829895 -0700
-+@@ -17,6 +17,10 @@
-+  */
-+ #include <glib.h>
-+ 
-++#ifndef NT_GNU_BUILD_ID
-++#define NT_GNU_BUILD_ID 3
-++#endif
-++
-+ typedef struct ElfSym ElfSym;
-+ typedef struct ElfParser ElfParser;
-+ 
+ http://autobuild.buildroot.org/stats/
+
+I will run the script every day in a crontab, after doing a git pull,
+so it will reflect the daily status of our packages.
+
+There are probably more metrics to add, even small things like presence
+of ':=' operators. Don't hesitate to share your ideas and patches about
+this.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
