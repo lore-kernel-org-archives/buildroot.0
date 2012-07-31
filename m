@@ -1,32 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 31 Jul 2012 12:34:53 +0200
-Subject: [Buildroot] Manual password entry for DOWNLOAD_SCP scheme
-In-Reply-To: <BLU145-W509744A25C67F5562EF92D6C50@phx.gbl>
-References: <BLU145-W509744A25C67F5562EF92D6C50@phx.gbl>
-Message-ID: <CAAXf6LUXNqAHCCLkkNDRO8AA79fzpp9xmQhBDZJWBXF0aNae5g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 Jul 2012 12:35:22 +0200
+Subject: [Buildroot] [PATCH] sysprof: New package.
+In-Reply-To: <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
+References: <CAFbHwiTWnB+EtB=Du5bkAa7mtKfJ7nHeyWGshpq7Rcvjf9O__g@mail.gmail.com>
+ <20120730235830.27770869@skate> <20120731110420.76490dd1@skate>
+ <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
+Message-ID: <20120731123522.501dae00@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Tue, 31 Jul 2012 11:31:20 +0100,
+Will Newton <will.newton@gmail.com> a ?crit :
 
-On Tue, Jul 31, 2012 at 12:24 PM, Steve Goldberg
-<indeliblesteve@hotmail.com> wrote:
-> I'm putting together a TI toolchain package but as some of the required
-> packages are export controlled I need to host them on my institutional
-> machine to control access.  I think scp is the best choice for this but the
-> scp scheme does not prompt for passwords and users who haven't setup
-> public-key ssh access are unable to download the packages.  Why does the
-> DOWNLOAD_SCP scheme not prompt the user for a password?
+> Would something like the below be acceptable? It's not very clean but
+> until uClibc supports this define I don't know if there is a better
+> alternative.
 
-In my test, using scp as primary site, it does ask for a password if
-one is required.
-How have you configured the package? Have you specified a user?
+It's similar to
+http://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-kernel/sysprof/files/define-NT_GNU_BUILD_ID.patch,
+so I guess it's acceptable. The perf people are also doing the same
+thing apparently.
 
-Have you tried running scp manually? Is a password requested there? Is
-the same command used as Buildroot does?
+Thanks, I will commit this!
 
-Best regards,
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
