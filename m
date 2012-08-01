@@ -1,32 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 20:10:46 +0200
-Subject: [Buildroot] [git commit] lcdproc: add license information
-Message-ID: <20120801183817.E45E196FEA@busybox.osuosl.org>
+Date: Wed, 1 Aug 2012 20:37:49 +0200
+Subject: [Buildroot] [git commit] sysprof: add patch to fix PowerPC build
+	problem
+Message-ID: <20120801183818.14A1A96F7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01b0d34fcec8575315c5927d4b4a3fce7fc9f00d
+commit: http://git.buildroot.net/buildroot/commit/?id=5e671c8e79bf0ebbb19bbb40872d17777f8f9fdd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Fixes
+http://autobuild.buildroot.org/results/5841486b8ecc9f13e46f03413a2805d2966cd2d5/build-end.log
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lcdproc/lcdproc.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ .../sysprof/sysprof-03-fix-powerpc-checks.patch    |   26 ++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-index 1275ddf..94848e6 100644
---- a/package/lcdproc/lcdproc.mk
-+++ b/package/lcdproc/lcdproc.mk
-@@ -6,6 +6,8 @@
- LCDPROC_VERSION = 0.5.5
- LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
- LCDPROC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
-+LCDPROC_LICENSE = GPLv2+
-+LCDPROC_LICENSE_FILES = COPYING
- 
- LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
- 
+diff --git a/package/sysprof/sysprof-03-fix-powerpc-checks.patch b/package/sysprof/sysprof-03-fix-powerpc-checks.patch
+new file mode 100644
+index 0000000..8d69f74
+--- /dev/null
++++ b/package/sysprof/sysprof-03-fix-powerpc-checks.patch
+@@ -0,0 +1,26 @@
++From 4708a509aa9d65ae93e9824e42ddbc6e8d42d90c Mon Sep 17 00:00:00 2001
++From: Michel D??nzer <michel@daenzer.net>
++Date: Sat, 27 Aug 2011 18:04:44 +0000
++Subject: Fix PowerPC checks for __NR_perf_counter_open.
++
++__ppc__ isn't defined here on Debian powerpc. Grepping through the headers
++installed in /usr/include, there are a few references to __ppc__ and
++__ppc64__, but I suspect they're for other OSs.
++
++Signed-off-by: Michel D??nzer <michel@daenzer.net>
++---
++diff --git a/collector.c b/collector.c
++index b28964f..fe16967 100644
++--- a/collector.c
+++++ b/collector.c
++@@ -175,7 +175,7 @@ sysprof_perf_counter_open (struct perf_counter_attr *attr,
++ #define __NR_perf_counter_open 337
++ #elif defined(__hppa__)
++ #define __NR_perf_counter_open 318
++-#elif defined(__ppc__) || defined(__ppc64__)
+++#elif defined(__powerpc__) || defined(__powerpc64__)
++ #define __NR_perf_counter_open 319
++ #elif defined(__s390__)
++ #define __NR_perf_counter_open 331
++--
++cgit v0.9.0.2
