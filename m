@@ -1,89 +1,147 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 20:46:31 +0200
-Subject: [Buildroot] [git commit] Update for 2012.08-rc1
-Message-ID: <20120801200014.99AB696FBB@busybox.osuosl.org>
+Date: Wed, 1 Aug 2012 22:09:24 +0200
+Subject: [Buildroot] Buildroot 2012.08-rc1 released
+Message-ID: <20120801220924.4adf3668@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- CHANGES            |    2 +-
- Makefile           |    2 +-
- docs/download.html |    7 +++----
- docs/news.html     |   13 +++++++++++++
- 4 files changed, 18 insertions(+), 6 deletions(-)
+Buildroot 2012.08-rc1 is released - Go download it at:
 
-diff --git a/CHANGES b/CHANGES
-index e314c84..fb5160d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2012.08-rc1, Not released yet:
-+2012.08-rc1, Released August 1st, 2012
- 
- 	Fixes all over the tree and new features.
- 
-diff --git a/Makefile b/Makefile
-index 639fdaa..079af65 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2012.08-git
-+export BR2_VERSION:=2012.08-rc1
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index d23e7e9..c00a356 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -13,13 +13,12 @@ here:<p>
- or
- <a href="/downloads/buildroot-2012.05.tar.bz2">buildroot-2012.05.tar.bz2</a>.
- <p>
--<!--
--The latest release candidate is <b>2012.05-rc3</b>, which can be
-+The latest release candidate is <b>2012.08-rc1</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2012.05-rc3.tar.gz">buildroot-2012.05-rc3.tar.gz</a>
-+<a href="/downloads/buildroot-2012.08-rc1.tar.gz">buildroot-2012.08-rc1.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.05-rc3.tar.bz2">buildroot-2012.05-rc3.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.08-rc1.tar.bz2">buildroot-2012.08-rc1.tar.bz2</a>.
- <p>
- -->
- This and earlier releases can always be downloaded from
-diff --git a/docs/news.html b/docs/news.html
-index 8060638..4114b03 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,19 @@
- <p>
- 
- <ul>
-+   <li><b>1 August 2012 -- 2012.08-rc1 released</b>
-+
-+     <p>We have a new release candidate! Lots of changes all over the
-+     tree, see the <a
-+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc1">CHANGES</a>
-+     file for details</p>
-+
-+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+     <a href="/downloads/buildroot-2012.08-rc1.tar.bz2">2012.08-rc1
-+     release candidate</a>, and report any problems found to the <a
-+     href="lists.html">mailing list</a> or <a
-+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>22 July 2012 -- Buildroot Developer Day</b>
- 
-     <p>The next <i>Buildroot Developer Day</i> meeting will take place
+http://buildroot.net/downloads/buildroot-2012.08-rc1.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2012.08-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2012.05..
+   124  Gustavo Zacarias
+    73  Peter Korsgaard
+    68  Thomas Petazzoni
+    37  Luca Ceresoli
+    25  Simon Dawson
+    21  Samuel Martin
+    17  Arnout Vandecappelle (Essensium/Mind)
+    12  Maxime Ripard
+    12  Thomas De Schampheleire
+    10  Nathan Lynch
+     9  Francois Perrad
+     7  Yegor Yefremov
+     6  Danomi Manchego
+     6  Jonathan Liu
+     5  Baruch Siach
+     5  Marek Belisko
+     3  Arnout Vandecappelle
+     3  gregory hermant
+     2  Dominik Faessler
+     1  Aras Vaichas
+     1  Arn R
+     1  Beno?t Th?baudeau
+     1  Daniel Mack
+     1  David Purdy
+     1  Dimitry Golubovsky
+     1  Eric Jarrige
+     1  Frank Hunleth
+     1  Fran?ois Perrad
+     1  Jarkko Sakkinen
+     1  Jean-Christophe PLAGNIOL-VILLARD
+     1  Julian Lunz
+     1  Kelvin Cheung
+     1  Markos Chandras
+     1  Murat Demirten
+     1  Phil Edworthy
+     1  Richard Braun
+     1  Tristan Lelong
+     1  Will Newton
+
+Just like for the 2012.05, we see an increasing number of new
+contributors, which is very good.
+
+The important new features are:
+
+        Integration of a legal information reporting infrastructure,
+        which allows to generate detailed informations about the
+        licenses and source code of all components of a system
+        generated by Buildroot. License information will progressively
+        be added on packages.
+
+        Default configuration files added for Calao-systems USB-A9263
+        and Calao-systems USB-A9G20-LPW.
+
+        External toolchains update: allow download of a custom
+        toolchain, add Linaro 2012.05 and 2012.06 for ARM, add
+        Blackfin toolchain 2012R1-BETA1, add Sourcery CodeBench MIPS
+        2011.09.
+
+        Allow the restriction of downloads to the primary site only.
+        This is useful for project developers who want to ensure that
+        the project can be built even if the upstream tarball
+        locations disappear.
+
+        Add a 'System configuration' choice to select between 3
+        different init systems: Busybox init, SysV init and Systemd
+        init.
+
+        Cleanups to the package infrastructure. The visible change to
+        developers is that $(eval $(call AUTOTARGETS)) is now $(eval
+        $(autotools-package)), and similarly for other package
+        infrastructures and host packages. Refer to the documentation
+        for details.
+
+        By default, automatic detection of the number of compilation
+        jobs to use, depending on the number of CPUs available.
+
+        Improvements to generate systems with static libraries only
+        (infrastructure and package fixes).
+
+        Add proper support in the Linux kernel package to generate
+        Device Tree Blobs or combined Device Tree / Kernel
+        images. This will be useful on Microblaze, PowerPC and ARM,
+        which are architectures making extensive use of the Device
+        Tree.
+
+        Many new packages: cjson, collectd, dfu-util, dmidecode, elftosb,
+        fbterm, flashrom, freerdp, inadyn, libfreefare,
+        libnetfilter_cttimeout, libnfc, libnfc-llcp, liboping,
+        libtorrent, linphone, logsurfer, lshw, luacjson, luaexpat,
+        luajit, mediastreamer, mobile-broadband-provider-info, monit,
+        mxs-bootlets, nanocom, nss-mdns, ofone, omap-u-boot-utils,
+        opkg, ortp, owl-linux, python-id3, python-nfc, quota,
+        ramspeed, rtorrent, sound-theme-borealis,
+        sound-theme-freedesktop, sysprof, webrtc-audio-processing,
+        xinetd, zxing
+
+And the usual package version updates and bug fixes. Special thanks to
+Luca Cerosoli for the legal info infrastructure implementation, to
+Arnout Vandecappelle for more package infrastructure cleanup, and
+Maxime Ripard for the improved Device Tree support and finalization of
+the systemd integration. And of course thanks to all the contributors
+for their fixes, new packages, bug reports and ideas. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc1
+
+Like Peter was doing, I will now create a next branch and start merging
+in new features, rather than wait until 2012.08 is released. Note
+however that during the next three weeks, I will only have a 3G mobile
+data connection, so I may be less reactive.
+
+Enjoy!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
