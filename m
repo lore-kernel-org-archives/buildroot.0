@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 20:10:32 +0200
-Subject: [Buildroot] [git commit] ebtables: add license information
-Message-ID: <20120801183817.D096E96F30@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 1 Aug 2012 20:55:51 +0200
+Subject: [Buildroot] Package informations, online and updated
+In-Reply-To: <20120731213729.49c4b3ee@skate>
+References: <20120731213729.49c4b3ee@skate>
+Message-ID: <CAAXf6LXtZ4Cp4-rpreKiuEdntpyJMeiyrWSNB93LOzbFDrt5Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2ec096eeda8d46b1cbb8f6adac16004c442f27e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ebtables/ebtables.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Tue, Jul 31, 2012 at 9:37 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> After the update to the pkg-stats package, I've set up the necessary
+> infrastructure to keep an updated online result of this script. It can
+> be seen at any time at:
+>
+>  http://autobuild.buildroot.org/stats/
+>
+> I will run the script every day in a crontab, after doing a git pull,
+> so it will reflect the daily status of our packages.
+>
+> There are probably more metrics to add, even small things like presence
+> of ':=' operators. Don't hesitate to share your ideas and patches about
+> this.
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index b3068f4..7676e9a 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -7,6 +7,8 @@
- EBTABLES_VERSION = 2.0.10-4
- EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
- EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
-+EBTABLES_LICENSE = GPLv2
-+EBTABLES_LICENSE_FILES = COPYING
- 
- define EBTABLES_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables -C $(@D)
+Nice!
+In fact, I wasn't aware of the pkg-stats script at all. I doesn't seem
+to be mentioned in the documentation, or has this changed in recent
+versions?
+
+Anyway, good idea to put it online.
+
+Best regards,
+Thomas
