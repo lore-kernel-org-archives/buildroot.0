@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 20:10:32 +0200
-Subject: [Buildroot] [git commit branch/next] ebtables: add license
+Date: Wed, 1 Aug 2012 20:10:48 +0200
+Subject: [Buildroot] [git commit branch/next] minicom: add license
 	information
-Message-ID: <20120802195305.9301F96CE6@busybox.osuosl.org>
+Message-ID: <20120802195305.B53DB96CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2ec096eeda8d46b1cbb8f6adac16004c442f27e
+commit: http://git.buildroot.net/buildroot/commit/?id=df6ef452e7fafc604d8b11c1ccb68279d41bb7cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ebtables/ebtables.mk |    2 ++
+ package/minicom/minicom.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index b3068f4..7676e9a 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -7,6 +7,8 @@
- EBTABLES_VERSION = 2.0.10-4
- EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
- EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
-+EBTABLES_LICENSE = GPLv2
-+EBTABLES_LICENSE_FILES = COPYING
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 7293f6a..6d0607f 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -6,6 +6,8 @@
+ MINICOM_VERSION = 2.6.1
+ MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.gz
+ MINICOM_SITE = http://alioth.debian.org/frs/download.php/3700/
++MINICOM_LICENSE = GPLv2+
++MINICOM_LICENSE_FILES = COPYING
  
- define EBTABLES_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables -C $(@D)
+ # pkg-config is only used to check for liblockdev, which we don't have
+ # in BR, so instead of adding host-pkg-config as a dependency, simply
