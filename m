@@ -1,40 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:06 -0000
-Subject: [Buildroot] [git commit branch/next] qt: make
-	$(HOST_DIR)/usr/mkspecs a symlink to $(STAGING_DIR)/usr/mkspecs
-Message-ID: <20120802195239.2DCDF7FD54@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 1 Aug 2012 20:08:53 +0200
+Subject: [Buildroot] [git commit branch/next] poco: add license information
+Message-ID: <20120802195305.843EA96CE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=755a51f327d7d18f31e6b352cdd7032d2d01e35f
+commit: http://git.buildroot.net/buildroot/commit/?id=e320e94106e852d114c562ad644a0b5956e64e0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In fact, not only qt can install stuff in $(STAGING_DIR)/usr/mkspecs,
-but also libraries that wish to integrate with qmake, such as
-qwt. However, qmake and al. will look inside $(HOST_DIR)/usr/mkspecs,
-so the easiest solution is to have a symbolic link between the two
-directories, instead of copying things around.
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/poco/poco.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 7e6c5dd..b751696 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -583,8 +583,7 @@ define QT_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) install
- 	mkdir -p $(HOST_DIR)/usr/bin
- 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
--	rm -rf $(HOST_DIR)/usr/mkspecs
--	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
-+	ln -sf $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr/mkspecs
- 	$(QT_INSTALL_QT_CONF)
- endef
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 779487f..f74c2b1 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -6,6 +6,8 @@
+ POCO_VERSION = 1.4.3p1
+ POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
+ POCO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/poco
++POCO_LICENSE = Boost-v1.0
++POCO_LICENSE_FILES = LICENSE
+ POCO_INSTALL_STAGING = YES
  
+ POCO_DEPENDENCIES = zlib pcre					\
