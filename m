@@ -1,28 +1,34 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 1 Aug 2012 08:05:13 +0100
-Subject: [Buildroot] [PATCH] minicom: add license information
-In-Reply-To: <20120731214445.348522a6@skate>
-References: <1343722581-10112-1-git-send-email-spdawson@gmail.com>
- <20120731214445.348522a6@skate>
-Message-ID: <CAHt8ZCNg3V0V8fz75LAGOSkjbQ6tZaZvu7W1+tLyidiJLo2jhw@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  1 Aug 2012 08:06:38 +0100
+Subject: [Buildroot] [PATCH v2] lcdproc: add license information
+Message-ID: <1343804798-5733-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31 July 2012 20:44, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Tue, 31 Jul 2012 09:16:21 +0100,
-> spdawson at gmail.com a ?crit :
->
->> +MINICOM_LICENSE = LGPLv2+
->
-> NAK, the license is GPLv2+.
->
-> Again, please be careful when sending such patches to verify the
-> information.
+From: Simon Dawson <spdawson@gmail.com>
 
-Okay. Will fix and resubmit.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v2: License is GPL, not LGPL as claimed by v1 of this patch.
 
-Simon.
+ package/lcdproc/lcdproc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index 1275ddf..94848e6 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
+@@ -6,6 +6,8 @@
+ LCDPROC_VERSION = 0.5.5
+ LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
+ LCDPROC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
++LCDPROC_LICENSE = GPLv2+
++LCDPROC_LICENSE_FILES = COPYING
+ 
+ LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
+ 
+-- 
+1.7.9.5
