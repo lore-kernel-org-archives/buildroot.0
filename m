@@ -1,48 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 23:16:35 +0200
-Subject: [Buildroot] glibc instead of ulibc ?
-In-Reply-To: <1343854870.70701.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-References: <1343854870.70701.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-Message-ID: <20120801231635.08b7d808@skate>
+Date: Wed,  1 Aug 2012 23:47:04 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: microblaze toolchains are
+	glibc-based
+Message-ID: <1343857624-4494-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 1 Aug 2012 14:01:10 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in |   12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-> I've built root file system for ARM board and now try to cross
-> compile simple (graphical) program, using Lazarus.
-> Althouth I'm pretty sure that I correctly configured Lazarus, some
-> errors emerged?(eg. libX11.so: undefined reference to strcpy, ... fclose; fseek ...).
-
-These functions are very basic stuff in uClibc, so your problem is
-most likely not uClibc here.
-
-> Seems to me?that at least part of?the?problem lies in?having uclibc,
-> instead of glibc. 
-> So my question is - how (if possible) can I?build root file system 
-> with glibc instead of?uclibc.
-
-You have two choices:
-
- * Use the external toolchain backend, which allows you to use a
-   pre-built CodeSourcery or Linaro toolchain for ARM, or build your
-   own toolchain with Crosstool-NG, and then use it into Buildroot as
-   an external toolchain.
-
- * Use the Crosstool-NG backend, which will tell Buildroot to use
-   Crosstool-NG to build the toolchain.
-
-Both of those solutions will allow you to use the glibc C library.
-
-Best regards,
-
-Thomas
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index e34802d..f86ed74 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -542,11 +542,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	bool "Xilinx Little Endian Microblaze GNU Tools"
+ 	depends on BR2_microblazeel
+-	select BR2_LARGEFILE
+-	select BR2_INET_IPV6
+-	select BR2_INET_RPC
+-	select BR2_ENABLE_LOCALE
+-	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
+@@ -554,11 +550,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	bool "Xilinx Big Endian Microblaze GNU Tools"
+ 	depends on BR2_microblazebe
+-	select BR2_LARGEFILE
+-	select BR2_INET_IPV6
+-	select BR2_INET_RPC
+-	select BR2_ENABLE_LOCALE
+-	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
