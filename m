@@ -1,20 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 20:10:40 +0200
-Subject: [Buildroot] [PATCH 3/3] ebtables: add license information
-In-Reply-To: <8ed73faa3bc5d3cf00af348d5733252737446ed8.1343796460.git.baruch@tkos.co.il>
-References: <5d40aa0e8f5d5dc6b863bf1a0af427a377e75989.1343796460.git.baruch@tkos.co.il>
- <8ed73faa3bc5d3cf00af348d5733252737446ed8.1343796460.git.baruch@tkos.co.il>
-Message-ID: <20120801201040.549eeffb@skate>
+Date: Wed, 1 Aug 2012 20:10:56 +0200
+Subject: [Buildroot] [PATCH v2] lcdproc: add license information
+In-Reply-To: <1343804798-5733-1-git-send-email-spdawson@gmail.com>
+References: <1343804798-5733-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120801201056.1c2ba155@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed,  1 Aug 2012 07:48:59 +0300,
-Baruch Siach <baruch@tkos.co.il> a ?crit :
+Le Wed,  1 Aug 2012 08:06:38 +0100,
+spdawson at gmail.com a ?crit :
 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
 Applied, thanks.
 
