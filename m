@@ -1,38 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 1 Jul 2012 00:27:39 +0200
-Subject: [Buildroot] [git commit] Globally disable PKG_CONFIG_PATH
-Message-ID: <20120630222816.F27BA8F39F@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  1 Aug 2012 07:48:59 +0300
+Subject: [Buildroot] [PATCH 3/3] ebtables: add license information
+In-Reply-To: <5d40aa0e8f5d5dc6b863bf1a0af427a377e75989.1343796460.git.baruch@tkos.co.il>
+References: <5d40aa0e8f5d5dc6b863bf1a0af427a377e75989.1343796460.git.baruch@tkos.co.il>
+Message-ID: <8ed73faa3bc5d3cf00af348d5733252737446ed8.1343796460.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=670cb306704d76b4c3b717931cc7abef8c693099
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
-look for libraries outside of the buildroot tree.  This is a problem
-both for host and target builds.  To avoid it, globally set an empty
-PKG_CONFIG_PATH in the environment.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- Makefile |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/ebtables/ebtables.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 7a66897..bcbe9fc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -165,6 +165,9 @@ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index b3068f4..7676e9a 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -7,6 +7,8 @@
+ EBTABLES_VERSION = 2.0.10-4
+ EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
+ EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
++EBTABLES_LICENSE = GPLv2
++EBTABLES_LICENSE_FILES = COPYING
  
-+# Make sure pkg-config doesn't look outside the buildroot tree
-+unexport PKG_CONFIG_PATH
-+
- # bash prints the name of the directory on 'cd <dir>' if CDPATH is
- # set, so unset it here to not cause problems. Notice that the export
- # line doesn't affect the environment of $(shell ..) calls, so
+ define EBTABLES_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables -C $(@D)
+-- 
+1.7.10.4
