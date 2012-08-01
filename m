@@ -1,39 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 10:03:05 +0200
-Subject: [Buildroot] [PATCH] sysprof: New package.
-In-Reply-To: <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
-References: <CAFbHwiTWnB+EtB=Du5bkAa7mtKfJ7nHeyWGshpq7Rcvjf9O__g@mail.gmail.com>
- <20120730235830.27770869@skate> <20120731110420.76490dd1@skate>
- <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
-Message-ID: <20120801100305.1afec3c1@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 01 Aug 2012 11:18:35 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.08/systemd
+In-Reply-To: <20120730232106.07e25afb@skate>
+References: <cover.1343460025.git.maxime.ripard@free-electrons.com>
+ <20120730232106.07e25afb@skate>
+Message-ID: <5018F46B.80807@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 31 Jul 2012 11:31:20 +0100,
-Will Newton <will.newton@gmail.com> a ?crit :
+Hi,
 
-> > It has been causing quite a few build failures since I merged the
-> > package, so it would be good to fix those.
+Le 30/07/2012 23:21, Thomas Petazzoni a ?crit :
+> Le Sat, 28 Jul 2012 09:21:19 +0200,
+> Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 > 
-> Would something like the below be acceptable? It's not very clean but
-> until uClibc supports this define I don't know if there is a better
-> alternative.
-
-I've pushed your patch. It solves the build failure on x86, and removes
-one error message from the PowerPC build, but the PowerPC build is still
-failing:
-http://autobuild.buildroot.org/results/a3ef351704317a9f3f3ab4ee3845bc1e61938c23/build-end.log.
-
-It has caused ~5 build failures during the last night.
+>> Maxime Ripard (3):
+>>       Rework of the init system
+>>       Add systemd unit for lighttpd
+>>       doc: Update the documentation to mention the new PKG_INSTALL_INIT_ variables
+> 
+> I have applied your changes. I had to make a change on PATCH 1/3,
+> because the systemd init choice was visible even if the requirements
+> for the systemd package were not met (thread support and
+> udev-based /dev).
 
 Thanks!
 
-Thomas
+> Also, it would be good to investigate the newer versions of systemd. If
+> I remember correctly, they integrate udev directly, but is it possible
+> to still have udev separately? This of course will not be for 2012.08,
+> but it would be nice to continue to integrate those technologies into
+> Buildroot.
+
+Yes, this is definitely something I want to try in the future. They told
+when they merged udev that we could still be able to compile both
+separately, but from a quick look, I haven't seen a way to do so yet.
+
+> Also, in the testing I've done with the vexpress Qemu target, I have
+> not been particularly impressed by the boot speed, but I should
+> probably try on a real target.
+
+Yes, boot speed for a minimal system didn't impress me much neither. But
+still, it tends to be the same time as with busybox's init, but it has
+way much to boot, like udev, dbus, and so on. Also, if I remember
+correctly the talk at ELCE last year from Koen Kooi, he was saying that
+now the boot is mostly CPU-bound, which might explain the not-so-fast
+boot on slow cpus.
+
+> And final comment: it seems lighttpd is started even before the web
+> server is accessed. Wasn't systemd supposed to start such daemons
+> on-demand? Or maybe lighttpd does not have the necessary code to
+> support such kind of startup where the already opened socket is passed
+> by systemd?
+
+This is one of the features of systemd yes, but the daemons have to be
+started in inet-mode, so that it's actually systemd that handles the
+socket. Here, we just start lighttpd like a regular daemon, so except
+for the starting part, it has nothing to do with the daemon.
+
+Maxime
+
 -- 
-Thomas Petazzoni, Free Electrons
+Maxime Ripard, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
