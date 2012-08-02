@@ -1,37 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:34 -0000
-Subject: [Buildroot] [git commit branch/next] qt: bump to 4.8.2
-Message-ID: <20120802195241.5F9EF8C999@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:36 -0000
+Subject: [Buildroot] [git commit branch/next] valgrind: unbreak arm support
+	after REAL_GNU_TARGET_NAME removal
+Message-ID: <20120802195245.99C8C8E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=81e0952d9ece82d992070cc8215553d396897e4f
+commit: http://git.buildroot.net/buildroot/commit/?id=01d7b429d9a0709ce96f7af892b14398b62d5b22
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also switch to the new upstream URL.
+Fixes http://autobuild.buildroot.net/results/085aa258adc5eaaa6320f283868a185093480960
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/valgrind/valgrind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index ff9f4ca..6b1be83 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -11,9 +11,9 @@
- #
- ######################################################################
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 004c1ac..22e5c96 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -16,7 +16,7 @@ VALGRIND_CONF_OPT = --disable-tls
+ # only be selected on Cortex A8 and Cortex A9 platforms.
+ ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
+ VALGRIND_CONF_OPT += \
+-	--host=$(patsubst arm-%,armv7-unknown-%,$(GNU_TARGET_NAME))
++	--host=$(patsubst arm-%,armv7-%,$(GNU_TARGET_NAME))
+ endif
  
--QT_VERSION = 4.8.1
-+QT_VERSION = 4.8.2
- QT_SOURCE  = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
--QT_SITE    = http://get.qt.nokia.com/qt/source
-+QT_SITE    = http://releases.qt-project.org/qt4/source
- QT_DEPENDENCIES = host-pkg-config
- QT_INSTALL_STAGING = YES
- 
+ define VALGRIND_INSTALL_UCLIBC_SUPP
