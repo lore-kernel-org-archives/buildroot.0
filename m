@@ -1,35 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:53 -0000
-Subject: [Buildroot] [git commit branch/next] php: fix build error for snmp
-	extension
-Message-ID: <20120802195236.098F096AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain/mips: kill EABI and
+	fix N32
+Message-ID: <20120802195249.5A85B96DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48189d95001c41969ffddad427aaf73a9b57bc15
+commit: http://git.buildroot.net/buildroot/commit/?id=b6ebb7fd1bd778709c3acb10b96a43e6bd863dae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-PHP requires that net-snmp be built with the ability to load MIB code,
-so force it on when the extension is enabled.
+MIPS EABI is a bare-metal ABI so remove it.
+Also fix uClibc to really work with N32 ABI, which used the EABI knob
+previously.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/Config.ext |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ target/Config.in.arch      |    3 ---
+ toolchain/uClibc/uclibc.mk |    2 +-
+ 2 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index fa73bb4..80bab70 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -219,6 +219,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
- config BR2_PACKAGE_PHP_EXT_SNMP
- 	bool "SNMP"
- 	select BR2_PACKAGE_NETSNMP
-+	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 	help
- 	  SNMP support
- 
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index c9bbc12..bad0f4c 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -280,9 +280,6 @@ config BR2_MIPS_OABI32
+ config BR2_MIPS_ABI32
+ 	bool "n32"
+ 	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
+-config BR2_MIPS_EABI
+-	bool "eabi"
+-	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
+ config BR2_MIPS_ABI64
+ 	bool "n64"
+ 	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index f40fe36..9d0b6db 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -158,7 +158,7 @@ ifeq ($(UCLIBC_TARGET_ARCH),mips)
+ ifeq ($(BR2_MIPS_OABI),y)
+ 	$(SED) 's/.*\(CONFIG_MIPS_O32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_MIPS_EABI),y)
++ifeq ($(BR2_MIPS_ABI32),y)
+ 	$(SED) 's/.*\(CONFIG_MIPS_N32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
+ endif
+ ifeq ($(BR2_MIPS_ABI64),y)
