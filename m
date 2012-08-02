@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:48 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain/crosstool-ng: change
-	use of BR2_JLEVEL to PARALLEL_JOBS
-Message-ID: <20120802195244.5301E8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] xavante: bump version to 2.2.1
+Message-ID: <20120802195247.2E7BD8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6b26ea4251c7bcec36a26e7059832789a3f5938
+commit: http://git.buildroot.net/buildroot/commit/?id=f4da6b8bd979a49c4ca14fb6003d2b05f6d8c5b7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    2 +-
+ package/xavante/xavante.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 625796a..d18f5d5 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -81,7 +81,7 @@ $(STAMP_DIR)/ct-ng-toolchain-installed: $(STAMP_DIR)/ct-ng-toolchain-built
- #       depending on the selected C library. Those deps are added later
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
+index e6dd312..5eabd1e 100644
+--- a/package/xavante/xavante.mk
++++ b/package/xavante/xavante.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- $(STAMP_DIR)/ct-ng-toolchain-built: $(CTNG_DIR)/.config
--	$(Q)$(call ctng,build.$(BR2_JLEVEL))
-+	$(Q)$(call ctng,build.$(PARALLEL_JOBS))
- 	$(Q)printf "\n"
- 	$(Q)touch $@
+-XAVANTE_VERSION = 2.2.0
++XAVANTE_VERSION = 2.2.1
+ XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
+ XAVANTE_DEPENDENCIES = cgilua copas coxpcall lua luafilesystem luasocket wsapi
  
