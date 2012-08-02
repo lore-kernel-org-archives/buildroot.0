@@ -1,68 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:34 -0000
-Subject: [Buildroot] [git commit branch/next] socat: disable documentation
-	build/installation
-Message-ID: <20120802195232.7A00196FF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/news.html: add
+	2012.05-rc1 announcement link
+Message-ID: <20120802195232.8B20296FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=556fd4f81588dff2e9ff288a87517d4ae18bf0ed
+commit: http://git.buildroot.net/buildroot/commit/?id=4d1c69dd1021b0e94930c97f6f8af7bdff2fd667
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The documentation generation process requires a special yold2man
-program, for which we don't have a package in Buildroot. Since we
-generally don't care much about documentation of packages, just adjust
-the package Makefile.in to not build/install its documentation.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/socat/socat-no-documentation.patch |   37 ++++++++++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
+ docs/news.html |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/socat/socat-no-documentation.patch b/package/socat/socat-no-documentation.patch
-new file mode 100644
-index 0000000..ce088df
---- /dev/null
-+++ b/package/socat/socat-no-documentation.patch
-@@ -0,0 +1,37 @@
-+socat: disable documentation build/installation
-+
-+The documentation generation process requires a special yold2man
-+program, for which we don't have a package in Buildroot. Since we
-+generally don't care much about documentation of packages, just adjust
-+the package Makefile.in to not build/install its documentation.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makefile.in
-+===================================================================
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -93,7 +93,7 @@
-+ 	Config/Makefile.Cygwin-1-5-25 Config/config.Cygwin-1-5-25.h \
-+ 	Config/Makefile.MacOSX-10-5 Config/config.MacOSX-10-5.h
-+ 
-+-all: progs doc
-++all: progs
-+ 
-+ scmclean: gitclean
-+ 
-+@@ -136,13 +136,11 @@
-+ strip: progs
-+ 	strip $(PROGS)
-+ 
-+-install: progs $(srcdir)/doc/socat.1
-++install: progs
-+ 	mkdir -p $(DESTDIR)$(BINDEST)
-+ 	$(INSTALL) -m 755 socat $(DESTDIR)$(BINDEST)
-+ 	$(INSTALL) -m 755 procan $(DESTDIR)$(BINDEST)
-+ 	$(INSTALL) -m 755 filan $(DESTDIR)$(BINDEST)
-+-	mkdir -p $(DESTDIR)$(MANDEST)/man1
-+-	$(INSTALL) -m 644 $(srcdir)/doc/socat.1 $(DESTDIR)$(MANDEST)/man1/
-+ 
-+ uninstall:
-+ 	rm -f $(DESTDIR)$(BINDEST)/socat
+diff --git a/docs/news.html b/docs/news.html
+index 8c4871f..0032dfa 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -10,7 +10,8 @@
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc1">CHANGES</a>
+-    file for details</p>
++    file for details, and read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2012-May/053736.html">announcement</a>.</p>
+ 
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05-rc1.tar.bz2">2012.05-rc1
