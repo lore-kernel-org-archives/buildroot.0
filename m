@@ -1,32 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:52:58 -0000
-Subject: [Buildroot] [git commit branch/next] berkeleydb: define license
-Message-ID: <20120802195252.83A1C8D74F@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:59 -0000
+Subject: [Buildroot] [git commit branch/next] nasm: bump version to 2.10.01,
+	remove dummy target package
+Message-ID: <20120802195252.EE4028D74F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e03375d317c369c1f676b090f5bb10efa52ecec
+commit: http://git.buildroot.net/buildroot/commit/?id=d09967e0716894b91d27348877467ecba5eccad0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+The target package was only present because at the time 'nasm' was
+packaged, there was a bug in the package infrastructure that prevented
+a package from having a host only variant. This has been fixed since
+then, so we can get rid of the useless dummy target package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/berkeleydb/berkeleydb.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/nasm/nasm.mk |   13 +++----------
+ 1 files changed, 3 insertions(+), 10 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index 09f35ef..3aaae5f 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -7,6 +7,8 @@ BERKELEYDB_VERSION = 5.3.21
- BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
- BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
- BERKELEYDB_SUBDIR = build_unix
-+BERKELEYDB_LICENSE = BerkeleyDB License
-+BERKELEYDB_LICENSE_FILES = LICENSE
- BERKELEYDB_INSTALL_STAGING = YES
- BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
- 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index b819df0..9d99209 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -2,17 +2,10 @@
+ #
+ # nasm
+ #
+-# This is special case: nasm is used to build syslinux and
+-# pxelinux. As these are for the target, we should cross-compile
+-# nasm. However, as nasm is x86-only, there's no point in
+-# cross-compiling it. So we just build it for the host. The target
+-# variant is only provided because of a bug in the package
+-# infrastructure that prevents having only a host variant.
+ ############################################################
+ 
+-NASM_VERSION=2.08.01
+-NASM_SOURCE=nasm-$(NASM_VERSION).tar.bz2
+-NASM_SITE=http://www.nasm.us/pub/nasm/releasebuilds/2.08.01/
++NASM_VERSION = 2.10.01
++NASM_SOURCE  = nasm-$(NASM_VERSION).tar.bz2
++NASM_SITE    = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ 
+-$(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
