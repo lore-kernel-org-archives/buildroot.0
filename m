@@ -1,35 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:45 -0000
-Subject: [Buildroot] [git commit branch/next] php: security bump to version
-	5.3.14
-Message-ID: <20120802195240.92E7088D21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt: change use of BR2_JLEVEL
+	to PARALLEL_JOBS
+Message-ID: <20120802195244.4262E8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74b442c8b41f466253b84fd4b529cd1a6bac2587
+commit: http://git.buildroot.net/buildroot/commit/?id=de780f6471672468fd67d79177e707c6d4d160ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump php to version 5.3.14 to fix CVE-2012-2143 and other assorted bugs.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/php/php.mk |    2 +-
+ package/qt/qt.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index af041c9..fee2c92 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--PHP_VERSION = 5.3.13
-+PHP_VERSION = 5.3.14
- PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 6b1be83..e18b873 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -487,7 +487,7 @@ define QT_CONFIGURE_CMDS
+ 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig:$(PKG_CONFIG_PATH)" \
+-		MAKEFLAGS="$(MAKEFLAGS) -j$(BR2_JLEVEL)" ./configure \
++		MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" ./configure \
+ 		$(if $(VERBOSE),-verbose,-silent) \
+ 		-force-pkg-config \
+ 		$(QT_CONFIGURE_OPTS) \
