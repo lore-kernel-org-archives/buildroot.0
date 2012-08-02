@@ -1,52 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:53 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain/mips: kill EABI and
-	fix N32
-Message-ID: <20120802195249.5A85B96DC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] dependencies.sh: suppress
+	output of locale
+Message-ID: <20120802195249.6AA8F96DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6ebb7fd1bd778709c3acb10b96a43e6bd863dae
+commit: http://git.buildroot.net/buildroot/commit/?id=99dd58418daee463074d7fd38d6ea98aca97d304
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-MIPS EABI is a bare-metal ABI so remove it.
-Also fix uClibc to really work with N32 ABI, which used the EABI knob
-previously.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in.arch      |    3 ---
- toolchain/uClibc/uclibc.mk |    2 +-
- 2 files changed, 1 insertions(+), 4 deletions(-)
+ support/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index c9bbc12..bad0f4c 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -280,9 +280,6 @@ config BR2_MIPS_OABI32
- config BR2_MIPS_ABI32
- 	bool "n32"
- 	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
--config BR2_MIPS_EABI
--	bool "eabi"
--	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
- config BR2_MIPS_ABI64
- 	bool "n64"
- 	depends on BR2_mips_3 || BR2_mips_4 || BR2_mips_64 || BR2_mips_64r2 || BR2_mips_16
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index f40fe36..9d0b6db 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -158,7 +158,7 @@ ifeq ($(UCLIBC_TARGET_ARCH),mips)
- ifeq ($(BR2_MIPS_OABI),y)
- 	$(SED) 's/.*\(CONFIG_MIPS_O32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
- endif
--ifeq ($(BR2_MIPS_EABI),y)
-+ifeq ($(BR2_MIPS_ABI32),y)
- 	$(SED) 's/.*\(CONFIG_MIPS_N32_ABI\).*/\1=y/' $(UCLIBC_DIR)/.oldconfig
- endif
- ifeq ($(BR2_MIPS_ABI64),y)
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index c47ffcf..9f0f6a9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -153,7 +153,7 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
+        /bin/echo -e "\nYou need locale support on your build machine to build a toolchain supporting locales\n"
+        exit 1 ;
+    fi
+-   if ! locale -a | grep -i utf8$ ; then
++   if ! locale -a | grep -q -i utf8$ ; then
+        /bin/echo -e "\nYou need at least one UTF8 locale to build a toolchain supporting locales\n"
+        exit 1 ;
+    fi
