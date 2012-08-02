@@ -1,36 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:19 -0000
-Subject: [Buildroot] [git commit branch/next] axel: needs thread support
-Message-ID: <20120802195241.B98838E204@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:20 -0000
+Subject: [Buildroot] [git commit branch/next] gzip: bump to version 1.5
+Message-ID: <20120802195242.0C81E8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da76330445f1aa044702f08afd8d57d164b6df07
+commit: http://git.buildroot.net/buildroot/commit/?id=e3cae83573ab9030da718b68de2d9d61a0728143
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/28d84d05e1a52a9ddec5956c946d99e8cd8c8fd7/build-end.log
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/axel/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/gzip/gzip.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/axel/Config.in b/package/axel/Config.in
-index cb9af32..98f4941 100644
---- a/package/axel/Config.in
-+++ b/package/axel/Config.in
-@@ -2,7 +2,11 @@ config BR2_PACKAGE_AXEL
- 	bool "axel"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  HTTP/FTP download accelerator.
- 
- 	  http://axel.alioth.debian.org/
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index f712f98..5fad001 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -3,8 +3,8 @@
+ # gzip
+ #
+ #############################################################
+-GZIP_VERSION:=1.4
+-GZIP_SOURCE:=gzip-$(GZIP_VERSION).tar.gz
+-GZIP_SITE:=$(BR2_GNU_MIRROR)/gzip
 +
-+comment "axel needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
++GZIP_VERSION = 1.5
++GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ 
+ $(eval $(call AUTOTARGETS))
