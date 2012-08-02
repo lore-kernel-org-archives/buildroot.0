@@ -1,42 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:52:59 -0000
-Subject: [Buildroot] [git commit branch/next] package/usbutils: bump to
-	version 006
-Message-ID: <20120802195255.839EA8E8F3@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:00 -0000
+Subject: [Buildroot] [git commit branch/next] lua: refactor without sed
+Message-ID: <20120802195256.139D68E8F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d3a91caccbfa6e2adcb134f8f2f457aef4a27786
+commit: http://git.buildroot.net/buildroot/commit/?id=ad6af5819f88bac9ca7f50e565c4fc68d3e408cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Also, as the kernel.org archives are back up, use them as official site
-again.
-
-[thomas.petazzoni at free-electrons.com: use BR2_KERNEL_MIRROR]
-
-Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/usbutils/usbutils.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/lua/lua.mk |   16 +++++++---------
+ 1 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 53a29c5..6e29571 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 1e52075..8f71fc2 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -8,8 +8,9 @@ LUA_VERSION = 5.1.5
+ LUA_SITE = http://www.lua.org/ftp
+ LUA_INSTALL_STAGING = YES
  
--USBUTILS_VERSION = 005
--USBUTILS_SITE = http://snapshot.debian.org/archive/debian/20111211T214105Z/pool/main/u/usbutils/
--USBUTILS_SOURCE = usbutils_$(USBUTILS_VERSION).orig.tar.gz
-+USBUTILS_VERSION = 006
-+USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils/
-+USBUTILS_SOURCE = usbutils-$(USBUTILS_VERSION).tar.gz
- USBUTILS_DEPENDENCIES = host-pkg-config libusb
- USBUTILS_INSTALL_STAGING = YES
- # no configure in tarball
++LUA_CFLAGS = -Wall
+ ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+-	LUA_MYCFLAGS += -fPIC
++	LUA_CFLAGS += -fPIC
+ endif
+ 
+ LUA_MYLIBS += -ldl
+@@ -17,28 +18,25 @@ LUA_MYLIBS += -ldl
+ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+-	LUA_MYCFLAGS += -DLUA_USE_LINUX
++	LUA_CFLAGS += -DLUA_USE_LINUX
+ else
+-	LUA_MYCFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
++	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
+ endif
+ 
+-HOST_LUA_DEPENDENCIES =
+-HOST_LUA_MYCFLAGS = -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
++HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
+ HOST_LUA_MYLIBS = -ldl
+ 
+ define LUA_BUILD_CMDS
+-	sed -i -e 's/-O2//' $(@D)/src/Makefile
+ 	$(MAKE) \
+ 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
+-	MYCFLAGS="$(TARGET_CFLAGS) $(LUA_MYCFLAGS)" \
++	CFLAGS="$(TARGET_CFLAGS) $(LUA_CFLAGS)" \
+ 	MYLIBS="$(LUA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" \
+ 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
+ endef
+ 
+ define HOST_LUA_BUILD_CMDS
+-	sed -i -e 's/-O2//' $(@D)/src/Makefile
+ 	$(MAKE) \
+-	MYCFLAGS="$(HOST_LUA_MYCFLAGS)" \
++	CFLAGS="$(HOST_LUA_CFLAGS)" \
+ 	MYLIBS="$(HOST_LUA_MYLIBS)" \
+ 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
+ endef
