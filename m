@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:45 -0000
-Subject: [Buildroot] [git commit branch/next] cifs-utils: bump to version 5.5
-Message-ID: <20120802195250.3CD8496FE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] beecrypt: needs threads support
+Message-ID: <20120802195248.888868E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9c3890cdd22f168bdc3cb52926d51ba2a2b61b3
+commit: http://git.buildroot.net/buildroot/commit/?id=f7ea7b227fc9c04fa85fd4a552ef9e5640abaf26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump cifs-utils to version 5.5
-Also switch to http source instead of ftp.
+Fixes
+http://autobuild.buildroot.net/results/e28e5dfe73d838b8bc4e9c586bc865d57d717f76/build-end.log
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cifs-utils/cifs-utils.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/beecrypt/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 0fdb689..15ed17a 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -1,6 +1,6 @@
--CIFS_UTILS_VERSION = 5.4
-+CIFS_UTILS_VERSION = 5.5
- CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
--CIFS_UTILS_SITE    = ftp://ftp.samba.org/pub/linux-cifs/cifs-utils/
-+CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index 2673877..19c7f2f 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -1,10 +1,14 @@
+ config BR2_PACKAGE_BEECRYPT
+ 	bool "beecrypt"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR
+ 	help
+ 	  Beecrypt is a general-purpose cryptography library.
  
- define CIFS_UTILS_NO_WERROR
- 	$(SED) 's/-Werror//' $(@D)/Makefile.in
+ 	  http://beecrypt.sf.net
+ 
++comment "beecrypt needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ comment "beecrypt C++ support requires a toolchain with WCHAR enabled"
+-	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
++	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS
