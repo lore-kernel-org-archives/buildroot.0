@@ -1,33 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:45 -0000
-Subject: [Buildroot] [git commit branch/next] news.html: add 2012.05
-	announcement mail link
-Message-ID: <20120802195234.F3B7296AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] CHANGES: update with recent
+	changes
+Message-ID: <20120802195244.EC4CB8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f809eb20214d7c0c7f552d7009022180f3f690ff
+commit: http://git.buildroot.net/buildroot/commit/?id=1ea857452a45672f5a0dc7d3322db4de017e3ca6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ CHANGES |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
 
-diff --git a/docs/news.html b/docs/news.html
-index 8b52650..256d3b9 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>The stable 2012.05 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
--    file for more details
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2012-May/054342.html">announcement</a>
-     and go to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
+diff --git a/CHANGES b/CHANGES
+index b526c58..f8ab319 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,5 +1,31 @@
+ 2012.08, Not released yet:
  
++	Fixes all over the tree and new features.
++
++	Updated/fixed packages: audiofile, autoconf, automake, axel,
++	beecrypt, berkeleydb, bind, bison, boost, busybox, bzip2,
++	cmake, connman, conntrack-tools, cups, dnsmasq, e2fsprogs,
++	ethtool, fbv, gmp, gnutls, grep, gst-plugins-base,
++	gst-plugins-good, gzip, hiawatha, hostapd, icu, imagemagick,
++	iproute2, ipset, iptables, kmod, libgci, libconfig, libcurl,
++	libeXosip2, libfuse, libidn, libmbus, libmnl,
++	libnetfilter-conntrack, libnl, libnspr, libogg, libosip2,
++	libpcap, libroxml, liburcu, libxml2, lighttpd, ltrace,
++	lttng-libust, lttng-modules, lttng-tools, module-init-tools,
++	mpg123, midori, mrouted, mtd, mxml, mysql_client, nbd,
++	nfs-utils, openocd, pciutils, php, polarssl, portaudio, pppd,
++	pthread-stubs, pulseaudio, qt, quagga, radvd, rrdtool, samba,
++	sdl_gfx, sdl_sound, speex, sqlite, squashfs, squid, sudo,
++	synergy, systemd, wpa_supplicant, zlib
++
++	New packages: cjson, collectd, dmidecode, fbterm, flashrom,
++	freerdp, inadyn, libfreefare, libnetfilter_cttimeout, libnfc,
++	liboping, libtorrent, linphone, logsurfer, lshw,
++	mediastreamer, mobile-broadband-provider-info, monit, nanocom,
++	nss-mdns, ofone, omap-u-boot-utils, opkg, ortp, python-id3,
++	quota, ramspeed, rtorrent, sound-theme-freedesktop,
++	webrtc-audio-processing, xinetd, zxing
++
+ 2012.05, Released May 30th, 2012:
+ 
+ 	Updated/fixed packages: busybox, netsnmp, pptp-linux
