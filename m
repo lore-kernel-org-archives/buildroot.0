@@ -1,34 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:13 -0000
-Subject: [Buildroot] [git commit branch/next] libmodbus: bump to 3.0.3
-Message-ID: <20120802195238.733E290E2A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Aug 2012 21:49:48 +0200
+Subject: [Buildroot] [git commit branch/next] sam-ba: bump version to 2.12
+Message-ID: <20120802195306.56BD08F456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aae26bb872384559df1b211ef0a96ea50c7a1fe8
+commit: http://git.buildroot.net/buildroot/commit/?id=9240163ef7e1f10cdbecfc5a6936d5624f823565
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmodbus/libmodbus.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/sam-ba/sam-ba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index 4dcfe23..d45bc92 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -3,9 +3,8 @@
- # libmodbus
- #
- #############################################################
--LIBMODBUS_VERSION = 3.0.2
-+LIBMODBUS_VERSION = 3.0.3
- LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
--LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
- LIBMODBUS_INSTALL_STAGING = YES
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 9f39347..067bdf1 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -1,5 +1,5 @@
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+-SAM_BA_VERSION = 2.11
++SAM_BA_VERSION = 2.12
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
  
- $(eval $(call AUTOTARGETS))
+ define HOST_SAM_BA_EXTRACT_CMDS
