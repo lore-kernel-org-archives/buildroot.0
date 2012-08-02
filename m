@@ -1,47 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:36 -0000
-Subject: [Buildroot] [git commit branch/next] mtd: fix build when no sub
-	options are enabled
-Message-ID: <20120802195234.3C75696EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pptp-linux: fix build with
+	high BR2_JLEVEL settings
+Message-ID: <20120802195234.8639D96AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=573a740998f6345317dca1d62f3efcda4d067499
+commit: http://git.buildroot.net/buildroot/commit/?id=ffc4afe084a76e7246bd373c73b706f512a86c2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mtd-utils with no sub options enabled should be a noop, but we end up
-calling make with the default target (E.G. to build everything), breaking
-the build if zlib/lzo aren't available.
+The pptp-linux build system is not robust against parallel builds.
 
-Fixes http://autobuild.buildroot.net/results/a0781db394792e6d3831c1884fc4bb3525fedb2e/
+Fixes http://autobuild.buildroot.net/results/a75fab3f04d03cb39cd41a86b6f57307198ba5f1
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mtd/mtd.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/pptp-linux/pptp-linux.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 8ccd4dd..b4d981d 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -68,12 +68,17 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)	+= ubiupdatevol
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 77ae34d..d4c5bc4 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -7,6 +7,7 @@
+ PPTP_LINUX_VERSION = 1.7.2
+ PPTP_LINUX_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pptpclient
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
++PPTP_LINUX_MAKE = $(MAKE1)
  
- MTD_TARGETS_y += $(addprefix ubi-utils/,$(MTD_TARGETS_UBI_y))
- 
-+# only call make if atleast a single tool is enabled
-+ifneq ($(MTD_TARGETS_y),)
-+
- define MTD_BUILD_CMDS
- 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
- 		BUILDDIR=$(@D) WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 -C $(@D) \
- 		$(addprefix $(@D)/,$(MTD_TARGETS_y))
- endef
- 
-+endif
-+
- define MTD_INSTALL_TARGET_CMDS
-  for f in $(MTD_TARGETS_y) ; do \
-   install -D -m 0755 $(@D)/$$f $(TARGET_DIR)/usr/sbin/$${f##*/} ; \
+ define PPTP_LINUX_BUILD_CMDS
+ 	$(MAKE) -C $(@D) OPTIMIZE= DEBUG= \
