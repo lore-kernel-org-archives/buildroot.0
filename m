@@ -1,75 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:53 -0000
-Subject: [Buildroot] [git commit branch/next] doc: Add FAQ entries from the
-	old HTML-only documentation
-Message-ID: <20120802195252.9516B8D74F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] syslinux: bump to 4.05
+Message-ID: <20120802195252.DBC138D74F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6580011f12e6ca8f7eb87af11d4e9d6def4316f
+commit: http://git.buildroot.net/buildroot/commit/?id=d2ff1ac2b34ed23273e1284255ba5970f47126d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+* bump syslinux from 4.04 to 4.05
+* add patch to fix build problem with 4.05, see
+http://old.nabble.com/syslinux-fails-to-build-td34112447.html
+* add util-linux dependency and make sure the build finds it
+
+Signed-off-by: Aras Vaichas <aras.vaichas@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/faq.txt    |   38 ++++++++++++++++++++++++++++++++++++++
- docs/manual/manual.txt |    2 ++
- 2 files changed, 40 insertions(+), 0 deletions(-)
+ boot/syslinux/syslinux-build-fix-for-uuid.patch |   15 +++++++++++++++
+ boot/syslinux/syslinux.mk                       |    9 ++++++---
+ 2 files changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
+diff --git a/boot/syslinux/syslinux-build-fix-for-uuid.patch b/boot/syslinux/syslinux-build-fix-for-uuid.patch
 new file mode 100644
-index 0000000..575d019
+index 0000000..04ff562
 --- /dev/null
-+++ b/docs/manual/faq.txt
-@@ -0,0 +1,38 @@
-+Frequently Asked Questions
-+==========================
++++ b/boot/syslinux/syslinux-build-fix-for-uuid.patch
+@@ -0,0 +1,15 @@
++Author: Micah Gersten <micahg@ubuntu.com>
++Description: Fix build failure with --as-needed (Closes: #654838).
 +
-+The boot hangs after 'Starting network...'
-+------------------------------------------
++diff -Naurp syslinux.orig/utils/Makefile syslinux/utils/Makefile
++--- syslinux.orig/utils/Makefile       2011-12-23 14:53:26.653571511 +0100
+++++ syslinux/utils/Makefile    2012-01-22 18:55:03.849466924 +0100
++@@ -51,7 +51,7 @@ isohdpfx.c: $(ISOHDPFX) isohdpfxarray.pl
++ 	$(PERL) isohdpfxarray.pl $(ISOHDPFX) > $@
 +
-+If the boot process seems to hand after the following messages
-+(messages not necessarily exactly similar, depending on the list of
-+packages selected):
++ isohybrid: isohybrid.o isohdpfx.o
++-	$(CC) $(LDFLAGS) -luuid -o $@ $^
+++	$(CC) $(LDFLAGS) -o $@ $^ -luuid
 +
-+------------------------
-+Freeing init memory: 3972K
-+Initializing random number generator... done.
-+Starting network...
-+Starting dropbear sshd: generating rsa key... generating dsa key... OK
-+------------------------
-+
-+then it means that your system is running, but didn't start a shell on
-+the serial console. In order to have the system start a shell on your
-+serial console, you have to go in the Buildroot configuration, +System
-+configuration+, and modify +Port to run a getty (login prompt) on+ and
-++Baudrate to use+ as appropriate. This will automatically tune the
-++/etc/inittab+ file of the generated system so that a shell starts on
-+the correct serial port.
-+
-+module-init-tools fails to build with 'cannot find -lc'
-+-------------------------------------------------------
-+
-+If the build of +module-init-tools+ for the host fails with:
-+
-+------------------------
-+/usr/bin/ld: cannot find -lc
-+------------------------
-+
-+then probably you are running a Fedora (or similar) distribution, and
-+you should install the +glibc-static+ package. This is because the
-++module-init-tools+ build process wants to link statically against the
-+C library.
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 732b50c..de4b594 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -31,4 +31,6 @@ include::download-location.txt[]
++ gethostip: gethostip.o
++ 	$(CC) $(LDFLAGS) -o $@ $^
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 3e89bdf..185baab 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -4,17 +4,20 @@
+ #
+ #############################################################
  
- include::adding-packages.txt[]
+-SYSLINUX_VERSION = 4.04
++SYSLINUX_VERSION = 4.05
+ SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
+ SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
  
-+include::faq.txt[]
-+
- include::appendix.txt[]
+ SYSLINUX_INSTALL_TARGET = NO
+ SYSLINUX_INSTALL_IMAGES = YES
+ 
+-SYSLINUX_DEPENDENCIES = host-nasm
++SYSLINUX_DEPENDENCIES = host-nasm host-util-linux
+ 
++# syslinux build system has no convenient way to pass CFLAGS,
++# and the internal zlib should take precedence so -I shouldn't
++# be used.
+ define SYSLINUX_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" AR="$(HOSTAR)" -C $(@D)
+ endef
+ 
+ SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
