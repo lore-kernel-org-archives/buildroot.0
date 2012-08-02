@@ -1,39 +1,28 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:35 -0000
-Subject: [Buildroot] [git commit branch/next] oprofile: fix target-install
-	for archs without performance counters support
-Message-ID: <20120802195233.C9836801CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libmpeg2: move ARM patch to
+	the correct directory
+Message-ID: <20120802195234.2064E96AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c73df193c558dfcf8386082548d8bea396960f39
+commit: http://git.buildroot.net/buildroot/commit/?id=a3c46e4f17c4381ff526b00f805194fde72b8492
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-These archs can still use the timer mode.
+The patch was added after the multimedia category reorganization so it
+became unreachable.
+Move it to the final libmpeg2 package directory.
 
-Fixes http://autobuild.buildroot.org/results/2627ee17e1f1a58520e01c52af365998f648bbc5/
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/oprofile/oprofile.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ .../libmpeg2/libmpeg2-0.5.1-armv4l.patch           |    0
+ 1 files changed, 0 insertions(+), 0 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 5da794b..fc21928 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -30,7 +30,10 @@ OPROFILE_DEPENDENCIES = popt binutils
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
--	cp -dpfr $(@D)/events/$(OPROFILE_ARCH) $(TARGET_DIR)/usr/share/oprofile
-+	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
-+		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
-+			$(TARGET_DIR)/usr/share/oprofile; \
-+	fi
- 	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
- 	$(INSTALL) -m 755 $(@D)/utils/opcontrol $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
+diff --git a/package/multimedia/libmpeg2/libmpeg2-0.5.1-armv4l.patch b/package/libmpeg2/libmpeg2-0.5.1-armv4l.patch
+similarity index 100%
+rename from package/multimedia/libmpeg2/libmpeg2-0.5.1-armv4l.patch
+rename to package/libmpeg2/libmpeg2-0.5.1-armv4l.patch
