@@ -1,37 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:52 -0000
-Subject: [Buildroot] [git commit branch/next] lshw: fix build failure
-Message-ID: <20120802195248.665638E204@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gob2: needs MMU
+Message-ID: <20120802195248.CC2F68E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=185646838f99cf515b379f937232a8f73c2e9931
+commit: http://git.buildroot.net/buildroot/commit/?id=9741fd7031c648352b6acabfac4066f5482499fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix space-unfriendly CC/CXX/AR argument passing.
-Fixes build failure
-http://autobuild.buildroot.net/results/d8c7b5ef4056a197bb8085b0fcdd09d931aec876/build-end.log
+m4 needs MMU, so does bison, and so does gob2 which uses bison.
+Fixes build failure:
+http://autobuild.buildroot.net/results/f942b4ac770f3c7b27c42214af5bcec49f687da1/build-end.log
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lshw/lshw.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gob2/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
-index 8b4fcc6..d0d97db 100644
---- a/package/lshw/lshw.mk
-+++ b/package/lshw/lshw.mk
-@@ -6,7 +6,7 @@
- 
- LSHW_VERSION = B.02.16
- LSHW_SITE = http://ezix.org/software/files
--LSHW_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) AR=$(TARGET_AR) \
-+LSHW_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
- 	RPM_OPT_FLAGS="$(TARGET_CFLAGS)" all
- LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT),-lintl)"
- LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),libintl)
+diff --git a/package/gob2/Config.in b/package/gob2/Config.in
+index 562ac31..cbe30d6 100644
+--- a/package/gob2/Config.in
++++ b/package/gob2/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_GOB2
+ 	bool "gob2"
+ 	depends on BR2_USE_WCHAR # glib2
++	# m4 uses fork(), so does bison then
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_FLEX
+ 	select BR2_PACKAGE_FLEX_LIBFL
