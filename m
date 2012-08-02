@@ -1,33 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:54:14 -0000
-Subject: [Buildroot] [git commit branch/next] package/Makefile.in: link
-	statically when BR2_PREFER_STATIC_LIB
-Message-ID: <20120802195246.CCF1B8E204@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Aug 2012 10:25:23 +0200
+Subject: [Buildroot] [git commit branch/next] docs: update links to the
+	manual
+Message-ID: <20120802195305.EF22D8F456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb421a8433a44504c79e06ccdd5a69a9792ee77f
+commit: http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Instead of explicitly adding it for each package.
+In addition to the HTML version, also publish the PDF and Text
+versions of our manual.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ docs/docs.html |   16 ++++++++++++----
+ 1 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 1d43aef..c5ad00a 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -305,6 +305,7 @@ endif
+diff --git a/docs/docs.html b/docs/docs.html
+index 65eaff1..1393498 100644
+--- a/docs/docs.html
++++ b/docs/docs.html
+@@ -2,10 +2,18 @@
  
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
-+TARGET_LDFLAGS += -static
- else
- SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
- endif
+ <h3>Documentation</h3>
+ 
+-<p>The <a href="/downloads/manual/manual.html">Buildroot user manual</a>
+-is where you want to start reading if you wish to understand how
+-Buildroot works, or wish to change/extend/fix things. If you find any
+-errors (factual, grammatical, whatever) please report them to us.</p>
++<p>The Buildroot user manual is where you want to start reading if you
++wish to understand how Buildroot works, or wish to change/extend/fix
++things. It is available as:</p>
++
++<ul>
++  <li><a href="/downloads/manual/manual.html">Online HTML</a></li>
++  <li><a href="/downloads/manual/manual.pdf">PDF document</a></li>
++  <li><a href="/downloads/manual/manual.text">ASCII text</a></li>
++</ul>
++
++<p>If you find any errors (factual, grammatical, whatever) please
++report them to us.</p>
+ 
+ <p>If you find that you need help with Buildroot, you can ask for
+ help:</p>
