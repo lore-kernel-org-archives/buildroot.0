@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:57 -0000
-Subject: [Buildroot] [git commit branch/next] linux: define license
-Message-ID: <20120802195251.A5CED8D74F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libusb: define license
+Message-ID: <20120802195252.492BC8D74F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67f1836d27a144d3934706a34aa5b866d41096cd
+commit: http://git.buildroot.net/buildroot/commit/?id=847fd1cf1b934bfd90a6ffca11f55e912984d6db
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    2 ++
+ package/libusb/libusb.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index f165dda..bd3e23e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -4,6 +4,8 @@
- #
- ###############################################################################
- LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_LICENSE = GPLv2
-+LINUX_LICENSE_FILES = COPYING
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 9abfcfc..ac0f0d2 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -6,6 +6,8 @@
+ LIBUSB_VERSION = 1.0.9
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
++LIBUSB_LICENSE = LGPLv2.1+
++LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkg-config
+ LIBUSB_INSTALL_STAGING = YES
  
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(LINUX_VERSION),custom)
