@@ -1,54 +1,87 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:54 -0000
-Subject: [Buildroot] [git commit branch/next] quagga: fix non-IPv6 build
-	failures
-Message-ID: <20120802195236.1877896EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] doc: minor documentation fixes
+	after package infrastructure changes
+Message-ID: <20120802195254.5B7B58EE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4991fbbdb4aef7f5a7bf22a62872b8b59163102a
+commit: http://git.buildroot.net/buildroot/commit/?id=8141ccf380377e48edf596135306c8daa76a68ca
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Zebra daemon now requires IPv6 support so disable it for non-IPv6
-toolchains and add a comment mentioning it.
-The BABEL protocol/daemon also requires IPv6 so just enable it when it's
-available.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/quagga/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-autotools.txt |    4 ++--
+ docs/manual/adding-packages-cmake.txt     |    4 ++--
+ docs/manual/adding-packages-generic.txt   |    4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/quagga/Config.in b/package/quagga/Config.in
-index 5a01863..0834201 100644
---- a/package/quagga/Config.in
-+++ b/package/quagga/Config.in
-@@ -10,11 +10,16 @@ if BR2_PACKAGE_QUAGGA
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index a9653ce..9fb0918 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -4,7 +4,7 @@ Infrastructure for autotools-based packages
+ [[autotools-package-tutorial]]
  
- config BR2_PACKAGE_QUAGGA_ZEBRA
- 	bool "zebra daemon"
-+	depends on BR2_INET_IPV6
- 	help
- 	  Build zebra daemon.
+ +autotools-package+ tutorial
+-~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
-+comment "Zebra daemon requires a toolchain with IPV6 support"
-+	depends on BR2_PACKAGE_QUAGGA && !BR2_INET_IPV6
-+
- config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
- 	bool "Use TCP sockets between zebra and protocol daemons"
-+	depends on BR2_PACKAGE_QUAGGA_ZEBRA
- 	help
- 	  Use a TCP socket to communicate between zebra (supervisor) and
- 	  the different protocol daemons.
-@@ -24,6 +29,7 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ First, let's see how to write a +.mk+ file for an autotools-based
+ package, with an example :
+@@ -64,7 +64,7 @@ package to be built.
+ [[autotools-package-reference]]
  
- config BR2_PACKAGE_QUAGGA_BABELD
- 	bool "BABEL protocol"
-+	depends on BR2_INET_IPV6
- 	help
- 	  Build babeld daemon.
+ +autotools-package+ reference
+-~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
+ The main macro of the autotools package infrastructure is
+ +autotools-package+. It is similar to the +generic-package+ macro. The ability to
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index d1489bd..e29ca0f 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -4,7 +4,7 @@ Infrastructure for CMake-based packages
+ [[cmake-package-tutorial]]
+ 
+ +cmake-package+ tutorial
+-~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ First, let's see how to write a +.mk+ file for a CMake-based package,
+ with an example :
+@@ -63,7 +63,7 @@ package to be built.
+ [[cmake-package-reference]]
+ 
+ +cmake-package+ reference
+-~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ The main macro of the CMake package infrastructure is
+ +cmake-package+. It is similar to the +generic-package+ macro. The ability to
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index a7cceb7..d264f40 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -9,7 +9,7 @@ system is based on hand-written Makefiles or shell scripts.
+ [[generic-package-tutorial]]
+ 
+ +generic-package+ Tutorial
+-~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ ------------------------------
+ 01: #############################################################
+@@ -90,7 +90,7 @@ Makefile code necessary to make your package working.
+ [[generic-package-reference]]
+ 
+ +generic-package+ Reference
+-~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ There are two variants of the generic target. The +generic-package+ macro is
+ used for packages to be cross-compiled for the target.  The
