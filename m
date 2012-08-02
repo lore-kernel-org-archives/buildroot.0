@@ -1,87 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:52:54 -0000
-Subject: [Buildroot] [git commit branch/next] doc: minor documentation fixes
-	after package infrastructure changes
-Message-ID: <20120802195254.5B7B58EE7F@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:55 -0000
+Subject: [Buildroot] [git commit branch/next] libevas: refactor *_CONF_OPT
+	assignment with cpu-feature options
+Message-ID: <20120802195250.8ABE890D1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8141ccf380377e48edf596135306c8daa76a68ca
+commit: http://git.buildroot.net/buildroot/commit/?id=8d74cc7b88761bbfdfe88becebc27be95bde41a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-autotools.txt |    4 ++--
- docs/manual/adding-packages-cmake.txt     |    4 ++--
- docs/manual/adding-packages-generic.txt   |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/efl/libevas/libevas.mk |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index a9653ce..9fb0918 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -4,7 +4,7 @@ Infrastructure for autotools-based packages
- [[autotools-package-tutorial]]
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index e716cea..c556942 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -115,23 +115,23 @@ LIBEVAS_CONF_OPT += --enable-gl-flavor-gles --enable-gles-variety-s3c6410
+ endif
  
- +autotools-package+ tutorial
--~~~~~~~~~~~~~~~~~~~~~~
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ # code options
+-ifeq ($(BR2_i386)$(BR2_x86_64),y)
+-# defaults
+-LIBEVAS_CONF_OPT += --disable-cpu-mmx --disable-cpu-sse --disable-cpu-sse3
+-
+-# enable if cpu variant has mmx support
+-ifneq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
++ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-mmx
++else
++LIBEVAS_CONF_OPT += --disable-cpu-mmx
++endif
  
- First, let's see how to write a +.mk+ file for an autotools-based
- package, with an example :
-@@ -64,7 +64,7 @@ package to be built.
- [[autotools-package-reference]]
+-ifneq ($(BR2_x86_pentium_mmx)$(BR2_x86_pentium2)$(BR2_x86_k6)$(BR2_x86_k6_2)$(BR2_x86_athlon)$(BR2_x86_c3)$(BR2_x86_winchip_c6)$(BR2_x86_winchip2),y)
++ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-sse
++else
++LIBEVAS_CONF_OPT += --disable-cpu-sse
++endif
  
- +autotools-package+ reference
--~~~~~~~~~~~~~~~~~~~~~~~
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-ifneq ($(BR2_x86_pentium3)$(BR2_x86_pentium4)$(BR2_x86_prescott)$(BR2_x86_athlon_4)$(BR2_x86_opteron)$(BR2_x86_c32)$(BR2_x86_64_opteron),y)
++ifeq ($(BR2_X86_CPU_HAS_SSE3),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-sse3
+-endif # sse3
+-endif # sse
+-endif # mmx
+-endif # x86
++else
++LIBEVAS_CONF_OPT += --disable-cpu-sse3
++endif
  
- The main macro of the autotools package infrastructure is
- +autotools-package+. It is similar to the +generic-package+ macro. The ability to
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index d1489bd..e29ca0f 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -4,7 +4,7 @@ Infrastructure for CMake-based packages
- [[cmake-package-tutorial]]
- 
- +cmake-package+ tutorial
--~~~~~~~~~~~~~~~~~~~~~~~
-+~~~~~~~~~~~~~~~~~~~~~~~~
- 
- First, let's see how to write a +.mk+ file for a CMake-based package,
- with an example :
-@@ -63,7 +63,7 @@ package to be built.
- [[cmake-package-reference]]
- 
- +cmake-package+ reference
--~~~~~~~~~~~~~~~~~~~~~~~~
-+~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- The main macro of the CMake package infrastructure is
- +cmake-package+. It is similar to the +generic-package+ macro. The ability to
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index a7cceb7..d264f40 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -9,7 +9,7 @@ system is based on hand-written Makefiles or shell scripts.
- [[generic-package-tutorial]]
- 
- +generic-package+ Tutorial
--~~~~~~~~~~~~~~~~~~~~~
-+~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- ------------------------------
- 01: #############################################################
-@@ -90,7 +90,7 @@ Makefile code necessary to make your package working.
- [[generic-package-reference]]
- 
- +generic-package+ Reference
--~~~~~~~~~~~~~~~~~~~~~~
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- There are two variants of the generic target. The +generic-package+ macro is
- used for packages to be cross-compiled for the target.  The
+ ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-altivec
