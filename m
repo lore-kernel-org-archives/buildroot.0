@@ -1,38 +1,32 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 02 Aug 2012 09:16:09 +0200
-Subject: [Buildroot] [PATCH v2] mxml: add license information
-In-Reply-To: <d3a5eeb3604382c11faa97b8104b3c43cc61ea4c.1343879845.git.baruch@tkos.co.il>
-References: <d3a5eeb3604382c11faa97b8104b3c43cc61ea4c.1343879845.git.baruch@tkos.co.il>
-Message-ID: <501A2939.7030307@lucaceresoli.net>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  2 Aug 2012 08:18:21 +0100
+Subject: [Buildroot] [PATCH] empty: add license information
+Message-ID: <1343891901-8678-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->
-> v2: note that the license adds exceptions to LGPLv2+
->
->   package/mxml/mxml.mk |    2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
-> index af1cb26..03850d0 100644
-> --- a/package/mxml/mxml.mk
-> +++ b/package/mxml/mxml.mk
-> @@ -5,6 +5,8 @@
->   #############################################################
->   MXML_VERSION = 2.7
->   MXML_SITE = http://ftp.easysw.com/pub/mxml/$(MXML_VERSION)
-> +MXML_LICENSE = LGPLv2+ with exceptions
-> +MXML_LICENSE_FILES = COPYING
->   MXML_INSTALL_STAGING = YES
->   
->   MXML_INSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) install
+From: Simon Dawson <spdawson@gmail.com>
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/empty/empty.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Luca
+diff --git a/package/empty/empty.mk b/package/empty/empty.mk
+index 97b1e7e..005f880 100644
+--- a/package/empty/empty.mk
++++ b/package/empty/empty.mk
+@@ -6,6 +6,8 @@
+ EMPTY_VERSION = 0.6.18b
+ EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
+ EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
++EMPTY_LICENSE = BSD-3c
++EMPTY_LICENSE_FILES = COPYRIGHT
+ 
+ define EMPTY_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+-- 
+1.7.9.5
