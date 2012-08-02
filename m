@@ -1,40 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:33 -0000
-Subject: [Buildroot] [git commit branch/next] collectd: needs thread support
-Message-ID: <20120802195240.EA73388D21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] kmod: _TOOLS option should
+	only be visible if kmod is enabled
+Message-ID: <20120802195241.8A36D8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9cf295017d21233806528d6a3538c9724913db8b
+commit: http://git.buildroot.net/buildroot/commit/?id=93216b641986ac2271430aab5ebbfa33e8d393a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/28f10dcc772809d53315f6dfb37bb41d77183abe/.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/collectd/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/kmod/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index cb96fbd..96438c0 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_COLLECTD
- 	bool "collectd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  collectd is a daemon which collects system performance
- 	  statistics periodically and provides mechanisms to store
-@@ -380,3 +381,6 @@ config BR2_PACKAGE_COLLECTD_WRITEHTTP
- endmenu
+diff --git a/package/kmod/Config.in b/package/kmod/Config.in
+index 26c2c6d..4965237 100644
+--- a/package/kmod/Config.in
++++ b/package/kmod/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_KMOD
  
- endif
-+
-+comment "collectd needs a toolchain with thread support"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_PACKAGE_KMOD_TOOLS
+ 	bool "kmod utilities"
++	depends on BR2_PACKAGE_KMOD
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  Install kmod module utilities (depmod, insmod, lsmod,
