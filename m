@@ -1,39 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:47 -0000
-Subject: [Buildroot] [git commit branch/next] Globally disable
-	PKG_CONFIG_PATH
-Message-ID: <20120802195247.5A0C38C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] eeprog: use provided linker
+	flags as well
+Message-ID: <20120802195246.AD5778C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=670cb306704d76b4c3b717931cc7abef8c693099
+commit: http://git.buildroot.net/buildroot/commit/?id=df2b9516eaa6fc59b8bd847fa0af7ada99e59ad6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
-look for libraries outside of the buildroot tree.  This is a problem
-both for host and target builds.  To avoid it, globally set an empty
-PKG_CONFIG_PATH in the environment.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/eeprog/eeprog.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7a66897..bcbe9fc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -165,6 +165,9 @@ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+diff --git a/package/eeprog/eeprog.mk b/package/eeprog/eeprog.mk
+index 40b059e..7520744 100644
+--- a/package/eeprog/eeprog.mk
++++ b/package/eeprog/eeprog.mk
+@@ -8,7 +8,7 @@ EEPROG_VERSION = 0.7.6
+ EEPROG_SITE = http://codesink.org/download
  
-+# Make sure pkg-config doesn't look outside the buildroot tree
-+unexport PKG_CONFIG_PATH
-+
- # bash prints the name of the directory on 'cd <dir>' if CDPATH is
- # set, so unset it here to not cause problems. Notice that the export
- # line doesn't affect the environment of $(shell ..) calls, so
+ define EEPROG_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" -C $(@D)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define EEPROG_INSTALL_TARGET_CMDS
