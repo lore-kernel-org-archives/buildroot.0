@@ -1,32 +1,34 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu,  2 Aug 2012 08:18:21 +0100
-Subject: [Buildroot] [PATCH] empty: add license information
-Message-ID: <1343891901-8678-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Aug 2012 09:19:18 +0200
+Subject: [Buildroot] [PATCH] sysprof: New package.
+In-Reply-To: <20120801100305.1afec3c1@skate>
+References: <CAFbHwiTWnB+EtB=Du5bkAa7mtKfJ7nHeyWGshpq7Rcvjf9O__g@mail.gmail.com>
+ <20120730235830.27770869@skate> <20120731110420.76490dd1@skate>
+ <CAFbHwiQTT6rojCNvBNSUYierq5mrOkMmQfC95yxz1vK4gocCNA@mail.gmail.com>
+ <20120801100305.1afec3c1@skate>
+Message-ID: <20120802091918.72c6ac15@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Le Wed, 1 Aug 2012 10:03:05 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/empty/empty.mk |    2 ++
- 1 file changed, 2 insertions(+)
+> I've pushed your patch. It solves the build failure on x86, and removes
+> one error message from the PowerPC build, but the PowerPC build is still
+> failing:
+> http://autobuild.buildroot.org/results/a3ef351704317a9f3f3ab4ee3845bc1e61938c23/build-end.log.
 
-diff --git a/package/empty/empty.mk b/package/empty/empty.mk
-index 97b1e7e..005f880 100644
---- a/package/empty/empty.mk
-+++ b/package/empty/empty.mk
-@@ -6,6 +6,8 @@
- EMPTY_VERSION = 0.6.18b
- EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
- EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
-+EMPTY_LICENSE = BSD-3c
-+EMPTY_LICENSE_FILES = COPYRIGHT
- 
- define EMPTY_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+I have pushed another patch (taken from upstream) that fixes this
+problem, so no need to spend time on this one.
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
