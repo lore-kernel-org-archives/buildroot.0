@@ -1,44 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:54:01 -0000
-Subject: [Buildroot] [git commit branch/next] imagemagick: use alternate
-	download location
-Message-ID: <20120802195245.1F88B8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tcpreplay: fix linking when
+	libpcap is built with canusb support
+Message-ID: <20120802195246.1FE278E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d044199e74d6dae0285f4739adc76c1b10c0b9b8
+commit: http://git.buildroot.net/buildroot/commit/?id=a795e2a491c7a99530c79fc3f23a39b6a85ebce5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The official ImageMagick site only keeps the latest versions. Even in
-the legacy/ directory, they only keep the last version of each
-'branch'. Therefore, to avoid problems, we use an alternate download
-site.
+Fixes http://autobuild.buildroot.net/results/f3cee3df639a8ecf0f7f81ca33efee4e040c76ff
 
-Fixes
-http://autobuild.buildroot.org/results/2269aa42a0a21730ff0ec28af89cd4973ec28751/build-end.log.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/imagemagick/imagemagick.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/tcpreplay/tcpreplay.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 32eb371..a8b69c7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -7,7 +7,10 @@
- IMAGEMAGICK_MAJOR = 6.7.6
- IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-9
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
--IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick
-+# The official ImageMagick site only keeps the latest versions
-+# available, which is annoying. Use an alternate site that keeps all
-+# older versions.
-+IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick/
- IMAGEMAGICK_INSTALL_STAGING = YES
- IMAGEMAGICK_AUTORECONF = YES
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 72abade..4a72266 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -11,5 +11,9 @@ TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
+ TCPREPLAY_AUTORECONF = YES
+ TCPREPLAY_DEPENDENCIES = libpcap
+ 
++# libpcap may depend on symbols in libusb as well
++TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
++TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)'
++
+ $(eval $(call AUTOTARGETS))
  
