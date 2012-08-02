@@ -1,47 +1,62 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:45 -0000
-Subject: [Buildroot] [git commit branch/next] introduce PARALLEL_JOBS build
-	system variable
-Message-ID: <20120802195244.0006A8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libfreefare: new package
+Message-ID: <20120802195239.5FD5588D21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a72aed3a7434ed35599674a8405b1baee0f3df75
+commit: http://git.buildroot.net/buildroot/commit/?id=e2b296ad7f01bbc3dd073afd3e9fbb140244bed0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-BR2_JLEVEL currently is expanded directly in $(MAKE), and used in
-invocations of other build software (e.g. ct-ng).  However, we are
-going to allow "0" to be a meaningful value for BR2_JLEVEL, which
-won't work for these uses.  Given that it is not permissible to modify
-BR2_-prefixed variables in Makefiles, we need an intermediate
-variable.
-
-Define PARALLEL_JOBS to $(BR2_JLEVEL), and use the former in MAKE's
-definition.  Uses of BR2_JLEVEL throughout the rest of the tree to be
-adjusted similarly in follow-up patches.
-
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/Config.in                  |    1 +
+ package/libfreefare/Config.in      |    7 +++++++
+ package/libfreefare/libfreefare.mk |   10 ++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 57599c5..be83ada 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -6,8 +6,10 @@ HOSTMAKE=$(MAKE)
- endif
- HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
- 
-+PARALLEL_JOBS:=$(BR2_JLEVEL)
+diff --git a/package/Config.in b/package/Config.in
+index fecc336..13310b2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -364,6 +364,7 @@ menu "Hardware handling"
+ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
++source "package/libfreefare/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+new file mode 100644
+index 0000000..2e11f7e
+--- /dev/null
++++ b/package/libfreefare/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBFREEFARE
++	bool "libfreefare"
++	select BR2_PACKAGE_LIBNFC
++	help
++	  Library for high level manipulation of MIFARE cards.
 +
- MAKE1:=$(HOSTMAKE) -j1
--MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
-+MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
- 
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
++	  http://code.google.com/p/nfc-tools/wiki/libfreefare
+diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+new file mode 100644
+index 0000000..0499999
+--- /dev/null
++++ b/package/libfreefare/libfreefare.mk
+@@ -0,0 +1,10 @@
++#############################################################
++#
++# libfreefare
++#
++#############################################################
++LIBFREEFARE_VERSION = 0.3.2
++LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
++LIBFREEFARE_DEPENDENCIES = libnfc
++
++$(eval $(call AUTOTARGETS))
