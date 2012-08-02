@@ -1,42 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:53:45 -0000
-Subject: [Buildroot] [git commit branch/next] beecrypt: needs threads support
-Message-ID: <20120802195248.888868E204@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] freetype: bump to version
+	2.4.10
+Message-ID: <20120802195250.1544496DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7ea7b227fc9c04fa85fd4a552ef9e5640abaf26
+commit: http://git.buildroot.net/buildroot/commit/?id=82f83c6122837acd4daed5649ad4ccb8fec42e83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes
-http://autobuild.buildroot.net/results/e28e5dfe73d838b8bc4e9c586bc865d57d717f76/build-end.log
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/beecrypt/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/freetype/freetype.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index 2673877..19c7f2f 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -1,10 +1,14 @@
- config BR2_PACKAGE_BEECRYPT
- 	bool "beecrypt"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ICU if BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR
- 	help
- 	  Beecrypt is a general-purpose cryptography library.
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index ded10d2..f351fd2 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- 	  http://beecrypt.sf.net
- 
-+comment "beecrypt needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- comment "beecrypt C++ support requires a toolchain with WCHAR enabled"
--	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
-+	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS
+-FREETYPE_VERSION = 2.4.9
++FREETYPE_VERSION = 2.4.10
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
