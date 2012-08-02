@@ -1,50 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:46 -0000
-Subject: [Buildroot] [git commit branch/next] barebox: bump to 2012.07
-Message-ID: <20120802195248.46C6F8E204@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:47 -0000
+Subject: [Buildroot] [git commit branch/next] automake: bump to version
+	1.11.5
+Message-ID: <20120802195244.971CA96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e8d35e8e146bf8e4ceab17747c686a643698623
+commit: http://git.buildroot.net/buildroot/commit/?id=8133b7d5d69f60e29bf2f421113f0e99cbafd332
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/barebox/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ package/automake/automake.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 09a82eb..13009d2 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -8,7 +8,7 @@ config BR2_TARGET_BAREBOX
- if BR2_TARGET_BAREBOX
- choice
- 	prompt "version"
--	default BR2_TARGET_BAREBOX_2012_04
-+	default BR2_TARGET_BAREBOX_2012_07
- 	help
- 	  Select the specific Barebox version you want to use
- 
-@@ -25,6 +25,9 @@ config BR2_TARGET_BAREBOX_2012_03
- config BR2_TARGET_BAREBOX_2012_04
- 	bool "2012.04"
- 
-+config BR2_TARGET_BAREBOX_2012_07
-+	bool "2012.07"
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 7f35f3f..522e22c 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -3,8 +3,8 @@
+ # automake
+ #
+ #############################################################
+-AUTOMAKE_VERSION = 1.11.1
+-AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.bz2
 +
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
++AUTOMAKE_VERSION = 1.11.5
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
  
-@@ -46,6 +49,7 @@ config BR2_TARGET_BAREBOX_VERSION
- 	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
- 	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_03
- 	default "2012.04.0"	if BR2_TARGET_BAREBOX_2012_04
-+	default "2012.07.0"	if BR2_TARGET_BAREBOX_2012_07
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
- 
+ AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
