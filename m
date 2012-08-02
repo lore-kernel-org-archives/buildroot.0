@@ -1,41 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:03 -0000
-Subject: [Buildroot] [git commit branch/next] sdl_gfx: fix assignments
-Message-ID: <20120802195236.4601796AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libcgi: fix cflags
+Message-ID: <20120802195236.8F72296AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64d4866257db72f06284a0fcef9a816d4291462a
+commit: http://git.buildroot.net/buildroot/commit/?id=7ab39d39cbbf93dbd59e7a0fdb1a1f5ee7962034
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Fixes http://autobuild.buildroot.org/results/4000a12a9b237bd12618eb22ea793a913fc73b4f
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sdl_gfx/sdl_gfx.mk |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/libcgi/libcgi.patch |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
-index a25987d..5503bbd 100644
---- a/package/sdl_gfx/sdl_gfx.mk
-+++ b/package/sdl_gfx/sdl_gfx.mk
-@@ -3,11 +3,11 @@
- # SDL_gfx addon for SDL
- #
- #############################################################
--SDL_GFX_VERSION:=2.0.19
--SDL_GFX_SOURCE:=SDL_gfx-$(SDL_GFX_VERSION).tar.gz
--SDL_GFX_SITE:=http://www.ferzkopp.net/Software/SDL_gfx-2.0/
--SDL_GFX_INSTALL_STAGING:=YES
--SDL_GFX_DEPENDENCIES:=sdl
-+SDL_GFX_VERSION = 2.0.19
-+SDL_GFX_SOURCE = SDL_gfx-$(SDL_GFX_VERSION).tar.gz
-+SDL_GFX_SITE = http://www.ferzkopp.net/Software/SDL_gfx-2.0/
-+SDL_GFX_INSTALL_STAGING = YES
-+SDL_GFX_DEPENDENCIES = sdl
- SDL_GFX_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
+diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
+index 716d83c..12a7b10 100644
+--- a/package/libcgi/libcgi.patch
++++ b/package/libcgi/libcgi.patch
+@@ -27,7 +27,7 @@
+  exec_prefix = @exec_prefix@
+  
+ -SHAREDOPT = -shared
+-+SHAREDOPT = -shared -fPIC,-Wl,-soname,libcgi.so.0
+++SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
+  LIBDIR = $(prefix)/lib
+ -INCDIR = $(prefix)/include
+ +INCDIR = $(prefix)/include/libcgi/
