@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:55 -0000
-Subject: [Buildroot] [git commit branch/next] opencv: get rid of unused
-	SSE41 and SSE42 options
-Message-ID: <20120802195250.D43018F944@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libnspr: fix 64-bit build
+Message-ID: <20120802195255.41F198EE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d19377d24b2b1d6ded278559c16252ec320bef6
+commit: http://git.buildroot.net/buildroot/commit/?id=20b2199d30f9c00abd51ae199d0934f4eb70d870
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
----
- package/opencv/opencv.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+On some architectures (found on x86_64, but probably others too),
+libnspr builds with -m32 unless it is configured for 64-bit build.  So
+force 64-bit build on 64-bit architectures.
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 10ed5bd..8ae2fd5 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -62,8 +62,6 @@ OPENCV_CONF_OPT += \
- 	-DENABLE_SSE=$(if $(BR2_X86_CPU_HAS_SSE),ON,OFF)     \
- 	-DENABLE_SSE2=$(if $(BR2_X86_CPU_HAS_SSE2),ON,OFF)   \
- 	-DENABLE_SSE3=$(if $(BR2_X86_CPU_HAS_SSE3),ON,OFF)   \
--	-DENABLE_SSE41=$(if $(BR2_X86_CPU_HAS_SSE41),ON,OFF) \
--	-DENABLE_SSE42=$(if $(BR2_X86_CPU_HAS_SSE42),ON,OFF) \
- 	-DENABLE_SSSE3=$(if $(BR2_X86_CPU_HAS_SSSE3),ON,OFF)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libnspr/libnspr.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index c2cc996..689caa4 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
+ 		   HOST_LDFLAGS="-lc"
+ # NSPR mixes up --build and --host
+-LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
++LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
++LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
++LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
  
- # Software/3rd-party support options.
+ $(eval $(autotools-package))
