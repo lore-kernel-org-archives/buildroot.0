@@ -1,37 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:38 -0000
-Subject: [Buildroot] [git commit branch/next] cups: fix libdir handling
-Message-ID: <20120802195236.AD67F96AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
+	version 3.4.2
+Message-ID: <20120802195237.0A3B396F60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=edd2716c4369801770c10fad5565ab0d3e117c3f
+commit: http://git.buildroot.net/buildroot/commit/?id=0d0916796d2335e9ca973876f2ce2e842e0acf83
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Cups uses /usr/lib64 if the HOST has it, no matter if it is cross compiling
-for a 32bit arch, breaking the build for stuff looking in /usr/lib.
-
-Fixes http://autobuild.buildroot.net/results/4ed4f5b43d05a40ab15f141442f15da56c87be3b
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cups/cups.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index f06502a..6d906ec 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -13,7 +13,8 @@ CUPS_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) DSTROOT=$(TARGET_DIR) install
- CUPS_CONF_OPT = --without-perl \
- 		--without-java \
- 		--disable-gnutls \
--		--disable-gssapi
-+		--disable-gssapi \
-+		--libdir=/usr/$(if $(BR2_ARCH_IS_64),lib64,lib)
+diff --git a/linux/Config.in b/linux/Config.in
+index 83dac3f..26e0872 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_4
  
- CUPS_DEPENDENCIES = $(if $(BR2_PACKAGE_ZLIB),zlib) \
- 		    $(if $(BR2_PACKAGE_LIBPNG),libpng) \
+ config BR2_LINUX_KERNEL_3_4
+-	bool "3.4.1"
++	bool "3.4.2"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.4.1" if BR2_LINUX_KERNEL_3_4
++	default "3.4.2" if BR2_LINUX_KERNEL_3_4
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
