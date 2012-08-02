@@ -1,33 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:36 -0000
-Subject: [Buildroot] [git commit branch/next] kernel-headers: bump 3.2.x
-	stable version
-Message-ID: <20120802195233.6A49796EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] heirloom-mailx: run makeconfig
+	in configure step
+Message-ID: <20120802195231.3265A81EDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fce8d0765a1b84b838f1807213724805e13985c2
+commit: http://git.buildroot.net/buildroot/commit/?id=89726baea94bc72fe624cd5ef85b07171db0a7ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The heirloom-mailx Makefile runs makeconfig if this has not been done
+before.  In a parallel build, this means makeconfig may be run several
+times in parallel because there are two targets that depend on makeconfig.
+See for instance
+http://autobuild.buildroot.net/results/d24854be69961f71db189f9d804d4bd2cfa078da
+
+To avoid this, run makeconfig in the configure step, which is not parallel.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/heirloom-mailx/heirloom-mailx.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index d8602f1..cd83270 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -65,7 +65,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.31"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.17"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.18"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.6"		if BR2_KERNEL_HEADERS_3_3
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
+index 2b28a3f..b1779c0 100644
+--- a/package/heirloom-mailx/heirloom-mailx.mk
++++ b/package/heirloom-mailx/heirloom-mailx.mk
+@@ -12,6 +12,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ HEIRLOOM_MAILX_DEPENDENCIES += openssl
+ endif
+ 
++define HEIRLOOM_MAILX_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(SHELL) ./makeconfig)
++endef
++
+ define HEIRLOOM_MAILX_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
