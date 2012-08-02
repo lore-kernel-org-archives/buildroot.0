@@ -1,41 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:12 -0000
-Subject: [Buildroot] [git commit branch/next] squashfs: needs pthreads
-	support in toolchain
-Message-ID: <20120802195238.21F2196EA0@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:13 -0000
+Subject: [Buildroot] [git commit branch/next] bind: security bump to version
+	9.6-ESV-R7-P1
+Message-ID: <20120802195240.0F4F9800EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6828e8e072c243ddc266a0946a4a8bc890fc0e1c
+commit: http://git.buildroot.net/buildroot/commit/?id=eb29c78a634bc50e320d0ad61d7753719bb208b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/9afdb3f7141fa361ac2ff3fe24887b0c6eb9342d
+Bump bind to version 9.6-ESV-R7-P1.
+Fixes CVE-2012-667.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/squashfs/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-index 7d0fc71..93d3594 100644
---- a/package/squashfs/Config.in
-+++ b/package/squashfs/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SQUASHFS
- 	bool "squashfs"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_SQUASHFS_GZIP if !(BR2_PACKAGE_SQUASHFS_LZMA || BR2_PACKAGE_SQUASHFS_LZO)
- 	help
- 	  Tools to generate SquashFS filesystems.
-@@ -36,5 +37,5 @@ config BR2_PACKAGE_SQUASHFS_XZ
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index eb7b9c0..88f79de 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- endif
- 
--comment "squashfs requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "squashfs requires a toolchain with LARGEFILE and threads support"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+-BIND_VERSION = 9.6-ESV-R7
++BIND_VERSION = 9.6-ESV-R7-P1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
