@@ -1,49 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Aug 2012 10:25:23 +0200
-Subject: [Buildroot] [git commit branch/next] docs: update links to the
-	manual
-Message-ID: <20120802195305.EF22D8F456@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 02 Aug 2012 19:54:17 -0000
+Subject: [Buildroot] [git commit branch/next] mii-diag: remove unneded
+	explicit static linking handling
+Message-ID: <20120802195246.E2DA58C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
+commit: http://git.buildroot.net/buildroot/commit/?id=dc1d20acb78a979ed03f03143db3900d972c3714
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-In addition to the HTML version, also publish the PDF and Text
-versions of our manual.
+Now that it is done globally instead.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/docs.html |   16 ++++++++++++----
- 1 files changed, 12 insertions(+), 4 deletions(-)
+ package/mii-diag/mii-diag.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/docs/docs.html b/docs/docs.html
-index 65eaff1..1393498 100644
---- a/docs/docs.html
-+++ b/docs/docs.html
-@@ -2,10 +2,18 @@
+diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
+index f74fa3d..5adb270 100644
+--- a/package/mii-diag/mii-diag.mk
++++ b/package/mii-diag/mii-diag.mk
+@@ -10,10 +10,6 @@ MII_DIAG_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
  
- <h3>Documentation</h3>
+ MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
  
--<p>The <a href="/downloads/manual/manual.html">Buildroot user manual</a>
--is where you want to start reading if you wish to understand how
--Buildroot works, or wish to change/extend/fix things. If you find any
--errors (factual, grammatical, whatever) please report them to us.</p>
-+<p>The Buildroot user manual is where you want to start reading if you
-+wish to understand how Buildroot works, or wish to change/extend/fix
-+things. It is available as:</p>
-+
-+<ul>
-+  <li><a href="/downloads/manual/manual.html">Online HTML</a></li>
-+  <li><a href="/downloads/manual/manual.pdf">PDF document</a></li>
-+  <li><a href="/downloads/manual/manual.text">ASCII text</a></li>
-+</ul>
-+
-+<p>If you find any errors (factual, grammatical, whatever) please
-+report them to us.</p>
- 
- <p>If you find that you need help with Buildroot, you can ask for
- help:</p>
+-ifeq ($(BR2_PREFER_STATIC_LIB),y)
+-MII_DIAG_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -static"
+-endif
+-
+ define MII_DIAG_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
