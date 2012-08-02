@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:36 -0000
-Subject: [Buildroot] [git commit branch/next] gpsd: Remove package version
-	from the navcom patch
-Message-ID: <20120802195233.208D696EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qemu/sh4-r2d: update to use
+	kernel 3.2.17
+Message-ID: <20120802195231.64C2696EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b779b6bd948f96d20d6f12cc5591b436256177d4
+commit: http://git.buildroot.net/buildroot/commit/?id=73e844fe2944b1c0c2e9942a9b7771158e9b0dad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If the buildroot infrastructure finds a patch file that contains the
-$PKG-$VERSION tuple in the filename, it will only apply this kind of
-patches, ignoring the rest of the patches in the package directory.
-As a result of which, the gpsd-fix-libgpsmm.patch did not apply
-because the gpsd-2.95-navcom.patch satisfies the $PKG-$VERSION convention.
-The buildroot policy (as discussed during the Buildroot Developer meeting)
-is to remove the package version from the patch filename.
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../{gpsd-2.95-navcom.patch => gpsd-navcom.patch}  |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
+ configs/qemu_sh4_r2d_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gpsd/gpsd-2.95-navcom.patch b/package/gpsd/gpsd-navcom.patch
-similarity index 100%
-rename from package/gpsd/gpsd-2.95-navcom.patch
-rename to package/gpsd/gpsd-navcom.patch
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 58ace03..99db36a 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.16"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.17"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
