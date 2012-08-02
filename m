@@ -1,244 +1,295 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:53:59 -0000
-Subject: [Buildroot] [git commit branch/next] pkg-infra: add
-	host-xxx-package macro
-Message-ID: <20120802195253.0F39D8D74F@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:54:00 -0000
+Subject: [Buildroot] [git commit branch/next] legal-info: infrastructure to
+	collect legally-relevant material
+Message-ID: <20120802195250.E7BD28F944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c98337911cc2427f9cf78e9da44a1b1dead61d4b
+commit: http://git.buildroot.net/buildroot/commit/?id=7e76f904d208e4ef0bf722583897d4044264f546
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Create host-generic-package, host-autotools-package and
-host-cmake-package macros.  Such a macro is more intuitive to use than
-the $(call ...,host) construct.  Also it speeds things up by having
-one less $(call ...) evaluation.
+This allows to automatically collect material that may be needed to comply with
+the license of packages that Buildroot prepares for the target device.
 
-Also includes documentation update, but not for buildroot.html.
+The core of the implementation is made by the following parts:
+ - in package/pkg-utils.mk some helper functions are defined for common actions
+   such as generating a warning, producing info about a package etc;
+ - in package/pkg-gentargets.mk, within the GENTARGETS framework, a new
+   <PKG>-legal-info target produces all the info for a given package;
+ - Makefile implements the top-level targets:
+   - legal-info-prepare creates the output directory and produces legal info
+     about Buildroot itself and the toolchain, which mostly means just warning
+     the user that this is not implemented;
+   - legal-info, the only target that is supposed to be used directly, depends
+     on all of the above and finishes things by producing the README files from
+     the various pieces.
 
-This brings the time for 'make -qp' (which is used by bash-completion)
-down from 1.85s to 1.35s on my laptop.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-autotargets.txt  |   10 ++++------
- docs/manual/adding-packages-cmaketargets.txt |    9 ++++-----
- docs/manual/adding-packages-gentargets.txt   |   25 +++++++++++--------------
- package/pkg-autotargets.mk                   |    9 ++-------
- package/pkg-cmaketargets.mk                  |    9 ++-------
- package/pkg-gentargets.mk                    |   11 +++--------
- support/scripts/pkg-stats                    |   12 ++++++------
- 7 files changed, 32 insertions(+), 53 deletions(-)
+ Makefile                                  |   42 ++++++++++++++++++-
+ package/pkg-gentargets.mk                 |   61 +++++++++++++++++++++++++++++
+ package/pkg-utils.mk                      |   25 ++++++++++++
+ support/legal-info/README.header          |   24 +++++++++++
+ support/legal-info/README.warnings-header |    4 ++
+ 5 files changed, 153 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-autotargets.txt b/docs/manual/adding-packages-autotargets.txt
-index 428a182..09a2e7c 100644
---- a/docs/manual/adding-packages-autotargets.txt
-+++ b/docs/manual/adding-packages-autotargets.txt
-@@ -23,7 +23,7 @@ package, with an example :
- 11: LIBFOO_CONF_OPT = --enable-shared
- 12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
- 13:
--14: $(eval $(call AUTOTARGETS))
-+14: $(eval $(AUTOTARGETS))
- ------------------------
+diff --git a/Makefile b/Makefile
+index b80477f..d55b136 100644
+--- a/Makefile
++++ b/Makefile
+@@ -257,6 +257,14 @@ TARGET_DIR:=$(BASE_DIR)/target
+ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ TARGET_SKELETON=$(TOPDIR)/fs/skeleton
  
- On line 6, we declare the version of the package.
-@@ -67,11 +67,9 @@ package to be built.
- ~~~~~~~~~~~~~~~~~~~~~~~
++LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
++REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
++LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
++LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
++LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
++LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
++LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
++
+ ifeq ($(BR2_CCACHE),y)
+ CCACHE:=$(HOST_DIR)/usr/bin/ccache
+ BUILDROOT_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
+@@ -338,6 +346,9 @@ HOST_DEPS = $(sort $(foreach dep,\
+ 		$($(dep))))
+ HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
  
- The main macro of the autotools package infrastructure is
--+AUTOTARGETS+. It has the same number of arguments and the
--same semantic as the +GENTARGETS+ macro, which is the main
--macro of the generic package infrastructure. For autotools packages, the
--ability to have target and host packages is also available (and is
--actually widely used).
-++AUTOTARGETS+. It is similar to the +GENTARGETS+ macro. The ability to
-+have target and host packages is also available, with the
-++host-autotools-package+ macro.
++TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
++		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
++
+ # all targets depend on the crosscompiler and it's prerequisites
+ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
  
- Just like the generic infrastructure, the autotools infrastructure
- works by defining a number of variables before calling the
-diff --git a/docs/manual/adding-packages-cmaketargets.txt b/docs/manual/adding-packages-cmaketargets.txt
-index 3e400ec..a294042 100644
---- a/docs/manual/adding-packages-cmaketargets.txt
-+++ b/docs/manual/adding-packages-cmaketargets.txt
-@@ -23,7 +23,7 @@ with an example :
- 11: LIBFOO_CONF_OPT = -DBUILD_DEMOS=ON
- 12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
- 13:
--14: $(eval $(call CMAKETARGETS))
-+14: $(eval $(CMAKETARGETS))
- ------------------------
+@@ -354,8 +365,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
  
- On line 6, we declare the version of the package.
-@@ -66,10 +66,9 @@ package to be built.
- ~~~~~~~~~~~~~~~~~~~~~~~~
+ .PHONY: all world dirs clean distclean source outputmakefile \
++	legal-info legal-info-prepare legal-info-clean \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+-	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
++	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
  
- The main macro of the CMake package infrastructure is
--+CMAKETARGETS+. It has the same number of arguments and the same
--semantic as the +GENTARGETS+ macro, which is the main macro of the
--generic package infrastructure. For CMake packages, the ability to
--have target and host packages is also available.
-++CMAKETARGETS+. It is similar to the +GENTARGETS+ macro. The ability to
-+have target and host packages is also available, with the
-++host-cmake-package+ macro.
+@@ -365,7 +377,7 @@ world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+ # dependencies anywhere else
+ #
+ #############################################################
+-$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR):
++$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
+ 	@mkdir -p $@
  
- Just like the generic infrastructure, the CMake infrastructure works
- by defining a number of variables before calling the +CMAKETARGETS+
-diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
-index 6e9dc89..2e9ebef 100644
---- a/docs/manual/adding-packages-gentargets.txt
-+++ b/docs/manual/adding-packages-gentargets.txt
-@@ -46,7 +46,7 @@ system is based on hand-written Makefiles or shell scripts.
- 32: 	/bin/foo  f  4755  0  0  -  -  -  -  -
- 33: endef
- 34:
--35: $(eval $(call GENTARGETS))
-+35: $(eval $(GENTARGETS))
- --------------------------------
+ $(STAGING_DIR):
+@@ -498,6 +510,28 @@ source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
+ external-deps:
+ 	@$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
  
- The Makefile begins on line 6 to 8 with metadata information: the
-@@ -92,19 +92,16 @@ Makefile code necessary to make your package working.
- +GENTARGETS+ Reference
- ~~~~~~~~~~~~~~~~~~~~~~
++legal-info-clean:
++	@rm -fr $(LEGAL_INFO_DIR)
++
++legal-info-prepare: $(LEGAL_INFO_DIR)
++	@$(call MESSAGE,"Collecting legal info")
++	@$(call legal-license-file,buildroot,COPYING,COPYING)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved)
++	@$(call legal-warning,the Buildroot source code has not been saved)
++	@$(call legal-warning,the toolchain has not been saved)
++	@cp $(CONFIG_DIR)/.config $(LEGAL_INFO_DIR)/buildroot.config
++
++legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
++		$(TARGETS_LEGAL_INFO)
++	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
++	@if [ -r $(LEGAL_WARNINGS) ]; then \
++		cat support/legal-info/README.warnings-header \
++			$(LEGAL_WARNINGS) >>$(LEGAL_REPORT); \
++		cat $(LEGAL_WARNINGS); fi
++	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
++	@rm -f $(LEGAL_WARNINGS)
++
+ show-targets:
+ 	@echo $(TARGETS)
  
--The +GENTARGETS+ macro takes one optional argument. This argument can
--be used to tell if the package is a target package (cross-compiled for
--the target) or a host package (natively compiled for the host). If
--unspecified, it is assumed that it is a target package. See below for
--details.
--
--For a given package, in a single +.mk+ file, it is possible to call
--GENTARGETS twice, once to create the rules to generate a target
-+There are two variants of the generic target. The +GENTARGETS+ macro is
-+used for packages to be cross-compiled for the target.  The
-++host-generic-package+ macro is used for host packages, natively compiled
-+for the host.  It is possible to call both of them in a single +.mk+
-+file: once to create the rules to generate a target
- package and once to create the rules to generate a host package:
+@@ -619,7 +653,8 @@ endif
  
- ----------------------
--$(eval $(call GENTARGETS))
--$(eval $(call GENTARGETS,host))
-+$(eval $(GENTARGETS))
-+$(eval $(host-generic-package))
- ----------------------
+ clean:
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+-		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging
++		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
++		$(LEGAL_INFO_DIR)
  
- This might be useful if the compilation of the target package requires
-@@ -115,12 +112,12 @@ some tools to be installed on the host. If the package name is
- variables of other packages, if they depend on +libfoo+ or
- +host-libfoo+.
- 
--The call to the +GENTARGETS+ macro *must* be at the end of the +.mk+
--file, after all variable definitions.
-+The call to the +GENTARGETS+ and/or +host-generic-package+ macro *must* be
-+at the end of the +.mk+ file, after all variable definitions.
- 
- For the target package, the +GENTARGETS+ uses the variables defined by
- the .mk file and prefixed by the uppercased package name:
--+LIBFOO_*+. For the host package, it uses the +HOST_LIBFOO_*+. For
-++LIBFOO_*+. +host-generic-package+ uses the +HOST_LIBFOO_*+ variables. For
- 'some' variables, if the +HOST_LIBFOO_+ prefixed variable doesn't
- exist, the package infrastructure uses the corresponding variable
- prefixed by +LIBFOO_+. This is done for variables that are likely to
-diff --git a/package/pkg-autotargets.mk b/package/pkg-autotargets.mk
-index d31230d..d925cbb 100644
---- a/package/pkg-autotargets.mk
-+++ b/package/pkg-autotargets.mk
-@@ -305,10 +305,5 @@ endef
- # Argument 1 is "target" or "host"           [optional, default: "target"]
- ################################################################################
- 
--define AUTOTARGETS
--ifeq ($(1),host)
--$(call AUTOTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
--else
--$(call AUTOTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
--endif
--endef
-+AUTOTARGETS = $(call AUTOTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-+host-autotools-package = $(call AUTOTARGETS_INNER,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
-diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
-index b405df5..71cc610 100644
---- a/package/pkg-cmaketargets.mk
-+++ b/package/pkg-cmaketargets.mk
-@@ -190,13 +190,8 @@ endef
- # Argument 1 is "target" or "host"           [optional, default: "target"]
- ################################################################################
- 
--define CMAKETARGETS
--ifeq ($(1),host)
--$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
--else
--$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
--endif
--endef
-+CMAKETARGETS = $(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-+host-cmake-package = $(call CMAKETARGETS_INNER,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
- 
- ################################################################################
- # Generation of the CMake toolchain file
+ distclean: clean
+ ifeq ($(DL_DIR),$(TOPDIR)/dl)
+@@ -687,6 +722,7 @@ endif
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  source-check           - check selected packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
++	@echo '  legal-info             - generate info about license compliance'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
 diff --git a/package/pkg-gentargets.mk b/package/pkg-gentargets.mk
-index 5105335..a9cee90 100644
+index 5da9cdc..5105335 100644
 --- a/package/pkg-gentargets.mk
 +++ b/package/pkg-gentargets.mk
-@@ -504,14 +504,9 @@ endef # GENTARGETS_INNER
- # Argument 1 is "target" or "host"           [optional, default: "target"]
- ################################################################################
+@@ -180,6 +180,7 @@ define GENTARGETS_INNER
  
--define GENTARGETS
--ifeq ($(1),host)
--# In the case of host packages, turn the package name "pkg" into "host-pkg"
--$(call GENTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
--else
- # In the case of target packages, keep the package name "pkg"
--$(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
--endif
--endef
-+GENTARGETS = $(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
-+# In the case of host packages, turn the package name "pkg" into "host-pkg"
-+host-generic-package = $(call GENTARGETS_INNER,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+ $(2)_TYPE                       =  $(5)
+ $(2)_NAME			=  $(1)
++$(2)_RAWNAME			=  $(patsubst host-%,%,$(1))
  
- # :mode=makefile:
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 06d9d0d..e7941bc 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -100,27 +100,27 @@ for i in $(find package/ -name '*.mk') ; do
-     is_manual_target=0
-     is_manual_host=0
+ # Keep the package version that may contain forward slashes in the _DL_VERSION
+ # variable, then replace all forward slashes ('/') by underscores ('_') to
+@@ -245,6 +246,20 @@ $(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
+ endif
+ endif
  
--    if grep -E "\(call AUTOTARGETS,host\)" $i > /dev/null ; then
-+    if grep -E "\(host-autotools-package\)" $i > /dev/null ; then
- 	is_auto_host=1
-     fi
++ifndef $(2)_LICENSE
++ ifdef $(3)_LICENSE
++  $(2)_LICENSE = $($(3)_LICENSE)
++ endif
++endif
++
++ifndef $(2)_LICENSE_FILES
++ ifdef $(3)_LICENSE_FILES
++  $(2)_LICENSE_FILES = $($(3)_LICENSE_FILES)
++ endif
++endif
++
++$(2)_LICENSE			?= unknown
++
+ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
  
--    if grep -E "\(call AUTOTARGETS\)" $i > /dev/null ; then
-+    if grep -E "\(AUTOTARGETS\)" $i > /dev/null ; then
- 	is_auto_target=1
-     fi
+ $(2)_INSTALL_STAGING		?= NO
+@@ -412,6 +427,52 @@ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+ endif
  
--    if grep -E "\(call GENTARGETS,host\)" $i > /dev/null ; then
-+    if grep -E "\(host-generic-package\)" $i > /dev/null ; then
- 	is_pkg_host=1
-     fi
++# legal-info: declare dependencies and set values used later for the manifest
++ifneq ($$($(2)_LICENSE),PROPRIETARY)
++ifneq ($$($(2)_SITE_METHOD),local)
++ifneq ($$($(2)_SITE_METHOD),override)
++# Packages that have a tarball need it downloaded and extracted beforehand
++$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR)
++$(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
++ifneq ($$($(2)_LICENSE_FILES),)
++$(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
++endif
++endif
++endif
++endif
++# defaults for packages without tarball or license files
++$(2)_MANIFEST_TARBALL ?= not saved
++$(2)_MANIFEST_LICENSE_FILES ?= not saved
++
++# legal-info: produce legally relevant info.
++$(1)-legal-info:
++# Packages without a source are assumed to be part of Buildroot, skip them.
++ifneq ($(call qstrip,$$($(2)_SOURCE)),)
++ifeq ($$($(2)_LICENSE),PROPRIETARY)
++# Proprietary packages: nothing to save
++else ifeq ($$($(2)_SITE_METHOD),local)
++# Packages without a tarball: don't save and warn
++	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
++else ifeq ($$($(2)_SITE_METHOD),override)
++	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
++else
++# Other packages
++# Save license files if defined
++ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
++	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
++	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
++else
++	@for F in $$($(2)_LICENSE_FILES); do \
++		$(call legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
++		done
++endif
++# Copy the source tarball (just hardlink if possible)
++	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
++	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
++endif
++	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
++endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
++
+ # add package to the general list of targets if requested by the buildroot
+ # configuration
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 0c55a9d..35abb17 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -92,3 +92,28 @@ define sep
  
--    if grep -E "\(call GENTARGETS\)" $i > /dev/null ; then
-+    if grep -E "\(GENTARGETS\)" $i > /dev/null ; then
- 	is_pkg_target=1
-     fi
  
--    if grep -E "\(call CMAKETARGETS,host\)" $i > /dev/null ; then
-+    if grep -E "\(host-cmake-package\)" $i > /dev/null ; then
- 	is_cmake_host=1
-     fi
- 
--    if grep -E "\(call CMAKETARGETS\)" $i > /dev/null ; then
-+    if grep -E "\(CMAKETARGETS\)" $i > /dev/null ; then
- 	is_cmake_target=1
-     fi
- 
+ endef
++
++#
++# legal-info helper functions
++#
++LEGAL_INFO_SEPARATOR="::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
++legal-warning=echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
++legal-warning-pkg=echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
++define legal-warning-pkg-savednothing # pkg, {local|override}
++	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
++endef
++legal-manifest=echo "$(1),$(2),$(3),$(4),$(5)" >>$(LEGAL_MANIFEST_CSV)
++define legal-license-header
++	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
++		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
++endef
++define legal-license-nofiles
++	$(call legal-license-header,$(1),unknown license file(s))
++endef
++define legal-license-file # pkg, filename, file-fullpath
++	$(call legal-license-header,$(1),$(2) file) && \
++	cat $(3) >>$(LEGAL_LICENSES_TXT) && \
++	echo >>$(LEGAL_LICENSES_TXT) && \
++	mkdir -p $(LICENSE_FILES_DIR)/$(1)/ && \
++	cp $(3) $(LICENSE_FILES_DIR)/$(1)/
++endef
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+new file mode 100644
+index 0000000..3321adb
+--- /dev/null
++++ b/support/legal-info/README.header
+@@ -0,0 +1,24 @@
++Most of the packages that were used by Buildroot to produce the image files,
++including Buildroot itself, have open-source licenses. It is your
++responsibility to comply to the requirements of these licenses.
++To make this easier for you, Buildroot collected in this directory some
++material you may need to get it done.
++
++This material is composed of the following items.
++ * The scripts used to control compilation of the packages and the generation
++   of image files, i.e. the Buildroot sources.
++   Note: this has not been saved due to technical limitations, you must
++   collect it manually.
++ * The Buildroot configuration file; this has been saved in buildroot.config.
++ * The toolchain (cross-compiler and related tools) used to generate all the
++   compiled programs.
++   Note: this has not been saved due to technical limitations, you must
++   collect it manually.
++ * The source code for all packages; this has been saved in the sources/
++   subdirectory (except for the proprietary packages, which have not been
++   saved); patches applied to some packages by Buildroot are included in the
++   Buildroot sources and were not duplicated in the sources/ subdirectory.
++ * A manifest file listing the configured packages and related information.
++ * The license text of the packages; they have been saved in the licenses/
++   subdirectory.
++
+diff --git a/support/legal-info/README.warnings-header b/support/legal-info/README.warnings-header
+new file mode 100644
+index 0000000..cd08290
+--- /dev/null
++++ b/support/legal-info/README.warnings-header
+@@ -0,0 +1,4 @@
++Due to technical limitations or lack of license definition in the package
++makefile, some of the material listed above could not been saved, as the
++following list details.
++
