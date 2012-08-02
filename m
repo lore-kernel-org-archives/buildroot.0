@@ -1,52 +1,57 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:17 -0000
-Subject: [Buildroot] [git commit branch/next] libfreefare: add missing
-	openssl dependency
-Message-ID: <20120802195240.7CB3B88D21@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:19 -0000
+Subject: [Buildroot] [git commit branch/next] libpcap: don't fail on kernels
+	without netfilter support
+Message-ID: <20120802195239.3F48288D21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=929c3e89a6715ecfdc8055ec82025cee5e8e23a1
+commit: http://git.buildroot.net/buildroot/commit/?id=e4bcf12d104da408361410ad6cd187021dd8eda5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-If openssl is not selected, configuration fails for the libfreefare package
-as follows.
+From upstream git.
 
-  configure: error: Cannot find libcrypto.
-
-This patch adds the missing dependency on openssl.
-
-[Peter: use select instead of depends on]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libfreefare/Config.in      |    1 +
- package/libfreefare/libfreefare.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ .../libpcap-dont-fail-on-missing-netfilter.patch   |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
-index 2e11f7e..13a8630 100644
---- a/package/libfreefare/Config.in
-+++ b/package/libfreefare/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBFREEFARE
- 	bool "libfreefare"
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBNFC
- 	help
- 	  Library for high level manipulation of MIFARE cards.
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 0499999..16ef8fb 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -5,6 +5,6 @@
- #############################################################
- LIBFREEFARE_VERSION = 0.3.2
- LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
--LIBFREEFARE_DEPENDENCIES = libnfc
-+LIBFREEFARE_DEPENDENCIES = libnfc openssl
- 
- $(eval $(call AUTOTARGETS))
+diff --git a/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch b/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch
+new file mode 100644
+index 0000000..b0efbc7
+--- /dev/null
++++ b/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch
+@@ -0,0 +1,30 @@
++From d55b6f4f1b2bfab96ad57e0239b0b2b57785df77 Mon Sep 17 00:00:00 2001
++From: Jiri Slaby <jirislaby@gmail.com>
++Date: Wed, 29 Feb 2012 01:19:18 -0800
++Subject: [PATCH] Don't fail if netfilter isn't enabled in the kernel.
++
++Check for EPROTONOSUPPORT as well as EAFNOSUPPORT.
++
++Reviewed-By: Guy Harris <guy@alum.mit.edu>
++---
++ pcap-netfilter-linux.c |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/pcap-netfilter-linux.c b/pcap-netfilter-linux.c
++index 225e49f..f9c6bef 100644
++--- a/pcap-netfilter-linux.c
+++++ b/pcap-netfilter-linux.c
++@@ -452,8 +452,8 @@ netfilter_platform_finddevs(pcap_if_t **alldevsp, char *err_str)
++ 	
++ 	sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_NETFILTER);
++ 	if (sock < 0) {
++-		/* if netlink is not supported this this is not fatal */
++-		if (errno == EAFNOSUPPORT)
+++		/* if netlink is not supported this is not fatal */
+++		if (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT)
++ 			return 0;
++ 		snprintf(err_str, PCAP_ERRBUF_SIZE, "Can't open netlink socket %d:%s",
++ 			errno, pcap_strerror(errno));
++-- 
++1.7.10
++
