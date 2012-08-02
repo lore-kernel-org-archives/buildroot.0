@@ -1,46 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:50 -0000
-Subject: [Buildroot] [git commit branch/next] iw: fix static linking
-Message-ID: <20120802195247.BDB3D96FE4@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:51 -0000
+Subject: [Buildroot] [git commit branch/next] dependencies: ensure that
+	DESTDIR isn't set when running Buildroot
+Message-ID: <20120802195247.3C3618C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ffd15029fbe4f1223e1604653672f0f313e6017
+commit: http://git.buildroot.net/buildroot/commit/?id=9910eba33adb2b783b0df5d90a857816e82fbd55
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Libnl needs explicit -lpthread / -lm when statically linking.
+Having DESTDIR set in the environment before running Buildroot creates
+some funky problems in the build process. Prevent users from running
+into this kind of troubles.
 
+Cc: Michael Opdenacker <michael.opdenacker@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/iw/iw.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ support/dependencies/dependencies.sh |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 5cd40a3..2b322f6 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -13,6 +13,12 @@ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
- 	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index c47ffcf..43ec3cc 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -48,6 +48,12 @@ if test -n "$PERL_MM_OPT" ; then
+     exit 1
+ fi
  
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+# libnl needs pthread/m, so we need to explicitly with them when static
-+# these need to added AFTER libnl, so we have to override LIBS completely
-+IW_MAKE_OPT = LIBS='-lnl-genl-3 -lnl-3 -lpthread -lm'
-+endif
++if test -n "$DESTDIR" ; then
++    /bin/echo -e "\nYou have the DESTDIR environment variable set. Please"
++    /bin/echo -e "unset it so that Buildroot can work properly."
++    exit 1
++fi
 +
- define IW_CONFIGURE_CMDS
- 	echo "CC = $(TARGET_CC)" >$(IW_CONFIG)
- 	echo "CFLAGS = $(TARGET_CFLAGS)" >>$(IW_CONFIG)
-@@ -20,7 +26,7 @@ define IW_CONFIGURE_CMDS
- endef
- 
- define IW_BUILD_CMDS
--	$(IW_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPT) -C $(@D)
- endef
- 
- define IW_INSTALL_TARGET_CMDS
+ # Verify that which is installed
+ if ! which which > /dev/null ; then
+ 	/bin/echo -e "\nYou must install 'which' on your build machine\n";
