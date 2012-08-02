@@ -1,43 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:54:33 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain/powerpc: SPE ABI is
-	not available for e500mc
-Message-ID: <20120802195248.AC03D8E204@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 02 Aug 2012 19:54:34 -0000
+Subject: [Buildroot] [git commit branch/next] Remove -fPIC on x86_64
+Message-ID: <20120802195248.EC58A8E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=37aa01f2cf3e05f6e52df056c22e5733fd1164ef
+commit: http://git.buildroot.net/buildroot/commit/?id=7ea1e92bdd9acf6cd5b021e61a18703e27885426
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Config.in.arch |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+The -fPIC breaks the purgatory of kexec (= the code that passes command-line
+arguments to the kernel): kexec doesn't know how to handle the GOT and PLT
+relocation entries.
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 25ff750..c9bbc12 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -556,8 +556,8 @@ endchoice
- choice
- 	prompt "Target ABI"
- 	depends on BR2_powerpc
--	default BR2_powerpc_CLASSIC if BR2_powerpc_e500mc
- 	default BR2_powerpc_SPE if BR2_powerpc_8540 || BR2_powerpc_8548
-+	default BR2_powerpc_CLASSIC
- 	help
- 	  Application Binary Interface to use
+There is also no reason at all to pass -fPIC.  Shared libraries that require
+it will add it to their local Makefiles, and normal executables have no
+business with -fPIC (plus it adds overhead...).
+
+The -fPIC was added by Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+in commit 8027784c.  That commit adds sysroot parameters to CFLAGS.
+There is no explanation why -fPIC is also added for x86_64.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Makefile.in |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c5ad00a..1c3ce48 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -87,12 +87,6 @@ endif
  
-@@ -566,7 +566,7 @@ config BR2_powerpc_CLASSIC
- 	depends on !(BR2_powerpc_8540 || BR2_powerpc_8548)
- config BR2_powerpc_SPE
- 	bool "SPE"
--	depends on BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
-+	depends on BR2_powerpc_8540 || BR2_powerpc_8548
- endchoice
+ TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
  
- config BR2_ARCH
+-ifneq ($(BR2_PREFER_STATIC_LIB),y)
+-ifeq ($(BR2_x86_64),y)
+-TARGET_CFLAGS+=-fPIC -DPIC
+-endif # PIC for dynamic objects on x86_64
+-endif
+-
+ ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_ABI64)),yy)
+ TARGET_CFLAGS+=-fno-pic -mno-abicalls
+ endif
