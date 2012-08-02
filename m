@@ -1,68 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:53:00 -0000
-Subject: [Buildroot] [git commit branch/next] lua: refactor without sed
-Message-ID: <20120802195256.139D68E8F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Clean up naming of old
+	GENTARGETS infrastructure
+Message-ID: <20120802195254.445E48EE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad6af5819f88bac9ca7f50e565c4fc68d3e408cc
+commit: http://git.buildroot.net/buildroot/commit/?id=2359e1223f622c8984f235fd8ddfb40a8e1cdc7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+With the renaming of XXXTARGETS to xxx-package, the names of the
+pkg-xxx.mk files is inconsistent, as well as some internal names in
+the documentation.  These inconsistencies are cleaned up here.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ ...kages-autotargets.txt => adding-packages-autotools.txt} |    4 ++--
+ ...packages-cmaketargets.txt => adding-packages-cmake.txt} |    4 ++--
+ docs/manual/adding-packages-directory.txt                  |   12 ++++++------
+ ...packages-gentargets.txt => adding-packages-generic.txt} |    4 ++--
+ docs/manual/adding-packages.txt                            |    6 +++---
+ package/Makefile.in                                        |    6 +++---
+ package/{pkg-autotargets.mk => pkg-autotools.mk}           |    0
+ package/{pkg-cmaketargets.mk => pkg-cmake.mk}              |    0
+ package/{pkg-gentargets.mk => pkg-generic.mk}              |    0
+ 9 files changed, 18 insertions(+), 18 deletions(-)
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lua/lua.mk |   16 +++++++---------
- 1 files changed, 7 insertions(+), 9 deletions(-)
+ ...totargets.txt => adding-packages-autotools.txt} |    4 ++--
+ ...-cmaketargets.txt => adding-packages-cmake.txt} |    4 ++--
+ docs/manual/adding-packages-directory.txt          |   12 ++++++------
+ ...-gentargets.txt => adding-packages-generic.txt} |    4 ++--
+ docs/manual/adding-packages.txt                    |    6 +++---
+ package/Makefile.in                                |    6 +++---
+ package/{pkg-autotargets.mk => pkg-autotools.mk}   |    0
+ package/{pkg-cmaketargets.mk => pkg-cmake.mk}      |    0
+ package/{pkg-gentargets.mk => pkg-generic.mk}      |    0
+ 9 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 1e52075..8f71fc2 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -8,8 +8,9 @@ LUA_VERSION = 5.1.5
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- 
-+LUA_CFLAGS = -Wall
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
--	LUA_MYCFLAGS += -fPIC
-+	LUA_CFLAGS += -fPIC
- endif
- 
- LUA_MYLIBS += -ldl
-@@ -17,28 +18,25 @@ LUA_MYLIBS += -ldl
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
--	LUA_MYCFLAGS += -DLUA_USE_LINUX
-+	LUA_CFLAGS += -DLUA_USE_LINUX
- else
--	LUA_MYCFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
-+	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
- endif
- 
--HOST_LUA_DEPENDENCIES =
--HOST_LUA_MYCFLAGS = -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
-+HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
- HOST_LUA_MYLIBS = -ldl
- 
- define LUA_BUILD_CMDS
--	sed -i -e 's/-O2//' $(@D)/src/Makefile
- 	$(MAKE) \
- 	CC="$(TARGET_CC)" RANLIB="$(TARGET_RANLIB)" \
--	MYCFLAGS="$(TARGET_CFLAGS) $(LUA_MYCFLAGS)" \
-+	CFLAGS="$(TARGET_CFLAGS) $(LUA_CFLAGS)" \
- 	MYLIBS="$(LUA_MYLIBS)" AR="$(TARGET_CROSS)ar rcu" \
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
- 
- define HOST_LUA_BUILD_CMDS
--	sed -i -e 's/-O2//' $(@D)/src/Makefile
- 	$(MAKE) \
--	MYCFLAGS="$(HOST_LUA_MYCFLAGS)" \
-+	CFLAGS="$(HOST_LUA_CFLAGS)" \
- 	MYLIBS="$(HOST_LUA_MYLIBS)" \
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
+Patch is too large, so refusing to show it
