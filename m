@@ -1,51 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:44 -0000
-Subject: [Buildroot] [git commit branch/next] pkg-utils.mk: add utility
-	functions find*clauses and notfirstword
-Message-ID: <20120802195243.4C2A68E204@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] kernel-headers: bump 3.{0,
+	3}.x stable versions
+Message-ID: <20120802195233.E606796EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75f18de67e7bc7f1feb360eb4201a3c6d6773698
+commit: http://git.buildroot.net/buildroot/commit/?id=66c7e294515f016928abdde506e7563214242b15
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch adds a few utility functions to pkg-utils.mk.
-
-Functions finddirclauses and findfileclauses help in building a find command
-that skips a set of directories and performs operations on a set of files.
-This pattern can for example be used to keep certain files or directories from
-being stripped, or to remove certain files from a package installation.
-
-The notfirstword function is the inverse of the 'firstword' function in make:
-it returns all but the first word.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-utils.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ ...umode_t.patch => linux-3.3.7-fix-umode_t.patch} |    0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 953dbc9..0c55a9d 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -76,6 +76,15 @@ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESE
- TERM_BOLD := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
- 
-+# Utility functions for 'find'
-+# findfileclauses(filelist) => -name 'X' -o -name 'Y'
-+findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
-+# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
-+finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
-+
-+# Miscellaneous utility functions
-+# notfirstword(wordlist): returns all but the first word in wordlist
-+notfirstword = $(wordlist 2,$(words $(1)),$(1))
- 
- # Needed for the foreach loops to loop over the list of hooks, so that
- # each hook call is properly separated by a newline.
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index cd83270..1253531 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.31"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.32"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.18"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3.6"		if BR2_KERNEL_HEADERS_3_3
++	default "3.3.7"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/toolchain/kernel-headers/linux-3.3.6-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.7-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3.6-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.7-fix-umode_t.patch
