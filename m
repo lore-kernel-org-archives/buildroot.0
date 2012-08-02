@@ -1,31 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:44 -0000
-Subject: [Buildroot] [git commit branch/next] Add /dev/video static device
-	nodes
-Message-ID: <20120802195242.C5C318E204@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pkg-utils.mk: add utility
+	functions find*clauses and notfirstword
+Message-ID: <20120802195243.4C2A68E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b317f63489b03a0f31d1a199f60b3c5d878e0c10
+commit: http://git.buildroot.net/buildroot/commit/?id=75f18de67e7bc7f1feb360eb4201a3c6d6773698
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+This patch adds a few utility functions to pkg-utils.mk.
+
+Functions finddirclauses and findfileclauses help in building a find command
+that skips a set of directories and performs operations on a set of files.
+This pattern can for example be used to keep certain files or directories from
+being stripped, or to remove certain files from a package installation.
+
+The notfirstword function is the inverse of the 'firstword' function in make:
+it returns all but the first word.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/generic/device_table_dev.txt |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/pkg-utils.mk |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
-index d1d1e11..a93a2c8 100644
---- a/target/generic/device_table_dev.txt
-+++ b/target/generic/device_table_dev.txt
-@@ -141,3 +141,6 @@
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 953dbc9..0c55a9d 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -76,6 +76,15 @@ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESE
+ TERM_BOLD := $(shell tput smso)
+ TERM_RESET := $(shell tput rmso)
  
- # I2C device nodes
- /dev/i2c-	c	666	0	0	89	0	0	1	4
++# Utility functions for 'find'
++# findfileclauses(filelist) => -name 'X' -o -name 'Y'
++findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
++# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
++finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
 +
-+# v4l device nodes
-+/dev/video	c	666	0	0	81	0	0	1	4
++# Miscellaneous utility functions
++# notfirstword(wordlist): returns all but the first word in wordlist
++notfirstword = $(wordlist 2,$(words $(1)),$(1))
+ 
+ # Needed for the foreach loops to loop over the list of hooks, so that
+ # each hook call is properly separated by a newline.
