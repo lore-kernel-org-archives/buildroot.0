@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:52:55 -0000
-Subject: [Buildroot] [git commit branch/next] libnspr: fix 64-bit build
-Message-ID: <20120802195255.41F198EE7F@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:56 -0000
+Subject: [Buildroot] [git commit branch/next] vpnc: warn that legal-info is
+	not implemented
+Message-ID: <20120802195251.68F778F944@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20b2199d30f9c00abd51ae199d0934f4eb70d870
+commit: http://git.buildroot.net/buildroot/commit/?id=86f7382a6c8d216658ae400dee93a4c45a7f5406
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On some architectures (found on x86_64, but probably others too),
-libnspr builds with -m32 unless it is configured for 64-bit build.  So
-force 64-bit build on 64-bit architectures.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnspr/libnspr.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/vpnc/vpnc.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index c2cc996..689caa4 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -12,6 +12,8 @@ LIBNSPR_INSTALL_STAGING = YES
- LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
- 		   HOST_LDFLAGS="-lc"
- # NSPR mixes up --build and --host
--LIBNSPR_CONF_OPT = --host=$(GNU_HOST_NAME)
-+LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
-+LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
-+LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
+diff --git a/package/vpnc/vpnc.mk b/package/vpnc/vpnc.mk
+index d8d9654..f585dc4 100644
+--- a/package/vpnc/vpnc.mk
++++ b/package/vpnc/vpnc.mk
+@@ -42,6 +42,9 @@ $(VPNC_TARGET_BINARY): $(VPNC_BINARY)
+ 		-C $(VPNC_DIR) install
+ 	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(VPNC_TARGET_BINARY)
  
- $(eval $(autotools-package))
++vpnc-legal-info:
++	@$(call legal-warning-pkg,vpnc,legal-info not yet implemented)
++
+ vpnc: libgcrypt $(VPNC_TARGET_BINARY)
+ 
+ vpnc-source: $(DL_DIR)/$(VPNC_SOURCE)
