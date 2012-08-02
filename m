@@ -1,42 +1,83 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:43 -0000
-Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
-	version 3.3.7
-Message-ID: <20120802195234.005AD96AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain/crosstool-NG:
+	disable decimal floats
+Message-ID: <20120802195232.3D18C96AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82609df4dd2f31fde175b2fab21cabd6124fcfae
+commit: http://git.buildroot.net/buildroot/commit/?id=cb30e130519fcb50e1a2e0d7a02aa628e52ed24c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
+the floating-point environement fenv.h in the C library.
+
+The uClibc .config file used by crosstool-NG to build uClibc is the
+same as used by the internal buildroot mechanism, and explcitly
+disables fenv support.
+
+The quick workaround is to simply disable decimal floats in all
+crosstool-NG config files.
+
+In the long run, it might be better to check this situation, and/or
+add code and/or options in crosstool-NG to handle this (but it is
+much more involved, and this workaround is sane).
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ .../crosstool-ng.config-eglibc                     |    4 ++--
+ .../crosstool-ng.config-glibc                      |    4 ++--
+ .../crosstool-ng.config-uClibc                     |    4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index dd34465..4562b1b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_3
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+index cbad52a..58cdff2 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+@@ -294,8 +294,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
  
- config BR2_LINUX_KERNEL_3_3
--	bool "3.3.6"
-+	bool "3.3.7"
+ #
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index e57a91d..db724ab 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -294,8 +294,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ #
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+index c115096..5f1ee7e 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+@@ -293,8 +293,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3.6" if BR2_LINUX_KERNEL_3_3
-+	default "3.3.7" if BR2_LINUX_KERNEL_3_3
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ #
