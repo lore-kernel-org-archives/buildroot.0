@@ -1,42 +1,89 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:38 -0000
-Subject: [Buildroot] [git commit branch/next] kernel-headers: bump 3.{0,
-	4}.x stable versions
-Message-ID: <20120802195237.1D78D96F60@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bzip2: security bump to
+	version 1.0.6
+Message-ID: <20120802195237.A71FC96FF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f63d6b41a188b169870492c9a7d3320e2be1f66
+commit: http://git.buildroot.net/buildroot/commit/?id=54e03b24848bc79995c7de388f7d79b09f469e3e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Bump bzip2 to version 1.0.6 to fix CVE-2010-0405
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bzip2/bzip2.mk |   29 ++++++++++++++---------------
+ 1 files changed, 14 insertions(+), 15 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index ea7c99c..012b436 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -64,10 +64,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.33"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.34"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.19"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.1"		if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.2"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.33-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.34-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.33-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.34-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index 1bc4449..59c993e 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -3,15 +3,14 @@
+ # bzip2
+ #
+ #############################################################
+-BZIP2_VERSION:=1.0.5
+-BZIP2_SONAME=1.0.4
+-BZIP2_SOURCE:=bzip2-$(BZIP2_VERSION).tar.gz
+-BZIP2_SITE:=http://www.bzip.org/$(BZIP2_VERSION)
+-BZIP2_INSTALL_STAGING=YES
++
++BZIP2_VERSION = 1.0.6
++BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
++BZIP2_INSTALL_STAGING = YES
+ 
+ define BZIP2_FIX_MAKEFILE
+ 	$(SED) "s,ln \$$(,ln -snf \$$(,g" $(@D)/Makefile
+-	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_SONAME) \
++	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_VERSION)) \
+ 	    libbz2.so,g" $(@D)/Makefile-libbz2_so
+ 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(@D)/Makefile
+ 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(@D)/Makefile-libbz2_so
+@@ -42,12 +41,12 @@ define BZIP2_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
+ 	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/lib
+-	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(STAGING_DIR)/usr/lib/
++	cp $(@D)/libbz2.so.$(BZIP2_VERSION) $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/libbz2.a $(STAGING_DIR)/usr/lib/
+ 	(cd $(STAGING_DIR)/usr/lib/; \
+-		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
+-		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
+-		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
++		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so; \
++		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1.0; \
++		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1; \
+ 	)
+ endef
+ 
+@@ -56,11 +55,11 @@ define BZIP2_INSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,bzip2 bunzip2 bzcat)
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+ 	$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
+-	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(TARGET_DIR)/usr/lib/
++	cp $(@D)/libbz2.so.$(BZIP2_VERSION) $(TARGET_DIR)/usr/lib/
+ 	(cd $(TARGET_DIR)/usr/lib; \
+-		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
+-		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
+-		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
++		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1.0; \
++		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1; \
++		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so; \
+ 	)
+ 	(cd $(TARGET_DIR)/usr/bin; \
+ 		ln -snf bzip2 bunzip2; \
+@@ -84,7 +83,7 @@ endef
+ 
+ define HOST_BZIP2_FIX_MAKEFILE
+ 	$(SED) "s,ln \$$(,ln -snf \$$(,g" $(@D)/Makefile
+-	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_SONAME) \
++	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_VERSION) \
+ 	    libbz2.so,g" $(@D)/Makefile-libbz2_so
+ 	$(SED) "s:-O2:$(HOST_CFLAGS):" $(@D)/Makefile
+ 	$(SED) "s:-O2:$(HOST_CFLAGS):" $(@D)/Makefile-libbz2_so
