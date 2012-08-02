@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:42 -0000
-Subject: [Buildroot] [git commit branch/next] squid: bump to version 3.1.20
-Message-ID: <20120802195241.E305E96FE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] qt: remove redundant and
+	incorrect URL from Makefile
+Message-ID: <20120802195241.50B058C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdc2a34ca8e9cedc7f0be59ed6ac999538c9a9a8
+commit: http://git.buildroot.net/buildroot/commit/?id=f703569bead266c1a35f05191d9e4ae8992e8dbd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The upstream URL for Buildroot packages is usually visible in the Config.in
+file, not in comments in the Makefile.
+
+Moreover, this URL does not point to the correct upstream project.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt/qt.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 9cdbeb5..9db2197 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index b751696..ff9f4ca 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -1,7 +1,6 @@
+ ######################################################################
  #
- #############################################################
- 
--SQUID_VERSION = 3.1.19
-+SQUID_VERSION = 3.1.20
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
- SQUID_DEPENDENCIES = libcap host-libcap
- SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
+ # Qt Embedded for Linux
+-# http://www.qtsoftware.com/
+ #
+ # This makefile was originally composed by Thomas Lundquist <thomasez@zelow.no>
+ # Later heavily modified by buildroot developers
