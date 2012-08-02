@@ -1,39 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:54:21 -0000
-Subject: [Buildroot] [git commit branch/next] Ensure DESTDIR will not
-	confuse the build
-Message-ID: <20120802195247.EA7EC8E204@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:54:22 -0000
+Subject: [Buildroot] [git commit branch/next] cgilua: bump version to 5.1.4
+Message-ID: <20120802195247.0F0198C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=91123a6fab2770ced312fc54a69f4d83f3a2e1e5
+commit: http://git.buildroot.net/buildroot/commit/?id=c6ef9dd63d63c98d8c8f2cc0ada207944ee2dd69
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Having DESTDIR defined will confuse the build of certain packages, so
-we ensure that it is undefined from the environment when Buildroot
-starts.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/cgilua/Config.in |    2 +-
+ package/cgilua/cgilua.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index bcbe9fc..b80477f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -168,6 +168,10 @@ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
- # Make sure pkg-config doesn't look outside the buildroot tree
- unexport PKG_CONFIG_PATH
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index b43ba97..2f9c452 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_CGILUA
+ 	  CGILua is a tool for creating dynamic HTML pages
+ 	  and manipulating input data from Web forms.
  
-+# Having DESTDIR set in the environment confuses the installation
-+# steps of some packages.
-+unexport DESTDIR
-+
- # bash prints the name of the directory on 'cd <dir>' if CDPATH is
- # set, so unset it here to not cause problems. Notice that the export
- # line doesn't affect the environment of $(shell ..) calls, so
+-	  http://luaforge.net/projects/cgilua/
++	  http://keplerproject.github.com/cgilua
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index d46c2a6..8e5770a 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ 
+-CGILUA_VERSION = 5.1.3
+-CGILUA_SITE = http://luaforge.net/frs/download.php/3970
++CGILUA_VERSION = 5.1.4
++CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
+ CGILUA_DEPENDENCIES = luafilesystem
+ 
+ define CGILUA_INSTALL_TARGET_CMDS
