@@ -1,36 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:42 -0000
-Subject: [Buildroot] [git commit branch/next] pthread-stubs: fix incorrect
-	indentation
-Message-ID: <20120802195241.070948C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bison: m4 needs MMU
+Message-ID: <20120802195233.D7AFA96AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c96b50aac61bcfbfbd7e2ef56396303a856d785
+commit: http://git.buildroot.net/buildroot/commit/?id=ae446b2ea386ddc06644ef15b26bd06f16f3cbc3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes http://autobuild.buildroot.net/results/0bb659881ed6a01745f596f00da9acbef02a4c31/
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/pthread-stubs/Config.in |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ package/bison/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/pthread-stubs/Config.in b/package/x11r7/pthread-stubs/Config.in
-index de13e87..c17f7da 100644
---- a/package/x11r7/pthread-stubs/Config.in
-+++ b/package/x11r7/pthread-stubs/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_PTHREAD_STUBS
- 	bool "pthread-stubs"
+diff --git a/package/bison/Config.in b/package/bison/Config.in
+index da0ac3f..1a485c4 100644
+--- a/package/bison/Config.in
++++ b/package/bison/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_BISON
+ 	bool "bison"
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_M4
++	# m4 uses fork()
++	depends on BR2_USE_MMU
  	help
--		This library provides weak aliases for pthread functions not
--		provided in libc or otherwise available by default.
--
--		http://xcb.freedesktop.org/
-+	  This library provides weak aliases for pthread functions not
-+	  provided in libc or otherwise available by default.
- 
-+	  http://xcb.freedesktop.org/
+ 	  General-purpose parser generator that converts a
+ 	  grammar description for an LALR context-free grammar into a C
