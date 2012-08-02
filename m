@@ -1,49 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:14 -0000
-Subject: [Buildroot] [git commit branch/next] portaudio: bump to version
-	v19_20111121
-Message-ID: <20120802195238.811AC96EA0@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:16 -0000
+Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
+	version 3.4.3
+Message-ID: <20120802195241.22DDC8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=922fdbcdda7a71447307f648e3c51f42232ddbbe
+commit: http://git.buildroot.net/buildroot/commit/?id=da38ab287ffde1f68a110af8050883d3237ae2cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Murat Demirten <mdemirten@yh.com.tr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/portaudio/portaudio.mk |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
-index a824735..b0340f7 100644
---- a/package/portaudio/portaudio.mk
-+++ b/package/portaudio/portaudio.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 26e0872..1cd05ae 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_4
  
--PORTAUDIO_VERSION = V19
-+PORTAUDIO_VERSION = v19_20111121
- PORTAUDIO_SITE = http://www.portaudio.com/archives
--PORTAUDIO_SOURCE = pa_stable_v19_20110326.tgz
-+PORTAUDIO_SOURCE = pa_stable_$(PORTAUDIO_VERSION).tgz
- PORTAUDIO_INSTALL_STAGING = YES
- PORTAUDIO_MAKE = $(MAKE1)
+ config BR2_LINUX_KERNEL_3_4
+-	bool "3.4.2"
++	bool "3.4.3"
  
- PORTAUDIO_DEPENDENCIES = \
--       $(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
-+	$(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
  
- PORTAUDIO_CONF_OPT = \
--       $(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
--       $(if $(BR2_PACKAGE_PORTAUDIO_OSS),--with-oss,--without-oss) \
--       $(if $(BR2_PACKAGE_PORTAUDIO_CXX),--enable-cxx,--disable-cxx)
-+	$(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
-+	$(if $(BR2_PACKAGE_PORTAUDIO_OSS),--with-oss,--without-oss) \
-+	$(if $(BR2_PACKAGE_PORTAUDIO_CXX),--enable-cxx,--disable-cxx)
- 
- $(eval $(call AUTOTARGETS))
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.4.2" if BR2_LINUX_KERNEL_3_4
++	default "3.4.3" if BR2_LINUX_KERNEL_3_4
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
