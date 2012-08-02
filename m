@@ -1,36 +1,105 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:30 -0000
-Subject: [Buildroot] [git commit branch/next] wget: requires wchar support
-Message-ID: <20120802195245.89BFA8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gstreamer: add xorg support
+Message-ID: <20120802195243.97AD48E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d8343a9ac81f3566ca3a093f3699d21bfce67cd
+commit: http://git.buildroot.net/buildroot/commit/?id=e607b0f9e3efaf96ffb2c3196f736c80232adc1b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/431853a9fda593fba41c1176ecee0bdfe38ce441
+GStreamer requires xorg support in order for the ximagesink and xvimagesink
+plugins to be available.
 
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/wget/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/multimedia/gst-plugins-base/Config.in      |    3 +++
+ .../gst-plugins-base/gst-plugins-base.mk           |   16 +++++++++++++---
+ .../gst-plugins-good/gst-plugins-good.mk           |   16 +++++++++++++---
+ 3 files changed, 29 insertions(+), 6 deletions(-)
 
-diff --git a/package/wget/Config.in b/package/wget/Config.in
-index 3f79a64..354b48f 100644
---- a/package/wget/Config.in
-+++ b/package/wget/Config.in
-@@ -2,7 +2,11 @@ config BR2_PACKAGE_WGET
- 	bool "wget"
- 	# fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR
+diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
+index 851337b..5d82533 100644
+--- a/package/multimedia/gst-plugins-base/Config.in
++++ b/package/multimedia/gst-plugins-base/Config.in
+@@ -1,6 +1,9 @@
+ menuconfig BR2_PACKAGE_GST_PLUGINS_BASE
+ 	bool "gst-plugins-base"
+ 	depends on BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXV if BR2_PACKAGE_XORG7
  	help
- 	  Network utility to retrieve files from http, https and ftp.
+ 	  A basic set of well-supported plug-ins for GStreamer.
  
- 	  http://www.gnu.org/software/wget/
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index 848eaf2..e35a606 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -17,15 +17,25 @@ GST_PLUGINS_BASE_CONF_ENV =
+ 
+ GST_PLUGINS_BASE_CONF_OPT = \
+ 		--disable-examples \
+-		--disable-x \
+-		--disable-xvideo \
+-		--disable-xshm \
+ 		--disable-oggtest \
+ 		--disable-vorbistest \
+ 		--disable-freetypetest
+ 
+ GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST_PLUGINS_BASE_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
++GST_PLUGINS_BASE_CONF_OPT += \
++	--enable-x \
++	--enable-xshm \
++	--enable-xvideo
++else
++GST_PLUGINS_BASE_CONF_OPT += \
++	--disable-x \
++	--disable-xshm \
++	--disable-xvideo
++endif
 +
-+comment "wget requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
+ ifeq ($(BR2_PACKAGE_ORC),y)
+ GST_PLUGINS_BASE_DEPENDENCIES += orc
+ endif
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index 4e6b73e..ebd463b 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -14,9 +14,6 @@ GST_PLUGINS_GOOD_CONF_OPT = \
+ 		--disable-sunaudio \
+ 		--disable-osx_audio \
+ 		--disable-osx_video \
+-		--disable-x \
+-		--disable-xshm \
+-		--disable-xvideo \
+ 		--disable-aalib \
+ 		--disable-aalibtest \
+ 		--disable-esd \
+@@ -25,6 +22,19 @@ GST_PLUGINS_GOOD_CONF_OPT = \
+ 
+ GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
+ 
++ifeq ($(BR2_PACKAGE_XORG7),y)
++GST_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
++GST_PLUGINS_GOOD_CONF_OPT += \
++	--enable-x \
++	--enable-xshm \
++	--enable-xvideo
++else
++GST_PLUGINS_GOOD_CONF_OPT += \
++	--disable-x \
++	--disable-xshm \
++	--disable-xvideo
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_JPEG),y)
+ GST_PLUGINS_GOOD_CONF_OPT += --enable-jpeg
+ GST_PLUGINS_GOOD_DEPENDENCIES += jpeg
