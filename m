@@ -1,70 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:42 -0000
-Subject: [Buildroot] [git commit branch/next] xinetd: expand DESTDIR patch
-	to fix uninstall target
-Message-ID: <20120802195242.9726A96EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bsdiff: libraries should go
+	after source files using them in linker invocation
+Message-ID: <20120802195247.CDCF38E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d177d4852ec5549f93671273f07ba60dbabdcc2
+commit: http://git.buildroot.net/buildroot/commit/?id=68b2218cb5b3758e60b8cff399ca17c5153663cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Expand the openWRT patch to fix xinetd's "uninstall" target,
-so that buildroot's "xinetd-clean" removes the correct files.
+Fixes http://autobuild.buildroot.net/results/2a6e213997c06136e18b25a1b0e91d8782acbfc4/
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xinetd/xinetd-2.3.15/002-destdir.patch |   28 ++++++++++++++++++++---
- 1 files changed, 24 insertions(+), 4 deletions(-)
+ package/bsdiff/bsdiff.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xinetd/xinetd-2.3.15/002-destdir.patch b/package/xinetd/xinetd-2.3.15/002-destdir.patch
-index 15ff4b8..7a323eb 100644
---- a/package/xinetd/xinetd-2.3.15/002-destdir.patch
-+++ b/package/xinetd/xinetd-2.3.15/002-destdir.patch
-@@ -1,14 +1,15 @@
- This patch adds $(DESTDIR) to xinetd's installation paths, to support 
- installation to a cross-compiled RFS area.
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index 66a7722..e8d9ec0 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
+@@ -9,10 +9,10 @@ BSDIFF_SITE = http://www.daemonology.net/bsdiff
+ BSDIFF_DEPENDENCIES = bzip2
  
--The content of this patch was copied from the OpenWrt project:
-+The content of this patch was inspired by the OpenWrt project:
- https://dev.openwrt.org/browser/packages/net/xinetd/patches/002-destdir.patch
+ define BSDIFF_BUILD_CMDS
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lbz2 \
+-		$(@D)/bsdiff.c -o $(@D)/bsdiff
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lbz2 \
+-		$(@D)/bspatch.c -o $(@D)/bspatch
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		$(@D)/bsdiff.c -lbz2 -o $(@D)/bsdiff
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		$(@D)/bspatch.c -lbz2 -o $(@D)/bspatch
+ endef
  
- Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
- 
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -75,15 +75,15 @@ dlibxlog: dlibsio dlibstr
-+diff -urN xinetd-2.3.15.ORIG/Makefile.in xinetd-2.3.15/Makefile.in
-+--- xinetd-2.3.15.ORIG/Makefile.in	2007-09-20 13:01:52.000000000 -0400
-++++ xinetd-2.3.15/Makefile.in	2012-06-18 10:20:00.540864388 -0400
-+@@ -75,27 +75,27 @@
-  
-  install: build
-  	for i in $(DAEMONDIR) $(BINDIR) $(MANDIR)/man5 $(MANDIR)/man8 ; do \
-@@ -33,3 +34,22 @@ Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-  	@echo "You must put your xinetd.conf in /etc/xinetd.conf"
-  	@echo "There is a sample config file in xinetd/sample.conf and you can"
-  	@echo "use xconv.pl to convert your old inetd.conf file to an xinetd format"
-+ 
-+ uninstall:
-+-	rm -f $(DAEMONDIR)/xinetd
-+-	rm -f $(DAEMONDIR)/itox
-+-	rm -f $(DAEMONDIR)/xconv.pl
-+-	rm -f $(MANDIR)/man5/xinetd.conf.5
-+-	rm -f $(MANDIR)/man8/xinetd.log.8
-+-	rm -f $(MANDIR)/man8/xinetd.8
-+-	rm -f $(MANDIR)/man8/itox.8
-++	rm -f $(DESTDIR)$(DAEMONDIR)/xinetd
-++	rm -f $(DESTDIR)$(DAEMONDIR)/itox
-++	rm -f $(DESTDIR)$(DAEMONDIR)/xconv.pl
-++	rm -f $(DESTDIR)$(MANDIR)/man5/xinetd.conf.5
-++	rm -f $(DESTDIR)$(MANDIR)/man8/xinetd.log.8
-++	rm -f $(DESTDIR)$(MANDIR)/man8/xinetd.8
-++	rm -f $(DESTDIR)$(MANDIR)/man8/itox.8
-+  
-+ distclean: clean
-+ 	rm -f config.cache config.log Makefile config.status xinetd/itox
+ define BSDIFF_INSTALL_TARGET_CMDS
