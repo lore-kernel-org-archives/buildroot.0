@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Aug 2012 21:46:12 +0200
-Subject: [Buildroot] [git commit branch/next] nanocom: add license
-	information
-Message-ID: <20120802195306.3A4A68F456@busybox.osuosl.org>
+Date: Thu, 2 Aug 2012 22:13:19 +0200
+Subject: [Buildroot] Apologies
+Message-ID: <20120802221319.380170fc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=71fd5f5b28ea889ccd9b371627c0c37aef214e92
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/nanocom/nanocom.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+As you have probably seen, you have received hundreds of commit
+e-mails. These are due to the fact that I rebased and pushed the next
+branch to start accumulating non bug fix changes that will be
+integrated into the 2012.11 release.
 
-diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
-index 1e46100..a88daeb 100644
---- a/package/nanocom/nanocom.mk
-+++ b/package/nanocom/nanocom.mk
-@@ -6,6 +6,8 @@
- NANOCOM_VERSION = 2.6.1
- NANOCOM_SOURCE = nanocom.tar.gz
- NANOCOM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nanocom/nanocom/v1.0
-+NANOCOM_LICENSE = GPLv2+
-+NANOCOM_LICENSE_FILES = COPYING
- 
- # N.B. Don't strip any path components during extraction.
- define NANOCOM_EXTRACT_CMDS
+However, I apparently didn't do that the way Peter was doing it, and
+the commit e-mail scripts decided to send one e-mail for each of the
+new commits that appeared in the next branch since the last time it was
+rebased. So basically, you're going to see *all* the commits that
+happened during the 2012.08 cycle :-(
+
+I guess that I should have deleted the next branch completely, and then
+push a completely new branch. The end result would have been the same,
+except for the hundreds of e-mails.
+
+My sincere apologies for the mess.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
