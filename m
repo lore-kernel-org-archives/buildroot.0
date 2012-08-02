@@ -1,91 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:54 -0000
-Subject: [Buildroot] [git commit branch/next] libmad: Add optimization
-	config options
-Message-ID: <20120802195249.15DF68E204@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] orc: remove redundant
+	HOST_ORC_DEPENDENCIES
+Message-ID: <20120802195249.D1E2E96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=830c5868ed96a06007050f6b134e2a9954e88b10
+commit: http://git.buildroot.net/buildroot/commit/?id=585a4b0aa6e964fd0dca39aef8feeb72b6bce39c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Configuring libmad with --enable-speed compromises accuracy and can cause audio
-clipping in some cases (heard on ARM platform with some loud MP3s), so give
-users the choice of MAD optimizations.
-
-The default config corresponds to the default behavior of libmad's configure.
-
-Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmad/Config.in |   41 +++++++++++++++++++++++++++++++++++++++++
- package/libmad/libmad.mk |    6 +++++-
- 2 files changed, 46 insertions(+), 1 deletions(-)
+ package/orc/orc.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmad/Config.in b/package/libmad/Config.in
-index 4d4f930..d0edc49 100644
---- a/package/libmad/Config.in
-+++ b/package/libmad/Config.in
-@@ -6,3 +6,44 @@ config BR2_PACKAGE_LIBMAD
- 	  without a floating-point unit.
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index 6602e36..97c80f2 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -7,7 +7,6 @@ ORC_VERSION = 0.4.14
+ ORC_SITE = http://code.entropywave.com/download/orc/
+ ORC_INSTALL_STAGING = YES
+ ORC_DEPENDENCIES = host-orc
+-HOST_ORC_DEPENDENCIES =
  
- 	  http://www.underbit.com/products/mad/
-+
-+if BR2_PACKAGE_LIBMAD
-+
-+choice
-+	prompt "Speed vs. accuracy"
-+	default BR2_PACKAGE_LIBMAD_OPTIMIZATION_DEFAULT
-+
-+config BR2_PACKAGE_LIBMAD_OPTIMIZATION_DEFAULT
-+	bool "Default"
-+	help
-+	  Keep optimizations balanced between speed and accuracy.
-+
-+config BR2_PACKAGE_LIBMAD_OPTIMIZATION_SPEED
-+	bool "Optimize for speed over accuracy"
-+	help
-+	  Compromise accuracy for speed.
-+
-+config BR2_PACKAGE_LIBMAD_OPTIMIZATION_ACCURACY
-+	bool "Optimize for accuracy over speed"
-+	help
-+	  Compromise speed for accuracy.
-+
-+endchoice
-+
-+config BR2_PACKAGE_LIBMAD_SSO
-+	bool "Subband synthesis optimization"
-+	help
-+	  Use the subband synthesis optimization, with reduced accuracy.
-+
-+config BR2_PACKAGE_LIBMAD_ASO
-+	bool "Architecture-specific optimizations"
-+	default y
-+	help
-+	  Use certain architecture-specific optimizations.
-+
-+config BR2_PACKAGE_LIBMAD_STRICT_ISO
-+	bool "Strict ISO/IEC interpretations"
-+	help
-+	  Use strict ISO/IEC interpretations.
-+
-+endif
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index 6e53cf2..3c92d52 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -30,6 +30,10 @@ LIBMAD_POST_INSTALL_TARGET_HOOKS += LIBMAD_INSTALL_TARGET_PC
- 
- LIBMAD_CONF_OPT = \
- 		--disable-debugging \
--		--enable-speed
-+		$(if $(BR2_PACKAGE_LIBMAD_OPTIMIZATION_SPEED),--enable-speed) \
-+		$(if $(BR2_PACKAGE_LIBMAD_OPTIMIZATION_ACCURACY),--enable-accuracy) \
-+		--$(if $(BR2_PACKAGE_LIBMAD_SSO),enable,disable)-sso \
-+		--$(if $(BR2_PACKAGE_LIBMAD_ASO),enable,disable)-aso \
-+		--$(if $(BR2_PACKAGE_LIBMAD_STRICT_ISO),enable,disable)-strict-iso
- 
- $(eval $(call AUTOTARGETS))
+ define ORC_REMOVE_BUGREPORT
+ 	rm -f $(TARGET_DIR)/usr/bin/orc-bugreport
