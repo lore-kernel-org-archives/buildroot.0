@@ -1,142 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:56 -0000
-Subject: [Buildroot] [git commit branch/next] package: add mediastreamer
-Message-ID: <20120802195235.242A896AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] add host arch detection and
+	Kconfig BR2_HOSTARCH
+Message-ID: <20120802195255.B77638D2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdf093b7cef81cc9cbf8bdab3a7e2d88a02d611d
+commit: http://git.buildroot.net/buildroot/commit/?id=1d4104f0d0428297a8b447a0e08c81a9eaee7f62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-It doesn't really need C++ support on Linux, but the configure script
-checks for it (and fails if not available), and the package is not easy
-to autoreconf as there's C++ source files for Android/Windows, causing
-automake to fail if AC_PROG_CXX isn't set.
+This will allow to install binary package only if they are supported by the
+host. As example Atmel SAM-BA (x86 only).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                      |    1 +
- package/mediastreamer/Config.in        |   16 +++++++
- package/mediastreamer/mediastreamer.mk |   77 ++++++++++++++++++++++++++++++++
- 3 files changed, 94 insertions(+), 0 deletions(-)
+ Config.in |    4 ++++
+ Makefile  |   10 ++++++++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3e97ae5..dde5800 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -388,6 +388,7 @@ source "package/libogg/Config.in"
- source "package/libplayer/Config.in"
- source "package/libtheora/Config.in"
- source "package/live555/Config.in"
-+source "package/mediastreamer/Config.in"
- endmenu
+diff --git a/Config.in b/Config.in
+index 925c247..c182f70 100644
+--- a/Config.in
++++ b/Config.in
+@@ -10,6 +10,10 @@ config BR2_VERSION
+ 	string
+ 	option env="BR2_VERSION_FULL"
  
- menu "Networking"
-diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
-new file mode 100644
-index 0000000..2e1af93
---- /dev/null
-+++ b/package/mediastreamer/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_MEDIASTREAMER
-+	bool "mediastreamer"
-+	select BR2_PACKAGE_ORTP
-+	depends on BR2_INSTALL_LIBSTDCPP # until fixed
-+	help
-+	  Mediastreamer is a powerful and lightweighted streaming
-+	  engine specialized for voice/video telephony applications.
++config BR2_HOSTARCH
++	string
++	option env="HOSTARCH"
 +
-+	  It is the library that is responsible for all the receiving
-+	  and sending of multimedia streams in linphone, including
-+	  voice/video capture, encoding and decoding, and rendering.
+ source "target/Config.in.arch"
+ 
+ menu "Build options"
+diff --git a/Makefile b/Makefile
+index d55b136..639fdaa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -32,6 +32,16 @@ ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSI
+ $(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
+ endif
+ 
++export HOSTARCH := $(shell uname -m | \
++	sed -e s/i.86/x86/ \
++	    -e s/sun4u/sparc64/ \
++	    -e s/arm.*/arm/ \
++	    -e s/sa110/arm/ \
++	    -e s/ppc64/powerpc/ \
++	    -e s/ppc/powerpc/ \
++	    -e s/macppc/powerpc/\
++	    -e s/sh.*/sh/)
 +
-+	  http://www.linphone.org/eng/documentation/dev/mediastreamer2.html
-+
-+comment "mediastreamer requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-new file mode 100644
-index 0000000..bea6fb3
---- /dev/null
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -0,0 +1,77 @@
-+MEDIASTREAMER_VERSION = 2.8.2
-+MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
-+MEDIASTREAMER_INSTALL_STAGING = YES
-+MEDIASTREAMER_DEPENDENCIES = host-pkg-config ortp
-+
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+MEDIASTREAMER_CONF_OPT += --enable-alsa
-+MEDIASTREAMER_DEPENDENCIES += alsa-lib
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-alsa
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+MEDIASTREAMER_CONF_OPT += --enable-portaudio
-+MEDIASTREAMER_DEPENDENCIES += portaudio
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-portaudio
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+MEDIASTREAMER_CONF_OPT += --enable-pulseaudio
-+MEDIASTREAMER_DEPENDENCIES += pulseaudio
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-pulseaudio
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SPEEX),y)
-+MEDIASTREAMER_CONF_OPT += --enable-speex
-+MEDIASTREAMER_DEPENDENCIES += speex
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-speex
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
-+MEDIASTREAMER_CONF_OPT += --enable-ffmpeg
-+MEDIASTREAMER_DEPENDENCIES += ffmpeg
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-ffmpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL),y)
-+MEDIASTREAMER_CONF_OPT += --enable-sdl
-+MEDIASTREAMER_DEPENDENCIES += sdl
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-sdl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+MEDIASTREAMER_CONF_OPT += --enable-x11
-+MEDIASTREAMER_DEPENDENCIES += xlib_libX11
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
-+MEDIASTREAMER_CONF_OPT += --enable-xv
-+MEDIASTREAMER_DEPENDENCIES += xlib_libXv
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-xv
-+endif
-+
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-x11
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBTHEORA),y)
-+MEDIASTREAMER_CONF_OPT += --enable-theora
-+MEDIASTREAMER_DEPENDENCIES += libtheora
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-theora
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+MEDIASTREAMER_CONF_OPT += --enable-libv4l1 --enable-libv4l2
-+MEDIASTREAMER_DEPENDENCIES += libv4l
-+else
-+MEDIASTREAMER_CONF_OPT += --disable-libv4l1 --disable-libv4l2
-+endif
-+
-+$(eval $(call AUTOTARGETS))
+ # This top-level Makefile can *not* be executed in parallel
+ .NOTPARALLEL:
+ 
