@@ -1,49 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:46 -0000
-Subject: [Buildroot] [git commit branch/next] ltrace: unbreak build on
-	uClibc after REAL_GNU_TARGET_NAME removal
-Message-ID: <20120802195243.E1FE596EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] gzip: 1.5+ needs wchar support
+Message-ID: <20120802195245.793E88C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3cd8183f875a56ccffd0adf951ae6caed4b8b0a5
+commit: http://git.buildroot.net/buildroot/commit/?id=c18532766f65ea19b29000ccbb56a5aa7777f698
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/b7456bb91a89f866f91e8c21a8ed5de98f25e6be
+Fixes http://autobuild.buildroot.net/results/267404bccd9582d3b85b99b16b47b580bf239eb9/
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ltrace/ltrace-0.6.0-uclibc.patch |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
+ package/gzip/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/ltrace/ltrace-0.6.0-uclibc.patch b/package/ltrace/ltrace-0.6.0-uclibc.patch
-new file mode 100644
-index 0000000..8bec2ae
---- /dev/null
-+++ b/package/ltrace/ltrace-0.6.0-uclibc.patch
-@@ -0,0 +1,22 @@
-+[PATCH] configure.ac: Recognize linux-uclibc as well
+diff --git a/package/gzip/Config.in b/package/gzip/Config.in
+index dc9d50b..f501d5c 100644
+--- a/package/gzip/Config.in
++++ b/package/gzip/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_GZIP
+ 	bool "gzip"
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Standard GNU compressor.  Provides things like gzip,
+ 	  gunzip, gzcat, etc...
+ 
+ 	  http://www.gnu.org/software/gzip/gzip.html
 +
-+Ltrace works on uClibc as well as on glibc, so accept it.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ configure.ac |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: ltrace-0.6.0/configure.ac
-+===================================================================
-+--- ltrace-0.6.0.orig/configure.ac
-++++ ltrace-0.6.0/configure.ac
-+@@ -11,7 +11,7 @@
-+ AC_CANONICAL_HOST
-+ 
-+ case "${host_os}" in
-+-    linux-gnu*)	HOST_OS="linux-gnu" ;;
-++    linux-gnu* | linux-uclibc*)	HOST_OS="linux-gnu" ;;
-+     *)		AC_MSG_ERROR([unkown host-os ${host_osx}]) ;;
-+ esac
-+ AC_SUBST(HOST_OS)
++comment "gzip requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
