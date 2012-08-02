@@ -1,36 +1,66 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:33 -0000
-Subject: [Buildroot] [git commit branch/next] tcpreplay: cleanup
-Message-ID: <20120802195246.093168C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] openocd: fix breakage with
+	newer autotools
+Message-ID: <20120802195244.C93018C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2ddfdb11a2c28c511a2a4d5bf0060217c93d140
+commit: http://git.buildroot.net/buildroot/commit/?id=ff3cf356802b9b2447d510d361f6c1cf3e5308b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Drop unneeded uclibc dependency and autoreconf as patch changes
-configure.ac.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tcpreplay/tcpreplay.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/openocd/openocd-0006-automake-compat.patch |   40 ++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 3a526a7..72abade 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -8,8 +8,8 @@ TCPREPLAY_VERSION = 3.4.3
- TCPREPLAY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/tcpreplay
- TCPREPLAY_CONF_ENV = tr_cv_libpcap_version=">= 0.7.0"
- TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
--
--TCPREPLAY_DEPENDENCIES = uclibc libpcap
-+TCPREPLAY_AUTORECONF = YES
-+TCPREPLAY_DEPENDENCIES = libpcap
- 
- $(eval $(call AUTOTARGETS))
- 
+diff --git a/package/openocd/openocd-0006-automake-compat.patch b/package/openocd/openocd-0006-automake-compat.patch
+new file mode 100644
+index 0000000..cdc6c92
+--- /dev/null
++++ b/package/openocd/openocd-0006-automake-compat.patch
+@@ -0,0 +1,40 @@
++Backport from openocd commit 737a52d7b22b1774acc5d20f9bd25000a70ac116
++Fix for automake 1.11.2+
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura openocd-0.5.0/src/jtag/drivers/Makefile.am openocd-0.5.0.automake/src/jtag/drivers/Makefile.am
++--- openocd-0.5.0/src/jtag/drivers/Makefile.am	2011-08-09 02:34:19.000000000 -0300
+++++ openocd-0.5.0.automake/src/jtag/drivers/Makefile.am	2012-05-01 13:57:01.007561480 -0300
++@@ -5,7 +5,8 @@
++ libocdjtagdrivers_la_SOURCES = \
++ 	$(DRIVERFILES)
++ 
++-nobase_dist_pkglib_DATA =
+++ocddatadir = $(pkglibdir)
+++nobase_dist_ocddata_DATA =
++ 
++ ULINK_FIRMWARE = $(srcdir)/OpenULINK
++ 
++@@ -64,7 +65,7 @@
++ endif
++ if ULINK
++ DRIVERFILES += ulink.c
++-nobase_dist_pkglib_DATA += $(ULINK_FIRMWARE)/ulink_firmware.hex
+++nobase_dist_ocddata_DATA += $(ULINK_FIRMWARE)/ulink_firmware.hex
++ endif
++ if VSLLINK
++ DRIVERFILES += vsllink.c
++diff -Nura openocd-0.5.0/src/target/Makefile.am openocd-0.5.0.automake/src/target/Makefile.am
++--- openocd-0.5.0/src/target/Makefile.am	2011-08-09 02:34:19.000000000 -0300
+++++ openocd-0.5.0.automake/src/target/Makefile.am	2012-05-01 13:57:01.934567076 -0300
++@@ -165,7 +165,7 @@
++ 	avr32_mem.h \
++ 	avr32_regs.h
++ 
++-nobase_dist_pkglib_DATA =
++-nobase_dist_pkglib_DATA += ecos/at91eb40a.elf
+++ocddatadir = $(pkglibdir)
+++nobase_dist_ocddata_DATA = ecos/at91eb40a.elf
++ 
++ MAINTAINERCLEANFILES = $(srcdir)/Makefile.in
