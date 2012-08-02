@@ -1,98 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:53 -0000
-Subject: [Buildroot] [git commit branch/next] Update for 2012.05
-Message-ID: <20120802195234.A685A96EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] php: fix build error for snmp
+	extension
+Message-ID: <20120802195236.098F096AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bce34ab199dea7e8430971ae31d743e246049785
+commit: http://git.buildroot.net/buildroot/commit/?id=48189d95001c41969ffddad427aaf73a9b57bc15
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+PHP requires that net-snmp be built with the ability to load MIB code,
+so force it on when the extension is enabled.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES            |    4 ++++
- Makefile           |    2 +-
- docs/download.html |   10 +++++-----
- docs/news.html     |    9 +++++++++
- 4 files changed, 19 insertions(+), 6 deletions(-)
+ package/php/Config.ext |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 4a8bed0..5043bc9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,7 @@
-+2012.05, Released May 30th, 2012:
-+
-+	Updated/fixed packages: busybox, netsnmp, pptp-linux
-+
- 2012.05-rc3, Released May 25th, 2012:
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index fa73bb4..80bab70 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -219,6 +219,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
+ config BR2_PACKAGE_PHP_EXT_SNMP
+ 	bool "SNMP"
+ 	select BR2_PACKAGE_NETSNMP
++	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+ 	help
+ 	  SNMP support
  
- 	Minor fixes around the tree.
-diff --git a/Makefile b/Makefile
-index 4945c16..98e1a51 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2012.05-rc3
-+export BR2_VERSION:=2012.05
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index 57c8be5..d23e7e9 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -6,14 +6,14 @@
- 
- <p>
- 
--The latest stable release is <b>2012.02</b>, which can be downloaded
-+The latest stable release is <b>2012.05</b>, which can be downloaded
- here:<p>
- 
--<a href="/downloads/buildroot-2012.02.tar.gz">buildroot-2012.02.tar.gz</a>
-+<a href="/downloads/buildroot-2012.05.tar.gz">buildroot-2012.05.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.05.tar.bz2">buildroot-2012.05.tar.bz2</a>.
- <p>
--
-+<!--
- The latest release candidate is <b>2012.05-rc3</b>, which can be
- downloaded here:<p>
- 
-@@ -21,7 +21,7 @@ downloaded here:<p>
- or
- <a href="/downloads/buildroot-2012.05-rc3.tar.bz2">buildroot-2012.05-rc3.tar.bz2</a>.
- <p>
--
-+-->
- This and earlier releases can always be downloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
-diff --git a/docs/news.html b/docs/news.html
-index 94d1d94..8b52650 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,15 @@
- <p>
- 
- <ul>
-+  <li><b>30 May 2012 -- 2012.05 released</b>
-+
-+    <p>The stable 2012.05 release is out - Thanks to everyone
-+    contributing and testing the release candidates. See the
-+    <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
-+    file for more details
-+    and go to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
-+
-   <li><b>25 May 2012 -- 2012.05-rc3 released</b>
- 
-     <p>RC3 is out with more bugfixes - See the <a
