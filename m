@@ -1,46 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:54:22 -0000
-Subject: [Buildroot] [git commit branch/next] cgilua: bump version to 5.1.4
-Message-ID: <20120802195247.0F0198C999@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:54:33 -0000
+Subject: [Buildroot] [git commit branch/next] toolchain/powerpc: SPE ABI is
+	not available for e500mc
+Message-ID: <20120802195248.AC03D8E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6ef9dd63d63c98d8c8f2cc0ada207944ee2dd69
+commit: http://git.buildroot.net/buildroot/commit/?id=37aa01f2cf3e05f6e52df056c22e5733fd1164ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cgilua/Config.in |    2 +-
- package/cgilua/cgilua.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ target/Config.in.arch |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
-index b43ba97..2f9c452 100644
---- a/package/cgilua/Config.in
-+++ b/package/cgilua/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_CGILUA
- 	  CGILua is a tool for creating dynamic HTML pages
- 	  and manipulating input data from Web forms.
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 25ff750..c9bbc12 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -556,8 +556,8 @@ endchoice
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_powerpc
+-	default BR2_powerpc_CLASSIC if BR2_powerpc_e500mc
+ 	default BR2_powerpc_SPE if BR2_powerpc_8540 || BR2_powerpc_8548
++	default BR2_powerpc_CLASSIC
+ 	help
+ 	  Application Binary Interface to use
  
--	  http://luaforge.net/projects/cgilua/
-+	  http://keplerproject.github.com/cgilua
-diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
-index d46c2a6..8e5770a 100644
---- a/package/cgilua/cgilua.mk
-+++ b/package/cgilua/cgilua.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
+@@ -566,7 +566,7 @@ config BR2_powerpc_CLASSIC
+ 	depends on !(BR2_powerpc_8540 || BR2_powerpc_8548)
+ config BR2_powerpc_SPE
+ 	bool "SPE"
+-	depends on BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
++	depends on BR2_powerpc_8540 || BR2_powerpc_8548
+ endchoice
  
--CGILUA_VERSION = 5.1.3
--CGILUA_SITE = http://luaforge.net/frs/download.php/3970
-+CGILUA_VERSION = 5.1.4
-+CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
- CGILUA_DEPENDENCIES = luafilesystem
- 
- define CGILUA_INSTALL_TARGET_CMDS
+ config BR2_ARCH
