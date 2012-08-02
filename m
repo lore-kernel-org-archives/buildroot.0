@@ -1,78 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:51 -0000
-Subject: [Buildroot] [git commit branch/next] igh-ethercat: use release
-	tarball instead of mercurial branch
-Message-ID: <20120802195246.5386E8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] bonnie: needs MMU
+Message-ID: <20120802195248.7652D8E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f7879e02479818fac17c0c281511b492da904ee
+commit: http://git.buildroot.net/buildroot/commit/?id=528607d04cb5ecbf367fa30a17481b0dded55ceb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The Mercurial branch may change, which leads to non-reproducible builds.
-So download a released version instead.
+Fixes
+http://autobuild.buildroot.net/results/08cc7fdf21f8e51b793c0cf7a51b3f190ea7668c/build-end.log
 
-Also add configure option for e1000e.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/igh-ethercat/Config.in       |    3 +++
- package/igh-ethercat/igh-ethercat.mk |   20 ++++----------------
- 2 files changed, 7 insertions(+), 16 deletions(-)
+ package/bonnie/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
-index 764a021..890bb12 100644
---- a/package/igh-ethercat/Config.in
-+++ b/package/igh-ethercat/Config.in
-@@ -17,6 +17,9 @@ config BR2_PACKAGE_IGH_ETHERCAT_E100
- config BR2_PACKAGE_IGH_ETHERCAT_E1000
- 	bool "e1000 driver"
+diff --git a/package/bonnie/Config.in b/package/bonnie/Config.in
+index 9dda4b6..91b1e96 100644
+--- a/package/bonnie/Config.in
++++ b/package/bonnie/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BONNIE
+ 	bool "bonnie++"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Filesystem tester
  
-+config BR2_PACKAGE_IGH_ETHERCAT_E1000E
-+	bool "e1000e driver"
-+
- config BR2_PACKAGE_IGH_ETHERCAT_R8169
- 	bool "r8169 driver"
- 
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b6ac5b8..f04eb57 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -1,8 +1,7 @@
--IGH_ETHERCAT_VERSION = stable-1.5
--IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
--IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
-+IGH_ETHERCAT_VERSION = 1.5.1
-+IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
-+IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
- 
--IGH_ETHERCAT_AUTORECONF      = YES
- IGH_ETHERCAT_DEPENDENCIES    = linux
- IGH_ETHERCAT_INSTALL_STAGING = YES
- 
-@@ -12,20 +11,9 @@ IGH_ETHERCAT_CONF_OPT = \
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
--# Since we download ethercat from source control, we have to emulate
--# the bootstrap script that creates the ChangeLog file before running
--# autoreconf.  We don't want to run that script directly, since we
--# leave to the autotargets infrastructure the responsability of
--# running 'autoreconf' so that the dependencies on host-automake,
--# host-autoconf and al. are correct.
--define IGH_ETHERCAT_CREATE_CHANGELOG
--	touch $(@D)/ChangeLog
--endef
--
--IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
--
- define IGH_ETHERCAT_BUILD_MODULES
- 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
- endef
