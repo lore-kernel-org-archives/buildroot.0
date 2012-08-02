@@ -1,41 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:52 -0000
-Subject: [Buildroot] [git commit branch/next] connman: needs IPv6 support in
-	toolchain
-Message-ID: <20120802195235.9EA0296EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libcap: remove redundant
+	HOST_LIBCAP_DEPENDENCIES
+Message-ID: <20120802195249.B242596EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=34ea3b3c6461423ba8ad43089a15498f8cc1eb32
+commit: http://git.buildroot.net/buildroot/commit/?id=8db1cb467eda44a9269d2a60ced90b064b5431ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/c405f9b3a59463fb7367daeb63e282c5d60f0685
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/connman/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/libcap/libcap.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index ebe0cee..c9bc94f 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_GNUTLS
- 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
- 	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_INET_IPV6
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon for
- 	  managing internet connections within embedded devices running
-@@ -45,5 +46,5 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 4683121..9d6acf2 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -10,7 +10,6 @@ LIBCAP_VERSION = 2.22
+ LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
+ LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
+ LIBCAP_DEPENDENCIES = host-libcap
+-HOST_LIBCAP_DEPENDENCIES =
+ LIBCAP_INSTALL_STAGING = YES
  
- endif # BR2_PACKAGE_CONNMAN
- 
--comment "connman needs a toolchain with WCHAR and resolver support"
--	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32 || !BR2_USE_WCHAR
-+comment "connman needs a toolchain with IPv6, WCHAR and resolver support"
-+	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32 || !BR2_USE_WCHAR || !BR2_INET_IPV6
+ define LIBCAP_BUILD_CMDS
