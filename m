@@ -1,66 +1,70 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:42 -0000
-Subject: [Buildroot] [git commit branch/next] docs: update LIBFOO_SITE to
-	describe use of filesystem paths
-Message-ID: <20120802195247.8B52196EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] xinetd: expand DESTDIR patch
+	to fix uninstall target
+Message-ID: <20120802195242.9726A96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c62b04ce9a029943185da187b8e6a17a52591cba
+commit: http://git.buildroot.net/buildroot/commit/?id=2d177d4852ec5549f93671273f07ba60dbabdcc2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Buildroot supports the use of local filesystem paths in LIBFOO_SITE
-since the 2011.11 release, but this is not documented in the manual.
-Fix this and slightly reword the surrounding doucmentation
-accordingly.
+Expand the openWRT patch to fix xinetd's "uninstall" target,
+so that buildroot's "xinetd-clean" removes the correct files.
 
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-gentargets.txt |   21 ++++++++++++++-------
- 1 files changed, 14 insertions(+), 7 deletions(-)
+ package/xinetd/xinetd-2.3.15/002-destdir.patch |   28 ++++++++++++++++++++---
+ 1 files changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
-index cfcee8c..918580e 100644
---- a/docs/manual/adding-packages-gentargets.txt
-+++ b/docs/manual/adding-packages-gentargets.txt
-@@ -156,13 +156,18 @@ information is (assuming the package name is +libfoo+) :
-   package directory inside Buildroot will be applied to the package
-   after extraction.
+diff --git a/package/xinetd/xinetd-2.3.15/002-destdir.patch b/package/xinetd/xinetd-2.3.15/002-destdir.patch
+index 15ff4b8..7a323eb 100644
+--- a/package/xinetd/xinetd-2.3.15/002-destdir.patch
++++ b/package/xinetd/xinetd-2.3.15/002-destdir.patch
+@@ -1,14 +1,15 @@
+ This patch adds $(DESTDIR) to xinetd's installation paths, to support 
+ installation to a cross-compiled RFS area.
  
--* +LIBFOO_SITE+ may contain the Internet location of the package. It
--  can either be the HTTP, FTP or SCP location of a tarball, or the URL
--  of a Git, Subversion, Mercurial or Bazaar repository (see
--  +LIBFOO_SITE_METHOD+ below). +
--  SCP URLs should be of the form +scp://[user@]host:filepath+. Note
--  that filepath is relative to the user's home directory, so you may want
--  to prepend the path with a slash for absolute paths:
-+* +LIBFOO_SITE+ provides the location of the package, which can be a
-+  URL or a local filesystem path. HTTP, FTP and SCP are supported URL
-+  types for retrieving package tarballs. Git, Subversion, Mercurial,
-+  and Bazaar are supported URL types for retrieving packages directly
-+  from source code management systems. A filesystem path may be used
-+  to specify either a tarball or a directory containing the package
-+  source code. See +LIBFOO_SITE_METHOD+ below for more details on how
-+  retrieval works. +
-+  Note that SCP URLs should be of the form
-+  +scp://[user@]host:filepath+, and that filepath is relative to the
-+  user's home directory, so you may want to prepend the path with a
-+  slash for absolute paths:
-   +scp://[user@]host:/absolutepath+. +
-   If +HOST_LIBFOO_SITE+ is not specified, it defaults to
-   +LIBFOO_SITE+. If none are specified, then the location is assumed
-@@ -172,6 +177,8 @@ information is (assuming the package name is +libfoo+) :
-     +LIBFOO_SITE=http://www.libfoosoftware.org/libfoo+ +
-     +LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/+ +
-     +LIBFOO_SITE=git://github.com/kergoth/tslib.git+
-+    +LIBFOO_SITE=/opt/software/libfoo.tar.gz+
-+    +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
+-The content of this patch was copied from the OpenWrt project:
++The content of this patch was inspired by the OpenWrt project:
+ https://dev.openwrt.org/browser/packages/net/xinetd/patches/002-destdir.patch
  
- * +LIBFOO_SITE_METHOD+ may contain the method to fetch the package
-   source code. It can either be +wget+ (for normal FTP/HTTP downloads
+ Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ 
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -75,15 +75,15 @@ dlibxlog: dlibsio dlibstr
++diff -urN xinetd-2.3.15.ORIG/Makefile.in xinetd-2.3.15/Makefile.in
++--- xinetd-2.3.15.ORIG/Makefile.in	2007-09-20 13:01:52.000000000 -0400
+++++ xinetd-2.3.15/Makefile.in	2012-06-18 10:20:00.540864388 -0400
++@@ -75,27 +75,27 @@
+  
+  install: build
+  	for i in $(DAEMONDIR) $(BINDIR) $(MANDIR)/man5 $(MANDIR)/man8 ; do \
+@@ -33,3 +34,22 @@ Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+  	@echo "You must put your xinetd.conf in /etc/xinetd.conf"
+  	@echo "There is a sample config file in xinetd/sample.conf and you can"
+  	@echo "use xconv.pl to convert your old inetd.conf file to an xinetd format"
++ 
++ uninstall:
++-	rm -f $(DAEMONDIR)/xinetd
++-	rm -f $(DAEMONDIR)/itox
++-	rm -f $(DAEMONDIR)/xconv.pl
++-	rm -f $(MANDIR)/man5/xinetd.conf.5
++-	rm -f $(MANDIR)/man8/xinetd.log.8
++-	rm -f $(MANDIR)/man8/xinetd.8
++-	rm -f $(MANDIR)/man8/itox.8
+++	rm -f $(DESTDIR)$(DAEMONDIR)/xinetd
+++	rm -f $(DESTDIR)$(DAEMONDIR)/itox
+++	rm -f $(DESTDIR)$(DAEMONDIR)/xconv.pl
+++	rm -f $(DESTDIR)$(MANDIR)/man5/xinetd.conf.5
+++	rm -f $(DESTDIR)$(MANDIR)/man8/xinetd.log.8
+++	rm -f $(DESTDIR)$(MANDIR)/man8/xinetd.8
+++	rm -f $(DESTDIR)$(MANDIR)/man8/itox.8
++  
++ distclean: clean
++ 	rm -f config.cache config.log Makefile config.status xinetd/itox
