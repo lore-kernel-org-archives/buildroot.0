@@ -1,41 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:54 -0000
-Subject: [Buildroot] [git commit branch/next] mediastreamer: disable test
-	programs
-Message-ID: <20120802195236.616B996AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] quagga: fix non-IPv6 build
+	failures
+Message-ID: <20120802195236.1877896EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fefae21c3f5f03d9f57dcd61e151acbebbbfbe1b
+commit: http://git.buildroot.net/buildroot/commit/?id=4991fbbdb4aef7f5a7bf22a62872b8b59163102a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Building tests produces an error during the "OBJCLD mediastream" phase with
-some toolchains/architectures.
+The Zebra daemon now requires IPv6 support so disable it for non-IPv6
+toolchains and add a comment mentioning it.
+The BABEL protocol/daemon also requires IPv6 so just enable it when it's
+available.
 
-This is supposed to fix:
- - http://autobuild.buildroot.net/results/7fca436524e5f7ba300d27c615061b0838adb1e2
- - http://autobuild.buildroot.net/results/bd9027ce94348025f1ca02a77eb81b9200124d9a
- - http://autobuild.buildroot.net/results/4d9f554fc29901be1a577ca0c39369befee269b5
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mediastreamer/mediastreamer.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/quagga/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 8327a55..a503490 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -2,6 +2,8 @@ MEDIASTREAMER_VERSION = 2.8.2
- MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
- MEDIASTREAMER_INSTALL_STAGING = YES
- MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkg-config ortp
-+# tests fail linking on some architectures, so disable them
-+MEDIASTREAMER_CONF_OPT = --disable-tests
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 5a01863..0834201 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -10,11 +10,16 @@ if BR2_PACKAGE_QUAGGA
  
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- MEDIASTREAMER_CONF_OPT += --enable-alsa
+ config BR2_PACKAGE_QUAGGA_ZEBRA
+ 	bool "zebra daemon"
++	depends on BR2_INET_IPV6
+ 	help
+ 	  Build zebra daemon.
+ 
++comment "Zebra daemon requires a toolchain with IPV6 support"
++	depends on BR2_PACKAGE_QUAGGA && !BR2_INET_IPV6
++
+ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	bool "Use TCP sockets between zebra and protocol daemons"
++	depends on BR2_PACKAGE_QUAGGA_ZEBRA
+ 	help
+ 	  Use a TCP socket to communicate between zebra (supervisor) and
+ 	  the different protocol daemons.
+@@ -24,6 +29,7 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 
+ config BR2_PACKAGE_QUAGGA_BABELD
+ 	bool "BABEL protocol"
++	depends on BR2_INET_IPV6
+ 	help
+ 	  Build babeld daemon.
+ 
