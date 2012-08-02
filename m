@@ -1,42 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:16 -0000
-Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
-	version 3.4.3
-Message-ID: <20120802195241.22DDC8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libcurl: fix up prefix in
+	curl-config
+Message-ID: <20120802195238.AE89D96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da38ab287ffde1f68a110af8050883d3237ae2cd
+commit: http://git.buildroot.net/buildroot/commit/?id=f83cd598907c5b8ac3a2b1bbb70c071d1ae929d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+While most packages that rely on libcurl use pkg-config, a few
+packages (such as libxmlrpc) still use curl-config. So we need to fix
+up the prefix locations in the curl-config script installed in
+STAGING_DIR.
+
+[Peter: only fixup if prefix=/usr]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 26e0872..1cd05ae 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_4
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e8f13bb..50a55b4 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -30,6 +30,12 @@ endef
  
- config BR2_LINUX_KERNEL_3_4
--	bool "3.4.2"
-+	bool "3.4.3"
+ LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
++define LIBCURL_STAGING_FIXUP_CURL_CONFIG
++	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
++endef
++
++LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
++
+ $(eval $(call AUTOTARGETS))
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.4.2" if BR2_LINUX_KERNEL_3_4
-+	default "3.4.3" if BR2_LINUX_KERNEL_3_4
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ curl: libcurl
