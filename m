@@ -1,35 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:33 -0000
-Subject: [Buildroot] [git commit branch/next] ndisc6: fix build when libintl
-	is enabled
-Message-ID: <20120802195231.CC44796FF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] apr: requires shared library
+	support
+Message-ID: <20120802195232.5ABA296FE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b6f3f2645a50a115c974cdc6dd0e2d8b96837b2
+commit: http://git.buildroot.net/buildroot/commit/?id=02b00dc9dfb7216145277a303c7c2f52004f85b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The apr library requires shared library support unconditionally, so
+make it depend on !BR2_PREFER_STATIC_LIB, so that architectures that
+support static libraries only do not make this package available.
+
+Solves
+http://autobuild.buildroot.org/results/f4cd9751e85e9ee7fde2e9479e0f01ab2be93e84/build-end.log.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ndisc6/ndisc6.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/apr-util/Config.in |    2 ++
+ package/apr/Config.in      |    2 ++
+ 2 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index 8451e06..7cf4b8a 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
-@@ -10,6 +10,11 @@ NDISC6_SITE = http://www.remlab.net/files/ndisc6/
- NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
- NDISC6_CONF_OPT = --localstatedir=/var --disable-rpath --disable-suid-install
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index 99b32f2..895dbb8 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_APR_UTIL
+ 	select BR2_PACKAGE_NEON
+ 	select BR2_PACKAGE_NEON_ZLIB
+ 	select BR2_PACKAGE_ZLIB
++	# apr really needs shared library support
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  The utility library for the apache runtime project
  
-+ifeq ($(BR2_PACKAGE_LIBINTL),y)
-+NDISC6_DEPENDENCIES += libintl
-+NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+endif
-+
- NDISC6_BIN_ += dnssort # perl script
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_TCPSPRAY) += tcpspray tcpspray6
+diff --git a/package/apr/Config.in b/package/apr/Config.in
+index 292cadb..ed319ed 100644
+--- a/package/apr/Config.in
++++ b/package/apr/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_APR
+ 	bool "apr"
++	# apr really needs shared library support
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  The mission of the Apache Portable Runtime (APR) project is to create
+ 	  and maintain software libraries that provide a predictable and
