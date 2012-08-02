@@ -1,38 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:33 -0000
-Subject: [Buildroot] [git commit branch/next] dnsmasq: host-pkg-config is
-	needed for lua support as well
-Message-ID: <20120802195232.2B60F96FE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] ndisc6: fix build when libintl
+	is enabled
+Message-ID: <20120802195231.CC44796FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9950d485cd8c16dc84d2e9eca5f4f586c1b717c5
+commit: http://git.buildroot.net/buildroot/commit/?id=0b6f3f2645a50a115c974cdc6dd0e2d8b96837b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Fixes http://autobuild.buildroot.org/results/94d67f02c81639e1586d1c21a7e3b183a6ab50a2
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dnsmasq/dnsmasq.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/ndisc6/ndisc6.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 2e3575c..4aa7cfb 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -42,11 +42,9 @@ endef
- endif
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index 8451e06..7cf4b8a 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -10,6 +10,11 @@ NDISC6_SITE = http://www.remlab.net/files/ndisc6/
+ NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
+ NDISC6_CONF_OPT = --localstatedir=/var --disable-rpath --disable-suid-install
  
- ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
--	DNSMASQ_DEPENDENCIES += lua
-+	DNSMASQ_DEPENDENCIES += lua host-pkg-config
- 	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
--endif
- 
--ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
- define DNSMASQ_ENABLE_LUA
- 	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
- 	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
++ifeq ($(BR2_PACKAGE_LIBINTL),y)
++NDISC6_DEPENDENCIES += libintl
++NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
++endif
++
+ NDISC6_BIN_ += dnssort # perl script
+ NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
+ NDISC6_BIN_$(BR2_PACKAGE_NDISC6_TCPSPRAY) += tcpspray tcpspray6
