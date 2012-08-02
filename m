@@ -1,35 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:34 -0000
-Subject: [Buildroot] [git commit branch/next] gnuchess: needs threads
-Message-ID: <20120802195233.9CB9D96EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] xserver-xorg: fix build when
+	Xtst isn't available
+Message-ID: <20120802195232.E4A5896FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c52c9e1fb630a7f44eb8244072eb1aa28c08dff
+commit: http://git.buildroot.net/buildroot/commit/?id=920544e02b7e050d0160574803167c1c0a36f1cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.org/results/63a7cf35ecef02f30641a37d602f7cc55d59f543/
+The optional DMX support (Distributed Multihead X) needs Xtst, which
+may or may not be available in the buildroot config. DMX is unlikely
+to be needed for a BR system, so simply disable it rather than
+forcibly requiring Xtst.
+
+Fixes http://autobuild.buildroot.org/results/df990ded6472de62132e3a089634fafe0e029107/
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/games/gnuchess/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/games/gnuchess/Config.in b/package/games/gnuchess/Config.in
-index cae05cb..c79c52d 100644
---- a/package/games/gnuchess/Config.in
-+++ b/package/games/gnuchess/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_GNUCHESS
- 	bool "gnuchess"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  GNU Chess lets most modern computers play a full game of chess.
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index df7ba9a..29f7c81 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -58,6 +58,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
  
- 	  http://ftp.gnu.org/pub/gnu/chess
-+
-+comment "gnuchess requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
+ 		--disable-xnest --disable-xephyr --disable-xvfb \
++		--disable-dmx \
+ 		--with-builder-addr=buildroot at uclibc.org \
+ 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
+ 		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var
