@@ -1,33 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:47 -0000
-Subject: [Buildroot] [git commit branch/next] midori: change use of
+Subject: [Buildroot] [git commit branch/next] boost: change uses of
 	BR2_JLEVEL to PARALLEL_JOBS
-Message-ID: <20120802195244.311528C999@busybox.osuosl.org>
+Message-ID: <20120802195244.106018C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3fa214aadf41ff35835d91f67a6502d3b9a79bfd
+commit: http://git.buildroot.net/buildroot/commit/?id=7206f219d46c9007e9e14dffd60d4904b108671d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/midori/midori.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/boost/boost.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index 0b3439c..aa376a2 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -34,7 +34,7 @@ define MIDORI_CONFIGURE_CMDS
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 3667964..abdf3a2 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -70,7 +70,7 @@ define BOOST_CONFIGURE_CMDS
  endef
  
- define MIDORI_BUILD_CMDS
--       (cd $(@D); ./waf build -j $(BR2_JLEVEL))
-+       (cd $(@D); ./waf build -j $(PARALLEL_JOBS))
+ define BOOST_INSTALL_TARGET_CMDS
+-	(cd $(@D) && ./b2 -j$(BR2_JLEVEL) -q -d+2 \
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+2 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(TARGET_DIR)/usr \
+@@ -78,7 +78,7 @@ define BOOST_INSTALL_TARGET_CMDS
  endef
  
- define MIDORI_INSTALL_TARGET_CMDS
+ define BOOST_INSTALL_STAGING_CMDS
+-	(cd $(@D) && ./bjam -j$(BR2_JLEVEL) -d+2 \
++	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+2 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(STAGING_DIR)/usr \
