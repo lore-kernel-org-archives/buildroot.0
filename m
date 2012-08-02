@@ -1,34 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:03 -0000
-Subject: [Buildroot] [git commit branch/next] libcgi: fix cflags
-Message-ID: <20120802195236.8F72296AE7@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:04 -0000
+Subject: [Buildroot] [git commit branch/next] sdl_sound: fix assignments
+Message-ID: <20120802195236.53E0796AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ab39d39cbbf93dbd59e7a0fdb1a1f5ee7962034
+commit: http://git.buildroot.net/buildroot/commit/?id=3bb9979ab052787c17cd5f1e507bfa54c7bbdead
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.org/results/4000a12a9b237bd12618eb22ea793a913fc73b4f
-
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcgi/libcgi.patch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sdl_sound/sdl_sound.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
-index 716d83c..12a7b10 100644
---- a/package/libcgi/libcgi.patch
-+++ b/package/libcgi/libcgi.patch
-@@ -27,7 +27,7 @@
-  exec_prefix = @exec_prefix@
-  
- -SHAREDOPT = -shared
--+SHAREDOPT = -shared -fPIC,-Wl,-soname,libcgi.so.0
-++SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
-  LIBDIR = $(prefix)/lib
- -INCDIR = $(prefix)/include
- +INCDIR = $(prefix)/include/libcgi/
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index f95d6bc..a5d9a26 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -3,10 +3,10 @@
+ # sdl_sound addon for SDL
+ #
+ #############################################################
+-SDL_SOUND_VERSION:=1.0.3
+-SDL_SOUND_SOURCE:=SDL_sound-$(SDL_SOUND_VERSION).tar.gz
+-SDL_SOUND_SITE:=http://icculus.org/SDL_sound/downloads/
+-SDL_SOUND_INSTALL_STAGING:=YES
++SDL_SOUND_VERSION = 1.0.3
++SDL_SOUND_SOURCE = SDL_sound-$(SDL_SOUND_VERSION).tar.gz
++SDL_SOUND_SITE = http://icculus.org/SDL_sound/downloads/
++SDL_SOUND_INSTALL_STAGING = YES
+ SDL_SOUND_DEPENDENCIES = sdl
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
