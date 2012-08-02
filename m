@@ -1,89 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Aug 2012 20:46:31 +0200
-Subject: [Buildroot] [git commit branch/next] Update for 2012.08-rc1
-Message-ID: <20120802195305.DC4CB96CE6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 02 Aug 2012 19:53:08 -0000
+Subject: [Buildroot] [git commit branch/next] kernel-headers: bump 3.2.x
+	stable version
+Message-ID: <20120802195238.5055E90E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
+commit: http://git.buildroot.net/buildroot/commit/?id=a17f53f64bd183705e50debe81b796bc6cb82e0f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES            |    2 +-
- Makefile           |    2 +-
- docs/download.html |    7 +++----
- docs/news.html     |   13 +++++++++++++
- 4 files changed, 18 insertions(+), 6 deletions(-)
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index e314c84..fb5160d 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2012.08-rc1, Not released yet:
-+2012.08-rc1, Released August 1st, 2012
- 
- 	Fixes all over the tree and new features.
- 
-diff --git a/Makefile b/Makefile
-index 639fdaa..079af65 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2012.08-git
-+export BR2_VERSION:=2012.08-rc1
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index d23e7e9..c00a356 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -13,13 +13,12 @@ here:<p>
- or
- <a href="/downloads/buildroot-2012.05.tar.bz2">buildroot-2012.05.tar.bz2</a>.
- <p>
--<!--
--The latest release candidate is <b>2012.05-rc3</b>, which can be
-+The latest release candidate is <b>2012.08-rc1</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2012.05-rc3.tar.gz">buildroot-2012.05-rc3.tar.gz</a>
-+<a href="/downloads/buildroot-2012.08-rc1.tar.gz">buildroot-2012.08-rc1.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.05-rc3.tar.bz2">buildroot-2012.05-rc3.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.08-rc1.tar.bz2">buildroot-2012.08-rc1.tar.bz2</a>.
- <p>
- -->
- This and earlier releases can always be downloaded from
-diff --git a/docs/news.html b/docs/news.html
-index 8060638..4114b03 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,19 @@
- <p>
- 
- <ul>
-+   <li><b>1 August 2012 -- 2012.08-rc1 released</b>
-+
-+     <p>We have a new release candidate! Lots of changes all over the
-+     tree, see the <a
-+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc1">CHANGES</a>
-+     file for details</p>
-+
-+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+     <a href="/downloads/buildroot-2012.08-rc1.tar.bz2">2012.08-rc1
-+     release candidate</a>, and report any problems found to the <a
-+     href="lists.html">mailing list</a> or <a
-+     href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>22 July 2012 -- Buildroot Developer Day</b>
- 
-     <p>The next <i>Buildroot Developer Day</i> meeting will take place
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 012b436..9978315 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.34"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.19"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.20"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.2"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
