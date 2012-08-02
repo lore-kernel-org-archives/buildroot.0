@@ -1,58 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Aug 2012 21:42:37 +0200
-Subject: [Buildroot] glibc instead of ulibc ?
-In-Reply-To: <1343936315.31073.YahooMailNeo@web164603.mail.gq1.yahoo.com>
-References: <1343854870.70701.YahooMailNeo@web164605.mail.gq1.yahoo.com>
- <20120801231635.08b7d808@skate>
- <1343913806.30162.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20120802152640.5d9cca86@skate>
- <1343936315.31073.YahooMailNeo@web164603.mail.gq1.yahoo.com>
-Message-ID: <20120802214237.37ed2f82@skate>
+Date: Thu, 2 Aug 2012 21:44:15 +0200
+Subject: [Buildroot] [git commit] toolchain-external: microblaze toolchains
+	are glibc-based
+Message-ID: <20120802194713.8168696B71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=1f6e2b4a9518b9608f3cc8cc7281bac382da41eb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le Thu, 2 Aug 2012 12:38:35 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in |   12 ++----------
+ 1 files changed, 2 insertions(+), 10 deletions(-)
 
-> Excuse me, Thomas, but I don't know exactly the meaning of? "keeping
-> the Buildroot list in Cc", however hope this way is OK.
-
-It is correct. You kept the list in copy of our discussion, which is
-good.
-
-> Shortly as possible - I build Tiny X?with Buildroot for ARM and it
-> works on target, including your?gtk-demo.Now I try building my own
-> simple GUI - gtk program (Lazarus iz Delphi like IDE - it works
-> OK?for me?in Linux-?i386 and could be adjusted?for cross compilation
-> including ARM). I use it at Ubuntu 11.04. For cross compiling, I
-> use?target libraries (X11, pango, ...), built as described. However,
-> I probably make some mistake in first pass, and in second attempt
-> (few hours ago) the only error reported, AT THE MOMENT, is (like
-> first time): undefined refernece?to __libc_start_main. Here
-> http://lists.uclibc.org/pipermail/uclibc/2006-June/015659.html?I
-> found some statement that uClibc does not have that function (but
-> glibc yes). I am aware that this question is maybe more related to
-> other forums, but part of it MAYBE to uClibc. So don't bother too
-> much with this problem, just hoped that it?was already?recorded
-> matter.
-
-If you don't provide all the details needed to reproduce your problem,
-there's no way we can help you. So, please provide:
-
- *) Your Buildroot configuration and version
- *) The exact command lines you use to build your Lazarus program
- *) An example of Lazarus program that exhibits the problem
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index e34802d..f86ed74 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -542,11 +542,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	bool "Xilinx Little Endian Microblaze GNU Tools"
+ 	depends on BR2_microblazeel
+-	select BR2_LARGEFILE
+-	select BR2_INET_IPV6
+-	select BR2_INET_RPC
+-	select BR2_ENABLE_LOCALE
+-	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
+@@ -554,11 +550,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	bool "Xilinx Big Endian Microblaze GNU Tools"
+ 	depends on BR2_microblazebe
+-	select BR2_LARGEFILE
+-	select BR2_INET_IPV6
+-	select BR2_INET_RPC
+-	select BR2_ENABLE_LOCALE
+-	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	help
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
