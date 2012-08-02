@@ -1,39 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:39 -0000
-Subject: [Buildroot] [git commit branch/next] pppd: fix plugin search path
-Message-ID: <20120802195238.5EEE596EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] synergy: Remove -Werror from
+	CXXFLAGS
+Message-ID: <20120802195238.3FE1790E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9910f1906dc8dab6ba65fcb464ee4095c6c944a
+commit: http://git.buildroot.net/buildroot/commit/?id=0a65b7d93662c9c801af777528561e488389d592
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix the plugin search path by passing a --prefix to configure.
-DESTDIR is used in the source code for the search path of plugins
-(DESTDIR/lib/pppd/VERSION).
-Since DESTDIR defaults to /usr/local we get the search path wrong so the
-'plugin' directive requires a full pathspec to the plugin rather than
-the .so name, which isn't nice or portable.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pppd/pppd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/synergy/synergy-1.3.1-remove-werror.patch |   16 ++++++++++++++++
+ package/synergy/synergy.mk                        |    2 ++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 2137f6a..a62f495 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -26,7 +26,7 @@ endif
- define PPPD_CONFIGURE_CMDS
- 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
- 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
--	( cd $(@D); ./configure )
-+	( cd $(@D); ./configure --prefix=/usr )
- endef
+diff --git a/package/synergy/synergy-1.3.1-remove-werror.patch b/package/synergy/synergy-1.3.1-remove-werror.patch
+new file mode 100644
+index 0000000..31a8c2b
+--- /dev/null
++++ b/package/synergy/synergy-1.3.1-remove-werror.patch
+@@ -0,0 +1,16 @@
++Remove -Werror from CXXFLAGS
++
++Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
++
++Index: synergy-1.3.1/configure.in
++===================================================================
++--- synergy-1.3.1.orig/configure.in
+++++ synergy-1.3.1/configure.in
++@@ -239,7 +239,6 @@ dnl checks for system services
++ 
++ dnl enable maximum compiler warnings and warnings are errors.
++ ACX_CXX_WARNINGS
++-ACX_CXX_WARNINGS_ARE_ERRORS
++ 
++ dnl adjust compiler and linker variables
++ CXXFLAGS="$CXXFLAGS $SYNERGY_CXXFLAGS $ARCH_CFLAGS"
+diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+index c86fb8b..890b82a 100644
+--- a/package/synergy/synergy.mk
++++ b/package/synergy/synergy.mk
+@@ -7,6 +7,8 @@
+ SYNERGY_VERSION = 1.3.1
+ SYNERGY_SOURCE = synergy-$(SYNERGY_VERSION).tar.gz
+ SYNERGY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/synergy2/
++
++SYNERGY_AUTORECONF = YES
+ SYNERGY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+                    --x-libraries=$(STAGING_DIR)/usr/lib
  
- define PPPD_BUILD_CMDS
