@@ -1,34 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:49 -0000
-Subject: [Buildroot] [git commit branch/next] faad2: fix frontend/faad
-	linking
-Message-ID: <20120802195246.2E7198C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] tcpdump: bump to version 4.3.0
+Message-ID: <20120802195245.41BDB8C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56168c215595e4b7bc6222fcee3d1021e327051d
+commit: http://git.buildroot.net/buildroot/commit/?id=ac2a58c5c3627d39e2e7f77119dea2da6fa0b355
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/84db857a6fc8e73483493e484f2cc5f4bf64f3d0
-
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/faad2/faad2.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/tcpdump/tcpdump.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/multimedia/faad2/faad2.mk b/package/multimedia/faad2/faad2.mk
-index 366515c..567875a 100644
---- a/package/multimedia/faad2/faad2.mk
-+++ b/package/multimedia/faad2/faad2.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index ab9d4f1..0febf60 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -6,9 +6,8 @@
+ # Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
  
- FAAD2_VERSION = 2.7
- FAAD2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/faac
-+# frontend/faad calls frexp()
-+FAAD2_CONF_ENV = LIBS=-lm
- FAAD2_INSTALL_STAGING = YES
- 
- $(eval $(call AUTOTARGETS))
+-TCPDUMP_VERSION = 4.2.1
++TCPDUMP_VERSION = 4.3.0
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+-TCPDUMP_SOURCE = tcpdump-$(TCPDUMP_VERSION).tar.gz
+ TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no
+ TCPDUMP_CONF_OPT = --without-crypto \
+ 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
