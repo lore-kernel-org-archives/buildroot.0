@@ -1,54 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:38 -0000
-Subject: [Buildroot] [git commit branch/next] pulseaudio: fix build error on
-	toolchains without C++ support
-Message-ID: <20120802195235.BF47896AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] collectd: fix dependencies for
+	bind plugin
+Message-ID: <20120802195236.6F4C796AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50995f43e18032a386bf2a4b0de47f2322a110a3
+commit: http://git.buildroot.net/buildroot/commit/?id=6457adf87b17c597761a503cfbee4923a3772ee8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The optional webrtc echo canceller is written in C++, causing auto* to want
-to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
-If we don't have C++ support enabled in BR, CXX will point to /bin/false,
-which makes configure think we aren't able to create C++ .so files
-(arguable true), breaking the build when it tries to install the .so
-workaround it by patching up the libtool invocations to use C mode instead.
+The bind plugin requires libcurl and libxml2.
+These are properly selected but never added to COLLECTD_DEPENDENCIES.
+Fix that.
 
-Fixes http://autobuild.buildroot.net/results/114e5bf0086f2394b36f17a70cb54b357a72413c
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/pulseaudio/pulseaudio.mk |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ package/collectd/collectd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index 175adfa..6d05822 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -32,6 +32,21 @@ PULSEAUDIO_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 0109f77..4404509 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -87,6 +87,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
  
-+ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-+# The optional webrtc echo canceller is written in C++, causing auto* to want
-+# to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
-+# If we don't have C++ support enabled in BR, CXX will point to /bin/false,
-+# which makes configure think we aren't able to create C++ .so files
-+# (arguable true), breaking the build when it tries to install the .so
-+# workaround it by patching up the libtool invocations to use C mode instead
-+define PULSEAUDIO_FORCE_CC
-+	$(SED) 's/--tag=CXX/--tag=CC/g' -e 's/(CXXLD)/(CCLD)/g' \
-+		$(@D)/src/Makefile.in
-+endef
-+
-+PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
-+endif
-+
- # pulseaudio alsa backend needs pcm/mixer apis
- ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
- PULSEAUDIO_CONF_OPT += --disable-alsa
+ COLLECTD_DEPENDENCIES = host-pkg-config \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),libcurl) \
++	$(if $(BR2_PACKAGE_COLLECTD_BIND),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL),libcurl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
