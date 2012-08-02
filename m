@@ -1,38 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:34 -0000
-Subject: [Buildroot] [git commit branch/next] xserver-xorg: fix build when
-	Xtst isn't available
-Message-ID: <20120802195232.E4A5896FF0@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:35 -0000
+Subject: [Buildroot] [git commit branch/next] oprofile: fix target-install
+	for archs without performance counters support
+Message-ID: <20120802195233.C9836801CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=920544e02b7e050d0160574803167c1c0a36f1cf
+commit: http://git.buildroot.net/buildroot/commit/?id=c73df193c558dfcf8386082548d8bea396960f39
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The optional DMX support (Distributed Multihead X) needs Xtst, which
-may or may not be available in the buildroot config. DMX is unlikely
-to be needed for a BR system, so simply disable it rather than
-forcibly requiring Xtst.
+These archs can still use the timer mode.
 
-Fixes http://autobuild.buildroot.org/results/df990ded6472de62132e3a089634fafe0e029107/
+Fixes http://autobuild.buildroot.org/results/2627ee17e1f1a58520e01c52af365998f648bbc5/
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/oprofile/oprofile.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index df7ba9a..29f7c81 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -58,6 +58,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 
- XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
- 		--disable-xnest --disable-xephyr --disable-xvfb \
-+		--disable-dmx \
- 		--with-builder-addr=buildroot at uclibc.org \
- 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
- 		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 5da794b..fc21928 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -30,7 +30,10 @@ OPROFILE_DEPENDENCIES = popt binutils
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
+-	cp -dpfr $(@D)/events/$(OPROFILE_ARCH) $(TARGET_DIR)/usr/share/oprofile
++	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
++		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
++			$(TARGET_DIR)/usr/share/oprofile; \
++	fi
+ 	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
+ 	$(INSTALL) -m 755 $(@D)/utils/opcontrol $(TARGET_DIR)/usr/bin
+ 	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
