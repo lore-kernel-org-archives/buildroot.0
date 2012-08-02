@@ -1,34 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:19 -0000
-Subject: [Buildroot] [git commit branch/next] polarssl: bump to version 1.1.4
-Message-ID: <20120802195239.5066F800EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] axel: needs thread support
+Message-ID: <20120802195241.B98838E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b7a7a028c47b546390b5f591e560a1f0f586e1b
+commit: http://git.buildroot.net/buildroot/commit/?id=da76330445f1aa044702f08afd8d57d164b6df07
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-* Correctly handle empty SSL/TLS packets (Found by James Yonan)
-* Fixed potential heap corruption in x509_name allocation
-* Fixed single RSA test that failed on Big Endian systems
+Fixes http://autobuild.buildroot.net/results/28d84d05e1a52a9ddec5956c946d99e8cd8c8fd7/build-end.log
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/polarssl/polarssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/axel/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index d07cdc6..e12f08d 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -1,5 +1,5 @@
- POLARSSL_SITE = http://polarssl.org/code/releases/
--POLARSSL_VERSION = 1.1.3
-+POLARSSL_VERSION = 1.1.4
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPT = \
- 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
+diff --git a/package/axel/Config.in b/package/axel/Config.in
+index cb9af32..98f4941 100644
+--- a/package/axel/Config.in
++++ b/package/axel/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_AXEL
+ 	bool "axel"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  HTTP/FTP download accelerator.
+ 
+ 	  http://axel.alioth.debian.org/
++
++comment "axel needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
