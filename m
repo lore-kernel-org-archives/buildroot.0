@@ -1,40 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:55 -0000
-Subject: [Buildroot] [git commit branch/next] sdl_gfx: refactor *_CONF_OPT
-	assignment with cpu-feature options
-Message-ID: <20120802195250.9C45B90D1C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] mediastreamer: alsa support
+	needs mixer + pcm
+Message-ID: <20120802195236.D0AAF96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c044a2d3830d20d26efcd53407a76a050a04d93
+commit: http://git.buildroot.net/buildroot/commit/?id=1bc8d2a21ae99eb41e383f3bf3d8553813066093
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sdl_gfx/sdl_gfx.mk |   10 ++--------
- 1 files changed, 2 insertions(+), 8 deletions(-)
+Fixes http://autobuild.buildroot.net/results/ec6e32eb44e39c1f622da39a8c5d80eb95433a54
 
-diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
-index 5503bbd..343c7a1 100644
---- a/package/sdl_gfx/sdl_gfx.mk
-+++ b/package/sdl_gfx/sdl_gfx.mk
-@@ -11,13 +11,7 @@ SDL_GFX_DEPENDENCIES = sdl
- SDL_GFX_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
--	--enable-static
--
--# enable mmx for newer x86's
--ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
--SDL_GFX_CONF_OPT += --enable-mmx
--else
--SDL_GFX_CONF_OPT += --disable-mmx
--endif
-+	--enable-static \
-+	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mediastreamer/mediastreamer.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 65e4ec7..be91c44 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -5,7 +5,7 @@ MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkg-config ortp
+ # tests fail linking on some architectures, so disable them
+ MEDIASTREAMER_CONF_OPT = --disable-tests
  
- $(eval $(call AUTOTARGETS))
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++ifeq ($(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yy)
+ MEDIASTREAMER_CONF_OPT += --enable-alsa
+ MEDIASTREAMER_DEPENDENCIES += alsa-lib
+ else
