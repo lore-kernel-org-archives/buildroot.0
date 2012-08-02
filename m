@@ -1,56 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:39 -0000
-Subject: [Buildroot] [git commit branch/next] synergy: Remove -Werror from
-	CXXFLAGS
-Message-ID: <20120802195238.3FE1790E2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pciutils: simplify
+Message-ID: <20120802195238.E071E96FE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a65b7d93662c9c801af777528561e488389d592
+commit: http://git.buildroot.net/buildroot/commit/?id=83f43bab374535fe39d93547fb03c52fa45ab0a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+No need for two seperate make invocations for installation.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/synergy/synergy-1.3.1-remove-werror.patch |   16 ++++++++++++++++
- package/synergy/synergy.mk                        |    2 ++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ package/pciutils/pciutils.mk |    8 ++------
+ 1 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/synergy/synergy-1.3.1-remove-werror.patch b/package/synergy/synergy-1.3.1-remove-werror.patch
-new file mode 100644
-index 0000000..31a8c2b
---- /dev/null
-+++ b/package/synergy/synergy-1.3.1-remove-werror.patch
-@@ -0,0 +1,16 @@
-+Remove -Werror from CXXFLAGS
-+
-+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-+
-+Index: synergy-1.3.1/configure.in
-+===================================================================
-+--- synergy-1.3.1.orig/configure.in
-++++ synergy-1.3.1/configure.in
-+@@ -239,7 +239,6 @@ dnl checks for system services
-+ 
-+ dnl enable maximum compiler warnings and warnings are errors.
-+ ACX_CXX_WARNINGS
-+-ACX_CXX_WARNINGS_ARE_ERRORS
-+ 
-+ dnl adjust compiler and linker variables
-+ CXXFLAGS="$CXXFLAGS $SYNERGY_CXXFLAGS $ARCH_CFLAGS"
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-index c86fb8b..890b82a 100644
---- a/package/synergy/synergy.mk
-+++ b/package/synergy/synergy.mk
-@@ -7,6 +7,8 @@
- SYNERGY_VERSION = 1.3.1
- SYNERGY_SOURCE = synergy-$(SYNERGY_VERSION).tar.gz
- SYNERGY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/synergy2/
-+
-+SYNERGY_AUTORECONF = YES
- SYNERGY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
-                    --x-libraries=$(STAGING_DIR)/usr/lib
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 7de5fd7..d1c8db5 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -46,16 +46,12 @@ endef
+ # Ditch install-lib if SHARED is an option in the future
+ define PCIUTILS_INSTALL_TARGET_CMDS
+ 	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
+-		SHARED=$(PCIUTILS_SHARED) install
+-	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
+-		SHARED=$(PCIUTILS_SHARED) install-lib
++		SHARED=$(PCIUTILS_SHARED) install install-lib
+ endef
  
+ define PCIUTILS_INSTALL_STAGING_CMDS
+ 	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(STAGING_DIR)/usr \
+-		SHARED=$(PCIUTILS_SHARED) install
+-	$(MAKE) BUILDDIR=$(@D) -C $(@D) PREFIX=$(STAGING_DIR)/usr \
+-		SHARED=$(PCIUTILS_SHARED) install-lib
++		SHARED=$(PCIUTILS_SHARED) install install-lib
+ endef
+ 
+ $(eval $(call GENTARGETS))
