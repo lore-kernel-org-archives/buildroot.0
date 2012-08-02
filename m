@@ -1,81 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:44 -0000
-Subject: [Buildroot] [git commit branch/next] quota: new package (v8)
-Message-ID: <20120802195243.C790396EA0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] monit: fix configuration error
+Message-ID: <20120802195239.E5895800EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da1884f048f691467febc2d6d4d570d414c530d0
+commit: http://git.buildroot.net/buildroot/commit/?id=c5832382a18e285376e9a519e3fbfd6436e42a73
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-[Peter: fix help text whitespace]
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Configuration fails for the monit package, with the following error.
+
+  checking for SSL library directory... Not found
+
+  Couldn't find your SSL library files.
+  Use --with-ssl-lib-dir option to fix this problem or disable the
+  SSL support with --without-ssl
+
+Tweak the monit configuration command line so that openssl is found.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in       |    3 +++
- package/quota/Config.in |   14 ++++++++++++++
- package/quota/quota.mk  |   18 ++++++++++++++++++
- 3 files changed, 35 insertions(+), 0 deletions(-)
+ package/monit/monit.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b257c0f..374a5aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -663,6 +663,9 @@ source "package/monit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
-+endif
-+source "package/quota/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
- source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-new file mode 100644
-index 0000000..dfefb8a
---- /dev/null
-+++ b/package/quota/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_QUOTA
-+	bool "quota"
-+	depends on BR2_INET_RPC
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	help
-+	  Implementation of the disk quota system.
-+
-+	  http://sourceforge.net/projects/linuxquota/
-+
-+comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
-+	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-new file mode 100644
-index 0000000..845eefb
---- /dev/null
-+++ b/package/quota/quota.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# QUOTA
-+#
-+#############################################################
-+
-+QUOTA_VERSION = 4.00
-+QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
-+QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
-+
-+QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+
-+# Package uses autoconf but not automake.
-+QUOTA_INSTALL_TARGET_OPT = \
-+	ROOTDIR=$(TARGET_DIR) \
-+	install
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+index 958618d..11bc7e1 100644
+--- a/package/monit/monit.mk
++++ b/package/monit/monit.mk
+@@ -15,7 +15,7 @@ MONIT_CONF_OPT += \
+ 	--without-pam
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-MONIT_CONF_OPT += --with-ssl
++MONIT_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr
+ MONIT_DEPENDENCIES += openssl
+ else
+ MONIT_CONF_OPT += --without-ssl
