@@ -1,83 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:43 -0000
-Subject: [Buildroot] [git commit branch/next] toolchain/crosstool-NG:
-	disable decimal floats
-Message-ID: <20120802195232.3D18C96AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] opencv: add zlib dependency
+Message-ID: <20120802195232.4B6AE96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb30e130519fcb50e1a2e0d7a02aa628e52ed24c
+commit: http://git.buildroot.net/buildroot/commit/?id=60cc0ba4b3a97804c9230cddbdeb1999f5023368
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
-the floating-point environement fenv.h in the C library.
+The opencv package selects zlib, but it does not depend on it. This
+leads to cases where opencv gets built before zlib, and in this case,
+opencv uses its internal version of zlib, which doesn't build properly
+(it has some conditional code for ARM that is probably broken), see:
 
-The uClibc .config file used by crosstool-NG to build uClibc is the
-same as used by the internal buildroot mechanism, and explcitly
-disables fenv support.
+  http://autobuild.buildroot.org/results/45f4e195fe0cc5acace10287f5ff33aa953d5430/build-end.log
 
-The quick workaround is to simply disable decimal floats in all
-crosstool-NG config files.
+We fix this by properly adding the opencv dependency on zlib.
 
-In the long run, it might be better to check this situation, and/or
-add code and/or options in crosstool-NG to handle this (but it is
-much more involved, and this workaround is sane).
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../crosstool-ng.config-eglibc                     |    4 ++--
- .../crosstool-ng.config-glibc                      |    4 ++--
- .../crosstool-ng.config-uClibc                     |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/opencv/opencv.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-index cbad52a..58cdff2 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-@@ -294,8 +294,8 @@ CT_CC_LANG_CXX=y
- # gcc other options
- #
- CT_CC_ENABLE_CXX_FLAGS=""
--CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
--CT_CC_EXTRA_CONFIG_ARRAY=""
-+CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
-+CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
- CT_CC_STATIC_LIBSTDCXX=y
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index d415e51..ec94715 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -35,6 +35,8 @@ OPENCV_CONF_OPT = \
+ 	-DWITH_UNICAP=OFF \
+ 	-DWITH_XINE=OFF
  
- #
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-index e57a91d..db724ab 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-@@ -294,8 +294,8 @@ CT_CC_LANG_CXX=y
- # gcc other options
- #
- CT_CC_ENABLE_CXX_FLAGS=""
--CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
--CT_CC_EXTRA_CONFIG_ARRAY=""
-+CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
-+CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
- CT_CC_STATIC_LIBSTDCXX=y
- 
- #
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-index c115096..5f1ee7e 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-@@ -293,8 +293,8 @@ CT_CC_LANG_CXX=y
- # gcc other options
- #
- CT_CC_ENABLE_CXX_FLAGS=""
--CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
--CT_CC_EXTRA_CONFIG_ARRAY=""
-+CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
-+CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
- CT_CC_STATIC_LIBSTDCXX=y
- 
- #
++OPENCV_DEPENDENCIES += zlib
++
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_PYTHON),y)
+ OPENCV_CONF_OPT += -DBUILD_NEW_PYTHON_SUPPORT=ON
+ OPENCV_DEPENDENCIES += python
