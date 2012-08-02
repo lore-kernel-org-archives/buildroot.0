@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:54:34 -0000
-Subject: [Buildroot] [git commit branch/next] linux: clarify the
-	BR2_LINUX_KERNEL_DEFCONFIG help text
-Message-ID: <20120802195249.36C3A8E204@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:54:35 -0000
+Subject: [Buildroot] [git commit branch/next] kernel-headers: bump 3.2.x
+	stable version
+Message-ID: <20120802195249.45D4096DC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8dfbaf20f546024acb8a03a82e676c7547c64ae6
+commit: http://git.buildroot.net/buildroot/commit/?id=9308ac18687c016f654598ac55b15a9957562956
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The help text of BR2_LINUX_KERNEL_DEFCONFIG is confusing: it seems to
-point to the defconfigs in the buildroot tree.  So explicitly refer to
-the kernel tree in the help text.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9c26439..c969be6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -115,8 +115,9 @@ config BR2_LINUX_KERNEL_DEFCONFIG
- 	string "Defconfig name"
- 	depends on BR2_LINUX_KERNEL_USE_DEFCONFIG
- 	help
--	 Name of the defconfig file to use, without the trailing
--	 _defconfig
-+	 Name of the kernel defconfig file to use, without the
-+	 trailing _defconfig.  The defconfig is located in
-+	 arch/<arch>/configs in the kernel tree.
- 
- config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	string "Configuration file path"
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index c14717f..ac16c7f 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.36"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.22"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.23"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.4"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
