@@ -1,69 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:50 -0000
-Subject: [Buildroot] [git commit branch/next] libpcap: bump to version 1.3.0
-Message-ID: <20120802195245.3086C8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] pkg-download.mk: Add missing
+	argument when downloading from primary mirror (scp)
+Message-ID: <20120802195234.2E54B96AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=843d934165910488acb3ec360a8eab7a9581b02f
+commit: http://git.buildroot.net/buildroot/commit/?id=3ae7d814075095b43e25c8ef11be6a14234241cc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This problem was already fixed by Markos Chandras for wget, but not for scp.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../libpcap-dont-fail-on-missing-netfilter.patch   |   30 --------------------
- package/libpcap/libpcap.mk                         |    2 +-
- 2 files changed, 1 insertions(+), 31 deletions(-)
+ package/pkg-download.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch b/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch
-deleted file mode 100644
-index b0efbc7..0000000
---- a/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From d55b6f4f1b2bfab96ad57e0239b0b2b57785df77 Mon Sep 17 00:00:00 2001
--From: Jiri Slaby <jirislaby@gmail.com>
--Date: Wed, 29 Feb 2012 01:19:18 -0800
--Subject: [PATCH] Don't fail if netfilter isn't enabled in the kernel.
--
--Check for EPROTONOSUPPORT as well as EAFNOSUPPORT.
--
--Reviewed-By: Guy Harris <guy@alum.mit.edu>
-----
-- pcap-netfilter-linux.c |    4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/pcap-netfilter-linux.c b/pcap-netfilter-linux.c
--index 225e49f..f9c6bef 100644
----- a/pcap-netfilter-linux.c
--+++ b/pcap-netfilter-linux.c
--@@ -452,8 +452,8 @@ netfilter_platform_finddevs(pcap_if_t **alldevsp, char *err_str)
-- 	
-- 	sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_NETFILTER);
-- 	if (sock < 0) {
---		/* if netlink is not supported this this is not fatal */
---		if (errno == EAFNOSUPPORT)
--+		/* if netlink is not supported this is not fatal */
--+		if (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT)
-- 			return 0;
-- 		snprintf(err_str, PCAP_ERRBUF_SIZE, "Can't open netlink socket %d:%s",
-- 			errno, pcap_strerror(errno));
---- 
--1.7.10
--
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 0b88a42..51e1106 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBPCAP_VERSION = 1.2.1
-+LIBPCAP_VERSION = 1.3.0
- LIBPCAP_SITE = http://www.tcpdump.org/release
- LIBPCAP_INSTALL_STAGING = YES
- # doesn't have an install-strip
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index b833de9..7d1e543 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -206,7 +206,7 @@ endef
+ define DOWNLOAD_INNER
+ 	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+ 		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
+-			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
++			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+ 			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
+ 		esac ; \
+ 	fi ; \
