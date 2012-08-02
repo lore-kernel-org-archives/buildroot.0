@@ -1,67 +1,63 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:49 -0000
-Subject: [Buildroot] [git commit branch/next] automatically set
-	PARALLEL_JOBS when BR2_JLEVEL is 0
-Message-ID: <20120802195244.642238C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] barebox: remove old version
+	and add last 4 versions.
+Message-ID: <20120802195248.568588E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5016aa02fb51dbd73461f65ed8c7d9b52539a988
+commit: http://git.buildroot.net/buildroot/commit/?id=a1b7bec1760692e7db19062c76dc905e77054479
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When BR2_JLEVEL is 0, set PARALLEL_JOBS to double the number of CPUs
-detected.  This allows one to more or less fully utilize the host
-system without manually tuning the configuration.
-
-Also make 0 the default value for BR2_JLEVEL.
-
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in           |    8 +++++---
- package/Makefile.in |    8 ++++++++
- 2 files changed, 13 insertions(+), 3 deletions(-)
+ boot/barebox/Config.in |   21 ++++++++-------------
+ 1 files changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 83f64bb..925c247 100644
---- a/Config.in
-+++ b/Config.in
-@@ -178,10 +178,12 @@ config BR2_DEBIAN_MIRROR
- endmenu
- 
- config BR2_JLEVEL
--	int "Number of jobs to run simultaneously"
--	default "2"
-+	int "Number of jobs to run simultaneously (0 for auto)"
-+	default "0"
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 13009d2..574bfae 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,19 +12,15 @@ choice
  	help
--	  Number of jobs to run simultaneously
-+	  Number of jobs to run simultaneously.  If 0, determine
-+	  automatically according to number of CPUs on the host
-+	  system.
+ 	  Select the specific Barebox version you want to use
  
- config BR2_CCACHE
- 	bool "Enable compiler cache"
-diff --git a/package/Makefile.in b/package/Makefile.in
-index be83ada..1d43aef 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -6,7 +6,15 @@ HOSTMAKE=$(MAKE)
- endif
- HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+-config BR2_TARGET_BAREBOX_2012_01
+-	depends on BR2_DEPRECATED
+-	bool "2012.01"
+-
+-config BR2_TARGET_BAREBOX_2012_02
+-	bool "2012.02"
+-
+-config BR2_TARGET_BAREBOX_2012_03
+-	bool "2012.03"
+-
+ config BR2_TARGET_BAREBOX_2012_04
+ 	bool "2012.04"
  
-+# If BR2_LEVEL is 0, scale the maximum concurrency with the number of
-+# CPUs.  A coefficient of 2 is used in order to keep processors busy
-+# while waiting on I/O.
-+ifeq ($(BR2_JLEVEL),0)
-+PARALLEL_JOBS:=$(shell echo \
-+	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
-+else
- PARALLEL_JOBS:=$(BR2_JLEVEL)
-+endif
++config BR2_TARGET_BAREBOX_2012_05
++	bool "2012.05"
++
++config BR2_TARGET_BAREBOX_2012_06
++	bool "2012.06"
++
+ config BR2_TARGET_BAREBOX_2012_07
+ 	bool "2012.07"
  
- MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+@@ -45,10 +41,9 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2012.01.0"	if BR2_TARGET_BAREBOX_2012_01
+-	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
+-	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_03
+ 	default "2012.04.0"	if BR2_TARGET_BAREBOX_2012_04
++	default "2012.05.0"	if BR2_TARGET_BAREBOX_2012_05
++	default "2012.06.0"	if BR2_TARGET_BAREBOX_2012_06
+ 	default "2012.07.0"	if BR2_TARGET_BAREBOX_2012_07
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
