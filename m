@@ -1,88 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:48 -0000
-Subject: [Buildroot] [git commit branch/next] build: add option to exclude
-	executables/dirs from being stripped
-Message-ID: <20120802195243.632288E204@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:49 -0000
+Subject: [Buildroot] [git commit branch/next] toolchain/gcc : bump 4.5.x
+	version
+Message-ID: <20120802195248.22A848E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a97045d5daeb7cb7222f1ffe0532930d5b3140d
+commit: http://git.buildroot.net/buildroot/commit/?id=8f6fc941c729f069256296f82ed9f721a266cc8c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Sometimes it may be desirable to keep debug symbols for some binaries and
-libraries on the target. This commit introduces the config option
-BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
-and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
-directories excluded from stripping entirely.
-These exclusions are passed to the find command in the target-finalize step.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in |   19 +++++++++++++++++++
- Makefile  |   10 ++++++++--
- 2 files changed, 27 insertions(+), 2 deletions(-)
+ .../gcc/{4.5.3 => 4.5.4}/100-uclibc-conf.patch     |    0
+ .../{4.5.3 => 4.5.4}/301-missing-execinfo_h.patch  |    0
+ .../gcc/{4.5.3 => 4.5.4}/302-c99-snprintf.patch    |    0
+ .../305-libmudflap-susv3-legacy.patch              |    0
+ .../810-arm-softfloat-libgcc.patch                 |    0
+ .../{4.5.3 => 4.5.4}/820-arm-unbreak-armv4t.patch  |    0
+ .../gcc/{4.5.3 => 4.5.4}/830-arm-pr43440.patch     |    0
+ .../powerpc-link-with-math-lib.patch.conditional   |    0
+ toolchain/gcc/Config.in                            |    2 +-
+ 9 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 95c2e8c..83f64bb 100644
---- a/Config.in
-+++ b/Config.in
-@@ -283,6 +283,25 @@ config BR2_STRIP_none
- 	  filesystem.
- endchoice
- 
-+config BR2_STRIP_EXCLUDE_FILES
-+	string "executables that should not be stripped"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of binaries and libraries
-+	  here that should not be stripped on the target.
-+
-+config BR2_STRIP_EXCLUDE_DIRS
-+	string "directories that should be skipped when stripping"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of directories that should
-+	  be skipped when stripping. Binaries and libraries in these
-+	  directories will not be touched.
-+	  The directories should be specified relative to the target directory,
-+	  without leading slash.
-+
- choice
- 	prompt "gcc optimization level"
- 	default BR2_OPTIMIZE_S
-diff --git a/Makefile b/Makefile
-index 9a9634d..c691767 100644
---- a/Makefile
-+++ b/Makefile
-@@ -386,6 +386,13 @@ $(BUILD_DIR)/.root:
- 
- $(TARGET_DIR): $(BUILD_DIR)/.root
- 
-+STRIP_FIND_CMD = find $(TARGET_DIR)
-+ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-+STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-+endif
-+STRIP_FIND_CMD += -type f -perm +111
-+STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-+
- target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-@@ -410,8 +417,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
--	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
--		xargs $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD) || true
- 
+diff --git a/toolchain/gcc/4.5.3/100-uclibc-conf.patch b/toolchain/gcc/4.5.4/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/100-uclibc-conf.patch
+rename to toolchain/gcc/4.5.4/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.5.3/301-missing-execinfo_h.patch b/toolchain/gcc/4.5.4/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/301-missing-execinfo_h.patch
+rename to toolchain/gcc/4.5.4/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.5.3/302-c99-snprintf.patch b/toolchain/gcc/4.5.4/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/302-c99-snprintf.patch
+rename to toolchain/gcc/4.5.4/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.5.3/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.5.4/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/305-libmudflap-susv3-legacy.patch
+rename to toolchain/gcc/4.5.4/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.5.3/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.5.4/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/810-arm-softfloat-libgcc.patch
+rename to toolchain/gcc/4.5.4/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.5.3/820-arm-unbreak-armv4t.patch b/toolchain/gcc/4.5.4/820-arm-unbreak-armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/820-arm-unbreak-armv4t.patch
+rename to toolchain/gcc/4.5.4/820-arm-unbreak-armv4t.patch
+diff --git a/toolchain/gcc/4.5.3/830-arm-pr43440.patch b/toolchain/gcc/4.5.4/830-arm-pr43440.patch
+similarity index 100%
+rename from toolchain/gcc/4.5.3/830-arm-pr43440.patch
+rename to toolchain/gcc/4.5.4/830-arm-pr43440.patch
+diff --git a/toolchain/gcc/4.5.3/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.5.3/powerpc-link-with-math-lib.patch.conditional
+rename to toolchain/gcc/4.5.4/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 4ce8816..fa526bb 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -62,7 +62,7 @@ config BR2_GCC_VERSION
+ 	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
+ 	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
+ 	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
+-	default "4.5.3"     if BR2_GCC_VERSION_4_5_X
++	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
+ 	default "4.6.3"     if BR2_GCC_VERSION_4_6_X
+ 	default "4.7.1"     if BR2_GCC_VERSION_4_7_X
+ 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
