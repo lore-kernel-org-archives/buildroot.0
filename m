@@ -1,90 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:55:23 -0000
-Subject: [Buildroot] [git commit branch/next] new package: luacjson
-Message-ID: <20120802195255.294148EE7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] luajit: fix dependencies of
+	Lua modules
+Message-ID: <20120802195255.ED02E8EE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d8434630b397dab7da3739c9f737fc2fbf0e97d
+commit: http://git.buildroot.net/buildroot/commit/?id=fb0af9388713497ac7917174518e8703b7887751
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+BR2_PACKAGE_LUA_SHARED_LIBRARY is an internal of lua package
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/luacjson/Config.in   |   13 +++++++++++++
- package/luacjson/luacjson.mk |   32 ++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
+ package/cgilua/Config.in        |    1 -
+ package/copas/Config.in         |    1 -
+ package/luafilesystem/Config.in |    1 -
+ package/luasocket/Config.in     |    1 -
+ package/rings/Config.in         |    1 -
+ package/xavante/Config.in       |    1 -
+ 6 files changed, 0 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5126f1a..8529777 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -250,6 +250,7 @@ menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
-+source "package/luacjson/Config.in"
- source "package/luaexpat/Config.in"
- source "package/luafilesystem/Config.in"
- source "package/luasocket/Config.in"
-diff --git a/package/luacjson/Config.in b/package/luacjson/Config.in
-new file mode 100644
-index 0000000..8a5624f
---- /dev/null
-+++ b/package/luacjson/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LUACJSON
-+	bool "luacjson"
-+	help
-+	  The Lua CJSON module provides JSON support for Lua. It features:
-+	  - Fast, standards compliant encoding/parsing routines
-+	  - Full support for JSON with UTF-8, including decoding surrogate pairs
-+	  - Optional run-time support for common exceptions to the JSON
-+	    specification (infinity, NaN, ...)
-+	  - No dependencies on other libraries
-+
-+	  (C-module)
-+
-+	  http://www.kyne.com.au/~mark/software/lua-cjson.php
-diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-new file mode 100644
-index 0000000..fe92f16
---- /dev/null
-+++ b/package/luacjson/luacjson.mk
-@@ -0,0 +1,32 @@
-+#############################################################
-+#
-+# luacjson
-+#
-+#############################################################
-+LUACJSON_VERSION      = 2.1.0
-+LUACJSON_SOURCE       = lua-cjson-$(LUACJSON_VERSION).tar.gz
-+LUACJSON_SITE         = http://www.kyne.com.au/~mark/software/download
-+LUACJSON_DEPENDENCIES = lua
-+
-+define LUACJSON_BUILD_CMDS
-+	$(MAKE) -C $(@D) \
-+		CFLAGS="$(TARGET_CFLAGS)"   \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CC="$(TARGET_CC)"           \
-+		LD="$(TARGET_LD)"           \
-+		PREFIX=$(STAGING_DIR)/usr
-+endef
-+
-+define LUACJSON_INSTALL_TARGET_CMDS
-+	install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
-+endef
-+
-+define LUACJSON_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+define LUACJSON_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/lua/cjson.so
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index 2f9c452..01928f0 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_CGILUA
+ 	bool "cgilua"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	help
+ 	  CGILua is a tool for creating dynamic HTML pages
+diff --git a/package/copas/Config.in b/package/copas/Config.in
+index 36abcc1..9969c8f 100644
+--- a/package/copas/Config.in
++++ b/package/copas/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_COPAS
+ 	bool "copas"
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUASOCKET
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY # for luasocket
+ 	help
+ 	  Copas is a dispatcher based on coroutines that
+ 	  can be used by TCP/IP servers.
+diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
+index edcb414..7c130f8 100644
+--- a/package/luafilesystem/Config.in
++++ b/package/luafilesystem/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUAFILESYSTEM
+ 	bool "luafilesystem"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  LuaFileSystem offers a portable way to access
+ 	  the underlying directory structure and file attributes.
+diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
+index 298db56..4526303 100644
+--- a/package/luasocket/Config.in
++++ b/package/luasocket/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUASOCKET
+ 	bool "luasocket"
+-	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  LuaSocket is the most comprehensive networking support library
+ 	  for the Lua language.
+diff --git a/package/rings/Config.in b/package/rings/Config.in
+index 2fe14aa..d1f1efe 100644
+--- a/package/rings/Config.in
++++ b/package/rings/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_RINGS
+ 	bool "rings"
+-	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Provides a way to create new Lua states from within Lua.
+ 
+diff --git a/package/xavante/Config.in b/package/xavante/Config.in
+index a7df530..db34d66 100644
+--- a/package/xavante/Config.in
++++ b/package/xavante/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XAVANTE
+ 	bool "xavante"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	select BR2_PACKAGE_CGILUA
+ 	select BR2_PACKAGE_COPAS
+ 	select BR2_PACKAGE_COXPCALL
