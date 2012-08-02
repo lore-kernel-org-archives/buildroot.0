@@ -1,47 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:53:26 -0000
-Subject: [Buildroot] [git commit branch/next] hiawatha: fix bug #5276 and
-	bump to version 8.4
-Message-ID: <20120802195240.000BA800EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] toolchain: reinstate
+	host/usr/bin/$arch-linux-* symlinks for gcc/gdb binaries
+Message-ID: <20120802195242.7D3F48E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c1ad3099242bb4ddc5ade87e6a8e4239d68f5cc
+commit: http://git.buildroot.net/buildroot/commit/?id=3f487ef72845965b578002b2f9c0a37eff47e97a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix bug #5276 by disabling IPv6 when the toolchain lacks it.
-It builds fine even if it's enabled but it probably doesn't work fine.
+As people might be using them.
 
-Also bump to version 8.4:
-* MaxServerLoad option added.
-* Bugfix: invalid reverse proxy request when URL parameters are present.
-* PolarSSL updated to version 1.1.4.
-* Small bugfixes and improvements.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/hiawatha/hiawatha.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++++
+ toolchain/gdb/gdb.mk            |    1 +
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 647c1e1..941ee8d 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -1,4 +1,4 @@
--HIAWATHA_VERSION = 8.3
-+HIAWATHA_VERSION = 8.4
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 57f4f8a..e29d797 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -482,6 +482,10 @@ endif
+ 	if [ ! -e $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc ]; then \
+ 		ln -snf gcc $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/cc; \
+ 	fi
++	# arch-linux-* symlinks
++	cd $(HOST_DIR)/usr/bin; for i in $(GNU_TARGET_NAME)-*; do \
++		ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
++	done
  
- ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
-@@ -7,6 +7,7 @@ HIAWATHA_DEPENDENCIES += polarssl
- endif
+ 	mkdir -p $(TARGET_DIR)/usr/lib $(TARGET_DIR)/usr/sbin
+ 	touch $@
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 5673cf1..f5af454 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -203,6 +203,7 @@ $(GDB_HOST_DIR)/gdb/gdb: $(GDB_HOST_DIR)/.configured
  
- HIAWATHA_CONF_OPT += \
-+	$(if $(BR2_INET_IPV6),,-DENABLE_IPV6=OFF) \
- 	-DENABLE_TOOLKIT=OFF \
- 	-DENABLE_XSLT=OFF \
- 	-DCONFIG_DIR=/etc/hiawatha \
+ $(TARGET_CROSS)gdb: $(GDB_HOST_DIR)/gdb/gdb
+ 	install -c $(GDB_HOST_DIR)/gdb/gdb $(TARGET_CROSS)gdb
++	ln -snf $(@F) $(HOST_DIR)/usr/bin/$(ARCH)-linux-gdb
+ 
+ gdbhost: host-expat $(TARGET_CROSS)gdb
+ 
