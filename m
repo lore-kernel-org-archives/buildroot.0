@@ -1,32 +1,67 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:49 -0000
-Subject: [Buildroot] [git commit branch/next] bluez_utils: bump to 4.101
-Message-ID: <20120802195245.554588C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] automatically set
+	PARALLEL_JOBS when BR2_JLEVEL is 0
+Message-ID: <20120802195244.642238C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b731806dd1d7e6a5a18e6160817e097296a18660
+commit: http://git.buildroot.net/buildroot/commit/?id=5016aa02fb51dbd73461f65ed8c7d9b52539a988
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+When BR2_JLEVEL is 0, set PARALLEL_JOBS to double the number of CPUs
+detected.  This allows one to more or less fully utilize the host
+system without manually tuning the configuration.
+
+Also make 0 the default value for BR2_JLEVEL.
+
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bluez_utils/bluez_utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Config.in           |    8 +++++---
+ package/Makefile.in |    8 ++++++++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
-index eb42e23..33d2987 100644
---- a/package/bluez_utils/bluez_utils.mk
-+++ b/package/bluez_utils/bluez_utils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/Config.in b/Config.in
+index 83f64bb..925c247 100644
+--- a/Config.in
++++ b/Config.in
+@@ -178,10 +178,12 @@ config BR2_DEBIAN_MIRROR
+ endmenu
  
--BLUEZ_UTILS_VERSION = 4.99
-+BLUEZ_UTILS_VERSION = 4.101
- BLUEZ_UTILS_SOURCE = bluez-$(BLUEZ_UTILS_VERSION).tar.gz
- BLUEZ_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ_UTILS_INSTALL_STAGING = YES
+ config BR2_JLEVEL
+-	int "Number of jobs to run simultaneously"
+-	default "2"
++	int "Number of jobs to run simultaneously (0 for auto)"
++	default "0"
+ 	help
+-	  Number of jobs to run simultaneously
++	  Number of jobs to run simultaneously.  If 0, determine
++	  automatically according to number of CPUs on the host
++	  system.
+ 
+ config BR2_CCACHE
+ 	bool "Enable compiler cache"
+diff --git a/package/Makefile.in b/package/Makefile.in
+index be83ada..1d43aef 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -6,7 +6,15 @@ HOSTMAKE=$(MAKE)
+ endif
+ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+ 
++# If BR2_LEVEL is 0, scale the maximum concurrency with the number of
++# CPUs.  A coefficient of 2 is used in order to keep processors busy
++# while waiting on I/O.
++ifeq ($(BR2_JLEVEL),0)
++PARALLEL_JOBS:=$(shell echo \
++	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
++else
+ PARALLEL_JOBS:=$(BR2_JLEVEL)
++endif
+ 
+ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
