@@ -1,98 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:37 -0000
-Subject: [Buildroot] [git commit branch/next] Update for 2012.05-rc3
-Message-ID: <20120802195234.508B996AE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] connman: fixup libglib2
+	(gettext) dependencies
+Message-ID: <20120802195235.8DDDD96F60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b0d7badb0338f7c33c86e2ab60c413a973ca348
+commit: http://git.buildroot.net/buildroot/commit/?id=fdba8d85e034d64abec25c791d34f91ac09f92ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Connman was missing from commit b730010c90a (package: gettext needs
+WCHAR support).
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES            |   13 +++++++++++++
- Makefile           |    2 +-
- docs/download.html |    6 +++---
- docs/news.html     |   12 ++++++++++++
- 4 files changed, 29 insertions(+), 4 deletions(-)
+ package/connman/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 7d17c26..4a8bed0 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,16 @@
-+2012.05-rc3, Released May 25th, 2012:
-+
-+	Minor fixes around the tree.
-+
-+	Infra: Fix for DOWNLOAD macro when using primary mirrors with
-+	scp targets.
-+
-+	Toolchain: Kernel headers 3.2.18 / 3.3.7.
-+
-+	Updated/fixed packages: binutils, bison, busybox, cifs-utils,
-+	gnuchess, gpsd, iperf, libmpeg2, mtd, ntfs-3g, oprofile,
-+	xserver-xorg
-+
- 2012.05-rc2, Released May 18th, 2012:
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 3373ec1..ebe0cee 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
++	depends on BR2_USE_WCHAR # libglib2
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+ 	  managing internet connections within embedded devices running
+@@ -44,5 +45,5 @@ config BR2_PACKAGE_CONNMAN_CLIENT
  
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index c0fc8c2..4945c16 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
+ endif # BR2_PACKAGE_CONNMAN
  
- # Set and export the version string
--export BR2_VERSION:=2012.05-rc2
-+export BR2_VERSION:=2012.05-rc3
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index 52d3c18..57c8be5 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -14,12 +14,12 @@ or
- <a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
- <p>
- 
--The latest release candidate is <b>2012.05-rc2</b>, which can be
-+The latest release candidate is <b>2012.05-rc3</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2012.05-rc2.tar.gz">buildroot-2012.05-rc2.tar.gz</a>
-+<a href="/downloads/buildroot-2012.05-rc3.tar.gz">buildroot-2012.05-rc3.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.05-rc2.tar.bz2">buildroot-2012.05-rc2.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.05-rc3.tar.bz2">buildroot-2012.05-rc3.tar.bz2</a>.
- <p>
- 
- This and earlier releases can always be downloaded from
-diff --git a/docs/news.html b/docs/news.html
-index c7d276e..94d1d94 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,18 @@
- <p>
- 
- <ul>
-+  <li><b>25 May 2012 -- 2012.05-rc3 released</b>
-+
-+    <p>RC3 is out with more bugfixes - See the <a
-+    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc3">CHANGES</a>
-+    file for details.
-+
-+    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2012.05-rc3.tar.bz2">2012.05-rc3
-+    release candidate</a>, and report any problems found to the <a
-+    href="lists.html">mailing list</a> or <a
-+    href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>18 May 2012 -- 2012.05-rc2 released</b>
- 
-     <p>Another week, another release candidate with more cleanups and
+-comment "connman needs a toolchain with resolver support"
+-	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32
++comment "connman needs a toolchain with WCHAR and resolver support"
++	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32 || !BR2_USE_WCHAR
