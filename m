@@ -1,30 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Aug 2012 21:49:48 +0200
-Subject: [Buildroot] [git commit branch/next] sam-ba: bump version to 2.12
-Message-ID: <20120802195306.56BD08F456@busybox.osuosl.org>
+Date: Thu, 2 Aug 2012 21:45:53 +0200
+Subject: [Buildroot] [git commit branch/next] mxml: add license information
+Message-ID: <20120802195306.2BB4B8F456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9240163ef7e1f10cdbecfc5a6936d5624f823565
+commit: http://git.buildroot.net/buildroot/commit/?id=1bcc51fd1a8a83d1cfb350b7d83e47b8687ef39f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/sam-ba/sam-ba.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mxml/mxml.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-index 9f39347..067bdf1 100644
---- a/package/sam-ba/sam-ba.mk
-+++ b/package/sam-ba/sam-ba.mk
-@@ -1,5 +1,5 @@
- SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
--SAM_BA_VERSION = 2.11
-+SAM_BA_VERSION = 2.12
- SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index af1cb26..03850d0 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -5,6 +5,8 @@
+ #############################################################
+ MXML_VERSION = 2.7
+ MXML_SITE = http://ftp.easysw.com/pub/mxml/$(MXML_VERSION)
++MXML_LICENSE = LGPLv2+ with exceptions
++MXML_LICENSE_FILES = COPYING
+ MXML_INSTALL_STAGING = YES
  
- define HOST_SAM_BA_EXTRACT_CMDS
+ MXML_INSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) install
