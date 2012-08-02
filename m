@@ -1,38 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:55:20 -0000
-Subject: [Buildroot] [git commit branch/next] libnss: fix 64-bit build
-Message-ID: <20120802195255.5CE518D2C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] new package: LuaExpat
+Message-ID: <20120802195255.0ED408EE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adbe85c752651bc147bc4deb6419d162b2c6417e
+commit: http://git.buildroot.net/buildroot/commit/?id=198bc9631aff65f5fe90db068cb1936850736910
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On some architectures (found on x86_64, but probably others too),
-libnss builds with -m32 unless it is configured for 64-bit build.  So
-force 64-bit build on 64-bit architectures.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnss/libnss.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/Config.in            |    1 +
+ package/luaexpat/Config.in   |    7 +++++++
+ package/luaexpat/luaexpat.mk |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 2e28c75..f7fd682 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -28,6 +28,10 @@ LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
- 		OS_RELEASE="2.6" \
- 		OS_TEST="$(ARCH)"
- 
-+ifeq ($(BR2_ARCH_IS_64),y)
-+LIBNSS_BUILD_VARS += USE_64=1
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index 99257b4..5126f1a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -250,6 +250,7 @@ menu "LUA libraries/modules"
+ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
++source "package/luaexpat/Config.in"
+ source "package/luafilesystem/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/rings/Config.in"
+diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
+new file mode 100644
+index 0000000..186c5c9
+--- /dev/null
++++ b/package/luaexpat/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUAEXPAT
++	bool "luaexpat"
++	select BR2_PACKAGE_EXPAT
++	help
++	  LuaExpat is a SAX XML parser based on the Expat library.
 +
- 
- define LIBNSS_BUILD_CMDS
- 	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf build_dbm all \
++	  http://matthewwild.co.uk/projects/luaexpat/
+diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+new file mode 100644
+index 0000000..400d7b4
+--- /dev/null
++++ b/package/luaexpat/luaexpat.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# luaexpat
++#
++#############################################################
++
++LUAEXPAT_VERSION      = 1.2.0
++LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
++LUAEXPAT_DEPENDENCIES = lua expat
++
++
++LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
++LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
++LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
++LUAEXPAT_MFLAGS += LIBNAME=lxp.so
++LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
++LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
++
++
++define LUAEXPAT_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
++endef
++
++define LUAEXPAT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
++	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
++endef
++
++define LUAEXPAT_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/lib/lua/lxp.so
++	rm -f $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
++endef
++
++define LUAEXPAT_CLEAN_CMDS
++	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS) clean
++endef
++
++$(eval $(generic-package))
