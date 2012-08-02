@@ -1,56 +1,100 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:34 -0000
-Subject: [Buildroot] [git commit branch/next] vala: do not append a -dirty
-	suffix to the valac version number
-Message-ID: <20120802195232.B2B0296FF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Update for 2012.05-rc2
+Message-ID: <20120802195232.C5D9196FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f87cbf0ed9e0efa12ee5e2ea5e81bdc217430c80
+commit: http://git.buildroot.net/buildroot/commit/?id=b07ad40c1dc78e61dd71d264b1b30aabfa1033dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When vala is built inside a Git repository with uncommitted changes, the
-valac version number has -dirty appended. This creates problems for
-packages (e.g. Midori) which require a valac version number without
-the -dirty suffix.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...la-0.15.2-dont-add-dirty-to-valac-version.patch |   25 ++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ CHANGES            |   14 +++++++++++++-
+ Makefile           |    2 +-
+ docs/download.html |    6 +++---
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 30 insertions(+), 5 deletions(-)
 
-diff --git a/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch b/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch
-new file mode 100644
-index 0000000..a2a0623
---- /dev/null
-+++ b/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch
-@@ -0,0 +1,25 @@
-+valac: don't append -dirty to version
+diff --git a/CHANGES b/CHANGES
+index 6b01c04..7d17c26 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,16 @@
+-2012.05-rc1, Released May 10th, 2012
++2012.05-rc2, Released May 18th, 2012:
 +
-+Don't append -dirty to the valac version number if the Buildroot Git
-+tree has uncommited changes.
++	Fixes all over the tree.
 +
-+The patched script is meant for the valac developers, but it also
-+activates if you build valac in a subdirectory of a Git tree (e.g.
-+as is commonly done in Buildroot).
++	Toolchain: uClibc: Use 0.9.33.2, Crosstool-ng: fix gperf
++	dependency, disable decimal floats support, Linux 3.2.17 /
++	3.3.6 kernel headers. Fix sysroot copy handling for toolchains
++	without C++ support.
 +
-+The effect is that valac gets built as being version x.y.z-dirty, which
-+breaks programs (such as Midori) that explicitly check for valac-x.y.z.
++	Updated/fixed packages: apr, apr-util, ccache, dnsmasq,
++	heirloom-mailx, gdb, ndisc6, opencv, openssl, socat, vala
 +
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+diff -Nur a/build-aux/git-version-gen b/build-aux/git-version-gen
-+--- a/build-aux/git-version-gen	2010-08-15 12:49:03.000000000 +0100
-++++ b/build-aux/git-version-gen	2012-05-14 10:17:19.977204570 +0100
-+@@ -135,7 +135,7 @@
-+     *) # Append the suffix only if there isn't one already.
-+ 	case $v in
-+ 	  *-dirty) ;;
-+-	  *) v="$v-dirty" ;;
-++	  #*) v="$v-dirty" ;;
-+ 	esac ;;
-+ esac
-+ 
++2012.05-rc1, Released May 10th, 2012:
+ 
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index 4427c40..c0fc8c2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2012.05-rc1
++export BR2_VERSION:=2012.05-rc2
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 7b22569..52d3c18 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -14,12 +14,12 @@ or
+ <a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
+ <p>
+ 
+-The latest release candidate is <b>2012.05-rc1</b>, which can be
++The latest release candidate is <b>2012.05-rc2</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2012.05-rc1.tar.gz">buildroot-2012.05-rc1.tar.gz</a>
++<a href="/downloads/buildroot-2012.05-rc2.tar.gz">buildroot-2012.05-rc2.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2012.05-rc1.tar.bz2">buildroot-2012.05-rc1.tar.bz2</a>.
++<a href="/downloads/buildroot-2012.05-rc2.tar.bz2">buildroot-2012.05-rc2.tar.bz2</a>.
+ <p>
+ 
+ This and earlier releases can always be downloaded from
+diff --git a/docs/news.html b/docs/news.html
+index 0032dfa..c7d276e 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>18 May 2012 -- 2012.05-rc2 released</b>
++
++    <p>Another week, another release candidate with more cleanups and
++    build fixes. See the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc2">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2012.05-rc2.tar.bz2">2012.05-rc2
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>10 May 2012 -- 2012.05-rc1 released</b>
+ 
+     <p>We have a new release candidate! Lots of changes all over the
