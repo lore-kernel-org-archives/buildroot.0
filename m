@@ -1,55 +1,321 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:53:38 -0000
-Subject: [Buildroot] [git commit branch/next] ramspeed: use provided linker
-	flags as well
-Message-ID: <20120802195246.7249C8C999@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:53:39 -0000
+Subject: [Buildroot] [git commit branch/next] sudo: fix install
+Message-ID: <20120802195241.AAE348C999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e6ec6e319f87c3f3e97d314ea88a181096c451e
+commit: http://git.buildroot.net/buildroot/commit/?id=463ffd9ee401d4fcff0883735db38c873be1d9a0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Running sudo on the target fails with the following errors.
+
+  sudo: /usr/libexec/sudoers.so: No such file or directory
+  sudo: fatal error, unable to load plugins
+
+The problem is that the installation of the sudo package is broken. This patch
+replaces the hand-crafted install rule with the default AUTOTARGETS install.
+
+Unfortunately, the default install fails because it includes a step that
+invokes the cross-compiled visudo binary. A patch is provided here to disable
+this visudo invocation, which is for sanity checking only. This local patch is
+a backport of upstream commit 8209:0c4e3f68b2f5; the real fix will be in the
+1.8.6 release of sudo.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ramspeed/Makefile    |    6 +++---
- package/ramspeed/ramspeed.mk |    3 +--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ ...rt-commit-8209:0c4e3f68b2f5-from-upstream.patch |  263 ++++++++++++++++++++
+ package/sudo/sudo.mk                               |    8 -
+ 2 files changed, 263 insertions(+), 8 deletions(-)
 
-diff --git a/package/ramspeed/Makefile b/package/ramspeed/Makefile
-index acb8cfd..f4a4de6 100644
---- a/package/ramspeed/Makefile
-+++ b/package/ramspeed/Makefile
-@@ -2,13 +2,13 @@
- all: generic
+diff --git a/package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch b/package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
+new file mode 100644
+index 0000000..69512b0
+--- /dev/null
++++ b/package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
+@@ -0,0 +1,263 @@
++The installation of the sudoers plugin fails when cross compiling, because it
++tries to run the cross-compiled visudo, rather than that of the host.
++
++The visudo invocation is only required in order to sanity check any existing
++sudoers file in the target directory; this can safely be dispensed with.
++
++This is a backport of commit 8209:0c4e3f68b2f5 from upstream.
++
++N.B. The upstream fix will appear in sudo 1.8.6; when the Buildroot package
++is bumped to version 1.8.6 (or higher), then this patch will no longer be
++required.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++diff -Nurp a/common/Makefile.in b/common/Makefile.in
++--- a/common/Makefile.in	2012-05-15 17:22:01.000000000 +0100
+++++ b/common/Makefile.in	2012-06-21 08:55:57.345169676 +0100
++@@ -24,6 +24,7 @@ devdir = @devdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Where to install things...
++ prefix = @prefix@
++diff -Nurp a/compat/Makefile.in b/compat/Makefile.in
++--- a/compat/Makefile.in	2012-05-15 17:22:01.000000000 +0100
+++++ b/compat/Makefile.in	2012-06-21 08:57:09.097166477 +0100
++@@ -24,6 +24,7 @@ devdir = @devdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Where to install things...
++ prefix = @prefix@
++@@ -111,19 +112,21 @@ install-plugin:
++ uninstall:
++ 
++ check: $(TEST_PROGS)
++-	@if [ -f fnm_test ]; then \
++-	    ./fnm_test $(srcdir)/regress/fnmatch/fnm_test.in; \
++-	fi
++-	@if [ -f globtest ]; then \
++-	    mkdir -p `sed 's@/[^/]*$$@@' $(srcdir)/regress/glob/files | sort -u`; \
++-	    touch `cat $(srcdir)/regress/glob/files`; \
++-	    chmod 0755 `grep '/r[^/]*$$' $(srcdir)/regress/glob/files`; \
++-	    chmod 0444 `grep '/s[^/]*$$' $(srcdir)/regress/glob/files`; \
++-	    chmod 0711 `grep '/t[^/]*$$' $(srcdir)/regress/glob/files`; \
++-	    ./globtest $(srcdir)/regress/glob/globtest.in; \
++-	    rval=$$?; \
++-	    rm -rf fake; \
++-	    exit $$rval; \
+++	@if test X"$(cross_compiling)" != X"yes"; then \
+++	    if test -f fnm_test; then \
+++		./fnm_test $(srcdir)/regress/fnmatch/fnm_test.in; \
+++	    fi; \
+++	    if test -f globtest; then \
+++		mkdir -p `sed 's@/[^/]*$$@@' $(srcdir)/regress/glob/files | sort -u`; \
+++		touch `cat $(srcdir)/regress/glob/files`; \
+++		chmod 0755 `grep '/r[^/]*$$' $(srcdir)/regress/glob/files`; \
+++		chmod 0444 `grep '/s[^/]*$$' $(srcdir)/regress/glob/files`; \
+++		chmod 0711 `grep '/t[^/]*$$' $(srcdir)/regress/glob/files`; \
+++		./globtest $(srcdir)/regress/glob/globtest.in; \
+++		rval=$$?; \
+++		rm -rf fake; \
+++		exit $$rval; \
+++	    fi; \
++ 	fi
++ 
++ clean:
++diff -Nurp a/configure b/configure
++--- a/configure	2012-05-17 20:53:53.000000000 +0100
+++++ b/configure	2012-06-21 08:58:08.769163817 +0100
++@@ -691,6 +691,7 @@ password_timeout
++ timeout
++ timedir
++ iolog_dir
+++CROSS_COMPILING
++ COMPAT_TEST_PROGS
++ SUDO_NLS
++ LIBINTL
++@@ -2874,6 +2875,7 @@ $as_echo "$as_me: Configuring Sudo versi
++ 
++ 
++ 
+++
++ #
++ # Begin initial values for man page substitution
++ #
++@@ -20094,6 +20096,8 @@ if test -n "$GCC"; then
++     fi
++ fi
++ 
+++CROSS_COMPILING="$cross_compiling"
+++
++ test "$exec_prefix" = "NONE" && exec_prefix='$(prefix)'
++ 
++ if test X"$with_noexec" != X"no" -o X"$with_selinux" != X"no"; then
++diff -Nurp a/configure.in b/configure.in
++--- a/configure.in	2012-05-17 20:53:54.000000000 +0100
+++++ b/configure.in	2012-06-21 08:58:51.017161934 +0100
++@@ -67,6 +67,7 @@ AC_SUBST([LT_STATIC])
++ AC_SUBST([LIBINTL])
++ AC_SUBST([SUDO_NLS])
++ AC_SUBST([COMPAT_TEST_PROGS])
+++AC_SUBST([CROSS_COMPILING])
++ dnl
++ dnl Variables that get substituted in docs (not overridden by environment)
++ dnl
++@@ -3198,6 +3199,11 @@ if test -n "$GCC"; then
++ fi
++ 
++ dnl
+++dnl Skip regress tests and sudoers sanity check if cross compiling.
+++dnl
+++CROSS_COMPILING="$cross_compiling"
+++
+++dnl
++ dnl Set exec_prefix
++ dnl
++ test "$exec_prefix" = "NONE" && exec_prefix='$(prefix)'
++diff -Nurp a/doc/Makefile.in b/doc/Makefile.in
++--- a/doc/Makefile.in	2012-03-12 18:02:07.000000000 +0000
+++++ b/doc/Makefile.in	2012-06-21 08:59:06.537161242 +0100
++@@ -23,6 +23,7 @@ srcdir = @srcdir@
++ docdir = @docdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Tools to use
++ NROFF = @NROFFPROG@
++diff -Nurp a/plugins/sample/Makefile.in b/plugins/sample/Makefile.in
++--- a/plugins/sample/Makefile.in	2012-03-12 18:02:09.000000000 +0000
+++++ b/plugins/sample/Makefile.in	2012-06-21 08:59:24.397160445 +0100
++@@ -24,6 +24,7 @@ devdir = @devdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Compiler & tools to use
++ CC = @CC@
++diff -Nurp a/plugins/sample_group/Makefile.in b/plugins/sample_group/Makefile.in
++--- a/plugins/sample_group/Makefile.in	2012-05-15 17:22:02.000000000 +0100
+++++ b/plugins/sample_group/Makefile.in	2012-06-21 08:59:38.641159810 +0100
++@@ -24,6 +24,7 @@ devdir = @devdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Compiler & tools to use
++ CC = @CC@
++diff -Nurp a/plugins/sudoers/Makefile.in b/plugins/sudoers/Makefile.in
++--- a/plugins/sudoers/Makefile.in	2012-05-15 17:22:02.000000000 +0100
+++++ b/plugins/sudoers/Makefile.in	2012-06-21 09:32:26.165072089 +0100
++@@ -32,6 +32,7 @@ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
++ docdir = @docdir@
++ timedir = @timedir@
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Compiler & tools to use
++ CC = @CC@
++@@ -237,7 +238,7 @@ sudoers: $(srcdir)/sudoers.in
++ 	(cd $(top_builddir) && $(SHELL) config.status --file=plugins/sudoers/$@)
++ 
++ pre-install:
++-	@if test -r $(DESTDIR)$(sudoersdir)/sudoers; then \
+++	@if test X"$(cross_compiling)" != X"yes" -a -r $(DESTDIR)$(sudoersdir)/sudoers; then \
++ 	    echo "Checking existing sudoers file for syntax errors."; \
++ 	    ./visudo -c -f $(DESTDIR)$(sudoersdir)/sudoers; \
++ 	fi
++@@ -280,17 +281,23 @@ uninstall:
++ 	    rm -f $(DESTDIR)$(sudoersdir)/sudoers
++ 
++ check: $(TEST_PROGS) visudo testsudoers
++-	@-rval=0; \
++-	./check_addr $(srcdir)/regress/parser/check_addr.in; \
+++	@-if test X"$(cross_compiling)" != X"yes"; then \
+++	    rval=0; \
+++	    PWD=`pwd`; \
+++	    ./check_addr $(srcdir)/regress/parser/check_addr.in; \
++ 	rval=`expr $$rval + $$?`; \
++-	./check_fill; \
++-	rval=`expr $$rval + $$?`; \
++-	./check_iolog_path $(srcdir)/regress/iolog_path/data; \
++-	rval=`expr $$rval + $$?`; \
++-	./check_wrap $(srcdir)/regress/logging/check_wrap.in > check_wrap.out; \
++-	diff check_wrap.out $(srcdir)/regress/logging/check_wrap.out.ok; \
++-	rval=`expr $$rval + $$?`; \
++-	passed=0; failed=0; total=0; \
+++	    ./check_fill; \
+++	    rval=`expr $$rval + $$?`; \
+++	    ./check_iolog_path $(srcdir)/regress/iolog_path/data; \
+++	    rval=`expr $$rval + $$?`; \
+++	    if [ X"$(soext)" != X"" ]; then \
+++		./check_symbols .libs/sudoers$(soext) $(shlib_exp); \
+++		rval=`expr $$rval + $$?`; \
+++	    fi; \
+++	    ./check_wrap $(srcdir)/regress/logging/check_wrap.in > check_wrap.out; \
+++	    diff check_wrap.out $(srcdir)/regress/logging/check_wrap.out.ok; \
+++	    rval=`expr $$rval + $$?`; \
+++	    passed=0; failed=0; total=0; \
++ 	    for t in $(srcdir)/regress/sudoers/*.in; do \
++ 		dir=`dirname $$t`; \
++ 		dirbase=`basename $$dir`; \
++@@ -318,8 +325,8 @@ check: $(TEST_PROGS) visudo testsudoers
++ 		total=`expr $$total + 1`; \
++ 	    done; \
++ 	    echo "$$dirbase: $$passed/$$total tests passed; $$failed/$$total tests failed"; \
++-	rval=`expr $$rval + $$failed`; \
++-	passed=0; failed=0; total=0; \
+++	    rval=`expr $$rval + $$failed`; \
+++	    passed=0; failed=0; total=0; \
++ 	    for t in $(srcdir)/regress/*/*.sh; do \
++ 		dir=`dirname $$t`; \
++ 		dirbase=`basename $$dir`; \
++@@ -351,7 +358,9 @@ check: $(TEST_PROGS) visudo testsudoers
++ 		fi; \
++ 	    done; \
++ 	    echo "$$dirbase: $$passed/$$total tests passed; $$failed/$$total tests failed"; \
++-	    rval=`expr $$rval + $$failed`; exit $$rval
+++	    rval=`expr $$rval + $$failed`; \
+++	    exit $$rval; \
+++	fi
++ 
++ clean:
++ 	-$(LIBTOOL) --mode=clean rm -f $(PROGS) $(TEST_PROGS) *.lo *.o *.la *.a stamp-* core *.core core.* *.out *.toke *.err
++diff -Nurp a/plugins/system_group/Makefile.in b/plugins/system_group/Makefile.in
++--- a/plugins/system_group/Makefile.in	2012-05-15 17:22:03.000000000 +0100
+++++ b/plugins/system_group/Makefile.in	2012-06-21 09:32:38.361071545 +0100
++@@ -24,6 +24,7 @@ devdir = @devdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Compiler & tools to use
++ CC = @CC@
++diff -Nurp a/src/Makefile.in b/src/Makefile.in
++--- a/src/Makefile.in	2012-05-08 21:56:43.000000000 +0100
+++++ b/src/Makefile.in	2012-06-21 09:32:53.233070882 +0100
++@@ -24,6 +24,7 @@ devdir = @devdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ incdir = $(top_srcdir)/include
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Compiler & tools to use
++ CC = @CC@
++diff -Nurp a/zlib/Makefile.in b/zlib/Makefile.in
++--- a/zlib/Makefile.in	2012-03-12 18:02:17.000000000 +0000
+++++ b/zlib/Makefile.in	2012-06-21 09:33:03.417070428 +0100
++@@ -22,6 +22,7 @@
++ srcdir = @srcdir@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
+++cross_compiling = @CROSS_COMPILING@
++ 
++ # Compiler & tools to use
++ CC = @CC@
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 3629ad1..f1efc54 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -14,12 +14,4 @@ SUDO_CONF_OPT = \
+ 		--without-interfaces \
+ 		--without-pam
  
- generic: ramspeed.c fltmem.c fltmark.c intmem.c intmark.c
--	$(CC) $(CFLAGS) $^ -o ramspeed
-+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o ramspeed
- 
- i386: ramspeed.c i386/*.s i386/cpuinfo/*.s
--	$(CC) $(CFLAGS) -DI386_ASM $^ -o ramspeed
-+	$(CC) $(CFLAGS) -DI386_ASM $(LDFLAGS) $^ -o ramspeed
- 
- x86_64: ramspeed.c amd64/*.s
--	$(CC) $(CFLAGS) -DAMD64_ASM $^ -o ramspeed
-+	$(CC) $(CFLAGS) -DAMD64_ASM $(LDFLAGS) $^ -o ramspeed
- 
- clean:
- 	rm -f *.o ramspeed
-diff --git a/package/ramspeed/ramspeed.mk b/package/ramspeed/ramspeed.mk
-index 9ac21ad..478c2fb 100644
---- a/package/ramspeed/ramspeed.mk
-+++ b/package/ramspeed/ramspeed.mk
-@@ -10,8 +10,7 @@ RAMSPEED_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
- 
- define RAMSPEED_BUILD_CMDS
- 	cp -f package/ramspeed/Makefile $(@D)
--	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
--		make -C $(@D) $(RAMSPEED_ARCH)
-+	$(TARGET_CONFIGURE_OPTS) make -C $(@D) $(RAMSPEED_ARCH)
- endef
- 
- define RAMSPEED_INSTALL_TARGET_CMDS
+-define SUDO_INSTALL_TARGET_CMDS
+-	install -m 4555 -D $(@D)/src/sudo $(TARGET_DIR)/usr/bin/sudo
+-	install -m 0555 -D $(@D)/plugins/sudoers/visudo  \
+-		$(TARGET_DIR)/usr/sbin/visudo
+-	install -m 0440 -D $(@D)/plugins/sudoers/sudoers \
+-		$(TARGET_DIR)/etc/sudoers
+-endef
+-
+ $(eval $(call AUTOTARGETS))
