@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:52:53 -0000
-Subject: [Buildroot] [git commit branch/next] dependencies.sh: suppress
-	output of locale
-Message-ID: <20120802195249.6AA8F96DC4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] icu: remove redundant
+	HOST_ICU_DEPENDENCIES
+Message-ID: <20120802195249.A033A96EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99dd58418daee463074d7fd38d6ea98aca97d304
+commit: http://git.buildroot.net/buildroot/commit/?id=feb96bb00d5cbda97900b525bba6cbd50b432f20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/dependencies/dependencies.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/icu/icu.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index c47ffcf..9f0f6a9 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -153,7 +153,7 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
-        /bin/echo -e "\nYou need locale support on your build machine to build a toolchain supporting locales\n"
-        exit 1 ;
-    fi
--   if ! locale -a | grep -i utf8$ ; then
-+   if ! locale -a | grep -q -i utf8$ ; then
-        /bin/echo -e "\nYou need at least one UTF8 locale to build a toolchain supporting locales\n"
-        exit 1 ;
-    fi
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index a2c24ca..42416b7 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -8,7 +8,6 @@ ICU_VERSION = 4.8.1.1
+ ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
+ ICU_DEPENDENCIES = host-icu
+-HOST_ICU_DEPENDENCIES =
+ ICU_INSTALL_STAGING = YES
+ ICU_CONF_OPT = --with-cross-build=$(HOST_ICU_DIR)/source --disable-samples \
+ 		--disable-tests
