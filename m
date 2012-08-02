@@ -1,42 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:44 -0000
-Subject: [Buildroot] [git commit branch/next] monit: fix configuration error
-Message-ID: <20120802195239.E5895800EF@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:45 -0000
+Subject: [Buildroot] [git commit branch/next] php: security bump to version
+	5.3.14
+Message-ID: <20120802195240.92E7088D21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5832382a18e285376e9a519e3fbfd6436e42a73
+commit: http://git.buildroot.net/buildroot/commit/?id=74b442c8b41f466253b84fd4b529cd1a6bac2587
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Configuration fails for the monit package, with the following error.
+Bump php to version 5.3.14 to fix CVE-2012-2143 and other assorted bugs.
 
-  checking for SSL library directory... Not found
-
-  Couldn't find your SSL library files.
-  Use --with-ssl-lib-dir option to fix this problem or disable the
-  SSL support with --without-ssl
-
-Tweak the monit configuration command line so that openssl is found.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/monit/monit.mk |    2 +-
+ package/php/php.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index 958618d..11bc7e1 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -15,7 +15,7 @@ MONIT_CONF_OPT += \
- 	--without-pam
+diff --git a/package/php/php.mk b/package/php/php.mk
+index af041c9..fee2c92 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--MONIT_CONF_OPT += --with-ssl
-+MONIT_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr
- MONIT_DEPENDENCIES += openssl
- else
- MONIT_CONF_OPT += --without-ssl
+-PHP_VERSION = 5.3.13
++PHP_VERSION = 5.3.14
+ PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
