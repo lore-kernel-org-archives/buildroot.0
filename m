@@ -1,34 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:49 -0000
-Subject: [Buildroot] [git commit branch/next] tcpdump: bump to version 4.3.0
-Message-ID: <20120802195245.41BDB8C999@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] rpm: needs threads support
+Message-ID: <20120802195248.9A4D396EA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac2a58c5c3627d39e2e7f77119dea2da6fa0b355
+commit: http://git.buildroot.net/buildroot/commit/?id=485b05a475a996652a6533b3f50c5440a025e5bf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Because beecrypt needs threads rpm does too since it's a mandatory
+dependency.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tcpdump/tcpdump.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/rpm/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index ab9d4f1..0febf60 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -6,9 +6,8 @@
- # Copyright (C) 2001-2003 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2002 by Tim Riker <Tim@Rikers.org>
+diff --git a/package/rpm/Config.in b/package/rpm/Config.in
+index a80a5a7..14072c9 100644
+--- a/package/rpm/Config.in
++++ b/package/rpm/Config.in
+@@ -1,8 +1,12 @@
++comment "rpm requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ comment "rpm requires libneon with SSL, XML and ZLIB support"
+-	depends on !BR2_PACKAGE_NEON || BR2_PACKAGE_NEON_NOXML
++	depends on !BR2_PACKAGE_NEON || BR2_PACKAGE_NEON_NOXML && BR2_TOOLCHAIN_HAS_THREADS
  
--TCPDUMP_VERSION = 4.2.1
-+TCPDUMP_VERSION = 4.3.0
- TCPDUMP_SITE = http://www.tcpdump.org/release
--TCPDUMP_SOURCE = tcpdump-$(TCPDUMP_VERSION).tar.gz
- TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no
- TCPDUMP_CONF_OPT = --without-crypto \
- 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ config BR2_PACKAGE_RPM
+ 	bool "rpm"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # beecrypt
+ 	select BR2_PACKAGE_BEECRYPT
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_OPENSSL
