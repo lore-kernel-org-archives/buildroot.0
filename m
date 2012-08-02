@@ -1,53 +1,68 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:33 -0000
-Subject: [Buildroot] [git commit branch/next] apr: requires shared library
-	support
-Message-ID: <20120802195232.5ABA296FE4@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:34 -0000
+Subject: [Buildroot] [git commit branch/next] socat: disable documentation
+	build/installation
+Message-ID: <20120802195232.7A00196FF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02b00dc9dfb7216145277a303c7c2f52004f85b2
+commit: http://git.buildroot.net/buildroot/commit/?id=556fd4f81588dff2e9ff288a87517d4ae18bf0ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The apr library requires shared library support unconditionally, so
-make it depend on !BR2_PREFER_STATIC_LIB, so that architectures that
-support static libraries only do not make this package available.
-
-Solves
-http://autobuild.buildroot.org/results/f4cd9751e85e9ee7fde2e9479e0f01ab2be93e84/build-end.log.
+The documentation generation process requires a special yold2man
+program, for which we don't have a package in Buildroot. Since we
+generally don't care much about documentation of packages, just adjust
+the package Makefile.in to not build/install its documentation.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/apr-util/Config.in |    2 ++
- package/apr/Config.in      |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ package/socat/socat-no-documentation.patch |   37 ++++++++++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-index 99b32f2..895dbb8 100644
---- a/package/apr-util/Config.in
-+++ b/package/apr-util/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_APR_UTIL
- 	select BR2_PACKAGE_NEON
- 	select BR2_PACKAGE_NEON_ZLIB
- 	select BR2_PACKAGE_ZLIB
-+	# apr really needs shared library support
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  The utility library for the apache runtime project
- 
-diff --git a/package/apr/Config.in b/package/apr/Config.in
-index 292cadb..ed319ed 100644
---- a/package/apr/Config.in
-+++ b/package/apr/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_APR
- 	bool "apr"
-+	# apr really needs shared library support
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  The mission of the Apache Portable Runtime (APR) project is to create
- 	  and maintain software libraries that provide a predictable and
+diff --git a/package/socat/socat-no-documentation.patch b/package/socat/socat-no-documentation.patch
+new file mode 100644
+index 0000000..ce088df
+--- /dev/null
++++ b/package/socat/socat-no-documentation.patch
+@@ -0,0 +1,37 @@
++socat: disable documentation build/installation
++
++The documentation generation process requires a special yold2man
++program, for which we don't have a package in Buildroot. Since we
++generally don't care much about documentation of packages, just adjust
++the package Makefile.in to not build/install its documentation.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile.in
++===================================================================
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -93,7 +93,7 @@
++ 	Config/Makefile.Cygwin-1-5-25 Config/config.Cygwin-1-5-25.h \
++ 	Config/Makefile.MacOSX-10-5 Config/config.MacOSX-10-5.h
++ 
++-all: progs doc
+++all: progs
++ 
++ scmclean: gitclean
++ 
++@@ -136,13 +136,11 @@
++ strip: progs
++ 	strip $(PROGS)
++ 
++-install: progs $(srcdir)/doc/socat.1
+++install: progs
++ 	mkdir -p $(DESTDIR)$(BINDEST)
++ 	$(INSTALL) -m 755 socat $(DESTDIR)$(BINDEST)
++ 	$(INSTALL) -m 755 procan $(DESTDIR)$(BINDEST)
++ 	$(INSTALL) -m 755 filan $(DESTDIR)$(BINDEST)
++-	mkdir -p $(DESTDIR)$(MANDEST)/man1
++-	$(INSTALL) -m 644 $(srcdir)/doc/socat.1 $(DESTDIR)$(MANDEST)/man1/
++ 
++ uninstall:
++ 	rm -f $(DESTDIR)$(BINDEST)/socat
