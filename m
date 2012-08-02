@@ -1,35 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:36 -0000
-Subject: [Buildroot] [git commit branch/next] pptp-linux: fix build with
-	high BR2_JLEVEL settings
-Message-ID: <20120802195234.8639D96AE7@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:37 -0000
+Subject: [Buildroot] [git commit branch/next] linphone: add optional gtk
+	support
+Message-ID: <20120802195235.538AF96AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffc4afe084a76e7246bd373c73b706f512a86c2b
+commit: http://git.buildroot.net/buildroot/commit/?id=1a3045f209d651ebbe1e5e87ccb7686e8ea595a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-The pptp-linux build system is not robust against parallel builds.
-
-Fixes http://autobuild.buildroot.net/results/a75fab3f04d03cb39cd41a86b6f57307198ba5f1
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pptp-linux/pptp-linux.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/linphone/linphone.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index 77ae34d..d4c5bc4 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -7,6 +7,7 @@
- PPTP_LINUX_VERSION = 1.7.2
- PPTP_LINUX_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pptpclient
- PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
-+PPTP_LINUX_MAKE = $(MAKE1)
+diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
+index b34fbf7..c6d571d 100644
+--- a/package/linphone/linphone.mk
++++ b/package/linphone/linphone.mk
+@@ -7,10 +7,16 @@
+ LINPHONE_VERSION = 3.5.2
+ LINPHONE_SITE = http://download-mirror.savannah.gnu.org/releases/linphone/3.5.x/sources/
+ LINPHONE_CONF_OPT = \
+-	--disable-gtk_ui \
+ 	--enable-external-ortp \
+ 	--enable-external-mediastreamer
  
- define PPTP_LINUX_BUILD_CMDS
- 	$(MAKE) -C $(@D) OPTIMIZE= DEBUG= \
+ LINPHONE_DEPENDENCIES = host-pkg-config ortp mediastreamer libeXosip2 speex
+ 
++ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
++LINPHONE_CONF_OPT += --enable-gtk_ui
++LINPHONE_DEPENDENCIES += libgtk2
++else
++LINPHONE_CONF_OPT += --disable-gtk_ui
++endif
++
+ $(eval $(call AUTOTARGETS))
