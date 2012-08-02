@@ -1,53 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:32 -0000
-Subject: [Buildroot] [git commit branch/next] Revert "directfb: add support
-	for davinci gfx driver"
-Message-ID: <20120802195232.0D07596AE7@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:33 -0000
+Subject: [Buildroot] [git commit branch/next] dnsmasq: host-pkg-config is
+	needed for lua support as well
+Message-ID: <20120802195232.2B60F96FE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1abaa98d9242799605fc8d91e238fc1e929b6414
+commit: http://git.buildroot.net/buildroot/commit/?id=9950d485cd8c16dc84d2e9eca5f4f586c1b717c5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This reverts commit df39ffe7f437f62d7c0eb6d73bdb86b2d09a8c8a.
-
-It's broken and Arnout no longer has the hardware to fix/test.
+Fixes http://autobuild.buildroot.org/results/94d67f02c81639e1586d1c21a7e3b183a6ab50a2
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/directfb/Config.in   |    4 ----
- package/directfb/directfb.mk |    3 +--
- 2 files changed, 1 insertions(+), 6 deletions(-)
+ package/dnsmasq/dnsmasq.mk |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 26f5091..47f9fea 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -53,10 +53,6 @@ config BR2_PACKAGE_DIRECTFB_EP9X
- 	bool "compile ep9x graphics driver"
- 	depends on BR2_arm
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 2e3575c..4aa7cfb 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -42,11 +42,9 @@ endef
+ endif
  
--config BR2_PACKAGE_DIRECTFB_DAVINCI
--	bool "compile TI DaVinci graphics driver"
--	depends on BR2_arm
--
- config BR2_PACKAGE_DIRECTFB_UNICHROME
- 	bool "compile unichrome graphics driver"
- 	default y
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 7aa0398..071cdf4 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -58,8 +58,7 @@ DIRECTFB_GFX := \
- 	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)	\
--	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x) \
--	$(if $(BR2_PACKAGE_DIRECTFB_DAVINCI),davinci)
-+	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
+ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+-	DNSMASQ_DEPENDENCIES += lua
++	DNSMASQ_DEPENDENCIES += lua host-pkg-config
+ 	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
+-endif
  
- ifeq ($(strip $(DIRECTFB_GFX)),)
- DIRECTFB_GFX:=none
+-ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+ define DNSMASQ_ENABLE_LUA
+ 	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
+ 	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
