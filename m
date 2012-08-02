@@ -1,47 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:37 -0000
-Subject: [Buildroot] [git commit branch/next] linux: bump default to kernel
-	version 3.4.1
-Message-ID: <20120802195235.ECD7596AE7@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:38 -0000
+Subject: [Buildroot] [git commit branch/next] pulseaudio: fix build error on
+	toolchains without C++ support
+Message-ID: <20120802195235.BF47896AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=05d7b16f53dcfeeba28d4932958458dbb49c6683
+commit: http://git.buildroot.net/buildroot/commit/?id=50995f43e18032a386bf2a4b0de47f2322a110a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The optional webrtc echo canceller is written in C++, causing auto* to want
+to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
+If we don't have C++ support enabled in BR, CXX will point to /bin/false,
+which makes configure think we aren't able to create C++ .so files
+(arguable true), breaking the build when it tries to install the .so
+workaround it by patching up the libtool invocations to use C mode instead.
+
+Fixes http://autobuild.buildroot.net/results/114e5bf0086f2394b36f17a70cb54b357a72413c
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/multimedia/pulseaudio/pulseaudio.mk |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4562b1b..83dac3f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -19,10 +19,10 @@ if BR2_LINUX_KERNEL
- #
- choice
- 	prompt "Kernel version"
--	default BR2_LINUX_KERNEL_3_3
-+	default BR2_LINUX_KERNEL_3_4
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 175adfa..6d05822 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -32,6 +32,21 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing) \
+ 	$(if $(BR2_PACKAGE_SYSTEMD),systemd)
  
--config BR2_LINUX_KERNEL_3_3
--	bool "3.3.7"
-+config BR2_LINUX_KERNEL_3_4
-+	bool "3.4.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3.7" if BR2_LINUX_KERNEL_3_3
-+	default "3.4.1" if BR2_LINUX_KERNEL_3_4
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
++ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
++# The optional webrtc echo canceller is written in C++, causing auto* to want
++# to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
++# If we don't have C++ support enabled in BR, CXX will point to /bin/false,
++# which makes configure think we aren't able to create C++ .so files
++# (arguable true), breaking the build when it tries to install the .so
++# workaround it by patching up the libtool invocations to use C mode instead
++define PULSEAUDIO_FORCE_CC
++	$(SED) 's/--tag=CXX/--tag=CC/g' -e 's/(CXXLD)/(CCLD)/g' \
++		$(@D)/src/Makefile.in
++endef
++
++PULSEAUDIO_POST_PATCH_HOOKS += PULSEAUDIO_FORCE_CC
++endif
++
+ # pulseaudio alsa backend needs pcm/mixer apis
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ PULSEAUDIO_CONF_OPT += --disable-alsa
