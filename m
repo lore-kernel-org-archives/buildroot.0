@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Aug 2012 21:45:53 +0200
-Subject: [Buildroot] [git commit] mxml: add license information
-Message-ID: <20120802194713.A10A796B71@busybox.osuosl.org>
+Date: Thu, 2 Aug 2012 21:44:20 +0200
+Subject: [Buildroot] [git commit] sudo: needs MMU support
+Message-ID: <20120802194713.8F72696FF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1bcc51fd1a8a83d1cfb350b7d83e47b8687ef39f
+commit: http://git.buildroot.net/buildroot/commit/?id=ba24df488e5783a6ccb715cff60f3c1f2b32acc4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Fixes
+http://autobuild.buildroot.org/results/46bcd9601233ca14d6747d9219669e4f52f147e6/build-end.log
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/mxml/mxml.mk |    2 ++
+ package/sudo/Config.in |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
-index af1cb26..03850d0 100644
---- a/package/mxml/mxml.mk
-+++ b/package/mxml/mxml.mk
-@@ -5,6 +5,8 @@
- #############################################################
- MXML_VERSION = 2.7
- MXML_SITE = http://ftp.easysw.com/pub/mxml/$(MXML_VERSION)
-+MXML_LICENSE = LGPLv2+ with exceptions
-+MXML_LICENSE_FILES = COPYING
- MXML_INSTALL_STAGING = YES
- 
- MXML_INSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) install
+diff --git a/package/sudo/Config.in b/package/sudo/Config.in
+index fc0a175..cd7ab81 100644
+--- a/package/sudo/Config.in
++++ b/package/sudo/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_SUDO
+ 	bool "sudo"
++	# uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  Sudo is a program designed to allow a sysadmin to give
+ 	  limited root privileges to users and log root activity.  The
