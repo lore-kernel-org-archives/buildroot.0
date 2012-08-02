@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 2 Aug 2012 15:26:40 +0200
-Subject: [Buildroot] glibc instead of ulibc ?
-In-Reply-To: <1343913806.30162.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-References: <1343854870.70701.YahooMailNeo@web164605.mail.gq1.yahoo.com>
- <20120801231635.08b7d808@skate>
- <1343913806.30162.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <20120802152640.5d9cca86@skate>
+Date: Thu, 2 Aug 2012 15:36:29 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: limit -reconfigure and -rebuild
+ actions
+In-Reply-To: <CA+wH294jcQSojPtHUyaYGmPZs6R5pGKyG1wF9vXTfmTVFEhH4Q@mail.gmail.com>
+References: <1342791572-18657-1-git-send-email-rbraun@sceen.net>
+ <20120720222722.5f89af04@skate>
+ <20120720233136.GA25851@mail.sceen.net>
+ <20120721145411.6e291ad2@skate>
+ <20120721151730.GA2543@mail.sceen.net>
+ <CAHXCMMK0J9pvVcXTfRApAcSYG+yxxOVffD_5goqF1OaBGEKROg@mail.gmail.com>
+ <500F2AAE.6020107@mind.be>
+ <CA+wH294jcQSojPtHUyaYGmPZs6R5pGKyG1wF9vXTfmTVFEhH4Q@mail.gmail.com>
+Message-ID: <20120802153629.22d25126@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Thu, 2 Aug 2012 14:28:37 +0100,
+Alex Bradbury <asb@asbradbury.org> a ?crit :
 
-Please keep the Buildroot list in Cc.
+> On 25 July 2012 00:07, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >  Bottom line: I'm all in favour of Richard's original patch
+> > (except that foo-reconfigure should also reinstall foo, which
+> > everybody seems to agree with).
+> 
+> So has this patch missed 2012.08, or might it still be included?
 
-Le Thu, 2 Aug 2012 06:23:26 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+It has missed 2012.08, I haven't the time to get to it, and now that
+-rc1 has been released, we don't accept such changes.
 
-> I am not much familiar with process of linking, but I suppose,
-> somwhere (in Lazarus units) is explicitly named glibc.so as file
-> which contains necessary binaries (let's say for fclose function). It
-> is so in Windows, where I must note (Delphi) dll name and function
-> name or index?inside that dll,?in order for linker to find wanted
-> function.) Otherwise, I don't know why linker would try to find
-> eg.?fclose function exactely?in uclibc.so. Or am I wrong with that
-> way of thinking ? 
+There was a fairly long backlog of patches to handle, and I only had
+from July 13th to July 31th to try to catch up. I tried to merge things
+fairly aggressively during that time, but didn't manage to merge
+everything.
 
-Yes. The compiler knows which C library it has been linked against, and
-automatically links programs against it, unless you explicitly tell it
-to do otherwise.
-
-However, I don't know what Lazarus is, and how it works, so maybe it
-does funky things. If you want help, please share the current state of
-the packages you're trying to add to Buildroot and let us know how to
-reproduce the problem, and maybe someone will try to help on this.
+However, while we are in the process of preparing 2012.08, I will open
+a 'next' branch in which I will accumulate the patches that will be
+merged as soon as the 2012.11 development cycle open, at the end of
+August/early September. Therefore, I am hoping to reduce even further
+the backlog by merging stuff into the 'next' branch.
 
 Best regards,
 
