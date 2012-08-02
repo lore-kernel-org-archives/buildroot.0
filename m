@@ -1,33 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 02 Aug 2012 19:53:45 -0000
-Subject: [Buildroot] [git commit branch/next] freetype: bump to version
-	2.4.10
-Message-ID: <20120802195250.1544496DC4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 02 Aug 2012 19:53:46 -0000
+Subject: [Buildroot] [git commit branch/next] barebox: bump to 2012.07
+Message-ID: <20120802195248.46C6F8E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82f83c6122837acd4daed5649ad4ccb8fec42e83
+commit: http://git.buildroot.net/buildroot/commit/?id=5e8d35e8e146bf8e4ceab17747c686a643698623
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/freetype/freetype.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/barebox/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index ded10d2..f351fd2 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 09a82eb..13009d2 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,7 +8,7 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2012_04
++	default BR2_TARGET_BAREBOX_2012_07
+ 	help
+ 	  Select the specific Barebox version you want to use
  
--FREETYPE_VERSION = 2.4.9
-+FREETYPE_VERSION = 2.4.10
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_INSTALL_STAGING = YES
+@@ -25,6 +25,9 @@ config BR2_TARGET_BAREBOX_2012_03
+ config BR2_TARGET_BAREBOX_2012_04
+ 	bool "2012.04"
+ 
++config BR2_TARGET_BAREBOX_2012_07
++	bool "2012.07"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -46,6 +49,7 @@ config BR2_TARGET_BAREBOX_VERSION
+ 	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
+ 	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_03
+ 	default "2012.04.0"	if BR2_TARGET_BAREBOX_2012_04
++	default "2012.07.0"	if BR2_TARGET_BAREBOX_2012_07
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
