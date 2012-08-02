@@ -1,35 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:45 -0000
-Subject: [Buildroot] [git commit branch/next] module-init-tools: don't build
-	static tools for host
-Message-ID: <20120802195244.D95EF8E204@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] news.html: add 2012.05
+	announcement mail link
+Message-ID: <20120802195234.F3B7296AE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c460cc8161a0738873351d990a522cee90173231
+commit: http://git.buildroot.net/buildroot/commit/?id=f809eb20214d7c0c7f552d7009022180f3f690ff
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-As pointed out on IRC, the static tools causes problems on distributions
-without glibc-static, and we don't need them - So just disable them like
-we do for the target build.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/module-init-tools/module-init-tools.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ docs/news.html |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
-index ad92a1a..96c8378 100644
---- a/package/module-init-tools/module-init-tools.mk
-+++ b/package/module-init-tools/module-init-tools.mk
-@@ -18,6 +18,7 @@ MODULE_INIT_TOOLS_CONF_OPT = \
- MODULE_INIT_TOOLS_AUTORECONF = YES
- HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
- HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
-+HOST_MODULE_INIT_TOOLS_CONF_OPT = --disable-static-utils
+diff --git a/docs/news.html b/docs/news.html
+index 8b52650..256d3b9 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -10,7 +10,8 @@
+     <p>The stable 2012.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
+-    file for more details
++    file for more details, read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2012-May/054342.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
  
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
