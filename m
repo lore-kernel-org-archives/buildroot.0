@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 02 Aug 2012 19:52:38 -0000
-Subject: [Buildroot] [git commit branch/next] dnsmasq: bump to version 2.62
-Message-ID: <20120802195237.5F02996F60@busybox.osuosl.org>
+Date: Thu, 02 Aug 2012 19:52:39 -0000
+Subject: [Buildroot] [git commit branch/next] ethtool: bump version
+Message-ID: <20120802195238.311A890E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f00e2b26b28c9705b2a36beebb3efcd66cb86618
+commit: http://git.buildroot.net/buildroot/commit/?id=f10913cf8e0790517a552a0a959f501e46b88cae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dnsmasq/dnsmasq.mk |    2 +-
+ package/ethtool/ethtool.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 4aa7cfb..2b22c10 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 101d0a1..b6cbc64 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--DNSMASQ_VERSION = 2.61
-+DNSMASQ_VERSION = 2.62
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = CC="$(TARGET_CC)"
- DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
+-ETHTOOL_VERSION = 3.2
++ETHTOOL_VERSION = 3.4
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ 
+ $(eval $(call AUTOTARGETS))
