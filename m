@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 02 Aug 2012 19:55:20 -0000
-Subject: [Buildroot] [git commit branch/next] sam-ba: only propose it if the
-	host is x86 or x86_64
-Message-ID: <20120802195256.2E0668E8F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] libnss: fix 64-bit build
+Message-ID: <20120802195255.5CE518D2C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=498ea22be27863c8eff99033384f9d268167a2b3
+commit: http://git.buildroot.net/buildroot/commit/?id=adbe85c752651bc147bc4deb6419d162b2c6417e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As sam-ba is delivered as a binary for x86
+On some architectures (found on x86_64, but probably others too),
+libnss builds with -m32 unless it is configured for 64-bit build.  So
+force 64-bit build on 64-bit architectures.
 
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sam-ba/Config.in.host |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/libnss/libnss.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
-index f2ea01f..20b2b36 100644
---- a/package/sam-ba/Config.in.host
-+++ b/package/sam-ba/Config.in.host
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HOST_SAM_BA
- 	bool "host sam-ba"
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	help
- 	  Atmel SAM-BA software provides an open set of tools for
- 	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 2e28c75..f7fd682 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -28,6 +28,10 @@ LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
+ 		OS_RELEASE="2.6" \
+ 		OS_TEST="$(ARCH)"
+ 
++ifeq ($(BR2_ARCH_IS_64),y)
++LIBNSS_BUILD_VARS += USE_64=1
++endif
++
+ 
+ define LIBNSS_BUILD_CMDS
+ 	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf build_dbm all \
