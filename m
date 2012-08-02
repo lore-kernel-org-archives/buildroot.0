@@ -1,37 +1,95 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 02 Aug 2012 19:52:40 -0000
-Subject: [Buildroot] [git commit branch/next] libroxml: bump version to 2.2.0
-Message-ID: <20120802195239.B4AD188D21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] New package: cJSON
+Message-ID: <20120802195239.97EBE800EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9156bbc947f03ef149df527e768c920846aa7a33
+commit: http://git.buildroot.net/buildroot/commit/?id=d0bf0be438801bbd1f30031529493e6e01523d8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ....2-werror.patch => libroxml-2.2.0-werror.patch} |    0
- package/libroxml/libroxml.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in       |    1 +
+ package/cjson/Config.in |    7 +++++++
+ package/cjson/cjson.mk  |   43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+), 0 deletions(-)
 
-diff --git a/package/libroxml/libroxml-2.1.2-werror.patch b/package/libroxml/libroxml-2.2.0-werror.patch
-similarity index 100%
-rename from package/libroxml/libroxml-2.1.2-werror.patch
-rename to package/libroxml/libroxml-2.2.0-werror.patch
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index 5c0bf01..228a0df 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
-@@ -2,7 +2,7 @@
- # libroxml
- #
+diff --git a/package/Config.in b/package/Config.in
+index b3a2f80..ddb504a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -469,6 +469,7 @@ source "package/slang/Config.in"
+ endmenu
  
--LIBROXML_VERSION = 2.1.2
-+LIBROXML_VERSION = 2.2.0
- LIBROXML_SITE = http://libroxml.googlecode.com/files
- LIBROXML_INSTALL_STAGING = YES
- 
+ menu "JSON/XML"
++source "package/cjson/Config.in"
+ source "package/expat/Config.in"
+ source "package/ezxml/Config.in"
+ source "package/json-c/Config.in"
+diff --git a/package/cjson/Config.in b/package/cjson/Config.in
+new file mode 100644
+index 0000000..ff90074
+--- /dev/null
++++ b/package/cjson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CJSON
++	bool "cJSON"
++	help
++	  An ultra-lightweight, portable, single-file, simple-as-can-be ANSI-C
++	  compliant JSON parser, under MIT license.
++
++	  http://cjson.sourceforge.net/
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+new file mode 100644
+index 0000000..f0e1fc4
+--- /dev/null
++++ b/package/cjson/cjson.mk
+@@ -0,0 +1,43 @@
++#############################################################
++#
++# cjson
++#
++#############################################################
++CJSON_VERSION         = undefined
++CJSON_SOURCE          = cJSONFiles.zip
++CJSON_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/cjson/
++CJSON_INSTALL_STAGING = YES
++
++define CJSON_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(CJSON_SOURCE)
++endef
++
++define CJSON_BUILD_CMDS
++	cd $(@D)/cJSON && $(TARGET_CC) $(TARGET_CFLAGS) -shared -fpic cJSON.c -o libcJSON.so
++endef
++
++define CJSON_INSTALL_STAGING_CMDS
++	$(INSTALL) -D $(@D)/cJSON/cJSON.h $(STAGING_DIR)/usr/include/cJSON.h
++	$(INSTALL) -D $(@D)/cJSON/libcJSON.so $(STAGING_DIR)/usr/lib/libcJSON.so
++endef
++
++define CJSON_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/cJSON/cJSON.h $(STAGING_DIR)/usr/include/cJSON.h
++	$(INSTALL) -D $(@D)/cJSON/libcJSON.so $(TARGET_DIR)/usr/lib/libcJSON.so
++endef
++
++define CJSON_UNINSTALL_STAGING_CMDS
++	rm -f $(STAGING_DIR)/usr/include/cJSON.h
++	rm -f $(STAGING_DIR)/usr/lib/libcJSON.so
++endef
++
++define CJSON_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/include/cJSON.h
++	rm -f $(TARGET_DIR)/usr/lib/libcJSON.so
++endef
++
++define CJSON_CLEAN_CMDS
++	cd $(@D)/cJSON && rm -f libcJSON.so
++endef
++
++$(eval $(call GENTARGETS))
