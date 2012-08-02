@@ -1,26 +1,32 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 2 Aug 2012 08:03:34 +0100
-Subject: [Buildroot] Another gpsd build failure
-In-Reply-To: <20120801095944.06e08366@skate>
-References: <20120801095944.06e08366@skate>
-Message-ID: <CAHt8ZCOJnK1AzxSSyOv+mm71rxjOS-stAOKOQkTEgqBBWc4t6A@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  2 Aug 2012 08:09:12 +0100
+Subject: [Buildroot] [PATCH] nanocom: add license information
+Message-ID: <1343891352-21337-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas.
+From: Simon Dawson <spdawson@gmail.com>
 
-On 1 August 2012 08:59, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> At
-> http://autobuild.buildroot.org/results/64e7d0f0272ecafade2fbb58dfd9d72578d6c3fd/build-end.log,
-> you'll find another gpsd build failure. I am not sure what the reason
-> is. Maybe that host-python has been built prior to gpsd, leading to
-> gpsd finding a host Python with insufficient packages. Would be good to
-> investigate this.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/nanocom/nanocom.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-I'll take a look as soon as possible.
-
-Simon.
+diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
+index 1e46100..a88daeb 100644
+--- a/package/nanocom/nanocom.mk
++++ b/package/nanocom/nanocom.mk
+@@ -6,6 +6,8 @@
+ NANOCOM_VERSION = 2.6.1
+ NANOCOM_SOURCE = nanocom.tar.gz
+ NANOCOM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nanocom/nanocom/v1.0
++NANOCOM_LICENSE = GPLv2+
++NANOCOM_LICENSE_FILES = COPYING
+ 
+ # N.B. Don't strip any path components during extraction.
+ define NANOCOM_EXTRACT_CMDS
+-- 
+1.7.9.5
