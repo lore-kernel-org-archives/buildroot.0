@@ -1,9 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 03 Aug 2012 10:38:14 +0200
-Subject: [Buildroot] [PATCH 1/6] cjson: Add license info
-In-Reply-To: <1343962432-2772-1-git-send-email-danomimanchego123@gmail.com>
+Date: Fri, 03 Aug 2012 10:41:08 +0200
+Subject: [Buildroot] [PATCH 3/6] lua: Add license info
+In-Reply-To: <1343962432-2772-3-git-send-email-danomimanchego123@gmail.com>
 References: <1343962432-2772-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <501B8DF6.3060109@lucaceresoli.net>
+ <1343962432-2772-3-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <501B8EA4.80301@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,23 @@ To: buildroot@busybox.net
 Danomi Manchego wrote:
 > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 > ---
->   package/cjson/cjson.mk |    2 ++
+>   package/lua/lua.mk |    2 ++
 >   1 file changed, 2 insertions(+)
 >
-> diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-> index a9b0bcf..44ddfc2 100644
-> --- a/package/cjson/cjson.mk
-> +++ b/package/cjson/cjson.mk
-> @@ -7,6 +7,8 @@ CJSON_VERSION         = undefined
->   CJSON_SOURCE          = cJSONFiles.zip
->   CJSON_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/cjson/
->   CJSON_INSTALL_STAGING = YES
-> +CJSON_LICENSE         = MIT
-> +CJSON_LICENSE_FILES   = cJSON/README
+> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+> index 26c1576..de60c57 100644
+> --- a/package/lua/lua.mk
+> +++ b/package/lua/lua.mk
+> @@ -7,6 +7,8 @@
+>   LUA_VERSION = 5.1.5
+>   LUA_SITE = http://www.lua.org/ftp
+>   LUA_INSTALL_STAGING = YES
+> +LUA_LICENSE = MIT
+> +LUA_LICENSE_FILES = COPYRIGHT
+>   
+>   LUA_CFLAGS = -Wall
+>   ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
 
-Unfortunately that README is not a license file. Ok, it starts
-with the license, but then goes on with a description of the
-packages, how to build, etc. The license is just 10% of the whole
-file. This is off topic in licenses.txt.
-
-This is one of the known cases that `make legal-info` is unable to
-handle correctly, so you should a) skip the definition of
-CJSON_LICENSE_FILES, or b) ask the developers include a proper
-license file, or c) extend legal-info to handle these cases. :)
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 Luca
