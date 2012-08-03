@@ -1,179 +1,98 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri, 03 Aug 2012 12:26:04 +0200
-Subject: [Buildroot] [PATCH] cachebench: new package
-In-Reply-To: <1343979807-15024-1-git-send-email-gregory.clement@free-electrons.com>
-References: <1343979807-15024-1-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <501BA73C.6010303@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 3 Aug 2012 13:07:01 +0200
+Subject: [Buildroot] A little summer game ? :-)
+In-Reply-To: <20120803111951.2269f1ca@skate>
+References: <1343962432-2772-1-git-send-email-danomimanchego123@gmail.com>
+ <20120803103052.5ec63fb7@skate> <501B9416.3090700@lucaceresoli.net>
+ <20120803111951.2269f1ca@skate>
+Message-ID: <CAAXf6LXqbEF=aPnV6+Wg4QghOg5EG4B4yySqSKuR-XUP7bXd2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gregory,
+Hi,
 
-Le 03/08/2012 09:43, Gregory CLEMENT a ?crit :
-> This patch adds the cachebench package.
-> 
-> Cachebench presents itself as a program to empirically determine some
-> parameters about an architectures memory subsystem. It can be used to
-> have an idea of the performance of the cache support. It has been
-> integrated into LLCbench (Low Level Characterization Benchmarks), but
-> currently only Cachebench is supported by Buildroot. The only
-> difference with mainline is a patch which add a script to be able to
-> generate data ready to bu used by gnuplot without having to use 'make'
+On Fri, Aug 3, 2012 at 11:19 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Le Fri, 03 Aug 2012 11:04:22 +0200,
+> Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
+>
+>> Wheee, what a fun, Thomas! Call it "Buildroot Summer Of Bugfix" and
+>> people will flock in! :-D
+>
+> I like this name, adopted! :-)
 
-Nitpick of the day: to *be* used.
+I like the game, I like the name.
 
-> which is usually not present on embedded target.
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
-> ---
->  package/Config.in                                  |    1 +
->  package/cachebench/Config.in                       |   13 ++++
->  ...ipt-rules-of-Makefile-to-run-it-on-target.patch |   65 ++++++++++++++++++++
->  package/cachebench/cachebench.mk                   |   30 +++++++++
->  4 files changed, 109 insertions(+)
->  create mode 100644 package/cachebench/Config.in
->  create mode 100644 package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
->  create mode 100644 package/cachebench/cachebench.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index f308de7..163f1a7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -17,6 +17,7 @@ source "package/xz/Config.in"
->  endmenu
->  
->  menu "Debugging, profiling and benchmark"
-> +source "package/cachebench/Config.in"
->  source "package/bonnie/Config.in"
->  source "package/dhrystone/Config.in"
->  source "package/dstat/Config.in"
-> diff --git a/package/cachebench/Config.in b/package/cachebench/Config.in
-> new file mode 100644
-> index 0000000..b97c9ad
-> --- /dev/null
-> +++ b/package/cachebench/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_CACHEBENCH
-> +	bool "cachebench"
-> +	help
-> +
-> +	  Cachebench presents itself as a program to empirically determine
-> +	  some parameters about an architectures memory subsystem. It can
-> +	  be used to have an idea of the performance of the cache
-> +	  support. It has been integrated into LLCbench (Low Level
-> +	  Characterization Benchmarks), but currently only Cachebench is
-> +	  supported by Buildroot.
-> +
-> +	  http://icl.cs.utk.edu/projects/llcbench/cachebench.html
-> +
-> diff --git a/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch b/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
-> new file mode 100644
-> index 0000000..505a4fe
-> --- /dev/null
-> +++ b/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
-> @@ -0,0 +1,65 @@
-> +From 6daded62de221ca0d97360523575b1c7230c8800 Mon Sep 17 00:00:00 2001
-> +From: Gregory CLEMENT <gregory.clement@free-electrons.com>
-> +Date: Thu, 2 Aug 2012 22:33:36 +0200
-> +Subject: [PATCH] Convert script rules of Makefile to run it on target
-> +
-> +The benchmark is supposed to be run using the Makefile to be able to
-> +get data ready to be used by gnuplot. On some target we don't have
-> +Makefile available, so this script exctracted from the Makefile can be
+>
+>> Seriously, I admit I'm not investing a lot of time in fixing build
+>> errors. This is in part due to the limited time available, but
+>> another important blocking factor is that many build errors happen
+>> with external, custom toolchains that are installed on your build
+>> server.
+>>
+>> I almost daily skim through the build failures and take a look at
+>> those about by packages and/or architectures I use and somehow know.
+>> These are already a small subset of all the possibilities.
+>> But often I discover these happen with toolchains (and probably
+>> architectures) I don't have an easy access to, so I just go along.
+>>
+>> It would help if the external toolchains used for the builds were
+>> always available within Buildroot, so we could just apply the
+>> [def]config, run make, have an icy drink while it downloads and
+>> fails building and then, happily refreshed, hunt for the bug.
+>>
+>> I'm not saying this would be easy to do, but it would be helpful
+>> to me.
+>
+> Yes, I know this is a problem with the current autobuilders. My plan is
+> to make the tarballs of those external toolchains available somewhere,
+> so that people can easily install them as well. But that will take a
+> bit of time, and still leave some work when you want to reproduce a bug
+> (download the external toolchain, download .config, adjust .config to
+> match the path of the external toolchain on your local machine, build).
+> Or maybe, I should put all of them somewhere, and have my defconfig
+> download them from this common place. This could be a good idea to make
+> it easier to reproduce the build problems.
+>
+> Also, there is a problem with BR external toolchains that are not (yet)
+> relocatable. I can create a tarball for them, but it will force you to
+> install them to /home/test/toolchains/... which is the location where
+> they are built on my build server. I guess the best solution for this
+> is just to make Buildroot toolchains relocatable :-)
 
-extracted
+One of the hurdles I experience with looking/fixing the
+autobuild-reported problems is that it's not clear:
+- who is already looking at a given issue
+- who has already looked at a certain issue and determined the
+problem, without being able to fix it or not having time.
+    => For these, some kind of comment field would be nice, attached
+to each issue.
 
-> +used directly to run the benchmark, format data and make a tarball of
-> +the result.
+- whether there is progress. How many issues are remaining?
+    => Due to the random build principle it's a bit hard to give exact
+numbers, but maybe some alternative statistics are possible? For
+example, the amount of issues found each week?
 
-Ok. Since this is not really a patch (you are adding a file that don't
-rely at all on existing source file from the project), why don't you
-just add this file to the package folder, and install it ?
+- at first sight, which issues are related? It would be nice if two
+issues caused by the same thing could be identified as such. This may
+not be completely possible in an automatic fashion, but we could try.
+For example, on the first problem, a manual intervention could be
+possible to specify which is the identifying string of that error
+(part of the error message). If a later build finds a problem in a
+given package, grep in the endlog for that identifying string. If
+present, we assume it's the same problem. Obviously, the choice of the
+identifying string is critical.
+It could be that the same problem can occur in different packages, in
+which case the above strategy wouldn't mark them as such. You could
+expand the strategy across packages, so that you only check for the
+string, but it may yield too much false relations.
 
-But if you still want to use a patch, please use your Signed-off-by here.
+This probably needs some further thinking...
 
-> +---
-> + cachebench/do_bench.sh |   40 ++++++++++++++++++++++++++++++++++++++++
-> + 1 file changed, 40 insertions(+)
-> + create mode 100644 cachebench/do_bench.sh
-> +
-> +diff --git a/cachebench/do_bench.sh b/cachebench/do_bench.sh
-> +new file mode 100644
-> +index 0000000..a80dcde
-> +--- /dev/null
-> ++++ b/cachebench/do_bench.sh
-> +@@ -0,0 +1,40 @@
-> ++#!/bin/sh
-> ++# Prefix of the output files produced by each benchmark
-> ++
-> ++# if this fails, replace it with a regular name!
-> ++Result_Prefix=$(hostname)-$(uname -m)
-> ++# Datatype used for each memory reference. 
-> ++# Legal values are DOUBLE, CHAR, INT, FLOAT
-> ++CB_Datatype=DOUBLE
-> ++
-> ++# The number of seconds each test runs.
-> ++CB_SecondsPerIteration=5
-> ++
-> ++# The number of times each test is run.
-> ++CB_RepeatCount=1
-> ++
-> ++# Log base 2 of the maximum problem size tested in bytes
-> ++CB_Memsize=29
-> ++
-> ++# The number of test sizes measured between powers of two
-> ++CB_Resolution=2
-> ++
-> ++CBOPTS="-m $CB_Memsize -e $CB_RepeatCount -x $CB_Resolution -d $CB_SecondsPerIteration
-> ++DATA=$CB_Datatype"
-> ++mkdir -p results
-> ++
-> ++cachebench  $CBOPTS -r > results/${Result_Prefix}_cache_read.dat
-> ++cachebench  $CBOPTS -w > results/${Result_Prefix}_cache_write.dat
-> ++cachebench  $CBOPTS -b > results/${Result_Prefix}_cache_rmw.dat
-> ++cachebench  $CBOPTS -tr > results/${Result_Prefix}_cache_handread.dat
-> ++cachebench  $CBOPTS -tw > results/${Result_Prefix}_cache_handwrite.dat
-> ++cachebench  $CBOPTS -tb > results/${Result_Prefix}_cache_handrmw.dat
-> ++cachebench  $CBOPTS -s > results/${Result_Prefix}_cache_memset.dat
-> ++cachebench  $CBOPTS -p > results/${Result_Prefix}_cache_memcpy.dat
-> ++
-> ++sed -e "s|TITLE|Memory Hierarchy Performance of ${Result_Prefix}|g" < /usr/share/cachebench/cachegraph.gp > results/${Result_Prefix}_cache.gp; echo "plot \"${Result_Prefix}_cache_read\" title 'read' with linespoints \\" >> results/${Result_Prefix}_cache.gp; for i in write rmw handread handwrite handrmw memset memcpy; do echo ", \"${Result_Prefix}_cache_$i.dat\" title '$i' with linespoints \\" >> results/${Result_Prefix}_cache.gp; done;
-> ++
-> ++cd results; tar cf ${Result_Prefix}-cachebench-datafiles.tar ${Result_Prefix}_cache*.dat ${Result_Prefix}_cache.gp
-> ++echo ""
-> ++echo "Datafiles and GNUplot scripts are located in the results directory."
-> ++echo ""
-> +\ No newline at end of file
-> +-- 
-> +1.7.9.5
-> +
-> diff --git a/package/cachebench/cachebench.mk b/package/cachebench/cachebench.mk
-> new file mode 100644
-> index 0000000..efe95d9
-> --- /dev/null
-> +++ b/package/cachebench/cachebench.mk
-> @@ -0,0 +1,30 @@
-> +#############################################################
-> +#
-> +# cachebench
-> +#
-> +#############################################################
-> +CACHEBENCH_VERSION = 1.11
-> +CACHEBENCH_SOURCE = llcbench.tar.gz
-> +CACHEBENCH_SITE = http://icl.cs.utk.edu/projects/llcbench/
-
-Hmmm, here I would call the package llcbench. But you were saying that
-you were building only the cachebench package, so I'm not quite sure
-about what to do, except build the whole tool set and not just
-cachebench (if it is possible?)
-
-Maxime
-
--- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards,
+Thomas
