@@ -1,374 +1,172 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri,  3 Aug 2012 08:32:06 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-02
-Message-ID: <20120803063206.73B63521BD8@lolut.humanoidz.org>
+From: Gregory CLEMENT <gregory.clement@free-electrons.com>
+Date: Fri,  3 Aug 2012 09:43:27 +0200
+Subject: [Buildroot] [PATCH] cachebench: new package
+Message-ID: <1343979807-15024-1-git-send-email-gregory.clement@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch adds the cachebench package.
 
-Hello,
+Cachebench presents itself as a program to empirically determine some
+parameters about an architectures memory subsystem. It can be used to
+have an idea of the performance of the cache support. It has been
+integrated into LLCbench (Low Level Characterization Benchmarks), but
+currently only Cachebench is supported by Buildroot. The only
+difference with mainline is a patch which add a script to be able to
+generate data ready to bu used by gnuplot without having to use 'make'
+which is usually not present on embedded target.
 
-On 2012-08-02, 93 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 68 builds have been successful
- 25 builds have failed
+Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/cachebench/Config.in                       |   13 ++++
+ ...ipt-rules-of-Makefile-to-run-it-on-target.patch |   65 ++++++++++++++++++++
+ package/cachebench/cachebench.mk                   |   30 +++++++++
+ 4 files changed, 109 insertions(+)
+ create mode 100644 package/cachebench/Config.in
+ create mode 100644 package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
+ create mode 100644 package/cachebench/cachebench.mk
 
-Below the results of the failed builds. Successful builds are omitted.
-
-Build 467faf86bc6fd3fdbf072a700bcbe8c58c1821ab
-==============================================
-
-Status         : NOK
-Failure reason : libv4l-0.8.5
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 00:08:31
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/467faf86bc6fd3fdbf072a700bcbe8c58c1821ab/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/467faf86bc6fd3fdbf072a700bcbe8c58c1821ab/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/467faf86bc6fd3fdbf072a700bcbe8c58c1821ab/config
-Defconfig      : http://autobuild.buildroot.net/results/467faf86bc6fd3fdbf072a700bcbe8c58c1821ab/defconfig
-
-Build 5831a372fe126791f2e95eedeef20def7294e186
-==============================================
-
-Status         : NOK
-Failure reason : libnss-3.12.9
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 00:31:51
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/5831a372fe126791f2e95eedeef20def7294e186/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5831a372fe126791f2e95eedeef20def7294e186/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5831a372fe126791f2e95eedeef20def7294e186/config
-Defconfig      : http://autobuild.buildroot.net/results/5831a372fe126791f2e95eedeef20def7294e186/defconfig
-
-Build 93b27e7b7ff57018dbddaf23776115c85e4d1502
-==============================================
-
-Status         : NOK
-Failure reason : mplayer-32726
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 00:55:51
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/93b27e7b7ff57018dbddaf23776115c85e4d1502/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/93b27e7b7ff57018dbddaf23776115c85e4d1502/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/93b27e7b7ff57018dbddaf23776115c85e4d1502/config
-Defconfig      : http://autobuild.buildroot.net/results/93b27e7b7ff57018dbddaf23776115c85e4d1502/defconfig
-
-Build 585497b7d2efd6ebfda613d0dbd4e8573301c7df
-==============================================
-
-Status         : NOK
-Failure reason : collectd-5.1.0
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 01:31:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/585497b7d2efd6ebfda613d0dbd4e8573301c7df/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/585497b7d2efd6ebfda613d0dbd4e8573301c7df/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/585497b7d2efd6ebfda613d0dbd4e8573301c7df/config
-Defconfig      : http://autobuild.buildroot.net/results/585497b7d2efd6ebfda613d0dbd4e8573301c7df/defconfig
-
-Build 0e783154be41e3c36c1f0fab1fdff7874a6ed78c
-==============================================
-
-Status         : NOK
-Failure reason : beecrypt-4.2.1
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 01:48:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/0e783154be41e3c36c1f0fab1fdff7874a6ed78c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/0e783154be41e3c36c1f0fab1fdff7874a6ed78c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/0e783154be41e3c36c1f0fab1fdff7874a6ed78c/config
-Defconfig      : http://autobuild.buildroot.net/results/0e783154be41e3c36c1f0fab1fdff7874a6ed78c/defconfig
-
-Build c3e6a6b9bda16b703fc455ebb92da781cb28e3e6
-==============================================
-
-Status         : NOK
-Failure reason : libmad-0.15.1b
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 03:34:14
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/c3e6a6b9bda16b703fc455ebb92da781cb28e3e6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c3e6a6b9bda16b703fc455ebb92da781cb28e3e6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c3e6a6b9bda16b703fc455ebb92da781cb28e3e6/config
-Defconfig      : http://autobuild.buildroot.net/results/c3e6a6b9bda16b703fc455ebb92da781cb28e3e6/defconfig
-
-Build 42b435c271b0d791365e18ad974c7eecca8896a0
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-02 04:45:22
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/42b435c271b0d791365e18ad974c7eecca8896a0/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/42b435c271b0d791365e18ad974c7eecca8896a0/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/42b435c271b0d791365e18ad974c7eecca8896a0/config
-Defconfig      : http://autobuild.buildroot.net/results/42b435c271b0d791365e18ad974c7eecca8896a0/defconfig
-
-Build 6c0ef98ebdeffb9b9991e85e2c706df74819e5d4
-==============================================
-
-Status         : NOK
-Failure reason : tremor-18153
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 04:50:51
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/6c0ef98ebdeffb9b9991e85e2c706df74819e5d4/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/6c0ef98ebdeffb9b9991e85e2c706df74819e5d4/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/6c0ef98ebdeffb9b9991e85e2c706df74819e5d4/config
-Defconfig      : http://autobuild.buildroot.net/results/6c0ef98ebdeffb9b9991e85e2c706df74819e5d4/defconfig
-
-Build 095b89851aa8d729029b50af181a7331e158a4f6
-==============================================
-
-Status         : NOK
-Failure reason : luajit-2.0.0-beta10
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 06:09:32
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/095b89851aa8d729029b50af181a7331e158a4f6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/095b89851aa8d729029b50af181a7331e158a4f6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/095b89851aa8d729029b50af181a7331e158a4f6/config
-Defconfig      : http://autobuild.buildroot.net/results/095b89851aa8d729029b50af181a7331e158a4f6/defconfig
-
-Build 99769ca108efe682464362bf8ce3c4d05be112a2
-==============================================
-
-Status         : NOK
-Failure reason : kismet-2011-03-R2
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 06:21:44
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/99769ca108efe682464362bf8ce3c4d05be112a2/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/99769ca108efe682464362bf8ce3c4d05be112a2/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/99769ca108efe682464362bf8ce3c4d05be112a2/config
-Defconfig      : http://autobuild.buildroot.net/results/99769ca108efe682464362bf8ce3c4d05be112a2/defconfig
-
-Build 8a94159d776f14cc12a6cf729421ff8b1e2a961c
-==============================================
-
-Status         : NOK
-Failure reason : webkit-1.2.7
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 07:47:17
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/8a94159d776f14cc12a6cf729421ff8b1e2a961c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/8a94159d776f14cc12a6cf729421ff8b1e2a961c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/8a94159d776f14cc12a6cf729421ff8b1e2a961c/config
-Defconfig      : http://autobuild.buildroot.net/results/8a94159d776f14cc12a6cf729421ff8b1e2a961c/defconfig
-
-Build 7b5eaafd12d57e05afd3be4cae53bb5405b5c848
-==============================================
-
-Status         : NOK
-Failure reason : mplayer-32726
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 09:10:28
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/7b5eaafd12d57e05afd3be4cae53bb5405b5c848/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7b5eaafd12d57e05afd3be4cae53bb5405b5c848/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7b5eaafd12d57e05afd3be4cae53bb5405b5c848/config
-Defconfig      : http://autobuild.buildroot.net/results/7b5eaafd12d57e05afd3be4cae53bb5405b5c848/defconfig
-
-Build 3253a075206a9c3323c0ebdd3849d73c61f4b46e
-==============================================
-
-Status         : NOK
-Failure reason : beecrypt-4.2.1
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 09:30:05
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/3253a075206a9c3323c0ebdd3849d73c61f4b46e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3253a075206a9c3323c0ebdd3849d73c61f4b46e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3253a075206a9c3323c0ebdd3849d73c61f4b46e/config
-Defconfig      : http://autobuild.buildroot.net/results/3253a075206a9c3323c0ebdd3849d73c61f4b46e/defconfig
-
-Build 36dbfb03800e7274717abfb35baeb816a6635c4a
-==============================================
-
-Status         : NOK
-Failure reason : gnutls-2.12.19
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 10:28:44
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/36dbfb03800e7274717abfb35baeb816a6635c4a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/36dbfb03800e7274717abfb35baeb816a6635c4a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/36dbfb03800e7274717abfb35baeb816a6635c4a/config
-Defconfig      : http://autobuild.buildroot.net/results/36dbfb03800e7274717abfb35baeb816a6635c4a/defconfig
-
-Build b8b34104ef3e597f908d2d0c509bcbe5b699d4af
-==============================================
-
-Status         : NOK
-Failure reason : make: *** [/home/test/dl//gdb-.tar.bz2] Error 1
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 10:40:42
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/b8b34104ef3e597f908d2d0c509bcbe5b699d4af/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b8b34104ef3e597f908d2d0c509bcbe5b699d4af/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b8b34104ef3e597f908d2d0c509bcbe5b699d4af/config
-Defconfig      : http://autobuild.buildroot.net/results/b8b34104ef3e597f908d2d0c509bcbe5b699d4af/defconfig
-
-Build 9578f11b821cf446dd7628e062c1063bbae70b62
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-02 12:04:26
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=4009cbbbf9832abfb4e3047d536ce2bd775d2587
-End of log     : http://autobuild.buildroot.net/results/9578f11b821cf446dd7628e062c1063bbae70b62/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9578f11b821cf446dd7628e062c1063bbae70b62/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9578f11b821cf446dd7628e062c1063bbae70b62/config
-Defconfig      : http://autobuild.buildroot.net/results/9578f11b821cf446dd7628e062c1063bbae70b62/defconfig
-
-Build 4ea13b38caa43b95042928e2ffed7263b74bec6c
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 12:26:06
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/4ea13b38caa43b95042928e2ffed7263b74bec6c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4ea13b38caa43b95042928e2ffed7263b74bec6c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4ea13b38caa43b95042928e2ffed7263b74bec6c/config
-Defconfig      : http://autobuild.buildroot.net/results/4ea13b38caa43b95042928e2ffed7263b74bec6c/defconfig
-
-Build 4ff664067fc3ca8198f9c496ed024a56b3fbfed5
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-08-02 12:40:02
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/4ff664067fc3ca8198f9c496ed024a56b3fbfed5/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4ff664067fc3ca8198f9c496ed024a56b3fbfed5/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4ff664067fc3ca8198f9c496ed024a56b3fbfed5/config
-Defconfig      : http://autobuild.buildroot.net/results/4ff664067fc3ca8198f9c496ed024a56b3fbfed5/defconfig
-
-Build 7dd1c45bc864d4c5a2adaec1f71c8fdf2112191c
-==============================================
-
-Status         : NOK
-Failure reason : ortp-0.20.0
-Architecture   : avr32
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 12:58:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/7dd1c45bc864d4c5a2adaec1f71c8fdf2112191c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7dd1c45bc864d4c5a2adaec1f71c8fdf2112191c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7dd1c45bc864d4c5a2adaec1f71c8fdf2112191c/config
-Defconfig      : http://autobuild.buildroot.net/results/7dd1c45bc864d4c5a2adaec1f71c8fdf2112191c/defconfig
-
-Build c144ba2873cbb5b42bb3e15541fdf6dcaa7d1f21
-==============================================
-
-Status         : NOK
-Failure reason : microperl-5.12.4
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 13:01:15
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/c144ba2873cbb5b42bb3e15541fdf6dcaa7d1f21/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c144ba2873cbb5b42bb3e15541fdf6dcaa7d1f21/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c144ba2873cbb5b42bb3e15541fdf6dcaa7d1f21/config
-Defconfig      : http://autobuild.buildroot.net/results/c144ba2873cbb5b42bb3e15541fdf6dcaa7d1f21/defconfig
-
-Build a543cd4f851c9aa07c0e440896d0d511859a7f01
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-02 13:24:36
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/a543cd4f851c9aa07c0e440896d0d511859a7f01/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a543cd4f851c9aa07c0e440896d0d511859a7f01/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a543cd4f851c9aa07c0e440896d0d511859a7f01/config
-Defconfig      : http://autobuild.buildroot.net/results/a543cd4f851c9aa07c0e440896d0d511859a7f01/defconfig
-
-Build f45d68db3de1ed1567ce7d802ee3ca61f5779bd6
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-08-02 15:57:04
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/f45d68db3de1ed1567ce7d802ee3ca61f5779bd6/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/f45d68db3de1ed1567ce7d802ee3ca61f5779bd6/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/f45d68db3de1ed1567ce7d802ee3ca61f5779bd6/config
-Defconfig      : http://autobuild.buildroot.net/results/f45d68db3de1ed1567ce7d802ee3ca61f5779bd6/defconfig
-
-Build 542dc9b92d6d1de8767a0005fd30a72f28a0f151
-==============================================
-
-Status         : NOK
-Failure reason : make: *** [/home/test/dl//gdb-.tar.bz2] Error 1
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 17:45:20
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/542dc9b92d6d1de8767a0005fd30a72f28a0f151/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/542dc9b92d6d1de8767a0005fd30a72f28a0f151/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/542dc9b92d6d1de8767a0005fd30a72f28a0f151/config
-Defconfig      : http://autobuild.buildroot.net/results/542dc9b92d6d1de8767a0005fd30a72f28a0f151/defconfig
-
-Build daa1679c13055d568e4200fbabf79ecfce7bfb88
-==============================================
-
-Status         : NOK
-Failure reason : dbus-1.4.20
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 18:28:21
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/daa1679c13055d568e4200fbabf79ecfce7bfb88/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/daa1679c13055d568e4200fbabf79ecfce7bfb88/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/daa1679c13055d568e4200fbabf79ecfce7bfb88/config
-Defconfig      : http://autobuild.buildroot.net/results/daa1679c13055d568e4200fbabf79ecfce7bfb88/defconfig
-
-Build b058063437138c3f1f705de57391d27f48b0d2a2
-==============================================
-
-Status         : NOK
-Failure reason : mplayer-32726
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-02 21:00:56
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d40d77ff708344a075c0c70a73e1b35efc4e3d62
-End of log     : http://autobuild.buildroot.net/results/b058063437138c3f1f705de57391d27f48b0d2a2/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b058063437138c3f1f705de57391d27f48b0d2a2/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b058063437138c3f1f705de57391d27f48b0d2a2/config
-Defconfig      : http://autobuild.buildroot.net/results/b058063437138c3f1f705de57391d27f48b0d2a2/defconfig
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index f308de7..163f1a7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -17,6 +17,7 @@ source "package/xz/Config.in"
+ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
++source "package/cachebench/Config.in"
+ source "package/bonnie/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dstat/Config.in"
+diff --git a/package/cachebench/Config.in b/package/cachebench/Config.in
+new file mode 100644
+index 0000000..b97c9ad
+--- /dev/null
++++ b/package/cachebench/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_CACHEBENCH
++	bool "cachebench"
++	help
++
++	  Cachebench presents itself as a program to empirically determine
++	  some parameters about an architectures memory subsystem. It can
++	  be used to have an idea of the performance of the cache
++	  support. It has been integrated into LLCbench (Low Level
++	  Characterization Benchmarks), but currently only Cachebench is
++	  supported by Buildroot.
++
++	  http://icl.cs.utk.edu/projects/llcbench/cachebench.html
++
+diff --git a/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch b/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
+new file mode 100644
+index 0000000..505a4fe
+--- /dev/null
++++ b/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
+@@ -0,0 +1,65 @@
++From 6daded62de221ca0d97360523575b1c7230c8800 Mon Sep 17 00:00:00 2001
++From: Gregory CLEMENT <gregory.clement@free-electrons.com>
++Date: Thu, 2 Aug 2012 22:33:36 +0200
++Subject: [PATCH] Convert script rules of Makefile to run it on target
++
++The benchmark is supposed to be run using the Makefile to be able to
++get data ready to be used by gnuplot. On some target we don't have
++Makefile available, so this script exctracted from the Makefile can be
++used directly to run the benchmark, format data and make a tarball of
++the result.
++---
++ cachebench/do_bench.sh |   40 ++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 40 insertions(+)
++ create mode 100644 cachebench/do_bench.sh
++
++diff --git a/cachebench/do_bench.sh b/cachebench/do_bench.sh
++new file mode 100644
++index 0000000..a80dcde
++--- /dev/null
+++++ b/cachebench/do_bench.sh
++@@ -0,0 +1,40 @@
+++#!/bin/sh
+++# Prefix of the output files produced by each benchmark
+++
+++# if this fails, replace it with a regular name!
+++Result_Prefix=$(hostname)-$(uname -m)
+++# Datatype used for each memory reference. 
+++# Legal values are DOUBLE, CHAR, INT, FLOAT
+++CB_Datatype=DOUBLE
+++
+++# The number of seconds each test runs.
+++CB_SecondsPerIteration=5
+++
+++# The number of times each test is run.
+++CB_RepeatCount=1
+++
+++# Log base 2 of the maximum problem size tested in bytes
+++CB_Memsize=29
+++
+++# The number of test sizes measured between powers of two
+++CB_Resolution=2
+++
+++CBOPTS="-m $CB_Memsize -e $CB_RepeatCount -x $CB_Resolution -d $CB_SecondsPerIteration
+++DATA=$CB_Datatype"
+++mkdir -p results
+++
+++cachebench  $CBOPTS -r > results/${Result_Prefix}_cache_read.dat
+++cachebench  $CBOPTS -w > results/${Result_Prefix}_cache_write.dat
+++cachebench  $CBOPTS -b > results/${Result_Prefix}_cache_rmw.dat
+++cachebench  $CBOPTS -tr > results/${Result_Prefix}_cache_handread.dat
+++cachebench  $CBOPTS -tw > results/${Result_Prefix}_cache_handwrite.dat
+++cachebench  $CBOPTS -tb > results/${Result_Prefix}_cache_handrmw.dat
+++cachebench  $CBOPTS -s > results/${Result_Prefix}_cache_memset.dat
+++cachebench  $CBOPTS -p > results/${Result_Prefix}_cache_memcpy.dat
+++
+++sed -e "s|TITLE|Memory Hierarchy Performance of ${Result_Prefix}|g" < /usr/share/cachebench/cachegraph.gp > results/${Result_Prefix}_cache.gp; echo "plot \"${Result_Prefix}_cache_read\" title 'read' with linespoints \\" >> results/${Result_Prefix}_cache.gp; for i in write rmw handread handwrite handrmw memset memcpy; do echo ", \"${Result_Prefix}_cache_$i.dat\" title '$i' with linespoints \\" >> results/${Result_Prefix}_cache.gp; done;
+++
+++cd results; tar cf ${Result_Prefix}-cachebench-datafiles.tar ${Result_Prefix}_cache*.dat ${Result_Prefix}_cache.gp
+++echo ""
+++echo "Datafiles and GNUplot scripts are located in the results directory."
+++echo ""
++\ No newline at end of file
++-- 
++1.7.9.5
++
+diff --git a/package/cachebench/cachebench.mk b/package/cachebench/cachebench.mk
+new file mode 100644
+index 0000000..efe95d9
+--- /dev/null
++++ b/package/cachebench/cachebench.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# cachebench
++#
++#############################################################
++CACHEBENCH_VERSION = 1.11
++CACHEBENCH_SOURCE = llcbench.tar.gz
++CACHEBENCH_SITE = http://icl.cs.utk.edu/projects/llcbench/
++CACHEBENCH_LICENSE = GPLv3
++CACHEBENCH_LICENSE_FILES = COPYING
++
++define CACHEBENCH_CONFIGURE_CMDS
++	$(MAKE)  -C $(@D) linux-lam
++endef
++
++define CACHEBENCH_BUILD_CMDS
++	$(MAKE) BB_CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D) cache-bench
++endef
++
++define CACHEBENCH_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/cachebench/cachebench $(TARGET_DIR)/usr/bin/cachebench
++	$(INSTALL) -m 0755 -D $(@D)/cachebench/do_bench.sh $(TARGET_DIR)/usr/share/cachebench/do_bench.sh
++	cp $(@D)/cachebench/cachegraph.gp $(TARGET_DIR)/usr/share/cachebench/cachegraph.gp
++endef
++
++define CACHEBENCH_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/usr/bin/cachebench
++endef
++
++$(eval $(generic-package))
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
