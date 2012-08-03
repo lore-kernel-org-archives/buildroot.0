@@ -1,21 +1,20 @@
-From: Gregory CLEMENT <gclement00@gmail.com>
-Date: Fri, 3 Aug 2012 11:52:38 +0200
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Fri, 03 Aug 2012 12:26:04 +0200
 Subject: [Buildroot] [PATCH] cachebench: new package
 In-Reply-To: <1343979807-15024-1-git-send-email-gregory.clement@free-electrons.com>
 References: <1343979807-15024-1-git-send-email-gregory.clement@free-electrons.com>
-Message-ID: <CADx9zJBLBk2P_5p+V1uuhAb79Qe=FxNj-J5nbqUGq3kgFHHskg@mail.gmail.com>
+Message-ID: <501BA73C.6010303@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please don't take this patch I found two typos in the script, I am
-currently testing the fixes, and I will sent a new version soon.
+Hi Gregory,
 
-2012/8/3 Gregory CLEMENT <gregory.clement@free-electrons.com>:
+Le 03/08/2012 09:43, Gregory CLEMENT a ?crit :
 > This patch adds the cachebench package.
->
+> 
 > Cachebench presents itself as a program to empirically determine some
 > parameters about an architectures memory subsystem. It can be used to
 > have an idea of the performance of the cache support. It has been
@@ -23,8 +22,11 @@ currently testing the fixes, and I will sent a new version soon.
 > currently only Cachebench is supported by Buildroot. The only
 > difference with mainline is a patch which add a script to be able to
 > generate data ready to bu used by gnuplot without having to use 'make'
+
+Nitpick of the day: to *be* used.
+
 > which is usually not present on embedded target.
->
+> 
 > Signed-off-by: Gregory CLEMENT <gregory.clement@free-electrons.com>
 > ---
 >  package/Config.in                                  |    1 +
@@ -35,14 +37,14 @@ currently testing the fixes, and I will sent a new version soon.
 >  create mode 100644 package/cachebench/Config.in
 >  create mode 100644 package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
 >  create mode 100644 package/cachebench/cachebench.mk
->
+> 
 > diff --git a/package/Config.in b/package/Config.in
 > index f308de7..163f1a7 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
 > @@ -17,6 +17,7 @@ source "package/xz/Config.in"
 >  endmenu
->
+>  
 >  menu "Debugging, profiling and benchmark"
 > +source "package/cachebench/Config.in"
 >  source "package/bonnie/Config.in"
@@ -55,17 +57,17 @@ currently testing the fixes, and I will sent a new version soon.
 > +++ b/package/cachebench/Config.in
 > @@ -0,0 +1,13 @@
 > +config BR2_PACKAGE_CACHEBENCH
-> +       bool "cachebench"
-> +       help
+> +	bool "cachebench"
+> +	help
 > +
-> +         Cachebench presents itself as a program to empirically determine
-> +         some parameters about an architectures memory subsystem. It can
-> +         be used to have an idea of the performance of the cache
-> +         support. It has been integrated into LLCbench (Low Level
-> +         Characterization Benchmarks), but currently only Cachebench is
-> +         supported by Buildroot.
+> +	  Cachebench presents itself as a program to empirically determine
+> +	  some parameters about an architectures memory subsystem. It can
+> +	  be used to have an idea of the performance of the cache
+> +	  support. It has been integrated into LLCbench (Low Level
+> +	  Characterization Benchmarks), but currently only Cachebench is
+> +	  supported by Buildroot.
 > +
-> +         http://icl.cs.utk.edu/projects/llcbench/cachebench.html
+> +	  http://icl.cs.utk.edu/projects/llcbench/cachebench.html
 > +
 > diff --git a/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch b/package/cachebench/cachebench-0001-Convert-script-rules-of-Makefile-to-run-it-on-target.patch
 > new file mode 100644
@@ -81,8 +83,18 @@ currently testing the fixes, and I will sent a new version soon.
 > +The benchmark is supposed to be run using the Makefile to be able to
 > +get data ready to be used by gnuplot. On some target we don't have
 > +Makefile available, so this script exctracted from the Makefile can be
+
+extracted
+
 > +used directly to run the benchmark, format data and make a tarball of
 > +the result.
+
+Ok. Since this is not really a patch (you are adding a file that don't
+rely at all on existing source file from the project), why don't you
+just add this file to the package folder, and install it ?
+
+But if you still want to use a patch, please use your Signed-off-by here.
+
 > +---
 > + cachebench/do_bench.sh |   40 ++++++++++++++++++++++++++++++++++++++++
 > + 1 file changed, 40 insertions(+)
@@ -99,7 +111,7 @@ currently testing the fixes, and I will sent a new version soon.
 > ++
 > ++# if this fails, replace it with a regular name!
 > ++Result_Prefix=$(hostname)-$(uname -m)
-> ++# Datatype used for each memory reference.
+> ++# Datatype used for each memory reference. 
 > ++# Legal values are DOUBLE, CHAR, INT, FLOAT
 > ++CB_Datatype=DOUBLE
 > ++
@@ -135,7 +147,7 @@ currently testing the fixes, and I will sent a new version soon.
 > ++echo "Datafiles and GNUplot scripts are located in the results directory."
 > ++echo ""
 > +\ No newline at end of file
-> +--
+> +-- 
 > +1.7.9.5
 > +
 > diff --git a/package/cachebench/cachebench.mk b/package/cachebench/cachebench.mk
@@ -152,37 +164,16 @@ currently testing the fixes, and I will sent a new version soon.
 > +CACHEBENCH_VERSION = 1.11
 > +CACHEBENCH_SOURCE = llcbench.tar.gz
 > +CACHEBENCH_SITE = http://icl.cs.utk.edu/projects/llcbench/
-> +CACHEBENCH_LICENSE = GPLv3
-> +CACHEBENCH_LICENSE_FILES = COPYING
-> +
-> +define CACHEBENCH_CONFIGURE_CMDS
-> +       $(MAKE)  -C $(@D) linux-lam
-> +endef
-> +
-> +define CACHEBENCH_BUILD_CMDS
-> +       $(MAKE) BB_CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" -C $(@D) cache-bench
-> +endef
-> +
-> +define CACHEBENCH_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -m 0755 -D $(@D)/cachebench/cachebench $(TARGET_DIR)/usr/bin/cachebench
-> +       $(INSTALL) -m 0755 -D $(@D)/cachebench/do_bench.sh $(TARGET_DIR)/usr/share/cachebench/do_bench.sh
-> +       cp $(@D)/cachebench/cachegraph.gp $(TARGET_DIR)/usr/share/cachebench/cachegraph.gp
-> +endef
-> +
-> +define CACHEBENCH_UNINSTALL_TARGET_CMDS
-> +       $(RM) $(TARGET_DIR)/usr/bin/cachebench
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 1.7.9.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
+Hmmm, here I would call the package llcbench. But you were saying that
+you were building only the cachebench package, so I'm not quite sure
+about what to do, except build the whole tool set and not just
+cachebench (if it is possible?)
 
+Maxime
 
 -- 
-Gregory CLEMENT
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
