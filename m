@@ -1,36 +1,58 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 03 Aug 2012 10:41:09 +0200
-Subject: [Buildroot] [PATCH 2/6] expat: Add license info
-In-Reply-To: <1343962432-2772-2-git-send-email-danomimanchego123@gmail.com>
+Date: Fri, 03 Aug 2012 11:04:22 +0200
+Subject: [Buildroot] A little summer game ? :-)
+In-Reply-To: <20120803103052.5ec63fb7@skate>
 References: <1343962432-2772-1-git-send-email-danomimanchego123@gmail.com>
- <1343962432-2772-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <501B8EA5.4010600@lucaceresoli.net>
+ <20120803103052.5ec63fb7@skate>
+Message-ID: <501B9416.3090700@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi Manchego wrote:
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->   package/expat/expat.mk |    2 ++
->   1 file changed, 2 insertions(+)
+Thomas Petazzoni wrote:
+> Le Thu,  2 Aug 2012 22:53:47 -0400,
+> Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
 >
-> diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-> index 663abcd..7fa3126 100644
-> --- a/package/expat/expat.mk
-> +++ b/package/expat/expat.mk
-> @@ -10,6 +10,8 @@ EXPAT_INSTALL_STAGING = YES
->   EXPAT_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) installlib
->   EXPAT_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) installlib
->   EXPAT_DEPENDENCIES = host-pkg-config
-> +EXPAT_LICENSE = MIT
-> +EXPAT_LICENSE_FILES = COPYING
->   
->   $(eval $(autotools-package))
->   $(eval $(host-autotools-package))
+>> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>
+> Thanks for all the license information patches.
+>
+> However, those patches are too easy, so let's make a little summer
+> game :-)
+>
+> I will merge 3 "license information" patches from someone for each
+> patch that this developer sends to fix a build issue reported by the
+> autobuilders. This way, I'm pretty sure we'll manage to reduce the
+> number of build issues! This offer is obviously valid for all
+> contributors.
+>
+> Ready to play the game ? :-)
+>
+> Thomas
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Wheee, what a fun, Thomas! Call it "Buildroot Summer Of Bugfix" and
+people will flock in! :-D
+
+Seriously, I admit I'm not investing a lot of time in fixing build
+errors. This is in part due to the limited time available, but
+another important blocking factor is that many build errors happen
+with external, custom toolchains that are installed on your build
+server.
+
+I almost daily skim through the build failures and take a look at
+those about by packages and/or architectures I use and somehow know.
+These are already a small subset of all the possibilities.
+But often I discover these happen with toolchains (and probably
+architectures) I don't have an easy access to, so I just go along.
+
+It would help if the external toolchains used for the builds were
+always available within Buildroot, so we could just apply the
+[def]config, run make, have an icy drink while it downloads and
+fails building and then, happily refreshed, hunt for the bug.
+
+I'm not saying this would be easy to do, but it would be helpful
+to me.
 
 Luca
