@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Aug 2012 13:18:26 +0200
-Subject: [Buildroot] [PATCH 1/3] lmbench: Add license info
-In-Reply-To: <1343987106-3302-1-git-send-email-keguang.zhang@gmail.com>
-References: <1343987106-3302-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <20120804131826.121736f4@skate>
+Date: Sat, 4 Aug 2012 13:16:10 +0200
+Subject: [Buildroot] [git commit] cjson: Add license info
+Message-ID: <20120804112012.C8B609701F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri,  3 Aug 2012 17:45:04 +0800,
-Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=6495c25cb0e8174a8a83483aff98e38943c98479
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +LMBENCH_LICENSE = GPLv2
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cjson/cjson.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-No, see the file COPYING-2. The license of lmbench seems more
-complicated. This file adds some fairly strong restrictions on top of
-the GPLv2, which probably makes this program non-free software.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index a9b0bcf..6f26bb8 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -7,6 +7,7 @@ CJSON_VERSION         = undefined
+ CJSON_SOURCE          = cJSONFiles.zip
+ CJSON_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/cjson/
+ CJSON_INSTALL_STAGING = YES
++CJSON_LICENSE         = MIT
+ 
+ define CJSON_EXTRACT_CMDS
+ 	unzip -d $(@D) $(DL_DIR)/$(CJSON_SOURCE)
