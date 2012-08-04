@@ -1,41 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Aug 2012 13:15:13 +0200
-Subject: [Buildroot] [git commit] luacjson: Add license info
-Message-ID: <20120804112012.8DC4497015@busybox.osuosl.org>
+Date: Sat, 4 Aug 2012 13:20:23 +0200
+Subject: [Buildroot] [PATCH 2/3] bwm-ng: Add license info
+In-Reply-To: <1343987106-3302-2-git-send-email-keguang.zhang@gmail.com>
+References: <1343987106-3302-1-git-send-email-keguang.zhang@gmail.com>
+ <1343987106-3302-2-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <20120804132023.4b98ebec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82c3a3322857c36601f795f5f8be54d9af33641b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Fri,  3 Aug 2012 17:45:05 +0800,
+Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/luacjson/luacjson.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+> Add license info for bwm-ng.
+> ---
 
-diff --git a/package/luacjson/luacjson.mk b/package/luacjson/luacjson.mk
-index fe92f16..1f79d5d 100644
---- a/package/luacjson/luacjson.mk
-+++ b/package/luacjson/luacjson.mk
-@@ -3,10 +3,12 @@
- # luacjson
- #
- #############################################################
--LUACJSON_VERSION      = 2.1.0
--LUACJSON_SOURCE       = lua-cjson-$(LUACJSON_VERSION).tar.gz
--LUACJSON_SITE         = http://www.kyne.com.au/~mark/software/download
--LUACJSON_DEPENDENCIES = lua
-+LUACJSON_VERSION       = 2.1.0
-+LUACJSON_SOURCE        = lua-cjson-$(LUACJSON_VERSION).tar.gz
-+LUACJSON_SITE          = http://www.kyne.com.au/~mark/software/download
-+LUACJSON_DEPENDENCIES  = lua
-+LUACJSON_LICENSE       = MIT
-+LUACJSON_LICENSE_FILES = LICENSE
- 
- define LUACJSON_BUILD_CMDS
- 	$(MAKE) -C $(@D) \
+Please add your Signed-off-by on all the patches you submit.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
