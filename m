@@ -1,34 +1,25 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Fri, 3 Aug 2012 16:44:13 +0200
-Subject: [Buildroot] glibc instead of ulibc ?
-In-Reply-To: <1344004327.94147.YahooMailNeo@web164606.mail.gq1.yahoo.com>
-References: <1343854870.70701.YahooMailNeo@web164605.mail.gq1.yahoo.com>
- <20120801231635.08b7d808@skate>
- <1343913806.30162.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20120802152640.5d9cca86@skate>
- <1343936315.31073.YahooMailNeo@web164603.mail.gq1.yahoo.com>
- <20120802214237.37ed2f82@skate>
- <1343944807.21046.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20120803150651.6ce383f0@skate>
- <1344004327.94147.YahooMailNeo@web164606.mail.gq1.yahoo.com>
-Message-ID: <20120803164413.4313e55b@eb-e6520>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Fri, 3 Aug 2012 22:56:43 -0400
+Subject: [Buildroot] [PATCH 6/6] xinetd: Add license info
+In-Reply-To: <501B8970.1080206@lucaceresoli.net>
+References: <1343962432-2772-1-git-send-email-danomimanchego123@gmail.com>
+ <1343962432-2772-6-git-send-email-danomimanchego123@gmail.com>
+ <501B8970.1080206@lucaceresoli.net>
+Message-ID: <CANxTyt5ScLfrBobcLvu4F+hukvQ1SwJnwes5uDs4YUw5eqjzeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Zoran,
+Okay, will do.
 
-Le Fri, 3 Aug 2012 07:32:07 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
-> PS I am also suspitious about final success, but I don't know if there is some way to
-> programm in some RAD GUI environment?(like Lazarus)?and do crosscompiling.
-> 
-QTcreator can do that, assuming you have a toolchain with QT
-properly integrated, and by providing it a simple helper script
-(and having a ssh server with key authentication on your target) you can
-even debug from QTCreator using gdb/gdbserver.
-
-Best regards,
-Eric
+On Fri, Aug 3, 2012 at 4:18 AM, Luca Ceresoli <luca@lucaceresoli.net>wrote:
+>
+> To keep it consistent with similar cases (currently only bzip2 and
+> berkeleydb) I would better like to use "xinetd license" instead of
+> "Custom".
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120803/35f55cb8/attachment.html>
