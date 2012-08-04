@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Aug 2012 13:14:53 +0200
-Subject: [Buildroot] [git commit] lua: Add license info
-Message-ID: <20120804112012.79C3C9701D@busybox.osuosl.org>
+Date: Sat, 4 Aug 2012 13:16:08 +0200
+Subject: [Buildroot] [git commit] xinetd: Add license info
+Message-ID: <20120804112012.ABC3E9701D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80e184610b16417b079c44c7fa5f855fbdcac09c
+commit: http://git.buildroot.net/buildroot/commit/?id=8c529aa7e4d7bd0b9a8e76c902de3e81480255ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/lua/lua.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/xinetd/xinetd.mk |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 26c1576..de60c57 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -7,6 +7,8 @@
- LUA_VERSION = 5.1.5
- LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
-+LUA_LICENSE = MIT
-+LUA_LICENSE_FILES = COPYRIGHT
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index a209d12..4fc2de9 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -3,9 +3,11 @@
+ # xinetd
+ #
+ #############################################################
+-XINETD_VERSION = 2.3.15
+-XINETD_SOURCE  = xinetd-$(XINETD_VERSION).tar.gz
+-XINETD_SITE    = http://www.xinetd.org
++XINETD_VERSION       = 2.3.15
++XINETD_SOURCE        = xinetd-$(XINETD_VERSION).tar.gz
++XINETD_SITE          = http://www.xinetd.org
++XINETD_LICENSE       = xinetd license
++XINETD_LICENSE_FILES = COPYRIGHT
  
- LUA_CFLAGS = -Wall
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+ ifneq ($(BR2_INET_RPC),y)
+ XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
