@@ -1,44 +1,29 @@
-From: Dallas Clement <dallas.a.clement@gmail.com>
-Date: Sat, 4 Aug 2012 11:25:40 -0500
-Subject: [Buildroot] ext-toolchain-wrapper issues
-In-Reply-To: <20120804111932.6e0f0481@skate>
-References: <CAE9DZUSdA9fgHZjgNu3bY8Ue4d6V+4o0USbR6_dcOPsCAfxgiQ@mail.gmail.com>
- <20120804111932.6e0f0481@skate>
-Message-ID: <CAE9DZUROhjmKaqYqPoYPa0gy2RhxnX0dvQ4+XJ+2Z2nwjQed+w@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat,  4 Aug 2012 12:27:24 -0400
+Subject: [Buildroot] [PATCH] [v2] luaexpat: Add license info
+Message-ID: <1344097644-9431-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/luaexpat/luaexpat.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for the help.
-
-> Interesting, I'm also working around the Armada 370 and Armada XP. What
-> are you doing with this platform?
-
-Building a NAS product.
-
-> The Armada XP support in mainline doesn't need machine type, it uses
-> the device tree.
-
-Marvell provides a patch to the 3.0.6 kernel, which definitely
-provides machine types.  They have 3 or 4 defconfigs for the Armada
-XP.
-
-> Is this Marvell toolchain available somewhere so I can try to reproduce the problem?
-
-You have to get it from Marvell's extranet.  Need to register first.
-Pls contact Erez who is the FAE if you need help getting in
-(ereza at marvell.com).
-
-> You can modify ext-toolchain-wrapper.c to progressively remove some
-> option that it passes to the compiler to see which one is problematic.
-
-I'll do that.  It would be nice to get it figured out.  Will let you
-know what I find.
-
-Regards,
-
-Dallas
+diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
+index 400d7b4..2d4c517 100644
+--- a/package/luaexpat/luaexpat.mk
++++ b/package/luaexpat/luaexpat.mk
+@@ -7,6 +7,7 @@
+ LUAEXPAT_VERSION      = 1.2.0
+ LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
+ LUAEXPAT_DEPENDENCIES = lua expat
++LUAEXPAT_LICENSE      = MIT
+ 
+ 
+ LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
+-- 
+1.7.9.5
