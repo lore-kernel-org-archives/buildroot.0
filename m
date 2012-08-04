@@ -1,40 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Aug 2012 17:42:16 +0200
-Subject: [Buildroot] avoiding the need to enter password
-In-Reply-To: <CAGXs5wViA3UoPPd6_Q1SHuC8JO_M6hTemt80LntGuu0rU_jY6g@mail.gmail.com>
-References: <CAGXs5wVSxtaZP47Owd+O+gqzqCZZcmuYJ-msSyTyU7pyED_q=g@mail.gmail.com>
- <20120804130507.13db9c42@skate>
- <CAGXs5wViA3UoPPd6_Q1SHuC8JO_M6hTemt80LntGuu0rU_jY6g@mail.gmail.com>
-Message-ID: <20120804174216.0e4d7349@skate>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Sat, 4 Aug 2012 11:25:40 -0500
+Subject: [Buildroot] ext-toolchain-wrapper issues
+In-Reply-To: <20120804111932.6e0f0481@skate>
+References: <CAE9DZUSdA9fgHZjgNu3bY8Ue4d6V+4o0USbR6_dcOPsCAfxgiQ@mail.gmail.com>
+ <20120804111932.6e0f0481@skate>
+Message-ID: <CAE9DZUROhjmKaqYqPoYPa0gy2RhxnX0dvQ4+XJ+2Z2nwjQed+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 4 Aug 2012 16:55:08 +0300,
-Kevin Wilson <wkevils@gmail.com> a ?crit :
+Hi Thomas,
 
-> I tried it replacing  /bin.sh instead of the
-> /sbin/getty line in /etc/inittab and indeed it boots into prompt
-> without need to enter password.
-> Is there a way to enforce it running the /etc/profile in boot
-> in such a case ?
-> (It seems to me that /etc/profile is not executed)
+Thanks for the help.
 
-Try:
+> Interesting, I'm also working around the Armada 370 and Armada XP. What
+> are you doing with this platform?
 
-ttyS0::respawn:-/bin/sh
+Building a NAS product.
 
-(i.e add a '-' in front of the /bin/sh command. It will make your shell
-a login shell, which I think should tell the shell to
-read /etc/profile).
+> The Armada XP support in mainline doesn't need machine type, it uses
+> the device tree.
 
-Best regards,
+Marvell provides a patch to the 3.0.6 kernel, which definitely
+provides machine types.  They have 3 or 4 defconfigs for the Armada
+XP.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Is this Marvell toolchain available somewhere so I can try to reproduce the problem?
+
+You have to get it from Marvell's extranet.  Need to register first.
+Pls contact Erez who is the FAE if you need help getting in
+(ereza at marvell.com).
+
+> You can modify ext-toolchain-wrapper.c to progressively remove some
+> option that it passes to the compiler to see which one is problematic.
+
+I'll do that.  It would be nice to get it figured out.  Will let you
+know what I find.
+
+Regards,
+
+Dallas
