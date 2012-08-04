@@ -1,29 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 4 Aug 2012 13:20:23 +0200
-Subject: [Buildroot] [PATCH 2/3] bwm-ng: Add license info
-In-Reply-To: <1343987106-3302-2-git-send-email-keguang.zhang@gmail.com>
-References: <1343987106-3302-1-git-send-email-keguang.zhang@gmail.com>
- <1343987106-3302-2-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <20120804132023.4b98ebec@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 4 Aug 2012 14:04:49 +0200
+Subject: [Buildroot] Package informations, online and updated
+In-Reply-To: <20120731213729.49c4b3ee@skate>
+References: <20120731213729.49c4b3ee@skate>
+Message-ID: <CAHXCMMLSAQ__EMtn=uSr3P1B3fAfbVCJTo-N5jK780cL6gQh_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri,  3 Aug 2012 17:45:05 +0800,
-Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
+Hi,
 
-> Add license info for bwm-ng.
-> ---
+2012/7/31 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+[...]
+> There are probably more metrics to add, even small things like presence
+> of ':=' operators. Don't hesitate to share your ideas and patches about
+> this.
 
-Please add your Signed-off-by on all the patches you submit.
+Another idea, half way with autobuild, could be the latest
+build-success and build-failure dates (maybe for each toolchain
+running in autobuild).
 
-Thanks!
+Cheers,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Sam
