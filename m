@@ -1,22 +1,41 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sat, 4 Aug 2012 21:10:40 +0100
-Subject: [Buildroot] [PATCH] sudo: fix main executable permissions
-In-Reply-To: <20120804144316.469003e8@skate>
-References: <1343998111-15331-1-git-send-email-spdawson@gmail.com>
- <20120804144316.469003e8@skate>
-Message-ID: <CAHt8ZCPK5Q1-30Vzd24Xghh=7Jogr5c2ug3Umggmv35sozhtKw@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sat,  4 Aug 2012 21:11:01 +0100
+Subject: [Buildroot] [PATCH v2] sudo: fix main executable permissions
+Message-ID: <1344111062-4616-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4 August 2012 13:43, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The principle is good, but not the way it is implemented.  Please use
-> the <pkg>_PERMISSIONS infrastructure instead. See the documentation, or
-> package/busybox/busybox.mk for an example.
+From: Simon Dawson <spdawson@gmail.com>
 
-Okay, thanks Thomas.
+The sudo executable is installed without the setuid bit set, which prevents
+sudo from working.
 
-Simon.
+This patch adds a post-install hook to fix the permissions of the sudo
+executable.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v2: Use generic package permissions mechanism, as suggested by Thomas
+ Petazzoni
+
+ package/sudo/sudo.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 9b0ebed..15e06fa 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -14,4 +14,8 @@ SUDO_CONF_OPT = \
+ 		--without-interfaces \
+ 		--without-pam
+ 
++define SUDO_PERMISSIONS
++/usr/bin/sudo			 f 4755	0 0 - - - - -
++endef
++
+ $(eval $(autotools-package))
+-- 
+1.7.9.5
