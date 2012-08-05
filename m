@@ -1,233 +1,201 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 5 Aug 2012 16:56:01 +0200
-Subject: [Buildroot] [PATCH 1/2] Added packages libmsgpack (v. 0.5.7)
- without C++ support (as in small embedded systems buildroot is often
- compiled without C++ support) and msgpack-python version 0.1.10 (which does
- not rely yet on python-setuptools. I had
-Message-ID: <CAHXCMMLZtrdpGPV5ivdc9cOiJydYCVRZ=8dGi0_P9pbrHNuwXQ@mail.gmail.com>
+Date: Sun, 5 Aug 2012 16:59:39 +0200
+Subject: [Buildroot] [PATCH 00/11] RFC: Manual content reorganization
+In-Reply-To: <20120801224356.6b0d0bd3@skate>
+References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
+ <20120801224356.6b0d0bd3@skate>
+Message-ID: <CAHXCMMJcUjcYpno08OvgPHiaj_ECe=Pi9F6pDkp7L33Berza+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Wojciech,
+Hi Thomas, all,
 
-Thanks for your patch series.
 
-First, some remarks when posting patch(es) for new packages:
-- 1 package per patch (and 1 patch per package).
-  If you need to rework your commits before posting them, you
-certainly want to rebase your branch using 'git rebase'
-  (some tips are gathered at: http://elinux.org/Buildroot_how_to_contribute )
-- take care of the commit message:
-  the 1st line should be "<package name>: new package", then if you
-want to give some details, you can add them with 1 blank line between
-the 1st line and these details.
-
-Hereafter, my comments inlined.
-
-2012/8/5 Wojciech M. Zabolotny <wzab01@gmail.com>:
-> From: "Wojciech M. Zabolotny" <wzab01@gmail.com>
+2012/8/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Hello,
 >
-> Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
-> ---
->  package/Config.in                             |    2 ++
->  package/libmsgpack/Config.in                  |    8 ++++++++
->  package/libmsgpack/README                     |    1 +
->  package/libmsgpack/libmsgpack-0.5.7-001.patch |   25 +++++++++++++++++++++++
->  package/libmsgpack/libmsgpack.mk              |   13 ++++++++++++
->  package/msgpack-python/Config.in              |    8 ++++++++
->  package/msgpack-python/msgpack-python.mk      |   27 +++++++++++++++++++++++++
->  7 files changed, 84 insertions(+)
->  create mode 100644 package/libmsgpack/Config.in
->  create mode 100644 package/libmsgpack/README
->  create mode 100644 package/libmsgpack/libmsgpack-0.5.7-001.patch
->  create mode 100644 package/libmsgpack/libmsgpack.mk
->  create mode 100644 package/msgpack-python/Config.in
->  create mode 100644 package/msgpack-python/msgpack-python.mk
+> Le Wed, 21 Mar 2012 00:09:50 +0100,
+> Samuel MARTIN <s.martin49@gmail.com> a ?crit :
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index f308de7..42d0718 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -275,6 +275,7 @@ source "package/python-nfc/Config.in"
->  source "package/python-pygame/Config.in"
->  source "package/python-serial/Config.in"
->  source "package/python-setuptools/Config.in"
-> +source "package/msgpack-python/Config.in"
-We usually keep packages listed in alphabetical order.
-
->  endmenu
->  endif
->  source "package/ruby/Config.in"
-> @@ -461,6 +462,7 @@ source "package/libsigc/Config.in"
->  source "package/libtpl/Config.in"
->  source "package/liburcu/Config.in"
->  source "package/lttng-libust/Config.in"
-> +source "package/libmsgpack/Config.in"
-ditto
-
->  source "package/orc/Config.in"
->  source "package/poco/Config.in"
->  source "package/protobuf/Config.in"
-> diff --git a/package/libmsgpack/Config.in b/package/libmsgpack/Config.in
-> new file mode 100644
-> index 0000000..d8edd4d
-> --- /dev/null
-> +++ b/package/libmsgpack/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBMSGPACK
-> +       bool "libmsgpack"
-> +       help
-> +         LibMsgPack is a library for packing and unpacking data
-> +         structures in C
-> +
-> +         http://msgpack.org
-> +
-
-> diff --git a/package/libmsgpack/README b/package/libmsgpack/README
-> new file mode 100644
-> index 0000000..b2e25f7
-> --- /dev/null
-> +++ b/package/libmsgpack/README
-> @@ -0,0 +1 @@
-> +Created by WZab
-I don't think this is the usage here.
-Git history and signed commits does the job ;)
-
-> diff --git a/package/libmsgpack/libmsgpack-0.5.7-001.patch b/package/libmsgpack/libmsgpack-0.5.7-001.patch
-> new file mode 100644
-> index 0000000..6b3ad60
-> --- /dev/null
-> +++ b/package/libmsgpack/libmsgpack-0.5.7-001.patch
-A description + the sign-off-by statement in the patch is missing.
-
-> @@ -0,0 +1,25 @@
-> +diff -u -r msgpack-0.5.7.orig/configure.in msgpack-0.5.7/configure.in
-> +--- msgpack-0.5.7.orig/configure.in    2011-08-08 15:51:19.000000000 +0100
-> ++++ msgpack-0.5.7/configure.in 2012-07-06 22:02:38.000000000 +0100
-> +@@ -1,6 +1,6 @@
-> +-AC_INIT(src/object.cpp)
-> ++AC_INIT(msgpack, 0.5.7)
-> + AC_CONFIG_AUX_DIR(ac)
-> +-AM_INIT_AUTOMAKE(msgpack, 0.5.7)
-> ++AM_INIT_AUTOMAKE(no-dependencies)
-> + AC_CONFIG_HEADER(config.h)
-> +
-> + AC_SUBST(CFLAGS)
-> +diff -u -r msgpack-0.5.7.orig/src/Makefile.am msgpack-0.5.7/src/Makefile.am
-> +--- msgpack-0.5.7.orig/src/Makefile.am 2011-06-12 07:07:29.000000000 +0100
-> ++++ msgpack-0.5.7/src/Makefile.am      2012-07-06 22:27:09.000000000 +0100
-> +@@ -1,5 +1,7 @@
-> +-
-> +-lib_LTLIBRARIES = libmsgpack.la
-> ++lib_LTLIBRARIES =
-> ++if ENABLE_CXX
-> ++lib_LTLIBRARIES += libmsgpack.la
-> ++endif
-> +
-> + libmsgpack_la_SOURCES = \
-> +               unpack.c \
-> diff --git a/package/libmsgpack/libmsgpack.mk b/package/libmsgpack/libmsgpack.mk
-> new file mode 100644
-> index 0000000..eeaea52
-> --- /dev/null
-> +++ b/package/libmsgpack/libmsgpack.mk
-> @@ -0,0 +1,13 @@
-> +#############################################################
-> +#
-> +# libmsgpack
-> +#
-> +#############################################################
-> +LIBMSGPACK_VERSION:=0.5.7
-Replace ":=" by " = "
-
-> +LIBMSGPACK_SOURCE:=msgpack-$(LIBMSGPACK_VERSION).tar.gz
-ditto
-
-> +LIBMSGPACK_SITE:=http://msgpack.org/releases/cpp
-ditto
-
-> +LIBMSGPACK_INSTALL_STAGING=YES
-Replace "=" by " = "
-
-> +LIBMSGPACK_INSTALL_TARGET=YES
-ditto
-
-> +LIBMSGPACK_AUTORECONF=YES
-ditto
-
-> +LIBMSGPACK_CONF_OPT = --disable-cxx --disable-dependency-tracking
-Could be:
-LIBMSGPACK_CONF_OPT = --disable-dependency-tracking \
-  --$(if $(BR2_INSTALL_LIBSTDCPP),enable,disable)-cxx
-
-> +$(eval $(call AUTOTARGETS))
-Add a blank line before the package infrastructure call.
-
-> diff --git a/package/msgpack-python/Config.in b/package/msgpack-python/Config.in
-> new file mode 100644
-> index 0000000..25c3cd6
-> --- /dev/null
-> +++ b/package/msgpack-python/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_MSGPACK_PYTHON
-> +       bool "msgpack-python"
-> +       depends on BR2_PACKAGE_PYTHON
-> +       help
-> +         msgpack-python is a Python library to serialize/deserialize Python data
-> +
-> +         http://pypi.python.org/pypi/msgpack-python/
-> +
-> diff --git a/package/msgpack-python/msgpack-python.mk b/package/msgpack-python/msgpack-python.mk
-> new file mode 100644
-> index 0000000..d70e9de
-> --- /dev/null
-> +++ b/package/msgpack-python/msgpack-python.mk
-> @@ -0,0 +1,27 @@
-> +#############################################################
-> +#
-> +# msgpack-python
-> +#
-> +#############################################################
-> +
-> +MSGPACK_PYTHON_VERSION = 0.1.10
-> +MSGPACK_PYTHON_SOURCE  = msgpack-python-$(MSGPACK_PYTHON_VERSION).tar.gz
-This line is not needed since tarball name has the default scheme:
-<package name>-<package version>.tar.gz
-
-> +MSGPACK_PYTHON_SITE    = http://pypi.python.org/packages/source/m/msgpack-python
-Replace "    = " by " = "
-
-> +MSGPACK_PYTHON_DEPENDENCIES = python
-> +
-> +define MSGPACK_PYTHON_BUILD_CMDS
-> +       (cd $(@D); \
-> +               CC="$(TARGET_CC)"               \
-> +               CFLAGS="$(TARGET_CFLAGS)"       \
-> +               LDSHARED="$(TARGET_CC) -shared" \
-> +               LDFLAGS="$(TARGET_LDFLAGS)"     \
-> +       $(HOST_DIR)/usr/bin/python setup.py build_ext \
-> +       --include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
-> +       (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-> +endef
-> +
-> +define MSGPACK_PYTHON_INSTALL_TARGET_CMDS
-> +       (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-> +endef
-> +
-> +$(eval $(call GENTARGETS))
-> --
-> 1.7.10.4
+>> This patch series aims to reorganize the manual content, as well as
+>> complete it... thought there are still lacks here and there after that ;-)
+>>
+>> This work intends to make the manual:
+>> - understable and clear for new comers, even if they are not familiar with
+>> embedded development;
+>> - useful for developers, contributors, even people that may want to redistribute
+>> third-party SDK/BSP based on Buildroot
+>> - as the entry point (anyone discovering/needing/using Buildroot should find
+>> its way out straight forward reading the manual)
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Those are good objectives that I fully agree with.
+>
+>> Although I am well aware that these are ambitious goals and this patch series
+>> does not acheive nor address all these points, at least, it is a starting point.
+>>
+>> Let's talk about the new organization.
+>>
+>> Overview of the new table of content:
+>> 1.  About Buildroot
+>> 2.  Starting up
+>>       Think this chapter like a tutorial.
+>>       Includes system requirements, how to get Buildroot and the first steps
+>>       using it.
+>> 3.  Working with Buildroot
+>>       Intends to present basics to make Buildroot fitting your needs using
+>>       the available customization knobs.
+>
+> Is this where we would put details like what's the difference between
+> the three toolchain backends?
+Yes.
+
+> Where we would explain how Buildroot
+> reacts when one removes package from menuconfig and runs 'make'?
+Hum... not sure if this point is documented right now; but yes, I
+think this is the place where I would add it.
+
+>
+>> 4.  Troubleshooting
+>
+> What do you intend to put here? Our FAQ?
+The FAQ has its place here.
+
+>
+>> 5.  Going further in Buildroot's innards
+>>       Explains some topics like about embedded development, cross-compilation,
+>>       etc, and gives more advanced tips about Buildroot usages.
+>
+> I am not sure it is a good idea to mix topics not directly related to
+> Buildroot (embedded development, cross-compilation) with recommendation
+> on using Buildroot itself.
+In fact, most of this section come from from the current introduction.
+The truth is this chapter is part of what I'm not happy with. So, it
+certainly need some more rework.
+
+>
+> For example, is this where you would recommend to use post-build
+> scripts instead of custom target skeleton? How to have a custom
+> additional device table?
+Definitely yes.
+
+>
+> I am not sure to see clearly where's the boundary between (3) and (5).
+> For example, in (3) you will probably want to explain the
+> different /dev management mechanism, which will lead you to explain
+> device table concepts and so on.
+Having to write some code (*.mk, scripts, etc) is (more or less) the
+boundary that lead me putting each section in chapter 3 or 5.
+IOW, anything explained in chapter 3 should be available from the
+menuconfig or is direct buildroot (make) invocation tips.
+
+New comers should just have to read chapter 1 to 3 (maybe 4), and
+after that they should be able to use buildroot, though some options,
+like /dev management mechanism, may require some deeper knowledge or
+understanding of what it is.
+In such a case, I would add a section in chapter 5, or add a new chapter.
+
+>
+>> 6.  Developer Guidelines
+>>       Intends to provide all relevant information for anyone wanting to hack in
+>>       Buildroot.
+Anything you want to know to add new software in BR, to hack in a way
+or another BR; whatever your will to push the patches upstream or not.
+
+>> 7.  Getting involved
+>>       Provides all the way to keep informed about the Buildroot development.
+All places where BR is on the www, all places where you should look to
+get information.
+
+>> 8.  Contibuting to Buildroot
+>>       Gives tips about patch submission.
+How to push your patch upstream, making them available for all BR users.
+
+Hope, this is clearer.
+
+>
+> I am not sure to understand where's the boundary between 6, 7 and 8
+> here.
+>
+> I think we also need to differentiate two developer levels maybe:
+>
+>  * The new developer, which generally needs a tutorial and reference on
+>    how to add packages
+>
+>  * The hardcore developer, for which we will maybe want to provide
+>    details about Buildroot internals (even though I'm not sure those
+>    will ever be documented).
+>
+So, you would recommend to split chapter 6 in 2, one for new
+developers, the other for "hardcore developer"?
+
+I disagree with not documenting BR internals.
+I've been following BR and hacking in it for 3 years now, and I still
+discover features that are in BR for a while, but I've never noticed
+or known (certainly because I haven't need them for far), the latest
+one is the <pkg>_PERMISSIONS infrastructure!
+
+>> 9.  Legal notice
+>>       Intends to give legal/license details about Buildroot itself, software
+>>       used/built by Buildroot, how to redistribute SDK based on, etc.
+>> 10. Appendix
+>
+>
+>> BTW, over the last days, some other topics came out of my mind, but I have
+>> intentionally omitted them, letting their respective authors writing
+>> documentation about them. For example:
+>> - patches policy/howto, for which some great changes are on their way to be
+>> integrated;
+>
+> Good point. Should be added to the "new package reference", that should
+> be more clearly defined above.
+>
+>> - init system, maybe a paragraph about systemd (that is in the queue) and/or a
+>> comparative between the others available init systems could be added:
+>> - package's license explaination;
+>> - ... anything else i missed ;-)
+- /dev management (as you suggest above :P)
+
+>>
+>>
+>> Right now, I'm not happy with everything I did.
+>> For example, now I use a deeper toc (4 title levels in this patch set vs. 3 on
+>> the current git master). This has a side effect on the html manual, indeed the
+>> toc only shows the first two level, this reduce the readability, IOW the fact
+>> that one can quickly find the relevant piece of information he/she is looking
+>> for.
+>>
+>> So, IOW, I'd like to know whether I'm on right path, the one the Buildroot
+>> community want to take.
+>
+> I think it's a good strategy to first defined the organization of the
+> manual before diving into the implementation of such organization. I
+> would suggest to work on the Wiki page at
+> http://elinux.org/Buildroot:ManualOrganization. First by listing, in
+> random order and without any organization, the topics we think should
+> be discussed in the manual. And then, work on a proposed organization.
+> Most likely, it'll be similar to what you're proposing, but I think
+> that listing beforehand all the topics is a good idea.
+Definitely I agree.
+This way, I'd really like to see more people involved in or touched by
+this doc work.
+
+So, to all:
+Grab your keyboard and fill the documentation wish list!
+If you are hanging around BR world for a long while, try to remember
+what was missing in the doc when you started out;
+or if you've just discovered BR, tell us what is disappointing for you
+because of the lack of documentation.
+
+Though I make this call using some humorous tone, I really mean it.
+Some people have the knowledge, so don't really need the doc; some
+others want to learn.
+So, tell us what is missing, we'll fill the gaps.
 
 
-Cheers,
+Yours,
 
 -- 
 Sam
