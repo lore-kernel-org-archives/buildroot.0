@@ -1,30 +1,35 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun,  5 Aug 2012 08:52:43 +0200
-Subject: [Buildroot] [PATCH 9/9] [xavante] add license info
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 5 Aug 2012 11:42:33 +0200
+Subject: [Buildroot] [PATCH 1/9] [luajit] add license info
 In-Reply-To: <1344149563-20917-1-git-send-email-francois.perrad@gadz.org>
 References: <1344149563-20917-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1344149563-20917-9-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20120805114233.3aab2ad2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/xavante/xavante.mk |    1 +
- 1 file changed, 1 insertion(+)
+Le Sun,  5 Aug 2012 08:52:35 +0200,
+Francois Perrad <fperrad@gmail.com> a ?crit :
 
-diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
-index f885fbd..0c1c6f1 100644
---- a/package/xavante/xavante.mk
-+++ b/package/xavante/xavante.mk
-@@ -7,6 +7,7 @@
- XAVANTE_VERSION = 2.2.1
- XAVANTE_SITE = http://github.com/downloads/keplerproject/xavante
- XAVANTE_DEPENDENCIES = cgilua copas coxpcall lua luafilesystem luasocket wsapi
-+XAVANTE_LICENSE = MIT
- 
- define XAVANTE_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) PREFIX=/usr \
+> ---
+>  package/luajit/luajit.mk |    2 ++
+>  1 file changed, 2 insertions(+)
+
+Thanks, but please redo all your patches with:
+
+ * A title like "<pkgname>: add license info". The package name should
+   *NOT* be between [], otherwise Git removes it when applying the
+   patch.
+
+ * A Signed-off-by line the commit log of each patch.
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
