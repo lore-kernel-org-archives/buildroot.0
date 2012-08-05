@@ -1,88 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 5 Aug 2012 11:50:10 +0200
-Subject: [Buildroot] [git commit] pkg-stats: statistics about license files
-	information
-Message-ID: <20120805095159.17D949702E@busybox.osuosl.org>
+Date: Sun, 5 Aug 2012 11:44:52 +0200
+Subject: [Buildroot] [git commit] pkg-stats: support <pkg>_LICENSE = lines
+	with spaces
+Message-ID: <20120805095159.09EF597015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58dbdce29eaacd8a7d5bbc2eb6eebcd29efa7052
+commit: http://git.buildroot.net/buildroot/commit/?id=f1f580731b7872684a4bef8930cd2f468e2dc69a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since on some packages we are adding <pkg>_LICENSE but not necessarily
-<pkg>_LICENSE_FILES, let's add a separate statistic to track these
-informations. This will allow us to improve both the number of
-packages covered by <pkg>_LICENSE and <pkg>_LICENSE_FILES.
+For alignement reasons, we sometimes add spaces between <pkg>_LICENSE
+and the equal sign. Take this into account in pkg-stats.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/pkg-stats |   25 +++++++++++++++++++++++++
- 1 files changed, 25 insertions(+), 0 deletions(-)
+ support/scripts/pkg-stats |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index a07af55..9c8ec49 100755
+index de73eeb..a07af55 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -66,6 +66,7 @@ td.lotsofpatches {
- <td class=\"centered\">Patch count</td>
- <td class=\"centered\">Infrastructure</td>
- <td class=\"centered\">License</td>
-+<td class=\"centered\">License files</td>
- </tr>
- "
- 
-@@ -75,6 +76,8 @@ generic_packages=0
- manual_packages=0
- packages_with_licence=0
- packages_without_licence=0
-+packages_with_license_files=0
-+packages_without_license_files=0
- total_patch_count=0
- cnt=0
- 
-@@ -163,6 +166,14 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	license=0
+@@ -155,7 +155,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ 	generic_packages=$(($generic_packages+1))
      fi
  
-+    if grep -qE "^${pkgvariable}_LICENSE_FILES[ ]*=" $i ; then
-+	packages_with_license_files=$(($packages_with_license_files+1))
-+	license_files=1
-+    else
-+	packages_without_license_files=$(($packages_without_license_files+1))
-+	license_files=0
-+    fi
-+
-     echo "<tr>"
- 
-     echo "<td>$cnt</td>"
-@@ -205,6 +216,12 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	echo "<td class=\"centered correct\">Yes</td>"
-     fi
- 
-+    if [ ${license_files} -eq 0 ] ; then
-+	echo "<td class=\"centered wrong\">No</td>"
-+    else
-+	echo "<td class=\"centered correct\">Yes</td>"
-+    fi
-+
-     echo "</tr>"
- 
- done
-@@ -236,6 +253,14 @@ echo "<td>Packages not having licence information</td>"
- echo "<td>$packages_without_license</td>"
- echo "</tr>"
- echo "<tr>"
-+echo "<td>Packages having license files information</td>"
-+echo "<td>$packages_with_license_files</td>"
-+echo "</tr>"
-+echo "<tr>"
-+echo "<td>Packages not having licence files information</td>"
-+echo "<td>$packages_without_license_files</td>"
-+echo "</tr>"
-+echo "<tr>"
- echo "<td>Number of patches in all packages</td>"
- echo "<td>$total_patch_count</td>"
- echo "</tr>"
+-    if grep -qE "^${pkgvariable}_LICENSE =" $i ; then
++    if grep -qE "^${pkgvariable}_LICENSE[ ]*=" $i ; then
+ 	packages_with_license=$(($packages_with_license+1))
+ 	license=1
+     else
