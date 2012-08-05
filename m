@@ -1,42 +1,42 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Sun, 5 Aug 2012 20:56:45 +0200
-Subject: [Buildroot] [PATCH 1/2] Added packages libmsgpack (v. 0.5.7)
- without C++ support (as in small embedded systems buildroot is often
- compiled without C++ support) and msgpack-python version 0.1.10 (which does
- not rely yet on python-setuptools. I had
-In-Reply-To: <CAHXCMMLZtrdpGPV5ivdc9cOiJydYCVRZ=8dGi0_P9pbrHNuwXQ@mail.gmail.com>
-References: <CAHXCMMLZtrdpGPV5ivdc9cOiJydYCVRZ=8dGi0_P9pbrHNuwXQ@mail.gmail.com>
-Message-ID: <CAMduVEe-hduc5vkCpEmoRb8cOGHopw6p7MQyg=KTqfUky94Cow@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 5 Aug 2012 21:13:23 +0200
+Subject: [Buildroot] Added quick and dirty packaging of
+	lua-msgpack-native
+In-Reply-To: <1344192669-29968-1-git-send-email-wzab01@gmail.com>
+References: <1344192669-29968-1-git-send-email-wzab01@gmail.com>
+Message-ID: <CAHXCMMJtM4Ng3E-96JnEc0uRSgS3Ad1H23mZsdaAY+YMEJEoog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Aug 5, 2012 at 4:56 PM, Samuel Martin <s.martin49@gmail.com> wrote:
->
-> Thanks for your patch series.
->
-> First, some remarks when posting patch(es) for new packages:
-> - 1 package per patch (and 1 patch per package).
->   If you need to rework your commits before posting them, you
-> certainly want to rebase your branch using 'git rebase'
->   (some tips are gathered at: http://elinux.org/Buildroot_how_to_contribute )
-> - take care of the commit message:
->   the 1st line should be "<package name>: new package", then if you
-> want to give some details, you can add them with 1 blank line between
-> the 1st line and these details.
->
-> Hereafter, my comments inlined.
+Hi Wojciech,
 
-Dear Sam,
+2012/8/5 Wojciech M. Zabolotny <wzab01@gmail.com>:
+> I needed to add the fast msgpack implementation of msgpack library for Lua
+> I've choosen the lua-msgpack-native implementation available at:
+> https://github.com/kengonakajima/lua-msgpack-native
+>
+> Unfortunately, I couldn't (didn't know how to?) create the package
+> description, where the source is downloaded as a single file
+> (namely: https://github.com/kengonakajima/lua-msgpack-native/raw/master/mp.c )
+> I tried to create the source directory in the package definition like:
+> LUA_MSGPACK_NATIVE_SITE = file://$(TOPDIR)/package/lua-msgpack-native/src
+> LUA_MSGPACK_NATIVE_METHOD = local
+> but it didn't work for me - buildroot still tried to download the tarball.
+Actually, by overriding LUA_MSGPACK_NATIVE_METHOD, you are on the right path ;)
+Just set:
+LUA_MSGPACK_NATIVE_VERSION = <commit>
+LUA_MSGPACK_NATIVE_SITE = <git repo url>
+LUA_MSGPACK_NATIVE_METHOD = git
 
-Thank's a lot for your remarks. I'll do my best to obey to those rules
-in my next posts.
-However in the meantime (before I've read your mail) I have posted yet
-another patch not conforming to those rules.
-This one adds implementation of msgpack for Lua.
-Sorry for confusion,
-Regards,
+Here is an example:
+http://git.buildroot.net/buildroot/tree/package/omap-u-boot-utils/omap-u-boot-utils.mk
 
-Wojtek
+
+Cheers,
+
+
+-- 
+Sam
