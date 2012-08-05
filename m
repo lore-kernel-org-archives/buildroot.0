@@ -1,201 +1,26 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 5 Aug 2012 16:59:39 +0200
-Subject: [Buildroot] [PATCH 00/11] RFC: Manual content reorganization
-In-Reply-To: <20120801224356.6b0d0bd3@skate>
-References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
- <20120801224356.6b0d0bd3@skate>
-Message-ID: <CAHXCMMJcUjcYpno08OvgPHiaj_ECe=Pi9F6pDkp7L33Berza+w@mail.gmail.com>
+From: Wojciech M. Zabolotny <wzab01@gmail.com>
+Date: Sun,  5 Aug 2012 20:51:08 +0200
+Subject: [Buildroot] Added quick and dirty packaging of lua-msgpack-native
+Message-ID: <1344192669-29968-1-git-send-email-wzab01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+I needed to add the fast msgpack implementation of msgpack library for Lua
+I've choosen the lua-msgpack-native implementation available at:
+https://github.com/kengonakajima/lua-msgpack-native
 
+Unfortunately, I couldn't (didn't know how to?) create the package
+description, where the source is downloaded as a single file
+(namely: https://github.com/kengonakajima/lua-msgpack-native/raw/master/mp.c )
+I tried to create the source directory in the package definition like:
+LUA_MSGPACK_NATIVE_SITE = file://$(TOPDIR)/package/lua-msgpack-native/src
+LUA_MSGPACK_NATIVE_METHOD = local
+but it didn't work for me - buildroot still tried to download the tarball.
 
-2012/8/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> Le Wed, 21 Mar 2012 00:09:50 +0100,
-> Samuel MARTIN <s.martin49@gmail.com> a ?crit :
->
->> This patch series aims to reorganize the manual content, as well as
->> complete it... thought there are still lacks here and there after that ;-)
->>
->> This work intends to make the manual:
->> - understable and clear for new comers, even if they are not familiar with
->> embedded development;
->> - useful for developers, contributors, even people that may want to redistribute
->> third-party SDK/BSP based on Buildroot
->> - as the entry point (anyone discovering/needing/using Buildroot should find
->> its way out straight forward reading the manual)
->
-> Those are good objectives that I fully agree with.
->
->> Although I am well aware that these are ambitious goals and this patch series
->> does not acheive nor address all these points, at least, it is a starting point.
->>
->> Let's talk about the new organization.
->>
->> Overview of the new table of content:
->> 1.  About Buildroot
->> 2.  Starting up
->>       Think this chapter like a tutorial.
->>       Includes system requirements, how to get Buildroot and the first steps
->>       using it.
->> 3.  Working with Buildroot
->>       Intends to present basics to make Buildroot fitting your needs using
->>       the available customization knobs.
->
-> Is this where we would put details like what's the difference between
-> the three toolchain backends?
-Yes.
+Finally I've given up and created tarball of the source directory.
+This tarball is of course included in the patch.
 
-> Where we would explain how Buildroot
-> reacts when one removes package from menuconfig and runs 'make'?
-Hum... not sure if this point is documented right now; but yes, I
-think this is the place where I would add it.
-
->
->> 4.  Troubleshooting
->
-> What do you intend to put here? Our FAQ?
-The FAQ has its place here.
-
->
->> 5.  Going further in Buildroot's innards
->>       Explains some topics like about embedded development, cross-compilation,
->>       etc, and gives more advanced tips about Buildroot usages.
->
-> I am not sure it is a good idea to mix topics not directly related to
-> Buildroot (embedded development, cross-compilation) with recommendation
-> on using Buildroot itself.
-In fact, most of this section come from from the current introduction.
-The truth is this chapter is part of what I'm not happy with. So, it
-certainly need some more rework.
-
->
-> For example, is this where you would recommend to use post-build
-> scripts instead of custom target skeleton? How to have a custom
-> additional device table?
-Definitely yes.
-
->
-> I am not sure to see clearly where's the boundary between (3) and (5).
-> For example, in (3) you will probably want to explain the
-> different /dev management mechanism, which will lead you to explain
-> device table concepts and so on.
-Having to write some code (*.mk, scripts, etc) is (more or less) the
-boundary that lead me putting each section in chapter 3 or 5.
-IOW, anything explained in chapter 3 should be available from the
-menuconfig or is direct buildroot (make) invocation tips.
-
-New comers should just have to read chapter 1 to 3 (maybe 4), and
-after that they should be able to use buildroot, though some options,
-like /dev management mechanism, may require some deeper knowledge or
-understanding of what it is.
-In such a case, I would add a section in chapter 5, or add a new chapter.
-
->
->> 6.  Developer Guidelines
->>       Intends to provide all relevant information for anyone wanting to hack in
->>       Buildroot.
-Anything you want to know to add new software in BR, to hack in a way
-or another BR; whatever your will to push the patches upstream or not.
-
->> 7.  Getting involved
->>       Provides all the way to keep informed about the Buildroot development.
-All places where BR is on the www, all places where you should look to
-get information.
-
->> 8.  Contibuting to Buildroot
->>       Gives tips about patch submission.
-How to push your patch upstream, making them available for all BR users.
-
-Hope, this is clearer.
-
->
-> I am not sure to understand where's the boundary between 6, 7 and 8
-> here.
->
-> I think we also need to differentiate two developer levels maybe:
->
->  * The new developer, which generally needs a tutorial and reference on
->    how to add packages
->
->  * The hardcore developer, for which we will maybe want to provide
->    details about Buildroot internals (even though I'm not sure those
->    will ever be documented).
->
-So, you would recommend to split chapter 6 in 2, one for new
-developers, the other for "hardcore developer"?
-
-I disagree with not documenting BR internals.
-I've been following BR and hacking in it for 3 years now, and I still
-discover features that are in BR for a while, but I've never noticed
-or known (certainly because I haven't need them for far), the latest
-one is the <pkg>_PERMISSIONS infrastructure!
-
->> 9.  Legal notice
->>       Intends to give legal/license details about Buildroot itself, software
->>       used/built by Buildroot, how to redistribute SDK based on, etc.
->> 10. Appendix
->
->
->> BTW, over the last days, some other topics came out of my mind, but I have
->> intentionally omitted them, letting their respective authors writing
->> documentation about them. For example:
->> - patches policy/howto, for which some great changes are on their way to be
->> integrated;
->
-> Good point. Should be added to the "new package reference", that should
-> be more clearly defined above.
->
->> - init system, maybe a paragraph about systemd (that is in the queue) and/or a
->> comparative between the others available init systems could be added:
->> - package's license explaination;
->> - ... anything else i missed ;-)
-- /dev management (as you suggest above :P)
-
->>
->>
->> Right now, I'm not happy with everything I did.
->> For example, now I use a deeper toc (4 title levels in this patch set vs. 3 on
->> the current git master). This has a side effect on the html manual, indeed the
->> toc only shows the first two level, this reduce the readability, IOW the fact
->> that one can quickly find the relevant piece of information he/she is looking
->> for.
->>
->> So, IOW, I'd like to know whether I'm on right path, the one the Buildroot
->> community want to take.
->
-> I think it's a good strategy to first defined the organization of the
-> manual before diving into the implementation of such organization. I
-> would suggest to work on the Wiki page at
-> http://elinux.org/Buildroot:ManualOrganization. First by listing, in
-> random order and without any organization, the topics we think should
-> be discussed in the manual. And then, work on a proposed organization.
-> Most likely, it'll be similar to what you're proposing, but I think
-> that listing beforehand all the topics is a good idea.
-Definitely I agree.
-This way, I'd really like to see more people involved in or touched by
-this doc work.
-
-So, to all:
-Grab your keyboard and fill the documentation wish list!
-If you are hanging around BR world for a long while, try to remember
-what was missing in the doc when you started out;
-or if you've just discovered BR, tell us what is disappointing for you
-because of the lack of documentation.
-
-Though I make this call using some humorous tone, I really mean it.
-Some people have the knowledge, so don't really need the doc; some
-others want to learn.
-So, tell us what is missing, we'll fill the gaps.
-
-
-Yours,
-
--- 
-Sam
+The package was tested on a x86_64 architecture.
