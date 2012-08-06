@@ -1,25 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Aug 2012 14:57:35 +0200
-Subject: [Buildroot] [PATCH v2] Add new package: cpuload
-In-Reply-To: <1344219986-8638-1-git-send-email-keguang.zhang@gmail.com>
-References: <1344219986-8638-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <20120806145735.6ee2deaf@skate>
+Date: Mon, 6 Aug 2012 14:57:51 +0200
+Subject: [Buildroot] [PATCH 1/9] luajit: add license info
+In-Reply-To: <1344232007-3085-1-git-send-email-francois.perrad@gadz.org>
+References: <1344232007-3085-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20120806145751.790bb563@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon,  6 Aug 2012 10:26:26 +0800,
-Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
+Le Mon,  6 Aug 2012 07:46:39 +0200,
+Francois Perrad <fperrad@gmail.com> a ?crit :
 
-> cpuload is a simple tool to obtain intuitive vision of CPU load
-> (including total, user, system, irq and softirq) within a certain
-> time, which is especially useful for embedded system without GUI.
-> 
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luajit/luajit.mk |    2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied to next.
+Applied to master your 9 license information patches.
 
 Thanks,
 
