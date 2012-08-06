@@ -1,43 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 6 Aug 2012 18:58:05 +0200
-Subject: [Buildroot] [PATCH] package/crosstool-ng: update to 1.16.0
-In-Reply-To: <20120805232656.4b952d9a@skate>
-References: <1344197156-20586-1-git-send-email-yann.morin.1998@free.fr>
- <201208052248.32983.yann.morin.1998@free.fr> <20120805232656.4b952d9a@skate>
-Message-ID: <201208061858.05607.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  6 Aug 2012 14:33:56 -0300
+Subject: [Buildroot] [PATCHv2] kernel-headers: bump 3.{0,
+	2}.x stable versions
+Message-ID: <1344274436-24678-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.39-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-On Sunday 05 August 2012 23:26:56 Thomas Petazzoni wrote:
-> Le Sun, 5 Aug 2012 22:48:32 +0200,
-> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-> 
-> > Yes, it would be nice, but there's no provision in crosstool-NG to use a
-> > defconfig file, except from the bundeled samples.
-> 
-> Well, then we can do just like we do for the kernel:
-> 
-> 	install -D crosstool-ng.config $(CROSSTOOL_NG_BUILD_DIR)/samples/buildroot/crosstool-ng.config
-> 	ct-ng buildroot
-> 	ct-ng build
-> 
-> And there you are :-)
-
-I guess it is too late for this release cycle, and hopefully crosstool-NG
-will gain such an ability t the next release.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 96dd129..ca2a156 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -64,9 +64,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.38"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.39"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.24"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.26"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.7"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+diff --git a/toolchain/kernel-headers/linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.39-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.39-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.8.6
