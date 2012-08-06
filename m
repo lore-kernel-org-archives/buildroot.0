@@ -1,31 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Aug 2012 14:57:02 +0200
-Subject: [Buildroot] [PATCH] package/crosstool-ng: update to 1.16.0
-In-Reply-To: <1344197156-20586-1-git-send-email-yann.morin.1998@free.fr>
-References: <1344197156-20586-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20120806145702.3d8e652e@skate>
+Date: Mon, 6 Aug 2012 14:57:21 +0200
+Subject: [Buildroot] [PATCH 1/3] lmbench: Add license info
+In-Reply-To: <1344219682-8544-1-git-send-email-keguang.zhang@gmail.com>
+References: <1344219682-8544-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <20120806145721.113e9a8e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun,  5 Aug 2012 22:05:56 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+Le Mon,  6 Aug 2012 10:21:20 +0800,
+Kelvin Cheung <keguang.zhang@gmail.com> a ?crit :
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/crosstool-ng/crosstool-ng.mk               |    2 +-
->  .../crosstool-ng.config-eglibc                     |   29 +++++++++------
->  .../crosstool-ng.config-glibc                      |   28 +++++++++------
->  .../crosstool-ng.config-uClibc                     |   39 +++++++++++---------
->  4 files changed, 58 insertions(+), 40 deletions(-)
+> Add license info for lmbench.
+> 
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 
-Ok, I've made an exception for this and pushed it to master even though
-version bumps are not supposed to be merged at this point. If anything
-breaks because of this, I'll revert :-)
-
-Thanks!
+Applied your 3 license information patches, thanks.
 
 Thomas
 -- 
