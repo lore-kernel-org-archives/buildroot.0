@@ -1,77 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 6 Aug 2012 14:36:07 +0200
-Subject: [Buildroot] [PATCH 1/3] buildroot: target: Add Blackfin
- architecture support in configuration.
-In-Reply-To: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+Date: Mon, 6 Aug 2012 14:50:30 +0200
+Subject: [Buildroot] [PATCH 2/2] buildroot:package: Avoids prefix
+ absolute compiler path when external toolchain path is empty.
+In-Reply-To: <1344251847-7709-2-git-send-email-sonic.adi@gmail.com>
 References: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20120806143607.7dca918a@skate>
+ <1344251847-7709-2-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20120806145030.68102835@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Le Mon, 6 Aug 2012 19:17:25 +0800,
+Le Mon, 6 Aug 2012 19:17:26 +0800,
 Sonic Zhang <sonic.adi@gmail.com> a ?crit :
 
 > From: Sonic Zhang <sonic.zhang@analog.com>
 > 
+> Current external compiler is always prefixed by he customer path.
+> When external toolchain path is left empty, this patch avoids prefix absolute path.
+> 
 > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 > ---
->  target/Config.in.arch |   19 +++++++++++++++++++
->  1 files changed, 19 insertions(+), 0 deletions(-)
+>  package/Makefile.in |    5 +++++
+>  1 files changed, 5 insertions(+), 0 deletions(-)
 > 
-> diff --git a/target/Config.in.arch b/target/Config.in.arch
-> index 6eaa951..001faf0 100644
-> --- a/target/Config.in.arch
-> +++ b/target/Config.in.arch
-> @@ -131,6 +131,15 @@ config BR2_xtensa
->  	  http://www.tensilica.com/
->  endchoice
->  
-> +config BR2_ABI_FLAT
-> +	bool
-> +	default n
-> +
-> +config BR2_ABI_ELF
-> +	bool
-> +	default y
-> +	depends on !BR2_ABI_FLAT
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 6fad224..ecbdc00 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -101,8 +101,13 @@ TARGET_LDFLAGS=$(call qstrip,$(BR2_TARGET_LDFLAGS))
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+>  else
+> +TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
+> +ifeq ($(TOOLCHAIN_EXTERNAL_LOCATION),)
+> +TARGET_CROSS=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+> +else
+>  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+>  endif
+> +endif
 
-Could you expand a bit on why this is needed, and where it will be
-used? I have seen those used in various places in some of your packages
-in your Git repository, but I am not sure the use cases were actually
-valid.
+I am sorry but this is not correct. It will lead to packages calling
+directly the compiler without going through our external toolchain
+wrapper, which is mandatory to ensure that the correct sysroot (and
+other flags) are passed correctly.
 
->  config BR2_microblaze
->  	bool
->  	default y if BR2_microblazeel || BR2_microblazebe
-> @@ -231,8 +240,18 @@ choice
->  	default BR2_BFIN_FDPIC
->  config BR2_BFIN_FDPIC
->  	bool "FDPIC"
-> +	select BR2_ABI_ELF
->  config BR2_BFIN_FLAT
->  	bool "FLAT"
-> +	select BR2_ABI_FLAT
-> +	select BR2_PREFER_STATIC_LIB
-> +config BR2_BFIN_FLAT_SEP_DATA
-> +	bool "FLAT (Separate data)"
-> +	select BR2_ABI_FLAT
-> +	select BR2_PREFER_STATIC_LIB
-> +config BR2_BFIN_SHARED_FLAT
-> +	bool "Shared FLAT"
-> +	select BR2_ABI_FLAT
->  	select BR2_PREFER_STATIC_LIB
->  endchoice
+Passing an empty BR2_TOOLCHAIN_EXTERNAL_PATH works just fine for me if
+the toolchain binaries are in the PATH.
 
-Are these "FLAT (Separate data)" and "Shared FLAT" use cases actually
-used in practice by people? I'm not a Blackfin expert, so I don't know
-what's used in the field.
+Could you explain in more details what you are trying to achieve here?
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
