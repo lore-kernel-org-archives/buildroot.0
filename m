@@ -1,8 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Mon, 6 Aug 2012 19:17:25 +0800
-Subject: [Buildroot] [PATCH 1/3] buildroot: target: Add Blackfin
-	architecture support in configuration.
-Message-ID: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+Date: Mon, 6 Aug 2012 19:17:26 +0800
+Subject: [Buildroot] [PATCH 2/2] buildroot:package: Avoids prefix absolute
+	compiler path when external toolchain path is empty.
+In-Reply-To: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+References: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1344251847-7709-2-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,49 +13,31 @@ To: buildroot@busybox.net
 
 From: Sonic Zhang <sonic.zhang@analog.com>
 
+Current external compiler is always prefixed by he customer path.
+When external toolchain path is left empty, this patch avoids prefix absolute path.
+
 Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 ---
- target/Config.in.arch |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
+ package/Makefile.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 6eaa951..001faf0 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -131,6 +131,15 @@ config BR2_xtensa
- 	  http://www.tensilica.com/
- endchoice
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 6fad224..ecbdc00 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -101,8 +101,13 @@ TARGET_LDFLAGS=$(call qstrip,$(BR2_TARGET_LDFLAGS))
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+ else
++TOOLCHAIN_EXTERNAL_LOCATION=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PATH))
++ifeq ($(TOOLCHAIN_EXTERNAL_LOCATION),)
++TARGET_CROSS=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
++else
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+ endif
++endif
  
-+config BR2_ABI_FLAT
-+	bool
-+	default n
-+
-+config BR2_ABI_ELF
-+	bool
-+	default y
-+	depends on !BR2_ABI_FLAT
-+
- config BR2_microblaze
- 	bool
- 	default y if BR2_microblazeel || BR2_microblazebe
-@@ -231,8 +240,18 @@ choice
- 	default BR2_BFIN_FDPIC
- config BR2_BFIN_FDPIC
- 	bool "FDPIC"
-+	select BR2_ABI_ELF
- config BR2_BFIN_FLAT
- 	bool "FLAT"
-+	select BR2_ABI_FLAT
-+	select BR2_PREFER_STATIC_LIB
-+config BR2_BFIN_FLAT_SEP_DATA
-+	bool "FLAT (Separate data)"
-+	select BR2_ABI_FLAT
-+	select BR2_PREFER_STATIC_LIB
-+config BR2_BFIN_SHARED_FLAT
-+	bool "Shared FLAT"
-+	select BR2_ABI_FLAT
- 	select BR2_PREFER_STATIC_LIB
- endchoice
- 
+ # Quotes are needed for spaces et al in path components.
+ TARGET_PATH="$(HOST_DIR)/bin:$(HOST_DIR)/usr/bin:$(HOST_DIR)/usr/sbin/:$(PATH)"
 -- 
 1.7.0.4
