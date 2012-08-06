@@ -1,39 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  6 Aug 2012 08:46:23 -0300
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0 , 2}.x stable versions
-Message-ID: <1344253583-3151-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 6 Aug 2012 14:36:07 +0200
+Subject: [Buildroot] [PATCH 1/3] buildroot: target: Add Blackfin
+ architecture support in configuration.
+In-Reply-To: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+References: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20120806143607.7dca918a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.39-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+Hello,
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 96dd129..e1069e9 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -64,9 +64,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.38"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.39"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.24"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.25"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.7"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
-diff --git a/toolchain/kernel-headers/linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.39-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.38-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.39-headers_install-fix-__packed-in-exported-kernel-head.patch
+Le Mon, 6 Aug 2012 19:17:25 +0800,
+Sonic Zhang <sonic.adi@gmail.com> a ?crit :
+
+> From: Sonic Zhang <sonic.zhang@analog.com>
+> 
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> ---
+>  target/Config.in.arch |   19 +++++++++++++++++++
+>  1 files changed, 19 insertions(+), 0 deletions(-)
+> 
+> diff --git a/target/Config.in.arch b/target/Config.in.arch
+> index 6eaa951..001faf0 100644
+> --- a/target/Config.in.arch
+> +++ b/target/Config.in.arch
+> @@ -131,6 +131,15 @@ config BR2_xtensa
+>  	  http://www.tensilica.com/
+>  endchoice
+>  
+> +config BR2_ABI_FLAT
+> +	bool
+> +	default n
+> +
+> +config BR2_ABI_ELF
+> +	bool
+> +	default y
+> +	depends on !BR2_ABI_FLAT
+
+Could you expand a bit on why this is needed, and where it will be
+used? I have seen those used in various places in some of your packages
+in your Git repository, but I am not sure the use cases were actually
+valid.
+
+>  config BR2_microblaze
+>  	bool
+>  	default y if BR2_microblazeel || BR2_microblazebe
+> @@ -231,8 +240,18 @@ choice
+>  	default BR2_BFIN_FDPIC
+>  config BR2_BFIN_FDPIC
+>  	bool "FDPIC"
+> +	select BR2_ABI_ELF
+>  config BR2_BFIN_FLAT
+>  	bool "FLAT"
+> +	select BR2_ABI_FLAT
+> +	select BR2_PREFER_STATIC_LIB
+> +config BR2_BFIN_FLAT_SEP_DATA
+> +	bool "FLAT (Separate data)"
+> +	select BR2_ABI_FLAT
+> +	select BR2_PREFER_STATIC_LIB
+> +config BR2_BFIN_SHARED_FLAT
+> +	bool "Shared FLAT"
+> +	select BR2_ABI_FLAT
+>  	select BR2_PREFER_STATIC_LIB
+>  endchoice
+
+Are these "FLAT (Separate data)" and "Shared FLAT" use cases actually
+used in practice by people? I'm not a Blackfin expert, so I don't know
+what's used in the field.
+
+Thanks!
+
+Thomas
 -- 
-1.7.8.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
