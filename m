@@ -1,54 +1,31 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Tue, 7 Aug 2012 10:39:02 -0500
-Subject: [Buildroot] Prebuilt concept
-In-Reply-To: <CAHXCMMKfgsM8JAdN=vbtmt2JPv1OSccq7SCYQRVpisqAg8HLyg@mail.gmail.com>
-References: <CAFt09wNhCtxZcG63uJ8iCuaLeSWEMZrFRd-VuoNw3cTPkFXGAg@mail.gmail.com>
- <CAHXCMMKfgsM8JAdN=vbtmt2JPv1OSccq7SCYQRVpisqAg8HLyg@mail.gmail.com>
-Message-ID: <CAFt09wMkzusGNstiUyX-WN18PtzRvwUhu6EU7ww204sVXPW9eQ@mail.gmail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 07 Aug 2012 17:40:12 +0200
+Subject: [Buildroot] [PATCH 2/5] libglib2: fix linker flags
+In-Reply-To: <20120720233224.18ba8eb2@skate>
+References: <1342646260-11203-1-git-send-email-s.neumann@raumfeld.com>
+ <1342646260-11203-3-git-send-email-s.neumann@raumfeld.com>
+ <20120720233224.18ba8eb2@skate>
+Message-ID: <1344354012.32113.9.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yeah, that's my thought exactly.  I'll post my results later today.
+On Fri, 2012-07-20 at 23:32 +0200, Thomas Petazzoni wrote:
+> Le Wed, 18 Jul 2012 23:17:37 +0200,
+> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+> 
+> > The Makefiles distributed with glib 2.32 omit some needed linker flags.
+> > Fix this and autoreconf to get the changes applied.
+> > 
+> > Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+> 
+> Do you have sent this one upstream?
 
-rm output/build/.root
-rm -rf output/target
-find output/build/* -name "*target_installed" -type f -exec rm -f {} \;
-make
-
-Thanks!
-
-On Tue, Aug 7, 2012 at 10:28 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-
-> Hi Matthew,
->
-> 2012/8/7 Matthew Weber <matt@thewebers.ws>:
-> > My problem is overall build time for recreating the large # of packages
-> I'm
-> > building.  When I perform a verification of the target rootfs for a
-> release,
-> > I really just need it to recreate the output/target folder and don't
-> need to
-> > do a complete rebuild.  Has anyone tried to trick buildroot into just
-> > re-installing the target folder using all the existing (built) packages?
->
-> A solution could be (not tested):
-> rm -rf output/target && find output/build -name
-> .stamp_target_installed -delete && make
->
-> Cheers,
->
-> --
-> Sam
->
+I was about to do so, but it seems that this has been fixed with newer
+versions of glib2. The patch is not any longer needed (for 2.32.4).
 
 
-
--- 
-Thanks,
-Matt
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120807/c211a233/attachment.html>
+Regards,
+Sven
