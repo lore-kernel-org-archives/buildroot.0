@@ -1,28 +1,46 @@
-From: Scott Moore <scott.moore@sri.com>
-Date: Tue, 07 Aug 2012 11:13:10 -0700
-Subject: [Buildroot] Known good x86-64 host/target configuration with dev
-	tools?
-Message-ID: <50215AB6.3050800@sri.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Tue, 7 Aug 2012 23:29:10 +0300
+Subject: [Buildroot] [Login]
+In-Reply-To: <DUB116-W30E67467724AA1ADDB84AE97CE0@phx.gbl>
+References: <DUB116-W30E67467724AA1ADDB84AE97CE0@phx.gbl>
+Message-ID: <CALR4fEKKaH8DL23oq_1AhKYqe1Hqm-O70aoCPNO+myq-XpR0gQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Do you see the login on the serial line...?
 
-I've been trying for some time to build a chroot jail for compiling code 
-against uclibc on a x86_64 platform without worrying about contamination 
-from the system glibc, etc. To do this, I've been trying to use 
-buildroot with development files on the target and gcc/make/etc packages 
-enabled. I keep running into problems with the resulting target 
-toolchain, though. With NPTL support on, all executables compiled by my 
-target gcc segfault. With linuxthreads instead, I still encounter what 
-appear to be mis-compiles (though could be bugs in the code I'm compiling).
+(Just reminder to self - I am seeing the same when I test on qemu... I need
+to route the serial as well...)
 
-Since I'm not confident in my configuration, I was wondering if anyone 
-has a known good buildroot/uClibc configuration that targets x86_64 with 
-a target toolchain with C++ support.
+On Tue, Aug 7, 2012 at 8:26 PM, enrico d'urso <e.durso@live.com> wrote:
 
-Thanks,
-Scott
+>  Hi ,
+>
+> I'm tring to boot a kernel customize and buildroot initrd through
+> VirtualBox,
+> My problem is that I can't login because doesn't appears :
+> "Welcome to buildroot"
+> The boot seems block to:
+> ..Starting Network..
+> In my configuration there is:
+>
+> ttys0 as ' port to getty'.
+>
+> Thank you
+>
+> Bye
+>
+> enrico
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120807/27c2f895/attachment.html>
