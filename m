@@ -1,80 +1,105 @@
-From: enrico d'urso <e.durso@live.com>
-Date: Tue, 7 Aug 2012 22:44:11 +0200
-Subject: [Buildroot] [Login]
-In-Reply-To: <CALR4fEKKaH8DL23oq_1AhKYqe1Hqm-O70aoCPNO+myq-XpR0gQ@mail.gmail.com>
-References: <DUB116-W30E67467724AA1ADDB84AE97CE0@phx.gbl>,
- <CALR4fEKKaH8DL23oq_1AhKYqe1Hqm-O70aoCPNO+myq-XpR0gQ@mail.gmail.com>
-Message-ID: <DUB116-W130B2FB8A44D39F38AFE93097CE0@phx.gbl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 Aug 2012 22:52:17 +0200
+Subject: [Buildroot] [RFC] "select" vs. "depends on" : a proposal for a
+	workaround
+Message-ID: <201208072252.18028.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello All !
 
-Hi,
-In VirtualBox options If i create a serial port (raw) and set it to write output in a file , I can see
-(in that file) this:
-"Welcome to buildroot" 
-"login:" 
+This is a Request For Comments about the now-infamous dilemn between
+"depends on" vs. "select", and a suggestion to work it around.
 
-I would ,that line above, were in stdoutput so I Could login!
+As I am adding some packages (soon to be pushed!), I stumbled upon a few
+cases where I could not select another package because it had dependencies
+my package does not have.
 
-(I'm Italian, sorry my bad english)
+And as we all know, doing so is A Very Bad Idea (TM).
 
-Thanks
+So I decided to depend on this package, just printing a message in case it's
+not available. Sad-and-dull life, but life nonetheless...
 
-Bye
+But as an afterthought, I thought about a /solution/ to this issue. It's
+best explained with a little bit of code, so consider the following:
 
+  config PKG_LIBFOO_AVAILABLE
+    def_bool y
+    depends on ARM && THREADS && !LFS
 
-From: diegoiast@gmail.com
-Date: Tue, 7 Aug 2012 23:29:10 +0300
-Subject: Re: [Buildroot] [Login]
-To: e.durso at live.com
-CC: buildroot at busybox.net
+  config PKG_LIBFOO
+    bool "libfoo"
+    depends on PKG_LIBFOO_AVAILABLE
 
-Do you see the login on the serial line...?
-(Just reminder to self - I am seeing the same when I test on qemu... I need to route the serial as well...)
+  comments "libfoo requires ARM and threads, but not Large files"
+    depends on !PKG_LIBFOO_AVAILABLE
 
-On Tue, Aug 7, 2012 at 8:26 PM, enrico d'urso <e.durso@live.com> wrote:
+That is, move all the package's dependencies to their own symbol, and
+have the package depends on this symbol.
 
+Although the gain is not explicit for the package libfoo by itself, it
+becomes much more evident when another package depends on libfoo:
 
+  config PKG_BAR
+    bool "bar"
+    depends on PKG_LIBFOO_AVAILABLE
+    select PKG_LIBFOO
 
+This way, it becomes extremely easy to inherit the dependencies of libfoo
+in bar, and still we can select it. If the dependencies of libfoo were to
+change, there would be a single place where to update them.
 
+(And yes, we could/should also have a PKG_BAR_AVAILABLE.)
 
+This also allows for more involved constructs (which is the actual use-case
+I'm in need for my package):
 
-Hi ,
+  config PKG_BAR
+    bool "bar"
 
-I'm tring to boot a kernel customize and buildroot initrd through VirtualBox,
-My problem is that I can't login because doesn't appears : 
-"Welcome to buildroot" 
-The boot seems block to:
+  config PKG_BAR_OPT
+    bool "bar option"
+    depends on PKG_BAR
+    depends on PKG_LIBFOO_AVAILABLE
+    select PKG_LIBFOO
 
+(I have tested both constructs with the current kconfig from 3.6-rc1, and
+it behaves as expected.)
 
-..Starting Network..
-In my configuration there is:
+*And* it has no impact whatsoever on the package build infrastructure.
 
-ttys0 as ' port to getty'.
+Of course, this does not have a zero-impact on how to write packages'
+Config.in files, and there is no easy way to convert existing packages.
+But, as for the package infrastructure, this could be a step-by-step
+process by which packages would be converted (enhanced!) one after the
+other.
 
-Thank you
+Another disadvantage is that it wanders a bit away from the current
+simplicity of writing a single package; complexity that is regained
+later-on when new packages will use it.
 
-Bye
+What are your thoughts on this?
+Where's the flaw in my reasoning? ;-)
+Am I rambling on incoherently? ;-)
 
-enrico
+Regards,
+Yann E. MORIN.
 
- 		 	   		  
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 
-
-
-_______________________________________________
-
-buildroot mailing list
-
-buildroot at busybox.net
-
-http://lists.busybox.net/mailman/listinfo/buildroot
-
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120807/b8cf12d4/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
