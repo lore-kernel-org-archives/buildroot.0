@@ -1,60 +1,86 @@
-From: Scott Moore <scott.moore@sri.com>
-Date: Tue, 07 Aug 2012 19:27:33 -0700
-Subject: [Buildroot] building native gcc for target
-In-Reply-To: <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
-References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
- <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
-Message-ID: <5021CE95.9000808@sri.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Wed, 8 Aug 2012 10:39:56 +0800
+Subject: [Buildroot] [PATCH 3/3] buildroot: toolchain: Allow to build
+ gdbserver when external toolchain is selected.
+In-Reply-To: <DB904C5425BA6F4E8424B3B51A1414D1714D28600B@NWD2CMBX1.ad.analog.com>
+References: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+ <1344251847-7709-3-git-send-email-sonic.adi@gmail.com>
+ <20120806145441.4dbc10ab@skate>
+ <DB904C5425BA6F4E8424B3B51A1414D1714D28600B@NWD2CMBX1.ad.analog.com>
+Message-ID: <CAJxxZ0P+Xg++UGF1SdnsSyW3bua78+txP36FpMWoKNLaGKxQmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 8/7/12 7:19 PM, Steve Calfee wrote:
-> On Tue, Aug 7, 2012 at 6:18 PM, Kevin Broch <kevbroch@gmail.com> wrote:
->> I'm am looking to build a complete (gcc too) development environment on the
->> target (arm) but currently don't see that this is possible.
->> I have tried all 3 toolchain types (buildroot, cross-ng, external (linaro),
->> but regardless I don't find gcc in output/target/usr/bin/gcc
->> I am wondering if I am missing something?
->>
->> If not I am looking for any pointer on how I might do this (having never
->> created a buildroot package).
->> Ideally I would like to create a package that compiles Linaro GCC:
->> https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative
->> I am imagining leveraging what is used to generate other tools like gdb,
->> binutils, and trying to incorporate the various machine options (VFP,
->> softfloat, etc)
->> in the configure options.
->>
->> Any pointers would be appreciated.
->>
->> Best, /<evin
-> I guess you haven't seen how to do it because it is kind of bizarre.
-> You want to cross compile a native mode compiler. Why?
+On Tue, Aug 7, 2012 at 11:22 AM, Zhang, Sonic <Sonic.Zhang@analog.com> wrote:
+> Hi Thomas,
 >
-> Most people building embedded systems don't want to compile on those
-> systems. I don't know how you even bootstrap a gcc build in a system
-> without a c compiler.
+>>-----Original Message-----
+>>From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+>>Sent: Monday, August 06, 2012 8:55 PM
+>>To: Sonic Zhang
+>>Cc: Peter Korsgaard; buildroot at busybox.net; buildroot-devel at lackfin.uclinux.org;
+>>Zhang, Sonic
+>>Subject: Re: [Buildroot] [PATCH 3/3] buildroot: toolchain: Allow to build gdbserver
+>>when external toolchain is selected.
+>>
+>>Le Mon, 6 Aug 2012 19:17:27 +0800,
+>>Sonic Zhang <sonic.adi@gmail.com> a ?crit :
+>>
+>>> From: Sonic Zhang <sonic.zhang@analog.com>
+>>>
+>>> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+>>> ---
+>>>  toolchain/gdb/Config.in |    3 +--
+>>>  1 files changed, 1 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+>>> index fd6956b..8a440d8 100644
+>>> --- a/toolchain/gdb/Config.in
+>>> +++ b/toolchain/gdb/Config.in
+>>> @@ -14,14 +14,13 @@ comment "Gdb debugger for the target needs WCHAR
+>>support in toolchain"
+>>>
+>>>  config BR2_PACKAGE_GDB_SERVER
+>>>      bool "Build gdb server for the Target"
+>>> -    depends on !BR2_TOOLCHAIN_EXTERNAL
+>>>      help
+>>>          Build the gdbserver stub to run on the target.
+>>>          A full gdb is needed to debug the progam.
+>>>
+>>>  config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+>>>      bool "Copy gdb server to the Target"
+>>> -    depends on BR2_TOOLCHAIN_EXTERNAL
+>>> +    depends on BR2_TOOLCHAIN_EXTERNAL
+>>&& !BR2_PACKAGE_GDB_SERVER
+>>>      help
+>>>        Copy the gdbserver provided by the external toolchain to the
+>>>        target.
+>>
+>>Is this really a good idea? For compatibility reasons, we generally
+>>want the gdbserver on the target to have the same version as the cross
+>>gdb on the development machine. Therefore, in the external toolchain
+>>case, it sounds like a really bad idea to let the user build its own
+>>gdbserver instead of using the one of the external toolchain.
+>>
 >
-> Regards, Steve
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-According to http://www.uclibc.org/toolchains.html (which unfortunately 
-seems quite out of date), this is a recommended way of creating a 
-development system for using uClibc.
-I'm actually trying to do something similar to easily build applications 
-in a "clean" environment with only uClibc headers, etc, and also having 
-trouble. Has anyone done this recently? (See my message earlier today 
-about a configuration for x86_64)
+> This is an option for developers who want to develop/debug gdb server or want to use an alternative version.
+> The developer is responsible to ensure the compatibility.
+>
+>>I know the Blackfin toolchains are not providing their own gdbserver
+>>(but they provide a cross gdb), but in my opinion, it's a bug that
+>>should be fixed in the build process of the Blackfin toolchains: they
+>>should include their own gdbserver, just like the Linaro and Sourcery
+>>CodeBench toolchains do.
+>>
+>
+> I include ADI blackfin GNU toolchain developer Stuart for your question.
+>
 
-Kevin, you may need to select GCC in the "package selection for target 
--> development tools" options in menuconfig (which requires setting 
-development files on target to true in build options). I've gotten that 
-far but the resulting native compiler hasn't worked reliably.
+Because Stuart is out these days, I cc David as well.
 
-Cheers,
-Scott
+Regards,
+
+Sonic
