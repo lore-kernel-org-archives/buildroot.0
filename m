@@ -1,93 +1,88 @@
 From: Kevin Broch <kevbroch@gmail.com>
-Date: Wed, 8 Aug 2012 13:16:26 -0700
+Date: Wed, 8 Aug 2012 13:24:14 -0700
 Subject: [Buildroot] building native gcc for target
-In-Reply-To: <5021CE95.9000808@sri.com>
+In-Reply-To: <20120808055704.GA9185@sapphire.tkos.co.il>
 References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
  <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
  <5021CE95.9000808@sri.com>
-Message-ID: <CAKWKLJAcKAyfoGX_fx-sFGAAEu88t0hvke_cAm432VYL3DsrWw@mail.gmail.com>
+ <20120808055704.GA9185@sapphire.tkos.co.il>
+Message-ID: <CAKWKLJCnXK-+4kDorAubXCizrEeUua=H+2+K6h+hCzddJ9q-BA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Scott,
-
-Thanks for the suggestion.  I unfortunately do not see this "select GCC"
-option that you suggest.
-I am using git://git.buildroot.net/buildroot @HEAD
-
-- I have selected "Buildroot toolchain" from the Toolchain menu.
-- Under "Package selection for the target" -> "Development Tools", I see a
-comment
-"gcc needs development files in target filesystem"
-but no way to select GCC.
-As far as I can see the only selecting of GCC goes to which version for the
-cross compiled version.
+Thank Baruch I will have to check it out.  Have you used this yourself and
+if so what platform?
 
 Best, /<evin
 
 
-On Tue, Aug 7, 2012 at 7:27 PM, Scott Moore <scott.moore@sri.com> wrote:
+On Tue, Aug 7, 2012 at 10:57 PM, Baruch Siach <baruch@tkos.co.il> wrote:
 
-> On 8/7/12 7:19 PM, Steve Calfee wrote:
+> Hi Scott, Kevin,
 >
->> On Tue, Aug 7, 2012 at 6:18 PM, Kevin Broch <kevbroch@gmail.com> wrote:
->>
->>> I'm am looking to build a complete (gcc too) development environment on
->>> the
->>> target (arm) but currently don't see that this is possible.
->>> I have tried all 3 toolchain types (buildroot, cross-ng, external
->>> (linaro),
->>> but regardless I don't find gcc in output/target/usr/bin/gcc
->>> I am wondering if I am missing something?
->>>
->>> If not I am looking for any pointer on how I might do this (having never
->>> created a buildroot package).
->>> Ideally I would like to create a package that compiles Linaro GCC:
->>> https://wiki.linaro.org/**WorkingGroups/ToolChain/Using/**GCCNative<https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative>
->>> I am imagining leveraging what is used to generate other tools like gdb,
->>> binutils, and trying to incorporate the various machine options (VFP,
->>> softfloat, etc)
->>> in the configure options.
->>>
->>> Any pointers would be appreciated.
->>>
->>> Best, /<evin
->>>
->> I guess you haven't seen how to do it because it is kind of bizarre.
->> You want to cross compile a native mode compiler. Why?
->>
->> Most people building embedded systems don't want to compile on those
->> systems. I don't know how you even bootstrap a gcc build in a system
->> without a c compiler.
->>
->> Regards, Steve
->> ______________________________**_________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
->>
-> According to http://www.uclibc.org/**toolchains.html<http://www.uclibc.org/toolchains.html>(which unfortunately seems quite out of date), this is a recommended way of
-> creating a development system for using uClibc.
-> I'm actually trying to do something similar to easily build applications
-> in a "clean" environment with only uClibc headers, etc, and also having
-> trouble. Has anyone done this recently? (See my message earlier today about
-> a configuration for x86_64)
+> On Tue, Aug 07, 2012 at 07:27:33PM -0700, Scott Moore wrote:
+> > On 8/7/12 7:19 PM, Steve Calfee wrote:
+> > >On Tue, Aug 7, 2012 at 6:18 PM, Kevin Broch <kevbroch@gmail.com> wrote:
+> > >>I'm am looking to build a complete (gcc too) development environment
+> on the
+> > >>target (arm) but currently don't see that this is possible.
+> > >>I have tried all 3 toolchain types (buildroot, cross-ng, external
+> (linaro),
+> > >>but regardless I don't find gcc in output/target/usr/bin/gcc
+> > >>I am wondering if I am missing something?
+> > >>
+> > >>If not I am looking for any pointer on how I might do this (having
+> never
+> > >>created a buildroot package).
+> > >>Ideally I would like to create a package that compiles Linaro GCC:
+> > >>https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative
+> > >>I am imagining leveraging what is used to generate other tools like
+> gdb,
+> > >>binutils, and trying to incorporate the various machine options (VFP,
+> > >>softfloat, etc)
+> > >>in the configure options.
+> > >>
+> > >>Any pointers would be appreciated.
+> > >I guess you haven't seen how to do it because it is kind of bizarre.
+> > >You want to cross compile a native mode compiler. Why?
+> > >
+> > >Most people building embedded systems don't want to compile on those
+> > >systems. I don't know how you even bootstrap a gcc build in a system
+> > >without a c compiler.
+> > According to http://www.uclibc.org/toolchains.html (which
+> > unfortunately seems quite out of date), this is a recommended way of
+> > creating a development system for using uClibc.
+> > I'm actually trying to do something similar to easily build
+> > applications in a "clean" environment with only uClibc headers, etc,
+> > and also having trouble. Has anyone done this recently? (See my
+> > message earlier today about a configuration for x86_64)
+> >
+> > Kevin, you may need to select GCC in the "package selection for
+> > target -> development tools" options in menuconfig (which requires
+> > setting development files on target to true in build options). I've
+> > gotten that far but the resulting native compiler hasn't worked
+> > reliably.
 >
-> Kevin, you may need to select GCC in the "package selection for target ->
-> development tools" options in menuconfig (which requires setting
-> development files on target to true in build options). I've gotten that far
-> but the resulting native compiler hasn't worked reliably.
+> You may try Aboriginal Linux (http://landley.net/aboriginal/) which
+> includes
+> pre-built native compilers for various targets, along with their build
+> scripts.
 >
-> Cheers,
-> Scott
-> ______________________________**_________________
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
-> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120808/9c016d9f/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120808/ffab85b6/attachment.html>
