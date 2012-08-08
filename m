@@ -1,31 +1,40 @@
-From: Kevin Broch <kevbroch@gmail.com>
-Date: Tue, 7 Aug 2012 18:18:56 -0700
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 7 Aug 2012 19:19:28 -0700
 Subject: [Buildroot] building native gcc for target
-Message-ID: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+In-Reply-To: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+Message-ID: <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm am looking to build a complete (gcc too) development environment on the
-target (arm) but currently don't see that this is possible.
-I have tried all 3 toolchain types (buildroot, cross-ng, external (linaro),
-but regardless I don't find gcc in output/target/usr/bin/gcc
-I am wondering if I am missing something?
+On Tue, Aug 7, 2012 at 6:18 PM, Kevin Broch <kevbroch@gmail.com> wrote:
+> I'm am looking to build a complete (gcc too) development environment on the
+> target (arm) but currently don't see that this is possible.
+> I have tried all 3 toolchain types (buildroot, cross-ng, external (linaro),
+> but regardless I don't find gcc in output/target/usr/bin/gcc
+> I am wondering if I am missing something?
+>
+> If not I am looking for any pointer on how I might do this (having never
+> created a buildroot package).
+> Ideally I would like to create a package that compiles Linaro GCC:
+> https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative
+> I am imagining leveraging what is used to generate other tools like gdb,
+> binutils, and trying to incorporate the various machine options (VFP,
+> softfloat, etc)
+> in the configure options.
+>
+> Any pointers would be appreciated.
+>
+> Best, /<evin
 
-If not I am looking for any pointer on how I might do this (having never
-created a buildroot package).
-Ideally I would like to create a package that compiles Linaro GCC:
-https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative
-I am imagining leveraging what is used to generate other tools like gdb,
-binutils, and trying to incorporate the various machine options (VFP,
-softfloat, etc)
-in the configure options.
+I guess you haven't seen how to do it because it is kind of bizarre.
+You want to cross compile a native mode compiler. Why?
 
-Any pointers would be appreciated.
+Most people building embedded systems don't want to compile on those
+systems. I don't know how you even bootstrap a gcc build in a system
+without a c compiler.
 
-Best, /<evin
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120807/634fb4bd/attachment.html>
+Regards, Steve
