@@ -1,49 +1,33 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Wed, 8 Aug 2012 20:20:51 +0800
-Subject: [Buildroot] Prebuilt concept
-In-Reply-To: <CAFt09wO4r6kXnLLhBW6ZGDdOCsrV38+vfG+dFQb421eXtrEi=g@mail.gmail.com>
-References: <CAFt09wNhCtxZcG63uJ8iCuaLeSWEMZrFRd-VuoNw3cTPkFXGAg@mail.gmail.com>
- <CAHXCMMKfgsM8JAdN=vbtmt2JPv1OSccq7SCYQRVpisqAg8HLyg@mail.gmail.com>
- <CAFt09wMkzusGNstiUyX-WN18PtzRvwUhu6EU7ww204sVXPW9eQ@mail.gmail.com>
- <CAFt09wO4r6kXnLLhBW6ZGDdOCsrV38+vfG+dFQb421eXtrEi=g@mail.gmail.com>
-Message-ID: <CAEvN+1gK=vHMJ5-wM_uWyAEpeq6gVC25YRbMQrKmqKO2PysKRQ@mail.gmail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Wed, 8 Aug 2012 13:58:31 +0000 (UTC)
+Subject: [Buildroot] building native gcc for target
+References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+ <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
+ <5021CE95.9000808@sri.com>
+Message-ID: <jvtra6$e8e$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 8, 2012 at 1:42 AM, Matthew Weber <matt@thewebers.ws> wrote:
-> Here's what worked for me (taken from my Makefile).  I have only tested this
-> with an external toolchain, so I'm guessing there will be some additional
-> stamp files that need tweaking.
+On 2012-08-08, Scott Moore <scott.moore@sri.com> wrote:
+> On 8/7/12 7:19 PM, Steve Calfee wrote:
 >
-> refresh_target:
->         @echo "Cleaning up target install..."
->         @rm -f $(BUILD_DIR)/.root       #Causes target dir to recreate
->         @rm -rf $(TARGET_DIR)
->         @find $(BUILD_DIR)/* -name "*target_installed" -type f -exec rm -f
-> {} \;        # Causes pkg to reinstall target dir
->         @find $(BUILD_DIR)/* -name ".installed" -type f -exec rm -f {} \;
-> # Causes grub to reinstall target dir
->         @find $(BUILD_DIR)/* -name ".stamp_installed" -type f -exec rm -f {}
-> \; # Causes kernel to reinstall target dir
->         @rm -rf $(STAMP_DIR)/ext-toolchain-
-> installed                            # Causes toolchain to recopy libs to
-> target dir
->         @make
-> # Command Re-install of target dir
->         @echo "Rebuilding target install..."
+>> I guess you haven't seen how to do it because it is kind of bizarre.
+>> You want to cross compile a native mode compiler. Why?
 >
+> According to http://www.uclibc.org/toolchains.html (which
+> unfortunately seems quite out of date), this is a recommended way of
+> creating a development system for using uClibc.
 >
-> Thanks,
-> Matt
+> I'm actually trying to do something similar to easily build
+> applications in a "clean" environment with only uClibc headers, etc,
 
-I did things like this several times manually, and is also asked from
-time to time.
+I don't see why a cross compiler built using Crosstool-NG doesn't
+satisfy that requirement.
 
-It would be very handy if the future releases could officially include
-similar make targets.
-
-Thanks,
-Roy
+-- 
+Grant Edwards               grant.b.edwards        Yow! Spreading peanut
+                                  at               butter reminds me of
+                              gmail.com            opera!!  I wonder why?
