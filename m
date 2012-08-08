@@ -1,47 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 8 Aug 2012 21:23:05 +0200
-Subject: [Buildroot] [PATCH 3/3] buildroot: toolchain: Allow to build
- gdbserver when external toolchain is selected.
-In-Reply-To: <05E9E85E39C35B4D96ED3A3190E35A10C3D77B0E41@LIMKCMBX1.ad.analog.com>
-References: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
- <1344251847-7709-3-git-send-email-sonic.adi@gmail.com>
- <20120806145441.4dbc10ab@skate>
- <DB904C5425BA6F4E8424B3B51A1414D1714D28600B@NWD2CMBX1.ad.analog.com>
- <CAJxxZ0P+Xg++UGF1SdnsSyW3bua78+txP36FpMWoKNLaGKxQmw@mail.gmail.com>
- <05E9E85E39C35B4D96ED3A3190E35A10C3D77B0E41@LIMKCMBX1.ad.analog.com>
-Message-ID: <20120808212305.5c20e240@skate>
+From: Kevin Broch <kevbroch@gmail.com>
+Date: Wed, 8 Aug 2012 13:16:26 -0700
+Subject: [Buildroot] building native gcc for target
+In-Reply-To: <5021CE95.9000808@sri.com>
+References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+ <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
+ <5021CE95.9000808@sri.com>
+Message-ID: <CAKWKLJAcKAyfoGX_fx-sFGAAEu88t0hvke_cAm432VYL3DsrWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Scott,
 
-Le Wed, 8 Aug 2012 17:29:20 +0100,
-"Henderson, Stuart" <Stuart.Henderson@analog.com> a ?crit :
+Thanks for the suggestion.  I unfortunately do not see this "select GCC"
+option that you suggest.
+I am using git://git.buildroot.net/buildroot @HEAD
 
-> Since Sonic's linux distro has gdbserver built into it anyway (built
-> using the appropriate version of the toolchain), I don't think
-> providing gdbserver in the toolchain as well would provide any
-> particular benefit to the end user.  Is there a scenario where having
-> gdbserver in the toolchain is going to help the user?  I'd happily
-> introduce it, if so.
+- I have selected "Buildroot toolchain" from the Toolchain menu.
+- Under "Package selection for the target" -> "Development Tools", I see a
+comment
+"gcc needs development files in target filesystem"
+but no way to select GCC.
+As far as I can see the only selecting of GCC goes to which version for the
+cross compiled version.
 
-Well, my personal experience (and I've heard this experience from
-several other people has well) is that to avoid problems the gdbserver
-version you're using should be the same as the cross-gdb used to
-connect to this gdbserver. Therefore, it makes sense for a toolchain to
-provide both cross-gdb *and* gdbserver, or none of them, but it doesn't
-make much sense to offer just cross-gdb without a gdbserver. As I was
-mentioning before, Linaro toolchains, Sourcery CodeBench toolchains do
-that.
+Best, /<evin
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+On Tue, Aug 7, 2012 at 7:27 PM, Scott Moore <scott.moore@sri.com> wrote:
+
+> On 8/7/12 7:19 PM, Steve Calfee wrote:
+>
+>> On Tue, Aug 7, 2012 at 6:18 PM, Kevin Broch <kevbroch@gmail.com> wrote:
+>>
+>>> I'm am looking to build a complete (gcc too) development environment on
+>>> the
+>>> target (arm) but currently don't see that this is possible.
+>>> I have tried all 3 toolchain types (buildroot, cross-ng, external
+>>> (linaro),
+>>> but regardless I don't find gcc in output/target/usr/bin/gcc
+>>> I am wondering if I am missing something?
+>>>
+>>> If not I am looking for any pointer on how I might do this (having never
+>>> created a buildroot package).
+>>> Ideally I would like to create a package that compiles Linaro GCC:
+>>> https://wiki.linaro.org/**WorkingGroups/ToolChain/Using/**GCCNative<https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative>
+>>> I am imagining leveraging what is used to generate other tools like gdb,
+>>> binutils, and trying to incorporate the various machine options (VFP,
+>>> softfloat, etc)
+>>> in the configure options.
+>>>
+>>> Any pointers would be appreciated.
+>>>
+>>> Best, /<evin
+>>>
+>> I guess you haven't seen how to do it because it is kind of bizarre.
+>> You want to cross compile a native mode compiler. Why?
+>>
+>> Most people building embedded systems don't want to compile on those
+>> systems. I don't know how you even bootstrap a gcc build in a system
+>> without a c compiler.
+>>
+>> Regards, Steve
+>> ______________________________**_________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+>>
+> According to http://www.uclibc.org/**toolchains.html<http://www.uclibc.org/toolchains.html>(which unfortunately seems quite out of date), this is a recommended way of
+> creating a development system for using uClibc.
+> I'm actually trying to do something similar to easily build applications
+> in a "clean" environment with only uClibc headers, etc, and also having
+> trouble. Has anyone done this recently? (See my message earlier today about
+> a configuration for x86_64)
+>
+> Kevin, you may need to select GCC in the "package selection for target ->
+> development tools" options in menuconfig (which requires setting
+> development files on target to true in build options). I've gotten that far
+> but the resulting native compiler hasn't worked reliably.
+>
+> Cheers,
+> Scott
+> ______________________________**_________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120808/9c016d9f/attachment-0001.html>
