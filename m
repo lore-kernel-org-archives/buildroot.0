@@ -1,90 +1,82 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 9 Aug 2012 06:32:52 +0300
-Subject: [Buildroot] building native gcc for target
-In-Reply-To: <CAKWKLJCnXK-+4kDorAubXCizrEeUua=H+2+K6h+hCzddJ9q-BA@mail.gmail.com>
-References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
- <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
- <5021CE95.9000808@sri.com>
- <20120808055704.GA9185@sapphire.tkos.co.il>
- <CAKWKLJCnXK-+4kDorAubXCizrEeUua=H+2+K6h+hCzddJ9q-BA@mail.gmail.com>
-Message-ID: <20120809033252.GB3332@tarshish>
+Date: Thu, 9 Aug 2012 09:03:12 +0300
+Subject: [Buildroot] Noobie hat for a day
+In-Reply-To: <CALo-6+hK=t54u992+DVMba1g_n0VYCpVyoZM6L2xPvdmh=hiLg@mail.gmail.com>
+References: <CALo-6+hK=t54u992+DVMba1g_n0VYCpVyoZM6L2xPvdmh=hiLg@mail.gmail.com>
+Message-ID: <20120809060312.GC3332@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Kevin,
+Hi Charles,
 
-On Wed, Aug 08, 2012 at 01:24:14PM -0700, Kevin Broch wrote:
-> Thank Baruch I will have to check it out.  Have you used this yourself and
-> if so what platform?
+On Wed, Aug 08, 2012 at 03:37:18PM -0700, Charles Krinke wrote:
+> Putting on my 'noobie' hat again for a day, I am bolloxed as to why I
+> compile the same kernel with two different toolchains and one works
+> and the other dies.
 
-Yes. I used it on ARMv5 platform (i.MX25) to build the initramfs environment 
-(just Busybox and a few small utilities) statically linked.
-
-Another option that comes to mind is to install Debian on your target. Debian 
-includes a natively built toolchain, and you can easily test the result in a 
-chroot. If you don't have enough storage for Debian (at least 500MB, more is 
-preferred) on-board you can use NFS mounted root filesystem, mounted from a 
-PC. I used this trick on several platforms (ARM, MIPS, PowerPC) during 
-bring-up phase as it's a short path to a wealth of pre-built (and natively 
-compiled) software packages.
+The right direction for this question is the Linux ARM kernel mailing list. 
+See http://lists.infradead.org/mailman/listinfo/linux-arm-kernel. For this 
+particular platform you can also try the linux-omap mailing list. See 
+http://vger.kernel.org/vger-lists.html#linux-omap.
 
 baruch
 
-> On Tue, Aug 7, 2012 at 10:57 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> > Hi Scott, Kevin,
-> >
-> > On Tue, Aug 07, 2012 at 07:27:33PM -0700, Scott Moore wrote:
-> > > On 8/7/12 7:19 PM, Steve Calfee wrote:
-> > > >On Tue, Aug 7, 2012 at 6:18 PM, Kevin Broch <kevbroch@gmail.com> wrote:
-> > > >>I'm am looking to build a complete (gcc too) development environment
-> > on the
-> > > >>target (arm) but currently don't see that this is possible.
-> > > >>I have tried all 3 toolchain types (buildroot, cross-ng, external
-> > (linaro),
-> > > >>but regardless I don't find gcc in output/target/usr/bin/gcc
-> > > >>I am wondering if I am missing something?
-> > > >>
-> > > >>If not I am looking for any pointer on how I might do this (having
-> > never
-> > > >>created a buildroot package).
-> > > >>Ideally I would like to create a package that compiles Linaro GCC:
-> > > >>https://wiki.linaro.org/WorkingGroups/ToolChain/Using/GCCNative
-> > > >>I am imagining leveraging what is used to generate other tools like
-> > gdb,
-> > > >>binutils, and trying to incorporate the various machine options (VFP,
-> > > >>softfloat, etc)
-> > > >>in the configure options.
-> > > >>
-> > > >>Any pointers would be appreciated.
-> > > >I guess you haven't seen how to do it because it is kind of bizarre.
-> > > >You want to cross compile a native mode compiler. Why?
-> > > >
-> > > >Most people building embedded systems don't want to compile on those
-> > > >systems. I don't know how you even bootstrap a gcc build in a system
-> > > >without a c compiler.
-> > > According to http://www.uclibc.org/toolchains.html (which
-> > > unfortunately seems quite out of date), this is a recommended way of
-> > > creating a development system for using uClibc.
-> > > I'm actually trying to do something similar to easily build
-> > > applications in a "clean" environment with only uClibc headers, etc,
-> > > and also having trouble. Has anyone done this recently? (See my
-> > > message earlier today about a configuration for x86_64)
-> > >
-> > > Kevin, you may need to select GCC in the "package selection for
-> > > target -> development tools" options in menuconfig (which requires
-> > > setting development files on target to true in build options). I've
-> > > gotten that far but the resulting native compiler hasn't worked
-> > > reliably.
-> >
-> > You may try Aboriginal Linux (http://landley.net/aboriginal/) which
-> > includes
-> > pre-built native compilers for various targets, along with their build
-> > scripts.
-> >
-> > baruch
+> Here are two boots. Earlyprintk is compiled in and earlyprintk is on
+> the kernel command line. The same source is used in both cases. The
+> non-functioning one is is compiled with Sourcery CodeBench 2011.09-70
+> and it dies early. The functioning one is compiled with the
+> CodeSourcery 2010.09-50 toolchain.
+> 
+> Clearly earlyprintk does show a difference (Thank you for that
+> suggestion last week). But as to why the kernel for this TI AM3517EVM
+> dies with the newer Sourcery Codebench is a question I am hoping
+> someone can answer.
+> 
+> Uncompressing Linux... done, booting the kernel.
+> Linux version 2.6.37+ (ckrinke at dellx) (gcc version 4.6.1 (Sourcery
+> CodeBench Lite 2011.09-70) ) #5 Wed Aug 8 15:25:02 PDT 2012
+> CPU: ARMv7 Processor [411fc087] revision 7 (ARMv7), cr=10c53c7f
+> CPU: VIPT nonaliasing data cache, VIPT nonaliasing instruction cache
+> Machine: OMAP3517/AM3517 EVM
+> bootconsole [earlycon0] enabled
+> Reserving 4194304 bytes SDRAM for VRAM
+> Memory policy: ECC disabled, Data cache writeback
+> AM3517 ES1.1 (l2cache iva sgx neon isp )
+> SRAM: Mapped pa 0x40200000 to va 0xfe400000 size: 0x10000
+> Unhandled fault: alignment exception (0x001) at 0xc04ee62b
+> Internal error: : 1 [#1]
+> 
+> Uncompressing Linux... done, booting the kernel.
+> Linux version 2.6.37+ (ckrinke at dellx) (gcc version 4.5.1 (Sourcery G++
+> Lite 2010.09-50) ) #3 Wed Aug 8 12:43:27 PDT2
+> CPU: ARMv7 Processor [411fc087] revision 7 (ARMv7), cr=10c53c7f
+> CPU: VIPT nonaliasing data cache, VIPT nonaliasing instruction cache
+> Machine: OMAP3517/AM3517 EVM
+> Reserving 4194304 bytes SDRAM for VRAM
+> Memory policy: ECC disabled, Data cache writeback
+> AM3517 ES1.1 (l2cache iva sgx neon isp )
+> SRAM: Mapped pa 0x40200000 to va 0xfe400000 size: 0x10000
+> Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 64000
+> Kernel command line: console=ttyO2,115200n8 earlyprintk
+> root=/dev/mtdblock4 rw rootfstype=jffs2
+> PID hash table entries: 1024 (order: 0, 4096 bytes)
+> Dentry cache hash table entries: 32768 (order: 5, 131072 bytes)
+> Inode-cache hash table entries: 16384 (order: 4, 65536 bytes)
+> Memory: 252MB = 252MB total
+> Memory: 243656k/243656k available, 18488k reserved, 0K highmem
+> Virtual kernel memory layout:
+>     vector  : 0xffff0000 - 0xffff1000   (   4 kB)
+>     fixmap  : 0xfff00000 - 0xfffe0000   ( 896 kB)
+>     DMA     : 0xffc00000 - 0xffe00000   (   2 MB)
+>     vmalloc : 0xd0800000 - 0xf8000000   ( 632 MB)
+>     lowmem  : 0xc0000000 - 0xd0000000   ( 256 MB)
+>     modules : 0xbf000000 - 0xc0000000   (  16 MB)
+>       .init : 0xc0008000 - 0xc003a000   ( 200 kB)
+>       .text : 0xc003a000 - 0xc05959c4   (5487 kB)
+>       .data : 0xc0596000 - 0xc074ce60   (1756 kB)
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
