@@ -1,42 +1,56 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 9 Aug 2012 09:32:24 +0200
-Subject: [Buildroot] Best practices for managing the dl directory
-In-Reply-To: <CA+-urNRgQ5ExvyLq1q4kZj-jp6KHueDC=LG9+Y3J2n7cOz0LAg@mail.gmail.com>
-References: <CA+-urNRgQ5ExvyLq1q4kZj-jp6KHueDC=LG9+Y3J2n7cOz0LAg@mail.gmail.com>
-Message-ID: <CAAXf6LV42mQyHTHFSDu9Kpzy0cOb1JbV5Pm1Z0U4HVaqQczKew@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Aug 2012 10:23:51 +0200
+Subject: [Buildroot] [PATCH] uboot: add AIS binary target format
+In-Reply-To: <1344474253-19265-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1344474253-19265-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20120809102351.6491fb52@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-On Thu, Aug 9, 2012 at 4:24 AM, Frank Hunleth
-<fhunleth@troodon-software.com> wrote:
-> Hello,
->
-> I was wondering how others have managed files in the dl directory. I
-> need to make sure that old versions are buildable. The main buildroot
-> upstream source code mirror has been extremely reliable. In fact, it
-> has never failed for me (a big thanks to everyone who maintains this),
-> but as you can imagine some people want every bit that goes into a
-> build to be locally managed. I've addressed this in the past by
-> setting up a local mirror that has copies of all of the files in the
-> dl directory. However, recently, it was desired that all of these
-> files be checked in under revision control. This didn't seem like a
-> bad suggestion in principle, but the files are large, and I'm afraid
-> that the git repository will soon become too large and slow to work
-> with regularly.
->
-> Does anyone manage their dl directories differently? I'm curious how
-> other people have managed this.
+Le Wed,  8 Aug 2012 21:04:13 -0400,
+Vivien Didelot <vivien.didelot@savoirfairelinux.com> a ?crit :
 
-I have set up a mirror of the files, accessed using scp from a network location.
-As the tarballs have version numbers in their filename, I did not see
-the need for a version control system on top of it.
+> This format embeds the SPL boot code with U-Boot, which is necessary
+> on TI platforms such as the DA850.
+> 
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  boot/uboot/Config.in | 3 +++
+>  boot/uboot/uboot.mk  | 3 +++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index afc2f91..7f4b076 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -80,6 +80,9 @@ endif
+>  choice
+>  	prompt "U-Boot binary format"
+>  
 
-I simply have a mechanism to prevent overwrites of existing files.
+Could you add a 'default BR2_TARGET_UBOOT_FORM_BIN' here, so that even
+though u-boot.bin is no longer the first choice (and therefore the
+default one), it remains the one selected by default?
 
-Best regards,
+> +config BR2_TARGET_UBOOT_FORMAT_AIS
+> +	bool "u-boot.ais"
+> +
+
+Could you add a help text that mentions which platforms use this
+format? For newcomers, it's not necessarily easy to find which image
+format they should use, especially amongst the numerous SoC-specific
+formats.
+
+Otherwise, looks good, thanks!
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
