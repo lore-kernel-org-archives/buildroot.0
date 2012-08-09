@@ -1,49 +1,30 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed,  8 Aug 2012 21:04:13 -0400
-Subject: [Buildroot] [PATCH] uboot: add AIS binary target format
-Message-ID: <1344474253-19265-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 8 Aug 2012 22:24:07 -0400
+Subject: [Buildroot] Best practices for managing the dl directory
+Message-ID: <CA+-urNRgQ5ExvyLq1q4kZj-jp6KHueDC=LG9+Y3J2n7cOz0LAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This format embeds the SPL boot code with U-Boot, which is necessary on
-TI platforms such as the DA850.
+Hello,
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- boot/uboot/Config.in | 3 +++
- boot/uboot/uboot.mk  | 3 +++
- 2 files changed, 6 insertions(+)
+I was wondering how others have managed files in the dl directory. I
+need to make sure that old versions are buildable. The main buildroot
+upstream source code mirror has been extremely reliable. In fact, it
+has never failed for me (a big thanks to everyone who maintains this),
+but as you can imagine some people want every bit that goes into a
+build to be locally managed. I've addressed this in the past by
+setting up a local mirror that has copies of all of the files in the
+dl directory. However, recently, it was desired that all of these
+files be checked in under revision control. This didn't seem like a
+bad suggestion in principle, but the files are large, and I'm afraid
+that the git repository will soon become too large and slow to work
+with regularly.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index afc2f91..7f4b076 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -80,6 +80,9 @@ endif
- choice
- 	prompt "U-Boot binary format"
- 
-+config BR2_TARGET_UBOOT_FORMAT_AIS
-+	bool "u-boot.ais"
-+
- config BR2_TARGET_UBOOT_FORMAT_BIN
- 	bool "u-boot.bin"
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 9e03d6a..b61400e 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -25,6 +25,9 @@ endif
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_KWB),y)
- UBOOT_BIN          = u-boot.kwb
- UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_AIS),y)
-+UBOOT_BIN          = u-boot.ais
-+UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
- UBOOT_BIN          = u-boot.ldr
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
--- 
-1.7.11.2
+Does anyone manage their dl directories differently? I'm curious how
+other people have managed this.
+
+Thanks,
+Frank
