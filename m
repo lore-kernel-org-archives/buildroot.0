@@ -1,37 +1,37 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu,  9 Aug 2012 12:00:09 +0100
-Subject: [Buildroot] [PATCH] gdk-pixbuf: build x11 support, if appropriate
-Message-ID: <1344510009-18476-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Aug 2012 13:30:53 +0200
+Subject: [Buildroot] [RFC] "select" vs. "depends on" : a proposal for a
+ workaround
+In-Reply-To: <201208091158.19469.yann.morin.1998@free.fr>
+References: <201208072252.18028.yann.morin.1998@free.fr>
+ <20120809114001.6e9d2a10@skate>
+ <201208091158.19469.yann.morin.1998@free.fr>
+Message-ID: <20120809133053.51033341@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Le Thu, 9 Aug 2012 11:58:19 +0200,
+"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
 
-If libX11 is available, then gdk-pixbuf can be built with X11 support.
+> Going this route can lead to over-complicated and over-cluterred
+> Config.in files. We have to set a limit to where we want to go.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/gdk-pixbuf/gdk-pixbuf.mk |    5 +++++
- 1 file changed, 5 insertions(+)
+Right. I guess we can limit this do the package that are being
+select'ed by others. Generally, this means the libraries and a few
+other packages.
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 751f499..0d9e206 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -34,6 +34,11 @@ else
- GDK_PIXBUF_DEPENDENCIES += tiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+GDK_PIXBUF_CONF_OPT += --with-x11
-+GDK_PIXBUF_DEPENDENCIES += xlib_libX11
-+endif
-+
- GDK_PIXBUF_DEPENDENCIES += \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) \
- 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+I must admit I still see this as a workaround for a
+deficiency/limitation of kconfig. It's true that it will make our
+package Config.in files a bit less obvious to understand.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
