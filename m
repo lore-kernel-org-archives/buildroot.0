@@ -1,36 +1,70 @@
-From: Jan Pohanka <xhpohanka@gmail.com>
-Date: Thu, 09 Aug 2012 11:43:53 +0200
-Subject: [Buildroot] libev on armv5 - illegal instruction
-Message-ID: <op.wirpbfhyyxxkfz@pohanka-pc>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Aug 2012 11:45:26 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ for-2012.08/systemd
+In-Reply-To: <CADiAo4LsWUje0=p0QvJqgK_tAiT1XtsSs9J9qFmHswSYvzSSew@mail.gmail.com>
+References: <CADiAo4LsWUje0=p0QvJqgK_tAiT1XtsSs9J9qFmHswSYvzSSew@mail.gmail.com>
+Message-ID: <20120809114526.742e2e38@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Dmitry,
 
-I'd like to use libev on my arm system with arm9 processor (armv5te).  
-Unfortunately when I use libev-4.11 compiled by buildroot there is a  
-problem with SIGILL illegal instruction. I checked the compiled library  
-more deeply and there is really 'vldr' instruction which works only on  
-cores with NEON.
+Le Mon, 6 Aug 2012 11:14:50 -0400,
+Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
 
-I tried to compile the libev outside the buildroot with same CFLAGS  
-(-march=armv5te -mcpu=arm926ej-s -mtune=arm926ej-s -mfloat-abi=softfp -Os)  
-and cross-compiler (arm-2011.03 from codesourcery) and in this case the  
-library works as expected.
+> While still a bit away from this project (and will resume work on
+> patches for linux-pam as soon as I can), I think I can also contribute
+> into the systemd discussion:
+> 
+> Thomas Petazzoni wrote:
+> 
+> > Also, it would be good to investigate the newer versions of
+> > systemd. If I remember correctly, they integrate udev directly, but
+> > is it possible to still have udev separately? This of course will
+> > not be for 2012.08, but it would be nice to continue to integrate
+> > those technologies into Buildroot.
+> 
+> My latest systemd patches are for version 186 (don't worry about 185
+> in patches themselves: this part of the path is discarded anyway - and
+> now there is 187). See here:
+> 
+> https://gitorious.org/lfa/myroot/trees/master/systemd-pam
+> 
+> Code layout changed considerably in this new version series (185 and
+> up).
 
-When I set the path to BRROOT/output/host/bin and compile it there is the  
-illegal instruction problem again. Even if the wrappers in host directory  
-calls the same compiler.
+This repository is unfortunately a bit unusable: it isn't a fork from
+the original Buildroot repository. Why did you create a new repository
+that contains just the source code of a package? You should instead
+clone the original Buildroot repository, create a branch, and push it
+on Gitorious.
 
-Could please anyone give me some advice how to solve this problem? The  
-rest of applications from buildroot works without any problems.
+Also, your work on PAM+systemd should not be a new systemd-pam package:
+it should be integrated (probably with configuration options) into the
+existing systemd package.
 
-best regards
-Jan
+> Yes, they integrated udev together with systemd, and I do not see any
+> option to build udev separately from their source tree: there isn't
+> even such repo as udev at freedesktop.
+> 
+> Now I see that Buildroot gets udev from different source. Could these
+> be just two mutually exclusive config options: either to build udev
+> with systemd, or udev standalone (and disable building of systemd)?
 
+Now that udev is part of the systemd sources, do they publish new
+udev-only release tarballs? I guess not. If I'm correct, then we should
+simply remove the 'udev' package, and implement a mechanism to allow
+the systemd package to install only udev, or udev+systemd.
+
+Best regards,
+
+Thomas
 -- 
-Tato zpr?va byla vytvo?ena p?evratn?m po?tovn?m klientem Opery:  
-http://www.opera.com/mail/
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
