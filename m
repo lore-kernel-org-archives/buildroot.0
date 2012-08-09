@@ -1,90 +1,110 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 Aug 2012 11:58:19 +0200
-Subject: [Buildroot] [RFC] "select" vs. "depends on" : a proposal for a
-	workaround
-In-Reply-To: <20120809114001.6e9d2a10@skate>
-References: <201208072252.18028.yann.morin.1998@free.fr>
- <20120809114001.6e9d2a10@skate>
-Message-ID: <201208091158.19469.yann.morin.1998@free.fr>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Thu, 9 Aug 2012 18:26:54 +0800
+Subject: [Buildroot] [PATCH] buildroot: Makefile: Allow target board
+ makefile fill in default target_skeleton path.
+In-Reply-To: <20120809104155.563af2a2@skate>
+References: <1344409039-32071-1-git-send-email-sonic.adi@gmail.com>
+ <20120809104155.563af2a2@skate>
+Message-ID: <CAJxxZ0N4JFf5U34pw=LQOa6hR7XL7scyp5dckHc9fTgZvg2e1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On Thursday 09 August 2012 11:40:01 Thomas Petazzoni wrote:
-> Le Tue, 7 Aug 2012 22:52:17 +0200,
-> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-> > This is a Request For Comments about the now-infamous dilemn between
-> > "depends on" vs. "select", and a suggestion to work it around.
-[--SNIP--]
-> Thanks a lot for thinking about this. So, the idea is that every time
-> there is a "select", we add a corresponding "depends on", and that
-> since there is inheritance of "depends on", we will not have to
-> recursively add all the "depends on" on toolchain options on all the
-> reverse dependencies of a package that need such toolchain options.
-> 
-> Am I understanding your proposal correctly?
+On Thu, Aug 9, 2012 at 4:41 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Wed, 8 Aug 2012 14:57:19 +0800,
+> Sonic Zhang <sonic.adi@gmail.com> a ?crit :
+>
+>> If the target skeleton path is empty in config, don't change variable
+>> TARGET_SKELETON in buildroot Makefile. Allow the target board makefile
+>> fill in a default path.
+>
+> The concept of "target board makefile" does not exist. It used to exist
+> in earlier versions of Buildroot, but it no longer exists in newer
+> versions. Thus, I have the feeling that rather than fixing this, it is
+> the way your boards are supported that should be modified according to
+> the newer Buildroot good practices.
 
-Basically, yes. I was only thinking about inter-package dependencies, but
-it can be of course applied to other options.
+If "target board makefile" doesn't exit, where should we add arch
+specific makefile targets and compile/link flags? Where should arch
+specific Config options be put? Take blackfin specific makefile as an
+example bellow.
 
-Where this would usefull:
- - a package depends on some generic options: toolchain, architecture...
- - a package depends on another package.
+Makefile.in
+----------------
+TARGET_CFLAGS += -D__NOMMU__ -D__uClinux__ -D_GNU_SOURCE
+ifeq ($(BR2_ABI_FLAT),y)
+TARGET_LDFLAGS += -Wl,-elf2flt
+endif
+ifeq ($(BR2_BFIN_SHARED_FLAT), y)
+TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
+TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
+TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
+endif
 
-Adding the intermediate _AVAILABLE symbol propagates the dependency list,
-so all a package (or a sub-option of a package) needs to know is wether
-that other package it depends on is available, so it can select it.
+CROSS_COMPILE_SHARED_ELF ?= bfin-linux-uclibc-
+romfs.shared.libs.elf:
+        set -e; \
+        t=`$(CROSS_COMPILE_SHARED_ELF)gcc $(CPUFLAGS)
+-print-file-name=libc.a`; \
+        t=`dirname $$t`/../..; \
+        for i in $$t/lib/*so*; do \
+                i=`readlink -f "$$i"`; \
+                soname=`$(CROSS_COMPILE_SHARED_ELF)readelf -d "$$i" |
+sed -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
+                $(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
+        done
 
-But there is a limitation: should we also use that mechanism for package
-options? Eg:
+CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
+romfs.shared.libs.flat:
+        set -e; \
+        t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS)
+-mid-shared-library -print-file-name=libc`; \
+        if [ -f $$t -a ! -h $$t ] ; then \
+                $(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
+        fi
 
-  config PKG_FOO_AVAIL
-    def_bool y
-    depends on WCHAR
 
-  config PKG_FOO
-    bool "foo"
-    depends on PKG_FOO_AVAIL
+Config.in
+----------------------------------------------------
+config BR2_TARGET_ANALOGDEVICES_INSTALL_ELF_SHARED
+        bool "Install ELF shared libraries" if !BR2_BFIN_FDPIC
+        default y
 
-  if PKG_FOO
+config BR2_TARGET_ANALOGDEVICES_INSTALL_FLAT_SHARED
+        bool "Install FLAT shared libraries" if !BR2_BFIN_SHARED_FLAT
+        default y
 
-  config PKG_FOO_OPT_AVAIL
-    def_bool y
-    depends on ARM
 
-  config PKG_FOO_OPT
-    bool "opt"
-    depends on PKG_FOO_OPT_AVAIL
+>
+> The practices in terms of board support are:
+>
+>  * One defconfig file per board in configs/, generally named
+>    <vendor>_<boardname>_defconfig. Those files must be generated with
+>    'make savedefconfig'
+>
+>  * Utility files (kernel patches, kernel configuration files and other
+>    stuff), should be stored in board/<vendor>/<boardname>/. Kernel
+>    configuration files must be generated with 'make savedefconfig' as
+>    well.
+>
+>  * Using a different skeleton from the default one provided by
+>    Buildroot is really *not* recommended. Instead, if anything needs to
+>    be tweaked in the filesystem, use the post-build script for that
+>    effect. This allows to avoid duplicating the skeleton for each and
+>    every board, causing a maintenance nightmare when we want to change
+>    something in this skeleton.
+>
 
-  endif # PKG_FOO
+Blackfin Linux distribution has a different file system layout from
+current default one in buildroot. And we have no plan to deviate from
+current one used for years. Anyway without this patch, we can still
+set a custom skeleton for blackfin.
 
-  config PKG_BAR
-    bool "bar"
-    depends on PKG_FOO_AVAIL && PKG_FOO_OPT_AVAIL
-    select PKG_FOO
-    select PKG_FOO_OPT
+Regards,
 
-Going this route can lead to over-complicated and over-cluterred Config.in
-files. We have to set a limit to where we want to go.
-
-> On my side, I would need to experiment a bit with this on some
-> real-world example, but it sounds like a nice path to investigate, for
-> sure.
-
-I'm finishing my new packages that I'll push soon (this WE?) because it
-takes a bit of time testing all the combinations.
-
-When those are pushed, I'll try to add this _AVAILABLE stuff to the packages
-I added and their depndencies to see if it plays nicely.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Sonic
