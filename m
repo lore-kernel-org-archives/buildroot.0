@@ -1,12 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Aug 2012 22:44:01 +0200
-Subject: [Buildroot] [PATCH] buildroot: Makefile: Allow target board
- makefile fill in default target_skeleton path.
-In-Reply-To: <CAJxxZ0N4JFf5U34pw=LQOa6hR7XL7scyp5dckHc9fTgZvg2e1g@mail.gmail.com>
-References: <1344409039-32071-1-git-send-email-sonic.adi@gmail.com>
- <20120809104155.563af2a2@skate>
- <CAJxxZ0N4JFf5U34pw=LQOa6hR7XL7scyp5dckHc9fTgZvg2e1g@mail.gmail.com>
-Message-ID: <20120809224401.32f625ee@skate>
+Date: Fri, 10 Aug 2012 08:58:36 +0200
+Subject: [Buildroot] libev on armv5 - illegal instruction
+In-Reply-To: <op.wirpbfhyyxxkfz@pohanka-pc>
+References: <op.wirpbfhyyxxkfz@pohanka-pc>
+Message-ID: <20120810085836.3c62fe7e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,98 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-Le Thu, 9 Aug 2012 18:26:54 +0800,
-Sonic Zhang <sonic.adi@gmail.com> a ?crit :
+Le Thu, 09 Aug 2012 11:43:53 +0200,
+"Jan Pohanka" <xhpohanka@gmail.com> a ?crit :
 
-> If "target board makefile" doesn't exit, where should we add arch
-> specific makefile targets and compile/link flags? Where should arch
-> specific Config options be put? Take blackfin specific makefile as an
-> example bellow.
+> Could please anyone give me some advice how to solve this problem?
+> The rest of applications from buildroot works without any problems.
 
-There is no general rule for this, it depends on each thing you want to
-add. For things that must be added globally, package/Makefile.in is
-usually the current place (though this file would probably need some
-cleanup, but this is a different topic).
+Could you post your Buildroot .config file?
 
-> Makefile.in
-> ----------------
-> TARGET_CFLAGS += -D__NOMMU__ -D__uClinux__ -D_GNU_SOURCE
-
-I don't think the -D_GNU_SOURCE should be passed globally to all
-packages. Each package should define it if it is needed to build this
-package.
-
-Also, before globally defining __NOMMU__ and __uClinux__, I'd like to
-understand why they are needed. I think __NOMMU__ is generally used to
-test whether fork() or vfork() should be used, but this should probably
-be tested using autoconf tests when possible.
-
-That said, if such flags are indeed necessary, package/Makefile.in is a
-good place for that.
-
-> ifeq ($(BR2_ABI_FLAT),y)
-> TARGET_LDFLAGS += -Wl,-elf2flt
-> endif
-> ifeq ($(BR2_BFIN_SHARED_FLAT), y)
-> TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-> TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-> TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
-> endif
-
-Same thing for these flags, package/Makefile.in.
-
-> CROSS_COMPILE_SHARED_ELF ?= bfin-linux-uclibc-
-
-No, this should use the existing variables to get the cross-compiler
-location.
-
-> romfs.shared.libs.elf:
->         set -e; \
->         t=`$(CROSS_COMPILE_SHARED_ELF)gcc $(CPUFLAGS)
-> -print-file-name=libc.a`; \
->         t=`dirname $$t`/../..; \
->         for i in $$t/lib/*so*; do \
->                 i=`readlink -f "$$i"`; \
->                 soname=`$(CROSS_COMPILE_SHARED_ELF)readelf -d "$$i" |
-> sed -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
->                 $(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
->         done
-
-Why is this needed? How is this romfs.shared.libs.elf target being used?
-
-> CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
-> romfs.shared.libs.flat:
->         set -e; \
->         t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS)
-> -mid-shared-library -print-file-name=libc`; \
->         if [ -f $$t -a ! -h $$t ] ; then \
->                 $(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
->         fi
-
-Ditto.
-
-> Config.in
-> ----------------------------------------------------
-> config BR2_TARGET_ANALOGDEVICES_INSTALL_ELF_SHARED
->         bool "Install ELF shared libraries" if !BR2_BFIN_FDPIC
->         default y
-> 
-> config BR2_TARGET_ANALOGDEVICES_INSTALL_FLAT_SHARED
->         bool "Install FLAT shared libraries" if !BR2_BFIN_SHARED_FLAT
->         default y
-
-Any reason to have these in addition to the existing selection of ABI?
-What are the use cases for these?
-
-> Blackfin Linux distribution has a different file system layout from
-> current default one in buildroot. And we have no plan to deviate from
-> current one used for years. Anyway without this patch, we can still
-> set a custom skeleton for blackfin.
-
-How does the filesystem layout differs? Depending on how it differs,
-having a separate skeleton may or may not be the right solution.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
