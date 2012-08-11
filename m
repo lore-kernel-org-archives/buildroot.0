@@ -1,46 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 22:31:03 +0200
-Subject: [Buildroot] [PATCH] opkg: bump version to svn r635
-In-Reply-To: <1344666707-27833-1-git-send-email-net147@gmail.com>
-References: <1344666707-27833-1-git-send-email-net147@gmail.com>
-Message-ID: <20120811223103.3207ccf9@skate>
+Date: Sat, 11 Aug 2012 22:33:31 +0200
+Subject: [Buildroot] [git commit branch/next] acpid: add init.d script
+Message-ID: <20120811203419.B2FF997075@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 11 Aug 2012 16:31:47 +1000,
-Jonathan Liu <net147@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=956caf62480f2cb0adada6a5a9f1e5ca3dd2b262
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> -OPKG_VERSION = 0.1.8
-> +OPKG_VERSION = 635
->  OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
-> -OPKG_SITE = http://opkg.googlecode.com/files
-> +OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
-> +OPKG_SITE_METHOD = svn
->  OPKG_INSTALL_STAGING = YES
->  OPKG_CONF_OPT = --disable-curl --disable-gpg
->  
-> +define OPKG_AUTOGEN
-> +	cd $(@D) ; \
-> +	./autogen.sh
-> +endef
-> +
-> +OPKG_PRE_CONFIGURE_HOOKS += OPKG_AUTOGEN
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/acpid/S02acpid |   22 ++++++++++++++++++++++
+ package/acpid/acpid.mk |    1 +
+ 2 files changed, 23 insertions(+), 0 deletions(-)
 
-This means that the package now depends on host-autoconf, host-automake
-and probably host-libtool.
-
-Can you try if setting OPKG_AUTORECONF = YES is sufficient instead of
-this custom hook? If not, then of course, keep this hook and add the
-necessary dependency on host tools.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/acpid/S02acpid b/package/acpid/S02acpid
+new file mode 100755
+index 0000000..ec686d8
+--- /dev/null
++++ b/package/acpid/S02acpid
+@@ -0,0 +1,22 @@
++#!/bin/sh
++
++case "$1" in
++	start)
++		echo -n "Starting acpid: "
++		start-stop-daemon -S -q -m -b -p /var/run/acpid.pid --exec /usr/sbin/acpid -- -n
++		echo "done"
++		;;
++	stop)
++		echo -n "Stopping acpid: "
++		start-stop-daemon -K -q -p /var/run/acpid.pid
++		echo "done"
++		;;
++	restart)
++		"$0" stop
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index cacfb27..56f671d 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -18,6 +18,7 @@ define ACPID_INSTALL_TARGET_CMDS
+ 	install -D -m 644 $(@D)/acpi_listen.8 $(TARGET_DIR)/usr/share/man/man8/acpi_listen.8
+ 	mkdir -p $(TARGET_DIR)/etc/acpi/events
+ 	/bin/echo -e "event=button[ /]power\naction=/sbin/poweroff" > $(TARGET_DIR)/etc/acpi/events/powerbtn
++	$(INSTALL) -D -m 0755 package/acpid/S02acpid $(TARGET_DIR)/etc/init.d/S02acpid
+ endef
+ 
+ define ACPID_UNINSTALL_TARGET_CMDS
