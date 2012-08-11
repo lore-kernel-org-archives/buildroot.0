@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 20:03:32 +0200
-Subject: [Buildroot] [git commit] linux: Rename blackfin kernel Image file
-	from vmImage back to uImage
-Message-ID: <20120811180400.C344497164@busybox.osuosl.org>
+Date: Sat, 11 Aug 2012 20:04:03 +0200
+Subject: [Buildroot] [PATCH 1/5] buildroot:linux: Rename blackfin kernel
+ Image file from vmImage back to uImage.
+In-Reply-To: <1344330577-25159-1-git-send-email-sonic.adi@gmail.com>
+References: <1344330577-25159-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <20120811200403.61d7e940@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1f299105e7a82f7b1f76bdff15fd0413e6fac4fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Tue, 7 Aug 2012 17:09:33 +0800,
+Sonic Zhang <sonic.adi@gmail.com> a ?crit :
 
-Consist with other architectures.
+> From: Sonic Zhang <sonic.zhang@analog.com>
+> 
+> Consist with other architectures.
+> 
+> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 
-Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux.mk |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+Thanks, pushed to master. I have considered this as a bug fix, so I
+could commit this to master.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5365d5f..c4bdf90 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -69,12 +69,7 @@ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
- LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- else
- ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
--ifeq ($(KERNEL_ARCH),blackfin)
--# a uImage, but with a different file name
--LINUX_IMAGE_NAME=vmImage
--else
- LINUX_IMAGE_NAME=uImage
--endif
- else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
- LINUX_IMAGE_NAME=uImage
- else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
