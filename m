@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 23:05:55 +0200
-Subject: [Buildroot] [PATCH] python: fix interpreter directive for
- python scripts
-In-Reply-To: <1344665427-27181-2-git-send-email-net147@gmail.com>
-References: <1344665427-27181-2-git-send-email-net147@gmail.com>
-Message-ID: <20120811230555.46b2f565@skate>
+Date: Sat, 11 Aug 2012 23:11:14 +0200
+Subject: [Buildroot] [PATCH] p7zip-light: new package
+In-Reply-To: <1344666280-27588-1-git-send-email-net147@gmail.com>
+References: <1344666280-27588-1-git-send-email-net147@gmail.com>
+Message-ID: <20120811231114.4f1b0f10@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 11 Aug 2012 16:10:27 +1000,
+Le Sat, 11 Aug 2012 16:24:40 +1000,
 Jonathan Liu <net147@gmail.com> a ?crit :
 
-> +# Fix Python interpreter directive
-> +define PYTHON_FIX_INTERPRETER
-> +        sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{easy_install,easy_install-2.7,idle,smtpd.py}
-> +endef
-> +
-> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_FIX_INTERPRETER
+> Signed-off-by: Jonathan Liu <net147@gmail.com>
+> ---
+>  package/Config.in                           |    1 +
+>  package/p7zip-light/Config.in               |    7 +
+>  package/p7zip-light/p7zip-light-libre.patch | 6540 +++++++++++++++++++++++++++
+>  package/p7zip-light/p7zip-light.mk          |   24 +
+>  4 files changed, 6572 insertions(+)
+>  create mode 100644 package/p7zip-light/Config.in
+>  create mode 100644 package/p7zip-light/p7zip-light-libre.patch
+>  create mode 100644 package/p7zip-light/p7zip-light.mk
 
-I agree the paths in those scripts is incorrect, *but*:
+I am not entirely fan of carrying such a huge patch. Can you see if
+Debian has a version of p7zip without the non-free RAR code, and if so,
+use their tarball instead?
 
- * Should these scripts have been installed in the first place? I don't
-   think there are useful for the typical usage of the Python
-   interpreter, so maybe we want to get rid of them.
-
- * Instead of fixing this patch manually in every Python script
-   installed, can we investigate on how to fix the root of the problem?
-   I'm the one who has reworked the patches that get Python to
-   cross-compile, and I know this stuff is really painful, but I think
-   it's worth at least trying to understand a bit if there could be a
-   way of handling things. From what I remember the problem is that the
-   host-python uses its host sysconfig parameters even when building
-   things for the target, simply because the whole Python things has
-   absolutely zero understanding of the fact that we could be using
-   Python on one machine to build stuff that will run on a different
-   machine.
-
-Thoughts?
+Thanks!
 
 Thomas
 -- 
