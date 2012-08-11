@@ -1,9 +1,9 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 11 Aug 2012 16:10:20 -0400
-Subject: [Buildroot] [PATCH 10/17] libpcap: add license info
+Date: Sat, 11 Aug 2012 16:10:15 -0400
+Subject: [Buildroot] [PATCH 05/17] libcgicc: add license info
 In-Reply-To: <1344715827-9452-1-git-send-email-danomimanchego123@gmail.com>
 References: <1344715827-9452-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1344715827-9452-10-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1344715827-9452-5-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/libpcap/libpcap.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/libcgicc/libcgicc.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 1d1fbc1..04766ea 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -6,7 +6,10 @@
+diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
+index 98b8e5f..80e9213 100644
+--- a/package/libcgicc/libcgicc.mk
++++ b/package/libcgicc/libcgicc.mk
+@@ -6,6 +6,7 @@
+ LIBCGICC_VERSION=3.2.9
+ LIBCGICC_SITE=$(BR2_GNU_MIRROR)/cgicc
+ LIBCGICC_SOURCE=cgicc-$(LIBCGICC_VERSION).tar.gz
++LIBCGICC_LICENSE=LGPLv3+
+ LIBCGICC_INSTALL_STAGING=YES
+ LIBCGICC_AUTORECONF=YES
  
- LIBPCAP_VERSION = 1.3.0
- LIBPCAP_SITE = http://www.tcpdump.org/release
-+LIBPCAP_LICENSE = BSD-3c
-+LIBPCAP_LICENSE_FILES = LICENSE
- LIBPCAP_INSTALL_STAGING = YES
-+
- # doesn't have an install-strip
- LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
- 	$(if $(BR2_PREFER_STATIC_LIB),install,install-shared)
 -- 
 1.7.9.5
