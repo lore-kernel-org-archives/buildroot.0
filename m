@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 23:00:25 +0200
-Subject: [Buildroot] [PATCH 1/2] python-meld3: new package
-In-Reply-To: <1344669126-28921-2-git-send-email-net147@gmail.com>
-References: <1344669126-28921-1-git-send-email-net147@gmail.com>
- <1344669126-28921-2-git-send-email-net147@gmail.com>
-Message-ID: <20120811230025.70cd10e7@skate>
+Date: Sat, 11 Aug 2012 23:05:55 +0200
+Subject: [Buildroot] [PATCH] python: fix interpreter directive for
+ python scripts
+In-Reply-To: <1344665427-27181-2-git-send-email-net147@gmail.com>
+References: <1344665427-27181-2-git-send-email-net147@gmail.com>
+Message-ID: <20120811230555.46b2f565@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 11 Aug 2012 17:12:05 +1000,
+Le Sat, 11 Aug 2012 16:10:27 +1000,
 Jonathan Liu <net147@gmail.com> a ?crit :
 
-> +config BR2_PACKAGE_PYTHON_MELD3
-> +    bool "python-meld3"
-> +    depends on BR2_PACKAGE_PYTHON
-> +    help
-> +      A HTML/XML templating system.
+> +# Fix Python interpreter directive
+> +define PYTHON_FIX_INTERPRETER
+> +        sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{easy_install,easy_install-2.7,idle,smtpd.py}
+> +endef
 > +
-> +      https://github.com/supervisor/meld3
+> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_FIX_INTERPRETER
 
-Indentation was incorrect here, and the 'select' on PYEXPAT was missing.
+I agree the paths in those scripts is incorrect, *but*:
 
-> +PYTHON_MELD3_VERSION = 0.6.8
-> +PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
-> +PYTHON_MELD3_SITE = http://pypi.python.org/packages/source/m/meld3/
-> +PYTHON_MELD3_DEPENDENCIES = python
+ * Should these scripts have been installed in the first place? I don't
+   think there are useful for the typical usage of the Python
+   interpreter, so maybe we want to get rid of them.
 
-Would be good to add license informations now for all new packages.
+ * Instead of fixing this patch manually in every Python script
+   installed, can we investigate on how to fix the root of the problem?
+   I'm the one who has reworked the patches that get Python to
+   cross-compile, and I know this stuff is really painful, but I think
+   it's worth at least trying to understand a bit if there could be a
+   way of handling things. From what I remember the problem is that the
+   host-python uses its host sysconfig parameters even when building
+   things for the target, simply because the whole Python things has
+   absolutely zero understanding of the fact that we could be using
+   Python on one machine to build stuff that will run on a different
+   machine.
 
-I've fixed those and committed to next.
-
-Thanks!
+Thoughts?
 
 Thomas
 -- 
