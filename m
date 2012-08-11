@@ -1,73 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 19:40:50 +0200
-Subject: [Buildroot] [PATCH 18/20] toolchain-external: add Sourcery
-	CodeBench SuperH 2012.03
+Date: Sat, 11 Aug 2012 19:40:52 +0200
+Subject: [Buildroot] [PATCH 20/20] external-toolchain: add Sourcery
+	CodeBench ARM 2012.03
 In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <59c51f4f7d9ffb138e9214dbfb713c453e648c72.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d7731ad73ed06ae83273de4ba302bdaa5d791943.1344706801.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   20 ++++++++++++++++++++
+ toolchain/toolchain-external/Config.in   |   22 ++++++++++++++++++++++
  toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 23 insertions(+)
+ 2 files changed, 25 insertions(+)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 8ea0dcb..2f20fa5 100644
+index 83be75a..ede1a3b 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -394,6 +394,25 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	    - 970 glibc hard-float, 64 bits
- 	      Set BR2_TARGET_OPTIMIZATION to -m64
+@@ -82,6 +82,27 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
+ 	  Thumb 2, with the softfp calling convention, and uses the
+ 	  VFPv3-D16 FPU instructions.
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
-+	bool "Sourcery CodeBench SH 2012.03"
-+	depends on BR2_sh4a || BR2_sh4aeb
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
++	bool "Sourcery CodeBench ARM 2012.03"
++	depends on BR2_arm
 +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 +	select BR2_INSTALL_LIBSTDCPP
 +	help
-+	  Sourcery CodeBench toolchain for the SuperH architecture,
-+	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
-+	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
-+	  2.6.38. It has support for the following variants:
-+            - SH4A, glibc, little endian
-+              Default.
-+            - SH4A, glibc, big endian
-+              Add -mb to BR2_TARGET_OPTIMIZATION
-+            - SH4A, uClibc, little endian
-+              Not usable in Buildroot yet.
-+            - SH4A, uClibc, big endian
-+              Not usable in Buildroot yet.
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
++	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
++	  for the following variants:
++	    - ARMv5TE, little endian, soft-float, glibc
++	      Select ARM926T, ARM10T, XScale or another ARMv5 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv4T, little endian, soft-float, glibc
++	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
++	      Select BR2_SOFT_FLOAT
++	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
++	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mthumb
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	bool "Sourcery CodeBench SH 2011.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
-@@ -643,6 +662,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
-+	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	bool "Sourcery CodeBench ARM 2011.09"
+ 	depends on BR2_arm
+@@ -678,6 +699,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
++	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 6e33342..9351c35 100644
+index 0d4c022..f8a730e 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -223,6 +223,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103),y)
- TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/sgpp/lite/superh/portal/package8759/public/sh-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/GNUToolchain/package10148/public/sh-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=renesas-2012.03-35-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7859/public/sh-uclinux/
- TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
+@@ -187,6 +187,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
++TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://launchpad.net/linaro-toolchain-binaries/trunk/2012.02/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.02-20120222_linux.tar.bz2
 -- 
 1.7.9.5
