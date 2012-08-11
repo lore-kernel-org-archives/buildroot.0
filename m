@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 19:40:45 +0200
-Subject: [Buildroot] [PATCH 13/20] rpcbind: new package
+Date: Sat, 11 Aug 2012 19:40:47 +0200
+Subject: [Buildroot] [PATCH 15/20] quota: add support to use RPC support
+	from libtirpc
 In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7f28782ad569ab1f2ea9c53cd338739f31eb643c.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e55c1cbfa2a0e61480bf8723b92d39a49014bf37.1344706801.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,113 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                              |    1 +
- package/rpcbind/Config.in                      |    6 ++++
- package/rpcbind/rpcbind-01-no-yp-support.patch |   46 ++++++++++++++++++++++++
- package/rpcbind/rpcbind.mk                     |   17 +++++++++
- 4 files changed, 70 insertions(+)
- create mode 100644 package/rpcbind/Config.in
- create mode 100644 package/rpcbind/rpcbind-01-no-yp-support.patch
- create mode 100644 package/rpcbind/rpcbind.mk
+ package/quota/Config.in |    6 +++---
+ package/quota/quota.mk  |   13 +++++++++++--
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 581cccb..6205db2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -589,6 +589,7 @@ source "package/proftpd/Config.in"
- source "package/quagga/Config.in"
- source "package/radvd/Config.in"
- source "package/rp-pppoe/Config.in"
-+source "package/rpcbind/Config.in"
- source "package/rsh-redone/Config.in"
- source "package/rsync/Config.in"
- source "package/rtorrent/Config.in"
-diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
-new file mode 100644
-index 0000000..0d4ffb2
---- /dev/null
-+++ b/package/rpcbind/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_RPCBIND
-+	bool "rpcbind"
-+	select BR2_PACKAGE_LIBTIRPC
-+	help
-+	  The rpcbind utility is a server that converts RPC program numbers
-+	  into universal addresses.
-diff --git a/package/rpcbind/rpcbind-01-no-yp-support.patch b/package/rpcbind/rpcbind-01-no-yp-support.patch
-new file mode 100644
-index 0000000..e9e6c9d
---- /dev/null
-+++ b/package/rpcbind/rpcbind-01-no-yp-support.patch
-@@ -0,0 +1,46 @@
-+Remove yellow pages support
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+index 788af1b..4220e67 100644
+--- a/package/quota/Config.in
++++ b/package/quota/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_QUOTA
+ 	bool "quota"
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on BR2_RPC_SUPPORT_AVAILABLE
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_UTIL_LINUX
+@@ -12,5 +12,5 @@ config BR2_PACKAGE_QUOTA
+ 
+ 	  http://sourceforge.net/projects/linuxquota/
+ 
+-comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
+-	depends on !(BR2_TOOLCHAIN_HAS_NATIVE_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
++comment "quota requires a toolchain with LARGEFILE + WCHAR support, and RPC (toolchain or libtirpc)"
++	depends on !(BR2_RPC_SUPPORT_AVAILABLE && BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 44a5073..278df6d 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -8,13 +8,22 @@ QUOTA_VERSION = 4.00
+ QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
+ QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
+ 
+-QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
++QUOTA_CFLAGS = $(TARGET_CFLAGS)
++QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ QUOTA_DEPENDENCIES = gettext libintl
+-QUOTA_MAKE_OPT += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
++QUOTA_LDFLAGS += -lintl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++QUOTA_DEPENDENCIES += libtirpc
++QUOTA_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
++QUOTA_LDFLAGS += -ltirpc
++endif
 +
-+This support requires yellow pages support in libtirpc, which isn't
-+available. As most Buildroot users are most likely never going to need
-+such feature, get rid of it.
++QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Index: b/src/security.c
-+===================================================================
-+--- a/src/security.c
-++++ b/src/security.c
-+@@ -23,9 +23,6 @@
-+ #include <rpcsvc/mount.h>
-+ #include <rpcsvc/rquota.h>
-+ #include <rpcsvc/nfs_prot.h>
-+-#include <rpcsvc/yp.h>
-+-#include <rpcsvc/ypclnt.h>
-+-#include <rpcsvc/yppasswd.h>
-+ 
-+ #include "rpcbind.h"
-+ 
-+@@ -322,24 +319,9 @@
-+ 		    args->rmt_proc != MOUNTPROC_UMNT)
-+ 			break;
-+ 		goto deny;
-+-	case YPBINDPROG:
-+-		if (args->rmt_proc != YPBINDPROC_SETDOM)
-+-			break;
-+-		/* FALLTHROUGH */
-+-	case YPPASSWDPROG:
-+ 	case NFS_PROGRAM:
-+ 	case RQUOTAPROG:
-+ 		goto deny;
-+-	case YPPROG:
-+-		switch (args->rmt_proc) {
-+-		case YPPROC_ALL:
-+-		case YPPROC_MATCH:
-+-		case YPPROC_FIRST:
-+-		case YPPROC_NEXT:
-+-			goto deny;
-+-		default:
-+-			break;
-+-		}
-+ 	default:
-+ 		break;
-+ 	}
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-new file mode 100644
-index 0000000..d9a80de
---- /dev/null
-+++ b/package/rpcbind/rpcbind.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# rpcbind
-+#
-+#############################################################
-+
-+RPCBIND_VERSION = 0.2.0
-+RPCBIND_SITE    = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
-+RPCBIND_SOURCE  = rpcbind-$(RPCBIND_VERSION).tar.bz2
-+RPCBIND_LICENSE = BSD-3c
-+RPCBIND_LICENSE_FILES = COPYING
-+
-+RPCBIND_CONF_ENV += \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
-+RPCBIND_DEPENDENCIES += libtirpc
-+
-+$(eval $(autotools-package))
+ # Package uses autoconf but not automake.
+ QUOTA_INSTALL_TARGET_OPT = \
+ 	ROOTDIR=$(TARGET_DIR) \
 -- 
 1.7.9.5
