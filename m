@@ -1,85 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 22:27:03 +0200
-Subject: [Buildroot] [git commit branch/next] yasm: New package
-Message-ID: <20120811202815.B67B49715F@busybox.osuosl.org>
+Date: Sat, 11 Aug 2012 22:29:44 +0200
+Subject: [Buildroot] [PATCH] yasm: New package
+In-Reply-To: <1344627011-1862-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1344627011-1862-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20120811222944.0b6b6ff8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a81db89eb036216c87b3036251adbeea2013b0e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Le Fri, 10 Aug 2012 22:30:11 +0300,
+Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
 
-[thomas.petazzoni at free-electrons.com:
+> Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
 
- drop the --disable-static from configuration options, the default
- behavior should work without problem.
+Thanks, applied to next with a few minor fixes.
 
- make sure the pre configure hook is also executed for the host
- variant of the package.
+Luca, I'm Cc'ing you on this regarding the license informations. The
+license of Yasm seems to be, hum, complicated. Below the contents of
+the COPYING file of the project. How should we encode that into
+YASM_LICENSE ? :-)
 
- add the project upstream URL in the package help text
-]
+----------------------------------------------------------------------
+Yasm is Copyright (c) 2001-2010 Peter Johnson and other Yasm developers.
 
-Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in      |    1 +
- package/yasm/Config.in |    9 +++++++++
- package/yasm/yasm.mk   |   20 ++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+Yasm developers and/or contributors include:
+  Peter Johnson
+  Michael Urman
+  Brian Gladman (Visual Studio build files, other fixes)
+  Stanislav Karchebny (options parser)
+  Mathieu Monnier (SSE4 instruction patches, NASM preprocessor additions)
+  Anonymous "NASM64" developer (NASM preprocessor fixes)
+  Stephen Polkowski (x86 instruction patches)
+  Henryk Richter (Mach-O object format)
+  Ben Skeggs (patches, bug reports)
+  Alexei Svitkine (GAS preprocessor)
+  Samuel Thibault (TASM parser and frontend)
 
-diff --git a/package/Config.in b/package/Config.in
-index 89cb40f..45f0799 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -91,6 +91,7 @@ source "package/sstrip/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/tar/Config.in"
- endif
-+source "package/yasm/Config.in"
- endmenu
- 
- menu "Games"
-diff --git a/package/yasm/Config.in b/package/yasm/Config.in
-new file mode 100644
-index 0000000..bb1d417
---- /dev/null
-+++ b/package/yasm/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_YASM
-+	bool "yasm"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  Yasm is a complete rewrite of the NASM-2.10.01 assembler.
-+	  It supports the x86 and AMD64 instruction sets, accepts NASM
-+	  and GAS assembler syntaxes and outputs binary, ELF32 and ELF64
-+	  object formats.
-+
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-new file mode 100644
-index 0000000..ac75d2b
---- /dev/null
-+++ b/package/yasm/yasm.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# yasm
-+#
-+#############################################################
-+YASM_VERSION = 1.2.0
-+YASM_SOURCE = yasm-$(YASM_VERSION).tar.gz
-+YASM_SITE = http://www.tortall.net/projects/yasm/releases/
-+YASM_CONF_OPT = --disable-static
-+
-+define YASM_PRE_CONFIGURE_FIXUP
-+# This sed prevents it compiling 2 programs (vsyasm and ytasm) 
-+# that are only of use on Microsoft Windows. 
-+	sed -i 's#) ytasm.*#)#' $(@D)/Makefile.in
-+endef
-+
-+YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+-----------------------------------
+Yasm licensing overview and summary
+-----------------------------------
+
+Note: This document does not provide legal advice nor is it the actual
+license of any part of Yasm.  See the individual licenses for complete
+details.  Consult a lawyer for legal advice.
+
+The primary license of Yasm is the 2-clause BSD license.  Please use this
+license if you plan on submitting code to the project.
+
+Yasm has absolutely no warranty; not even for merchantibility or fitness
+for a particular purpose.
+
+-------
+Libyasm
+-------
+Libyasm is 2-clause or 3-clause BSD licensed, with the exception of
+bitvect, which is triple-licensed under the Artistic license, GPL, and
+LGPL.  Libyasm is thus GPL and LGPL compatible.  In addition, this also
+means that libyasm is free for binary-only distribution as long as the
+terms of the 3-clause BSD license and Artistic license (as it applies to
+bitvect) are fulfilled.
+
+-------
+Modules
+-------
+The modules are 2-clause or 3-clause BSD licensed.
+
+---------
+Frontends
+---------
+The frontends are 2-clause BSD licensed.
+
+-------------
+License Texts
+-------------
+The full text of all licenses are provided in separate files in the source
+distribution.  Each source file may include the entire license (in the case
+of the BSD and Artistic licenses), or may reference the GPL or LGPL license
+file.
+
+BSD.txt - 2-clause and 3-clause BSD licenses
+Artistic.txt - Artistic license
+GNU_GPL-2.0 - GNU General Public License
+GNU_LGPL-2.0 - GNU Library General Public License
+----------------------------------------------------------------------
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
