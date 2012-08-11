@@ -1,25 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 20:27:10 +0200
-Subject: [Buildroot] [PATCH] cairo: Add tee surface backend option
- (required by firefox)
-In-Reply-To: <50240868.2070709@petroprogram.com>
-References: <50240868.2070709@petroprogram.com>
-Message-ID: <20120811202710.004718e1@skate>
+Date: Sat, 11 Aug 2012 20:23:57 +0200
+Subject: [Buildroot] [PATCH] u-boot: add AIS target format
+In-Reply-To: <1344535869-5199-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1344535869-5199-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1344535869-5199-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20120811202357.7c44f4a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 09 Aug 2012 21:58:48 +0300,
-Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
+Le Thu,  9 Aug 2012 14:11:09 -0400,
+Vivien Didelot <vivien.didelot@savoirfairelinux.com> a ?crit :
 
-> Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  boot/uboot/Config.in | 8 ++++++++
+>  boot/uboot/uboot.mk  | 3 +++
+>  2 files changed, 11 insertions(+)
 
-I wanted to apply this, but the patch has apparently been damaged by
-Thunderbird. Can you resend it with git send-email please?
-
-Thanks!
+Applied to next.
 
 Thomas
 -- 
