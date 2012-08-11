@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 19:40:46 +0200
-Subject: [Buildroot] [PATCH 14/20] portmap: mention that rpcbind is the
-	project that superseds portmap
+Date: Sat, 11 Aug 2012 19:40:51 +0200
+Subject: [Buildroot] [PATCH 19/20] toolchain-external: add Sourcery
+	CodeBench x86 2012.03
 In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <aae61f5152331e0d8e63c01ddca703e00cde1382.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <58900acdf9856b611b4736be8ed37497f7069142.1344706801.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/portmap/Config.in |    2 ++
- 1 file changed, 2 insertions(+)
+ toolchain/toolchain-external/Config.in   |   26 ++++++++++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/package/portmap/Config.in b/package/portmap/Config.in
-index f017cb6..8d25e3a 100644
---- a/package/portmap/Config.in
-+++ b/package/portmap/Config.in
-@@ -4,6 +4,8 @@ config BR2_PACKAGE_PORTMAP
- 	help
- 	  The standard portmapper for RPC services.
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 2f20fa5..83be75a 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -487,6 +487,31 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	  has support for the following variants:
+ 	    - SH2A, uClibc, big endian
  
-+	  Note that portmap is being deprecated in favour of rpcbind.
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
++	bool "Sourcery CodeBench x86/x86_64 2012.03"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Sourcery CodeBench toolchain for the x86/x86_64
++	  architectures, from Mentor Graphics. It uses gcc 4.6.3,
++	  binutils 2.21.53, glibc 2.15, gdb 7.2.50 and kernel headers
++	  3.2.10. It has support for the following variants:
++	    - Intel Pentium 4, glibc, 32 bits
++	      Default for x86, nothing special to do.
++	    - Intel Atom, glibc, 32 bits
++	      Select an Atom core
++	    - Intel Xeon, glibc, 64 bits
++	      Default for x86_64, nothing special to do.
++	    - Intel Core 2, glibc, 64 bits
++	      Select a Core 2 core
++	  Other architecture variants (beyond Pentium-4/Xeon) are
++	  supported as well, but glibc is not optimised for it.
 +
- 	  http://neil.brown.name/portmap/
- 
- comment "portmap requires a toolchain with RPC support"
++	  Note that due to the upgrade to glibc 2.15, this toolchain
++	  no longer provides RPC functions. The TI-RPC library should
++	  be used instead, but isn't available in Buildroot yet.
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	bool "Sourcery CodeBench x86/x86_64 2011.09"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -667,6 +692,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
++	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && !BR2_BFIN_FDPIC
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 9351c35..0d4c022 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -238,6 +238,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2010.09-44-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203),y)
++TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/GNUToolchain/package10163/public/i686-pc-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
+ TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
+ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
 -- 
 1.7.9.5
