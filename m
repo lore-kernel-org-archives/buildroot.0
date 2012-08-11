@@ -1,9 +1,9 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 11 Aug 2012 16:10:18 -0400
-Subject: [Buildroot] [PATCH 08/17] libdnet: add license info
+Date: Sat, 11 Aug 2012 16:10:21 -0400
+Subject: [Buildroot] [PATCH 11/17] libpng: add license info
 In-Reply-To: <1344715827-9452-1-git-send-email-danomimanchego123@gmail.com>
 References: <1344715827-9452-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1344715827-9452-8-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1344715827-9452-11-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/libdnet/libdnet.mk |    2 ++
+ package/libpng/libpng.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libdnet/libdnet.mk b/package/libdnet/libdnet.mk
-index e622dd4..f6daffd 100644
---- a/package/libdnet/libdnet.mk
-+++ b/package/libdnet/libdnet.mk
-@@ -7,6 +7,8 @@
- LIBDNET_VERSION = 1.11
- LIBDNET_SOURCE = libdnet-$(LIBDNET_VERSION).tar.gz
- LIBDNET_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libdnet/
-+LIBDNET_LICENSE = BSD-3c
-+LIBDNET_LICENSE_FILES = LICENSE
- LIBDNET_INSTALL_STAGING = YES
- LIBDNET_AUTORECONF = YES
- LIBDNET_CONF_OPT = \
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 6edabc4..1c1a087 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -8,6 +8,8 @@ LIBPNG_VERSION = 1.4.12
+ LIBPNG_SERIES = 14
+ LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
++LIBPNG_LICENSE = libpng license
++LIBPNG_LICENSE_FILES = LICENSE
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkg-config zlib
+ 
 -- 
 1.7.9.5
