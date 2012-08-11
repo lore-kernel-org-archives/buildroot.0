@@ -1,60 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 22:33:31 +0200
-Subject: [Buildroot] [git commit branch/next] acpid: add init.d script
-Message-ID: <20120811203419.B2FF997075@busybox.osuosl.org>
+Date: Sat, 11 Aug 2012 22:33:40 +0200
+Subject: [Buildroot] [git commit branch/next] yasm: minor fixes that should
+	have been part the commit adding the package
+Message-ID: <20120811203419.C4D0A97075@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=956caf62480f2cb0adada6a5a9f1e5ca3dd2b262
+commit: http://git.buildroot.net/buildroot/commit/?id=54fe81fbb49d29a15945bdcf8e2c281bcb1969fd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jonathan Liu <net147@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/acpid/S02acpid |   22 ++++++++++++++++++++++
- package/acpid/acpid.mk |    1 +
- 2 files changed, 23 insertions(+), 0 deletions(-)
+ package/yasm/Config.in |    1 +
+ package/yasm/yasm.mk   |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/acpid/S02acpid b/package/acpid/S02acpid
-new file mode 100755
-index 0000000..ec686d8
---- /dev/null
-+++ b/package/acpid/S02acpid
-@@ -0,0 +1,22 @@
-+#!/bin/sh
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting acpid: "
-+		start-stop-daemon -S -q -m -b -p /var/run/acpid.pid --exec /usr/sbin/acpid -- -n
-+		echo "done"
-+		;;
-+	stop)
-+		echo -n "Stopping acpid: "
-+		start-stop-daemon -K -q -p /var/run/acpid.pid
-+		echo "done"
-+		;;
-+	restart)
-+		"$0" stop
-+		sleep 1
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		;;
-+esac
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index cacfb27..56f671d 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -18,6 +18,7 @@ define ACPID_INSTALL_TARGET_CMDS
- 	install -D -m 644 $(@D)/acpi_listen.8 $(TARGET_DIR)/usr/share/man/man8/acpi_listen.8
- 	mkdir -p $(TARGET_DIR)/etc/acpi/events
- 	/bin/echo -e "event=button[ /]power\naction=/sbin/poweroff" > $(TARGET_DIR)/etc/acpi/events/powerbtn
-+	$(INSTALL) -D -m 0755 package/acpid/S02acpid $(TARGET_DIR)/etc/init.d/S02acpid
+diff --git a/package/yasm/Config.in b/package/yasm/Config.in
+index bb1d417..2dc25aa 100644
+--- a/package/yasm/Config.in
++++ b/package/yasm/Config.in
+@@ -7,3 +7,4 @@ config BR2_PACKAGE_YASM
+ 	  and GAS assembler syntaxes and outputs binary, ELF32 and ELF64
+ 	  object formats.
+ 
++	  http://www.tortall.net/projects/yasm/
+diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
+index ac75d2b..fafd1ec 100644
+--- a/package/yasm/yasm.mk
++++ b/package/yasm/yasm.mk
+@@ -6,7 +6,6 @@
+ YASM_VERSION = 1.2.0
+ YASM_SOURCE = yasm-$(YASM_VERSION).tar.gz
+ YASM_SITE = http://www.tortall.net/projects/yasm/releases/
+-YASM_CONF_OPT = --disable-static
+ 
+ define YASM_PRE_CONFIGURE_FIXUP
+ # This sed prevents it compiling 2 programs (vsyasm and ytasm) 
+@@ -15,6 +14,7 @@ define YASM_PRE_CONFIGURE_FIXUP
  endef
  
- define ACPID_UNINSTALL_TARGET_CMDS
+ YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
++HOST_YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
