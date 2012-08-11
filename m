@@ -1,289 +1,357 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 19:40:36 +0200
-Subject: [Buildroot] [PATCH 04/20] toolchain-external: improve glibc support
-	to test availability of RPC
+Date: Sat, 11 Aug 2012 19:40:35 +0200
+Subject: [Buildroot] [PATCH 03/20] Rename BR2_INET_RPC to
+	BR2_TOOLCHAIN_HAS_NATIVE_RPC
 In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <80f89c34315be739c52935f1b0606dc5531e6eb3.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2f810a82e1710951760bb4bdf7e1ca96e40a4dee.1344706801.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Basically, the BR2_TOOLCHAIN_EXTERNAL_GLIBC option no longer
-unconditionally selects BR2_TOOLCHAIN_HAS_NATIVE_RPC since there are
-glibc toolchains that don't have RPC support. All the predefined
-toolchain profiles are updated to take into account this change: for
-the moment, all glibc toolchains that have pre-defined toolchains have
-RPC support, but further patches in the series add pre-defined glibc
-toolchains that don't have RPC support. In the case of custom glibc
-toolchains, a question is asked to the user so that he can say whether
-the external glibc toolchain has RPC support or not. The validity of
-this configuration option is checked by the new
-check_glibc_rpc_feature function in helpers.mk.
+The BR2_INET_RPC has for a long time been a not very descriptive
+configuration option name, and with the advent of non-RPC glibc
+toolchains and the apparition of libtirpc, we really need to rename it
+to something more sensible, BR2_TOOLCHAIN_HAS_NATIVE_RPC.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk                   |   27 ++++++++++++++++++-----
- toolchain/toolchain-external/Config.in |   37 ++++++++++++++++++++++++--------
- 2 files changed, 50 insertions(+), 14 deletions(-)
+ package/busybox/busybox.mk                 |    2 +-
+ package/lmbench/Config.in                  |    4 ++--
+ package/netkitbase/Config.in               |    4 ++--
+ package/netkittelnet/Config.in             |    4 ++--
+ package/nfs-utils/Config.in                |    4 ++--
+ package/portmap/Config.in                  |    4 ++--
+ package/quota/Config.in                    |    4 ++--
+ package/samba/samba.mk                     |    2 +-
+ package/xinetd/xinetd.mk                   |    2 +-
+ toolchain/helpers.mk                       |    4 ++--
+ toolchain/toolchain-buildroot/Config.in.2  |    2 +-
+ toolchain/toolchain-common.in              |    2 +-
+ toolchain/toolchain-crosstool-ng/Config.in |   10 +++++++---
+ toolchain/toolchain-external/Config.in     |   14 +++++++-------
+ toolchain/toolchain-external/ext-tool.mk   |    8 ++++----
+ 15 files changed, 37 insertions(+), 33 deletions(-)
 
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 17ee50a..7277301 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -79,7 +79,7 @@ endef
+ endif
+ 
+ # If RPC is enabled then enable nfs mounts
+-ifeq ($(BR2_INET_RPC),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+ define BUSYBOX_SET_RPC
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
+ endef
+diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
+index c8423d1..70449b6 100644
+--- a/package/lmbench/Config.in
++++ b/package/lmbench/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LMBENCH
+ 	bool "lmbench"
+ 	# Uses pmap_set, pmap__unset, pmap_getport, etc.
+-	depends on BR2_INET_RPC
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  LMbench is a suite of simple, portable,
+ 	  ANSI/C microbenchmarks for UNIX/POSIX.
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_LMBENCH
+ 	  http://sourceforge.net/projects/lmbench/
+ 
+ comment "lmbench requires a toolchain with RPC support"
+-	depends on !BR2_INET_RPC
++	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
+index 725e500..75bd728 100644
+--- a/package/netkitbase/Config.in
++++ b/package/netkitbase/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_NETKITBASE
+ 	bool "netkitbase"
+-	depends on BR2_INET_RPC
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Old-style inetd.
+ 
+ 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
+ 
+ comment "netkitbase requires a toolchain with RPC support"
+-        depends on !BR2_INET_RPC
++        depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/netkittelnet/Config.in b/package/netkittelnet/Config.in
+index 058d210..10eb022 100644
+--- a/package/netkittelnet/Config.in
++++ b/package/netkittelnet/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_NETKITTELNET
+ 	bool "netkittelnet"
+-	depends on BR2_INET_RPC
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_PACKAGE_NETKITBASE
+ 	help
+ 	  Standard Linux telnet client and server.
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_NETKITTELNET
+ 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
+ 
+ comment "netkittelnet requires a toolchain with RPC support"
+-	depends on !BR2_INET_RPC
++	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index 67d25a7..c87502f 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_NFS_UTILS
+ 	bool "nfs-utils"
+-	depends on BR2_INET_RPC
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_LARGEFILE
+ 	select BR2_PACKAGE_PORTMAP
+ 	help
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_NFS_UTILS
+ 	  http://sourceforge.net/projects/nfs
+ 
+ comment "nfs-utils requires a toolchain with RPC and LARGEFILE support"
+-	depends on !BR2_INET_RPC || !BR2_LARGEFILE
++	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_LARGEFILE
+ 
+ menu "NFS utilities selection"
+ 	depends on BR2_PACKAGE_NFS_UTILS
+diff --git a/package/portmap/Config.in b/package/portmap/Config.in
+index 5914357..f017cb6 100644
+--- a/package/portmap/Config.in
++++ b/package/portmap/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_PORTMAP
+ 	bool "portmap"
+-	depends on BR2_INET_RPC
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  The standard portmapper for RPC services.
+ 
+ 	  http://neil.brown.name/portmap/
+ 
+ comment "portmap requires a toolchain with RPC support"
+-	depends on !BR2_INET_RPC
++	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+index 6c2beff..788af1b 100644
+--- a/package/quota/Config.in
++++ b/package/quota/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_QUOTA
+ 	bool "quota"
+-	depends on BR2_INET_RPC
++	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_UTIL_LINUX
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_QUOTA
+ 	  http://sourceforge.net/projects/linuxquota/
+ 
+ comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
+-	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
++	depends on !(BR2_TOOLCHAIN_HAS_NATIVE_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 6b9a082..75f16f5 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -49,7 +49,7 @@ SAMBA_CONF_OPT = \
+ 	\
+ 	--without-cluster-support \
+ 	--without-dnsupdate \
+-	$(if $(BR2_INET_RPC),--with-sys-quotas,--without-sys-quotas) \
++	$(if $(BR2_TOOLCHAIN_HAS_NATIVE_RPC),--with-sys-quotas,--without-sys-quotas) \
+ 	--without-ads \
+ 	--without-ldap \
+ 	--with-included-iniparser \
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index 4fc2de9..a420425 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -9,7 +9,7 @@ XINETD_SITE          = http://www.xinetd.org
+ XINETD_LICENSE       = xinetd license
+ XINETD_LICENSE_FILES = COPYRIGHT
+ 
+-ifneq ($(BR2_INET_RPC),y)
++ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+ XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
+ endif
+ 
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 462cd87..7036552 100644
+index 49a9044..462cd87 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -172,9 +172,10 @@ create_lib64_symlinks = \
- 	(cd $(STAGING_DIR)/usr ; ln -s lib lib64)
- 
- #
--# Check the availability of a particular glibc feature. We assume that
--# all Buildroot toolchain options are supported by glibc, so we just
--# check that they are enabled.
-+# Check the availability of a particular glibc feature. This function
-+# is used to check toolchain options that are always supported by
-+# glibc, so we simply check that the corresponding option is properly
-+# enabled.
- #
- # $1: Buildroot option name
- # $2: feature description
-@@ -186,6 +187,22 @@ check_glibc_feature = \
- 	fi
- 
- #
-+# Check the availability of RPC support in a glibc toolchain
-+#
-+# $1: sysroot directory
-+#
-+check_glibc_rpc_feature = \
-+	IS_IN_LIBC=`test -f $(1)/usr/include/rpc/rpc.h && echo y` ; \
-+	if [ x$(BR2_TOOLCHAIN_EXTERNAL_INET_RPC) != x"y" -a x$${IS_IN_LIBC} = x"y" ] ; then \
-+		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
-+		exit 1 ; \
-+	fi ; \
-+	if [ x$(BR2_TOOLCHAIN_EXTERNAL_INET_RPC) = x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
-+		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
-+		exit 1 ; \
-+	fi
-+
-+#
- # Check the correctness of a glibc external toolchain configuration.
- #  1. Check that the C library selected in Buildroot matches the one
- #     of the external toolchain
-@@ -202,10 +219,10 @@ check_glibc = \
+@@ -202,7 +202,7 @@ check_glibc = \
  	fi; \
  	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
  	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
--	$(call check_glibc_feature,BR2_TOOLCHAIN_HAS_NATIVE_RPC,RPC support) ;\
+-	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
++	$(call check_glibc_feature,BR2_TOOLCHAIN_HAS_NATIVE_RPC,RPC support) ;\
  	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
  	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
--	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
-+	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
-+	$(call check_glibc_rpc_feature,$${SYSROOT_DIR})
+ 	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
+@@ -248,7 +248,7 @@ check_uclibc = \
+ 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
+-	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
++	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
+ 	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS__,BR2_TOOLCHAIN_HAS_THREADS,$${UCLIBC_CONFIG_FILE},Thread support) ;\
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 7580946..956ec2f 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -20,7 +20,7 @@ config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
  
- #
- # Check the conformity of Buildroot configuration with regard to the
+ config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
+ 	bool "Enable RPC support"
+-	select BR2_INET_RPC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Enable this option if you want your toolchain to support
+ 	  RPC (needed for NFS, for example).
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 6e0d159..9f11a39 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -11,7 +11,7 @@ config BR2_LARGEFILE
+ config BR2_INET_IPV6
+ 	bool
+ 
+-config BR2_INET_RPC
++config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	bool
+ 
+ config BR2_USE_WCHAR
+diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+index 35ea2b1..9cd5ca5 100644
+--- a/toolchain/toolchain-crosstool-ng/Config.in
++++ b/toolchain/toolchain-crosstool-ng/Config.in
+@@ -14,7 +14,9 @@ config BR2_TOOLCHAIN_CTNG_eglibc
+ 	bool "eglibc"
+ 	select BR2_LARGEFILE
+ 	select BR2_INET_IPV6
+-	select BR2_INET_RPC
++	# Our default ct-ng configuration uses eglibc 2.12, which has
++	# native RPC support
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_USE_WCHAR
+ 
+@@ -22,7 +24,9 @@ config BR2_TOOLCHAIN_CTNG_glibc
+ 	bool "glibc"
+ 	select BR2_LARGEFILE
+ 	select BR2_INET_IPV6
+-	select BR2_INET_RPC
++	# Our default ct-ng configuration uses glibc 2.9, which has
++	# native RPC support
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_USE_WCHAR
+ 
+@@ -66,7 +70,7 @@ config BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6
+ 
+ config BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC
+ 	bool "Enable RPC support"
+-	select BR2_INET_RPC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Enable this option if you want your toolchain to support
+ 	  RPC (needed for NFS, for example).
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 5410c9a..8ea0dcb 100644
+index f86ed74..5410c9a 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_06
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+@@ -423,7 +423,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	depends on BR2_sh2a
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_LARGEFILE
+-	select BR2_INET_RPC
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+@@ -440,7 +440,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	depends on BR2_sh2a
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_LARGEFILE
+-	select BR2_INET_RPC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+@@ -501,7 +501,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
  	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -24,6 +25,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_05
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_LARGEFILE
+ 	select BR2_INET_IPV6
+-	select BR2_INET_RPC
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+@@ -516,7 +516,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
  	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -40,6 +42,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_04
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_LARGEFILE
+ 	select BR2_INET_IPV6
+-	select BR2_INET_RPC
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+@@ -531,7 +531,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
  	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -54,6 +57,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_03
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_LARGEFILE
+ 	select BR2_INET_IPV6
+-	select BR2_INET_RPC
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -68,6 +72,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -81,6 +86,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	bool "Sourcery CodeBench ARM 2011.09"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -102,6 +108,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	bool "Sourcery CodeBench ARM 2011.03"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -123,6 +130,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
- 	bool "Sourcery CodeBench ARM 2010.09"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -144,6 +152,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	bool "Sourcery CodeBench ARM 2010q1"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -165,6 +174,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- 	bool "Sourcery CodeBench MIPS 2011.09"
- 	depends on BR2_mips || BR2_mipsel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
-@@ -232,6 +242,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	bool "Sourcery CodeBench MIPS 2011.03"
- 	depends on BR2_mips || BR2_mipsel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
-@@ -281,6 +292,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
- 	bool "Sourcery CodeBench MIPS 4.4"
- 	depends on BR2_mips || BR2_mipsel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
-@@ -330,6 +342,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
-@@ -357,6 +370,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	bool "Sourcery CodeBench PowerPC 2010.09"
- 	depends on BR2_powerpc
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
-@@ -384,6 +398,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	bool "Sourcery CodeBench SH 2011.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
-@@ -403,6 +418,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
- 	bool "Sourcery CodeBench SH 2010.09"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
-@@ -456,6 +472,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	bool "Sourcery CodeBench x86/x86_64 2011.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
-@@ -477,6 +494,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	bool "Sourcery CodeBench x86/x86_64 2010.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
-@@ -543,6 +561,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	bool "Xilinx Little Endian Microblaze GNU Tools"
- 	depends on BR2_microblazeel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
-@@ -551,6 +570,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	bool "Xilinx Big Endian Microblaze GNU Tools"
- 	depends on BR2_microblazebe
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
-@@ -640,7 +660,6 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+@@ -640,7 +640,7 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	bool
  	select BR2_LARGEFILE
  	select BR2_INET_IPV6
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_INET_RPC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_USE_WCHAR
  	select BR2_ENABLE_LOCALE
  	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -687,14 +706,6 @@ config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
- 	  IPv6. If you don't know, leave the default value, Buildroot
- 	  will tell you if it's correct or not.
+@@ -689,7 +689,7 @@ config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
  
--config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
--	bool "Toolchain has RPC support?"
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	help
--	  Select this option if your external toolchain supports
--	  RPC. If you don't know, leave the default value, Buildroot
--	  will tell you if it's correct or not.
--
- config BR2_TOOLCHAIN_EXTERNAL_WCHAR
- 	bool "Toolchain has WCHAR support?"
- 	select BR2_USE_WCHAR
-@@ -733,6 +744,14 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
- 
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
-+config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
-+	bool "Toolchain has RPC support?"
+ config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
+ 	bool "Toolchain has RPC support?"
+-	select BR2_INET_RPC
 +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	help
-+	  Select this option if your external toolchain supports
-+	  RPC. If you don't know, leave the default value, Buildroot
-+	  will tell you if it's correct or not.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CXX
- 	bool "Toolchain has C++ support?"
- 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Select this option if your external toolchain supports
+ 	  RPC. If you don't know, leave the default value, Buildroot
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 53b898f..6e33342 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -24,10 +24,10 @@
+ #  the Buildroot configuration system knows whether the toolchain
+ #  supports RPC, IPv6, locales, large files, etc. Unfortunately, these
+ #  things cannot be detected automatically, since the value of these
+-#  options (such as BR2_INET_RPC) are needed at configuration time
+-#  because these options are used as dependencies for other
+-#  options. And at configuration time, we are not able to retrieve the
+-#  external toolchain configuration.
++#  options (such as BR2_TOOLCHAIN_HAS_NATIVE_RPC) are needed at
++#  configuration time because these options are used as dependencies
++#  for other options. And at configuration time, we are not able to
++#  retrieve the external toolchain configuration.
+ #
+ #  3. Copy the libraries needed at runtime to the target directory,
+ #  $(TARGET_DIR). Obviously, things such as the C library, the dynamic
 -- 
 1.7.9.5
