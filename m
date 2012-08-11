@@ -1,90 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 22:29:44 +0200
-Subject: [Buildroot] [PATCH] yasm: New package
-In-Reply-To: <1344627011-1862-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1344627011-1862-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20120811222944.0b6b6ff8@skate>
+Date: Sat, 11 Aug 2012 22:31:03 +0200
+Subject: [Buildroot] [PATCH] opkg: bump version to svn r635
+In-Reply-To: <1344666707-27833-1-git-send-email-net147@gmail.com>
+References: <1344666707-27833-1-git-send-email-net147@gmail.com>
+Message-ID: <20120811223103.3207ccf9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 10 Aug 2012 22:30:11 +0300,
-Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
+Le Sat, 11 Aug 2012 16:31:47 +1000,
+Jonathan Liu <net147@gmail.com> a ?crit :
 
-> Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
+> -OPKG_VERSION = 0.1.8
+> +OPKG_VERSION = 635
+>  OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+> -OPKG_SITE = http://opkg.googlecode.com/files
+> +OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
+> +OPKG_SITE_METHOD = svn
+>  OPKG_INSTALL_STAGING = YES
+>  OPKG_CONF_OPT = --disable-curl --disable-gpg
+>  
+> +define OPKG_AUTOGEN
+> +	cd $(@D) ; \
+> +	./autogen.sh
+> +endef
+> +
+> +OPKG_PRE_CONFIGURE_HOOKS += OPKG_AUTOGEN
 
-Thanks, applied to next with a few minor fixes.
+This means that the package now depends on host-autoconf, host-automake
+and probably host-libtool.
 
-Luca, I'm Cc'ing you on this regarding the license informations. The
-license of Yasm seems to be, hum, complicated. Below the contents of
-the COPYING file of the project. How should we encode that into
-YASM_LICENSE ? :-)
-
-----------------------------------------------------------------------
-Yasm is Copyright (c) 2001-2010 Peter Johnson and other Yasm developers.
-
-Yasm developers and/or contributors include:
-  Peter Johnson
-  Michael Urman
-  Brian Gladman (Visual Studio build files, other fixes)
-  Stanislav Karchebny (options parser)
-  Mathieu Monnier (SSE4 instruction patches, NASM preprocessor additions)
-  Anonymous "NASM64" developer (NASM preprocessor fixes)
-  Stephen Polkowski (x86 instruction patches)
-  Henryk Richter (Mach-O object format)
-  Ben Skeggs (patches, bug reports)
-  Alexei Svitkine (GAS preprocessor)
-  Samuel Thibault (TASM parser and frontend)
-
------------------------------------
-Yasm licensing overview and summary
------------------------------------
-
-Note: This document does not provide legal advice nor is it the actual
-license of any part of Yasm.  See the individual licenses for complete
-details.  Consult a lawyer for legal advice.
-
-The primary license of Yasm is the 2-clause BSD license.  Please use this
-license if you plan on submitting code to the project.
-
-Yasm has absolutely no warranty; not even for merchantibility or fitness
-for a particular purpose.
-
--------
-Libyasm
--------
-Libyasm is 2-clause or 3-clause BSD licensed, with the exception of
-bitvect, which is triple-licensed under the Artistic license, GPL, and
-LGPL.  Libyasm is thus GPL and LGPL compatible.  In addition, this also
-means that libyasm is free for binary-only distribution as long as the
-terms of the 3-clause BSD license and Artistic license (as it applies to
-bitvect) are fulfilled.
-
--------
-Modules
--------
-The modules are 2-clause or 3-clause BSD licensed.
-
----------
-Frontends
----------
-The frontends are 2-clause BSD licensed.
-
--------------
-License Texts
--------------
-The full text of all licenses are provided in separate files in the source
-distribution.  Each source file may include the entire license (in the case
-of the BSD and Artistic licenses), or may reference the GPL or LGPL license
-file.
-
-BSD.txt - 2-clause and 3-clause BSD licenses
-Artistic.txt - Artistic license
-GNU_GPL-2.0 - GNU General Public License
-GNU_LGPL-2.0 - GNU Library General Public License
-----------------------------------------------------------------------
+Can you try if setting OPKG_AUTORECONF = YES is sufficient instead of
+this custom hook? If not, then of course, keep this hook and add the
+necessary dependency on host tools.
 
 Thanks!
 
