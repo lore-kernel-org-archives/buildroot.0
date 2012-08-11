@@ -1,45 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 20:21:14 +0200
-Subject: [Buildroot] Open question: remove "toolchain on target" option
-Message-ID: <20120811202114.3a95d4ab@skate>
+Date: Sat, 11 Aug 2012 20:22:23 +0200
+Subject: [Buildroot] [git commit] libtpl: add license information
+Message-ID: <20120811182241.CC6AA90B7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=f0e1710c916a081d6e02daf804a585d2a9a0fd39
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Today, I'd like to open the debate of the "toolchain on target"
-configuration option. This option normally allows to install
-binutils/gcc, and together with "install development files on target",
-should allow to have a complete development environment on the target.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libtpl/libtpl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-However, I see a number of problems with this:
-
- (1) A large number of first time users try to use this, and fall into
-     problems, because this feature is mostly unmaintained. This gives
-     a poor image of Buildroot's quality.
-
- (2) A large number of first time users try to use this, because they
-     misunderstand what Buildroot is (a cross-compilation environment)
-     and they try to use it for something that nobody amongst the core
-     Buildroot developers is doing, and therefore is poorly supported.
-
- (3) None of the core Buildroot developers seem to care about this,
-     no-one is apparently using/fixing this mechanism.
-
-So, rather than having a bad and dysfunctional mechanism to have a
-toolchain on the target, I would suggest that we simply get rid of it.
-Of course, I am not going to take the decision alone, Peter will have
-to do it, but I wanted to start the discussion around this topic and
-gather opinions from people in the community.
-
-Thoughts?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
+index 45089b5..7af0b06 100644
+--- a/package/libtpl/libtpl.mk
++++ b/package/libtpl/libtpl.mk
+@@ -7,5 +7,7 @@ LIBTPL_VERSION = 1.5
+ LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
+ LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
+ LIBTPL_INSTALL_STAGING = YES
++LIBTPL_LICENSE = BSD-like
++LIBTPL_LICENSE_FILES = LICENSE
+ 
+ $(eval $(autotools-package))
