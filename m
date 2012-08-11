@@ -1,78 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 19:40:52 +0200
-Subject: [Buildroot] [PATCH 20/20] external-toolchain: add Sourcery
-	CodeBench ARM 2012.03
+Date: Sat, 11 Aug 2012 19:40:42 +0200
+Subject: [Buildroot] [PATCH 10/20] netkittelnet: mark as deprecated
 In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d7731ad73ed06ae83273de4ba302bdaa5d791943.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <11a03ef6cb57bb5f2d4c59e92674f0e89b3cbda3.1344706801.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
+It is no longer being developed, the FTP is dead, and Debian has
+removed it from the distribution.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   22 ++++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 25 insertions(+)
+ package/netkittelnet/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 83be75a..ede1a3b 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -82,6 +82,27 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
- 	  Thumb 2, with the softfp calling convention, and uses the
- 	  VFPv3-D16 FPU instructions.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
-+	bool "Sourcery CodeBench ARM 2012.03"
-+	depends on BR2_arm
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Sourcery CodeBench toolchain for the ARM architecture, from
-+	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
-+	  2.15 and gdb 7.2.50, kernel headers 3.2.10. It has support
-+	  for the following variants:
-+	    - ARMv5TE, little endian, soft-float, glibc
-+	      Select ARM926T, ARM10T, XScale or another ARMv5 core
-+	      Select BR2_SOFT_FLOAT
-+	    - ARMv4T, little endian, soft-float, glibc
-+	      Select ARM720T, ARM920T, ARM922T or another ARMv4 core
-+	      Select BR2_SOFT_FLOAT
-+	    - ARMv7-A, Thumb 2, little endian, soft-float, glibc
-+	      Select Cortex-A8, Cortex-A9 or another ARMv7-A core
-+	      Select BR2_SOFT_FLOAT
-+	      Set BR2_TARGET_OPTIMIZATION to -mthumb
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	bool "Sourcery CodeBench ARM 2011.09"
- 	depends on BR2_arm
-@@ -678,6 +699,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 0d4c022..f8a730e 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -187,6 +187,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gn
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02),y)
- TOOLCHAIN_EXTERNAL_SITE=http://launchpad.net/linaro-toolchain-binaries/trunk/2012.02/+download/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.02-20120222_linux.tar.bz2
+diff --git a/package/netkittelnet/Config.in b/package/netkittelnet/Config.in
+index 10eb022..1f11d88 100644
+--- a/package/netkittelnet/Config.in
++++ b/package/netkittelnet/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NETKITTELNET
+ 	bool "netkittelnet"
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on BR2_DEPRECATED
+ 	select BR2_PACKAGE_NETKITBASE
+ 	help
+ 	  Standard Linux telnet client and server.
 -- 
 1.7.9.5
