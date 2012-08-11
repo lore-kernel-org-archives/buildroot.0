@@ -1,7 +1,7 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 11 Aug 2012 16:13:12 -0400
-Subject: [Buildroot] [PATCH 15/17] psmisc: add license info
-Message-ID: <1344715992-9883-1-git-send-email-danomimanchego123@gmail.com>
+Date: Sat, 11 Aug 2012 16:13:24 -0400
+Subject: [Buildroot] [PATCH 16/17] socat: add license info
+Message-ID: <1344716004-9960-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/psmisc/psmisc.mk |    2 ++
+ package/socat/socat.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index a70f071..cd381e5 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
-@@ -6,6 +6,8 @@
- 
- PSMISC_VERSION = 22.16
- PSMISC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/psmisc/psmisc
-+PSMISC_LICENSE = GPLv2
-+PSMISC_LICENSE_FILES = COPYING
- PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
- 
- ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 9a5234d..f10a836 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -7,6 +7,8 @@
+ SOCAT_VERSION = 2.0.0-b5
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download/
++SOCAT_LICENSE = GPLv2
++SOCAT_LICENSE_FILES = COPYING
+ SOCAT_CONF_ENV = sc_cv_termios_ispeed=no \
+ 		 sc_cv_sys_crdly_shift=9 \
+ 		 sc_cv_sys_tabdly_shift=11 \
 -- 
 1.7.9.5
