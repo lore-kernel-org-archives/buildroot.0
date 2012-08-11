@@ -1,49 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 22:33:40 +0200
-Subject: [Buildroot] [git commit branch/next] yasm: minor fixes that should
-	have been part the commit adding the package
-Message-ID: <20120811203419.C4D0A97075@busybox.osuosl.org>
+Date: Sat, 11 Aug 2012 22:34:31 +0200
+Subject: [Buildroot] [PATCH v2] acpid: add init.d script
+In-Reply-To: <1344669512-29193-1-git-send-email-net147@gmail.com>
+References: <1344669512-29193-1-git-send-email-net147@gmail.com>
+Message-ID: <20120811223431.46d09ec7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54fe81fbb49d29a15945bdcf8e2c281bcb1969fd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Le Sat, 11 Aug 2012 17:18:32 +1000,
+Jonathan Liu <net147@gmail.com> a ?crit :
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/yasm/Config.in |    1 +
- package/yasm/yasm.mk   |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+> Signed-off-by: Jonathan Liu <net147@gmail.com>
 
-diff --git a/package/yasm/Config.in b/package/yasm/Config.in
-index bb1d417..2dc25aa 100644
---- a/package/yasm/Config.in
-+++ b/package/yasm/Config.in
-@@ -7,3 +7,4 @@ config BR2_PACKAGE_YASM
- 	  and GAS assembler syntaxes and outputs binary, ELF32 and ELF64
- 	  object formats.
- 
-+	  http://www.tortall.net/projects/yasm/
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index ac75d2b..fafd1ec 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
-@@ -6,7 +6,6 @@
- YASM_VERSION = 1.2.0
- YASM_SOURCE = yasm-$(YASM_VERSION).tar.gz
- YASM_SITE = http://www.tortall.net/projects/yasm/releases/
--YASM_CONF_OPT = --disable-static
- 
- define YASM_PRE_CONFIGURE_FIXUP
- # This sed prevents it compiling 2 programs (vsyasm and ytasm) 
-@@ -15,6 +14,7 @@ define YASM_PRE_CONFIGURE_FIXUP
- endef
- 
- YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
-+HOST_YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Applied to next, thanks. I have only changed 'install' to '$(INSTALL)'
+as we do in all other packages.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
