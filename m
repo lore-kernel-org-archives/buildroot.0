@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 20:13:35 +0200
-Subject: [Buildroot] [PATCH 5/5] buildroot: initramfs: Generate vmImage
- without builtin initramfs rootfs.
-In-Reply-To: <1344330577-25159-5-git-send-email-sonic.adi@gmail.com>
-References: <1344330577-25159-1-git-send-email-sonic.adi@gmail.com>
- <1344330577-25159-5-git-send-email-sonic.adi@gmail.com>
-Message-ID: <20120811201335.09a3082e@skate>
+Date: Sat, 11 Aug 2012 20:16:43 +0200
+Subject: [Buildroot] building native gcc for target
+In-Reply-To: <CAKWKLJAcKAyfoGX_fx-sFGAAEu88t0hvke_cAm432VYL3DsrWw@mail.gmail.com>
+References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+ <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
+ <5021CE95.9000808@sri.com>
+ <CAKWKLJAcKAyfoGX_fx-sFGAAEu88t0hvke_cAm432VYL3DsrWw@mail.gmail.com>
+Message-ID: <20120811201643.7413a602@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 7 Aug 2012 17:09:37 +0800,
-Sonic Zhang <sonic.adi@gmail.com> a ?crit :
+Le Wed, 8 Aug 2012 13:16:26 -0700,
+Kevin Broch <kevbroch@gmail.com> a ?crit :
 
-> From: Sonic Zhang <sonic.zhang@analog.com>
+> Thanks for the suggestion.  I unfortunately do not see this "select GCC"
+> option that you suggest.
+> I am using git://git.buildroot.net/buildroot @HEAD
 > 
-> This is for developer's convenience when debugging via initramfs uImage.
-> 
-> Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+> - I have selected "Buildroot toolchain" from the Toolchain menu.
+> - Under "Package selection for the target" -> "Development Tools", I see a
+> comment
+> "gcc needs development files in target filesystem"
+> but no way to select GCC.
+> As far as I can see the only selecting of GCC goes to which version for the
+> cross compiled version.
 
-What is the problem being solved here? Could you expand a bit on the
-"why" this is needed? When you make changes to the root filesystem and
-do "make", the initramfs is regenerated, and the kernel image is
-regenerated as well with the current Buildroot, so I'm not sure what
-this patch is solving.
+Build options -> development files in target filesystem
+Packages -> Development tools -> gcc
 
-> +	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
-> +		cp $(LINUX_IMAGE_PATH) $(KERNEL_ARCH_PATH)/boot/vmImage)
+Note that this is only available if you use "Buildroot toolchain" as
+the toolchain type. We don't support generating gcc for the target with
+the external toolchain and Crosstool-NG toolchain backends.
 
-I'm confused. What is this vmImage thing that you are copying back into
-the kernel tree here...
-
->  define LINUX_INSTALL_IMAGES_CMDS
->  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-> +	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
-> +		cp $(KERNEL_ARCH_PATH)/boot/vmImage $(BINARIES_DIR))
-
-and installing to output/images here?
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
