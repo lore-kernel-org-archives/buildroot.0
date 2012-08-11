@@ -1,7 +1,7 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 11 Aug 2012 16:12:52 -0400
-Subject: [Buildroot] [PATCH 13/17] mtd: add license info
-Message-ID: <1344715972-9800-1-git-send-email-danomimanchego123@gmail.com>
+Date: Sat, 11 Aug 2012 16:13:02 -0400
+Subject: [Buildroot] [PATCH 14/17] openssl: add license info
+Message-ID: <1344715982-9842-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,22 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/mtd/mtd.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/openssl/openssl.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 9b60ac8..7e3a9b8 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -6,6 +6,9 @@
- MTD_VERSION = 1.5.0
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
-+MTD_LICENSE = GPLv2
-+MTD_LICENSE_FILES = COPYING
-+
- ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
- MTD_DEPENDENCIES = zlib lzo
- endif
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index f9816af..4ae65b1 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -6,6 +6,8 @@
+ 
+ OPENSSL_VERSION = 1.0.0j
+ OPENSSL_SITE = http://www.openssl.org/source
++OPENSSL_LICENSE = OpenSSL or SSLeay
++OPENSSL_LICENSE_FILES = LICENSE
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
+ OPENSSL_TARGET_ARCH = generic32
 -- 
 1.7.9.5
