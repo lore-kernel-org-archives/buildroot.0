@@ -1,33 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 11 Aug 2012 23:01:00 +0200
-Subject: [Buildroot] [PATCH 2/2] supervisor: new package
-In-Reply-To: <1344669126-28921-3-git-send-email-net147@gmail.com>
+Date: Sat, 11 Aug 2012 23:00:25 +0200
+Subject: [Buildroot] [PATCH 1/2] python-meld3: new package
+In-Reply-To: <1344669126-28921-2-git-send-email-net147@gmail.com>
 References: <1344669126-28921-1-git-send-email-net147@gmail.com>
- <1344669126-28921-3-git-send-email-net147@gmail.com>
-Message-ID: <20120811230100.30809b54@skate>
+ <1344669126-28921-2-git-send-email-net147@gmail.com>
+Message-ID: <20120811230025.70cd10e7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 11 Aug 2012 17:12:06 +1000,
+Le Sat, 11 Aug 2012 17:12:05 +1000,
 Jonathan Liu <net147@gmail.com> a ?crit :
 
-> +config BR2_PACKAGE_SUPERVISOR
-> +    bool "supervisor"
-> +    select BR2_PACKAGE_PYTHON_SETUPTOOLS
-> +    select BR2_PACKAGE_PYTHON_MELD3
+> +config BR2_PACKAGE_PYTHON_MELD3
+> +    bool "python-meld3"
+> +    depends on BR2_PACKAGE_PYTHON
 > +    help
-> +      A client/server system that allows its users to control a number
-> +      of processes on UNIX-like operating systems.
+> +      A HTML/XML templating system.
 > +
-> +      http://supervisord.org/
+> +      https://github.com/supervisor/meld3
 
-Indentation was wrong, and dependency on the python interpreter was
-missing.
+Indentation was incorrect here, and the 'select' on PYEXPAT was missing.
 
-I've fixed this and committed to next.
+> +PYTHON_MELD3_VERSION = 0.6.8
+> +PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
+> +PYTHON_MELD3_SITE = http://pypi.python.org/packages/source/m/meld3/
+> +PYTHON_MELD3_DEPENDENCIES = python
+
+Would be good to add license informations now for all new packages.
+
+I've fixed those and committed to next.
 
 Thanks!
 
