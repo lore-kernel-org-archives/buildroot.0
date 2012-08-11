@@ -1,25 +1,25 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Sat, 11 Aug 2012 20:44:35 +0200
+From: Michael S. Zick <minimod@morethan.org>
+Date: Sat, 11 Aug 2012 14:46:53 -0500
 Subject: [Buildroot] Open question: remove "toolchain on target" option
 In-Reply-To: <20120811202114.3a95d4ab@skate>
 References: <20120811202114.3a95d4ab@skate>
-Message-ID: <20120811184435.GA674@mail.sceen.net>
+Message-ID: <201208111446.58278.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Aug 11, 2012 at 08:21:14PM +0200, Thomas Petazzoni wrote:
-> So, rather than having a bad and dysfunctional mechanism to have a
-> toolchain on the target, I would suggest that we simply get rid of it.
-> Of course, I am not going to take the decision alone, Peter will have
-> to do it, but I wanted to start the discussion around this topic and
-> gather opinions from people in the community.
+On Sat August 11 2012, Thomas Petazzoni wrote:
+> ?(3) None of the core Buildroot developers seem to care about this,
+> ? ? ?no-one is apparently using/fixing this mechanism.
+> 
 
-As a regular buildroot user (only), I think it's a wise choice, for all
-the reasons you mentioned which seem quite obvious, and which are
-probably why I personally never tried that.
+The only reason I can see in the argument against continuing support.
 
--- 
-Richard Braun
+A target native toolchain is one of the most often required set of
+applications in the after-market embedded world.
+
+But since the active developers don't work in that world . . .
+
+Mike
