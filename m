@@ -1,8 +1,8 @@
 From: Jonathan Liu <net147@gmail.com>
-Date: Sat, 11 Aug 2012 15:43:15 +1000
+Date: Sat, 11 Aug 2012 16:10:27 +1000
 Subject: [Buildroot] [PATCH] python: fix interpreter directive for python
 	scripts
-Message-ID: <1344663795-26449-1-git-send-email-net147@gmail.com>
+Message-ID: <1344665427-27181-2-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
