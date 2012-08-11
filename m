@@ -1,34 +1,36 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Fri, 10 Aug 2012 22:52:12 -0400
-Subject: [Buildroot] [PATCH] Add package linux-pam
-In-Reply-To: <20120810220424.7aba837f@skate>
-References: <1344569575-25960-1-git-send-email-golubovsky@gmail.com>
- <20120810094139.12fbf1f2@skate>
- <CADiAo4+Ak_6ZLY0ND=ZYWz6wTsov4XnkpXvbK8ZSF-ukU7ALGw@mail.gmail.com>
- <20120810220424.7aba837f@skate>
-Message-ID: <CADiAo4JAFBkemNO6AM8Kpx_8LObeyimFA6GZXXdPUCaYGQAqMg@mail.gmail.com>
+From: Jonathan Liu <net147@gmail.com>
+Date: Sat, 11 Aug 2012 15:43:15 +1000
+Subject: [Buildroot] [PATCH] python: fix interpreter directive for python
+	scripts
+Message-ID: <1344663795-26449-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ package/python/python.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Fri, Aug 10, 2012 at 4:04 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-
-> Try this instead:
->
-> ifeq ($(BR2_PACKAGE_LIBINTL),y)
-> LINUX_PAM_MAKE_OPT += LIBS=-lintl
-> endif
-
-Thanks, this works.
-
-Patch resubmitted.
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index fae4e5c..783b7b8 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -165,6 +165,13 @@ endef
+ 
+ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
+ 
++# Fix Python interpreter directive
++define PYTHON_FIX_INTERPRETER
++        sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{easy_install,easy_install-2.7,idle,smtpd.py}
++endef
++
++PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_FIX_INTERPRETER
++
+ PYTHON_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+1.7.11.3
