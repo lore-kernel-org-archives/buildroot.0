@@ -1,66 +1,67 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Sat, 11 Aug 2012 14:29:24 +0300
-Subject: [Buildroot] [PATCH] libpng: bump version and add apng support
- (required by firefox)
-In-Reply-To: <20120811085055.1bc901c8@skate>
-References: <50240DDE.4000901@petroprogram.com>
- <20120810090232.7ca6f885@skate> <5024D8B5.2020605@petroprogram.com>
- <20120810220052.6a596ce3@skate> <502597B9.9010705@petroprogram.com>
- <20120811085055.1bc901c8@skate>
-Message-ID: <50264214.8020208@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 11 Aug 2012 19:40:33 +0200
+Subject: [Buildroot] [PATCH 01/20] uClibc: use the Buildroot toolchain
+	options instead of the hidden common options
+In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c7cce91689b4f349473e17573ce98ce311777aa9.1344706801.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-11.8.2012 9:50, Thomas Petazzoni kirjoitti:
-> So the biggest files are firefox.mk, which I have commented extensively
-> so that nobody has to go for this trouble again, and mozconfig file.
-> How complicated do you feel the Firefox version bumps will be,
-> considering the work you had to do for a specific version?
+Since we are some day going to finally rename the badly named common
+toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
+etc.) into something more logical, let's start using the Buildroot
+toolchain options in the uClibc code.
 
-I think the bumps will be trivial.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/uClibc/uclibc.mk |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-The firefox.mk is more or less in stable state now and
-simply changing FIREFOX_VERSION should be enough.
-
-Ofcourse adding more optional configure options like DBus support,
-libnotify etc.,
-can be added later but right now it will build a very minimal binary and
-im satisfied with that.
-
-The mozconfig file which is Mozilla way of feeding all the configure
-switches to build process
-is pretty much stable and static now and will unlikely change for very
-long time.
-
-And the only changes I had to make to actual code was to replace finite()
-with more standard isinf() and handle glibc specific malloc_usable_size and
-execinfo.h stuff.
-
-When I started the version number was 11.0 and now they have released
-14.0 so those things might be
-even fixed by now. :-)
-
-If not, then I will try to contact upstream for including those minor
-fixes and if failing that Im
-more than willing to keep those lil patches updated.
-
-Stefan
-
->> I also have added optional feature that when enabled will try to make
->> Firefox as privacy enhanced as possible
->> (using NoScript  and AdblockPlus extension plus my own about:config
->> settings)
->>
->> If the yasm package patch and that little cairo option addition patch
->> are both okay for you I will then send one final patch (few little
->> changes needed to sqlite.mk)
->> and then im ready to send the actual firefox.
-> I will try to catch up a bit on my Buildroot backlog today, hoping that
-> the 3G connection will be more cooperative than the other days.
->
-> Best regards,
->
-> Thomas
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 9d0b6db..788c1d3 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -245,19 +245,19 @@ ifneq ($(UCLIBC_TARGET_ENDIAN),)
+ 		-e 's/.*\(ARCH_WANTS_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
+ 		$(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_LARGEFILE),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
+ 	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
+ 	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=n,g' $(UCLIBC_DIR)/.oldconfig
+ 	$(SED) '/.*UCLIBC_HAS_FOPEN_LARGEFILE_MODE.*/d' $(UCLIBC_DIR)/.oldconfig
+ 	echo "# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set" >> $(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_INET_IPV6),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=n,g' $(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_INET_RPC),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_RPC),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=y,g' \
+ 		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=y,g' \
+ 		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=y,g' \
+@@ -317,12 +317,12 @@ ifeq ($(BR2_PTHREAD_DEBUG),y)
+ else
+ 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_ENABLE_LOCALE),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LOCALE),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\n# UCLIBC_BUILD_ALL_LOCALE is not set\nUCLIBC_BUILD_MINIMAL_LOCALE=y\nUCLIBC_BUILD_MINIMAL_LOCALES="$(UCLIBC_LOCALES)"\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
+ endif
+-ifeq ($(BR2_USE_WCHAR),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+ 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
+ else
+ 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g' $(UCLIBC_DIR)/.oldconfig
+-- 
+1.7.9.5
