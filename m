@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Aug 2012 17:05:55 +0200
-Subject: [Buildroot] [PATCH 02/20] toolchain-crosstool-ng: use the
-	Crosstool-ng config options instead of the common hidden ones
-In-Reply-To: <d670b74d596c2d7c4cfbb611b0837950945c488e.1344706801.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Aug 2012 17:18:22 +0200
+Subject: [Buildroot] [PATCH 04/20] toolchain-external: improve glibc
+	support to test availability of RPC
+In-Reply-To: <80f89c34315be739c52935f1b0606dc5531e6eb3.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <d670b74d596c2d7c4cfbb611b0837950945c488e.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201208121705.55967.yann.morin.1998@free.fr>
+ <80f89c34315be739c52935f1b0606dc5531e6eb3.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201208121718.23105.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,84 +14,92 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Saturday 11 August 2012 19:40:34 Thomas Petazzoni wrote:
-> Since we are some day going to finally rename the badly named common
-> toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
-> etc.) into something more logical, let's start using the Crosstool-NG
-> toolchain options in the Crosstool-NG code.
+On Saturday 11 August 2012 19:40:36 Thomas Petazzoni wrote:
+> Basically, the BR2_TOOLCHAIN_EXTERNAL_GLIBC option no longer
+> unconditionally selects BR2_TOOLCHAIN_HAS_NATIVE_RPC since there are
+> glibc toolchains that don't have RPC support. All the predefined
+> toolchain profiles are updated to take into account this change: for
+> the moment, all glibc toolchains that have pre-defined toolchains have
+> RPC support, but further patches in the series add pre-defined glibc
+> toolchains that don't have RPC support. In the case of custom glibc
+> toolchains, a question is asked to the user so that he can say whether
+> the external glibc toolchain has RPC support or not. The validity of
+> this configuration option is checked by the new
+> check_glibc_rpc_feature function in helpers.mk.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/helpers.mk                   |   27 ++++++++++++++++++-----
+>  toolchain/toolchain-external/Config.in |   37 ++++++++++++++++++++++++--------
+>  2 files changed, 50 insertions(+), 14 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 462cd87..7036552 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -172,9 +172,10 @@ create_lib64_symlinks = \
+>  	(cd $(STAGING_DIR)/usr ; ln -s lib lib64)
+>  
+>  #
+> -# Check the availability of a particular glibc feature. We assume that
+> -# all Buildroot toolchain options are supported by glibc, so we just
+> -# check that they are enabled.
+> +# Check the availability of a particular glibc feature. This function
+> +# is used to check toolchain options that are always supported by
+> +# glibc, so we simply check that the corresponding option is properly
+> +# enabled.
+>  #
+>  # $1: Buildroot option name
+>  # $2: feature description
+> @@ -186,6 +187,22 @@ check_glibc_feature = \
+>  	fi
+>  
+>  #
+> +# Check the availability of RPC support in a glibc toolchain
+> +#
+> +# $1: sysroot directory
+> +#
+> +check_glibc_rpc_feature = \
+> +	IS_IN_LIBC=`test -f $(1)/usr/include/rpc/rpc.h && echo y` ; \
+> +	if [ x$(BR2_TOOLCHAIN_EXTERNAL_INET_RPC) != x"y" -a x$${IS_IN_LIBC} = x"y" ] ; then \
 
-It was my impression that we would get rid of backend-specific options,
-and use a central point where those options would be selected.
+Why use the 'x' char, and why not simply quote everything (same number of chars,
+yet easier to read, IMHO):
+	if [ "$(BR2_TOOLCHAIN_EXTERNAL_INET_RPC)" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
 
-As such, patches 1 & 2 are getting away from this goal, unless there is
-something I missed (eg. a future work that will rule them all).
+And so on below (and in other patches, too).
 
-Otherwise:
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
+> +		exit 1 ; \
+> +	fi ; \
+> +	if [ x$(BR2_TOOLCHAIN_EXTERNAL_INET_RPC) = x"y" -a x$${IS_IN_LIBC} != x"y" ] ; then \
+> +		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
+> +		exit 1 ; \
+> +	fi
+> +
+> +#
+>  # Check the correctness of a glibc external toolchain configuration.
+>  #  1. Check that the C library selected in Buildroot matches the one
+>  #     of the external toolchain
+> @@ -202,10 +219,10 @@ check_glibc = \
+>  	fi; \
+>  	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
+>  	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
+> -	$(call check_glibc_feature,BR2_TOOLCHAIN_HAS_NATIVE_RPC,RPC support) ;\
+>  	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
+>  	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
+> -	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
+> +	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
+> +	$(call check_glibc_rpc_feature,$${SYSROOT_DIR})
+
+This change is the reason why I always finish all lines with a backslash,
+even the last line. Thus, adding or removing a sunlge line is obvious, while
+here I add to double-check the wchar line, and why it was -/+.
+
+[--SNIP--]
 
 Regards,
 Yann E. MORIN.
-
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-> index d18f5d5..967b39a 100644
-> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-> @@ -268,7 +268,7 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
->  ifeq ($(BR2_TOOLCHAIN_CTNG_uClibc),y)
->  
->  # Handle the locales option
-> -ifneq ($(call qstrip,$(BR2_ENABLE_LOCALE)),)
-> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_LOCALE)),)
->  CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_LOCALES) is not set:\1=y\n\# CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA is not set:;
->  CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA)=.*:\# \1 is not set:;
->  else
-> @@ -276,28 +276,28 @@ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_LOCALES)=.*:\# \1 is not set:;
->  endif
->  
->  # Handle the wide-char option
-> -ifneq ($(call qstrip,$(BR2_USE_WCHAR)),)
-> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_WCHAR)),)
->  CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_WCHAR) is not set:\1=y:;
->  else
->  CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_WCHAR)=.*:\# \1 is not set:;
->  endif
->  
->  # Handle the LFS option
-> -ifneq ($(call qstrip,$(BR2_LARGEFILE)),)
-> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_LARGEFILE)),)
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_LFS) is not set:\1=y:;
->  else
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_LFS)=.*:\# \1 is not set:;
->  endif
->  
->  # Handle the IPv6 option
-> -ifneq ($(call qstrip,$(BR2_INET_IPV6)),)
-> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6)),)
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_IPV6) is not set:\1=y:;
->  else
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_IPV6)=.*:\# \1 is not set:;
->  endif
->  
->  # Handle the RPC option
-> -ifneq ($(call qstrip,$(BR2_INET_RPC)),)
-> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC)),)
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_RPC) is not set:\1=y\nUCLIBC_HAS_FULL_RPC=y\nUCLIBC_HAS_REENTRANT_RPC=y:;
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_FULL_RPC) is not set:\1=y:;
->  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_REENTRANT_RPC) is not set:\1=y:;
-> -- 
-> 1.7.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
