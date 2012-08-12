@@ -1,37 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Aug 2012 17:26:41 +0200
-Subject: [Buildroot] [PATCH 02/20] toolchain-crosstool-ng: use the
- Crosstool-ng config options instead of the common hidden ones
-In-Reply-To: <201208121705.55967.yann.morin.1998@free.fr>
-References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <d670b74d596c2d7c4cfbb611b0837950945c488e.1344706801.git.thomas.petazzoni@free-electrons.com>
- <201208121705.55967.yann.morin.1998@free.fr>
-Message-ID: <20120812172641.2eb74012@skate>
+Date: Sun, 12 Aug 2012 17:27:26 +0200
+Subject: [Buildroot] [PATCH] python: fix interpreter directive for
+ python scripts
+In-Reply-To: <201208121650.03902.yann.morin.1998@free.fr>
+References: <1344665427-27181-2-git-send-email-net147@gmail.com>
+ <50279BDA.6080407@gmail.com>
+ <CAMkyJgAgra7W+7-NZyT_Oz9HAHLGMgziLBU+kR-hdjexJsHtow@mail.gmail.com>
+ <201208121650.03902.yann.morin.1998@free.fr>
+Message-ID: <20120812172726.5111b4ef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 12 Aug 2012 17:05:55 +0200,
+Le Sun, 12 Aug 2012 16:50:03 +0200,
 "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
 
-> It was my impression that we would get rid of backend-specific options,
-> and use a central point where those options would be selected.
+> Or introduce a new package infrastrucutre, like for autotools-based and
+> cmake-based packages. For example, we could add a "pysetup" (or whatver)
+> infrastructure:
 > 
-> As such, patches 1 & 2 are getting away from this goal, unless there is
-> something I missed (eg. a future work that will rule them all).
+>   $(eval $(pysetup-package))
+> 
+> Which would automatically call ./setup in the package directory, passing the
+> proper arguments, instead of reimplementing that in every python packages?
 
-Well, it is not possible to get rid of backend-specific options,
-because the prompts and help text of those options are not the same, as
-they don't mean the same thing. For internal backend, the wchar option
-is "I want the wchar support in the toolchain that you will generate",
-while for the external backend, the wchar option is "Does the external
-toolchain you're giving me has wchar support". That's the very reason
-why we have per-backend visible options that select common hidden
-options. Does that make sense?
+Right. We start to have more and more Python-based packages, and it
+seems like those using the Python setuptools could benefit from having
+a common infrastructure.
 
-Thanks for the review!
+Best regards,
 
 Thomas
 -- 
