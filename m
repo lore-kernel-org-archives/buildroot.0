@@ -1,35 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Aug 2012 16:50:03 +0200
-Subject: [Buildroot] [PATCH] python: fix interpreter directive for
-	python scripts
-In-Reply-To: <CAMkyJgAgra7W+7-NZyT_Oz9HAHLGMgziLBU+kR-hdjexJsHtow@mail.gmail.com>
-References: <1344665427-27181-2-git-send-email-net147@gmail.com>
- <50279BDA.6080407@gmail.com>
- <CAMkyJgAgra7W+7-NZyT_Oz9HAHLGMgziLBU+kR-hdjexJsHtow@mail.gmail.com>
-Message-ID: <201208121650.03902.yann.morin.1998@free.fr>
+Date: Sun, 12 Aug 2012 17:05:55 +0200
+Subject: [Buildroot] [PATCH 02/20] toolchain-crosstool-ng: use the
+	Crosstool-ng config options instead of the common hidden ones
+In-Reply-To: <d670b74d596c2d7c4cfbb611b0837950945c488e.1344706801.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
+ <d670b74d596c2d7c4cfbb611b0837950945c488e.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201208121705.55967.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jonathan, Avishay, Thomas, All,
+Thomas, All,
 
-On Sunday 12 August 2012 15:19:17 Avishay Orpaz wrote:
-> I've just ran into this kind of problem. It can be solved per package by
-> adding "-e /usr/bin/python" to the setup build command.
+On Saturday 11 August 2012 19:40:34 Thomas Petazzoni wrote:
+> Since we are some day going to finally rename the badly named common
+> toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
+> etc.) into something more logical, let's start using the Crosstool-NG
+> toolchain options in the Crosstool-NG code.
 
-Or introduce a new package infrastrucutre, like for autotools-based and
-cmake-based packages. For example, we could add a "pysetup" (or whatver)
-infrastructure:
+It was my impression that we would get rid of backend-specific options,
+and use a central point where those options would be selected.
 
-  $(eval $(pysetup-package))
+As such, patches 1 & 2 are getting away from this goal, unless there is
+something I missed (eg. a future work that will rule them all).
 
-Which would automatically call ./setup in the package directory, passing the
-proper arguments, instead of reimplementing that in every python packages?
+Otherwise:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> index d18f5d5..967b39a 100644
+> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> @@ -268,7 +268,7 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
+>  ifeq ($(BR2_TOOLCHAIN_CTNG_uClibc),y)
+>  
+>  # Handle the locales option
+> -ifneq ($(call qstrip,$(BR2_ENABLE_LOCALE)),)
+> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_LOCALE)),)
+>  CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_LOCALES) is not set:\1=y\n\# CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA is not set:;
+>  CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA)=.*:\# \1 is not set:;
+>  else
+> @@ -276,28 +276,28 @@ CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_LOCALES)=.*:\# \1 is not set:;
+>  endif
+>  
+>  # Handle the wide-char option
+> -ifneq ($(call qstrip,$(BR2_USE_WCHAR)),)
+> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_WCHAR)),)
+>  CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_WCHAR) is not set:\1=y:;
+>  else
+>  CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_WCHAR)=.*:\# \1 is not set:;
+>  endif
+>  
+>  # Handle the LFS option
+> -ifneq ($(call qstrip,$(BR2_LARGEFILE)),)
+> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_LARGEFILE)),)
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_LFS) is not set:\1=y:;
+>  else
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_LFS)=.*:\# \1 is not set:;
+>  endif
+>  
+>  # Handle the IPv6 option
+> -ifneq ($(call qstrip,$(BR2_INET_IPV6)),)
+> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6)),)
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_IPV6) is not set:\1=y:;
+>  else
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^(UCLIBC_HAS_IPV6)=.*:\# \1 is not set:;
+>  endif
+>  
+>  # Handle the RPC option
+> -ifneq ($(call qstrip,$(BR2_INET_RPC)),)
+> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC)),)
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_RPC) is not set:\1=y\nUCLIBC_HAS_FULL_RPC=y\nUCLIBC_HAS_REENTRANT_RPC=y:;
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_FULL_RPC) is not set:\1=y:;
+>  CTNG_FIX_DOT_CONFIG_LIBC_SED += s:^\# (UCLIBC_HAS_REENTRANT_RPC) is not set:\1=y:;
+> -- 
+> 1.7.9.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
