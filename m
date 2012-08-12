@@ -1,54 +1,66 @@
 From: Jonathan Liu <net147@gmail.com>
-Date: Sun, 12 Aug 2012 18:51:04 +1000
-Subject: [Buildroot] [PATCH] nodejs: new package
-In-Reply-To: <20120812090610.6cf8fd4d@skate>
-References: <1344665495-27246-1-git-send-email-net147@gmail.com>
- <20120811222306.4e21b827@skate> <502703DF.5000602@gmail.com>
- <20120812090610.6cf8fd4d@skate>
-Message-ID: <50276E78.3030009@gmail.com>
+Date: Sun, 12 Aug 2012 22:06:05 +1000
+Subject: [Buildroot] [PATCH] python: Use fixed path for sys.executable
+Message-ID: <1344773165-5165-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The path to the Python interpreter is returned by sys.executable.
+However, setuptools uses sys.executable to generate the shebang
+interpreter directive used for entry point scripts that will run
+on the target system. In this case, it will return the path of the
+host Python interpreter when it should be the path of the Python
+interpreter on the target.
 
-On 12/08/2012 5:06 PM, Thomas Petazzoni wrote:
-> It would be better if Node.js could use the OpenSSL version that is in
-> Buildroot rather than its own internal one. It avoids having two copies
-> of OpenSSL on the target system.
->
-> And yes, if the SSL support can be enabled/disabled easily, it would be
-> great: OpenSSL is a fairly heavy dependency.
-Done.
->
->>>> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
->>>> new file mode 100644
->>>> index 0000000..8a0fa91
->>>> --- /dev/null
->>>> +++ b/package/nodejs/nodejs.mk
->>>> @@ -0,0 +1,54 @@
->>>> +#############################################################
->>>> +#
->>>> +# nodejs
->>>> +#
->>>> +#############################################################
->>>> +NODEJS_VERSION = 0.8.6
->>>> +NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
->>>> +NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
->>>> +NODEJS_INSTALL_STAGING = YES
->>> Does NodeJS contains libraries required by other packages?
->> The headers and node-waf binary are needed to build 3rd party native
->> modules. I figured it may be useful if someone wants to create buildroot
->> packages for node.js modules in the future.
-> Can you add a comment with a similar explanation just before this line.
-> For libraries, the reason to have _INSTALL_STAGING is fairly obvious,
-> for things like nodejs, it's a little bit less obvious for the ones who
-> are not familiar with what nodejs is.
-Done.
+To fix this, just return a fixed path of /usr/bin/python for
+sys.executable.
 
-I've submitted the updated patch as V3.
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ package/python/python-2.7-114-sys-executable.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/python/python-2.7-114-sys-executable.patch
 
-Regards,
-Jonathan
+diff --git a/package/python/python-2.7-114-sys-executable.patch b/package/python/python-2.7-114-sys-executable.patch
+new file mode 100644
+index 0000000..1a6b73c
+--- /dev/null
++++ b/package/python/python-2.7-114-sys-executable.patch
+@@ -0,0 +1,32 @@
++Use fixed path for sys.executable
++
++The path to the Python interpreter is returned by sys.executable.
++However, setuptools uses sys.executable to generate the shebang
++interpreter directive used for entry point scripts that will run
++on the target system. In this case, it will return the path of the
++host Python interpreter when it should be the path of the Python
++interpreter on the target.
++
++To fix this, just return a fixed path of /usr/bin/python for
++sys.executable.
++
++Signed-off-by: Jonathan Liu <net147@gmail.com>
++---
++ Modules/getpath.c | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++Index: Python-2.7.2/Modules/getpath.c
++===================================================================
++--- Python-2.7.2.orig/Modules/getpath.c
+++++ Python-2.7.2/Modules/getpath.c
++@@ -686,9 +686,7 @@ Py_GetExecPrefix(void)
++ char *
++ Py_GetProgramFullPath(void)
++ {
++-    if (!module_search_path)
++-        calculate_path();
++-    return progpath;
+++    return "/usr/bin/python";
++ }
++ 
++ 
+-- 
+1.7.11.3
