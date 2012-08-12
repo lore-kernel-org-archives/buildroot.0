@@ -1,28 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Aug 2012 18:35:12 +0200
-Subject: [Buildroot] [PATCH v2] opkg: bump version to svn r635
-In-Reply-To: <1344735391-23280-1-git-send-email-net147@gmail.com>
-References: <1344735391-23280-1-git-send-email-net147@gmail.com>
-Message-ID: <20120812183512.562acfe3@skate>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 12 Aug 2012 13:01:15 -0400
+Subject: [Buildroot] [PATCH 1/2] openssh: add linux-pam support
+Message-ID: <1344790876-27962-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 12 Aug 2012 11:36:31 +1000,
-Jonathan Liu <net147@gmail.com> a ?crit :
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/openssh/openssh.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-> It is recommended to use the most recent revision from subversion as it
-> contains various fixes.
-> 
-> Signed-off-by: Jonathan Liu <net147@gmail.com>
-
-Committed to next, thanks.
-
-Thomas
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 0878fce..815ed33 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -12,6 +12,11 @@ OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
+ 
+ OPENSSH_DEPENDENCIES = zlib openssl
+ 
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++OPENSSH_DEPENDENCIES += linux-pam
++OPENSSH_CONF_OPT += --with-pam
++endif
++
+ define OPENSSH_INSTALL_INITSCRIPT
+ 	$(INSTALL) -D -m 755 package/openssh/S50sshd $(TARGET_DIR)/etc/init.d/S50sshd
+ endef
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
