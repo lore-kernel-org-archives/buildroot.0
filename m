@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Aug 2012 18:31:31 +0200
-Subject: [Buildroot] [git commit branch/next] conntrack-tools: bump to
-	version 1.2.2
-Message-ID: <20120812163240.A3EBF97176@busybox.osuosl.org>
+Date: Sun, 12 Aug 2012 18:32:21 +0200
+Subject: [Buildroot] [git commit branch/next] ethtool: bump to version 3.5
+Message-ID: <20120812163240.E13A19716D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5de5a65807de9ce230c6516eef00cf26876a1ee6
+commit: http://git.buildroot.net/buildroot/commit/?id=a3a698de727b9747f4fd4b1495426b7fe4918af3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/conntrack-tools/conntrack-tools.mk |    4 +++-
+ package/ethtool/ethtool.mk |    4 +++-
  1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 8f1159b..6f438fc 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
-@@ -4,10 +4,12 @@
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 63a8d54..30d0a47 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,9 @@
  #
  #############################################################
  
--CONNTRACK_TOOLS_VERSION = 1.2.1
-+CONNTRACK_TOOLS_VERSION = 1.2.2
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkg-config \
- 	libnetfilter_conntrack libnetfilter_cttimeout
-+CONNTRACK_TOOLS_LICENSE = GPLv2
-+CONNTRACK_TOOLS_LICENSE_FILES = COPYING
+-ETHTOOL_VERSION = 3.4.1
++ETHTOOL_VERSION = 3.5
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
++ETHTOOL_LICENSE = GPLv2
++ETHTOOL_LICENSE_FILE = COPYING
  
  $(eval $(autotools-package))
