@@ -1,66 +1,46 @@
 From: Jonathan Liu <net147@gmail.com>
-Date: Sun, 12 Aug 2012 22:06:05 +1000
-Subject: [Buildroot] [PATCH] python: Use fixed path for sys.executable
-Message-ID: <1344773165-5165-1-git-send-email-net147@gmail.com>
+Date: Sun, 12 Aug 2012 22:04:42 +1000
+Subject: [Buildroot] [PATCH] python: fix interpreter directive for
+ python scripts
+In-Reply-To: <20120811230555.46b2f565@skate>
+References: <1344665427-27181-2-git-send-email-net147@gmail.com>
+ <20120811230555.46b2f565@skate>
+Message-ID: <50279BDA.6080407@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The path to the Python interpreter is returned by sys.executable.
-However, setuptools uses sys.executable to generate the shebang
-interpreter directive used for entry point scripts that will run
-on the target system. In this case, it will return the path of the
-host Python interpreter when it should be the path of the Python
-interpreter on the target.
+On 12/08/2012 7:05 AM, Thomas Petazzoni wrote:
+> Le Sat, 11 Aug 2012 16:10:27 +1000,
+> Jonathan Liu<net147@gmail.com>  a ?crit :
+>
+>> +# Fix Python interpreter directive
+>> +define PYTHON_FIX_INTERPRETER
+>> +        sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{easy_install,easy_install-2.7,idle,smtpd.py}
+>> +endef
+>> +
+>> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_FIX_INTERPRETER
+> I agree the paths in those scripts is incorrect, *but*:
+>
+>   * Should these scripts have been installed in the first place? I don't
+>     think there are useful for the typical usage of the Python
+>     interpreter, so maybe we want to get rid of them.
+>
+>   * Instead of fixing this patch manually in every Python script
+>     installed, can we investigate on how to fix the root of the problem?
+>     I'm the one who has reworked the patches that get Python to
+>     cross-compile, and I know this stuff is really painful, but I think
+>     it's worth at least trying to understand a bit if there could be a
+>     way of handling things. From what I remember the problem is that the
+>     host-python uses its host sysconfig parameters even when building
+>     things for the target, simply because the whole Python things has
+>     absolutely zero understanding of the fact that we could be using
+>     Python on one machine to build stuff that will run on a different
+>     machine.
+I've submitted patch for Python to use fixed path for sys.executable to 
+resolve this.
 
-To fix this, just return a fixed path of /usr/bin/python for
-sys.executable.
-
-Signed-off-by: Jonathan Liu <net147@gmail.com>
----
- package/python/python-2.7-114-sys-executable.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/python/python-2.7-114-sys-executable.patch
-
-diff --git a/package/python/python-2.7-114-sys-executable.patch b/package/python/python-2.7-114-sys-executable.patch
-new file mode 100644
-index 0000000..1a6b73c
---- /dev/null
-+++ b/package/python/python-2.7-114-sys-executable.patch
-@@ -0,0 +1,32 @@
-+Use fixed path for sys.executable
-+
-+The path to the Python interpreter is returned by sys.executable.
-+However, setuptools uses sys.executable to generate the shebang
-+interpreter directive used for entry point scripts that will run
-+on the target system. In this case, it will return the path of the
-+host Python interpreter when it should be the path of the Python
-+interpreter on the target.
-+
-+To fix this, just return a fixed path of /usr/bin/python for
-+sys.executable.
-+
-+Signed-off-by: Jonathan Liu <net147@gmail.com>
-+---
-+ Modules/getpath.c | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+Index: Python-2.7.2/Modules/getpath.c
-+===================================================================
-+--- Python-2.7.2.orig/Modules/getpath.c
-++++ Python-2.7.2/Modules/getpath.c
-+@@ -686,9 +686,7 @@ Py_GetExecPrefix(void)
-+ char *
-+ Py_GetProgramFullPath(void)
-+ {
-+-    if (!module_search_path)
-+-        calculate_path();
-+-    return progpath;
-++    return "/usr/bin/python";
-+ }
-+ 
-+ 
--- 
-1.7.11.3
+Regards,
+Jonathan
