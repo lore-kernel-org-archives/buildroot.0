@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Aug 2012 01:53:57 +0200
-Subject: [Buildroot] [PATCH 09/36] package/spice-protocol: new package
+Date: Mon, 13 Aug 2012 01:54:19 +0200
+Subject: [Buildroot] [PATCH 31/36] package/qemu: add support for USB
+	redirection
 In-Reply-To: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
 References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1344815664-28138-9-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1344815664-28138-31-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +13,55 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                        |    1 +
- package/spice-protocol/Config.in         |   12 ++++++++++++
- package/spice-protocol/spice-protocol.mk |   14 ++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/spice-protocol/Config.in
- create mode 100644 package/spice-protocol/spice-protocol.mk
+ package/qemu/Config.in |    9 +++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 16 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ae22203..d916128 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -600,6 +600,7 @@ source "package/ser2net/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
-+source "package/spice-protocol/Config.in"
- source "package/squid/Config.in"
- source "package/stunnel/Config.in"
- source "package/tcpdump/Config.in"
-diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
-new file mode 100644
-index 0000000..3be82a8
---- /dev/null
-+++ b/package/spice-protocol/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SPICE_PROTOCOL
-+	bool "spice protocol"
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index e81a089..b56fef4 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -152,6 +152,15 @@ config BR2_PACKAGE_QEMU_ISCSI
+ 	help
+ 	  Say 'y' here to have QEMU use iSCSI targets as block-devices.
+ 
++config BR2_PACKAGE_QEMU_USBREDIR
++	bool "Enable USB redirection"
++	depends on BR2_PACKAGE_USBREDIR
 +	help
-+	  The Spice project aims to provide a complete open source
-+	  solution for interaction with virtualized desktop devices.
-+	  The Spice project deals with both the virtualized devices
-+	  and the front-end. Interaction between front-end and
-+	  back-end is done using VD-Interfaces.
-+	  
-+	  This package implements the ptotocol-part of Spice.
-+	  
-+	  http://www.spice-space.org/
-diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
-new file mode 100644
-index 0000000..0197c6c
---- /dev/null
-+++ b/package/spice-protocol/spice-protocol.mk
-@@ -0,0 +1,14 @@
-+#-----------------------------------------------------------------------------
-+# Package description
++	  Say 'y' here to have QEMU support USB redirection over the network.
 +
-+SPICE_PROTOCOL_VERSION         = 0.12.0
-+SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
-+SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
-+SPICE_PROTOCOL_LICENSE         = BSD-3c
-+SPICE_PROTOCOL_LICENSE_FILES   = COPYING
-+SPICE_PROTOCOL_INSTALL_STAGING = YES
++comment "USB redirection requires usbredir"
++	depends on !BR2_PACKAGE_USBREDIR
 +
-+#----------------------------------------------------------------------------
-+# Package build process
+ config BR2_PACKAGE_QEMU_AIO
+ 	bool "Enable AIO"
+ 	depends on BR2_PACKAGE_LIBAIO
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 4436047..c14b3c3 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -108,6 +108,13 @@ else
+ QEMU_OPTS += --disable-libiscsi
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_USBREDIR),y)
++QEMU_OPTS += --enable-usb-redir
++QEMU_DEPENDENCIES += usbredir
++else
++QEMU_OPTS += --disable-usb-redir
++endif
 +
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_QEMU_AIO),y)
+ QEMU_OPTS += --enable-linux-aio
+ QEMU_DEPENDENCIES += libaio
+@@ -251,7 +258,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-docs                      \
+ 	        --disable-spice                     \
+ 	        --disable-rbd                       \
+-	        --disable-usb-redir                 \
+ 	        --disable-guest-agent               \
+ 	        --disable-smartcard                 \
+ 	        --disable-strip                     \
 -- 
 1.7.2.5
