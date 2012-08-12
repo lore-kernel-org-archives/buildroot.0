@@ -1,22 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Aug 2012 18:32:44 +0200
-Subject: [Buildroot] [PATCH 2/2] cairo: Add tee surface backend option
- (required by firefox)
-In-Reply-To: <1344722231-30341-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1344722231-30341-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20120812183244.4cf62fe7@skate>
+Date: Sun, 12 Aug 2012 18:33:22 +0200
+Subject: [Buildroot] [PATCH 1/8] iptables: bump to version 1.4.15
+In-Reply-To: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120812183322.778ef8fe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 12 Aug 2012 00:57:11 +0300,
-Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
+Le Sat, 11 Aug 2012 19:27:26 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-> Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed to next, thanks.
+Committed 1-4 and 6-8 to next, but not patch 5/8 since it was missing
+the version bump itself.
+
+Thanks!
 
 Thomas
 -- 
