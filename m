@@ -1,40 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Aug 2012 17:55:19 +0200
-Subject: [Buildroot] [PATCH 14/20] portmap: mention that rpcbind is the
-	project that superseds portmap
-In-Reply-To: <aae61f5152331e0d8e63c01ddca703e00cde1382.1344706801.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Aug 2012 17:58:52 +0200
+Subject: [Buildroot] [PATCH 17/20] xinetd: add support to use RPC
+	support from libtirpc
+In-Reply-To: <d88a9e06effd725dd2b9e08e8a702db3709f5211.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <aae61f5152331e0d8e63c01ddca703e00cde1382.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201208121755.19505.yann.morin.1998@free.fr>
+ <d88a9e06effd725dd2b9e08e8a702db3709f5211.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201208121758.52937.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, all,
+Thomas, All,
 
-On Saturday 11 August 2012 19:40:46 Thomas Petazzoni wrote:
+On Saturday 11 August 2012 19:40:49 Thomas Petazzoni wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/portmap/Config.in |    2 ++
->  1 file changed, 2 insertions(+)
+>  package/xinetd/xinetd.mk |   14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/portmap/Config.in b/package/portmap/Config.in
-> index f017cb6..8d25e3a 100644
-> --- a/package/portmap/Config.in
-> +++ b/package/portmap/Config.in
-> @@ -4,6 +4,8 @@ config BR2_PACKAGE_PORTMAP
->  	help
->  	  The standard portmapper for RPC services.
+> diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+> index a420425..05168a5 100644
+> --- a/package/xinetd/xinetd.mk
+> +++ b/package/xinetd/xinetd.mk
+> @@ -9,10 +9,20 @@ XINETD_SITE          = http://www.xinetd.org
+>  XINETD_LICENSE       = xinetd license
+>  XINETD_LICENSE_FILES = COPYRIGHT
 >  
-> +	  Note that portmap is being deprecated in favour of rpcbind.
+> -ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+> -XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
+> +XINETD_CFLAGS = $(TARGET_CFLAGS)
+> +
+> +ifeq ($(BR2_RPC_SUPPORT_AVAILABLE),y)
 
-Wouldn't it be better to add (thus answering your question from 00/20):
-  depends on BR2_DEPRECATED
+What if the toolchain has RPC support? Surely, you do not want to link
+against libtirpc, yes?
 
-Regards,
-Yann E. MORIN.
+> +XINETD_DEPENDENCIES += libtirpc
+> +XINETD_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+> +XINETD_LIBS += -ltirpc
+> +else
+> +XINETD_CFLAGS += -DNO_RPC
+>  endif
+>  
+> +XINETD_CONF_ENV += \
+> +	CFLAGS="$(XINETD_CFLAGS)" \
+> +	LIBS="$(XINETD_LIBS)"
+> +
+>  XINETD_MAKE_OPT = AR="$(TARGET_AR)"
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 1.7.9.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
