@@ -1,28 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Aug 2012 18:33:22 +0200
-Subject: [Buildroot] [PATCH 1/8] iptables: bump to version 1.4.15
-In-Reply-To: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120812183322.778ef8fe@skate>
+Date: Sun, 12 Aug 2012 18:33:35 +0200
+Subject: [Buildroot] [git commit branch/next] opkg: bump version to svn r635
+Message-ID: <20120812163508.B8A7C97172@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 11 Aug 2012 19:27:26 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=80cde682b1f3a794e173efd82a347d5bab658730
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+It is recommended to use the most recent revision from subversion as it
+contains various fixes.
 
-Committed 1-4 and 6-8 to next, but not patch 5/8 since it was missing
-the version bump itself.
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opkg/opkg.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index be67f8e..3ba61ae 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,11 +4,13 @@
+ #
+ #############################################################
+ 
+-OPKG_VERSION = 0.1.8
++OPKG_VERSION = 635
+ OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+-OPKG_SITE = http://opkg.googlecode.com/files
++OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
++OPKG_SITE_METHOD = svn
+ OPKG_INSTALL_STAGING = YES
+ OPKG_CONF_OPT = --disable-curl --disable-gpg
++OPKG_AUTORECONF = YES
+ 
+ # Ensure directory for lockfile exists
+ define OPKG_CREATE_LOCKDIR
