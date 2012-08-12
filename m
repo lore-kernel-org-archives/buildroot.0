@@ -1,67 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Aug 2012 01:54:12 +0200
-Subject: [Buildroot] [PATCH 24/36] package/qemu: add support for cURL
+Date: Mon, 13 Aug 2012 01:54:13 +0200
+Subject: [Buildroot] [PATCH 25/36] package/qemu: enable use of the curses
+	frontend
 In-Reply-To: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
 References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1344815664-28138-24-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1344815664-28138-25-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-QEMU can use libcurl as a block backend, to access remote block devices.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   10 ++++++++++
+ package/qemu/Config.in |   11 +++++++++++
  package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 498a5a6..bbcd308 100644
+index bbcd308..e2864f4 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -125,6 +125,16 @@ config BR2_PACKAGE_QEMU_VIRTFS
- 	  file-system called 9p, and can be accelerated by using the 9p
- 	  virtio).
+@@ -109,6 +109,17 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
-+config BR2_PACKAGE_QEMU_CURL
-+	bool "Enable remote block-devices using cURL"
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_LIBCURL
++config BR2_PACKAGE_QEMU_CURSES
++	bool "Enable the curses frontend"
++	select BR2_PACKAGE_NCURSES
 +	help
-+	  Say 'y' to access remote block-devices using libcurl.
++	  Say 'y' to use curses to display the text-mode of VGA outpout.
++	  
++	  If the VM's graphic adapter does not support VGA text-mode, or it
++	  is in graphical mode, then nothing will be displayed with this
++	  frontend (although you can still use the SDL or VNC frontends to
++	  display the graphical output).
 +
-+comment "cURL support is not possible with static linking"
-+    depends on BR2_PREFER_STATIC_LIB
-+
- comment "Misc. features"
+ comment "Block backends"
  
- config BR2_PACKAGE_QEMU_UUID
+ config BR2_PACKAGE_QEMU_VIRTFS
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index caaf077..fb1bbcd 100644
+index fb1bbcd..31e3d0c 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -87,6 +87,13 @@ else
- QEMU_OPTS += --disable-virtfs
+@@ -81,6 +81,13 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_CURL),y)
-+QEMU_OPTS += --enable-curl
-+QEMU_DEPENDENCIES += libcurl
++ifeq ($(BR2_PACKAGE_QEMU_CURSES),y)
++QEMU_OPTS += --enable-curses
++QEMU_DEPENDENCIES += ncurses
 +else
-+QEMU_OPTS += --disable-curl
++QEMU_OPTS += --disable-curses
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -199,7 +206,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
+ QEMU_OPTS += --enable-virtfs
+ else
+@@ -205,7 +212,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-slirp                     \
  	        --disable-vnc-sasl                  \
  	        --disable-brlapi                    \
- 	        --disable-curses                    \
--	        --disable-curl                      \
+-	        --disable-curses                    \
  	        --disable-fdt                       \
  	        --disable-bluez                     \
  	        --disable-guest-base                \
