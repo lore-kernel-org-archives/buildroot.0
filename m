@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Aug 2012 01:54:07 +0200
-Subject: [Buildroot] [PATCH 19/36] package/qemu: add option to remove
-	unwanted keymaps
+Date: Mon, 13 Aug 2012 01:53:59 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_11/36=5D_package/qemu=3A_new_packa?=
+	=?utf-8?q?ge?=
 In-Reply-To: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
 References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1344815664-28138-19-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,101 +13,158 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   12 ++++++++++
- package/qemu/qemu.mk   |   58 ++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 70 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/qemu/Config.in |   24 ++++++++++++
+ package/qemu/qemu.mk   |   98 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 123 insertions(+), 0 deletions(-)
+ create mode 100644 package/qemu/Config.in
+ create mode 100644 package/qemu/qemu.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 3109591..eb02983 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -504,6 +504,7 @@ menu "Miscellaneous"
+ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
++source "package/qemu/Config.in"
+ source "package/shared-mime-info/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index e34680c..0ae7fc3 100644
---- a/package/qemu/Config.in
+new file mode 100644
+index 0000000..a77d863
+--- /dev/null
 +++ b/package/qemu/Config.in
-@@ -125,6 +125,18 @@ config BR2_PACKAGE_QEMU_BLOBS
- 	  Note2: This has nothing to do with the licensing of the blobs;
- 	         some (most?) even have a free and/or open source license.
- 
-+config BR2_PACKAGE_QEMU_KEYMAPS
-+	string "Keymaps to keep"
-+	default "all"
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_QEMU
++	bool "QEMU"
++	depends on BR2_PACKAGE_PYTHON       # We only need host-python,
++	                                    # but there's no way to say so.
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_LIBGLIB2
 +	help
-+	  Enter the list of keymap(s) to keep. To keep many keymaps, you can
-+	  use shell globs, or you can enter a space-separated list of keymaps:
-+	    - empty to remove all keymaps
-+	    - 'all' to keep all keymaps
-+	    - 'fr*' to keep all french keymaps
-+	    - 'de fr* en-*' for german, french and english keymaps
-+	    - and so on (see the QEMU source for all supported keymaps)
++	  QEMU is a generic and open source machine emulator and virtualizer.
++	  
++	  When used as a machine emulator, QEMU can run OSes and programs made
++	  for one machine (e.g. an ARM board) on a different machine (e.g.
++	  your own PC). By using dynamic translation, it achieves very good
++	  performance.
++	  
++	  When used as a virtualizer, QEMU achieves near native performances
++	  by executing the guest code directly on the host CPU. QEMU supports
++	  virtualization when executing under the Xen hypervisor or using the
++	  KVM kernel module in Linux. When using KVM, QEMU can virtualize x86,
++	  server and embedded PowerPC, and S390 guests. 
++	  
++	  http://qemu.org/
 +
- endif # BR2_PACKAGE_QEMU
- 
- comment "QEMU requires python"
++comment "QEMU requires python"
++	depends on !BR2_PACKAGE_PYTHON
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index cd473f8..c00209b 100644
---- a/package/qemu/qemu.mk
+new file mode 100644
+index 0000000..3825731
+--- /dev/null
 +++ b/package/qemu/qemu.mk
-@@ -86,6 +86,64 @@ QEMU_OPTS += --disable-blobs
- endif
- 
- #----------------------------------------------------------------------------
-+# Package hooks
+@@ -0,0 +1,98 @@
++#-----------------------------------------------------------------------------
++# Package description
 +
-+# Post-install removal of unwanted keymaps:
-+# - if we want 'all', we do nothing;
-+# - if we want none, we completely remove the keymap dir
-+# - otherwise:
-+#   - we completely remove the keymap dir; and recreate it empty
-+#   - we recursively copy only those keymaps we want (as keymaps may include
-+#     some common files)
-+#
-+# NOTE-1: we need the un-quoted list of keymaps, so it is interpreted as a glob
-+#         by the shell.
-+# NOTE-2: yes, all (current!) keymaps do include the 'common' keymap, which in
-+#         turn includes the 'modifiers' keymap, so we could unconditionally
-+#         copy those two, for a much simpler code. Doing it the way it's done
-+#         is more generic, and will adapt to any future keymaps which has
-+#         multiple includes, or none.
-+# NOTE-3: we can't use $(SED), because it expands to include the '-i' option,
-+#         which we do *not* want here, because we are not munging a file, but
-+#         using sed as a enhanced grep.
-+#
-+QEMU_KEYMAPS = $(call qstrip,$(BR2_PACKAGE_QEMU_KEYMAPS))
++QEMU_VERSION = 1.1.1-1
++QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
++QEMU_SITE = http://wiki.qemu.org/download
++QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
++QEMU_LICENSE_FILES = COPYING COPYING.LIB
++#?NOTE: there is no top-level license file for non-(L)GPL licenses;
++#       the non-(L)GPL license texts are specified in the affected
++#       individual source files.
 +
-+ifeq ($(QEMU_KEYMAPS),all)      #--- Keep all keymaps ---#
-+define QEMU_POST_INSTALL_KEYMAPS
-+	@: Nothing
-+endef
++#-----------------------------------------------------------------------------
++# Package unconditional configuration
 +
-+else ifeq ($(QEMU_KEYMAPS),)    #--- Remove all keymaps ---#
-+define QEMU_POST_INSTALL_KEYMAPS
-+	rm -rf "$(TARGET_DIR)/usr/share/qemu/keymaps"
-+endef
++QEMU_DEPENDENCIES = zlib libglib2
 +
-+else                            #--- Keep selected keymaps ---#
-+define QEMU_POST_INSTALL_KEYMAPS
-+	rm -rf "$(TARGET_DIR)/usr/share/qemu/keymaps"
-+	mkdir -p "$(TARGET_DIR)/usr/share/qemu/keymaps"
-+	add_keymap() {                                                  \
-+	    local k="$${1}"; local dest="$${2}";                        \
-+	    if [ -n "$${k}" -a ! -f "$${dest}/$${k}" ]; then            \
-+	        cp -v "$${k}" "$${dest}";                               \
-+	        for k in $$(sed -r -e '/^include[[:space:]]+(.*)$$/!d;' \
-+	                           -e 's//\1/;' "$${k}" ); do           \
-+	            add_keymap "$${k}" "$${dest}";                      \
-+	        done;                                                   \
-+	    fi;                                                         \
-+	};                                                              \
-+	cd $(@D)/pc-bios/keymaps;                                       \
-+	for k in $(QEMU_KEYMAPS); do                                    \
-+	    add_keymap "$${k}" "$(TARGET_DIR)/usr/share/qemu/keymaps";  \
-+	done
-+endef
++#-----------------------------------------------------------------------------
++# Package conditional configuration
 +
-+endif # Keymaps to keep
++# Need the LIBS variable because librt and libm are
++# not automatically pulled. :-(
++QEMU_LIBS = -lrt -lm
 +
-+QEMU_POST_INSTALL_TARGET_HOOKS += QEMU_POST_INSTALL_KEYMAPS
++QEMU_OPTS =
++QEMU_VARS =
 +
 +#----------------------------------------------------------------------------
- # Package build process
- 
- # Note: although QEMU uses a ./configure script, it is not compatible with
++# Package build process
++
++# Note: although QEMU uses a ./configure script, it is not compatible with
++#       the traditional autotools options (eg. --target et al.), so we can
++#       not use the autotools-package infrastructure. So we have to use the
++#       generic-package infra instead. Sigh... :-(
++
++define QEMU_CONFIGURE_CMDS
++	( cd $(@D);                                 \
++	    LIBS='$(QEMU_LIBS)'                     \
++	    $(TARGET_CONFIGURE_OPTS)                \
++	    $(TARGET_CONFIGURE_ARGS)                \
++	    $(QEMU_VARS)                            \
++	    ./configure                             \
++	        --prefix=/usr                       \
++	        --cross-prefix=$(TARGET_CROSS)      \
++	        --audio-drv-list=                   \
++	        --audio-card-list=                  \
++	        --enable-kvm                        \
++	        --enable-nptl                       \
++	        --enable-attr                       \
++	        --enable-vhost-net                  \
++	        --enable-system                     \
++	        --enable-linux-user                 \
++	        --disable-bsd-user                  \
++	        --disable-xen                       \
++	        --disable-slirp                     \
++	        --disable-sdl                       \
++	        --disable-vnc                       \
++	        --disable-virtfs                    \
++	        --disable-brlapi                    \
++	        --disable-curses                    \
++	        --disable-curl                      \
++	        --disable-fdt                       \
++	        --disable-bluez                     \
++	        --disable-guest-base                \
++	        --disable-uuid                      \
++	        --disable-vde                       \
++	        --disable-linux-aio                 \
++	        --disable-cap-ng                    \
++	        --disable-docs                      \
++	        --disable-spice                     \
++	        --disable-rbd                       \
++	        --disable-libiscsi                  \
++	        --disable-usb-redir                 \
++	        --disable-guest-agent               \
++	        --disable-smartcard                 \
++	        --disable-strip                     \
++	        $(QEMU_OPTS)                        \
++	)
++endef
++
++define QEMU_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define QEMU_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define QEMU_UNINSTALL_TARGET_CMDS
++	@echo 'QEMU has no uninstall rule.'
++	@false
++endef
++
++define QEMU_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
