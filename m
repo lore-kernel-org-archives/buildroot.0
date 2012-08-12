@@ -1,40 +1,33 @@
 From: Jonathan Liu <net147@gmail.com>
-Date: Sun, 12 Aug 2012 11:36:31 +1000
-Subject: [Buildroot] [PATCH v2] opkg: bump version to svn r635
-Message-ID: <1344735391-23280-1-git-send-email-net147@gmail.com>
+Date: Sun, 12 Aug 2012 12:35:26 +1000
+Subject: [Buildroot] [PATCH v2 1/2] python: enable bz2 module for host build
+In-Reply-To: <1344738927-24698-1-git-send-email-net147@gmail.com>
+References: <1344738927-24698-1-git-send-email-net147@gmail.com>
+Message-ID: <1344738927-24698-2-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is recommended to use the most recent revision from subversion as it
-contains various fixes.
+The bz2 module is required for building some Python packages.
 
 Signed-off-by: Jonathan Liu <net147@gmail.com>
 ---
- package/opkg/opkg.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/python/python.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index be67f8e..3ba61ae 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -4,11 +4,13 @@
- #
- #############################################################
+diff --git a/package/python/python.mk b/package/python/python.mk
+index fae4e5c..7b314ab 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -27,7 +27,6 @@ HOST_PYTHON_CONF_OPT += 	\
+ 	--disable-gdbm		\
+ 	--disable-bsddb		\
+ 	--disable-test-modules	\
+-	--disable-bz2		\
+ 	--disable-ssl
  
--OPKG_VERSION = 0.1.8
-+OPKG_VERSION = 635
- OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
--OPKG_SITE = http://opkg.googlecode.com/files
-+OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
-+OPKG_SITE_METHOD = svn
- OPKG_INSTALL_STAGING = YES
- OPKG_CONF_OPT = --disable-curl --disable-gpg
-+OPKG_AUTORECONF = YES
- 
- # Ensure directory for lockfile exists
- define OPKG_CREATE_LOCKDIR
+ HOST_PYTHON_MAKE_ENV = \
 -- 
 1.7.11.3
