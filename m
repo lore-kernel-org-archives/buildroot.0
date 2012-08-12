@@ -1,112 +1,70 @@
-From: Jonathan Liu <net147@gmail.com>
-Date: Sun, 12 Aug 2012 12:35:27 +1000
-Subject: [Buildroot] [PATCH v2 2/2] nodejs: new package
-In-Reply-To: <1344738927-24698-1-git-send-email-net147@gmail.com>
-References: <1344738927-24698-1-git-send-email-net147@gmail.com>
-Message-ID: <1344738927-24698-3-git-send-email-net147@gmail.com>
+From: Dmitry <golubovsky@gmail.com>
+Date: Sat, 11 Aug 2012 23:03:43 -0400
+Subject: [Buildroot] [PATCH] PAM support in Busybox if linux-pam is built
+Message-ID: <1344740623-29446-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jonathan Liu <net147@gmail.com>
+Signed-off-by: Dmitry <golubovsky@gmail.com>
 ---
- package/Config.in        |  1 +
- package/nodejs/Config.in | 26 ++++++++++++++++++++++++++
- package/nodejs/nodejs.mk | 39 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 66 insertions(+)
- create mode 100644 package/nodejs/Config.in
- create mode 100644 package/nodejs/nodejs.mk
+ package/busybox/Config.in  |   11 +++++++++++
+ package/busybox/busybox.mk |   12 ++++++++++++
+ 2 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f308de7..76c589b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -263,6 +263,7 @@ source "package/xavante/Config.in"
- endmenu
- endif
- source "package/microperl/Config.in"
-+source "package/nodejs/Config.in"
- source "package/php/Config.in"
- source "package/python/Config.in"
- if BR2_PACKAGE_PYTHON
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-new file mode 100644
-index 0000000..3fa79cb
---- /dev/null
-+++ b/package/nodejs/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_NODEJS
-+	bool "nodejs"
-+	help
-+	  Event-driven I/O server-side JavaScript environment based on V8.
-+
-+	  http://nodejs.org/
-+
-+if BR2_PACKAGE_NODEJS
-+
-+config BR2_PACKAGE_NODEJS_SSL
-+	bool "enable SSL support"
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index dedcf18..3e9f56d 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -62,6 +62,17 @@ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	  Install the watchdog daemon startup script,
+ 	  that just start at the boot the busybox watchdog daemon.
+ 
++config BR2_PACKAGE_BUSYBOX_PAM
++	bool "Enable PAM support in Busybox"
 +	default y
++	depends on BR2_PACKAGE_LINUX_PAM
 +	help
-+	  Enable SSL support.
++	  PAM support in Busybox is enabled by default if package 
++	  linux-pam is selected. Make sure that files /etc/pam.d/default
++	  and/or /etc/pam.d/login exist and contain valid authentication
++	  stack. Otherwise you will not be able to log into the booted
++	  system. If unsure unselect this item.
 +
-+config BR2_PACKAGE_NODEJS_NPM
-+	bool "npm"
-+	help
-+	  Enable npm (Node Package Manager).
-+
-+config BR2_PACKAGE_NODEJS_WAF
-+	bool "waf"
-+	help
-+	  Enable node-waf for building native modules.
-+
+ if BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 17ee50a..c97ce77 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -161,6 +161,17 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_PAM),y)
++BUSYBOX_DEPENDENCIES += linux-pam
++define BUSYBOX_ENABLE_PAM
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
++else
++define BUSYBOX_ENABLE_PAM
++	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
 +endif
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-new file mode 100644
-index 0000000..43e871a
---- /dev/null
-+++ b/package/nodejs/nodejs.mk
-@@ -0,0 +1,39 @@
-+#############################################################
-+#
-+# nodejs
-+#
-+#############################################################
-+NODEJS_VERSION = 0.8.6
-+NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
-+NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
-+NODEJS_INSTALL_STAGING = YES
-+NODEJS_DEPENDENCIES = host-python
-+NODEJS_LICENSE = MIT
 +
-+define NODEJS_CONFIGURE_CMDS
-+	(cd $(@D); rm -rf config.cache; \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		PATH="$(HOST_DIR)/usr/bin:$(PATH)" \
-+		./configure \
-+		--prefix=/usr \
-+		--without-snapshot \
-+		$(if $(BR2_PACKAGE_NODEJS_SSL),,--without-ssl) \
-+		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
-+		$(if $(BR2_PACKAGE_NODEJS_WAF),,--without-waf) \
-+		--without-dtrace \
-+		--without-etw \
-+	)
-+endef
-+
-+NODEJS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
-+
-+define NODEJS_INSTALL_TARGET_CMDS
-+       $(INSTALL) -D -m 775 $(@D)/out/Release/node $(TARGET_DIR)/usr/bin/node
-+endef
-+
-+define NODEJS_UNINSTALL_TARGET_CMDS
-+       rm -f $(TARGET_DIR)/usr/bin/node
-+endef
-+
-+$(eval $(autotools-package))
+ # We do this here to avoid busting a modified .config in configure
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+ 
+@@ -176,6 +187,7 @@ define BUSYBOX_CONFIGURE_CMDS
+ 	$(BUSYBOX_DISABLE_MMU_APPLETS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
++	$(BUSYBOX_ENABLE_PAM)
+ 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		-C $(@D) oldconfig
+ endef
 -- 
-1.7.11.3
+1.7.2.5
