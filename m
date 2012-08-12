@@ -1,118 +1,66 @@
 From: Avishay Orpaz <avishorp@gmail.com>
-Date: Sun, 12 Aug 2012 16:18:29 +0300
-Subject: [Buildroot] [PATCH] Added new package - rdiff-backup.
-Message-ID: <1344777509-17936-1-git-send-email-avishorp@gmail.com>
+Date: Sun, 12 Aug 2012 16:19:17 +0300
+Subject: [Buildroot] [PATCH] python: fix interpreter directive for
+	python scripts
+In-Reply-To: <50279BDA.6080407@gmail.com>
+References: <1344665427-27181-2-git-send-email-net147@gmail.com>
+ <20120811230555.46b2f565@skate> <50279BDA.6080407@gmail.com>
+Message-ID: <CAMkyJgAgra7W+7-NZyT_Oz9HAHLGMgziLBU+kR-hdjexJsHtow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I've just ran into this kind of problem. It can be solved per package by
+adding "-e /usr/bin/python" to the setup build command.
 
-Signed-off-by: Avishay Orpaz <avishorp@gmail.com>
----
- package/Config.in                    |    1 +
- package/python/Config.in             |    6 ++++++
- package/python/python.mk             |    4 ++++
- package/rdiff-backup/Config.in       |   10 ++++++++++
- package/rdiff-backup/rdiff-backup.mk |   28 ++++++++++++++++++++++++++++
- 5 files changed, 49 insertions(+), 0 deletions(-)
- create mode 100644 package/rdiff-backup/Config.in
- create mode 100644 package/rdiff-backup/rdiff-backup.mk
+Avishay
 
-diff --git a/package/Config.in b/package/Config.in
-index f308de7..1e4d7a1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -503,6 +503,7 @@ source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
- source "package/sound-theme-borealis/Config.in"
- source "package/sound-theme-freedesktop/Config.in"
-+source "package/rdiff-backup/Config.in"
- endmenu
- 
- menu "Networking applications"
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 11aa267..65aac23 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -93,6 +93,12 @@ config BR2_PACKAGE_PYTHON_ZLIB
- 	help
- 	  zlib support in Python
- 
-+config BR2_PACKAGE_PYTHON_HASHLIB
-+	bool "hashlib module"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  hashlib support in Python
-+
- endmenu
- 
- endif
-diff --git a/package/python/python.mk b/package/python/python.mk
-index fae4e5c..0584a5a 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -110,6 +110,10 @@ else
- PYTHON_CONF_OPT += --disable-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON_HASHLIB),y)
-+PYTHON_DEPENDENCIES += openssl
-+endif
-+
- PYTHON_CONF_ENV += \
- 	PYTHON_FOR_BUILD=$(HOST_PYTHON_DIR)/python \
- 	PGEN_FOR_BUILD=$(HOST_PYTHON_DIR)/Parser/pgen \
-diff --git a/package/rdiff-backup/Config.in b/package/rdiff-backup/Config.in
-new file mode 100644
-index 0000000..1e8bc27
---- /dev/null
-+++ b/package/rdiff-backup/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_RDIFF_BACKUP
-+    bool "rdiff-backup"
-+    depends on BR2_PACKAGE_PYTHON
-+    select BR2_PACKAGE_PYTHON_HASHLIB
-+    select BR2_PACKAGE_PYTHON_ZLIB
-+    help
-+      Tool for incremental, network efficient backup
-+
-+      http://nongnu.org/rdiff-backup
-+
-diff --git a/package/rdiff-backup/rdiff-backup.mk b/package/rdiff-backup/rdiff-backup.mk
-new file mode 100644
-index 0000000..77d9caf
---- /dev/null
-+++ b/package/rdiff-backup/rdiff-backup.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# rdiff-backup
-+#
-+#############################################################
-+
-+RDIFF_BACKUP_VERSION = 1.2.8
-+RDIFF_BACKUP_SOURCE = rdiff-backup-$(RDIFF_BACKUP_VERSION).tar.gz
-+RDIFF_BACKUP_SITE = http://savannah.nongnu.org/download/rdiff-backup
-+
-+RDIFF_BACKUP_DEPENDENCIES = python librsync
-+
-+define RDIFF_BACKUP_BUILD_CMDS
-+	(cd $(@D); \
-+		CC="$(TARGET_CC)"		\
-+		CFLAGS="$(TARGET_CFLAGS)" 	\
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" 	\
-+	$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build -e /usr/bin/python )
-+endef
-+
-+define RDIFF_BACKUP_INSTALL_TARGET_CMDS
-+    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.1
+2012/8/12 Jonathan Liu <net147@gmail.com>
+
+> On 12/08/2012 7:05 AM, Thomas Petazzoni wrote:
+>
+>> Le Sat, 11 Aug 2012 16:10:27 +1000,
+>> Jonathan Liu<net147@gmail.com>  a ?crit :
+>>
+>>  +# Fix Python interpreter directive
+>>> +define PYTHON_FIX_INTERPRETER
+>>> +        sed -i '1s|#!.*python.*|#!/usr/bin/**env python|'
+>>> $(TARGET_DIR)/usr/bin/{easy_**install,easy_install-2.7,idle,**smtpd.py}
+>>> +endef
+>>> +
+>>> +PYTHON_POST_INSTALL_TARGET_**HOOKS += PYTHON_FIX_INTERPRETER
+>>>
+>> I agree the paths in those scripts is incorrect, *but*:
+>>
+>>   * Should these scripts have been installed in the first place? I don't
+>>     think there are useful for the typical usage of the Python
+>>     interpreter, so maybe we want to get rid of them.
+>>
+>>   * Instead of fixing this patch manually in every Python script
+>>     installed, can we investigate on how to fix the root of the problem?
+>>     I'm the one who has reworked the patches that get Python to
+>>     cross-compile, and I know this stuff is really painful, but I think
+>>     it's worth at least trying to understand a bit if there could be a
+>>     way of handling things. From what I remember the problem is that the
+>>     host-python uses its host sysconfig parameters even when building
+>>     things for the target, simply because the whole Python things has
+>>     absolutely zero understanding of the fact that we could be using
+>>     Python on one machine to build stuff that will run on a different
+>>     machine.
+>>
+> I've submitted patch for Python to use fixed path for sys.executable to
+> resolve this.
+>
+>
+> Regards,
+> Jonathan
+> ______________________________**_________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120812/0dfffc8a/attachment-0001.html>
