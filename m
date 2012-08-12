@@ -1,54 +1,69 @@
-From: Jonathan Liu <net147@gmail.com>
-Date: Sun, 12 Aug 2012 16:57:34 +1000
-Subject: [Buildroot] [PATCH] python: fix interpreter directive for
- python scripts
-In-Reply-To: <20120811230555.46b2f565@skate>
-References: <1344665427-27181-2-git-send-email-net147@gmail.com>
- <20120811230555.46b2f565@skate>
-Message-ID: <502753DE.3040201@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Aug 2012 09:06:10 +0200
+Subject: [Buildroot] [PATCH] nodejs: new package
+In-Reply-To: <502703DF.5000602@gmail.com>
+References: <1344665495-27246-1-git-send-email-net147@gmail.com>
+ <20120811222306.4e21b827@skate> <502703DF.5000602@gmail.com>
+Message-ID: <20120812090610.6cf8fd4d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/08/2012 7:05 AM, Thomas Petazzoni wrote:
-> Le Sat, 11 Aug 2012 16:10:27 +1000,
-> Jonathan Liu<net147@gmail.com>  a ?crit :
->
->> +# Fix Python interpreter directive
->> +define PYTHON_FIX_INTERPRETER
->> +        sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{easy_install,easy_install-2.7,idle,smtpd.py}
->> +endef
->> +
->> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_FIX_INTERPRETER
-> I agree the paths in those scripts is incorrect, *but*:
->
->   * Should these scripts have been installed in the first place? I don't
->     think there are useful for the typical usage of the Python
->     interpreter, so maybe we want to get rid of them.
-Perhaps we could add a config option later on to not install idle and 
-smtpd.py.
->
->   * Instead of fixing this patch manually in every Python script
->     installed, can we investigate on how to fix the root of the problem?
->     I'm the one who has reworked the patches that get Python to
->     cross-compile, and I know this stuff is really painful, but I think
->     it's worth at least trying to understand a bit if there could be a
->     way of handling things. From what I remember the problem is that the
->     host-python uses its host sysconfig parameters even when building
->     things for the target, simply because the whole Python things has
->     absolutely zero understanding of the fact that we could be using
->     Python on one machine to build stuff that will run on a different
->     machine.
-easy_install and easy_install-2.7 shouldn't be in there apparently. It's 
-part of setuptools package.
-I've submitted a V2 patch so it only fixes idle and smtpd.py in python 
-package. The V2 patch is independant of this setuptools interpreter 
-directive issue.
+Hello Jonathan,
 
-I will see if I can look into fixing the interpreter for the setuptools 
-package.
+Please keep the list Cc'ed for our exchanges, thanks!
 
-Regards,
-Jonathan
+Le Sun, 12 Aug 2012 11:16:15 +1000,
+Jonathan Liu <net147@gmail.com> a ?crit :
+
+> >> +config BR2_PACKAGE_NODEJS
+> >> +	bool "nodejs"
+> >> +	select BR2_PACKAGE_OPENSSL
+> > I know nothing about nodejs. Is OpenSSL support absolutely mandatory?
+> If I remember correctly, Node.js already bundles a copy of OpenSSL so 
+> this dependency can be removed.
+> I can add an option to enable/disable built-in SSL support in the 
+> Node.js build.
+
+It would be better if Node.js could use the OpenSSL version that is in
+Buildroot rather than its own internal one. It avoids having two copies
+of OpenSSL on the target system.
+
+And yes, if the SSL support can be enabled/disabled easily, it would be
+great: OpenSSL is a fairly heavy dependency.
+
+> >> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> >> new file mode 100644
+> >> index 0000000..8a0fa91
+> >> --- /dev/null
+> >> +++ b/package/nodejs/nodejs.mk
+> >> @@ -0,0 +1,54 @@
+> >> +#############################################################
+> >> +#
+> >> +# nodejs
+> >> +#
+> >> +#############################################################
+> >> +NODEJS_VERSION = 0.8.6
+> >> +NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+> >> +NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+> >> +NODEJS_INSTALL_STAGING = YES
+> > Does NodeJS contains libraries required by other packages?
+> The headers and node-waf binary are needed to build 3rd party native 
+> modules. I figured it may be useful if someone wants to create buildroot 
+> packages for node.js modules in the future.
+
+Can you add a comment with a similar explanation just before this line.
+For libraries, the reason to have _INSTALL_STAGING is fairly obvious,
+for things like nodejs, it's a little bit less obvious for the ones who
+are not familiar with what nodejs is.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
