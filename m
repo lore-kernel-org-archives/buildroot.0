@@ -1,48 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 12 Aug 2012 18:29:45 +0200
-Subject: [Buildroot] [git commit branch/next] cairo: Add tee surface backend
-	option (required by firefox)
-Message-ID: <20120812163010.6837F97000@busybox.osuosl.org>
+Date: Sun, 12 Aug 2012 18:32:08 +0200
+Subject: [Buildroot] [PATCH 5/8] wget: bump to version 1.14
+In-Reply-To: <1344724053-10165-5-git-send-email-gustavo@zacarias.com.ar>
+References: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
+ <1344724053-10165-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120812183208.5fd3b70a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42136fea75b123377df99189fc8c8871cd568584
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Le Sat, 11 Aug 2012 19:27:30 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cairo/Config.in |    3 +++
- package/cairo/cairo.mk  |    6 ++++++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/wget/wget.mk |    2 ++
+>  1 files changed, 2 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+> index a15111c..9be9c0d 100644
+> --- a/package/wget/wget.mk
+> +++ b/package/wget/wget.mk
+> @@ -6,6 +6,8 @@
+>  
+>  WGET_VERSION = 1.13.4
+>  WGET_SITE = $(BR2_GNU_MIRROR)/wget
+> +WGET_LICENSE = GPLv3+
+> +WGET_LICENSE_FILES = COPYING
+>  
+>  # Prefer full-blown wget over busybox
+>  ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 19c4723..398e47f 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -32,4 +32,7 @@ config BR2_PACKAGE_CAIRO_SVG
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_CAIRO_PDF
- 
-+config BR2_PACKAGE_CAIRO_TEE
-+	bool "tee support"
- endif
-+
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 6b456dd..eedb28d 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -77,4 +77,10 @@ else
- 	CAIRO_CONF_OPT += --disable-svg
- endif
- 
-+ifeq ($(BR2_PACKAGE_CAIRO_TEE),y)
-+	CAIRO_CONF_OPT += --enable-tee
-+else
-+	CAIRO_CONF_OPT += --disable-tee
-+endif
-+
- $(eval $(autotools-package))
+This patch is not bumping the version as its title suggest it should
+do :-)
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
