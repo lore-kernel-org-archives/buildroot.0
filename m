@@ -1,81 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 12 Aug 2012 17:51:09 +0200
-Subject: [Buildroot] [PATCH 06/20] busybox: add support to link against
-	libtirpc when available
-In-Reply-To: <982e7938fd23732ce642ef91ecdc26b0f073b4c7.1344706801.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 12 Aug 2012 17:55:19 +0200
+Subject: [Buildroot] [PATCH 14/20] portmap: mention that rpcbind is the
+	project that superseds portmap
+In-Reply-To: <aae61f5152331e0d8e63c01ddca703e00cde1382.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <982e7938fd23732ce642ef91ecdc26b0f073b4c7.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201208121751.09062.yann.morin.1998@free.fr>
+ <aae61f5152331e0d8e63c01ddca703e00cde1382.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201208121755.19505.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas, all,
 
-On Saturday 11 August 2012 19:40:38 Thomas Petazzoni wrote:
+On Saturday 11 August 2012 19:40:46 Thomas Petazzoni wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/busybox/busybox.mk |   20 +++++++++++++++++---
->  1 file changed, 17 insertions(+), 3 deletions(-)
+>  package/portmap/Config.in |    2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 7277301..17c8317 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -12,14 +12,28 @@ BUSYBOX_VERSION = $(call qstrip,$(BR2_BUSYBOX_VERSION))
->  BUSYBOX_SITE = http://www.busybox.net/downloads
->  endif
->  BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
-> +
-> +BUSYBOX_CFLAGS = \
-> +	$(TARGET_CFLAGS) \
-> +	-I$(LINUX_HEADERS_DIR)/include
-> +
-> +BUSYBOX_LDFLAGS = \
-> +	$(TARGET_LDFLAGS)
-> +
-> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-> +BUSYBOX_DEPENDENCIES += libtirpc
-> +BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-> +BUSYBOX_LDFLAGS += -ltirpc
-> +endif
-> +
->  BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
->  # Allows the build system to tweak CFLAGS
-> -BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
-> +BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(BUSYBOX_CFLAGS)"
->  BUSYBOX_MAKE_OPTS = \
->  	CC="$(TARGET_CC)" \
->  	ARCH=$(KERNEL_ARCH) \
->  	PREFIX="$(TARGET_DIR)" \
-> -	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
-> +	EXTRA_LDFLAGS="$(BUSYBOX_LDFLAGS)" \
->  	CROSS_COMPILE="$(TARGET_CROSS)" \
->  	CONFIG_PREFIX="$(TARGET_DIR)" \
->  	SKIP_STRIP=y
-> @@ -79,7 +93,7 @@ endef
->  endif
+> diff --git a/package/portmap/Config.in b/package/portmap/Config.in
+> index f017cb6..8d25e3a 100644
+> --- a/package/portmap/Config.in
+> +++ b/package/portmap/Config.in
+> @@ -4,6 +4,8 @@ config BR2_PACKAGE_PORTMAP
+>  	help
+>  	  The standard portmapper for RPC services.
 >  
->  # If RPC is enabled then enable nfs mounts
-> -ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
-> +ifeq ($(BR2_RPC_AVAILABLE),y)
+> +	  Note that portmap is being deprecated in favour of rpcbind.
 
-BR2_RPC_SUPPORT_AVAILABLE
+Wouldn't it be better to add (thus answering your question from 00/20):
+  depends on BR2_DEPRECATED
 
->  define BUSYBOX_SET_RPC
->  	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
->  endef
-> -- 
-> 1.7.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Regards,
+Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
