@@ -1,32 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 11 Aug 2012 19:27:33 -0300
-Subject: [Buildroot] [PATCH 8/8] e2fsprogs: bump to version 1.42.5
-In-Reply-To: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1344724053-10165-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1344724053-10165-8-git-send-email-gustavo@zacarias.com.ar>
+From: Jonathan Liu <net147@gmail.com>
+Date: Sun, 12 Aug 2012 11:36:31 +1000
+Subject: [Buildroot] [PATCH v2] opkg: bump version to svn r635
+Message-ID: <1344735391-23280-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/e2fsprogs/e2fsprogs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+It is recommended to use the most recent revision from subversion as it
+contains various fixes.
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 16725ac..1608521 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ package/opkg/opkg.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index be67f8e..3ba61ae 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,11 +4,13 @@
  #
  #############################################################
  
--E2FSPROGS_VERSION = 1.42.4
-+E2FSPROGS_VERSION = 1.42.5
- E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+-OPKG_VERSION = 0.1.8
++OPKG_VERSION = 635
+ OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+-OPKG_SITE = http://opkg.googlecode.com/files
++OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
++OPKG_SITE_METHOD = svn
+ OPKG_INSTALL_STAGING = YES
+ OPKG_CONF_OPT = --disable-curl --disable-gpg
++OPKG_AUTORECONF = YES
  
- E2FSPROGS_CONF_OPT = \
+ # Ensure directory for lockfile exists
+ define OPKG_CREATE_LOCKDIR
 -- 
-1.7.8.6
+1.7.11.3
