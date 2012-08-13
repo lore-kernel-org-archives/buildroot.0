@@ -1,60 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 Aug 2012 17:02:35 -0300
-Subject: [Buildroot] [PATCH 1/7] samba: add license info and smbta-util
-	option
-Message-ID: <1344888161-10068-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 13 Aug 2012 17:02:36 -0300
+Subject: [Buildroot] [PATCH 2/7] cifs-utils: bump to version 5.6
+In-Reply-To: <1344888161-10068-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1344888161-10068-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1344888161-10068-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add license info and the smbta-util config knob.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba/Config.in |    7 +++++++
- package/samba/samba.mk  |    3 +++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ package/cifs-utils/cifs-utils.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index e88b360..928b40b 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -168,6 +168,13 @@ config BR2_PACKAGE_SAMBA_SWAT
- 	help
- 	  Samba Web Administration Tool
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index e2530c0..cfa2b91 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -1,6 +1,8 @@
+-CIFS_UTILS_VERSION = 5.5
++CIFS_UTILS_VERSION = 5.6
+ CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
++CIFS_UTILS_LICENSE = GPLv3
++CIFS_UTILS_LICENSE_FILES = COPYING
  
-+config BR2_PACKAGE_SAMBA_SMBTA_UTIL
-+	bool "smbta-util"
-+	default y
-+	help
-+	  Tool to ease the configuration of the vfs_smb_traffic_analyzer
-+	  module regarding data encryption.
-+
- config BR2_PACKAGE_SAMBA_SMBTAR
- 	bool "smbtar"
- 	default y
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 301a39f..75e3173 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -8,6 +8,8 @@ SAMBA_VERSION = 3.6.7
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
-+SAMBA_LICENSE = GPLv3+
-+SAMBA_LICENSE_FILES = COPYING
- 
- SAMBA_DEPENDENCIES = popt \
- 	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
-@@ -104,6 +106,7 @@ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBPASSWD) += usr/bin/smbpasswd
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSHARESEC) += usr/bin/sharesec
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSPOOL) += usr/bin/smbspool
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSTATUS) += usr/bin/smbstatus
-+SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTA_UTIL) += usr/bin/smbta-util
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTREE) += usr/bin/smbtree
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SWAT) += usr/sbin/swat
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbbackup
+ define CIFS_UTILS_NO_WERROR
+ 	$(SED) 's/-Werror//' $(@D)/Makefile.in
 -- 
 1.7.8.6
