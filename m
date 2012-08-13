@@ -1,72 +1,76 @@
-From: Avishay Orpaz <avishorp@gmail.com>
-Date: Mon, 13 Aug 2012 17:19:38 +0300
-Subject: [Buildroot] [PATCH 2/2] rdiff-backup: new package
-In-Reply-To: <1344867578-12784-1-git-send-email-avishorp@gmail.com>
-References: <1344867578-12784-1-git-send-email-avishorp@gmail.com>
-Message-ID: <1344867578-12784-2-git-send-email-avishorp@gmail.com>
+From: Ozgun <ozgun.gunay@gmail.com>
+Date: Mon, 13 Aug 2012 18:16:04 +0300
+Subject: [Buildroot] buildroot Digest, Vol 69, Issue 3
+In-Reply-To: <mailman.69642.1330589368.2942.buildroot@busybox.net>
+References: <mailman.69642.1330589368.2942.buildroot@busybox.net>
+Message-ID: <CAPeX=+tj9qAj45rtFThuw+yReS31uXCTaAsf0C6MLNRkOdSxxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/rdiff-backup/Config.in       |   10 ++++++++++
- package/rdiff-backup/rdiff-backup.mk |   29 +++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 package/rdiff-backup/Config.in
- create mode 100644 package/rdiff-backup/rdiff-backup.mk
+I have to use a gamepad with br linux. The gamepad is recognized by linux
+as a HID device and I can read hid commands form ?/dev/input/event6? with
+the evtest ( http://www.freedesktop.org/wiki/Evtest  ).
+Even if the interval of device is 1ms, I can read very few values form
+?/dev/input/event6?. see below. (The gamepad produces signals with 1ms
+interval on windows.)
+Do I have to configure libhid or chose another method?
 
-diff --git a/package/rdiff-backup/Config.in b/package/rdiff-backup/Config.in
-new file mode 100644
-index 0000000..1e8bc27
---- /dev/null
-+++ b/package/rdiff-backup/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_RDIFF_BACKUP
-+    bool "rdiff-backup"
-+    depends on BR2_PACKAGE_PYTHON
-+    select BR2_PACKAGE_PYTHON_HASHLIB
-+    select BR2_PACKAGE_PYTHON_ZLIB
-+    help
-+      Tool for incremental, network efficient backup
-+
-+      http://nongnu.org/rdiff-backup
-+
-diff --git a/package/rdiff-backup/rdiff-backup.mk b/package/rdiff-backup/rdiff-backup.mk
-new file mode 100644
-index 0000000..bb0c3ca
---- /dev/null
-+++ b/package/rdiff-backup/rdiff-backup.mk
-@@ -0,0 +1,29 @@
-+#############################################################
-+#
-+# rdiff-backup
-+#
-+#############################################################
-+
-+RDIFF_BACKUP_VERSION = 1.2.8
-+RDIFF_BACKUP_SOURCE = rdiff-backup-$(RDIFF_BACKUP_VERSION).tar.gz
-+RDIFF_BACKUP_SITE = http://savannah.nongnu.org/download/rdiff-backup
-+RDIFF_BACKUP_LICENSE = GPLv2
-+
-+RDIFF_BACKUP_DEPENDENCIES = python librsync
-+
-+define RDIFF_BACKUP_BUILD_CMDS
-+	(cd $(@D); \
-+		CC="$(TARGET_CC)"		\
-+		CFLAGS="$(TARGET_CFLAGS)" 	\
-+		LDSHARED="$(TARGET_CC) -shared" \
-+		LDFLAGS="$(TARGET_LDFLAGS)" 	\
-+	$(HOST_DIR)/usr/bin/python setup.py build_ext \
-+	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build -e /usr/bin/python )
-+endef
-+
-+define RDIFF_BACKUP_INSTALL_TARGET_CMDS
-+    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.1
+
+
+got motion event at: 1343817626.146290 - Type: 3  Code: 0 Value: 574
+
+got motion event at: 1343817626.146360 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.155289 - Type: 3  Code: 0 Value: 606
+
+got motion event at: 1343817626.155359 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.164279 - Type: 3  Code: 0 Value: 638
+
+got motion event at: 1343817626.164349 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.173291 - Type: 3  Code: 0 Value: 670
+
+got motion event at: 1343817626.173361 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.182248 - Type: 3  Code: 0 Value: 702
+
+got motion event at: 1343817626.182315 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.191242 - Type: 3  Code: 0 Value: 733
+
+got motion event at: 1343817626.191309 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.202252 - Type: 3  Code: 0 Value: 765
+
+got motion event at: 1343817626.202321 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.215249 - Type: 3  Code: 0 Value: 796
+
+got motion event at: 1343817626.215317 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.423287 - Type: 3  Code: 0 Value: 762
+
+got motion event at: 1343817626.423358 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.425287 - Type: 3  Code: 0 Value: 728
+
+got motion event at: 1343817626.425357 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.427287 - Type: 3  Code: 0 Value: 694
+
+got motion event at: 1343817626.427357 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.429260 - Type: 3  Code: 0 Value: 659
+
+got motion event at: 1343817626.429331 - Type: 0  Code: 0 Value: 0
+
+got motion event at: 1343817626.431261 - Type: 3  Code: 0 Value: 626
+
+got motion event at: 1343817626.431366 - Type: 0  Code: 0 Value: 0
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120813/c221c52d/attachment-0001.html>
