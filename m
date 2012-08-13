@@ -1,201 +1,69 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Mon, 13 Aug 2012 10:22:32 +0300
-Subject: [Buildroot] [PATCH 11/36] package/qemu: new package
-In-Reply-To: <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CALR4fELL58pS31Ur4v-h30ok9q1ibx3QzxKuxz3HJuY+vOqVbA@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Mon, 13 Aug 2012 15:41:14 +0800
+Subject: [Buildroot] [PATCH 2/2] package: Makefile.in: Add target
+	compilation flags for Blackfin.
+In-Reply-To: <1344843674-27814-1-git-send-email-sonic.adi@gmail.com>
+References: <1344843674-27814-1-git-send-email-sonic.adi@gmail.com>
+Message-ID: <1344843674-27814-2-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Let me understand this: you are trying to build QEMU for the host ?
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-If you can also hook up some magic woodo to execute the image as well
-("make qemu-run" for example) that would really be great.
+1) Add CPU type and revision CFLAGS
+2) Add FLAT ABI LDFLAGS
+3) Add share FLAT ABI FLAGS
 
-I was thinking of adding this my self, by setting some new vars depending
-on the CPU arch chosen, and other tricks. I am still unsure about the
-details, as this is an idea I toyed with late night.
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ package/Makefile.in |   22 +++++++++++++++++++++-
+ 1 files changed, 21 insertions(+), 1 deletions(-)
 
-On Mon, Aug 13, 2012 at 2:53 AM, Yann E. MORIN <yann.morin.1998@free.fr>wrote:
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/Config.in      |    1 +
->  package/qemu/Config.in |   24 ++++++++++++
->  package/qemu/qemu.mk   |   98
-> ++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 123 insertions(+), 0 deletions(-)
->  create mode 100644 package/qemu/Config.in
->  create mode 100644 package/qemu/qemu.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 3109591..eb02983 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -504,6 +504,7 @@ menu "Miscellaneous"
->  source "package/collectd/Config.in"
->  source "package/empty/Config.in"
->  source "package/mobile-broadband-provider-info/Config.in"
-> +source "package/qemu/Config.in"
->  source "package/shared-mime-info/Config.in"
->  source "package/sound-theme-borealis/Config.in"
->  source "package/sound-theme-freedesktop/Config.in"
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> new file mode 100644
-> index 0000000..a77d863
-> --- /dev/null
-> +++ b/package/qemu/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_QEMU
-> +       bool "QEMU"
-> +       depends on BR2_PACKAGE_PYTHON       # We only need host-python,
-> +                                           # but there's no way to say so.
-> +       select BR2_PACKAGE_ZLIB
-> +       select BR2_PACKAGE_LIBGLIB2
-> +       help
-> +         QEMU is a generic and open source machine emulator and
-> virtualizer.
-> +
-> +         When used as a machine emulator, QEMU can run OSes and programs
-> made
-> +         for one machine (e.g. an ARM board) on a different machine (e.g.
-> +         your own PC). By using dynamic translation, it achieves very good
-> +         performance.
-> +
-> +         When used as a virtualizer, QEMU achieves near native
-> performances
-> +         by executing the guest code directly on the host CPU. QEMU
-> supports
-> +         virtualization when executing under the Xen hypervisor or using
-> the
-> +         KVM kernel module in Linux. When using KVM, QEMU can virtualize
-> x86,
-> +         server and embedded PowerPC, and S390 guests.
-> +
-> +         http://qemu.org/
-> +
-> +comment "QEMU requires python"
-> +       depends on !BR2_PACKAGE_PYTHON
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> new file mode 100644
-> index 0000000..3825731
-> --- /dev/null
-> +++ b/package/qemu/qemu.mk
-> @@ -0,0 +1,98 @@
->
-> +#-----------------------------------------------------------------------------
-> +# Package description
-> +
-> +QEMU_VERSION = 1.1.1-1
-> +QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
-> +QEMU_SITE = http://wiki.qemu.org/download
-> +QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
-> +QEMU_LICENSE_FILES = COPYING COPYING.LIB
-> +# NOTE: there is no top-level license file for non-(L)GPL licenses;
-> +#       the non-(L)GPL license texts are specified in the affected
-> +#       individual source files.
-> +
->
-> +#-----------------------------------------------------------------------------
-> +# Package unconditional configuration
-> +
-> +QEMU_DEPENDENCIES = zlib libglib2
-> +
->
-> +#-----------------------------------------------------------------------------
-> +# Package conditional configuration
-> +
-> +# Need the LIBS variable because librt and libm are
-> +# not automatically pulled. :-(
-> +QEMU_LIBS = -lrt -lm
-> +
-> +QEMU_OPTS =
-> +QEMU_VARS =
-> +
->
-> +#----------------------------------------------------------------------------
-> +# Package build process
-> +
-> +# Note: although QEMU uses a ./configure script, it is not compatible with
-> +#       the traditional autotools options (eg. --target et al.), so we can
-> +#       not use the autotools-package infrastructure. So we have to use
-> the
-> +#       generic-package infra instead. Sigh... :-(
-> +
-> +define QEMU_CONFIGURE_CMDS
-> +       ( cd $(@D);                                 \
-> +           LIBS='$(QEMU_LIBS)'                     \
-> +           $(TARGET_CONFIGURE_OPTS)                \
-> +           $(TARGET_CONFIGURE_ARGS)                \
-> +           $(QEMU_VARS)                            \
-> +           ./configure                             \
-> +               --prefix=/usr                       \
-> +               --cross-prefix=$(TARGET_CROSS)      \
-> +               --audio-drv-list=                   \
-> +               --audio-card-list=                  \
-> +               --enable-kvm                        \
-> +               --enable-nptl                       \
-> +               --enable-attr                       \
-> +               --enable-vhost-net                  \
-> +               --enable-system                     \
-> +               --enable-linux-user                 \
-> +               --disable-bsd-user                  \
-> +               --disable-xen                       \
-> +               --disable-slirp                     \
-> +               --disable-sdl                       \
-> +               --disable-vnc                       \
-> +               --disable-virtfs                    \
-> +               --disable-brlapi                    \
-> +               --disable-curses                    \
-> +               --disable-curl                      \
-> +               --disable-fdt                       \
-> +               --disable-bluez                     \
-> +               --disable-guest-base                \
-> +               --disable-uuid                      \
-> +               --disable-vde                       \
-> +               --disable-linux-aio                 \
-> +               --disable-cap-ng                    \
-> +               --disable-docs                      \
-> +               --disable-spice                     \
-> +               --disable-rbd                       \
-> +               --disable-libiscsi                  \
-> +               --disable-usb-redir                 \
-> +               --disable-guest-agent               \
-> +               --disable-smartcard                 \
-> +               --disable-strip                     \
-> +               $(QEMU_OPTS)                        \
-> +       )
-> +endef
-> +
-> +define QEMU_BUILD_CMDS
-> +       $(MAKE) -C $(@D)
-> +endef
-> +
-> +define QEMU_INSTALL_TARGET_CMDS
-> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +endef
-> +
-> +define QEMU_UNINSTALL_TARGET_CMDS
-> +       @echo 'QEMU has no uninstall rule.'
-> +       @false
-> +endef
-> +
-> +define QEMU_CLEAN_CMDS
-> +       $(MAKE) -C $(@D) clean
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 1.7.2.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120813/e3e63448/attachment-0001.html>
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 6fad224..cda2297 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -85,7 +85,13 @@ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING=-g3
+ endif
+ 
+-TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
++ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
++TARGET_CPU=-mcpu=$(BR2_GCC_TARGET_CPU)
++else
++TARGET_CPU=-mcpu=$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION)
++endif
++
++TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_CPU)
+ 
+ ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_ABI64)),yy)
+ TARGET_CFLAGS+=-fno-pic -mno-abicalls
+@@ -95,9 +101,23 @@ ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
+ 
++ifeq ($(BR2_NOMMU), y)
++TARGET_CFLAGS += -D__NOMMU__ -D__uClinux__
++endif
++
+ TARGET_CXXFLAGS=$(TARGET_CFLAGS)
+ TARGET_LDFLAGS=$(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
++ifeq ($(BR2_ABI_FLAT),y)
++TARGET_LDFLAGS += -Wl,-elf2flt
++endif
++
++ifeq ($(BR2_BFIN_SHARED_FLAT), y)
++TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
++TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
++TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+ TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
+ else
+-- 
+1.7.0.4
