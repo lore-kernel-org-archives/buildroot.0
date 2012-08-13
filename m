@@ -1,42 +1,201 @@
-From: Jan Pohanka <xhpohanka@gmail.com>
-Date: Mon, 13 Aug 2012 08:52:27 +0200
-Subject: [Buildroot] libev on armv5 - illegal instruction
-In-Reply-To: <20120810215623.5d7304a5@skate>
-References: <op.wirpbfhyyxxkfz@pohanka-pc> <20120810085836.3c62fe7e@skate>
- <op.witduljwyxxkfz@pohanka-pc> <20120810215623.5d7304a5@skate>
-Message-ID: <op.wiyv1poeyxxkfz@pohanka-pc>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Mon, 13 Aug 2012 10:22:32 +0300
+Subject: [Buildroot] [PATCH 11/36] package/qemu: new package
+In-Reply-To: <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
+References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
+ <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CALR4fELL58pS31Ur4v-h30ok9q1ibx3QzxKuxz3HJuY+vOqVbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Let me understand this: you are trying to build QEMU for the host ?
 
-> The toolchain is not downloaded by Buildroot in your .config. Are you
-> sure you have the same toolchain on both build machines?
+If you can also hook up some magic woodo to execute the image as well
+("make qemu-run" for example) that would really be great.
+
+I was thinking of adding this my self, by setting some new vars depending
+on the CPU arch chosen, and other tricks. I am still unsure about the
+details, as this is an idea I toyed with late night.
+
+On Mon, Aug 13, 2012 at 2:53 AM, Yann E. MORIN <yann.morin.1998@free.fr>wrote:
+
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/Config.in      |    1 +
+>  package/qemu/Config.in |   24 ++++++++++++
+>  package/qemu/qemu.mk   |   98
+> ++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 123 insertions(+), 0 deletions(-)
+>  create mode 100644 package/qemu/Config.in
+>  create mode 100644 package/qemu/qemu.mk
 >
-
-I have checked it again, yes toolchain are the same:
-arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 from
-Codesourcery
-
-> Also, could you put online:
+> diff --git a/package/Config.in b/package/Config.in
+> index 3109591..eb02983 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -504,6 +504,7 @@ menu "Miscellaneous"
+>  source "package/collectd/Config.in"
+>  source "package/empty/Config.in"
+>  source "package/mobile-broadband-provider-info/Config.in"
+> +source "package/qemu/Config.in"
+>  source "package/shared-mime-info/Config.in"
+>  source "package/sound-theme-borealis/Config.in"
+>  source "package/sound-theme-freedesktop/Config.in"
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> new file mode 100644
+> index 0000000..a77d863
+> --- /dev/null
+> +++ b/package/qemu/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_QEMU
+> +       bool "QEMU"
+> +       depends on BR2_PACKAGE_PYTHON       # We only need host-python,
+> +                                           # but there's no way to say so.
+> +       select BR2_PACKAGE_ZLIB
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       help
+> +         QEMU is a generic and open source machine emulator and
+> virtualizer.
+> +
+> +         When used as a machine emulator, QEMU can run OSes and programs
+> made
+> +         for one machine (e.g. an ARM board) on a different machine (e.g.
+> +         your own PC). By using dynamic translation, it achieves very good
+> +         performance.
+> +
+> +         When used as a virtualizer, QEMU achieves near native
+> performances
+> +         by executing the guest code directly on the host CPU. QEMU
+> supports
+> +         virtualization when executing under the Xen hypervisor or using
+> the
+> +         KVM kernel module in Linux. When using KVM, QEMU can virtualize
+> x86,
+> +         server and embedded PowerPC, and S390 guests.
+> +
+> +         http://qemu.org/
+> +
+> +comment "QEMU requires python"
+> +       depends on !BR2_PACKAGE_PYTHON
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> new file mode 100644
+> index 0000000..3825731
+> --- /dev/null
+> +++ b/package/qemu/qemu.mk
+> @@ -0,0 +1,98 @@
 >
->  - A complete build log on both machines (make clean && make)
->  - The two binaries that are different and causing problems
+> +#-----------------------------------------------------------------------------
+> +# Package description
+> +
+> +QEMU_VERSION = 1.1.1-1
+> +QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+> +QEMU_SITE = http://wiki.qemu.org/download
+> +QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
+> +QEMU_LICENSE_FILES = COPYING COPYING.LIB
+> +# NOTE: there is no top-level license file for non-(L)GPL licenses;
+> +#       the non-(L)GPL license texts are specified in the affected
+> +#       individual source files.
+> +
 >
-
-Example and logs can be downloaded from  
-http://neuron.feld.cvut.cz/honza/br_test.tar.bz2
-Buildroot logs and example source and binaries libev libraries (working  
-and not working) are statically linked
-with testing application. Compiler is called through BR wrapper (in
-BR_PATH/output/host/usr/bin)
-
-best regards
-Jan
-
--- 
-Tato zpr?va byla vytvo?ena p?evratn?m po?tovn?m klientem Opery:
-http://www.opera.com/mail/
+> +#-----------------------------------------------------------------------------
+> +# Package unconditional configuration
+> +
+> +QEMU_DEPENDENCIES = zlib libglib2
+> +
+>
+> +#-----------------------------------------------------------------------------
+> +# Package conditional configuration
+> +
+> +# Need the LIBS variable because librt and libm are
+> +# not automatically pulled. :-(
+> +QEMU_LIBS = -lrt -lm
+> +
+> +QEMU_OPTS =
+> +QEMU_VARS =
+> +
+>
+> +#----------------------------------------------------------------------------
+> +# Package build process
+> +
+> +# Note: although QEMU uses a ./configure script, it is not compatible with
+> +#       the traditional autotools options (eg. --target et al.), so we can
+> +#       not use the autotools-package infrastructure. So we have to use
+> the
+> +#       generic-package infra instead. Sigh... :-(
+> +
+> +define QEMU_CONFIGURE_CMDS
+> +       ( cd $(@D);                                 \
+> +           LIBS='$(QEMU_LIBS)'                     \
+> +           $(TARGET_CONFIGURE_OPTS)                \
+> +           $(TARGET_CONFIGURE_ARGS)                \
+> +           $(QEMU_VARS)                            \
+> +           ./configure                             \
+> +               --prefix=/usr                       \
+> +               --cross-prefix=$(TARGET_CROSS)      \
+> +               --audio-drv-list=                   \
+> +               --audio-card-list=                  \
+> +               --enable-kvm                        \
+> +               --enable-nptl                       \
+> +               --enable-attr                       \
+> +               --enable-vhost-net                  \
+> +               --enable-system                     \
+> +               --enable-linux-user                 \
+> +               --disable-bsd-user                  \
+> +               --disable-xen                       \
+> +               --disable-slirp                     \
+> +               --disable-sdl                       \
+> +               --disable-vnc                       \
+> +               --disable-virtfs                    \
+> +               --disable-brlapi                    \
+> +               --disable-curses                    \
+> +               --disable-curl                      \
+> +               --disable-fdt                       \
+> +               --disable-bluez                     \
+> +               --disable-guest-base                \
+> +               --disable-uuid                      \
+> +               --disable-vde                       \
+> +               --disable-linux-aio                 \
+> +               --disable-cap-ng                    \
+> +               --disable-docs                      \
+> +               --disable-spice                     \
+> +               --disable-rbd                       \
+> +               --disable-libiscsi                  \
+> +               --disable-usb-redir                 \
+> +               --disable-guest-agent               \
+> +               --disable-smartcard                 \
+> +               --disable-strip                     \
+> +               $(QEMU_OPTS)                        \
+> +       )
+> +endef
+> +
+> +define QEMU_BUILD_CMDS
+> +       $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QEMU_INSTALL_TARGET_CMDS
+> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +endef
+> +
+> +define QEMU_UNINSTALL_TARGET_CMDS
+> +       @echo 'QEMU has no uninstall rule.'
+> +       @false
+> +endef
+> +
+> +define QEMU_CLEAN_CMDS
+> +       $(MAKE) -C $(@D) clean
+> +endef
+> +
+> +$(eval $(generic-package))
+> --
+> 1.7.2.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120813/e3e63448/attachment-0001.html>
