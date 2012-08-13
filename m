@@ -1,59 +1,60 @@
-From: Neale Pickett <neale@lanl.gov>
-Date: Mon, 13 Aug 2012 13:56:40 -0600
-Subject: [Buildroot] git clone with http not giving me commits after Jul
- 6
-In-Reply-To: <502958DC.3050705@googlemail.com>
-References: <20120813121005.3aeda200@cfl-science.lanl.gov>
- <502958DC.3050705@googlemail.com>
-Message-ID: <20120813135640.7735d625@cfl-science.lanl.gov>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 13 Aug 2012 17:02:35 -0300
+Subject: [Buildroot] [PATCH 1/7] samba: add license info and smbta-util
+	option
+Message-ID: <1344888161-10068-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm unable to use the git protocol because it is firewalled out where I
-work.
+Add license info and the smbta-util config knob.
 
-The problem may be that update-server-info has quit running.  This
-would explain the behavior I'm observing (git protocol is current, http
-protocol is not).  It may also be my company's HTTP proxy, although I'm
-doubtful that it has still cached a manifest file from over a month ago.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba/Config.in |    7 +++++++
+ package/samba/samba.mk  |    3 +++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-My remote branches (on origin) are "master" and "next".  Neither has
-the 2012.08_rc1 tag, which according to the cgit interface, are on the
-"master" branch.
-
-    cfl-science:/home/neale/src/buildroot$ git tag -l | grep -c 2012.08
-    0
-
-
-
-On Mon, 13 Aug 2012 21:43:24 +0200
-Carsten Schoenert <c.schoenert@gmail.com> wrote:
-
-> Hello Neale,
-> 
-> I use another URL an get all the tags and branches like seen on
-> http://git.buildroot.net/buildroot/ .
-> 
-> > carsten at wheezy:~/gitprojects/buildroot [master]$ grep
-> > "url"  .git/config url = git://git.busybox.net/buildroot
-> 
-> Do you have checked the output of 'git branch -a' and 'git tag -l'?
-> 
-> Regards
-> Carsten
-> 
-> and now to the ML :)
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index e88b360..928b40b 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -168,6 +168,13 @@ config BR2_PACKAGE_SAMBA_SWAT
+ 	help
+ 	  Samba Web Administration Tool
+ 
++config BR2_PACKAGE_SAMBA_SMBTA_UTIL
++	bool "smbta-util"
++	default y
++	help
++	  Tool to ease the configuration of the vfs_smb_traffic_analyzer
++	  module regarding data encryption.
++
+ config BR2_PACKAGE_SAMBA_SMBTAR
+ 	bool "smbtar"
+ 	default y
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 301a39f..75e3173 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -8,6 +8,8 @@ SAMBA_VERSION = 3.6.7
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
++SAMBA_LICENSE = GPLv3+
++SAMBA_LICENSE_FILES = COPYING
+ 
+ SAMBA_DEPENDENCIES = popt \
+ 	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
+@@ -104,6 +106,7 @@ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBPASSWD) += usr/bin/smbpasswd
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSHARESEC) += usr/bin/sharesec
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSPOOL) += usr/bin/smbspool
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSTATUS) += usr/bin/smbstatus
++SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTA_UTIL) += usr/bin/smbta-util
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTREE) += usr/bin/smbtree
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SWAT) += usr/sbin/swat
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbbackup
 -- 
-Neale Pickett <neale@lanl.gov>
-Advanced Computing Solutions, Los Alamos National Laboratory
+1.7.8.6
