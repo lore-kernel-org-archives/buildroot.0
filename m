@@ -1,48 +1,127 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Aug 2012 02:00:24 +0200
-Subject: [Buildroot] [PATCH 01/36] system/init: add option for no init
-	system
-In-Reply-To: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <201208130200.24426.yann.morin.1998@free.fr>
+From: Jonathan Liu <net147@gmail.com>
+Date: Mon, 13 Aug 2012 11:02:40 +1000
+Subject: [Buildroot] [PATCH v3 2/2] nodejs: new package
+In-Reply-To: <20120812182909.4988214d@skate>
+References: <1344761525-532-1-git-send-email-net147@gmail.com>
+ <1344761525-532-3-git-send-email-net147@gmail.com>
+ <20120812182909.4988214d@skate>
+Message-ID: <CANwerB3M_qD7Ly8jsTzXvABx7pMdGpASiEicy+_mzi27Vyg9bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 13 August 2012 02:29, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Sorry, I forgot an intro mail... Here it is:
+> Le Sun, 12 Aug 2012 18:52:05 +1000,
+> Jonathan Liu <net147@gmail.com> a ?crit :
+>
+> > --- /dev/null
+> > +++ b/package/nodejs/Config.in
+> > @@ -0,0 +1,38 @@
+> > +config BR2_PACKAGE_NODEJS
+> > +     bool "nodejs"
+> > +     help
+> > +       Event-driven I/O server-side JavaScript environment based on V8.
+> > +
+> > +       http://nodejs.org/
+> > +
+> > +if BR2_PACKAGE_NODEJS
+> > +
+> > +config BR2_PACKAGE_NODEJS_SSL
+> > +     bool "enable SSL support"
+> > +     default y
+> > +     help
+> > +       Enable SSL support.
+>
+> In general, we don't add a suboption to enable OpenSSL support: is the
+> openssl package is enabled, we automatically enable openssl support in
+> the package.
+>
+Ok.
 
-This series is an attempt to add QEMU as a package.
+>
+> > +if BR2_PACKAGE_NODEJS_SSL
+> > +
+> > +config BR2_PACKAGE_NODEJS_SHARED_OPENSSL
+> > +     bool "use shared OpenSSL"
+> > +     default y
+> > +     select BR2_PACKAGE_OPENSSL
+> > +     help
+> > +       Use shared OpenSSL library instead of statically linked
+> > +       OpenSSL bundled with node.js.
+> > +
+> > +endif
+>
+> I think this should always be the case: use the Buildroot openssl
+> package if enabled, otherwise disable ssl support. Is there any
+> advantage to using the built-in version?
+>
+Not much advantage I guess. I can remove it.
 
-It first tries to fix a few short-comings I encounterd:
-  patches 1 & 2
+>
+> > +define NODEJS_CONFIGURE_CMDS
+> > +     (cd $(@D); rm -rf config.cache; \
+> > +             $(TARGET_CONFIGURE_ARGS) \
+> > +             $(TARGET_CONFIGURE_OPTS) \
+> > +             PATH="$(HOST_DIR)/usr/bin:$(PATH)" \
+> > +             ./configure \
+> > +             --prefix=/usr \
+> > +             --without-snapshot \
+> > +             $(if
+> $(BR2_PACKAGE_NODEJS_SHARED_OPENSSL),--shared-openssl,) \
+> > +             $(if $(BR2_PACKAGE_NODEJS_SSL),,--without-ssl) \
+> > +             $(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+> > +             $(if $(BR2_PACKAGE_NODEJS_WAF),,--without-waf) \
+> > +             --without-dtrace \
+> > +             --without-etw \
+> > +     )
+> > +endef
+>
+> You're using the autotools-package infrastructure, so don't override
+> the _CONFIGURE_CMDS. You should simply need to do:
+>
+> NODEJS_CONF_OPT =
+>         --without-snapshot \
+>         $(if $(BR2_PACKAGE_NODEJS_SHARED_OPENSSL),--shared-openssl,) \
+>         $(if $(BR2_PACKAGE_NODEJS_SSL),,--without-ssl) \
+>         $(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+>         $(if $(BR2_PACKAGE_NODEJS_WAF),,--without-waf) \
+>         --without-dtrace \
+>         --without-etw
+>
+> > +NODEJS_MAKE_ENV = $(TARGET_CONFIGURE_OPTS)
+>
+The make command needs have CC, CXX, etc. set again because node.js isn't
+using a real autotools based configure. It doesn't remember the variables.
+I am thinking I should probably change it back to generic package because
+it isn't a real autotools based system but just a Python-based configure
+behaves similar to autotools.
 
-It then adds a few new packages that are dependencies of QEMU, some optional:
-  patches 3 to 10
 
-Then it adds QEMU as a new package, with everything disabled:
-  patch 11
+> > +NODEJS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
+>
+> And you can get rid of this as well.
+>
+Ok.
 
-Then it adds a few config options to QEMU, to enable/disable some features:
-  patches 12 to 34
-
-And finally it moves QEMU options to a sub-menu:
-  patch 35
-
-A last patch, which I'd like feedback on, enables building static QEMU
-executables:
-  patch 36
+>
+> > +define NODEJS_INSTALL_TARGET_CMDS
+> > +       $(INSTALL) -D -m 775 $(@D)/out/Release/node
+> $(TARGET_DIR)/usr/bin/node
+> > +endef
+> > +
+> > +define NODEJS_UNINSTALL_TARGET_CMDS
+> > +       rm -f $(TARGET_DIR)/usr/bin/node
+> > +endef
+> > +
+> > +$(eval $(autotools-package))
+>
 
 Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Jonathan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120813/dd6130a1/attachment-0001.html>
