@@ -1,35 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Aug 2012 19:35:50 +0200
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 13 Aug 2012 15:26:18 -0300
 Subject: [Buildroot] [PATCH 14/20] portmap: mention that rpcbind is the
  project that superseds portmap
-In-Reply-To: <201208121755.19505.yann.morin.1998@free.fr>
+In-Reply-To: <20120813193550.289adb91@skate>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
  <aae61f5152331e0d8e63c01ddca703e00cde1382.1344706801.git.thomas.petazzoni@free-electrons.com>
- <201208121755.19505.yann.morin.1998@free.fr>
-Message-ID: <20120813193550.289adb91@skate>
+ <201208121755.19505.yann.morin.1998@free.fr> <20120813193550.289adb91@skate>
+Message-ID: <502946CA.4040606@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 12 Aug 2012 17:55:19 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+On 08/13/12 14:35, Thomas Petazzoni wrote:
 
-> > +	  Note that portmap is being deprecated in favour of rpcbind.
+> Yeah, I wasn't sure about this one. Maybe we should mark it deprecated
+> yes. Gustavo, do you see any use case that requires keeping portmap if
+> rpcbind is available?
 > 
-> Wouldn't it be better to add (thus answering your question from 00/20):
->   depends on BR2_DEPRECATED
+> Thanks!
+> 
+> Thomas
 
-Yeah, I wasn't sure about this one. Maybe we should mark it deprecated
-yes. Gustavo, do you see any use case that requires keeping portmap if
-rpcbind is available?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I use a couple of apps that need RPC that i think will probably break,
+but on the libc level rather than the portmapper itself so i see no
+issue there.
+It's probably worth trying the switch with -next so we can find and fix
+those in need of a slight LDFLAGS tweak.
+Regards.
