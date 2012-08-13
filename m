@@ -1,318 +1,348 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 13 Aug 2012 08:32:16 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-12
-Message-ID: <20120813063216.C672452D0F0@lolut.humanoidz.org>
+From: Jonathan Liu <net147@gmail.com>
+Date: Mon, 13 Aug 2012 16:42:08 +1000
+Subject: [Buildroot] [PATCH v3] p7zip-light: new package
+Message-ID: <1344840128-29740-1-git-send-email-net147@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+---
+ package/Config.in                                  |   1 +
+ package/p7zip-light/Config.in                      |  26 +++++
+ package/p7zip-light/p7zip-light-disable-rar.patch  | 112 +++++++++++++++++++++
+ package/p7zip-light/p7zip-light-exclude-docs.patch |  30 ++++++
+ .../p7zip-light/p7zip-light-makefile-flags.patch   |  80 +++++++++++++++
+ package/p7zip-light/p7zip-light.mk                 |  31 ++++++
+ 6 files changed, 280 insertions(+)
+ create mode 100644 package/p7zip-light/Config.in
+ create mode 100644 package/p7zip-light/p7zip-light-disable-rar.patch
+ create mode 100644 package/p7zip-light/p7zip-light-exclude-docs.patch
+ create mode 100644 package/p7zip-light/p7zip-light-makefile-flags.patch
+ create mode 100644 package/p7zip-light/p7zip-light.mk
 
-Hello,
-
-On 2012-08-12, 83 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 62 builds have been successful
- 21 builds have failed
-
-Below the results of the failed builds. Successful builds are omitted.
-
-Build 2f7a375a6bdd4f0ccd3c6816ee2e7cd8048f256f
-==============================================
-
-Status         : NOK
-Failure reason : mplayer-32726
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 00:45:20
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/2f7a375a6bdd4f0ccd3c6816ee2e7cd8048f256f/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2f7a375a6bdd4f0ccd3c6816ee2e7cd8048f256f/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2f7a375a6bdd4f0ccd3c6816ee2e7cd8048f256f/config
-Defconfig      : http://autobuild.buildroot.net/results/2f7a375a6bdd4f0ccd3c6816ee2e7cd8048f256f/defconfig
-
-Build e6d42590af23346d6b1110e1943f656bf5ad1715
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-08-12 01:33:57
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/e6d42590af23346d6b1110e1943f656bf5ad1715/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e6d42590af23346d6b1110e1943f656bf5ad1715/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e6d42590af23346d6b1110e1943f656bf5ad1715/config
-Defconfig      : http://autobuild.buildroot.net/results/e6d42590af23346d6b1110e1943f656bf5ad1715/defconfig
-
-Build 3142d8b0c96deba4dc6a9af2553f4ceeeb960c8e
-==============================================
-
-Status         : NOK
-Failure reason : xenomai-2.6.0
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 01:46:18
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/3142d8b0c96deba4dc6a9af2553f4ceeeb960c8e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3142d8b0c96deba4dc6a9af2553f4ceeeb960c8e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3142d8b0c96deba4dc6a9af2553f4ceeeb960c8e/config
-Defconfig      : http://autobuild.buildroot.net/results/3142d8b0c96deba4dc6a9af2553f4ceeeb960c8e/defconfig
-
-Build 00d1b159b48eb9a0b14bd7efbb7ca5298e1db907
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-08-12 02:11:12
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/00d1b159b48eb9a0b14bd7efbb7ca5298e1db907/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/00d1b159b48eb9a0b14bd7efbb7ca5298e1db907/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/00d1b159b48eb9a0b14bd7efbb7ca5298e1db907/config
-Defconfig      : http://autobuild.buildroot.net/results/00d1b159b48eb9a0b14bd7efbb7ca5298e1db907/defconfig
-
-Build 213d6d2984e3d4698023ab815d427c7ff4e79b36
-==============================================
-
-Status         : NOK
-Failure reason : quota-4.00
-Architecture   : mips
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 02:25:07
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/213d6d2984e3d4698023ab815d427c7ff4e79b36/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/213d6d2984e3d4698023ab815d427c7ff4e79b36/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/213d6d2984e3d4698023ab815d427c7ff4e79b36/config
-Defconfig      : http://autobuild.buildroot.net/results/213d6d2984e3d4698023ab815d427c7ff4e79b36/defconfig
-
-Build a4a7cef9848c03c13f74c20584c58376d45ed054
-==============================================
-
-Status         : NOK
-Failure reason : php-5.3.15
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 03:24:02
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/a4a7cef9848c03c13f74c20584c58376d45ed054/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a4a7cef9848c03c13f74c20584c58376d45ed054/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a4a7cef9848c03c13f74c20584c58376d45ed054/config
-Defconfig      : http://autobuild.buildroot.net/results/a4a7cef9848c03c13f74c20584c58376d45ed054/defconfig
-
-Build a3eaa6d130985020b17a826a73337db49243149e
-==============================================
-
-Status         : NOK
-Failure reason : bind-9.6-ESV-R7-P2
-Architecture   : x86_64
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 03:43:16
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/a3eaa6d130985020b17a826a73337db49243149e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a3eaa6d130985020b17a826a73337db49243149e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a3eaa6d130985020b17a826a73337db49243149e/config
-Defconfig      : http://autobuild.buildroot.net/results/a3eaa6d130985020b17a826a73337db49243149e/defconfig
-
-Build 4ce3691d0ce07c4bcb68a952caa4e0bed121251c
-==============================================
-
-Status         : NOK
-Failure reason : libatomic_ops-1.2
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 04:26:36
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/4ce3691d0ce07c4bcb68a952caa4e0bed121251c/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4ce3691d0ce07c4bcb68a952caa4e0bed121251c/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4ce3691d0ce07c4bcb68a952caa4e0bed121251c/config
-Defconfig      : http://autobuild.buildroot.net/results/4ce3691d0ce07c4bcb68a952caa4e0bed121251c/defconfig
-
-Build c1de468586c6354cd5869758a54821769c613f64
-==============================================
-
-Status         : NOK
-Failure reason : audiofile-0.3.4
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 05:09:42
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/c1de468586c6354cd5869758a54821769c613f64/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c1de468586c6354cd5869758a54821769c613f64/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c1de468586c6354cd5869758a54821769c613f64/config
-Defconfig      : http://autobuild.buildroot.net/results/c1de468586c6354cd5869758a54821769c613f64/defconfig
-
-Build 1d4790645d37f6d198574a4d0a62e1cabd208217
-==============================================
-
-Status         : NOK
-Failure reason : libmad-0.15.1b
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 05:52:42
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/1d4790645d37f6d198574a4d0a62e1cabd208217/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/1d4790645d37f6d198574a4d0a62e1cabd208217/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/1d4790645d37f6d198574a4d0a62e1cabd208217/config
-Defconfig      : http://autobuild.buildroot.net/results/1d4790645d37f6d198574a4d0a62e1cabd208217/defconfig
-
-Build b7ef2710a6bd3f6a55a4c3ab4aeffd0d5fa093e5
-==============================================
-
-Status         : NOK
-Failure reason : webkit-1.2.7
-Architecture   : powerpc
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 09:07:05
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/b7ef2710a6bd3f6a55a4c3ab4aeffd0d5fa093e5/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b7ef2710a6bd3f6a55a4c3ab4aeffd0d5fa093e5/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b7ef2710a6bd3f6a55a4c3ab4aeffd0d5fa093e5/config
-Defconfig      : http://autobuild.buildroot.net/results/b7ef2710a6bd3f6a55a4c3ab4aeffd0d5fa093e5/defconfig
-
-Build 8f339eae1af5ffe9f295a1943c486f03a606702f
-==============================================
-
-Status         : NOK
-Failure reason : make: *** [/home/test/dl//gdb-.tar.bz2] Error 1
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 09:08:32
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/8f339eae1af5ffe9f295a1943c486f03a606702f/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/8f339eae1af5ffe9f295a1943c486f03a606702f/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/8f339eae1af5ffe9f295a1943c486f03a606702f/config
-Defconfig      : http://autobuild.buildroot.net/results/8f339eae1af5ffe9f295a1943c486f03a606702f/defconfig
-
-Build 5269ec910d0059b01c206ceb8fad62cd3ca1941a
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-12 09:35:51
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/5269ec910d0059b01c206ceb8fad62cd3ca1941a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5269ec910d0059b01c206ceb8fad62cd3ca1941a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5269ec910d0059b01c206ceb8fad62cd3ca1941a/config
-Defconfig      : http://autobuild.buildroot.net/results/5269ec910d0059b01c206ceb8fad62cd3ca1941a/defconfig
-
-Build 4b1ad080c98efe1ed1ce617b9c32ef38ace1623b
-==============================================
-
-Status         : NOK
-Failure reason : boost-1.49.0
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-12 10:17:36
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/4b1ad080c98efe1ed1ce617b9c32ef38ace1623b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4b1ad080c98efe1ed1ce617b9c32ef38ace1623b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4b1ad080c98efe1ed1ce617b9c32ef38ace1623b/config
-Defconfig      : http://autobuild.buildroot.net/results/4b1ad080c98efe1ed1ce617b9c32ef38ace1623b/defconfig
-
-Build ae07110cffe528b63bafec0b401d143c18af5deb
-==============================================
-
-Status         : NOK
-Failure reason : gnutls-2.12.19
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 10:24:04
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/ae07110cffe528b63bafec0b401d143c18af5deb/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/ae07110cffe528b63bafec0b401d143c18af5deb/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/ae07110cffe528b63bafec0b401d143c18af5deb/config
-Defconfig      : http://autobuild.buildroot.net/results/ae07110cffe528b63bafec0b401d143c18af5deb/defconfig
-
-Build d664cd075a415dd0d5687123d98daa29e6df1288
-==============================================
-
-Status         : NOK
-Failure reason : make: *** [/home/test/dl//gdb-.tar.bz2] Error 1
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 10:25:22
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/d664cd075a415dd0d5687123d98daa29e6df1288/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d664cd075a415dd0d5687123d98daa29e6df1288/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d664cd075a415dd0d5687123d98daa29e6df1288/config
-Defconfig      : http://autobuild.buildroot.net/results/d664cd075a415dd0d5687123d98daa29e6df1288/defconfig
-
-Build bdb5adfc876463e51a80a0d58e2c1b0505d717be
-==============================================
-
-Status         : NOK
-Failure reason : ffmpeg-0.8.12
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 10:44:37
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/bdb5adfc876463e51a80a0d58e2c1b0505d717be/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/bdb5adfc876463e51a80a0d58e2c1b0505d717be/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/bdb5adfc876463e51a80a0d58e2c1b0505d717be/config
-Defconfig      : http://autobuild.buildroot.net/results/bdb5adfc876463e51a80a0d58e2c1b0505d717be/defconfig
-
-Build e297de3865ace283dde83d7c8833f03266edb3a4
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-12 17:49:43
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/e297de3865ace283dde83d7c8833f03266edb3a4/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e297de3865ace283dde83d7c8833f03266edb3a4/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e297de3865ace283dde83d7c8833f03266edb3a4/config
-Defconfig      : http://autobuild.buildroot.net/results/e297de3865ace283dde83d7c8833f03266edb3a4/defconfig
-
-Build 79b45bd679c3c639d2dd3c12560d568c798b6391
-==============================================
-
-Status         : NOK
-Failure reason : microperl-5.12.4
-Architecture   : sh2a
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 18:21:54
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/79b45bd679c3c639d2dd3c12560d568c798b6391/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/79b45bd679c3c639d2dd3c12560d568c798b6391/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/79b45bd679c3c639d2dd3c12560d568c798b6391/config
-Defconfig      : http://autobuild.buildroot.net/results/79b45bd679c3c639d2dd3c12560d568c798b6391/defconfig
-
-Build 23fe9623a2cc402153f3f523ddd7f18cc6b58865
-==============================================
-
-Status         : NOK
-Failure reason : gmp-5.0.5
-Architecture   : mipsel
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 19:10:46
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/23fe9623a2cc402153f3f523ddd7f18cc6b58865/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/23fe9623a2cc402153f3f523ddd7f18cc6b58865/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/23fe9623a2cc402153f3f523ddd7f18cc6b58865/config
-Defconfig      : http://autobuild.buildroot.net/results/23fe9623a2cc402153f3f523ddd7f18cc6b58865/defconfig
-
-Build cb5c3961624b5df402aa3b805c148ecbe07dee5d
-==============================================
-
-Status         : NOK
-Failure reason : gdisk-0.6.14
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-12 21:15:04
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/cb5c3961624b5df402aa3b805c148ecbe07dee5d/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/cb5c3961624b5df402aa3b805c148ecbe07dee5d/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/cb5c3961624b5df402aa3b805c148ecbe07dee5d/config
-Defconfig      : http://autobuild.buildroot.net/results/cb5c3961624b5df402aa3b805c148ecbe07dee5d/defconfig
-
-
-
+diff --git a/package/Config.in b/package/Config.in
+index f308de7..fceedd4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -13,6 +13,7 @@ source "package/gzip/Config.in"
+ endif
+ source "package/lzop/Config.in"
+ source "package/lzma/Config.in"
++source "package/p7zip-light/Config.in"
+ source "package/xz/Config.in"
+ endmenu
+ 
+diff --git a/package/p7zip-light/Config.in b/package/p7zip-light/Config.in
+new file mode 100644
+index 0000000..9aaec23
+--- /dev/null
++++ b/package/p7zip-light/Config.in
+@@ -0,0 +1,26 @@
++config BR2_PACKAGE_P7ZIP_LIGHT
++	bool "p7zip-light"
++	help
++	  Command-line version of the 7-Zip compressed file archiver
++	  without RAR and GUI support.
++
++	  http://p7zip.sourceforge.net/
++
++if BR2_PACKAGE_P7ZIP_LIGHT
++
++config BR2_PACKAGE_P7ZIP_LIGHT_SFX
++	bool "SFX support"
++	help
++	  Enable support for creating self-extracting archives.
++
++config BR2_PACKAGE_P7ZIP_LIGHT_7Z
++	bool "7z"
++	help
++	  Build 7z executable. Uses plugins to handle archives.
++
++config BR2_PACKAGE_P7ZIP_LIGHT_7ZR
++	bool "7zr"
++	help
++	  Build 7zr executable. Only supports 7z archives.
++
++endif
+diff --git a/package/p7zip-light/p7zip-light-disable-rar.patch b/package/p7zip-light/p7zip-light-disable-rar.patch
+new file mode 100644
+index 0000000..d605c6b
+--- /dev/null
++++ b/package/p7zip-light/p7zip-light-disable-rar.patch
+@@ -0,0 +1,112 @@
++Disable RAR support
++
++The RAR support is non-free and licensed under the unRAR restriction.
++As this support is usually not neeeded, disable it to reduce footprint
++and simplify licensing.
++
++Signed-off-by: Jonathan Liu <net147@gmail.com>
++---
++ CPP/7zip/Bundles/Format7zFree/makefile | 11 -----------
++ makefile                               |  3 ---
++ makefile.rules                         | 17 -----------------
++ 3 files changed, 31 deletions(-)
++
++Index: p7zip_9.20.1/CPP/7zip/Bundles/Format7zFree/makefile
++===================================================================
++--- p7zip_9.20.1.orig/CPP/7zip/Bundles/Format7zFree/makefile
+++++ p7zip_9.20.1/CPP/7zip/Bundles/Format7zFree/makefile
++@@ -158,14 +158,6 @@
++   NsisIn.o \
++   NsisRegister.o \
++ 
++-RAR_OBJS = \
++-  RarHandler.o \
++-  RarHeader.o \
++-  RarIn.o \
++-  RarItem.o \
++-  RarVolumeInStream.o \
++-  RarRegister.o \
++-
++ TAR_OBJS = \
++   TarHandler.o \
++   TarHandlerOut.o \
++@@ -257,8 +249,6 @@
++   MyAes.o \
++   Pbkdf2HmacSha1.o \
++   RandGen.o \
++-  Rar20Crypto.o \
++-  RarAes.o \
++   Sha1.o \
++   WzAes.o \
++   ZipCrypto.o \
++@@ -314,7 +304,6 @@
++   $(HFS_OBJS) \
++   $(ISO_OBJS) \
++   $(NSIS_OBJS) \
++-  $(RAR_OBJS) \
++   $(TAR_OBJS) \
++   $(UDF_OBJS) \
++   $(WIM_OBJS) \
++Index: p7zip_9.20.1/makefile
++===================================================================
++--- p7zip_9.20.1.orig/makefile
+++++ p7zip_9.20.1/makefile
++@@ -56,7 +56,6 @@
++ 	$(MAKE) -C CPP/7zip/UI/Client7z           depend
++ 	$(MAKE) -C CPP/7zip/UI/Console            depend
++ 	$(MAKE) -C CPP/7zip/Bundles/Format7zFree  depend
++-	$(MAKE) -C CPP/7zip/Compress/Rar          depend
++ 	$(MAKE) -C CPP/7zip/UI/GUI                depend
++ 	$(MAKE) -C CPP/7zip/UI/FileManager        depend
++ 	$(MAKE) -C check/my_86_filter             depend
++@@ -68,7 +67,6 @@
++ common7z:common
++ 	$(MKDIR) bin/Codecs
++ 	$(MAKE) -C CPP/7zip/Bundles/Format7zFree all
++-	$(MAKE) -C CPP/7zip/Compress/Rar         all
++ 
++ 7z: common7z
++ 	$(MAKE) -C CPP/7zip/UI/Console           all
++@@ -93,7 +91,6 @@
++ 	$(MAKE) -C CPP/7zip/UI/FileManager       clean
++ 	$(MAKE) -C CPP/7zip/UI/GUI               clean
++ 	$(MAKE) -C CPP/7zip/Bundles/Format7zFree clean
++-	$(MAKE) -C CPP/7zip/Compress/Rar         clean
++ 	$(MAKE) -C CPP/7zip/Compress/LZMA_Alone  clean
++ 	$(MAKE) -C CPP/7zip/Bundles/AloneGCOV    clean
++ 	$(MAKE) -C CPP/7zip/TEST/TestUI          clean
++Index: p7zip_9.20.1/makefile.rules
++===================================================================
++--- p7zip_9.20.1.orig/makefile.rules
+++++ p7zip_9.20.1/makefile.rules
++@@ -448,19 +448,6 @@
++ NsisRegister.o : ../../Archive/Nsis/NsisRegister.cpp
++ 	$(CXX) $(CXXFLAGS) ../../Archive/Nsis/NsisRegister.cpp
++ 
++-RarHandler.o : ../../Archive/Rar/RarHandler.cpp
++-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarHandler.cpp
++-RarHeader.o : ../../Archive/Rar/RarHeader.cpp
++-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarHeader.cpp
++-RarIn.o : ../../Archive/Rar/RarIn.cpp
++-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarIn.cpp
++-RarItem.o : ../../Archive/Rar/RarItem.cpp
++-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarItem.cpp
++-RarVolumeInStream.o : ../../Archive/Rar/RarVolumeInStream.cpp
++-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarVolumeInStream.cpp
++-RarRegister.o : ../../Archive/Rar/RarRegister.cpp
++-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarRegister.cpp
++-
++ UdfHandler.o : ../../Archive/Udf/UdfHandler.cpp
++ 	$(CXX) $(CXXFLAGS) ../../Archive/Udf/UdfHandler.cpp
++ UdfIn.o : ../../Archive/Udf/UdfIn.cpp
++@@ -535,10 +522,6 @@
++ 	$(CXX) $(CXXFLAGS) ../../Crypto/7zAesRegister.cpp
++ WzAes.o : ../../Crypto/WzAes.cpp
++ 	$(CXX) $(CXXFLAGS) ../../Crypto/WzAes.cpp
++-Rar20Crypto.o : ../../Crypto/Rar20Crypto.cpp
++-	$(CXX) $(CXXFLAGS) ../../Crypto/Rar20Crypto.cpp
++-RarAes.o : ../../Crypto/RarAes.cpp
++-	$(CXX) $(CXXFLAGS) ../../Crypto/RarAes.cpp
++ HmacSha1.o : ../../Crypto/HmacSha1.cpp
++ 	$(CXX) $(CXXFLAGS) ../../Crypto/HmacSha1.cpp
++ Pbkdf2HmacSha1.o : ../../Crypto/Pbkdf2HmacSha1.cpp
+diff --git a/package/p7zip-light/p7zip-light-exclude-docs.patch b/package/p7zip-light/p7zip-light-exclude-docs.patch
+new file mode 100644
+index 0000000..f01f114
+--- /dev/null
++++ b/package/p7zip-light/p7zip-light-exclude-docs.patch
+@@ -0,0 +1,30 @@
++Do not install documentation
++
++The install script installs documentation files which are not needed.
++Exclude them to reduce footprint.
++
++Signed-off-by: Jonathan Liu <net147@gmail.com>
++---
++ install.sh | 2 ++
++ 1 file changed, 2 insertions(+)
++
++Index: p7zip_9.20.1/install.sh
++===================================================================
++--- p7zip_9.20.1.orig/install.sh
+++++ p7zip_9.20.1/install.sh
++@@ -129,6 +129,7 @@
++   fi
++ fi
++ 
+++:<<DISABLED
++ mkdir -p "${DEST_DIR}${DEST_MAN}/man1"
++ if [ -d DOCS ]
++ then
++@@ -181,6 +182,7 @@
++   find "${DEST_DIR}${DEST_SHARE_DOC}/DOCS" -type d -exec chmod 555 {} \;
++   find "${DEST_DIR}${DEST_SHARE_DOC}/DOCS" -type f -exec chmod 444 {} \;
++ fi
+++DISABLED
++ 
++ use_lang="n"
++ 
+diff --git a/package/p7zip-light/p7zip-light-makefile-flags.patch b/package/p7zip-light/p7zip-light-makefile-flags.patch
+new file mode 100644
+index 0000000..0babe95
+--- /dev/null
++++ b/package/p7zip-light/p7zip-light-makefile-flags.patch
+@@ -0,0 +1,80 @@
++Allow CC/CFLAGS/CXX/CXXFLAGS overrides
++
++The makefiles currently use hardcoded values for the compiler and
++compiler flags. This patch removes flags that not essential or are
++already added by buildroot and then modifies the makefiles to
++to allow specifying custom compiler and compiler flags.
++
++Signed-off-by: Jonathan Liu <net147@gmail.com>
++---
++ CPP/7zip/Compress/LZMA_Alone/makefile |  7 +++----
++ makefile                              |  1 +
++ makefile.glb                          |  4 ++--
++ makefile.machine                      | 15 +++++----------
++ 4 files changed, 11 insertions(+), 16 deletions(-)
++
++Index: p7zip_9.20.1/CPP/7zip/Compress/LZMA_Alone/makefile
++===================================================================
++--- p7zip_9.20.1.orig/CPP/7zip/Compress/LZMA_Alone/makefile
+++++ p7zip_9.20.1/CPP/7zip/Compress/LZMA_Alone/makefile
++@@ -1,12 +1,11 @@
+++LOCAL_FLAGS = -c -I. -I../../../  -I../../../myWindows  -I../../../include_windows \
+++         -UENV_UNIX -DCOMPRESS_MF_MT -DBENCH_MT
+++
++ include ../../../../makefile.machine
++ 
++ PROG = lzma
++ LIB = $(LOCAL_LIBS)
++ RM = rm -f
++-CFLAGS = -c -I. -I../../../  -I../../../myWindows  -I../../../include_windows \
++-         -UENV_UNIX -DCOMPRESS_MF_MT -DBENCH_MT
++-
++-CXXFLAGS=$(CFLAGS)
++ 
++ OBJS = \
++   LzmaAlone.o \
++Index: p7zip_9.20.1/makefile.glb
++===================================================================
++--- p7zip_9.20.1.orig/makefile.glb
+++++ p7zip_9.20.1/makefile.glb
++@@ -1,12 +1,12 @@
++ 
++ RM=rm -f
++-CFLAGS=-c -I. \
+++override CFLAGS+=-c -I. \
++ -I../../../../C \
++ -I../../../myWindows \
++ -I../../../include_windows \
++ -I../../..
++ 
++-CXXFLAGS=-c -I. \
+++override CXXFLAGS+=-c -I. \
++ -I../../../myWindows \
++ -I../../../ \
++ -I../../../include_windows
++Index: p7zip_9.20.1/makefile.machine
++===================================================================
++--- p7zip_9.20.1.orig/makefile.machine
+++++ p7zip_9.20.1/makefile.machine
++@@ -2,16 +2,11 @@
++ # makefile for Linux (x86, PPC, alpha ...)
++ #
++ 
++-OPTFLAGS=-O
++-
++-ALLFLAGS=${OPTFLAGS} -pipe -s \
++-    	-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE \
++-	-DNDEBUG -D_REENTRANT -DENV_UNIX \
++-	-D_7ZIP_LARGE_PAGES \
++-	$(LOCAL_FLAGS)
++-
++-CXX=g++ $(ALLFLAGS)
++-CC=gcc $(ALLFLAGS)
+++ALLFLAGS=-DNDEBUG -D_REENTRANT -DENV_UNIX -D_7ZIP_LARGE_PAGES $(LOCAL_FLAGS)
+++CXX?=g++
+++CC?=gcc $(ALLFLAGS)
+++override CXXFLAGS+=$(ALLFLAGS)
+++override CCFLAGS+=$(ALLFLAGS)
++ CC_SHARED=-fPIC
++ LINK_SHARED=-fPIC -shared
++ 
+diff --git a/package/p7zip-light/p7zip-light.mk b/package/p7zip-light/p7zip-light.mk
+new file mode 100644
+index 0000000..b2f597b
+--- /dev/null
++++ b/package/p7zip-light/p7zip-light.mk
+@@ -0,0 +1,31 @@
++#############################################################
++#
++# p7zip-light
++#
++#############################################################
++P7ZIP_LIGHT_VERSION = 9.20.1
++P7ZIP_LIGHT_SOURCE = p7zip_$(P7ZIP_LIGHT_VERSION)_src_all.tar.bz2
++P7ZIP_LIGHT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/p7zip
++P7ZIP_LIGHT_LICENSE = LGPLv2.1+
++
++define P7ZIP_LIGHT_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		CXX="$(TARGET_CXX)" CXXFLAGS="$(TARGET_CXXFLAGS)" \
++		-C $(@D) 7za \
++		$(if $(BR2_PACKAGE_P7ZIP_LIGHT_SFX),sfx) \
++		$(if $(BR2_PACKAGE_P7ZIP_LIGHT_7Z),7z) \
++		$(if $(BR2_PACKAGE_P7ZIP_LIGHT_7ZR),7zr)
++endef
++
++define P7ZIP_LIGHT_INSTALL_TARGET_CMDS
++	(cd $(@D); \
++		make install DEST_DIR=$(TARGET_DIR) DEST_HOME=/usr DEST_MAN=/usr/share/man \
++	)
++endef
++
++define P7ZIP_LIGHT_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/7z{,a,r}
++	rm -rf $(TARGET_DIR)/usr/lib/p7zip
++endef
++
++$(eval $(generic-package))
 -- 
-http://autobuild.buildroot.net
+1.7.11.3
