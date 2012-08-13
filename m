@@ -1,61 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Aug 2012 08:52:47 +0200
-Subject: [Buildroot] [PATCH 11/36] package/qemu: new package
-In-Reply-To: <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <201208130852.47290.yann.morin.1998@free.fr>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Mon, 13 Aug 2012 08:52:27 +0200
+Subject: [Buildroot] libev on armv5 - illegal instruction
+In-Reply-To: <20120810215623.5d7304a5@skate>
+References: <op.wirpbfhyyxxkfz@pohanka-pc> <20120810085836.3c62fe7e@skate>
+ <op.witduljwyxxkfz@pohanka-pc> <20120810215623.5d7304a5@skate>
+Message-ID: <op.wiyv1poeyxxkfz@pohanka-pc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
 
-On Monday 13 August 2012 01:53:59 Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/Config.in      |    1 +
->  package/qemu/Config.in |   24 ++++++++++++
->  package/qemu/qemu.mk   |   98 ++++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 123 insertions(+), 0 deletions(-)
->  create mode 100644 package/qemu/Config.in
->  create mode 100644 package/qemu/qemu.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 3109591..eb02983 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -504,6 +504,7 @@ menu "Miscellaneous"
->  source "package/collectd/Config.in"
->  source "package/empty/Config.in"
->  source "package/mobile-broadband-provider-info/Config.in"
-> +source "package/qemu/Config.in"
->  source "package/shared-mime-info/Config.in"
->  source "package/sound-theme-borealis/Config.in"
->  source "package/sound-theme-freedesktop/Config.in"
-> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-> new file mode 100644
-> index 0000000..a77d863
-> --- /dev/null
-> +++ b/package/qemu/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_QEMU
-> +	bool "QEMU"
-> +	depends on BR2_PACKAGE_PYTHON       # We only need host-python,
-> +	                                    # but there's no way to say so.
+> The toolchain is not downloaded by Buildroot in your .config. Are you
+> sure you have the same toolchain on both build machines?
+>
 
-And I forgot to add this dependency in the .mk. I'll repush this series
-later with this change.
+I have checked it again, yes toolchain are the same:
+arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 from
+Codesourcery
 
-Regards,
-Yann E. MORIN.
+> Also, could you put online:
+>
+>  - A complete build log on both machines (make clean && make)
+>  - The two binaries that are different and causing problems
+>
+
+Example and logs can be downloaded from  
+http://neuron.feld.cvut.cz/honza/br_test.tar.bz2
+Buildroot logs and example source and binaries libev libraries (working  
+and not working) are statically linked
+with testing application. Compiler is called through BR wrapper (in
+BR_PATH/output/host/usr/bin)
+
+best regards
+Jan
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Tato zpr?va byla vytvo?ena p?evratn?m po?tovn?m klientem Opery:
+http://www.opera.com/mail/
