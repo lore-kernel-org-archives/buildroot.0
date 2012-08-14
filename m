@@ -1,37 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Aug 2012 15:07:39 +0200
-Subject: [Buildroot] [PATCH 17/20] xinetd: add support to use RPC
- support from libtirpc
-In-Reply-To: <201208121758.52937.yann.morin.1998@free.fr>
-References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <d88a9e06effd725dd2b9e08e8a702db3709f5211.1344706801.git.thomas.petazzoni@free-electrons.com>
- <201208121758.52937.yann.morin.1998@free.fr>
-Message-ID: <20120814150739.17e04329@skate>
+Date: Tue, 14 Aug 2012 15:09:21 +0200
+Subject: [Buildroot] [git commit] support/graph-depends: fix out-of-tree
+	usage
+Message-ID: <20120814130938.91F0497136@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 12 Aug 2012 17:58:52 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=a293d4ab338c84f450261371085cef1cf69bcf96
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > +ifeq ($(BR2_RPC_SUPPORT_AVAILABLE),y)
-> 
-> What if the toolchain has RPC support? Surely, you do not want to link
-> against libtirpc, yes?
+graph-depends calls make to get the list of packages, and the
+dependencies of each package.
 
-Argh, yes, you're correct. I need to distinguish three cases here:
+When called out-of-tree, the Makefile is a wrapper that calls
+the real Makefile, so make will spit out a line like:
+  make -C /path/to/buildroot O=/path/to/build-dir show-targets
 
- * No RPC support at all
- * RPC support in the toolchain
- * RPC support through libtirpc
+which graph-depends wrongly believes is part of the target list.
 
-I'll fix that, thanks for the review!
+Be silent when calling make, as we really only want the target
+and dependency lists.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/graph-depends |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index da050da..409c123 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -53,7 +53,7 @@ unknownpkgs = []
+ # list is used as the starting point for full dependency graphs
+ def get_targets():
+     sys.stderr.write("Getting targets\n")
+-    cmd = ["make", "show-targets"]
++    cmd = ["make", "-s", "show-targets"]
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+     output = p.communicate()[0].strip()
+     if p.returncode != 0:
+@@ -67,7 +67,7 @@ def get_targets():
+ # formatted as a Python list.
+ def get_depends(pkg):
+     sys.stderr.write("Getting dependencies for %s\n" % pkg)
+-    cmd = ["make", "%s-show-depends" % pkg]
++    cmd = ["make", "-s", "%s-show-depends" % pkg]
+     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+     output = p.communicate()[0].strip()
+     if p.returncode != 0:
