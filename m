@@ -1,32 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 13 Aug 2012 17:02:41 -0300
-Subject: [Buildroot] [PATCH 7/7] mpd: bump to version 0.17.1
-In-Reply-To: <1344888161-10068-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1344888161-10068-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1344888161-10068-7-git-send-email-gustavo@zacarias.com.ar>
+From: Kevin Broch <kevbroch@gmail.com>
+Date: Mon, 13 Aug 2012 17:38:45 -0700
+Subject: [Buildroot] building native gcc for target
+In-Reply-To: <20120811201643.7413a602@skate>
+References: <CAKWKLJCPCYuYteR7s6xrUgBH6j5aOfn28431eeSQeGqVT5Z3=g@mail.gmail.com>
+ <CAJJ6jxszVqjSSLCsU0oVbWAb72KBo1jf5U6kFEBHpED+RniKdw@mail.gmail.com>
+ <5021CE95.9000808@sri.com>
+ <CAKWKLJAcKAyfoGX_fx-sFGAAEu88t0hvke_cAm432VYL3DsrWw@mail.gmail.com>
+ <20120811201643.7413a602@skate>
+Message-ID: <CAKWKLJA0LUAMnhhCsNGR4NCX3Zf0QDYJegGqERTs6NhcAMUh1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/mpd/mpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Thanks Thomas.  Everything is working now.
 
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 54a5ba7..bf4610e 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--MPD_VERSION = 0.17
-+MPD_VERSION = 0.17.1
- MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/musicpd/mpd/$(MPD_VERSION)
- MPD_DEPENDENCIES = host-pkg-config libglib2
- MPD_LICENSE = GPLv2
--- 
-1.7.8.6
+Best, /<evin
+
+
+On Sat, Aug 11, 2012 at 11:16 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Le Wed, 8 Aug 2012 13:16:26 -0700,
+> Kevin Broch <kevbroch@gmail.com> a ?crit :
+>
+> > Thanks for the suggestion.  I unfortunately do not see this "select GCC"
+> > option that you suggest.
+> > I am using git://git.buildroot.net/buildroot @HEAD
+> >
+> > - I have selected "Buildroot toolchain" from the Toolchain menu.
+> > - Under "Package selection for the target" -> "Development Tools", I see
+> a
+> > comment
+> > "gcc needs development files in target filesystem"
+> > but no way to select GCC.
+> > As far as I can see the only selecting of GCC goes to which version for
+> the
+> > cross compiled version.
+>
+> Build options -> development files in target filesystem
+> Packages -> Development tools -> gcc
+>
+> Note that this is only available if you use "Buildroot toolchain" as
+> the toolchain type. We don't support generating gcc for the target with
+> the external toolchain and Crosstool-NG toolchain backends.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120813/efd6280b/attachment-0001.html>
