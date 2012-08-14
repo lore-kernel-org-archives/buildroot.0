@@ -1,58 +1,94 @@
-From: Dmitry <golubovsky@gmail.com>
-Date: Mon, 13 Aug 2012 22:24:49 -0400
-Subject: [Buildroot] [PATCH 2/2] Provide PAM configuration files in the fs
-	skeleton
-In-Reply-To: <1344911089-31197-1-git-send-email-golubovsky@gmail.com>
-References: <1344911089-31197-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <1344911089-31197-2-git-send-email-golubovsky@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Aug 2012 08:32:10 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-13
+Message-ID: <20120814063210.9244752D100@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The default PAM configuration file requires valid user accounts with
-non-blank passwords.
 
-The PAM configuration file for busybox login allows local authentication
-with blank passwords thus emulating the non-PAM login configuration.
+Hello,
 
-Signed-off-by: Dmitry <golubovsky@gmail.com>
----
- fs/skeleton/etc/pam.d/default |    8 ++++++++
- fs/skeleton/etc/pam.d/login   |    9 +++++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 fs/skeleton/etc/pam.d/default
- create mode 100644 fs/skeleton/etc/pam.d/login
+On 2012-08-13, 21 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 16 builds have been successful
+ 5 builds have failed
 
-diff --git a/fs/skeleton/etc/pam.d/default b/fs/skeleton/etc/pam.d/default
-new file mode 100644
-index 0000000..0bd5ba0
---- /dev/null
-+++ b/fs/skeleton/etc/pam.d/default
-@@ -0,0 +1,8 @@
-+#
-+# default; standard UN*X access
-+#
-+auth     required       pam_unix.so
-+account  required       pam_unix.so
-+password required       pam_unix.so
-+session  required       pam_unix.so
-+
-diff --git a/fs/skeleton/etc/pam.d/login b/fs/skeleton/etc/pam.d/login
-new file mode 100644
-index 0000000..d65a9d4
---- /dev/null
-+++ b/fs/skeleton/etc/pam.d/login
-@@ -0,0 +1,9 @@
-+#
-+# login: allow local logins to users with entries in /etc/passwd and
-+# /etc/shadow even with null password
-+#
-+auth      required       pam_unix.so nullok
-+account   required       pam_unix.so nullok
-+password  required       pam_unix.so nullok
-+session   required       pam_unix.so nullok
-+
+Below the results of the failed builds. Successful builds are omitted.
+
+Build c0bcf4da9525318eac140fcecde9ac33ed9b6d4d
+==============================================
+
+Status         : NOK
+Failure reason : webkit-1.2.7
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-08-13 02:45:41
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
+End of log     : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/config
+Defconfig      : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/defconfig
+
+Build 7fc1ce110f61675665cb94a3079b936886111113
+==============================================
+
+Status         : NOK
+Failure reason : alsa-lib-1.0.25
+Architecture   : sh2a
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-08-13 05:36:12
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
+End of log     : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/config
+Defconfig      : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/defconfig
+
+Build 2cc1cac29733a5051945b340996ac728e2498ddf
+==============================================
+
+Status         : NOK
+Failure reason : gpsd-3.7
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-08-13 10:41:22
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
+End of log     : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/config
+Defconfig      : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/defconfig
+
+Build fd6f483f78d489a6cc450adf106deb60f814a70e
+==============================================
+
+Status         : NOK
+Failure reason : bmon-2.1.0
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-08-13 22:50:46
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
+End of log     : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/config
+Defconfig      : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/defconfig
+
+Build a1533dac7638439768c0a5de31b433d9683f36f0
+==============================================
+
+Status         : NOK
+Failure reason : gpsd-3.7
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-08-13 22:52:45
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
+End of log     : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/config
+Defconfig      : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/defconfig
+
+
+
 -- 
-1.7.2.5
+http://autobuild.buildroot.net
