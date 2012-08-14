@@ -1,143 +1,48 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Tue, 14 Aug 2012 14:22:15 +0300
-Subject: [Buildroot] Login with user fails
-In-Reply-To: <3C32AECB8207924A9A228348325DB2D2905022@mntserv.meier-nt.local>
-References: <3C32AECB8207924A9A228348325DB2D290500A@mntserv.meier-nt.local>
- <F1CD4B889E6D4A1CA304C713688A7AD8@meiernt.local>
- <3C32AECB8207924A9A228348325DB2D2905022@mntserv.meier-nt.local>
-Message-ID: <CALR4fE+ecYchgm_cQLjnwK8JzGTdQwnjAmQbvr0WzFyabDG1EQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 14 Aug 2012 14:25:40 +0200
+Subject: [Buildroot] [PATCH 3/3] buildroot: toolchain: Allow to build
+ gdbserver when external toolchain is selected.
+In-Reply-To: <05E9E85E39C35B4D96ED3A3190E35A10C3D786052C@LIMKCMBX1.ad.analog.com>
+References: <1344251847-7709-1-git-send-email-sonic.adi@gmail.com>
+ <1344251847-7709-3-git-send-email-sonic.adi@gmail.com>
+ <20120806145441.4dbc10ab@skate>
+ <DB904C5425BA6F4E8424B3B51A1414D1714D28600B@NWD2CMBX1.ad.analog.com>
+ <CAJxxZ0P+Xg++UGF1SdnsSyW3bua78+txP36FpMWoKNLaGKxQmw@mail.gmail.com>
+ <05E9E85E39C35B4D96ED3A3190E35A10C3D77B0E41@LIMKCMBX1.ad.analog.com>
+ <20120808212305.5c20e240@skate>
+ <05E9E85E39C35B4D96ED3A3190E35A10C3D786052C@LIMKCMBX1.ad.analog.com>
+Message-ID: <20120814142540.7b0ade51@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Then go back to the basics -
+Hello,
 
-strace passwd
-strace su random_user -c "/bin/true"
+Le Tue, 14 Aug 2012 12:06:38 +0100,
+"Henderson, Stuart" <Stuart.Henderson@analog.com> a ?crit :
 
-Just for the record - this is working on my fresh buildroot setup. I assume
-this is something broken on your local setup - which means: it's fixable.
+> >Well, my personal experience (and I've heard this experience from several other people has well)
+> >is that to avoid problems the gdbserver version you're using should be the same as the cross-gdb
+> >used to connect to this gdbserver. Therefore, it makes sense for a toolchain to provide both cross-gdb
+> >*and* gdbserver, or none of them, but it doesn't make much sense to offer just cross-gdb without a
+> >gdbserver. As I was mentioning before, Linaro toolchains, Sourcery CodeBench toolchains do that.
+> 
+> This seems reasonable, however we only support matching releases of the toolchain/u-boot/linux, so the result is much the same.
+> i.e. The 2012R1 release of the toolchain is used to build the 2012R1 release of u-boot and linux.  The latter of which contains the correct version of gdbserver for the 2012R1 release of the toolchain.
 
-Cam you post the configuration which triggers this problem ?
+I am not sure to understand: why would gdbserver be part of your
+"linux" release? Linux is the kernel, was does it has to do with
+gdbserver.
 
-On Tue, Aug 14, 2012 at 11:27 AM, Dirk Lohse <d.lohse@meier-nt.de> wrote:
+> However, like I said, I certainly don't have any strong objections to having gdbserver in the toolchain package as well.  I'll take a look at how other people package it and see what Sonic's thoughts are on it when we're doing the next release.
 
->  Devices are managed with mdev. /dev/tty is:****
->
-> ** **
->
-> crw-rw-rw- 1    root tty  5,   0 Jan 1    1970 /dev/tty****
->
-> ** **
->
-> user is in /etc/passwd and /etc/shadow, group is added.****
->
-> ** **
->
-> The same scenario works on another embedded system with an older busybox
-> and also on debian based i686-machines ? so it might be a bug in busybox or
-> kernel?!****
->
-> ** **
->
-> Root-Login also works ? so I think it could be a problem with permissions
-> to an device/file/?****
->
-> I added the user to group ?root? but this doesn?t help.****
->
-> ** **
->
-> Thanks.****
->
-> ** **
->
-> ** **
->
-> *Von:* Diego Iastrubni [mailto:diegoiast at gmail.com]
-> *Gesendet:* Montag, 13. August 2012 13:30
-> *An:* Dirk Lohse
-> *Cc:* buildroot at busybox.net
-> *Betreff:* Re: [Buildroot] Login with user fails****
->
-> ** **
->
-> I saw this problem once when I worked with static devices (not udev/mdev)
-> and /dev/tty was missing. I am not sure if this is your problem.
->
-> If the user available in /etc/passwd ?****
->
-> On Mon, Aug 13, 2012 at 12:43 PM, Dirk Lohse <d.lohse@meier-nt.de> wrote:*
-> ***
->
-> I can't login with other user than root.****
->
->  ****
->
-> I can give root an password and can login over serial or ssh. But I can't
-> add a new user and login with this one.****
->
->  ****
->
-> What I've done:****
->
-> # whoami****
->
-> root****
->
-> # adduser test****
->
-> New password: 123456****
->
-> Retype password: 123456****
->
-> # su test****
->
-> Killed****
->
-> # echo $?****
->
-> 137****
->
-> # exit****
->
-> Welcome to Buildroot...****
->
-> tx28 login: test****
->
-> Password: 123456****
->
->  ****
->
-> Welcome to Buildroot...****
->
->  ****
->
->  ****
->
-> rootfs is mounted in r/w****
->
->  ****
->
-> Thank you.****
->
->  ****
->
-> bye****
->
->  ****
->
-> Dirk****
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot****
->
->  ** **
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120814/be21df6a/attachment-0001.html>
+Ok, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
