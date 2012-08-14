@@ -1,94 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 14 Aug 2012 08:32:10 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-13
-Message-ID: <20120814063210.9244752D100@lolut.humanoidz.org>
+From: Dirk Lohse <d.lohse@meier-nt.de>
+Date: Tue, 14 Aug 2012 10:27:41 +0200
+Subject: [Buildroot] Login with user fails
+In-Reply-To: <F1CD4B889E6D4A1CA304C713688A7AD8@meiernt.local>
+References: <3C32AECB8207924A9A228348325DB2D290500A@mntserv.meier-nt.local>
+ <F1CD4B889E6D4A1CA304C713688A7AD8@meiernt.local>
+Message-ID: <3C32AECB8207924A9A228348325DB2D2905022@mntserv.meier-nt.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Devices are managed with mdev. /dev/tty is:
 
-Hello,
+ 
 
-On 2012-08-13, 21 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 16 builds have been successful
- 5 builds have failed
+crw-rw-rw- 1    root tty  5,   0 Jan 1    1970 /dev/tty
 
-Below the results of the failed builds. Successful builds are omitted.
+ 
 
-Build c0bcf4da9525318eac140fcecde9ac33ed9b6d4d
-==============================================
+user is in /etc/passwd and /etc/shadow, group is added.
 
-Status         : NOK
-Failure reason : webkit-1.2.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-13 02:45:41
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/config
-Defconfig      : http://autobuild.buildroot.net/results/c0bcf4da9525318eac140fcecde9ac33ed9b6d4d/defconfig
+ 
 
-Build 7fc1ce110f61675665cb94a3079b936886111113
-==============================================
+The same scenario works on another embedded system with an older busybox
+and also on debian based i686-machines - so it might be a bug in busybox
+or kernel?!
 
-Status         : NOK
-Failure reason : alsa-lib-1.0.25
-Architecture   : sh2a
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-13 05:36:12
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/config
-Defconfig      : http://autobuild.buildroot.net/results/7fc1ce110f61675665cb94a3079b936886111113/defconfig
+ 
 
-Build 2cc1cac29733a5051945b340996ac728e2498ddf
-==============================================
+Root-Login also works - so I think it could be a problem with
+permissions to an device/file/...
 
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-08-13 10:41:22
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/config
-Defconfig      : http://autobuild.buildroot.net/results/2cc1cac29733a5051945b340996ac728e2498ddf/defconfig
+I added the user to group "root" but this doesn't help.
 
-Build fd6f483f78d489a6cc450adf106deb60f814a70e
-==============================================
+ 
 
-Status         : NOK
-Failure reason : bmon-2.1.0
-Architecture   : bfin
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-13 22:50:46
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/config
-Defconfig      : http://autobuild.buildroot.net/results/fd6f483f78d489a6cc450adf106deb60f814a70e/defconfig
+Thanks.
 
-Build a1533dac7638439768c0a5de31b433d9683f36f0
-==============================================
+ 
 
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-08-13 22:52:45
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=8b9523938e0671e20739ad5f1951267499ff2d95
-End of log     : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/config
-Defconfig      : http://autobuild.buildroot.net/results/a1533dac7638439768c0a5de31b433d9683f36f0/defconfig
+ 
+
+Von: Diego Iastrubni [mailto:diegoiast at gmail.com] 
+Gesendet: Montag, 13. August 2012 13:30
+An: Dirk Lohse
+Cc: buildroot at busybox.net
+Betreff: Re: [Buildroot] Login with user fails
+
+ 
+
+I saw this problem once when I worked with static devices (not
+udev/mdev) and /dev/tty was missing. I am not sure if this is your
+problem.
+
+If the user available in /etc/passwd ?
+
+On Mon, Aug 13, 2012 at 12:43 PM, Dirk Lohse <d.lohse@meier-nt.de>
+wrote:
+
+I can't login with other user than root.
+
+ 
+
+I can give root an password and can login over serial or ssh. But I
+can't add a new user and login with this one.
+
+ 
+
+What I've done:
+
+# whoami
+
+root
+
+# adduser test
+
+New password: 123456
+
+Retype password: 123456
+
+# su test
+
+Killed
+
+# echo $?
+
+137
+
+# exit
+
+Welcome to Buildroot...
+
+tx28 login: test
+
+Password: 123456
+
+ 
+
+Welcome to Buildroot...
+
+ 
+
+ 
+
+rootfs is mounted in r/w
+
+ 
+
+Thank you.
+
+ 
+
+bye
+
+ 
+
+Dirk
 
 
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
 
--- 
-http://autobuild.buildroot.net
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120814/daafa98e/attachment.html>
