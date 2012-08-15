@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 15 Aug 2012 16:38:28 +0200
-Subject: [Buildroot] [PATCH 06/12] microperl: install more modules by default
+Date: Wed, 15 Aug 2012 16:38:24 +0200
+Subject: [Buildroot] [PATCH 02/12] microperl: how to test it ?
 In-Reply-To: <1345041514-31539-1-git-send-email-francois.perrad@gadz.org>
 References: <1345041514-31539-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1345041514-31539-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1345041514-31539-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,54 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/microperl/microperl.mk |   45 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 44 insertions(+), 1 deletion(-)
+ package/microperl/Config.in    |    9 +++++++++
+ package/microperl/microperl.mk |   12 ++++++++++++
+ 2 files changed, 21 insertions(+)
 
+diff --git a/package/microperl/Config.in b/package/microperl/Config.in
+index 256e271..54df7e2 100644
+--- a/package/microperl/Config.in
++++ b/package/microperl/Config.in
+@@ -15,6 +15,15 @@ config BR2_PACKAGE_MICROPERL_MODULES
+ 	  Module dependencies are not automatic so check your needs.
+ 	  You can't use XS modules like IO.
+ 
++config BR2_PACKAGE_MICROPERL_INSTALL_TESTSUITE
++	bool "install testsuite"
++	help
++	  Install the test suite on target.
++		# cd /root/microperl/t
++		# rm -f perl
++		# ln -s /usr/bin/microperl perl
++		# ./perl TEST base/*.t cmd/*.t
++
+ menu "module bundles"
+ 
+ config BR2_PACKAGE_MICROPERL_BUNDLE_CGI
 diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index 4229a2f..8cd1a42 100644
+index b2a912a..0269b3f 100644
 --- a/package/microperl/microperl.mk
 +++ b/package/microperl/microperl.mk
-@@ -19,9 +19,52 @@ MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
- MICROPERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
- MICROPERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
+@@ -144,8 +144,20 @@ define MICROPERL_INSTALL_TARGET_CMDS
+ 	# Remove test files
+ 	find $(TARGET_DIR)/$(MICROPERL_MODS_DIR) -type f -name *.t \
+ 		-exec rm -f {} \;
++	$(MICROPERL_INSTALL_TESTSUITE)
+ endef
  
-+# other pragma modules (from lib/)
-+MICROPERL_BASE_MODS += \
-+  bytes.pm \
-+  deprecate.pm \
-+  feature.pm \
-+  integer.pm \
-+  less.pm \
-+  locale.pm \
-+  overloading.pm \
-+  overload.pm \
-+  sigtrap.pm \
-+  sort.pm \
-+  subs.pm \
-+  utf8.pm utf8_heavy.pl \
-+  version.pm
++ifdef BR2_PACKAGE_MICROPERL_INSTALL_TESTSUITE
++define MICROPERL_INSTALL_TESTSUITE
++	$(INSTALL) -m644 -D $(@D)/t/TEST                $(TARGET_DIR)/root/microperl/t/TEST
++	$(INSTALL) -m644 -D $(@D)/t/harness             $(TARGET_DIR)/root/microperl/t/harness
++	cp -r $(@D)/lib         $(TARGET_DIR)/root/microperl/lib
++	cp -r $(@D)/t/base      $(TARGET_DIR)/root/microperl/t/base
++	cp -r $(@D)/t/cmd       $(TARGET_DIR)/root/microperl/t/cmd
++	echo "BEGIN { chdir 't' if -d 't'; @INC = ('../lib', '.'); } 1;" > $(TARGET_DIR)/root/microperl/TestInit.pm
++endef
++endif
 +
-+# some common modules (from lib/)
-+MICROPERL_BASE_MODS += \
-+  Benchmark.pm \
-+  Carp.pm \
-+  Class/Struct.pm \
-+  Exporter.pm Exporter/Heavy.pm \
-+  File/Basename.pm \
-+  File/Compare.pm \
-+  Getopt/Std.pm \
-+  Tie/Array.pm \
-+  Tie/Hash.pm \
-+  Tie/Scalar.pm \
-+  UNIVERSAL.pm
-+
-+# other common modules (from dist/)
-+MICROPERL_MODS += \
-+  Dumpvalue.pm \
-+  Env.pm \
-+  autouse.pm \
-+  base.pm \
-+  constant.pm
-+
-+# other common modules (from cpan/)
-+MICROPERL_MODS += \
-+  Getopt/Long.pm \
-+  parent.pm
-+
- # CGI bundle
- ifeq ($(BR2_PACKAGE_MICROPERL_BUNDLE_CGI),y)
--MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm
-+MICROPERL_MODS += CGI CGI.pm
- endif
- 
- # Host microperl is actually full-blown perl
+ define MICROPERL_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/perl
+ 	rm -f $(TARGET_DIR)/usr/bin/microperl
 -- 
 1.7.9.5
