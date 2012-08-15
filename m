@@ -1,32 +1,42 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Tue, 14 Aug 2012 13:15:30 -0400
-Subject: [Buildroot]  [PATCH 11/36] package/qemu: new package
-Message-ID: <CADiAo4+W4ofccqAnjaT3XmJxboa9=CuOd8Lv2SQMcBzq7hCVPA@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 14 Aug 2012 21:25:30 -0400
+Subject: [Buildroot] [PATCH] luajit: bug fix - prevent target CFLAGS from
+	being used in host tool compile.
+Message-ID: <1344993930-2730-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The luajit amalgamation compile starts with building a host tool, and then
+uses it to build itself. ?However, when CFLAGS is specified, as opposed to
+TARGET_CFLAGS, then it is used for both HOST and TARGET builds. ?So if you
+add something target specific into 'Target Optimizations' (for example,
+'-mfpu=neon -mfloat-abi=softfp' for ARM Cortex-A8), then it gets into the
+host tool compile, which then fails (because my build machine is not an
+ARM Cortext-A8). ?This can be fixed by using TARGET_CFLAGS and
+TARGET_LDFLAGS, instead of CFLAGS and LDFLAGS, respectively.
 
-Yann Morin wrote:
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/luajit/luajit.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->> Just curious, what's the use case for Qemu on the target? I would have
->> seen Qemu as something useful on the host, but on the target?
-
-> I want to build a libvirt-based system to host VMs, and I do not want
-> to use a complete distro for that : I do not care about the handy-dandy
-
-I'd like to support the ideas to include more server-like and
-desktop-like packages into Buildroot: it is a great tool to build a
-custom root filesystem far beyond the needs of embedded systems and
-micro-controllers. This is the same reason why I am proposing
-linux-pam and systemd  (and not only me for the latter) for Buildroot.
-
-Thanks.
-
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index e4c46d8..913bc0c 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -42,8 +42,8 @@ define LUAJIT_BUILD_CMDS
+ 		TARGET_LD="$(TARGET_CC)" \
+ 		TARGET_AR="$(TARGET_AR) rcus" \
+ 		TARGET_STRIP="$(TARGET_STRIP)" \
+-		CFLAGS="$(TARGET_CFLAGS)" \
+-		LDFLAGS="$(TARGET_LDFLAGS)" \
++		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
++		TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+ 		HOST_CC="$(LUAJIT_HOST_CC)" \
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+1.7.9.5
