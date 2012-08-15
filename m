@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 18:08:48 +0200
-Subject: [Buildroot] [PATCH 02/12] microperl: how to test it ?
-In-Reply-To: <1345041514-31539-2-git-send-email-francois.perrad@gadz.org>
-References: <1345041514-31539-1-git-send-email-francois.perrad@gadz.org>
- <1345041514-31539-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20120815180848.1e0c3d66@skate>
+Date: Wed, 15 Aug 2012 18:07:04 +0200
+Subject: [Buildroot] [git commit branch/next] microperl: add license info
+Message-ID: <20120815180000.DB011971BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 15 Aug 2012 16:38:24 +0200,
-Francois Perrad <fperrad@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=0c801c99dcf2f84f642a27a11b9d2458106d4afc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> +ifdef BR2_PACKAGE_MICROPERL_INSTALL_TESTSUITE
-> +define MICROPERL_INSTALL_TESTSUITE
-> +	$(INSTALL) -m644 -D $(@D)/t/TEST                $(TARGET_DIR)/root/microperl/t/TEST
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/microperl/microperl.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Isn't this one a script that should be installed 755?
-
-> +	$(INSTALL) -m644 -D $(@D)/t/harness             $(TARGET_DIR)/root/microperl/t/harness
-> +	cp -r $(@D)/lib         $(TARGET_DIR)/root/microperl/lib
-> +	cp -r $(@D)/t/base      $(TARGET_DIR)/root/microperl/t/base
-> +	cp -r $(@D)/t/cmd       $(TARGET_DIR)/root/microperl/t/cmd
-
-Is /root/ really the right place to install this? Isn't
-some /usr/share/perl/ or /usr/lib/perl/ a better place?
-
-> +	echo "BEGIN { chdir 't' if -d 't'; @INC = ('../lib', '.'); } 1;" > $(TARGET_DIR)/root/microperl/TestInit.pm
-
-I think I would prefer a TestInit.pm file added in package/microperl/
-rather than echo'ing it here.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index fbf319c..b2a912a 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -7,6 +7,8 @@
+ MICROPERL_VERSION = 5.12.4
+ MICROPERL_SITE = http://www.cpan.org/src/5.0
+ MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
++MICROPERL_LICENSE = Artistic
++MICROPERL_LICENSE_FILES = Artistic
+ MICROPERL_DEPENDENCIES = host-microperl
+ MICROPERL_MODS_DIR = /usr/lib/perl5/$(MICROPERL_VERSION)
+ MICROPERL_ARCH_DIR = $(MICROPERL_MODS_DIR)/$(GNU_TARGET_NAME)
