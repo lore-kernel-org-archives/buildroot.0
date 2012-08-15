@@ -1,23 +1,32 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Wed, 15 Aug 2012 11:39:10 +0100
-Subject: [Buildroot] Open question: remove "toolchain on target" option
-In-Reply-To: <201208150456.03396.minimod@morethan.org>
-References: <20120811202114.3a95d4ab@skate>
- <201208150456.03396.minimod@morethan.org>
-Message-ID: <CA+wH295eUsHq5+R=YrAN4GCXbummq_oYuJSBbm-p1uQfcw2Lrg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Aug 2012 12:03:02 +0200
+Subject: [Buildroot] [git commit] libfcgi: add license info
+Message-ID: <20120815100417.BF2E1971A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 August 2012 10:56, Michael S. Zick <minimod@morethan.org> wrote:
-> crosstool-ng was never intended to do Canadian Cross toolchain builds.
+commit: http://git.buildroot.net/buildroot/commit/?id=52a46f8330a18213e113423e9e4fc726e01a86a4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I don't follow crosstool-ng closely, but according to
-http://crosstool-ng.org/#canadian_build
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libfcgi/libfcgi.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-"NOTE: There is support for building canadian-crosses right now. It's
-not perfect, some cleanups have to be done, but it works quite OK."
-
-Alex
+diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
+index 1aa2c5a..a4d18a4 100644
+--- a/package/libfcgi/libfcgi.mk
++++ b/package/libfcgi/libfcgi.mk
+@@ -6,6 +6,8 @@
+ LIBFCGI_VERSION = 2.4.0
+ LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
+ LIBFCGI_SITE = http://www.fastcgi.com/dist
++LIBFCGI_LICENSE = fcgi license
++LIBFCGI_LICENSE_FILES = LICENSE.TERMS
+ LIBFCGI_INSTALL_STAGING = YES
+ LIBFCGI_AUTORECONF = YES
+ 
