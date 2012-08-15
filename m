@@ -1,143 +1,177 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 15 Aug 2012 16:38:32 +0200
-Subject: [Buildroot] [PATCH 10/12] microperl: bump version to 5.16.1
+Date: Wed, 15 Aug 2012 16:38:34 +0200
+Subject: [Buildroot] [PATCH 12/12] cpanminus: new package
 In-Reply-To: <1345041514-31539-1-git-send-email-francois.perrad@gadz.org>
 References: <1345041514-31539-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1345041514-31539-10-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1345041514-31539-12-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+and adjust sitelib in perl & microperl
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/microperl/microperl-fix-build.patch |   76 +++++++++++++++++++++++++++
- package/microperl/microperl.mk              |    8 +--
- 2 files changed, 80 insertions(+), 4 deletions(-)
- create mode 100644 package/microperl/microperl-fix-build.patch
+ package/Config.in              |    5 +++++
+ package/cpanminus/Config.in    |   24 ++++++++++++++++++++++++
+ package/cpanminus/cpanminus.mk |   37 +++++++++++++++++++++++++++++++++++++
+ package/microperl/microperl.mk |    5 ++++-
+ package/perl/perl.mk           |   12 ++++++++++++
+ 5 files changed, 82 insertions(+), 1 deletion(-)
+ create mode 100644 package/cpanminus/Config.in
+ create mode 100644 package/cpanminus/cpanminus.mk
 
-diff --git a/package/microperl/microperl-fix-build.patch b/package/microperl/microperl-fix-build.patch
+diff --git a/package/Config.in b/package/Config.in
+index 1b8237d..986fc89 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -263,6 +263,11 @@ source "package/xavante/Config.in"
+ endmenu
+ endif
+ source "package/perl/Config.in"
++if BR2_PACKAGE_PERL || BR2_PACKAGE_MINIPERL || BR2_PACKAGE_MICROPERL
++menu "Perl libraries/modules"
++source "package/cpanminus/Config.in"
++endmenu
++endif
+ source "package/miniperl/Config.in"
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
 new file mode 100644
-index 0000000..fe01395
+index 0000000..9db7b2e
 --- /dev/null
-+++ b/package/microperl/microperl-fix-build.patch
-@@ -0,0 +1,76 @@
-+Backport of http://perl5.git.perl.org/perl.git/commitdiff/d40eae8f110fb9900e82648a2c44710def9f117d
++++ b/package/cpanminus/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_CPANMINUS
++	bool "cpanminus"
++	help
++	  cpanminus is a script to get, unpack, build and install Perl modules
++	  from CPAN.
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++	  Why? It's dependency free, requires zero configuration, and stands
++	  alone. When running, it requires only 10MB of RAM.
 +
-+From: Nicholas Clark <nick@ccl4.org>
-+Date: Fri, 27 Jul 2012 17:36:40 +0200
-+Subject: [PATCH] Restore microperl, which has been unable to build since January.
++	  http://github.com/miyagawa/cpanminus
 +
-+microperl was broken by commit 82ad65bb0613be64 on 2012-01-16, which used
-+IN_LOCALE_COMPILETIME for the first time in the C code. Unlike
-+IN_LOCALE_RUNTIME, it had no fallback definition for microperl.
++if BR2_PACKAGE_CPANMINUS
 +
-+Commit f90a9a0230170cc0 on 2012-01-28 added the first use of Strtol(),
-+which means that microperl now needs to assume that the system has strtol().
-+(Which is not unreasonable, as it's part of C89).
-+---
-+ perl.h       |    1 +
-+ uconfig.h    |    2 +-
-+ uconfig.sh   |    2 +-
-+ uconfig64.sh |    2 +-
-+ 4 files changed, 4 insertions(+), 3 deletions(-)
++config BR2_PACKAGE_CPANMINUS_MODULES
++	string "Perl modules from CPAN"
++	help
++	  List of space-separated Perl modules to install from CPAN.
 +
-+diff --git a/perl.h b/perl.h
-+index e532af2..9e92ae4 100644
-+--- a/perl.h
-++++ b/perl.h
-+@@ -5311,6 +5311,7 @@ typedef struct am_table_short AMTS;
-+ #define RESTORE_NUMERIC_STANDARD()	/**/
-+ #define Atof				my_atof
-+ #define IN_LOCALE_RUNTIME		0
-++#define IN_LOCALE_COMPILETIME		0
-+ 
-+ #endif /* !USE_LOCALE_NUMERIC */
-+ 
-+diff --git a/uconfig.h b/uconfig.h
-+index 20b1f23..60c7ca7 100644
-+--- a/uconfig.h
-++++ b/uconfig.h
-+@@ -527,7 +527,7 @@
-+  *	This symbol, if defined, indicates that the strtol routine is available
-+  *	to provide better numeric string conversion than atoi() and friends.
-+  */
-+-/*#define HAS_STRTOL	/ **/
-++#define HAS_STRTOL	/**/
-+ 
-+ /* HAS_STRXFRM:
-+  *	This symbol, if defined, indicates that the strxfrm() routine is
-+diff --git a/uconfig.sh b/uconfig.sh
-+index e96b7e8..d761d5c 100644
-+--- a/uconfig.sh
-++++ b/uconfig.sh
-+@@ -424,7 +424,7 @@ d_strftime='undef'
-+ d_strlcat='undef'
-+ d_strlcpy='undef'
-+ d_strtod='undef'
-+-d_strtol='undef'
-++d_strtol='define'
-+ d_strtold='undef'
-+ d_strtoll='undef'
-+ d_strtoq='undef'
-+diff --git a/uconfig64.sh b/uconfig64.sh
-+index 80e6f7f..f57c979 100644
-+--- a/uconfig64.sh
-++++ b/uconfig64.sh
-+@@ -425,7 +425,7 @@ d_strftime='undef'
-+ d_strlcat='undef'
-+ d_strlcpy='undef'
-+ d_strtod='undef'
-+-d_strtol='undef'
-++d_strtol='define'
-+ d_strtold='undef'
-+ d_strtoll='undef'
-+ d_strtoq='undef'
-+-- 
-+1.7.9.5
++	  Examples: Try::Tiny Dancer YAML Moo
 +
++	  Install the listed modules and their dependencies.
++	  cpanm run on host, so you cannot use it for XS modules.
++
++endif
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+new file mode 100644
+index 0000000..6df9f73
+--- /dev/null
++++ b/package/cpanminus/cpanminus.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# cpanminus
++#
++#############################################################
++
++CPANMINUS_VERSION = 1.5017
++CPANMINUS_SITE = http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA
++CPANMINUS_SOURCE = App-cpanminus-$(CPANMINUS_VERSION).tar.gz
++CPANMINUS_DEPENDENCIES = host-perl host-cpanminus
++CPANMINUS_MODS = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
++
++define HOST_CPANMINUS_CONFIGURE_CMDS
++	cd $(@D); $(HOST_DIR)/usr/bin/perl Makefile.PL
++endef
++
++define HOST_CPANMINUS_INSTALL_CMDS
++	$(MAKE) -C $(@D) install
++endef
++
++define CPANMINUS_INSTALL_TARGET_CMDS
++	for i in $(CPANMINUS_MODS); do \
++		cd $(@D); $(HOST_DIR)/usr/bin/cpanm -L $(TARGET_DIR)/usr/local $$i; \
++	done
++	# show XS modules
++	find $(TARGET_DIR)/usr/local/lib/perl5 -name *.so -print
++	# remove XS modules
++	rm -Rf $(TARGET_DIR)/usr/local/lib/perl5/$(shell $(HOST_DIR)/usr/bin/perl -MConfig -e "print Config->{archname}")
++	# fix shebang
++	touch $(TARGET_DIR)/usr/local/bin/dummy
++	for i in $(TARGET_DIR)/usr/local/bin/*; do \
++		$(SED) 's/$(subst /,\/,$(HOST_DIR))//' $$i; \
++	done
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index aaa47be..e4846b4 100644
+index f130666..544702f 100644
 --- a/package/microperl/microperl.mk
 +++ b/package/microperl/microperl.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
+@@ -108,11 +108,15 @@ define MICROPERL_CONFIGURE_CMDS
+ 	$(SED) '/^archlib=/d' -e '/^archlibexp=/d' -e '/^optimize=/d' \
+ 		-e '/^archname=/d' -e '/^d_poll=/d' -e '/^i_poll=/d' \
+ 		-e '/^osname=/d' -e '/^d_archlib=/d' -e '/^i_fcntl=/d' \
++		-e '/^sitelib=/d' -e '/^sitelibexp=/d' \
+ 		-e '/^useperlio=/d' $(MICROPERL_UCONFIG_SH)
+ 	$(SED) 's/5\.$(MICROPERL_VERSION_MAJOR)/$(MICROPERL_VERSION)/' $(MICROPERL_UCONFIG_SH)
++	$(SED) 's/local\///' $(MICROPERL_UCONFIG_SH)
+ 	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(MICROPERL_UCONFIG_SH)
+ 	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(MICROPERL_UCONFIG_SH)
+ 	echo "d_archlib='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "sitelib='/usr/local/lib/perl5'" >>$(MICROPERL_UCONFIG_SH)
++	echo "sitelibexp='/usr/local/lib/perl5'" >>$(MICROPERL_UCONFIG_SH)
+ 	echo "archname='$(GNU_TARGET_NAME)'" >>$(MICROPERL_UCONFIG_SH)
+ 	echo "osname='linux'" >>$(MICROPERL_UCONFIG_SH)
+ 	echo "cc='$(TARGET_CC)'" >>$(MICROPERL_UCONFIG_SH)
+@@ -126,7 +130,6 @@ define MICROPERL_CONFIGURE_CMDS
+ 	$(MICROPERL_BIGENDIAN)
+ 	$(MICROPERL_LARGEFILE)
+ 	$(MICROPERL_WCHAR)
+-	$(SED) 's/local\///' $(MICROPERL_UCONFIG_SH)
+ 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
+ 	$(MICROPERL_REGEN_CONFIG)
+ 	cp -f $(@D)/uconfig.h $(@D)/config.h
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index a7b94e0..dc67dd0 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -81,6 +81,7 @@ define PERL_CONFIGURE_COMMON
+ 		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
+ 		-Duseshrplib \
+ 		-Dprefix=/usr \
++		-Dsitelib=/usr/local/lib/perl5 \
+ 		-Uoptimize \
+ 		$(PERL_USE_DEVEL) \
+ 		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
+@@ -113,9 +114,20 @@ define PERL_CONFIGURE_CMDS
+ 	$(INSTALL) -m 755 $(HOST_DIR)/usr/bin/generate_uudmap $(@D)/generate_uudmap
+ endef
  
--MICROPERL_VERSION_MAJOR = 14
--MICROPERL_VERSION = 5.$(MICROPERL_VERSION_MAJOR).2
-+MICROPERL_VERSION_MAJOR = 16
-+MICROPERL_VERSION = 5.$(MICROPERL_VERSION_MAJOR).1
- MICROPERL_SITE = http://www.cpan.org/src/5.0
- MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
- MICROPERL_LICENSE = Artistic
-@@ -50,7 +50,6 @@ MICROPERL_BASE_MODS += \
- # some common modules (from lib/)
- MICROPERL_BASE_MODS += \
-   Benchmark.pm \
--  Carp.pm \
-   Class/Struct.pm \
-   Exporter.pm Exporter/Heavy.pm \
-   File/Basename.pm \
-@@ -63,6 +62,7 @@ MICROPERL_BASE_MODS += \
++# example of hack for XS module (cpanminus handles only pure Perl modules)
++#define PERL_HACK_4_XS_MODULES
++#	cd $(@D)/cpan; tar xfz $(BUILDROOT_DL_DIR)/HTML-Parser-3.69.tar.gz
++#endef
++
++PERL_PRE_CONFIGURE_HOOKS += PERL_HACK_4_XS_MODULES
++
+ define PERL_BUILD_CMDS
+ 	$(MAKE) RUN_PERL=$(HOST_DIR)/usr/bin/perl \
+ 		-C $(@D) all
++# example of hack for XS module
++#	cd $(@D); \
++#		$(HOST_DIR)/usr/bin/perl -Ilib make_ext.pl MAKE="$(MAKE)" LIBPERL_A=libperl.a LINKTYPE=dynamic \
++#			HTML-Parser-3.69
+ endef
  
- # other common modules (from dist/)
- MICROPERL_MODS += \
-+  Carp.pm \
-   Dumpvalue.pm \
-   Env.pm \
-   autouse.pm \
-@@ -155,7 +155,7 @@ endef
- 
- define MICROPERL_BUILD_CMDS
- 	$(MAKE) -f Makefile.micro -C $(@D) \
--		CC="$(HOSTCC)" bitcount.h
-+		CC="$(HOSTCC)" ubitcount.h
- 	$(MAKE) -f Makefile.micro -C $(@D) \
- 		CC="$(TARGET_CC)" OPTIMIZE="$(TARGET_CFLAGS)"
- 	$(MICROPERL_BUILD_EXTENSIONS)
+ define PERL_INSTALL_STAGING_CMDS
 -- 
 1.7.9.5
