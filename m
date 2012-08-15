@@ -1,10 +1,7 @@
 From: Dmitry <golubovsky@gmail.com>
-Date: Tue, 14 Aug 2012 23:33:23 -0400
-Subject: [Buildroot] [PATCH 2/2] Provide PAM default configuration files
-	when building linux-pam package
-In-Reply-To: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
-References: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <1345001603-16774-2-git-send-email-golubovsky@gmail.com>
+Date: Tue, 14 Aug 2012 23:33:22 -0400
+Subject: [Buildroot] [PATCH 1/2] PAM support in Busybox if linux-pam is built
+Message-ID: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +10,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Dmitry <golubovsky@gmail.com>
 ---
- package/linux-pam/default      |    8 ++++++++
- package/linux-pam/linux-pam.mk |    8 ++++++++
- package/linux-pam/login        |    9 +++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/linux-pam/default
- create mode 100644 package/linux-pam/login
+ package/busybox/Config.in  |   11 +++++++++++
+ package/busybox/busybox.mk |   12 ++++++++++++
+ 2 files changed, 23 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-pam/default b/package/linux-pam/default
-new file mode 100644
-index 0000000..0bd5ba0
---- /dev/null
-+++ b/package/linux-pam/default
-@@ -0,0 +1,8 @@
-+#
-+# default; standard UN*X access
-+#
-+auth     required       pam_unix.so
-+account  required       pam_unix.so
-+password required       pam_unix.so
-+session  required       pam_unix.so
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index dedcf18..2a9cbf1 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -62,6 +62,17 @@ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	  Install the watchdog daemon startup script,
+ 	  that just start at the boot the busybox watchdog daemon.
+ 
++config BR2_PACKAGE_BUSYBOX_PAM
++	bool "Enable PAM support in Busybox"
++	default n
++	depends on BR2_PACKAGE_LINUX_PAM
++	help
++	  If this item is selected, Busybox login will use the PAM stack
++	  for local logins. Local logins with null password are allowed
++	  for users with records in /etc/passwd ("default" and "root").
++	  The default PAM configuration file requires user accounts with
++	  nonzero length passwords.
 +
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 48cb073..99161c6 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -24,4 +24,12 @@ ifeq ($(BR2_PACKAGE_LIBINTL),y)
- 	LINUX_PAM_MAKE_OPT += LIBS=-lintl
+ if BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 17ee50a..c97ce77 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -161,6 +161,17 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ endef
  endif
  
-+define LINUX_PAM_CONFFILES
-+	mkdir -p $(TARGET_DIR)/etc/pam.d
-+	cp $($(PKG)_DIR_PREFIX)/$(RAWNAME)/default $(TARGET_DIR)/etc/pam.d
-+	cp $($(PKG)_DIR_PREFIX)/$(RAWNAME)/login $(TARGET_DIR)/etc/pam.d
++ifeq ($(BR2_PACKAGE_BUSYBOX_PAM),y)
++BUSYBOX_DEPENDENCIES += linux-pam
++define BUSYBOX_ENABLE_PAM
++	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
 +endef
++else
++define BUSYBOX_ENABLE_PAM
++	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
++endef
++endif
 +
-+LINUX_PAM_POST_PATCH_HOOKS = LINUX_PAM_CONFFILES
-+
- $(eval $(autotools-package))
-diff --git a/package/linux-pam/login b/package/linux-pam/login
-new file mode 100644
-index 0000000..d65a9d4
---- /dev/null
-+++ b/package/linux-pam/login
-@@ -0,0 +1,9 @@
-+#
-+# login: allow local logins to users with entries in /etc/passwd and
-+# /etc/shadow even with null password
-+#
-+auth      required       pam_unix.so nullok
-+account   required       pam_unix.so nullok
-+password  required       pam_unix.so nullok
-+session   required       pam_unix.so nullok
-+
+ # We do this here to avoid busting a modified .config in configure
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+ 
+@@ -176,6 +187,7 @@ define BUSYBOX_CONFIGURE_CMDS
+ 	$(BUSYBOX_DISABLE_MMU_APPLETS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
++	$(BUSYBOX_ENABLE_PAM)
+ 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		-C $(@D) oldconfig
+ endef
 -- 
 1.7.2.5
