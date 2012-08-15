@@ -1,33 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 12:02:48 +0200
-Subject: [Buildroot] [git commit] busybox: add license info
-Message-ID: <20120815100417.B03B2971BB@busybox.osuosl.org>
+Date: Wed, 15 Aug 2012 12:04:44 +0200
+Subject: [Buildroot] [PATCH] imagemagick: security bump to version
+ 6.7.8-8
+In-Reply-To: <1344280518-5293-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1344280518-5293-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120815120444.1418fbe1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3a887b7eb85d32b651d2c028c75a06e41a0df8e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Mon,  6 Aug 2012 16:15:18 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+> Fixes CVE-2012-3437, CVE-2012-3437 and CVE-2012-3438.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 17ee50a..33f8633 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -12,6 +12,9 @@ BUSYBOX_VERSION = $(call qstrip,$(BR2_BUSYBOX_VERSION))
- BUSYBOX_SITE = http://www.busybox.net/downloads
- endif
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
-+BUSYBOX_LICENSE = GPLv2
-+BUSYBOX_LICENSE_FILES = LICENSE
-+
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
- # Allows the build system to tweak CFLAGS
- BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
+Since it fixes security problems, I've applied this patch to master.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
