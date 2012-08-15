@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 12:03:48 +0200
-Subject: [Buildroot] [git commit] psmisc: add license info
-Message-ID: <20120815100418.9BEB4971A4@busybox.osuosl.org>
+Date: Wed, 15 Aug 2012 12:02:48 +0200
+Subject: [Buildroot] [git commit] busybox: add license info
+Message-ID: <20120815100417.B03B2971BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7561116a77d654b56b4dbac815e6eb86c771f032
+commit: http://git.buildroot.net/buildroot/commit/?id=3a887b7eb85d32b651d2c028c75a06e41a0df8e9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/psmisc/psmisc.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index a70f071..cd381e5 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
-@@ -6,6 +6,8 @@
- 
- PSMISC_VERSION = 22.16
- PSMISC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/psmisc/psmisc
-+PSMISC_LICENSE = GPLv2
-+PSMISC_LICENSE_FILES = COPYING
- PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
- 
- ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 17ee50a..33f8633 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -12,6 +12,9 @@ BUSYBOX_VERSION = $(call qstrip,$(BR2_BUSYBOX_VERSION))
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ endif
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
++BUSYBOX_LICENSE = GPLv2
++BUSYBOX_LICENSE_FILES = LICENSE
++
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+ BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
