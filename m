@@ -1,32 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 18:07:04 +0200
-Subject: [Buildroot] [git commit branch/next] microperl: add license info
-Message-ID: <20120815180000.DB011971BD@busybox.osuosl.org>
+From: Stefan Froberg <stefan.froberg@petroprogram.com>
+Date: Wed, 15 Aug 2012 22:00:25 +0300
+Subject: [Buildroot] [PATCH] python: firefox host-python dependency needs
+	--enable-unicodedata
+Message-ID: <1345057226-18726-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c801c99dcf2f84f642a27a11b9d2458106d4afc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello all
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/microperl/microperl.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Firefox needs host-python to be built with --enable-unicodedata.
+This patch enables/disables that switch depending of your
+target python configuration (BR2_PACKAGE_PYTHON_UNICODEDATA).
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index fbf319c..b2a912a 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -7,6 +7,8 @@
- MICROPERL_VERSION = 5.12.4
- MICROPERL_SITE = http://www.cpan.org/src/5.0
- MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
-+MICROPERL_LICENSE = Artistic
-+MICROPERL_LICENSE_FILES = Artistic
- MICROPERL_DEPENDENCIES = host-microperl
- MICROPERL_MODS_DIR = /usr/lib/perl5/$(MICROPERL_VERSION)
- MICROPERL_ARCH_DIR = $(MICROPERL_MODS_DIR)/$(GNU_TARGET_NAME)
+As far as I can tell, this was the last dependency that needed some handling
+before building firefox.
+
+If this and those two previously sended patches
+
+http://lists.busybox.net/pipermail/buildroot/2012-August/057378.html
+
+and
+
+http://lists.busybox.net/pipermail/buildroot/2012-August/057380.html
+
+are okay with you Thomas, then Im ready to send firefox patch next.
+
+Best regards
+
+Stefan
