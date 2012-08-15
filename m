@@ -1,54 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 12:25:02 +0200
-Subject: [Buildroot] Buildroot 2012.08-rc2 released
-Message-ID: <20120815122502.226ff3e3@skate>
+From: Jan Pohanka <xhpohanka@gmail.com>
+Date: Wed, 15 Aug 2012 14:45:52 +0200
+Subject: [Buildroot] libev on armv5 - illegal instruction
+In-Reply-To: <20120810215623.5d7304a5@skate>
+References: <op.wirpbfhyyxxkfz@pohanka-pc> <20120810085836.3c62fe7e@skate>
+ <op.witduljwyxxkfz@pohanka-pc> <20120810215623.5d7304a5@skate>
+Message-ID: <op.wi21qq1byxxkfz@pohanka-pc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Buildroot 2012.08-rc2 is released - Go download it at:
+have you found the example I posted useful to extract some information,  
+please? I would like to solve that issue.
 
-http://buildroot.net/downloads/buildroot-2012.08-rc2.tar.gz
+regards
+Jan
 
-or
+Dne Fri, 10 Aug 2012 21:56:23 +0200 Thomas Petazzoni  
+<thomas.petazzoni@free-electrons.com> napsal(a):
 
-http://buildroot.net/downloads/buildroot-2012.08-rc2.tar.bz2
+> Hello,
+>
+> Le Fri, 10 Aug 2012 09:31:23 +0200,
+> "Jan Pohanka" <xhpohanka@gmail.com> a ?crit :
+>
+>> Now I also discovered that the problem is machine specific. I have two
+>> hosts using exactly the same cross-compiler and buildroot. One works and
+>> the second one (my workstation) does not.
+>>
+>> working host (Ubuntu 11.10) uname -a
+>> Linux linux-dev 3.0.0-23-server #39-Ubuntu SMP Thu Jul 19 19:37:41 UTC
+>> 2012 x86_64 x86_64 x86_64 GNU/Linux
+>>
+>> my workstation (Ubuntu 12.04 lts) uname -a
+>> Linux pohanka-pc 3.2.0-27-generic #43-Ubuntu SMP Fri Jul 6 14:25:57 UTC
+>> 2012 x86_64 x86_64 x86_64 GNU/Linux
+>
+> The toolchain is not downloaded by Buildroot in your .config. Are you
+> sure you have the same toolchain on both build machines?
+>
+> Also, could you put online:
+>
+>  - A complete build log on both machines (make clean && make)
+>  - The two binaries that are different and causing problems
+>
+> Best regards,
+>
+> Thomas
 
-Or get it from Git:
 
-git://git.buildroot.net/buildroot
-
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2012.08_rc1..
-    23  Danomi Manchego
-     9  Francois Perrad
-     6  Thomas Petazzoni
-     4  Simon Dawson
-     3  Kelvin Cheung
-     2  Gustavo Zacarias
-     2  Yann E. MORIN
-     1  Baruch Siach
-     1  Sonic Zhang
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc2
-
-Expect the final 2012.08 release at the end of the month. Depending on
-the amount of fixes showing up until then, I might do a -rc3 as well.
-
-Enjoy!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Tato zpr?va byla vytvo?ena p?evratn?m po?tovn?m klientem Opery:  
+http://www.opera.com/mail/
