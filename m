@@ -1,42 +1,41 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 14 Aug 2012 21:25:30 -0400
-Subject: [Buildroot] [PATCH] luajit: bug fix - prevent target CFLAGS from
-	being used in host tool compile.
-Message-ID: <1344993930-2730-1-git-send-email-danomimanchego123@gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Tue, 14 Aug 2012 23:18:16 -0400
+Subject: [Buildroot] Suggestion: increase username buffer size in
+	busybox login
+In-Reply-To: <201208141907.13002.yann.morin.1998@free.fr>
+References: <CADiAo4LZ0e=Goo13SKodFo6PL0iEsVG5tPsdQ6jp6yhOsBX4DQ@mail.gmail.com>
+ <201208141907.13002.yann.morin.1998@free.fr>
+Message-ID: <CADiAo4Jn7525qF0+_mXhDT2j5-k+W-SCsXf1x8oaAEuNvWz66g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The luajit amalgamation compile starts with building a host tool, and then
-uses it to build itself. ?However, when CFLAGS is specified, as opposed to
-TARGET_CFLAGS, then it is used for both HOST and TARGET builds. ?So if you
-add something target specific into 'Target Optimizations' (for example,
-'-mfpu=neon -mfloat-abi=softfp' for ARM Cortex-A8), then it gets into the
-host tool compile, which then fails (because my build machine is not an
-ARM Cortext-A8). ?This can be fixed by using TARGET_CFLAGS and
-TARGET_LDFLAGS, instead of CFLAGS and LDFLAGS, respectively.
+Hi,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/luajit/luajit.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, Aug 14, 2012 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index e4c46d8..913bc0c 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -42,8 +42,8 @@ define LUAJIT_BUILD_CMDS
- 		TARGET_LD="$(TARGET_CC)" \
- 		TARGET_AR="$(TARGET_AR) rcus" \
- 		TARGET_STRIP="$(TARGET_STRIP)" \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+		TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		HOST_CC="$(LUAJIT_HOST_CC)" \
- 		HOST_CFLAGS="$(HOST_CFLAGS)" \
- 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+>> Or would it be better to raise this with busybox developers?
+>
+> Yep, probably. If there's a hard-reason for 32, they are the guys that
+> will know for sure, and if the change is accepted, they are the guys
+> that can apply it ;-)
+>     busybox at busybox.net
+
+Well, the busybox developers stick with the original Unix spec
+limiting username length at 32 chars:
+
+http://lists.busybox.net/pipermail/busybox/2012-August/078256.html
+
+So I am repeating my question: is anybody among Buildroot users also
+interested in such patching of busybox: in case longer usernames (like
+firstname.lastname at host.example.org) are desired, increase the
+username buffer in login.c to 256 characters?
+
+Thanks.
+
 -- 
-1.7.9.5
+Dmitry Golubovsky
+
+Anywhere on the Web
