@@ -1,41 +1,70 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Tue, 14 Aug 2012 23:18:16 -0400
-Subject: [Buildroot] Suggestion: increase username buffer size in
-	busybox login
-In-Reply-To: <201208141907.13002.yann.morin.1998@free.fr>
-References: <CADiAo4LZ0e=Goo13SKodFo6PL0iEsVG5tPsdQ6jp6yhOsBX4DQ@mail.gmail.com>
- <201208141907.13002.yann.morin.1998@free.fr>
-Message-ID: <CADiAo4Jn7525qF0+_mXhDT2j5-k+W-SCsXf1x8oaAEuNvWz66g@mail.gmail.com>
+From: Dmitry <golubovsky@gmail.com>
+Date: Tue, 14 Aug 2012 23:33:23 -0400
+Subject: [Buildroot] [PATCH 2/2] Provide PAM default configuration files
+	when building linux-pam package
+In-Reply-To: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
+References: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
+Message-ID: <1345001603-16774-2-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Dmitry <golubovsky@gmail.com>
+---
+ package/linux-pam/default      |    8 ++++++++
+ package/linux-pam/linux-pam.mk |    8 ++++++++
+ package/linux-pam/login        |    9 +++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/linux-pam/default
+ create mode 100644 package/linux-pam/login
 
-On Tue, Aug 14, 2012 at 1:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-
->> Or would it be better to raise this with busybox developers?
->
-> Yep, probably. If there's a hard-reason for 32, they are the guys that
-> will know for sure, and if the change is accepted, they are the guys
-> that can apply it ;-)
->     busybox at busybox.net
-
-Well, the busybox developers stick with the original Unix spec
-limiting username length at 32 chars:
-
-http://lists.busybox.net/pipermail/busybox/2012-August/078256.html
-
-So I am repeating my question: is anybody among Buildroot users also
-interested in such patching of busybox: in case longer usernames (like
-firstname.lastname at host.example.org) are desired, increase the
-username buffer in login.c to 256 characters?
-
-Thanks.
-
+diff --git a/package/linux-pam/default b/package/linux-pam/default
+new file mode 100644
+index 0000000..0bd5ba0
+--- /dev/null
++++ b/package/linux-pam/default
+@@ -0,0 +1,8 @@
++#
++# default; standard UN*X access
++#
++auth     required       pam_unix.so
++account  required       pam_unix.so
++password required       pam_unix.so
++session  required       pam_unix.so
++
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 48cb073..99161c6 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -24,4 +24,12 @@ ifeq ($(BR2_PACKAGE_LIBINTL),y)
+ 	LINUX_PAM_MAKE_OPT += LIBS=-lintl
+ endif
+ 
++define LINUX_PAM_CONFFILES
++	mkdir -p $(TARGET_DIR)/etc/pam.d
++	cp $($(PKG)_DIR_PREFIX)/$(RAWNAME)/default $(TARGET_DIR)/etc/pam.d
++	cp $($(PKG)_DIR_PREFIX)/$(RAWNAME)/login $(TARGET_DIR)/etc/pam.d
++endef
++
++LINUX_PAM_POST_PATCH_HOOKS = LINUX_PAM_CONFFILES
++
+ $(eval $(autotools-package))
+diff --git a/package/linux-pam/login b/package/linux-pam/login
+new file mode 100644
+index 0000000..d65a9d4
+--- /dev/null
++++ b/package/linux-pam/login
+@@ -0,0 +1,9 @@
++#
++# login: allow local logins to users with entries in /etc/passwd and
++# /etc/shadow even with null password
++#
++auth      required       pam_unix.so nullok
++account   required       pam_unix.so nullok
++password  required       pam_unix.so nullok
++session   required       pam_unix.so nullok
++
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+1.7.2.5
