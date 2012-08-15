@@ -1,47 +1,37 @@
-From: Stefan Froberg <stefan.froberg@petroprogram.com>
-Date: Wed, 15 Aug 2012 22:00:26 +0300
-Subject: [Buildroot] [PATCH] python: firefox host-python dependency needs
-	--enable-unicodedata
-In-Reply-To: <1345057226-18726-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1345057226-18726-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <1345057226-18726-2-git-send-email-stefan.froberg@petroprogram.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 15 Aug 2012 22:37:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 5450] New: AT91SAM9260 Bootstrap compilation
+	problem
+Message-ID: <bug-5450-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=5450
 
-Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
----
- package/python/python.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+           Summary: AT91SAM9260 Bootstrap compilation problem
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: peter.stosz at freemail.hu
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index fae4e5c..805e40c 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -22,7 +22,6 @@ HOST_PYTHON_CONF_OPT += 	\
- 	--disable-curses	\
- 	--disable-codecs-cjk	\
- 	--disable-nis		\
--	--disable-unicodedata	\
- 	--disable-dbm		\
- 	--disable-gdbm		\
- 	--disable-bsddb		\
-@@ -30,6 +29,13 @@ HOST_PYTHON_CONF_OPT += 	\
- 	--disable-bz2		\
- 	--disable-ssl
- 
-+ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
-+	HOST_PYTHON_CONF_OPT += --disable-unicodedata	
-+else
-+	HOST_PYTHON_CONF_OPT += --enable-unicodedata
-+endif
-+
-+
- HOST_PYTHON_MAKE_ENV = \
- 	PYTHON_MODULES_INCLUDE=$(HOST_DIR)/usr/include \
- 	PYTHON_MODULES_LIB="$(HOST_DIR)/lib $(HOST_DIR)/usr/lib"
+
+2012.08-rc2 clean install.
+Target: AT91SAM9260EK. Only target set, nothing more changed.
+AT91 Bootstrap not compiled.
+(Env: Debian 6 32bit)
+
 -- 
-1.7.7.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
