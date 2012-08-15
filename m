@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 12:04:44 +0200
-Subject: [Buildroot] [PATCH] imagemagick: security bump to version
- 6.7.8-8
-In-Reply-To: <1344280518-5293-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1344280518-5293-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120815120444.1418fbe1@skate>
+Date: Wed, 15 Aug 2012 12:03:53 +0200
+Subject: [Buildroot] [git commit] socat: add license info
+Message-ID: <20120815100418.AD03C971BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon,  6 Aug 2012 16:15:18 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=b27921a809a395ee21ba88c7e87de2133ffc0ac6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes CVE-2012-3437, CVE-2012-3437 and CVE-2012-3438.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/socat/socat.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Since it fixes security problems, I've applied this patch to master.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index 9a5234d..f10a836 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -7,6 +7,8 @@
+ SOCAT_VERSION = 2.0.0-b5
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download/
++SOCAT_LICENSE = GPLv2
++SOCAT_LICENSE_FILES = COPYING
+ SOCAT_CONF_ENV = sc_cv_termios_ispeed=no \
+ 		 sc_cv_sys_crdly_shift=9 \
+ 		 sc_cv_sys_tabdly_shift=11 \
