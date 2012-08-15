@@ -1,31 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Aug 2012 16:56:02 +0200
-Subject: [Buildroot] libev on armv5 - illegal instruction
-In-Reply-To: <op.wi21qq1byxxkfz@pohanka-pc>
-References: <op.wirpbfhyyxxkfz@pohanka-pc> <20120810085836.3c62fe7e@skate>
- <op.witduljwyxxkfz@pohanka-pc> <20120810215623.5d7304a5@skate>
- <op.wi21qq1byxxkfz@pohanka-pc>
-Message-ID: <20120815165602.769aad1f@skate>
+From: Richard Braun <rbraun@sceen.net>
+Date: Wed, 15 Aug 2012 17:24:16 +0200
+Subject: [Buildroot] [PATCH] grub: add host support
+In-Reply-To: <1345042674-28463-1-git-send-email-rbraun@sceen.net>
+References: <1345042674-28463-1-git-send-email-rbraun@sceen.net>
+Message-ID: <20120815152416.GA659@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 15 Aug 2012 14:45:52 +0200,
-"Jan Pohanka" <xhpohanka@gmail.com> a ?crit :
+On Wed, Aug 15, 2012 at 04:57:54PM +0200, Richard Braun wrote:
+> This part is intended as a hint to people trying to use buildroot for
+> embedded x86 targets in the hope it helps. Included here is a reference
+> shell script that doesn't require root privileges, which you can use as
+> a template for your own projects :
 
-> have you found the example I posted useful to extract some information,  
-> please? I would like to solve that issue.
+The comments were eaten by git. Attached is the original script.
 
-You have ccache enabled. Can you try doing a build with ccache
-disabled, and see if it generates a working libev?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Richard Braun
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: make_cf.sh
+Type: application/x-sh
+Size: 2658 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120815/e70ad4ee/attachment-0001.sh>
