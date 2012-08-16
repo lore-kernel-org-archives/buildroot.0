@@ -1,23 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 15 Aug 2012 22:39:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 5450] AT91SAM9260 Bootstrap compilation problem
-In-Reply-To: <bug-5450-163@https.bugs.busybox.net/>
-References: <bug-5450-163@https.bugs.busybox.net/>
-Message-ID: <20120815223909.799D9971C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 16 Aug 2012 08:31:26 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-15
+Message-ID: <20120816063126.BC8FD52D127@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5450
 
---- Comment #1 from Peter Stosz <peter.stosz@freemail.hu> 2012-08-15 22:39:09 UTC ---
-Created attachment 4496
-  --> https://bugs.busybox.net/attachment.cgi?id=4496
-AT91 bootstrap make log
+Hello,
+
+On 2012-08-15, 18 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 17 builds have been successful
+ 1 builds have failed
+
+Below the results of the failed builds. Successful builds are omitted.
+
+Build cf1c378714fc8d8476fd5716e3f23d119d4df2c9
+==============================================
+
+Status         : NOK
+Failure reason : boost-1.49.0
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-08-15 18:08:12
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
+End of log     : http://autobuild.buildroot.net/results/cf1c378714fc8d8476fd5716e3f23d119d4df2c9/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/cf1c378714fc8d8476fd5716e3f23d119d4df2c9/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/cf1c378714fc8d8476fd5716e3f23d119d4df2c9/config
+Defconfig      : http://autobuild.buildroot.net/results/cf1c378714fc8d8476fd5716e3f23d119d4df2c9/defconfig
+
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+http://autobuild.buildroot.net
