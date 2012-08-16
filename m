@@ -1,114 +1,62 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 16 Aug 2012 12:49:24 +0200
-Subject: [Buildroot] [PATCH] yasm: New package
-In-Reply-To: <20120811222944.0b6b6ff8@skate>
-References: =?iso-8859-1?q?=3C1344627011=2D1862=2D1=2Dgit=2Dsend=2Demail=2Dstefan?=
- =?iso-8859-1?q?=2Efroberg=40petroprogram=2Ecom=3E_=3C20120811222944?=
- =?iso-8859-1?q?=2E0b6b6ff8=40skate=3E?=
-Message-ID: <M8UGQC$160B85C03116093A705207CA496406FB@lucaceresoli.net>
+From: gregory hermant <gregory.hermant@calao-systems.com>
+Date: Thu, 16 Aug 2012 14:31:38 +0200
+Subject: [Buildroot] [PATCH 1/1] calao: use zImage on usb-a9263 and
+ usb-a9g20 lpw
+In-Reply-To: <20120811231618.7fa6380c@skate>
+References: <1344003028-9452-1-git-send-email-plagnioj@jcrosoft.com>
+ <20120811231618.7fa6380c@skate>
+Message-ID: <502CE82A.9060901@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi thomas,
+I'm ok.
+gregory
+
 Thomas Petazzoni wrote:
-> Le Fri, 10 Aug 2012 22:30:11 +0300,
-> Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
+> Gr?gory,
 > 
-> > Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
-> 
-> Thanks, applied to next with a few minor fixes.
-> 
-> Luca, I'm Cc'ing you on this regarding the license informations. The
-> license of Yasm seems to be, hum, complicated. Below the contents of
-> the COPYING file of the project. How should we encode that into
-> YASM_LICENSE ? :-)
-
-What a foolish license!
-
-At first sight, I can't think of anything better than
-YASM_LICENSE = Various
-because there are BSD-derivatives, GPLs, and more.
-Informative, complete and concise: you can have at most two of them
-here, and I would not sacrifice the last two ones.
-
-Ah, and sorry for the delay... vacation time (without 3G).
-
-Luca
-
-
-> 
-> ----------------------------------------------------------------------
-> Yasm is Copyright (c) 2001-2010 Peter Johnson and other Yasm developers.
-> 
-> Yasm developers and/or contributors include:
->   Peter Johnson
->   Michael Urman
->   Brian Gladman (Visual Studio build files, other fixes)
->   Stanislav Karchebny (options parser)
->   Mathieu Monnier (SSE4 instruction patches, NASM preprocessor additions)
->   Anonymous "NASM64" developer (NASM preprocessor fixes)
->   Stephen Polkowski (x86 instruction patches)
->   Henryk Richter (Mach-O object format)
->   Ben Skeggs (patches, bug reports)
->   Alexei Svitkine (GAS preprocessor)
->   Samuel Thibault (TASM parser and frontend)
-> 
-> -----------------------------------
-> Yasm licensing overview and summary
-> -----------------------------------
-> 
-> Note: This document does not provide legal advice nor is it the actual
-> license of any part of Yasm.  See the individual licenses for complete
-> details.  Consult a lawyer for legal advice.
-> 
-> The primary license of Yasm is the 2-clause BSD license.  Please use this
-> license if you plan on submitting code to the project.
-> 
-> Yasm has absolutely no warranty; not even for merchantibility or fitness
-> for a particular purpose.
-> 
-> -------
-> Libyasm
-> -------
-> Libyasm is 2-clause or 3-clause BSD licensed, with the exception of
-> bitvect, which is triple-licensed under the Artistic license, GPL, and
-> LGPL.  Libyasm is thus GPL and LGPL compatible.  In addition, this also
-> means that libyasm is free for binary-only distribution as long as the
-> terms of the 3-clause BSD license and Artistic license (as it applies to
-> bitvect) are fulfilled.
-> 
-> -------
-> Modules
-> -------
-> The modules are 2-clause or 3-clause BSD licensed.
-> 
-> ---------
-> Frontends
-> ---------
-> The frontends are 2-clause BSD licensed.
-> 
-> -------------
-> License Texts
-> -------------
-> The full text of all licenses are provided in separate files in the source
-> distribution.  Each source file may include the entire license (in the case
-> of the BSD and Artistic licenses), or may reference the GPL or LGPL license
-> file.
-> 
-> BSD.txt - 2-clause and 3-clause BSD licenses
-> Artistic.txt - Artistic license
-> GNU_GPL-2.0 - GNU General Public License
-> GNU_LGPL-2.0 - GNU Library General Public License
-> ----------------------------------------------------------------------
+> Since you are the person who added support for Calao USB-A9263 and
+> Calao USB-A9G20-LPW, can you ACK the following patch if you're OK with
+> it?
 > 
 > Thanks!
 > 
 > Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> 
+> Le Fri,  3 Aug 2012 16:10:28 +0200,
+> Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
+> 
+>> The board boot more fast with a zImage than a uImage
+>> as the kernel will not have to be relocated during the decompression.
+>>
+>> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+>> ---
+>>  configs/calao_usb_a9263_defconfig     |    1 +
+>>  configs/calao_usb_a9g20_lpw_defconfig |    1 +
+>>  2 files changed, 2 insertions(+)
+>>
+>> diff --git a/configs/calao_usb_a9263_defconfig b/configs/calao_usb_a9263_defconfig
+>> index 6612d2c..8094ea2 100644
+>> --- a/configs/calao_usb_a9263_defconfig
+>> +++ b/configs/calao_usb_a9263_defconfig
+>> @@ -12,3 +12,4 @@ BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9263"
+>>  BR2_LINUX_KERNEL=y
+>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9263/linux-3.4.4.config"
+>> +BR2_LINUX_KERNEL_ZIMAGE=y
+>> diff --git a/configs/calao_usb_a9g20_lpw_defconfig b/configs/calao_usb_a9g20_lpw_defconfig
+>> index 580972a..36b6c9b 100644
+>> --- a/configs/calao_usb_a9g20_lpw_defconfig
+>> +++ b/configs/calao_usb_a9g20_lpw_defconfig
+>> @@ -13,3 +13,4 @@ BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9g20"
+>>  BR2_LINUX_KERNEL=y
+>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9g20-lpw/linux-3.4.4.config"
+>> +BR2_LINUX_KERNEL_ZIMAGE=y
+> 
+> 
 > 
