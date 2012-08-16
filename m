@@ -1,62 +1,36 @@
-From: gregory hermant <gregory.hermant@calao-systems.com>
-Date: Thu, 16 Aug 2012 14:31:38 +0200
-Subject: [Buildroot] [PATCH 1/1] calao: use zImage on usb-a9263 and
- usb-a9g20 lpw
-In-Reply-To: <20120811231618.7fa6380c@skate>
-References: <1344003028-9452-1-git-send-email-plagnioj@jcrosoft.com>
- <20120811231618.7fa6380c@skate>
-Message-ID: <502CE82A.9060901@calao-systems.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Thu, 16 Aug 2012 19:28:49 +0200
+Subject: [Buildroot] Qt tribulations take 2
+In-Reply-To: <20120715123854.3d6c11f1@skate>
+References: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
+ <20120713165557.1b39651c@skate>
+ <CALo-6+gv+zb1peT7ngOGLL7VnS6xpCUOZRn_J6CD86Kmn7vX=A@mail.gmail.com>
+ <20120714182555.4b7b267d@jl-desk-LL>
+ <CALo-6+hSrFrqua1s48qzYn9J8qF0F6=zCpgfbguO2hf3VmqeOQ@mail.gmail.com>
+ <20120715010542.1a23ba0f@skate> <50029C65.9010004@mind.be>
+ <20120715123854.3d6c11f1@skate>
+Message-ID: <502D2DD1.1020604@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi thomas,
-I'm ok.
-gregory
+Am 15.07.2012 12:38, schrieb Thomas Petazzoni:
+> Well, there are already many other environment variables that may break
+> the build and that we are either checking in
+> support/dependencies/dependencies.sh, or unsetting in main Makefile.
+> Shouldn't we do the same for QMAKESPEC?
+>
+After spending several hours in this trap this sounds like a real good
+Idea to me.
 
-Thomas Petazzoni wrote:
-> Gr?gory,
-> 
-> Since you are the person who added support for Calao USB-A9263 and
-> Calao USB-A9G20-LPW, can you ACK the following patch if you're OK with
-> it?
-> 
-> Thanks!
-> 
-> Thomas
-> 
-> Le Fri,  3 Aug 2012 16:10:28 +0200,
-> Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
-> 
->> The board boot more fast with a zImage than a uImage
->> as the kernel will not have to be relocated during the decompression.
->>
->> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
->> ---
->>  configs/calao_usb_a9263_defconfig     |    1 +
->>  configs/calao_usb_a9g20_lpw_defconfig |    1 +
->>  2 files changed, 2 insertions(+)
->>
->> diff --git a/configs/calao_usb_a9263_defconfig b/configs/calao_usb_a9263_defconfig
->> index 6612d2c..8094ea2 100644
->> --- a/configs/calao_usb_a9263_defconfig
->> +++ b/configs/calao_usb_a9263_defconfig
->> @@ -12,3 +12,4 @@ BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9263"
->>  BR2_LINUX_KERNEL=y
->>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9263/linux-3.4.4.config"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
->> diff --git a/configs/calao_usb_a9g20_lpw_defconfig b/configs/calao_usb_a9g20_lpw_defconfig
->> index 580972a..36b6c9b 100644
->> --- a/configs/calao_usb_a9g20_lpw_defconfig
->> +++ b/configs/calao_usb_a9g20_lpw_defconfig
->> @@ -13,3 +13,4 @@ BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="usb_a9g20"
->>  BR2_LINUX_KERNEL=y
->>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/usb-a9g20-lpw/linux-3.4.4.config"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
-> 
-> 
-> 
+Kind regards
+
+Stephan
+
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
