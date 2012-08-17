@@ -1,61 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Aug 2012 14:42:18 +0200
-Subject: [Buildroot] [PATCH 05/36] package/libiscsi: new package
-In-Reply-To: <CAHXCMMK1cMmkCbOFU5=ZsCADzGrK-e0i7RYGu+XSFyYh9hU3Tw@mail.gmail.com>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-5-git-send-email-yann.morin.1998@free.fr>
- <20120817131432.205de8e1@skate>
- <CAHXCMMK1cMmkCbOFU5=ZsCADzGrK-e0i7RYGu+XSFyYh9hU3Tw@mail.gmail.com>
-Message-ID: <20120817144218.2129fe41@skate>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Fri, 17 Aug 2012 08:46:32 -0400
+Subject: [Buildroot] Suggestion: increase username buffer size in
+	busybox login
+In-Reply-To: <20120817143017.65099bd6@skate>
+References: <CADiAo4LZ0e=Goo13SKodFo6PL0iEsVG5tPsdQ6jp6yhOsBX4DQ@mail.gmail.com>
+ <201208141907.13002.yann.morin.1998@free.fr>
+ <CADiAo4Jn7525qF0+_mXhDT2j5-k+W-SCsXf1x8oaAEuNvWz66g@mail.gmail.com>
+ <20120817143017.65099bd6@skate>
+Message-ID: <CADiAo4LX4q5Vxrw_Hje34DjzkDjKo8-MpdZzT-xN6MVUHSwuUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 17 Aug 2012 14:29:53 +0200,
-Samuel Martin <s.martin49@gmail.com> a ?crit :
+Hi,
 
-> > You can instead use
-> >
-> > https://github.com/sahlberg/libiscsi/zipball/$(LIBISCI_VERSION)
-> >
-> > which will download a zip file of the project.
-> 
-> I think the right url is:
-> https://github.com/downloads/sahlberg/libiscsi/libiscsi-1.5.0.tar.gz
+On Fri, Aug 17, 2012 at 8:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 
-Well, the above URL worked for me as well :)
+> This should not be implemented in Buildroot, as we don't want to keep
+> such "feature" patches on our packages. Make a patch to Busybox that
+> turns this into a configurable value, so that by default the length of
+> 32 characters is used, but a Busybox configuration option allows to
+> extend that. Then, Buildroot users interested by this feature can
+> create a custom Busybox configuration.
 
-> Though the zipball/tarball url is valid as soon as a tag is pushed in
-> the repository, it will require some more plumbing in the download
-> infrastructure since the downloaded file name is $(FOO_VERSION) with
-> no extension. What a pity!
+Busybox developers increased this length to 64 for now ;) It is in the
+daily snapshot and eventually will propagate to Buildroot (or can even
+be enabled now by selecting daily snapshot).
 
-We have done changes to allow that for external toolchains (i.e
-download a funky Git URL into a reasonably named tarball file), should
-we do this for packages?
+Maybe this will be sufficient.
 
-> > host-autoconf will not bring host-automake, so I think you should
-> > either depend on host-automake (which itself depends on host-autoconf),
-> > or you should do like the autotools package infrastructure does:
-> > FOO_DEPENDENCIES += host-automake host-autoconf host-libtool.
-> 
-> I would assume that the autotools-package infrastructure automatically
-> pulled these host dependencies...
+Thanks.
 
-It does if you do FOO_AUTORECONF=YES. But in this case, the
-FOO_AUTORECONF mechanism doesn't work because the source tree lacks a
-m4/ directory, needed for autoreconf. Usually, the packages come with
-some ./autogen or ./autogen.sh or ./bootstrap script doing the
-necessary preparation + autoreconf call, but there is no really
-commonly adopted best practice here.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Dmitry Golubovsky
+
+Anywhere on the Web
