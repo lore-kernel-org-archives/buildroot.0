@@ -1,34 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Aug 2012 18:02:19 +0200
-Subject: [Buildroot] [git commit] Added QMAKESPEC to the list of unexported
-	symbols
-Message-ID: <20120817160233.87B80971B4@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 17 Aug 2012 16:16:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 5462] webkit doesn't build on directfb
+In-Reply-To: <bug-5462-163@https.bugs.busybox.net/>
+References: <bug-5462-163@https.bugs.busybox.net/>
+Message-ID: <20120817161626.D0E9C971EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32314b44717d655d86b7ff3f557313da8fea4183
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=5462
 
-Building QT might fail if QMAKESPEC is defined.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-08-17 16:16:26 UTC ---
+Thanks Vincent for the report. It is similar to
+http://autobuild.buildroot.net/results/74637e3a3e4c37c3af0f3662504c28332e9c586c/build-end.log.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+We need to investigate if this is really Webkit that doesn't support DirectFB
+as a Gtk backend. If this is the case, then we simply need to prevent Webkit
+from being built if the selected Gtk backend is DirectFB.
 
-diff --git a/Makefile b/Makefile
-index 9ab7d99..77ca4a0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -209,6 +209,7 @@ unexport CFLAGS
- unexport CXXFLAGS
- unexport GREP_OPTIONS
- unexport CONFIG_SITE
-+unexport QMAKESPEC
- 
- GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- 
+Or it is just a bug in Webkit that shouldn't include this header file, or
+should include it conditionnally or something like that.
+
+I personaly don't have enough time right now to dig into Webkit, so if you
+could have a look at this and give us your conclusions, it would be great.
+Thanks!
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
