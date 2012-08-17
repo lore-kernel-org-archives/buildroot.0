@@ -1,61 +1,66 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 16 Aug 2012 19:25:43 +0200
-Subject: [Buildroot] Solved:  Cannot build QT on ARM Cortex A8
-In-Reply-To: <502CBD1D.4000902@relinux.de>
-References: <502CBD1D.4000902@relinux.de>
-Message-ID: <502D2D17.8060902@relinux.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Aug 2012 08:32:26 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-16
+Message-ID: <20120817063226.78E3352D13D@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
 
-I just found the answer in a thread from 13th of July.
+Hello,
 
-The fault was caused by the environment-variable QMAKESPEC
+On 2012-08-16, 24 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 21 builds have been successful
+ 3 builds have failed
 
-Kind regards
+Below the results of the failed builds. Successful builds are omitted.
 
-Stephan
+Build 90b66fb851e1088bd5bffef53dd1a4d91d9a44c3
+==============================================
 
-Am 16.08.2012 11:27, schrieb Stephan Hoffmann:
-> Hello all,
->
-> I am currently trying to build QT embedded for Cortex A8 (Freescale
-> iMX53) without success.
->
-> I have a working configuration for x86_64 qemu attached as qttest_defconfig.
->
-> After changing the architecture from x86_64 to arm Cortex A8 I get the
-> message
->> You have asked to use pkg-config and are cross-compiling.
->> Please make sure you have a correctly set-up pkg-config
->> environment!
-> and the build stops. Attached you find the not working defconfig.
->
-> I am using cloned buildroot 2012.08-rc2
->
-> Kind regards
->
-> Stephan
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Status         : NOK
+Failure reason : gdbhost-7.4.1
+Architecture   : mipsel
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-08-16 00:33:11
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
+End of log     : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/config
+Defconfig      : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/defconfig
+
+Build 77e8ae25131bb261ac0de4c9da2739512ff4936a
+==============================================
+
+Status         : NOK
+Failure reason : gpsd-3.7
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-08-16 14:46:52
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
+End of log     : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/config
+Defconfig      : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/defconfig
+
+Build 8910c35486c42d1964971523307c722233ced8f9
+==============================================
+
+Status         : NOK
+Failure reason : glib-networking-2.30.2
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-08-16 15:46:40
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
+End of log     : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/config
+Defconfig      : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/defconfig
+
 
 
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120816/b48c4cfb/attachment.html>
+http://autobuild.buildroot.net
