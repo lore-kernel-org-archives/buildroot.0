@@ -1,44 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Aug 2012 15:38:42 +0200
-Subject: [Buildroot] [PATCH 10/36] package/spice-server: new package
-In-Reply-To: <20120817132218.40c4d82d@skate>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-10-git-send-email-yann.morin.1998@free.fr>
- <20120817132218.40c4d82d@skate>
-Message-ID: <201208171538.42384.yann.morin.1998@free.fr>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Fri, 17 Aug 2012 09:40:26 -0400
+Subject: [Buildroot] Suggestion: increase username buffer size in
+	busybox login
+In-Reply-To: <20120817151717.64d943d6@skate>
+References: <CADiAo4LZ0e=Goo13SKodFo6PL0iEsVG5tPsdQ6jp6yhOsBX4DQ@mail.gmail.com>
+ <201208141907.13002.yann.morin.1998@free.fr>
+ <CADiAo4Jn7525qF0+_mXhDT2j5-k+W-SCsXf1x8oaAEuNvWz66g@mail.gmail.com>
+ <20120817143017.65099bd6@skate>
+ <CADiAo4LX4q5Vxrw_Hje34DjzkDjKo8-MpdZzT-xN6MVUHSwuUw@mail.gmail.com>
+ <20120817151717.64d943d6@skate>
+Message-ID: <CADiAo4+VVvS48mi4Bw=NOC7i1GAYojdhDKZyCXecR9=KTY2_1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi,
 
-On Friday 17 August 2012 13:22:18 Thomas Petazzoni wrote:
-> Le Mon, 13 Aug 2012 01:53:58 +0200,
-> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-> 
-> > --- /dev/null
-> > +++ b/package/spice/Config.in
-> > @@ -0,0 +1,22 @@
-> > +config BR2_PACKAGE_SPICE
-> > +	bool "spice server"
-> > +	depends on BR2_PACKAGE_PYTHON_PYPARSING
-> 
-> This should probably be:
-> 
-> 	depends on BR2_PACKAGE_PYTHON
-> 	select BR2_PACKAGE_PYTHON_PYPARSING
+On Fri, Aug 17, 2012 at 9:17 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Fri, 17 Aug 2012 08:46:32 -0400,
+> Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
 
-Ok, will do.
+> If the change has been accepted upstream in Busybox, then we can
+> include a patch in Buildroot until a new version of Busybox gets
+> released, if that makes things easier/nicer for you.
 
-Regards,
-Yann E. MORIN.
+I believe it should be sufficient to just select a daily snapshot of
+Busybox - no patches needed. Or it will appear in 1_20_3 - not sure
+what their release cycle is.
+
+I am already using Busybox daily snapshot in my project's config. But
+for now I am more focused on linux-pam and systemd...
+
+Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Dmitry Golubovsky
+
+Anywhere on the Web
