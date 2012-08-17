@@ -1,42 +1,43 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Fri, 17 Aug 2012 09:40:26 -0400
-Subject: [Buildroot] Suggestion: increase username buffer size in
-	busybox login
-In-Reply-To: <20120817151717.64d943d6@skate>
-References: <CADiAo4LZ0e=Goo13SKodFo6PL0iEsVG5tPsdQ6jp6yhOsBX4DQ@mail.gmail.com>
- <201208141907.13002.yann.morin.1998@free.fr>
- <CADiAo4Jn7525qF0+_mXhDT2j5-k+W-SCsXf1x8oaAEuNvWz66g@mail.gmail.com>
- <20120817143017.65099bd6@skate>
- <CADiAo4LX4q5Vxrw_Hje34DjzkDjKo8-MpdZzT-xN6MVUHSwuUw@mail.gmail.com>
- <20120817151717.64d943d6@skate>
-Message-ID: <CADiAo4+VVvS48mi4Bw=NOC7i1GAYojdhDKZyCXecR9=KTY2_1A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Aug 2012 15:48:58 +0200
+Subject: [Buildroot] [PATCH 06/36] package/usbredir: new package
+In-Reply-To: <201208171537.54259.yann.morin.1998@free.fr>
+References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
+ <1344815664-28138-6-git-send-email-yann.morin.1998@free.fr>
+ <20120817131558.77a46760@skate>
+ <201208171537.54259.yann.morin.1998@free.fr>
+Message-ID: <20120817154858.797b4dbe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Fri, 17 Aug 2012 15:37:53 +0200,
+"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
 
-On Fri, Aug 17, 2012 at 9:17 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Fri, 17 Aug 2012 08:46:32 -0400,
-> Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
+> > Another note: have you looked at the uClibc compatibility of all these
+> > new packages, regarding things like wchar, locale, largefile, ipv6 and
+> > al. ?
+> 
+> I'm building with uClibc, but granted, that's a full-featured config.
+> 
+> I'll test further with a stripped-down config to see what's missing.
 
-> If the change has been accepted upstream in Busybox, then we can
-> include a patch in Buildroot until a new version of Busybox gets
-> released, if that makes things easier/nicer for you.
+Ok, thanks!
 
-I believe it should be sufficient to just select a daily snapshot of
-Busybox - no patches needed. Or it will appear in 1_20_3 - not sure
-what their release cycle is.
+> I at least know of one of the packages that requires SSP in the libc, but I
+> think there's no such knob in BR for now.
 
-I am already using Busybox daily snapshot in my project's config. But
-for now I am more focused on linux-pam and systemd...
+We have BR2_TOOLCHAIN_BUILDROOT_USE_SSP in the internal backend.
 
-Thanks.
+If one package requires SSP support, it's going to be a pain with
+external toolchains that may not have enabled this feature. How is it
+possible that a package requires such mechanism?
 
+Thomas
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
