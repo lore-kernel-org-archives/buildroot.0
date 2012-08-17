@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Aug 2012 15:37:53 +0200
-Subject: [Buildroot] [PATCH 06/36] package/usbredir: new package
-In-Reply-To: <20120817131558.77a46760@skate>
+Date: Fri, 17 Aug 2012 15:38:42 +0200
+Subject: [Buildroot] [PATCH 10/36] package/spice-server: new package
+In-Reply-To: <20120817132218.40c4d82d@skate>
 References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-6-git-send-email-yann.morin.1998@free.fr>
- <20120817131558.77a46760@skate>
-Message-ID: <201208171537.54259.yann.morin.1998@free.fr>
+ <1344815664-28138-10-git-send-email-yann.morin.1998@free.fr>
+ <20120817132218.40c4d82d@skate>
+Message-ID: <201208171538.42384.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,23 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Friday 17 August 2012 13:15:58 Thomas Petazzoni wrote:
-> Le Mon, 13 Aug 2012 01:53:54 +0200,
+On Friday 17 August 2012 13:22:18 Thomas Petazzoni wrote:
+> Le Mon, 13 Aug 2012 01:53:58 +0200,
 > "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
 > 
-> > +# Note: do not ofrget to update the license, above, if you keep the server.
+> > --- /dev/null
+> > +++ b/package/spice/Config.in
+> > @@ -0,0 +1,22 @@
+> > +config BR2_PACKAGE_SPICE
+> > +	bool "spice server"
+> > +	depends on BR2_PACKAGE_PYTHON_PYPARSING
 > 
-> forget
-
-Hehe! :-)
-
-> Otherwise, looks good.
+> This should probably be:
 > 
-> Another note: have you looked at the uClibc compatibility of all these
-> new packages, regarding things like wchar, locale, largefile, ipv6 and
-> al. ?
+> 	depends on BR2_PACKAGE_PYTHON
+> 	select BR2_PACKAGE_PYTHON_PYPARSING
 
-I'm building with uClibc, but granted, that's a full-featured config.
-
-I'll test further with a stripped-down config to see what's missing.
-
-I at least know of one of the packages that requires SSP in the libc, but I
-think there's no such knob in BR for now.
+Ok, will do.
 
 Regards,
 Yann E. MORIN.
