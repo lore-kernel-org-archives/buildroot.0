@@ -1,54 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Aug 2012 13:26:06 +0200
-Subject: [Buildroot] [PATCH 11/36] package/qemu: new package
-In-Reply-To: <201208141903.45500.yann.morin.1998@free.fr>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-11-git-send-email-yann.morin.1998@free.fr>
- <20120814153403.1673236e@skate>
- <201208141903.45500.yann.morin.1998@free.fr>
-Message-ID: <20120817132606.1212d7f8@skate>
+Date: Fri, 17 Aug 2012 13:29:15 +0200
+Subject: [Buildroot] Qt tribulations take 2
+In-Reply-To: <502D2DD1.1020604@relinux.de>
+References: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
+ <20120713165557.1b39651c@skate>
+ <CALo-6+gv+zb1peT7ngOGLL7VnS6xpCUOZRn_J6CD86Kmn7vX=A@mail.gmail.com>
+ <20120714182555.4b7b267d@jl-desk-LL>
+ <CALo-6+hSrFrqua1s48qzYn9J8qF0F6=zCpgfbguO2hf3VmqeOQ@mail.gmail.com>
+ <20120715010542.1a23ba0f@skate> <50029C65.9010004@mind.be>
+ <20120715123854.3d6c11f1@skate> <502D2DD1.1020604@relinux.de>
+Message-ID: <20120817132915.5c1ab3f3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 14 Aug 2012 19:03:45 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+Le Thu, 16 Aug 2012 19:28:49 +0200,
+Stephan Hoffmann <sho@relinux.de> a ?crit :
 
-> > Just curious, what's the use case for Qemu on the target? I would have
-> > seen Qemu as something useful on the host, but on the target?
-> 
-> I want to build a libvirt-based system to host VMs, and I do not want
-> to use a complete distro for that : I do not care about the handy-dandy
-> init stuff, I don't care about networking auto-managing stuff, no fscking
-> desktop stuff... I just want a basic system that just runs a libvirt daemon,
-> and manages the VMs.
-> 
-> I want to build a completly-static QEMU, and that's not possible on a
-> desktop/server distro that uses glibc, because static linking still pulls
-> the NSS libs. So, rather than creating a new 'framework', I just decided
-> to reuse something. ;-)
-> 
-> I want to play! ;-)
+> After spending several hours in this trap this sounds like a real good
+> Idea to me.
 
-Ok, interesting. The only thing I'm a bit worried about is that this
-brings Buildroot outside of its "environment to cross-compile Linux
-systems for embedded platforms". Although it initially probably fits
-the "minimal Linux system for VM hosting" use case, I'm worried that
-down the road the needs may diverge (for example people using Buildroot
-for VM hosting environments will want package management, etc.). But
-maybe I simply shouldn't anticipate too much on this and just see how
-things move.
-
-However, on this patch set, I'd like to see at least a Ack from Peter
-on the general idea of merging Qemu for the target and all the required
-dependencies. If Peter is fine with the general idea, we can together
-review the implementation details, but the general idea needs to be
-Acked, me thinks.
-
-Of course, other people in the community are invited to raise their
-voice here as well.
+Then please send a patch adding an unexport QMAKESPEC to the main
+Buildroot Makefile, with a short comment on the top that explains why
+it is needed. You will find other variables already being unexported,
+such as PKG_CONFIG_PATH.
 
 Thanks!
 
