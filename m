@@ -1,32 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Aug 2012 19:23:01 +0200
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.0j
-In-Reply-To: <502E7775.2060006@zacarias.com.ar>
-References: <1336751148-28858-1-git-send-email-gustavo@zacarias.com.ar>
- <20120817184902.61d989c0@skate> <502E7775.2060006@zacarias.com.ar>
-Message-ID: <20120817192301.2d60a15c@skate>
+Date: Fri, 17 Aug 2012 19:33:40 +0200
+Subject: [Buildroot] [PATCH] erlang: Add new package.
+In-Reply-To: <CAFbHwiTCXTT23fGLnz_w8kr+6NmNzV9kK+=nHYpXOY5NOMt1dg@mail.gmail.com>
+References: <CAFbHwiTCXTT23fGLnz_w8kr+6NmNzV9kK+=nHYpXOY5NOMt1dg@mail.gmail.com>
+Message-ID: <20120817193340.39e7ddb5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 17 Aug 2012 13:55:17 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Hello Will,
 
-> 1.0.1 is security-vulnerable, so it can't be bumped as-is, the target
-> should be 1.0.1c at the moment.
+Le Wed, 4 Apr 2012 17:49:07 +0100,
+Will Newton <will.newton@gmail.com> a ?crit :
 
-Yes, agreed. I was referring to 1.0.1 as a branch, not specifically to
-1.0.1. The patch I mentioned did target 1.0.1 because this patch is
-about 6 months old.
+> ---
+>  package/Config.in                     |    1 +
+>  package/erlang/Config.in              |    9 +++++++++
+>  package/erlang/erlang-build-fix.patch |   13 +++++++++++++
+>  package/erlang/erlang.mk              |   26 ++++++++++++++++++++++++++
+>  4 files changed, 49 insertions(+), 0 deletions(-)
+>  create mode 100644 package/erlang/Config.in
+>  create mode 100644 package/erlang/erlang-build-fix.patch
+>  create mode 100644 package/erlang/erlang.mk
 
-> The big difference between 1.0.0* and 1.0.1* is that the later has
-> initial support for TLSv1.1 and TLSv1.2 among other minor details.
-> Both are API compatible though not ABI (and we don't care).
-> I can give it a test during the weekend and give it a go for -next.
+Thanks for this.
 
-Great, thanks!
+A couple of questions/comments:
+
+ *) Could you update the patch to use autotools-package and
+ host-autotools-package in accordance with the latest package
+ infrastructure changes?
+
+ *) Could you add your Signed-off by line?
+
+ *) The complete Erlang stuff gets installed in /usr/lib/erlang, even
+ the binaries (compiler, interpreter?) in /usr/lib/erlang/bin/. Is this
+ the normal installation location? If so, then we should at least
+ probably provide a few symlinks from /usr/bin/.
+
+ *) By default the /usr/lib/erlang/ size is 55 MB on ARM. Is this the
+ minimal size of the standard library?
+
+ *) From the configure.in script, I see options like shared-zlib, or
+ ssl path or things like that, but your erlang package does not depend
+ on zlib nor OpenSSL. Can you give a few comments about this?
+
+Thanks!
 
 Thomas
 -- 
