@@ -1,66 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Aug 2012 08:32:26 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-08-16
-Message-ID: <20120817063226.78E3352D13D@lolut.humanoidz.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 17 Aug 2012 09:32:00 +0100
+Subject: [Buildroot] [PATCH v4] Add /var/www to device table
+Message-ID: <1345192320-4835-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Simon Dawson <spdawson@gmail.com>
 
-Hello,
+The /var/www directory is listed in /etc/passwd in the skeleton target
+filesystem as the home directory of the www-data user (uid 33).
 
-On 2012-08-16, 24 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 21 builds have been successful
- 3 builds have failed
+In the final target filesystem, /var/www should be owned by www-data. This
+is important for the lighttpd package, for example.
 
-Below the results of the failed builds. Successful builds are omitted.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ v4: Resend.
+ v3: Added Acked-by information.
+ v2: Removed redundant TAB from line added device table file.
 
-Build 90b66fb851e1088bd5bffef53dd1a4d91d9a44c3
-==============================================
+ target/generic/device_table.txt |    1 +
+ 1 file changed, 1 insertion(+)
 
-Status         : NOK
-Failure reason : gdbhost-7.4.1
-Architecture   : mipsel
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-16 00:33:11
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
-End of log     : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/config
-Defconfig      : http://autobuild.buildroot.net/results/90b66fb851e1088bd5bffef53dd1a4d91d9a44c3/defconfig
-
-Build 77e8ae25131bb261ac0de4c9da2739512ff4936a
-==============================================
-
-Status         : NOK
-Failure reason : gpsd-3.7
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-08-16 14:46:52
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
-End of log     : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/config
-Defconfig      : http://autobuild.buildroot.net/results/77e8ae25131bb261ac0de4c9da2739512ff4936a/defconfig
-
-Build 8910c35486c42d1964971523307c722233ced8f9
-==============================================
-
-Status         : NOK
-Failure reason : glib-networking-2.30.2
-Architecture   : x86_64
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-08-16 15:46:40
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=b58c83ae999966975c278c860cb97aee0d2e8e08
-End of log     : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/config
-Defconfig      : http://autobuild.buildroot.net/results/8910c35486c42d1964971523307c722233ced8f9/defconfig
-
-
-
+diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
+index fc397a9..421728b 100644
+--- a/target/generic/device_table.txt
++++ b/target/generic/device_table.txt
+@@ -10,6 +10,7 @@
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
+ /home/default				d	2755	1000	1000	-	-	-	-	-
++/var/www				d	755	33	33	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
