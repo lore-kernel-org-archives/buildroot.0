@@ -1,50 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Aug 2012 16:35:16 +0200
-Subject: [Buildroot] [PATCH 07/36] package/celt051: new package
-In-Reply-To: <20120817155047.4e94c0dd@skate>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <201208171527.29938.yann.morin.1998@free.fr> <20120817155047.4e94c0dd@skate>
-Message-ID: <201208171635.16714.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Aug 2012 17:47:40 +0200
+Subject: [Buildroot] [git commit branch/next] gsl: fix space instead of tab
+	in Config.in
+Message-ID: <20120817154924.72ACB971EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=4d74cff9b88509bb11c5ad44bd2b3f870c821273
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Friday 17 August 2012 15:50:47 Thomas Petazzoni wrote:
-> Le Fri, 17 Aug 2012 15:27:29 +0200,
-> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-> 
-> > > Just curious, for what reason an audio codec is needed as a dependency
-> > > of a virtual machine thing? How does it fit in the stack?
-> > 
-> > celt-0.51 is a hard-depdency for Spice to encode the audio.
-> > It's select-ed by BR2_PACKAGE_SPICE in a later patch.
-> > 
-> > Note that I added all new packages in a row, rather than add them just
-> > prior to the requiring qemu feature. Should I re-order the series to make
-> > the depedencies clearer?
-> 
-> No, I understood perfectly that celt was a dependency of spice. My
-> question was not Buildroot-specific: I was trying to understand
-> what Qemu/Spice had to do with an audio encoder.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gsl/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Spice is a VNC-like solution, but specificaly designed for use by virtual
-machine hypervisors. It can transport video and audio alike, and uses celt
-to encode/decode the audio for sending over-the-wire.
-
-I don't know why they choose celt instead of ogg or anything else,
-except maybe that celt is developped to be really patent-unencumbered.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gsl/Config.in b/package/gsl/Config.in
+index 92541da..aa431d1 100644
+--- a/package/gsl/Config.in
++++ b/package/gsl/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_GSL
+ 	  special functions and least-squares fitting. There are over
+ 	  1000 functions in total with an extensive test suite.
+ 
+- 	  http://www.gnu.org/software/gsl
++	  http://www.gnu.org/software/gsl
