@@ -1,28 +1,38 @@
-From: Zoran Djordjevic <djdjdjole@yahoo.com>
-Date: Fri, 17 Aug 2012 05:47:09 -0700 (PDT)
-Subject: [Buildroot] external toolchain
-Message-ID: <1345207629.82252.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Aug 2012 15:17:17 +0200
+Subject: [Buildroot] Suggestion: increase username buffer size in
+ busybox login
+In-Reply-To: <CADiAo4LX4q5Vxrw_Hje34DjzkDjKo8-MpdZzT-xN6MVUHSwuUw@mail.gmail.com>
+References: <CADiAo4LZ0e=Goo13SKodFo6PL0iEsVG5tPsdQ6jp6yhOsBX4DQ@mail.gmail.com>
+ <201208141907.13002.yann.morin.1998@free.fr>
+ <CADiAo4Jn7525qF0+_mXhDT2j5-k+W-SCsXf1x8oaAEuNvWz66g@mail.gmail.com>
+ <20120817143017.65099bd6@skate>
+ <CADiAo4LX4q5Vxrw_Hje34DjzkDjKo8-MpdZzT-xN6MVUHSwuUw@mail.gmail.com>
+Message-ID: <20120817151717.64d943d6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
-?
-I am using buildroot to build RFS with external toolchain support.
-When using?Crosstool- NG, it builds OK, but on my target I got
-an error- saying "kernel too old". Seems to me that there is no other
-way out (is it so ?) knowing that 2.6.32 is the?latest?kernel that I 
-found for my board.?So I tried with Sourcery Code Bench ARM2009q1. 
-While building, it shows an error, regarding libev - saying:
-"memory fences not defined for your architecture, please report".
-I don't know the meaning and apparently how to avoid that (if
-possible), so I ask myself can I?miss?building libev (or better how
-can I solve above mentined issue) ?? In fact I can avoid it, by simple
-uncheking appropriate check box, ?but what consequences?can be then ?
-?
-Best regards
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120817/7171a513/attachment.html>
+Le Fri, 17 Aug 2012 08:46:32 -0400,
+Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
+
+> Busybox developers increased this length to 64 for now ;) It is in the
+> daily snapshot and eventually will propagate to Buildroot (or can even
+> be enabled now by selecting daily snapshot).
+> 
+> Maybe this will be sufficient.
+
+If the change has been accepted upstream in Busybox, then we can
+include a patch in Buildroot until a new version of Busybox gets
+released, if that makes things easier/nicer for you.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
