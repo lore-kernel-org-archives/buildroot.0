@@ -1,37 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 17 Aug 2012 13:29:15 +0200
-Subject: [Buildroot] Qt tribulations take 2
-In-Reply-To: <502D2DD1.1020604@relinux.de>
-References: <CALo-6+iZBhkaZJCOG8BLNOGfV36C_ZOHx+-U7hzuArLbrTmN4w@mail.gmail.com>
- <20120713165557.1b39651c@skate>
- <CALo-6+gv+zb1peT7ngOGLL7VnS6xpCUOZRn_J6CD86Kmn7vX=A@mail.gmail.com>
- <20120714182555.4b7b267d@jl-desk-LL>
- <CALo-6+hSrFrqua1s48qzYn9J8qF0F6=zCpgfbguO2hf3VmqeOQ@mail.gmail.com>
- <20120715010542.1a23ba0f@skate> <50029C65.9010004@mind.be>
- <20120715123854.3d6c11f1@skate> <502D2DD1.1020604@relinux.de>
-Message-ID: <20120817132915.5c1ab3f3@skate>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Fri, 17 Aug 2012 13:54:16 +0200
+Subject: [Buildroot] [PATCH] Added QMAKESPEC to the list of unexported
+	symbols
+Message-ID: <1345204456-13535-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 16 Aug 2012 19:28:49 +0200,
-Stephan Hoffmann <sho@relinux.de> a ?crit :
+Building QT might fail if QMAKESPEC is defined.
 
-> After spending several hours in this trap this sounds like a real good
-> Idea to me.
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Then please send a patch adding an unexport QMAKESPEC to the main
-Buildroot Makefile, with a short comment on the top that explains why
-it is needed. You will find other variables already being unexported,
-such as PKG_CONFIG_PATH.
-
-Thanks!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 9ab7d99..77ca4a0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -209,6 +209,7 @@ unexport CFLAGS
+ unexport CXXFLAGS
+ unexport GREP_OPTIONS
+ unexport CONFIG_SITE
++unexport QMAKESPEC
+ 
+ GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
