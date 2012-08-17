@@ -1,48 +1,65 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 17 Aug 2012 21:03:52 +0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.0j
-In-Reply-To: <502E7775.2060006@zacarias.com.ar>
-References: <1336751148-28858-1-git-send-email-gustavo@zacarias.com.ar>
- <20120817184902.61d989c0@skate> <502E7775.2060006@zacarias.com.ar>
-Message-ID: <502E8788.7050808@petroprogram.com>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Fri, 17 Aug 2012 11:05:33 -0700 (PDT)
+Subject: [Buildroot] external toolchain
+In-Reply-To: <201208171519.16926.yann.morin.1998@free.fr>
+References: <1345207629.82252.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+ <201208171519.16926.yann.morin.1998@free.fr>
+Message-ID: <1345226733.22381.YahooMailNeo@web164602.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-17.8.2012 19:55, Gustavo Zacarias kirjoitti:
-> On 08/17/12 13:49, Thomas Petazzoni wrote:
->
->> At http://patchwork.ozlabs.org/patch/148560/ we have a patch that has
->> been sitting for a long time, which bumps the version of openssl to
->> 1.0.1. Looking at the OpenSSL website, I see that both the 1.0.0X
->> versions and 1.0.1X versions are maintained. Do you know what they
->> mean, and whether we should stay at 1.0.0 or move to 1.0.1?
->>
->> I simply would like to know what to do with this patch in our
->> patchwork :)
->>
->> Thanks!
->>
->> Thomas
-> 1.0.1 is security-vulnerable, so it can't be bumped as-is, the target
-> should be 1.0.1c at the moment.
-> The big difference between 1.0.0* and 1.0.1* is that the later has
-> initial support for TLSv1.1 and TLSv1.2 among other minor details.
-> Both are API compatible though not ABI (and we don't care).
-> I can give it a test during the weekend and give it a go for -next.
-> Regards.
-
-Don't know about 1.0.1c version (or greater) but what's it worth, I have
-had version 1.0.1b sitting in my buildroot copy like ages
-and so far have not noticed anything strange in my buildroot based home
-distro.
-
-
+Thank you for revealing me the matter about Crosstool- NG adjustment
+and related to glibc. I?was not?able to try (but will do at monday), however,
+it raises another question to me. Having in mind that I built with??2.6.9 choice?
+- which is default (although I didn't know the fact) and that my exact kernel
+version is 2.6.32.2 (that is on target board) then how it comes error
+"kernel too old" (because target kernel is newer one) ???
+?
 Best regards
-Stefan
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+?
+
+
+________________________________
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot at busybox.net; Zoran Djordjevic <djdjdjole@yahoo.com> 
+Sent: Friday, August 17, 2012 3:19 PM
+Subject: Re: [Buildroot] external toolchain
+
+Zoran, All,
+
+On Friday 17 August 2012 14:47:09 Zoran Djordjevic wrote:
+> I am using buildroot to build RFS with external toolchain support.
+> When using Crosstool- NG, it builds OK, but on my target I got
+> an error- saying "kernel too old".
+
+When you build your toolchain with crosstool-NG, you can tell glibc what the
+oldest supported kernel should be:
+? ? C-library? --->
+? ? ? ? Minimum supported kernel version (Specific kernel version)? --->
+? ? ? ? ? ? (2.6.9) Minimum kernel version to support
+
+Of course, 2.6.9 is just an example. Use whatever you see fit for your
+use-case (eg. 2.6.32?)
+
+> Seems to me that there is no other
+> way out (is it so ?) knowing that 2.6.32 is the latest kernel that I 
+> found for my board.
+
+Bug your provider about this issue. Tell them they should upgrade. ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? |? ___? ? ? ? ? ? ? |
+| +33 223 225 172 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? v? conspiracy.? |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120817/7614f7e6/attachment.html>
