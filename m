@@ -1,32 +1,42 @@
-From: Shawn J. Goff <shawnjgoff@gmail.com>
-Date: Sat, 18 Aug 2012 10:04:16 -0400
-Subject: [Buildroot] [PATCH] ifplugd: add --with-initdir= to config command
-Message-ID: <1345298656-12714-1-git-send-email-shawnjgoff@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 18 Aug 2012 23:58:55 +0200
+Subject: [Buildroot] [PATCH] docs/manual: fix cross-reference
+Message-ID: <1345327135-30445-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Shawn J. Goff" <shawnjgoff@gmail.com>
-
-ifplugd refuses to configure without this set.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/ifplugd/ifplugd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/adding-packages.txt     |    1 +
+ docs/manual/rebuilding-packages.txt |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 1e11c14..d031a97 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -12,7 +12,7 @@ IFPLUGD_AUTORECONF = YES
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index acbde0c..cb75f2d 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -1,5 +1,6 @@
+ Adding new packages to Buildroot
+ ================================
++[[adding-packages]]
  
- # install-strip unconditionally overwrites $(TARGET_DIR)/etc/ifplugd/ifplugd.*
- IFPLUGD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-exec
--IFPLUGD_CONF_OPT = --disable-lynx
-+IFPLUGD_CONF_OPT = --disable-lynx --with-initdir=/etc/init.d/
- IFPLUGD_DEPENDENCIES = libdaemon
+ This section covers how new packages (userspace libraries or
+ applications) can be integrated into Buildroot. It also shows how
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index f247dd0..fb6d696 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -29,7 +29,7 @@ by the different packages, so some understanding of the particular
+ package is needed.
  
- # Prefer big ifplugd
+ For packages relying on Buildroot packages infrastructures (see
+-xref:add-packages[this section] for details), the following stamp
++xref:adding-packages[this section] for details), the following stamp
+ files are relevant:
+ 
+ * +output/build/packagename-version/.stamp_configured+. If removed,
 -- 
-1.7.11.1
+1.7.2.5
