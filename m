@@ -1,21 +1,33 @@
-From: Zoran Djordjevic <djdjdjole@yahoo.com>
-Date: Sat, 18 Aug 2012 00:33:42 -0700 (PDT)
-Subject: [Buildroot] external toolchain
-Message-ID: <1345275222.2621.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sat, 18 Aug 2012 10:25:37 +0100
+Subject: [Buildroot] [PATCH 1/5] barebox: add license information
+Message-ID: <1345281941-6722-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you?Yann for revealing me the matter about Crosstool- NG adjustment
-and related to glibc. I?was not?able to try (but will do at monday), however,
-it raises another question to me. Having in mind that I built with??2.6.9 choice?
-- which is default (although I didn't know the fact) and that my exact kernel
-version is 2.6.32.2 (that is on target board) then how it comes?the error
-"kernel too old" (because target kernel is newer one) ???
-?
-Best regard
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120818/28925e21/attachment.html>
+From: Simon Dawson <spdawson@gmail.com>
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ boot/barebox/barebox.mk |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index e5e2558..3641c1d 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -20,6 +20,9 @@ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE = http://www.barebox.org/download/
+ endif
+ 
++BAREBOX_LICENSE = GPLv2+
++BAREBOX_LICENSE_FILES = COPYING
++
+ ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+ define BAREBOX_APPLY_CUSTOM_PATCHES
+ 	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
+-- 
+1.7.9.5
