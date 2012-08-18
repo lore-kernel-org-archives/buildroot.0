@@ -1,154 +1,216 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 18 Aug 2012 14:06:22 +0200
-Subject: [Buildroot] [PATCH v3 2/2] libglib2: fix install even if the
- host python binary refers to python3
-In-Reply-To: <CAHXCMMLFnfw9qUaOcScsNKH10sS8JTHUBiRUHvNNKXT3dk69JQ@mail.gmail.com>
-References: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
- <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
- <20120717102211.0a8f59b9@skate>
- <CAHXCMMLFnfw9qUaOcScsNKH10sS8JTHUBiRUHvNNKXT3dk69JQ@mail.gmail.com>
-Message-ID: <CAHXCMMKrACc1zJpBMFr6iPLPCH-YTbzV9X=tggLy4pQ_c=tXWQ@mail.gmail.com>
+Date: Sat, 18 Aug 2012 14:05:40 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: make codegen python2/python3
+	compliant
+Message-ID: <1345291540-13111-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-Reviving an old thread... ;-)
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-2012/7/17 Samuel Martin <s.martin49@gmail.com>:
-> 2012/7/17 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> Le Sun,  3 Jun 2012 00:08:17 +0200,
->> Samuel Martin <s.martin49@gmail.com> a ?crit :
->>
->>> The libglib2's build system uses some python2 scripts in the install rules.
->>>
->>> This patch ensures to have a valid host python2 binary and enforces this python2
->>> binary at configure-time.
->>>
->>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>
->> Isn't there a way to make the libglib2 python script python2 *and*
->> python3 compatible?
->>
-> The truth is I have not checked that.
-> Will do and report here.
+ create mode 100644 package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch
 
-
-Current state in BR, with or without host-python already installed:
-- if host-python is already installed in the host directory, then
-libglib2 found it; in this case PYTHON=$(HOST_DIR)/usr/bin/python, so
-no problem (this is a side effect of the the way we set the PATH env.
-var.).
-- otherwise, libglib2 use the python binary from the system:
-PYTHON=/usr/bin/python, which is wrong if /usr/bin/python points to
-/usr/bin/python3.
-
-With no host python2 found, the build error is:
-[...]
-Making all in tests
-make[5]: Entering directory
-`/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/tests'
-UNINSTALLED_GLIB_SRCDIR=../.. \
-	UNINSTALLED_GLIB_BUILDDIR=../.. \
-	/usr/bin/python ../../gio/gdbus-2.0/codegen/gdbus-codegen \
-	--interface-prefix org.project. \
-	--generate-c-code gdbus-test-codegen-generated \
-	--c-generate-object-manager \
-	--c-namespace Foo_iGen \
-	--generate-docbook gdbus-test-codegen-generated-doc \
-	--annotate "org.project.Bar" Key1 Value1 \
-	--annotate "org.project.Bar" org.gtk.GDBus.Internal Value2 \
-	--annotate "org.project.Bar.HelloWorld()" Key3 Value3 \
-	--annotate "org.project.Bar::TestSignal" Key4 Value4 \
-	--annotate "org.project.Bar:ay" Key5 Value5 \
-	--annotate "org.project.Bar.TestPrimitiveTypes()[val_int32]" Key6 Value6 \
-	--annotate "org.project.Bar.TestPrimitiveTypes()[ret_uint32]" Key7 Value7 \
-	--annotate "org.project.Bar::TestSignal[array_of_strings]" Key8 Value8 \
-	./test-codegen.xml \
-	
-UNINSTALLED_GLIB_SRCDIR=../.. \
-	UNINSTALLED_GLIB_BUILDDIR=../.. \
-	/usr/bin/python ../../gio/gdbus-2.0/codegen/gdbus-codegen \
-	--interface-prefix org.project. \
-	--generate-c-code gdbus-test-codegen-generated \
-	--c-generate-object-manager \
-	--c-namespace Foo_iGen \
-	--generate-docbook gdbus-test-codegen-generated-doc \
-	--annotate "org.project.Bar" Key1 Value1 \
-	--annotate "org.project.Bar" org.gtk.GDBus.Internal Value2 \
-	--annotate "org.project.Bar.HelloWorld()" Key3 Value3 \
-	--annotate "org.project.Bar::TestSignal" Key4 Value4 \
-	--annotate "org.project.Bar:ay" Key5 Value5 \
-	--annotate "org.project.Bar.TestPrimitiveTypes()[val_int32]" Key6 Value6 \
-	--annotate "org.project.Bar.TestPrimitiveTypes()[ret_uint32]" Key7 Value7 \
-	--annotate "org.project.Bar::TestSignal[array_of_strings]" Key8 Value8 \
-	./test-codegen.xml \
-	
-Traceback (most recent call last):
-  File "../../gio/gdbus-2.0/codegen/gdbus-codegen", line 41, in <module>
-    sys.exit(codegen_main.codegen_main())
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/codegen_main.py",
-line 171, in codegen_main
-    parsed_ifaces = parser.parse_dbus_xml(xml_data)
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/parser.py",
-line 289, in parse_dbus_xml
-    parser = DBusXMLParser(xml_data)
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/parser.py",
-line 57, in __init__
-    self._parser.Parse(xml_data)
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/parser.py",
-line 155, in handle_start_element
-    if attrs.has_key('name') and self.doc_comment_last_symbol == attrs['name']:
-AttributeError: 'dict' object has no attribute 'has_key'
-make[5]: *** [gdbus-test-codegen-generated.c] Error 1
-make[5]: *** Waiting for unfinished jobs....
-Traceback (most recent call last):
-  File "../../gio/gdbus-2.0/codegen/gdbus-codegen", line 41, in <module>
-    sys.exit(codegen_main.codegen_main())
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/codegen_main.py",
-line 171, in codegen_main
-    parsed_ifaces = parser.parse_dbus_xml(xml_data)
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/parser.py",
-line 289, in parse_dbus_xml
-    parser = DBusXMLParser(xml_data)
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/parser.py",
-line 57, in __init__
-    self._parser.Parse(xml_data)
-  File "/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/gdbus-2.0/codegen/parser.py",
-line 155, in handle_start_element
-    if attrs.has_key('name') and self.doc_comment_last_symbol == attrs['name']:
-AttributeError: 'dict' object has no attribute 'has_key'
-make[5]: *** [gdbus-test-codegen-generated.h] Error 1
-make[5]: Leaving directory
-`/home/samuel/data/workspace/src/buildroot/master/output/build/host-libglib2-2.30.2/gio/tests'
-
-
-Current state in somewhere else:
-Most of the time, other distros keep the dependency to python2 to
-build glib2/gdbus-codegen, e.g.:
-- archlinux (though the package has already been bumped to 2.32.4):
-https://projects.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/glib2&id=614e5ff9b1c81454a96eebad2baf0ab7a803329b
-- gentoo:
-http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/glib/glib-2.30.2.ebuild?view=markup
-http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-util/gdbus-codegen/gdbus-codegen-2.30.2.ebuild?view=markup
-
-
-Current state in glib repository:
-A patch fixing this has quite recently been merged upstream (which is
-already included in the glib release 2.32.4 or later, and works fine
-with the current version integrated in BR: 2.30.2):
-http://git.gnome.org/browse/glib/patch/?id=03611f7c0670ea14eedbc121972aed7ce60bb9ee
-
-
-So, I'll send a patch integrating the upstream patch.
-If this new patch is accepted, then this patch series (host-python2
-and libglib2 depending on python2) could be discarded.
-
-
-Cheers,
-
+diff --git a/package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch b/package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch
+new file mode 100644
+index 0000000..b483827
+--- /dev/null
++++ b/package/libglib2/libglib2-make-codegen-python2-python3-compliant.patch
+@@ -0,0 +1,192 @@
++Fetch from http://git.gnome.org/browse/glib/patch/?id=03611f7c0670ea14eedbc121972aed7ce60bb9ee
++
++This patch is already included upstream, from the glib-2.32.4 release. 
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++From 03611f7c0670ea14eedbc121972aed7ce60bb9ee Mon Sep 17 00:00:00 2001
++From: Simon Feltman <s.feltman@gmail.com>
++Date: Thu, 14 Jun 2012 06:20:17 +0000
++Subject: Updated codegen to work with python3.
++
++Most changes were just replacing usage of "has_key" with "in".
++Also updated the sorting function which was simplified and
++changed to a "key" function instead of "cmp" (which is no longer
++supported in python3. Verified everything builds with
++python 2.7 and 3.
++
++https://bugzilla.gnome.org/show_bug.cgi?id=678066
++---
++diff --git a/gio/gdbus-2.0/codegen/codegen.py b/gio/gdbus-2.0/codegen/codegen.py
++index 41ea8fa..bca3490 100644
++--- a/gio/gdbus-2.0/codegen/codegen.py
+++++ b/gio/gdbus-2.0/codegen/codegen.py
++@@ -304,11 +304,8 @@ class CodeGenerator:
++             #
++             # See https://bugzilla.gnome.org/show_bug.cgi?id=647577#c5
++             # for discussion
++-            keys = function_pointers.keys()
++-            if len(keys) > 0:
++-                keys.sort(cmp=utils.my_version_cmp)
++-                for key in keys:
++-                    self.h.write('%s'%function_pointers[key])
+++            for key in sorted(function_pointers.keys(), key=utils.version_cmp_key):
+++                self.h.write('%s'%function_pointers[key])
++ 
++             self.h.write('};\n')
++             self.h.write('\n')
++@@ -1022,11 +1019,9 @@ class CodeGenerator:
++                 value  = '@get_%s: '%(p.name_lower)
++                 value += 'Getter for the #%s:%s property.'%(i.camel_name, p.name_hyphen)
++                 doc_bits[key] = value
++-        keys = doc_bits.keys()
++-        if len(keys) > 0:
++-            keys.sort(cmp=utils.my_version_cmp)
++-            for key in keys:
++-                self.c.write(' * %s\n'%doc_bits[key])
+++        for key in sorted(doc_bits.keys(), key=utils.version_cmp_key):
+++            self.c.write(' * %s\n'%doc_bits[key])
+++
++         self.c.write(self.docbook_gen.expand(
++                 ' *\n'
++                 ' * Virtual table for the D-Bus interface #%s.\n'
++diff --git a/gio/gdbus-2.0/codegen/codegen_docbook.py b/gio/gdbus-2.0/codegen/codegen_docbook.py
++index 4ceef57..00581f1 100644
++--- a/gio/gdbus-2.0/codegen/codegen_docbook.py
+++++ b/gio/gdbus-2.0/codegen/codegen_docbook.py
++@@ -259,14 +259,12 @@ class DocbookCodeGenerator:
++                 self.expand_member_dict[key] = value
++         # Make sure to expand the keys in reverse order so e.g. #org.foo.Iface:MediaCompat
++         # is evaluated before #org.foo.Iface:Media ...
++-        self.expand_member_dict_keys = self.expand_member_dict.keys()
++-        self.expand_member_dict_keys.sort(reverse=True)
++-        self.expand_iface_dict_keys = self.expand_iface_dict.keys()
++-        self.expand_iface_dict_keys.sort(reverse=True)
+++        self.expand_member_dict_keys = sorted(self.expand_member_dict.keys(), reverse=True)
+++        self.expand_iface_dict_keys = sorted(self.expand_iface_dict.keys(), reverse=True)
++ 
++     def generate(self):
++         for i in self.ifaces:
++-            self.out = file('%s-%s.xml'%(self.docbook, i.name), 'w')
+++            self.out = open('%s-%s.xml'%(self.docbook, i.name), 'w')
++             self.out.write(''%())
++             self.out.write('<?xml version="1.0" encoding="utf-8"?>\n'%())
++             self.out.write('<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"\n'%())
++diff --git a/gio/gdbus-2.0/codegen/codegen_main.py b/gio/gdbus-2.0/codegen/codegen_main.py
++index 76c838c..735cc1f 100755
++--- a/gio/gdbus-2.0/codegen/codegen_main.py
+++++ b/gio/gdbus-2.0/codegen/codegen_main.py
++@@ -184,8 +184,8 @@ def codegen_main():
++ 
++     c_code = opts.generate_c_code
++     if c_code:
++-        h = file(c_code + '.h', 'w')
++-        c = file(c_code + '.c', 'w')
+++        h = open(c_code + '.h', 'w')
+++        c = open(c_code + '.c', 'w')
++         gen = codegen.CodeGenerator(all_ifaces,
++                                     opts.c_namespace,
++                                     opts.interface_prefix,
++diff --git a/gio/gdbus-2.0/codegen/parser.py b/gio/gdbus-2.0/codegen/parser.py
++index 5fabd44..7b9d216 100644
++--- a/gio/gdbus-2.0/codegen/parser.py
+++++ b/gio/gdbus-2.0/codegen/parser.py
++@@ -152,12 +152,12 @@ class DBusXMLParser:
++                 self.state = DBusXMLParser.STATE_IGNORED
++ 
++             # assign docs, if any
++-            if attrs.has_key('name') and self.doc_comment_last_symbol == attrs['name']:
+++            if 'name' in attrs and self.doc_comment_last_symbol == attrs['name']:
++                 self._cur_object.doc_string = self.doc_comment_body
++-                if self.doc_comment_params.has_key('short_description'):
+++                if 'short_description' in self.doc_comment_params:
++                     short_description = self.doc_comment_params['short_description']
++                     self._cur_object.doc_string_brief = short_description
++-                if self.doc_comment_params.has_key('since'):
+++                if 'since' in self.doc_comment_params:
++                     self._cur_object.since = self.doc_comment_params['since']
++ 
++         elif self.state == DBusXMLParser.STATE_INTERFACE:
++@@ -185,16 +185,16 @@ class DBusXMLParser:
++                 self.state = DBusXMLParser.STATE_IGNORED
++ 
++             # assign docs, if any
++-            if attrs.has_key('name') and self.doc_comment_last_symbol == attrs['name']:
+++            if 'name' in attrs and self.doc_comment_last_symbol == attrs['name']:
++                 self._cur_object.doc_string = self.doc_comment_body
++-                if self.doc_comment_params.has_key('since'):
+++                if 'since' in self.doc_comment_params:
++                     self._cur_object.since = self.doc_comment_params['since']
++ 
++         elif self.state == DBusXMLParser.STATE_METHOD:
++             if name == DBusXMLParser.STATE_ARG:
++                 self.state = DBusXMLParser.STATE_ARG
++                 arg_name = None
++-                if attrs.has_key('name'):
+++                if 'name' in attrs:
++                     arg_name = attrs['name']
++                 arg = dbustypes.Arg(arg_name, attrs['type'])
++                 direction = attrs['direction']
++@@ -215,18 +215,18 @@ class DBusXMLParser:
++ 
++             # assign docs, if any
++             if self.doc_comment_last_symbol == old_cur_object.name:
++-                if attrs.has_key('name') and self.doc_comment_params.has_key(attrs['name']):
+++                if 'name' in attrs and attrs['name'] in self.doc_comment_params:
++                     doc_string = self.doc_comment_params[attrs['name']]
++                     if doc_string != None:
++                         self._cur_object.doc_string = doc_string
++-                    if self.doc_comment_params.has_key('since'):
+++                    if 'since' in self.doc_comment_params:
++                         self._cur_object.since = self.doc_comment_params['since']
++ 
++         elif self.state == DBusXMLParser.STATE_SIGNAL:
++             if name == DBusXMLParser.STATE_ARG:
++                 self.state = DBusXMLParser.STATE_ARG
++                 arg_name = None
++-                if attrs.has_key('name'):
+++                if 'name' in attrs:
++                     arg_name = attrs['name']
++                 arg = dbustypes.Arg(arg_name, attrs['type'])
++                 self._cur_object.args.append(arg)
++@@ -241,11 +241,11 @@ class DBusXMLParser:
++ 
++             # assign docs, if any
++             if self.doc_comment_last_symbol == old_cur_object.name:
++-                if attrs.has_key('name') and self.doc_comment_params.has_key(attrs['name']):
+++                if 'name' in attrs and attrs['name'] in self.doc_comment_params:
++                     doc_string = self.doc_comment_params[attrs['name']]
++                     if doc_string != None:
++                         self._cur_object.doc_string = doc_string
++-                    if self.doc_comment_params.has_key('since'):
+++                    if 'since' in self.doc_comment_params:
++                         self._cur_object.since = self.doc_comment_params['since']
++ 
++         elif self.state == DBusXMLParser.STATE_PROPERTY:
++diff --git a/gio/gdbus-2.0/codegen/utils.py b/gio/gdbus-2.0/codegen/utils.py
++index 94bd05c..239b64e 100644
++--- a/gio/gdbus-2.0/codegen/utils.py
+++++ b/gio/gdbus-2.0/codegen/utils.py
++@@ -97,15 +97,8 @@ def lookup_brief_docs(annotations):
++     else:
++         return s
++ 
++-# I'm sure this could be a lot more elegant if I was
++-# more fluent in python...
++-def my_version_cmp(a, b):
++-    if len(a[0]) > 0 and len(b[0]) > 0:
++-        va = distutils.version.LooseVersion(a[0])
++-        vb = distutils.version.LooseVersion(b[0])
++-        ret = va.__cmp__(vb)
++-    else:
++-        ret = cmp(a[0], b[0])
++-    if ret != 0:
++-        return ret
++-    return cmp(a[1], b[1])
+++def version_cmp_key(key):
+++    # If the 'since' version is empty put a 0 in its place as this will
+++    # allow LooseVersion to work and will always compare lower.
+++    v = key[0] if key[0] else '0'
+++    return (distutils.version.LooseVersion(v), key[1])
++--
++cgit v0.9.0.2
 -- 
-Sam
+1.7.11.5
