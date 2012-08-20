@@ -1,11 +1,10 @@
 From: Sonic Zhang <sonic.adi@gmail.com>
-Date: Mon, 20 Aug 2012 10:40:53 +0800
-Subject: [Buildroot] [PATCH 2/2] package: Makefile.in: Add target
- compilation flags for Blackfin.
-In-Reply-To: <1344843674-27814-2-git-send-email-sonic.adi@gmail.com>
+Date: Mon, 20 Aug 2012 10:41:14 +0800
+Subject: [Buildroot] [PATCH 1/2] buildroot: target: Add Blackfin
+ architecture support.
+In-Reply-To: <1344843674-27814-1-git-send-email-sonic.adi@gmail.com>
 References: <1344843674-27814-1-git-send-email-sonic.adi@gmail.com>
- <1344843674-27814-2-git-send-email-sonic.adi@gmail.com>
-Message-ID: <CAJxxZ0OUarK5rQQT_SgCAu7Q3J30U0SvhZaCJus_zevZFEDaBQ@mail.gmail.com>
+Message-ID: <CAJxxZ0NjpFeq+7upfSPmTZjK7T3Nwm_morrVd-i+NVykQgpSaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,58 +18,127 @@ Sonic
 On Mon, Aug 13, 2012 at 3:41 PM, Sonic Zhang <sonic.adi@gmail.com> wrote:
 > From: Sonic Zhang <sonic.zhang@analog.com>
 >
-> 1) Add CPU type and revision CFLAGS
-> 2) Add FLAT ABI LDFLAGS
-> 3) Add share FLAT ABI FLAGS
+> 1) Add NOMMU option, blackfin cpu type option and install shared library
+> of different ABI option to target/Config.in.
+> 2) Add makefile targets to install shared library of different ABI into
+> rootfs image.
 >
 > Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
 > ---
->  package/Makefile.in |   22 +++++++++++++++++++++-
->  1 files changed, 21 insertions(+), 1 deletions(-)
+>  target/Config.in.arch |   51 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  target/Makefile.in    |   24 +++++++++++++++++++++++
+>  2 files changed, 75 insertions(+), 0 deletions(-)
 >
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 6fad224..cda2297 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -85,7 +85,13 @@ ifeq ($(BR2_DEBUG_3),y)
->  TARGET_DEBUGGING=-g3
->  endif
+> diff --git a/target/Config.in.arch b/target/Config.in.arch
+> index 342066e..288cc9e 100644
+> --- a/target/Config.in.arch
+> +++ b/target/Config.in.arch
+> @@ -131,6 +131,19 @@ config BR2_xtensa
+>           http://www.tensilica.com/
+>  endchoice
 >
-> -TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-> +ifeq ($(BR2_GCC_TARGET_CPU_REVISION),)
-> +TARGET_CPU=-mcpu=$(BR2_GCC_TARGET_CPU)
-> +else
-> +TARGET_CPU=-mcpu=$(BR2_GCC_TARGET_CPU)-$(BR2_GCC_TARGET_CPU_REVISION)
-> +endif
+> +config BR2_ABI_FLAT
+> +       bool
+> +       default n
 > +
-> +TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_CPU)
->
->  ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_ABI64)),yy)
->  TARGET_CFLAGS+=-fno-pic -mno-abicalls
-> @@ -95,9 +101,23 @@ ifeq ($(BR2_LARGEFILE),y)
->  TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
->  endif
->
-> +ifeq ($(BR2_NOMMU), y)
-> +TARGET_CFLAGS += -D__NOMMU__ -D__uClinux__
-> +endif
+> +config BR2_ABI_ELF
+> +       bool
+> +       default y
+> +       depends on !BR2_ABI_FLAT
 > +
->  TARGET_CXXFLAGS=$(TARGET_CFLAGS)
->  TARGET_LDFLAGS=$(call qstrip,$(BR2_TARGET_LDFLAGS))
+> +config BR2_NOMMU
+> +       bool "Target has no MMU support"
+> +       default n
+> +
+>  config BR2_microblaze
+>         bool
+>         default y if BR2_microblazeel || BR2_microblazebe
+> @@ -230,11 +243,43 @@ choice
+>         default BR2_BFIN_FDPIC
+>  config BR2_BFIN_FDPIC
+>         bool "FDPIC"
+> +       select BR2_ABI_ELF
+>  config BR2_BFIN_FLAT
+>         bool "FLAT"
+> +       select BR2_ABI_FLAT
+>         select BR2_PREFER_STATIC_LIB
+> +config BR2_BFIN_FLAT_SEP_DATA
+> +       bool "FLAT (Separate data)"
+> +       select BR2_ABI_FLAT
+> +       select BR2_PREFER_STATIC_LIB
+> +config BR2_BFIN_SHARED_FLAT
+> +       bool "Shared FLAT"
+> +       select BR2_ABI_FLAT
+> +       select BR2_PREFER_STATIC_LIB
+> +endchoice
+> +
+> +choice
+> +       prompt "Target Architecture Variant"
+> +       depends on BR2_bfin
+> +       default BR2_bf609
+> +       help
+> +         Specific CPU variant to use
+> +config BR2_bf609
+> +       bool "bf609"
+> +config BR2_bf537
+> +       bool "bf537"
+>  endchoice
 >
-> +ifeq ($(BR2_ABI_FLAT),y)
-> +TARGET_LDFLAGS += -Wl,-elf2flt
-> +endif
+> +config BR2_BFIN_INSTALL_ELF_SHARED
+> +       depends on BR2_bfin && !BR2_BFIN_FDPIC
+> +       bool "Install ELF shared libraries"
+> +       default y
 > +
-> +ifeq ($(BR2_BFIN_SHARED_FLAT), y)
-> +TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
-> +TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-> +TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
-> +endif
+> +config BR2_BFIN_INSTALL_FLAT_SHARED
+> +       depends on BR2_bfin && !BR2_BFIN_SHARED_FLAT
+> +       bool "Install FLAT shared libraries"
+> +       default y
 > +
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
->  TARGET_CROSS=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-
->  else
+>  choice
+>         prompt "Target Architecture Variant"
+>         depends on BR2_mips || BR2_mipsel
+> @@ -876,3 +921,9 @@ config BR2_GCC_TARGET_CPU
+>         default sparchfleonv8   if BR2_sparc_sparchfleonv8
+>         default sparcsfleon     if BR2_sparc_sparcsfleon
+>         default sparcsfleonv8   if BR2_sparc_sparcsfleonv8
+> +       default bf609           if BR2_bf609
+> +       default bf537           if BR2_bf537
+> +
+> +config BR2_GCC_TARGET_CPU_REVISION
+> +       string "Target CPU revision"
+> +
+> diff --git a/target/Makefile.in b/target/Makefile.in
+> index 915d625..5c285ed 100644
+> --- a/target/Makefile.in
+> +++ b/target/Makefile.in
+> @@ -1,3 +1,27 @@
+>  # make sure to put everything that is board-specific before the tarroot targets
+> +TARGETS-y =
+> +TARGETS-$(BR2_BFIN_INSTALL_ELF_SHARED) += romfs.shared.libs.elf
+> +TARGETS-$(BR2_BFIN_INSTALL_FLAT_SHARED) += romfs.shared.libs.flat
+> +TARGETS += $(TARGETS-y)
+> +
+> +CROSS_COMPILE_SHARED_ELF ?= bfin-linux-uclibc-
+> +romfs.shared.libs.elf:
+> +       set -e; \
+> +       t=`$(CROSS_COMPILE_SHARED_ELF)gcc $(CPUFLAGS) -print-file-name=libc.a`; \
+> +       t=`dirname $$t`/../..; \
+> +       for i in $$t/lib/*so*; do \
+> +               i=`readlink -f "$$i"`; \
+> +               soname=`$(CROSS_COMPILE_SHARED_ELF)readelf -d "$$i" | sed -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
+> +               $(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
+> +       done
+> +
+> +CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
+> +romfs.shared.libs.flat:
+> +       set -e; \
+> +       t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS) -mid-shared-library -print-file-name=libc`; \
+> +       if [ -f $$t -a ! -h $$t ] ; then \
+> +               $(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
+> +       fi
+> +
+>  include target/generic/Makefile.in
+>
 > --
 > 1.7.0.4
 >
