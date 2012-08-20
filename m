@@ -1,144 +1,145 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 20 Aug 2012 10:55:02 +0200
-Subject: [Buildroot] [PATCH 03/10] cpanminus: new package
+Date: Mon, 20 Aug 2012 10:55:04 +0200
+Subject: [Buildroot] [PATCH 05/10] microperl: bump version to 5.14.2
 In-Reply-To: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
 References: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1345452909-15756-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1345452909-15756-5-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in              |    5 +++++
- package/cpanminus/Config.in    |   24 ++++++++++++++++++++++++
- package/cpanminus/cpanminus.mk |   37 +++++++++++++++++++++++++++++++++++++
- package/perl/perl.mk           |   12 ++++++++++++
- 4 files changed, 78 insertions(+)
- create mode 100644 package/cpanminus/Config.in
- create mode 100644 package/cpanminus/cpanminus.mk
+patches have been merged in upstream
+perl -V requires more modules
 
-diff --git a/package/Config.in b/package/Config.in
-index 1b8237d..bb8c80d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -263,6 +263,11 @@ source "package/xavante/Config.in"
- endmenu
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ .../microperl/microperl-no-signal-handlers.patch   |   22 ---------
+ package/microperl/microperl-uudmap.patch           |   47 --------------------
+ package/microperl/microperl.mk                     |   10 ++---
+ 3 files changed, 5 insertions(+), 74 deletions(-)
+ delete mode 100644 package/microperl/microperl-no-signal-handlers.patch
+ delete mode 100644 package/microperl/microperl-uudmap.patch
+
+diff --git a/package/microperl/microperl-no-signal-handlers.patch b/package/microperl/microperl-no-signal-handlers.patch
+deleted file mode 100644
+index 3c9aa41..0000000
+--- a/package/microperl/microperl-no-signal-handlers.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Backport of http://perl5.git.perl.org/perl.git/commitdiff/01d65469392dfc0a?hp=a82b5f080d91ffe184d8ac4795ac71e72e612c2f
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura perl-5.12.3/miniperlmain.c perl-5.12.3-nosig/miniperlmain.c
+---- perl-5.12.3/miniperlmain.c	2011-01-09 17:20:57.000000000 -0300
+-+++ perl-5.12.3-nosig/miniperlmain.c	2011-04-14 10:16:53.564639438 -0300
+-@@ -116,12 +116,14 @@
+-     if (!exitstatus)
+-         perl_run(my_perl);
+- 
+-+#ifndef PERL_MICRO
+-     /* Unregister our signal handler before destroying my_perl */
+-     for (i = 0; PL_sig_name[i]; i++) {
+- 	if (rsignal_state(PL_sig_num[i]) == (Sighandler_t) PL_csighandlerp) {
+- 	    rsignal(PL_sig_num[i], (Sighandler_t) SIG_DFL);
+- 	}
+-     }
+-+#endif
+- 
+-     exitstatus = perl_destruct(my_perl);
+- 
+diff --git a/package/microperl/microperl-uudmap.patch b/package/microperl/microperl-uudmap.patch
+deleted file mode 100644
+index c72f9c9..0000000
+--- a/package/microperl/microperl-uudmap.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From a82b5f080d91ffe184d8ac4795ac71e72e612c2f Mon Sep 17 00:00:00 2001
+-From: David Leadbeater <dgl@dgl.cx>
+-Date: Mon, 7 Mar 2011 18:40:55 +0000
+-Subject: [PATCH] microperl: Update generate_uudmap in Makefile.micro
+-
+-Makefile.micro hadn't kept up with the changes for generate_uudmap,
+-make it match the real Makefile.
+----
+- Makefile.micro |    8 ++++----
+- 1 files changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile.micro b/Makefile.micro
+-index 4b738f5..567d98a 100644
+---- a/Makefile.micro
+-+++ b/Makefile.micro
+-@@ -35,7 +35,7 @@ H = av.h uconfig.h cop.h cv.h embed.h embedvar.h form.h gv.h handy.h \
+- HE = $(H) EXTERN.h
+- 
+- clean:
+--	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h
+-+	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h bitcount.h
+- 
+- distclean:	clean
+- 
+-@@ -74,7 +74,7 @@ udoop$(_O):	$(HE) doop.c
+- udump$(_O):	$(HE) dump.c regcomp.h regnodes.h
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) dump.c
+- 
+--uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h
+-+uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h uudmap.h bitcount.h
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) globals.c
+- 
+- ugv$(_O):	$(HE) gv.c
+-@@ -173,8 +173,8 @@ uutil$(_O):	$(HE) util.c
+- uperlapi$(_O):	$(HE) perlapi.c perlapi.h
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) perlapi.c
+- 
+--uudmap.h: generate_uudmap$(_X)
+--	$(RUN) ./generate_uudmap$(_X) >uudmap.h
+-+uudmap.h bitcount.h: generate_uudmap$(_X)
+-+	$(RUN) ./generate_uudmap$(_X) uudmap.h bitcount.h
+- 
+- generate_uudmap$(_O): generate_uudmap.c
+- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) generate_uudmap.c
+--- 
+-1.6.5.2.74.g610f9.dirty
+-
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index fa92144..1899e03 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -4,7 +4,8 @@
+ #
+ #############################################################
+ 
+-MICROPERL_VERSION = 5.12.4
++MICROPERL_VERSION_MAJOR = 14
++MICROPERL_VERSION = 5.$(MICROPERL_VERSION_MAJOR).2
+ MICROPERL_SITE = http://www.cpan.org/src/5.0
+ MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
+ MICROPERL_LICENSE = Artistic
+@@ -16,12 +17,11 @@ MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
+ 
+ # Minimal set of modules required for 'perl -V' to work
+ MICROPERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
+-MICROPERL_BASE_MODS = strict.pm
++MICROPERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
+ 
+ # CGI bundle
+ ifeq ($(BR2_PACKAGE_MICROPERL_BUNDLE_CGI),y)
+-MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm \
+-	vars.pm warnings.pm warnings/register.pm
++MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm
  endif
- source "package/perl/Config.in"
-+if BR2_PACKAGE_PERL || BR2_PACKAGE_MINIPERL
-+menu "Perl libraries/modules"
-+source "package/cpanminus/Config.in"
-+endmenu
-+endif
- source "package/miniperl/Config.in"
- source "package/microperl/Config.in"
- source "package/php/Config.in"
-diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
-new file mode 100644
-index 0000000..9db7b2e
---- /dev/null
-+++ b/package/cpanminus/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_CPANMINUS
-+	bool "cpanminus"
-+	help
-+	  cpanminus is a script to get, unpack, build and install Perl modules
-+	  from CPAN.
-+
-+	  Why? It's dependency free, requires zero configuration, and stands
-+	  alone. When running, it requires only 10MB of RAM.
-+
-+	  http://github.com/miyagawa/cpanminus
-+
-+if BR2_PACKAGE_CPANMINUS
-+
-+config BR2_PACKAGE_CPANMINUS_MODULES
-+	string "Perl modules from CPAN"
-+	help
-+	  List of space-separated Perl modules to install from CPAN.
-+
-+	  Examples: Try::Tiny Dancer YAML Moo
-+
-+	  Install the listed modules and their dependencies.
-+	  cpanm run on host, so you cannot use it for XS modules.
-+
-+endif
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-new file mode 100644
-index 0000000..b55dd3f
---- /dev/null
-+++ b/package/cpanminus/cpanminus.mk
-@@ -0,0 +1,37 @@
-+#############################################################
-+#
-+# cpanminus
-+#
-+#############################################################
-+
-+CPANMINUS_VERSION = 1.5017
-+CPANMINUS_SITE = http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA
-+CPANMINUS_SOURCE = App-cpanminus-$(CPANMINUS_VERSION).tar.gz
-+CPANMINUS_DEPENDENCIES = host-perl host-cpanminus
-+CPANMINUS_MODS = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
-+
-+define HOST_CPANMINUS_CONFIGURE_CMDS
-+	cd $(@D); $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) Makefile.PL
-+endef
-+
-+define HOST_CPANMINUS_INSTALL_CMDS
-+	$(MAKE) -C $(@D) install
-+endef
-+
-+define CPANMINUS_INSTALL_TARGET_CMDS
-+	for i in $(CPANMINUS_MODS); do \
-+		cd $(@D); $(HOST_DIR)/usr/bin/cpanm -L $(TARGET_DIR)/usr/local $$i; \
-+	done
-+	# show XS modules
-+	find $(TARGET_DIR)/usr/local/lib/perl5 -name *.so -print
-+	# remove XS modules
-+	rm -Rf $(TARGET_DIR)/usr/local/lib/perl5/$(shell $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) -MConfig -e "print Config->{archname}")
-+	# fix shebang
-+	touch $(TARGET_DIR)/usr/local/bin/dummy
-+	for i in $(TARGET_DIR)/usr/local/bin/*; do \
-+		$(SED) 's/$(subst /,\/,$(HOST_DIR))//' $$i; \
-+	done
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index d2679bc..38e1167 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -41,6 +41,7 @@ define PERL_CONFIGURE_CMDS
- 		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
- 		-Duseshrplib \
- 		-Dprefix=/usr \
-+		-Dsitelib=/usr/local/lib/perl5 \
- 		-Uoptimize \
- 		$(PERL_USE_DEVEL) \
- 		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
-@@ -65,8 +66,19 @@ define PERL_CONFIGURE_CMDS
- 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
- endef
  
-+# example of hack for XS module (cpanminus handles only pure Perl modules)
-+#define PERL_HACK_4_XS_MODULES
-+#	cd $(@D)/cpan; tar xfz $(BUILDROOT_DL_DIR)/HTML-Parser-3.69.tar.gz
-+#endef
-+
-+PERL_PRE_CONFIGURE_HOOKS += PERL_HACK_4_XS_MODULES
-+
- define PERL_BUILD_CMDS
- 	$(MAKE) -C $(@D) all
-+# example of hack for XS module
-+#	cd $(@D); \
-+#		$(HOST_DIR)/usr/bin/perl$(PERL_VERSION) -Ilib make_ext.pl MAKE="$(MAKE)" LIBPERL_A=libperl.a LINKTYPE=dynamic \
-+#			HTML-Parser-3.69
- endef
- 
- define PERL_INSTALL_STAGING_CMDS
+ # Host microperl is actually full-blown perl
+@@ -70,7 +70,7 @@ define MICROPERL_CONFIGURE_CMDS
+ 		-e '/^osname=/d' -e '/^u32type=/d' -e '/^d_archlib=/d' \
+ 		-e '/^d_memset=/d' -e '/^i_fcntl=/d' -e '/^useperlio=/d' \
+ 		-e '/^need_va_copy=/d' $(@D)/uconfig.sh
+-	$(SED) 's/5.12/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
++	$(SED) 's/5\.$(MICROPERL_VERSION_MAJOR)/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
+ 	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
+ 	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
+ 	echo "d_archlib='define'" >>$(@D)/uconfig.sh
 -- 
 1.7.9.5
