@@ -1,63 +1,144 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 20 Aug 2012 10:55:03 +0200
-Subject: [Buildroot] [PATCH 04/10] microperl: build extensions at build time
+Date: Mon, 20 Aug 2012 10:55:02 +0200
+Subject: [Buildroot] [PATCH 03/10] cpanminus: new package
 In-Reply-To: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
 References: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1345452909-15756-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1345452909-15756-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-just set PERL5LIB in build tree
-optim: symlink only one time, before the loop
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/microperl/microperl.mk |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/Config.in              |    5 +++++
+ package/cpanminus/Config.in    |   24 ++++++++++++++++++++++++
+ package/cpanminus/cpanminus.mk |   37 +++++++++++++++++++++++++++++++++++++
+ package/perl/perl.mk           |   12 ++++++++++++
+ 4 files changed, 78 insertions(+)
+ create mode 100644 package/cpanminus/Config.in
+ create mode 100644 package/cpanminus/cpanminus.mk
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index b2a912a..fa92144 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -97,6 +97,7 @@ define MICROPERL_CONFIGURE_CMDS
- 	cp -f $(@D)/uconfig.sh $(@D)/config.sh
- 	echo "ccname='$(TARGET_CC)'" >>$(@D)/config.sh
- 	echo "PERL_CONFIG_SH=true" >>$(@D)/config.sh
-+	touch $(@D)/config.h    # avoid warning : out of date
- 	cd $(@D) ; $(HOST_DIR)/usr/bin/perl make_patchnum.pl ; \
- 	$(HOST_DIR)/usr/bin/perl configpm
- endef
-@@ -106,16 +107,17 @@ define MICROPERL_BUILD_CMDS
- 		CC="$(HOSTCC)" bitcount.h
- 	$(MAKE) -f Makefile.micro -C $(@D) \
- 		CC="$(TARGET_CC)" OPTIMIZE="$(TARGET_CFLAGS)"
-+	$(MICROPERL_BUILD_EXTENSIONS)
+diff --git a/package/Config.in b/package/Config.in
+index 1b8237d..bb8c80d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -263,6 +263,11 @@ source "package/xavante/Config.in"
+ endmenu
+ endif
+ source "package/perl/Config.in"
++if BR2_PACKAGE_PERL || BR2_PACKAGE_MINIPERL
++menu "Perl libraries/modules"
++source "package/cpanminus/Config.in"
++endmenu
++endif
+ source "package/miniperl/Config.in"
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
+new file mode 100644
+index 0000000..9db7b2e
+--- /dev/null
++++ b/package/cpanminus/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_CPANMINUS
++	bool "cpanminus"
++	help
++	  cpanminus is a script to get, unpack, build and install Perl modules
++	  from CPAN.
++
++	  Why? It's dependency free, requires zero configuration, and stands
++	  alone. When running, it requires only 10MB of RAM.
++
++	  http://github.com/miyagawa/cpanminus
++
++if BR2_PACKAGE_CPANMINUS
++
++config BR2_PACKAGE_CPANMINUS_MODULES
++	string "Perl modules from CPAN"
++	help
++	  List of space-separated Perl modules to install from CPAN.
++
++	  Examples: Try::Tiny Dancer YAML Moo
++
++	  Install the listed modules and their dependencies.
++	  cpanm run on host, so you cannot use it for XS modules.
++
++endif
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+new file mode 100644
+index 0000000..b55dd3f
+--- /dev/null
++++ b/package/cpanminus/cpanminus.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# cpanminus
++#
++#############################################################
++
++CPANMINUS_VERSION = 1.5017
++CPANMINUS_SITE = http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA
++CPANMINUS_SOURCE = App-cpanminus-$(CPANMINUS_VERSION).tar.gz
++CPANMINUS_DEPENDENCIES = host-perl host-cpanminus
++CPANMINUS_MODS = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
++
++define HOST_CPANMINUS_CONFIGURE_CMDS
++	cd $(@D); $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) Makefile.PL
++endef
++
++define HOST_CPANMINUS_INSTALL_CMDS
++	$(MAKE) -C $(@D) install
++endef
++
++define CPANMINUS_INSTALL_TARGET_CMDS
++	for i in $(CPANMINUS_MODS); do \
++		cd $(@D); $(HOST_DIR)/usr/bin/cpanm -L $(TARGET_DIR)/usr/local $$i; \
++	done
++	# show XS modules
++	find $(TARGET_DIR)/usr/local/lib/perl5 -name *.so -print
++	# remove XS modules
++	rm -Rf $(TARGET_DIR)/usr/local/lib/perl5/$(shell $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) -MConfig -e "print Config->{archname}")
++	# fix shebang
++	touch $(TARGET_DIR)/usr/local/bin/dummy
++	for i in $(TARGET_DIR)/usr/local/bin/*; do \
++		$(SED) 's/$(subst /,\/,$(HOST_DIR))//' $$i; \
++	done
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index d2679bc..38e1167 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -41,6 +41,7 @@ define PERL_CONFIGURE_CMDS
+ 		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
+ 		-Duseshrplib \
+ 		-Dprefix=/usr \
++		-Dsitelib=/usr/local/lib/perl5 \
+ 		-Uoptimize \
+ 		$(PERL_USE_DEVEL) \
+ 		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
+@@ -65,8 +66,19 @@ define PERL_CONFIGURE_CMDS
+ 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
  endef
  
- # Some extensions don't need a build run
- # We try to build anyway to avoid a huge black list
- # Just ignore make_ext.pl warning/errors
- define MICROPERL_BUILD_EXTENSIONS
-+	cd $(@D); rm -f miniperl; ln -s $(HOST_DIR)/usr/bin/perl miniperl;
- 	for i in $(MICROPERL_MODS); do \
--	cd $(@D); ln -sf $(HOST_DIR)/usr/bin/perl miniperl; \
--		PERL5LIB=$(TARGET_DIR)/$(MICROPERL_ARCH_DIR) \
--		$(HOST_DIR)/usr/bin/perl make_ext.pl MAKE="$(MAKE)" --nonxs \
-+	cd $(@D); PERL5LIB=lib \
-+		./miniperl make_ext.pl MAKE="$(MAKE)" --nonxs \
- 		`echo $$i|sed -e 's/.pm//'`; \
- 	done
++# example of hack for XS module (cpanminus handles only pure Perl modules)
++#define PERL_HACK_4_XS_MODULES
++#	cd $(@D)/cpan; tar xfz $(BUILDROOT_DL_DIR)/HTML-Parser-3.69.tar.gz
++#endef
++
++PERL_PRE_CONFIGURE_HOOKS += PERL_HACK_4_XS_MODULES
++
+ define PERL_BUILD_CMDS
+ 	$(MAKE) -C $(@D) all
++# example of hack for XS module
++#	cd $(@D); \
++#		$(HOST_DIR)/usr/bin/perl$(PERL_VERSION) -Ilib make_ext.pl MAKE="$(MAKE)" LIBPERL_A=libperl.a LINKTYPE=dynamic \
++#			HTML-Parser-3.69
  endef
-@@ -131,7 +133,6 @@ define MICROPERL_INSTALL_TARGET_CMDS
- 		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
- 			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
- 	done
--	$(MICROPERL_BUILD_EXTENSIONS)
- 	for i in $(MICROPERL_MODS); do \
- 		j=`echo $$i|cut -d : -f 1` ; \
- 		if [ -d $(@D)/lib/$$j ] ; then \
+ 
+ define PERL_INSTALL_STAGING_CMDS
 -- 
 1.7.9.5
