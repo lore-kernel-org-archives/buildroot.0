@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 20 Aug 2012 10:55:00 +0200
-Subject: [Buildroot] [PATCH 01/10] perl: new package
-Message-ID: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
+Date: Mon, 20 Aug 2012 10:55:01 +0200
+Subject: [Buildroot] [PATCH 02/10] miniperl: new package
+In-Reply-To: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
+References: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1345452909-15756-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,63 +11,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/Config.in                      |    1 +
- package/perl/Config.in                 |   16 +++++
- package/perl/perl-Makefile-SH.patch    |   28 ++++++++
- package/perl/perl-configure-qemu.patch |   22 +++++++
- package/perl/perl-fix-minitest.patch   |   96 +++++++++++++++++++++++++++
- package/perl/perl-make-ext.patch       |   35 ++++++++++
- package/perl/perl-mkppport.patch       |   36 ++++++++++
- package/perl/perl.mk                   |  112 ++++++++++++++++++++++++++++++++
- 8 files changed, 346 insertions(+)
- create mode 100644 package/perl/Config.in
- create mode 100644 package/perl/perl-Makefile-SH.patch
- create mode 100644 package/perl/perl-configure-qemu.patch
- create mode 100644 package/perl/perl-fix-minitest.patch
- create mode 100644 package/perl/perl-make-ext.patch
- create mode 100644 package/perl/perl-mkppport.patch
- create mode 100644 package/perl/perl.mk
+ package/Config.in                              |    1 +
+ package/miniperl/Config.in                     |    6 ++
+ package/miniperl/miniperl-Makefile-SH.patch    |   48 +++++++++
+ package/miniperl/miniperl-configure-qemu.patch |   22 ++++
+ package/miniperl/miniperl-fix-minitest.patch   |  122 +++++++++++++++++++++
+ package/miniperl/miniperl-installperl.patch    |  135 ++++++++++++++++++++++++
+ package/miniperl/miniperl-make-ext.patch       |   35 ++++++
+ package/miniperl/miniperl-mkppport.patch       |   36 +++++++
+ package/miniperl/miniperl.mk                   |   35 ++++++
+ package/perl/Config.in                         |    2 +-
+ 10 files changed, 441 insertions(+), 1 deletion(-)
+ create mode 100644 package/miniperl/Config.in
+ create mode 100644 package/miniperl/miniperl-Makefile-SH.patch
+ create mode 100644 package/miniperl/miniperl-configure-qemu.patch
+ create mode 100644 package/miniperl/miniperl-fix-minitest.patch
+ create mode 100644 package/miniperl/miniperl-installperl.patch
+ create mode 100644 package/miniperl/miniperl-make-ext.patch
+ create mode 100644 package/miniperl/miniperl-mkppport.patch
+ create mode 100644 package/miniperl/miniperl.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f308de7..00a79ab 100644
+index 00a79ab..1b8237d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -262,6 +262,7 @@ source "package/wsapi/Config.in"
- source "package/xavante/Config.in"
+@@ -263,6 +263,7 @@ source "package/xavante/Config.in"
  endmenu
  endif
-+source "package/perl/Config.in"
+ source "package/perl/Config.in"
++source "package/miniperl/Config.in"
  source "package/microperl/Config.in"
  source "package/php/Config.in"
  source "package/python/Config.in"
-diff --git a/package/perl/Config.in b/package/perl/Config.in
+diff --git a/package/miniperl/Config.in b/package/miniperl/Config.in
 new file mode 100644
-index 0000000..387448e
+index 0000000..abe283b
 --- /dev/null
-+++ b/package/perl/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_PERL
-+	bool "perl"
++++ b/package/miniperl/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_MINIPERL
++	bool "miniperl"
 +	help
-+	  Larry Wall's Practical Extraction and Report Language
-+	  An interpreted scripting language, known among some as "Unix's Swiss
-+	  Army Chainsaw".
++	  Perl without dynamic module loader.
++	  Usually used to bootstrap a full Perl (@INC contains only .).
 +
-+	  http://www.perl.org/
-+
-+
-+config BR2_PACKAGE_PERL_CUSTOM_CONFIGURE
-+	string "configuration flags"
-+	depends on BR2_PACKAGE_PERL
-+	help
-+	  Allows to add some flags to Configure.
-+
-diff --git a/package/perl/perl-Makefile-SH.patch b/package/perl/perl-Makefile-SH.patch
+diff --git a/package/miniperl/miniperl-Makefile-SH.patch b/package/miniperl/miniperl-Makefile-SH.patch
 new file mode 100644
-index 0000000..00d26b9
+index 0000000..6b28b0a
 --- /dev/null
-+++ b/package/perl/perl-Makefile-SH.patch
-@@ -0,0 +1,28 @@
++++ b/package/miniperl/miniperl-Makefile-SH.patch
+@@ -0,0 +1,48 @@
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
@@ -73,7 +68,27 @@ index 0000000..00d26b9
 +===================================================================
 +--- a/Makefile.SH
 ++++ b/Makefile.SH
-+@@ -1512,8 +1512,10 @@
++@@ -555,7 +555,8 @@
++ .c.s:
++ 	$(CCCMDSRC) -S $*.c
++ 
++-all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(generated_pods) $(private) $(unidatafiles) $(public) $(dynamic_ext) $(nonxs_ext) extras.make
+++#all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(generated_pods) $(private) $(unidatafiles) $(public) $(dynamic_ext) $(nonxs_ext) extras.make
+++all: $(FIRSTMAKEFILE) $(MINIPERL_EXE) $(private) $(unidatafiles) $(nonxs_ext) lib/auto/Cwd/Cwd.so
++ 	@echo " ";
++ 	@echo "	Everything is up to date. Type '$(MAKE) test' to run test suite."
++ 
++@@ -1101,7 +1102,8 @@
++ INSTALL_DEPENDENCE = all
++ 
++ install.perl:	$(INSTALL_DEPENDENCE) installperl
++-	$(RUN_PERL) installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
+++#	$(RUN_PERL) installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
+++	$(MINIPERL) installperl --destdir=$(DESTDIR) $(INSTALLFLAGS) $(STRIPFLAGS)
++ 	- at test ! -s extras.lst || $(MAKE) extras.install
++ 
++ install.man:	all installman
++@@ -1512,8 +1514,10 @@
 + # Can't depend on lib/Config.pm because that might be where miniperl
 + # is crashing.
 + minitest: $(MINIPERL_EXE) minitest.prep
@@ -81,24 +96,24 @@ index 0000000..00d26b9
 +-		&& $(RUN_PERL) TEST base/*.t comp/*.t cmd/*.t run/*.t io/*.t re/*.t op/*.t uni/*.t </dev/tty
 ++#	- cd t && (rm -f $(PERL_EXE); $(LNS) ../$(MINIPERL_EXE) $(PERL_EXE)) \
 ++#		&& $(RUN_PERL) TEST base/*.t comp/*.t cmd/*.t run/*.t io/*.t re/*.t op/*.t uni/*.t </dev/tty
-++	- cd t && (rm -f $(PERL_EXE); cp run_perl $(PERL_EXE); chmod +x $(PERL_EXE)) \
+++	- cd t && (rm -f $(PERL_EXE); cp run_miniperl $(PERL_EXE); chmod +x $(PERL_EXE)) \
 ++		&& $(PERL_EXE) TEST base/*.t comp/*.t cmd/*.t run/*.t io/*.t re/*.t op/*.t uni/*.t </dev/tty
 + 
 + # Test via harness
 + 
-+Index: b/t/run_perl
++Index: b/t/run_miniperl
 +new file mode 100755
 +===================================================================
 +--- /dev/null
-++++ b/t/run_perl
+++++ b/t/run_miniperl
 +@@ -0,0 +1,2 @@
 ++#!/bin/sh
-++../Cross/run-qemu-arm ../perl "$@"
-diff --git a/package/perl/perl-configure-qemu.patch b/package/perl/perl-configure-qemu.patch
+++../Cross/run-qemu-arm ../miniperl "$@"
+diff --git a/package/miniperl/miniperl-configure-qemu.patch b/package/miniperl/miniperl-configure-qemu.patch
 new file mode 100644
 index 0000000..c7276b0
 --- /dev/null
-+++ b/package/perl/perl-configure-qemu.patch
++++ b/package/miniperl/miniperl-configure-qemu.patch
 @@ -0,0 +1,22 @@
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
@@ -122,15 +137,41 @@ index 0000000..c7276b0
 + 	*)  echo "Unknown targetrun '$targetrun'" >&4
 + 	    exit 1
 + 	    ;;
-diff --git a/package/perl/perl-fix-minitest.patch b/package/perl/perl-fix-minitest.patch
+diff --git a/package/miniperl/miniperl-fix-minitest.patch b/package/miniperl/miniperl-fix-minitest.patch
 new file mode 100644
-index 0000000..0d6b25f
+index 0000000..1ea474e
 --- /dev/null
-+++ b/package/perl/perl-fix-minitest.patch
-@@ -0,0 +1,96 @@
++++ b/package/miniperl/miniperl-fix-minitest.patch
+@@ -0,0 +1,122 @@
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
++Index: b/lib/_charnames.pm
++===================================================================
++--- a/lib/_charnames.pm
+++++ b/lib/_charnames.pm
++@@ -11,7 +11,7 @@
++ use unicore::Name;    # mktables-generated algorithmically-defined names
++ 
++ use bytes ();          # for $bytes::hint_bits
++-use re "/aa";          # Everything in here should be ASCII
+++#use re "/aa";          # Everything in here should be ASCII
++ 
++ $Carp::Internal{ (__PACKAGE__) } = 1;
++ 
++Index: b/lib/charnames.pm
++===================================================================
++--- a/lib/charnames.pm
+++++ b/lib/charnames.pm
++@@ -6,7 +6,7 @@
++ use _charnames ();    # The submodule for this where most of the work gets done
++ 
++ use bytes ();          # for $bytes::hint_bits
++-use re "/aa";          # Everything in here should be ASCII
+++#use re "/aa";          # Everything in here should be ASCII
++ 
++ # Translate between Unicode character names and their code points.
++ # This is a wrapper around the submodule C<_charnames>.  This design allows
 +Index: b/t/base/term.t
 +===================================================================
 +--- a/t/base/term.t
@@ -224,11 +265,152 @@ index 0000000..0d6b25f
 + 
 + 	# VMS should have 'perl' aliased properly
 + 	return $Perl if $is_vms;
-diff --git a/package/perl/perl-make-ext.patch b/package/perl/perl-make-ext.patch
+diff --git a/package/miniperl/miniperl-installperl.patch b/package/miniperl/miniperl-installperl.patch
+new file mode 100644
+index 0000000..f8b5889
+--- /dev/null
++++ b/package/miniperl/miniperl-installperl.patch
+@@ -0,0 +1,135 @@
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/installperl
++===================================================================
++--- a/installperl
+++++ b/installperl
++@@ -3,11 +3,17 @@
++ BEGIN {
++     require 5.004;
++     chdir '..' if !-d 'lib' and -d '../lib';
+++
+++    my @sav = @INC;
+++    my $sav = $ENV{PERL5LIB};
++     @INC = 'lib';
++     $ENV{PERL5LIB} = 'lib';
++ 
++     # This needs to be at BEGIN time, before any use of Config
++     require './install_lib.pl';
+++
+++    @INC = @sav;
+++    $ENV{PERL5LIB} = $sav;
++ }
++ 
++ use strict;
++@@ -29,7 +35,7 @@
++ use ExtUtils::Packlist;
++ use Cwd;
++ 
++-require './Porting/pod_lib.pl';
+++#require './Porting/pod_lib.pl';
++ 
++ if ($Is_NetWare) {
++     $Is_W32 = 0;
++@@ -112,19 +118,19 @@
++ 
++ $versiononly = 1 if $Config{versiononly} && !defined $versiononly;
++ my (@scripts, @tolink);
++-open SCRIPTS, "utils.lst" or die "Can't open utils.lst: $!";
++-while (<SCRIPTS>) {
++-    next if /^#/;
++-    next if /a2p/; # a2p is binary, to be installed separately
++-    chomp;
++-    if (/(\S*)\s*#\s*link\s*=\s*(\S*)/) {
++-	push @scripts, $1;
++-	push @tolink, [$1, $2];
++-    } else {
++-	push @scripts, $_;
++-    }
++-}
++-close SCRIPTS;
+++#open SCRIPTS, "utils.lst" or die "Can't open utils.lst: $!";
+++#while (<SCRIPTS>) {
+++#    next if /^#/;
+++#    next if /a2p/; # a2p is binary, to be installed separately
+++#    chomp;
+++#    if (/(\S*)\s*#\s*link\s*=\s*(\S*)/) {
+++#	push @scripts, $1;
+++#	push @tolink, [$1, $2];
+++#    } else {
+++#	push @scripts, $_;
+++#    }
+++#}
+++#close SCRIPTS;
++ 
++ if ($scr_ext) { @scripts = map { "$_$scr_ext" } @scripts; }
++ 
++@@ -241,7 +247,7 @@
++ 
++ if (!$Is_NetWare) {
++ if (!$Is_VMS) {
++--x 'perl' . $exe_ext	|| die "perl isn't executable!\n";
+++-x 'miniperl' . $exe_ext	|| die "miniperl isn't executable!\n";
++ }
++ else {
++ -x $ndbg . 'perl' . $exe_ext	|| die "${ndbg}perl$exe_ext isn't executable!\n";
++@@ -357,7 +363,7 @@
++ }
++ 
++ # Install header files and libraries.
++-mkpath("$installarchlib/CORE", $opts{verbose}, 0777);
+++#mkpath("$installarchlib/CORE", $opts{verbose}, 0777);
++ my @corefiles;
++ if ($Is_VMS) {  # We did core file selection during build
++     my $coredir = "lib/$Config{archname}/$ver/CORE";
++@@ -395,18 +401,18 @@
++ 	push(@corefiles,'mpeix/mpeixish.h');
++     }
++ }
++-foreach my $file (@corefiles) {
++-    # HP-UX (at least) needs to maintain execute permissions
++-    # on dynamically-loadable libraries. So we do it for all.
++-    if (copy_if_diff($file,"$installarchlib/CORE/$file")) {
++-	if ($file =~ /\.(\Q$so\E|\Q$dlext\E)$/) {
++-	    strip("-S", "$installarchlib/CORE/$file") if $^O =~ /^(rhapsody|darwin)$/;
++-	    chmod(0555, "$installarchlib/CORE/$file");
++-	} else {
++-	    chmod(0444, "$installarchlib/CORE/$file");
++-	}
++-    }
++-}
+++#foreach my $file (@corefiles) {
+++#    # HP-UX (at least) needs to maintain execute permissions
+++#    # on dynamically-loadable libraries. So we do it for all.
+++#    if (copy_if_diff($file,"$installarchlib/CORE/$file")) {
+++#	if ($file =~ /\.(\Q$so\E|\Q$dlext\E)$/) {
+++#	    strip("-S", "$installarchlib/CORE/$file") if $^O =~ /^(rhapsody|darwin)$/;
+++#	    chmod(0555, "$installarchlib/CORE/$file");
+++#	} else {
+++#	    chmod(0444, "$installarchlib/CORE/$file");
+++#	}
+++#    }
+++#}
++ 
++ # Install main perl executables
++ # Make links to ordinary names if installbin directory isn't current directory.
++@@ -757,7 +763,8 @@
++     $name = "$dir/$name" if $dir ne '';
++ 
++     # ignore pods that are stand alone documentation from dual life modules.
++-    return if /\.pod\z/ && is_duplicate_pod($_);
+++#    return if /\.pod\z/ && is_duplicate_pod($_);
+++    return if /\.pod\z/;
++ 
++     return if $name eq 'ExtUtils/XSSymSet.pm' and !$Is_VMS;
++ 
++@@ -767,7 +774,7 @@
++ 	  ($name =~ /^(.*)\.(?:h|lib)$/i && ($Is_W32 || $Is_NetWare)) ||
++ 	  $name=~/^Config_(heavy|git)\.pl\z/
++        ) {
++-	$installlib = $installarchlib;
+++#	$installlib = $installarchlib;
++ 	return unless $do_installarchlib;
++     } else {
++ 	return unless $do_installprivlib;
+diff --git a/package/miniperl/miniperl-make-ext.patch b/package/miniperl/miniperl-make-ext.patch
 new file mode 100644
 index 0000000..f109487
 --- /dev/null
-+++ b/package/perl/perl-make-ext.patch
++++ b/package/miniperl/miniperl-make-ext.patch
 @@ -0,0 +1,35 @@
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
@@ -265,11 +447,11 @@ index 0000000..f109487
 +     die "Unsuccessful make($ext_dir): code=$code" if $code != 0;
 + 
 +     chdir $return_dir || die "Cannot cd to $return_dir: $!";
-diff --git a/package/perl/perl-mkppport.patch b/package/perl/perl-mkppport.patch
+diff --git a/package/miniperl/miniperl-mkppport.patch b/package/miniperl/miniperl-mkppport.patch
 new file mode 100644
 index 0000000..fce1d6e
 --- /dev/null
-+++ b/package/perl/perl-mkppport.patch
++++ b/package/miniperl/miniperl-mkppport.patch
 @@ -0,0 +1,36 @@
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
@@ -307,123 +489,59 @@ index 0000000..fce1d6e
 + }
 + 
 + __END__
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+diff --git a/package/miniperl/miniperl.mk b/package/miniperl/miniperl.mk
 new file mode 100644
-index 0000000..d2679bc
+index 0000000..68972b9
 --- /dev/null
-+++ b/package/perl/perl.mk
-@@ -0,0 +1,112 @@
++++ b/package/miniperl/miniperl.mk
+@@ -0,0 +1,35 @@
 +#############################################################
 +#
-+# perl
++# miniperl
 +#
 +#############################################################
 +
-+PERL_VERSION_MAJOR = 16
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_SITE = http://www.cpan.org/src/5.0
-+PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
-+PERL_LICENSE = Artistic
-+PERL_LICENSE_FILES = Artistic
-+PERL_INSTALL_STAGING = YES
++MINIPERL_VERSION = 5.16.1
++MINIPERL_SITE = http://www.cpan.org/src/5.0
++MINIPERL_SOURCE = perl-$(MINIPERL_VERSION).tar.bz2
++MINIPERL_LICENSE = Artistic
++MINIPERL_LICENSE_FILES = Artistic
 +
-+ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
-+PERL_USE_DEVEL=-Dusedevel
-+endif
-+
-+PERL_ARCH=$(call qstrip,$(BR2_ARCH))
-+ifeq ($(PERL_ARCH),i686)
-+    PERL_ARCH=i386
-+endif
-+PERL_QEMU_USER_MODE=qemu-$(PERL_ARCH)
-+
-+define PERL_CONFIGURE_CMDS
-+	rm -f $(@D)/config.sh
-+	cd $(@D); ./Configure -des \
-+		-Dusecrosscompile \
-+		-Dtargetrun=$(PERL_QEMU_USER_MODE) \
-+		-Dqemulib=$(TARGET_DIR) \
-+		-Dtargethost=dummy \
-+		-Dar="$(TARGET_AR)" \
-+		-Dcc="$(TARGET_CC)" \
-+		-Dcpp="$(TARGET_CC)" \
-+		-Dld="$(TARGET_LD)" \
-+		-Dnm="$(TARGET_NM)" \
-+		-Dranlib="$(TARGET_RANLIB)" \
-+		-Dccflags="$(TARGET_CFLAGS)" \
-+		-Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
-+		-Dlddlflags="-shared" \
-+		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
-+		-Duseshrplib \
-+		-Dprefix=/usr \
-+		-Uoptimize \
-+		$(PERL_USE_DEVEL) \
-+		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
-+	echo "# patched values"                 >>$(@D)/config.sh
-+	$(SED) '/^myarchname=/d' \
-+		-e '/^mydomain=/d' \
-+		-e '/^myhostname=/d' \
-+		-e '/^myuname=/d' \
-+		-e '/^osname=/d' \
-+		-e '/^osvers=/d' \
-+		-e '/^perladmin=/d' \
-+		$(@D)/config.sh
-+	echo "myarchname='$(GNU_TARGET_NAME)'"                  >>$(@D)/config.sh
-+	echo "mydomain=''"                                      >>$(@D)/config.sh
-+	echo "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'"      >>$(@D)/config.sh
-+	echo "myuname='Buildroot $(BR2_VERSION_FULL)'"          >>$(@D)/config.sh
-+	echo "osname='linux'"                                   >>$(@D)/config.sh
-+	echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'"             >>$(@D)/config.sh
-+	echo "perladmin='root'"                                 >>$(@D)/config.sh
-+	cd $(@D); ./Configure -S
-+	cp $(@D)/config.h $(@D)/xconfig.h
-+	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++define MINIPERL_CONFIGURE_CMDS
++	$(PERL_CONFIGURE_CMDS)
 +endef
 +
-+define PERL_BUILD_CMDS
++define MINIPERL_BUILD_CMDS
 +	$(MAKE) -C $(@D) all
 +endef
 +
-+define PERL_INSTALL_STAGING_CMDS
-+	$(MAKE) INSTALL_DEPENDENCE= \
-+		INSTALLFLAGS= \
-+		DESTDIR="$(STAGING_DIR)" \
-+		-C $(@D) install.perl
-+endef
-+
-+define PERL_INSTALL_TARGET_CMDS
++define MINIPERL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 $(@D)/miniperl $(TARGET_DIR)/usr/bin/miniperl
 +	$(MAKE) INSTALL_DEPENDENCE= \
 +		INSTALLFLAGS=-p \
 +		DESTDIR="$(TARGET_DIR)" \
 +		-C $(@D) install.perl
++	# File::Spec is a pure module but packaged in the XS module Cwd
++	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(MINIPERL_VERSION)/auto
 +endef
 +
-+define PERL_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
-+
-+define HOST_PERL_CONFIGURE_CMDS
-+	cd $(@D); ./Configure -des \
-+		-Dcc="$(HOSTCC)" \
-+		-Dprefix="$(HOST_DIR)/usr" \
-+		$(PERL_USE_DEVEL) \
-+		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
-+endef
-+
-+define HOST_PERL_BUILD_CMDS
-+	$(MAKE) -C $(@D) all
-+endef
-+
-+define HOST_PERL_INSTALL_CMDS
-+	$(MAKE) INSTALL_DEPENDENCE= \
-+		-C $(@D) install
-+endef
-+
-+define HOST_PERL_CLEAN_CMDS
++define MINIPERL_CLEAN_CMDS
 +	-$(MAKE) -C $(@D) clean
 +endef
 +
 +$(eval $(generic-package))
-+$(eval $(host-generic-package))
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index 387448e..58971a0 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_PERL
+ 
+ config BR2_PACKAGE_PERL_CUSTOM_CONFIGURE
+ 	string "configuration flags"
+-	depends on BR2_PACKAGE_PERL
++	depends on BR2_PACKAGE_PERL || BR2_PACKAGE_MINIPERL
+ 	help
+ 	  Allows to add some flags to Configure.
+ 
 -- 
 1.7.9.5
