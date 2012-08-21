@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 12:48:03 +0200
-Subject: [Buildroot] [git commit] nano: add license info
-Message-ID: <20120821110312.8124597206@busybox.osuosl.org>
+Date: Tue, 21 Aug 2012 13:00:55 +0200
+Subject: [Buildroot] [PATCH 1/8] alsa-lib: add license info
+In-Reply-To: <1345407510-10058-1-git-send-email-danomimanchego123@gmail.com>
+References: <1345407510-10058-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20120821130055.2f7e13fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87e7661b53b83df870918432481995f8bd9fcd78
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 19 Aug 2012 16:18:23 -0400,
+Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nano/nano.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 164c7a6..61bf218 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -6,6 +6,8 @@
- 
- NANO_VERSION = 2.3.1
- NANO_SITE = http://www.nano-editor.org/dist/v2.3
-+NANO_LICENSE = GPLv3+
-+NANO_LICENSE_FILES = COPYING
- NANO_MAKE_ENV = CURSES_LIB="-lncurses"
- NANO_CONF_OPT = --without-slang
- NANO_DEPENDENCIES = ncurses
+Thanks. I have applied all patches except patch 6/8 on fontconfig, due
+to the specific comment I sent on it.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
