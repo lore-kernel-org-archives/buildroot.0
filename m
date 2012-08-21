@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 13:57:06 +0200
-Subject: [Buildroot] [PATCHv6] vlc: New package
-In-Reply-To: <1342502199-6723-1-git-send-email-ismael.luceno@gmail.com>
-References: <1342502199-6723-1-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <20120821135706.3c8238b8@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Aug 2012 12:00:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 5360] buildroot fails when building "host-libglib2
+ 2.30.2 Building"
+In-Reply-To: <bug-5360-163@https.bugs.busybox.net/>
+References: <bug-5360-163@https.bugs.busybox.net/>
+Message-ID: <20120821120016.A4BAB9724C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 17 Jul 2012 02:16:39 -0300,
-Ismael Luceno <ismael.luceno@gmail.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=5360
 
-> Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-I'm seeing some kconfig warnings with VLC:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-warning: (BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG && BR2_PACKAGE_VLC_SVG) selects BR2_PACKAGE_LIBRSVG which has unmet direct dependencies (BR2_PACKAGE_LIBGTK2 && BR2_USE_WCHAR)
-warning: (BR2_PACKAGE_GST_FFMPEG && BR2_PACKAGE_VLC_POSTPROC) selects BR2_PACKAGE_FFMPEG_POSTPROC which has unmet direct dependencies (BR2_PACKAGE_FFMPEG && BR2_PACKAGE_FFMPEG_GPL)
-warning: (BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG && BR2_PACKAGE_VLC_SVG) selects BR2_PACKAGE_LIBRSVG which has unmet direct dependencies (BR2_PACKAGE_LIBGTK2 && BR2_USE_WCHAR)
-warning: (BR2_PACKAGE_GST_FFMPEG && BR2_PACKAGE_VLC_POSTPROC) selects BR2_PACKAGE_FFMPEG_POSTPROC which has unmet direct dependencies (BR2_PACKAGE_FFMPEG && BR2_PACKAGE_FFMPEG_GPL)
+--- Comment #19 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-08-21 12:00:16 UTC ---
+Original problem is "solved": it is an upstream glib2 bug which has been
+reported at https://bugzilla.gnome.org/show_bug.cgi?id=679993.
 
-Also, could you update the patch to include licensing informations, and
-use the $(eval $(autotools-package)) line at the end of the .mk file?
-
-I've started testing the patch, but downloading all the dependencies
-over 3G is very inconvenient. If nobody works on this in the mean time,
-I'll try to have a look when I get access to a proper Internet
-connection.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
