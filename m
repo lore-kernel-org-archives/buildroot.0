@@ -1,59 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Aug 2012 23:17:14 +0200
-Subject: [Buildroot] BR2_SOURCEFORGE_MIRROR issue in package .mk files
-In-Reply-To: <5033F5D8.2090706@petroprogram.com>
-References: <CAJkQPO=k7cmM46OXekN1s6n-Whk8_AG5hs37Q=ELgvzoVOj8XA@mail.gmail.com>
- <201208212204.55029.yann.morin.1998@free.fr>
- <5033F5D8.2090706@petroprogram.com>
-Message-ID: <201208212317.14834.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 21 Aug 2012 23:30:39 +0200
+Subject: [Buildroot] [PATCH] libpng: bump version and add apng support
+ (required by firefox)
+In-Reply-To: <5024D8B5.2020605@petroprogram.com>
+References: <50240DDE.4000901@petroprogram.com>
+ <20120810090232.7ca6f885@skate> <5024D8B5.2020605@petroprogram.com>
+Message-ID: <5033FDFF.7090704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+On 08/10/12 11:47, Stefan Fr?berg wrote:
+> Good morning Thomas
+>
+> 10.8.2012 10:02, Thomas Petazzoni kirjoitti:
 
-On Tuesday 21 August 2012 22:55:52 Stefan Fr?berg wrote:
-> 21.8.2012 23:04, Yann E. MORIN kirjoitti:
-[--SNIP--]
-> > In buildroot, it could be written thus:
-> > BOOST_SITE = sf://boost/boost/$(BOOST_VERSION)
-> >
-> > with 'sf://' automatically turned by the pkg-infa into the canonical SF
-> > download base URL:
-> >   http://downloads.sourceforge.net/project/
-> >
-> > and thus giving the full URL:
-> >   http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)/$(BOOST_SOURCE)
-> Thank you!
-> 
-> That sf:// thing did not work for me
+[snip]
+>>   (3) Is this apng feature something that is being integrated in the
+>>       upstream version of libpng? In Buildroot, we don't like carrying
+>>       patches that add features to packages. Imagine we later want to
+>>       bump libpng to version 1.5.10 or 1.5.11, we'd have to refresh the
+>>       patch, which becomes complicated if we accumulate many large
+>>       patches.
+>
+> That's a good guestion.
+>
+> I had to check from http://en.wikipedia.org/wiki/APNG
+> and it says the following:
+>
+> "The PNG group officially rejected APNG as an official extension on
+> April 20, 2007.[3]
+> There have been several subsequent proposals for a simple animated
+> graphics format based on PNG using several different approaches.[4]
+>
+> Mozilla Firefox added support for APNG in version 3 trunk builds on
+> March 23, 2007.[5]
+> However, because libpng is the PNG Group's reference implementation of
+> the official specification,
+> APNG support can never be supported in the main libpng distribution so
+> long as it remains
+> unratified by the Group. Iceweasel 3 now supports APNG by using
+> Mozilla's unofficial variant of libpng."
 
-Of course not! Maybe I was not clear, but that was *only* a suggestion! ;-)
+  The most logical solution for me seems to be to add a libapng package
+that uses the Mozilla code base.  Of course, that introduces the same
+variants mess we have for expat/libxml2 and lua/luajit.
 
-> but I tried this with libpng and
-> changed LIBPNG_SITE to:
-> 
-> LIBPNG_SITE =
-> http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/${LIBPNG_VERSION}
-[--SNIP--]
-> Works nicely !  :-)
-
-What's even better, is that downloads.sf.net should pick a mirror that is
-near to you (in terms of network), and that is not over-loaded. So I think
-it would better to use than use a fixed mirror.
-
-I'll submit a patch shortly to switch all packages to use that. I'll even
-see if I can implement my sf:// scheme, just as a proof-of-concept. ;-)
-
-Regards,
-Yann E. MORIN.
-
+  Regards,
+  Arnout
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
