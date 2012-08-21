@@ -1,39 +1,134 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 20 Aug 2012 22:23:50 +0200
-Subject: [Buildroot] [PATCH v3 2/2] libglib2: fix install even if the
- host python binary refers to python3
-In-Reply-To: <20120820205652.44db93f9@skate>
-References: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
- <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
- <20120717102211.0a8f59b9@skate>
- <CAHXCMMLFnfw9qUaOcScsNKH10sS8JTHUBiRUHvNNKXT3dk69JQ@mail.gmail.com>
- <CAHXCMMKrACc1zJpBMFr6iPLPCH-YTbzV9X=tggLy4pQ_c=tXWQ@mail.gmail.com>
- <20120820205652.44db93f9@skate>
-Message-ID: <CAHXCMMKAYpTTxppz53XH4_Z5+DjEWJiQzfUy8GMPs53BQ_5t7g@mail.gmail.com>
+From: Sonic Zhang <sonic.adi@gmail.com>
+Date: Tue, 21 Aug 2012 12:45:48 +0800
+Subject: [Buildroot] [PATCH 1/2 v2] buildroot: target: Add Blackfin
+	architecture support.
+Message-ID: <1345524349-709-1-git-send-email-sonic.adi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Sonic Zhang <sonic.zhang@analog.com>
 
-2012/8/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-[...]
->
-> Excellent! Thanks a lot for the follow-up work. I will discard your
-> previous patches from the patchwork, and we'll wait for your new patch
-> integrating the upstream glib solution for this.
-Here it is:
-http://patchwork.ozlabs.org/patch/178456/
+1) Add blackfin cpu type option and install shared library
+of different ABI option to target/Config.in.
+2) Add makefile targets to install shared library of different ABI into
+rootfs image.
 
-> Thanks again for working on this!
-de nada ;)
+Signed-off-by: Sonic Zhang <sonic.zhang@analog.com>
+---
+ target/Config.in.arch |   47 +++++++++++++++++++++++++++++++++++++++++++++++
+ target/Makefile.in    |   24 ++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 0 deletions(-)
 
-
-Cheers,
-
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 342066e..54c7fa0 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -131,6 +131,15 @@ config BR2_xtensa
+ 	  http://www.tensilica.com/
+ endchoice
+ 
++config BR2_ABI_FLAT
++	bool
++	default n
++
++config BR2_ABI_ELF
++	bool
++	default y
++	depends on !BR2_ABI_FLAT
++
+ config BR2_microblaze
+ 	bool
+ 	default y if BR2_microblazeel || BR2_microblazebe
+@@ -230,13 +239,45 @@ choice
+ 	default BR2_BFIN_FDPIC
+ config BR2_BFIN_FDPIC
+ 	bool "FDPIC"
++	select BR2_ABI_ELF
+ config BR2_BFIN_FLAT
+ 	bool "FLAT"
++	select BR2_ABI_FLAT
++	select BR2_PREFER_STATIC_LIB
++config BR2_BFIN_FLAT_SEP_DATA
++	bool "FLAT (Separate data)"
++	select BR2_ABI_FLAT
++	select BR2_PREFER_STATIC_LIB
++config BR2_BFIN_SHARED_FLAT
++	bool "Shared FLAT"
++	select BR2_ABI_FLAT
+ 	select BR2_PREFER_STATIC_LIB
+ endchoice
+ 
+ choice
+ 	prompt "Target Architecture Variant"
++	depends on BR2_bfin
++	default BR2_bf609
++	help
++	  Specific CPU variant to use
++config BR2_bf609
++	bool "bf609"
++config BR2_bf537
++	bool "bf537"
++endchoice
++
++config BR2_BFIN_INSTALL_ELF_SHARED
++	depends on BR2_bfin && !BR2_BFIN_FDPIC
++	bool "Install ELF shared libraries"
++	default y
++
++config BR2_BFIN_INSTALL_FLAT_SHARED
++	depends on BR2_bfin && !BR2_BFIN_SHARED_FLAT
++	bool "Install FLAT shared libraries"
++	default y
++
++choice
++	prompt "Target Architecture Variant"
+ 	depends on BR2_mips || BR2_mipsel
+ 	default BR2_mips_3 if BR2_mips
+ 	default BR2_mips_1 if BR2_mipsel
+@@ -876,3 +917,9 @@ config BR2_GCC_TARGET_CPU
+ 	default sparchfleonv8	if BR2_sparc_sparchfleonv8
+ 	default sparcsfleon	if BR2_sparc_sparcsfleon
+ 	default sparcsfleonv8	if BR2_sparc_sparcsfleonv8
++	default bf609		if BR2_bf609
++	default bf537		if BR2_bf537
++
++config BR2_GCC_TARGET_CPU_REVISION
++	string "Target CPU revision"
++
+diff --git a/target/Makefile.in b/target/Makefile.in
+index 915d625..5c285ed 100644
+--- a/target/Makefile.in
++++ b/target/Makefile.in
+@@ -1,3 +1,27 @@
+ # make sure to put everything that is board-specific before the tarroot targets
++TARGETS-y =
++TARGETS-$(BR2_BFIN_INSTALL_ELF_SHARED) += romfs.shared.libs.elf
++TARGETS-$(BR2_BFIN_INSTALL_FLAT_SHARED) += romfs.shared.libs.flat
++TARGETS += $(TARGETS-y)
++
++CROSS_COMPILE_SHARED_ELF ?= bfin-linux-uclibc-
++romfs.shared.libs.elf:
++	set -e; \
++	t=`$(CROSS_COMPILE_SHARED_ELF)gcc $(CPUFLAGS) -print-file-name=libc.a`; \
++	t=`dirname $$t`/../..; \
++	for i in $$t/lib/*so*; do \
++		i=`readlink -f "$$i"`; \
++		soname=`$(CROSS_COMPILE_SHARED_ELF)readelf -d "$$i" | sed -n '/(SONAME)/s:.*[[]\(.*\)[]].*:\1:p'`; \
++		$(INSTALL) -D $$i $(TARGET_DIR)/lib/$$soname; \
++	done
++
++CROSS_COMPILE_SHARED_FLAT ?= bfin-uclinux-
++romfs.shared.libs.flat:
++	set -e; \
++	t=`$(CROSS_COMPILE_SHARED_FLAT)gcc $(CPUFLAGS) -mid-shared-library -print-file-name=libc`; \
++	if [ -f $$t -a ! -h $$t ] ; then \
++		$(INSTALL) -D $$t $(TARGET_DIR)/lib/lib1.so; \
++	fi
++
+ include target/generic/Makefile.in
+ 
 -- 
-Sam
+1.7.0.4
