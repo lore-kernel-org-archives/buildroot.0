@@ -1,32 +1,32 @@
-From: Stefan Froberg <stefan.froberg@petroprogram.com>
-Date: Tue, 21 Aug 2012 16:48:28 +0300
-Subject: [Buildroot] [PATCH] python: firefox host-python dependency needs
-	--enable-unicodedata
-Message-ID: <1345556908-9189-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Aras Vaichas <aras.vaichas@gmail.com>
+Date: Tue, 21 Aug 2012 16:51:07 +0100
+Subject: [Buildroot] BR2_SOURCEFORGE_MIRROR issue in package .mk files
+Message-ID: <CAJkQPO=k7cmM46OXekN1s6n-Whk8_AG5hs37Q=ELgvzoVOj8XA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I was rebuilding my Buildroot when I noticed that the
+kent.dl.sourceforge.net mirror is down and my build fails.
 
-Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
----
- package/python/python.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I encountered this same problem the other day with crosstool-ng, and
+soon afterwards a patch was posted:
+http://sourceware.org/ml/crossgcc/2012-08/msg00066.html
 
-diff --git a/package/python/python.mk b/package/python/python.mk
-index fae4e5c..6a79584 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -22,7 +22,7 @@ HOST_PYTHON_CONF_OPT += 	\
- 	--disable-curses	\
- 	--disable-codecs-cjk	\
- 	--disable-nis		\
--	--disable-unicodedata	\
-+	--enable-unicodedata	\
- 	--disable-dbm		\
- 	--disable-gdbm		\
- 	--disable-bsddb		\
--- 
-1.7.7.6
+I looked at changing BR2_SOURCEFORGE_MIRROR but unfortunately
+Buildroot only allows BR2_SOURCEFORGE_MIRROR to replace *part* of the
+Sourceforge URL
+
+e.g. in buildroot/package/boost/boost.mk:
+BOOST_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/boost
+
+Should it be changed to:
+http://$(BR2_SOURCEFORGE_MIRROR).sourceforge.net/sourceforge/boost
+
+Comments?
+
+regards,
+
+Aras Vaichas
