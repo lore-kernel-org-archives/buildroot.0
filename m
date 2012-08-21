@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 12:09:23 +0200
-Subject: [Buildroot] [git commit] syslinux: add license information
-Message-ID: <20120821110311.E533997206@busybox.osuosl.org>
+Date: Tue, 21 Aug 2012 12:09:16 +0200
+Subject: [Buildroot] [git commit] barebox: add license information
+Message-ID: <20120821110311.C2CDB9724C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f13cb75fb7cbc5ac3ad69252bd10e1709aa4c450
+commit: http://git.buildroot.net/buildroot/commit/?id=de2ac17e461ba233167985499846a4ae1e9961b7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/syslinux/syslinux.mk |    3 +++
+ boot/barebox/barebox.mk |    3 +++
  1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 7df342f..f63f2e0 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -8,6 +8,9 @@ SYSLINUX_VERSION = 4.05
- SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
- SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index e5e2558..3641c1d 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -20,6 +20,9 @@ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE = http://www.barebox.org/download/
+ endif
  
-+SYSLINUX_LICENSE = GPLv2+
-+SYSLINUX_LICENSE_FILES = COPYING
++BAREBOX_LICENSE = GPLv2+
++BAREBOX_LICENSE_FILES = COPYING
 +
- SYSLINUX_INSTALL_TARGET = NO
- SYSLINUX_INSTALL_IMAGES = YES
- 
+ ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+ define BAREBOX_APPLY_CUSTOM_PATCHES
+ 	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
