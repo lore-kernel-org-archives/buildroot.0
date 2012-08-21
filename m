@@ -1,32 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Aug 2012 00:25:20 +0200
-Subject: [Buildroot] [PATCH] valgrind: valgrind/valgrind.h missing if
- --disable-tls enabled
-In-Reply-To: <1344801370-14582-2-git-send-email-stefan.froberg@petroprogram.com>
-References: <1344801370-14582-1-git-send-email-stefan.froberg@petroprogram.com>
- <1344801370-14582-2-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <50340AD0.501@mind.be>
+Date: Wed, 22 Aug 2012 00:49:21 +0200
+Subject: [Buildroot] [PATCH 5/5] buildroot: initramfs: Generate vmImage
+ without builtin initramfs rootfs.
+In-Reply-To: <CAJxxZ0NiToOrkAbk2Wd=YBJyAmVEMd108hHN2NhfwBBvd=efOQ@mail.gmail.com>
+References: <1344330577-25159-1-git-send-email-sonic.adi@gmail.com>
+ <1344330577-25159-5-git-send-email-sonic.adi@gmail.com>
+ <20120811201335.09a3082e@skate>
+ <CAJxxZ0NiToOrkAbk2Wd=YBJyAmVEMd108hHN2NhfwBBvd=efOQ@mail.gmail.com>
+Message-ID: <50341071.90108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/12/12 21:56, Stefan Froberg wrote:
-> +ifeq ($(BR2_GCC_ENABLE_TLS),y)
-> +	VALGRIND_CONF_OPT = --enable-tls
-> +else
-> +	VALGRIND_CONF_OPT = --disable-tls
-> +endif
+On 08/13/12 12:32, Sonic Zhang wrote:
+> This patch generates a pure kernel image (vmImage) for developers
+> convenience in addition to the uImage which has initramfs linked in.
 
-  This will only work for buildroot toolchains, not for crosstool-NG or external
-toolchains...
+  This sentence makes a much clearer commit message :-)
 
-
+  Also, I would call this image $(LINUX_IMAGE_NAME)-noinitramfs rather than
+vmImage.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
