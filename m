@@ -1,31 +1,21 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 21 Aug 2012 12:38:29 +0100
-Subject: [Buildroot] [PATCH 2/4] zeromq: add license information
-In-Reply-To: <20120821124200.59ffab03@skate>
-References: <1345406924-6574-1-git-send-email-spdawson@gmail.com>
- <1345406924-6574-2-git-send-email-spdawson@gmail.com>
- <20120821124200.59ffab03@skate>
-Message-ID: <CAHt8ZCN0P9_xEWzKhWcKLy=WixYoE8ZtVS0WYkmxT_Cu8ufrow@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Aug 2012 11:53:52 +0000 (UTC)
+Subject: [Buildroot] [Bug 5450] AT91SAM9260 Bootstrap compilation problem
+In-Reply-To: <bug-5450-163@https.bugs.busybox.net/>
+References: <bug-5450-163@https.bugs.busybox.net/>
+Message-ID: <20120821115352.80A9597244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21 August 2012 11:42, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Sun, 19 Aug 2012 21:08:42 +0100,
-> spdawson at gmail.com a ?crit :
->
->> +ZEROMQ_LICENSE = GPLv3+
->> +ZEROMQ_LICENSE_FILES = COPYING
->
-> No. Most of ZeroMQ is apparently under the LGPLv3+, but the
-> COPYING.LESSER contains a special exception. This needs to be encoded
-> differently.
+https://bugs.busybox.net/show_bug.cgi?id=5450
 
-Okay; thanks Thomas. It's not clear to me how properly to express that
-using the package license variables; I'll wait to see if there are any
-suggestions.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-08-21 11:53:52 UTC ---
+Any news?
 
-Simon.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
