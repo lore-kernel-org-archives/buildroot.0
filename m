@@ -1,22 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 13:00:55 +0200
-Subject: [Buildroot] [PATCH 1/8] alsa-lib: add license info
-In-Reply-To: <1345407510-10058-1-git-send-email-danomimanchego123@gmail.com>
-References: <1345407510-10058-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20120821130055.2f7e13fa@skate>
+Date: Tue, 21 Aug 2012 13:19:48 +0200
+Subject: [Buildroot] [PATCH 01/10] perl: new package
+In-Reply-To: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
+References: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20120821131948.5e59085b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 19 Aug 2012 16:18:23 -0400,
-Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
+Hello Fran?ois,
 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Le Mon, 20 Aug 2012 10:55:00 +0200,
+Francois Perrad <fperrad@gmail.com> a ?crit :
 
-Thanks. I have applied all patches except patch 6/8 on fontconfig, due
-to the specific comment I sent on it.
+> ---
+>  package/Config.in                      |    1 +
+>  package/perl/Config.in                 |   16 +++++
+>  package/perl/perl-Makefile-SH.patch    |   28 ++++++++
+>  package/perl/perl-configure-qemu.patch |   22 +++++++
+>  package/perl/perl-fix-minitest.patch   |   96 +++++++++++++++++++++++++++
+>  package/perl/perl-make-ext.patch       |   35 ++++++++++
+>  package/perl/perl-mkppport.patch       |   36 ++++++++++
+>  package/perl/perl.mk                   |  112 ++++++++++++++++++++++++++++++++
+>  8 files changed, 346 insertions(+)
+>  create mode 100644 package/perl/Config.in
+>  create mode 100644 package/perl/perl-Makefile-SH.patch
+>  create mode 100644 package/perl/perl-configure-qemu.patch
+>  create mode 100644 package/perl/perl-fix-minitest.patch
+>  create mode 100644 package/perl/perl-make-ext.patch
+>  create mode 100644 package/perl/perl-mkppport.patch
+>  create mode 100644 package/perl/perl.mk
+
+Thanks for this work on Perl. However, I find it lacks a bit of
+background information. What is your patch series doing? Why would we
+want to have three separate packages for Perl (perl, miniperl and
+microperl)? We need some details to understand what you're proposing.
 
 Thanks!
 
