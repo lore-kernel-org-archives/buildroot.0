@@ -1,41 +1,58 @@
-From: Shawn Goff <shawnjgoff@gmail.com>
-Date: Tue, 21 Aug 2012 09:12:46 -0400
-Subject: [Buildroot] [PATCH] ifplugd: add --with-initdir= to config
-	command
-In-Reply-To: <20120821115651.7908bfa9@skate>
-References: <1345298656-12714-1-git-send-email-shawnjgoff@gmail.com>
- <20120821115651.7908bfa9@skate>
-Message-ID: <CABYt4-bHDJt9sQd4OyebD-4xg8EU+4ppFJv6y9HEBWFPBs4NDQ@mail.gmail.com>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Tue, 21 Aug 2012 16:37:52 +0300
+Subject: [Buildroot] [PATCH] python: firefox host-python dependency
+ needs --enable-unicodedata
+In-Reply-To: <20120821132339.45b28565@skate>
+References: <1345057226-18726-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1345057226-18726-2-git-send-email-stefan.froberg@petroprogram.com>
+ <20120821132339.45b28565@skate>
+Message-ID: <50338F30.7020907@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I mean the configure script fails when building the package.
+Hello Thomas
 
-On Tue, Aug 21, 2012 at 5:56 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+21.8.2012 14:23, Thomas Petazzoni kirjoitti:
+> Le Wed, 15 Aug 2012 22:00:26 +0300,
+> Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
+>
+>> +ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
+>> +	HOST_PYTHON_CONF_OPT += --disable-unicodedata	
+>> +else
+>> +	HOST_PYTHON_CONF_OPT += --enable-unicodedata
+>> +endif
+> No, this is not correct. The BR2_PACKAGE_* options are here to
+> configure the *target* packages. Host packages that are only
+> dependencies to build target packages do not have kconfig options. So
+> in this case, the only solution is to simply use --enable-unicodedata
+> unconditionally to the host-python build.
 
-> Le Sat, 18 Aug 2012 10:04:16 -0400,
-> "Shawn J. Goff" <shawnjgoff@gmail.com> a ?crit :
+Oh, sorry.
+I was just trying to be carefull and not to mess with host-python too much.
+
 >
-> > From: "Shawn J. Goff" <shawnjgoff@gmail.com>
-> >
-> > ifplugd refuses to configure without this set.
->
-> When you say "configure", do you mean the execution of the configure
-> script at build time, or the startup of ifplugd on the target?
->
-> Thanks!
+> Can you post an updated patch with this change?
+
+No problem. I will cook a new lil patch and resend.
+
+
+By the way Thomas, what do you think about these two little changes to
+SQLite and Valgrind ?
+
+http://lists.busybox.net/pipermail/buildroot/2012-August/057377.html
+
+http://lists.busybox.net/pipermail/buildroot/2012-August/057379.html
+
+
+I also noticed that you accepted yasm and that little cairo patch for
+next version.
+Thank you!
+
+Stefan
+
+> Thanks,
 >
 > Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120821/dfbc80c8/attachment-0001.html>
