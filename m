@@ -1,21 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 12:03:09 +0200
-Subject: [Buildroot] [PATCH] docs/manual: fix cross-reference
-In-Reply-To: <1345327135-30445-1-git-send-email-yann.morin.1998@free.fr>
-References: <1345327135-30445-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20120821120309.6280661d@skate>
+Date: Tue, 21 Aug 2012 12:09:51 +0200
+Subject: [Buildroot] [PATCH 1/5] barebox: add license information
+In-Reply-To: <1345281941-6722-1-git-send-email-spdawson@gmail.com>
+References: <1345281941-6722-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120821120951.7ff81228@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 18 Aug 2012 23:58:55 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+Le Sat, 18 Aug 2012 10:25:37 +0100,
+spdawson at gmail.com a ?crit :
 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-Applied, thanks!
+Applied all 5 patches, thanks. But please also look at the gpsd build
+issue!
+
+Thanks,
 
 Thomas
 -- 
