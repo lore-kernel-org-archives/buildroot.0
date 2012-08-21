@@ -1,42 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Aug 2012 18:31:57 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libnspr: add pkg-config file
-In-Reply-To: <20120821111439.1a46d367@skate>
-References: <1345294543-13671-1-git-send-email-yann.morin.1998@free.fr>
- <20120821111439.1a46d367@skate>
-Message-ID: <201208211831.57392.yann.morin.1998@free.fr>
+Date: Tue, 21 Aug 2012 18:59:58 +0200
+Subject: [Buildroot] BR2_SOURCEFORGE_MIRROR issue in package .mk files
+In-Reply-To: <CAJkQPO=k7cmM46OXekN1s6n-Whk8_AG5hs37Q=ELgvzoVOj8XA@mail.gmail.com>
+References: <CAJkQPO=k7cmM46OXekN1s6n-Whk8_AG5hs37Q=ELgvzoVOj8XA@mail.gmail.com>
+Message-ID: <201208211859.59357.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Aras, All,
 
-On Tuesday 21 August 2012 11:14:39 Thomas Petazzoni wrote:
-> Le Sat, 18 Aug 2012 14:55:42 +0200,
-> "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+On Tuesday 21 August 2012 17:51:07 Aras Vaichas wrote:
+> I was rebuilding my Buildroot when I noticed that the
+> kent.dl.sourceforge.net mirror is down and my build fails.
 > 
-> > Some packages use pkg-config to check for libnspr.
-> > libnspr does bundle a .pc file, but it is not installed.
-> 
-> Here you're saying that libnspr bundles a .pc file... but
-> 
-> > diff --git a/package/libnspr/nspr.pc.in b/package/libnspr/nspr.pc.in
-> > new file mode 100644
-> > index 0000000..3719260
-> > --- /dev/null
-> > +++ b/package/libnspr/nspr.pc.in
-> 
-> here you're adding it to Buildroot. I'm confused. Could you explain? :-)
+> I encountered this same problem the other day with crosstool-ng, and
+> soon afterwards a patch was posted:
+> http://sourceware.org/ml/crossgcc/2012-08/msg00066.html
 
-Bah, I guess I was cafeine-deprived when I wrote this... libnspr does *not*
-bundle a .pc file. I don't know where I saw one: I just re-extracted the
-sources, and there's clearly no pkg-config file in there...
+.. and has been applied and pushed! ;-)
 
-I'll reword the commit message and resubmit.
+> I looked at changing BR2_SOURCEFORGE_MIRROR but unfortunately
+> Buildroot only allows BR2_SOURCEFORGE_MIRROR to replace *part* of the
+> Sourceforge URL
+> 
+> e.g. in buildroot/package/boost/boost.mk:
+> BOOST_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/boost
+> 
+> Should it be changed to:
+> http://$(BR2_SOURCEFORGE_MIRROR).sourceforge.net/sourceforge/boost
 
-Thanks for the review.
+I guess the correct solution would be to use their mirror-selector (as is
+done for ct-ng, as you point out):
+  http://downloads.sourceforge.net/blablabla
+
+This will redirect to an active mirror, and we can get rid of this
+SF mirror selection.
+
+To be noted, the SF mirrors can come and go without notice. kent, who used
+to be a reliable one, has disapeared a few days ago.
 
 Regards,
 Yann E. MORIN.
