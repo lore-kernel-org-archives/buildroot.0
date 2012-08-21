@@ -1,112 +1,570 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 09:35:27 +0200
-Subject: [Buildroot] Best way of building for unknown architecture
-In-Reply-To: <12889.25157.bm@smtp148.mail.ukl.yahoo.com>
-References: <760828.46392.bm@smtp116.mail.ukl.yahoo.com>
- <20120817194310.25198340@skate>
- <12889.25157.bm@smtp148.mail.ukl.yahoo.com>
-Message-ID: <20120821093527.2dd03b31@skate>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Tue, 21 Aug 2012 15:53:35 +0800
+Subject: [Buildroot]  [PATCH resend] mplayer: Update to version 1.1.
+Message-ID: <1345535615-2553-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Update to version 1.1 (r34994).
 
-Le Mon, 20 Aug 2012 17:27:49 +0100,
-Kevin Chadwick <ma1l1ists@yahoo.co.uk> a ?crit :
+remove --enable-largefiles configure option which was
+deleted in r33321.
 
-> This patch seems to add the --with-arch="armv7-m" and
-> --with-tune="cortex-m3" when cortex-m3 is selected.
+Discard mplayer-theora-fix.patch which is a backport
+of r34498 and r34503.
 
-Correct.
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+ .../mplayer-1.0rc3-disable-install-strip.patch     |   24 --
+ .../mplayer/mplayer-1.0rc3-fix-cc-parsing.patch    |   22 --
+ .../mplayer-1.1-disable-install-strip.patch        |   24 ++
+ .../mplayer/mplayer-1.1-fix-cc-parsing.patch       |   22 ++
+ .../multimedia/mplayer/mplayer-theora-fix.patch    |  374 --------------------
+ package/multimedia/mplayer/mplayer.mk              |   21 +-
+ 6 files changed, 51 insertions(+), 436 deletions(-)
+ delete mode 100644 package/multimedia/mplayer/mplayer-1.0rc3-disable-install-strip.patch
+ delete mode 100644 package/multimedia/mplayer/mplayer-1.0rc3-fix-cc-parsing.patch
+ create mode 100644 package/multimedia/mplayer/mplayer-1.1-disable-install-strip.patch
+ create mode 100644 package/multimedia/mplayer/mplayer-1.1-fix-cc-parsing.patch
+ delete mode 100644 package/multimedia/mplayer/mplayer-theora-fix.patch
 
-> www.linux-arm.org/LinuxKernel/LinuxM3 suggests that the following
-> should be added to build busybox
-> 
-> -mthumb -Wl,-elf2flt=-s -Wl,-elf2flt=16384
-
--mthumb can be added to the BR2_TARGET_OPTIMIZATION option, though at
-some point, it might be good to add an option to build ARM code with
-the ARM instruction set, or the Thumb instruction set, or the Thumb-2
-instruction set.
-
-The elf2flt option define the stack size, and we have a similar need
-for Blackfin. Maybe we need to define a "Flat" ABI for ARM, and when
-this option is enabled, offer an option to define the default stack
-size passed to elf2flt.
-
-> and I think
-> 
-> -mfloat-abi=soft might be a good idea for this cpu too
-
-If you select BR2_PREFER_SOFT_FLOAT, then the compiler will be built to
-generate soft float code by default, so there's nothing to do.
-
-> I have successfully built arm binaries with the inbuilt toolchain
-> manually using
-> 
-> -march=armv7-m -mtune=cortex-m3 -mthumb -mfloat-abi=soft
-> 
-> but the -Wl linker option flags fail and I am not sure how to add
-> -mthumb and -mfloat-abi=soft to buildroot though it does already have
-> --with-float=soft enabled?
-
-Hum, I would have to test myself to give more details here.
-
-> I wanted to test it so I extracted a fresh buildroot and pointed the
-> external chain to the already built uclibc internal toolchain
-> (built before patching with above) where I had selected NO_MMU before
-> building.
-> 
-> When I ran make I got
-> 
-> Checking external toolchain settings
-> MMU support available in C library, please enable BR2_USE_MMU
-> 
-> This chip has no MMU but does have an MPU, do I need to rebuild the
-> toolchain with this patch, bypass/fix this error or enable MMU and
-> select not to use MMU or something else?
-
-It is due to the fact that the uClibc headers define __ARCH_USE_MMU__.
-This is because uClibc has been built with MMU support. In fact, the
-Buildroot toolchain backend for now doesn't support building non-MMU
-toolchains. But it could probably be added relatively easily.
-
-In toolchain/uClibc/uclibc.mk, you would have to tweak the
-uClibc .config (like we already do for many options) so as to disable
-the ARCH_USE_MMU uClibc option when BR2_USE_MMU is disabled.
-
-Something along the lines of (completely untested):
-
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 9d0b6db..0eb11c0 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -245,6 +245,9 @@ ifneq ($(UCLIBC_TARGET_ENDIAN),)
-                -e 's/.*\(ARCH_WANTS_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
-                $(UCLIBC_DIR)/.oldconfig
+diff --git a/package/multimedia/mplayer/mplayer-1.0rc3-disable-install-strip.patch b/package/multimedia/mplayer/mplayer-1.0rc3-disable-install-strip.patch
+deleted file mode 100644
+index 644d292..0000000
+--- a/package/multimedia/mplayer/mplayer-1.0rc3-disable-install-strip.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Disable stripping on installation
+-
+-Using the -s option of install does not work, as it uses the host
+-strip instead of the cross strip. So, get rid of it, and let Buildroot
+-handle the stripping.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: mplayer-32710/configure
+-===================================================================
+---- mplayer-32710.orig/configure
+-+++ mplayer-32710/configure
+-@@ -2519,7 +2519,7 @@
+- 
+- 
+- # Checking for CFLAGS
+--_install_strip="-s"
+-+_install_strip=
+- if test "$_profile" != "" || test "$_debug" != "" ; then
+-   CFLAGS="-O2 $_march $_mcpu $_pipe $_debug $_profile"
+-   WARNFLAGS="-W -Wall"
+diff --git a/package/multimedia/mplayer/mplayer-1.0rc3-fix-cc-parsing.patch b/package/multimedia/mplayer/mplayer-1.0rc3-fix-cc-parsing.patch
+deleted file mode 100644
+index a3ba03f..0000000
+--- a/package/multimedia/mplayer/mplayer-1.0rc3-fix-cc-parsing.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] mplayer: fix --cc= parsing if the value contains equal signs (=)
+-
+-E.G. if -cc="$CROSS-gcc --sysroot=<SYSROOT>" is passed.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- configure |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: mplayer-32710/configure
+-===================================================================
+---- mplayer-32710.orig/configure
+-+++ mplayer-32710/configure
+-@@ -870,7 +870,7 @@
+-     _target=$(echo $ac_option | cut -d '=' -f 2)
+-     ;;
+-   --cc=*)
+--    _cc=$(echo $ac_option | cut -d '=' -f 2)
+-+    _cc=$(echo $ac_option | cut -d '=' -f 2-)
+-     ;;
+-   --host-cc=*)
+-     _host_cc=$(echo $ac_option | cut -d '=' -f 2)
+diff --git a/package/multimedia/mplayer/mplayer-1.1-disable-install-strip.patch b/package/multimedia/mplayer/mplayer-1.1-disable-install-strip.patch
+new file mode 100644
+index 0000000..644d292
+--- /dev/null
++++ b/package/multimedia/mplayer/mplayer-1.1-disable-install-strip.patch
+@@ -0,0 +1,24 @@
++Disable stripping on installation
++
++Using the -s option of install does not work, as it uses the host
++strip instead of the cross strip. So, get rid of it, and let Buildroot
++handle the stripping.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: mplayer-32710/configure
++===================================================================
++--- mplayer-32710.orig/configure
+++++ mplayer-32710/configure
++@@ -2519,7 +2519,7 @@
++ 
++ 
++ # Checking for CFLAGS
++-_install_strip="-s"
+++_install_strip=
++ if test "$_profile" != "" || test "$_debug" != "" ; then
++   CFLAGS="-O2 $_march $_mcpu $_pipe $_debug $_profile"
++   WARNFLAGS="-W -Wall"
+diff --git a/package/multimedia/mplayer/mplayer-1.1-fix-cc-parsing.patch b/package/multimedia/mplayer/mplayer-1.1-fix-cc-parsing.patch
+new file mode 100644
+index 0000000..a3ba03f
+--- /dev/null
++++ b/package/multimedia/mplayer/mplayer-1.1-fix-cc-parsing.patch
+@@ -0,0 +1,22 @@
++[PATCH] mplayer: fix --cc= parsing if the value contains equal signs (=)
++
++E.G. if -cc="$CROSS-gcc --sysroot=<SYSROOT>" is passed.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ configure |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: mplayer-32710/configure
++===================================================================
++--- mplayer-32710.orig/configure
+++++ mplayer-32710/configure
++@@ -870,7 +870,7 @@
++     _target=$(echo $ac_option | cut -d '=' -f 2)
++     ;;
++   --cc=*)
++-    _cc=$(echo $ac_option | cut -d '=' -f 2)
+++    _cc=$(echo $ac_option | cut -d '=' -f 2-)
++     ;;
++   --host-cc=*)
++     _host_cc=$(echo $ac_option | cut -d '=' -f 2)
+diff --git a/package/multimedia/mplayer/mplayer-theora-fix.patch b/package/multimedia/mplayer/mplayer-theora-fix.patch
+deleted file mode 100644
+index 08bb29b..0000000
+--- a/package/multimedia/mplayer/mplayer-theora-fix.patch
++++ /dev/null
+@@ -1,374 +0,0 @@
+-[PATCH] fix libtheora linking issue with modern theora versions
+-
+-This is a squash/backport of upstream r34498 (configure: Simplify
+-Theora check) and r34503 (Port libtheora glue code to Theora 1.0 API).
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- configure               |   56 ++++--------------------------------
+- libmpcodecs/vd_theora.c |   74 +++++++++++++++++++++++++-----------------------
+- libmpdemux/demux_ogg.c  |   54 ++++++++++++++++++-----------------
+- 3 files changed, 74 insertions(+), 110 deletions(-)
+-
+-Index: mplayer-32726/configure
+-===================================================================
+---- mplayer-32726.orig/configure
+-+++ mplayer-32726/configure
+-@@ -6404,57 +6404,15 @@
+- echocheck "OggTheora support"
+- if test "$_theora" = auto ; then
+-   _theora=no
+--    cat > $TMPC << EOF
+--#include <theora/theora.h>
+--#include <string.h>
+--int main(void) {
+--  /* Theora is in flux, make sure that all interface routines and datatypes
+--   * exist and work the way we expect it, so we don't break MPlayer. */
+--  ogg_packet op;
+--  theora_comment tc;
+--  theora_info inf;
+--  theora_state st;
+--  yuv_buffer yuv;
+--  int r;
+--  double t;
+--
+--  theora_info_init(&inf);
+--  theora_comment_init(&tc);
+--
+--  return 0;
+--
+--  /* we don't want to execute this kind of nonsense; just for making sure
+--   * that compilation works... */
+--  memset(&op, 0, sizeof(op));
+--  r = theora_decode_header(&inf, &tc, &op);
+--  r = theora_decode_init(&st, &inf);
+--  t = theora_granule_time(&st, op.granulepos);
+--  r = theora_decode_packetin(&st, &op);
+--  r = theora_decode_YUVout(&st, &yuv);
+--  theora_clear(&st);
+--
+--  return 0;
+--}
+--EOF
+--  _ld_theora=$($_pkg_config --silence-errors --libs theora)
+--  _inc_theora=$($_pkg_config --silence-errors --cflags theora)
+--  cc_check $_inc_theora $_ld_theora && extra_ldflags="$extra_ldflags $_ld_theora" &&
+--    extra_cflags="$extra_cflags $_inc_theora" && _theora=yes
+-+  ld_theora="-ltheoradec -logg"
+-+  statement_check theora/theoradec.h 'theora_info_init(NULL)' $ld_theora &&
+-+    extra_ldflags="$extra_ldflags $ld_theora" && _theora=yes
+-   if test _theora = no; then
+--    _ld_theora="-ltheora -logg"
+--    cc_check $_ld_theora && extra_ldflags="$extra_ldflags $_ld_theora" && _theora=yes
+--  fi
+--  if test "$_theora" = no && test "$_tremor_internal" = yes; then
+--    _ld_theora=$($_pkg_config --silence-errors --libs theora)
+--    _inc_theora=$($_pkg_config --silence-errors --cflags theora)
+--    cc_check tremor/bitwise.c $_inc_theora $_ld_theora &&
+-+    _ld_theora=$($_pkg_config --silence-errors --libs theoradec)
+-+    _inc_theora=$($_pkg_config --silence-errors --cflags theoradec)
+-+    statement_check theora/theoradec.h 'theora_info_init(NULL)' $inc_theora $ld_theora &&
+-       extra_ldflags="$extra_ldflags $_ld_theora" &&
+-       extra_cflags="$extra_cflags $_inc_theora" && _theora=yes
+--    if test _theora = no; then
+--      _ld_theora="-ltheora -logg"
+--      cc_check tremor/bitwise.c $_ld_theora &&
+--        extra_ldflags="$extra_ldflags $_ld_theora" && _theora=yes
+--    fi
+-   fi
+- fi
+- if test "$_theora" = yes ; then
+-@@ -6462,7 +6420,7 @@
+-   codecmodules="libtheora $codecmodules"
+-   # when --enable-theora is forced, we'd better provide a probably sane
+-   # $_ld_theora than nothing
+--  test -z "$_ld_theora" && extra_ldflags="$extra_ldflags -ltheora -logg"
+-+  test -z "$_ld_theora" && extra_ldflags="$extra_ldflags -ltheoradec -logg"
+- else
+-   def_theora='#undef CONFIG_OGGTHEORA'
+-   nocodecmodules="libtheora $nocodecmodules"
+-Index: mplayer-32726/libmpcodecs/vd_theora.c
+-===================================================================
+---- mplayer-32726.orig/libmpcodecs/vd_theora.c
+-+++ mplayer-32726/libmpcodecs/vd_theora.c
+-@@ -39,22 +39,23 @@
+- 
+- LIBVD_EXTERN(theora)
+- 
+--#include <theora/theora.h>
+-+#include <theora/theoradec.h>
+- 
+- #define THEORA_NUM_HEADER_PACKETS 3
+- 
+- typedef struct theora_struct_st {
+--    theora_state st;
+--    theora_comment cc;
+--    theora_info inf;
+-+    th_setup_info *tsi;
+-+    th_dec_ctx    *tctx;
+-+    th_comment     tc;
+-+    th_info        ti;
+- } theora_struct_t;
+- 
+- /** Convert Theora pixelformat to the corresponding IMGFMT_ */
+--static uint32_t theora_pixelformat2imgfmt(theora_pixelformat fmt){
+-+static uint32_t theora_pixelformat2imgfmt(th_pixel_fmt fmt){
+-     switch(fmt) {
+--       case OC_PF_420: return IMGFMT_YV12;
+--       case OC_PF_422: return IMGFMT_422P;
+--       case OC_PF_444: return IMGFMT_444P;
+-+       case TH_PF_420: return IMGFMT_YV12;
+-+       case TH_PF_422: return IMGFMT_422P;
+-+       case TH_PF_444: return IMGFMT_444P;
+-     }
+-     return 0;
+- }
+-@@ -64,7 +65,7 @@
+-     theora_struct_t *context = sh->context;
+-     switch(cmd) {
+-     case VDCTRL_QUERY_FORMAT:
+--        if (*(int*)arg == theora_pixelformat2imgfmt(context->inf.pixelformat))
+-+        if (*(int*)arg == theora_pixelformat2imgfmt(context->ti.pixel_fmt))
+- 	    return CONTROL_TRUE;
+- 	return CONTROL_FALSE;
+-     }
+-@@ -88,8 +89,9 @@
+-     if (!context)
+-         goto err_out;
+- 
+--    theora_info_init(&context->inf);
+--    theora_comment_init(&context->cc);
+-+    th_info_init(&context->ti);
+-+    th_comment_init(&context->tc);
+-+    context->tsi = NULL;
+- 
+-     /* Read all header packets, pass them to theora_decode_header. */
+-     for (i = 0; i < THEORA_NUM_HEADER_PACKETS; i++)
+-@@ -109,7 +111,7 @@
+-             op.b_o_s = 1;
+-         }
+- 
+--        if ( (errorCode = theora_decode_header (&context->inf, &context->cc, &op)) )
+-+        if ( (errorCode = th_decode_headerin (&context->ti, &context->tc, &context->tsi, &op)) < 0)
+-         {
+-             mp_msg(MSGT_DECVIDEO, MSGL_ERR, "Broken Theora header; errorCode=%i!\n", errorCode);
+-             goto err_out;
+-@@ -117,23 +119,25 @@
+-     }
+- 
+-     /* now init codec */
+--    errorCode = theora_decode_init (&context->st, &context->inf);
+--    if (errorCode)
+-+    context->tctx = th_decode_alloc (&context->ti, context->tsi);
+-+    if (!context->tctx)
+-     {
+--        mp_msg(MSGT_DECVIDEO,MSGL_ERR,"Theora decode init failed: %i \n", errorCode);
+-+        mp_msg(MSGT_DECVIDEO,MSGL_ERR,"Theora decode init failed\n");
+-         goto err_out;
+-     }
+-+    /* free memory used for decoder setup information */
+-+    th_setup_free(context->tsi);
+- 
+--    if(sh->aspect==0.0 && context->inf.aspect_denominator!=0)
+-+    if(sh->aspect==0.0 && context->ti.aspect_denominator!=0)
+-     {
+--       sh->aspect = ((double)context->inf.aspect_numerator * context->inf.width)/
+--          ((double)context->inf.aspect_denominator * context->inf.height);
+-+       sh->aspect = ((double)context->ti.aspect_numerator * context->ti.frame_width)/
+-+          ((double)context->ti.aspect_denominator * context->ti.frame_height);
+-     }
+- 
+-     mp_msg(MSGT_DECVIDEO,MSGL_V,"INFO: Theora video init ok!\n");
+--    mp_msg(MSGT_DECVIDEO,MSGL_INFO,"Frame: %dx%d, Picture %dx%d, Offset [%d,%d]\n", context->inf.width, context->inf.height, context->inf.frame_width, context->inf.frame_height, context->inf.offset_x, context->inf.offset_y);
+-+    mp_msg(MSGT_DECVIDEO,MSGL_INFO,"Frame: %dx%d, Picture %dx%d, Offset [%d,%d]\n", context->ti.frame_width, context->ti.frame_height, context->ti.pic_width, context->ti.pic_height, context->ti.pic_x, context->ti.pic_y);
+- 
+--    return mpcodecs_config_vo (sh,context->inf.width,context->inf.height,theora_pixelformat2imgfmt(context->inf.pixelformat));
+-+    return mpcodecs_config_vo (sh,context->ti.frame_width,context->ti.frame_height,theora_pixelformat2imgfmt(context->ti.pixel_fmt));
+- 
+- err_out:
+-     free(context);
+-@@ -150,9 +154,9 @@
+- 
+-    if (context)
+-    {
+--      theora_info_clear(&context->inf);
+--      theora_comment_clear(&context->cc);
+--      theora_clear (&context->st);
+-+      th_info_clear(&context->ti);
+-+      th_comment_clear(&context->tc);
+-+      th_decode_free (context->tctx);
+-       free (context);
+-    }
+- }
+-@@ -165,7 +169,7 @@
+-    theora_struct_t *context = sh->context;
+-    int errorCode = 0;
+-    ogg_packet op;
+--   yuv_buffer yuv;
+-+   th_ycbcr_buffer ycbcrbuf;
+-    mp_image_t* mpi;
+- 
+-    // no delayed frames
+-@@ -177,31 +181,31 @@
+-    op.packet = data;
+-    op.granulepos = -1;
+- 
+--   errorCode = theora_decode_packetin (&context->st, &op);
+--   if (errorCode)
+-+   errorCode = th_decode_packetin (context->tctx, &op, NULL);
+-+   if (errorCode < 0)
+-    {
+-       mp_msg(MSGT_DECVIDEO,MSGL_ERR,"Theora decode packetin failed: %i \n",
+- 	     errorCode);
+-       return NULL;
+-    }
+- 
+--   errorCode = theora_decode_YUVout (&context->st, &yuv);
+--   if (errorCode)
+-+   errorCode = th_decode_ycbcr_out (context->tctx, ycbcrbuf);
+-+   if (errorCode < 0)
+-    {
+-       mp_msg(MSGT_DECVIDEO,MSGL_ERR,"Theora decode YUVout failed: %i \n",
+- 	     errorCode);
+-       return NULL;
+-    }
+- 
+--    mpi = mpcodecs_get_image(sh, MP_IMGTYPE_EXPORT, 0, yuv.y_width, yuv.y_height);
+-+    mpi = mpcodecs_get_image(sh, MP_IMGTYPE_EXPORT, 0, ycbcrbuf[0].width, ycbcrbuf[0].height);
+-     if(!mpi) return NULL;
+- 
+--    mpi->planes[0]=yuv.y;
+--    mpi->stride[0]=yuv.y_stride;
+--    mpi->planes[1]=yuv.u;
+--    mpi->stride[1]=yuv.uv_stride;
+--    mpi->planes[2]=yuv.v;
+--    mpi->stride[2]=yuv.uv_stride;
+-+    mpi->planes[0]=ycbcrbuf[0].data;
+-+    mpi->stride[0]=ycbcrbuf[0].stride;
+-+    mpi->planes[1]=ycbcrbuf[1].data;
+-+    mpi->stride[1]=ycbcrbuf[1].stride;
+-+    mpi->planes[2]=ycbcrbuf[2].data;
+-+    mpi->stride[2]=ycbcrbuf[2].stride;
+- 
+-     return mpi;
+- }
+-Index: mplayer-32726/libmpdemux/demux_ogg.c
+-===================================================================
+---- mplayer-32726.orig/libmpdemux/demux_ogg.c
+-+++ mplayer-32726/libmpdemux/demux_ogg.c
+-@@ -49,21 +49,21 @@
+- #endif
+- 
+- #ifdef CONFIG_OGGTHEORA
+--#include <theora/theora.h>
+--int _ilog (unsigned int); /* defined in many places in theora/lib/ */
+-+#include <theora/theoradec.h>
+- #endif
+- 
+- #define BLOCK_SIZE 4096
+- 
+- /* Theora decoder context : we won't be able to interpret granule positions
+-- * without using theora_granule_time with the theora_state of the stream.
+-+ * without using th_granule_time with the th_dec_ctx of the stream.
+-  * This is duplicated in `vd_theora.c'; put this in a common header?
+-  */
+- #ifdef CONFIG_OGGTHEORA
+- typedef struct theora_struct_st {
+--    theora_state   st;
+--    theora_comment cc;
+--    theora_info    inf;
+-+    th_setup_info *tsi;
+-+    th_dec_ctx    *tctx;
+-+    th_comment     tc;
+-+    th_info        ti;
+- } theora_struct_t;
+- #endif
+- 
+-@@ -116,7 +116,7 @@
+-     float   samplerate; /// granulpos 2 time
+-     int64_t lastpos;
+-     int32_t lastsize;
+--    int     keyframe_frequency_force;
+-+    int     keyframe_granule_shift;
+- 
+-     // Logical stream state
+-     ogg_stream_state stream;
+-@@ -299,11 +299,10 @@
+-            have theora_state st, until all header packets were passed to the
+-            decoder. */
+-         if (!pack->bytes || !(*data&0x80)) {
+--            int keyframe_granule_shift = _ilog(os->keyframe_frequency_force - 1);
+--            int64_t iframemask = (1 << keyframe_granule_shift) - 1;
+-+            int64_t iframemask = (1 << os->keyframe_granule_shift) - 1;
+- 
+-             if (pack->granulepos >= 0) {
+--                os->lastpos  = pack->granulepos >> keyframe_granule_shift;
+-+                os->lastpos  = pack->granulepos >> os->keyframe_granule_shift;
+-                 os->lastpos += pack->granulepos & iframemask;
+-                 *flags = (pack->granulepos & iframemask) == 0;
+-             } else {
+-@@ -892,14 +891,15 @@
+- #ifdef CONFIG_OGGTHEORA
+-         } else if (pack.bytes >= 7 && !strncmp (&pack.packet[1], "theora", 6)) {
+-             int errorCode = 0;
+--            theora_info inf;
+--            theora_comment cc;
+-+            th_info ti;
+-+            th_comment tc;
+-+            th_setup_info *tsi = NULL;
+- 
+--            theora_info_init (&inf);
+--            theora_comment_init (&cc);
+-+            th_info_init (&ti);
+-+            th_comment_init (&tc);
+- 
+--            errorCode = theora_decode_header (&inf, &cc, &pack);
+--            if (errorCode) {
+-+            errorCode = th_decode_headerin(&ti, &tc, &tsi, &pack);
+-+            if (errorCode < 0) {
+-                 mp_msg(MSGT_DEMUX, MSGL_ERR,
+-                        "Theora header parsing failed: %i \n", errorCode);
+-             } else {
+-@@ -908,30 +908,32 @@
+-                 sh_v->bih = calloc(1, sizeof(*sh_v->bih));
+-                 sh_v->bih->biSize        = sizeof(*sh_v->bih);
+-                 sh_v->bih->biCompression = sh_v->format = FOURCC_THEORA;
+--                sh_v->fps = ((double)inf.fps_numerator) / (double)inf.fps_denominator;
+--                sh_v->frametime = ((double)inf.fps_denominator) / (double)inf.fps_numerator;
+--                sh_v->disp_w = sh_v->bih->biWidth  = inf.frame_width;
+--                sh_v->disp_h = sh_v->bih->biHeight = inf.frame_height;
+-+                sh_v->fps = ((double)ti.fps_numerator) / (double)ti.fps_denominator;
+-+                sh_v->frametime = ((double)ti.fps_denominator) / (double)ti.fps_numerator;
+-+                sh_v->i_bps  = ti.target_bitrate / 8;
+-+                sh_v->disp_w = sh_v->bih->biWidth  = ti.frame_width;
+-+                sh_v->disp_h = sh_v->bih->biHeight = ti.frame_height;
+-                 sh_v->bih->biBitCount  = 24;
+-                 sh_v->bih->biPlanes    = 3;
+-                 sh_v->bih->biSizeImage = ((sh_v->bih->biBitCount / 8) * sh_v->bih->biWidth * sh_v->bih->biHeight);
+-                 ogg_d->subs[ogg_d->num_sub].samplerate               = sh_v->fps;
+-                 ogg_d->subs[ogg_d->num_sub].theora                   = 1;
+--                ogg_d->subs[ogg_d->num_sub].keyframe_frequency_force = inf.keyframe_frequency_force;
+-+                ogg_d->subs[ogg_d->num_sub].keyframe_granule_shift   = ti.keyframe_granule_shift;
+-                 ogg_d->subs[ogg_d->num_sub].id                       = n_video;
+-                 n_video++;
+-                 mp_msg(MSGT_DEMUX, MSGL_INFO,
+-                        "[Ogg] stream %d: video (Theora v%d.%d.%d), -vid %d\n",
+-                        ogg_d->num_sub,
+--                       (int)inf.version_major,
+--                       (int)inf.version_minor,
+--                       (int)inf.version_subminor,
+-+                       (int)ti.version_major,
+-+                       (int)ti.version_minor,
+-+                       (int)ti.version_subminor,
+-                        n_video - 1);
+-                 if (mp_msg_test(MSGT_HEADER, MSGL_V))
+-                     print_video_header(sh_v->bih, MSGL_V);
+-             }
+--            theora_comment_clear(&cc);
+--            theora_info_clear(&inf);
+-+            th_comment_clear(&tc);
+-+            th_info_clear(&ti);
+-+            th_setup_free(tsi);
+- #endif /* CONFIG_OGGTHEORA */
+-         } else if (pack.bytes >= 4 && !strncmp (&pack.packet[0], "fLaC", 4)) {
+-             sh_a = new_sh_audio_aid(demuxer, ogg_d->num_sub, n_audio, NULL);
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index f4fedf4..f4c8d06 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -3,10 +3,11 @@
+ # mplayer
+ #
+ #############################################################
+-MPLAYER_VERSION = 32726
+-# MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.bz2
+-# MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
+-MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
++# MPLAYER_VERSION = 32726
++MPLAYER_VERSION = 1.1
++MPLAYER_SOURCE = MPlayer-$(MPLAYER_VERSION).tar.xz
++MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
++# MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
+ 
+ MPLAYER_CFLAGS = $(TARGET_CFLAGS)
+ MPLAYER_LDFLAGS = $(TARGET_LDFLAGS)
+@@ -25,18 +26,6 @@ else
+ MPLAYER_CONF_OPTS += --disable-big-endian
  endif
-+ifeq ($(BR2_USE_MMU),)
-+       $(SED) 's,.*ARCH_USE_MMU.*,# ARCH_USE_MMU is not set,g' $(UCLIBC_DIR)/.oldconfig
-+endif
- ifeq ($(BR2_LARGEFILE),y)
-        $(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=y,g' $(UCLIBC_DIR)/.oldconfig
- else
-
-However, besides this option, you will also probably need to adjust the
-uClibc configuration to add support for FLAT binaries.
-
-The no-MMU support for ARM is basically non-existent for now in
-Buildroot, but I'm interested in having that integrated, so I'll try to
-help you getting this working.
-
-Hope this helps,
-
-Thomas
+ 
+-# mplayer unfortunately uses --disable-largefiles, so we cannot use
+-# DISABLE_LARGEFILE
+-ifeq ($(BR2_LARGEFILE),y)
+-MPLAYER_CONF_OPTS += --enable-largefiles
+-else
+-# dvdread/dvdcss requires largefile support
+-MPLAYER_CONF_OPTS += 			\
+-	--disable-largefiles 		\
+-	--disable-dvdread-internal 	\
+-	--disable-libdvdcss-internal
+-endif
+-
+ ifeq ($(BR2_PACKAGE_SDL),y)
+ MPLAYER_CONF_OPTS += \
+ 	--enable-sdl \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
