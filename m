@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 12:09:20 +0200
-Subject: [Buildroot] [git commit] grub: add license information
-Message-ID: <20120821110311.D213697206@busybox.osuosl.org>
+Date: Tue, 21 Aug 2012 12:43:18 +0200
+Subject: [Buildroot] [git commit] alsa-lib: add license info
+Message-ID: <20120821110312.56CFA97206@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6643351d0b0feac205341ab9b121c0c74c70c125
+commit: http://git.buildroot.net/buildroot/commit/?id=4cbe5ff11a49c7cbe0296d6d6ef5abf81b973d7b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- boot/grub/grub.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/alsa-lib/alsa-lib.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index e8d66f1..4a094bc 100644
---- a/boot/grub/grub.mk
-+++ b/boot/grub/grub.mk
-@@ -9,6 +9,9 @@ GRUB_SOURCE = grub_$(GRUB_VERSION).orig.tar.gz
- GRUB_PATCH  = grub_$(GRUB_VERSION)-35.diff.gz
- GRUB_SITE   = http://snapshot.debian.org/archive/debian/20080329T000000Z/pool/main/g/grub/
- 
-+GRUB_LICENSE = GPLv2+
-+GRUB_LICENSE_FILES = COPYING
-+
- GRUB_CFLAGS=-DSUPPORT_LOOPDEV
- ifeq ($(BR2_LARGEFILE),)
- GRUB_CFLAGS+=-U_FILE_OFFSET_BITS
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index c3f61ff..8ed1339 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -7,6 +7,8 @@
+ ALSA_LIB_VERSION = 1.0.25
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
++ALSA_LIB_LICENSE = LGPLv2.1+
++ALSA_LIB_LICENSE_FILES = COPYING
+ ALSA_LIB_INSTALL_STAGING = YES
+ ALSA_LIB_CFLAGS=$(TARGET_CFLAGS)
+ ALSA_LIB_CONF_OPT = --with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVDIR)) \
