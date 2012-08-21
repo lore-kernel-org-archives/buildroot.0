@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 13:19:48 +0200
-Subject: [Buildroot] [PATCH 01/10] perl: new package
-In-Reply-To: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
-References: <1345452909-15756-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20120821131948.5e59085b@skate>
+Date: Tue, 21 Aug 2012 13:23:39 +0200
+Subject: [Buildroot] [PATCH] python: firefox host-python dependency
+ needs --enable-unicodedata
+In-Reply-To: <1345057226-18726-2-git-send-email-stefan.froberg@petroprogram.com>
+References: <1345057226-18726-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1345057226-18726-2-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20120821132339.45b28565@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+Le Wed, 15 Aug 2012 22:00:26 +0300,
+Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
 
-Le Mon, 20 Aug 2012 10:55:00 +0200,
-Francois Perrad <fperrad@gmail.com> a ?crit :
+> +ifneq ($(BR2_PACKAGE_PYTHON_UNICODEDATA),y)
+> +	HOST_PYTHON_CONF_OPT += --disable-unicodedata	
+> +else
+> +	HOST_PYTHON_CONF_OPT += --enable-unicodedata
+> +endif
 
-> ---
->  package/Config.in                      |    1 +
->  package/perl/Config.in                 |   16 +++++
->  package/perl/perl-Makefile-SH.patch    |   28 ++++++++
->  package/perl/perl-configure-qemu.patch |   22 +++++++
->  package/perl/perl-fix-minitest.patch   |   96 +++++++++++++++++++++++++++
->  package/perl/perl-make-ext.patch       |   35 ++++++++++
->  package/perl/perl-mkppport.patch       |   36 ++++++++++
->  package/perl/perl.mk                   |  112 ++++++++++++++++++++++++++++++++
->  8 files changed, 346 insertions(+)
->  create mode 100644 package/perl/Config.in
->  create mode 100644 package/perl/perl-Makefile-SH.patch
->  create mode 100644 package/perl/perl-configure-qemu.patch
->  create mode 100644 package/perl/perl-fix-minitest.patch
->  create mode 100644 package/perl/perl-make-ext.patch
->  create mode 100644 package/perl/perl-mkppport.patch
->  create mode 100644 package/perl/perl.mk
+No, this is not correct. The BR2_PACKAGE_* options are here to
+configure the *target* packages. Host packages that are only
+dependencies to build target packages do not have kconfig options. So
+in this case, the only solution is to simply use --enable-unicodedata
+unconditionally to the host-python build.
 
-Thanks for this work on Perl. However, I find it lacks a bit of
-background information. What is your patch series doing? Why would we
-want to have three separate packages for Perl (perl, miniperl and
-microperl)? We need some details to understand what you're proposing.
+Can you post an updated patch with this change?
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
