@@ -1,66 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Aug 2012 19:07:03 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libnspr: add pkg-config file
-In-Reply-To: <1345568824-7523-1-git-send-email-yann.morin.1998@free.fr>
-References: <1345568824-7523-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1345568824-7523-2-git-send-email-yann.morin.1998@free.fr>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Tue, 21 Aug 2012 20:07:37 +0300
+Subject: [Buildroot] BR2_SOURCEFORGE_MIRROR issue in package .mk files
+In-Reply-To: <CAJkQPO=k7cmM46OXekN1s6n-Whk8_AG5hs37Q=ELgvzoVOj8XA@mail.gmail.com>
+References: <CAJkQPO=k7cmM46OXekN1s6n-Whk8_AG5hs37Q=ELgvzoVOj8XA@mail.gmail.com>
+Message-ID: <5033C059.9060603@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages use pkg-config to check for libnspr.
+21.8.2012 18:51, Aras Vaichas kirjoitti:
+> I was rebuilding my Buildroot when I noticed that the
+> kent.dl.sourceforge.net mirror is down and my build fails.
+>
+> I encountered this same problem the other day with crosstool-ng, and
+> soon afterwards a patch was posted:
+> http://sourceware.org/ml/crossgcc/2012-08/msg00066.html
+>
+> I looked at changing BR2_SOURCEFORGE_MIRROR but unfortunately
+> Buildroot only allows BR2_SOURCEFORGE_MIRROR to replace *part* of the
+> Sourceforge URL
+>
+> e.g. in buildroot/package/boost/boost.mk:
+> BOOST_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/boost
+>
+> Should it be changed to:
+> http://$(BR2_SOURCEFORGE_MIRROR).sourceforge.net/sourceforge/boost
+>
+> Comments?
 
-Add our own .pc file (vampirised from Debian).
+Yeah, kent is definetely down.
+Checked with this:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/libnspr/libnspr.mk |   16 ++++++++++++++++
- package/libnspr/nspr.pc.in |   10 ++++++++++
- 2 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/libnspr/nspr.pc.in
+http://kent.dl.sourceforge.net/project/boost/boost/1.49.0/boost_1_49_0.tar.bz2
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 689caa4..736984d 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -16,4 +16,20 @@ LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
- LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
- LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
- 
-+define LIBNSPR_INSTALL_STAGING_PC
-+	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnspr/nspr.pc.in \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/nspr.pc
-+	$(SED) 's/@VERSION@/$(LIBNSPR_VERSION)/g;' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/nspr.pc
-+endef
-+LIBNSPR_POST_INSTALL_STAGING_HOOKS += LIBNSPR_INSTALL_STAGING_PC
-+
-+define LIBNSPR_INSTALL_TARGET_PC
-+	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnspr/nspr.pc.in \
-+		$(TARGET_DIR)/usr/lib/pkgconfig/nspr.pc
-+	$(SED) 's/@VERSION@/$(LIBNSPR_VERSION)/g;' \
-+		$(TARGET_DIR)/usr/lib/pkgconfig/nspr.pc
-+endef
-+LIBNSPR_POST_INSTALL_TARGET_HOOKS += LIBNSPR_INSTALL_TARGET_PC
-+
- $(eval $(autotools-package))
-diff --git a/package/libnspr/nspr.pc.in b/package/libnspr/nspr.pc.in
-new file mode 100644
-index 0000000..44873d2
---- /dev/null
-+++ b/package/libnspr/nspr.pc.in
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include/nspr
-+
-+Name: NSPR
-+Description: The Netscape Portable Runtime
-+Version: @VERSION@
-+Libs: -L${exec_prefix}/lib -lplds4 -lplc4 -lnspr4 -lpthread -ldl
-+Cflags: -I${prefix}/include/nspr
--- 
-1.7.2.5
+But this works:
+
+http://tenet.dl.sourceforge.net/project/boost/boost/1.49.0/boost_1_49_0.tar.bz2
+
+If that South African mirror is too far away/slow  then you could change
+the BR2_SOURCEFORGE_MIRROR
+to some other, short name value from
+http://sourceforge.net/apps/trac/sourceforge/wiki/Mirrors
+
+In related note: Maybe this BR2_SOURCEFORGE_MIRROR stuff could be
+automated somehow ?
+
+Like using some mirrorselect tool (or something like that) if
+BR2_SOURCEFORGE_MIRROR is empty and picking the fastest/closest mirror.
+And if BR2_SOURCEFORGE_MIRROR is set in Config.in then use that value no
+matter what.
+
+Just thoughts....
+
+Stefan
+
+>
+> regards,
+>
+> Aras Vaichas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
