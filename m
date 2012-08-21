@@ -1,24 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 21 Aug 2012 12:42:29 +0200
-Subject: [Buildroot] [PATCH 4/4] zxing: add license information
-In-Reply-To: <1345406924-6574-4-git-send-email-spdawson@gmail.com>
-References: <1345406924-6574-1-git-send-email-spdawson@gmail.com>
- <1345406924-6574-4-git-send-email-spdawson@gmail.com>
-Message-ID: <20120821124229.4bf8d627@skate>
+Date: Tue, 21 Aug 2012 12:56:37 +0200
+Subject: [Buildroot] [PATCH 6/8] fontconfig: add license info
+In-Reply-To: <1345407510-10058-6-git-send-email-danomimanchego123@gmail.com>
+References: <1345407510-10058-1-git-send-email-danomimanchego123@gmail.com>
+ <1345407510-10058-6-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20120821125637.6b0257bc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 19 Aug 2012 21:08:44 +0100,
-spdawson at gmail.com a ?crit :
+Le Sun, 19 Aug 2012 16:18:28 -0400,
+Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
 
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> +FONTCONFIG_LICENSE = fontconfig
+> +FONTCONFIG_LICENSE_FILES = COPYING
 
-Applied, thanks.
+For special licenses, I thought that the convention was to use the
+string "foo license", and not just "foo". Luca?
 
 Thomas
 -- 
