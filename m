@@ -1,44 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Aug 2012 19:47:10 +0200
-Subject: [Buildroot] Compiling process
-In-Reply-To: <1345630715.32281.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-References: <1345630715.32281.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <20120822194710.14807341@skate>
+Date: Wed, 22 Aug 2012 19:42:19 +0200
+Subject: [Buildroot] [git commit] inotify-tools: add license information
+Message-ID: <20120822174958.A102897268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 22 Aug 2012 03:18:35 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=a05a1cc16b9b306fe21a8117e00f80a54151a267
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Can someone tell me through an example?what compiler line 
-> should look like for compiling SomeFile.c (or .cpp) using compiler, 
-> built by Buildroot. 
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/inotify-tools/inotify-tools.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Use the compiler in output/host/usr/bin/<arch>-gcc.
-
-> Also, does Qt need building X server, or it run independently of it ?
-
-No, it can run directly on the framebuffer.
-
-> Does some window manager have to be installed??
-
-For a simple full screen application, just run your Qt application with
--qws as others mentioned.
-
-If you want to build your Qt application with qmake, then use the qmake
-installed in output/host/usr/bin/qmake.
-
-I should probably put together a step-by-step tutorial on how to use
-Buildroot to write Qt apps, as this sounds like a popular request.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
+index 52a1701..b53efad 100644
+--- a/package/inotify-tools/inotify-tools.mk
++++ b/package/inotify-tools/inotify-tools.mk
+@@ -5,4 +5,7 @@
+ #############################################################
+ INOTIFY_TOOLS_VERSION = 3.14
+ INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
++INOTIFY_TOOLS_LICENSE = GPLv2+
++INOTIFY_TOOLS_LICENSE_FILES = COPYING
++
+ $(eval $(autotools-package))
