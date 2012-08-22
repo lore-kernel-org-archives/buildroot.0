@@ -1,49 +1,24 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Wed, 22 Aug 2012 12:26:20 +0200
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 22 Aug 2012 12:30:17 +0200
 Subject: [Buildroot] Compiling process
 In-Reply-To: <1345630715.32281.YahooMailNeo@web164601.mail.gq1.yahoo.com>
 References: <1345630715.32281.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <5034B3CC.5070804@relinux.de>
+Message-ID: <CAHkwnC-cORDbnJWsmod-ZD5OVSfOFFeVMwa0Dsw_J3o2uGxs6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 22.08.2012 12:18, schrieb Zoran Djordjevic:
+On Wed, Aug 22, 2012 at 12:18 PM, Zoran Djordjevic <djdjdjole@yahoo.com> wrote:
 > Hello
->  
+>
 > Can someone tell me through an example what compiler line
 > should look like for compiling SomeFile.c (or .cpp) using compiler,
 > built by Buildroot.
-> Also, does Qt need building X server, or it run independently of it ?
-Hi,
 
-I am currently working with QT without X. It runs directly on the Linux
-framebuffer.
-> Does some window manager have to be installed ?
-No, but you have to start the app with the "-qws" option.
+http://buildroot.uclibc.org/downloads/manual/manual.html#_using_the_generated_toolchain_outside_buildroot
 
-Kind regards
-
-Stephan
->  
-> Best regards
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+Regards
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120822/ed3edb18/attachment.html>
+Fabio Porcedda
