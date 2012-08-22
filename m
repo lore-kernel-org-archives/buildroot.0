@@ -1,40 +1,20 @@
-From: Shawn Goff <shawnjgoff@gmail.com>
-Date: Wed, 22 Aug 2012 08:39:55 -0400
-Subject: [Buildroot] [PATCH] ifplugd: add --with-initdir= to config
-	command
-In-Reply-To: <20120822095459.4a73afb0@skate>
-References: <1345298656-12714-1-git-send-email-shawnjgoff@gmail.com>
- <20120821115651.7908bfa9@skate>
- <CABYt4-bHDJt9sQd4OyebD-4xg8EU+4ppFJv6y9HEBWFPBs4NDQ@mail.gmail.com>
- <20120822095459.4a73afb0@skate>
-Message-ID: <CABYt4-b-E630NcSDfb3MjoRkQ6gMGxmvNta_zNyS-P_O8fPsFA@mail.gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Wed, 22 Aug 2012 13:47:04 +0100
+Subject: [Buildroot] [PATCH 1/5] barebox: add license information
+In-Reply-To: <20120822121615.GC6060@game.jcrosoft.org>
+References: <1345281941-6722-1-git-send-email-spdawson@gmail.com>
+ <20120822121615.GC6060@game.jcrosoft.org>
+Message-ID: <CAHt8ZCOfEBiK72gBpGVQaVOhwyF-cxX93QxNYB8k49c6nZ=qUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Error:
-configure: error: missing --with-initdir=DIR
-full output from make: http://sprunge.us/eRQT
+On 22 August 2012 13:16, Jean-Christophe PLAGNIOL-VILLARD
+<plagnioj@jcrosoft.com> wrote:
+> Barebox is GPLv2 only
 
-Config:
-http://sprunge.us/TITZ
+Thanks Jean-Christophe; I'll fix this.
 
-On Wed, Aug 22, 2012 at 3:54 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Le Tue, 21 Aug 2012 09:12:46 -0400,
-> Shawn Goff <shawnjgoff@gmail.com> a ?crit :
->
-> > I mean the configure script fails when building the package.
->
-> It builds fine here. What problem do you encounter, and with what
-> configuration?
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+Simon.
