@@ -1,54 +1,63 @@
-From: chuck.fry@nasa.gov (Fry, Charles R. {Chuck}(ARC-TI)[Stinger Ghaffarian Technologies Inc.
- (SGT Inc.)])
-Date: Wed, 22 Aug 2012 13:44:48 -0500
-Subject: [Buildroot] Stupid n00b question about U-Boot config
-In-Reply-To: <20120822102656.5c528851@skate>
-References: <817F82FC-C333-4BC2-9BD9-4ADBB6D313BC@nasa.gov>
- <20120822102656.5c528851@skate>
-Message-ID: <8901DA81-DA68-44E5-8E4E-61F0712FD06A@nasa.gov>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 22 Aug 2012 21:54:31 +0200
+Subject: [Buildroot] [PATCH] inotify-tools: add license information
+In-Reply-To: <20120822194521.48a4060c@skate>
+References: <1345619321-4644-1-git-send-email-spdawson@gmail.com>
+ <20120822194521.48a4060c@skate>
+Message-ID: <503538F7.9000102@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you, this is the information I needed!
- -- Chuck
- 
-On Aug 22, 2012, at 1:26 AM, Thomas Petazzoni wrote:
+Thomas Petazzoni wrote:
+> Le Wed, 22 Aug 2012 08:08:40 +0100,
+> spdawson at gmail.com a ?crit :
+>
+>> From: Simon Dawson <spdawson@gmail.com>
+>>
+>> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+>> ---
+>>   package/inotify-tools/inotify-tools.mk |    2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
+>> index 52a1701..7c37929 100644
+>> --- a/package/inotify-tools/inotify-tools.mk
+>> +++ b/package/inotify-tools/inotify-tools.mk
+>> @@ -6,3 +6,5 @@
+>>   INOTIFY_TOOLS_VERSION = 3.14
+>>   INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
+>>   $(eval $(autotools-package))
+>> +INOTIFY_TOOLS_LICENSE = GPLv2+
+>> +INOTIFY_TOOLS_LICENSE_FILES = COPYING
+>
+> I've applied this one, but modified the two licensing-related lines to
+> be above the $(eval $(autotools-package)).
+>
+> Also, I am not 100% sure how to decide whether this package is GPLv2 or
+> GPLv2+. The COPYING file contains the text of the GPLv2, but I haven't
+> found any other place in the source code where the license was
+> mentioned. So we don't know whether it is GPLv2 only, or "GPLv2 or
+> later".
+>
+> I've applied your patch with GPLv2+, and we'll listen to comments from
+> others if they have a better idea on how to take the proper decision on
+> this.
 
-> Le Tue, 21 Aug 2012 18:41:43 -0500,
-> "Fry, Charles R. {Chuck}(ARC-TI)[Stinger Ghaffarian Technologies Inc.
-> (SGT Inc.)]" <chuck.fry@nasa.gov> a ?crit :
-> 
->> make[1]: Entering directory `/home/cfry/buildroot/buildroot-2012.05/output/build/uboot-2012.04.01'
->> make: *** No rule to make target `at91sam9260ek_config'.  Stop.
-> 
-> U-Boot does not have a at91sam9260ek configuration. The available
-> configuration for this board are:
-> 
->  at91sam9260ek_dataflash_cs0
->  at91sam9260ek_dataflash_cs1
->  at91sam9260ek_nandflash
-> 
-> see boards.cfg in U-Boot source code for the list of available
-> configurations.
-> 
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+iostat has the same licensing policy.
 
-Chuck Fry
-Senior Software Engineer
-Dell | Services, Federal Government
-Office: 650 604 1882  Mobile: 408 230 2715
-M/S 269-1, Building N269/260-7
-NASA Ames Research Center
-Moffett Field, CA 94035-1000
+The GPLv2 (reported in the COPYING file for inotify-tools, as well as 
+iostat)
+states:
 
-I do not speak for Dell, SGT, Code TI, or NASA, nor do they speak for me.
+   If the Program does not specify a version number of
+   this License, you may choose any version ever published by the Free 
+Software
+   Foundation.
+
+So:
+INOTIFY_TOOLS_LICENSE = GPL
+
+Luca
