@@ -1,44 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Aug 2012 20:06:15 +0200
-Subject: [Buildroot] [PATCH] gpsd: fix Python-related build failure
-In-Reply-To: <CAHt8ZCPRsyLfCKQfOfa5LQ3qeX22_3UgLJAXH0YfeGSb1sQ8-A@mail.gmail.com>
-References: <1345548715-16593-1-git-send-email-spdawson@gmail.com>
- <5034933C.8040005@free-electrons.com>
- <CAHt8ZCPRsyLfCKQfOfa5LQ3qeX22_3UgLJAXH0YfeGSb1sQ8-A@mail.gmail.com>
-Message-ID: <20120822200615.42118e87@skate>
+From: chuck.fry@nasa.gov (Fry, Charles R. {Chuck}(ARC-TI)[Stinger Ghaffarian Technologies Inc.
+ (SGT Inc.)])
+Date: Wed, 22 Aug 2012 13:44:48 -0500
+Subject: [Buildroot] Stupid n00b question about U-Boot config
+In-Reply-To: <20120822102656.5c528851@skate>
+References: <817F82FC-C333-4BC2-9BD9-4ADBB6D313BC@nasa.gov>
+ <20120822102656.5c528851@skate>
+Message-ID: <8901DA81-DA68-44E5-8E4E-61F0712FD06A@nasa.gov>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 22 Aug 2012 09:26:06 +0100,
-Simon Dawson <spdawson@gmail.com> a ?crit :
+Thank you, this is the information I needed!
+ -- Chuck
+ 
+On Aug 22, 2012, at 1:26 AM, Thomas Petazzoni wrote:
 
-> > I guess the real problem that we have to address here is why scons uses
-> > the interpreter from the distribution and not the buildroot-generated one.
-> >
-> > I guess, we could just make scons depends on host-python and force the
-> > $(SCONS) variable as "$(HOST_DIR)/usr/bin/python
-> > $(HOST_DIR)/usr/bin/scons ?"
+> Le Tue, 21 Aug 2012 18:41:43 -0500,
+> "Fry, Charles R. {Chuck}(ARC-TI)[Stinger Ghaffarian Technologies Inc.
+> (SGT Inc.)]" <chuck.fry@nasa.gov> a ?crit :
 > 
-> This sounds to me like a good idea. I had tried to avoid the
-> host-python dependency, which was in fact present in an earlier
-> incarnation of the gpsd version bump patch. But it looks like it might
-> be the cleanest way of resolving the present issue.
+>> make[1]: Entering directory `/home/cfry/buildroot/buildroot-2012.05/output/build/uboot-2012.04.01'
+>> make: *** No rule to make target `at91sam9260ek_config'.  Stop.
+> 
+> U-Boot does not have a at91sam9260ek configuration. The available
+> configuration for this board are:
+> 
+>  at91sam9260ek_dataflash_cs0
+>  at91sam9260ek_dataflash_cs1
+>  at91sam9260ek_nandflash
+> 
+> see boards.cfg in U-Boot source code for the list of available
+> configurations.
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-If we could avoid the host-python dependency, it would be great. My
-understanding is that the SConstruct needs JSON just to generate one
-file. Maybe we could simply integrate a pre-generated version as a
-patch. But maybe it's too hackish, and we should just go ahead and add
-host-python as a dependency of scons, so that a well-known version of
-Python gets built.
+Chuck Fry
+Senior Software Engineer
+Dell | Services, Federal Government
+Office: 650 604 1882  Mobile: 408 230 2715
+M/S 269-1, Building N269/260-7
+NASA Ames Research Center
+Moffett Field, CA 94035-1000
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I do not speak for Dell, SGT, Code TI, or NASA, nor do they speak for me.
