@@ -1,37 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Aug 2012 23:21:16 +0200
-Subject: [Buildroot] [git commit] inotify-tools: fix license
-Message-ID: <20120822212214.068149726D@busybox.osuosl.org>
+From: Stefan Froberg <stefan.froberg@petroprogram.com>
+Date: Thu, 23 Aug 2012 01:11:54 +0300
+Subject: [Buildroot] [PATCH] freetype, libfuse, libpng, x11vnc,
+	zlib: get rid of BR2_SOURCEFORGE_MIRROR
+Message-ID: <1345673515-1719-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b502930374bb6b179d4cfb42bf1db06e051bc8fd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Starting point of kicking that useless BR2_SOURCEFORGE_MIRROR 
+variable out and using sourceforges mirror autoselection.
 
-No specific GPL version is declared, so it defaults to "any version
-ever published", as clause 9 of the GPLv2 states.
+This will ensure that there will be always some mirror available
+and maybe fast one too (Hurrah! 3G modem users shout ;) )
 
-Fixes a05a1cc16b9b3.
+If someone *still* want's to have sourceforge mirror forcing then
+that could probably be possible with the hacking of 
+package/pkg-download.mk and adding special handling of 
+BR2_SOURCEFORGE_MIRROR variable in DOWNLOAD_INNER.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/inotify-tools/inotify-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
-index b53efad..deb8a8c 100644
---- a/package/inotify-tools/inotify-tools.mk
-+++ b/package/inotify-tools/inotify-tools.mk
-@@ -5,7 +5,7 @@
- #############################################################
- INOTIFY_TOOLS_VERSION = 3.14
- INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
--INOTIFY_TOOLS_LICENSE = GPLv2+
-+INOTIFY_TOOLS_LICENSE = GPL
- INOTIFY_TOOLS_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+Regards:
+Stefan Froberg
