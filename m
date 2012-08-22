@@ -1,56 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2012 22:37:03 +0200
-Subject: [Buildroot] [PATCH] package/cURL: fix static link whith openSSL
-Message-ID: <1345667823-16633-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Aug 2012 23:21:04 +0200
+Subject: [Buildroot] [git commit] zxing: add version of the Apache license
+Message-ID: <20120822212213.EE43697260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When openSSL is selected, cURL is configured to use it.
+commit: http://git.buildroot.net/buildroot/commit/?id=d10c263b7fe6c389561ead92ce0c8453c3a77fa9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-But in this case, the libcurl.pc file /forgets/ to require link
-against -ldl.
-
-This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
-but an executable wants to be linked statically (for various reasons
-which are irrelevant here).
-
-Fix that by conditionally append -ldl to the Libs.Private section of
-the installed libcurl.pc if openSSL is enabled.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcurl/libcurl.mk |   10 ++++++++--
- 1 files changed, 8 insertions(+), 2 deletions(-)
+ package/zxing/zxing.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 090bb4c..35c7f56 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -29,14 +29,20 @@ define LIBCURL_TARGET_CLEANUP
- 	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
- 	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
- endef
--
-+define LIBCURL_FIX_TARGET_PC
-+	$(SED) '/^Libs.private:/s/[[:space:]]*$$/ -ldl/;' $(TARGET_DIR)/usr/lib/pkgconfig/libcurl.pc
-+endef
- LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
-+LIBCURL_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_TARGET_PC)
+diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
+index 543d038..851aef6 100644
+--- a/package/zxing/zxing.mk
++++ b/package/zxing/zxing.mk
+@@ -6,7 +6,7 @@
+ ZXING_VERSION = 2.0
+ ZXING_SITE = http://zxing.googlecode.com/files
+ ZXING_SOURCE = ZXing-$(ZXING_VERSION).zip
+-ZXING_LICENSE = Apache
++ZXING_LICENSE = Apache v2.0
+ ZXING_LICENSE_FILES = COPYING
+ ZXING_INSTALL_STAGING = YES
  
- define LIBCURL_STAGING_FIXUP_CURL_CONFIG
- 	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
- endef
--
-+define LIBCURL_FIX_STAGING_PC
-+	$(SED) '/^Libs.private:/s/[[:space:]]*$$/ -ldl/;' $(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
-+endef
- LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
-+LIBCURL_POST_INSTALL_STAGING_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_STAGING_PC)
- 
- $(eval $(autotools-package))
- 
--- 
-1.7.2.5
