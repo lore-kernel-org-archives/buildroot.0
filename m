@@ -1,31 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 22 Aug 2012 19:42:19 +0200
-Subject: [Buildroot] [git commit] inotify-tools: add license information
-Message-ID: <20120822174958.A102897268@busybox.osuosl.org>
+Date: Wed, 22 Aug 2012 19:41:15 +0200
+Subject: [Buildroot] [git commit] fontconfig: add license info
+Message-ID: <20120822174958.93CB197251@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a05a1cc16b9b306fe21a8117e00f80a54151a267
+commit: http://git.buildroot.net/buildroot/commit/?id=53136e92bc8d0141e753d507667cd3848e6cac51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/inotify-tools/inotify-tools.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/fontconfig/fontconfig.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
-index 52a1701..b53efad 100644
---- a/package/inotify-tools/inotify-tools.mk
-+++ b/package/inotify-tools/inotify-tools.mk
-@@ -5,4 +5,7 @@
- #############################################################
- INOTIFY_TOOLS_VERSION = 3.14
- INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
-+INOTIFY_TOOLS_LICENSE = GPLv2+
-+INOTIFY_TOOLS_LICENSE_FILES = COPYING
-+
- $(eval $(autotools-package))
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 843b34f..9845656 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -6,6 +6,8 @@
+ FONTCONFIG_VERSION = 2.6.0
+ FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.gz
+ FONTCONFIG_SITE = http://fontconfig.org/release
++FONTCONFIG_LICENSE = fontconfig license
++FONTCONFIG_LICENSE_FILES = COPYING
+ FONTCONFIG_AUTORECONF = YES
+ FONTCONFIG_INSTALL_STAGING = YES
+ # This package does not like using the target cflags for some reason.
