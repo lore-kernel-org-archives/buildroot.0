@@ -1,33 +1,29 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 22 Aug 2012 09:17:13 +0200
-Subject: [Buildroot] [PATCH] python: fix interpreter directive for
- python scripts
-In-Reply-To: <1344663795-26449-1-git-send-email-net147@gmail.com>
-References: <1344663795-26449-1-git-send-email-net147@gmail.com>
-Message-ID: <50348779.5060601@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 22 Aug 2012 09:54:59 +0200
+Subject: [Buildroot] [PATCH] ifplugd: add --with-initdir= to config
+ command
+In-Reply-To: <CABYt4-bHDJt9sQd4OyebD-4xg8EU+4ppFJv6y9HEBWFPBs4NDQ@mail.gmail.com>
+References: <1345298656-12714-1-git-send-email-shawnjgoff@gmail.com>
+ <20120821115651.7908bfa9@skate>
+ <CABYt4-bHDJt9sQd4OyebD-4xg8EU+4ppFJv6y9HEBWFPBs4NDQ@mail.gmail.com>
+Message-ID: <20120822095459.4a73afb0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Tue, 21 Aug 2012 09:12:46 -0400,
+Shawn Goff <shawnjgoff@gmail.com> a ?crit :
 
-Le 11/08/2012 07:43, Jonathan Liu a ?crit :
-> +# Fix Python interpreter directive
-> +define PYTHON_FIX_INTERPRETER
-> +        sed -i '1s|#!.*python.*|#!/usr/bin/env python|' $(TARGET_DIR)/usr/bin/{easy_install,easy_install-2.7,idle,smtpd.py}
-> +endef
-> +
-> +PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_FIX_INTERPRETER
-> +
+> I mean the configure script fails when building the package.
 
-Could you provide a bit more input on why this patch is needed ?
-Did you encounter a bug? Which one?
+It builds fine here. What problem do you encounter, and with what
+configuration?
 
-Thanks,
+Thomas
 -- 
-Maxime Ripard, Free Electrons
+Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
