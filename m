@@ -1,11 +1,10 @@
-From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Wed, 22 Aug 2012 22:08:47 +0200
-Subject: [Buildroot] [PATCH] inotify-tools: add license information
-In-Reply-To: <20120822215832.12e58fe5@skate>
-References: <1345619321-4644-1-git-send-email-spdawson@gmail.com>
- <20120822194521.48a4060c@skate> <503538F7.9000102@lucaceresoli.net>
- <20120822215832.12e58fe5@skate>
-Message-ID: <50353C4F.50800@lucaceresoli.net>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 22 Aug 2012 22:18:47 +0200
+Subject: [Buildroot] [PATCH] barebox: fix license information
+In-Reply-To: <20120822194924.268ac192@skate>
+References: <1345639653-17544-1-git-send-email-spdawson@gmail.com>
+ <20120822194924.268ac192@skate>
+Message-ID: <50353EA7.6030901@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +12,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Thomas Petazzoni wrote:
-> Le Wed, 22 Aug 2012 21:54:31 +0200,
-> Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
+> Le Wed, 22 Aug 2012 13:47:33 +0100,
+> spdawson at gmail.com a ?crit :
 >
->>> I've applied your patch with GPLv2+, and we'll listen to comments from
->>> others if they have a better idea on how to take the proper decision on
->>> this.
+>> From: Simon Dawson <spdawson@gmail.com>
 >>
->> iostat has the same licensing policy.
+>> The barebox license is GPLv2, and not GPLv2+.
 >>
->> The GPLv2 (reported in the COPYING file for inotify-tools, as well as
->> iostat)
->> states:
->>
->>     If the Program does not specify a version number of
->>     this License, you may choose any version ever published by the Free
->> Software
->>     Foundation.
->>
->> So:
->> INOTIFY_TOOLS_LICENSE = GPL
+>> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 >
-> Even if the program includes a specific version of the GPL in its
-> COPYING file (in this case GPLv2) ?
+> Thanks, applied.
+>
+> However, the Barebox license, just like U-Boot license, has a special
+> exception to allow proprietary standalone applications to be linked
+> against parts of Barebox/U-Boot without having to be released under the
+> GPL. Should be use "GPLv2 with exceptions"? Or something else?
 
-That's the file that contains the text I quoted, so I'd say yes.
-I just sent a patch to fix this, but of course you should wait for other 
-comments
-before applying if you're in doubt.
+Ouch. Well, practically speaking, AFAIK we don't include standalone
+Barebox applications in Buildroot, so this a NOOP in our case. If a user
+includes such applications in their own copy of Busybox and build it with
+Buildroot, then we may kind of assume that user will take care of handling
+this case...
+
+But from a formal and "legally-technical" POV, this license has some
+exceptions to the original FSF text, so to be safe we should go that way.
+
+I have no strong opinions at this time of the day, but I generally think
+that when speaking legal, we should be as safe as possible.
+So I'm moderately convinced this is a "GPLv2 with exceptions".
+
+Other opinions are very welcome.
 
 Luca
