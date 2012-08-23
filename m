@@ -1,59 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Aug 2012 23:25:20 +0200
-Subject: [Buildroot] [PATCH] package/cURL: fix static link whith openSSL
-In-Reply-To: <201208232311.29773.yann.morin.1998@free.fr>
-References: <1345667823-16633-1-git-send-email-yann.morin.1998@free.fr>
- <20120823110034.1f0b01d8@skate> <201208232311.29773.yann.morin.1998@free.fr>
-Message-ID: <201208232325.20885.yann.morin.1998@free.fr>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Thu, 23 Aug 2012 18:33:38 -0400
+Subject: [Buildroot] [PATCH 2/2] Provide PAM default configuration files
+ when building linux-pam package
+In-Reply-To: <50369EFA.5010708@mind.be>
+References: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
+ <1345001603-16774-2-git-send-email-golubovsky@gmail.com>
+ <50369EFA.5010708@mind.be>
+Message-ID: <CADiAo4L9v-f-1_SHx6f0xEiZkTO0rLu_qWyh7N+PAyzPVfGDDQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Arnout,
 
-On Thursday 23 August 2012 23:11:29 Yann E. MORIN wrote:
-> On Thursday 23 August 2012 11:00:34 Thomas Petazzoni wrote:
-> > Le Wed, 22 Aug 2012 22:37:03 +0200,
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
-> > 
-> > > When openSSL is selected, cURL is configured to use it.
-> > > 
-> > > But in this case, the libcurl.pc file /forgets/ to require link
-> > > against -ldl.
-> > > 
-> > > This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
-> > > but an executable wants to be linked statically (for various reasons
-> > > which are irrelevant here).
-> > > 
-> > > Fix that by conditionally append -ldl to the Libs.Private section of
-> > > the installed libcurl.pc if openSSL is enabled.
-> > > 
-> > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > Shouldn't this rather be fixed through a patch that gets submitted to
-> > the upstream curl project?
-> 
-> Probably, yes. There's even a comment in the libcurl.pc.in template, that
-> reads:
->   # This should most probably benefit from getting a "Requires:" field added
->   # dynamically by configure.
+On Thu, Aug 23, 2012 at 5:22 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  We normally hard-code the directory name: the build is always executed from
+> the buildroot directory, and the package directory normally doesn't change.
+> So:
+>         cp package/linux-pam/default $(TARGET_DIR)/etc/pam.d
+> This will also allow you to do it in the post-install hook.
 
-OK, I've changed my mind: forget this patch of mine, I'll just redo it
-by adding a proper 'Requires:' line, that's much cleaner.
+I try to avoid any hardcoding. Would it be better to make RAWNAME also
+available at the install phase?
 
-Doint it properly in curl's source will take a bit more time, but I'll
-eventually look at it (but not before Monday, I'm off for the WE, with
-probably no access to a computer, much less to internet. Yeah! Roots!).
+>
+>  Also, I would use $(INSTALL) instead of cp (but that's personal preference,
+> cp is used in other places as well):
+>         $(INSTALL) -D -m 0644 package/linux-pam/default
+> $(TARGET_DIR)/etc/pam.d/default
+> (since it uses -D, the mkdir can be removed).
 
-Regards,
-Yann E. MORIN.
+Thanks for the suggestion. I hope to also get Thomas' opinion and if
+there are further improvement suggestions I'll try to incorporate
+yours as well.
+
+Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Dmitry Golubovsky
+
+Anywhere on the Web
