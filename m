@@ -1,7 +1,7 @@
 From: Jerry Jacobs <jerry@xor-gate.org>
-Date: Thu, 23 Aug 2012 15:47:27 +0200
-Subject: [Buildroot] Interessting (new) embedded linux webservers
-Message-ID: <CA+TFifbt9_N4dKLhUDBv-aKL1B9eke7ZxxikvSuJ6T-A1TSTcQ@mail.gmail.com>
+Date: Thu, 23 Aug 2012 15:18:29 +0200
+Subject: [Buildroot] Interesting new embedded linux webservers
+Message-ID: <CA+TFifaF0g3mMJux7uD_=AfP1hdtnPWokC7kkrg5zQcMNnEKaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
