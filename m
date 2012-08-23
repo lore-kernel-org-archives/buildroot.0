@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 23 Aug 2012 10:14:13 +0200
-Subject: [Buildroot] [PATCH 2/9] perl: add an option for miniperl
+Date: Thu, 23 Aug 2012 10:14:14 +0200
+Subject: [Buildroot] [PATCH 3/9] cpanminus: new package
 In-Reply-To: <1345709660-25443-1-git-send-email-francois.perrad@gadz.org>
 References: <1345709660-25443-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1345709660-25443-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1345709660-25443-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,182 +11,134 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 ---
- package/perl/Config.in                   |    6 ++
- package/perl/perl-install-miniperl.patch |  126 ++++++++++++++++++++++++++++++
- package/perl/perl.mk                     |    6 +-
- 3 files changed, 137 insertions(+), 1 deletion(-)
- create mode 100644 package/perl/perl-install-miniperl.patch
+ package/Config.in              |    5 +++++
+ package/cpanminus/Config.in    |   24 ++++++++++++++++++++++++
+ package/cpanminus/cpanminus.mk |   37 +++++++++++++++++++++++++++++++++++++
+ package/perl/perl.mk           |   12 ++++++++++++
+ 4 files changed, 78 insertions(+)
+ create mode 100644 package/cpanminus/Config.in
+ create mode 100644 package/cpanminus/cpanminus.mk
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 286b09e..1f044eb 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -14,4 +14,10 @@ config BR2_PACKAGE_PERL_CUSTOM_CONFIGURE
- 	help
- 	  Allows to add some flags to Configure.
- 
-+config BR2_PACKAGE_PERL_ONLY_MINIPERL
-+	bool "only miniperl"
-+	help
-+	  Install only miniperl (without dynamic module loader)
-+	  Usually used to bootstrap a full Perl (@INC contains only .).
-+
+diff --git a/package/Config.in b/package/Config.in
+index 00a79ab..48d25fc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -263,6 +263,11 @@ source "package/xavante/Config.in"
+ endmenu
  endif
-diff --git a/package/perl/perl-install-miniperl.patch b/package/perl/perl-install-miniperl.patch
+ source "package/perl/Config.in"
++if BR2_PACKAGE_PERL
++menu "Perl libraries/modules"
++source "package/cpanminus/Config.in"
++endmenu
++endif
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+ source "package/python/Config.in"
+diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
 new file mode 100644
-index 0000000..b1aaad3
+index 0000000..9db7b2e
 --- /dev/null
-+++ b/package/perl/perl-install-miniperl.patch
-@@ -0,0 +1,126 @@
-+Add an option -miniperl
++++ b/package/cpanminus/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_CPANMINUS
++	bool "cpanminus"
++	help
++	  cpanminus is a script to get, unpack, build and install Perl modules
++	  from CPAN.
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++	  Why? It's dependency free, requires zero configuration, and stands
++	  alone. When running, it requires only 10MB of RAM.
 +
-+Index: b/installperl
-+===================================================================
-+--- a/installperl
-++++ b/installperl
-+@@ -14,7 +14,7 @@
-+ use vars qw($Is_VMS $Is_W32 $Is_OS2 $Is_Cygwin $Is_Darwin $Is_NetWare
-+ 	    %opts $packlist);
-+ my ($dostrip, $versiononly, $force,
-+-    $otherperls, $archname, $nwinstall, $nopods);
-++    $otherperls, $archname, $nwinstall, $nopods, $miniperl);
-+ 
-+ BEGIN {
-+     if ($Is_VMS) { eval 'use VMS::Filespec;' }
-+@@ -83,6 +83,7 @@
-+     $force = 1 if $ARGV[0] eq '-f';
-+     $opts{verbose} = 1 if $ARGV[0] eq '-V' || $ARGV [0] eq '-n';
-+     $archname = 1 if $ARGV[0] eq '-A';
-++    $miniperl = 1 if $ARGV[0] eq '-miniperl';
-+     $nwinstall = 1 if $ARGV[0] eq '-netware';
-+     $nopods = 1 if $ARGV[0] eq '-p';
-+     $opts{destdir} = $1 if $ARGV[0] =~ /^-?-destdir=(.*)$/;
-+@@ -102,6 +103,7 @@
-+   -A        Also install perl with the architecture's name in the perl binary's
-+             name.
-+   -p        Don't install the pod files. [This will break use diagnostics;]
-++  -miniperl Install only miniperl.
-+   -netware  Install correctly on a Netware server.
-+   -destdir  Prefix installation directories by this string.
-+ EOT
-+@@ -114,6 +116,7 @@
-+ my (@scripts, @tolink);
-+ open SCRIPTS, "utils.lst" or die "Can't open utils.lst: $!";
-+ while (<SCRIPTS>) {
-++    next if $miniperl;
-+     next if /^#/;
-+     next if /a2p/; # a2p is binary, to be installed separately
-+     chomp;
-+@@ -310,7 +313,7 @@
-+     link($Config{perlpath}, "$installbin/perl$ver$exe_ext");
-+ }
-+ elsif ($^O ne 'dos') {
-+-    if (!$Is_NetWare) {
-++    if (!$Is_NetWare && !$miniperl) {
-+ 	safe_unlink("$installbin/$perl_verbase$ver$exe_ext");
-+ 	copy("perl$exe_ext", "$installbin/$perl_verbase$ver$exe_ext");
-+ 	strip("$installbin/$perl_verbase$ver$exe_ext");
-+@@ -396,6 +399,7 @@
-+     }
-+ }
-+ foreach my $file (@corefiles) {
-++    next if $miniperl;
-+     # HP-UX (at least) needs to maintain execute permissions
-+     # on dynamically-loadable libraries. So we do it for all.
-+     if (copy_if_diff($file,"$installarchlib/CORE/$file")) {
-+@@ -411,7 +415,7 @@
-+ # Install main perl executables
-+ # Make links to ordinary names if installbin directory isn't current directory.
-+ 
-+-if (! $versiononly && ! samepath($installbin, '.') && ($^O ne 'dos') && ! $Is_VMS && ! $Is_NetWare) {
-++if (! $versiononly && ! samepath($installbin, '.') && ($^O ne 'dos') && ! $Is_VMS && ! $Is_NetWare && ! $miniperl) {
-+     safe_unlink("$installbin/$perl$exe_ext", "$installbin/suid$perl$exe_ext");
-+     if ($^O eq 'mpeix') {
-+ 	# MPE doesn't support hard links, so use a symlink.
-+@@ -429,7 +433,7 @@
-+ 
-+ # For development purposes it can be very useful to have multiple perls
-+ # build for different "architectures" (eg threading or not) simultaneously.
-+-if ($archname && ! samepath($installbin, '.') && ($^O ne 'dos') && ! $Is_VMS) {
-++if ($archname && ! samepath($installbin, '.') && ($^O ne 'dos') && ! $Is_VMS && ! $miniperl) {
-+     my $archperl = "$perl_verbase$ver-$Config{archname}$exe_ext";
-+     safe_unlink("$installbin/$archperl");
-+     if ($^O eq 'mpeix') {
-+@@ -451,7 +455,7 @@
-+ 
-+ if ($Config{installusrbinperl} && $Config{installusrbinperl} eq 'define' &&
-+     !$versiononly && !$opts{notify} && !$Is_W32 && !$Is_NetWare && !$Is_VMS && -t STDIN && -t STDERR
-+-	&& -w $mainperldir && ! samepath($mainperldir, $installbin)) {
-++	&& -w $mainperldir && ! samepath($mainperldir, $installbin) && ! $miniperl) {
-+     my($usrbinperl)	= "$mainperldir/$perl$exe_ext";
-+     my($instperl)	= "$installbin/$perl$exe_ext";
-+     my($expinstperl)	= "$binexp/$perl$exe_ext";
-+@@ -480,7 +484,7 @@
-+ }
-+ 
-+ # Make links to ordinary names if installbin directory isn't current directory.
-+-if (!$Is_NetWare && $dbg eq '') {
-++if (!$Is_NetWare && $dbg eq '' && !$miniperl) {
-+     if (! samepath($installbin, 'x2p')) {
-+ 	my $base = 'a2p';
-+ 	$base .= $ver if $versiononly;
-+@@ -495,12 +499,18 @@
-+ # it can't safely be shared.  Place it in $installbin.
-+ # Note that Configure doesn't build cppstin if it isn't needed, so
-+ # we skip this if cppstdin doesn't exist.
-+-if (! $versiononly && (-f 'cppstdin') && (! samepath($installbin, '.'))) {
-++if (! $versiononly && (-f 'cppstdin') && (! samepath($installbin, '.')) && !$miniperl) {
-+     safe_unlink("$installbin/cppstdin");
-+     copy("cppstdin", "$installbin/cppstdin");
-+     chmod(0755, "$installbin/cppstdin");
-+ }
-+ 
-++if ($miniperl && (-f 'miniperl')) {
-++    safe_unlink("$installbin/miniperl$exe_ext");
-++    copy("miniperl$exe_ext", "$installbin/miniperl$exe_ext");
-++    chmod(0755, "$installbin/miniperl$exe_ext");
-++}
-++
-+ sub script_alias {
-+     my ($installscript, $orig, $alias, $scr_ext) = @_;
-+ 
-+@@ -761,6 +771,11 @@
-+ 
-+     return if $name eq 'ExtUtils/XSSymSet.pm' and !$Is_VMS;
-+ 
-++    if ($miniperl && $dir =~ /^auto\//) {
-++        # Don't copy
-++        return;
-++    }
-++
-+     my $installlib = $installprivlib;
-+     if ($dir =~ /^auto\// ||
-+ 	  ($name =~ /^(.*)\.(?:pm|pod)$/ && $archpms{$1}) ||
++	  http://github.com/miyagawa/cpanminus
++
++if BR2_PACKAGE_CPANMINUS
++
++config BR2_PACKAGE_CPANMINUS_MODULES
++	string "Perl modules from CPAN"
++	help
++	  List of space-separated Perl modules to install from CPAN.
++
++	  Examples: Try::Tiny Dancer YAML Moo
++
++	  Install the listed modules and their dependencies.
++	  cpanm run on host, so you cannot use it for XS modules.
++
++endif
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+new file mode 100644
+index 0000000..b55dd3f
+--- /dev/null
++++ b/package/cpanminus/cpanminus.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# cpanminus
++#
++#############################################################
++
++CPANMINUS_VERSION = 1.5017
++CPANMINUS_SITE = http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA
++CPANMINUS_SOURCE = App-cpanminus-$(CPANMINUS_VERSION).tar.gz
++CPANMINUS_DEPENDENCIES = host-perl host-cpanminus
++CPANMINUS_MODS = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
++
++define HOST_CPANMINUS_CONFIGURE_CMDS
++	cd $(@D); $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) Makefile.PL
++endef
++
++define HOST_CPANMINUS_INSTALL_CMDS
++	$(MAKE) -C $(@D) install
++endef
++
++define CPANMINUS_INSTALL_TARGET_CMDS
++	for i in $(CPANMINUS_MODS); do \
++		cd $(@D); $(HOST_DIR)/usr/bin/cpanm -L $(TARGET_DIR)/usr/local $$i; \
++	done
++	# show XS modules
++	find $(TARGET_DIR)/usr/local/lib/perl5 -name *.so -print
++	# remove XS modules
++	rm -Rf $(TARGET_DIR)/usr/local/lib/perl5/$(shell $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) -MConfig -e "print Config->{archname}")
++	# fix shebang
++	touch $(TARGET_DIR)/usr/local/bin/dummy
++	for i in $(TARGET_DIR)/usr/local/bin/*; do \
++		$(SED) 's/$(subst /,\/,$(HOST_DIR))//' $$i; \
++	done
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 813d8bf..5161654 100644
+index 5161654..38aae08 100644
 --- a/package/perl/perl.mk
 +++ b/package/perl/perl.mk
-@@ -16,6 +16,10 @@ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
- PERL_USE_DEVEL=-Dusedevel
- endif
- 
-+ifdef BR2_PACKAGE_PERL_ONLY_MINIPERL
-+    PERL_INSTALL_ONLY_MINIPERL = -miniperl
-+endif
-+
- PERL_ARCH=$(call qstrip,$(BR2_ARCH))
- ifeq ($(PERL_ARCH),i686)
-     PERL_ARCH=i386
-@@ -79,7 +83,7 @@ endef
- 
- define PERL_INSTALL_TARGET_CMDS
- 	$(MAKE) INSTALL_DEPENDENCE= \
--		INSTALLFLAGS=-p \
-+		INSTALLFLAGS="-p $(PERL_INSTALL_ONLY_MINIPERL)"\
- 		DESTDIR="$(TARGET_DIR)" \
- 		-C $(@D) install.perl
+@@ -45,6 +45,7 @@ define PERL_CONFIGURE_CMDS
+ 		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
+ 		-Duseshrplib \
+ 		-Dprefix=/usr \
++		-Dsitelib=/usr/local/lib/perl5 \
+ 		-Uoptimize \
+ 		$(PERL_USE_DEVEL) \
+ 		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
+@@ -69,8 +70,19 @@ define PERL_CONFIGURE_CMDS
+ 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
  endef
+ 
++# example of hack for XS module (cpanminus handles only pure Perl modules)
++#define PERL_HACK_4_XS_MODULES
++#	cd $(@D)/cpan; tar xfz $(BUILDROOT_DL_DIR)/HTML-Parser-3.69.tar.gz
++#endef
++
++PERL_PRE_CONFIGURE_HOOKS += PERL_HACK_4_XS_MODULES
++
+ define PERL_BUILD_CMDS
+ 	$(MAKE) -C $(@D) all
++# example of hack for XS module
++#	cd $(@D); \
++#		$(HOST_DIR)/usr/bin/perl$(PERL_VERSION) -Ilib make_ext.pl MAKE="$(MAKE)" LIBPERL_A=libperl.a LINKTYPE=dynamic \
++#			HTML-Parser-3.69
+ endef
+ 
+ define PERL_INSTALL_STAGING_CMDS
 -- 
 1.7.9.5
