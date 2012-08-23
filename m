@@ -1,102 +1,58 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Wed, 22 Aug 2012 21:53:58 -0400
-Subject: [Buildroot] [PATCH] Add package linux-pam
-In-Reply-To: <503485C0.1000406@free-electrons.com>
-References: <1344594434-22756-1-git-send-email-golubovsky@gmail.com>
- <503485C0.1000406@free-electrons.com>
-Message-ID: <CADiAo4J1XeK5iN0+WNMPPDi5ie6H2Ro3QKQ6dZUpK5fBuviqcg@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 22 Aug 2012 23:03:42 -0400
+Subject: [Buildroot] relative DL_DIR okay?
+Message-ID: <CANxTyt6qz5eUv54zyJXBsg_jVZjKjc+vETz905P-L9ST45j7bQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime,
+Hi all,
 
-On Wed, Aug 22, 2012 at 3:09 AM, Maxime Ripard
-<maxime.ripard@free-electrons.com> wrote:
-> Hi Dmitry,
->
-> This looks fine for me, I still have some comments however.
+I have a question about the DL_DIR path:  is DL_DIR required to be an
+absolute path?
 
-Thomas applied this patch to next already:
+Background: For our projects, we have been setting DL_DIR to a relative
+path, e.g.  "../../../packages".  This has worked fine for us, until I
+recently tried to add a new package that uses git.  At that point, I found
+that DOWNLOAD_GIT failed to create the archive, because it wants to send
+the gzipped output to "$(DL_DIR)/$($(PKG)_SOURCE)".  But DL_DIR is a
+relative path from buildroot/, not $(DL_DIR)/$($(PKG)_BASE_NAME), so the
+output tries to go to the wrong place, and fails, because the directory
+doesn't exist.
 
-http://git.buildroot.net/buildroot/commit/?h=next&id=04be7f0f8ca100afaf06b264332bc2cd61fbb3d0
+So, if DL_DIR must be an absolute path, then I think that I can fix this
+problem by setting DL_DIR to "$(CURDIR)/../../../packages" in my menuconfig.
 
-But I'll try to answer to your comments
+If an absolute path requirement was not intended, then I believe that this
+problem can be fixed with the following mod to DOWNLOAD_GIT:
 
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 9e98581..e1b1bed 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -68,10 +68,10 @@ define DOWNLOAD_GIT
+        test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+        (pushd $(DL_DIR) > /dev/null && \
+        $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+-       pushd $($(PKG)_BASE_NAME) > /dev/null && \
++       cd $($(PKG)_BASE_NAME) && \
+        $(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/
+$($(PKG)_DL_VERSION) | \
+-               gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
+-       popd > /dev/null && \
++               gzip -c > ../$($(PKG)_SOURCE) && \
++       cd .. && \
+        rm -rf $($(PKG)_DL_DIR) && \
+        popd > /dev/null)
+ endef
 
-> From what I can see, this patchset only removes calls to ruserok and
-> innetgr. Could you merge them together so that all the conditionnal
-> removal of ruserok is only in one patch and all the conditional removal
-> of inetgr in another ?
+(The pushd/popd don't have to change to cd, but I think it emphasizes the
+relationship to the "../".)
 
-It makes use of ruserok and innetgr conditional as defined by
-configure tests. Something that is not very much consistent in
-linux-pam itself: some of its files did have check for innetgr, other
-just called it. Configure test for innetgr existed in linux-pam. There
-was no test for ruserok.
-
-This is merely technical, the way I created those patches was manual
-diffing of files in a pristine linux-pam source tree vs. working copy
-in Buildroot build area. This time I did file-wise to make sure each
-file compiles after patching. Patches for systemd are organized more
-at functional level (like fixing %ms format in all files that use it
-altogether).
-
-> Also, could you be more explicit with regard to patch names ? Like
-> linux-pam-disable-ruserok.patch.
-
-Patch names are again file-wise.
-
->> +
->> +LINUX_PAM_VERSION = 1.1.4
->> +LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
->
-> Since gz archives are also available, I guess you can drop this line.
-
-They are, but .bz2 is smaller: why download more?
-
->
->> +LINUX_PAM_SITE = http://linux-pam.org/library/
->> +LINUX_PAM_INSTALL_STAGING = YES
->> +LINUX_PAM_CONF_OPT = \
->> +     --disable-prelude \
->> +     --disable-isadir \
->> +     --disable-nis \
->> +     --disable-regenerate-docu \
->> +     --enable-securedir=/lib/security \
->> +     --libdir=/lib
->> +LINUX_PAM_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) flex
->
-> You can drop the libintl here. I know that a lot of packages do that,
-> but this is useless, since the libintl package doesn't exist.
-
-from .config:
-
-#
-# gcc needs development files in target filesystem
-#
-BR2_PACKAGE_GETTEXT=y
-BR2_PACKAGE_LIBINTL=y
-
-And indeed a bunch of packages have it in their dependencies. So why
-is BR2_PACKAGE_LIBINTL in the config?
-
->
->> +LINUX_PAM_AUTORECONF = YES
->> +
->> +define LINUX_PAM_BUILD_CMDS
->> +     $(MAKE) CC="$(TARGET_CC) -lintl -lfl" LD="$(TARGET_LD)" -C $(@D) all
->> +endef
->
-> Why do you need to set -lintl -lfl options ?
-
-I had build errors without this.
-
-Thanks.
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Let me know,
+Danomi -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120822/8da7543b/attachment-0001.html>
