@@ -1,37 +1,81 @@
-From: Francisco Prado <panchopapadezoe@gmail.com>
-Date: Wed, 22 Aug 2012 20:32:04 -0300
-Subject: [Buildroot] Busybox Mips
-In-Reply-To: <CAN5RZzLtbpQ30PAgpuNj_hGF6Eia42ZvxgH3Emh3AESHU-1C=g@mail.gmail.com>
-References: <CAN5RZzLtbpQ30PAgpuNj_hGF6Eia42ZvxgH3Emh3AESHU-1C=g@mail.gmail.com>
-Message-ID: <CAN5RZz+SZeqpeZ6vBPT63Gj7k2sozQ9sCk5sogKBs+O-JA2ixA@mail.gmail.com>
+From: Evade Flow <evadeflow@gmail.com>
+Date: Wed, 22 Aug 2012 20:03:56 -0400
+Subject: [Buildroot] "Incorrect selection of the C library" with Emdebian
+	toolchain
+Message-ID: <5035736C.1020205@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please guide me to compile Busybox 1.18.2 for Android Tablet Ainol Novo
-Basic 32r2 little endian MIPS.
-I have
-apt-get install subversion
-apt-get install gcc
-apt-get install g++
-apt-get install libc6-dev
-apt-get install bison
-apt-get install flex
-apt-get install gettext
-apt-get install libncurses5-dev
-apt-get install texinfo
+Hi. I'm having a problem similar to one reported earlier this year (see
+http://goo.gl/lBYtC), namely: SYSROOT_DIR is being computed incorrectly
+for my external toolchain. I'm trying to use Emdebian's ARM cross
+toolchain, which I installed in my Ubuntu 12.04 VM using:
 
-Which version of buildroot I use for this?
+   sudo apt-get install gcc-4.6-arm-linux-gnueabi
 
-I have already installed "stable BUILDROOT 5.2012"
+This puts arm-linux-gnueabi-gcc-4.6 in /usr/bin, and the dependent
+package binutils-arm-linux-gnueabi adds things like
+arm-linux-gnueabi-ar, arm-linux-gnueabi-as, etc in the same location.
+However, the latter package also drops a bunch of files in
+/usr/arm-linux-gnueabi:
 
-From already thanks.
+/usr/arm-linux-gnueabi
+|-- bin
+|   |-- ar
+|   |-- as
+|   |-- ld
+|   |-- ld.bfd
+|   |-- ld.gold
+|   |-- nm
+|   |-- objcopy
+|   |-- objdump
+|   |-- ranlib
+|   `-- strip
+|-- include
+|   |-- aio.h
+|   |-- aliases.h
+|   <--SNIP!-->
+|   |-- wait.h
+|   |-- wchar.h
+|   |-- wctype.h
+|   |-- wordexp.h
+|   |-- xen
+|   `-- xlocale.h
+`-- lib
+     |-- crt1.o
+     |-- crti.o
+     |-- crtn.o
+     |-- gcrt1.o
+     |-- ld-2.15.so
+     |-- ld-linux.so.3 -> ld-2.15.so
+     |-- libanl-2.15.so
+     <--SNIP--!>
+     |-- libstdc++.so.6 -> libstdc++.so.6.0.16
+     |-- libstdc++.so.6.0.16
+     |-- libthread_db-1.0.so
+     |-- libthread_db.so -> libthread_db.so.1
+     |-- libthread_db.so.1 -> libthread_db-1.0.so
+     |-- libutil-2.15.so
+     |-- libutil.a
+     |-- libutil.so -> libutil.so.1
+     |-- libutil.so.1 -> libutil-2.15.so
+     |-- Mcrt1.o
+     `-- Scrt1.o
 
-SORRY FOR MY BAD ENGLISH.
+So, as near as I can tell, SYSROOT_DIR should be /usr/arm-linux-gnueabi
+for this toolchain. The following sed command in ext-tool.mk (~ line
+311) is the problem:
 
-Francisco Prado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120822/1bfe35f8/attachment.html>
+SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 
+'s:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+
+When the above is executed, LIBC_A_LOCATION has the value
+"/usr/arm-linux-gnueabi/lib/libc.a" so the regex doesn't match anything,
+and I get the error "Incorrect selection of the C library".
+
+For now, I've temporarily hacked ext-tool.mk to hard-code SYSROOT_DIR to
+'/usr/arm/arm-linux-gnueabi', which seems to work. Just figured I should
+tell some folks who may be able to implement a 'real' fix... :-}
