@@ -1,40 +1,84 @@
-From: rechid miloi <in.hiring@gmail.com>
-Date: Fri, 24 Aug 2012 10:22:42 +0100
-Subject: [Buildroot] The TARGET TOOLCHAIN wan't work
-Message-ID: <CAD4nNjUzE2Oekt4huyF1KBSaweOwRzn+Gh9HiAXLFWRVxxcoYA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Aug 2012 11:34:18 +0200
+Subject: [Buildroot] gdbserver with external crosstool
+In-Reply-To: <CAJkQPOknYkU=jGjpS2B+b+DUYLNPq6NX-muxC04BBSKbbhGcLA@mail.gmail.com>
+References: <CAJkQPOknYkU=jGjpS2B+b+DUYLNPq6NX-muxC04BBSKbbhGcLA@mail.gmail.com>
+Message-ID: <20120824113418.18b14077@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I've made a buildroot based system for x86_64 to which I've
-successfully added PAM, MINGETTY, ...etc. But some of packages I've to
-add can't be cross compiled. So I decided
-to use the target gcc/binutils by activating
-BR2_TARGET_GCC,BR2_TARTGET_BINUTILS,
-BR2_TARGET_DEVFILE and I've deactivated uClibc striping.
+Le Thu, 23 Aug 2012 09:45:35 +0100,
+Aras Vaichas <aras.vaichas@gmail.com> a ?crit :
 
-When I try to compile a simple program :
-#include <stdio.h>
-main () {
- printf("Hello %s","samy");
-}
+> I've got a question about building gdbserver when an external
+> toolchain is selected.
+> 
+> in toolchain/gdb/Config.in:
+> 
+> config BR2_PACKAGE_GDB_SERVER
+>         bool "Build gdb server for the Target"
+>         depends on !BR2_TOOLCHAIN_EXTERNAL
+>         help
+>             Build the gdbserver stub to run on the target.
+>             A full gdb is needed to debug the progam.
+> 
+> Why doesn't Buildroot build gdbserver when an external toolchain is selected?
 
-It works !
+Because for external toolchains, we assume that the gdbserver must be
+provided by the external toolchain, together with the cross-gdb.
 
-But when trying to compile for example the "file" package I got this message :
+There are two reasons:
 
-.../bin/ld: ..../libc.a(libc-cancellation.os): realocation
-R_X86_64_PC32 against undefined symbol '__pthread_unwind' can not be
-used when making a shared object; recompile with fPIC
+ 1. Most pre-built external toolchains available out there provide both
+    their own cross-gdb and gdbserver, so it makes sense to use them.
 
-So I've recompiled the entire system with '-fPIC -DPIC" without success.
+ 2. Experience has shown that if there is a version difference between
+    the cross-gdb and the gdbserver, there are often problems.
+    Therefore, we really want people using external toolchains to use
+    the provided gdbserver with their external toolchain rather than
+    build their own.
 
-NOTA :
-   - The problem occurs with other packages on other library and other symbols.
-   - The R_X86_64_PC32 is present when using readelf on the "libc_pic.a".
+> I noticed that both gdbserver and gdb are built (with the external
+> toolchain) by Buildroot, but only gdb is copied over to the target.
 
-Samy FODIL,
+I'm a bit confused: are you talking about the cross gdb or the target
+gdb? When using an external toolchain, what we except people to do is:
+
+ *) Use the cross-gdb provided pre-built by their external toolchain
+
+ *) Use the BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option so that the
+ gdbserver provided pre-built by their external toolchain is copied to
+ the target filesystem
+
+ *) Optionally (but not really useful or recommended), they can enable
+ the gdb package, which will build a full-blown gdb for the target,
+ installed in the target filesystem. But that's a completely different
+ thing than cross-gdb+gdbserver.
+
+> I see that BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY allows the gdbserver
+> from the external toolchain to be copied over.
+
+Yes.
+
+> So why doesn't Buildroot allow me to copy over the gdbserver that I
+> built within Buildroot?
+
+I'm confused again. Can you explain what you're doing exactly? In the
+previous paragraph, you precisely said that there was an option to copy
+gdbserver to the target filesystem, and now you're saying that there
+isn't such an option. Are you talking about two different
+configurations maybe?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
