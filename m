@@ -1,32 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Aug 2012 23:28:26 +0200
-Subject: [Buildroot] [git commit] openssl: bump to version 1.0.1c
-Message-ID: <20120903200543.11EFB9953E@busybox.osuosl.org>
+Date: Fri, 24 Aug 2012 23:40:28 +0200
+Subject: [Buildroot] [git commit] package/libnss: also install a pkg-config
+	file
+Message-ID: <20120903200543.D15099953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3c33a354b74697dd792c4f5c03f348e974782b2
+commit: http://git.buildroot.net/buildroot/commit/?id=d59cd114d6e33cc6dd358c3708d70a1a5483dc56
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Some packages use pkg-config to check for libnss.
+
+Add our own .pc file (vampirised from Debian).
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libnss/libnss.mk |    8 ++++++++
+ package/libnss/nss.pc.in |   11 +++++++++++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index f9816af..16d1394 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index f7fd682..84fc149 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -49,6 +49,10 @@ define LIBNSS_INSTALL_STAGING_CMDS
+ 		$(@D)/$(LIBNSS_DISTDIR)/public/nss/*
+ 	$(INSTALL) -m 755 -t $(STAGING_DIR)/usr/lib/ \
+ 		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
++	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnss/nss.pc.in \
++		$(STAGING_DIR)/usr/lib/pkgconfig/nss.pc
++	$(SED) 's/@VERSION@/$(LIBNSS_VERSION)/g;' \
++		$(STAGING_DIR)/usr/lib/pkgconfig/nss.pc
+ endef
  
--OPENSSL_VERSION = 1.0.0j
-+OPENSSL_VERSION = 1.0.1c
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
+ define LIBNSS_INSTALL_TARGET_CMDS
+@@ -59,6 +63,10 @@ define LIBNSS_INSTALL_TARGET_CMDS
+ 		$(@D)/$(LIBNSS_DISTDIR)/public/nss/*
+ 	$(INSTALL) -m 755 -t $(TARGET_DIR)/usr/lib/ \
+ 		$(@D)/$(LIBNSS_DISTDIR)/lib/*.a
++	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnss/nss.pc.in \
++		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
++	$(SED) 's/@VERSION@/$(LIBNSS_VERSION)/g;' \
++		$(TARGET_DIR)/usr/lib/pkgconfig/nss.pc
+ endef
+ 
+ define LIBNSS_CLEAN_CMDS
+diff --git a/package/libnss/nss.pc.in b/package/libnss/nss.pc.in
+new file mode 100644
+index 0000000..e27783f
+--- /dev/null
++++ b/package/libnss/nss.pc.in
+@@ -0,0 +1,11 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include/nss
++
++Name: NSS
++Description: Mozilla Network Security Services
++Version: @VERSION@
++Requires: nspr
++Libs: -L${libdir} -lnss3 -lnssutil3 -lsmime3 -lssl3
++Cflags: -I${includedir}
