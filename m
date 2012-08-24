@@ -1,84 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Aug 2012 11:34:18 +0200
-Subject: [Buildroot] gdbserver with external crosstool
-In-Reply-To: <CAJkQPOknYkU=jGjpS2B+b+DUYLNPq6NX-muxC04BBSKbbhGcLA@mail.gmail.com>
-References: <CAJkQPOknYkU=jGjpS2B+b+DUYLNPq6NX-muxC04BBSKbbhGcLA@mail.gmail.com>
-Message-ID: <20120824113418.18b14077@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 24 Aug 2012 10:39:54 +0100
+Subject: [Buildroot] [PATCH] schifra: new package
+Message-ID: <1345801194-28735-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Simon Dawson <spdawson@gmail.com>
 
-Le Thu, 23 Aug 2012 09:45:35 +0100,
-Aras Vaichas <aras.vaichas@gmail.com> a ?crit :
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in          |    1 +
+ package/schifra/Config.in  |   18 ++++++++++++++++
+ package/schifra/schifra.mk |   50 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 69 insertions(+)
+ create mode 100644 package/schifra/Config.in
+ create mode 100644 package/schifra/schifra.mk
 
-> I've got a question about building gdbserver when an external
-> toolchain is selected.
-> 
-> in toolchain/gdb/Config.in:
-> 
-> config BR2_PACKAGE_GDB_SERVER
->         bool "Build gdb server for the Target"
->         depends on !BR2_TOOLCHAIN_EXTERNAL
->         help
->             Build the gdbserver stub to run on the target.
->             A full gdb is needed to debug the progam.
-> 
-> Why doesn't Buildroot build gdbserver when an external toolchain is selected?
-
-Because for external toolchains, we assume that the gdbserver must be
-provided by the external toolchain, together with the cross-gdb.
-
-There are two reasons:
-
- 1. Most pre-built external toolchains available out there provide both
-    their own cross-gdb and gdbserver, so it makes sense to use them.
-
- 2. Experience has shown that if there is a version difference between
-    the cross-gdb and the gdbserver, there are often problems.
-    Therefore, we really want people using external toolchains to use
-    the provided gdbserver with their external toolchain rather than
-    build their own.
-
-> I noticed that both gdbserver and gdb are built (with the external
-> toolchain) by Buildroot, but only gdb is copied over to the target.
-
-I'm a bit confused: are you talking about the cross gdb or the target
-gdb? When using an external toolchain, what we except people to do is:
-
- *) Use the cross-gdb provided pre-built by their external toolchain
-
- *) Use the BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY option so that the
- gdbserver provided pre-built by their external toolchain is copied to
- the target filesystem
-
- *) Optionally (but not really useful or recommended), they can enable
- the gdb package, which will build a full-blown gdb for the target,
- installed in the target filesystem. But that's a completely different
- thing than cross-gdb+gdbserver.
-
-> I see that BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY allows the gdbserver
-> from the external toolchain to be copied over.
-
-Yes.
-
-> So why doesn't Buildroot allow me to copy over the gdbserver that I
-> built within Buildroot?
-
-I'm confused again. Can you explain what you're doing exactly? In the
-previous paragraph, you precisely said that there was an option to copy
-gdbserver to the target filesystem, and now you're saying that there
-isn't such an option. Are you talking about two different
-configurations maybe?
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f308de7..993a5ad 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -464,6 +464,7 @@ source "package/lttng-libust/Config.in"
+ source "package/orc/Config.in"
+ source "package/poco/Config.in"
+ source "package/protobuf/Config.in"
++source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
+ 
+diff --git a/package/schifra/Config.in b/package/schifra/Config.in
+new file mode 100644
+index 0000000..466ac0e
+--- /dev/null
++++ b/package/schifra/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_SCHIFRA
++	bool "schifra"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  Schifra is a very robust, highly optimized and extremely configurable
++	  Reed-Solomon error correcting code library for both software and IP
++	  core based applications with implementations in C++ and VHDL.
++
++	  http://www.schifra.com/
++
++config BR2_PACKAGE_SCHIFRA_EXAMPLES
++	bool "schifra examples"
++	depends on BR2_PACKAGE_SCHIFRA
++	help
++	  Build and install the schifra example applications.
++
++comment "schifra requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
+new file mode 100644
+index 0000000..e97dede
+--- /dev/null
++++ b/package/schifra/schifra.mk
+@@ -0,0 +1,50 @@
++#############################################################
++#
++# schifra
++#
++#############################################################
++SCHIFRA_VERSION = 0.0.1
++SCHIFRA_SITE = http://www.schifra.com/downloads
++SCHIFRA_SOURCE = schifra.tgz
++SCHIFRA_INSTALL_STAGING = YES
++SCHIFRA_LICENSE = schifra license
++SCHIFRA_LICENSE_FILES = schifra_license.txt
++
++SCHIFRA_MAKE_OPT = COMPILER="$(TARGET_CXX)"
++
++# The examples are the only buildable artefacts.
++ifeq ($(BR2_PACKAGE_SCHIFRA_EXAMPLES),y)
++define SCHIFRA_BUILD_CMDS
++	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPT) all
++endef
++endif
++
++define SCHIFRA_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/include
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/include $(@D)/schifra_*.hpp
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/bin
++	for i in `find $(@D) -type f -name 'schifra_*' -executable` ; \
++	do \
++		$(INSTALL) -m 0755 -t $(TARGET_DIR)/usr/bin $$i ; \
++	done
++endef
++
++define SCHIFRA_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include
++	$(INSTALL) -m 0644 -t $(STAGING_DIR)/usr/include $(@D)/schifra_*.hpp
++endef
++
++define SCHIFRA_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/usr/include/schifra_*.hpp
++	$(RM) $(TARGET_DIR)/usr/bin/schifra_*
++endef
++
++define SCHIFRA_UNINSTALL_STAGING_CMDS
++	$(RM) $(STAGING_DIR)/usr/include/schifra_*.hpp
++endef
++
++define SCHIFRA_CLEAN_CMDS
++	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPT) clean
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
