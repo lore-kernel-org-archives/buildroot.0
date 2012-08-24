@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Aug 2012 23:48:49 +0200
-Subject: [Buildroot] [git commit branch/next] coreutils: bump to version 8.18
-Message-ID: <20120824214947.254659731C@busybox.osuosl.org>
+Date: Sat, 25 Aug 2012 00:05:22 +0200
+Subject: [Buildroot] [git commit] system/init: add option for no init system
+Message-ID: <20120824221101.F08EA99363@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2dfe72045192e7ffee36dc4561b981c178d43d4c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: http://git.buildroot.net/buildroot/commit/?id=0c00636e8bbc4e4c3049e2e4a2e2e9da25ef5589
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Can be usefull if a local package provides an init procedure.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/coreutils/coreutils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ target/generic/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index e64dd5a..d7d0779 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/target/generic/Config.in b/target/generic/Config.in
+index a83ba44..b8472f4 100644
+--- a/target/generic/Config.in
++++ b/target/generic/Config.in
+@@ -64,6 +64,9 @@ comment 'systemd requires largefile, wchar, IPv6, threads and udev support'
+ 		     BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && \
+ 		     BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV)
  
--COREUTILS_VERSION = 8.16
-+COREUTILS_VERSION = 8.18
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
++config BR2_INIT_NONE
++	bool "None"
++
+ endchoice
  
+ config BR2_ROOTFS_DEVICE_TABLE
