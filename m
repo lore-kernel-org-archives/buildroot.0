@@ -1,42 +1,57 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Fri, 24 Aug 2012 13:51:38 -0400
-Subject: [Buildroot]  dropbear permission denied
-Message-ID: <CADiAo4JrERmenatsSkNqb8d--WduPqBXvz0862Cr-CqO2-2Txg@mail.gmail.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Fri, 24 Aug 2012 23:02:20 +0200
+Subject: [Buildroot] Buildproblems while running make
+Message-ID: <5037EBDC.4020205@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Thomas Petazzoni wrote:
+I'm successful setting up BR for building a ARM cross compiler with
+CT-NG. Now I've added a project specific kernelconfig for 2.6.39.4 and
+started a build process.
 
-> Should we make the default 'root' password be 'root' so that it is
-> non-empty and it works with Dropbear? Or simply add a FAQ entry
-> which explains this problem? Other ideas?
+The whole cross compiler part is working without problems, so after this
+some tools should be builded. But the build failed with an error message
+about aclocal could not be found.
+This confuses me a little bit, because some lines above is to see that
+automake1.11 was successful builded. Here is the relevant output.
+> make[3]: F?r das Ziel ?install-exec-am? ist nichts zu tun.
+>  /bin/mkdir -p '/home/carsten/gitprojects/buildroot/output/target/usr/share/aclocal-1.11'
+>  /usr/bin/install -c -m 644 ../m4/amversion.m4 ar-lib.m4 as.m4 auxdir.m4 ccstdc.m4 cond.m4 cond-if.m4 depend.m4 depout.m4 dmalloc.m4 gcj.m4 header.m4 init.m4 install-sh.m4 lead-dot.m4 lex.m4 lispdir.m4 maintainer.m4 make.m4 minuso.m4 missing.m4 mkdirp.m4 multi.m4 obsol-gt.m4 obsol-lt.m4 obsolete.m4 options.m4 protos.m4 python.m4 regex.m4 runlog.m4 sanity.m4 silent.m4 strip.m4 substnot.m4 tar.m4 upc.m4 vala.m4 '/home/carsten/gitprojects/buildroot/output/target/usr/share/aclocal-1.11'
+> make[3]: Leaving directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5/m4'
+> make[2]: Leaving directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5/m4'
+> Making install in tests
+> make[2]: Entering directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5/tests'
+> make[3]: Entering directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5/tests'
+> make[3]: F?r das Ziel ?install-exec-am? ist nichts zu tun.
+> make[3]: F?r das Ziel ?install-data-am? ist nichts zu tun.
+> make[3]: Leaving directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5/tests'
+> make[2]: Leaving directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5/tests'
+> make[1]: Leaving directory `/home/carsten/gitprojects/buildroot/output/build/automake-1.11.5'
+> mkdir -p /home/carsten/gitprojects/buildroot/output/target/etc
+> echo "buildroot" > /home/carsten/gitprojects/buildroot/output/target/etc/hostname
+> /bin/sed -i -e '$a \127.0.1.1\tbuildroot' \
+> 		-e '/^127.0.1.1/d' /home/carsten/gitprojects/buildroot/output/target/etc/hosts
+> mkdir -p /home/carsten/gitprojects/buildroot/output/target/etc
+> echo "Welcome to Buildroot" > /home/carsten/gitprojects/buildroot/output/target/etc/issue
+> /bin/sed -i -e '/# GENERIC_SERIAL$/s~^.*#~ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 #~' \
+> 		/home/carsten/gitprojects/buildroot/output/target/etc/inittab
+> /bin/sed -i -e '/^#.*# REMOUNT_ROOTFS_RW$/s~^#\+~~' /home/carsten/gitprojects/buildroot/output/target/etc/inittab
+>>>> host-module-init-tools 3.15 Autoreconfiguring
+> aclocal: couldn't open directory '/home/carsten/gitprojects/buildroot/output/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/share/aclocal': Datei oder Verzeichnis nicht gefunden
+> autoreconf: /home/carsten/gitprojects/buildroot/output/host/usr/bin/aclocal failed with exit status: 1
+> make: *** [/home/carsten/gitprojects/buildroot/output/build/host-module-init-tools-3.15/.stamp_configured] Fehler 1
 
-Not being much familiar with Dropbear, I'm wondering if it supports
-PAM [1]? If it does, can it work with a similar PAM config file like I
-am supplying* with Busybox for login i. e.
+Did I something misconfigured or misunderstood?
+Can someone point me to the correct direction? If there some config
+files needed just let me know.
 
-auth      required       pam_unix.so nullok
-account   required       pam_unix.so nullok
-password  required       pam_unix.so nullok
-session   required       pam_unix.so nullok
+And one more question, if I rerun make (without changes to BR) the
+complete cross compiler will be rebuilded, why this happen?
 
-with such PAM config file zero-length passwords are allowed. Busybox
-login works this way for users `default' and `root' but not for any
-other username.
-
-[1] http://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2010q3/001053.html
-
-* In a patch I submitted some time earlier, but it hasn't been
-committed  yet:
-http://lists.busybox.net/pipermail/buildroot/2012-August/057490.html
-
-Thanks.
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Thanks in advice,
+Carsten
