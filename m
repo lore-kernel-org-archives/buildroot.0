@@ -1,44 +1,82 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Thu, 23 Aug 2012 18:33:38 -0400
-Subject: [Buildroot] [PATCH 2/2] Provide PAM default configuration files
- when building linux-pam package
-In-Reply-To: <50369EFA.5010708@mind.be>
-References: <1345001603-16774-1-git-send-email-golubovsky@gmail.com>
- <1345001603-16774-2-git-send-email-golubovsky@gmail.com>
- <50369EFA.5010708@mind.be>
-Message-ID: <CADiAo4L9v-f-1_SHx6f0xEiZkTO0rLu_qWyh7N+PAyzPVfGDDQ@mail.gmail.com>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Fri, 24 Aug 2012 10:36:57 +0800
+Subject: [Buildroot] Busybox Mips
+In-Reply-To: <CAN5RZzLr+vGuiVw4oRGF40bvvZ33gaxPt_LvSLBvauOmEK7PZw@mail.gmail.com>
+References: <CAN5RZzLtbpQ30PAgpuNj_hGF6Eia42ZvxgH3Emh3AESHU-1C=g@mail.gmail.com>
+ <CAN5RZz+SZeqpeZ6vBPT63Gj7k2sozQ9sCk5sogKBs+O-JA2ixA@mail.gmail.com>
+ <CAJhJPsWaU1B_Cq=ZJZQrqUzaHt_JGq4khPj=kDpM37hVLT0YKg@mail.gmail.com>
+ <CAN5RZzLr+vGuiVw4oRGF40bvvZ33gaxPt_LvSLBvauOmEK7PZw@mail.gmail.com>
+Message-ID: <CAJhJPsU3eUkJf=Yqr6E9tP9ZGRzY-L20XkaXa5Sk3k-QZ-804Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+The 1.18.x was marked as deprecated in this April.
+I'm afraid you need to downgrade to 2012.02 or earlier.
+Otherwise, you have to modify package/busybox/Config.in manually.
 
-On Thu, Aug 23, 2012 at 5:22 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  We normally hard-code the directory name: the build is always executed from
-> the buildroot directory, and the package directory normally doesn't change.
-> So:
->         cp package/linux-pam/default $(TARGET_DIR)/etc/pam.d
-> This will also allow you to do it in the post-install hook.
+2012/8/23 Francisco Prado <panchopapadezoe@gmail.com>
 
-I try to avoid any hardcoding. Would it be better to make RAWNAME also
-available at the install phase?
-
+> Dear Kelvin.
+> Thanks for answering.
+> Read the manual before posting my question.
+> The manual is not the answer of my question, or I did not understand.
+> That version of "buildroot" this pre-configurated for "Busybox 1.20.x or
+> 1.19.x".
+> I need 1.18.2
+> Thanks.
+>  El 23/08/2012 00:17, "Kelvin Cheung" <keguang.zhang@gmail.com> escribi?:
 >
->  Also, I would use $(INSTALL) instead of cp (but that's personal preference,
-> cp is used in other places as well):
->         $(INSTALL) -D -m 0644 package/linux-pam/default
-> $(TARGET_DIR)/etc/pam.d/default
-> (since it uses -D, the mkdir can be removed).
+> Please refer to the user manual.
+>> http://buildroot.uclibc.org/downloads/manual/manual.html
+>>
+>> 2012/8/23 Francisco Prado <panchopapadezoe@gmail.com>
+>>
+>>> Please guide me to compile Busybox 1.18.2 for Android Tablet Ainol Novo
+>>> Basic 32r2 little endian MIPS.
+>>> I have
+>>> apt-get install subversion
+>>> apt-get install gcc
+>>> apt-get install g++
+>>> apt-get install libc6-dev
+>>> apt-get install bison
+>>> apt-get install flex
+>>> apt-get install gettext
+>>> apt-get install libncurses5-dev
+>>> apt-get install texinfo
+>>>
+>>> Which version of buildroot I use for this?
+>>>
+>>> I have already installed "stable BUILDROOT 5.2012"
+>>>
+>>> From already thanks.
+>>>
+>>> SORRY FOR MY BAD ENGLISH.
+>>>
+>>> Francisco Prado
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>>
+>>
+>> --
+>> Best Regards!
+>> Kelvin
+>>
+>>
+>>
+>>
 
-Thanks for the suggestion. I hope to also get Thomas' opinion and if
-there are further improvement suggestions I'll try to incorporate
-yours as well.
-
-Thanks.
 
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Best Regards!
+Kelvin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120824/070ab304/attachment.html>
