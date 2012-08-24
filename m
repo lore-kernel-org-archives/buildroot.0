@@ -1,25 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Aug 2012 23:49:02 +0200
-Subject: [Buildroot] [PATCH 1/2] wget: bump to version 1.14
-In-Reply-To: <1344863670-7129-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1344863670-7129-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120824234902.6bb145bc@skate>
+Date: Fri, 24 Aug 2012 23:48:46 +0200
+Subject: [Buildroot] [git commit branch/next] wget: bump to version 1.14
+Message-ID: <20120824214946.BEACB9731C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 13 Aug 2012 10:14:29 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=61d1f013d9217633a0f992a5a12d3c6092fefdee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wget/wget.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Applied the wget and coreutils bump to next, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index a15111c..01ebcb6 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,8 +4,10 @@
+ #
+ #############################################################
+ 
+-WGET_VERSION = 1.13.4
++WGET_VERSION = 1.14
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
++WGET_LICENSE = GPLv3+
++WGET_LICENSE_FILES = COPYING
+ 
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
