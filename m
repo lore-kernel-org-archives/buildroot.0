@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Aug 2012 23:34:20 +0200
-Subject: [Buildroot] [PATCH] freetype, libfuse, libpng, x11vnc,
- zlib: get rid of BR2_SOURCEFORGE_MIRROR
-In-Reply-To: <1345673515-1719-2-git-send-email-stefan.froberg@petroprogram.com>
-References: <1345673515-1719-1-git-send-email-stefan.froberg@petroprogram.com>
- <1345673515-1719-2-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20120824233420.296862c5@skate>
+Date: Fri, 24 Aug 2012 23:35:15 +0200
+Subject: [Buildroot] [git commit] Mention that BR2_SOURCEFORGE_MIRROR is
+	deprecated
+Message-ID: <20120824213544.1F61297086@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 23 Aug 2012 01:11:55 +0300,
-Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=d660fa32ad67b861ccb30d50a58c511b7999a6cc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
-> ---
->  package/freetype/freetype.mk |    2 +-
->  package/libfuse/libfuse.mk   |    2 +-
->  package/libpng/libpng.mk     |    2 +-
->  package/x11vnc/x11vnc.mk     |    2 +-
->  package/zlib/zlib.mk         |    2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Applied, thanks.
-
-I have done one small change: use $() everywhere instead of the ${}
-that you introduced. We use $() everywhere in Buildroot to reference
-make variables.
-
-Could you look at the other packages that reference the
-BR2_SOURCEFORGE_MIRROR variable?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/Config.in b/Config.in
+index b18c927..4a7e6b5 100644
+--- a/Config.in
++++ b/Config.in
+@@ -151,6 +151,10 @@ config BR2_SOURCEFORGE_MIRROR
+ 	string "Sourceforge mirror site"
+ 	default "kent"
+ 	help
++	  Note: the usage of this variable is deprecated. Packages
++	  should instead use the http://downloads.sourceforge.net/ URL
++	  which automatically chooses a working mirror
++
+ 	  Sourceforge has a system of mirror sites.  Some sites may be
+ 	  closer to your location, and sometimes mirror sites go down
+ 	  and are no longer available.  This option allows you to select
