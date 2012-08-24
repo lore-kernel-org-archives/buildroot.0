@@ -1,66 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 24 Aug 2012 23:40:25 +0200
-Subject: [Buildroot] [git commit branch/next] package/libnspr: add
-	pkg-config file
-Message-ID: <20120824214115.7623197296@busybox.osuosl.org>
+Date: Fri, 24 Aug 2012 23:41:35 +0200
+Subject: [Buildroot] [PATCH] python: firefox host-python dependency
+ needs --enable-unicodedata
+In-Reply-To: <1345556908-9189-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1345556908-9189-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20120824234135.3dfc5dd5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22afea3002e5357382704c8e15d8a03d54a6b869
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Le Tue, 21 Aug 2012 16:48:28 +0300,
+Stefan Froberg <stefan.froberg@petroprogram.com> a ?crit :
 
-Some packages use pkg-config to check for libnspr.
+> Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
 
-Add our own .pc file (vampirised from Debian).
+Could you send a complete set of patches with all the necessary
+changes to add the firefox package, including the firefox package
+itself?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnspr/libnspr.mk |   16 ++++++++++++++++
- package/libnspr/nspr.pc.in |   10 ++++++++++
- 2 files changed, 26 insertions(+), 0 deletions(-)
+Thanks!
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 689caa4..736984d 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -16,4 +16,20 @@ LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
- LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
- LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
- 
-+define LIBNSPR_INSTALL_STAGING_PC
-+	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnspr/nspr.pc.in \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/nspr.pc
-+	$(SED) 's/@VERSION@/$(LIBNSPR_VERSION)/g;' \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/nspr.pc
-+endef
-+LIBNSPR_POST_INSTALL_STAGING_HOOKS += LIBNSPR_INSTALL_STAGING_PC
-+
-+define LIBNSPR_INSTALL_TARGET_PC
-+	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnspr/nspr.pc.in \
-+		$(TARGET_DIR)/usr/lib/pkgconfig/nspr.pc
-+	$(SED) 's/@VERSION@/$(LIBNSPR_VERSION)/g;' \
-+		$(TARGET_DIR)/usr/lib/pkgconfig/nspr.pc
-+endef
-+LIBNSPR_POST_INSTALL_TARGET_HOOKS += LIBNSPR_INSTALL_TARGET_PC
-+
- $(eval $(autotools-package))
-diff --git a/package/libnspr/nspr.pc.in b/package/libnspr/nspr.pc.in
-new file mode 100644
-index 0000000..44873d2
---- /dev/null
-+++ b/package/libnspr/nspr.pc.in
-@@ -0,0 +1,10 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include/nspr
-+
-+Name: NSPR
-+Description: The Netscape Portable Runtime
-+Version: @VERSION@
-+Libs: -L${exec_prefix}/lib -lplds4 -lplc4 -lnspr4 -lpthread -ldl
-+Cflags: -I${prefix}/include/nspr
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
