@@ -1,70 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 Aug 2012 00:53:31 +0200
-Subject: [Buildroot] libffi or the crazy world of toolchain options
-In-Reply-To: <201208262240.51214.yann.morin.1998@free.fr>
-References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <201208261223.46075.yann.morin.1998@free.fr>
- <201208262240.51214.yann.morin.1998@free.fr>
-Message-ID: <201208300053.32183.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Aug 2012 17:19:26 +0200
+Subject: [Buildroot] [git commit branch/next] connman: bump to version 1.6
+Message-ID: <20120830031119.C5DF4994F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=a5cefe8a7edd38c06aedf2fe403e087d4061a180
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sunday 26 August 2012 22:40:50 Yann E. MORIN wrote:
-> On Sunday 26 August 2012 12:23:46 Yann E. MORIN wrote:
-> OK, now I have a shell+awk script (pkg-avail, attached) that:
->   - adds a BR2_PACKAGE_XXX_AVAILABLE symbol for all packages
->   - moves packages dependencies to that symbol
->   - adds a single dependency against that symbol to the corresponding
->     BR2_PACKAGE_XXX /main/ symbol
+Signed-off-by: Jonathan Liu <net147@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/connman/connman.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-OK, this is iteration 3 of the script.
-
-It now runs three pases:
-
-1) - introduces a BR2_PACKAGE_XXX_AVAILABLE symbol
-   - moves all the package dependencies to this symbol
-   - has the package depends only on this symbol
-
-2) - transforms all 'depends on BR2_PACKAGE_XXX' into a dependency
-     on the corresponding _AVAILABLE symbol
-   - adds a select on the corresponding package
-
-3) - checks and fixes 'select BR2_PACKAGE_XXX' that does not have a
-     corresponding 'depends on BR2_PACKAGE_XXX_AVAILABLE'
-
-NOTE: the coverage of this script is NOT 100%. Some manual inspection
-and fixes are still required.
-
-Pass 1 treats all 817 packages. After a quick glance, all appears OK,
-but a more thorough analysis must be conducted.
-
-Pass 2 finds 67 packages that needs munging. There are a few packages
-left over, becasue they ahve constructs like
-    depends on PKG_FOO || PKG_BAR
-
-Pass 3 finds 401 packages that 'select' packages without a corresponding
-'depends on' on the _AVAILABLE symbol. A casual glance found that pass
-to be pretty OK, although a complete analysis has not ben done so far.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: pkg-avail
-Type: application/x-shellscript
-Size: 6962 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120830/6ae428c6/attachment.bin>
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 726cb73..ed83ebc 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ #######################################################
+ 
+-CONNMAN_VERSION = 1.4
++CONNMAN_VERSION = 1.6
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ CONNMAN_INSTALL_STAGING = YES
