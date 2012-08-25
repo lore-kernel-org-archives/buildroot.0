@@ -1,63 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Aug 2012 16:13:12 +0200
-Subject: [Buildroot] [PATCH] json-c: fix build when no thread support is
-	available
-In-Reply-To: <1345903992-27961-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1345903992-27961-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1345903992-27961-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 25 Aug 2012 17:06:05 +0200
+Subject: [Buildroot] libffi or the crazy world of toolchain options
+Message-ID: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/1d9a2e44da3aa627265b03763ca324c609c0c61c/build-end.log.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/json-c/json-c-no-reentrant.patch |   33 ++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/json-c/json-c-no-reentrant.patch
+I got sick of having build issues related to libffi needs of threads,
+of the absence of support for sh2a in libffi, so I did the work needed
+to ensure that libffi would not be used anymore in those two cases.
 
-diff --git a/package/json-c/json-c-no-reentrant.patch b/package/json-c/json-c-no-reentrant.patch
-new file mode 100644
-index 0000000..a01181c
---- /dev/null
-+++ b/package/json-c/json-c-no-reentrant.patch
-@@ -0,0 +1,33 @@
-+Do not pass -D_REENTRANT
-+
-+This flag is not needed to build this library, and prevents to build
-+it with toolchains that don't have thread support.
-+
-+Since the Makefile.in change is a one-liner, we also do it in the
-+patch to avoid having to autoreconfigure the package.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makefile.am
-+===================================================================
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,4 +1,4 @@
-+-AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
-++AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
-+ 
-+ EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
-+ 
-+Index: b/Makefile.in
-+===================================================================
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -219,7 +219,7 @@
-+ top_build_prefix = @top_build_prefix@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+-AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
-++AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
-+ EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
-+ lib_LTLIBRARIES = libjson.la
-+ pkgconfigdir = $(libdir)/pkgconfig
--- 
-1.7.9.5
+This is a boring work, because libffi is mandatory for Python and
+glib2, and glib2 has a crazy number of reverse dependencies that do
+"select BR2_PACKAGE_LIBGLIB2", and therefore overstepping the
+dependencies of glib2.
+
+This patch, I hope, illustrate how crazy this story of "depends on"
+needed for toolchain options has become. We need to find a solution
+for this. Yann has proposed something (see
+http://lists.busybox.net/pipermail/buildroot/2012-August/057144.html).
+
+Opinions? My patch, or Yann's solution? Other solutions?
+
+Thanks,
+
+Thomas
