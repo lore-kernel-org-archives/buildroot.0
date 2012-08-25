@@ -1,77 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 25 Aug 2012 11:30:12 +0200
-Subject: [Buildroot] Generating external toolchains with Buildroot
-Message-ID: <20120825113012.44b2612f@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 25 Aug 2012 12:03:55 +0200
+Subject: [Buildroot] Announcement: availability of autobuilder toolchains
+In-Reply-To: <20120825110931.5acc6645@skate> (Thomas Petazzoni's message of
+ "Sat, 25 Aug 2012 11:09:31 +0200")
+References: <20120825110931.5acc6645@skate>
+Message-ID: <87a9xjqodw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-In order to make the autobuilders toolchain available to everyone, I
-had to generate tarballs of Buildroot toolchains. Basically, I just did
-BR2_HOST_DIR=/opt/<some-toolchain-name> and built just the toolchain.
-This has raised two problems.
+ Thomas> Hello,
 
-Problem 1: everything is in usr/
-================================
+ Thomas> One common complaint about the autobuilders was that the builds
+ Thomas> were not reproducible because they were using external
+ Thomas> toolchains that were not available to others.
 
-In the host directory, Buildroot installs everything under a usr/
-subdirectory. So the toolchain binaries are available under
-usr/bin/<foo>-gcc and al.
+ Thomas> I have fixed this now for all the toolchain configuration used
+ Thomas> on the Free Electrons build server, and I guess Peter will
+ Thomas> follow with the toolchain configurations he is using on the
+ Thomas> gcc10 and gcc14 build machines.
 
-However, all other external toolchains (from Sourcery CodeBench,
-Crosstool-NG, Blackfin, Linaro, etc.) all have the toolchain binaries
-directly under bin/.
+Cool, thanks!
 
-So the external toolchain code extracts the toolchain tarball into
-host/opt/ext-toolchain/ and excepts to find the binaries in
-host/opt/external-toolchain/bin/. Which is not the case with Buildroot
-toolchain if you simply create a tarball of the host/ directory
-contents.
+ Thomas> Peter, could you:
 
-For now, I've simply adjusted how I create the tarball so that the
-tarball has everything without the usr/ sub-directory.
+ Thomas>  * Give me your base Buildroot configuration that you are using
+ Thomas>  on gcc10 and gcc14
 
-Question: should we be changing our host directory policy and use
---prefix=$(HOST_DIR) instead of --prefix=$(HOST_DIR)/usr ? Or should we
-keep things as it is and leave with this little drawback ?
+The (internal) gcc10 config is present in every build result (grep -v
+BR2_PACKAGE defconfig).
 
-Problem 2: relocalability
-=========================
+gcc14 toolchain config is:
+BR2_powerpc=y
+BR2_powerpc_603e=y
+BR2_HOST_DIR="/home/peko/br/ppc603e-wl6"
+BR2_JLEVEL=8
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
 
-The main problem though is the relocalability of the toolchain. We have
-discussed in length the relocability of the Buildroot SDK (i.e, the
-host/ directory) during previous Buildroot Developer meetings. For the
-specific case of a SDK that contains only the toolchain, there is only
-one problem I had: we build gmp, mpfr and gmp as shared libraries, and
-the gcc binaries have absolute rpath in their binaries to reference the
-host/usr/lib directory in which these shared libraries are installed.
+gcc110 toolchain config is:
+BR2_x86_i686=y
+BR2_HOST_DIR="/home/peko/br/i686-wchar"
+BR2_JLEVEL=8
+BR2_PTHREAD_DEBUG=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
 
-We thought of solving this problem by using a relative rpath:
--Wl,-rpath,$ORIGIN/../lib. Unfortunately, this probably works fine for
-binaries installed in host/usr/bin, but not for the cc1 and collect2
-binaries installed in host/usr/libexec/gcc/<foo>/<gcc-version>/. Those
-binaries would need a different relative rpath to work properly.
+But notice that this is a power7 machine, so an x86 toolchain won't work.
 
-For the toolchains that I've put online at
-http://autobuild.buildroot.org/toolchains/tarballs/, I've solved this
-problem by modifying Buildroot so that it builds mpfr, gmp and mpc as
-static libraries, so that the gcc binaries do not depend to any shared
-libraries besides the C library. And this seems to work fine, though it
-is not a completely satisfying solution.
+uname -a
+Linux gcc1-power7.osuosl.org 3.3.1-3.fc16.ppc64 #1 SMP Wed Apr 11 09:05:31 MST 2012 ppc64 ppc64 ppc64 GNU/Linux
 
-Any ideas on this one? Should we add both -Wl,-rpath,$ORIGIN/../lib and
--Wl,-rpath,$ORIGIN/../../../../lib when building gcc to solve this
-problem? Another solution?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
