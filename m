@@ -1,29 +1,55 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 26 Aug 2012 18:31:49 -0400
-Subject: [Buildroot] [PATCH] sqlite: add license info
-Message-ID: <1346020310-3067-1-git-send-email-danomimanchego123@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 27 Aug 2012 00:43:26 +0200
+Subject: [Buildroot] libffi or the crazy world of toolchain options
+In-Reply-To: <201208262240.51214.yann.morin.1998@free.fr>
+References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <201208261223.46075.yann.morin.1998@free.fr>
+ <201208262240.51214.yann.morin.1998@free.fr>
+Message-ID: <201208270043.26928.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/sqlite/sqlite.mk |    1 +
- 1 file changed, 1 insertion(+)
+Thomas, All,
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9e63b52..7b5b4aa 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -7,6 +7,7 @@
- SQLITE_VERSION = 3071300
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
-+SQLITE_LICENSE = Public domain
- SQLITE_INSTALL_STAGING = YES
- 
- ifneq ($(BR2_LARGEFILE),y)
+On Sunday 26 August 2012 22:40:50 Yann E. MORIN wrote:
+> What's left, now, is to change each dependency on a package /main/ symbol
+> to a dependency on the corresponding _AVAILABLE symbol, plus a select on
+> the the /main/ symbol. I hope to update my scripts with this functionality.
+> I definitely do not want to manually review hundreds of packages! ;-)
+
+Well, find attached an updated pkg-avail script that does just that.
+
+Please note however that the script is not bullet-proof, neither when adding
+the _AVAILABLE symbols, nor when using them. It avoids mangling simple cases
+(such as: "depends on PKG_FOO||PKG_BAR" and stuff like that) and thus misses
+some of the dependencies, but may still butcher other places. :-/
+
+Enough for today, more tomorrow...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pkg-avail
+Type: application/x-shellscript
+Size: 4775 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120827/2139b68a/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pkg-avail-test
+Type: application/x-shellscript
+Size: 1514 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120827/2139b68a/attachment-0001.bin>
