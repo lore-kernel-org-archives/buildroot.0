@@ -1,88 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Aug 2012 09:39:01 +0200
-Subject: [Buildroot] [PATCH] remove rest of the BR2_SOURCEFORGE_MIRROR
- references
-In-Reply-To: <1345938768-1921-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1345938768-1921-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20120826093901.75f17f9c@skate>
+Date: Sun, 26 Aug 2012 09:45:18 +0200
+Subject: [Buildroot] Announcement: availability of autobuilder toolchains
+In-Reply-To: <87a9xjqodw.fsf@macbook.be.48ers.dk>
+References: <20120825110931.5acc6645@skate>
+ <87a9xjqodw.fsf@macbook.be.48ers.dk>
+Message-ID: <20120826094518.0f0be0fc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Sat, 25 Aug 2012 12:03:55 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Thanks! Some comments below.
+> The (internal) gcc10 config is present in every build result (grep -v
+> BR2_PACKAGE defconfig).
 
-Le Sun, 26 Aug 2012 02:52:48 +0300,
-Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
+Thanks, added to
+http://autobuild.buildroot.org/toolchains/configs/gcc10/toolchain.config.
 
-> diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
-> index c1cd608..3f5d44e 100644
-> --- a/package/genromfs/genromfs.mk
-> +++ b/package/genromfs/genromfs.mk
-> @@ -6,7 +6,7 @@
->  
->  GENROMFS_VERSION=0.5.2
->  GENROMFS_SOURCE=genromfs-$(GENROMFS_VERSION).tar.gz
-> -GENROMFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/romfs
-> +GENROMFS_SITE=http://downloads.sourceforge.net/project/romfs/genromfs/$(GENROMFS_VERSION)
->  
->  define GENROMFS_BUILD_CMDS
->   $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> @@ -28,4 +28,4 @@ define HOST_GENROMFS_INSTALL_CMDS
->  endef
->  
->  $(eval $(generic-package))
-> -$(eval $(host-generic-package))
-> \ No newline at end of file
-> +$(eval $(host-generic-package))
+However note that I haven't see build results coming from gcc10 since
+about two days.
 
-You're adding a newline here (which was missing), but ok.
+> gcc14 toolchain config is:
+> BR2_powerpc=y
+> BR2_powerpc_603e=y
+> BR2_HOST_DIR="/home/peko/br/ppc603e-wl6"
+> BR2_JLEVEL=8
+> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
 
-> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-> index f74c2b1..e59e812 100644
-> --- a/package/poco/poco.mk
-> +++ b/package/poco/poco.mk
-> @@ -3,9 +3,9 @@
->  # poco
->  #
->  #############################################################
-> -POCO_VERSION = 1.4.3p1
-> -POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
-> -POCO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/poco
-> +POCO_VERSION = 1.4.3
-> +POCO_SOURCE = poco-$(POCO_VERSION)p1-all.tar.gz
-> +POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION)
+Is this running on a x86/x86-64 machine? If so, then what we need to do
+is generate a tarball from the toolchain you have
+in /home/peko/br/ppc603e-wl6/, and then use this tarball as the
+external toolchain instead of making a reference to this local
+directory. This will allow everyone to reproduce the build.
 
-No, I don't agree with this. The "p1" should be part of the version. So
-you should do something like:
+Would you agree to do this?
 
-POCO_VERSION_MAJOR = 1.4.3
-POCO_VERSION = $(POCO_VERSION_MAJOR)p1
-POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
-POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
+> gcc110 toolchain config is:
+> BR2_x86_i686=y
+> BR2_HOST_DIR="/home/peko/br/i686-wchar"
+> BR2_JLEVEL=8
+> BR2_PTHREAD_DEBUG=y
+> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> 
+> But notice that this is a power7 machine, so an x86 toolchain won't work.
 
-> diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-> index b1afff7..0f492e7 100644
-> --- a/package/synergy/synergy.mk
-> +++ b/package/synergy/synergy.mk
-> @@ -1,4 +1,4 @@
-> -#############################################################
-> +	#############################################################
-
-Why ?
-
->  #
->  # synergy
->  #
-> @@ -6,7 +6,7 @@
->  
->  SYNERGY_VERSION = 1.3.1
->  SYNERGY_SOURCE = synergy-$(SYNERGY_VERSION).tar.gz
-> -SYNERGY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/synergy2/
-> +SYNERGY_SITE = http://downloads.sourceforge.net/project/synergy2/Sources/$(SYNERGY_VERSION)
+Argh. Then what can we do to allow other people to reproduce the build?
+I agree that doing a build targeting x86 on a !x86 machine is really
+an interesting test, so I'd like to keep it. Or maybe we just say that
+the build results from this machine cannot easily be reproduced by
+others and we live with it?
 
 Thanks!
 
