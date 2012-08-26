@@ -1,23 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Aug 2012 00:00:15 +0200
-Subject: [Buildroot] [PATCH] barebox: fix license information
-In-Reply-To: <50353EA7.6030901@lucaceresoli.net>
-References: <1345639653-17544-1-git-send-email-spdawson@gmail.com>
- <20120822194924.268ac192@skate> <50353EA7.6030901@lucaceresoli.net>
-Message-ID: <503A9C6F.3060301@mind.be>
+Date: Mon, 27 Aug 2012 00:05:30 +0200
+Subject: [Buildroot] relative DL_DIR okay?
+In-Reply-To: <CANxTyt6qz5eUv54zyJXBsg_jVZjKjc+vETz905P-L9ST45j7bQ@mail.gmail.com>
+References: <CANxTyt6qz5eUv54zyJXBsg_jVZjKjc+vETz905P-L9ST45j7bQ@mail.gmail.com>
+Message-ID: <503A9DAA.9000007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/22/12 22:18, Luca Ceresoli wrote:
-> I have no strong opinions at this time of the day, but I generally think
-> that when speaking legal, we should be as safe as possible.
-> So I'm moderately convinced this is a "GPLv2 with exceptions".
+On 08/23/12 05:03, Danomi Manchego wrote:
+[snip]
+> So, if DL_DIR must be an absolute path, then I think that I can fix this
+> problem by setting DL_DIR to "$(CURDIR)/../../../packages" in my menuconfig.
 
-  I agree.  The legalinfo is should make it easy to find the cases requiring
-special attention, and the "GPLv2 with exceptions" tag will flag it that way.
+  Better set it to $(TOPDIR)/../../../packages.  Note that the default is
+$(TOPDIR)/dl, which should give a hint that it should be an absolute path :-)
+
+>
+> If an absolute path requirement was not intended, then I believe that this
+> problem can be fixed with the following mod to DOWNLOAD_GIT:
+>
+> diff --git a/package/pkg-download.mk <http://pkg-download.mk/> b/package/pkg-download.mk <http://pkg-download.mk/>
+> index 9e98581..e1b1bed 100644
+> --- a/package/pkg-download.mk <http://pkg-download.mk/>
+> +++ b/package/pkg-download.mk <http://pkg-download.mk/>
+> @@ -68,10 +68,10 @@ define DOWNLOAD_GIT
+>          test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>          (pushd $(DL_DIR) > /dev/null && \
+>          $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+> -       pushd $($(PKG)_BASE_NAME) > /dev/null && \
+> +       cd $($(PKG)_BASE_NAME) && \
+>          $(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+> -               gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
+> -       popd > /dev/null && \
+> +               gzip -c > ../$($(PKG)_SOURCE) && \
+> +       cd .. && \
+>          rm -rf $($(PKG)_DL_DIR) && \
+>          popd > /dev/null)
+>   endef
+>
+> (The pushd/popd don't have to change to cd, but I think it emphasizes the
+> relationship to the "../".)
+
+  Patch looks good.  Care to resubmit as a proper patch (sent with
+git send-email, with a proper Signed-off-by tag and a commit message)?
+Is something similar needed for other VCSes?
 
   Regards,
   Arnout
