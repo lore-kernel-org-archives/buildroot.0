@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Aug 2012 11:18:20 +0200
-Subject: [Buildroot] Apologies
-In-Reply-To: <87oblyow2l.fsf@macbook.be.48ers.dk>
-References: <20120802221319.380170fc@skate> <jveuro$oi7$1@dough.gmane.org>
- <87oblyow2l.fsf@macbook.be.48ers.dk>
-Message-ID: <20120826111820.2596d4ce@skate>
+Date: Sun, 26 Aug 2012 11:20:16 +0200
+Subject: [Buildroot] [PATCH] luajit: bug fix - prevent target CFLAGS
+ from being used in host tool compile.
+In-Reply-To: <1344993930-2730-1-git-send-email-danomimanchego123@gmail.com>
+References: <1344993930-2730-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20120826112016.13c9caae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 26 Aug 2012 11:13:06 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Le Tue, 14 Aug 2012 21:25:30 -0400,
+Danomi Manchego <danomimanchego123@gmail.com> a ?crit :
 
->  Grant> Another reason to read the list via gmane.org's NNTP server. My slrn
->  Grant> scorefile defaults to hiding commit messages.  :)
+> The luajit amalgamation compile starts with building a host tool, and then
+> uses it to build itself. ?However, when CFLAGS is specified, as opposed to
+> TARGET_CFLAGS, then it is used for both HOST and TARGET builds. ?So if you
+> add something target specific into 'Target Optimizations' (for example,
+> '-mfpu=neon -mfloat-abi=softfp' for ARM Cortex-A8), then it gets into the
+> host tool compile, which then fails (because my build machine is not an
+> ARM Cortext-A8). ?This can be fixed by using TARGET_CFLAGS and
+> TARGET_LDFLAGS, instead of CFLAGS and LDFLAGS, respectively.
 > 
-> We could move the git commit mails to a seperate commit list if a lot of
-> people don't want to see them.
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Unless there is a strong wish to move into this direction, I'd prefer
-to keep the commit messages on the main mailing list. It lets people
-know what has been changed, it encourages review of the committed
-changes, etc.
+Applied, thanks. It fixes build issues like
+http://autobuild.buildroot.net/results/022b73a989734d800225c91f419f18f4fc31c264/build-end.log.
+
+Danomi, could you share what is your Buildroot configuration that uses
+-mfpu=neon -mfloat-abi=softfp ? I might be interested in adding such a
+configuration to the autobuilders.
+
+Thanks!
 
 Thomas
 -- 
