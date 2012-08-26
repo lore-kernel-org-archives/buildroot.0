@@ -1,55 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 27 Aug 2012 00:43:26 +0200
-Subject: [Buildroot] libffi or the crazy world of toolchain options
-In-Reply-To: <201208262240.51214.yann.morin.1998@free.fr>
-References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <201208261223.46075.yann.morin.1998@free.fr>
- <201208262240.51214.yann.morin.1998@free.fr>
-Message-ID: <201208270043.26928.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 27 Aug 2012 01:28:32 +0200
+Subject: [Buildroot] [PATCH] grub: add host support
+In-Reply-To: <20120825102258.3ba3a0dd@skate>
+References: <1345042674-28463-1-git-send-email-rbraun@sceen.net>
+ <20120825102258.3ba3a0dd@skate>
+Message-ID: <503AB120.4090909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 08/25/12 10:22, Thomas Petazzoni wrote:
+> Since you had a look some time ago at Grub (and the problem of building
+> it on x86-64), could you have a look at the below proposal from Richard?
+>
+> Richard proposes to add a host variant of Grub. At some point, I think
+> we discussed changing the target variant so that it gets built with the
+> host compiler (since Grub is always built for x86/x86-64 systems).
+>
+> With Richard's proposal below, I'm a bit worried about the fact that
+> the user needs to do "make host-grub" manually. Of course, we can add
+> the host-grub package for the "Host utilities" menu. But anyway, I want
+> your opinion on this.
 
-On Sunday 26 August 2012 22:40:50 Yann E. MORIN wrote:
-> What's left, now, is to change each dependency on a package /main/ symbol
-> to a dependency on the corresponding _AVAILABLE symbol, plus a select on
-> the the /main/ symbol. I hope to update my scripts with this functionality.
-> I definitely do not want to manually review hundreds of packages! ;-)
+  Yeah, that got pushed down a little on my todo list.  I was in fact looking
+into grub2 to see if that's any better for cross-compilation.  But that's
+almost two months ago...
 
-Well, find attached an updated pkg-avail script that does just that.
+  Having the possibility to compile a host-grub is a good start in any case,
+however.  We can still remove it again if we decide to always do native
+compilation for grub.
 
-Please note however that the script is not bullet-proof, neither when adding
-the _AVAILABLE symbols, nor when using them. It avoids mangling simple cases
-(such as: "depends on PKG_FOO||PKG_BAR" and stuff like that) and thus misses
-some of the dependencies, but may still butcher other places. :-/
-
-Enough for today, more tomorrow...
-
-Regards,
-Yann E. MORIN.
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: pkg-avail
-Type: application/x-shellscript
-Size: 4775 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120827/2139b68a/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: pkg-avail-test
-Type: application/x-shellscript
-Size: 1514 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120827/2139b68a/attachment-0001.bin>
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
