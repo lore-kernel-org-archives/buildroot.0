@@ -1,52 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 Aug 2012 12:23:46 +0200
-Subject: [Buildroot] libffi or the crazy world of toolchain options
-In-Reply-To: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <201208261223.46075.yann.morin.1998@free.fr>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Sun, 26 Aug 2012 13:51:39 +0300
+Subject: [Buildroot] [PATCH] remove rest of the BR2_SOURCEFORGE_MIRROR
+ references
+In-Reply-To: <20120826093901.75f17f9c@skate>
+References: <1345938768-1921-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20120826093901.75f17f9c@skate>
+Message-ID: <5039FFBB.6040205@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+26.8.2012 10:39, Thomas Petazzoni kirjoitti:
+> Hello,
+>
+> Thanks! Some comments below.
+>
+> Le Sun, 26 Aug 2012 02:52:48 +0300,
+> Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
+>
+>> diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
+>> index c1cd608..3f5d44e 100644
+>> --- a/package/genromfs/genromfs.mk
+>> +++ b/package/genromfs/genromfs.mk
+>> @@ -6,7 +6,7 @@
+>>  
+>>  GENROMFS_VERSION=0.5.2
+>>  GENROMFS_SOURCE=genromfs-$(GENROMFS_VERSION).tar.gz
+>> -GENROMFS_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/romfs
+>> +GENROMFS_SITE=http://downloads.sourceforge.net/project/romfs/genromfs/$(GENROMFS_VERSION)
+>>  
+>>  define GENROMFS_BUILD_CMDS
+>>   $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>> @@ -28,4 +28,4 @@ define HOST_GENROMFS_INSTALL_CMDS
+>>  endef
+>>  
+>>  $(eval $(generic-package))
+>> -$(eval $(host-generic-package))
+>> \ No newline at end of file
+>> +$(eval $(host-generic-package))
+> You're adding a newline here (which was missing), but ok.
+Oops!
 
-On Saturday 25 August 2012 17:06:05 Thomas Petazzoni wrote:
-> I got sick of having build issues related to libffi needs of threads,
-> of the absence of support for sh2a in libffi, so I did the work needed
-> to ensure that libffi would not be used anymore in those two cases.
-> 
-> This is a boring work, because libffi is mandatory for Python and
-> glib2, and glib2 has a crazy number of reverse dependencies that do
-> "select BR2_PACKAGE_LIBGLIB2", and therefore overstepping the
-> dependencies of glib2.
-> 
-> This patch, I hope, illustrate how crazy this story of "depends on"
-> needed for toolchain options has become. We need to find a solution
-> for this. Yann has proposed something (see
-> http://lists.busybox.net/pipermail/buildroot/2012-August/057144.html).
-> 
-> Opinions? My patch, or Yann's solution? Other solutions?
+>> diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+>> index f74c2b1..e59e812 100644
+>> --- a/package/poco/poco.mk
+>> +++ b/package/poco/poco.mk
+>> @@ -3,9 +3,9 @@
+>>  # poco
+>>  #
+>>  #############################################################
+>> -POCO_VERSION = 1.4.3p1
+>> -POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
+>> -POCO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/poco
+>> +POCO_VERSION = 1.4.3
+>> +POCO_SOURCE = poco-$(POCO_VERSION)p1-all.tar.gz
+>> +POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION)
+> No, I don't agree with this. The "p1" should be part of the version. So
+> you should do something like:
+>
+> POCO_VERSION_MAJOR = 1.4.3
+> POCO_VERSION = $(POCO_VERSION_MAJOR)p1
+> POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
+> POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
+Ah, ok
+>> diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+>> index b1afff7..0f492e7 100644
+>> --- a/package/synergy/synergy.mk
+>> +++ b/package/synergy/synergy.mk
+>> @@ -1,4 +1,4 @@
+>> -#############################################################
+>> +	#############################################################
+> Why ?
+Another oops
 
-I'm sorry to say that, but pushing dependencies down to every package is
-ugly.
+3 mistakes out of 86 within one saturday evening hour.
+Not too bad ;)
 
-What would happen when/if hte next libffi release does support sh2a?
-You'd have to undo most of this work with another thousands-packages patch.
-
-Today, I'll be working on my proposal (eg. the BR2_PKG_XX_AVAILABLE stuff),
-and will post a patchset.
-
-Thus, we'll be able to compare.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Stefan
+>>  #
+>>  # synergy
+>>  #
+>> @@ -6,7 +6,7 @@
+>>  
+>>  SYNERGY_VERSION = 1.3.1
+>>  SYNERGY_SOURCE = synergy-$(SYNERGY_VERSION).tar.gz
+>> -SYNERGY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/synergy2/
+>> +SYNERGY_SITE = http://downloads.sourceforge.net/project/synergy2/Sources/$(SYNERGY_VERSION)
+> Thanks!
+>
+> Thomas
