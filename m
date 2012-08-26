@@ -1,44 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Aug 2012 11:18:34 +0200
-Subject: [Buildroot] [git commit] luajit: bug fix - prevent target CFLAGS
-	from being used in host tool compile.
-Message-ID: <20120826092045.5095D993D7@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 26 Aug 2012 12:23:46 +0200
+Subject: [Buildroot] libffi or the crazy world of toolchain options
+In-Reply-To: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <201208261223.46075.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc753d3ca243bcda35d567465ee649ecee3ef236
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-The luajit amalgamation compile starts with building a host tool, and then
-uses it to build itself. ??However, when CFLAGS is specified, as opposed to
-TARGET_CFLAGS, then it is used for both HOST and TARGET builds. ??So if you
-add something target specific into 'Target Optimizations' (for example,
-'-mfpu=neon -mfloat-abi=softfp' for ARM Cortex-A8), then it gets into the
-host tool compile, which then fails (because my build machine is not an
-ARM Cortext-A8). ??This can be fixed by using TARGET_CFLAGS and
-TARGET_LDFLAGS, instead of CFLAGS and LDFLAGS, respectively.
+On Saturday 25 August 2012 17:06:05 Thomas Petazzoni wrote:
+> I got sick of having build issues related to libffi needs of threads,
+> of the absence of support for sh2a in libffi, so I did the work needed
+> to ensure that libffi would not be used anymore in those two cases.
+> 
+> This is a boring work, because libffi is mandatory for Python and
+> glib2, and glib2 has a crazy number of reverse dependencies that do
+> "select BR2_PACKAGE_LIBGLIB2", and therefore overstepping the
+> dependencies of glib2.
+> 
+> This patch, I hope, illustrate how crazy this story of "depends on"
+> needed for toolchain options has become. We need to find a solution
+> for this. Yann has proposed something (see
+> http://lists.busybox.net/pipermail/buildroot/2012-August/057144.html).
+> 
+> Opinions? My patch, or Yann's solution? Other solutions?
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luajit/luajit.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+I'm sorry to say that, but pushing dependencies down to every package is
+ugly.
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index e4c46d8..913bc0c 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -42,8 +42,8 @@ define LUAJIT_BUILD_CMDS
- 		TARGET_LD="$(TARGET_CC)" \
- 		TARGET_AR="$(TARGET_AR) rcus" \
- 		TARGET_STRIP="$(TARGET_STRIP)" \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		TARGET_CFLAGS="$(TARGET_CFLAGS)" \
-+		TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
- 		HOST_CC="$(LUAJIT_HOST_CC)" \
- 		HOST_CFLAGS="$(HOST_CFLAGS)" \
- 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
+What would happen when/if hte next libffi release does support sh2a?
+You'd have to undo most of this work with another thousands-packages patch.
+
+Today, I'll be working on my proposal (eg. the BR2_PKG_XX_AVAILABLE stuff),
+and will post a patchset.
+
+Thus, we'll be able to compare.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
