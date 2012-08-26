@@ -1,34 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 26 Aug 2012 10:56:12 +0200
-Subject: [Buildroot] [git commit] cups: uses fork(),
-	only available on MMU platforms
-Message-ID: <20120826090843.C8441993DB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Aug 2012 11:12:06 +0200
+Subject: [Buildroot] Apologies
+In-Reply-To: <20120802221319.380170fc@skate> (Thomas Petazzoni's message of
+ "Thu, 2 Aug 2012 22:13:19 +0200")
+References: <20120802221319.380170fc@skate>
+Message-ID: <87sjbaow49.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9241fb6794cae1cad66d83ac3dfcfe243bc5566b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/6db1eb27387696bfa6b4d8ffb30eff00a2f842d0/build-end.log.
+ Thomas> Hello,
+ Thomas> As you have probably seen, you have received hundreds of commit
+ Thomas> e-mails. These are due to the fact that I rebased and pushed the next
+ Thomas> branch to start accumulating non bug fix changes that will be
+ Thomas> integrated into the 2012.11 release.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cups/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Thomas> However, I apparently didn't do that the way Peter was doing it, and
+ Thomas> the commit e-mail scripts decided to send one e-mail for each of the
+ Thomas> new commits that appeared in the next branch since the last time it was
+ Thomas> rebased. So basically, you're going to see *all* the commits that
+ Thomas> happened during the 2012.08 cycle :-(
 
-diff --git a/package/cups/Config.in b/package/cups/Config.in
-index 0176423..dc1c2ed 100644
---- a/package/cups/Config.in
-+++ b/package/cups/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_CUPS
- 	bool "cups"
-+	# needs fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  The Common Unix Printing System
- 
+ Thomas> I guess that I should have deleted the next branch completely, and then
+ Thomas> push a completely new branch. The end result would have been the same,
+ Thomas> except for the hundreds of e-mails.
+
+Yes, I normally delete the branch and create a new one as the 2 branches
+have nothing in common (except for the name).
+
+-- 
+Bye, Peter Korsgaard
