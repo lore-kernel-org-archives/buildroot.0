@@ -1,33 +1,25 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 Aug 2012 23:35:36 +0200
-Subject: [Buildroot] [PATCH] libpng: bump version and add apng support
- (required by firefox)
-In-Reply-To: <5034054C.6050807@petroprogram.com>
-References: <50240DDE.4000901@petroprogram.com>
- <20120810090232.7ca6f885@skate> <5024D8B5.2020605@petroprogram.com>
- <5033FDFF.7090704@mind.be> <5034054C.6050807@petroprogram.com>
-Message-ID: <503A96A8.6090700@mind.be>
+Date: Sun, 26 Aug 2012 23:40:42 +0200
+Subject: [Buildroot] [PATCH 6/8] fontconfig: add license info
+In-Reply-To: <CANxTyt7w48eF1TBWJzbtaz_uao988-=y6W6LhTJF+CP9FUJNCg@mail.gmail.com>
+References: <1345407510-10058-1-git-send-email-danomimanchego123@gmail.com>
+ <1345407510-10058-6-git-send-email-danomimanchego123@gmail.com>
+ <20120821125637.6b0257bc@skate>
+ <CANxTyt7w48eF1TBWJzbtaz_uao988-=y6W6LhTJF+CP9FUJNCg@mail.gmail.com>
+Message-ID: <503A97DA.8000305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/22/12 00:01, Stefan Fr?berg wrote:
-> I forgotted to mention Thomas that that APNG patch is steadily updated
-> inhttp://sourceforge.net/projects/libpng-apng/
->
-> So keeping it updated between libpng versions is really not an issue.
+On 08/22/12 02:39, Danomi Manchego wrote:
+> What about sqlite?  According to http://www.sqlite.org/copyright.html, it is "public domain".  Should sqlite's license
+> also be "sqlite license", or "public domain"?
 
-  Even better!  Then you can make something like
-
-ifeq ($(BR2_PACKAGE_LIBPNG_APNG_SUPPORT),y)
-LIBPNG_PATCH = sf://libpng-apng/files/libpng15/$(LIBPNG_VERSION)/libpng-$(LIBPNG_VERSION)-apng.patch.gz
-endif
-
-(where sf:// is Yann's soon-to-be-interoduced abbreviation of the sourceforge
-URLs).  As far as I know (but never tried it), the above should download and
-apply the patch.
+  I'd use 'Public domain', it's a very specific and well-known legal term.  It
+means the authors forfeit their copyright, and there are no restrictions whatsoever
+on the use of the software.
 
   Regards,
   Arnout
