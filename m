@@ -1,36 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 Aug 2012 01:28:32 +0200
-Subject: [Buildroot] [PATCH] grub: add host support
-In-Reply-To: <20120825102258.3ba3a0dd@skate>
-References: <1345042674-28463-1-git-send-email-rbraun@sceen.net>
- <20120825102258.3ba3a0dd@skate>
-Message-ID: <503AB120.4090909@mind.be>
+Date: Mon, 27 Aug 2012 01:50:41 +0200
+Subject: [Buildroot] json-c fix, question about -D_REENTRANT
+In-Reply-To: <1345903992-27961-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1345903992-27961-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <503AB651.3010806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/25/12 10:22, Thomas Petazzoni wrote:
-> Since you had a look some time ago at Grub (and the problem of building
-> it on x86-64), could you have a look at the below proposal from Richard?
+On 08/25/12 16:13, Thomas Petazzoni wrote:
+> The attached patch fixes the build of json-c when thread support is
+> not available. This library does not require thread support: it was
+> compatible with -D_REENTRANT in all cases, which is only possible when
+> thread support is available.
 >
-> Richard proposes to add a host variant of Grub. At some point, I think
-> we discussed changing the target variant so that it gets built with the
-> host compiler (since Grub is always built for x86/x86-64 systems).
+> However, I didn't commit this directly, because I am not sure what the
+> right fix is. My fix is to just get rid of -D_REENTRANT.
 >
-> With Richard's proposal below, I'm a bit worried about the fact that
-> the user needs to do "make host-grub" manually. Of course, we can add
-> the host-grub package for the "Host utilities" menu. But anyway, I want
-> your opinion on this.
+> However, according to
+> http://pauillac.inria.fr/~xleroy/linuxthreads/faq.html#H, all code
+> used in a multithreaded application should be built with -D_REENTRANT,
+> even if this code itself is not creating/manipulating threads.
 
-  Yeah, that got pushed down a little on my todo list.  I was in fact looking
-into grub2 to see if that's any better for cross-compilation.  But that's
-almost two months ago...
+  Note that that FAQ is pretty old.
 
-  Having the possibility to compile a host-grub is a good start in any case,
-however.  We can still remove it again if we decide to always do native
-compilation for grub.
+>
+> So, technically, removing -D_REENTRANT seems like an incorrect: it
+> should be kept if the toolchain supports thread.
+
+  I looked at the source of uClibc 0.32 and 0.33, and it looks like they
+automatically select the reentrant versions of errno and getc if
+HAS_THREADS is defined.  As to the _r reentrant functions, they're
+always there (except, for some reason, getlogin_r) - but for those you'd
+anyway get a compile or link error.
+
+  I expect glibc will always build the reentrant versions.
+
+  So I guess you can remove the -D_REENTRANT.
+
 
   Regards,
   Arnout
