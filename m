@@ -1,29 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Aug 2012 11:13:06 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 26 Aug 2012 11:18:20 +0200
 Subject: [Buildroot] Apologies
-In-Reply-To: <jveuro$oi7$1@dough.gmane.org> (Grant Edwards's message of "Thu, 
- 2 Aug 2012 22:27:05 +0000 (UTC)")
+In-Reply-To: <87oblyow2l.fsf@macbook.be.48ers.dk>
 References: <20120802221319.380170fc@skate> <jveuro$oi7$1@dough.gmane.org>
-Message-ID: <87oblyow2l.fsf@macbook.be.48ers.dk>
+ <87oblyow2l.fsf@macbook.be.48ers.dk>
+Message-ID: <20120826111820.2596d4ce@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
+Le Sun, 26 Aug 2012 11:13:06 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- Grant> On 2012-08-02, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
- >> As you have probably seen, you have received hundreds of commit
- >> e-mails. These are due to the fact that I rebased and pushed the next
- >> branch to start accumulating non bug fix changes that will be
- >> integrated into the 2012.11 release.
+>  Grant> Another reason to read the list via gmane.org's NNTP server. My slrn
+>  Grant> scorefile defaults to hiding commit messages.  :)
+> 
+> We could move the git commit mails to a seperate commit list if a lot of
+> people don't want to see them.
 
- Grant> Another reason to read the list via gmane.org's NNTP server. My slrn
- Grant> scorefile defaults to hiding commit messages.  :)
+Unless there is a strong wish to move into this direction, I'd prefer
+to keep the commit messages on the main mailing list. It lets people
+know what has been changed, it encourages review of the committed
+changes, etc.
 
-We could move the git commit mails to a seperate commit list if a lot of
-people don't want to see them.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
