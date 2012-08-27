@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 27 Aug 2012 17:28:11 +0200
-Subject: [Buildroot] [PATCH 7/9] microperl: install more modules by default
+Date: Mon, 27 Aug 2012 17:28:13 +0200
+Subject: [Buildroot] [PATCH 9/9] microperl: remove host-microperl
 In-Reply-To: <1346081293-18845-1-git-send-email-francois.perrad@gadz.org>
 References: <1346081293-18845-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1346081293-18845-7-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1346081293-18845-9-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,66 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/microperl/microperl.mk |   45 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 44 insertions(+), 1 deletion(-)
+ package/microperl/microperl.mk |   24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
 diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index 4b68567..c0f6029 100644
+index b601754..a3d1018 100644
 --- a/package/microperl/microperl.mk
 +++ b/package/microperl/microperl.mk
-@@ -31,9 +31,52 @@ endif
- MICROPERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
- MICROPERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
- 
-+# other pragma modules (from lib/)
-+MICROPERL_BASE_MODS += \
-+  bytes.pm \
-+  deprecate.pm \
-+  feature.pm \
-+  integer.pm \
-+  less.pm \
-+  locale.pm \
-+  overloading.pm \
-+  overload.pm \
-+  sigtrap.pm \
-+  sort.pm \
-+  subs.pm \
-+  utf8.pm utf8_heavy.pl \
-+  version.pm
-+
-+# some common modules (from lib/)
-+MICROPERL_BASE_MODS += \
-+  Benchmark.pm \
-+  Carp.pm \
-+  Class/Struct.pm \
-+  Exporter.pm Exporter/Heavy.pm \
-+  File/Basename.pm \
-+  File/Compare.pm \
-+  Getopt/Std.pm \
-+  Tie/Array.pm \
-+  Tie/Hash.pm \
-+  Tie/Scalar.pm \
-+  UNIVERSAL.pm
-+
-+# other common modules (from dist/)
-+MICROPERL_MODS += \
-+  Dumpvalue.pm \
-+  Env.pm \
-+  autouse.pm \
-+  base.pm \
-+  constant.pm
-+
-+# other common modules (from cpan/)
-+MICROPERL_MODS += \
-+  Getopt/Long.pm \
-+  parent.pm
-+
- # CGI bundle
- ifeq ($(BR2_PACKAGE_MICROPERL_BUNDLE_CGI),y)
--MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm
-+MICROPERL_MODS += CGI CGI.pm
+@@ -10,7 +10,7 @@ MICROPERL_SITE = http://www.cpan.org/src/5.0
+ MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
+ MICROPERL_LICENSE = Artistic
+ MICROPERL_LICENSE_FILES = Artistic
+-MICROPERL_DEPENDENCIES = host-microperl
++MICROPERL_DEPENDENCIES = host-perl
+ MICROPERL_MODS_DIR = /usr/lib/perl5/$(MICROPERL_VERSION)
+ MICROPERL_ARCH_DIR = $(MICROPERL_MODS_DIR)/$(GNU_TARGET_NAME)
+ MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
+@@ -79,21 +79,6 @@ ifeq ($(BR2_PACKAGE_MICROPERL_BUNDLE_CGI),y)
+ MICROPERL_MODS += CGI CGI.pm
  endif
  
- # Host microperl is actually full-blown perl
+-# Host microperl is actually full-blown perl
+-define HOST_MICROPERL_CONFIGURE_CMDS
+-	cd $(@D) ; \
+-	./Configure -Dcc="$(HOSTCC)" -Dprefix="$(HOST_DIR)/usr" \
+-		-Dloclibpth='/lib /lib64 /usr/lib /usr/lib64' -des
+-endef
+-
+-define HOST_MICROPERL_BUILD_CMDS
+-	$(MAKE) -C $(@D)
+-endef
+-
+-define HOST_MICROPERL_INSTALL_CMDS
+-	$(MAKE) -C $(@D) install
+-endef
+-
+ ifeq ($(BR2_ENDIAN),"BIG")
+ define MICROPERL_BIGENDIAN
+ 	$(SED) '/^byteorder=/d' $(MICROPERL_UCONFIG_SH)
+@@ -149,8 +134,8 @@ define MICROPERL_CONFIGURE_CMDS
+ 	echo "ccname='$(TARGET_CC)'" >>$(@D)/config.sh
+ 	echo "PERL_CONFIG_SH=true" >>$(@D)/config.sh
+ 	touch $(@D)/config.h    # avoid warning : out of date
+-	cd $(@D) ; $(HOST_DIR)/usr/bin/perl make_patchnum.pl ; \
+-	$(HOST_DIR)/usr/bin/perl configpm
++	cd $(@D) ; $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) make_patchnum.pl ; \
++	$(HOST_DIR)/usr/bin/perl$(PERL_VERSION) configpm
+ endef
+ 
+ define MICROPERL_BUILD_CMDS
+@@ -165,7 +150,7 @@ endef
+ # We try to build anyway to avoid a huge black list
+ # Just ignore make_ext.pl warning/errors
+ define MICROPERL_BUILD_EXTENSIONS
+-	cd $(@D); rm -f miniperl; ln -s $(HOST_DIR)/usr/bin/perl miniperl;
++	cd $(@D); rm -f miniperl; ln -s $(HOST_DIR)/usr/bin/perl$(PERL_VERSION) miniperl;
+ 	for i in $(MICROPERL_MODS); do \
+ 	cd $(@D); PERL5LIB=lib \
+ 		./miniperl make_ext.pl MAKE="$(MAKE)" --nonxs \
+@@ -205,4 +190,3 @@ define MICROPERL_UNINSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
+-$(eval $(host-generic-package))
 -- 
 1.7.9.5
