@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Aug 2012 23:27:18 +0200
-Subject: [Buildroot] [git commit] sqlite: add license info
-Message-ID: <20120827212737.3541788C09@busybox.osuosl.org>
+Date: Mon, 27 Aug 2012 23:27:53 +0200
+Subject: [Buildroot] [PATCH] remove rest of the BR2_SOURCEFORGE_MIRROR
+ references
+In-Reply-To: <5039FFBB.6040205@petroprogram.com>
+References: <1345938768-1921-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20120826093901.75f17f9c@skate> <5039FFBB.6040205@petroprogram.com>
+Message-ID: <20120827232753.3521d4b7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=57f4106c228d997af6e1266f33764eeccefe6977
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 26 Aug 2012 13:51:39 +0300,
+Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sqlite/sqlite.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> 3 mistakes out of 86 within one saturday evening hour.
+> Not too bad ;)
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 9e63b52..7b5b4aa 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -7,6 +7,7 @@
- SQLITE_VERSION = 3071300
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
-+SQLITE_LICENSE = Public domain
- SQLITE_INSTALL_STAGING = YES
- 
- ifneq ($(BR2_LARGEFILE),y)
+Yeah sure :) Can you resubmit an updated patch with those fixed?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
