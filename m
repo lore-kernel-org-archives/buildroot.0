@@ -1,26 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 27 Aug 2012 23:27:53 +0200
-Subject: [Buildroot] [PATCH] remove rest of the BR2_SOURCEFORGE_MIRROR
- references
-In-Reply-To: <5039FFBB.6040205@petroprogram.com>
-References: <1345938768-1921-1-git-send-email-stefan.froberg@petroprogram.com>
- <20120826093901.75f17f9c@skate> <5039FFBB.6040205@petroprogram.com>
-Message-ID: <20120827232753.3521d4b7@skate>
+Date: Mon, 27 Aug 2012 23:54:19 +0200
+Subject: [Buildroot] [PATCH 1/9] perl: new package v4
+In-Reply-To: <CAB0FRsuKC8Ow_Fqq+iOR3uW-iENzhX3o8qz9OCDf4rr0xb3uDQ@mail.gmail.com>
+References: <1346081293-18845-1-git-send-email-francois.perrad@gadz.org>
+ <20120827211024.492b964e@skate>
+ <CAB0FRsuKC8Ow_Fqq+iOR3uW-iENzhX3o8qz9OCDf4rr0xb3uDQ@mail.gmail.com>
+Message-ID: <20120827235419.0486035e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 26 Aug 2012 13:51:39 +0300,
-Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
+Le Mon, 27 Aug 2012 23:05:53 +0200,
+Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 
-> 3 mistakes out of 86 within one saturday evening hour.
-> Not too bad ;)
+> miniperl is built during the full perl build, it is just a specific
+> installation.
+> There are no common step (configure, build of exe, build of modules,
+> install) between microperl and perl.
+> So, technically a merge of these packages is not easy.
 
-Yeah sure :) Can you resubmit an updated patch with those fixed?
+Ok.
 
-Thanks!
+> I've updated microperl to the latest stable release.
+> But I think that microperl is an useless toy which will be removed
+> soon by the Perl community.
+
+As long as the long term intention is to get rid of microperl, I'm
+fine. Should we mark it "depends on BR2_DEPRECATED" ?
+
+> I prefer spend my time with the full perl and the CPAN modules.
+> There still a lot of work with Perl community for put my patches in
+> the upstream.
+> 
+> With this today version, cpanminus really cross-compiles the modules from CPAN.
+> The Dancer web framework (my current goal) requires 22 modules from CPAN.
+> The CPAN contains more than 23000 modules. This is the challenge.
+>         ? CPAN is the language, Perl is just its syntax ? - Audrey Tang.
+
+ :-)
 
 Thomas
 -- 
