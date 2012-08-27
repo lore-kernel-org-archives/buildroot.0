@@ -1,170 +1,63 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 27 Aug 2012 17:28:07 +0200
-Subject: [Buildroot] [PATCH 3/9] cpanminus: new package v2
+Date: Mon, 27 Aug 2012 17:28:08 +0200
+Subject: [Buildroot] [PATCH 4/9] microperl: build extensions at build time
 In-Reply-To: <1346081293-18845-1-git-send-email-francois.perrad@gadz.org>
 References: <1346081293-18845-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1346081293-18845-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1346081293-18845-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                         |    5 +++++
- package/cpanminus/Config.in               |   23 +++++++++++++++++++
- package/cpanminus/cpanminus-destdir.patch |   24 ++++++++++++++++++++
- package/cpanminus/cpanminus.mk            |   34 +++++++++++++++++++++++++++++
- package/perl/perl-EUMM.patch              |   19 +++++++++++++++-
- 5 files changed, 104 insertions(+), 1 deletion(-)
- create mode 100644 package/cpanminus/Config.in
- create mode 100644 package/cpanminus/cpanminus-destdir.patch
- create mode 100644 package/cpanminus/cpanminus.mk
+just set PERL5LIB in build tree
+optim: symlink only one time, before the loop
 
-diff --git a/package/Config.in b/package/Config.in
-index 00a79ab..48d25fc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -263,6 +263,11 @@ source "package/xavante/Config.in"
- endmenu
- endif
- source "package/perl/Config.in"
-+if BR2_PACKAGE_PERL
-+menu "Perl libraries/modules"
-+source "package/cpanminus/Config.in"
-+endmenu
-+endif
- source "package/microperl/Config.in"
- source "package/php/Config.in"
- source "package/python/Config.in"
-diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
-new file mode 100644
-index 0000000..7c41c4d
---- /dev/null
-+++ b/package/cpanminus/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_CPANMINUS
-+	bool "cpanminus"
-+	help
-+	  cpanminus is a script to get, unpack, build and install Perl modules
-+	  from CPAN.
-+
-+	  Why? It's dependency free, requires zero configuration, and stands
-+	  alone. When running, it requires only 10MB of RAM.
-+
-+	  http://github.com/miyagawa/cpanminus
-+
-+if BR2_PACKAGE_CPANMINUS
-+
-+config BR2_PACKAGE_CPANMINUS_MODULES
-+	string "Perl modules from CPAN"
-+	help
-+	  List of space-separated Perl modules to install from CPAN.
-+
-+	  Examples: Try::Tiny Dancer YAML Moo
-+
-+	  Install the listed modules and their dependencies.
-+
-+endif
-diff --git a/package/cpanminus/cpanminus-destdir.patch b/package/cpanminus/cpanminus-destdir.patch
-new file mode 100644
-index 0000000..c1c61ad
---- /dev/null
-+++ b/package/cpanminus/cpanminus-destdir.patch
-@@ -0,0 +1,24 @@
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/cpanm
-+===================================================================
-+--- a/cpanm
-++++ b/cpanm
-+@@ -399,6 +399,7 @@
-+           'h|help'    => sub { $self->{action} = 'show_help' },
-+           'V|version' => sub { $self->{action} = 'show_version' },
-+           'perl=s'    => \$self->{perl},
-++          'destdir=s' => \$self->{destdir},
-+           'l|local-lib=s' => sub { $self->{local_lib} = $self->maybe_abs($_[1]) },
-+           'L|local-lib-contained=s' => sub {
-+               $self->{local_lib} = $self->maybe_abs($_[1]);
-+@@ -1636,7 +1637,7 @@
-+           $self->diag_progress("Building " . ($self->{notest} ? "" : "and testing ") . $distname);
-+           $self->build([ $self->{make} ], $distname) &&
-+           $self->test([ $self->{make}, "test" ], $distname) &&
-+-          $self->install([ $self->{make}, "install" ], [ "UNINST=1" ], $depth) &&
-++          $self->install([ $self->{make}, "install", "DESTDIR=$self->{destdir}" ], [ "UNINST=1" ], $depth) &&
-+           $installed++;
-+       } else {
-+           my $why;
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-new file mode 100644
-index 0000000..ce2a09b
---- /dev/null
-+++ b/package/cpanminus/cpanminus.mk
-@@ -0,0 +1,34 @@
-+#############################################################
-+#
-+# cpanminus
-+#
-+#############################################################
-+
-+CPANMINUS_VERSION = 1.5017
-+CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-g917a607.tar.gz
-+CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
-+CPANMINUS_DEPENDENCIES = perl
-+
-+CPANMINUS_ARCH=$(call qstrip,$(BR2_ARCH))
-+ifeq ($(CPANMINUS_ARCH),i686)
-+    CPANMINUS_ARCH=i386
-+endif
-+CPANMINUS_QEMU_USER_MODE=qemu-$(CPANMINUS_ARCH) -L $(STAGING_DIR)
-+CPANMINUS_RUN_PERL=$(CPANMINUS_QEMU_USER_MODE) $(STAGING_DIR)/usr/bin/perl
-+CPANMINUS_ARCHNAME=$(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
-+CPANMINUS_PERL5LIB=$(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME):$(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION):$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME):$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)
-+
-+define CPANMINUS_INSTALL_TARGET_CMDS
-+	echo "#!/bin/sh"                                                        > $(@D)/run_perl
-+	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
-+	chmod +x $(@D)/run_perl
-+	PERL5LIB=$(CPANMINUS_PERL5LIB) \
-+	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
-+		--perl=$(@D)/run_perl \
-+		--destdir="$(TARGET_DIR)" \
-+		--notest \
-+		--no-man-pages \
-+		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/perl/perl-EUMM.patch b/package/perl/perl-EUMM.patch
-index 4134f8a..689c2c9 100644
---- a/package/perl/perl-EUMM.patch
-+++ b/package/perl/perl-EUMM.patch
-@@ -6,7 +6,24 @@ Index: b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
- ===================================================================
- --- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
- +++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Unix.pm
--@@ -1924,7 +1925,7 @@
-+@@ -1659,8 +1659,14 @@
-+     } else {
-+ 	# we should also consider $ENV{PERL5LIB} here
-+         my $old = $self->{PERL_LIB} || $self->{PERL_ARCHLIB} || $self->{PERL_INC};
-+-	$self->{PERL_LIB}     ||= $Config{privlibexp};
-+-	$self->{PERL_ARCHLIB} ||= $Config{archlibexp};
-++	if ($Config{run}) {
-++	    $self->{PERL_LIB}     ||= $inc_carp_dir;
-++	    $self->{PERL_ARCHLIB} ||= $inc_config_dir;
-++	}
-++	else {
-++	    $self->{PERL_LIB}     ||= $Config{privlibexp};
-++	    $self->{PERL_ARCHLIB} ||= $Config{archlibexp};
-++	}
-+ 	$self->{PERL_INC}     = $self->catdir("$self->{PERL_ARCHLIB}","CORE"); # wild guess for now
-+ 	my $perl_h;
-+ 
-+@@ -1924,7 +1930,7 @@
-      foreach my $perl (qw(PERL FULLPERL ABSPERL)) {
-          my $run  = $perl.'RUN';
-  
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/microperl/microperl.mk |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index b2a912a..fa92144 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -97,6 +97,7 @@ define MICROPERL_CONFIGURE_CMDS
+ 	cp -f $(@D)/uconfig.sh $(@D)/config.sh
+ 	echo "ccname='$(TARGET_CC)'" >>$(@D)/config.sh
+ 	echo "PERL_CONFIG_SH=true" >>$(@D)/config.sh
++	touch $(@D)/config.h    # avoid warning : out of date
+ 	cd $(@D) ; $(HOST_DIR)/usr/bin/perl make_patchnum.pl ; \
+ 	$(HOST_DIR)/usr/bin/perl configpm
+ endef
+@@ -106,16 +107,17 @@ define MICROPERL_BUILD_CMDS
+ 		CC="$(HOSTCC)" bitcount.h
+ 	$(MAKE) -f Makefile.micro -C $(@D) \
+ 		CC="$(TARGET_CC)" OPTIMIZE="$(TARGET_CFLAGS)"
++	$(MICROPERL_BUILD_EXTENSIONS)
+ endef
+ 
+ # Some extensions don't need a build run
+ # We try to build anyway to avoid a huge black list
+ # Just ignore make_ext.pl warning/errors
+ define MICROPERL_BUILD_EXTENSIONS
++	cd $(@D); rm -f miniperl; ln -s $(HOST_DIR)/usr/bin/perl miniperl;
+ 	for i in $(MICROPERL_MODS); do \
+-	cd $(@D); ln -sf $(HOST_DIR)/usr/bin/perl miniperl; \
+-		PERL5LIB=$(TARGET_DIR)/$(MICROPERL_ARCH_DIR) \
+-		$(HOST_DIR)/usr/bin/perl make_ext.pl MAKE="$(MAKE)" --nonxs \
++	cd $(@D); PERL5LIB=lib \
++		./miniperl make_ext.pl MAKE="$(MAKE)" --nonxs \
+ 		`echo $$i|sed -e 's/.pm//'`; \
+ 	done
+ endef
+@@ -131,7 +133,6 @@ define MICROPERL_INSTALL_TARGET_CMDS
+ 		$(INSTALL) -m 0644 -D $(@D)/lib/$$i \
+ 			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+ 	done
+-	$(MICROPERL_BUILD_EXTENSIONS)
+ 	for i in $(MICROPERL_MODS); do \
+ 		j=`echo $$i|cut -d : -f 1` ; \
+ 		if [ -d $(@D)/lib/$$j ] ; then \
 -- 
 1.7.9.5
