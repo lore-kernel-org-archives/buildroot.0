@@ -1,34 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Aug 2012 01:00:22 +0200
-Subject: [Buildroot] 2012.08-rc3 skipping python modules during build
-In-Reply-To: <CALoHCLOK1-F5uxiWc95Mr6SJwCc2sqxicBi5V93-HtuBOhY0kA@mail.gmail.com>
-References: <CALoHCLOK1-F5uxiWc95Mr6SJwCc2sqxicBi5V93-HtuBOhY0kA@mail.gmail.com>
-Message-ID: <503D4D86.3040802@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Aug 2012 01:02:26 +0200
+Subject: [Buildroot] [git commit] prboom,
+	oprofile: Add explicit <foo>_SITE statements
+Message-ID: <20120828230609.F408A97083@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/28/12 17:43, Eric Seifert wrote:
-> Hello, I have been using the stable 2012.05 build without issue and wanted to try the latest rc3. I have a few extra
-> python modules I have added to the external python modules section. It seems in the latest rc3 is not building them or
-> even downloading the packages even though they are selected in the menuconfig, they are just ignored. It works in the
-> stable 2012.05 build. When I select one of the existing external modules such as pthon-serial, it does get built.
+commit: http://git.buildroot.net/buildroot/commit/?id=cd355e1125b5f3cbc0884c975f9972431639bfdb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  The package infrastructure has changed.  If you added a package ending with
-$(eval $(call GENTARGETS))
-it will be ignored.  Replace it with
-$(eval $(call package-generic))
+The default <foo>_SITE value that pkg-generic sets when the .mk file
+doesn't declare it is using BR2_SOURCEFORGE_MIRROR and therefore isn't
+consistent with the usage of downloads.sourceforge.net we have
+generalized for all drivers.
 
-  (Note: this is just guesswork based on the limited information you gave.)
+Since the downloads.sourceforge.net URLs are inherently specific to
+each package, we can no longer provide a default in pkg-generic.mk,
+and therefore each package *must* declare its own <foo>_SITE value.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+This patch fixes the only two packages that were lacking a <foo>_SITE
+value.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/games/prboom/prboom.mk |    1 +
+ package/oprofile/oprofile.mk   |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/games/prboom/prboom.mk b/package/games/prboom/prboom.mk
+index 4dbfd1d..1f5c3dd 100644
+--- a/package/games/prboom/prboom.mk
++++ b/package/games/prboom/prboom.mk
+@@ -4,6 +4,7 @@
+ #
+ #############################################################
+ PRBOOM_VERSION = 2.5.0
++PRBOOM_SITE = http://downloads.sourceforge.net/project/prboom/prboom%20stable/$(PRBOOM_VERSION)
+ PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
+ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
+ 
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 256ae9b..54c46dd 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -5,6 +5,7 @@
+ #############################################################
+ 
+ OPROFILE_VERSION = 0.9.7
++OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
+ OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
+ OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
+ OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
