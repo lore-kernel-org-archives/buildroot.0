@@ -1,41 +1,41 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 28 Aug 2012 09:27:30 +0100
-Subject: [Buildroot] [PATCH 2/4] zeromq: add license information
-In-Reply-To: <50379455.8090907@lucaceresoli.net>
-References: <1345406924-6574-1-git-send-email-spdawson@gmail.com>
- <1345406924-6574-2-git-send-email-spdawson@gmail.com>
- <20120821124200.59ffab03@skate>
- <CAHt8ZCN0P9_xEWzKhWcKLy=WixYoE8ZtVS0WYkmxT_Cu8ufrow@mail.gmail.com>
- <50379455.8090907@lucaceresoli.net>
-Message-ID: <CAHt8ZCOvvbkuK4JUaiMC+RHtLTR2hvMEbA_Vdfk35s6vUJnRdQ@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 28 Aug 2012 10:30:52 +0200
+Subject: [Buildroot] [PATCH v2] barebox: fix license information
+In-Reply-To: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
+References: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
+Message-ID: <503C81BC.5050806@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca; thanks for looking into this.
-
-On 24 August 2012 15:48, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> So, it looks like the license is an "LGPLv3+ with exceptions", and the
-> "Parts under the MIT/X11" do not exist anymore. But I'm not sure my
-> understanding is correct.
+spdawson at gmail.com wrote:
+> From: Simon Dawson <simond@trainfx.com>
 >
-> It may be worth asking if the MIT/X11 part of COPYING.LESSER can be
-> considerednot applicable anymore, and so if it can be dropped to simplify
-> their license.
+> The barebox license should be "GPLv2 with exceptions", and not GPLv2.
 >
-> Of course searching their mail archives for more such info, or other
-> clarification, is the best thing. The period around august 2010 may be
-> interesting.
+> Signed-off-by: Simon Dawson <simond@trainfx.com>
+> ---
+>   v2: Changed license information as suggested on mailing list.
 >
-> Simon, would you mind doing this research?
+>   boot/barebox/barebox.mk |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index 9550cdc..ee84831 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -20,7 +20,7 @@ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
+>   BAREBOX_SITE = http://www.barebox.org/download/
+>   endif
+>   
+> -BAREBOX_LICENSE = GPLv2
+> +BAREBOX_LICENSE = GPLv2 with exceptions
+>   BAREBOX_LICENSE_FILES = COPYING
+>   
+>   ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
 
-I have spent some time searching the 0MQ mailing list, but have drawn
-a blank. I have now posted a message on the mailing list, requesting
-clarification of the license terms. (I agree that the MIT/X11 clause
-appears to be superfluous.)
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-I'll let you know if and when I get a response.
-
-Simon.
+Luca
