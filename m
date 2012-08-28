@@ -1,41 +1,31 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 28 Aug 2012 10:30:52 +0200
-Subject: [Buildroot] [PATCH v2] barebox: fix license information
-In-Reply-To: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
-References: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
-Message-ID: <503C81BC.5050806@lucaceresoli.net>
+From: Kevin Chadwick <ma1l1ists@yahoo.co.uk>
+Date: Tue, 28 Aug 2012 12:06:46 +0100
+Subject: [Buildroot] dropbear permission denied
+In-Reply-To: <3C32AECB8207924A9A228348325DB2D2905100@mntserv.meier-nt.local>
+References: <8E7CEF5A14A94EDF90F261B9ED2FC9E6@meiernt.local>
+ <3C32AECB8207924A9A228348325DB2D29050F1@mntserv.meier-nt.local>
+ <20120824135323.654eb15b@skate>
+ <CAAfyv37CS+Hss_-kfiv9tGZDTPpeiG-bzjyF5mqNdL61=PNupg@mail.gmail.com>
+ <910D354268014B298DD6633E97BC1DEE@meiernt.local>
+ <3C32AECB8207924A9A228348325DB2D2905100@mntserv.meier-nt.local>
+Message-ID: <886709.90681.bm@smtp145.mail.ukl.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-spdawson at gmail.com wrote:
-> From: Simon Dawson <simond@trainfx.com>
->
-> The barebox license should be "GPLv2 with exceptions", and not GPLv2.
->
-> Signed-off-by: Simon Dawson <simond@trainfx.com>
-> ---
->   v2: Changed license information as suggested on mailing list.
->
->   boot/barebox/barebox.mk |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 9550cdc..ee84831 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -20,7 +20,7 @@ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
->   BAREBOX_SITE = http://www.barebox.org/download/
->   endif
->   
-> -BAREBOX_LICENSE = GPLv2
-> +BAREBOX_LICENSE = GPLv2 with exceptions
->   BAREBOX_LICENSE_FILES = COPYING
->   
->   ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+> Or simply add a FAQ entry
+> which explains this problem? Other ideas?
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Is it easy to add an entry into a readme file packaged with dropbear.
 
-Luca
+-- 
+_______________________________________________________________________
+
+'Write programs that do one thing and do it well. Write programs to work
+together. Write programs to handle text streams, because that is a
+universal interface'
+
+(Doug McIlroy)
+_______________________________________________________________________
