@@ -1,48 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Aug 2012 19:34:02 +0200
-Subject: [Buildroot] [PATCH 05/20] libtirpc: new package
-In-Reply-To: <201208121743.03068.yann.morin.1998@free.fr>
-References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <43fd6bbd813c17a10caad354c09b94bd42558170.1344706801.git.thomas.petazzoni@free-electrons.com>
- <201208121743.03068.yann.morin.1998@free.fr>
-Message-ID: <503D010A.6030907@mind.be>
+Date: Tue, 28 Aug 2012 19:48:08 +0200
+Subject: [Buildroot] [PATCH v2] barebox: fix license information
+In-Reply-To: <20120828144426.483cd251@skate>
+References: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
+ <20120828144426.483cd251@skate>
+Message-ID: <503D0458.2020700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/12/12 17:43, Yann E. MORIN wrote:
->> >  +diff --git a/src/rpc_generic.c b/src/rpc_generic.c
->> >  +index 509fb36..2eb91ad 100644
->> >  +--- a/src/rpc_generic.c
->> >  ++++ b/src/rpc_generic.c
->> >  +@@ -535,7 +535,9 @@ __rpc_nconf2fd_flags(const struct netconfig *nconf, int flags)
->> >  + 	    si.si_af == AF_INET6) {
->                          ^^^^^^^^
->> >  + 		int val = 1;
->> >  +
->> >  ++#ifdef INET6
->> >  + 		setsockopt(fd, SOL_IPV6, IPV6_V6ONLY,&val, sizeof(val));
->> >  ++#endif
-> Is it evenpossible to have AF_INET6 defined if INET6 is not?
-
-  Yes it is.
-
-> If so, is it sensible to do the actual test if it would do nothing because
-> INET6 is not available?
+On 08/28/12 14:44, Thomas Petazzoni wrote:
+> Le Tue, 28 Aug 2012 08:19:47 +0100,
+> spdawson at gmail.com a ?crit :
 >
-> I would simply return fd in this case (but that makes for a bigger patch).
+>> +BAREBOX_LICENSE = GPLv2 with exceptions
+>>   BAREBOX_LICENSE_FILES = COPYING
+>
+> U-Boot has a similar exception, so shouldn't we be doing the same?
+>
+> Also, uboot.mk mentions that the license is GPLv2+, but the U-Boot
+> COPYING file says:
+>
+>    U-Boot is Free Software.  It is copyrighted by Wolfgang Denk and
+> many others who contributed code (see the actual source code for
+> details).  You can redistribute U-Boot and/or modify it under the
+> terms of version 2 of the GNU General Public License as published by
+> the Free Software Foundation.  Most of it can also be distributed,
+> at your option, under any later version of the GNU General Public
+> License -- see individual files for exceptions.
+>
+> So I guess that formally speaking U-Boot is GPLv2 only, and not GPLv2+.
 
-  Actually, it may make more sense to return -EINVAL (or -1 and set errno, or
-whatever the convention is).  But I don't have enough context to verify that.
+  Given the large number of special cases we've encountered in the licensing
+support, I propose that we require one or two Acks on all licensing patches.
+And for new packages, the Acks should explicitly mention that it Acks the
+license information.  Failing the Acks, it could still be committed with
+a flag that it needs review, e.g. "GPLv2+ (needs review)".
+
+  I think for the legal-info, we should really be conservative. Now that it
+exists, people will rely on it.  And if they rely on the wrong information,
+they could be in trouble.
+
+  OTOH, the trouble would probably just be from your own legal department...
+Copyright holders who create complex, inconsistent licenses are very
+unlikely to try to enforce them.  And also the FSFE and similar organisations
+will just go for the obvious GPL violations.  So maybe I'm just being
+unnecessarily paranoid here...
 
   Regards,
   Arnout
-
-  BTW, Yann, it would be nice if you'd snip away some of the quoting, to save us
-all a bit of scrolling.  Not everybody has automatic collapsing of quoted text...
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
