@@ -1,39 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Aug 2012 14:44:26 +0200
-Subject: [Buildroot] [PATCH v2] barebox: fix license information
-In-Reply-To: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
-References: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120828144426.483cd251@skate>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue, 28 Aug 2012 15:48:56 +0200
+Subject: [Buildroot] [PATCH] mtdev: new package
+Message-ID: <503CCC48.7000409@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 28 Aug 2012 08:19:47 +0100,
-spdawson at gmail.com a ?crit :
+The mtdev is a stand-alone library which transforms all variants
+of kernel multitouch events to the slotted type B protocol.
 
-> +BAREBOX_LICENSE = GPLv2 with exceptions
->  BAREBOX_LICENSE_FILES = COPYING
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ package/Config.in       |    1 +
+ package/mtdev/Config.in |    8 ++++++++
+ package/mtdev/mtdev.mk  |   14 ++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/mtdev/Config.in
+ create mode 100644 package/mtdev/mtdev.mk
 
-U-Boot has a similar exception, so shouldn't we be doing the same?
-
-Also, uboot.mk mentions that the license is GPLv2+, but the U-Boot
-COPYING file says:
-
-  U-Boot is Free Software.  It is copyrighted by Wolfgang Denk and
-many others who contributed code (see the actual source code for
-details).  You can redistribute U-Boot and/or modify it under the
-terms of version 2 of the GNU General Public License as published by
-the Free Software Foundation.  Most of it can also be distributed,
-at your option, under any later version of the GNU General Public
-License -- see individual files for exceptions.
-
-So I guess that formally speaking U-Boot is GPLv2 only, and not GPLv2+.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index f308de7..ff52e87 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -383,6 +383,7 @@ source "package/libnfc-llcp/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
++source "package/mtdev/Config.in"
+ endmenu
+  menu "Javascript"
+diff --git a/package/mtdev/Config.in b/package/mtdev/Config.in
+new file mode 100644
+index 0000000..3419903
+--- /dev/null
++++ b/package/mtdev/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_MTDEV
++	bool "mtdev"
++	help
++	  The mtdev is a stand-alone library which transforms all
++	  variants of kernel MT events to the slotted type B protocol.
++
++	  http://bitmath.org/code/mtdev/
++
+diff --git a/package/mtdev/mtdev.mk b/package/mtdev/mtdev.mk
+new file mode 100644
+index 0000000..09f76f2
+--- /dev/null
++++ b/package/mtdev/mtdev.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# mtdev
++#
++#############################################################
++MTDEV_VERSION = 1.1.3
++MTDEV_SOURCE = mtdev-$(MTDEV_VERSION).tar.bz2
++MTDEV_SITE = http://bitmath.org/code/mtdev/
++
++MTDEV_LICENSE = MIT
++MTDEV_LICENSE_FILES = COPYING
++MTDEV_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
