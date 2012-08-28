@@ -1,27 +1,23 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Aug 2012 19:51:44 +0200
-Subject: [Buildroot] [PATCH 06/20] busybox: add support to link against
- libtirpc when available
-In-Reply-To: <201208121751.09062.yann.morin.1998@free.fr>
+Date: Tue, 28 Aug 2012 20:15:33 +0200
+Subject: [Buildroot] [PATCH 19/20] toolchain-external: add Sourcery
+ CodeBench x86 2012.03
+In-Reply-To: <58900acdf9856b611b4736be8ed37497f7069142.1344706801.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <982e7938fd23732ce642ef91ecdc26b0f073b4c7.1344706801.git.thomas.petazzoni@free-electrons.com>
- <201208121751.09062.yann.morin.1998@free.fr>
-Message-ID: <503D0530.1080708@mind.be>
+ <58900acdf9856b611b4736be8ed37497f7069142.1344706801.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <503D0AC5.3070307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/12/12 17:51, Yann E. MORIN wrote:
-> On Saturday 11 August 2012 19:40:38 Thomas Petazzoni wrote:
-> >    # If RPC is enabled then enable nfs mounts
-> >  -ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
-> >  +ifeq ($(BR2_RPC_AVAILABLE),y)
-> BR2_RPC_SUPPORT_AVAILABLE
+On 08/11/12 19:40, Thomas Petazzoni wrote:
+> +	  Note that due to the upgrade to glibc 2.15, this toolchain
+> +	  no longer provides RPC functions. The TI-RPC library should
+> +	  be used instead, but isn't available in Buildroot yet.
 
-
-  But maybe BR2_RPC_AVAILABLE is a better name :-)
+  Uh?
 
   Regards,
   Arnout
