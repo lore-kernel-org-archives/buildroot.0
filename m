@@ -1,37 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Aug 2012 19:39:37 +0200
-Subject: [Buildroot] [PATCH 05/20] libtirpc: new package
-In-Reply-To: <43fd6bbd813c17a10caad354c09b94bd42558170.1344706801.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Aug 2012 19:51:44 +0200
+Subject: [Buildroot] [PATCH 06/20] busybox: add support to link against
+ libtirpc when available
+In-Reply-To: <201208121751.09062.yann.morin.1998@free.fr>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <43fd6bbd813c17a10caad354c09b94bd42558170.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <503D0259.7020904@mind.be>
+ <982e7938fd23732ce642ef91ecdc26b0f073b4c7.1344706801.git.thomas.petazzoni@free-electrons.com>
+ <201208121751.09062.yann.morin.1998@free.fr>
+Message-ID: <503D0530.1080708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/11/12 19:40, Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-[snip]
-> diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
-> new file mode 100644
-> index 0000000..ed56b88
-> --- /dev/null
-> +++ b/package/libtirpc/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_LIBTIRPC
-> +	bool "libtirpc"
-> +	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> +	help
-> +	  Libtirpc is a port of Suns Transport-Independent RPC library
-                                 ^^^^Sun's
+On 08/12/12 17:51, Yann E. MORIN wrote:
+> On Saturday 11 August 2012 19:40:38 Thomas Petazzoni wrote:
+> >    # If RPC is enabled then enable nfs mounts
+> >  -ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+> >  +ifeq ($(BR2_RPC_AVAILABLE),y)
+> BR2_RPC_SUPPORT_AVAILABLE
+
+
+  But maybe BR2_RPC_AVAILABLE is a better name :-)
 
   Regards,
   Arnout
-
-[snip]
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
