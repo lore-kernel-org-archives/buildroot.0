@@ -1,63 +1,47 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Tue, 28 Aug 2012 20:02:01 +0300
-Subject: [Buildroot] Some questions about buildroot Target toolchain
-In-Reply-To: <20120828175935.4fe0aa87@skate>
-References: <CAD4nNjU1cEJvd3LfwnKFDp12_11onm-vTc2JJidtWOz4vLuexg@mail.gmail.com>
- <20120828175935.4fe0aa87@skate>
-Message-ID: <503CF989.7060909@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Aug 2012 19:14:25 +0200
+Subject: [Buildroot] libffi or the crazy world of toolchain options
+In-Reply-To: <201208270043.26928.yann.morin.1998@free.fr>
+References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <201208262240.51214.yann.morin.1998@free.fr>
+ <201208270043.26928.yann.morin.1998@free.fr>
+Message-ID: <201208281914.25890.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-28.8.2012 18:59, Thomas Petazzoni kirjoitti:
-> Hello,
->
-> Le Tue, 28 Aug 2012 16:04:42 +0100,
-> rechid miloi <in.hiring@gmail.com> a ?crit :
->
->> I've build my own Linux system for X86_64 using Buildroot/uclibc. I've
->> successfully added number of packages : libpam, openldap, clamav,  ...etc.
->> However other package I wanna add can't be cross-compiled, so I decided to
->> compile TARGET_GCC and TARGET_DEVFILE into the system.
-> Really, using the toolchain on the target is not the right solution.
-> The right solution is to get your "other package" to cross-compile
-> properly. What package is it?
->
->> The problem, is when (ld) try to link any object, I got the famous
->> "R_X86_64_PC32" ERROR.
->> I've tried to figure that out by :
->>
->>    - Recompile all buildRoot with : -fPIC -DPIC
->>    - Recompile all BuildRoot with : -pie
->>    - Deactivate binary striping
->>
->> Without any result.
->>
->> However, I've tried to compile the "file" package with 'LDFLAG="-static"'
->> and It worked ! Sincerely I don't know why !
-> Maybe because our target toolchain is broken with regard to shared
-> libraries or something. Since the target toolchain is not really useful
-> (Buildroot is meant to cross-compile things), almost none of the main
-> Buildroot developers use it and test it, so we have had repeatedly
-> reports of breakage. Unfortunately, none of the people reporting
-> breakage, who should be the ones interested by this feature, have
-> contributed fixes to improve the situation. At some point, we might
-> even consider removing the possibility of generating a toolchain for
-> the target in Buildroot, but this remains to be discussed.
+Thomas, All,
 
-I *might* volunteer to fix x86 target toolchain because I know for sure
-that I need it in the future
-because Im currently making my own uClibc based, buildroot assisted,
-distro and that's why
-having a native uClibc toolchain is crucial for me.
+On Monday 27 August 2012 00:43:26 Yann E. MORIN wrote:
+> On Sunday 26 August 2012 22:40:50 Yann E. MORIN wrote:
+> > What's left, now, is to change each dependency on a package /main/ symbol
+> > to a dependency on the corresponding _AVAILABLE symbol, plus a select on
+> > the the /main/ symbol. I hope to update my scripts with this functionality.
+> > I definitely do not want to manually review hundreds of packages! ;-)
+> 
+> Well, find attached an updated pkg-avail script that does just that.
+> 
+> Please note however that the script is not bullet-proof, neither when adding
+> the _AVAILABLE symbols, nor when using them. It avoids mangling simple cases
+> (such as: "depends on PKG_FOO||PKG_BAR" and stuff like that) and thus misses
+> some of the dependencies, but may still butcher other places. :-/
+> 
+> Enough for today, more tomorrow...
 
-But not before I have keeped my soon to be starting, 3 weeks vacation.
+For those interested, I've posted two patches that can be applied ontop
+commit bc753d3ca243bcda35d567465ee649ecee3ef236 :
 
-So please Thomas, don't remove it just yet while im away :)
+    http://ymorin.is-a-geek.org/download/tmp/
 
-Stefan
-> Best regards,
->
-> Thomas
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
