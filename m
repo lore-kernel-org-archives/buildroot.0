@@ -1,88 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Aug 2012 00:34:54 +0200
-Subject: [Buildroot] [RFC v1] Rework of RPC support to handle glibc >=
- 2.14 and libtirpc
-In-Reply-To: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Aug 2012 00:45:06 +0200
+Subject: [Buildroot] [PATCH 20/20] external-toolchain: add Sourcery
+ CodeBench ARM 2012.03
+In-Reply-To: <201208221636.16437.yann.morin.1998@free.fr>
 References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <503D478E.4030400@mind.be>
+ <CAHkwnC8sEW3NSwCKpfMwbGWbJgVQ_zKKga5kRduutvFUnPKNqg@mail.gmail.com>
+ <20120822155122.2cf57b60@skate> <201208221636.16437.yann.morin.1998@free.fr>
+Message-ID: <503D49F2.1000501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/11/12 19:40, Thomas Petazzoni wrote:
-> Hello,
+On 08/22/12 16:36, Yann E. MORIN wrote:
+>> >  I'm a bit hesitant here. If newer glibc toolchains re-include the RPC
+>> >  support, is it worth supporting libtirpc and do all the changes I had
+>> >  proposed? Or should we just give up and say we only support
+>> >  glibc toolchains that include RPC support? Maybe not nice, since
+>> >  libtirpc brings quite a few features compared to in-toolchain RPC
+>> >  support.
+>> >
+>> >  Comments from others?
+> In glibc, RPC is now considered obsolete, and still planned for removal,
+> albeit no time-line exists AFAIK.
 >
-> This set of patches reworks the RPC support to take into account newer
-> glibc versions that do not provide RPC support. This is still a work
-> in progress and this version is a RFC only.
+> So, although glibc now again installs RPC headers, I think working on
+> the libtirpc replacement is still the way to go. It's just that it's less
+> critical for now.
+>
+> Also, there is currently no provision in crosstool-NG to build glibc/eglibc
+> with --enable-obsolete-rpc (although that should be easy to add; will do
+> shortly).
+>
+> In the end, I don not think that your work on libtirpc is still valuable,
+                 ^^^^^^^not???
+> because at the very least, it offers some insights on the road to go, and
+> even provides a good overview of the issues at hand, and how to possibly
+> solve those.
 
-  It looks pretty good though.
+  At the very least it is useful to be able to use tirpc instead of uClibc RPC.
+And I agree that this patch set is good for the future.  Also, it's in such
+a good state already that it would be a real shame to discard it.
 
-[snip]
->   * Patch 3 makes a naive rename BR2_INET_RPC to
->     BR2_TOOLCHAIN_HAS_NATIVE_RPC. This name better describes what it
->     means: whether the toolchain has or does not have RPC support (the
->     RPC support will later have the capability of being provided by
->     libtirpc, outside of the toolchain).
-
-  This is probably done with an automatically with a script, right?  Then
-I think you should include the script in the commit message.  That way,
-it can easily be reproduced even if some new package started using
-BR2_INET_RPC.
-
-
-[snip]
->   * Patch 5 adds a package for libtirpc, with a bunch of patches to
->     make its compilation work properly on top of uClibc.
-
-  Anything upstreamable?
-
-
->   * Patch 12 makes it possible to link nfs-utils against libtirpc. The
->     only thing worth mentionning is that I removed the select on
->     BR2_PACKAGE_PORTMAP. This select was not a build-time dependency,
->     but a run-time dependency, and nowadays, nfs-utils can work
->     together with rpcbind rather than portmap (which is deprecated).
-
-  Maybe keep the select if LIBTIRPC is not selected, and select rpcbind
-if it is.
-
-
->   * Patch 13 adds a package for rpcbind, the modern replacement for
->     portmap. This package directly selects libtirpc. Question: how
->     should it behave with toolchains having internal RPC support?
-
-  Is it possible to compile rpcbind with internal RPC support?  In that case
-I definitely think that case should be supported (and then portmap can be
-deprecated).  I think you can use
-	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-
-  Maybe the same pattern can be applied to the other RPC users (excluding
-busybox, of course).  And in that case the BR2_RPC_SUPPORT_AVAILABLE
-symbol isn't needed...
-
-[snip]
->   * Patch 14 adds a small comment in portmap saying that rpcbind is the
->     newer replacement. Portmap doesn't link properly against libtirpc,
->     and it probably isn't worth fixing it. Question: should I mark
->     portmap as deprecated?
-
-  Unless rpcbind works for native rpc, it shouldn't be deprecated.
-
-[snip]
->   * Patches 18-20 add the latest Sourcery CodeBench toolchain for ARM,
->     x86 and SH4. Those glibc toolchains use glibc 2.15 and therefore do
->     not have RPC support.
-
-  The help text about RPC should be the same for all three.  Actually there's
-probably no need to mention RPC, the comments in the packages requiring RPC
-are sufficient.
+  Some of the preparatory patches (1-4, 7-10) can definitely be applied in the
+short term, even if libtirpc isn't included.  Especially patch 4 is a good one
+to make sure people don't run into the issue anymore with locally installed
+external toolchains.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
