@@ -1,50 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Aug 2012 01:09:18 +0200
-Subject: [Buildroot] [PATCH 02/36] package/sdl: add symlink to sdl-config
-In-Reply-To: <20120813125710.13d0fc69@skate>
-References: <1344815664-28138-1-git-send-email-yann.morin.1998@free.fr>
- <1344815664-28138-2-git-send-email-yann.morin.1998@free.fr>
- <20120813125710.13d0fc69@skate>
-Message-ID: <503D4F9E.6070803@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Aug 2012 01:18:00 +0200
+Subject: [Buildroot] 2012.08-rc3 skipping python modules during build
+In-Reply-To: <CALoHCLOK1-F5uxiWc95Mr6SJwCc2sqxicBi5V93-HtuBOhY0kA@mail.gmail.com>
+References: <CALoHCLOK1-F5uxiWc95Mr6SJwCc2sqxicBi5V93-HtuBOhY0kA@mail.gmail.com>
+Message-ID: <20120829011800.01eb081e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/13/12 12:57, Thomas Petazzoni wrote:
-> Le Mon, 13 Aug 2012 01:53:50 +0200,
-> "Yann E. MORIN"<yann.morin.1998@free.fr>  a ?crit :
->
->> >  SDL installs a script-based sdl-config in the sysroot, but some
->> >  packages (eg. QEMU) needs it to be either:
->> >     - prefixed with the cross-prefix
->> >     - in the PATH
->> >
->> >  So, as sdl-config is a script, and although it is installed in
->> >  the sysroot, it can be run on the host.
-> Well, that's typically not how we handle this problem. In general, we
-> pass the complete location of the<foo>-config script to
-> the ./configure script of the package that needs it. I would prefer if
-> we could use this solution everywhere instead of having a different
-> solution in different places for the same problem.
+Le Tue, 28 Aug 2012 08:43:38 -0700,
+Eric Seifert <eric.seifert@cyaninc.com> a ?crit :
 
-  Although I fully agree with using the same pattern everywhere, I think the
-pattern is wrong here.  Having a xxx-config script is supposed to make it
-easy to discover a package; if you have to point to it explicitly in the
-package.mk using it, that kind of defeats the purpose.
+> Hello, I have been using the stable 2012.05 build without issue and wanted
+> to try the latest rc3. I have a few extra python modules I have added to
+> the external python modules section. It seems in the latest rc3 is not
+> building them or even downloading the packages even though they are
+> selected in the menuconfig, they are just ignored. It works in the stable
+> 2012.05 build. When I select one of the existing external modules such as
+> pthon-serial, it does get built.
 
-  Of course, even so it is still shaky.  If the xxx-config has to be looked up
-from the PATH, we risk picking up /usr/bin/xxx-config...  In an ideal world,
-they'd all be using pkg-config...  But in an ideal work we probably wouldn't
-even need buildroot :-)
+You aren't giving enough details to provide a final answer, but my
+guess is that you should replace:
 
-  Regards,
-  Arnout
+$(eval $(call GENTARGETS))
+
+by
+
+$(eval $(generic-package))
+
+at the end of your Python external modules .mk files.
+
+And also, you should submit those .mk files upstream if they correspond
+to publicly available Python modules.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
