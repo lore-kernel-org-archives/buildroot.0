@@ -1,55 +1,106 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Aug 2012 00:45:06 +0200
-Subject: [Buildroot] [PATCH 20/20] external-toolchain: add Sourcery
- CodeBench ARM 2012.03
-In-Reply-To: <201208221636.16437.yann.morin.1998@free.fr>
-References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <CAHkwnC8sEW3NSwCKpfMwbGWbJgVQ_zKKga5kRduutvFUnPKNqg@mail.gmail.com>
- <20120822155122.2cf57b60@skate> <201208221636.16437.yann.morin.1998@free.fr>
-Message-ID: <503D49F2.1000501@mind.be>
+Date: Wed, 29 Aug 2012 00:57:32 +0200
+Subject: [Buildroot] [PATCH] mtdev2tuio: new package
+In-Reply-To: <503CD43F.6060802@relinux.de>
+References: <503CD43F.6060802@relinux.de>
+Message-ID: <503D4CDC.2060806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/22/12 16:36, Yann E. MORIN wrote:
->> >  I'm a bit hesitant here. If newer glibc toolchains re-include the RPC
->> >  support, is it worth supporting libtirpc and do all the changes I had
->> >  proposed? Or should we just give up and say we only support
->> >  glibc toolchains that include RPC support? Maybe not nice, since
->> >  libtirpc brings quite a few features compared to in-toolchain RPC
->> >  support.
->> >
->> >  Comments from others?
-> In glibc, RPC is now considered obsolete, and still planned for removal,
-> albeit no time-line exists AFAIK.
+On 08/28/12 16:22, Stephan Hoffmann wrote:
+> mtdev2tuio is a simple application for converting touch events
+> to the standart TUIO 1.1 protocol.
 >
-> So, although glibc now again installs RPC headers, I think working on
-> the libtirpc replacement is still the way to go. It's just that it's less
-> critical for now.
+> https://github.com/olivopaolo/mtdev2tuio
 >
-> Also, there is currently no provision in crosstool-NG to build glibc/eglibc
-> with --enable-obsolete-rpc (although that should be easy to add; will do
-> shortly).
->
-> In the end, I don not think that your work on libtirpc is still valuable,
-                 ^^^^^^^not???
-> because at the very least, it offers some insights on the road to go, and
-> even provides a good overview of the issues at hand, and how to possibly
-> solve those.
+> Signed-off-by: Stephan Hoffmann<sho@relinux.de>
+> ---
+>   package/Config.in                                  |    2 +
+>   package/mtdev2tuio/Config.in                       |    8 ++++++
+>   ...ev2tuio-Use-gcc-instead-of-ld-for-linking.patch |   26
+> ++++++++++++++++++++
 
-  At the very least it is useful to be able to use tirpc instead of uClibc RPC.
-And I agree that this patch set is good for the future.  Also, it's in such
-a good state already that it would be a real shame to discard it.
+  Thunderbird doesn't like to send patches - it wordwraps.  Use git send-email.
 
-  Some of the preparatory patches (1-4, 7-10) can definitely be applied in the
-short term, even if libtirpc isn't included.  Especially patch 4 is a good one
-to make sure people don't run into the issue anymore with locally installed
-external toolchains.
+[snip]
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -291,6 +291,7 @@ source "package/libcdaudio/Config.in"
+>  source "package/libcue/Config.in"
+>  source "package/libcuefile/Config.in"
+>  source "package/libid3tag/Config.in"
+> +source "package/liblo/Config.in"
 
-  Regards,
-  Arnout
+  This one doesn't belong here.
+
+[snip]
+> --- /dev/null
+> +++ b/package/mtdev2tuio/mtdev2tuio-Use-gcc-instead-of-ld-for-linking.patch
+> @@ -0,0 +1,26 @@
+> +From 3594a424f9610f982cd98b56fffb3ba3f597bd6a Mon Sep 17 00:00:00 2001
+> +From: Stephan Hoffmann<sho@relinux.de>
+> +Date: Tue, 28 Aug 2012 11:53:14 +0200
+> +Subject: [PATCH] Use gcc instead of ld for linking
+> +
+> +Signed-off-by: Stephan Hoffmann<sho@relinux.de>
+> +---
+> + Makefile |    2 +-
+> + 1 files changed, 1 insertions(+), 1 deletions(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index 8ed320a..788d6ed 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -26,7 +26,7 @@ OBJS=${SRCS:.c=.o}
+> + + # Link rule
+> + $(TARGET): $(OBJS)
+> +-	$(LD) $(LDFLAGS) $(OBJS) -o $@ $(LIBDIRS) $(LIBS)
+> ++	$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LIBDIRS) $(LIBS)
+
+  Alternative is to run make with LD=$(TARGET_CC) instead of $(TARGET_LD).
+Happens in a couple of places.
+
+> + + # Compilation rule
+> + %.o:%.c
+> +-- +1.7.0.4
+> +
+> diff --git a/package/mtdev2tuio/mtdev2tuio.mk
+> b/package/mtdev2tuio/mtdev2tuio.mk
+> new file mode 100644
+> index 0000000..418f21c
+> --- /dev/null
+> +++ b/package/mtdev2tuio/mtdev2tuio.mk
+> @@ -0,0 +1,21 @@
+> +#############################################################
+> +#
+> +# mtdev2tuio
+> +#
+> +#############################################################
+> +MTDEV2TUIO_VERSION = e1e7378d86
+> +MTDEV2TUIO_SITE = git://github.com/olivopaolo/mtdev2tuio.git
+> +MTDEV2TUIO_DEPENDENCIES = mtdev
+> +MTDEV2TUIO_LICENSE = GPLv3
+
+  The only source file states GPLv3+
+
+> +MTDEV2TUIO_LICENSE_FILES = COPYING
+> +
+> +define MTDEV2TUIO_BUILD_CMDS
+> +$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) clean
+
+  Is the clean really necessary?
+
+> +$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) +endef
+> +
+> +define MTDEV2TUIO_INSTALL_TARGET_CMDS
+> +$(INSTALL) -D -m 0755 $(@D)/mtdev2tuio $(TARGET_DIR)/usr/bin
+> +endef
+> +
+> +$(eval $(generic-package))
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
