@@ -1,7 +1,7 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 28 Aug 2012 16:13:33 +0200
+Date: Tue, 28 Aug 2012 16:22:55 +0200
 Subject: [Buildroot] [PATCH] mtdev2tuio: new package
-Message-ID: <503CD20D.7060703@relinux.de>
+Message-ID: <503CD43F.6060802@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 mtdev2tuio is a simple application for converting touch events
-to the standard TUIO 1.1 protocol.
+to the standart TUIO 1.1 protocol.
 
 https://github.com/olivopaolo/mtdev2tuio
 
@@ -19,8 +19,8 @@ Signed-off-by: Stephan Hoffmann <sho@relinux.de>
  package/mtdev2tuio/Config.in                       |    8 ++++++
  ...ev2tuio-Use-gcc-instead-of-ld-for-linking.patch |   26
 ++++++++++++++++++++
- package/mtdev2tuio/mtdev2tuio.mk                   |   22 ++++++++++++++++
- 4 files changed, 58 insertions(+), 0 deletions(-)
+ package/mtdev2tuio/mtdev2tuio.mk                   |   21 ++++++++++++++++
+ 4 files changed, 57 insertions(+), 0 deletions(-)
  create mode 100644 package/mtdev2tuio/Config.in
  create mode 100644
 package/mtdev2tuio/mtdev2tuio-Use-gcc-instead-of-ld-for-linking.patch
@@ -94,10 +94,10 @@ index 0000000..cb7e16d
 diff --git a/package/mtdev2tuio/mtdev2tuio.mk
 b/package/mtdev2tuio/mtdev2tuio.mk
 new file mode 100644
-index 0000000..2636525
+index 0000000..418f21c
 --- /dev/null
 +++ b/package/mtdev2tuio/mtdev2tuio.mk
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,21 @@
 +#############################################################
 +#
 +# mtdev2tuio
@@ -105,11 +105,9 @@ index 0000000..2636525
 +#############################################################
 +MTDEV2TUIO_VERSION = e1e7378d86
 +MTDEV2TUIO_SITE = git://github.com/olivopaolo/mtdev2tuio.git
-+# MTDEV2TUIO_AUTORECONF = YES
-+# MTDEV2TUIO_INSTALL_STAGING = YES
-+# MTDEV2TUIO_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR)
-LDFLAGS=-L$(STAGING_DIR)/usr/lib install
 +MTDEV2TUIO_DEPENDENCIES = mtdev
++MTDEV2TUIO_LICENSE = GPLv3
++MTDEV2TUIO_LICENSE_FILES = COPYING
 +
 +define MTDEV2TUIO_BUILD_CMDS
 +$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) clean
