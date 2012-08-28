@@ -1,68 +1,70 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 28 Aug 2012 15:48:56 +0200
-Subject: [Buildroot] [PATCH] mtdev: new package
-Message-ID: <503CCC48.7000409@relinux.de>
+Date: Tue, 28 Aug 2012 16:00:16 +0200
+Subject: [Buildroot] [PATCH] liblo: new pachage
+Message-ID: <503CCEF0.7050409@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mtdev is a stand-alone library which transforms all variants
-of kernel multitouch events to the slotted type B protocol.
+liblo is an implementation of the Open Sound Control protocol
+for POSIX systems.
 
 Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 ---
  package/Config.in       |    1 +
- package/mtdev/Config.in |    8 ++++++++
- package/mtdev/mtdev.mk  |   14 ++++++++++++++
+ package/liblo/Config.in |    8 ++++++++
+ package/liblo/liblo.mk  |   14 ++++++++++++++
  3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/mtdev/Config.in
- create mode 100644 package/mtdev/mtdev.mk
+ create mode 100644 package/liblo/Config.in
+ create mode 100644 package/liblo/liblo.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f308de7..ff52e87 100644
+index f308de7..aad52c2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -383,6 +383,7 @@ source "package/libnfc-llcp/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
- source "package/libv4l/Config.in"
-+source "package/mtdev/Config.in"
- endmenu
-  menu "Javascript"
-diff --git a/package/mtdev/Config.in b/package/mtdev/Config.in
+@@ -291,6 +291,7 @@ source "package/libcdaudio/Config.in"
+ source "package/libcue/Config.in"
+ source "package/libcuefile/Config.in"
+ source "package/libid3tag/Config.in"
++source "package/liblo/Config.in"
+ source "package/libmad/Config.in"
+ source "package/libmpd/Config.in"
+ source "package/libreplaygain/Config.in"
+diff --git a/package/liblo/Config.in b/package/liblo/Config.in
 new file mode 100644
-index 0000000..3419903
+index 0000000..69848f8
 --- /dev/null
-+++ b/package/mtdev/Config.in
++++ b/package/liblo/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_MTDEV
-+	bool "mtdev"
++config BR2_PACKAGE_LIBLO
++	bool "liblo"
 +	help
-+	  The mtdev is a stand-alone library which transforms all
-+	  variants of kernel MT events to the slotted type B protocol.
++	  liblo is an implementation of the Open Sound Control
++	  protocol for POSIX systems
 +
-+	  http://bitmath.org/code/mtdev/
++	  http://liblo.sourceforge.net/
 +
-diff --git a/package/mtdev/mtdev.mk b/package/mtdev/mtdev.mk
+diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
 new file mode 100644
-index 0000000..09f76f2
+index 0000000..924c3a7
 --- /dev/null
-+++ b/package/mtdev/mtdev.mk
++++ b/package/liblo/liblo.mk
 @@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# mtdev
++# liblo
 +#
 +#############################################################
-+MTDEV_VERSION = 1.1.3
-+MTDEV_SOURCE = mtdev-$(MTDEV_VERSION).tar.bz2
-+MTDEV_SITE = http://bitmath.org/code/mtdev/
++LIBLO_VERSION = 0.26
++LIBLO_SOURCE = liblo-$(LIBLO_VERSION).tar.gz
++LIBLO_SITE =
+http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
 +
-+MTDEV_LICENSE = MIT
-+MTDEV_LICENSE_FILES = COPYING
-+MTDEV_INSTALL_STAGING = YES
++LIBLO_LICENSE = LGPLv2.1+
++LIBLO_LICENSE_FILES = COPYING
++LIBLO_INSTALL_STAGING = YES
 +
 +$(eval $(autotools-package))
 -- 
