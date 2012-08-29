@@ -1,41 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 29 Aug 2012 11:37:31 +0200
-Subject: [Buildroot] [PATCH 20/20] external-toolchain: add Sourcery
-	CodeBench ARM 2012.03
-In-Reply-To: <503D49F2.1000501@mind.be>
-References: <cover.1344706801.git.thomas.petazzoni@free-electrons.com>
- <201208221636.16437.yann.morin.1998@free.fr> <503D49F2.1000501@mind.be>
-Message-ID: <201208291138.13363.yann.morin.1998@free.fr>
+From: gregory hermant <gregory.hermant@calao-systems.com>
+Date: Wed, 29 Aug 2012 11:55:03 +0200
+Subject: [Buildroot] [PATCH] Add custom boards support for Atmel SAM-BA
+	software
+Message-ID: <503DE6F7.8050702@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas, All,
 
-On Wednesday 29 August 2012 00:45:06 Arnout Vandecappelle wrote:
-> On 08/22/12 16:36, Yann E. MORIN wrote:
-> >> >  I'm a bit hesitant here. If newer glibc toolchains re-include the RPC
-> >> >  support, is it worth supporting libtirpc and do all the changes I had
-> >> >  proposed? Or should we just give up and say we only support
-> >> >  glibc toolchains that include RPC support? Maybe not nice, since
-> >> >  libtirpc brings quite a few features compared to in-toolchain RPC
-> >> >  support.
-> >> >
-> >> >  Comments from others?
-> > In the end, I don not think that your work on libtirpc is still valuable,
->                  ^^^^^^^not???
+---
+ package/sam-ba/Config.in.host |   13 +++++++++++++
+ package/sam-ba/sam-ba.mk      |    9 +++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-Of course, I meant: I *do* think it is valuable.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
+index 20b2b36..16279db 100644
+--- a/package/sam-ba/Config.in.host
++++ b/package/sam-ba/Config.in.host
+@@ -7,3 +7,16 @@ config BR2_PACKAGE_HOST_SAM_BA
+ 	  microcontrollers.
+ 
+ 	  http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools
++
++if	BR2_PACKAGE_HOST_SAM_BA
++
++config BR2_TARGET_SAM_BA_CUSTOM_PATCH_DIR
++	string "custom patch dir"
++	help
++	  If your board requires custom patches, add the path to the
++	  directory containing the patches here. The patches must be
++	  named sam-ba-<version>-<something>.patch.
++
++	  Most users may leave this empty
++
++endif
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index 9f39347..98b600b 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -8,6 +8,15 @@ define HOST_SAM_BA_EXTRACT_CMDS
+         rmdir $(BUILD_DIR)/sam-ba_cdc_cdc_linux/
+ endef
+ 
++ifneq ($(call qstrip,$(BR2_TARGET_SAM_BA_CUSTOM_PATCH_DIR)),)
++define SAM_BA_APPLY_CUSTOM_PATCHES
++	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_SAM_BA_CUSTOM_PATCH_DIR) \
++		sam-ba-$(SAM_BA_VERSION)-\*.patch
++endef
++
++HOST_SAM_BA_POST_PATCH_HOOKS += SAM_BA_APPLY_CUSTOM_PATCHES
++endif
++
+ # Since it's a prebuilt application and it does not conform to the
+ # usual Unix hierarchy, we install it in $(HOST_DIR)/opt/sam-ba and
+ # then create a symbolic link from $(HOST_DIR)/usr/bin to the
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.5.6.3
