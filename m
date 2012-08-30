@@ -1,143 +1,97 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 30 Aug 2012 14:08:26 +0200
-Subject: [Buildroot] [PATCH] qtuio: new package
-Message-ID: <1346328506-27403-1-git-send-email-sho@relinux.de>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 30 Aug 2012 23:02:28 +0200
+Subject: [Buildroot] [PATCH v2] barebox: fix license information
+In-Reply-To: <503D5205.30306@mind.be>
+References: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
+ <20120828144426.483cd251@skate> <503D0458.2020700@mind.be>
+ <20120828225431.791a7aec@skate> <503D5205.30306@mind.be>
+Message-ID: <503FD4E4.2000405@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Implementation of an interface connecting TUIO messages and QT events
+Arnout Vandecappelle wrote:
+> On 08/28/12 22:54, Thomas Petazzoni wrote:
+>> Le Tue, 28 Aug 2012 19:48:08 +0200,
+>> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
+>>
+>>>> Also, uboot.mk mentions that the license is GPLv2+, but the U-Boot
+>>>> COPYING file says:
+>>>>
+>>>>     U-Boot is Free Software.  It is copyrighted by Wolfgang Denk and
+>>>> many others who contributed code (see the actual source code for
+>>>> details).  You can redistribute U-Boot and/or modify it under the
+>>>> terms of version 2 of the GNU General Public License as published by
+>>>> the Free Software Foundation.  Most of it can also be distributed,
+>>>> at your option, under any later version of the GNU General Public
+>>>> License -- see individual files for exceptions.
+>>>>
+>>>> So I guess that formally speaking U-Boot is GPLv2 only, and not 
+>>>> GPLv2+.
+>>>
+>>>    Given the large number of special cases we've encountered in the 
+>>> licensing
+>>> support, I propose that we require one or two Acks on all licensing 
+>>> patches.
+>>> And for new packages, the Acks should explicitly mention that it 
+>>> Acks the
+>>> license information.  Failing the Acks, it could still be committed 
+>>> with
+>>> a flag that it needs review, e.g. "GPLv2+ (needs review)".
+>>>
+>>>    I think for the legal-info, we should really be conservative. Now 
+>>> that it
+>>> exists, people will rely on it.  And if they rely on the wrong 
+>>> information,
+>>> they could be in trouble.
+>>
+>> Well, this means having to wait even more before being able to commit a
+>> new package, I'm not sure I like to see more "bureaucracy" when it
+>> comes to getting patches applied. Instead, getting things in movement
+>> usually encourages people to react when something looks wrong. I.e, if
+>> I had left out the barebox and u-boot patches from Simon, maybe nobody
+>> would have commented on them... The fact that I took action by
+>> committing them got the discussion started, we fixed the problems, and
+>> we're good.
+>
+>  That's why I say: commit it with (needs review).  That will attract more
+> reviews than having it either without legal-info, or with the wrong
+> legal-info.
+>
+>
+>>>    OTOH, the trouble would probably just be from your own legal 
+>>> department...
+>>> Copyright holders who create complex, inconsistent licenses are very
+>>> unlikely to try to enforce them.  And also the FSFE and similar 
+>>> organisations
+>>> will just go for the obvious GPL violations.  So maybe I'm just being
+>>> unnecessarily paranoid here...
+>>
+>> Just like we don't provide any guarantees of the proper functioning of
+>> Buildroot, we don't provide any guarantees of the correctness of the
+>> license information. Now, of course, it's up to us as a community to
+>> ensure that Buildroot works fine (it builds what you need) and has the
+>> most correct licensing information as possible, but we're not trying to
+>> provide 100% guarantees here.
+>
+>  The difference is that buildroot users are likely to test the resulting
+> rootfs, but are very unlikely to look a second time at the output of
+> legal-info.  It's very difficult to "test" the legal-info - all you have
+> is "code review". For me, the wrong information in legal-info is an order
+> of magnitude worse than no legal-info at all.
 
-https://github.com/x29a/qTUIO
+I agree with Arnout here. If a feature is buggy, a user wanting to use it
+will probably be bitten by the bug and report it.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
-Included fixes suggested by Thomas Petazzoni
-Removed dependency from mtdev2tuio
-Install library to staging
+If a license is buggy, or even worse, if a user knows license definitions
+are not trustworthy, he will have to check them one by one, just as if they
+were not defined at all in BR. The whole legal-info would thus loose most of
+its usefulness.
 
- package/Config.in       |    3 ++
- package/qtuio/Config.in |   18 ++++++++++++
- package/qtuio/qtuio.mk  |   70 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 91 insertions(+), 0 deletions(-)
- create mode 100644 package/qtuio/Config.in
- create mode 100644 package/qtuio/qtuio.mk
+These weeks my spare time is close to zero, but I do review license info
+patches as soon as I can. It takes 2 minutes in simple cases, 15 when
+things are complex, so it is definitely a little effort.
 
-diff --git a/package/Config.in b/package/Config.in
-index e129522..94430b0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -134,6 +134,9 @@ source "package/efl/Config.in"
- source "package/qt/Config.in"
- source "package/x11r7/Config.in"
- 
-+comment "QT libraries and helper libraries"
-+source "package/qtuio/Config.in"
-+
- comment "X libraries and helper libraries"
- source "package/liberation/Config.in"
- source "package/libsexy/Config.in"
-diff --git a/package/qtuio/Config.in b/package/qtuio/Config.in
-new file mode 100644
-index 0000000..19499fd
---- /dev/null
-+++ b/package/qtuio/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QTUIO
-+	bool "qtuio"
-+	depends on BR2_PACKAGE_QT_GUI_MODULE
-+	help
-+	  Implementation of an interface connecting TUIO messages
-+	  and QT events
-+
-+	  https://github.com/x29a/qTUIO
-+
-+config BR2_QTUIO_EXAMPLES
-+	bool "qtuio examples"
-+	depends on BR2_PACKAGE_QTUIO
-+	help
-+	  Build and install qtuio examples
-+
-+comment "qtuio depends on QT gui module"
-+	depends on !BR2_PACKAGE_QT_GUI_MODULE
-+
-diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
-new file mode 100644
-index 0000000..5451052
---- /dev/null
-+++ b/package/qtuio/qtuio.mk
-@@ -0,0 +1,70 @@
-+#############################################################
-+#
-+# qTUIO
-+#
-+#############################################################
-+QTUIO_VERSION = abe4973ff6
-+QTUIO_SITE = git://github.com/x29a/qTUIO.git
-+QTUIO_INSTALL_STAGING = YES
-+QTUIO_DEPENDENCIES = qt
-+
-+QTUIO_LICENSE = GPLv3+
-+QTUIO_LICENSE_FILES = COPYING
-+
-+# The pong example needs QtOpenGL support, which might become available
-+# some time in the future. Then add pong to the list of examples.
-+QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
-+
-+ifeq ($(BR2_QTUIO_EXAMPLES),y)
-+define QTUIO_CONFIGURE_EXAMPLES
-+	for example in $(QTUIO_EXAMPLES) ; do \
-+		(cd $(@D)/examples/$${example} && $(QT_QMAKE)) ; \
-+	done
-+endef
-+endif
-+
-+define QTUIO_CONFIGURE_CMDS
-+	cd $(@D)/src && $(QT_QMAKE)
-+	$(QTUIO_CONFIGURE_EXAMPLES)
-+endef
-+
-+ifeq ($(BR2_QTUIO_EXAMPLES),y)
-+define QTUIO_BUILD_EXAMPLES
-+	for example in $(QTUIO_EXAMPLES) ; do \
-+		($(MAKE) -C $(@D)/examples/$${example}) ; \
-+	done
-+endef
-+endif
-+
-+define QTUIO_BUILD_CMDS
-+	$(MAKE) -C $(@D)/src
-+	$(QTUIO_BUILD_EXAMPLES)
-+endef
-+
-+# Unfortunatelly, there is no working "install" target available
-+ifeq ($(BR2_QTUIO_EXAMPLES),y)
-+define QTUIO_INSTALL_EXAMPLES
-+	for example in $(QTUIO_EXAMPLES) ; do \
-+		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
-+	done
-+endef
-+endif
-+
-+define QTUIO_INSTALL_TARGET_CMDS
-+	cp -dpf $(@D)/lib/libqTUIO.so* $(TARGET_DIR)/usr/lib
-+	$(QTUIO_INSTALL_EXAMPLES)
-+endef
-+
-+define QTUIO_INSTALL_STAGING_CMDS
-+	cp -dpf $(@D)/lib/libqTUIO.so* $(STAGING_DIR)/usr/lib
-+endef
-+
-+define QTUIO_CLEAN_CMDS
-+	$(MAKE) -C $(@D)/src clean
-+	for example in $(QTUIO_EXAMPLES) ; do \
-+		($(MAKE) -C $(@D)/examples/$${example} clean) ; \
-+	done
-+endef
-+
-+
-+$(eval $(generic-package))
--- 
-1.7.0.4
+Luca
