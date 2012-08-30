@@ -1,78 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 30 Aug 2012 05:09:11 +0200
-Subject: [Buildroot] [git commit] liblo: new pachage
-Message-ID: <20120903200545.46E9C97235@busybox.osuosl.org>
+Date: Thu, 30 Aug 2012 05:09:50 +0200
+Subject: [Buildroot] [git commit] mtdev2tuio: new package
+Message-ID: <20120903200545.7F27D97235@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa6e224e589be3386b9b6b7a9bf25fc26325efa5
+commit: http://git.buildroot.net/buildroot/commit/?id=dafa32b3bd75e9d155d075c796fa5b0ecbb9b11b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-liblo is an implementation of the Open Sound Control protocol
-for POSIX systems.
+mtdev2tuio is a simple application for converting touch events
+to the standart TUIO 1.1 protocol.
 
-http://liblo.sourceforge.net/
+https://github.com/olivopaolo/mtdev2tuio
 
-[thomas.petazzoni at free-electrons.com: add dependency on thread support
-in toolchain]
+[thomas.petazzoni at free-electrons.com: use TARGET_CONFIGURE_OPTS, fix
+indentation, add dependency on thread support in toolchain]
 
 Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in       |    1 +
- package/liblo/Config.in |   11 +++++++++++
- package/liblo/liblo.mk  |   14 ++++++++++++++
- 3 files changed, 26 insertions(+), 0 deletions(-)
+ package/Config.in                |    1 +
+ package/mtdev2tuio/Config.in     |   13 +++++++++++++
+ package/mtdev2tuio/mtdev2tuio.mk |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index f0fe0a6..5b4788f 100644
+index 5b4788f..e129522 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -295,6 +295,7 @@ source "package/libcdaudio/Config.in"
- source "package/libcue/Config.in"
- source "package/libcuefile/Config.in"
- source "package/libid3tag/Config.in"
-+source "package/liblo/Config.in"
- source "package/libmad/Config.in"
- source "package/libmpd/Config.in"
- source "package/libreplaygain/Config.in"
-diff --git a/package/liblo/Config.in b/package/liblo/Config.in
+@@ -469,6 +469,7 @@ source "package/libtpl/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+ source "package/lttng-libust/Config.in"
++source "package/mtdev2tuio/Config.in"
+ source "package/orc/Config.in"
+ source "package/poco/Config.in"
+ source "package/protobuf/Config.in"
+diff --git a/package/mtdev2tuio/Config.in b/package/mtdev2tuio/Config.in
 new file mode 100644
-index 0000000..4c2d719
+index 0000000..74453c4
 --- /dev/null
-+++ b/package/liblo/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBLO
-+	bool "liblo"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/mtdev2tuio/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_MTDEV2TUIO
++	bool "mtdev2tuio"
++	select BR2_PACKAGE_LIBLO
++	select BR2_PACKAGE_MTDEV
++	depends on BR2_TOOLCHAIN_HAS_THREADS # liblo
 +	help
-+	  liblo is an implementation of the Open Sound Control
-+	  protocol for POSIX systems
++	  mtdev2tuio is a simple application for converting touch
++	  events captured from libmtdev to TUIO 1.1
 +
-+	  http://liblo.sourceforge.net/
++	  https://github.com/olivopaolo/mtdev2tuio
 +
-+comment "liblo requires thread support in toolchain"
++comment "mtdev2tuio requires thread support in toolchain"
 +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/liblo/liblo.mk b/package/liblo/liblo.mk
+diff --git a/package/mtdev2tuio/mtdev2tuio.mk b/package/mtdev2tuio/mtdev2tuio.mk
 new file mode 100644
-index 0000000..924c3a7
+index 0000000..a86c0bf
 --- /dev/null
-+++ b/package/liblo/liblo.mk
-@@ -0,0 +1,14 @@
++++ b/package/mtdev2tuio/mtdev2tuio.mk
+@@ -0,0 +1,29 @@
 +#############################################################
 +#
-+# liblo
++# mtdev2tuio
 +#
 +#############################################################
-+LIBLO_VERSION = 0.26
-+LIBLO_SOURCE = liblo-$(LIBLO_VERSION).tar.gz
-+LIBLO_SITE = http://downloads.sourceforge.net/project/liblo/liblo/$(LIBLO_VERSION)
++MTDEV2TUIO_VERSION = e1e7378d86
++MTDEV2TUIO_SITE = git://github.com/olivopaolo/mtdev2tuio.git
++MTDEV2TUIO_DEPENDENCIES = mtdev liblo
++MTDEV2TUIO_LICENSE = GPLv3+
++MTDEV2TUIO_LICENSE_FILES = COPYING
 +
-+LIBLO_LICENSE = LGPLv2.1+
-+LIBLO_LICENSE_FILES = COPYING
-+LIBLO_INSTALL_STAGING = YES
++# mtdev2tuio Makefile misuses $(LD) as gcc, so we need to override LD
++# here.
++define MTDEV2TUIO_BUILD_CMDS
++	$(MAKE) \
++		$(TARGET_CONFIGURE_OPTS) \
++		LD="$(TARGET_CC)" \
++		-C $(@D)
++endef
 +
-+$(eval $(autotools-package))
++define MTDEV2TUIO_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/mtdev2tuio $(TARGET_DIR)/usr/bin/mtdev2tuio
++endef
++
++define MTDEV2TUIO_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
