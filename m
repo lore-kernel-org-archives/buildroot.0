@@ -1,97 +1,131 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 30 Aug 2012 23:02:28 +0200
-Subject: [Buildroot] [PATCH v2] barebox: fix license information
-In-Reply-To: <503D5205.30306@mind.be>
-References: <1346138387-4344-1-git-send-email-spdawson@gmail.com>
- <20120828144426.483cd251@skate> <503D0458.2020700@mind.be>
- <20120828225431.791a7aec@skate> <503D5205.30306@mind.be>
-Message-ID: <503FD4E4.2000405@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 30 Aug 2012 23:38:39 +0200
+Subject: [Buildroot] libffi or the crazy world of toolchain options
+In-Reply-To: <201208300053.32183.yann.morin.1998@free.fr>
+References: <1345907166-29628-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <201208261223.46075.yann.morin.1998@free.fr>
+ <201208262240.51214.yann.morin.1998@free.fr>
+ <201208300053.32183.yann.morin.1998@free.fr>
+Message-ID: <503FDD5F.4070007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle wrote:
-> On 08/28/12 22:54, Thomas Petazzoni wrote:
->> Le Tue, 28 Aug 2012 19:48:08 +0200,
->> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
->>
->>>> Also, uboot.mk mentions that the license is GPLv2+, but the U-Boot
->>>> COPYING file says:
->>>>
->>>>     U-Boot is Free Software.  It is copyrighted by Wolfgang Denk and
->>>> many others who contributed code (see the actual source code for
->>>> details).  You can redistribute U-Boot and/or modify it under the
->>>> terms of version 2 of the GNU General Public License as published by
->>>> the Free Software Foundation.  Most of it can also be distributed,
->>>> at your option, under any later version of the GNU General Public
->>>> License -- see individual files for exceptions.
->>>>
->>>> So I guess that formally speaking U-Boot is GPLv2 only, and not 
->>>> GPLv2+.
->>>
->>>    Given the large number of special cases we've encountered in the 
->>> licensing
->>> support, I propose that we require one or two Acks on all licensing 
->>> patches.
->>> And for new packages, the Acks should explicitly mention that it 
->>> Acks the
->>> license information.  Failing the Acks, it could still be committed 
->>> with
->>> a flag that it needs review, e.g. "GPLv2+ (needs review)".
->>>
->>>    I think for the legal-info, we should really be conservative. Now 
->>> that it
->>> exists, people will rely on it.  And if they rely on the wrong 
->>> information,
->>> they could be in trouble.
->>
->> Well, this means having to wait even more before being able to commit a
->> new package, I'm not sure I like to see more "bureaucracy" when it
->> comes to getting patches applied. Instead, getting things in movement
->> usually encourages people to react when something looks wrong. I.e, if
->> I had left out the barebox and u-boot patches from Simon, maybe nobody
->> would have commented on them... The fact that I took action by
->> committing them got the discussion started, we fixed the problems, and
->> we're good.
+On 08/30/12 00:53, Yann E. MORIN wrote:
+> Thomas, All,
 >
->  That's why I say: commit it with (needs review).  That will attract more
-> reviews than having it either without legal-info, or with the wrong
-> legal-info.
+> On Sunday 26 August 2012 22:40:50 Yann E. MORIN wrote:
+> > On Sunday 26 August 2012 12:23:46 Yann E. MORIN wrote:
+> > OK, now I have a shell+awk script (pkg-avail, attached) that:
+> >    - adds a BR2_PACKAGE_XXX_AVAILABLE symbol for all packages
+> >    - moves packages dependencies to that symbol
+> >    - adds a single dependency against that symbol to the corresponding
+> >      BR2_PACKAGE_XXX /main/ symbol
 >
+> OK, this is iteration 3 of the script.
 >
->>>    OTOH, the trouble would probably just be from your own legal 
->>> department...
->>> Copyright holders who create complex, inconsistent licenses are very
->>> unlikely to try to enforce them.  And also the FSFE and similar 
->>> organisations
->>> will just go for the obvious GPL violations.  So maybe I'm just being
->>> unnecessarily paranoid here...
->>
->> Just like we don't provide any guarantees of the proper functioning of
->> Buildroot, we don't provide any guarantees of the correctness of the
->> license information. Now, of course, it's up to us as a community to
->> ensure that Buildroot works fine (it builds what you need) and has the
->> most correct licensing information as possible, but we're not trying to
->> provide 100% guarantees here.
+> It now runs three pases:
 >
->  The difference is that buildroot users are likely to test the resulting
-> rootfs, but are very unlikely to look a second time at the output of
-> legal-info.  It's very difficult to "test" the legal-info - all you have
-> is "code review". For me, the wrong information in legal-info is an order
-> of magnitude worse than no legal-info at all.
+> 1) - introduces a BR2_PACKAGE_XXX_AVAILABLE symbol
+>     - moves all the package dependencies to this symbol
+>     - has the package depends only on this symbol
+  So that means the XXX_AVAILABLE is there even if the package has no
+dependencies? I'm not sure I like that... It means the simplest packages
+become more complex (only to make a few complex cases simpler).
+A patch with a shortstat that adds 4500+ lines, that can't be right :-)
 
-I agree with Arnout here. If a feature is buggy, a user wanting to use it
-will probably be bitten by the bug and report it.
+  Take the example of transmission: the size of its Config.in doubles, but
+the real dependency is IPV6.  Adding all those "depends on ..._AVAILABLE"
+which are always true only hide the real restriction here.
 
-If a license is buggy, or even worse, if a user knows license definitions
-are not trustworthy, he will have to check them one by one, just as if they
-were not defined at all in BR. The whole legal-info would thus loose most of
-its usefulness.
+  So I propose to remove the _AVAILABLE symbols for packages that don't
+have actual dependencies.  At the moment, those are easy to find because
+the dependencies are present directly in the package (but of course the
+intention is to remove those direct dependencies if they're actually due to
+an indirect dependency).
 
-These weeks my spare time is close to zero, but I do review license info
-patches as soon as I can. It takes 2 minutes in simple cases, 15 when
-things are complex, so it is definitely a little effort.
+=> In pass 1, only create the _AVAILABLE symbol if there is a depends on.
+Also log in a file for which packages the _AVAILABLE was created
 
-Luca
+=> in pass 2 and 3, only execute the transformation if the _AVAILABLE
+exists.
+
+
+  Note that the disadvantage of restricting the _AVAILABLE to packages
+that really need it, is that there's more work when a package acquires its first
+toolchain dependency. Indeed, you have to add the _AVAILABLE symbol,
+and look for all packages that select this one and add an _AVAILABLE
+dependency. However, I think it doesn't often occur that a package
+acquires a new (toolchain) dependency, and when it does it usually already
+has an existing dependency (cfr. libglib2, python, xorg7, efl).  So, even
+the libffi case wouldn't have cost much effort.
+
+
+> 2) - transforms all 'depends on BR2_PACKAGE_XXX' into a dependency
+>       on the corresponding _AVAILABLE symbol
+>     - adds a select on the corresponding package
+  Actually I don't think we want this step.  The "depends on BR2_PACKAGE_XXX"
+construct is used to hide packages that depend on a super-feature, like
+X11 or python. In other cases, it's used to reduce the size of the menus where
+relevant; e.g. dbus-glib is only relevant if you have dbus. This isn't perfectly
+clear-cut, but it shouldn't be done mechanically.
+
+>
+> 3) - checks and fixes 'select BR2_PACKAGE_XXX' that does not have a
+>       corresponding 'depends on BR2_PACKAGE_XXX_AVAILABLE'
+
+  What is missing as a fourth step is the removal of the dependencies which are
+actually due to transitive dependencies. They can be detected because normally
+we write
+depends on BR2_USE_WCHAR # glib2
+in such a situation.  But again, I wouldn't do this mechanically. There are only
+85 of these comments, and you have the "depends on ..._AVAILABLE" below
+to verify if the transitive dependency exists.
+
+
+>
+> NOTE: the coverage of this script is NOT 100%. Some manual inspection
+> and fixes are still required.
+>
+> Pass 1 treats all 817 packages. After a quick glance, all appears OK,
+> but a more thorough analysis must be conducted.
+
+  The script looks correct to me - not much can go wrong here.
+
+>
+> Pass 2 finds 67 packages that needs munging. There are a few packages
+> left over, becasue they ahve constructs like
+>      depends on PKG_FOO || PKG_BAR
+
+  Can be skipped :-)
+
+>
+> Pass 3 finds 401 packages that 'select' packages without a corresponding
+> 'depends on' on the _AVAILABLE symbol. A casual glance found that pass
+> to be pretty OK, although a complete analysis has not ben done so far.
+
+  I've updated the script with my own feedback; it's attached.
+
+  Now only 279 packages are munged in the first pass, and only 146 in the third
+pass.  However, the third pass detects about twenty of packages with inconsistent
+select/depends (e.g. automake selects microperl, but microperl depends on MMU).
+These should be fixed first, of course!
+
+  I haven't had time to test it though.
+
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: pkg-avail
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120830/bdb75552/attachment.ksh>
