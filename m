@@ -1,54 +1,143 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 30 Aug 2012 11:28:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 5480] New: Choose default kernel configuration
- depending on the current architecture selected.
-Message-ID: <bug-5480-163@https.bugs.busybox.net/>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Thu, 30 Aug 2012 14:08:26 +0200
+Subject: [Buildroot] [PATCH] qtuio: new package
+Message-ID: <1346328506-27403-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5480
+Implementation of an interface connecting TUIO messages and QT events
 
-           Summary: Choose default kernel configuration depending on the
-                    current architecture selected.
-           Product: buildroot
-           Version: unspecified
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: rsanchezs at infoglobal.es
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+https://github.com/x29a/qTUIO
 
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+Included fixes suggested by Thomas Petazzoni
+Removed dependency from mtdev2tuio
+Install library to staging
 
-Created attachment 4526
-  --> https://bugs.busybox.net/attachment.cgi?id=4526
-linux: Choose default kernel configuration depending on the current
-architecture selected.
+ package/Config.in       |    3 ++
+ package/qtuio/Config.in |   18 ++++++++++++
+ package/qtuio/qtuio.mk  |   70 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 91 insertions(+), 0 deletions(-)
+ create mode 100644 package/qtuio/Config.in
+ create mode 100644 package/qtuio/qtuio.mk
 
-Hello:
-
-  I've found out that after initial configuration, including enabling of linux
-kernel compilation, the default kernel config is not set and almost all make
-targets fail with:
-
-"linux/linux.mk:304: *** No kernel defconfig name specified, check your
-BR2_LINUX_KERNEL_DEFCONFIG setting."
-
-  One possible solution would have been tweaking the build system to avoid that
-message or at least, be able to run the linux-menuconfig target. I didn't find
-an easy way to do this and therefore I chose another option which is setting
-kernel default configs depending on target architecture.
-
-  Find the patch attached, regards,
-
+diff --git a/package/Config.in b/package/Config.in
+index e129522..94430b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -134,6 +134,9 @@ source "package/efl/Config.in"
+ source "package/qt/Config.in"
+ source "package/x11r7/Config.in"
+ 
++comment "QT libraries and helper libraries"
++source "package/qtuio/Config.in"
++
+ comment "X libraries and helper libraries"
+ source "package/liberation/Config.in"
+ source "package/libsexy/Config.in"
+diff --git a/package/qtuio/Config.in b/package/qtuio/Config.in
+new file mode 100644
+index 0000000..19499fd
+--- /dev/null
++++ b/package/qtuio/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_QTUIO
++	bool "qtuio"
++	depends on BR2_PACKAGE_QT_GUI_MODULE
++	help
++	  Implementation of an interface connecting TUIO messages
++	  and QT events
++
++	  https://github.com/x29a/qTUIO
++
++config BR2_QTUIO_EXAMPLES
++	bool "qtuio examples"
++	depends on BR2_PACKAGE_QTUIO
++	help
++	  Build and install qtuio examples
++
++comment "qtuio depends on QT gui module"
++	depends on !BR2_PACKAGE_QT_GUI_MODULE
++
+diff --git a/package/qtuio/qtuio.mk b/package/qtuio/qtuio.mk
+new file mode 100644
+index 0000000..5451052
+--- /dev/null
++++ b/package/qtuio/qtuio.mk
+@@ -0,0 +1,70 @@
++#############################################################
++#
++# qTUIO
++#
++#############################################################
++QTUIO_VERSION = abe4973ff6
++QTUIO_SITE = git://github.com/x29a/qTUIO.git
++QTUIO_INSTALL_STAGING = YES
++QTUIO_DEPENDENCIES = qt
++
++QTUIO_LICENSE = GPLv3+
++QTUIO_LICENSE_FILES = COPYING
++
++# The pong example needs QtOpenGL support, which might become available
++# some time in the future. Then add pong to the list of examples.
++QTUIO_EXAMPLES = dials fingerpaint knobs pinchzoom
++
++ifeq ($(BR2_QTUIO_EXAMPLES),y)
++define QTUIO_CONFIGURE_EXAMPLES
++	for example in $(QTUIO_EXAMPLES) ; do \
++		(cd $(@D)/examples/$${example} && $(QT_QMAKE)) ; \
++	done
++endef
++endif
++
++define QTUIO_CONFIGURE_CMDS
++	cd $(@D)/src && $(QT_QMAKE)
++	$(QTUIO_CONFIGURE_EXAMPLES)
++endef
++
++ifeq ($(BR2_QTUIO_EXAMPLES),y)
++define QTUIO_BUILD_EXAMPLES
++	for example in $(QTUIO_EXAMPLES) ; do \
++		($(MAKE) -C $(@D)/examples/$${example}) ; \
++	done
++endef
++endif
++
++define QTUIO_BUILD_CMDS
++	$(MAKE) -C $(@D)/src
++	$(QTUIO_BUILD_EXAMPLES)
++endef
++
++# Unfortunatelly, there is no working "install" target available
++ifeq ($(BR2_QTUIO_EXAMPLES),y)
++define QTUIO_INSTALL_EXAMPLES
++	for example in $(QTUIO_EXAMPLES) ; do \
++		($(INSTALL) -D -m 0755 $(@D)/examples/$${example}/$${example} $(TARGET_DIR)/usr/share/qtuio/$${example}) ; \
++	done
++endef
++endif
++
++define QTUIO_INSTALL_TARGET_CMDS
++	cp -dpf $(@D)/lib/libqTUIO.so* $(TARGET_DIR)/usr/lib
++	$(QTUIO_INSTALL_EXAMPLES)
++endef
++
++define QTUIO_INSTALL_STAGING_CMDS
++	cp -dpf $(@D)/lib/libqTUIO.so* $(STAGING_DIR)/usr/lib
++endef
++
++define QTUIO_CLEAN_CMDS
++	$(MAKE) -C $(@D)/src clean
++	for example in $(QTUIO_EXAMPLES) ; do \
++		($(MAKE) -C $(@D)/examples/$${example} clean) ; \
++	done
++endef
++
++
++$(eval $(generic-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.0.4
