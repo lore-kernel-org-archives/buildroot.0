@@ -1,43 +1,27 @@
-From: Aras Vaichas <aras.vaichas@gmail.com>
-Date: Fri, 31 Aug 2012 16:39:03 +0100
-Subject: [Buildroot] boost 1.51.0 bz2 archive observations
-Message-ID: <CAJkQPO=_T94Y854wErurMiwrQyZFbW7Mt9+9ak0xGDU0ahiEaw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 31 Aug 2012 21:46:13 +0200
+Subject: [Buildroot] Incorrect spelling in buildroot trunk?
+In-Reply-To: <SNT126-W377EE102E2EF4FBB08DBA2C9A60@phx.gbl> (R. Zhong's message
+ of "Fri, 31 Aug 2012 11:42:11 -0700")
+References: <SNT126-W377EE102E2EF4FBB08DBA2C9A60@phx.gbl>
+Message-ID: <87bohqq1yy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for the cross-posting, but I'm not sure where to put this.
+>>>>> "R" == R Zhong <rzhong@hotmail.com> writes:
 
-There is a slight difference between the 1.51.0 and 1.50.0 boost bz2 files.
+ R> Hi, I think SYSDROOT_DIR should be SYSROOT_DIR in toolchain/helpers.mk
+ R> check_glibc = \
+ R>         SYSROOT_DIR="$(strip $1)"; \
+ R>         if test `find $${SYSDROOT_DIR}/lib/ -maxdepth 1 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
+ R>                 echo "Incorrect selection of the C library"; \
+ R>                 exit -1; \
+ R>         fi; \
 
-e.g.
-\boost_1_50_0.tar.bz2\boost_1_50_0.tar\boost_1_50_0\
-\boost_1_51_0.tar.bz2\boost_1_51_0.tar\.\boost_1_51_0\
+You're right. I've fixed it in git now, thanks.
 
-I went looking for this because I updated the Boost version to 1.51.0
-in Buildroot and it failed to find the bootstrap.sh file because it
-wasn't in the expected directory.
-
-e.g.
-/opt/br/output/build$ find -name "bootstrap.sh"
-./boost-1.51.0/boost_1_51_0/tools/build/v2/bootstrap.sh
-./boost-1.51.0/boost_1_51_0/bootstrap.sh
-./boost-1.50.0/tools/build/v2/bootstrap.sh
-./boost-1.50.0/bootstrap.sh
-
-Buildroot fails to find the boostrap.sh file and the build fails.
-
-When I tried to untar it manually I got an error.
-
-$ tar xjf boost_1_51_0.tar.bz2
-tar: .: Cannot utime: Operation not permitted
-tar: .: Cannot change mode to rwxr-xr-t: Operation not permitted
-tar: Exiting with failure status due to previous errors
-
-1.50.0 does not have this problem.
-
-regards,
-
-Aras Vaichas
+-- 
+Bye, Peter Korsgaard
