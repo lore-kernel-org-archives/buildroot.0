@@ -1,81 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 31 Aug 2012 01:50:54 +0200
-Subject: [Buildroot] [RFC] Handling gettext
-Message-ID: <201208310150.54511.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 31 Aug 2012 00:02:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 5486] New: libglib2 build fails on qsort r test
+Message-ID: <bug-5486-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+https://bugs.busybox.net/show_bug.cgi?id=5486
 
-Currently, defining dependency upon gettext is a bit convoluted:
+           Summary: libglib2 build fails on qsort r test
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: seetwobob at live.co.uk
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-  config BR2_PACKAGE_FOO
-    select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-    select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
 
-I think that packages should not have to do that in this way, because
-I believe they should not have to deal with that complexity.
+Using CS TC (current or otherwise), 32 bit system. Builroot latest via GIT
 
-What I mean is, for example, should the gettext issue gains some complexity,
-of is simplified, of we decide to always use a library instead of the libc's
-gettext, it would mean updating all packages.
+libglib2-2.30.2
 
-Also, it breaks my script about the _AVAILABLE sutff.
+As a general overview:
+CFLAGS="-fno-stack-protector -O2 -ffast-math -march=armv6j -mtune=arm1136jf-s
+-mfpu=vfp -pipe -$fomit-frame-pointer"
+CXXFLAGS="-fno-stack-protector" CPPFLAGS="-U_FORTIFY_SOURCE" 
+HOST=i686-pc-linux
+BUILD=arm-unknown-linux-gnueabi
 
-What I suggest is the following:
+Whilst:
+>>> libglib2 2.30.2 Building
+Fails with
+  CC     gtester.o
+  CCLD   libglib-2.0.la
+  CCLD   gtester
+./.libs/libglib-2.0.so: undefined reference to `qsort_r'
+collect2: ld returned 1 exit status
 
-0) Rename the current options:
+There was some reference (related? maybe?) to an embedded patch for libglib2 re
+another system here: http://patches.openembedded.org/patch/14169/ 
+Perhaps it is relevant.
 
-  BR2_NEEDS_GETTEXT            -->  BR2_NEEDS_EXTERNAL_GETTEXT
+This is my first bug report apologies for any elided required info.
+Will be glad to forward any extra required.
 
-1) Add blind options that do the conditional selects:
-
-  config BR2_NEEDS_GETTEXT
-    bool
-    select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-
-  config BR2_NEEDS_LIBINTL
-    bool
-    select BR2_PACKAGE_LIBINTL if BR2_NEEDS_EXTERNAL_GETTEXT
-
-2) simplify packages by selecting appropriate options:
-
-  config BR2_PACKAGE_FOO
-    select BR2_NEEDS_GETTEXT
-    select BR2_NEEDS_LIBINTL
-
-3) Ditto for the _IF_LOCALE variants.
-
-4) A similar approach (that I haven't yet thought about) for the .mk file.
-   Maybe something along the lines of:
-
-  In package's .mk file:
-  FOO_DEPENDENCIES += $(needs_gettext)
-
-  In one of the infrastructure .mk files:
-  needs_gettext = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT),gettext)
-
-Comments?
-
-I was initially a bit puzzled when reading the doc, and really wondered
-*why* I needed to do that in my package (remember, the huge QEMU stack
-in the coming). I had to read the docs twice before I really saw where we
-were going with these.
-
-And no, updating the doc (my original issue) is not what I suggest. In
-fact, the doc is pretty clear what to do and why. It's just that, in my
-poor convoluted mind, I expected something much simpler than that. ;-)
-
-Regards,
-Yann E. MORIN.
+Regards.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
