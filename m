@@ -1,33 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 31 Aug 2012 10:21:35 +0200
-Subject: [Buildroot] [git commit] rrdtool: fix build with high BR2_JLEVEL
-	settings
-Message-ID: <20120831083509.B9DF6994E7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 31 Aug 2012 10:45:06 +0200
+Subject: [Buildroot] [git commit] Update CHANGES with resolved bugs in the
+	2012.08 cycle
+Message-ID: <20120831085103.2988699413@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8627654df717080a078d6022345226c255a3c418
+commit: http://git.buildroot.net/buildroot/commit/?id=3b38ade5c2fd4bb8fc3583de7e6221b9dc89c013
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/3dc64c2d74c54c665f16649992052a39b1665d4d
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rrdtool/rrdtool.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ CHANGES |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-index 112ddf9..1057d5d 100644
---- a/package/rrdtool/rrdtool.mk
-+++ b/package/rrdtool/rrdtool.mk
-@@ -13,6 +13,7 @@ RRDTOOL_CONF_ENV = rd_cv_ieee_works=yes rd_cv_null_realloc=nope \
- 			ac_cv_func_mmap_fixed_mapped=yes
- RRDTOOL_CONF_OPT = --disable-perl --disable-python --disable-ruby \
- 			--disable-tcl --program-transform-name=''
-+RRDTOOL_MAKE = $(MAKE1)
+diff --git a/CHANGES b/CHANGES
+index 7049c38..024ee75 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -106,6 +106,16 @@
+ 	sound-theme-freedesktop, sysprof, webrtc-audio-processing,
+ 	xinetd, zxing
  
- define RRDTOOL_REMOVE_EXAMPLES
- 	rm -rf $(TARGET_DIR)/usr/share/rrdtool/examples
++	Issues resolved (http://bugs.uclibc.org):
++
++	#1315: Allow use of older external toolchains without sysroot
++               support [won't fix]
++	#5276: Hiawatha needs to manage IPV6 if so [fixed]
++	#5360: buildroot fails when building "host-libglib2 2.30.2
++               Building" [won't fix, upstream problem]
++	#5384: Can't build packages relying on gets on newer glibc
++               [fixed]
++
+ 2012.05, Released May 30th, 2012:
+ 
+ 	Updated/fixed packages: busybox, netsnmp, pptp-linux
