@@ -1,69 +1,42 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 1 Sep 2012 14:16:05 +0200
-Subject: [Buildroot] [RFC] Handling gettext
-In-Reply-To: <201208310150.54511.yann.morin.1998@free.fr>
-References: <201208310150.54511.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMM+tTZudQqRyO3x+TwaeC26KQJETEd7Yu+gVQu8yPAcddg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  1 Sep 2012 13:29:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 5486] libglib2 build fails on:
+ libs/libglib-2.0.so: undefined reference to `qsort_r'
+In-Reply-To: <bug-5486-163@https.bugs.busybox.net/>
+References: <bug-5486-163@https.bugs.busybox.net/>
+Message-ID: <20120901132907.9111A994ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+https://bugs.busybox.net/show_bug.cgi?id=5486
 
-2012/8/31 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Hello All!
->
-> Currently, defining dependency upon gettext is a bit convoluted:
->
->   config BR2_PACKAGE_FOO
->     select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
->     select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
->
-> I think that packages should not have to do that in this way, because
-> I believe they should not have to deal with that complexity.
->
-> What I mean is, for example, should the gettext issue gains some complexity,
-> of is simplified, of we decide to always use a library instead of the libc's
-> gettext, it would mean updating all packages.
->
-> Also, it breaks my script about the _AVAILABLE sutff.
->
-> What I suggest is the following:
->
-> 0) Rename the current options:
->
->   BR2_NEEDS_GETTEXT            -->  BR2_NEEDS_EXTERNAL_GETTEXT
->
-> 1) Add blind options that do the conditional selects:
->
->   config BR2_NEEDS_GETTEXT
->     bool
->     select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
->
->   config BR2_NEEDS_LIBINTL
->     bool
->     select BR2_PACKAGE_LIBINTL if BR2_NEEDS_EXTERNAL_GETTEXT
->
-> 2) simplify packages by selecting appropriate options:
->
->   config BR2_PACKAGE_FOO
->     select BR2_NEEDS_GETTEXT
->     select BR2_NEEDS_LIBINTL
-I do like having such explicit things in BR:)
+twobob <seetwobob@live.co.uk> changed:
 
-However, IIRC,  gettext comes if needed with i18n/l10n option from the
-toolchain menu.
-I may miss something obvious, but I don't get what is the behavior of
-this when the i18n/l10n support is disabled. :-|
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
 
-I mean, in the case package foo requires i18n/l10n support:  how do
-you express the package foo dependency on the i18n/l10n support?
-Is it through the *_AVAILABLE infra you're working on too?
+--- Comment #9 from twobob <seetwobob@live.co.uk> 2012-09-01 13:29:07 UTC ---
+In essence, this doesn't happen using the Buildroot installed Code Sourcery
+Toolchains.
 
+For my use case I was attempting to utitlise a pre-installed chain.
+It was possibly too old a version.
 
-Cheers,
+Using the 2011 TC fixes this. So I will set it as a non issue and possibly add
+a note when I figure out the oldest CS TC that *will* build this without error.
+
+(I run all this on a 3rd gen kindle, no really)
+Thanks for all your help.
+
+If I find something *actually* useful to contribute I will.
+Regards.
 
 -- 
-Sam
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
