@@ -1,40 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 01 Sep 2012 13:41:55 +0200
-Subject: [Buildroot] [RFC] Handling gettext
-In-Reply-To: <201208312358.03480.yann.morin.1998@free.fr>
-References: <201208310150.54511.yann.morin.1998@free.fr>
- <20120831092502.2a3fa3a7@skate> <201208312358.03480.yann.morin.1998@free.fr>
-Message-ID: <5041F483.2090200@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 1 Sep 2012 13:45:38 +0200
+Subject: [Buildroot] boost 1.51.0 bz2 archive observations
+In-Reply-To: <5041F078.2080106@mind.be>
+References: <CAJkQPO=_T94Y854wErurMiwrQyZFbW7Mt9+9ak0xGDU0ahiEaw@mail.gmail.com>
+ <5041F078.2080106@mind.be>
+Message-ID: <CAHXCMM+xCS8q40aEf50jrukDcsDkzDg7WQuWoOcgD7qRZ9-D3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/31/12 23:58, Yann E. MORIN wrote:
-> Thomas, All,
+Hi,
+
+2012/9/1 Arnout Vandecappelle <arnout@mind.be>:
+> On 08/31/12 17:39, Aras Vaichas wrote:
+>>
+>> Sorry for the cross-posting, but I'm not sure where to put this.
+>>
+>> There is a slight difference between the 1.51.0 and 1.50.0 boost bz2
+>> files.
+>>
+>> e.g.
+>> \boost_1_50_0.tar.bz2\boost_1_50_0.tar\boost_1_50_0\
+>> \boost_1_51_0.tar.bz2\boost_1_51_0.tar\.\boost_1_51_0\
+>>
+>> I went looking for this because I updated the Boost version to 1.51.0
+>> in Buildroot and it failed to find the bootstrap.sh file because it
+>> wasn't in the expected directory.
 >
-> On Friday 31 August 2012 09:25:02 Thomas Petazzoni wrote:
->> >  Le Fri, 31 Aug 2012 01:50:54 +0200,
->> >  "Yann E. MORIN"<yann.morin.1998@free.fr>  a ?crit :
->> >
->>> >  >  Also, it breaks my script about the _AVAILABLE sutff.
->>> >  >
->>> >  >  What I suggest is the following:
->> >
->> >  Have you looked at
->> >  http://lists.busybox.net/pipermail/buildroot/2012-July/055871.html  ?
-> Well, I missed it, but nonetheless, I think my proposal can be added on-top
-> of that patchset.
+>
+>  This happens because buildroot uses the --strip-components=1 option of
+> tar to remove the leading path component - and now this is just the '.' that
+> is removed.
+>
+>  If the boost maintainers could repackage the tar file without the leading
+> .,
+> that would be really nice for us.  If not, we have to construct a workaround
+> in buildroot to treat the boost extraction specially. (Aras: you can
+> probably
+> just add "/boost_1_51_0" to all the references to $(@D) in the .mk file.)
 
-  I agree.  And this proposal is another great cleanup idea from Yann!
+Or just declare the boost  subdir in the .mk file:
+BOOST_SUBDIR = boost_1_51_0
 
-  Regards,
-  Arnout
+
+Cheers,
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Sam
