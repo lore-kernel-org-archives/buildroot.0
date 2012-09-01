@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Sep 2012 00:54:51 +0200
-Subject: [Buildroot] [PATCH 3/5] gettext: remove libintl handling
-In-Reply-To: <7baa3f68f46df9cb2c70c264cc0d550f349e2fdc.1342732829.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Sep 2012 00:57:14 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	gettext-rework
+In-Reply-To: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
- <7baa3f68f46df9cb2c70c264cc0d550f349e2fdc.1342732829.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201209020054.51337.yann.morin.1998@free.fr>
+Message-ID: <201209020057.14408.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,18 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Thursday 19 July 2012 23:21:02 Thomas Petazzoni wrote:
-> Now, the gettext package always:
-> 
->  * install everything to the staging directory
->  * install the libraries to the target directory
-> 
-> Note that this commit removes BR2_PACKAGE_LIBINTL without updating the
-> packages, it is done in a separate commit to ease the review process.
-[--SNIP--]
-> -config BR2_PACKAGE_LIBINTL
-> -	bool "libintl"
-> -	depends on BR2_NEEDS_GETTEXT
-> -	depends on BR2_USE_WCHAR
-> -	help
-> -	  Selecting this package installs all of gettext in the staging
-> -	  directory and the shared library for it's use in the target.
-> -
-> -	  http://www.gnu.org/software/gettext/
+On Thursday 19 July 2012 23:20:59 Thomas Petazzoni wrote:
+> Here is a set of patches that builds on top of the work from Maxime
+> Ripard and Samuel Martin to clean up how gettext is handled, and in
+> the end migrate the gettext package to the autotools-package
+> infrastructure.
 
-To avoid breaking the menuconfig, what about:
+I am currently looking at this patchset. Globally, I'm OK with most of it,
+except for some minor picks.
 
- config BR2_PACKAGE_LIBINTL
--	bool "libintl"
--	depends on BR2_NEEDS_GETTEXT
--	depends on BR2_USE_WCHAR
--	help
--	  Selecting this package installs all of gettext in the staging
--	  directory and the shared library for it's use in the target.
--
--	  http://www.gnu.org/software/gettext/
-+	bool
-
-Thus, we keep an blind config option that can still be selected, although
-there is nothing in gettext.mk that uses it, and we do not break the
-other packages.
-
-Then, it can be removed entirely in the next patch.
+I am also almost finished doing the GETTEXT select rework I wrote about
+yesterday, and will push an updated patchset with your patches, and mine
+on-top of them.
 
 Regards,
 Yann E. MORIN.
