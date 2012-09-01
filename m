@@ -1,46 +1,51 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  1 Sep 2012 09:25:29 +0200
-Subject: [Buildroot] [PATCH 11/14] cpanminus: handle native dependencies
+Date: Sat,  1 Sep 2012 09:25:30 +0200
+Subject: [Buildroot] [PATCH 12/14] perl: add DB_File
 In-Reply-To: <1346484332-31433-1-git-send-email-francois.perrad@gadz.org>
 References: <1346484332-31433-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1346484332-31433-11-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1346484332-31433-12-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/cpanminus/Config.in    |    5 +++++
- package/cpanminus/cpanminus.mk |    2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/perl/Config.in |    6 ++++++
+ package/perl/perl.mk   |    5 +++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
-index 7c41c4d..d265c2e 100644
---- a/package/cpanminus/Config.in
-+++ b/package/cpanminus/Config.in
-@@ -20,4 +20,9 @@ config BR2_PACKAGE_CPANMINUS_MODULES
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index 1f044eb..9df487a 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -20,4 +20,10 @@ config BR2_PACKAGE_PERL_ONLY_MINIPERL
+ 	  Install only miniperl (without dynamic module loader)
+ 	  Usually used to bootstrap a full Perl (@INC contains only .).
  
- 	  Install the listed modules and their dependencies.
- 
-+config BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES
-+	string "native dependencies"
++config BR2_PACKAGE_PERL_DB_FILE
++	bool "DB_File"
++	select BR2_PACKAGE_BERKELEYDB
 +	help
-+	  Some XS modules require native libraries.
++	  Build the DB_File module.
 +
  endif
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index ce2a09b..5c10627 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -7,7 +7,7 @@
- CPANMINUS_VERSION = 1.5017
- CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-g917a607.tar.gz
- CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
--CPANMINUS_DEPENDENCIES = perl
-+CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 5161654..7785322 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -12,6 +12,11 @@ PERL_LICENSE = Artistic
+ PERL_LICENSE_FILES = Artistic
+ PERL_INSTALL_STAGING = YES
  
- CPANMINUS_ARCH=$(call qstrip,$(BR2_ARCH))
- ifeq ($(CPANMINUS_ARCH),i686)
++ifdef BR2_PACKAGE_PERL_DB_FILE
++    PERL_DEPENDENCIES += berkeleydb
++endif
++HOST_PERL_DEPENDENCIES =
++
+ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+ PERL_USE_DEVEL=-Dusedevel
+ endif
 -- 
 1.7.9.5
