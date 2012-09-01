@@ -1,42 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  1 Sep 2012 13:29:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 5486] libglib2 build fails on:
- libs/libglib-2.0.so: undefined reference to `qsort_r'
-In-Reply-To: <bug-5486-163@https.bugs.busybox.net/>
-References: <bug-5486-163@https.bugs.busybox.net/>
-Message-ID: <20120901132907.9111A994ED@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 01 Sep 2012 17:08:42 +0200
+Subject: [Buildroot] Buildroot 2012.08 released
+In-Reply-To: <20120831112123.672bd606@skate>
+References: <20120831112123.672bd606@skate>
+Message-ID: <504224FA.1070908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5486
+On 08/31/12 11:21, Thomas Petazzoni wrote:
+>   - Cleanups to the package infrastructure. The visible change
+>     to developers is that $(eval $(call AUTOTARGETS)) is now
+>     $(eval $(autotools-package)), and similarly for other package
+>     infrastructures and host packages. Refer to the documentation for
+>     details.
 
-twobob <seetwobob@live.co.uk> changed:
+  It's unfortunate that my patch for detecting legacy XXXTARGETS usage wasn't merged.
+I'm afraid there will be many people hitting that problem...
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
+  (I realize it's my own responsibility for not pushing it a second time when the
+deadline was approaching...)
 
---- Comment #9 from twobob <seetwobob@live.co.uk> 2012-09-01 13:29:07 UTC ---
-In essence, this doesn't happen using the Buildroot installed Code Sourcery
-Toolchains.
-
-For my use case I was attempting to utitlise a pre-installed chain.
-It was possibly too old a version.
-
-Using the 2011 TC fixes this. So I will set it as a non issue and possibly add
-a note when I figure out the oldest CS TC that *will* build this without error.
-
-(I run all this on a 3rd gen kindle, no really)
-Thanks for all your help.
-
-If I find something *actually* useful to contribute I will.
-Regards.
-
+  Regards,
+  Arnout
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
