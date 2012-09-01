@@ -1,34 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 01 Sep 2012 17:08:42 +0200
-Subject: [Buildroot] Buildroot 2012.08 released
-In-Reply-To: <20120831112123.672bd606@skate>
-References: <20120831112123.672bd606@skate>
-Message-ID: <504224FA.1070908@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 2 Sep 2012 00:54:51 +0200
+Subject: [Buildroot] [PATCH 3/5] gettext: remove libintl handling
+In-Reply-To: <7baa3f68f46df9cb2c70c264cc0d550f349e2fdc.1342732829.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
+ <7baa3f68f46df9cb2c70c264cc0d550f349e2fdc.1342732829.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201209020054.51337.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/31/12 11:21, Thomas Petazzoni wrote:
->   - Cleanups to the package infrastructure. The visible change
->     to developers is that $(eval $(call AUTOTARGETS)) is now
->     $(eval $(autotools-package)), and similarly for other package
->     infrastructures and host packages. Refer to the documentation for
->     details.
+Thomas, All,
 
-  It's unfortunate that my patch for detecting legacy XXXTARGETS usage wasn't merged.
-I'm afraid there will be many people hitting that problem...
+On Thursday 19 July 2012 23:21:02 Thomas Petazzoni wrote:
+> Now, the gettext package always:
+> 
+>  * install everything to the staging directory
+>  * install the libraries to the target directory
+> 
+> Note that this commit removes BR2_PACKAGE_LIBINTL without updating the
+> packages, it is done in a separate commit to ease the review process.
+[--SNIP--]
+> -config BR2_PACKAGE_LIBINTL
+> -	bool "libintl"
+> -	depends on BR2_NEEDS_GETTEXT
+> -	depends on BR2_USE_WCHAR
+> -	help
+> -	  Selecting this package installs all of gettext in the staging
+> -	  directory and the shared library for it's use in the target.
+> -
+> -	  http://www.gnu.org/software/gettext/
 
-  (I realize it's my own responsibility for not pushing it a second time when the
-deadline was approaching...)
+To avoid breaking the menuconfig, what about:
 
-  Regards,
-  Arnout
+ config BR2_PACKAGE_LIBINTL
+-	bool "libintl"
+-	depends on BR2_NEEDS_GETTEXT
+-	depends on BR2_USE_WCHAR
+-	help
+-	  Selecting this package installs all of gettext in the staging
+-	  directory and the shared library for it's use in the target.
+-
+-	  http://www.gnu.org/software/gettext/
++	bool
+
+Thus, we keep an blind config option that can still be selected, although
+there is nothing in gettext.mk that uses it, and we do not break the
+other packages.
+
+Then, it can be removed entirely in the next patch.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
