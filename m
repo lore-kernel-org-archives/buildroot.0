@@ -1,49 +1,65 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  1 Sep 2012 09:25:32 +0200
-Subject: [Buildroot] [PATCH 14/14] perl: add GDBM_File
-In-Reply-To: <1346484332-31433-1-git-send-email-francois.perrad@gadz.org>
-References: <1346484332-31433-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1346484332-31433-14-git-send-email-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 01 Sep 2012 13:24:40 +0200
+Subject: [Buildroot] boost 1.51.0 bz2 archive observations
+In-Reply-To: <CAJkQPO=_T94Y854wErurMiwrQyZFbW7Mt9+9ak0xGDU0ahiEaw@mail.gmail.com>
+References: <CAJkQPO=_T94Y854wErurMiwrQyZFbW7Mt9+9ak0xGDU0ahiEaw@mail.gmail.com>
+Message-ID: <5041F078.2080106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/Config.in |    6 ++++++
- package/perl/perl.mk   |    3 +++
- 2 files changed, 9 insertions(+)
+On 08/31/12 17:39, Aras Vaichas wrote:
+> Sorry for the cross-posting, but I'm not sure where to put this.
+>
+> There is a slight difference between the 1.51.0 and 1.50.0 boost bz2 files.
+>
+> e.g.
+> \boost_1_50_0.tar.bz2\boost_1_50_0.tar\boost_1_50_0\
+> \boost_1_51_0.tar.bz2\boost_1_51_0.tar\.\boost_1_51_0\
+>
+> I went looking for this because I updated the Boost version to 1.51.0
+> in Buildroot and it failed to find the bootstrap.sh file because it
+> wasn't in the expected directory.
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 9df487a..8a042cc 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -26,4 +26,10 @@ config BR2_PACKAGE_PERL_DB_FILE
- 	help
- 	  Build the DB_File module.
- 
-+config BR2_PACKAGE_PERL_GDBM_FILE
-+	bool "GDBM_File"
-+	select BR2_PACKAGE_GDBM
-+	help
-+	  Build the GDBM_File module.
-+
- endif
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 7785322..b5dd4bd 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -15,6 +15,9 @@ PERL_INSTALL_STAGING = YES
- ifdef BR2_PACKAGE_PERL_DB_FILE
-     PERL_DEPENDENCIES += berkeleydb
- endif
-+ifdef BR2_PACKAGE_PERL_GDBM_FILE
-+    PERL_DEPENDENCIES += gdbm
-+endif
- HOST_PERL_DEPENDENCIES =
- 
- ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+  This happens because buildroot uses the --strip-components=1 option of
+tar to remove the leading path component - and now this is just the '.' that
+is removed.
+
+  If the boost maintainers could repackage the tar file without the leading .,
+that would be really nice for us.  If not, we have to construct a workaround
+in buildroot to treat the boost extraction specially. (Aras: you can probably
+just add "/boost_1_51_0" to all the references to $(@D) in the .mk file.)
+
+>
+> e.g.
+> /opt/br/output/build$ find -name "bootstrap.sh"
+> ./boost-1.51.0/boost_1_51_0/tools/build/v2/bootstrap.sh
+> ./boost-1.51.0/boost_1_51_0/bootstrap.sh
+> ./boost-1.50.0/tools/build/v2/bootstrap.sh
+> ./boost-1.50.0/bootstrap.sh
+>
+> Buildroot fails to find the boostrap.sh file and the build fails.
+>
+> When I tried to untar it manually I got an error.
+>
+> $ tar xjf boost_1_51_0.tar.bz2
+> tar: .: Cannot utime: Operation not permitted
+> tar: .: Cannot change mode to rwxr-xr-t: Operation not permitted
+> tar: Exiting with failure status due to previous errors
+
+  This you can ignore: you're extracting in /tmp which isn't owned by
+you, so you can't change the metadata of /tmp.  All files are still
+untarred, it's just the exit code that's not 0.
+
+  Regards,
+  Arnout
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
