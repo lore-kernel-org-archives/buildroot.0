@@ -1,41 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Sep 2012 17:16:05 +0200
-Subject: [Buildroot] [PATCH] linux: add default defconfig
-In-Reply-To: <1346598341-20434-1-git-send-email-arnout@mind.be>
-References: <1346598341-20434-1-git-send-email-arnout@mind.be>
-Message-ID: <201209021716.05404.yann.morin.1998@free.fr>
+Date: Sun,  2 Sep 2012 17:43:45 +0200
+Subject: [Buildroot] [PATCH 02/12] gettext: remove the gettext-target make
+	target, unused
+In-Reply-To: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
+References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1346600635-30946-3-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Sunday 02 September 2012 17:05:41 Arnout Vandecappelle (Essensium/Mind) wrote:
-> Buildroot currently requires a defconfig to be supplied for the kernel:
-> either a custom supplied one, or one from the kernel tree.  However,
-> the kernel can (usually) also select a default defconfig, based on
-> the architecture.  So make this option available to buildroot.
-> 
-> We also make this the default, so the user can compile a kernel with
-> minimal effort.
-> 
-> Microblaze currently (linux-3.5) doesn't have a default defconfig.
-> Older versions also lack it for some architectures (e.g. mips was
-> introduced in 2.6.35) but that's nearly impossible to check for at
-> buildroot level.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/gettext/gettext.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 20bd672..6b2c336 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -130,10 +130,6 @@ gettext-dirclean:
+ #
+ #############################################################
+ 
+-gettext-target: $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GETTEXT_DIR) install
+-	chmod +x $(TARGET_DIR)/usr/lib/libintl.so* # identify as needing to be stripped
+-
+ $(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.so* \
+ 		$(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
