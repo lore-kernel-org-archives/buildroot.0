@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  2 Sep 2012 17:43:45 +0200
-Subject: [Buildroot] [PATCH 02/12] gettext: remove the gettext-target make
-	target, unused
+Date: Sun,  2 Sep 2012 17:43:44 +0200
+Subject: [Buildroot] [PATCH 01/12] gettext: remove option to build statically
 In-Reply-To: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
 References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1346600635-30946-3-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,23 +15,60 @@ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/gettext/gettext.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/gettext/Config.in  |   12 ------------
+ package/gettext/gettext.mk |    9 ---------
+ 2 files changed, 0 insertions(+), 21 deletions(-)
 
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index fabfe1e..0ee4065 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -12,18 +12,6 @@ config BR2_PACKAGE_GETTEXT
+ comment "gettext requires a toolchain with WCHAR support"
+ 	depends on BR2_NEEDS_GETTEXT && !BR2_USE_WCHAR
+ 
+-config BR2_PACKAGE_GETTEXT_STATIC
+-	bool "Use libgettext.a instead of libgettext.so.*"
+-	depends on BR2_PACKAGE_GETTEXT
+-	depends on BR2_arm
+-	help
+-	  The GNU `gettext' utilities are a set of tools that provide a
+-	  framework to help other GNU packages produce multi-lingual
+-	  messages.
+-
+-	  http://www.gnu.org/software/gettext/
+-
+-
+ config BR2_PACKAGE_LIBINTL
+ 	bool "libintl"
+ 	depends on BR2_NEEDS_GETTEXT
 diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 20bd672..6b2c336 100644
+index 9778007..20bd672 100644
 --- a/package/gettext/gettext.mk
 +++ b/package/gettext/gettext.mk
-@@ -130,10 +130,6 @@ gettext-dirclean:
- #
- #############################################################
+@@ -11,11 +11,7 @@ GETTEXT_CAT:=$(ZCAT)
+ GETTEXT_BINARY:=gettext-runtime/src/gettext
+ GETTEXT_TARGET_BINARY:=usr/bin/gettext
  
--gettext-target: $(GETTEXT_DIR)/$(GETTEXT_BINARY)
--	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GETTEXT_DIR) install
--	chmod +x $(TARGET_DIR)/usr/lib/libintl.so* # identify as needing to be stripped
+-ifeq ($(BR2_PACKAGE_GETTEXT_STATIC),y)
+-LIBINTL_TARGET_BINARY:=usr/lib/libintl.a
+-else
+ LIBINTL_TARGET_BINARY:=usr/lib/libintl.so
+-endif
+ 
+ $(DL_DIR)/$(GETTEXT_SOURCE):
+ 	 $(call DOWNLOAD,$(GETTEXT_SITE)/$(GETTEXT_SOURCE))
+@@ -147,11 +143,6 @@ $(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 		libgettext*.so*.la libintl*.so*.la)
+ 	touch -c $@
+ 
+-$(TARGET_DIR)/usr/lib/libintl.a: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+-	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.a $(TARGET_DIR)/usr/lib/
+-	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.a $(TARGET_DIR)/usr/lib/
+-	touch -c $@
 -
- $(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
- 	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.so* \
- 		$(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
+ libintl: $(TARGET_DIR)/$(LIBINTL_TARGET_BINARY)
+ 
+ #############################################################
 -- 
 1.7.2.5
