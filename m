@@ -1,38 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 2 Sep 2012 00:57:14 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	gettext-rework
-In-Reply-To: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1342732829.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201209020057.14408.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  2 Sep 2012 00:42:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 5486] libglib2 build fails on:
+ libs/libglib-2.0.so: undefined reference to `qsort_r'
+In-Reply-To: <bug-5486-163@https.bugs.busybox.net/>
+References: <bug-5486-163@https.bugs.busybox.net/>
+Message-ID: <20120902004230.6DC8E994F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=5486
 
-On Thursday 19 July 2012 23:20:59 Thomas Petazzoni wrote:
-> Here is a set of patches that builds on top of the work from Maxime
-> Ripard and Samuel Martin to clean up how gettext is handled, and in
-> the end migrate the gettext package to the autotools-package
-> infrastructure.
+--- Comment #10 from twobob <seetwobob@live.co.uk> 2012-09-02 00:42:29 UTC ---
+(In reply to comment #9)
+> In essence, this doesn't happen using the Buildroot installed Code Sourcery
+> Toolchains.
+> 
+> For my use case I was attempting to utitlise a pre-installed chain.
+> It was possibly too old a version.
+> 
+> Using the 2011 TC fixes this. So I will set it as a non issue and possibly add
+> a note when I figure out the oldest CS TC that *will* build this without error.
+> 
+> (I run all this on a 3rd gen kindle, no really)
+> Thanks for all your help.
+> 
+> If I find something *actually* useful to contribute I will.
+> Regards.
 
-I am currently looking at this patchset. Globally, I'm OK with most of it,
-except for some minor picks.
+Okay as promised.   
 
-I am also almost finished doing the GETTEXT select rework I wrote about
-yesterday, and will push an updated patchset with your patches, and mine
-on-top of them.
+CCLD   libglib-2.0.la
+  CCLD   gtester
+./.libs/libglib-2.0.so: undefined reference to `qsort_r'
 
-Regards,
-Yann E. MORIN.
+First exhibits in Toolchains older than 
+
+rm-2008q3-72-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+
+From here:
+
+http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
+
+so perhaps a "min required version" might properly reflect that.
+
+2008q3 onward all build as expected.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
