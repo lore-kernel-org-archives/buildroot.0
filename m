@@ -1,35 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 02 Sep 2012 22:09:57 +0200
-Subject: [Buildroot] Problems building Busybox 1.20.1 with Buildroot
-	2012.05
-In-Reply-To: <CAMPeO9x61f+1fU+qdOTQav3MEbqZRG8X2SR+WLjeQgHRWxsC4A@mail.gmail.com>
-References: <CAMPeO9x61f+1fU+qdOTQav3MEbqZRG8X2SR+WLjeQgHRWxsC4A@mail.gmail.com>
-Message-ID: <5043BD15.4020709@mind.be>
+Date: Sun, 02 Sep 2012 22:30:48 +0200
+Subject: [Buildroot] [PATCH 10/12] pkg-infra: ensure gettext gets built
+ before all other packages
+In-Reply-To: <1346600635-30946-11-git-send-email-yann.morin.1998@free.fr>
+References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
+ <1346600635-30946-11-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5043C1F8.6020801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/02/12 20:06, David Sanchez Herrero wrote:
-> Hi all,
+On 09/02/12 17:43, Yann E. MORIN wrote:
+> If the gettext package is selected, it means that the toolchain does not
+> provide gettext functionality, and that at least one package needs it.
+> Thus, the gettext package needs to be built before any such package.
 >
-> I'm trying to build a Buildroot toolchain using configuration files for Buildroot and uClibc downloaded from the
-> official forum.
+> So far, packages that need gettext declare an explicit conditional
+> build-dependency upon gettext, thus ensuring that gettext be built
+> before they are.
 >
-> During the full building process with Buildroot, I get the next error in Busybox building, and I'm blocked there:
-[snip]
-> networking/lib.a(nslookup.o): In function `nslookup_main':
-> nslookup.c:(.text.nslookup_main+0x2c): undefined reference to `__res_init'
-> nslookup.c:(.text.nslookup_main+0x54): undefined reference to `__res_state'
-> nslookup.c:(.text.nslookup_main+0x78): undefined reference to `__res_state'
-> nslookup.c:(.text.nslookup_main+0x8c): undefined reference to `__res_state'
+> But if gettext was built first, packages would no longer need to declare
+> such an explicit build-dependency.
+>
+> As it is not easy to ensure that gettext be the first package, we can also
+> declare it as a dependency of all packages (except itself, of course).
 
-  Any chance you have a custom uClibc config, which doesn't have HAS_LIBRESOLV_STUB ?
-Try with the default uClibc config from buildroot (don't forget to make clean).
 
-  If that doesn't help, please run 'make savedefconfig' and post the resulting
-defconfig, so we can try to reproduce the problem.
+  I don't like this.  I don't like the idea of having redundant dependencies,
+I don't like to have a single thing that everything depends on, I don't like
+the $(filter-out ...) construct.
+
+  I also don't like that it breaks the build when the toolchain depends on some
+package (sstrip, ccache, ...).
+
+  Possible alternatives:
+
+  * Use a construct similar to patch 11/12: $(gettext-dependency) which is
+nothing unless gettext is enabled.
+
+  * Move this dependency into the toolchain logic - which means duplicating
+it three times so maybe not such a good idea...
+
 
   Regards,
   Arnout
