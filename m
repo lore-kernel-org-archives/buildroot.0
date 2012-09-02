@@ -1,35 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 02 Sep 2012 21:52:59 +0200
-Subject: [Buildroot] make clean; make doesn't work
-Message-ID: <5043B91B.8020703@mind.be>
+Date: Sun, 02 Sep 2012 22:09:57 +0200
+Subject: [Buildroot] Problems building Busybox 1.20.1 with Buildroot
+	2012.05
+In-Reply-To: <CAMPeO9x61f+1fU+qdOTQav3MEbqZRG8X2SR+WLjeQgHRWxsC4A@mail.gmail.com>
+References: <CAMPeO9x61f+1fU+qdOTQav3MEbqZRG8X2SR+WLjeQgHRWxsC4A@mail.gmail.com>
+Message-ID: <5043BD15.4020709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  To test Yann's latest patch series, I did a 'make clean; make' in one of my
-output directories.  Surprisingly, this failed...  Because the .config in
-that directory was pretty old, the silentoldconfig was run.  This run asked
-me a few questions about newly added options.  One of them was the external
-toolchain - the original one didn't exist anymore.  So I select a different
-one, and buildroot continues building.  However, it's still using the old
-toolchain!  Clearly, this will create problems somewhere down the line...
+On 09/02/12 20:06, David Sanchez Herrero wrote:
+> Hi all,
+>
+> I'm trying to build a Buildroot toolchain using configuration files for Buildroot and uClibc downloaded from the
+> official forum.
+>
+> During the full building process with Buildroot, I get the next error in Busybox building, and I'm blocked there:
+[snip]
+> networking/lib.a(nslookup.o): In function `nslookup_main':
+> nslookup.c:(.text.nslookup_main+0x2c): undefined reference to `__res_init'
+> nslookup.c:(.text.nslookup_main+0x54): undefined reference to `__res_state'
+> nslookup.c:(.text.nslookup_main+0x78): undefined reference to `__res_state'
+> nslookup.c:(.text.nslookup_main+0x8c): undefined reference to `__res_state'
 
-  What happens is that the .config is included by the Makefile; however,
-when the .config is modified, it is not re-read.  Normally, GNU make
-automatically re-reads an included file when it is updates.  However,
-this doesn't happen here because the .config file does not appear as
-a target.  Instead, it is created by the rule
+  Any chance you have a custom uClibc config, which doesn't have HAS_LIBRESOLV_STUB ?
+Try with the default uClibc config from buildroot (don't forget to make clean).
 
-$(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
-	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-
-i.e. as a side-effect of building auto.conf.
-
-  So I'd like to make the .config a real target of a dependency that rebuilds
-it.  Unfortunately, I don't understand enough of this auto.conf file
-to know how to do it...
+  If that doesn't help, please run 'make savedefconfig' and post the resulting
+defconfig, so we can try to reproduce the problem.
 
   Regards,
   Arnout
