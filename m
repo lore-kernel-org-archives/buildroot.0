@@ -1,25 +1,25 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Mon, 03 Sep 2012 21:56:31 +0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Sep 2012 21:08:30 +0200
 Subject: [Buildroot] Bash string manipulation in Kconfig
-Message-ID: <5044FD5F.102@petroprogram.com>
+In-Reply-To: <5044FD5F.102@petroprogram.com>
+References: <5044FD5F.102@petroprogram.com>
+Message-ID: <20120903210830.71b3372b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone.
+Le Mon, 03 Sep 2012 21:56:31 +0300,
+Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
 
-What is the equivalent buildroot thing for handling the following bash
-string stuff ?
+> But how to do similar in buildroot  .mk files ???
 
-FULL_DOWNLOAD_URL="http://www.somedomain.com/blah/blah2/blahblahblah/somefile"
-FILE=${FULL_DOWNLOAD_URL##*/}
-echo ${FILE}
+	$(notdir $(FOO))
 
-That will correctly print only the last part of the url, "somefile"
-
-But how to do similar in buildroot  .mk files ???
-
-Best regards
-Stefan
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
