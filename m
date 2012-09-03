@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 03 Sep 2012 20:05:36 -0000
-Subject: [Buildroot] [git commit] iptables: bump to version 1.4.15
-Message-ID: <20120903200535.1F2349953E@busybox.osuosl.org>
+Date: Mon, 03 Sep 2012 20:05:37 -0000
+Subject: [Buildroot] [git commit] conntrack-tools: bump to version 1.2.2
+Message-ID: <20120903200535.510969953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b96e11f0a1cd91256c6fede83030aa1369b4794a
+commit: http://git.buildroot.net/buildroot/commit/?id=5de5a65807de9ce230c6516eef00cf26876a1ee6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iptables/iptables.mk |    4 +++-
+ package/conntrack-tools/conntrack-tools.mk |    4 +++-
  1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index a5ec6a7..bdef575 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,11 +4,13 @@
+diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
+index 8f1159b..6f438fc 100644
+--- a/package/conntrack-tools/conntrack-tools.mk
++++ b/package/conntrack-tools/conntrack-tools.mk
+@@ -4,10 +4,12 @@
  #
  #############################################################
  
--IPTABLES_VERSION = 1.4.14
-+IPTABLES_VERSION = 1.4.15
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- IPTABLES_INSTALL_STAGING = YES
- IPTABLES_DEPENDENCIES = host-pkg-config
-+IPTABLES_LICENSE = GPLv2
-+IPTABLES_LICENSE_FILES = COPYING
+-CONNTRACK_TOOLS_VERSION = 1.2.1
++CONNTRACK_TOOLS_VERSION = 1.2.2
+ CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
+ CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
+ CONNTRACK_TOOLS_DEPENDENCIES = host-pkg-config \
+ 	libnetfilter_conntrack libnetfilter_cttimeout
++CONNTRACK_TOOLS_LICENSE = GPLv2
++CONNTRACK_TOOLS_LICENSE_FILES = COPYING
  
- IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
- 
+ $(eval $(autotools-package))
