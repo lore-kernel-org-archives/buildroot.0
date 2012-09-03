@@ -1,33 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Sep 2012 22:03:32 +0200
-Subject: [Buildroot] Buildroot 2012.08 released
-In-Reply-To: <504224FA.1070908@mind.be>
-References: <20120831112123.672bd606@skate>
-	<504224FA.1070908@mind.be>
-Message-ID: <20120903220332.5b38e9b4@skate>
+Date: Mon, 03 Sep 2012 20:05:31 -0000
+Subject: [Buildroot] [git commit] sam-ba: bump version to 2.12
+Message-ID: <20120903200530.2EEB59953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 01 Sep 2012 17:08:42 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=9240163ef7e1f10cdbecfc5a6936d5624f823565
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->   It's unfortunate that my patch for detecting legacy XXXTARGETS usage wasn't merged.
-> I'm afraid there will be many people hitting that problem...
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sam-ba/sam-ba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Yes, this is my fault. I really wanted to merge it, but the 24+h trip
-from San Diego back to France erased this from my brain, and when I did
-the release of Buildroot on Friday morning, I had completely forgotten
-this patch... until lunch but it was too late. My apologies.
-
-I agree with the proposal of doing a 2012.08.1. It could at least
-contain this change + the SYSROOT_DIR typo fix.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Patch is too large, so refusing to show it
