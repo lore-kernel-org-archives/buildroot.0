@@ -1,51 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 03 Sep 2012 11:01:46 +0200
-Subject: [Buildroot] [PATCH 01/12] gettext: remove option to build
-	statically
-In-Reply-To: <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 3 Sep 2012 11:09:52 +0200
+Subject: [Buildroot] [PATCH 10/12] pkg-infra: ensure gettext gets built
+ before all other packages
+In-Reply-To: <5043C1F8.6020801@mind.be>
 References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
- <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <504471FA.3060407@mind.be>
+ <1346600635-30946-11-git-send-email-yann.morin.1998@free.fr>
+ <5043C1F8.6020801@mind.be>
+Message-ID: <20120903110952.6998fa01@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/02/12 17:43, Yann E. MORIN wrote:
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> Reviewed-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+Le Sun, 02 Sep 2012 22:30:48 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-  In the last BR developer meeting, we agreed not to use the Reviewed-by: tag,
-but only the Acked-by: tag.  It should be used when you've reviewed the
-patch and you would commit it if you had commit access.
+>   I don't like this.  I don't like the idea of having redundant
+> dependencies, I don't like to have a single thing that everything
+> depends on, I don't like the $(filter-out ...) construct.
+> 
+>   I also don't like that it breaks the build when the toolchain
+> depends on some package (sstrip, ccache, ...).
+> 
+>   Possible alternatives:
+> 
+>   * Use a construct similar to patch 11/12: $(gettext-dependency)
+> which is nothing unless gettext is enabled.
+> 
+>   * Move this dependency into the toolchain logic - which means
+> duplicating it three times so maybe not such a good idea...
 
+I don't like it either, and I don't think I like those alternatives
+either.
 
-  Another thing: it was actually Samuel Martin who initiated this patch
-series.  However, the original patches were rewritten so completely by
-Thomas and Maxime that it doesn't make sense to keep his Signed-off-by.
-To be able to keep some of the credit, I propose to add a Cc: tag in
-such a situation.
+I prefer keeping the explicit dependency in the packages, because I
+don't like things that are too magic.
 
+Best regards,
 
-  Finally, for the whole series except 10/12 and 12/12:
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(build-test with a minimal x86 config)
-
-  And:
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
-  I'm pretty much in favour of committing patches 1 to 9 now.  The first
-six have had plenty of time for review, 7 and 8 are fairly obvious
-bugfixes, and 9 is a mechanical rename.
-
-  Regards,
-  Arnout
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
