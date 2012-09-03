@@ -1,74 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 03 Sep 2012 20:05:57 -0000
-Subject: [Buildroot] [git commit] new package: gsl the GNU Scientific
-	Library.
-Message-ID: <20120903200538.347409953E@busybox.osuosl.org>
+Date: Mon, 03 Sep 2012 20:06:05 -0000
+Subject: [Buildroot] [git commit] iproute2: bump to version 3.5.0
+Message-ID: <20120903200540.748479953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d9f7feba4ffbfeb54479f1ad90d47acca1a6f0b
+commit: http://git.buildroot.net/buildroot/commit/?id=7a3d7601fb96997ffe507f0f81ec0581a2f010ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[thomas.petazzoni at free-electrons.com:
- renamed package to 'gsl' to match upstream name.
- added license information.]
-
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in     |    1 +
- package/gsl/Config.in |   10 ++++++++++
- package/gsl/gsl.mk    |   13 +++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3f46d3a..d6a66fd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -457,6 +457,7 @@ source "package/libelf/Config.in"
- source "package/libevent/Config.in"
- source "package/libev/Config.in"
- source "package/libffi/Config.in"
-+source "package/gsl/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
-diff --git a/package/gsl/Config.in b/package/gsl/Config.in
-new file mode 100644
-index 0000000..92541da
---- /dev/null
-+++ b/package/gsl/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_GSL
-+	bool "gsl"
-+	help
-+	  The GNU Scientific Library (GSL) is a numerical library for
-+	  C and C++ programmers.  The library provides a wide range of
-+	  mathematical routines such as random number generators,
-+	  special functions and least-squares fitting. There are over
-+	  1000 functions in total with an extensive test suite.
-+
-+ 	  http://www.gnu.org/software/gsl
-diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
-new file mode 100644
-index 0000000..7196859
---- /dev/null
-+++ b/package/gsl/gsl.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# gnu gsl
-+#
-+#############################################################
-+GSL_VERSION = 1.15
-+GSL_SOURCE = gsl-$(GSL_VERSION).tar.gz
-+GSL_SITE = $(BR2_GNU_MIRROR)/gsl
-+GSL_INSTALL_STAGING = YES
-+GSL_LICENSE = GPLv3
-+GSL_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 27bc56f..c671e44 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,9 +4,11 @@
+ #
+ #############################################################
+ 
+-IPROUTE2_VERSION = 3.4.0
++IPROUTE2_VERSION = 3.5.0
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
++IPROUTE2_LICENSE = GPLv2
++IPROUTE2_LICENSE_FILES = COPYING
+ 
+ # If both iproute2 and busybox are selected, make certain we win
+ # the fight over who gets to have their utils actually installed.
