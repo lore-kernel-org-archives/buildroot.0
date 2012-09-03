@@ -1,50 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  4 Sep 2012 00:02:56 +0200
-Subject: [Buildroot] [PATCH 06/11] doc: update after gettext changes
+Date: Tue,  4 Sep 2012 00:02:58 +0200
+Subject: [Buildroot] [PATCH 08/11] package/pulseaudio: fix build-dependency
+	on gettext
 In-Reply-To: <1346709781-18158-1-git-send-email-yann.morin.1998@free.fr>
 References: <1346709781-18158-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1346709781-18158-7-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1346709781-18158-9-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+In its Config.in, pulseaudio declares a dependency on gettext
+using the documented construct:
+    select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+but in its .mk file, declares a dependency on the package:
+    PULSEAUDIO_DEPENDENCIES = [...] $(if $(BR2_PACKAGE_GETTEXT),gettext) [...]
+
+instead of the documented:
+    $(if $(BR2_NEEDS_GETTEXT),gettext)
+
+Fix that.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 CC: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/adding-packages-gettext.txt |    8 ++------
- 1 files changed, 2 insertions(+), 6 deletions(-)
+ package/multimedia/pulseaudio/pulseaudio.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-gettext.txt b/docs/manual/adding-packages-gettext.txt
-index 1ed834e..e0df1a4 100644
---- a/docs/manual/adding-packages-gettext.txt
-+++ b/docs/manual/adding-packages-gettext.txt
-@@ -27,18 +27,14 @@ Therefore, Buildroot defines two configuration options:
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 6f7d7d2..406dd8f 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -16,7 +16,7 @@ PULSEAUDIO_CONF_OPT = \
  
- Therefore, packages that unconditionally need gettext should:
- 
--* Use +select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT+ and possibly
--  +select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT+, if libintl is
--  also needed
-+* Use +select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT+
- 
- * Use +$(if $(BR2_NEEDS_GETTEXT),gettext)+ in the package
-   +DEPENDENCIES+ variable
- 
- Packages that need gettext only when locale support is enabled should:
- 
--* Use +select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE+ and
--  possibly +select BR2_PACKAGE_LIBINTL if
--  BR2_NEEDS_GETTEXT_IF_LOCALE+, if libintl is also needed
-+* Use +select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE+
- 
- * Use +$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)+ in the package
-   +DEPENDENCIES+ variable
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkg-config libtool json-c libsndfile speex host-intltool \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
++	$(if $(BR2_NEEDS_GETTEXT),gettext) \
+ 	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+ 	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
 -- 
 1.7.2.5
