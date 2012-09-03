@@ -1,63 +1,42 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 3 Sep 2012 23:50:04 +0200
-Subject: [Buildroot] Is there an include statement in buildroot ?
-In-Reply-To: <50452381.5040804@petroprogram.com>
-References: <50452381.5040804@petroprogram.com>
-Message-ID: <CAHXCMM+ZOiZf1FWKKYjVjDgwG9Cy2DfwJNT_18FpqBcbZspZpQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue,  4 Sep 2012 00:02:52 +0200
+Subject: [Buildroot] [PATCH 02/11] gettext: remove the gettext-target make
+	target, unused
+In-Reply-To: <1346709781-18158-1-git-send-email-yann.morin.1998@free.fr>
+References: <1346709781-18158-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1346709781-18158-3-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-2012/9/3 Stefan Fr?berg <stefan.froberg@petroprogram.com>:
-> Hello everyone
->
-> My package .mk file is getting quite large now and I would like to break
-> it to more easily
-> sizeable and logical chunks.
->
-> Is there a way to include other .mk files in main .mk file ?
-Actually, you don't need to explicitly include .mk files, this is
-automatically handled in the Makefile at the root of BR.
-To convince yourself ;-) :
-grep -nE 'include .*?mk' Makefile
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+CC: Samuel Martin <s.martin49@gmail.com>
+---
+ package/gettext/gettext.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
->
-> Like something like this:
->
-> package/newpackage/A.mk
-> package/newpackage/C.mk
-> package/newpackage/D.mk
-> etc....
-> package/newpackage/newpackage.mk
-
-However, if you there is a specific order for the inclusion, you can do:
-package/newpackage/A.mk.in
-package/newpackage/B.mk.in
-...
-
->
-> And newpackage.mk would have:
->
-> include "A.mk"
-> include "B.mk"
-> include "C.mk"
->
-> etc....
->
-Then, in the newpackage.mk:
-include A.mk.in
-include B.mk.in
-...
-
-Or just:
-include ./*.mk.in
-
-
-Cheers,
-
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 20bd672..6b2c336 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -130,10 +130,6 @@ gettext-dirclean:
+ #
+ #############################################################
+ 
+-gettext-target: $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+-	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(GETTEXT_DIR) install
+-	chmod +x $(TARGET_DIR)/usr/lib/libintl.so* # identify as needing to be stripped
+-
+ $(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.so* \
+ 		$(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
 -- 
-Sam
+1.7.2.5
