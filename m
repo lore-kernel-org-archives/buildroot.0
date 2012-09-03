@@ -1,43 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Sep 2012 09:17:06 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-09-01
-In-Reply-To: <504319A8.5070903@relinux.de>
-References: <20120902063244.629BF428001@lolut.humanoidz.org>
- <504319A8.5070903@relinux.de>
-Message-ID: <20120903091706.47c0b600@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 03 Sep 2012 09:48:36 +0200
+Subject: [Buildroot] [PATCH 10/12] pkg-infra: ensure gettext gets built
+ before all other packages
+In-Reply-To: <201209022305.51613.yann.morin.1998@free.fr>
+References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
+ <1346600635-30946-11-git-send-email-yann.morin.1998@free.fr>
+ <5043C1F8.6020801@mind.be> <201209022305.51613.yann.morin.1998@free.fr>
+Message-ID: <504460D4.1040805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 02 Sep 2012 10:32:40 +0200,
-Stephan Hoffmann <sho@relinux.de> a ?crit :
+On 09/02/12 23:05, Yann E. MORIN wrote:
+>> >     * Move this dependency into the toolchain logic - which means duplicating
+>> >  it three times so maybe not such a good idea...
+> Not sure I understand this... O_o
 
-> I just started looking at this. The cause of the problem is that the
-> tool chain lacks suppot for the "versionsort" routine.
-> 
-> In uClinux there is a patch adding a versionsort to alsalib locally, but
-> this doesn't seem to be a good solution to me, especially since I assume
-> that most other toolchains have versionsort so that such a patch would
-> breal other architectures.
+  All the more reason not to do it :-)
 
-The configure script can detect whether this function is provided by
-the toolchain, and only if not provided, enable the internal version.
+  I'm currently running a test build with the whole patch series (barring 10/12 and 12/12) - result in an hour or so.
 
-> There are also some other patches for alsa-lib that would be needed to
-> support blackfin. How shall we handle such architecture dependent patches?
-
-We don't like architecture specific patches. This one for example has
-no reason to be architecture-specific, it just needs to be written
-properly :-)
-
-Best regards,
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
