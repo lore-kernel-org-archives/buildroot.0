@@ -1,77 +1,35 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 03 Sep 2012 18:17:22 +0200
-Subject: [Buildroot] Please help with pkg infrastructure
-Message-ID: <1346689042.29515.6.camel@sven>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Sep 2012 20:02:26 +0200
+Subject: [Buildroot] [PATCH 01/12] gettext: remove option to build
+	statically
+In-Reply-To: <504471FA.3060407@mind.be>
+References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
+ <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
+ <504471FA.3060407@mind.be>
+Message-ID: <201209032002.26875.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Arnout, All,
 
-I am trying to simplify our custom buildroot packages that define the
-build rules for our internal software packages. So far these packages
-duplicate a lot of akward code in their .mk files. I'd like to move this
-to a central place. So what I did is to add code like this to
-package/raumfeld/raumfeld.mk:
+On Monday 03 September 2012 11:01:46 Arnout Vandecappelle wrote:
+>   I'm pretty much in favour of committing patches 1 to 9 now.  The first
+> six have had plenty of time for review, 7 and 8 are fairly obvious
+> bugfixes, and 9 is a mechanical rename.
 
+I'd suggest we wait yet a little tiny bit until later tonight (+0200),
+I will re-submit the whole series with your comments (and ack/tst).
 
--------------------------------------------------------------------------
+Regards,
+Yann E. MORIN.
 
-################################################################################
-# inner-raumfeld-autotools-package
-#
-#  argument 1 is the lowercase package name
-#  argument 2 is the uppercase package name
-#  argument 3 is the package directory prefix
-################################################################################
-
-define inner-raumfeld-autotools-package
-
-
-ifndef $(2)_BRANCH
-  $(2)_BRANCH = $(call qstrip,$(BR2_PACKAGE_RAUMFELD_BRANCH))
-endif
-
-ifndef $(2)_MODULE
-  $(2)_MODULE = $($(1))
-endif
-
-ifndef $(2)_VERSION
-  $(2)_VERSION = $($(2)_BRANCH)
-endif
-
-
-# Call the generic autotools package infrastructure to generate the necessary
-# make targets
-$(call inner-autotools-package,$(1),$(2),$(2),$(3),target)
-
-
-################################################################################
-# raumfeld-autotools-package
-#   -- the target generator macro for Raumfeld autotools packages
-################################################################################
-
-raumfeld-autotools-package = $(call inner-raumfeld-autotools-package,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir))
-
-
-################################################################################
-################################################################################
-
-include package/raumfeld/*/*.mk
-
--------------------------------------------------------------------------
-
-
-As you can probably guess the idea here is to define PKG_BRANCH, PKG_MODULE
-and PKG_VERSION with default values but still leave the possibility to
-override these from the respective pkg.mk files.
-
-So what am I doing wrong here, because PKG_VERSION ends up being
-"undefined" instead of defaulting to the value of
-$BR2_PACKAGE_RAUMFELD_BRANCH ?
-
-
-Thanks for your help,
-Sven
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
