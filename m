@@ -1,25 +1,34 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Mon, 03 Sep 2012 22:13:52 +0300
-Subject: [Buildroot] Bash string manipulation in Kconfig
-In-Reply-To: <20120903210830.71b3372b@skate>
-References: <5044FD5F.102@petroprogram.com> <20120903210830.71b3372b@skate>
-Message-ID: <50450170.8010508@petroprogram.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 03 Sep 2012 21:39:51 +0200
+Subject: [Buildroot] Buildroot 2012.08 released
+In-Reply-To: <504224FA.1070908@mind.be> (Arnout Vandecappelle's message of
+ "Sat, 01 Sep 2012 17:08:42 +0200")
+References: <20120831112123.672bd606@skate> <504224FA.1070908@mind.be>
+Message-ID: <87y5kqopyw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-3.9.2012 22:08, Thomas Petazzoni kirjoitti:
-> Le Mon, 03 Sep 2012 21:56:31 +0300,
-> Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
->
->> But how to do similar in buildroot  .mk files ???
-> 	$(notdir $(FOO))
->
-> Thomas
-Thanks Thomas!
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-That was fast :)
+ Arnout> On 08/31/12 11:21, Thomas Petazzoni wrote:
+ >> - Cleanups to the package infrastructure. The visible change
+ >> to developers is that $(eval $(call AUTOTARGETS)) is now
+ >> $(eval $(autotools-package)), and similarly for other package
+ >> infrastructures and host packages. Refer to the documentation for
+ >> details.
 
-Stefan
+ Arnout>  It's unfortunate that my patch for detecting legacy XXXTARGETS
+ Arnout> usage wasn't merged.  I'm afraid there will be many people
+ Arnout> hitting that problem...
+
+ Arnout>  (I realize it's my own responsibility for not pushing it a
+ Arnout> second time when the deadline was approaching...)
+
+Indeed. Lets wait a few days and see if something else critical shows
+up, then perhaps we can do a 2012.08.1 bugfix release.
+
+-- 
+Bye, Peter Korsgaard
