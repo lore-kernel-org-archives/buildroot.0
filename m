@@ -1,32 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 03 Sep 2012 20:05:38 -0000
-Subject: [Buildroot] [git commit] samba: bump to version 3.6.7
-Message-ID: <20120903200536.0064D9953E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] opkg: bump version to svn r635
+Message-ID: <20120903200537.35A899953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03e3cd9572665c8332c2ace0cbc8b251983108ac
+commit: http://git.buildroot.net/buildroot/commit/?id=80cde682b1f3a794e173efd82a347d5bab658730
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+It is recommended to use the most recent revision from subversion as it
+contains various fixes.
+
+Signed-off-by: Jonathan Liu <net147@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/opkg/opkg.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 6b9a082..301a39f 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index be67f8e..3ba61ae 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,11 +4,13 @@
  #
  #############################################################
  
--SAMBA_VERSION = 3.6.6
-+SAMBA_VERSION = 3.6.7
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
+-OPKG_VERSION = 0.1.8
++OPKG_VERSION = 635
+ OPKG_SOURCE = opkg-$(OPKG_VERSION).tar.gz
+-OPKG_SITE = http://opkg.googlecode.com/files
++OPKG_SITE = http://opkg.googlecode.com/svn/trunk/
++OPKG_SITE_METHOD = svn
+ OPKG_INSTALL_STAGING = YES
+ OPKG_CONF_OPT = --disable-curl --disable-gpg
++OPKG_AUTORECONF = YES
+ 
+ # Ensure directory for lockfile exists
+ define OPKG_CREATE_LOCKDIR
