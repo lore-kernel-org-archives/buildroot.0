@@ -1,28 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 03 Sep 2012 21:41:40 +0200
-Subject: [Buildroot] Buildroot 2012.08 released
-In-Reply-To: <20120831112123.672bd606@skate> (Thomas Petazzoni's message of
- "Fri, 31 Aug 2012 11:21:23 +0200")
-References: <20120831112123.672bd606@skate>
-Message-ID: <87txveopvv.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Mon, 03 Sep 2012 22:53:52 +0300
+Subject: [Buildroot] Bash string manipulation in Kconfig
+In-Reply-To: <20120903210830.71b3372b@skate>
+References: <5044FD5F.102@petroprogram.com> <20120903210830.71b3372b@skate>
+Message-ID: <50450AD0.3060703@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+3.9.2012 22:08, Thomas Petazzoni kirjoitti:
+> Le Mon, 03 Sep 2012 21:56:31 +0300,
+> Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
+>
+>> But how to do similar in buildroot  .mk files ???
+> 	$(notdir $(FOO))
+>
+> Thomas
 
-Hi,
+One more question:
 
- Thomas> Next release will be 2012.12. Expect the first release
- Thomas> candidate early November, and the final release towards the end
- Thomas> of the month. After 1.5 months of interim maintenance done by
- Thomas> myself, Peter Korsgaard is now back in its duties as the
- Thomas> official Buildroot maintainer.
+Why does not the following work ?
 
-2012.11, not 2012.12. A very big thanks to Thomas for handling the
-maintainer role during my illness!
+FULL_DOWNLOAD_URL=http://www.somedomain.com/blah/blah/somefile1
+FULL_DOWNLOAD_URL+=http://www.somedomain2.com/blah2/blah2/blah/somefile2
 
--- 
-Bye, Peter Korsgaard
+for i in $(FULL_DOWNLOAD_URL);do \
+    echo $(notdir $$i) ; \
+done
+
+I expect it to print:
+
+somefile1
+somefile2
+
+But it prints instead:
+
+http://www.somedomain.com/blah/blah/somefile1
+http://www.somedomain2.com/blah2/blah2/blah/somefile2
+
+Stefan
