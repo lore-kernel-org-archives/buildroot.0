@@ -1,63 +1,76 @@
-From: KARTHIK SEKURU <karthik.sekuru@gmail.com>
-Date: Mon, 3 Sep 2012 09:59:16 +0530
-Subject: [Buildroot] Issue with "Unknown HZ value! (744514) Assume 100."
-Message-ID: <CANev7oUGNDneJ+dLt4gqf-eUGHF6fV3Cuym-n5CvHBau8AViog@mail.gmail.com>
+From: David Sanchez Herrero <david.krusty@gmail.com>
+Date: Mon, 3 Sep 2012 08:20:35 +0200
+Subject: [Buildroot] Problems building Busybox 1.20.1 with Buildroot
+	2012.05
+In-Reply-To: <5043BD15.4020709@mind.be>
+References: <CAMPeO9x61f+1fU+qdOTQav3MEbqZRG8X2SR+WLjeQgHRWxsC4A@mail.gmail.com>
+ <5043BD15.4020709@mind.be>
+Message-ID: <CAMPeO9x1N0j3c4DiRwkHdA7erFg8Q2TfVAUS0bEyAQY=_ZQvBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hi Arnout,
 
+That was exactly the problem. I have set the values:
 
-I am working on porting linux kernel 3.4 to an arm926-ejs based fpga board.
+UCLIBC HAS_RESOLVER_SUPPORT=y
+UCLIBC_HAS_LIBRESOLV_STUB=y
 
+With these options, everything builds fine.
 
-After the kernel bootup, in the command prompt when i am using the command
-"ps -l "..i am getting the following
+Thanks all for your help.
 
-*sh-4.2# ps -l*
-*Unknown HZ value! (744514) Assume 100.*
-*
-*
-*
-*
-*F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD*
-*0 S     0    51     1  0  80   0 -   443 wait   ttySAC0  00:00:12 sh*
-*0 R     0    56    51  0  80   0 -   297 -      ttySAC0  00:00:04 ps*
-*
-*
-*
-*
-The issue i am facing is *"I configured the jiffies for 25Hz in the
-kernel,still it is assuming 100hz."*
+Greetings, David.
 
-I am using ".ext2"  filesystem build from buildroot.
+2012/9/2 Arnout Vandecappelle <arnout@mind.be>
 
-The option set in buildroot for creating filesystem are as mentioned below:
-
-*(3.4) linux version  *
-*uClibc C library Version (uClibc 0.9.33.x)*
-*Binutils Version (binutils 2.21.1)*
-*GCC compiler Version (gcc 4.7.x)*
-
-
-The tried the following options --
-
-1. I tried using glibc instead of uclibc in buildroot , but it didn't help.
-
-2. I replaced the linux-3.4.tar.bz from /dl/  folder in buildroot with the
-modified linux-3.4.tar.bz where i made CONFIG_HZ as 25.This also didn't fix
-the issue.
-
-
-Please let me know if this issue is because of filesystem created using
-buildroot.
-
-
-Thanks,
-Karthik.
+> On 09/02/12 20:06, David Sanchez Herrero wrote:
+>
+>> Hi all,
+>>
+>> I'm trying to build a Buildroot toolchain using configuration files for
+>> Buildroot and uClibc downloaded from the
+>> official forum.
+>>
+>> During the full building process with Buildroot, I get the next error in
+>> Busybox building, and I'm blocked there:
+>>
+> [snip]
+>
+>  networking/lib.a(nslookup.o): In function `nslookup_main':
+>> nslookup.c:(.text.nslookup_**main+0x2c): undefined reference to
+>> `__res_init'
+>> nslookup.c:(.text.nslookup_**main+0x54): undefined reference to
+>> `__res_state'
+>> nslookup.c:(.text.nslookup_**main+0x78): undefined reference to
+>> `__res_state'
+>> nslookup.c:(.text.nslookup_**main+0x8c): undefined reference to
+>> `__res_state'
+>>
+>
+>  Any chance you have a custom uClibc config, which doesn't have
+> HAS_LIBRESOLV_STUB ?
+> Try with the default uClibc config from buildroot (don't forget to make
+> clean).
+>
+>  If that doesn't help, please run 'make savedefconfig' and post the
+> resulting
+> defconfig, so we can try to reproduce the problem.
+>
+>  Regards,
+>  Arnout
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120903/054b27d2/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120903/5498dba5/attachment.html>
