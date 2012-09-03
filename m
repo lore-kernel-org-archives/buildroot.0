@@ -1,70 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 03 Sep 2012 20:05:33 -0000
-Subject: [Buildroot] [git commit] Add new package: cpuload
-Message-ID: <20120903200531.26B239953E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] gdk-pixbuf: build x11 support,
+	if appropriate
+Message-ID: <20120903200531.704B29953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=663a1b6241b2dcae87427eff72fba9ae3fbf8d80
+commit: http://git.buildroot.net/buildroot/commit/?id=d27d40b0de526b4d395210067ae36a0513a29a77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpuload is a simple tool to obtain intuitive vision of CPU load
-(including total, user, system, irq and softirq) within a certain
-time, which is especially useful for embedded system without GUI.
+If libX11 is available, then gdk-pixbuf can be built with X11 support.
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/cpuload/Config.in  |    8 ++++++++
- package/cpuload/cpuload.mk |   13 +++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f308de7..c9ad06a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -663,6 +663,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 751f499..0d9e206 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -34,6 +34,11 @@ else
+ GDK_PIXBUF_DEPENDENCIES += tiff
  endif
- source "package/bwm-ng/Config.in"
-+source "package/cpuload/Config.in"
- source "package/htop/Config.in"
- source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/cpuload/Config.in b/package/cpuload/Config.in
-new file mode 100644
-index 0000000..82bc450
---- /dev/null
-+++ b/package/cpuload/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CPULOAD
-+	bool "cpuload"
-+	help
-+	  cpuload is a simple tool to obtain intuitive vision of CPU load
-+	  (including total, user, system, irq and softirq) within a certain
-+	  time, which is especially useful for embedded system without GUI.
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++GDK_PIXBUF_CONF_OPT += --with-x11
++GDK_PIXBUF_DEPENDENCIES += xlib_libX11
++endif
 +
-+	  https://github.com/kelvincheung/cpuload
-diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
-new file mode 100644
-index 0000000..d25c504
---- /dev/null
-+++ b/package/cpuload/cpuload.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# cpuload
-+#
-+#############################################################
-+
-+CPULOAD_VERSION = v0.3
-+CPULOAD_SITE = git://github.com/kelvincheung/cpuload.git
-+CPULOAD_LICENSE = GPLv2
-+CPULOAD_LICENSE_FILES = COPYING
-+
-+
-+$(eval $(autotools-package))
+ GDK_PIXBUF_DEPENDENCIES += \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
