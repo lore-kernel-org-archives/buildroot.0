@@ -1,60 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 03 Sep 2012 20:05:34 -0000
-Subject: [Buildroot] [git commit] acpid: add init.d script
-Message-ID: <20120903200533.1F3CA9953E@busybox.osuosl.org>
+Date: Mon, 03 Sep 2012 20:05:35 -0000
+Subject: [Buildroot] [git commit] yasm: New package
+Message-ID: <20120903200532.7A9FD9953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=956caf62480f2cb0adada6a5a9f1e5ca3dd2b262
+commit: http://git.buildroot.net/buildroot/commit/?id=6a81db89eb036216c87b3036251adbeea2013b0e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jonathan Liu <net147@gmail.com>
+[thomas.petazzoni at free-electrons.com:
+
+ drop the --disable-static from configuration options, the default
+ behavior should work without problem.
+
+ make sure the pre configure hook is also executed for the host
+ variant of the package.
+
+ add the project upstream URL in the package help text
+]
+
+Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/acpid/S02acpid |   22 ++++++++++++++++++++++
- package/acpid/acpid.mk |    1 +
- 2 files changed, 23 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/yasm/Config.in |    9 +++++++++
+ package/yasm/yasm.mk   |   20 ++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/acpid/S02acpid b/package/acpid/S02acpid
-new file mode 100755
-index 0000000..ec686d8
---- /dev/null
-+++ b/package/acpid/S02acpid
-@@ -0,0 +1,22 @@
-+#!/bin/sh
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting acpid: "
-+		start-stop-daemon -S -q -m -b -p /var/run/acpid.pid --exec /usr/sbin/acpid -- -n
-+		echo "done"
-+		;;
-+	stop)
-+		echo -n "Stopping acpid: "
-+		start-stop-daemon -K -q -p /var/run/acpid.pid
-+		echo "done"
-+		;;
-+	restart)
-+		"$0" stop
-+		sleep 1
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		;;
-+esac
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index cacfb27..56f671d 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -18,6 +18,7 @@ define ACPID_INSTALL_TARGET_CMDS
- 	install -D -m 644 $(@D)/acpi_listen.8 $(TARGET_DIR)/usr/share/man/man8/acpi_listen.8
- 	mkdir -p $(TARGET_DIR)/etc/acpi/events
- 	/bin/echo -e "event=button[ /]power\naction=/sbin/poweroff" > $(TARGET_DIR)/etc/acpi/events/powerbtn
-+	$(INSTALL) -D -m 0755 package/acpid/S02acpid $(TARGET_DIR)/etc/init.d/S02acpid
- endef
+diff --git a/package/Config.in b/package/Config.in
+index 89cb40f..45f0799 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -91,6 +91,7 @@ source "package/sstrip/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/tar/Config.in"
+ endif
++source "package/yasm/Config.in"
+ endmenu
  
- define ACPID_UNINSTALL_TARGET_CMDS
+ menu "Games"
+diff --git a/package/yasm/Config.in b/package/yasm/Config.in
+new file mode 100644
+index 0000000..bb1d417
+--- /dev/null
++++ b/package/yasm/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_YASM
++	bool "yasm"
++	depends on BR2_i386 || BR2_x86_64
++	help
++	  Yasm is a complete rewrite of the NASM-2.10.01 assembler.
++	  It supports the x86 and AMD64 instruction sets, accepts NASM
++	  and GAS assembler syntaxes and outputs binary, ELF32 and ELF64
++	  object formats.
++
+diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
+new file mode 100644
+index 0000000..ac75d2b
+--- /dev/null
++++ b/package/yasm/yasm.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# yasm
++#
++#############################################################
++YASM_VERSION = 1.2.0
++YASM_SOURCE = yasm-$(YASM_VERSION).tar.gz
++YASM_SITE = http://www.tortall.net/projects/yasm/releases/
++YASM_CONF_OPT = --disable-static
++
++define YASM_PRE_CONFIGURE_FIXUP
++# This sed prevents it compiling 2 programs (vsyasm and ytasm) 
++# that are only of use on Microsoft Windows. 
++	sed -i 's#) ytasm.*#)#' $(@D)/Makefile.in
++endef
++
++YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
