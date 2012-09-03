@@ -1,23 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Sep 2012 22:01:43 +0200
-Subject: [Buildroot] Bash string manipulation in Kconfig
-In-Reply-To: <50450AD0.3060703@petroprogram.com>
-References: <5044FD5F.102@petroprogram.com> <20120903210830.71b3372b@skate>
- <50450AD0.3060703@petroprogram.com>
-Message-ID: <20120903220143.42e0c095@skate>
+Date: Mon, 3 Sep 2012 22:03:32 +0200
+Subject: [Buildroot] Buildroot 2012.08 released
+In-Reply-To: <504224FA.1070908@mind.be>
+References: <20120831112123.672bd606@skate>
+	<504224FA.1070908@mind.be>
+Message-ID: <20120903220332.5b38e9b4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 03 Sep 2012 22:53:52 +0300,
-Stefan Fr?berg <stefan.froberg@petroprogram.com> a ?crit :
+Le Sat, 01 Sep 2012 17:08:42 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> for i in $(FULL_DOWNLOAD_URL);do \
->     echo $(notdir $$i) ; \
+>   It's unfortunate that my patch for detecting legacy XXXTARGETS usage wasn't merged.
+> I'm afraid there will be many people hitting that problem...
 
-Inside this for loop, what you're writing is shell code, not make code.
+Yes, this is my fault. I really wanted to merge it, but the 24+h trip
+from San Diego back to France erased this from my brain, and when I did
+the release of Buildroot on Friday morning, I had completely forgotten
+this patch... until lunch but it was too late. My apologies.
+
+I agree with the proposal of doing a 2012.08.1. It could at least
+contain this change + the SYSROOT_DIR typo fix.
 
 Thomas
 -- 
