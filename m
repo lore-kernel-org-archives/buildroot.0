@@ -1,49 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 03 Sep 2012 20:05:35 -0000
-Subject: [Buildroot] [git commit] yasm: minor fixes that should have been
-	part the commit adding the package
-Message-ID: <20120903200533.8B00F9953E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] python-meld3: new package
+Message-ID: <20120903200533.D155B9953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54fe81fbb49d29a15945bdcf8e2c281bcb1969fd
+commit: http://git.buildroot.net/buildroot/commit/?id=1ff74a535d9c5e7e7f996eb9b8d8f83f8af44f1e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[thomas.petazzoni at free-electrons.com:
+ Fixup indentation in the Config.in file.
+ Add 'select BR2_PACKAGE_PYTHON_PYEXPAT' which is needed to get XML
+ support in Python.
+ Add license information.]
+
+Signed-off-by: Jonathan Liu <net147@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/yasm/Config.in |    1 +
- package/yasm/yasm.mk   |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/Config.in                    |    1 +
+ package/python-meld3/Config.in       |    8 ++++++++
+ package/python-meld3/python-meld3.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/yasm/Config.in b/package/yasm/Config.in
-index bb1d417..2dc25aa 100644
---- a/package/yasm/Config.in
-+++ b/package/yasm/Config.in
-@@ -7,3 +7,4 @@ config BR2_PACKAGE_YASM
- 	  and GAS assembler syntaxes and outputs binary, ELF32 and ELF64
- 	  object formats.
- 
-+	  http://www.tortall.net/projects/yasm/
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index ac75d2b..fafd1ec 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
-@@ -6,7 +6,6 @@
- YASM_VERSION = 1.2.0
- YASM_SOURCE = yasm-$(YASM_VERSION).tar.gz
- YASM_SITE = http://www.tortall.net/projects/yasm/releases/
--YASM_CONF_OPT = --disable-static
- 
- define YASM_PRE_CONFIGURE_FIXUP
- # This sed prevents it compiling 2 programs (vsyasm and ytasm) 
-@@ -15,6 +14,7 @@ define YASM_PRE_CONFIGURE_FIXUP
- endef
- 
- YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
-+HOST_YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/Config.in b/package/Config.in
+index 45f0799..a9101b2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -271,6 +271,7 @@ menu "external python modules"
+ source "package/python-dpkt/Config.in"
+ source "package/python-id3/Config.in"
+ source "package/python-mad/Config.in"
++source "package/python-meld3/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-pygame/Config.in"
+diff --git a/package/python-meld3/Config.in b/package/python-meld3/Config.in
+new file mode 100644
+index 0000000..8dee723
+--- /dev/null
++++ b/package/python-meld3/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_MELD3
++	bool "python-meld3"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_PYEXPAT
++	help
++	  A HTML/XML templating system.
++
++	  https://github.com/supervisor/meld3
+diff --git a/package/python-meld3/python-meld3.mk b/package/python-meld3/python-meld3.mk
+new file mode 100644
+index 0000000..de83b28
+--- /dev/null
++++ b/package/python-meld3/python-meld3.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# python-meld3
++#
++#############################################################
++
++PYTHON_MELD3_VERSION = 0.6.8
++PYTHON_MELD3_SOURCE = meld3-$(PYTHON_MELD3_VERSION).tar.gz
++PYTHON_MELD3_SITE = http://pypi.python.org/packages/source/m/meld3/
++PYTHON_MELD3_DEPENDENCIES = python
++PYTHON_MELD3_LICENSE = ZPLv2.1
++PYTHON_MELD3_LICENSE_FILES = COPYRIGHT.txt LICENSE.txt
++
++define PYTHON_MELD3_BUILD_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_MELD3_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(generic-package))
