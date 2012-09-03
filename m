@@ -1,37 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 03 Sep 2012 20:05:32 -0000
-Subject: [Buildroot] [git commit] sudo: bump version to 1.8.5p2
-Message-ID: <20120903200530.79DE89953E@busybox.osuosl.org>
+Date: Mon, 03 Sep 2012 20:05:33 -0000
+Subject: [Buildroot] [git commit] Add new package: cpuload
+Message-ID: <20120903200531.26B239953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d30aaf3e0c5f90306a1c931794d9096d549405cf
+commit: http://git.buildroot.net/buildroot/commit/?id=663a1b6241b2dcae87427eff72fba9ae3fbf8d80
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+cpuload is a simple tool to obtain intuitive vision of CPU load
+(including total, user, system, irq and softirq) within a certain
+time, which is especially useful for embedded system without GUI.
+
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...t-commit-8209:0c4e3f68b2f5-from-upstream.patch} |    0
- package/sudo/sudo.mk                               |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in          |    1 +
+ package/cpuload/Config.in  |    8 ++++++++
+ package/cpuload/cpuload.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch b/package/sudo/sudo-1.8.5p2-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
-similarity index 100%
-rename from package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
-rename to package/sudo/sudo-1.8.5p2-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 9b0ebed..00d08f0 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SUDO_VERSION = 1.8.5p1
-+SUDO_VERSION = 1.8.5p2
- SUDO_SITE    = http://www.sudo.ws/sudo/dist
- SUDO_CONF_OPT = \
- 		--without-lecture \
+diff --git a/package/Config.in b/package/Config.in
+index f308de7..c9ad06a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -663,6 +663,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/bootutils/Config.in"
+ endif
+ source "package/bwm-ng/Config.in"
++source "package/cpuload/Config.in"
+ source "package/htop/Config.in"
+ source "package/kmod/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/cpuload/Config.in b/package/cpuload/Config.in
+new file mode 100644
+index 0000000..82bc450
+--- /dev/null
++++ b/package/cpuload/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CPULOAD
++	bool "cpuload"
++	help
++	  cpuload is a simple tool to obtain intuitive vision of CPU load
++	  (including total, user, system, irq and softirq) within a certain
++	  time, which is especially useful for embedded system without GUI.
++
++	  https://github.com/kelvincheung/cpuload
+diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
+new file mode 100644
+index 0000000..d25c504
+--- /dev/null
++++ b/package/cpuload/cpuload.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# cpuload
++#
++#############################################################
++
++CPULOAD_VERSION = v0.3
++CPULOAD_SITE = git://github.com/kelvincheung/cpuload.git
++CPULOAD_LICENSE = GPLv2
++CPULOAD_LICENSE_FILES = COPYING
++
++
++$(eval $(autotools-package))
