@@ -1,121 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 03 Sep 2012 20:05:56 -0000
-Subject: [Buildroot] [git commit] new package: usb_modeswitch_data
-Message-ID: <20120903200537.B54219953E@busybox.osuosl.org>
+Date: Mon, 03 Sep 2012 20:05:57 -0000
+Subject: [Buildroot] [git commit] new package: gsl the GNU Scientific
+	Library.
+Message-ID: <20120903200538.347409953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=572ba0692c7a41b4e4b86009b9964e5045939fef
+commit: http://git.buildroot.net/buildroot/commit/?id=9d9f7feba4ffbfeb54479f1ad90d47acca1a6f0b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-usb_modeswitch_data provides udev rules for usb VID/PID combinations to
-switch usb deices from their default mode into a more useable mode. The
-default mode usually is a cdrom with installation software that is of
-little use in an embedded linux situation
+[thomas.petazzoni at free-electrons.com:
+ renamed package to 'gsl' to match upstream name.
+ added license information.]
 
-Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                                  |    1 +
- package/usb_modeswitch_data/Config.in              |   12 +++++++++
- .../usb_modeswitch_data-makefile.patch             |   27 ++++++++++++++++++++
- package/usb_modeswitch_data/usb_modeswitch_data.mk |   24 +++++++++++++++++
- 4 files changed, 64 insertions(+), 0 deletions(-)
+ package/Config.in     |    1 +
+ package/gsl/Config.in |   10 ++++++++++
+ package/gsl/gsl.mk    |   13 +++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 3a05917..3f46d3a 100644
+index 3f46d3a..d6a66fd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -239,6 +239,7 @@ source "package/uboot-tools/Config.in"
- source "package/udev/Config.in"
- source "package/unionfs/Config.in"
- source "package/usb_modeswitch/Config.in"
-+source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
- source "package/wipe/Config.in"
-diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
+@@ -457,6 +457,7 @@ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+ source "package/libev/Config.in"
+ source "package/libffi/Config.in"
++source "package/gsl/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+diff --git a/package/gsl/Config.in b/package/gsl/Config.in
 new file mode 100644
-index 0000000..8698bb6
+index 0000000..92541da
 --- /dev/null
-+++ b/package/usb_modeswitch_data/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_USB_MODESWITCH_DATA
-+	bool "usb_modeswitch_data"
-+	select BR2_PACKAGE_USB_MODESWITCH
-+	# tcl is a runtime dependency
-+	select BR2_PACKAGE_TCL
-+	select BR2_PACKAGE_TCL_TCLSH
++++ b/package/gsl/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_GSL
++	bool "gsl"
 +	help
-+	  USB mode switch data
-+	  Contains udev rules and events to allow usb_modeswitch to
-+	  function automatically
++	  The GNU Scientific Library (GSL) is a numerical library for
++	  C and C++ programmers.  The library provides a wide range of
++	  mathematical routines such as random number generators,
++	  special functions and least-squares fitting. There are over
++	  1000 functions in total with an extensive test suite.
 +
-+	  http://www.draisberghof.de/usb_modeswitch/
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
++ 	  http://www.gnu.org/software/gsl
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
 new file mode 100644
-index 0000000..769e514
+index 0000000..7196859
 --- /dev/null
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-@@ -0,0 +1,27 @@
-+Fixed Makefile install sections to not reload udev rules. In a 
-+cross-compiler environment, it is not wanted to reload the host udev rules.
-+
-+Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-+--- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
-++++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
-+@@ -12,9 +12,9 @@
-+ 
-+ clean:
-+ 
-+-install: files-install db-install rules-reload
-++install: files-install db-install
-+ 
-+-install-packed: files-install db-install-packed rules-reload
-++install-packed: files-install db-install-packed
-+ 
-+ files-install:
-+ 	install -d $(PREFIX)/share/usb_modeswitch
-+@@ -50,7 +50,7 @@
-+ 		fi \
-+ 	fi
-+ 
-+-uninstall: files-uninstall rules-reload
-++uninstall: files-uninstall
-+ 
-+ files-uninstall:
-+ 	$(RM) $(RULESDIR)/40-usb_modeswitch.rules
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-new file mode 100644
-index 0000000..d493144
---- /dev/null
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -0,0 +1,24 @@
++++ b/package/gsl/gsl.mk
+@@ -0,0 +1,13 @@
 +#############################################################
 +#
-+# usb_modeswitch_data
++# gnu gsl
 +#
 +#############################################################
++GSL_VERSION = 1.15
++GSL_SOURCE = gsl-$(GSL_VERSION).tar.gz
++GSL_SITE = $(BR2_GNU_MIRROR)/gsl
++GSL_INSTALL_STAGING = YES
++GSL_LICENSE = GPLv3
++GSL_LICENSE_FILES = COPYING
 +
-+USB_MODESWITCH_DATA_VERSION = 20120812
-+USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
-+USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
-+USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
-+USB_MODESWITCH_DATA_LICENSE = GPLv2+
-+USB_MODESWITCH_DATA_LICENSE_FILES = COPYING
-+
-+# Nothing to build, it is a pure data package
-+
-+define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define USB_MODESWITCH_DATA_CLEAN_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
