@@ -1,44 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Sep 2012 11:21:40 +0200
-Subject: [Buildroot] [PATCH 01/12] gettext: remove option to build
-	statically
-In-Reply-To: <504471FA.3060407@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 03 Sep 2012 11:38:37 +0200
+Subject: [Buildroot] [PATCH 10/12] pkg-infra: ensure gettext gets built
+ before all other packages
+In-Reply-To: <20120903110952.6998fa01@skate>
 References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
- <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
- <504471FA.3060407@mind.be>
-Message-ID: <201209031121.40716.yann.morin.1998@free.fr>
+ <1346600635-30946-11-git-send-email-yann.morin.1998@free.fr>
+ <5043C1F8.6020801@mind.be> <20120903110952.6998fa01@skate>
+Message-ID: <50447A9D.5090706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas, All,
+On 09/03/12 11:09, Thomas Petazzoni wrote:
+> Le Sun, 02 Sep 2012 22:30:48 +0200,
+> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
+>
+>>    I don't like this.  I don't like the idea of having redundant
+>> dependencies, I don't like to have a single thing that everything
+>> depends on, I don't like the $(filter-out ...) construct.
+>>
+>>    I also don't like that it breaks the build when the toolchain
+>> depends on some package (sstrip, ccache, ...).
+>>
+>>    Possible alternatives:
+>>
+>>    * Use a construct similar to patch 11/12: $(gettext-dependency)
+>> which is nothing unless gettext is enabled.
+>>
+>>    * Move this dependency into the toolchain logic - which means
+>> duplicating it three times so maybe not such a good idea...
+>
+> I don't like it either, and I don't think I like those alternatives
+> either.
+>
+> I prefer keeping the explicit dependency in the packages, because I
+> don't like things that are too magic.
 
-On Monday 03 September 2012 11:01:46 Arnout Vandecappelle wrote:
-> On 09/02/12 17:43, Yann E. MORIN wrote:
-> > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> > Reviewed-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> 
->   In the last BR developer meeting, we agreed not to use the Reviewed-by: tag,
-> but only the Acked-by: tag.  It should be used when you've reviewed the
-> patch and you would commit it if you had commit access.
+  With $(gettext-dependency), the dependency is explicit.  You'll see
+in Yann's next patch series :-)
 
-OK. So, to whoever commits these patches, you can change my
-Reviewed-by into an Acked-by
-
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
