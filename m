@@ -1,20 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 03 Sep 2012 20:05:31 -0000
-Subject: [Buildroot] [git commit] sam-ba: bump version to 2.12
-Message-ID: <20120903200530.2EEB59953E@busybox.osuosl.org>
+Date: Mon, 03 Sep 2012 20:05:32 -0000
+Subject: [Buildroot] [git commit] sudo: bump version to 1.8.5p2
+Message-ID: <20120903200530.79DE89953E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9240163ef7e1f10cdbecfc5a6936d5624f823565
+commit: http://git.buildroot.net/buildroot/commit/?id=d30aaf3e0c5f90306a1c931794d9096d549405cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sam-ba/sam-ba.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...t-commit-8209:0c4e3f68b2f5-from-upstream.patch} |    0
+ package/sudo/sudo.mk                               |    2 +-
+ 2 files changed, 1 insertions(+), 1 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch b/package/sudo/sudo-1.8.5p2-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
+similarity index 100%
+rename from package/sudo/sudo-1.8.5p1-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
+rename to package/sudo/sudo-1.8.5p2-backport-commit-8209:0c4e3f68b2f5-from-upstream.patch
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 9b0ebed..00d08f0 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SUDO_VERSION = 1.8.5p1
++SUDO_VERSION = 1.8.5p2
+ SUDO_SITE    = http://www.sudo.ws/sudo/dist
+ SUDO_CONF_OPT = \
+ 		--without-lecture \
