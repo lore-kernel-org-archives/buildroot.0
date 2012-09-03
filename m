@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Sep 2012 09:14:57 +0200
+Date: Mon, 3 Sep 2012 09:17:06 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-09-02
-In-Reply-To: <504457E8.3010301@relinux.de>
-References: <20120903063225.52446428001@lolut.humanoidz.org>
- <504457E8.3010301@relinux.de>
-Message-ID: <20120903091457.3bd8061e@skate>
+ 2012-09-01
+In-Reply-To: <504319A8.5070903@relinux.de>
+References: <20120902063244.629BF428001@lolut.humanoidz.org>
+ <504319A8.5070903@relinux.de>
+Message-ID: <20120903091706.47c0b600@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 03 Sep 2012 09:10:32 +0200,
+Le Sun, 02 Sep 2012 10:32:40 +0200,
 Stephan Hoffmann <sho@relinux.de> a ?crit :
 
-> are these randomly selected?
+> I just started looking at this. The cause of the problem is that the
+> tool chain lacks suppot for the "versionsort" routine.
 > 
-> This one was already there yesterday.
+> In uClinux there is a patch adding a versionsort to alsalib locally, but
+> this doesn't seem to be a good solution to me, especially since I assume
+> that most other toolchains have versionsort so that such a patch would
+> breal other architectures.
 
-The toolchain configuration is randomly chosen from a list of
-pre-defined toolchain configurations.
+The configure script can detect whether this function is provided by
+the toolchain, and only if not provided, enable the internal version.
 
-The packages configuration is randomly chosen (using 'make
-randpackageconfig').
+> There are also some other patches for alsa-lib that would be needed to
+> support blackfin. How shall we handle such architecture dependent patches?
 
-So it is very possible to have the same build failure two days in a
-row, or even multiple times during a single day.
+We don't like architecture specific patches. This one for example has
+no reason to be architecture-specific, it just needs to be written
+properly :-)
 
 Best regards,
 
