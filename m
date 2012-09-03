@@ -1,52 +1,51 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  3 Sep 2012 10:37:45 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-firmware: add ti-connectivity fw v5
-Message-ID: <1346661466-24431-1-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 03 Sep 2012 11:01:46 +0200
+Subject: [Buildroot] [PATCH 01/12] gettext: remove option to build
+	statically
+In-Reply-To: <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
+References: <1346600635-30946-1-git-send-email-yann.morin.1998@free.fr>
+ <1346600635-30946-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <504471FA.3060407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On 09/02/12 17:43, Yann E. MORIN wrote:
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> Reviewed-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/linux-firmware/linux-firmware.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+  In the last BR developer meeting, we agreed not to use the Reviewed-by: tag,
+but only the Acked-by: tag.  It should be used when you've reviewed the
+patch and you would commit it if you had commit access.
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 2a6bfc1..c71dc15 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -3,7 +3,7 @@
- # linux-firmware
- #
- #############################################################
--LINUX_FIRMWARE_VERSION = 8ccddee5ee23a0e192da38d98bcbbbb41bf385dd
-+LINUX_FIRMWARE_VERSION = 7560108a2c94a62056fa82d912282b901aa0904f
- LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
-@@ -41,6 +41,9 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
- 	ti-connectivity/wl127x-fw-4-mr.bin			\
- 	ti-connectivity/wl127x-fw-4-plt.bin			\
- 	ti-connectivity/wl127x-fw-4-sr.bin			\
-+	ti-connectivity/wl127x-fw-5-mr.bin			\
-+	ti-connectivity/wl127x-fw-5-plt.bin			\
-+	ti-connectivity/wl127x-fw-5-sr.bin			\
- 	ti-connectivity/TIInit_7.2.31.bts 			\
- 	LICENCE.ti-connectivity
- 
-@@ -56,6 +59,9 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X) += \
- 	ti-connectivity/wl128x-fw-4-mr.bin			\
- 	ti-connectivity/wl128x-fw-4-plt.bin			\
- 	ti-connectivity/wl128x-fw-4-sr.bin			\
-+	ti-connectivity/wl128x-fw-5-mr.bin			\
-+	ti-connectivity/wl128x-fw-5-plt.bin			\
-+	ti-connectivity/wl128x-fw-5-sr.bin			\
- 	ti-connectivity/TIInit_7.2.31.bts 			\
- 	LICENCE.ti-connectivity
- 
+
+  Another thing: it was actually Samuel Martin who initiated this patch
+series.  However, the original patches were rewritten so completely by
+Thomas and Maxime that it doesn't make sense to keep his Signed-off-by.
+To be able to keep some of the credit, I propose to add a Cc: tag in
+such a situation.
+
+
+  Finally, for the whole series except 10/12 and 12/12:
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(build-test with a minimal x86 config)
+
+  And:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+  I'm pretty much in favour of committing patches 1 to 9 now.  The first
+six have had plenty of time for review, 7 and 8 are fairly obvious
+bugfixes, and 9 is a mechanical rename.
+
+  Regards,
+  Arnout
 -- 
-1.7.7
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
