@@ -1,39 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Sep 2012 22:04:19 +0200
-Subject: [Buildroot] [pull request v3] Pull request for branch
-	update-mips-support
-In-Reply-To: <cover.1346767632.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 4 Sep 2012 16:09:52 +0200")
-References: <cover.1346767632.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87d3215zcs.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 Sep 2012 22:02:15 +0200
+Subject: [Buildroot] [git commit] php: bump to version 5.3.16
+Message-ID: <20120904200552.1F0E999503@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ca56df4e442027e51465fd23435d6a165f9ef720
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Here is a new version of the patch set that clarifies MIPS support,
- Thomas> and especially MIPS64 support.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/php/php.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
- Thomas> It has four patches:
-
- Thomas>  * First patch refactors some uclibc.mk to use the existing BR2_ENDIAN
- Thomas>    config option rather than doing the same work again.
-
- Thomas>  * Second patch reworks the config option for mips. It creates two
- Thomas>    separate two level architectures for MIPS and MIPS64, and then
- Thomas>    clarifies the ABI names and config options.
-
- Thomas>  * Third patch (from Gustavo) remove old MIPS64 related toolchain
- Thomas>    kludge
-
- Thomas>  * Fourth patch (from Gustavo) adds a defconfig to build a mips64
- Thomas>    system for Qemu
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0544659..2f8e99e 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,12 +4,14 @@
+ #
+ #############################################################
+ 
+-PHP_VERSION = 5.3.15
++PHP_VERSION = 5.3.16
+ PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+ PHP_INSTALL_TARGET_OPT = INSTALL_ROOT=$(TARGET_DIR) install
++PHP_LICENSE = PHP
++PHP_LICENSE_FILES = LICENSE
+ PHP_CONF_OPT =  --mandir=/usr/share/man \
+ 		--infodir=/usr/share/info \
+ 		--disable-all \
