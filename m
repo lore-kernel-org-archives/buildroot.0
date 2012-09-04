@@ -1,26 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Sep 2012 22:01:33 +0200
-Subject: [Buildroot] [PATCH 1/2] dnsmasq: bump to version 2.63
-In-Reply-To: <20120904180016.GC3768@tarshish> (Baruch Siach's message of "Tue, 
- 4 Sep 2012 21:00:16 +0300")
+Date: Tue, 04 Sep 2012 22:02:06 +0200
+Subject: [Buildroot] [PATCH 2/2] php: bump to version 5.3.16
+In-Reply-To: <1346767658-7968-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 4 Sep 2012 11:07:38 -0300")
 References: <1346767658-7968-1-git-send-email-gustavo@zacarias.com.ar>
- <20120904180016.GC3768@tarshish>
-Message-ID: <87ligp5zhe.fsf@macbook.be.48ers.dk>
+ <1346767658-7968-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87hard5zgh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- >> +DNSMASQ_LICENSE = GPLv2 GPLv3
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Baruch> Looks confusing. Is it "either v2 or v3"? If so, then I think
-
- Baruch> DNSMASQ_LICENSE = Dual GPLv2/GPLv3
-
-Or even GPLv2+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
