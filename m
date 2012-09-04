@@ -1,88 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Sep 2012 20:13:36 +0200
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Tue, 4 Sep 2012 14:23:40 -0400
 Subject: [Buildroot] [PATCH 1/2] PAM support in Busybox if linux-pam is
 	built
-In-Reply-To: <1346729322-17868-1-git-send-email-golubovsky@gmail.com>
+In-Reply-To: <201209042013.36710.yann.morin.1998@free.fr>
 References: <1346729322-17868-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <201209042013.36710.yann.morin.1998@free.fr>
+ <201209042013.36710.yann.morin.1998@free.fr>
+Message-ID: <CADiAo4LDPr9hc6rHH+_kNJmWKo9KhR2FsnqC1kF3vH-gc7h3yQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dmitry, All,
+Yann,
 
-On Tuesday 04 September 2012 05:28:41 Dmitry wrote:
-> Signed-off-by: Dmitry <golubovsky@gmail.com>
-> ---
->  package/busybox/Config.in  |   11 +++++++++++
->  package/busybox/busybox.mk |   12 ++++++++++++
->  2 files changed, 23 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-> index dedcf18..2a9cbf1 100644
-> --- a/package/busybox/Config.in
-> +++ b/package/busybox/Config.in
-> @@ -62,6 +62,17 @@ config BR2_PACKAGE_BUSYBOX_WATCHDOG
->  	  Install the watchdog daemon startup script,
->  	  that just start at the boot the busybox watchdog daemon.
->  
-> +config BR2_PACKAGE_BUSYBOX_PAM
-> +	bool "Enable PAM support in Busybox"
-> +	default n
-> +	depends on BR2_PACKAGE_LINUX_PAM
-> +	help
-> +	  If this item is selected, Busybox login will use the PAM stack
-> +	  for local logins.
+On Tue, Sep 4, 2012 at 2:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
->         Local logins with null password are allowed
-> +	  for users with records in /etc/passwd ("default" and "root").
+>>         Local logins with null password are allowed
+>> +       for users with records in /etc/passwd ("default" and "root").
+>
+>> +       The default PAM configuration file requires user accounts with
+>> +       nonzero length passwords.
+>
+> These two sentences tend to contradict each other. What about:
 
-> +	  The default PAM configuration file requires user accounts with
-> +	  nonzero length passwords.
+No, they do not contradict each other because they are about two
+different files (which may be not so clear as it is written - but I
+tried to keep the text short).
 
-These two sentences tend to contradict each other. What about:
+The first sentence is about /etc/pam.d/login.
 
-    The default PAM configuration in buildroot allows local users
-    (those with records in /etc/passwd and /etc/shadow) with null
-    passwords to log in.
+The second is about /etc/pam.d/default (which means any program that
+calls pam_start with arbitrary program name and no match in PAM
+configs uses /etc/pam.d/default).
 
-Then the second sentence can go away, because the PAM config files patch
-will come before that patch. ;-]
+>
+> To be more in line with other options, I'd suggest this be BUSYBOX_SET_PAM
+> (we already have a bunch of BUSYBOX_SET_XXX, although there are variations).
+> But I have no strong objection to keeping ENABLE.
 
-If you can come with another formulation that is not contradictory, that
-is fine by me, too. ;-) 
+I see a whole variety of names:
 
->  if BR2_PACKAGE_BUSYBOX_WATCHDOG
->  
->  config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 33f8633..21942c6 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -164,6 +164,17 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
->  endef
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_BUSYBOX_PAM),y)
-> +BUSYBOX_DEPENDENCIES += linux-pam
-> +define BUSYBOX_ENABLE_PAM
+define BUSYBOX_CONFIGURE_CMDS
+	$(BUSYBOX_SET_LARGEFILE)
+	$(BUSYBOX_SET_IPV6)
+	$(BUSYBOX_SET_RPC)
+	$(BUSYBOX_PREFER_STATIC)
+	$(BUSYBOX_SET_MDEV)
+	$(BUSYBOX_NETKITBASE)
+	$(BUSYBOX_NETKITTELNET)
+	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+	$(BUSYBOX_DISABLE_MMU_APPLETS)
+	$(BUSYBOX_SET_INIT)
+	$(BUSYBOX_SET_WATCHDOG)
 
-To be more in line with other options, I'd suggest this be BUSYBOX_SET_PAM
-(we already have a bunch of BUSYBOX_SET_XXX, although there are variations).
-But I have no strong objection to keeping ENABLE.
+and there is "DISABLE" ;)
 
-Otherwise, LGTM. When you resubmit (with at least the help clarification):
-    Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I'd keep "ENABLE".
 
-Regards,
-Yann E. MORIN.
+Thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Dmitry Golubovsky
+
+Anywhere on the Web
