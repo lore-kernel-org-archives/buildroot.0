@@ -1,58 +1,32 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Tue, 4 Sep 2012 14:03:02 -0400
-Subject: [Buildroot] [PATCH 2/2] Provide PAM default configuration files
- when building linux-pam package
-In-Reply-To: <201209041952.39756.yann.morin.1998@free.fr>
-References: <1346729322-17868-1-git-send-email-golubovsky@gmail.com>
- <201209041902.30271.yann.morin.1998@free.fr>
- <CADiAo4LQysVFknpskVM0Z2nfY_oSB8vUD306X1KYucM_My+kVw@mail.gmail.com>
- <201209041952.39756.yann.morin.1998@free.fr>
-Message-ID: <CADiAo4JFrhbUtJ3K4A3kvxD95v5M7H8aDOZVWzmO2KOJH-rx0Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Sep 2012 20:03:31 +0200
+Subject: [Buildroot] fs skeleton quick rebuild
+In-Reply-To: <CAE9DZUQi+OEhWzW0Hu1bBrBhs6QZ+_V=J1MwFej_H2EAhhdM4A@mail.gmail.com>
+References: <CAE9DZUQi+OEhWzW0Hu1bBrBhs6QZ+_V=J1MwFej_H2EAhhdM4A@mail.gmail.com>
+Message-ID: <20120904200331.1222b43d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Le Tue, 4 Sep 2012 12:59:42 -0500,
+Dallas Clement <dallas.a.clement@gmail.com> a ?crit :
 
-On Tue, Sep 4, 2012 at 1:52 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> I'm working on a custom skeleton for my rootfs and wanting to make
+> changes and test without having to rebuild everything.  Is there an
+> easy way to do this?
 
->> This patch was a "reasonable compromise" to have a somewhat working
->> system emulating PAM-less behavior when PAM is enabled in login and no
->> proper PAM configs are provided.
->> I think that in a real project, a post-build filesystem fix should
->> replace these files with something more sensible (like mine does).
->
-> Ah, OK I get it. With these two files, even if no PAM configuration is
-> provided by other means, it would behave as if PAM was not enabled. Right?
+Easiest way is to *not* use the custom skeleton mechanism, but instead
+use the post-build script mechanism. See
+http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf for more
+details.
 
-Correct: local logins via busybox login (or whatever calls pam_start
-with "login" as program name) will be possible for "default" and
-"root" (but not any other config) even if /etc/shadow has null
-passwords. At least in my tests it worked so.
+Best regards,
 
-> I guess that, without its config files, PAM would not allow anything,
-> right?
-
-Correct.
-
->
-> If so, then the default files should come _before_ they are required.
->
-
-Yes, this is reasonable.
-
->
-> Thanks for bearing with me. ;-)
->
-
-That's fine: thanks for your comments.
-
-I'll see if there are any more comments on these patches and will try
-to reorder and resubmit them later tonight.
-
+Thomas
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
