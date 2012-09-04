@@ -1,69 +1,39 @@
-From: Dmitry <golubovsky@gmail.com>
-Date: Mon,  3 Sep 2012 23:28:42 -0400
-Subject: [Buildroot] [PATCH 2/2] Provide PAM default configuration files
-	when building linux-pam package
-In-Reply-To: <1346729322-17868-1-git-send-email-golubovsky@gmail.com>
-References: <1346729322-17868-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <1346729322-17868-2-git-send-email-golubovsky@gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Mon, 3 Sep 2012 23:41:39 -0400
+Subject: [Buildroot] Re-submitted patches: Busybox-PAM config and PAM
+	default config files
+Message-ID: <CADiAo4+F_EGuzCugWNBPhwAjVYccd1Ug4woOwKc4gBOdi9PG9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dmitry <golubovsky@gmail.com>
----
- package/linux-pam/default      |    8 ++++++++
- package/linux-pam/linux-pam.mk |    7 +++++++
- package/linux-pam/login        |    9 +++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/linux-pam/default
- create mode 100644 package/linux-pam/login
+Hi,
 
-diff --git a/package/linux-pam/default b/package/linux-pam/default
-new file mode 100644
-index 0000000..0bd5ba0
---- /dev/null
-+++ b/package/linux-pam/default
-@@ -0,0 +1,8 @@
-+#
-+# default; standard UN*X access
-+#
-+auth     required       pam_unix.so
-+account  required       pam_unix.so
-+password required       pam_unix.so
-+session  required       pam_unix.so
-+
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 48cb073..2807bc1 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -24,4 +24,11 @@ ifeq ($(BR2_PACKAGE_LIBINTL),y)
- 	LINUX_PAM_MAKE_OPT += LIBS=-lintl
- endif
- 
-+define LINUX_PAM_CONFFILES
-+	$(INSTALL) -D -m 0644 package/linux-pam/default $(TARGET_DIR)/etc/pam.d/default
-+	$(INSTALL) -D -m 0644 package/linux-pam/login $(TARGET_DIR)/etc/pam.d/login
-+endef
-+
-+LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_CONFFILES
-+
- $(eval $(autotools-package))
-diff --git a/package/linux-pam/login b/package/linux-pam/login
-new file mode 100644
-index 0000000..d65a9d4
---- /dev/null
-+++ b/package/linux-pam/login
-@@ -0,0 +1,9 @@
-+#
-+# login: allow local logins to users with entries in /etc/passwd and
-+# /etc/shadow even with null password
-+#
-+auth      required       pam_unix.so nullok
-+account   required       pam_unix.so nullok
-+password  required       pam_unix.so nullok
-+session   required       pam_unix.so nullok
-+
+I have just re-submitted the two recent patches to add a Busybox
+configuration option to enable PAM support in the Buildroot
+configurator, and to provide the default PAM config files so
+password-less login still is possible for local "default" and "root"
+accounts when PAM is enabled. The patches were initially submitted
+mid-August [1].
+
+Now that the August release has been completed, I have rebased my
+patches against the current master. I have also implemented Arnout's
+suggestions [2]
+
+Hopefully everything is OK in these patches, and they can be committed
+to master. This will complete the linux-pam integration, and I'll
+begin preparing systemd patches shortly after.
+
+Thanks.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2012-August/057491.html
+     http://lists.busybox.net/pipermail/buildroot/2012-August/057490.html
+
+[2] http://lists.busybox.net/pipermail/buildroot/2012-August/057822.html
+
 -- 
-1.7.2.5
+Dmitry Golubovsky
+
+Anywhere on the Web
