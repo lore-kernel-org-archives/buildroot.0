@@ -1,49 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 4 Sep 2012 22:03:51 +0200
-Subject: [Buildroot] [git commit] uClibc: use BR2_ENDIAN to simplify
-	endianess selection
-Message-ID: <20120904200552.7BFD799503@busybox.osuosl.org>
+Date: Tue, 4 Sep 2012 22:04:00 +0200
+Subject: [Buildroot] [git commit] mips64: remove toolchain kludge
+Message-ID: <20120904200553.36D49972C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9df50486c0e5a7a36531aacf49c2a57ac21c7fe
+commit: http://git.buildroot.net/buildroot/commit/?id=2bb39acb6adc90a9d9264e19d3ac3c5affcbb528
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+-mno-abicalls is an old kludge for some (probably) old issue.
+Remove it since it's actually harmful, static busybox doesn't build with
+it for a modern-ish toolchain (defaults as of this commit, uClibc
+0.9.33.2 + gcc 4.5.4).
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/uClibc/uclibc.mk |   17 ++---------------
- 1 files changed, 2 insertions(+), 15 deletions(-)
+ package/Makefile.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 9d0b6db..583d199 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -41,22 +41,9 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
- 		-e 's/cris.*/cris/' \
- 		-e 's/xtensa.*/xtensa/' \
- ")
--# just handle the ones that can be big or little
--UCLIBC_TARGET_ENDIAN:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
--		-e 's/armeb/BIG/' \
--		-e 's/arm/LITTLE/' \
--		-e 's/mipsel/LITTLE/' \
--		-e 's/mips/BIG/' \
--		-e 's/sh.*eb/BIG/' \
--		-e 's/sh.*/LITTLE/' \
--		-e 's/sparc.*/BIG/' \
--")
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 21b8634..340e387 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -87,10 +87,6 @@ endif
  
--ifneq ($(UCLIBC_TARGET_ENDIAN),LITTLE)
--ifneq ($(UCLIBC_TARGET_ENDIAN),BIG)
--UCLIBC_TARGET_ENDIAN:=
+ TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ 
+-ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_NABI64)),yy)
+-TARGET_CFLAGS+=-fno-pic -mno-abicalls
 -endif
--endif
-+UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
-+
- ifeq ($(UCLIBC_TARGET_ENDIAN),LITTLE)
- UCLIBC_NOT_TARGET_ENDIAN:=BIG
- else
+-
+ ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
