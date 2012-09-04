@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Sep 2012 20:03:31 +0200
-Subject: [Buildroot] fs skeleton quick rebuild
-In-Reply-To: <CAE9DZUQi+OEhWzW0Hu1bBrBhs6QZ+_V=J1MwFej_H2EAhhdM4A@mail.gmail.com>
-References: <CAE9DZUQi+OEhWzW0Hu1bBrBhs6QZ+_V=J1MwFej_H2EAhhdM4A@mail.gmail.com>
-Message-ID: <20120904200331.1222b43d@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 04 Sep 2012 15:05:01 -0300
+Subject: [Buildroot] [PATCH 1/2] dnsmasq: bump to version 2.63
+In-Reply-To: <20120904180016.GC3768@tarshish>
+References: <1346767658-7968-1-git-send-email-gustavo@zacarias.com.ar>
+ <20120904180016.GC3768@tarshish>
+Message-ID: <504642CD.3030106@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 4 Sep 2012 12:59:42 -0500,
-Dallas Clement <dallas.a.clement@gmail.com> a ?crit :
+On 09/04/12 15:00, Baruch Siach wrote:
 
-> I'm working on a custom skeleton for my rootfs and wanting to make
-> changes and test without having to rebuild everything.  Is there an
-> easy way to do this?
+>> +DNSMASQ_LICENSE = GPLv2 GPLv3
+> 
+> Looks confusing. Is it "either v2 or v3"? If so, then I think
+> 
+> DNSMASQ_LICENSE = Dual GPLv2/GPLv3
+> 
+> would be better.
+> 
+> baruch
 
-Easiest way is to *not* use the custom skeleton mechanism, but instead
-use the post-build script mechanism. See
-http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf for more
-details.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Hi.
+They specify (in not so clear terms) that you can choose one of them,
+see CHANGELOG.archive line 2393.
+I'm pretty short of sleep these days, "Dual" would be choose either or
+both apply?
+Regards.
