@@ -1,46 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 4 Sep 2012 15:50:21 +0200
-Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.5.3
-Message-ID: <20120904135056.1963299543@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Sep 2012 15:52:50 +0200
+Subject: [Buildroot] [PATCH 3/3] u-boot: add version 2012.07
+In-Reply-To: <1346760019-31807-3-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 4 Sep 2012 09:00:19 -0300")
+References: <1346760019-31807-1-git-send-email-gustavo@zacarias.com.ar>
+ <1346760019-31807-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d321opxp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69a507e3577fe45a6ab3e004e0b588be5394217b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  boot/uboot/Config.in                               |    6 +++-
+ Gustavo>  ...oot-tools-2012.07-drop-configh-from-tools.patch |   31 ++++++++++++++++++++
+ Gustavo>  ...oot-tools-2012.07-hostcflags-override-fix.patch |   29 ++++++++++++++++++
+ Gustavo>  3 files changed, 65 insertions(+), 1 deletions(-)
+ Gustavo>  create mode 100644 package/uboot-tools/uboot-tools-2012.07-drop-configh-from-tools.patch
+ Gustavo>  create mode 100644 package/uboot-tools/uboot-tools-2012.07-hostcflags-override-fix.patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0306348..30cb5ed 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -19,10 +19,10 @@ if BR2_LINUX_KERNEL
- #
- choice
- 	prompt "Kernel version"
--	default BR2_LINUX_KERNEL_3_4
-+	default BR2_LINUX_KERNEL_3_5
- 
--config BR2_LINUX_KERNEL_3_4
--	bool "3.4.8"
-+config BR2_LINUX_KERNEL_3_5
-+	bool "3.5.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.4.8" if BR2_LINUX_KERNEL_3_4
-+	default "3.5.3" if BR2_LINUX_KERNEL_3_5
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+You don't seem to be removing the 2012.04 patches?
+
+-- 
+Bye, Peter Korsgaard
