@@ -1,20 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Sep 2012 22:02:06 +0200
-Subject: [Buildroot] [PATCH 2/2] php: bump to version 5.3.16
-In-Reply-To: <1346767658-7968-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Sep 2012 11:07:38 -0300")
-References: <1346767658-7968-1-git-send-email-gustavo@zacarias.com.ar>
- <1346767658-7968-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87hard5zgh.fsf@macbook.be.48ers.dk>
+Date: Tue, 04 Sep 2012 22:04:19 +0200
+Subject: [Buildroot] [pull request v3] Pull request for branch
+	update-mips-support
+In-Reply-To: <cover.1346767632.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Sep 2012 16:09:52 +0200")
+References: <cover.1346767632.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87d3215zcs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> Hello,
+ Thomas> Here is a new version of the patch set that clarifies MIPS support,
+ Thomas> and especially MIPS64 support.
+
+ Thomas> It has four patches:
+
+ Thomas>  * First patch refactors some uclibc.mk to use the existing BR2_ENDIAN
+ Thomas>    config option rather than doing the same work again.
+
+ Thomas>  * Second patch reworks the config option for mips. It creates two
+ Thomas>    separate two level architectures for MIPS and MIPS64, and then
+ Thomas>    clarifies the ABI names and config options.
+
+ Thomas>  * Third patch (from Gustavo) remove old MIPS64 related toolchain
+ Thomas>    kludge
+
+ Thomas>  * Fourth patch (from Gustavo) adds a defconfig to build a mips64
+ Thomas>    system for Qemu
 
 Committed, thanks.
 
