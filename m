@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 4 Sep 2012 22:53:05 +0200
-Subject: [Buildroot] [PATCH 2/4] New top-level directory: system
-In-Reply-To: <bf2cdf7779649494ec8e4436a75c6d22b79d2a7b.1346767209.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Sep 2012 23:24:32 +0200
+Subject: [Buildroot] [PATCH 3/4] Remove target/Makefile.in, now useless
+In-Reply-To: <77bb15266ba4c2bad35d207606a0214fef441263.1346767209.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1346767209.git.thomas.petazzoni@free-electrons.com>
- <bf2cdf7779649494ec8e4436a75c6d22b79d2a7b.1346767209.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201209042253.05822.yann.morin.1998@free.fr>
+ <77bb15266ba4c2bad35d207606a0214fef441263.1346767209.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201209042324.32810.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,44 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Tuesday 04 September 2012 16:04:07 Thomas Petazzoni wrote:
-> This directory groups the following elements:
->  * the default root filesystem skeleton
->  * the default device tables
->  * the Config.in options for system configuration (UART port for
->    getty, system hostname, etc.)
->  * the make rules to apply the system configuration options
-> 
-> Even though the skeleton and device tables could have lived in fs/, it
-> would have been strange to have the UART, system hostname and other
-> related options into fs/. A new system/ directory makes more sense.
-
-Agreed. The fs/ sub-dir is now only for all the different rootfs methods.
-I'm not too fond of the 'system' name, but I can see anything else that
-would be fit.
-
+On Tuesday 04 September 2012 16:04:08 Thomas Petazzoni wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Makefile           |    1 -
+>  target/Makefile.in |    3 ---
+>  2 files changed, 4 deletions(-)
+>  delete mode 100644 target/Makefile.in
+> 
+> diff --git a/Makefile b/Makefile
+> index 791fd72..aff44a8 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -314,7 +314,6 @@ endif
+>  include package/*/*.mk
+>  
+>  include boot/common.mk
+> -include target/Makefile.in
+>  include linux/linux.mk
+>  
+>  TARGETS+=target-finalize
+> diff --git a/target/Makefile.in b/target/Makefile.in
+> deleted file mode 100644
+> index 915d625..0000000
+> --- a/target/Makefile.in
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# make sure to put everything that is board-specific before the tarroot targets
+> -include target/generic/Makefile.in
 
-As this is a mostly-mechanical rename:
-Acked-by: me
+I would fold this patch with the previous one. Without it, the previous
+patch breaks the Makefile:
+  $ make defconfig
+  [--SNIP--]
+  $ make
+  target/Makefile.in:2: target/generic/Makefile.in: No such file or directory
+  make: *** No rule to make target `target/generic/Makefile.in'.  Stop.
+
+(Sorry, I missed that in the previous patch).
 
 Regards,
 Yann E. MORIN.
