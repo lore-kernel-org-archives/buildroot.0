@@ -1,85 +1,181 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  4 Sep 2012 08:58:41 +0200
-Subject: [Buildroot] [PATCH 5/5] lua: refactor without useless define's
-In-Reply-To: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
-References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1346741921-28968-5-git-send-email-francois.perrad@gadz.org>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Tue, 4 Sep 2012 11:32:23 +0200
+Subject: [Buildroot] adding custom company packages
+In-Reply-To: <CAHXCMMJiYUCS-bxCtxEvw9L3mDsDHgwGp9Hf+dEAjzogxa1WsA@mail.gmail.com>
+References: <CAAfyv35kEYr2i+=vV5dNzJdDYVDRSRf3+eDK8=YvvJNPbV9mLQ@mail.gmail.com>
+ <CAHXCMMJiYUCS-bxCtxEvw9L3mDsDHgwGp9Hf+dEAjzogxa1WsA@mail.gmail.com>
+Message-ID: <CAAfyv37JUjnJ55GwFxsA_5g24pmMCp3p8o25Z3GLYuEOH1cSMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/lua/lua.mk |   36 +++++++++++-------------------------
- 1 file changed, 11 insertions(+), 25 deletions(-)
+Hi Samuel,
+On Mon, Sep 3, 2012 at 11:36 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Marek,
+>
+> 2012/9/3 Belisko Marek <marek.belisko@gmail.com>:
+>> Hi,
+>>
+>> I'm following http://www.elinux.org/images/2/2a/Using-buildroot-real-project.pdf
+>> (especially page 28 Project-speci c packages (2/5))
+>>
+>> I have simple QT application which was added to custom subdirectory in package
+>> directory and according presentation everything seems to be fine. But
+>> there is one problem
+>> songPresentation.mk is never called (at least package isn't starting
+>> to build at all).
+>>
+>> Any ideas what I'm doing wrong?
+>>
+>> Thanks in advance.
+>>
+>> Attached is my patch:
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index f308de7..a2d9fe2 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -696,4 +696,8 @@ source "package/vim/Config.in"
+>>  endif
+>>  endmenu
+>>
+>> +menu "SDB project"
+>> +source "package/sdb/songPresentation/Config.in"
+>> +endmenu
+>> +
+>>  endmenu
+>> diff --git a/package/sdb/sdb.mk b/package/sdb/sdb.mk
+>> new file mode 100644
+>> index 0000000..0d23585
+>> --- /dev/null
+>> +++ b/package/sdb/sdb.mk
+>> @@ -0,0 +1 @@
+>> +include package/sdb/*/*.mk
+>> diff --git a/package/sdb/songPresentation/Config.in
+>> b/package/sdb/songPresentation/Config.in
+>> new file mode 100644
+>> index 0000000..f3425fb
+>> --- /dev/null
+>> +++ b/package/sdb/songPresentation/Config.in
+>> @@ -0,0 +1,6 @@
+>> +config BR2_PACKAGE_SONG_PRESENTATION
+>> +       bool "songPresentation"
+>> +       depends on BR2_PACKAGE_QT
+>> +       help
+>> +         songPresentation is simple presentation of church songs
+>> +
+>> diff --git a/package/sdb/songPresentation/S99songPresentation
+>> b/package/sdb/songPresentation/S99songPresentation
+>> new file mode 100644
+>> index 0000000..38103f2
+>> --- /dev/null
+>> +++ b/package/sdb/songPresentation/S99songPresentation
+>> @@ -0,0 +1,37 @@
+>> +#!/bin/sh
+>> +#
+>> +# Starts song presentation
+>> +#
+>> +
+>> +start() {
+>> +       echo -n "Starting songPresentation: "
+>> +       # Make sure dropbear directory exists
+>> +       start-stop-daemon --start --quiet --background --exec
+>> /usr/bin/songPresentation -qws -display "Multi: LinuxFb:/dev/fb1
+>> LinuxFb:/dev/fb0" -nomouse
+>> +       echo "OK"
+>> +}
+>> +stop() {
+>> +       echo -n "Stopping songPresentation: "
+>> +       echo "OK"
+>> +}
+>> +restart() {
+>> +       stop
+>> +       start
+>> +}
+>> +
+>> +case "$1" in
+>> +  start)
+>> +       start
+>> +       ;;
+>> +  stop)
+>> +       stop
+>> +       ;;
+>> +  restart|reload)
+>> +       restart
+>> +       ;;
+>> +  *)
+>> +       echo "Usage: $0 {start|stop|restart}"
+>> +       exit 1
+>> +esac
+>> +
+>> +exit $?
+>> +
+>> diff --git a/package/sdb/songPresentation/songPresentation.mk
+>> b/package/sdb/songPresentation/songPresentation.mk
+>> new file mode 100644
+>> index 0000000..82c45e9
+>> --- /dev/null
+>> +++ b/package/sdb/songPresentation/songPresentation.mk
+>> @@ -0,0 +1,25 @@
+>> +#############################################################
+>> +#
+>> +# song
+>> +#
+>> +#############################################################
+>> +
+>> +SONG_PRESENTATION_VERSION = master
+>> +SONG_PRESENTATION_SITE    = https://github.com/nandra/songPresentation.git
+>> +SONG_PRESENTATION_SITE_METHOD = git
+>> +
+>> +define SONG_PRESENTATION_CONFIGURE_CMDS
+>> +       cd $(@D) && $(QT_QMAKE)
+>> +endef
+>> +
+>> +define SONG_PRESENTATION_BUILD_CMDS
+>> +       $(MAKE) -C $(@D)
+>> +endef
+>> +
+>> +define SONG_PRESENTATION_INSTALL_TARGET_CMDS
+>> +       install -D -m 0755 $(@D)/songPresentation
+>> $(TARGET_DIR)/usr/bin/songPresentation
+>> +       install -D -m 0755 $(@D)/S90songPresentation
+>> $(TARGET_DIR)/etc/init.d/S90songPresentation
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> +
+>>
+>
+> I think this is most likely a side effect of the "automagically" guess
+> of the package name from the package dirname.
+>
+> So, here are the 2 options that, i think, should fix your issues.
+> You can:
+> - either substitute all occurences of "SONG_PRESENTATION" by "SONGPRESENTATION",
+> - or rename the package into "song-presentation" or
+> "song-Presentation" instead of "songPresentation" (package dirname and
+> *.mk file).
+Choose second option and now it's working fine. Thanks.
+>
+> Cheers,
+>
+> --
+> Sam
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 4704e4c..9e0d387 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -42,39 +42,21 @@ define HOST_LUA_BUILD_CMDS
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
- 
--define LUA_INSTALL_STAGING_SHARED_LIB
--	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
--		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
--	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
--endef
--
- define LUA_INSTALL_STAGING_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
- 		$(STAGING_DIR)/usr/lib/pkgconfig/lua.pc
--	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
- 	$(INSTALL) -m 0755 -D $(@D)/src/lua $(STAGING_DIR)/usr/bin/lua
- 	$(INSTALL) -m 0755 -D $(@D)/src/luac $(STAGING_DIR)/usr/bin/luac
-+	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
-+		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
-+	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
-+	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(STAGING_DIR)/usr/lib/liblua.a
- 	$(INSTALL) -m 0644 -D $(@D)/src/lua.h $(STAGING_DIR)/usr/include/lua.h
- 	$(INSTALL) -m 0644 -D $(@D)/src/luaconf.h $(STAGING_DIR)/usr/include/luaconf.h
- 	$(INSTALL) -m 0644 -D $(@D)/src/lualib.h $(STAGING_DIR)/usr/include/lualib.h
- 	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
- endef
- 
--define LUA_INSTALL_INTERPRETER
--	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
--endef
--
--define LUA_INSTALL_COMPILER
--	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
--endef
--
--define LUA_INSTALL_LIBRARY
--	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
--		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
--	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
--	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
--endif
--
- ifeq ($(BR2_HAVE_DEVFILES),y)
- define LUA_INSTALL_DEVFILES
- 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
-@@ -86,10 +68,14 @@ define LUA_INSTALL_DEVFILES
- endef
- endif
- 
-+
- define LUA_INSTALL_TARGET_CMDS
--	$(LUA_INSTALL_INTERPRETER)
--	$(LUA_INSTALL_COMPILER)
--	$(LUA_INSTALL_LIBRARY)
-+	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
-+	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
-+	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
-+		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
-+	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
-+	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
- 	$(LUA_INSTALL_DEVFILES)
- endef
- 
+Cheers,
+
+mbe
+
 -- 
-1.7.9.5
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
