@@ -1,9 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  4 Sep 2012 08:58:39 +0200
-Subject: [Buildroot] [PATCH 3/5] luajit: allow building for the host
+Date: Tue,  4 Sep 2012 08:58:40 +0200
+Subject: [Buildroot] [PATCH 4/5] lua: remove 3 sub-options,
+	always install all
 In-Reply-To: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
 References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1346741921-28968-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1346741921-28968-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +13,104 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luajit/luajit.mk |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/lua/Config.in |   18 ------------------
+ package/lua/lua.mk    |   18 +-----------------
+ 2 files changed, 1 insertion(+), 35 deletions(-)
 
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 913bc0c..e82df64 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -50,6 +50,11 @@ define LUAJIT_BUILD_CMDS
- 		-C $(@D) amalg
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index ad454a6..febec45 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -32,29 +32,11 @@ endchoice
+ 
+ if BR2_PACKAGE_LUA
+ 
+-config BR2_PACKAGE_LUA_COMPILER
+-	bool "lua compiler"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+-	help
+-	  Install luac binary
+-
+-config BR2_PACKAGE_LUA_INTERPRETER
+-	bool "lua interpreter"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+-	help
+-	  Install lua binary
+-
+ config BR2_PACKAGE_LUA_INTERPRETER_READLINE
+ 	bool "readline support"
+-	depends on BR2_PACKAGE_LUA_INTERPRETER
+ 	select BR2_PACKAGE_READLINE
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Enables command-line editing in the lua interpreter.
+ 
+-config BR2_PACKAGE_LUA_SHARED_LIBRARY
+-	bool "shared library"
+-	help
+-	  Install shared liblua.so
+-
+ endif
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index de60c57..4704e4c 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -10,11 +10,7 @@ LUA_INSTALL_STAGING = YES
+ LUA_LICENSE = MIT
+ LUA_LICENSE_FILES = COPYRIGHT
+ 
+-LUA_CFLAGS = -Wall
+-ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+-	LUA_CFLAGS += -fPIC
+-endif
+-
++LUA_CFLAGS = -Wall -fPIC
+ LUA_MYLIBS += -ldl
+ 
+ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+@@ -46,13 +42,11 @@ define HOST_LUA_BUILD_CMDS
+ 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
  endef
  
-+define HOST_LUAJIT_BUILD_CMDS
-+	$(MAKE) PREFIX="/usr" \
-+		-C $(@D) amalg
-+endef
-+
- define LUAJIT_INSTALL_STAGING_CMDS
- 	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
+-ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+ define LUA_INSTALL_STAGING_SHARED_LIB
+ 	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
+ 		$(STAGING_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
+ 	ln -sf liblua.so.$(LUA_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
  endef
-@@ -58,8 +63,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
- 	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
+-endif
+ 
+ define LUA_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
+@@ -66,29 +60,19 @@ define LUA_INSTALL_STAGING_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/src/lauxlib.h $(STAGING_DIR)/usr/include/lauxlib.h
  endef
  
-+define HOST_LUAJIT_INSTALL_CMDS
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
-+endef
-+
- define LUAJIT_CLEAN_CMDS
- 	-$(MAKE) -C $(@D) clean
+-ifeq ($(BR2_PACKAGE_LUA_INTERPRETER),y)
+ define LUA_INSTALL_INTERPRETER
+ 	$(INSTALL) -m 0755 -D $(@D)/src/lua $(TARGET_DIR)/usr/bin/lua
  endef
+-endif
  
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+-ifeq ($(BR2_PACKAGE_LUA_COMPILER),y)
+ define LUA_INSTALL_COMPILER
+ 	$(INSTALL) -m 0755 -D $(@D)/src/luac $(TARGET_DIR)/usr/bin/luac
+ endef
+-endif
+ 
+-ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+ define LUA_INSTALL_LIBRARY
+ 	$(INSTALL) -m 0755 -D $(@D)/src/liblua.so.$(LUA_VERSION) \
+ 		$(TARGET_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
+ 	ln -sf liblua.so.$(LUA_VERSION) $(TARGET_DIR)/usr/lib/liblua.so
+ 	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
+-endef
+-else
+-define LUA_INSTALL_LIBRARY
+-	$(INSTALL) -m 0644 -D $(@D)/src/liblua.a $(TARGET_DIR)/usr/lib/liblua.a
+-endef
+ endif
+ 
+ ifeq ($(BR2_HAVE_DEVFILES),y)
 -- 
 1.7.9.5
