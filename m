@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  4 Sep 2012 16:09:53 +0200
-Subject: [Buildroot] [PATCH 1/4] uClibc: use BR2_ENDIAN to simplify
-	endianess selection
+Date: Tue,  4 Sep 2012 16:09:55 +0200
+Subject: [Buildroot] [PATCH 3/4] mips64: remove toolchain kludge
 In-Reply-To: <cover.1346767632.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1346767632.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0cc943db2b4ce1a2e84b3d3d59b0dca85ae87cc3.1346767632.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c793743093cd955d6ba6fe12322ad18f97b21933.1346767632.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+-mno-abicalls is an old kludge for some (probably) old issue.
+Remove it since it's actually harmful, static busybox doesn't build with
+it for a modern-ish toolchain (defaults as of this commit, uClibc
+0.9.33.2 + gcc 4.5.4).
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uclibc.mk |   17 ++---------------
- 1 file changed, 2 insertions(+), 15 deletions(-)
+ package/Makefile.in |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 9d0b6db..583d199 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -41,22 +41,9 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
- 		-e 's/cris.*/cris/' \
- 		-e 's/xtensa.*/xtensa/' \
- ")
--# just handle the ones that can be big or little
--UCLIBC_TARGET_ENDIAN:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
--		-e 's/armeb/BIG/' \
--		-e 's/arm/LITTLE/' \
--		-e 's/mipsel/LITTLE/' \
--		-e 's/mips/BIG/' \
--		-e 's/sh.*eb/BIG/' \
--		-e 's/sh.*/LITTLE/' \
--		-e 's/sparc.*/BIG/' \
--")
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 21b8634..340e387 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -87,10 +87,6 @@ endif
  
--ifneq ($(UCLIBC_TARGET_ENDIAN),LITTLE)
--ifneq ($(UCLIBC_TARGET_ENDIAN),BIG)
--UCLIBC_TARGET_ENDIAN:=
+ TARGET_CFLAGS=$(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ 
+-ifeq ($(findstring yy,$(BR2_mips)$(BR2_MIPS_NABI64)),yy)
+-TARGET_CFLAGS+=-fno-pic -mno-abicalls
 -endif
--endif
-+UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
-+
- ifeq ($(UCLIBC_TARGET_ENDIAN),LITTLE)
- UCLIBC_NOT_TARGET_ENDIAN:=BIG
- else
+-
+ ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CFLAGS+=-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
 -- 
 1.7.9.5
