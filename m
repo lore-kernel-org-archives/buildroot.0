@@ -1,69 +1,68 @@
-From: norbert at nanobug.de <norbert@nanobug.de>
-Date: Wed, 5 Sep 2012 02:19:29 +0200 (CEST)
-Subject: [Buildroot] Package for libwt (Web Toolkit http://webtoolkit.eu)
-Message-ID: <935246701.408118.1346804369727.JavaMail.open-xchange@email.1und1.de>
+From: Dmitry <golubovsky@gmail.com>
+Date: Tue,  4 Sep 2012 23:16:28 -0400
+Subject: [Buildroot] [PATCH 1/2] Provide PAM default configuration files
+	when building linux-pam package
+Message-ID: <1346814989-17138-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Experts,
-I am trying to build Wt in my buildroot environment and it does not compile.
+Signed-off-by: Dmitry <golubovsky@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/linux-pam/default      |    8 ++++++++
+ package/linux-pam/linux-pam.mk |    7 +++++++
+ package/linux-pam/login        |    9 +++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/linux-pam/default
+ create mode 100644 package/linux-pam/login
 
- I am a real noob  with Cmake or buildroot. Obviously I have misconfigured
- something. Cmake gets called but refuses to continue telling me something about
- missing path. Somehow the generated Cmake command is wrong, I think. I do not
-see
- how to fix it. Maybe someone has already made a package for WT and could share
-it here ?
-
-
-
- This is what I used:
-
- ------------- file libwt.mk in package/libwt -----------------
-
- #############################################################
- #
- # libwt
- #
- #############################################################
-
- LIBWT_VERSION =3.2.1
- LIBWT_SOURCE =wt-$(LIBWT_VERSION).tar.gz
- LIBWT_SITE =http://prdownloads.sourceforge.net/witty
-<http://prdownloads.sourceforge.net/witty>
- LIBWT_INSTALL_STAGING = YES
- LIBWT_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
-
- ifeq ($(BR2_PACKAGE_BOOST),y)
- LIBWT_DEPENDENCIES += boost
- LIBWT_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
- # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
- # native stuff during the rest of configure when target == host.
- # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
- # are found first.
- # LIBWT_CONF_ENV += "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib"
+diff --git a/package/linux-pam/default b/package/linux-pam/default
+new file mode 100644
+index 0000000..0bd5ba0
+--- /dev/null
++++ b/package/linux-pam/default
+@@ -0,0 +1,8 @@
++#
++# default; standard UN*X access
++#
++auth     required       pam_unix.so
++account  required       pam_unix.so
++password required       pam_unix.so
++session  required       pam_unix.so
++
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index 48cb073..2807bc1 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -24,4 +24,11 @@ ifeq ($(BR2_PACKAGE_LIBINTL),y)
+ 	LINUX_PAM_MAKE_OPT += LIBS=-lintl
  endif
-
- --------------- end of libwt.mk -----------------------------------
-
-
-
- --------------- file Config.in  in package/libwt ------------------
-
- config BR2_PACKAGE_LIBWT
- bool "libwt"
- help
- wt web toolkit is a library for writing cgi code
-
- http://webtoolkit.eu/ <http://webtoolkit.eu/>
-
- --------------- end of Config.in -----------------------------------
-
-Best regards,
-   Norbert.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120905/657b8b6e/attachment.html>
+ 
++define LINUX_PAM_CONFFILES
++	$(INSTALL) -D -m 0644 package/linux-pam/default $(TARGET_DIR)/etc/pam.d/default
++	$(INSTALL) -D -m 0644 package/linux-pam/login $(TARGET_DIR)/etc/pam.d/login
++endef
++
++LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_CONFFILES
++
+ $(eval $(autotools-package))
+diff --git a/package/linux-pam/login b/package/linux-pam/login
+new file mode 100644
+index 0000000..d65a9d4
+--- /dev/null
++++ b/package/linux-pam/login
+@@ -0,0 +1,9 @@
++#
++# login: allow local logins to users with entries in /etc/passwd and
++# /etc/shadow even with null password
++#
++auth      required       pam_unix.so nullok
++account   required       pam_unix.so nullok
++password  required       pam_unix.so nullok
++session   required       pam_unix.so nullok
++
+-- 
+1.7.2.5
