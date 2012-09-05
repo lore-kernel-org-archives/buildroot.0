@@ -1,63 +1,87 @@
-From: Soroush Rabiei <soroush.rabiei@gmail.com>
-Date: Wed, 5 Sep 2012 13:32:57 +0430
-Subject: [Buildroot] Compilation failure on host-pkg-config 0.25
-Message-ID: <CAOMsk2RPh8kDBfbTtOVBz4vBUO_RHrJaG=7+kRL2kr0b24mubg@mail.gmail.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 05 Sep 2012 11:07:10 +0200
+Subject: [Buildroot] Fwd: Re:  fs skeleton quick rebuild
+Message-ID: <5047163E.3040303@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi Dallas,
 
-This is my first mail in this list. I'm trying to configure and make an OS
-for an embedded board. Using buildroot 2012.08 I'm getting this error:
+I forward your messages to the list in case someone else is interested
+in your findings.
 
->>> host-pkg-config 0.25 Autoreconfiguring
-> main::scan_file() called too early to check prototype at
-> /home/soroush/workspace/kernel/buildroot-2012.08/output/host/usr/bin/aclocal
-> line 643.
-> aclocal: couldn't open directory
-> '/home/soroush/workspace/kernel/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/share/aclocal':
-> No such file or directory
->
+Is there interest in getting something like "make root-reinstall" added
+to buildroot?
 
-I removed corrosponding directory from /output/build and make again. Same
-error appears:
+Kind regards
 
->>> host-pkg-config 0.25 Extracting
-> gzip -d -c /home/soroush/src/pkg-config-0.25.tar.gz | tar
-> --strip-components=1 -C
-> /home/soroush/workspace/kernel/buildroot-2012.08/output/build/host-pkg-config-0.25
-> -xf -
-> >>> host-pkg-config 0.25 Patching package//pkg-config
+Stephan
+
+-------- Original-Nachricht --------
+Betreff: 	Re: [Buildroot] fs skeleton quick rebuild
+Datum: 	Tue, 4 Sep 2012 17:42:36 -0500
+Von: 	Dallas Clement <dallas.a.clement@gmail.com>
+An: 	Stephan Hoffmann <sho@relinux.de>
+
+
+
+I found the answer.  Need to preserve target/lib or repopulate from staging/lib.
+
+On Tue, Sep 4, 2012 at 5:21 PM, Dallas Clement
+<dallas.a.clement@gmail.com> wrote:
+> One small follow up question.  This method works great except, my /lib
+> dir is empty afterward.  Any pointers on how to repopulate this dir
+> with all the libs?
 >
-> Applying pkg-config-0.25-add-with-sysroot.patch using patch:
-> patching file Makefile.am
-> patching file configure.in
-> patching file main.c
->
-> Applying pkg-config-0.25-fix-variable.patch using patch:
-> patching file main.c
-> >>> host-pkg-config 0.25  Updating config.sub and config.guess
-> for file in config.guess config.sub; do for i in $(find
-> /home/soroush/workspace/kernel/buildroot-2012.08/output/build/host-pkg-config-0.25
-> -name $file); do cp support/gnuconfig/$file $i; done; done
-> >>> host-pkg-config 0.25 Patching libtool
-> >>> host-pkg-config 0.25 Autoreconfiguring
-> main::scan_file() called too early to check prototype at
-> /home/soroush/workspace/kernel/buildroot-2012.08/output/host/usr/bin/aclocal
-> line 643.
-> aclocal: couldn't open directory
-> '/home/soroush/workspace/kernel/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/share/aclocal':
-> No such file or directory
-> autoreconf:
-> /home/soroush/workspace/kernel/buildroot-2012.08/output/host/usr/bin/aclocal
-> failed with exit status: 1
-> make: ***
-> [/home/soroush/workspace/kernel/buildroot-2012.08/output/build/host-pkg-config-0.25/.stamp_configured]
-> Error 1
->
+> On Tue, Sep 4, 2012 at 1:30 PM, Stephan Hoffmann <sho@relinux.de> wrote:
+>> Am 04.09.2012 19:59, schrieb Dallas Clement:
+>>> Greetings:
+>>>
+>>> I'm working on a custom skeleton for my rootfs and wanting to make
+>>> changes and test without having to rebuild everything.  Is there an
+>>> easy way to do this?
+>> Hi,
+>>
+>> I figured out that
+>> 1. remove output/target
+>> 2. remove output/build/.root
+>> 3. remove all .stamp_target_installed files
+>> give a quite fast, clean rebuild of the root file system.
+>>
+>> Hope that helps
+>>
+>> Stephan
+>>> Thanks,
+>>>
+>>> Dallas
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>> --
+>> reLinux     -    Stephan Hoffmann
+>> Am Schmidtgrund 124    50765 K?ln
+>> Tel. +49.221.95595-19    Fax: -64
+>> www.reLinux.de     sho at reLinux.de
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120905/84fc2cdb/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120905/803770fd/attachment.html>
