@@ -1,10 +1,10 @@
 From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Wed,  5 Sep 2012 17:29:00 +0300
-Subject: [Buildroot] [PATCH 5/9] firefox: installing default extensions
-	needs host-unzip dependency
+Date: Wed,  5 Sep 2012 17:29:02 +0300
+Subject: [Buildroot] [PATCH 7/9] firefox: GNU gnash flash plugin needs agg
+	dependency
 In-Reply-To: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
 References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <1346855344-15081-6-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <1346855344-15081-8-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,141 +14,280 @@ To: buildroot@busybox.net
 
 Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
- package/Config.in                       |    1 +
- package/unzip/Config.in                 |    8 ++++
- package/unzip/unzip-respect-flags.patch |   23 +++++++++++
- package/unzip/unzip.mk                  |   66 +++++++++++++++++++++++++++++++
- 4 files changed, 98 insertions(+), 0 deletions(-)
- create mode 100644 package/unzip/Config.in
- create mode 100644 package/unzip/unzip-respect-flags.patch
- create mode 100644 package/unzip/unzip.mk
+ package/Config.in         |    1 +
+ package/agg/Config.in     |   12 +++
+ package/agg/agg-2.5.patch |  207 +++++++++++++++++++++++++++++++++++++++++++++
+ package/agg/agg.mk        |   17 ++++
+ 4 files changed, 237 insertions(+), 0 deletions(-)
+ create mode 100644 package/agg/Config.in
+ create mode 100644 package/agg/agg-2.5.patch
+ create mode 100644 package/agg/agg.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e129522..636caf8 100644
+index 1848abb..92c957e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -13,6 +13,7 @@ source "package/gzip/Config.in"
- endif
- source "package/lzop/Config.in"
- source "package/lzma/Config.in"
-+source "package/unzip/Config.in"
- source "package/xz/Config.in"
+@@ -344,6 +344,7 @@ source "package/libsysfs/Config.in"
  endmenu
  
-diff --git a/package/unzip/Config.in b/package/unzip/Config.in
+ menu "Graphics"
++source "package/agg/Config.in"
+ source "package/atk/Config.in"
+ source "package/cairo/Config.in"
+ source "package/fltk/Config.in"
+diff --git a/package/agg/Config.in b/package/agg/Config.in
 new file mode 100644
-index 0000000..f4fc111
+index 0000000..98a7b02
 --- /dev/null
-+++ b/package/unzip/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_UNZIP
-+	bool "unzip"
++++ b/package/agg/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_AGG
++	bool "agg"
++	select BR2_PACKAGE_PKG_CONFIG
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_SDL
 +	help
-+	  The UnZip package contains ZIP extraction utilities. These are useful for extracting files from
-+	  ZIP archives. ZIP archives are created with PKZIP or Info-ZIP utilities, primarily in a DOS
-+	  environment.
++	  The Anti-Grain Geometry (AGG) package contains a general purpse C++ graphical toolkit. 
++	  It can be used in many areas of computer programming where high quality 2D graphics is
++	  an essential part of the project.
 +
-+	  http://downloads.sourceforge.net/infozip/
-diff --git a/package/unzip/unzip-respect-flags.patch b/package/unzip/unzip-respect-flags.patch
++	  http://www.antigrain.com
++
+diff --git a/package/agg/agg-2.5.patch b/package/agg/agg-2.5.patch
 new file mode 100644
-index 0000000..35c8314
+index 0000000..d8749c5
 --- /dev/null
-+++ b/package/unzip/unzip-respect-flags.patch
-@@ -0,0 +1,23 @@
-+diff -Naur unzip60.org/unix/Makefile unzip60/unix/Makefile
-+--- unzip60.org/unix/Makefile	2012-09-02 21:29:55.944176704 +0300
-++++ unzip60/unix/Makefile	2012-09-02 21:31:20.276176583 +0300
-+@@ -808,8 +808,8 @@
-+ # systems.)
-+ linux:		unix_make
-+ 	@echo 'NOTE:  use linux_noasm target for non-Intel Linux compiles.'
-+-	$(MAKE) unzips CC=gcc LD=gcc AS=gcc\
-+-	 CFLAGS="-O3 -Wall -DASM_CRC"\
-++	$(MAKE) unzips CC=$(CC) LD=$(CC) AS=$(CC)\
-++	 CFLAGS="$(CFLAGS) -DASM_CRC"\
-+ 	 AF="-Di386 $(AF)" CRCA_O=crc_gcc$O
-+ # GRR:  this echo is pointless; if user gets this far, no difference to install
-+ #	@echo 'Be sure to use the install_asm target rather than the install target'
-+@@ -819,7 +819,7 @@
-+ # Linux (Posix, approximately SysV):  virtually any version since before 0.96,
-+ # for any platform.  Change "-O" to "-O3" or whatever, as desired...
-+ linux_noasm:	unix_make
-+-	$(MAKE) unzips CC=gcc LD=gcc CFLAGS="-O -Wall"
-++	$(MAKE) unzips CC=$(CC) LD=$(CC) CFLAGS="$(CFLAGS)"
++++ b/package/agg/agg-2.5.patch
+@@ -0,0 +1,207 @@
++diff -Naur agg-2.5.org/authors agg-2.5/authors
++--- agg-2.5.org/authors	2012-07-24 14:46:22.692942266 +0300
+++++ agg-2.5/authors	1970-01-01 02:00:00.000000000 +0200
++@@ -1,3 +0,0 @@
++-Anti-Grain Geometry (AGG) - Version 2.5
++-A high quality rendering engine for C++
++-Copyright (C) 2002-2006 Maxim Shemanarev
++diff -Naur agg-2.5.org/AUTHORS agg-2.5/AUTHORS
++--- agg-2.5.org/AUTHORS	1970-01-01 02:00:00.000000000 +0200
+++++ agg-2.5/AUTHORS	2006-10-09 07:06:36.000000000 +0300
++@@ -0,0 +1,3 @@
+++Anti-Grain Geometry (AGG) - Version 2.5
+++A high quality rendering engine for C++
+++Copyright (C) 2002-2006 Maxim Shemanarev
++diff -Naur agg-2.5.org/configure.in agg-2.5/configure.in
++--- agg-2.5.org/configure.in	2012-07-24 14:46:22.685942274 +0300
+++++ agg-2.5/configure.in	2012-07-24 14:48:22.177936690 +0300
++@@ -8,7 +8,6 @@
++ AC_PROG_CC
++ AC_PROG_CXX
++ AC_ISC_POSIX
++-AM_C_PROTOTYPES
++ if test "x$U" != "x"; then
++   AC_MSG_ERROR(Compiler not ANSI compliant)
++ fi
++diff -Naur agg-2.5.org/news agg-2.5/news
++--- agg-2.5.org/news	2012-07-24 14:46:22.692942266 +0300
+++++ agg-2.5/news	1970-01-01 02:00:00.000000000 +0200
++@@ -1 +0,0 @@
++-Visit http://antigrain.com/news
++\ Ei rivinvaihtoa tiedoston lopussa
++diff -Naur agg-2.5.org/NEWS agg-2.5/NEWS
++--- agg-2.5.org/NEWS	1970-01-01 02:00:00.000000000 +0200
+++++ agg-2.5/NEWS	2006-10-09 07:06:36.000000000 +0300
++@@ -0,0 +1 @@
+++Visit http://antigrain.com/news
++\ Ei rivinvaihtoa tiedoston lopussa
++diff -Naur agg-2.5.org/readme agg-2.5/readme
++--- agg-2.5.org/readme	2012-07-24 14:46:22.692942266 +0300
+++++ agg-2.5/readme	1970-01-01 02:00:00.000000000 +0200
++@@ -1,75 +0,0 @@
++-Anti-Grain Geometry (AGG) - Version 2.5
++-A high quality rendering engine for C++
++-Copyright (C) 2002-2006 Maxim Shemanarev
++-Contact: mcseem at antigrain.com
++-         mcseemagg at yahoo.com
++-         http://antigrain.com
++-
++-AGG is free software; you can redistribute it and/or
++-modify it under the terms of the GNU General Public License
++-as published by the Free Software Foundation; either version 2
++-of the License, or (at your option) any later version.
++-
++-AGG is distributed in the hope that it will be useful,
++-but WITHOUT ANY WARRANTY; without even the implied warranty of
++-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++-GNU General Public License for more details.
++-
++-You should have received a copy of the GNU General Public License
++-along with AGG; if not, write to the Free Software
++-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
++-MA 02110-1301, USA.
++-
++-
++-
++----------------------------------
++-
++-Use automake to build the library.
++-
++-If automake is not available you still can use the old make.
++-There is a very simple Makefile that can be used. Note that
++-if you use automake it will overwrite Makefile.
++-
++----------------------------------
++-
++-If building on AmigaOS 4.0 or higher type the following for
++-instructions on what targets are available.
++- make -f Makefile.AmigaOS
++-
++-To just build and install AGG into the standard AmigaOS SDK
++-ready for use type:
++- make -f Makefile.AmigaOS install
++-
++-If you just want to build one demo (e.g. lion) use:
++- make -f Makefile.AmigaOS bin/lion
++-
++-If you have any questions about the AmigaOS port please
++-contact Steven Solie (ssolie at telus.net) for help.
++-
++----------------------------------
++-
++-To build all examples using SDL (Mac or Linux) just type:
++-
++-cd /examples/sdl
++-make
++-
++-Individual examples can be built with
++-
++-make aa_test
++-
++-In the same way the native Carbon examples can be built with
++-
++-cd /examples/macosx_carbon
++-make
++-
++-In both cases the static library will be built (if it was not already) 
++-from the existing global Makefile in /src/.
++-
++-The Makefiles for both SDL and Carbon will also attempt to download the 
++-required .bmp files if they are not found in the system for a given 
++-example. If the files could not be fetched (wget) the user will receive 
++-a message explaining where to download the samples from (sphere.bmp, 
++-etc.)  Since all programs reside in the same directory there is no need 
++-to duplicate the .bmp files for each program that needs to use them.
++-
++----------------------------------
++diff -Naur agg-2.5.org/README agg-2.5/README
++--- agg-2.5.org/README	1970-01-01 02:00:00.000000000 +0200
+++++ agg-2.5/README	2006-10-09 07:06:36.000000000 +0300
++@@ -0,0 +1,75 @@
+++Anti-Grain Geometry (AGG) - Version 2.5
+++A high quality rendering engine for C++
+++Copyright (C) 2002-2006 Maxim Shemanarev
+++Contact: mcseem at antigrain.com
+++         mcseemagg at yahoo.com
+++         http://antigrain.com
+++
+++AGG is free software; you can redistribute it and/or
+++modify it under the terms of the GNU General Public License
+++as published by the Free Software Foundation; either version 2
+++of the License, or (at your option) any later version.
+++
+++AGG is distributed in the hope that it will be useful,
+++but WITHOUT ANY WARRANTY; without even the implied warranty of
+++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++GNU General Public License for more details.
+++
+++You should have received a copy of the GNU General Public License
+++along with AGG; if not, write to the Free Software
+++Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+++MA 02110-1301, USA.
+++
+++
+++
+++---------------------------------
+++
+++Use automake to build the library.
+++
+++If automake is not available you still can use the old make.
+++There is a very simple Makefile that can be used. Note that
+++if you use automake it will overwrite Makefile.
+++
+++---------------------------------
+++
+++If building on AmigaOS 4.0 or higher type the following for
+++instructions on what targets are available.
+++ make -f Makefile.AmigaOS
+++
+++To just build and install AGG into the standard AmigaOS SDK
+++ready for use type:
+++ make -f Makefile.AmigaOS install
+++
+++If you just want to build one demo (e.g. lion) use:
+++ make -f Makefile.AmigaOS bin/lion
+++
+++If you have any questions about the AmigaOS port please
+++contact Steven Solie (ssolie at telus.net) for help.
+++
+++---------------------------------
+++
+++To build all examples using SDL (Mac or Linux) just type:
+++
+++cd /examples/sdl
+++make
+++
+++Individual examples can be built with
+++
+++make aa_test
+++
+++In the same way the native Carbon examples can be built with
+++
+++cd /examples/macosx_carbon
+++make
+++
+++In both cases the static library will be built (if it was not already) 
+++from the existing global Makefile in /src/.
+++
+++The Makefiles for both SDL and Carbon will also attempt to download the 
+++required .bmp files if they are not found in the system for a given 
+++example. If the files could not be fetched (wget) the user will receive 
+++a message explaining where to download the samples from (sphere.bmp, 
+++etc.)  Since all programs reside in the same directory there is no need 
+++to duplicate the .bmp files for each program that needs to use them.
+++
+++---------------------------------
++diff -Naur agg-2.5.org/src/platform/X11/Makefile.am agg-2.5/src/platform/X11/Makefile.am
++--- agg-2.5.org/src/platform/X11/Makefile.am	2012-07-24 14:46:22.686942273 +0300
+++++ agg-2.5/src/platform/X11/Makefile.am	2012-07-24 14:47:55.674937931 +0300
++@@ -1,7 +1,7 @@
++ if ENABLE_X11
++ lib_LTLIBRARIES = libaggplatformX11.la
 + 
-+ # Linux with lcc compiler:  __inline__ (stat.h) not recognized, and must edit
-+ # /usr/include/gnu/types.h to get rid of "long long" if __LCC__ defined.  -O3
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
++-libaggplatformX11_la_LDFLAGS = -version-info @AGG_LIB_VERSION@  -L at x_libraries@
+++libaggplatformX11_la_LDFLAGS = -version-info @AGG_LIB_VERSION@ 
++ libaggplatformX11_la_SOURCES = agg_platform_support.cpp
++ libaggplatformX11_la_CXXFLAGS =  -I$(top_srcdir)/include -I at x_includes@
++ libaggplatformX11_la_LIBADD = -lX11
+diff --git a/package/agg/agg.mk b/package/agg/agg.mk
 new file mode 100644
-index 0000000..fdfbe9f
+index 0000000..f4b9a75
 --- /dev/null
-+++ b/package/unzip/unzip.mk
-@@ -0,0 +1,66 @@
-+###################################################################
++++ b/package/agg/agg.mk
+@@ -0,0 +1,17 @@
++#############################################################
 +#
-+# unzip
-+# 
-+# quickly hacked from: 
-+# http://www.linuxfromscratch.org/blfs/view/svn/general/unzip.html
-+###################################################################
-+
-+UNZIP_MAJOR_VERSION = 6
-+UNZIP_MINOR_VERSION = 0
-+UNZIP_VERSION = $(UNZIP_MAJOR_VERSION).$(UNZIP_MINOR_VERSION)
-+UNZIP_SOURCE = unzip$(UNZIP_MAJOR_VERSION)$(UNZIP_MINOR_VERSION).tar.gz
-+UNZIP_SITE = http://downloads.sourceforge.net/infozip
-+UNZIP_LICENSE = Info-ZIP
-+UNZIP_LICENSE_FILES = LICENSE
-+
-+# No point of doing optimized build for host version,
-+# so we build host version without any x86 specific asm stuff
-+define HOST_UNZIP_BUILD_CMDS
-+	(cd $(@D); \
-+	sed -i -e 's/CFLAGS="-O -Wall/& -DNO_LCHMOD/' unix/Makefile ; \
-+	$(MAKE) -f unix/Makefile linux_noasm )
-+endef
-+
-+define HOST_UNZIP_INSTALL_CMDS
-+	(cd $(@D); \
-+	$(MAKE) prefix=$(HOST_DIR)/usr install )
-+endef
-+
-+# If you do have busybox installed in your target (like most do)
-+# and if you have by accident also enabled unzip support in
-+# your busybox configuration file, then guess what happens
-+# after insallation of the real unzip application ?
++# agg
 +#
-+# Yep, UNZIP_INSTALL_TARGET_CMDS will happily
-+# write to your unzip -> /bin/busybox symlink
-+# and overwrite your busybox ... :-(
-+#
-+# That's why I included this as an primitive safety mechanism.
-+# Improvement are wellcome
++#############################################################
 +
-+ifneq ($(BR2_PACKAGE_BUSYBOX),y)
-+ifeq ($(BR2_i386),y) || ($(BR2_x86_64),y)
-+# Intel x86 asm optimized version
-+define UNZIP_BUILD_CMDS
-+	(cd $(@D);\
-+	sed -i -e 's/DASM"/DASM -DNO_LCHMOD"/' unix/Makefile;\
-+	$(MAKE) -f unix/Makefile $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -DNO_LCHMOD" CC=$(TARGET_CC) LD=$(TARGET_LD) AS=$(TARGET_AS) linux )
-+endef
-+else
-+# non-Intel asm optimized (aka generic) version
-+define UNZIP_BUILD_CMDS
-+	(cd $(@D); \
-+	sed -i -e 's/CFLAGS="-O -Wall/& -DNO_LCHMOD/' unix/Makefile ; \
-+	$(MAKE) -f unix/Makefile $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -DNO_LCHMOD" CC=$(TARGET_CC) LD=$(TARGET_LD) AS=$(TARGET_AS) linux_noasm )
-+endef
-+endif
++AGG_VERSION = 2.5
++AGG_SOURCE = agg-$(AGG_VERSION).tar.gz
++AGG_SITE = http://www.antigrain.com/
++AGG_DEPENDENCIES = xlib_libX11 pkg-config sdl
++AGG_INSTALL_STAGING = YES
++AGG_AUTORECONF = YES
++AGG_LICENSE = GPLv2
++AGG_LICENCE_FILE = readme
 +
-+define UNZIP_INSTALL_TARGET_CMDS
-+	(cd $(@D); \
-+	$(MAKE) prefix=$(TARGET_DIR)/usr install )
-+endef
-+endif
++$(eval $(autotools-package))
 +
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
 -- 
 1.7.7.6
