@@ -1,103 +1,35 @@
-From: Dallas Clement <dallas.a.clement@gmail.com>
-Date: Wed, 5 Sep 2012 08:47:09 -0500
-Subject: [Buildroot] Fwd: Re: fs skeleton quick rebuild
-In-Reply-To: <5047163E.3040303@relinux.de>
-References: <5047163E.3040303@relinux.de>
-Message-ID: <CAE9DZUSZGj167S8eLoHaSidAS6hOguK8zZEm880RzyjMSeFT=A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 5 Sep 2012 16:04:52 +0200
+Subject: [Buildroot] [git commit] libpcap: fix build on microblaze
+Message-ID: <20120905140625.94B2A9958F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephan,
+commit: http://git.buildroot.net/buildroot/commit/?id=dd00c5fcd072b4a1e3862c5af29f8c580acadd38
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, that would be perfect to have some make target that re-installs
-everything, including the libs.
+On microblaze, libpcap needs to be built with -fPIC rather than -fpic as
+reported by mrueg on IRC.
 
-Thanks much,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libpcap/libpcap.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Dallas
-
-On Wed, Sep 5, 2012 at 4:07 AM, Stephan Hoffmann <sho@relinux.de> wrote:
-
-> **
-> Hi Dallas,
->
-> I forward your messages to the list in case someone else is interested in
-> your findings.
->
-> Is there interest in getting something like "make root-reinstall" added to
-> buildroot?
->
-> Kind regards
->
-> Stephan
->
-> -------- Original-Nachricht --------  Betreff: Re: [Buildroot] fs
-> skeleton quick rebuild  Datum: Tue, 4 Sep 2012 17:42:36 -0500  Von: Dallas
-> Clement <dallas.a.clement@gmail.com> <dallas.a.clement@gmail.com>  An: Stephan
-> Hoffmann <sho@relinux.de> <sho@relinux.de>
->
->
-> I found the answer.  Need to preserve target/lib or repopulate from staging/lib.
->
-> On Tue, Sep 4, 2012 at 5:21 PM, Dallas Clement<dallas.a.clement@gmail.com> <dallas.a.clement@gmail.com> wrote:
-> > One small follow up question.  This method works great except, my /lib
-> > dir is empty afterward.  Any pointers on how to repopulate this dir
-> > with all the libs?
-> >
-> > On Tue, Sep 4, 2012 at 1:30 PM, Stephan Hoffmann <sho@relinux.de> <sho@relinux.de> wrote:
-> >> Am 04.09.2012 19:59, schrieb Dallas Clement:
-> >>> Greetings:
-> >>>
-> >>> I'm working on a custom skeleton for my rootfs and wanting to make
-> >>> changes and test without having to rebuild everything.  Is there an
-> >>> easy way to do this?
-> >> Hi,
-> >>
-> >> I figured out that
-> >> 1. remove output/target
-> >> 2. remove output/build/.root
-> >> 3. remove all .stamp_target_installed files
-> >> give a quite fast, clean rebuild of the root file system.
-> >>
-> >> Hope that helps
-> >>
-> >> Stephan
-> >>> Thanks,
-> >>>
-> >>> Dallas
-> >>> _______________________________________________
-> >>> buildroot mailing list
-> >>> buildroot at busybox.net
-> >>> http://lists.busybox.net/mailman/listinfo/buildroot
-> >>
-> >>
-> >> --
-> >> reLinux     -    Stephan Hoffmann
-> >> Am Schmidtgrund 124    50765 K?ln
-> >> Tel. +49.221.95595-19    Fax: -64
-> >> www.reLinux.de     sho at reLinux.de
-> >>
-> >>
-> >> _______________________________________________
-> >> buildroot mailing list
-> >> buildroot at busybox.net
-> >> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> --
-> reLinux     -    Stephan Hoffmann
-> Am Schmidtgrund 124    50765 K?ln
-> Tel. +49.221.95595-19    Fax: -64www.reLinux.de     sho at reLinux.de
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120905/c21c6709/attachment.html>
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 04766ea..7a1d32f 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -21,4 +21,9 @@ LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
+ 		ac_cv_header_linux_wireless_h=yes # configure misdetects this
+ LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
+ 
++# microblaze needs -fPIC instead of -fpic
++ifeq ($(BR2_microblaze),y)
++LIBPCAP_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
++endif
++
+ $(eval $(autotools-package))
