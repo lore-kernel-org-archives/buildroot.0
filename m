@@ -1,37 +1,103 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Sep 2012 11:23:02 +0200
-Subject: [Buildroot] [PATCH 3/4] Remove target/Makefile.in, now useless
-In-Reply-To: <201209042324.32810.yann.morin.1998@free.fr>
-References: <cover.1346767209.git.thomas.petazzoni@free-electrons.com>
- <77bb15266ba4c2bad35d207606a0214fef441263.1346767209.git.thomas.petazzoni@free-electrons.com>
- <201209042324.32810.yann.morin.1998@free.fr>
-Message-ID: <20120905112302.33add030@skate>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Wed, 5 Sep 2012 08:47:09 -0500
+Subject: [Buildroot] Fwd: Re: fs skeleton quick rebuild
+In-Reply-To: <5047163E.3040303@relinux.de>
+References: <5047163E.3040303@relinux.de>
+Message-ID: <CAE9DZUSZGj167S8eLoHaSidAS6hOguK8zZEm880RzyjMSeFT=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 4 Sep 2012 23:24:32 +0200,
-"Yann E. MORIN" <yann.morin.1998@free.fr> a ?crit :
+Hi Stephan,
 
-> I would fold this patch with the previous one. Without it, the previous
-> patch breaks the Makefile:
->   $ make defconfig
->   [--SNIP--]
->   $ make
->   target/Makefile.in:2: target/generic/Makefile.in: No such file or directory
->   make: *** No rule to make target `target/generic/Makefile.in'.  Stop.
-> 
-> (Sorry, I missed that in the previous patch).
+Yes, that would be perfect to have some make target that re-installs
+everything, including the libs.
 
-Ok, will do.
+Thanks much,
 
-Thanks,
+Dallas
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+On Wed, Sep 5, 2012 at 4:07 AM, Stephan Hoffmann <sho@relinux.de> wrote:
+
+> **
+> Hi Dallas,
+>
+> I forward your messages to the list in case someone else is interested in
+> your findings.
+>
+> Is there interest in getting something like "make root-reinstall" added to
+> buildroot?
+>
+> Kind regards
+>
+> Stephan
+>
+> -------- Original-Nachricht --------  Betreff: Re: [Buildroot] fs
+> skeleton quick rebuild  Datum: Tue, 4 Sep 2012 17:42:36 -0500  Von: Dallas
+> Clement <dallas.a.clement@gmail.com> <dallas.a.clement@gmail.com>  An: Stephan
+> Hoffmann <sho@relinux.de> <sho@relinux.de>
+>
+>
+> I found the answer.  Need to preserve target/lib or repopulate from staging/lib.
+>
+> On Tue, Sep 4, 2012 at 5:21 PM, Dallas Clement<dallas.a.clement@gmail.com> <dallas.a.clement@gmail.com> wrote:
+> > One small follow up question.  This method works great except, my /lib
+> > dir is empty afterward.  Any pointers on how to repopulate this dir
+> > with all the libs?
+> >
+> > On Tue, Sep 4, 2012 at 1:30 PM, Stephan Hoffmann <sho@relinux.de> <sho@relinux.de> wrote:
+> >> Am 04.09.2012 19:59, schrieb Dallas Clement:
+> >>> Greetings:
+> >>>
+> >>> I'm working on a custom skeleton for my rootfs and wanting to make
+> >>> changes and test without having to rebuild everything.  Is there an
+> >>> easy way to do this?
+> >> Hi,
+> >>
+> >> I figured out that
+> >> 1. remove output/target
+> >> 2. remove output/build/.root
+> >> 3. remove all .stamp_target_installed files
+> >> give a quite fast, clean rebuild of the root file system.
+> >>
+> >> Hope that helps
+> >>
+> >> Stephan
+> >>> Thanks,
+> >>>
+> >>> Dallas
+> >>> _______________________________________________
+> >>> buildroot mailing list
+> >>> buildroot at busybox.net
+> >>> http://lists.busybox.net/mailman/listinfo/buildroot
+> >>
+> >>
+> >> --
+> >> reLinux     -    Stephan Hoffmann
+> >> Am Schmidtgrund 124    50765 K?ln
+> >> Tel. +49.221.95595-19    Fax: -64
+> >> www.reLinux.de     sho at reLinux.de
+> >>
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+> --
+> reLinux     -    Stephan Hoffmann
+> Am Schmidtgrund 124    50765 K?ln
+> Tel. +49.221.95595-19    Fax: -64www.reLinux.de     sho at reLinux.de
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120905/c21c6709/attachment.html>
