@@ -1,39 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 5 Sep 2012 00:38:53 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	uclibc-arch-type-cleanup
-In-Reply-To: <cover.1346766545.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1346766545.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201209050038.53754.yann.morin.1998@free.fr>
+From: norbert at nanobug.de <norbert@nanobug.de>
+Date: Wed, 5 Sep 2012 02:19:29 +0200 (CEST)
+Subject: [Buildroot] Package for libwt (Web Toolkit http://webtoolkit.eu)
+Message-ID: <935246701.408118.1346804369727.JavaMail.open-xchange@email.1und1.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Experts,
+I am trying to build Wt in my buildroot environment and it does not compile.
 
-On Tuesday 04 September 2012 15:49:42 Thomas Petazzoni wrote:
-> Here is a simple patch set that moves BR2_ARM_TYPE and BR2_SPARC_TYPE
-> to a uClibc-specific place, since those are uClibc specific.
+ I am a real noob  with Cmake or buildroot. Obviously I have misconfigured
+ something. Cmake gets called but refuses to continue telling me something about
+ missing path. Somehow the generated Cmake command is wrong, I think. I do not
+see
+ how to fix it. Maybe someone has already made a package for WT and could share
+it here ?
 
-This series will come clashing with your reorganising you sent later.
 
-What's your plan with those two? Apply this series first, or the other one?
 
-I personaly think we should work on the other series first, then add this
-one after. You could probably aggregate those two series as a single one.
+ This is what I used:
 
-Regards,
-Yann E. MORIN.
+ ------------- file libwt.mk in package/libwt -----------------
 
-PS. Reviewing takes time! I used my whole evening reviewing those two series!
-Pfew... ;-)
+ #############################################################
+ #
+ # libwt
+ #
+ #############################################################
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ LIBWT_VERSION =3.2.1
+ LIBWT_SOURCE =wt-$(LIBWT_VERSION).tar.gz
+ LIBWT_SITE =http://prdownloads.sourceforge.net/witty
+<http://prdownloads.sourceforge.net/witty>
+ LIBWT_INSTALL_STAGING = YES
+ LIBWT_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
+
+ ifeq ($(BR2_PACKAGE_BOOST),y)
+ LIBWT_DEPENDENCIES += boost
+ LIBWT_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
+ # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
+ # native stuff during the rest of configure when target == host.
+ # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
+ # are found first.
+ # LIBWT_CONF_ENV += "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:/lib:/usr/lib"
+ endif
+
+ --------------- end of libwt.mk -----------------------------------
+
+
+
+ --------------- file Config.in  in package/libwt ------------------
+
+ config BR2_PACKAGE_LIBWT
+ bool "libwt"
+ help
+ wt web toolkit is a library for writing cgi code
+
+ http://webtoolkit.eu/ <http://webtoolkit.eu/>
+
+ --------------- end of Config.in -----------------------------------
+
+Best regards,
+   Norbert.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120905/657b8b6e/attachment.html>
