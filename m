@@ -1,74 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Sep 2012 22:59:31 +0200
-Subject: [Buildroot] [git commit] linux-firmware: add firmware for SDIO
-	based Marvell Libertas modules
-Message-ID: <20120905215421.62DF797020@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  6 Sep 2012 00:01:36 +0200
+Subject: [Buildroot] [PATCH] package/cURL: fix static link whith openSSL
+Message-ID: <1346882496-8114-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c04355b9223b2d74a091b2722229bc0f337d2820
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When openSSL is selected, cURL is configured to use it.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+But in this case, the libcurl.pc file /forgets/ to require link
+against -ldl.
+
+This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
+but an executable wants to be linked statically (for various reasons
+which are irrelevant here).
+
+Fix that by appending a 'Requires: openssl' line to the installed
+libcurl.pc, if openSSL is enabled.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/Config.in         |   19 +++++++++++++++++++
- package/linux-firmware/linux-firmware.mk |   12 ++++++++++++
- 2 files changed, 31 insertions(+), 0 deletions(-)
+ package/libcurl/libcurl.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index c494f0f..0c24d98 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -22,6 +22,25 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 090bb4c..6441a80 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -29,14 +29,20 @@ define LIBCURL_TARGET_CLEANUP
+ 	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
+ 	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
+ endef
+-
++define LIBCURL_FIX_TARGET_PC
++	printf 'Requires: openssl\n' >>$(TARGET_DIR)/usr/lib/pkgconfig/libcurl.pc
++endef
+ LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
++LIBCURL_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_TARGET_PC)
  
- endmenu
+ define LIBCURL_STAGING_FIXUP_CURL_CONFIG
+ 	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
+ endef
+-
++define LIBCURL_FIX_STAGING_PC
++	printf 'Requires: openssl\n' >>$(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
++endef
+ LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
++LIBCURL_POST_INSTALL_STAGING_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_STAGING_PC)
  
-+menu "Marvell Libertas"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8
-+       bool "Libertas SD 8686 v8"
-+       help
-+         Firmware files (version 8) for the Marvell SD8686 module
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9
-+       bool "Libertas SD 8686 v9"
-+       help
-+         Firmware files (version 9) for the Marvell SD8686 module
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
-+       bool "Libertas SD 8688"
-+       help
-+         Firmware files for the Marvell SD8688 module
-+
-+endmenu
-+
- menu "Ralink"
+ $(eval $(autotools-package))
  
- config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 28c551f..23afafa 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -40,6 +40,18 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010) += \
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271) += \
- 	LICENCE.atheros_firmware ar9271.fw htc_9271.fw
- 
-+# sd8686 v8
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8) += \
-+	libertas/sd8686_v8.bin libertas/sd8686_v8_helper.bin LICENCE.Marvell
-+
-+# sd8686 v9
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9) += \
-+	libertas/sd8686_v9.bin libertas/sd8686_v9_helper.bin LICENCE.Marvell
-+
-+# sd8688
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688) += \
-+	libertas/sd8688.bin libertas/sd8688_helper.bin LICENCE.Marvell
-+
- # wl127x
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
- 	ti-connectivity/wl1271-fw-2.bin				\
+-- 
+1.7.2.5
