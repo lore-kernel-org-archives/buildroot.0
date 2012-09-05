@@ -1,54 +1,36 @@
-From: Aras Vaichas <aras.vaichas@gmail.com>
-Date: Wed, 5 Sep 2012 15:59:31 +0100
-Subject: [Buildroot] fs skeleton quick rebuild
-In-Reply-To: <504648B4.6010301@relinux.de>
-References: <CAE9DZUQi+OEhWzW0Hu1bBrBhs6QZ+_V=J1MwFej_H2EAhhdM4A@mail.gmail.com>
- <504648B4.6010301@relinux.de>
-Message-ID: <CAJkQPOmzL7L2Z+Bx=t48Fn_+7+ZHtv7gRknhEPhvSxL7CKkcgg@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 5 Sep 2012 17:17:35 +0200
+Subject: [Buildroot] Google breakpad patch status?
+In-Reply-To: <CAJkQPO=cmNHbx088d+7TL+8DQaW64qS9ZhFxFOy=pgSVzWEwEg@mail.gmail.com>
+References: <CAJkQPO=cmNHbx088d+7TL+8DQaW64qS9ZhFxFOy=pgSVzWEwEg@mail.gmail.com>
+Message-ID: <CAHXCMMKqz5sKtXUZbokBiH03zfkwkpZ5DcE+UdmXAHCEf2mx2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4 September 2012 19:30, Stephan Hoffmann <sho@relinux.de> wrote:
-> Am 04.09.2012 19:59, schrieb Dallas Clement:
->> Greetings:
->>
->> I'm working on a custom skeleton for my rootfs and wanting to make
->> changes and test without having to rebuild everything.  Is there an
->> easy way to do this?
-> Hi,
+Hi Aras, all,
+
+2012/9/5 Aras Vaichas <aras.vaichas@gmail.com>:
+> Hi, I was checking to see if Buildroot had Google breakpad. It
+> doesn't, but there was a patch for it some months ago:
 >
-> I figured out that
-> 1. remove output/target
-> 2. remove output/build/.root
-> 3. remove all .stamp_target_installed files
-> give a quite fast, clean rebuild of the root file system.
+> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/34282
+>
+> ref: http://code.google.com/p/google-breakpad/
+Does it provide cross-tools?
+Last time I played with it, I could not dump symbol from x86 (32 bits)
+binaries using breakpad tools built on x86_64 system. :-/
 
-I have something similar in a script I call "pre_build_clean.sh"
+BTW, breakpad is something like gnulib, a source dependency for
+software that want to link against.
+Not really easy to package in a distro based on support package
+manager; but here, we don't care about this point ;-)
 
--- snip --
-#/bin/sh
-echo pre build cleanup script
-echo removing stamps, output/target, output/images,
-find -name .stamp_target_installed | xargs rm
-rm -rf output/target
-rm -rf output/images/*
-rm output/build/.root
-rm output/stamps/ct-ng-toolchain-installed
-echo build your target now. e.g. \"make\" or \"make
-linux-reconfigure\" to rebuild the kernel
--- snip --
 
-This is the script I created when I was making lots of skeleton,
-configuration and kernel changes; YMMV.
+Cheers,
 
-Dallas, be careful doing this because it's easy to make a mistake, and
-I know that Thomas doesn't recommend doing partial builds like this.
 
-If you use a custom toolchain, then I highly recommend building an
-external toolchain. You can perform a "make clean; make" and it
-doesn't take very long.
-
-Aras
+-- 
+Sam
