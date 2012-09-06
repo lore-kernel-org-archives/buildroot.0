@@ -1,15 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Sep 2012 16:15:09 +0200
+From: Vimal Menon <vimalmenon@yahoo.com>
+Date: Thu, 6 Sep 2012 07:27:17 -0700 (PDT)
 Subject: [Buildroot] Python running very slow with buildroot 2012.05
-In-Reply-To: <1346940241.6846.YahooMailNeo@web110707.mail.gq1.yahoo.com>
+In-Reply-To: <20120906161509.2f5fc914@skate>
 References: <1346940241.6846.YahooMailNeo@web110707.mail.gq1.yahoo.com>
-Message-ID: <20120906161509.2f5fc914@skate>
+ <20120906161509.2f5fc914@skate>
+Message-ID: <1346941637.60509.YahooMailNeo@web110712.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Thomas,
+
+I checked using default installations in both the environments, can the difference between glibc and uClibc be so huge for python?
+
+
+Thanks,
+Vimal
+
+?
+
+
+________________________________
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Vimal Menon <vimalmenon@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Thursday, September 6, 2012 7:45 PM
+Subject: Re: [Buildroot] Python running very slow with buildroot 2012.05
+ 
 Le Thu, 6 Sep 2012 07:04:01 -0700 (PDT),
 Vimal Menon <vimalmenon@yahoo.com> a ?crit :
 
@@ -54,3 +73,6 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120906/2d0b73cc/attachment.html>
