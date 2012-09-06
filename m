@@ -1,27 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 06 Sep 2012 07:52:33 +0200
-Subject: [Buildroot] [PATCHv2] u-boot: add version 2012.07
-In-Reply-To: <1346766923-29838-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1346766923-29838-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <50483A21.5060604@mind.be>
+Date: Thu, 06 Sep 2012 08:06:47 +0200
+Subject: [Buildroot] [PATCH] jimsh: new package
+In-Reply-To: <1346778052-31923-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1346778052-31923-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <50483D77.40902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/12 15:55, Gustavo Zacarias wrote:
-> diff --git a/package/uboot-tools/uboot-tools-2012.04.01-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-2012.07-drop-configh-from-tools.patch
-> similarity index 100%
-> rename from package/uboot-tools/uboot-tools-2012.04.01-drop-configh-from-tools.patch
-> rename to package/uboot-tools/uboot-tools-2012.07-drop-configh-from-tools.patch
-> diff --git a/package/uboot-tools/uboot-tools-2012.04.01-hostcflags-override-fix.patch b/package/uboot-tools/uboot-tools-2012.07-hostcflags-override-fix.patch
-> similarity index 100%
-> rename from package/uboot-tools/uboot-tools-2012.04.01-hostcflags-override-fix.patch
-> rename to package/uboot-tools/uboot-tools-2012.07-hostcflags-override-fix.patch
-> diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+On 09/04/12 19:00, Gustavo Zacarias wrote:
+> Add new jimsh package - a lightweight tclsh alternative.
+> Useful for a lighter footprint usb_modeswitch installation.
 
-  Is there any reason to keep the version number for uboot-tools patches?
+  I guess a patch that installs usb_modeswitch's tcl script will follow
+then?
+
+  You'll probably want to add a hidden BR2_NEEDS_TCLSH which selects
+JIMSH if TCL is not defined.  And/or a HAS_TCLSH that is selected by
+jimsh and tcl.  Or should those symbols only be introduced when a
+package actually selects or depends on them?
 
   Regards,
   Arnout
