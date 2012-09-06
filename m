@@ -1,74 +1,38 @@
-From: Thiago A. Correa <thiago.correa@gmail.com>
-Date: Thu, 6 Sep 2012 17:58:58 -0300
-Subject: [Buildroot] [PATCH] python-protobuf: Add support for Python
- implementation of Google's Protocol Buffers
-Message-ID: <20120906205831.GA12993@localhost.comm5.com.br>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 6 Sep 2012 15:48:19 +0200
+Subject: [Buildroot] [git commit] vala: bump version
+Message-ID: <20120906210346.550A49959E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-protobuf: Add support for Python implementation of Google's Protocol Buffers
+commit: http://git.buildroot.net/buildroot/commit/?id=bf5f225dca807b70f80168a23dadc9e29e71cf20
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/python-protobuf/Config.in          |   11 +++++++++++
- package/python-protobuf/python-protobuf.mk |   28 ++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 package/python-protobuf/Config.in
- create mode 100644 package/python-protobuf/python-protobuf.mk
+ ... => vala-dont-add-dirty-to-valac-version.patch} |    0
+ package/vala/vala.mk                               |    4 ++--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-new file mode 100644
-index 0000000..d2bf70d
---- /dev/null
-+++ b/package/python-protobuf/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PROTOBUF
-+	bool "python-protobuf"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	help
-+	  Python implementation of the Google Protocol Buffers.
-+
-+	  Protocol buffers are Google's language-neutral, platform-neutral,
-+	  extensible mechanism for serializing structured data.
-+
-+	  http://code.google.com/p/protobuf/
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-new file mode 100644
-index 0000000..d632e00
---- /dev/null
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# python-protobuf
-+#
-+#############################################################
-+
-+PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
-+PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
-+PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
-+PYTHON_PROTOBUF_LICENSE = BSD-3c
-+PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
-+
-+PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools host-python-distutilscross host-protobuf
-+
-+define PYTHON_PROTOBUF_BUILD_CMDS
-+	(cd $(@D)/python; \
-+		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
-+		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		PATH=$(HOST_PATH) \
-+	$(HOST_DIR)/usr/bin/python setup.py build -x)
-+endef
-+
-+define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
-+	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.3.4
+diff --git a/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch b/package/vala/vala-dont-add-dirty-to-valac-version.patch
+similarity index 100%
+rename from package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch
+rename to package/vala/vala-dont-add-dirty-to-valac-version.patch
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 7c0ea9f..984043c 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ 
+-VALA_VERSION_MAJOR = 0.15
+-VALA_VERSION_MINOR = 2
++VALA_VERSION_MAJOR = 0.17
++VALA_VERSION_MINOR = 6
+ VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
