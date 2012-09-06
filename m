@@ -1,59 +1,41 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Thu, 6 Sep 2012 09:35:49 -0400
-Subject: [Buildroot] Autobuild and linux-pam failing to compile
-In-Reply-To: <20120906151542.31796360@skate>
-References: <CADiAo4KUj5s7UO8yZf5OcbY3VsaekJWNpjxSmpd8r_qf1MMJKQ@mail.gmail.com>
- <20120906151542.31796360@skate>
-Message-ID: <CADiAo4JYh_L0tOOdYHKxM0ZdUwpaPpX_GeSTqQXKb-jKpVbvHA@mail.gmail.com>
+From: Vimal Menon <vimalmenon@yahoo.com>
+Date: Thu, 6 Sep 2012 07:04:01 -0700 (PDT)
+Subject: [Buildroot] Python running very slow with buildroot 2012.05
+Message-ID: <1346940241.6846.YahooMailNeo@web110707.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Team,
 
-On Thu, Sep 6, 2012 at 9:15 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+I happened to download and install buildroot (default 2012.05), while checking the compiled image, I saw that python runs very slow.
+for eg:
 
->
-> All the external toolchains that are used on the Free Electrons build
-> server are publicly available, so you can download them.
+On a standard linux, Python 2.7.2 complied with glibc
 
-OK great. I'll try to reproduce this. A question however remains open:
+#time python -c "print 'hello world'" 
 
->>> When using an external toolchain, is it possible to force a specific
->>> feature from within buildroot config?
+hello world
 
-From what I see in Buildroot's docs/config source, it is possible to
-tell buildroot what a given toolchain supports, but nothing like NDBM
-is on that list, am I correct?
+real??? 0m0.077s
+user??? 0m0.068s
+sys???? 0m0.009s
 
-And to my understanding, a toolchain is taken as preconfigured, and no
-way to reconfigure it on the fly, right? I just never used external
-toolchains so this part is not clear to me.
+and the same command ran on the same machine with the buildroot compiled image (not via qemu, but with the image booted through grub), python takes a lot more time
 
-Anyway later tonight I'll get to this, so if there is any additional
-info I can use I'd appreciate this.
+#time python -c "print 'hello world'" 
 
-> See also
-> http://lists.busybox.net/pipermail/buildroot/2012-August/057876.html
+hello world
+real??? 0m 0.28s
+user??? 0m 0.26s
+sys???? 0m 0.01s
 
-Thanks, this is useful.
+Why would there be such a huge difference? What might I have done wrong? Has anybody of you come across such a situation?
 
-PS I have resubmitted a busybox-PAM patch with the recent suggestions
-implemented (reorder patches, clarify the help message):
-
-http://lists.busybox.net/pipermail/buildroot/2012-September/058295.html
-and http://lists.busybox.net/pipermail/buildroot/2012-September/058296.html
-
-Since I may need to patch PAM further to address the NDBM issue, I'd
-be happier if these patches are applied (or if there is anything more
-to fix I'd do that first).
-
-Thanks.
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Thanks,
+Vimal
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120906/694993f0/attachment-0001.html>
