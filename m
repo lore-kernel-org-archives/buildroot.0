@@ -1,32 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Sep 2012 11:48:57 -0300
-Subject: [Buildroot] [PATCH 10/10] iproute2: bump to version 3.5.1
-In-Reply-To: <1347029337-12494-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1347029337-12494-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1347029337-12494-10-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  7 Sep 2012 14:59:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 5516] New: appended device tree blobs on uImage
+	fails
+Message-ID: <bug-5516-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/iproute2/iproute2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=5516
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index c671e44..90588a3 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPROUTE2_VERSION = 3.5.0
-+IPROUTE2_VERSION = 3.5.1
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
- IPROUTE2_LICENSE = GPLv2
+           Summary: appended device tree blobs on uImage fails
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: richard.genoud at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+The version impacted is 2012.08 (it's not in the list)
+the commit 978928e4acb0ee4e335eaf4bf8feca895f372418 adds the ability to append
+device tree blobs.
+This works great with zImage.
+BUT, with uImage there's a problem:
+in linux.mk, the line :
+cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb >>
+$(KERNEL_ARCH_PATH)/boot/zImage
+is all right, but after that, the line :
+$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
+erases the zImage that has been just done.
+
+that's because in the kernel, the uImage rule is :
+$(obj)/uImage:  $(obj)/zImage FORCE
+        @$(check_for_multiple_loadaddr)
+        $(call if_changed,uimage)
+        @echo '  Image $@ is ready'
+
+=> so if we do a make uImage, zImage is overwritten.
+
 -- 
-1.7.8.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
