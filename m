@@ -1,62 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Sep 2012 08:59:18 -0300
-Subject: [Buildroot] [PATCHv2] libfuse: fix build failures with iconv
-Message-ID: <1347019158-30268-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
+Date: Fri, 7 Sep 2012 17:40:01 +0530
+Subject: [Buildroot] Beaglebone build broken ?
+Message-ID: <5049E419.2050408@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failures when iconv is present for libfuse users that use
-pkgconfig.
-For example:
-http://autobuild.buildroot.net/results/4d455831a7b467b9ea1ad54bea6b57607f5560a8/build-end.log
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libfuse/libfuse-iconv.patch |   18 ++++++++++++++++++
- package/libfuse/libfuse.mk          |    2 +-
- 2 files changed, 19 insertions(+), 1 deletions(-)
- create mode 100644 package/libfuse/libfuse-iconv.patch
+I'm using the tip of buildroot, to build for beaglebone (using
+beaglebone_defconfig) and running into a couple of issues:
 
-diff --git a/package/libfuse/libfuse-iconv.patch b/package/libfuse/libfuse-iconv.patch
-new file mode 100644
-index 0000000..9f50032
---- /dev/null
-+++ b/package/libfuse/libfuse-iconv.patch
-@@ -0,0 +1,18 @@
-+Upstream commit efeac22bfa65c845c04adb5e70e6de33b0104fa3 but without
-+the need to autoreconf :)
-+Fixes libiconv missing in fuse.pc
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura fuse-2.9.1/configure fuse-2.9.1.iconv/configure
-+--- fuse-2.9.1/configure	2012-07-19 09:53:29.000000000 -0300
-++++ fuse-2.9.1.iconv/configure	2012-09-07 08:47:57.834912620 -0300
-+@@ -13237,7 +13237,7 @@
-+ 
-+   fi
-+ 
-+-libfuse_libs=$libfuse_libs $LTLIBICONV
-++libfuse_libs="$libfuse_libs $LTLIBICONV"
-+  if test "$am_cv_func_iconv" = yes; then
-+   ICONV_TRUE=
-+   ICONV_FALSE='#'
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index c8c0130..779115b 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -9,8 +9,8 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://downloads.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
- LIBFUSE_LICENSE = GPLv2 LGPLv2.1
- LIBFUSE_LICENSE_FILES = COPYING COPYING.LIB
--
- LIBFUSE_INSTALL_STAGING = YES
-+LIBFUSE_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- LIBFUSE_CONF_OPT= --disable-nls \
- 		--disable-example \
- 		--disable-kernel-module \
--- 
-1.7.8.6
+1. The hard FPU settings cause uClibc build to break (intermixing of
+soft and hard) and an equivalent of below needs to be made to top level
+config file.
+
+-BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
++BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-float=soft"
+-# BR2_SOFT_FLOAT is not set
++BR2_SOFT_FLOAT=y
+
+If this is a must, can this be committed to buildroot itself. I can't
+propose a patch myself because I'm not sure why it must or must-not be
+built with software float.
+
+2. Next, it's failing when trying to get the custom kernel.
+
+Cloning into bare repository
+linux-linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91...
+fatal: The remote end hung up unexpectedly
+fatal: early EOF
+fatal: index-pack failed
+--2012-09-07 12:54:37-- 
+http://sources.buildroot.net//linux-linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91.tar.gz
+Resolving sources.buildroot.net... 176.9.16.109
+Connecting to sources.buildroot.net|176.9.16.109|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2012-09-07 12:54:38 ERROR 404: Not Found.
+
+A few months back I could successfully build bone image so obviously
+this kernel issue was not present then.
+
+
+Thanks,
+Vineet
