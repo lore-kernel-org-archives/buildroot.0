@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Sep 2012 08:54:07 -0300
-Subject: [Buildroot] [PATCH] libfuse: fix build failures with iconv
-Message-ID: <1347018847-29380-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  7 Sep 2012 08:59:18 -0300
+Subject: [Buildroot] [PATCHv2] libfuse: fix build failures with iconv
+Message-ID: <1347019158-30268-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,7 +11,7 @@ To: buildroot@busybox.net
 Fix build failures when iconv is present for libfuse users that use
 pkgconfig.
 For example:
-http://git.buildroot.net/buildroot/commit/?id=dd00c5fcd072b4a1e3862c5af29f8c580acadd38
+http://autobuild.buildroot.net/results/4d455831a7b467b9ea1ad54bea6b57607f5560a8/build-end.log
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
