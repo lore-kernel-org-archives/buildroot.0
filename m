@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Sep 2012 11:48:56 -0300
-Subject: [Buildroot] [PATCH 09/10] gmp: add license info
+Date: Fri,  7 Sep 2012 11:48:57 -0300
+Subject: [Buildroot] [PATCH 10/10] iproute2: bump to version 3.5.1
 In-Reply-To: <1347029337-12494-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1347029337-12494-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1347029337-12494-9-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1347029337-12494-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gmp/gmp.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 5bcc6c1..c0a74f0 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -7,6 +7,8 @@
- GMP_VERSION = 5.0.5
- GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
-+GMP_LICENSE = GPLv3 LGPLv3
-+GMP_LICENSE_FILES = COPYING COPYING.LIB
- GMP_INSTALL_STAGING = YES
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index c671e44..90588a3 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- # Bad ARM assembly breaks on pure thumb
+-IPROUTE2_VERSION = 3.5.0
++IPROUTE2_VERSION = 3.5.1
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
+ IPROUTE2_LICENSE = GPLv2
 -- 
 1.7.8.6
