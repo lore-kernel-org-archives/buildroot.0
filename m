@@ -1,61 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Sep 2012 23:32:33 +0200
-Subject: [Buildroot] [git commit] json-c: fix build when no thread support
-	is available
-Message-ID: <20120906213808.E873E99581@busybox.osuosl.org>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 07 Sep 2012 08:23:57 +0200
+Subject: [Buildroot] [PATCH] python-protobuf: Add support for Python
+ implementation of Google's Protocol Buffers
+In-Reply-To: <20120906205831.GA12993@localhost.comm5.com.br>
+References: <20120906205831.GA12993@localhost.comm5.com.br>
+Message-ID: <504992FD.4080702@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58149528d09b3342477beb3f5abce83775acdaff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 06.09.2012 22:58, schrieb Thiago A. Correa:
+> python-protobuf: Add support for Python implementation of Google's Protocol Buffers
+> 
+> Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
+> ---
+>  package/python-protobuf/Config.in          |   11 +++++++++++
+>  package/python-protobuf/python-protobuf.mk |   28 ++++++++++++++++++++++++++++
+>  2 files changed, 39 insertions(+), 0 deletions(-)
+>  create mode 100644 package/python-protobuf/Config.in
+>  create mode 100644 package/python-protobuf/python-protobuf.mk
+> 
+> diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
+> new file mode 100644
+> index 0000000..d2bf70d
+> --- /dev/null
+> +++ b/package/python-protobuf/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_PYTHON_PROTOBUF
+> +	bool "python-protobuf"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+> +	help
+> +	  Python implementation of the Google Protocol Buffers.
+> +
+> +	  Protocol buffers are Google's language-neutral, platform-neutral,
+> +	  extensible mechanism for serializing structured data.
+> +
+> +	  http://code.google.com/p/protobuf/
+> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+> new file mode 100644
+> index 0000000..d632e00
+> --- /dev/null
+> +++ b/package/python-protobuf/python-protobuf.mk
+> @@ -0,0 +1,28 @@
+> +#############################################################
+> +#
+> +# python-protobuf
+> +#
+> +#############################################################
+> +
+> +PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+> +PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
+> +PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
+> +PYTHON_PROTOBUF_LICENSE = BSD-3c
+> +PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
+> +
+> +PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools host-python-distutilscross host-protobuf
+> +
+> +define PYTHON_PROTOBUF_BUILD_CMDS
+> +	(cd $(@D)/python; \
+> +		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+> +		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+> +		PATH=$(HOST_PATH) \
+> +	$(HOST_DIR)/usr/bin/python setup.py build -x)
+> +endef
+> +
+> +define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
+> +	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+> +	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
 
-Fixes
-http://autobuild.buildroot.org/results/1d9a2e44da3aa627265b03763ca324c609c0c61c/build-end.log.
+I'm missing package/Config.in, where python-protobuf can be activated.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/json-c/json-c-no-reentrant.patch |   33 ++++++++++++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
-
-diff --git a/package/json-c/json-c-no-reentrant.patch b/package/json-c/json-c-no-reentrant.patch
-new file mode 100644
-index 0000000..a01181c
---- /dev/null
-+++ b/package/json-c/json-c-no-reentrant.patch
-@@ -0,0 +1,33 @@
-+Do not pass -D_REENTRANT
-+
-+This flag is not needed to build this library, and prevents to build
-+it with toolchains that don't have thread support.
-+
-+Since the Makefile.in change is a one-liner, we also do it in the
-+patch to avoid having to autoreconfigure the package.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makefile.am
-+===================================================================
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,4 +1,4 @@
-+-AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
-++AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
-+ 
-+ EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
-+ 
-+Index: b/Makefile.in
-+===================================================================
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -219,7 +219,7 @@
-+ top_build_prefix = @top_build_prefix@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+-AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE -D_REENTRANT
-++AM_CFLAGS = -Wall -Wwrite-strings -Werror -std=gnu99 -D_GNU_SOURCE
-+ EXTRA_DIST = README.html README-WIN32.html config.h.win32 doc
-+ lib_LTLIBRARIES = libjson.la
-+ pkgconfigdir = $(libdir)/pkgconfig
+Best regards,
+Yegor
