@@ -1,60 +1,86 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Sat, 8 Sep 2012 08:54:40 -0400
-Subject: [Buildroot] Fixing linux-pam build failures
-In-Reply-To: <504B2BD3.5080205@petroprogram.com>
-References: <CADiAo4L2eUCF-2dEBWEJbw1V9z7uaQ-1=AA6z9SE4FA9v529+Q@mail.gmail.com>
- <504B2BD3.5080205@petroprogram.com>
-Message-ID: <CADiAo4KAOhh3DDxn+kPGoqrOOZx4iw9s2A6mdft2619ofhZHtw@mail.gmail.com>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Sat, 8 Sep 2012 10:22:21 -0300
+Subject: [Buildroot] [PATCH] python-protobuf: Add support for Python
+ implementation of Google's Protocol Buffers
+In-Reply-To: <504992FD.4080702@visionsystems.de>
+References: <20120906205831.GA12993@localhost.comm5.com.br>
+ <504992FD.4080702@visionsystems.de>
+Message-ID: <CAExDhvaYvvRka=SccB-_dBQHFZpQ_vFun35kA6sxjKcggZSFQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan,
+Ops, will resend. Thanks for pointing out
 
-On Sat, Sep 8, 2012 at 7:28 AM, Stefan Fr?berg
-<stefan.froberg@petroprogram.com> wrote:
-> Hi Dmitry!
+On Fri, Sep 7, 2012 at 3:23 AM, Yegor Yefremov
+<yegor_sub1@visionsystems.de> wrote:
+> Am 06.09.2012 22:58, schrieb Thiago A. Correa:
+>> python-protobuf: Add support for Python implementation of Google's Protocol Buffers
+>>
+>> Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
+>> ---
+>>  package/python-protobuf/Config.in          |   11 +++++++++++
+>>  package/python-protobuf/python-protobuf.mk |   28 ++++++++++++++++++++++++++++
+>>  2 files changed, 39 insertions(+), 0 deletions(-)
+>>  create mode 100644 package/python-protobuf/Config.in
+>>  create mode 100644 package/python-protobuf/python-protobuf.mk
+>>
+>> diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
+>> new file mode 100644
+>> index 0000000..d2bf70d
+>> --- /dev/null
+>> +++ b/package/python-protobuf/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_PYTHON_PROTOBUF
+>> +     bool "python-protobuf"
+>> +     depends on BR2_PACKAGE_PYTHON
+>> +     select BR2_PACKAGE_PYTHON_SETUPTOOLS
+>> +     help
+>> +       Python implementation of the Google Protocol Buffers.
+>> +
+>> +       Protocol buffers are Google's language-neutral, platform-neutral,
+>> +       extensible mechanism for serializing structured data.
+>> +
+>> +       http://code.google.com/p/protobuf/
+>> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+>> new file mode 100644
+>> index 0000000..d632e00
+>> --- /dev/null
+>> +++ b/package/python-protobuf/python-protobuf.mk
+>> @@ -0,0 +1,28 @@
+>> +#############################################################
+>> +#
+>> +# python-protobuf
+>> +#
+>> +#############################################################
+>> +
+>> +PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+>> +PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
+>> +PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
+>> +PYTHON_PROTOBUF_LICENSE = BSD-3c
+>> +PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
+>> +
+>> +PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools host-python-distutilscross host-protobuf
+>> +
+>> +define PYTHON_PROTOBUF_BUILD_CMDS
+>> +     (cd $(@D)/python; \
+>> +             PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+>> +             LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+>> +             PATH=$(HOST_PATH) \
+>> +     $(HOST_DIR)/usr/bin/python setup.py build -x)
+>> +endef
+>> +
+>> +define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
+>> +     (cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+>> +     $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>>
 >
-> Your work on this pam support looks good.
+> I'm missing package/Config.in, where python-protobuf can be activated.
 >
-> I have attached in this message my very quick, unpolished & very very
-> very dirty pam (version 1.1.5) hack
-> (it doesn't bother to even check for if pam is enabled in busybox and it
-> assumes that pam.d stuff is already in fs/skeleton/etc )
-
-Thanks. However I'd rather let finalize the 1.1.4 integration (the
-patches I just submitted will do) and then to upgrade to 1.1.5.
-
-Another thing in your patch, and I was asked not to do so, is PAM
-configs in the fs skeleton. I moved them to the Buildroot package
-area, and honestly I would not provide any more configs with Buildroot
-itself. For example, in my project PAM config for login does not
-resemble the standard one at all, etc. these configs are just for
-compatibility with PAM-less setup.
-
->
-> If you find something usefull for your work then by all means salvage
-> what you need from it.
-
-Sure, once 1.1.4 is done.
-
-> Your work for v86d ( http://patchwork.ozlabs.org/patch/157286/ )
-> is working wonderfully in my distro !
-
-Thanks for testing. The patchwork entry you mentioned also captures
-the discussion we had regarding non-standard use of C flags: the way
-Makefile is written in v86d does not capture them from the build
-environment, and they have to be pushed harder down via redefinition
-of $(CC) rather than via an environment variable.
-
-I thnk eventually I'll try to reintroduce the v86d patch: may I take
-your e-mail as a supporting vote? ;)
-
-Thanks.
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+> Best regards,
+> Yegor
