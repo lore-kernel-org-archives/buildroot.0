@@ -1,86 +1,299 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Sat, 08 Sep 2012 14:28:19 +0300
-Subject: [Buildroot] Fixing linux-pam build failures
-In-Reply-To: <CADiAo4L2eUCF-2dEBWEJbw1V9z7uaQ-1=AA6z9SE4FA9v529+Q@mail.gmail.com>
-References: <CADiAo4L2eUCF-2dEBWEJbw1V9z7uaQ-1=AA6z9SE4FA9v529+Q@mail.gmail.com>
-Message-ID: <504B2BD3.5080205@petroprogram.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  8 Sep 2012 14:28:33 +0200
+Subject: [Buildroot] [PATCH 01/13] perl: new package v6
+Message-ID: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dmitry!
+---
+ package/Config.in                      |    1 +
+ package/perl/Config.in                 |   17 +++++
+ package/perl/perl-configure-qemu.patch |   32 +++++++++
+ package/perl/perl-make-ext.patch       |   24 +++++++
+ package/perl/perl-mkppport.patch       |   37 ++++++++++
+ package/perl/perl.mk                   |  121 ++++++++++++++++++++++++++++++++
+ 6 files changed, 232 insertions(+)
+ create mode 100644 package/perl/Config.in
+ create mode 100644 package/perl/perl-configure-qemu.patch
+ create mode 100644 package/perl/perl-make-ext.patch
+ create mode 100644 package/perl/perl-mkppport.patch
+ create mode 100644 package/perl/perl.mk
 
-Your work on this pam support looks good.
-
-I have attached in this message my very quick, unpolished & very very
-very dirty pam (version 1.1.5) hack
-(it doesn't bother to even check for if pam is enabled in busybox and it
-assumes that pam.d stuff is already in fs/skeleton/etc )
-
-I can't even remember when I did this ugly hack.
-
-Got it somehow working with the help of :
-http://www.linuxfromscratch.org/blfs/view/svn/postlfs/linux-pam.html
-http://www.linuxfromscratch.org/blfs/view/svn/postlfs/shadow.html
-and
-http://www.linuxfromscratch.org/blfs/view/svn/postlfs/cracklib.html
-
-Those Linux From Scratch pages are really great starting templates for
-any new buildroot package!
-:)
-
-Also, those three patches mentioned in this attached file are from
-openwrt project witch also
-uses buildroot  stuff (???).
-
-https://dev.openwrt.org/browser/packages/libs/libpam
-
-If you find something usefull for your work then by all means salvage
-what you need from it.
-
-I just want to get quickly rid of my dirty pam hack as soon as official
-support lands on buildroot.
-
-Stefan
-
-P.S:
-
-Your work for v86d ( http://patchwork.ozlabs.org/patch/157286/ )
-is working wonderfully in my distro !
-Thanks!
-
-
-8.9.2012 7:32, Dmitry Golubovsky kirjoitti:
-> Hi,
->
-> My initial assumption about the failures of linux-pam building in
-> autobuilder was not correct: the problem was in BerkeleyDB
-> configuration.
->
-> When BerkeleyDB is not built, the pam_userdb module is not built
-> either (via linux-pam configure). In this failed autobuilder
-> configuration Berkeley DB was selected. But dbm functionality was not
-> enabled in BerkeleyDB configure options. Thus the pam_userdb module
-> was attempted to build, but it failed due to the absence of dbm
-> functions in Berkeley DB, and this showed up in the build log.
->
-> I have submitted a series of patches which address the problem:
->
-> * if linux-pam is built, --enable-dbm is added to BerkeleyDB configure options
-> * BerkeleyDB is autoselected when linux-pam is selected, and
-> BerkeleyDB is now a dependency of linux-pam
->
-> I also included my two other patches (since linux-pam is being patched anyway):
->
-> * Provide dummy PAM config files to allow password-less logons via busybox login
-> * New configuration option for PAM support has been added to the
-> Busybox configuration menu.
->
-> Any suggestions are welcome.
->
-> Thanks.
->
-
--------------- next part --------------
+diff --git a/package/Config.in b/package/Config.in
+index f308de7..00a79ab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -262,6 +262,7 @@ source "package/wsapi/Config.in"
+ source "package/xavante/Config.in"
+ endmenu
+ endif
++source "package/perl/Config.in"
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+ source "package/python/Config.in"
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+new file mode 100644
+index 0000000..286b09e
+--- /dev/null
++++ b/package/perl/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PERL
++	bool "perl"
++	help
++	  Larry Wall's Practical Extraction and Report Language
++	  An interpreted scripting language, known among some as "Unix's Swiss
++	  Army Chainsaw".
++
++	  http://www.perl.org/
++
++if BR2_PACKAGE_PERL
++
++config BR2_PACKAGE_PERL_CUSTOM_CONFIGURE
++	string "configuration flags"
++	help
++	  Allows to add some flags to Configure.
++
++endif
+diff --git a/package/perl/perl-configure-qemu.patch b/package/perl/perl-configure-qemu.patch
+new file mode 100644
+index 0000000..00f7539
+--- /dev/null
++++ b/package/perl/perl-configure-qemu.patch
+@@ -0,0 +1,32 @@
++Add qemu support
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/Configure
++===================================================================
++--- a/Configure
+++++ b/Configure
++@@ -2908,6 +2908,14 @@
++ $targetrun -l $targetuser $targethost "cd \$cwd && ./\$exe \$@"
++ EOF
++ 	    ;;
+++	qemu*)
+++	    to=:
+++	    from=:
+++	    cat >$run <<EOF
+++#!/bin/sh
+++$targetrun -L $qemulib "\$@"
+++EOF
+++	    ;;
++ 	*)  echo "Unknown targetrun '$targetrun'" >&4
++ 	    exit 1
++ 	    ;;
++@@ -5048,7 +5056,7 @@
++ echo " ";
++ echo "Checking if your compiler accepts $flag" 2>&1;
++ echo "int main(void) { return 0; }" > gcctest.c;
++-if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && ./gcctest; then
+++if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && $run ./gcctest; then
++     echo "Yes, it does." 2>&1;
++     if $test -s gcctest.out ; then
++         echo "But your platform does not like it:";
+diff --git a/package/perl/perl-make-ext.patch b/package/perl/perl-make-ext.patch
+new file mode 100644
+index 0000000..e0195e7
+--- /dev/null
++++ b/package/perl/perl-make-ext.patch
+@@ -0,0 +1,24 @@
++Don't use RUN with make (only for perl)
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/make_ext.pl
++===================================================================
++--- a/make_ext.pl
+++++ b/make_ext.pl
++@@ -458,11 +458,13 @@
++ 	# Give makefile an opportunity to rewrite itself.
++ 	# reassure users that life goes on...
++ 	my @args = ('config', @$pass_through);
++-	system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
+++#	system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
+++	system(@make, @args) and print "@make @args failed, continuing anyway...\n";
++     }
++     my @targ = ($target, @$pass_through);
++     print "Making $target in $ext_dir\n at run @make @targ\n";
++-    my $code = system(@run, @make, @targ);
+++#    my $code = system(@run, @make, @targ);
+++    my $code = system(@make, @targ);
++     die "Unsuccessful make($ext_dir): code=$code" if $code != 0;
++ 
++     chdir $return_dir || die "Cannot cd to $return_dir: $!";
+diff --git a/package/perl/perl-mkppport.patch b/package/perl/perl-mkppport.patch
+new file mode 100644
+index 0000000..97f27a2
+--- /dev/null
++++ b/package/perl/perl-mkppport.patch
+@@ -0,0 +1,37 @@
++Add RUN
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/mkppport
++===================================================================
++--- a/mkppport
+++++ b/mkppport
++@@ -1,6 +1,7 @@
++ use strict;
++ use warnings;
++ 
+++use Config;
++ use Getopt::Long;
++ use File::Spec;
++ use File::Compare qw( compare );
++@@ -136,14 +137,18 @@
++ #----------------------------------------------
++ sub run
++ {
+++  my @run = $Config{run};
+++  @run = () if not defined $run[0] or $run[0] eq '';
++   my @args = ("-I" . File::Spec->catdir((File::Spec->updir) x 2, 'lib'), @_);
++   my $run = $perl =~ m/\s/ ? qq("$perl") : $perl;
++   for (@args) {
++     $_ = qq("$_") if $^O eq 'VMS' && /^[^"]/;
++     $run .= " $_";
++   }
++-  print "running $run\n";
++-  system $run and die "$run failed: $?\n";
+++#  print "running $run\n";
+++#  system $run and die "$run failed: $?\n";
+++  print "running ", join(' ', @run, $run), "\n";
+++  system join(' ', @run, $run) and die "@run $run failed: $?\n";
++ }
++ 
++ __END__
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+new file mode 100644
+index 0000000..2a8da79
+--- /dev/null
++++ b/package/perl/perl.mk
+@@ -0,0 +1,121 @@
++#############################################################
++#
++# perl
++#
++#############################################################
++
++PERL_VERSION_MAJOR = 16
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_SITE = http://www.cpan.org/src/5.0
++PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
++PERL_LICENSE = Artistic
++PERL_LICENSE_FILES = Artistic
++PERL_INSTALL_STAGING = YES
++
++ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
++    PERL_USE_DEVEL=-Dusedevel
++endif
++
++ifneq ($(BR2_LARGEFILE),y)
++    PERL_NO_LARGEFILE=-Uuselargefiles
++endif
++
++PERL_ARCH=$(call qstrip,$(BR2_ARCH))
++ifeq ($(PERL_ARCH),i686)
++    PERL_ARCH=i386
++endif
++PERL_QEMU_USER_MODE=qemu-$(PERL_ARCH)
++
++define PERL_CONFIGURE_CMDS
++	rm -f $(@D)/config.sh
++	cd $(@D); ./Configure -des \
++		-Dusecrosscompile \
++		-Dtargetrun=$(PERL_QEMU_USER_MODE) \
++		-Dqemulib=$(STAGING_DIR) \
++		-Dtargethost=dummy \
++		-Dar="$(TARGET_AR)" \
++		-Dcc="$(TARGET_CC)" \
++		-Dcpp="$(TARGET_CC)" \
++		-Dld="$(TARGET_LD)" \
++		-Dnm="$(TARGET_NM)" \
++		-Dranlib="$(TARGET_RANLIB)" \
++		-Dccflags="$(TARGET_CFLAGS)" \
++		-Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
++		-Dlddlflags="-shared" \
++		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
++		-Duseshrplib \
++		-Dprefix=/usr \
++		-Uoptimize \
++		$(PERL_USE_DEVEL) \
++		$(PERL_NO_LARGEFILE) \
++		$(call qstrip,$(BR2_PACKAGE_PERL_CUSTOM_CONFIGURE))
++	echo "# patched values"                 >>$(@D)/config.sh
++	$(SED) '/^myarchname=/d' \
++		-e '/^mydomain=/d' \
++		-e '/^myhostname=/d' \
++		-e '/^myuname=/d' \
++		-e '/^osname=/d' \
++		-e '/^osvers=/d' \
++		-e '/^perladmin=/d' \
++		$(@D)/config.sh
++	echo "myarchname='$(GNU_TARGET_NAME)'"                  >>$(@D)/config.sh
++	echo "mydomain=''"                                      >>$(@D)/config.sh
++	echo "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'"      >>$(@D)/config.sh
++	echo "myuname='Buildroot $(BR2_VERSION_FULL)'"          >>$(@D)/config.sh
++	echo "osname='linux'"                                   >>$(@D)/config.sh
++	echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'"             >>$(@D)/config.sh
++	echo "perladmin='root'"                                 >>$(@D)/config.sh
++	cd $(@D); ./Configure -S
++	cp $(@D)/config.h $(@D)/xconfig.h
++	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++endef
++
++define PERL_BUILD_CMDS
++	echo "#!/bin/sh"                                                        > $(@D)/Cross/miniperl
++	echo "$(PERL_QEMU_USER_MODE) -L $(STAGING_DIR) $(@D)/miniperl \"\$$@\"" >>$(@D)/Cross/miniperl
++	chmod +x $(@D)/Cross/miniperl
++	PERL_MM_OPT="PERL=$(@D)/Cross/miniperl" \
++	$(MAKE) -C $(@D) all
++endef
++
++define PERL_INSTALL_STAGING_CMDS
++	$(MAKE) INSTALL_DEPENDENCE= \
++		INSTALLFLAGS= \
++		DESTDIR="$(STAGING_DIR)" \
++		-C $(@D) install.perl
++	$(INSTALL) -m 755 $(@D)/libperl.so $(STAGING_DIR)/usr/lib/libperl.so
++endef
++
++define PERL_INSTALL_TARGET_CMDS
++	$(MAKE) INSTALL_DEPENDENCE= \
++		INSTALLFLAGS=-p \
++		DESTDIR="$(TARGET_DIR)" \
++		-C $(@D) install.perl
++endef
++
++define PERL_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++endef
++
++define HOST_PERL_CONFIGURE_CMDS
++	cd $(@D); ./Configure -des \
++		-Dcc="$(HOSTCC)" \
++		-Dprefix="$(HOST_DIR)/usr" \
++		$(PERL_USE_DEVEL)
++endef
++
++define HOST_PERL_BUILD_CMDS
++	$(MAKE) -C $(@D) all
++endef
++
++define HOST_PERL_INSTALL_CMDS
++	$(MAKE) INSTALL_DEPENDENCE= \
++		-C $(@D) install
++endef
++
++define HOST_PERL_CLEAN_CMDS
++	-$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+-- 
+1.7.9.5
