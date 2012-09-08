@@ -1,31 +1,60 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  8 Sep 2012 14:28:45 +0200
-Subject: [Buildroot] [PATCH 13/13] microperl: mark as DEPRECATED
-In-Reply-To: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
-References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1347107325-4163-13-git-send-email-francois.perrad@gadz.org>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Sat, 8 Sep 2012 08:54:40 -0400
+Subject: [Buildroot] Fixing linux-pam build failures
+In-Reply-To: <504B2BD3.5080205@petroprogram.com>
+References: <CADiAo4L2eUCF-2dEBWEJbw1V9z7uaQ-1=AA6z9SE4FA9v529+Q@mail.gmail.com>
+ <504B2BD3.5080205@petroprogram.com>
+Message-ID: <CADiAo4KAOhh3DDxn+kPGoqrOOZx4iw9s2A6mdft2619ofhZHtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/microperl/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+Stefan,
 
-diff --git a/package/microperl/Config.in b/package/microperl/Config.in
-index 66bbedd..19d104a 100644
---- a/package/microperl/Config.in
-+++ b/package/microperl/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MICROPERL
- 	bool "microperl"
- 	# needs fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_DEPRECATED
- 	help
- 	  Perl without operating-specific functions such as readdir.
- 
+On Sat, Sep 8, 2012 at 7:28 AM, Stefan Fr?berg
+<stefan.froberg@petroprogram.com> wrote:
+> Hi Dmitry!
+>
+> Your work on this pam support looks good.
+>
+> I have attached in this message my very quick, unpolished & very very
+> very dirty pam (version 1.1.5) hack
+> (it doesn't bother to even check for if pam is enabled in busybox and it
+> assumes that pam.d stuff is already in fs/skeleton/etc )
+
+Thanks. However I'd rather let finalize the 1.1.4 integration (the
+patches I just submitted will do) and then to upgrade to 1.1.5.
+
+Another thing in your patch, and I was asked not to do so, is PAM
+configs in the fs skeleton. I moved them to the Buildroot package
+area, and honestly I would not provide any more configs with Buildroot
+itself. For example, in my project PAM config for login does not
+resemble the standard one at all, etc. these configs are just for
+compatibility with PAM-less setup.
+
+>
+> If you find something usefull for your work then by all means salvage
+> what you need from it.
+
+Sure, once 1.1.4 is done.
+
+> Your work for v86d ( http://patchwork.ozlabs.org/patch/157286/ )
+> is working wonderfully in my distro !
+
+Thanks for testing. The patchwork entry you mentioned also captures
+the discussion we had regarding non-standard use of C flags: the way
+Makefile is written in v86d does not capture them from the build
+environment, and they have to be pushed harder down via redefinition
+of $(CC) rather than via an environment variable.
+
+I thnk eventually I'll try to reintroduce the v86d patch: may I take
+your e-mail as a supporting vote? ;)
+
+Thanks.
+
 -- 
-1.7.9.5
+Dmitry Golubovsky
+
+Anywhere on the Web
