@@ -1,145 +1,135 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  8 Sep 2012 14:28:40 +0200
-Subject: [Buildroot] [PATCH 08/13] microperl: bump version to 5.14.2
+Date: Sat,  8 Sep 2012 14:28:41 +0200
+Subject: [Buildroot] [PATCH 09/13] microperl: improve configure step on
+	64bits platform
 In-Reply-To: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
 References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1347107325-4163-8-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1347107325-4163-9-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-patches have been merged in upstream
-perl -V requires more modules
+use uconfig64.sh instead of uconfig.sh
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .../microperl/microperl-no-signal-handlers.patch   |   22 ---------
- package/microperl/microperl-uudmap.patch           |   47 --------------------
- package/microperl/microperl.mk                     |   10 ++---
- 3 files changed, 5 insertions(+), 74 deletions(-)
- delete mode 100644 package/microperl/microperl-no-signal-handlers.patch
- delete mode 100644 package/microperl/microperl-uudmap.patch
+ package/microperl/microperl.mk |   74 ++++++++++++++++++++++------------------
+ 1 file changed, 41 insertions(+), 33 deletions(-)
 
-diff --git a/package/microperl/microperl-no-signal-handlers.patch b/package/microperl/microperl-no-signal-handlers.patch
-deleted file mode 100644
-index 3c9aa41..0000000
---- a/package/microperl/microperl-no-signal-handlers.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--Backport of http://perl5.git.perl.org/perl.git/commitdiff/01d65469392dfc0a?hp=a82b5f080d91ffe184d8ac4795ac71e72e612c2f
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura perl-5.12.3/miniperlmain.c perl-5.12.3-nosig/miniperlmain.c
----- perl-5.12.3/miniperlmain.c	2011-01-09 17:20:57.000000000 -0300
--+++ perl-5.12.3-nosig/miniperlmain.c	2011-04-14 10:16:53.564639438 -0300
--@@ -116,12 +116,14 @@
--     if (!exitstatus)
--         perl_run(my_perl);
-- 
--+#ifndef PERL_MICRO
--     /* Unregister our signal handler before destroying my_perl */
--     for (i = 0; PL_sig_name[i]; i++) {
-- 	if (rsignal_state(PL_sig_num[i]) == (Sighandler_t) PL_csighandlerp) {
-- 	    rsignal(PL_sig_num[i], (Sighandler_t) SIG_DFL);
-- 	}
--     }
--+#endif
-- 
--     exitstatus = perl_destruct(my_perl);
-- 
-diff --git a/package/microperl/microperl-uudmap.patch b/package/microperl/microperl-uudmap.patch
-deleted file mode 100644
-index c72f9c9..0000000
---- a/package/microperl/microperl-uudmap.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From a82b5f080d91ffe184d8ac4795ac71e72e612c2f Mon Sep 17 00:00:00 2001
--From: David Leadbeater <dgl@dgl.cx>
--Date: Mon, 7 Mar 2011 18:40:55 +0000
--Subject: [PATCH] microperl: Update generate_uudmap in Makefile.micro
--
--Makefile.micro hadn't kept up with the changes for generate_uudmap,
--make it match the real Makefile.
-----
-- Makefile.micro |    8 ++++----
-- 1 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile.micro b/Makefile.micro
--index 4b738f5..567d98a 100644
----- a/Makefile.micro
--+++ b/Makefile.micro
--@@ -35,7 +35,7 @@ H = av.h uconfig.h cop.h cv.h embed.h embedvar.h form.h gv.h handy.h \
-- HE = $(H) EXTERN.h
-- 
-- clean:
---	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h
--+	-rm -f $(O) microperl generate_uudmap$(_X) uudmap.h bitcount.h
-- 
-- distclean:	clean
-- 
--@@ -74,7 +74,7 @@ udoop$(_O):	$(HE) doop.c
-- udump$(_O):	$(HE) dump.c regcomp.h regnodes.h
-- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) dump.c
-- 
---uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h
--+uglobals$(_O):	$(H) globals.c INTERN.h perlapi.h uudmap.h bitcount.h
-- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) globals.c
-- 
-- ugv$(_O):	$(HE) gv.c
--@@ -173,8 +173,8 @@ uutil$(_O):	$(HE) util.c
-- uperlapi$(_O):	$(HE) perlapi.c perlapi.h
-- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) perlapi.c
-- 
---uudmap.h: generate_uudmap$(_X)
---	$(RUN) ./generate_uudmap$(_X) >uudmap.h
--+uudmap.h bitcount.h: generate_uudmap$(_X)
--+	$(RUN) ./generate_uudmap$(_X) uudmap.h bitcount.h
-- 
-- generate_uudmap$(_O): generate_uudmap.c
-- 	$(CC) $(CCFLAGS) -o $@ $(CFLAGS) generate_uudmap.c
---- 
--1.6.5.2.74.g610f9.dirty
--
 diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index fa92144..1899e03 100644
+index 1899e03..4b68567 100644
 --- a/package/microperl/microperl.mk
 +++ b/package/microperl/microperl.mk
-@@ -4,7 +4,8 @@
- #
- #############################################################
+@@ -15,6 +15,18 @@ MICROPERL_MODS_DIR = /usr/lib/perl5/$(MICROPERL_VERSION)
+ MICROPERL_ARCH_DIR = $(MICROPERL_MODS_DIR)/$(GNU_TARGET_NAME)
+ MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
  
--MICROPERL_VERSION = 5.12.4
-+MICROPERL_VERSION_MAJOR = 14
-+MICROPERL_VERSION = 5.$(MICROPERL_VERSION_MAJOR).2
- MICROPERL_SITE = http://www.cpan.org/src/5.0
- MICROPERL_SOURCE = perl-$(MICROPERL_VERSION).tar.bz2
- MICROPERL_LICENSE = Artistic
-@@ -16,12 +17,11 @@ MICROPERL_MODS = $(call qstrip,$(BR2_PACKAGE_MICROPERL_MODULES))
- 
++ifeq ($(BR2_ARCH_IS_64),y)
++MICROPERL_UCONFIG_SH = $(@D)/uconfig64.sh
++define MICROPERL_REGEN_CONFIG
++	$(MAKE) -C $(@D) -f Makefile.micro regen_uconfig64
++endef
++else
++MICROPERL_UCONFIG_SH = $(@D)/uconfig.sh
++define MICROPERL_REGEN_CONFIG
++	$(MAKE) -C $(@D) -f Makefile.micro regen_uconfig
++endef
++endif
++
  # Minimal set of modules required for 'perl -V' to work
  MICROPERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
--MICROPERL_BASE_MODS = strict.pm
-+MICROPERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
+ MICROPERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
+@@ -41,60 +53,56 @@ endef
  
- # CGI bundle
- ifeq ($(BR2_PACKAGE_MICROPERL_BUNDLE_CGI),y)
--MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm \
--	vars.pm warnings.pm warnings/register.pm
-+MICROPERL_MODS += constant.pm CGI CGI.pm Carp.pm Exporter.pm overload.pm
+ ifeq ($(BR2_ENDIAN),"BIG")
+ define MICROPERL_BIGENDIAN
+-	$(SED) '/^byteorder=/d' $(@D)/uconfig.sh
+-	echo "byteorder='4321'" >>$(@D)/uconfig.sh
++	$(SED) '/^byteorder=/d' $(MICROPERL_UCONFIG_SH)
++	echo "byteorder='4321'" >>$(MICROPERL_UCONFIG_SH)
+ endef
  endif
  
- # Host microperl is actually full-blown perl
-@@ -70,7 +70,7 @@ define MICROPERL_CONFIGURE_CMDS
- 		-e '/^osname=/d' -e '/^u32type=/d' -e '/^d_archlib=/d' \
- 		-e '/^d_memset=/d' -e '/^i_fcntl=/d' -e '/^useperlio=/d' \
- 		-e '/^need_va_copy=/d' $(@D)/uconfig.sh
--	$(SED) 's/5.12/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
-+	$(SED) 's/5\.$(MICROPERL_VERSION_MAJOR)/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
- 	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
- 	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
- 	echo "d_archlib='define'" >>$(@D)/uconfig.sh
+ ifeq ($(BR2_LARGEFILE),y)
+ define MICROPERL_LARGEFILE
+-	$(SED) '/^uselargefiles=/d' $(@D)/uconfig.sh
+-	echo "uselargefiles='define'" >>$(@D)/uconfig.sh
++	$(SED) '/^uselargefiles=/d' $(MICROPERL_UCONFIG_SH)
++	echo "uselargefiles='define'" >>$(MICROPERL_UCONFIG_SH)
+ endef
+ endif
+ 
+ ifeq ($(BR2_USE_WCHAR),y)
+ define MICROPERL_WCHAR
+ 	$(SED) '/^d_mbstowcs=/d' -e '/^d_mbtowc=/d' -e '/^d_wcstombs=/d' \
+-		-e '/^d_wctomb=/d' $(@D)/uconfig.sh
+-	echo "d_mbstowcs='define'" >>$(@D)/uconfig.sh
+-	echo "d_mbtowc='define'" >>$(@D)/uconfig.sh
+-	echo "d_wcstombs='define'" >>$(@D)/uconfig.sh
+-	echo "d_wctomb='define'" >>$(@D)/uconfig.sh
++		-e '/^d_wctomb=/d' $(MICROPERL_UCONFIG_SH)
++	echo "d_mbstowcs='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "d_mbtowc='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "d_wcstombs='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "d_wctomb='define'" >>$(MICROPERL_UCONFIG_SH)
+ endef
+ endif
+ 
+ define MICROPERL_CONFIGURE_CMDS
+ 	$(SED) '/^archlib=/d' -e '/^archlibexp=/d' -e '/^optimize=/d' \
+ 		-e '/^archname=/d' -e '/^d_poll=/d' -e '/^i_poll=/d' \
+-		-e '/^osname=/d' -e '/^u32type=/d' -e '/^d_archlib=/d' \
+-		-e '/^d_memset=/d' -e '/^i_fcntl=/d' -e '/^useperlio=/d' \
+-		-e '/^need_va_copy=/d' $(@D)/uconfig.sh
+-	$(SED) 's/5\.$(MICROPERL_VERSION_MAJOR)/$(MICROPERL_VERSION)/' $(@D)/uconfig.sh
+-	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
+-	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(@D)/uconfig.sh
+-	echo "d_archlib='define'" >>$(@D)/uconfig.sh
+-	echo "archname='$(GNU_TARGET_NAME)'" >>$(@D)/uconfig.sh
+-	echo "osname='linux'" >>$(@D)/uconfig.sh
+-	echo "cc='$(TARGET_CC)'" >>$(@D)/uconfig.sh
+-	echo "ccflags='$(TARGET_CFLAGS)'" >>$(@D)/uconfig.sh
+-	echo "optimize='$(TARGET_CFLAGS)'" >>$(@D)/uconfig.sh
+-	echo "usecrosscompile='define'" >>$(@D)/uconfig.sh
+-	echo "d_memset='define'" >>$(@D)/uconfig.sh
+-	echo "i_fcntl='define'" >>$(@D)/uconfig.sh
+-	echo "useperlio='define'" >>$(@D)/uconfig.sh
+-	echo "u32type='unsigned int'" >>$(@D)/uconfig.sh
+-	echo "need_va_copy='define'" >>$(@D)/uconfig.sh
+-	echo "d_poll='define'" >>$(@D)/uconfig.sh
+-	echo "i_poll='define'" >>$(@D)/uconfig.sh
+-	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
+-	$(SED) 's/local\///' $(@D)/uconfig.sh
++		-e '/^osname=/d' -e '/^d_archlib=/d' -e '/^i_fcntl=/d' \
++		-e '/^useperlio=/d' $(MICROPERL_UCONFIG_SH)
++	$(SED) 's/5\.$(MICROPERL_VERSION_MAJOR)/$(MICROPERL_VERSION)/' $(MICROPERL_UCONFIG_SH)
++	echo "archlib='$(MICROPERL_ARCH_DIR)'" >>$(MICROPERL_UCONFIG_SH)
++	echo "archlibexp='$(MICROPERL_ARCH_DIR)'" >>$(MICROPERL_UCONFIG_SH)
++	echo "d_archlib='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "archname='$(GNU_TARGET_NAME)'" >>$(MICROPERL_UCONFIG_SH)
++	echo "osname='linux'" >>$(MICROPERL_UCONFIG_SH)
++	echo "cc='$(TARGET_CC)'" >>$(MICROPERL_UCONFIG_SH)
++	echo "ccflags='$(TARGET_CFLAGS)'" >>$(MICROPERL_UCONFIG_SH)
++	echo "optimize='$(TARGET_CFLAGS)'" >>$(MICROPERL_UCONFIG_SH)
++	echo "usecrosscompile='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "i_fcntl='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "useperlio='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "d_poll='define'" >>$(MICROPERL_UCONFIG_SH)
++	echo "i_poll='define'" >>$(MICROPERL_UCONFIG_SH)
+ 	$(MICROPERL_BIGENDIAN)
+ 	$(MICROPERL_LARGEFILE)
+ 	$(MICROPERL_WCHAR)
+-	$(MAKE) -C $(@D) -f Makefile.micro regen_uconfig
++	$(SED) 's/local\///' $(MICROPERL_UCONFIG_SH)
++	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++	$(MICROPERL_REGEN_CONFIG)
+ 	cp -f $(@D)/uconfig.h $(@D)/config.h
+-	cp -f $(@D)/uconfig.sh $(@D)/config.sh
++	cp -f $(MICROPERL_UCONFIG_SH) $(@D)/config.sh
+ 	echo "ccname='$(TARGET_CC)'" >>$(@D)/config.sh
+ 	echo "PERL_CONFIG_SH=true" >>$(@D)/config.sh
+ 	touch $(@D)/config.h    # avoid warning : out of date
 -- 
 1.7.9.5
