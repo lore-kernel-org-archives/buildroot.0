@@ -1,76 +1,43 @@
-From: Dmitry <golubovsky@gmail.com>
-Date: Sat,  8 Sep 2012 00:21:06 -0400
-Subject: [Buildroot] [PATCH 4/4] PAM support in Busybox if linux-pam is built
-In-Reply-To: <1347078066-25257-1-git-send-email-golubovsky@gmail.com>
-References: <1347078066-25257-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <1347078066-25257-4-git-send-email-golubovsky@gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Sat, 8 Sep 2012 00:32:43 -0400
+Subject: [Buildroot] Fixing linux-pam build failures
+Message-ID: <CADiAo4L2eUCF-2dEBWEJbw1V9z7uaQ-1=AA6z9SE4FA9v529+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dmitry <golubovsky@gmail.com>
----
- package/busybox/Config.in  |   15 +++++++++++++++
- package/busybox/busybox.mk |   12 ++++++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+Hi,
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index dedcf18..21ff3fb 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -62,6 +62,21 @@ config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	  Install the watchdog daemon startup script,
- 	  that just start at the boot the busybox watchdog daemon.
- 
-+config BR2_PACKAGE_BUSYBOX_PAM
-+	bool "Enable PAM support in Busybox"
-+	default n
-+	depends on BR2_PACKAGE_LINUX_PAM
-+	help
-+	  If this item is selected, Busybox login will use the PAM stack
-+	  for local logins. Local logins with null password are allowed
-+	  for users with records in /etc/passwd ("default" and "root") 
-+	  per the /etc/pam.d/login file.
-+	  The default PAM configuration file /etc/pam.d/default requires 
-+	  user accounts with nonzero length passwords.
-+	  These files are provided by the linux-pam package. Buildroot
-+	  users opting to use PAM are strongly advised to supply their
-+	  own PAM configuration files for proper authentication model.
-+
- if BR2_PACKAGE_BUSYBOX_WATCHDOG
- 
- config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 33f8633..21942c6 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -164,6 +164,17 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_PAM),y)
-+BUSYBOX_DEPENDENCIES += linux-pam
-+define BUSYBOX_ENABLE_PAM
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+else
-+define BUSYBOX_ENABLE_PAM
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_PAM,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+endif
-+
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -179,6 +190,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_DISABLE_MMU_APPLETS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+	$(BUSYBOX_ENABLE_PAM)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
+My initial assumption about the failures of linux-pam building in
+autobuilder was not correct: the problem was in BerkeleyDB
+configuration.
+
+When BerkeleyDB is not built, the pam_userdb module is not built
+either (via linux-pam configure). In this failed autobuilder
+configuration Berkeley DB was selected. But dbm functionality was not
+enabled in BerkeleyDB configure options. Thus the pam_userdb module
+was attempted to build, but it failed due to the absence of dbm
+functions in Berkeley DB, and this showed up in the build log.
+
+I have submitted a series of patches which address the problem:
+
+* if linux-pam is built, --enable-dbm is added to BerkeleyDB configure options
+* BerkeleyDB is autoselected when linux-pam is selected, and
+BerkeleyDB is now a dependency of linux-pam
+
+I also included my two other patches (since linux-pam is being patched anyway):
+
+* Provide dummy PAM config files to allow password-less logons via busybox login
+* New configuration option for PAM support has been added to the
+Busybox configuration menu.
+
+Any suggestions are welcome.
+
+Thanks.
+
 -- 
-1.7.2.5
+Dmitry Golubovsky
+
+Anywhere on the Web
