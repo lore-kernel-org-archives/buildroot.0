@@ -1,242 +1,329 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Sep 2012 01:40:47 +0200
-Subject: [Buildroot] [PATCH 2/7] support/scripts: add a script to add a new
-	package
+Date: Mon, 10 Sep 2012 01:40:48 +0200
+Subject: [Buildroot] [PATCH 3/7] support/scripts: add a script to automate
+	the migration to _AVAILABLE
 In-Reply-To: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
 References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1347234052-10527-3-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1347234052-10527-4-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script asks a few questions to the user, and creates the skeleton
-files (Config.in and package.mk).
+This script runs three passes on the packages' Config.in files:
+
+1) - introduces a BR2_PACKAGE_XXX_AVAILABLE symbol
+   - moves all the package dependencies to this symbol
+   - has the package depends only on this symbol
+
+2) - transforms all 'depends on BR2_PACKAGE_XXX' into a dependency
+     on the corresponding _AVAILABLE symbol
+   - adds a select on the corresponding package
+
+3) - checks and fixes 'select BR2_PACKAGE_XXX' that does not have a
+     corresponding 'depends on BR2_PACKAGE_XXX_AVAILABLE'
+
+NOTE: the coverage of this script is NOT 100%. Some manual inspection
+and fixers are still required.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- docs/manual/adding-packages-script.txt |   41 +++++++++
- docs/manual/adding-packages.txt        |    2 +
- support/scripts/pkg-new                |  151 ++++++++++++++++++++++++++++++++
- 3 files changed, 194 insertions(+), 0 deletions(-)
- create mode 100644 docs/manual/adding-packages-script.txt
- create mode 100755 support/scripts/pkg-new
+ support/scripts/pkg-avail |  286 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 286 insertions(+), 0 deletions(-)
+ create mode 100755 support/scripts/pkg-avail
 
-diff --git a/docs/manual/adding-packages-script.txt b/docs/manual/adding-packages-script.txt
-new file mode 100644
-index 0000000..b19e6ee
---- /dev/null
-+++ b/docs/manual/adding-packages-script.txt
-@@ -0,0 +1,41 @@
-+Scripted new package
-+--------------------
-+
-+To help you add your new package, Buildroot offers a script that partially
-+automates the creation of a new package: +support/scripts/pkg-new+.
-+
-+When run, this script asks you a few questions about your package, and
-+creates skeleton files for you, so you only have to fill-in the the values
-+for the different variables.
-+
-+----
-+$ ./support/script/pkg-new
-+Name of the package: libfoo
-+
-+1) none
-+2) multimedia
-+3) java
-+4) x11r7
-+5) games
-+Category of your package: 1
-+
-+1) autotools
-+2) cmake
-+3) generic
-+Build-system your package is using: 1
-+
-+Your package skeleton files have been created; you can now edit these files
-+to complete the creation of the package:
-+  package/libfoo/Config.in
-+  package/libfoo/libfoo.mk
-+
-+Do not forget to also edit 'package/Config.in' to include
-+package/libfoo/Config.in in the correct location.
-+----
-+
-+Then, you just have to edit the two generated files with appropriate values.
-+Refer to the following sections for each type of build-system:
-+
-+* xref:generic-package-tutorial[]
-+* xref:autotools-package-tutorial[]
-+* xref:cmake-package-tutorial[]
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index cb75f2d..1aacaa8 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -19,4 +19,6 @@ include::adding-packages-handwritten.txt[]
- 
- include::adding-packages-gettext.txt[]
- 
-+include::adding-packages-script.txt[]
-+
- include::adding-packages-conclusion.txt[]
-diff --git a/support/scripts/pkg-new b/support/scripts/pkg-new
+diff --git a/support/scripts/pkg-avail b/support/scripts/pkg-avail
 new file mode 100755
-index 0000000..4e1ddac
+index 0000000..1f616fd
 --- /dev/null
-+++ b/support/scripts/pkg-new
-@@ -0,0 +1,151 @@
++++ b/support/scripts/pkg-avail
+@@ -0,0 +1,286 @@
 +#!/bin/bash
++set -e
 +
-+my_name="${0##*/}"
++#-----------------------------------------------------------------------------
++# Find all packages and introduce the _AVAILABLE symbols for each of them
++# 10 packages per cset, it's easier to review
 +
-+# -----------------------------------------------------------------------------
-+# Ask some questions...
-+# 
++AWK_SCRIPT_ADD='
++BEGIN {
++    nb_lines = 0;
++    delete lines;
++}
 +
-+# List of known categories:
-+CAT_LIST=( none multimedia java x11r7 games )
-+# List of known build-systems:
-+BS_LIST=( autotools cmake generic )
++{ lines[nb_lines++] = $0; }
 +
-+# --------------------------------------
-+# First, some trivial stuff: what's the package name?
-+if [ -n "${1}" ]; then
-+    pkg_name="${1}"
-+    printf "Starting addition of new package '%s'\n" "${pkg_name}"
-+else
-+    read -p "Name of the package: " pkg_name
-+fi
++END {
++    PKG = toupper( pkg );
++    is_pkg = 0;
++    for( i = 0; i < nb_lines; i++ ) {
++        if( lines[i] ~ "^(menu)?config[[:space:]]+BR2_PACKAGE_" PKG "([[:space:]]+.*)?$" ) {
++            pkg_line = lines[i];
++            printf( "config BR2_PACKAGE_%s_AVAILABLE\n", PKG );
++            printf( "\tdef_bool y\n" );
++            is_pkg = 1;
++            break;
++        }
++        printf( "%s\n", lines[i] );
++    }
 +
-+# Check we do not already have this package
-+pkgs="$( find package -type d -name "${pkg_name}" 2>/dev/null )"
-+if [ -n "${pkgs}" ]; then
-+    printf "%s: error: package '%s' already exists in:\n"   \
-+           "${my_name}" "${pkg_name}"
-+    for p in ${pkgs}; do
-+        printf "    %s\n" "${p}"
-+    done
-+    exit 1
-+fi
-+PKG_NAME="$( tr '[:lower:]-' '[:upper:]_' <<<"${pkg_name}" )"
++    if( is_pkg ) {
++        deps_end = i+1;
++        nb_not_deps = 0;
++        while( deps_end < nb_lines ) {
++            if( lines[deps_end] ~ "^([[:space:]]+help)?$" ) {
++                break;
++            } else if ( lines[deps_end] ~ "^[[:space:]]+depends on " ) {
++                print lines[deps_end];
++                while( lines[deps_end] ~ "\\\\$" ) {
++                    deps_end++;
++                    print lines[deps_end];
++                }
++            } else {
++                not_deps[nb_not_deps++] = lines[deps_end];
++            }
++            deps_end++;
++        }
++        printf( "\n" );
 +
-+# --------------------------------------
-+# Will it be categorised?
-+printf "\n"
-+PS3="Category of your package: "
-+select pkg_cat in "${CAT_LIST[@]}"; do
-+    case "${pkg_cat}" in
-+        none)   pkg_cat=""; break;;
-+        ?*)     break;;
-+    esac
-+    printf "Please enter a number in [1..%d]\n" "${#CAT_LIST[@]}"
-+done
++        printf( "%s\n", pkg_line );
++        for( i = 0; i < nb_not_deps; i++ ) {
++            printf( "%s\n", not_deps[i] );
++        }
++        printf( "\tdepends on BR2_PACKAGE_%s_AVAILABLE\n", PKG );
 +
-+pkg_dir="package/${pkg_cat}/${pkg_name}"
-+pkg_dir="${pkg_dir//\/\///}"
++        for( i = deps_end; i < nb_lines; i++ ) {
++            printf( "%s\n", lines[i] );
++        }
++    }
++}
++'
 +
-+# --------------------------------------
-+# What kind of build system is it using?
-+printf "\n"
-+PS3="Build-system your package is using: "
-+select pkg_bs in "${BS_LIST[@]}"; do
-+    case "${pkg_bs}" in
-+        *?)     break;;
-+    esac
-+    printf "Please enter a number in [1..%d]\n" "${#BS_LIST[@]}"
-+done
++#-----------------------------------------------------------------------------
++# Find all packages that depends on another package, and switch that to
++# the new _AVAILABLE dependency, plus a select on the main symbol
 +
-+# -----------------------------------------------------------------------------
-+# Now we can create the package
-+#
++AWK_SCRIPT_USE='
++BEGIN {
++    nb_lines = 0;
++    delete lines;
++}
 +
-+mkdir -p "${pkg_dir}"
++{ lines[nb_lines++] = $0; }
 +
-+# --------------------------------------
-+# Can't use 'cat <<-_EOF_', as Config.in uses leading tabs.
-+sed -r -e 's/^    //;' >"${pkg_dir}/Config.in" <<_EOF_
-+    config BR2_PACKAGE_${PKG_NAME}_AVAILABLE
-+    	def_bool y
-+    	# Here, add one 'depends on' line for each of your
-+    	# package's dependencies, eg.:
-+    	#depends on BR2_PACKAGE_LIBBAR_AVAILABLE
-+    	#depends on BR2_LARGEFILE
-+    
-+    # Update this comment to tell why the package is not available:
-+    comment "${pkg_name} requires XXX and YYY"
-+    	depends on !BR2_PACKAGE_${PKG_NAME}_AVAILABLE
-+    
-+    config BR2_PACKAGE_${PKG_NAME}
-+    	bool "${pkg_name}"
-+    	depends on BR2_PACKAGE_${PKG_NAME}_AVAILABLE
-+    	# Here, add one 'select' line for each package your
-+    	# package depends on, eg.:
-+    	#select BR2_PACKAGE_LIBBAR
-+    	help
-+    	  # Here, add a short description of your package
-+    	  # For example, copy the first few description sentences
-+    	  # from the package's website
-+    	  
-+    	  # Also, add a pointer to the package's website
-+    
-+    # Here, you may add optional features/options of your package:
-+    if BR2_PACKAGE_${PKG_NAME}
-+    endif # BR2_PACKAGE_${PKG_NAME}
++END {
++    PKG = toupper( pkg );
++    nb_depends = 0;
++    delete depends;
++    for( i = 0; i < nb_lines; i++ ) {
++        if( lines[i] == "" ) {
++            break;
++        } else if( lines[i] ~ "^[[:space:]]+depends on BR2_PACKAGE_[^|&[:space:]]+$" ) {
++            pkg = gensub( "^[[:space:]]+depends on BR2_PACKAGE_([^[:space:]]+).*$",
++                          "\\1", "g", lines[i] );
++            depends[nb_depends++] = pkg;
++            printf( "\tdepends on BR2_PACKAGE_%s_AVAILABLE\n", pkg );
++        } else {
++            printf( "%s\n", lines[i] );
++        }
++    }
++
++    for( ; i < nb_lines; i++ ) {
++        printf( "%s\n", lines[i] );
++        if( lines[i] ~ "^(menu)?config BR2_PACKAGE_" PKG "$" ) {
++            while( lines[++i] !~ "^([[:space:]]+(select|help)|[[:space:]]*$)" ) {
++                printf( "%s\n", lines[i] );
++            }
++            break;
++        }
++    }
++
++    for( j=0; j < nb_depends; j++ ) {
++        printf( "\tselect BR2_PACKAGE_%s\n", depends[j] );
++    }
++
++    for( ; i < nb_lines; i++ ) {
++        printf( "%s\n", lines[i] );
++    }
++}
++'
++
++#-----------------------------------------------------------------------------
++# Check that all 'select' on packages have a corresponding 'depends on' the
++# corresponding _AVAILABLE symbol
++
++AWK_SCRIPT_CHECK='
++BEGIN {
++    nb_lines = 0;
++    delete lines;
++}
++
++{ lines[nb_lines++] = $0; }
++
++END {
++    PKG = toupper( pkg );
++    delete selects;
++
++    for( i = 0; i < nb_lines; i++ ) {
++        if( lines[i] ~ "^(menu)?config BR2_PACKAGE_" PKG "$" ) {
++            break;
++        }
++    }
++
++    for( ; i < nb_lines; i++ ) {
++        if( lines[i] ~ "^([[:space:]]+help|$)" ) {
++            break
++        } else if( lines[i] ~ "^[[:space:]]+select BR2_PACKAGE_[^|&[:space:]]+$" ) {
++            pkg = gensub( "^[[:space:]]+select BR2_PACKAGE_([^[:space:]]+)$",
++                          "\\1", "g", lines[i] );
++            selects[pkg] = 1;
++        }
++    }
++
++    for( i = 0; i < nb_lines; i++ ) {
++        printf( "%s\n", lines[i] );
++        if( lines[i] ~ "^config BR2_PACKAGE_" PKG "_AVAILABLE$" ) {
++            break;
++        }
++    }
++
++    for( i++; i < nb_lines; i++ ) {
++        if( lines[i] == "" ) {
++            break;
++        } else if( lines[i] ~ "^[[:space:]]+depends on BR2_PACKAGE_[^|&[:space:]]+_AVAILABLE$" ) {
++            pkg = gensub( "^[[:space:]]+depends on BR2_PACKAGE_([^[:space:]]+)_AVAILABLE$",
++                          "\\1", "g", lines[i] );
++            selects[pkg] = 0;
++        }
++        printf( "%s\n", lines[i] );
++    }
++
++    for( pkg in selects ) {
++        if( selects[pkg] == 1 ) {
++            printf( "\tdepends on BR2_PACKAGE_%s_AVAILABLE\n", toupper( pkg ) );
++        }
++    }
++
++    for( ; i < nb_lines; i++ ) {
++        printf( "%s\n", lines[i] );
++    }
++}
++'
++
++
++#-----------------------------------------------------------------------------
++
++munge_files() {
++    local awk_script="${1}"
++
++    find package -type f -name Config.in    \
++    |sort                                   \
++    |(while read in_file; do
++        pkg="${in_file%/*}"
++        pkg="${pkg##*/}"
++        i=${i:-0}
++        printf "\rMunging package %s (%d)...                                    \r"   \
++               "${pkg}" ${i}
++        gawk -v pkg="${pkg//-/_}" "${awk_script}" "${in_file}" >/tmp/Config.in
++        mv /tmp/Config.in "${in_file}"
++        i=$((i+1))
++      done
++      printf "\n"
++    )
++}
++
++# I have a local patch that updates the doc for the _AVAILABLE stuff,
++# and I want all munging patches to be pushed after that
++stg push -a >/dev/null 2>&1 || true
++
++# Add the _AVAILABLE symbols...
++cat >/tmp/commit.msg <<-_EOF_
++	packages: introduce the _AVAILABLE symbol to all packages
++	
++	Introducing this symbol to all packages will allow other packages
++	to both safely select a package, and inherit its dependency.
++	
++	Given two packages, the mechanism works as follow:
++	
++	    ---8<---
++	    config BR2_PKG_FOO_AVAILABLE
++	    	depends on BR2_LARGEFILE
++	
++	    config BR2_PKG_FOO
++	    	bool "foo"
++	    	depends on BR2_PKG_FOO_AVAILABLE
++	    ---8<---
++	
++	    ---8<---
++	    config BR2_PKG_BAR_AVAILABLE
++	    	def_bool y
++	    	depends on BR2_PKG_FOO_AVAILABLE
++	    	depends on BR2_HAS_THREADS
++	
++	    config BR2_PKG_BAR
++	        bool "bar"
++	    	depends on BR2_PKG_BAR_AVAILABLE
++	    	select BR2_PKG_FOO
++	    ---8<---
++	
++	In this case, the 'select' on package 'foo' from package 'bar' is possible,
++	because package 'bar' inherits, via the BR2_PKG_BAR_AVAILABLE symbol, the
++	same dependencies as package 'foo'. So, package 'bar' can not be visible
++	if package 'foo' is not (although 'bar' may be hidden because of other
++	dependencies of its own, missing threads in the example).
++	
++	This patch only introduces this new symbol for all packages, moves the
++	packages' dependencies to these new symbols, and makes each package depend
++	solely on this new symbol. Cross-package use of 'select' will be introduced
++	in a later patch.
++	
++	With the construct above, using 'select' is now safe.
 +_EOF_
++stg new --sign -f /tmp/commit.msg pkg-add-available
++rm /tmp/commit.msg
++munge_files "${AWK_SCRIPT_ADD}"
++stg refresh
 +
-+# --------------------------------------
-+# Create the package.mk file
-+cat >"${pkg_dir}/${pkg_name}.mk" <<-_EOF_
-+	#############################################################
-+	#
-+	# ${pkg_name}
-+	#
-+	#############################################################
++# ... and use them, now! ;-)
++cat >/tmp/commit.msg <<-_EOF_
++	packages: use the newly-introduced _AVAILABLE symbol
 +	
-+	${PKG_NAME}_VERSION       = 
-+	${PKG_NAME}_SOURCE        = 
-+	${PKG_NAME}_SITE          = 
-+	${PKG_NAME}_DEPENDENCIES  = 
-+	${PKG_NAME}_LICENSE       = 
-+	${PKG_NAME}_LICENSE_FILES = 
-+	
++	This patch transforms all 'depends on' on a package to a 'depends on'
++	the corresponding _AVAILABLE symbol, and adds a 'select' against the
++	dependant package.
 +_EOF_
++stg new --sign -f /tmp/commit.msg pkg-use-available
++rm /tmp/commit.msg
++munge_files "${AWK_SCRIPT_USE}"
++stg refresh
 +
-+if [ "${pkg_bs}" = "generic" ]; then
-+    cat  >>"${pkg_dir}/${pkg_name}.mk" <<-_EOF_
-+		# See docs/manual/ for the complete list of actions that can
-+		# be defined; only the most common ones are listed below:
-+		
-+		define ${PKG_NAME}_CONFIGURE_CMDS
-+		endef
-+		
-+		define ${PKG_NAME}_BUILD_CMDS
-+		endef
-+		
-+		define ${PKG_NAME}_INSTALL_TARGET_CMDS
-+		endef
-+		
-+		define ${PKG_NAME}_UNINSTALL_TARGET_CMDS
-+		endef
-+		
-+	_EOF_
-+fi
-+
-+printf '$(eval $(%s-package))\n' "${pkg_bs}" >>"${pkg_dir}/${pkg_name}.mk"
-+
-+# -----------------------------------------------------------------------------
-+# The End
-+# 
-+cat <<-_EOF_
++# Finally, check for missing 'depends on ..._AVAILABLE'
++cat >/tmp/commit.msg <<-_EOF_
++	packages: check proper use of 'select' against packages
 +	
-+	Your package skeleton files have been created; you can now edit these files
-+	to complete the creation of the package:
-+	  ${pkg_dir}/Config.in
-+	  ${pkg_dir}/${pkg_name}.mk
-+	
-+	Do not forget to also edit '${pkg_dir%/${pkg_name}}/Config.in' to include
-+	${pkg_dir}/Config.in in the correct location.
++	This patch checks that all 'select' on a package have a 'depends on'
++	on the corresponding _AVAILABLE symbol.
 +_EOF_
++stg new --sign -f /tmp/commit.msg pkg-check-available
++rm /tmp/commit.msg
++munge_files "${AWK_SCRIPT_CHECK}"
++stg refresh
++
++# And eventually, get rid of ourselves (Seppuku!)
++cat >/tmp/commit.msg <<-_EOF_
++	script/support: get rid of now-useless pkg-avail script
++	
++	This script has done its job, and is no-longer needed.
++	RIP, script!
++_EOF_
++stg new --sign -f /tmp/commit.msg pkg-delete-pkg_avail
++rm /tmp/commit.msg
++rm -f support/scripts/pkg-avail
++git rm support/scripts/pkg-avail
++stg refresh
++
++# And eventually, get rid of ourselves (Seppuku!)
++
 -- 
 1.7.2.5
