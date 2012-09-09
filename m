@@ -1,329 +1,444 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Sep 2012 01:40:48 +0200
-Subject: [Buildroot] [PATCH 3/7] support/scripts: add a script to automate
-	the migration to _AVAILABLE
+Date: Mon, 10 Sep 2012 01:40:46 +0200
+Subject: [Buildroot] [PATCH 1/7] docs/manual: update 'adding packages' with
+	the new _AVAILABLE symbol
 In-Reply-To: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
 References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1347234052-10527-4-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1347234052-10527-2-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script runs three passes on the packages' Config.in files:
-
-1) - introduces a BR2_PACKAGE_XXX_AVAILABLE symbol
-   - moves all the package dependencies to this symbol
-   - has the package depends only on this symbol
-
-2) - transforms all 'depends on BR2_PACKAGE_XXX' into a dependency
-     on the corresponding _AVAILABLE symbol
-   - adds a select on the corresponding package
-
-3) - checks and fixes 'select BR2_PACKAGE_XXX' that does not have a
-     corresponding 'depends on BR2_PACKAGE_XXX_AVAILABLE'
-
-NOTE: the coverage of this script is NOT 100%. Some manual inspection
-and fixers are still required.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- support/scripts/pkg-avail |  286 +++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 286 insertions(+), 0 deletions(-)
- create mode 100755 support/scripts/pkg-avail
+ docs/manual/adding-packages-autotools.txt |   48 ++++++--
+ docs/manual/adding-packages-directory.txt |  190 +++++++++++++++--------------
+ docs/manual/adding-packages-generic.txt   |   85 ++++++++-----
+ 3 files changed, 191 insertions(+), 132 deletions(-)
 
-diff --git a/support/scripts/pkg-avail b/support/scripts/pkg-avail
-new file mode 100755
-index 0000000..1f616fd
---- /dev/null
-+++ b/support/scripts/pkg-avail
-@@ -0,0 +1,286 @@
-+#!/bin/bash
-+set -e
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index 9fb0918..0f14489 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -20,10 +20,24 @@ package, with an example :
+ 08: LIBFOO_SITE = http://www.foosoftware.org/download
+ 09: LIBFOO_INSTALL_STAGING = YES
+ 10: LIBFOO_INSTALL_TARGET = YES
+-11: LIBFOO_CONF_OPT = --enable-shared
+-12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
+-13:
+-14: $(eval $(autotools-package))
++11: LIBFOO_DEPENDENCIES = host-libaaa libbbb
++12:
++13: ifeq ($(BR2_PACKAGE_LIBFOO_FROBBLE),y)
++14: LIBFOO_CONF_OPT += --enable-frobble
++15: else
++16: LIBFOO_CONF_OPT += --disable-frobble
++17: endif
++18:
++19: LIBFOO_CONF_OPT += --with-gazzle-level=$(BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL)
++20:
++21: ifeq ($(BR2_PACKAGE_LIBFOO_GOO),y)
++22: LIBFOO_DEPENDENCIES += goo
++23: LIBFOO_CONF_OPT += --enable-goo
++24: else
++25: LIBFOO_CONF_OPT += --disable-goo
++26: endif
++27:
++28: $(eval $(autotools-package))
+ ------------------------
+ 
+ On line 6, we declare the version of the package.
+@@ -50,16 +64,26 @@ installation is enabled, so in fact, this line is not strictly
+ necessary. Also by default, packages are installed in this location
+ using the +make install+ command.
+ 
+-On line 11, we tell Buildroot to pass a custom configure option, that
+-will be passed to the +./configure+ script before configuring
+-and building the package.
++On line 11, we declare our dependencies, so that they are built before the
++build process of our package starts.
+ 
+-On line 12, we declare our dependencies, so that they are built
+-before the build process of our package starts.
++On lines 13 to 17, if the user selected the option 'frobble'
+++BR2_PACKAGE_LIBFOO_FROBBLE+, we add the corresponding configure option
++to enable 'frobble' (line 14), or disable it (line 16), that will be
++passed to the +./configure+ script before configuring and building the
++package.
+ 
+-Finally, on line line 14, we invoke the +autotools-package+
+-macro that generates all the Makefile rules that actually allows the
+-package to be built.
++Similarly, on line 19, we add the configure option that defines the
++'bazzle level' +BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL+.
 +
-+#-----------------------------------------------------------------------------
-+# Find all packages and introduce the _AVAILABLE symbols for each of them
-+# 10 packages per cset, it's easier to review
++On lines 21 to 26, if user selected the option 'goo' +BR2_PACKAGE_LIBFOO_GOO+,
++we add a dependency on the package +goo+ (line 22), and add the corresponding
++configure option to enable 'goo' (line 23); or if 'goo' support is not
++selected, we pass the configure option to disable it (line 25).
 +
-+AWK_SCRIPT_ADD='
-+BEGIN {
-+    nb_lines = 0;
-+    delete lines;
-+}
++Finally, on line line 28, we invoke the +autotools-package+ macro that
++generates all the Makefile rules that actually allows the package to be
++built.
+ 
+ [[autotools-package-reference]]
+ 
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 4a96415..4863332 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -12,30 +12,37 @@ one of these categories, then create your package directory in these.
+ +Config.in+ file
+ ~~~~~~~~~~~~~~~~
+ 
+-Then, create a file named +Config.in+. This file will contain the
+-option descriptions related to our +libfoo+ software that will be used
+-and displayed in the configuration tool. It should basically contain:
++Then, create a file named +Config.in+. This file will contain the option
++descriptions related to our +libfoo+ software that will be used and
++displayed in the configuration tool. It should basically contain:
+ 
+ ---------------------------
++config BR2_PACKAGE_LIBFOO_AVAILABLE
++	def_bool y
 +
-+{ lines[nb_lines++] = $0; }
+ config BR2_PACKAGE_LIBFOO
+ 	bool "libfoo"
++	depends on BR2_PACKAGE_LIBFOO_AVAILABLE
+ 	help
+ 	  This is a comment that explains what libfoo is.
+ 
+ 	  http://foosoftware.org/libfoo/
+ ---------------------------
+ 
+-The +bool+ line, +help+ line and other meta-informations about the
+-configuration option must be indented with one tab. The help text
+-itself should be indented with one tab and two spaces, and it must
+-mention the upstream URL of the project.
++*Notes*
 +
-+END {
-+    PKG = toupper( pkg );
-+    is_pkg = 0;
-+    for( i = 0; i < nb_lines; i++ ) {
-+        if( lines[i] ~ "^(menu)?config[[:space:]]+BR2_PACKAGE_" PKG "([[:space:]]+.*)?$" ) {
-+            pkg_line = lines[i];
-+            printf( "config BR2_PACKAGE_%s_AVAILABLE\n", PKG );
-+            printf( "\tdef_bool y\n" );
-+            is_pkg = 1;
-+            break;
-+        }
-+        printf( "%s\n", lines[i] );
-+    }
++* This is a very simple example, not really complete, for a very simple
++  package with no dependency.
 +
-+    if( is_pkg ) {
-+        deps_end = i+1;
-+        nb_not_deps = 0;
-+        while( deps_end < nb_lines ) {
-+            if( lines[deps_end] ~ "^([[:space:]]+help)?$" ) {
-+                break;
-+            } else if ( lines[deps_end] ~ "^[[:space:]]+depends on " ) {
-+                print lines[deps_end];
-+                while( lines[deps_end] ~ "\\\\$" ) {
-+                    deps_end++;
-+                    print lines[deps_end];
-+                }
-+            } else {
-+                not_deps[nb_not_deps++] = lines[deps_end];
-+            }
-+            deps_end++;
-+        }
-+        printf( "\n" );
++* The syntax of the +Config.in+ file is the same as the one for the kernel
++  Kconfig file. The documentation for this syntax is available at:
++  https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/kbuild/kconfig-language.txt[]
 +
-+        printf( "%s\n", pkg_line );
-+        for( i = 0; i < nb_not_deps; i++ ) {
-+            printf( "%s\n", not_deps[i] );
-+        }
-+        printf( "\tdepends on BR2_PACKAGE_%s_AVAILABLE\n", PKG );
++* The +bool+ line, +help+ line and other meta-informations about the
++  configuration option must be indented with one tab. The help text
++  itself should be indented with one tab and two spaces, and it must
++  mention the upstream URL of the project.
+ 
+-Of course, you can add other sub-options into a +if
+-BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
+-in your software. You can look at examples in other packages. The
+-syntax of the +Config.in+ file is the same as the one for the kernel
+-Kconfig file. The documentation for this syntax is available at
+-http://lxr.free-electrons.com/source/Documentation/kbuild/kconfig-language.txt[]
+ 
+ Finally you have to add your new +libfoo/Config.in+ to
+ +package/Config.in+ (or in a category subdirectory if you decided to
+@@ -47,103 +54,108 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
+ 
+-The +Config.in+ file of your package must also ensure that
+-dependencies are enabled. Typically, Buildroot uses the following
+-rules:
++The +Config.in+ file for your package must also ensure that its
++dependencies are available. This is done in four steps:
+ 
+-* Use a +select+ type of dependency for dependencies on
+-  libraries. These dependencies are generally not obvious and it
+-  therefore make sense to have the kconfig system ensure that the
+-  dependencies are selected. For example, the _libgtk2_ package uses
+-  +select BR2_PACKAGE_LIBGLIB2+ to make sure this library is also
+-  enabled.
++1. The +BR2_PACKAGE_LIBFOO_AVAILABLE+ symbol shall +depends on+ any
++other package's +_AVAILABLE+ symbol. It may also depend on any other
++symbol, such as toolchain features, but should not directly depend on
++any package's main symbol.
+ 
+-* Use a +depends on+ type of dependency when the user really needs to
+-  be aware of the dependency. Typically, Buildroot uses this type of
+-  dependency for dependencies on toolchain options (large file
+-  support, RPC support, IPV6 support), or for dependencies on "big"
+-  things, such as the X.org system. In some cases, especially
+-  dependency on toolchain options, it is recommended to add a
+-  +comment+ displayed when the option is not enabled, so that the user
+-  knows why the package is not available.
++1. The main +BR2_PACKAGE_LIBFOO+ symbol should directly +depends
++on+ it's own +_AVAILABLE+ symbol, +BR2_PACKAGE_LIBFOO_AVAILABLE+, and
++should not depend on any other symbol.
+ 
+-An example illustrates both the usage of +select+ and +depends on+.
++1. For each +_AVAILABLE+ symbol your package's own +_AVAILABLE+
++symbol depends on, your package's main symbol should +select+ the
++corresponding package's main symbol.
 +
-+        for( i = deps_end; i < nb_lines; i++ ) {
-+            printf( "%s\n", lines[i] );
-+        }
-+    }
-+}
-+'
++1. Add a +comment+ briefly explaining why your package is not
++available. That +comment+ shall have a single negative dependency on
++your package's +_AVAILABLE+ symbol.
 +
-+#-----------------------------------------------------------------------------
-+# Find all packages that depends on another package, and switch that to
-+# the new _AVAILABLE dependency, plus a select on the main symbol
++The example below illustrates this mechanism for our libfoo package:
+ 
+ --------------------------
+-config BR2_PACKAGE_ACL
+-        bool "acl"
+-        select BR2_PACKAGE_ATTR
+-        depends on BR2_LARGEFILE
+-        help
+-          POSIX Access Control Lists, which are used to define more
+-          fine-grained discretionary access rights for files and
+-          directories.
+-          This package also provides libacl.
+-
+-          http://savannah.nongnu.org/projects/acl
+-
+-comment "acl requires a toolchain with LARGEFILE support"
+-        depends on !BR2_LARGEFILE
++config BR2_PACKAGE_LIBFOO_AVAILABLE
++	def_bool y
++	depends on BR2_LARGEFILE
++	depends on BR2_PACKAGE_LIBBAR
 +
-+AWK_SCRIPT_USE='
-+BEGIN {
-+    nb_lines = 0;
-+    delete lines;
-+}
++comment "libfoo requires libbar, and a toolchain with support for LARGEFILEs"
++	depends on !BR2_PACKAGE_LIBFOO_AVAILABLE
 +
-+{ lines[nb_lines++] = $0; }
++config BR2_PACKAGE_LIBFOO
++	bool "libfoo"
++	depends on BR2_PACKAGE_LIBFOO_AVAILABLE
++	select BR2_PACKAGE_LIBBAR
++	help
++	  This is a comment that explains what libfoo is.
 +
-+END {
-+    PKG = toupper( pkg );
-+    nb_depends = 0;
-+    delete depends;
-+    for( i = 0; i < nb_lines; i++ ) {
-+        if( lines[i] == "" ) {
-+            break;
-+        } else if( lines[i] ~ "^[[:space:]]+depends on BR2_PACKAGE_[^|&[:space:]]+$" ) {
-+            pkg = gensub( "^[[:space:]]+depends on BR2_PACKAGE_([^[:space:]]+).*$",
-+                          "\\1", "g", lines[i] );
-+            depends[nb_depends++] = pkg;
-+            printf( "\tdepends on BR2_PACKAGE_%s_AVAILABLE\n", pkg );
-+        } else {
-+            printf( "%s\n", lines[i] );
-+        }
-+    }
++	  http://foosoftware.org/libfoo/
+ --------------------------
+ 
++*Notes*
 +
-+    for( ; i < nb_lines; i++ ) {
-+        printf( "%s\n", lines[i] );
-+        if( lines[i] ~ "^(menu)?config BR2_PACKAGE_" PKG "$" ) {
-+            while( lines[++i] !~ "^([[:space:]]+(select|help)|[[:space:]]*$)" ) {
-+                printf( "%s\n", lines[i] );
-+            }
-+            break;
-+        }
-+    }
++* Even if your package does not have any dependency, you should anyway
++  add the corresponding +_AVAILABLE+ symbol. This way, other packages can
++  safely use the mechanism above to select your package, even if it is later
++  updated and dependencies are added (eg. a new version of the package is
++  released; or features, initially disabled, are now enabled...)
 +
-+    for( j=0; j < nb_depends; j++ ) {
-+        printf( "\tselect BR2_PACKAGE_%s\n", depends[j] );
-+    }
++* The symbols and the comment should be in this order, so that the
++  +menuconfig+ will be properly laid out.
 +
-+    for( ; i < nb_lines; i++ ) {
-+        printf( "%s\n", lines[i] );
-+    }
-+}
-+'
++* The dependencies in +Config.in+ will make sure that your package's
++  dependencies options are also enabled, but they will not necessarily be
++  built before your package. To do so, these dependencies also need to be
++  expressed in the +.mk+ file of the package (see below).
+ 
+-Note that these two dependency types are only transitive with the
+-dependencies of the same kind.
++If your package can be fine-tuned, you can add sub-options, enclosed inside
++an +if BR2_PACKAGE_LIBFOO ... endif+ block. You can even have each option
++depend on other packages, using the +_AVAILABLE+ and main symbols for
++those pacakges.
+ 
+-This means, in the following example:
++Finally, here's our now-complete example package:
+ 
+ --------------------------
+-config BR2_PACKAGE_A
+-        bool "Package A"
++config BR2_PACKAGE_LIBFOO_AVAILABLE
++	def_bool y
++	depends on BR2_LARGEFILE
++	depends on BR2_PACKAGE_LIBBAR
+ 
+-config BR2_PACKAGE_B
+-        bool "Package B"
+-        depends on BR2_PACKAGE_A
++comment "libfoo requires libbar"
++	depends on !BR2_PACKAGE_LIBFOO_AVAILABLE
+ 
+-config BR2_PACKAGE_C
+-        bool "Package C"
+-        depends on BR2_PACKAGE_B
++config BR2_PACKAGE_LIBFOO
++	bool "libfoo"
++	depends on BR2_PACKAGE_LIBFOO_AVAILABLE
++	select BR2_PACKAGE_LIBBAR
++	help
++	  This is a comment that explains what libfoo is.
+ 
+-config BR2_PACKAGE_D
+-        bool "Package D"
+-        select BR2_PACKAGE_B
++	  http://foosoftware.org/libfoo/
+ 
+-config BR2_PACKAGE_E
+-        bool "Package E"
+-        select BR2_PACKAGE_D
+---------------------------
++if BR2_PACKAGE_LIBFOO
+ 
+-* Selecting +Package C+ will be visible if +Package B+ has been
+-  selected, which in turn is only visible if +Package A+ has been
+-  selected.
++config BR2_PACKAGE_LIBFOO_FROBBLE
++	bool "Frobble the foo"
+ 
+-* Selecting +Package E+ will select +Package D+, which will select
+-  +Package B+, it will not check for the dependencies of +Package B+,
+-  so it will not select +Package A+.
++config BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL
++	int "Gazzle level"
++	range 0 10
+ 
+-* Since +Package B+ is selected but +Package A+ is not, this violates
+-  the dependency of +Package B+ on +Package A+.  Therefore, in such a
+-  situation, the transitive dependency has to be added explicitly:
++comment "goo option requires package goo"
++	depends on !BR2_PACKAGE_GOO_AVAILABLE
+ 
+---------------------------
+-config BR2_PACKAGE_D
+-	bool "Package D"
+-	select BR2_PACKAGE_B
+-	depends on BR2_PACKAGE_A
+-
+-config BR2_PACKAGE_E
+-	bool "Package E"
+-	select BR2_PACKAGE_D
+-	depends on BR2_PACKAGE_A
+---------------------------
++config BR2_PACKAGE_LIBFOO_GOO
++	bool "goo"
++	depends on BR2_PACKAGE_GOO_AVAILABLE
++	select BR2_PACKAGE_GOO
+ 
+-Overall, for package library dependencies, +select+ should be
+-preferred.
++endif
++--------------------------
+ 
+-Note that such dependencies will make sure that the dependency option
+-is also enabled, but not necessarily built before your package. To do
+-so, the dependency also needs to be expressed in the +.mk+ file of the
+-package.
+ 
+ The +.mk+ file
+ ~~~~~~~~~~~~~~
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index d3a4abb..3e4c864 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -23,30 +23,45 @@ system is based on hand-written Makefiles or shell scripts.
+ 09: LIBFOO_INSTALL_STAGING = YES
+ 10: LIBFOO_DEPENDENCIES = host-libaaa libbbb
+ 11:
+-12: define LIBFOO_BUILD_CMDS
+-13: 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
+-14: endef
++12: ifeq ($(BR2_PACKAGE_LIBFOO_FROBBLE),y)
++13: LIBFOO_CFLAGS += -DFROBBLE
++14: endif
+ 15:
+-16: define LIBFOO_INSTALL_STAGING_CMDS
+-17: 	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
+-18: 	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
+-19: 	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
+-20: endef
+-21:
+-22: define LIBFOO_INSTALL_TARGET_CMDS
+-23: 	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
+-24: 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
+-25: endef
+-26:
+-27: define LIBFOO_DEVICES
+-28: 	/dev/foo  c  666  0  0  42  0  -  -  -
++16: LIBFOO_CFLAGS += -DGAZZLE_LEVEL=$(BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL)
++17:
++18: ifeq ($(BR2_PACKAGE_LIBFOO_GOO),y)
++19: LIBFOO_DEPENDENCIES += goo
++20: LIBFOO_CFLAGS       += -DGOO
++21: LIBFOO_LDFLAGS      += -lgoo
++22: endif
++23:
++24: define LIBFOO_BUILD_CMDS
++25: 	$(MAKE) -C $(@D)                                        \
++26: 	        CC="$(TARGET_CC)" CFLAGS="$(LIBFOO_CFLAGS)"     \
++27: 	        LD="$(TARGET_LD)" LDFLAGS="$(LIBFOO_LDFLAGS)"   \
++28: 	        all
+ 29: endef
+ 30:
+-31: define LIBFOO_PERMISSIONS
+-32: 	/bin/foo  f  4755  0  0  -  -  -  -  -
+-33: endef
+-34:
+-35: $(eval $(generic-package))
++31: define LIBFOO_INSTALL_STAGING_CMDS
++32: 	$(INSTALL) -D -m 0755 $(@D)/libfoo.a $(STAGING_DIR)/usr/lib/libfoo.a
++33: 	$(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
++34: 	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
++35: endef
++36:
++37: define LIBFOO_INSTALL_TARGET_CMDS
++38: 	$(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
++39: 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
++40: endef
++41:
++42: define LIBFOO_DEVICES
++43: 	/dev/foo  c  666  0  0  42  0  -  -  -
++44: endef
++45:
++46: define LIBFOO_PERMISSIONS
++47: 	/bin/foo  f  4755  0  0  -  -  -  -  -
++48: endef
++49:
++50: $(eval $(generic-package))
+ --------------------------------
+ 
+ The Makefile begins on line 6 to 8 with metadata information: the
+@@ -64,12 +79,20 @@ install header files and other development files in the staging space.
+ This will ensure that the commands listed in the
+ +LIBFOO_INSTALL_STAGING_CMDS+ variable will be executed.
+ 
+-On line 10, we specify the list of dependencies this package relies
+-on. These dependencies are listed in terms of lower-case package names,
+-which can be packages for the target (without the +host-+
+-prefix) or packages for the host (with the +host-+) prefix).
+-Buildroot will ensure that all these packages are built and installed
+-'before' the current package starts its configuration.
++On line 10, we specify the list of dependencies this package relies on.
++These dependencies are listed in terms of lower-case package names, which
++can be packages for the target (without the +host-+ prefix) or packages
++for the host (with the +host-+ prefix). Buildroot will ensure that all
++these packages are built and installed 'before' the current package starts
++its configuration.
 +
-+#-----------------------------------------------------------------------------
-+# Check that all 'select' on packages have a corresponding 'depends on' the
-+# corresponding _AVAILABLE symbol
-+
-+AWK_SCRIPT_CHECK='
-+BEGIN {
-+    nb_lines = 0;
-+    delete lines;
-+}
-+
-+{ lines[nb_lines++] = $0; }
-+
-+END {
-+    PKG = toupper( pkg );
-+    delete selects;
-+
-+    for( i = 0; i < nb_lines; i++ ) {
-+        if( lines[i] ~ "^(menu)?config BR2_PACKAGE_" PKG "$" ) {
-+            break;
-+        }
-+    }
-+
-+    for( ; i < nb_lines; i++ ) {
-+        if( lines[i] ~ "^([[:space:]]+help|$)" ) {
-+            break
-+        } else if( lines[i] ~ "^[[:space:]]+select BR2_PACKAGE_[^|&[:space:]]+$" ) {
-+            pkg = gensub( "^[[:space:]]+select BR2_PACKAGE_([^[:space:]]+)$",
-+                          "\\1", "g", lines[i] );
-+            selects[pkg] = 1;
-+        }
-+    }
-+
-+    for( i = 0; i < nb_lines; i++ ) {
-+        printf( "%s\n", lines[i] );
-+        if( lines[i] ~ "^config BR2_PACKAGE_" PKG "_AVAILABLE$" ) {
-+            break;
-+        }
-+    }
-+
-+    for( i++; i < nb_lines; i++ ) {
-+        if( lines[i] == "" ) {
-+            break;
-+        } else if( lines[i] ~ "^[[:space:]]+depends on BR2_PACKAGE_[^|&[:space:]]+_AVAILABLE$" ) {
-+            pkg = gensub( "^[[:space:]]+depends on BR2_PACKAGE_([^[:space:]]+)_AVAILABLE$",
-+                          "\\1", "g", lines[i] );
-+            selects[pkg] = 0;
-+        }
-+        printf( "%s\n", lines[i] );
-+    }
-+
-+    for( pkg in selects ) {
-+        if( selects[pkg] == 1 ) {
-+            printf( "\tdepends on BR2_PACKAGE_%s_AVAILABLE\n", toupper( pkg ) );
-+        }
-+    }
-+
-+    for( ; i < nb_lines; i++ ) {
-+        printf( "%s\n", lines[i] );
-+    }
-+}
-+'
-+
-+
-+#-----------------------------------------------------------------------------
-+
-+munge_files() {
-+    local awk_script="${1}"
-+
-+    find package -type f -name Config.in    \
-+    |sort                                   \
-+    |(while read in_file; do
-+        pkg="${in_file%/*}"
-+        pkg="${pkg##*/}"
-+        i=${i:-0}
-+        printf "\rMunging package %s (%d)...                                    \r"   \
-+               "${pkg}" ${i}
-+        gawk -v pkg="${pkg//-/_}" "${awk_script}" "${in_file}" >/tmp/Config.in
-+        mv /tmp/Config.in "${in_file}"
-+        i=$((i+1))
-+      done
-+      printf "\n"
-+    )
-+}
-+
-+# I have a local patch that updates the doc for the _AVAILABLE stuff,
-+# and I want all munging patches to be pushed after that
-+stg push -a >/dev/null 2>&1 || true
-+
-+# Add the _AVAILABLE symbols...
-+cat >/tmp/commit.msg <<-_EOF_
-+	packages: introduce the _AVAILABLE symbol to all packages
-+	
-+	Introducing this symbol to all packages will allow other packages
-+	to both safely select a package, and inherit its dependency.
-+	
-+	Given two packages, the mechanism works as follow:
-+	
-+	    ---8<---
-+	    config BR2_PKG_FOO_AVAILABLE
-+	    	depends on BR2_LARGEFILE
-+	
-+	    config BR2_PKG_FOO
-+	    	bool "foo"
-+	    	depends on BR2_PKG_FOO_AVAILABLE
-+	    ---8<---
-+	
-+	    ---8<---
-+	    config BR2_PKG_BAR_AVAILABLE
-+	    	def_bool y
-+	    	depends on BR2_PKG_FOO_AVAILABLE
-+	    	depends on BR2_HAS_THREADS
-+	
-+	    config BR2_PKG_BAR
-+	        bool "bar"
-+	    	depends on BR2_PKG_BAR_AVAILABLE
-+	    	select BR2_PKG_FOO
-+	    ---8<---
-+	
-+	In this case, the 'select' on package 'foo' from package 'bar' is possible,
-+	because package 'bar' inherits, via the BR2_PKG_BAR_AVAILABLE symbol, the
-+	same dependencies as package 'foo'. So, package 'bar' can not be visible
-+	if package 'foo' is not (although 'bar' may be hidden because of other
-+	dependencies of its own, missing threads in the example).
-+	
-+	This patch only introduces this new symbol for all packages, moves the
-+	packages' dependencies to these new symbols, and makes each package depend
-+	solely on this new symbol. Cross-package use of 'select' will be introduced
-+	in a later patch.
-+	
-+	With the construct above, using 'select' is now safe.
-+_EOF_
-+stg new --sign -f /tmp/commit.msg pkg-add-available
-+rm /tmp/commit.msg
-+munge_files "${AWK_SCRIPT_ADD}"
-+stg refresh
-+
-+# ... and use them, now! ;-)
-+cat >/tmp/commit.msg <<-_EOF_
-+	packages: use the newly-introduced _AVAILABLE symbol
-+	
-+	This patch transforms all 'depends on' on a package to a 'depends on'
-+	the corresponding _AVAILABLE symbol, and adds a 'select' against the
-+	dependant package.
-+_EOF_
-+stg new --sign -f /tmp/commit.msg pkg-use-available
-+rm /tmp/commit.msg
-+munge_files "${AWK_SCRIPT_USE}"
-+stg refresh
-+
-+# Finally, check for missing 'depends on ..._AVAILABLE'
-+cat >/tmp/commit.msg <<-_EOF_
-+	packages: check proper use of 'select' against packages
-+	
-+	This patch checks that all 'select' on a package have a 'depends on'
-+	on the corresponding _AVAILABLE symbol.
-+_EOF_
-+stg new --sign -f /tmp/commit.msg pkg-check-available
-+rm /tmp/commit.msg
-+munge_files "${AWK_SCRIPT_CHECK}"
-+stg refresh
-+
-+# And eventually, get rid of ourselves (Seppuku!)
-+cat >/tmp/commit.msg <<-_EOF_
-+	script/support: get rid of now-useless pkg-avail script
-+	
-+	This script has done its job, and is no-longer needed.
-+	RIP, script!
-+_EOF_
-+stg new --sign -f /tmp/commit.msg pkg-delete-pkg_avail
-+rm /tmp/commit.msg
-+rm -f support/scripts/pkg-avail
-+git rm support/scripts/pkg-avail
-+stg refresh
-+
-+# And eventually, get rid of ourselves (Seppuku!)
-+
++On lines 12 to 14, if the user did select the option
+++BR2_PACKAGE_LIBFOO_FROBBLE+ (see above, in the +Config.in+), we
++conditionnally add a value to the +CFLAGS+. On line 16, we add the 'gazzle
++level' +BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL+ to the +CFLAGS+. And on lines 18
++to 22, if the user selected 'goo' support, +BR2_PACKAGE_LIBFOO_GOO+, we
++add a dependency on the package +goo+, and add appropriate +CFLAGS+ and
+++LDFLAGS+.
+ 
+ The rest of the Makefile defines what should be done at the different
+ steps of the package configuration, compilation and installation.
+@@ -79,11 +102,11 @@ steps should be performed to install the package in the staging space.
+ +LIBFOO_INSTALL_TARGET_CMDS+ tells what steps should be
+ performed to install the package in the target space.
+ 
+-All these steps rely on the +$(@D)+ variable, which
+-contains the directory where the source code of the package has been
+-extracted.
++All these steps rely on the +$(@D)+ variable, which contains the directory
++where the source code of the package has been extracted, and where the
++package is being built.
+ 
+-Finally, on line 35, we call the +generic-package+ which
++Finally, on line 50, we call the +generic-package+ which
+ generates, according to the variables defined previously, all the
+ Makefile code necessary to make your package working.
+ 
 -- 
 1.7.2.5
