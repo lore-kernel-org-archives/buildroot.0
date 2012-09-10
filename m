@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 10 Sep 2012 19:53:16 +0000 (UTC)
+Date: Mon, 10 Sep 2012 20:05:14 +0000 (UTC)
 Subject: [Buildroot] [Bug 5378] dropbear Makefile broken
 In-Reply-To: <bug-5378-163@https.bugs.busybox.net/>
 References: <bug-5378-163@https.bugs.busybox.net/>
-Message-ID: <20120910195316.BEEAC995FD@busybox.osuosl.org>
+Message-ID: <20120910200515.20F1A995FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,25 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=5378
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> 2012-09-10 19:53:16 UTC ---
-(In reply to comment #3)
-> The build of the dropbear package was failing, because there was no rule to
-> create "-lcrypt" obj.
+--- Comment #5 from Mike Frysinger <vapier@gentoo.org> 2012-09-10 20:05:14 UTC ---
+(In reply to comment #1)
 
-Hmm, I don't seem to be able to reproduce this. Could you provide more details
-about your config, please?
+it would be better to fix Makefile.in itself and then send the fix upstream
+
+(In reply to comment #2)
+
+make has implicit rules to handle "-lfoo" in its dependency list.  so dropbear
+does this:
+
+dropbearobjs=$(COMMONOBJS) $(CLISVROBJS) $(SVROBJS) @CRYPTLIB@
+...
+dropbear: $(dropbearobjs)
+
+this expands into:
+dropbear: ... -lcrypt
+
+and make executes its implicit code to try and find /usr/lib/libcrypt.a.  if
+you don't have that, it'll fail.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
