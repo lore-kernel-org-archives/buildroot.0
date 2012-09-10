@@ -1,38 +1,26 @@
-From: Rishi <rishid+mailman@gmail.com>
-Date: Mon, 10 Sep 2012 14:21:47 -0400
-Subject: [Buildroot] Relocate uClibc toolchain question
-Message-ID: <CAJbs9BEw+45qVbj_zcy_iFj3dGbHdN772upUXFg=pDiaR7WEsw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 10 Sep 2012 19:53:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 5378] dropbear Makefile broken
+In-Reply-To: <bug-5378-163@https.bugs.busybox.net/>
+References: <bug-5378-163@https.bugs.busybox.net/>
+Message-ID: <20120910195316.BEEAC995FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=5378
 
-I have built a uClibc toolchain using Buildroot 2012.05.
-- uClibc 0.9.33
-- gcc 4.6.x
-- C++ support
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> 2012-09-10 19:53:16 UTC ---
+(In reply to comment #3)
+> The build of the dropbear package was failing, because there was no rule to
+> create "-lcrypt" obj.
 
-The toolchain works perfectly but I want to move it from my home
-directory to a directory that can be shared with the team, like
-/opt/arm_uClibc/..
+Hmm, I don't seem to be able to reproduce this. Could you provide more details
+about your config, please?
 
-I performed a "cp -rf output/host/ /opt/arm_uClibc" and then attempted
-to use this compiler by passing the --sysroot option as suggested in
-Documentation.
-(http://buildroot.uclibc.org/downloads/manual/manual.html#_using_the_generated_toolchain_outside_buildroot)
-
-This seemed to be working but as soon as I performed a distclean in my
-buildroot area the toolchain broke; it could not find libmpc.so.2 as
-well as C standard include headers.
-
-Executing command:
-arm-linux-g++ -c -Wall --sysroot=/opt/arm_uClibc main.cpp
-
-2 questions:
-1. Any ideas on how to fix this?  Codesourcery toolchain does not have
-libmpc.so.2, so I was a bit puzzled.
-2. Why doesn't CodeSourcery's toolchain require this sysroot thing?  I
-can move their compiler anywhere and it works perfectly fine.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
