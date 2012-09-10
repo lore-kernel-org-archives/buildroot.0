@@ -1,59 +1,32 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 10 Sep 2012 15:03:29 +0200
-Subject: [Buildroot] Uncompressed kernel image for ARM architecture
-	(Raspberry)
-In-Reply-To: <CAMPeO9yjDwyhqpA0nOwLcp25cponBsP_OC_J4T7+22Jj_OzoaA@mail.gmail.com>
-References: <CAMPeO9yjDwyhqpA0nOwLcp25cponBsP_OC_J4T7+22Jj_OzoaA@mail.gmail.com>
-Message-ID: <CAAfyv34EEAb4foJqdxLjkJa1yHZkEM8tH=ptGJWTmP_S_NcL7w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 10 Sep 2012 16:27:37 +0200
+Subject: [Buildroot] [PATCH] Replace DL_DIR refs in the GIT/SVN/HG
+	download
+In-Reply-To: <CANxTyt4a9qs1uspp6RUQq5Mm8sALLStdOfJdTsbky_PsCQWdNA@mail.gmail.com>
+ (Danomi Manchego's message of "Mon, 27 Aug 2012 21:13:03 -0400")
+References: <1346026375-15339-1-git-send-email-danomimanchego123@gmail.com>
+ <CAHXCMMKs4GxWiKbi8dnjezAK5z9s0srDh6u6TFD+BVOG5bWSLA@mail.gmail.com>
+ <CANxTyt4a9qs1uspp6RUQq5Mm8sALLStdOfJdTsbky_PsCQWdNA@mail.gmail.com>
+Message-ID: <87y5kiymue.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi David,
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-On Mon, Sep 10, 2012 at 3:01 PM, David Sanchez Herrero
-<david.krusty@gmail.com> wrote:
-> Hi all,
->
-> Is there a way to obtain uncompressed kernel image for ARM architecture?
->
-> I'm trying to build a kernel and a root filesystem for Raspberry Pi from an
-> internal buildroot toolchain with uClibc, but the only supported formats for
-> the output kernel image are vmlinux, uImage and zImage.
->
-> Downloading the kernel sources from the Raspberry Git repositories, and
-> building them manually, an image file called "Image" is generated under
-> ".arch/arm/boot/" folder, but this file doesn't exists if the building
-> process of the same sources is made by Buildroot.
-Currently I have in my queue patches for RPI bootloader + kernel. Need
-to do some testing
-and the I'll post it to ML.
->
-> Maybe using BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM?
->
-> Thanks in advance.
->
-> Greeting, David.
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Hi,
 
-Regards,
+ Danomi> Basically, Arnout's reminder that the default DL_DIR value
+ Danomi> is?"$(TOPDIR)/dl" was enough to convince me to recommend adding
+ Danomi> $(TOPDIR) to all our defconfigs - fixing my particular
+ Danomi> situation. ?So I'm not 100% invested in this patch, if people
+ Danomi> would rather?leave the download helpers as-is ...
 
-mbe
+I've just pushed a change to use mkdir -p $(DL_DIR) && cd $(DL_DIR) &&
+pwd similiar to how we do for the output directory for out of tree
+builds.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+Bye, Peter Korsgaard
