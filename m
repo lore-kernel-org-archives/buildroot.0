@@ -1,49 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Sep 2012 09:04:45 +0200
-Subject: [Buildroot] [PATCH] pppd: fix build failures
-In-Reply-To: <1347044851-24272-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 7 Sep 2012 20:07:31 +0100")
-References: <1347044851-24272-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87fw6pyr8y.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Sep 2012 22:56:50 +0200
+Subject: [Buildroot] [git commit] linux-firmware: update to a more recent
+	git snapshot
+Message-ID: <20120911070828.1FCC09960A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0cf33385468889c7ec1ddbdae2c81ecabc4f9584
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Fix pppd build failures such as Build 8a9369fece696e012249b865708ffee533c5318a
+This update pulls in new ath6k and realtek drivers and updates for
+libertas and iwlwifi:
 
- spdawson> http://autobuild.buildroot.net/results/8a9369fece696e012249b865708ffee533c5318a/build-end.log
+a707c25 Merge branch 'master' of git://dev.laptop.org/users/dsd/linux-firmware
+adb6547 rtlwifi/rtl8723e: Add firmware for new driver
+4e17394 linux-firmware: ath6k: add firmware for AR6004 hw1.3
+bac3567 Marvell SD8787: update to v14.66.9.p96
+6a08d14 Marvell SD8686: update to v9.70.20.p0
+bbede96 iwlwifi: update firmware for 6205
 
- spdawson> Note that, although this is a build failure, the pppd plugin makefile is
- spdawson> such that plugin build failures are not correctly detected. Consequently,
- spdawson> the failure does not appear until the install phase, at which point the
- spdawson> following error occurs.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/linux-firmware/linux-firmware.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- spdawson> /usr/bin/install -D /home/test/test/output/build/pppd-2.4.5/pppd/plugins/rp-pppoe/rp-pppoe.so /home/test/test/output/target/usr/lib/pppd/2.4.5/rp-pppoe.so
- spdawson> /usr/bin/install: cannot stat `/home/test/test/output/build/pppd-2.4.5/pppd/plugins/rp-pppoe/rp-pppoe.so': No such file or directory
- spdawson> make: *** [/home/test/test/output/build/pppd-2.4.5/.stamp_target_installed] Error 1
-
-Thanks, but I don't think this is the right fix. The problem is that
-pppd contains copies of some of the kernel headers it uses, but not all.
-
-The build error is because one of the headers it does have a copy of
-(if_pppol2tp.h) was updated for kernel 3.5, and another kernel header
-(if_pppox.h) which includes this and depends on the change is not
-present in the pppd sources, causing us to use a mix of kernel and pppd
-headers.
-
-Just updating the included header might not always work, as you don't
-have any guarantee that it will be compatible with any random kernel
-headers (E.G. is sockaddr_in6 available?)
-
-Mike fixed it in gentoo by simply getting rid of the included
-if_pppol2tp.h copy, which makes sense to me as it has been included in
-the kernel since 2.6.23 (and the fix we were carrying was for the update
-in 2.6.35), so I've committed a fix doing that.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 23afafa..09836a4 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -3,7 +3,7 @@
+ # linux-firmware
+ #
+ #############################################################
+-LINUX_FIRMWARE_VERSION = 7560108a2c94a62056fa82d912282b901aa0904f
++LINUX_FIRMWARE_VERSION = a707c25a6e992b8ee6127a6ebab63dd063043047
+ LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
