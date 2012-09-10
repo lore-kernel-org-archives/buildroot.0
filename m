@@ -1,61 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Sep 2012 22:31:27 +0200
-Subject: [Buildroot] Relocate uClibc toolchain question
-In-Reply-To: <CAHXCMMJjd3tt2NLfu=O2uKF1-gHyWBdhEhpsbGCRzxRRrt=ATQ@mail.gmail.com>
-References: <CAJbs9BEw+45qVbj_zcy_iFj3dGbHdN772upUXFg=pDiaR7WEsw@mail.gmail.com>
- <CAHXCMMJjd3tt2NLfu=O2uKF1-gHyWBdhEhpsbGCRzxRRrt=ATQ@mail.gmail.com>
-Message-ID: <201209102231.27949.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 10 Sep 2012 20:52:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 5378] dropbear Makefile broken
+In-Reply-To: <bug-5378-163@https.bugs.busybox.net/>
+References: <bug-5378-163@https.bugs.busybox.net/>
+Message-ID: <20120910205240.1347B99343@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sameul, Rishi, All,
+https://bugs.busybox.net/show_bug.cgi?id=5378
 
-On Monday 10 September 2012 22:14:42 Samuel Martin wrote:
-> 2012/9/10 Rishi <rishid+mailman@gmail.com>:
-> > I performed a "cp -rf output/host/ /opt/arm_uClibc" and then attempted
-> > to use this compiler by passing the --sysroot option as suggested in
-> > Documentation.
-> > (http://buildroot.uclibc.org/downloads/manual/manual.html#_using_the_generated_toolchain_outside_buildroot)
-> Afaik, Buildroot toolchain are not yet fully relocatable
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> 2012-09-10 20:52:39 UTC ---
+(In reply to comment #5)
+> (In reply to comment #1)
+> 
+> it would be better to fix Makefile.in itself and then send the fix upstream
+> 
+> (In reply to comment #2)
+> 
+> make has implicit rules to handle "-lfoo" in its dependency list.  so dropbear
+> does this:
+> 
+> dropbearobjs=$(COMMONOBJS) $(CLISVROBJS) $(SVROBJS) @CRYPTLIB@
+> ...
+> dropbear: $(dropbearobjs)
+> 
+> this expands into:
+> dropbear: ... -lcrypt
+> 
+> and make executes its implicit code to try and find /usr/lib/libcrypt.a.  if
+> you don't have that, it'll fail.
 
-IIRC, that's right.
+Ahh yes, I missed that.
 
-> However, both solutions (based on adding output/host/usr/bin to your
-> PATH or changing the host directory location) should works.
-
-Right again. In Rishi's case, I'd suggest (s)he sets the host directory
-location, and rebuilds from scratch.
-
-> > 1. Any ideas on how to fix this?  Codesourcery toolchain does not have
-> > libmpc.so.2, so I was a bit puzzled.
-> Afaik, libmpc is not a mandatory for a toolchain (you don't need it
-> for building the toolchain itself).
-
-Wrong. gcc needs mpc to do calculations on complex numbers. gcc needs a few
-other such libraries (which I call "companion libraries"):
-  gmp         GNU Multi-Precision arithmetic library
-  mpfr        Multiple-Precision Floating-point with correct Rounding
-  mpc         Multiple-Precision on Complex numbers
-  ppl         Parma-Polyhedral Library
-  cloog/ppl   Chunky LOOp Generator with PPL as backend
-
-And I would guess CS toolchain are statically linked against libmpc, hence
-the reason there's no such lib in their toolchain, as they do for the other
-companion libraries.
-
-Static linking against the companion libraries is also what crosstool-NG
-does.
-
-Regards,
-Yann E. MORIN.
+And yes, I agree with Mike. Please fix it correctly (E.G. in Makefile.in) and
+submit upstream.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
