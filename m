@@ -1,119 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Sep 2012 10:45:19 +0200
-Subject: [Buildroot] [git commit] schifra: new package
-Message-ID: <20120910084611.1667099601@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 10 Sep 2012 10:48:57 +0200
+Subject: [Buildroot] [PATCH] linux-firmware: update to a more recent git
+	snapshot
+Message-ID: <1347266937-9242-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48a68499d17a730fdf83934f5e9032eb373c596d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This update pulls in new ath6k and realtek drivers and updates for
+libertas and iwlwifi:
 
-[Peter: minor fixes/cleanups]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+a707c25 Merge branch 'master' of git://dev.laptop.org/users/dsd/linux-firmware
+adb6547 rtlwifi/rtl8723e: Add firmware for new driver
+4e17394 linux-firmware: ath6k: add firmware for AR6004 hw1.3
+bac3567 Marvell SD8787: update to v14.66.9.p96
+6a08d14 Marvell SD8686: update to v9.70.20.p0
+bbede96 iwlwifi: update firmware for 6205
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/Config.in          |    1 +
- package/schifra/Config.in  |   18 ++++++++++++++
- package/schifra/schifra.mk |   55 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 74 insertions(+), 0 deletions(-)
+ package/linux-firmware/linux-firmware.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7fd26a5..441159d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -473,6 +473,7 @@ source "package/mtdev2tuio/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/protobuf/Config.in"
-+source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
- endmenu
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 23afafa..09836a4 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -3,7 +3,7 @@
+ # linux-firmware
+ #
+ #############################################################
+-LINUX_FIRMWARE_VERSION = 7560108a2c94a62056fa82d912282b901aa0904f
++LINUX_FIRMWARE_VERSION = a707c25a6e992b8ee6127a6ebab63dd063043047
+ LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
  
-diff --git a/package/schifra/Config.in b/package/schifra/Config.in
-new file mode 100644
-index 0000000..466ac0e
---- /dev/null
-+++ b/package/schifra/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_SCHIFRA
-+	bool "schifra"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Schifra is a very robust, highly optimized and extremely configurable
-+	  Reed-Solomon error correcting code library for both software and IP
-+	  core based applications with implementations in C++ and VHDL.
-+
-+	  http://www.schifra.com/
-+
-+config BR2_PACKAGE_SCHIFRA_EXAMPLES
-+	bool "schifra examples"
-+	depends on BR2_PACKAGE_SCHIFRA
-+	help
-+	  Build and install the schifra example applications.
-+
-+comment "schifra requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/schifra/schifra.mk b/package/schifra/schifra.mk
-new file mode 100644
-index 0000000..0285b62
---- /dev/null
-+++ b/package/schifra/schifra.mk
-@@ -0,0 +1,55 @@
-+#############################################################
-+#
-+# schifra
-+#
-+#############################################################
-+SCHIFRA_VERSION = 0.0.1
-+SCHIFRA_SITE = http://www.schifra.com/downloads
-+SCHIFRA_SOURCE = schifra.tgz
-+SCHIFRA_INSTALL_STAGING = YES
-+SCHIFRA_LICENSE = schifra license
-+SCHIFRA_LICENSE_FILES = schifra_license.txt
-+
-+SCHIFRA_MAKE_OPT = COMPILER="$(TARGET_CXX)" \
-+		   OPTIONS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS) -o"
-+
-+# The examples are the only buildable artefacts.
-+ifeq ($(BR2_PACKAGE_SCHIFRA_EXAMPLES),y)
-+define SCHIFRA_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPT) all
-+endef
-+
-+define SCHIFRA_INSTALL_EXAMPLES
-+	cd $(@D) && for i in `find -type f -name 'schifra_*' -executable` ; \
-+	do \
-+		$(INSTALL) -m 0755 -D $$i (TARGET_DIR)/usr/bin/$$i; \
-+	done
-+endef
-+
-+SCHIFRA_POST_TARGET_INSTALL_HOOKS += SCHIFRA_INSTALL_EXAMPLES
-+endif
-+
-+define SCHIFRA_INSTALL_TARGET_CMDS
-+	cd $(@D) && for i in schifra_*.hpp; do \
-+		$(INSTALL) -m 0644 -D $$i $(TARGET_DIR)/usr/include/$$i; done
-+endef
-+
-+define SCHIFRA_INSTALL_STAGING_CMDS
-+	cd $(@D) && for i in schifra_*.hpp; do \
-+		$(INSTALL) -m 0644 -D $$i $(STAGING_DIR)/usr/include/$$i; done
-+endef
-+
-+define SCHIFRA_UNINSTALL_TARGET_CMDS
-+	$(RM) $(TARGET_DIR)/usr/include/schifra_*.hpp
-+	$(RM) $(TARGET_DIR)/usr/bin/schifra_*
-+endef
-+
-+define SCHIFRA_UNINSTALL_STAGING_CMDS
-+	$(RM) $(STAGING_DIR)/usr/include/schifra_*.hpp
-+endef
-+
-+define SCHIFRA_CLEAN_CMDS
-+	$(MAKE) -C $(@D) $(SCHIFRA_MAKE_OPT) clean
-+endef
-+
-+$(eval $(generic-package))
+-- 
+1.7.9.5
