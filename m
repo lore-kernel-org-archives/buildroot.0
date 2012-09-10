@@ -1,92 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 10 Sep 2012 13:43:37 +0200
-Subject: [Buildroot] [PATCH RFC] patches-from-git.sh: new support script
-Message-ID: <1347277417-5078-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Sep 2012 14:34:03 +0200
+Subject: [Buildroot] Question: exporting
+ QWS_KEYBOARD=LinuxInput:/dev/input/event0" hang application
+In-Reply-To: <CAAfyv34dT-531F66fHTx8-Tk7nXP0NkSPx_L2SOYkgc--CucDw@mail.gmail.com>
+References: <CAAfyv34dT-531F66fHTx8-Tk7nXP0NkSPx_L2SOYkgc--CucDw@mail.gmail.com>
+Message-ID: <20120910143403.48f87840@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patches-from-git.sh script automates the creation of patches
-from a git repository.  It adds some post-processing on top
-of git-format-patch to make sure that only relevant modifications
-are made to a patch file.
+Le Mon, 10 Sep 2012 11:08:54 +0200,
+Belisko Marek <marek.belisko@gmail.com> a ?crit :
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-The intention is to use this to simplify patching of packages,
-in combination with the XXX_OVERRIDE_DIR facility.
+> I know this isn't related to buildroot but maybe somehow have same troubles.
+> I've build simple buildroot rootfs (2012.08 based) with QT4.8.2, my
+> small qt application
+> and dropbear.
+> 
+> I can start my application and it is working fine. When need to add
+> keyboard handling
+> from USB keyboard application hang (with no useful data in console) that way:
+> export QWS_KEYBOARD="LinuxInput:/dev/input/event0" ./app -qws
+> 
+> I've double check qt configuration and linuxinput is checked.
+> Anybody have same troubles?
 
- support/scripts/patches-from-git.sh |   61 +++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+I remember having problems with Qt as soon as I started defining
+QWS_KEYBOARD, but I don't remember if the problem was exactly the one
+you had.
 
-diff --git a/support/scripts/patches-from-git.sh b/support/scripts/patches-from-git.sh
-new file mode 100755
-index 0000000..fd7afbc
---- /dev/null
-+++ b/support/scripts/patches-from-git.sh
-@@ -0,0 +1,61 @@
-+#! /bin/sh
-+# patches-from-git.sh - Create buildroot patches from a git repository
-+#
-+
-+outdir="$1"
-+gitdir="$2"
-+basecommit="$3"
-+basename="$4"
-+
-+if [ $# != 4 ]; then
-+	cat >&2 <<EOF
-+Usage: $0 <outdir> <gitdir> <base-commit> <basename>
-+
-+Patches are created from the repository in <gitdir>, starting from
-+(and excluding) <base-commit>, up to HEAD.  The patches are stored
-+in <outdir> and are named <basename>-00nn-commit-msg.patch.
-+<gitdir> must not contain uncommitted changes.
-+EOF
-+	exit 1
-+fi
-+
-+# Verify arguments
-+if [ ! -d "$outdir" ]; then
-+	printf 'Output directory "%s" doesn'\''t exist\n' "$outdir" >&2
-+	exit 1
-+fi
-+
-+if [ ! -d "$gitdir" ]; then
-+	printf 'git repository "%s" doesn'\''t exist\n' "$outdir" >&2
-+	exit 1
-+fi
-+cd "$gitdir"
-+git rev-parse --verify HEAD >/dev/null || exit 1
-+
-+if ! git rev-parse --verify "$basecommit" > /dev/null; then
-+	printf 'Invalid base commit "%s"\n' "$basecommit" >&2
-+	exit 1
-+fi
-+
-+
-+# First delete the existing patches, so rebases are supported correctly
-+/bin/rm -f "${outdir}/${basename}"-*.patch
-+
-+# Make patches unnumbered (-N) to avoid differences just because the
-+# total has changed.
-+# Don't track renames, because apply-patches.sh doesn't deal with them.
-+patchfiles=$(git format-patch -o "$outdir" -N --no-renames "$basecommit") || exit 1
-+
-+# Give the patches the correct name
-+# Also strip the last two lines, which contain the git version, to avoid
-+# differences just because git has changed.  Note that this is not very
-+# robust, because future git versions may add other cruft there.
-+for patch in $patchfiles; do
-+	lastdashline=$(awk '
-+			BEGIN {lastdash=0}
-+			/^--[[:space:]]$/ {lastdash=NR}
-+			END {print lastdash}' \
-+		"$patch")
-+	head -$lastdashline "$patch" > "${outdir}/${basename}-${patch##*/}"
-+	/bin/rm -f "$patch"
-+done
+Can you try to add the attached patch to the Qt package? It has been
+written for Qt 4.7.3, but since the patch is trivial, I guess it can be
+quickly adapted to Qt 4.8.2. It's the patch I had to fix the problem I
+encountered, but again I don't remember the exact problem, and I have
+been apparently too lazy to describe it in the patch description.
+
+Best regards,
+
+Thomas
 -- 
-tg: (666eb02..) t/patches-from-git (depends on: master)
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qt-4.7.3-remove-ioctl.patch
+Type: text/x-patch
+Size: 721 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120910/685f2bd7/attachment.bin>
