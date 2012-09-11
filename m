@@ -1,42 +1,27 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Tue, 11 Sep 2012 10:46:02 -0400
-Subject: [Buildroot] [PATCH 1/4] If linux-pam is built,
- enable dbm functionality in Berkeley DB
-In-Reply-To: <20120911163208.3e9d23b3@skate>
-References: <1347078066-25257-1-git-send-email-golubovsky@gmail.com>
- <20120911163208.3e9d23b3@skate>
-Message-ID: <CADiAo4Ly0Tv=bJMewpY=PW9fj4cWNKG-vdwdQwbiySSZ6kRkAA@mail.gmail.com>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Tue, 11 Sep 2012 12:15:58 -0500
+Subject: [Buildroot] disabling parallel make for a generic package
+Message-ID: <CAE9DZUThTZYAbwUhhDOct5wDA3BGh48z3Yvv0cK8_ZvAoJBp_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello All,
 
-On Tue, Sep 11, 2012 at 10:32 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Sat,  8 Sep 2012 00:21:03 -0400,
-> Dmitry <golubovsky@gmail.com> a ?crit :
->
->> +             $(if $(BR2_PACKAGE_LINUX_PAM),--enable-dbm,--disable-dbm) \
->
-> I don't really like this. I think you should rather add a configuration
-> sub-option in package/berkeleydb/Config.in to enable/disable DBM
-> support, and then have berkeleydb.mk test this configuration option,
-> and the linux-pam/Config.in package select it.
+I need to turn off parallel make for one particular generic package.
+I see that this can be done for an auto-tools package by doing the
+following:
 
-Well, adding extra config options is what I really wanted to avoid.
-But this may be just my way of thinking.
+LIBFOO_MAKE=$(MAKE1)
 
-> I don't like when one package recipe pokes into the configuration
-> options of another package.
+This doesn't seem to work for my generic package though.  Is there a
+different way to do this for generic packages?
 
-It is not a problem to add such configuration item, I'll do it.
+Btw, I'm using buildroot 2012.08.
 
-Thanks.
 
--- 
-Dmitry Golubovsky
+Thanks,
 
-Anywhere on the Web
+Dallas
