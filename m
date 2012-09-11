@@ -1,81 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Sep 2012 08:59:56 +0200
-Subject: [Buildroot] [git commit] pppd: fix build with 3.5+ kernel headers
-Message-ID: <20120911070828.61AFC9960A@busybox.osuosl.org>
+Date: Tue, 11 Sep 2012 09:13:11 +0200
+Subject: [Buildroot] [git commit] lcdproc: fix build with high BR2_JLEVEL
+	setting
+Message-ID: <20120911071421.3C9F599604@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94ce13a56f238bbba01bdfc893cfbc4e62169287
+commit: http://git.buildroot.net/buildroot/commit/?id=3b9e61f9234165db1f70021396c8d59c2d52d3ec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/8a9369fece696e012249b865708ffee533c5318a
-
-Pppd bundles some, but not all needed kernel headers. In Linux 3.5 (and
-before that 2.6.35) if_pppol2tp.h was changed, so the embedded copy was no
-longer compatible.
-
-if_pppol2tp.h has been part of the exported kernel headers since 2.6.23, so
-simply drop the bundled copy and use the kernel headers instead, similar
-to how it is done in Gentoo:
-
-https://bugs.gentoo.org/show_bug.cgi?id=427684
+Fixes http://autobuild.buildroot.net/results/646db4b6b284beb4392759a57efffc8d10ee9f49
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch |   24 ------------------------
- package/pppd/pppd.mk                         |    9 +++++++++
- 2 files changed, 9 insertions(+), 24 deletions(-)
+ package/lcdproc/lcdproc.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch b/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch
-deleted file mode 100644
-index 0e71e24..0000000
---- a/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
----- ppp-2.4.5/include/linux/if_pppol2tp.h       2009-11-16 22:26:07.000000000 +0000
--+++ ppp-2.4.5/include/linux/if_pppol2tp.h       2010-07-16 22:35:22.000000000 +0100
--@@ -32,6 +32,20 @@
--  	__u16 d_tunnel, d_session;	/* For sending outgoing packets */
-- };
--
--+/* The L2TPv3 protocol changes tunnel and session ids from 16 to 32
--+ * bits. So we need a different sockaddr structure.
--+ */
--+struct pppol2tpv3_addr {
--+       pid_t   pid;                    /* pid that owns the fd.
--+                                        * 0 => current */
--+       int     fd;                     /* FD of UDP or IP socket to use */
--+
--+       struct sockaddr_in addr;        /* IP address and port to send to */
--+
--+       __u32 s_tunnel, s_session;      /* For matching incoming packets */
--+       __u32 d_tunnel, d_session;      /* For sending outgoing packets */
--+};
--+
-- /* Socket options:
--  * DEBUG	- bitmask of debug message categories
--  * SENDSEQ	- 0 => don't send packets with sequence numbers
--
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 259d1dc..b13dbab 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -23,6 +23,15 @@ ifeq ($(BR2_INET_IPV6),y)
- 	PPPD_MAKE_OPT += HAVE_INET6=y
- endif
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index e4944da..7fd8a44 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
+@@ -8,6 +8,7 @@ LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
+ LCDPROC_SITE = http://downloads.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
+ LCDPROC_LICENSE = GPLv2+
+ LCDPROC_LICENSE_FILES = COPYING
++LCDPROC_MAKE = $(MAKE1)
  
-+# pppd bundles some but not all of the needed kernel headers. The embedded
-+# if_pppol2tp.h is unfortunately not compatible with kernel headers > 2.6.34,
-+# and has been part of the kernel headers since 2.6.23, so drop it
-+define PPPD_DROP_INTERNAL_IF_PPOL2TP_H
-+	$(RM) $(@D)/include/linux/if_pppol2tp.h
-+endef
-+
-+PPPD_POST_EXTRACT_HOOKS += PPPD_DROP_INTERNAL_IF_PPOL2TP_H
-+
- define PPPD_CONFIGURE_CMDS
- 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
- 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
+ LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
+ 
