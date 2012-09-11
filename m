@@ -1,30 +1,37 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 11 Sep 2012 10:29:42 +0000 (UTC)
-Subject: [Buildroot] Relocate uClibc toolchain question
-References: <CAJbs9BEw+45qVbj_zcy_iFj3dGbHdN772upUXFg=pDiaR7WEsw@mail.gmail.com>
-Message-ID: <k2n3qm$q27$1@ger.gmane.org>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Tue, 11 Sep 2012 05:29:52 -0700 (PDT)
+Subject: [Buildroot] big root fs
+Message-ID: <1347366592.32116.YahooMailNeo@web164601.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-09-10, Rishi <rishid+mailman@gmail.com> wrote:
-> Hello,
->
-> I have built a uClibc toolchain using Buildroot 2012.05.
-> - uClibc 0.9.33
-> - gcc 4.6.x
-> - C++ support
->
-> The toolchain works perfectly but I want to move it from my home
-> directory to a directory that can be shared with the team, like
-> /opt/arm_uClibc/..
-
-In that case, it might be easier to use Crosstool-NG to build a
-toolchain.  AFAICT, the toolchains it generates can be moved anywhere
-(even to different machines).  [Though I think you do need the
-sysroot option when you run a relocated ctng toolchain.]
-
--- 
-Grant
+Hello
+?
+I built linux kernel using Buildroot, but included glibc support instead of
+uClibc. For that matter I was using Crosstool NG. 
+I achieved the goal - compiled the GTK?applications and they work on
+my target ARM board. All of that is?by using?NFS on my Ubuntu machine.
+However the size of generated jffs2 is 52MB- which is huge for me.
+Although I included GTK examples, and maybe few more properties I still
+wander if the size is related (only)?to glibc matter. 
+I will try building with uClibc (only to detect difference in size), but at the 
+moment it is important to me to use glibc, so what else can contribute to 
+overal size of image, other than??(maybe) glibc. 
+I attatched my .config if someone want to look at it and maybe find some 
+memory eating matter. Also,?can size of glibc be reduced, by throwing
+out some properties.
+?
+Regards
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120911/a73951a3/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 29821 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120911/a73951a3/attachment-0001.wsdl>
