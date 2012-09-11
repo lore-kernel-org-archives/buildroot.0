@@ -1,33 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Sep 2012 09:13:11 +0200
-Subject: [Buildroot] [git commit] lcdproc: fix build with high BR2_JLEVEL
-	setting
-Message-ID: <20120911071421.3C9F599604@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Sep 2012 09:28:47 +0200
+Subject: [Buildroot] Question: exporting
+ QWS_KEYBOARD=LinuxInput:/dev/input/event0" hang application
+In-Reply-To: <CAAfyv37v2DDX6NQ9srjoeudYHQnDe9OHv1hgkAFqce3KKzrppw@mail.gmail.com>
+References: <CAAfyv34dT-531F66fHTx8-Tk7nXP0NkSPx_L2SOYkgc--CucDw@mail.gmail.com>
+ <20120910143403.48f87840@skate>
+ <CAAfyv37v2DDX6NQ9srjoeudYHQnDe9OHv1hgkAFqce3KKzrppw@mail.gmail.com>
+Message-ID: <20120911092847.11c26ee6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b9e61f9234165db1f70021396c8d59c2d52d3ec
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Mon, 10 Sep 2012 22:13:57 +0200,
+Belisko Marek <marek.belisko@gmail.com> a ?crit :
 
-Fixes http://autobuild.buildroot.net/results/646db4b6b284beb4392759a57efffc8d10ee9f49
+> > Can you try to add the attached patch to the Qt package? It has been
+> > written for Qt 4.7.3, but since the patch is trivial, I guess it can be
+> > quickly adapted to Qt 4.8.2. It's the patch I had to fix the problem I
+> > encountered, but again I don't remember the exact problem, and I have
+> > been apparently too lazy to describe it in the patch description.
+> Thanks. It helps. It's not freezing with your patch.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lcdproc/lcdproc.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Great. The patch is more a workaround than a real bug, but it would be
+nice to implement a real fix and submit it upstream.
 
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-index e4944da..7fd8a44 100644
---- a/package/lcdproc/lcdproc.mk
-+++ b/package/lcdproc/lcdproc.mk
-@@ -8,6 +8,7 @@ LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
- LCDPROC_SITE = http://downloads.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
- LCDPROC_LICENSE = GPLv2+
- LCDPROC_LICENSE_FILES = COPYING
-+LCDPROC_MAKE = $(MAKE1)
- 
- LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
- 
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
