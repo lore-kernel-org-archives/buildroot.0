@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Sep 2012 16:45:45 +0200
-Subject: [Buildroot] [PATCH 2/4] Make Berkeley DB a dependency of
- linux-pam and make sure it is selected
-In-Reply-To: <CADiAo4Jn3mdhvTOvDUria1XBnLvOCO_pAMWScdtTZhS67P4oxw@mail.gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Tue, 11 Sep 2012 10:46:02 -0400
+Subject: [Buildroot] [PATCH 1/4] If linux-pam is built,
+ enable dbm functionality in Berkeley DB
+In-Reply-To: <20120911163208.3e9d23b3@skate>
 References: <1347078066-25257-1-git-send-email-golubovsky@gmail.com>
- <1347078066-25257-2-git-send-email-golubovsky@gmail.com>
- <20120911163255.07c42a02@skate>
- <CADiAo4Jn3mdhvTOvDUria1XBnLvOCO_pAMWScdtTZhS67P4oxw@mail.gmail.com>
-Message-ID: <20120911164545.6a41f36c@skate>
+ <20120911163208.3e9d23b3@skate>
+Message-ID: <CADiAo4Ly0Tv=bJMewpY=PW9fj4cWNKG-vdwdQwbiySSZ6kRkAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 11 Sep 2012 10:44:03 -0400,
-Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
+Thomas,
 
-> > Looking at the code, the dependency indeed looks necessary. But isn't
-> > it possible to rework a bit linux-pam to make this dependency optional
-> > (and then submit this upstream)? Of course, if you don't care about
-> > making this dependency optional, then just keep it as it is.
-> 
-> I don't think such change in linux-pam is really needed. I'd keep it
-> here given the fix is trivial, and BerkeleyDB is not a huge library.
+On Tue, Sep 11, 2012 at 10:32 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Sat,  8 Sep 2012 00:21:03 -0400,
+> Dmitry <golubovsky@gmail.com> a ?crit :
+>
+>> +             $(if $(BR2_PACKAGE_LINUX_PAM),--enable-dbm,--disable-dbm) \
+>
+> I don't really like this. I think you should rather add a configuration
+> sub-option in package/berkeleydb/Config.in to enable/disable DBM
+> support, and then have berkeleydb.mk test this configuration option,
+> and the linux-pam/Config.in package select it.
 
-Ok, fine with me.
+Well, adding extra config options is what I really wanted to avoid.
+But this may be just my way of thinking.
 
-Thomas
+> I don't like when one package recipe pokes into the configuration
+> options of another package.
+
+It is not a problem to add such configuration item, I'll do it.
+
+Thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Dmitry Golubovsky
+
+Anywhere on the Web
