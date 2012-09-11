@@ -1,22 +1,35 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Tue, 11 Sep 2012 16:06:12 +0200
-Subject: [Buildroot] Buildroot customizations as a git submodule?
-Message-ID: <CAHQn0kgXzCNf560jUw_AF82tSuOpHqUWu04yfisxf2Ac1iYPdQ@mail.gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Tue, 11 Sep 2012 10:12:40 -0400
+Subject: [Buildroot] Patches to fix linux-pam failures in autobuilder
+Message-ID: <CADiAo4J=p10k22LRMG1zU6XAyLRmJ5i6A1URWFqxh+YLcaOBQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-How do you folks on this mailing list manage your customizations on Buildroot?
+Hi,
 
-I was thinking maybe I could keep all my customizations as a git
-submodule residing in board/<company>/<project>?
+Maybe this went unnoticed, but few days ago I posted patches which fix
+the linux-pam build failures in autobuilder, and also to finalize
+integration of PAM into Buildroot (PAM support in Busybox).
 
-Can I add new software packages without touching the original BR
-source files or directories? How about defconfigs?
+Hopefully these patches can be reviewed and committed. The fix is
+trivial: to enable dbm functions in berkeleyDB as PAM depends on them
+(the pam_userdb module).
 
-It would be really awesome if this could be achieved so one did not
-have to make changes to BR at all.
+Discussion: http://lists.busybox.net/pipermail/buildroot/2012-September/058390.html
 
-Thoughts or comments anyone?
+Patches:
+
+http://lists.busybox.net/pipermail/buildroot/2012-September/058386.html
+http://lists.busybox.net/pipermail/buildroot/2012-September/058387.html
+http://lists.busybox.net/pipermail/buildroot/2012-September/058388.html
+http://lists.busybox.net/pipermail/buildroot/2012-September/058389.html
+
+Thanks.
+
+-- 
+Dmitry Golubovsky
+
+Anywhere on the Web
