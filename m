@@ -1,43 +1,81 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Sep 2012 22:56:50 +0200
-Subject: [Buildroot] [git commit] linux-firmware: update to a more recent
-	git snapshot
-Message-ID: <20120911070828.1FCC09960A@busybox.osuosl.org>
+Date: Tue, 11 Sep 2012 08:59:56 +0200
+Subject: [Buildroot] [git commit] pppd: fix build with 3.5+ kernel headers
+Message-ID: <20120911070828.61AFC9960A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0cf33385468889c7ec1ddbdae2c81ecabc4f9584
+commit: http://git.buildroot.net/buildroot/commit/?id=94ce13a56f238bbba01bdfc893cfbc4e62169287
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This update pulls in new ath6k and realtek drivers and updates for
-libertas and iwlwifi:
+Fixes http://autobuild.buildroot.net/results/8a9369fece696e012249b865708ffee533c5318a
 
-a707c25 Merge branch 'master' of git://dev.laptop.org/users/dsd/linux-firmware
-adb6547 rtlwifi/rtl8723e: Add firmware for new driver
-4e17394 linux-firmware: ath6k: add firmware for AR6004 hw1.3
-bac3567 Marvell SD8787: update to v14.66.9.p96
-6a08d14 Marvell SD8686: update to v9.70.20.p0
-bbede96 iwlwifi: update firmware for 6205
+Pppd bundles some, but not all needed kernel headers. In Linux 3.5 (and
+before that 2.6.35) if_pppol2tp.h was changed, so the embedded copy was no
+longer compatible.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+if_pppol2tp.h has been part of the exported kernel headers since 2.6.23, so
+simply drop the bundled copy and use the kernel headers instead, similar
+to how it is done in Gentoo:
+
+https://bugs.gentoo.org/show_bug.cgi?id=427684
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-firmware/linux-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch |   24 ------------------------
+ package/pppd/pppd.mk                         |    9 +++++++++
+ 2 files changed, 9 insertions(+), 24 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 23afafa..09836a4 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -3,7 +3,7 @@
- # linux-firmware
- #
- #############################################################
--LINUX_FIRMWARE_VERSION = 7560108a2c94a62056fa82d912282b901aa0904f
-+LINUX_FIRMWARE_VERSION = a707c25a6e992b8ee6127a6ebab63dd063043047
- LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
+diff --git a/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch b/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch
+deleted file mode 100644
+index 0e71e24..0000000
+--- a/package/pppd/pppd-2.4.5-ol2tpv3-2.6.35.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+---- ppp-2.4.5/include/linux/if_pppol2tp.h       2009-11-16 22:26:07.000000000 +0000
+-+++ ppp-2.4.5/include/linux/if_pppol2tp.h       2010-07-16 22:35:22.000000000 +0100
+-@@ -32,6 +32,20 @@
+-  	__u16 d_tunnel, d_session;	/* For sending outgoing packets */
+- };
+-
+-+/* The L2TPv3 protocol changes tunnel and session ids from 16 to 32
+-+ * bits. So we need a different sockaddr structure.
+-+ */
+-+struct pppol2tpv3_addr {
+-+       pid_t   pid;                    /* pid that owns the fd.
+-+                                        * 0 => current */
+-+       int     fd;                     /* FD of UDP or IP socket to use */
+-+
+-+       struct sockaddr_in addr;        /* IP address and port to send to */
+-+
+-+       __u32 s_tunnel, s_session;      /* For matching incoming packets */
+-+       __u32 d_tunnel, d_session;      /* For sending outgoing packets */
+-+};
+-+
+- /* Socket options:
+-  * DEBUG	- bitmask of debug message categories
+-  * SENDSEQ	- 0 => don't send packets with sequence numbers
+-
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 259d1dc..b13dbab 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -23,6 +23,15 @@ ifeq ($(BR2_INET_IPV6),y)
+ 	PPPD_MAKE_OPT += HAVE_INET6=y
+ endif
  
++# pppd bundles some but not all of the needed kernel headers. The embedded
++# if_pppol2tp.h is unfortunately not compatible with kernel headers > 2.6.34,
++# and has been part of the kernel headers since 2.6.23, so drop it
++define PPPD_DROP_INTERNAL_IF_PPOL2TP_H
++	$(RM) $(@D)/include/linux/if_pppol2tp.h
++endef
++
++PPPD_POST_EXTRACT_HOOKS += PPPD_DROP_INTERNAL_IF_PPOL2TP_H
++
+ define PPPD_CONFIGURE_CMDS
+ 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+ 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
