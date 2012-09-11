@@ -1,196 +1,777 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Sep 2012 00:24:32 +0200
-Subject: [Buildroot] [PATCH 5/9] firefox: installing default extensions
- needs host-unzip dependency
-In-Reply-To: <1346855344-15081-6-git-send-email-stefan.froberg@petroprogram.com>
-References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
- <1346855344-15081-6-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <504FBA20.9010602@mind.be>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Wed, 12 Sep 2012 00:36:17 +0200
+Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
+Message-ID: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/05/12 16:29, Stefan Fr?berg wrote:
->
-> Signed-off-by: Stefan Fr?berg<stefan.froberg@petroprogram.com>
-> ---
->   package/Config.in                       |    1 +
->   package/unzip/Config.in                 |    8 ++++
->   package/unzip/unzip-respect-flags.patch |   23 +++++++++++
->   package/unzip/unzip.mk                  |   66 +++++++++++++++++++++++++++++++
->   4 files changed, 98 insertions(+), 0 deletions(-)
->   create mode 100644 package/unzip/Config.in
->   create mode 100644 package/unzip/unzip-respect-flags.patch
->   create mode 100644 package/unzip/unzip.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index e129522..636caf8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -13,6 +13,7 @@ source "package/gzip/Config.in"
->   endif
->   source "package/lzop/Config.in"
->   source "package/lzma/Config.in"
-> +source "package/unzip/Config.in"
->   source "package/xz/Config.in"
->   endmenu
->
-> diff --git a/package/unzip/Config.in b/package/unzip/Config.in
-> new file mode 100644
-> index 0000000..f4fc111
-> --- /dev/null
-> +++ b/package/unzip/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_UNZIP
-> +	bool "unzip"
-> +	help
-> +	  The UnZip package contains ZIP extraction utilities. These are useful for extracting files from
-> +	  ZIP archives. ZIP archives are created with PKZIP or Info-ZIP utilities, primarily in a DOS
-> +	  environment.
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 
-  Wordwrap at 80 columns
+Basic support:
+- boot binary blobs + VideoCore added in utils package (to avoid fetching 2 times
+  same repo which is quite big)
+- added post-build script to adjust password, add config, cmdline files
+- add actual kernel build 3.2.27 with cutdown config
+- using external toolchain
+- some parts was overtaken from commits from: https://github.com/nezticle/RaspberryPi-BuildRoot.git
 
-> +
-> +	  http://downloads.sourceforge.net/infozip/
-> diff --git a/package/unzip/unzip-respect-flags.patch b/package/unzip/unzip-respect-flags.patch
-> new file mode 100644
-> index 0000000..35c8314
-> --- /dev/null
-> +++ b/package/unzip/unzip-respect-flags.patch
-> @@ -0,0 +1,23 @@
+---
+ board/raspberrypi/config.txt                   |   41 ++
+ board/raspberrypi/linux-3.2.27_defconfig       |  546 ++++++++++++++++++++++++
+ board/raspberrypi/post-build.sh                |   23 +
+ configs/raspberrypi_defconfig                  |   19 +
+ package/Config.in                              |    1 +
+ package/raspberrypi-utils/Config.in            |   21 +
+ package/raspberrypi-utils/raspberrypi-utils.mk |   41 ++
+ 7 files changed, 692 insertions(+)
+ create mode 100644 board/raspberrypi/config.txt
+ create mode 100644 board/raspberrypi/linux-3.2.27_defconfig
+ create mode 100755 board/raspberrypi/post-build.sh
+ create mode 100644 configs/raspberrypi_defconfig
+ create mode 100644 package/raspberrypi-utils/Config.in
+ create mode 100644 package/raspberrypi-utils/raspberrypi-utils.mk
 
-  Please add a comment at the top of the patch.
-
-- Why is it needed
-
-- Upstream status, if applicable
-
-- Signed-of-by line
-
-  Also upstreaming the patch would be useful.
-
-> +diff -Naur unzip60.org/unix/Makefile unzip60/unix/Makefile
-> +--- unzip60.org/unix/Makefile	2012-09-02 21:29:55.944176704 +0300
-> ++++ unzip60/unix/Makefile	2012-09-02 21:31:20.276176583 +0300
-> +@@ -808,8 +808,8 @@
-> + # systems.)
-> + linux:		unix_make
-> + 	@echo 'NOTE:  use linux_noasm target for non-Intel Linux compiles.'
-> +-	$(MAKE) unzips CC=gcc LD=gcc AS=gcc\
-> +-	 CFLAGS="-O3 -Wall -DASM_CRC"\
-> ++	$(MAKE) unzips CC=$(CC) LD=$(CC) AS=$(CC)\
-
-  $(CC) should be quoted: "$(CC)"
-
-> ++	 CFLAGS="$(CFLAGS) -DASM_CRC"\
-> + 	 AF="-Di386 $(AF)" CRCA_O=crc_gcc$O
-> + # GRR:  this echo is pointless; if user gets this far, no difference to install
-> + #	@echo 'Be sure to use the install_asm target rather than the install target'
-> +@@ -819,7 +819,7 @@
-> + # Linux (Posix, approximately SysV):  virtually any version since before 0.96,
-> + # for any platform.  Change "-O" to "-O3" or whatever, as desired...
-> + linux_noasm:	unix_make
-> +-	$(MAKE) unzips CC=gcc LD=gcc CFLAGS="-O -Wall"
-> ++	$(MAKE) unzips CC=$(CC) LD=$(CC) CFLAGS="$(CFLAGS)"
-
-  Same here.
-
-  Wouldn't it be easier to run this $(MAKE) unzips command from the .mk file,
-instead of going through the linux[_noasm] target?
-
-> +
-> + # Linux with lcc compiler:  __inline__ (stat.h) not recognized, and must edit
-> + # /usr/include/gnu/types.h to get rid of "long long" if __LCC__ defined.  -O3
-> diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-> new file mode 100644
-> index 0000000..fdfbe9f
-> --- /dev/null
-> +++ b/package/unzip/unzip.mk
-> @@ -0,0 +1,66 @@
-> +###################################################################
-> +#
-> +# unzip
-> +#
-> +# quickly hacked from:
-> +# http://www.linuxfromscratch.org/blfs/view/svn/general/unzip.html
-> +###################################################################
-> +
-> +UNZIP_MAJOR_VERSION = 6
-> +UNZIP_MINOR_VERSION = 0
-> +UNZIP_VERSION = $(UNZIP_MAJOR_VERSION).$(UNZIP_MINOR_VERSION)
-> +UNZIP_SOURCE = unzip$(UNZIP_MAJOR_VERSION)$(UNZIP_MINOR_VERSION).tar.gz
-
-  Why not just call it version 60?  Then the _SOURCE line isn't
-needed.
-
-> +UNZIP_SITE = http://downloads.sourceforge.net/infozip
-> +UNZIP_LICENSE = Info-ZIP
-> +UNZIP_LICENSE_FILES = LICENSE
-> +
-> +# No point of doing optimized build for host version,
-> +# so we build host version without any x86 specific asm stuff
-> +define HOST_UNZIP_BUILD_CMDS
-> +	(cd $(@D); \
-> +	sed -i -e 's/CFLAGS="-O -Wall/&  -DNO_LCHMOD/' unix/Makefile ; \
-
-  This isn't needed anymore with the patch above, right?
-
-> +	$(MAKE) -f unix/Makefile linux_noasm )
-> +endef
-> +
-> +define HOST_UNZIP_INSTALL_CMDS
-> +	(cd $(@D); \
-> +	$(MAKE) prefix=$(HOST_DIR)/usr install )
-
-  We normally use $(MAKE) -C $(@D) instead of cd $(@D)
-
-> +endef
-> +
-> +# If you do have busybox installed in your target (like most do)
-> +# and if you have by accident also enabled unzip support in
-> +# your busybox configuration file, then guess what happens
-> +# after insallation of the real unzip application ?
-> +#
-> +# Yep, UNZIP_INSTALL_TARGET_CMDS will happily
-> +# write to your unzip ->  /bin/busybox symlink
-> +# and overwrite your busybox ... :-(
-> +#
-> +# That's why I included this as an primitive safety mechanism.
-> +# Improvement are wellcome
-
-  AFAIK, install removes a symlink before installing, so busybox
-itself shouldn't be overwritten.  To make sure the full unzip is
-installed instead of the busybox unzip, you do:
-
-UNZIP_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-
-  That way, busybox is installed first and unzip will overwrite
-the busybox symlink.  It's done like that for a lot of packages.
-
-> +
-> +ifneq ($(BR2_PACKAGE_BUSYBOX),y)
-> +ifeq ($(BR2_i386),y) || ($(BR2_x86_64),y)
-> +# Intel x86 asm optimized version
-> +define UNZIP_BUILD_CMDS
-> +	(cd $(@D);\
-> +	sed -i -e 's/DASM"/DASM -DNO_LCHMOD"/' unix/Makefile;\
-> +	$(MAKE) -f unix/Makefile $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -DNO_LCHMOD" CC=$(TARGET_CC) LD=$(TARGET_LD) AS=$(TARGET_AS) linux )
-
-  CC="$(TARGET_CC)" should be quoted.  But anyway, it's already in
-$(TARGET_CONFIGURE_OPTS) so that can be left out.  For the CFLAGS,
-I believe it's possible to use CFLAGS+=-DNO_LCHMOD.
-
-[snip]
-
-  Regards,
-  Arnout
-
+diff --git a/board/raspberrypi/config.txt b/board/raspberrypi/config.txt
+new file mode 100644
+index 0000000..4de2f88
+--- /dev/null
++++ b/board/raspberrypi/config.txt
+@@ -0,0 +1,41 @@
++# uncomment if you get no picture on HDMI for a default "safe" mode
++#hdmi_safe=1
++
++# uncomment this if your display has a black border of unused pixels visible
++# and your display can output without overscan
++#disable_overscan=1
++
++# uncomment the following to adjust overscan. Use positive numbers if console
++# goes off screen, and negative if there is too much border
++#overscan_left=16
++#overscan_right=16
++#overscan_top=16
++#overscan_bottom=16
++
++# uncomment to force a console size. By default it will be display's size minus
++# overscan.
++#framebuffer_width=1280
++#framebuffer_height=720
++
++# uncomment if hdmi display is not detected and composite is being output
++#hdmi_force_hotplug=1
++
++# uncomment to force a specific HDMI mode (this will force VGA)
++#hdmi_group=1
++#hdmi_mode=1
++
++# uncomment to force a HDMI mode rather than DVI. This can make audio work in
++# DMT (computer monitor) modes
++#hdmi_drive=2
++
++# uncomment to increase signal to HDMI, if you have interference, blanking, or
++# no display
++#config_hdmi_boost=4
++
++# uncomment for composite PAL
++#sdtv_mode=2
++
++#uncomment to overclock the arm. 700 MHz is the default.
++#arm_freq=800
++
++# for more options see http://elinux.org/RPi_config.txt
+diff --git a/board/raspberrypi/linux-3.2.27_defconfig b/board/raspberrypi/linux-3.2.27_defconfig
+new file mode 100644
+index 0000000..3b8bd74
+--- /dev/null
++++ b/board/raspberrypi/linux-3.2.27_defconfig
+@@ -0,0 +1,546 @@
++CONFIG_EXPERIMENTAL=y
++CONFIG_LOCALVERSION="-cutdown"
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_SCHED_AUTOGROUP=y
++# CONFIG_UID16 is not set
++# CONFIG_KALLSYMS is not set
++CONFIG_EMBEDDED=y
++# CONFIG_VM_EVENT_COUNTERS is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_ARCH_BCM2708=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_AEABI=y
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_CMDLINE="dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 root=/dev/mmcblk0p2 rootfstype=ext3 rootwait"
++CONFIG_CPU_IDLE=y
++CONFIG_VFP=y
++CONFIG_BINFMT_MISC=m
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=m
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++CONFIG_IP_PNP_RARP=y
++CONFIG_SYN_COOKIES=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++CONFIG_IPV6_PRIVACY=y
++CONFIG_NET_PKTGEN=m
++CONFIG_IRDA=m
++CONFIG_IRLAN=m
++CONFIG_IRCOMM=m
++CONFIG_IRDA_ULTRA=y
++CONFIG_IRDA_CACHE_LAST_LSAP=y
++CONFIG_IRDA_FAST_RR=y
++CONFIG_IRTTY_SIR=m
++CONFIG_KINGSUN_DONGLE=m
++CONFIG_KSDAZZLE_DONGLE=m
++CONFIG_KS959_DONGLE=m
++CONFIG_USB_IRDA=m
++CONFIG_SIGMATEL_FIR=m
++CONFIG_MCS_FIR=m
++CONFIG_BT=m
++CONFIG_BT_L2CAP=y
++CONFIG_BT_SCO=y
++CONFIG_BT_RFCOMM=m
++CONFIG_BT_RFCOMM_TTY=y
++CONFIG_BT_BNEP=m
++CONFIG_BT_BNEP_MC_FILTER=y
++CONFIG_BT_BNEP_PROTO_FILTER=y
++CONFIG_BT_HIDP=m
++CONFIG_BT_HCIBTUSB=m
++CONFIG_BT_HCIBCM203X=m
++CONFIG_BT_HCIBPA10X=m
++CONFIG_BT_HCIBFUSB=m
++CONFIG_BT_HCIVHCI=m
++CONFIG_BT_MRVL=m
++CONFIG_BT_MRVL_SDIO=m
++CONFIG_BT_ATH3K=m
++CONFIG_CFG80211=m
++CONFIG_MAC80211=m
++CONFIG_MAC80211_RC_PID=y
++CONFIG_MAC80211_MESH=y
++CONFIG_WIMAX=m
++CONFIG_NET_9P=m
++CONFIG_NFC=m
++CONFIG_NFC_PN533=m
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_CRYPTOLOOP=m
++CONFIG_BLK_DEV_NBD=m
++CONFIG_BLK_DEV_RAM=y
++CONFIG_CDROM_PKTCDVD=m
++CONFIG_MISC_DEVICES=y
++CONFIG_SCSI=y
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_BLK_DEV_SR=m
++CONFIG_SCSI_MULTI_LUN=y
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_NETDEVICES=y
++CONFIG_NETCONSOLE=m
++CONFIG_TUN=m
++CONFIG_PHYLIB=m
++CONFIG_MDIO_BITBANG=m
++CONFIG_PPP=m
++CONFIG_PPP_BSDCOMP=m
++CONFIG_PPP_DEFLATE=m
++CONFIG_PPP_ASYNC=m
++CONFIG_PPP_SYNC_TTY=m
++CONFIG_SLIP=m
++CONFIG_SLIP_COMPRESSED=y
++CONFIG_USB_CATC=m
++CONFIG_USB_KAWETH=m
++CONFIG_USB_PEGASUS=m
++CONFIG_USB_RTL8150=m
++CONFIG_USB_USBNET=y
++CONFIG_USB_NET_AX8817X=m
++CONFIG_USB_NET_CDCETHER=m
++CONFIG_USB_NET_CDC_EEM=m
++CONFIG_USB_NET_DM9601=m
++CONFIG_USB_NET_SMSC75XX=m
++CONFIG_USB_NET_SMSC95XX=y
++CONFIG_USB_NET_GL620A=m
++CONFIG_USB_NET_NET1080=m
++CONFIG_USB_NET_PLUSB=m
++CONFIG_USB_NET_MCS7830=m
++CONFIG_USB_NET_CDC_SUBSET=m
++CONFIG_USB_ALI_M5632=y
++CONFIG_USB_AN2720=y
++CONFIG_USB_KC2190=y
++# CONFIG_USB_NET_ZAURUS is not set
++CONFIG_USB_NET_CX82310_ETH=m
++CONFIG_USB_NET_KALMIA=m
++CONFIG_USB_NET_INT51X1=m
++CONFIG_USB_IPHETH=m
++CONFIG_USB_SIERRA_NET=m
++CONFIG_USB_VL600=m
++CONFIG_LIBERTAS_THINFIRM=m
++CONFIG_LIBERTAS_THINFIRM_USB=m
++CONFIG_AT76C50X_USB=m
++CONFIG_USB_ZD1201=m
++CONFIG_USB_NET_RNDIS_WLAN=m
++CONFIG_RTL8187=m
++CONFIG_MAC80211_HWSIM=m
++CONFIG_ATH_COMMON=m
++CONFIG_ATH9K=m
++CONFIG_ATH9K_HTC=m
++CONFIG_CARL9170=m
++CONFIG_B43=m
++CONFIG_B43LEGACY=m
++CONFIG_HOSTAP=m
++CONFIG_IWM=m
++CONFIG_LIBERTAS=m
++CONFIG_LIBERTAS_USB=m
++CONFIG_LIBERTAS_SDIO=m
++CONFIG_P54_COMMON=m
++CONFIG_P54_USB=m
++CONFIG_RT2X00=m
++CONFIG_RT2500USB=m
++CONFIG_RT73USB=m
++CONFIG_RT2800USB=m
++CONFIG_RT2800USB_RT53XX=y
++CONFIG_RTL8192CU=m
++CONFIG_WL1251=m
++CONFIG_WL12XX_MENU=m
++CONFIG_ZD1211RW=m
++CONFIG_MWIFIEX=m
++CONFIG_MWIFIEX_SDIO=m
++CONFIG_WIMAX_I2400M_USB=m
++CONFIG_INPUT_POLLDEV=m
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++CONFIG_INPUT_JOYDEV=m
++CONFIG_INPUT_EVDEV=m
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_AD714X=m
++CONFIG_INPUT_ATI_REMOTE2=m
++CONFIG_INPUT_KEYSPAN_REMOTE=m
++CONFIG_INPUT_POWERMATE=m
++CONFIG_INPUT_YEALINK=m
++CONFIG_INPUT_CM109=m
++CONFIG_INPUT_UINPUT=m
++CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
++CONFIG_INPUT_ADXL34X=m
++CONFIG_INPUT_CMA3000=m
++CONFIG_SERIO=m
++CONFIG_SERIO_RAW=m
++CONFIG_GAMEPORT=m
++CONFIG_GAMEPORT_NS558=m
++CONFIG_GAMEPORT_L4=m
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++CONFIG_RAW_DRIVER=y
++CONFIG_GPIO_SYSFS=y
++# CONFIG_HWMON is not set
++CONFIG_WATCHDOG=y
++CONFIG_BCM2708_WDT=m
++CONFIG_MEDIA_SUPPORT=m
++CONFIG_VIDEO_DEV=m
++CONFIG_USB_VIDEO_CLASS=m
++CONFIG_USB_M5602=m
++CONFIG_USB_STV06XX=m
++CONFIG_USB_GL860=m
++CONFIG_USB_GSPCA_BENQ=m
++CONFIG_USB_GSPCA_CONEX=m
++CONFIG_USB_GSPCA_CPIA1=m
++CONFIG_USB_GSPCA_ETOMS=m
++CONFIG_USB_GSPCA_FINEPIX=m
++CONFIG_USB_GSPCA_JEILINJ=m
++CONFIG_USB_GSPCA_KINECT=m
++CONFIG_USB_GSPCA_KONICA=m
++CONFIG_USB_GSPCA_MARS=m
++CONFIG_USB_GSPCA_MR97310A=m
++CONFIG_USB_GSPCA_NW80X=m
++CONFIG_USB_GSPCA_OV519=m
++CONFIG_USB_GSPCA_OV534=m
++CONFIG_USB_GSPCA_OV534_9=m
++CONFIG_USB_GSPCA_PAC207=m
++CONFIG_USB_GSPCA_PAC7302=m
++CONFIG_USB_GSPCA_PAC7311=m
++CONFIG_USB_GSPCA_SE401=m
++CONFIG_USB_GSPCA_SN9C2028=m
++CONFIG_USB_GSPCA_SN9C20X=m
++CONFIG_USB_GSPCA_SONIXB=m
++CONFIG_USB_GSPCA_SONIXJ=m
++CONFIG_USB_GSPCA_SPCA500=m
++CONFIG_USB_GSPCA_SPCA501=m
++CONFIG_USB_GSPCA_SPCA505=m
++CONFIG_USB_GSPCA_SPCA506=m
++CONFIG_USB_GSPCA_SPCA508=m
++CONFIG_USB_GSPCA_SPCA561=m
++CONFIG_USB_GSPCA_SPCA1528=m
++CONFIG_USB_GSPCA_SQ905=m
++CONFIG_USB_GSPCA_SQ905C=m
++CONFIG_USB_GSPCA_SQ930X=m
++CONFIG_USB_GSPCA_STK014=m
++CONFIG_USB_GSPCA_STV0680=m
++CONFIG_USB_GSPCA_SUNPLUS=m
++CONFIG_USB_GSPCA_T613=m
++CONFIG_USB_GSPCA_TV8532=m
++CONFIG_USB_GSPCA_VC032X=m
++CONFIG_USB_GSPCA_VICAM=m
++CONFIG_USB_GSPCA_XIRLINK_CIT=m
++CONFIG_USB_GSPCA_ZC3XX=m
++CONFIG_VIDEO_HDPVR=m
++CONFIG_USB_PWC=m
++CONFIG_USB_ZR364XX=m
++CONFIG_USB_STKWEBCAM=m
++CONFIG_USB_S2255=m
++CONFIG_FB=y
++CONFIG_FB_BCM2708=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++CONFIG_SOUND=y
++CONFIG_SND=m
++CONFIG_SND_SEQUENCER=m
++CONFIG_SND_SEQ_DUMMY=m
++CONFIG_SND_MIXER_OSS=m
++CONFIG_SND_PCM_OSS=m
++CONFIG_SND_SEQUENCER_OSS=y
++CONFIG_SND_HRTIMER=m
++CONFIG_SND_DUMMY=m
++CONFIG_SND_ALOOP=m
++CONFIG_SND_VIRMIDI=m
++CONFIG_SND_MTPAV=m
++CONFIG_SND_SERIAL_U16550=m
++CONFIG_SND_MPU401=m
++CONFIG_SND_BCM2835=m
++CONFIG_SND_USB_AUDIO=m
++CONFIG_SND_USB_UA101=m
++CONFIG_SND_USB_CAIAQ=m
++CONFIG_SND_USB_6FIRE=m
++CONFIG_SOUND_PRIME=m
++CONFIG_HID_PID=y
++CONFIG_USB_HIDDEV=y
++CONFIG_HID_A4TECH=m
++CONFIG_HID_ACRUX=m
++CONFIG_HID_APPLE=m
++CONFIG_HID_BELKIN=m
++CONFIG_HID_CHERRY=m
++CONFIG_HID_CHICONY=m
++CONFIG_HID_CYPRESS=m
++CONFIG_HID_DRAGONRISE=m
++CONFIG_HID_EMS_FF=m
++CONFIG_HID_ELECOM=m
++CONFIG_HID_EZKEY=m
++CONFIG_HID_HOLTEK=m
++CONFIG_HID_KEYTOUCH=m
++CONFIG_HID_KYE=m
++CONFIG_HID_UCLOGIC=m
++CONFIG_HID_WALTOP=m
++CONFIG_HID_GYRATION=m
++CONFIG_HID_TWINHAN=m
++CONFIG_HID_KENSINGTON=m
++CONFIG_HID_LCPOWER=m
++CONFIG_HID_LOGITECH=m
++CONFIG_HID_MAGICMOUSE=m
++CONFIG_HID_MICROSOFT=m
++CONFIG_HID_MONTEREY=m
++CONFIG_HID_MULTITOUCH=m
++CONFIG_HID_NTRIG=m
++CONFIG_HID_ORTEK=m
++CONFIG_HID_PANTHERLORD=m
++CONFIG_HID_PETALYNX=m
++CONFIG_HID_PICOLCD=m
++CONFIG_HID_QUANTA=m
++CONFIG_HID_ROCCAT=m
++CONFIG_HID_SAMSUNG=m
++CONFIG_HID_SONY=m
++CONFIG_HID_SPEEDLINK=m
++CONFIG_HID_SUNPLUS=m
++CONFIG_HID_GREENASIA=m
++CONFIG_HID_SMARTJOYPLUS=m
++CONFIG_HID_TOPSEED=m
++CONFIG_HID_THRUSTMASTER=m
++CONFIG_HID_WACOM=m
++CONFIG_HID_WIIMOTE=m
++CONFIG_HID_ZEROPLUS=m
++CONFIG_HID_ZYDACRON=m
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_MON=m
++CONFIG_USB_DWCOTG=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_STORAGE_REALTEK=m
++CONFIG_USB_STORAGE_DATAFAB=m
++CONFIG_USB_STORAGE_FREECOM=m
++CONFIG_USB_STORAGE_ISD200=m
++CONFIG_USB_STORAGE_USBAT=m
++CONFIG_USB_STORAGE_SDDR09=m
++CONFIG_USB_STORAGE_SDDR55=m
++CONFIG_USB_STORAGE_JUMPSHOT=m
++CONFIG_USB_STORAGE_ALAUDA=m
++CONFIG_USB_STORAGE_ONETOUCH=m
++CONFIG_USB_STORAGE_KARMA=m
++CONFIG_USB_STORAGE_CYPRESS_ATACB=m
++CONFIG_USB_STORAGE_ENE_UB6250=m
++CONFIG_USB_UAS=y
++CONFIG_USB_LIBUSUAL=y
++CONFIG_USB_MDC800=m
++CONFIG_USB_MICROTEK=m
++CONFIG_USB_SERIAL=m
++CONFIG_USB_SERIAL_GENERIC=y
++CONFIG_USB_SERIAL_AIRCABLE=m
++CONFIG_USB_SERIAL_ARK3116=m
++CONFIG_USB_SERIAL_BELKIN=m
++CONFIG_USB_SERIAL_CH341=m
++CONFIG_USB_SERIAL_WHITEHEAT=m
++CONFIG_USB_SERIAL_DIGI_ACCELEPORT=m
++CONFIG_USB_SERIAL_CP210X=m
++CONFIG_USB_SERIAL_CYPRESS_M8=m
++CONFIG_USB_SERIAL_EMPEG=m
++CONFIG_USB_SERIAL_FTDI_SIO=m
++CONFIG_USB_SERIAL_FUNSOFT=m
++CONFIG_USB_SERIAL_VISOR=m
++CONFIG_USB_SERIAL_IPAQ=m
++CONFIG_USB_SERIAL_IR=m
++CONFIG_USB_SERIAL_EDGEPORT=m
++CONFIG_USB_SERIAL_EDGEPORT_TI=m
++CONFIG_USB_SERIAL_GARMIN=m
++CONFIG_USB_SERIAL_IPW=m
++CONFIG_USB_SERIAL_IUU=m
++CONFIG_USB_SERIAL_KEYSPAN_PDA=m
++CONFIG_USB_SERIAL_KEYSPAN=m
++CONFIG_USB_SERIAL_KLSI=m
++CONFIG_USB_SERIAL_KOBIL_SCT=m
++CONFIG_USB_SERIAL_MCT_U232=m
++CONFIG_USB_SERIAL_MOS7720=m
++CONFIG_USB_SERIAL_MOS7840=m
++CONFIG_USB_SERIAL_MOTOROLA=m
++CONFIG_USB_SERIAL_NAVMAN=m
++CONFIG_USB_SERIAL_PL2303=m
++CONFIG_USB_SERIAL_OTI6858=m
++CONFIG_USB_SERIAL_QCAUX=m
++CONFIG_USB_SERIAL_QUALCOMM=m
++CONFIG_USB_SERIAL_SPCP8X5=m
++CONFIG_USB_SERIAL_HP4X=m
++CONFIG_USB_SERIAL_SAFE=m
++CONFIG_USB_SERIAL_SIEMENS_MPI=m
++CONFIG_USB_SERIAL_SIERRAWIRELESS=m
++CONFIG_USB_SERIAL_SYMBOL=m
++CONFIG_USB_SERIAL_TI=m
++CONFIG_USB_SERIAL_CYBERJACK=m
++CONFIG_USB_SERIAL_XIRCOM=m
++CONFIG_USB_SERIAL_OPTION=m
++CONFIG_USB_SERIAL_OMNINET=m
++CONFIG_USB_SERIAL_OPTICON=m
++CONFIG_USB_SERIAL_VIVOPAY_SERIAL=m
++CONFIG_USB_SERIAL_ZIO=m
++CONFIG_USB_SERIAL_SSU100=m
++CONFIG_USB_SERIAL_DEBUG=m
++CONFIG_USB_EMI62=m
++CONFIG_USB_EMI26=m
++CONFIG_USB_ADUTUX=m
++CONFIG_USB_SEVSEG=m
++CONFIG_USB_RIO500=m
++CONFIG_USB_LEGOTOWER=m
++CONFIG_USB_LCD=m
++CONFIG_USB_LED=m
++CONFIG_USB_CYPRESS_CY7C63=m
++CONFIG_USB_CYTHERM=m
++CONFIG_USB_IDMOUSE=m
++CONFIG_USB_FTDI_ELAN=m
++CONFIG_USB_APPLEDISPLAY=m
++CONFIG_USB_LD=m
++CONFIG_USB_TRANCEVIBRATOR=m
++CONFIG_USB_IOWARRIOR=m
++CONFIG_USB_TEST=m
++CONFIG_USB_ISIGHTFW=m
++CONFIG_USB_YUREX=m
++CONFIG_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_SDHCI_BCM2708=y
++CONFIG_MMC_SDHCI_BCM2708_DMA=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGER_TIMER=m
++CONFIG_LEDS_TRIGGER_HEARTBEAT=m
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=m
++CONFIG_UIO=m
++CONFIG_UIO_PDRV=m
++CONFIG_UIO_PDRV_GENIRQ=m
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_REISERFS_FS=m
++CONFIG_REISERFS_FS_XATTR=y
++CONFIG_REISERFS_FS_POSIX_ACL=y
++CONFIG_REISERFS_FS_SECURITY=y
++CONFIG_JFS_FS=m
++CONFIG_JFS_POSIX_ACL=y
++CONFIG_JFS_SECURITY=y
++CONFIG_XFS_FS=m
++CONFIG_XFS_QUOTA=y
++CONFIG_XFS_POSIX_ACL=y
++CONFIG_XFS_RT=y
++CONFIG_GFS2_FS=m
++CONFIG_OCFS2_FS=m
++CONFIG_BTRFS_FS=m
++CONFIG_BTRFS_FS_POSIX_ACL=y
++CONFIG_NILFS2_FS=m
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=m
++CONFIG_CUSE=m
++CONFIG_FSCACHE=y
++CONFIG_CACHEFILES=y
++CONFIG_ISO9660_FS=m
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_UDF_FS=m
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_FAT_DEFAULT_IOCHARSET="ascii"
++CONFIG_NTFS_FS=m
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_CONFIGFS_FS=y
++CONFIG_SQUASHFS=m
++CONFIG_SQUASHFS_XATTR=y
++CONFIG_SQUASHFS_LZO=y
++CONFIG_SQUASHFS_XZ=y
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NFS_FSCACHE=y
++CONFIG_CIFS=m
++CONFIG_CIFS_WEAK_PW_HASH=y
++CONFIG_CIFS_XATTR=y
++CONFIG_CIFS_POSIX=y
++CONFIG_9P_FS=m
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_MAC_PARTITION=y
++CONFIG_EFI_PARTITION=y
++CONFIG_NLS_DEFAULT="utf8"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_CODEPAGE_737=m
++CONFIG_NLS_CODEPAGE_775=m
++CONFIG_NLS_CODEPAGE_850=m
++CONFIG_NLS_CODEPAGE_852=m
++CONFIG_NLS_CODEPAGE_855=m
++CONFIG_NLS_CODEPAGE_857=m
++CONFIG_NLS_CODEPAGE_860=m
++CONFIG_NLS_CODEPAGE_861=m
++CONFIG_NLS_CODEPAGE_862=m
++CONFIG_NLS_CODEPAGE_863=m
++CONFIG_NLS_CODEPAGE_864=m
++CONFIG_NLS_CODEPAGE_865=m
++CONFIG_NLS_CODEPAGE_866=m
++CONFIG_NLS_CODEPAGE_869=m
++CONFIG_NLS_CODEPAGE_936=m
++CONFIG_NLS_CODEPAGE_950=m
++CONFIG_NLS_CODEPAGE_932=m
++CONFIG_NLS_CODEPAGE_949=m
++CONFIG_NLS_CODEPAGE_874=m
++CONFIG_NLS_ISO8859_8=m
++CONFIG_NLS_CODEPAGE_1250=m
++CONFIG_NLS_CODEPAGE_1251=m
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=m
++CONFIG_NLS_ISO8859_2=m
++CONFIG_NLS_ISO8859_3=m
++CONFIG_NLS_ISO8859_4=m
++CONFIG_NLS_ISO8859_5=m
++CONFIG_NLS_ISO8859_6=m
++CONFIG_NLS_ISO8859_7=m
++CONFIG_NLS_ISO8859_9=m
++CONFIG_NLS_ISO8859_13=m
++CONFIG_NLS_ISO8859_14=m
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_KOI8_R=m
++CONFIG_NLS_KOI8_U=m
++CONFIG_NLS_UTF8=m
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_PREEMPT is not set
++# CONFIG_DEBUG_BUGVERBOSE is not set
++# CONFIG_FTRACE is not set
++# CONFIG_ARM_UNWIND is not set
++CONFIG_CRYPTO_AUTHENC=m
++CONFIG_CRYPTO_SEQIV=m
++CONFIG_CRYPTO_CBC=y
++CONFIG_CRYPTO_HMAC=y
++CONFIG_CRYPTO_XCBC=m
++CONFIG_CRYPTO_MD5=y
++CONFIG_CRYPTO_SHA1=y
++CONFIG_CRYPTO_SHA256=m
++CONFIG_CRYPTO_SHA512=m
++CONFIG_CRYPTO_TGR192=m
++CONFIG_CRYPTO_WP512=m
++CONFIG_CRYPTO_CAST5=m
++CONFIG_CRYPTO_DES=y
++CONFIG_CRYPTO_DEFLATE=m
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++# CONFIG_CRYPTO_HW is not set
++CONFIG_CRC_ITU_T=y
++CONFIG_LIBCRC32C=y
+diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+new file mode 100755
+index 0000000..2ed4569
+--- /dev/null
++++ b/board/raspberrypi/post-build.sh
+@@ -0,0 +1,23 @@
++TARGETDIR=$1
++# Set root password to 'root'. Password generated with
++# mkpasswd, from the 'whois' package in Debian/Ubuntu.
++sed -i 's%^root::%root:8kfIfYHmcyQEE:%' $TARGETDIR/etc/shadow
++
++# Generate cmdline file
++echo -e 'dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait' > $TARGETDIR/boot/cmdline.txt
++
++# Copy config file
++cp board/raspberrypi/config.txt $TARGETDIR/boot/
++
++
++# Copy zImage to boot partition
++cp $TARGETDIR/../images/zImage $TARGETDIR/boot/kernel.img
++
++# Package the /boot partition
++tar -czf $TARGETDIR/../images/boot.tar.gz --exclude=Image -C $TARGETDIR/boot/ .
++
++# add eth0 dhcp entry into /etc/network/interfaces
++echo -e 'auto eth0 \niface eth0 inet dhcp' >> $TARGETDIR/etc/network/interfaces
++
++# add /opt/vc/lib to default library path
++echo /opt/vc/lib > $TARGETDIR/etc/ld.so.conf
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+new file mode 100644
+index 0000000..e19883d
+--- /dev/null
++++ b/configs/raspberrypi_defconfig
+@@ -0,0 +1,19 @@
++BR2_arm=y
++BR2_arm1176jzf_s=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TARGET_GENERIC_HOSTNAME="raspberrypi"
++BR2_TARGET_GENERIC_ISSUE="Welcome to RaspberryPi"
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi/post-build.sh"
++BR2_PACKAGE_ZLIB=y
++BR2_PACKAGE_RASPBERRYPI_UTILS=y
++BR2_PACKAGE_BOOTLOADER=y
++BR2_PACKAGE_VIDEOCORE=y
++BR2_TARGET_ROOTFS_TAR_GZIP=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rpi-3.2.27"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.2.27_defconfig"
++BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/Config.in b/package/Config.in
+index 441159d..b3aaeb2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -222,6 +222,7 @@ source "package/owl-linux/Config.in"
+ source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
++source "package/raspberrypi-utils/Config.in"
+ source "package/read-edid/Config.in"
+ source "package/rng-tools/Config.in"
+ source "package/sane-backends/Config.in"
+diff --git a/package/raspberrypi-utils/Config.in b/package/raspberrypi-utils/Config.in
+new file mode 100644
+index 0000000..f267c78
+--- /dev/null
++++ b/package/raspberrypi-utils/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_RASPBERRYPI_UTILS
++	bool "Raspberry Pi bootloader and VideoCore binaries"
++	help
++	  Raspberry Pi bootloader and videocore binaries
++
++if BR2_PACKAGE_RASPBERRYPI_UTILS
++
++config BR2_PACKAGE_BOOTLOADER
++        bool "Raspberry Pi bootloader files"
++        help
++          These are the binary bootloader files from Broadcom.
++          https://github.com/raspberrypi/firmware
++
++config BR2_PACKAGE_VIDEOCORE
++        bool "Raspberry Pi VideoCore drivers"
++        help
++          These are the binary VideoCore drivers from Broadcom.
++          https://github.com/raspberrypi/firmware
++
++endif #BR2_PACKAGE_RASPBERRYPI_UTILS
++
+diff --git a/package/raspberrypi-utils/raspberrypi-utils.mk b/package/raspberrypi-utils/raspberrypi-utils.mk
+new file mode 100644
+index 0000000..3dc640b
+--- /dev/null
++++ b/package/raspberrypi-utils/raspberrypi-utils.mk
+@@ -0,0 +1,41 @@
++RASPBERRYPI_UTILS_VERSION = 05bb1ecbf6e11f5fbec18380cd8c5daea02f1392
++RASPBERRYPI_UTILS_SITE = git://github.com/raspberrypi/firmware.git
++RASPBERRYPI_UTILS_SITE_METHOD = git
++RASPBERRYPI_UTILS_INSTALL_TARGET = YES
++
++ifeq ($(BR2_PACKAGE_VIDEOCORE),y)
++RASPBERRYPI_UTILS_INSTALL_STAGING = YES
++
++define RASPBERRYPI_UTILS_INSTALL_STAGING_CMDS
++	cp -r $(@D)/hardfp/opt $(STAGING_DIR)/
++endef
++
++endif
++
++ifeq ($(BR2_PACKAGE_BOOTLOADER),y)
++define RASPBERRYPI_UTILS_INSTALL_TARGET_BOOT
++	if [ ! -d "$(TARGET_DIR)/boot" ]; then \
++		mkdir $(TARGET_DIR)/boot; \
++	fi; \
++	cp $(@D)/boot/arm128_start.elf $(TARGET_DIR)/boot/start.elf
++	cp $(@D)/boot/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
++	cp $(@D)/boot/loader.bin $(TARGET_DIR)/boot/loader.bin
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_VIDEOCORE),y)
++define RASPBERRYPI_UTILS_INSTALL_TARGET_VIDEOCORE
++	mkdir -p $(TARGET_DIR)/opt/vc
++	cp -r $(@D)/hardfp/opt/vc/bin $(TARGET_DIR)/opt/vc
++	cp -r $(@D)/hardfp/opt/vc/lib $(TARGET_DIR)/opt/vc
++	cp -r $(@D)/hardfp/opt/vc/sbin $(TARGET_DIR)/opt/vc
++endef
++endif
++
++define RASPBERRYPI_UTILS_INSTALL_TARGET_CMDS
++	$(RASPBERRYPI_UTILS_INSTALL_TARGET_BOOT)
++	$(RASPBERRYPI_UTILS_INSTALL_TARGET_VIDEOCORE)
++endef
++
++$(eval $(generic-package))
++
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
