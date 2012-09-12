@@ -1,44 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Sep 2012 08:44:34 +0200
-Subject: [Buildroot] big root fs
-In-Reply-To: <1347427978.76430.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-References: <1347366592.32116.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20120911154439.47e2b53a@skate>
- <1347427978.76430.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <20120912084434.13946c09@skate>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 12 Sep 2012 08:52:56 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-09-11
+In-Reply-To: <20120912063243.ABAD452D57F@lolut.humanoidz.org>
+References: <20120912063243.ABAD452D57F@lolut.humanoidz.org>
+Message-ID: <50503148.1020305@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 11 Sep 2012 22:32:58 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+Am 12.09.2012 08:32, schrieb Thomas Petazzoni:
 
-> So, as much as I understood, I can't expect to reduce jffs2 below
-> let's say 45MB having included?options that?I stated (GTK, ...).
-> Then a question emerged to me - how it happens that for example
-> Qtopia for my ARM board has 25MB, alltogether with some 
-> video materials, games, ...?
-> Although I didn't try, but there is Angstrom root file system for my
-> ARM board, based on glibc, that is 25MB at size, which is considerably 
-> smaller then my jffs2.
-> How did they achieve that, or maybe I made some mistakes so the
-> file size is large ?
+> 
+> Status         : NOK
+> Failure reason : libdrm-2.4.19
+> Architecture   : arm
+> Submitted by   : Thomas Petazzoni (Free Electrons build server)
+> Submitted at   : 2012-09-11 02:36:06
+> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a77ee7fd40a78d6fe05657b4f4be63926c04e523
+> End of log     : http://autobuild.buildroot.net/results/ba85b1e8b5608948de3df9b513aff9084346d9b3/build-end.log
+> Complete log   : http://autobuild.buildroot.net/results/ba85b1e8b5608948de3df9b513aff9084346d9b3/build.log.bz2
+> Configuration  : http://autobuild.buildroot.net/results/ba85b1e8b5608948de3df9b513aff9084346d9b3/config
+> Defconfig      : http://autobuild.buildroot.net/results/ba85b1e8b5608948de3df9b513aff9084346d9b3/defconfig
 
-As Avery said, look around with du and ls in your filesystem to check
-where the size is, and whether or not the biggest things are actually
-useful or not.
+Please try this patch: http://patchwork.ozlabs.org/patch/171901/
 
-Alternatively, could you put online a tarball version of your
-filesystem, so that others could help you pointing what are the
-problems?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
