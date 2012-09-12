@@ -1,52 +1,80 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Sep 2012 11:49:01 +0200
-Subject: [Buildroot] [git commit] gst-plugin-bad: add musepack option
-Message-ID: <20120912094932.B26FE99615@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 12 Sep 2012 11:50:14 +0200
+Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
+In-Reply-To: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <CAHXCMM+v=M_jusWkrwtMsfZSPqz3PqvF0uj1C2o6g_67gFksnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fc8d6986e38d4b8f7847b72a707c693a24dcb5c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Marek,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/gst-plugins-bad/Config.in       |    4 ++++
- .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    7 +++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+2012/9/12 Marek Belisko <marek.belisko@open-nandra.com>:
+> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+>
+> Basic support:
+> - boot binary blobs + VideoCore added in utils package (to avoid fetching 2 times
+>   same repo which is quite big)
+> - added post-build script to adjust password, add config, cmdline files
+> - add actual kernel build 3.2.27 with cutdown config
+> - using external toolchain
+> - some parts was overtaken from commits from: https://github.com/nezticle/RaspberryPi-BuildRoot.git
+>
+> ---
+>  board/raspberrypi/config.txt                   |   41 ++
+>  board/raspberrypi/linux-3.2.27_defconfig       |  546 ++++++++++++++++++++++++
+>  board/raspberrypi/post-build.sh                |   23 +
+>  configs/raspberrypi_defconfig                  |   19 +
+>  package/Config.in                              |    1 +
+>  package/raspberrypi-utils/Config.in            |   21 +
+>  package/raspberrypi-utils/raspberrypi-utils.mk |   41 ++
+>  7 files changed, 692 insertions(+)
+>  create mode 100644 board/raspberrypi/config.txt
+>  create mode 100644 board/raspberrypi/linux-3.2.27_defconfig
+>  create mode 100755 board/raspberrypi/post-build.sh
+>  create mode 100644 configs/raspberrypi_defconfig
+>  create mode 100644 package/raspberrypi-utils/Config.in
+>  create mode 100644 package/raspberrypi-utils/raspberrypi-utils.mk
+>
+[...]
+> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+> new file mode 100644
+> index 0000000..e19883d
+> --- /dev/null
+> +++ b/configs/raspberrypi_defconfig
+> @@ -0,0 +1,19 @@
+> +BR2_arm=y
+> +BR2_arm1176jzf_s=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+Do you use an external toolchain found on the web?
+If yes, IMO, it would be nice to add it as a supported external
+toolchain (see: toolchain/toolchain-external/Config.in and
+toolchain/toolchain-external/ext-tool.mk).
 
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index cde3ab8..7784ad7 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -273,6 +273,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBMMS
- 	bool "libmms"
- 	select BR2_PACKAGE_LIBMMS
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MUSEPACK
-+	bool "musepack"
-+	select BR2_PACKAGE_MUSEPACK
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NEON
- 	bool "neon"
- 	select BR2_PACKAGE_NEON
-diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-index 6bdcf10..714c987 100644
---- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-@@ -521,6 +521,13 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-libmms
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MUSEPACK),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-musepack
-+GST_PLUGINS_BAD_DEPENDENCIES += musepack
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-musepack
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NEON),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-neon
- GST_PLUGINS_BAD_DEPENDENCIES += neon
+> +BR2_TARGET_GENERIC_HOSTNAME="raspberrypi"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to RaspberryPi"
+> +BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi/post-build.sh"
+> +BR2_PACKAGE_ZLIB=y
+> +BR2_PACKAGE_RASPBERRYPI_UTILS=y
+> +BR2_PACKAGE_BOOTLOADER=y
+> +BR2_PACKAGE_VIDEOCORE=y
+> +BR2_TARGET_ROOTFS_TAR_GZIP=y
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rpi-3.2.27"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.2.27_defconfig"
+> +BR2_LINUX_KERNEL_ZIMAGE=y
+
+
+
+Regards,
+
+
+-- 
+Sam
