@@ -1,52 +1,109 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Sep 2012 23:21:56 +0200
-Subject: [Buildroot] [git commit] gst-plugin-bad: add opus option
-Message-ID: <20120912073359.AD11B99621@busybox.osuosl.org>
+Date: Wed, 12 Sep 2012 09:33:06 +0200
+Subject: [Buildroot] [git commit] gst-plugins-bad: opus + jpegformat:
+	unbreak non-debug build
+Message-ID: <20120912073359.F01A599621@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5df8e364d00840ab8ea2d8ee0cfe574034b54c3c
+commit: http://git.buildroot.net/buildroot/commit/?id=259f0ed4fa8129c5c4c0061b787b85b766efa011
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+opus + jpegformat plugin builds fail when gstreamer is configured with
+--disable-gst-debug as they are checking the GST_DISABLE_DEBUG symbol
+instead of GST_DISABLE_GST_DEBUG.
+
+Submitted upstream as https://bugzilla.gnome.org/show_bug.cgi?id=683850
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/gst-plugins-bad/Config.in       |    4 ++++
- .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    7 +++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ ...d-opus-jpegformat-unbreak-non-debug-build.patch |   78 ++++++++++++++++++++
+ 1 files changed, 78 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index cb50fbd..cde3ab8 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -277,6 +277,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_NEON
- 	bool "neon"
- 	select BR2_PACKAGE_NEON
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_OPUS
-+	bool "opus"
-+	select BR2_PACKAGE_OPUS
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch b/package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch
+new file mode 100644
+index 0000000..2c98c3e
+--- /dev/null
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch
+@@ -0,0 +1,78 @@
++From 1725e702a3622cb45c8142622dd419fa0c410ac9 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Wed, 12 Sep 2012 09:10:35 +0200
++Subject: [PATCH] gst-plugins-bad: opus + jpegformat: unbreak non-debug build
 +
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG
- 	bool "rsvg"
- 	depends on BR2_PACKAGE_LIBGTK2
-diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-index ad8b509..6bdcf10 100644
---- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-@@ -528,6 +528,13 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-neon
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_OPUS),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-opus
-+GST_PLUGINS_BAD_DEPENDENCIES += opus
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-opus
-+endif
++opus + jpegformat plugin builds fail when gstreamer is configured with
++--disable-gst-debug as they are checking the GST_DISABLE_DEBUG symbol
++instead of GST_DISABLE_GST_DEBUG.
 +
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-rsvg
- GST_PLUGINS_BAD_DEPENDENCIES += librsvg
++Submitted upstream as https://bugzilla.gnome.org/show_bug.cgi?id=683850
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ ext/opus/gstopusdec.c         |    2 +-
++ ext/opus/gstopusenc.c         |    4 ++--
++ gst/jpegformat/gstjpegparse.c |    4 ++--
++ 3 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/ext/opus/gstopusdec.c b/ext/opus/gstopusdec.c
++index 0e2805c..ab7221d 100644
++--- a/ext/opus/gstopusdec.c
+++++ b/ext/opus/gstopusdec.c
++@@ -357,7 +357,7 @@ opus_dec_chain_parse_data (GstOpusDec * dec, GstBuffer * buffer)
++ 
++     GST_DEBUG_OBJECT (dec, "Creating decoder with %d channels, %d Hz",
++         dec->n_channels, dec->sample_rate);
++-#ifndef GST_DISABLE_DEBUG
+++#ifndef GST_DISABLE_GST_DEBUG
++     gst_opus_common_log_channel_mapping_table (GST_ELEMENT (dec), opusdec_debug,
++         "Mapping table", dec->n_channels, dec->channel_mapping);
++ #endif
++diff --git a/ext/opus/gstopusenc.c b/ext/opus/gstopusenc.c
++index 240a2cb..d991795 100644
++--- a/ext/opus/gstopusenc.c
+++++ b/ext/opus/gstopusenc.c
++@@ -589,7 +589,7 @@ gst_opus_enc_setup_channel_mappings (GstOpusEnc * enc,
++       }
++     }
++ 
++-#ifndef GST_DISABLE_DEBUG
+++#ifndef GST_DISABLE_GST_DEBUG
++     GST_INFO_OBJECT (enc,
++         "Mapping tables built: %d channels, %d stereo streams", enc->n_channels,
++         enc->n_stereo_streams);
++@@ -654,7 +654,7 @@ gst_opus_enc_setup (GstOpusEnc * enc)
++ {
++   int error = OPUS_OK;
++ 
++-#ifndef GST_DISABLE_DEBUG
+++#ifndef GST_DISABLE_GST_DEBUG
++   GST_DEBUG_OBJECT (enc,
++       "setup: %d Hz, %d channels, %d stereo streams, family %d",
++       enc->sample_rate, enc->n_channels, enc->n_stereo_streams,
++diff --git a/gst/jpegformat/gstjpegparse.c b/gst/jpegformat/gstjpegparse.c
++index f984a52..b4af9ed 100644
++--- a/gst/jpegformat/gstjpegparse.c
+++++ b/gst/jpegformat/gstjpegparse.c
++@@ -545,7 +545,7 @@ gst_jpeg_parse_skip_marker (GstJpegParse * parse,
++   if (!gst_byte_reader_get_uint16_be (reader, &size))
++     return FALSE;
++ 
++-#ifndef GST_DISABLE_DEBUG
+++#ifndef GST_DISABLE_GST_DEBUG
++   /* We'd pry the id of the skipped application segment */
++   if (marker >= APP0 && marker <= APP15) {
++     const gchar *id_str = NULL;
++@@ -561,7 +561,7 @@ gst_jpeg_parse_skip_marker (GstJpegParse * parse,
++ #else
++   GST_DEBUG_OBJECT (parse, "unhandled marker %x skiping %u bytes", marker,
++       size);
++-#endif // GST_DISABLE_DEBUG
+++#endif // GST_DISABLE_GST_DEBUG
++ 
++   if (!gst_byte_reader_skip (reader, size - 2))
++     return FALSE;
++-- 
++1.7.10
++
