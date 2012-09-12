@@ -1,47 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Sep 2012 10:27:27 +0200
-Subject: [Buildroot] big root fs
-In-Reply-To: <1347438063.92384.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-References: <1347366592.32116.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20120911154439.47e2b53a@skate>
- <1347427978.76430.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20120912084434.13946c09@skate>
- <1347438063.92384.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <20120912102727.46894561@skate>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Wed, 12 Sep 2012 11:07:32 +0200
+Subject: [Buildroot] Uncompressed kernel image for ARM architecture
+	(Raspberry)
+In-Reply-To: <CAMPeO9yjDwyhqpA0nOwLcp25cponBsP_OC_J4T7+22Jj_OzoaA@mail.gmail.com>
+References: <CAMPeO9yjDwyhqpA0nOwLcp25cponBsP_OC_J4T7+22Jj_OzoaA@mail.gmail.com>
+Message-ID: <CAAfyv35=m_nHK_mRqdRVdZ9RY8i7=dLv9BNsc4mHxP+LGpXEKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 12 Sep 2012 01:21:03 -0700 (PDT),
-Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+Hi David,
 
-> It is hard to send output/target folder, because it is about 100MB uncompressed.
-> Maybe someone will have suggestion, according to next size info:
-> The biggest folder inside "target" is /lib(20MB) and? /usr - 86MB (/usr/lib -20MB ; /usr/share - 60).
-> Inside /usr/share - the most parts go to folders: locale (35MB); 
+On Mon, Sep 10, 2012 at 3:01 PM, David Sanchez Herrero
+<david.krusty@gmail.com> wrote:
+> Hi all,
+>
+> Is there a way to obtain uncompressed kernel image for ARM architecture?
+>
+> I'm trying to build a kernel and a root filesystem for Raspberry Pi from an
+> internal buildroot toolchain with uClibc, but the only supported formats for
+> the output kernel image are vmlinux, uImage and zImage.
+>
+> Downloading the kernel sources from the Raspberry Git repositories, and
+> building them manually, an image file called "Image" is generated under
+> ".arch/arm/boot/" folder, but this file doesn't exists if the building
+> process of the same sources is made by Buildroot. It will prepare boot partition
+for RPI automatically.
+Maybe you've seen that but to be sure ;):
+http://lists.busybox.net/pipermail/buildroot/2012-September/058499.html
+>
+> Maybe using BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM?
+>
+> Thanks in advance.
+>
+> Greeting, David.
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Enable option BR2_ENABLE_LOCALE_PURGE. And you can probably set
-BR2_ENABLE_LOCALE_WHITELIST to just "C en_US". This should get rid of
-most of your usr/share/locale directory.
+Cheers,
 
-I'm wondering whether we should make BR2_ENABLE_LOCALE_PURGE=y and
-BR2_ENABLE_LOCALE_WHITELIST="C en_US" the defaults.
+marek
 
-> fonts(20MB) and X11(5MB).
-> I can send some of them although I am aware that info I provided is not so clear.
-
-Can you send the output of:
-
-	cd output/target/
-	ls -lRS
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
