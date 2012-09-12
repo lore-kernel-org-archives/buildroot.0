@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Sep 2012 10:51:55 -0300
-Subject: [Buildroot] [PATCH 2/3] unionfs: bump to version 0.26
+Date: Wed, 12 Sep 2012 10:51:56 -0300
+Subject: [Buildroot] [PATCH 3/3] patch: bump to version 2.7
 In-Reply-To: <1347457916-23684-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1347457916-23684-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1347457916-23684-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1347457916-23684-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/unionfs/unionfs.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/patch/patch.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
-index 3b33824..e2ffd72 100644
---- a/package/unionfs/unionfs.mk
-+++ b/package/unionfs/unionfs.mk
-@@ -4,10 +4,12 @@
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index b4206c5..346aabd 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
+@@ -4,7 +4,9 @@
  #
  #############################################################
  
--UNIONFS_VERSION = 0.25
-+UNIONFS_VERSION = 0.26
- UNIONFS_SITE = http://podgorny.cz/unionfs-fuse/releases
--UNIONFS_SOURCE = unionfs-fuse-$(UNIONFS_VERSION).tar.bz2
-+UNIONFS_SOURCE = unionfs-fuse-$(UNIONFS_VERSION).tar.xz
- UNIONFS_DEPENDENCIES = libfuse
-+UNIONFS_LICENSE = BSD-3c
-+UNIONFS_LICENSE_FILES = LICENSE
+-PATCH_VERSION = 2.6
++PATCH_VERSION = 2.7
+ PATCH_SITE = $(BR2_GNU_MIRROR)/patch
++PATCH_LICENSE = GPLv3+
++PATCH_LICENSE_FILE = COPYING
  
- define UNIONFS_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ $(eval $(autotools-package))
 -- 
 1.7.8.6
