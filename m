@@ -1,37 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Sep 2012 18:22:29 +0200
-Subject: [Buildroot] [PATCH] iw: add license information
-In-Reply-To: <505054B5.3080000@mimc.co.uk>
-References: <505054B5.3080000@mimc.co.uk>
-Message-ID: <5050B6C5.5050804@mind.be>
+Date: Wed, 12 Sep 2012 18:12:42 +0200
+Subject: [Buildroot] [PATCH] dropbear: add license information
+In-Reply-To: <50503FB3.6080807@mimc.co.uk>
+References: <50503FB3.6080807@mimc.co.uk>
+Message-ID: <5050B47A.10504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/12/12 11:24, Mark Jackson wrote:
+On 09/12/12 09:54, Mark Jackson wrote:
 > Signed-off-by: Mark Jackson<mpfj@newflow.co.uk>
 > ---
->   package/iw/iw.mk |    2 ++
+>   package/dropbear/dropbear.mk |    2 ++
 >   1 file changed, 2 insertions(+)
 >
-> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-> index 9c68093..ba1ab30 100644
-> --- a/package/iw/iw.mk
-> +++ b/package/iw/iw.mk
-> @@ -7,6 +7,8 @@
->   IW_VERSION = 3.6
->   IW_SOURCE = iw-$(IW_VERSION).tar.bz2
->   IW_SITE = http://wireless.kernel.org/download/iw
-> +IW_LICENSE = iw license
-> +IW_LICENSE_FILES = COPYING
-Looks like a MIT license to me.
+> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+> index 64d3a01..cd349b0 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -6,6 +6,8 @@
+>
+>   DROPBEAR_VERSION = 2012.55
+>   DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+> +DROPBEAR_LICENSE = dropbear license
+> +DROPBEAR_LICENSE_FILES = LICENSE
+
+  I'd call it "MIT BSD-2c public domain", that's more descriptive.
+
+  Luca and others: what should we do when several licenses apply?
+Up to now, we've always just put a space between them, but the problem
+is that something like "public domain" already has a space. Maybe it's
+better to put
+
+MIT && BSD-2c && public domain
+
+?
 
 Regards,
 Arnout
-
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
