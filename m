@@ -1,30 +1,37 @@
-From: Mark Jackson <mpfj-list@mimc.co.uk>
-Date: Wed, 12 Sep 2012 10:30:11 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: add license information
-Message-ID: <50505623.7000903@mimc.co.uk>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Wed, 12 Sep 2012 05:30:58 -0400
+Subject: [Buildroot] [PATCH 2/4] Make Berkeley DB a dependency of
+ linux-pam and make sure it is selected
+In-Reply-To: <50501E2C.6080306@mind.be>
+References: <1347078066-25257-1-git-send-email-golubovsky@gmail.com>
+ <1347078066-25257-2-git-send-email-golubovsky@gmail.com>
+ <504F8E7B.1060102@mind.be>
+ <CADiAo4KFXtMDJqfjtVS1pu2EkHC=2EOFZ1LaN4dWw-ig9QsuGw@mail.gmail.com>
+ <50501E2C.6080306@mind.be>
+Message-ID: <CADiAo4JjqO_4mFFngp0cw6=rgskOTjMnk=52xzyL20dyL0-b-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
----
- package/wpa_supplicant/wpa_supplicant.mk |    2 ++
- 1 file changed, 2 insertions(+)
+Arnout,
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9d957ea..34c5a0b 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -6,6 +6,8 @@
+On Wed, Sep 12, 2012 at 1:31 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
- WPA_SUPPLICANT_VERSION = 1.0
- WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
-+WPA_SUPPLICANT_LICENSE = GPLv2
-+WPA_SUPPLICANT_LICENSE_FILES = COPYING
- WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
- WPA_SUPPLICANT_SUBDIR = wpa_supplicant
- WPA_SUPPLICANT_DBUS_SERVICE = fi.epitest.hostap.WPASupplicant
+>
+>  Since these patches are still under review, maybe it's best to first
+> commit an individual patch that just does --disable-db ?  Can you do
+> that and check if it fixes the autobuilder issue?
+>
+
+I have just submitted such patch. Let's see how autobuilder results
+change. In my test linux-pam compiled without pam_userdb.so, and
+berkeleydb was selected in menuconfig.
+
+Thanks.
+
 -- 
-1.7.9.5
+Dmitry Golubovsky
+
+Anywhere on the Web
