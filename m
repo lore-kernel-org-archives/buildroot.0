@@ -1,38 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Sep 2012 23:26:46 +0200
-Subject: [Buildroot] [git commit] unionfs: bump to version 0.26
-Message-ID: <20120912213354.5CE6C8B799@busybox.osuosl.org>
+Date: Wed, 12 Sep 2012 23:27:39 +0200
+Subject: [Buildroot] [git commit] patch: bump to version 2.7
+Message-ID: <20120912213354.D501999603@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bca9a642c9e9f272798135170a4eba49fb3d9a6e
+commit: http://git.buildroot.net/buildroot/commit/?id=47ac46f5bd6ed2175b63bd92531a45ddc08dfc44
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/unionfs/unionfs.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/patch/patch.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
-index 3b33824..e2ffd72 100644
---- a/package/unionfs/unionfs.mk
-+++ b/package/unionfs/unionfs.mk
-@@ -4,10 +4,12 @@
+diff --git a/package/patch/patch.mk b/package/patch/patch.mk
+index b4206c5..346aabd 100644
+--- a/package/patch/patch.mk
++++ b/package/patch/patch.mk
+@@ -4,7 +4,9 @@
  #
  #############################################################
  
--UNIONFS_VERSION = 0.25
-+UNIONFS_VERSION = 0.26
- UNIONFS_SITE = http://podgorny.cz/unionfs-fuse/releases
--UNIONFS_SOURCE = unionfs-fuse-$(UNIONFS_VERSION).tar.bz2
-+UNIONFS_SOURCE = unionfs-fuse-$(UNIONFS_VERSION).tar.xz
- UNIONFS_DEPENDENCIES = libfuse
-+UNIONFS_LICENSE = BSD-3c
-+UNIONFS_LICENSE_FILES = LICENSE
+-PATCH_VERSION = 2.6
++PATCH_VERSION = 2.7
+ PATCH_SITE = $(BR2_GNU_MIRROR)/patch
++PATCH_LICENSE = GPLv3+
++PATCH_LICENSE_FILE = COPYING
  
- define UNIONFS_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ $(eval $(autotools-package))
