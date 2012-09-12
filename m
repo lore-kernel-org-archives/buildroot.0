@@ -1,29 +1,26 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 12 Sep 2012 16:01:49 +0100
-Subject: [Buildroot] [network-manager] Apply upstream patch to fix
- compilation with kernel-headers >= 3.4
-Message-ID: <CAG2jQ8g+0WkYnR2k-8jaLXHOFRA2OPiuQWeD==B6gdE67N=4OA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 12 Sep 2012 17:03:16 +0200
+Subject: [Buildroot] icu: disable renaming
+Message-ID: <CAGm1_kuwSbyUnFE2zMrAn6DB_f2QOvrZyZisWhRri4Te3aJpfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thiago Macieira pointed to this issue with ICU
+(https://plus.google.com/u/0/108138837678270193032/posts/8ujbfzMz9St):
 
-Since kernel-3.4_rc1, commit
-bf7daebb9fba540cb8864f435f153678b3e5c171[1], the ifpppstatsreq
-structure has been removed. This leads to compilation problems for
-network-manager in buildroot if one uses kernel-headers >= 3.4.
-Upstream fixed this problem in commit
-	6b64e4db2f3c9cfc0e0e240cf0bc58f3b3e90c1f[2]. Please consider applying
-this patch to the buildroot package. If a git commit with a Signed-off
-line is required for that, please let me know and I will provide one.
-Another way to solve this problem is to bump to the latest 0.9.6
-release.
+"If you're packaging ICU on a Linux distribution, please add the
+"--disable-renaming" option to your configure line. Upstream
+recommends it.
 
-Regards,
-Markos
+And we users of ICU will thank you. Starting in 2013, we may be able
+to depend on ICU.
 
-[1] http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=bf7daebb9fba540cb8864f435f153678b3e5c171
-[2] http://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/src/ppp-manager/nm-ppp-manager.c?id=6b64e4db2f3c9cfc0e0e240cf0bc58f3b3e90c1f
+Hopefully someone will figure out a similar option for Boost and
+people will be able to use it."
+
+Should we also use this option?
+
+Yegor
