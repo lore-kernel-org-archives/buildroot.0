@@ -1,34 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 12 Sep 2012 10:51:56 -0300
-Subject: [Buildroot] [PATCH 3/3] patch: bump to version 2.7
-In-Reply-To: <1347457916-23684-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1347457916-23684-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1347457916-23684-3-git-send-email-gustavo@zacarias.com.ar>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 12 Sep 2012 16:01:49 +0100
+Subject: [Buildroot] [network-manager] Apply upstream patch to fix
+ compilation with kernel-headers >= 3.4
+Message-ID: <CAG2jQ8g+0WkYnR2k-8jaLXHOFRA2OPiuQWeD==B6gdE67N=4OA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/patch/patch.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+Hi,
 
-diff --git a/package/patch/patch.mk b/package/patch/patch.mk
-index b4206c5..346aabd 100644
---- a/package/patch/patch.mk
-+++ b/package/patch/patch.mk
-@@ -4,7 +4,9 @@
- #
- #############################################################
- 
--PATCH_VERSION = 2.6
-+PATCH_VERSION = 2.7
- PATCH_SITE = $(BR2_GNU_MIRROR)/patch
-+PATCH_LICENSE = GPLv3+
-+PATCH_LICENSE_FILE = COPYING
- 
- $(eval $(autotools-package))
--- 
-1.7.8.6
+Since kernel-3.4_rc1, commit
+bf7daebb9fba540cb8864f435f153678b3e5c171[1], the ifpppstatsreq
+structure has been removed. This leads to compilation problems for
+network-manager in buildroot if one uses kernel-headers >= 3.4.
+Upstream fixed this problem in commit
+	6b64e4db2f3c9cfc0e0e240cf0bc58f3b3e90c1f[2]. Please consider applying
+this patch to the buildroot package. If a git commit with a Signed-off
+line is required for that, please let me know and I will provide one.
+Another way to solve this problem is to bump to the latest 0.9.6
+release.
+
+Regards,
+Markos
+
+[1] http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=bf7daebb9fba540cb8864f435f153678b3e5c171
+[2] http://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/src/ppp-manager/nm-ppp-manager.c?id=6b64e4db2f3c9cfc0e0e240cf0bc58f3b3e90c1f
