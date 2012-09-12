@@ -1,106 +1,46 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Wed, 12 Sep 2012 12:00:01 +0200
-Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
-In-Reply-To: <CAHXCMM+v=M_jusWkrwtMsfZSPqz3PqvF0uj1C2o6g_67gFksnA@mail.gmail.com>
-References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
- <CAHXCMM+v=M_jusWkrwtMsfZSPqz3PqvF0uj1C2o6g_67gFksnA@mail.gmail.com>
-Message-ID: <CAAfyv3637FXWDjC=VEO2kzK+CeoU5UXJ_-O8EB=kP8FE6+J74w@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 12 Sep 2012 13:19:55 +0300
+Subject: [Buildroot] [PATCH] wpa_supplicant: add license information
+In-Reply-To: <50505623.7000903@mimc.co.uk>
+References: <50505623.7000903@mimc.co.uk>
+Message-ID: <20120912101955.GB15924@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Hi Mark,
 
-On Wed, Sep 12, 2012 at 11:50 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi Marek,
->
-> 2012/9/12 Marek Belisko <marek.belisko@open-nandra.com>:
->> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
->>
->> Basic support:
->> - boot binary blobs + VideoCore added in utils package (to avoid fetching 2 times
->>   same repo which is quite big)
->> - added post-build script to adjust password, add config, cmdline files
->> - add actual kernel build 3.2.27 with cutdown config
->> - using external toolchain
->> - some parts was overtaken from commits from: https://github.com/nezticle/RaspberryPi-BuildRoot.git
->>
->> ---
->>  board/raspberrypi/config.txt                   |   41 ++
->>  board/raspberrypi/linux-3.2.27_defconfig       |  546 ++++++++++++++++++++++++
->>  board/raspberrypi/post-build.sh                |   23 +
->>  configs/raspberrypi_defconfig                  |   19 +
->>  package/Config.in                              |    1 +
->>  package/raspberrypi-utils/Config.in            |   21 +
->>  package/raspberrypi-utils/raspberrypi-utils.mk |   41 ++
->>  7 files changed, 692 insertions(+)
->>  create mode 100644 board/raspberrypi/config.txt
->>  create mode 100644 board/raspberrypi/linux-3.2.27_defconfig
->>  create mode 100755 board/raspberrypi/post-build.sh
->>  create mode 100644 configs/raspberrypi_defconfig
->>  create mode 100644 package/raspberrypi-utils/Config.in
->>  create mode 100644 package/raspberrypi-utils/raspberrypi-utils.mk
->>
-> [...]
->> diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
->> new file mode 100644
->> index 0000000..e19883d
->> --- /dev/null
->> +++ b/configs/raspberrypi_defconfig
->> @@ -0,0 +1,19 @@
->> +BR2_arm=y
->> +BR2_arm1176jzf_s=y
->> +BR2_TOOLCHAIN_EXTERNAL=y
-> Do you use an external toolchain found on the web?
-Nope just choose arm1176jzf_s and select external toolchain
-which gives me: Sourcery CodeBench ARM 2011.09. to use.
-> If yes, IMO, it would be nice to add it as a supported external
-> toolchain (see: toolchain/toolchain-external/Config.in and
-> toolchain/toolchain-external/ext-tool.mk).
->
->> +BR2_TARGET_GENERIC_HOSTNAME="raspberrypi"
->> +BR2_TARGET_GENERIC_ISSUE="Welcome to RaspberryPi"
->> +BR2_TARGET_GENERIC_GETTY_PORT="tty1"
->> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi/post-build.sh"
->> +BR2_PACKAGE_ZLIB=y
->> +BR2_PACKAGE_RASPBERRYPI_UTILS=y
->> +BR2_PACKAGE_BOOTLOADER=y
->> +BR2_PACKAGE_VIDEOCORE=y
->> +BR2_TARGET_ROOTFS_TAR_GZIP=y
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rpi-3.2.27"
->> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/raspberrypi/linux-3.2.27_defconfig"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
->
->
->
-> Regards,
->
->
-> --
-> Sam
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+On Wed, Sep 12, 2012 at 10:30:11AM +0100, Mark Jackson wrote:
+> Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+> ---
+>  package/wpa_supplicant/wpa_supplicant.mk |    2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index 9d957ea..34c5a0b 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -6,6 +6,8 @@
+> 
+>  WPA_SUPPLICANT_VERSION = 1.0
+>  WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
+> +WPA_SUPPLICANT_LICENSE = GPLv2
 
-cheers,
+wpa_supplicant (and hostapd) are under a dual license GPLv2/BSD-3c. See the 
+README file.
 
-marek
+baruch
+
+> +WPA_SUPPLICANT_LICENSE_FILES = COPYING
+>  WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+>  WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+>  WPA_SUPPLICANT_DBUS_SERVICE = fi.epitest.hostap.WPASupplicant
+
+baruch
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
