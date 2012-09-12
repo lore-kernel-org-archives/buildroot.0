@@ -1,21 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 12 Sep 2012 18:12:06 +0200
-Subject: [Buildroot] [git commit] package: add opus audio codec library
-In-Reply-To: <20120912073358.E363B99621@busybox.osuosl.org>
-References: <20120912073358.E363B99621@busybox.osuosl.org>
-Message-ID: <5050B456.6040807@mind.be>
+Date: Wed, 12 Sep 2012 18:22:29 +0200
+Subject: [Buildroot] [PATCH] iw: add license information
+In-Reply-To: <505054B5.3080000@mimc.co.uk>
+References: <505054B5.3080000@mimc.co.uk>
+Message-ID: <5050B6C5.5050804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/11/12 22:50, Peter Korsgaard wrote:
-> +OPUS_CONF_OPT = --disable-doc
-That should depend on BR2_HAVE_DOCUMENTATION, no?
+On 09/12/12 11:24, Mark Jackson wrote:
+> Signed-off-by: Mark Jackson<mpfj@newflow.co.uk>
+> ---
+>   package/iw/iw.mk |    2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+> index 9c68093..ba1ab30 100644
+> --- a/package/iw/iw.mk
+> +++ b/package/iw/iw.mk
+> @@ -7,6 +7,8 @@
+>   IW_VERSION = 3.6
+>   IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+>   IW_SITE = http://wireless.kernel.org/download/iw
+> +IW_LICENSE = iw license
+> +IW_LICENSE_FILES = COPYING
+Looks like a MIT license to me.
 
 Regards,
 Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
