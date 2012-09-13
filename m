@@ -1,35 +1,82 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 13 Sep 2012 00:19:43 +0200
-Subject: [Buildroot] [git commit] vsftpd: add linux-pam support
-Message-ID: <20120913051437.DD75C99637@busybox.osuosl.org>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Wed, 12 Sep 2012 23:25:43 -0700 (PDT)
+Subject: [Buildroot] big root fs
+In-Reply-To: <20120912102727.46894561@skate>
+References: <1347366592.32116.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+ <20120911154439.47e2b53a@skate>
+ <1347427978.76430.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+ <20120912084434.13946c09@skate>
+ <1347438063.92384.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+ <20120912102727.46894561@skate>
+Message-ID: <1347517543.48062.YahooMailNeo@web164604.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7f8dda7c07dd5eaddc1f0e2fa4d7426e673f8ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Your mail server reports me some problems, that is not so much understandable 
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/vsftpd/vsftpd.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+to me, so I decided to post attachment in compressed version while repeating text?
+once more:
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index ca711bb..ce042c5 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -23,6 +23,11 @@ VSFTPD_DEPENDENCIES += libcap
- VSFTPD_LIBS += -lcap
- endif
+Here is report from my output/target root file system, and as 
+Mr Arnout proposed, I added "h" option, along with others.
+I just want to say that there is some example programs, I built
+for testing in /root folder, but I didn't take that into account,
+when I reported overall RFS size. So size is about 100MB, 
+as I stated earlier, without /root size.
+
+Regards
+
+
+
+
+________________________________
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Zoran Djordjevic <djdjdjole@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Wednesday, September 12, 2012 1:27 AM
+Subject: Re: [Buildroot] big root fs
  
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+VSFTPD_DEPENDENCIES += linux-pam
-+VSFTPD_LIBS += -lpam
-+endif
-+
- define VSFTPD_BUILD_CMDS
- 	$(MAKE) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" LIBS="$(VSFTPD_LIBS)" -C $(@D)
+Le Wed, 12 Sep 2012 01:21:03 -0700 (PDT),
+Zoran Djordjevic <djdjdjole@yahoo.com> a ?crit :
+
+> It is hard to send output/target folder, because it is about 100MB uncompressed.
+> Maybe someone will have suggestion, according to next size info:
+> The biggest folder inside "target" is /lib(20MB) and? /usr - 86MB (/usr/lib -20MB ; /usr/share - 60).
+> Inside /usr/share - the most parts go to folders: locale (35MB); 
+
+Enable option BR2_ENABLE_LOCALE_PURGE. And you can probably set
+BR2_ENABLE_LOCALE_WHITELIST to just "C en_US". This should get rid of
+most of your usr/share/locale directory.
+
+I'm wondering whether we should make BR2_ENABLE_LOCALE_PURGE=y and
+BR2_ENABLE_LOCALE_WHITELIST="C en_US" the defaults.
+
+> fonts(20MB) and X11(5MB).
+> I can send some of them although I am aware that info I provided is not so clear.
+
+Can you send the output of:
+
+??? cd output/target/
+??? ls -lRS
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120912/97004fdb/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: RFSlisting.zip
+Type: application/zip
+Size: 35078 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120912/97004fdb/attachment-0001.zip>
