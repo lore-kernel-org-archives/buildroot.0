@@ -1,104 +1,108 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Sep 2012 00:16:30 +0200
-Subject: [Buildroot] [PATCH 2/2] target: add different methods to encode the
-	root password
-In-Reply-To: <1347574590-13716-1-git-send-email-yann.morin.1998@free.fr>
-References: <1347574590-13716-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1347574590-13716-2-git-send-email-yann.morin.1998@free.fr>
+Date: Fri, 14 Sep 2012 00:16:29 +0200
+Subject: [Buildroot] [PATCH 1/2] target: add option to set the root password
+Message-ID: <1347574590-13716-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The password can be encoded in different ways (from the weakest
-to the strongest): des, md5, sha-256, sha-512
+Add an option in the menuconfig to specify a root password.
 
-Add a choice entry to select the method, defaulting to 'des'.
+If set to empty, no root password is created; otherwise, the password is
+encrypted using DES-56 (other mechanisms will come in a future patch),
+because DES-56 is the standard default using crypt(3).
+
+Add a check for 'mkpasswd' as a new dependency.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- target/generic/Config.in   |   46 ++++++++++++++++++++++++++++++++++++++++++++
- target/generic/Makefile.in |    3 +-
- 2 files changed, 48 insertions(+), 1 deletions(-)
+This will clash with Thomas' pending reorganising series:
+    http://lists.busybox.net/pipermail/buildroot/2012-September/058254.html
+---
+ support/dependencies/dependencies.sh |    7 +++++++
+ target/generic/Config.in             |   14 ++++++++++++++
+ target/generic/Makefile.in           |   14 ++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 9f0f6a9..edf49e9 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -158,3 +158,10 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
+        exit 1 ;
+    fi
+ fi
++
++if grep -E '^TARGET_GENERIC_ROOT_PASSWD=".+"$' $CONFIG_FILE > /dev/null 2>&1; then
++    if ! which mkpasswd > /dev/null 2>&1; then
++        /bin/echo -e "\nYou need the 'mkpasswd' utility to set the root password\n"
++        exit 1
++    fi
++fi
 diff --git a/target/generic/Config.in b/target/generic/Config.in
-index b376c85..9933df6 100644
+index b8472f4..b376c85 100644
 --- a/target/generic/Config.in
 +++ b/target/generic/Config.in
-@@ -27,6 +27,52 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	  if either the .config file or the build log may be distributed!
+@@ -12,6 +12,20 @@ config BR2_TARGET_GENERIC_ISSUE
+        help
+          Select system banner (/etc/issue) to be displayed at login.
  
++config BR2_TARGET_GENERIC_ROOT_PASSWD
++	string "root password"
++	default ""
++	help
++	  Set the initial root password. It will be des56-encrypted.
++	  
++	  If set to empty (the default), then no root password will be set,
++	  and root will need no password to log in.
++	  
++	  WARNING! WARNING!
++	  The password appears in clear in the .config file, and may
++	  appear in the the build log! Avoid using a valuable password
++	  if either the .config file or the build log may be distributed!
++
  choice
-+	bool "root password encoding"
-+	depends on BR2_TARGET_GENERIC_ROOT_PASSWD != ""
-+	default BR2_TARGET_GENERIC_ROOT_PASSWD_DES
-+
-+config BR2_TARGET_GENERIC_ROOT_PASSWD_DES
-+	bool "des"
-+	help
-+	  Use standard 56-bit DES-based crypt(3).
-+	  
-+	  The default, wildly available, but also the weakest.
-+
-+config BR2_TARGET_GENERIC_ROOT_PASSWD_MD5
-+	bool "md5"
-+	help
-+	  Use MD5 to encode the password.
-+	  
-+	  Although not default, still wildly available, and pretty good.
-+
-+config BR2_TARGET_GENERIC_ROOT_PASSWD_SHA256
-+	bool "sha-256"
-+	help
-+	  Use SHA256 to encode the password.
-+	  
-+	  Very strong, but not ubiquitous, although available in glibc
-+	  for some time now. Choose only if you are sure your C library
-+	  understands SHA256 passwords.
-+
-+config BR2_TARGET_GENERIC_ROOT_PASSWD_SHA512
-+	bool "sha-512"
-+	help
-+	  Use SHA512 to encode the password.
-+	  
-+	  Extremely strong, but not ubiquitous, although available in glibc
-+	  for some time now. Choose only if you are sure your C library
-+	  understands SHA512 passwords.
-+
-+endchoice # root passwd encoding
-+
-+config BR2_TARGET_GENERIC_ROOT_PASSWD_METHOD
-+	string
-+	default "des"       if BR2_TARGET_GENERIC_ROOT_PASSWD_DES
-+	default "md5"       if BR2_TARGET_GENERIC_ROOT_PASSWD_MD5
-+	default "sha-256"   if BR2_TARGET_GENERIC_ROOT_PASSWD_SHA256
-+	default "sha-512"   if BR2_TARGET_GENERIC_ROOT_PASSWD_SHA512
-+
-+choice
  	prompt "/dev management"
  	default BR2_ROOTFS_DEVICE_CREATION_STATIC
- 
 diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-index 1021b10..674665b 100644
+index 4185202..1021b10 100644
 --- a/target/generic/Makefile.in
 +++ b/target/generic/Makefile.in
-@@ -1,6 +1,7 @@
+@@ -1,5 +1,6 @@
  TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
  TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
- TARGET_GENERIC_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-+TARGET_GENERIC_ROOT_PASSWD_METHOD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD_METHOD))
++TARGET_GENERIC_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
  TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
  TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
  
-@@ -18,7 +19,7 @@ target-no-root-passwd:
- 	$(SED) "s/^root:[^:]*:/root::/" $(TARGET_DIR)/etc/shadow
+@@ -13,6 +14,13 @@ target-generic-issue:
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
  
- target-root-passwd:
--	root_passwd="$$( mkpasswd -m des "$(TARGET_GENERIC_ROOT_PASSWD)" )"; \
-+	root_passwd="$$( mkpasswd -m "$(TARGET_GENERIC_ROOT_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)" )"; \
- 	$(SED) "s,^root::,root:$${root_passwd}:," $(TARGET_DIR)/etc/shadow
- 
++target-no-root-passwd:
++	$(SED) "s/^root:[^:]*:/root::/" $(TARGET_DIR)/etc/shadow
++
++target-root-passwd:
++	root_passwd="$$( mkpasswd -m des "$(TARGET_GENERIC_ROOT_PASSWD)" )"; \
++	$(SED) "s,^root::,root:$${root_passwd}:," $(TARGET_DIR)/etc/shadow
++
  target-generic-getty-busybox:
+ 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
+ 		$(TARGET_DIR)/etc/inittab
+@@ -39,6 +47,12 @@ ifneq ($(TARGET_GENERIC_ISSUE),)
+ TARGETS += target-generic-issue
+ endif
+ 
++ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
++TARGETS += target-root-passwd
++else
++TARGETS += target-no-root-passwd
++endif
++
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ ifeq ($(BR2_PACKAGE_SYSVINIT),y)
+ TARGETS += target-generic-getty-sysvinit
 -- 
 1.7.2.5
