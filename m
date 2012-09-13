@@ -1,43 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Sep 2012 23:16:55 +0200
-Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
-In-Reply-To: <50517A99.4040700@mind.be>
-References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
- <50517A99.4040700@mind.be>
-Message-ID: <201209132316.55747.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Sep 2012 23:19:17 +0200
+Subject: [Buildroot] Using Buildroot to make a mingw platform
+In-Reply-To: <CAER7dwdGMpWK_kh7-1SW2DJkdvq4W-5UdyO=45HfEqXxuGG+5Q@mail.gmail.com>
+ (Luis Polasek's message of "Thu, 13 Sep 2012 11:03:25 -0300")
+References: <CAER7dwdGMpWK_kh7-1SW2DJkdvq4W-5UdyO=45HfEqXxuGG+5Q@mail.gmail.com>
+Message-ID: <87fw6lr57u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Marek, All,
+>>>>> "Luis" == Luis Polasek <pola@sol.info.unlp.edu.ar> writes:
 
-On Thursday 13 September 2012 08:18:01 Arnout Vandecappelle wrote:
-> On 09/12/12 00:36, Marek Belisko wrote:
-> > diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
-> > new file mode 100755
-> > index 0000000..2ed4569
-> > --- /dev/null
-> > +++ b/board/raspberrypi/post-build.sh
-> > @@ -0,0 +1,23 @@
-> > +TARGETDIR=$1
-> > +# Set root password to 'root'. Password generated with
-> > +# mkpasswd, from the 'whois' package in Debian/Ubuntu.
-> > +sed -i 's%^root::%root:8kfIfYHmcyQEE:%' $TARGETDIR/etc/shadow
-> NACK. Has nothing to do with RPi (although I think it's a good
-> idea to update the skeleton with this change).
+Hi,
 
-I'll shortly push a patch that allows one to specify the root password from
-inside the menuconfig.
+ Luis> Hi all...I was trying to use buildroot to build a mingw platform
+ Luis> for a cross-platform tool we are developing.
 
-Regards,
-Yann E. MORIN.
+Ehh, what is a mingw platform exactly? Buildroot is a tool to create
+embedded Linux systems, and I don't right away see the relation with a
+Windows compiler?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
