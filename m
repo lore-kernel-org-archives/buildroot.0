@@ -1,42 +1,32 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Thu, 13 Sep 2012 11:43:56 +0300
-Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
-In-Reply-To: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <CALR4fELY4B_fYsX8QJdV0P9iAbDkT5T3bKFyEsUX8_tBVyq46Q@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Sep 2012 12:29:59 +0200
+Subject: [Buildroot] [network-manager] Apply upstream patch to fix
+	compilation with kernel-headers >= 3.4
+In-Reply-To: <CAG2jQ8jTO66cWd8UG-=mxWgihLJf=RETGizK0q_8YOapUbGo3g@mail.gmail.com>
+ (Markos Chandras's message of "Thu, 13 Sep 2012 09:17:23 +0100")
+References: <CAG2jQ8g+0WkYnR2k-8jaLXHOFRA2OPiuQWeD==B6gdE67N=4OA@mail.gmail.com>
+ <877grzszx8.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8jTO66cWd8UG-=mxWgihLJf=RETGizK0q_8YOapUbGo3g@mail.gmail.com>
+Message-ID: <87r4q6qkpk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 12, 2012 at 1:36 AM, Marek Belisko
-<marek.belisko@open-nandra.com> wrote:
->
-> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
->
-> Basic support:
-> - boot binary blobs + VideoCore added in utils package (to avoid fetching 2 times
->   same repo which is quite big)
-Is it possible to only "check out" those needed blobs with  a single
-"wget" from some stable tag? Why do I need the whole project history
-just to boot my RBPI?
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
-> - add actual kernel build 3.2.27 with cutdown config
-Is this a vanilla kernel? Can those boot the RBPI now? (sweet...)
+Hi,
 
->
-> - using external toolchain
-What happens when you choose a regular common ARM toolchain? From my
-tests the RBPI does boot with those CodeSourcery (whatever they are
-called now)  toolchains over NFS when I choose generic ARM.
+ Markos> There is no need to apply this patch if you bump the
+ Markos> package. This patch only fixes the compilation problem for
+ Markos> version 0.9.2.0, which is the one we have on buildroot.
 
-When you re-send the patch, I will also look into the package list. I
-looked at what you did in the repository, and IMHO you are building b
-default WAY too much. The default should be busybox, and maybe SSH...
-all other things are related to the application you want to build, not
-the board. Meaning: let the user choose what to compile into his RBPI.
-For example, in none of my tests I needed glib2, which you are
-compiling.
+Ahh, I thought it was a post-0.9.6 change. Any reason to not just move
+to the latest upstream?
 
-GREAT WORK! KEEP IT COMING!
+I gather that you are using the network manager package? I'm not using
+it myself, perhaps you would be interested in testing 0.9.6?
+
+-- 
+Bye, Peter Korsgaard
