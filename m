@@ -1,65 +1,43 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Thu, 13 Sep 2012 23:07:33 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Sep 2012 23:16:55 +0200
 Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
-In-Reply-To: <CALR4fELY4B_fYsX8QJdV0P9iAbDkT5T3bKFyEsUX8_tBVyq46Q@mail.gmail.com>
+In-Reply-To: <50517A99.4040700@mind.be>
 References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
- <CALR4fELY4B_fYsX8QJdV0P9iAbDkT5T3bKFyEsUX8_tBVyq46Q@mail.gmail.com>
-Message-ID: <CAAfyv37pAPxpozgXEsiAL2weySFY6mT3tz_0SOKPeCv+kCrmxA@mail.gmail.com>
+ <50517A99.4040700@mind.be>
+Message-ID: <201209132316.55747.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Diego,
-On Thu, Sep 13, 2012 at 10:43 AM, Diego Iastrubni <diegoiast@gmail.com> wrote:
-> On Wed, Sep 12, 2012 at 1:36 AM, Marek Belisko
-> <marek.belisko@open-nandra.com> wrote:
->>
->> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
->>
->> Basic support:
->> - boot binary blobs + VideoCore added in utils package (to avoid fetching 2 times
->>   same repo which is quite big)
-> Is it possible to only "check out" those needed blobs with  a single
-> "wget" from some stable tag? Why do I need the whole project history
-> just to boot my RBPI?
-It's hosted on github and github don't have permanent download links (just git).
->
->> - add actual kernel build 3.2.27 with cutdown config
-> Is this a vanilla kernel? Can those boot the RBPI now? (sweet...)
-Nope this kernel is maintained out of main kernel tree.
->
->>
->> - using external toolchain
-> What happens when you choose a regular common ARM toolchain? From my
-> tests the RBPI does boot with those CodeSourcery (whatever they are
-> called now)  toolchains over NFS when I choose generic ARM.
-I know it works. As Arnout comment would be nice to use internal BR toolchain.
->
-> When you re-send the patch, I will also look into the package list. I
-> looked at what you did in the repository, and IMHO you are building b
-> default WAY too much. The default should be busybox, and maybe SSH...
-> all other things are related to the application you want to build, not
-> the board. Meaning: let the user choose what to compile into his RBPI.
-> For example, in none of my tests I needed glib2, which you are
-> compiling.
-Where do you see glib2 in defconfig? I cannot find it.
->
-> GREAT WORK! KEEP IT COMING!
+Arnout, Marek, All,
 
-Cheers,
+On Thursday 13 September 2012 08:18:01 Arnout Vandecappelle wrote:
+> On 09/12/12 00:36, Marek Belisko wrote:
+> > diff --git a/board/raspberrypi/post-build.sh b/board/raspberrypi/post-build.sh
+> > new file mode 100755
+> > index 0000000..2ed4569
+> > --- /dev/null
+> > +++ b/board/raspberrypi/post-build.sh
+> > @@ -0,0 +1,23 @@
+> > +TARGETDIR=$1
+> > +# Set root password to 'root'. Password generated with
+> > +# mkpasswd, from the 'whois' package in Debian/Ubuntu.
+> > +sed -i 's%^root::%root:8kfIfYHmcyQEE:%' $TARGETDIR/etc/shadow
+> NACK. Has nothing to do with RPi (although I think it's a good
+> idea to update the skeleton with this change).
 
-marek
+I'll shortly push a patch that allows one to specify the root password from
+inside the menuconfig.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
