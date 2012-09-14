@@ -1,12 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Sep 2012 11:56:29 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-09-13
-In-Reply-To: <20120914064447.GE4504@tarshish> (Baruch Siach's message of "Fri, 
- 14 Sep 2012 09:44:47 +0300")
-References: <20120914063234.2AD8852D5BE@lolut.humanoidz.org>
- <20120914064447.GE4504@tarshish>
-Message-ID: <87pq5porle.fsf@macbook.be.48ers.dk>
+Date: Fri, 14 Sep 2012 12:00:34 +0200
+Subject: [Buildroot] [PATCH] poco: fix parallel build failure
+In-Reply-To: <983f847ed905297a7f8e78b258e482c71b13232a.1346227179.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 29 Aug 2012 11:04:05 +0300")
+References: <983f847ed905297a7f8e78b258e482c71b13232a.1346227179.git.baruch@tkos.co.il>
+Message-ID: <87k3vwq5z1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +13,21 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- Baruch> Hi Thomas, all,
- Baruch> On Fri, Sep 14, 2012 at 08:32:34AM +0200, Thomas Petazzoni wrote:
- >> Build 20ae8ff4714ad207912ed4cf193122629fca9401
- >> ==============================================
- >> 
- >> Status         : NOK
- >> Failure reason : poco-1.4.3p1
- >> Architecture   : arm
- >> Submitted by   : Thomas Petazzoni (Free Electrons build server)
- >> Submitted at   : 2012-09-13 07:40:50
- >> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=c8573284cd9ee0f93cd9740fd6472d09357ffb91
- >> End of log     : http://autobuild.buildroot.net/results/20ae8ff4714ad207912ed4cf193122629fca9401/build-end.log
- >> Complete log   : http://autobuild.buildroot.net/results/20ae8ff4714ad207912ed4cf193122629fca9401/build.log.bz2
- >> Configuration  : http://autobuild.buildroot.net/results/20ae8ff4714ad207912ed4cf193122629fca9401/config
- >> Defconfig      : http://autobuild.buildroot.net/results/20ae8ff4714ad207912ed4cf193122629fca9401/defconfig
+ Baruch> This added patch should fix
+ Baruch> http://autobuild.buildroot.net/results/1bf7e51ef30af9bbf5e423e80ef07212b83bdaf8/.
 
- Baruch> The patch at http://patchwork.ozlabs.org/patch/180652/ should
- Baruch> fix this build failure. Any chance of having it applied?
+ Baruch> CROSSENV is now required also in the install stages to prevent a rebuild using
+ Baruch> the host native toolchain.
 
-Yes, I'll do so now - Thanks.
+ Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ Baruch> ---
+
+ Baruch> I've never encountered this build failure on my machine, so I
+ Baruch> can't verify the fix. If this patch is accepted, and we won't
+ Baruch> get these failures on the autobuild machines, I'll try to
+ Baruch> upstream this patch.
+
+Committed, thanks. Don't forget to send patch upstream.
 
 -- 
 Bye, Peter Korsgaard
