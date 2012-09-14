@@ -1,128 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Sep 2012 12:01:57 +0200
-Subject: [Buildroot] [git commit] package: add new filesystem utilities
-	category
-Message-ID: <20120914100312.9138199640@busybox.osuosl.org>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Fri, 14 Sep 2012 06:26:04 -0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-09-13
+Message-ID: <CADiAo4LU1ysmNjJktsSsA3zqRnRTQ6_t4KJM4QzEWRFM7K5eTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter,
 
-Add the new filesystem utilities category and move a bunch of packages
-into it.
+Status         : NOK
+Failure reason : linux-pam-1.1.4
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-13 14:55:33
+Git commit ID  :
+http://git.buildroot.net/buildroot/commit/?id=d7f8dda7c07dd5eaddc1f0e2fa4d7426e673f8ac
+End of log     :
+http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/build-end.log
+Complete log   :
+http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/build.log.bz2
+Configuration  :
+http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/config
+Defconfig      :
+http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/defconfig
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in |   33 ++++++++++++++++++---------------
- 1 files changed, 18 insertions(+), 15 deletions(-)
+I posted a patch (must fix on all arches), but it likely got lost in space:
 
-diff --git a/package/Config.in b/package/Config.in
-index 2e3f676..58dd5e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -167,10 +167,27 @@ source "package/xterm/Config.in"
- source "package/xvkbd/Config.in"
- endmenu
- 
-+menu "Filesystem utilities"
-+source "package/cifs-utils/Config.in"
-+source "package/cramfs/Config.in"
-+source "package/dosfstools/Config.in"
-+source "package/e2fsprogs/Config.in"
-+source "package/genext2fs/Config.in"
-+source "package/genromfs/Config.in"
-+source "package/makedevs/Config.in"
-+source "package/mtd/Config.in"
-+source "package/nfs-utils/Config.in"
-+source "package/ntfs-3g/Config.in"
-+source "package/squashfs/Config.in"
-+source "package/squashfs3/Config.in"
-+source "package/sshfs/Config.in"
-+source "package/unionfs/Config.in"
-+source "package/xfsprogs/Config.in"
-+endmenu
-+
- menu "Hardware handling"
- source "package/acpid/Config.in"
- source "package/cdrkit/Config.in"
--source "package/cramfs/Config.in"
- source "package/dbus/Config.in"
- source "package/dbus-glib/Config.in"
- source "package/dbus-python/Config.in"
-@@ -179,8 +196,6 @@ source "package/devmem2/Config.in"
- endif
- source "package/dmidecode/Config.in"
- source "package/dmraid/Config.in"
--source "package/dosfstools/Config.in"
--source "package/e2fsprogs/Config.in"
- source "package/eeprog/Config.in"
- source "package/flashrom/Config.in"
- source "package/fconfig/Config.in"
-@@ -188,8 +203,6 @@ source "package/fis/Config.in"
- source "package/fmtools/Config.in"
- source "package/gadgetfs-test/Config.in"
- source "package/gdisk/Config.in"
--source "package/genext2fs/Config.in"
--source "package/genromfs/Config.in"
- source "package/gpsd/Config.in"
- source "package/gvfs/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-@@ -208,13 +221,10 @@ source "package/lm-sensors/Config.in"
- source "package/lshw/Config.in"
- source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
--source "package/makedevs/Config.in"
- source "package/mdadm/Config.in"
- source "package/memtester/Config.in"
- source "package/minicom/Config.in"
--source "package/mtd/Config.in"
- source "package/nanocom/Config.in"
--source "package/ntfs-3g/Config.in"
- source "package/ofono/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-@@ -228,22 +238,17 @@ source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- source "package/smartmontools/Config.in"
--source "package/squashfs/Config.in"
--source "package/squashfs3/Config.in"
- source "package/sredird/Config.in"
--source "package/sshfs/Config.in"
- source "package/statserial/Config.in"
- source "package/sysstat/Config.in"
- source "package/ti-utils/Config.in"
- source "package/uboot-tools/Config.in"
- source "package/udev/Config.in"
--source "package/unionfs/Config.in"
- source "package/usb_modeswitch/Config.in"
- source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
- source "package/wipe/Config.in"
--source "package/xfsprogs/Config.in"
- endmenu
- 
- menu "Interpreter languages and scripting"
-@@ -530,7 +535,6 @@ source "package/bridge-utils/Config.in"
- source "package/can-utils/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
--source "package/cifs-utils/Config.in"
- source "package/conntrack-tools/Config.in"
- source "package/cups/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-@@ -582,7 +586,6 @@ source "package/netsnmp/Config.in"
- source "package/netstat-nat/Config.in"
- source "package/network-manager/Config.in"
- source "package/noip/Config.in"
--source "package/nfs-utils/Config.in"
- source "package/ngircd/Config.in"
- source "package/ngrep/Config.in"
- source "package/ntp/Config.in"
+http://lists.busybox.net/pipermail/buildroot/2012-September/058529.html
+(dated Wed Sep 12 09:27:31 UTC 2012)  - please apply.
+
+This is a temporary measure to make linux-pam build without
+pam_userdb; I was told that gdbm will soon be added; then I can
+implement the database choice logic from
+
+http://lists.busybox.net/pipermail/buildroot/2012-September/058494.html
+
+Thanks.
+
+-- 
+Dmitry Golubovsky
+
+Anywhere on the Web
