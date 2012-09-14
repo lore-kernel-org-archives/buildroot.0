@@ -1,123 +1,128 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Sep 2012 11:56:06 +0200
-Subject: [Buildroot] [git commit] poco: fix parallel build failure
-Message-ID: <20120914100312.41CA799640@busybox.osuosl.org>
+Date: Fri, 14 Sep 2012 12:01:57 +0200
+Subject: [Buildroot] [git commit] package: add new filesystem utilities
+	category
+Message-ID: <20120914100312.9138199640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32f4957b153bdabe7af60d529942aca7d1a4783d
+commit: http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This added patch should fix
-http://autobuild.buildroot.net/results/1bf7e51ef30af9bbf5e423e80ef07212b83bdaf8/.
+Add the new filesystem utilities category and move a bunch of packages
+into it.
 
-CROSSENV is now required also in the install stages to prevent a rebuild using
-the host native toolchain.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/poco/poco-fix-parallel-build.patch |   71 ++++++++++++++++++++++++++++
- package/poco/poco.mk                       |    6 ++-
- 2 files changed, 75 insertions(+), 2 deletions(-)
+ package/Config.in |   33 ++++++++++++++++++---------------
+ 1 files changed, 18 insertions(+), 15 deletions(-)
 
-diff --git a/package/poco/poco-fix-parallel-build.patch b/package/poco/poco-fix-parallel-build.patch
-new file mode 100644
-index 0000000..39a1e3e
---- /dev/null
-+++ b/package/poco/poco-fix-parallel-build.patch
-@@ -0,0 +1,71 @@
-+poco: fix parallel build
-+
-+The makefile rule for generating objects implicitly depends on the existence
-+of the containing directory. The makefile dependecies do not reflect this,
-+however. Instead, the final compilation producs depend on one of libdirs,
-+bindirs, or static_bindirs, which in turn depend on objdirs. This breaks
-+parallel build since the objdirs target may not complete before the object
-+files build starts as follows (abbreviated):
-+
-+make[2]: Entering directory `/home/test/test/output/build/poco-1.4.3p1/Zip'
-+mkdir -p /home/test/test/output/build/poco-1.4.3p1/Zip/obj/Linux/powerpc/release_static
-+mkdir -p /home/test/test/output/build/poco-1.4.3p1/Zip/obj/Linux/powerpc/debug_static
-+mkdir -p /home/test/test/output/build/poco-1.4.3p1/Zip/obj/Linux/powerpc/release_shared
-+mkdir -p /home/test/test/output/build/poco-1.4.3p1/Zip/obj/Linux/powerpc/debug_shared
-+** Compiling src/AutoDetectStream.cpp (release, shared)
-+...
-+Assembler messages:
-+Fatal error: can't create /home/test/test/output/build/poco-1.4.3p1/Zip/obj/Linux/powerpc/release_shared/AutoDetectStream.o: No such file or directory
-+
-+Add direct dependency on the objects directories to fix this.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+
-+diff -Nur poco-1.4.3p1-all.orig/build/rules/compile poco-1.4.3p1-all/build/rules/compile
-+--- poco-1.4.3p1-all.orig/build/rules/compile	2012-01-23 16:12:26.000000000 +0200
-++++ poco-1.4.3p1-all/build/rules/compile	2012-08-28 13:10:17.000000000 +0300
-+@@ -33,35 +32,35 @@
-+ #
-+ # Rules for compiling
-+ #	
-+-$(OBJPATH_DEBUG_STATIC)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d
-++$(OBJPATH_DEBUG_STATIC)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(debug, static)"
-+ 	$(CXX) $(INCLUDE) $(CXXFLAGS) $(DEBUGOPT_CXX) $(STATICOPT_CXX) -c $< -o $@
-+ 
-+-$(OBJPATH_RELEASE_STATIC)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d
-++$(OBJPATH_RELEASE_STATIC)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(release, static)"
-+ 	$(CXX) $(INCLUDE) $(CXXFLAGS) $(RELEASEOPT_CXX) $(STATICOPT_CXX) -c $< -o $@
-+ 
-+-$(OBJPATH_DEBUG_STATIC)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d
-++$(OBJPATH_DEBUG_STATIC)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(debug, static)"
-+ 	$(CC) $(INCLUDE) $(CFLAGS) $(DEBUGOPT_CC) $(STATICOPT_CC) -c $< -o $@
-+ 
-+-$(OBJPATH_RELEASE_STATIC)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d
-++$(OBJPATH_RELEASE_STATIC)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(release, static)"
-+ 	$(CC) $(INCLUDE) $(CFLAGS) $(RELEASEOPT_CC) $(STATICOPT_CC) -c $< -o $@
-+ 
-+-$(OBJPATH_DEBUG_SHARED)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d
-++$(OBJPATH_DEBUG_SHARED)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(debug, shared)"
-+ 	$(CXX) $(INCLUDE) $(CXXFLAGS) $(DEBUGOPT_CXX) $(SHAREDOPT_CXX) -c $< -o $@
-+ 
-+-$(OBJPATH_RELEASE_SHARED)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d
-++$(OBJPATH_RELEASE_SHARED)/%.o: $(SRCDIR)/%.cpp $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(release, shared)"
-+ 	$(CXX) $(INCLUDE) $(CXXFLAGS) $(RELEASEOPT_CXX) $(SHAREDOPT_CXX) -c $< -o $@
-+ 
-+-$(OBJPATH_DEBUG_SHARED)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d
-++$(OBJPATH_DEBUG_SHARED)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(debug, shared)"
-+ 	$(CC) $(INCLUDE) $(CFLAGS) $(DEBUGOPT_CC) $(SHAREDOPT_CC) -c $< -o $@
-+ 
-+-$(OBJPATH_RELEASE_SHARED)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d
-++$(OBJPATH_RELEASE_SHARED)/%.o: $(SRCDIR)/%.c $(DEPPATH)/%.d objdirs
-+ 	@echo "** Compiling" $< "(release, shared)"
-+ 	$(CC) $(INCLUDE) $(CFLAGS) $(RELEASEOPT_CC) $(SHAREDOPT_CC) -c $< -o $@
-+ 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index 69ef314..5b8bdbf 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -51,11 +51,13 @@ define POCO_BUILD_CMDS
- endef
+diff --git a/package/Config.in b/package/Config.in
+index 2e3f676..58dd5e8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -167,10 +167,27 @@ source "package/xterm/Config.in"
+ source "package/xvkbd/Config.in"
+ endmenu
  
- define POCO_INSTALL_STAGING_CMDS
--	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) install -C $(@D)
-+	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) \
-+		CROSSENV=$(TARGET_CROSS) install -C $(@D)
- endef
++menu "Filesystem utilities"
++source "package/cifs-utils/Config.in"
++source "package/cramfs/Config.in"
++source "package/dosfstools/Config.in"
++source "package/e2fsprogs/Config.in"
++source "package/genext2fs/Config.in"
++source "package/genromfs/Config.in"
++source "package/makedevs/Config.in"
++source "package/mtd/Config.in"
++source "package/nfs-utils/Config.in"
++source "package/ntfs-3g/Config.in"
++source "package/squashfs/Config.in"
++source "package/squashfs3/Config.in"
++source "package/sshfs/Config.in"
++source "package/unionfs/Config.in"
++source "package/xfsprogs/Config.in"
++endmenu
++
+ menu "Hardware handling"
+ source "package/acpid/Config.in"
+ source "package/cdrkit/Config.in"
+-source "package/cramfs/Config.in"
+ source "package/dbus/Config.in"
+ source "package/dbus-glib/Config.in"
+ source "package/dbus-python/Config.in"
+@@ -179,8 +196,6 @@ source "package/devmem2/Config.in"
+ endif
+ source "package/dmidecode/Config.in"
+ source "package/dmraid/Config.in"
+-source "package/dosfstools/Config.in"
+-source "package/e2fsprogs/Config.in"
+ source "package/eeprog/Config.in"
+ source "package/flashrom/Config.in"
+ source "package/fconfig/Config.in"
+@@ -188,8 +203,6 @@ source "package/fis/Config.in"
+ source "package/fmtools/Config.in"
+ source "package/gadgetfs-test/Config.in"
+ source "package/gdisk/Config.in"
+-source "package/genext2fs/Config.in"
+-source "package/genromfs/Config.in"
+ source "package/gpsd/Config.in"
+ source "package/gvfs/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -208,13 +221,10 @@ source "package/lm-sensors/Config.in"
+ source "package/lshw/Config.in"
+ source "package/lsuio/Config.in"
+ source "package/lvm2/Config.in"
+-source "package/makedevs/Config.in"
+ source "package/mdadm/Config.in"
+ source "package/memtester/Config.in"
+ source "package/minicom/Config.in"
+-source "package/mtd/Config.in"
+ source "package/nanocom/Config.in"
+-source "package/ntfs-3g/Config.in"
+ source "package/ofono/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
+@@ -228,22 +238,17 @@ source "package/sane-backends/Config.in"
+ source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
+ source "package/smartmontools/Config.in"
+-source "package/squashfs/Config.in"
+-source "package/squashfs3/Config.in"
+ source "package/sredird/Config.in"
+-source "package/sshfs/Config.in"
+ source "package/statserial/Config.in"
+ source "package/sysstat/Config.in"
+ source "package/ti-utils/Config.in"
+ source "package/uboot-tools/Config.in"
+ source "package/udev/Config.in"
+-source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usb_modeswitch_data/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
+ source "package/wipe/Config.in"
+-source "package/xfsprogs/Config.in"
+ endmenu
  
- define POCO_INSTALL_TARGET_CMDS
--	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) install -C $(@D)
-+	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) \
-+		CROSSENV=$(TARGET_CROSS) install -C $(@D)
- endef
- 
- $(eval $(generic-package))
+ menu "Interpreter languages and scripting"
+@@ -530,7 +535,6 @@ source "package/bridge-utils/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/connman/Config.in"
+ source "package/ctorrent/Config.in"
+-source "package/cifs-utils/Config.in"
+ source "package/conntrack-tools/Config.in"
+ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -582,7 +586,6 @@ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
+ source "package/network-manager/Config.in"
+ source "package/noip/Config.in"
+-source "package/nfs-utils/Config.in"
+ source "package/ngircd/Config.in"
+ source "package/ngrep/Config.in"
+ source "package/ntp/Config.in"
