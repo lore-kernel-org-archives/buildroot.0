@@ -1,45 +1,28 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Fri, 14 Sep 2012 06:26:04 -0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-09-13
-Message-ID: <CADiAo4LU1ysmNjJktsSsA3zqRnRTQ6_t4KJM4QzEWRFM7K5eTQ@mail.gmail.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Fri, 14 Sep 2012 16:11:15 +0300
+Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
+In-Reply-To: <CAAfyv37pAPxpozgXEsiAL2weySFY6mT3tz_0SOKPeCv+kCrmxA@mail.gmail.com>
+References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
+ <CALR4fELY4B_fYsX8QJdV0P9iAbDkT5T3bKFyEsUX8_tBVyq46Q@mail.gmail.com>
+ <CAAfyv37pAPxpozgXEsiAL2weySFY6mT3tz_0SOKPeCv+kCrmxA@mail.gmail.com>
+Message-ID: <CALR4fELjfHfDkacbB3wBQE4_dCt4OE8n5Ea0ZCCWQMkaf_fSYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+On Fri, Sep 14, 2012 at 12:07 AM, Belisko Marek <marek.belisko@gmail.com>wrote:
 
-Status         : NOK
-Failure reason : linux-pam-1.1.4
-Architecture   : arm
-Submitted by   : Thomas Petazzoni (Free Electrons build server)
-Submitted at   : 2012-09-13 14:55:33
-Git commit ID  :
-http://git.buildroot.net/buildroot/commit/?id=d7f8dda7c07dd5eaddc1f0e2fa4d7426e673f8ac
-End of log     :
-http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/build-end.log
-Complete log   :
-http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/build.log.bz2
-Configuration  :
-http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/config
-Defconfig      :
-http://autobuild.buildroot.net/results/03c64cf7006dbc510dcb7bb153b32a840c43c37f/defconfig
-
-I posted a patch (must fix on all arches), but it likely got lost in space:
-
-http://lists.busybox.net/pipermail/buildroot/2012-September/058529.html
-(dated Wed Sep 12 09:27:31 UTC 2012)  - please apply.
-
-This is a temporary measure to make linux-pam build without
-pam_userdb; I was told that gdbm will soon be added; then I can
-implement the database choice logic from
-
-http://lists.busybox.net/pipermail/buildroot/2012-September/058494.html
-
-Thanks.
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+> >> - add actual kernel build 3.2.27 with cutdown config
+> > Is this a vanilla kernel? Can those boot the RBPI now? (sweet...)
+> Nope this kernel is maintained out of main kernel tree.
+>
+>
+Then once again  - please do not clone a whole git repository, instead try
+and find a realeased tarball. Cloning a large repository here can take
+days, as my ISP throttles the connection to 3kb, and it usually kiils it
+after 5-10 minutes.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120914/1b681b3b/attachment.html>
