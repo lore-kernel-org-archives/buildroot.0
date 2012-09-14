@@ -1,33 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 14 Sep 2012 12:00:34 +0200
-Subject: [Buildroot] [PATCH] poco: fix parallel build failure
-In-Reply-To: <983f847ed905297a7f8e78b258e482c71b13232a.1346227179.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 29 Aug 2012 11:04:05 +0300")
-References: <983f847ed905297a7f8e78b258e482c71b13232a.1346227179.git.baruch@tkos.co.il>
-Message-ID: <87k3vwq5z1.fsf@macbook.be.48ers.dk>
+Date: Fri, 14 Sep 2012 12:02:41 +0200
+Subject: [Buildroot] [PATCH] package: add new filesystem utilities
+	category
+In-Reply-To: <1347490459-4049-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 12 Sep 2012 19:54:19 -0300")
+References: <1347490459-4049-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87fw6kq5vi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Baruch> This added patch should fix
- Baruch> http://autobuild.buildroot.net/results/1bf7e51ef30af9bbf5e423e80ef07212b83bdaf8/.
+ Gustavo> Add the new filesystem utilities category and move a bunch of packages
+ Gustavo> into it.
 
- Baruch> CROSSENV is now required also in the install stages to prevent a rebuild using
- Baruch> the host native toolchain.
-
- Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- Baruch> ---
-
- Baruch> I've never encountered this build failure on my machine, so I
- Baruch> can't verify the fix. If this patch is accepted, and we won't
- Baruch> get these failures on the autobuild machines, I'll try to
- Baruch> upstream this patch.
-
-Committed, thanks. Don't forget to send patch upstream.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
