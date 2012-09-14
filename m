@@ -1,28 +1,50 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Fri, 14 Sep 2012 16:11:15 +0300
-Subject: [Buildroot] [RFC] Add board support for Raspberry Pi device.
-In-Reply-To: <CAAfyv37pAPxpozgXEsiAL2weySFY6mT3tz_0SOKPeCv+kCrmxA@mail.gmail.com>
-References: <1347402977-17837-1-git-send-email-marek.belisko@open-nandra.com>
- <CALR4fELY4B_fYsX8QJdV0P9iAbDkT5T3bKFyEsUX8_tBVyq46Q@mail.gmail.com>
- <CAAfyv37pAPxpozgXEsiAL2weySFY6mT3tz_0SOKPeCv+kCrmxA@mail.gmail.com>
-Message-ID: <CALR4fELjfHfDkacbB3wBQE4_dCt4OE8n5Ea0ZCCWQMkaf_fSYQ@mail.gmail.com>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Fri, 14 Sep 2012 18:32:20 -0500
+Subject: [Buildroot] make savedefconfig
+Message-ID: <CAE9DZUQ846_YRr+sc09Pt-7ufgfQpfBrsaOraCneufBLrbTUJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 14, 2012 at 12:07 AM, Belisko Marek <marek.belisko@gmail.com>wrote:
+Greetings,
 
-> >> - add actual kernel build 3.2.27 with cutdown config
-> > Is this a vanilla kernel? Can those boot the RBPI now? (sweet...)
-> Nope this kernel is maintained out of main kernel tree.
->
->
-Then once again  - please do not clone a whole git repository, instead try
-and find a realeased tarball. Cloning a large repository here can take
-days, as my ISP throttles the connection to 3kb, and it usually kiils it
-after 5-10 minutes.
+I'm not feeling overly confident in 'make savedefconfig'.  It appears
+to not save everything I think it should after making changes with
+'make menuconfig'.  I have attached a comparison of my original config
+file (shown on the right) with the defconfig file produced by 'make
+savedefconfig' (shown on the left).  As you can see, the items shown
+in red did not make it into the defconfig.  Some of these are pretty
+important, such as:
+
+BR2_BUSYBOX_VERSION
+BR2_ROOTFS_SKELETON_CUSTOM_PATH
+BR2_LINUX_KERNEL_UBOOT_IMAGE
+BR2_LINUX_KERNEL_UIMAGE
+
+The other thing I noticed is that if I do a 'make
+blah-blah-defconfig', and then look at the .config file, most of the
+settings from the defconfig show up in the .config, with a few
+exceptions:
+
+BR2_ROOTFS_SKELETON_CUSTOM_PATH
+BR2_BUSYBOX_VERSION
+
+These are reverted from my changes to the default values.
+
+I'm using buildroot 2012.08.
+
+Would appreciate if anyone could confirm whether this is buggy
+behavior or I am just doing something wrong.
+
+Thanks,
+
+Dallas
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120914/1b681b3b/attachment.html>
+A non-text attachment was scrubbed...
+Name: Text Compare.pdf
+Type: application/pdf
+Size: 37335 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120914/0a4d7741/attachment-0001.pdf>
