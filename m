@@ -1,51 +1,25 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 15 Sep 2012 17:04:43 +0200
-Subject: [Buildroot] [PATCH] Download packages from github in tar.gz
- format instead git format.
-In-Reply-To: <1347714423-13242-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1347714423-13242-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <CAHXCMM++UpS2jPSMtPwWzLsCKCdJnSqPOzY7MG5XBN+UuZ7yGQ@mail.gmail.com>
+From: Martin Peevski <martin@ronetix.at>
+Date: Sat, 15 Sep 2012 20:29:30 +0300
+Subject: [Buildroot] Basic questions about using BuildRoot
+Message-ID: <5054BAFA.5060700@ronetix.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nack.
+      Hello, I'm new embedded Linux user and need a little help to build 
+embedded Linux system with BuildRoot tool for AT91SAM9263 target. May 
+questions are described below:
 
-Though github provides a "download" tab, with a button to directly
-download the source tarball,
-the generated tarball url does contain the beginning of the commit sha1.
-So, the download url cannot be easily resolved, at least the current
-download infrastructure does not support it.
+      1. After system configuration is done with make menuconfig 
+command, shall I execute only make command to build the entire embedded 
+system? Or there is need to execute make at91sam9263ek_defconfig command 
+prior or after the pure make command?
 
-To, use a fix url stating with "http://github.com/downloads/", the
-maintainers of a github project has to upload something.
+      2. If I not make additional configuration with busybox-menuconfig 
+or the corresponding command for configuration the Linux Kernel, shall 
+the build system work on the target?
 
-As ref, a thread also talking about github download urls:
-http://lists.busybox.net/pipermail/buildroot/2012-August/057570.html
-
-
-2012/9/15 Marek Belisko <marek.belisko@open-nandra.com>:
-> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-> ---
->  package/cpuload/cpuload.mk                       |    2 +-
->  package/input-event-daemon/input-event-daemon.mk |    2 +-
->  package/jsmin/jsmin.mk                           |    2 +-
->  package/libiqrf/libiqrf.mk                       |    2 +-
->  package/mtdev2tuio/mtdev2tuio.mk                 |    2 +-
->  package/omap-u-boot-utils/omap-u-boot-utils.mk   |    2 +-
->  package/socketcand/socketcand.mk                 |    2 +-
->  package/ti-utils/ti-utils.mk                     |    2 +-
->  package/tslib/tslib.mk                           |    2 +-
->  package/yajl/yajl.mk                             |    2 +-
->  10 files changed, 10 insertions(+), 10 deletions(-)
-
-BTW, in this list, only yajl does upload some material, but the
-tarball of the yajl version we use in BR in is not available for
-download on the download page... :(
-
-Regards,
-
--- 
-Sam
+      I will be thankful to any help!
+      With best regards, Martin Peevski.
