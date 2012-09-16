@@ -1,19 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 16 Sep 2012 23:23:08 +0200
-Subject: [Buildroot] [PATCH] linux: bump default to kernel version 3.5.4
-In-Reply-To: <1347824463-2952-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 16 Sep 2012 16:41:03 -0300")
-References: <1347824463-2952-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nmxpsqr.fsf@macbook.be.48ers.dk>
+Date: Sun, 16 Sep 2012 23:24:20 +0200
+Subject: [Buildroot] [PATCH] libmad: add Thumb2 patches from Debian
+In-Reply-To: <1347827317-23343-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 16 Sep 2012 22:28:36 +0200")
+References: <1347827317-23343-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zk4poe4b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> This fixes recurrent libmad build failures reported by the
+ Thomas> autobuilder. See:
+
+ Thomas>   http://autobuild.buildroot.net/results/a10c943e74b6e67e69183a35b5762482e357a75f/build-end.log
 
 Committed, thanks.
 
