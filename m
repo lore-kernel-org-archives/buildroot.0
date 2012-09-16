@@ -1,97 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 Sep 2012 23:22:31 +0200
-Subject: [Buildroot] [git commit] libmad: add Thumb2 patches from Debian
-Message-ID: <20120916212614.D2B799965B@busybox.osuosl.org>
+Date: Sun, 16 Sep 2012 23:19:58 +0200
+Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.5.4
+Message-ID: <20120916212614.7FC1F9965B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f299dee78316d3c91f930d8bfce6a781d6e39ea
+commit: http://git.buildroot.net/buildroot/commit/?id=cb63f3145de9a0a660e5d9cab5a61816d9659f17
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes recurrent libmad build failures reported by the
-autobuilder. See:
-
-  http://autobuild.buildroot.net/results/a10c943e74b6e67e69183a35b5762482e357a75f/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../libmad/libmad-0.15.1b-thumb2-fixed-arm.patch   |   40 ++++++++++++++++++++
- .../libmad/libmad-0.15.1b-thumb2-imdct-arm.patch   |   20 ++++++++++
- 2 files changed, 60 insertions(+), 0 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libmad/libmad-0.15.1b-thumb2-fixed-arm.patch b/package/libmad/libmad-0.15.1b-thumb2-fixed-arm.patch
-new file mode 100644
-index 0000000..befda48
---- /dev/null
-+++ b/package/libmad/libmad-0.15.1b-thumb2-fixed-arm.patch
-@@ -0,0 +1,40 @@
-+Fixes Thumb2-related build failure
-+
-+Patch below comes from the Debian libmad package.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+From: Dave Martin
-+Subject: "rsc" doesnt exist anymore in thumb2
-+
-+diff --git a/fixed.h b/fixed.h
-+index 4b58abf..ba4bc26 100644
-+--- a/fixed.h
-++++ b/fixed.h
-+@@ -275,12 +275,25 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_t y)
-+ 	 : "+r" (lo), "+r" (hi)  \
-+ 	 : "%r" (x), "r" (y))
-+ 
-++#ifdef __thumb__
-++/* In Thumb-2, the RSB-immediate instruction is only allowed with a zero
-++	operand.  If needed this code can also support Thumb-1 
-++	(simply append "s" to the end of the second two instructions). */
-++#  define MAD_F_MLN(hi, lo)  \
-++    asm ("rsbs        %0, %0, #0\n\t"  \
-++	 "sbc   %1, %1, %1\n\t"  \
-++	 "sub   %1, %1, %2"  \
-++	 : "+&r" (lo), "=&r" (hi)  \
-++	 : "r" (hi)  \
-++	 : "cc")
-++#else /* ! __thumb__ */
-+ #  define MAD_F_MLN(hi, lo)  \
-+     asm ("rsbs	%0, %2, #0\n\t"  \
-+ 	 "rsc	%1, %3, #0"  \
-+-	 : "=r" (lo), "=r" (hi)  \
-++	 : "=&r" (lo), "=r" (hi)  \
-+ 	 : "0" (lo), "1" (hi)  \
-+ 	 : "cc")
-++#endif /* __thumb__ */
-+ 
-+ #  define mad_f_scale64(hi, lo)  \
-+     ({ mad_fixed_t __result;  \
-diff --git a/package/libmad/libmad-0.15.1b-thumb2-imdct-arm.patch b/package/libmad/libmad-0.15.1b-thumb2-imdct-arm.patch
-new file mode 100644
-index 0000000..414b9c8
---- /dev/null
-+++ b/package/libmad/libmad-0.15.1b-thumb2-imdct-arm.patch
-@@ -0,0 +1,20 @@
-+Fixes Thumb2 related build failure
-+
-+Patch below comes from the Debian libmad package.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+From: Konstantinos Margaritis <markos@debian.org>
-+Subject: use "adr" instead of "add" to make code ready for thumb2
-+
-+--- ./imdct_l_arm.S.orig	2010-02-25 13:25:23.000000000 +0100
-++++ ./imdct_l_arm.S	2010-02-25 13:27:26.000000000 +0100
-+@@ -468,7 +468,7 @@
-+ 
-+     @----
-+ 
-+-    add     r2, pc, #(imdct36_long_karray-.-8)  @ r2 = base address of Knn array (PIC safe ?)
-++    adr     r2, imdct36_long_karray
-+ 
-+ 
-+ loop:
+diff --git a/linux/Config.in b/linux/Config.in
+index 30cb5ed..ff2700a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_5
+ 
+ config BR2_LINUX_KERNEL_3_5
+-	bool "3.5.3"
++	bool "3.5.4"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.5.3" if BR2_LINUX_KERNEL_3_5
++	default "3.5.4" if BR2_LINUX_KERNEL_3_5
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
