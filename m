@@ -1,235 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Sep 2012 00:57:50 +0200
-Subject: [Buildroot] [PATCH 05/11] gettext: convert to autotools-package
+Date: Mon, 17 Sep 2012 00:57:53 +0200
+Subject: [Buildroot] [PATCH 08/11] package/pulseaudio: fix build-dependency
+	on gettext
 In-Reply-To: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
 References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1347836276-24262-6-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1347836276-24262-9-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
+In its Config.in, pulseaudio declares a dependency on gettext
+using the documented construct:
+    select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: add license info, build libintl if locales disabled]
+but in its .mk file, declares a dependency on the package:
+    PULSEAUDIO_DEPENDENCIES = [...] $(if $(BR2_PACKAGE_GETTEXT),gettext) [...]
+
+instead of the documented:
+    $(if $(BR2_NEEDS_GETTEXT),gettext)
+
+Fix that.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 CC: Samuel Martin <s.martin49@gmail.com>
 ---
- package/gettext/Config.in  |   10 +++-
- package/gettext/gettext.mk |  172 ++++++++------------------------------------
- 2 files changed, 40 insertions(+), 142 deletions(-)
+ package/multimedia/pulseaudio/pulseaudio.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gettext/Config.in b/package/gettext/Config.in
-index de19410..ee7d8cb 100644
---- a/package/gettext/Config.in
-+++ b/package/gettext/Config.in
-@@ -7,11 +7,19 @@ config BR2_PACKAGE_GETTEXT
- 	  framework to help other GNU packages produce multi-lingual
- 	  messages.
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 6f7d7d2..406dd8f 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -16,7 +16,7 @@ PULSEAUDIO_CONF_OPT = \
  
--	  Only the gettext libraries will be installed in the
-+	  Only the libintl library will be installed in the
- 	  target. The full gettext suite, including tools, will be
- 	  installed in the staging directory.
- 
- 	  http://www.gnu.org/software/gettext/
- 
-+config BR2_PACKAGE_GETTEXT_TOOLS
-+	bool "Install gettext tools"
-+	depends on BR2_PACKAGE_GETTEXT
-+	help
-+	  This option allows to install the complete gettext suite in
-+	  the target filesystem. This is typically not useful for
-+	  correct operation of programs.
-+
- comment "gettext requires a toolchain with WCHAR support"
- 	depends on BR2_NEEDS_GETTEXT && !BR2_USE_WCHAR
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 4dff941..74f5218 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -3,147 +3,37 @@
- # gettext
- #
- #############################################################
--GETTEXT_VERSION:=0.16.1
--GETTEXT_SOURCE:=gettext-$(GETTEXT_VERSION).tar.gz
--GETTEXT_SITE:=$(BR2_GNU_MIRROR)/gettext
--GETTEXT_DIR:=$(BUILD_DIR)/gettext-$(GETTEXT_VERSION)
--GETTEXT_CAT:=$(ZCAT)
--GETTEXT_BINARY:=gettext-runtime/src/gettext
--GETTEXT_TARGET_BINARY:=usr/bin/gettext
--
--LIBINTL_TARGET_BINARY:=usr/lib/libintl.so
--
--$(DL_DIR)/$(GETTEXT_SOURCE):
--	 $(call DOWNLOAD,$(GETTEXT_SITE)/$(GETTEXT_SOURCE))
--
--gettext-source: $(DL_DIR)/$(GETTEXT_SOURCE)
--
--$(GETTEXT_DIR)/.unpacked: $(DL_DIR)/$(GETTEXT_SOURCE)
--	$(GETTEXT_CAT) $(DL_DIR)/$(GETTEXT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	support/scripts/apply-patches.sh $(GETTEXT_DIR) package/gettext/ gettext\*.patch
--	$(call CONFIG_UPDATE,$(@D))
--	touch $@
--
--ifneq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--IGNORE_EXTERNAL_GETTEXT:=--with-included-gettext
-+GETTEXT_VERSION = 0.16.1
-+GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
-+GETTEXT_INSTALL_STAGING = YES
-+GETTEXT_LICENSE = GPLv2+
-+GETTEXT_LICENSE_FILES = COPYING
-+
-+GETTEXT_CONF_OPT += \
-+	--disable-libasprintf \
-+	--disable-openmp \
-+	--disable-rpath \
-+	--disable-java \
-+	--disable-native-java \
-+	--disable-csharp \
-+	--disable-relocatable \
-+	--without-emacs
-+
-+# Force build with NLS support, otherwise libintl is not built
-+# This is needed because some packages (eg. libglib2) requires
-+# locales, but do not properly depend on BR2_ENABLE_LOCALE, and
-+# instead select BR2_PACKAGE_GETTEXT. Those packages need to be
-+# fixed before we can remove the following 3 lines... :-(
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+GETTEXT_CONF_OPT += --enable-nls
- endif
- 
--$(GETTEXT_DIR)/.configured: $(GETTEXT_DIR)/.unpacked
--	(cd $(GETTEXT_DIR); rm -rf config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		ac_cv_func_strtod=yes \
--		ac_fsusage_space=yes \
--		fu_cv_sys_stat_statfs2_bsize=yes \
--		ac_cv_func_closedir_void=no \
--		ac_cv_func_getloadavg=no \
--		ac_cv_lib_util_getloadavg=no \
--		ac_cv_lib_getloadavg_getloadavg=no \
--		ac_cv_func_getgroups=yes \
--		ac_cv_func_getgroups_works=yes \
--		ac_cv_func_chown_works=yes \
--		ac_cv_have_decl_euidaccess=no \
--		ac_cv_func_euidaccess=no \
--		ac_cv_have_decl_strnlen=yes \
--		ac_cv_func_strnlen_working=yes \
--		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
--		ac_cv_func_lstat_empty_string_bug=no \
--		ac_cv_func_stat_empty_string_bug=no \
--		vb_cv_func_rename_trailing_slash_bug=no \
--		ac_cv_have_decl_nanosleep=yes \
--		jm_cv_func_nanosleep_works=yes \
--		gl_cv_func_working_utimes=yes \
--		ac_cv_func_utime_null=yes \
--		ac_cv_have_decl_strerror_r=yes \
--		ac_cv_func_strerror_r_char_p=no \
--		jm_cv_func_svid_putenv=yes \
--		ac_cv_func_getcwd_null=yes \
--		ac_cv_func_getdelim=yes \
--		ac_cv_func_mkstemp=yes \
--		utils_cv_func_mkstemp_limitations=no \
--		utils_cv_func_mkdir_trailing_slash_bug=no \
--		jm_cv_func_gettimeofday_clobber=no \
--		gl_cv_func_working_readdir=yes \
--		jm_ac_cv_func_link_follows_symlink=no \
--		utils_cv_localtime_cache=no \
--		ac_cv_struct_st_mtim_nsec=no \
--		gl_cv_func_tzset_clobber=no \
--		gl_cv_func_getcwd_null=yes \
--		gl_cv_func_getcwd_path_max=yes \
--		ac_cv_func_fnmatch_gnu=yes \
--		am_getline_needs_run_time_check=no \
--		am_cv_func_working_getline=yes \
--		gl_cv_func_mkdir_trailing_slash_bug=no \
--		gl_cv_func_mkstemp_limitations=no \
--		ac_cv_func_working_mktime=yes \
--		jm_cv_func_working_re_compile_pattern=yes \
--		ac_use_included_regex=no \
--		gl_cv_c_restrict=no \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
--		--disable-libasprintf \
--		--enable-shared \
--		$(IGNORE_EXTERNAL_GETTEXT) \
--		--disable-openmp \
--	)
--	touch $@
--
--$(GETTEXT_DIR)/$(GETTEXT_BINARY): $(GETTEXT_DIR)/.configured
--	$(MAKE) -C $(GETTEXT_DIR)
--	touch -c $(GETTEXT_DIR)/$(GETTEXT_BINARY)
--
--$(STAGING_DIR)/$(GETTEXT_TARGET_BINARY): $(GETTEXT_DIR)/$(GETTEXT_BINARY)
--	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(GETTEXT_DIR) install
--	$(SED) 's,/lib/,$(STAGING_DIR)/usr/lib/,g' $(STAGING_DIR)/usr/lib/libgettextlib.la
--	$(SED) 's,/lib/,$(STAGING_DIR)/usr/lib/,g' $(STAGING_DIR)/usr/lib/libgettextpo.la
--	$(SED) 's,/lib/,$(STAGING_DIR)/usr/lib/,g' $(STAGING_DIR)/usr/lib/libgettextsrc.la
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgettextlib.la
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgettextpo.la
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libgettextsrc.la
--	$(SED) "s,^libdir=.*,libdir=\'$(STAGING_DIR)/usr/lib\',g" $(STAGING_DIR)/usr/lib/libintl.la
--	rm -f $(addprefix $(STAGING_DIR)/usr/bin/, \
--		autopoint envsubst gettext.sh gettextize msg* ?gettext)
--	touch -c $@
--
--gettext-legal-info:
--	@$(call legal-warning-pkg,gettext,legal-info not yet implemented)
--
--gettext: host-pkg-config $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY) $(TARGET_DIR)/$(LIBINTL_TARGET_BINARY)
--
--gettext-unpacked: $(GETTEXT_DIR)/.unpacked
--
--gettext-clean:
--	-$(MAKE) DESTDIR=$(STAGING_DIR) CC="$(TARGET_CC)" -C $(GETTEXT_DIR) uninstall
--	-$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(GETTEXT_DIR) uninstall
--	-$(MAKE) -C $(GETTEXT_DIR) clean
--
--gettext-dirclean:
--	rm -rf $(GETTEXT_DIR)
-+# When the gettext tools are not enabled in the configuration, we only
-+# install libintl to the target.
-+ifeq ($(BR2_PACKAGE_GETTEXT_TOOLS),)
-+define GETTEXT_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
-+endef
-+endif # GETTEXT_TOOLS = n
- 
--#############################################################
--#
--# gettext on the target
--#
--#############################################################
--
--$(TARGET_DIR)/usr/lib/libintl.so: $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
--	cp -dpf $(STAGING_DIR)/usr/lib/libgettext*.so* \
--		$(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libgettext*.so*
--	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libintl*.so*
--	rm -f $(addprefix $(TARGET_DIR)/usr/lib/, \
--		libgettext*.so*.la libintl*.so*.la)
--	touch -c $@
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--TARGETS+=gettext
--endif
-+$(eval $(autotools-package))
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkg-config libtool json-c libsndfile speex host-intltool \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
++	$(if $(BR2_NEEDS_GETTEXT),gettext) \
+ 	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+ 	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
 -- 
 1.7.2.5
