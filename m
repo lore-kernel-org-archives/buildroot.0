@@ -1,63 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Sep 2012 18:44:34 +0200
-Subject: [Buildroot] [PATCH] libnspr: requires thread support in toolchain
-Message-ID: <1347900274-31892-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Sep 2012 19:00:11 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2012-09-16
+In-Reply-To: <20120917063237.C9EAE428029@lolut.humanoidz.org>
+References: <20120917063237.C9EAE428029@lolut.humanoidz.org>
+Message-ID: <20120917190011.557394ea@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
 
- http://autobuild.buildroot.org/results/58e0784e2289a60fa51589d2ce0a7a8ffe40f07e/build-end.log
+On Mon, 17 Sep 2012 08:32:37 +0200 (CEST), Thomas Petazzoni wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libnspr/Config.in |    5 +++--
- package/libnss/Config.in  |    6 ++++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+> Build 57b12f7d469e16af420c92d33edeba6142ac71a1
+> ==============================================
+> 
+> Status         : NOK
+> Failure reason : busybox-1.20.2
+> Architecture   : mipsel
+> Submitted by   : Thomas Petazzoni (Free Electrons build server)
+> Submitted at   : 2012-09-16 14:29:41
+> Git commit ID  :
+> http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+> End of log     :
+> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/build-end.log
+> Complete log   :
+> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/build.log.bz2
+> Configuration  :
+> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/config
+> Defconfig      :
+> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/defconfig
 
-diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
-index 53086f0..f4f24d4 100644
---- a/package/libnspr/Config.in
-+++ b/package/libnspr/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBNSPR
- 	bool "libnspr"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  NSPR is the Netscape Portable Runtime library which provides
- 	  a platform-neutral API for system level and libc like
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBNSPR
- 
- 	  http://www.mozilla.org/projects/nspr/
- 
--comment "libnspr requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "libnspr requires a toolchain with LARGEFILE and threads support"
-+	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index 55928a4..a070ffb 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBNSS
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
- 	help
- 	  Network Security Services (NSS) is a set of libraries designed
- 	  to support development of security-enabled client and server
-@@ -13,5 +14,6 @@ config BR2_PACKAGE_LIBNSS
- 
- 	  http://www.mozilla.org/projects/security/pki/nss/
- 
--comment "libnss requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "libnss requires a toolchain with LARGEFILE and thread support"
-+	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
-+
+Fixed this one. It was also a problem in the toolchain default
+configuration, since the MIPS64 configuration options clean up has been
+merged.
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
