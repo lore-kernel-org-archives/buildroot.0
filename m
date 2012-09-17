@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Sep 2012 23:01:54 +0200
+Date: Mon, 17 Sep 2012 23:50:27 +0200
 Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
-In-Reply-To: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
+In-Reply-To: <201209172301.54610.yann.morin.1998@free.fr>
 References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <201209172301.54610.yann.morin.1998@free.fr>
+ <201209172301.54610.yann.morin.1998@free.fr>
+Message-ID: <201209172350.27316.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,78 +13,109 @@ To: buildroot@busybox.net
 
 Marek, All,
 
-On Monday 17 September 2012 22:34:17 Marek Belisko wrote:
-> Add support for raspberrypi bootloader and VideoCore.
-
-See my comments below.
-
-> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+On Monday 17 September 2012 23:01:54 Yann E. MORIN wrote:
+> On Monday 17 September 2012 22:34:17 Marek Belisko wrote:
+> > Add support for raspberrypi bootloader and VideoCore.
+[--SNIP--]
+> I am not too fond of this hack... :-(
 > 
-> Added changes from Arnout comments:
-> (http://lists.busybox.net/pipermail/buildroot/2012-September/058565.html)
-> - add rasberrypi-firmware as separate package
-> - change Config.in handling to have separate bootloader and
->   VideoCore packages (handled in same mk file)
-> - various other fixes
-> 
-> New features:
-> - add possibility to choose ARM - GPU memory split by user
-> - download package in tar.gz instead git method
-> 
-> ---
->  package/Config.in                                  |    1 +
->  package/raspberrypi-firmware/Config.in             |   53 ++++++++++++++++++++
->  .../raspberrypi-firmware/raspberrypi-firmware.mk   |   48 ++++++++++++++++++
->  3 files changed, 102 insertions(+)
->  create mode 100644 package/raspberrypi-firmware/Config.in
->  create mode 100644 package/raspberrypi-firmware/raspberrypi-firmware.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 58dd5e8..36635cd 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -232,6 +232,7 @@ source "package/owl-linux/Config.in"
->  source "package/parted/Config.in"
->  source "package/pciutils/Config.in"
->  source "package/picocom/Config.in"
-> +source "package/raspberrypi-firmware/Config.in"
->  source "package/read-edid/Config.in"
->  source "package/rng-tools/Config.in"
->  source "package/sane-backends/Config.in"
-> diff --git a/package/raspberrypi-firmware/Config.in b/package/raspberrypi-firmware/Config.in
-> new file mode 100644
-> index 0000000..55abd68
-> --- /dev/null
-> +++ b/package/raspberrypi-firmware/Config.in
-> @@ -0,0 +1,53 @@
-> +config BR2_PACKAGE_RASPBERRYPI_FIRMWARE
-> +	bool
-> +
-> +config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER
-> +        bool "Raspberry Pi bootloader files"
+> The issue with this 'package' is that it's two things:
+>   - a package that installs the videocore library;
+>   - a package that installs the bootloader files.
 
-Space-damage: config option should be indented one tab, not 8 spaces,
-and help entries are indented one tab plus two spaces, not 10 spaces.
+Ah, my bad, I should have paid more attention to the README. The bootloader
+files are for the GPU, not the CPU. Well, that's another issue, then.
 
-> +	select BR2_PACKAGE_RASPBERRYPI_FIRMWARE
+Still, I am not very fond of the 'select' hack. Why not do something like
+the following (untested so far, will give it a spin shortly):
 
-I am not too fond of this hack... :-(
+---8<--- Config.in --8<---
+config BR2_PACKAGE_RASPBERRYPI_FIRMWARE
+	bool "Raspberry Pi firmware blobs"
+	depends on ARM    # (and even the proper CPU?)
+	help
+	  Install the firmware blobs for the GPU, and the userland
+	  VideoCore library to use accelerated graphics on the
+	  Raspberry Pi.
 
-The issue with this 'package' is that it's two things:
-  - a package that installs the videocore library;
-  - a package that installs the bootloader files.
+	  http://github/babla/...
 
-So, I would really like to see the bootloader entries in the bootloader
-sub-menu, and the library part in the "packages on target" sub-menu.
+if BR2_PACKAGE_RASPBERRYPI_FIRMWARE
 
-I'll look at this shortly (having recently received my rPi), and hope to
-be able to come back later tonight with an alternate proposal.
+choice
+	bool "CPU/GPU memory split"
+	default BR2_PACKAGE_RASPBERRYPI_FIRMWARE_ARM192
 
-The big issue is that there is no provision in BR to handle this situation,
-as it is currently expected that an upstream package only provides a single
-package in BR.
+config BR2_PACKAGE_RASPBERRYPI_FIRMWARE_ARM128
+	bool "128MiB/128MiB"
 
-So, NACK from me in the state it is currently.
+config BR2_PACKAGE_RASPBERRYPI_FIRMWARE_ARM192
+	bool "192MiB/64MiB"
+
+# And so on (your help entries are fine!)
+
+enchoice
+
+config BR2_PACKAGE_RASPBERRYPI_FIRMWARE_GPU_BOOT_FILE
+	string
+	default "arm128" if BR2_PACKAGE_RASPBERRYPI_FIRMWARE_ARM128
+	default "arm192" if BR2_PACKAGE_RASPBERRYPI_FIRMWARE_ARM192
+	...
+
+endif
+---8<--- Config.in --8<---
+
+What would be the interest to install the GPU boot files, but not install
+the VideoCore libraries? Or the other way around, what would be the intrest
+to install the VidoeCore library without the GPU boot files?
+
+So my proposal install both one GPU boot file and the VideoCore libraries,
+or nothing@all.
+
+---8<--- raspberrypi-firmware.mk --8<---
+RASPBERRYPI_FIRMWARE_VERSION = d29291e
+RASPBERRYPI_FIRMWARE_SOURCE = raspberrypi-firmware-$(RASPBERRYPI_FIRMWARE_VERSION).tar.gz
+RASPBERRYPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/master
+RASPBERRYPI_FIRMWARE_INSTALL_STAGING = YES
+
+define RASPBERRYPI_FIRMWARE_INSTALL_STAGING_CMDS
+	cp -a $(@D)/hardfp/opt/vc/* $(STAGING_DIR)/usr
+endef
+
+define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_CMDS
+	mkdir -p $(TARGET_DIR)/boot
+	cp $(@D)/boot/$(qstrip $(BR2_PACKAGE_RASPBERRYPI_FIRMWARE_GPU_BOOT_FILE))_start.elf \
+	        $(TARGET_DIR)/boot/start.elf
+	cp $(@D)/boot/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
+	cp $(@D)/boot/loader.bin $(TARGET_DIR)/boot/loader.bin
+	cp -a $(@D)/hardfp/opt/vc/bin/* $(TARGET_DIR)/usr/bin
+	cp -a $(@D)/hardfp/opt/vc/lib/* $(TARGET_DIR)/usr/lib
+	cp -a $(@D)/hardfp/opt/vc/sbin/* $(TARGET_DIR)/usr/sbin
+endef
+
+$(eval $(generic-package))
+---8<--- raspberrypi-firmware.mk --8<---
+
+
+Also, to be noted in your original patch, you wrote:
+
+---8<---
+ifeq ($(BR2_PACKAGE_RASPBERRYPI_BOOTLOADER),y)
+BOOT_FILE := #empty
+ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM128),y)
+BOOT_FILE += arm128_start.elf
+else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM192),y)
+BOOT_FILE += arm192_start.elf
+else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM224),y)
+BOOT_FILE += arm224_start.elf
+else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM240),y)
+BOOT_FILE += arm240_start.elf
+endif
+---8<---
+
+But all the ARMxxx options are in a choice, so they are mutually exclusive.
+In the proposal, above, I kept it as a choice, although it may make sense
+to install more than one GPU bootloader.
 
 Regards,
 Yann E. MORIN.
