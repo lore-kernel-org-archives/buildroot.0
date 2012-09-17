@@ -1,51 +1,93 @@
-From: Ryan Mallon <rmallon@gmail.com>
-Date: Tue, 18 Sep 2012 06:37:09 +1000
-Subject: [Buildroot] [PATCH] libsndfile: Add -D_FILE_OFFSET_BITS=64 to
- configuration
-In-Reply-To: <20120917190500.5a1ab662@skate>
-References: <5056C7AE.9000401@gmail.com> <20120917190500.5a1ab662@skate>
-Message-ID: <505789F5.7090506@gmail.com>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Mon, 17 Sep 2012 22:41:08 +0200
+Subject: [Buildroot] [PATCH v2 2/2] Add FAQ entry how to properly add
+ package from github.
+In-Reply-To: <CAHXCMML5X18Hs_zjGsOKAdYARnt8RFNiC7OBLuKkVM2HGtrHHw@mail.gmail.com>
+References: <1347746247-12033-2-git-send-email-marek.belisko@open-nandra.com>
+ <1347912277-3982-1-git-send-email-marek.belisko@open-nandra.com>
+ <CAHXCMML5X18Hs_zjGsOKAdYARnt8RFNiC7OBLuKkVM2HGtrHHw@mail.gmail.com>
+Message-ID: <CAAfyv36=M4=+8ztK3zd1dLCN=ApyT8ZOXBgvWLwJFDxzNsd_RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/09/12 03:05, Thomas Petazzoni wrote:
+Hi Samuel,
 
-> Dear Ryan Mallon,
-> 
-> On Mon, 17 Sep 2012 16:48:14 +1000, Ryan Mallon wrote:
->> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
->> typedef alias for off_t. This is not true by default for all
->> tool-chains, which leads to a runtime assert failure in binaries
->> compiled against libsndfile. See:
->>     
->>   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
->>    
->> Add -D_FILE_OFFSET_BITS=64 to the configuration for libsndfile to
->> ensure that off_t is the correct size.
->>     
->> Signed-off-by: Ryan Mallon <rmallon@gmail.com>
+On Mon, Sep 17, 2012 at 10:28 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Marek,
+>
+> 2012/9/17 Marek Belisko <marek.belisko@open-nandra.com>:
+>> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 >> ---
+>>  docs/manual/faq.txt |   20 ++++++++++++++++++++
+>>  1 file changed, 20 insertions(+)
 >>
->> diff --git a/package/libsndfile/libsndfile.mk
->> b/package/libsndfile/libsndfile.m index e5fbb5e..5e39aca 100644
->> --- a/package/libsndfile/libsndfile.mk
->> +++ b/package/libsndfile/libsndfile.mk
->> @@ -7,5 +7,7 @@
->>  LIBSNDFILE_VERSION = 1.0.25
->>  LIBSNDFILE_SITE = http://www.mega-nerd.com/libsndfile/files
->>  LIBSNDFILE_INSTALL_STAGING = YES
->> +LIBSNDFILE_CFLAGS = $(TARGET_CFLAGS) -D_FILE_OFFSET_BITS=64
->> +LIBSNDFILE_CONF_ENV += CFLAGS="$(LIBSNDFILE_CFLAGS)"
-> 
-> This looks strange: Buildroot already automatically passes
-> -D_FILE_OFFSET_BITS=64 when BR2_LARGEFILE=y, see package/Makefile.in.
+>> diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
+>> index 575d019..f04a93e 100644
+>> --- a/docs/manual/faq.txt
+>> +++ b/docs/manual/faq.txt
+>> @@ -36,3 +36,23 @@ then probably you are running a Fedora (or similar) distribution, and
+>>  you should install the +glibc-static+ package. This is because the
+>>  +module-init-tools+ build process wants to link statically against the
+>>  C library.
+>> +
+>> +How to add package from github
+>> +------------------------------
+>> +
+>> +If package don't have version number and want to use SHA1
+>> +(it's enough to use first 7 characters from SHA1):
+>
+> IANA native English speaker, but I'd have rephrased this with
+> something like that:
+Same here ;) . Your sentence is much better then mine. Will send updated patch.
+Thanks.
+>
+> If the package has no release version, or its version cannot be
+> identified using tag, then the sha1 of the particular commit should be
+> used to identify the version (the first 7 characters of the sha1 are
+> enough):
+>
+>> +
+>> +------------------------
+>> +FOO_VERSION = 1234567
+>> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
+>> +FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
+>> +------------------------
+>> +
+>> +If package have version number use:
+>
+> Same here:
+>
+> If the package version matches a tag, then this tag should be used to
+> identify the version:
+>
+>> +
+>> +------------------------
+>> +FOO_VERSION = v1.0
+>> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
+>> +FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+>> +------------------------
+>
+>
+> Regards,
+>
+> --
+> Sam
 
+Cheers,
 
-Okay, I didn't realise that. libsndfile should either depend on or
-select (probably the latter) that package then. I will post a follow up.
+mbe
 
-Thanks,
-~Ryan
+-- 
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
