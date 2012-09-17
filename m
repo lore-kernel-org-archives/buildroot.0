@@ -1,85 +1,63 @@
-From: Thiago A. Correa <thiago.correa@gmail.com>
-Date: Mon, 17 Sep 2012 07:51:03 -0300
-Subject: [Buildroot] [PATCHv2][RESEND] python-protobuf: Add support for
- Python implementation of Google's Protocol Buffers
-Message-ID: <20120917105103.GA17573@localhost.comm5.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Sep 2012 18:44:34 +0200
+Subject: [Buildroot] [PATCH] libnspr: requires thread support in toolchain
+Message-ID: <1347900274-31892-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
----
- package/Config.in                          |    1 +
- package/python-protobuf/Config.in          |   11 +++++++++++
- package/python-protobuf/python-protobuf.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+), 0 deletions(-)
- create mode 100644 package/python-protobuf/Config.in
- create mode 100644 package/python-protobuf/python-protobuf.mk
+Fixes
 
-diff --git a/package/Config.in b/package/Config.in
-index e129522..3aff270 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -276,6 +276,7 @@ source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
-+source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-new file mode 100644
-index 0000000..d2bf70d
---- /dev/null
-+++ b/package/python-protobuf/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PROTOBUF
-+	bool "python-protobuf"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	help
-+	  Python implementation of the Google Protocol Buffers.
+ http://autobuild.buildroot.org/results/58e0784e2289a60fa51589d2ce0a7a8ffe40f07e/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libnspr/Config.in |    5 +++--
+ package/libnss/Config.in  |    6 ++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/package/libnspr/Config.in b/package/libnspr/Config.in
+index 53086f0..f4f24d4 100644
+--- a/package/libnspr/Config.in
++++ b/package/libnspr/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBNSPR
+ 	bool "libnspr"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  NSPR is the Netscape Portable Runtime library which provides
+ 	  a platform-neutral API for system level and libc like
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBNSPR
+ 
+ 	  http://www.mozilla.org/projects/nspr/
+ 
+-comment "libnspr requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++comment "libnspr requires a toolchain with LARGEFILE and threads support"
++	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 55928a4..a070ffb 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBNSS
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_ZLIB
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+@@ -13,5 +14,6 @@ config BR2_PACKAGE_LIBNSS
+ 
+ 	  http://www.mozilla.org/projects/security/pki/nss/
+ 
+-comment "libnss requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++comment "libnss requires a toolchain with LARGEFILE and thread support"
++	depends on !BR2_LARGEFILE && !BR2_TOOLCHAIN_HAS_THREADS
 +
-+	  Protocol buffers are Google's language-neutral, platform-neutral,
-+	  extensible mechanism for serializing structured data.
-+
-+	  http://code.google.com/p/protobuf/
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-new file mode 100644
-index 0000000..d632e00
---- /dev/null
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# python-protobuf
-+#
-+#############################################################
-+
-+PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
-+PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
-+PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
-+PYTHON_PROTOBUF_LICENSE = BSD-3c
-+PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
-+
-+PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools host-python-distutilscross host-protobuf
-+
-+define PYTHON_PROTOBUF_BUILD_CMDS
-+	(cd $(@D)/python; \
-+		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
-+		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-+		PATH=$(HOST_PATH) \
-+	$(HOST_DIR)/usr/bin/python setup.py build -x)
-+endef
-+
-+define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
-+	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
 -- 
-1.7.3.4
+1.7.9.5
