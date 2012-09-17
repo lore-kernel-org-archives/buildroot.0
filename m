@@ -1,891 +1,598 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Sep 2012 00:57:56 +0200
-Subject: [Buildroot] [PATCH 11/11] packages: use the new gettext mechanism
-In-Reply-To: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
-References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1347836276-24262-12-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Sep 2012 08:32:37 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-09-16
+Message-ID: <20120917063237.C9EAE428029@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now, packages that require the gettext functionality just need to add
-one of the following in their Config.in file:
-  - select BR2_NEEDS_GETTEXT
-  - select BR2_NEEDS_GETTEXT_IF_LOCALE
 
-And add the appropriate $(gettext) or $(gettext--if-locale) to their
-build-dependencies in their .mk file.
+Hello,
 
-Alternatively, if a package needs special link flags when gettext is not
-provided by the toolchain, then can use the appropriate $(gettext-LDFLAGS)
-or $(gettext-LDFLAGS-if-locale) to their own LDFLAGS.
+On 2012-09-16, 92 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 51 builds have been successful
+ 41 builds have failed
 
-Becasue of this, four packages that did not have a config-dependency on
-gettext but had a build-dependency, now have such a config-dependency
-(note that these packages were previously broken in case no other package
-would provide gettext). Those packages are:
-    diffutils, flex, ndisc6, util-linux
+Below the results of the failed builds. Successful builds are omitted.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-CC: Samuel Martin <s.martin49@gmail.com>
----
- package/avahi/Config.in                     |    2 +-
- package/avahi/avahi.mk                      |    7 ++-----
- package/axel/Config.in                      |    2 +-
- package/axel/axel.mk                        |    8 ++------
- package/binutils/Config.in                  |    2 +-
- package/binutils/binutils.mk                |    2 +-
- package/diffutils/Config.in                 |    1 +
- package/diffutils/diffutils.mk              |    3 +--
- package/dnsmasq/Config.in                   |    2 +-
- package/dnsmasq/dnsmasq.mk                  |    4 ++--
- package/flex/Config.in                      |    1 +
- package/flex/flex.mk                        |    3 +--
- package/gdk-pixbuf/Config.in                |    2 +-
- package/gdk-pixbuf/gdk-pixbuf.mk            |    2 +-
- package/glib-networking/Config.in           |    2 +-
- package/glib-networking/glib-networking.mk  |    2 +-
- package/gmpc/Config.in                      |    2 +-
- package/gmpc/gmpc.mk                        |    2 +-
- package/grep/Config.in                      |    2 +-
- package/grep/grep.mk                        |    2 +-
- package/kbd/Config.in                       |    2 +-
- package/kbd/kbd.mk                          |    3 +--
- package/libglib2/Config.in                  |    2 +-
- package/libglib2/libglib2.mk                |    2 +-
- package/libidn/Config.in                    |    2 +-
- package/libidn/libidn.mk                    |    2 +-
- package/libsoup/Config.in                   |    2 +-
- package/libsoup/libsoup.mk                  |    2 +-
- package/linux-pam/Config.in                 |    3 +--
- package/linux-pam/linux-pam.mk              |    6 ++----
- package/lshw/Config.in                      |    2 +-
- package/lshw/lshw.mk                        |    4 ++--
- package/make/Config.in                      |    2 +-
- package/make/make.mk                        |    2 +-
- package/midori/Config.in                    |    2 +-
- package/midori/midori.mk                    |    2 +-
- package/multimedia/pulseaudio/Config.in     |    2 +-
- package/multimedia/pulseaudio/pulseaudio.mk |    2 +-
- package/ndisc6/Config.in                    |    1 +
- package/ndisc6/ndisc6.mk                    |    6 ++----
- package/pango/Config.in                     |    2 +-
- package/pango/pango.mk                      |    2 +-
- package/php/Config.ext                      |    2 +-
- package/php/php.mk                          |    2 +-
- package/psmisc/Config.in                    |    2 +-
- package/psmisc/psmisc.mk                    |    2 +-
- package/quota/Config.in                     |    2 +-
- package/quota/quota.mk                      |    6 ++----
- package/sshfs/Config.in                     |    2 +-
- package/sshfs/sshfs.mk                      |    2 +-
- package/sysstat/Config.in                   |    2 +-
- package/sysstat/sysstat.mk                  |    6 ++----
- package/ushare/Config.in                    |    2 +-
- package/ushare/ushare.mk                    |    6 ++----
- package/util-linux/Config.in                |    1 +
- package/util-linux/util-linux.mk            |    6 ++----
- package/vala/Config.in                      |    2 +-
- package/vala/vala.mk                        |    3 +--
- 58 files changed, 68 insertions(+), 88 deletions(-)
+Build 4fd161ffef4697759a908e6e551327718827e126
+==============================================
 
-diff --git a/package/avahi/Config.in b/package/avahi/Config.in
-index 982966d..ed585ff 100644
---- a/package/avahi/Config.in
-+++ b/package/avahi/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_AVAHI
- 	bool "avahi"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Avahi is a system which facilitates service
- 	  discovery on a local network.
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 67b357e..b099ace 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -85,7 +85,7 @@ AVAHI_CONF_OPT = --localstatedir=/var \
- 		--with-autoipd-user=default \
- 		--with-autoipd-group=default
- 
--AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) host-intltool host-pkg-config
-+AVAHI_DEPENDENCIES = host-intltool host-pkg-config $(gettext-if-locale)
- 
- ifneq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_AVAHI_AUTOIPD),)
- AVAHI_DEPENDENCIES += libdaemon
-@@ -133,10 +133,7 @@ else
- AVAHI_CONF_OPT += --disable-python
- endif
- 
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--AVAHI_DEPENDENCIES += gettext
--AVAHI_MAKE_OPT = LIBS=-lintl
--endif
-+AVAHI_MAKE_OPT = LIBS="$(gettext-LDFLAGS-if-locale)"
- 
- define AVAHI_REMOVE_INITSCRIPT
- 	rm -rf $(TARGET_DIR)/etc/init.d/avahi-*
-diff --git a/package/axel/Config.in b/package/axel/Config.in
-index 4c22286..79b8d6b 100644
---- a/package/axel/Config.in
-+++ b/package/axel/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_AXEL
- 	bool "axel"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  HTTP/FTP download accelerator.
-diff --git a/package/axel/axel.mk b/package/axel/axel.mk
-index cfec43d..96c7755 100644
---- a/package/axel/axel.mk
-+++ b/package/axel/axel.mk
-@@ -7,12 +7,8 @@ AXEL_VERSION = 2.4
- AXEL_SOURCE = axel-$(AXEL_VERSION).tar.gz
- AXEL_SITE = https://alioth.debian.org/frs/download.php/3015
- 
--AXEL_LDFLAGS = -lpthread
--
--ifeq ($(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),y)
--AXEL_DEPENDENCIES += gettext
--AXEL_LDFLAGS += -lintl
--endif
-+AXEL_DEPENDENCIES += $(gettext-if-locale)
-+AXEL_LDFLAGS = -lpthread $(gettext-LDFLAGS-if-locale)
- 
- ifneq ($(BR2_ENABLE_LOCALE),y)
- AXEL_DISABLE_I18N=--i18n=0
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 159bee1..d5203a2 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Install binutils on the target
- 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 27cdfd2..3abad62 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -23,7 +23,7 @@ BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
- endif
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
- BINUTILS_INSTALL_STAGING = YES
--BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+BINUTILS_DEPENDENCIES = $(gettext-if-locale)
- 
- # We need to specify host & target to avoid breaking ARM EABI
- BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
-diff --git a/package/diffutils/Config.in b/package/diffutils/Config.in
-index 86da5d3..065e97b 100644
---- a/package/diffutils/Config.in
-+++ b/package/diffutils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_DIFFUTILS
- 	bool"diffutils"
- 	depends on BR2_USE_WCHAR
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  GNU diff. Compare files per line.
- 
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 168d040..4e5603a 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -6,8 +6,7 @@
- 
- DIFFUTILS_VERSION = 3.2
- DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
--DIFFUTILS_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext)
-+DIFFUTILS_DEPENDENCIES = $(gettext)
- 
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- DIFFUTILS_DEPENDENCIES += busybox
-diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
-index 7b55a20..3027256 100644
---- a/package/dnsmasq/Config.in
-+++ b/package/dnsmasq/Config.in
-@@ -24,7 +24,7 @@ config BR2_PACKAGE_DNSMASQ_IDN
- 	bool "IDN support"
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBIDN
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Enable IDN support in dnsmasq.
- 	  This option is a big space taker since it pulls in many libraries.
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 8ef4cd3..998bb41 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -24,8 +24,8 @@ endif
- 
- # NLS requires IDN so only enable it (i18n) when IDN is true
- ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
--	DNSMASQ_DEPENDENCIES += libidn $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
--	DNSMASQ_MAKE_OPT += LDFLAGS+="-lidn $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),-lintl)"
-+	DNSMASQ_DEPENDENCIES += libidn $(gettext-if-locale)
-+	DNSMASQ_MAKE_OPT += LDFLAGS+="-lidn $(gettext-LDFLAGS-if-locale)"
- 	DNSMASQ_COPTS += -DHAVE_IDN
- 	DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
- endif
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index b10eb00..f977d82 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_FLEX
- 	bool "flex"
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  A fast lexical analyser generator.  A tool for generating
- 	  programs that perform pattern-matching on text.
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 2599cdc..4c77fa0 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -11,8 +11,7 @@ FLEX_PATCH = flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
- FLEX_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
- FLEX_DIR = $(BUILD_DIR)/flex-$(FLEX_VERSION)
- FLEX_INSTALL_STAGING = YES
--FLEX_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_GETTEXT),gettext)
-+FLEX_DEPENDENCIES = $(gettext)
- # we don't have a host-gettext/libintl
- HOST_FLEX_DEPENDENCIES =
- 
-diff --git a/package/gdk-pixbuf/Config.in b/package/gdk-pixbuf/Config.in
-index e50ecbc..40bd3b4 100644
---- a/package/gdk-pixbuf/Config.in
-+++ b/package/gdk-pixbuf/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_GDK_PIXBUF
- 	bool "gdk-pixbuf"
- 	depends on BR2_USE_WCHAR # glib2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Gdk-Pixbuf is an image loader and scaler. It uses GObject
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 1df409e..9c445b9 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -40,7 +40,7 @@ GDK_PIXBUF_DEPENDENCIES += xlib_libX11
- endif
- 
- GDK_PIXBUF_DEPENDENCIES += \
--	$(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) \
-+	$(gettext) \
- 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
- 	host-pkg-config libglib2
- 
-diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-index 6ed312b..41e113a 100644
---- a/package/glib-networking/Config.in
-+++ b/package/glib-networking/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
- 	bool "glib-networking"
- 	depends on BR2_USE_WCHAR # glib2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  Network-related GIO modules for glib.
- 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index 9f74c35..9691329 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -13,7 +13,7 @@ GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- GLIB_NETWORKING_INSTALL_STAGING = YES
- 
- GLIB_NETWORKING_DEPENDENCIES = \
--	$(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) \
-+	$(gettext) \
- 	host-pkg-config \
- 	host-intltool \
- 	libglib2
-diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
-index 45b08d4..95554b2 100644
---- a/package/gmpc/Config.in
-+++ b/package/gmpc/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_GMPC
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBMPD
- 	select BR2_PACKAGE_LIBSOUP
-diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
-index bdc10c5..4317b7a 100644
---- a/package/gmpc/gmpc.mk
-+++ b/package/gmpc/gmpc.mk
-@@ -11,6 +11,6 @@ GMPC_CONF_OPT = --disable-mmkeys --disable-unique
- GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkg-config host-vala \
- 	libglib2 libgtk2 libmpd libsoup sqlite \
- 	xlib_libICE xlib_libSM xlib_libX11 \
--	$(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+	$(gettext-if-locale)
- 
- $(eval $(autotools-package))
-diff --git a/package/grep/Config.in b/package/grep/Config.in
-index fc4e5b9..0c8c7ba 100644
---- a/package/grep/Config.in
-+++ b/package/grep/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_GREP
- 	bool "grep"
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  The GNU regular expression matcher.
- 
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 6c37847..b1c8307 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -10,7 +10,7 @@ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
- GREP_LICENSE_FILES = COPYING
- GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
--GREP_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+GREP_DEPENDENCIES = $(gettext-if-locale)
- 
- # link with iconv if enabled
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
-diff --git a/package/kbd/Config.in b/package/kbd/Config.in
-index 939565f..8a69736 100644
---- a/package/kbd/Config.in
-+++ b/package/kbd/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KBD
- 	bool "kbd"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	# Uses fork()
- 	depends on BR2_USE_MMU
- 	help
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index 69a22c1..4f6b443 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -1,7 +1,6 @@
- KBD_VERSION = 1.15.2
- KBD_SOURCE = kbd-$(KBD_VERSION).tar.gz
- KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
--
--KBD_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+KBD_DEPENDENCIES = $(gettext-if-locale)
- 
- $(eval $(autotools-package))
-diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-index 50e95d5..4b850eb 100644
---- a/package/libglib2/Config.in
-+++ b/package/libglib2/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBGLIB2
- 	bool "libglib2"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 7df1cd0..5b9bbfe 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -55,7 +55,7 @@ HOST_LIBGLIB2_CONF_OPT = \
- 		--disable-gtk-doc \
- 		--enable-debug=no \
- 
--LIBGLIB2_DEPENDENCIES = host-pkg-config host-libglib2 libffi zlib $(if $(BR2_NEEDS_EXTERNAL_GETTEXT),gettext)
-+LIBGLIB2_DEPENDENCIES = host-pkg-config host-libglib2 libffi zlib $(gettext)
- 
- HOST_LIBGLIB2_DEPENDENCIES = host-pkg-config host-libffi host-zlib
- 
-diff --git a/package/libidn/Config.in b/package/libidn/Config.in
-index 9ef7a64..8c3d200 100644
---- a/package/libidn/Config.in
-+++ b/package/libidn/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBIDN
- 	bool "libidn"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Libidn's purpose is to encode and decode internationalized
- 	  domain names.
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index 3219dae..7859882 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -9,7 +9,7 @@ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
- LIBIDN_CONF_OPT = --disable-java --enable-csharp=no
--LIBIDN_DEPENDENCIES = host-pkg-config $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LIBIDN_DEPENDENCIES = host-pkg-config $(gettext-if-locale) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- define LIBIDN_REMOVE_BINARY
- 	rm -f $(TARGET_DIR)/usr/bin/idn
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 5a4061a..bd81c45 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBSOUP
- 	depends on BR2_USE_WCHAR # glib2 and gnutls
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  libsoup is an HTTP client/server library. It uses GObject
- 	  and the GLib main loop, to integrate well with GNOME
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index c14771d..121af9a 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -19,7 +19,7 @@ endif
- 
- LIBSOUP_CONF_OPT = --disable-glibtest --without-gnome
- 
--LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) host-pkg-config host-libglib2 libglib2 libxml2
-+LIBSOUP_DEPENDENCIES = $(gettext) host-pkg-config host-libglib2 libglib2 libxml2
- 
- ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
- LIBSOUP_DEPENDENCIES += glib-networking
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index 1b0bc6e..7051e89 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LINUX_PAM
- 	bool "linux-pam"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_FLEX
- 	select BR2_PACKAGE_FLEX_LIBFL
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-@@ -11,4 +11,3 @@ config BR2_PACKAGE_LINUX_PAM
- 
- comment "linux-pam requires a toolchain with WCHAR and locale support"
- 	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
--
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 9bd1b1b..abc4d7a 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -15,13 +15,11 @@ LINUX_PAM_CONF_OPT = \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
- 	--libdir=/lib
--LINUX_PAM_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) flex
-+LINUX_PAM_DEPENDENCIES = $(gettext-if-locale) flex
- LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_LICENSE = BSD-3c
- LINUX_PAM_LICENSE_FILES = Copyright
- 
--ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
--	LINUX_PAM_MAKE_OPT += LIBS=-lintl
--endif
-+LINUX_PAM_MAKE_OPT += LIBS="$(gettext-LDFLAGS-if-locale)"
- 
- $(eval $(autotools-package))
-diff --git a/package/lshw/Config.in b/package/lshw/Config.in
-index 45ca2b2..37f4e22 100644
---- a/package/lshw/Config.in
-+++ b/package/lshw/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LSHW
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  lshw (Hardware Lister) is a small tool to provide
- 	  detailed information on the hardware configuration of the machine.
-diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
-index 5bdffc9..f99d7ab 100644
---- a/package/lshw/lshw.mk
-+++ b/package/lshw/lshw.mk
-@@ -8,8 +8,8 @@ LSHW_VERSION = B.02.16
- LSHW_SITE = http://ezix.org/software/files
- LSHW_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
- 	RPM_OPT_FLAGS="$(TARGET_CFLAGS)" all
--LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_EXTERNAL_GETTEXT),-lintl)"
--LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT),gettext)
-+LSHW_MAKE_ENV = LIBS="$(gettext-LDFLAGS)"
-+LSHW_DEPENDENCIES = $(gettext)
- 
- define LSHW_BUILD_CMDS
- 	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPT)
-diff --git a/package/make/Config.in b/package/make/Config.in
-index d650649..bc89986 100644
---- a/package/make/Config.in
-+++ b/package/make/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_MAKE
- 	bool "make"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  A tool which controls the generation of executables and other
- 	  non-source files of a program from the program's source files.
-diff --git a/package/make/make.mk b/package/make/make.mk
-index b8fe323..94783bc 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -7,7 +7,7 @@ MAKE_VERSION:=3.81
- MAKE_SOURCE:=make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE:=$(BR2_GNU_MIRROR)/make
- 
--MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+MAKE_DEPENDENCIES = $(gettext-if-locale)
- 
- MAKE_CONF_ENV = make_cv_sys_gnu_glob=no \
- 		GLOBINC='-I$(@D)/glob' \
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 5933699..b97e24f 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_MIDORI
- 	bool "midori"
- 	select BR2_PACKAGE_WEBKIT
- 	select BR2_PACKAGE_LIBSEXY
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # webkit
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index f98bd91..e68249b 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -14,7 +14,7 @@ MIDORI_DEPENDENCIES = \
- 	libgtk2 \
- 	libsexy \
- 	webkit \
--	$(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) \
-+	$(gettext-if-locale) \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- ifneq ($(BR2_PACKAGE_XORG7),y)
-diff --git a/package/multimedia/pulseaudio/Config.in b/package/multimedia/pulseaudio/Config.in
-index 927d347..7deb0f9 100644
---- a/package/multimedia/pulseaudio/Config.in
-+++ b/package/multimedia/pulseaudio/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_SPEEX
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  PulseAudio is a sound system for POSIX OSes, meaning that it
- 	  is a proxy for your sound applications. It allows you to do
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index 439cb17..8f31998 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -16,7 +16,7 @@ PULSEAUDIO_CONF_OPT = \
- 
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkg-config libtool json-c libsndfile speex host-intltool \
--	$(if $(BR2_NEEDS_EXTERNAL_GETTEXT),gettext) \
-+	$(gettext) \
- 	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
- 	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
-diff --git a/package/ndisc6/Config.in b/package/ndisc6/Config.in
-index 126bfa2..cd42b55 100644
---- a/package/ndisc6/Config.in
-+++ b/package/ndisc6/Config.in
-@@ -4,6 +4,7 @@ comment "ndisc6 requires a toolchain with IPv6 support"
- config BR2_PACKAGE_NDISC6
- 	bool "ndisc6 tools"
- 	depends on BR2_INET_IPV6
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  NDisc6 is a small collection of useful tools for IPv6 networking
- 
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index f58cc13..849b003 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
-@@ -10,10 +10,8 @@ NDISC6_SITE = http://www.remlab.net/files/ndisc6/
- NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
- NDISC6_CONF_OPT = --localstatedir=/var --disable-rpath --disable-suid-install
- 
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--NDISC6_DEPENDENCIES += gettext
--NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
--endif
-+NDISC6_DEPENDENCIES = $(gettext)
-+NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(gettext-LDFLAGS)"
- 
- NDISC6_BIN_ += dnssort # perl script
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
-diff --git a/package/pango/Config.in b/package/pango/Config.in
-index 07ca298..c8d4796 100644
---- a/package/pango/Config.in
-+++ b/package/pango/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_CAIRO
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Pango is a library for laying out and rendering of text, with an
- 	  emphasis on internationalization. Pango can be used anywhere that
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index ed2e313..c5cd3eb 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -41,7 +41,7 @@ PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
- 
- PANGO_CONF_OPT = --enable-explicit-deps=no --disable-debug
- 
--PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) host-pkg-config libglib2 cairo
-+PANGO_DEPENDENCIES = $(gettext-if-locale) host-pkg-config libglib2 cairo
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
-         PANGO_CONF_OPT += --with-x \
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 33d64ec..47c9146 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -146,7 +146,7 @@ comment "Human language and character encoding support"
- 
- config BR2_PACKAGE_PHP_EXT_GETTEXT
- 	bool "Gettext"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT
-+	select BR2_NEEDS_GETTEXT
- 	depends on BR2_USE_WCHAR
- 	help
- 	  Gettext support
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 38aebdd..6535bf9 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -87,7 +87,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_GETTEXT),y)
- 	PHP_CONF_OPT += --with-gettext=$(STAGING_DIR)/usr
--	PHP_DEPENDENCIES += $(if $(BR2_NEEDS_EXTERNAL_GETTEXT),gettext)
-+	PHP_DEPENDENCIES += $(gettext)
- endif
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_ICONV),y)
-diff --git a/package/psmisc/Config.in b/package/psmisc/Config.in
-index 4832956..886e2d4 100644
---- a/package/psmisc/Config.in
-+++ b/package/psmisc/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_PSMISC
- 	bool "psmisc"
- 	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Helpful /proc related utilities such as pstree, fuser, and killall
- 
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index aaf08d1..df7d885 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
-@@ -8,7 +8,7 @@ PSMISC_VERSION = 22.16
- PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
- PSMISC_LICENSE = GPLv2
- PSMISC_LICENSE_FILES = COPYING
--PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+PSMISC_DEPENDENCIES = ncurses $(gettext-if-locale)
- 
- ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
- # Don't force -fstack-protector
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index 17f2278..bcb6523 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Implementation of the disk quota system.
- 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 2be3fa4..4ab14c5 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -10,10 +10,8 @@ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(Q
- 
- QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
--ifeq ($(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),y)
--QUOTA_DEPENDENCIES = gettext
--QUOTA_MAKE_OPT += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
--endif
-+QUOTA_DEPENDENCIES = $(gettext-if-locale)
-+QUOTA_MAKE_OPT += LDFLAGS="$(TARGET_LDFLAGS) $(gettext-LDFLAGS-if-locale)"
- 
- # Package uses autoconf but not automake.
- QUOTA_INSTALL_TARGET_OPT = \
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index 1416393..9024d53 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_SSHFS
- 	bool "sshfs (FUSE)"
- 	select BR2_PACKAGE_LIBFUSE
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_OPENSSH
- 	depends on BR2_LARGEFILE
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 23e62e0..7ec254b 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
-@@ -9,7 +9,7 @@ SSHFS_SITE = http://downloads.sourceforge.net/project/fuse/sshfs-fuse/$(SSHFS_VE
- SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
- SSHFS_DEPENDENCIES = \
- 	libglib2 libfuse openssh \
--	$(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext) \
-+	$(gettext-if-locale) \
- 	$(if $(BR2_ENABLE_LOCALE),,libiconv)
- 
- $(eval $(autotools-package))
-diff --git a/package/sysstat/Config.in b/package/sysstat/Config.in
-index 834e99b..8d899cf 100644
---- a/package/sysstat/Config.in
-+++ b/package/sysstat/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_SYSSTAT
- 	bool "sysstat"
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	# Uses fork()
- 	depends on BR2_USE_MMU
- 	help
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 794d70b..5aff21c 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -13,10 +13,8 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
- SYSSTAT_CONF_OPT += --disable-documentation
- endif
- 
--ifeq ($(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),y)
--SYSSTAT_DEPENDENCIES += gettext
--SYSSTAT_MAKE_OPT += CFLAGS+=-lintl
--endif
-+SYSSTATDEPENDENCIES += $(gettext-if-locale)
-+SYSSTAT_MAKE_OPT += CFLAGS+=$(gettext-LDFLAGS-if-locale)
- 
- # The isag tool is a post processing script that depends on tcl/tk
- # among other things. So we don't install it.
-diff --git a/package/ushare/Config.in b/package/ushare/Config.in
-index eb1d2b2..c5fb516 100644
---- a/package/ushare/Config.in
-+++ b/package/ushare/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_USHARE
- 	bool "ushare"
- 	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_LIBUPNP
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
- 	  It implements the server component that provides UPnP media devices
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index aa47618..697a384 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -9,10 +9,8 @@ USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
- USHARE_SITE = http://ushare.geexbox.org/releases
- USHARE_DEPENDENCIES = host-pkg-config libupnp
- 
--ifeq ($(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),y)
--USHARE_DEPENDENCIES += gettext
--USHARE_LDFLAGS += -lintl
--endif
-+USHARE_DEPENDENCIES += $(gettext-if-locale)
-+USHARE_LDFLAGS += $(gettext-LDFLAGS-if-locale)
- 
- define USHARE_CONFIGURE_CMDS
- 	(cd $(@D); \
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 43a8444..3f56a57 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_UTIL_LINUX
- 	bool "util-linux"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
-+	select BR2_NEEDS_GETTEXT
- 	help
- 	  Various useful/essential Linux utilities.
- 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 71a6c53..2260af1 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -29,10 +29,8 @@ else
- UTIL_LINUX_CONF_OPT += --without-ncurses
- endif
- 
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
--UTIL_LINUX_DEPENDENCIES += gettext
--UTIL_LINUX_MAKE_OPT += LIBS=-lintl
--endif
-+UTIL_LINUX_DEPENDENCIES += $(gettext)
-+UTIL_LINUX_MAKE_OPT += LIBS="$(gettext-LDFLAGS)"
- 
- #############################################
- #
-diff --git a/package/vala/Config.in b/package/vala/Config.in
-index 0021895..4e542c4 100644
---- a/package/vala/Config.in
-+++ b/package/vala/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_VALA
- 	bool "vala"
- 	depends on BR2_USE_WCHAR # glib2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE
-+	select BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Compiler for the GObject type system.
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index fef51da..01bae20 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -9,8 +9,7 @@ VALA_VERSION_MINOR = 6
- VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
--VALA_DEPENDENCIES = host-flex libglib2 \
--		$(if $(BR2_NEEDS_EXTERNAL_GETTEXT_IF_LOCALE),gettext)
-+VALA_DEPENDENCIES = host-flex libglib2 $(gettext-if-locale)
- HOST_VALA_DEPENDENCIES = host-flex host-libglib2
- 
- $(eval $(autotools-package))
+Status         : NOK
+Failure reason : linux-pam-1.1.4
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 01:05:26
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/4fd161ffef4697759a908e6e551327718827e126/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/4fd161ffef4697759a908e6e551327718827e126/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/4fd161ffef4697759a908e6e551327718827e126/config
+Defconfig      : http://autobuild.buildroot.net/results/4fd161ffef4697759a908e6e551327718827e126/defconfig
+
+Build 5159f0fda898d6fdac704ac6680b2ff0453393e5
+==============================================
+
+Status         : NOK
+Failure reason : gnutls-2.12.20
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 02:14:22
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/5159f0fda898d6fdac704ac6680b2ff0453393e5/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/5159f0fda898d6fdac704ac6680b2ff0453393e5/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/5159f0fda898d6fdac704ac6680b2ff0453393e5/config
+Defconfig      : http://autobuild.buildroot.net/results/5159f0fda898d6fdac704ac6680b2ff0453393e5/defconfig
+
+Build f805bb46695607f497282f0ecb8ac585f89a7e19
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 03:24:47
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/f805bb46695607f497282f0ecb8ac585f89a7e19/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/f805bb46695607f497282f0ecb8ac585f89a7e19/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/f805bb46695607f497282f0ecb8ac585f89a7e19/config
+Defconfig      : http://autobuild.buildroot.net/results/f805bb46695607f497282f0ecb8ac585f89a7e19/defconfig
+
+Build 0d8be16df7686d72e570649b9d14cdd01de7b79a
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-09-16 05:12:12
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/0d8be16df7686d72e570649b9d14cdd01de7b79a/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/0d8be16df7686d72e570649b9d14cdd01de7b79a/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/0d8be16df7686d72e570649b9d14cdd01de7b79a/config
+Defconfig      : http://autobuild.buildroot.net/results/0d8be16df7686d72e570649b9d14cdd01de7b79a/defconfig
+
+Build 4173c04cc38afaa3bd738379fa71d7e973f5ad21
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 05:25:40
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/4173c04cc38afaa3bd738379fa71d7e973f5ad21/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/4173c04cc38afaa3bd738379fa71d7e973f5ad21/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/4173c04cc38afaa3bd738379fa71d7e973f5ad21/config
+Defconfig      : http://autobuild.buildroot.net/results/4173c04cc38afaa3bd738379fa71d7e973f5ad21/defconfig
+
+Build 916eec225d10e28f6b025f50103d7812ee1d3881
+==============================================
+
+Status         : NOK
+Failure reason : libdaemon-0.14
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 05:29:17
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/916eec225d10e28f6b025f50103d7812ee1d3881/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/916eec225d10e28f6b025f50103d7812ee1d3881/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/916eec225d10e28f6b025f50103d7812ee1d3881/config
+Defconfig      : http://autobuild.buildroot.net/results/916eec225d10e28f6b025f50103d7812ee1d3881/defconfig
+
+Build 8d6fb5cc0e039ced02cd8b686d4373bd2cf74d4d
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 07:11:00
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/8d6fb5cc0e039ced02cd8b686d4373bd2cf74d4d/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/8d6fb5cc0e039ced02cd8b686d4373bd2cf74d4d/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/8d6fb5cc0e039ced02cd8b686d4373bd2cf74d4d/config
+Defconfig      : http://autobuild.buildroot.net/results/8d6fb5cc0e039ced02cd8b686d4373bd2cf74d4d/defconfig
+
+Build 250de62da8be809cf9fb35cb01a9757c07589989
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 07:14:28
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/250de62da8be809cf9fb35cb01a9757c07589989/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/250de62da8be809cf9fb35cb01a9757c07589989/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/250de62da8be809cf9fb35cb01a9757c07589989/config
+Defconfig      : http://autobuild.buildroot.net/results/250de62da8be809cf9fb35cb01a9757c07589989/defconfig
+
+Build 667e7e75e814da745a152a457955b95d84409202
+==============================================
+
+Status         : NOK
+Failure reason : sdl_net-1.2.8
+Architecture   : x86_64
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 07:21:35
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/667e7e75e814da745a152a457955b95d84409202/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/667e7e75e814da745a152a457955b95d84409202/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/667e7e75e814da745a152a457955b95d84409202/config
+Defconfig      : http://autobuild.buildroot.net/results/667e7e75e814da745a152a457955b95d84409202/defconfig
+
+Build a617028029c1baeb5cac58c08766113e23dd4586
+==============================================
+
+Status         : NOK
+Failure reason : host-vala-0.17.6
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-09-16 07:21:43
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/a617028029c1baeb5cac58c08766113e23dd4586/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/a617028029c1baeb5cac58c08766113e23dd4586/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/a617028029c1baeb5cac58c08766113e23dd4586/config
+Defconfig      : http://autobuild.buildroot.net/results/a617028029c1baeb5cac58c08766113e23dd4586/defconfig
+
+Build c5b183d79ff45f92bfc5bfd1999685557af469c2
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 07:35:45
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/c5b183d79ff45f92bfc5bfd1999685557af469c2/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/c5b183d79ff45f92bfc5bfd1999685557af469c2/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/c5b183d79ff45f92bfc5bfd1999685557af469c2/config
+Defconfig      : http://autobuild.buildroot.net/results/c5b183d79ff45f92bfc5bfd1999685557af469c2/defconfig
+
+Build 0d636dc261447d26da6f3316933923a6fe8bb386
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 08:02:33
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/0d636dc261447d26da6f3316933923a6fe8bb386/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/0d636dc261447d26da6f3316933923a6fe8bb386/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/0d636dc261447d26da6f3316933923a6fe8bb386/config
+Defconfig      : http://autobuild.buildroot.net/results/0d636dc261447d26da6f3316933923a6fe8bb386/defconfig
+
+Build 18a2336bfb962e3924652f9334526f5bae8ba4fd
+==============================================
+
+Status         : NOK
+Failure reason : imagemagick-6.7.8-8
+Architecture   : sh4
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 08:38:45
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/18a2336bfb962e3924652f9334526f5bae8ba4fd/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/18a2336bfb962e3924652f9334526f5bae8ba4fd/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/18a2336bfb962e3924652f9334526f5bae8ba4fd/config
+Defconfig      : http://autobuild.buildroot.net/results/18a2336bfb962e3924652f9334526f5bae8ba4fd/defconfig
+
+Build 2322dfed94b3f584b47ddce168c1593f66de31c2
+==============================================
+
+Status         : NOK
+Failure reason : libdrm-2.4.19
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 09:01:11
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/2322dfed94b3f584b47ddce168c1593f66de31c2/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/2322dfed94b3f584b47ddce168c1593f66de31c2/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/2322dfed94b3f584b47ddce168c1593f66de31c2/config
+Defconfig      : http://autobuild.buildroot.net/results/2322dfed94b3f584b47ddce168c1593f66de31c2/defconfig
+
+Build 08e8aeebaa81ee369d5199369e898508954d9a49
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 09:57:57
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/08e8aeebaa81ee369d5199369e898508954d9a49/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/08e8aeebaa81ee369d5199369e898508954d9a49/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/08e8aeebaa81ee369d5199369e898508954d9a49/config
+Defconfig      : http://autobuild.buildroot.net/results/08e8aeebaa81ee369d5199369e898508954d9a49/defconfig
+
+Build bcee7d35df567f89d975bd066afd1a8f411fb880
+==============================================
+
+Status         : NOK
+Failure reason : dhcpdump-1.8
+Architecture   : avr32
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 10:02:05
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/bcee7d35df567f89d975bd066afd1a8f411fb880/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/bcee7d35df567f89d975bd066afd1a8f411fb880/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/bcee7d35df567f89d975bd066afd1a8f411fb880/config
+Defconfig      : http://autobuild.buildroot.net/results/bcee7d35df567f89d975bd066afd1a8f411fb880/defconfig
+
+Build 032b0b29b6f232e6c11ed143b0ba31a9be09c07c
+==============================================
+
+Status         : NOK
+Failure reason : alsa-lib-1.0.25
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 10:08:41
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/032b0b29b6f232e6c11ed143b0ba31a9be09c07c/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/032b0b29b6f232e6c11ed143b0ba31a9be09c07c/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/032b0b29b6f232e6c11ed143b0ba31a9be09c07c/config
+Defconfig      : http://autobuild.buildroot.net/results/032b0b29b6f232e6c11ed143b0ba31a9be09c07c/defconfig
+
+Build 9bca9019b9dc79eb0a61026f18d396ab25309263
+==============================================
+
+Status         : NOK
+Failure reason : kexec-2.0.3
+Architecture   : avr32
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 10:26:37
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/9bca9019b9dc79eb0a61026f18d396ab25309263/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/9bca9019b9dc79eb0a61026f18d396ab25309263/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/9bca9019b9dc79eb0a61026f18d396ab25309263/config
+Defconfig      : http://autobuild.buildroot.net/results/9bca9019b9dc79eb0a61026f18d396ab25309263/defconfig
+
+Build a019ab3753e8a63d193dddec6836a75e82489730
+==============================================
+
+Status         : NOK
+Failure reason : gsl-1.15
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 11:37:38
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/a019ab3753e8a63d193dddec6836a75e82489730/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/a019ab3753e8a63d193dddec6836a75e82489730/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/a019ab3753e8a63d193dddec6836a75e82489730/config
+Defconfig      : http://autobuild.buildroot.net/results/a019ab3753e8a63d193dddec6836a75e82489730/defconfig
+
+Build b395091b0c0cc451d34357189c1c7fe9eeaa7a5c
+==============================================
+
+Status         : NOK
+Failure reason : pulseaudio-2.0
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 11:48:21
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/b395091b0c0cc451d34357189c1c7fe9eeaa7a5c/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/b395091b0c0cc451d34357189c1c7fe9eeaa7a5c/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/b395091b0c0cc451d34357189c1c7fe9eeaa7a5c/config
+Defconfig      : http://autobuild.buildroot.net/results/b395091b0c0cc451d34357189c1c7fe9eeaa7a5c/defconfig
+
+Build e1a0ab37c1053c0afb6188fa6bbed669979ab23f
+==============================================
+
+Status         : NOK
+Failure reason : make: *** [/home/test/dl/gdb-.tar.bz2] Error 1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 11:49:24
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/e1a0ab37c1053c0afb6188fa6bbed669979ab23f/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/e1a0ab37c1053c0afb6188fa6bbed669979ab23f/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/e1a0ab37c1053c0afb6188fa6bbed669979ab23f/config
+Defconfig      : http://autobuild.buildroot.net/results/e1a0ab37c1053c0afb6188fa6bbed669979ab23f/defconfig
+
+Build aac3330ba23a72a62a235460c551197a12ef7150
+==============================================
+
+Status         : NOK
+Failure reason : gdbhost-7.4.1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 11:57:00
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/aac3330ba23a72a62a235460c551197a12ef7150/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/aac3330ba23a72a62a235460c551197a12ef7150/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/aac3330ba23a72a62a235460c551197a12ef7150/config
+Defconfig      : http://autobuild.buildroot.net/results/aac3330ba23a72a62a235460c551197a12ef7150/defconfig
+
+Build 11cd9d8fbe34d5b1f3b24d63c5919b1a6564f37e
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 11:57:57
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/11cd9d8fbe34d5b1f3b24d63c5919b1a6564f37e/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/11cd9d8fbe34d5b1f3b24d63c5919b1a6564f37e/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/11cd9d8fbe34d5b1f3b24d63c5919b1a6564f37e/config
+Defconfig      : http://autobuild.buildroot.net/results/11cd9d8fbe34d5b1f3b24d63c5919b1a6564f37e/defconfig
+
+Build 59d4348b15ea613c0dc34674d2cbf16b87daa557
+==============================================
+
+Status         : NOK
+Failure reason : libdaemon-0.14
+Architecture   : sh2a
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 12:00:08
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/59d4348b15ea613c0dc34674d2cbf16b87daa557/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/59d4348b15ea613c0dc34674d2cbf16b87daa557/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/59d4348b15ea613c0dc34674d2cbf16b87daa557/config
+Defconfig      : http://autobuild.buildroot.net/results/59d4348b15ea613c0dc34674d2cbf16b87daa557/defconfig
+
+Build bf8c9138d18fde5c4c0e2c06fcf85e65b1591f09
+==============================================
+
+Status         : NOK
+Failure reason : linux-pam-1.1.4
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 12:33:04
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/bf8c9138d18fde5c4c0e2c06fcf85e65b1591f09/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/bf8c9138d18fde5c4c0e2c06fcf85e65b1591f09/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/bf8c9138d18fde5c4c0e2c06fcf85e65b1591f09/config
+Defconfig      : http://autobuild.buildroot.net/results/bf8c9138d18fde5c4c0e2c06fcf85e65b1591f09/defconfig
+
+Build e79ddb55a546cc939d31d10bee7a4d12aa024993
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 12:34:10
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/e79ddb55a546cc939d31d10bee7a4d12aa024993/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/e79ddb55a546cc939d31d10bee7a4d12aa024993/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/e79ddb55a546cc939d31d10bee7a4d12aa024993/config
+Defconfig      : http://autobuild.buildroot.net/results/e79ddb55a546cc939d31d10bee7a4d12aa024993/defconfig
+
+Build 996450ffc752ba14cf1d5646a391225ba1dd5220
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-09-16 12:59:39
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/996450ffc752ba14cf1d5646a391225ba1dd5220/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/996450ffc752ba14cf1d5646a391225ba1dd5220/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/996450ffc752ba14cf1d5646a391225ba1dd5220/config
+Defconfig      : http://autobuild.buildroot.net/results/996450ffc752ba14cf1d5646a391225ba1dd5220/defconfig
+
+Build 676547601dc149f7c27d9eefc9c96f7a6e2e4c48
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : sh4a
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 13:53:52
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/676547601dc149f7c27d9eefc9c96f7a6e2e4c48/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/676547601dc149f7c27d9eefc9c96f7a6e2e4c48/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/676547601dc149f7c27d9eefc9c96f7a6e2e4c48/config
+Defconfig      : http://autobuild.buildroot.net/results/676547601dc149f7c27d9eefc9c96f7a6e2e4c48/defconfig
+
+Build 31298626d1f480fb24bb26ee8edd5441aa58fd7a
+==============================================
+
+Status         : NOK
+Failure reason : make: *** [/home/test/dl/gdb-.tar.bz2] Error 1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 14:29:09
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/31298626d1f480fb24bb26ee8edd5441aa58fd7a/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/31298626d1f480fb24bb26ee8edd5441aa58fd7a/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/31298626d1f480fb24bb26ee8edd5441aa58fd7a/config
+Defconfig      : http://autobuild.buildroot.net/results/31298626d1f480fb24bb26ee8edd5441aa58fd7a/defconfig
+
+Build 57b12f7d469e16af420c92d33edeba6142ac71a1
+==============================================
+
+Status         : NOK
+Failure reason : busybox-1.20.2
+Architecture   : mipsel
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 14:29:41
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/config
+Defconfig      : http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/defconfig
+
+Build 64f478aa95ed1b416bbe6e1a36d7863d5983f4f2
+==============================================
+
+Status         : NOK
+Failure reason : boost-1.49.0
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 14:33:25
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/64f478aa95ed1b416bbe6e1a36d7863d5983f4f2/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/64f478aa95ed1b416bbe6e1a36d7863d5983f4f2/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/64f478aa95ed1b416bbe6e1a36d7863d5983f4f2/config
+Defconfig      : http://autobuild.buildroot.net/results/64f478aa95ed1b416bbe6e1a36d7863d5983f4f2/defconfig
+
+Build b6c85afe4b1415718acc5f1054ce1888e9c34d99
+==============================================
+
+Status         : NOK
+Failure reason : host-vala-0.17.6
+Architecture   : arm
+Submitted by   : Peter Korsgaard (gcc10)
+Submitted at   : 2012-09-16 14:43:09
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/b6c85afe4b1415718acc5f1054ce1888e9c34d99/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/b6c85afe4b1415718acc5f1054ce1888e9c34d99/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/b6c85afe4b1415718acc5f1054ce1888e9c34d99/config
+Defconfig      : http://autobuild.buildroot.net/results/b6c85afe4b1415718acc5f1054ce1888e9c34d99/defconfig
+
+Build c785a39d09c212d2ed5b00f35ab8b7724331cbe8
+==============================================
+
+Status         : NOK
+Failure reason : poco-1.4.3p1
+Architecture   : i686
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 17:05:19
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/c785a39d09c212d2ed5b00f35ab8b7724331cbe8/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/c785a39d09c212d2ed5b00f35ab8b7724331cbe8/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/c785a39d09c212d2ed5b00f35ab8b7724331cbe8/config
+Defconfig      : http://autobuild.buildroot.net/results/c785a39d09c212d2ed5b00f35ab8b7724331cbe8/defconfig
+
+Build 2df51e8cb5be72bae3e1cf72c860fcb51f711a25
+==============================================
+
+Status         : NOK
+Failure reason : make: *** [/home/test/dl/gdb-.tar.bz2] Error 1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 18:54:05
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/2df51e8cb5be72bae3e1cf72c860fcb51f711a25/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/2df51e8cb5be72bae3e1cf72c860fcb51f711a25/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/2df51e8cb5be72bae3e1cf72c860fcb51f711a25/config
+Defconfig      : http://autobuild.buildroot.net/results/2df51e8cb5be72bae3e1cf72c860fcb51f711a25/defconfig
+
+Build 01232d3b3fc0f248afdc17acdcb780835e720664
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 19:29:22
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/01232d3b3fc0f248afdc17acdcb780835e720664/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/01232d3b3fc0f248afdc17acdcb780835e720664/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/01232d3b3fc0f248afdc17acdcb780835e720664/config
+Defconfig      : http://autobuild.buildroot.net/results/01232d3b3fc0f248afdc17acdcb780835e720664/defconfig
+
+Build 99035e89e101c41d5e8b5ef6a025856f4af88ae2
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 20:04:39
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/99035e89e101c41d5e8b5ef6a025856f4af88ae2/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/99035e89e101c41d5e8b5ef6a025856f4af88ae2/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/99035e89e101c41d5e8b5ef6a025856f4af88ae2/config
+Defconfig      : http://autobuild.buildroot.net/results/99035e89e101c41d5e8b5ef6a025856f4af88ae2/defconfig
+
+Build d2856cab4a0b6c10941e4e7ce2457ae00268d56c
+==============================================
+
+Status         : NOK
+Failure reason : iproute2-3.5.1
+Architecture   : arm
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 20:17:06
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/d2856cab4a0b6c10941e4e7ce2457ae00268d56c/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/d2856cab4a0b6c10941e4e7ce2457ae00268d56c/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/d2856cab4a0b6c10941e4e7ce2457ae00268d56c/config
+Defconfig      : http://autobuild.buildroot.net/results/d2856cab4a0b6c10941e4e7ce2457ae00268d56c/defconfig
+
+Build 1cf93a78655335a1baf4d66042ddfc6e236a4673
+==============================================
+
+Status         : NOK
+Failure reason : opus-tools-0.1.5
+Architecture   : i686
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 20:51:53
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/1cf93a78655335a1baf4d66042ddfc6e236a4673/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/1cf93a78655335a1baf4d66042ddfc6e236a4673/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/1cf93a78655335a1baf4d66042ddfc6e236a4673/config
+Defconfig      : http://autobuild.buildroot.net/results/1cf93a78655335a1baf4d66042ddfc6e236a4673/defconfig
+
+Build 09371a0aaec0fd04c2475172e4a97e98f2ba2f92
+==============================================
+
+Status         : NOK
+Failure reason : attr-2.4.46
+Architecture   : bfin
+Submitted by   : Thomas Petazzoni (Free Electrons build server)
+Submitted at   : 2012-09-16 20:52:13
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/09371a0aaec0fd04c2475172e4a97e98f2ba2f92/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/09371a0aaec0fd04c2475172e4a97e98f2ba2f92/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/09371a0aaec0fd04c2475172e4a97e98f2ba2f92/config
+Defconfig      : http://autobuild.buildroot.net/results/09371a0aaec0fd04c2475172e4a97e98f2ba2f92/defconfig
+
+Build efcf263017ace5b32f37f68bae4c19dcd42681f9
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 22:16:14
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/efcf263017ace5b32f37f68bae4c19dcd42681f9/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/efcf263017ace5b32f37f68bae4c19dcd42681f9/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/efcf263017ace5b32f37f68bae4c19dcd42681f9/config
+Defconfig      : http://autobuild.buildroot.net/results/efcf263017ace5b32f37f68bae4c19dcd42681f9/defconfig
+
+Build b9b1bd7d096788592aeaadd6201565e28a30d051
+==============================================
+
+Status         : NOK
+Failure reason : host-erlang-R15B01
+Architecture   : powerpc
+Submitted by   : Peter Korsgaard (gcc14)
+Submitted at   : 2012-09-16 22:53:27
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
+End of log     : http://autobuild.buildroot.net/results/b9b1bd7d096788592aeaadd6201565e28a30d051/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/b9b1bd7d096788592aeaadd6201565e28a30d051/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/b9b1bd7d096788592aeaadd6201565e28a30d051/config
+Defconfig      : http://autobuild.buildroot.net/results/b9b1bd7d096788592aeaadd6201565e28a30d051/defconfig
+
+
+
 -- 
-1.7.2.5
+http://autobuild.buildroot.net
