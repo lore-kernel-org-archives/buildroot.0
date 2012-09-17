@@ -1,30 +1,33 @@
-From: David Sanchez Herrero <david.krusty@gmail.com>
-Date: Tue, 18 Sep 2012 00:35:51 +0200
-Subject: [Buildroot] Error on ssh login: "loadkmap: can't open console"
-Message-ID: <CAMPeO9xZFoP5fKy5VhvUNaF0C2qB0TJxPnB53mwfd5P5FjKduw@mail.gmail.com>
+From: Ryan Mallon <rmallon@gmail.com>
+Date: Tue, 18 Sep 2012 08:41:26 +1000
+Subject: [Buildroot] [PATCH] libsndfile: select BR2_LARGEFILE
+Message-ID: <5057A716.4070702@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
+typedef alias for off_t. This is not true by default for all
+tool-chains, which leads to a runtime assert failure in binaries
+compiled against libsndfile. See:
+    
+  http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+   
+Select BR2_LARGEFILE for libsndfile so that sizeof(off_t) == 8.
+    
+Signed-off-by: Ryan Mallon <rmallon@gmail.com>
+---
 
-I'm getting this error after login when connecting to Raspberry using ssh,
-with a non root user. This error isn't shown when I login locally with the
-same user.
-If I run loadkmap manually, I get the same error, but with sudo, the error
-doesn't appear:
-
-$ loadkmap < /usr/share/keymaps/es.bmap
-loadkmap: can't open console
-$ sudo loadkmap < /usr/share/keymaps/es.bmap
-Password:
-$
-
-Any ideas about the problem??
-
-Thanks in advance, David.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120918/a472dfae/attachment.html>
+diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
+index 9afe496..4897ed1 100644
+--- a/package/libsndfile/Config.in
++++ b/package/libsndfile/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBSNDFILE
+        bool "libsndfile"
++       select BR2_LARGEFILE
+        help
+          Libsndfile is a C library for reading and writing files containing
+          sampled sound (such as MS Windows WAV and the Apple/SGI AIFF format)
