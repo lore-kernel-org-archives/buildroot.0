@@ -1,11 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 17 Sep 2012 22:58:46 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Add FAQ entry how to properly add
-	package from github.
-In-Reply-To: <1347914801-20681-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1347746247-12033-2-git-send-email-marek.belisko@open-nandra.com>
- <1347914801-20681-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <201209172258.46415.yann.morin.1998@free.fr>
+Date: Mon, 17 Sep 2012 23:01:54 +0200
+Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
+In-Reply-To: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <201209172301.54610.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,55 +12,81 @@ To: buildroot@busybox.net
 
 Marek, All,
 
-On Monday 17 September 2012 22:46:41 Marek Belisko wrote:
+On Monday 17 September 2012 22:34:17 Marek Belisko wrote:
+> Add support for raspberrypi bootloader and VideoCore.
+
+See my comments below.
+
 > Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+> 
+> Added changes from Arnout comments:
+> (http://lists.busybox.net/pipermail/buildroot/2012-September/058565.html)
+> - add rasberrypi-firmware as separate package
+> - change Config.in handling to have separate bootloader and
+>   VideoCore packages (handled in same mk file)
+> - various other fixes
+> 
+> New features:
+> - add possibility to choose ARM - GPU memory split by user
+> - download package in tar.gz instead git method
+> 
 > ---
->  docs/manual/faq.txt |   23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+>  package/Config.in                                  |    1 +
+>  package/raspberrypi-firmware/Config.in             |   53 ++++++++++++++++++++
+>  .../raspberrypi-firmware/raspberrypi-firmware.mk   |   48 ++++++++++++++++++
+>  3 files changed, 102 insertions(+)
+>  create mode 100644 package/raspberrypi-firmware/Config.in
+>  create mode 100644 package/raspberrypi-firmware/raspberrypi-firmware.mk
 > 
-> diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
-> index 575d019..d2ffb07 100644
-> --- a/docs/manual/faq.txt
-> +++ b/docs/manual/faq.txt
-> @@ -36,3 +36,26 @@ then probably you are running a Fedora (or similar) distribution, and
->  you should install the +glibc-static+ package. This is because the
->  +module-init-tools+ build process wants to link statically against the
->  C library.
+> diff --git a/package/Config.in b/package/Config.in
+> index 58dd5e8..36635cd 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -232,6 +232,7 @@ source "package/owl-linux/Config.in"
+>  source "package/parted/Config.in"
+>  source "package/pciutils/Config.in"
+>  source "package/picocom/Config.in"
+> +source "package/raspberrypi-firmware/Config.in"
+>  source "package/read-edid/Config.in"
+>  source "package/rng-tools/Config.in"
+>  source "package/sane-backends/Config.in"
+> diff --git a/package/raspberrypi-firmware/Config.in b/package/raspberrypi-firmware/Config.in
+> new file mode 100644
+> index 0000000..55abd68
+> --- /dev/null
+> +++ b/package/raspberrypi-firmware/Config.in
+> @@ -0,0 +1,53 @@
+> +config BR2_PACKAGE_RASPBERRYPI_FIRMWARE
+> +	bool
 > +
-> +How to add package from github
-> +------------------------------
-> +
-> +If the package has no release version, or its version cannot be
-> +identified using tag, then the sha1 of the particular commit should be
-> +used to identify the version (the first 7 characters of the sha1 are
-> +enough):
-> +
-> +------------------------
-> +FOO_VERSION = 1234567
-> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
-> +FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
-> +------------------------
-> +
-> +If the package version matches a tag, then this tag should be used to
-> +identify the version:
-> +
-> +------------------------
-> +FOO_VERSION = v1.0
-> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
-> +FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
-> +------------------------
-> -- 
-> 1.7.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+> +config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER
+> +        bool "Raspberry Pi bootloader files"
+
+Space-damage: config option should be indented one tab, not 8 spaces,
+and help entries are indented one tab plus two spaces, not 10 spaces.
+
+> +	select BR2_PACKAGE_RASPBERRYPI_FIRMWARE
+
+I am not too fond of this hack... :-(
+
+The issue with this 'package' is that it's two things:
+  - a package that installs the videocore library;
+  - a package that installs the bootloader files.
+
+So, I would really like to see the bootloader entries in the bootloader
+sub-menu, and the library part in the "packages on target" sub-menu.
+
+I'll look at this shortly (having recently received my rPi), and hope to
+be able to come back later tonight with an alternate proposal.
+
+The big issue is that there is no provision in BR to handle this situation,
+as it is currently expected that an upstream package only provides a single
+package in BR.
+
+So, NACK from me in the state it is currently.
+
+Regards,
+Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
