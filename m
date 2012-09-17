@@ -1,41 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Sep 2012 19:00:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-09-16
-In-Reply-To: <20120917063237.C9EAE428029@lolut.humanoidz.org>
-References: <20120917063237.C9EAE428029@lolut.humanoidz.org>
-Message-ID: <20120917190011.557394ea@skate>
+Date: Mon, 17 Sep 2012 19:05:00 +0200
+Subject: [Buildroot] [PATCH] libsndfile: Add -D_FILE_OFFSET_BITS=64 to
+ configuration
+In-Reply-To: <5056C7AE.9000401@gmail.com>
+References: <5056C7AE.9000401@gmail.com>
+Message-ID: <20120917190500.5a1ab662@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Ryan Mallon,
 
-On Mon, 17 Sep 2012 08:32:37 +0200 (CEST), Thomas Petazzoni wrote:
-
-> Build 57b12f7d469e16af420c92d33edeba6142ac71a1
-> ==============================================
+On Mon, 17 Sep 2012 16:48:14 +1000, Ryan Mallon wrote:
+> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
+> typedef alias for off_t. This is not true by default for all
+> tool-chains, which leads to a runtime assert failure in binaries
+> compiled against libsndfile. See:
+>     
+>   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+>    
+> Add -D_FILE_OFFSET_BITS=64 to the configuration for libsndfile to
+> ensure that off_t is the correct size.
+>     
+> Signed-off-by: Ryan Mallon <rmallon@gmail.com>
+> ---
 > 
-> Status         : NOK
-> Failure reason : busybox-1.20.2
-> Architecture   : mipsel
-> Submitted by   : Thomas Petazzoni (Free Electrons build server)
-> Submitted at   : 2012-09-16 14:29:41
-> Git commit ID  :
-> http://git.buildroot.net/buildroot/commit/?id=f1e79957f857c12bba3d930d6c4b0278ab737132
-> End of log     :
-> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/build-end.log
-> Complete log   :
-> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/build.log.bz2
-> Configuration  :
-> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/config
-> Defconfig      :
-> http://autobuild.buildroot.net/results/57b12f7d469e16af420c92d33edeba6142ac71a1/defconfig
+> diff --git a/package/libsndfile/libsndfile.mk
+> b/package/libsndfile/libsndfile.m index e5fbb5e..5e39aca 100644
+> --- a/package/libsndfile/libsndfile.mk
+> +++ b/package/libsndfile/libsndfile.mk
+> @@ -7,5 +7,7 @@
+>  LIBSNDFILE_VERSION = 1.0.25
+>  LIBSNDFILE_SITE = http://www.mega-nerd.com/libsndfile/files
+>  LIBSNDFILE_INSTALL_STAGING = YES
+> +LIBSNDFILE_CFLAGS = $(TARGET_CFLAGS) -D_FILE_OFFSET_BITS=64
+> +LIBSNDFILE_CONF_ENV += CFLAGS="$(LIBSNDFILE_CFLAGS)"
 
-Fixed this one. It was also a problem in the toolchain default
-configuration, since the MIPS64 configuration options clean up has been
-merged.
+This looks strange: Buildroot already automatically passes
+-D_FILE_OFFSET_BITS=64 when BR2_LARGEFILE=y, see package/Makefile.in.
 
 Thomas
 -- 
