@@ -1,53 +1,53 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Sep 2012 00:06:16 +0200
-Subject: [Buildroot] Fwd: Re:  Basic questions about using BuildRoot
-In-Reply-To: <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
-References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
- <5055A940.7070802@ronetix.at>
- <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
- <5055C935.3050108@ronetix.at>
- <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
-Message-ID: <5058F058.1020806@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 19 Sep 2012 00:24:25 +0200
+Subject: [Buildroot] [PATCH 2/2] target: add different methods to encode
+	the root password
+In-Reply-To: <5058EFE9.5050707@mind.be>
+References: <1347574590-13716-1-git-send-email-yann.morin.1998@free.fr>
+ <1347574590-13716-2-git-send-email-yann.morin.1998@free.fr>
+ <5058EFE9.5050707@mind.be>
+Message-ID: <201209190024.25455.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/17/12 12:43, Thomas De Schampheleire wrote:
-> If you're only interested in the rootfs, you could use the original,
-> working u-boot and use the rootfs from buildroot. Have you tried that?
->
->> >
->> >  One question beyond the theme: is it possible to build only Root FS
->> >  compatible with some external Kernel without any tool and if so how to do
->> >  that?
+Arnout, All,
 
-  Indeed, it is entirely possible to use buildroot to build a rootfs and
-combine it with a pre-built kernel.  There is usually no dependency
-of an executable on a specific kernel version, because the kernel
-ABI is backward-compatible. When you build an internal or
-crosstool-NG toolchain in buildroot, however, do make sure that
-you use kernel headers with a sufficiently low version (smaller than
-or equal to the pre-built kernel you use).
+On Wednesday 19 September 2012 00:04:25 Arnout Vandecappelle wrote:
+> On 09/14/12 00:16, Yann E. MORIN wrote:
+> > The password can be encoded in different ways (from the weakest
+> > to the strongest): des, md5, sha-256, sha-512
+> >
+> > Add a choice entry to select the method, defaulting to 'des'.
+> >
+> > Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+> 
+> I think this is going way too far for just setting the root password. I 
+> would just make it an md5 crypt (which is supported by all uClibc versions)
+> and be done with it.
 
-  If you do want to build a custom kernel later on, you need two
-things: the source and the config. Whoever gave you the kernel
-binary is also obliged to give you the source (GPL), so that should
-be doable. The config you can usually get from the running kernel,
-in /proc/config.gz.
+OK, I'll respin a single patch with only MD5-encrypted password.
 
+To be noted however, is that MD5 is now sensible to attacks:
+    http://www.kb.cert.org/vuls/id/836068
 
-  Good luck!
+There's even an attack that can find collisions within seconds on a P4:
+    http://www.win.tue.nl/hashclash/On%20Collisions%20for%20MD5%20-%20M.M.J.%20Stevens.pdf
 
-  Regards,
-  Arnout
+Thus, I'll add to the help text that this should not be considered for
+production use for publicly-reachable devices (eg. appliances...), and
+that the security of the device should not rely on the root password being
+strongly-enough encrypted; something in this vein...
+
+Regards,
+Yann E. MORIN.
 
 -- 
-
-Arnout Vandecappelle             arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . +32-16-286540 . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 31BB CF53 8660 6F88 345D 54CC A836 5879 20D7 CF43
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
