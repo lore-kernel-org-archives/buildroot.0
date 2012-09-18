@@ -1,43 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 19:58:40 +0200
-Subject: [Buildroot] [PATCH 08/11] package/pulseaudio: fix
- build-dependency on gettext
-In-Reply-To: <1347836276-24262-9-git-send-email-yann.morin.1998@free.fr>
-References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
- <1347836276-24262-9-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20120918195840.7d2af5af@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 18 Sep 2012 21:28:45 +0200
+Subject: [Buildroot] [PATCH v2] vala: fix documentation build problem
+In-Reply-To: <1347961957-14841-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 18 Sep 2012 11:52:37 +0200")
+References: <1347961957-14841-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a9wnnn9u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 17 Sep 2012 00:57:53 +0200, Yann E. MORIN wrote:
-> In its Config.in, pulseaudio declares a dependency on gettext
-> using the documented construct:
->     select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-> 
-> but in its .mk file, declares a dependency on the package:
->     PULSEAUDIO_DEPENDENCIES = [...] $(if $(BR2_PACKAGE_GETTEXT),gettext) [...]
-> 
-> instead of the documented:
->     $(if $(BR2_NEEDS_GETTEXT),gettext)
-> 
-> Fix that.
+ Thomas> On gcc10, the build of the host-vala documentation causes a
+ Thomas> segmentation fault of xsltproc, for some unknown reason. See:
 
-Some other packages seem to suffer from the same problem, for example
-diffutils. Why are you fixing pulseaudio separately, and not diffutils,
-which gets fixed in your 11/11 patch:
+Committed, thanks.
 
--DIFFUTILS_DEPENDENCIES = \
--       $(if $(BR2_PACKAGE_GETTEXT),gettext)
-+DIFFUTILS_DEPENDENCIES = $(gettext)
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
