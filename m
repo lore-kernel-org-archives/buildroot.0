@@ -1,26 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 07:12:08 +0200
-Subject: [Buildroot] Exception for the release schedule?
-Message-ID: <20120918071208.78dfa6d0@skate>
+Date: Tue, 18 Sep 2012 07:55:51 +0200
+Subject: [Buildroot] [PATCH] libsndfile: Add dependency on BR2_LARGEFILE
+In-Reply-To: <505801FF.20207@gmail.com>
+References: <505801FF.20207@gmail.com>
+Message-ID: <20120918075551.5f3c294c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Dear Ryan Mallon,
 
-According to our usual release schedule, 2012.11-rc1 should be released
-at the end of October, and the final 2012.11 at the end November.
+On Tue, 18 Sep 2012 15:09:19 +1000, Ryan Mallon wrote:
+> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
+> typedef alias for off_t. This is not true by default for all
+> tool-chains, which leads to a runtime assert failure in binaries
+> compiled against libsndfile. See:
+>     
+>   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+>     
+> Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
+> BR2_LARGEFILE is not selected.
+>     
+> Signed-off-by: Ryan Mallon <rmallon@gmail.com>
 
-Do you think it would be possible to make an exception, and delay
-2012.11-rc1 by one week? This would allow 2012.11-rc1 to be released
-*after* the Buildroot Developers Meeting (November 3-4) in Barcelona.
-This would be nice since I expect within the two days of this meeting
-that we will review and ack quite a bit of pending material, which
-would be good to have in 2012.11.
+Ok, looks better. But now you need to udpate all the reverse
+dependencies of libsndfile (i.e, all packages that select
+BR2_PACKAGE_LIBSNDFILE), to add the same BR2_LARGEFILE dependency. This
+concerns bluez_utils, gst-plugins-bad, mpd and pulseaudio.
 
-What do you think of this?
+(Note: this problem should be simplified once we get Yann's work on
+the _AVAILABLE thing merged, but in the mean time, we have to handle
+those reverse dependencies manually).
 
 Best regards,
 
