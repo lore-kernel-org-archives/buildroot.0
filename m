@@ -1,62 +1,79 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 18 Sep 2012 19:47:31 +0200
-Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
-In-Reply-To: <20120918070934.2e3182bf@skate>
-References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
- <201209172350.27316.yann.morin.1998@free.fr> <20120918070934.2e3182bf@skate>
-Message-ID: <201209181947.32049.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Sep 2012 19:55:18 +0200
+Subject: [Buildroot] [PATCH 10/11] toolchain/common: introduce blind
+ options BR2_NEEDS_GETTEXT{, _IF_LOCALE}
+In-Reply-To: <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
+References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+ <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20120918195518.163c409d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Marek, All,
+Dear Yann E. MORIN,
 
-On Tuesday 18 September 2012 07:09:34 Thomas Petazzoni wrote:
-> On Mon, 17 Sep 2012 23:50:27 +0200, Yann E. MORIN wrote:
-> > What would be the interest to install the GPU boot files, but not install
-> > the VideoCore libraries? Or the other way around, what would be the intrest
-> > to install the VidoeCore library without the GPU boot files?
-
-> The GPU boot files are needed to actually boot the ARM processor. So
-> technically speaking, they are some kind of first-stage bootloader for
-> the ARM processor, even if they get executed on the GPU.
+On Mon, 17 Sep 2012 00:57:55 +0200, Yann E. MORIN wrote:
+> Introduce two new blind config options:
+>   - BR2_NEEDS_GETTEXT
+>         selects the gettext package if the toolchain does not provide it
+>   - BR2_NEEDS_GETTEXT_IF_LOCALE
+>         ditto, but only if locales are enabled
 > 
-> So, if you want to use the RasberryPi, you *must* install those GPU
-> boot files. However, if you're not using the RasberryPi for a 3D
-> graphical application, you don't necessarily need the VideoCore library
-> files. So I think it makes sense to be able to install the GPU boot
-> files separately from the VideoCore library.
+> Packages can then select either if they require gettext (resp. if locales
+> are enabled).
+> 
+> This will simplify the packages Config.in by no longer requiring that the
+> 'select' be conditional, thus hiding the gory details out of packages,
+> which don't really need to know about those details.
 
-Ah, OK, that's one more thing I learned, so I won;t have to discover the
-hard way when plugging my RPI first (later tonight! :-) )
+Nice.
 
-So, basically, the initial interest for this package is to provide the
-bootloader files, hence I believe the package should go in the bootloader
-sub-menu.
+> Also, introduce four new Makefile variables:
+>   - $(gettext)
+>         contains the needed dependencies for pacakges that need gettext
+>         functioanlity: 'gettext' if the gettext pacakge is needed, empty
+>         otherwise
+>   - $(gettext-if-locale)
+>         ditto, but only if locales are enabled
+>   - $(gettext-LDFLAGS)
+>         contains the required LDFLAGS ("-lintl") if gettext is provided by
+>         the gettext package, empty otherwise
+>   - $(gettext-LDFLAGS-if-locale)
+>         ditto, but only if locales are enabled
+> 
+> Packages can then add either variable to their own LDFLAGS.
 
-Then we can add a VideoCoreIV package in one of the "packages on target"
-sub-menu ("libs -> hardware handling" sounds the most adequate AFAICS).
+I am happy about the entire patch set, except those $(gettext),
+$(gettext-if-locale), $(gettext-LDFLAGS) and
+$(gettext-LDFLAGS-if-locale) variables. Even though they admittedly
+make the code a bit shorter, I think they needlessly hide what is
+really happening. I very much prefer an explicit:
 
-> The underlying problem here is a fundamental weakness in Buildroot
-> design: the absence of separation between source packages and binary
-> packages. We have the same situation quite often for other things. For
-> example the "curl" package. It provides both a library "libcurl", and a
-> program "curl" that relies on that library. Should this package be
-> under "Libraries -> Networking" or under "Networking applications" ?
-> Ditto for many, many of our packages.
+FOO_DEPENDENCIES += $(if $(BR2_NEEDS_GETTEXT),gettext)
 
-Ok, so I'll prepare that patch of mine to add this package, so we can
-compare with Marek's solution.
+(which doesn't use any special construct)
 
-Regards,
-Yann E. MORIN.
+rather than the more strange:
 
+FOO_DEPENDENCIES += $(gettext)
+
+I know I'm annoying by rejecting many new additional constructs, but I
+think such constructs are crossing the boundary of shortness vs.
+readability.
+
+Of course, this is only my opinion, and if others are strongly in
+favor of this approach, then I'll learn to live with it, but I think
+it's a dangerous direction for the readability of .mk files. If you
+respin your patch set without those constructs, you'll have my Acked-by
+on the whole thing.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
