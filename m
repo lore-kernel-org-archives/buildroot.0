@@ -1,66 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Sep 2012 22:59:47 +0200
-Subject: [Buildroot] [PATCH] vala: fix documentation build problem
-In-Reply-To: <1347914008-3054-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1347914008-3054-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <5058E0C3.8070502@mind.be>
+Date: Tue, 18 Sep 2012 23:08:39 +0200
+Subject: [Buildroot] Exception for the release schedule?
+In-Reply-To: <20120918071208.78dfa6d0@skate>
+References: <20120918071208.78dfa6d0@skate>
+Message-ID: <5058E2D7.7040606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/17/12 22:33, Thomas Petazzoni wrote:
-> On gcc10, the build of the host-vala documentation causes a
-> segmentation fault of xsltproc, for some unknown reason. See:
+On 09/18/12 07:12, Thomas Petazzoni wrote:
+> Peter,
 >
->    http://autobuild.buildroot.org/results/42fea25ac4fe33a56c02d90c361da1c494f79ba3/build-end.log
+> According to our usual release schedule, 2012.11-rc1 should be released
+> at the end of October, and the final 2012.11 at the end November.
 >
-> Therefore, this patch fixes the problem by:
+> Do you think it would be possible to make an exception, and delay
+> 2012.11-rc1 by one week? This would allow 2012.11-rc1 to be released
+> *after* the Buildroot Developers Meeting (November 3-4) in Barcelona.
+> This would be nice since I expect within the two days of this meeting
+> that we will review and ack quite a bit of pending material, which
+> would be good to have in 2012.11.
 >
->   * Ensuring that host-libxslt is amongst the dependency of vala (vala
->     for the target) so that we build a well-known version of
->     libxslt/xsltproc.
->
->   * Disabling the build of the documentation for host-vala. Note that
->     we need to pass ':' as the xsltproc binary name to teach the
->     configure script that xsltproc is not available.
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> ---
->   package/vala/vala.mk |    8 ++++++++
->   1 file changed, 8 insertions(+)
->
-> diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-> index 984043c..83c45b0 100644
-> --- a/package/vala/vala.mk
-> +++ b/package/vala/vala.mk
-> @@ -9,9 +9,17 @@ VALA_VERSION_MINOR = 6
->   VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
->   VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
->   VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
-> +
->   VALA_DEPENDENCIES = host-flex libglib2 \
->   		$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
-> +ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-> +VALA_DEPENDENCIES += host-libxslt
+> What do you think of this?
 
-  Don't you need ac_cv_path_XSLTPROC=: in the else case too?
+  Excellent plan!
 
   Regards,
   Arnout
-
-> +endif
-> +
->   HOST_VALA_DEPENDENCIES = host-flex host-libglib2
-> +# Yes, the autoconf script understands ':' as "xsltproc is not
-> +# available".
-> +HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
->
->   $(eval $(autotools-package))
->   $(eval $(host-autotools-package))
-
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
