@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 07:09:34 +0200
-Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
-In-Reply-To: <201209172350.27316.yann.morin.1998@free.fr>
-References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
- <201209172301.54610.yann.morin.1998@free.fr>
- <201209172350.27316.yann.morin.1998@free.fr>
-Message-ID: <20120918070934.2e3182bf@skate>
+Date: Tue, 18 Sep 2012 07:12:08 +0200
+Subject: [Buildroot] Exception for the release schedule?
+Message-ID: <20120918071208.78dfa6d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Peter,
 
-On Mon, 17 Sep 2012 23:50:27 +0200, Yann E. MORIN wrote:
+According to our usual release schedule, 2012.11-rc1 should be released
+at the end of October, and the final 2012.11 at the end November.
 
-> What would be the interest to install the GPU boot files, but not install
-> the VideoCore libraries? Or the other way around, what would be the intrest
-> to install the VidoeCore library without the GPU boot files?
+Do you think it would be possible to make an exception, and delay
+2012.11-rc1 by one week? This would allow 2012.11-rc1 to be released
+*after* the Buildroot Developers Meeting (November 3-4) in Barcelona.
+This would be nice since I expect within the two days of this meeting
+that we will review and ack quite a bit of pending material, which
+would be good to have in 2012.11.
 
-The GPU boot files are needed to actually boot the ARM processor. So
-technically speaking, they are some kind of first-stage bootloader for
-the ARM processor, even if they get executed on the GPU.
+What do you think of this?
 
-So, if you want to use the RasberryPi, you *must* install those GPU
-boot files. However, if you're not using the RasberryPi for a 3D
-graphical application, you don't necessarily need the VideoCore library
-files. So I think it makes sense to be able to install the GPU boot
-files separately from the VideoCore library.
-
-The underlying problem here is a fundamental weakness in Buildroot
-design: the absence of separation between source packages and binary
-packages. We have the same situation quite often for other things. For
-example the "curl" package. It provides both a library "libcurl", and a
-program "curl" that relies on that library. Should this package be
-under "Libraries -> Networking" or under "Networking applications" ?
-Ditto for many, many of our packages.
+Best regards,
 
 Thomas
 -- 
