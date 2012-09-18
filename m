@@ -1,33 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 Sep 2012 08:16:01 +0200
-Subject: [Buildroot] Exception for the release schedule?
-In-Reply-To: <20120918071208.78dfa6d0@skate> (Thomas Petazzoni's message of
- "Tue, 18 Sep 2012 07:12:08 +0200")
-References: <20120918071208.78dfa6d0@skate>
-Message-ID: <87ipbbonz2.fsf@macbook.be.48ers.dk>
+Date: Tue, 18 Sep 2012 08:21:09 +0200
+Subject: [Buildroot] Splitting this list
+In-Reply-To: <CAJpxd05FN2NVVaQ2CAMkpRDvazFiqhSAqBEOgd+=Yc9JrDbZgA@mail.gmail.com>
+ (Bryce Schober's message of "Mon, 17 Sep 2012 11:58:21 -0700")
+References: <CAJpxd05FN2NVVaQ2CAMkpRDvazFiqhSAqBEOgd+=Yc9JrDbZgA@mail.gmail.com>
+Message-ID: <87ehlzonqi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Bryce" == Bryce Schober <bryce.schober@gmail.com> writes:
 
- Thomas> Peter,
- Thomas> According to our usual release schedule, 2012.11-rc1 should be released
- Thomas> at the end of October, and the final 2012.11 at the end November.
+ Bryce> It seems to me that this list could benefit from a split to
+ Bryce> buildroot-user & buildroot-dev. There's an awful lot of
+ Bryce> developer "noise" for those trying to get off the ground and get
+ Bryce> working. Just a thought...
 
- Thomas> Do you think it would be possible to make an exception, and
- Thomas> delay 2012.11-rc1 by one week? This would allow 2012.11-rc1 to
- Thomas> be released *after* the Buildroot Developers Meeting (November
- Thomas> 3-4) in Barcelona.  This would be nice since I expect within
- Thomas> the two days of this meeting that we will review and ack quite
- Thomas> a bit of pending material, which would be good to have in
- Thomas> 2012.11.
+We've considered it in the past, but so far the feeling among the main
+developers favors a single list.
 
- Thomas> What do you think of this?
+Another proposal than -user / -dev was to move the git commit mails to a
+seperate list, which was brought up recently.
 
-Yes, I agree 100%. I did similar with 2012.02 (Fosdem).
+But splitting the list can also bring disadvantages, so I would prefer
+to keep it like it is, unless a lot of people think elsewise?
 
 -- 
 Bye, Peter Korsgaard
