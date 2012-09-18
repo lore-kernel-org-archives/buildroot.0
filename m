@@ -1,71 +1,103 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Sep 2012 23:53:26 +0200
-Subject: [Buildroot] Two packages with the same source [was: [PATCH] Add
-	package raspberrypi-firmware.]
-In-Reply-To: <20120918200622.472bf779@skate>
+Date: Wed, 19 Sep 2012 00:01:58 +0200
+Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
+In-Reply-To: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
 References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
- <201209172350.27316.yann.morin.1998@free.fr> <20120918070934.2e3182bf@skate>
- <201209181947.32049.yann.morin.1998@free.fr> <20120918200622.472bf779@skate>
-Message-ID: <5058ED56.6090701@mind.be>
+Message-ID: <5058EF56.3070208@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/18/12 20:06, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
->
-> On Tue, 18 Sep 2012 19:47:31 +0200, Yann E. MORIN wrote:
->
->> So, basically, the initial interest for this package is to provide the
->> bootloader files, hence I believe the package should go in the bootloader
->> sub-menu.
->>
->> Then we can add a VideoCoreIV package in one of the "packages on target"
->> sub-menu ("libs ->  hardware handling" sounds the most adequate AFAICS).
->
-> And so this package would "depends on" a bootloader?
->
-> Marek made it clear at the beginning: even though this
-> rasberrypi-firmware package contains a bootloader, he decided to put it
-> in package/ because it also contains userspace libraries. And Marek
-> wanted to avoid having two separate packages, because it would be that
-> you would download the same original tarball (or Git repository) twice,
-> have two packages to upgrade when bumping the version, etc.
->
-> Note that we however already have a relatively similar situation with
-> u-boot: we have boot/uboot for the bootloader and package/u-boot-tools
-> for the host and target utilities.
+On 09/17/12 22:34, Marek Belisko wrote:
+[snip]
+> diff --git a/package/raspberrypi-firmware/raspberrypi-firmware.mk b/package/raspberrypi-firmware/raspberrypi-firmware.mk
+> new file mode 100644
+> index 0000000..1ebf67c
+> --- /dev/null
+> +++ b/package/raspberrypi-firmware/raspberrypi-firmware.mk
+> @@ -0,0 +1,48 @@
+> +RASPBERRYPI_FIRMWARE_VERSION = d29291e
+> +RASPBERRYPI_FIRMWARE_SOURCE = raspberrypi-firmware-$(RASPBERRYPI_FIRMWARE_VERSION).tar.gz
 
-  And also e.g. for the kernel headers - which basically means Gustavo's
-patches are doubled :-)
+  That's the default, so it can be left out.
 
+> +RASPBERRYPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/master
+> +
+> +ifeq ($(BR2_PACKAGE_RASPBERRYPI_VIDEOCORE),y)
+> +RASPBERRYPI_FIRMWARE_INSTALL_STAGING = YES
+> +
+> +define RASPBERRYPI_FIRMWARE_INSTALL_STAGING_CMDS
+> +	cp -r $(@D)/hardfp/opt $(STAGING_DIR)/
 
-> It is clearly a lack of separation between source package and binary
-> packages that is causing problem here. We should normally have one
-> source package: rasberrypi-firmware, that provides two binary packages:
-> rasberrypi-bootloader and rasberrypi-videocore-libs.
+  The same reasoning as for the target applies here as well: we want
+the cross-compiler to find the headers and libraries without
+requiring special -I and -L directives.  So copy them to /usr/include
+and /usr/lib.
 
-  I've been thinking a bit about this problem as well.  As an intermediate
-solution, I considered the concept of a "source dependency".  You'd
-basically do something like:
+> +endef
+> +
+> +define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_VIDEOCORE
+> +	cp -r $(@D)/hardfp/opt/vc/bin $(TARGET_DIR)/usr/bin
 
-UBOOT_TOOLS_SOURCE_PACKAGE = UBOOT
+  Doesn't this create /usr/bin/bin ? To be safe, use -T .
 
-and the generic-package infrastructure will re-use uboot's download step.
-This would replace the _VERSION, _SOURCE and _SITE symbols for uboot-tools.
+> +	cp -r $(@D)/hardfp/opt/vc/lib $(TARGET_DIR)/usr/lib
+> +	cp -r $(@D)/hardfp/opt/vc/sbin $(TARGET_DIR)/usr/sbin
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RASPBERRYPI_BOOTLOADER),y)
+> +BOOT_FILE := #empty
+> +ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM128),y)
+> +BOOT_FILE += arm128_start.elf
+> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM192),y)
+> +BOOT_FILE += arm192_start.elf
+> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM224),y)
+> +BOOT_FILE += arm224_start.elf
+> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM240),y)
+> +BOOT_FILE += arm240_start.elf
+> +endif
+> +
+> +define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_BOOTLOADER
+> +	if [ ! -d "$(TARGET_DIR)/boot" ]; then \
+> +		mkdir $(TARGET_DIR)/boot; \
+> +	fi; \
 
-  Unfortunately, for uboot-tools and kernel-headers it's a bit more complex,
-because you have to select a version for uboot and kernel so you can't
-easily add an automatic dependency on it.
+  Just "mkdir -p $(TARGET_DIR)/boot".  Or even better, replace the cp
+below with
+	install -D -m 0644 <fromfile> <tofile>
 
-  Note that I would still extract, patch and build the packages twice,
-because the procedure may be different (just like for host-packages).
+> +	cp $(@D)/boot/$(subst $(space),$(comma),$(strip $(BOOT_FILE))) \
+
+  I guess this must be a leftover from some earlier magic, because
+BOOT_FILE can contain only a single entry, and even if there are
+several bootfiles, replacing spaces by commas won't help.
+
+  If you want to support the installation of several bootfiles, you
+should use
+	for bootfile in $(BOOT_FILE) bootcode.bin loader.bin; do \
+		install -D -m $(@D)/boot/$$bootfile $(TARGET_DIR)/boot/$$bootfile; \
+	done
 
 
   Regards,
   Arnout
+
+> +		$(TARGET_DIR)/boot/start.elf
+> +	cp $(@D)/boot/bootcode.bin $(TARGET_DIR)/boot/bootcode.bin
+> +	cp $(@D)/boot/loader.bin $(TARGET_DIR)/boot/loader.bin
+> +endef
+> +endif
+> +
+> +define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_CMDS
+> +	$(RASPBERRYPI_FIRMWARE_INSTALL_TARGET_BOOTLOADER)
+> +	$(RASPBERRYPI_FIRMWARE_INSTALL_TARGET_VIDEOCORE)
+> +endef
+> +
+> +$(eval $(generic-package))
+> +
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
