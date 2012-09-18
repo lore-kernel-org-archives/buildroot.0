@@ -1,86 +1,133 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 18 Sep 2012 08:01:14 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Add FAQ entry how to properly add
- package from github.
-In-Reply-To: <201209172258.46415.yann.morin.1998@free.fr>
-References: <1347746247-12033-2-git-send-email-marek.belisko@open-nandra.com>
- <1347914801-20681-1-git-send-email-marek.belisko@open-nandra.com>
- <201209172258.46415.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMMKyQM5HnKFf6Hgqh8BcVDdYYcRLuv8CMWc-6YJFSTzH=A@mail.gmail.com>
+From: Ryan Mallon <rmallon@gmail.com>
+Date: Tue, 18 Sep 2012 16:13:15 +1000
+Subject: [Buildroot] [PATCH] libsndfile: Add dependency on BR2_LARGEFILE
+In-Reply-To: <20120918075551.5f3c294c@skate>
+References: <505801FF.20207@gmail.com> <20120918075551.5f3c294c@skate>
+Message-ID: <505810FB.20004@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/9/17 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Marek, All,
+On 18/09/12 15:55, Thomas Petazzoni wrote:
+> Dear Ryan Mallon,
 >
-> On Monday 17 September 2012 22:46:41 Marek Belisko wrote:
->> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+> On Tue, 18 Sep 2012 15:09:19 +1000, Ryan Mallon wrote:
+>> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
+>> typedef alias for off_t. This is not true by default for all
+>> tool-chains, which leads to a runtime assert failure in binaries
+>> compiled against libsndfile. See:
+>>     
+>>   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
+>>     
+>> Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
+>> BR2_LARGEFILE is not selected.
+>>     
+>> Signed-off-by: Ryan Mallon <rmallon@gmail.com>
+> Ok, looks better. But now you need to udpate all the reverse
+> dependencies of libsndfile (i.e, all packages that select
+> BR2_PACKAGE_LIBSNDFILE), to add the same BR2_LARGEFILE dependency. This
+> concerns bluez_utils, gst-plugins-bad, mpd and pulseaudio.
 >
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-
+> (Note: this problem should be simplified once we get Yann's work on
+> the _AVAILABLE thing merged, but in the mean time, we have to handle
+> those reverse dependencies manually).
 >
->> ---
->>  docs/manual/faq.txt |   23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->>
->> diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
->> index 575d019..d2ffb07 100644
->> --- a/docs/manual/faq.txt
->> +++ b/docs/manual/faq.txt
->> @@ -36,3 +36,26 @@ then probably you are running a Fedora (or similar) distribution, and
->>  you should install the +glibc-static+ package. This is because the
->>  +module-init-tools+ build process wants to link statically against the
->>  C library.
->> +
->> +How to add package from github
->> +------------------------------
->> +
->> +If the package has no release version, or its version cannot be
->> +identified using tag, then the sha1 of the particular commit should be
->> +used to identify the version (the first 7 characters of the sha1 are
->> +enough):
->> +
->> +------------------------
->> +FOO_VERSION = 1234567
->> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
->> +FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
->> +------------------------
->> +
->> +If the package version matches a tag, then this tag should be used to
->> +identify the version:
->> +
->> +------------------------
->> +FOO_VERSION = v1.0
->> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
->> +FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
->> +------------------------
->> --
->> 1.7.9.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
+Like this? I can repost in full if needed.
 
+~Ryan
 
--- 
-Sam
+---
+
+diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
+index d63284d..3003277 100644
+--- a/package/bluez_utils/Config.in
++++ b/package/bluez_utils/Config.in
+@@ -20,9 +20,13 @@ config BR2_PACKAGE_BLUEZ_UTILS_AUDIO
+ 	bool "audio support"
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_LIBSNDFILE
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Audio support
+ 
++comment "bluez-utils audio requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
++
+ config BR2_PACKAGE_BLUEZ_UTILS_USB
+ 	bool "USB support"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+diff --git a/package/libsndfile/Config.in b/package/libsndfile/Config.in
+index 9afe496..21e1591 100644
+--- a/package/libsndfile/Config.in
++++ b/package/libsndfile/Config.in
+@@ -1,8 +1,12 @@
+ config BR2_PACKAGE_LIBSNDFILE
+ 	bool "libsndfile"
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Libsndfile is a C library for reading and writing files containing
+ 	  sampled sound (such as MS Windows WAV and the Apple/SGI AIFF format)
+ 	  through one standard library interface.
+ 
+ 	  http://www.mega-nerd.com/libsndfile/
++
++comment "libsndfile requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 7784ad7..f767ed4 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -297,6 +297,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDL
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SNDFILE
+ 	bool "sndfile"
+ 	select BR2_PACKAGE_LIBSNDFILE
++	depends on BR2_LARGEFILE
++
++comment "gst-plugins-bad-plugin-sndfile requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+ 
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VCD
+ 	bool "vcd"
+diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
+index c7c0cd7..ff9f573 100644
+--- a/package/multimedia/mpd/Config.in
++++ b/package/multimedia/mpd/Config.in
+@@ -103,10 +103,14 @@ config BR2_PACKAGE_MPD_LIBSAMPLERATE
+ config BR2_PACKAGE_MPD_LIBSNDFILE
+ 	bool "libsndfile"
+ 	select BR2_PACKAGE_LIBSNDFILE
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Enable libsndfile input/streaming support.
+ 	  Select this if you want to play back WAV files.
+ 
++comment "mpd-libsndfile requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
++
+ config BR2_PACKAGE_MPD_MAD
+ 	bool "mad"
+ 	default y
+diff --git a/package/multimedia/pulseaudio/Config.in b/package/multimedia/pulseaudio/Config.in
+index 6e6d64c..9e4084c 100644
+--- a/package/multimedia/pulseaudio/Config.in
++++ b/package/multimedia/pulseaudio/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_PULSEAUDIO
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_SPEEX
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT
++	depends on BR2_LARGEFILE
+ 	help
+ 	  PulseAudio is a sound system for POSIX OSes, meaning that it
+ 	  is a proxy for your sound applications. It allows you to do
+@@ -17,5 +18,8 @@ config BR2_PACKAGE_PULSEAUDIO
+ 
+ 	  http://pulseaudio.org
+ 
++comment "pulseaudio depends on a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
++
+ comment "pulseaudio requires a toolchain with WCHAR support"
+ 	depends on !BR2_USE_WCHAR
