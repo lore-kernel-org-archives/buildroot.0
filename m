@@ -1,42 +1,87 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Sep 2012 23:18:05 +0200
-Subject: [Buildroot] [PATCH 1/2] pcsc-lite: new package
-In-Reply-To: <1347970538-25087-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
-References: <1347970538-25087-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
-Message-ID: <5058E50D.8040005@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 18 Sep 2012 23:17:47 +0200
+Subject: [Buildroot] [PATCH 0/11 v3] Rework the gettext handling
+In-Reply-To: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+U=KZQcTy30C3HB_Kc328O76+w8c91rKrmH_VCwiuioQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/18/12 14:15, Waldemar Rymarkiewicz wrote:
-> +PCSC_LITE_CONF_OPT = --disable-libudev --enable-libusb
-> +PCSC_LITE_DEPENDENCIES = libusb
+Hi Yann,
 
-  IIRC, libusb is really optional for pcsc-lite. You can use a
-construct like:
+2012/9/17 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Hello All!
+>
+> This patch series is an aggregation of the gettext rework by Samuel,
+> Maxime, Thomas, and I.
+>
+> See this post for the 6 first patches:
+> http://lists.busybox.net/pipermail/buildroot/2012-July/055871.html
+>
+>     [PATCH 01/11] gettext: remove option to build statically
+>     [PATCH 02/11] gettext: remove the gettext-target make target, unused
+>     [PATCH 03/11] gettext: remove libintl handling
+>     [PATCH 04/11] Remove all references to libintl
+>     [PATCH 05/11] gettext: convert to autotools-package
+>     [PATCH 06/11] doc: update after gettext changes
+>
+> The following 2 patches fix two packages in preparation for the end of the
+> series:
+>
+>     [PATCH 07/11] package/lshw: add missing dependency on gettext
+>     [PATCH 08/11] package/pulseaudio: fix build-dependency on gettext
+>
+> See this post for an explanation for the next 3 patches:
+> http://lists.busybox.net/pipermail/buildroot/2012-August/058042.html
+>
+>     [PATCH 09/11] toolchain/common: rename BR2_NEEDS_GETTEXT
+>     [PATCH 10/11] toolchain/common: introduce blind options
+>                   BR2_NEEDS_GETTEXT{,_IF_LOCALE}
+>     [PATCH 11/11] packages: use the new gettext mechanism
+>
+> The tests were done with two external uClibc-based toolchains built with
+> crosstool-NG, one with locale support, the other without. All packages
+> touched by the series were first built with both toolchains and the series
+> not applied (to check for any non-series related issues, see gmpc below),
+> then the series was fully applied, and the packages all re-built from
+> scratch.
+>
+> gmpc failed to build, even before the series was applied, because it does
+> not link with -lm and thus misses some sumbols (eg. floor(3)). All other
+> packages were built successfully (albeit using a great deal of electrons
+> in the process! ;-) ). No test-run was done on my side.
+>
+> Changes since v2:
+>   - fix conversion to autotools to always build libintl, even if locales are
+>     disabled, to fix packages that always require NLS
+>   - thus removed Arnout's Tested-by on patch 5/11, as it has changed
+>   - rebase on-top latest tree
+>   - also C: Samuel on the introductory message
+>
+> Changes since v1:
+>   - drop the gettext-before-all patch (Arnout, Thomas)
+>   - keep and simplify build-dependency against gettext (Arnout)
+>   - add config-dependency against gettext for diffutils, flex, ndisc6
+>     and util-linux, in patch 11
+>   - rebase on-top latest tree (and upgrade new package linux-pam in the
+>     process)
+>   - update doc
+>   - add Tested-by and Acked-by Arnout were he said so
+>   - CC: Samuel Martin as a recognition for his original work on this topic,
+>     which this series is based on. (Arnout)
+>
+> Regards,
+> Yann E. MORIN.
 
-ifeq ($(BR2_PACKAGE_LIBUSB),y)
-PCSC_LITE_CONF_OPT += --enable-libusb
-PCSC_LITE_DEPENDENCIES += libusb
-else
-PCSC_LITE_CONF_OPT += --disable-libusb
-endif
+You have my Acked-by for the whole series.
+
+Again, thanks for this great work.
 
 
-  And maybe similarly for udev.
+Yours,
 
-
-  Your mileage may vary, though. And I think the HAS_THREADS may
-still be needed for pcsc-lite itself.
-
-  Regards,
-  Arnout
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Sam
