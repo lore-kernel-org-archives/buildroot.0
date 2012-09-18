@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 16:20:53 +0200
-Subject: [Buildroot] [PATCH 1/2] pcsc-lite: new package
-In-Reply-To: <1347970538-25087-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+Date: Tue, 18 Sep 2012 16:22:24 +0200
+Subject: [Buildroot] [PATCH 2/2] ccid: new package
+In-Reply-To: <1347970772-25135-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
 References: <1347970538-25087-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
-Message-ID: <20120918162053.1155b90f@skate>
+ <1347970772-25135-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+Message-ID: <20120918162224.338721a9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +13,29 @@ To: buildroot@busybox.net
 
 Dear Waldemar Rymarkiewicz,
 
-On Tue, 18 Sep 2012 14:15:37 +0200, Waldemar Rymarkiewicz wrote:
-> Middleware to access a smart card using SCard API (PC/SC).
-> 
-> http://pcsclite.alioth.debian.org/
-> 
-> Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
-> ---
->  package/Config.in              |    1 +
->  package/pcsc-lite/Config.in    |    6 ++++++
->  package/pcsc-lite/pcsc-lite.mk |   13 +++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/pcsc-lite/Config.in
->  create mode 100644 package/pcsc-lite/pcsc-lite.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index a4e0b2c..dcc84b6 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -395,6 +395,7 @@ source "package/libusb/Config.in"
->  source "package/libusb-compat/Config.in"
->  source "package/libv4l/Config.in"
->  source "package/mtdev/Config.in"
-> +source "package/pcsc-lite/Config.in"
->  endmenu
->  
->  menu "Javascript"
-> diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
-> new file mode 100644
-> index 0000000..7c26427
+On Tue, 18 Sep 2012 14:19:32 +0200, Waldemar Rymarkiewicz wrote:
 > --- /dev/null
-> +++ b/package/pcsc-lite/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PCSC_LITE
-> +	bool "pcsc-lite"
+> +++ b/package/ccid/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_CCID
+> +	bool "ccid"
+> +	select BR2_PACKAGE_PCSC_LITE
 
-Since you depend on libusb, you must add:
-
-	select BR2_PACKAGE_LIBUSB
 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
 
 > +	help
-> +	  Middleware to accesss smart card using SCard API (PC/SC).
+> +	  PC/SC driver for USB CCID smart card readers
 > +
-> +	  http://pcsclite.alioth.debian.org/
+> +	  http://pcsclite.alioth.debian.org/ccid.html
 
-And here:
-
-comment "pcsc-lite needs a toolchain with thread support"
+comment "ccid needs a toolchain with thread support"
 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+> +CCID_DEPENDENCIES = pcsc-lite libusb
+
+Does ccid directly uses libusb, or does it only use it through
+pcsc-lite? If the latter, then it would be better not to have libusb
+amongst the dependencies here.
 
 Best regards,
 
