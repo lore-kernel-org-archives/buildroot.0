@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 20:06:22 +0200
-Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
-In-Reply-To: <201209181947.32049.yann.morin.1998@free.fr>
-References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
- <201209172350.27316.yann.morin.1998@free.fr>
- <20120918070934.2e3182bf@skate>
- <201209181947.32049.yann.morin.1998@free.fr>
-Message-ID: <20120918200622.472bf779@skate>
+Date: Tue, 18 Sep 2012 19:58:40 +0200
+Subject: [Buildroot] [PATCH 08/11] package/pulseaudio: fix
+ build-dependency on gettext
+In-Reply-To: <1347836276-24262-9-git-send-email-yann.morin.1998@free.fr>
+References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+ <1347836276-24262-9-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20120918195840.7d2af5af@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +14,26 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Tue, 18 Sep 2012 19:47:31 +0200, Yann E. MORIN wrote:
-
-> So, basically, the initial interest for this package is to provide the
-> bootloader files, hence I believe the package should go in the bootloader
-> sub-menu.
+On Mon, 17 Sep 2012 00:57:53 +0200, Yann E. MORIN wrote:
+> In its Config.in, pulseaudio declares a dependency on gettext
+> using the documented construct:
+>     select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
 > 
-> Then we can add a VideoCoreIV package in one of the "packages on target"
-> sub-menu ("libs -> hardware handling" sounds the most adequate AFAICS).
+> but in its .mk file, declares a dependency on the package:
+>     PULSEAUDIO_DEPENDENCIES = [...] $(if $(BR2_PACKAGE_GETTEXT),gettext) [...]
+> 
+> instead of the documented:
+>     $(if $(BR2_NEEDS_GETTEXT),gettext)
+> 
+> Fix that.
 
-And so this package would "depends on" a bootloader?
+Some other packages seem to suffer from the same problem, for example
+diffutils. Why are you fixing pulseaudio separately, and not diffutils,
+which gets fixed in your 11/11 patch:
 
-Marek made it clear at the beginning: even though this
-rasberrypi-firmware package contains a bootloader, he decided to put it
-in package/ because it also contains userspace libraries. And Marek
-wanted to avoid having two separate packages, because it would be that
-you would download the same original tarball (or Git repository) twice,
-have two packages to upgrade when bumping the version, etc.
-
-Note that we however already have a relatively similar situation with
-u-boot: we have boot/uboot for the bootloader and package/u-boot-tools
-for the host and target utilities.
-
-It is clearly a lack of separation between source package and binary
-packages that is causing problem here. We should normally have one
-source package: rasberrypi-firmware, that provides two binary packages:
-rasberrypi-bootloader and rasberrypi-videocore-libs.
-
-Best regards,
+-DIFFUTILS_DEPENDENCIES = \
+-       $(if $(BR2_PACKAGE_GETTEXT),gettext)
++DIFFUTILS_DEPENDENCIES = $(gettext)
 
 Thomas
 -- 
