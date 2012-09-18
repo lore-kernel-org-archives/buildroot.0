@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 Sep 2012 21:28:45 +0200
-Subject: [Buildroot] [PATCH v2] vala: fix documentation build problem
-In-Reply-To: <1347961957-14841-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 18 Sep 2012 11:52:37 +0200")
-References: <1347961957-14841-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a9wnnn9u.fsf@macbook.be.48ers.dk>
+Date: Tue, 18 Sep 2012 21:30:53 +0200
+Subject: [Buildroot] [PATCH] libnspr: requires thread support in
+	toolchain
+In-Reply-To: <1347900274-31892-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 17 Sep 2012 18:44:34 +0200")
+References: <1347900274-31892-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87627bnn6a.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> On gcc10, the build of the host-vala documentation causes a
- Thomas> segmentation fault of xsltproc, for some unknown reason. See:
+ Thomas> Fixes
+ Thomas>  http://autobuild.buildroot.org/results/58e0784e2289a60fa51589d2ce0a7a8ffe40f07e/build-end.log
 
 Committed, thanks.
 
