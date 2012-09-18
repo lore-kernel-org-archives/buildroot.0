@@ -1,25 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Sep 2012 23:25:01 +0200
-Subject: [Buildroot] [PATCH 6/9] firefox: Mozilla Web Browser
-In-Reply-To: <505897DF.9070102@petroprogram.com>
-References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
- <1346855344-15081-7-git-send-email-stefan.froberg@petroprogram.com>
- <5057A4D4.60904@mind.be> <505897DF.9070102@petroprogram.com>
-Message-ID: <5058E6AD.7010303@mind.be>
+Date: Tue, 18 Sep 2012 23:26:40 +0200
+Subject: [Buildroot] [PATCH] Disable database support in linux-pam
+In-Reply-To: <1347442051-24329-1-git-send-email-golubovsky@gmail.com>
+References: <1347442051-24329-1-git-send-email-golubovsky@gmail.com>
+Message-ID: <5058E710.6060404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/18/12 17:48, Stefan Fr?berg wrote:
-> And because I don't have any other machines than x86  I can't test with ARM or MIPS
+On 09/12/12 11:27, Dmitry wrote:
+> Due to the conflicts with default Berkeley DB configuration, disable
+> database support in linux-pam: pam_userdb is not built.
+>
+> Signed-off-by: Dmitry<golubovsky@gmail.com>
 
-  You can do a build-test.  And if you really want, you can try to run it
-in QEMU.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  This is fixing autobuilder issues, right?  I think Peter commits
+faster if you add a link to an autobuilder failure :-)
+
 
   Regards,
   Arnout
+
+> ---
+>   package/linux-pam/linux-pam.mk |    1 +
+>   1 files changed, 1 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+> index 48cb073..08b5cf9 100644
+> --- a/package/linux-pam/linux-pam.mk
+> +++ b/package/linux-pam/linux-pam.mk
+> @@ -12,6 +12,7 @@ LINUX_PAM_CONF_OPT = \
+>   	--disable-prelude \
+>   	--disable-isadir \
+>   	--disable-nis \
+> +	--disable-db \
+>   	--disable-regenerate-docu \
+>   	--enable-securedir=/lib/security \
+>   	--libdir=/lib
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
