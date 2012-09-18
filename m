@@ -1,38 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Sep 2012 23:08:39 +0200
-Subject: [Buildroot] Exception for the release schedule?
-In-Reply-To: <20120918071208.78dfa6d0@skate>
-References: <20120918071208.78dfa6d0@skate>
-Message-ID: <5058E2D7.7040606@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 18 Sep 2012 23:16:52 +0200
+Subject: [Buildroot] [PATCH 10/11] toolchain/common: introduce blind
+ options BR2_NEEDS_GETTEXT{, _IF_LOCALE}
+In-Reply-To: <20120918195518.163c409d@skate>
+References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+ <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
+ <20120918195518.163c409d@skate>
+Message-ID: <CAHXCMMJajHR7i2hhVYfDa9RejnBV3ezBidALf=zqVwaXsp_0Hw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/18/12 07:12, Thomas Petazzoni wrote:
-> Peter,
->
-> According to our usual release schedule, 2012.11-rc1 should be released
-> at the end of October, and the final 2012.11 at the end November.
->
-> Do you think it would be possible to make an exception, and delay
-> 2012.11-rc1 by one week? This would allow 2012.11-rc1 to be released
-> *after* the Buildroot Developers Meeting (November 3-4) in Barcelona.
-> This would be nice since I expect within the two days of this meeting
-> that we will review and ack quite a bit of pending material, which
-> would be good to have in 2012.11.
->
-> What do you think of this?
+Hi Yann, Thomas, all,
 
-  Excellent plan!
+2012/9/18 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Yann E. MORIN,
+>
+> On Mon, 17 Sep 2012 00:57:55 +0200, Yann E. MORIN wrote:
+[...]
+>> Also, introduce four new Makefile variables:
+>>   - $(gettext)
+>>         contains the needed dependencies for pacakges that need gettext
+>>         functioanlity: 'gettext' if the gettext pacakge is needed, empty
+>>         otherwise
+>>   - $(gettext-if-locale)
+>>         ditto, but only if locales are enabled
+>>   - $(gettext-LDFLAGS)
+>>         contains the required LDFLAGS ("-lintl") if gettext is provided by
+>>         the gettext package, empty otherwise
+>>   - $(gettext-LDFLAGS-if-locale)
+>>         ditto, but only if locales are enabled
+>>
+>> Packages can then add either variable to their own LDFLAGS.
+>
+> I am happy about the entire patch set, except those $(gettext),
+> $(gettext-if-locale), $(gettext-LDFLAGS) and
+> $(gettext-LDFLAGS-if-locale) variables. Even though they admittedly
+> make the code a bit shorter, I think they needlessly hide what is
+> really happening. I very much prefer an explicit:
 
-  Regards,
-  Arnout
+I disagree with Thomas.
+True, this hides a bit the details, but I do not think it that's a bad thing.
+I mean gettext/locale support is somehow quite closely related to the
+toolchain, so, having these variables warns a bit more about what one
+is about to do.
+
+Though, these variables hide some things, it's pretty easy to find out
+their definitions; and IMHO, there are other things more hidden than
+this in BR. ;-)
+Besides, I think,  the variable names are clear, and won't easily lead
+to mistakes or misunderstandings.
+
+
+Yours,
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Sam
