@@ -1,44 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 07:55:51 +0200
-Subject: [Buildroot] [PATCH] libsndfile: Add dependency on BR2_LARGEFILE
-In-Reply-To: <505801FF.20207@gmail.com>
-References: <505801FF.20207@gmail.com>
-Message-ID: <20120918075551.5f3c294c@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 18 Sep 2012 08:01:14 +0200
+Subject: [Buildroot] [PATCH v2 2/2] Add FAQ entry how to properly add
+ package from github.
+In-Reply-To: <201209172258.46415.yann.morin.1998@free.fr>
+References: <1347746247-12033-2-git-send-email-marek.belisko@open-nandra.com>
+ <1347914801-20681-1-git-send-email-marek.belisko@open-nandra.com>
+ <201209172258.46415.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMKyQM5HnKFf6Hgqh8BcVDdYYcRLuv8CMWc-6YJFSTzH=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Mallon,
+2012/9/17 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Marek, All,
+>
+> On Monday 17 September 2012 22:46:41 Marek Belisko wrote:
+>> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-On Tue, 18 Sep 2012 15:09:19 +1000, Ryan Mallon wrote:
-> libsndfile requires sizeof(sf_count_t) == 8, where sf_count_t is a
-> typedef alias for off_t. This is not true by default for all
-> tool-chains, which leads to a runtime assert failure in binaries
-> compiled against libsndfile. See:
->     
->   http://permalink.gmane.org/gmane.comp.audio.libsndfile.devel/229
->     
-> Add a dependency on BR2_LARGEFILE for libsndfile, and a comment if
-> BR2_LARGEFILE is not selected.
->     
-> Signed-off-by: Ryan Mallon <rmallon@gmail.com>
+>
+>> ---
+>>  docs/manual/faq.txt |   23 +++++++++++++++++++++++
+>>  1 file changed, 23 insertions(+)
+>>
+>> diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
+>> index 575d019..d2ffb07 100644
+>> --- a/docs/manual/faq.txt
+>> +++ b/docs/manual/faq.txt
+>> @@ -36,3 +36,26 @@ then probably you are running a Fedora (or similar) distribution, and
+>>  you should install the +glibc-static+ package. This is because the
+>>  +module-init-tools+ build process wants to link statically against the
+>>  C library.
+>> +
+>> +How to add package from github
+>> +------------------------------
+>> +
+>> +If the package has no release version, or its version cannot be
+>> +identified using tag, then the sha1 of the particular commit should be
+>> +used to identify the version (the first 7 characters of the sha1 are
+>> +enough):
+>> +
+>> +------------------------
+>> +FOO_VERSION = 1234567
+>> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
+>> +FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
+>> +------------------------
+>> +
+>> +If the package version matches a tag, then this tag should be used to
+>> +identify the version:
+>> +
+>> +------------------------
+>> +FOO_VERSION = v1.0
+>> +FOO_SOURCE = <user>-<package>-$(FOO_VERSION).tar.gz
+>> +FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+>> +------------------------
+>> --
+>> 1.7.9.5
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Ok, looks better. But now you need to udpate all the reverse
-dependencies of libsndfile (i.e, all packages that select
-BR2_PACKAGE_LIBSNDFILE), to add the same BR2_LARGEFILE dependency. This
-concerns bluez_utils, gst-plugins-bad, mpd and pulseaudio.
 
-(Note: this problem should be simplified once we get Yann's work on
-the _AVAILABLE thing merged, but in the mean time, we have to handle
-those reverse dependencies manually).
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Sam
