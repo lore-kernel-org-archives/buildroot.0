@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Sep 2012 19:55:18 +0200
-Subject: [Buildroot] [PATCH 10/11] toolchain/common: introduce blind
- options BR2_NEEDS_GETTEXT{, _IF_LOCALE}
-In-Reply-To: <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
-References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
- <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20120918195518.163c409d@skate>
+Date: Tue, 18 Sep 2012 20:06:22 +0200
+Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
+In-Reply-To: <201209181947.32049.yann.morin.1998@free.fr>
+References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
+ <201209172350.27316.yann.morin.1998@free.fr>
+ <20120918070934.2e3182bf@skate>
+ <201209181947.32049.yann.morin.1998@free.fr>
+Message-ID: <20120918200622.472bf779@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,60 +15,32 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Mon, 17 Sep 2012 00:57:55 +0200, Yann E. MORIN wrote:
-> Introduce two new blind config options:
->   - BR2_NEEDS_GETTEXT
->         selects the gettext package if the toolchain does not provide it
->   - BR2_NEEDS_GETTEXT_IF_LOCALE
->         ditto, but only if locales are enabled
+On Tue, 18 Sep 2012 19:47:31 +0200, Yann E. MORIN wrote:
+
+> So, basically, the initial interest for this package is to provide the
+> bootloader files, hence I believe the package should go in the bootloader
+> sub-menu.
 > 
-> Packages can then select either if they require gettext (resp. if locales
-> are enabled).
-> 
-> This will simplify the packages Config.in by no longer requiring that the
-> 'select' be conditional, thus hiding the gory details out of packages,
-> which don't really need to know about those details.
+> Then we can add a VideoCoreIV package in one of the "packages on target"
+> sub-menu ("libs -> hardware handling" sounds the most adequate AFAICS).
 
-Nice.
+And so this package would "depends on" a bootloader?
 
-> Also, introduce four new Makefile variables:
->   - $(gettext)
->         contains the needed dependencies for pacakges that need gettext
->         functioanlity: 'gettext' if the gettext pacakge is needed, empty
->         otherwise
->   - $(gettext-if-locale)
->         ditto, but only if locales are enabled
->   - $(gettext-LDFLAGS)
->         contains the required LDFLAGS ("-lintl") if gettext is provided by
->         the gettext package, empty otherwise
->   - $(gettext-LDFLAGS-if-locale)
->         ditto, but only if locales are enabled
-> 
-> Packages can then add either variable to their own LDFLAGS.
+Marek made it clear at the beginning: even though this
+rasberrypi-firmware package contains a bootloader, he decided to put it
+in package/ because it also contains userspace libraries. And Marek
+wanted to avoid having two separate packages, because it would be that
+you would download the same original tarball (or Git repository) twice,
+have two packages to upgrade when bumping the version, etc.
 
-I am happy about the entire patch set, except those $(gettext),
-$(gettext-if-locale), $(gettext-LDFLAGS) and
-$(gettext-LDFLAGS-if-locale) variables. Even though they admittedly
-make the code a bit shorter, I think they needlessly hide what is
-really happening. I very much prefer an explicit:
+Note that we however already have a relatively similar situation with
+u-boot: we have boot/uboot for the bootloader and package/u-boot-tools
+for the host and target utilities.
 
-FOO_DEPENDENCIES += $(if $(BR2_NEEDS_GETTEXT),gettext)
-
-(which doesn't use any special construct)
-
-rather than the more strange:
-
-FOO_DEPENDENCIES += $(gettext)
-
-I know I'm annoying by rejecting many new additional constructs, but I
-think such constructs are crossing the boundary of shortness vs.
-readability.
-
-Of course, this is only my opinion, and if others are strongly in
-favor of this approach, then I'll learn to live with it, but I think
-it's a dangerous direction for the readability of .mk files. If you
-respin your patch set without those constructs, you'll have my Acked-by
-on the whole thing.
+It is clearly a lack of separation between source package and binary
+packages that is causing problem here. We should normally have one
+source package: rasberrypi-firmware, that provides two binary packages:
+rasberrypi-bootloader and rasberrypi-videocore-libs.
 
 Best regards,
 
