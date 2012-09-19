@@ -1,51 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Sep 2012 22:03:11 +0200
-Subject: [Buildroot] [PATCH] wpa-supplicant: add options to enable the
- new DBus interface
-In-Reply-To: <1348045377.23228.3.camel@sven>
-References: <1347525267-4536-1-git-send-email-s.neumann@raumfeld.com>
- <1347525267-4536-2-git-send-email-s.neumann@raumfeld.com>
- <505810D1.8070806@essensium.com> <1348045377.23228.3.camel@sven>
-Message-ID: <505A24FF.6020402@mind.be>
+Date: Wed, 19 Sep 2012 22:06:05 +0200
+Subject: [Buildroot] [PATCH 2/3] wpa_supplicant: remove redundant
+ escaping from sed commands
+In-Reply-To: <1348049503-1469-3-git-send-email-s.neumann@raumfeld.com>
+References: <5058EFD8.4010809@mind.be>
+ <1348049503-1469-1-git-send-email-s.neumann@raumfeld.com>
+ <1348049503-1469-3-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <505A25AD.10709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/19/12 11:02, Sven Neumann wrote:
-> Hi,
->
-> thanks a lot for your review. I'll make the changes you suggested, but I
-> am not sure about the following:
->
-> On Tue, 2012-09-18 at 08:12 +0200, Arnout Vandecappelle wrote:
->
->>> +config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD
->>> +	bool "Enable support for old DBus control interface"
->>> +        depends on BR2_PACKAGE_DBUS
->>
->>     Use 1 tab instead of 8 spaces (below as well).
->>
->>    Also, I think it's better to make this
->>       select BR2_PACKAGE_DBUS
->>       depends on BR2_TOOLCHAIN_HAS_THREADS
->>
->>    Also, since this only installs a .service file, and it used to be
->> always enabled before, I would make at least one of the two
->> DBus interfaces enabled by default.
->
-> If I follow this suggestion and enable one of the DBus interfaces by
-> default, then selecting wpa-supplicant would select DBus, which it did
-> not do before. Is that really desired?
+On 09/19/12 12:11, Sven Neumann wrote:
+> Signed-off-by: Sven Neumann<s.neumann@raumfeld.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(visual inspection only)
 
-  Actually, on second thought, it makes more sense to depend on dbus
-after all: .service files are installed if dbus is enabled.  That's also
-the old behaviour.
+  Although the third patch makes this one pretty much redundant...
+Still, it doesn't hurt to do it in separate steps.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
