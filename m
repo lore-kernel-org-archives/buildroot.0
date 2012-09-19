@@ -1,161 +1,107 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 19 Sep 2012 12:11:43 +0200
-Subject: [Buildroot] [PATCH 3/3] wpa_supplicant: introduce macros for
-	editing the .config file
-In-Reply-To: <1348049503-1469-1-git-send-email-s.neumann@raumfeld.com>
-References: <5058EFD8.4010809@mind.be>
- <1348049503-1469-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1348049503-1469-4-git-send-email-s.neumann@raumfeld.com>
+From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
+Date: Wed, 19 Sep 2012 14:52:29 +0200
+Subject: [Buildroot] [PATCH v2 1/2] pcsc-lite: new package
+Message-ID: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the substitutions on the .config file more readable by
-introducing macros to enable, disable certain options similar
-to the macros we use for editing KConfig files.
+Middleware to access a smart card using SCard API (PC/SC).
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+http://pcsclite.alioth.debian.org/
+
+Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk |   62 ++++++++++++++++++------------
- 1 file changed, 37 insertions(+), 25 deletions(-)
+ package/Config.in              |    1 +
+ package/pcsc-lite/Config.in    |   24 ++++++++++++++++++++++++
+ package/pcsc-lite/pcsc-lite.mk |   34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
+ create mode 100644 package/pcsc-lite/Config.in
+ create mode 100644 package/pcsc-lite/pcsc-lite.mk
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index e8d55d3..5337e5f 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,49 +15,61 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+diff --git a/package/Config.in b/package/Config.in
+index a4e0b2c..dcc84b6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -395,6 +395,7 @@ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
+ source "package/mtdev/Config.in"
++source "package/pcsc-lite/Config.in"
+ endmenu
  
-+define WPA_SUPPLICANT_CONFIG_DISABLE
-+	$(SED) 's/^\($(1).*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+endef
+ menu "Javascript"
+diff --git a/package/pcsc-lite/Config.in b/package/pcsc-lite/Config.in
+new file mode 100644
+index 0000000..94d37c5
+--- /dev/null
++++ b/package/pcsc-lite/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_PCSC_LITE
++	bool "pcsc-lite"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Middleware to accesss smart card using SCard API (PC/SC).
 +
-+define WPA_SUPPLICANT_CONFIG_ENABLE
-+	$(SED) 's/#\($(1).*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+endef
++	  http://pcsclite.alioth.debian.org/
 +
-+define WPA_SUPPLICANT_CONFIG_SET
-+	echo '$(1)=y' >> $(WPA_SUPPLICANT_CONFIG)
-+endef
++if BR2_PACKAGE_PCSC_LITE
 +
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	echo 'CONFIG_LIBNL32=y' >>$(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_LIBNL32)
- endef
- else
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_NL80211)
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
- define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/#\(CONFIG_EAP_AKA.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_FAST.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_GPSK.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_IKEV2.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_PAX.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_PSK.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_SAKE.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_SIM.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_TNC.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_AKA)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_FAST)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_GPSK)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_IKEV2)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PAX)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PSK)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_SAKE)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_SIM)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_TNC)
- endef
- else
- define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_EAP)
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
- define WPA_SUPPLICANT_AP_CONFIG
--	echo 'CONFIG_AP=y' >>$(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_AP)
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
- define WPA_SUPPLICANT_WPS_CONFIG
--	$(SED) 's/#\(CONFIG_WPS.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_WPS)
- endef
- endif
- 
- define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
--	$(SED) 's/#\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_INTERNAL_LIBTOMMATH)
- endef
- 
- # Try to use openssl or gnutls if it's already available
-@@ -65,7 +77,7 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += openssl
- define WPA_SUPPLICANT_TLS_CONFIG
- 	$(SED) 's/#\(CONFIG_TLS=openssl\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_PWD.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PWD)
- endef
- else
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
-@@ -88,7 +100,7 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
- define WPA_SUPPLICANT_DBUS_OLD_CONFIG
--	$(SED) 's/#\(CONFIG_CTRL_IFACE_DBUS=\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS=)
- endef
- define WPA_SUPPLICANT_INSTALL_DBUS_OLD
- 	$(INSTALL) -D \
-@@ -99,7 +111,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
- define WPA_SUPPLICANT_DBUS_NEW_CONFIG
--	$(SED) 's/#\(CONFIG_CTRL_IFACE_DBUS_NEW=\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS_NEW)
- endef
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
- 	$(INSTALL) -D \
-@@ -110,7 +122,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
- define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
--	$(SED) 's/#\(CONFIG_CTRL_IFACE_DBUS_INTRO=\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS_INTRO)
- endef
- endif
- 
-@@ -124,12 +136,12 @@ endif
- 
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_IEEE80211N.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_IEEE80211R.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_INTERWORKING.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_DELAYED_MIC.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_SMARTCARD\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_IEEE80211N)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_IEEE80211R)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_INTERWORKING)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_DELAYED_MIC)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_ATMEL)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_SMARTCARD)
- 	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
- 	$(WPA_SUPPLICANT_TLS_CONFIG)
- 	$(WPA_SUPPLICANT_EAP_CONFIG)
++config BR2_PACKAGE_PCSC_LITE_DEBUGART
++	bool "enable ATR debug messages"
++	help
++	  enable ATR debug messages from pcscd
++
++config BR2_PACKAGE_PCSC_LITE_EMBEDDED
++	bool "enable embedded mode"
++	help
++	  limit RAM and CPU ressources by disabling features (log)
++
++endif
++
++comment "pcsc-lite needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+new file mode 100644
+index 0000000..2a031e4
+--- /dev/null
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -0,0 +1,34 @@
++##########################################################
++#
++# PCSC-Lite
++#
++# ########################################################
++PCSC_LITE_VERSION = 1.8.6
++PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
++PCSC_LITE_SITE = https://alioth.debian.org/frs/download.php/3757
++PCSC_LITE_INSTALL_STAGING = YES
++PCSC_LITE_DEPENDENCIES = host-pkg-config
++
++# libudev has a priority over libusb
++ifneq ($(BR2_PACKAGE_UDEV),y)
++PCSC_LITE_CONF_OPT += --disable-libudev
++
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
++PCSC_LITE_CONF_OPT += --enable-libusb
++PCSC_LITE_DEPENDENCIES += libusb
++else
++PCSC_LITE_CONF_OPT += --disable-libusb
++endif
++
++endif
++
++ifeq ($(PACKAGE_PCSC_LITE_DEBUGART),y)
++PCSC_LITE_CONF_OPT += --enable-debugatr
++endif
++
++ifeq ($(PACKAGE_PCSC_LITE_EMBEDDED),y)
++PCSC_LITE_CONF_OPT += --enable-embedded
++endif
++
++
++$(eval $(call autotools-package))
 -- 
-1.7.9.5
+1.7.10
