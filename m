@@ -1,49 +1,40 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Thu, 20 Sep 2012 00:02:17 +0200
-Subject: [Buildroot] [PATCH v2 1/2] Download packages from github in
- tar.gz format instead git format.
-In-Reply-To: <CAHXCMM+r-m6dGDBeOoV6=5vdYt846Y16h2-Mnu3Z8TZbDj1YjQ@mail.gmail.com>
-References: <1347746247-12033-1-git-send-email-marek.belisko@open-nandra.com>
- <CAHXCMM+r-m6dGDBeOoV6=5vdYt846Y16h2-Mnu3Z8TZbDj1YjQ@mail.gmail.com>
-Message-ID: <CAAfyv34ga52pX_YJXdg_b3WZQKh+gD6B3Av6ERk3=Z6NhJyyrA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Sep 2012 00:53:12 +0200
+Subject: [Buildroot] [PATCH 0/11 v3] Rework the gettext handling
+In-Reply-To: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <505A4CD8.80900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Sep 16, 2012 at 1:05 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> 2012/9/15 Marek Belisko <marek.belisko@open-nandra.com>:
->> Verified way how to get packages from github by version or sha1
->> (it's enough to use first 7 characters from SHA1):
->> 1. by sha1
->> FOO_VERSION = 1234567
->> FOO_SOURCE = user-package-$(FOO_VERSION).tar.gz
->> FOO_SITE = http://github.com/user/package/tarball/master
->>
->> 2. by version
->> FOO_VERSION = v1.0
->> FOO_SOURCE = user-package-$(FOO_VERSION).tar.gz
->> FOO_SITE = http://github.com/user/package/tarball/$(FOO_VERSION)
-It seems FOO_SOURCE is redundant in both cases. I'll resend updated patch.
-It's enough to have SITE + VERSION.
->>
->> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
-> Acked-by: Samuel Martin <s.martin49@gmail.com>
-> Tested-by: Samuel Martin <s.martin49@gmail.com>
+On 09/17/12 00:57, Yann E. MORIN wrote:
+>    - fix conversion to autotools to always build libintl, even if locales are
+>      disabled, to fix packages that always require NLS
+>    - thus removed Arnout's Tested-by on patch 5/11, as it has changed
 
-Regards,
+  Goes to show how valuable my testing was :-(
 
-marek
+  How about finding and fixing the packages that require NLS?
 
+  But then, Samuel's remark becomes valid: if ENABLE_LOCALE is not true,
+then libintl won't be built, so the -lintl becomes invalid.  In fact,
+I would think that packages that select BR2_NEEDS_EXTERNAL_GETTEXT should
+actually depend on ENABLE_LOCALE... Or usually they should be
+..._IF_LOCALE instead.  For instance, I tried util-linux and it builds
+perfectly without locale and gettext.
+
+  Any chance of testing if the cases that have gettext without -if-locale
+can be replaced with gettext-if-locale?
+
+  Regards,
+  Arnout
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
