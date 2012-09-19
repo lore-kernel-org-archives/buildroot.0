@@ -1,40 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Sep 2012 22:41:34 +0200
-Subject: [Buildroot] [PATCH v2 1/2] pcsc-lite: new package
-In-Reply-To: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
-References: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
-Message-ID: <505A2DFE.3060604@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Sep 2012 22:42:52 +0200
+Subject: [Buildroot] [PATCH] mplayer: not supported on sh4a/sh4aeb
+Message-ID: <1348087372-21780-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/19/12 14:52, Waldemar Rymarkiewicz wrote:
-[snip]
-> +config BR2_PACKAGE_PCSC_LITE_DEBUGART
+The mplayer configure script says that sh4a is not supported,
+according to:
 
-  _DEBUGATR, not ART
+ http://autobuild.buildroot.org/results/c6457c2dea7c1df4d8e0f23995ebfb3285a85aed/build-end.log
 
-> +	bool "enable ATR debug messages"
-> +	help
-> +	  enable ATR debug messages from pcscd
-> +
-> +config BR2_PACKAGE_PCSC_LITE_EMBEDDED
-> +	bool "enable embedded mode"
-> +	help
-> +	  limit RAM and CPU ressources by disabling features (log)
+Apparently, sh4 is supported, but not sh4a, even though it seems that
+sh4a is a super-set of sh4. So it would probably not be too difficult
+to get mplayer to build/work for sh4a, but we don't have hardware to
+test this easily, and we can leave this work to the first developer
+who will need mplayer on sh4a: let's only support what the upstream
+package supports.
 
-  resources (one s)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/multimedia/mplayer/Config.in |    3 +++
+ 1 file changed, 3 insertions(+)
 
-
-  Regards,
-  Arnout
-[snip]
+diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
+index a9a4bb6..77bf9dc 100644
+--- a/package/multimedia/mplayer/Config.in
++++ b/package/multimedia/mplayer/Config.in
+@@ -1,5 +1,8 @@
+ config BR2_PACKAGE_MPLAYER
+ 	bool "mplayer"
++	# "Error: unsupported architecture sh4a" says mplayer
++	# configure script.
++	depends on !BR2_sh4a && !BR2_sh4aeb
+ 	help
+ 	  MPlayer is a movie player which runs on many systems and supports
+ 	  many different file formats.
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
