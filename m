@@ -1,25 +1,44 @@
-From: Waldemar.Rymarkiewicz at tieto.com <Waldemar.Rymarkiewicz@tieto.com>
-Date: Wed, 19 Sep 2012 10:49:22 +0300
-Subject: [Buildroot] [PATCH 2/2] ccid: new package
-In-Reply-To: <20120918162224.338721a9@skate>
-References: <1347970538-25087-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
- <1347970772-25135-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
- <20120918162224.338721a9@skate>
-Message-ID: <99B09243E1A5DA4898CDD8B70011144818038C36C4@EXMB04.eu.tieto.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Wed, 19 Sep 2012 10:59:55 +0300
+Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
+In-Reply-To: <5058EF56.3070208@mind.be>
+References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
+ <5058EF56.3070208@mind.be>
+Message-ID: <CALR4fEJzZPa+CAeCvuFrFZoNwO562+6_LDEM8xP2a15dy1YJuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+On Wed, Sep 19, 2012 at 1:01 AM, Arnout Vandecappelle <arnout@mind.be>wrote:
 
+> +ifeq ($(BR2_PACKAGE_RASPBERRYPI_**BOOTLOADER),y)
+>> +BOOT_FILE := #empty
+>> +ifeq ($(BR2_PACKAGE_BOOTLOADER_**ARM128),y)
+>> +BOOT_FILE += arm128_start.elf
+>> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_**ARM192),y)
+>> +BOOT_FILE += arm192_start.elf
+>> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_**ARM224),y)
+>> +BOOT_FILE += arm224_start.elf
+>> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_**ARM240),y)
+>> +BOOT_FILE += arm240_start.elf
+>> +endif
+>> +
+>> +define RASPBERRYPI_FIRMWARE_INSTALL_**TARGET_BOOTLOADER
+>> +       if [ ! -d "$(TARGET_DIR)/boot" ]; then \
+>> +               mkdir $(TARGET_DIR)/boot; \
+>> +       fi; \
+>>
 >
->Does ccid directly uses libusb, or does it only use it through
->pcsc-lite? If the latter, then it would be better not to have libusb
->amongst the dependencies here.
-
-It uses libusb directly, so will add missing dependencies.
-
-Thanks,
-/Waldek
+>  Just "mkdir -p $(TARGET_DIR)/boot".  Or even better, replace the cp
+> below with
+>         install -D -m 0644 <fromfile> <tofile>
+>
+>
+>
+Wait... this implies that /boot/ is on the rootfs... ext2... and rbpi
+demands that the "boot" partition will be vfat.. right? What am I missing?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120919/d64eba75/attachment.html>
