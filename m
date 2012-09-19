@@ -1,42 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Sep 2012 22:42:52 +0200
-Subject: [Buildroot] [PATCH] mplayer: not supported on sh4a/sh4aeb
-Message-ID: <1348087372-21780-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 19 Sep 2012 22:56:42 +0200
+Subject: [Buildroot] [PATCH v2 2/2] ccid: new package
+In-Reply-To: <1348059150-32601-2-git-send-email-waldemar.rymarkiewicz@tieto.com>
+References: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+ <1348059150-32601-2-git-send-email-waldemar.rymarkiewicz@tieto.com>
+Message-ID: <505A318A.6080107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mplayer configure script says that sh4a is not supported,
-according to:
+On 09/19/12 14:52, Waldemar Rymarkiewicz wrote:
+> PC/SC driver for USB CCID smart card readers.
+[snip]
+> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
+> +CCID_CONF_OPT += --enable-libusb
+> +CCID_DEPENDENCIES += libusb
+> +else
+> +CCID_CONF_OPT += --disable-libusb
+> +endif
+> +
+> +$(eval $(call autotools-package))
 
- http://autobuild.buildroot.org/results/c6457c2dea7c1df4d8e0f23995ebfb3285a85aed/build-end.log
+  I just build-tested on a config without libusb, and it doesn't seem
+to install anything.  The examples are compiled (not installed), but
+I doubt they're useful for anything without the ccid plugin.
 
-Apparently, sh4 is supported, but not sh4a, even though it seems that
-sh4a is a super-set of sh4. So it would probably not be too difficult
-to get mplayer to build/work for sh4a, but we don't have hardware to
-test this easily, and we can leave this work to the first developer
-who will need mplayer on sh4a: let's only support what the upstream
-package supports.
+  So maybe it's better to select libusb after all.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/multimedia/mplayer/Config.in |    3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
-index a9a4bb6..77bf9dc 100644
---- a/package/multimedia/mplayer/Config.in
-+++ b/package/multimedia/mplayer/Config.in
-@@ -1,5 +1,8 @@
- config BR2_PACKAGE_MPLAYER
- 	bool "mplayer"
-+	# "Error: unsupported architecture sh4a" says mplayer
-+	# configure script.
-+	depends on !BR2_sh4a && !BR2_sh4aeb
- 	help
- 	  MPlayer is a movie player which runs on many systems and supports
- 	  many different file formats.
+  Regards,
+  Arnout
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
