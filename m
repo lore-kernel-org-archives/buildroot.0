@@ -1,128 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Sep 2012 22:33:20 +0200
-Subject: [Buildroot] [PATCH 3/3] wpa_supplicant: introduce macros for
- editing the .config file
-In-Reply-To: <1348049503-1469-4-git-send-email-s.neumann@raumfeld.com>
-References: <5058EFD8.4010809@mind.be>
- <1348049503-1469-1-git-send-email-s.neumann@raumfeld.com>
- <1348049503-1469-4-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <505A2C10.8040407@mind.be>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Wed, 19 Sep 2012 15:36:58 -0500
+Subject: [Buildroot] eaccelerator
+In-Reply-To: <20120919221012.3646aa7b@skate>
+References: <CAE9DZURE9s7eH_N2vhv1wK73Pip9wAVDmYtbU8Ynxn_3XpGpdQ@mail.gmail.com>
+ <20120919221012.3646aa7b@skate>
+Message-ID: <CAE9DZUQFsysouX9sNvJj9qLRqJQB6-goVOSezxjNc2e7a_cG4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/19/12 12:11, Sven Neumann wrote:
-> Make the substitutions on the .config file more readable by
-> introducing macros to enable, disable certain options similar
-> to the macros we use for editing KConfig files.
+Thanks Thomas.  You are sure right.  I figured this out earlier today.
+ I have a .mk file for it which I am happy to share with anyone who
+cares.  How dost one go about sharing build recipes?  I realize this
+one may not be one that you want to include in the general buildroot
+distribution.
+
+On Wed, Sep 19, 2012 at 3:10 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Dallas Clement,
 >
-> Signed-off-by: Sven Neumann<s.neumann@raumfeld.com>
-
-  Nice!
-
-  Did you use a sed (or editor) regexp to do the substitution?  If yes,
-it makes sense to document that regexp in the commit message.  That
-helps to review it, and can also be useful for others who are inspired
-to do a similar modification.
-
-> ---
->   package/wpa_supplicant/wpa_supplicant.mk |   62 ++++++++++++++++++------------
->   1 file changed, 37 insertions(+), 25 deletions(-)
+> On Wed, 19 Sep 2012 10:34:51 -0500, Dallas Clement wrote:
 >
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index e8d55d3..5337e5f 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -15,49 +15,61 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
->   WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
->   WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+>> Can any of you provide guidance on the proper way to build a PHP
+>> extension such as eaccelerator?  Should I create its own .mk or should
+>> I modify the php.mk to extract into $(PHP_DIR)/ext and make all
+>> together?  I have examined the eaccelerator tar ball contents and
+>> there is no configure script present, so I am assuming the intent is
+>> for it to be built with PHP.  Would appreciate any tips you might
+>> have.
 >
-> +define WPA_SUPPLICANT_CONFIG_DISABLE
-> +	$(SED) 's/^\($(1).*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-> +endef
-> +
-> +define WPA_SUPPLICANT_CONFIG_ENABLE
-> +	$(SED) 's/#\($(1).*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-> +endef
-> +
-> +define WPA_SUPPLICANT_CONFIG_SET
-> +	echo '$(1)=y'>>  $(WPA_SUPPLICANT_CONFIG)
-> +endef
-> +
->   ifeq ($(BR2_PACKAGE_LIBNL),y)
->   	WPA_SUPPLICANT_DEPENDENCIES += libnl
->   define WPA_SUPPLICANT_LIBNL_CONFIG
-> -	echo 'CONFIG_LIBNL32=y'>>$(WPA_SUPPLICANT_CONFIG)
-> +	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_LIBNL32)
->   endef
->   else
->   define WPA_SUPPLICANT_LIBNL_CONFIG
-> -	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-> +	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_NL80211)
->   endef
->   endif
-
-  While you're at it, I'd like to avoid calling sed dozens of times,
-by writing it like this:
-
-----
-WPA_SUPPLICANT_CONFIG_DISABLE = -e 's/^\($(1).*\)/#\1/'
-WPA_SUPPLICANT_CONFIG_ENABLE  = -e 's/#\($(1).*\)/\1/'
-WPA_SUPPLICANT_CONFIG_SET     = -e '1i$(1)=y'
-
-ifeq ($(BR2_PACKAGE_LIBNL),y)
-WPA_SUPPLICANT_DEPENDENCIES += libnl
-WPA_SUPPLICANT_CONFIG_EDITS += $(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_LIBNL32)
-else
-WPA_SUPPLICANT_CONFIG_EDITS += $(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_LIBNL32)
-endif
-
-...
-
-define WPA_SUPPLICANT_CONFIGURE_CMDS
-	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
-	$(SED) $(WPA_SUPPLICANT_CONFIG_EDITS) $(WPA_SUPPLICANT_CONFIG)
-endef
-----
-
-
-  Of course, using 'sed 1i...' instead of 'echo ... >>' means those options
-will be at the beginning rather than at the end, but I don't think that
-should make a difference.
-
-
-  I just love hacking make, so here's another alternative:
-
-----
-ifeq ($(BR2_PACKAGE_LIBNL),y)
-WPA_SUPPLICANT_DEPENDENCIES += libnl
-WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
-else
-WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_LIBNL32
-endif
-
-...
-
-define WPA_SUPPLICANT_CONFIGURE_CMDS
-	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
-	$(SED) $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-	       $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-	       $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
-	       $(WPA_SUPPLICANT_CONFIG)
-endef
-----
-
-
-  Regards,
-  Arnout
-
-[snip]
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> The compilation instructions are detailed in
+> https://github.com/eaccelerator/eaccelerator/blob/master/README.
+> Apparently, you need to call phpize (which comes with PHP, but I don't
+> know if we build it for the host at the moment, I don't think so), it
+> probably generates a configure script, that you execute, and then you
+> can build the extension.
+>
+> For sure, this extension needs to be a separate package from the php
+> package.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
