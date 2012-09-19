@@ -1,38 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Sep 2012 23:28:44 +0200
-Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
-In-Reply-To: <CAAfyv36do0+Cf+ZYyj67Sypt13UzfM2TRyx9-Pwq_28fVgsWsw@mail.gmail.com>
-References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
- <5058EF56.3070208@mind.be>
- <CALR4fEJzZPa+CAeCvuFrFZoNwO562+6_LDEM8xP2a15dy1YJuA@mail.gmail.com>
- <CAAfyv365AxzAfJSP3rnhbgKoDKMq19AyUnZkkSW54uerXCOYTg@mail.gmail.com>
- <505A21D6.7060808@mind.be>
- <CAAfyv36do0+Cf+ZYyj67Sypt13UzfM2TRyx9-Pwq_28fVgsWsw@mail.gmail.com>
-Message-ID: <505A390C.7080704@mind.be>
+Date: Wed, 19 Sep 2012 23:30:35 +0200
+Subject: [Buildroot] thread debugging with target gdb
+In-Reply-To: <zarafa.505a38cb.6d34.7898f54820e76f8d@jacal.basystemes.fr>
+References: <505A3347.9010503@mind.be>
+ <zarafa.505a38cb.6d34.7898f54820e76f8d@jacal.basystemes.fr>
+Message-ID: <505A397B.80404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/19/12 22:08, Belisko Marek wrote:
->> >    Shouldn't all images be in that boot directory, then?  Or rather, doesn't
->> >  it make more sense to place the bootfiles directly in the images dir?
-> Idea behind /boot directory was to copy raspberrypi booloader files +
-> config file +
-> kernel cmdline file + kernel bzImage to  that directory and compress it
-> to output/images/boot.tar.gz (probably in post-build.sh script)
-> directory to make it
-> more user friendly (avoid manually copy files from different parts of
-> buildroot).
+On 09/19/12 23:27, Thierry Bultel wrote:
+>
+> Trying gdbserver is my next step, but I feel pessimistic / my conclusions above.
 
-  But would the images/ dir contain anything besides the boot.tar.gz?  If not,
-it makes more sense to put all the required images in the images dir.  It's
-easier to copy the files from there than to untar them.
-
-  Ah, of course, there's the rootfs files...  But OTOH, you'd also have to handle
-bzImage explicitly in some way, so it's just as easy to copy everything except
-rootfs.* from the images directory.
+  Most BR developers use gdbserver only, so that's better supported than full gdb on
+the target.
 
   Regards,
   Arnout
