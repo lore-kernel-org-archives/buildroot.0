@@ -1,25 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Sep 2012 23:30:35 +0200
-Subject: [Buildroot] thread debugging with target gdb
-In-Reply-To: <zarafa.505a38cb.6d34.7898f54820e76f8d@jacal.basystemes.fr>
-References: <505A3347.9010503@mind.be>
- <zarafa.505a38cb.6d34.7898f54820e76f8d@jacal.basystemes.fr>
-Message-ID: <505A397B.80404@mind.be>
+Date: Wed, 19 Sep 2012 23:48:03 +0200
+Subject: [Buildroot] [PATCH v5] sconeserver: new package
+In-Reply-To: <1348044562-6762-1-git-send-email-spdawson@gmail.com>
+References: <1348044562-6762-1-git-send-email-spdawson@gmail.com>
+Message-ID: <505A3D93.3040709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/19/12 23:27, Thierry Bultel wrote:
->
-> Trying gdbserver is my next step, but I feel pessimistic / my conclusions above.
+On 09/19/12 10:49, spdawson at gmail.com wrote:
+> +# Sconeserver configure script fails to find the libxml2 headers.
+> +ifeq ($(BR2_PACKAGE_LIBXML2),y)
+> +	SCONESERVER_CONF_OPT += CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2"
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
+> +	SCONESERVER_CONF_OPT += LDFLAGS="-L$(STAGING_DIR)/usr/lib/mysql"
+> +endif
 
-  Most BR developers use gdbserver only, so that's better supported than full gdb on
-the target.
+  I'd suggest using the following pattern:
+
+SCONESERVER_CONF_OPT += CXXFLAGS="$(TARGET_CXXFLAGS) $(SCONESERVER_CXXFLAGS)"
+SCONESERVER_CONF_OPT += LDFLAGS="$(TARGET_LDFLAGS) $(SCONESERVER_LDFLAGS)"
+
+ifeq ($(BR2_PACKAGE_LIBXML2),y)
+SCONESERVER_CXXFLAGS += -I$(STAGING_DIR)/usr/include/libxml2
+endif
+
+(Actually, this pattern should move to TARGET_CFLAGS itself...  Yet another
+item on my ideas list :-)
+
+
+  The mysql flags should move to the rest of the mysql stuff, so you have the
+condition only once.
+
+
+  I tried building the mysql module and it also fails to find mysql.h.  Turns
+out that the configure script hard-codes -I/usr/include/mysql instead of using
+the sysrooted path.  I'm not sure how to fix it elegantly.  Adding a -I
+option to the CXXFLAGS works, but you still get a -I/usr/include/mysql which
+may cause problems...
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
