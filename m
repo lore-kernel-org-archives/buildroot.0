@@ -1,31 +1,44 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Wed, 19 Sep 2012 04:39:53 +0300
-Subject: [Buildroot] [PATCH 6/9] firefox: Mozilla Web Browser
-In-Reply-To: <5058E6AD.7010303@mind.be>
-References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
- <1346855344-15081-7-git-send-email-stefan.froberg@petroprogram.com>
- <5057A4D4.60904@mind.be> <505897DF.9070102@petroprogram.com>
- <5058E6AD.7010303@mind.be>
-Message-ID: <50592269.6090809@petroprogram.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 18 Sep 2012 21:44:14 -0400
+Subject: [Buildroot] rootfs hooks okay to use?
+Message-ID: <CANxTyt7HEBtj+WUzAcwii7n9K3drUEz=34yMAOeN8FHOG2DqfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-19.9.2012 0:25, Arnout Vandecappelle kirjoitti:
-> On 09/18/12 17:48, Stefan Fr?berg wrote:
->> And because I don't have any other machines than x86  I can't test
->> with ARM or MIPS
->
->  You can do a build-test.  And if you really want, you can try to run it
-> in QEMU.
->
-I have used qemu in the past so I will give it a try.
-Have been thinking of getting arm machine someday, maybe raspberry pi.
+Hi all,
 
+I tried adding something like this to one of our proprietary packages:
 
-Stefan
++define TEST_PRE_GEN_HOOK_FIXUP
++ echo "This is a test hook"
++endef
++
++ROOTFS_CRAMFS_PRE_GEN_HOOKS    += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_CLOOP_PRE_GEN_HOOKS     += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_EXT2_PRE_GEN_HOOKS      += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_JFFS2_PRE_GEN_HOOKS     += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_UBIFS_PRE_GEN_HOOKS     += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_SQUASHFS_PRE_GEN_HOOKS  += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_TAR_PRE_GEN_HOOKS       += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_CPIO_PRE_GEN_HOOKS      += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_ISO9660_PRE_GEN_HOOKS   += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_INITRAMFS_PRE_GEN_HOOKS += TEST_PRE_GEN_HOOK_FIXUP
++ROOTFS_ROMFS_PRE_GEN_HOOKS     += TEST_PRE_GEN_HOOK_FIXUP
 
->  Regards,
->  Arnout
+But when I run make, I get:
+
+fs/cpio/cpio.mk:32: *** missing separator (did you mean TAB instead of 8
+spaces?).  Stop.
+make: *** [all] Error 2
+
+So - are the rootfs hooks okay for general use, or are they reserved
+strictly for fs/*/*.mk use?
+
+Thanks again,
+Danomi -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120918/62815c5c/attachment.html>
