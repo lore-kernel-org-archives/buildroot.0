@@ -1,34 +1,51 @@
-From: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
-Date: Wed, 19 Sep 2012 18:43:17 +0200
-Subject: [Buildroot] [PATCH] use a more portable syntax for mktemp. fixes
- build problem under MacOS X
-Message-ID: <20120919164317.GA20160@waldemar-brodkorb.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 19 Sep 2012 21:49:42 +0200
+Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
+In-Reply-To: <CAAfyv365AxzAfJSP3rnhbgKoDKMq19AyUnZkkSW54uerXCOYTg@mail.gmail.com>
+References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
+ <5058EF56.3070208@mind.be>
+ <CALR4fEJzZPa+CAeCvuFrFZoNwO562+6_LDEM8xP2a15dy1YJuA@mail.gmail.com>
+ <CAAfyv365AxzAfJSP3rnhbgKoDKMq19AyUnZkkSW54uerXCOYTg@mail.gmail.com>
+Message-ID: <505A21D6.7060808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Developers,
-following patch might be useful, when using buildroot on MacOS X.
+On 09/19/12 10:09, Belisko Marek wrote:
+> On Wed, Sep 19, 2012 at 9:59 AM, Diego Iastrubni<diegoiast@gmail.com>  wrote:
+>> On Wed, Sep 19, 2012 at 1:01 AM, Arnout Vandecappelle<arnout@mind.be>
+>> wrote:
+>>>>
+>>>> +define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_BOOTLOADER
+>>>> +       if [ ! -d "$(TARGET_DIR)/boot" ]; then \
+>>>> +               mkdir $(TARGET_DIR)/boot; \
+>>>> +       fi; \
+>>>
+>>>
+>>>   Just "mkdir -p $(TARGET_DIR)/boot".  Or even better, replace the cp
+>>> below with
+>>>          install -D -m 0644<fromfile>  <tofile>
+>>>
+>>>
+>>
+>> Wait... this implies that /boot/ is on the rootfs... ext2... and rbpi
+>> demands that the "boot" partition will be vfat.. right? What am I missing?
+> My mistake, this shouldn't got to $(TARGET_DIR) but to $(IMAGES_DIR)
+> which will then can be copied by user to FAT partition of SD card
+> necessary for booting.
+> There is no need to have it in rootfs/boot.
 
-Signed-off-by: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
----
- support/kconfig/lxdialog/check-lxdialog.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Shouldn't all images be in that boot directory, then?  Or rather, doesn't
+it make more sense to place the bootfiles directly in the images dir?
 
-diff --git a/support/kconfig/lxdialog/check-lxdialog.sh b/support/kconfig/lxdialog/check-lxdialog.sh
-index 969cd4c..fb4d90b 100644
---- a/support/kconfig/lxdialog/check-lxdialog.sh
-+++ b/support/kconfig/lxdialog/check-lxdialog.sh
-@@ -33,7 +33,7 @@ ccflags()
- }
- 
- # Temp file, try to clean up after us
--tmp=$(mktemp)
-+tmp=$(mktemp -t yyy)
- trap "rm -f $tmp" 0 1 2 3 15
- 
- # Check if we can link to ncurses
+  Regards,
+  Arnout
 -- 
-1.7.11.1
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
