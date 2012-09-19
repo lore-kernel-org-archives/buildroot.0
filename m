@@ -1,28 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Sep 2012 07:10:40 +0200
-Subject: [Buildroot] [PATCH] vala: fix documentation build problem
-In-Reply-To: <5058E0C3.8070502@mind.be>
-References: <1347914008-3054-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <5058E0C3.8070502@mind.be>
-Message-ID: <20120919071040.2768d32d@skate>
+Date: Wed, 19 Sep 2012 07:14:23 +0200
+Subject: [Buildroot] rootfs hooks okay to use?
+In-Reply-To: <CANxTyt7HEBtj+WUzAcwii7n9K3drUEz=34yMAOeN8FHOG2DqfA@mail.gmail.com>
+References: <CANxTyt7HEBtj+WUzAcwii7n9K3drUEz=34yMAOeN8FHOG2DqfA@mail.gmail.com>
+Message-ID: <20120919071423.3ac203d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Danomi Manchego,
 
-On Tue, 18 Sep 2012 22:59:47 +0200, Arnout Vandecappelle wrote:
+On Tue, 18 Sep 2012 21:44:14 -0400, Danomi Manchego wrote:
 
-> > +ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-> > +VALA_DEPENDENCIES += host-libxslt
-> 
->   Don't you need ac_cv_path_XSLTPROC=: in the else case too?
+> So - are the rootfs hooks okay for general use, or are they reserved
+> strictly for fs/*/*.mk use?
 
-Yes that's what PATCHv2 did.
-
-Thanks for the review!
+Depends on what you want them to do. What are you trying to do, in the
+end?
 
 Thomas
 -- 
