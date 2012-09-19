@@ -1,71 +1,255 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Wed, 19 Sep 2012 10:09:04 +0200
-Subject: [Buildroot] [PATCH] Add package raspberrypi-firmware.
-In-Reply-To: <CALR4fEJzZPa+CAeCvuFrFZoNwO562+6_LDEM8xP2a15dy1YJuA@mail.gmail.com>
-References: <1347914057-20287-1-git-send-email-marek.belisko@open-nandra.com>
- <5058EF56.3070208@mind.be>
- <CALR4fEJzZPa+CAeCvuFrFZoNwO562+6_LDEM8xP2a15dy1YJuA@mail.gmail.com>
-Message-ID: <CAAfyv365AxzAfJSP3rnhbgKoDKMq19AyUnZkkSW54uerXCOYTg@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 19 Sep 2012 09:49:21 +0100
+Subject: [Buildroot] [PATCH v5] sconeserver: new package
+Message-ID: <1348044562-6762-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 19, 2012 at 9:59 AM, Diego Iastrubni <diegoiast@gmail.com> wrote:
-> On Wed, Sep 19, 2012 at 1:01 AM, Arnout Vandecappelle <arnout@mind.be>
-> wrote:
->>>
->>> +ifeq ($(BR2_PACKAGE_RASPBERRYPI_BOOTLOADER),y)
->>> +BOOT_FILE := #empty
->>> +ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM128),y)
->>> +BOOT_FILE += arm128_start.elf
->>> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM192),y)
->>> +BOOT_FILE += arm192_start.elf
->>> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM224),y)
->>> +BOOT_FILE += arm224_start.elf
->>> +else ifeq ($(BR2_PACKAGE_BOOTLOADER_ARM240),y)
->>> +BOOT_FILE += arm240_start.elf
->>> +endif
->>> +
->>> +define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_BOOTLOADER
->>> +       if [ ! -d "$(TARGET_DIR)/boot" ]; then \
->>> +               mkdir $(TARGET_DIR)/boot; \
->>> +       fi; \
->>
->>
->>  Just "mkdir -p $(TARGET_DIR)/boot".  Or even better, replace the cp
->> below with
->>         install -D -m 0644 <fromfile> <tofile>
->>
->>
->
-> Wait... this implies that /boot/ is on the rootfs... ext2... and rbpi
-> demands that the "boot" partition will be vfat.. right? What am I missing?
-My mistake, this shouldn't got to $(TARGET_DIR) but to $(IMAGES_DIR)
-which will then can be copied by user to FAT partition of SD card
-necessary for booting.
-There is no need to have it in rootfs/boot.
+From: Simon Dawson <spdawson@gmail.com>
 
-Cheers,
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v5: Rebase and resend.
+ v4: Resend.
+ v3: Fix build failure for mysql module; ui module depends on X.org.
+ v2: Extensive rework in response to feedback on mailing list.
 
-marek
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ package/Config.in                  |    1 +
+ package/sconeserver/Config.in      |   88 +++++++++++++++++++++++++++
+ package/sconeserver/sconeserver.mk |  115 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 204 insertions(+)
+ create mode 100644 package/sconeserver/Config.in
+ create mode 100644 package/sconeserver/sconeserver.mk
 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 58dd5e8..e0841da 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -606,6 +606,7 @@ source "package/rsh-redone/Config.in"
+ source "package/rsync/Config.in"
+ source "package/rtorrent/Config.in"
+ source "package/samba/Config.in"
++source "package/sconeserver/Config.in"
+ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+new file mode 100644
+index 0000000..a7e5c75
+--- /dev/null
++++ b/package/sconeserver/Config.in
+@@ -0,0 +1,88 @@
++menuconfig BR2_PACKAGE_SCONESERVER
++	bool "sconeserver"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PCRE
++	help
++	  Sconeserver is a modular, object-orientated and extremely versatile
++	  network server framework for GNU/Linux and UNIX-like platforms.
++
++	  http://www.sconemad.com/sconeserver/
++
++if BR2_PACKAGE_SCONESERVER
++
++comment "Sconeserver modules"
++
++config BR2_PACKAGE_SCONESERVER_EXAMPLES
++	bool "examples"
++	help
++	  Example modules for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
++	bool "http::sconesite"
++	select BR2_PACKAGE_LIBXML2
++	help
++	  http::sconesite module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
++	bool "http::sconesite::image"
++	depends on BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
++	select BR2_PACKAGE_IMAGEMAGICK
++	help
++	  http::sconesite::image module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_MYSQL
++	bool "mysql"
++	select BR2_PACKAGE_MYSQL_CLIENT
++	help
++	  MySQL module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_BLUETOOTH
++	bool "bluetooth"
++	select BR2_PACKAGE_BLUEZ_UTILS
++	help
++	  Bluetooth module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_RSS
++	bool "rss"
++	select BR2_PACKAGE_LIBXML2
++	help
++	  RSS module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_LOCATION
++	bool "location"
++	select BR2_PACKAGE_GPSD
++	help
++	  Location module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_LETTUCE
++	bool "lettuce"
++	help
++	  Sconeserver module for Lettuce embedded automation platform
++
++	  http://www.sconemad.com/lettuce/
++
++config BR2_PACKAGE_SCONESERVER_MATHS
++	bool "maths"
++	select BR2_PACKAGE_MPFR
++	help
++	  Mathematics module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_TESTBUILDER
++	bool "testbuilder"
++	help
++	  Testbuilder module for Sconeserver
++
++config BR2_PACKAGE_SCONESERVER_UI
++	bool "ui"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	help
++	  UI module for Sconeserver
++
++comment "ui module requires X.org"
++	depends on !BR2_PACKAGE_XORG7
++
++endif # BR2_PACKAGE_SCONESERVER
++
++comment "sconeserver requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+new file mode 100644
+index 0000000..27e2c6e
+--- /dev/null
++++ b/package/sconeserver/sconeserver.mk
+@@ -0,0 +1,115 @@
++#############################################################
++#
++# sconeserver
++#
++#############################################################
++# Release 0.6.0 doesn't build cleanly, so use a recent
++# Subversion trunk snapshot.
++SCONESERVER_VERSION = 178
++SCONESERVER_SITE = \
++	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
++SCONESERVER_SITE_METHOD = svn
++
++SCONESERVER_LICENSE = GPLv2+
++SCONESERVER_LICENSE_FILES = COPYING
++
++SCONESERVER_DEPENDENCIES += pcre
++SCONESERVER_CONF_OPT += --with-ip --with-local
++
++# Sconeserver configure script fails to find the libxml2 headers.
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++	SCONESERVER_CONF_OPT += CPPFLAGS="-I$(STAGING_DIR)/usr/include/libxml2"
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
++	SCONESERVER_CONF_OPT += LDFLAGS="-L$(STAGING_DIR)/usr/lib/mysql"
++endif
++
++ifeq ($(BR2_INET_IPV6),y)
++	SCONESERVER_CONF_OPT += --with-ip6
++else
++	SCONESERVER_CONF_OPT += --without-ip6
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	SCONESERVER_DEPENDENCIES += openssl
++	SCONESERVER_CONF_OPT += --with-ssl
++else
++	SCONESERVER_CONF_OPT += --without-ssl
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_EXAMPLES),y)
++	SCONESERVER_CONF_OPT += --with-examples
++else
++	SCONESERVER_CONF_OPT += --without-examples
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),y)
++	SCONESERVER_DEPENDENCIES += libxml2
++	SCONESERVER_CONF_OPT += --with-sconesite
++else
++	SCONESERVER_CONF_OPT += --without-sconesite
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),y)
++	SCONESERVER_DEPENDENCIES += imagemagick
++	SCONESERVER_CONF_OPT += --with-sconesite-image
++else
++	SCONESERVER_CONF_OPT += --without-sconesite-image
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
++	SCONESERVER_DEPENDENCIES += mysql_client
++	SCONESERVER_CONF_OPT += --with-mysql
++else
++	SCONESERVER_CONF_OPT += --without-mysql
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_BLUETOOTH),y)
++	SCONESERVER_DEPENDENCIES += bluez_utils
++	SCONESERVER_CONF_OPT += --with-bluetooth
++else
++	SCONESERVER_CONF_OPT += --without-bluetooth
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_RSS),y)
++	SCONESERVER_DEPENDENCIES += libxml2
++	SCONESERVER_CONF_OPT += --with-rss
++else
++	SCONESERVER_CONF_OPT += --without-rss
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
++	SCONESERVER_DEPENDENCIES += gpsd
++	SCONESERVER_CONF_OPT += --with-location
++else
++	SCONESERVER_CONF_OPT += --without-location
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_LETTUCE),y)
++	SCONESERVER_CONF_OPT += --with-lettuce
++else
++	SCONESERVER_CONF_OPT += --without-lettuce
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
++	SCONESERVER_DEPENDENCIES += mpfr
++	SCONESERVER_CONF_OPT += --with-maths
++else
++	SCONESERVER_CONF_OPT += --without-maths
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
++	SCONESERVER_CONF_OPT += --with-testbuilder
++else
++	SCONESERVER_CONF_OPT += --without-testbuilder
++endif
++
++ifeq ($(BR2_PACKAGE_SCONESERVER_UI),y)
++	SCONESERVER_DEPENDENCIES += xlib_libX11
++	SCONESERVER_CONF_OPT += --with-ui
++else
++	SCONESERVER_CONF_OPT += --without-ui
++endif
++
++$(eval $(autotools-package))
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+1.7.9.5
