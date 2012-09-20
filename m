@@ -1,20 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Sep 2012 14:10:54 +0200
-Subject: [Buildroot] [PATCH] mplayer: not supported on sh4a/sh4aeb
-In-Reply-To: <1348087372-21780-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 19 Sep 2012 22:42:52 +0200")
-References: <1348087372-21780-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87haqsao8h.fsf@macbook.be.48ers.dk>
+Date: Thu, 20 Sep 2012 14:11:22 +0200
+Subject: [Buildroot] [PATCH] dhcp: security bump to version 4.1-ESV-R7
+In-Reply-To: <1348071837-496-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 19 Sep 2012 13:23:57 -0300")
+References: <1348071837-496-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d31gao7p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> The mplayer configure script says that sh4a is not supported,
- Thomas> according to:
+ Gustavo> Bump dhcp to version 4.1-ESV-R7 to fix CVE-2012-3955
 
 Committed, thanks.
 
