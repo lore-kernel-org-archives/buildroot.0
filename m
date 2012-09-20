@@ -1,43 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Sep 2012 22:22:03 +0200
-Subject: [Buildroot] [PATCH 13/13] microperl: mark as DEPRECATED
-In-Reply-To: <1347107325-4163-13-git-send-email-francois.perrad@gadz.org>
-References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
- <1347107325-4163-13-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20120920222203.2c608fcf@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 20 Sep 2012 22:25:08 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	uclibc-arch-type-cleanup
+In-Reply-To: <cover.1346766545.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 4 Sep 2012 15:49:42 +0200")
+References: <cover.1346766545.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87boh08msb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sat,  8 Sep 2012 14:28:45 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/microperl/Config.in |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/microperl/Config.in b/package/microperl/Config.in
-> index 66bbedd..19d104a 100644
-> --- a/package/microperl/Config.in
-> +++ b/package/microperl/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_MICROPERL
->  	bool "microperl"
->  	# needs fork()
->  	depends on BR2_USE_MMU
-> +	depends on BR2_DEPRECATED
+ Thomas> Hello,
+ Thomas> Here is a simple patch set that moves BR2_ARM_TYPE and BR2_SPARC_TYPE
+ Thomas> to a uClibc-specific place, since those are uClibc specific.
 
-If microperl is deprecated, is it really useful to have patches 7, 8,
-9, 10, 11 and 12 that are making improvements to it, and updating it to
-a more recent version?
+Committed both, thanks.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
