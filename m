@@ -1,90 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Sep 2012 20:44:17 +0200
-Subject: [Buildroot] eaccelerator
-In-Reply-To: <CAE9DZUSLuiDgK0fPGoSE=bBQLinvDRKFLBq6ifzPxJwpMBD-zQ@mail.gmail.com>
-References: <CAE9DZURE9s7eH_N2vhv1wK73Pip9wAVDmYtbU8Ynxn_3XpGpdQ@mail.gmail.com>
- <20120919221012.3646aa7b@skate>
- <CAE9DZUQFsysouX9sNvJj9qLRqJQB6-goVOSezxjNc2e7a_cG4Q@mail.gmail.com>
- <20120920111001.371f5b01@skate>
- <CAE9DZUSLuiDgK0fPGoSE=bBQLinvDRKFLBq6ifzPxJwpMBD-zQ@mail.gmail.com>
-Message-ID: <20120920204417.784829de@skate>
+Date: Thu, 20 Sep 2012 20:47:30 +0200
+Subject: [Buildroot] [PATCH 0/11 v3] Rework the gettext handling
+In-Reply-To: <201209201850.56066.yann.morin.1998@free.fr>
+References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+ <505A4CD8.80900@mind.be>
+ <201209201850.56066.yann.morin.1998@free.fr>
+Message-ID: <20120920204730.75b79901@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dallas Clement,
+Dear Yann E. MORIN,
 
-You should send such contributions to the Buildroot list and not just
-to me. Also, your contribution should be a proper Git patch, see
-http://elinux.org/Buildroot_how_to_contribute.
+On Thu, 20 Sep 2012 18:50:55 +0200, Yann E. MORIN wrote:
 
-On Thu, 20 Sep 2012 11:34:54 -0500, Dallas Clement wrote:
-> #############################################################
-> #
-> # eaccelerator
-> #
-> #############################################################
-> EACCELERATOR_VERSION = 0.9.6.1
-> EACCELERATOR_SITE = http://eaccelerator.net/
-> EACCELERATOR_SOURCE = eaccelerator-$(EACCELERATOR_VERSION).tar.bz2
-> EACCELERATOR_UNZIP = bzcat
+> My goal with the series was not to fix anything (except for the required
+> fixes), but rather to improve on the existing infrastructure.
 
-Line useless.
+Agreed.
 
-> EACCELERATOR_DEPENDENCIES = php
-> EACCELERATOR_DIR = $(BUILD_DIR)/eaccelerator-$(EACCELERATOR_VERSION)
-
-Line useless.
-
-> EACCELERATOR_CONF_OPT = --prefix=/usr --enable-eaccelerator=shared \
->   --with-php-config=$(STAGING_DIR)/usr/bin/php-config
-
-The --prefix=/usr is useless, this is already passed by default.
-
-> STAGING_INCLUDE_DIR = $(STAGING_DIR)/usr/include
-> EACCELERATOR_CONF_ENV = CPPFLAGS="$(TARGET_CFLAGS) -DMM_SEM_IPC
-> -DMM_SHM_IPC -I$(STAGING_INCLUDE_DIR)/php
-> -I$(STAGING_INCLUDE_DIR)/php/main -I$(STAGING_INCLUDE_DIR)/php/Zend
-> -I$(STAGING_INCLUDE_DIR)/php/TSRM"
-
-This big sequence of -I looks strange. Doesn't the configure script
-figures those one out?
-
-> EACCELERATOR_MAKE_ENV = INSTALL_ROOT="$(TARGET_DIR)"
+> Fixing anything that would break after the series, and that was already
+> broken before the series, was not the goal. This can come in a later
+> series [0], if such fixes are needed.
 > 
-> EACCELERATOR_CONFFILES = /etc/php/cgi-php5/ext/eaccelerator.ini
-
-Is this used somewhere?
-
+> [0] Admitedly, it could (should?) even come before the series, but fixing
+>     packages is really different from improving the infrastructure.
 > 
-> define PHPIZE_HOOK
-> 	cd $(EACCELERATOR_DIR) && phpize
-> endef
+> That being said, we now have a few venues to deal with this series:
+>   0- drop the series entirely,
+>   1- postpone this series until after all packages have been fixed,
+>   2- finalise the series so it is fully agreed-on, apply it, then fix
+>      packages,
+>   3- get a benevolent dictator to agree the whole series for good,
+>      apply it, then we can fix the packages,
+>   4- apply all agreed-on patches (eg. 1-4, 6), then fix all packages,
+>      then refine/drop currently not agreed-on patches.
+>   5- apply all agreed-on patches (eg. 1-4, 6), then refine/drop the
+>      rest of the series, apply it, and fix packages,
+> 
+> Hopefully, we all agree that 0 is out-of-question. ;-)
+> 
+> Although 1 would be the best technical solution, it is (IMHO) not the
+> best from a practical point of view.
+> 
+> Going with 2 means another long round-trip, as there is at least one
+> opposition to this series (although I hope Thomas can be coerced into
+> approving the series! ;-p ).
+> 
+> 3 is not the best course of action, we still have not reached consensus
+> on the technical (de)merits of the series (specifically the end of it).
+> 
+> I do not have a strong feeling between 4 and 5, although, from a personal
+> position, I'd say we should go for 5, so I can get rid of this series
+> entirely (and switch to other interesting stuff! ;-) ).
 
-The hook should have a name starting with EACCELERATOR, to avoid
-clashing with other packages.
-
-EACCELERATOR_DIR should be replaced by $(@D).
-
-> define FIXUP_HOOK
-> 	sed -i 's/mm_shm_mmap_anon=no/mm_shm_mmap_anon=yes\n
-> mm_sem_pthread=yes/' $(EACCELERATOR_DIR)/config.m4
-> endef
-
-EACCELERATOR_DIR should be replaced by $(@D). A comment is needed to
-explain what you are doing.
-
-> EACCELERATOR_PRE_CONFIGURE_HOOKS += FIXUP_HOOK
-> EACCELERATOR_PRE_CONFIGURE_HOOKS += PHPIZE_HOOK
-
-Then you could probably do both things within a single hook.
-
-> $(eval $(autotools-package))
-
-There is a bit of rework to do, but it is good start. Keep posting
-updated versions that take into account the comments!
+Peter, can you please apply now patches 1 to 8 in this series, so the
+volume of the series reduces and we can more easily work on an
+agreement for the remaining patches?
 
 Thanks,
 
