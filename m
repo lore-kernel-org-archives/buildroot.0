@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Sep 2012 20:47:30 +0200
+Date: Thu, 20 Sep 2012 20:49:08 +0200
 Subject: [Buildroot] [PATCH 0/11 v3] Rework the gettext handling
-In-Reply-To: <201209201850.56066.yann.morin.1998@free.fr>
+In-Reply-To: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
 References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
- <505A4CD8.80900@mind.be>
- <201209201850.56066.yann.morin.1998@free.fr>
-Message-ID: <20120920204730.75b79901@skate>
+Message-ID: <20120920204908.65ca34d3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,53 +12,33 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Thu, 20 Sep 2012 18:50:55 +0200, Yann E. MORIN wrote:
+On Mon, 17 Sep 2012 00:57:45 +0200, Yann E. MORIN wrote:
 
-> My goal with the series was not to fix anything (except for the required
-> fixes), but rather to improve on the existing infrastructure.
+> This patch series is an aggregation of the gettext rework by Samuel,
+> Maxime, Thomas, and I.
+> 
+> See this post for the 6 first patches:
+> http://lists.busybox.net/pipermail/buildroot/2012-July/055871.html
+> 
+>     [PATCH 01/11] gettext: remove option to build statically
+>     [PATCH 02/11] gettext: remove the gettext-target make target, unused
+>     [PATCH 03/11] gettext: remove libintl handling
+>     [PATCH 04/11] Remove all references to libintl
+>     [PATCH 05/11] gettext: convert to autotools-package
+>     [PATCH 06/11] doc: update after gettext changes
+> 
+> The following 2 patches fix two packages in preparation for the end of the
+> series:
+> 
+>     [PATCH 07/11] package/lshw: add missing dependency on gettext
+>     [PATCH 08/11] package/pulseaudio: fix build-dependency on gettext
 
-Agreed.
+For patches 1 to 8,
 
-> Fixing anything that would break after the series, and that was already
-> broken before the series, was not the goal. This can come in a later
-> series [0], if such fixes are needed.
-> 
-> [0] Admitedly, it could (should?) even come before the series, but fixing
->     packages is really different from improving the infrastructure.
-> 
-> That being said, we now have a few venues to deal with this series:
->   0- drop the series entirely,
->   1- postpone this series until after all packages have been fixed,
->   2- finalise the series so it is fully agreed-on, apply it, then fix
->      packages,
->   3- get a benevolent dictator to agree the whole series for good,
->      apply it, then we can fix the packages,
->   4- apply all agreed-on patches (eg. 1-4, 6), then fix all packages,
->      then refine/drop currently not agreed-on patches.
->   5- apply all agreed-on patches (eg. 1-4, 6), then refine/drop the
->      rest of the series, apply it, and fix packages,
-> 
-> Hopefully, we all agree that 0 is out-of-question. ;-)
-> 
-> Although 1 would be the best technical solution, it is (IMHO) not the
-> best from a practical point of view.
-> 
-> Going with 2 means another long round-trip, as there is at least one
-> opposition to this series (although I hope Thomas can be coerced into
-> approving the series! ;-p ).
-> 
-> 3 is not the best course of action, we still have not reached consensus
-> on the technical (de)merits of the series (specifically the end of it).
-> 
-> I do not have a strong feeling between 4 and 5, although, from a personal
-> position, I'd say we should go for 5, so I can get rid of this series
-> entirely (and switch to other interesting stuff! ;-) ).
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Peter, can you please apply now patches 1 to 8 in this series, so the
-volume of the series reduces and we can more easily work on an
-agreement for the remaining patches?
-
-Thanks,
+Peter, please merge as soon as possible so we can make progress on
+this. Thanks!
 
 Thomas
 -- 
