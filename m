@@ -1,86 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Sep 2012 18:50:55 +0200
-Subject: [Buildroot] [PATCH 0/11 v3] Rework the gettext handling
-In-Reply-To: <505A4CD8.80900@mind.be>
-References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
- <505A4CD8.80900@mind.be>
-Message-ID: <201209201850.56066.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Sep 2012 20:44:17 +0200
+Subject: [Buildroot] eaccelerator
+In-Reply-To: <CAE9DZUSLuiDgK0fPGoSE=bBQLinvDRKFLBq6ifzPxJwpMBD-zQ@mail.gmail.com>
+References: <CAE9DZURE9s7eH_N2vhv1wK73Pip9wAVDmYtbU8Ynxn_3XpGpdQ@mail.gmail.com>
+ <20120919221012.3646aa7b@skate>
+ <CAE9DZUQFsysouX9sNvJj9qLRqJQB6-goVOSezxjNc2e7a_cG4Q@mail.gmail.com>
+ <20120920111001.371f5b01@skate>
+ <CAE9DZUSLuiDgK0fPGoSE=bBQLinvDRKFLBq6ifzPxJwpMBD-zQ@mail.gmail.com>
+Message-ID: <20120920204417.784829de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Dear Dallas Clement,
 
-(Adding Samuel in Cc)
+You should send such contributions to the Buildroot list and not just
+to me. Also, your contribution should be a proper Git patch, see
+http://elinux.org/Buildroot_how_to_contribute.
 
-On Thursday 20 September 2012 00:53:12 Arnout Vandecappelle wrote:
-> On 09/17/12 00:57, Yann E. MORIN wrote:
-> >    - fix conversion to autotools to always build libintl, even if locales are
-> >      disabled, to fix packages that always require NLS
-> >    - thus removed Arnout's Tested-by on patch 5/11, as it has changed
-[--SNIP--]
->   How about finding and fixing the packages that require NLS?
+On Thu, 20 Sep 2012 11:34:54 -0500, Dallas Clement wrote:
+> #############################################################
+> #
+> # eaccelerator
+> #
+> #############################################################
+> EACCELERATOR_VERSION = 0.9.6.1
+> EACCELERATOR_SITE = http://eaccelerator.net/
+> EACCELERATOR_SOURCE = eaccelerator-$(EACCELERATOR_VERSION).tar.bz2
+> EACCELERATOR_UNZIP = bzcat
+
+Line useless.
+
+> EACCELERATOR_DEPENDENCIES = php
+> EACCELERATOR_DIR = $(BUILD_DIR)/eaccelerator-$(EACCELERATOR_VERSION)
+
+Line useless.
+
+> EACCELERATOR_CONF_OPT = --prefix=/usr --enable-eaccelerator=shared \
+>   --with-php-config=$(STAGING_DIR)/usr/bin/php-config
+
+The --prefix=/usr is useless, this is already passed by default.
+
+> STAGING_INCLUDE_DIR = $(STAGING_DIR)/usr/include
+> EACCELERATOR_CONF_ENV = CPPFLAGS="$(TARGET_CFLAGS) -DMM_SEM_IPC
+> -DMM_SHM_IPC -I$(STAGING_INCLUDE_DIR)/php
+> -I$(STAGING_INCLUDE_DIR)/php/main -I$(STAGING_INCLUDE_DIR)/php/Zend
+> -I$(STAGING_INCLUDE_DIR)/php/TSRM"
+
+This big sequence of -I looks strange. Doesn't the configure script
+figures those one out?
+
+> EACCELERATOR_MAKE_ENV = INSTALL_ROOT="$(TARGET_DIR)"
 > 
->   But then, Samuel's remark becomes valid: if ENABLE_LOCALE is not true,
-> then libintl won't be built, so the -lintl becomes invalid.  In fact,
-> I would think that packages that select BR2_NEEDS_EXTERNAL_GETTEXT should
-> actually depend on ENABLE_LOCALE... Or usually they should be
-> ..._IF_LOCALE instead.  For instance, I tried util-linux and it builds
-> perfectly without locale and gettext.
+> EACCELERATOR_CONFFILES = /etc/php/cgi-php5/ext/eaccelerator.ini
+
+Is this used somewhere?
+
 > 
->   Any chance of testing if the cases that have gettext without -if-locale
-> can be replaced with gettext-if-locale?
+> define PHPIZE_HOOK
+> 	cd $(EACCELERATOR_DIR) && phpize
+> endef
 
-My goal with the series was not to fix anything (except for the required
-fixes), but rather to improve on the existing infrastructure.
+The hook should have a name starting with EACCELERATOR, to avoid
+clashing with other packages.
 
-Fixing anything that would break after the series, and that was already
-broken before the series, was not the goal. This can come in a later
-series [0], if such fixes are needed.
+EACCELERATOR_DIR should be replaced by $(@D).
 
-[0] Admitedly, it could (should?) even come before the series, but fixing
-    packages is really different from improving the infrastructure.
+> define FIXUP_HOOK
+> 	sed -i 's/mm_shm_mmap_anon=no/mm_shm_mmap_anon=yes\n
+> mm_sem_pthread=yes/' $(EACCELERATOR_DIR)/config.m4
+> endef
 
-That being said, we now have a few venues to deal with this series:
-  0- drop the series entirely,
-  1- postpone this series until after all packages have been fixed,
-  2- finalise the series so it is fully agreed-on, apply it, then fix
-     packages,
-  3- get a benevolent dictator to agree the whole series for good,
-     apply it, then we can fix the packages,
-  4- apply all agreed-on patches (eg. 1-4, 6), then fix all packages,
-     then refine/drop currently not agreed-on patches.
-  5- apply all agreed-on patches (eg. 1-4, 6), then refine/drop the
-     rest of the series, apply it, and fix packages,
+EACCELERATOR_DIR should be replaced by $(@D). A comment is needed to
+explain what you are doing.
 
-Hopefully, we all agree that 0 is out-of-question. ;-)
+> EACCELERATOR_PRE_CONFIGURE_HOOKS += FIXUP_HOOK
+> EACCELERATOR_PRE_CONFIGURE_HOOKS += PHPIZE_HOOK
 
-Although 1 would be the best technical solution, it is (IMHO) not the
-best from a practical point of view.
+Then you could probably do both things within a single hook.
 
-Going with 2 means another long round-trip, as there is at least one
-opposition to this series (although I hope Thomas can be coerced into
-approving the series! ;-p ).
+> $(eval $(autotools-package))
 
-3 is not the best course of action, we still have not reached consensus
-on the technical (de)merits of the series (specifically the end of it).
+There is a bit of rework to do, but it is good start. Keep posting
+updated versions that take into account the comments!
 
-I do not have a strong feeling between 4 and 5, although, from a personal
-position, I'd say we should go for 5, so I can get rid of this series
-entirely (and switch to other interesting stuff! ;-) ).
+Thanks,
 
-Also, we have not heard from Peter on this series, so maybe I'll pause
-working on it until he has a chance to express his opinion. Peter? ;-p
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
