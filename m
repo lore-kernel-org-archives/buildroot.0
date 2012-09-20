@@ -1,34 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Sep 2012 11:10:01 +0200
-Subject: [Buildroot] eaccelerator
-In-Reply-To: <CAE9DZUQFsysouX9sNvJj9qLRqJQB6-goVOSezxjNc2e7a_cG4Q@mail.gmail.com>
-References: <CAE9DZURE9s7eH_N2vhv1wK73Pip9wAVDmYtbU8Ynxn_3XpGpdQ@mail.gmail.com>
- <20120919221012.3646aa7b@skate>
- <CAE9DZUQFsysouX9sNvJj9qLRqJQB6-goVOSezxjNc2e7a_cG4Q@mail.gmail.com>
-Message-ID: <20120920111001.371f5b01@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Sep 2012 11:27:13 +0200
+Subject: [Buildroot] [PATCH v2 1/2] pcsc-lite: new package
+In-Reply-To: <99B09243E1A5DA4898CDD8B70011144818039905B8@EXMB04.eu.tieto.com>
+References: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+ <20120919164706.0e38b54d@skate>
+ <99B09243E1A5DA4898CDD8B70011144818039905B8@EXMB04.eu.tieto.com>
+Message-ID: <505AE171.50405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dallas Clement,
+On 09/20/12 08:10, Waldemar.Rymarkiewicz at tieto.com wrote:
+>> >Why when udev is available you don't do need libusb? Also, if udev is
+>> >available, you need to add it to the list of dependencies.
+> This is how pcsc-lite  ./configure  works.
+>
+> Firstly, libudev and libusb can't be used together. That means if you --enable-libusb you have to --disable-libudev (by default is enabled) explicitly.
+>
+> Secondly,  ./configure gives priority to libudev to be used if found, otherwise it searches for libusb.
+>
+> Finally, Neither libusb nor libudev can be found then no usb devices are used (serial only). Then --disable-libudev --disable-libusb will still compile.
 
-On Wed, 19 Sep 2012 15:36:58 -0500, Dallas Clement wrote:
-> Thanks Thomas.  You are sure right.  I figured this out earlier today.
->  I have a .mk file for it which I am happy to share with anyone who
-> cares.  How dost one go about sharing build recipes?  I realize this
-> one may not be one that you want to include in the general buildroot
-> distribution.
+  In that case, it should be:
 
-Why so? Just sent a patch that adds your new package, so that we can
-include it in Buildroot.
+if UDEV=y
+    --enable-libudev --disable-libusb
+    DEPS += udev
+else
+if LIBUSB=y
+    --enable-libusb --disable-libudev
+    DEPS += libusb
+else
+    --disable-libusb --disable-libudev
+endif
+endif
 
-Best regards,
+  This gives buildroot complete control over the process.  We generally want
+explicit --enable and --disable options, to avoid accidents with forgotten
+dependencies (they would mean that the compilation result is dependent on
+the order in which things are compiled, and we want to avoid that at all
+cost).
 
-Thomas
+
+> The only concern I have now it that user has to know this dependencies and select libusb or libudev explicitly. So wandering if not to require libusb or libudev in this package. What's your opinion?
+
+  udev _has_ to be selected explicitly - it's consequences are too far-reaching to allow
+selecting it behind the scenes, IMHO.
+
+  For libusb, you could add a config option in PCSC to force enabling of
+libusb.  Make that option 'depends on !BR2_PACKAGE_UDEV' because it isn't
+needed if udev exists.
+
+  Regards,
+  Arnout
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
