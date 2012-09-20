@@ -1,31 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 20 Sep 2012 12:23:53 +0200
-Subject: [Buildroot] [git commit] vala: bump version
-Message-ID: <20120920124823.C72ED9964E@busybox.osuosl.org>
+Date: Thu, 20 Sep 2012 14:11:39 +0200
+Subject: [Buildroot] [git commit] leafpad: needs host-intltool
+Message-ID: <20120920124824.D636A9964E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=238f3f860a660b0aafdc6a4ae4abcf0e31b21d93
+commit: http://git.buildroot.net/buildroot/commit/?id=fee31757683e39dba28527215e9e7fa6150c52cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+
+  http://autobuild.buildroot.org/results/d313a67b3deca262844d1043eafa5f6c5b6b7cad/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/vala/vala.mk |    2 +-
+ package/leafpad/leafpad.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 1cbbbc4..73ac8ee 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- #############################################################
+diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
+index ede8c58..b06e655 100644
+--- a/package/leafpad/leafpad.mk
++++ b/package/leafpad/leafpad.mk
+@@ -6,7 +6,7 @@
+ LEAFPAD_VERSION = 0.8.18
+ LEAFPAD_SOURCE = leafpad-$(LEAFPAD_VERSION).tar.gz
+ LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
+-LEAFPAD_DEPENDENCIES = libgtk2
++LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
  
- VALA_VERSION_MAJOR = 0.17
--VALA_VERSION_MINOR = 6
-+VALA_VERSION_MINOR = 7
- VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ $(eval $(autotools-package))
+ 
