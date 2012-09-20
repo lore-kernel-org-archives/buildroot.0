@@ -1,55 +1,38 @@
-From: Martin Peevski <martin@ronetix.at>
-Date: Thu, 20 Sep 2012 09:19:56 +0300
-Subject: [Buildroot] Fwd: Re:  Basic questions about using BuildRoot
-In-Reply-To: <5058F058.1020806@mind.be>
-References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
- <5055A940.7070802@ronetix.at>
- <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
- <5055C935.3050108@ronetix.at>
- <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
- <5058F058.1020806@mind.be>
-Message-ID: <505AB58C.3030805@ronetix.at>
+From: Waldemar.Rymarkiewicz at tieto.com <Waldemar.Rymarkiewicz@tieto.com>
+Date: Thu, 20 Sep 2012 09:31:25 +0300
+Subject: [Buildroot] [PATCH v2 2/2] ccid: new package
+In-Reply-To: <505A318A.6080107@mind.be>
+References: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+ <1348059150-32601-2-git-send-email-waldemar.rymarkiewicz@tieto.com>
+ <505A318A.6080107@mind.be>
+Message-ID: <99B09243E1A5DA4898CDD8B70011144818039905E5@EXMB04.eu.tieto.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/09/12 01:06, Arnout Vandecappelle wrote:
-> On 09/17/12 12:43, Thomas De Schampheleire wrote:
->> If you're only interested in the rootfs, you could use the original,
->> working u-boot and use the rootfs from buildroot. Have you tried that?
->>
->>> >
->>> >  One question beyond the theme: is it possible to build only Root FS
->>> >  compatible with some external Kernel without any tool and if so 
->>> how to do
->>> >  that?
->
->  Indeed, it is entirely possible to use buildroot to build a rootfs and
-> combine it with a pre-built kernel.  There is usually no dependency
-> of an executable on a specific kernel version, because the kernel
-> ABI is backward-compatible. When you build an internal or
-> crosstool-NG toolchain in buildroot, however, do make sure that
-> you use kernel headers with a sufficiently low version (smaller than
-> or equal to the pre-built kernel you use).
->
->  If you do want to build a custom kernel later on, you need two
-> things: the source and the config. Whoever gave you the kernel
-> binary is also obliged to give you the source (GPL), so that should
-> be doable. The config you can usually get from the running kernel,
-> in /proc/config.gz.
->
->
->  Good luck!
->
->  Regards,
->  Arnout
->
+Arnout,
 
+>[snip]
+>> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
+>> +CCID_CONF_OPT += --enable-libusb
+>> +CCID_DEPENDENCIES += libusb
+>> +else
+>> +CCID_CONF_OPT += --disable-libusb
+>> +endif
+>> +
+>> +$(eval $(call autotools-package))
+>
+>  I just build-tested on a config without libusb, and it doesn't seem
+>to install anything.  The examples are compiled (not installed), but
+>I doubt they're useful for anything without the ccid plugin.
+>
+>  So maybe it's better to select libusb after all.
 
-      Hi again! Thank you for the help. All my attempts to build Linux 
-with external version of U-boot and Kernel and the rootfs from buildroot 
-was unsuccessfull. However I get older directory tree and programs and 
-make rootfs with the Linux command mkfs.jffs2. To that moment it works, 
-thank for you time and help!
+You are right. I missed that. 
+
+It seems that ccid itself is broken and this option does not work as supposed so I will require libusb then. 
+
+Thanks,
+/Waldek
