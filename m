@@ -1,37 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Sep 2012 14:13:59 +0200
-Subject: [Buildroot] [PATCH] use a more portable syntax for mktemp.
-	fixes build problem under MacOS X
-In-Reply-To: <20120919223028.168abba2@skate> (Thomas Petazzoni's message of
- "Wed, 19 Sep 2012 22:30:28 +0200")
-References: <20120919164317.GA20160@waldemar-brodkorb.de>
- <20120919223028.168abba2@skate>
-Message-ID: <874nmsao3c.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Sep 2012 14:42:26 +0200
+Subject: [Buildroot] thread debugging with target gdb
+In-Reply-To: <zarafa.505b004f.74f2.799ed96c0a00510d@jacal.basystemes.fr>
+References: <505A397B.80404@mind.be>
+ <zarafa.505b004f.74f2.799ed96c0a00510d@jacal.basystemes.fr>
+Message-ID: <20120920144226.70dd0e27@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Thierry Bultel,
 
-Hi,
+On Thu, 20 Sep 2012 13:38:55 +0200, Thierry Bultel wrote:
 
- >> # Check if we can link to ncurses
+> Thanks for your help, is there a chance that those fixes get integrated in the mainline ?
 
- Thomas> If you make any changes to support/kconfig/, then those changes
- Thomas> should also be done in the patches in support/kconfig/patches/
- Thomas> that help us port our changes to later versions of kconfig when
- Thomas> we sync kconfig with the latest kernel version.
+Yes, sure. Could you send a proper patch? This way we can keep
+attribution, and credit you for the investigation of this problem.
 
-Or Yann's new kconfig-frontends package.
+Thanks!
 
- Thomas> In your case, changing patch 11 sounds like a good plan. However, does
- Thomas> Buildroot really works on Mac OS X? I don't think anybody uses
- Thomas> Buildroot on Mac OS X, and I suspect that a lot of things might be
- Thomas> broken besides just kconfig, no?
-
-My thoughts exactly.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
