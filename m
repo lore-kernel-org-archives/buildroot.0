@@ -1,53 +1,69 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 20 Sep 2012 09:36:39 +0200
-Subject: [Buildroot] [PATCH v2 1/2] pcsc-lite: new package
-In-Reply-To: <99B09243E1A5DA4898CDD8B70011144818039905B8@EXMB04.eu.tieto.com>
-References: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
- <20120919164706.0e38b54d@skate>
- <99B09243E1A5DA4898CDD8B70011144818039905B8@EXMB04.eu.tieto.com>
-Message-ID: <CAHXCMM+5Uu4vdB+kQrke15PJRki-k-meNg=E1_Ai8TceNYZbtA@mail.gmail.com>
+From: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+Date: Thu, 20 Sep 2012 09:49:59 +0200
+Subject: [Buildroot] [PATCH] use a more portable syntax for mktemp.
+	fixes build problem under MacOS X
+In-Reply-To: <20120919223028.168abba2@skate>
+References: <20120919164317.GA20160@waldemar-brodkorb.de>
+ <20120919223028.168abba2@skate>
+Message-ID: <AFA3A331-2A44-4362-AE91-45C4D377A159@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Hi Thomas Petazzoni,
+On Sep 19, 2012, at 10:30 PM, Thomas Petazzoni wrote:
 
-2012/9/20  <Waldemar.Rymarkiewicz@tieto.com>:
-[...]
-> Firstly, libudev and libusb can't be used together. That means if you --enable-libusb you have to --disable-libudev (by default is enabled) explicitly.
->
-> Secondly,  ./configure gives priority to libudev to be used if found, otherwise it searches for libusb.
->
-> Finally, Neither libusb nor libudev can be found then no usb devices are used (serial only). Then --disable-libudev --disable-libusb will still compile.
->
-> The only concern I have now it that user has to know this dependencies and select libusb or libudev explicitly. So wandering if not to require libusb or libudev in this package. What's your opinion?
+> Dear Waldemar Brodkorb,
+> 
+> On Wed, 19 Sep 2012 18:43:17 +0200, Waldemar Brodkorb wrote:
+> 
+>> diff --git a/support/kconfig/lxdialog/check-lxdialog.sh b/support/kconfig/lxdialog/check-lxdialog.sh
+>> index 969cd4c..fb4d90b 100644
+>> --- a/support/kconfig/lxdialog/check-lxdialog.sh
+>> +++ b/support/kconfig/lxdialog/check-lxdialog.sh
+>> @@ -33,7 +33,7 @@ ccflags()
+>> }
+>> 
+>> # Temp file, try to clean up after us
+>> -tmp=$(mktemp)
+>> +tmp=$(mktemp -t yyy)
+>> trap "rm -f $tmp" 0 1 2 3 15
+>> 
+>> # Check if we can link to ncurses
+> 
+> If you make any changes to support/kconfig/, then those changes should
+> also be done in the patches in support/kconfig/patches/ that help us
+> port our changes to later versions of kconfig when we sync kconfig with
+> the latest kernel version.
 
-If i don't misunderstand, here, the dependency can be explicitly
-express as a choice in the menuconfig:
+Okay.
 
-choice BR2_PACKAGE_PCSC_LITE_HWLIBS
-  prompt "hardware access/detection" # or whatever more suitable
-  default BR2_PACKAGE_PCSC_LITE_HWLIBS_LIBUDEV
-config BR2_PACKAGE_PCSC_LITE_HWLIBS_NONE
-  bool "none"
-config BR2_PACKAGE_PCSC_LITE_HWLIBS_LIBUSB
-  bool "libusb"
-  select BR2_PACKAGE_LIBUSB
-config BR2_PACKAGE_PCSC_LITE_HWLIBS_LIBUDEV
-  bool "libudev"
-  select BR2_PACKAGE_UDEV
-endchoice
+> In your case, changing patch 11 sounds like a good plan. However, does
+> Buildroot really works on Mac OS X? I don't think anybody uses
+> Buildroot on Mac OS X, and I suspect that a lot of things might be
+> broken besides just kconfig, no?
 
-Then, it is easy to know in the *.mk file which support should be enabled.
+Yes, there are more things broken. But I can successfully build a Qemu MIPS system
+and it boots up fine.
+- Busybox have a patch in upstream, will be in the next release
+ http://www.mail-archive.com/busybox at busybox.net/msg17046.html
+- uClibc utils/getconf.c does not compile (unresolved)
+- there is a kernel patch needed to build the different tools ( I can provide this, if someone is interested, this is
+used in OpenWrt, too)
+- minor patch for echo -e incompatibility
 
-Note:
-While writing this, I'm also wondering if the dependency on udev may
-be conditioned by the device management chosen.
+Besides that you need to use GNU sed, GNU xargs and GNU install instead of the MacOS X utils.
 
+best regards 
+ Waldemar 
 
-Regards,
-
--- 
-Sam
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> 
