@@ -1,48 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Sep 2012 12:22:57 +0200
-Subject: [Buildroot] [PATCH v2 1/2] pcsc-lite: new package
-In-Reply-To: <99B09243E1A5DA4898CDD8B70011144818039905B8@EXMB04.eu.tieto.com>
-References: <1348059150-32601-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
- <20120919164706.0e38b54d@skate>
- <99B09243E1A5DA4898CDD8B70011144818039905B8@EXMB04.eu.tieto.com>
-Message-ID: <20120920122257.359e35d6@skate>
+From: =?utf-8?Q?Thierry_Bultel?= <thierry.bultel@basystemes.fr>
+Date: Thu, 20 Sep 2012 13:38:55 +0200
+Subject: [Buildroot] thread debugging with target gdb
+In-Reply-To: <505A397B.80404@mind.be>
+References: <505A397B.80404@mind.be>
+Message-ID: <zarafa.505b004f.74f2.799ed96c0a00510d@jacal.basystemes.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Rymarkiewicz,
+I finnally solved my problem, and threads debugging now works fine.
 
-On Thu, 20 Sep 2012 09:10:26 +0300, Waldemar.Rymarkiewicz at tieto.com
-wrote:
+The fix consists in 2 things
 
-> >Why when udev is available you don't do need libusb? Also, if udev is
-> >available, you need to add it to the list of dependencies.
-> 
-> This is how pcsc-lite  ./configure  works. 
-> 
-> Firstly, libudev and libusb can't be used together. That means if you --enable-libusb you have to --disable-libudev (by default is enabled) explicitly.
-> 
-> Secondly,  ./configure gives priority to libudev to be used if found, otherwise it searches for libusb.
-> 
-> Finally, Neither libusb nor libudev can be found then no usb devices are used (serial only). Then --disable-libudev --disable-libusb will still compile. 
-> 
-> The only concern I have now it that user has to know this dependencies and select libusb or libudev explicitly. So wandering if not to require libusb or libudev in this package. What's your opinion?
+1) adding libpthreads_db.so on target
+Just like you said, this can be achieved in croostools-ng.mk like this:
 
-Samuel and Arnout have replied on the ways to make it possible.
+ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+CTNG_LIBS_LIB += libthread_db.so
+endif
 
-On my side, I'm still surprised that either udev or libusb are needed.
-They do really two different things, and I don't see how having udev
-can replace what libusb is doing, except if libusb is only used for USB
-device enumeration, and not access to the USB devices themselves. But I
-haven't looked at the code.
+But I would also add:
 
-Best regards,
+ifeq ($(BR2_PACKAGE_GDB),y)
+CTNG_LIBS_LIB += libthread_db.so
+endif
 
-Thomas
+since full gdb definitively needs it. Whatever ORing mecanism should maybe be done, not to add the lib twice,
+as options are not exclusive.
+
+2) Not stripping libpthread.so
+
+In the top Makefile:
+
+ifeq ($(BR2_PACKAGE_GDB),y)
+BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
+endif
+
+Thanks for your help, is there a chance that those fixes get integrated in the mainline ?
+
+Cheers 
+Thierry
+
+
+
+-----Original message-----
+From: Arnout Vandecappelle?<arnout@mind.be>
+Sent: Wed 19-Sep-2012 23:30
+To: Thierry Bultel <thierry.bultel@basystemes.fr>
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] thread debugging with target gdb
+
+
+On 09/19/12 23:27, Thierry Bultel wrote:
+>
+> Trying gdbserver is my next step, but I feel pessimistic / my conclusions above.
+
+  Most BR developers use gdbserver only, so that's better supported than full gdb on
+the target.
+
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be <http://www.mind.be> 
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle <http://www.linkedin.com/in/arnoutvandecappelle> 
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F ifeq ($(BR2_PACKAGE_GDB),y)
+> $(warning "THIERRY")
+> BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
+> endif
+ ifeq ($(BR2_PACKAGE_GDB),y)
+> $(warning "THIERRY")
+> BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
+> endif
+> ifeq ($(BR2_PACKAGE_GDB),y)
+> $(warning "THIERRY")
+> BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
+> endif
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120920/bb972315/attachment.html>
