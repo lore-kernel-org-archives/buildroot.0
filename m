@@ -1,9 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Sep 2012 20:49:08 +0200
-Subject: [Buildroot] [PATCH 0/11 v3] Rework the gettext handling
-In-Reply-To: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 20 Sep 2012 20:53:55 +0200
+Subject: [Buildroot] [PATCH 10/11] toolchain/common: introduce blind
+ options BR2_NEEDS_GETTEXT{, _IF_LOCALE}
+In-Reply-To: <201209182328.38581.yann.morin.1998@free.fr>
 References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20120920204908.65ca34d3@skate>
+ <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
+ <20120918195518.163c409d@skate>
+ <201209182328.38581.yann.morin.1998@free.fr>
+Message-ID: <20120920205355.29c30a7d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +16,46 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Mon, 17 Sep 2012 00:57:45 +0200, Yann E. MORIN wrote:
+On Tue, 18 Sep 2012 23:28:38 +0200, Yann E. MORIN wrote:
 
-> This patch series is an aggregation of the gettext rework by Samuel,
-> Maxime, Thomas, and I.
+> I agree that this is somewhat crossing the line. But I also believe this
+> change would make it easier to maintain packages, with a single, right way
+> of expressing the dependency, and a single place we'd have to change if
+> we'd have to, rather than scouting the tree for packages that needs gettext
+> feature (although a trivial grep would probably do the trick, granted).
 > 
-> See this post for the 6 first patches:
-> http://lists.busybox.net/pipermail/buildroot/2012-July/055871.html
+> Also, leaving packages do the conditional test opens the door to packages
+> doing it in their own way, eg:
 > 
->     [PATCH 01/11] gettext: remove option to build statically
->     [PATCH 02/11] gettext: remove the gettext-target make target, unused
->     [PATCH 03/11] gettext: remove libintl handling
->     [PATCH 04/11] Remove all references to libintl
->     [PATCH 05/11] gettext: convert to autotools-package
->     [PATCH 06/11] doc: update after gettext changes
+>   if BR2_NEEDS_GETTEXT
+>   FOO_DEPS += gettext
+>   endif
 > 
-> The following 2 patches fix two packages in preparation for the end of the
-> series:
+> vs.
 > 
->     [PATCH 07/11] package/lshw: add missing dependency on gettext
->     [PATCH 08/11] package/pulseaudio: fix build-dependency on gettext
+>   FOO_DEPS += $(if $(BR2_NEEDS_GETTEXT),gettext)
 
-For patches 1 to 8,
+Those two ways are identical, so I don't mind what packages do between
+both cases. Depending on how the package .mk file is written, one way
+or the other might make more sense.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> OK, so here's what I suggest:
+>   - fix the 4 gettext mis-constructs in packages, as you pointed out in
+>     another mail,
+>   - split the gettext abstraction in two parts: one for the Config.in stuff,
+>     and a second for the .mk stuff.
+> 
+> This way, at least the part of the series that we all agree on can be merged,
+> and the litiguous parts can be refined/dropped.
+> 
+> Does that sound OK?
 
-Peter, please merge as soon as possible so we can make progress on
-this. Thanks!
+I am all in favor of merging your entire patch series, but I remain
+unconvinced on just the .mk macros themselves. That said, it seems
+other people are fine with it, so if it goes in, I will not be overly
+shocked. I don't think it's a good direction, but I can live with it.
+
+Best regards,
 
 Thomas
 -- 
