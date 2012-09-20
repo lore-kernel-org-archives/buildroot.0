@@ -1,25 +1,27 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 19 Sep 2012 23:56:40 -0400
-Subject: [Buildroot] rootfs hooks okay to use?
-In-Reply-To: <CANxTyt4VXrRRG2X7gk1TRytmFXbEo+JbpwkL_bhHY5_ysti0=g@mail.gmail.com>
-References: <CANxTyt7HEBtj+WUzAcwii7n9K3drUEz=34yMAOeN8FHOG2DqfA@mail.gmail.com>
- <505963F8.7050705@mind.be>
- <CANxTyt4VXrRRG2X7gk1TRytmFXbEo+JbpwkL_bhHY5_ysti0=g@mail.gmail.com>
-Message-ID: <CANxTyt7S1j3i+kHk6oJgAsQ5-4ivsy+YCGnq9Ctp+bG=i4csSw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 20 Sep 2012 07:45:35 +0300
+Subject: [Buildroot] perl
+In-Reply-To: <CAE9DZURPOS_4tpqYO1zzsKNKTLxAY_4Xjh4Nqq9o+znJ89u+nw@mail.gmail.com>
+References: <CAE9DZURPOS_4tpqYO1zzsKNKTLxAY_4Xjh4Nqq9o+znJ89u+nw@mail.gmail.com>
+Message-ID: <20120920044535.GA4596@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Thomas,
+Hi Dallas,
 
-Please disregard this thread.  After some reconsideration, i've decided to
-abandon this approach.  There are certainly plenty of alternatives ways to
-do what I need to do.  It is probably best for me not to stir up trouble.
+On Wed, Sep 19, 2012 at 06:42:15PM -0500, Dallas Clement wrote:
+> Does anyone have a build recipe (perl.mk) for the full version of perl
+> that you wouldn't mind sharing?
 
-Apologies, apologies, apologies.
-Danomi -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120919/80d5efa8/attachment.html>
+Francois Perrad has posted patches for perl integration in Buildroot recently.  
+The most recent version is at http://patchwork.ozlabs.org/patch/182554/.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
