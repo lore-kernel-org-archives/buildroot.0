@@ -1,34 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Sep 2012 23:40:18 +0200
-Subject: [Buildroot] [PATCHv2][RESEND] python-protobuf: Add support for
- Python implementation of Google's Protocol Buffers
-In-Reply-To: <20120920223439.6480353a@skate>
-References: <20120917105103.GA17573@localhost.comm5.com.br>
- <20120920223439.6480353a@skate>
-Message-ID: <505B8D42.8010108@mind.be>
+Date: Fri, 21 Sep 2012 00:15:03 +0200
+Subject: [Buildroot] [PATCH v2 1/2] Download packages from github in
+ tar.gz format instead git format.
+In-Reply-To: <1348174101-13388-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1348174101-13388-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <505B9567.3070202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/20/12 22:34, Thomas Petazzoni wrote:
->> >  +PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
->> >  +PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
->> >  +PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
-> So the source tarball is the same? So what you're doing here in fact is
-> having two separate Buildroot packages for the same source tarball,
-> something that we generally don't do. But in this case, it seems like
-> logical to do it this way.
+On 09/20/12 22:48, Marek Belisko wrote:
+> Verified way how to get packages from github by version or sha1
+> (it's enough to use first 7 characters from SHA1):
+> 1. by sha1
+> FOO_VERSION = 1234567
+> FOO_SITE =http://github.com/user/package/tarball/branch
 >
-> What do others think about this strategy?
+> 2. by version
+> FOO_VERSION = v1.0
+> FOO_SITE =http://github.com/user/package/tarball/$(FOO_VERSION)
 >
+> Changes from V1:
+> - remove unnecessary FOO_SOURCE from mk files and documentation
 
-  It's a good start, but I still think we need more generic infrastructure
-for this use case.  For instance, this will fail if protobuf moves to a
-hg version, because then PROTOBUF_SOURCE is empty.
+  The changelog of the patch should go below the Signed-off-by,
+separated by a line with
+---
+This makes sure the patch changelog is not included in the final
+git commit message.
 
-  For the time being, it's OK, however.
+
+> Signed-off-by: Marek Belisko<marek.belisko@open-nandra.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (re-downloaded the affected packages)
 
   Regards,
   Arnout
