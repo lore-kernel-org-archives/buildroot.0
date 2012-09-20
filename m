@@ -1,75 +1,54 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Thu, 20 Sep 2012 17:12:29 +0200
-Subject: [Buildroot] [PATCH] intel-microcode: new package
-Message-ID: <1348153949-30525-1-git-send-email-rbraun@sceen.net>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Thu, 20 Sep 2012 17:22:29 +0200
+Subject: [Buildroot] [PATCH] Enables thread debugging with full gdb on target
+In-Reply-To: <20120920144226.70dd0e27@skate>
+References: <505A397B.80404@mind.be>
+ <zarafa.505b004f.74f2.799ed96c0a00510d@jacal.basystemes.fr>
+ <20120920144226.70dd0e27@skate>
+Message-ID: <505B34B5.2050503@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The libthread_db was not copied on target
+GDB needs libpthread to be not stripped
 
-Signed-off-by: Richard Braun <rbraun@sceen.net>
----
- package/Config.in                          |    1 +
- package/intel-microcode/Config.in          |    7 +++++++
- package/intel-microcode/intel-microcode.mk |   22 ++++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/intel-microcode/Config.in
- create mode 100644 package/intel-microcode/intel-microcode.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 58dd5e8..e8a3f50 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -212,6 +212,7 @@ source "package/hwdata/Config.in"
- source "package/i2c-tools/Config.in"
- source "package/input-event-daemon/Config.in"
- source "package/input-tools/Config.in"
-+source "package/intel-microcode/Config.in"
- source "package/iostat/Config.in"
- source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
-diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
-new file mode 100644
-index 0000000..495ebd7
---- /dev/null
-+++ b/package/intel-microcode/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_INTEL_MICROCODE
-+	bool "intel-microcode"
-+	depends on BR2_x86_64 || BR2_i386
-+	help
-+	  This package provides an Intel microcode data file that can be
-+	  used to correct processor errors. The iucode-tool package and
-+	  proper kernel support are required to upload the microcode.
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-new file mode 100644
-index 0000000..5f60272
---- /dev/null
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# intel-microcode
-+#
-+#############################################################
+Signed-off-by: Thierry Bultel <thierry.bultel@wanadoo.fr>
+diff -Naur buildroot-2012.08.orig/Makefile buildroot-2012.08/Makefile
+--- buildroot-2012.08.orig/Makefile	2012-08-31 10:49:41.000000000 +0200
++++ buildroot-2012.08/Makefile	2012-09-20 16:42:11.938021804 +0200
+@@ -416,6 +416,10 @@
+  
+  $(TARGET_DIR): $(BUILD_DIR)/.root
+  
++ifeq ($(BR2_PACKAGE_GDB),y)
++BR2_STRIP_EXCLUDE_FILES += libpthread*.so*
++endif
 +
-+INTEL_MICROCODE_VERSION = 20120606
-+INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
-+INTEL_MICROCODE_SITE = http://downloadmirror.intel.com/21385/eng
-+INTEL_MICROCODE_LICENSE = PROPRIETARY
+  STRIP_FIND_CMD = find $(TARGET_DIR)
+  ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+  STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+diff -Naur buildroot-2012.08.orig/toolchain/toolchain-crosstool-ng/crosstool-ng.mk buildroot-2012.08/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+--- buildroot-2012.08.orig/toolchain/toolchain-crosstool-ng/crosstool-ng.mk	2012-08-31 10:49:41.000000000 +0200
++++ buildroot-2012.08/toolchain/toolchain-crosstool-ng/crosstool-ng.mk	2012-09-20 16:41:46.741771907 +0200
+@@ -41,6 +41,18 @@
+  CTNG_LIBS_LIB := ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so    \
+                   libnsl.so libpthread.so libresolv.so librt.so libutil.so
+  
++ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++CTNG_LIBS_LIB_THREAD_DB_NEEDED := y
++endif
 +
-+# N.B. Don't strip any path components during extraction.
-+define INTEL_MICROCODE_EXTRACT_CMDS
-+	gzip -d -c $(DL_DIR)/$(INTEL_MICROCODE_SOURCE) | tar --strip-components=0 -C $(INTEL_MICROCODE_DIR) -xf -
-+endef
++ifeq ($(BR2_PACKAGE_GDB),y)
++CTNG_LIBS_LIB_THREAD_DB_NEEDED := y
++endif
 +
-+define INTEL_MICROCODE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/microcode.dat \
-+		$(TARGET_DIR)/usr/share/misc/intel-microcode.dat
-+endef
++ifeq ($(CTNG_LIBS_LIB_THREAD_DB_NEEDED),y)
++CTNG_LIBS_LIB += libthread_db.so
++endif
 +
-+$(eval $(generic-package))
--- 
-1.7.2.5
+  #--------------
+  # The libc-specific system libraries (in /lib)
+  # Note: it may be needed to tweak the NSS libs in the glibc and eglibc cases...
