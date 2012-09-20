@@ -1,156 +1,180 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Thu, 20 Sep 2012 22:37:46 +0200
-Subject: [Buildroot] [PATCH v2] Add package raspberrypi-firmware.
-Message-ID: <1348173466-10956-1-git-send-email-marek.belisko@open-nandra.com>
+Date: Thu, 20 Sep 2012 22:48:20 +0200
+Subject: [Buildroot] [PATCH v2 1/2] Download packages from github in tar.gz
+	format instead git format.
+Message-ID: <1348174101-13388-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for raspberrypi bootloader and VideoCore.
+Verified way how to get packages from github by version or sha1
+(it's enough to use first 7 characters from SHA1):
+1. by sha1
+FOO_VERSION = 1234567
+FOO_SITE = http://github.com/user/package/tarball/branch
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+2. by version
+FOO_VERSION = v1.0
+FOO_SITE = http://github.com/user/package/tarball/$(FOO_VERSION)
 
 Changes from V1:
-- fix names in Config.in (BR2_PACKAGE_BOOTLOADER_ARM192 to
- BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM192)
-- remove unnecessary SOURCE in mk file
-- fix installing VideoCore libraries and include
-- copy bootloader files directly to images directory
-- rework handling selection of GPU & ARM memory split
- (inspired by Yann patch)
-- bump to latest "turbo mode" firmware version
- (http://www.raspberrypi.org/archives/2008)
+- remove unnecessary FOO_SOURCE from mk files and documentation
 
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in                                  |    1 +
- package/raspberrypi-firmware/Config.in             |   60 ++++++++++++++++++++
- .../raspberrypi-firmware/raspberrypi-firmware.mk   |   37 ++++++++++++
- 3 files changed, 98 insertions(+)
- create mode 100644 package/raspberrypi-firmware/Config.in
- create mode 100644 package/raspberrypi-firmware/raspberrypi-firmware.mk
+ package/cpuload/cpuload.mk                       |    2 +-
+ package/input-event-daemon/input-event-daemon.mk |    2 +-
+ package/jsmin/jsmin.mk                           |    4 ++--
+ package/libiqrf/libiqrf.mk                       |    2 +-
+ package/mtdev2tuio/mtdev2tuio.mk                 |    4 ++--
+ package/omap-u-boot-utils/omap-u-boot-utils.mk   |    5 ++---
+ package/socketcand/socketcand.mk                 |    4 ++--
+ package/ti-utils/ti-utils.mk                     |    4 ++--
+ package/tslib/tslib.mk                           |    4 ++--
+ package/yajl/yajl.mk                             |    2 +-
+ 10 files changed, 16 insertions(+), 17 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 58dd5e8..36635cd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -232,6 +232,7 @@ source "package/owl-linux/Config.in"
- source "package/parted/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
-+source "package/raspberrypi-firmware/Config.in"
- source "package/read-edid/Config.in"
- source "package/rng-tools/Config.in"
- source "package/sane-backends/Config.in"
-diff --git a/package/raspberrypi-firmware/Config.in b/package/raspberrypi-firmware/Config.in
-new file mode 100644
-index 0000000..e1b7e52
---- /dev/null
-+++ b/package/raspberrypi-firmware/Config.in
-@@ -0,0 +1,60 @@
-+config BR2_PACKAGE_RASPBERRYPI_FIRMWARE
-+	bool
-+
-+config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER
-+	bool "Raspberry Pi bootloader files"
-+	select BR2_PACKAGE_RASPBERRYPI_FIRMWARE
-+	help
-+	  These are the binary bootloader files from Broadcom.
-+
-+	  https://github.com/raspberrypi/firmware
-+
-+if BR2_PACKAGE_RASPBERRYPI_BOOTLOADER
-+choice
-+
-+prompt "Memory & GPU split"
-+	default BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM192
-+	help
-+	  Select how much memory use for system and
-+	  how much for GPU.
-+
-+config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM128
-+	bool "arm128"
-+	help
-+	  128M ARM, 128M GPU split (use this for heavy 3D work, possibly also
-+	  required for some video decoding)
-+
-+config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM192
-+	bool "arm192"
-+	help
-+	  192M ARM, 64M GPU split (this is the default)
-+
-+config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM224
-+	bool "arm224"
-+	help
-+	  224M ARM, 32M GPU split (use this for Linux only with no 3D or video
-+	  processing. Its enough for the 1080p framebuffer, but not much else)
-+
-+config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM240
-+	bool "arm240"
-+	help
-+	  240M ARM, 16M GPU split (use this for headless mode only. It is enough
-+	  to boot the system, but you can not use video at all.)
-+endchoice
-+
-+config BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_FILE
-+	string
-+	default "arm128" if BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM128
-+	default "arm192" if BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM192
-+	default "arm224" if BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM224
-+	default "arm240" if BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_ARM240
-+
-+endif #BR2_PACKAGE_RASPBERRYPI_BOOTLOADER
-+
-+config BR2_PACKAGE_RASPBERRYPI_VIDEOCORE
-+	bool "Raspberry Pi VideoCore drivers"
-+	select BR2_PACKAGE_RASPBERRYPI_FIRMWARE
-+	help
-+	  These are the binary VideoCore drivers from Broadcom.
-+
-+	  https://github.com/raspberrypi/firmware
-diff --git a/package/raspberrypi-firmware/raspberrypi-firmware.mk b/package/raspberrypi-firmware/raspberrypi-firmware.mk
-new file mode 100644
-index 0000000..c788497
---- /dev/null
-+++ b/package/raspberrypi-firmware/raspberrypi-firmware.mk
-@@ -0,0 +1,37 @@
-+RASPBERRYPI_FIRMWARE_VERSION = 9f7cff0
-+RASPBERRYPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/master
-+
-+ifeq ($(BR2_PACKAGE_RASPBERRYPI_VIDEOCORE),y)
-+RASPBERRYPI_FIRMWARE_INSTALL_STAGING = YES
-+
-+define RASPBERRYPI_FIRMWARE_INSTALL_STAGING_CMDS
-+	cp -r -T $(@D)/hardfp/opt/vc/include $(STAGING_DIR)/usr/include
-+	cp -r -T $(@D)/hardfp/opt/vc/lib $(STAGING_DIR)/usr/lib
-+endef
-+
-+define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_VIDEOCORE
-+	cp -r -T $(@D)/hardfp/opt/vc/bin $(TARGET_DIR)/usr/bin
-+	cp -r -T $(@D)/hardfp/opt/vc/lib $(TARGET_DIR)/usr/lib
-+	cp -r -T $(@D)/hardfp/opt/vc/sbin $(TARGET_DIR)/usr/sbin
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RASPBERRYPI_BOOTLOADER),y)
-+
-+BOOT_FILE = $(call qstrip,$(BR2_PACKAGE_RASPBERRYPI_BOOTLOADER_FILE))
-+
-+define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_BOOTLOADER
-+	install -D -m 0644 $(@D)/boot/$(BOOT_FILE)_start.elf \
-+		$(BINARIES_DIR)/start.elf
-+	install -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/bootcode.bin
-+	install -D -m 0644 $(@D)/boot/loader.bin $(BINARIES_DIR)/loader.bin
-+endef
-+endif
-+
-+define RASPBERRYPI_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(RASPBERRYPI_FIRMWARE_INSTALL_TARGET_BOOTLOADER)
-+	$(RASPBERRYPI_FIRMWARE_INSTALL_TARGET_VIDEOCORE)
-+endef
-+
-+$(eval $(generic-package))
-+
+diff --git a/package/cpuload/cpuload.mk b/package/cpuload/cpuload.mk
+index d25c504..494cbb1 100644
+--- a/package/cpuload/cpuload.mk
++++ b/package/cpuload/cpuload.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ CPULOAD_VERSION = v0.3
+-CPULOAD_SITE = git://github.com/kelvincheung/cpuload.git
++CPULOAD_SITE = http://github.com/kelvincheung/cpuload/tarball/$(CPULOAD_VERSION)
+ CPULOAD_LICENSE = GPLv2
+ CPULOAD_LICENSE_FILES = COPYING
+ 
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index f99bfbe..fdff557 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ INPUT_EVENT_DAEMON_VERSION = v0.1.3
+-INPUT_EVENT_DAEMON_SITE = git://github.com/gandro/input-event-daemon.git
++INPUT_EVENT_DAEMON_SITE = http://github.com/gandro/input-event-daemon/tarball/$(INPUT_EVENT_DAEMON_VERSION)
+ INPUT_EVENT_DAEMON_LICENSE = input-event-daemon license
+ INPUT_EVENT_DAEMON_LICENSE_FILES = README
+ 
+diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
+index fb8c214..0e82008 100644
+--- a/package/jsmin/jsmin.mk
++++ b/package/jsmin/jsmin.mk
+@@ -1,5 +1,5 @@
+-JSMIN_VERSION = a9b47554d5684a55301a2eb7ca8480b7ee7630d4
+-JSMIN_SITE = git://github.com/douglascrockford/JSMin.git
++JSMIN_VERSION = a9b4755
++JSMIN_SITE = http://github.com/douglascrockford/JSMin/tarball/master
+ 
+ define JSMIN_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
+diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+index 4cf1541..d7603ae 100644
+--- a/package/libiqrf/libiqrf.mk
++++ b/package/libiqrf/libiqrf.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ LIBIQRF_VERSION = v0.1.0
+-LIBIQRF_SITE = git://github.com/nandra/libiqrf.git
++LIBIQRF_SITE = http://github.com/nandra/libiqrf/tarball/$(LIBIQRF_VERSION)
+ LIBIQRF_INSTALL_STAGING = YES
+ 
+ LIBIQRF_DEPENDENCIES = libusb
+diff --git a/package/mtdev2tuio/mtdev2tuio.mk b/package/mtdev2tuio/mtdev2tuio.mk
+index a86c0bf..9306946 100644
+--- a/package/mtdev2tuio/mtdev2tuio.mk
++++ b/package/mtdev2tuio/mtdev2tuio.mk
+@@ -3,8 +3,8 @@
+ # mtdev2tuio
+ #
+ #############################################################
+-MTDEV2TUIO_VERSION = e1e7378d86
+-MTDEV2TUIO_SITE = git://github.com/olivopaolo/mtdev2tuio.git
++MTDEV2TUIO_VERSION = e1e7378
++MTDEV2TUIO_SITE = http://github.com/olivopaolo/mtdev2tuio/tarball/master
+ MTDEV2TUIO_DEPENDENCIES = mtdev liblo
+ MTDEV2TUIO_LICENSE = GPLv3+
+ MTDEV2TUIO_LICENSE_FILES = COPYING
+diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+index 8405f62..bb894a5 100644
+--- a/package/omap-u-boot-utils/omap-u-boot-utils.mk
++++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+@@ -4,9 +4,8 @@
+ #
+ #############################################################
+ 
+-OMAP_U_BOOT_UTILS_VERSION = 8aff852322
+-OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils.git
+-OMAP_U_BOOT_UTILS_SITE_METHOD = git
++OMAP_U_BOOT_UTILS_VERSION = 8aff852
++OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils/tarball/master
+ 
+ define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
+ 	$(MAKE) -C $(@D)
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+index a1e672f..efade31 100644
+--- a/package/socketcand/socketcand.mk
++++ b/package/socketcand/socketcand.mk
+@@ -3,8 +3,8 @@
+ # socketcand
+ #
+ #############################################################
+-SOCKETCAND_VERSION = 7d06986fa4b5fd2c210ec4e248dab41107be1ccd
+-SOCKETCAND_SITE = git://github.com/dschanoeh/socketcand.git
++SOCKETCAND_VERSION = 7d06986
++SOCKETCAND_SITE = http://github.com/dschanoeh/socketcand/tarball/master
+ SOCKETCAND_AUTORECONF = YES
+ SOCKETCAND_DEPENDENCIES = libconfig
+ 
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index ac54370..956daf4 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ 
+-TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
+-TI_UTILS_SITE = git://github.com/gxk/ti-utils.git
++TI_UTILS_VERSION = 06dbdb2
++TI_UTILS_SITE = http://github.com/gxk/ti-utils/tarball/master
+ TI_UTILS_DEPENDENCIES = libnl
+ 
+ define TI_UTILS_BUILD_CMDS
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 8f30c25..b10b5ec 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -3,8 +3,8 @@
+ # tslib
+ #
+ #############################################################
+-TSLIB_VERSION = 412d99d8b92c
+-TSLIB_SITE = git://github.com/kergoth/tslib.git
++TSLIB_VERSION = 412d99d
++TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
+ TSLIB_AUTORECONF = YES
+ TSLIB_INSTALL_STAGING = YES
+ TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
+index 9cebeb7..6f9c640 100644
+--- a/package/yajl/yajl.mk
++++ b/package/yajl/yajl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ YAJL_VERSION = 2.0.4
+-YAJL_SITE = git://github.com/lloyd/yajl.git
++YAJL_SITE = http://github.com/lloyd/yajl/tarball/$(YAJL_VERSION)
+ YAJL_INSTALL_STAGING = YES
+ YAJL_LICENSE = ISC
+ YAJL_LICENSE_FILES = COPYING
 -- 
 1.7.9.5
