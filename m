@@ -1,46 +1,41 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Thu, 20 Sep 2012 23:12:55 +0200
-Subject: [Buildroot] [PATCH] intel-microcode: new package
-In-Reply-To: <20120920223646.65a34101@skate>
-References: <1348153949-30525-1-git-send-email-rbraun@sceen.net>
- <20120920223646.65a34101@skate>
-Message-ID: <20120920211255.GA32421@mail.sceen.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Sep 2012 23:35:16 +0200
+Subject: [Buildroot] [PATCH 06/13] cpanminus: new package v3
+In-Reply-To: <20120920220418.65bb6b14@skate>
+References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
+ <1347107325-4163-6-git-send-email-francois.perrad@gadz.org>
+ <20120920220418.65bb6b14@skate>
+Message-ID: <505B8C14.5090103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 20, 2012 at 10:36:46PM +0200, Thomas Petazzoni wrote:
-> Is there a license file somewhere that states that even though it is
-> proprietary, one has the right to redistribute the binaries?
+On 09/20/12 22:04, Thomas Petazzoni wrote:
+> Hum, do we really want a package which has configuration options that
+> allow to select a set of libraries/modules to be downloaded and
+> installed? It would be more natural to have those Perl modules properly
+> packaged into Buildroot, no? I suspect that they are all packaged
+> similarly, so a $(perl-package) infrastructure would work quite well.
+>
+> This way, we still have the usual package infrastructure for licensing
+> report and things like this. I honestly don't know if we want packages
+> whose job is in turn to download/install a bunch of other things. It's
+> smart, but I'm not sure we want that.
 
-On the Intel download site, after searching for the last version of the
-microcode data file [1], the download link leads to a license agreement
-page which describes three license terms, depending on the nature of the
-distributor (network administrator, end user or OEM). I think the OEM
-license applies to most buildroot users. Here is the content :
+  I'm not sure we want to add 100,000 .mk files either...
 
-"OEM LICENSE: You may reproduce and distribute the Software only as an 
-integral part of or incorporated in Your product or as a standalone 
-Software maintenance update for existing end users of Your products, 
-excluding any other standalone products, subject to these conditions:
+  Ideally, the cpanminus module should be able to do the right thing for
+the -source, -source-check and -legal-info targets.
 
-1. This Software is licensed for use only in conjunction with Intel 
-component products. Use of the Software in conjunction with non-Intel 
-component products is not licensed hereunder.
-2. You may not copy, modify, rent, sell, distribute or transfer any part 
-of the Software except as provided in this Agreement, and you agree to 
-prevent unauthorized copying of the Software.
-3. You may not reverse engineer, decompile, or disassemble the Software. 
-4. You may only distribute the Software to your customers pursuant to a 
-written license agreement. Such license agreement may be a "break-the-
-seal" license agreement. At a minimum such license shall safeguard 
-Intel's ownership rights to the Software.
-5. The Software may include portions offered on terms in addition to those
-set out here, as set out in a license accompanying those portions."
 
+  Regards,
+  Arnout
 -- 
-Richard Braun
-
-[1] http://downloadcenter.intel.com/Detail_Desc.aspx?agr=Y&DwnldID=21385&keyword=microcode&lang=eng
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
