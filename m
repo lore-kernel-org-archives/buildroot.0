@@ -1,25 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Sep 2012 08:37:36 -0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Sep 2012 14:02:08 +0200
 Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
-	host-pkg-config
-In-Reply-To: <505C4E1A.7000809@mind.be>
+ host-pkg-config
+In-Reply-To: <1348224356-20104-1-git-send-email-arnout@mind.be>
 References: <1348224356-20104-1-git-send-email-arnout@mind.be>
- <505C4969.8090707@zacarias.com.ar> <505C4C17.2000701@mind.be>
- <505C4DB3.8000008@zacarias.com.ar> <505C4E1A.7000809@mind.be>
-Message-ID: <505C5180.10105@zacarias.com.ar>
+Message-ID: <20120921140208.341710bd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/21/12 08:23, Arnout Vandecappelle wrote:
+Dear Arnout Vandecappelle (Essensium/Mind),
 
->  But the final link will fail because of undefined fuse_xxx symbols,
-> because there is no -lfuse added by pkg-config.
+On Fri, 21 Sep 2012 12:45:56 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-Yes, that's why i Acked your patch, it IS a problem.
-It's just not the problem stated in the commit msg about the
-autobuilders not detecting it (host-pkg-config almost always present,
-that changes nothing as long as there's a pkg-config around) :)
-Regards.
+> How was this never caught by the autobuilders?  Do they happen to
+> build host-pkg-config most of the time?  If so, maybe we should make
+> the randpackageconfig select a smaller number of packages to increase
+> the chance of finding this kind of issue...
+
+We can configure the probability for each given package to be selected
+in randpackageconfig, and my autobuilder script itself make this value
+a random value between (IIRC) 2 and 35%. So depending on the build,
+each package has between 2% and 35% of chances of being selected. And I
+certainly see builds with very few packages selected. So I'm also
+surprised it wasn't found until now.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
