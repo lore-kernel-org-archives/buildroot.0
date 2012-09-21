@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 22 Sep 2012 00:28:33 +0200
-Subject: [Buildroot] [PATCH 1/6] netkitbase: convert to the generic-package
+Date: Sat, 22 Sep 2012 00:28:34 +0200
+Subject: [Buildroot] [PATCH 2/6] netkittelnet: convert to generic-package
 	infrastructure
 In-Reply-To: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
 References: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1348266518-27665-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1348266518-27665-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,102 +12,115 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/netkitbase/netkitbase.mk b/package/netkitbase/netkitbase.mk
-index 56480fc..3899b78 100644
---- a/package/netkitbase/netkitbase.mk
-+++ b/package/netkitbase/netkitbase.mk
-@@ -3,69 +3,32 @@
- # netkitbase
+diff --git a/package/netkittelnet/netkittelnet.mk b/package/netkittelnet/netkittelnet.mk
+index 43ba324..003094b 100644
+--- a/package/netkittelnet/netkittelnet.mk
++++ b/package/netkittelnet/netkittelnet.mk
+@@ -3,69 +3,30 @@
+ # netkittelnet
  #
  #############################################################
--NETKITBASE_VERSION:=0.17
--NETKITBASE_SOURCE:=netkit-base-$(NETKITBASE_VERSION).tar.gz
--NETKITBASE_SITE:=ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
--NETKITBASE_DIR:=$(BUILD_DIR)/netkit-base-$(NETKITBASE_VERSION)
--NETKITBASE_CAT:=$(ZCAT)
--NETKITBASE_BINARY:=inetd/inetd
--NETKITBASE_TARGET_BINARY:=usr/sbin/inetd
-+NETKITBASE_VERSION = 0.17
-+NETKITBASE_SOURCE  = netkit-base-$(NETKITBASE_VERSION).tar.gz
-+NETKITBASE_SITE    = ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
-+NETKITBASE_LICENSE = BSD-4c
+-NETKITTELNET_VERSION:=0.17
+-NETKITTELNET_SOURCE:=netkit-telnet-$(NETKITTELNET_VERSION).tar.gz
+-NETKITTELNET_SITE:=ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
+-NETKITTELNET_DIR:=$(BUILD_DIR)/netkit-telnet-$(NETKITTELNET_VERSION)
+-NETKITTELNET_CAT:=$(ZCAT)
+-NETKITTELNET_BINARY:=telnetd/telnetd
+-NETKITTELNET_TARGET_BINARY:=usr/sbin/telnetd
++NETKITTELNET_VERSION = 0.17
++NETKITTELNET_SOURCE  = netkit-telnet-$(NETKITTELNET_VERSION).tar.gz
++NETKITTELNET_SITE    = ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
++NETKITTELNET_LICENSE = BSD-4c
  
--$(DL_DIR)/$(NETKITBASE_SOURCE):
--	 $(call DOWNLOAD,$(NETKITBASE_SITE)/$(NETKITBASE_SOURCE))
+-$(DL_DIR)/$(NETKITTELNET_SOURCE):
+-	 $(call DOWNLOAD,$(NETKITTELNET_SITE)/$(NETKITTELNET_SOURCE))
 -
--netkitbase-source: $(DL_DIR)/$(NETKITBASE_SOURCE)
+-netkittelnet-source: $(DL_DIR)/$(NETKITTELNET_SOURCE)
 -
--$(NETKITBASE_DIR)/.unpacked: $(DL_DIR)/$(NETKITBASE_SOURCE)
--	$(NETKITBASE_CAT) $(DL_DIR)/$(NETKITBASE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+define NETKITBASE_CONFIGURE_CMDS
+-$(NETKITTELNET_DIR)/.unpacked: $(DL_DIR)/$(NETKITTELNET_SOURCE)
+-	$(NETKITTELNET_CAT) $(DL_DIR)/$(NETKITTELNET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++define NETKITTELNET_CONFIGURE_CMDS
  	# use ANSI syntax
- 	$(SED) "s/main()/main(void)/;" $(NETKITBASE_DIR)/configure
- 	# don't try to run cross compiled binaries while configuring things
- 	$(SED) "s~./__conftest~#./__conftest~;" $(NETKITBASE_DIR)/configure
--	support/scripts/apply-patches.sh $(NETKITBASE_DIR) package/netkitbase/ netkitbase\*.patch
--	touch $(NETKITBASE_DIR)/.unpacked
+-	$(SED) "s/main()/main(void)/;" $(NETKITTELNET_DIR)/configure
++	$(SED) "s/main()/main(void)/;" $(@D)/configure
+ 	# Disable termcap support
+-	$(SED) "s~\(.*termcap\.h.*\)~/* \1 */~;" $(NETKITTELNET_DIR)/telnetd/telnetd.c
+-	# don't try to run cross compiled binaries while configuring things
+-	support/scripts/apply-patches.sh $(NETKITTELNET_DIR) package/netkittelnet/ netkittelnet\*.patch
+-	touch $(NETKITTELNET_DIR)/.unpacked
 -
--$(NETKITBASE_DIR)/.configured: $(NETKITBASE_DIR)/.unpacked
--	(cd $(NETKITBASE_DIR); rm -f config.cache; \
+-$(NETKITTELNET_DIR)/.configured: $(NETKITTELNET_DIR)/.unpacked
+-	(cd $(NETKITTELNET_DIR); rm -f config.cache; \
 -	 PATH=$(TARGET_PATH) CC="$(TARGET_CC)" \
 -	./configure --installroot=$(TARGET_DIR) --with-c-compiler="$(TARGET_CC)" \
 -	)
--	touch $(NETKITBASE_DIR)/.configured
+-	touch $(NETKITTELNET_DIR)/.configured
 -
--$(NETKITBASE_DIR)/$(NETKITBASE_BINARY): $(NETKITBASE_DIR)/.configured
--	$(MAKE) CC="$(TARGET_CC)" -C $(NETKITBASE_DIR)
--	$(STRIPCMD) $(NETKITBASE_DIR)/$(NETKITBASE_BINARY)
+-$(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY): $(NETKITTELNET_DIR)/.configured
+-	$(MAKE) SUB=telnetd CC="$(TARGET_CC)" -C $(NETKITTELNET_DIR)
+-	$(STRIPCMD) $(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY)
 -
--$(TARGET_DIR)/$(NETKITBASE_TARGET_BINARY): $(NETKITBASE_DIR)/$(NETKITBASE_BINARY)
+-$(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY): $(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY)
 -	# Only install a few selected items...
 -	mkdir -p $(TARGET_DIR)/usr/sbin
--	cp $(NETKITBASE_DIR)/$(NETKITBASE_BINARY) $(TARGET_DIR)/$(NETKITBASE_TARGET_BINARY)
--	@if [ ! -f $(TARGET_DIR)/etc/inetd.conf ]; then \
--		mkdir -p $(TARGET_DIR)/etc; \
--		cp $(NETKITBASE_DIR)/etc.sample/inetd.conf $(TARGET_DIR)/etc/; \
+-	rm -f $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
+-	cp $(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY) $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
++	$(SED) "s~\(.*termcap\.h.*\)~/* \1 */~;" $(@D)/telnetd/telnetd.c
 +	(cd $(@D); \
 +		$(TARGET_CONFIGURE_OPTS) \
 +		./configure \
 +		--installroot=$(TARGET_DIR))
 +endef
 +
-+define NETKITBASE_BUILD_CMDS
-+	$(MAKE) -C $(@D)
++define NETKITTELNET_BUILD_CMDS
++	$(MAKE) SUB=telnetd -C $(@D)
 +endef
 +
-+define NETKITBASE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/inetd/inetd $(TARGET_DIR)/usr/sbin/inetd
-+	if [ ! -f $(TARGET_DIR)/etc/inetd.conf ]; then \
-+		$(INSTALL) -D -m 0644 $(@D)/etc.sample/inetd.conf $(TARGET_DIR)/etc/inetd.conf; \
- 		$(SED) "s/^\([a-z]\)/#\1/;" $(TARGET_DIR)/etc/inetd.conf; \
- 	fi
--	touch -c $(TARGET_DIR)/$(NETKITBASE_TARGET_BINARY)
++define NETKITTELNET_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/telnetd/telnetd $(TARGET_DIR)/usr/sbin/telnetd
+ 	# Enable telnet in inetd
+ 	$(SED) "s~^#telnet.*~telnet\tstream\ttcp\tnowait\troot\t/usr/sbin/telnetd\t/usr/sbin/telnetd~;" $(TARGET_DIR)/etc/inetd.conf
+-	#$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(NETKITTELNET_DIR) install
+-	#rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
+-	# $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
 -
--netkitbase-legal-info:
--	@$(call legal-warning-pkg,netkitbase,legal-info not yet implemented)
+-netkittelnet-legal-info:
+-	@$(call legal-warning-pkg,netkittelnet,legal-info not yet implemented)
 -
--netkitbase: $(TARGET_DIR)/$(NETKITBASE_TARGET_BINARY)
+-netkittelnet: netkitbase $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
 +endef
  
--netkitbase-clean:
--	#$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(NETKITBASE_DIR) uninstall
--	-rm -f $(TARGET_DIR)/usr/sbin/inetd $(TARGET_DIR)/etc/inetd.conf
--	-rm -f $(TARGET_DIR)/etc/inetd.conf
--	-$(MAKE) -C $(NETKITBASE_DIR) clean
+-netkittelnet-clean:
+-	#$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(NETKITTELNET_DIR) uninstall
+-	-rm -f $(TARGET_DIR)/usr/sbin/telnetd
+-	-$(MAKE) -C $(NETKITTELNET_DIR) clean
 -
--netkitbase-dirclean:
--	rm -rf $(NETKITBASE_DIR)
+-netkittelnet-dirclean:
+-	rm -rf $(NETKITTELNET_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_NETKITBASE),y)
--TARGETS+=netkitbase
+-ifeq ($(BR2_PACKAGE_NETKITTELNET),y)
+-TARGETS+=netkittelnet
 -endif
 +$(eval $(generic-package))
+diff --git a/package/netkittelnet/netkittelnet.patch b/package/netkittelnet/netkittelnet.patch
+index c894c2a..863bbcd 100644
+--- a/package/netkittelnet/netkittelnet.patch
++++ b/package/netkittelnet/netkittelnet.patch
+@@ -66,7 +66,7 @@
+ -cat <<EOF >__conftest.cc
+ -#include <stdio.h>
+ -#include <termcap.h>
+--int main(void) {
++-int main() {
+ -    tgetent(NULL, NULL); return 0;
+ -}
+ -
 -- 
 1.7.12.1
