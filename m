@@ -1,24 +1,31 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Sep 2012 07:47:52 -0300
-Subject: [Buildroot] [PATCH] gettext: don't build tools if they won't be
- installed
-In-Reply-To: <1348180978-20654-1-git-send-email-arnout@mind.be>
-References: <1348180978-20654-1-git-send-email-arnout@mind.be>
-Message-ID: <505C45D8.8010705@zacarias.com.ar>
+Date: Fri, 21 Sep 2012 08:03:05 -0300
+Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
+	host-pkg-config
+In-Reply-To: <1348224356-20104-1-git-send-email-arnout@mind.be>
+References: <1348224356-20104-1-git-send-email-arnout@mind.be>
+Message-ID: <505C4969.8090707@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/20/12 19:42, Arnout Vandecappelle (Essensium/Mind) wrote:
+On 09/21/12 07:45, Arnout Vandecappelle (Essensium/Mind) wrote:
 
-> When only libintl is requested from gettext, it is not necessary to
-> build and install the tools in staging.  Just run configure and make
-> in the gettext-runtime directory.
-> 
-> This _will_ install the gettext executable in the target.  But that
-> seems the correct thing to do, since it may be used by scripts.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-It wasn't installed before and things worked, why would it be needed now?
+> How was this never caught by the autobuilders?  Do they happen to
+> build host-pkg-config most of the time?  If so, maybe we should make
+> the randpackageconfig select a smaller number of packages to increase
+> the chance of finding this kind of issue...
+
+Because it uses any pkg-config around, it doesn't honour PKG_CONFIG nor
+check for it as a dependency.
+
+Makefile:CPPFLAGS += $(shell pkg-config --cflags fuse)
+Makefile:LIB = $(shell pkg-config --libs fuse)
+
+As long as there's one on PATH it'll just work.
 Regards.
