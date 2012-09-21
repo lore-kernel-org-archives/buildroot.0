@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Sep 2012 11:54:22 -0300
-Subject: [Buildroot] [PATCH 02/11] qemu/arm-vexpress: update to use kernel
-	3.5.4
+Date: Fri, 21 Sep 2012 11:54:23 -0300
+Subject: [Buildroot] [PATCH 03/11] qemu/x86: update to use kernel 3.5.4
 In-Reply-To: <1348239271-17456-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1348239271-17456-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1348239271-17456-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1348239271-17456-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/qemu_arm_vexpress_defconfig |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ .../x86/{linux-3.4.config => linux-3.5.config}     |    0
+ configs/qemu_x86_defconfig                         |    8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename board/qemu/x86/{linux-3.4.config => linux-3.5.config} (100%)
 
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 03ea6e0..8ac7a07 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -11,12 +11,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+diff --git a/board/qemu/x86/linux-3.4.config b/board/qemu/x86/linux-3.5.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.4.config
+rename to board/qemu/x86/linux-3.5.config
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 1851cec..73c16a3 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -34,7 +39,8 @@ index 03ea6e0..8ac7a07 100644
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.4.7"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.4.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.5.config"
 -- 
 1.7.8.6
