@@ -1,66 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Sep 2012 07:13:59 +0200
-Subject: [Buildroot] [PATCH 10/11] toolchain/common: introduce blind
- options BR2_NEEDS_GETTEXT{, _IF_LOCALE}
-In-Reply-To: <505B9786.9000509@mind.be>
-References: <1347836276-24262-1-git-send-email-yann.morin.1998@free.fr>
- <1347836276-24262-11-git-send-email-yann.morin.1998@free.fr>
- <505B9786.9000509@mind.be>
-Message-ID: <20120921071359.337a7876@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 21 Sep 2012 07:29:54 +0200
+Subject: [Buildroot] [git commit] gcc: bump 4.7.x version
+Message-ID: <20120921053034.B08F3996A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+commit: http://git.buildroot.net/buildroot/commit/?id=6fdc695128581a8d2e177997145e2aa075d5fb9f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 21 Sep 2012 00:24:06 +0200, Arnout Vandecappelle wrote:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../gcc/{4.7.1 => 4.7.2}/100-uclibc-conf.patch     |    0
+ .../{4.7.1 => 4.7.2}/301-missing-execinfo_h.patch  |    0
+ .../gcc/{4.7.1 => 4.7.2}/302-c99-snprintf.patch    |    0
+ .../305-libmudflap-susv3-legacy.patch              |    0
+ .../810-arm-softfloat-libgcc.patch                 |    0
+ .../{4.7.1 => 4.7.2}/830-arm_unbreak_armv4t.patch  |    0
+ .../powerpc-link-with-math-lib.patch.conditional   |    0
+ toolchain/gcc/Config.in                            |    2 +-
+ 8 files changed, 1 insertions(+), 1 deletions(-)
 
-> diffutils: should be _IF_LOCALE
-> flex: should be _IF_LOCALE
-> gdk-pixbuf: indirect dependency through libglib2
-> glib-networking: indirect dependency through libglib2
-> libglib2: _really_ depends on libintl
-> libsoup: indirect dependency through libglib2
-> lshw: add -DNONLS to CFLAGS
-> pulseaudio: indirect dependency through libglib2
-> ndisc6: should be _IF_LOCALE
-> php: gettext module obviously requires gettext
-> util-linux: should be _IF_LOCALE
-> 
-> 
->   So, only two packages left that need gettext even without LOCALE: libglib2 and
-> php.  For php: gettext doesn't make much sense without LOCALE, so we can depend
-> on LOCALE there.  For libglib2: if you build that kind of bloat, you can live
-> with the overhead of LOCALE, so I'd also depend on LOCALE there...
-
-Ok. Just to make it clear: php itself does not depend on gettext, it's
-only the gettext module that does. So even if we adopt your
-solution, it remains to built the PHP interpreter with a toolchain that
-doesn't have locale support, only building the gettext module will not
-be possible, which indeed makes sense.
-
->   My proposal, therefore:
-> 
-> - only introduce BR2_NEEDS_GETTEXT_IF_LOCALE> ---
-> 
-> - Remove the NEEDS_GETTEXT part from the documentation
-> 
-> - we'll fix up these packages separately
-> 
-> - the patches for these packages are independent from patch 10/11 and 11/11
-> (if the NEEDS_GETTEXT symbol is not introduced), so they can be produced
-> in parallel.  Note that patch 9/11 is still in the way, but that's a
-> mechanical change that should anyway be re-done prior to commit (in case
-> a new package pops up using that symbol).
-
-A full Acked-by from me on this approach. Thanks a lot for the in-depth
-analysis of the problem that leads to this simplification, really great.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/gcc/4.7.1/100-uclibc-conf.patch b/toolchain/gcc/4.7.2/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.1/100-uclibc-conf.patch
+rename to toolchain/gcc/4.7.2/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.7.1/301-missing-execinfo_h.patch b/toolchain/gcc/4.7.2/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.1/301-missing-execinfo_h.patch
+rename to toolchain/gcc/4.7.2/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.7.1/302-c99-snprintf.patch b/toolchain/gcc/4.7.2/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.1/302-c99-snprintf.patch
+rename to toolchain/gcc/4.7.2/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.7.1/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.7.2/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.1/305-libmudflap-susv3-legacy.patch
+rename to toolchain/gcc/4.7.2/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.7.1/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.7.2/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.1/810-arm-softfloat-libgcc.patch
+rename to toolchain/gcc/4.7.2/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.7.1/830-arm_unbreak_armv4t.patch b/toolchain/gcc/4.7.2/830-arm_unbreak_armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.7.1/830-arm_unbreak_armv4t.patch
+rename to toolchain/gcc/4.7.2/830-arm_unbreak_armv4t.patch
+diff --git a/toolchain/gcc/4.7.1/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.7.2/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.7.1/powerpc-link-with-math-lib.patch.conditional
+rename to toolchain/gcc/4.7.2/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index a67e7b0..6456502 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -64,7 +64,7 @@ config BR2_GCC_VERSION
+ 	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
+ 	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
+ 	default "4.6.3"     if BR2_GCC_VERSION_4_6_X
+-	default "4.7.1"     if BR2_GCC_VERSION_4_7_X
++	default "4.7.2"     if BR2_GCC_VERSION_4_7_X
+ 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+ 
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
