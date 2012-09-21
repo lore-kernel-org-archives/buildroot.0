@@ -1,257 +1,40 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 21 Sep 2012 09:20:34 +0100
-Subject: [Buildroot] [PATCH v6] sconeserver: new package
-Message-ID: <1348215634-6586-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Sep 2012 10:35:13 +0200
+Subject: [Buildroot] [PATCH] intel-microcode: new package
+In-Reply-To: <20120920211255.GA32421@mail.sceen.net>
+References: <1348153949-30525-1-git-send-email-rbraun@sceen.net>
+ <20120920223646.65a34101@skate>
+ <20120920211255.GA32421@mail.sceen.net>
+Message-ID: <20120921103513.01871dd2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Dear Richard Braun,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v6: Incorporated improvements suggested by Arnout Vandecappelle.
- v5: Rebase and resend.
- v4: Resend.
- v3: Fix build failure for mysql module; ui module depends on X.org.
- v2: Extensive rework in response to feedback on mailing list.
+On Thu, 20 Sep 2012 23:12:55 +0200, Richard Braun wrote:
 
- package/Config.in                  |    1 +
- package/sconeserver/Config.in      |   88 +++++++++++++++++++++++++++
- package/sconeserver/sconeserver.mk |  116 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 205 insertions(+)
- create mode 100644 package/sconeserver/Config.in
- create mode 100644 package/sconeserver/sconeserver.mk
+> On the Intel download site, after searching for the last version of the
+> microcode data file [1], the download link leads to a license agreement
+> page which describes three license terms, depending on the nature of the
+> distributor (network administrator, end user or OEM). I think the OEM
+> license applies to most buildroot users. Here is the content :
 
-diff --git a/package/Config.in b/package/Config.in
-index 58dd5e8..e0841da 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -606,6 +606,7 @@ source "package/rsh-redone/Config.in"
- source "package/rsync/Config.in"
- source "package/rtorrent/Config.in"
- source "package/samba/Config.in"
-+source "package/sconeserver/Config.in"
- source "package/ser2net/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-new file mode 100644
-index 0000000..a7e5c75
---- /dev/null
-+++ b/package/sconeserver/Config.in
-@@ -0,0 +1,88 @@
-+menuconfig BR2_PACKAGE_SCONESERVER
-+	bool "sconeserver"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  Sconeserver is a modular, object-orientated and extremely versatile
-+	  network server framework for GNU/Linux and UNIX-like platforms.
-+
-+	  http://www.sconemad.com/sconeserver/
-+
-+if BR2_PACKAGE_SCONESERVER
-+
-+comment "Sconeserver modules"
-+
-+config BR2_PACKAGE_SCONESERVER_EXAMPLES
-+	bool "examples"
-+	help
-+	  Example modules for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-+	bool "http::sconesite"
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  http::sconesite module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
-+	bool "http::sconesite::image"
-+	depends on BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE
-+	select BR2_PACKAGE_IMAGEMAGICK
-+	help
-+	  http::sconesite::image module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_MYSQL
-+	bool "mysql"
-+	select BR2_PACKAGE_MYSQL_CLIENT
-+	help
-+	  MySQL module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_BLUETOOTH
-+	bool "bluetooth"
-+	select BR2_PACKAGE_BLUEZ_UTILS
-+	help
-+	  Bluetooth module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_RSS
-+	bool "rss"
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  RSS module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_LOCATION
-+	bool "location"
-+	select BR2_PACKAGE_GPSD
-+	help
-+	  Location module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_LETTUCE
-+	bool "lettuce"
-+	help
-+	  Sconeserver module for Lettuce embedded automation platform
-+
-+	  http://www.sconemad.com/lettuce/
-+
-+config BR2_PACKAGE_SCONESERVER_MATHS
-+	bool "maths"
-+	select BR2_PACKAGE_MPFR
-+	help
-+	  Mathematics module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_TESTBUILDER
-+	bool "testbuilder"
-+	help
-+	  Testbuilder module for Sconeserver
-+
-+config BR2_PACKAGE_SCONESERVER_UI
-+	bool "ui"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  UI module for Sconeserver
-+
-+comment "ui module requires X.org"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+endif # BR2_PACKAGE_SCONESERVER
-+
-+comment "sconeserver requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-new file mode 100644
-index 0000000..2313cd2
---- /dev/null
-+++ b/package/sconeserver/sconeserver.mk
-@@ -0,0 +1,116 @@
-+#############################################################
-+#
-+# sconeserver
-+#
-+#############################################################
-+# Release 0.6.0 doesn't build cleanly, so use a recent
-+# Subversion trunk snapshot.
-+SCONESERVER_VERSION = 178
-+SCONESERVER_SITE = \
-+	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
-+SCONESERVER_SITE_METHOD = svn
-+
-+SCONESERVER_LICENSE = GPLv2+
-+SCONESERVER_LICENSE_FILES = COPYING
-+
-+SCONESERVER_DEPENDENCIES += pcre
-+SCONESERVER_CONF_OPT += --with-ip --with-local
-+
-+SCONESERVER_CONF_OPT += CXXFLAGS="$(TARGET_CXXFLAGS) $(SCONESERVER_CXXFLAGS)"
-+SCONESERVER_CONF_OPT += LDFLAGS="$(TARGET_LDFLAGS) $(SCONESERVER_LDFLAGS)"
-+
-+# Sconeserver configure script fails to find the libxml2 headers.
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+	SCONESERVER_CXXFLAGS += -I$(STAGING_DIR)/usr/include/libxml2
-+endif
-+
-+ifeq ($(BR2_INET_IPV6),y)
-+	SCONESERVER_CONF_OPT += --with-ip6
-+else
-+	SCONESERVER_CONF_OPT += --without-ip6
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	SCONESERVER_DEPENDENCIES += openssl
-+	SCONESERVER_CONF_OPT += --with-ssl
-+else
-+	SCONESERVER_CONF_OPT += --without-ssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_EXAMPLES),y)
-+	SCONESERVER_CONF_OPT += --with-examples
-+else
-+	SCONESERVER_CONF_OPT += --without-examples
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE),y)
-+	SCONESERVER_DEPENDENCIES += libxml2
-+	SCONESERVER_CONF_OPT += --with-sconesite
-+else
-+	SCONESERVER_CONF_OPT += --without-sconesite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),y)
-+	SCONESERVER_DEPENDENCIES += imagemagick
-+	SCONESERVER_CONF_OPT += --with-sconesite-image
-+else
-+	SCONESERVER_CONF_OPT += --without-sconesite-image
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
-+	SCONESERVER_DEPENDENCIES += mysql_client
-+	SCONESERVER_CONF_OPT += --with-mysql
-+	SCONESERVER_CXXFLAGS += -I$(STAGING_DIR)/usr/include/mysql
-+	SCONESERVER_LDFLAGS += -L$(STAGING_DIR)/usr/lib/mysql
-+else
-+	SCONESERVER_CONF_OPT += --without-mysql
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_BLUETOOTH),y)
-+	SCONESERVER_DEPENDENCIES += bluez_utils
-+	SCONESERVER_CONF_OPT += --with-bluetooth
-+else
-+	SCONESERVER_CONF_OPT += --without-bluetooth
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_RSS),y)
-+	SCONESERVER_DEPENDENCIES += libxml2
-+	SCONESERVER_CONF_OPT += --with-rss
-+else
-+	SCONESERVER_CONF_OPT += --without-rss
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_LOCATION),y)
-+	SCONESERVER_DEPENDENCIES += gpsd
-+	SCONESERVER_CONF_OPT += --with-location
-+else
-+	SCONESERVER_CONF_OPT += --without-location
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_LETTUCE),y)
-+	SCONESERVER_CONF_OPT += --with-lettuce
-+else
-+	SCONESERVER_CONF_OPT += --without-lettuce
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
-+	SCONESERVER_DEPENDENCIES += mpfr
-+	SCONESERVER_CONF_OPT += --with-maths
-+else
-+	SCONESERVER_CONF_OPT += --without-maths
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_TESTBUILDER),y)
-+	SCONESERVER_CONF_OPT += --with-testbuilder
-+else
-+	SCONESERVER_CONF_OPT += --without-testbuilder
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SCONESERVER_UI),y)
-+	SCONESERVER_DEPENDENCIES += xlib_libX11
-+	SCONESERVER_CONF_OPT += --with-ui
-+else
-+	SCONESERVER_CONF_OPT += --without-ui
-+endif
-+
-+$(eval $(autotools-package))
+Ok. Thanks. And there is no zip file or tarball that contains both
+the license and the firmware? I'm simply worried about having just
+FOO_LICENSE = PROPRIETARY without a proper license file that indicates
+what license it is. Or maybe we need to put a special license file in
+package/intel-microcode/ and find a way to tell the license
+infrastructure that the license file is here rather than in the package
+itself?
+
+Cc'ing Luca on this.
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
