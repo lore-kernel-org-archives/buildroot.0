@@ -1,11 +1,11 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 21 Sep 2012 20:26:32 +0200
-Subject: [Buildroot] [PATCH 03/13] perl: add DB_File
-In-Reply-To: <20120920215727.0159e781@skate>
+Date: Fri, 21 Sep 2012 20:36:45 +0200
+Subject: [Buildroot] [PATCH 05/13] perl: add GDBM_File
+In-Reply-To: <20120920215953.4d4650fb@skate>
 References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
- <1347107325-4163-3-git-send-email-francois.perrad@gadz.org>
- <20120920215727.0159e781@skate>
-Message-ID: <CAB0FRssfn_HSyGhW=+WVEHFgsRGX3Ae3JWsWTzRgbEHo7U8_KA@mail.gmail.com>
+ <1347107325-4163-5-git-send-email-francois.perrad@gadz.org>
+ <20120920215953.4d4650fb@skate>
+Message-ID: <CAB0FRsuJ8vSgW8My3HzKVG5BDMu7049NtScW6ijbzKbL4sTPLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,45 @@ To: buildroot@busybox.net
 2012/9/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > Dear Francois Perrad,
 >
-> On Sat,  8 Sep 2012 14:28:35 +0200, Francois Perrad wrote:
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/perl/Config.in |    6 ++++++
->>  package/perl/perl.mk   |    5 +++++
->>  2 files changed, 11 insertions(+)
->>
->> diff --git a/package/perl/Config.in b/package/perl/Config.in
->> index 1f044eb..9df487a 100644
->> --- a/package/perl/Config.in
->> +++ b/package/perl/Config.in
->> @@ -20,4 +20,10 @@ config BR2_PACKAGE_PERL_ONLY_MINIPERL
->>         Install only miniperl (without dynamic module loader)
->>         Usually used to bootstrap a full Perl (@INC contains only .).
->>
->> +config BR2_PACKAGE_PERL_DB_FILE
->> +     bool "DB_File"
->> +     select BR2_PACKAGE_BERKELEYDB
->> +     help
->> +       Build the DB_File module.
->> +
->>  endif
->> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
->> index b00116f..2225f0c 100644
->> --- a/package/perl/perl.mk
->> +++ b/package/perl/perl.mk
->> @@ -12,6 +12,11 @@ PERL_LICENSE = Artistic
->>  PERL_LICENSE_FILES = Artistic
->>  PERL_INSTALL_STAGING = YES
->>
->> +ifdef BR2_PACKAGE_PERL_DB_FILE
+> On Sat,  8 Sep 2012 14:28:37 +0200, Francois Perrad wrote:
 >
-> ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
+>> +ifdef BR2_PACKAGE_PERL_GDBM_FILE
+>
+> ifeq ($(BR2_PACKAGE_PERL_GDBM_FILE),y)
 
-ok.
+ok
 
 >
->> +    PERL_DEPENDENCIES += berkeleydb
+>> +    PERL_DEPENDENCIES += gdbm
 >> +endif
->> +HOST_PERL_DEPENDENCIES =
->> +
->>  ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
->>      PERL_USE_DEVEL=-Dusedevel
->>  endif
+>>  HOST_PERL_DEPENDENCIES =
+>
+> There is no configuration option or argument to pass to Perl to tell it
+> to use Gdbm (or Berkeley DB)? I am a bit worried that if GDBM is
+> available on the build machine (for the build machine architecture),
+> the Perl build system might get confused and think that GDBM or
+> Berkeley DB are available, while they are not available for the target.
+> I.e, for autotools packages, we typically have:
+>
+> ifeq ($(BR2_PACKAGE_FOO_FEATURE_A),y)
+> FOO_DEPENDENCIES += liba
+> FOO_CONF_OPT += --enable-feature-a
+> else
+> FOO_CONT_OPT += --disable-feature-a
+> endif
+>
+> Isn't a similar construct necessary here?
+>
+
+The Configure script is not created by autotools, by a tool named 'metaconfig'.
+So, an option --enable-gdbm is not needed.
+The Configure script detects the include and the lib.
+The parameter libc defines a path with SYSROOT, so, there is not
+confusion with build machine.
+
+Fran?ois
+
+> Best regards,
 >
 > Thomas
 > --
