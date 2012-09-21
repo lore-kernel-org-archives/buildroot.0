@@ -1,62 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 21 Sep 2012 02:53:45 +0200
-Subject: [Buildroot] [PATCH 00/10] Clean up improper dependencies on gettext
-	without LOCALE
-Message-ID: <20120921004927.11838.37292.stgit@localhost>
+Date: Fri, 21 Sep 2012 02:53:51 +0200
+Subject: [Buildroot] [PATCH 01/10] diffutils: only needs gettext if locale
+	is selected
+In-Reply-To: <20120921004927.11838.37292.stgit@localhost>
+References: <20120921004927.11838.37292.stgit@localhost>
+Message-ID: <20120921005351.11838.56090.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series cleans up redundant dependencies on gettext, in packages that
-select gettext when LOCALE is not enabled.
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The first 7 patches really remove the gettext dependency.  The last three
-are in fact a NOP, because libglib2 selects gettext unconditionally.
-I have kept the NEEDS_GETTEXT_IF_LOCALE dependency for these packages,
-because they do have i18n code and do require libintl.  But the
-dependency adds nothing, because libglib2 does the same already.
+Also add missing select in Config.in.
 
-Regards,
-Arnout
-
-PS sorry for my earlier unfinished cover letter: I though I could
-still cancel its sending...
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+ package/diffutils/Config.in    |    1 +
+ package/diffutils/diffutils.mk |    3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Arnout Vandecappelle (Essensium/Mind) (10):
-      diffutils: only needs gettext if locale is selected
-      flex: only needs gettext if locale is selected
-      ndisc6: only needs gettext if locale is selected
-      util-linux: only needs gettext if locale is selected
-      lshw: fix build with no LOCALE support
-      avahi: remove double dependency on gettext
-      pulseaudio: remove dependency on gettext
-      gdk-pixbuf: remove dependency on gettext
-      glib-networking: remove redundant dependency on gettext
-      libsoup: remove redundant dependency on gettext
-
-
- package/avahi/avahi.mk                      |    5 +----
- package/diffutils/Config.in                 |    1 +
- package/diffutils/diffutils.mk              |    3 +--
- package/flex/Config.in                      |    1 +
- package/flex/flex.mk                        |    3 +--
- package/gdk-pixbuf/Config.in                |    1 -
- package/gdk-pixbuf/gdk-pixbuf.mk            |    1 -
- package/glib-networking/Config.in           |    2 +-
- package/libsoup/Config.in                   |    2 +-
- package/lshw/Config.in                      |    2 +-
- package/lshw/lshw.mk                        |   12 +++++++++---
- package/multimedia/pulseaudio/Config.in     |    2 +-
- package/multimedia/pulseaudio/pulseaudio.mk |    2 +-
- package/ndisc6/Config.in                    |    1 +
- package/ndisc6/ndisc6.mk                    |    2 +-
- package/util-linux/Config.in                |    1 +
- package/util-linux/util-linux.mk            |    2 +-
- 17 files changed, 23 insertions(+), 20 deletions(-)
-
--- 
-Signature
+diff --git a/package/diffutils/Config.in b/package/diffutils/Config.in
+index 86da5d3..4cc16e2 100644
+--- a/package/diffutils/Config.in
++++ b/package/diffutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DIFFUTILS
+ 	bool"diffutils"
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  GNU diff. Compare files per line.
+ 
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 168d040..2530763 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -6,8 +6,7 @@
+ 
+ DIFFUTILS_VERSION = 3.2
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+-DIFFUTILS_DEPENDENCIES = \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext)
++DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ DIFFUTILS_DEPENDENCIES += busybox
