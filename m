@@ -1,21 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Sep 2012 08:43:43 +0200
-Subject: [Buildroot] [PATCH] wireless_tools: add license information
-In-Reply-To: <50505561.8040009@mimc.co.uk> (Mark Jackson's message of "Wed, 12
- Sep 2012 10:26:57 +0100")
-References: <50505561.8040009@mimc.co.uk>
-Message-ID: <87lig37u5c.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Sep 2012 09:13:27 +0200
+Subject: [Buildroot] [PATCH] gettext: don't build tools if they won't be
+ installed
+In-Reply-To: <1348180978-20654-1-git-send-email-arnout@mind.be>
+References: <1348180978-20654-1-git-send-email-arnout@mind.be>
+Message-ID: <20120921091327.57710f5b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mark" == Mark Jackson <mpfj-list@mimc.co.uk> writes:
+Dear Arnout Vandecappelle (Essensium/Mind),
 
- Mark> Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+On Fri, 21 Sep 2012 00:42:58 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-Committed, thanks.
+> When only libintl is requested from gettext, it is not necessary to
+> build and install the tools in staging.  Just run configure and make
+> in the gettext-runtime directory.
+> 
+> This _will_ install the gettext executable in the target.  But that
+> seems the correct thing to do, since it may be used by scripts.
 
+Which scripts?
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
