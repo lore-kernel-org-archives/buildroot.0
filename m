@@ -1,32 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 Sep 2012 08:43:33 +0200
-Subject: [Buildroot] [git commit] wireless_tools: add license information
-Message-ID: <20120921093725.71E749968E@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 21 Sep 2012 12:45:56 +0200
+Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
+	host-pkg-config
+Message-ID: <1348224356-20104-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a5f0fdc66b9a7606f6b789d43496fe9351586ac2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/wireless_tools/wireless_tools.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+How was this never caught by the autobuilders?  Do they happen to
+build host-pkg-config most of the time?  If so, maybe we should make
+the randpackageconfig select a smaller number of packages to increase
+the chance of finding this kind of issue...
 
-diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-index d81aa7c..f355689 100644
---- a/package/wireless_tools/wireless_tools.mk
-+++ b/package/wireless_tools/wireless_tools.mk
-@@ -7,6 +7,8 @@
- WIRELESS_TOOLS_VERSION = 29
- WIRELESS_TOOLS_SITE = http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
- WIRELESS_TOOLS_SOURCE = wireless_tools.$(WIRELESS_TOOLS_VERSION).tar.gz
-+WIRELESS_TOOLS_LICENSE = GPLv2
-+WIRELESS_TOOLS_LICENSE_FILES = COPYING
- WIRELESS_TOOLS_INSTALL_STAGING = YES
+ package/unionfs/unionfs.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
+index e2ffd72..eb8109e 100644
+--- a/package/unionfs/unionfs.mk
++++ b/package/unionfs/unionfs.mk
+@@ -7,7 +7,7 @@
+ UNIONFS_VERSION = 0.26
+ UNIONFS_SITE = http://podgorny.cz/unionfs-fuse/releases
+ UNIONFS_SOURCE = unionfs-fuse-$(UNIONFS_VERSION).tar.xz
+-UNIONFS_DEPENDENCIES = libfuse
++UNIONFS_DEPENDENCIES = libfuse host-pkg-config
+ UNIONFS_LICENSE = BSD-3c
+ UNIONFS_LICENSE_FILES = LICENSE
  
- WIRELESS_TOOLS_BUILD_TARGETS = iwmulticall
+-- 
+tg: (669d07b..) t/unionfs-host-pkg-config (depends on: master)
