@@ -1,40 +1,36 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 21 Sep 2012 16:11:12 +0200
+Date: Fri, 21 Sep 2012 16:20:02 +0200
 Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
 	host-pkg-config
-In-Reply-To: <1348224356-20104-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Fri, 21 Sep 2012 12:45:56 +0200")
+In-Reply-To: <505C597E.8020306@mind.be> (Arnout Vandecappelle's message of
+ "Fri, 21 Sep 2012 14:11:42 +0200")
 References: <1348224356-20104-1-git-send-email-arnout@mind.be>
-Message-ID: <87ehlv79fj.fsf@macbook.be.48ers.dk>
+ <505C4969.8090707@zacarias.com.ar> <505C4C17.2000701@mind.be>
+ <505C4DB3.8000008@zacarias.com.ar> <505C4E1A.7000809@mind.be>
+ <505C5180.10105@zacarias.com.ar> <505C597E.8020306@mind.be>
+Message-ID: <877grn790t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout> How was this never caught by the autobuilders?  Do they happen to
- Arnout> build host-pkg-config most of the time?  If so, maybe we should make
- Arnout> the randpackageconfig select a smaller number of packages to increase
- Arnout> the chance of finding this kind of issue...
+ Arnout> On 09/21/12 13:37, Gustavo Zacarias wrote:
+ >> host-pkg-config almost always present
 
-Committed, thanks.
+ Arnout>  Maybe we should make that _always_ present, and add
+ Arnout> host-pkg-config to the toolchain build...  It is more or less
+ Arnout> part of the toolchain, and it doesn't hurt to build it if it's
+ Arnout> not needed.
 
-Lots of stuff indeed pulls in host-pkgconfig, and as 'u' is pretty late
-in the alphabet the chance is quite high that it is already available:
+That's an option, but it's fairly slow to build (mainly because of the
+embedded glib), so people might not like it (especially if using an
+external toolchain). Perhaps it would be better to move to pkgconf
+instead then (I think Gentoo uses it)?
 
-ls package | cat -n | grep unionfs
-   520	unionfs
-
-ls package | wc -l
-559
-
-We do have KCONFIG_PROBABILITY (see 3435c1afb583) that I sometimes play
-with, but you need both low and high probability builds as they catch
-different issues.
+https://github.com/pkgconf/pkgconf
 
 -- 
 Bye, Peter Korsgaard
