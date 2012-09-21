@@ -1,31 +1,32 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 21 Sep 2012 23:39:08 +0200
-Subject: [Buildroot] [PATCH v7 13/13] microperl: mark as DEPRECATED
-In-Reply-To: <1348263548-12975-1-git-send-email-francois.perrad@gadz.org>
-References: <1348263548-12975-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1348263548-12975-13-git-send-email-francois.perrad@gadz.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 21 Sep 2012 22:42:34 +0100
+Subject: [Buildroot] [PATCH] zeromq: bump version to 2.2.0
+Message-ID: <1348263754-2253-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/microperl/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+From: Simon Dawson <spdawson@gmail.com>
 
-diff --git a/package/microperl/Config.in b/package/microperl/Config.in
-index 66bbedd..19d104a 100644
---- a/package/microperl/Config.in
-+++ b/package/microperl/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MICROPERL
- 	bool "microperl"
- 	# needs fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_DEPRECATED
- 	help
- 	  Perl without operating-specific functions such as readdir.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/zeromq/zeromq.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 99ee4ca..284a168 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
+-ZEROMQ_VERSION = 2.1.11
++ZEROMQ_VERSION = 2.2.0
+ ZEROMQ_SITE = http://download.zeromq.org/
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
 -- 
 1.7.9.5
