@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Sep 2012 14:02:08 +0200
+Date: Fri, 21 Sep 2012 14:03:00 +0200
 Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
  host-pkg-config
-In-Reply-To: <1348224356-20104-1-git-send-email-arnout@mind.be>
+In-Reply-To: <505C4969.8090707@zacarias.com.ar>
 References: <1348224356-20104-1-git-send-email-arnout@mind.be>
-Message-ID: <20120921140208.341710bd@skate>
+ <505C4969.8090707@zacarias.com.ar>
+Message-ID: <20120921140300.207eea98@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Dear Gustavo Zacarias,
 
-On Fri, 21 Sep 2012 12:45:56 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
+On Fri, 21 Sep 2012 08:03:05 -0300, Gustavo Zacarias wrote:
 
-> How was this never caught by the autobuilders?  Do they happen to
-> build host-pkg-config most of the time?  If so, maybe we should make
-> the randpackageconfig select a smaller number of packages to increase
-> the chance of finding this kind of issue...
+> Because it uses any pkg-config around, it doesn't honour PKG_CONFIG nor
+> check for it as a dependency.
 
-We can configure the probability for each given package to be selected
-in randpackageconfig, and my autobuilder script itself make this value
-a random value between (IIRC) 2 and 35%. So depending on the build,
-each package has between 2% and 35% of chances of being selected. And I
-certainly see builds with very few packages selected. So I'm also
-surprised it wasn't found until now.
+My autobuild stuff runs inside a chroot that does not have pkg-config
+installed. The chroot in question has the strict minimal number of
+dependencies that Buildroot requires on the host system.
 
 Thomas
 -- 
