@@ -1,40 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Sep 2012 10:35:13 +0200
-Subject: [Buildroot] [PATCH] intel-microcode: new package
-In-Reply-To: <20120920211255.GA32421@mail.sceen.net>
-References: <1348153949-30525-1-git-send-email-rbraun@sceen.net>
- <20120920223646.65a34101@skate>
- <20120920211255.GA32421@mail.sceen.net>
-Message-ID: <20120921103513.01871dd2@skate>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Fri, 21 Sep 2012 08:38:36 +0000 (UTC)
+Subject: [Buildroot] DNS resolv issue with localhost
+References: <23843298-AAFD-4E03-A77D-2883BBA856B2@labri.fr>
+ <4E130353.7030207@labri.fr> <20110705210437.47fd7806@skate>
+Message-ID: <loom.20120921T103525-82@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Richard Braun,
+Thomas Petazzoni <thomas.petazzoni@...> writes:
 
-On Thu, 20 Sep 2012 23:12:55 +0200, Richard Braun wrote:
+> 
+> Le Tue, 05 Jul 2011 14:28:03 +0200,
+> Jigar SOLANKI <jigar.solanki <at> labri.fr> a ?crit :
+> 
+> > Problem SOLVED :
+> > I was missing the nsswitch.conf file in /etc, so the resolv order was
+> > wrong (nslookup localhost was requesting the dns server in
+> > /etc/resolv.conf whereas it should have beeb /etc/hosts)
+> > I just added a nsswitch.conf from an another correctly running linux.
+> 
+> So you're using a glibc-based system, right ? If so, maybe we should
+> add this nsswitch.conf file to the default Buildroot and make sure it
+> gets installed when a glibc toolchain is used.
+> 
+> Thomas
 
-> On the Intel download site, after searching for the last version of the
-> microcode data file [1], the download link leads to a license agreement
-> page which describes three license terms, depending on the nature of the
-> distributor (network administrator, end user or OEM). I think the OEM
-> license applies to most buildroot users. Here is the content :
+I just ran into the exact same problem, and here is a links to a LFS manual
+stating the problem as well :
+http://archive.linuxfromscratch.org/lfs-museum/4.1/LFS-BOOK-4.1-HTML/chapter06/glibc.html#AEN2505
 
-Ok. Thanks. And there is no zip file or tarball that contains both
-the license and the firmware? I'm simply worried about having just
-FOO_LICENSE = PROPRIETARY without a proper license file that indicates
-what license it is. Or maybe we need to put a special license file in
-package/intel-microcode/ and find a way to tell the license
-infrastructure that the license file is here rather than in the package
-itself?
+So yes I think that should be good to ship nsswitch.conf.
 
-Cc'ing Luca on this.
+For information, I used the nsswitch.conf file found in my external toolchain
+sysroot that was re-created under buildroot, in my case it was at
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+<buildroot_path>/output/host/usr/sh4-unknown-linux-gnu/sysroot/etc/nsswitch.conf
+
+Kind regards,
+Lionel
