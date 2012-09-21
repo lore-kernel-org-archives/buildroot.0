@@ -1,43 +1,31 @@
-From: Lionel Orry <lionel.orry@gmail.com>
-Date: Fri, 21 Sep 2012 08:38:36 +0000 (UTC)
-Subject: [Buildroot] DNS resolv issue with localhost
-References: <23843298-AAFD-4E03-A77D-2883BBA856B2@labri.fr>
- <4E130353.7030207@labri.fr> <20110705210437.47fd7806@skate>
-Message-ID: <loom.20120921T103525-82@post.gmane.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 21 Sep 2012 09:59:36 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
+Message-ID: <20120921093726.037949968E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@...> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ae5dfe556a8dd4eccd7e7785230036ef7ddbd253
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> 
-> Le Tue, 05 Jul 2011 14:28:03 +0200,
-> Jigar SOLANKI <jigar.solanki <at> labri.fr> a ?crit :
-> 
-> > Problem SOLVED :
-> > I was missing the nsswitch.conf file in /etc, so the resolv order was
-> > wrong (nslookup localhost was requesting the dns server in
-> > /etc/resolv.conf whereas it should have beeb /etc/hosts)
-> > I just added a nsswitch.conf from an another correctly running linux.
-> 
-> So you're using a glibc-based system, right ? If so, maybe we should
-> add this nsswitch.conf file to the default Buildroot and make sure it
-> gets installed when a glibc toolchain is used.
-> 
-> Thomas
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I just ran into the exact same problem, and here is a links to a LFS manual
-stating the problem as well :
-http://archive.linuxfromscratch.org/lfs-museum/4.1/LFS-BOOK-4.1-HTML/chapter06/glibc.html#AEN2505
-
-So yes I think that should be good to ship nsswitch.conf.
-
-For information, I used the nsswitch.conf file found in my external toolchain
-sysroot that was re-created under buildroot, in my case it was at
-
-<buildroot_path>/output/host/usr/sh4-unknown-linux-gnu/sysroot/etc/nsswitch.conf
-
-Kind regards,
-Lionel
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 1f06e2b..4059074 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -65,7 +65,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.43"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.29"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.30"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.11"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.4"		if BR2_KERNEL_HEADERS_3_5
