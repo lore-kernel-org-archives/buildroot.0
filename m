@@ -1,67 +1,42 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 21 Sep 2012 20:36:45 +0200
-Subject: [Buildroot] [PATCH 05/13] perl: add GDBM_File
-In-Reply-To: <20120920215953.4d4650fb@skate>
-References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
- <1347107325-4163-5-git-send-email-francois.perrad@gadz.org>
- <20120920215953.4d4650fb@skate>
-Message-ID: <CAB0FRsuJ8vSgW8My3HzKVG5BDMu7049NtScW6ijbzKbL4sTPLA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Sep 2012 20:51:16 +0200
+Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
+ host-pkg-config
+In-Reply-To: <505C597E.8020306@mind.be>
+References: <1348224356-20104-1-git-send-email-arnout@mind.be>
+ <505C4969.8090707@zacarias.com.ar> <505C4C17.2000701@mind.be>
+ <505C4DB3.8000008@zacarias.com.ar> <505C4E1A.7000809@mind.be>
+ <505C5180.10105@zacarias.com.ar> <505C597E.8020306@mind.be>
+Message-ID: <20120921205116.1ea5d2c8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/9/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Sat,  8 Sep 2012 14:28:37 +0200, Francois Perrad wrote:
->
->> +ifdef BR2_PACKAGE_PERL_GDBM_FILE
->
-> ifeq ($(BR2_PACKAGE_PERL_GDBM_FILE),y)
+Dear Arnout Vandecappelle,
 
-ok
+On Fri, 21 Sep 2012 14:11:42 +0200, Arnout Vandecappelle wrote:
 
->
->> +    PERL_DEPENDENCIES += gdbm
->> +endif
->>  HOST_PERL_DEPENDENCIES =
->
-> There is no configuration option or argument to pass to Perl to tell it
-> to use Gdbm (or Berkeley DB)? I am a bit worried that if GDBM is
-> available on the build machine (for the build machine architecture),
-> the Perl build system might get confused and think that GDBM or
-> Berkeley DB are available, while they are not available for the target.
-> I.e, for autotools packages, we typically have:
->
-> ifeq ($(BR2_PACKAGE_FOO_FEATURE_A),y)
-> FOO_DEPENDENCIES += liba
-> FOO_CONF_OPT += --enable-feature-a
-> else
-> FOO_CONT_OPT += --disable-feature-a
-> endif
->
-> Isn't a similar construct necessary here?
->
+>   Maybe we should make that _always_ present, and add host-pkg-config to
+> the toolchain build...  It is more or less part of the toolchain, and it
+> doesn't hurt to build it if it's not needed.
 
-The Configure script is not created by autotools, by a tool named 'metaconfig'.
-So, an option --enable-gdbm is not needed.
-The Configure script detects the include and the lib.
-The parameter libc defines a path with SYSROOT, so, there is not
-confusion with build machine.
+host-pkg-config depends on host-automake, which depends on
+host-autoconf and host-libtool, themselves needing host-m4.
 
-Fran?ois
+Are we going to become OpenEmebdded, and rebuild the entire host
+distribution before building anything useful for the target?
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Sorry, but the fact that when building a Busybox system, Buildroot
+builds Busybox and nothing else is a very good property of Buildroot.
+Let's keep it this way, thanks :-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
