@@ -1,126 +1,151 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 22 Sep 2012 00:28:34 +0200
-Subject: [Buildroot] [PATCH 2/6] netkittelnet: convert to generic-package
+Date: Sat, 22 Sep 2012 00:28:36 +0200
+Subject: [Buildroot] [PATCH 4/6] newt: convert to generic-package
 	infrastructure
 In-Reply-To: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
 References: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1348266518-27665-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1348266518-27665-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/netkittelnet/netkittelnet.mk b/package/netkittelnet/netkittelnet.mk
-index 43ba324..003094b 100644
---- a/package/netkittelnet/netkittelnet.mk
-+++ b/package/netkittelnet/netkittelnet.mk
-@@ -3,69 +3,30 @@
- # netkittelnet
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index b10e4f8..9ec917c 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -3,80 +3,54 @@
+ # newt
  #
  #############################################################
--NETKITTELNET_VERSION:=0.17
--NETKITTELNET_SOURCE:=netkit-telnet-$(NETKITTELNET_VERSION).tar.gz
--NETKITTELNET_SITE:=ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
--NETKITTELNET_DIR:=$(BUILD_DIR)/netkit-telnet-$(NETKITTELNET_VERSION)
--NETKITTELNET_CAT:=$(ZCAT)
--NETKITTELNET_BINARY:=telnetd/telnetd
--NETKITTELNET_TARGET_BINARY:=usr/sbin/telnetd
-+NETKITTELNET_VERSION = 0.17
-+NETKITTELNET_SOURCE  = netkit-telnet-$(NETKITTELNET_VERSION).tar.gz
-+NETKITTELNET_SITE    = ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
-+NETKITTELNET_LICENSE = BSD-4c
- 
--$(DL_DIR)/$(NETKITTELNET_SOURCE):
--	 $(call DOWNLOAD,$(NETKITTELNET_SITE)/$(NETKITTELNET_SOURCE))
+-NEWT_SOURCE=newt-0.51.0.tar.bz2
+-NEWT_CAT:=$(BZCAT)
+-NEWT_SITE=http://www.uclibc.org/
+-NEWT_DIR=$(BUILD_DIR)/newt-0.51.0
+-NEWT_VERSION=0.51.0
+-NEWT_CFLAGS=-Os -g -fPIC
 -
--netkittelnet-source: $(DL_DIR)/$(NETKITTELNET_SOURCE)
+-$(DL_DIR)/$(NEWT_SOURCE):
+-	$(call DOWNLOAD,$(NEWT_SITE)/$(NEWT_SOURCE))
 -
--$(NETKITTELNET_DIR)/.unpacked: $(DL_DIR)/$(NETKITTELNET_SOURCE)
--	$(NETKITTELNET_CAT) $(DL_DIR)/$(NETKITTELNET_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+define NETKITTELNET_CONFIGURE_CMDS
- 	# use ANSI syntax
--	$(SED) "s/main()/main(void)/;" $(NETKITTELNET_DIR)/configure
-+	$(SED) "s/main()/main(void)/;" $(@D)/configure
- 	# Disable termcap support
--	$(SED) "s~\(.*termcap\.h.*\)~/* \1 */~;" $(NETKITTELNET_DIR)/telnetd/telnetd.c
--	# don't try to run cross compiled binaries while configuring things
--	support/scripts/apply-patches.sh $(NETKITTELNET_DIR) package/netkittelnet/ netkittelnet\*.patch
--	touch $(NETKITTELNET_DIR)/.unpacked
+-$(NEWT_DIR)/.source: $(DL_DIR)/$(NEWT_SOURCE)
+-	$(NEWT_CAT) $(DL_DIR)/$(NEWT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	touch $(NEWT_DIR)/.source
 -
--$(NETKITTELNET_DIR)/.configured: $(NETKITTELNET_DIR)/.unpacked
--	(cd $(NETKITTELNET_DIR); rm -f config.cache; \
--	 PATH=$(TARGET_PATH) CC="$(TARGET_CC)" \
--	./configure --installroot=$(TARGET_DIR) --with-c-compiler="$(TARGET_CC)" \
+-$(NEWT_DIR)/.configured: $(NEWT_DIR)/.source
+-	(cd $(NEWT_DIR); rm -rf config.cache; \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		CFLAGS="$(TARGET_CFLAGS) $(NEWT_CFLAGS)" \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--bindir=/usr/bin \
+-		--sbindir=/usr/sbin \
+-		--libdir=/lib \
+-		--libexecdir=/usr/lib \
+-		--sysconfdir=/etc \
+-		--datadir=/usr/share \
+-		--localstatedir=/var \
+-		--mandir=/usr/man \
+-		--infodir=/usr/info \
+-		$(DISABLE_NLS) \
 -	)
--	touch $(NETKITTELNET_DIR)/.configured
+-	touch $(NEWT_DIR)/.configured
 -
--$(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY): $(NETKITTELNET_DIR)/.configured
--	$(MAKE) SUB=telnetd CC="$(TARGET_CC)" -C $(NETKITTELNET_DIR)
--	$(STRIPCMD) $(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY)
+-$(NEWT_DIR)/libnewt.so.$(NEWT_VERSION): $(NEWT_DIR)/.configured
+-	$(MAKE1) CFLAGS="$(TARGET_CFLAGS) $(NEWT_CFLAGS)" CC="$(TARGET_CC)" -C $(NEWT_DIR)
+-	touch -c $@
 -
--$(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY): $(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY)
--	# Only install a few selected items...
--	mkdir -p $(TARGET_DIR)/usr/sbin
--	rm -f $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
--	cp $(NETKITTELNET_DIR)/$(NETKITTELNET_BINARY) $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
-+	$(SED) "s~\(.*termcap\.h.*\)~/* \1 */~;" $(@D)/telnetd/telnetd.c
-+	(cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		./configure \
-+		--installroot=$(TARGET_DIR))
+-$(STAGING_DIR)/usr/lib/libnewt.a: $(NEWT_DIR)/libnewt.so.$(NEWT_VERSION)
+-	cp -a $(NEWT_DIR)/libnewt.a $(STAGING_DIR)/usr/lib/
+-	cp -a $(NEWT_DIR)/newt.h $(STAGING_DIR)/usr/include/
+-	cp -a $(NEWT_DIR)/libnewt.so* $(STAGING_DIR)/usr/lib/
+-	(cd $(STAGING_DIR)/usr/lib; ln -fs libnewt.so.$(NEWT_VERSION) libnewt.so)
+-	(cd $(STAGING_DIR)/usr/lib; ln -fs libnewt.so.$(NEWT_VERSION) libnewt.so.0.51)
+-	touch -c $@
+-
+-$(TARGET_DIR)/usr/lib/libnewt.so.$(NEWT_VERSION): $(STAGING_DIR)/usr/lib/libnewt.a
++NEWT_VERSION         = 0.51.0
++NEWT_SITE            = http://www.uclibc.org/
++NEWT_SOURCE          = newt-$(NEWT_VERSION).tar.bz2
++NEWT_LICENSE         = GPLv2
++NEWT_LICENSE_FILES   = COPYING
++NEWT_INSTALL_STAGING = YES
++
++NEWT_DEPENDENCIES = slang
++
++NEWT_CONFIGURE_ENV = \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	CFLAGS="$(TARGET_CFLAGS)"
++
++NEWT_CONFIGURE_OPT = \
++	--prefix=/usr \
++	--exec-prefix=/usr \
++	--bindir=/usr/bin \
++	--sbindir=/usr/sbin \
++	--libdir=/lib \
++	--libexecdir=/usr/lib \
++	--sysconfdir=/etc \
++	--datadir=/usr/share \
++	--localstatedir=/var \
++	--mandir=/usr/man \
++	--infodir=/usr/info \
++	$(DISABLE_NLS)
++
++define NEWT_CONFIGURE_CMDS
++	( cd $(@D) ; $(NEWT_CONFIGURE_ENV) ./configure $(NEWT_CONFIGURE_OPT) )
 +endef
 +
-+define NETKITTELNET_BUILD_CMDS
-+	$(MAKE) SUB=telnetd -C $(@D)
++define NEWT_BUILD_CMDS
++	$(MAKE1) CFLAGS="$(TARGET_CFLAGS)" CC="$(TARGET_CC)" -C $(@D)
 +endef
 +
-+define NETKITTELNET_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/telnetd/telnetd $(TARGET_DIR)/usr/sbin/telnetd
- 	# Enable telnet in inetd
- 	$(SED) "s~^#telnet.*~telnet\tstream\ttcp\tnowait\troot\t/usr/sbin/telnetd\t/usr/sbin/telnetd~;" $(TARGET_DIR)/etc/inetd.conf
--	#$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(NETKITTELNET_DIR) install
--	#rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
--	# $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
++define NEWT_INSTALL_STAGING_CMDS
++	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(@D)/libnewt.so.$(NEWT_VERSION)
++	$(INSTALL) -D -m644 $(@D)/newt.h      $(STAGING_DIR)/usr/include/
++	$(INSTALL) -D -m644 $(@D)/libnewt.a   $(STAGING_DIR)/usr/lib/
++	$(INSTALL) -D -m755 $(@D)/libnewt.so* $(STAGING_DIR)/usr/lib/
++	ln -fs libnewt.so.$(NEWT_VERSION)     $(STAGING_DIR)/usr/lib/libnewt.so
++	ln -fs libnewt.so.$(NEWT_VERSION)     $(STAGING_DIR)/usr/lib/libnewt.so.0.51
++endef
++
++define NEWT_INSTALL_TARGET_CMDS
++	$(INSTALL) -d $(TARGET_DIR)/usr/include/
+ 	cp -a $(STAGING_DIR)/usr/lib/libnewt.so* $(TARGET_DIR)/usr/lib/
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libnewt.so*
+-	touch -c $@
 -
--netkittelnet-legal-info:
--	@$(call legal-warning-pkg,netkittelnet,legal-info not yet implemented)
+-newt-legal-info:
+-	@$(call legal-warning-pkg,newt,legal-info not yet implemented)
 -
--netkittelnet: netkitbase $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
+-newt: slang $(TARGET_DIR)/usr/lib/libnewt.so.$(NEWT_VERSION)
 +endef
  
--netkittelnet-clean:
--	#$(MAKE) DESTDIR=$(TARGET_DIR) CC="$(TARGET_CC)" -C $(NETKITTELNET_DIR) uninstall
--	-rm -f $(TARGET_DIR)/usr/sbin/telnetd
--	-$(MAKE) -C $(NETKITTELNET_DIR) clean
+-newt-source: $(DL_DIR)/$(NEWT_SOURCE)
 -
--netkittelnet-dirclean:
--	rm -rf $(NETKITTELNET_DIR)
+-newt-clean:
+-	rm -f $(TARGET_DIR)/usr/lib/libnewt.so*
+-	-$(MAKE) -C $(NEWT_DIR) clean
+-
+-newt-dirclean: slang-dirclean
+-	rm -rf $(NEWT_DIR)
 -
 -#############################################################
 -#
 -# Toplevel Makefile options
 -#
 -#############################################################
--ifeq ($(BR2_PACKAGE_NETKITTELNET),y)
--TARGETS+=netkittelnet
+-ifeq ($(BR2_PACKAGE_NEWT),y)
+-TARGETS+=newt
 -endif
 +$(eval $(generic-package))
-diff --git a/package/netkittelnet/netkittelnet.patch b/package/netkittelnet/netkittelnet.patch
-index c894c2a..863bbcd 100644
---- a/package/netkittelnet/netkittelnet.patch
-+++ b/package/netkittelnet/netkittelnet.patch
-@@ -66,7 +66,7 @@
- -cat <<EOF >__conftest.cc
- -#include <stdio.h>
- -#include <termcap.h>
---int main(void) {
-+-int main() {
- -    tgetent(NULL, NULL); return 0;
- -}
- -
 -- 
 1.7.12.1
