@@ -1,64 +1,71 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 21 Sep 2012 20:25:14 +0200
-Subject: [Buildroot] [PATCH 06/13] cpanminus: new package v3
-In-Reply-To: <505B8C14.5090103@mind.be>
+Date: Fri, 21 Sep 2012 20:26:32 +0200
+Subject: [Buildroot] [PATCH 03/13] perl: add DB_File
+In-Reply-To: <20120920215727.0159e781@skate>
 References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
- <1347107325-4163-6-git-send-email-francois.perrad@gadz.org>
- <20120920220418.65bb6b14@skate> <505B8C14.5090103@mind.be>
-Message-ID: <CAB0FRsv6CbPpvsYaA0cdJLA_qu+8zBg1TTkdSUDiWhVi1poW3Q@mail.gmail.com>
+ <1347107325-4163-3-git-send-email-francois.perrad@gadz.org>
+ <20120920215727.0159e781@skate>
+Message-ID: <CAB0FRssfn_HSyGhW=+WVEHFgsRGX3Ae3JWsWTzRgbEHo7U8_KA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/9/20 Arnout Vandecappelle <arnout@mind.be>:
-> On 09/20/12 22:04, Thomas Petazzoni wrote:
+2012/9/20 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Francois Perrad,
+>
+> On Sat,  8 Sep 2012 14:28:35 +0200, Francois Perrad wrote:
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/perl/Config.in |    6 ++++++
+>>  package/perl/perl.mk   |    5 +++++
+>>  2 files changed, 11 insertions(+)
 >>
->> Hum, do we really want a package which has configuration options that
->> allow to select a set of libraries/modules to be downloaded and
->> installed? It would be more natural to have those Perl modules properly
->> packaged into Buildroot, no? I suspect that they are all packaged
->> similarly, so a $(perl-package) infrastructure would work quite well.
+>> diff --git a/package/perl/Config.in b/package/perl/Config.in
+>> index 1f044eb..9df487a 100644
+>> --- a/package/perl/Config.in
+>> +++ b/package/perl/Config.in
+>> @@ -20,4 +20,10 @@ config BR2_PACKAGE_PERL_ONLY_MINIPERL
+>>         Install only miniperl (without dynamic module loader)
+>>         Usually used to bootstrap a full Perl (@INC contains only .).
 >>
->> This way, we still have the usual package infrastructure for licensing
->> report and things like this. I honestly don't know if we want packages
->> whose job is in turn to download/install a bunch of other things. It's
->> smart, but I'm not sure we want that.
+>> +config BR2_PACKAGE_PERL_DB_FILE
+>> +     bool "DB_File"
+>> +     select BR2_PACKAGE_BERKELEYDB
+>> +     help
+>> +       Build the DB_File module.
+>> +
+>>  endif
+>> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+>> index b00116f..2225f0c 100644
+>> --- a/package/perl/perl.mk
+>> +++ b/package/perl/perl.mk
+>> @@ -12,6 +12,11 @@ PERL_LICENSE = Artistic
+>>  PERL_LICENSE_FILES = Artistic
+>>  PERL_INSTALL_STAGING = YES
+>>
+>> +ifdef BR2_PACKAGE_PERL_DB_FILE
 >
->
->  I'm not sure we want to add 100,000 .mk files either...
->
->  Ideally, the cpanminus module should be able to do the right thing for
-> the -source, -source-check and -legal-info targets.
->
+> ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
 
-Perl is useless without a CPAN client.
-The Perl packages are fine grained (compared to Python or Ruby ones),
-for example the web framework Dancer (without any plugins) requires 22
-dependencies (direct or indirect).
-Debian has more then thousand Perl packages; I don't want to do the same thing.
-
-Most of CPAN packages haven't a license file; usually the
-documentation contains an information, like : "LICENSE - same as Perl
-itself".
-
-The reproductibility of a project (with an identified version of each
-CPAN module) could be done with a local CPAN mirror.
-
-Fran?ois
+ok.
 
 >
->  Regards,
->  Arnout
+>> +    PERL_DEPENDENCIES += berkeleydb
+>> +endif
+>> +HOST_PERL_DEPENDENCIES =
+>> +
+>>  ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+>>      PERL_USE_DEVEL=-Dusedevel
+>>  endif
+>
+> Thomas
 > --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
