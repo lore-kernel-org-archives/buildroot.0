@@ -1,36 +1,24 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 21 Sep 2012 12:45:56 +0200
-Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
-	host-pkg-config
-Message-ID: <1348224356-20104-1-git-send-email-arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 21 Sep 2012 07:47:52 -0300
+Subject: [Buildroot] [PATCH] gettext: don't build tools if they won't be
+ installed
+In-Reply-To: <1348180978-20654-1-git-send-email-arnout@mind.be>
+References: <1348180978-20654-1-git-send-email-arnout@mind.be>
+Message-ID: <505C45D8.8010705@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-How was this never caught by the autobuilders?  Do they happen to
-build host-pkg-config most of the time?  If so, maybe we should make
-the randpackageconfig select a smaller number of packages to increase
-the chance of finding this kind of issue...
+On 09/20/12 19:42, Arnout Vandecappelle (Essensium/Mind) wrote:
 
- package/unionfs/unionfs.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> When only libintl is requested from gettext, it is not necessary to
+> build and install the tools in staging.  Just run configure and make
+> in the gettext-runtime directory.
+> 
+> This _will_ install the gettext executable in the target.  But that
+> seems the correct thing to do, since it may be used by scripts.
 
-diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
-index e2ffd72..eb8109e 100644
---- a/package/unionfs/unionfs.mk
-+++ b/package/unionfs/unionfs.mk
-@@ -7,7 +7,7 @@
- UNIONFS_VERSION = 0.26
- UNIONFS_SITE = http://podgorny.cz/unionfs-fuse/releases
- UNIONFS_SOURCE = unionfs-fuse-$(UNIONFS_VERSION).tar.xz
--UNIONFS_DEPENDENCIES = libfuse
-+UNIONFS_DEPENDENCIES = libfuse host-pkg-config
- UNIONFS_LICENSE = BSD-3c
- UNIONFS_LICENSE_FILES = LICENSE
- 
--- 
-tg: (669d07b..) t/unionfs-host-pkg-config (depends on: master)
+It wasn't installed before and things worked, why would it be needed now?
+Regards.
