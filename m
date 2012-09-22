@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:34:52 +0200
-Subject: [Buildroot] [git commit] xdriver_x86-input-evdev: bump version
-Message-ID: <20120922194146.8F5D09969B@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 21:34:55 +0200
+Subject: [Buildroot] [git commit] xdriver_x86-driver-voodoo: bump version
+Message-ID: <20120922194156.D5EFC9963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e7d9221b00db6a458f527d03778a3f14db6397ca
+commit: http://git.buildroot.net/buildroot/commit/?id=ae63946346747dbe8d6ccbd45225578e23d38c7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xdriver_xf86-input-evdev.mk                    |    2 +-
+ .../xdriver_xf86-video-voodoo.mk                   |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index c6f10a8..1f69388 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+diff --git a/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk b/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
+index 4811d68..49065c6 100644
+--- a/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
++++ b/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.3.0
-+XDRIVER_XF86_INPUT_EVDEV_VERSION = 2.5.0
- XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server xproto_randrproto xproto_xproto
+-XDRIVER_XF86_VIDEO_VOODOO_VERSION = 1.2.3
++XDRIVER_XF86_VIDEO_VOODOO_VERSION = 1.2.4
+ XDRIVER_XF86_VIDEO_VOODOO_SOURCE = xf86-video-voodoo-$(XDRIVER_XF86_VIDEO_VOODOO_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VOODOO_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VOODOO_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
