@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:34:53 +0200
-Subject: [Buildroot] [git commit] xdriver_x86-input-vmmouse: bump version
-Message-ID: <20120922194148.992389963C@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 21:34:58 +0200
+Subject: [Buildroot] [git commit] xapp_xlsatoms: bump version
+Message-ID: <20120922194205.6526F9963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=229a4de32eb5e5af21581055ef8c0f9cd7d24b97
+commit: http://git.buildroot.net/buildroot/commit/?id=98fda5ba568d03380eba5a52374b2166f201a60f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xdriver_xf86-input-vmmouse.mk                  |    2 +-
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-index c0ee55d..c54b2aa 100644
---- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+diff --git a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
+index 96c7937..1863ca6 100644
+--- a/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
++++ b/package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 12.6.5
-+XDRIVER_XF86_INPUT_VMMOUSE_VERSION = 12.6.10
- XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMOUSE_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+-XAPP_XLSATOMS_VERSION = 1.0.2
++XAPP_XLSATOMS_VERSION = 1.1.0
+ XAPP_XLSATOMS_SOURCE = xlsatoms-$(XAPP_XLSATOMS_VERSION).tar.bz2
+ XAPP_XLSATOMS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XLSATOMS_DEPENDENCIES = xlib_libX11 xlib_libXmu
