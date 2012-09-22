@@ -1,41 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:35:48 +0200
-Subject: [Buildroot] [git commit] x11r7: update Config.in
-Message-ID: <20120922194224.BA75E99625@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 21:35:03 +0200
+Subject: [Buildroot] [git commit] xfont_font-util: bump version
+Message-ID: <20120922194223.9DDE899625@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69e6cd4a2fa80d9299d9e763923f6adae46919a3
+commit: http://git.buildroot.net/buildroot/commit/?id=e9b4564a768874465db821b8b2d8d28786fa3039
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Don't mention the revision in the option text (we're now at 7.6)
-and add the upstream URL.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/x11r7/xfont_font-util/xfont_font-util.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 664226f..bb538e1 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -1,5 +1,5 @@
- menuconfig BR2_PACKAGE_XORG7
--	bool "X.org X Window System, X11R7, release 7.5"
-+	bool "X.org X Window System"
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_EXPAT
-@@ -9,6 +9,8 @@ menuconfig BR2_PACKAGE_XORG7
- 	  Support for X11R7 libraries, servers, drivers, and/or
- 	  applications in the target.
+diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
+index 2445c94..832b441 100644
+--- a/package/x11r7/xfont_font-util/xfont_font-util.mk
++++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+	  http://xorg.freedesktop.org
-+
- if BR2_PACKAGE_XORG7
- 
- choice
+-XFONT_FONT_UTIL_VERSION = 1.1.1
++XFONT_FONT_UTIL_VERSION = 1.2.0
+ XFONT_FONT_UTIL_SOURCE = font-util-$(XFONT_FONT_UTIL_VERSION).tar.bz2
+ XFONT_FONT_UTIL_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
