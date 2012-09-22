@@ -1,31 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:35:03 +0200
-Subject: [Buildroot] [git commit] xfont_font-xfree86-type1: bump version
-Message-ID: <20120922194224.4232D99625@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 22 Sep 2012 21:46:45 +0200
+Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
+	host-pkg-config
+In-Reply-To: <20120921205224.55eeda57@skate> (Thomas Petazzoni's message of
+ "Fri, 21 Sep 2012 20:52:24 +0200")
+References: <1348224356-20104-1-git-send-email-arnout@mind.be>
+ <87ehlv79fj.fsf@macbook.be.48ers.dk> <20120921205224.55eeda57@skate>
+Message-ID: <876275c02i.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=370522fb71028f2e098f5ac061d4a3d7faf637dc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../xfont_font-xfree86-type1.mk                    |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Thomas> Dear Peter Korsgaard,
+ Thomas> On Fri, 21 Sep 2012 16:11:12 +0200, Peter Korsgaard wrote:
 
-diff --git a/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk b/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
-index e0a27ab..bb23be9 100644
---- a/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
-+++ b/package/x11r7/xfont_font-xfree86-type1/xfont_font-xfree86-type1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFONT_FONT_XFREE86_TYPE1_VERSION = 1.0.2
-+XFONT_FONT_XFREE86_TYPE1_VERSION = 1.0.4
- XFONT_FONT_XFREE86_TYPE1_SOURCE = font-xfree86-type1-$(XFONT_FONT_XFREE86_TYPE1_VERSION).tar.bz2
- XFONT_FONT_XFREE86_TYPE1_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_XFREE86_TYPE1_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+ >> Lots of stuff indeed pulls in host-pkgconfig, and as 'u' is pretty late
+ >> in the alphabet the chance is quite high that it is already available:
+
+ Thomas> Can we somehow fight this alphabet thing and make things even more
+ Thomas> random? Something that would shuffle the make targets or something, but
+ Thomas> I don't know if it is possible.
+
+I don't know of any easy/clean way, but it could probably be done by
+some $(wildcard) / $(shell unsort ..) stuff instead of include
+package/*/*.mk, but it won't be pretty.
+
+-- 
+Bye, Peter Korsgaard
