@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:34:58 +0200
-Subject: [Buildroot] [git commit] xapp_xrefresh: bump version
-Message-ID: <20120922194207.D5AEA9963C@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 21:34:59 +0200
+Subject: [Buildroot] [git commit] xapp_xwd: bump version
+Message-ID: <20120922194209.C981C9963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7425b19a5be1a46d85636364b6449d6b5cf4f44c
+commit: http://git.buildroot.net/buildroot/commit/?id=41320f9d2ca99320b7cec115044b78fea935cddd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xapp_xrefresh/xapp_xrefresh.mk |    2 +-
+ package/x11r7/xapp_xwd/xapp_xwd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk b/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
-index c6a92ac..6146856 100644
---- a/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
-+++ b/package/x11r7/xapp_xrefresh/xapp_xrefresh.mk
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
+index c42797f..94ae800 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.mk
++++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XREFRESH_VERSION = 1.0.3
-+XAPP_XREFRESH_VERSION = 1.0.4
- XAPP_XREFRESH_SOURCE = xrefresh-$(XAPP_XREFRESH_VERSION).tar.bz2
- XAPP_XREFRESH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XREFRESH_DEPENDENCIES = xlib_libX11
+-XAPP_XWD_VERSION = 1.0.3
++XAPP_XWD_VERSION = 1.0.4
+ XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
+ XAPP_XWD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XWD_DEPENDENCIES = xlib_libX11 xlib_libXmu
