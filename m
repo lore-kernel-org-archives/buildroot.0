@@ -1,31 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 22 Sep 2012 21:34:59 +0200
-Subject: [Buildroot] [git commit] xdata_xbitmaps: bump version
-Message-ID: <20120922194211.074CC9963C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xdata_xcursor-themes: bump version
+Message-ID: <20120922194211.78C429963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e4dc1a08fbda69d1b8335d7843df74e80016b61
+commit: http://git.buildroot.net/buildroot/commit/?id=d52664bc93c54e3586a287057f3654cf99c6215b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk b/package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk
-index b35087c..1f26743 100644
---- a/package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk
-+++ b/package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+index 605d6fa..e46fbbc 100644
+--- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
++++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
+@@ -3,7 +3,8 @@
+ # xdata_xcursor-themes - No description available
  #
- ################################################################################
- 
--XDATA_XBITMAPS_VERSION = 1.1.0
-+XDATA_XBITMAPS_VERSION = 1.1.1
- XDATA_XBITMAPS_SOURCE = xbitmaps-$(XDATA_XBITMAPS_VERSION).tar.bz2
- XDATA_XBITMAPS_SITE = http://xorg.freedesktop.org/releases/individual/data
- XDATA_XBITMAPS_INSTALL_STAGING = YES
+ #############################################################
+-XDATA_XCURSOR_THEMES_VERSION = 1.0.2
++
++XDATA_XCURSOR_THEMES_VERSION = 1.0.3
+ XDATA_XCURSOR_THEMES_SOURCE = xcursor-themes-$(XDATA_XCURSOR_THEMES_VERSION).tar.bz2
+ XDATA_XCURSOR_THEMES_SITE = http://xorg.freedesktop.org/releases/individual/data
+ XDATA_XCURSOR_THEMES_INSTALL_STAGING = YES
