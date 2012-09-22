@@ -1,31 +1,45 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:34:53 +0200
-Subject: [Buildroot] [git commit] xdriver_x86-driver-apm: bump version
-Message-ID: <20120922194149.57C7D9963C@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 20:45:54 +0200
+Subject: [Buildroot] [git commit] libdrm: bump version
+Message-ID: <20120922194145.5724E9969B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a40fdb2978be1512d8a641d1247ab07b5863345e
+commit: http://git.buildroot.net/buildroot/commit/?id=42a8064763379c3fd172e3f75e4e4a9182867424
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Based on patch by Allan W. Nielsen.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xdriver_xf86-video-apm.mk                      |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libdrm/libdrm.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk b/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
-index 0d30635..d0317f5 100644
---- a/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
-+++ b/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 6bd65f9..76ee763 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -3,7 +3,7 @@
+ # libdrm
  #
- ################################################################################
+ #############################################################
+-LIBDRM_VERSION = 2.4.19
++LIBDRM_VERSION = 2.4.23
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_INSTALL_STAGING = YES
+@@ -28,4 +28,11 @@ ifneq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI),y)
+ LIBDRM_CONF_OPT += --disable-radeon
+ endif
  
--XDRIVER_XF86_VIDEO_APM_VERSION = 1.2.2
-+XDRIVER_XF86_VIDEO_APM_VERSION = 1.2.3
- XDRIVER_XF86_VIDEO_APM_SOURCE = xf86-video-apm-$(XDRIVER_XF86_VIDEO_APM_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_APM_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_APM_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86rushproto xproto_xproto
++ifeq ($(BR2_PACKAGE_UDEV),y)
++LIBDRM_CONF_OPT += --enable-udev
++LIBDRM_DEPENDENCIES += udev
++else
++LIBDRM_CONF_OPT += --disable-udev
++endif
++
+ $(eval $(autotools-package))
