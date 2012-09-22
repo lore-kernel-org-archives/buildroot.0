@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 22 Sep 2012 21:34:55 +0200
-Subject: [Buildroot] [git commit] xdriver_x86-driver-siliconmotion: bump
-	version
-Message-ID: <20120922194154.C684F9963C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xdriver_x86-driver-sisusb: bump version
+Message-ID: <20120922194155.115839963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c044426217958e197f94e5c7e1c5870e4503b251
+commit: http://git.buildroot.net/buildroot/commit/?id=5be6125b5d2b8b482301b08d4364f90db43cfd91
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xdriver_xf86-video-siliconmotion.mk            |    2 +-
+ .../xdriver_xf86-video-sisusb.mk                   |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-index 1d3fafc..88e8f07 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
+diff --git a/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk b/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
+index a43ba60..c59b876 100644
+--- a/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
++++ b/package/x11r7/xdriver_xf86-video-sisusb/xdriver_xf86-video-sisusb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.3
-+XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION = 1.7.4
- XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF86_VIDEO_SILICONMOTION_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
+-XDRIVER_XF86_VIDEO_SISUSB_VERSION = 0.9.3
++XDRIVER_XF86_VIDEO_SISUSB_VERSION = 0.9.4
+ XDRIVER_XF86_VIDEO_SISUSB_SOURCE = xf86-video-sisusb-$(XDRIVER_XF86_VIDEO_SISUSB_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SISUSB_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SISUSB_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xineramaproto xproto_xproto
