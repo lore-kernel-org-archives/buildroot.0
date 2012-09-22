@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 14:40:53 +0200
-Subject: [Buildroot] [git commit] xlib_libdmx: version bump to 1.1.1
-Message-ID: <20120922194132.56204995DC@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 14:46:26 +0200
+Subject: [Buildroot] [git commit] xproto_fontsproto: verison bump to 2.1.1
+Message-ID: <20120922194139.D2C48995DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=043dd7fd72181c76aeafeb39e6ca8d14ed05d81f
+commit: http://git.buildroot.net/buildroot/commit/?id=15ae60b34c4268dec24b5bfa9e5952824c18fb0a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Allan W. Nielsen <a@awn.dk>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xlib_libdmx/xlib_libdmx.mk |    2 +-
+ .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-index 8e50778..6429bb3 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
+diff --git a/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk b/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
+index 407664a..5252fd9 100644
+--- a/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
++++ b/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBDMX_VERSION = 1.1.0
-+XLIB_LIBDMX_VERSION = 1.1.1
- XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
- XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBDMX_INSTALL_STAGING = YES
+-XPROTO_FONTSPROTO_VERSION = 2.1.0
++XPROTO_FONTSPROTO_VERSION = 2.1.1
+ XPROTO_FONTSPROTO_SOURCE = fontsproto-$(XPROTO_FONTSPROTO_VERSION).tar.bz2
+ XPROTO_FONTSPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_FONTSPROTO_INSTALL_STAGING = YES
