@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:34:56 +0200
-Subject: [Buildroot] [git commit] xapp_iceauth: bump version
-Message-ID: <20120922194158.61E809963C@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 21:34:55 +0200
+Subject: [Buildroot] [git commit] xdriver_x86-driver-xgixp: bump version
+Message-ID: <20120922194157.C093F9963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c02bbe2a52d8faabf624fd60b8c838efdd6e0b62
+commit: http://git.buildroot.net/buildroot/commit/?id=6ca752dce9494874149bb83106192d5ed4dab0cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xapp_iceauth/xapp_iceauth.mk |    2 +-
+ .../xdriver_xf86-video-xgixp.mk                    |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_iceauth/xapp_iceauth.mk b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
-index 9ea0e8a..569f053 100644
---- a/package/x11r7/xapp_iceauth/xapp_iceauth.mk
-+++ b/package/x11r7/xapp_iceauth/xapp_iceauth.mk
+diff --git a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk b/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
+index f1e518a..4a9a2a2 100644
+--- a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
++++ b/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_ICEAUTH_VERSION = 1.0.3
-+XAPP_ICEAUTH_VERSION = 1.0.4
- XAPP_ICEAUTH_SOURCE = iceauth-$(XAPP_ICEAUTH_VERSION).tar.bz2
- XAPP_ICEAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_ICEAUTH_DEPENDENCIES = xlib_libICE xlib_libX11
+-XDRIVER_XF86_VIDEO_XGIXP_VERSION = 1.7.99.4
++XDRIVER_XF86_VIDEO_XGIXP_VERSION = 1.8.0
+ XDRIVER_XF86_VIDEO_XGIXP_SOURCE = xf86-video-xgixp-$(XDRIVER_XF86_VIDEO_XGIXP_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_XGIXP_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_XGIXP_AUTORECONF = YES
