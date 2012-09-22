@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 Sep 2012 23:36:11 +0200
-Subject: [Buildroot] [PATCH] zeromq: bump version to 2.2.0
-In-Reply-To: <1348263754-2253-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 21 Sep 2012 22:42:34 +0100")
-References: <1348263754-2253-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87lig1agfo.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 22 Sep 2012 23:36:00 +0200
+Subject: [Buildroot] [git commit] zeromq: bump version to 2.2.0
+Message-ID: <20120922213625.DDB78996D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/zeromq/zeromq.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 99ee4ca..284a168 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-ZEROMQ_VERSION = 2.1.11
++ZEROMQ_VERSION = 2.2.0
+ ZEROMQ_SITE = http://download.zeromq.org/
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
