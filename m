@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 22 Sep 2012 21:34:59 +0200
-Subject: [Buildroot] [git commit] xdata_xcursor-themes: bump version
-Message-ID: <20120922194211.78C429963C@busybox.osuosl.org>
+Date: Sat, 22 Sep 2012 21:35:00 +0200
+Subject: [Buildroot] [git commit] xfont_font-bh-100dpi: bump version
+Message-ID: <20120922194213.DEE879963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d52664bc93c54e3586a287057f3654cf99c6215b
+commit: http://git.buildroot.net/buildroot/commit/?id=8a96c30b5e6fd91983849346d006b42d146f8398
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-index 605d6fa..e46fbbc 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-@@ -3,7 +3,8 @@
- # xdata_xcursor-themes - No description available
+diff --git a/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk b/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
+index 0bddb15..2f43524 100644
+--- a/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
++++ b/package/x11r7/xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk
+@@ -4,7 +4,7 @@
  #
- #############################################################
--XDATA_XCURSOR_THEMES_VERSION = 1.0.2
-+
-+XDATA_XCURSOR_THEMES_VERSION = 1.0.3
- XDATA_XCURSOR_THEMES_SOURCE = xcursor-themes-$(XDATA_XCURSOR_THEMES_VERSION).tar.bz2
- XDATA_XCURSOR_THEMES_SITE = http://xorg.freedesktop.org/releases/individual/data
- XDATA_XCURSOR_THEMES_INSTALL_STAGING = YES
+ ################################################################################
+ 
+-XFONT_FONT_BH_100DPI_VERSION = 1.0.1
++XFONT_FONT_BH_100DPI_VERSION = 1.0.3
+ XFONT_FONT_BH_100DPI_SOURCE = font-bh-100dpi-$(XFONT_FONT_BH_100DPI_VERSION).tar.bz2
+ XFONT_FONT_BH_100DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_BH_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
