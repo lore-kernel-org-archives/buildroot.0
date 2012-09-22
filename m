@@ -1,204 +1,82 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 22 Sep 2012 00:28:38 +0200
-Subject: [Buildroot] [PATCH 6/6] manual: remove Manual Makefile section
-In-Reply-To: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
-References: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1348266518-27665-7-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 22 Sep 2012 05:38:51 +0200
+Subject: [Buildroot] [UNSURE]Re:  [PATCH 01/13] perl: new package v6
+In-Reply-To: <CAB0FRsu9fyH_9+QtLgbXrTMA=zqmR1io5vCO6cEYFQfwgtNcxw@mail.gmail.com>
+References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
+ <20120920215636.6d86b7b5@skate>
+ <CAB0FRsu9fyH_9+QtLgbXrTMA=zqmR1io5vCO6cEYFQfwgtNcxw@mail.gmail.com>
+Message-ID: <20120922053851.25e90b1e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Dear Fran?ois Perrad,
 
- delete mode 100644 docs/manual/adding-packages-handwritten.txt
+On Fri, 21 Sep 2012 23:29:57 +0200, Fran?ois Perrad wrote:
 
-diff --git a/docs/manual/adding-packages-handwritten.txt b/docs/manual/adding-packages-handwritten.txt
-deleted file mode 100644
-index beb25f6..0000000
---- a/docs/manual/adding-packages-handwritten.txt
-+++ /dev/null
-@@ -1,167 +0,0 @@
--[[handwritten-tutorial]]
--
--Manual Makefile
-----------------
--
--*NOTE: new manual makefiles should not be created, and existing manual
--makefiles should be converted either to the generic, autotools or
--cmake infrastructure. This section is only kept to document the
--existing manual makefiles and to help understand how they work.*
--
--------------------------
--01: #############################################################
--02: #
--03: # libfoo
--04: #
--05: #############################################################
--06: LIBFOO_VERSION = 1.0
--07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
--08: LIBFOO_SITE = http://www.foosoftware.org/downloads
--09: LIBFOO_DIR = $(BUILD_DIR)/foo-$(FOO_VERSION)
--10: LIBFOO_BINARY = foo
--11: LIBFOO_TARGET_BINARY = usr/bin/foo
--12:
--13: $(DL_DIR)/$(LIBFOO_SOURCE):
--14: 	$(call DOWNLOAD,$(LIBFOO_SITE)/$(LIBFOO_SOURCE))
--15:
--16: $(LIBFOO_DIR)/.source: $(DL_DIR)/$(LIBFOO_SOURCE)
--17: 	$(ZCAT) $(DL_DIR)/$(LIBFOO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--18: 	touch $@
--19:
--20: $(LIBFOO_DIR)/.configured: $(LIBFOO_DIR)/.source
--21: 	(cd $(LIBFOO_DIR); rm -rf config.cache; \
--22: 		$(TARGET_CONFIGURE_OPTS) \
--23: 		$(TARGET_CONFIGURE_ARGS) \
--24: 		./configure \
--25: 		--target=$(GNU_TARGET_NAME) \
--26: 		--host=$(GNU_TARGET_NAME) \
--27: 		--build=$(GNU_HOST_NAME) \
--28: 		--prefix=/usr \
--29: 		--sysconfdir=/etc \
--30: 	)
--31: 	touch $@
--32:
--33: $(LIBFOO_DIR)/$(LIBFOO_BINARY): $(LIBFOO_DIR)/.configured
--34: 	$(MAKE) CC=$(TARGET_CC) -C $(LIBFOO_DIR)
--35:
--36: $(TARGET_DIR)/$(LIBFOO_TARGET_BINARY): $(LIBFOO_DIR)/$(LIBFOO_BINARY)
--37: 	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIBFOO_DIR) install-strip
--38: 	rm -Rf $(TARGET_DIR)/usr/man
--39:
--40: libfoo: uclibc ncurses $(TARGET_DIR)/$(LIBFOO_TARGET_BINARY)
--41:
--42: libfoo-source: $(DL_DIR)/$(LIBFOO_SOURCE)
--43:
--44: libfoo-clean:
--45: 	$(MAKE) prefix=$(TARGET_DIR)/usr -C $(LIBFOO_DIR) uninstall
--46: 	-$(MAKE) -C $(LIBFOO_DIR) clean
--47:
--48: libfoo-dirclean:
--49: 	rm -rf $(LIBFOO_DIR)
--50:
--51: #############################################################
--52: #
--53: # Toplevel Makefile options
--54: #
--55: #############################################################
--56: ifeq ($(BR2_PACKAGE_LIBFOO),y)
--57: TARGETS += libfoo
--58: endif
--------------------------
--
--First of all, this Makefile example works for a package which
--comprises a single binary executable. For other software, such as
--libraries or more complex stuff with multiple binaries, it must be
--qqadapted. For examples look at the other +*.mk+ files in the
--+package+ directory.
--
--At lines 6-11, a couple of useful variables are defined:
--
--* +LIBFOO_VERSION+: The version of 'libfoo' that should be downloaded.
--
--* +LIBFOO_SOURCE+: The name of the tarball of 'libfoo' on the download
--  website or FTP site. As you can see +LIBFOO_VERSION+ is used.
--
--* +LIBFOO_SITE+: The HTTP or FTP site from which 'libfoo' archive is
--  downloaded. It must include the complete path to the directory where
--  +LIBFOO_SOURCE+ can be found.
--
--* +LIBFOO_DIR+: The directory into which the software will be
--  configured and compiled. Basically, it's a subdirectory of
--  +BUILD_DIR+ which is created upon decompression of the tarball.
--
--* +LIBFOO_BINARY+: Software binary name. As said previously, this is
--  an example for a package with a single binary.
--
--* +LIBFOO_TARGET_BINARY+: The full path of the binary inside the
--  target filesystem.  Lines 13-14 define a target that downloads the
--  tarball from the remote site to the download directory (+DL_DIR+).
--
--Lines 16-18 define a target and associated rules that uncompress the
--downloaded tarball. As you can see, this target depends on the tarball
--file so that the previous target (lines 13-14) is called before
--executing the rules of the current target. Uncompressing is followed
--by 'touching' a hidden file to mark the software as having been
--uncompressed. This trick is used everywhere in a Buildroot Makefile to
--split steps (download, uncompress, configure, compile, install) while
--still having correct dependencies.
--
--Lines 20-31 define a target and associated rules that configure the
--software. It depends on the previous target (the hidden +.source+
--file) so that we are sure the software has been uncompressed. In order
--to configure the package, it basically runs the well-known
--+./configure+ script. As we may be doing cross-compilation, +target+,
--+host+ and +build+ arguments are given. The prefix is also set to
--+/usr+, not because the software will be installed in +/usr+ on your
--host system, but because the software will be installed in + /usr+ on
--the target filesystem. Finally it creates a +.configured+ file to mark
--the software as configured.
--
--Lines 33-34 define a target and a rule that compile the software. This
--target will create the binary file in the compilation directory and
--depends on the software being already configured (hence the reference
--to the +.configured+ file).  It basically runs +make+ inside the
--source directory.
--
--Lines 36-38 define a target and associated rules that install the
--software inside the target filesystem. They depend on the binary file
--in the source directory to make sure the software has been
--compiled. They use the +install-strip+ target of the software
--+Makefile+ by passing a +DESTDIR+ argument so that the +Makefile+
--doesn't try to install the software in the host +/usr+ but rather in
--the target +/usr+. After the installation, the +/usr/man + directory
--inside the target filesystem is removed to save space.
--
--Line 40 defines the main target of the software &mdash; the one that
--will eventually be used by the top level +Makefile+ to download,
--compile, and then install this package. This target should first of
--all depend on all needed dependencies of the software (in our example,
--'uclibc' and 'ncurses') and also depend on the final binary. This last
--dependency will call all previous dependencies in the correct order.
--
--Line 42 defines a simple target that only downloads the code
--source. This is not used during normal operation of Buildroot, but is
--needed if you intend to download all required sources at once for
--later offline build. Note that if you add a new package, providing a
--+libfoo-source+ target is 'mandatory' to support users that wish to do
--offline-builds. Furthermore, it eases checking if all package-sources
--are downloadable.
--
--Lines 44-46 define a simple target to clean the software build by
--calling the Makefile with the appropriate options.  The +-clean+
--target should run +make clean+ on $(BUILD_DIR)/package-version and
--MUST uninstall all files of the package from $(STAGING_DIR) and from
--$(TARGET_DIR).
--
--Lines 48-49 define a simple target to completely remove the directory
--in which the software was uncompressed, configured and compiled. The
--+-dirclean+ target MUST completely rm $(BUILD_DIR)/ package-version.
--
--Lines 51-58 add the target +libfoo+ to the list of targets to be
--compiled by Buildroot, by first checking if the configuration option
--for this package has been enabled using the configuration tool. If so,
--it then &quot;subscribes&quot; this package to be compiled by adding
--the package to the TARGETS global variable.  The name added to the
--TARGETS global variable is the name of this package's target, as
--defined on line 40, which is used by Buildroot to download, compile,
--and then install this package.
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index cb75f2d..f672ec6 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -15,8 +15,6 @@ include::adding-packages-autotools.txt[]
- 
- include::adding-packages-cmake.txt[]
- 
--include::adding-packages-handwritten.txt[]
--
- include::adding-packages-gettext.txt[]
- 
- include::adding-packages-conclusion.txt[]
+> > Please explain in more details what this means, and whether this
+> > patch has a chance of being upstream or not.
+> >
+> > Also, it seems to imply that the build process of Perl would require
+> > Qemu. Or, Qemu is not amongst the requirements of Buildroot, and
+> > there is no host-qemu package in the dependencies of your package
+> > (and we don't have a host-qemu package). Yann E. Morin has posted a
+> > target package for qemu a while ago, but it hasn't been merged so
+> > far.
+> >
+> > That said, even so it is certainly possible to create a host-qemu
+> > package, I am a bit annoyed to see the build process of a package
+> > requiring qemu. Is there really no other way? I guess it uses qemu
+> > to run a bunch of tests on the target system. Is there no way to
+> > provide pre-defined values for those tests, on a per-architecture
+> > basis, rather than running those test applications in Qemu?
+> >
+> 
+> Qemu is not used for test, but for the configure and build step.
+> Perl is 'bootstrapped' by miniperl (a perl without any extension
+> module), during the build process, miniperl is running via qemu (user
+> mode).
+> 
+> Perl doesn't use the "standard" autotools, Perl has a limited support
+> for cross-compiling
+> where the target executables are running on a real target through a
+> ssh connection.
+> The use of qemu (user mode) removes the need of a real target and the
+> ssh connection.
+> 
+> BR is shipped with 12 configs/qemu_*_defconfig files,
+> many users have already run 'apt-get install qemu-kvm
+> qemu-kvm-extras'.
+> 
+> A host-qemu package (with the latest version) could be nice in the
+> future.
+
+I understand the need for Qemu in the Perl context (even though I
+generally don't understand why they can't bring normal
+cross-compilation support in the Perl build system), but the solution
+you're proposing cannot be accepted as is. We need to either:
+
+ * Make qemu a hard requirement to run Buildroot, and in that case, add
+   a check for it in support/dependencies/dependencies.sh. Since it is
+   such an unusual dependency, we may special case it, and add it as a
+   dependency only if the Perl package is selected, a bit like we
+   already do for the version control tools (that are only requested as
+   dependencies if at least one package needing a given version control
+   tool is selected)
+
+ * Add a host-qemu package. We can quite certainly find a commonality
+   here with Yann's work on Qemu.
+
+At the moment, your package will break on auto-builders, because they
+don't necessarily have Qemu installed.
+
+Best regards,
+
+Thomas
 -- 
-1.7.12.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
