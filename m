@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sat, 22 Sep 2012 21:35:00 +0200
-Subject: [Buildroot] [git commit] xfont_font-bh-lucidatypewriter-100dpi:
-	bump version
-Message-ID: <20120922194214.9B6E59963C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xfont_font-bh-ttf: bump version
+Message-ID: <20120922194215.789A79963C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=908ecee11b2770df7a6d19128bd26a8c0cce74a8
+commit: http://git.buildroot.net/buildroot/commit/?id=612af34153012f13e374b9e363c92e8117f3e93d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xfont_font-bh-lucidatypewriter-100dpi.mk       |    2 +-
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
-index 192c19c..8eac391 100644
---- a/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
-+++ b/package/x11r7/xfont_font-bh-lucidatypewriter-100dpi/xfont_font-bh-lucidatypewriter-100dpi.mk
+diff --git a/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk b/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk
+index 89bbc39..874e495 100644
+--- a/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk
++++ b/package/x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_VERSION = 1.0.1
-+XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_VERSION = 1.0.3
- XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_SOURCE = font-bh-lucidatypewriter-100dpi-$(XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_VERSION).tar.bz2
- XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_BH_LUCIDATYPEWRITER_100DPI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
+-XFONT_FONT_BH_TTF_VERSION = 1.0.1
++XFONT_FONT_BH_TTF_VERSION = 1.0.3
+ XFONT_FONT_BH_TTF_SOURCE = font-bh-ttf-$(XFONT_FONT_BH_TTF_VERSION).tar.bz2
+ XFONT_FONT_BH_TTF_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_BH_TTF_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install
