@@ -1,33 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 22 Sep 2012 21:46:45 +0200
-Subject: [Buildroot] [PATCH] unionfs: add missing dependency on
-	host-pkg-config
-In-Reply-To: <20120921205224.55eeda57@skate> (Thomas Petazzoni's message of
- "Fri, 21 Sep 2012 20:52:24 +0200")
-References: <1348224356-20104-1-git-send-email-arnout@mind.be>
- <87ehlv79fj.fsf@macbook.be.48ers.dk> <20120921205224.55eeda57@skate>
-Message-ID: <876275c02i.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 22 Sep 2012 21:47:47 +0200
+Subject: [Buildroot] [git commit] qemu/arm-versatile: update to use kernel
+	3.5.4
+Message-ID: <20120922194941.DF0AD996DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=24f659f51ceec0c21861437fbbcfd9453e0805b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Dear Peter Korsgaard,
- Thomas> On Fri, 21 Sep 2012 16:11:12 +0200, Peter Korsgaard wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../{linux-3.3.config => linux-3.5.config}         |    0
+ configs/qemu_arm_versatile_defconfig               |    8 ++++----
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- >> Lots of stuff indeed pulls in host-pkgconfig, and as 'u' is pretty late
- >> in the alphabet the chance is quite high that it is already available:
-
- Thomas> Can we somehow fight this alphabet thing and make things even more
- Thomas> random? Something that would shuffle the make targets or something, but
- Thomas> I don't know if it is possible.
-
-I don't know of any easy/clean way, but it could probably be done by
-some $(wildcard) / $(shell unsort ..) stuff instead of include
-package/*/*.mk, but it won't be pretty.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/qemu/arm-versatile/linux-3.3.config b/board/qemu/arm-versatile/linux-3.5.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-3.3.config
+rename to board/qemu/arm-versatile/linux-3.5.config
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 5385f28..2037565 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.3 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_3=y
++# Lock to 3.5 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_3_5=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.3.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.5.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
