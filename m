@@ -1,41 +1,58 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 23 Sep 2012 13:13:26 +0100
-Subject: [Buildroot] [PATCH] xserver_xorg-server: fix dbus/udev
-	configure problem
-In-Reply-To: <87haqp9cmq.fsf@macbook.be.48ers.dk>
-References: <1348399924-22924-1-git-send-email-spdawson@gmail.com>
- <87haqp9cmq.fsf@macbook.be.48ers.dk>
-Message-ID: <CAHt8ZCOBJt3XD9O+kEu6uzO3eHvDt28LC2D83v31W9thX=M51Q@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 23 Sep 2012 13:18:20 +0100
+Subject: [Buildroot] [PATCH v2] xserver_xorg-server: fix dbus/udev configure
+	problem
+Message-ID: <1348402700-12259-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Okay Peter; I'll reverse the logic then.
+From: Simon Dawson <spdawson@gmail.com>
 
-Simon.
+If both the dbus and udev packages are selected, then the configure step
+for the xserver_xorg-server package fails as follows.
 
-On 23 September 2012 12:55, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
->
->  spdawson> From: Simon Dawson <spdawson@gmail.com>
->
->  spdawson> If both the dbus and udev packages are selected, then the
->  spdawson> configure step for the xserver_xorg-server package fails as
->  spdawson> follows.
->
->  spdawson>   configure: error: Hotplugging through both libudev and dbus/hal not allowed
->
->  spdawson> The configure script no longer allows both the
->  spdawson> --enable-config-dbus and --enable-config-udev options to be
->  spdawson> specified.
->
->  spdawson> This patch changes the xserver_xorg-server makefile to use
->  spdawson> dbus in preference to udev, when both are available.
->
-> Thanks, but isn't udev the "preferred" backend nowadays? D-Bus defaults
-> to no.
->
-> --
-> Bye, Peter Korsgaard
+  configure: error: Hotplugging through both libudev and dbus/hal not allowed
+
+The configure script no longer allows both the --enable-config-dbus
+and --enable-config-udev options to be specified.
+
+This patch changes the xserver_xorg-server makefile to use udev in preference
+to dbus, when both are available.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ v2: As suggested by Peter Korsgaard, prefer udev to dbus
+
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index a19122d..8018a89 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -104,16 +104,14 @@ XSERVER_XORG_SERVER_DEPENDENCIES += tslib
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-tslib LDFLAGS="-lts"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UDEV),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += udev
++XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
++else
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
+ endif
+-
+-ifeq ($(BR2_PACKAGE_UDEV),y)
+-XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
+-XSERVER_XORG_SERVER_DEPENDENCIES += udev
+-else
+-XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+-- 
+1.7.9.5
