@@ -1,62 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Sep 2012 20:37:42 +0200
-Subject: [Buildroot] [git commit] blackbox: fix build issue with gcc 4.6+
-Message-ID: <20120923193049.BABA399649@busybox.osuosl.org>
+Date: Sun, 23 Sep 2012 20:53:30 +0200
+Subject: [Buildroot] [git commit] xserver_xorg-server: fix dbus/udev
+	configure problem
+Message-ID: <20120923193051.02A6599649@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=52679e66a52461bc48188dc4c30490aba2a87595
+commit: http://git.buildroot.net/buildroot/commit/?id=21a5f16edb8d28da0df19d82f0655e2b49e2abaa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/e99b292047b780d379f1123e61177c234d5d3351
+If both the dbus and udev packages are selected, then the configure step
+for the xserver_xorg-server package fails as follows.
 
-Patch from Debian.
+  configure: error: Hotplugging through both libudev and dbus/hal not allowed
 
+The configure script no longer allows both the --enable-config-dbus
+and --enable-config-udev options to be specified.
+
+This patch changes the xserver_xorg-server makefile to use udev in preference
+to dbus, when both are available.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...lackbox-0.70.1-gcc46-textpropertytostring.patch |   34 ++++++++++++++++++++
- 1 files changed, 34 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/blackbox/blackbox-0.70.1-gcc46-textpropertytostring.patch b/package/blackbox/blackbox-0.70.1-gcc46-textpropertytostring.patch
-new file mode 100644
-index 0000000..af03be4
---- /dev/null
-+++ b/package/blackbox/blackbox-0.70.1-gcc46-textpropertytostring.patch
-@@ -0,0 +1,34 @@
-+[PATCH] fix build issue with gcc 4.6+
-+
-+Debian patch from http://patch-tracker.debian.org/patch/series/dl/blackbox/0.70.1-13/textpropertytostring-unconditional.diff
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+
-+Description: Declare bt::textPropertyToString unconditionally.
-+Author: Jakub Wilk <jwilk@debian.org>
-+Forwarded: no
-+Bug-Debian: http://bugs.debian.org/614468
-+Last-Update: 2011-03-12
-+
-+--- a/lib/Util.hh
-++++ b/lib/Util.hh
-+@@ -25,6 +25,8 @@
-+ #ifndef __Util_hh
-+ #define __Util_hh
-+ 
-++#include <X11/Xutil.h>
-++
-+ #include <limits.h>
-+ #include <string>
-+ 
-+@@ -94,10 +96,8 @@
-+ 
-+   std::string tolower(const std::string &string);
-+ 
-+-#ifdef _XUTIL_H_
-+   std::string textPropertyToString(::Display *display,
-+                                    ::XTextProperty& text_prop);
-+-#endif
-+ 
-+ } // namespace bt
-+ 
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index a19122d..8018a89 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -104,16 +104,14 @@ XSERVER_XORG_SERVER_DEPENDENCIES += tslib
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-tslib LDFLAGS="-lts"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UDEV),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += udev
++XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
++else
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
+ endif
+-
+-ifeq ($(BR2_PACKAGE_UDEV),y)
+-XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
+-XSERVER_XORG_SERVER_DEPENDENCIES += udev
+-else
+-XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
