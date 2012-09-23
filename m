@@ -1,32 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Sep 2012 13:13:32 +0200
-Subject: [Buildroot] [git commit] xapp_xkbcomp: preseed xkbparse.c check
-Message-ID: <20120923111411.6675C996DE@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 23 Sep 2012 12:32:04 +0100
+Subject: [Buildroot] [PATCH] xserver_xorg-server: fix dbus/udev configure
+	problem
+Message-ID: <1348399924-22924-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-Fixes http://autobuild.buildroot.net/results/3fd3f1c7dfd17178c33d8c7f6f4b184019709967
+If both the dbus and udev packages are selected, then the configure step
+for the xserver_xorg-server package fails as follows.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+  configure: error: Hotplugging through both libudev and dbus/hal not allowed
+
+The configure script no longer allows both the --enable-config-dbus
+and --enable-config-udev options to be specified.
+
+This patch changes the xserver_xorg-server makefile to use dbus in preference
+to udev, when both are available.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index 5208f1d..5bfb01b 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-@@ -8,6 +8,7 @@ XAPP_XKBCOMP_VERSION = 1.2.0
- XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile
-+XAPP_XKBCOMP_CONF_ENV = ac_cv_file___xkbparse_c=yes
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index a19122d..90ac8a0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -107,13 +107,11 @@ endif
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
+-endif
+-
++else
+ ifeq ($(BR2_PACKAGE_UDEV),y)
+-XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
+ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+-else
+-XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev
++XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
++endif
+ endif
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+-- 
+1.7.9.5
