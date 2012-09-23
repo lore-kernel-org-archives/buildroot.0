@@ -1,58 +1,104 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sun, 23 Sep 2012 13:18:20 +0100
-Subject: [Buildroot] [PATCH v2] xserver_xorg-server: fix dbus/udev configure
-	problem
-Message-ID: <1348402700-12259-1-git-send-email-spdawson@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 23 Sep 2012 09:51:00 -0300
+Subject: [Buildroot] [PATCH] xl2tp: bump to version 1.3.1
+Message-ID: <1348404660-14218-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
-
-If both the dbus and udev packages are selected, then the configure step
-for the xserver_xorg-server package fails as follows.
-
-  configure: error: Hotplugging through both libudev and dbus/hal not allowed
-
-The configure script no longer allows both the --enable-config-dbus
-and --enable-config-udev options to be specified.
-
-This patch changes the xserver_xorg-server makefile to use udev in preference
-to dbus, when both are available.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- v2: As suggested by Peter Korsgaard, prefer udev to dbus
+ package/xl2tp/xl2tp-1.2.7-makefile-flags.patch     |   33 --------------------
+ ...xl2tp-1.2.7-legacy.patch => xl2tp-legacy.patch} |    0
+ package/xl2tp/xl2tp.mk                             |   21 ++----------
+ 3 files changed, 4 insertions(+), 50 deletions(-)
+ delete mode 100644 package/xl2tp/xl2tp-1.2.7-makefile-flags.patch
+ rename package/xl2tp/{xl2tp-1.2.7-legacy.patch => xl2tp-legacy.patch} (100%)
 
- .../xserver_xorg-server/xserver_xorg-server.mk     |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index a19122d..8018a89 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -104,16 +104,14 @@ XSERVER_XORG_SERVER_DEPENDENCIES += tslib
- XSERVER_XORG_SERVER_CONF_OPT += --enable-tslib LDFLAGS="-lts"
- endif
- 
-+ifeq ($(BR2_PACKAGE_UDEV),y)
-+XSERVER_XORG_SERVER_DEPENDENCIES += udev
-+XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
-+else
- ifeq ($(BR2_PACKAGE_DBUS),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += dbus
- XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
- endif
+diff --git a/package/xl2tp/xl2tp-1.2.7-makefile-flags.patch b/package/xl2tp/xl2tp-1.2.7-makefile-flags.patch
+deleted file mode 100644
+index 68a56a6..0000000
+--- a/package/xl2tp/xl2tp-1.2.7-makefile-flags.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-Make sure that the CFLAGS passed on the command line are taken into
+-account.
 -
--ifeq ($(BR2_PACKAGE_UDEV),y)
--XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
--XSERVER_XORG_SERVER_DEPENDENCIES += udev
--else
--XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev
- endif
+---- xl2tp-1.2.7/Makefile-orig	2010-08-05 15:33:46.000000000 -0700
+-+++ xl2tp-1.2.7/Makefile	2010-09-30 22:34:54.000000000 -0700
+-@@ -90,7 +90,7 @@ OSFLAGS?= -DLINUX -I$(KERNELSRC)/include
+- 
+- IPFLAGS?= -DIP_ALLOCATION
+- 
+--CFLAGS+= $(DFLAGS) -O2 -fno-builtin -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
+-+COMPILE_FLAGS+= $(DFLAGS) -fno-builtin -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
+- HDRS=l2tp.h avp.h misc.h control.h call.h scheduler.h file.h aaa.h md5.h
+- OBJS=xl2tpd.o pty.o misc.o control.o avp.o call.o network.o avpsend.o scheduler.o file.o aaa.o md5.o
+- SRCS=${OBJS:.o=.c} ${HDRS}
+-@@ -105,6 +105,9 @@ MANDIR?=$(DESTDIR)${PREFIX}/share/man
+- 
+- all: $(EXEC) pfc
+- 
+-+%.o: %.c
+-+	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c -o $@ -shared $<
+-+
+- clean:
+- 	rm -f $(OBJS) $(EXEC) pfc.o pfc
+- 
+-@@ -112,7 +115,7 @@ $(EXEC): $(OBJS) $(HDRS)
+- 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+- 
+- pfc:
+--	$(CC) $(CFLAGS) -c contrib/pfc.c
+-+	$(CC) $(COMPILE_FLAGS) $(CFLAGS) -c contrib/pfc.c
+- 	$(CC) $(LDFLAGS) -lpcap $(LDLIBS) -o pfc pfc.o
+- 
+- romfs:
+diff --git a/package/xl2tp/xl2tp-1.2.7-legacy.patch b/package/xl2tp/xl2tp-legacy.patch
+similarity index 100%
+rename from package/xl2tp/xl2tp-1.2.7-legacy.patch
+rename to package/xl2tp/xl2tp-legacy.patch
+diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+index 768e6ec..cf0576d 100644
+--- a/package/xl2tp/xl2tp.mk
++++ b/package/xl2tp/xl2tp.mk
+@@ -3,31 +3,18 @@
+ # xl2tp
+ #
+ #############################################################
+-XL2TP_VERSION = 1.2.7
+-XL2TP_SOURCE = xl2tpd-$(XL2TP_VERSION).tar.gz
+-XL2TP_SITE = ftp://ftp.xelerance.com/xl2tpd/
  
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
++XL2TP_VERSION = v1.3.1
++XL2TP_SITE = http://github.com/xelerance/xl2tpd/tarball/$(XL2TP_VERSION)
+ XL2TP_DEPENDENCIES = libpcap
+ 
+ define XL2TP_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(SED) 's/ -O2 //' $(@D)/Makefile
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define XL2TP_INSTALL_TARGET_CMDS
+ 	$(MAKE) DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D) install
+ endef
+ 
+-define XL2TP_UNINSTALL_TARGET_CMDS
+-	rm -f $(TARGET_DIR)/usr/bin/pfc
+-	rm -f $(TARGET_DIR)/usr/sbin/xl2tpd
+-	rm -f $(TARGET_DIR)/usr/share/man/man1/pfc.1
+-	rm -f $(TARGET_DIR)/usr/share/man/man8/xl2tpd.8
+-	rm -f $(TARGET_DIR)/usr/share/man/man5/xl2tpd.conf.5
+-	rm -f $(TARGET_DIR)/usr/share/man/man5/l2tp-secrets.5
+-endef
+-
+-define XL2TP_CLEAN_CMDS
+-	-$(MAKE) -C $(@D) clean
+-endef
+-
+ $(eval $(generic-package))
 -- 
-1.7.9.5
+1.7.8.6
