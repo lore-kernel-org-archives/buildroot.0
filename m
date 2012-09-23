@@ -1,85 +1,48 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sun, 23 Sep 2012 15:08:30 +0100
-Subject: [Buildroot] [PATCH] xapp_xkbcomp: fix cross compilation
-Message-ID: <1348409310-13298-1-git-send-email-spdawson@gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 23 Sep 2012 17:11:56 +0200
+Subject: [Buildroot] [PATCH 13/13] microperl: mark as DEPRECATED
+In-Reply-To: <20120921205944.774e22d6@skate>
+References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
+ <1347107325-4163-13-git-send-email-francois.perrad@gadz.org>
+ <20120920222203.2c608fcf@skate>
+ <CAB0FRsuHy1wibu0X=8q168hKbhO-Rv2FMgewY1O1LN3HAfV4Jw@mail.gmail.com>
+ <20120921205944.774e22d6@skate>
+Message-ID: <CAB0FRsthWPv3+bHe-f982r6wSfYS7ocpoFRS8cE6xxhpf_pYqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+2012/9/21 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Fran?ois Perrad,
+>
+> On Fri, 21 Sep 2012 20:53:08 +0200, Fran?ois Perrad wrote:
+>
+>> I added this commit after your request in
+>> http://patchwork.ozlabs.org/patch/180227/ (Aug. 27, 2012, 9:54 p.m.)
+>
+> Yes, I perfectly remember asking you to mark microperl as deprecated,
+> since you were saying that microperl was a dead-end. My question here
+> is different: knowing that microperl is deprecated, why would we bother
+> bumping its version, making fixes and so on? It doesn't look really
+> interesting to write patches against deprecated and even less
+> interesting to review such patches :-)
+>
 
-The configure step of the xapp_xkbcomp package fails as follows.
+Today, 5 packages depend on microperl :
+    autoconf
+    automake
+    ntp
+    samba
+    libxml-parser-perl (requires only a full host perl)
+So, I think that it is not a good idea to remove it (after a deprecation).
 
-  checking for ./xkbparse.c... configure: error: cannot check for file existence when cross compiling
+Fran?ois
 
-This problem has been fixed by the following upstream commit.
-
-  http://cgit.freedesktop.org/xorg/app/xkbcomp/commit/?id=cc55d8f5ab021861308b071aab9c03016be15187
-
-This patch backports the upstream patch.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- ...-cc55d8f5ab021861308b071aab9c03016be15187.patch |   36 ++++++++++++++++++++
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    2 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/x11r7/xapp_xkbcomp/xapp_xkbcomp-cc55d8f5ab021861308b071aab9c03016be15187.patch
-
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp-cc55d8f5ab021861308b071aab9c03016be15187.patch b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp-cc55d8f5ab021861308b071aab9c03016be15187.patch
-new file mode 100644
-index 0000000..e85ba81
---- /dev/null
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp-cc55d8f5ab021861308b071aab9c03016be15187.patch
-@@ -0,0 +1,36 @@
-+From cc55d8f5ab021861308b071aab9c03016be15187 Mon Sep 17 00:00:00 2001
-+From: Gaetan Nadon <memsize@videotron.ca>
-+Date: Mon, 01 Nov 2010 00:35:24 +0000
-+Subject: config: replace AC_CHECK_FILE with test -f as it fails to cross-compile
-+
-+Testing for the presence of xkbparse.c is legitimate as this is a build
-+file, but the Autoconf macro assumes it is testing on the host system
-+and fails.
-+
-+Tested-by: Abdoulaye Walsimou Gaye <awg@embtoolkit.org>
-+Signed-off-by: Gaetan Nadon <memsize@videotron.ca>
-+---
-+diff --git a/configure.ac b/configure.ac
-+index c69230b..8e6bd6e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -34,11 +34,14 @@ XORG_DEFAULT_OPTIONS
-+ 
-+ AM_CONFIG_HEADER(config.h)
-+ 
-++# If both the C file and YACC are missing, the package cannot be build.
-+ AC_PROG_YACC
-+ AC_PATH_PROG([YACC_INST], $YACC)
-+-AC_CHECK_FILE([$srcdir/xkbparse.c], [],
-+-              [test -z "$YACC_INST" && AC_MSG_ERROR([yacc not found - unable to compile xkbparse.y])])
-+-
-++if test ! -f "$srcdir/xkbparse.c"; then
-++   if test -z "$YACC_INST"; then
-++      AC_MSG_ERROR([yacc not found - unable to compile xkbparse.y])
-++   fi
-++fi
-+ 
-+ AC_CHECK_FUNCS([strdup strcasecmp])
-+ 
-+--
-+cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index 5208f1d..ef25615 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-@@ -9,5 +9,7 @@ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile
- 
-+XAPP_XKBCOMP_AUTORECONF = YES
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-1.7.9.5
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
