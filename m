@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Sep 2012 14:10:06 +0000 (UTC)
+Date: Mon, 24 Sep 2012 14:27:32 +0000 (UTC)
 Subject: [Buildroot] [Bug 5570] Cannot compile software on the target machine
 In-Reply-To: <bug-5570-163@https.bugs.busybox.net/>
 References: <bug-5570-163@https.bugs.busybox.net/>
-Message-ID: <20120924141006.88AAF9966D@busybox.osuosl.org>
+Message-ID: <20120924142732.E18DF996FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,21 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=5570
 
---- Comment #1 from Maribu <mari.hahn@uni-muenster.de> 2012-09-24 14:10:05 UTC ---
-Ok, I found references inside /usr/bin/libtool and also in /usr/lib/*.la on the
-target machine referring to paths on the host machine.
+--- Comment #2 from Samuel Martin <s.martin49@gmail.com> 2012-09-24 14:27:32 UTC ---
+Hi Maribu,
 
-For now I fixed the pathes manually. Hopefully I can now compile on the target
-machine.
+You're talking about the target toolchain, right?
+
+Note that this is not really the way most of the developers around work, so
+this barely maintained and tested.
+
+See this thread:
+http://lists.busybox.net/pipermail/buildroot/2012-August/057987.html
 
 Regards,
-Maribu
+
+
+Sam
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
