@@ -1,262 +1,217 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Sep 2012 08:32:21 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2012-09-23
-Message-ID: <20120924063221.A4D06428011@lolut.humanoidz.org>
+Date: Mon, 24 Sep 2012 08:34:28 +0200
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	remove-target-dir
+Message-ID: <cover.1348468443.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Hello,
 
-On 2012-09-23, 44 random build tests have been done and
-submitted on autobuild.buildroot.net.
- 27 builds have been successful
- 17 builds have failed
+The goal of this branch is to get rid of the target/ directory, which
+has now become mostly useless since the Xtensa architecture has been
+removed.
 
-Below the results of the failed builds. Successful builds are omitted.
+ * Patch 1 creates a new top-level directory called 'system' to store
+   the default device table, the default skeleton, and system-wide
+   configuration options.
 
-Build 9ad594f13175bc3bf101d01342b6108efd555069
-==============================================
+ * Patch 2 removes the last file from target/, Config.in.arch, by
+   splitting it into smaller chunks into a new top-level arch/
+   directory.
 
-Status         : NOK
-Failure reason : xlib_libXt-1.0.9
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-09-23 01:29:19
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
-End of log     : http://autobuild.buildroot.net/results/9ad594f13175bc3bf101d01342b6108efd555069/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/9ad594f13175bc3bf101d01342b6108efd555069/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/9ad594f13175bc3bf101d01342b6108efd555069/config
-Defconfig      : http://autobuild.buildroot.net/results/9ad594f13175bc3bf101d01342b6108efd555069/defconfig
+ * Patch 3 improves the organization of files in arch/ by moving all
+   the gcc mtune, march, mcpu and al. definitions to each
+   architecture-specific file rather than having a big
+   Config.in.common file for those definitions. Idea given by Yann
+   E. Morin.
 
-Build d99f53f1d82280aa9a3fc0328af1ff166fac69d1
-==============================================
+Changes from v1:
 
-Status         : NOK
-Failure reason : xapp_xkbcomp-1.2.0
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 02:25:20
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d358e457237edbcdbef77fe29c40ef8f03fa769f
-End of log     : http://autobuild.buildroot.net/results/d99f53f1d82280aa9a3fc0328af1ff166fac69d1/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/d99f53f1d82280aa9a3fc0328af1ff166fac69d1/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/d99f53f1d82280aa9a3fc0328af1ff166fac69d1/config
-Defconfig      : http://autobuild.buildroot.net/results/d99f53f1d82280aa9a3fc0328af1ff166fac69d1/defconfig
+ * Get rid of the Xtensa removal patch, since it has been applied.
 
-Build e99b292047b780d379f1123e61177c234d5d3351
-==============================================
+ * Squash the patch remove target/Makefile.in into the patch moving
+   stuff into system/, since it was causing bisection breakage.
 
-Status         : NOK
-Failure reason : blackbox-0.70.1
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 03:40:07
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
-End of log     : http://autobuild.buildroot.net/results/e99b292047b780d379f1123e61177c234d5d3351/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e99b292047b780d379f1123e61177c234d5d3351/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e99b292047b780d379f1123e61177c234d5d3351/config
-Defconfig      : http://autobuild.buildroot.net/results/e99b292047b780d379f1123e61177c234d5d3351/defconfig
+ * Implement Yann's idea on how to implement nicely the definition of
+   the gcc mtune, mcpu, march and al. values.
 
-Build 3fd3f1c7dfd17178c33d8c7f6f4b184019709967
-==============================================
+Best regards,
 
-Status         : NOK
-Failure reason : xapp_xkbcomp-1.2.0
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 06:32:28
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
-End of log     : http://autobuild.buildroot.net/results/3fd3f1c7dfd17178c33d8c7f6f4b184019709967/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3fd3f1c7dfd17178c33d8c7f6f4b184019709967/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3fd3f1c7dfd17178c33d8c7f6f4b184019709967/config
-Defconfig      : http://autobuild.buildroot.net/results/3fd3f1c7dfd17178c33d8c7f6f4b184019709967/defconfig
+Thomas
 
-Build 3608caa510763288e11fd523b16d73ca640a759e
-==============================================
+The following changes since commit 90f908f21e4f7b1b7dd0c4c44515db67f441dcc3:
 
-Status         : NOK
-Failure reason : webkit-1.2.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 08:56:55
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
-End of log     : http://autobuild.buildroot.net/results/3608caa510763288e11fd523b16d73ca640a759e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/3608caa510763288e11fd523b16d73ca640a759e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/3608caa510763288e11fd523b16d73ca640a759e/config
-Defconfig      : http://autobuild.buildroot.net/results/3608caa510763288e11fd523b16d73ca640a759e/defconfig
+  xlsclient: unbreak build (2012-09-23 21:27:13 +0200)
 
-Build 5be81d2e8f293d88caef1416a4a568d764e62bc0
-==============================================
+are available in the git repository at:
 
-Status         : NOK
-Failure reason : webkit-1.2.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 11:44:35
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
-End of log     : http://autobuild.buildroot.net/results/5be81d2e8f293d88caef1416a4a568d764e62bc0/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/5be81d2e8f293d88caef1416a4a568d764e62bc0/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/5be81d2e8f293d88caef1416a4a568d764e62bc0/config
-Defconfig      : http://autobuild.buildroot.net/results/5be81d2e8f293d88caef1416a4a568d764e62bc0/defconfig
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git remove-target-dir
 
-Build eb1d5e979818ba57c70c1be48103f77dc9559e1b
-==============================================
+for you to fetch changes up to a9b004ff67d93f81796aa2a6a10734cf1d59ccf2:
 
-Status         : NOK
-Failure reason : xapp_xkbcomp-1.2.0
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-09-23 12:58:21
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=a018c076fb2b73784469ed484437087f6fd08ca5
-End of log     : http://autobuild.buildroot.net/results/eb1d5e979818ba57c70c1be48103f77dc9559e1b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/eb1d5e979818ba57c70c1be48103f77dc9559e1b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/eb1d5e979818ba57c70c1be48103f77dc9559e1b/config
-Defconfig      : http://autobuild.buildroot.net/results/eb1d5e979818ba57c70c1be48103f77dc9559e1b/defconfig
+  arch: improve definition of gcc mtune, mcpu, etc. (2012-09-24 08:17:46 +0200)
 
-Build deac6f0a692f47b03718879e8042c01934235ae9
-==============================================
+----------------------------------------------------------------
+Thomas Petazzoni (3):
+      New top-level directory: system
+      Split target/Config.in.arch into multiple Config.in.* in arch/
+      arch: improve definition of gcc mtune, mcpu, etc.
 
-Status         : NOK
-Failure reason : mplayer-1.1
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-09-23 15:17:05
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/deac6f0a692f47b03718879e8042c01934235ae9/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/deac6f0a692f47b03718879e8042c01934235ae9/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/deac6f0a692f47b03718879e8042c01934235ae9/config
-Defconfig      : http://autobuild.buildroot.net/results/deac6f0a692f47b03718879e8042c01934235ae9/defconfig
+ Config.in                                          |    4 +-
+ Makefile                                           |    2 +-
+ arch/Config.in                                     |  201 +++++
+ arch/Config.in.arm                                 |  114 +++
+ arch/Config.in.avr32                               |    5 +
+ arch/Config.in.bfin                                |   16 +
+ fs/skeleton/bin/.empty => arch/Config.in.common    |    0
+ arch/Config.in.m68k                                |   21 +
+ arch/Config.in.microblaze                          |   10 +
+ arch/Config.in.mips                                |   79 ++
+ arch/Config.in.powerpc                             |  128 +++
+ arch/Config.in.sh                                  |   41 +
+ arch/Config.in.sparc                               |   69 ++
+ arch/Config.in.x86                                 |  235 ++++++
+ {target/generic => system}/Config.in               |    2 +-
+ {target/generic => system}/device_table.txt        |    0
+ {target/generic => system}/device_table_dev.txt    |    0
+ .../dev/pts => system/skeleton/bin}/.empty         |    0
+ {fs => system}/skeleton/dev/log                    |    0
+ .../skeleton/dev/pts}/.empty                       |    0
+ {fs => system}/skeleton/etc/TZ                     |    0
+ {fs => system}/skeleton/etc/fstab                  |    0
+ {fs => system}/skeleton/etc/group                  |    0
+ {fs => system}/skeleton/etc/hostname               |    0
+ {fs => system}/skeleton/etc/hosts                  |    0
+ {fs => system}/skeleton/etc/init.d/S20urandom      |    0
+ {fs => system}/skeleton/etc/init.d/S40network      |    0
+ {fs => system}/skeleton/etc/init.d/rcK             |    0
+ {fs => system}/skeleton/etc/init.d/rcS             |    0
+ {fs => system}/skeleton/etc/inittab                |    0
+ {fs => system}/skeleton/etc/inputrc                |    0
+ {fs => system}/skeleton/etc/issue                  |    0
+ .../skeleton/etc/ld.so.conf.d}/.empty              |    0
+ {fs => system}/skeleton/etc/mtab                   |    0
+ .../skeleton/etc/network/if-down.d}/.empty         |    0
+ .../skeleton/etc/network/if-post-down.d}/.empty    |    0
+ .../skeleton/etc/network/if-pre-up.d}/.empty       |    0
+ .../skeleton/etc/network/if-up.d}/.empty           |    0
+ {fs => system}/skeleton/etc/network/interfaces     |    0
+ {fs => system}/skeleton/etc/passwd                 |    0
+ {fs => system}/skeleton/etc/profile                |    0
+ {fs => system}/skeleton/etc/protocols              |    0
+ {fs => system}/skeleton/etc/random-seed            |  Bin 512 -> 512 bytes
+ {fs => system}/skeleton/etc/resolv.conf            |    0
+ {fs => system}/skeleton/etc/securetty              |    0
+ {fs => system}/skeleton/etc/services               |    0
+ {fs => system}/skeleton/etc/shadow                 |    0
+ .../lib => system/skeleton/home/ftp}/.empty        |    0
+ {fs/skeleton/media => system/skeleton/lib}/.empty  |    0
+ {fs/skeleton/mnt => system/skeleton/media}/.empty  |    0
+ {fs/skeleton/opt => system/skeleton/mnt}/.empty    |    0
+ {fs/skeleton/proc => system/skeleton/opt}/.empty   |    0
+ {fs/skeleton/root => system/skeleton/proc}/.empty  |    0
+ {fs => system}/skeleton/root/.bash_history         |    0
+ {fs => system}/skeleton/root/.bash_logout          |    0
+ {fs => system}/skeleton/root/.bash_profile         |    0
+ {fs/skeleton/sbin => system/skeleton/root}/.empty  |    0
+ {fs => system}/skeleton/run                        |    0
+ {fs/skeleton/sys => system/skeleton/sbin}/.empty   |    0
+ {fs/skeleton/tmp => system/skeleton/sys}/.empty    |    0
+ .../usr/bin => system/skeleton/tmp}/.empty         |    0
+ .../usr/lib => system/skeleton/usr/bin}/.empty     |    0
+ .../usr/sbin => system/skeleton/usr/lib}/.empty    |    0
+ {fs => system}/skeleton/var/cache                  |    0
+ {fs => system}/skeleton/var/lib/misc               |    0
+ {fs => system}/skeleton/var/lib/pcmcia             |    0
+ {fs => system}/skeleton/var/lock                   |    0
+ {fs => system}/skeleton/var/log                    |    0
+ {fs => system}/skeleton/var/pcmcia                 |    0
+ {fs => system}/skeleton/var/run                    |    0
+ {fs => system}/skeleton/var/spool                  |    0
+ {fs => system}/skeleton/var/tmp                    |    0
+ target/generic/Makefile.in => system/system.mk     |    0
+ target/Config.in.arch                              |  822 --------------------
+ target/Makefile.in                                 |    3 -
+ 75 files changed, 923 insertions(+), 829 deletions(-)
+ create mode 100644 arch/Config.in
+ create mode 100644 arch/Config.in.arm
+ create mode 100644 arch/Config.in.avr32
+ create mode 100644 arch/Config.in.bfin
+ rename fs/skeleton/bin/.empty => arch/Config.in.common (100%)
+ create mode 100644 arch/Config.in.m68k
+ create mode 100644 arch/Config.in.microblaze
+ create mode 100644 arch/Config.in.mips
+ create mode 100644 arch/Config.in.powerpc
+ create mode 100644 arch/Config.in.sh
+ create mode 100644 arch/Config.in.sparc
+ create mode 100644 arch/Config.in.x86
+ rename {target/generic => system}/Config.in (99%)
+ rename {target/generic => system}/device_table.txt (100%)
+ rename {target/generic => system}/device_table_dev.txt (100%)
+ rename {fs/skeleton/dev/pts => system/skeleton/bin}/.empty (100%)
+ rename {fs => system}/skeleton/dev/log (100%)
+ rename {fs/skeleton/etc/ld.so.conf.d => system/skeleton/dev/pts}/.empty (100%)
+ rename {fs => system}/skeleton/etc/TZ (100%)
+ rename {fs => system}/skeleton/etc/fstab (100%)
+ rename {fs => system}/skeleton/etc/group (100%)
+ rename {fs => system}/skeleton/etc/hostname (100%)
+ rename {fs => system}/skeleton/etc/hosts (100%)
+ rename {fs => system}/skeleton/etc/init.d/S20urandom (100%)
+ rename {fs => system}/skeleton/etc/init.d/S40network (100%)
+ rename {fs => system}/skeleton/etc/init.d/rcK (100%)
+ rename {fs => system}/skeleton/etc/init.d/rcS (100%)
+ rename {fs => system}/skeleton/etc/inittab (100%)
+ rename {fs => system}/skeleton/etc/inputrc (100%)
+ rename {fs => system}/skeleton/etc/issue (100%)
+ rename {fs/skeleton/etc/network/if-down.d => system/skeleton/etc/ld.so.conf.d}/.empty (100%)
+ rename {fs => system}/skeleton/etc/mtab (100%)
+ rename {fs/skeleton/etc/network/if-post-down.d => system/skeleton/etc/network/if-down.d}/.empty (100%)
+ rename {fs/skeleton/etc/network/if-pre-up.d => system/skeleton/etc/network/if-post-down.d}/.empty (100%)
+ rename {fs/skeleton/etc/network/if-up.d => system/skeleton/etc/network/if-pre-up.d}/.empty (100%)
+ rename {fs/skeleton/home/ftp => system/skeleton/etc/network/if-up.d}/.empty (100%)
+ rename {fs => system}/skeleton/etc/network/interfaces (100%)
+ rename {fs => system}/skeleton/etc/passwd (100%)
+ rename {fs => system}/skeleton/etc/profile (100%)
+ rename {fs => system}/skeleton/etc/protocols (100%)
+ rename {fs => system}/skeleton/etc/random-seed (100%)
+ rename {fs => system}/skeleton/etc/resolv.conf (100%)
+ rename {fs => system}/skeleton/etc/securetty (100%)
+ rename {fs => system}/skeleton/etc/services (100%)
+ rename {fs => system}/skeleton/etc/shadow (100%)
+ rename {fs/skeleton/lib => system/skeleton/home/ftp}/.empty (100%)
+ rename {fs/skeleton/media => system/skeleton/lib}/.empty (100%)
+ rename {fs/skeleton/mnt => system/skeleton/media}/.empty (100%)
+ rename {fs/skeleton/opt => system/skeleton/mnt}/.empty (100%)
+ rename {fs/skeleton/proc => system/skeleton/opt}/.empty (100%)
+ rename {fs/skeleton/root => system/skeleton/proc}/.empty (100%)
+ rename {fs => system}/skeleton/root/.bash_history (100%)
+ rename {fs => system}/skeleton/root/.bash_logout (100%)
+ rename {fs => system}/skeleton/root/.bash_profile (100%)
+ rename {fs/skeleton/sbin => system/skeleton/root}/.empty (100%)
+ rename {fs => system}/skeleton/run (100%)
+ rename {fs/skeleton/sys => system/skeleton/sbin}/.empty (100%)
+ rename {fs/skeleton/tmp => system/skeleton/sys}/.empty (100%)
+ rename {fs/skeleton/usr/bin => system/skeleton/tmp}/.empty (100%)
+ rename {fs/skeleton/usr/lib => system/skeleton/usr/bin}/.empty (100%)
+ rename {fs/skeleton/usr/sbin => system/skeleton/usr/lib}/.empty (100%)
+ create mode 100644 system/skeleton/usr/sbin/.empty
+ rename {fs => system}/skeleton/var/cache (100%)
+ rename {fs => system}/skeleton/var/lib/misc (100%)
+ rename {fs => system}/skeleton/var/lib/pcmcia (100%)
+ rename {fs => system}/skeleton/var/lock (100%)
+ rename {fs => system}/skeleton/var/log (100%)
+ rename {fs => system}/skeleton/var/pcmcia (100%)
+ rename {fs => system}/skeleton/var/run (100%)
+ rename {fs => system}/skeleton/var/spool (100%)
+ rename {fs => system}/skeleton/var/tmp (100%)
+ rename target/generic/Makefile.in => system/system.mk (100%)
+ delete mode 100644 target/Config.in.arch
+ delete mode 100644 target/Makefile.in
 
-Build fd249983726fc4cbc8e8d6ea83d7d1523d0fc297
-==============================================
-
-Status         : NOK
-Failure reason : xapp_xlsclients-1.1.0
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-09-23 16:37:29
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/fd249983726fc4cbc8e8d6ea83d7d1523d0fc297/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/fd249983726fc4cbc8e8d6ea83d7d1523d0fc297/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/fd249983726fc4cbc8e8d6ea83d7d1523d0fc297/config
-Defconfig      : http://autobuild.buildroot.net/results/fd249983726fc4cbc8e8d6ea83d7d1523d0fc297/defconfig
-
-Build b52b6df241fcf410b60c73fcf879ef95385ac429
-==============================================
-
-Status         : NOK
-Failure reason : webkit-1.2.7
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 17:09:23
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/b52b6df241fcf410b60c73fcf879ef95385ac429/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/b52b6df241fcf410b60c73fcf879ef95385ac429/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/b52b6df241fcf410b60c73fcf879ef95385ac429/config
-Defconfig      : http://autobuild.buildroot.net/results/b52b6df241fcf410b60c73fcf879ef95385ac429/defconfig
-
-Build 8458aff70742945fc33d42efc68ae998cdb07bbf
-==============================================
-
-Status         : NOK
-Failure reason : xapp_xlsclients-1.1.0
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-09-23 18:28:49
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/8458aff70742945fc33d42efc68ae998cdb07bbf/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/8458aff70742945fc33d42efc68ae998cdb07bbf/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/8458aff70742945fc33d42efc68ae998cdb07bbf/config
-Defconfig      : http://autobuild.buildroot.net/results/8458aff70742945fc33d42efc68ae998cdb07bbf/defconfig
-
-Build e6aa47c5e7f5062ab222b3a7bb10b4d3a07fc13a
-==============================================
-
-Status         : NOK
-Failure reason : mplayer-1.1
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-09-23 19:28:30
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/e6aa47c5e7f5062ab222b3a7bb10b4d3a07fc13a/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/e6aa47c5e7f5062ab222b3a7bb10b4d3a07fc13a/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/e6aa47c5e7f5062ab222b3a7bb10b4d3a07fc13a/config
-Defconfig      : http://autobuild.buildroot.net/results/e6aa47c5e7f5062ab222b3a7bb10b4d3a07fc13a/defconfig
-
-Build 4cb357a99de9e2c2940fbdfccb314aaef5891b6b
-==============================================
-
-Status         : NOK
-Failure reason : xapp_xlsclients-1.1.0
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-09-23 19:40:46
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/4cb357a99de9e2c2940fbdfccb314aaef5891b6b/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/4cb357a99de9e2c2940fbdfccb314aaef5891b6b/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/4cb357a99de9e2c2940fbdfccb314aaef5891b6b/config
-Defconfig      : http://autobuild.buildroot.net/results/4cb357a99de9e2c2940fbdfccb314aaef5891b6b/defconfig
-
-Build 981a0bd1e4c03f72cbfaa8e7271ec2eb911660d2
-==============================================
-
-Status         : NOK
-Failure reason : x11vnc-0.9.3
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-09-23 20:58:38
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/981a0bd1e4c03f72cbfaa8e7271ec2eb911660d2/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/981a0bd1e4c03f72cbfaa8e7271ec2eb911660d2/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/981a0bd1e4c03f72cbfaa8e7271ec2eb911660d2/config
-Defconfig      : http://autobuild.buildroot.net/results/981a0bd1e4c03f72cbfaa8e7271ec2eb911660d2/defconfig
-
-Build babc39da15731e584014fe7176fd2fbf5058a665
-==============================================
-
-Status         : NOK
-Failure reason : xapp_xlsclients-1.1.0
-Architecture   : arm
-Submitted by   : Peter Korsgaard (gcc10)
-Submitted at   : 2012-09-23 21:39:11
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/babc39da15731e584014fe7176fd2fbf5058a665/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/babc39da15731e584014fe7176fd2fbf5058a665/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/babc39da15731e584014fe7176fd2fbf5058a665/config
-Defconfig      : http://autobuild.buildroot.net/results/babc39da15731e584014fe7176fd2fbf5058a665/defconfig
-
-Build 6d65a71b7a00ea58abdb65e7b8d00bf63de67f4e
-==============================================
-
-Status         : NOK
-Failure reason : xserver_xorg-server-1.9.4
-Architecture   : i686
-Submitted by   : Peter Korsgaard (gcc110)
-Submitted at   : 2012-09-23 21:50:35
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/6d65a71b7a00ea58abdb65e7b8d00bf63de67f4e/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/6d65a71b7a00ea58abdb65e7b8d00bf63de67f4e/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/6d65a71b7a00ea58abdb65e7b8d00bf63de67f4e/config
-Defconfig      : http://autobuild.buildroot.net/results/6d65a71b7a00ea58abdb65e7b8d00bf63de67f4e/defconfig
-
-Build f1f75fbabb6a40901a8fcbf15333c9eee6c34102
-==============================================
-
-Status         : NOK
-Failure reason : xapp_xlsclients-1.1.0
-Architecture   : powerpc
-Submitted by   : Peter Korsgaard (gcc14)
-Submitted at   : 2012-09-23 22:07:23
-Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=f0b4b5a06867fd1ac71fd8f32ac837245fbbcd03
-End of log     : http://autobuild.buildroot.net/results/f1f75fbabb6a40901a8fcbf15333c9eee6c34102/build-end.log
-Complete log   : http://autobuild.buildroot.net/results/f1f75fbabb6a40901a8fcbf15333c9eee6c34102/build.log.bz2
-Configuration  : http://autobuild.buildroot.net/results/f1f75fbabb6a40901a8fcbf15333c9eee6c34102/config
-Defconfig      : http://autobuild.buildroot.net/results/f1f75fbabb6a40901a8fcbf15333c9eee6c34102/defconfig
-
-
-
+Thanks,
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni
