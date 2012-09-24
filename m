@@ -1,78 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Sep 2012 22:28:22 +0200
-Subject: [Buildroot] [PATCH 1/3] New top-level directory: system
-In-Reply-To: <201209242209.50482.yann.morin.1998@free.fr>
-References: <cover.1348468443.git.thomas.petazzoni@free-electrons.com>
- <d1e6b9d55b385bee2d698c950a610d52fffd2d95.1348468443.git.thomas.petazzoni@free-electrons.com>
- <201209242209.50482.yann.morin.1998@free.fr>
-Message-ID: <201209242228.22916.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Sep 2012 23:24:32 +0200
+Subject: [Buildroot] Kernel version
+In-Reply-To: <1348517486.7248.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+References: <1348517486.7248.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+Message-ID: <5060CF90.7070605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 09/24/12 22:11, Zoran Djordjevic wrote:
+> A problem with tslib - "selected device uses a different version of the event protocol than tslib was compiled for"
+> initiated me to rethink about item in Buildroot menu under "Kernel" subtree.
+> What I don't understand is the meaning of Kernel version (where I can enter for example 3.2.6) and custom kernel
+> configuration file - which could be ".config" from directory where are my linux sources (for example 2.6.32).
+> Questions are - how Buildroot knows where from to take kernel sources (is it directory where ".config" is ?) and
+> what in that case means "Kernel version " item ? Which kernel is built - if 3.2.6 then where sources come from
+> (Internet ?). Or is it only proper way to set "Kernel version" alsoto 2.6.32 according to above examples, but in that
+> case where the sources come from ?
 
-On Monday 24 September 2012 22:09:50 Yann E. MORIN wrote:
-> On Monday 24 September 2012 08:34:29 Thomas Petazzoni wrote:
-> > This directory groups the following elements:
-> >  * the default root filesystem skeleton
-> >  * the default device tables
-> >  * the Config.in options for system configuration (UART port for
-> >    getty, system hostname, etc.)
-> >  * the make rules to apply the system configuration options
-> [--SNIP--]
-> > diff --git a/Makefile b/Makefile
-> > index 6536bca..ac4aa39 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -309,7 +309,6 @@ endif
-> >  include package/*/*.mk
-> >  
-> >  include boot/common.mk
-> > -include target/Makefile.in
-> >  include linux/linux.mk
-> >  
-> >  TARGETS+=target-finalize
-> > @@ -324,6 +323,7 @@ TARGETS+=target-generatelocales
-> >  endif
-> >  endif
-> >  
-> > +include system/system.mk
-> >  include fs/common.mk
-> >  
-> >  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
-> 
-> I don't know why, but now the build is broken:
-> 
->     make defconfig
->     make
->     [--SNIP a lot of lines and a long time to build--]
->     /bin/sed -i -e '$a \127.0.1.1\tbuildroot' \
->           -e '/^127.0.1.1/d' /home/ymorin/dev/buildroot/O001/target/etc/hosts
->     /bin/sed: can't read /home/ymorin/dev/buildroot/O001/target/etc/hosts: No
->     such file or directory
-> 
-> Looks like the skeleton is not copied.
-> 
-> I've tried moving back the include to the place its predecessor used to be
-> (ie., moved it back in place of 'include target/Makefile.in'), but no matter
-> what, the build is still broken the same way (although I'll double check
-> again in a moment)...
+  Hi Zoran,
 
-Confirmed: moving the 'include system/system.mk' back to where the previous
-'include target/Makefile.in' was yields a build with the same error.
+  Since I don't understand what you mean with all of the above, I'll just explain
+how things work.
 
-I was unable to identify the root cause for this failure... :-(
+  Buildroot downloads and compiles a linux kernel.  This kernel has nothing to
+do with the kernel on your build machine - you could be building a 3.5 kernel
+on a 2.4.32 build machine.  The kernel version that you specify in buildroot
+is the version that will be downloaded from kernel.org.  If you have a custom
+kernel source tree locally, you can use the CUSTOM_TARBALL or CUSTOM_GIT
+options to build that one instead of a downloaded kernel.org tree.
 
-Regards,
-Yann E. MORIN.
+  To build a kernel, you need a configuration file.  This can either be one of
+the configuration files that are present in the kernel source itself (in the
+arch/<arch>/configs directory), or a custom configuration file that you provide.
+To create such a custom configuration file, you have two approaches:
+- start from a kernel-provided configuration file for your platform, and tweak
+it later.  Then you start with "use a defconfig", build the kernel, play around
+with it.  Later, you run 'make linux-menuconfig' to modify the configuration,
+build and test it again.  Finally, you change the buildroot configuration to
+use a custom configuration file and set the filename to something that doesn't
+exist yet.  Then, you run 'make linux-update-defconfig' to create the custom
+configuration file.
+- Instead of starting from a defconfig, you can also immediately start with
+a custom configuration file.  You have to make sure it exists in this case,
+but you can just do 'touch <filename>' to create it.  Then run
+'make linux-menuconfig' and configure it as you like.
+
+
+  Now, regarding the issue with tslib: that probably means that tslib was built
+with kernel headers that are different from the kernel on which you are running.
+Normally Linux tries to make sure that code compiled against old kernel headers
+still works on newer kernels, but compiling against newer kernel headers and
+running under an old kernel may be an issue.  I'm assuming you use a buildroot
+toolchain (not ct-ng or an external toolchain): in that case, you can select
+the kernel version to use for the kernel headers separately, under
+Toolchain->Kernel Headers.  It doesn't go below 2.6.37, however.
+
+
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
