@@ -1,34 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 24 Sep 2012 14:27:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 5570] Cannot compile software on the target machine
-In-Reply-To: <bug-5570-163@https.bugs.busybox.net/>
-References: <bug-5570-163@https.bugs.busybox.net/>
-Message-ID: <20120924142732.E18DF996FD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 24 Sep 2012 18:13:40 +0200
+Subject: [Buildroot] [PATCH] cvs: needs MMU support
+Message-ID: <1348503220-19839-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5570
+Fixes
 
---- Comment #2 from Samuel Martin <s.martin49@gmail.com> 2012-09-24 14:27:32 UTC ---
-Hi Maribu,
+  http://autobuild.buildroot.org/results/33ac8387a7b27d7b90c23a5f772292921534f8da/build-end.log
 
-You're talking about the target toolchain, right?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cvs/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Note that this is not really the way most of the developers around work, so
-this barely maintained and tested.
-
-See this thread:
-http://lists.busybox.net/pipermail/buildroot/2012-August/057987.html
-
-Regards,
-
-
-Sam
-
+diff --git a/package/cvs/Config.in b/package/cvs/Config.in
+index f9d5955..2308144 100644
+--- a/package/cvs/Config.in
++++ b/package/cvs/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_CVS
+ 	bool "cvs"
+ 	depends on BR2_USE_WCHAR
++	# needs fork()
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Concurrent Versions System - source code revision control tools.
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
