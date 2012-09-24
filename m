@@ -1,61 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Sep 2012 10:43:20 +0200
-Subject: [Buildroot] [PATCH 05/13] perl: add GDBM_File
-In-Reply-To: <CAB0FRsuJ8vSgW8My3HzKVG5BDMu7049NtScW6ijbzKbL4sTPLA@mail.gmail.com>
-References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
- <1347107325-4163-5-git-send-email-francois.perrad@gadz.org>
- <20120920215953.4d4650fb@skate>
- <CAB0FRsuJ8vSgW8My3HzKVG5BDMu7049NtScW6ijbzKbL4sTPLA@mail.gmail.com>
-Message-ID: <50601D28.8060808@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 24 Sep 2012 11:05:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 5570] New: Cannot compile software on the target
+	machine
+Message-ID: <bug-5570-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/21/12 20:36, Fran?ois Perrad wrote:
-> 2012/9/20 Thomas Petazzoni<thomas.petazzoni@free-electrons.com>:
->> On Sat,  8 Sep 2012 14:28:37 +0200, Francois Perrad wrote:
->>> +    PERL_DEPENDENCIES += gdbm
->>> +endif
->>>   HOST_PERL_DEPENDENCIES =
->>
->> There is no configuration option or argument to pass to Perl to tell it
->> to use Gdbm (or Berkeley DB)? I am a bit worried that if GDBM is
->> available on the build machine (for the build machine architecture),
->> the Perl build system might get confused and think that GDBM or
->> Berkeley DB are available, while they are not available for the target.
->> I.e, for autotools packages, we typically have:
->>
->> ifeq ($(BR2_PACKAGE_FOO_FEATURE_A),y)
->> FOO_DEPENDENCIES += liba
->> FOO_CONF_OPT += --enable-feature-a
->> else
->> FOO_CONT_OPT += --disable-feature-a
->> endif
->>
->> Isn't a similar construct necessary here?
->>
->
-> The Configure script is not created by autotools, by a tool named 'metaconfig'.
-> So, an option --enable-gdbm is not needed.
-> The Configure script detects the include and the lib.
-> The parameter libc defines a path with SYSROOT, so, there is not
-> confusion with build machine.
+https://bugs.busybox.net/show_bug.cgi?id=5570
 
-  Another reason to explicitly enable/disable options is to be more robust
-against dependency problems.  E.g. if --enable-feature-a is specified but
-the configure script can't find feature a, then it will (hopefully) error out
-and we can detect this in the autobuilders.  So if metaconf allows to
-explicitly enable/disable features, we would prefer to use that.
+              Host: x86_64 Arch Linux box
+            Target: arm (littel endian) arm1176jzf-s (BCM2708)
+           Summary: Cannot compile software on the target machine
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: mari.hahn at uni-muenster.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-  Regards,
-  Arnout
+
+Version: buildroot-20120922.tar.bz2
+
+While compiling simple hello world programs on the target machine does work,
+compiling complex software doesn't.
+
+I get error messages like this one:
+
+libtool: link: warning: library `/usr/lib/libintl.la' was moved.
+grep:
+/home/maribu/buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib//libiconv.la:
+No such file or directory
+sed:
+/home/maribu/buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib//libiconv.la:
+No such file or directory
+libtool: link:
+`/home/maribu/buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib//libiconv.la'
+is not a valid libtool archive
+
+the libtool archive "libintl.la" is present at /usr/lib, but libtool is
+searching for it in
+"/home/maribu/buildroot/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/"
+which was the correct path on the cross compiling host, but not on the target.
+I tried to export LD_LIBARY_PATH=/usr/lib which does work as root, bus for some
+reason is completely ignored (without any feedback) as normal user.
+
+I think this is a bug, because in my humble opinion there should be no
+reference to host specific paths within the resulting image.
+
+I would be very happy if someone would suggest a quick workaround so I can
+start compiling again.
+
+Regards,
+Maribu
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
