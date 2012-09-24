@@ -1,31 +1,71 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 24 Sep 2012 21:32:26 +0200
-Subject: [Buildroot] External toolchain with eglibc?
-In-Reply-To: <CALoHCLOYcabRC5FZqLqAMyRdFUR7ALu4D7i-MjDuFYyOQm4OSA@mail.gmail.com>
-References: <CALoHCLOYcabRC5FZqLqAMyRdFUR7ALu4D7i-MjDuFYyOQm4OSA@mail.gmail.com>
-Message-ID: <20120924193225.GB4439@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Sep 2012 22:09:50 +0200
+Subject: [Buildroot] [PATCH 1/3] New top-level directory: system
+In-Reply-To: <d1e6b9d55b385bee2d698c950a610d52fffd2d95.1348468443.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1348468443.git.thomas.petazzoni@free-electrons.com>
+ <d1e6b9d55b385bee2d698c950a610d52fffd2d95.1348468443.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201209242209.50482.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eric,
+Thomas, All,
 
-On Mon, Sep 24, 2012 at 11:02:13AM -0700, Eric Seifert wrote:
-> I am using an external toolchain (custom toolchain) and it asks which
-> external toolchain C library I am using, the only two options listed are
-> uClibc and glibc. My external toolchain uses eglibc, does this matter?
-> Should I select glibc?
+On Monday 24 September 2012 08:34:29 Thomas Petazzoni wrote:
+> This directory groups the following elements:
+>  * the default root filesystem skeleton
+>  * the default device tables
+>  * the Config.in options for system configuration (UART port for
+>    getty, system hostname, etc.)
+>  * the make rules to apply the system configuration options
+[--SNIP--]
+> diff --git a/Makefile b/Makefile
+> index 6536bca..ac4aa39 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -309,7 +309,6 @@ endif
+>  include package/*/*.mk
+>  
+>  include boot/common.mk
+> -include target/Makefile.in
+>  include linux/linux.mk
+>  
+>  TARGETS+=target-finalize
+> @@ -324,6 +323,7 @@ TARGETS+=target-generatelocales
+>  endif
+>  endif
+>  
+> +include system/system.mk
+>  include fs/common.mk
+>  
+>  TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
 
-You should select glibc. glibc and eglibc are almost the same as far as 
-Buildroot is concerned. The Linaro toolchains also use eglibc, and select the 
-BR2_TOOLCHAIN_EXTERNAL_GLIBC config symbol. We should probably change the 
-prompt string to "glibc/eglibc", patch follows.
+I don't know why, but now the build is broken:
 
-baruch
+    make defconfig
+    make
+    [--SNIP a lot of lines and a long time to build--]
+    /bin/sed -i -e '$a \127.0.1.1\tbuildroot' \
+          -e '/^127.0.1.1/d' /home/ymorin/dev/buildroot/O001/target/etc/hosts
+    /bin/sed: can't read /home/ymorin/dev/buildroot/O001/target/etc/hosts: No
+    such file or directory
+
+Looks like the skeleton is not copied.
+
+I've tried moving back the include to the place its predecessor used to be
+(ie., moved it back in place of 'include target/Makefile.in'), but no matter
+what, the build is still broken the same way (although I'll double check
+again in a moment)...
+
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
