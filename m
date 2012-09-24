@@ -1,31 +1,28 @@
-From: Waldemar.Rymarkiewicz at tieto.com <Waldemar.Rymarkiewicz@tieto.com>
-Date: Mon, 24 Sep 2012 14:56:33 +0300
-Subject: [Buildroot] [PATCH v3 2/2] ccid: new package
-In-Reply-To: <1348212739-32093-2-git-send-email-waldemar.rymarkiewicz@tieto.com>
-References: <1348212739-32093-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
- <1348212739-32093-2-git-send-email-waldemar.rymarkiewicz@tieto.com>
-Message-ID: <99B09243E1A5DA4898CDD8B70011144818039912C0@EXMB04.eu.tieto.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 24 Sep 2012 14:10:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 5570] Cannot compile software on the target machine
+In-Reply-To: <bug-5570-163@https.bugs.busybox.net/>
+References: <bug-5570-163@https.bugs.busybox.net/>
+Message-ID: <20120924141006.88AAF9966D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->PC/SC driver for USB CCID smart card readers.
->
->http://pcsclite.alioth.debian.org/ccid.html
->
->Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
->---
-> package/Config.in      |    1 +
-> package/ccid/Config.in |   12 ++++++++++++
-> package/ccid/ccid.mk   |   12 ++++++++++++
-> 3 files changed, 25 insertions(+)
-> create mode 100644 package/ccid/Config.in
-> create mode 100644 package/ccid/ccid.mk
+https://bugs.busybox.net/show_bug.cgi?id=5570
 
+--- Comment #1 from Maribu <mari.hahn@uni-muenster.de> 2012-09-24 14:10:05 UTC ---
+Ok, I found references inside /usr/bin/libtool and also in /usr/lib/*.la on the
+target machine referring to paths on the host machine.
 
-No more comments on this series?
+For now I fixed the pathes manually. Hopefully I can now compile on the target
+machine.
 
-Thanks,
-/Waldek
+Regards,
+Maribu
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
