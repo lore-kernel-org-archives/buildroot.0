@@ -1,35 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Sep 2012 10:39:52 +0200
-Subject: [Buildroot] [PATCH] external-toolchain:
- BR2_TOOLCHAIN_EXTERNAL_GLIBC includes eglibc
-In-Reply-To: <20120925083330.GD4439@tarshish>
-References: <1348544993-5682-1-git-send-email-baruch@tkos.co.il>
- <20120925095442.01c07b54@skate> <20120925083330.GD4439@tarshish>
-Message-ID: <20120925103952.20f4d20a@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 24 Sep 2012 21:57:21 +0200
+Subject: [Buildroot] [git commit] genext2fs: update to CVS rev 1.118
+Message-ID: <20120925093427.728869970E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: http://git.buildroot.net/buildroot/commit/?id=fa2ab8ac340a6f8e7b625cf55505253500481b96
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 25 Sep 2012 10:33:30 +0200, Baruch Siach wrote:
+See http://genext2fs.cvs.sourceforge.net/viewvc/genext2fs/genext2fs/genext2fs.c?view=log
+for details.
 
-> This is exactly what I meant to say, but the text surely needs to be clearer 
-> as you suggest. What feature do you think we need to mention as minimal 
-> requirements in the help text?
+Numerous bugfixes, large file and filesystem support, rev 1 filesystems,
+volume id support, block size, ..
 
-I have no idea, since I have never looked at what eglibc provides in
-terms of configurability :) I guess Yann can give details on this, he
-is quite certainly a lot more aware than I am about what the eglibc
-options are.
+And drop unneeded patches while we're at it.
 
-Best regards,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/genext2fs/genext2fs-1.4.1-nosquash.patch   |   14 -
+ .../genext2fs-1.4.1-remove_ugly_warnings.patch     |   21 -
+ ...genext2fs-update-genext2fs.c-to-rev-1.118.patch | 2971 ++++++++++++++++++++
+ 3 files changed, 2971 insertions(+), 35 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Patch is too large, so refusing to show it
