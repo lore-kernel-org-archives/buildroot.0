@@ -1,55 +1,34 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Tue, 25 Sep 2012 12:17:03 +0200
-Subject: [Buildroot] [PATCH 1/1] allow to pass the number of parallel jobs
-	via command line
-Message-ID: <1348568223-13874-1-git-send-email-plagnioj@jcrosoft.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 25 Sep 2012 17:10:03 +0200
+Subject: [Buildroot] [git commit] configs: add defconfig for
+	boundarydevices nitrogen6x board
+In-Reply-To: <5061B7A2.6060306@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 25 Sep 2012 15:54:42 +0200")
+References: <20120925093427.C0B609970E@busybox.osuosl.org>
+ <5061B7A2.6060306@mind.be>
+Message-ID: <87ipb287g4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-use PARALLEL_JOBS=x for this
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-This will overwrite the value in BR2_JLEVEL
+ Arnout> On 09/24/12 22:51, Peter Korsgaard wrote:
+ >> board/boundarydevices/nitrogen6x/6q_bootscript |  Bin 0 ->  455 bytes
+ >> board/boundarydevices/nitrogen6x/6q_upgrade    |  Bin 0 ->  1587 bytes
 
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
----
- Makefile            |    2 ++
- package/Makefile.in |    2 ++
- 2 files changed, 4 insertions(+)
+ Arnout> Why not keep these as text files and use host-mkimage to
+ Arnout> produce the images?
 
-diff --git a/Makefile b/Makefile
-index 6536bca..13e8139 100644
---- a/Makefile
-+++ b/Makefile
-@@ -730,6 +730,8 @@ endif
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
- 	@echo
-+	@echo '  make PARALLEL_JOBS=x   - X => number of jobs for each package this overwrite the KConfig BR2_JLEVEL'
-+	@echo
- 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
- 	@echo
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 64508b2..fcf5b13 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -9,12 +9,14 @@ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
- # If BR2_LEVEL is 0, scale the maximum concurrency with the number of
- # CPUs.  A coefficient of 2 is used in order to keep processors busy
- # while waiting on I/O.
-+ifeq ($(PARALLEL_JOBS),)
- ifeq ($(BR2_JLEVEL),0)
- PARALLEL_JOBS:=$(shell echo \
- 	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
- else
- PARALLEL_JOBS:=$(BR2_JLEVEL)
- endif
-+endif
- 
- MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+Simplicity. I didn't write these scripts myself (they are from the uSD
+shipped with the board), and accessing host tools or checking if
+host-mkimage is enabled from the post-build script is not that straight
+forward (you cannot truly rely on host bein $TARGET_DIR/../host).
+
+I also doubted about the u-boot.bin handling, but atleast the user
+cannot change the IMAGES_DIR to anything else (like BR2_HOST_DIR).
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
