@@ -1,160 +1,1493 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 25 Sep 2012 14:55:24 +0200
-Subject: [Buildroot] [PATCH 3/4] wpa_supplicant: introduce macros for
-	editing the .config file
+Date: Tue, 25 Sep 2012 14:55:25 +0200
+Subject: [Buildroot] [PATCH 4/4] wpa-supplicant: rework .config file editing
 In-Reply-To: <1348577725-12647-1-git-send-email-s.neumann@raumfeld.com>
 References: <1348577725-12647-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1348577725-12647-4-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1348577725-12647-5-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make the substitutions on the .config file more readable by
-introducing macros to enable, disable certain options similar
-to the macros we use for editing KConfig files.
+Further simplify the edits on the .config file based on a nice idea
+brought up by Arnout Vandecappelle on the mailing-list.
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk |   62 ++++++++++++++++++------------
- 1 file changed, 37 insertions(+), 25 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.mk |  117 +--
+ raumfeld/br2-remotecontrol-arm.config    | 1284 ++++++++++++++++++++++++++++++
+ 2 files changed, 1323 insertions(+), 78 deletions(-)
+ create mode 100644 raumfeld/br2-remotecontrol-arm.config
 
 diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index e8d55d3..5337e5f 100644
+index 5337e5f..6a577c7 100644
 --- a/package/wpa_supplicant/wpa_supplicant.mk
 +++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,49 +15,61 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
+@@ -15,80 +15,61 @@ WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
  WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
  WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
  
-+define WPA_SUPPLICANT_CONFIG_DISABLE
-+	$(SED) 's/^\($(1).*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+endef
+-define WPA_SUPPLICANT_CONFIG_DISABLE
+-	$(SED) 's/^\($(1).*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++WPA_SUPPLICANT_CONFIG_EDITS =
+ 
+-define WPA_SUPPLICANT_CONFIG_ENABLE
+-	$(SED) 's/#\($(1).*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++WPA_SUPPLICANT_CONFIG_SET =
+ 
+-define WPA_SUPPLICANT_CONFIG_SET
+-	echo '$(1)=y' >> $(WPA_SUPPLICANT_CONFIG)
+-endef
++WPA_SUPPLICANT_CONFIG_ENABLE = \
++	CONFIG_IEEE80211N	\
++	CONFIG_IEEE80211R	\
++	CONFIG_INTERWORKING	\
++	CONFIG_DELAYED_MIC	\
++	CONFIG_INTERNAL_LIBTOMMATH
 +
-+define WPA_SUPPLICANT_CONFIG_ENABLE
-+	$(SED) 's/#\($(1).*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+endef
-+
-+define WPA_SUPPLICANT_CONFIG_SET
-+	echo '$(1)=y' >> $(WPA_SUPPLICANT_CONFIG)
-+endef
-+
++WPA_SUPPLICANT_CONFIG_DISABLE = \
++	CONFIG_DRIVER_ATMEL	\
++	CONFIG_SMARTCARD
+ 
  ifeq ($(BR2_PACKAGE_LIBNL),y)
  	WPA_SUPPLICANT_DEPENDENCIES += libnl
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	echo 'CONFIG_LIBNL32=y' >>$(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_LIBNL32)
- endef
+-define WPA_SUPPLICANT_LIBNL_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_LIBNL32)
+-endef
++	WPA_SUPPLICANT_CONFIG_SET += CONFIG_LIBNL32
  else
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_NL80211)
- endef
+-define WPA_SUPPLICANT_LIBNL_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_NL80211)
+-endef
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
  endif
  
  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
- define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/#\(CONFIG_EAP_AKA.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_FAST.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_GPSK.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_IKEV2.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_PAX.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_PSK.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_SAKE.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_SIM.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_TNC.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_AKA)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_FAST)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_GPSK)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_IKEV2)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PAX)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PSK)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_SAKE)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_SIM)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_TNC)
- endef
+-define WPA_SUPPLICANT_EAP_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_AKA)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_FAST)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_GPSK)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_IKEV2)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PAX)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PSK)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_SAKE)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_SIM)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_TNC)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_AKA		\
++					CONFIG_EAP_FAST		\
++					CONFIG_EAP_GPSK 	\
++					CONFIG_EAP_IKEV2	\
++					CONFIG_EAP_PAX		\
++					CONFIG_EAP_PSK		\
++					CONFIG_EAP_SAKE		\
++					CONFIG_EAP_SIM		\
++					CONFIG_EAP_TNC
  else
- define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_EAP)
- endef
+-define WPA_SUPPLICANT_EAP_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_EAP)
+-endef
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
  endif
  
  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
- define WPA_SUPPLICANT_AP_CONFIG
--	echo 'CONFIG_AP=y' >>$(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_AP)
- endef
+-define WPA_SUPPLICANT_AP_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_SET,CONFIG_AP)
+-endef
++	WPA_SUPPLICANT_CONFIG_SET += CONFIG_AP
  endif
  
  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
- define WPA_SUPPLICANT_WPS_CONFIG
--	$(SED) 's/#\(CONFIG_WPS.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_WPS)
- endef
+-define WPA_SUPPLICANT_WPS_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_WPS)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
  endif
  
- define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
--	$(SED) 's/#\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_INTERNAL_LIBTOMMATH)
- endef
- 
+-define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_INTERNAL_LIBTOMMATH)
+-endef
+-
  # Try to use openssl or gnutls if it's already available
-@@ -65,7 +77,7 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
  	WPA_SUPPLICANT_DEPENDENCIES += openssl
- define WPA_SUPPLICANT_TLS_CONFIG
- 	$(SED) 's/#\(CONFIG_TLS=openssl\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_EAP_PWD.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PWD)
- endef
+-define WPA_SUPPLICANT_TLS_CONFIG
+-	$(SED) 's/#\(CONFIG_TLS=openssl\)/\1/' $(WPA_SUPPLICANT_CONFIG)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_EAP_PWD)
+-endef
++	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_PWD
  else
  ifeq ($(BR2_PACKAGE_GNUTLS),y)
-@@ -88,7 +100,7 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
- define WPA_SUPPLICANT_DBUS_OLD_CONFIG
--	$(SED) 's/#\(CONFIG_CTRL_IFACE_DBUS=\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS=)
- endef
- define WPA_SUPPLICANT_INSTALL_DBUS_OLD
- 	$(INSTALL) -D \
-@@ -99,7 +111,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
- define WPA_SUPPLICANT_DBUS_NEW_CONFIG
--	$(SED) 's/#\(CONFIG_CTRL_IFACE_DBUS_NEW=\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS_NEW)
- endef
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
- 	$(INSTALL) -D \
-@@ -110,7 +122,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
- define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
--	$(SED) 's/#\(CONFIG_CTRL_IFACE_DBUS_INTRO=\)/\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS_INTRO)
- endef
+ 	WPA_SUPPLICANT_DEPENDENCIES += gnutls
+-define WPA_SUPPLICANT_TLS_CONFIG
+-	$(SED) 's/#\(CONFIG_TLS=\).*/\1gnutls/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1gnutls/'
+ else
+-define WPA_SUPPLICANT_TLS_CONFIG
+-	$(SED) 's/#\(CONFIG_TLS=\).*/\1internal/' $(WPA_SUPPLICANT_CONFIG)
+-endef
++	WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
  endif
  
-@@ -124,12 +136,12 @@ endif
+@@ -99,9 +80,7 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
+-define WPA_SUPPLICANT_DBUS_OLD_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS=)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS=
+ define WPA_SUPPLICANT_INSTALL_DBUS_OLD
+ 	$(INSTALL) -D \
+ 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
+@@ -110,9 +89,7 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
+-define WPA_SUPPLICANT_DBUS_NEW_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS_NEW)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -D \
+ 	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
+@@ -121,34 +98,18 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+-define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_CTRL_IFACE_DBUS_INTRO)
+-endef
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
+ endif
+ 
+-define WPA_SUPPLICANT_DBUS_CONFIG
+-	$(WPA_SUPPLICANT_DBUS_OLD_CONFIG)
+-	$(WPA_SUPPLICANT_DBUS_NEW_CONFIG)
+-	$(WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG)
+-endef
+-
+ endif
  
  define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_IEEE80211N.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_IEEE80211R.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_INTERWORKING.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/#\(CONFIG_DELAYED_MIC.*\)/\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
--	$(SED) 's/\(CONFIG_SMARTCARD\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_IEEE80211N)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_IEEE80211R)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_INTERWORKING)
-+	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_DELAYED_MIC)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_ATMEL)
-+	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_SMARTCARD)
- 	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
- 	$(WPA_SUPPLICANT_TLS_CONFIG)
- 	$(WPA_SUPPLICANT_EAP_CONFIG)
+-	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_IEEE80211N)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_IEEE80211R)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_INTERWORKING)
+-	$(call WPA_SUPPLICANT_CONFIG_ENABLE,CONFIG_DELAYED_MIC)
+-	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_DRIVER_ATMEL)
+-	$(call WPA_SUPPLICANT_CONFIG_DISABLE,CONFIG_SMARTCARD)
+-	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
+-	$(WPA_SUPPLICANT_TLS_CONFIG)
+-	$(WPA_SUPPLICANT_EAP_CONFIG)
+-	$(WPA_SUPPLICANT_WPS_CONFIG)
+-	$(WPA_SUPPLICANT_LIBNL_CONFIG)
+-	$(WPA_SUPPLICANT_DBUS_CONFIG)
+-	$(WPA_SUPPLICANT_AP_CONFIG)
++        cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
++        sed -i $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
++               $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
++               $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
++	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
++               $(WPA_SUPPLICANT_CONFIG)
+ endef
+ 
+ define WPA_SUPPLICANT_BUILD_CMDS
+diff --git a/raumfeld/br2-remotecontrol-arm.config b/raumfeld/br2-remotecontrol-arm.config
+new file mode 100644
+index 0000000..548ab07
+--- /dev/null
++++ b/raumfeld/br2-remotecontrol-arm.config
+@@ -0,0 +1,1284 @@
++#
++# Automatically generated make config: don't edit
++# Buildroot 2012.08-00672-g522e9b5-dirty Configuration
++#
++BR2_HAVE_DOT_CONFIG=y
++BR2_arm=y
++# BR2_armeb is not set
++# BR2_avr32 is not set
++# BR2_bfin is not set
++# BR2_i386 is not set
++# BR2_microblazeel is not set
++# BR2_microblazebe is not set
++# BR2_mips is not set
++# BR2_mipsel is not set
++# BR2_powerpc is not set
++# BR2_sh is not set
++# BR2_sh64 is not set
++# BR2_sparc is not set
++# BR2_x86_64 is not set
++# BR2_generic_arm is not set
++# BR2_arm7tdmi is not set
++# BR2_arm610 is not set
++# BR2_arm710 is not set
++# BR2_arm720t is not set
++# BR2_arm920t is not set
++# BR2_arm922t is not set
++# BR2_arm926t is not set
++# BR2_arm10t is not set
++# BR2_arm1136jf_s is not set
++# BR2_arm1176jz_s is not set
++# BR2_arm1176jzf_s is not set
++# BR2_cortex_a8 is not set
++# BR2_cortex_a9 is not set
++# BR2_sa110 is not set
++# BR2_sa1100 is not set
++BR2_xscale=y
++# BR2_iwmmxt is not set
++BR2_ARM_TYPE="ARM_XSCALE"
++BR2_ARM_EABI=y
++# BR2_ARM_OABI is not set
++BR2_ARCH="arm"
++BR2_ENDIAN="LITTLE"
++BR2_GCC_TARGET_TUNE="xscale"
++BR2_GCC_TARGET_ARCH="armv5te"
++BR2_GCC_TARGET_ABI="aapcs-linux"
++
++#
++# Build options
++#
++
++#
++# Commands
++#
++BR2_WGET="wget --passive-ftp -nd"
++BR2_SVN="svn"
++BR2_BZR="bzr"
++BR2_GIT="git"
++BR2_LOCALFILES="cp"
++BR2_SCP="scp"
++BR2_SSH="ssh"
++BR2_HG="hg"
++BR2_ZCAT="gzip -d -c"
++BR2_BZCAT="bzcat"
++BR2_XZCAT="xzcat"
++BR2_TAR_OPTIONS=""
++BR2_DL_DIR="$(BASE_DIR)/dl"
++BR2_HOST_DIR="$(BASE_DIR)/host"
++
++#
++# Mirrors and Download locations
++#
++BR2_PRIMARY_SITE="http://rf-devel.teufel.local/buildroot/dl"
++# BR2_PRIMARY_SITE_ONLY is not set
++BR2_BACKUP_SITE="http://sources.buildroot.net/"
++BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
++BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
++BR2_DEBIAN_MIRROR="http://ftp.debian.org"
++BR2_JLEVEL=8
++# BR2_CCACHE is not set
++# BR2_DEPRECATED is not set
++# BR2_ENABLE_DEBUG is not set
++BR2_STRIP_strip=y
++# BR2_STRIP_sstrip is not set
++# BR2_STRIP_none is not set
++BR2_STRIP_EXCLUDE_FILES="libuClibc* libglib* libgio* libgobject* libsoup* libxml2* libgupnp* libraumfeld* libsly* remote-control"
++BR2_STRIP_EXCLUDE_DIRS=""
++# BR2_OPTIMIZE_0 is not set
++# BR2_OPTIMIZE_1 is not set
++BR2_OPTIMIZE_2=y
++# BR2_OPTIMIZE_3 is not set
++# BR2_OPTIMIZE_S is not set
++# BR2_PREFER_STATIC_LIB is not set
++# BR2_HAVE_DOCUMENTATION is not set
++# BR2_HAVE_DEVFILES is not set
++BR2_PACKAGE_OVERRIDE_FILE="$(TOPDIR)/local.mk"
++
++#
++# Toolchain
++#
++BR2_TOOLCHAIN_BUILDROOT=y
++# BR2_TOOLCHAIN_EXTERNAL is not set
++# BR2_TOOLCHAIN_CTNG is not set
++
++#
++# Kernel Header Options
++#
++# BR2_KERNEL_HEADERS_2_6_38 is not set
++# BR2_KERNEL_HEADERS_2_6_39 is not set
++# BR2_KERNEL_HEADERS_3_0 is not set
++# BR2_KERNEL_HEADERS_3_1 is not set
++# BR2_KERNEL_HEADERS_3_2 is not set
++# BR2_KERNEL_HEADERS_3_3 is not set
++# BR2_KERNEL_HEADERS_3_4 is not set
++BR2_KERNEL_HEADERS_VERSION=y
++# BR2_KERNEL_HEADERS_SNAP is not set
++BR2_DEFAULT_KERNEL_VERSION="3.0.4"
++BR2_DEFAULT_KERNEL_HEADERS="3.0.4"
++
++#
++# uClibc Options
++#
++# BR2_UCLIBC_VERSION_0_9_31 is not set
++BR2_UCLIBC_VERSION_0_9_32=y
++# BR2_UCLIBC_VERSION_0_9_33 is not set
++# BR2_UCLIBC_VERSION_SNAPSHOT is not set
++BR2_UCLIBC_VERSION_STRING="0.9.32.1"
++BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.32.config"
++# BR2_PTHREAD_DEBUG is not set
++# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
++
++#
++# Binutils Options
++#
++# BR2_BINUTILS_VERSION_2_20 is not set
++# BR2_BINUTILS_VERSION_2_20_1 is not set
++# BR2_BINUTILS_VERSION_2_21 is not set
++BR2_BINUTILS_VERSION_2_21_1=y
++# BR2_BINUTILS_VERSION_2_22 is not set
++BR2_BINUTILS_VERSION="2.21.1"
++BR2_BINUTILS_EXTRA_CONFIG_OPTIONS=""
++
++#
++# GCC Options
++#
++# BR2_GCC_VERSION_4_3_X is not set
++# BR2_GCC_VERSION_4_4_X is not set
++# BR2_GCC_VERSION_4_5_X is not set
++BR2_GCC_VERSION_4_6_X=y
++# BR2_GCC_VERSION_4_7_X is not set
++# BR2_GCC_VERSION_SNAP is not set
++BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
++BR2_GCC_VERSION="4.6.3"
++BR2_EXTRA_GCC_CONFIG_OPTIONS=""
++# BR2_INSTALL_OBJC is not set
++# BR2_INSTALL_FORTRAN is not set
++BR2_GCC_SHARED_LIBGCC=y
++BR2_GCC_ENABLE_TLS=y
++# BR2_GCC_ENABLE_OPENMP is not set
++
++#
++# Gdb Options
++#
++# BR2_PACKAGE_GDB is not set
++# BR2_PACKAGE_GDB_SERVER is not set
++# BR2_PACKAGE_GDB_HOST is not set
++BR2_LARGEFILE=y
++BR2_INET_IPV6=y
++BR2_USE_WCHAR=y
++BR2_ENABLE_LOCALE=y
++BR2_TOOLCHAIN_HAS_THREADS=y
++BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED=y
++BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS=y
++BR2_ENABLE_LOCALE_PURGE=y
++BR2_ENABLE_LOCALE_WHITELIST="C de en nl"
++BR2_GENERATE_LOCALE="en_US de_DE nl_NL"
++BR2_NEEDS_GETTEXT=y
++BR2_NEEDS_GETTEXT_IF_LOCALE=y
++BR2_USE_MMU=y
++BR2_PREFER_SOFT_FLOAT=y
++BR2_SOFT_FLOAT=y
++BR2_TARGET_OPTIMIZATION="-pipe -funwind-tables"
++BR2_TARGET_LDFLAGS=""
++
++#
++# Toolchain Options
++#
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
++# BR2_TOOLCHAIN_BUILDROOT_INET_RPC is not set
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
++# BR2_TOOLCHAIN_BUILDROOT_CXX is not set
++# BR2_TOOLCHAIN_BUILDROOT_USE_SSP is not set
++# BR2_PTHREADS_NONE is not set
++# BR2_PTHREADS is not set
++# BR2_PTHREADS_OLD is not set
++BR2_PTHREADS_NATIVE=y
++# BR2_ELF2FLT is not set
++
++#
++# System configuration
++#
++BR2_TARGET_GENERIC_HOSTNAME="controller"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Raumfeld"
++# BR2_ROOTFS_DEVICE_CREATION_STATIC is not set
++# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS is not set
++# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is not set
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV=y
++BR2_INIT_BUSYBOX=y
++# BR2_INIT_SYSV is not set
++# BR2_INIT_SYSTEMD is not set
++# BR2_INIT_NONE is not set
++BR2_ROOTFS_DEVICE_TABLE="target/generic/device_table.txt"
++BR2_ROOTFS_SKELETON_DEFAULT=y
++# BR2_ROOTFS_SKELETON_CUSTOM is not set
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++# BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP is not set
++# BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600 is not set
++# BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200 is not set
++# BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400 is not set
++# BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600 is not set
++BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
++BR2_TARGET_GENERIC_GETTY_BAUDRATE="115200"
++BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="raumfeld/postbuild-remotecontrol-arm.sh"
++
++#
++# Package Selection for the target
++#
++BR2_PACKAGE_BUSYBOX=y
++# BR2_BUSYBOX_VERSION_1_19_X is not set
++BR2_BUSYBOX_VERSION_1_20_X=y
++# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
++BR2_BUSYBOX_VERSION="1.20.2"
++BR2_PACKAGE_BUSYBOX_CONFIG="raumfeld/busybox.config"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++# BR2_PACKAGE_BUSYBOX_WATCHDOG is not set
++
++#
++# Audio and video applications
++#
++# BR2_PACKAGE_ALSA_UTILS is not set
++# BR2_PACKAGE_AUMIX is not set
++
++#
++# bellagio requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_FAAD2 is not set
++# BR2_PACKAGE_FLAC is not set
++# BR2_PACKAGE_FFMPEG is not set
++# BR2_PACKAGE_GSTREAMER is not set
++# BR2_PACKAGE_LAME is not set
++# BR2_PACKAGE_MADPLAY is not set
++
++#
++# mpd requires a toolchain with C++ and WCHAR support
++#
++# BR2_PACKAGE_MPG123 is not set
++# BR2_PACKAGE_MPLAYER is not set
++# BR2_PACKAGE_MUSEPACK is not set
++# BR2_PACKAGE_PULSEAUDIO is not set
++# BR2_PACKAGE_VORBIS_TOOLS is not set
++# BR2_PACKAGE_WAVPACK is not set
++
++#
++# Compressors and decompressors
++#
++# BR2_PACKAGE_BZIP2 is not set
++# BR2_PACKAGE_GZIP is not set
++# BR2_PACKAGE_LZOP is not set
++# BR2_PACKAGE_XZ is not set
++
++#
++# Debugging, profiling and benchmark
++#
++
++#
++# bonnie++ requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_DHRYSTONE is not set
++# BR2_PACKAGE_DSTAT is not set
++# BR2_PACKAGE_DMALLOC is not set
++BR2_PACKAGE_KEXEC=y
++BR2_PACKAGE_KEXEC_ZLIB=y
++# BR2_PACKAGE_LATENCYTOP is not set
++
++#
++# lmbench requires a toolchain with RPC support
++#
++# BR2_PACKAGE_LSOF is not set
++# BR2_PACKAGE_LTP_TESTSUITE is not set
++# BR2_PACKAGE_LTTNG_MODULES is not set
++# BR2_PACKAGE_LTRACE is not set
++# BR2_PACKAGE_MEMSTAT is not set
++# BR2_PACKAGE_NETPERF is not set
++
++#
++# oprofile requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_RAMSPEED is not set
++# BR2_PACKAGE_RT_TESTS is not set
++# BR2_PACKAGE_STRACE is not set
++# BR2_PACKAGE_STRESS is not set
++# BR2_PACKAGE_WHETSTONE is not set
++# BR2_PACKAGE_PV is not set
++
++#
++# Development tools
++#
++# BR2_PACKAGE_AUTOCONF is not set
++# BR2_PACKAGE_AUTOMAKE is not set
++# BR2_PACKAGE_BINUTILS is not set
++# BR2_PACKAGE_BISON is not set
++# BR2_PACKAGE_BSDIFF is not set
++# BR2_PACKAGE_CCACHE is not set
++# BR2_PACKAGE_COREUTILS is not set
++# BR2_PACKAGE_CVS is not set
++# BR2_PACKAGE_DIFFUTILS is not set
++# BR2_PACKAGE_DISTCC is not set
++# BR2_PACKAGE_FINDUTILS is not set
++# BR2_PACKAGE_FLEX is not set
++# BR2_PACKAGE_GAWK is not set
++
++#
++# gcc needs development files in target filesystem
++#
++BR2_PACKAGE_GETTEXT=y
++# BR2_PACKAGE_GETTEXT_STATIC is not set
++BR2_PACKAGE_LIBINTL=y
++# BR2_PACKAGE_GMP is not set
++
++#
++# gperf requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_GREP is not set
++# BR2_PACKAGE_MAKE is not set
++# BR2_PACKAGE_MPC is not set
++# BR2_PACKAGE_MPFR is not set
++# BR2_PACKAGE_LIBTOOL is not set
++# BR2_PACKAGE_M4 is not set
++# BR2_PACKAGE_PATCH is not set
++# BR2_PACKAGE_PKG_CONFIG is not set
++# BR2_PACKAGE_SED is not set
++# BR2_PACKAGE_SSTRIP is not set
++# BR2_PACKAGE_TAR is not set
++
++#
++# Games
++#
++# BR2_PACKAGE_GNUCHESS is not set
++# BR2_PACKAGE_PRBOOM is not set
++
++#
++# Graphic libraries and applications (graphic/text)
++#
++
++#
++# Graphic applications
++#
++# BR2_PACKAGE_RRDTOOL is not set
++
++#
++# graphic libraries
++#
++BR2_PACKAGE_DIRECTFB=y
++# BR2_PACKAGE_DIRECTFB_MULTI is not set
++# BR2_PACKAGE_DIRECTFB_DEBUG is not set
++# BR2_PACKAGE_DIRECTFB_TRACE is not set
++BR2_PACKAGE_DIRECTFB_PXA3XX=y
++# BR2_PACKAGE_DIRECTFB_EP9X is not set
++BR2_PACKAGE_DIRECTFB_LINUXINPUT=y
++# BR2_PACKAGE_DIRECTFB_KEYBOARD is not set
++# BR2_PACKAGE_DIRECTFB_PS2MOUSE is not set
++# BR2_PACKAGE_DIRECTFB_SERIALMOUSE is not set
++# BR2_PACKAGE_DIRECTFB_TSLIB is not set
++BR2_PACKAGE_DIRECTFB_GIF=y
++BR2_PACKAGE_DIRECTFB_JPEG=y
++BR2_PACKAGE_DIRECTFB_PNG=y
++BR2_PACKAGE_DIRECTB_DITHER_RGB16=y
++# BR2_PACKAGE_DIRECTB_TESTS is not set
++# BR2_PACKAGE_DIRECTFB_EXAMPLES is not set
++# BR2_PACKAGE_DIVINE is not set
++# BR2_PACKAGE_FBDUMP is not set
++# BR2_PACKAGE_FBGRAB is not set
++# BR2_PACKAGE_FBSET is not set
++
++#
++# fbterm requires a toolchain with C++, WCHAR and locale support
++#
++# BR2_PACKAGE_FBV is not set
++# BR2_PACKAGE_IMAGEMAGICK is not set
++# BR2_PACKAGE_LINUX_FUSION is not set
++# BR2_PACKAGE_LITE is not set
++# BR2_PACKAGE_SAWMAN is not set
++# BR2_PACKAGE_SDL is not set
++
++#
++# other GUIs
++#
++# BR2_PACKAGE_EFL is not set
++
++#
++# qt requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_XORG7 is not set
++
++#
++# X libraries and helper libraries
++#
++# BR2_PACKAGE_LIBERATION is not set
++
++#
++# X Window managers
++#
++
++#
++# X applications
++#
++# BR2_PACKAGE_GOB2 is not set
++
++#
++# midori requires C++, WCHAR in toolchain and libgtk2
++#
++# BR2_PACKAGE_VALA is not set
++
++#
++# Hardware handling
++#
++# BR2_PACKAGE_CDRKIT is not set
++# BR2_PACKAGE_CRAMFS is not set
++BR2_PACKAGE_DBUS=y
++# BR2_DBUS_EXPAT is not set
++BR2_DBUS_LIBXML2=y
++# BR2_PACKAGE_DBUS_GLIB is not set
++# BR2_PACKAGE_DEVMEM2 is not set
++# BR2_PACKAGE_DMRAID is not set
++# BR2_PACKAGE_DOSFSTOOLS is not set
++# BR2_PACKAGE_E2FSPROGS is not set
++# BR2_PACKAGE_EEPROG is not set
++# BR2_PACKAGE_FCONFIG is not set
++# BR2_PACKAGE_FIS is not set
++# BR2_PACKAGE_FMTOOLS is not set
++# BR2_PACKAGE_GADGETFS_TEST is not set
++
++#
++# gdisk requires a toolchain with LARGEFILE/WCHAR/C++ support enabled
++#
++# BR2_PACKAGE_GENEXT2FS is not set
++# BR2_PACKAGE_GENROMFS is not set
++# BR2_PACKAGE_GPSD is not set
++BR2_PACKAGE_GVFS=y
++# BR2_PACKAGE_HDPARM is not set
++# BR2_PACKAGE_HWDATA is not set
++# BR2_PACKAGE_I2C_TOOLS is not set
++# BR2_PACKAGE_INPUT_EVENT_DAEMON is not set
++# BR2_PACKAGE_INPUT_TOOLS is not set
++# BR2_PACKAGE_IOSTAT is not set
++# BR2_PACKAGE_IRDA_UTILS is not set
++# BR2_PACKAGE_KBD is not set
++# BR2_PACKAGE_LCDPROC is not set
++BR2_PACKAGE_LINUX_FIRMWARE=y
++
++#
++# Atheros
++#
++# BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010 is not set
++# BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271 is not set
++
++#
++# Marvell
++#
++# BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V8 is not set
++BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9=y
++# BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688 is not set
++# BR2_PACKAGE_LINUX_FIRMWARE_MRVL_SD8787 is not set
++
++#
++# Ralink
++#
++# BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61 is not set
++# BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73 is not set
++# BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX is not set
++
++#
++# Texas Instruments
++#
++# BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X is not set
++# BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X is not set
++# BR2_PACKAGE_LM_SENSORS is not set
++
++#
++# lshw requires a toolchain with C++, LARGEFILE & WCHAR support enabled
++#
++# BR2_PACKAGE_LSUIO is not set
++# BR2_PACKAGE_LVM2 is not set
++# BR2_PACKAGE_MAKEDEVS is not set
++# BR2_PACKAGE_MDADM is not set
++# BR2_PACKAGE_MEMTESTER is not set
++# BR2_PACKAGE_MINICOM is not set
++BR2_PACKAGE_MTD=y
++
++#
++# MTD tools selection
++#
++BR2_PACKAGE_MTD_DOCFDISK=y
++BR2_PACKAGE_MTD_DOC_LOADBIOS=y
++BR2_PACKAGE_MTD_FLASHCP=y
++BR2_PACKAGE_MTD_FLASH_ERASE=y
++BR2_PACKAGE_MTD_FLASH_LOCK=y
++# BR2_PACKAGE_MTD_FLASH_OTP_DUMP is not set
++# BR2_PACKAGE_MTD_FLASH_OTP_INFO is not set
++BR2_PACKAGE_MTD_FLASH_UNLOCK=y
++BR2_PACKAGE_MTD_FTL_CHECK=y
++BR2_PACKAGE_MTD_FTL_FORMAT=y
++# BR2_PACKAGE_MTD_JFFS2DUMP is not set
++# BR2_PACKAGE_MTD_MKFSJFFS2 is not set
++BR2_PACKAGE_MTD_MTD_DEBUG=y
++BR2_PACKAGE_MTD_NANDDUMP=y
++BR2_PACKAGE_MTD_NANDTEST=y
++BR2_PACKAGE_MTD_NANDWRITE=y
++BR2_PACKAGE_MTD_NFTLDUMP=y
++BR2_PACKAGE_MTD_NFTL_FORMAT=y
++# BR2_PACKAGE_MTD_RECV_IMAGE is not set
++# BR2_PACKAGE_MTD_RFDDUMP is not set
++# BR2_PACKAGE_MTD_RFDFORMAT is not set
++# BR2_PACKAGE_MTD_SERVE_IMAGE is not set
++BR2_PACKAGE_MTD_SUMTOOL=y
++BR2_PACKAGE_MTD_MTDINFO=y
++BR2_PACKAGE_MTD_UBIATTACH=y
++BR2_PACKAGE_MTD_UBICRC32=y
++BR2_PACKAGE_MTD_UBIDETACH=y
++BR2_PACKAGE_MTD_UBIFORMAT=y
++BR2_PACKAGE_MTD_UBIMKVOL=y
++BR2_PACKAGE_MTD_UBINFO=y
++BR2_PACKAGE_MTD_UBINIZE=y
++BR2_PACKAGE_MTD_UBIRENAME=y
++BR2_PACKAGE_MTD_UBIRMVOL=y
++BR2_PACKAGE_MTD_UBIRSVOL=y
++BR2_PACKAGE_MTD_UBIUPDATEVOL=y
++# BR2_PACKAGE_NANOCOM is not set
++BR2_PACKAGE_NTFS_3G=y
++# BR2_PACKAGE_NTFS_3G_ENCRYPTED is not set
++# BR2_PACKAGE_NTFS_3G_NTFSPROGS is not set
++# BR2_PACKAGE_OFONO is not set
++# BR2_PACKAGE_OPEN2300 is not set
++# BR2_PACKAGE_OPENOCD is not set
++
++#
++# owl-linux is only supported on ARM9 architecture with EABI
++#
++# BR2_PACKAGE_PARTED is not set
++# BR2_PACKAGE_PCIUTILS is not set
++# BR2_PACKAGE_PICOCOM is not set
++# BR2_PACKAGE_RNG_TOOLS is not set
++# BR2_PACKAGE_SANE_BACKENDS is not set
++# BR2_PACKAGE_SDPARM is not set
++# BR2_PACKAGE_SETSERIAL is not set
++# BR2_PACKAGE_SFDISK is not set
++
++#
++# smartmontools requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_SQUASHFS is not set
++# BR2_PACKAGE_SREDIRD is not set
++# BR2_PACKAGE_SSHFS is not set
++# BR2_PACKAGE_STATSERIAL is not set
++# BR2_PACKAGE_SYSSTAT is not set
++# BR2_PACKAGE_TI_UTILS is not set
++BR2_PACKAGE_UBOOT_TOOLS=y
++# BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE is not set
++BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV=y
++BR2_PACKAGE_UDEV=y
++# BR2_PACKAGE_UDEV_ACL is not set
++# BR2_PACKAGE_UDEV_GUDEV is not set
++# BR2_PACKAGE_UDEV_HWDATA is not set
++# BR2_PACKAGE_UDEV_INTROSPECTION is not set
++# BR2_PACKAGE_UDEV_KEYMAP is not set
++# BR2_PACKAGE_UDEV_MTD is not set
++# BR2_PACKAGE_UDEV_RULES_GEN is not set
++# BR2_PACKAGE_UNIONFS is not set
++# BR2_PACKAGE_USB_MODESWITCH is not set
++BR2_PACKAGE_USBMOUNT=y
++# BR2_PACKAGE_USBUTILS is not set
++# BR2_PACKAGE_WIPE is not set
++# BR2_PACKAGE_XFSPROGS is not set
++
++#
++# Interpreter languages and scripting
++#
++# BR2_PACKAGE_HASERL is not set
++# BR2_PACKAGE_LUA is not set
++# BR2_PACKAGE_LUAJIT is not set
++# BR2_PACKAGE_MICROPERL is not set
++# BR2_PACKAGE_PHP is not set
++# BR2_PACKAGE_PYTHON is not set
++# BR2_PACKAGE_RUBY is not set
++# BR2_PACKAGE_TCL is not set
++
++#
++# Libraries
++#
++
++#
++# Audio/Sound
++#
++# BR2_PACKAGE_ALSA_LIB is not set
++
++#
++# audiofile requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIBAO is not set
++# BR2_PACKAGE_LIBCDAUDIO is not set
++# BR2_PACKAGE_LIBCUE is not set
++# BR2_PACKAGE_LIBCUEFILE is not set
++# BR2_PACKAGE_LIBID3TAG is not set
++# BR2_PACKAGE_LIBMAD is not set
++# BR2_PACKAGE_LIBMPD is not set
++# BR2_PACKAGE_LIBREPLAYGAIN is not set
++# BR2_PACKAGE_LIBSAMPLERATE is not set
++# BR2_PACKAGE_LIBSNDFILE is not set
++# BR2_PACKAGE_LIBVORBIS is not set
++# BR2_PACKAGE_PORTAUDIO is not set
++# BR2_PACKAGE_SPEEX is not set
++
++#
++# taglib requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_TREMOR is not set
++
++#
++# webrtc-audio-processing requires a toolchain with C++ support enabled
++#
++
++#
++# Compression and decompression
++#
++BR2_PACKAGE_LIBARCHIVE=y
++# BR2_PACKAGE_LIBARCHIVE_BSDTAR is not set
++# BR2_PACKAGE_LIBARCHIVE_BSDCPIO is not set
++BR2_PACKAGE_LZO=y
++BR2_PACKAGE_ZLIB=y
++
++#
++# Crypto
++#
++# BR2_PACKAGE_BEECRYPT is not set
++# BR2_PACKAGE_GNUTLS is not set
++# BR2_PACKAGE_LIBGCRYPT is not set
++# BR2_PACKAGE_LIBGPG_ERROR is not set
++# BR2_PACKAGE_LIBNSS is not set
++# BR2_PACKAGE_OCF_LINUX is not set
++BR2_PACKAGE_OPENSSL=y
++# BR2_PACKAGE_OPENSSL_BIN is not set
++# BR2_PACKAGE_OPENSSL_ENGINES is not set
++# BR2_PACKAGE_OPENSSL_OCF is not set
++# BR2_PACKAGE_NETTLE is not set
++# BR2_PACKAGE_POLARSSL is not set
++
++#
++# Database
++#
++# BR2_PACKAGE_BERKELEYDB is not set
++
++#
++# Mysql client requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_SQLCIPHER is not set
++# BR2_PACKAGE_SQLITE is not set
++
++#
++# Filesystem
++#
++# BR2_PACKAGE_GAMIN is not set
++# BR2_PACKAGE_LIBCONFIG is not set
++# BR2_PACKAGE_LIBCONFUSE is not set
++# BR2_PACKAGE_LIBFUSE is not set
++BR2_PACKAGE_LIBLOCKFILE=y
++# BR2_PACKAGE_LIBSYSFS is not set
++
++#
++# Graphics
++#
++# BR2_PACKAGE_ATK is not set
++# BR2_PACKAGE_CAIRO is not set
++# BR2_PACKAGE_FONTCONFIG is not set
++BR2_PACKAGE_FREETYPE=y
++# BR2_PACKAGE_IMLIB2 is not set
++BR2_PACKAGE_JPEG=y
++# BR2_PACKAGE_LIBART is not set
++# BR2_PACKAGE_LIBDMTX is not set
++# BR2_PACKAGE_LIBEXIF is not set
++# BR2_PACKAGE_LIBGEOTIFF is not set
++# BR2_PACKAGE_GDK_PIXBUF is not set
++
++#
++# libgtk2 requires a toolchain with WCHAR and C++ support
++#
++BR2_PACKAGE_LIBPNG=y
++
++#
++# libraw requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIBSVGTINY is not set
++# BR2_PACKAGE_LIBUNGIF is not set
++
++#
++# opencv requires a toolchain with C++ and WCHAR support
++#
++
++#
++# pango requires a toolchain with WCHAR and C++ support
++#
++# BR2_PACKAGE_PIXMAN is not set
++# BR2_PACKAGE_TIFF is not set
++
++#
++# webkit requires C++, WCHAR in toolchain and libgtk2
++#
++
++#
++# zxing requires a toolchain with C++ support
++#
++
++#
++# Hardware handling
++#
++# BR2_PACKAGE_LIBAIO is not set
++# BR2_PACKAGE_LIBRAW1394 is not set
++# BR2_PACKAGE_TSLIB is not set
++# BR2_PACKAGE_LIBFREEFARE is not set
++# BR2_PACKAGE_LIBFTDI is not set
++# BR2_PACKAGE_LIBHID is not set
++# BR2_PACKAGE_LIBIQRF is not set
++# BR2_PACKAGE_LIBNFC is not set
++# BR2_PACKAGE_LIBNFC_LLCP is not set
++BR2_PACKAGE_LIBUSB=y
++# BR2_PACKAGE_LIBUSB_COMPAT is not set
++# BR2_PACKAGE_LIBV4L is not set
++
++#
++# Javascript
++#
++# BR2_PACKAGE_EXPLORERCANVAS is not set
++# BR2_PACKAGE_FLOT is not set
++# BR2_PACKAGE_JQUERY is not set
++# BR2_PACKAGE_JQUERY_SPARKLINE is not set
++# BR2_PACKAGE_JQUERY_VALIDATION is not set
++# BR2_PACKAGE_JSMIN is not set
++
++#
++# Multimedia
++#
++# BR2_PACKAGE_LIBDVDREAD is not set
++# BR2_PACKAGE_LIBDVDNAV is not set
++# BR2_PACKAGE_LIBMMS is not set
++# BR2_PACKAGE_LIBMPEG2 is not set
++# BR2_PACKAGE_LIBOGG is not set
++# BR2_PACKAGE_LIBPLAYER is not set
++# BR2_PACKAGE_LIBTHEORA is not set
++
++#
++# Live555 needs C++ compiler
++#
++
++#
++# mediastreamer requires a toolchain with C++ support enabled
++#
++
++#
++# Networking
++#
++# BR2_PACKAGE_GLIB_NETWORKING is not set
++# BR2_PACKAGE_LIBCGI is not set
++
++#
++# libcgicc requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIBCURL is not set
++# BR2_PACKAGE_LIBDNET is not set
++# BR2_PACKAGE_LIBESMTP is not set
++# BR2_PACKAGE_LIBEXOSIP2 is not set
++# BR2_PACKAGE_LIBFCGI is not set
++# BR2_PACKAGE_LIBIDN is not set
++# BR2_PACKAGE_LIBOAUTH is not set
++# BR2_PACKAGE_LIBMICROHTTPD is not set
++# BR2_PACKAGE_NEON is not set
++# BR2_PACKAGE_LIBMNL is not set
++# BR2_PACKAGE_LIBMODBUS is not set
++# BR2_PACKAGE_LIBMBUS is not set
++# BR2_PACKAGE_LIBNETFILTER_CONNTRACK is not set
++# BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT is not set
++# BR2_PACKAGE_LIBNFNETLINK is not set
++BR2_PACKAGE_LIBNL=y
++# BR2_PACKAGE_LIBNL_TOOLS is not set
++# BR2_PACKAGE_LIBOPING is not set
++# BR2_PACKAGE_LIBPCAP is not set
++# BR2_PACKAGE_LIBOSIP2 is not set
++# BR2_PACKAGE_LIBRSYNC is not set
++BR2_PACKAGE_LIBSOUP=y
++# BR2_PACKAGE_LIBSOUP_SSL is not set
++
++#
++# libtorrent requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIBUPNP is not set
++# BR2_PACKAGE_LIBVNCSERVER is not set
++# BR2_PACKAGE_ORTP is not set
++
++#
++# zeromq requires a toolchain with C++, LARGEFILE + WCHAR support
++#
++
++#
++# Other
++#
++# BR2_PACKAGE_APR is not set
++# BR2_PACKAGE_APR_UTIL is not set
++# BR2_PACKAGE_FFTW is not set
++# BR2_PACKAGE_LIBARGTABLE2 is not set
++# BR2_PACKAGE_ARGP_STANDALONE is not set
++
++#
++# boost requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIBATOMIC_OPS is not set
++# BR2_PACKAGE_LIBCAP is not set
++# BR2_PACKAGE_LIBCAP_NG is not set
++BR2_PACKAGE_LIBDAEMON=y
++# BR2_PACKAGE_LIBELF is not set
++# BR2_PACKAGE_LIBEVENT is not set
++# BR2_PACKAGE_LIBEV is not set
++BR2_PACKAGE_LIBFFI=y
++BR2_PACKAGE_LIBGLIB2=y
++# BR2_PACKAGE_LIBICAL is not set
++# BR2_PACKAGE_LIBNSPR is not set
++
++#
++# libsigc++ requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIBTPL is not set
++BR2_PACKAGE_LIBUNWIND=y
++# BR2_PACKAGE_LIBURCU is not set
++# BR2_PACKAGE_LTTNG_LIBUST is not set
++# BR2_PACKAGE_ORC is not set
++
++#
++# poco requires a toolchain with WCHAR and C++ support
++#
++
++#
++# protobuf requires a toolchain with C++ support enabled
++#
++
++#
++# Text and terminal handling
++#
++
++#
++# enchant requires a toolchain with C++ and WCHAR support enabled
++#
++
++#
++# icu requires a toolchain with C++ support and WCHAR enabled
++#
++# BR2_PACKAGE_LIBICONV is not set
++# BR2_PACKAGE_NCURSES is not set
++# BR2_PACKAGE_NEWT is not set
++# BR2_PACKAGE_PCRE is not set
++BR2_PACKAGE_POPT=y
++# BR2_PACKAGE_READLINE is not set
++# BR2_PACKAGE_SLANG is not set
++
++#
++# JSON/XML
++#
++# BR2_PACKAGE_CJSON is not set
++BR2_PACKAGE_EXPAT=y
++# BR2_PACKAGE_EZXML is not set
++# BR2_PACKAGE_JSON_C is not set
++# BR2_PACKAGE_LIBROXML is not set
++BR2_PACKAGE_LIBXML2=y
++# BR2_PACKAGE_LIBXSLT is not set
++# BR2_PACKAGE_LIBYAML is not set
++# BR2_PACKAGE_MXML is not set
++
++#
++# xerces-c++ requires a toolchain with C++ and WCHAR support enabled
++#
++# BR2_PACKAGE_YAJL is not set
++
++#
++# Miscellaneous
++#
++# BR2_PACKAGE_COLLECTD is not set
++# BR2_PACKAGE_EMPTY is not set
++BR2_ISO_CODES=y
++# BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO is not set
++BR2_PACKAGE_SHARED_MIME_INFO=y
++# BR2_PACKAGE_SOUND_THEME_BOREALIS is not set
++# BR2_PACKAGE_SOUND_THEME_FREEDESKTOP is not set
++
++#
++# Networking applications
++#
++# BR2_PACKAGE_ARGUS is not set
++BR2_PACKAGE_AVAHI=y
++BR2_PACKAGE_AVAHI_AUTOIPD=y
++BR2_PACKAGE_AVAHI_DAEMON=y
++# BR2_PACKAGE_AXEL is not set
++# BR2_PACKAGE_BLUEZ_UTILS is not set
++# BR2_PACKAGE_BOA is not set
++# BR2_PACKAGE_BIND is not set
++# BR2_PACKAGE_BMON is not set
++# BR2_PACKAGE_BRIDGE_UTILS is not set
++# BR2_PACKAGE_CAN_UTILS is not set
++
++#
++# connman needs a toolchain with IPv6, WCHAR, thread and resolver support
++#
++# BR2_PACKAGE_CRDA is not set
++
++#
++# ctorrent requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_CIFS_UTILS is not set
++# BR2_PACKAGE_CONNTRACK_TOOLS is not set
++# BR2_PACKAGE_CUPS is not set
++BR2_PACKAGE_DHCP=y
++# BR2_PACKAGE_DHCP_SERVER is not set
++# BR2_PACKAGE_DHCP_RELAY is not set
++BR2_PACKAGE_DHCP_CLIENT=y
++# BR2_PACKAGE_DHCPDUMP is not set
++# BR2_PACKAGE_DNSMASQ is not set
++# BR2_PACKAGE_DROPBEAR is not set
++# BR2_PACKAGE_EBTABLES is not set
++# BR2_PACKAGE_ETHTOOL is not set
++BR2_PACKAGE_GUPNP=y
++BR2_PACKAGE_GUPNP_AV=y
++# BR2_PACKAGE_GUPNP_IGD is not set
++BR2_PACKAGE_GSSDP=y
++# BR2_PACKAGE_HEIRLOOM_MAILX is not set
++# BR2_PACKAGE_HIAWATHA is not set
++# BR2_PACKAGE_HOSTAPD is not set
++# BR2_PACKAGE_IFPLUGD is not set
++# BR2_PACKAGE_IGH_ETHERCAT is not set
++# BR2_PACKAGE_INADYN is not set
++
++#
++# iperf requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_IPROUTE2 is not set
++# BR2_PACKAGE_IPSEC_TOOLS is not set
++# BR2_PACKAGE_IPSET is not set
++# BR2_PACKAGE_IPTABLES is not set
++BR2_PACKAGE_IW=y
++
++#
++# Kismet requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LIGHTTPD is not set
++# BR2_PACKAGE_LINKS is not set
++
++#
++# linphone requires a toolchain with C++ support enabled
++#
++# BR2_PACKAGE_LRZSZ is not set
++# BR2_PACKAGE_MII_DIAG is not set
++# BR2_PACKAGE_MROUTED is not set
++# BR2_PACKAGE_MSMTP is not set
++# BR2_PACKAGE_MUTT is not set
++# BR2_PACKAGE_NBD is not set
++# BR2_PACKAGE_NCFTP is not set
++# BR2_PACKAGE_NDISC6 is not set
++# BR2_PACKAGE_NETCAT is not set
++
++#
++# netkitbase requires a toolchain with RPC support
++#
++
++#
++# netkittelnet requires a toolchain with RPC support
++#
++# BR2_PACKAGE_NETATALK is not set
++# BR2_PACKAGE_NETPLUG is not set
++# BR2_PACKAGE_NETSNMP is not set
++# BR2_PACKAGE_NETSTAT_NAT is not set
++# BR2_PACKAGE_NETWORK_MANAGER is not set
++# BR2_PACKAGE_NOIP is not set
++
++#
++# nfs-utils requires a toolchain with RPC and LARGEFILE support
++#
++# BR2_PACKAGE_NGIRCD is not set
++# BR2_PACKAGE_NGREP is not set
++# BR2_PACKAGE_NTP is not set
++# BR2_PACKAGE_NUTTCP is not set
++# BR2_PACKAGE_OLSR is not set
++# BR2_PACKAGE_OPENNTPD is not set
++BR2_PACKAGE_OPENSSH=y
++# BR2_PACKAGE_OPENSWAN is not set
++# BR2_PACKAGE_OPENVPN is not set
++
++#
++# portmap requires a toolchain with RPC support
++#
++# BR2_PACKAGE_PPPD is not set
++# BR2_PACKAGE_PPTP_LINUX is not set
++# BR2_PACKAGE_PROFTPD is not set
++# BR2_PACKAGE_QUAGGA is not set
++# BR2_PACKAGE_RADVD is not set
++# BR2_PACKAGE_RSH_REDONE is not set
++# BR2_PACKAGE_RSYNC is not set
++
++#
++# rtorrent requires a toolchain with C++ and WCHAR support
++#
++BR2_PACKAGE_SAMBA=y
++
++#
++# Samba tools selection
++#
++# BR2_PACKAGE_SAMBA_EVENTLOGADM is not set
++
++#
++# findsmb       - disabled (requires nmblookup, smbclient and perl)
++#
++# BR2_PACKAGE_SAMBA_NET is not set
++# BR2_PACKAGE_SAMBA_NMBD is not set
++# BR2_PACKAGE_SAMBA_NMBLOOKUP is not set
++# BR2_PACKAGE_SAMBA_NTLM_AUTH is not set
++# BR2_PACKAGE_SAMBA_PDBEDIT is not set
++# BR2_PACKAGE_SAMBA_PROFILES is not set
++# BR2_PACKAGE_SAMBA_RPCCLIENT is not set
++# BR2_PACKAGE_SAMBA_SMBCACLS is not set
++# BR2_PACKAGE_SAMBA_SMBCLIENT is not set
++# BR2_PACKAGE_SAMBA_SMBCONTROL is not set
++# BR2_PACKAGE_SAMBA_SMBCQUOTAS is not set
++# BR2_PACKAGE_SAMBA_SMBD is not set
++# BR2_PACKAGE_SAMBA_SMBGET is not set
++# BR2_PACKAGE_SAMBA_SMBLDBTOOLS is not set
++# BR2_PACKAGE_SAMBA_SMBPASSWD is not set
++# BR2_PACKAGE_SAMBA_SMBSHARESEC is not set
++# BR2_PACKAGE_SAMBA_SMBSPOOL is not set
++# BR2_PACKAGE_SAMBA_SMBSTATUS is not set
++# BR2_PACKAGE_SAMBA_SMBTREE is not set
++# BR2_PACKAGE_SAMBA_SWAT is not set
++
++#
++# smbtar        - disabled (requires smbclient)
++#
++# BR2_PACKAGE_SAMBA_TDB is not set
++# BR2_PACKAGE_SAMBA_TESTPARM is not set
++# BR2_PACKAGE_SAMBA_WINBINDD is not set
++
++#
++# Samba libraries selection
++#
++BR2_PACKAGE_SAMBA_LIBSMBCLIENT=y
++
++#
++# Samba support selection
++#
++BR2_PACKAGE_SAMBA_AVAHI=y
++
++#
++# support gamin - disabled (requires gamin)
++#
++# BR2_PACKAGE_SER2NET is not set
++# BR2_PACKAGE_SOCAT is not set
++# BR2_PACKAGE_SOCKETCAND is not set
++# BR2_PACKAGE_SPAWN_FCGI is not set
++
++#
++# Squid requires a toolchain with C++ and IPv6 support enabled
++#
++# BR2_PACKAGE_STUNNEL is not set
++# BR2_PACKAGE_TCPDUMP is not set
++# BR2_PACKAGE_TCPREPLAY is not set
++# BR2_PACKAGE_TFTPD is not set
++# BR2_PACKAGE_THTTPD is not set
++# BR2_PACKAGE_TINYHTTPD is not set
++# BR2_PACKAGE_TN5250 is not set
++# BR2_PACKAGE_TRANSMISSION is not set
++# BR2_PACKAGE_UDPCAST is not set
++# BR2_PACKAGE_USHARE is not set
++# BR2_PACKAGE_VPNC is not set
++# BR2_PACKAGE_VSFTPD is not set
++# BR2_PACKAGE_VTUN is not set
++# BR2_PACKAGE_WGET is not set
++# BR2_PACKAGE_WIRELESS_REGDB is not set
++BR2_PACKAGE_WIRELESS_TOOLS=y
++# BR2_PACKAGE_WIRELESS_TOOLS_LIB is not set
++BR2_PACKAGE_WPA_SUPPLICANT=y
++# BR2_PACKAGE_WPA_SUPPLICANT_EAP is not set
++# BR2_PACKAGE_WPA_SUPPLICANT_CLI is not set
++# BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE is not set
++# BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT is not set
++# BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD is not set
++BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW=y
++BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION=y
++# BR2_PACKAGE_WPA_SUPPLICANT_WPS is not set
++# BR2_PACKAGE_XINETD is not set
++# BR2_PACKAGE_XL2TP is not set
++
++#
++# Package managers
++#
++# BR2_PACKAGE_IPKG is not set
++# BR2_PACKAGE_OPKG is not set
++
++#
++# rpm requires libneon with SSL, XML and ZLIB support
++#
++
++#
++# Real-Time
++#
++# BR2_PACKAGE_XENOMAI is not set
++
++#
++# Shell and utilities
++#
++# BR2_PACKAGE_AT is not set
++# BR2_PACKAGE_BASH is not set
++# BR2_PACKAGE_DASH is not set
++# BR2_PACKAGE_DIALOG is not set
++# BR2_PACKAGE_FILE is not set
++# BR2_PACKAGE_INOTIFY_TOOLS is not set
++BR2_PACKAGE_LOCKFILE_PROGS=y
++# BR2_PACKAGE_LOGROTATE is not set
++# BR2_PACKAGE_LOGSURFER is not set
++# BR2_PACKAGE_SCREEN is not set
++# BR2_PACKAGE_SUDO is not set
++# BR2_PACKAGE_WHICH is not set
++# BR2_PACKAGE_XMLSTARLET is not set
++
++#
++# System tools
++#
++# BR2_PACKAGE_ACL is not set
++# BR2_PACKAGE_ATTR is not set
++# BR2_PACKAGE_BOOTUTILS is not set
++# BR2_PACKAGE_BWM_NG is not set
++# BR2_PACKAGE_HTOP is not set
++# BR2_PACKAGE_KMOD is not set
++# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
++# BR2_PACKAGE_MONIT is not set
++# BR2_PACKAGE_PROCPS is not set
++# BR2_PACKAGE_PSMISC is not set
++
++#
++# quota requires a toolchain with RPC + LARGEFILE + WCHAR support
++#
++# BR2_PACKAGE_RSYSLOG is not set
++# BR2_PACKAGE_SYSKLOGD is not set
++# BR2_PACKAGE_SYSVINIT is not set
++# BR2_PACKAGE_SYSTEMD is not set
++BR2_PACKAGE_UTIL_LINUX=y
++# BR2_PACKAGE_UTIL_LINUX_BASIC is not set
++# BR2_PACKAGE_UTIL_LINUX_MOUNT is not set
++# BR2_PACKAGE_UTIL_LINUX_FSCK is not set
++# BR2_PACKAGE_UTIL_LINUX_LIBMOUNT is not set
++BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
++# BR2_PACKAGE_UTIL_LINUX_UUIDD is not set
++BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
++# BR2_PACKAGE_UTIL_LINUX_AGETTY is not set
++# BR2_PACKAGE_UTIL_LINUX_CRAMFS is not set
++# BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT is not set
++# BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT is not set
++# BR2_PACKAGE_UTIL_LINUX_FALLOCATE is not set
++# BR2_PACKAGE_UTIL_LINUX_UNSHARE is not set
++# BR2_PACKAGE_UTIL_LINUX_RENAME is not set
++# BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS is not set
++# BR2_PACKAGE_UTIL_LINUX_WALL is not set
++# BR2_PACKAGE_UTIL_LINUX_PARTX is not set
++# BR2_PACKAGE_UTIL_LINUX_ARCH is not set
++# BR2_PACKAGE_UTIL_LINUX_INIT is not set
++# BR2_PACKAGE_UTIL_LINUX_KILL is not set
++# BR2_PACKAGE_UTIL_LINUX_LAST is not set
++# BR2_PACKAGE_UTIL_LINUX_MESG is not set
++# BR2_PACKAGE_UTIL_LINUX_RAW is not set
++# BR2_PACKAGE_UTIL_LINUX_RESET is not set
++# BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS is not set
++# BR2_PACKAGE_UTIL_LINUX_WRITE is not set
++
++#
++# Text editors and viewers
++#
++# BR2_PACKAGE_ED is not set
++# BR2_PACKAGE_LESS is not set
++# BR2_PACKAGE_NANO is not set
++# BR2_PACKAGE_UEMACS is not set
++# BR2_PACKAGE_VIM is not set
++
++#
++# Raumfeld software
++#
++BR2_PACKAGE_RAUMFELD_REPOSITORY="sftp://rf-bzr.teufel.local/bzr"
++BR2_PACKAGE_RAUMFELD_BRANCH="trunk"
++BR2_PACKAGE_LIBRAUMFELD=y
++# BR2_PACKAGE_LIBRAUMFELD_PROFILING is not set
++# BR2_PACKAGE_LIBRAUMFELDCPP is not set
++BR2_PACKAGE_SLY_TOOLKIT=y
++BR2_PACKAGE_REMOTE_CONTROL=y
++# BR2_PACKAGE_MASTER_PROCESS is not set
++# BR2_PACKAGE_P0_RENDERER is not set
++# BR2_PACKAGE_P0_TIMESERVER is not set
++# BR2_PACKAGE_CONFIG_SERVICE is not set
++# BR2_PACKAGE_META_SERVER is not set
++# BR2_PACKAGE_STREAM_DECODER is not set
++# BR2_PACKAGE_STREAM_RELAY is not set
++# BR2_PACKAGE_LOOPBACKTEST is not set
++# BR2_PACKAGE_RAUMFELD_EXTRACT is not set
++BR2_PACKAGE_REPORT_DAEMON=y
++# BR2_PACKAGE_WEB_SERVICE is not set
++
++#
++# Host utilities
++#
++# BR2_PACKAGE_HOST_DFU_UTIL is not set
++# BR2_PACKAGE_HOST_LPC3250LOADER is not set
++# BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS is not set
++# BR2_PACKAGE_HOST_OPENOCD is not set
++# BR2_PACKAGE_HOST_SAM_BA is not set
++# BR2_PACKAGE_HOST_UBOOT_TOOLS is not set
++
++#
++# Filesystem images
++#
++# BR2_TARGET_ROOTFS_CRAMFS is not set
++# BR2_TARGET_ROOTFS_CLOOP is not set
++# BR2_TARGET_ROOTFS_EXT2 is not set
++# BR2_TARGET_ROOTFS_JFFS2 is not set
++# BR2_TARGET_ROOTFS_UBIFS is not set
++# BR2_TARGET_ROOTFS_SQUASHFS is not set
++BR2_TARGET_ROOTFS_TAR=y
++# BR2_TARGET_ROOTFS_TAR_NONE is not set
++BR2_TARGET_ROOTFS_TAR_GZIP=y
++# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
++# BR2_TARGET_ROOTFS_TAR_LZMA is not set
++BR2_TARGET_ROOTFS_TAR_OPTIONS=""
++# BR2_TARGET_ROOTFS_CPIO is not set
++# BR2_TARGET_ROOTFS_INITRAMFS is not set
++# BR2_TARGET_ROOTFS_ROMFS is not set
++
++#
++# Bootloaders
++#
++# BR2_TARGET_BAREBOX is not set
++# BR2_TARGET_MXS_BOOTLETS is not set
++# BR2_TARGET_UBOOT is not set
++
++#
++# Kernel
++#
++BR2_LINUX_KERNEL=y
++# BR2_LINUX_KERNEL_3_4 is not set
++# BR2_LINUX_KERNEL_SAME_AS_HEADERS is not set
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++# BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
++# BR2_LINUX_KERNEL_CUSTOM_GIT is not set
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0.4"
++BR2_LINUX_KERNEL_VERSION="3.0.4"
++BR2_LINUX_KERNEL_PATCH="raumfeld/kernel-arm.patch"
++BR2_LINUX_KERNEL_FIRMWARE=""
++# BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="raumfeld/kernel-arm.config"
++BR2_LINUX_KERNEL_UBOOT_IMAGE=y
++BR2_LINUX_KERNEL_UIMAGE=y
++# BR2_LINUX_KERNEL_APPENDED_UIMAGE is not set
++# BR2_LINUX_KERNEL_ZIMAGE is not set
++# BR2_LINUX_KERNEL_APPENDED_ZIMAGE is not set
++# BR2_LINUX_KERNEL_VMLINUX is not set
++# BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
++# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++#
++# Linux Kernel Extensions
++#
++# BR2_LINUX_KERNEL_EXT_XENOMAI is not set
++# BR2_LINUX_KERNEL_EXT_OCF_LINUX is not set
++# BR2_LINUX_KERNEL_EXT_RTAI is not set
 -- 
 1.7.9.5
