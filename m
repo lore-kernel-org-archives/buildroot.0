@@ -1,38 +1,47 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 25 Sep 2012 10:24:33 +0200
-Subject: [Buildroot] Kernel version
-In-Reply-To: <1348558164.41699.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-References: <1348517486.7248.YahooMailNeo@web164604.mail.gq1.yahoo.com>
- <5060CF90.7070605@mind.be>
- <1348558164.41699.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <50616A41.60802@relinux.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 25 Sep 2012 10:33:30 +0200
+Subject: [Buildroot] [PATCH] external-toolchain:
+ BR2_TOOLCHAIN_EXTERNAL_GLIBC includes eglibc
+In-Reply-To: <20120925095442.01c07b54@skate>
+References: <1348544993-5682-1-git-send-email-baruch@tkos.co.il>
+ <20120925095442.01c07b54@skate>
+Message-ID: <20120925083330.GD4439@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 25.09.2012 09:29, schrieb Zoran Djordjevic:
->
-> Also, can I somehow (in Buildroot) use sources for my board -
-> not those downloaded from kernel.org.
->  
-> Regard
->
-You can use a local linux source tree with the source directory override
-mechanism described here: http://free-electrons.com/blog/buildroot-2011-11/
+Hi Thomas,
 
-Kind regards
+On Tue, Sep 25, 2012 at 09:54:42AM +0200, Thomas Petazzoni wrote:
+> Dear Baruch Siach,
+> 
+> On Tue, 25 Sep 2012 05:49:53 +0200, Baruch Siach wrote:
+> 
+> > +	  Note: eglibc is a variant of glibc that (among other things) can be
+> > +	  configured to exclude parts of its features. This capability is 
+> > +	  currently not supported.
+> 
+> This note makes no sense in the context of external toolchains: the C
+> library is already compiled into the external toolchain, so it's the
+> responsibility of the person building the external toolchain to know
+> how to configure eglibc. The fact that we don't support eglibc
+> configuration in Buildroot doesn't make much sense.
+> 
+> Or, if you want to mean that we don't support eglibc toolchains that
+> have been configured to leave out certain features (such as IPv6
+> support for example), then it should be said in a different way, such
+> as: "We only support eglibc toolchains providing this, that and this
+> other feature".
 
-Stephan
+This is exactly what I meant to say, but the text surely needs to be clearer 
+as you suggest. What feature do you think we need to mention as minimal 
+requirements in the help text?
+
+baruch
 
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120925/5145e19a/attachment.html>
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
