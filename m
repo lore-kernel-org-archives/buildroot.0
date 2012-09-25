@@ -1,45 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Sep 2012 11:30:56 +0200
-Subject: [Buildroot] [git commit] xserver_xorg-server: needs record proto
-Message-ID: <20120925093428.20F549970E@busybox.osuosl.org>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Tue, 25 Sep 2012 04:57:47 -0700 (PDT)
+Subject: [Buildroot] Kernel version
+In-Reply-To: <5061687D.8090703@mind.be>
+References: <1348517486.7248.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+ <5060CF90.7070605@mind.be>
+ <1348558164.41699.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+ <5061687D.8090703@mind.be>
+Message-ID: <1348574267.95909.YahooMailNeo@web164603.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51b990b09fdac03188dd20a3f699b92a6eb2476b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Forgive me for repeating my mail, because I forgot CC info in previous mail.
+Now I correct that.
+In that case, can you tell me your proposal regarding kernel versions and 
+tslib problem. To remind you - my board has 2.6.32 kernel version and
+I use Crosstool-NG.
+What shoud I choose in Buildroot menu and also in Crosstool-NG menu ? 
+Regards
+ 
 
-Fixes http://autobuild.buildroot.net/results/0ab69c80b3e5e95a8947c32231d32da895deca60
+________________________________
+ From: Arnout Vandecappelle <arnout@mind.be>
+To: Zoran Djordjevic <djdjdjole@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Tuesday, September 25, 2012 10:17 AM
+Subject: Re: [Buildroot] Kernel version
+  
+On 09/25/12 09:29, Zoran Djordjevic wrote:
+> I will try to be more specific and I am aware that host kernel version doesn't matter in this story.
+> I have kernel sources for my board 2.6.32 on let' say "BoardKernelDir" directy. There, I also have ".config" file, for
+> kernel configuration.
+> Then I go into Buildroot menues (make menuconfig) and under "Kernel/Kernel version"
+> choose 3.2.6. In that same page of Buildroot menu, I can choose "Kernel configuration (Using custom configuration file)"
+> to be the one I mentioned above (".config").
+> Question is - is it wrong procedure and what kernel will be built this way- the one from
+> "BoardKernelDir" (2.6.32) or 3.2.6 or (probably) it will make some mess ?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/xserver_xorg-server/Config.in        |    1 +
- .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+This will work, more or less.? It will download the 3.2.6 kernel and run its
+configure with your 2.6.32 .config.? That will give you a lot of questions on
+the console about config options which exist in the 3.2.6 kernel but didn't
+exist yet in the 2.6.32 kernel.? So not necessarily the most efficient
+approach.
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 02c2828..7d2f2de 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -35,6 +35,7 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_KBPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
-+	select BR2_PACKAGE_XPROTO_RECORDPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_RESOURCEPROTO
- 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 8018a89..80431b4 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -39,6 +39,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xproto_inputproto 		\
- 	xproto_kbproto 			\
- 	xproto_randrproto 		\
-+	xproto_recordproto 		\
- 	xproto_renderproto 		\
- 	xproto_resourceproto 		\
- 	xproto_videoproto 		\
+> Also, can I somehow (in Buildroot) use sources for my board - not those downloaded from kernel.org.
+> I intend to use CrosstoolNG.
+
+Yes you can: use the "custom tarball" option that I mentioned in my mail.
+
+You have to configure that separately for buildroot and for crosstool-NG.
+AFAIK buildroot doesn't allow to give a directory, so you'll have to make
+a tarball from the directory first.
+
+Regards,
+Arnout
+-- Arnout Vandecappelle? ? ? ? ? ? ? ? ? ? ? ? ? ? ?  arnout at mind be
+Senior Embedded Software Architect? ? ? ? ? ? ? ?  +32-16-286540
+Essensium/Mind? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?  http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium? ? ? ? ? ? ? ? BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:? 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120925/643779d0/attachment.html>
