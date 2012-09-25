@@ -1,20 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Sep 2012 20:28:53 +0200
-Subject: [Buildroot] [PATCH] cvs: needs MMU support
-In-Reply-To: <1348503220-19839-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 24 Sep 2012 18:13:40 +0200")
-References: <1348503220-19839-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehlq7y8q.fsf@macbook.be.48ers.dk>
+Date: Tue, 25 Sep 2012 20:29:58 +0200
+Subject: [Buildroot] [PATCH] tiff: security bump to version 4.0.3
+In-Reply-To: <1348577342-8759-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 25 Sep 2012 09:49:02 -0300")
+References: <1348577342-8759-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a9we7y6x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Fixes
- Thomas>   http://autobuild.buildroot.org/results/33ac8387a7b27d7b90c23a5f772292921534f8da/build-end.log
+ Gustavo> Fixes CVE-2012-3401 and CVE-2012-3386.
 
 Committed, thanks.
 
