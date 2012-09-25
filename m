@@ -1,42 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 25 Sep 2012 15:46:31 +0200
-Subject: [Buildroot] [PATCH] external-toolchain:
- BR2_TOOLCHAIN_EXTERNAL_GLIBC includes eglibc
-In-Reply-To: <20120925103952.20f4d20a@skate>
-References: <1348544993-5682-1-git-send-email-baruch@tkos.co.il>
- <20120925095442.01c07b54@skate> <20120925083330.GD4439@tarshish>
- <20120925103952.20f4d20a@skate>
-Message-ID: <20120925134631.GE4439@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Sep 2012 15:48:52 +0200
+Subject: [Buildroot] Kernel version
+In-Reply-To: <1348574267.95909.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+References: <1348517486.7248.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+ <5060CF90.7070605@mind.be>
+ <1348558164.41699.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+ <5061687D.8090703@mind.be>
+ <1348574267.95909.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+Message-ID: <5061B644.9020306@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 09/25/12 13:57, Zoran Djordjevic wrote:
+> Forgive me for repeating my mail, because I forgot CC info in previous mail.
+> Now I correct that.
+> In that case, can you tell me your proposal regarding kernel versions and
+> tslib problem. To remind you - my board has 2.6.32 kernel version and
+> I use Crosstool-NG.
+> What shoud I choose in Buildroot menu and also in Crosstool-NG menu ?
 
-On Tue, Sep 25, 2012 at 10:39:52AM +0200, Thomas Petazzoni wrote:
-> Dear Baruch Siach,
-> 
-> On Tue, 25 Sep 2012 10:33:30 +0200, Baruch Siach wrote:
-> 
-> > This is exactly what I meant to say, but the text surely needs to be clearer 
-> > as you suggest. What feature do you think we need to mention as minimal 
-> > requirements in the help text?
-> 
-> I have no idea, since I have never looked at what eglibc provides in
-> terms of configurability :) I guess Yann can give details on this, he
-> is quite certainly a lot more aware than I am about what the eglibc
-> options are.
+  If you have no need to rebuild the kernel, the easiest is to leave the kernel
+build out of buildroot, and select the custom kernel dir option in crosstool-NG.
 
-Well, after a little thought, maybe we shouldn't get into configuration 
-details here and just say something general like: "Warning: using a toolchain 
-with eglibc configuration lacking key features (examples?) may result in build 
-failures, depending on your choice of packages."
-
-baruch
-
+  Regards,
+  Arnout
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
