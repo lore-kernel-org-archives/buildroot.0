@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 25 Sep 2012 19:18:21 +0200
-Subject: [Buildroot] [PATCH v8 05/11] gdbm: new package
+Date: Tue, 25 Sep 2012 19:18:22 +0200
+Subject: [Buildroot] [PATCH v8 06/11] perl: add GDBM_File
 In-Reply-To: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1348593508-14254-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1348593508-14254-6-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in      |    1 +
- package/gdbm/Config.in |    8 ++++++++
- package/gdbm/gdbm.mk   |   12 ++++++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/gdbm/Config.in
- create mode 100644 package/gdbm/gdbm.mk
+ package/perl/Config.in |    6 ++++++
+ package/perl/perl.mk   |    3 +++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 00a79ab..d9cadf9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -324,6 +324,7 @@ endmenu
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index e0dbbdf..8d8430d 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -26,4 +26,10 @@ config BR2_PACKAGE_PERL_DB_FILE
+ 	help
+ 	  Build the DB_File module.
  
- menu "Database"
- source "package/berkeleydb/Config.in"
-+source "package/gdbm/Config.in"
- source "package/mysql_client/Config.in"
- source "package/sqlcipher/Config.in"
- source "package/sqlite/Config.in"
-diff --git a/package/gdbm/Config.in b/package/gdbm/Config.in
-new file mode 100644
-index 0000000..d5aae83
---- /dev/null
-+++ b/package/gdbm/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GDBM
-+	bool "gdbm"
++config BR2_PACKAGE_PERL_GDBM_FILE
++	bool "GDBM_File"
++	select BR2_PACKAGE_GDBM
 +	help
-+	  GNU dbm is a set of database routines that use extensible hashing.
-+	  It works similar to the standard UNIX dbm routines.
++	  Build the GDBM_File module.
 +
-+	  http://www.gnu.org/software/gdbm/gdbm.html
-+
-diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
-new file mode 100644
-index 0000000..4971b12
---- /dev/null
-+++ b/package/gdbm/gdbm.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# gdbm
-+#
-+#############################################################
-+GDBM_VERSION = 1.10
-+GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
-+GDBM_LICENSE = GPLv3
-+GDBM_LICENSE_FILES = COPYING
-+GDBM_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+ endif
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0c69e0b..71762e1 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -16,6 +16,9 @@ PERL_DEPENDENCIES = host-qemu
+ ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
+     PERL_DEPENDENCIES += berkeleydb
+ endif
++ifeq ($(BR2_PACKAGE_PERL_GDBM_FILE),y)
++    PERL_DEPENDENCIES += gdbm
++endif
+ 
+ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+     PERL_USE_DEVEL=-Dusedevel
 -- 
 1.7.9.5
