@@ -1,31 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Sep 2012 14:46:17 +0200
-Subject: [Buildroot] Error when building defconfig
-In-Reply-To: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
-References: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
-Message-ID: <20120925144617.6daa086f@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 25 Sep 2012 09:49:02 -0300
+Subject: [Buildroot] [PATCH] tiff: security bump to version 4.0.3
+Message-ID: <1348577342-8759-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Fixes CVE-2012-3401 and CVE-2012-3386.
 
-On Tue, 25 Sep 2012 14:38:57 +0200, Maxime Hadjinlian wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/tiff/tiff.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-> I'm using the HEAD of the git tree of buildroot, and I just tried to
-> build a "default" config. I did : $
-> cp ./configs/qemu_x86_defconfig .config && make
-
-Wrong way. do:
-
-	make qemu_x86_defconfig
-	make
-
-Thomas
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 227047b..145d929 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -3,9 +3,9 @@
+ # tiff
+ #
+ #############################################################
+-TIFF_VERSION = 4.0.1
+-TIFF_SITE = ftp://ftp.remotesensing.org/pub/libtiff
+-TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.gz
++
++TIFF_VERSION = 4.0.3
++TIFF_SITE = http://download.osgeo.org/libtiff
+ TIFF_INSTALL_STAGING = YES
+ TIFF_CONF_OPT = \
+ 	--disable-cxx \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
