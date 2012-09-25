@@ -1,55 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Sep 2012 23:56:32 +0200
-Subject: [Buildroot] [PATCH 4/4] wpa-supplicant: rework .config file
-	editing
-In-Reply-To: <1348577725-12647-5-git-send-email-s.neumann@raumfeld.com>
-References: <1348577725-12647-1-git-send-email-s.neumann@raumfeld.com>
- <1348577725-12647-5-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <50622890.2000107@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 26 Sep 2012 00:42:42 +0200
+Subject: [Buildroot] [PATCH v3 RESEND] pkg-infra: make sure cross compiling
+	is enabled when host == target
+Message-ID: <1348612962-11310-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/25/12 14:55, Sven Neumann wrote:
-> Further simplify the edits on the .config file based on a nice idea
-> brought up by Arnout Vandecappelle on the mailing-list.
->
-> Signed-off-by: Sven Neumann<s.neumann@raumfeld.com>
+When compiling for the same architecture and libc as the host,
+GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
+these to detect cross-compilation, and will decide that we're doing
+native compilation.  This may trigger running of executables,
+which fail because of missing libraries in the host environment.
 
-  Having it as separate patches doesn't make review easier...
+To solve this, set the vendor part in GNU_TARGET_NAME to buildroot.
 
-> ---
->   package/wpa_supplicant/wpa_supplicant.mk |  117 +--
->   raumfeld/br2-remotecontrol-arm.config    | 1284 ++++++++++++++++++++++++++++++
+This problem exists for instance in xserver_xorg-server on x86_64.
 
-  Seems to be a mistake here :-)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+RESEND I hit this again while compiling xserver_xorg-server...
 
-[snip]
-> +        cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
-> +        sed -i $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-> +               $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-> +               $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
-> +	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
-> +               $(WPA_SUPPLICANT_CONFIG)
+v3: modify GNU_TARGET_NAME instead of GNU_HOST_NAME, which makes a lot
+    more sense of course.  Thank you ThomasP!
 
-  Yet more whitespace problems :-)  Commands should start with a tab,
-continuation lines with a tab and then spaces (if you want to align)
-or another tab (if you just want to indent).
+    I only tested this one with xserver_xorg-server on a Sourcery
+    x86_64 toolchain and with a simple config and an internal toolchain.
 
->   endef
->
->   define WPA_SUPPLICANT_BUILD_CMDS
+v2: -buildroot- instead of -buildroot_cross-, as suggested by ThomasP.
 
+ package/Makefile.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Regards,
-  Arnout
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 64508b2..30a542a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,7 +20,7 @@ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ 
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ LIBC=uclibc
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (919dca5..) t/force-cross (depends on: master)
