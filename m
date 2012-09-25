@@ -1,30 +1,31 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 25 Sep 2012 14:38:57 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 25 Sep 2012 14:46:17 +0200
 Subject: [Buildroot] Error when building defconfig
-Message-ID: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
+In-Reply-To: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
+References: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
+Message-ID: <20120925144617.6daa086f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Dear Maxime Hadjinlian,
 
-I'm using the HEAD of the git tree of buildroot, and I just tried to build a
-"default" config. I did : $ cp ./configs/qemu_x86_defconfig .config && make
+On Tue, 25 Sep 2012 14:38:57 +0200, Maxime Hadjinlian wrote:
 
-The menuconfig appeared, I saved the conf and exited. I did not change any
-option myself. Then I tried to make again, after a short while, I had this error
-:
+> I'm using the HEAD of the git tree of buildroot, and I just tried to
+> build a "default" config. I did : $
+> cp ./configs/qemu_x86_defconfig .config && make
 
-#error It appears you have defined _FILE_OFFSET_BITS=64. Unfortunately, uClibc
-was built without large file support enabled.
+Wrong way. do:
 
-Followed by many of the same kind.  Enabling large file support in make
-menuconfig fix this, but my issue is more the fact that taking a defconfig and
-trying to build it doesn't work.
+	make qemu_x86_defconfig
+	make
 
-I reproduced the same error with qemu_arm_versatile_defconfig
-
-I tried to look where a patch could be applied, but I'm still very new to
-buildroot so... I would need a bit of help :)
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
