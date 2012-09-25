@@ -1,42 +1,113 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Sep 2012 18:00:54 -0300
-Subject: [Buildroot] [PATCH 1/2] pkgconf: new package
-In-Reply-To: <506219E1.5070508@mind.be>
-References: <1348600115-27059-1-git-send-email-gustavo@zacarias.com.ar>
- <506219E1.5070508@mind.be>
-Message-ID: <50621B86.7040307@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Sep 2012 23:15:49 +0200
+Subject: [Buildroot] [PATCH v8 01/11] host-qemu: new package
+In-Reply-To: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
+References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <50621F05.1070708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/25/12 17:53, Arnout Vandecappelle wrote:
+On 09/25/12 19:18, Francois Perrad wrote:
+> only user mode for the current target architecture
+>
+> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
+[snip]
+> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> new file mode 100644
+> index 0000000..379507c
+> --- /dev/null
+> +++ b/package/qemu/Config.in.host
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_HOST_QEMU
+> +	bool "host qemu"
+> +	help
+> +	  QEMU is a generic and open source machine emulator and virtualizer.
+> +
+> +	  In user mode emulation, QEMU runs single cross-compiled programs.
+> +	  Fast cross-compilation and cross-debugging are the main targets
+> +	  for user-mode emulation.
+> +
+> +	  In system mode emulation, QEMU emulates a full computer system,
+> +	  including peripherals, and handles the filesystem image generated
+> +	  by Buildroot.
+> +	  (Buildroot is shipped with many configs/qemu_*_defconfig files).
 
->  Since we anyway need a wrapper, wouldn't it be more consistent
-> to set PKG_CONFIG_PATH there instead?
+  If only user mode is supported, that should be documented in the help text.
 
-Yes, it's possible, i can't think of any gain by doing so, but then i
-can't think of any loss either.
+> +
+> +	  http://qemu.org/
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> new file mode 100644
+> index 0000000..d727f49
+> --- /dev/null
+> +++ b/package/qemu/qemu.mk
+> @@ -0,0 +1,43 @@
+> +#############################################################
+> +#
+> +# qemu
+> +#
+> +#############################################################
+> +
+> +QEMU_VERSION = 1.2.0
+> +QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+> +QEMU_SITE = http://wiki.qemu.org/download
+> +
+> +HOST_QEMU_DEPENDENCIES =
 
->  As long as pkg-config exists, I would wrap this in a
-> ifeq ($(BR2_PACKAGE_PKG_CONFIG),)
+  This can be removed.
 
-See next point...
+> +
+> +QEMU_ARCH=$(ARCH)
+> +ifeq ($(QEMU_ARCH),i686)
+> +    QEMU_ARCH=i386
+> +endif
+> +HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
 
->  If for whatever reason, host-pkg-config is also built, the script
-> will be overwritten.  So to be safe, I'd remove host-pkg-config as well
-> (as a third patch).
+  We normally put spaces before and after =
 
-Yes, the idea is to remove pkg-config, but i don't think this is a final
-patch yet, it's more like a "let people test it and see if nothing
-breaks" (things didn't break for a couple of projects i've run with the
-patchset, but that may not be the case for everyone else).
+> +
+> +define HOST_QEMU_CONFIGURE_CMDS
+> +	(cd $(@D); ./configure                          \
+> +		--target-list="$(HOST_QEMU_TARGETS)"    \
+> +		--prefix="$(HOST_DIR)/usr"              \
+> +		--interp-prefix=$(STAGING_DIR)          \
+> +		--cc="$(HOSTCC)"                        \
+> +		--host-cc="$(HOSTCC)"                   \
+> +		--extra-cflags="$(HOST_CFLAGS)"         \
+> +		--extra-ldflags="$(HOST_LDFLAGS)"       \
+> +	)
+> +endef
+> +
+> +define HOST_QEMU_BUILD_CMDS
+> +	$(MAKE) -C $(@D) all
+> +endef
+> +
+> +define HOST_QEMU_INSTALL_CMDS
+> +	$(MAKE) -C $(@D) install
+> +endef
+> +
+> +define HOST_QEMU_CLEAN_CMDS
+> +	$(MAKE) -C $(@D) clean
+> +endef
+> +
+> +$(eval $(host-generic-package))
 
->  Although this is just copy-pasted from pkg-config.mk, that's no reason
-> to break the buildroot conventions :-)
-> 
-> PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
+  This looks very much like a $(host-autotools-package).  Even if the
+configure is not a proper autoconf script and barfs on all the unknown
+options that buildroot adds, you can still override the CONFIGURE_CMDS.
+But I expect that just setting HOST_QEMU_CONF_OPT will be enough.
 
-Yeah, it was a copy, again, not a final patchset :)
-Regards.
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
