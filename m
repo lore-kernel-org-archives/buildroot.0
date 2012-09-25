@@ -1,104 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Sep 2012 23:15:49 +0200
-Subject: [Buildroot] [PATCH v8 01/11] host-qemu: new package
-In-Reply-To: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
-References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <50621F05.1070708@mind.be>
+Date: Tue, 25 Sep 2012 23:56:32 +0200
+Subject: [Buildroot] [PATCH 4/4] wpa-supplicant: rework .config file
+	editing
+In-Reply-To: <1348577725-12647-5-git-send-email-s.neumann@raumfeld.com>
+References: <1348577725-12647-1-git-send-email-s.neumann@raumfeld.com>
+ <1348577725-12647-5-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <50622890.2000107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/25/12 19:18, Francois Perrad wrote:
-> only user mode for the current target architecture
+On 09/25/12 14:55, Sven Neumann wrote:
+> Further simplify the edits on the .config file based on a nice idea
+> brought up by Arnout Vandecappelle on the mailing-list.
 >
-> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
+> Signed-off-by: Sven Neumann<s.neumann@raumfeld.com>
+
+  Having it as separate patches doesn't make review easier...
+
+> ---
+>   package/wpa_supplicant/wpa_supplicant.mk |  117 +--
+>   raumfeld/br2-remotecontrol-arm.config    | 1284 ++++++++++++++++++++++++++++++
+
+  Seems to be a mistake here :-)
+
 [snip]
-> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-> new file mode 100644
-> index 0000000..379507c
-> --- /dev/null
-> +++ b/package/qemu/Config.in.host
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_HOST_QEMU
-> +	bool "host qemu"
-> +	help
-> +	  QEMU is a generic and open source machine emulator and virtualizer.
-> +
-> +	  In user mode emulation, QEMU runs single cross-compiled programs.
-> +	  Fast cross-compilation and cross-debugging are the main targets
-> +	  for user-mode emulation.
-> +
-> +	  In system mode emulation, QEMU emulates a full computer system,
-> +	  including peripherals, and handles the filesystem image generated
-> +	  by Buildroot.
-> +	  (Buildroot is shipped with many configs/qemu_*_defconfig files).
+> +        cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+> +        sed -i $(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
+> +               $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
+> +               $(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
+> +	       $(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
+> +               $(WPA_SUPPLICANT_CONFIG)
 
-  If only user mode is supported, that should be documented in the help text.
+  Yet more whitespace problems :-)  Commands should start with a tab,
+continuation lines with a tab and then spaces (if you want to align)
+or another tab (if you just want to indent).
 
-> +
-> +	  http://qemu.org/
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> new file mode 100644
-> index 0000000..d727f49
-> --- /dev/null
-> +++ b/package/qemu/qemu.mk
-> @@ -0,0 +1,43 @@
-> +#############################################################
-> +#
-> +# qemu
-> +#
-> +#############################################################
-> +
-> +QEMU_VERSION = 1.2.0
-> +QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
-> +QEMU_SITE = http://wiki.qemu.org/download
-> +
-> +HOST_QEMU_DEPENDENCIES =
-
-  This can be removed.
-
-> +
-> +QEMU_ARCH=$(ARCH)
-> +ifeq ($(QEMU_ARCH),i686)
-> +    QEMU_ARCH=i386
-> +endif
-> +HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
-
-  We normally put spaces before and after =
-
-> +
-> +define HOST_QEMU_CONFIGURE_CMDS
-> +	(cd $(@D); ./configure                          \
-> +		--target-list="$(HOST_QEMU_TARGETS)"    \
-> +		--prefix="$(HOST_DIR)/usr"              \
-> +		--interp-prefix=$(STAGING_DIR)          \
-> +		--cc="$(HOSTCC)"                        \
-> +		--host-cc="$(HOSTCC)"                   \
-> +		--extra-cflags="$(HOST_CFLAGS)"         \
-> +		--extra-ldflags="$(HOST_LDFLAGS)"       \
-> +	)
-> +endef
-> +
-> +define HOST_QEMU_BUILD_CMDS
-> +	$(MAKE) -C $(@D) all
-> +endef
-> +
-> +define HOST_QEMU_INSTALL_CMDS
-> +	$(MAKE) -C $(@D) install
-> +endef
-> +
-> +define HOST_QEMU_CLEAN_CMDS
-> +	$(MAKE) -C $(@D) clean
-> +endef
-> +
-> +$(eval $(host-generic-package))
-
-  This looks very much like a $(host-autotools-package).  Even if the
-configure is not a proper autoconf script and barfs on all the unknown
-options that buildroot adds, you can still override the CONFIGURE_CMDS.
-But I expect that just setting HOST_QEMU_CONF_OPT will be enough.
+>   endef
+>
+>   define WPA_SUPPLICANT_BUILD_CMDS
 
 
   Regards,
