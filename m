@@ -1,69 +1,105 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 25 Sep 2012 19:17:04 +0200
-Subject: [Buildroot] [UNSURE]Re: [PATCH 01/13] perl: new package v6
-In-Reply-To: <5060C07F.70702@mind.be>
-References: <1347107325-4163-1-git-send-email-francois.perrad@gadz.org>
- <20120920215636.6d86b7b5@skate>
- <CAB0FRsu9fyH_9+QtLgbXrTMA=zqmR1io5vCO6cEYFQfwgtNcxw@mail.gmail.com>
- <5060C07F.70702@mind.be>
-Message-ID: <CAB0FRstBowxmfUxWdKy=EYwiECGWEimora-6PxA7AR0RVgYCFg@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 25 Sep 2012 19:18:17 +0200
+Subject: [Buildroot] [PATCH v8 01/11] host-qemu: new package
+Message-ID: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/9/24 Arnout Vandecappelle <arnout@mind.be>:
-> On 09/21/12 23:29, Fran?ois Perrad wrote:
->>>
->>> >  That said, even so it is certainly possible to create a host-qemu
->>> >  package, I am a bit annoyed to see the build process of a package
->>> >  requiring qemu. Is there really no other way? I guess it uses qemu to
->>> >  run a bunch of tests on the target system. Is there no way to provide
->>> >  pre-defined values for those tests, on a per-architecture basis,
->>> > rather
->>> >  than running those test applications in Qemu?
->>> >
->>
->> Qemu is not used for test, but for the configure and build step.
->> Perl is 'bootstrapped' by miniperl (a perl without any extension module),
->> during the build process, miniperl is running via qemu (user mode).
->>
->> Perl doesn't use the "standard" autotools, Perl has a limited support
->> for cross-compiling
->> where the target executables are running on a real target through a
->> ssh connection.
->> The use of qemu (user mode) removes the need of a real target and the
->> ssh connection.
->
->
->  Probably a stupid question, but is it possible to build a host-miniperl
-> and use that for the perl build?  If necessary, we could patch the
-> host-miniperl a bit to point into the sysroot'ed perl directories, like
-> is done with host-pkg-config.  Or is the issue that the perl build generates
-> files with native endianness and struct layout?  That would be more or less
-> impossible to work around without qemu...
->
+only user mode for the current target architecture
 
-I've already explored this path.
-A host-miniperl could be used during the build of target-perl, instead
-of target-miniperl via qemu.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in.host      |    1 +
+ package/qemu/Config.in.host |   15 +++++++++++++++
+ package/qemu/qemu.mk        |   43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
+ create mode 100644 package/qemu/Config.in.host
+ create mode 100644 package/qemu/qemu.mk
 
-But qemu is also used during the configure step.
-Without qemu, a target configuration could be obtained by a large
-patching a host configuration.
-So, most of the logic of configure must be rewrited/duplicated in perl.mk.
-
-Fran?ois
-
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 79050f2..bf95a10 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -4,6 +4,7 @@ source "package/dfu-util/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+ source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
++source "package/qemu/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+ 
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+new file mode 100644
+index 0000000..379507c
+--- /dev/null
++++ b/package/qemu/Config.in.host
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_HOST_QEMU
++	bool "host qemu"
++	help
++	  QEMU is a generic and open source machine emulator and virtualizer.
++
++	  In user mode emulation, QEMU runs single cross-compiled programs.
++	  Fast cross-compilation and cross-debugging are the main targets
++	  for user-mode emulation.
++
++	  In system mode emulation, QEMU emulates a full computer system,
++	  including peripherals, and handles the filesystem image generated
++	  by Buildroot.
++	  (Buildroot is shipped with many configs/qemu_*_defconfig files).
++
++	  http://qemu.org/
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+new file mode 100644
+index 0000000..d727f49
+--- /dev/null
++++ b/package/qemu/qemu.mk
+@@ -0,0 +1,43 @@
++#############################################################
++#
++# qemu
++#
++#############################################################
++
++QEMU_VERSION = 1.2.0
++QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
++QEMU_SITE = http://wiki.qemu.org/download
++
++HOST_QEMU_DEPENDENCIES =
++
++QEMU_ARCH=$(ARCH)
++ifeq ($(QEMU_ARCH),i686)
++    QEMU_ARCH=i386
++endif
++HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
++
++define HOST_QEMU_CONFIGURE_CMDS
++	(cd $(@D); ./configure                          \
++		--target-list="$(HOST_QEMU_TARGETS)"    \
++		--prefix="$(HOST_DIR)/usr"              \
++		--interp-prefix=$(STAGING_DIR)          \
++		--cc="$(HOSTCC)"                        \
++		--host-cc="$(HOSTCC)"                   \
++		--extra-cflags="$(HOST_CFLAGS)"         \
++		--extra-ldflags="$(HOST_LDFLAGS)"       \
++	)
++endef
++
++define HOST_QEMU_BUILD_CMDS
++	$(MAKE) -C $(@D) all
++endef
++
++define HOST_QEMU_INSTALL_CMDS
++	$(MAKE) -C $(@D) install
++endef
++
++define HOST_QEMU_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(host-generic-package))
+-- 
+1.7.9.5
