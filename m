@@ -1,34 +1,74 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Sep 2012 17:10:03 +0200
-Subject: [Buildroot] [git commit] configs: add defconfig for
-	boundarydevices nitrogen6x board
-In-Reply-To: <5061B7A2.6060306@mind.be> (Arnout Vandecappelle's message of
- "Tue, 25 Sep 2012 15:54:42 +0200")
-References: <20120925093427.C0B609970E@busybox.osuosl.org>
- <5061B7A2.6060306@mind.be>
-Message-ID: <87ipb287g4.fsf@macbook.be.48ers.dk>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Tue, 25 Sep 2012 10:36:40 -0500
+Subject: [Buildroot] [PATCH] Add config for PHP eaccelerator package.
+ Signed-off-by: Dallas Clement <dallas.a.clement@gmail.com>
+Message-ID: <CAE9DZUT=mi4OHphQgBmeRzM_t=2nCTWRU-wC4VaGrgCmvF04Mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+ package/Config.in                    |    1 +
+ package/eaccelerator/Config.in       |    7 +++++++
+ package/eaccelerator/eaccelerator.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/eaccelerator/Config.in
+ create mode 100644 package/eaccelerator/eaccelerator.mk
 
- Arnout> On 09/24/12 22:51, Peter Korsgaard wrote:
- >> board/boundarydevices/nitrogen6x/6q_bootscript |  Bin 0 ->  455 bytes
- >> board/boundarydevices/nitrogen6x/6q_upgrade    |  Bin 0 ->  1587 bytes
-
- Arnout> Why not keep these as text files and use host-mkimage to
- Arnout> produce the images?
-
-Simplicity. I didn't write these scripts myself (they are from the uSD
-shipped with the board), and accessing host tools or checking if
-host-mkimage is enabled from the post-build script is not that straight
-forward (you cannot truly rely on host bein $TARGET_DIR/../host).
-
-I also doubted about the u-boot.bin handling, but atleast the user
-cannot change the IMAGES_DIR to anything else (like BR2_HOST_DIR).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 58dd5e8..083cad8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -272,6 +272,7 @@ endmenu
+ endif
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
++source "package/eaccelerator/Config.in"
+ source "package/python/Config.in"
+if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+diff --git a/package/eaccelerator/Config.in b/package/eaccelerator/Config.in
+new file mode 100644
+index 0000000..36600e1
+--- /dev/null
++++ b/package/eaccelerator/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_EACCELERATOR
++        bool "eaccelerator"
++       depends on BR2_PACKAGE_PHP
++        help
++          PHP accelerator and optimizer.
++
++          http://eaccelerator.net/
+diff --git a/package/eaccelerator/eaccelerator.mk
+b/package/eaccelerator/eaccelerator.mk
+new file mode 100644
+index 0000000..5ecd355
+--- /dev/null
++++ b/package/eaccelerator/eaccelerator.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# eaccelerator
++#
++#############################################################
++EACCELERATOR_VERSION = 0.9.6.1
++EACCELERATOR_SITE = http://eaccelerator.net/
++EACCELERATOR_SOURCE = eaccelerator-$(EACCELERATOR_VERSION).tar.bz2
++EACCELERATOR_DEPENDENCIES = php
++EACCELERATOR_CONF_OPT = --enable-eaccelerator=shared \
++  --with-php-config=$(STAGING_DIR)/usr/bin/php-config
++EACCELERATOR_MAKE_ENV = INSTALL_ROOT="$(TARGET_DIR)"
++
++define EACCELERATOR_PRE_CONFIGURE_HOOK
++       # Must set shared memory config manually for cross-compilation
++       sed -i "s/mm_shm_mmap_anon=no/mm_shm_mmap_anon=yes\n
+mm_sem_pthread=yes/" $(@D)/config.m4
++       # Need to run this command to create the autoconf configure script
++       cd $(@D) && phpize
++endef
++
++EACCELERATOR_PRE_CONFIGURE_HOOKS += EACCELERATOR_PRE_CONFIGURE_HOOK
++
++$(eval $(autotools-package))
