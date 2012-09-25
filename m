@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Sep 2012 09:54:42 +0200
-Subject: [Buildroot] [PATCH] external-toolchain:
- BR2_TOOLCHAIN_EXTERNAL_GLIBC includes eglibc
-In-Reply-To: <1348544993-5682-1-git-send-email-baruch@tkos.co.il>
-References: <1348544993-5682-1-git-send-email-baruch@tkos.co.il>
-Message-ID: <20120925095442.01c07b54@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 25 Sep 2012 10:17:01 +0200
+Subject: [Buildroot] Kernel version
+In-Reply-To: <1348558164.41699.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+References: <1348517486.7248.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+ <5060CF90.7070605@mind.be>
+ <1348558164.41699.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+Message-ID: <5061687D.8090703@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On 09/25/12 09:29, Zoran Djordjevic wrote:
+> I will try to be more specific and I am aware that host kernel version doesn't matter in this story.
+> I have kernel sources for my board 2.6.32 on let' say "BoardKernelDir" directy. There, I also have ".config" file, for
+> kernel configuration.
+> Then I go into Buildroot menues (make menuconfig) and under "Kernel/Kernel version"
+> choose 3.2.6. In that same page of Buildroot menu, I can choose "Kernel configuration (Using custom configuration file)"
+> to be the one I mentioned above (".config").
+> Question is - is it wrong procedure and what kernel will be built this way- the one from
+> "BoardKernelDir" (2.6.32) or 3.2.6 or (probably) it will make some mess ?
 
-On Tue, 25 Sep 2012 05:49:53 +0200, Baruch Siach wrote:
+  This will work, more or less.  It will download the 3.2.6 kernel and run its
+configure with your 2.6.32 .config.  That will give you a lot of questions on
+the console about config options which exist in the 3.2.6 kernel but didn't
+exist yet in the 2.6.32 kernel.  So not necessarily the most efficient
+approach.
 
-> +	  Note: eglibc is a variant of glibc that (among other things) can be
-> +	  configured to exclude parts of its features. This capability is 
-> +	  currently not supported.
+> Also, can I somehow (in Buildroot) use sources for my board - not those downloaded from kernel.org.
+> I intend to use CrosstoolNG.
 
-This note makes no sense in the context of external toolchains: the C
-library is already compiled into the external toolchain, so it's the
-responsibility of the person building the external toolchain to know
-how to configure eglibc. The fact that we don't support eglibc
-configuration in Buildroot doesn't make much sense.
+  Yes you can: use the "custom tarball" option that I mentioned in my mail.
 
-Or, if you want to mean that we don't support eglibc toolchains that
-have been configured to leave out certain features (such as IPv6
-support for example), then it should be said in a different way, such
-as: "We only support eglibc toolchains providing this, that and this
-other feature".
+  You have to configure that separately for buildroot and for crosstool-NG.
+AFAIK buildroot doesn't allow to give a directory, so you'll have to make
+a tarball from the directory first.
 
-Best regards,
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
