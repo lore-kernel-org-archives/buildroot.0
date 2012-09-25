@@ -1,36 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Sep 2012 09:49:02 -0300
-Subject: [Buildroot] [PATCH] tiff: security bump to version 4.0.3
-Message-ID: <1348577342-8759-1-git-send-email-gustavo@zacarias.com.ar>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 25 Sep 2012 14:55:21 +0200
+Subject: [Buildroot] wpa_supplicant changes, the next round
+Message-ID: <1348577725-12647-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2012-3401 and CVE-2012-3386.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/tiff/tiff.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+based on the very helpful comments from Arnout, here's another
+series of patches for wpa_supplicant. The first patch is what I
+submitted initially to gain options to enable the new DBus API
+(now with hopefully all whitespace issues fixed).
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 227047b..145d929 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -3,9 +3,9 @@
- # tiff
- #
- #############################################################
--TIFF_VERSION = 4.0.1
--TIFF_SITE = ftp://ftp.remotesensing.org/pub/libtiff
--TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.gz
-+
-+TIFF_VERSION = 4.0.3
-+TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_INSTALL_STAGING = YES
- TIFF_CONF_OPT = \
- 	--disable-cxx \
--- 
-1.7.8.6
+The following three patches simplify the substitutions on the
+.config file. You may decide to merge them into a single change,
+but I thought it would be easier to review it this way.
+
+
+Regards, Sven
