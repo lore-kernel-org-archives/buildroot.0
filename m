@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Sep 2012 09:30:25 +0200
-Subject: [Buildroot] Host xmllint dynamic link failure
-In-Reply-To: <50624463.1000200@mind.be>
-References: <50624463.1000200@mind.be>
-Message-ID: <20120926093025.0ba0c3d0@skate>
+Date: Wed, 26 Sep 2012 09:33:35 +0200
+Subject: [Buildroot] [PATCH v8 01/11] host-qemu: new package
+In-Reply-To: <50621F05.1070708@mind.be>
+References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
+ <50621F05.1070708@mind.be>
+Message-ID: <20120926093335.5397b207@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +13,25 @@ To: buildroot@busybox.net
 
 Dear Arnout Vandecappelle,
 
-On Wed, 26 Sep 2012 01:55:15 +0200, Arnout Vandecappelle wrote:
->   During one of my test builds, I ran into a dynamic linker failure
-> when running xmllint:
-> 
-> /usr/bin/xmllint: relocation error: /usr/bin/xmllint: symbol
-> xmlShell, version LIBXML2_2.4.30 not defined in file libxml2.so.2
-> with link time reference
-> 
->   The problem is that we compile with
-> LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:", so that our host-libxml2 is
-> used instead of the one in /usr/lib.  Or, the problem is
-> that /usr/bin/xmllint is used instead of
-> $(HOST_DIR)/usr/bin/xmllint.  The path is hardcoded in xmlto...
-> 
->   Possible solutions:
-> 
-> - Build host-xmlto.  This will require updating all packages using
-> xmlto to add host-xmlto to the dependencies.
+On Tue, 25 Sep 2012 23:15:49 +0200, Arnout Vandecappelle wrote:
 
-I am not sure to understand. Aren't we already building xmllint for the
-host? I don't follow your explanation entirely here. Anyway, if there
-is something from the host that we're using and that isn't part of the
-mandatory Buildroot dependencies, then it should definitely be built as
-a dependency, yes.
+>   This looks very much like a $(host-autotools-package).  Even if the
+> configure is not a proper autoconf script and barfs on all the unknown
+> options that buildroot adds, you can still override the
+> CONFIGURE_CMDS. But I expect that just setting HOST_QEMU_CONF_OPT
+> will be enough.
 
-> - Remove LD_LIBRARY_PATH and rely on rpath to find the libraries.
-> This may require patching some of the host packages.  At first sight,
-> it doesn't look too bad, however.
+Still, the package doesn't use the autotools, so we shouldn't use the
+autotools-package infrastructure for it. While it may work at current
+time t, it may easily break at time t+1 if we make changes to the
+autotools-package infrastructure that are relevant for autotools
+packages, but that break the subtle assumptions that non-autotools
+packages are making in their use of the autotools-package
+infrastructure.
 
-Normally yes, I think we should remove LD_LIBRARY_PATH. The idea is to
-build all binaries installed in $(HOST_DIR)/usr/bin with a rpath, and
-that is normally sufficient to let them find the libraries.
+So no, let's make things explicit: Qemu doesn't not use the autotools,
+they have a custom configure script, custom Makefiles, so we have to
+use the generic-package infrastructure here.
 
 Best regards,
 
