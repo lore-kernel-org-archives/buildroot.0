@@ -1,34 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Sep 2012 09:25:23 +0200
-Subject: [Buildroot] [PATCH v3 RESEND] pkg-infra: make sure cross
- compiling is enabled when host == target
-In-Reply-To: <1348612962-11310-1-git-send-email-arnout@mind.be>
-References: <1348612962-11310-1-git-send-email-arnout@mind.be>
-Message-ID: <20120926092523.6a26c22f@skate>
+Date: Wed, 26 Sep 2012 09:30:25 +0200
+Subject: [Buildroot] Host xmllint dynamic link failure
+In-Reply-To: <50624463.1000200@mind.be>
+References: <50624463.1000200@mind.be>
+Message-ID: <20120926093025.0ba0c3d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+Dear Arnout Vandecappelle,
 
-On Wed, 26 Sep 2012 00:42:42 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> When compiling for the same architecture and libc as the host,
-> GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
-> these to detect cross-compilation, and will decide that we're doing
-> native compilation.  This may trigger running of executables,
-> which fail because of missing libraries in the host environment.
+On Wed, 26 Sep 2012 01:55:15 +0200, Arnout Vandecappelle wrote:
+>   During one of my test builds, I ran into a dynamic linker failure
+> when running xmllint:
 > 
-> To solve this, set the vendor part in GNU_TARGET_NAME to buildroot.
+> /usr/bin/xmllint: relocation error: /usr/bin/xmllint: symbol
+> xmlShell, version LIBXML2_2.4.30 not defined in file libxml2.so.2
+> with link time reference
 > 
-> This problem exists for instance in xserver_xorg-server on x86_64.
+>   The problem is that we compile with
+> LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:", so that our host-libxml2 is
+> used instead of the one in /usr/lib.  Or, the problem is
+> that /usr/bin/xmllint is used instead of
+> $(HOST_DIR)/usr/bin/xmllint.  The path is hardcoded in xmlto...
+> 
+>   Possible solutions:
+> 
+> - Build host-xmlto.  This will require updating all packages using
+> xmlto to add host-xmlto to the dependencies.
 
-I confirm the problem, and I think this is the right solution, but I
-haven't had the time to test it. But anyway:
+I am not sure to understand. Aren't we already building xmllint for the
+host? I don't follow your explanation entirely here. Anyway, if there
+is something from the host that we're using and that isn't part of the
+mandatory Buildroot dependencies, then it should definitely be built as
+a dependency, yes.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> - Remove LD_LIBRARY_PATH and rely on rpath to find the libraries.
+> This may require patching some of the host packages.  At first sight,
+> it doesn't look too bad, however.
+
+Normally yes, I think we should remove LD_LIBRARY_PATH. The idea is to
+build all binaries installed in $(HOST_DIR)/usr/bin with a rpath, and
+that is normally sufficient to let them find the libraries.
+
+Best regards,
 
 Thomas
 -- 
