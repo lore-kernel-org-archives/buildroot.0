@@ -1,37 +1,38 @@
-From: vaxon <gvaxon@gmail.com>
-Date: Thu, 27 Sep 2012 01:05:55 +0400
-Subject: [Buildroot] [PATCH 2/3] libdvdnav: Fix dvdnav-config
-In-Reply-To: <20120926224634.7bddf310@skate>
-References: <20120926193155.GA3942@gmail.com>
- <20120926193351.GA3971@gmail.com> <20120926224634.7bddf310@skate>
-Message-ID: <50636E33.9030101@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 26 Sep 2012 23:24:14 +0200
+Subject: [Buildroot] [git commit] x11vnc: fix build without ipv6 support
+Message-ID: <20120926212531.BF49599722@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/27/2012 12:46 AM, Thomas Petazzoni wrote:
-> Dear Valentine Barshak,
->
-> On Wed, 26 Sep 2012 23:33:51 +0400, Valentine Barshak wrote:
->
->> +ifneq ($(BR2_HAVE_DEVFILES),y)
->> +LIBDVDNAV_POST_INSTALL_TARGET_HOOKS += LIBDVDNAV_TARGET_CLEANUP
->> +endif
->
-> We generally prefer positive logic:
->
-> ifeq ($(BR2_HAVE_DEVFILES),)
-> ...
-> endif
+commit: http://git.buildroot.net/buildroot/commit/?id=9c53079fd2351b56becd1ad5eb8dcc997ac3c6f3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The ifneq(($BR2_HAVE_DEVFILES),y) was copy-pasted from other .mk file 
-and it seems to be used much more often than ifeq($(BR2_HAVE_DEVFILES),).
+Fixes http://autobuild.buildroot.net/results/1119dbf055edf281451a9e4216fdebc0b07fffae/
 
-Thanks,
-Val.
+configure script uses --without-ipv6 instead of --disable-ipv6, and configure
+option is only used for libraries, not the x11vnc application.
 
->
-> Thomas
->
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11vnc/x11vnc.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
+index 444a839..51ae0a0 100644
+--- a/package/x11vnc/x11vnc.mk
++++ b/package/x11vnc/x11vnc.mk
+@@ -11,4 +11,10 @@ X11VNC_CONF_OPT = \
+ 
+ X11VNC_DEPENDENCIES = xlib_libXt xlib_libXext
+ 
++ifneq ($(BR2_INET_IPV6),y)
++# configure option only used for libvncserver
++X11VNC_CONF_OPT += --without-ipv6
++X11VNC_CONF_ENV += CFLAGS='$(TARGET_CFLAGS) -DX11VNC_IPV6=0'
++endif
++
+ $(eval $(autotools-package))
