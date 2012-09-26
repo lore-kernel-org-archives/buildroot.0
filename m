@@ -1,32 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Sep 2012 22:46:34 +0200
-Subject: [Buildroot] [PATCH 2/3] libdvdnav: Fix dvdnav-config
-In-Reply-To: <20120926193351.GA3971@gmail.com>
-References: <20120926193155.GA3942@gmail.com> <20120926193351.GA3971@gmail.com>
-Message-ID: <20120926224634.7bddf310@skate>
+From: vaxon <gvaxon@gmail.com>
+Date: Thu, 27 Sep 2012 00:59:13 +0400
+Subject: [Buildroot] [PATCH 3/3] mplayer: Fix external libdvdread and
+ libdvdnav support
+In-Reply-To: <20120926224604.2cb082f2@skate>
+References: <20120926193155.GA3942@gmail.com>
+ <20120926193451.GA3983@gmail.com> <20120926224604.2cb082f2@skate>
+Message-ID: <50636CA1.3070401@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Valentine Barshak,
+On 09/27/2012 12:46 AM, Thomas Petazzoni wrote:
+> Dear Valentine Barshak,
+>
+> On Wed, 26 Sep 2012 23:34:51 +0400, Valentine Barshak wrote:
+>
+>> +ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
+>> +MPLAYER_CONF_OPTS +=  \
+>> +	--enable-dvdread \
+>> +	--disable-dvdread-internal \
+>> +	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
+>> +MPLAYER_DEPENDENCIES += libdvdread
+>> +endif
+>
+> Don't we want a:
+>
+> else
+> MPLAYER_CONF_OPTS += --disable-dvdread --disable-dvdread-internal
+> endif
 
-On Wed, 26 Sep 2012 23:33:51 +0400, Valentine Barshak wrote:
+Not really, these options are set to "auto" by default and will be 
+disabled when mplayer fails to find libcdio, which internal dvdread 
+depends on.
 
-> +ifneq ($(BR2_HAVE_DEVFILES),y)
-> +LIBDVDNAV_POST_INSTALL_TARGET_HOOKS += LIBDVDNAV_TARGET_CLEANUP
-> +endif
+I did not manually disable it. In case libcdio is added later mplayer 
+would use it for internal dvdread when libdvdread is disabled.
 
-We generally prefer positive logic:
-
-ifeq ($(BR2_HAVE_DEVFILES),)
-...
-endif
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks,
+Val.
+>
+>> +ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
+>> +MPLAYER_CONF_OPTS +=  \
+>> +	--enable-dvdnav \
+>> +	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
+>> +MPLAYER_DEPENDENCIES += libdvdnav
+>> +endif
+>
+> else
+> MPLAYER_CONF_OPTS += --disable-dvdnav
+> endif
+>
+> Thanks,
+>
+> Thomas
+>
