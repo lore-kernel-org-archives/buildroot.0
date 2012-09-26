@@ -1,30 +1,40 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Wed, 26 Sep 2012 08:23:48 +0200
-Subject: [Buildroot] [PATCH 1/1] allow to pass the number of parallel
- jobs via command line
-In-Reply-To: <87txul7sbc.fsf@macbook.be.48ers.dk>
-References: <1348568223-13874-1-git-send-email-plagnioj@jcrosoft.com>
- <87txul7sbc.fsf@macbook.be.48ers.dk>
-Message-ID: <20120926062348.GA31527@game.jcrosoft.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 26 Sep 2012 09:13:32 +0200
+Subject: [Buildroot] [git commit] mplayer: 1.1 version needs largefile
+	support
+Message-ID: <20120926071505.4B0D399721@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22:36 Tue 25 Sep     , Peter Korsgaard wrote:
-> >>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
-> 
->  Jean-Christophe> use PARALLEL_JOBS=x for this
->  Jean-Christophe> This will overwrite the value in BR2_JLEVEL
-> 
-> why not just use make BR2_JLEVEL=x ?
-> 
-kconfig overwrite and you can not optarg env as BR2_JLEVEL is a int
+commit: http://git.buildroot.net/buildroot/commit/?id=0b255b06498e1646a392cc58f7589b043104955c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-so need to use PARALLEL_JOBS
+Fixes http://autobuild.buildroot.net/results/7d084a1a8fd484f2c6df82ccd7b9d8aeebe68c2d
 
-Best Regards,
-J.
-> -- 
-> Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mplayer/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
+index 77bf9dc..c64dab7 100644
+--- a/package/multimedia/mplayer/Config.in
++++ b/package/multimedia/mplayer/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MPLAYER
+ 	# "Error: unsupported architecture sh4a" says mplayer
+ 	# configure script.
+ 	depends on !BR2_sh4a && !BR2_sh4aeb
++	depends on BR2_LARGEFILE
+ 	help
+ 	  MPlayer is a movie player which runs on many systems and supports
+ 	  many different file formats.
+@@ -23,3 +24,6 @@ config BR2_PACKAGE_MPLAYER_MENCODER
+ 	  This will install the video encoder.
+ 
+ endif
++
++comment "mplayer requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
