@@ -1,48 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Sep 2012 09:18:13 +0200
-Subject: [Buildroot] [git commit] genext2fs: needs largefile after version
-	bump
-Message-ID: <20120926072004.60CBA97193@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 26 Sep 2012 09:25:23 +0200
+Subject: [Buildroot] [PATCH v3 RESEND] pkg-infra: make sure cross
+ compiling is enabled when host == target
+In-Reply-To: <1348612962-11310-1-git-send-email-arnout@mind.be>
+References: <1348612962-11310-1-git-send-email-arnout@mind.be>
+Message-ID: <20120926092523.6a26c22f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c39cf6108ba5a8e8f4f3e6c6fb09b043db7cfd79
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-Fixes http://autobuild.buildroot.net/results/8c7c10c0175a7ddf8e2d37a4718469d4ead3835a
+On Wed, 26 Sep 2012 00:42:42 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> When compiling for the same architecture and libc as the host,
+> GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
+> these to detect cross-compilation, and will decide that we're doing
+> native compilation.  This may trigger running of executables,
+> which fail because of missing libraries in the host environment.
+> 
+> To solve this, set the vendor part in GNU_TARGET_NAME to buildroot.
+> 
+> This problem exists for instance in xserver_xorg-server on x86_64.
 
-And fixup space/tab mixup in Config.in while we're at it.
+I confirm the problem, and I think this is the right solution, but I
+haven't had the time to test it. But anyway:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/genext2fs/Config.in |   18 +++++++++++-------
- 1 files changed, 11 insertions(+), 7 deletions(-)
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/genext2fs/Config.in b/package/genext2fs/Config.in
-index 82992f8..d869d7e 100644
---- a/package/genext2fs/Config.in
-+++ b/package/genext2fs/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_GENEXT2FS
--       bool "genext2fs"
--       help
--         genext2fs generates an ext2 filesystem as a normal (non-root)
--	 user.  It does not require you to mount the image file to
--	 copy files on it, nor does it require that you become the
--	 superuser to make device nodes.
-+	bool "genext2fs"
-+	depends on BR2_LARGEFILE
-+	help
-+	  genext2fs generates an ext2 filesystem as a normal (non-root)
-+	  user.  It does not require you to mount the image file to
-+	  copy files on it, nor does it require that you become the
-+	  superuser to make device nodes.
- 
--	 http://genext2fs.sourceforge.net/
-+	  http://genext2fs.sourceforge.net/
-+
-+comment "genext2fs requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
