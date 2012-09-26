@@ -1,38 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Sep 2012 23:24:14 +0200
-Subject: [Buildroot] [git commit] x11vnc: fix build without ipv6 support
-Message-ID: <20120926212531.BF49599722@busybox.osuosl.org>
+Date: Wed, 26 Sep 2012 22:51:01 +0200
+Subject: [Buildroot] [git commit] xlib_libSM: only build documentation if
+	needed
+Message-ID: <20120926212531.70C0399722@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c53079fd2351b56becd1ad5eb8dcc997ac3c6f3
+commit: http://git.buildroot.net/buildroot/commit/?id=812eae5ccf281f89efba6092cb432224c0f7e89c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/1119dbf055edf281451a9e4216fdebc0b07fffae/
-
-configure script uses --without-ipv6 instead of --disable-ipv6, and configure
-option is only used for libraries, not the x11vnc application.
+Documentation generation is slow, so only create it if requested.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11vnc/x11vnc.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/x11r7/xlib_libSM/xlib_libSM.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11vnc/x11vnc.mk b/package/x11vnc/x11vnc.mk
-index 444a839..51ae0a0 100644
---- a/package/x11vnc/x11vnc.mk
-+++ b/package/x11vnc/x11vnc.mk
-@@ -11,4 +11,10 @@ X11VNC_CONF_OPT = \
+diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
+index a8d1eff..bdbda3f 100644
+--- a/package/x11r7/xlib_libSM/xlib_libSM.mk
++++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+@@ -11,4 +11,9 @@ XLIB_LIBSM_INSTALL_STAGING = YES
+ XLIB_LIBSM_DEPENDENCIES = xlib_libICE xlib_xtrans xproto_xproto
+ XLIB_LIBSM_CONF_OPT = --without-libuuid
  
- X11VNC_DEPENDENCIES = xlib_libXt xlib_libXext
- 
-+ifneq ($(BR2_INET_IPV6),y)
-+# configure option only used for libvncserver
-+X11VNC_CONF_OPT += --without-ipv6
-+X11VNC_CONF_ENV += CFLAGS='$(TARGET_CFLAGS) -DX11VNC_IPV6=0'
++ifneq ($(BR2_HAVE_DOCUMENTATION),y)
++# documentation generation is slow
++XLIB_LIBSM_CONF_OPT += --disable-docs
 +endif
 +
  $(eval $(autotools-package))
