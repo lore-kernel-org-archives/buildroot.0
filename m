@@ -1,11 +1,10 @@
 From: vaxon <gvaxon@gmail.com>
-Date: Thu, 27 Sep 2012 00:59:13 +0400
-Subject: [Buildroot] [PATCH 3/3] mplayer: Fix external libdvdread and
- libdvdnav support
-In-Reply-To: <20120926224604.2cb082f2@skate>
+Date: Thu, 27 Sep 2012 01:05:55 +0400
+Subject: [Buildroot] [PATCH 2/3] libdvdnav: Fix dvdnav-config
+In-Reply-To: <20120926224634.7bddf310@skate>
 References: <20120926193155.GA3942@gmail.com>
- <20120926193451.GA3983@gmail.com> <20120926224604.2cb082f2@skate>
-Message-ID: <50636CA1.3070401@gmail.com>
+ <20120926193351.GA3971@gmail.com> <20120926224634.7bddf310@skate>
+Message-ID: <50636E33.9030101@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,44 +14,24 @@ To: buildroot@busybox.net
 On 09/27/2012 12:46 AM, Thomas Petazzoni wrote:
 > Dear Valentine Barshak,
 >
-> On Wed, 26 Sep 2012 23:34:51 +0400, Valentine Barshak wrote:
+> On Wed, 26 Sep 2012 23:33:51 +0400, Valentine Barshak wrote:
 >
->> +ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
->> +MPLAYER_CONF_OPTS +=  \
->> +	--enable-dvdread \
->> +	--disable-dvdread-internal \
->> +	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
->> +MPLAYER_DEPENDENCIES += libdvdread
+>> +ifneq ($(BR2_HAVE_DEVFILES),y)
+>> +LIBDVDNAV_POST_INSTALL_TARGET_HOOKS += LIBDVDNAV_TARGET_CLEANUP
 >> +endif
 >
-> Don't we want a:
+> We generally prefer positive logic:
 >
-> else
-> MPLAYER_CONF_OPTS += --disable-dvdread --disable-dvdread-internal
+> ifeq ($(BR2_HAVE_DEVFILES),)
+> ...
 > endif
 
-Not really, these options are set to "auto" by default and will be 
-disabled when mplayer fails to find libcdio, which internal dvdread 
-depends on.
-
-I did not manually disable it. In case libcdio is added later mplayer 
-would use it for internal dvdread when libdvdread is disabled.
+The ifneq(($BR2_HAVE_DEVFILES),y) was copy-pasted from other .mk file 
+and it seems to be used much more often than ifeq($(BR2_HAVE_DEVFILES),).
 
 Thanks,
 Val.
->
->> +ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
->> +MPLAYER_CONF_OPTS +=  \
->> +	--enable-dvdnav \
->> +	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
->> +MPLAYER_DEPENDENCIES += libdvdnav
->> +endif
->
-> else
-> MPLAYER_CONF_OPTS += --disable-dvdnav
-> endif
->
-> Thanks,
+
 >
 > Thomas
 >
