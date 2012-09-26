@@ -1,34 +1,104 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Sep 2012 12:42:25 +0200
-Subject: [Buildroot] [PATCH 1/1] allow to pass the number of parallel
-	jobs via command line
-In-Reply-To: <20120926062348.GA31527@game.jcrosoft.org> (Jean-Christophe
- PLAGNIOL-VILLARD's message of "Wed, 26 Sep 2012 08:23:48 +0200")
-References: <1348568223-13874-1-git-send-email-plagnioj@jcrosoft.com>
- <87txul7sbc.fsf@macbook.be.48ers.dk>
- <20120926062348.GA31527@game.jcrosoft.org>
-Message-ID: <87a9wd6p66.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 26 Sep 2012 07:48:39 -0300
+Subject: [Buildroot] [PATCHv2 1/4] pkgconf: new package
+Message-ID: <1348656522-13698-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+pkgconf is a drop-in replacement for pkg-config that doesn't need
+itself to build and just requires a C89 compiler.
 
-Hi,
+Instead of using a patch for hardcoded sysroot support (as the patch to
+pkg-config does) we rely instead on a wrapper script that takes the
+appropiate action.
 
- >> why not just use make BR2_JLEVEL=x ?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in             |    1 +
+ package/pkgconf/Config.in     |    9 +++++++++
+ package/pkgconf/pkg-config.in |    2 ++
+ package/pkgconf/pkgconf.mk    |   33 +++++++++++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+), 0 deletions(-)
+ create mode 100644 package/pkgconf/Config.in
+ create mode 100644 package/pkgconf/pkg-config.in
+ create mode 100644 package/pkgconf/pkgconf.mk
 
- JC> kconfig overwrite and you can not optarg env as
- JC> BR2_JLEVEL is a int so need to use PARALLEL_JOBS
-
-Sorry, I don't understand what you are saying here. BR2_JLEVEL works
-fine:
-
-make BR2_LEVEL=42
-...
-/usr/bin/make -j42 CC="/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc" ..
-
+diff --git a/package/Config.in b/package/Config.in
+index 82c319e..0c17918 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -84,6 +84,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/patch/Config.in"
+ endif
+ source "package/pkg-config/Config.in"
++source "package/pkgconf/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/sed/Config.in"
+ endif
+diff --git a/package/pkgconf/Config.in b/package/pkgconf/Config.in
+new file mode 100644
+index 0000000..fec5a69
+--- /dev/null
++++ b/package/pkgconf/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PKGCONF
++	bool "pkgconf"
++	help
++	  pkgconf is a program which helps to configure compiler and linker
++	  flags for development frameworks. It is similar to pkg-config,
++	  but was written from scratch in the summer of 2011 to replace
++	  pkg-config, which now needs itself to build itself.
++
++	  https://github.com/nenolod/pkgconf
+diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+new file mode 100644
+index 0000000..4039d4d
+--- /dev/null
++++ b/package/pkgconf/pkg-config.in
+@@ -0,0 +1,2 @@
++#!/bin/sh
++PKG_CONFIG_PATH=${PKG_CONFIG_PATH:- at PKG_CONFIG_PATH@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} @HOST_DIR@/usr/bin/pkgconf $@
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+new file mode 100644
+index 0000000..2dd1a51
+--- /dev/null
++++ b/package/pkgconf/pkgconf.mk
+@@ -0,0 +1,33 @@
++#############################################################
++#
++# pkgconf
++#
++#############################################################
++
++PKGCONF_VERSION = 0.8.9
++PKGCONF_SITE = http://tortois.es/~nenolod/distfiles
++PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
++
++HOST_PKGCONF_CONF_OPT = \
++	--with-pkg-config-dir="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig"
++
++PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
++
++define PKGCONF_LINK_PKGCONFIG
++	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
++endef
++
++define HOST_PKGCONF_INSTALL_WRAPPER
++	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
++		$(HOST_DIR)/usr/bin/pkg-config
++	$(SED) 's, at PKG_CONFIG_PATH@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
++		-e 's, at HOST_DIR@,$(HOST_DIR),' \
++		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
++		$(HOST_DIR)/usr/bin/pkg-config
++endef
++
++PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
++HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.8.6
