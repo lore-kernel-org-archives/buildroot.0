@@ -1,45 +1,49 @@
 From: Valentine Barshak <gvaxon@gmail.com>
-Date: Wed, 26 Sep 2012 23:33:51 +0400
-Subject: [Buildroot] [PATCH 2/3] libdvdnav: Fix dvdnav-config
+Date: Wed, 26 Sep 2012 23:34:51 +0400
+Subject: [Buildroot] [PATCH 3/3] mplayer: Fix external libdvdread and
+	libdvdnav support
 In-Reply-To: <20120926193155.GA3942@gmail.com>
-Message-ID: <20120926193351.GA3971@gmail.com>
+Message-ID: <20120926193451.GA3983@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes path prefix in the staging dvdnav-config
-and removes dvdnav-config from the target filesystem
-if BR2_HAVE_DEVFILES is not set.
+This sets paths to dvdread-config and dvdnav-config,
+and configuration options to enable external libdvdread
+and libdvdnav support.
 
 Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
 ---
- package/libdvdnav/libdvdnav.mk | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ package/multimedia/mplayer/mplayer.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index e2d42f3..2fefe43 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -16,4 +16,18 @@ LIBDVDNAV_DEPENDENCIES = libdvdread host-pkg-config
- # of cross compilation, we prefer using pkg-config.
- LIBDVDNAV_CONF_OPT = --with-dvdread-config="$(PKG_CONFIG_HOST_BINARY) dvdread"
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 05120bf..9ff4b8a 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -42,6 +42,21 @@ else
+ MPLAYER_CONF_OPTS += --disable-freetype
+ endif
  
-+define LIBDVDNAV_TARGET_CLEANUP
-+	$(RM) -f $(TARGET_DIR)/usr/bin/dvdnav-config
-+endef
-+
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+LIBDVDNAV_POST_INSTALL_TARGET_HOOKS += LIBDVDNAV_TARGET_CLEANUP
++ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
++MPLAYER_CONF_OPTS +=  \
++	--enable-dvdread \
++	--disable-dvdread-internal \
++	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
++MPLAYER_DEPENDENCIES += libdvdread
 +endif
 +
-+define LIBDVDNAV_STAGING_FIXUP_DVDNAV_CONFIG
-+	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/dvdnav-config
-+endef
++ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
++MPLAYER_CONF_OPTS +=  \
++	--enable-dvdnav \
++	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
++MPLAYER_DEPENDENCIES += libdvdnav
++endif
 +
-+LIBDVDNAV_POST_INSTALL_STAGING_HOOKS += LIBDVDNAV_STAGING_FIXUP_DVDNAV_CONFIG
-+
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_MPLAYER_MPLAYER),y)
+ MPLAYER_CONF_OPTS += --enable-mplayer
+ else
 -- 
 1.7.11.4
