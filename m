@@ -1,42 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Sep 2012 14:21:24 +0200
-Subject: [Buildroot] Fwd: Re:  Basic questions about using BuildRoot
-In-Reply-To: <50643F2A.3010500@ronetix.at>
-References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
- <5055A940.7070802@ronetix.at>
- <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
- <5055C935.3050108@ronetix.at>
- <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
- <5058F058.1020806@mind.be> <505AB58C.3030805@ronetix.at>
- <50641497.3030800@ronetix.at> <20120927115321.73a0e2b4@skate>
- <50643F2A.3010500@ronetix.at>
-Message-ID: <20120927142124.6abf0a75@skate>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Thu, 27 Sep 2012 16:25:36 +0400
+Subject: [Buildroot] [PATCH 3/3] mplayer: Fix external libdvdread and
+ libdvdnav support
+In-Reply-To: <50636C68.5030601@gmail.com>
+References: <20120926193155.GA3942@gmail.com>
+ <20120926193451.GA3983@gmail.com> <20120926224604.2cb082f2@skate>
+ <50636C68.5030601@gmail.com>
+Message-ID: <506445C0.7010906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Peevski,
+On 09/27/2012 12:58 AM, vaxon wrote:
+> On 09/27/2012 12:46 AM, Thomas Petazzoni wrote:
+>> Dear Valentine Barshak,
+>>
+>> On Wed, 26 Sep 2012 23:34:51 +0400, Valentine Barshak wrote:
+>>
+>>> +ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
+>>> +MPLAYER_CONF_OPTS +=  \
+>>> +    --enable-dvdread \
+>>> +    --disable-dvdread-internal \
+>>> +    --with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
+>>> +MPLAYER_DEPENDENCIES += libdvdread
+>>> +endif
+>>
+>> Don't we want a:
+>>
+>> else
+>> MPLAYER_CONF_OPTS += --disable-dvdread --disable-dvdread-internal
+>> endif
+>
+> Not really, these options are set to "auto" by default and will be
+> disabled when mplayer fails to find libcdio which internal dvdread
+> depends on.
+>
+> Thus, it builds fine with or without .
+>
+> I did not manually disable it in case libcdio is added later so that
+> mplayer would use it for internal dvdread when libdvdread is disabled.
+>
+>>
+>>> +ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
+>>> +MPLAYER_CONF_OPTS +=  \
+>>> +    --enable-dvdnav \
+>>> +    --with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
+>>> +MPLAYER_DEPENDENCIES += libdvdnav
+>>> +endif
+>>
+>> else
+>> MPLAYER_CONF_OPTS += --disable-dvdnav
+>> endif
 
-On Thu, 27 Sep 2012 14:57:30 +0300, Martin Peevski wrote:
+Same here. I don't think disabling dvdnav would give us anything.
 
-> > I'd rather recommend using the latest mainline version. AT91
-> > support in mainline is really good.
-> 
-> I think that it's mandatory to use exactly 2.6.30 version because the 
-> Ronetix board isn't included in the main line of any later Kernel.
+Why not let mplayer try other choices (like internal dvd libs)
+and auto-disable dvd support if the checks fail.
 
-Ok. That said, porting a recent kernel on a AT91SAM9G45 board is
-probably a matter of a few hours for someone knowledgeable with ARM
-kernel development, unless the board has some funky peripherals that
-are not supported in mainline.
+Thomas, I can add this options if you like, but really don't see any 
+gain in them.
 
-Best regards,
+Thanks,
+Val.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>>
+>> Thanks,
+>>
+>> Thomas
+>>
+>
