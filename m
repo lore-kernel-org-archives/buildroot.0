@@ -1,53 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Sep 2012 23:40:54 +0200
-Subject: [Buildroot] [PATCHv2 4/4] iw: pkg-config nitpicking
-In-Reply-To: <1348656522-13698-4-git-send-email-gustavo@zacarias.com.ar>
-References: <1348656522-13698-1-git-send-email-gustavo@zacarias.com.ar>
- <1348656522-13698-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5064C7E6.3080005@mind.be>
+Date: Thu, 27 Sep 2012 23:48:19 +0200
+Subject: [Buildroot] [git commit] xlib_libSM: only build documentation
+ if needed
+In-Reply-To: <20120926212531.70C0399722@busybox.osuosl.org>
+References: <20120926212531.70C0399722@busybox.osuosl.org>
+Message-ID: <5064C9A3.8040305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/09/12 12:48, Gustavo Zacarias wrote:
-> Since we're now using pkgconf with a wrapper script we no longer need to
-> pass PKG_CONFIG_PATH to pkg-config to do the right thing.
-> Also point PKG_CONFIG to PKG_CONFIG_HOST_BINARY rather than the
-> hardcoded option.
+On 26/09/12 22:51, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=812eae5ccf281f89efba6092cb432224c0f7e89c
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
-> Signed-off-by: Gustavo Zacarias<gustavo@zacarias.com.ar>
+> Documentation generation is slow, so only create it if requested.
+>
+> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
 > ---
->   package/iw/iw.mk |    4 +---
->   1 files changed, 1 insertions(+), 3 deletions(-)
+>   package/x11r7/xlib_libSM/xlib_libSM.mk |    5 +++++
+>   1 files changed, 5 insertions(+), 0 deletions(-)
 >
-> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-> index b1a86b3..af11140 100644
-> --- a/package/iw/iw.mk
-> +++ b/package/iw/iw.mk
-> @@ -9,9 +9,7 @@ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
->   IW_SITE = http://wireless.kernel.org/download/iw
->   IW_DEPENDENCIES = host-pkgconf libnl
->   IW_CONFIG = $(IW_DIR)/.config
-> -IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
-> -	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
-> -	GIT_DIR=$(IW_DIR)
-> +IW_MAKE_ENV = PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)"
+> diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
+> index a8d1eff..bdbda3f 100644
+> --- a/package/x11r7/xlib_libSM/xlib_libSM.mk
+> +++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+> @@ -11,4 +11,9 @@ XLIB_LIBSM_INSTALL_STAGING = YES
+>   XLIB_LIBSM_DEPENDENCIES = xlib_libICE xlib_xtrans xproto_xproto
+>   XLIB_LIBSM_CONF_OPT = --without-libuuid
 >
->   ifeq ($(BR2_PREFER_STATIC_LIB),y)
->   # libnl needs pthread/m, so we need to explicitly with them when static
+> +ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+> +# documentation generation is slow
+> +XLIB_LIBSM_CONF_OPT += --disable-docs
+> +endif
+>
 
-Doesn't removing GIT_DIR break version.sh?
+Roughly 45 packages have some form of --disable-doc, with variants
+
+--disable-doc
+--disable-docs
+--disable-documentation
+
+Maybe we should just add all three to the common configure options?
 
 Regards,
 Arnout
 
 -- 
-
-Arnout Vandecappelle             arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . +32-16-286540 . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . . . . BE 872 984 063 RPR Leuven
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 31BB CF53 8660 6F88 345D 54CC A836 5879 20D7 CF43
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
