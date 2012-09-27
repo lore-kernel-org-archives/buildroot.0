@@ -1,49 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Sep 2012 11:53:21 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 27 Sep 2012 12:42:32 +0200
 Subject: [Buildroot] Fwd: Re:  Basic questions about using BuildRoot
-In-Reply-To: <50641497.3030800@ronetix.at>
+In-Reply-To: <20120927115321.73a0e2b4@skate>
 References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
  <5055A940.7070802@ronetix.at>
  <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
  <5055C935.3050108@ronetix.at>
  <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
  <5058F058.1020806@mind.be> <505AB58C.3030805@ronetix.at>
- <50641497.3030800@ronetix.at>
-Message-ID: <20120927115321.73a0e2b4@skate>
+ <50641497.3030800@ronetix.at> <20120927115321.73a0e2b4@skate>
+Message-ID: <50642D98.8030603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Peevski,
+On 09/27/12 11:53, Thomas Petazzoni wrote:
+> Don't worry too much about the kernel headers version, it doesn't have
+> to match exactly the kernel you're running. It should just be*older*
+> than the kernel version you're running on the board.
 
-On Thu, 27 Sep 2012 11:55:51 +0300, Martin Peevski wrote:
+  But the oldest version we provide is 2.6.37 - and even that one is
+marked as deprecated.
 
->       Hi, I'm back to Buildroot. I new working Linux on board which 
-> isn't supported to that moment in Buildroot, I think - AT91SAM9G45 on 
-> Ronetix board. Is it possible to build for it?
+  We really should refactor kernel-headers so it refers to the main kernel
+source, if that is configured.
 
-Yes, of course.
+  Regards,
+  Arnout
 
-> Moreover I will use 
-> external Kernel which support 9g45 - Kernel version 2.6.30.
-
-I'd rather recommend using the latest mainline version. AT91 support in
-mainline is really good.
-
-> That version isn't supported from the Kernel headers, I think? Can you
-> help me build the Linux again?
-
-Don't worry too much about the kernel headers version, it doesn't have
-to match exactly the kernel you're running. It should just be *older*
-than the kernel version you're running on the board.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
