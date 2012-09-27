@@ -1,32 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 27 Sep 2012 18:14:29 -0300
-Subject: [Buildroot] [PATCH 2/2] libxml2: add license info
-In-Reply-To: <1348780469-23859-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1348780469-23859-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1348780469-23859-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 27 Sep 2012 23:21:35 +0200
+Subject: [Buildroot] [PATCH v4] external-toolchain:
+ BR2_TOOLCHAIN_EXTERNAL_GLIBC includes eglibc
+In-Reply-To: <1348774062-23946-1-git-send-email-baruch@tkos.co.il>
+References: <1348774062-23946-1-git-send-email-baruch@tkos.co.il>
+Message-ID: <20120927232135.4d4e010e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libxml2/libxml2.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Dear Baruch Siach,
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index ad11236..71f2bd1 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -8,6 +8,8 @@ LIBXML2_VERSION = 2.8.0
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_AUTORECONF = YES
-+LIBXML2_LICENSE = MIT
-+LIBXML2_LICENSE_FILES = COPYING
- 
- ifneq ($(BR2_LARGEFILE),y)
- LIBXML2_CONF_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS) -DNO_LARGEFILE_SOURCE"
+On Thu, 27 Sep 2012 21:27:42 +0200, Baruch Siach wrote:
+> Yann E. MORIN says:
+> 
+>     "Although eglibc can be configured to include/exclude parts of the
+>     features, it seems to not be in wide use, if at all."
+> 
+> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.7.8.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
