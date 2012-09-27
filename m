@@ -1,54 +1,48 @@
-From: Valentine Barshak <gvaxon@gmail.com>
-Date: Thu, 27 Sep 2012 22:17:37 +0400
-Subject: [Buildroot] [PATCH 3/3] mplayer: Fix DVD support
-In-Reply-To: <20120927181306.GA21215@gmail.com>
-Message-ID: <20120927181737.GA21348@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 27 Sep 2012 21:10:14 +0200
+Subject: [Buildroot] [PATCH v3] external-toolchain:
+	BR2_TOOLCHAIN_EXTERNAL_GLIBC includes eglibc
+Message-ID: <1348773014-19000-1-git-send-email-baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This sets paths to dvdread-config and dvdnav-config,
-and configuration options to enable external libdvdread
-and libdvdnav support when these libraries are enabled.
-Otherwise DVD support is disabled.
+Yann E. MORIN says:
 
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+    "Although eglibc can be configured to include/exclude parts of the
+    features, it seems to not be in wide use, if at all."
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/multimedia/mplayer/mplayer.mk | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+v3: rephrase the help text to make it clear that the eglibc build is given,
+    address the comment of Thomas Petazzoni.
 
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 05120bf..0458507 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -42,6 +42,26 @@ else
- MPLAYER_CONF_OPTS += --disable-freetype
- endif
+v2: mention in the help text that eglibc may lack some features as suggested
+    by Yann E. MORIN.
+
+ toolchain/toolchain-external/Config.in |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index f86ed74..f7a84b2 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -664,8 +664,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
  
-+MPLAYER_CONF_OPTS += --disable-dvdread-internal
-+
-+ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
-+MPLAYER_CONF_OPTS +=  \
-+	--enable-dvdread \
-+	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
-+MPLAYER_DEPENDENCIES += libdvdread
-+else
-+MPLAYER_CONF_OPTS += --disable-dvdread
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
-+MPLAYER_CONF_OPTS +=  \
-+	--enable-dvdnav \
-+	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
-+MPLAYER_DEPENDENCIES += libdvdnav
-+else
-+MPLAYER_CONF_OPTS += --disable-dvdnav
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPLAYER_MPLAYER),y)
- MPLAYER_CONF_OPTS += --enable-mplayer
- else
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC
+-	bool "glibc"
++	bool "glibc/eglibc"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	help
++	  Note: eglibc is a variant of glibc that (among other things) can be
++	  configured to exclude parts of its features. This capability is 
++	  currently not supported.
+ 
+ endchoice
+ 
 -- 
-1.7.11.4
+1.7.10.4
