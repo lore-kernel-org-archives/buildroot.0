@@ -1,62 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 27 Sep 2012 10:25:36 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 27 Sep 2012 10:30:32 +0200
 Subject: [Buildroot] [PATCHv3 1/4] pkgconf: new package
-In-Reply-To: <50640C55.4070005@mind.be>
+In-Reply-To: <20120927102536.7729b853@skate>
 References: <1348656857-27725-1-git-send-email-gustavo@zacarias.com.ar>
  <50640642.8020407@mind.be> <20120927100912.6b623e39@skate>
- <50640C55.4070005@mind.be>
-Message-ID: <20120927102536.7729b853@skate>
+ <50640C55.4070005@mind.be> <20120927102536.7729b853@skate>
+Message-ID: <50640EA8.8010204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On 09/27/12 10:25, Thomas Petazzoni wrote:
+>> >     I haven't checked...  I just do a make -k during the night and see
+>> >  what I need to fix in the morning.  I normally keep a log file but
+>> >  that's already wiped.
+> Ok. I'm wondering if we should be running allyespackageconfig builds in
+> a regular fashion on the autobuild machines as well.
 
-On Thu, 27 Sep 2012 10:20:37 +0200, Arnout Vandecappelle wrote:
+  No, I don't think it's worth it.  Random builds should trigger all packages
+a couple of times per week, and they will capture dependency problems that
+an allyespackageconfig doesn't.
 
->   I haven't checked...  I just do a make -k during the night and see
-> what I need to fix in the morning.  I normally keep a log file but
-> that's already wiped.
+  It would be useful if a report existed somewhere that lists each package and
+gives the last time it was built successfully and failed.  That should tell us
+if some packages are missed by the autobuilders.  Even better would be if this
+is reported per autobuilder config, but that's probably too large to view.
 
-Ok. I'm wondering if we should be running allyespackageconfig builds in
-a regular fashion on the autobuild machines as well.
-
-> > Would be good to fix those 30-ish packages that don't build, but I
-> > guess some of them are due to the host tuple not being different
-> > (waiting for your<arch>-buildroot-linux... to be merged).
-> 
->   The cross-build problem I patched first, otherwise there would be
-> many more failures (and probably all of them packages that use
-> pkg-config).  The remaining problems are:
-> 
-> - The LD_LIBRARY_PATH problem I mentioned, worked around by setting
->    XMLTO=/dev/null
-> 
-> - CMake doesn't find libraries in $(STAGING_DIR)/usr/lib64, worked
-> around by setting CMAKE_LIBRARY_PATH
-> 
-> - Similar for scons, no workaround (gpsd fails to build)
-> 
-> - xapp_* needs to be upgraded due to Xorg upgrade
-> 
-> - linux-pam, sdl-gfx: not analysed why they fail
-> 
-> - packages from avr32linux fail to download
-> 
-> - there are a few packages that I disabled before for some reason,
-> and I didn't enable them again.
-> 
-> 
->   I'm planning to do a more thorough analysis + fixes at some point.
-> When I have time :-P
-
-Great, nice analysis. Looking forward to the corresponding fixes :-)
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
