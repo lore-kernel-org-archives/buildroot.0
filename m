@@ -1,39 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Sep 2012 10:30:32 +0200
-Subject: [Buildroot] [PATCHv3 1/4] pkgconf: new package
-In-Reply-To: <20120927102536.7729b853@skate>
-References: <1348656857-27725-1-git-send-email-gustavo@zacarias.com.ar>
- <50640642.8020407@mind.be> <20120927100912.6b623e39@skate>
- <50640C55.4070005@mind.be> <20120927102536.7729b853@skate>
-Message-ID: <50640EA8.8010204@mind.be>
+From: Martin Peevski <martin@ronetix.at>
+Date: Thu, 27 Sep 2012 11:55:51 +0300
+Subject: [Buildroot] Fwd: Re:  Basic questions about using BuildRoot
+In-Reply-To: <505AB58C.3030805@ronetix.at>
+References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
+ <5055A940.7070802@ronetix.at>
+ <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
+ <5055C935.3050108@ronetix.at>
+ <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
+ <5058F058.1020806@mind.be> <505AB58C.3030805@ronetix.at>
+Message-ID: <50641497.3030800@ronetix.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/27/12 10:25, Thomas Petazzoni wrote:
->> >     I haven't checked...  I just do a make -k during the night and see
->> >  what I need to fix in the morning.  I normally keep a log file but
->> >  that's already wiped.
-> Ok. I'm wondering if we should be running allyespackageconfig builds in
-> a regular fashion on the autobuild machines as well.
+On 20/09/12 09:19, Martin Peevski wrote:
+> On 19/09/12 01:06, Arnout Vandecappelle wrote:
+>> On 09/17/12 12:43, Thomas De Schampheleire wrote:
+>>> If you're only interested in the rootfs, you could use the original,
+>>> working u-boot and use the rootfs from buildroot. Have you tried that?
+>>>
+>>>> >
+>>>> >  One question beyond the theme: is it possible to build only Root FS
+>>>> >  compatible with some external Kernel without any tool and if so 
+>>>> how to do
+>>>> >  that?
+>>
+>>  Indeed, it is entirely possible to use buildroot to build a rootfs and
+>> combine it with a pre-built kernel.  There is usually no dependency
+>> of an executable on a specific kernel version, because the kernel
+>> ABI is backward-compatible. When you build an internal or
+>> crosstool-NG toolchain in buildroot, however, do make sure that
+>> you use kernel headers with a sufficiently low version (smaller than
+>> or equal to the pre-built kernel you use).
+>>
+>>  If you do want to build a custom kernel later on, you need two
+>> things: the source and the config. Whoever gave you the kernel
+>> binary is also obliged to give you the source (GPL), so that should
+>> be doable. The config you can usually get from the running kernel,
+>> in /proc/config.gz.
+>>
+>>
+>>  Good luck!
+>>
+>>  Regards,
+>>  Arnout
+>>
+>
+>
+>      Hi again! Thank you for the help. All my attempts to build Linux 
+> with external version of U-boot and Kernel and the rootfs from 
+> buildroot was unsuccessfull. However I get older directory tree and 
+> programs and make rootfs with the Linux command mkfs.jffs2. To that 
+> moment it works, thank for you time and help!
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  No, I don't think it's worth it.  Random builds should trigger all packages
-a couple of times per week, and they will capture dependency problems that
-an allyespackageconfig doesn't.
 
-  It would be useful if a report existed somewhere that lists each package and
-gives the last time it was built successfully and failed.  That should tell us
-if some packages are missed by the autobuilders.  Even better would be if this
-is reported per autobuilder config, but that's probably too large to view.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+      Hi, I'm back to Buildroot. I new working Linux on board which 
+isn't supported to that moment in Buildroot, I think - AT91SAM9G45 on 
+Ronetix board. Is it possible to build for it? Moreover I will use 
+external Kernel which support 9g45 - Kernel version 2.6.30. That version 
+isn't supported from the Kernel headers, I think? Can you help me build 
+the Linux again?
+
+
+      Thanks, Martin.
