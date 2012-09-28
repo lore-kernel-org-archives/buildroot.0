@@ -1,34 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Sep 2012 11:48:57 +0200
-Subject: [Buildroot] [git commit] xlib_libSM: only build documentation
-	if needed
-In-Reply-To: <5064C9A3.8040305@mind.be> (Arnout Vandecappelle's message of
- "Thu, 27 Sep 2012 23:48:19 +0200")
-References: <20120926212531.70C0399722@busybox.osuosl.org>
- <5064C9A3.8040305@mind.be>
-Message-ID: <871uhm7a0m.fsf@macbook.be.48ers.dk>
+From: Richard Braun <rbraun@sceen.net>
+Date: Fri, 28 Sep 2012 14:17:58 +0200
+Subject: [Buildroot] [PATCH] intel-microcode: new package
+In-Reply-To: <20120922094203.GA11192@mail.sceen.net>
+References: <1348153949-30525-1-git-send-email-rbraun@sceen.net>
+ <20120920223646.65a34101@skate>
+ <20120920211255.GA32421@mail.sceen.net>
+ <20120921103513.01871dd2@skate>
+ <20120922094203.GA11192@mail.sceen.net>
+Message-ID: <20120928121758.GA2362@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Sat, Sep 22, 2012 at 11:42:03AM +0200, Richard Braun wrote:
+> Unfortunately no, the microcode file is the only one.
 
-Hi,
-
- Arnout> Roughly 45 packages have some form of --disable-doc, with variants
-
- Arnout> --disable-doc
- Arnout> --disable-docs
- Arnout> --disable-documentation
-
- Arnout> Maybe we should just add all three to the common configure options?
-
-Yes, that imho makes sense. For some packages, the documentation
-generation step is a significant part of the build time.
-
-Care to submit a patch?
+While it's the only file, the license is actually embedded inside, in
+plain text. I've modified the package to extract the license as a
+separate file in the build directory. The package infrastructure also
+had to be slightly change to save legal info for proprietary packages.
+Patches will follow.
 
 -- 
-Bye, Peter Korsgaard
+Richard Braun
