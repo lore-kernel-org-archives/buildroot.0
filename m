@@ -1,65 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Sep 2012 22:08:35 +0200
-Subject: [Buildroot] [git commit] barebox: add 2012.08 / .09, drop .04 / .05
-Message-ID: <20120929201754.57C5A9975D@busybox.osuosl.org>
+Date: Fri, 28 Sep 2012 22:08:39 +0200
+Subject: [Buildroot] [git commit] input-tools: drop evtest from input-tools
+	package
+Message-ID: <20120929201754.A24819975D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7626c20f92c44c26e0f8c0dfbf2db07cf5bf60a3
+commit: http://git.buildroot.net/buildroot/commit/?id=3d0c79aa9fa7635fdc91f889c6fa160aecd3d576
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Evtest is nowadays maintained as a seperate package by Peter Hutterer.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/barebox/Config.in |   18 +++++++++---------
- 1 files changed, 9 insertions(+), 9 deletions(-)
+ package/input-tools/Config.in      |    7 -------
+ package/input-tools/input-tools.mk |    1 -
+ 2 files changed, 0 insertions(+), 8 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 574bfae..172b540 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -8,22 +8,22 @@ config BR2_TARGET_BAREBOX
- if BR2_TARGET_BAREBOX
- choice
- 	prompt "version"
--	default BR2_TARGET_BAREBOX_2012_07
-+	default BR2_TARGET_BAREBOX_2012_09
- 	help
- 	  Select the specific Barebox version you want to use
+diff --git a/package/input-tools/Config.in b/package/input-tools/Config.in
+index 489b130..08b3cbe 100644
+--- a/package/input-tools/Config.in
++++ b/package/input-tools/Config.in
+@@ -4,13 +4,6 @@ config BR2_PACKAGE_INPUT_TOOLS
+ 	  Tools for the Linux kernel input layer.
+ 	  http://linuxconsole.sourceforge.net/
  
--config BR2_TARGET_BAREBOX_2012_04
--	bool "2012.04"
+-config BR2_PACKAGE_INPUT_TOOLS_EVTEST
+-        bool "evtest"
+-        depends on BR2_PACKAGE_INPUT_TOOLS
+-        default y
+-        help
+-	  Input event interface test program.
 -
--config BR2_TARGET_BAREBOX_2012_05
--	bool "2012.05"
--
- config BR2_TARGET_BAREBOX_2012_06
- 	bool "2012.06"
+ config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
+         bool "inputattach"
+         depends on BR2_PACKAGE_INPUT_TOOLS
+diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
+index c73a193..b1cb093 100644
+--- a/package/input-tools/input-tools.mk
++++ b/package/input-tools/input-tools.mk
+@@ -8,7 +8,6 @@ INPUT_TOOLS_SOURCE  = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
+ INPUT_TOOLS_PATCH   = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
+ INPUT_TOOLS_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
  
- config BR2_TARGET_BAREBOX_2012_07
- 	bool "2012.07"
- 
-+config BR2_TARGET_BAREBOX_2012_08
-+	bool "2012.08"
-+
-+config BR2_TARGET_BAREBOX_2012_09
-+	bool "2012.09"
-+
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
-@@ -41,10 +41,10 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2012.04.0"	if BR2_TARGET_BAREBOX_2012_04
--	default "2012.05.0"	if BR2_TARGET_BAREBOX_2012_05
- 	default "2012.06.0"	if BR2_TARGET_BAREBOX_2012_06
- 	default "2012.07.0"	if BR2_TARGET_BAREBOX_2012_07
-+	default "2012.08.0"	if BR2_TARGET_BAREBOX_2012_08
-+	default "2012.09.0"	if BR2_TARGET_BAREBOX_2012_09
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
- 
+-INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_EVTEST)      += evtest
+ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
+ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSCAL)       += jscal
+ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSTEST)      += jstest
