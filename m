@@ -1,54 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Sep 2012 19:27:32 +0200
-Subject: [Buildroot] Support for package liblog4c-localtime
-In-Reply-To: <5065CE40.70500@mail.ru>
-References: <5065CDD1.2000502@mail.ru>
-	<5065CE40.70500@mail.ru>
-Message-ID: <20120928192732.69a9c393@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 28 Sep 2012 20:52:11 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
+	proprietary packages
+In-Reply-To: <20120928190526.79db5cde@skate>
+References: <20120928121758.GA2362@mail.sceen.net>
+ <1348834801-2672-1-git-send-email-rbraun@sceen.net>
+ <20120928142314.4810033e@skate>
+ <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
+ <20120928190526.79db5cde@skate>
+Message-ID: <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Varnin,
+Op 28 sep. 2012 19:05 schreef "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> het volgende:
+>
+> Thomas,
+>
+> On Fri, 28 Sep 2012 18:40:04 +0200, Thomas De Schampheleire wrote:
+>
+> > Additionally, it would be nice to get some context. Why do you need
+this?
+> > What its the use case?
+> >
+> > The proprietary packages are not in the current legal info, precisely
+> > because you wouldn't distribute them.
+> > If you have a package that you distribute under a non open-source
+license,
+> > I think it makes more sense to provide a real name to the license.
+>
+> There are things like firmware, or DSP blobs or other stuff that are
+> just provided in binary form, but their license allows free
+> redistribution. Should we mark those as PROPRIETARY, or should we have
+> a different license name for those?
+>
+> Basically, the context is the intel-microcode package, which bundles a
+> binary-only firmware for some Intel hardware. Which license
+> informations should we attach to it?
 
-On Fri, 28 Sep 2012 20:20:16 +0400, Alexander Varnin wrote:
+I think we need a specific category for those packages that are not
+intended for distribution. That is, when you generate the legal info, these
+packages are not included.
 
-> Sorry, forget to include patch file.
+Next to that, I can understand that there is another category of 'packages'
+that may be proprietary, but are intended for redistribution. I think we
+should keep this separate.
 
-Please don't send patches as attached files, because we can't easily
-comment on them. If you want to send patches properly, use the 'git
-send-email' tool.
-
-A few comments:
-
- * You're specifying a LIBLOG4C_SOURCE variable, but this variable is
-   ignored because your LIBLOG4C_SITE starts with git://. You have to
-   decide whether you want a tarball download (so LIBLOG4C_SOURCE
-   should be a tarball name, and LIBLOG4C_SITE should be a http or ftp
-   url) or if you want a Git download (so LIBLOG4C_SOURCE should not be
-   set, and LIBLOG4C_SITE should point to a Git repository)
-
- * LIBLOG4C_INSTALL_STAGING should be set to YES. Your package is a
-   library, and you are defining the <foo>_INSTALL_STAGING_CMDS
-   variable.
-
- * Looking at https://github.com/rcmadruga/log4c-localtime, this
-   package seems to use the autotools, so you should be using the
-   autotools-package infrastructure, and most likely you don't need to
-   define any of the LIBLOG4C_BUILD_CMDS, LIBLOG4C_INSTALL_STAGING_CMDS
-   and LIBLOG4C_INSTALL_TARGET_CMDS variables.
-
- * There should not be a commented line in your
-   <foo>_INSTALL_TARGET_CMDS variable. Ditto for <foo>_DEVICES and
-   <foo>_PERMISSIONS.
+Now, whether we use the name 'proprietary' for the first or second category
+is an open question.
+I'm not familiar with the microcode example that you give. I assume that
+they have some kind of legal text associated with them? Can we really
+assume that two such proprietary packages from different vendors have the
+exact same redistribution conditions? My gut says no, in which case there'd
+be a separate term for each variant. In Gentoo Linux there it's such a
+mechanism. In order to install a given package, you have to agree to the
+specific license, e.g. an Adobe Flash one.
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120928/db04dfca/attachment.html>
