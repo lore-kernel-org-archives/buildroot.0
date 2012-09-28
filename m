@@ -1,7 +1,7 @@
 From: markos.chandras at gmail.com <markos.chandras@gmail.com>
-Date: Fri, 28 Sep 2012 09:38:13 +0100
+Date: Fri, 28 Sep 2012 09:43:16 +0100
 Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-Message-ID: <1348821493-27221-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
