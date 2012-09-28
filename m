@@ -1,32 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Sep 2012 14:24:12 +0200
-Subject: [Buildroot] [PATCH] intel-microcode: new package
-In-Reply-To: <1348834817-3360-1-git-send-email-rbraun@sceen.net>
-References: <20120928121758.GA2362@mail.sceen.net>
- <1348834817-3360-1-git-send-email-rbraun@sceen.net>
-Message-ID: <20120928142412.4bc2a3a6@skate>
+From: Martin Peevski <martin@ronetix.at>
+Date: Fri, 28 Sep 2012 17:02:08 +0300
+Subject: [Buildroot] Fwd: Re:  Basic questions about using BuildRoot
+In-Reply-To: <20120927142124.6abf0a75@skate>
+References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
+ <5055A940.7070802@ronetix.at>
+ <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
+ <5055C935.3050108@ronetix.at>
+ <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
+ <5058F058.1020806@mind.be> <505AB58C.3030805@ronetix.at>
+ <50641497.3030800@ronetix.at> <20120927115321.73a0e2b4@skate>
+ <50643F2A.3010500@ronetix.at> <20120927142124.6abf0a75@skate>
+Message-ID: <5065ADE0.2030801@ronetix.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Richard Braun,
+On 27/09/12 15:21, Thomas Petazzoni wrote:
+> Dear Martin Peevski,
+>
+> On Thu, 27 Sep 2012 14:57:30 +0300, Martin Peevski wrote:
+>
+>>> I'd rather recommend using the latest mainline version. AT91
+>>> support in mainline is really good.
+>> I think that it's mandatory to use exactly 2.6.30 version because the
+>> Ronetix board isn't included in the main line of any later Kernel.
+> Ok. That said, porting a recent kernel on a AT91SAM9G45 board is
+> probably a matter of a few hours for someone knowledgeable with ARM
+> kernel development, unless the board has some funky peripherals that
+> are not supported in mainline.
+>
+> Best regards,
+>
+> Thomas
 
-On Fri, 28 Sep 2012 14:20:17 +0200, Richard Braun wrote:
-> 
-> Signed-off-by: Richard Braun <rbraun@sceen.net>
-> ---
->  package/Config.in                          |    1 +
->  package/intel-microcode/Config.in          |    7 +++++++
->  package/intel-microcode/intel-microcode.mk |   24 ++++++++++++++++++++++++
->  3 files changed, 32 insertions(+), 0 deletions(-)
->  create mode 100644 package/intel-microcode/Config.in
->  create mode 100644 package/intel-microcode/intel-microcode.mk
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Hi again! I build only rootfs with Buildroot using the toolchain for 
+building the Kernel in early stage. But the Ethernet have some problems. 
+Find the PHY correctly but can't make ping.
+
+So my suggestion to fix the problem is to build the Kernel and the 
+rootfs together in Buildroot. Shall this thing correct the problem?
+
+Also want to ask because I was impossible to configure the Buildroot 
+using Kernel sources from my computer. Is it possible and how? If it's 
+impossible I can deliver the sources via internet but they are not in 
+Git repository, is that problem?
+
+Thanks in advance!
+Martin
