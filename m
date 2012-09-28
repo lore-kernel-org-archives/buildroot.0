@@ -1,39 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Sep 2012 19:05:26 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
- proprietary packages
-In-Reply-To: <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
-References: <20120928121758.GA2362@mail.sceen.net>
- <1348834801-2672-1-git-send-email-rbraun@sceen.net>
- <20120928142314.4810033e@skate>
- <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
-Message-ID: <20120928190526.79db5cde@skate>
+Date: Fri, 28 Sep 2012 19:27:32 +0200
+Subject: [Buildroot] Support for package liblog4c-localtime
+In-Reply-To: <5065CE40.70500@mail.ru>
+References: <5065CDD1.2000502@mail.ru>
+	<5065CE40.70500@mail.ru>
+Message-ID: <20120928192732.69a9c393@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Alexander Varnin,
 
-On Fri, 28 Sep 2012 18:40:04 +0200, Thomas De Schampheleire wrote:
+On Fri, 28 Sep 2012 20:20:16 +0400, Alexander Varnin wrote:
 
-> Additionally, it would be nice to get some context. Why do you need this?
-> What its the use case?
-> 
-> The proprietary packages are not in the current legal info, precisely
-> because you wouldn't distribute them.
-> If you have a package that you distribute under a non open-source license,
-> I think it makes more sense to provide a real name to the license.
+> Sorry, forget to include patch file.
 
-There are things like firmware, or DSP blobs or other stuff that are
-just provided in binary form, but their license allows free
-redistribution. Should we mark those as PROPRIETARY, or should we have
-a different license name for those?
+Please don't send patches as attached files, because we can't easily
+comment on them. If you want to send patches properly, use the 'git
+send-email' tool.
 
-Basically, the context is the intel-microcode package, which bundles a
-binary-only firmware for some Intel hardware. Which license
-informations should we attach to it?
+A few comments:
+
+ * You're specifying a LIBLOG4C_SOURCE variable, but this variable is
+   ignored because your LIBLOG4C_SITE starts with git://. You have to
+   decide whether you want a tarball download (so LIBLOG4C_SOURCE
+   should be a tarball name, and LIBLOG4C_SITE should be a http or ftp
+   url) or if you want a Git download (so LIBLOG4C_SOURCE should not be
+   set, and LIBLOG4C_SITE should point to a Git repository)
+
+ * LIBLOG4C_INSTALL_STAGING should be set to YES. Your package is a
+   library, and you are defining the <foo>_INSTALL_STAGING_CMDS
+   variable.
+
+ * Looking at https://github.com/rcmadruga/log4c-localtime, this
+   package seems to use the autotools, so you should be using the
+   autotools-package infrastructure, and most likely you don't need to
+   define any of the LIBLOG4C_BUILD_CMDS, LIBLOG4C_INSTALL_STAGING_CMDS
+   and LIBLOG4C_INSTALL_TARGET_CMDS variables.
+
+ * There should not be a commented line in your
+   <foo>_INSTALL_TARGET_CMDS variable. Ditto for <foo>_DEVICES and
+   <foo>_PERMISSIONS.
 
 Best regards,
 
