@@ -1,47 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Sep 2012 18:52:38 +0200
-Subject: [Buildroot] Buildroot Developers Days sponsored by Fluendo and
-	Synopsys
-Message-ID: <20120930185238.0ce4fc07@skate>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Sun, 30 Sep 2012 22:11:04 +0400
+Subject: [Buildroot] [PATCH] openvpn: Fix paths to external utilities
+Message-ID: <20120930181104.GA2046@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This sets paths to ifconfig, route, netstat and ip
+in the target root filesystem.
 
-As we have been announcing for quite some time, the next Buildroot
-Developers Days will take place on November 3rd and November 4th in
-Barcelona, prior to the Embedded Linux Conference Europe.
+Otherwise the paths leak from the host and may not
+match those on the target.
 
-We have now found two sponsors for this event, thanks to which we will
-be able to host the meeting in excellent conditions:
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+---
+ package/openvpn/openvpn.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- * Fluendo <http://www.fluendo.com>, very famous for its involvement in
-   the Linux multimedia stack, and in GStreamer specifically, is
-   sponsoring a meeting room for us at Hotel Grums, in downtown
-   Barcelona. They have been exceptional with us, taking care of
-   selecting the hotel, booking the meeting room, and sponsoring the
-   corresponding cost. Thanks a lot to them!
-
- * Synopsys <http://www.synopsys.com>, a major company in the EDA
-   business, also developing IPs, and specifically the ARC processor
-   architecture, will be sponsoring the Saturday dinner for the
-   Buildroot developers and contributors who are participating to the
-   meeting. Thanks as well to Synopsys!
-
-I have updated the event page at
-http://elinux.org/Buildroot:DeveloperDaysELCE2012 with all the
-practical informations (location, hours, etc.). I am still working on
-finding a good place for the Saturday dinner, but this is currently
-being discussed with local people.
-
-Thanks again to our sponsors!
-
-Thomas
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 03eabcf..b7e13f5 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -6,7 +6,11 @@
+ 
+ OPENVPN_VERSION = 2.2.2
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+-OPENVPN_CONF_OPT = --enable-small --disable-plugins
++OPENVPN_CONF_OPT = --enable-small --disable-plugins \
++			--with-ifconfig-path=/sbin/ifconfig \
++			--with-route-path=/sbin/route \
++			--with-netstat-path=/bin/netstat \
++			--with-iproute-path=/bin/ip
+ 
+ ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
+ 	OPENVPN_DEPENDENCIES += lzo
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.11.4
