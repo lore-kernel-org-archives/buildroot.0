@@ -1,69 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 31 Oct 2012 23:46:33 +0100
-Subject: [Buildroot] [PATCH buildroot] fs/common: Create initial console
- device
-In-Reply-To: <1351677232-14959-1-git-send-email-markos.chandras@gmail.com>
-References: <1351677232-14959-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <5091AA49.6070300@mind.be>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Mon, 01 Oct 2012 00:40:33 +0400
+Subject: [Buildroot] [PATCH] openvpn: Fix paths to external utilities
+In-Reply-To: <5068A57A.6060703@zacarias.com.ar>
+References: <20120930181104.GA2046@gmail.com>
+ <5068A57A.6060703@zacarias.com.ar>
+Message-ID: <5068AE41.8030809@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/31/12 10:53, Markos Chandras wrote:
-> From: Markos Chandras<markos.chandras@imgtec.com>
+On 10/01/2012 12:03 AM, Gustavo Zacarias wrote:
+> On 09/30/12 15:11, Valentine Barshak wrote:
 >
-> A /dev/console node must be present in rootfs when the Linux kernel
-> boots otherwise the kernel will print the following warning:
-> "Warning: unable to open an initial console"
+>> This sets paths to ifconfig, route, netstat and ip
+>> in the target root filesystem.
+>>
+>> Otherwise the paths leak from the host and may not
+>> match those on the target.
+>>
+>> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+>> ---
+>>   package/openvpn/openvpn.mk | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+>> index 03eabcf..b7e13f5 100644
+>> --- a/package/openvpn/openvpn.mk
+>> +++ b/package/openvpn/openvpn.mk
+>> @@ -6,7 +6,11 @@
+>>
+>>   OPENVPN_VERSION = 2.2.2
+>>   OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+>> -OPENVPN_CONF_OPT = --enable-small --disable-plugins
+>> +OPENVPN_CONF_OPT = --enable-small --disable-plugins \
+>> +			--with-ifconfig-path=/sbin/ifconfig \
+>> +			--with-route-path=/sbin/route \
+>> +			--with-netstat-path=/bin/netstat \
+>> +			--with-iproute-path=/bin/ip
 >
-> This is because when we use an initramfs along with devtmpfs, the /dev
-> directory is not populated at this point. This can cause problems when a
-> program (e.g ldso with early debugging enabled) opens a standard file
-> descriptor for read/write before these descriptors are actually created by
-> the init process later on.
+> And what happens if i install let's say iproute2 which provides a
+> nicer/bigger /sbin/ip instead of using the busybox one?
+> Regards.
 >
-> Signed-off-by: Markos Chandras<markos.chandras@imgtec.com>
 
-  Good point.  However:
+You'll be surprised to see openvpn fail to find it :)
 
-- this is also true for mdev/udev;
-- it is only relevant in a cpio/initramfs rootfs;
-- it's cleaner to use the device table.
+Unless you build on the latest fedora, which has this stuff in 
+/usr/sbin. So you won't see any difference, because it has failed to 
+find it before.
 
-So I'd add a device table line to PACKAGES_PERMISSIONS_TABLE in
-fs/cpio/cpio.mk, where the init script is also installed.
+I'll submit new version with BR2_PACKAGE_IPROUTE2 check.
 
-  Regards,
-  Arnout
-
-> ---
->   fs/common.mk |    6 ++++++
->   1 files changed, 6 insertions(+), 0 deletions(-)
->
-> diff --git a/fs/common.mk b/fs/common.mk
-> index debf7db..d7383d1 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -55,6 +55,12 @@ endif
->   	echo "$(HOST_DIR)/usr/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)">>  $(FAKEROOT_SCRIPT)
->   endif
->   	echo "$(ROOTFS_$(2)_CMD)">>  $(FAKEROOT_SCRIPT)
-> +	# create initial console if devtmpfs is used
-> +ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS),y)
-> +	echo -e 'pushd $(TARGET_DIR)/dev/>  /dev/null 2>&1'>>  $(FAKEROOT_SCRIPT)
-> +	echo -e '/bin/mknod -m 622 console c 5 1'>>  $(FAKEROOT_SCRIPT)
-> +	echo -e 'popd>  /dev/null 2>&1'>>  $(FAKEROOT_SCRIPT)
-> +endif
->   	chmod a+x $(FAKEROOT_SCRIPT)
->   	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
->   	- at rm -f $(FAKEROOT_SCRIPT) $(FULL_DEVICE_TABLE)
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks,
+Val.
