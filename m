@@ -1,79 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 30 Sep 2012 16:22:06 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
- proprietary packages
-In-Reply-To: <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
-References: <20120928121758.GA2362@mail.sceen.net>
- <1348834801-2672-1-git-send-email-rbraun@sceen.net>
- <20120928142314.4810033e@skate>
- <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
- <20120928190526.79db5cde@skate>
- <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
-Message-ID: <5068558E.4070005@mind.be>
+Date: Sun, 30 Sep 2012 16:59:48 +0200
+Subject: [Buildroot] [PATCH v3 1/2] pcsc-lite: new package
+In-Reply-To: <1348212739-32093-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+References: <1348212739-32093-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+Message-ID: <50685E64.8040908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/09/12 20:52, Thomas De Schampheleire wrote:
+On 21/09/12 09:32, Waldemar Rymarkiewicz wrote:
+> Middleware to access a smart card using SCard API (PC/SC).
 >
-> Op 28 sep. 2012 19:05 schreef "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com
-> <mailto:thomas.petazzoni@free-electrons.com>> het volgende:
->>
->>  Thomas,
->>
->>  On Fri, 28 Sep 2012 18:40:04 +0200, Thomas De Schampheleire wrote:
->>
->>  > Additionally, it would be nice to get some context. Why do you need this?
->>  > What its the use case?
->>  >
->>  > The proprietary packages are not in the current legal info, precisely
->>  > because you wouldn't distribute them.
->>  > If you have a package that you distribute under a non open-source license,
->>  > I think it makes more sense to provide a real name to the license.
->>
->>  There are things like firmware, or DSP blobs or other stuff that are
->>  just provided in binary form, but their license allows free
->>  redistribution. Should we mark those as PROPRIETARY, or should we have
->>  a different license name for those?
->>
->>  Basically, the context is the intel-microcode package, which bundles a
->>  binary-only firmware for some Intel hardware. Which license
->>  informations should we attach to it?
+> http://pcsclite.alioth.debian.org/
 >
-> I think we need a specific category for those packages that are not intended for distribution. That is, when you
-> generate the legal info, these packages are not included.
->
-> Next to that, I can understand that there is another category of 'packages' that may be proprietary, but are intended
-> for redistribution. I think we should keep this separate.
+> Signed-off-by: Waldemar Rymarkiewicz<waldemar.rymarkiewicz@tieto.com>
+[snip]
+> +config BR2_PACKAGE_PCSC_LITE_FORCE_LIBUSB
+> +	bool "use libusb"
+> +	depends on !BR2_PACKAGE_UDEV
+> +	select BR2_PACKAGE_LIBUSB
 
-  Agreed.
+  This one is missing a help text.
 
-> Now, whether we use the name 'proprietary' for the first or second category is an open question.
+[snip]
+> +# - libudev and libusb are optional
+> +# - libudev and libusb can't be used together
+> +# - libudev has a priority over libusb
 
-  The word "proprietary" implies that it's not for redistribution. [1]
-Something like 'Intel microcode license' would be appropriate however.
+  Well put!
 
-  Two packages should only use the same license name if they have the same
-terms of use and redistribution (although the exact wording or the exact
-conditions may be different, cfr. various BSD-3c versions or exceptions in
-GPLv2 licenses).
+> +
+> +ifeq ($(BR2_PACKAGE_UDEV),y)
+> +PCSC_LITE_CONF_OPT += --enable-libudev --disable-libusb
+> +PCSC_LITE_DEPENDENCIES += udev
+> +else
+> +ifeq ($(BR2_PACKAGE_LIBUSB),y)
+> +PCSC_LITE_CONF_OPT += --enable-libusb --disable-libudev
+> +PCSC_LITE_DEPENDENCIES += libusb
+> +else
+> +PCSC_LITE_CONF_OPT += --disable-libusb --disable-libudev
+> +endif
+> +endif
+> +
+> +ifeq ($(PACKAGE_PCSC_LITE_DEBUGATR),y)
+> +PCSC_LITE_CONF_OPT += --enable-debugatr
+> +endif
+> +
+> +ifeq ($(PACKAGE_PCSC_LITE_EMBEDDED),y)
+> +PCSC_LITE_CONF_OPT += --enable-embedded
+> +endif
 
-  If we want to make it explicit that this is not an open source package, we
-could make it 'Intel microcode license (non-free)'.
+  There is also a --enable-usbdropdir which defaults to
+/usr/local/lib/pcsc/drivers.  We avoid using /usr/local, so could
+you make that point to /usr/lib/pcsc/drivers?  Or is it anyway
+not used?
+
 
   Regards,
   Arnout
 
-[1] http://en.wiktionary.org/wiki/proprietary
-
-
-> I'm not familiar with the microcode example that you give. I assume that they have some kind of legal text associated
-> with them? Can we really assume that two such proprietary packages from different vendors have the exact same
-> redistribution conditions? My gut says no, in which case there'd be a separate term for each variant. In Gentoo Linux
-> there it's such a mechanism. In order to install a given package, you have to agree to the specific license, e.g. an
-> Adobe Flash one.
+> +
+> +$(eval $(call autotools-package))
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
