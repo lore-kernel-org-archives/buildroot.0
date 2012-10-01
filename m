@@ -1,34 +1,56 @@
-From: Zoran Djordjevic <djdjdjole@yahoo.com>
-Date: Mon, 1 Oct 2012 03:54:32 -0700 (PDT)
-Subject: [Buildroot] long starting time
-Message-ID: <1349088872.23403.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+From: Martin Peevski <martin@ronetix.at>
+Date: Mon, 01 Oct 2012 15:51:26 +0300
+Subject: [Buildroot] Fwd: Re: Basic questions about using BuildRoot
+In-Reply-To: <50695FC6.7050505@ronetix.at>
+References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
+ <5055A940.7070802@ronetix.at>
+ <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
+ <5055C935.3050108@ronetix.at>
+ <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
+ <5058F058.1020806@mind.be> <505AB58C.3030805@ronetix.at>
+ <50641497.3030800@ronetix.at> <20120927115321.73a0e2b4@skate>
+ <50643F2A.3010500@ronetix.at> <20120927142124.6abf0a75@skate>
+ <5065ADE0.2030801@ronetix.at> <5066F4F9.7080201@ronetix.at>
+ <5066FE59.9060600@relinux.de> <50670128.7090203@ronetix.at>
+ <5067024A.9010609@relinux.de> <506950E1.5050709@ronetix.at>
+ <CAHXCMMJZVe_jTF8GNeTXdJG9PYt77C+Rk5YxXqUT8DnuxMGbuA@mail.gmail.com>
+ <50695CFB.30708@ronetix.at>
+ <CAHXCMMKkOJuPUCCiq46UpPsu+X5AbY8TkHCpYMPPM5asizT=Ew@mail.gmail.com>
+ <50695FC6.7050505@ronetix.at>
+Message-ID: <506991CE.1070201@ronetix.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't know if this question should be targeted to Buildroot forum.
-My root file system (X framebuffer)?was built using Buildroot and my 
-.xinitrc file consists of these lines:
-?
-twm &
-xclock -geometry 100x100-1+1 & 
-/root/MyProgram &
-exec xterm -geometry 30x36+0+0 - name login
-?
-Few strange matters I noticed. When starting X (framebuffer) server, it
-correctly read those lines and start xterm (few seconds later) and after
-that, I had to wait about 20 seconds for other two programs to start.
-I don't know why this happens. 
-Also, program, named MyProgram (only one window and button inside), when 
-started, draws only window's border and when I click on caption it then 
-repaints window and do corectly whatever intended programatically. 
-And last, can I somehow avoid twm or use some other window manager, because
-I would like not to have twm's menues (when clicked on empty space of
-desktop).
-?
-Regards
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121001/f8288dd0/attachment-0001.html>
+On 01/10/12 12:17, Martin Peevski wrote:
+> On 01/10/12 12:11, Samuel Martin wrote:
+>> 2012/10/1 Martin Peevski <martin@ronetix.at>:
+>> [...]
+>>> Yes, I found that in menuconfig! Before search in the manual but 
+>>> there can't
+>>> find anything about dhcp.
+>> Hint:
+>> You can use 'make xconfig' instead of 'make menuconfig'.
+>> This way, you will get a (nice) gui, with some search function, and
+>> the ability to display all options, even those hidden by some others.
+>> ;)
+>>
+>>
+> Yes, its was explained in the manual, I think. I try it earlier but 
+> seems like that it want some package to be install and want not to 
+> work. That's also explained in the manual :) But I'm new Linux user 
+> and prefer not to dive in the deep water. Tha't the reason to use only 
+> menuconfig.
+>
+> Thanks again! I have some more questions but first will try to solve 
+> them alone :)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+I add a dhclient to buildroot system but have a problem with assigning 
+dynamic IP address to my target. When execute dhclient nothing is done 
+but when I execute udhcpc I get an IP. Where is my mistake?
