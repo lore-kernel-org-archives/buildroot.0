@@ -1,94 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Oct 2012 19:44:58 +0200
-Subject: [Buildroot] [PATCH] at91bootstrap: fix gcc-4.6.x overlap linker
- issue
-In-Reply-To: <5069BD92.8010704@calao-systems.com>
-References: <5069BD92.8010704@calao-systems.com>
-Message-ID: <20121001194458.40356967@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 01 Oct 2012 21:46:31 +0200
+Subject: [Buildroot] [PATCH 1/1] allow to pass the number of parallel
+	jobs via command line
+In-Reply-To: <20120926165756.GB31527@game.jcrosoft.org> (Jean-Christophe
+ PLAGNIOL-VILLARD's message of "Wed, 26 Sep 2012 18:57:56 +0200")
+References: <1348568223-13874-1-git-send-email-plagnioj@jcrosoft.com>
+ <87txul7sbc.fsf@macbook.be.48ers.dk>
+ <20120926062348.GA31527@game.jcrosoft.org>
+ <87a9wd6p66.fsf@macbook.be.48ers.dk>
+ <20120926165756.GB31527@game.jcrosoft.org>
+Message-ID: <87obkm3rhk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gr?gory Hermant,
+>>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
-Your patch is line-wrapped, so it won't apply. Can you resend it with
-'git send-email' instead, or at least make sure your MUA is properly
-configured not to wrap lines (but using 'git send-email' is a much
-easier and reliable solution IMO).
+Hi,
 
-Thomas
+ JC> kconfig overwrite and you can not optarg env as
+ JC> BR2_JLEVEL is a int so need to use PARALLEL_JOBS
+ >> 
+ >> Sorry, I don't understand what you are saying here. BR2_JLEVEL works
+ >> fine:
+ >> 
+ >> make BR2_LEVEL=42
+ >> ...
+ >> /usr/bin/make -j42 CC="/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc" ..
+ Jean-Christophe> here does not work
 
-On Mon, 01 Oct 2012 17:58:10 +0200, Gr?gory Hermant wrote:
-> ---
->   ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   53 
-> ++++++++++++++++++++
->   1 file changed, 53 insertions(+)
->   create mode 100644 
-> boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-> 
-> diff --git 
-> a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch 
-> b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-> new file mode 100644
-> index 0000000..56947c7
-> --- /dev/null
-> +++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-> @@ -0,0 +1,53 @@
-> +From 5a094e959cd216c1be148effc624eb12e2083de9 Mon Sep 17 00:00:00 2001
-> +From: Gregory Hermant <gregory.hermant@calao-systems.com>
-> +Date: Mon, 1 Oct 2012 16:54:43 +0200
-> +Subject: [PATCH] at91bootstrap-v1.16-ldscript-fix
-> +
-> +---
-> + crt0_gnu.S          |    2 +-
-> + elf32-littlearm.lds |   12 +++++++++++-
-> + 2 files changed, 12 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/crt0_gnu.S b/crt0_gnu.S
-> +index 002feef..ea6581f 100644
-> +--- a/crt0_gnu.S
-> ++++ b/crt0_gnu.S
-> +@@ -191,7 +191,7 @@ _go:
-> + + 	.align
-> + _lp_data:
-> +-        .word _etext
-> ++        .word _edummy
-> +         .word _sdata
-> +         .word _edata
-> + +diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
-> +index a33952f..17b1646 100644
-> +--- a/elf32-littlearm.lds
-> ++++ b/elf32-littlearm.lds
-> +@@ -10,11 +10,21 @@ SECTIONS
-> + 		*(.rodata)                 /* read-only data (constants) */
-> + 		*(.rodata*)
-> + 		. = ALIGN(4);
-> ++		*(.glue_7)
-> ++		. = ALIGN(4);
-> ++		*(.eh_frame)
-> ++		. = ALIGN(4);
-> +  		_etext = . ;
-> + 	}
-> + + 	/* collect all initialized .data sections */
-> +-	.data : AT ( ADDR (.text) + SIZEOF (.text) ) { ++	/* .data : AT ( 
-> ADDR (.text) + SIZEOF (.text) ) { */
-> ++	. = ALIGN(4);
-> ++	.dummy : {
-> ++		_edummy = .;
-> ++	}
-> ++ ++	.data : AT (LOADADDR(.dummy)) {
-> + 		_sdata = .;
-> + 		*(.vectors)
-> + 		*(.data)
-> +-- +1.7.9.5
-> +
+ Jean-Christophe> I try this
 
+ Jean-Christophe> with a value of BR2_JLEVEL at 4
 
+ Jean-Christophe> BR2_JLEVEL=13 make
+
+That doesn't work. Variables defined on the make commandline take
+precedence over definitions in makefiles, but environment variables
+don't (and should not, stuff would break all the time).
+
+Just use make BR2_JLEVEL=$BR2_JLEVEL to get your shell to expand the
+variable for you.
 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
