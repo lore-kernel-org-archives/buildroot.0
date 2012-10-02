@@ -1,52 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Oct 2012 16:02:54 +0200
-Subject: [Buildroot] Question about 64Bit kernel and 32Bit applications
-In-Reply-To: <CAMJ=MEd+eR2Z1yUKu541TQzQJOhu-fpa6HDLD0e-0+n-Jt-6WA@mail.gmail.com>
-References: <CAMJ=MEd+eR2Z1yUKu541TQzQJOhu-fpa6HDLD0e-0+n-Jt-6WA@mail.gmail.com>
-Message-ID: <20121002160254.3b94fe25@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 02 Oct 2012 16:35:03 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
+ proprietary packages
+In-Reply-To: <506AEF12.5080906@lucaceresoli.net>
+References: <20120928121758.GA2362@mail.sceen.net>
+ <1348834801-2672-1-git-send-email-rbraun@sceen.net>
+ <20120928142314.4810033e@skate>
+ <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
+ <20120928190526.79db5cde@skate>
+ <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
+ <5068558E.4070005@mind.be> <506AEF12.5080906@lucaceresoli.net>
+Message-ID: <506AFB97.4000106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ronny,
+On 02/10/12 15:41, Luca Ceresoli wrote:
+> INTEL_MICROCODE_LICENSE = Intel microcode license
+> INTEL_MICROCODE_REDISTRIBUTE = NO
+>
+> Of course this would make package files more verbose for non-redistributed
+> packages, but they are a minor part so it is probably not a problem.
 
-On Tue, 2 Oct 2012 15:57:43 +0200, Ronny Meeus wrote:
+  I would say this is even desirable, so
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> I'm using buildroot to build an environment for MIPS (Cavium).
-> For this I use a 64 bit toolchain provided by Cavium.
-
-Just curious, is this toolchain publicly available? I would really like
-to have the opportunity to test it and integrate it as an external
-toolchain in Buildroot.
-
-> Building and deploying the kernel / busybox in this configuration
-> works without issues.
-> 
-> I want to deploy on this configuration "legacy" applications that need
-> to run in 32 bit mode.
-> So in fact I want to have a mixture of 32 and 64 bit
-> (busybox,dropbear,...) applications to be present on the board.
-> 
-> Is this supported in buildroot? If it is, how can this be configured?
-
-No, generating a userland with a mix of libraries with different ABIs
-is not supported.
-
-And my opinion is that we should not try to support this. Unless I'm
-missing something, it is a really bizarre use case, and adding support
-for it would create an horrible additional complexity in Buildroot.
-
-The change you did for libfuse cannot be integrated: it is MIPS
-specific, and we also have no way of specifying on a per-package basis
-whether it should be built for 32 bits or 64 bits.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
