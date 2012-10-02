@@ -1,147 +1,106 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 2 Oct 2012 19:50:08 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
-	proprietary packages
-In-Reply-To: <506AEF12.5080906@lucaceresoli.net>
-References: <20120928121758.GA2362@mail.sceen.net>
- <1348834801-2672-1-git-send-email-rbraun@sceen.net>
- <20120928142314.4810033e@skate>
- <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
- <20120928190526.79db5cde@skate>
- <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
- <5068558E.4070005@mind.be> <506AEF12.5080906@lucaceresoli.net>
-Message-ID: <CAAXf6LWob8fHhJSAF2XgyHCn_nHkD+3U_-d0D7P4fFHAgHYT_g@mail.gmail.com>
+Date: Tue, 2 Oct 2012 20:39:49 +0200
+Subject: [Buildroot] Question about 64Bit kernel and 32Bit applications
+In-Reply-To: <20121002194921.5fb92a46@skate>
+References: <CAMJ=MEd+eR2Z1yUKu541TQzQJOhu-fpa6HDLD0e-0+n-Jt-6WA@mail.gmail.com>
+ <20121002160254.3b94fe25@skate>
+ <CAMJ=MEe-AfvoQ9tx5z3Wo2=w3tTbsorqCmcSp6trkxMmwpusZg@mail.gmail.com>
+ <20121002194921.5fb92a46@skate>
+Message-ID: <CAAXf6LV03Oqs7Snmcn1jMybn=dZeqkVEK+h7JvtzePq6Qo0aAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Luca, all,
+Hi,
 
-On Tue, Oct 2, 2012 at 3:41 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> Arnout Vandecappelle wrote:
+On Tue, Oct 2, 2012 at 7:49 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Ronny,
+>
+> Please keep the list Cc'ed for Buildroot related discussions.
+>
+> On Tue, 2 Oct 2012 19:43:46 +0200, Ronny Meeus wrote:
+>
+>> The toolchain is available from cnusers.org.
+>> You need to register first but once registered (can take 1 day or so), go to:
+>> Downloads -> Downloads for registered users -> Octeon Software
+>> development kit -> SDK 2.3
+>> This is the complete octeon SDK including an installed toochain, Linux
+>> source code, example code, uboot etc for the Cavium reference boards.
+>> This is the direct link:
+>> http://www.cnusers.org/index.php?option=com_remository&Itemid=32&func=fileinfo&id=165
+>
+> Ok, thanks, I'll have a look. However, if registration is required,
+> integrating the toolchain in Buildroot will be difficult.
+>
+>> > And my opinion is that we should not try to support this. Unless I'm
+>> > missing something, it is a really bizarre use case, and adding support
+>> > for it would create an horrible additional complexity in Buildroot.
 >>
->> On 28/09/12 20:52, Thomas De Schampheleire wrote:
->>>
->>>
->>> Op 28 sep. 2012 19:05 schreef "Thomas Petazzoni"
->>> <thomas.petazzoni@free-electrons.com
->>> <mailto:thomas.petazzoni@free-electrons.com>> het volgende:
->>>>
->>>>
->>>>  Thomas,
->>>>
->>>>  On Fri, 28 Sep 2012 18:40:04 +0200, Thomas De Schampheleire wrote:
->>>>
->>>>  > Additionally, it would be nice to get some context. Why do you need
->>>> this?
->>>>  > What its the use case?
->>>>  >
->>>>  > The proprietary packages are not in the current legal info, precisely
->>>>  > because you wouldn't distribute them.
->>>>  > If you have a package that you distribute under a non open-source
->>>> license,
->>>>  > I think it makes more sense to provide a real name to the license.
->>>>
->>>>  There are things like firmware, or DSP blobs or other stuff that are
->>>>  just provided in binary form, but their license allows free
->>>>  redistribution. Should we mark those as PROPRIETARY, or should we have
->>>>  a different license name for those?
->>>>
->>>>  Basically, the context is the intel-microcode package, which bundles a
->>>>  binary-only firmware for some Intel hardware. Which license
->>>>  informations should we attach to it?
->>>
->>>
->>> I think we need a specific category for those packages that are not
->>> intended for distribution. That is, when you
->>> generate the legal info, these packages are not included.
->>>
->>> Next to that, I can understand that there is another category of
->>> 'packages' that may be proprietary, but are intended
->>> for redistribution. I think we should keep this separate.
->>
->>
->>  Agreed.
->>
->>> Now, whether we use the name 'proprietary' for the first or second
->>> category is an open question.
->>
->>
->>  The word "proprietary" implies that it's not for redistribution. [1]
->> Something like 'Intel microcode license' would be appropriate however.
->>
->>  Two packages should only use the same license name if they have the same
->> terms of use and redistribution (although the exact wording or the exact
->> conditions may be different, cfr. various BSD-3c versions or exceptions in
->> GPLv2 licenses).
->>
->>  If we want to make it explicit that this is not an open source package,
->> we
->> could make it 'Intel microcode license (non-free)'.
->
->
-> The current legal-info implementation is based on the assumption that
-> Buildroot
-> is used to build the root fs for an embedded device, for which packages can
-> be
-> divided in two broad categories:
->  * open-source packages that are publicly available, whose source code can
-> or
->    must be redistributed;
->  * packages for which copying rights are reserved and the source is not
->    available in the public; these packages are often developed by (or for)
-> the
->    device manufacturer and are kept proprietary as part of the device
->    industrial secret.
->
-> All packages in the second category a marked as _LICENSE = PROPRIETARY,
-> which
-> means a) that they're not freely licensed and b) that the tarball will not
-> be
-> saved by Buildroot. This clearly prevents to specify in better detail the
-> license of these packages.
->
-> This is a short path I took based on the above assumptions, but it is not
-> correct is all cases.
->
-> intel-microcode is clearly not fitting any of the two categories: we want to
-> describe its license, but we are not allowed to redistribute it freely, as
-> the license text reported from Richard seems to signify.
->
-> A clean solution is probably to let the _LICENSE do its work, i.e. simply
-> describe the license, and add a new _REDISTRUBUTE parameter (defaulting to
-> YES), to specify if the tarball must be copied or not.
-> Defining the license and choosing whether or not to redistribute would
-> become technically independent, which is more correct.
->
-> Examples:
->
-> MYAPP_LICENSE = PROPRIETARY
-> would become
-> MYAPP_LICENSE = PROPRIETARY
-> MYAPP_REDISTRIBUTE = NO
-> or
-> MYAPP_LICENSE = Copyright (C) 2012 My Company # just an idea
-> MYAPP_REDISTRIBUTE = NO
->
-> INTEL_MICROCODE_LICENSE = PROPRIETARY
-> would become
-> INTEL_MICROCODE_LICENSE = Intel microcode license
-> INTEL_MICROCODE_REDISTRIBUTE = NO
->  Of course this would make package files more verbose for non-redistributed
-> packages, but they are a minor part so it is probably not a problem.
->
-> What do people think about such a solution?
+>> In my opinion this usecase is not so bizarre. New applications can be
+>> compiled in 64Bit mode while legacy applications (coming from a 32Bit
+>> machine) can be compiled with the -mabi=n32 compiler option. If we
+>> would not do this and just compile in 64Bit mode, the impact in the
+>> application can be big (size of several types changes from 4 to 8
+>> bytes, impact on the size of data-types, alignment issues etc).
 
-I think it is a clean and suitable solution for this problem.
+(note: I'm working together with Ronny so my opinions are biased)
 
+I also think that this use case is valid: on a 64 bit systems you may
+need to support 32-bit legacy applications. The end goal obviously is
+to fix the applications so that they truly support 64-bit, but this is
+not a quick fix. In the short term, a mixed approach would be needed.
+It's true that this may be a new use case for Buildroot, and I also
+understand and agree that we shouldn't support this if it makes the
+implementation ugly or overcomplicated. However, I hope that it's
+possible with a clean and simple implementation, which ideally is also
+integrateable in mainline Buildroot. If not possible, we'll have to
+keep it in our local tree.
+
+>>
+>> What about the support to compile the userland with a different ABI
+>> than the kernel?
 >
-> Another solution would be to totally ignore the problem because it is
-> affecting very few packages. But this would prevent Buildroot to provide
-> intel-microcode in a "legally safe" way.
+> Sure. Do you know what changes we should do to make this possible?
 >
+>> > The change you did for libfuse cannot be integrated: it is MIPS
+>> > specific, and we also have no way of specifying on a per-package basis
+>> > whether it should be built for 32 bits or 64 bits.
+
+In fact, if we are to support a mixed 32/64 bit system, there are
+several levels:
+- specify for some packages/libraries whether it should be built for
+this or that bitness/ABI but only build one combination in a given
+environment.
+- build certain libraries for more than one bitness/ABI combination in
+the same environment, e.g. 32 and 64-bit. This way, the same library
+can be used by both 32- as 64-bit applications.
+- build all libraries for more than one bitness/ABI if a given global
+option is selected
+
+The first option is probably the easiest. One could envision a global
+option that specifies the deviant CFLAGS and LDFLAGS to use, and
+another option to list the packages that should use these deviant
+flags.
+Or another solution would be inspired by the local.mk feature: in this
+case one could create a single file that specifies entries like
+<PKG>_DEVIANT_FLAGS="..."
+The impact of such a solution in the central infrastructure is limited.
+
+>>
+>> I just included this code to give you an indication of the changes I
+>> needed to do ...
+>
+> Sure, that's the way I took your code, I just highlighted the reason
+> why we couldn't accept this type of modification.
+>
+
+Aside from the selection of bitness/ABI for certain packages built by
+buildroot, there is the question of libraries part of the (external)
+sysroot. The C library would obviously need to be present on the
+rootfs in both 32- and 64-bit versions.
 
 Best regards,
 Thomas
