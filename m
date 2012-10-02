@@ -1,45 +1,71 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 02 Oct 2012 08:46:55 +0200
-Subject: [Buildroot] [PATCH] connman: bump to version 1.7
-In-Reply-To: <1348232059-1055-1-git-send-email-net147@gmail.com> (Jonathan
- Liu's message of "Fri, 21 Sep 2012 22:54:19 +1000")
-References: <1348232059-1055-1-git-send-email-net147@gmail.com>
-Message-ID: <87ipat4bhc.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
+Date: Tue, 02 Oct 2012 08:57:37 +0200
+Subject: [Buildroot] [PATCH] at91bootstrap: fix gcc-4.6.x overlap linker
+	issue
+Message-ID: <506A9061.3010300@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jonathan" == Jonathan Liu <net147@gmail.com> writes:
+---
+ ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   53 ++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
 
- Jonathan> Signed-off-by: Jonathan Liu <net147@gmail.com>
- Jonathan> ---
- Jonathan>  package/connman/connman.mk | 4 ++--
- Jonathan>  1 file changed, 2 insertions(+), 2 deletions(-)
-
- Jonathan> diff --git a/package/connman/connman.mk b/package/connman/connman.mk
- Jonathan> index ed83ebc..07122df 100644
- Jonathan> --- a/package/connman/connman.mk
- Jonathan> +++ b/package/connman/connman.mk
- Jonathan> @@ -4,7 +4,7 @@
- Jonathan>  #
- Jonathan>  #######################################################
- 
- Jonathan> -CONNMAN_VERSION = 1.6
- Jonathan> +CONNMAN_VERSION = 1.7
- Jonathan>  CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
- Jonathan>  CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
- Jonathan>  CONNMAN_INSTALL_STAGING = YES
- Jonathan> @@ -27,7 +27,7 @@ ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
- Jonathan>  CONNMAN_CONF_OPT += --enable-client
- 
- Jonathan>  define CONNMAN_INSTALL_CM
- Jonathan> -	$(INSTALL) -m 0755 -D $(@D)/client/cm $(TARGET_DIR)/usr/bin/cm
- Jonathan> +	$(INSTALL) -m 0755 -D $(@D)/client/connmanctl $(TARGET_DIR)/usr/bin/connmanctl
-
-The client application needs readline, but I fixed that and committed,
-thanks.
-
+diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+new file mode 100644
+index 0000000..56947c7
+--- /dev/null
++++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+@@ -0,0 +1,53 @@
++From 5a094e959cd216c1be148effc624eb12e2083de9 Mon Sep 17 00:00:00 2001
++From: Gregory Hermant <gregory.hermant@calao-systems.com>
++Date: Mon, 1 Oct 2012 16:54:43 +0200
++Subject: [PATCH] at91bootstrap-v1.16-ldscript-fix
++
++---
++ crt0_gnu.S          |    2 +-
++ elf32-littlearm.lds |   12 +++++++++++-
++ 2 files changed, 12 insertions(+), 2 deletions(-)
++
++diff --git a/crt0_gnu.S b/crt0_gnu.S
++index 002feef..ea6581f 100644
++--- a/crt0_gnu.S
+++++ b/crt0_gnu.S
++@@ -191,7 +191,7 @@ _go:
++ + 	.align
++ _lp_data:
++-        .word _etext
+++        .word _edummy
++         .word _sdata
++         .word _edata
++ +diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
++index a33952f..17b1646 100644
++--- a/elf32-littlearm.lds
+++++ b/elf32-littlearm.lds
++@@ -10,11 +10,21 @@ SECTIONS
++ 		*(.rodata)                 /* read-only data (constants) */
++ 		*(.rodata*)
++ 		. = ALIGN(4);
+++		*(.glue_7)
+++		. = ALIGN(4);
+++		*(.eh_frame)
+++		. = ALIGN(4);
++  		_etext = . ;
++ 	}
++ + 	/* collect all initialized .data sections */
++-	.data : AT ( ADDR (.text) + SIZEOF (.text) ) { ++	/* .data : AT ( ADDR (.text) + SIZEOF (.text) ) { */
+++	. = ALIGN(4);
+++	.dummy : {
+++		_edummy = .;
+++	}
+++ ++	.data : AT (LOADADDR(.dummy)) {
++ 		_sdata = .;
++ 		*(.vectors)
++ 		*(.data)
++-- +1.7.9.5
++
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
