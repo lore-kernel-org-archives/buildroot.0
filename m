@@ -1,58 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Oct 2012 17:29:31 +0200
-Subject: [Buildroot] read-only NFS devtmpfs mount fails
-In-Reply-To: <1349189984.20063.YahooMailNeo@web171606.mail.ir2.yahoo.com>
-References: <1349189984.20063.YahooMailNeo@web171606.mail.ir2.yahoo.com>
-Message-ID: <20121002172931.297a7cd7@skate>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Oct 2012 18:03:34 +0200
+Subject: [Buildroot] Basic Qt questions
+In-Reply-To: <1349111952.9619.YahooMailNeo@web164605.mail.gq1.yahoo.com>
+References: <1349111952.9619.YahooMailNeo@web164605.mail.gq1.yahoo.com>
+Message-ID: <CAGm1_ksSPpbhG_wkE5kofYFj_EyRU8-QKBSs4ZP5TP0w0x8wmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Massimo Callegari,
+On Mon, Oct 1, 2012 at 7:19 PM, Zoran Djordjevic <djdjdjole@yahoo.com> wrote:
+> I intend to use Qt library, by building  root file sistem with
+> Qt support. If I build X (Tiny X), does it mean that Qt  will use that
+> server ? As much as I understood Qt can run without X in embedded
+> systems (am I right if I say that it must use X in desktop systems), but
+> I am interested, if I can "force" it to use X, of course if it has
+> advantages
+> over "stand alone" use ?
 
-On Tue, 2 Oct 2012 15:59:44 +0100 (BST), Massimo Callegari wrote:
+Everything depends on what is your application/goal. If you're going
+to use only one app, then Qt Embedded would fully sufficient. If
+you're going to start many applications, then X11 would be better.
+AFAIK Qt still has problems being called from X11, but my info is
+about one year old or so.
 
-> I'm running buildroot 2012.05 on a MIPSel device, custom kernel 3.3.0.?I'm testing over NFS, building a .TAR target.
-> When devices are created statically and fs is mounted in RW, all is OK.
-> When I try to use devtmpfs (with or without udev) and read-only filesystem over NFS, I am not able to obtain a dynamic /dev creation.
-> I thought the kernel was supposed to do the mounting automagically, but since I'm mounting a NFS tree my init script is busybox, so I added?this instruction at the beginning of /etc/inittab:
-> 
-> ::sysinit:/bin/mount -t devtmpfs devtmpfs /dev
-> 
-> 
-> Although I get this error:
-> mount: mounting devtmpfs on /dev failed: No such device
-> 
-> 
-> I've read a lot of forums and docs and checked everything I could.?
-> On my kernel folder: "grep TMPFS .config"?says:
-> CONFIG_DEVTMPFS=y
-> CONFIG_DEVTMPFS_MOUNT=y
-
-This option normally mounts automatically devtmpfs at boot time, even
-before your init application starts. So normally, you have nothing to
-do in userspace to get devtmpfs ready.
-
-Are you sure you are running a kernel that has this configuration?
-
-> I also had to create some devices manually to avoid several errors, especially for /dev/null (isn't buildroot supposed to create a minimum set of devices to avoid this ?) so I created these:
-> 
-> crw-rw-rw- ?1 root root ?5, ?1 2012-10-01 17:14 console
-> crw-rw-rw- ?1 root root ?1, ?3 2012-10-01 17:14 null
-> 
-> crw-rw-rw- ?1 root root ?4, ?0 2012-10-01 17:14 tty0
-> 
-> crw-rw-rw- ?1 root root ?4, 64 2012-10-01 17:16 ttyS0
-> crw-rw-rw- ?1 root root ?1, ?5 2012-10-01 17:38 zero
-
-If you tell Buildroot that you're using devtmpfs, then Buildroot no
-longer creates device files, as those are no longer necessary.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
