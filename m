@@ -1,129 +1,62 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 02 Oct 2012 15:41:38 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
- proprietary packages
-In-Reply-To: <5068558E.4070005@mind.be>
-References: <20120928121758.GA2362@mail.sceen.net>
- <1348834801-2672-1-git-send-email-rbraun@sceen.net>
- <20120928142314.4810033e@skate>
- <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
- <20120928190526.79db5cde@skate>
- <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
- <5068558E.4070005@mind.be>
-Message-ID: <506AEF12.5080906@lucaceresoli.net>
+From: Ronny Meeus <ronny.meeus@gmail.com>
+Date: Tue, 2 Oct 2012 15:57:43 +0200
+Subject: [Buildroot] Question about 64Bit kernel and 32Bit applications
+Message-ID: <CAMJ=MEd+eR2Z1yUKu541TQzQJOhu-fpa6HDLD0e-0+n-Jt-6WA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle wrote:
-> On 28/09/12 20:52, Thomas De Schampheleire wrote:
->>
->> Op 28 sep. 2012 19:05 schreef "Thomas Petazzoni" 
->> <thomas.petazzoni@free-electrons.com
->> <mailto:thomas.petazzoni@free-electrons.com>> het volgende:
->>>
->>>  Thomas,
->>>
->>>  On Fri, 28 Sep 2012 18:40:04 +0200, Thomas De Schampheleire wrote:
->>>
->>>  > Additionally, it would be nice to get some context. Why do you 
->>> need this?
->>>  > What its the use case?
->>>  >
->>>  > The proprietary packages are not in the current legal info, 
->>> precisely
->>>  > because you wouldn't distribute them.
->>>  > If you have a package that you distribute under a non open-source 
->>> license,
->>>  > I think it makes more sense to provide a real name to the license.
->>>
->>>  There are things like firmware, or DSP blobs or other stuff that are
->>>  just provided in binary form, but their license allows free
->>>  redistribution. Should we mark those as PROPRIETARY, or should we have
->>>  a different license name for those?
->>>
->>>  Basically, the context is the intel-microcode package, which bundles a
->>>  binary-only firmware for some Intel hardware. Which license
->>>  informations should we attach to it?
->>
->> I think we need a specific category for those packages that are not 
->> intended for distribution. That is, when you
->> generate the legal info, these packages are not included.
->>
->> Next to that, I can understand that there is another category of 
->> 'packages' that may be proprietary, but are intended
->> for redistribution. I think we should keep this separate.
->
->  Agreed.
->
->> Now, whether we use the name 'proprietary' for the first or second 
->> category is an open question.
->
->  The word "proprietary" implies that it's not for redistribution. [1]
-> Something like 'Intel microcode license' would be appropriate however.
->
->  Two packages should only use the same license name if they have the same
-> terms of use and redistribution (although the exact wording or the exact
-> conditions may be different, cfr. various BSD-3c versions or 
-> exceptions in
-> GPLv2 licenses).
->
->  If we want to make it explicit that this is not an open source 
-> package, we
-> could make it 'Intel microcode license (non-free)'.
+Hello
 
-The current legal-info implementation is based on the assumption that Buildroot
-is used to build the root fs for an embedded device, for which packages can be
-divided in two broad categories:
-  * open-source packages that are publicly available, whose source code can or
-    must be redistributed;
-  * packages for which copying rights are reserved and the source is not
-    available in the public; these packages are often developed by (or for) the
-    device manufacturer and are kept proprietary as part of the device
-    industrial secret.
+I'm using buildroot to build an environment for MIPS (Cavium).
+For this I use a 64 bit toolchain provided by Cavium.
 
-All packages in the second category a marked as _LICENSE = PROPRIETARY, which
-means a) that they're not freely licensed and b) that the tarball will not be
-saved by Buildroot. This clearly prevents to specify in better detail the
-license of these packages.
+My buildroot configuration is as follows:
+* Buildroot 2012.05
+* Target Architecture: MIPS (big endian)
+* Target Architecture Variant: mips 64
+* Target ABI: n64
+* glibc
 
-This is a short path I took based on the above assumptions, but it is not
-correct is all cases.
+Building and deploying the kernel / busybox in this configuration
+works without issues.
 
-intel-microcode is clearly not fitting any of the two categories: we want to
-describe its license, but we are not allowed to redistribute it freely, as
-the license text reported from Richard seems to signify.
+I want to deploy on this configuration "legacy" applications that need
+to run in 32 bit mode.
+So in fact I want to have a mixture of 32 and 64 bit
+(busybox,dropbear,...) applications to be present on the board.
 
-A clean solution is probably to let the _LICENSE do its work, i.e. simply
-describe the license, and add a new _REDISTRUBUTE parameter (defaulting to
-YES), to specify if the tarball must be copied or not.
-Defining the license and choosing whether or not to redistribute would
-become technically independent, which is more correct.
+Is this supported in buildroot? If it is, how can this be configured?
 
-Examples:
+What I already did is changing the .mk files in the package directory
+to pass the correct options to build 32 bit variants to the individual
+libraries (libUIO / xenomai-forge / libfuse) I want to use.
+This works, but I consider it as a workaround since I only have 32 bit
+variants of these libraries. To be correct, I should have both a 32
+and a 64 bit version of each of these libraries.
+I also need to adapt all the packages I want to include, which is
+something I would like to configure at buildroot level.
 
-MYAPP_LICENSE = PROPRIETARY
-would become
-MYAPP_LICENSE = PROPRIETARY
-MYAPP_REDISTRIBUTE = NO
-or
-MYAPP_LICENSE = Copyright (C) 2012 My Company # just an idea
-MYAPP_REDISTRIBUTE = NO
+This is what I changed for libfuse for example:
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -13,7 +13,8 @@ LIBFUSE_CONF_OPT= --disable-nls \
+                --disable-example \
+                --disable-kernel-module \
+                --enable-lib \
+-               --enable-util
++               --enable-util \
++               CFLAGS="-mabi=n32 -march=octeon2"
+LDFLAGS="-Wl,-melf32btsmipn32" CPPFLAGS="-mabi=n32 -march=octeon2"
 
-INTEL_MICROCODE_LICENSE = PROPRIETARY
-would become
-INTEL_MICROCODE_LICENSE = Intel microcode license
-INTEL_MICROCODE_REDISTRIBUTE = NO
-  
-Of course this would make package files more verbose for non-redistributed
-packages, but they are a minor part so it is probably not a problem.
 
-What do people think about such a solution?
+On the short term, it would also be fine to have user-land compiled
+completely in 32 bit mode while the kernel is compiled in 64 bit mode.
+If this is supported in some way, I would be fine for the moment but
+in the future we want to run a mixture of both 32 and 64 bit apps.
 
-Another solution would be to totally ignore the problem because it is
-affecting very few packages. But this would prevent Buildroot to provide
-intel-microcode in a "legally safe" way.
-
-Luca
+---
+Ronny
