@@ -1,44 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 2 Oct 2012 08:48:33 +0200
-Subject: [Buildroot] [git commit] linux: add 3.6 kernel, remove 3.5 option
-Message-ID: <20121002065916.4304A99795@busybox.osuosl.org>
+Date: Tue, 2 Oct 2012 08:47:53 +0200
+Subject: [Buildroot] [git commit] connman: bump to version 1.7
+Message-ID: <20121002065915.9E2B899795@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51009b3b422b9679daafbce5c22d6bd140e43f2c
+commit: http://git.buildroot.net/buildroot/commit/?id=6d0277001f368ecf77ebb47a0a9344de94c43298
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: command line client needs readline]
+Signed-off-by: Jonathan Liu <net147@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    7 +++----
- 1 files changed, 3 insertions(+), 4 deletions(-)
+ package/connman/Config.in  |    1 +
+ package/connman/connman.mk |    5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6e174ba..257f934 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -19,10 +19,9 @@ if BR2_LINUX_KERNEL
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 082b0ca..b67b540 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -44,6 +44,7 @@ config BR2_PACKAGE_CONNMAN_DEBUG
+ 
+ config BR2_PACKAGE_CONNMAN_CLIENT
+ 	bool "enable command line client"
++	select BR2_PACKAGE_READLINE
+ 
+ endif # BR2_PACKAGE_CONNMAN
+ 
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index ed83ebc..7a52071 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
  #
- choice
- 	prompt "Kernel version"
--	default BR2_LINUX_KERNEL_3_5
+ #######################################################
  
--config BR2_LINUX_KERNEL_3_5
--	bool "3.5.4"
-+config BR2_LINUX_KERNEL_3_6
-+	bool "3.6"
+-CONNMAN_VERSION = 1.6
++CONNMAN_VERSION = 1.7
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
+ CONNMAN_INSTALL_STAGING = YES
+@@ -25,9 +25,10 @@ CONNMAN_POST_INSTALL_TARGET_HOOKS = CONNMAN_INSTALL_INITSCRIPT
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ ifeq ($(BR2_PACKAGE_CONNMAN_CLIENT),y)
+ CONNMAN_CONF_OPT += --enable-client
++CONNMAN_DEPENDENCIES += readline
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.5.4" if BR2_LINUX_KERNEL_3_5
-+	default "3.6" if BR2_LINUX_KERNEL_3_6
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ define CONNMAN_INSTALL_CM
+-	$(INSTALL) -m 0755 -D $(@D)/client/cm $(TARGET_DIR)/usr/bin/cm
++	$(INSTALL) -m 0755 -D $(@D)/client/connmanctl $(TARGET_DIR)/usr/bin/connmanctl
+ endef
+ 
+ CONNMAN_POST_INSTALL_TARGET_HOOKS += CONNMAN_INSTALL_CM
