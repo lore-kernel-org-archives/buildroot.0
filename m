@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  2 Oct 2012 14:40:51 -0300
-Subject: [Buildroot] [PATCH 4/5] hostapd: add openssl 1.0.1 patch
+Date: Tue,  2 Oct 2012 14:40:52 -0300
+Subject: [Buildroot] [PATCH 5/5] wpa_supplicant: add openssl 1.0.1 patch
 In-Reply-To: <1349199652-12928-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1349199652-12928-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1349199652-12928-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1349199652-12928-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,15 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/hostapd/hostapd-openssl-1.0.1.patch |   54 +++++++++++++++++++++++++++
+ .../wpa_supplicant-openssl-1.0.1.patch             |   54 ++++++++++++++++++++
  1 files changed, 54 insertions(+), 0 deletions(-)
- create mode 100644 package/hostapd/hostapd-openssl-1.0.1.patch
+ create mode 100644 package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch
 
-diff --git a/package/hostapd/hostapd-openssl-1.0.1.patch b/package/hostapd/hostapd-openssl-1.0.1.patch
+diff --git a/package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch b/package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch
 new file mode 100644
 index 0000000..2e110f4
 --- /dev/null
-+++ b/package/hostapd/hostapd-openssl-1.0.1.patch
++++ b/package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch
 @@ -0,0 +1,54 @@
 +From e6e243d97795306aeb604948e7101f9f14e8b8ca Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
