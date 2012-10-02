@@ -1,71 +1,58 @@
-From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
-Date: Tue, 02 Oct 2012 08:57:37 +0200
-Subject: [Buildroot] [PATCH] at91bootstrap: fix gcc-4.6.x overlap linker
-	issue
-Message-ID: <506A9061.3010300@calao-systems.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 2 Oct 2012 08:48:33 +0200
+Subject: [Buildroot] [git commit] kernel-headers: add 3.6 kernel
+Message-ID: <20121002065915.E111C99795@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   53 ++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+commit: http://git.buildroot.net/buildroot/commit/?id=d1344dbbd43587847c61ceb32dd17d282199104d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-new file mode 100644
-index 0000000..56947c7
---- /dev/null
-+++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-@@ -0,0 +1,53 @@
-+From 5a094e959cd216c1be148effc624eb12e2083de9 Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Mon, 1 Oct 2012 16:54:43 +0200
-+Subject: [PATCH] at91bootstrap-v1.16-ldscript-fix
+And deprecate 2.6.39.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 4059074..7e6cc43 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_5
++	default BR2_KERNEL_HEADERS_3_6
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -25,6 +25,7 @@ choice
+ 
+ 	config BR2_KERNEL_HEADERS_2_6_39
+ 		bool "Linux 2.6.39.x kernel headers"
++		depends on BR2_DEPRECATED
+ 
+ 	config BR2_KERNEL_HEADERS_3_0
+ 		bool "Linux 3.0.x kernel headers"
+@@ -44,6 +45,9 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_5
+ 		bool "Linux 3.5.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_3_6
++		bool "Linux 3.6.x kernel headers"
 +
-+---
-+ crt0_gnu.S          |    2 +-
-+ elf32-littlearm.lds |   12 +++++++++++-
-+ 2 files changed, 12 insertions(+), 2 deletions(-)
-+
-+diff --git a/crt0_gnu.S b/crt0_gnu.S
-+index 002feef..ea6581f 100644
-+--- a/crt0_gnu.S
-++++ b/crt0_gnu.S
-+@@ -191,7 +191,7 @@ _go:
-+ + 	.align
-+ _lp_data:
-+-        .word _etext
-++        .word _edummy
-+         .word _sdata
-+         .word _edata
-+ +diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
-+index a33952f..17b1646 100644
-+--- a/elf32-littlearm.lds
-++++ b/elf32-littlearm.lds
-+@@ -10,11 +10,21 @@ SECTIONS
-+ 		*(.rodata)                 /* read-only data (constants) */
-+ 		*(.rodata*)
-+ 		. = ALIGN(4);
-++		*(.glue_7)
-++		. = ALIGN(4);
-++		*(.eh_frame)
-++		. = ALIGN(4);
-+  		_etext = . ;
-+ 	}
-+ + 	/* collect all initialized .data sections */
-+-	.data : AT ( ADDR (.text) + SIZEOF (.text) ) { ++	/* .data : AT ( ADDR (.text) + SIZEOF (.text) ) { */
-++	. = ALIGN(4);
-++	.dummy : {
-++		_edummy = .;
-++	}
-++ ++	.data : AT (LOADADDR(.dummy)) {
-+ 		_sdata = .;
-+ 		*(.vectors)
-+ 		*(.data)
-+-- +1.7.9.5
-+
--- 
-1.7.9.5
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Linux 2.6 (manually specified version)"
+ 
+@@ -69,5 +73,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.11"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.4"		if BR2_KERNEL_HEADERS_3_5
++	default "3.6"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
