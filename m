@@ -1,32 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Oct 2012 15:36:50 +0200
-Subject: [Buildroot] [PATCH] New package liblog4c-localtime
-In-Reply-To: <CAHXCMMKR3h3+wRdXgjCE_DzOJSv1SJhttqNvNt8_k_ac6LUJ0A@mail.gmail.com>
-References: <1349341682-12387-1-git-send-email-fenixk19@mail.ru>
- <506D527D.2010502@mail.ru>
- <CAHXCMMKR3h3+wRdXgjCE_DzOJSv1SJhttqNvNt8_k_ac6LUJ0A@mail.gmail.com>
-Message-ID: <20121004153650.186683bc@skate>
+From: =?ISO-8859-1?Q?Christian_M=F6ller?= <christian.moeller.75@googlemail.com>
+Date: Wed, 3 Oct 2012 11:39:50 +0200
+Subject: [Buildroot] eGalax Touchscreen
+Message-ID: <CAA8O6f7aq+f95GQMLhLMx+4ystqCcj5JOMAnLDD01dQfRHU36g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-On Thu, 4 Oct 2012 11:24:04 +0200, Samuel Martin wrote:
-
-> >> + $(eval $(call AUTOTARGETS))
-
-And also if you want us to apply this patch in the current Buildroot
-version, this has to be changed to:
-
-$(eval $(autotools-package))
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Hello all
+I'm trying to setup EGalax Touchscreen. The controller-ic is an etr-4000
+usb.
+I patched the Kernel described in "eGTouch Linux Programming Guide v2.5c". (
+http://home.eeti.com.tw/web20/eGalaxTouchDriver/linuxDriver.htm)
+In dmesg output the controller is listet, but there is no /dev/uinput and
+no /dev/hidrawX devicefile.
+Device isn't also listet under /proc/bus/input/devices.
+What I have to do to get the touchscreen running?
+Any help will be welcome.
+Best regards
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121003/f11f385e/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: devices.out
+Type: application/octet-stream
+Size: 1935 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121003/f11f385e/attachment-0004.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: dmesg.out
+Type: application/octet-stream
+Size: 59838 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121003/f11f385e/attachment-0005.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 48769 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121003/f11f385e/attachment-0006.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 82226 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121003/f11f385e/attachment-0007.obj>
