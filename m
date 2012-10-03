@@ -1,43 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 03 Oct 2012 11:20:35 +0200
-Subject: [Buildroot] [PATCH v6] sconeserver: new package
-In-Reply-To: <1348215634-6586-1-git-send-email-spdawson@gmail.com>
-References: <1348215634-6586-1-git-send-email-spdawson@gmail.com>
-Message-ID: <506C0363.7020807@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed,  3 Oct 2012 11:26:30 +0200
+Subject: [Buildroot] [PATCH v3 RESEND-2] pkg-infra: make sure cross
+	compiling is enabled when host == target
+In-Reply-To: <20120926092523.6a26c22f@skate>
+Message-ID: <1349256390-9956-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/09/12 10:20, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
->
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+When compiling for the same architecture and libc as the host,
+GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
+these to detect cross-compilation, and will decide that we're doing
+native compilation.  This may trigger running of executables,
+which fail because of missing libraries in the host environment.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(build test on ppc with minimal internal toolchain (C++ & WCHAR),
-all sconeserver modules enabled, with an explicit 'make sconeserver'
-so dependencies are checked as well.)
+To solve this, set the vendor part in GNU_TARGET_NAME to buildroot.
 
-[snip]
-> +SCONESERVER_SITE = \
-> +	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
+This problem exists for instance in xserver_xorg-server on x86_64.
 
-  I don't like this kind of splitting of lines with many characters but few words.
-It's OK to go over the 80 character limit for this kind of thing.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+RESEND I hit this again while compiling xserver_xorg-server...
+RESEND-2 And again, after testing the xorg updates.
+         Added ThomasP's Acked-by as well.
 
-  But that little thing is not enough to warrant a v7 :-)
+v3: modify GNU_TARGET_NAME instead of GNU_HOST_NAME, which makes a lot
+    more sense of course.  Thank you ThomasP!
 
-  Regards,
-  Arnout
+    I only tested this one with xserver_xorg-server on a Sourcery
+    x86_64 toolchain and with a simple config and an internal toolchain.
 
-[snip]
+v2: -buildroot- instead of -buildroot_cross-, as suggested by ThomasP.
+
+ package/Makefile.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 64508b2..30a542a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,7 +20,7 @@ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ 
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ LIBC=uclibc
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (b2e0d96..) t/force-cross (depends on: master)
