@@ -1,36 +1,62 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  3 Oct 2012 14:52:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
-In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
-References: <bug-5516-163@https.bugs.busybox.net/>
-Message-ID: <20121003145234.69C21997A9@busybox.osuosl.org>
+From: Martin Peevski <martin@ronetix.at>
+Date: Wed, 03 Oct 2012 18:05:42 +0300
+Subject: [Buildroot] Fwd: Re: Basic questions about using BuildRoot
+In-Reply-To: <50695FC6.7050505@ronetix.at>
+References: <CAAXf6LVtXq=OhWvqL27SzQjxUjOvd4yoisp1aAOUtqNSYJ1G0Q@mail.gmail.com>
+ <5055A940.7070802@ronetix.at>
+ <CAAXf6LXt1+Ee4B9BDE2ocj=6MqY0QdV5gMhn0x9JyTXR3zfyEw@mail.gmail.com>
+ <5055C935.3050108@ronetix.at>
+ <CAAXf6LUrzxDXUmLdwkKZFaB-H_q_XC+ybkt+_bBZO=0EgfbffA@mail.gmail.com>
+ <5058F058.1020806@mind.be> <505AB58C.3030805@ronetix.at>
+ <50641497.3030800@ronetix.at> <20120927115321.73a0e2b4@skate>
+ <50643F2A.3010500@ronetix.at> <20120927142124.6abf0a75@skate>
+ <5065ADE0.2030801@ronetix.at> <5066F4F9.7080201@ronetix.at>
+ <5066FE59.9060600@relinux.de> <50670128.7090203@ronetix.at>
+ <5067024A.9010609@relinux.de> <506950E1.5050709@ronetix.at>
+ <CAHXCMMJZVe_jTF8GNeTXdJG9PYt77C+Rk5YxXqUT8DnuxMGbuA@mail.gmail.com>
+ <50695CFB.30708@ronetix.at>
+ <CAHXCMMKkOJuPUCCiq46UpPsu+X5AbY8TkHCpYMPPM5asizT=Ew@mail.gmail.com>
+ <50695FC6.7050505@ronetix.at>
+Message-ID: <506C5446.8050404@ronetix.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5516
+On 01/10/12 12:17, Martin Peevski wrote:
+> On 01/10/12 12:11, Samuel Martin wrote:
+>> 2012/10/1 Martin Peevski <martin@ronetix.at>:
+>> [...]
+>>> Yes, I found that in menuconfig! Before search in the manual but 
+>>> there can't
+>>> find anything about dhcp.
+>> Hint:
+>> You can use 'make xconfig' instead of 'make menuconfig'.
+>> This way, you will get a (nice) gui, with some search function, and
+>> the ability to display all options, even those hidden by some others.
+>> ;)
+>>
+>>
+> Yes, its was explained in the manual, I think. I try it earlier but 
+> seems like that it want some package to be install and want not to 
+> work. That's also explained in the manual :) But I'm new Linux user 
+> and prefer not to dive in the deep water. Tha't the reason to use only 
+> menuconfig.
+>
+> Thanks again! I have some more questions but first will try to solve 
+> them alone :)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
---- Comment #5 from richard.genoud at gmail.com 2012-10-03 14:52:33 UTC ---
-(In reply to comment #4)
-> Maxime is testing with a more recent kernel version (3.6). Maybe things have
-> changed since 2.6.33/3.0 that you are testing?
-> 
-> Maxime, would be good if you could test with older kernel versions as well.
-> They are not old enough to not support them in Buildroot (even though testing
-> those DT related features with 2.6.33 is kind of useless since there was no DT
-> on ARM at 2.6.33).
+Hello, could you help me to display a picture with the LCD. With another 
+rootfs i do it with the following command:
 
-The 1st kernel I tested was 3.6-rc4.
-I used the script against vanilla 3.6, and I still get zImage reconstructed.
+cp lcd_image /dev/fb0
 
-besides, I'm not a Makefile guru, but the rule uImage needs zImage and FORCE
-And the rule zImage needs compressed/vmlinux and FORCE
-so it gets to be rebuilt. 
-(by the way, compressed/vmlinux depends also on FORCE, like Image)
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Now with Buildroot that don't work for me. I try with make menuconfig 
+and install some packages for display, as fbv (frame buffer viewer) and 
+also anothers but with no effect. Still don't display the picture. Any 
+ideas?
