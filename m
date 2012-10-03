@@ -1,70 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 03 Oct 2012 11:35:40 +0200
-Subject: [Buildroot] [PATCH] Added build configuration for Network UPS
- Tools (nut) package. Signed-off-by: Dallas Clement
- <dallas.a.clement@gmail.com>
-In-Reply-To: <CAE9DZUTZPXWobHm=FYzE2Ph-CkLmtQ5CF4uHC54mqY2eiyJ8oA@mail.gmail.com>
-References: <CAE9DZUTZPXWobHm=FYzE2Ph-CkLmtQ5CF4uHC54mqY2eiyJ8oA@mail.gmail.com>
-Message-ID: <506C06EC.8030607@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  3 Oct 2012 07:24:56 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 4,
+	5}.x stable versions
+Message-ID: <1349259896-2294-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/09/12 17:41, Dallas Clement wrote:
-> package/Config.in     |    1 +
->   package/nut/Config.in |    6 ++++++
->   package/nut/nut.mk    |   10 ++++++++++
->   3 files changed, 17 insertions(+), 0 deletions(-)
->   create mode 100644 package/nut/Config.in
->   create mode 100644 package/nut/nut.mk
-
-  I don't know which mailer you're using, but your patches don't come
-through correctly.  You should have:
-
-Subject: [PATH] nut: new package
-
-Body:
-
-Signed-off-by: Dallas Clement <...>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-<diffstat>
-diff --git ...
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.43-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.44-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-  And if you want additional comments (e.g. patch changelog) it should
-go below your SOB, separated by a line containing three dashes.
-
-
-[snip]
-> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
-> new file mode 100644
-> index 0000000..7a0b7c6
-> --- /dev/null
-> +++ b/package/nut/nut.mk
-> @@ -0,0 +1,10 @@
-> +#############################################################
-> +#
-> +# nut
-> +#
-> +#############################################################
-> +NUT_VERSION = 2.4.3
-> +NUT_SOURCE = nut-$(NUT_VERSION).tar.gz
-> +NUT_SITE = http://www.networkupstools.org/source/2.4/
-> +
-> +$(eval $(autotools-package))
-
-  On uClibc toolchain, it misses -lm so you should add:
-
-NUT_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -lm"
-
-
-  Regards,
-  Arnout
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 7e6cc43..bfec5f1 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.43"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.44"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.30"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.11"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.5.4"		if BR2_KERNEL_HEADERS_3_5
++	default "3.4.12"	if BR2_KERNEL_HEADERS_3_4
++	default "3.5.5"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.43-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.44-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.43-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.44-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.8.6
