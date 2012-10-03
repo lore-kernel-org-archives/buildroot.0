@@ -1,44 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  3 Oct 2012 07:24:56 -0300
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 4,
-	5}.x stable versions
-Message-ID: <1349259896-2294-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  3 Oct 2012 11:40:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
+In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
+References: <bug-5516-163@https.bugs.busybox.net/>
+Message-ID: <20121003114056.929B099797@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.43-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.44-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+https://bugs.busybox.net/show_bug.cgi?id=5516
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 7e6cc43..bfec5f1 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.43"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.44"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.30"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.11"	if BR2_KERNEL_HEADERS_3_4
--	default "3.5.4"		if BR2_KERNEL_HEADERS_3_5
-+	default "3.4.12"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.5.5"		if BR2_KERNEL_HEADERS_3_5
- 	default "3.6"		if BR2_KERNEL_HEADERS_3_6
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.43-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.44-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.43-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.44-headers_install-fix-__packed-in-exported-kernel-head.patch
+--- Comment #1 from Maxime Ripard <maxime.ripard@free-electrons.com> 2012-10-03 11:40:55 UTC ---
+I can't reproduce the problem here, doing :
+
+$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- make -j8 zImage
+$ cat arch/arm/boot/<random>.dtb >> arch/arm/boot/zImage
+$ ls -l arch/arm/boot/zImage
+-rwxrwxr-x 1 max max 2577673 oct.   3 13:36 arch/arm/boot/zImage
+$ md5sum arch/arm/boot/zImage
+d88b9ddc04847e06b34f80841a973ce5  arch/arm/boot/zImage
+$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- make -j8 uImage
+$ ls -l arch/arm/boot/zImage
+-rwxrwxr-x 1 max max 2577673 oct.   3 13:36 arch/arm/boot/zImage
+$ ls -l arch/arm/boot/uImage
+-rw-rw-r-- 1 max max 2577737 oct.   3 13:37 arch/arm/boot/uImage
+$ md5sum arch/arm/boot/zImage
+d88b9ddc04847e06b34f80841a973ce5  arch/arm/boot/zImage
+
+So it definitely looks to me like the zImage is left untouched.
+
+What are you doing to see that behaviour? What is your configuration file? What
+kernel version are you using?
+
+(In reply to comment #0)
+> that's because in the kernel, the uImage rule is :
+> $(obj)/uImage:  $(obj)/zImage FORCE
+>         @$(check_for_multiple_loadaddr)
+>         $(call if_changed,uimage)
+>         @echo '  Image $@ is ready'
+
+I don't get by looking at that code why the zImage should be overwritten?
+
 -- 
-1.7.8.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
