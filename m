@@ -1,27 +1,27 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Oct 2012 00:03:08 +0200
-Subject: [Buildroot] [git commit] hostapd: add openssl 1.0.1 patch
-Message-ID: <20121003220400.52E4499669@busybox.osuosl.org>
+Date: Thu, 4 Oct 2012 00:03:12 +0200
+Subject: [Buildroot] [git commit] wpa_supplicant: add openssl 1.0.1 patch
+Message-ID: <20121003220400.AD89B99669@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9a5df36c24a669eb3f0af425cd343d594a79475d
+commit: http://git.buildroot.net/buildroot/commit/?id=af882c15cca45c1b27766d0efda2be16a137a765
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/hostapd/hostapd-openssl-1.0.1.patch |   54 +++++++++++++++++++++++++++
+ .../wpa_supplicant-openssl-1.0.1.patch             |   54 ++++++++++++++++++++
  1 files changed, 54 insertions(+), 0 deletions(-)
 
-diff --git a/package/hostapd/hostapd-openssl-1.0.1.patch b/package/hostapd/hostapd-openssl-1.0.1.patch
+diff --git a/package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch b/package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch
 new file mode 100644
 index 0000000..2e110f4
 --- /dev/null
-+++ b/package/hostapd/hostapd-openssl-1.0.1.patch
++++ b/package/wpa_supplicant/wpa_supplicant-openssl-1.0.1.patch
 @@ -0,0 +1,54 @@
 +From e6e243d97795306aeb604948e7101f9f14e8b8ca Mon Sep 17 00:00:00 2001
 +From: Jouni Malinen <j@w1.fi>
