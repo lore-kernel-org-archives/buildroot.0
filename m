@@ -1,55 +1,70 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  3 Oct 2012 11:26:30 +0200
-Subject: [Buildroot] [PATCH v3 RESEND-2] pkg-infra: make sure cross
-	compiling is enabled when host == target
-In-Reply-To: <20120926092523.6a26c22f@skate>
-Message-ID: <1349256390-9956-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 03 Oct 2012 11:35:40 +0200
+Subject: [Buildroot] [PATCH] Added build configuration for Network UPS
+ Tools (nut) package. Signed-off-by: Dallas Clement
+ <dallas.a.clement@gmail.com>
+In-Reply-To: <CAE9DZUTZPXWobHm=FYzE2Ph-CkLmtQ5CF4uHC54mqY2eiyJ8oA@mail.gmail.com>
+References: <CAE9DZUTZPXWobHm=FYzE2Ph-CkLmtQ5CF4uHC54mqY2eiyJ8oA@mail.gmail.com>
+Message-ID: <506C06EC.8030607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling for the same architecture and libc as the host,
-GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
-these to detect cross-compilation, and will decide that we're doing
-native compilation.  This may trigger running of executables,
-which fail because of missing libraries in the host environment.
+On 25/09/12 17:41, Dallas Clement wrote:
+> package/Config.in     |    1 +
+>   package/nut/Config.in |    6 ++++++
+>   package/nut/nut.mk    |   10 ++++++++++
+>   3 files changed, 17 insertions(+), 0 deletions(-)
+>   create mode 100644 package/nut/Config.in
+>   create mode 100644 package/nut/nut.mk
 
-To solve this, set the vendor part in GNU_TARGET_NAME to buildroot.
+  I don't know which mailer you're using, but your patches don't come
+through correctly.  You should have:
 
-This problem exists for instance in xserver_xorg-server on x86_64.
+Subject: [PATH] nut: new package
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Body:
+
+Signed-off-by: Dallas Clement <...>
 ---
-RESEND I hit this again while compiling xserver_xorg-server...
-RESEND-2 And again, after testing the xorg updates.
-         Added ThomasP's Acked-by as well.
+<diffstat>
+diff --git ...
 
-v3: modify GNU_TARGET_NAME instead of GNU_HOST_NAME, which makes a lot
-    more sense of course.  Thank you ThomasP!
+  And if you want additional comments (e.g. patch changelog) it should
+go below your SOB, separated by a line containing three dashes.
 
-    I only tested this one with xserver_xorg-server on a Sourcery
-    x86_64 toolchain and with a simple config and an internal toolchain.
 
-v2: -buildroot- instead of -buildroot_cross-, as suggested by ThomasP.
+[snip]
+> diff --git a/package/nut/nut.mk b/package/nut/nut.mk
+> new file mode 100644
+> index 0000000..7a0b7c6
+> --- /dev/null
+> +++ b/package/nut/nut.mk
+> @@ -0,0 +1,10 @@
+> +#############################################################
+> +#
+> +# nut
+> +#
+> +#############################################################
+> +NUT_VERSION = 2.4.3
+> +NUT_SOURCE = nut-$(NUT_VERSION).tar.gz
+> +NUT_SITE = http://www.networkupstools.org/source/2.4/
+> +
+> +$(eval $(autotools-package))
 
- package/Makefile.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  On uClibc toolchain, it misses -lm so you should add:
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 64508b2..30a542a 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -20,7 +20,7 @@ MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
- 
- # Compute GNU_TARGET_NAME
--GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
-+GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
- LIBC=uclibc
+NUT_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -lm"
+
+
+  Regards,
+  Arnout
 -- 
-tg: (b2e0d96..) t/force-cross (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
