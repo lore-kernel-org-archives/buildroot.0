@@ -1,64 +1,53 @@
-From: Alexander Varnin <fenixk19@mail.ru>
-Date: Thu,  4 Oct 2012 13:08:02 +0400
-Subject: [Buildroot] [PATCH] New package liblog4c-localtime
-Message-ID: <1349341682-12387-1-git-send-email-fenixk19@mail.ru>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 04 Oct 2012 11:08:40 +0200
+Subject: [Buildroot] Question about 64Bit kernel and 32Bit applications
+In-Reply-To: <CAMJ=MEcQ510+eF7qa6WEJrN-4M2uu+9cejXO9cwwsgwMNCiiHQ@mail.gmail.com>
+References: <CAMJ=MEd+eR2Z1yUKu541TQzQJOhu-fpa6HDLD0e-0+n-Jt-6WA@mail.gmail.com>
+ <20121002160254.3b94fe25@skate>
+ <CAMJ=MEe-AfvoQ9tx5z3Wo2=w3tTbsorqCmcSp6trkxMmwpusZg@mail.gmail.com>
+ <20121002194921.5fb92a46@skate>
+ <CAMJ=MEf59P7U5hFc43kqNwBJg-O1narSbvjvRO5cGfueps+vcw@mail.gmail.com>
+ <CAMJ=MEcQ510+eF7qa6WEJrN-4M2uu+9cejXO9cwwsgwMNCiiHQ@mail.gmail.com>
+Message-ID: <506D5218.2060401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                                |    1 +
- package/liblog4c-localtime/Config.in             |    9 +++++++++
- package/liblog4c-localtime/liblog4c-localtime.mk |   11 +++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/liblog4c-localtime/Config.in
- create mode 100644 package/liblog4c-localtime/liblog4c-localtime.mk
+On 02/10/12 22:46, Ronny Meeus wrote:
+> Another solution would be to have 2 buildroot environments, 1 for the
+> 32bit applications and 1 for the 64bit applications.
+> For example the 64bit could be "the master" one. In this a directory
+> of the slave buildroot can be specified and this master will merge the
+> 32bit applications together with its libraries from the slave
+> output/target into its own target/output and remake the rootfs.
+>
+> This might not be a nice solution, but I think it will work.
+>
+> It can be considered similar to BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+> where a copy is made of certain things into the root-fs.
 
-diff --git a/package/Config.in b/package/Config.in
-index 8a7c9c4..25752e5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -387,6 +387,7 @@ source "package/lttng-libust/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
-+source "package/liblog4c-localtime/Config.in"
- endmenu
- 
- menu "Text and terminal handling"
-diff --git a/package/liblog4c-localtime/Config.in b/package/liblog4c-localtime/Config.in
-new file mode 100644
-index 0000000..58797be
---- /dev/null
-+++ b/package/liblog4c-localtime/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBLOG4C
-+	bool "liblog4c-localtime"
-+	help
-+	  Log4c is a library of C for flexible logging to files, syslog 
-+	  and other destinations.
-+	  This version is with localtime patch, to make lib show times in
-+	  local timezone.
-+
-+	  https://github.com/rcmadruga/log4c-localtime
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
-new file mode 100644
-index 0000000..f0599c3
---- /dev/null
-+++ b/package/liblog4c-localtime/liblog4c-localtime.mk
-@@ -0,0 +1,11 @@
-+ #############################################################
-+ #
-+ # liblog4c
-+ #
-+ #############################################################
-+ LIBLOG4C_VERSION = 1.2.1
-+ LIBLOG4C_SITE = git://github.com/rcmadruga/log4c-localtime.git
-+ LIBLOG4C_INSTALL_STAGING = YES 
-+
-+ $(eval $(call AUTOTARGETS))
-+
+  First of all, I'm not at all convinced that the multilib usecase is valid
+for buildroot.  I mean, obviously it's a valid usecase, but if you need
+that I don't think that buildroot should be your weapon of choice.
+
+  That said, if you (temporarily) do need a mixed 32/64-bit system, I think
+this approach is the most appropriate: make two separate buildroot builds,
+and merge them together at the end.  The merge can be done in the post-build
+script.  The post-build script could even call the'make' for the other part
+  of the system...  The tricky part is that the libraries from the 'slave'
+environment will have to be moved into a multilib directory (i.e. lib32 or
+lib64).
+
+  I don't immediately see a need for changes in the buildroot infrastructure.
+
+  Regards,
+  Arnout
 -- 
-1.7.2.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
