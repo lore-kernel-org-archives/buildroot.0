@@ -1,96 +1,81 @@
-From: Valentine Barshak <gvaxon@gmail.com>
-Date: Fri, 05 Oct 2012 01:47:10 +0400
-Subject: [Buildroot] initramfs compression and some other questions
-In-Reply-To: <506C98F7.2000408@mind.be>
-References: <506C7BE3.9040001@gmail.com> <506C98F7.2000408@mind.be>
-Message-ID: <506E03DE.2020701@gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 4 Oct 2012 18:09:48 -0400
+Subject: [Buildroot] [PATCH v8 01/11] host-qemu: new package
+In-Reply-To: <20121004223334.64e74a6f@skate>
+References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
+ <20121004223334.64e74a6f@skate>
+Message-ID: <CA+-urNSi+VTS93wP5cEFuLwZn7SCKawpDp6XR6OLqumofBXJyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/03/2012 11:58 PM, Arnout Vandecappelle wrote:
-> On 03/10/12 19:54, Valentine Barshak wrote:
->> Hi,
->> I've been using buildroot for a small (i586) Linux recovery image,
->> having both the kernel and initramfs root in a single
->> image.
+On Thu, Oct 4, 2012 at 4:33 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Fran?ois,
+>
+> Thanks for keeping up the good work on this.
+>
+> On Tue, 25 Sep 2012 19:18:17 +0200, Francois Perrad wrote:
+>> only user mode for the current target architecture
 >>
->> By default, buildroot (linux/linux.mk) sets GZIP compression for
->> initramfs, and there's no option to choose other
->> compression mode.
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/Config.in.host      |    1 +
+>>  package/qemu/Config.in.host |   15 +++++++++++++++
+>>  package/qemu/qemu.mk        |   43 +++++++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 59 insertions(+)
+>>  create mode 100644 package/qemu/Config.in.host
+>>  create mode 100644 package/qemu/qemu.mk
 >>
->> My question is why is GZIP compression forced for initramfs?
->> IMHO, initramfs compression doesn't make much sense, since
->> the kernel is compressed altogether with initramfs, and we
->> have double compression, that adds more size to the resulting image
->> and time overhead when unpacking.
+>> diff --git a/package/Config.in.host b/package/Config.in.host
+>> index 79050f2..bf95a10 100644
+>> --- a/package/Config.in.host
+>> +++ b/package/Config.in.host
+>> @@ -4,6 +4,7 @@ source "package/dfu-util/Config.in.host"
+>>  source "package/lpc3250loader/Config.in.host"
+>>  source "package/omap-u-boot-utils/Config.in.host"
+>>  source "package/openocd/Config.in.host"
+>> +source "package/qemu/Config.in.host"
+>>  source "package/sam-ba/Config.in.host"
+>>  source "package/uboot-tools/Config.in.host"
 >>
->> Why not remove the following lines from linux.mk?
->> $(call
->> KCONFIG_DISABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE,$(@D)/.config)
->> $(call
->> KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_GZIP,$(@D)/.config))
->>
->> Or probably use KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE
->> instead?
->>
->> Besides, there are other compression methods supported by linux kernel,
->> so why force GZIP?
+>> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+>> new file mode 100644
+>> index 0000000..379507c
+>> --- /dev/null
+>> +++ b/package/qemu/Config.in.host
+>> @@ -0,0 +1,15 @@
+>> +config BR2_PACKAGE_HOST_QEMU
+>> +     bool "host qemu"
+>> +     help
+>> +       QEMU is a generic and open source machine emulator and virtualizer.
+>> +
+>> +       In user mode emulation, QEMU runs single cross-compiled programs.
+>> +       Fast cross-compilation and cross-debugging are the main targets
+>> +       for user-mode emulation.
+>> +
+>> +       In system mode emulation, QEMU emulates a full computer system,
+>> +       including peripherals, and handles the filesystem image generated
+>> +       by Buildroot.
+>> +       (Buildroot is shipped with many configs/qemu_*_defconfig files).
+>> +
+>> +       http://qemu.org/
 >
->   Good idea.  Care to make a patch?
+> I think you should not add a Kconfig option for the host-qemu package
+> for now. Until it supports the system emulation, it is kind of useless
+> to have it listed in the host tools. For the perl stuff, you only need
+> the user emulation, so let's add support for the user emulation only at
+> the moment.
 
-I'll try to play with it a bit more and maybe eventually come up with a 
-patch.
+Forgive me if I'm misunderstanding, but I think that listing qemu in
+Kconfig may be desirable to me even if only user emulation is
+supported. I currently run a set of regression tests as a post-build
+step. I use qemu user emulation mode for this. Right now, I use a
+system-installed version of qemu-arm but would prefer to use a
+buildroot version.
 
->
->> BTW, I have submitted a number of patches to the list, that attempt
->> to fix some of the issues I've encountered while building my recovery
->> image. Is it the right place to share patches or
->> do I need to use bugz and file a bug for each change?
->
->   It's the right place.  We don't use bugzilla that much - basically
-> only for
-> bugs that aren't resolved (yet).
->
->
->> I have some more changes that I'd like to share.
->> It's been no ack/nack for the stuff I sent last week. So I'm kind of
->> wondering whether this stuff is needed upstream.
->
->   It just takes a while before patches get committed.  As long as you react
-> to the comments you get (like you did), they should be included in the long
-> run.  But it can take months...
->
+I'm glad to see these patches come in. Thanks for adding them.
 
-Really hope it's gonna be faster than that. It's hard to keep track of 
-things for months.
-
-BTW, some of the patches have got in already, thanks to Peter.
-
->
->> And the last question is about adding new packages to buildroot.
->> For example, do you plan to add a pdf viewer?
->>
->> I've added epdfview, it seems to work fine. Is there any reason
->> to not include it in the mainstream buildroot?
->>
->> I've also added tigervnc for my small recovery image.
->> Seems to work fine as well.
->> Do you plan to include it as well or is it considered unneeded for the
->> majority of the buildroot users?
->
->   Well, firefox is on the way in, so a pdf viewer shouldn't be a problem
-> :-)
-
-hehe, OK, I'll prolly prepare some more patches if I have time.
-
-Thanks Arnout.
->
->   Regards,
->   Arnout
->
-
-Regards,
-Val.
+Frank
