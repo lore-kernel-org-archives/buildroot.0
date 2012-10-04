@@ -1,25 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Oct 2012 23:04:17 +0200
-Subject: [Buildroot] [PATCH] Makefile: Remove more pkgconfig files
-In-Reply-To: <1349203935-20225-1-git-send-email-gvaxon@gmail.com> (Valentine
- Barshak's message of "Tue, 2 Oct 2012 22:52:15 +0400")
-References: <1349203935-20225-1-git-send-email-gvaxon@gmail.com>
-Message-ID: <871uhe0x0u.fsf@macbook.be.48ers.dk>
+Date: Thu, 04 Oct 2012 23:06:44 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-good: Add upstream patch to fix
+	building with Linux 3.6
+In-Reply-To: <1349340278-15827-1-git-send-email-markos.chandras@gmail.com>
+ (Markos Chandras's message of "Thu, 4 Oct 2012 09:44:38 +0100")
+References: <1349340278-15827-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <87wqz6ymjf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Valentine" == Valentine Barshak <gvaxon@gmail.com> writes:
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
- Valentine> The pkgconfig files are located in  /usr/lib/pkgconfig
- Valentine> and /usr/share/pkgconfig directories.
- Valentine> However, only /usr/lib/pkgconfig is removed when no
- Valentine> development files are needed in the target filesystem.
-
- Valentine> Remove pkgconfig directory from $(TARGET_DIR)/usr/share
- Valentine> as well if BR2_HAVE_DEVFILES is not set.
+ Markos> From: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
 Committed, thanks.
 
