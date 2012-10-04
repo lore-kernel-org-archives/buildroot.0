@@ -1,55 +1,52 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 4 Oct 2012 11:24:04 +0200
-Subject: [Buildroot] [PATCH] New package liblog4c-localtime
-In-Reply-To: <506D527D.2010502@mail.ru>
-References: <1349341682-12387-1-git-send-email-fenixk19@mail.ru>
- <506D527D.2010502@mail.ru>
-Message-ID: <CAHXCMMKR3h3+wRdXgjCE_DzOJSv1SJhttqNvNt8_k_ac6LUJ0A@mail.gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Thu, 4 Oct 2012 08:57:20 +0200
+Subject: [Buildroot] [PATCH 1/1] allow to pass the number of parallel
+ jobs via command line
+In-Reply-To: <87obkm3rhk.fsf@macbook.be.48ers.dk>
+References: <1348568223-13874-1-git-send-email-plagnioj@jcrosoft.com>
+ <87txul7sbc.fsf@macbook.be.48ers.dk>
+ <20120926062348.GA31527@game.jcrosoft.org>
+ <87a9wd6p66.fsf@macbook.be.48ers.dk>
+ <20120926165756.GB31527@game.jcrosoft.org>
+ <87obkm3rhk.fsf@macbook.be.48ers.dk>
+Message-ID: <20121004065720.GA11142@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexander,
+On 21:46 Mon 01 Oct     , Peter Korsgaard wrote:
+> >>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+> 
+> Hi,
+> 
+>  JC> kconfig overwrite and you can not optarg env as
+>  JC> BR2_JLEVEL is a int so need to use PARALLEL_JOBS
+>  >> 
+>  >> Sorry, I don't understand what you are saying here. BR2_JLEVEL works
+>  >> fine:
+>  >> 
+>  >> make BR2_LEVEL=42
+>  >> ...
+>  >> /usr/bin/make -j42 CC="/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc" ..
+>  Jean-Christophe> here does not work
+> 
+>  Jean-Christophe> I try this
+> 
+>  Jean-Christophe> with a value of BR2_JLEVEL at 4
+> 
+>  Jean-Christophe> BR2_JLEVEL=13 make
+> 
+> That doesn't work. Variables defined on the make commandline take
+> precedence over definitions in makefiles, but environment variables
+> don't (and should not, stuff would break all the time).
+> 
+> Just use make BR2_JLEVEL=$BR2_JLEVEL to get your shell to expand the
+> variable for you.
+issue I can not do so
 
-2012/10/4 Alexander Varnin <fenixk19@mail.ru>:
-> Hello. I'm working on old buildroot version 2012.02.
-> For some reason, this package doesn't get include in build, even when i
-> check config in menuconfig. What else should i have to do, to make package
-> building?
->
-> 04.10.2012 13:08, Alexander Varnin ?????:
->
-[...]
->> diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk
->> b/package/liblog4c-localtime/liblog4c-localtime.mk
->> new file mode 100644
->> index 0000000..f0599c3
->> --- /dev/null
->> +++ b/package/liblog4c-localtime/liblog4c-localtime.mk
->> @@ -0,0 +1,11 @@
->> + #############################################################
->> + #
->> + # liblog4c
->> + #
->> + #############################################################
->> + LIBLOG4C_VERSION = 1.2.1
->> + LIBLOG4C_SITE = git://github.com/rcmadruga/log4c-localtime.git
->> + LIBLOG4C_INSTALL_STAGING = YES
->> +
->> + $(eval $(call AUTOTARGETS))
->> +
+and env var are use commonly linux/barebox I expect this on buildroot too
 
-The problem is the package name "liblog4c-localtime" does not match
-the match the make target translation, which should be
-"LIBLOG4C_LOCALTIME" instead of just "LIBLOG4C".
-
-So, fix either the package name or the variables in the *.mk file,
-then it should work.
-
-
-Regards,
-
--- 
-Sam
+Best Regards,
+J.
