@@ -1,37 +1,44 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Oct 2012 22:30:51 +0200
-Subject: [Buildroot] [git commit] strace: Version bump to 4.7
-Message-ID: <20121004205124.463F4997BD@busybox.osuosl.org>
+Date: Thu, 4 Oct 2012 22:49:58 +0200
+Subject: [Buildroot] [git commit] pkg-infra: make sure cross compiling is
+	enabled when host == target
+Message-ID: <20121004205124.9BD9D997BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3732b05b1dcdf79392b86ba1922b0d0f2ee8cced
+commit: http://git.buildroot.net/buildroot/commit/?id=11017f081fc5b034e680d89eaea729c19f450e01
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This also fixes a compilation problem with kernel headers 3.5
-http://autobuild.buildroot.net/results/bb66a3a06d26f558e1c4c0593bb68e7af1d82398/build-end.log
+When compiling for the same architecture and libc as the host,
+GNU_TARGET_NAME and GNU_HOST_NAME are equal.  configure scripts use
+these to detect cross-compilation, and will decide that we're doing
+native compilation.  This may trigger running of executables,
+which fail because of missing libraries in the host environment.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+To solve this, set the vendor part in GNU_TARGET_NAME to buildroot.
+
+This problem exists for instance in xserver_xorg-server on x86_64.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/strace/strace.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 2d95137..5c2d33c 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 64508b2..30a542a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -20,7 +20,7 @@ MAKE1:=$(HOSTMAKE) -j1
+ MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
  
--STRACE_VERSION = 4.5.20
--STRACE_SOURCE = strace-$(STRACE_VERSION).tar.bz2
-+STRACE_VERSION = 4.7
-+STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
+ # Compute GNU_TARGET_NAME
+-GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
++GNU_TARGET_NAME=$(ARCH)-buildroot-linux-$(LIBC)$(ABI)
  
- STRACE_CONF_ENV = ac_cv_header_linux_if_packet_h=yes \
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+ LIBC=uclibc
