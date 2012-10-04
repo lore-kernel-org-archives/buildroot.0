@@ -1,62 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Oct 2012 23:18:33 +0200
-Subject: [Buildroot] [PATCH v8 02/11] perl: new package
-In-Reply-To: <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
-References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
- <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20121004231833.7c4f3cb5@skate>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Fri,  5 Oct 2012 01:26:04 +0400
+Subject: [Buildroot] [PATCH] webkit: Fix build issue with gcc-4.6 and above
+Message-ID: <1349385964-710-1-git-send-email-gvaxon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+This fixes the "Unknown parameter for tags/attrs" build error.
+Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe
 
-On Tue, 25 Sep 2012 19:18:18 +0200, Francois Perrad wrote:
+[PATCH] 2011-04-17  Thierry Reding
+<thierry.reding@avionic-design.de>
 
-> +		-Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
+  Reviewed by Adam Barth.
 
-You should also apply the following patch:
+  Fix build with GCC 4.6.
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index fbe7ba9..4e6f50b 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -52,7 +52,7 @@ define PERL_CONFIGURE_CMDS
-                -Dnm="$(TARGET_NM)" \
-                -Dranlib="$(TARGET_RANLIB)" \
-                -Dccflags="$(TARGET_CFLAGS)" \
--               -Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
-+               -Dldflags="$(TARGET_LDFLAGS) -l gcc_s -lm" \
-                -Dlddlflags="-shared" \
-                -Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
-                -Duseshrplib \
+  * dom/make_names.pl: Execute preprocessor without the -P option. The
+  preprocessor in GCC 4.6 eats empty lines, effectively breaking the
+  parsing performed by this script. Dropping the -P option when invoking
+  the preprocessor keeps the empty lines but as a side-effect also adds
+  additional linemarkers.
 
-Otherwise, the build fails with:
+  From the cpp manpage:
 
-/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc -l gcc_s -fstack-protector -o miniperl \
-            perlmini.o opmini.o miniperlmain.o  malloc.o gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o keywords.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o   
-pp.o: In function `Perl_pp_pow':
-pp.c:(.text+0x1b24): undefined reference to `pow'
-pp.o: In function `Perl_pp_modulo':
-pp.c:(.text+0x1f92): undefined reference to `floor'
-pp.c:(.text+0x1fa0): undefined reference to `floor'
-pp.c:(.text+0x1fbc): undefined reference to `fmod'
-[...]
+    -P  Inhibit generation of linemarkers in the output from the
+        preprocessor. This might be useful when running the preprocessor
+        on something that is not C code, and will be sent to a program
+        which might be confused by the linemarkers.
 
-with certain toolchains.
+  The linemarkers are not problematic, however, because the script
+  properly handles them by ignoring all lines starting with a #.
 
-Also, on the target there is a usr/bin/perl and a usr/bin/perl5.x.y
-files. One is a hardlink to the other, but it is always a bit
-disturbing to see two big files of the same size. Shouldn't we replace
-that by a symlink instead, which is more obvious?
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+---
+ package/webkit/webkit-fix-build-with-gcc-4-6.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/webkit/webkit-fix-build-with-gcc-4-6.patch
 
-Thanks!
-
-Thomas
+diff --git a/package/webkit/webkit-fix-build-with-gcc-4-6.patch b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
+new file mode 100644
+index 0000000..15f32d9
+--- /dev/null
++++ b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
+@@ -0,0 +1,45 @@
++Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe:
++Removed the ChangeLog part.
++
++From: "commit-queue at webkit.org"
++ <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
++Date: Mon, 18 Apr 2011 06:53:23 +0000
++Subject: [PATCH] 2011-04-17  Thierry Reding 
++ <thierry.reding@avionic-design.de>
++
++        Reviewed by Adam Barth.
++
++        Fix build with GCC 4.6.
++
++        * dom/make_names.pl: Execute preprocessor without the -P option. The
++        preprocessor in GCC 4.6 eats empty lines, effectively breaking the
++        parsing performed by this script. Dropping the -P option when invoking
++        the preprocessor keeps the empty lines but as a side-effect also adds
++        additional linemarkers.
++
++        From the cpp manpage:
++
++          -P  Inhibit generation of linemarkers in the output from the
++              preprocessor. This might be useful when running the preprocessor
++              on something that is not C code, and will be sent to a program
++              which might be confused by the linemarkers.
++
++        The linemarkers are not problematic, however, because the script
++        properly handles them by ignoring all lines starting with a #.
++
++diff --git a/WebCore/dom/make_names.pl b/Source/WebCore/dom/make_names.pl
++index 836137e..50386e0 100755
++--- a/WebCore/dom/make_names.pl
+++++ b/WebCore/dom/make_names.pl
++@@ -54,7 +54,7 @@ if ($ENV{CC}) {
++ } else {
++     $gccLocation = "/usr/bin/gcc";
++ }
++-my $preprocessor = $gccLocation . " -E -P -x c++";
+++my $preprocessor = $gccLocation . " -E -x c++";
++ 
++ GetOptions(
++     'tags=s' => \$tagsFile, 
++-- 
++1.7.11.4
++
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.11.4
