@@ -1,50 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Oct 2012 23:26:56 +0200
-Subject: [Buildroot] [git commit] mplayer: Fix external libdvdread and
-	libdvdnav support
-Message-ID: <20121004212758.DF0BF997BC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Oct 2012 23:30:58 +0200
+Subject: [Buildroot] [PATCH 0/2] Slightly amend mplayer options
+In-Reply-To: <20120928191730.GA9550@gmail.com> (Valentine Barshak's message of
+ "Fri, 28 Sep 2012 23:17:30 +0400")
+References: <20120928191730.GA9550@gmail.com>
+Message-ID: <87k3v5zzzh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63fbc1834f98f37cc43514f13cb75c1034dcf454
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Valentine" == Valentine Barshak <gvaxon@gmail.com> writes:
 
-This sets paths to dvdread-config and dvdnav-config,
-and configuration options to enable external libdvdread
-and libdvdnav support.
+ Valentine> These are a couple of mplayer nitpicks.
+ Valentine> Valentine Barshak (2):
+ Valentine>   mplayer: Amend libmad selection
+ Valentine>   mplayer: Only enable IPv6 if BR2_INET_IPV6 is set
 
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/mplayer/mplayer.mk |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+Committed both, thanks.
 
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 05120bf..9ff4b8a 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -42,6 +42,21 @@ else
- MPLAYER_CONF_OPTS += --disable-freetype
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
-+MPLAYER_CONF_OPTS +=  \
-+	--enable-dvdread \
-+	--disable-dvdread-internal \
-+	--with-dvdread-config=$(STAGING_DIR)/usr/bin/dvdread-config
-+MPLAYER_DEPENDENCIES += libdvdread
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
-+MPLAYER_CONF_OPTS +=  \
-+	--enable-dvdnav \
-+	--with-dvdnav-config=$(STAGING_DIR)/usr/bin/dvdnav-config
-+MPLAYER_DEPENDENCIES += libdvdnav
-+endif
-+
- ifeq ($(BR2_PACKAGE_MPLAYER_MPLAYER),y)
- MPLAYER_CONF_OPTS += --enable-mplayer
- else
+-- 
+Bye, Peter Korsgaard
