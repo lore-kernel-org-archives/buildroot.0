@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Oct 2012 22:33:34 +0200
-Subject: [Buildroot] [PATCH v8 01/11] host-qemu: new package
-In-Reply-To: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
+Date: Thu, 4 Oct 2012 22:40:01 +0200
+Subject: [Buildroot] [PATCH v8 02/11] perl: new package
+In-Reply-To: <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20121004223334.64e74a6f@skate>
+ <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20121004224001.5e1ef233@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,158 +13,206 @@ To: buildroot@busybox.net
 
 Fran?ois,
 
-Thanks for keeping up the good work on this.
+On Tue, 25 Sep 2012 19:18:18 +0200, Francois Perrad wrote:
 
-On Tue, 25 Sep 2012 19:18:17 +0200, Francois Perrad wrote:
-> only user mode for the current target architecture
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in.host      |    1 +
->  package/qemu/Config.in.host |   15 +++++++++++++++
->  package/qemu/qemu.mk        |   43 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 59 insertions(+)
->  create mode 100644 package/qemu/Config.in.host
->  create mode 100644 package/qemu/qemu.mk
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 79050f2..bf95a10 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -4,6 +4,7 @@ source "package/dfu-util/Config.in.host"
->  source "package/lpc3250loader/Config.in.host"
->  source "package/omap-u-boot-utils/Config.in.host"
->  source "package/openocd/Config.in.host"
-> +source "package/qemu/Config.in.host"
->  source "package/sam-ba/Config.in.host"
->  source "package/uboot-tools/Config.in.host"
->  
-> diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+> diff --git a/package/perl/Config.in b/package/perl/Config.in
 > new file mode 100644
-> index 0000000..379507c
+> index 0000000..6b7a986
 > --- /dev/null
-> +++ b/package/qemu/Config.in.host
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_HOST_QEMU
-> +	bool "host qemu"
+> +++ b/package/perl/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PERL
+> +	bool "perl"
+> +	select BR2_PACKAGE_HOST_QEMU
+
+As per my suggestion on the host-qemu package, you can remove this
+select statement.
+
 > +	help
-> +	  QEMU is a generic and open source machine emulator and virtualizer.
+> +	  Larry Wall's Practical Extraction and Report Language
+> +	  An interpreted scripting language, known among some as "Unix's Swiss
+> +	  Army Chainsaw".
 > +
-> +	  In user mode emulation, QEMU runs single cross-compiled programs.
-> +	  Fast cross-compilation and cross-debugging are the main targets
-> +	  for user-mode emulation.
-> +
-> +	  In system mode emulation, QEMU emulates a full computer system,
-> +	  including peripherals, and handles the filesystem image generated
-> +	  by Buildroot.
-> +	  (Buildroot is shipped with many configs/qemu_*_defconfig files).
-> +
-> +	  http://qemu.org/
-
-I think you should not add a Kconfig option for the host-qemu package
-for now. Until it supports the system emulation, it is kind of useless
-to have it listed in the host tools. For the perl stuff, you only need
-the user emulation, so let's add support for the user emulation only at
-the moment.
-
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> +	  http://www.perl.org/
+> diff --git a/package/perl/perl-configure-qemu.patch b/package/perl/perl-configure-qemu.patch
 > new file mode 100644
-> index 0000000..d727f49
+> index 0000000..921ac0b
 > --- /dev/null
-> +++ b/package/qemu/qemu.mk
+> +++ b/package/perl/perl-configure-qemu.patch
 > @@ -0,0 +1,43 @@
+> +Add qemu support
+> +
+> +see https://rt.perl.org/rt3//Public/Bug/Display.html?id=114798
+> +
+> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> +
+> +Index: b/Configure
+> +===================================================================
+> +--- a/Configure
+> ++++ b/Configure
+> +@@ -2868,7 +2868,7 @@
+> + 	case "$targetfrom" in
+> + 	'') targetfrom=scp ;;
+> + 	esac
+> +-    	run=$run-$targetrun
+> ++    	run=$run-`basename $targetrun`
+> +     	to=$to-$targetto
+> +     	from=$from-$targetfrom
+> + 	case "$targetdir" in
+> +@@ -2908,6 +2908,14 @@
+> + $targetrun -l $targetuser $targethost "cd \$cwd && ./\$exe \$@"
+> + EOF
+> + 	    ;;
+> ++	*qemu*)
+> ++	    to=:
+> ++	    from=:
+> ++	    cat >$run <<EOF
+> ++#!/bin/sh
+> ++$targetrun -L $qemulib "\$@"
+> ++EOF
+> ++	    ;;
+> + 	*)  echo "Unknown targetrun '$targetrun'" >&4
+> + 	    exit 1
+> + 	    ;;
+> +@@ -5048,7 +5056,7 @@
+> + echo " ";
+> + echo "Checking if your compiler accepts $flag" 2>&1;
+> + echo "int main(void) { return 0; }" > gcctest.c;
+> +-if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && ./gcctest; then
+> ++if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && $run ./gcctest; then
+> +     echo "Yes, it does." 2>&1;
+> +     if $test -s gcctest.out ; then
+> +         echo "But your platform does not like it:";
+> diff --git a/package/perl/perl-make-ext.patch b/package/perl/perl-make-ext.patch
+> new file mode 100644
+> index 0000000..e0195e7
+> --- /dev/null
+> +++ b/package/perl/perl-make-ext.patch
+> @@ -0,0 +1,24 @@
+> +Don't use RUN with make (only for perl)
+> +
+> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+
+I would really to see a bit more details in the patch descriptions.
+This is probably enough for you to understand what's going on, but not
+for people reviewing your code, or people that will end up maintaining
+this if you move away from Buildroot :-)
+
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> new file mode 100644
+> index 0000000..7d60ca7
+> --- /dev/null
+> +++ b/package/perl/perl.mk
+> @@ -0,0 +1,99 @@
 > +#############################################################
 > +#
-> +# qemu
+> +# perl
 > +#
 > +#############################################################
 > +
-> +QEMU_VERSION = 1.2.0
-> +QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
-> +QEMU_SITE = http://wiki.qemu.org/download
+> +PERL_VERSION_MAJOR = 16
+> +PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
+> +PERL_SITE = http://www.cpan.org/src/5.0
+> +PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+> +PERL_LICENSE = Artistic
+> +PERL_LICENSE_FILES = Artistic
+> +PERL_INSTALL_STAGING = YES
+> +PERL_DEPENDENCIES = host-qemu
 > +
-> +HOST_QEMU_DEPENDENCIES =
-
-I think this is not needed.
-
-> +
-> +QEMU_ARCH=$(ARCH)
-> +ifeq ($(QEMU_ARCH),i686)
-> +    QEMU_ARCH=i386
+> +ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+> +    PERL_USE_DEVEL=-Dusedevel
 > +endif
-> +HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
+> +
+> +ifneq ($(BR2_LARGEFILE),y)
+> +    PERL_NO_LARGEFILE=-Uuselargefiles
+> +endif
+> +
+> +PERL_ARCH=$(ARCH)
+> +ifeq ($(PERL_ARCH),i686)
+> +    PERL_ARCH=i386
+> +endif
+> +PERL_QEMU_USER_MODE=$(HOST_DIR)/usr/bin/qemu-$(PERL_ARCH)
 
-This will not work for a number of architectures.
+Same comments as the QEMU_ARCH definition. And it should clearly be
+shared with the host-qemu package.
 
-See the definition of BR2_ARCH in target/Config.in.arch. The list of
-architectures you have to handle is:
+> +define PERL_CONFIGURE_CMDS
+> +	rm -f $(@D)/config.sh
+> +	(cd $(@D); ./Configure -des \
+> +		-Dusecrosscompile \
+> +		-Dtargetrun=$(PERL_QEMU_USER_MODE) \
+> +		-Dqemulib=$(STAGING_DIR) \
+> +		-Dtargethost=dummy \
+> +		-Dar="$(TARGET_AR)" \
+> +		-Dcc="$(TARGET_CC)" \
+> +		-Dcpp="$(TARGET_CC)" \
+> +		-Dld="$(TARGET_LD)" \
+> +		-Dnm="$(TARGET_NM)" \
+> +		-Dranlib="$(TARGET_RANLIB)" \
+> +		-Dccflags="$(TARGET_CFLAGS)" \
+> +		-Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
+> +		-Dlddlflags="-shared" \
+> +		-Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
 
-	arm	-> no change
-	armeb	-> no change
-	avr32	-> not supported (so the perl package should depends on !BR2_avr32)
-	bfin	-> not supported (so the perl package should depends on !BR2_bfin)
-	i386	-> no change
-	i486	-> change to i386
-	i586	-> change to i386
-	i686	-> change to i386
-	x86_64	-> no change
-	microblaze -> we probably have an issue here in
-			target/Config.in.arch as we don't
-			make the distinction between
-			little endian and big endian
-	mips		-> no change
-	mipsel		-> no change
-	mips64el	-> not sure what to do
-	mips64		-> not sure what to do
-	powerpc		-> change to ppc
-	sh2		-> not supported (so perl should depends on !BR2_sh2)
-	sh2a		-> ditto
-	sh3		-> ditto
-	sh4		-> no change
-	sh4eb		-> no change
-	sh4aeb		-> not sure, maybe sh4eb would work, but I don't know
-	sh4a		-> not sure, same reason
-	sh64		-> not supported (so perl should depends on !BR2_sh64)
-	sparc		-> no change
+Doh, what is target host? Why aren't you simply using:
 
-So the definition of QEMU_ARCH needs to be made a bit more complicated.
-Note: I wouldn't mind if you decide to exclude certain architectures
-even if they might potentially work. We have to limit the development
-work for a first version, otherwise we'll never get those patches
-merged. So you could decide to support only i386, arm and maybe powerpc
-for now, I would be fine with this.
+		-Dlibc="$(STAGING_DIR)/lib/libc.so" ?
 
-> +define HOST_QEMU_CONFIGURE_CMDS
-> +	(cd $(@D); ./configure                          \
-> +		--target-list="$(HOST_QEMU_TARGETS)"    \
-> +		--prefix="$(HOST_DIR)/usr"              \
-> +		--interp-prefix=$(STAGING_DIR)          \
-> +		--cc="$(HOSTCC)"                        \
-> +		--host-cc="$(HOSTCC)"                   \
-> +		--extra-cflags="$(HOST_CFLAGS)"         \
-> +		--extra-ldflags="$(HOST_LDFLAGS)"       \
-> +	)
+> +		-Duseshrplib \
+> +		-Dprefix=/usr \
+> +		-Uoptimize \
+> +		$(PERL_USE_DEVEL) \
+> +		$(PERL_NO_LARGEFILE))
+> +	echo "# patched values"                 >>$(@D)/config.sh
+> +	$(SED) '/^myarchname=/d' \
+> +		-e '/^mydomain=/d' \
+> +		-e '/^myhostname=/d' \
+> +		-e '/^myuname=/d' \
+> +		-e '/^osname=/d' \
+> +		-e '/^osvers=/d' \
+> +		-e '/^perladmin=/d' \
+> +		$(@D)/config.sh
+> +	echo "myarchname='$(GNU_TARGET_NAME)'"                  >>$(@D)/config.sh
+> +	echo "mydomain=''"                                      >>$(@D)/config.sh
+> +	echo "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'"      >>$(@D)/config.sh
+> +	echo "myuname='Buildroot $(BR2_VERSION_FULL)'"          >>$(@D)/config.sh
+> +	echo "osname='linux'"                                   >>$(@D)/config.sh
+> +	echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'"             >>$(@D)/config.sh
+> +	echo "perladmin='root'"                                 >>$(@D)/config.sh
+> +	(cd $(@D); ./Configure -S)
+> +	cp $(@D)/config.h $(@D)/xconfig.h
+> +	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
 > +endef
 > +
-> +define HOST_QEMU_BUILD_CMDS
+> +define PERL_BUILD_CMDS
+> +	echo "#!/bin/sh"                                        > $(@D)/Cross/miniperl
+> +	echo "$(PERL_QEMU_USER_MODE) $(@D)/miniperl \"\$$@\""   >>$(@D)/Cross/miniperl
+> +	chmod +x $(@D)/Cross/miniperl
+> +	PERL_MM_OPT="PERL=$(@D)/Cross/miniperl" \
 > +	$(MAKE) -C $(@D) all
 > +endef
 > +
-> +define HOST_QEMU_INSTALL_CMDS
-> +	$(MAKE) -C $(@D) install
+> +define PERL_INSTALL_STAGING_CMDS
+> +	$(MAKE) INSTALL_DEPENDENCE= \
+> +		INSTALLFLAGS= \
+> +		DESTDIR="$(STAGING_DIR)" \
+> +		-C $(@D) install.perl
 > +endef
 > +
-> +define HOST_QEMU_CLEAN_CMDS
-> +	$(MAKE) -C $(@D) clean
+> +define PERL_INSTALL_TARGET_CMDS
+> +	$(MAKE) INSTALL_DEPENDENCE= \
+> +		INSTALLFLAGS=-p \
+> +		DESTDIR="$(TARGET_DIR)" \
+> +		-C $(@D) install.perl
 > +endef
 > +
-> +$(eval $(host-generic-package))
+> +define PERL_CLEAN_CMDS
+> +	-$(MAKE) -C $(@D) clean
+> +endef
+> +
+> +$(eval $(generic-package))
 
-The rest sounds ok to me. Shouldn't you pass a bunch of --disable-xxx
-options in order to make sure that the Qemu ./configure script doesn't
-pick up certain host libraries (SDL, etc.) ?
-
-Best regards,
+That's all I have for now on this patch.
 
 Thomas
 -- 
