@@ -1,41 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 4 Oct 2012 23:29:41 +0200
-Subject: [Buildroot] [git commit] mplayer: Amend libmad selection
-Message-ID: <20121004213120.10412997AA@busybox.osuosl.org>
+Date: Thu, 4 Oct 2012 23:29:48 +0200
+Subject: [Buildroot] [git commit] mplayer: Only enable IPv6 if BR2_INET_IPV6
+	is set
+Message-ID: <20121004213120.607CD997AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79f77bf92587878145049a0d6d771dd92ddc1fe4
+commit: http://git.buildroot.net/buildroot/commit/?id=2ba4eedeee5342799c15207a64fe1a147c2cb020
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do not set both --enable-mad and --disable-mad.
+This fixes false positive IPv6 detection.
 
 Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mplayer/mplayer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/multimedia/mplayer/mplayer.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 9ff4b8a..9967dd9 100644
+index 9967dd9..17680b6 100644
 --- a/package/multimedia/mplayer/mplayer.mk
 +++ b/package/multimedia/mplayer/mplayer.mk
-@@ -81,6 +81,7 @@ endif
+@@ -153,6 +153,9 @@ define MPLAYER_FIXUP_IPV6_MREQ_DETECTION
+ endef
  
- ifeq ($(BR2_PACKAGE_LIBMAD),y)
- MPLAYER_DEPENDENCIES += libmad
-+MPLAYER_CONF_OPTS += --enable-mad
- else
- MPLAYER_CONF_OPTS += --disable-mad
+ MPLAYER_POST_CONFIGURE_HOOKS += MPLAYER_FIXUP_IPV6_MREQ_DETECTION
++MPLAYER_CONF_OPTS += --disable-inet6
++else
++MPLAYER_CONF_OPTS += --enable-inet6
  endif
-@@ -136,7 +137,6 @@ define MPLAYER_CONFIGURE_CMDS
- 		--extra-cflags="$(MPLAYER_CFLAGS)" \
- 		--extra-ldflags="$(MPLAYER_LDFLAGS)" \
- 		--yasm='' \
--		--enable-mad \
- 		--enable-fbdev \
- 		$(MPLAYER_CONF_OPTS) \
- 		--enable-cross-compile \
+ 
+ define MPLAYER_BUILD_CMDS
