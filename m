@@ -1,23 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Oct 2012 22:48:16 +0200
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- (markos chandras's message of "Fri, 28 Sep 2012 09:43:16 +0100")
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <87a9w20xrj.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Oct 2012 22:57:24 +0200
+Subject: [Buildroot] [PATCH v3 RESEND-2] pkg-infra: make sure cross
+ compiling is enabled when host == target
+In-Reply-To: <87626q0xne.fsf@macbook.be.48ers.dk>
+References: <1349256390-9956-1-git-send-email-arnout@mind.be>
+ <87626q0xne.fsf@macbook.be.48ers.dk>
+Message-ID: <20121004225724.26ae6f12@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>>   <markos.chandras@gmail.com> writes:
 
- > From: Markos Chandras <markos.chandras@imgtec.com>
- > This also fixes a compilation problem with kernel headers 3.5
- > http://autobuild.buildroot.net/results/bb66a3a06d26f558e1c4c0593bb68e7af1d82398/build-end.log
+On Thu, 04 Oct 2012 22:50:45 +0200, Peter Korsgaard wrote:
 
-Committed, thanks.
+> Committed, thanks.
 
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
