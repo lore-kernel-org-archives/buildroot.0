@@ -1,36 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 06 Oct 2012 01:26:58 +0200
-Subject: [Buildroot] [PATCH] sylpheed: Fix includedir
-In-Reply-To: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
-References: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
-Message-ID: <506F6CC2.6050007@mind.be>
+Date: Sat, 06 Oct 2012 01:34:07 +0200
+Subject: [Buildroot] [PATCHv3] python-protobuf: Add support for Python
+ implementation of Google's Protocol Buffers
+In-Reply-To: <20121005193603.GA7975@localhost.comm5.com.br>
+References: <20121005193603.GA7975@localhost.comm5.com.br>
+Message-ID: <506F6E6F.6050908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/12 19:25, Valentine Barshak wrote:
-> The sylpheed headers are installed to the target directory,
-> creating full staging directory path in the target rootfs,
-> which is wrong.
-> This happens because the headers are installed to
-> $(DESTDIR)$(includedir), while DESTDIR is set to
-> $(TARGET_DIR) and includedir is $(STAGING_DIR)/usr/include.
->
-> Remove $(DESTDIR) from the include paths in the Makefile
-> to have sylpheed install its headers to staging include
-> directory instead.
+On 05/10/12 21:36, Thiago A. Correa wrote:
+> Signed-off-by: Thiago A. Correa<thiago.correa@gmail.com>
 
-  Actually, includedir should be /usr/include instead of
-$(STAGING_DIR)/usr/include.  Peter set it to $(STAGING_DIR)/usr/include
-because sylpheed incorrectly adds includedir to its include path.
-So maybe it's better to patch src/Makefile and remove the
---includedir=... from sylpheed.mk.
+  Looks good.
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(untested)
+
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
