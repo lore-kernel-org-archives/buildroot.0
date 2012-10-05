@@ -1,88 +1,40 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 5 Oct 2012 10:12:28 +0200
-Subject: [Buildroot] [PATCH v8 07/11] cpanminus: new package
-In-Reply-To: <20121004230105.53ac1b54@skate>
-References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
- <1348593508-14254-7-git-send-email-francois.perrad@gadz.org>
- <20121004230105.53ac1b54@skate>
-Message-ID: <CAB0FRsvwuR9FtBsmu6SBmo0-bTB8xz+88kFTuQf=ZrVkpxegYg@mail.gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Fri, 5 Oct 2012 09:20:46 +0100
+Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
+In-Reply-To: <87boghzdjc.fsf@macbook.be.48ers.dk>
+References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
+ <87a9w20xrj.fsf@macbook.be.48ers.dk>
+ <87boghzdjc.fsf@macbook.be.48ers.dk>
+Message-ID: <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/4 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Fran?ois,
+On Fri, Oct 5, 2012 at 6:35 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+>>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 >
-> Some other questions...
+>>>>>>   <markos.chandras@gmail.com> writes:
+>  >> From: Markos Chandras <markos.chandras@imgtec.com>
+>  >> This also fixes a compilation problem with kernel headers 3.5
+>  >> http://autobuild.buildroot.net/results/bb66a3a06d26f558e1c4c0593bb68e7af1d82398/build-end.log
 >
-> On Tue, 25 Sep 2012 19:18:23 +0200, Francois Perrad wrote:
+>  Peter> Committed, thanks.
 >
->> +if BR2_PACKAGE_CPANMINUS
->> +
->> +config BR2_PACKAGE_CPANMINUS_MIRROR
->> +     string "mirror"
->> +     help
->> +       Specifies the base URL for the CPAN mirror to use,
->> +       such as http://cpan.cpantesters.org/.
->> +
->> +config BR2_PACKAGE_CPANMINUS_MODULES
->> +     string "Perl modules from CPAN"
->> +     help
->> +       List of space-separated Perl modules to install from CPAN.
->> +
->> +       Examples: Try::Tiny Dancer YAML Moo
->> +
->> +       Install the listed modules and their dependencies.
->> +
->> +config BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES
->> +     string "native dependencies"
->> +     help
->> +       Some XS modules require native libraries.
+> It unfortunately seems to be broken on largefile configurations:
 >
-> I'm wondering if those options shouldn't have some default values, at
-> least for BR2_PACKAGE_CPANMINUS_MODULES and
-> BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES, so that when our
-> autobuilders will enable this package, it will actually build
-> something. Of course, we can't test all possibilities, but at least
-> testing a basic module that has a native dependency would be a good
-> test.
+> http://autobuild.buildroot.net/results/db48ce61cdb53669958b8b301fd24d7ecc33b236/build-end.log
 >
-
-I suggest these values for autobuilder
-        BR2_PACKAGE_CPANMINUS_MODULES = Curses::UI
-        BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES = ncurses
-
-Thomas, could you test them ?
-
->> +define CPANMINUS_INSTALL_TARGET_CMDS
->> +     echo "#!/bin/sh"                                                        > $(@D)/run_perl
->> +     echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
->> +     chmod +x $(@D)/run_perl
->> +     PERL5LIB=$(CPANMINUS_PERL5LIB) \
->> +     PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
->> +     PERL_MB_OPT="--destdir $(TARGET_DIR)" \
->> +     RUN_PERL="$(@D)/run_perl" \
->> +     $(CPANMINUS_RUN_PERL) $(@D)/cpanm \
->> +             --perl=$(@D)/run_perl \
->> +             --notest \
->> +             --no-man-pages \
->> +             $(CPANMINUS_MIRROR) \
->> +             $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
->> +endef
+> Any idea how to fix?
 >
-> Will this work if $(BR2_PACKAGE_CPANMINUS_MODULES) is empty?
->
-> Best regards,
->
-> Thomas
 > --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Bye, Peter Korsgaard
+
+Hi Peter,
+
+I will have a look and I will let you know.
+
+-- 
+Regards,
+Markos
