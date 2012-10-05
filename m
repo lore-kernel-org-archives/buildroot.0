@@ -1,54 +1,84 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Fri, 5 Oct 2012 14:20:59 +0100
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk>
- <87boghzdjc.fsf@macbook.be.48ers.dk>
- <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
-Message-ID: <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
+From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
+Date: Fri, 5 Oct 2012 15:31:39 +0200
+Subject: [Buildroot] [PATCH] fb-test-app: new package
+Message-ID: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 5, 2012 at 9:20 AM, Markos Chandras
-<markos.chandras@gmail.com> wrote:
-> On Fri, Oct 5, 2012 at 6:35 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
->>>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
->>
->>>>>>>   <markos.chandras@gmail.com> writes:
->>  >> From: Markos Chandras <markos.chandras@imgtec.com>
->>  >> This also fixes a compilation problem with kernel headers 3.5
->>  >> http://autobuild.buildroot.net/results/bb66a3a06d26f558e1c4c0593bb68e7af1d82398/build-end.log
->>
->>  Peter> Committed, thanks.
->>
->> It unfortunately seems to be broken on largefile configurations:
->>
->> http://autobuild.buildroot.net/results/db48ce61cdb53669958b8b301fd24d7ecc33b236/build-end.log
->>
->> Any idea how to fix?
->>
->> --
->> Bye, Peter Korsgaard
->
-> Hi Peter,
->
-> I will have a look and I will let you know.
->
-> --
-> Regards,
-> Markos
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-Hi Peter,
+---
+ package/Config.in                  |  1 +
+ package/fb-test-app/Config.in      |  4 ++++
+ package/fb-test-app/fb-test-app.mk | 34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 package/fb-test-app/Config.in
+ create mode 100644 package/fb-test-app/fb-test-app.mk
 
-This also happens with the latest strace git code. It seems like
--D_FILE_OFFSET_BITS=64 is causing it. But there are also some other
-problems in the LFS support. I will see if I can write some patches
-and send them upstream.
-
+diff --git a/package/Config.in b/package/Config.in
+index 50b7631..a1ca25d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -117,6 +117,7 @@ source "package/fbset/Config.in"
+ endif
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
++source "package/fb-test-app/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+diff --git a/package/fb-test-app/Config.in b/package/fb-test-app/Config.in
+new file mode 100644
+index 0000000..6b682ce
+--- /dev/null
++++ b/package/fb-test-app/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_FB_TEST_APP
++	bool "fb-test-app"
++	help
++	  Test suite for Linux framebuffer.
+diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
+new file mode 100644
+index 0000000..ce31f05
+--- /dev/null
++++ b/package/fb-test-app/fb-test-app.mk
+@@ -0,0 +1,34 @@
++#############################################################
++#
++# fb-test-app
++#
++#############################################################
++
++FB_TEST_APP_VERSION = v1.0.0
++FB_TEST_APP_SITE = git://github.com/prpplague/fb-test-app.git
++FB_TEST_APP_LICENSE = GPLv2
++FB_TEST_APP_LICENSE_FILE = COPYING
++
++define FB_TEST_APP_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++define FB_TEST_APP_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/perf $(TARGET_DIR)/usr/bin/perf
++	$(INSTALL) -D -m 0755 $(@D)/rect $(TARGET_DIR)/usr/bin/rect
++	$(INSTALL) -D -m 0755 $(@D)/fb-test $(TARGET_DIR)/usr/bin/fb-test
++	$(INSTALL) -D -m 0755 $(@D)/offset $(TARGET_DIR)/usr/bin/offset
++endef
++
++define FB_TEST_APP_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/perf
++	rm -f $(TARGET_DIR)/usr/bin/rect
++	rm -f $(TARGET_DIR)/usr/bin/fb-test
++	rm -f $(TARGET_DIR)/usr/bin/offset
++endef
++
++define FB_TEST_APP_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
 -- 
-Regards,
-Markos
+1.7.11.3
