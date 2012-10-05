@@ -1,54 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Oct 2012 16:03:22 +0200
-Subject: [Buildroot] [PATCH] libglib2: Fix midori save file dialog not
- being rendered
-In-Reply-To: <506EE6B3.1000205@gmail.com>
-References: <1349386039-817-1-git-send-email-gvaxon@gmail.com>
- <20121005095237.19c642ca@skate> <506EE6B3.1000205@gmail.com>
-Message-ID: <20121005160322.279530c5@skate>
+From: =?ISO-8859-1?Q?Christian_M=F6ller?= <christian.moeller.75@googlemail.com>
+Date: Fri, 5 Oct 2012 16:12:56 +0200
+Subject: [Buildroot] Autorun
+In-Reply-To: <1349445386.31306.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+References: <1349445386.31306.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+Message-ID: <CAA8O6f48iHnAU_ya_6AqeBOufXuUeaK3u+tMpsM4txt=_y7RjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello
+in my case, there is a xinitrc under usr/lib/X11/xinit.
+There you can put your commands.
+Regards
+Christian
 
-On Fri, 05 Oct 2012 17:54:59 +0400, Valentine Barshak wrote:
 
-> > Thanks for all your great patches!
-> 
-> Thank you! I've been using buildroot for a while and I really like it.
-> Just want to have as little deviations from the mainstream as
-> possible :)
+2012/10/5 Zoran Djordjevic <djdjdjole@yahoo.com>
 
-That's certainly a good motivation :)
-
-> > Is there anything that prevents us from bumping libglib2 to this
-> > version instead of backporting patches?
-> 
-> I tried to bump to 2.32.2 (and higher), but it didn't work for me.
-> It doesn't build as is. It needs additional hacks to the
-> libglib2-optional-ipv6.patch plus some minor configure script changes 
-> (at least).
-> 
-> Even when I finally managed to build it, it didn't work.
-> Starting any gtk application would result in no window being
-> displayed. I've tried on a real x86 machine and vmware with no luck.
-> It just hangs without displaying any errors or warnings.
-> It's gonna take some time to debug. Probably some other packages
-> have to be updated as well, I'm not sure.
-> 
-> Since cherry-picking this single change worked fine for me, I've
-> decided to stick with it at least for now.
-
-Argh, ok. I hope someone will find the time to fix this. It's not great
-to get stuck with older versions due to regressions.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Hello
+>
+> Maybe question is not for this forum, although I am using Buildroot for
+> building root file system (ARM). What I need is info how to automatically
+> start GUI app. with starting Linux, built this way ?
+> I tried putting command (xinit --/usr/bin/Xfbdev ....) at the end of
+> inittab, but
+> then it starts X, without reading .xinitrc file (where is my GUI app
+> noted) so
+> only xterm was started (as it is default for X).
+>
+> Regards
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121005/0013e861/attachment-0001.html>
