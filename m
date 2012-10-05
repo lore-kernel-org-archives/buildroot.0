@@ -1,27 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 05 Oct 2012 23:34:30 +0200
-Subject: [Buildroot] Buildroot Issue with a uImage build
-In-Reply-To: <7D8DC74DEB12384E8E4F5EE4879A8497401F03B5@USMANSMEXPW01>
-References: <7D8DC74DEB12384E8E4F5EE4879A8497401F03B5@USMANSMEXPW01>
-Message-ID: <506F5266.9030305@mind.be>
+Date: Sat, 06 Oct 2012 00:54:49 +0200
+Subject: [Buildroot] Building FFMPEG fails
+In-Reply-To: <A2DF5FFD542E4E4DBE52600E0292D017@JohanW7>
+References: <B8BCA720FEFB473BBD1EACE9016F23C5@JohanW7>
+ <87fw5tzdze.fsf@macbook.be.48ers.dk>
+ <A2DF5FFD542E4E4DBE52600E0292D017@JohanW7>
+Message-ID: <506F6539.2060205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/10/12 21:21, Morrison, Tom wrote:
-> I was pointed to a patch that Peter K. had added a default config. For the Boundary Devices
-> Nitrogen/Sabre-Lite boards(I.MX6 processor).
+On 05/10/12 12:32, Sagaert Johan wrote:
+> Right, its mplayer build that is complaining
 >
->     http://git.buildroot.net/buildroot/commit/?id=913b916567231aedb34c4a616519f607eb90e616
+> Here is more detail and the config file.
 >
-> When I built this - the associated Kernel uImage was HUGE (60Meg)?
+> It seems to be caused bij some optimzed assembly code : Error: selected processor does not support ARM mode `vld1.32
+> {d2[],d3[]},[sl,:32]'
 
-  Something funny going on there...  I built the current master with the
-nitrogen6x_defconfig and the uImage is only 3.7M.
+  Note that the ffmpeg package itself seems to have a similar problem:
+http://autobuild.buildroot.net/results/847efc70592069af475e5b528f9bc4814df04f94/build-end.log
 
-  Maybe check the linux config, did it accidentally turn into an allyesconfig?
+  But with current master and your configuration, ffmpeg seems to work.
+
+
+  Anyway, you need to pass -mfpu=neon -mfloat-abi=softfp to the compiler.
+Patch follows.
+
 
   Regards,
   Arnout
