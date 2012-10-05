@@ -1,54 +1,49 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Fri, 5 Oct 2012 14:55:22 -0300
-Subject: [Buildroot] [PATCHv2][RESEND] python-protobuf: Add support for
- Python implementation of Google's Protocol Buffers
-In-Reply-To: <505B8D42.8010108@mind.be>
-References: <20120917105103.GA17573@localhost.comm5.com.br>
- <20120920223439.6480353a@skate> <505B8D42.8010108@mind.be>
-Message-ID: <CAExDhvZCmV9Wobjt56sa0MFC0rah8Zt_0=JjvKpaimaVyv2cVA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 05 Oct 2012 20:57:11 +0200
+Subject: [Buildroot] eGalax Touchscreen
+In-Reply-To: <506DBC0A.4030501@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 04 Oct 2012 18:40:42 +0200")
+References: <CAA8O6f7aq+f95GQMLhLMx+4ystqCcj5JOMAnLDD01dQfRHU36g@mail.gmail.com>
+ <506DBC0A.4030501@mind.be>
+Message-ID: <874nm8ycfs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+
 Hi,
 
+ >> What I have to do to get the touchscreen running?
+ >> Any help will be welcome.
 
-     Somehow I missed your replies. I will resubmit with the changes
-suggested. Thanks.
+ Arnout>  This is not really a buildroot-related question,
+ Arnout> linux-input at vger.kernel.org would be more appropriate.
 
+Or eGalaxy support for their non-upstream driver.
 
-Kind Regards,
-      Thiago A. Correa
+ Arnout>  Still, some ideas:
 
-On Thu, Sep 20, 2012 at 6:40 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 09/20/12 22:34, Thomas Petazzoni wrote:
->>>
->>> >  +PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
->>> >  +PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
->>> >  +PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
->>
->> So the source tarball is the same? So what you're doing here in fact is
->> having two separate Buildroot packages for the same source tarball,
->> something that we generally don't do. But in this case, it seems like
->> logical to do it this way.
->>
->> What do others think about this strategy?
->>
->
->  It's a good start, but I still think we need more generic infrastructure
-> for this use case.  For instance, this will fail if protobuf moves to a
-> hg version, because then PROTOBUF_SOURCE is empty.
->
->  For the time being, it's OK, however.
->
->  Regards,
->  Arnout
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ Arnout> - I never heard of /dev/uinput or /dev/hidraw.  Input devices
+ Arnout> can usually be found in /dev/input/.  Perhaps you need udev
+ Arnout> rules to create /dev/uinput or /dev/hidraw?
+
+uinput is the interface for injecting input events into the kernel
+(E.G. for userspace input drivers), and hidraw is the interface
+to communicate with non-input devices (ab)using the hid protocol.
+
+ Arnout>  For future posts, please
+
+ Arnout> - mention the buildroot and kernel versions you use;
+
+ Arnout> - post a defconfig instead of a a full config;
+
+ Arnout> - post text attachments with disposition:inline so people can
+ Arnout> quote them.
+
+Indeed.
+
+-- 
+Bye, Peter Korsgaard
