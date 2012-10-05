@@ -1,65 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 06 Oct 2012 01:14:16 +0200
-Subject: [Buildroot] [PATCH] fb-test-app: new package
-In-Reply-To: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <506F69C8.2010907@mind.be>
+Date: Sat, 06 Oct 2012 01:18:33 +0200
+Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
+In-Reply-To: <87ipapxbp2.fsf@macbook.be.48ers.dk>
+References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
+ <87a9w20xrj.fsf@macbook.be.48ers.dk> <87boghzdjc.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
+ <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
+ <87ipapxbp2.fsf@macbook.be.48ers.dk>
+Message-ID: <506F6AC9.3010702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/12 15:31, ludovic.desroches at atmel.com wrote:
-> From: Ludovic Desroches<ludovic.desroches@atmel.com>
+On 05/10/12 15:58, Peter Korsgaard wrote:
+>>>>>> "Markos" == Markos Chandras<markos.chandras@gmail.com>  writes:
+>
+>   Markos>  Hi Peter,
+>
+>   Markos>  This also happens with the latest strace git code. It seems like
+>   Markos>  -D_FILE_OFFSET_BITS=64 is causing it. But there are also some other
+>   Markos>  problems in the LFS support. I will see if I can write some patches
+>   Markos>  and send them upstream.
+>
+> Great, thanks!
 
-Add a Signed-off-by line for yourself.  This is a short way for you to
-assert that you are entitled to contribute the patch under buildroot's
-GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
-details.
+  Not sure if it is related, but the previous version was already broken for me
+on x86_64 builds. Hm, probably not related, because it failed with:
 
-[snip]
-> diff --git a/package/fb-test-app/Config.in b/package/fb-test-app/Config.in
-> new file mode 100644
-> index 0000000..6b682ce
-> --- /dev/null
-> +++ b/package/fb-test-app/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_FB_TEST_APP
-> +	bool "fb-test-app"
-> +	help
-> +	  Test suite for Linux framebuffer.
-
-  Could you add an upstream URL to the help text?
-
-> diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
-> new file mode 100644
-> index 0000000..ce31f05
-> --- /dev/null
-> +++ b/package/fb-test-app/fb-test-app.mk
-> @@ -0,0 +1,34 @@
-> +#############################################################
-> +#
-> +# fb-test-app
-> +#
-> +#############################################################
-> +
-> +FB_TEST_APP_VERSION = v1.0.0
-> +FB_TEST_APP_SITE = git://github.com/prpplague/fb-test-app.git
-
-FB_TEST_APP_SITE = http://github.com/prpplague/fb-test-app/tarball
-
-  downloads a lot faster.
-
-  Otherwise, looks great.
+file.c: In function 'printstat64':
+file.c:1073:16: error: storage size of 'statbuf' isn't known
+file.c:1073:16: warning: unused variable 'statbuf' [-Wunused-variable]
 
 
   Regards,
   Arnout
-
-[snip]
-
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
