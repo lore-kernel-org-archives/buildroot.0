@@ -1,40 +1,32 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Fri, 5 Oct 2012 09:20:46 +0100
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <87boghzdjc.fsf@macbook.be.48ers.dk>
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk>
- <87boghzdjc.fsf@macbook.be.48ers.dk>
-Message-ID: <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
+From: Waldemar.Rymarkiewicz at tieto.com <Waldemar.Rymarkiewicz@tieto.com>
+Date: Fri, 5 Oct 2012 12:57:47 +0300
+Subject: [Buildroot] [PATCH v3 2/2] ccid: new package
+In-Reply-To: <50686122.5080601@mind.be>
+References: <1348212739-32093-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
+ <1348212739-32093-2-git-send-email-waldemar.rymarkiewicz@tieto.com>
+ <50686122.5080601@mind.be>
+Message-ID: <99B09243E1A5DA4898CDD8B7001114481803B96ADC@EXMB04.eu.tieto.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 5, 2012 at 6:35 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
->>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
->
->>>>>>   <markos.chandras@gmail.com> writes:
->  >> From: Markos Chandras <markos.chandras@imgtec.com>
->  >> This also fixes a compilation problem with kernel headers 3.5
->  >> http://autobuild.buildroot.net/results/bb66a3a06d26f558e1c4c0593bb68e7af1d82398/build-end.log
->
->  Peter> Committed, thanks.
->
-> It unfortunately seems to be broken on largefile configurations:
->
-> http://autobuild.buildroot.net/results/db48ce61cdb53669958b8b301fd24d7ecc33b236/build-end.log
->
-> Any idea how to fix?
->
-> --
-> Bye, Peter Korsgaard
+Hi,
 
-Hi Peter,
+>  When installing, ccid says:
+>copy the src/92_pcscd_ccid.rules file in udev directory (/etc/udev/rules.d/)
+>Perhaps it would be a good idea to do that?  (If BR2_PACKAGE_UDEV, of course)
 
-I will have a look and I will let you know.
+or maybe "if BR2_ROTFS_DEVICE_CREATION_DYNAMIC_UDEV" would be better ?
+Should  POST_UNINSTALL_TARGET_HOOKS be added as well ?
 
--- 
-Regards,
-Markos
+>  Also, ccid has the same --enable-embedded option as pcsc-lite.  I'm not
+>sure if it is functional, though.
+
+I doubt as well. Will leave it as it's.
+
+
+Thanks,
+/Waldek
+ 
