@@ -1,49 +1,69 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat,  6 Oct 2012 01:03:13 +0200
-Subject: [Buildroot] [PATCH] mplayer: fix compilation of NEON assembly in
-	libavcodec
-In-Reply-To: 506F6539.2060205@mind.be
-Message-ID: <1349478193-13673-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 06 Oct 2012 01:14:16 +0200
+Subject: [Buildroot] [PATCH] fb-test-app: new package
+In-Reply-To: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <506F69C8.2010907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compilation of the NEON assembly fails unless neon is enabled in the
-compiler options.  This is probably not needed for all combinations of
-gcc/binutils, but at least some need it and it certainly doesn't hurt.
+On 05/10/12 15:31, ludovic.desroches at atmel.com wrote:
+> From: Ludovic Desroches<ludovic.desroches@atmel.com>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Add a Signed-off-by line for yourself.  This is a short way for you to
+assert that you are entitled to contribute the patch under buildroot's
+GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
+details.
 
----
- .../multimedia/mplayer/mplayer-1.1-fix-neon.patch   |   19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+[snip]
+> diff --git a/package/fb-test-app/Config.in b/package/fb-test-app/Config.in
+> new file mode 100644
+> index 0000000..6b682ce
+> --- /dev/null
+> +++ b/package/fb-test-app/Config.in
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_FB_TEST_APP
+> +	bool "fb-test-app"
+> +	help
+> +	  Test suite for Linux framebuffer.
 
-diff --git a/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch b/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch
-new file mode 100644
-index 0000000..38c2adc
---- /dev/null
-+++ b/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch
-@@ -0,0 +1,19 @@
-+Compilation of the NEON assembly fails unless neon is enabled in the
-+compiler options.  This is probably not needed for all combinations of
-+gcc/binutils, but at least some need it and it certainly doesn't hurt.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+diff -Nrup mplayer-1.1.orig/configure mplayer-1.1/configure
-+--- mplayer-1.1.orig/configure	2012-10-06 00:31:57.706985824 +0200
-++++ mplayer-1.1/configure	2012-10-06 00:49:32.618948116 +0200
-+@@ -2935,6 +2935,9 @@ if arm ; then
-+     inline_asm_check '"vadd.i16 q0, q0, q0"' && neon=yes
-+   fi
-+   echores "$neon"
-++  if test $neon = "yes" ; then
-++    extra_cflags="$extra_cflags -mfpu=neon -mfloat-abi=softfp"
-++  fi
-+ 
-+   echocheck "ARM THUMB"
-+   if test $armthumb = "auto" ; then
+  Could you add an upstream URL to the help text?
+
+> diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
+> new file mode 100644
+> index 0000000..ce31f05
+> --- /dev/null
+> +++ b/package/fb-test-app/fb-test-app.mk
+> @@ -0,0 +1,34 @@
+> +#############################################################
+> +#
+> +# fb-test-app
+> +#
+> +#############################################################
+> +
+> +FB_TEST_APP_VERSION = v1.0.0
+> +FB_TEST_APP_SITE = git://github.com/prpplague/fb-test-app.git
+
+FB_TEST_APP_SITE = http://github.com/prpplague/fb-test-app/tarball
+
+  downloads a lot faster.
+
+  Otherwise, looks great.
+
+
+  Regards,
+  Arnout
+
+[snip]
+
+
 -- 
-tg: (2ba4eed..) t/mplayer-neon (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
