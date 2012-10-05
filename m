@@ -1,84 +1,56 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Fri, 5 Oct 2012 15:31:39 +0200
-Subject: [Buildroot] [PATCH] fb-test-app: new package
-Message-ID: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Fri, 05 Oct 2012 17:54:59 +0400
+Subject: [Buildroot] [PATCH] libglib2: Fix midori save file dialog not
+ being rendered
+In-Reply-To: <20121005095237.19c642ca@skate>
+References: <1349386039-817-1-git-send-email-gvaxon@gmail.com>
+ <20121005095237.19c642ca@skate>
+Message-ID: <506EE6B3.1000205@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+On 10/05/2012 11:52 AM, Thomas Petazzoni wrote:
+> Valentine,
 
----
- package/Config.in                  |  1 +
- package/fb-test-app/Config.in      |  4 ++++
- package/fb-test-app/fb-test-app.mk | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+)
- create mode 100644 package/fb-test-app/Config.in
- create mode 100644 package/fb-test-app/fb-test-app.mk
+Hi Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index 50b7631..a1ca25d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -117,6 +117,7 @@ source "package/fbset/Config.in"
- endif
- source "package/fbterm/Config.in"
- source "package/fbv/Config.in"
-+source "package/fb-test-app/Config.in"
- source "package/imagemagick/Config.in"
- source "package/linux-fusion/Config.in"
- source "package/lite/Config.in"
-diff --git a/package/fb-test-app/Config.in b/package/fb-test-app/Config.in
-new file mode 100644
-index 0000000..6b682ce
---- /dev/null
-+++ b/package/fb-test-app/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_FB_TEST_APP
-+	bool "fb-test-app"
-+	help
-+	  Test suite for Linux framebuffer.
-diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
-new file mode 100644
-index 0000000..ce31f05
---- /dev/null
-+++ b/package/fb-test-app/fb-test-app.mk
-@@ -0,0 +1,34 @@
-+#############################################################
-+#
-+# fb-test-app
-+#
-+#############################################################
-+
-+FB_TEST_APP_VERSION = v1.0.0
-+FB_TEST_APP_SITE = git://github.com/prpplague/fb-test-app.git
-+FB_TEST_APP_LICENSE = GPLv2
-+FB_TEST_APP_LICENSE_FILE = COPYING
-+
-+define FB_TEST_APP_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
-+endef
-+
-+define FB_TEST_APP_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/perf $(TARGET_DIR)/usr/bin/perf
-+	$(INSTALL) -D -m 0755 $(@D)/rect $(TARGET_DIR)/usr/bin/rect
-+	$(INSTALL) -D -m 0755 $(@D)/fb-test $(TARGET_DIR)/usr/bin/fb-test
-+	$(INSTALL) -D -m 0755 $(@D)/offset $(TARGET_DIR)/usr/bin/offset
-+endef
-+
-+define FB_TEST_APP_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/perf
-+	rm -f $(TARGET_DIR)/usr/bin/rect
-+	rm -f $(TARGET_DIR)/usr/bin/fb-test
-+	rm -f $(TARGET_DIR)/usr/bin/offset
-+endef
-+
-+define FB_TEST_APP_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.11.3
+>
+> Thanks for all your great patches!
+
+Thank you! I've been using buildroot for a while and I really like it.
+Just want to have as little deviations from the mainstream as possible :)
+
+>
+> On Fri,  5 Oct 2012 01:27:19 +0400, Valentine Barshak wrote:
+>
+>> This is a known issue, which has been fixed in glib 2.32.2.
+>
+> Is there anything that prevents us from bumping libglib2 to this
+> version instead of backporting patches?
+
+I tried to bump to 2.32.2 (and higher), but it didn't work for me.
+It doesn't build as is. It needs additional hacks to the
+libglib2-optional-ipv6.patch plus some minor configure script changes 
+(at least).
+
+Even when I finally managed to build it, it didn't work.
+Starting any gtk application would result in no window being displayed.
+I've tried on a real x86 machine and vmware with no luck.
+It just hangs without displaying any errors or warnings.
+It's gonna take some time to debug. Probably some other packages
+have to be updated as well, I'm not sure.
+
+Since cherry-picking this single change worked fine for me, I've decided
+to stick with it at least for now.
+
+>
+> Best regards,
+>
+> Thomas
+>
+
+Thanks,
+Val.
