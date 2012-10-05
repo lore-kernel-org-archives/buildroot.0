@@ -1,42 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat,  6 Oct 2012 01:02:59 +0200
-Subject: [Buildroot] [PATCH] nitrogen6x_defconfig: Use tarball from github
-	instead of cloning git
-Message-ID: <1349478179-13495-1-git-send-email-arnout@mind.be>
+Date: Sat,  6 Oct 2012 01:03:13 +0200
+Subject: [Buildroot] [PATCH] mplayer: fix compilation of NEON assembly in
+	libavcodec
+In-Reply-To: 506F6539.2060205@mind.be
+Message-ID: <1349478193-13673-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Compilation of the NEON assembly fails unless neon is enabled in the
+compiler options.  This is probably not needed for all combinations of
+gcc/binutils, but at least some need it and it certainly doesn't hurt.
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- configs/nitrogen6x_defconfig |   10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ .../multimedia/mplayer/mplayer-1.1-fix-neon.patch   |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 2b7daec..74b33c6 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -13,14 +13,12 @@ BR2_TARGET_ROOTFS_EXT2=y
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabrelite"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://github.com/boundarydevices/u-boot-2009-08.git"
--BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="1f7edab0ac5ebf564e9ad9797fedc2a668149b96"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-2009-08/tarball/1f7edab/u-boot-1f7edab.tar.gz"
- 
- # kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/boundarydevices/linux-imx6.git"
--BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="cb1a536f4583af7e1572d39cabd4ac597a8916a5"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/cb1a536/linux-imx6-cb1a536.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch b/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch
+new file mode 100644
+index 0000000..38c2adc
+--- /dev/null
++++ b/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch
+@@ -0,0 +1,19 @@
++Compilation of the NEON assembly fails unless neon is enabled in the
++compiler options.  This is probably not needed for all combinations of
++gcc/binutils, but at least some need it and it certainly doesn't hurt.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++diff -Nrup mplayer-1.1.orig/configure mplayer-1.1/configure
++--- mplayer-1.1.orig/configure	2012-10-06 00:31:57.706985824 +0200
+++++ mplayer-1.1/configure	2012-10-06 00:49:32.618948116 +0200
++@@ -2935,6 +2935,9 @@ if arm ; then
++     inline_asm_check '"vadd.i16 q0, q0, q0"' && neon=yes
++   fi
++   echores "$neon"
+++  if test $neon = "yes" ; then
+++    extra_cflags="$extra_cflags -mfpu=neon -mfloat-abi=softfp"
+++  fi
++ 
++   echocheck "ARM THUMB"
++   if test $armthumb = "auto" ; then
 -- 
-tg: (0f98441..) t/nitrogen-github (depends on: t/mplayer-neon)
+tg: (2ba4eed..) t/mplayer-neon (depends on: master)
