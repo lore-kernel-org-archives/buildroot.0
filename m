@@ -1,66 +1,124 @@
-From: Martin Peevski <martin@ronetix.at>
-Date: Fri, 05 Oct 2012 18:34:06 +0300
-Subject: [Buildroot] ALSA don't work
-In-Reply-To: <506EF5DD.4020307@petroprogram.com>
-References: <506EF1E6.2090902@ronetix.at> <506EF5DD.4020307@petroprogram.com>
-Message-ID: <506EFDEE.5020307@ronetix.at>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Fri,  5 Oct 2012 21:25:34 +0400
+Subject: [Buildroot] [PATCH] sylpheed: Fix includedir
+Message-ID: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/12 17:59, Stefan Fr?berg wrote:
-> Have you build your ALSA soundcard drivers as modules ?
->
-> what does lsmod command give you ?
->
-> have you checked files  in
-> /lib/modules/your_kernel_version_here/kernel/sound ?
->
-> Best regards:
-> Stefan
->
-> 5.10.2012 17:42, Martin Peevski kirjoitti:
->> Hi, I build a Linux system with Buildroot but it don't work -
->> impossible to start applications. This is theconsole  log:
->>
->> # aplay -l
->> aplay: device_list:252: no soundcards found...
->> [16:11:18] engineerpeevski: # alsactl init
->> alsactl: init:1743: No soundcards found...
->> [16:11:30] engineerpeevski: # alsaconf
->> -sh: alsaconf: not found
->>
->> Also when the Kernel boots there is a message that a sound card was
->> found and with another rootfs it works. I think that it's something in
->> the config, can you help me, please? I work with AT91SAM9G45 SoC.
->>
->> Thanks in  advance, Martin!
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-First must tell you that want to use sound only with WAV files!
+The sylpheed headers are installed to the target directory,
+creating full staging directory path in the target rootfs,
+which is wrong.
+This happens because the headers are installed to
+$(DESTDIR)$(includedir), while DESTDIR is set to
+$(TARGET_DIR) and includedir is $(STAGING_DIR)/usr/include.
 
-I built the Kernel with installed in it drivers NOT as modules.
+Remove $(DESTDIR) from the include paths in the Makefile
+to have sylpheed install its headers to staging include
+directory instead.
 
-The lsmod command gives me the following:
-# lsmod
-Module                  Size  Used by    Not tainted
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+---
+ package/sylpheed/sylpheed-fix-includedir.patch | 89 ++++++++++++++++++++++++++
+ 1 file changed, 89 insertions(+)
+ create mode 100644 package/sylpheed/sylpheed-fix-includedir.patch
 
-That's 0 modules I think. Also have not  /lib/modules/ ... /kernel/sound 
-directory because I haven't modules, I think.
-
-
-I search in internet and find the following which claims that I must 
-edit the device table in Buildroot configuration: 
-http://elasticsheep.com/2011/01/adding-alsa-audio-support-to-a-buildroot-based-system/ 
-
-but will try it tomorrow. Is it true any way?
-
-Do I need something another special in the config except enabling the 
-ALSA and needed tools from it, as alsamixet?
-
-
-Thanks!
+diff --git a/package/sylpheed/sylpheed-fix-includedir.patch b/package/sylpheed/sylpheed-fix-includedir.patch
+new file mode 100644
+index 0000000..3971699
+--- /dev/null
++++ b/package/sylpheed/sylpheed-fix-includedir.patch
+@@ -0,0 +1,89 @@
++The sylpheed headers are installed to the target directory,
++creating full staging directory path in the target rootfs,
++which is wrong.
++This happens because the headers are installed to
++$(DESTDIR)$(includedir), while DESTDIR is set to
++$(TARGET_DIR) and includedir is $(STAGING_DIR)/usr/include.
++
++Remove $(DESTDIR) from the include paths in the Makefile
++to have sylpheed install its headers to staging include
++directory instead.
++
++Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
++
++diff -pruN sylpheed-3.1.0.orig/libsylph/Makefile.in sylpheed-3.1.0/libsylph/Makefile.in
++--- sylpheed-3.1.0.orig/libsylph/Makefile.in	2012-09-25 22:47:21.794759554 +0400
+++++ sylpheed-3.1.0/libsylph/Makefile.in	2012-09-25 22:47:39.797760345 +0400
++@@ -502,20 +502,20 @@ uninstall-info-am:
++ libsylph_0includeHEADERS_INSTALL = $(INSTALL_HEADER)
++ install-libsylph_0includeHEADERS: $(libsylph_0include_HEADERS)
++ 	@$(NORMAL_INSTALL)
++-	$(mkinstalldirs) $(DESTDIR)$(libsylph_0includedir)
+++	$(mkinstalldirs) $(libsylph_0includedir)
++ 	@list='$(libsylph_0include_HEADERS)'; for p in $$list; do \
++ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
++ 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
++-	  echo " $(libsylph_0includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(libsylph_0includedir)/$$f"; \
++-	  $(libsylph_0includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(libsylph_0includedir)/$$f; \
+++	  echo " $(libsylph_0includeHEADERS_INSTALL) $$d$$p $(libsylph_0includedir)/$$f"; \
+++	  $(libsylph_0includeHEADERS_INSTALL) $$d$$p $(libsylph_0includedir)/$$f; \
++ 	done
++ 
++ uninstall-libsylph_0includeHEADERS:
++ 	@$(NORMAL_UNINSTALL)
++ 	@list='$(libsylph_0include_HEADERS)'; for p in $$list; do \
++ 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
++-	  echo " rm -f $(DESTDIR)$(libsylph_0includedir)/$$f"; \
++-	  rm -f $(DESTDIR)$(libsylph_0includedir)/$$f; \
+++	  echo " rm -f $(libsylph_0includedir)/$$f"; \
+++	  rm -f $(libsylph_0includedir)/$$f; \
++ 	done
++ 
++ ETAGS = etags
++@@ -609,7 +609,7 @@ check: $(BUILT_SOURCES)
++ all-am: Makefile $(LTLIBRARIES) $(HEADERS)
++ 
++ installdirs:
++-	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(libsylph_0includedir)
+++	$(mkinstalldirs) $(DESTDIR)$(libdir) $(libsylph_0includedir)
++ install: $(BUILT_SOURCES)
++ 	$(MAKE) $(AM_MAKEFLAGS) install-am
++ install-exec: install-exec-am
++diff -pruN sylpheed-3.1.0.orig/src/Makefile.in sylpheed-3.1.0/src/Makefile.in
++--- sylpheed-3.1.0.orig/src/Makefile.in	2012-09-25 22:47:21.803759364 +0400
+++++ sylpheed-3.1.0/src/Makefile.in	2012-09-25 22:47:39.798760332 +0400
++@@ -771,20 +771,20 @@ uninstall-info-am:
++ libsylpheed_plugin_0includeHEADERS_INSTALL = $(INSTALL_HEADER)
++ install-libsylpheed_plugin_0includeHEADERS: $(libsylpheed_plugin_0include_HEADERS)
++ 	@$(NORMAL_INSTALL)
++-	$(mkinstalldirs) $(DESTDIR)$(libsylpheed_plugin_0includedir)
+++	$(mkinstalldirs) $(libsylpheed_plugin_0includedir)
++ 	@list='$(libsylpheed_plugin_0include_HEADERS)'; for p in $$list; do \
++ 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
++ 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
++-	  echo " $(libsylpheed_plugin_0includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(libsylpheed_plugin_0includedir)/$$f"; \
++-	  $(libsylpheed_plugin_0includeHEADERS_INSTALL) $$d$$p $(DESTDIR)$(libsylpheed_plugin_0includedir)/$$f; \
+++	  echo " $(libsylpheed_plugin_0includeHEADERS_INSTALL) $$d$$p $(libsylpheed_plugin_0includedir)/$$f"; \
+++	  $(libsylpheed_plugin_0includeHEADERS_INSTALL) $$d$$p $(libsylpheed_plugin_0includedir)/$$f; \
++ 	done
++ 
++ uninstall-libsylpheed_plugin_0includeHEADERS:
++ 	@$(NORMAL_UNINSTALL)
++ 	@list='$(libsylpheed_plugin_0include_HEADERS)'; for p in $$list; do \
++ 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
++-	  echo " rm -f $(DESTDIR)$(libsylpheed_plugin_0includedir)/$$f"; \
++-	  rm -f $(DESTDIR)$(libsylpheed_plugin_0includedir)/$$f; \
+++	  echo " rm -f $(libsylpheed_plugin_0includedir)/$$f"; \
+++	  rm -f $(libsylpheed_plugin_0includedir)/$$f; \
++ 	done
++ 
++ # This directory's subdirectories are mostly independent; you can cd
++@@ -963,7 +963,7 @@ install-binPROGRAMS: install-libLTLIBRAR
++ 
++ installdirs: installdirs-recursive
++ installdirs-am:
++-	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) $(DESTDIR)$(libsylpheed_plugin_0includedir)
+++	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(bindir) $(libsylpheed_plugin_0includedir)
++ 
++ install: $(BUILT_SOURCES)
++ 	$(MAKE) $(AM_MAKEFLAGS) install-recursive
+-- 
+1.7.11.4
