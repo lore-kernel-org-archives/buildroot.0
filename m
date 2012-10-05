@@ -1,25 +1,42 @@
-From: Martin Peevski <martin@ronetix.at>
-Date: Fri, 05 Oct 2012 17:42:46 +0300
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Fri, 05 Oct 2012 17:59:41 +0300
 Subject: [Buildroot] ALSA don't work
-Message-ID: <506EF1E6.2090902@ronetix.at>
+In-Reply-To: <506EF1E6.2090902@ronetix.at>
+References: <506EF1E6.2090902@ronetix.at>
+Message-ID: <506EF5DD.4020307@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, I build a Linux system with Buildroot but it don't work - impossible 
-to start applications. This is theconsole  log:
+Have you build your ALSA soundcard drivers as modules ?
 
-# aplay -l
-aplay: device_list:252: no soundcards found...
-[16:11:18] engineerpeevski: # alsactl init
-alsactl: init:1743: No soundcards found...
-[16:11:30] engineerpeevski: # alsaconf
--sh: alsaconf: not found
+what does lsmod command give you ?
 
-Also when the Kernel boots there is a message that a sound card was 
-found and with another rootfs it works. I think that it's something in 
-the config, can you help me, please? I work with AT91SAM9G45 SoC.
+have you checked files  in
+/lib/modules/your_kernel_version_here/kernel/sound ?
 
-Thanks in  advance, Martin!
+Best regards:
+Stefan
+
+5.10.2012 17:42, Martin Peevski kirjoitti:
+> Hi, I build a Linux system with Buildroot but it don't work -
+> impossible to start applications. This is theconsole  log:
+>
+> # aplay -l
+> aplay: device_list:252: no soundcards found...
+> [16:11:18] engineerpeevski: # alsactl init
+> alsactl: init:1743: No soundcards found...
+> [16:11:30] engineerpeevski: # alsaconf
+> -sh: alsaconf: not found
+>
+> Also when the Kernel boots there is a message that a sound card was
+> found and with another rootfs it works. I think that it's something in
+> the config, can you help me, please? I work with AT91SAM9G45 SoC.
+>
+> Thanks in  advance, Martin!
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
