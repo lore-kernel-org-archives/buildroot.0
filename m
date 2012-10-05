@@ -1,84 +1,98 @@
-From: Thiago A. Correa <thiago.correa@gmail.com>
-Date: Fri, 5 Oct 2012 16:36:03 -0300
-Subject: [Buildroot] [PATCHv3] python-protobuf: Add support for Python
- implementation of Google's Protocol Buffers
-Message-ID: <20121005193603.GA7975@localhost.comm5.com.br>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 05 Oct 2012 21:47:41 +0200
+Subject: [Buildroot] [PATCH] New package liblog4c-localtime
+In-Reply-To: <1349341682-12387-1-git-send-email-fenixk19@mail.ru>
+References: <1349341682-12387-1-git-send-email-fenixk19@mail.ru>
+Message-ID: <506F395D.9010205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
----
- package/Config.in                          |    1 +
- package/python-protobuf/Config.in          |   10 ++++++++++
- package/python-protobuf/python-protobuf.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+), 0 deletions(-)
- create mode 100644 package/python-protobuf/Config.in
- create mode 100644 package/python-protobuf/python-protobuf.mk
+On 04/10/12 11:08, Alexander Varnin wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index e129522..3aff270 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -276,6 +276,7 @@ source "package/python-mad/Config.in"
- source "package/python-meld3/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
-+source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
-diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-new file mode 100644
-index 0000000..ec22057
---- /dev/null
-+++ b/package/python-protobuf/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_PROTOBUF
-+	bool "python-protobuf"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Python implementation of the Google Protocol Buffers.
-+
-+	  Protocol buffers are Google's language-neutral, platform-neutral,
-+	  extensible mechanism for serializing structured data.
-+
-+	  http://code.google.com/p/protobuf/
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-new file mode 100644
-index 0000000..d853dee
---- /dev/null
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# python-protobuf
-+#
-+#############################################################
-+
-+PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
-+PYTHON_PROTOBUF_SOURCE  = $(PROTOBUF_SOURCE)
-+PYTHON_PROTOBUF_SITE    = $(PROTOBUF_SITE)
-+PYTHON_PROTOBUF_LICENSE = BSD-3c
-+PYTHON_PROTOBUF_LICENSE_FILES = COPYING.txt
-+
-+PYTHON_PROTOBUF_DEPENDENCIES = python host-python-setuptools \
-+        host-python-distutilscross host-protobuf
-+
-+define PYTHON_PROTOBUF_BUILD_CMDS
-+	(cd $(@D)/python; \
-+		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
-+		PATH=$(HOST_PATH) \
-+	$(HOST_DIR)/usr/bin/python setup.py build -x)
-+endef
-+
-+define PYTHON_PROTOBUF_INSTALL_TARGET_CMDS
-+	(cd $(@D)/python; PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
+  Add a Signed-off-by line for yourself.  This is a short way for you to
+assert that you are entitled to contribute the patch under buildroot's
+GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
+details.
+
+> ---
+>   package/Config.in                                |    1 +
+>   package/liblog4c-localtime/Config.in             |    9 +++++++++
+>   package/liblog4c-localtime/liblog4c-localtime.mk |   11 +++++++++++
+>   3 files changed, 21 insertions(+), 0 deletions(-)
+>   create mode 100644 package/liblog4c-localtime/Config.in
+>   create mode 100644 package/liblog4c-localtime/liblog4c-localtime.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 8a7c9c4..25752e5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -387,6 +387,7 @@ source "package/lttng-libust/Config.in"
+>   source "package/orc/Config.in"
+>   source "package/poco/Config.in"
+>   source "package/startup-notification/Config.in"
+> +source "package/liblog4c-localtime/Config.in"
+>   endmenu
+>
+>   menu "Text and terminal handling"
+> diff --git a/package/liblog4c-localtime/Config.in b/package/liblog4c-localtime/Config.in
+> new file mode 100644
+> index 0000000..58797be
+> --- /dev/null
+> +++ b/package/liblog4c-localtime/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LIBLOG4C
+> +	bool "liblog4c-localtime"
+> +	help
+> +	  Log4c is a library of C for flexible logging to files, syslog
+> +	  and other destinations.
+> +	  This version is with localtime patch, to make lib show times in
+> +	  local timezone.
+> +
+> +	  https://github.com/rcmadruga/log4c-localtime
+
+  Add the upstream URL as well: http://log4c.sourceforge.net/
+
+> diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
+> new file mode 100644
+> index 0000000..f0599c3
+> --- /dev/null
+> +++ b/package/liblog4c-localtime/liblog4c-localtime.mk
+> @@ -0,0 +1,11 @@
+> + #############################################################
+> + #
+> + # liblog4c
+> + #
+> + #############################################################
+> + LIBLOG4C_VERSION = 1.2.1
+> + LIBLOG4C_SITE = git://github.com/rcmadruga/log4c-localtime.git
+
+  There's also a tarball:
+LIBLOG4C_LOCALTIME_VERSION = v1.0
+LIBLOG4C_LOCALTIME_SITE    = https://github.com/rcmadruga/log4c-localtime/tarball/v$(LIBLOG4C_LOCALTIME_VERSION)
+
+> + LIBLOG4C_INSTALL_STAGING = YES
+> +
+> + $(eval $(call AUTOTARGETS))
+> +
+
+  Spurious newline at the end.
+
+
+  It looks like it requires expat, so you need "select BR2_PACKAGE_EXPAT"
+to Config.in, and "LIBLOG4C_LOCALTIME_DEPENDENCIES = expat" in .mk.  You'll
+probably also need --disable-expattest for cross-compilation.
+
+
+  Regards,
+  Arnout
+
 -- 
-1.7.3.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
