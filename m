@@ -1,41 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 06 Oct 2012 01:18:33 +0200
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <87ipapxbp2.fsf@macbook.be.48ers.dk>
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk> <87boghzdjc.fsf@macbook.be.48ers.dk>
- <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
- <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
- <87ipapxbp2.fsf@macbook.be.48ers.dk>
-Message-ID: <506F6AC9.3010702@mind.be>
+Date: Sat, 06 Oct 2012 01:26:58 +0200
+Subject: [Buildroot] [PATCH] sylpheed: Fix includedir
+In-Reply-To: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
+References: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
+Message-ID: <506F6CC2.6050007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/12 15:58, Peter Korsgaard wrote:
->>>>>> "Markos" == Markos Chandras<markos.chandras@gmail.com>  writes:
+On 05/10/12 19:25, Valentine Barshak wrote:
+> The sylpheed headers are installed to the target directory,
+> creating full staging directory path in the target rootfs,
+> which is wrong.
+> This happens because the headers are installed to
+> $(DESTDIR)$(includedir), while DESTDIR is set to
+> $(TARGET_DIR) and includedir is $(STAGING_DIR)/usr/include.
 >
->   Markos>  Hi Peter,
->
->   Markos>  This also happens with the latest strace git code. It seems like
->   Markos>  -D_FILE_OFFSET_BITS=64 is causing it. But there are also some other
->   Markos>  problems in the LFS support. I will see if I can write some patches
->   Markos>  and send them upstream.
->
-> Great, thanks!
+> Remove $(DESTDIR) from the include paths in the Makefile
+> to have sylpheed install its headers to staging include
+> directory instead.
 
-  Not sure if it is related, but the previous version was already broken for me
-on x86_64 builds. Hm, probably not related, because it failed with:
-
-file.c: In function 'printstat64':
-file.c:1073:16: error: storage size of 'statbuf' isn't known
-file.c:1073:16: warning: unused variable 'statbuf' [-Wunused-variable]
-
+  Actually, includedir should be /usr/include instead of
+$(STAGING_DIR)/usr/include.  Peter set it to $(STAGING_DIR)/usr/include
+because sylpheed incorrectly adds includedir to its include path.
+So maybe it's better to patch src/Makefile and remove the
+--includedir=... from sylpheed.mk.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
