@@ -1,42 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 06 Oct 2012 00:54:49 +0200
-Subject: [Buildroot] Building FFMPEG fails
-In-Reply-To: <A2DF5FFD542E4E4DBE52600E0292D017@JohanW7>
-References: <B8BCA720FEFB473BBD1EACE9016F23C5@JohanW7>
- <87fw5tzdze.fsf@macbook.be.48ers.dk>
- <A2DF5FFD542E4E4DBE52600E0292D017@JohanW7>
-Message-ID: <506F6539.2060205@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat,  6 Oct 2012 01:02:59 +0200
+Subject: [Buildroot] [PATCH] nitrogen6x_defconfig: Use tarball from github
+	instead of cloning git
+Message-ID: <1349478179-13495-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/12 12:32, Sagaert Johan wrote:
-> Right, its mplayer build that is complaining
->
-> Here is more detail and the config file.
->
-> It seems to be caused bij some optimzed assembly code : Error: selected processor does not support ARM mode `vld1.32
-> {d2[],d3[]},[sl,:32]'
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Note that the ffmpeg package itself seems to have a similar problem:
-http://autobuild.buildroot.net/results/847efc70592069af475e5b528f9bc4814df04f94/build-end.log
+---
+ configs/nitrogen6x_defconfig |   10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-  But with current master and your configuration, ffmpeg seems to work.
-
-
-  Anyway, you need to pass -mfpu=neon -mfloat-abi=softfp to the compiler.
-Patch follows.
-
-
-  Regards,
-  Arnout
-
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 2b7daec..74b33c6 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -13,14 +13,12 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabrelite"
+-BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://github.com/boundarydevices/u-boot-2009-08.git"
+-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="1f7edab0ac5ebf564e9ad9797fedc2a668149b96"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-2009-08/tarball/1f7edab/u-boot-1f7edab.tar.gz"
+ 
+ # kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/boundarydevices/linux-imx6.git"
+-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="cb1a536f4583af7e1572d39cabd4ac597a8916a5"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/linux-imx6/tarball/cb1a536/linux-imx6-cb1a536.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (0f98441..) t/nitrogen-github (depends on: t/mplayer-neon)
