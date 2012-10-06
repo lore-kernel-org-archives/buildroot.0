@@ -1,47 +1,59 @@
 From: Valentine Barshak <gvaxon@gmail.com>
-Date: Sat, 06 Oct 2012 22:51:34 +0400
-Subject: [Buildroot] [PATCH] sylpheed: Fix includedir
-In-Reply-To: <506F6CC2.6050007@mind.be>
-References: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
- <506F6CC2.6050007@mind.be>
-Message-ID: <50707DB6.5090401@gmail.com>
+Date: Sat,  6 Oct 2012 22:55:06 +0400
+Subject: [Buildroot] [PATCH v2] sylpheed: Fix includedir
+Message-ID: <1349549706-24827-1-git-send-email-gvaxon@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/06/2012 03:26 AM, Arnout Vandecappelle wrote:
-> On 05/10/12 19:25, Valentine Barshak wrote:
->> The sylpheed headers are installed to the target directory,
->> creating full staging directory path in the target rootfs,
->> which is wrong.
->> This happens because the headers are installed to
->> $(DESTDIR)$(includedir), while DESTDIR is set to
->> $(TARGET_DIR) and includedir is $(STAGING_DIR)/usr/include.
->>
->> Remove $(DESTDIR) from the include paths in the Makefile
->> to have sylpheed install its headers to staging include
->> directory instead.
->
->   Actually, includedir should be /usr/include instead of
-> $(STAGING_DIR)/usr/include.  Peter set it to $(STAGING_DIR)/usr/include
-> because sylpheed incorrectly adds includedir to its include path.
-> So maybe it's better to patch src/Makefile and remove the
-> --includedir=... from sylpheed.mk.
+The sylpheed headers are installed to the target directory,
+creating full staging directory path in the target rootfs,
+which is wrong.
+This happens because the headers are installed to
+$(DESTDIR)$(includedir), while DESTDIR is $(TARGET_DIR)
+and includedir is set to $(STAGING_DIR)/usr/include in the
+SYLPHEED_CONF_OPT.
 
-Right, I'll submit an updated patch that I've prepared and tested on the 
-vmware.
+The includedir was set to staging include because sylpheed
+incorrectly adds includedir to its include path, and does
+not build with the default includedir set to /usr/include
+in the target filesystem.
 
-BTW, are there any objections to bump it to version 3.2, which is the 
-latest. It seems to work fine for me (though to be honest I haven't seen 
-any issues with 3.1 either). Version 3.2 needs the same includedir fix 
-as well.
+This removes includedir setting and also removes it from
+include paths in Makefiles. The same approach is used
+in the OE.
 
-Thanks,
-Val.
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+---
+ package/sylpheed/sylpheed.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
->
->   Regards,
->   Arnout
->
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 451c4de..100fd67 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -9,11 +9,18 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ 
+-SYLPHEED_CONF_OPT = --disable-gtkspell \
+-                    --includedir=$(STAGING_DIR)/usr/include
++SYLPHEED_CONF_OPT = --disable-gtkspell
+ 
+ SYLPHEED_DEPENDENCIES = host-pkg-config libgtk2
+ 
++define SYLPHEED_PRECONFIGURE
++	for i in $$(find $(@D) -name "Makefile*"); do \
++		sed -i 's:-I$$(includedir)::g' $$i; \
++	done
++endef
++
++SYLPHEED_PRE_CONFIGURE_HOOKS += SYLPHEED_PRECONFIGURE
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ SYLPHEED_DEPENDENCIES += openssl
+ SYLPHEED_CONF_OPT += --enable-ssl
+-- 
+1.7.11.4
