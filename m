@@ -1,46 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Oct 2012 19:18:17 +0200
-Subject: [Buildroot] [PATCH v8 02/11] perl: new package
-In-Reply-To: <CAB0FRstB06t_6PC9ocQ-M7r9EhmF9v1XwXwjQAjQnoC5oqGFYw@mail.gmail.com>
-References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
- <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
- <20121004231833.7c4f3cb5@skate>
- <CAB0FRstB06t_6PC9ocQ-M7r9EhmF9v1XwXwjQAjQnoC5oqGFYw@mail.gmail.com>
-Message-ID: <20121006191817.618f5d98@skate>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Sat, 06 Oct 2012 22:51:34 +0400
+Subject: [Buildroot] [PATCH] sylpheed: Fix includedir
+In-Reply-To: <506F6CC2.6050007@mind.be>
+References: <1349457934-6208-1-git-send-email-gvaxon@gmail.com>
+ <506F6CC2.6050007@mind.be>
+Message-ID: <50707DB6.5090401@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 10/06/2012 03:26 AM, Arnout Vandecappelle wrote:
+> On 05/10/12 19:25, Valentine Barshak wrote:
+>> The sylpheed headers are installed to the target directory,
+>> creating full staging directory path in the target rootfs,
+>> which is wrong.
+>> This happens because the headers are installed to
+>> $(DESTDIR)$(includedir), while DESTDIR is set to
+>> $(TARGET_DIR) and includedir is $(STAGING_DIR)/usr/include.
+>>
+>> Remove $(DESTDIR) from the include paths in the Makefile
+>> to have sylpheed install its headers to staging include
+>> directory instead.
+>
+>   Actually, includedir should be /usr/include instead of
+> $(STAGING_DIR)/usr/include.  Peter set it to $(STAGING_DIR)/usr/include
+> because sylpheed incorrectly adds includedir to its include path.
+> So maybe it's better to patch src/Makefile and remove the
+> --includedir=... from sylpheed.mk.
 
-On Sat, 6 Oct 2012 15:33:02 +0200, Fran?ois Perrad wrote:
+Right, I'll submit an updated patch that I've prepared and tested on the 
+vmware.
 
-> > Also, on the target there is a usr/bin/perl and a usr/bin/perl5.x.y
-> > files. One is a hardlink to the other, but it is always a bit
-> > disturbing to see two big files of the same size. Shouldn't we
-> > replace that by a symlink instead, which is more obvious?
-> 
-> libperl.so  1.2 MB
-> perl      4 KB (stripped)
-> perl5.16.1   4 KB
-> We speak about 4KB !
+BTW, are there any objections to bump it to version 3.2, which is the 
+latest. It seems to work fine for me (though to be honest I haven't seen 
+any issues with 3.1 either). Version 3.2 needs the same includedir fix 
+as well.
 
-Here:
+Thanks,
+Val.
 
-$ ls -l output/target/usr/bin/perl*
--rwxr-xr-x 2 thomas thomas 4558484 oct.   4 23:12 output/target/usr/bin/perl
--rwxr-xr-x 2 thomas thomas 4558484 oct.   4 23:12 output/target/usr/bin/perl5.16.1
--rwxr-xr-x 2 thomas thomas   41693 oct.   4 22:59 output/target/usr/bin/perlbug
--rwxr-xr-x 1 thomas thomas     224 oct.   4 22:59 output/target/usr/bin/perldoc
--rwxr-xr-x 1 thomas thomas   10766 oct.   4 22:59 output/target/usr/bin/perlivp
--rwxr-xr-x 2 thomas thomas   41693 oct.   4 22:59 output/target/usr/bin/perlthanks
-
-So it's not exactly 4 KB :)
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+>   Regards,
+>   Arnout
+>
