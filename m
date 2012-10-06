@@ -1,76 +1,226 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 6 Oct 2012 15:33:02 +0200
+Date: Sat, 6 Oct 2012 15:34:48 +0200
 Subject: [Buildroot] [PATCH v8 02/11] perl: new package
-In-Reply-To: <20121004231833.7c4f3cb5@skate>
+In-Reply-To: <50702042.1070702@mind.be>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
  <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
- <20121004231833.7c4f3cb5@skate>
-Message-ID: <CAB0FRstB06t_6PC9ocQ-M7r9EhmF9v1XwXwjQAjQnoC5oqGFYw@mail.gmail.com>
+ <50702042.1070702@mind.be>
+Message-ID: <CAB0FRsuSCWmed9Y6Gi-2r8h3jZajZBnnCM9gdF-KoJJnSn3RCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/4 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Fran?ois,
+2012/10/6 Arnout Vandecappelle <arnout@mind.be>:
+> On 25/09/12 19:18, Francois Perrad wrote:
+>>
+>> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
 >
-> On Tue, 25 Sep 2012 19:18:18 +0200, Francois Perrad wrote:
 >
->> +             -Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
+>  Perl build system is way beyond my understanding, so here are just some
+> generic
+> comments.
 >
-> You should also apply the following patch:
+>  It may still take a while before your patches make it into the
+> repository, so please hang on!
 >
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index fbe7ba9..4e6f50b 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -52,7 +52,7 @@ define PERL_CONFIGURE_CMDS
->                 -Dnm="$(TARGET_NM)" \
->                 -Dranlib="$(TARGET_RANLIB)" \
->                 -Dccflags="$(TARGET_CFLAGS)" \
-> -               -Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
-> +               -Dldflags="$(TARGET_LDFLAGS) -l gcc_s -lm" \
->                 -Dlddlflags="-shared" \
->                 -Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
->                 -Duseshrplib \
+> [snip]
+>
+>
+>> diff --git a/package/perl/perl-make-ext.patch
+>> b/package/perl/perl-make-ext.patch
+>> new file mode 100644
+>> index 0000000..e0195e7
+>> --- /dev/null
+>> +++ b/package/perl/perl-make-ext.patch
+>> @@ -0,0 +1,24 @@
+>> +Don't use RUN with make (only for perl)
+>
+>
+>  As Thomas wrote, this patch description is not enough to understand it.
+> In particular, describe why a patch is needed in the first place.
+>
+>
+>> +
+>> +Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
+>> +
+>> +Index: b/make_ext.pl
+>> +===================================================================
+>> +--- a/make_ext.pl
+>> ++++ b/make_ext.pl
+>> +@@ -458,11 +458,13 @@
+>> +       # Give makefile an opportunity to rewrite itself.
+>> +       # reassure users that life goes on...
+>> +       my @args = ('config', @$pass_through);
+>> +-      system(@run, @make, @args) and print "@run @make @args failed,
+>> continuing anyway...\n";
+>> ++#     system(@run, @make, @args) and print "@run @make @args failed,
+>> continuing anyway...\n";
+>> ++      system(@make, @args) and print "@make @args failed, continuing
+>> anyway...\n";
+>
+>
+>  Since any future maintenance will be based on the patch itself, it's
+> not necessary to keep the original statement around in a comment -
+> it's already there in the patch itself.
+>
+> [snip]
+>
+>> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+>> new file mode 100644
+>> index 0000000..7d60ca7
+>> --- /dev/null
+>> +++ b/package/perl/perl.mk
+>> @@ -0,0 +1,99 @@
+>> +#############################################################
+>> +#
+>> +# perl
+>> +#
+>> +#############################################################
+>> +
+>> +PERL_VERSION_MAJOR = 16
+>> +PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
+>> +PERL_SITE = http://www.cpan.org/src/5.0
+>> +PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+>> +PERL_LICENSE = Artistic
+>> +PERL_LICENSE_FILES = Artistic
+>> +PERL_INSTALL_STAGING = YES
+>> +PERL_DEPENDENCIES = host-qemu
+>> +
+>> +ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+>> +    PERL_USE_DEVEL=-Dusedevel
+>> +endif
+>
+>
+>  This one certainly deserves some explanation...
+>
+>
+>> +
+>> +ifneq ($(BR2_LARGEFILE),y)
+>> +    PERL_NO_LARGEFILE=-Uuselargefiles
+>> +endif
+>> +
+>> +PERL_ARCH=$(ARCH)
+>> +ifeq ($(PERL_ARCH),i686)
+>> +    PERL_ARCH=i386
+>> +endif
+>> +PERL_QEMU_USER_MODE=$(HOST_DIR)/usr/bin/qemu-$(PERL_ARCH)
+>> +
+>> +define PERL_CONFIGURE_CMDS
+>> +       rm -f $(@D)/config.sh
+>> +       (cd $(@D); ./Configure -des \
+>> +               -Dusecrosscompile \
+>> +               -Dtargetrun=$(PERL_QEMU_USER_MODE) \
+>> +               -Dqemulib=$(STAGING_DIR) \
+>> +               -Dtargethost=dummy \
+>> +               -Dar="$(TARGET_AR)" \
+>> +               -Dcc="$(TARGET_CC)" \
+>> +               -Dcpp="$(TARGET_CC)" \
+>> +               -Dld="$(TARGET_LD)" \
+>> +               -Dnm="$(TARGET_NM)" \
+>> +               -Dranlib="$(TARGET_RANLIB)" \
+>> +               -Dccflags="$(TARGET_CFLAGS)" \
+>> +               -Dldflags="$(TARGET_LDFLAGS) -l gcc_s" \
+>> +               -Dlddlflags="-shared" \
+>> +
+>> -Dlibc=$(TARGET_HOST)/usr/$(GNU_TARGET_NAME)/sysroot/lib/libc.so \
+>> +               -Duseshrplib \
+>> +               -Dprefix=/usr \
+>> +               -Uoptimize \
+>
+>
+>  It would be nicer to define a variable PERL_CONF_OPT that contains
+> all these configure options.  Then you can also use += to extended
+> it instead of defining PERL_USE_DEVEL etc.
 >
 
-Ok, fixed.
-
-> Otherwise, the build fails with:
->
-> /home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc -l gcc_s -fstack-protector -o miniperl \
->             perlmini.o opmini.o miniperlmain.o  malloc.o gv.o toke.o perly.o pad.o regcomp.o dump.o util.o mg.o reentr.o mro.o keywords.o hv.o av.o run.o pp_hot.o sv.o pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o utf8.o taint.o deb.o universal.o globals.o perlio.o perlapi.o numeric.o mathoms.o locale.o pp_pack.o pp_sort.o
-> pp.o: In function `Perl_pp_pow':
-> pp.c:(.text+0x1b24): undefined reference to `pow'
-> pp.o: In function `Perl_pp_modulo':
-> pp.c:(.text+0x1f92): undefined reference to `floor'
-> pp.c:(.text+0x1fa0): undefined reference to `floor'
-> pp.c:(.text+0x1fbc): undefined reference to `fmod'
-> [...]
->
-> with certain toolchains.
->
-> Also, on the target there is a usr/bin/perl and a usr/bin/perl5.x.y
-> files. One is a hardlink to the other, but it is always a bit
-> disturbing to see two big files of the same size. Shouldn't we replace
-> that by a symlink instead, which is more obvious?
-
-libperl.so  1.2 MB
-perl      4 KB (stripped)
-perl5.16.1   4 KB
-We speak about 4KB !
+PERL_CONF_OPT is a good idea.
 
 >
-> Thanks!
+>> +               $(PERL_USE_DEVEL) \
+>> +               $(PERL_NO_LARGEFILE))
+>> +       echo "# patched values">>$(@D)/config.sh
+>> +       $(SED) '/^myarchname=/d' \
+>> +               -e '/^mydomain=/d' \
+>> +               -e '/^myhostname=/d' \
+>> +               -e '/^myuname=/d' \
+>> +               -e '/^osname=/d' \
+>> +               -e '/^osvers=/d' \
+>> +               -e '/^perladmin=/d' \
+>> +               $(@D)/config.sh
+>> +       echo "myarchname='$(GNU_TARGET_NAME)'">>$(@D)/config.sh
+>> +       echo "mydomain=''">>$(@D)/config.sh
+>> +       echo
+>> "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'">>$(@D)/config.sh
+>> +       echo "myuname='Buildroot $(BR2_VERSION_FULL)'">>$(@D)/config.sh
+>> +       echo "osname='linux'">>$(@D)/config.sh
+>> +       echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'">>$(@D)/config.sh
+>> +       echo "perladmin='root'">>$(@D)/config.sh
+>> +       (cd $(@D); ./Configure -S)
+>> +       cp $(@D)/config.h $(@D)/xconfig.h
+>> +       $(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /'
+>> $(@D)/patchlevel.h
+>> +endef
+>> +
+>> +define PERL_BUILD_CMDS
+>> +       echo "#!/bin/sh">  $(@D)/Cross/miniperl
+>> +       echo "$(PERL_QEMU_USER_MODE) $(@D)/miniperl
+>> \"\$$@\"">>$(@D)/Cross/miniperl
+>> +       chmod +x $(@D)/Cross/miniperl
 >
-> Thomas
+>
+>  Wouldn't it make more sense to create miniperl as part of the configure
+> step?
+> I mean, when you rebuild perl, there's no need to recreate miniperl, right?
+>
+>
+>> +       PERL_MM_OPT="PERL=$(@D)/Cross/miniperl" \
+>> +       $(MAKE) -C $(@D) all
+>
+>
+>  Minor nit: I prefer to see indentation if you continue a line like this.
+>
+
+Ok
+
+>
+>> +endef
+>> +
+>> +define PERL_INSTALL_STAGING_CMDS
+>> +       $(MAKE) INSTALL_DEPENDENCE= \
+>> +               INSTALLFLAGS= \
+>> +               DESTDIR="$(STAGING_DIR)" \
+>> +               -C $(@D) install.perl
+>> +endef
+>> +
+>> +define PERL_INSTALL_TARGET_CMDS
+>> +       $(MAKE) INSTALL_DEPENDENCE= \
+>> +               INSTALLFLAGS=-p \
+>> +               DESTDIR="$(TARGET_DIR)" \
+>> +               -C $(@D) install.perl
+>> +endef
+>> +
+>> +define PERL_CLEAN_CMDS
+>> +       -$(MAKE) -C $(@D) clean
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>
+>
+>  All in all, looks pretty good!  Not tested, though.
+>
+>  Regards,
+>  Arnout
+>
 > --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
