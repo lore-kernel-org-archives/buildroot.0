@@ -1,11 +1,11 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 6 Oct 2012 15:38:02 +0200
-Subject: [Buildroot] [PATCH v8 03/11] perl: add an option for miniperl
-In-Reply-To: <50702144.6020503@mind.be>
+Date: Sat, 6 Oct 2012 15:40:39 +0200
+Subject: [Buildroot] [PATCH v8 04/11] perl: add DB_File
+In-Reply-To: <507022C1.9030909@mind.be>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
- <1348593508-14254-3-git-send-email-francois.perrad@gadz.org>
- <20121004224112.4c46e707@skate> <50702144.6020503@mind.be>
-Message-ID: <CAB0FRss_rtthWvc8++Y+fFOw5LCU5LW-qqMx+gYUTEPEVO3psw@mail.gmail.com>
+ <1348593508-14254-4-git-send-email-francois.perrad@gadz.org>
+ <507022C1.9030909@mind.be>
+Message-ID: <CAB0FRsuO1X6juxFWrTcxYsXJChjN0i5D9J+snaYDh3BQQ64LuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 2012/10/6 Arnout Vandecappelle <arnout@mind.be>:
-> On 04/10/12 22:41, Thomas Petazzoni wrote:
+> On 25/09/12 19:18, Francois Perrad wrote:
 >>
->> Fran?ois,
+>> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
+>> ---
+>>   package/perl/Config.in |   10 ++++++++++
+>>   package/perl/perl.mk   |    4 ++++
+>>   2 files changed, 14 insertions(+)
 >>
->> On Tue, 25 Sep 2012 19:18:19 +0200, Francois Perrad wrote:
+>> diff --git a/package/perl/Config.in b/package/perl/Config.in
+>> index 3e11574..e0dbbdf 100644
+>> --- a/package/perl/Config.in
+>> +++ b/package/perl/Config.in
+>> @@ -17,3 +17,13 @@ config BR2_PACKAGE_PERL_ONLY_MINIPERL
+>>           Usually used to bootstrap a full Perl (@INC contains only .).
 >>
->>> diff --git a/package/perl/perl-install-miniperl.patch
->>> b/package/perl/perl-install-miniperl.patch
->>> new file mode 100644
->>> index 0000000..7e6f8e6
->>> --- /dev/null
->>> +++ b/package/perl/perl-install-miniperl.patch
->>> @@ -0,0 +1,129 @@
->>> +Add an option -miniperl
->>> +
->>> +Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
->>
->>
->> Does this (fairly long) patch has a chance of being merged upstream? If
->> not, then I'd prefer if we simply didn't support miniperl.
+>>   endif
+>> +
+>> +if BR2_PACKAGE_PERL&&  !BR2_PACKAGE_PERL_ONLY_MINIPERL
 >
 >
->  I don't agree.  There is definitely a need for a non-bloated perl in
-> buildroot.
-> So if microperl is on its way out, this patch is needed even if upstream
-> doesn't
-> accept it.
+>  You can reuse the preceding if BR2_PACKAGE_PERL, so all the perl options
+> will be wrapped into two condition levels.
 >
+>
+>> +
+>> +config BR2_PACKAGE_PERL_DB_FILE
+>> +       bool "DB_File"
+>> +       select BR2_PACKAGE_BERKELEYDB
+>> +       help
+>> +         Build the DB_File module.
+>> +
+>> +endif
+>> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+>> index 8f7ba15..0c69e0b 100644
+>> --- a/package/perl/perl.mk
+>> +++ b/package/perl/perl.mk
+>> @@ -11,7 +11,11 @@ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+>>   PERL_LICENSE = Artistic
+>>   PERL_LICENSE_FILES = Artistic
+>>   PERL_INSTALL_STAGING = YES
+>> +
+>>   PERL_DEPENDENCIES = host-qemu
+>> +ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
+>> +    PERL_DEPENDENCIES += berkeleydb
+>> +endif
+>
+>
+>  We want reproducible builds, so whether DB_File is built shouldn't depend
+> on whether berkeleydb happens to have been built before.  If you don't
+> select
+> the PERL_DB_FILE option, DB_File still might be built depending on the order
+> of compilation. There are two options to resolve this.
+>
+> - Add something to PERL_CONF_OPT to explicitly disable and enable DB_FILE.
+>
+> - Remove the configure option, and instead write
+> ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+>         PERL_DEPENDENCIES += berkeleydb
+> endif
 
-miniperl is not a non-bloated perl.
-a custom install allows a small footprint, see patch 08/11.
+Done.
 
+>
 >
 >  Regards,
 >  Arnout
