@@ -1,91 +1,132 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 6 Oct 2012 15:40:39 +0200
-Subject: [Buildroot] [PATCH v8 04/11] perl: add DB_File
-In-Reply-To: <507022C1.9030909@mind.be>
+Date: Sat, 6 Oct 2012 15:43:30 +0200
+Subject: [Buildroot] [PATCH v8 07/11] cpanminus: new package
+In-Reply-To: <20121004224641.622486b8@skate>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
- <1348593508-14254-4-git-send-email-francois.perrad@gadz.org>
- <507022C1.9030909@mind.be>
-Message-ID: <CAB0FRsuO1X6juxFWrTcxYsXJChjN0i5D9J+snaYDh3BQQ64LuA@mail.gmail.com>
+ <1348593508-14254-7-git-send-email-francois.perrad@gadz.org>
+ <20121004224641.622486b8@skate>
+Message-ID: <CAB0FRsvdN4VGKGXGmwnPjM+XciGd8Js659SBAfZcP=hjBzYkdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/6 Arnout Vandecappelle <arnout@mind.be>:
-> On 25/09/12 19:18, Francois Perrad wrote:
->>
->> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
->> ---
->>   package/perl/Config.in |   10 ++++++++++
->>   package/perl/perl.mk   |    4 ++++
->>   2 files changed, 14 insertions(+)
->>
->> diff --git a/package/perl/Config.in b/package/perl/Config.in
->> index 3e11574..e0dbbdf 100644
->> --- a/package/perl/Config.in
->> +++ b/package/perl/Config.in
->> @@ -17,3 +17,13 @@ config BR2_PACKAGE_PERL_ONLY_MINIPERL
->>           Usually used to bootstrap a full Perl (@INC contains only .).
->>
->>   endif
->> +
->> +if BR2_PACKAGE_PERL&&  !BR2_PACKAGE_PERL_ONLY_MINIPERL
+2012/10/4 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Fran?ois,
 >
->
->  You can reuse the preceding if BR2_PACKAGE_PERL, so all the perl options
-> will be wrapped into two condition levels.
->
->
+> On Tue, 25 Sep 2012 19:18:23 +0200, Francois Perrad wrote:
+>> diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+>> new file mode 100644
+>> index 0000000..1b2857a
+>> --- /dev/null
+>> +++ b/package/cpanminus/cpanminus.mk
+>> @@ -0,0 +1,44 @@
+>> +#############################################################
+>> +#
+>> +# cpanminus
+>> +#
+>> +#############################################################
 >> +
->> +config BR2_PACKAGE_PERL_DB_FILE
->> +       bool "DB_File"
->> +       select BR2_PACKAGE_BERKELEYDB
->> +       help
->> +         Build the DB_File module.
+>> +CPANMINUS_VERSION = 1.5018
+>> +CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
+>> +CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
+>> +CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
 >> +
->> +endif
->> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
->> index 8f7ba15..0c69e0b 100644
->> --- a/package/perl/perl.mk
->> +++ b/package/perl/perl.mk
->> @@ -11,7 +11,11 @@ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
->>   PERL_LICENSE = Artistic
->>   PERL_LICENSE_FILES = Artistic
->>   PERL_INSTALL_STAGING = YES
->> +
->>   PERL_DEPENDENCIES = host-qemu
->> +ifeq ($(BR2_PACKAGE_PERL_DB_FILE),y)
->> +    PERL_DEPENDENCIES += berkeleydb
+>> +CPANMINUS_ARCH=$(ARCH)
+>> +ifeq ($(CPANMINUS_ARCH),i686)
+>> +    CPANMINUS_ARCH=i386
 >> +endif
 >
+> Same comment: not complete, and please share all those Qemu definitions
+> in the host-qemu package. It should probably define TARGET_QEMU_USER to
+> $(HOST_DIR)/usr/bin/qemu-$(QEMU_ARCH). Unless of course they are not
+> related to Qemu.
+Ok.
+
 >
->  We want reproducible builds, so whether DB_File is built shouldn't depend
-> on whether berkeleydb happens to have been built before.  If you don't
-> select
-> the PERL_DB_FILE option, DB_File still might be built depending on the order
-> of compilation. There are two options to resolve this.
+>> +CPANMINUS_QEMU_USER_MODE=$(HOST_DIR)/usr/bin/qemu-$(CPANMINUS_ARCH)
+>> +CPANMINUS_RUN_PERL=$(CPANMINUS_QEMU_USER_MODE) $(STAGING_DIR)/usr/bin/perl
+>> +CPANMINUS_ARCHNAME=$(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
+>> +CPANMINUS_PERL_LIB=$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)
+>> +CPANMINUS_PERL_ARCHLIB=$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
 >
-> - Add something to PERL_CONF_OPT to explicitly disable and enable DB_FILE.
+> CPANMINUS_PERL_ARCHLIB = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
+
+Ok
 >
-> - Remove the configure option, and instead write
-> ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
->         PERL_DEPENDENCIES += berkeleydb
+>> +CPANMINUS_PERL_SITELIB=$(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
+>> +CPANMINUS_PERL_SITEARCH=$(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
+>
+> CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
+Ok
+
+>
+>> +CPANMINUS_PERL5LIB=$(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
+>
+>
+>> +ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
+>> +    CPANMINUS_MIRROR=--mirror $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MIRROR)) --mirror-only
+>> +endif
+>
+> CPANMINUS_MIRROR = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MIRROR)
+> ifneq ($(CPANMINUS_MIRROR),y)
+>         CPANMINUS_CONF_OPT += --mirror $(CPANMINUS_MIRROR) --mirror-only
 > endif
-
-Done.
+>
+> And also, put space before and after equal sign when defining make variables.
+Ok.
 
 >
+>> +define CPANMINUS_INSTALL_TARGET_CMDS
+>> +     echo "#!/bin/sh"                                                        > $(@D)/run_perl
+>> +     echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
+>> +     chmod +x $(@D)/run_perl
+>> +     PERL5LIB=$(CPANMINUS_PERL5LIB) \
+>> +     PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
+>> +     PERL_MB_OPT="--destdir $(TARGET_DIR)" \
+>> +     RUN_PERL="$(@D)/run_perl" \
+>> +     $(CPANMINUS_RUN_PERL) $(@D)/cpanm \
+>> +             --perl=$(@D)/run_perl \
+>> +             --notest \
+>> +             --no-man-pages \
+>> +             $(CPANMINUS_MIRROR) \
+>> +             $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> diff --git a/package/perl/perl-fix-Module-Build.patch b/package/perl/perl-fix-Module-Build.patch
+>> new file mode 100644
+>> index 0000000..26b15e4
+>> --- /dev/null
+>> +++ b/package/perl/perl-fix-Module-Build.patch
+>> @@ -0,0 +1,16 @@
+>> +
+>> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 >
->  Regards,
->  Arnout
+> Patch description please.
+>
+>> +
+>> +Index: b/cpan/Module-Build/lib/Module/Build/Base.pm
+>> +===================================================================
+>> +--- a/cpan/Module-Build/lib/Module/Build/Base.pm
+>> ++++ b/cpan/Module-Build/lib/Module/Build/Base.pm
+>> +@@ -456,7 +456,7 @@
+>> +   my $proto = shift;
+>> +   my $c     = ref($proto) ? $proto->{config} : 'Module::Build::Config';
+>> +
+>> +-  my $perl  = $^X;
+>> ++  my $perl  = $ENV{RUN_PERL} || $^X;
+>> +   my $perl_basename = File::Basename::basename($perl);
+>> +
+>> +   my @potential_perls;
+>
+> Thomas
 > --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
