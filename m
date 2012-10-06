@@ -1,11 +1,11 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 6 Oct 2012 15:43:30 +0200
+Date: Sat, 6 Oct 2012 15:44:28 +0200
 Subject: [Buildroot] [PATCH v8 07/11] cpanminus: new package
-In-Reply-To: <20121004224641.622486b8@skate>
+In-Reply-To: <20121004230105.53ac1b54@skate>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
  <1348593508-14254-7-git-send-email-francois.perrad@gadz.org>
- <20121004224641.622486b8@skate>
-Message-ID: <CAB0FRsvdN4VGKGXGmwnPjM+XciGd8Js659SBAfZcP=hjBzYkdg@mail.gmail.com>
+ <20121004230105.53ac1b54@skate>
+Message-ID: <CAB0FRsu=ObqFU+a2na_hHjgVG6RtYUw7gM1nTDx8SYD+xOG3wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,39 @@ To: buildroot@busybox.net
 2012/10/4 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > Fran?ois,
 >
+> Some other questions...
+>
 > On Tue, 25 Sep 2012 19:18:23 +0200, Francois Perrad wrote:
->> diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
->> new file mode 100644
->> index 0000000..1b2857a
->> --- /dev/null
->> +++ b/package/cpanminus/cpanminus.mk
->> @@ -0,0 +1,44 @@
->> +#############################################################
->> +#
->> +# cpanminus
->> +#
->> +#############################################################
+>
+>> +if BR2_PACKAGE_CPANMINUS
 >> +
->> +CPANMINUS_VERSION = 1.5018
->> +CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
->> +CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
->> +CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
+>> +config BR2_PACKAGE_CPANMINUS_MIRROR
+>> +     string "mirror"
+>> +     help
+>> +       Specifies the base URL for the CPAN mirror to use,
+>> +       such as http://cpan.cpantesters.org/.
 >> +
->> +CPANMINUS_ARCH=$(ARCH)
->> +ifeq ($(CPANMINUS_ARCH),i686)
->> +    CPANMINUS_ARCH=i386
->> +endif
+>> +config BR2_PACKAGE_CPANMINUS_MODULES
+>> +     string "Perl modules from CPAN"
+>> +     help
+>> +       List of space-separated Perl modules to install from CPAN.
+>> +
+>> +       Examples: Try::Tiny Dancer YAML Moo
+>> +
+>> +       Install the listed modules and their dependencies.
+>> +
+>> +config BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES
+>> +     string "native dependencies"
+>> +     help
+>> +       Some XS modules require native libraries.
 >
-> Same comment: not complete, and please share all those Qemu definitions
-> in the host-qemu package. It should probably define TARGET_QEMU_USER to
-> $(HOST_DIR)/usr/bin/qemu-$(QEMU_ARCH). Unless of course they are not
-> related to Qemu.
-Ok.
-
->
->> +CPANMINUS_QEMU_USER_MODE=$(HOST_DIR)/usr/bin/qemu-$(CPANMINUS_ARCH)
->> +CPANMINUS_RUN_PERL=$(CPANMINUS_QEMU_USER_MODE) $(STAGING_DIR)/usr/bin/perl
->> +CPANMINUS_ARCHNAME=$(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
->> +CPANMINUS_PERL_LIB=$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)
->> +CPANMINUS_PERL_ARCHLIB=$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
->
-> CPANMINUS_PERL_ARCHLIB = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
-
-Ok
->
->> +CPANMINUS_PERL_SITELIB=$(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
->> +CPANMINUS_PERL_SITEARCH=$(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)/$(CPANMINUS_ARCHNAME)
->
-> CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
-Ok
-
->
->> +CPANMINUS_PERL5LIB=$(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
->
->
->> +ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
->> +    CPANMINUS_MIRROR=--mirror $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MIRROR)) --mirror-only
->> +endif
->
-> CPANMINUS_MIRROR = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MIRROR)
-> ifneq ($(CPANMINUS_MIRROR),y)
->         CPANMINUS_CONF_OPT += --mirror $(CPANMINUS_MIRROR) --mirror-only
-> endif
->
-> And also, put space before and after equal sign when defining make variables.
-Ok.
-
+> I'm wondering if those options shouldn't have some default values, at
+> least for BR2_PACKAGE_CPANMINUS_MODULES and
+> BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES, so that when our
+> autobuilders will enable this package, it will actually build
+> something. Of course, we can't test all possibilities, but at least
+> testing a basic module that has a native dependency would be a good
+> test.
 >
 >> +define CPANMINUS_INSTALL_TARGET_CMDS
 >> +     echo "#!/bin/sh"                                                        > $(@D)/run_perl
@@ -93,33 +64,13 @@ Ok.
 >> +             $(CPANMINUS_MIRROR) \
 >> +             $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
 >> +endef
->> +
->> +$(eval $(generic-package))
->> diff --git a/package/perl/perl-fix-Module-Build.patch b/package/perl/perl-fix-Module-Build.patch
->> new file mode 100644
->> index 0000000..26b15e4
->> --- /dev/null
->> +++ b/package/perl/perl-fix-Module-Build.patch
->> @@ -0,0 +1,16 @@
->> +
->> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 >
-> Patch description please.
+> Will this work if $(BR2_PACKAGE_CPANMINUS_MODULES) is empty?
+
+Now, fixed.
+
 >
->> +
->> +Index: b/cpan/Module-Build/lib/Module/Build/Base.pm
->> +===================================================================
->> +--- a/cpan/Module-Build/lib/Module/Build/Base.pm
->> ++++ b/cpan/Module-Build/lib/Module/Build/Base.pm
->> +@@ -456,7 +456,7 @@
->> +   my $proto = shift;
->> +   my $c     = ref($proto) ? $proto->{config} : 'Module::Build::Config';
->> +
->> +-  my $perl  = $^X;
->> ++  my $perl  = $ENV{RUN_PERL} || $^X;
->> +   my $perl_basename = File::Basename::basename($perl);
->> +
->> +   my @potential_perls;
+> Best regards,
 >
 > Thomas
 > --
