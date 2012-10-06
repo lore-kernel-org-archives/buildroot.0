@@ -1,62 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 06 Oct 2012 16:58:05 +0200
-Subject: [Buildroot] [PATCH v8 03/11] perl: add an option for miniperl
-In-Reply-To: <CAB0FRss_rtthWvc8++Y+fFOw5LCU5LW-qqMx+gYUTEPEVO3psw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Oct 2012 19:18:17 +0200
+Subject: [Buildroot] [PATCH v8 02/11] perl: new package
+In-Reply-To: <CAB0FRstB06t_6PC9ocQ-M7r9EhmF9v1XwXwjQAjQnoC5oqGFYw@mail.gmail.com>
 References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
- <1348593508-14254-3-git-send-email-francois.perrad@gadz.org>
- <20121004224112.4c46e707@skate> <50702144.6020503@mind.be>
- <CAB0FRss_rtthWvc8++Y+fFOw5LCU5LW-qqMx+gYUTEPEVO3psw@mail.gmail.com>
-Message-ID: <507046FD.5030607@mind.be>
+ <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
+ <20121004231833.7c4f3cb5@skate>
+ <CAB0FRstB06t_6PC9ocQ-M7r9EhmF9v1XwXwjQAjQnoC5oqGFYw@mail.gmail.com>
+Message-ID: <20121006191817.618f5d98@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/10/12 15:38, Fran?ois Perrad wrote:
-> 2012/10/6 Arnout Vandecappelle<arnout@mind.be>:
->> On 04/10/12 22:41, Thomas Petazzoni wrote:
->>>
->>> Fran?ois,
->>>
->>> On Tue, 25 Sep 2012 19:18:19 +0200, Francois Perrad wrote:
->>>
->>>> diff --git a/package/perl/perl-install-miniperl.patch
->>>> b/package/perl/perl-install-miniperl.patch
->>>> new file mode 100644
->>>> index 0000000..7e6f8e6
->>>> --- /dev/null
->>>> +++ b/package/perl/perl-install-miniperl.patch
->>>> @@ -0,0 +1,129 @@
->>>> +Add an option -miniperl
->>>> +
->>>> +Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
->>>
->>>
->>> Does this (fairly long) patch has a chance of being merged upstream? If
->>> not, then I'd prefer if we simply didn't support miniperl.
->>
->>
->>   I don't agree.  There is definitely a need for a non-bloated perl in
->> buildroot.
->> So if microperl is on its way out, this patch is needed even if upstream
->> doesn't
->> accept it.
->>
->
-> miniperl is not a non-bloated perl.
-> a custom install allows a small footprint, see patch 08/11.
 
-  Ah, in that case, I also don't see much point of having miniperl in the
-target, is there?
+On Sat, 6 Oct 2012 15:33:02 +0200, Fran?ois Perrad wrote:
 
-  Regards,
-  Arnout
+> > Also, on the target there is a usr/bin/perl and a usr/bin/perl5.x.y
+> > files. One is a hardlink to the other, but it is always a bit
+> > disturbing to see two big files of the same size. Shouldn't we
+> > replace that by a symlink instead, which is more obvious?
+> 
+> libperl.so  1.2 MB
+> perl      4 KB (stripped)
+> perl5.16.1   4 KB
+> We speak about 4KB !
 
+Here:
+
+$ ls -l output/target/usr/bin/perl*
+-rwxr-xr-x 2 thomas thomas 4558484 oct.   4 23:12 output/target/usr/bin/perl
+-rwxr-xr-x 2 thomas thomas 4558484 oct.   4 23:12 output/target/usr/bin/perl5.16.1
+-rwxr-xr-x 2 thomas thomas   41693 oct.   4 22:59 output/target/usr/bin/perlbug
+-rwxr-xr-x 1 thomas thomas     224 oct.   4 22:59 output/target/usr/bin/perldoc
+-rwxr-xr-x 1 thomas thomas   10766 oct.   4 22:59 output/target/usr/bin/perlivp
+-rwxr-xr-x 2 thomas thomas   41693 oct.   4 22:59 output/target/usr/bin/perlthanks
+
+So it's not exactly 4 KB :)
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
