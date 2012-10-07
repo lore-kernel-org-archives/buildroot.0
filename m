@@ -1,38 +1,24 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 07 Oct 2012 13:31:53 +0200
-Subject: [Buildroot] [PATCH] linux: Fix initramfs compression
-In-Reply-To: <1349551332-25169-1-git-send-email-gvaxon@gmail.com>
-References: <1349551332-25169-1-git-send-email-gvaxon@gmail.com>
-Message-ID: <50716829.7010004@mind.be>
+From: Martin Peevski <martin@ronetix.at>
+Date: Sun, 07 Oct 2012 16:29:09 +0300
+Subject: [Buildroot] Kernel sources supplied from my PC
+Message-ID: <507183A5.4010006@ronetix.at>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/10/12 21:22, Valentine Barshak wrote:
-> -		$(call KCONFIG_DISABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE,$(@D)/.config)
-> -		$(call KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_GZIP,$(@D)/.config))
-> +		for c in GZIP BZIP2 LZMA XZ LZO; do \
-> +			if grep -qm1 "CONFIG_RD_$$c=y" $(@D)/.config; then \
-> +				$(call KCONFIG_DISABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE,$(@D)/.config); \
-> +				$(call KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_$$c,$(@D)/.config); \
-> +				break; \
-> +			fi; \
-> +		done)
+Hello, I want to ask you how can I supply some of the needed sources for 
+building Linux system from my PC? This is because sometimes I haven't 
+server with some custom Kernel version, for example, and have only my PC.
 
-  I think this is a bit too complex for something that won't really be used by
-most people.  Why not just remove the COMPRESSION lines from linux.mk?  Then
-we fall back on the default if the user hasn't configured it explicitly.  Gives
-the user the possibility to choose something else than the default, without adding
-complexity to buildroot.
+I search in the manual and there have section "Offline builds" but it 
+can't help me, I think? When I execute make source the needed sources 
+will be downloaded from internet again?
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+I think that I can copy my sources to /dl directory of Buildroot but 
+when execute make distclean it dissapear. Or I must create it manualy 
+and then copy my sources there?
+
+Thanks in advance!
+Martin.
