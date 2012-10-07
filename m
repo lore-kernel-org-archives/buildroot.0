@@ -1,43 +1,56 @@
-From: Martin Peevski <martin@ronetix.at>
-Date: Sun, 07 Oct 2012 17:25:36 +0300
-Subject: [Buildroot] Kernel sources supplied from my PC
-In-Reply-To: <50718B1A.4060804@relinux.de>
-References: <507183A5.4010006@ronetix.at> <50718B1A.4060804@relinux.de>
-Message-ID: <507190E0.3090005@ronetix.at>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 7 Oct 2012 16:31:32 +0200
+Subject: [Buildroot] RFC: Manual refactoring - Request for feedback before
+ Buildroot Developer Days.
+Message-ID: <CAHXCMMLVWx3iwf0sJziz-LWDXr77biZ+c3iarcNWm7sE5wkrRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/10/12 17:00, Stephan Hoffmann wrote:
-> Try the source directory override explained here:
-> http://free-electrons.com/blog/buildroot-2011-11/
->
-> Obviously, this didn't make it into the manual yet;-(
->
-> Am 07.10.2012 15:29, schrieb Martin Peevski:
->> Hello, I want to ask you how can I supply some of the needed sources
->> for building Linux system from my PC? This is because sometimes I
->> haven't server with some custom Kernel version, for example, and have
->> only my PC.
->>
->> I search in the manual and there have section "Offline builds" but it
->> can't help me, I think? When I execute make source the needed sources
->> will be downloaded from internet again?
->>
->> I think that I can copy my sources to /dl directory of Buildroot but
->> when execute make distclean it dissapear. Or I must create it manualy
->> and then copy my sources there?
->>
->> Thanks in advance!
->> Martin.
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Hi folks, Buildroot users and developers,
 
 
-OK, this isn't at the manual but is it possible and if yes will you tell 
-me how to do that?
+The manual has been under discussion for refactoring for some months [1,2,3,4].
+This rework concerns all aspects of the manual (organization/table of
+content, and sections' content) [5].
+
+In 4 weeks, the Buildroot Developer Days will take place and I am
+pretty sure we will talk about it there [6].
+
+Meanwhile, whatever who you are (BR-users, BR-developers,
+BR-maintainers, newcomers or long-term followers, using BR in your
+spare-time, or at work...)
+we will really appreciate feedback about the current manual:
+- what is good
+- what is not so good
+- what is wrong, or not up-to-date
+- what is missing
+- what would you like to see in the manual
+- all existing material and way to gather them and make them easily
+referenced and available for anyone looking for Buildroot
+help/doc/tutorial/...
+- anything else, remarks, suggestions...
+
+
+If you feel concerned about Buildroot, its documentation, let your
+voice be heard by:
+- responding to this mail;
+- or updating the Manual refactoring wiki page [5].
+
+
+Yours,
+
+
+References:
+[1] http://lists.busybox.net/pipermail/buildroot/2012-March/051952.html
+[2] http://lists.busybox.net/pipermail/buildroot/2012-May/053803.html
+[3] http://lists.busybox.net/pipermail/buildroot/2012-August/056486.html
+[4] http://lists.busybox.net/pipermail/buildroot/2012-August/057070.html
+[5] http://elinux.org/Buildroot:ManualOrganization
+[6] http://elinux.org/Buildroot:DeveloperDaysELCE2012#List_of_topics_to_discuss
+
+
+-- 
+Samuel
