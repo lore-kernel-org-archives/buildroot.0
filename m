@@ -1,50 +1,47 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Mon, 08 Oct 2012 19:55:28 +0300
-Subject: [Buildroot] u-boot compiling
-In-Reply-To: <1349713787.63802.YahooMailNeo@web164603.mail.gq1.yahoo.com>
-References: <1349713787.63802.YahooMailNeo@web164603.mail.gq1.yahoo.com>
-Message-ID: <50730580.9020508@petroprogram.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 8 Oct 2012 18:56:09 +0200
+Subject: [Buildroot] [PATCH v9 02/10] perl: new package
+In-Reply-To: <20121008134900.403178cf@skate>
+References: <1349531633-26717-1-git-send-email-francois.perrad@gadz.org>
+ <1349531633-26717-2-git-send-email-francois.perrad@gadz.org>
+ <20121008113433.4b4bcc1b@skate>
+ <CAB0FRss5vs6xDU2ggQAZYo7Tff5JSBMw519ta-x-4FRE6hxefg@mail.gmail.com>
+ <20121008134900.403178cf@skate>
+Message-ID: <CAB0FRsuzTXvxs-t=sVTws2u=aK2VssgW5OA-w1rh26=3Ac1okg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I know nothing about u-boot because I use grub for booting my x86 machines
-and this is just a wild guess but maybe you could try standard "quiet"
-kernel parameter
-to place somewhere during boot process.
-
-That's is, if u-boot allows passing kernel paremeters  like grub does ?
-
-http://www.mjmwired.net/kernel/Documentation/kernel-parameters.txt
-
-quiet		[KNL] Disable most log messages
-
-
-
-Best regards
-Stefan
-
-8.10.2012 19:29, Zoran Djordjevic kirjoitti:
-> I want to achieve booting linux on my ARM board without messages
-> displaying on console. AFAIK, I must have u-boot version compiled
-> with that possiblity (CONFIG_SILENT_CONSOLE). My u-boot binary
-> version (on my board CD) seems not to be of that kind, because when I
-> set "silent" environment variable, nothing happens.
-> So, I am interested if I can compile u-boot alone, by 
-> using Buildroot ie. without building kernel and root file system ?
-> Also, what amount of boot time shortage can I expect when supressing
-> console messages ?
->  
-> Regards
+2012/10/8 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 >
+> On Mon, 8 Oct 2012 13:41:16 +0200, Fran?ois Perrad wrote:
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> > In my target, I have about 2 MB of C header files in
+>> > usr/lib/perl5/5.16.1/linux-gnueabihf/CORE. I suspect they are not
+>> > really useful, right?
+>>
+>> No, there are required for building XS modules (with cpanminus for example).
+>
+> Yes, but you're not building those XS modules on the target. So keep
+> the headers only in $(STAGING_DIR).
+>
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121008/8b736dc1/attachment.html>
+a BR user could choose between 2 methods for installing Perl :
+- a full install supplied by the script `installperl` from the Perl tarball
+- a custom install which reproduce the behavior of the BR package of microperl,
+where the user explicitily defines each module/file to install
+
+In my sense, when a user chooses the full install, he must also use
+the post-build script which removes its useless files,
+like CORE/*.h or the Unicode support.
+
+Fran?ois
+
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
