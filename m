@@ -1,32 +1,28 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Oct 2012 21:39:52 +0200
-Subject: [Buildroot] [git commit] sylpheed: Bump version to 3.2
-Message-ID: <20121008195649.05ED0997FA@busybox.osuosl.org>
+Date: Mon, 8 Oct 2012 21:37:19 +0200
+Subject: [Buildroot] [git commit] sylpheed: fix upstream URL
+Message-ID: <20121008195647.ED7F3997FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e856daa89157bb31d2a88abb23542a65e4d0fbaa
+commit: http://git.buildroot.net/buildroot/commit/?id=65ba9c49190b533cdaa41ce09dfd68a924859324
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sylpheed/sylpheed.mk |    2 +-
+ package/sylpheed/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index 32c0a82..491737e 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -3,7 +3,7 @@
- # sylpheed
- #
- #############################################################
--SYLPHEED_VERSION_MAJOR = 3.1
-+SYLPHEED_VERSION_MAJOR = 3.2
- SYLPHEED_VERSION_MINOR = 0
- SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
- SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+diff --git a/package/sylpheed/Config.in b/package/sylpheed/Config.in
+index 16f03be..f03ae87 100644
+--- a/package/sylpheed/Config.in
++++ b/package/sylpheed/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_SYLPHEED
+ 	help
+ 	  lightweight and user-friendly e-mail client.
+ 
+-	  http://sylpheed.sraoss.jp/sylpheed/v2.4
++	  http://sylpheed.sraoss.jp/en/
