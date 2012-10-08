@@ -1,33 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Oct 2012 13:49:00 +0200
-Subject: [Buildroot] [PATCH v9 02/10] perl: new package
-In-Reply-To: <CAB0FRss5vs6xDU2ggQAZYo7Tff5JSBMw519ta-x-4FRE6hxefg@mail.gmail.com>
-References: <1349531633-26717-1-git-send-email-francois.perrad@gadz.org>
- <1349531633-26717-2-git-send-email-francois.perrad@gadz.org>
- <20121008113433.4b4bcc1b@skate>
- <CAB0FRss5vs6xDU2ggQAZYo7Tff5JSBMw519ta-x-4FRE6hxefg@mail.gmail.com>
-Message-ID: <20121008134900.403178cf@skate>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Mon, 08 Oct 2012 15:28:11 +0400
+Subject: [Buildroot] rpm5
+Message-ID: <1349695691.6518.2.camel@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all!
+I faced with strange error with rpm5 package manager:
 
-On Mon, 8 Oct 2012 13:41:16 +0200, Fran?ois Perrad wrote:
 
-> > In my target, I have about 2 MB of C header files in
-> > usr/lib/perl5/5.16.1/linux-gnueabihf/CORE. I suspect they are not
-> > really useful, right?
-> 
-> No, there are required for building XS modules (with cpanminus for example).
+=== THIRD-PARTY LIBRARIES (2/2) ===
+checking popt.h usability... yes
+checking popt.h presence... yes
+checking for popt.h... yes
+checking for poptGetContext in -lpopt... yes
+checking whether to build with POPT library... yes (external: via
+pkg-config popt)
+checking zlib.h usability... yes
+checking zlib.h presence... yes
+checking for zlib.h... yes
+checking for gzread in -lrpmz... no
+checking for gzread in -lz... yes
+checking for gzread in -lgz... no
+checking whether to build with ZLib library... yes (external: via
+pkg-config zlib)
+checking for gzseek... yes
+checking bzlib.h usability... yes
+checking bzlib.h presence... yes
+checking for bzlib.h... yes
+checking for BZ2_bzread in -lbz2... yes
+checking whether to build with GNU BZip2 library... yes (external:
+implicitly)
+checking whether to build with XZ libLZMA library... yes (internal:
+sub-directory xz)
+checking beecrypt/api.h usability... yes
+checking beecrypt/api.h presence... yes
+checking for beecrypt/api.h... yes
+checking for mpfprintln in -lbeecrypt... no
+checking whether to build with BeeCrypt library... no
+configure: error: mandatory BeeCrypt library not found
+make: ***
+[/home/fdkit/buildroot/output/build/rpm-5.2.0/.stamp_configured] Error 1
 
-Yes, but you're not building those XS modules on the target. So keep
-the headers only in $(STAGING_DIR).
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Full log
+http://pastie.org/4932495
+
+Locally i have installed rpm5 distro Mandriva 2012 and 
+i can rebuild rpm5 package manager without any errors.
+Any solution?
