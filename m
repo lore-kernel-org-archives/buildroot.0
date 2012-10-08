@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Oct 2012 11:34:33 +0200
-Subject: [Buildroot] [PATCH v9 02/10] perl: new package
-In-Reply-To: <1349531633-26717-2-git-send-email-francois.perrad@gadz.org>
+Date: Mon, 8 Oct 2012 11:37:10 +0200
+Subject: [Buildroot] [PATCH v9 06/10] cpanminus: new package
+In-Reply-To: <1349531633-26717-6-git-send-email-francois.perrad@gadz.org>
 References: <1349531633-26717-1-git-send-email-francois.perrad@gadz.org>
- <1349531633-26717-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20121008113433.4b4bcc1b@skate>
+ <1349531633-26717-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20121008113710.4d01376c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,36 @@ To: buildroot@busybox.net
 
 Dear Francois Perrad,
 
-On Sat,  6 Oct 2012 15:53:45 +0200, Francois Perrad wrote:
+On Sat,  6 Oct 2012 15:53:49 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in                        |    5 ++++
+>  package/cpanminus/Config.in              |   36 +++++++++++++++++++++++
+>  package/cpanminus/cpanminus.mk           |   46 ++++++++++++++++++++++++++++++
+>  package/perl/perl-fix-Module-Build.patch |   16 +++++++++++
+>  4 files changed, 103 insertions(+)
+>  create mode 100644 package/cpanminus/Config.in
+>  create mode 100644 package/cpanminus/cpanminus.mk
+>  create mode 100644 package/perl/perl-fix-Module-Build.patch
 
-> +	select BR2_PACKAGE_HOST_QEMU
+One thing that I'm wondering with cpanminus is how it interacts with
+the Buildroot mechanisms for download.
 
-No longer needed.
+I.e :
 
-> +define PERL_INSTALL_TARGET_CMDS
-> +	$(MAKE) INSTALL_DEPENDENCE= \
-> +		INSTALLFLAGS=-p \
-> +		DESTDIR="$(TARGET_DIR)" \
-> +		-C $(@D) install.perl
-> +endef
+ *) Where does cpanminus downloads the Perl module tarballs?
 
-In my target, I have about 2 MB of C header files in
-usr/lib/perl5/5.16.1/linux-gnueabihf/CORE. I suspect they are not
-really useful, right?
+ *) Does it re-use the downloaded tarballs between rebuilds?
+
+ *) Is there a way to tell it to download its tarballs in $(DL_DIR) ?
+
+ *) Is there a way to have "make source" work properly, i.e ask
+    cpanminus to download the tarballs that it will need so that
+    offline builds are possible.
+
+ *) Is it possible to make it play nice with BR2_PRIMARY_SITE ?
+
+Thanks!
 
 Thomas
 -- 
