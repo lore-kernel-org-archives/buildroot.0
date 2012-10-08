@@ -1,47 +1,70 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 8 Oct 2012 18:56:09 +0200
-Subject: [Buildroot] [PATCH v9 02/10] perl: new package
-In-Reply-To: <20121008134900.403178cf@skate>
-References: <1349531633-26717-1-git-send-email-francois.perrad@gadz.org>
- <1349531633-26717-2-git-send-email-francois.perrad@gadz.org>
- <20121008113433.4b4bcc1b@skate>
- <CAB0FRss5vs6xDU2ggQAZYo7Tff5JSBMw519ta-x-4FRE6hxefg@mail.gmail.com>
- <20121008134900.403178cf@skate>
-Message-ID: <CAB0FRsuzTXvxs-t=sVTws2u=aK2VssgW5OA-w1rh26=3Ac1okg@mail.gmail.com>
+Date: Mon, 8 Oct 2012 18:57:05 +0200
+Subject: [Buildroot] [PATCH v8 02/11] perl: new package
+In-Reply-To: <CAB0FRssiQb_YJSsqwSy+EViX8F_aSUXkn6o2n4Zr91jyQyO+tA@mail.gmail.com>
+References: <1348593508-14254-1-git-send-email-francois.perrad@gadz.org>
+ <1348593508-14254-2-git-send-email-francois.perrad@gadz.org>
+ <20121004231833.7c4f3cb5@skate>
+ <CAB0FRstB06t_6PC9ocQ-M7r9EhmF9v1XwXwjQAjQnoC5oqGFYw@mail.gmail.com>
+ <20121006191817.618f5d98@skate>
+ <CAB0FRssiQb_YJSsqwSy+EViX8F_aSUXkn6o2n4Zr91jyQyO+tA@mail.gmail.com>
+Message-ID: <CAB0FRstVObxZ_ajKtdR2EGVnNZEp+L5=Ocd_BgdHdgB1D0585w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/8 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->
-> On Mon, 8 Oct 2012 13:41:16 +0200, Fran?ois Perrad wrote:
->
->> > In my target, I have about 2 MB of C header files in
->> > usr/lib/perl5/5.16.1/linux-gnueabihf/CORE. I suspect they are not
->> > really useful, right?
+2012/10/6 Fran?ois Perrad <francois.perrad@gadz.org>:
+> 2012/10/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 >>
->> No, there are required for building XS modules (with cpanminus for example).
+>> On Sat, 6 Oct 2012 15:33:02 +0200, Fran?ois Perrad wrote:
+>>
+>>> > Also, on the target there is a usr/bin/perl and a usr/bin/perl5.x.y
+>>> > files. One is a hardlink to the other, but it is always a bit
+>>> > disturbing to see two big files of the same size. Shouldn't we
+>>> > replace that by a symlink instead, which is more obvious?
+>>>
+>>> libperl.so  1.2 MB
+>>> perl      4 KB (stripped)
+>>> perl5.16.1   4 KB
+>>> We speak about 4KB !
+>>
+>> Here:
+>>
+>> $ ls -l output/target/usr/bin/perl*
+>> -rwxr-xr-x 2 thomas thomas 4558484 oct.   4 23:12 output/target/usr/bin/perl
+>> -rwxr-xr-x 2 thomas thomas 4558484 oct.   4 23:12 output/target/usr/bin/perl5.16.1
+>> -rwxr-xr-x 2 thomas thomas   41693 oct.   4 22:59 output/target/usr/bin/perlbug
+>> -rwxr-xr-x 1 thomas thomas     224 oct.   4 22:59 output/target/usr/bin/perldoc
+>> -rwxr-xr-x 1 thomas thomas   10766 oct.   4 22:59 output/target/usr/bin/perlivp
+>> -rwxr-xr-x 2 thomas thomas   41693 oct.   4 22:59 output/target/usr/bin/perlthanks
+>>
+>> So it's not exactly 4 KB :)
+>>
+
+ping.
+do you still have this problem ?
+
 >
-> Yes, but you're not building those XS modules on the target. So keep
-> the headers only in $(STAGING_DIR).
+> do you have a shared library libperl.so, in
+> output/target/usr/lib/perl5/5.16.1/-your-arch-/CORE/libperl.so ?
+> or in output/build/perl-5.16.1/libperl.so ?
 >
-
-a BR user could choose between 2 methods for installing Perl :
-- a full install supplied by the script `installperl` from the Perl tarball
-- a custom install which reproduce the behavior of the BR package of microperl,
-where the user explicitily defines each module/file to install
-
-In my sense, when a user chooses the full install, he must also use
-the post-build script which removes its useless files,
-like CORE/*.h or the Unicode support.
-
-Fran?ois
-
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> looks like a static linked build
+> the use of shared lib is forced at configure time by the option : -Duseshrplib
+>
+> I need to see the ouput of :
+> on your target :
+>      # perl -V
+> or on your host :
+>      $ output/host/usr/bin/qemu-your-arch output/build/perl-5.16.1/perl -Ilib -V
+>
+> Fran?ois
+>
+>> Thomas
+>> --
+>> Thomas Petazzoni, Free Electrons
+>> Kernel, drivers, real-time and embedded Linux
+>> development, consulting, training and support.
+>> http://free-electrons.com
