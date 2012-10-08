@@ -1,82 +1,56 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Oct 2012 22:04:51 +0200
-Subject: [Buildroot] [PATCH] at91bootstrap: fix gcc-4.6.x overlap linker
-	issue
-In-Reply-To: <506A9061.3010300@calao-systems.com> (=?utf-8?Q?=22Gr=C3=A9go?=
- =?utf-8?Q?ry?= Hermant"'s message
- of "Tue, 02 Oct 2012 08:57:37 +0200")
-References: <506A9061.3010300@calao-systems.com>
-Message-ID: <87txu43f30.fsf@macbook.be.48ers.dk>
+Date: Mon, 08 Oct 2012 22:27:46 +0200
+Subject: [Buildroot] [PATCH] mplayer: fix compilation of NEON assembly
+	in libavcodec
+In-Reply-To: <1349478193-13673-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 6 Oct 2012 01:03:13 +0200")
+References: <1349478193-13673-1-git-send-email-arnout@mind.be>
+Message-ID: <87pq4s3e0t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gr?gory" == Gr?gory Hermant <gregory.hermant@calao-systems.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- Gr?gory> ---
- Gr?gory>  ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   53 ++++++++++++++++++++
- Gr?gory>  1 file changed, 53 insertions(+)
- Gr?gory>  create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+ Arnout> Compilation of the NEON assembly fails unless neon is enabled in the
+ Arnout> compiler options.  This is probably not needed for all combinations of
+ Arnout> gcc/binutils, but at least some need it and it certainly doesn't hurt.
 
- Gr?gory> diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
- Gr?gory> new file mode 100644
- Gr?gory> index 0000000..56947c7
- Gr?gory> --- /dev/null
- Gr?gory> +++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
- Gr?gory> @@ -0,0 +1,53 @@
- Gr?gory> +From 5a094e959cd216c1be148effc624eb12e2083de9 Mon Sep 17 00:00:00 2001
- Gr?gory> +From: Gregory Hermant <gregory.hermant@calao-systems.com>
- Gr?gory> +Date: Mon, 1 Oct 2012 16:54:43 +0200
- Gr?gory> +Subject: [PATCH] at91bootstrap-v1.16-ldscript-fix
- Gr?gory> +
- Gr?gory> +---
- Gr?gory> + crt0_gnu.S          |    2 +-
- Gr?gory> + elf32-littlearm.lds |   12 +++++++++++-
- Gr?gory> + 2 files changed, 12 insertions(+), 2 deletions(-)
- Gr?gory> +
- Gr?gory> +diff --git a/crt0_gnu.S b/crt0_gnu.S
- Gr?gory> +index 002feef..ea6581f 100644
- Gr?gory> +--- a/crt0_gnu.S
- Gr?gory> ++++ b/crt0_gnu.S
- Gr?gory> +@@ -191,7 +191,7 @@ _go:
- Gr?gory> + + 	.align
- Gr?gory> + _lp_data:
- Gr?gory> +-        .word _etext
- Gr?gory> ++        .word _edummy
- Gr?gory> +         .word _sdata
- Gr?gory> +         .word _edata
- Gr?gory> + +diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
- Gr?gory> +index a33952f..17b1646 100644
- Gr?gory> +--- a/elf32-littlearm.lds
- Gr?gory> ++++ b/elf32-littlearm.lds
- Gr?gory> +@@ -10,11 +10,21 @@ SECTIONS
- Gr?gory> + 		*(.rodata)                 /* read-only data (constants) */
- Gr?gory> + 		*(.rodata*)
- Gr?gory> + 		. = ALIGN(4);
- Gr?gory> ++		*(.glue_7)
- Gr?gory> ++		. = ALIGN(4);
- Gr?gory> ++		*(.eh_frame)
- Gr?gory> ++		. = ALIGN(4);
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Is all of that needed? Isn't it just that gcc 4.6+ adds a bunch of
-.text.<blah> sections? I've fixed it up for an internal tree at work by
-just doing:
+ Arnout> ---
+ Arnout>  .../multimedia/mplayer/mplayer-1.1-fix-neon.patch   |   19 +++++++++++++++++++
+ Arnout>  1 file changed, 19 insertions(+)
 
-diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
-index a33952f..f50c30c 100644
---- a/elf32-littlearm.lds
-+++ b/elf32-littlearm.lds
-@@ -6,7 +6,7 @@ SECTIONS
-         . = ALIGN(4);
-        .text : { 
-                _stext = .;
--               *(.text)
-+               *(.text*)
-                *(.rodata)                 /* read-only data (constants) */
-                *(.rodata*)
-                . = ALIGN(4);
+ Arnout> diff --git a/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch b/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch
+ Arnout> new file mode 100644
+ Arnout> index 0000000..38c2adc
+ Arnout> --- /dev/null
+ Arnout> +++ b/package/multimedia/mplayer/mplayer-1.1-fix-neon.patch
+ Arnout> @@ -0,0 +1,19 @@
+ Arnout> +Compilation of the NEON assembly fails unless neon is enabled in the
+ Arnout> +compiler options.  This is probably not needed for all combinations of
+ Arnout> +gcc/binutils, but at least some need it and it certainly doesn't hurt.
+ Arnout> +
+ Arnout> +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> +---
+ Arnout> +diff -Nrup mplayer-1.1.orig/configure mplayer-1.1/configure
+ Arnout> +--- mplayer-1.1.orig/configure	2012-10-06 00:31:57.706985824 +0200
+ Arnout> ++++ mplayer-1.1/configure	2012-10-06 00:49:32.618948116 +0200
+ Arnout> +@@ -2935,6 +2935,9 @@ if arm ; then
+ Arnout> +     inline_asm_check '"vadd.i16 q0, q0, q0"' && neon=yes
+ Arnout> +   fi
+ Arnout> +   echores "$neon"
+ Arnout> ++  if test $neon = "yes" ; then
+ Arnout> ++    extra_cflags="$extra_cflags -mfpu=neon -mfloat-abi=softfp"
+
+Why softfp? Is that just an optimization or is it needed? How does that
+work with a hardfp toolchain/libraries?
+
+Please document why this is needed (if it is) in the commit message and
+resubmit, thanks.
 
 -- 
 Bye, Peter Korsgaard
