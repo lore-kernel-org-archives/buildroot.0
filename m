@@ -1,38 +1,44 @@
-From: ludovic.desroches <ludovic.desroches@atmel.com>
-Date: Mon, 8 Oct 2012 09:26:23 +0200
-Subject: [Buildroot] [PATCH] fb-test-app: new package
-In-Reply-To: <20121006210338.GA3850@tarshish>
-References: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
- <20121006210338.GA3850@tarshish>
-Message-ID: <5072801F.1030907@atmel.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 08 Oct 2012 09:32:26 +0200
+Subject: [Buildroot] [PATCH v3] sylpheed: Fix includedir
+In-Reply-To: <1349649599-12615-1-git-send-email-gvaxon@gmail.com>
+References: <1349649599-12615-1-git-send-email-gvaxon@gmail.com>
+Message-ID: <5072818A.8030800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-
-Le 10/06/2012 11:03 PM, Baruch Siach a ?crit :
-> Hi Ludovic,
+On 08/10/12 00:39, Valentine Barshak wrote:
+> The sylpheed headers are installed to $(DESTDIR)$(includedir),
+> while DESTDIR is $(TARGET_DIR) and includedir is set to
+> $(STAGING_DIR)/usr/include in the SYLPHEED_CONF_OPT.
+> Thus, the full staging directory path is created in the
+> target root filesystem, which is wrong.
 >
-> On Fri, Oct 05, 2012 at 03:31:39PM +0200, ludovic.desroches at atmel.com wrote:
->> +define FB_TEST_APP_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -D -m 0755 $(@D)/perf $(TARGET_DIR)/usr/bin/perf
+> The includedir was set to staging include because sylpheed
+> incorrectly adds includedir to its include path, and does
+> not cross-compile with the default includedir set to
+> /usr/include.
 >
-> This might collide with the Linux kernel's perf utility.
+> This removes includedir setting and also removes it from
+> include paths in Makefiles to prevent using host headers
+> from /usr/include. The same approach is used in the OE.
 >
+> Signed-off-by: Valentine Barshak<gvaxon@gmail.com>
 
-I can add fb-test prefix to to the binary names, isn't it?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Regards
+  (untested)
 
-Ludovic
 
->> +	$(INSTALL) -D -m 0755 $(@D)/rect $(TARGET_DIR)/usr/bin/rect
->> +	$(INSTALL) -D -m 0755 $(@D)/fb-test $(TARGET_DIR)/usr/bin/fb-test
->> +	$(INSTALL) -D -m 0755 $(@D)/offset $(TARGET_DIR)/usr/bin/offset
->> +endef
->
-> baruch
->
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
