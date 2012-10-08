@@ -1,70 +1,81 @@
-From: Alexander Varnin <fenixk19@mail.ru>
-Date: Mon,  8 Oct 2012 10:56:54 +0400
-Subject: [Buildroot] [PATCH] New package liblog4c-localtime
-Message-ID: <1349679414-2967-1-git-send-email-fenixk19@mail.ru>
+From: ludovic.desroches <ludovic.desroches@atmel.com>
+Date: Mon, 8 Oct 2012 09:23:50 +0200
+Subject: [Buildroot] [PATCH] fb-test-app: new package
+In-Reply-To: <506F69C8.2010907@mind.be>
+References: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
+ <506F69C8.2010907@mind.be>
+Message-ID: <50727F86.5050101@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in                                |    1 +
- package/liblog4c-localtime/Config.in             |    9 +++++++++
- package/liblog4c-localtime/liblog4c-localtime.mk |   17 +++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/liblog4c-localtime/Config.in
- create mode 100644 package/liblog4c-localtime/liblog4c-localtime.mk
+Hi Arnout
 
-diff --git a/package/Config.in b/package/Config.in
-index 8a7c9c4..25752e5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -387,6 +387,7 @@ source "package/lttng-libust/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
-+source "package/liblog4c-localtime/Config.in"
- endmenu
- 
- menu "Text and terminal handling"
-diff --git a/package/liblog4c-localtime/Config.in b/package/liblog4c-localtime/Config.in
-new file mode 100644
-index 0000000..68feab5
---- /dev/null
-+++ b/package/liblog4c-localtime/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBLOG4C_LOCALTIME
-+	bool "liblog4c-localtime"
-+	help
-+	  Log4c is a library of C for flexible logging to files, syslog 
-+	  and other destinations.
-+	  This version is with localtime patch, to make lib show times in
-+	  local timezone.
-+
-+	  https://github.com/rcmadruga/log4c-localtime
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
-new file mode 100644
-index 0000000..9936759
---- /dev/null
-+++ b/package/liblog4c-localtime/liblog4c-localtime.mk
-@@ -0,0 +1,17 @@
-+ #############################################################
-+ #
-+ # liblog4c
-+ #
-+ #############################################################
-+ LIBLOG4C_LOCALTIME_VERSION = 6b92bb84dad6f3f1a7cb97035e45f87bce5fa158
-+ LIBLOG4C_LOCALTIME_SITE = git://github.com/rcmadruga/log4c-localtime.git
-+ LIBLOG4C_LOCALTIME_INSTALL_STAGING = YES 
-+
-+ define LIBLOG4C_LOCALTIME_HOOK
-+   chmod +x $(@D)/configure
-+ endef
-+
-+ LIBLOG4C_LOCALTIME_PRE_CONFIGURE_HOOKS += LIBLOG4C_LOCALTIME_HOOK
-+
-+ $(eval $(autotools-package))
-+
--- 
-1.7.2.5
+Le 10/06/2012 01:14 AM, Arnout Vandecappelle a ?crit :
+> On 05/10/12 15:31, ludovic.desroches at atmel.com wrote:
+>> From: Ludovic Desroches<ludovic.desroches@atmel.com>
+>
+> Add a Signed-off-by line for yourself.  This is a short way for you to
+> assert that you are entitled to contribute the patch under buildroot's
+> GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
+> details.
+
+Sorry for the omission.
+
+>
+> [snip]
+>> diff --git a/package/fb-test-app/Config.in
+>> b/package/fb-test-app/Config.in
+>> new file mode 100644
+>> index 0000000..6b682ce
+>> --- /dev/null
+>> +++ b/package/fb-test-app/Config.in
+>> @@ -0,0 +1,4 @@
+>> +config BR2_PACKAGE_FB_TEST_APP
+>> +    bool "fb-test-app"
+>> +    help
+>> +      Test suite for Linux framebuffer.
+>
+>   Could you add an upstream URL to the help text?
+>
+
+Yes I'll add the github url.
+
+>> diff --git a/package/fb-test-app/fb-test-app.mk
+>> b/package/fb-test-app/fb-test-app.mk
+>> new file mode 100644
+>> index 0000000..ce31f05
+>> --- /dev/null
+>> +++ b/package/fb-test-app/fb-test-app.mk
+>> @@ -0,0 +1,34 @@
+>> +#############################################################
+>> +#
+>> +# fb-test-app
+>> +#
+>> +#############################################################
+>> +
+>> +FB_TEST_APP_VERSION = v1.0.0
+>> +FB_TEST_APP_SITE = git://github.com/prpplague/fb-test-app.git
+>
+> FB_TEST_APP_SITE = http://github.com/prpplague/fb-test-app/tarball
+>
+>   downloads a lot faster.
+
+Ok I'll change it.
+
+Regards
+
+Ludovic
+
+>
+>   Otherwise, looks great.
+>
+>
+>   Regards,
+>   Arnout
+>
+> [snip]
+>
+>
