@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Oct 2012 11:01:13 +0200
-Subject: [Buildroot] [PATCH v3] sylpheed: Fix includedir
-In-Reply-To: <1349649599-12615-1-git-send-email-gvaxon@gmail.com>
-References: <1349649599-12615-1-git-send-email-gvaxon@gmail.com>
-Message-ID: <20121008110113.3032157c@skate>
+Date: Mon, 8 Oct 2012 11:05:58 +0200
+Subject: [Buildroot] [PATCH] fb-test-app: new package
+In-Reply-To: <5072801F.1030907@atmel.com>
+References: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
+ <20121006210338.GA3850@tarshish> <5072801F.1030907@atmel.com>
+Message-ID: <20121008110558.4c9dd19f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Valentine Barshak,
 
-On Mon,  8 Oct 2012 02:39:59 +0400, Valentine Barshak wrote:
-> The sylpheed headers are installed to $(DESTDIR)$(includedir),
-> while DESTDIR is $(TARGET_DIR) and includedir is set to
-> $(STAGING_DIR)/usr/include in the SYLPHEED_CONF_OPT.
-> Thus, the full staging directory path is created in the
-> target root filesystem, which is wrong.
-> 
-> The includedir was set to staging include because sylpheed
-> incorrectly adds includedir to its include path, and does
-> not cross-compile with the default includedir set to
-> /usr/include.
-> 
-> This removes includedir setting and also removes it from
-> include paths in Makefiles to prevent using host headers
-> from /usr/include. The same approach is used in the OE.
-> 
-> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+On Mon, 8 Oct 2012 09:26:23 +0200, ludovic.desroches wrote:
 
-If you have the time, it would be great to submit a patch to the
-upstream project in order to fix this problem.
+> Hi Baruch,
+> 
+> Le 10/06/2012 11:03 PM, Baruch Siach a ?crit :
+> > Hi Ludovic,
+> >
+> > On Fri, Oct 05, 2012 at 03:31:39PM +0200,
+> > ludovic.desroches at atmel.com wrote:
+> >> +define FB_TEST_APP_INSTALL_TARGET_CMDS
+> >> +	$(INSTALL) -D -m 0755 $(@D)/perf
+> >> $(TARGET_DIR)/usr/bin/perf
+> >
+> > This might collide with the Linux kernel's perf utility.
+> >
+> 
+> I can add fb-test prefix to to the binary names, isn't it?
 
-Thanks,
+Sounds good, yes. So you would have:
+
+	fb-test-perf
+	fb-test
+	fb-test-rect
+	fb-test-offset
+
+Best regards,
 
 Thomas
 -- 
