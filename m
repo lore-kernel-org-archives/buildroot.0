@@ -1,25 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Oct 2012 22:34:02 +0200
-Subject: [Buildroot] [PATCH] lcdproc: backport upstream patches
-In-Reply-To: <1349422221-22971-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 5 Oct 2012 08:30:21 +0100")
-References: <1349422221-22971-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87haq43dqd.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 8 Oct 2012 22:32:44 +0200
+Subject: [Buildroot] [git commit] lcdproc: add support for menus
+Message-ID: <20121008203434.D3163997FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=23467d5e2c36866899bbe644c3adf7409cdba6d6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Backport some lcdproc patches from upstream, to fix the following issues.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/lcdproc/Config.in  |    6 ++++++
+ package/lcdproc/lcdproc.mk |    4 ++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
- spdawson>   * Incorrect parsing of minus key in handler for client_add_key command
- spdawson>   * Segfault in handler for menu_add_item command
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+index 7261105..820f4ea 100644
+--- a/package/lcdproc/Config.in
++++ b/package/lcdproc/Config.in
+@@ -12,3 +12,9 @@ config BR2_PACKAGE_LCDPROC_DRIVERS
+ 	depends on BR2_PACKAGE_LCDPROC
+ 	help
+ 	  Specify a comma-separated list of lcdproc drivers to be built
++
++config BR2_PACKAGE_LCDPROC_MENUS
++	bool "Menu support"
++	depends on BR2_PACKAGE_LCDPROC
++	help
++	  Enable support for lcdproc menus
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index 7fd8a44..7914c85 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
+@@ -12,6 +12,10 @@ LCDPROC_MAKE = $(MAKE1)
+ 
+ LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
+ 
++ifeq ($(BR2_PACKAGE_LCDPROC_MENUS),y)
++LCDPROC_CONF_OPT += --enable-lcdproc-menus
++endif
++
+ LCDPROC_DEPENDENCIES = ncurses
+ 
+ $(eval $(autotools-package))
