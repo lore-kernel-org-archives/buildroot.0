@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  8 Oct 2012 19:01:03 -0300
-Subject: [Buildroot] [PATCH 2/4] libcurl: bump to version 7.27.0
+Date: Mon,  8 Oct 2012 19:01:04 -0300
+Subject: [Buildroot] [PATCH 3/4] ethtool: bump to version 3.6
 In-Reply-To: <1349733665-2584-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1349733665-2584-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1349733665-2584-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1349733665-2584-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libcurl/libcurl.mk |    2 +-
+ package/ethtool/ethtool.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 090bb4c..8d8fdb4 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 30d0a47..a336b52 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--LIBCURL_VERSION = 7.25.0
-+LIBCURL_VERSION = 7.27.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_LICENSE = ICS
+-ETHTOOL_VERSION = 3.5
++ETHTOOL_VERSION = 3.6
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
+ ETHTOOL_LICENSE_FILE = COPYING
 -- 
 1.7.8.6
