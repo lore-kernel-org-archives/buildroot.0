@@ -1,253 +1,111 @@
-From: Martin Peevski <martin@ronetix.at>
-Date: Mon, 08 Oct 2012 17:38:57 +0300
+From: =?windows-1252?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Mon, 08 Oct 2012 17:46:59 +0300
 Subject: [Buildroot] ALSA don't work
-In-Reply-To: <5072D9D0.4030800@petroprogram.com>
+In-Reply-To: <5072E581.1000506@ronetix.at>
 References: <506EF1E6.2090902@ronetix.at> <506EF5DD.4020307@petroprogram.com>
  <506EFDEE.5020307@ronetix.at> <506F18F6.5010506@petroprogram.com>
  <50703E2A.5060702@ronetix.at> <50704D34.2070002@petroprogram.com>
  <50716DA7.4030200@ronetix.at> <50716F47.1@ronetix.at>
  <5071A4C8.9040407@petroprogram.com> <5072BC98.6070707@ronetix.at>
- <5072D9D0.4030800@petroprogram.com>
-Message-ID: <5072E581.1000506@ronetix.at>
+ <5072D9D0.4030800@petroprogram.com> <5072E581.1000506@ronetix.at>
+Message-ID: <5072E763.7010508@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/10/12 16:49, Stefan Fr?berg wrote:
-> 8.10.2012 14:44, Martin Peevski kirjoitti:
+8.10.2012 17:38, Martin Peevski kirjoitti:
+>>>
+>>>    2. start arecord  with the command:
+>>>        arecord -d 10 -t wav test68.wav       
+>>>        but when I try to hear the created file with aplay nothing
+>>> was heared. Next copy the test68.wav to my PC and try there aplay
+>>> also nothing. Note that when I start aplay with another wav file on
+>>> my target, aplay not release the console and nothing is heared
+>>> again. Then I use ctrl + c to release it.
+>>>
 >>
->>> My bad. I forgot that in buildroot that hidden linux .config file  
->>> is located  under the
->>> buildroot/output/build/linux/-linux_version///directory
+>> There is also a simpler way to test wav play.
 >>
->> Oh, sorry.
->> Yes, I see now the .config file and have the following configuration 
->> the things you show me above:
+>> Give command:
 >>
->> #CONFIG_SND_ATMEL_AC97C is not used
->> CONFIG_BUS_AC97C=y         is entirely missing but it's missing and 
->> for the system which works with another rootfs
->> CONFIG_SND_AT91_SOC_SAM9G20_WM8731=y
->> CONFIG_SND_SOC_WM8731=y
+>> speaker-test -t wav -c2
 >>
->> How you think, is it possible Buildroot to change my custom Kernel 
->> for which I'm supplied custom defconfig file?
->>
+>> It will play a loop of "Front Left, Front Right" untill you exit with
+>> Ctrl-C
 >
-> So you did not give buildroot the default config file (at91sam9g45) 
-> but used your own ?
-> (see at91sam9g45_linux_default_config.png)
 >
-> The default at91sam9g45_defconfig file that is shipped with Linux 
-> kernel and which buildroot uses if no custom file provided does not
-> by default seem to contain the needed drivers. (see 
-> at91sam9g45_linux_default_config2.png)
->
-> Only CONFIG_SND_ATMEL_AC97C=y is defined.
+> Yes, I test the command on my PC but when I include that package for
+> my target it was no on the target after build. No command speaker-test
+> was available on the target. I'll try to rebuild again the Buildroot
+> with that package. Any idea here?
+>>
 
-OK, I'm using my custom defconfig so everything must working good;
->
->
->>>
->>> Please see the attached linux_config.png file.
->>> That also shows how to check if you have the right drivers compiled.
->>>
->>> If you want to know how to check your drivers from actual /running/ 
->>> rootfs then
->>> please check attached file checking_linux_config_from_running_system.png
->>>
->>> Also, I have a very rudimentary linux config file for your board 
->>> (at91sam9g45_config file)
->>>
->>> To use it just do the following:
->>> 1 ) Go to your buildroot directory
->>>
->>>  cd 
->>> /home/martin/Desktop/pm9g45-test/Development/rootFS/buildRoot/buildRoot/buildroot
->>>
->>> 2 ) Clean everything
->>> make clean
->>>
->>> 3) Make a minimal buildroot config, just uClibc, busybox  and kernel
->>> make menuconfig
->>>
->>> From the buildroot Kernel section check the following (see 
->>> buildroot_config.png):
->>> - Kernel configuration (Using a custom config file)
->>> - 
->>> /your_directory_where_you_saved_my_custom_linux_config/at91sam945_config
->>>
->>> Keep the device management still static, /dev/management (Static 
->>> using device table) under
->>> System configuration section. No need to use mdev (or udev) yet 
->>> unless this won't work.
->>>
->>> 4) Double-check that kernel options are good before starting 
->>> building (check especially the Sound section under Device Drivers):
->>>
->>> make linux-menuconfig
->>>
->>> 5 ) If buildroot config and linux kernel config looks good then 
->>> build and pray
->>>
->>> make
->>>
->>>
->>> If that rootfs still does not have sound working then maybe it's 
->>> time to try mdev (or udev).
->>>
->>>
->>>
->>>>> Still no sound for me. Can't run alsamixer. The attached file is 
->>>>> with the edited device_table.txt which include and the audio nodes 
->>>>> in /dev.
->>>>> I want to ask you some more questions:
->>>>>
->>>>> 1. Shall I do make clean when I made some addition to the System 
->>>>> configuration or just make is fine?
->>>>>
->>>>> 2. Someone told me that he's doing such a task - making ALSA works 
->>>>> with Dynamic /dev population and udev, using built-in drivers not 
->>>>> modules for the Kernel. I try it out in Buildroot but was 
->>>>> impossible to bild the system because error. However, please tell 
->>>>> me, will such a System configuration makes my sound works? During 
->>>>> that time i will configure the system in that way and will send 
->>>>> you later the error message from Buildroot.
->>>>>
->>> mdev (or udev) will just handle the device population automatically 
->>> under /dev.
->>> If your kernel does not have the right settings and drivers compiled 
->>> either directly into to the kernel or alternatively
->>> as runtime loadable modules then mdev won't help either.
->>>
->>> In another words: *If the **drivers are not there *then using static 
->>> device tables, mdev, or udev will be useless.
->>>
->>> Also, if you have not used your own custom kernel config file for 
->>> your board, but the default config file, then it's
->>> a very high change that it does not have the needed drivers built-in.
->>>
->>>>> Thanks for the help! Martin.
->>>>>
->>>>>
->>>>>
->>>>>
->>>> Sorry, hit the Send button too early! :) Only to notice that at the 
->>>> moment I haven't  server to supply my custom Kernel version and now 
->>>> I'm building only the rootfs without the Kernel. However, I build 
->>>> the system with the same toolchain which was used for the Kernel 
->>>> building begore. I hope that this isn't problem, is that true?
->>>>
->>>>
->>> No, it's not a problem to use the same toolchain but I still suspect 
->>> that your kernel is missing something and that is a problem.
->>> (Can't check that because I didn't get your dmesg output or your 
->>> linux config file.)
->>>
->>>> Sorry once again and hava a nice day!
->>>> Martin
->>>
->>> No prob.
->>> Stefan
->>
->>
->> Thanks for the great help, Stefan, but I try it with mdev because I 
->> have no time to spent on that problem. Afer some cofiguration of the 
->> target roots manually, and rebuild, it works! :) Now is possible to 
->> start alsactl init, alsamixer , a play, asound. But:
->>
->>    1. Configure the ALSA with the fololwing commands:
->>
->> # alsactl init
->> Found hardware: "WM8731" "" "" "" ""
->> Hardware is initialized using a generic method
->> #
->> # aplay -l
->> **** List of PLAYBACK Hardware Devices ****
->> card 0: AT91SAMG20EK [AT91SAMG20-EK], device 0: WM8731 PCM WM8731-0 []
->>   Subdevices: 1/1
->>   Subdevice #0: subdevice #0
->> #
->>
->> Attached are the configurations for the Playback and Capture devices 
->> made with alsamixer program.
->>
->>
->>    2. start arecord  with the command:
->>        arecord -d 10 -t wav test68.wav
->>        but when I try to hear the created file with aplay nothing was 
->> heared. Next copy the test68.wav to my PC and try there aplay also 
->> nothing. Note that when I start aplay with another wav file on my 
->> target, aplay not release the console and nothing is heared again. 
->> Then I use ctrl + c to release it.
->>
->
-> There is also a simpler way to test wav play.
->
-> Give command:
->
-> speaker-test -t wav -c2
->
-> It will play a loop of "Front Left, Front Right" untill you exit with 
-> Ctrl-C
+speaker-test can be found under "ALSA utils selection".
+(see alsa_utils.png)
 
-Yes, I test the command on my PC but when I include that package for my 
-target it was no on the target after build. No command speaker-test was 
-available on the target. I'll try to rebuild again the Buildroot with 
-that package. Any idea here?
->
+>>>
+>>> Can you, please check the result from the commands and the
+>>> attachments and help me turn at least aplay with ready wav files in
+>>> the rootfs?
+>>>
 >>
->> Can you, please check the result from the commands and the 
->> attachments and help me turn at least aplay with ready wav files in 
->> the rootfs?
+>> Your alsactl init output is missing some information.
+>>
+>> Compare to mine:
+>>
+>> alsactl init
+>> Found hardware: "ICH" "Sigmatel STAC9700,83,84" "AC97a:83847600"
+>> "0x8086" "0x0000"
+>>
+>> (see also my_alsa_detection.png)
+>>
+>> So your alsactl init gives just your sound chip name and nothing else.
+>>
+>> Also, your alsamixer outputs seemed very weird and I noticed that in
+>> both screenshots
+>> there is no Chipset found.
+>>
+>> (see my version  my_alsa_mixer_settings.png)
 >>
 >
-> Your alsactl init output is missing some information.
+> OK, I will check again the output with another rootfs. I think that is
+> possible the different output is due to that your looks from PC but my
+> is very small Linux.
+>> This is a dump question but:
+>>
+>> Are you *absolutely sure* that you are using the right kernel sources
+>> and the right custom
+>> kernel .config file for your kernel ?
+>> And also are you sure that CONFIG_SND_ATMEL_AC97C=y is not needed in
+>> your kernel ?
 >
-> Compare to mine:
+> Yes, with another rootfs my sound is working. I'll compare it output
+> on ALSA commands with that from Buildroot.
+>>
+>> I still suggest you do the live running kernel config capture from
+>> your working system like
+>> I showed you in checking_linux_config_from_running_system.png from my
+>> previous post
+>> and compare it's settings to buildroot one.
 >
-> alsactl init
-> Found hardware: "ICH" "Sigmatel STAC9700,83,84" "AC97a:83847600" 
-> "0x8086" "0x0000"
+> Yes, everything which I'm asking you is happen on my board at the moment.
 >
-> (see also my_alsa_detection.png)
+> Thanks for the time and help!
 >
-> So your alsactl init gives just your sound chip name and nothing else.
->
-> Also, your alsamixer outputs seemed very weird and I noticed that in 
-> both screenshots
-> there is no Chipset found.
->
-> (see my version  my_alsa_mixer_settings.png)
->
+> Martin
 
-OK, I will check again the output with another rootfs. I think that is 
-possible the different output is due to that your looks from PC but my 
-is very small Linux.
-> This is a dump question but:
->
-> Are you *absolutely sure* that you are using the right kernel sources 
-> and the right custom
-> kernel .config file for your kernel ?
-> And also are you sure that CONFIG_SND_ATMEL_AC97C=y is not needed in 
-> your kernel ?
+No problem at all.
+Have a nice day and let me know if anything worked.
 
-Yes, with another rootfs my sound is working. I'll compare it output on 
-ALSA commands with that from Buildroot.
->
-> I still suggest you do the live running kernel config capture from 
-> your working system like
-> I showed you in checking_linux_config_from_running_system.png from my 
-> previous post
-> and compare it's settings to buildroot one.
+Stefan
 
-Yes, everything which I'm asking you is happen on my board at the moment.
 
-Thanks for the time and help!
-
-Martin
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121008/58e69a86/attachment-0001.html>
+A non-text attachment was scrubbed...
+Name: alsa_utils.png
+Type: image/png
+Size: 29456 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121008/acc48e64/attachment-0001.png>
