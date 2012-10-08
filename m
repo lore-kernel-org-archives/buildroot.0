@@ -1,81 +1,38 @@
 From: ludovic.desroches <ludovic.desroches@atmel.com>
-Date: Mon, 8 Oct 2012 09:23:50 +0200
+Date: Mon, 8 Oct 2012 09:26:23 +0200
 Subject: [Buildroot] [PATCH] fb-test-app: new package
-In-Reply-To: <506F69C8.2010907@mind.be>
+In-Reply-To: <20121006210338.GA3850@tarshish>
 References: <1349443899-23353-1-git-send-email-ludovic.desroches@atmel.com>
- <506F69C8.2010907@mind.be>
-Message-ID: <50727F86.5050101@atmel.com>
+ <20121006210338.GA3850@tarshish>
+Message-ID: <5072801F.1030907@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout
+Hi Baruch,
 
-Le 10/06/2012 01:14 AM, Arnout Vandecappelle a ?crit :
-> On 05/10/12 15:31, ludovic.desroches at atmel.com wrote:
->> From: Ludovic Desroches<ludovic.desroches@atmel.com>
+Le 10/06/2012 11:03 PM, Baruch Siach a ?crit :
+> Hi Ludovic,
 >
-> Add a Signed-off-by line for yourself.  This is a short way for you to
-> assert that you are entitled to contribute the patch under buildroot's
-> GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
-> details.
-
-Sorry for the omission.
-
+> On Fri, Oct 05, 2012 at 03:31:39PM +0200, ludovic.desroches at atmel.com wrote:
+>> +define FB_TEST_APP_INSTALL_TARGET_CMDS
+>> +	$(INSTALL) -D -m 0755 $(@D)/perf $(TARGET_DIR)/usr/bin/perf
 >
-> [snip]
->> diff --git a/package/fb-test-app/Config.in
->> b/package/fb-test-app/Config.in
->> new file mode 100644
->> index 0000000..6b682ce
->> --- /dev/null
->> +++ b/package/fb-test-app/Config.in
->> @@ -0,0 +1,4 @@
->> +config BR2_PACKAGE_FB_TEST_APP
->> +    bool "fb-test-app"
->> +    help
->> +      Test suite for Linux framebuffer.
->
->   Could you add an upstream URL to the help text?
+> This might collide with the Linux kernel's perf utility.
 >
 
-Yes I'll add the github url.
-
->> diff --git a/package/fb-test-app/fb-test-app.mk
->> b/package/fb-test-app/fb-test-app.mk
->> new file mode 100644
->> index 0000000..ce31f05
->> --- /dev/null
->> +++ b/package/fb-test-app/fb-test-app.mk
->> @@ -0,0 +1,34 @@
->> +#############################################################
->> +#
->> +# fb-test-app
->> +#
->> +#############################################################
->> +
->> +FB_TEST_APP_VERSION = v1.0.0
->> +FB_TEST_APP_SITE = git://github.com/prpplague/fb-test-app.git
->
-> FB_TEST_APP_SITE = http://github.com/prpplague/fb-test-app/tarball
->
->   downloads a lot faster.
-
-Ok I'll change it.
+I can add fb-test prefix to to the binary names, isn't it?
 
 Regards
 
 Ludovic
 
+>> +	$(INSTALL) -D -m 0755 $(@D)/rect $(TARGET_DIR)/usr/bin/rect
+>> +	$(INSTALL) -D -m 0755 $(@D)/fb-test $(TARGET_DIR)/usr/bin/fb-test
+>> +	$(INSTALL) -D -m 0755 $(@D)/offset $(TARGET_DIR)/usr/bin/offset
+>> +endef
 >
->   Otherwise, looks great.
->
->
->   Regards,
->   Arnout
->
-> [snip]
->
+> baruch
 >
