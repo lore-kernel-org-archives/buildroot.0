@@ -1,32 +1,79 @@
-From: Chris Westervelt <chris.westervelt@advantor.com>
-Date: Tue, 9 Oct 2012 09:09:56 -0500
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 9 Oct 2012 14:36:42 +0000 (UTC)
 Subject: [Buildroot] Adding my applications to the image generated
-Message-ID: <C008AB77AF9902469191C92183A1C6128B56E20A40@AUSP01VMBX13.collaborationhost.net>
+References: <C008AB77AF9902469191C92183A1C6128B56E20A40@AUSP01VMBX13.collaborationhost.net>
+Message-ID: <k51cpp$cnh$2@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 2012-10-09, Chris Westervelt <chris.westervelt@advantor.com> wrote:
 
-I'm new to build root but a long time LTIB user.  In LTIB, we had a way to 'merge' our custom files to the final build by putting them in a merge directory that replicated the directory hierarchy with the files in each level of the tree.  Is there a way to do this in Buildroot?
+> I'm new to build root but a long time LTIB user.  In LTIB, we had a
+> way to 'merge' our custom files to the final build by putting them in
+> a merge directory that replicated the directory hierarchy with the
+> files in each level of the tree.  Is there a way to do this in
+> Buildroot?
 
-Chris Westervelt
-Senior Product Development Engineer
-Advantor Systems.
-12612 Challenger Pkwy
-Suite 300
-Orlando, FL
-32826
-http://www.infrasafe.com<http://www.infrasafe.com/>
-Office:   (407) 926-6983
-Mobile: (407) 595-7023
-Fax:    (407) 857-1635
-Notice of Confidentiality:
-This e-mail communication and the attachments hereto, if any, are intended solely for the information and use of the addressee(s) identified above and may contain information which is legally privileged and/or otherwise confidential. If a recipient of this e-mail communication is not an addressee (or an authorized representative of an addressee), such recipient is hereby advised that any review, disclosure, reproduction, re-transmission or other dissemination or use of this e-mail communication (or any information contained herein) is strictly prohibited. If you are not an addressee and have received this e-mail communication in error, please advise the sender of that circumstance either by reply e-mail or by telephone at (800) 238-2686, immediately delete this e-mail communication from any computer and destroy all physical copies of same.
+There are several ways to do it:
+
+http://buildroot.uclibc.org/downloads/manual/manual.html#_customizing_the_generated_target_filesystem
+
+Using the "customize" package is depricated, and I think will be
+eliminated in the near future.  It sounds to me like you probably want
+to define a post-build script that merges your custom files files into
+the target tree after it's been built.
+
+I've placed a tree of files to be merged in "../custom-files" and the
+post-build script copies them into the target directory.  My
+post-build script shown below.  The line the does the merging of my
+custom files is the 'tar' command.  The rest of the script tweaks some
+of the pre-existing files.
+
+Once you've written a post-build script, you need to set the the 
+BR2_ROOTFS_POST_BUILD_SCRIPT configuration variable to point to it:
+
+In my .config file:
+
+BR2_ROOTFS_POST_BUILD_SCRIPT="../postbuild.sh"
 
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121009/1c9c455b/attachment.html>
+
+------------------------------postbuild.sh------------------------------
+#/bin/bash
+
+echo ">>>   Post-build script start"
+TARGET="$1"
+set -x
+
+# modify snmpd init script so that it listens on all interfaces rather
+# than only on 127.0.0.1
+sed -i '/^SNMPDOPTS/ s/ *127\.0\.0\.1//g' $TARGET/etc/init.d/S*snmpd
+
+# copy custom-files
+tar -c -f - -C ../custom-files --exclude-vcs --exclude-backup . | \
+          tar -v -x -f - -C "$TARGET"
+
+# set some global env variables by exporting them in rcS
+sed -i -e '/^export PATH=/ d'                    $TARGET/etc/init.d/rcS
+sed -i -e '/^export LD_LIBRARY_PATH=/ d'         $TARGET/etc/init.d/rcS
+sed -i -e '2 iexport PATH=$PATH:/apps/bin'       $TARGET/etc/init.d/rcS
+sed -i -e '2 iexport LD_LIBRARY_PATH=/apps/lib'  $TARGET/etc/init.d/rcS
+
+# tweak PHP settings
+sed -i -e 's/^upload_max_filesize.*/upload_max_filesize = 10M/g' $TARGET/etc/php.ini
+
+# make sure ssh keys aren't readable by anybody except owner
+chmod go-rwx $TARGET/etc/ssh_*_key
+
+set +x
+echo ">>>   Post-build script done"
+------------------------------------------------------------------------
+
+
+-- 
+Grant Edwards               grant.b.edwards        Yow! I want a VEGETARIAN
+                                  at               BURRITO to go ... with
+                              gmail.com            EXTRA MSG!!
