@@ -1,35 +1,59 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 9 Oct 2012 11:38:55 +0200
-Subject: [Buildroot] [git commit] barebox: fix license information
-Message-ID: <20121009094541.3D89A9980E@busybox.osuosl.org>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue, 09 Oct 2012 12:42:09 +0200
+Subject: [Buildroot] Webkit compilation broken without X11
+In-Reply-To: <20121009111701.42bb68af@skate>
+References: <5073DF9C.5030505@relinux.de> <20121009111701.42bb68af@skate>
+Message-ID: <5073FF81.3080200@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=805ba041c02e2eccfdc86cc43ef30c3c3240fc72
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 09.10.2012 11:17, schrieb Thomas Petazzoni:
+> Dear Stephan Hoffmann,
+>
+> On Tue, 09 Oct 2012 10:26:04 +0200, Stephan Hoffmann wrote:
+>
+>> I am currently trying to compile webkit for my beaglebone using
+>> directfb (without X11). Unfortunatelly, compilation stops because of
+>> missing X11 headers. This also happens with the qemu_arm_versatile
+>> defconfig.
+>>
+>>> In file included from ./WebCore/bridge/npruntime_internal.h:28:0,
+>>>                  from ./WebCore/plugins/PluginStream.h:40,
+>>>                  from ./WebCore/plugins/PluginView.h:36,
+>>>                  from
+>>> WebCore/bindings/js/ScriptControllerGtk.cpp:35: ./WebCore/bridge/npapi.h:105:26:
+>>> fatal error: X11/Xlib.h: No such file or directory
+>>> compilation terminated.
+>>> make[2]: ***
+>>> [WebCore/bindings/js/libwebkit_1_0_la-ScriptControllerGtk.lo]
+>>> Fehler 1
+>> In 2012.05 Webkit compiles o.k.
+>>
+>> Attached you find the modified defconfig to reproduce this failure.
+> Yes, the problem is well-known, and someone who cares about Webkit on
+> DirectFB needs to dig into it. Can you investigate? Maybe it's just a
+> header inclusion lacking the proper #ifdef, or maybe it's more
+> problematic (DirectFB support in Webkit not being well-maintained, for
+> example).
+>
+> Best regards,
+>
+> Thomas
+Hi Thomas,
 
-The barebox license should be "GPLv2 with exceptions", and not GPLv2.
+I'd like to search the autobuild results to find out when webkit
+compiled and when not. Is it possible to get them all? Simply "wget -r
+http://autobuild.buildroot.net/results" does not work.
 
-Signed-off-by: Simon Dawson <simond@trainfx.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/barebox/barebox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Kind regards
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 9550cdc..ee84831 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -20,7 +20,7 @@ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
- BAREBOX_SITE = http://www.barebox.org/download/
- endif
- 
--BAREBOX_LICENSE = GPLv2
-+BAREBOX_LICENSE = GPLv2 with exceptions
- BAREBOX_LICENSE_FILES = COPYING
- 
- ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+Stephan
+
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
