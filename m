@@ -1,83 +1,89 @@
-From: Chris Westervelt <chris.westervelt@advantor.com>
-Date: Tue, 9 Oct 2012 10:08:34 -0500
-Subject: [Buildroot] Adding my applications to the image generated
-In-Reply-To: <k51cpp$cnh$2@ger.gmane.org>
-References: <C008AB77AF9902469191C92183A1C6128B56E20A40@AUSP01VMBX13.collaborationhost.net>
- <k51cpp$cnh$2@ger.gmane.org>
-Message-ID: <C008AB77AF9902469191C92183A1C6128B56E20A9B@AUSP01VMBX13.collaborationhost.net>
+From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
+Date: Tue, 9 Oct 2012 17:53:27 +0200
+Subject: [Buildroot] [PATCH v2] fb-test-app: new package
+Message-ID: <1349798007-22053-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
------Original Message-----
-From: buildroot-bounces@busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Grant Edwards
-Sent: Tuesday, October 09, 2012 10:37 AM
-To: buildroot at uclibc.org
-Subject: Re: [Buildroot] Adding my applications to the image generated
+Test suite for Linux framebuffer.
 
-On 2012-10-09, Chris Westervelt <chris.westervelt@advantor.com> wrote:
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
+ package/Config.in                  |  1 +
+ package/fb-test-app/Config.in      |  6 ++++++
+ package/fb-test-app/fb-test-app.mk | 34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+)
+ create mode 100644 package/fb-test-app/Config.in
+ create mode 100644 package/fb-test-app/fb-test-app.mk
 
-> I'm new to build root but a long time LTIB user.  In LTIB, we had a 
-> way to 'merge' our custom files to the final build by putting them in 
-> a merge directory that replicated the directory hierarchy with the 
-> files in each level of the tree.  Is there a way to do this in 
-> Buildroot?
-
-There are several ways to do it:
-
-http://buildroot.uclibc.org/downloads/manual/manual.html#_customizing_the_generated_target_filesystem
-
-Using the "customize" package is depricated, and I think will be eliminated in the near future.  It sounds to me like you probably want to define a post-build script that merges your custom files files into the target tree after it's been built.
-
-I've placed a tree of files to be merged in "../custom-files" and the post-build script copies them into the target directory.  My post-build script shown below.  The line the does the merging of my custom files is the 'tar' command.  The rest of the script tweaks some of the pre-existing files.
-
-Once you've written a post-build script, you need to set the the BR2_ROOTFS_POST_BUILD_SCRIPT configuration variable to point to it:
-
-In my .config file:
-
-BR2_ROOTFS_POST_BUILD_SCRIPT="../postbuild.sh"
-
-
-
-------------------------------postbuild.sh------------------------------
-#/bin/bash
-
-echo ">>>   Post-build script start"
-TARGET="$1"
-set -x
-
-# modify snmpd init script so that it listens on all interfaces rather # than only on 127.0.0.1 sed -i '/^SNMPDOPTS/ s/ *127\.0\.0\.1//g' $TARGET/etc/init.d/S*snmpd
-
-# copy custom-files
-tar -c -f - -C ../custom-files --exclude-vcs --exclude-backup . | \
-          tar -v -x -f - -C "$TARGET"
-
-# set some global env variables by exporting them in rcS
-sed -i -e '/^export PATH=/ d'                    $TARGET/etc/init.d/rcS
-sed -i -e '/^export LD_LIBRARY_PATH=/ d'         $TARGET/etc/init.d/rcS
-sed -i -e '2 iexport PATH=$PATH:/apps/bin'       $TARGET/etc/init.d/rcS
-sed -i -e '2 iexport LD_LIBRARY_PATH=/apps/lib'  $TARGET/etc/init.d/rcS
-
-# tweak PHP settings
-sed -i -e 's/^upload_max_filesize.*/upload_max_filesize = 10M/g' $TARGET/etc/php.ini
-
-# make sure ssh keys aren't readable by anybody except owner chmod go-rwx $TARGET/etc/ssh_*_key
-
-set +x
-echo ">>>   Post-build script done"
-------------------------------------------------------------------------
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 50b7631..a1ca25d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -117,6 +117,7 @@ source "package/fbset/Config.in"
+ endif
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
++source "package/fb-test-app/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+diff --git a/package/fb-test-app/Config.in b/package/fb-test-app/Config.in
+new file mode 100644
+index 0000000..23b5568
+--- /dev/null
++++ b/package/fb-test-app/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_FB_TEST_APP
++	bool "fb-test-app"
++	help
++	  Test suite for Linux framebuffer.
++
++	  https://github.com/prpplague/fb-test-app
+diff --git a/package/fb-test-app/fb-test-app.mk b/package/fb-test-app/fb-test-app.mk
+new file mode 100644
+index 0000000..9ea932a
+--- /dev/null
++++ b/package/fb-test-app/fb-test-app.mk
+@@ -0,0 +1,34 @@
++#############################################################
++#
++# fb-test-app
++#
++#############################################################
++
++FB_TEST_APP_VERSION = v1.0.0
++FB_TEST_APP_SITE = http://github.com/prpplague/fb-test-app/tarball/$(FB_TEST_APP_VERSION)
++FB_TEST_APP_LICENSE = GPLv2
++FB_TEST_APP_LICENSE_FILE = COPYING
++
++define FB_TEST_APP_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++define FB_TEST_APP_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/perf $(TARGET_DIR)/usr/bin/fb-test-perf
++	$(INSTALL) -D -m 0755 $(@D)/rect $(TARGET_DIR)/usr/bin/fb-test-rect
++	$(INSTALL) -D -m 0755 $(@D)/fb-test $(TARGET_DIR)/usr/bin/fb-test
++	$(INSTALL) -D -m 0755 $(@D)/offset $(TARGET_DIR)/usr/bin/fb-test-offset
++endef
++
++define FB_TEST_APP_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/bin/fb-test-perf
++	rm -f $(TARGET_DIR)/usr/bin/fb-test-rect
++	rm -f $(TARGET_DIR)/usr/bin/fb-test
++	rm -f $(TARGET_DIR)/usr/bin/fb-test-offset
++endef
++
++define FB_TEST_APP_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
 -- 
-Grant Edwards               grant.b.edwards        Yow! I want a VEGETARIAN
-                                  at               BURRITO to go ... with
-                              gmail.com            EXTRA MSG!!
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+1.7.11.3
