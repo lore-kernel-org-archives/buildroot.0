@@ -1,37 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  9 Oct 2012 19:25:56 -0300
-Subject: [Buildroot] [PATCH] scons: fix library installation directory
-Message-ID: <1349821556-17510-1-git-send-email-gustavo@zacarias.com.ar>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Wed, 10 Oct 2012 02:44:44 +0400
+Subject: [Buildroot] [PATCH] linux: Fix initramfs compression
+In-Reply-To: <5072841C.7010505@mind.be>
+References: <1349551332-25169-1-git-send-email-gvaxon@gmail.com>
+ <50716829.7010004@mind.be> <5071E475.5070908@gmail.com>
+ <5072841C.7010505@mind.be>
+Message-ID: <5074A8DC.10705@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On gentoo systems SCons setup.py tries to install into
-$(HOST_DIR)/usr/lib64 but SCons looks up for its stuff in
-$(HOST_DIR)/usr/lib instead hence breaking.
-Make it install into $(HOST_DIR)/usr/lib by force to avoid the issue, it
-shouldn't matter on other distributions.
-Version bumping doesn't fix it.
+On 10/08/2012 11:43 AM, Arnout Vandecappelle wrote:
+> On 07/10/12 22:22, Valentine Barshak wrote:
+>> The problem here is that we can't set initramfs compression mode
+>> unless the initramfs source (CONFIG_INITRAMFS_SOURCE)
+>> is set. We can only set RAM disk compression modes that should be
+>> supported by the kernel (CONFIR_RD_...).
+>>
+>> The source is set by buildroot. So the user has no capability to
+>> configure compression explicitly, unless he (she) sets
+>> a fake initramfs source file, which will be overridden by buildroot.
+>> IMHO, this is a bit hackish way to set anything
+>> other than default, which is COMPRESSION_NONE.
+>>
+>> Yes, that is what most people want. I just didn't want to drop other
+>> options in case somebody wants a compressed
+>> initramfs image.
+>> This could be needed for systems with low memory, for example.
+>
+>   True.  Still, I don't think that this corner case warrants the additional
+> complexity of grepping etc. in the buildroot makefile.  Especially
+> because it
+> still doesn't give the user complete configuration freedom: if both GZIP
+> and
+> BZIP2 initrd compression options are enabled (like is the case in some
+> of the
+> kernel's defconfigs), then still GZIP will be chosen.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/scons/scons.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Right.
 
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index 2aed62c..878dcba 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -7,7 +7,7 @@ define HOST_SCONS_BUILD_CMDS
- endef
- 
- define HOST_SCONS_INSTALL_CMDS
--	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr)
-+	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr --install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION))
- endef
- 
- $(eval $(host-generic-package))
--- 
-1.7.8.6
+>
+>   If we really want to support this in buildroot, then the choice should
+> be added
+> to fs/initramfs/Config.in.  But also here I doubt that the (maintenance)
+> work of
+> having this option is worth it, because it's likely that it will _never_
+> be used.
+>
+>   As you say yourself, if you really do need the option, there is a
+> possibility
+> to do it.  And it's not as bad as you say, because when you run
+> 'make linux-menuconfig', buildroot will first run a 'linux-configure' so
+> the
+> INITRAMFS_SOURCE will already be set.  (At least, I think so :-)
+
+Indeed, so it's probably better to let the kernel config handle it, 
+instead of attempting to force any compression mode in BR.
+
+>
+>
+>   Regards,
+>   Arnout
+>
+Thanks,
+Val.
