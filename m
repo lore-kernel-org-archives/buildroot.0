@@ -1,22 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 09 Oct 2012 09:46:45 -0300
-Subject: [Buildroot] [PATCH 1/4] mpd: bump to version 0.17.2
-In-Reply-To: <87d30rbyr9.fsf@macbook.be.48ers.dk>
-References: <1349733665-2584-1-git-send-email-gustavo@zacarias.com.ar>
- <87d30rbyr9.fsf@macbook.be.48ers.dk>
-Message-ID: <50741CB5.20606@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 09 Oct 2012 16:15:18 +0200
+Subject: [Buildroot] Error when building defconfig
+In-Reply-To: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
+ (Maxime Hadjinlian's message of "Tue, 25 Sep 2012 14:38:57 +0200")
+References: <CAGduivwG505TRkZ8SnD_MXcyuF6qWwLPoc3CTnZtE5HZ2Uwv0w@mail.gmail.com>
+Message-ID: <87haq3ag09.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/09/12 09:44, Peter Korsgaard wrote:
-> This is blocked on the pkg-config / pkgconf series. I'll try to find
-> time to look at that in detail this week.
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-Ah, my bad.
-I'm already on pkgconf locally to get all the testing it needs.
-I can rebase on the new packages that (also) use host-pkg-config and
-resend, just tell me when.
-Regards.
+ Maxime> Hi,
+
+ Maxime> I'm using the HEAD of the git tree of buildroot, and I just
+ Maxime> tried to build a "default" config. I did : $ cp
+ Maxime> ./configs/qemu_x86_defconfig .config && make
+
+ Maxime> The menuconfig appeared, I saved the conf and exited. I did not
+ Maxime> change any option myself. Then I tried to make again, after a
+ Maxime> short while, I had this error :
+
+ Maxime> #error It appears you have defined
+ Maxime> _FILE_OFFSET_BITS=64. Unfortunately, uClibc was built without
+ Maxime> large file support enabled.
+
+You have to do a make clean before changing to a new .config.
+
+-- 
+Bye, Peter Korsgaard
