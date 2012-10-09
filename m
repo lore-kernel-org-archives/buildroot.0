@@ -1,27 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 09 Oct 2012 09:40:05 +0200
-Subject: [Buildroot] [PATCH 2/6] netkittelnet: convert to
-	generic-package infrastructure
-In-Reply-To: <1348266518-27665-3-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sat, 22 Sep 2012 00:28:34 +0200")
-References: <1348266518-27665-1-git-send-email-s.martin49@gmail.com>
- <1348266518-27665-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <87391odrfu.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  9 Oct 2012 08:12:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 5516] appended device tree blobs on uImage fails
+In-Reply-To: <bug-5516-163@https.bugs.busybox.net/>
+References: <bug-5516-163@https.bugs.busybox.net/>
+Message-ID: <20121009081217.375D2997BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5516
 
- Samuel> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+--- Comment #9 from richard.genoud at gmail.com 2012-10-09 08:12:16 UTC ---
+(In reply to comment #7)
+> Could you test the attached patch? It should solve your problem, and will apply
+> on top of master.
 
-Y Samuel> -netkittelnet: netkitbase $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
- 
-You forgot to add netkitbase to _DEPENDENCIES, but I fixed that and
-committed, thanks.
+Tested ok, works as expected.
+
+Thanks !
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
