@@ -1,49 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Oct 2012 19:21:47 +0200
-Subject: [Buildroot] [PATCH v2] at91bootstrap: fix gcc-4.6.x overlap
- linker issue
-In-Reply-To: <1349800757-31873-1-git-send-email-gregory.hermant@calao-systems.com>
-References: <1349800757-31873-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <20121009192147.0d5456dd@skate>
+From: Thiago A. Correa <thiago.correa@gmail.com>
+Date: Tue, 9 Oct 2012 15:16:15 -0300
+Subject: [Buildroot] [PATCH] QtSerialPort: new package
+Message-ID: <20121009181615.GA30642@localhost.comm5.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
+---
+ package/Config.in                    |    1 +
+ package/qtserialport/Config.in       |    9 +++++++++
+ package/qtserialport/qtserialport.mk |   21 +++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/qtserialport/Config.in
+ create mode 100644 package/qtserialport/qtserialport.mk
 
-On Tue,  9 Oct 2012 18:39:17 +0200, Gregory Hermant wrote:
-> 
-> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-> ---
->  ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   12 ++++++++++++
->  1 file changed, 12 insertions(+)
->  create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-> 
-> diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-> new file mode 100644
-> index 0000000..b738df1
-> --- /dev/null
-> +++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-> @@ -0,0 +1,12 @@
-> +diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
-> +index a33952f..4f3ba25 100644
-> +--- a/elf32-littlearm.lds
-> ++++ b/elf32-littlearm.lds
-> +@@ -7,6 +7,7 @@ SECTIONS
-> + 	.text : { 
-> + 		_stext = .;
-> + 		*(.text)
-> ++		*(.text*)
-> + 		*(.rodata)                 /* read-only data (constants) */
-> + 		*(.rodata*)
-> + 		. = ALIGN(4);
-
-Your patch lacks a description and Signed-off-by.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 331d879..e869c8a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -133,6 +133,7 @@ source "package/sdl_gfx/Config.in"
+ comment "other GUIs"
+ source "package/efl/Config.in"
+ source "package/qt/Config.in"
++source "package/qtserialport/Config.in"
+ source "package/x11r7/Config.in"
+ 
+ comment "X libraries and helper libraries"
+diff --git a/package/qtserialport/Config.in b/package/qtserialport/Config.in
+new file mode 100644
+index 0000000..773f4ce
+--- /dev/null
++++ b/package/qtserialport/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_QTSERIALPORT
++	bool "QtSerialPort"
++	depends on BR2_PACKAGE_QT
++	help
++	  QtSerialPort module is an add-on for the Qt library, providing
++	  a single interface for both hardware and virtual serial ports.
++
++	  http://qt-project.org/wiki/QtSerialPort
++
+diff --git a/package/qtserialport/qtserialport.mk b/package/qtserialport/qtserialport.mk
+new file mode 100644
+index 0000000..eee6f73
+--- /dev/null
++++ b/package/qtserialport/qtserialport.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# QtSerialPort 
++#
++#############################################################
++QTSERIALPORT_VERSION = 8389c4606ddcedf004838a6b8003f8e4421a37cc
++QTSERIALPORT_SITE = git://gitorious.org/qtplayground/qtserialport.git
++QTSERIALPORT_LICENSE = LGPLv2
++QTSERIALPORT_LICENSE_FILES = LICENSE.LGPL
++QTSERIALPORT_INSTALL_STAGING = YES
++
++QTSERIALPORT_DEPENDENCIES = qt
++
++QTSERIALPORT_LDFLAGS = $(TARGET_LDFLAGS)
++
++define QTSERIALPORT_CONF_CMDS
++	(cd $(@D); \
++		$(QT_QMAKE) CONFIG+=release)
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
