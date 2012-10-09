@@ -1,96 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 09 Oct 2012 22:29:50 +0200
-Subject: [Buildroot] [PATCH] New package liblog4c-localtime
-In-Reply-To: <1349679414-2967-1-git-send-email-fenixk19@mail.ru>
-References: <1349679414-2967-1-git-send-email-fenixk19@mail.ru>
-Message-ID: <5074893E.2030600@mind.be>
+Date: Tue, 09 Oct 2012 22:45:19 +0200
+Subject: [Buildroot] u-boot compiling
+In-Reply-To: <1349713787.63802.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+References: <1349713787.63802.YahooMailNeo@web164603.mail.gq1.yahoo.com>
+Message-ID: <50748CDF.6030203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  [Alexander, your mail server refuses mail from me, so I'm sending my
-comments only to the list; I already sent them last Friday, but
-obviously you didn't see them.]
+On 08/10/12 18:29, Zoran Djordjevic wrote:
+> I want to achieve booting linux on my ARM board without messages
+> displaying on console. AFAIK, I must have u-boot version compiled
+> with that possiblity (CONFIG_SILENT_CONSOLE). My u-boot binary
+> version (on my board CD) seems not to be of that kind, because when I
+> set "silent" environment variable, nothing happens.
+> So, I am interested if I can compile u-boot alone, by
+> using Buildroot ie. without building kernel and root file system ?
 
-  [List: sorry for the double posting...]
+  You can, but there's not much point using buildroot then.  It's just as
+easy to create a toolchain with crosstool-NG or to download a  precompiled
+one, and use that to compile U-Boot.  U-Boot is pretty good at
+cross-compilation :-)
 
-On 04/10/12 11:08, Alexander Varnin wrote:
+  Anyway, if you want to create an empty buildroot, just do the following:
+- in Package selection, remove busybox;
+- in Filesystem, remove tar;
+- in Bootloaders, select U-Boot and set the config name.
 
-  Add a Signed-off-by line for yourself.  This is a short way for you to
-assert that you are entitled to contribute the patch under buildroot's
-GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
-details.
+> Also, what amount of boot time shortage can I expect when supressing
+> console messages ?
 
-> ---
->   package/Config.in                                |    1 +
->   package/liblog4c-localtime/Config.in             |    9 +++++++++
->   package/liblog4c-localtime/liblog4c-localtime.mk |   11 +++++++++++
->   3 files changed, 21 insertions(+), 0 deletions(-)
->   create mode 100644 package/liblog4c-localtime/Config.in
->   create mode 100644 package/liblog4c-localtime/liblog4c-localtime.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 8a7c9c4..25752e5 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -387,6 +387,7 @@ source "package/lttng-libust/Config.in"
->   source "package/orc/Config.in"
->   source "package/poco/Config.in"
->   source "package/startup-notification/Config.in"
-> +source "package/liblog4c-localtime/Config.in"
->   endmenu
->
->   menu "Text and terminal handling"
-> diff --git a/package/liblog4c-localtime/Config.in b/package/liblog4c-localtime/Config.in
-> new file mode 100644
-> index 0000000..58797be
-> --- /dev/null
-> +++ b/package/liblog4c-localtime/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_LIBLOG4C
-> +    bool "liblog4c-localtime"
-> +    help
-> +      Log4c is a library of C for flexible logging to files, syslog
-> +      and other destinations.
-> +      This version is with localtime patch, to make lib show times in
-> +      local timezone.
-> +
-> +      https://github.com/rcmadruga/log4c-localtime
-
-  Add the upstream URL as well: http://log4c.sourceforge.net/
-
-> diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
-> new file mode 100644
-> index 0000000..f0599c3
-> --- /dev/null
-> +++ b/package/liblog4c-localtime/liblog4c-localtime.mk
-> @@ -0,0 +1,11 @@
-> + #############################################################
-> + #
-> + # liblog4c
-> + #
-> + #############################################################
-> + LIBLOG4C_VERSION = 1.2.1
-> + LIBLOG4C_SITE = git://github.com/rcmadruga/log4c-localtime.git
-
-  There's also a tarball:
-LIBLOG4C_LOCALTIME_VERSION = v1.0
-LIBLOG4C_LOCALTIME_SITE    = https://github.com/rcmadruga/log4c-localtime/tarball/v$(LIBLOG4C_LOCALTIME_VERSION)
-
-> + LIBLOG4C_INSTALL_STAGING = YES
-> +
-> + $(eval $(call AUTOTARGETS))
-> +
-
-  Spurious newline at the end.
-
-
-  It looks like it requires expat, so you need "select BR2_PACKAGE_EXPAT"
-to Config.in, and "LIBLOG4C_LOCALTIME_DEPENDENCIES = expat" in .mk.  You'll
-probably also need --disable-expattest for cross-compilation.
-
+  It won't be measurable without an oscilloscope.  U-Boot generates so little
+output when booting that it hardly affects its runtime - unless you have a
+very fast processor and a very slow serial port.  Disabling the kernel
+output (by adding the 'quiet' option to the bootargs) will help a lot more
+(about 1 second on my OMAP).
 
   Regards,
   Arnout
