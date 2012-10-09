@@ -1,68 +1,61 @@
 From: Valentine Barshak <gvaxon@gmail.com>
-Date: Wed, 10 Oct 2012 02:44:44 +0400
-Subject: [Buildroot] [PATCH] linux: Fix initramfs compression
-In-Reply-To: <5072841C.7010505@mind.be>
-References: <1349551332-25169-1-git-send-email-gvaxon@gmail.com>
- <50716829.7010004@mind.be> <5071E475.5070908@gmail.com>
- <5072841C.7010505@mind.be>
-Message-ID: <5074A8DC.10705@gmail.com>
+Date: Wed, 10 Oct 2012 02:50:53 +0400
+Subject: [Buildroot] [PATCH] libglib2: Fix midori save file dialog not
+ being rendered
+In-Reply-To: <20121005160322.279530c5@skate>
+References: <1349386039-817-1-git-send-email-gvaxon@gmail.com>
+ <20121005095237.19c642ca@skate> <506EE6B3.1000205@gmail.com>
+ <20121005160322.279530c5@skate>
+Message-ID: <5074AA4D.5060803@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/08/2012 11:43 AM, Arnout Vandecappelle wrote:
-> On 07/10/12 22:22, Valentine Barshak wrote:
->> The problem here is that we can't set initramfs compression mode
->> unless the initramfs source (CONFIG_INITRAMFS_SOURCE)
->> is set. We can only set RAM disk compression modes that should be
->> supported by the kernel (CONFIR_RD_...).
+On 10/05/2012 06:03 PM, Thomas Petazzoni wrote:
+>
+> On Fri, 05 Oct 2012 17:54:59 +0400, Valentine Barshak wrote:
+>
+>>> Thanks for all your great patches!
 >>
->> The source is set by buildroot. So the user has no capability to
->> configure compression explicitly, unless he (she) sets
->> a fake initramfs source file, which will be overridden by buildroot.
->> IMHO, this is a bit hackish way to set anything
->> other than default, which is COMPRESSION_NONE.
+>> Thank you! I've been using buildroot for a while and I really like it.
+>> Just want to have as little deviations from the mainstream as
+>> possible :)
+>
+> That's certainly a good motivation :)
+>
+>>> Is there anything that prevents us from bumping libglib2 to this
+>>> version instead of backporting patches?
 >>
->> Yes, that is what most people want. I just didn't want to drop other
->> options in case somebody wants a compressed
->> initramfs image.
->> This could be needed for systems with low memory, for example.
+>> I tried to bump to 2.32.2 (and higher), but it didn't work for me.
+>> It doesn't build as is. It needs additional hacks to the
+>> libglib2-optional-ipv6.patch plus some minor configure script changes
+>> (at least).
+>>
+>> Even when I finally managed to build it, it didn't work.
+>> Starting any gtk application would result in no window being
+>> displayed. I've tried on a real x86 machine and vmware with no luck.
+>> It just hangs without displaying any errors or warnings.
+>> It's gonna take some time to debug. Probably some other packages
+>> have to be updated as well, I'm not sure.
+>>
+>> Since cherry-picking this single change worked fine for me, I've
+>> decided to stick with it at least for now.
 >
->   True.  Still, I don't think that this corner case warrants the additional
-> complexity of grepping etc. in the buildroot makefile.  Especially
-> because it
-> still doesn't give the user complete configuration freedom: if both GZIP
-> and
-> BZIP2 initrd compression options are enabled (like is the case in some
-> of the
-> kernel's defconfigs), then still GZIP will be chosen.
+> Argh, ok. I hope someone will find the time to fix this. It's not great
+> to get stuck with older versions due to regressions.
 
-Right.
+Yeah, it would be better to move to the newer version, but it might take 
+some time, since it doesn't seem to work as is.
 
->
->   If we really want to support this in buildroot, then the choice should
-> be added
-> to fs/initramfs/Config.in.  But also here I doubt that the (maintenance)
-> work of
-> having this option is worth it, because it's likely that it will _never_
-> be used.
->
->   As you say yourself, if you really do need the option, there is a
-> possibility
-> to do it.  And it's not as bad as you say, because when you run
-> 'make linux-menuconfig', buildroot will first run a 'linux-configure' so
-> the
-> INITRAMFS_SOURCE will already be set.  (At least, I think so :-)
+Meanwhile, can we have this fix?
 
-Indeed, so it's probably better to let the kernel config handle it, 
-instead of attempting to force any compression mode in BR.
-
->
->
->   Regards,
->   Arnout
->
 Thanks,
 Val.
+
+>
+> Best regards,
+>
+> Thomas
+>
