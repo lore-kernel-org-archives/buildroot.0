@@ -1,61 +1,105 @@
 From: Valentine Barshak <gvaxon@gmail.com>
-Date: Wed, 10 Oct 2012 02:50:53 +0400
-Subject: [Buildroot] [PATCH] libglib2: Fix midori save file dialog not
- being rendered
-In-Reply-To: <20121005160322.279530c5@skate>
-References: <1349386039-817-1-git-send-email-gvaxon@gmail.com>
- <20121005095237.19c642ca@skate> <506EE6B3.1000205@gmail.com>
- <20121005160322.279530c5@skate>
-Message-ID: <5074AA4D.5060803@gmail.com>
+Date: Wed, 10 Oct 2012 02:54:55 +0400
+Subject: [Buildroot] [PATCH] webkit: Fix build issue with gcc-4.6 and
+	above
+In-Reply-To: <1349385964-710-1-git-send-email-gvaxon@gmail.com>
+References: <1349385964-710-1-git-send-email-gvaxon@gmail.com>
+Message-ID: <5074AB3F.8050400@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/05/2012 06:03 PM, Thomas Petazzoni wrote:
+On 10/05/2012 01:26 AM, Valentine Barshak wrote:
+> This fixes the "Unknown parameter for tags/attrs" build error.
+> Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe
 >
-> On Fri, 05 Oct 2012 17:54:59 +0400, Valentine Barshak wrote:
+> [PATCH] 2011-04-17  Thierry Reding
+> <thierry.reding@avionic-design.de>
 >
->>> Thanks for all your great patches!
->>
->> Thank you! I've been using buildroot for a while and I really like it.
->> Just want to have as little deviations from the mainstream as
->> possible :)
+>    Reviewed by Adam Barth.
 >
-> That's certainly a good motivation :)
+>    Fix build with GCC 4.6.
 >
->>> Is there anything that prevents us from bumping libglib2 to this
->>> version instead of backporting patches?
->>
->> I tried to bump to 2.32.2 (and higher), but it didn't work for me.
->> It doesn't build as is. It needs additional hacks to the
->> libglib2-optional-ipv6.patch plus some minor configure script changes
->> (at least).
->>
->> Even when I finally managed to build it, it didn't work.
->> Starting any gtk application would result in no window being
->> displayed. I've tried on a real x86 machine and vmware with no luck.
->> It just hangs without displaying any errors or warnings.
->> It's gonna take some time to debug. Probably some other packages
->> have to be updated as well, I'm not sure.
->>
->> Since cherry-picking this single change worked fine for me, I've
->> decided to stick with it at least for now.
+>    * dom/make_names.pl: Execute preprocessor without the -P option. The
+>    preprocessor in GCC 4.6 eats empty lines, effectively breaking the
+>    parsing performed by this script. Dropping the -P option when invoking
+>    the preprocessor keeps the empty lines but as a side-effect also adds
+>    additional linemarkers.
 >
-> Argh, ok. I hope someone will find the time to fix this. It's not great
-> to get stuck with older versions due to regressions.
+>    From the cpp manpage:
+>
+>      -P  Inhibit generation of linemarkers in the output from the
+>          preprocessor. This might be useful when running the preprocessor
+>          on something that is not C code, and will be sent to a program
+>          which might be confused by the linemarkers.
+>
+>    The linemarkers are not problematic, however, because the script
+>    properly handles them by ignoring all lines starting with a #.
+>
+> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+> ---
+>   package/webkit/webkit-fix-build-with-gcc-4-6.patch | 45 ++++++++++++++++++++++
+>   1 file changed, 45 insertions(+)
+>   create mode 100644 package/webkit/webkit-fix-build-with-gcc-4-6.patch
+>
+> diff --git a/package/webkit/webkit-fix-build-with-gcc-4-6.patch b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
+> new file mode 100644
+> index 0000000..15f32d9
+> --- /dev/null
+> +++ b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
+> @@ -0,0 +1,45 @@
+> +Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe:
+> +Removed the ChangeLog part.
+> +
+> +From: "commit-queue at webkit.org"
+> + <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+> +Date: Mon, 18 Apr 2011 06:53:23 +0000
+> +Subject: [PATCH] 2011-04-17  Thierry Reding
+> + <thierry.reding@avionic-design.de>
+> +
+> +        Reviewed by Adam Barth.
+> +
+> +        Fix build with GCC 4.6.
+> +
+> +        * dom/make_names.pl: Execute preprocessor without the -P option. The
+> +        preprocessor in GCC 4.6 eats empty lines, effectively breaking the
+> +        parsing performed by this script. Dropping the -P option when invoking
+> +        the preprocessor keeps the empty lines but as a side-effect also adds
+> +        additional linemarkers.
+> +
+> +        From the cpp manpage:
+> +
+> +          -P  Inhibit generation of linemarkers in the output from the
+> +              preprocessor. This might be useful when running the preprocessor
+> +              on something that is not C code, and will be sent to a program
+> +              which might be confused by the linemarkers.
+> +
+> +        The linemarkers are not problematic, however, because the script
+> +        properly handles them by ignoring all lines starting with a #.
+> +
+> +diff --git a/WebCore/dom/make_names.pl b/Source/WebCore/dom/make_names.pl
+> +index 836137e..50386e0 100755
+> +--- a/WebCore/dom/make_names.pl
+> ++++ b/WebCore/dom/make_names.pl
+> +@@ -54,7 +54,7 @@ if ($ENV{CC}) {
+> + } else {
+> +     $gccLocation = "/usr/bin/gcc";
+> + }
+> +-my $preprocessor = $gccLocation . " -E -P -x c++";
+> ++my $preprocessor = $gccLocation . " -E -x c++";
+> +
+> + GetOptions(
+> +     'tags=s' => \$tagsFile,
+> +--
+> +1.7.11.4
+> +
+>
 
-Yeah, it would be better to move to the newer version, but it might take 
-some time, since it doesn't seem to work as is.
-
-Meanwhile, can we have this fix?
+Is this change OK?
+I'm building on Fedora 17, using host gcc 4.7.2, and webkit doesn't 
+build for me without this patch.
 
 Thanks,
 Val.
-
->
-> Best regards,
->
-> Thomas
->
