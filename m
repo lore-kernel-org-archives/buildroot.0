@@ -1,55 +1,42 @@
-From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
-Date: Wed, 10 Oct 2012 10:27:18 +0200
-Subject: [Buildroot] [PATCH v3] at91bootstrap: fix gcc-4.6.x overlap linker
- issue
-Message-ID: <50753166.5010507@calao-systems.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Oct 2012 11:13:15 +0200
+Subject: [Buildroot] [PATCH] mplayer: fix compilation of NEON assembly
+	in libavcodec
+In-Reply-To: <50749743.5010700@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 09 Oct 2012 23:29:39 +0200")
+References: <1349478193-13673-1-git-send-email-arnout@mind.be>
+ <87pq4s3e0t.fsf@macbook.be.48ers.dk> <50749743.5010700@mind.be>
+Message-ID: <87d30qadw4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Things always happen in threes...
-This patch fixes an issue detected in the linking stage of the at91bootstraploader from gcc-4.6.x release.
-Indeed from this gcc release the linking stage fails due to an overlap between text.startup and data section.
-To fix this issue we need to modify the linker script in order to add the text.startup input section into the text output section.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
----
- ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   26 ++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+ >> Please document why this is needed (if it is) in the commit message and
+ >> resubmit, thanks.
 
-diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-new file mode 100644
-index 0000000..4222b6c
---- /dev/null
-+++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-@@ -0,0 +1,26 @@
-+From 1a26120767aed8a2660fe840955d5d66d3469ce2 Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Wed, 10 Oct 2012 08:45:46 +0200
-+Subject: [PATCH] at91bootstrap: fix overlap linker issue
-+
-+
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ elf32-littlearm.lds |    1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
-+index a33952f..4f3ba25 100644
-+--- a/elf32-littlearm.lds
-++++ b/elf32-littlearm.lds
-+@@ -7,6 +7,7 @@ SECTIONS
-+ 	.text : { + 		_stext = .;
-+ 		*(.text)
-++		*(.text*)
-+ 		*(.rodata)                 /* read-only data (constants) */
-+ 		*(.rodata*)
-+ 		. = ALIGN(4);
-+-- +1.7.9.5
-+
+ Arnout>  neon fpu (like vfp* fpu) can only be used with the softfp abi,
+ Arnout> so both are needed.  This is kind of standard ARM knowledge :-)
+
+It is? I've never done any real work on platforms with neon, so it's
+certainly a bit fussy to me, but I don't understand what the relation is
+with the calling convention.
+
+Aren't the new linaro toolchains hardfp and support neon?
+
+Googling a bit I see stuff like:
+
+http://wiki.meego.com/ARM/hardfp
+http://sources.redhat.com/ml/crossgcc/2012-07/msg00091.html
+
+http://wiki.debian.org/ArmHardFloatPort#GCC_floating-point_options
+mentions that neon + hardfp abi isn't supported by GCC 4.4, but
+otherwise doesn't mention that it cannot work.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
