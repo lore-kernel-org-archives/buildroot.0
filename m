@@ -1,67 +1,46 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Oct 2012 23:17:17 +0200
-Subject: [Buildroot] [PATCH] googlefontdirectory: new package
-In-Reply-To: <1343053494-21248-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Mon, 23 Jul 2012 15:24:54 +0100")
-References: <1343053494-21248-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87r4p658o2.fsf@macbook.be.48ers.dk>
+Date: Wed, 10 Oct 2012 23:22:25 +0200
+Subject: [Buildroot] [PATCH 02/11] e2fsprogs: add staging install
+In-Reply-To: <1342963719-1810-3-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 22 Jul 2012 15:28:30 +0200")
+References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
+ <1342963719-1810-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <87mwzu58fi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-Hi,
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Sorry for the slow response - See below for comments.
-
- spdawson> +++ b/package/googlefontdirectory/Config.in
- spdawson> @@ -0,0 +1,13 @@
- spdawson> +config BR2_PACKAGE_GOOGLEFONTDIRECTORY
- spdawson> +	bool "Google Web Fonts"
-
-It's a bit odd to see such a difference in Kconfig symbol name and help
-text - But OK, they mix it up on the website as well.
+Why? As far as I can see we don't have anything depending on e2fsprogs,
+and the libuuid stuff moved to util-linux, didn't it?
 
 
- spdawson> +	help
- spdawson> +	  Download Google Web Fonts
+ Samuel> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+ Samuel> index 16725ac..036e54e 100644
+ Samuel> --- a/package/e2fsprogs/e2fsprogs.mk
+ Samuel> +++ b/package/e2fsprogs/e2fsprogs.mk
+ Samuel> @@ -26,6 +26,9 @@ E2FSPROGS_DEPENDENCIES = host-pkg-config util-linux
+ Samuel>  E2FSPROGS_MAKE_OPT = \
+ Samuel>  	LDCONFIG=true
+ 
+ Samuel> +E2FSPROGS_INSTALL_STAGING = YES
+ Samuel> +E2FSPROGS_INSTALL_STAGING_OPT += install install-libs DESTDIR=$(STAGING_DIR)
+ Samuel> +
+ Samuel>  define HOST_E2FSPROGS_INSTALL_CMDS
+ Samuel>   $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
+ Samuel>  endef
+ Samuel> -- 
+ Samuel> 1.7.11.2
 
-Please drop 'Download'. All packages download.
-
- spdawson> +++ b/package/googlefontdirectory/googlefontdirectory.mk
- spdawson> @@ -0,0 +1,36 @@
- spdawson> +#############################################################
- spdawson> +#
- spdawson> +# googlefontdirectory
- spdawson> +#
- spdawson> +#############################################################
- spdawson> +GOOGLEFONTDIRECTORY_VERSION = 1.0
- spdawson> +GOOGLEFONTDIRECTORY_SITE = \
- spdawson> +	https://s3.amazonaws.com/joemaller_google_webfonts
-
-Is that the official location? I don't seem to see anything referring to
-a 1.0 release on the google code page.
-
-Please add a license tag as well.
-
-
- spdawson> +GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
- spdawson> +
- spdawson> +GOOGLEFONTDIRECTORY_FONTS = \
- spdawson> +	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
- spdawson> +
- spdawson> +define GOOGLEFONTDIRECTORY_INSTALL_SINGLE_FONT
- spdawson> +	$(info Installing single font $(1))
- spdawson> +	$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$(1)
- spdawson> +	cp -a $(@D)/$(1)/*.ttf	$(TARGET_DIR)/usr/share/fonts/$(1)
- spdawson> +	chmod 0644 $(TARGET_DIR)/usr/share/fonts/$(1)/*.ttf
- spdawson> +endef
-
-A simple loop for all fonts seems simpler / more standard than this
-single-font macro.
+ Samuel> _______________________________________________
+ Samuel> buildroot mailing list
+ Samuel> buildroot at busybox.net
+ Samuel> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
 -- 
