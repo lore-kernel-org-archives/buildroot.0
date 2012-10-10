@@ -1,42 +1,45 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 10 Oct 2012 11:13:15 +0200
-Subject: [Buildroot] [PATCH] mplayer: fix compilation of NEON assembly
-	in libavcodec
-In-Reply-To: <50749743.5010700@mind.be> (Arnout Vandecappelle's message of
- "Tue, 09 Oct 2012 23:29:39 +0200")
-References: <1349478193-13673-1-git-send-email-arnout@mind.be>
- <87pq4s3e0t.fsf@macbook.be.48ers.dk> <50749743.5010700@mind.be>
-Message-ID: <87d30qadw4.fsf@macbook.be.48ers.dk>
+Date: Wed, 10 Oct 2012 12:07:27 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-10-09
+In-Reply-To: <20121010063409.D3FD652C6A6@lolut.humanoidz.org> (Thomas
+ Petazzoni's message of "Wed, 10 Oct 2012 08:34:09 +0200 (CEST)")
+References: <20121010063409.D3FD652C6A6@lolut.humanoidz.org>
+Message-ID: <878vbeabds.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> Hello,
 
- >> Please document why this is needed (if it is) in the commit message and
- >> resubmit, thanks.
+ Thomas> Build 6a19968577835a27dd7fe220b317bc9b35762478
+ Thomas> ==============================================
 
- Arnout>  neon fpu (like vfp* fpu) can only be used with the softfp abi,
- Arnout> so both are needed.  This is kind of standard ARM knowledge :-)
+ Thomas> Status         : NOK
+ Thomas> Failure reason : ccid-1.4.7
+ Thomas> Architecture   : i686
+ Thomas> Submitted by   : Peter Korsgaard (gcc110)
+ Thomas> Submitted at   : 2012-10-09 05:53:44
+ Thomas> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=76b38f853d2683854bfedaccb3512fab110c5d49
+ Thomas> End of log     : http://autobuild.buildroot.net/results/6a19968577835a27dd7fe220b317bc9b35762478/build-end.log
+ Thomas> Complete log   : http://autobuild.buildroot.net/results/6a19968577835a27dd7fe220b317bc9b35762478/build.log.bz2
+ Thomas> Configuration  : http://autobuild.buildroot.net/results/6a19968577835a27dd7fe220b317bc9b35762478/config
+ Thomas> Defconfig      : http://autobuild.buildroot.net/results/6a19968577835a27dd7fe220b317bc9b35762478/defconfig
 
-It is? I've never done any real work on platforms with neon, so it's
-certainly a bit fussy to me, but I don't understand what the relation is
-with the calling convention.
+The problem here is that alioth uses a debian (spi-inc.org) signed ssl
+certificate. The wget version on my Debian machine doesn't complain as
+that CA is known, but non-Debian machines do.
 
-Aren't the new linaro toolchains hardfp and support neon?
+We could either:
+- 1: Change download URL to http://
+- 2: Hardcode --no-check-certificate wget argument
+- 3: Do nothing, as sources.buildroot.net now has a copy
 
-Googling a bit I see stuff like:
-
-http://wiki.meego.com/ARM/hardfp
-http://sources.redhat.com/ml/crossgcc/2012-07/msg00091.html
-
-http://wiki.debian.org/ArmHardFloatPort#GCC_floating-point_options
-mentions that neon + hardfp abi isn't supported by GCC 4.4, but
-otherwise doesn't mention that it cannot work.
+I would prefer option 1. Anybody disagrees?
 
 -- 
 Bye, Peter Korsgaard
