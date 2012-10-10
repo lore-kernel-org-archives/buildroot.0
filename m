@@ -1,55 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Oct 2012 09:26:33 +0200
-Subject: [Buildroot] [PATCH] linux: Do not force GZIP initramfs
-	compression
-In-Reply-To: <1349825696-28535-1-git-send-email-gvaxon@gmail.com>
-References: <1349825696-28535-1-git-send-email-gvaxon@gmail.com>
-Message-ID: <50752329.60809@mind.be>
+From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
+Date: Wed, 10 Oct 2012 10:27:18 +0200
+Subject: [Buildroot] [PATCH v3] at91bootstrap: fix gcc-4.6.x overlap linker
+ issue
+Message-ID: <50753166.5010507@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/10/12 01:34, Valentine Barshak wrote:
-> Initramfs compression does not make much sense for the architectures
-> that support compressed kernel images because in this case the data
-> would be compressed twice. This will eventually result in a bigger
-> kernel image and time overhead when uncompressing it.
-> The only reason to use compressed initramfs is to reduce memory
-> usage when the kernel prepares rootfs, and both the unpacked
-> filesystem and initramfs.cpio are present in the memory.
->
-> Buildroot attempts to force GZIP compression for initramfs,
-> however it doesn't always work because initramfs compression mode
-> depends on RAM disk compression supported by the kernel.
-> Thus, CONFIG_INITRAMFS_COMPRESSION_GZIP depends on CONFIG_RD_GZIP.
-> If CONFIG_RD_GZIP is not set, setting GZIP initramfs compression
-> will have no effect.
->
-> Besides, the kernel also supports other compression methods,
-> like BZIP2, LZMA, XZ and LZO. Forcing the good old GZIP does not
-> really make much sense any more.
->
-> This removes initramfs compression settings from Buildroot,
-> so that the default value preset in the kernel config is used,
-> which is CONFIG_INITRAMFS_COMPRESSION_NONE.
->
-> If initramfs compression is still needed, it can be set
-> in the kernel config (using make linux-menuconfig)
->
-> Signed-off-by: Valentine Barshak<gvaxon@gmail.com>
+Things always happen in threes...
+This patch fixes an issue detected in the linking stage of the at91bootstraploader from gcc-4.6.x release.
+Indeed from this gcc release the linking stage fails due to an overlap between text.startup and data section.
+To fix this issue we need to modify the linker script in order to add the text.startup input section into the text output section.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  I especially like the extensive commit message!
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+---
+ ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   26 ++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
 
-  Regards,
-  Arnout
+diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+new file mode 100644
+index 0000000..4222b6c
+--- /dev/null
++++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+@@ -0,0 +1,26 @@
++From 1a26120767aed8a2660fe840955d5d66d3469ce2 Mon Sep 17 00:00:00 2001
++From: Gregory Hermant <gregory.hermant@calao-systems.com>
++Date: Wed, 10 Oct 2012 08:45:46 +0200
++Subject: [PATCH] at91bootstrap: fix overlap linker issue
++
++
++Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
++---
++ elf32-littlearm.lds |    1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
++index a33952f..4f3ba25 100644
++--- a/elf32-littlearm.lds
+++++ b/elf32-littlearm.lds
++@@ -7,6 +7,7 @@ SECTIONS
++ 	.text : { + 		_stext = .;
++ 		*(.text)
+++		*(.text*)
++ 		*(.rodata)                 /* read-only data (constants) */
++ 		*(.rodata*)
++ 		. = ALIGN(4);
++-- +1.7.9.5
++
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
