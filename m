@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2012 17:06:28 +0200
-Subject: [Buildroot] [PATCH v10 07/10] perl: relax microperl dependencies
+Date: Wed, 10 Oct 2012 17:06:30 +0200
+Subject: [Buildroot] [PATCH v10 09/10] cpanminus: new package
 In-Reply-To: <1349881591-7062-1-git-send-email-francois.perrad@gadz.org>
 References: <1349881591-7062-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1349881591-7062-7-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1349881591-7062-9-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,115 +12,147 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/autoconf/Config.in   |    2 +-
- package/autoconf/autoconf.mk |    7 ++++++-
- package/automake/Config.in   |    2 +-
- package/automake/automake.mk |    7 ++++++-
- package/ntp/Config.in        |    4 ++--
- package/samba/Config.in      |    4 ++--
- 6 files changed, 18 insertions(+), 8 deletions(-)
+ package/Config.in                        |    5 ++++
+ package/cpanminus/Config.in              |   36 +++++++++++++++++++++++
+ package/cpanminus/cpanminus.mk           |   47 ++++++++++++++++++++++++++++++
+ package/perl/perl-fix-Module-Build.patch |   16 ++++++++++
+ 4 files changed, 104 insertions(+)
+ create mode 100644 package/cpanminus/Config.in
+ create mode 100644 package/cpanminus/cpanminus.mk
+ create mode 100644 package/perl/perl-fix-Module-Build.patch
 
-diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
-index 00b3e2c..41866ad 100644
---- a/package/autoconf/Config.in
-+++ b/package/autoconf/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_AUTOCONF
- 	bool "autoconf"
--	select BR2_PACKAGE_MICROPERL
-+	select BR2_PACKAGE_MICROPERL if !BR2_PACKAGE_PERL
- 	help
- 	  Extensible program for developing configure scripts.  These
- 	  scripts handle all the mundane system/feature detection.
-diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
-index 3f84e3e..13a474e 100644
---- a/package/autoconf/autoconf.mk
-+++ b/package/autoconf/autoconf.mk
-@@ -10,7 +10,12 @@ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
- AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 		    ac_cv_prog_gnu_m4_gnu=no
- 
--AUTOCONF_DEPENDENCIES = microperl host-m4
-+AUTOCONF_DEPENDENCIES = host-m4
-+ifeq ($(BR2_PACKAGE_PERL),y)
-+    AUTOCONF_DEPENDENCIES += perl
-+else
-+    AUTOCONF_DEPENDENCIES += microperl
+diff --git a/package/Config.in b/package/Config.in
+index d9cadf9..06050f2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -263,6 +263,11 @@ source "package/xavante/Config.in"
+ endmenu
+ endif
+ source "package/perl/Config.in"
++if BR2_PACKAGE_PERL
++menu "Perl libraries/modules"
++source "package/cpanminus/Config.in"
++endmenu
 +endif
- 
- HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
- 			ac_cv_prog_gnu_m4_gnu=no
-diff --git a/package/automake/Config.in b/package/automake/Config.in
-index 935f1f1..c0b29d1 100644
---- a/package/automake/Config.in
-+++ b/package/automake/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_AUTOMAKE
- 	bool "automake"
- 	select BR2_PACKAGE_AUTOCONF
--	select BR2_PACKAGE_MICROPERL
-+	select BR2_PACKAGE_MICROPERL if !BR2_PACKAGE_PERL
- 	help
- 	  Tool for automatically generating Makefile's for input to
- 	  configure scripts (made by autoconf).
-diff --git a/package/automake/automake.mk b/package/automake/automake.mk
-index 3c19085..0766111 100644
---- a/package/automake/automake.mk
-+++ b/package/automake/automake.mk
-@@ -7,7 +7,12 @@
- AUTOMAKE_VERSION = 1.11.5
- AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
- 
--AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
-+AUTOMAKE_DEPENDENCIES = host-autoconf autoconf
-+ifeq ($(BR2_PACKAGE_PERL),y)
-+    AUTOMAKE_DEPENDENCIES += perl
-+else
-+    AUTOMAKE_DEPENDENCIES += microperl
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+ source "package/python/Config.in"
+diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
+new file mode 100644
+index 0000000..b8b39dc
+--- /dev/null
++++ b/package/cpanminus/Config.in
+@@ -0,0 +1,36 @@
++config BR2_PACKAGE_CPANMINUS
++	bool "cpanminus"
++	help
++	  cpanminus is a script to get, unpack, build and install Perl modules
++	  from CPAN.
++
++	  Why? It's dependency free, requires zero configuration, and stands
++	  alone. When running, it requires only 10MB of RAM.
++
++	  http://github.com/miyagawa/cpanminus
++
++if BR2_PACKAGE_CPANMINUS
++
++config BR2_PACKAGE_CPANMINUS_MIRROR
++	string "mirror"
++	help
++	  Specifies the base URL for the CPAN mirror to use,
++	  such as http://cpan.cpantesters.org/.
++
++config BR2_PACKAGE_CPANMINUS_MODULES
++	string "Perl modules from CPAN"
++	default "Curses::UI"
++	help
++	  List of space-separated Perl modules to install from CPAN.
++
++	  Examples: Try::Tiny Dancer YAML Moo
++
++	  Install the listed modules and their dependencies.
++
++config BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES
++	string "native dependencies"
++	default "ncurses"
++	help
++	  Some XS modules require native libraries.
++
 +endif
- 
- HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
- 
-diff --git a/package/ntp/Config.in b/package/ntp/Config.in
-index 5996596..434cd2d 100644
---- a/package/ntp/Config.in
-+++ b/package/ntp/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_NTP_NTP_KEYGEN
- 
- config BR2_PACKAGE_NTP_NTP_WAIT
- 	bool "ntp-wait"
--	depends on BR2_PACKAGE_MICROPERL
-+	depends on BR2_PACKAGE_MICROPERL || BR2_PACKAGE_PERL
- 	help
- 	  ntp-wait waits until the locally running ntpd is in state 4
- 	  (synchronized). This could be useful at boot time, to delay the
-@@ -59,7 +59,7 @@ config BR2_PACKAGE_NTP_NTPSNMPD
- 
- config BR2_PACKAGE_NTP_NTPTRACE
- 	bool "ntptrace"
--	depends on BR2_PACKAGE_MICROPERL
-+	depends on BR2_PACKAGE_MICROPERL || BR2_PACKAGE_PERL
- 	help
- 	  ntptrace is a perl script that uses the ntpq utility program to
- 	  follow the chain of NTP servers from a given host back to the
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index e88b360..ee3244f 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -36,12 +36,12 @@ config BR2_PACKAGE_SAMBA_FINDSMB
- 	default y
- 	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
- 	depends on BR2_PACKAGE_SAMBA_NMBLOOKUP
--	depends on BR2_PACKAGE_MICROPERL
-+	depends on BR2_PACKAGE_MICROPERL || BR2_PACKAGE_PERL
- 	help
- 	  Script to browse network
- 
- comment "findsmb       - disabled (requires nmblookup, smbclient and perl)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !BR2_PACKAGE_MICROPERL
-+	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !(BR2_PACKAGE_MICROPERL || BR2_PACKAGE_PERL)
- 
- config BR2_PACKAGE_SAMBA_NET
- 	bool "net"
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+new file mode 100644
+index 0000000..d3a338b
+--- /dev/null
++++ b/package/cpanminus/cpanminus.mk
+@@ -0,0 +1,47 @@
++#############################################################
++#
++# cpanminus
++#
++#############################################################
++
++CPANMINUS_VERSION = 1.5018
++CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
++CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
++CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
++
++CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
++CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
++CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
++CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
++CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
++CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
++CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
++ifneq ($(BR2_PACKAGE_CPANMINUS_MIRROR),"")
++    CPANMINUS_MIRROR = --mirror $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MIRROR)) --mirror-only
++endif
++CPANMINUS_MODULES = $(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
++
++ifneq ($(CPANMINUS_MODULES),)
++define CPANMINUS_INSTALL_TARGET_CMDS
++	echo "#!/bin/sh"                                                        > $(@D)/run_perl
++	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
++	chmod +x $(@D)/run_perl
++	PERL5LIB=$(CPANMINUS_PERL5LIB) \
++	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
++	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
++	RUN_PERL="$(@D)/run_perl" \
++	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
++		--perl=$(@D)/run_perl \
++		--notest \
++		--no-man-pages \
++		$(CPANMINUS_MIRROR) \
++		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
++	find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
++endef
++else
++define CPANMINUS_INSTALL_TARGET_CMDS
++	@echo "No modules to install"
++endef
++endif
++
++$(eval $(generic-package))
+diff --git a/package/perl/perl-fix-Module-Build.patch b/package/perl/perl-fix-Module-Build.patch
+new file mode 100644
+index 0000000..26b15e4
+--- /dev/null
++++ b/package/perl/perl-fix-Module-Build.patch
+@@ -0,0 +1,16 @@
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/cpan/Module-Build/lib/Module/Build/Base.pm
++===================================================================
++--- a/cpan/Module-Build/lib/Module/Build/Base.pm
+++++ b/cpan/Module-Build/lib/Module/Build/Base.pm
++@@ -456,7 +456,7 @@
++   my $proto = shift;
++   my $c     = ref($proto) ? $proto->{config} : 'Module::Build::Config';
++ 
++-  my $perl  = $^X;
+++  my $perl  = $ENV{RUN_PERL} || $^X;
++   my $perl_basename = File::Basename::basename($perl);
++ 
++   my @potential_perls;
 -- 
 1.7.9.5
