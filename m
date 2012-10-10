@@ -1,36 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Oct 2012 07:52:49 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-10-09
-In-Reply-To: <20121010124644.55d52fff@skate>
-References: <20121010063409.D3FD652C6A6@lolut.humanoidz.org>
- <878vbeabds.fsf@macbook.be.48ers.dk> <20121010122914.0685ae62@skate>
- <874nm2aa44.fsf@macbook.be.48ers.dk> <20121010124644.55d52fff@skate>
-Message-ID: <50755381.4070405@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 10 Oct 2012 13:19:05 +0200
+Subject: [Buildroot] [PATCH v3] at91bootstrap: fix gcc-4.6.x overlap
+ linker issue
+In-Reply-To: <50753166.5010507@calao-systems.com>
+References: <50753166.5010507@calao-systems.com>
+Message-ID: <20121010131905.4c485886@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/10/12 07:46, Thomas Petazzoni wrote:
+Gr?gory,
 
->> But yeah, I'll change the alioth downloads to http.
+On Wed, 10 Oct 2012 10:27:18 +0200, Gr?gory Hermant wrote:
+> Things always happen in threes...
+> This patch fixes an issue detected in the linking stage of the at91bootstraploader from gcc-4.6.x release.
+> Indeed from this gcc release the linking stage fails due to an overlap between text.startup and data section.
+> To fix this issue we need to modify the linker script in order to add the text.startup input section into the text output section.
 > 
-> Ok. I am not a security expert, but I am not sure that downloading
-> those things from https:// gives any win over a http:// download. What
-> would be more interesting is to be able to verify the cryptographic
-> signature of those tarballs (or the signature of a hash of those
-> tarballs), to actually be able to verify that those tarballs have
-> really been emitted by whoever is supposed to emit those tarballs. But
-> that's another story, and there are probably many projects that don't
-> provide cryptographic signatures to verify the authenticity of
-> the tarballs.
+> 
+> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+> ---
+>  ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   26 ++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
 
-If the certificate is not signed by one of the usual/trusted CAs then
-it's a problem and yeah, switch to http.
-It's open source, so it's not like we are downloading some sekrit NDA
-source or something, encrypting it is of no value.
-Checking integrity via hash+size like i proposed some time ago and got a
-nay is what should be done :)
-Regards.
+Unfortunately, it still cannot be applied as is:
+
+ *) All the text before the --- separator goes into the commit log (so
+ it remains forever in the Buildroot commit history). Therefore, it
+ shouldn't contain "personal" comments such as "Things always happen in
+ threes"
+
+ *) The commit log text should be wrapped at ~80 columns
+
+In addition to that, most of the commit log text would benefit from
+being copy/pasted into the description of the
+at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch patch.
+
+Of course, Peter can probably fix those minor problems while
+committing, but I thought it would be useful to describe what's still
+not perfect with your patch.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
