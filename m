@@ -1,34 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Oct 2012 18:44:45 -0300
-Subject: [Buildroot] [PATCH] toolchain/kernel-headers: drop unused cris
-	architecture kludge
-Message-ID: <1349905485-28527-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 10 Oct 2012 23:51:45 +0200
+Subject: [Buildroot] [PATCH v2 1/1] Makefile.in: add CPPFLAGS support
+In-Reply-To: <1343274046-3825-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Thu, 26 Jul 2012 05:40:46 +0200")
+References: <1343274046-3825-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <871uh6572m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/kernel-headers.mk |    5 -----
- 1 files changed, 0 insertions(+), 5 deletions(-)
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index c464c37..568c192 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -70,11 +70,6 @@ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
- 		HOSTCXX="$(HOSTCXX)" \
- 		INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install; \
- 	)
--ifeq ($(BR2_ARCH),"cris")
--	ln -s $(LINUX_HEADERS_DIR)/include/arch-v10/arch $(LINUX_HEADERS_DIR)/include/arch
--	cp -a $(LINUX_HEADERS_UNPACK_DIR)/include/linux/user.h $(LINUX_HEADERS_DIR)/include/linux
--	$(SED) "/^#include <asm\/page\.h>/d" $(LINUX_HEADERS_DIR)/include/asm/user.h
--endif
- 	touch $@
- 
- $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+Committed (with a small fixup to apply to master), thanks.
+
 -- 
-1.7.8.6
+Bye, Peter Korsgaard
