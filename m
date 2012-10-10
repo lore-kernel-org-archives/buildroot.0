@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 10 Oct 2012 17:06:24 +0200
-Subject: [Buildroot] [PATCH v10 03/10] perl: add DB_File
+Date: Wed, 10 Oct 2012 17:06:25 +0200
+Subject: [Buildroot] [PATCH v10 04/10] gdbm: new package
 In-Reply-To: <1349881591-7062-1-git-send-email-francois.perrad@gadz.org>
 References: <1349881591-7062-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1349881591-7062-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1349881591-7062-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl/Config.in |   10 ++++++++++
- package/perl/perl.mk   |    4 ++++
- 2 files changed, 14 insertions(+)
+ package/Config.in      |    1 +
+ package/gdbm/Config.in |    8 ++++++++
+ package/gdbm/gdbm.mk   |   12 ++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/gdbm/Config.in
+ create mode 100644 package/gdbm/gdbm.mk
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 0a41a97..6cb89f0 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -14,5 +14,15 @@ config BR2_PACKAGE_PERL
+diff --git a/package/Config.in b/package/Config.in
+index 00a79ab..d9cadf9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -324,6 +324,7 @@ endmenu
  
- 	  http://www.perl.org/
- 
-+if BR2_PACKAGE_PERL
-+
-+config BR2_PACKAGE_PERL_DB_FILE
-+	bool "DB_File"
-+	select BR2_PACKAGE_BERKELEYDB
+ menu "Database"
+ source "package/berkeleydb/Config.in"
++source "package/gdbm/Config.in"
+ source "package/mysql_client/Config.in"
+ source "package/sqlcipher/Config.in"
+ source "package/sqlite/Config.in"
+diff --git a/package/gdbm/Config.in b/package/gdbm/Config.in
+new file mode 100644
+index 0000000..d5aae83
+--- /dev/null
++++ b/package/gdbm/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_GDBM
++	bool "gdbm"
 +	help
-+	  Build the DB_File module.
++	  GNU dbm is a set of database routines that use extensible hashing.
++	  It works similar to the standard UNIX dbm routines.
 +
-+endif
++	  http://www.gnu.org/software/gdbm/gdbm.html
 +
- comment "perl requires an architecture supported by qemu"
- 	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 7ac1aed..186158b 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -11,7 +11,11 @@ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic
- PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
+diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
+new file mode 100644
+index 0000000..4971b12
+--- /dev/null
++++ b/package/gdbm/gdbm.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# gdbm
++#
++#############################################################
++GDBM_VERSION = 1.10
++GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
++GDBM_LICENSE = GPLv3
++GDBM_LICENSE_FILES = COPYING
++GDBM_INSTALL_STAGING = YES
 +
- PERL_DEPENDENCIES = host-qemu
-+ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-+    PERL_DEPENDENCIES += berkeleydb
-+endif
- 
- PERL_CONF_OPT = -des \
- 		-Dusecrosscompile \
++$(eval $(autotools-package))
 -- 
 1.7.9.5
