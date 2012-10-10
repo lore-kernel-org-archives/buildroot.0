@@ -1,65 +1,39 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Wed, 10 Oct 2012 18:40:46 +0400
-Subject: [Buildroot] rpm5
-In-Reply-To: <50748D38.6000101@mind.be>
-References: <1349695691.6518.2.camel@localhost>
-	<50748D38.6000101@mind.be>
-Message-ID: <CABtOAfzoOqrjf83+caK4moJc26RsKEfvej2rOBS0ma2vw8-fpQ@mail.gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 10 Oct 2012 16:41:40 +0200
+Subject: [Buildroot] [PATCH v9 02/10] perl: new package
+In-Reply-To: <20121008134900.403178cf@skate>
+References: <1349531633-26717-1-git-send-email-francois.perrad@gadz.org>
+ <1349531633-26717-2-git-send-email-francois.perrad@gadz.org>
+ <20121008113433.4b4bcc1b@skate>
+ <CAB0FRss5vs6xDU2ggQAZYo7Tff5JSBMw519ta-x-4FRE6hxefg@mail.gmail.com>
+ <20121008134900.403178cf@skate>
+Message-ID: <CAB0FRss_BKG3=oQAwJijXMNNREaP_neMgNDQk0_3hruhNH8o+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/10 Arnout Vandecappelle <arnout@mind.be>
-
-> On 08/10/12 13:28, Alexander Khryukin wrote:
+2012/10/8 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 >
->> Full log
->> http://pastie.org/4932495
+> On Mon, 8 Oct 2012 13:41:16 +0200, Fran?ois Perrad wrote:
+>
+>> > In my target, I have about 2 MB of C header files in
+>> > usr/lib/perl5/5.16.1/linux-gnueabihf/CORE. I suspect they are not
+>> > really useful, right?
 >>
+>> No, there are required for building XS modules (with cpanminus for example).
 >
->  It would be more relevant to post
-> /home/fdkit/buildroot/output/**build/rpm-5.2.0/config.log
+> Yes, but you're not building those XS modules on the target. So keep
+> the headers only in $(STAGING_DIR).
 >
->  Also please post the file 'defconfig' which is generated when you do
-> 'make savedefconfig'.  This will allow us to try to reproduce.
->
->  Also can you mention which BR version you're using?
->
->  However, before doing any of that, do a 'make clean' and recompile
-> to see if that fixes your problem.
->
->  (It works for me, BTW).
->
->  Regards,
->  Arnout
+
+After a refactoring of cpanminus.mk, the headers in $(TARGET_DIR)
+could be removed.
+
+> Thomas
 > --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
-
-Hi!
-Thanks for the response
-
-
-defconfig http://pastie.org/5029882
-
-config.log
-
-http://pastebin.com/L5CLKg06
-
-
-Every time it fails at
-
-checking whether to build with BeeCrypt library... no
-configure: error: mandatory BeeCrypt library not found
-when it installed
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121010/03a454d2/attachment.html>
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
