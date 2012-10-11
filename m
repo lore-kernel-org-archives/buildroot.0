@@ -1,41 +1,68 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 11 Oct 2012 22:28:18 +0200
-Subject: [Buildroot] [git commit] scons: fix library installation directory
-Message-ID: <20121011202904.28F3F99836@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 11 Oct 2012 22:25:02 +0200
+Subject: [Buildroot] [PATCH v2] googlefontdirectory: new package
+In-Reply-To: <1349947685-7261-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Thu, 11 Oct 2012 10:28:05 +0100")
+References: <1349947685-7261-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87obk84uzl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b08979477d65203b9b90c88d2a00246342c0b56a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-On gentoo systems SCons setup.py tries to install into
-$(HOST_DIR)/usr/lib64 but SCons looks up for its stuff in
-$(HOST_DIR)/usr/lib instead hence breaking.
-Make it install into $(HOST_DIR)/usr/lib by force to avoid the issue, it
-shouldn't matter on other distributions.
-Version bumping doesn't fix it.
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Note that the Google code project does not provide an archive containing
+ spdawson> just the font files. This package uses the third party archive provided at
 
-[Peter: wrapped long line]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/scons/scons.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ spdawson>   http://joemaller.com/1856/download-google-fonts/
 
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index 2aed62c..7cc234e 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -7,7 +7,8 @@ define HOST_SCONS_BUILD_CMDS
- endef
- 
- define HOST_SCONS_INSTALL_CMDS
--	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr)
-+	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr \
-+		--install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION))
- endef
- 
- $(eval $(host-generic-package))
+ spdawson> Further information is available at the following URL.
+
+ spdawson>   http://code.google.com/p/googlefontdirectory/issues/detail?id=2
+
+Thanks, looks a lot better!
+
+ spdawson> +#############################################################
+ spdawson> +#
+ spdawson> +# googlefontdirectory
+ spdawson> +#
+ spdawson> +#############################################################
+ spdawson> +GOOGLEFONTDIRECTORY_VERSION = 1.0
+
+I don't like us inventing versions, so I dropped this line
+(infrastructure then uses 'undefined' like for makedevs).
+
+ spdawson> +GOOGLEFONTDIRECTORY_SITE = \
+ spdawson> +	https://s3.amazonaws.com/joemaller_google_webfonts
+ spdawson> +GOOGLEFONTDIRECTORY_SOURCE = googlewebfonts.tgz
+ spdawson> +GOOGLEFONTDIRECTORY_LICENSE = OFLv1.1
+ spdawson> +
+ spdawson> +GOOGLEFONTDIRECTORY_FONTS = \
+ spdawson> +	$(call qstrip,$(BR2_PACKAGE_GOOGLEFONTDIRECTORY_FONTS))
+ spdawson> +
+ spdawson> +define GOOGLEFONTDIRECTORY_INSTALL_TARGET_CMDS
+ spdawson> +	for i in $(GOOGLEFONTDIRECTORY_FONTS); \
+ spdawson> +	do \
+ spdawson> +		$(INSTALL) -d $(TARGET_DIR)/usr/share/fonts/$$i && \
+ spdawson> +		$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/fonts/$$i $(@D)/$$i/*.ttf \
+
+You are missing a ';' after ttf
+
+ spdawson> +	done
+ spdawson> +endef
+ spdawson> +
+ spdawson> +define GOOGLEFONTDIRECTORY_UNINSTALL_TARGET_CMDS
+ spdawson> +	$(RM) -r \
+ spdawson> +	$(foreach i,$(GOOGLEFONTDIRECTORY_FONTS),$(TARGET_DIR)/usr/share/fonts/$(i))
+
+We more commonly use $(addprefix
+$(TARGET_DIR)/usr/share/fonts/,$(GOOGLEFONTDIRECTORY_FONTS)) instead of
+foreach, so I changed it to use that instead.
+
+Committed with those fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
