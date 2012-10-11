@@ -1,42 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 11 Oct 2012 22:28:48 +0200
-Subject: [Buildroot] [PATCH] scons: fix library installation directory
-In-Reply-To: <1349821556-17510-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 9 Oct 2012 19:25:56 -0300")
-References: <1349821556-17510-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fw5k4utb.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 11 Oct 2012 22:25:54 +0200
+Subject: [Buildroot] [git commit] toolchain/kernel-headers: drop unused cris
+	architecture kludge
+Message-ID: <20121011202903.9F99299836@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f9d2bcd142e7162cabfa2153578eccc84e677d54
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> On gentoo systems SCons setup.py tries to install into
- Gustavo> $(HOST_DIR)/usr/lib64 but SCons looks up for its stuff in
- Gustavo> $(HOST_DIR)/usr/lib instead hence breaking.
- Gustavo> Make it install into $(HOST_DIR)/usr/lib by force to avoid the issue, it
- Gustavo> shouldn't matter on other distributions.
- Gustavo> Version bumping doesn't fix it.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/kernel-headers.mk |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/scons/scons.mk |    2 +-
- Gustavo>  1 files changed, 1 insertions(+), 1 deletions(-)
-
- Gustavo> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
- Gustavo> index 2aed62c..878dcba 100644
- Gustavo> --- a/package/scons/scons.mk
- Gustavo> +++ b/package/scons/scons.mk
- Gustavo> @@ -7,7 +7,7 @@ define HOST_SCONS_BUILD_CMDS
- Gustavo>  endef
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index c464c37..568c192 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -70,11 +70,6 @@ $(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_UNPACK_DIR)/.patched
+ 		HOSTCXX="$(HOSTCXX)" \
+ 		INSTALL_HDR_PATH=$(LINUX_HEADERS_DIR) headers_install; \
+ 	)
+-ifeq ($(BR2_ARCH),"cris")
+-	ln -s $(LINUX_HEADERS_DIR)/include/arch-v10/arch $(LINUX_HEADERS_DIR)/include/arch
+-	cp -a $(LINUX_HEADERS_UNPACK_DIR)/include/linux/user.h $(LINUX_HEADERS_DIR)/include/linux
+-	$(SED) "/^#include <asm\/page\.h>/d" $(LINUX_HEADERS_DIR)/include/asm/user.h
+-endif
+ 	touch $@
  
- Gustavo>  define HOST_SCONS_INSTALL_CMDS
- Gustavo> -	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr)
- Gustavo> +	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr --install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION))
-
-Committed with the line wrapped after ~80 chars, thanks.
-
--- 
-Bye, Peter Korsgaard
+ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
