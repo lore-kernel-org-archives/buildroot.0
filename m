@@ -1,39 +1,33 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Thu, 11 Oct 2012 16:06:58 +0400
-Subject: [Buildroot] intltool version update 0.50.2
-Message-ID: <CABtOAfxghzGTxUdjydjDXxk094ApfOXr8Qp=v-oXvBBuf2SANA@mail.gmail.com>
+From: Jean-Mickael Guerin <jean-mickael.guerin@6wind.com>
+Date: Thu, 11 Oct 2012 14:49:34 +0200
+Subject: [Buildroot] Error with external mips toolchain
+In-Reply-To: <5075F999.7000709@6wind.com>
+References: <5075F999.7000709@6wind.com>
+Message-ID: <5076C05E.1090701@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/11 Alexander Khryukin <alexander@mezon.ru>
-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+This is BR2_TARGET_ARCH I need to tune (to pass -march=octeon2). But it 
+does not show up when running make menuconfig, not even present in .config.
+I'm doing something wrong or I need to patch to enable the choice for 
+mips64?
 
-commit c32a92a45e5ca725c0e332d938f21e6d7fac1fe7
-Author: Alexander Khryukin <alexander@mezon.ru>
-Date:   Thu Oct 11 12:07:09 2012 +0000
+Thanks,
+Jean-Mickael
 
-    version update 0.50.2
-
-diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
-index 19b5238..38f82e7 100644
---- a/package/intltool/intltool.mk
-+++ b/package/intltool/intltool.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
-
--INTLTOOL_VERSION = 0.40.6
-+INTLTOOL_VERSION = 0.50.2
- INTLTOOL_SOURCE = intltool-$(INTLTOOL_VERSION).tar.bz2
--INTLTOOL_SITE = http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
-+INTLTOOL_SITE =
-https://launchpad.net/intltool/trunk/$(INTLTOOL_VERSION)/+download/intltool-$(INTLTOOL_VERSION).tar.gz
-
- HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
- HOST_INTLTOOL_CONF_OPT = \
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/25bbfe77/attachment.html>
+On 11/10/2012 00:41, Jean-Mickael Guerin wrote:
+> Hello,
+>
+> Using Cavium's toolchain I get "Incorrect selection of the C library",
+> because the helper.mk can't find ld.linux in $SYSROOT/lib/.
+> But in this toolchain ld.linux can be found in $SYSROOT/lib64 or
+> $SYSROOT/lib32 only. How to workaround this check?
+>
+> And maybe related, how to tune cpu cflags like -mabi or -march,
+> I have seen BR2_TARGET_LDFLAGS, but no BR2_TARGET_LDFLAGS.
+>
+> Thanks,
+> Jean-Mickael
