@@ -1,74 +1,32 @@
-From: Chris Wilkinson <kinsham@verizon.net>
-Date: Thu, 11 Oct 2012 17:45:31 -0400
-Subject: [Buildroot] Creating initrd
-In-Reply-To: <20121011172356.6af76f39@skate>
-References: <1349964303.8392.39.camel@Homeserver>
- <20121011164826.753f8312@skate>	<1349968569.14474.10.camel@Homeserver>
- <20121011172356.6af76f39@skate>
-Message-ID: <1349991931.14474.39.camel@Homeserver>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 11 Oct 2012 19:02:29 -0300
+Subject: [Buildroot] [PATCH] bind: security bump to version 9.6-ESV-R8
+Message-ID: <1349992949-24002-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clean/make on a stock v3.4.7 kernel gives the following
+Fixes CVE-2012-5166, CVE-2012-4244, CVE-2012-3817 and CVE-2012-1667.
 
--rw-r--r-- 1 chrisw chrisw 1.5M Oct 11 17:19 rootfs.cpio
--rw-r--r-- 1 chrisw chrisw 718K Oct 11 17:19 rootfs.cpio.gz
--rwxr-xr-x 1 chrisw chrisw 2.7M Oct 11 17:18 zImage
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-So it seems that the size problem originates in my customized kernel.
-2.7MB is still too big so I need to investigate the config settings in
-both my customized kernel and the stock one.
-
-Chris
-
-On Thu, 2012-10-11 at 17:23 +0200, Thomas Petazzoni wrote:
-> On Thu, 11 Oct 2012 11:16:09 -0400, Chris Wilkinson wrote:
-> > The .config is here
-> > 
-> > http://pastebin.com/84LqnBXS
-> 
-> Are you sure you did a "make clean; make" after doing all your
-> configuration changes? Your configuration has almost no packages
-> enabled, the generated root filesystem definitely shouldn't be that big.
-> 
-> > This shows what I'm trying to achieve.
-> > 
-> > http://d-i.alioth.debian.org/manual/en.armel/ch05s01.html#boot-firmware. 
-> > 
-> > The output on the serial console goes like this on power up.
-> > 
-> > >>
-> > No network interfaces found
-> > 
-> > EM-7210 ver.T04 2005-12-12 (For ver.AA)
-> > == Executing boot script in 1.000 seconds - enter ^C to abort
-> > 
-> > At this point, hit Control-C to interrupt the boot loader[4]. This
-> > will give you the RedBoot prompt. Enter the following commands:
-> > 
-> > > load -v -r -b 0x01800000 -m ymodem ramdisk.gz
-> > > load -v -r -b 0x01008000 -m ymodem zImage
-> > > exec -c "console=ttyS0,115200 rw root=/dev/ram mem=256M at 0xa0000000" -r 0x01800000
-> 
-> You have two choices:
-> 
->  1 Use an initramfs embedded inside the kernel image. This is what
->    Buildroot does when you enable the BR2_TARGET_ROOTFS_INITRAMFS
->    option. In that case, you only need to load zImage to RAM, and
->    execute it, it already contains the initramfs.
-> 
->  2 Use an initramfs outside the kernel image. In that case, don't
->    enable the BR2_TARGET_ROOTFS_INITRAMFS Buildroot option, and simply
->    generated a compressed cpio archive for the root filesystem, thanks
->    to BR2_TARGET_ROOTFS_CPIO + BR2_TARGET_ROOTFS_CPIO_GZIP. Then, make
->    sure your kernel as the support for initramfs enabled.
-> 
-> I am quite familiar with choice 1, but I haven't tested choice 2 with
-> Buildroot.
-> 
-> Best regards,
-> 
-> Thomas
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 736001c..bd7e5ed 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.6-ESV-R7-P2
++BIND_VERSION = 9.6-ESV-R8
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+-- 
+1.7.8.6
