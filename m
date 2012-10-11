@@ -1,67 +1,151 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Oct 2012 17:23:56 +0200
-Subject: [Buildroot] Creating initrd
-In-Reply-To: <1349968569.14474.10.camel@Homeserver>
-References: <1349964303.8392.39.camel@Homeserver>
- <20121011164826.753f8312@skate>
- <1349968569.14474.10.camel@Homeserver>
-Message-ID: <20121011172356.6af76f39@skate>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Thu, 11 Oct 2012 19:38:52 +0400
+Subject: [Buildroot] rpm5
+In-Reply-To: <5076D806.1040207@petroprogram.com>
+References: <1349695691.6518.2.camel@localhost> <50748D38.6000101@mind.be>
+ <CABtOAfzoOqrjf83+caK4moJc26RsKEfvej2rOBS0ma2vw8-fpQ@mail.gmail.com>
+ <CABtOAfx507KKScdea=Ptz-BzhYCh8tBQjL4S5cphs_MWoBxq4g@mail.gmail.com>
+ <CABtOAfwBcWbZ+xDF72OVSxM=99A9WcihQ-BcoBoMUBiJJQk27A@mail.gmail.com>
+ <5076D44E.2060107@petroprogram.com>
+ <5076D806.1040207@petroprogram.com>
+Message-ID: <CABtOAfw8+jgXBNQ+xtFiZJTL0-SVgM_joKwCwFiSHG+KfdmrGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2012/10/11 Stefan Fr?berg <stefan.froberg@petroprogram.com>
 
-On Thu, 11 Oct 2012 11:16:09 -0400, Chris Wilkinson wrote:
-> The .config is here
-> 
-> http://pastebin.com/84LqnBXS
+>  Of course, if that works, it's  just a quick fix.
+>
+> For proper fix you should check that you have openmp working (that is, you
+> have libgomp) for your compiler and
+> if that's ok then it's obvious that rpm5 configure needs patching
+>
+> Regards
+> Stefan
+>
+> 11.10.2012 17:14, Stefan Fr?berg kirjoitti:
+>
+> Hello Alexander
+>
+> According to this
+>
+> http://sourceforge.net/mailarchive/forum.php?set=custom&viewmonth=&viewday=&forum_name=beecrypt-devel&style=nested&max_rows=25&submit=Change+View
+>
+> it is missing  "-lgomp"
+>
+> I checked the beecrypt-4.2.1 and it reveals following:
+>
+> grep gomp *
+>
+> acinclude.m4:  AC_SUBST(OPENMP_LIBS,"-lgomp")
+> configure: OPENMP_LIBS="-lgomp"
+>
+> So openmp depends on libgomp
+>
+> Beecrypt has a configure switch --disable-openmp
+>
+> Maybe you could try adding that switch into BEECRYPT_CONF_OPT in Buildroot
+> beecrypt.mk file,
+> rebuild beecrypt and then try rpm again.
+>
+> Best regards
+> Stefan
+>
+>
+>
+>
+> 11.10.2012 13:04, Alexander Khryukin kirjoitti:
+>
+>
+>
+> 2012/10/10 Alexander Khryukin <alexander@mezon.ru>
+>
+>>
+>>
+>>  2012/10/10 Alexander Khryukin <alexander@mezon.ru>
+>>
+>>>
+>>>
+>>> 2012/10/10 Arnout Vandecappelle <arnout@mind.be>
+>>>
+>>>> On 08/10/12 13:28, Alexander Khryukin wrote:
+>>>>
+>>>>> Full log
+>>>>> http://pastie.org/4932495
+>>>>>
+>>>>
+>>>>  It would be more relevant to post
+>>>> /home/fdkit/buildroot/output/build/rpm-5.2.0/config.log
+>>>>
+>>>>  Also please post the file 'defconfig' which is generated when you do
+>>>> 'make savedefconfig'.  This will allow us to try to reproduce.
+>>>>
+>>>>  Also can you mention which BR version you're using?
+>>>>
+>>>>  However, before doing any of that, do a 'make clean' and recompile
+>>>> to see if that fixes your problem.
+>>>>
+>>>>  (It works for me, BTW).
+>>>>
+>>>>  Regards,
+>>>>  Arnout
+>>>> --
+>>>> Arnout Vandecappelle                               arnout at mind be
+>>>> Senior Embedded Software Architect                 +32-16-286540
+>>>> Essensium/Mind                                     http://www.mind.be
+>>>> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+>>>> Leuven
+>>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>>>> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>>>>
+>>>
+>>>  Hi!
+>>> Thanks for the response
+>>>
+>>>
+>>> defconfig http://pastie.org/5029882
+>>>
+>>> config.log
+>>>
+>>> http://pastebin.com/L5CLKg06
+>>>
+>>>
+>>> Every time it fails at
+>>>
+>>> checking whether to build with BeeCrypt library... no
+>>> configure: error: mandatory BeeCrypt library not found
+>>>  when it installed
+>>>
+>>
+>>
+>> Seems problem in
+>>
+>>  undefined reference to `GOMP_parallel_end'  on 10296,1 string
+>>
+>>
+>
+> Bump
+> Problem still exist
+>
+>
+> _______________________________________________
+> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
 
-Are you sure you did a "make clean; make" after doing all your
-configuration changes? Your configuration has almost no packages
-enabled, the generated root filesystem definitely shouldn't be that big.
+> that you have openmp working
 
-> This shows what I'm trying to achieve.
-> 
-> http://d-i.alioth.debian.org/manual/en.armel/ch05s01.html#boot-firmware. 
-> 
-> The output on the serial console goes like this on power up.
-> 
-> >>
-> No network interfaces found
-> 
-> EM-7210 ver.T04 2005-12-12 (For ver.AA)
-> == Executing boot script in 1.000 seconds - enter ^C to abort
-> 
-> At this point, hit Control-C to interrupt the boot loader[4]. This
-> will give you the RedBoot prompt. Enter the following commands:
-> 
-> > load -v -r -b 0x01800000 -m ymodem ramdisk.gz
-> > load -v -r -b 0x01008000 -m ymodem zImage
-> > exec -c "console=ttyS0,115200 rw root=/dev/ram mem=256M at 0xa0000000" -r 0x01800000
-
-You have two choices:
-
- 1 Use an initramfs embedded inside the kernel image. This is what
-   Buildroot does when you enable the BR2_TARGET_ROOTFS_INITRAMFS
-   option. In that case, you only need to load zImage to RAM, and
-   execute it, it already contains the initramfs.
-
- 2 Use an initramfs outside the kernel image. In that case, don't
-   enable the BR2_TARGET_ROOTFS_INITRAMFS Buildroot option, and simply
-   generated a compressed cpio archive for the root filesystem, thanks
-   to BR2_TARGET_ROOTFS_CPIO + BR2_TARGET_ROOTFS_CPIO_GZIP. Then, make
-   sure your kernel as the support for initramfs enabled.
-
-I am quite familiar with choice 1, but I haven't tested choice 2 with
-Buildroot.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+How i can check this?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/64ab69dc/attachment.html>
