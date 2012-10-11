@@ -1,32 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Oct 2012 19:02:29 -0300
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.6-ESV-R8
-Message-ID: <1349992949-24002-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 12 Oct 2012 00:14:30 +0200
+Subject: [Buildroot] rpm5
+In-Reply-To: <CABtOAfzoOqrjf83+caK4moJc26RsKEfvej2rOBS0ma2vw8-fpQ@mail.gmail.com>
+References: <1349695691.6518.2.camel@localhost> <50748D38.6000101@mind.be>
+ <CABtOAfzoOqrjf83+caK4moJc26RsKEfvej2rOBS0ma2vw8-fpQ@mail.gmail.com>
+Message-ID: <507744C6.6010303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2012-5166, CVE-2012-4244, CVE-2012-3817 and CVE-2012-1667.
+On 10/10/12 16:40, Alexander Khryukin wrote:
+[snip]
+> config.log
+>
+> http://pastebin.com/L5CLKg06
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/bind/bind.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+/home/user/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libbeecrypt.so: undefined reference to 
+`GOMP_parallel_sections_start'
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 736001c..bd7e5ed 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BIND_VERSION = 9.6-ESV-R7-P2
-+BIND_VERSION = 9.6-ESV-R8
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_MAKE = $(MAKE1)
- BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
+
+  Your cross-toolchain seems to contain OpenMP support.  Either add --disable-openmp to BEECRYPT_CONF_OPT, or if you 
+really need OpenMP support in beecrypt, add LIBS=-lgomp to RPM_CONF_ENV.
+
+
+  Maybe we should just add --disable-openmp to BEECRYPT_CONF_OPT?
+
+
+  Regards,
+  Arnout
 -- 
-1.7.8.6
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
