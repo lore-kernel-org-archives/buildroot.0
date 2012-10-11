@@ -1,43 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Oct 2012 23:26:32 +0200
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <CAG2jQ8hPXUt7sR5p3Tq1enqO3uYNXEX+N6=yUynLWZHhDnp=2Q@mail.gmail.com>
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk> <87boghzdjc.fsf@macbook.be.48ers.dk>
- <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
- <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
- <87ipapxbp2.fsf@macbook.be.48ers.dk> <506F6AC9.3010702@mind.be>
- <CAG2jQ8hPXUt7sR5p3Tq1enqO3uYNXEX+N6=yUynLWZHhDnp=2Q@mail.gmail.com>
-Message-ID: <50773988.6070904@mind.be>
+From: Chris Wilkinson <kinsham@verizon.net>
+Date: Thu, 11 Oct 2012 17:45:31 -0400
+Subject: [Buildroot] Creating initrd
+In-Reply-To: <20121011172356.6af76f39@skate>
+References: <1349964303.8392.39.camel@Homeserver>
+ <20121011164826.753f8312@skate>	<1349968569.14474.10.camel@Homeserver>
+ <20121011172356.6af76f39@skate>
+Message-ID: <1349991931.14474.39.camel@Homeserver>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/10/12 14:49, Markos Chandras wrote:
-> On Sat, Oct 6, 2012 at 12:18 AM, Arnout Vandecappelle<arnout@mind.be>  wrote:
->>   Not sure if it is related, but the previous version was already broken for me
->> on x86_64 builds. Hm, probably not related, because it failed with:
->>
->> file.c: In function 'printstat64':
->> file.c:1073:16: error: storage size of 'statbuf' isn't known
->> file.c:1073:16: warning: unused variable 'statbuf' [-Wunused-variable]
->>
+Clean/make on a stock v3.4.7 kernel gives the following
 
-> I reported this problem upstream about an hour ago (with a proposed
-> patch included)
->
-> http://sourceforge.net/mailarchive/message.php?msg_id=29947462
+-rw-r--r-- 1 chrisw chrisw 1.5M Oct 11 17:19 rootfs.cpio
+-rw-r--r-- 1 chrisw chrisw 718K Oct 11 17:19 rootfs.cpio.gz
+-rwxr-xr-x 1 chrisw chrisw 2.7M Oct 11 17:18 zImage
 
-  Is this only on x86_64 or also on other 64-bit platforms?
+So it seems that the size problem originates in my customized kernel.
+2.7MB is still too big so I need to investigate the config settings in
+both my customized kernel and the stock one.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Chris
+
+On Thu, 2012-10-11 at 17:23 +0200, Thomas Petazzoni wrote:
+> On Thu, 11 Oct 2012 11:16:09 -0400, Chris Wilkinson wrote:
+> > The .config is here
+> > 
+> > http://pastebin.com/84LqnBXS
+> 
+> Are you sure you did a "make clean; make" after doing all your
+> configuration changes? Your configuration has almost no packages
+> enabled, the generated root filesystem definitely shouldn't be that big.
+> 
+> > This shows what I'm trying to achieve.
+> > 
+> > http://d-i.alioth.debian.org/manual/en.armel/ch05s01.html#boot-firmware. 
+> > 
+> > The output on the serial console goes like this on power up.
+> > 
+> > >>
+> > No network interfaces found
+> > 
+> > EM-7210 ver.T04 2005-12-12 (For ver.AA)
+> > == Executing boot script in 1.000 seconds - enter ^C to abort
+> > 
+> > At this point, hit Control-C to interrupt the boot loader[4]. This
+> > will give you the RedBoot prompt. Enter the following commands:
+> > 
+> > > load -v -r -b 0x01800000 -m ymodem ramdisk.gz
+> > > load -v -r -b 0x01008000 -m ymodem zImage
+> > > exec -c "console=ttyS0,115200 rw root=/dev/ram mem=256M at 0xa0000000" -r 0x01800000
+> 
+> You have two choices:
+> 
+>  1 Use an initramfs embedded inside the kernel image. This is what
+>    Buildroot does when you enable the BR2_TARGET_ROOTFS_INITRAMFS
+>    option. In that case, you only need to load zImage to RAM, and
+>    execute it, it already contains the initramfs.
+> 
+>  2 Use an initramfs outside the kernel image. In that case, don't
+>    enable the BR2_TARGET_ROOTFS_INITRAMFS Buildroot option, and simply
+>    generated a compressed cpio archive for the root filesystem, thanks
+>    to BR2_TARGET_ROOTFS_CPIO + BR2_TARGET_ROOTFS_CPIO_GZIP. Then, make
+>    sure your kernel as the support for initramfs enabled.
+> 
+> I am quite familiar with choice 1, but I haven't tested choice 2 with
+> Buildroot.
+> 
+> Best regards,
+> 
+> Thomas
