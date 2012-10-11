@@ -1,151 +1,183 @@
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Thu, 11 Oct 2012 19:38:52 +0400
+Date: Thu, 11 Oct 2012 20:39:13 +0400
 Subject: [Buildroot] rpm5
-In-Reply-To: <5076D806.1040207@petroprogram.com>
+In-Reply-To: <CABtOAfw8+jgXBNQ+xtFiZJTL0-SVgM_joKwCwFiSHG+KfdmrGA@mail.gmail.com>
 References: <1349695691.6518.2.camel@localhost> <50748D38.6000101@mind.be>
  <CABtOAfzoOqrjf83+caK4moJc26RsKEfvej2rOBS0ma2vw8-fpQ@mail.gmail.com>
  <CABtOAfx507KKScdea=Ptz-BzhYCh8tBQjL4S5cphs_MWoBxq4g@mail.gmail.com>
  <CABtOAfwBcWbZ+xDF72OVSxM=99A9WcihQ-BcoBoMUBiJJQk27A@mail.gmail.com>
  <5076D44E.2060107@petroprogram.com>
  <5076D806.1040207@petroprogram.com>
-Message-ID: <CABtOAfw8+jgXBNQ+xtFiZJTL0-SVgM_joKwCwFiSHG+KfdmrGA@mail.gmail.com>
+ <CABtOAfw8+jgXBNQ+xtFiZJTL0-SVgM_joKwCwFiSHG+KfdmrGA@mail.gmail.com>
+Message-ID: <CABtOAfzWTz7T9juAE3eCGBgy-MjjHhwf+gyxdZTzWVXxb2ifkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/11 Stefan Fr?berg <stefan.froberg@petroprogram.com>
+2012/10/11 Alexander Khryukin <alexander@mezon.ru>
 
->  Of course, if that works, it's  just a quick fix.
->
-> For proper fix you should check that you have openmp working (that is, you
-> have libgomp) for your compiler and
-> if that's ok then it's obvious that rpm5 configure needs patching
->
-> Regards
-> Stefan
->
-> 11.10.2012 17:14, Stefan Fr?berg kirjoitti:
->
-> Hello Alexander
->
-> According to this
->
-> http://sourceforge.net/mailarchive/forum.php?set=custom&viewmonth=&viewday=&forum_name=beecrypt-devel&style=nested&max_rows=25&submit=Change+View
->
-> it is missing  "-lgomp"
->
-> I checked the beecrypt-4.2.1 and it reveals following:
->
-> grep gomp *
->
-> acinclude.m4:  AC_SUBST(OPENMP_LIBS,"-lgomp")
-> configure: OPENMP_LIBS="-lgomp"
->
-> So openmp depends on libgomp
->
-> Beecrypt has a configure switch --disable-openmp
->
-> Maybe you could try adding that switch into BEECRYPT_CONF_OPT in Buildroot
-> beecrypt.mk file,
-> rebuild beecrypt and then try rpm again.
->
-> Best regards
-> Stefan
 >
 >
+> 2012/10/11 Stefan Fr?berg <stefan.froberg@petroprogram.com>
 >
->
-> 11.10.2012 13:04, Alexander Khryukin kirjoitti:
->
->
->
-> 2012/10/10 Alexander Khryukin <alexander@mezon.ru>
->
+>>  Of course, if that works, it's  just a quick fix.
+>>
+>> For proper fix you should check that you have openmp working (that is,
+>> you have libgomp) for your compiler and
+>> if that's ok then it's obvious that rpm5 configure needs patching
+>>
+>> Regards
+>> Stefan
+>>
+>> 11.10.2012 17:14, Stefan Fr?berg kirjoitti:
+>>
+>> Hello Alexander
+>>
+>> According to this
+>>
+>> http://sourceforge.net/mailarchive/forum.php?set=custom&viewmonth=&viewday=&forum_name=beecrypt-devel&style=nested&max_rows=25&submit=Change+View
+>>
+>> it is missing  "-lgomp"
+>>
+>> I checked the beecrypt-4.2.1 and it reveals following:
+>>
+>> grep gomp *
+>>
+>> acinclude.m4:  AC_SUBST(OPENMP_LIBS,"-lgomp")
+>> configure: OPENMP_LIBS="-lgomp"
+>>
+>> So openmp depends on libgomp
+>>
+>> Beecrypt has a configure switch --disable-openmp
+>>
+>> Maybe you could try adding that switch into BEECRYPT_CONF_OPT in
+>> Buildroot beecrypt.mk file,
+>> rebuild beecrypt and then try rpm again.
+>>
+>> Best regards
+>> Stefan
 >>
 >>
->>  2012/10/10 Alexander Khryukin <alexander@mezon.ru>
+>>
+>>
+>> 11.10.2012 13:04, Alexander Khryukin kirjoitti:
+>>
+>>
+>>
+>> 2012/10/10 Alexander Khryukin <alexander@mezon.ru>
 >>
 >>>
 >>>
->>> 2012/10/10 Arnout Vandecappelle <arnout@mind.be>
+>>>  2012/10/10 Alexander Khryukin <alexander@mezon.ru>
 >>>
->>>> On 08/10/12 13:28, Alexander Khryukin wrote:
 >>>>
->>>>> Full log
->>>>> http://pastie.org/4932495
+>>>>
+>>>> 2012/10/10 Arnout Vandecappelle <arnout@mind.be>
+>>>>
+>>>>> On 08/10/12 13:28, Alexander Khryukin wrote:
+>>>>>
+>>>>>> Full log
+>>>>>> http://pastie.org/4932495
+>>>>>>
+>>>>>
+>>>>>  It would be more relevant to post
+>>>>> /home/fdkit/buildroot/output/build/rpm-5.2.0/config.log
+>>>>>
+>>>>>  Also please post the file 'defconfig' which is generated when you do
+>>>>> 'make savedefconfig'.  This will allow us to try to reproduce.
+>>>>>
+>>>>>  Also can you mention which BR version you're using?
+>>>>>
+>>>>>  However, before doing any of that, do a 'make clean' and recompile
+>>>>> to see if that fixes your problem.
+>>>>>
+>>>>>  (It works for me, BTW).
+>>>>>
+>>>>>  Regards,
+>>>>>  Arnout
+>>>>> --
+>>>>> Arnout Vandecappelle                               arnout at mind be
+>>>>> Senior Embedded Software Architect                 +32-16-286540
+>>>>> Essensium/Mind                                     http://www.mind.be
+>>>>> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+>>>>> Leuven
+>>>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>>>>> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 >>>>>
 >>>>
->>>>  It would be more relevant to post
->>>> /home/fdkit/buildroot/output/build/rpm-5.2.0/config.log
+>>>>  Hi!
+>>>> Thanks for the response
 >>>>
->>>>  Also please post the file 'defconfig' which is generated when you do
->>>> 'make savedefconfig'.  This will allow us to try to reproduce.
 >>>>
->>>>  Also can you mention which BR version you're using?
+>>>> defconfig http://pastie.org/5029882
 >>>>
->>>>  However, before doing any of that, do a 'make clean' and recompile
->>>> to see if that fixes your problem.
+>>>> config.log
 >>>>
->>>>  (It works for me, BTW).
+>>>> http://pastebin.com/L5CLKg06
 >>>>
->>>>  Regards,
->>>>  Arnout
->>>> --
->>>> Arnout Vandecappelle                               arnout at mind be
->>>> Senior Embedded Software Architect                 +32-16-286540
->>>> Essensium/Mind                                     http://www.mind.be
->>>> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
->>>> Leuven
->>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->>>> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>>>>
+>>>> Every time it fails at
+>>>>
+>>>> checking whether to build with BeeCrypt library... no
+>>>> configure: error: mandatory BeeCrypt library not found
+>>>>  when it installed
 >>>>
 >>>
->>>  Hi!
->>> Thanks for the response
 >>>
+>>> Seems problem in
 >>>
->>> defconfig http://pastie.org/5029882
+>>>  undefined reference to `GOMP_parallel_end'  on 10296,1 string
 >>>
->>> config.log
->>>
->>> http://pastebin.com/L5CLKg06
->>>
->>>
->>> Every time it fails at
->>>
->>> checking whether to build with BeeCrypt library... no
->>> configure: error: mandatory BeeCrypt library not found
->>>  when it installed
 >>>
 >>
+>> Bump
+>> Problem still exist
 >>
->> Seems problem in
 >>
->>  undefined reference to `GOMP_parallel_end'  on 10296,1 string
+>> _______________________________________________
+>> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
+>>
 >>
 >>
 >
-> Bump
-> Problem still exist
+> > that you have openmp working
 >
->
-> _______________________________________________
-> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
->
-> _______________________________________________
-> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
->
->
+> How i can check this?
 >
 
-> that you have openmp working
 
-How i can check this?
+Stegan, thanks for your answer i prepared patch
+
+
+--- beecrypt-4.2.0/Makefile.am~ 2009-07-04 14:07:12.000000000 +0200
++++ beecrypt-4.2.0/Makefile.am  2009-07-10 12:52:47.000000000 +0200
+@@ -52,7 +52,7 @@
+
+ libbeecrypt_la_SOURCES = aes.c base64.c beecrypt.c blockmode.c blockpad.c
+blowfish.c dhies.c dldp.c dlkp.c dlpk.c dlsvdp-dh.c dsa.c elgamal.c
+endianness.c entropy.c fips186.c hmac.c hmacmd5.c hmacsha1.c hmacsha224.c
+hmacsha256.c md4.c md5.c hmacsha384.c hmacsha512.c memchunk.c mp.c
+mpbarrett.c mpnumber.c mpprime.c mtprng.c pkcs1.c pkcs12.c ripemd128.c
+ripemd160.c ripemd256.c ripemd320.c rsa.c rsakp.c rsapk.c sha1.c sha224.c
+sha256.c sha384.c sha512.c sha2k32.c sha2k64.c timestamp.c cppglue.cxx
+ libbeecrypt_la_DEPENDENCIES = $(BEECRYPT_OBJECTS)
+-libbeecrypt_la_LIBADD = blowfishopt.lo mpopt.lo sha1opt.lo $(OPENMP_LIBS)
++libbeecrypt_la_LIBADD = blowfishopt.lo mpopt.lo sha1opt.lo -lgomp
+ libbeecrypt_la_LDFLAGS = -no-undefined -version-info
+$(LIBBEECRYPT_LT_CURRENT):$(LIBBEECRYPT_LT_REVISION):$(LIBBEECRYPT_LT_AGE)
+
+ EXTRA_DIST = BENCHMARKS BUGS CONTRIBUTORS README.WIN32 autogen.sh
+
+
+Looks like now it's ok
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/64ab69dc/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/27f58ad7/attachment-0001.html>
