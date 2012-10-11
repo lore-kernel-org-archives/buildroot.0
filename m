@@ -1,19 +1,53 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 11 Oct 2012 08:06:00 +0100
-Subject: [Buildroot] [PATCH] googlefontdirectory: new package
-In-Reply-To: <87r4p658o2.fsf@macbook.be.48ers.dk>
-References: <1343053494-21248-1-git-send-email-spdawson@gmail.com>
- <87r4p658o2.fsf@macbook.be.48ers.dk>
-Message-ID: <CAHt8ZCNTC7HRorvX9GwG7Xdj61w9Qia2mvabBS0tw1L-iU=v_A@mail.gmail.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Thu, 11 Oct 2012 09:54:14 +0200
+Subject: [Buildroot] Using a patched kernel
+In-Reply-To: <003701cda713$ad86eb10$0894c130$@net>
+References: <003701cda713$ad86eb10$0894c130$@net>
+Message-ID: <50767B26.6090209@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10 October 2012 22:17, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Sorry for the slow response - See below for comments.
+Am 10.10.2012 20:18, schrieb Chris Wilkinson:
+> Is it possible in BR to use a custom patched version of a Linux kernel
+> rather than have it get the standard one? 
+Yes, use "source override".
 
-Thanks for the comments Peter; I'll rework the patch and resubmit.
+Stephan wrote:
+>  Frequently Asked Questions
+>  ==========================
+>  
+> +How can I use sources from my local PC instead of the official tarball?
+> +-----------------------------------------------------------------------
+> +
+> +Just use the "Source Directory Override" mechanism.
+> +
+> +You have to add a file local.mk to your project.  This file should
+> +contain the following definition:
+> +
+> +<package>_OVERRIDE_SRCDIR = wherever.your.source.lives
+> +
+> +Then announce this file to buildroot in the "Build options" menu as
+> +"location of a package override file".
+> +
+>  
 
-Simon.
+> successfully built with crosstool-ng-1.16.0 and would like to use that.
+Didn't know that crosstool can build kernels;-)
+
+Stephan
+> Chris
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
