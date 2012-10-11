@@ -1,29 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Oct 2012 11:20:04 +0200
-Subject: [Buildroot] [PATCH] New package liblog4c-localtime
-In-Reply-To: <50768EA2.7010101@mail.ru>
-References: <1349679414-2967-1-git-send-email-fenixk19@mail.ru>
- <5074893E.2030600@mind.be> <50768EA2.7010101@mail.ru>
-Message-ID: <50768F44.2030607@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 11 Oct 2012 11:21:27 +0200
+Subject: [Buildroot] [PATCH 02/11] e2fsprogs: add staging install
+In-Reply-To: <87mwzu58fi.fsf@macbook.be.48ers.dk>
+References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
+ <1342963719-1810-3-git-send-email-s.martin49@gmail.com>
+ <87mwzu58fi.fsf@macbook.be.48ers.dk>
+Message-ID: <CAHXCMMJFJW3tWKER-=SqzzF62LM58yuZyuG1nvwhqnSnu6QbFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/12 11:17, Alexander Varnin wrote:
-> 10.10.2012 00:29, Arnout Vandecappelle ?????:
->> + $(eval $(call AUTOTARGETS))
-> Will this line work on newer versions of buildroot?
+2012/10/10 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>
+>  Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> Why? As far as I can see we don't have anything depending on e2fsprogs,
+> and the libuuid stuff moved to util-linux, didn't it?
+Well... so far, none that I'm aware of need e2fsprogs, though some
+people tried to add some packages that need it some months ago.
+So, maybe we could just skip this patch until someone/some package need it.
 
-  No it won't, but Thomas already gave that comment so I didn't repeat it.
-
-  Regards,
-  Arnout
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Sam
