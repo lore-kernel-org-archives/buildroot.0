@@ -1,37 +1,39 @@
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Thu, 11 Oct 2012 15:57:52 +0400
-Subject: [Buildroot] vala version update 0.18.0
-Message-ID: <CABtOAfwa+P3Nu9Ph2LOkuNJ-KmbQiAhiVFS5oAFqkMQyQORU6w@mail.gmail.com>
+Date: Thu, 11 Oct 2012 16:06:58 +0400
+Subject: [Buildroot] intltool version update 0.50.2
+Message-ID: <CABtOAfxghzGTxUdjydjDXxk094ApfOXr8Qp=v-oXvBBuf2SANA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2012/10/11 Alexander Khryukin <alexander@mezon.ru>
 Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
----
 
-commit 57874f61cfc22fa2e1e5cf73f84323e3f4fa0699
+commit c32a92a45e5ca725c0e332d938f21e6d7fac1fe7
 Author: Alexander Khryukin <alexander@mezon.ru>
-Date:   Thu Oct 11 12:01:05 2012 +0000
+Date:   Thu Oct 11 12:07:09 2012 +0000
 
-    vala version update 0.18.0
+    version update 0.50.2
 
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index e4b8b54..5c333c5 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 19b5238..38f82e7 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -4,9 +4,9 @@
  #
  #############################################################
 
--VALA_VERSION_MAJOR = 0.17
--VALA_VERSION_MINOR = 7
-+VALA_VERSION_MAJOR = 0.18
-+VALA_VERSION_MINOR = 0
- VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+-INTLTOOL_VERSION = 0.40.6
++INTLTOOL_VERSION = 0.50.2
+ INTLTOOL_SOURCE = intltool-$(INTLTOOL_VERSION).tar.bz2
+-INTLTOOL_SITE = http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
++INTLTOOL_SITE =
+https://launchpad.net/intltool/trunk/$(INTLTOOL_VERSION)/+download/intltool-$(INTLTOOL_VERSION).tar.gz
+
+ HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
+ HOST_INTLTOOL_CONF_OPT = \
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/e7840c37/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/25bbfe77/attachment.html>
