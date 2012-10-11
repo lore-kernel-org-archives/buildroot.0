@@ -1,41 +1,49 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 11 Oct 2012 10:19:34 +0200
-Subject: [Buildroot] make legal-info fails when override is active
-Message-ID: <50768116.4000506@relinux.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 11 Oct 2012 10:37:29 +0200
+Subject: [Buildroot] [git commit] libv4l: ensure TARGET_CFLAGS are used
+Message-ID: <20121011084009.E9C9399835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+commit: http://git.buildroot.net/buildroot/commit/?id=c69b809fc12e071225430a7fb627c785cdaa3fc7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-in my setup using the override srcdir feature for the kernel make
-legal-info fails.
+Now that the lfs handling issues have been worked around, we can
+pass TARGET_CONFIGURE_OPTS on the make command line to ensure
+TARGET_CFLAGS are used.
 
-> make legal-info
-> >>>   Collecting legal info
-> make: *** No rule to make target `linux-extract', needed by
-> `linux-legal-info'.  Stop.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libv4l/libv4l.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Tested with actual git head (526badc94)
-
-Kind regards
-
-Stephan
-
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: defconfig
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/573c0fce/attachment.ksh>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: local.mk
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121011/573c0fce/attachment-0001.ksh>
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index a793285..21cdb6d 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -23,19 +23,19 @@ endif
+ 
+ define LIBV4L_BUILD_CMDS
+ 	for i in $(LIBV4L_DIRS_y); do \
+-		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$$i \
++		$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/$$i \
+ 			$(LIBV4L_MAKE_OPTS); done
+ endef
+ 
+ define LIBV4L_INSTALL_STAGING_CMDS
+ 	for i in $(LIBV4L_DIRS_y); do \
+-		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$$i \
++		$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/$$i \
+ 			DESTDIR=$(STAGING_DIR) $(LIBV4L_MAKE_OPTS) install; done
+ endef
+ 
+ define LIBV4L_INSTALL_TARGET_CMDS
+ 	for i in $(LIBV4L_DIRS_y); do \
+-		$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/$$i \
++		$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/$$i \
+ 			DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install; done
+ endef
+ 
