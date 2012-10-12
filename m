@@ -1,5 +1,5 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Oct 2012 16:12:51 +0200
+Date: Fri, 12 Oct 2012 16:23:33 +0200
 Subject: [Buildroot] Creating initrd
 In-Reply-To: <1350049738.14474.52.camel@Homeserver>
 References: <1349964303.8392.39.camel@Homeserver>
@@ -11,7 +11,7 @@ References: <1349964303.8392.39.camel@Homeserver>
  <1349988968.14474.34.camel@Homeserver>
  <20121012091408.6184bb9f@skate>
  <1350049738.14474.52.camel@Homeserver>
-Message-ID: <20121012161251.3401e6c0@skate>
+Message-ID: <20121012162333.7fcc5273@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,8 +19,6 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Dear Chris Wilkinson,
-
-Please don't reply to me directly: keep the Buildroot list Cc'ed.
 
 On Fri, 12 Oct 2012 09:48:58 -0400, Chris Wilkinson wrote:
 > I had been using crosstool to build the kernel but now I see that BR
@@ -30,12 +28,12 @@ On Fri, 12 Oct 2012 09:48:58 -0400, Chris Wilkinson wrote:
 > https://skydrive.live.com/redir?resid=834D8577B5544D4E!169&authkey=!
 > AGZIOn-ye6O3anc
 
-By crosstool, do you mean crosstool-ng? Or something else?
+The .config file in this kernel tarball (which I assume is the kernel
+configuration you're using) has gazillions of kernel modules enabled.
+99.999999% of them are most likely useless in your setup. Those kernel
+modules are the one that are causing your root filesystem to be 30+MB.
 
-Both the old crosstool (that no-one should be using) and crosstool-ng
-do *NOT* build the kernel, so what you're saying doesn't make sense
-here. They use kernel /headers/ to build a toolchain, but that's all
-they do with the kernel.
+Best regards,
 
 Thomas
 -- 
