@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Oct 2012 09:10:43 +0200
-Subject: [Buildroot] Creating initrd
-In-Reply-To: <1349991931.14474.39.camel@Homeserver>
-References: <1349964303.8392.39.camel@Homeserver>
- <20121011164826.753f8312@skate>
- <1349968569.14474.10.camel@Homeserver>
- <20121011172356.6af76f39@skate>
- <1349991931.14474.39.camel@Homeserver>
-Message-ID: <20121012091043.746a65a1@skate>
+Date: Fri, 12 Oct 2012 09:30:32 +0200
+Subject: [Buildroot] post-buil script in chrooted
+In-Reply-To: <5077A820.7050202@free.fr>
+References: <5077A820.7050202@free.fr>
+Message-ID: <20121012093032.7ef6b972@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Wilkinson,
+Dear David Bonnin,
 
-On Thu, 11 Oct 2012 17:45:31 -0400, Chris Wilkinson wrote:
-> Clean/make on a stock v3.4.7 kernel gives the following
-> 
-> -rw-r--r-- 1 chrisw chrisw 1.5M Oct 11 17:19 rootfs.cpio
-> -rw-r--r-- 1 chrisw chrisw 718K Oct 11 17:19 rootfs.cpio.gz
-> -rwxr-xr-x 1 chrisw chrisw 2.7M Oct 11 17:18 zImage
-> 
-> So it seems that the size problem originates in my customized kernel.
-> 2.7MB is still too big so I need to investigate the config settings in
-> both my customized kernel and the stock one.
+On Fri, 12 Oct 2012 07:18:24 +0200, David Bonnin wrote:
 
-Ah, maybe your customized kernel configuration has gazillions of kernel
-modules enabled, which make the size of the root filesystem enormous.
-Could you pastebin your kernel config so we can confirm this?
+> Few ask in finalise target:
+> 1- to do root task, i can only use permission: target in each 
+> packages..........
 
-Thanks,
+Not sure I understand this part.
+
+> CAN i use a "root script" in chrooted mode?
+> ROOTFS_POST_BUILD_SCRIPT is not executed chrooted in the target.
+
+No because it doesn't make sense. Buildroot is used in many cases for
+cross-compilation, so the development machine is x86 or x86_64 and the
+target filesystem contain ARM, PowerPC or MIPS binaries. So chrooting
+into it is not possible (unless we use Qemu or something like that, but
+it's not the idea of Buildroot, we want to do cross-compilation).
+
+> 2-
+> why rootfs targets are generated 2 times?   (in my case: rootfs.tar
+> and rootfs.ubifs)
+> Generate 1 time and then generate tar and UBIFS is quicker.....so why?
+
+Well, this is exactly what Buildroot is doing:
+
+ 1) It generates your root filesystem in output/target
+
+ 2) At the end of the build it uses the contents of output/target to
+    create the different root filesystem images you requested. So if
+    you requested a tarball image and an UBIFS image, it is going to
+    call tar inside fakeroot to create the tarball image using the
+    contents of output/target, and then mkfs.ubifs inside fakeroot to
+    create the UBIFS image using the contents of output/target.
+
+Hope this helps,
 
 Thomas
 -- 
