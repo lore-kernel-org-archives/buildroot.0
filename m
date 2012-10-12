@@ -1,73 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 12 Oct 2012 09:15:09 -0300
-Subject: [Buildroot] [PATCH] hostapd: add fix for CVE-2012-4445
-Message-ID: <1350044109-9853-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 12 Oct 2012 12:55:34 +0200
+Subject: [Buildroot] [git commit] bind: security bump to version 9.6-ESV-R8
+Message-ID: <20121012131503.B854D9984D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/hostapd/hostapd-cve-2012-4445.patch |   49 +++++++++++++++++++++++++++
- 1 files changed, 49 insertions(+), 0 deletions(-)
- create mode 100644 package/hostapd/hostapd-cve-2012-4445.patch
+commit: http://git.buildroot.net/buildroot/commit/?id=cbf09c29d081a7b4060d8d9b614170c9d75d7bbc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/hostapd/hostapd-cve-2012-4445.patch b/package/hostapd/hostapd-cve-2012-4445.patch
-new file mode 100644
-index 0000000..034a458
---- /dev/null
-+++ b/package/hostapd/hostapd-cve-2012-4445.patch
-@@ -0,0 +1,49 @@
-+From 567bacefd73782508bfe72d3624df495f0df4cd1 Mon Sep 17 00:00:00 2001
-+From: Jouni Malinen <j@w1.fi>
-+Date: Sun, 7 Oct 2012 20:06:29 +0300
-+Subject: [PATCH] EAP-TLS server: Fix TLS Message Length validation
-+
-+EAP-TLS/PEAP/TTLS/FAST server implementation did not validate TLS
-+Message Length value properly and could end up trying to store more
-+information into the message buffer than the allocated size if the first
-+fragment is longer than the indicated size. This could result in hostapd
-+process terminating in wpabuf length validation. Fix this by rejecting
-+messages that have invalid TLS Message Length value.
-+
-+This would affect cases that use the internal EAP authentication server
-+in hostapd either directly with IEEE 802.1X or when using hostapd as a
-+RADIUS authentication server and when receiving an incorrectly
-+constructed EAP-TLS message. Cases where hostapd uses an external
-+authentication are not affected.
-+
-+Thanks to Timo Warns for finding and reporting this issue.
-+
-+Signed-hostap: Jouni Malinen <j@w1.fi>
-+intended-for: hostap-1
-+(cherry picked from commit 586c446e0ff42ae00315b014924ec669023bd8de)
-+---
-+ src/eap_server/eap_server_tls_common.c |    8 ++++++++
-+ 1 files changed, 8 insertions(+), 0 deletions(-)
-+
-+diff --git a/src/eap_server/eap_server_tls_common.c b/src/eap_server/eap_server_tls_common.c
-+index e149ee3..2cbe700 100644
-+--- a/src/eap_server/eap_server_tls_common.c
-++++ b/src/eap_server/eap_server_tls_common.c
-+@@ -224,6 +224,14 @@ static int eap_server_tls_process_fragment(struct eap_ssl_data *data,
-+ 			return -1;
-+ 		}
-+ 
-++		if (len > message_length) {
-++			wpa_printf(MSG_INFO, "SSL: Too much data (%d bytes) in "
-++				   "first fragment of frame (TLS Message "
-++				   "Length %d bytes)",
-++				   (int) len, (int) message_length);
-++			return -1;
-++		}
-++
-+ 		data->tls_in = wpabuf_alloc(message_length);
-+ 		if (data->tls_in == NULL) {
-+ 			wpa_printf(MSG_DEBUG, "SSL: No memory for message");
-+-- 
-+1.7.4-rc1
-+
--- 
-1.7.8.6
+Fixes CVE-2012-5166, CVE-2012-4244, CVE-2012-3817 and CVE-2012-1667.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 736001c..bd7e5ed 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.6-ESV-R7-P2
++BIND_VERSION = 9.6-ESV-R8
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
