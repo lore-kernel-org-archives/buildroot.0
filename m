@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Oct 2012 18:30:35 +0200
-Subject: [Buildroot] [PATCH] gdb: target gdb not available on microblaze
-Message-ID: <1350059435-4570-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Oct 2012 18:37:00 +0200
+Subject: [Buildroot] [PATCH v10 07/10] perl: relax microperl dependencies
+In-Reply-To: <1349881591-7062-7-git-send-email-francois.perrad@gadz.org>
+References: <1349881591-7062-1-git-send-email-francois.perrad@gadz.org>
+ <1349881591-7062-7-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20121012183700.76a19f91@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
+Dear Francois Perrad,
 
-  http://autobuild.buildroot.org/results/5950c95ca12721dd910ad72fe52bfa9ac45a5120/build-end.log
+On Wed, 10 Oct 2012 17:06:28 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/autoconf/Config.in   |    2 +-
+>  package/autoconf/autoconf.mk |    7 ++++++-
+>  package/automake/Config.in   |    2 +-
+>  package/automake/automake.mk |    7 ++++++-
+>  package/ntp/Config.in        |    4 ++--
+>  package/samba/Config.in      |    4 ++--
+>  6 files changed, 18 insertions(+), 8 deletions(-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gdb/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Instead of trying to support both microperl and perl in parallel, this
+patch should just switch everybody to use BR2_PACKAGE_PERL instead,
+since further patches in your series are removing microperl. So don't
+bother introduce complexity here to remove it in a later patch. Just
+move everybody to the full blown perl instead.
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index fd6956b..272e196 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_GDB
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32
-+	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze
- 	help
- 	    Build the full gdb debugger to run on the target.
- 
+Thanks,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
