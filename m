@@ -1,37 +1,78 @@
-From: Jean-Mickael Guerin <jean-mickael.guerin@6wind.com>
-Date: Fri, 12 Oct 2012 22:25:50 +0200
-Subject: [Buildroot] [PATCH] toolchain: have check_glibc to search deeper
-	for ld-linux
-Message-ID: <1350073550-779-1-git-send-email-jean-mickael.guerin@6wind.com>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Fri, 12 Oct 2012 23:28:11 +0300
+Subject: [Buildroot] [PATCH] putty: UNIX port of the famous Telnet and SSH
+	GUI client
+Message-ID: <1350073691-18721-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ld-linux*.so may not be present in lib/ directory, it could be
-in lib32 and/or lib64 only. But check_glibc reports
-"Incorrect selection of the C library" in this case, which is
-not true.
-Fixed by extending the search to  SYSROOT/*/*.
 
-Signed-off-by: Jean-Mickael Guerin <jean-mickael.guerin@6wind.com>
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
- toolchain/helpers.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/Config.in       |    1 +
+ package/putty/Config.in |    7 +++++++
+ package/putty/putty.mk  |   24 ++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 package/putty/Config.in
+ create mode 100644 package/putty/putty.mk
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index d5ab91b..497cfff 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -196,7 +196,7 @@ check_glibc_feature = \
- #
- check_glibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if test `find $${SYSROOT_DIR}/lib/ -maxdepth 1 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
-+	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
+diff --git a/package/Config.in b/package/Config.in
+index fb4ec28..3f2c289 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -598,6 +598,7 @@ source "package/portmap/Config.in"
+ source "package/pppd/Config.in"
+ source "package/pptp-linux/Config.in"
+ source "package/proftpd/Config.in"
++source "package/putty/Config.in"
+ source "package/quagga/Config.in"
+ source "package/radvd/Config.in"
+ source "package/rp-pppoe/Config.in"
+diff --git a/package/putty/Config.in b/package/putty/Config.in
+new file mode 100644
+index 0000000..125fbd6
+--- /dev/null
++++ b/package/putty/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PUTTY
++	bool "putty"
++	select BR2_PACKAGE_LIBGTK2
++	help
++	  UNIX port of the famous Telnet and SSH GUI client
++
++	  http://www.chiark.greenend.org.uk/~sgtatham/putty
+diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+new file mode 100644
+index 0000000..df66df5
+--- /dev/null
++++ b/package/putty/putty.mk
+@@ -0,0 +1,24 @@
++############################################
++#
++# putty
++# 
++############################################
++
++PUTTY_VERSION = 0.62-2012-08-27
++PUTTY_SOURCE = putty-$(PUTTY_VERSION).tar.gz
++PUTTY_SITE = http://tartarus.org/~simon/putty-snapshots
++PUTTY_SUBDIR = unix
++PUTTY_AUTORECONF = yes
++PUTTY_DEPENDENCIES = libglib2 libgtk2 gdk-pixbuf xlib_libX11 pango
++PUTTY_LICENSE = MIT
++PUTTY_LICENSE_FILES = LICENSE
++
++define PUTTY_CONFIGURE_FIXUP
++	(cd $(@D)/unix; \
++	sed -i configure.ac -e '/^AM_PATH_GTK(/d' -e 's|-Wall -Werror||g' )
++endef
++
++PUTTY_POST_PATCH_HOOKS += PUTTY_CONFIGURE_FIXUP
++
++$(eval $(autotools-package))
++
 -- 
-1.7.12
+1.7.7.6
