@@ -1,92 +1,73 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri, 12 Oct 2012 16:14:46 +0400
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <CAG2jQ8ja49TsB3eDjQX04v0fvpj+9jVaA8_9C7tWDNtqvRq7pg@mail.gmail.com>
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk>
- <87boghzdjc.fsf@macbook.be.48ers.dk>
- <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
- <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
- <87ipapxbp2.fsf@macbook.be.48ers.dk> <506F6AC9.3010702@mind.be>
- <CAG2jQ8hPXUt7sR5p3Tq1enqO3uYNXEX+N6=yUynLWZHhDnp=2Q@mail.gmail.com>
- <50773988.6070904@mind.be>
- <CAG2jQ8ja49TsB3eDjQX04v0fvpj+9jVaA8_9C7tWDNtqvRq7pg@mail.gmail.com>
-Message-ID: <CABtOAfxaj5MC5TL4umy-pUQDD19gGaa2zY3A5Rsr1gSrynOg5A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 12 Oct 2012 09:15:09 -0300
+Subject: [Buildroot] [PATCH] hostapd: add fix for CVE-2012-4445
+Message-ID: <1350044109-9853-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/10/12 Markos Chandras <markos.chandras@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/hostapd/hostapd-cve-2012-4445.patch |   49 +++++++++++++++++++++++++++
+ 1 files changed, 49 insertions(+), 0 deletions(-)
+ create mode 100644 package/hostapd/hostapd-cve-2012-4445.patch
 
-> On Thu, Oct 11, 2012 at 10:26 PM, Arnout Vandecappelle <arnout@mind.be>
-> wrote:
-> > On 10/10/12 14:49, Markos Chandras wrote:
-> >>
-> >> On Sat, Oct 6, 2012 at 12:18 AM, Arnout Vandecappelle<arnout@mind.be>
-> >> wrote:
-> >>>
-> >>>   Not sure if it is related, but the previous version was already
-> broken
-> >>> for me
-> >>>
-> >>> on x86_64 builds. Hm, probably not related, because it failed with:
-> >>>
-> >>> file.c: In function 'printstat64':
-> >>> file.c:1073:16: error: storage size of 'statbuf' isn't known
-> >>> file.c:1073:16: warning: unused variable 'statbuf' [-Wunused-variable]
-> >>>
-> >
-> >> I reported this problem upstream about an hour ago (with a proposed
-> >> patch included)
-> >>
-> >> http://sourceforge.net/mailarchive/message.php?msg_id=29947462
-> >
-> >
-> >  Is this only on x86_64 or also on other 64-bit platforms?
-> >
-> >
-> I haven't tested it with other 64-bit platforms but I think the rest
-> of them provide a struct stat64. But even with this patch, it does not
-> go much further as it fails to build again due to undefined syscalls
-> like Peter posted before
->
->
-> http://autobuild.buildroot.net/results/db48ce61cdb53669958b8b301fd24d7ecc33b236/build-end.log
->
-> Another way to workaround the stat64 problem on x86_64 is to
-> ac_cv_have_long_long_off_t=yes on strace.mk when
-> BR2_LARGEFILE is enabled.
->
-> --
-> Regards,
-> Markos
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
-Hi!
-
-i'm trying to buiid strace
-
-See here http://pastie.org/5043151
-
-
-
-
-syscall.o:(.rodata+0x128): undefined reference to `sys_oldstat'
-syscall.o:(.rodata+0x1c8): undefined reference to `sys_oldfstat'
-syscall.o:(.rodata+0x548): undefined reference to `sys_oldlstat'
-syscall.o:(.rodata+0x5a8): undefined reference to `sys_old_mmap'
-syscall.o:(.rodata+0xc18): undefined reference to `sys_truncate64'
-syscall.o:(.rodata+0xc28): undefined reference to `sys_ftruncate64'
-syscall.o:(.rodata+0xc38): undefined reference to `sys_stat64'
-syscall.o:(.rodata+0xc48): undefined reference to `sys_lstat64'
-syscall.o:(.rodata+0xc58): undefined reference to `sys_fstat64'
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121012/a0210c29/attachment.html>
+diff --git a/package/hostapd/hostapd-cve-2012-4445.patch b/package/hostapd/hostapd-cve-2012-4445.patch
+new file mode 100644
+index 0000000..034a458
+--- /dev/null
++++ b/package/hostapd/hostapd-cve-2012-4445.patch
+@@ -0,0 +1,49 @@
++From 567bacefd73782508bfe72d3624df495f0df4cd1 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Sun, 7 Oct 2012 20:06:29 +0300
++Subject: [PATCH] EAP-TLS server: Fix TLS Message Length validation
++
++EAP-TLS/PEAP/TTLS/FAST server implementation did not validate TLS
++Message Length value properly and could end up trying to store more
++information into the message buffer than the allocated size if the first
++fragment is longer than the indicated size. This could result in hostapd
++process terminating in wpabuf length validation. Fix this by rejecting
++messages that have invalid TLS Message Length value.
++
++This would affect cases that use the internal EAP authentication server
++in hostapd either directly with IEEE 802.1X or when using hostapd as a
++RADIUS authentication server and when receiving an incorrectly
++constructed EAP-TLS message. Cases where hostapd uses an external
++authentication are not affected.
++
++Thanks to Timo Warns for finding and reporting this issue.
++
++Signed-hostap: Jouni Malinen <j@w1.fi>
++intended-for: hostap-1
++(cherry picked from commit 586c446e0ff42ae00315b014924ec669023bd8de)
++---
++ src/eap_server/eap_server_tls_common.c |    8 ++++++++
++ 1 files changed, 8 insertions(+), 0 deletions(-)
++
++diff --git a/src/eap_server/eap_server_tls_common.c b/src/eap_server/eap_server_tls_common.c
++index e149ee3..2cbe700 100644
++--- a/src/eap_server/eap_server_tls_common.c
+++++ b/src/eap_server/eap_server_tls_common.c
++@@ -224,6 +224,14 @@ static int eap_server_tls_process_fragment(struct eap_ssl_data *data,
++ 			return -1;
++ 		}
++ 
+++		if (len > message_length) {
+++			wpa_printf(MSG_INFO, "SSL: Too much data (%d bytes) in "
+++				   "first fragment of frame (TLS Message "
+++				   "Length %d bytes)",
+++				   (int) len, (int) message_length);
+++			return -1;
+++		}
+++
++ 		data->tls_in = wpabuf_alloc(message_length);
++ 		if (data->tls_in == NULL) {
++ 			wpa_printf(MSG_DEBUG, "SSL: No memory for message");
++-- 
++1.7.4-rc1
++
+-- 
+1.7.8.6
