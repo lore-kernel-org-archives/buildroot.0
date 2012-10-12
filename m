@@ -1,27 +1,33 @@
-From: David Bonnin <dboml@free.fr>
-Date: Fri, 12 Oct 2012 07:18:24 +0200
-Subject: [Buildroot] post-buil script in chrooted
-Message-ID: <5077A820.7050202@free.fr>
+From: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
+Date: Fri, 12 Oct 2012 07:34:08 +0200
+Subject: [Buildroot] [PATCH] ccid: Version bump to 1.4.8
+Message-ID: <1350020048-12536-1-git-send-email-waldemar.rymarkiewicz@tieto.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Waldemar Rymarkiewicz <waldemar.rymarkiewicz@tieto.com>
+---
+ package/ccid/ccid.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Few ask in finalise target:
-1- to do root task, i can only use permission: target in each 
-packages..........
-CAN i use a "root script" in chrooted mode?
-ROOTFS_POST_BUILD_SCRIPT is not executed chrooted in the target.
-
-2-
-why rootfs targets are generated 2 times?   (in my case: rootfs.tar and 
-rootfs.ubifs)
-Generate 1 time and then generate tar and UBIFS is quicker.....so why?
-
-
-
-"Thanks for this nice buildroot tool."
-David.
+diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
+index d1ebf8c..73db67f 100644
+--- a/package/ccid/ccid.mk
++++ b/package/ccid/ccid.mk
+@@ -3,9 +3,9 @@
+ # CCID
+ #
+ # ########################################################
+-CCID_VERSION = 1.4.7
++CCID_VERSION = 1.4.8
+ CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
+-CCID_SITE = http://alioth.debian.org/frs/download.php/3730
++CCID_SITE = http://alioth.debian.org/frs/download.php/3768
+ CCID_INSTALL_STAGING = YES
+ CCID_DEPENDENCIES = pcsc-lite host-pkg-config libusb
+ 
+-- 
+1.7.10
