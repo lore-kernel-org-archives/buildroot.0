@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Oct 2012 18:39:01 +0200
-Subject: [Buildroot] [PATCH v10 10/10] microperl: remove it
-In-Reply-To: <1349881591-7062-10-git-send-email-francois.perrad@gadz.org>
-References: <1349881591-7062-1-git-send-email-francois.perrad@gadz.org>
- <1349881591-7062-10-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20121012183901.5acc6827@skate>
+Date: Fri, 12 Oct 2012 18:58:24 +0200
+Subject: [Buildroot] [PATCH] mesa3d: add dependency on host-xutil_makedepend
+Message-ID: <1350061104-5523-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+The mesa3d now requires the makedepend host utility, otherwise, it
+fails with:
 
-On Wed, 10 Oct 2012 17:06:31 +0200, Francois Perrad wrote:
-> replaced by perl
-> use BR2_PACKAGE_PERL_CUSTOM_INSTALL if you want a small footprint
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                                  |    1 -
->  package/autoconf/Config.in                         |    2 +-
->  package/autoconf/autoconf.mk                       |    7 +-
->  package/automake/Config.in                         |    2 +-
->  package/automake/automake.mk                       |    7 +-
->  package/libxml-parser-perl/libxml-parser-perl.mk   |    6 -
->  package/microperl/Config.in                        |   30 ----
->  .../microperl/microperl-no-signal-handlers.patch   |   22 ---
->  package/microperl/microperl-uudmap.patch           |   47 ------
->  package/microperl/microperl.mk                     |  156 --------------------
->  package/ntp/Config.in                              |    4 +-
->  package/samba/Config.in                            |    4 +-
->  12 files changed, 8 insertions(+), 280 deletions(-)
->  delete mode 100644 package/microperl/Config.in
->  delete mode 100644 package/microperl/microperl-no-signal-handlers.patch
->  delete mode 100644 package/microperl/microperl-uudmap.patch
->  delete mode 100644 package/microperl/microperl.mk
+configure: error: makedepend is required to build Mesa
 
-If you change your PATCH 07/10 to switch everybody to just use the new
-perl package, then this patch should just become a simple removal of
-the microperl package: no other packages should be affected.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Noel Vellemans <Noel.Vellemans@visionBMS.com>
+---
+ package/x11r7/mesa3d/mesa3d.mk |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk
+index 3c2635e..8d311e1 100644
+--- a/package/x11r7/mesa3d/mesa3d.mk
++++ b/package/x11r7/mesa3d/mesa3d.mk
+@@ -27,6 +27,7 @@ MESA3D_DEPENDENCIES = \
+ 	xlib_libXfixes \
+ 	xproto_dri2proto \
+ 	libdrm \
+-	expat
++	expat \
++	host-xutil_makedepend
+ 
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
