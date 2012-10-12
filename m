@@ -1,36 +1,37 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 12 Oct 2012 22:54:50 +0300
-Subject: [Buildroot] [PATCH] beecrypt: enable OpenMP if Buildroot GCC
-	supports it
-Message-ID: <1350071690-11279-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Jean-Mickael Guerin <jean-mickael.guerin@6wind.com>
+Date: Fri, 12 Oct 2012 22:25:50 +0200
+Subject: [Buildroot] [PATCH] toolchain: have check_glibc to search deeper
+	for ld-linux
+Message-ID: <1350073550-779-1-git-send-email-jean-mickael.guerin@6wind.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ld-linux*.so may not be present in lib/ directory, it could be
+in lib32 and/or lib64 only. But check_glibc reports
+"Incorrect selection of the C library" in this case, which is
+not true.
+Fixed by extending the search to  SYSROOT/*/*.
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Jean-Mickael Guerin <jean-mickael.guerin@6wind.com>
 ---
- package/beecrypt/beecrypt.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index d165aee..101d0df 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -18,6 +18,12 @@ BEECRYPT_CONF_OPT = \
- 		--without-java \
- 		--without-python
- 
-+ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
-+BEECRYPT_CONF_OPT += --enable-openmp
-+else
-+BEECRYPT_CONF_OPT += --disable-openmp
-+endif
-+
- ifeq ($(BR2_PACKAGE_ICU),y)
- # C++ support needs icu
- BEECRYPT_DEPENDENCIES += icu
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index d5ab91b..497cfff 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -196,7 +196,7 @@ check_glibc_feature = \
+ #
+ check_glibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if test `find $${SYSROOT_DIR}/lib/ -maxdepth 1 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
++	if test `find $${SYSROOT_DIR}/ -maxdepth 2 -name 'ld-linux*.so.*' -o -name 'ld.so.*' | wc -l` -eq 0 ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
 -- 
-1.7.7.6
+1.7.12
