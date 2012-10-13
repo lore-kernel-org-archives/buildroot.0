@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 01:14:38 +0200
-Subject: [Buildroot] [PATCH 10/13] Add update-all-config target
+Date: Sun, 14 Oct 2012 01:14:53 +0200
+Subject: [Buildroot] [PATCH 13/13] Document BR2_PROJECT_DIR in the manual
 In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
 References: <20121013231344.17317.92930.stgit@localhost>
-Message-ID: <20121013231438.17317.13801.stgit@localhost>
+Message-ID: <20121013231453.17317.66287.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,101 +12,63 @@ To: buildroot@busybox.net
 
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The update-all-config target updates all the external configuration
-file with their current values.  This includes:
-- buildroot
-- busybox
-- linux
-- crosstool-ng
-- uClibc
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Barebox is missing because there is no BR2_TARGET_BAREBOX_CONFIG option.
----
- Makefile                                         |    6 ++++++
- linux/linux.mk                                   |    2 ++
- package/busybox/busybox.mk                       |    4 ++++
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    7 +++++++
- toolchain/uClibc/uclibc.mk                       |    4 ++++
- 5 files changed, 23 insertions(+)
+ docs/manual/customize-project.txt |   37 +++++++++++++++++++++++++++++++++++++
+ docs/manual/customize.txt         |    2 ++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 docs/manual/customize-project.txt
 
-diff --git a/Makefile b/Makefile
-index 1f42141..0e5b28e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -660,6 +660,10 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
- 		$(CONFIG_CONFIG_IN)
- 
-+# UPDATE_ALL_CONFIG_TARGETS is set by the individual packages that have a
-+# save*config target.
-+update-all-config: savedefconfig $(UPDATE_ALL_CONFIG_TARGETS)
+diff --git a/docs/manual/customize-project.txt b/docs/manual/customize-project.txt
+new file mode 100644
+index 0000000..db6b757
+--- /dev/null
++++ b/docs/manual/customize-project.txt
+@@ -0,0 +1,37 @@
++Storing the configuration in a project directory
++------------------------------------------------
++[[project-dir]]
 +
- # check if download URLs are outdated
- source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
-@@ -714,6 +718,8 @@ help:
- 	@echo '  defconfig              - New config with default answer to all options'
- 	@echo '                             BR2_DEFCONFIG, if set, is used as input'
- 	@echo '  savedefconfig          - Save current config as ./defconfig (minimal config)'
-+	@echo '  update-all-config      - Update all configuration targets that have an input:'
-+	@echo '                           buildroot, busybox, linux, crosstool-ng, uClibc'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
- 	@echo '  randpackageconfig      - New config with random answer to package options'
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c4bdf90..98ffe44 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -151,6 +151,8 @@ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
-+# savedefconfig requires a kernel >= 2.6.33
-+UPDATE_ALL_CONFIG_TARGETS += linux-update-defconfig
- endif
- 
- define LINUX_CONFIGURE_CMDS
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 33f8633..5063a8b 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -217,3 +217,7 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
- 
- busybox-update-config:
- 	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
++When you use buildroot in different projects, it's a good idea to keep
++each project separate from buildroot itself.  Buildroot makes this
++possible with the +BR2_PROJECT_DIR+ option.  The project directory
++contains all the configuration files and the filesystem overlay for
++your project.
 +
-+ifneq ($(BUSYBOX_CONFIG_FILE),)
-+UPDATE_ALL_CONFIG_TARGETS += busybox-update-config
-+endif
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index d18f5d5..688bcfe 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -397,3 +397,10 @@ ctng-menuconfig: $(CTNG_DIR)/.config
- 	$(call ctng-oldconfig,$<)
- 	$(call ctng-check-config-changed,$<,$<.timestamp)
- 	$(Q)rm -f $<.timestamp
++After configuring buildroot, the linux kernel, etc., run the following
++command.
 +
-+ctng-update-config: $(CTNG_DIR)/.config
-+	$(Q)cp $< $(CTNG_CONFIG_FILE)
++--------------------
++make PROJECT_DIR=/path/to/project/dir projectdir
++--------------------
 +
-+ifneq ($(CTNG_CONFIG_FILE),)
-+UPDATE_ALL_CONFIG_TARGETS += ctng-update-config
-+endif
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index d1cd718..0faaf18 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -508,6 +508,10 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
- uclibc-update-config: uclibc-config
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
++This will create the directory +/path/to/project/dir+, which contains
++the buildroot configuration, and all other configuration files required
++to rebuild your system.
++
++To further customize your project, you can:
++
++* add a directory called +rootfs-overlay+ and fill it with additional
++  files and directories that should be installed in the root filesystem
++  (see xref:customize-rootfs[+BR2_ROOTFS_OVERLAY+]);
++
++* add a script called +post-build.sh+ to modify the root filesystem
++  (see xref:customize-rootfs[+BR2_ROOTFS_POST_BUILD_SCRIPT+]);
++
++* add a makefile +project.mk+ with additional buildroot targets.
++
++In addition, the project directory contains a Makefile to allow you to
++build directly from there.  This Makefile downloads and extracts
++buildroot, then builds everything according to your configuration. To
++avoid downloading buildroot, create a symbolic link to the buildroot
++directory in the project directory.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index e8235de..86fc1fb 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -10,3 +10,5 @@ include::customize-uclibc-config.txt[]
+ include::customize-kernel-config.txt[]
  
-+ifneq ($(UCLIBC_CONFIG_FILE),)
-+UPDATE_ALL_CONFIG_TARGETS += uclibc-update-config
-+endif
+ include::customize-toolchain.txt[]
 +
- uclibc-configured: gcc_initial kernel-headers $(UCLIBC_DIR)/.configured
- 
- uclibc-configured-source: uclibc-source
++include::customize-project.txt[]
