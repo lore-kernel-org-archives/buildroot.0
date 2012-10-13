@@ -1,78 +1,45 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 12 Oct 2012 23:28:11 +0300
-Subject: [Buildroot] [PATCH] putty: UNIX port of the famous Telnet and SSH
-	GUI client
-Message-ID: <1350073691-18721-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 12 Oct 2012 22:26:00 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 4, 5,
+	6}.x stable versions
+Message-ID: <1350091560-2409-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in       |    1 +
- package/putty/Config.in |    7 +++++++
- package/putty/putty.mk  |   24 ++++++++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
- create mode 100644 package/putty/Config.in
- create mode 100644 package/putty/putty.mk
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.45-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.46-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-diff --git a/package/Config.in b/package/Config.in
-index fb4ec28..3f2c289 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -598,6 +598,7 @@ source "package/portmap/Config.in"
- source "package/pppd/Config.in"
- source "package/pptp-linux/Config.in"
- source "package/proftpd/Config.in"
-+source "package/putty/Config.in"
- source "package/quagga/Config.in"
- source "package/radvd/Config.in"
- source "package/rp-pppoe/Config.in"
-diff --git a/package/putty/Config.in b/package/putty/Config.in
-new file mode 100644
-index 0000000..125fbd6
---- /dev/null
-+++ b/package/putty/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PUTTY
-+	bool "putty"
-+	select BR2_PACKAGE_LIBGTK2
-+	help
-+	  UNIX port of the famous Telnet and SSH GUI client
-+
-+	  http://www.chiark.greenend.org.uk/~sgtatham/putty
-diff --git a/package/putty/putty.mk b/package/putty/putty.mk
-new file mode 100644
-index 0000000..df66df5
---- /dev/null
-+++ b/package/putty/putty.mk
-@@ -0,0 +1,24 @@
-+############################################
-+#
-+# putty
-+# 
-+############################################
-+
-+PUTTY_VERSION = 0.62-2012-08-27
-+PUTTY_SOURCE = putty-$(PUTTY_VERSION).tar.gz
-+PUTTY_SITE = http://tartarus.org/~simon/putty-snapshots
-+PUTTY_SUBDIR = unix
-+PUTTY_AUTORECONF = yes
-+PUTTY_DEPENDENCIES = libglib2 libgtk2 gdk-pixbuf xlib_libX11 pango
-+PUTTY_LICENSE = MIT
-+PUTTY_LICENSE_FILES = LICENSE
-+
-+define PUTTY_CONFIGURE_FIXUP
-+	(cd $(@D)/unix; \
-+	sed -i configure.ac -e '/^AM_PATH_GTK(/d' -e 's|-Wall -Werror||g' )
-+endef
-+
-+PUTTY_POST_PATCH_HOOKS += PUTTY_CONFIGURE_FIXUP
-+
-+$(eval $(autotools-package))
-+
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index f111c11..00fb2f5 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.45"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.46"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.31"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.13"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.5.6"		if BR2_KERNEL_HEADERS_3_5
+-	default "3.6.1"		if BR2_KERNEL_HEADERS_3_6
++	default "3.4.14"	if BR2_KERNEL_HEADERS_3_4
++	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
++	default "3.6.2"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.45-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.46-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.45-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.46-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-1.7.7.6
+1.7.8.6
