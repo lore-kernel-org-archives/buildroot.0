@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 01:14:27 +0200
-Subject: [Buildroot] [PATCH 08/13] Store BR2_DEFCONFIG in .config,
- and use it to update the original input
+Date: Sun, 14 Oct 2012 01:14:32 +0200
+Subject: [Buildroot] [PATCH 09/13] Skip menuconfig if BR2_DEFCONFIG or
+ BR2_PROJECT_DIR is given.
 In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
 References: <20121013231344.17317.92930.stgit@localhost>
-Message-ID: <20121013231427.17317.48487.stgit@localhost>
+Message-ID: <20121013231432.17317.13596.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,118 +13,41 @@ To: buildroot@busybox.net
 
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-defconfig file after updating the configuration.
-
-Also use $(PROJECT_DIR) by default.
-
-As a side-effect of this change, the *config options have been moved out
-of the BR2_HAVE_DOT_CONFIG condition.  Also, the defconfig and savedefconfig
-targets do need to include .config now, which makes them slightly slower.
+If BR2_DEFCONFIG or BR2_PROJECT_DIR is given on the command line and
+it exists, there is no need to go through menuconfig and we can
+build immediately.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in |   13 +++++++++++++
- Makefile  |   22 +++++++++++++---------
- 2 files changed, 26 insertions(+), 9 deletions(-)
+ Makefile |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index 8cefcc6..4111409 100644
---- a/Config.in
-+++ b/Config.in
-@@ -29,6 +29,19 @@ config BR2_PROJECT_DIR
- 	  This option is used to set defaults for many other configuration
- 	  variables.  Each one of those can still be overridden individually.
- 
-+config BR2_DEFCONFIG_FROM_ENV
-+	string
-+	option env="BR2_DEFCONFIG"
-+
-+config BR2_DEFCONFIG
-+	string "Location to save buildroot config"
-+	default "$(PROJECT_DIR)/buildroot.config" if BR2_PROJECT_DIR != ""
-+	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
-+	default "defconfig"
-+	help
-+	  When running 'make savedefconfig', the defconfig file will be saved
-+	  in this location.
-+
- menu "Build options"
- 
- menu "Commands"
 diff --git a/Makefile b/Makefile
-index d6136ed..cbaa0c4 100644
+index cbaa0c4..1f42141 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -56,7 +56,7 @@ DATE:=$(shell date +%Y%m%d)
- export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
+@@ -544,8 +544,24 @@ show-targets:
  
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
-+	%_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	source-check print-version
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
-@@ -97,6 +97,7 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- endif
- 
- PROJECT_DIR = $(realpath $(call qstrip,$(BR2_PROJECT_DIR)))
-+DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
- 
- # To put more focus on warnings, be less verbose as default
- # Use 'make V=1' to see the full commands
-@@ -545,6 +546,8 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
++ifneq ($(PROJECT_DIR),)
++ifeq ($(DEFCONFIG),)
++DEFCONFIG = $(wildcard $(PROJECT_DIR)/buildroot.config)
++endif
++endif
++
++ifeq ($(DEFCONFIG),)
++
  all: menuconfig
  
-+endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
++else # ifeq ($(DEFCONFIG),)
 +
++# Re-run make if necessary
++all world: defconfig
++	$(MAKE) $(EXTRAMAKEARGS) $@
++
++endif # ifeq ($(DEFCONFIG),)
++
+ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
  # configuration
- # ---------------------------------------------------------------------------
- 
-@@ -560,6 +563,7 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
- 	BR2_PROJECT_DIR=$(PROJECT_DIR) \
-+	BR2_DEFCONFIG=$(DEFCONFIG) \
- 	BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
-@@ -626,24 +630,24 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	$(COMMON_CONFIG_ENV) $< --silentoldconfig $(CONFIG_CONFIG_IN)
- 
--defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
--
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
- 	@$(COMMON_CONFIG_ENV) $< --defconfig=$(TOPDIR)/configs/$@ $(CONFIG_CONFIG_IN)
- 
-+defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
-+	@mkdir -p $(BUILD_DIR)/buildroot-config
-+	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
-+
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< \
-+		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
-+		$(CONFIG_CONFIG_IN)
- 
- # check if download URLs are outdated
- source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
- 
--endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
--
- #############################################################
- #
- # Cleanup and misc junk
-@@ -757,5 +761,5 @@ print-version:
- 
- include docs/manual/manual.mk
- 
--.PHONY: $(noconfig_targets)
-+.PHONY: $(noconfig_targets) defconfig savedefconfig
- 
