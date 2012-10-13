@@ -1,37 +1,60 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 13 Oct 2012 11:38:40 +0200
-Subject: [Buildroot] [PATCH 11/11] libecore: fix build with glibc >=2.16
-In-Reply-To: <20121011171550.32aacb87@skate>
-References: <1342963719-1810-1-git-send-email-s.martin49@gmail.com>
- <1342963719-1810-12-git-send-email-s.martin49@gmail.com>
- <87ipai584z.fsf@macbook.be.48ers.dk>
- <CAHXCMM+YjpZ7beReUic3U_z4A-U2h+4hcGk0_8LwSdC7CJUWQw@mail.gmail.com>
- <20121011171550.32aacb87@skate>
-Message-ID: <CAHXCMMLHS-MHmbMaYk68obzuHtyk9LBC016BS-=Tvwo24aWK=w@mail.gmail.com>
+Date: Sat, 13 Oct 2012 11:41:24 +0200
+Subject: [Buildroot] [PATCH] webkit: Fix build issue with gcc-4.6 and
+	above
+In-Reply-To: <1349385964-710-1-git-send-email-gvaxon@gmail.com>
+References: <1349385964-710-1-git-send-email-gvaxon@gmail.com>
+Message-ID: <CAHXCMMJJXz-EXnSyVyL_=xcXQze=GM__k6sQsm=jSWmEQMheyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter, all,
+Hi Val, all,
 
-2012/10/11 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->
-> On Thu, 11 Oct 2012 11:26:59 +0200, Samuel Martin wrote:
->
->> > Did you send this patch upstream? If so, what is the status of it?
->> Arf... Got lost in my mailbox... So no, I haven't sent it upstream.
->>
->> I willl check upstream and let you know its status.
->
-> Well, back in July, I said:
-> http://lists.busybox.net/pipermail/buildroot/2012-July/056005.html
->
-Thomas, thanks for the reminder ;)
+Tested using gcc-4.{6,7}-based toolchain.
 
-The upstream patch works too.
-I'll post it shortly
+My comments inlined.
+
+2012/10/4 Valentine Barshak <gvaxon@gmail.com>:
+> This fixes the "Unknown parameter for tags/attrs" build error.
+> Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe
+>
+> [PATCH] 2011-04-17  Thierry Reding
+> <thierry.reding@avionic-design.de>
+>
+>   Reviewed by Adam Barth.
+>
+>   Fix build with GCC 4.6.
+>
+>   * dom/make_names.pl: Execute preprocessor without the -P option. The
+>   preprocessor in GCC 4.6 eats empty lines, effectively breaking the
+>   parsing performed by this script. Dropping the -P option when invoking
+>   the preprocessor keeps the empty lines but as a side-effect also adds
+>   additional linemarkers.
+>
+>   From the cpp manpage:
+>
+>     -P  Inhibit generation of linemarkers in the output from the
+>         preprocessor. This might be useful when running the preprocessor
+>         on something that is not C code, and will be sent to a program
+>         which might be confused by the linemarkers.
+>
+>   The linemarkers are not problematic, however, because the script
+>   properly handles them by ignoring all lines starting with a #.
+>
+> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+
+[...]
+> +        The linemarkers are not problematic, however, because the script
+> +        properly handles them by ignoring all lines starting with a #.
+> +
+> +diff --git a/WebCore/dom/make_names.pl b/Source/WebCore/dom/make_names.pl
+Nitpicking:
+s at Source/@@
 
 
 Regards,
