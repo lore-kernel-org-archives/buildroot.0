@@ -1,74 +1,115 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 01:14:53 +0200
-Subject: [Buildroot] [PATCH 13/13] Document BR2_PROJECT_DIR in the manual
-In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
-References: <20121013231344.17317.92930.stgit@localhost>
-Message-ID: <20121013231453.17317.66287.stgit@localhost>
+Date: Sun, 14 Oct 2012 01:21:03 +0200
+Subject: [Buildroot] [PATCH v2] Add target to create a project directory
+In-Reply-To: <20121013231443.17317.60675.stgit@localhost>
+References: <20121013231443.17317.60675.stgit@localhost>
+Message-ID: <20121013232039.19428.5883.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/customize-project.txt |   37 +++++++++++++++++++++++++++++++++++++
- docs/manual/customize.txt         |    2 ++
- 2 files changed, 39 insertions(+)
- create mode 100644 docs/manual/customize-project.txt
+v2: Removed accidental changes to busybox.config and uClibc.config
+---
+ Makefile              |   30 ++++++++++++++++++++++++++++++
+ Makefile.project.tmpl |   40 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 Makefile.project.tmpl
 
-diff --git a/docs/manual/customize-project.txt b/docs/manual/customize-project.txt
-new file mode 100644
-index 0000000..db6b757
---- /dev/null
-+++ b/docs/manual/customize-project.txt
-@@ -0,0 +1,37 @@
-+Storing the configuration in a project directory
-+------------------------------------------------
-+[[project-dir]]
-+
-+When you use buildroot in different projects, it's a good idea to keep
-+each project separate from buildroot itself.  Buildroot makes this
-+possible with the +BR2_PROJECT_DIR+ option.  The project directory
-+contains all the configuration files and the filesystem overlay for
-+your project.
-+
-+After configuring buildroot, the linux kernel, etc., run the following
-+command.
-+
-+--------------------
-+make PROJECT_DIR=/path/to/project/dir projectdir
-+--------------------
-+
-+This will create the directory +/path/to/project/dir+, which contains
-+the buildroot configuration, and all other configuration files required
-+to rebuild your system.
-+
-+To further customize your project, you can:
-+
-+* add a directory called +rootfs-overlay+ and fill it with additional
-+  files and directories that should be installed in the root filesystem
-+  (see xref:customize-rootfs[+BR2_ROOTFS_OVERLAY+]);
-+
-+* add a script called +post-build.sh+ to modify the root filesystem
-+  (see xref:customize-rootfs[+BR2_ROOTFS_POST_BUILD_SCRIPT+]);
-+
-+* add a makefile +project.mk+ with additional buildroot targets.
-+
-+In addition, the project directory contains a Makefile to allow you to
-+build directly from there.  This Makefile downloads and extracts
-+buildroot, then builds everything according to your configuration. To
-+avoid downloading buildroot, create a symbolic link to the buildroot
-+directory in the project directory.
-diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-index e8235de..86fc1fb 100644
---- a/docs/manual/customize.txt
-+++ b/docs/manual/customize.txt
-@@ -10,3 +10,5 @@ include::customize-uclibc-config.txt[]
- include::customize-kernel-config.txt[]
+diff --git a/Makefile b/Makefile
+index 0e5b28e..a3b88f7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -698,6 +698,33 @@ endif
  
- include::customize-toolchain.txt[]
+ cross: $(BASE_TARGETS)
+ 
++ifneq ($(PROJECT_DIR),)
++ifeq ($(findstring -git,$(BR2_VERSION)),)
++BUILDROOT_VERSION = $(BR2_VERSION)
++else
++BUILDROOT_VERSION = snapshot
++endif
 +
-+include::customize-project.txt[]
++# Write a buildroot config in the project dir, then use that defconfig to
++# re-generate the .config.  This replaces the config file paths with paths
++# pointing into PROJECT_DIR (unless they have been changed from their
++# default values).  The subsequent update-all-config writes all the config
++# files into the PROJECT_DIR.  That last step doesn't need to set PROJECT_DIR
++# or DEFCONFIG anymore, because they're already set in the new .config.
++projectdir:
++	mkdir -p $(PROJECT_DIR)
++	sed s/@BUILDROOT_VERSION@/$(BUILDROOT_VERSION)/g \
++		Makefile.project.tmpl > $(PROJECT_DIR)/Makefile
++	$(MAKE1) $(EXTRAMAKEARGS) \
++		DEFCONFIG=$(PROJECT_DIR)/buildroot.config \
++		savedefconfig
++	$(MAKE1) $(EXTRAMAKEARGS) \
++		PROJECT_DIR=$(PROJECT_DIR) \
++		DEFCONFIG=$(PROJECT_DIR)/buildroot.config \
++		defconfig
++	$(MAKE1) $(EXTRAMAKEARGS) update-all-config
++endif
++
+ help:
+ 	@echo 'Cleaning:'
+ 	@echo '  clean                  - delete all files created by build'
+@@ -756,6 +783,9 @@ endif
+ 	@echo '  source-check           - check selected packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
++ifneq ($(PROJECT_DIR),)
++	@echo '  projectdir             - Prepare project directory with a Makefile.'
++endif
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+diff --git a/Makefile.project.tmpl b/Makefile.project.tmpl
+new file mode 100644
+index 0000000..b41180a
+--- /dev/null
++++ b/Makefile.project.tmpl
+@@ -0,0 +1,40 @@
++# This Makefile creates a build environment using the directory containing
++# this Makefile as the project directory.
++# If called from a different directory using 'make -f ...', the current
++# directory is used as the output directory.
++
++lastword = $(word $(words $(1)),$(1))
++makedir  = $(dir $(call lastword,$(MAKEFILE_LIST)))
++
++BR2_PROJECT_DIR = $(realpath $(makedir))
++BUILDROOT_DIR   = $(BR2_PROJECT_DIR)/buildroot
++BUILDROOT_VERSION = @BUILDROOT_VERSION@
++BUILDROOT_SITE    = http://buildroot.net/downloads
++BUILDROOT_SOURCE  = buildroot-$(BUILDROOT_VERSION).tar.bz2
++
++ifeq ($(O),)
++ifeq ($(makedir),./)
++# Building in project dir => create output dir
++O = $(CURDIR)/output
++else
++# Building from some other dir => use this dir as output dir
++O = $(CURDIR)
++endif
++endif
++
++.PHONY: all $(MAKECMDGOALS)
++
++all: $(BUILDROOT_DIR)
++	@$(MAKE) -C buildroot O=$(O) BR2_PROJECT_DIR=$(BR2_PROJECT_DIR) $(all)
++
++all     := $(filter-out all,$(MAKECMDGOALS))
++$(all): all
++        @:
++
++$(BUILDROOT_DIR):
++	mkdir -p $@
++	wget -O - $(BUILDROOT_SITE)/$(BUILDROOT_SOURCE) | \
++		tar -xjf - -C $@ --strip-components=1
++	for p in `ls $(makedir)/patches/buildroot/buildroot-* 2>/dev/null`; do \
++		patch -d $@ -p1 -i $$p; \
++	done
