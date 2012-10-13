@@ -1,68 +1,106 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 01:13:50 +0200
-Subject: [Buildroot] [PATCH 01/13] Add BR2_PROJECT_DIR config option
-In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
-References: <20121013231344.17317.92930.stgit@localhost>
-Message-ID: <20121013231350.17317.23758.stgit@localhost>
+Date: Sun, 14 Oct 2012 01:13:45 +0200
+Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
+Message-ID: <20121013231344.17317.92930.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Many buildroot users prefer to keep their project's customizations
+separate from buildroot itself.  This makes it easier to go to a
+new buildroot version, and to identify which parts are project-
+specific.  Although it was already possible to keep the project's
+customization separate, this patch set simplifies it.
 
-This option will be used by subsequent patches to set default values
-for paths.
+ It introduces a new config option, BR2_PROJECT_DIR (patch 1).
+This symbol is used to set defaults for many other config options
+(patches 2-7). The buildroot config itself can also be stored in
+the project directory by setting a default BR2_DEFCONFIG (patch 8).
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Patch 9 does a 'make defconfig' and 'make world' in a single run
+when a project directory is available.
+
+ Patch 10 makes it possible to update all config files (buildroot,
+linux, busybox, ...) in a single shot.
+
+ Patch 11 adds a 'make projectdir' target to initialize a project
+directory.  It also creates a Makefile in the project directory:
+it downloads buildroot itself, so the project directory is
+self-sufficient.
+
+ Patch 12 adds the thing that everybody has to put in their
+post-build script as a configuration option: a rootfs overlay.
+This patch could also be applied independent of the series
+(except for the one line that sets a default based on PROJECT_DIR).
+
+ Patch 13, finally, adds the PROJECT_DIR concept to the manual.
+
+ What is still missing is a way to add custom packages and custom
+patches in the project directory.  Either can already be done
+with the BR2_PACKAGE_OVERRIDE_FILE, but I'm considering specific
+additions:
+
+- For custom packages, including $(PROJECT_DIR)/package/*/*.mk
+  and automatically setting these packages to 'y'.  I don't think
+  it's useful to include custom packages in the menuconfig - you
+  just want them to be always enabled.
+
+- For custom patches, add $(PROJECT_DIR)/patches/<pkg>/<pkg>-*.patch
+  to the list of patches that generic-package looks for.  The custom
+  patches would come in addition to and after the buildroot patches.
+
+ Comments on these last two ideas are welcome.
+
+
+ Two weeks from now (Oct. 28) I'm giving a presentation about buildroot
+at T-Dose in Eindhoven.  I'll use the project directory concept in
+that presentation.  So if there's any major feedback I'd like to hear
+it before that time :-)
+
+ Regards,
+ Arnout
+
 ---
- Config.in |   13 +++++++++++++
- Makefile  |    3 +++
- 2 files changed, 16 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index dab7787..438964a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -16,6 +16,19 @@ config BR2_HOSTARCH
- 
- source "target/Config.in.arch"
- 
-+# BR2_DEFCONFIG must be set through two configs, because 'option env='
-+# removes it from the .config.
-+config BR2_PROJECT_DIR_FROM_ENV
-+	string
-+	option env="BR2_PROJECT_DIR"
-+
-+config BR2_PROJECT_DIR
-+	string "Project directory"
-+	default BR2_PROJECT_DIR_FROM_ENV
-+	help
-+	  This option is used to set defaults for many other configuration
-+	  variables.  Each one of those can still be overridden individually.
-+
- menu "Build options"
- 
- menu "Commands"
-diff --git a/Makefile b/Makefile
-index 0128839..d6136ed 100644
---- a/Makefile
-+++ b/Makefile
-@@ -96,6 +96,8 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(CONFIG_DIR)/.config
- endif
- 
-+PROJECT_DIR = $(realpath $(call qstrip,$(BR2_PROJECT_DIR)))
-+
- # To put more focus on warnings, be less verbose as default
- # Use 'make V=1' to see the full commands
- ifdef V
-@@ -557,6 +559,7 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
-+	BR2_PROJECT_DIR=$(PROJECT_DIR) \
- 	BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
- 
- xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
+Arnout Vandecappelle (Essensium/Mind) (13):
+      Add BR2_PROJECT_DIR config option
+      Set default BR2_PACKAGE_OVERRIDE_FILE based on BR2_PROJECT_DIR
+      linux: get default paths from BR2_PROJECT_DIR
+      busybox: get default paths from BR2_PROJECT_DIR
+      target/generic: get default paths from BR2_PROJECT_DIR
+      toolchain-crosstool-ng: get default paths from BR2_PROJECT_DIR
+      uClibc: get default paths from BR2_PROJECT_DIR
+      Store BR2_DEFCONFIG in .config, and use it to update the original input
+      Skip menuconfig if BR2_DEFCONFIG or BR2_PROJECT_DIR is given.
+      Add update-all-config target
+      Add target to create a project directory
+      target/generic: add filesystem overlay option
+      Document BR2_PROJECT_DIR in the manual
+
+
+ Config.in                                        |   27 +++++++
+ Makefile                                         |   86 +++++++++++++++++++--
+ Makefile.project.tmpl                            |   40 ++++++++++
+ docs/manual/customize-project.txt                |   37 +++++++++
+ docs/manual/customize-rootfs.txt                 |   21 ++---
+ docs/manual/customize.txt                        |    2 
+ fs/common.mk                                     |    7 +-
+ linux/Config.in                                  |    2 
+ linux/linux.mk                                   |    2 
+ package/busybox/Config.in                        |    1 
+ package/busybox/busybox-1.20.x.config            |   26 +++---
+ package/busybox/busybox.mk                       |    4 +
+ target/generic/Config.in                         |   16 ++++
+ toolchain/toolchain-crosstool-ng/Config.in       |    1 
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    7 ++
+ toolchain/uClibc/Config.in                       |    1 
+ toolchain/uClibc/uClibc-0.9.33.config            |   91 +++++++++-------------
+ toolchain/uClibc/uclibc.mk                       |    4 +
+ 18 files changed, 286 insertions(+), 89 deletions(-)
+ create mode 100644 Makefile.project.tmpl
+ create mode 100644 docs/manual/customize-project.txt
+
+-- 
+Signature
