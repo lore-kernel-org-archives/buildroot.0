@@ -1,35 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 13 Oct 2012 08:33:38 -0300
-Subject: [Buildroot] [PATCH] package infra: remove empty TARGET_CPPFLAGS def
-Message-ID: <1350128018-3195-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Oct 2012 13:46:09 +0200
+Subject: [Buildroot] [PATCH] unionfs: convert to cmake-package
+Message-ID: <1350128769-13518-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's unneeded, just fills the next match (LARGEFILE) with a leading
-space. Fixes
-http://autobuild.buildroot.net/results/ad5772d19036a0c5564228ac7aba953d35a3cf85/build-end.log
-since SCons can't handle leading whitespace in LDFLAGS gracefully.
+Fixes e.g. http://autobuild.buildroot.net/results/c279007dd8b89a1c6fc9b58d3c2cda01ab84279e
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The addition of CPPFLAGS overrides the defines added in unionfs's
+Makefile.  Since unionfs now has CMake support, use that instead.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+With CMake, buildroot's CPPFLAGS are just not used.  This should
+probably be corrected in cmake.mk.
+ package/unionfs/unionfs.mk |   10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 45213c1..a939882 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -85,8 +85,6 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING=-g3
- endif
+diff --git a/package/unionfs/unionfs.mk b/package/unionfs/unionfs.mk
+index eb8109e..6c86c57 100644
+--- a/package/unionfs/unionfs.mk
++++ b/package/unionfs/unionfs.mk
+@@ -11,12 +11,4 @@ UNIONFS_DEPENDENCIES = libfuse host-pkg-config
+ UNIONFS_LICENSE = BSD-3c
+ UNIONFS_LICENSE_FILES = LICENSE
  
--TARGET_CPPFLAGS =
+-define UNIONFS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
 -
- ifeq ($(BR2_LARGEFILE),y)
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- endif
+-define UNIONFS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) PREFIX=/usr DESTDIR=$(TARGET_DIR) install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(cmake-package))
 -- 
-1.7.8.6
+tg: (0132e36..) t/unionfs-cmake (depends on: master)
