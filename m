@@ -1,32 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Oct 2012 22:56:25 +0200
-Subject: [Buildroot] [PATCH] beecrypt: enable OpenMP if Buildroot GCC
- supports it
-In-Reply-To: <CABtOAfyEmazbYa6k1ctPWvBEgBLug87oQPBkMcjoFX=ZvVEW-w@mail.gmail.com>
-References: <1350071690-11279-1-git-send-email-stefan.froberg@petroprogram.com>
- <50793478.1090305@mind.be> <50796BDA.3040008@petroprogram.com>
- <50796CB1.8040106@mind.be> <507975A3.8080009@petroprogram.com>
- <CABtOAfyEmazbYa6k1ctPWvBEgBLug87oQPBkMcjoFX=ZvVEW-w@mail.gmail.com>
-Message-ID: <5079D579.1060207@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 13 Oct 2012 22:58:18 +0200
+Subject: [Buildroot] Important fixes for autobuilder issues
+In-Reply-To: <20121013183210.34aa681d@skate> (Thomas Petazzoni's message of
+ "Sat, 13 Oct 2012 18:32:10 +0200")
+References: <20121013183210.34aa681d@skate>
+Message-ID: <878vba1445.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/10/12 16:54, Alexander Khryukin wrote:
-> Use my patch please
->
-> http://pastie.org/pastes/5052617/text
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  That patch adds -lgomp unconditionally, even if OpenMP is not available.
+ Thomas> Hello Peter,
+ Thomas> (Resending with Buildroot list Cc'ed)
 
-  Regards,
-  Arnout
+ Thomas> Could you quickly apply the following patches:
+
+ Thomas>  * http://patchwork.ozlabs.org/patch/183305/
+
+ Thomas>    This one fixes the linux-pam build failure reported at
+ Thomas>    http://autobuild.buildroot.org/results/8a5a5c6f350666c8d3a0fd26878c0a21653e6a24/build-end.log
+ Thomas>    and has been Acked by Arnout.
+
+ Thomas>  * http://patchwork.ozlabs.org/patch/191292/
+
+ Thomas>    It fixes the build failure at
+ Thomas>    http://autobuild.buildroot.net/results/c279007dd8b89a1c6fc9b58d3c2cda01ab84279e/build-end.log
+
+ Thomas>  * To fix the gpsd issue, apply either
+ Thomas>    http://patchwork.ozlabs.org/patch/191291/ or
+ Thomas>    http://patchwork.ozlabs.org/patch/191300/ or both.
+
+ Thomas> I'm asking specifically to apply those ones quickly, because they are
+ Thomas> really making the autobuild results horrible at the moment.
+
+Done, thanks.
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
