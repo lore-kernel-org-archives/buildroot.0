@@ -1,35 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 13 Oct 2012 22:22:17 +0200
-Subject: [Buildroot] [git commit] Disable database support in linux-pam
-Message-ID: <20121013202736.BAC7399849@busybox.osuosl.org>
+Date: Sat, 13 Oct 2012 22:24:14 +0200
+Subject: [Buildroot] [git commit] package infra: remove empty
+	TARGET_CPPFLAGS def
+Message-ID: <20121013202737.6AE9599849@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26e73ecb4540a4e78e92abaa9855e816b6dbf77f
+commit: http://git.buildroot.net/buildroot/commit/?id=fbb872a0c1e228509efebf50b644a5993ad4841f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to the conflicts with default Berkeley DB configuration, disable
-database support in linux-pam: pam_userdb is not built.
+It's unneeded, just fills the next match (LARGEFILE) with a leading
+space. Fixes
+http://autobuild.buildroot.net/results/ad5772d19036a0c5564228ac7aba953d35a3cf85/build-end.log
+since SCons can't handle leading whitespace in LDFLAGS gracefully.
 
-Signed-off-by: Dmitry <golubovsky@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-pam/linux-pam.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Makefile.in |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 1a2e7f6..be51049 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -12,6 +12,7 @@ LINUX_PAM_CONF_OPT = \
- 	--disable-prelude \
- 	--disable-isadir \
- 	--disable-nis \
-+	--disable-db \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
- 	--libdir=/lib
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 45213c1..a939882 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -85,8 +85,6 @@ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING=-g3
+ endif
+ 
+-TARGET_CPPFLAGS =
+-
+ ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
