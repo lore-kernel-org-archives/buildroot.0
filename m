@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 01:14:01 +0200
-Subject: [Buildroot] [PATCH 03/13] linux: get default paths from
+Date: Sun, 14 Oct 2012 01:14:06 +0200
+Subject: [Buildroot] [PATCH 04/13] busybox: get default paths from
 	BR2_PROJECT_DIR
 In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
 References: <20121013231344.17317.92930.stgit@localhost>
-Message-ID: <20121013231401.17317.59831.stgit@localhost>
+Message-ID: <20121013231406.17317.12771.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +15,18 @@ From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-I'm not very happy with the default name 'linux.dts' for the device tree.
-However, I haven't got a reasonable alternative.
----
- linux/Config.in |    2 ++
- 1 file changed, 2 insertions(+)
+ package/busybox/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 257f934..cf8352d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,6 +121,7 @@ config BR2_LINUX_KERNEL_DEFCONFIG
- config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	string "Configuration file path"
- 	depends on BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG
-+	default "$(PROJECT_DIR)/linux.config" if BR2_PROJECT_DIR != ""
- 	help
- 	  Path to the kernel configuration file
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index dedcf18..020e5c2 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -40,6 +40,7 @@ config BR2_BUSYBOX_VERSION
  
-@@ -269,6 +270,7 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	string "Device Tree Source file path"
- 	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	default "$(PROJECT_DIR)/linux.dts" if BR2_PROJECT_DIR != ""
- 	help
- 	  Path to the device tree source file
- 
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
++	default "$(PROJECT_DIR)/busybox.config" if BR2_PROJECT_DIR != ""
+ 	default "package/busybox/busybox-1.20.x.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
+ 	default "package/busybox/busybox-1.18.x.config" if BR2_BUSYBOX_VERSION_1_18_X
+ 	default "package/busybox/busybox-1.19.x.config" if BR2_BUSYBOX_VERSION_1_19_X
