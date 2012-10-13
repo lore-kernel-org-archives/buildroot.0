@@ -1,118 +1,35 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 13 Oct 2012 11:47:48 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/1=5D_libecore=3A_fix_build_with_?=
-	=?utf-8?b?Z2xpYmMgPj0yLjE2?=
-Message-ID: <1350121668-28258-1-git-send-email-s.martin49@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 13 Oct 2012 08:33:38 -0300
+Subject: [Buildroot] [PATCH] package infra: remove empty TARGET_CPPFLAGS def
+Message-ID: <1350128018-3195-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It's unneeded, just fills the next match (LARGEFILE) with a leading
+space. Fixes
+http://autobuild.buildroot.net/results/ad5772d19036a0c5564228ac7aba953d35a3cf85/build-end.log
+since SCons can't handle leading whitespace in LDFLAGS gracefully.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Makefile.in |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
- create mode 100644 package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
-
-diff --git a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
-new file mode 100644
-index 0000000..d9b439c
---- /dev/null
-+++ b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
-@@ -0,0 +1,94 @@
-+Backported for commit a0df6712b6afcd07facd32e5a66809170277bdf3
-+Fixed the ChangeLog part.
-+
-+This patch fix build with glibc >=2.16, avoiding the following error occurs:
-+
-+Making all in ecore
-+make[6]: Entering directory `/opt/buildroot/output/build/host-libecore-1.1.0/src/lib/ecore'
-+  CC     ecore.lo
-+  CC     ecore_anim.lo
-+  CC     ecore_app.lo
-+  CC     ecore_events.lo
-+  CC     ecore_getopt.lo
-+  CC     ecore_idle_enterer.lo
-+  CC     ecore_idle_exiter.lo
-+  CC     ecore_idler.lo
-+  CC     ecore_job.lo
-+  CC     ecore_main.lo
-+  CC     ecore_pipe.lo
-+  CC     ecore_poll.lo
-+  CC     ecore_time.lo
-+  CC     ecore_timer.lo
-+  CC     ecore_thread.lo
-+  CC     ecore_glib.lo
-+  CC     ecore_throttle.lo
-+  CC     ecore_signal.lo
-+  CC     ecore_exe.lo
-+ecore_exe.c: In function ?ecore_exe_pipe_run?:
-+ecore_exe.c:486:15: warning: implicit declaration of function ?setpriority? [-Wimplicit-function-declaration]
-+ecore_exe.c:486:27: error ?PRIO_PROCESS? undeclared (first use in this function)
-+ecore_exe.c:486:27: note: each undeclared identifier is reported only once for each function it appears in
-+make[6]: *** [ecore_exe.lo] Error 1
-+
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+---
-+From a0df6712b6afcd07facd32e5a66809170277bdf3 Mon Sep 17 00:00:00 2001
-+From: caro <caro>
-+Date: Fri, 22 Jun 2012 05:36:00 +0000
-+Subject: [PATCH] ecore_exe: fix compilation on fedora 18.
-+
-+setpriority needs sys/resource.h. See:
-+
-+http://linux.die.net/man/2/setpriority
-+
-+I let sys/time.h, it does not hurt on linux and is anyway needed for BSD systems.
-+
-+
-+git-svn-id: http://svn.enlightenment.org/svn/e at 72684 7cbeb6ba-43b4-40fd-8cce-4c39aea84d33
-+---
-+ ChangeLog                 | 4 ++++
-+ src/lib/ecore/ecore_exe.c | 7 ++-----
-+ 2 files changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index a306f75..549ad19 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -763,3 +763,7 @@
-+ 2011-11-29 Mike McCormack
-+
-+ 	* Allow quitting before entering the glib version of the main loop
-++
-++2012-06-22 Vincent Torri
-++
-++	* ecore_exe: fix compilation on fedora 18.
-+diff --git a/src/lib/ecore/ecore_exe.c b/src/lib/ecore/ecore_exe.c
-+index 7931a96..6db32a9 100644
-+--- a/src/lib/ecore/ecore_exe.c
-++++ b/src/lib/ecore/ecore_exe.c
-+@@ -2,11 +2,6 @@
-+ # include <config.h>
-+ #endif
-+ 
-+-#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
-+-# include <sys/time.h>
-+-# include <sys/resource.h>
-+-#endif
-+-
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+@@ -14,6 +9,8 @@
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-++#include <sys/time.h>
-++#include <sys/resource.h>
-+ 
-+ #ifdef HAVE_SYS_PRCTL_H
-+ # include <sys/prctl.h>
-+-- 
-+1.7.12.2
-+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 45213c1..a939882 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -85,8 +85,6 @@ ifeq ($(BR2_DEBUG_3),y)
+ TARGET_DEBUGGING=-g3
+ endif
+ 
+-TARGET_CPPFLAGS =
+-
+ ifeq ($(BR2_LARGEFILE),y)
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ endif
 -- 
-1.7.12.2
+1.7.8.6
