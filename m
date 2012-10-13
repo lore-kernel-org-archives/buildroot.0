@@ -1,38 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 13 Oct 2012 22:24:14 +0200
-Subject: [Buildroot] [git commit] package infra: remove empty
-	TARGET_CPPFLAGS def
-Message-ID: <20121013202737.6AE9599849@busybox.osuosl.org>
+Date: Sat, 13 Oct 2012 22:26:57 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4, 5,
+	6}.x stable versions
+Message-ID: <20121013202737.BC62499849@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbb872a0c1e228509efebf50b644a5993ad4841f
+commit: http://git.buildroot.net/buildroot/commit/?id=4006b76570faa25453198af25947a86bdbf3b02a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It's unneeded, just fills the next match (LARGEFILE) with a leading
-space. Fixes
-http://autobuild.buildroot.net/results/ad5772d19036a0c5564228ac7aba953d35a3cf85/build-end.log
-since SCons can't handle leading whitespace in LDFLAGS gracefully.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 45213c1..a939882 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -85,8 +85,6 @@ ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING=-g3
- endif
- 
--TARGET_CPPFLAGS =
--
- ifeq ($(BR2_LARGEFILE),y)
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- endif
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index f111c11..00fb2f5 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.45"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.46"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.31"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.13"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.5.6"		if BR2_KERNEL_HEADERS_3_5
+-	default "3.6.1"		if BR2_KERNEL_HEADERS_3_6
++	default "3.4.14"	if BR2_KERNEL_HEADERS_3_4
++	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
++	default "3.6.2"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.45-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.46-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.45-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.46-headers_install-fix-__packed-in-exported-kernel-head.patch
