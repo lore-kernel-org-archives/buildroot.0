@@ -1,83 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Oct 2012 17:58:11 +0200
-Subject: [Buildroot] [PATCH] gpsd: add patch to fix CPPFLAGS related build
-	issue
-Message-ID: <1350143891-5626-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Oct 2012 18:32:10 +0200
+Subject: [Buildroot] Important fixes for autobuilder issues
+Message-ID: <20121013183210.34aa681d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In gpsd, some of the environment variables carrying flags are handled
-specially when they can contain multiple flags enclosed inside
-quotes. The gpsd SConstruct uses env.MergeFlags() do add those flags.
+Hello Peter,
 
-Unfortunately, env.MergeFlags() doesn't work properly when this quoted
-string starts with a space. The build then fails with:
+(Resending with Buildroot list Cc'ed)
 
-  arm-unknown-linux-uclibcgnueabi-gcc: error:  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64: No such file or directory
+Could you quickly apply the following patches:
 
-This is because Scons believes that " -flag1 -flag2" is a file and not
-a set of flags.
+ * http://patchwork.ozlabs.org/patch/183305/
 
-We fix this by adding a patch that simply strip()s the string before
-passing it to env.MergeFlags(), which has the effect of removing all
-leading and trailing spaces.
+   This one fixes the linux-pam build failure reported at
+   http://autobuild.buildroot.org/results/8a5a5c6f350666c8d3a0fd26878c0a21653e6a24/build-end.log
+   and has been Acked by Arnout.
 
-Fixes
+ * http://patchwork.ozlabs.org/patch/191292/
 
-  http://autobuild.buildroot.org/results/acf4922e1538d50eb30e4750ee2ec0fba891e1ce/build-end.log
+   It fixes the build failure at
+   http://autobuild.buildroot.net/results/c279007dd8b89a1c6fc9b58d3c2cda01ab84279e/build-end.log
 
-Thanks to Gustavo Zacarias for the initial investigation. He is the
-one who found that the leading space was causing the problem.
+ * To fix the gpsd issue, apply either
+   http://patchwork.ozlabs.org/patch/191291/ or
+   http://patchwork.ozlabs.org/patch/191300/ or both.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...6-sconstruct-fix-multiword-flags-handling.patch |   35 ++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/gpsd/gpsd-06-sconstruct-fix-multiword-flags-handling.patch
+I'm asking specifically to apply those ones quickly, because they are
+really making the autobuild results horrible at the moment.
 
-diff --git a/package/gpsd/gpsd-06-sconstruct-fix-multiword-flags-handling.patch b/package/gpsd/gpsd-06-sconstruct-fix-multiword-flags-handling.patch
-new file mode 100644
-index 0000000..40b51ed
---- /dev/null
-+++ b/package/gpsd/gpsd-06-sconstruct-fix-multiword-flags-handling.patch
-@@ -0,0 +1,35 @@
-+Some of the environment variables carrying flags are handled specially
-+when they can contain multiple flags enclosed inside quotes. The gpsd
-+SConstruct uses env.MergeFlags() do add those flags.
-+
-+Unfortunately, env.MergeFlags() doesn't work properly when this quoted
-+string starts with a space. The build then fails with:
-+
-+  arm-unknown-linux-uclibcgnueabi-gcc: error:  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64: No such file or directory
-+
-+This is because Scons believes that " -flag1 -flag2" is a file and not
-+a set of flags.
-+
-+We fix this by simply strip()ing the string before passing it to
-+env.MergeFlags(), which has the effect of removing all leading and
-+trailing spaces.
-+
-+See
-+http://autobuild.buildroot.org/results/acf4922e1538d50eb30e4750ee2ec0fba891e1ce/build-end.log
-+for a complete example of build failure.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/SConstruct
-+===================================================================
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -236,7 +236,7 @@
-+             env.Replace(**{j: os.getenv(i)})
-+ for flags in ["LDFLAGS", "LINKFLAGS", "SHLINKFLAGS", "CPPFLAGS"]:
-+     if os.environ.has_key(flags):
-+-        env.MergeFlags({flags : [os.getenv(flags)]})
-++        env.MergeFlags({flags : [os.getenv(flags).strip()]})
-+ 
-+ 
-+ # Keep scan-build options in the environment
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
