@@ -1,21 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 13 Oct 2012 22:25:08 +0200
-Subject: [Buildroot] [PATCH] unionfs: convert to cmake-package
-In-Reply-To: <1350128769-13518-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 13 Oct 2012 13:46:09 +0200")
-References: <1350128769-13518-1-git-send-email-arnout@mind.be>
-Message-ID: <87sj9i15nf.fsf@macbook.be.48ers.dk>
+Date: Sat, 13 Oct 2012 22:25:24 +0200
+Subject: [Buildroot] [PATCH] package infra: remove empty TARGET_CPPFLAGS
+	def
+In-Reply-To: <1350128018-3195-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 13 Oct 2012 08:33:38 -0300")
+References: <1350128018-3195-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87obk615mz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Arnout> Fixes e.g. http://autobuild.buildroot.net/results/c279007dd8b89a1c6fc9b58d3c2cda01ab84279e
- Arnout> The addition of CPPFLAGS overrides the defines added in unionfs's
- Arnout> Makefile.  Since unionfs now has CMake support, use that instead.
+ Gustavo> It's unneeded, just fills the next match (LARGEFILE) with a leading
+ Gustavo> space. Fixes
+ Gustavo> http://autobuild.buildroot.net/results/ad5772d19036a0c5564228ac7aba953d35a3cf85/build-end.log
+ Gustavo> since SCons can't handle leading whitespace in LDFLAGS gracefully.
 
 Committed, thanks.
 
