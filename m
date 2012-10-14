@@ -1,37 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Oct 2012 14:12:11 +0200
-Subject: [Buildroot] [PATCH] pkg-avail: make it work without stgit
-In-Reply-To: <20121014120311.GF29733@sapphire.tkos.co.il>
-References: <1347234052-10527-3-git-send-email-yann.morin.1998@free.fr>
- <1350213261-4929-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20121014120311.GF29733@sapphire.tkos.co.il>
-Message-ID: <201210141412.11675.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Oct 2012 14:50:16 +0200
+Subject: [Buildroot] [PATCH v2] Add target to create a project directory
+In-Reply-To: <5079FAAC.3070803@gmail.com>
+References: <20121013231443.17317.60675.stgit@localhost>
+ <20121013232039.19428.5883.stgit@localhost> <5079FAAC.3070803@gmail.com>
+Message-ID: <507AB508.2000503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+On 14/10/12 01:35, Valentine Barshak wrote:
+>> +$(BUILDROOT_DIR):
+>> +    mkdir -p $@
+>> +    wget -O - $(BUILDROOT_SITE)/$(BUILDROOT_SOURCE) | \
+>> +        tar -xjf - -C $@ --strip-components=1
+>> +    for p in `ls $(makedir)/patches/buildroot/buildroot-* 2>/dev/null`; do \
+>> +        patch -d $@ -p1 -i $$p; \
+>> +    done
+>
+> I probably miss something, but
+> do I have to download buldroot for every project?
+> Can I use my local BR git tree as a buildroot source for my projects instead of downloading?
 
-On Sunday 14 October 2012 Baruch Siach wrote:
-> On Sun, Oct 14, 2012 at 01:14:21PM +0200, Thomas Petazzoni wrote:
-> >  support/scripts/pkg-avail |   44 +++++++++++++++++++++++++++++++-------------
-> >  1 file changed, 31 insertions(+), 13 deletions(-)
-> 
-> What branch is this patch based on? I can't find support/scripts/pkg-avail in 
-> current master.
+  No, make a symlink to the BR tree and it won't download anything.
 
-It's not based on a branch, it's to be applied on top of the patch that
-adds this script in the _AVAILABLE patch series.
+  But this automatic download feature is probably going a bridge too far :-)
 
-Regards,
-Yann E. MORIN.
+  Regards,
+  Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
