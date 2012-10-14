@@ -1,49 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Oct 2012 11:38:48 +0200
-Subject: [Buildroot] [git commit] unionfs: add patch to disable search for
-	the C++ compiler
-Message-ID: <20121014094026.479FB99866@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Oct 2012 12:04:29 +0200
+Subject: [Buildroot] Confused by the <fenv> implementation,
+	causing gsl build issues
+Message-ID: <20121014120429.52067fdc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b0e4f21d30cf115baa8b57a7edd7683d58ced6f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes
+uClibc provides a UCLIBC_HAS_FENV option that can be enabled on any
+architecture. As soon as this option is enabled, the <fenv.h> header is
+included, which make applications and libraries think that function
+such as feenableexcept() or fesetround() are available. However, on
+ARM, those function are in fact not implemented by uClibc.
 
-  http://autobuild.buildroot.org/results/9c4a9897dda1b99cc7a57af605301b53ed32b95d/build-end.log
+This causes the following build failure when trying to build the gsl
+library (version 1.15) against an ARM uClibc toolchain:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/unionfs/unionfs-fuse-no-cxx-needed.patch |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
+../ieee-utils/.libs/libgslieeeutils.a(fp.o): In function `gsl_ieee_set_mode':
+fp.c:(.text+0xd4): undefined reference to `fesetround'
+fp.c:(.text+0x148): undefined reference to `feenableexcept'
+collect2: ld returned 1 exit status
 
-diff --git a/package/unionfs/unionfs-fuse-no-cxx-needed.patch b/package/unionfs/unionfs-fuse-no-cxx-needed.patch
-new file mode 100644
-index 0000000..56f7e24
---- /dev/null
-+++ b/package/unionfs/unionfs-fuse-no-cxx-needed.patch
-@@ -0,0 +1,19 @@
-+By default, CMake assumes a project uses the C and C++ languages, so
-+it checks for both the C and the C++ compiler to exist.
-+
-+However, unionfs-fuse is written purely in C, so checking for a C++
-+compiler is useless, and even prevents unionfs-fuse from building
-+properly on targets for which no C++ compiler is available.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/CMakeLists.txt
-+===================================================================
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,4 +1,4 @@
-+-project(unionfs-fuse)
-++project(unionfs-fuse C)
-+ 
-+ cmake_minimum_required(VERSION 2.0)
-+ INCLUDE (CheckIncludeFiles)
+Of course, in one sense, the configure.ac check of gsl to test the
+existence of those functions might be considered incorrect (it only
+verifies if they are declared, not if it is actually possible to link a
+program using those functions), but on the other hand, it sounds
+strange for uClibc to install <fenv.h>, exposing certain functions that
+are in fact not available.
+
+See the end of
+http://autobuild.buildroot.org/results/f1784c53cb595a3573cb98d63868aee36b5d9bb6/build.log.bz2
+if you want to see the entire build log of gsl.
+
+Am I misunderstanding something?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
