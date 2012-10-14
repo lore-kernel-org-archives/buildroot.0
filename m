@@ -1,29 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Oct 2012 20:53:13 +0200
-Subject: [Buildroot] [PATCH 1/2] libv4l: properly error out when one of
-	the make step fails
-In-Reply-To: <1350238701-30441-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 14 Oct 2012 20:18:20 +0200")
-References: <1350238701-30441-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87626czy06.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 14 Oct 2012 20:51:35 +0200
+Subject: [Buildroot] [git commit] sdl_gfx: don't use --enable-mmx on x86_64
+Message-ID: <20121014185341.8802099835@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d3eced2687b68659716c7f4729e4bd31674934f7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> In libv4l.mk, if there are multiple elements in $(LIBV4L_DIRS_y), they
- Thomas> are built in order, one after the other. However, our loop construct
- Thomas> doesn't take into account the fact that we should error out if one of
- Thomas> the steps failed.
+Even though the MMX instructions are available on x86_64 processors,
+the MMX code in sdl_gfx is written in IA32-specific assembly code, and
+therefore does not build on x86_64. It generates the following build
+issues:
 
- Thomas> A good illustration is having BR2_PACKAGE_LIBV4L_DECODE_TM6000 and
- Thomas> BR2_PACKAGE_LIBV4L_V4L2_CTL enabled. The build of decode-tm6000 will
- Thomas> fail, but the build will happily continue without stopping in libv4l.
+SDL_imageFilter.c: Assembler messages:
+SDL_imageFilter.c:34: Error: `pusha' is not supported in 64-bit mode
+SDL_imageFilter.c:38: Error: `popa' is not supported in 64-bit mode
+SDL_imageFilter.c:77: Error: `pusha' is not supported in 64-bit mode
+SDL_imageFilter.c:93: Error: `popa' is not supported in 64-bit mode
+[...]
 
-Committed both, thanks.
+We fix this by only enabling MMX support in this package when the
+processor supports MMX *and* it is a IA32 compatible processor.
 
--- 
-Bye, Peter Korsgaard
+Fixes
+
+  http://autobuild.buildroot.org/results/b9efc611f5da487079b6be37bb7a41a3198d63b9/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sdl_gfx/sdl_gfx.mk |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index e3ff630..c1c7f91 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -11,7 +11,14 @@ SDL_GFX_DEPENDENCIES = sdl
+ SDL_GFX_CONF_OPT = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--disable-sdltest \
+-	--enable-static \
+-	$(if $(BR2_X86_CPU_HAS_MMX),--enable-mmx,--disable-mmx)
++	--enable-static
++
++# Even though x86_64 processors support MMX, the MMX-specific assembly
++# code in sdl_gfx is IA32 specific, and does not build for x86_64.
++ifeq ($(BR2_i386)$(BR2_X86_CPU_HAS_MMX),yy)
++SDL_GFX_CONF_OPT += --enable-mmx
++else
++SDL_GFX_CONF_OPT += --disable-mmx
++endif
+ 
+ $(eval $(autotools-package))
