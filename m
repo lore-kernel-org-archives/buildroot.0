@@ -1,49 +1,42 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 16:41:44 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: rename <pkg>-rsync to <pkg>-extract
-In-Reply-To: <50768116.4000506@relinux.de>
-Message-ID: <1350225704-5693-1-git-send-email-arnout@mind.be>
+Date: Sun, 14 Oct 2012 17:17:34 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: correct the source name for
+	host-only packages
+In-Reply-To: <20120611105621.0aacd20c@skate>
+Message-ID: <1350227854-6823-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The legal-info target (and possibly others as well) depends on
-<pkg>-extract to make sure the license file is available.  However,
-when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
-doesn't exist.
+Host-only package that don't define their <PKG>_SOURCE variable would
+default to host-<pkg>-<version>.tar.gz.  It's more logical to remove
+the host- prefix in this case.
 
-To solve this, we just call the target that rsyncs the source
-<pkg>-extract.
+This problem is most apparent with host-only packages downloaded from
+version control, because they never define <PKG>_SOURCE.
 
-While we're at it, also add a <pkg>-patch target (which is equivalent
-to <pkg>-extract).  That avoids the same problem in the future if
-something starts depending on <pkg>-patch.
+Reported by Thomas Petazzoni and initial analysis by Luca Ceresoli.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- package/pkg-generic.mk |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/pkg-generic.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index ffe7dfb..c2c1b06 100644
+index ffe7dfb..270da60 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
-@@ -378,9 +378,11 @@ else
- $(1)-configure:		$(1)-depends \
- 			$$($(2)_TARGET_CONFIGURE)
- 
--$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
-+$(1)-depends:		$(1)-extract $$($(2)_DEPENDENCIES)
- 
--$(1)-rsync:		$$($(2)_TARGET_RSYNC)
-+$(1)-patch:		$(1)-extract
-+
-+$(1)-extract:		$$($(2)_TARGET_RSYNC)
- 
- $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+@@ -231,7 +231,7 @@ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $($(3)_SOURCE)
+  else
+-  $(2)_SOURCE			?= $$($(2)_BASE_NAME).tar.gz
++  $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
+  endif
  endif
+ 
 -- 
-tg: (0132e36..) t/rsync-add-extract-target (depends on: )
+tg: (0132e36..) t/correct-host-only-source-name (depends on: master)
