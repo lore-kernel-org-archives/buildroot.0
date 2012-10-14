@@ -1,71 +1,119 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 14 Oct 2012 12:12:23 -0400
-Subject: [Buildroot] [PATCH 12/13] target/generic: add filesystem
-	overlay option
-In-Reply-To: <507AB5AD.6030307@mind.be>
-References: <20121013231344.17317.92930.stgit@localhost>
- <20121013231448.17317.37653.stgit@localhost>
- <CANxTyt6dH8173xfa1nfN2CaXspSMiZcwMgVna4c4FL9-0ziNkg@mail.gmail.com>
- <507AB5AD.6030307@mind.be>
-Message-ID: <CANxTyt4bQo-nAJ5rNvufapT00QJgkP9Xnc5-6CZJB-rtrmq=5A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Oct 2012 19:38:49 +0200
+Subject: [Buildroot] [PATCH 0/7] Introduce the _AVAILABLE mechanism
+In-Reply-To: <201210141631.29399.yann.morin.1998@free.fr>
+References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
+ <20121014160547.09c493d7@skate>
+ <201210141631.29399.yann.morin.1998@free.fr>
+Message-ID: <20121014193849.019347dd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 14, 2012 at 8:53 AM, Arnout Vandecappelle <arnout@mind.be>wrote:
+Yann,
 
-> On 14/10/12 02:39, Danomi Manchego wrote:
->
->> However, we still make use of the custom target skeleton feature.
->>  Basically, we wanted to keep our initial skeleton in
->> our project directory with our overlays, rather than hack up the default
->> skeleton that comes with buildroot.  Also, we
->> wanted to avoid having to maintain a list of files installed by the
->> default skeleton that then need to be deleted in a
->> post-build script.
->>
->> (The truth is that we use our custom skeleton both as the initial custom
->> skeleton that gets copied during the beginning
->> of the process, and as an overlay that gets copied at the end of the
->> process, so that no package-installed scripts
->> take precedence over our customized target skeleton files.)
->>
->> So I still see use, at least for us, for a custom skeleton.  No?
->>
->
->  If you need to remove files from the default skeleton, then there's
-> something
-> wrong with the default skeleton.  Now I take a second look, indeed there's
-> a lot
-> in there that is unneeded, e.g. .bash_profile if no bash is installed...
->
+On Sun, 14 Oct 2012 16:31:29 +0200, Yann E. MORIN wrote:
+> > Looking at the first one, it seems to be caused by the fact that all
+> > Python external packages are enclosed inside a "if BR2_PACKAGE_PYTHON"
+> > in package/Config.in, so this Python dependency is already available.
+> 
+> Strange. I do not recall all those recursive deps issues. I'll check here.
 
-Maybe saying that the files "need to be deleted" was too strong.  I didn't
-really distinguish between "need to be deleted" versus "files that are
-unneeded and potentially confusing to others by their presence".  Anyway,
-thanks for agreeing to un-deprecate.
+Ok.
 
-Danomi -
+> My gut feeling is that the "if BR2_PACKAGE_PYTHON" should go, now that
+> we have _AVAILABLE.
 
+Yes, it's a possible solution that sounds reasonable.
 
+> > But then in that case, we should also have a
+> > BR2_PACKAGE_PYTHON_ZLIB_AVAILABLE symbol, so that python-dpkt can
+> > depend on it instead of forcefully selecting BR2_PACKAGE_PYTHON_ZLIB,
+> > without knowing if zlib is available or not.
+> > 
+> > This problem however is going to be present in many many places, so I
+> > don't know if manual intervention is reasonable for it. But on the
+> > other hand, I am not sure it is possible to write an automated script
+> > to solve this problem.
+> 
+> As much as I remember, there were not so much cases like that. But, except
+> for manual intervention, I do not see how we could differentiate that case.
+> 
+> The problem is (form my script's point of view): 
+>   Is BR2_PACKAGE_PYTHON_ZLIB representing:
+>     - the package "python-zlib", or
+>     - the option "zlib" of the package "python"?
+> 
+> Except for intrumenting the option symbol (eg.: BR2_PACKAGE_PYTHON_OPT_ZLIB)
+> which I doubt we want to, there is no easy way for the script to detect
+> this situation.
+> 
+> And then, do we want to push the _AVAILABLE semantic dow to sub-option?
+> I doubt we do.
+> 
+> So, depending on sub-options should be as:
+> 
+> config BR2_PACKAGE_PYTHON_DPKT_AVAILABLE
+>     def_bool y
+>     depends on BR2_PACKAGE_PYTHON_AVAILABLE
+>     depends on BR2_PACKAGE_PYTHON_ZLIB # Sub-option
 
->
->  So I'll un-deprecate the custom skeleton in the next round.
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121014/141257eb/attachment.html>
+Unfortunately this is not what we want:
+
+ * We want the python-dpkt package to be visible to the user only if
+   Python (BR2_PACKAGE_PYTHON) has been enabled;
+
+ * However, when one enables BR2_PACKAGE_PYTHON, we want the
+   python-dpkt package to be visible even if the
+   BR2_PACKAGE_PYTHON_ZLIB option is not selected, and we want this
+   option to be automatically enabled when the user enables the
+   python-dpkt package. However, we have to be careful not to show the
+   python-dpkt option if for some reason the BR2_PACKAGE_PYTHON_ZLIB
+   option cannot be selected due to a dependency that isn't available
+   (in our zlib is available on all architectures, but we could imagine
+   depending on, say, libfoobar that is only available on certain
+   architectures)
+
+The reasoning is that:
+
+ * We can assume that a user knows that the Python interpreter should
+   be enabled in order to see all Python external packages;
+
+ * However, we don't want to have the user to know about the need to
+   enable the BR2_PACKAGE_PYTHON_ZLIB suboption in order to get access
+   to python-dpkt.
+
+In other words: we can assume the user knows about big subsystems
+(X.org, Python, Perl, etc.), but we don't want him to know the fine
+details of the dependencies on sub-options.
+
+> > Here, I don't think an automated process is possible, a human
+> > intervention will be needed to find out if those legacy dependencies
+> > can be removed or not, on a case by case basis.
+> 
+> Yep, manual intervention, one of the corener-cases I wrote about in my
+> intro mail.
+
+Ok.
+
+> > So all in all, the problem I'm most worried about is problem (2). Have
+> > you thought about it already?
+> 
+> Yep, I've thought about it. Answer: manual review.
+> ( Don't worry, *I* will have to do it before I submit a final series! ;-) )
+
+Ok.
+
+So, for me, problem (2) remains unsolved at the moment. I guess the
+only solution is to add _AVAILABLE kconfig knobs for all the package
+sub-options that select other packages. But this means adding a lot
+more _AVAILABLE knobs than we initially thought.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
