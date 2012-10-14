@@ -1,23 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Oct 2012 20:15:16 +0200
-Subject: [Buildroot] [PATCH] mesa3d: add dependency on
-	host-xutil_makedepend
-In-Reply-To: <1350061104-5523-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 12 Oct 2012 18:58:24 +0200")
-References: <1350061104-5523-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwzozzrf.fsf@macbook.be.48ers.dk>
+Date: Sun, 14 Oct 2012 20:17:30 +0200
+Subject: [Buildroot] [PATCH] poco: bump to version 1.4.4
+In-Reply-To: <b432cd22c94ee070400e78a576c8328513dd5a25.1350194864.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 14 Oct 2012 08:08:25 +0200")
+References: <b432cd22c94ee070400e78a576c8328513dd5a25.1350194864.git.baruch@tkos.co.il>
+Message-ID: <87ipaczznp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- Thomas> The mesa3d now requires the makedepend host utility, otherwise, it
- Thomas> fails with:
-
- Thomas> configure: error: makedepend is required to build Mesa
+ Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
