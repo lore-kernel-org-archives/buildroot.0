@@ -1,58 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Oct 2012 10:35:18 +0200
+Date: Sun, 14 Oct 2012 10:46:01 +0200
 Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
-In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
+In-Reply-To: <20121014103518.4fb1089d@skate>
 References: <20121013231344.17317.92930.stgit@localhost>
-Message-ID: <20121014103518.4fb1089d@skate>
+ <20121014103518.4fb1089d@skate>
+Message-ID: <20121014104601.568a3d10@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+On Sun, 14 Oct 2012 10:35:18 +0200, Thomas Petazzoni wrote:
 
-On Sun, 14 Oct 2012 01:13:45 +0200, Arnout Vandecappelle
-\(Essensium/Mind\) wrote:
->  Many buildroot users prefer to keep their project's customizations
-> separate from buildroot itself.  This makes it easier to go to a
-> new buildroot version, and to identify which parts are project-
-> specific.  Although it was already possible to keep the project's
-> customization separate, this patch set simplifies it.
-> 
->  It introduces a new config option, BR2_PROJECT_DIR (patch 1).
-> This symbol is used to set defaults for many other config options
-> (patches 2-7). The buildroot config itself can also be stored in
-> the project directory by setting a default BR2_DEFCONFIG (patch 8).
-> 
->  Patch 9 does a 'make defconfig' and 'make world' in a single run
-> when a project directory is available.
-> 
->  Patch 10 makes it possible to update all config files (buildroot,
-> linux, busybox, ...) in a single shot.
-> 
->  Patch 11 adds a 'make projectdir' target to initialize a project
-> directory.  It also creates a Makefile in the project directory:
-> it downloads buildroot itself, so the project directory is
-> self-sufficient.
-> 
->  Patch 12 adds the thing that everybody has to put in their
-> post-build script as a configuration option: a rootfs overlay.
-> This patch could also be applied independent of the series
-> (except for the one line that sets a default based on PROJECT_DIR).
+> So I'll have a look, but my initial impression is one of fairly high
+> skepticism, to say the least.
 
-I agree about this one.
+Ok, I had a look, and I'm going to NAK this.
 
->  Patch 13, finally, adds the PROJECT_DIR concept to the manual.
+All what this stuff is adding can already be done with the current
+Buildroot, by putting the configuration files in a board/something/foo
+directory, and adjusting the Buildroot configuration. It just adds a
+useless layer with a fuzzy concept of "project" that we had in the
+past, and was a terrible idea.
 
-I'll have a close look at all this later, but for reference, this is
-almost exactly a feature that Buildroot had years ago, and that we
-painfully progressively removed because it was not used properly by
-anyone, and was crippling the code base and usage of Buildroot with a
-lot of useless complexity.
+Moreover, the introduction text states that "Many buildroot users
+prefer to keep their project's customizations separate from buildroot
+itself", but the patch set doesn't solve this problem at all:
 
-So I'll have a look, but my initial impression is one of fairly high
-skepticism, to say the least.
+ * Custom packages are not taken into account
+
+ * Additional patches added to existing packages are not taken into
+   account
+
+ * Modification to the recipes of existing packages are not taken into
+   account. And it is very common for a project that you need to
+   slightly upgrade or adjust the recipe of a few existing packages.
+
+So even with this additional complexity, the most annoying problems are
+not solved. So I really do prefer to keep things as it is: people have
+to use version control systems to keep their changes cleanly separated
+from the base Buildroot version. A half-working solution is not going
+to help our users to understand how to properly use Buildroot.
+
+If we want to really separate the project specificities, then we need
+to introduce a real concept of "layers" like OpenEmbedded has, which
+allows to also override package recipes, add new custom packages, etc.
+But I am not sure we want to go down this road.
 
 Best regards,
 
