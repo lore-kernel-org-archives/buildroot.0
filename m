@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Oct 2012 12:04:29 +0200
-Subject: [Buildroot] Confused by the <fenv> implementation,
-	causing gsl build issues
-Message-ID: <20121014120429.52067fdc@skate>
+Date: Sun, 14 Oct 2012 12:28:37 +0200
+Subject: [Buildroot] [PATCH] cairo: disable trace and trace interpreter
+Message-ID: <1350210517-24759-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The Cairo tracing and trace interpreter are most likely not that
+useful, so disable them. They also require zlib, which isn't a
+dependency of Cairo at the moment. This fixes the following build
+failure:
 
-uClibc provides a UCLIBC_HAS_FENV option that can be enabled on any
-architecture. As soon as this option is enabled, the <fenv.h> header is
-included, which make applications and libraries think that function
-such as feenableexcept() or fesetround() are available. However, on
-ARM, those function are in fact not implemented by uClibc.
+  http://autobuild.buildroot.org/results/a91e4e337fd9deb0f9fad433350feb27b2aee556/build-end.log
 
-This causes the following build failure when trying to build the gsl
-library (version 1.15) against an ARM uClibc toolchain:
+In the future, if people are interested by the trace and trace
+interpreter, we can add a new Config.in knob for them.
 
-../ieee-utils/.libs/libgslieeeutils.a(fp.o): In function `gsl_ieee_set_mode':
-fp.c:(.text+0xd4): undefined reference to `fesetround'
-fp.c:(.text+0x148): undefined reference to `feenableexcept'
-collect2: ld returned 1 exit status
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cairo/cairo.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-Of course, in one sense, the configure.ac check of gsl to test the
-existence of those functions might be considered incorrect (it only
-verifies if they are declared, not if it is actually possible to link a
-program using those functions), but on the other hand, it sounds
-strange for uClibc to install <fenv.h>, exposing certain functions that
-are in fact not available.
-
-See the end of
-http://autobuild.buildroot.org/results/f1784c53cb595a3573cb98d63868aee36b5d9bb6/build.log.bz2
-if you want to see the entire build log of gsl.
-
-Am I misunderstanding something?
-
-Thanks,
-
-Thomas
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index eedb28d..2a453bb 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -34,6 +34,10 @@ CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no
+ 
++CAIRO_CONF_OPT = \
++	--enable-trace=no \
++	--enable-interpreter=no
++
+ CAIRO_DEPENDENCIES = host-pkg-config fontconfig pixman
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB),y)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
