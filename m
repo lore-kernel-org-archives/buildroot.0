@@ -1,36 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Oct 2012 20:14:39 +0200
-Subject: [Buildroot] [git commit] gdb: target gdb not available on microblaze
-Message-ID: <20121014182021.0D5ED9985F@busybox.osuosl.org>
+Date: Sun, 14 Oct 2012 20:15:10 +0200
+Subject: [Buildroot] [git commit] mesa3d: add dependency on
+	host-xutil_makedepend
+Message-ID: <20121014182021.D5C1C9985F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4e5f63a569c00ec97869b1b21410047ffd837813
+commit: http://git.buildroot.net/buildroot/commit/?id=8bd0a20b14ef3347ec2de9696ec0edddf6956726
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
+The mesa3d now requires the makedepend host utility, otherwise, it
+fails with:
 
-  http://autobuild.buildroot.org/results/5950c95ca12721dd910ad72fe52bfa9ac45a5120/build-end.log
+configure: error: makedepend is required to build Mesa
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Noel Vellemans <Noel.Vellemans@visionBMS.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/mesa3d/mesa3d.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index fd6956b..272e196 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_GDB
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32
-+	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze
- 	help
- 	    Build the full gdb debugger to run on the target.
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk
+index 3c2635e..8d311e1 100644
+--- a/package/x11r7/mesa3d/mesa3d.mk
++++ b/package/x11r7/mesa3d/mesa3d.mk
+@@ -27,6 +27,7 @@ MESA3D_DEPENDENCIES = \
+ 	xlib_libXfixes \
+ 	xproto_dri2proto \
+ 	libdrm \
+-	expat
++	expat \
++	host-xutil_makedepend
  
+ $(eval $(autotools-package))
