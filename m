@@ -1,45 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Oct 2012 23:19:18 +0200
-Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>-extract and <pkg>-patch
-	targets to OVERRIDE support
-In-Reply-To: <20121014230622.44a6d420@skate>
-Message-ID: <1350249558-21276-1-git-send-email-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Oct 2012 23:21:11 +0200
+Subject: [Buildroot] [PATCH 09/10] glib-networking: remove redundant
+	dependency on gettext
+In-Reply-To: <20121014211110.17845.3033.stgit@localhost>
+References: <20121014210734.17845.64519.stgit@localhost>
+ <20121014211110.17845.3033.stgit@localhost>
+Message-ID: <201210142321.11131.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The legal-info target (and possibly others as well) depends on
-<pkg>-extract to make sure the license file is available.  However,
-when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
-doesn't exist.
+Arnout, All,
 
-To solve this, we add <pkg>-extract which depends on <pkg>-rsync.
-While we're at it,we do the same for <pkg>-patch.  That avoids the
-same problem in the future if something starts depending on
-<pkg>-patch.
+On Sunday 14 October 2012 Arnout Vandecappelle (Essensium/Mind) wrote:
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/glib-networking/Config.in |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+> index dab35ea..f1aa7ee 100644
+> --- a/package/glib-networking/Config.in
+> +++ b/package/glib-networking/Config.in
+> @@ -2,7 +2,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
+>  	bool "glib-networking"
+>  	depends on BR2_USE_WCHAR # glib2
+>  	select BR2_PACKAGE_LIBGLIB2
+> -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+>  	help
+>  	  Network-related GIO modules for glib.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: As ThomasP suggested, don't remove <pkg>-rsync.
+The commit message says "remove redundant dependency on gettext", but this
+change changes the dependency on plain gettext to gettext-if-locales.
 
- package/pkg-generic.mk |    3 +++
- 1 file changed, 3 insertions(+)
+Thus, I think the subject is wrong, and should be changed to something like:
+    glib-networking: only depends on gettext if locales are used
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index ffe7dfb..27db5a5 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -380,6 +380,9 @@ $(1)-configure:		$(1)-depends \
- 
- $(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
- 
-+$(1)-patch:		$(1)-rsync
-+$(1)-extract:		$(1)-rsync
-+
- $(1)-rsync:		$$($(2)_TARGET_RSYNC)
- 
- $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+Regards,
+Yann E. MORIN.
+
 -- 
-tg: (0132e36..) t/rsync-add-extract-target (depends on: master)
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
