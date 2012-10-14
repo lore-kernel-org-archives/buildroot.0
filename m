@@ -1,29 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Oct 2012 20:18:15 +0200
-Subject: [Buildroot] [PATCH] cairo: disable trace and trace interpreter
-In-Reply-To: <1350210517-24759-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 14 Oct 2012 12:28:37 +0200")
-References: <1350210517-24759-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehl0zzmg.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Oct 2012 20:18:20 +0200
+Subject: [Buildroot] [PATCH 1/2] libv4l: properly error out when one of the
+	make step fails
+Message-ID: <1350238701-30441-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+In libv4l.mk, if there are multiple elements in $(LIBV4L_DIRS_y), they
+are built in order, one after the other. However, our loop construct
+doesn't take into account the fact that we should error out if one of
+the steps failed.
 
- Thomas> The Cairo tracing and trace interpreter are most likely not that
- Thomas> useful, so disable them. They also require zlib, which isn't a
- Thomas> dependency of Cairo at the moment. This fixes the following build
- Thomas> failure:
+A good illustration is having BR2_PACKAGE_LIBV4L_DECODE_TM6000 and
+BR2_PACKAGE_LIBV4L_V4L2_CTL enabled. The build of decode-tm6000 will
+fail, but the build will happily continue without stopping in libv4l.
 
- Thomas>   http://autobuild.buildroot.org/results/a91e4e337fd9deb0f9fad433350feb27b2aee556/build-end.log
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libv4l/libv4l.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- Thomas> In the future, if people are interested by the trace and trace
- Thomas> interpreter, we can add a new Config.in knob for them.
-
-Committed, thanks.
-
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 6c782b0..15e48ed 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -24,19 +24,19 @@ endif
+ define LIBV4L_BUILD_CMDS
+ 	for i in $(LIBV4L_DIRS_y); do \
+ 		$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/$$i \
+-			$(LIBV4L_MAKE_OPTS); done
++			$(LIBV4L_MAKE_OPTS) || exit 1 ; done
+ endef
+ 
+ define LIBV4L_INSTALL_STAGING_CMDS
+ 	for i in $(LIBV4L_DIRS_y); do \
+ 		$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/$$i \
+-			DESTDIR=$(STAGING_DIR) $(LIBV4L_MAKE_OPTS) install; done
++			DESTDIR=$(STAGING_DIR) $(LIBV4L_MAKE_OPTS) install || exit 1; done
+ endef
+ 
+ define LIBV4L_INSTALL_TARGET_CMDS
+ 	for i in $(LIBV4L_DIRS_y); do \
+ 		$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/$$i \
+-			DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install; done
++			DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install || exit 1; done
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
