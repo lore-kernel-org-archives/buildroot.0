@@ -1,69 +1,94 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Oct 2012 20:16:54 +0200
-Subject: [Buildroot] [git commit] poco: bump to version 1.4.4
-Message-ID: <20121014182022.127F29986E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Oct 2012 20:35:24 +0200
+Subject: [Buildroot] State of Perl: remaining questions
+Message-ID: <20121014203524.5dc66a9d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56994e16ac98e6a145bd26a68da134e64821846f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...fig.patch => poco-add-cross-build-config.patch} |    0
- ...th.patch => poco-add-staging-search-path.patch} |    6 +++---
- ...libs.patch => poco-dont-build-debug-libs.patch} |    0
- package/poco/poco.mk                               |    4 ++--
- 4 files changed, 5 insertions(+), 5 deletions(-)
+As we discussed on IRC, here is my opinion on the state of the Perl
+patch set from Fran?ois and the remaining points of discussion.
 
-diff --git a/package/poco/poco-1.4.2p1-add-cross-build-config.patch b/package/poco/poco-add-cross-build-config.patch
-similarity index 100%
-rename from package/poco/poco-1.4.2p1-add-cross-build-config.patch
-rename to package/poco/poco-add-cross-build-config.patch
-diff --git a/package/poco/poco-1.4.2p1-add-staging-search-path.patch b/package/poco/poco-add-staging-search-path.patch
-similarity index 68%
-rename from package/poco/poco-1.4.2p1-add-staging-search-path.patch
-rename to package/poco/poco-add-staging-search-path.patch
-index 638ee2a..a9397b4 100644
---- a/package/poco/poco-1.4.2p1-add-staging-search-path.patch
-+++ b/package/poco/poco-add-staging-search-path.patch
-@@ -8,13 +8,13 @@ must be set from the make command line.
- [Peter: Remove host dirs, add MYSQL_INCDIR]
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- --- 
----- poco-1.4.1p1-all-dist/Data/MySQL/Makefile	2011-02-09 11:13:00.000000000 +0200
--+++ poco-1.4.1p1-all/Data/MySQL/Makefile	2011-08-07 09:03:37.106161274 +0300
-+--- poco-1.4.4-all-dist/Data/MySQL/Makefile	2012-09-20 01:30:42.000000000 +0300
-++++ poco-1.4.4-all/Data/MySQL/Makefile	2012-10-11 14:36:10.343153420 +0200
- @@ -8,8 +8,8 @@
-  
-  include $(POCO_BASE)/build/rules/global
-  
---SYSLIBS += -L/usr/local/lib/mysql -L/usr/lib/mysql -L/usr/mysql/lib/mysql -L/usr/local/mysql/lib -lmysqlclient
-+-SYSLIBS += -L/usr/local/lib$(LIB64SUFFIX)/mysql -L/usr/lib$(LIB64SUFFIX)/mysql -L/usr/mysql/lib$(LIB64SUFFIX)/mysql -L/usr/local/mysql/lib$(LIB64SUFFIX) -lmysqlclient
- -INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql -I/usr/mysql/include/mysql -I/usr/local/mysql/include
- +SYSLIBS += -L$(MYSQL_LIBDIR) -lmysqlclient
- +INCLUDE += -I$(MYSQL_INCDIR)
-diff --git a/package/poco/poco-1.4.2p1-dont-build-debug-libs.patch b/package/poco/poco-dont-build-debug-libs.patch
-similarity index 100%
-rename from package/poco/poco-1.4.2p1-dont-build-debug-libs.patch
-rename to package/poco/poco-dont-build-debug-libs.patch
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-index eaa93e6..942b9b2 100644
---- a/package/poco/poco.mk
-+++ b/package/poco/poco.mk
-@@ -3,8 +3,8 @@
- # poco
- #
- #############################################################
--POCO_VERSION_MAJOR = 1.4.3
--POCO_VERSION = $(POCO_VERSION_MAJOR)p1
-+POCO_VERSION_MAJOR = 1.4.4
-+POCO_VERSION = $(POCO_VERSION_MAJOR)
- POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
- POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
- POCO_LICENSE = Boost-v1.0
+ * I am fine with patches 1/10, 2/10, 3/10, 4/10, 5/10, 6/10. I think
+   those patches could be committed now.
+
+ * I have asked Fran?ois to refactor a bit the removal of microperl
+   (patches 7/10, 8/10 and 10/10). In the end, it will make no
+   difference, it's just the order in which are done that will be
+   different. But this also requests for your approval to remove the
+   microperl package without having a deprecation period. I believe
+   that since we're adding a full Perl installation instead, there
+   should be no problem in doing this.
+
+ * I am still not fully convinced by 9/10, the integration of
+   cpanminus, and I will give some details below.
+
+Fran?ois will correct me if I'm wrong, but cpanminus is a tool that
+easily allows to download and build Perl modules, taking care of the
+necessary dependencies. It is a bit like easy_install for Python, if
+I'm correct.
+
+So the idea is that instead of having Buildroot packages for each and
+every Perl module, you only have cpanminus, which provides two important
+Kconfig knobs:
+
+ * BR2_PACKAGE_CPANMINUS_MODULES, thanks to which you provide a
+   space-separated list of Perl modules you want.
+
+ * BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES, thanks to which you
+   provide a space-separated list of Buildroot packages that are native
+   dependencies needed to build the Perl modules listed in
+   BR2_PACKAGE_CPANMINUS_MODULES.
+
+For example, BR2_PACKAGE_CPANMINUS_MODULES can be "Curses::UI" to get
+the Perl module of this name, in which case
+BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES has to be "curses" so that
+our "curses" package gets built as a dependency of cpanminus.
+
+So, cpanminus is doing its own package management, download process,
+dependency tracking, which to me creates a number of problems:
+
+ *) No integration with the licensing infrastructure. The individual
+    Perl modules are not visible in terms of licensing report. This is
+    maybe not a big issue since most of them are released under the
+    Artistic license.
+
+ *) No integration with the download mechanisms of Buildroot. So it
+    doesn't put the downloaded tarballs in $(DL_DIR), doesn't take care
+    of $(BR2_PRIMARY_SITE), breaks "make source", "make external-deps",
+    prevents people from having guarantees to make offline builds
+    (unless they create a specific cpan mirror, of course).
+
+ *) The dependency tracking seems a bit fragile, i.e the user needs to
+    know on which native package a given Perl module depend. This is
+    maybe not that problematic, we can assume that the developer crazy
+    enough to write Perl code will know his dependencies :-)
+
+On the other end, as Arnout and Francois have noted, create Buildroot
+packages for each and every Perl module around is going to bring us a
+crazy number of packages. Perl modules are apparently even more split
+in fine-grained components than Python packages are, so the number of
+dependencies and components if even larger.
+
+Note that I am not carrying a strong NAK on cpanminus, I am just
+pointing out how it moves away from the normal Buildroot
+infrastructure, and which problems it generates. I will not oppose to
+see it merged, I don't plan to be using it myself.
+
+So to summarize, the only part of this series that to me remains a bit
+controversial is this cpanminus thing, patch 9/10.
+
+I would like to thank again Fran?ois for his excellent persistence and
+perseverance in his work on the Lua and Perl stuff in Buildroot. This
+is _highly_ appreciated. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
