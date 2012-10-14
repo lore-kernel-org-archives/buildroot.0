@@ -1,32 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Oct 2012 14:50:16 +0200
-Subject: [Buildroot] [PATCH v2] Add target to create a project directory
-In-Reply-To: <5079FAAC.3070803@gmail.com>
-References: <20121013231443.17317.60675.stgit@localhost>
- <20121013232039.19428.5883.stgit@localhost> <5079FAAC.3070803@gmail.com>
-Message-ID: <507AB508.2000503@mind.be>
+Date: Sun, 14 Oct 2012 14:53:01 +0200
+Subject: [Buildroot] [PATCH 12/13] target/generic: add filesystem
+ overlay option
+In-Reply-To: <CANxTyt6dH8173xfa1nfN2CaXspSMiZcwMgVna4c4FL9-0ziNkg@mail.gmail.com>
+References: <20121013231344.17317.92930.stgit@localhost>
+ <20121013231448.17317.37653.stgit@localhost>
+ <CANxTyt6dH8173xfa1nfN2CaXspSMiZcwMgVna4c4FL9-0ziNkg@mail.gmail.com>
+Message-ID: <507AB5AD.6030307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/10/12 01:35, Valentine Barshak wrote:
->> +$(BUILDROOT_DIR):
->> +    mkdir -p $@
->> +    wget -O - $(BUILDROOT_SITE)/$(BUILDROOT_SOURCE) | \
->> +        tar -xjf - -C $@ --strip-components=1
->> +    for p in `ls $(makedir)/patches/buildroot/buildroot-* 2>/dev/null`; do \
->> +        patch -d $@ -p1 -i $$p; \
->> +    done
+On 14/10/12 02:39, Danomi Manchego wrote:
+> However, we still make use of the custom target skeleton feature.  Basically, we wanted to keep our initial skeleton in
+> our project directory with our overlays, rather than hack up the default skeleton that comes with buildroot.  Also, we
+> wanted to avoid having to maintain a list of files installed by the default skeleton that then need to be deleted in a
+> post-build script.
 >
-> I probably miss something, but
-> do I have to download buldroot for every project?
-> Can I use my local BR git tree as a buildroot source for my projects instead of downloading?
+> (The truth is that we use our custom skeleton both as the initial custom skeleton that gets copied during the beginning
+> of the process, and as an overlay that gets copied at the end of the process, so that no package-installed scripts
+> take precedence over our customized target skeleton files.)
+>
+> So I still see use, at least for us, for a custom skeleton.  No?
 
-  No, make a symlink to the BR tree and it won't download anything.
+  If you need to remove files from the default skeleton, then there's something
+wrong with the default skeleton.  Now I take a second look, indeed there's a lot
+in there that is unneeded, e.g. .bash_profile if no bash is installed...
 
-  But this automatic download feature is probably going a bridge too far :-)
+  So I'll un-deprecate the custom skeleton in the next round.
 
   Regards,
   Arnout
