@@ -1,70 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Oct 2012 20:01:39 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: rename <pkg>-rsync to
- <pkg>-extract
-In-Reply-To: <1350225704-5693-1-git-send-email-arnout@mind.be>
-References: <50768116.4000506@relinux.de>
- <1350225704-5693-1-git-send-email-arnout@mind.be>
-Message-ID: <20121014200139.525802ad@skate>
+Date: Sun, 14 Oct 2012 20:09:04 +0200
+Subject: [Buildroot] [PATCH] libglib2: Fix midori save file dialog not
+ being rendered
+In-Reply-To: <5074AA4D.5060803@gmail.com>
+References: <1349386039-817-1-git-send-email-gvaxon@gmail.com>
+ <20121005095237.19c642ca@skate> <506EE6B3.1000205@gmail.com>
+ <20121005160322.279530c5@skate> <5074AA4D.5060803@gmail.com>
+Message-ID: <20121014200904.0aa648a2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Dear Valentine Barshak,
 
-On Sun, 14 Oct 2012 16:41:44 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> The legal-info target (and possibly others as well) depends on
-> <pkg>-extract to make sure the license file is available.  However,
-> when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
-> doesn't exist.
-> 
-> To solve this, we just call the target that rsyncs the source
-> <pkg>-extract.
-> 
-> While we're at it, also add a <pkg>-patch target (which is equivalent
-> to <pkg>-extract).  That avoids the same problem in the future if
-> something starts depending on <pkg>-patch.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> ---
->  package/pkg-generic.mk |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index ffe7dfb..c2c1b06 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -378,9 +378,11 @@ else
->  $(1)-configure:		$(1)-depends \
->  			$$($(2)_TARGET_CONFIGURE)
->  
-> -$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
-> +$(1)-depends:		$(1)-extract $$($(2)_DEPENDENCIES)
->  
-> -$(1)-rsync:		$$($(2)_TARGET_RSYNC)
-> +$(1)-patch:		$(1)-extract
-> +
-> +$(1)-extract:		$$($(2)_TARGET_RSYNC)
->  
->  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
->  endif
+On Wed, 10 Oct 2012 02:50:53 +0400, Valentine Barshak wrote:
 
-I think I would prefer to keep the 1:1 mapping between virtual target
-name and real target name, and only have aliases when it makes sense.
-I.e:
+> > Argh, ok. I hope someone will find the time to fix this. It's not great
+> > to get stuck with older versions due to regressions.
+> 
+> Yeah, it would be better to move to the newer version, but it might take 
+> some time, since it doesn't seem to work as is.
+> 
+> Meanwhile, can we have this fix?
 
-$(1)-rsync:	$$($(2)_TARGET_RSYNC)
-
-# Possibly some comment here to explain what's going on
-$(1)-extract:	$(1)-rsync
-$(1)-patch:	$(1)-rsync
-
-Otherwise, I'm fine with fixing this problem using this approach, looks
-good to me.
+Yes, I don't have any problem getting this fix in until someone bumps
+libglib2 to a newer version.
 
 Thomas
 -- 
