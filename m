@@ -1,19 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Oct 2012 20:17:30 +0200
-Subject: [Buildroot] [PATCH] poco: bump to version 1.4.4
-In-Reply-To: <b432cd22c94ee070400e78a576c8328513dd5a25.1350194864.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 14 Oct 2012 08:08:25 +0200")
-References: <b432cd22c94ee070400e78a576c8328513dd5a25.1350194864.git.baruch@tkos.co.il>
-Message-ID: <87ipaczznp.fsf@macbook.be.48ers.dk>
+Date: Sun, 14 Oct 2012 20:18:15 +0200
+Subject: [Buildroot] [PATCH] cairo: disable trace and trace interpreter
+In-Reply-To: <1350210517-24759-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 14 Oct 2012 12:28:37 +0200")
+References: <1350210517-24759-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ehl0zzmg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ Thomas> The Cairo tracing and trace interpreter are most likely not that
+ Thomas> useful, so disable them. They also require zlib, which isn't a
+ Thomas> dependency of Cairo at the moment. This fixes the following build
+ Thomas> failure:
+
+ Thomas>   http://autobuild.buildroot.org/results/a91e4e337fd9deb0f9fad433350feb27b2aee556/build-end.log
+
+ Thomas> In the future, if people are interested by the trace and trace
+ Thomas> interpreter, we can add a new Config.in knob for them.
 
 Committed, thanks.
 
