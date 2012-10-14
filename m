@@ -1,54 +1,131 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Oct 2012 20:52:42 +0200
-Subject: [Buildroot] [git commit] libv4l: decode-tm6000 requires libv4l2util
-Message-ID: <20121014185342.247F599835@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 14 Oct 2012 20:56:29 +0200
+Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
+In-Reply-To: <20121013231344.17317.92930.stgit@localhost>
+References: <20121013231344.17317.92930.stgit@localhost>
+Message-ID: <CAAXf6LVPsfP-t=vGuCyWVs=dTtU0P=myEg3vTx01ZVv6dpHziw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=947b57da19e6308fed7f66ba827aa9a46c8c7d73
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-The decode-tm6000 utility cannot build without the libv4l2util. If
-this library is not available, the build breaks with:
+On Sun, Oct 14, 2012 at 1:13 AM, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+>  Many buildroot users prefer to keep their project's customizations
+> separate from buildroot itself.  This makes it easier to go to a
+> new buildroot version, and to identify which parts are project-
+> specific.  Although it was already possible to keep the project's
+> customization separate, this patch set simplifies it.
+>
+>  It introduces a new config option, BR2_PROJECT_DIR (patch 1).
+> This symbol is used to set defaults for many other config options
+> (patches 2-7). The buildroot config itself can also be stored in
+> the project directory by setting a default BR2_DEFCONFIG (patch 8).
+>
+>  Patch 9 does a 'make defconfig' and 'make world' in a single run
+> when a project directory is available.
+>
+>  Patch 10 makes it possible to update all config files (buildroot,
+> linux, busybox, ...) in a single shot.
+>
+>  Patch 11 adds a 'make projectdir' target to initialize a project
+> directory.  It also creates a Makefile in the project directory:
+> it downloads buildroot itself, so the project directory is
+> self-sufficient.
+>
+>  Patch 12 adds the thing that everybody has to put in their
+> post-build script as a configuration option: a rootfs overlay.
+> This patch could also be applied independent of the series
+> (except for the one line that sets a default based on PROJECT_DIR).
+>
+>  Patch 13, finally, adds the PROJECT_DIR concept to the manual.
+>
+>  What is still missing is a way to add custom packages and custom
+> patches in the project directory.  Either can already be done
+> with the BR2_PACKAGE_OVERRIDE_FILE, but I'm considering specific
+> additions:
+>
+> - For custom packages, including $(PROJECT_DIR)/package/*/*.mk
+>   and automatically setting these packages to 'y'.  I don't think
+>   it's useful to include custom packages in the menuconfig - you
+>   just want them to be always enabled.
+>
+> - For custom patches, add $(PROJECT_DIR)/patches/<pkg>/<pkg>-*.patch
+>   to the list of patches that generic-package looks for.  The custom
+>   patches would come in addition to and after the buildroot patches.
+>
+>  Comments on these last two ideas are welcome.
+>
+>
+>  Two weeks from now (Oct. 28) I'm giving a presentation about buildroot
+> at T-Dose in Eindhoven.  I'll use the project directory concept in
+> that presentation.  So if there's any major feedback I'd like to hear
+> it before that time :-)
+>
 
-decode_tm6000.o: In function `read_stream':
-decode_tm6000.c:(.text+0x220): undefined reference to `v4l2_rcvbuf'
-decode_tm6000.o: In function `main':
-decode_tm6000.c:(.text+0x37c): undefined reference to `v4l2_open'
-decode_tm6000.c:(.text+0x3cc): undefined reference to `v4l2_gettryset_fmt_cap'
-decode_tm6000.c:(.text+0x424): undefined reference to `v4l2_getset_freq'
-decode_tm6000.c:(.text+0x47c): undefined reference to `v4l2_mmap_bufs'
-decode_tm6000.c:(.text+0x4a0): undefined reference to `v4l2_start_streaming'
+For what it's worth, I don't think I need a PROJECT_DIR feature. I'm
+using Buildroot pretty much according to the way Thomas has described
+it in his 'Buildroot for real projects' presentation:
+- project specific packages are placed in package/<company>/...,
+- config files, post-build script, rootfs overlay, ... are placed in
+board/<company>/<project>/...
 
-See
+I'm using standard version control system features to merge these
+changes with new buildroot releases, with no real problems so far.
 
- http://autobuild.buildroot.org/results/207ed74d5e816309ef0dc82ecc8112b51788fdf6/build-end.log
+I do like some of the patches in this series, though, and have
+commented on them individually. I'd like these to be continued
+regardless of the decision on the series.
 
-We fix this by adding util/libv4l2util to the list of directories to
-build when decode-tm6000 is enabled. The only other user of
-libv4l2util is another utility called qv4l2, for which Buildroot has
-no Config.in option, so we only handle the case of decode-tm6000 at
-the moment.
+Best regards,
+Thomas
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libv4l/libv4l.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 15e48ed..0639505 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -11,7 +11,7 @@ LIBV4L_MAKE_OPTS = PREFIX=/usr
- LIBV4L_DEPENDENCIES = jpeg
- 
- LIBV4L_DIRS_y += lib
--LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_DECODE_TM6000)	+= utils/decode_tm6000
-+LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_DECODE_TM6000)	+= utils/libv4l2util utils/decode_tm6000
- LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_IR_KEYTABLE)	+= utils/keytable
- LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_V4L2_COMPLIANCE) += utils/v4l2-compliance
- LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_V4L2_CTL)	+= utils/v4l2-ctl
+> ---
+>
+> Arnout Vandecappelle (Essensium/Mind) (13):
+>       Add BR2_PROJECT_DIR config option
+>       Set default BR2_PACKAGE_OVERRIDE_FILE based on BR2_PROJECT_DIR
+>       linux: get default paths from BR2_PROJECT_DIR
+>       busybox: get default paths from BR2_PROJECT_DIR
+>       target/generic: get default paths from BR2_PROJECT_DIR
+>       toolchain-crosstool-ng: get default paths from BR2_PROJECT_DIR
+>       uClibc: get default paths from BR2_PROJECT_DIR
+>       Store BR2_DEFCONFIG in .config, and use it to update the original input
+>       Skip menuconfig if BR2_DEFCONFIG or BR2_PROJECT_DIR is given.
+>       Add update-all-config target
+>       Add target to create a project directory
+>       target/generic: add filesystem overlay option
+>       Document BR2_PROJECT_DIR in the manual
+>
+>
+>  Config.in                                        |   27 +++++++
+>  Makefile                                         |   86 +++++++++++++++++++--
+>  Makefile.project.tmpl                            |   40 ++++++++++
+>  docs/manual/customize-project.txt                |   37 +++++++++
+>  docs/manual/customize-rootfs.txt                 |   21 ++---
+>  docs/manual/customize.txt                        |    2
+>  fs/common.mk                                     |    7 +-
+>  linux/Config.in                                  |    2
+>  linux/linux.mk                                   |    2
+>  package/busybox/Config.in                        |    1
+>  package/busybox/busybox-1.20.x.config            |   26 +++---
+>  package/busybox/busybox.mk                       |    4 +
+>  target/generic/Config.in                         |   16 ++++
+>  toolchain/toolchain-crosstool-ng/Config.in       |    1
+>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    7 ++
+>  toolchain/uClibc/Config.in                       |    1
+>  toolchain/uClibc/uClibc-0.9.33.config            |   91 +++++++++-------------
+>  toolchain/uClibc/uclibc.mk                       |    4 +
+>  18 files changed, 286 insertions(+), 89 deletions(-)
+>  create mode 100644 Makefile.project.tmpl
+>  create mode 100644 docs/manual/customize-project.txt
+>
+> --
+> Signature
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
