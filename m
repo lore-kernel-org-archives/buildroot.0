@@ -1,35 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Oct 2012 23:06:22 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: rename <pkg>-rsync to
- <pkg>-extract
-In-Reply-To: <507B27E5.8060004@mind.be>
-References: <50768116.4000506@relinux.de>
- <1350225704-5693-1-git-send-email-arnout@mind.be>
- <20121014200139.525802ad@skate> <507B27E5.8060004@mind.be>
-Message-ID: <20121014230622.44a6d420@skate>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 14 Oct 2012 23:09:06 +0200
+Subject: [Buildroot] [PATCH 00/10] Clean up improper dependencies on gettext
+	without LOCALE
+Message-ID: <20121014210734.17845.64519.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This is a resend of a series that cleans up redundant dependencies on
+gettext, in packages that select gettext when LOCALE is not enabled.
 
-On Sun, 14 Oct 2012 23:00:21 +0200, Arnout Vandecappelle wrote:
+The first 7 patches really remove the gettext dependency.  The last three
+are in fact a NOP, because libglib2 selects gettext unconditionally.
+I have kept the NEEDS_GETTEXT_IF_LOCALE dependency for these packages,
+because they do have i18n code and do require libintl.  But the
+dependency adds nothing, because libglib2 does the same already.
 
-> > Otherwise, I'm fine with fixing this problem using this approach, looks
-> > good to me.
-> 
->   The reason that I choose to rename the -rsync target is that I'm hesitant
-> to add more targets - they slow down make.
-> 
->   However, this would only be for the OVERRIDE packages, so it just adds a few
-> targets, not 1000.  So I'll take your suggestion and resend.
+There are no changes compared to the first send, except for patch 7
+which received a comment from Thomas Petazzoni.
 
-Ok, thanks!
+Regards,
+Arnout
+---
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle (Essensium/Mind) (10):
+      diffutils: only needs gettext if locale is selected
+      flex: only needs gettext if locale is selected
+      ndisc6: only needs gettext if locale is selected
+      util-linux: only needs gettext if locale is selected
+      lshw: fix build with no LOCALE support
+      avahi: remove double dependency on gettext
+      pulseaudio: remove dependency on gettext
+      gdk-pixbuf: remove dependency on gettext
+      glib-networking: remove redundant dependency on gettext
+      libsoup: remove redundant dependency on gettext
+
+
+ package/avahi/avahi.mk                      |    5 +----
+ package/diffutils/Config.in                 |    1 +
+ package/diffutils/diffutils.mk              |    3 +--
+ package/flex/Config.in                      |    1 +
+ package/flex/flex.mk                        |    3 +--
+ package/gdk-pixbuf/Config.in                |    1 -
+ package/gdk-pixbuf/gdk-pixbuf.mk            |    1 -
+ package/glib-networking/Config.in           |    2 +-
+ package/libsoup/Config.in                   |    2 +-
+ package/lshw/Config.in                      |    2 +-
+ package/lshw/lshw.mk                        |   12 +++++++++---
+ package/multimedia/pulseaudio/Config.in     |    1 -
+ package/multimedia/pulseaudio/pulseaudio.mk |    1 -
+ package/ndisc6/Config.in                    |    1 +
+ package/ndisc6/ndisc6.mk                    |    2 +-
+ package/util-linux/Config.in                |    1 +
+ package/util-linux/util-linux.mk            |    2 +-
+ 17 files changed, 21 insertions(+), 20 deletions(-)
