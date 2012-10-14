@@ -1,50 +1,70 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sat, 13 Oct 2012 20:39:10 -0400
-Subject: [Buildroot] [PATCH 12/13] target/generic: add filesystem
-	overlay option
-In-Reply-To: <20121013231448.17317.37653.stgit@localhost>
-References: <20121013231344.17317.92930.stgit@localhost>
- <20121013231448.17317.37653.stgit@localhost>
-Message-ID: <CANxTyt6dH8173xfa1nfN2CaXspSMiZcwMgVna4c4FL9-0ziNkg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 14 Oct 2012 08:08:25 +0200
+Subject: [Buildroot] [PATCH] poco: bump to version 1.4.4
+Message-ID: <b432cd22c94ee070400e78a576c8328513dd5a25.1350194864.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...ross-build-config.patch => poco-add-cross-build-config.patch} |    0
+ ...ging-search-path.patch => poco-add-staging-search-path.patch} |    6 +++---
+ ...t-build-debug-libs.patch => poco-dont-build-debug-libs.patch} |    0
+ package/poco/poco.mk                                             |    4 ++--
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+ rename package/poco/{poco-1.4.2p1-add-cross-build-config.patch => poco-add-cross-build-config.patch} (100%)
+ rename package/poco/{poco-1.4.2p1-add-staging-search-path.patch => poco-add-staging-search-path.patch} (68%)
+ rename package/poco/{poco-1.4.2p1-dont-build-debug-libs.patch => poco-dont-build-debug-libs.patch} (100%)
 
-On Sat, Oct 13, 2012 at 7:14 PM, Arnout Vandecappelle (Essensium/Mind) <
-arnout@mind.be> wrote:
-
-> The filesystem overlay is a tree that is copied over the target fs
-> after building everything - which is currently usually done in the
-> post-build script.
->
-
-I'm very happy to see the overlay fs concept get introduced.  We introduced
-an almost identical concept to our customized buildroot a couple of years
-ago, and found it to be a great addition.  In particular, it lets us keep a
-full skeleton with most of our files, and a couple very small overlays for
-things that we want just in an NFS-mount dev scenario and just in a FLASH
-image scenario.
-
-However, we still make use of the custom target skeleton feature.
- Basically, we wanted to keep our initial skeleton in our project directory
-with our overlays, rather than hack up the default skeleton that comes with
-buildroot.  Also, we wanted to avoid having to maintain a list of files
-installed by the default skeleton that then need to be deleted in a
-post-build script.
-
-(The truth is that we use our custom skeleton both as the initial custom
-skeleton that gets copied during the beginning of the process, and as an
-overlay that gets copied at the end of the process, so that no
-package-installed scripts take precedence over our customized target
-skeleton files.)
-
-So I still see use, at least for us, for a custom skeleton.  No?
-
-Danomi -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121013/7f9f53c7/attachment.html>
+diff --git a/package/poco/poco-1.4.2p1-add-cross-build-config.patch b/package/poco/poco-add-cross-build-config.patch
+similarity index 100%
+rename from package/poco/poco-1.4.2p1-add-cross-build-config.patch
+rename to package/poco/poco-add-cross-build-config.patch
+diff --git a/package/poco/poco-1.4.2p1-add-staging-search-path.patch b/package/poco/poco-add-staging-search-path.patch
+similarity index 68%
+rename from package/poco/poco-1.4.2p1-add-staging-search-path.patch
+rename to package/poco/poco-add-staging-search-path.patch
+index 638ee2a..a9397b4 100644
+--- a/package/poco/poco-1.4.2p1-add-staging-search-path.patch
++++ b/package/poco/poco-add-staging-search-path.patch
+@@ -8,13 +8,13 @@ must be set from the make command line.
+ [Peter: Remove host dirs, add MYSQL_INCDIR]
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ --- 
+---- poco-1.4.1p1-all-dist/Data/MySQL/Makefile	2011-02-09 11:13:00.000000000 +0200
+-+++ poco-1.4.1p1-all/Data/MySQL/Makefile	2011-08-07 09:03:37.106161274 +0300
++--- poco-1.4.4-all-dist/Data/MySQL/Makefile	2012-09-20 01:30:42.000000000 +0300
+++++ poco-1.4.4-all/Data/MySQL/Makefile	2012-10-11 14:36:10.343153420 +0200
+ @@ -8,8 +8,8 @@
+  
+  include $(POCO_BASE)/build/rules/global
+  
+--SYSLIBS += -L/usr/local/lib/mysql -L/usr/lib/mysql -L/usr/mysql/lib/mysql -L/usr/local/mysql/lib -lmysqlclient
++-SYSLIBS += -L/usr/local/lib$(LIB64SUFFIX)/mysql -L/usr/lib$(LIB64SUFFIX)/mysql -L/usr/mysql/lib$(LIB64SUFFIX)/mysql -L/usr/local/mysql/lib$(LIB64SUFFIX) -lmysqlclient
+ -INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql -I/usr/mysql/include/mysql -I/usr/local/mysql/include
+ +SYSLIBS += -L$(MYSQL_LIBDIR) -lmysqlclient
+ +INCLUDE += -I$(MYSQL_INCDIR)
+diff --git a/package/poco/poco-1.4.2p1-dont-build-debug-libs.patch b/package/poco/poco-dont-build-debug-libs.patch
+similarity index 100%
+rename from package/poco/poco-1.4.2p1-dont-build-debug-libs.patch
+rename to package/poco/poco-dont-build-debug-libs.patch
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index eaa93e6..942b9b2 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -3,8 +3,8 @@
+ # poco
+ #
+ #############################################################
+-POCO_VERSION_MAJOR = 1.4.3
+-POCO_VERSION = $(POCO_VERSION_MAJOR)p1
++POCO_VERSION_MAJOR = 1.4.4
++POCO_VERSION = $(POCO_VERSION_MAJOR)
+ POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
+ POCO_SITE = http://downloads.sourceforge.net/project/poco/sources/poco-$(POCO_VERSION_MAJOR)
+ POCO_LICENSE = Boost-v1.0
+-- 
+1.7.10.4
