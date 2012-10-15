@@ -1,23 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 15 Oct 2012 13:54:10 +0200
-Subject: [Buildroot] [PATCH 1/3] feh: bump to 2.6.3
-In-Reply-To: <1350294378-20956-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 15 Oct 2012 11:46:16
- +0200")
-References: <1350294378-20956-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <878vb8x865.fsf@macbook.be.48ers.dk>
+From: bsuarez at free.fr <bsuarez@free.fr>
+Date: Mon, 15 Oct 2012 14:17:20 +0200 (CEST)
+Subject: [Buildroot] rrdtool and python binding
+In-Reply-To: <307253483.303942928.1350303101131.JavaMail.root@zimbra75-e12.priv.proxad.net>
+Message-ID: <1953630800.303959304.1350303440745.JavaMail.root@zimbra75-e12.priv.proxad.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+Hi
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+I try to build rrdtool and rrdtoolmodule with python but I have some problem.
 
-Committed, thanks.
+I remove the --disable-python  in rrdtool.mk but is not sufficient
 
--- 
-Bye, Peter Korsgaard
+The compilation work well, but when I import rrdtool in a python script I have this error :
+
+python: '/usr/lib/python2.7/site-packages/rrdtoolmodule.so' is not an ELF executable for ARM
+
+
+Buildroot version : 2012.02
+
+Thanks
+
+Bruno
