@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Oct 2012 13:53:49 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.6
-Message-ID: <20121015115559.61FDE99875@busybox.osuosl.org>
+Date: Mon, 15 Oct 2012 13:55:00 +0200
+Subject: [Buildroot] [git commit] xapp_xclock: bump to 1.0.6
+Message-ID: <20121015115600.D06E8997E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18bd242da0ddfe2e7873bb7943e6e6cd06cf584d
+commit: http://git.buildroot.net/buildroot/commit/?id=53f4b0baceb886579c3fa7551abadd63666a60d4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/e2fsprogs/e2fsprogs.mk |    2 +-
+ package/x11r7/xapp_xclock/xapp_xclock.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 9002d46..049bc29 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
+index 9fdc792..6d7bf65 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.mk
++++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
 @@ -4,7 +4,7 @@
  #
- #############################################################
+ ################################################################################
  
--E2FSPROGS_VERSION = 1.42.5
-+E2FSPROGS_VERSION = 1.42.6
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- 
- E2FSPROGS_CONF_OPT = \
+-XAPP_XCLOCK_VERSION = 1.0.3
++XAPP_XCLOCK_VERSION = 1.0.6
+ XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
+ XAPP_XCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXft xlib_libXrender xlib_libxkbfile
