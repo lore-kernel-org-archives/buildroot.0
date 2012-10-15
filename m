@@ -1,27 +1,49 @@
-From: bsuarez at free.fr <bsuarez@free.fr>
-Date: Mon, 15 Oct 2012 14:17:20 +0200 (CEST)
-Subject: [Buildroot] rrdtool and python binding
-In-Reply-To: <307253483.303942928.1350303101131.JavaMail.root@zimbra75-e12.priv.proxad.net>
-Message-ID: <1953630800.303959304.1350303440745.JavaMail.root@zimbra75-e12.priv.proxad.net>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 15 Oct 2012 14:38:50 +0200
+Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>-extract and
+ <pkg>-patch targets to OVERRIDE support
+In-Reply-To: <1350249558-21276-1-git-send-email-arnout@mind.be>
+References: <1350249558-21276-1-git-send-email-arnout@mind.be>
+Message-ID: <507C03DA.6060607@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Arnout Vandecappelle (Essensium/Mind) wrote:
+> The legal-info target (and possibly others as well) depends on
+> <pkg>-extract to make sure the license file is available.  However,
+> when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
+> doesn't exist.
+>
+> To solve this, we add <pkg>-extract which depends on <pkg>-rsync.
+> While we're at it,we do the same for <pkg>-patch.  That avoids the
+> same problem in the future if something starts depending on
+> <pkg>-patch.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> v2: As ThomasP suggested, don't remove <pkg>-rsync.
+>
+>   package/pkg-generic.mk |    3 +++
+>   1 file changed, 3 insertions(+)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index ffe7dfb..27db5a5 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -380,6 +380,9 @@ $(1)-configure:		$(1)-depends \
+>
+>   $(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
+>
+> +$(1)-patch:		$(1)-rsync
+> +$(1)-extract:		$(1)-rsync
+> +
+>   $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+>
+>   $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+>
 
-I try to build rrdtool and rrdtoolmodule with python but I have some problem.
 
-I remove the --disable-python  in rrdtool.mk but is not sufficient
-
-The compilation work well, but when I import rrdtool in a python script I have this error :
-
-python: '/usr/lib/python2.7/site-packages/rrdtoolmodule.so' is not an ELF executable for ARM
-
-
-Buildroot version : 2012.02
-
-Thanks
-
-Bruno
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
