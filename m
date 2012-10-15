@@ -1,35 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 15 Oct 2012 21:01:21 +0200
-Subject: [Buildroot] Git download is currently broken
-In-Reply-To: <CAExDhvZGg+VBSx3aP73yG8er9ppqEfL4FrmcoQbn4OT5xcVi8A@mail.gmail.com>
-References: <CAExDhvZGg+VBSx3aP73yG8er9ppqEfL4FrmcoQbn4OT5xcVi8A@mail.gmail.com>
-Message-ID: <507C5D81.7060109@mind.be>
+Date: Mon, 15 Oct 2012 21:05:20 +0200
+Subject: [Buildroot] [PATCH] mplayer: fix compilation of NEON assembly
+	in libavcodec
+In-Reply-To: <87txtwxm2n.fsf@macbook.be.48ers.dk>
+References: <1349478193-13673-1-git-send-email-arnout@mind.be>
+ <87pq4s3e0t.fsf@macbook.be.48ers.dk> <50749743.5010700@mind.be>
+ <87d30qadw4.fsf@macbook.be.48ers.dk> <87txtwxm2n.fsf@macbook.be.48ers.dk>
+Message-ID: <507C5E70.1050808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/10/12 19:49, Thiago A. Corr?a wrote:
-> Hi,
+On 15/10/12 08:53, Peter Korsgaard wrote:
+>   Peter>  It is? I've never done any real work on platforms with neon, so it's
+>   Peter>  certainly a bit fussy to me, but I don't understand what the relation is
+>   Peter>  with the calling convention.
 >
->       I've noticed that the generic-package Git download method is
-> broken, but I haven't been able to figure out why. Even packages
-> already included in buildroot will download from the buildroot.net
-> mirror instead of git.
+>   Peter>  Aren't the new linaro toolchains hardfp and support neon?
+>
+>   Peter>  Googling a bit I see stuff like:
+>
+>   Peter>  http://wiki.meego.com/ARM/hardfp
+>   Peter>  http://sources.redhat.com/ml/crossgcc/2012-07/msg00091.html
+>
+>   Peter>  http://wiki.debian.org/ArmHardFloatPort#GCC_floating-point_options
+>   Peter>  mentions that neon + hardfp abi isn't supported by GCC 4.4, but
+>   Peter>  otherwise doesn't mention that it cannot work.
+>
+> Any comments on this?
 
-  Works for me (tried with can-utils).
-
-  Can you run buildroot with 'make V=1' to see how git is called?  The
-output is very difficult to parse, but somewhere in that huge shell line
-there should be something like:
-
-... git clone --bare git://... qtserial-e831107f468618881e435932c8a42404c1dde13c
-
+  Sorry, I was going to test it with a Linaro toolchain but forgot about it.
+Running it now.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
