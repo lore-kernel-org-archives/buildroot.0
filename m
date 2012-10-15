@@ -1,30 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Oct 2012 08:28:35 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 15 Oct 2012 13:53:27 +0200
 Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.42.6
-Message-ID: <1350300515-25433-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1350300515-25433-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 15 Oct 2012 08:28:35 -0300")
+References: <1350300515-25433-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d30kx87c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/e2fsprogs/e2fsprogs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 0a114a6..e958158 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--E2FSPROGS_VERSION = 1.42.5
-+E2FSPROGS_VERSION = 1.42.6
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- 
- E2FSPROGS_CONF_OPT = \
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.7.8.6
+Bye, Peter Korsgaard
