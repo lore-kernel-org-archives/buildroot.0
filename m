@@ -1,43 +1,40 @@
-From: Antoine Caurier <antoine.caurier@gmail.com>
-Date: Mon, 15 Oct 2012 08:55:00 +0000 (UTC)
-Subject: [Buildroot] BuildRoot not starting with Udev
-Message-ID: <loom.20121015T104727-737@post.gmane.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 15 Oct 2012 15:16:04 +0200
+Subject: [Buildroot] [PATCHv5 2/5] packages: switch to host-pkgconf
+In-Reply-To: <1350302313-17344-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 15 Oct 2012 08:58:33 -0300")
+References: <1350302313-17344-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sj9fx4dn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-I'm working on Buildroot-2012.08, with the at91sam9x5ek_defconfig.
+Hi,
 
-It work perfectly fine with the default configuration. But I have a problem when 
-trying to activate udev.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-With menuconfig, I set /dev management (Dynamic using udev), and then rebuild 
-the kernel and fs.
+Sorry, I haven't found time to review this in detail yet, but I noticed
+this:
 
-All is starting fine, except for buildroot. The board stop to display anything 
-just before the "Welcome to buildroot" prompt.
+ Gustavo> +++ b/package/rrdtool/rrdtool.mk
+ Gustavo> @@ -6,7 +6,7 @@
+ 
+ Gustavo>  RRDTOOL_VERSION = 1.2.30
+ Gustavo>  RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ Gustavo> -RRDTOOL_DEPENDENCIES = host-pkg-config freetype libart libpng zlib
+ Gustavo> +RRDTOOL_DEPENDENCIES = host-pkgconf freetype libart libpng zlib
 
-Here are the last traces:
+There recently was a (misdirected) mail about rrdtool not working
+correctly with pkgconf:
 
-UBIFS: mounted UBI device 0, volume 0, name "rootfs"
-UBIFS: file system size:   247603200 bytes (241800 KiB, 236 MiB, 1950 LEBs)
-UBIFS: journal size:       9023488 bytes (8812 KiB, 8 MiB, 72 LEBs)
-UBIFS: media format:       w4/r0 (latest is w4/r0)
-UBIFS: default compressor: lzo
-UBIFS: reserved for root:  0 bytes (0 KiB)
-VFS: Mounted root (ubifs filesystem) on device 0:12.
-Freeing init memory: 136K
-Starting logging: OK
-Populating /dev using udev: done
-Starting portmap: portmap: fork: No such devicedone
-ALSA: Restoring mixer settings...
-Starting network...
-/usr/sbin/alsactl: load_state:1686: No soundcards found...
-Starting dropbear sshd: generating rsa key... generating dsa key... OK
+http://lists.freedesktop.org/archives/pkg-config/2012-October/000904.html
 
-Any ideas on what can causes my trouble?
-Thx
+Is that an issue for us or does the STAGING_DIR prefix mean pkgconfig
+never outputs nothing?
+
+-- 
+Bye, Peter Korsgaard
