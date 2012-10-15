@@ -1,49 +1,43 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 15 Oct 2012 14:38:50 +0200
-Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>-extract and
- <pkg>-patch targets to OVERRIDE support
-In-Reply-To: <1350249558-21276-1-git-send-email-arnout@mind.be>
-References: <1350249558-21276-1-git-send-email-arnout@mind.be>
-Message-ID: <507C03DA.6060607@lucaceresoli.net>
+From: Antoine Caurier <antoine.caurier@gmail.com>
+Date: Mon, 15 Oct 2012 08:55:00 +0000 (UTC)
+Subject: [Buildroot] BuildRoot not starting with Udev
+Message-ID: <loom.20121015T104727-737@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle (Essensium/Mind) wrote:
-> The legal-info target (and possibly others as well) depends on
-> <pkg>-extract to make sure the license file is available.  However,
-> when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
-> doesn't exist.
->
-> To solve this, we add <pkg>-extract which depends on <pkg>-rsync.
-> While we're at it,we do the same for <pkg>-patch.  That avoids the
-> same problem in the future if something starts depending on
-> <pkg>-patch.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> v2: As ThomasP suggested, don't remove <pkg>-rsync.
->
->   package/pkg-generic.mk |    3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index ffe7dfb..27db5a5 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -380,6 +380,9 @@ $(1)-configure:		$(1)-depends \
->
->   $(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
->
-> +$(1)-patch:		$(1)-rsync
-> +$(1)-extract:		$(1)-rsync
-> +
->   $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->
->   $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
->
+Hello,
 
+I'm working on Buildroot-2012.08, with the at91sam9x5ek_defconfig.
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+It work perfectly fine with the default configuration. But I have a problem when 
+trying to activate udev.
+
+With menuconfig, I set /dev management (Dynamic using udev), and then rebuild 
+the kernel and fs.
+
+All is starting fine, except for buildroot. The board stop to display anything 
+just before the "Welcome to buildroot" prompt.
+
+Here are the last traces:
+
+UBIFS: mounted UBI device 0, volume 0, name "rootfs"
+UBIFS: file system size:   247603200 bytes (241800 KiB, 236 MiB, 1950 LEBs)
+UBIFS: journal size:       9023488 bytes (8812 KiB, 8 MiB, 72 LEBs)
+UBIFS: media format:       w4/r0 (latest is w4/r0)
+UBIFS: default compressor: lzo
+UBIFS: reserved for root:  0 bytes (0 KiB)
+VFS: Mounted root (ubifs filesystem) on device 0:12.
+Freeing init memory: 136K
+Starting logging: OK
+Populating /dev using udev: done
+Starting portmap: portmap: fork: No such devicedone
+ALSA: Restoring mixer settings...
+Starting network...
+/usr/sbin/alsactl: load_state:1686: No soundcards found...
+Starting dropbear sshd: generating rsa key... generating dsa key... OK
+
+Any ideas on what can causes my trouble?
+Thx
