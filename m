@@ -1,46 +1,32 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 16 Oct 2012 21:48:28 +0100
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <87ehkytcjx.fsf@macbook.be.48ers.dk>
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk>
- <87boghzdjc.fsf@macbook.be.48ers.dk>
- <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
- <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
- <87ipapxbp2.fsf@macbook.be.48ers.dk>
- <87ehkytcjx.fsf@macbook.be.48ers.dk>
-Message-ID: <CAG2jQ8i=z_RAvEdYt_Tx4Ma5DK7e6b9djTQsu81MVULqOte1mg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 16 Oct 2012 23:00:30 +0200
+Subject: [Buildroot] [git commit] package: add gnupg
+In-Reply-To: <507DB21F.1090506@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 16 Oct 2012 21:14:39 +0200")
+References: <20121015082204.6813A99871@busybox.osuosl.org>
+ <20121016185610.36a03eff@skate> <87ipaatf0w.fsf@macbook.be.48ers.dk>
+ <507DB21F.1090506@mind.be>
+Message-ID: <87a9vmt9n5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 16, 2012 at 8:57 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
->>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
->  Markos> Hi Peter,
->
->  Markos> This also happens with the latest strace git code. It seems like
->  Markos> -D_FILE_OFFSET_BITS=64 is causing it. But there are also some other
->  Markos> problems in the LFS support. I will see if I can write some patches
->  Markos> and send them upstream.
->
->  Peter> Great, thanks!
->
-> Any progress on this? All the strace failures on the autobuilders are
-> not so nice. Alternatively I can revert until we have a fix.
->
-> --
-> Bye, Peter Korsgaard
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Hi Peter,
+Hi,
 
-I haven't managed to find a solution yet and I think all the LFS
-problems are buildroot specific.
-I don't have a native LFS toolchain so I can try an out-of-buildroot build.
-You can either revert the commit or disable the LFS support in the
-package for now.
+ Arnout>  I think this is the reason why gnupg wasn't included before.
+ Arnout> My colleague Stijn submitted a patch series for a more recent
+ Arnout> version of gnupg a while ago, and that also faced a portability
+ Arnout> problem (in the 'portable threads library :-) Thomas suggested
+ Arnout> to wait for npth-based gnupg 2.1, but that one hasn't been
+ Arnout> released yet.
+
+I believe the threads issue was only with gnupg 2.x. This issue was
+simply configure doing the wrong thing when cross compiling (which I
+have now fixed).
 
 -- 
-Regards,
-Markos
+Bye, Peter Korsgaard
