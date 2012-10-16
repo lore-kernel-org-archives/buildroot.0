@@ -1,46 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 Oct 2012 21:41:04 +0200
-Subject: [Buildroot] [PATCH] macchanger: new package
-In-Reply-To: <CAHt8ZCNDNa8vL20Zc6he4UP5rffnqaCEx9qJ98TiyZN5vMmVpQ@mail.gmail.com>
-References: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
- <507DAD97.6090003@mind.be>
- <CAHt8ZCNDNa8vL20Zc6he4UP5rffnqaCEx9qJ98TiyZN5vMmVpQ@mail.gmail.com>
-Message-ID: <201210162141.04997.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 16 Oct 2012 21:57:38 +0200
+Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
+In-Reply-To: <87ipapxbp2.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+ of "Fri, 05 Oct 2012 15:58:33 +0200")
+References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
+ <87a9w20xrj.fsf@macbook.be.48ers.dk>
+ <87boghzdjc.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
+ <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
+ <87ipapxbp2.fsf@macbook.be.48ers.dk>
+Message-ID: <87ehkytcjx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, All,
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+ Markos> Hi Peter,
 
-On Tuesday 16 October 2012 Simon Dawson wrote:
-> On 16 October 2012 19:55, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >  Just for my info, what does this do that 'ip link set address
-> > xx:xx:xx:xx:xx:xx'
-> > doesn't?
-> 
-> In addition to setting a specific MAC address, the tool can also be
-> used to set a random address. I don't think you can do that using ip.
+ Markos> This also happens with the latest strace git code. It seems like
+ Markos> -D_FILE_OFFSET_BITS=64 is causing it. But there are also some other
+ Markos> problems in the LFS support. I will see if I can write some patches
+ Markos> and send them upstream.
 
-Not with 'ip' only, but still possible:
-  # MAC="$(dd if=/dev/urandom bs=6 count=1 2>/dev/null \
-           |hexdump -e '5/1 "%0x:" "%0x"' )"
-  # printf "%s\n" "${MAC}"
-  b9:41:54:af:d9:f0
-  # ip link set address "${MAC}"
+ Peter> Great, thanks!
 
-UNIX-powa! And it's probably not the only possibility. ;-)
-
-But yes, it's a bit more involved than simply calling a single executable.
-
-Regards,
-Yann E. MORIN.
+Any progress on this? All the strace failures on the autobuilders are
+not so nice. Alternatively I can revert until we have a fix.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
