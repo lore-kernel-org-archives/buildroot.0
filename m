@@ -1,33 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Oct 2012 21:57:38 +0200
-Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
-In-Reply-To: <87ipapxbp2.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
- of "Fri, 05 Oct 2012 15:58:33 +0200")
-References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
- <87a9w20xrj.fsf@macbook.be.48ers.dk>
- <87boghzdjc.fsf@macbook.be.48ers.dk>
- <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
- <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
- <87ipapxbp2.fsf@macbook.be.48ers.dk>
-Message-ID: <87ehkytcjx.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Oct 2012 22:03:43 +0200
+Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
+In-Reply-To: <20121014103518.4fb1089d@skate>
+References: <20121013231344.17317.92930.stgit@localhost>
+ <20121014103518.4fb1089d@skate>
+Message-ID: <507DBD9F.4030307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
- Markos> Hi Peter,
+On 14/10/12 10:35, Thomas Petazzoni wrote:
+> I'll have a close look at all this later, but for reference, this is
+> almost exactly a feature that Buildroot had years ago, and that we
+> painfully progressively removed because it was not used properly by
+> anyone, and was crippling the code base and usage of Buildroot with a
+> lot of useless complexity.
 
- Markos> This also happens with the latest strace git code. It seems like
- Markos> -D_FILE_OFFSET_BITS=64 is causing it. But there are also some other
- Markos> problems in the LFS support. I will see if I can write some patches
- Markos> and send them upstream.
+  Sorry that I'm not letting this go, but: how is this similar to the
+project concept that was removed in 2009?  I'm not trying to share any
+of the build output between different projects -- the only thing that
+is shared is the buildroot directory.
 
- Peter> Great, thanks!
+  Should I rename it to something else?
 
-Any progress on this? All the strace failures on the autobuilders are
-not so nice. Alternatively I can revert until we have a fix.
+  Regards,
+  Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
