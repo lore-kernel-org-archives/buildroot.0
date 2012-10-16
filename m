@@ -1,79 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 16 Oct 2012 00:22:14 +0200
-Subject: [Buildroot] can't open /dev/ttyO2: No such file or directory
-In-Reply-To: <CAAfyv35ct59po3tM7xfRH3-xWX0yL-Bs_yuh_XY2eMp5-iJp0w@mail.gmail.com>
-References: <CAAfyv35ct59po3tM7xfRH3-xWX0yL-Bs_yuh_XY2eMp5-iJp0w@mail.gmail.com>
-Message-ID: <CAGm1_ksRY+C0Sb-dxxfYFZxWq7ciguBD-y602vTZEk_wybOVUQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 15 Oct 2012 22:50:26 -0300
+Subject: [Buildroot] [PATCH] vsftpd: bump to version 3.0.2
+Message-ID: <1350352226-23133-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 16, 2012 at 12:03 AM, Belisko Marek <marek.belisko@gmail.com> wrote:
-> Hi,
->
-> this is not mainly related to BR bt maybe somebody facing same problems.
-> I have rootfs builded by BR (just busybox with external toolchain for
-> Cortex-A9).
-> I'm booting kernel 3.7-rc1 on pandaboard with devicetree on barebox.
-> Booting seems to be
-> fine till point when IMO getty is started. Then I get console full of :
-> can't open /dev/ttyO2: No such file or directory
->
-> Last messages snip:
-> [    2.023406]  mmcblk0: p1 p2
-> [    2.036499] ThumbEE CPU extension supported.
-> [    2.066894] clock: disabling unused clocks to save power
-> [    2.076354] VANA: disabling
-> [    2.079986] VDAC: disabling
-> [    2.086822] omap_hsmmc 480d5000.mmc: Failed to get debounce clk
-> [    2.093231] omap-dma-engine omap-dma-engine: allocating channel for 60
-> [    2.100097] omap-dma-engine omap-dma-engine: allocating channel for 59
-> [    2.107269] omap-dma-engine omap-dma-engine: freeing channel for 59
-> [    2.114349] omap-dma-engine omap-dma-engine: freeing channel for 60
-> [    2.121093] platform 480d5000.mmc: Driver omap_hsmmc requests probe deferral
-> [    2.128814] twl_rtc rtc.9: setting system clock to 2000-01-01
-> 00:00:00 UTC (946684800)
-> [    2.219604] EXT3-fs (mmcblk0p2): error: couldn't mount because of
-> unsupported optional features (240)
-> [    2.375122] EXT2-fs (mmcblk0p2): error: couldn't mount because of
-> unsupported optional features (240)
-> [    2.612854] EXT4-fs (mmcblk0p2): mounted filesystem with ordered
-> data mode. Opts: (null)
-> [    2.621765] VFS: Mounted root (ext4 filesystem) readonly on device 179:2.
-> [    2.629394] Freeing init memory: 320K
-> [    2.808105] EXT4-fs (mmcblk0p2): re-mounted. Opts: data=ordered
-> Starting logging :OK
-> Initializing random number generator... done.
-> Starting network...
-> can't open /dev/ttyO2: No such file or directory
-> can't open /dev/ttyO2: No such file or directory
-> can't open /dev/ttyO2: No such file or directory
->
-> Any ideas?
->
-> Thanks,
->
-> mbe
->
->
-> --
-> as simple and primitive as possible
-> -------------------------------------------------
-> Marek Belisko - OPEN-NANDRA
-> Freelance Developer
->
-> Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-> Tel: +421 915 052 184
-> skype: marekwhite
-> twitter: #opennandra
-> web: http://open-nandra.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Bump vsftpd to version 3.0.2, closes bug #5330
 
-have you activated devtmpfs in kernel?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...ile.patch => vsftpd-dont-force-largefile.patch} |    0
+ package/vsftpd/vsftpd.mk                           |    4 +++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+ rename package/vsftpd/{vsftpd-2.3.4-dont-force-largefile.patch => vsftpd-dont-force-largefile.patch} (100%)
 
-Yegor
+diff --git a/package/vsftpd/vsftpd-2.3.4-dont-force-largefile.patch b/package/vsftpd/vsftpd-dont-force-largefile.patch
+similarity index 100%
+rename from package/vsftpd/vsftpd-2.3.4-dont-force-largefile.patch
+rename to package/vsftpd/vsftpd-dont-force-largefile.patch
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index ce042c5..8d261c8 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -4,9 +4,11 @@
+ #
+ #############################################################
+ 
+-VSFTPD_VERSION = 2.3.5
++VSFTPD_VERSION = 3.0.2
+ VSFTPD_SITE = https://security.appspot.com/downloads
+ VSFTPD_LIBS = -lcrypt
++VSFTPD_LICENSE = GPLv2
++VSFTPD_LICENSE_FILES = COPYING
+ 
+ define VSFTPD_ENABLE_SSL
+ 	$(SED) 's/.*VSF_BUILD_SSL/#define VSF_BUILD_SSL/' $(@D)/builddefs.h
+-- 
+1.7.8.6
