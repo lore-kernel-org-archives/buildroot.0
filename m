@@ -1,41 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Oct 2012 07:39:52 +0200
-Subject: [Buildroot] [PATCH 0/7] Introduce the _AVAILABLE mechanism
-In-Reply-To: <20121014193849.019347dd@skate>
-References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
- <20121014160547.09c493d7@skate> <201210141631.29399.yann.morin.1998@free.fr>
- <20121014193849.019347dd@skate>
-Message-ID: <507CF328.5090505@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 16 Oct 2012 09:54:11 +0200
+Subject: [Buildroot] [git commit] xenomai: disallow SMP option on !SMP ARM
+	variants
+Message-ID: <20121016075436.02D579988A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/10/12 19:38, Thomas Petazzoni wrote:
-> In other words: we can assume the user knows about big subsystems
-> (X.org, Python, Perl, etc.), but we don't want him to know the fine
-> details of the dependencies on sub-options.
+commit: http://git.buildroot.net/buildroot/commit/?id=3dfd5f40401a8037bfa86c7c1b10946ff83be26f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Someone (I don't remember who) proposed to stop doing that, because it adds
-little value.  Indeed, it's not as if 9 extra entries in the Scripting
-Languages menu will suddenly make it more difficult to navigate.  Maybe X.org
-is an exception, but even there most packages are collected in the x11r7 menus
-(and those could still be kept in a conditional).
+Fixes http://autobuild.buildroot.net/results/51bf35ed7a6224db7cdb157af4d030a787ef9159
 
-  Originally I was in favour of having the BR2_PACKAGE_PYTHON conditionals,
-but it _would_ probably make life simpler if we only had dependencies on
-toolchain options...
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/xenomai/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-  Yann, what do you think, would it make suboption handling simpler if there
-was no 'depends on BR2_PACKAGE_PYTHON'?
-
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index ecab23e..b09472d 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -41,6 +41,7 @@ config BR2_PACKAGE_XENOMAI_VERSION
+ 
+ config BR2_PACKAGE_XENOMAI_SMP
+ 	bool "Enable SMP support"
++	depends on BR2_cortex_a9 || !BR2_arm # only A9 has SMP support
+ 	help
+ 	  This option allows to enable or disable SMP support. It has
+ 	  to match your kernel configuration.
