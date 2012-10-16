@@ -1,89 +1,83 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Oct 2012 23:17:41 +0200
-Subject: [Buildroot] [git commit] gpsd: fix nmea2000 build failure
-Message-ID: <20121016212109.C746899884@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 17 Oct 2012 01:57:27 +0300
+Subject: [Buildroot] [PATCH] macchanger: new package
+In-Reply-To: <507DAD97.6090003@mind.be>
+References: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
+ <507DAD97.6090003@mind.be>
+Message-ID: <507DE657.1010409@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=acec9cda475c2901c20bc6616d3b5048608ff9f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+16.10.2012 21:55, Arnout Vandecappelle kirjoitti:
+> On 16/10/12 20:34, spdawson at gmail.com wrote:
+>> From: Simon Dawson<spdawson@gmail.com>
+>>
+>> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+> [snip]
+>> diff --git a/package/macchanger/Config.in b/package/macchanger/Config.in
+>> new file mode 100644
+>> index 0000000..e26faa7
+>> --- /dev/null
+>> +++ b/package/macchanger/Config.in
+>> @@ -0,0 +1,7 @@
+>> +config BR2_PACKAGE_MACCHANGER
+>> +    bool "macchanger"
+>> +    help
+>> +      A GNU/Linux utility for viewing/manipulating the MAC address of
+>> +      network interfaces
+>> +
+>> +      http://www.alobbs.com/macchanger
+>
+>  Just for my info, what does this do that 'ip link set address
+> xx:xx:xx:xx:xx:xx'
+> doesn't?
+>
 
-NMEA2000 seems to require NAVCOM for some odd reason.
-Fixes
-http://autobuild.buildroot.net/results/91ddc286f6a92498f96aba7d312f82d5c77a689a/build-end.log
-Also do a correct sort of protocol config options.
+Not much.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gpsd/Config.in |   31 ++++++++++++++++---------------
- 1 files changed, 16 insertions(+), 15 deletions(-)
+Besides setting MAC address to some specific value, it will let you to
+autogenerate random
+MAC address from within same device vendor, same physical device
+category or completely random, bogust
+MAC address.
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index a11c553..69f63f9 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -91,16 +91,16 @@ endmenu
- menu "Protocols"
- 	depends on BR2_PACKAGE_GPSD
- 
--config BR2_PACKAGE_GPSD_ASHTECH
--	bool "Ashtech"
--	help
--	  Ashtech support
--
- config BR2_PACKAGE_GPSD_AIVDM
- 	bool "Aivdm"
- 	help
- 	  Aivdm support
- 
-+config BR2_PACKAGE_GPSD_ASHTECH
-+	bool "Ashtech"
-+	help
-+	  Ashtech support
-+
- config BR2_PACKAGE_GPSD_EARTHMATE
- 	bool "Earthmate"
- 	help
-@@ -151,27 +151,28 @@ config BR2_PACKAGE_GPSD_MTK3301
- 	help
- 	  Mediatek MTK-3301 support
- 
-+config BR2_PACKAGE_GPSD_NAVCOM
-+	bool "Navcom"
-+	help
-+	  Navcom binary support
-+
- config BR2_PACKAGE_GPSD_NMEA
- 	bool "NMEA"
- 	default y
- 	help
- 	  Generic NMEA support
- 
-+config BR2_PACKAGE_GPSD_NMEA2000
-+	bool "NMEA2000"
-+	select BR2_PACKAGE_GPSD_NAVCOM
-+	help
-+	  NMEA2000/CAN support
-+
- config BR2_PACKAGE_GPSD_NTRIP
- 	bool "NTRIP"
- 	help
- 	  NTRIP support
- 
--config BR2_PACKAGE_GPSD_NAVCOM
--	bool "Navcom"
--	help
--	  Navcom binary support
--
--config BR2_PACKAGE_GPSD_NMEA2000
--	bool "nmea2000"
--	help
--	  NMEA2000/CAN support
--
- config BR2_PACKAGE_GPSD_OCEANSERVER
- 	bool "OceanServer"
- 	help
+So if you need to spoof MAC address when using aircrack-ng (which BTW, i
+have as buildroot package here) or some
+similar cracking tool then this might come handy.
+
+But then again, and like you noted, there are already zillion of other
+ways to change NIC MAC address ...
+
+Best regards
+Stefan
+
+>> diff --git a/package/macchanger/macchanger.mk
+>> b/package/macchanger/macchanger.mk
+>> new file mode 100644
+>> index 0000000..b1b9fff
+>> --- /dev/null
+>> +++ b/package/macchanger/macchanger.mk
+>> @@ -0,0 +1,11 @@
+>> +#############################################################
+>> +#
+>> +# macchanger
+>> +#
+>> +#############################################################
+>> +MACCHANGER_VERSION = 1.5.0
+>> +MACCHANGER_SITE = ftp://ftp.gnu.org/gnu/macchanger
+>
+> MACCHANGER_SITE = $(BR2_GNU_MIRROR)/macchanger
+>
+>  With this amendment:
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  (build-test with a WCHAR-only internal powerpc toolchain)
+>
+>> +MACCHANGER_LICENSE = GPLv2
+>> +MACCHANGER_LICENSE_FILES = COPYING
+>> +
+>> +$(eval $(autotools-package))
