@@ -1,65 +1,60 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 16 Oct 2012 19:34:48 +0100
-Subject: [Buildroot] [PATCH] macchanger: new package
-Message-ID: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Oct 2012 20:43:11 +0200
+Subject: [Buildroot] BuildRoot not starting with Udev
+In-Reply-To: <loom.20121015T104727-737@post.gmane.org>
+References: <loom.20121015T104727-737@post.gmane.org>
+Message-ID: <507DAABF.7040602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 15/10/12 10:55, Antoine Caurier wrote:
+> Hello,
+>
+> I'm working on Buildroot-2012.08, with the at91sam9x5ek_defconfig.
+>
+> It work perfectly fine with the default configuration. But I have a problem when
+> trying to activate udev.
+>
+> With menuconfig, I set /dev management (Dynamic using udev), and then rebuild
+> the kernel and fs.
+>
+> All is starting fine, except for buildroot. The board stop to display anything
+> just before the "Welcome to buildroot" prompt.
+>
+> Here are the last traces:
+>
+> UBIFS: mounted UBI device 0, volume 0, name "rootfs"
+> UBIFS: file system size:   247603200 bytes (241800 KiB, 236 MiB, 1950 LEBs)
+> UBIFS: journal size:       9023488 bytes (8812 KiB, 8 MiB, 72 LEBs)
+> UBIFS: media format:       w4/r0 (latest is w4/r0)
+> UBIFS: default compressor: lzo
+> UBIFS: reserved for root:  0 bytes (0 KiB)
+> VFS: Mounted root (ubifs filesystem) on device 0:12.
+> Freeing init memory: 136K
+> Starting logging: OK
+> Populating /dev using udev: done
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/Config.in                |    1 +
- package/macchanger/Config.in     |    7 +++++++
- package/macchanger/macchanger.mk |   11 +++++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 package/macchanger/Config.in
- create mode 100644 package/macchanger/macchanger.mk
+  So udev starts (or at least doesn't print an error to console).
 
-diff --git a/package/Config.in b/package/Config.in
-index d7b3db6..f8e83c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -573,6 +573,7 @@ endif
- source "package/links/Config.in"
- source "package/linphone/Config.in"
- source "package/lrzsz/Config.in"
-+source "package/macchanger/Config.in"
- source "package/mii-diag/Config.in"
- source "package/mrouted/Config.in"
- source "package/msmtp/Config.in"
-diff --git a/package/macchanger/Config.in b/package/macchanger/Config.in
-new file mode 100644
-index 0000000..e26faa7
---- /dev/null
-+++ b/package/macchanger/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MACCHANGER
-+	bool "macchanger"
-+	help
-+	  A GNU/Linux utility for viewing/manipulating the MAC address of
-+	  network interfaces
-+
-+	  http://www.alobbs.com/macchanger
-diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
-new file mode 100644
-index 0000000..b1b9fff
---- /dev/null
-+++ b/package/macchanger/macchanger.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# macchanger
-+#
-+#############################################################
-+MACCHANGER_VERSION = 1.5.0
-+MACCHANGER_SITE = ftp://ftp.gnu.org/gnu/macchanger
-+MACCHANGER_LICENSE = GPLv2
-+MACCHANGER_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+> Starting portmap: portmap: fork: No such devicedone
+> ALSA: Restoring mixer settings...
+> Starting network...
+> /usr/sbin/alsactl: load_state:1686: No soundcards found...
+> Starting dropbear sshd: generating rsa key... generating dsa key... OK
+
+  Since dropbear starts, can you log in with ssh?  Then you can check if
+getty is running on the (correct) serial port and if there's something
+funny showing up in dmesg or /var/log/messages.
+
+  Regards,
+  Arnout
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
