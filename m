@@ -1,43 +1,29 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Oct 2012 23:14:39 +0200
-Subject: [Buildroot] [git commit] vsftpd: bump to version 3.0.2
-Message-ID: <20121016212109.3710499884@busybox.osuosl.org>
+Date: Tue, 16 Oct 2012 23:17:10 +0200
+Subject: [Buildroot] [git commit] cifs-utils: bump to version 5.7
+Message-ID: <20121016212109.790A999884@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75f6e1df60b29e8e9d11ce91d548ef5d149c6804
+commit: http://git.buildroot.net/buildroot/commit/?id=811bcf124a33419ba18d1e326973a1b839050966
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump vsftpd to version 3.0.2, closes bug #5330
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...ile.patch => vsftpd-dont-force-largefile.patch} |    0
- package/vsftpd/vsftpd.mk                           |    4 +++-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/cifs-utils/cifs-utils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd-2.3.4-dont-force-largefile.patch b/package/vsftpd/vsftpd-dont-force-largefile.patch
-similarity index 100%
-rename from package/vsftpd/vsftpd-2.3.4-dont-force-largefile.patch
-rename to package/vsftpd/vsftpd-dont-force-largefile.patch
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index ce042c5..8d261c8 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -4,9 +4,11 @@
- #
- #############################################################
- 
--VSFTPD_VERSION = 2.3.5
-+VSFTPD_VERSION = 3.0.2
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
-+VSFTPD_LICENSE = GPLv2
-+VSFTPD_LICENSE_FILES = COPYING
- 
- define VSFTPD_ENABLE_SSL
- 	$(SED) 's/.*VSF_BUILD_SSL/#define VSF_BUILD_SSL/' $(@D)/builddefs.h
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index cfa2b91..d208c87 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -1,4 +1,4 @@
+-CIFS_UTILS_VERSION = 5.6
++CIFS_UTILS_VERSION = 5.7
+ CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3
