@@ -1,39 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Oct 2012 22:05:01 +0200
-Subject: [Buildroot] [git commit] package: add gnupg
-In-Reply-To: <507DB21F.1090506@mind.be>
-References: <20121015082204.6813A99871@busybox.osuosl.org>
- <20121016185610.36a03eff@skate>
- <87ipaatf0w.fsf@macbook.be.48ers.dk> <507DB21F.1090506@mind.be>
-Message-ID: <20121016220501.727796ff@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 16 Oct 2012 22:34:37 +0200
+Subject: [Buildroot] [git commit] gnupg: don't prefix assembly level
+	functions with underscore
+Message-ID: <20121016203752.3EC929988E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=525cd9eed18c55ffae18467bcdf69d44a3673310
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Oct 2012 21:14:39 +0200, Arnout Vandecappelle wrote:
+Fixes http://autobuild.buildroot.net/results/45a0856bafa9f2f7e86e2c063528c2b5b04c08d6
 
->   I think this is the reason why gnupg wasn't included before.  My
-> colleague Stijn submitted a patch series for a more recent version of
-> gnupg a while ago, and that also faced a portability problem (in the
-> 'portable threads library :-) Thomas suggested to wait for npth-based
-> gnupg 2.1, but that one hasn't been released yet.
+gnupg's configure script defaults to prepending an underscore ('_') to
+the assembly level functions, which isn't correct for Linux and causes
+linker errors for the archs where it has asm optimizations.
 
-I think the problem with Stinj version was due to the usage of gnupg
-2.x, and I suggested to either wait for 2.1 to solve the usage of the
-non-portable pth library, or fall back to an older version such as
-1.4.x, which Peter did.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gnupg/gnupg.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-That said, my memories on this are quite blurry, so I might be wrong
-here. I'd have to look through the archives.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 4b5c0a1..e63c33c 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
+@@ -10,6 +10,7 @@ GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
+ GNUPG_LICENSE_FILES = COPYING
+ GNUPG_DEPENDENCIES = zlib ncurses
++GNUPG_CONF_ENV = ac_cv_sys_symbol_underscore=no
+ GNUPG_CONF_OPT = --disable-rpath --enable-minimal --disable-regex
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
