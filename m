@@ -1,55 +1,87 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Oct 2012 08:59:20 -0300
-Subject: [Buildroot] [PATCH] openssl: disable apps for NOMMU
-Message-ID: <1350388760-5447-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 16 Oct 2012 09:33:19 -0300
+Subject: [Buildroot] [PATCH] gpsd: fix nmea2000 build failure
+Message-ID: <1350390799-9171-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The openssl binary uses fork() so disable the option and build for !MMU.
+NMEA2000 seems to require NAVCOM for some odd reason.
 Fixes
-http://autobuild.buildroot.net/results/45a9b84c16caadbf77b6fc43d7a0001c981a4c87/build-end.log
+http://autobuild.buildroot.net/results/91ddc286f6a92498f96aba7d312f82d5c77a689a/build-end.log
+Also do a correct sort of protocol config options.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssl/Config.in  |    2 ++
- package/openssl/openssl.mk |    9 +++++++++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ package/gpsd/Config.in |   31 ++++++++++++++++---------------
+ 1 files changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-index 6ba644a..2187023 100644
---- a/package/openssl/Config.in
-+++ b/package/openssl/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_OPENSSL
- config BR2_PACKAGE_OPENSSL_BIN
- 	bool "openssl binary"
- 	depends on BR2_PACKAGE_OPENSSL
-+	# uses fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  Install the openssl binary to the target file system. This is a
- 	  command line tool for doing various crypthographic stuff.
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 0917344..d283046 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -13,6 +13,15 @@ OPENSSL_DEPENDENCIES = zlib
- OPENSSL_TARGET_ARCH = generic32
- OPENSSL_CFLAGS = $(TARGET_CFLAGS)
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index a11c553..69f63f9 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -91,16 +91,16 @@ endmenu
+ menu "Protocols"
+ 	depends on BR2_PACKAGE_GPSD
  
-+ifeq ($(BR2_USE_MMU),)
-+define OPENSSL_DISABLE_APPS
-+	$(SED) '/^build_apps/! s/build_apps//' $(@D)/Makefile.org
-+	$(Q)touch $(@D)/apps/openssl
-+endef
-+endif
+-config BR2_PACKAGE_GPSD_ASHTECH
+-	bool "Ashtech"
+-	help
+-	  Ashtech support
+-
+ config BR2_PACKAGE_GPSD_AIVDM
+ 	bool "Aivdm"
+ 	help
+ 	  Aivdm support
+ 
++config BR2_PACKAGE_GPSD_ASHTECH
++	bool "Ashtech"
++	help
++	  Ashtech support
 +
-+OPENSSL_PRE_CONFIGURE_HOOKS += OPENSSL_DISABLE_APPS
+ config BR2_PACKAGE_GPSD_EARTHMATE
+ 	bool "Earthmate"
+ 	help
+@@ -151,27 +151,28 @@ config BR2_PACKAGE_GPSD_MTK3301
+ 	help
+ 	  Mediatek MTK-3301 support
+ 
++config BR2_PACKAGE_GPSD_NAVCOM
++	bool "Navcom"
++	help
++	  Navcom binary support
 +
- ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
- 	OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
- 	OPENSSL_DEPENDENCIES += ocf-linux
+ config BR2_PACKAGE_GPSD_NMEA
+ 	bool "NMEA"
+ 	default y
+ 	help
+ 	  Generic NMEA support
+ 
++config BR2_PACKAGE_GPSD_NMEA2000
++	bool "NMEA2000"
++	select BR2_PACKAGE_GPSD_NAVCOM
++	help
++	  NMEA2000/CAN support
++
+ config BR2_PACKAGE_GPSD_NTRIP
+ 	bool "NTRIP"
+ 	help
+ 	  NTRIP support
+ 
+-config BR2_PACKAGE_GPSD_NAVCOM
+-	bool "Navcom"
+-	help
+-	  Navcom binary support
+-
+-config BR2_PACKAGE_GPSD_NMEA2000
+-	bool "nmea2000"
+-	help
+-	  NMEA2000/CAN support
+-
+ config BR2_PACKAGE_GPSD_OCEANSERVER
+ 	bool "OceanServer"
+ 	help
 -- 
 1.7.8.6
