@@ -1,56 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Oct 2012 20:43:11 +0200
-Subject: [Buildroot] BuildRoot not starting with Udev
-In-Reply-To: <loom.20121015T104727-737@post.gmane.org>
-References: <loom.20121015T104727-737@post.gmane.org>
-Message-ID: <507DAABF.7040602@mind.be>
+Date: Tue, 16 Oct 2012 20:55:19 +0200
+Subject: [Buildroot] [PATCH] macchanger: new package
+In-Reply-To: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
+References: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
+Message-ID: <507DAD97.6090003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/10/12 10:55, Antoine Caurier wrote:
-> Hello,
+On 16/10/12 20:34, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
 >
-> I'm working on Buildroot-2012.08, with the at91sam9x5ek_defconfig.
->
-> It work perfectly fine with the default configuration. But I have a problem when
-> trying to activate udev.
->
-> With menuconfig, I set /dev management (Dynamic using udev), and then rebuild
-> the kernel and fs.
->
-> All is starting fine, except for buildroot. The board stop to display anything
-> just before the "Welcome to buildroot" prompt.
->
-> Here are the last traces:
->
-> UBIFS: mounted UBI device 0, volume 0, name "rootfs"
-> UBIFS: file system size:   247603200 bytes (241800 KiB, 236 MiB, 1950 LEBs)
-> UBIFS: journal size:       9023488 bytes (8812 KiB, 8 MiB, 72 LEBs)
-> UBIFS: media format:       w4/r0 (latest is w4/r0)
-> UBIFS: default compressor: lzo
-> UBIFS: reserved for root:  0 bytes (0 KiB)
-> VFS: Mounted root (ubifs filesystem) on device 0:12.
-> Freeing init memory: 136K
-> Starting logging: OK
-> Populating /dev using udev: done
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+[snip]
+> diff --git a/package/macchanger/Config.in b/package/macchanger/Config.in
+> new file mode 100644
+> index 0000000..e26faa7
+> --- /dev/null
+> +++ b/package/macchanger/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_MACCHANGER
+> +	bool "macchanger"
+> +	help
+> +	  A GNU/Linux utility for viewing/manipulating the MAC address of
+> +	  network interfaces
+> +
+> +	  http://www.alobbs.com/macchanger
 
-  So udev starts (or at least doesn't print an error to console).
+  Just for my info, what does this do that 'ip link set address xx:xx:xx:xx:xx:xx'
+doesn't?
 
-> Starting portmap: portmap: fork: No such devicedone
-> ALSA: Restoring mixer settings...
-> Starting network...
-> /usr/sbin/alsactl: load_state:1686: No soundcards found...
-> Starting dropbear sshd: generating rsa key... generating dsa key... OK
+> diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
+> new file mode 100644
+> index 0000000..b1b9fff
+> --- /dev/null
+> +++ b/package/macchanger/macchanger.mk
+> @@ -0,0 +1,11 @@
+> +#############################################################
+> +#
+> +# macchanger
+> +#
+> +#############################################################
+> +MACCHANGER_VERSION = 1.5.0
+> +MACCHANGER_SITE = ftp://ftp.gnu.org/gnu/macchanger
 
-  Since dropbear starts, can you log in with ssh?  Then you can check if
-getty is running on the (correct) serial port and if there's something
-funny showing up in dmesg or /var/log/messages.
+MACCHANGER_SITE = $(BR2_GNU_MIRROR)/macchanger
 
-  Regards,
-  Arnout
+  With this amendment:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (build-test with a WCHAR-only internal powerpc toolchain)
+
+> +MACCHANGER_LICENSE = GPLv2
+> +MACCHANGER_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
