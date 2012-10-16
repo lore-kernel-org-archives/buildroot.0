@@ -1,37 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Oct 2012 22:03:43 +0200
-Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
-In-Reply-To: <20121014103518.4fb1089d@skate>
-References: <20121013231344.17317.92930.stgit@localhost>
- <20121014103518.4fb1089d@skate>
-Message-ID: <507DBD9F.4030307@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Oct 2012 22:05:01 +0200
+Subject: [Buildroot] [git commit] package: add gnupg
+In-Reply-To: <507DB21F.1090506@mind.be>
+References: <20121015082204.6813A99871@busybox.osuosl.org>
+ <20121016185610.36a03eff@skate>
+ <87ipaatf0w.fsf@macbook.be.48ers.dk> <507DB21F.1090506@mind.be>
+Message-ID: <20121016220501.727796ff@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/10/12 10:35, Thomas Petazzoni wrote:
-> I'll have a close look at all this later, but for reference, this is
-> almost exactly a feature that Buildroot had years ago, and that we
-> painfully progressively removed because it was not used properly by
-> anyone, and was crippling the code base and usage of Buildroot with a
-> lot of useless complexity.
 
-  Sorry that I'm not letting this go, but: how is this similar to the
-project concept that was removed in 2009?  I'm not trying to share any
-of the build output between different projects -- the only thing that
-is shared is the buildroot directory.
+On Tue, 16 Oct 2012 21:14:39 +0200, Arnout Vandecappelle wrote:
 
-  Should I rename it to something else?
+>   I think this is the reason why gnupg wasn't included before.  My
+> colleague Stijn submitted a patch series for a more recent version of
+> gnupg a while ago, and that also faced a portability problem (in the
+> 'portable threads library :-) Thomas suggested to wait for npth-based
+> gnupg 2.1, but that one hasn't been released yet.
 
-  Regards,
-  Arnout
+I think the problem with Stinj version was due to the usage of gnupg
+2.x, and I suggested to either wait for 2.1 to solve the usage of the
+non-portable pth library, or fall back to an older version such as
+1.4.x, which Peter did.
 
+That said, my memories on this are quite blurry, so I might be wrong
+here. I'd have to look through the archives.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
