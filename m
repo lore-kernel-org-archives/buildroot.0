@@ -1,21 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 16 Oct 2012 23:14:17 +0200
-Subject: [Buildroot] [PATCH] nbd: bump to version 3.2
-In-Reply-To: <1350339317-22271-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 15 Oct 2012 19:15:17 -0300")
-References: <1350339317-22271-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wqyqrufq.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Oct 2012 21:16:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 5330] update vsftpd to 3.0.0
+In-Reply-To: <bug-5330-163@https.bugs.busybox.net/>
+References: <bug-5330-163@https.bugs.busybox.net/>
+Message-ID: <20121016211617.74AB399884@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5330
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2012-10-16 21:16:16 UTC ---
+Bumped in git by Gustavoz to 3.0.2. (75f6e1df60b29e)
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
