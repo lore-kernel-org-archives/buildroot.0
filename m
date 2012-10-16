@@ -1,103 +1,46 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Tue, 16 Oct 2012 21:39:16 +0200
-Subject: [Buildroot] can't open /dev/ttyO2: No such file or directory
-In-Reply-To: <CAGm1_ksRY+C0Sb-dxxfYFZxWq7ciguBD-y602vTZEk_wybOVUQ@mail.gmail.com>
-References: <CAAfyv35ct59po3tM7xfRH3-xWX0yL-Bs_yuh_XY2eMp5-iJp0w@mail.gmail.com>
- <CAGm1_ksRY+C0Sb-dxxfYFZxWq7ciguBD-y602vTZEk_wybOVUQ@mail.gmail.com>
-Message-ID: <CAAfyv34wnoGfuWDS+fwTE7Fw1zvfcdvFFmDj=tc91wDjEzQ0AQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 Oct 2012 21:41:04 +0200
+Subject: [Buildroot] [PATCH] macchanger: new package
+In-Reply-To: <CAHt8ZCNDNa8vL20Zc6he4UP5rffnqaCEx9qJ98TiyZN5vMmVpQ@mail.gmail.com>
+References: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
+ <507DAD97.6090003@mind.be>
+ <CAHt8ZCNDNa8vL20Zc6he4UP5rffnqaCEx9qJ98TiyZN5vMmVpQ@mail.gmail.com>
+Message-ID: <201210162141.04997.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Simon, All,
 
-On Tue, Oct 16, 2012 at 12:22 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> On Tue, Oct 16, 2012 at 12:03 AM, Belisko Marek <marek.belisko@gmail.com> wrote:
->> Hi,
->>
->> this is not mainly related to BR bt maybe somebody facing same problems.
->> I have rootfs builded by BR (just busybox with external toolchain for
->> Cortex-A9).
->> I'm booting kernel 3.7-rc1 on pandaboard with devicetree on barebox.
->> Booting seems to be
->> fine till point when IMO getty is started. Then I get console full of :
->> can't open /dev/ttyO2: No such file or directory
->>
->> Last messages snip:
->> [    2.023406]  mmcblk0: p1 p2
->> [    2.036499] ThumbEE CPU extension supported.
->> [    2.066894] clock: disabling unused clocks to save power
->> [    2.076354] VANA: disabling
->> [    2.079986] VDAC: disabling
->> [    2.086822] omap_hsmmc 480d5000.mmc: Failed to get debounce clk
->> [    2.093231] omap-dma-engine omap-dma-engine: allocating channel for 60
->> [    2.100097] omap-dma-engine omap-dma-engine: allocating channel for 59
->> [    2.107269] omap-dma-engine omap-dma-engine: freeing channel for 59
->> [    2.114349] omap-dma-engine omap-dma-engine: freeing channel for 60
->> [    2.121093] platform 480d5000.mmc: Driver omap_hsmmc requests probe deferral
->> [    2.128814] twl_rtc rtc.9: setting system clock to 2000-01-01
->> 00:00:00 UTC (946684800)
->> [    2.219604] EXT3-fs (mmcblk0p2): error: couldn't mount because of
->> unsupported optional features (240)
->> [    2.375122] EXT2-fs (mmcblk0p2): error: couldn't mount because of
->> unsupported optional features (240)
->> [    2.612854] EXT4-fs (mmcblk0p2): mounted filesystem with ordered
->> data mode. Opts: (null)
->> [    2.621765] VFS: Mounted root (ext4 filesystem) readonly on device 179:2.
->> [    2.629394] Freeing init memory: 320K
->> [    2.808105] EXT4-fs (mmcblk0p2): re-mounted. Opts: data=ordered
->> Starting logging :OK
->> Initializing random number generator... done.
->> Starting network...
->> can't open /dev/ttyO2: No such file or directory
->> can't open /dev/ttyO2: No such file or directory
->> can't open /dev/ttyO2: No such file or directory
->>
->> Any ideas?
->>
->> Thanks,
->>
->> mbe
->>
->>
->> --
->> as simple and primitive as possible
->> -------------------------------------------------
->> Marek Belisko - OPEN-NANDRA
->> Freelance Developer
->>
->> Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
->> Tel: +421 915 052 184
->> skype: marekwhite
->> twitter: #opennandra
->> web: http://open-nandra.com
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> have you activated devtmpfs in kernel?
-That was the problem. When compile devtmpfs to kernel it work fine.
-Thanks a lot. I'm asking myself why this isn;t enabled by default in
-omap2plus_defconfig?
->
-> Yegor
+On Tuesday 16 October 2012 Simon Dawson wrote:
+> On 16 October 2012 19:55, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >  Just for my info, what does this do that 'ip link set address
+> > xx:xx:xx:xx:xx:xx'
+> > doesn't?
+> 
+> In addition to setting a specific MAC address, the tool can also be
+> used to set a random address. I don't think you can do that using ip.
 
-Cheers,
+Not with 'ip' only, but still possible:
+  # MAC="$(dd if=/dev/urandom bs=6 count=1 2>/dev/null \
+           |hexdump -e '5/1 "%0x:" "%0x"' )"
+  # printf "%s\n" "${MAC}"
+  b9:41:54:af:d9:f0
+  # ip link set address "${MAC}"
 
-marek
+UNIX-powa! And it's probably not the only possibility. ;-)
+
+But yes, it's a bit more involved than simply calling a single executable.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
