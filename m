@@ -1,42 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 15 Oct 2012 22:50:26 -0300
-Subject: [Buildroot] [PATCH] vsftpd: bump to version 3.0.2
-Message-ID: <1350352226-23133-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Oct 2012 02:16:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 5234] kexec fails to build
+In-Reply-To: <bug-5234-163@https.bugs.busybox.net/>
+References: <bug-5234-163@https.bugs.busybox.net/>
+Message-ID: <20121016021601.91A8299884@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump vsftpd to version 3.0.2, closes bug #5330
+https://bugs.busybox.net/show_bug.cgi?id=5234
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...ile.patch => vsftpd-dont-force-largefile.patch} |    0
- package/vsftpd/vsftpd.mk                           |    4 +++-
- 2 files changed, 3 insertions(+), 1 deletions(-)
- rename package/vsftpd/{vsftpd-2.3.4-dont-force-largefile.patch => vsftpd-dont-force-largefile.patch} (100%)
+--- Comment #1 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2012-10-16 02:16:00 UTC ---
+Did you try with a newer version of Buildroot which uses kexec 2.0.3?
+If it still fails, can you attach a sample .config since i can't reproduce?
+A simple solution would be to pass the BUILD_CC and BUILD_CFLAGS variables to
+configure, no kexec-tools patching needed and it's there to be used.
+Thanks.
 
-diff --git a/package/vsftpd/vsftpd-2.3.4-dont-force-largefile.patch b/package/vsftpd/vsftpd-dont-force-largefile.patch
-similarity index 100%
-rename from package/vsftpd/vsftpd-2.3.4-dont-force-largefile.patch
-rename to package/vsftpd/vsftpd-dont-force-largefile.patch
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index ce042c5..8d261c8 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -4,9 +4,11 @@
- #
- #############################################################
- 
--VSFTPD_VERSION = 2.3.5
-+VSFTPD_VERSION = 3.0.2
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
-+VSFTPD_LICENSE = GPLv2
-+VSFTPD_LICENSE_FILES = COPYING
- 
- define VSFTPD_ENABLE_SSL
- 	$(SED) 's/.*VSF_BUILD_SSL/#define VSF_BUILD_SSL/' $(@D)/builddefs.h
 -- 
-1.7.8.6
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
