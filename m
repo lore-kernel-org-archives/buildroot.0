@@ -1,50 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Oct 2012 18:09:45 +0200
-Subject: [Buildroot] no /dev/console;
- /dev/null when booting with initrd of type 'ext2'
-In-Reply-To: <507D6C50.4060607@wanadoo.fr>
-References: <507D6C50.4060607@wanadoo.fr>
-Message-ID: <507D86C9.2050008@mind.be>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue, 16 Oct 2012 19:34:48 +0100
+Subject: [Buildroot] [PATCH] macchanger: new package
+Message-ID: <1350412488-17233-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/10/12 16:16, Thierry Bultel wrote:
-> When booting with an initrd of type "ext2", as it is the case when using a generated ISO image,
+From: Simon Dawson <spdawson@gmail.com>
 
-  ISO?
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in                |    1 +
+ package/macchanger/Config.in     |    7 +++++++
+ package/macchanger/macchanger.mk |   11 +++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/macchanger/Config.in
+ create mode 100644 package/macchanger/macchanger.mk
 
-> the kernel (a 3.2.21 in my case) does not automagically create the "/dev/null" and "dev/console" entries,
-> whereas it does when using a cpio.
-
-  The kernel doesn't, but buildroot does.  We copy fs/cpio/init to /init
-for cpio (and initramfs) archives, because those are the ones that are
-normally used for initrd.
-
-  You can copy fs/cpio/init to /init in your post-build script, if you like.
-
-
-> Would the solution be to always have these inodes created in 'device_table.txt' ?
-> (Works in my case, I do not plan to use the static table)
-
-  Not really: the kernel doesn't automount devtmps for initrd.
-
-> Or change the ISO generation for using cpio instead of ext2 ?
-
-  There's no point in using ext2 for initrd, it just adds overhead.
-So yes, switch to cpio.
-
-  Oh, now I see your point with the iso image: fs/iso9660 uses an ext2
-initrd...  Hm, that seems like a bad idea.  Someone should rewrite that.
-
-  Regards,
-  Arnout
+diff --git a/package/Config.in b/package/Config.in
+index d7b3db6..f8e83c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -573,6 +573,7 @@ endif
+ source "package/links/Config.in"
+ source "package/linphone/Config.in"
+ source "package/lrzsz/Config.in"
++source "package/macchanger/Config.in"
+ source "package/mii-diag/Config.in"
+ source "package/mrouted/Config.in"
+ source "package/msmtp/Config.in"
+diff --git a/package/macchanger/Config.in b/package/macchanger/Config.in
+new file mode 100644
+index 0000000..e26faa7
+--- /dev/null
++++ b/package/macchanger/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_MACCHANGER
++	bool "macchanger"
++	help
++	  A GNU/Linux utility for viewing/manipulating the MAC address of
++	  network interfaces
++
++	  http://www.alobbs.com/macchanger
+diff --git a/package/macchanger/macchanger.mk b/package/macchanger/macchanger.mk
+new file mode 100644
+index 0000000..b1b9fff
+--- /dev/null
++++ b/package/macchanger/macchanger.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# macchanger
++#
++#############################################################
++MACCHANGER_VERSION = 1.5.0
++MACCHANGER_SITE = ftp://ftp.gnu.org/gnu/macchanger
++MACCHANGER_LICENSE = GPLv2
++MACCHANGER_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
