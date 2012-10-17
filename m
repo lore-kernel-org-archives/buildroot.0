@@ -1,71 +1,42 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 17 Oct 2012 20:42:18 +0200
-Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
-In-Reply-To: <20121017192610.2ad5a7e4@skate>
-References: <20121013231344.17317.92930.stgit@localhost>
- <20121014103518.4fb1089d@skate> <507DBD9F.4030307@mind.be>
- <20121017192610.2ad5a7e4@skate>
-Message-ID: <8AC081BA091A47DE8B2B59188A410388@JohanW7>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Oct 2012 21:30:40 +0200
+Subject: [Buildroot] [PATCH 0/7] Introduce the _AVAILABLE mechanism
+In-Reply-To: <507CF328.5090505@mind.be>
+References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
+ <20121014160547.09c493d7@skate>
+ <201210141631.29399.yann.morin.1998@free.fr>
+ <20121014193849.019347dd@skate> <507CF328.5090505@mind.be>
+Message-ID: <20121017213040.01b61869@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi
+Arnout,
 
-I have patched my 2012.02 and 2012.05 so i could enter a project name in the buildroot menuconfig.
-If I was happy with everyting and did my version of saveconfig then it created a default config:
+On Tue, 16 Oct 2012 07:39:52 +0200, Arnout Vandecappelle wrote:
 
-buildrootdir/configs/<projectname>_defconfig
+>   Originally I was in favour of having the BR2_PACKAGE_PYTHON
+> conditionals, but it _would_ probably make life simpler if we only
+> had dependencies on toolchain options...
+> 
+>   Yann, what do you think, would it make suboption handling simpler
+> if there was no 'depends on BR2_PACKAGE_PYTHON'?
 
-And i also saved the kernel .config,busybox .config,and uclibc .config under board/<projectname>
-This was for me convenient enough.
+The real problem with _AVAILABLE is not caused by Python/X.org packages
+being under a big "if" condition. The big problem we hadn't really seen
+is that we don't only need to add _AVAILABLE options for each package,
+but also for each package sub-options that does a select on another
+package. This means that the number of _AVAILABLE kconfig options to
+add is a lot bigger than we expected, at a point that probably makes
+the _AVAILABLE solution relatively impractical.
 
-I think it does not make much sense to make it complicated. In practice i found out when I develop a new board I try to use the
-latest version, I don't port older boards to the latest buildroot unless I need stuff that is only supported in the latest
-kernels/libs etc.
-So all my archived (patched) buildroot versions contain just one hw board and several rootfs variations.(different target
-applications) 
-
-( one of patches creates a symlink in the buildroot directory, so I can just refer to  buildroot/kerneldir in make module makefile,
-I don't need to edit my makefiles after having selected another kernel version )
-
-Regards Johan
-
------Oorspronkelijk bericht-----
-Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Thomas Petazzoni
-Verzonden: woensdag 17 oktober 2012 19:26
-Aan: Arnout Vandecappelle
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH 00/13] Add support for a project directory
-
-
-On Tue, 16 Oct 2012 22:03:43 +0200, Arnout Vandecappelle wrote:
-
->   Sorry that I'm not letting this go, but: how is this similar to the 
-> project concept that was removed in 2009?  I'm not trying to share any 
-> of the build output between different projects -- the only thing that 
-> is shared is the buildroot directory.
-
-I agree that you're not trying to share the build output between different projects, as was the "project feature" that existed
-before
-2009 did. That said, I still don't get the benefit of this PROJECT_DIR thing when you can simply set you Linux configuration file,
-Linux patches, U-Boot patches and so on to point to the correct location with the existing Buildroot.
-
-I don't see which problems it is solving, and to me, it only creates yet another option to configure Buildroot that will only
-confuse users.
-
-But again, as I said in my earlier e-mails: this is just _my_ voice, and I am not the only Buildroot developer or contributor, and I
-am not the maintainer. So my voice is just my voice, nothing more.
+Best regards,
 
 Thomas
---
+-- 
 Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
 http://free-electrons.com
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
