@@ -1,48 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Oct 2012 19:23:37 +0200
-Subject: [Buildroot] BuildRoot not starting with Udev
-In-Reply-To: <CA+mmYj34+xbUcq=jvEuTFRu_XwX3TMn1Bcv6Rwnnn17pDCewiA@mail.gmail.com>
-References: <loom.20121015T104727-737@post.gmane.org>
- <20121016194117.2ed3a609@skate>
- <CA+mmYj34+xbUcq=jvEuTFRu_XwX3TMn1Bcv6Rwnnn17pDCewiA@mail.gmail.com>
-Message-ID: <20121017192337.7f1ac3eb@skate>
+Date: Wed, 17 Oct 2012 19:26:10 +0200
+Subject: [Buildroot] [PATCH 00/13] Add support for a project directory
+In-Reply-To: <507DBD9F.4030307@mind.be>
+References: <20121013231344.17317.92930.stgit@localhost>
+ <20121014103518.4fb1089d@skate> <507DBD9F.4030307@mind.be>
+Message-ID: <20121017192610.2ad5a7e4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Antoine,
 
-On Wed, 17 Oct 2012 10:22:22 +0200, Antoine Caurier wrote:
+On Tue, 16 Oct 2012 22:03:43 +0200, Arnout Vandecappelle wrote:
 
-> I found one of your previous post, where you said that if kernel was
-> build by buildroot, it should be ok. So I was thinking that it should
-> be ok just activating udev as I am building kernel with buildroot.
-> 
-> I tried to manually set DEVTMPFS in linux-menuconfig, and then
-> recompile the kernel (with buildroot), and it is now working.
-> 
-> Is it normal to have manualy to set DEVTMPFS in kernel configuration
-> in order to have udev working?
+>   Sorry that I'm not letting this go, but: how is this similar to the
+> project concept that was removed in 2009?  I'm not trying to share any
+> of the build output between different projects -- the only thing that
+> is shared is the buildroot directory.
 
-No, but it depends on what you did exactly.
+I agree that you're not trying to share the build output between
+different projects, as was the "project feature" that existed before
+2009 did. That said, I still don't get the benefit of this PROJECT_DIR
+thing when you can simply set you Linux configuration file, Linux
+patches, U-Boot patches and so on to point to the correct location with
+the existing Buildroot.
 
-If you did:
+I don't see which problems it is solving, and to me, it only creates
+yet another option to configure Buildroot that will only confuse
+users.
 
- 1) Configure /dev management as static
- 2) Configure your kernel
- 3) Build Buildroot
- 4) Reconfigure /dev management as udev
- 5) Build Buildroot
-
-Then yes, it is normal: Buildroot doesn't try to be smart about
-this kind of dependency. If you change the /dev management style, you
-are responsible to restart the build of the kernel (make
-linux-dirclean; make) so that it gets a configuration that is
-compatible with a dynamic /dev management.
-
-Best regards,
+But again, as I said in my earlier e-mails: this is just _my_ voice,
+and I am not the only Buildroot developer or contributor, and I am not
+the maintainer. So my voice is just my voice, nothing more.
 
 Thomas
 -- 
