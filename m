@@ -1,45 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Oct 2012 22:32:19 +0200
-Subject: [Buildroot] post-buil script in chrooted
-In-Reply-To: <507C882B.5080609@free.fr>
-References: <5077A820.7050202@free.fr> <20121012093032.7ef6b972@skate>
- <CAAXf6LVCr25_i_6CMR6DYs-5z1+bVuNNYEF4DedEe3j-6=4hqg@mail.gmail.com>
- <507866D6.8020608@mind.be> <507C882B.5080609@free.fr>
-Message-ID: <507F15D3.2080805@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Oct 2012 22:41:06 +0200
+Subject: [Buildroot] [PATCH 0/7] Introduce the _AVAILABLE mechanism
+In-Reply-To: <201210172216.43837.yann.morin.1998@free.fr>
+References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
+ <201210172147.15828.yann.morin.1998@free.fr>
+ <20121017220525.6e7e173b@skate>
+ <201210172216.43837.yann.morin.1998@free.fr>
+Message-ID: <20121017224106.6bb0ad49@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/10/12 00:03, David Bonnin wrote:
-> Hello,
->
-> yes, sorry , i mean , i was looking for a post-build script for my board in a fakeroot environnement.
-> customize package is deprecated.
->
-> in board/me/Myproject/rootfs-adds/root/
->
-> i want to cp files of root user.
+Yann,
 
-  Do you mean, files that are owned by root and are not readable by you?
-That won't be possible.
+On Wed, 17 Oct 2012 22:16:43 +0200, Yann E. MORIN wrote:
 
-  Or do you mean, files that should be owned by root in the target?  In that
-case, you can just copy them in the post-build script - buildroot will make
-everything owned by root.
+> > From a quick review, it sounds sufficient indeed. What surprises me
+> > is why we didn't think about this solution the other day when
+> > discussing your _AVAILABLE patch set.
+> 
+> To be honest, I'm surprised too I did not think about it. ;-]
+> 
+> In fact, as an after-thought, I do know why. That's because I was
+> thinking the other way-around: a package that depends on a sub-option
+> of another package, sub-option which in turn depends on a third
+> package.  *That* one would require an _AVAILABLE for sub-options.
 
+Aaah yes.
 
-> So i need to use custom skeletonfs or use customize package.
+> For example, libuuid which is a sub-option of util-linux (although
+> that one sub-option has no dpendency; but you get the idea) is select
+> by a few other packages (eg. parted, ntfs-3g...).
+> 
+> And going *that* route is IMHO not what we want.
 
-  Neither of these will do anything that the post-build script cannot do.
+Our example was the one of python-dpkt, which was doing a:
 
-  Regards,
-  Arnout
+	depends on BR2_PACKAGE_PYTHON
+	select BR2_PACKAGE_PYTHON_ZLIB
+
+or BR2_PACKAGE_PYTHON_ZLIB is not a package per-se, but a sub-option of
+the python package. And this this sub-option does a select, we should
+introduce a BR2_PACKAGE_PYTHON_ZLIB_AVAILABLE, I don't see a way around
+it.
+
+Except modifying kconfig, as we discussed, of course...
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
