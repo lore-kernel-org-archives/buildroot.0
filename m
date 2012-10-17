@@ -1,55 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 17 Oct 2012 22:16:43 +0200
-Subject: [Buildroot] [PATCH 0/7] Introduce the _AVAILABLE mechanism
-In-Reply-To: <20121017220525.6e7e173b@skate>
-References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
- <201210172147.15828.yann.morin.1998@free.fr> <20121017220525.6e7e173b@skate>
-Message-ID: <201210172216.43837.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 17 Oct 2012 22:20:14 +0200
+Subject: [Buildroot] Configuring for a custom kernel.
+In-Reply-To: <1350317845.18861.38.camel@Homeserver>
+References: <1350317845.18861.38.camel@Homeserver>
+Message-ID: <507F12FE.9030108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, All,
+On 15/10/12 18:17, Chris Wilkinson wrote:
+>
+> I saved a custom kernel tarball to<BR>/dl.
+>
+> I extracted the kernel with 'make linux-extract', creating
+> <BR>/output/build/linux-custom/.
+>
+> I configured the kernel with 'make linux-menuconfig'.
+>
+> This saves the kernel config in<BR>/output/build/linux-custom/.config.
+>
+> What should the kernel settings be in<BR>  'make menuconfig' for
+>
+> kernel version (custom tarball and its filename?)
 
-On Wednesday 17 October 2012 Thomas Petazzoni wrote:
-> On Wed, 17 Oct 2012 21:47:15 +0200, Yann E. MORIN wrote:
-> 
-> > Maybe the solution would be that we do not add _AVAILABLE to
-> > sub-options, but we can still use it from sub-options. Eg.
-> > (condensed):
-[--SNIP--]
-> > Isn't that sufficient?
-> 
-> From a quick review, it sounds sufficient indeed. What surprises me is
-> why we didn't think about this solution the other day when discussing
-> your _AVAILABLE patch set.
+  Put the custom tarball in some other location (which may, BTW, be
+an URL or a scp:// location), not in the dl dir.  Buildroot will
+download/copy it to the dl dir.
 
-To be honest, I'm surprised too I did not think about it. ;-]
+> kernel configuration ('using defconfig' or 'using custom config'?)
 
-In fact, as an after-thought, I do know why. That's because I was thinking
-the other way-around: a package that depends on a sub-option of another
-package, sub-option which in turn depends on a third package.  *That* one
-would require an _AVAILABLE for sub-options.
+  Select 'using custom config'.  Then specify a location for your
+custom config (which doesn't exist yet).  Then, run
+'make linux-update-defconfig' (assuming your kernel is 2.6.33 or later,
+otherwise you have to use 'make linux-update-config').  The latter command
+will copy the linux-custom/.config file to the location you specified
+in menuconfig.
 
-For example, libuuid which is a sub-option of util-linux (although that one
-sub-option has no dpendency; but you get the idea) is select by a few other
-packages (eg. parted, ntfs-3g...).
 
-And going *that* route is IMHO not what we want.
+  Regards,
+  Arnout
 
-And first, we need to know if the case really exists (I was not able to
-find a good heuristic to find such a case with a simple grep, so I gave
-up the search).
 
-Regards,
-Yann E. MORIN.
+> Defconfig name
+>
+> Neither of the two kernel configuration options available seem to point
+> to ./config
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
