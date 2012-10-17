@@ -1,52 +1,70 @@
-From: Antoine Caurier <antoine.caurier@gmail.com>
-Date: Wed, 17 Oct 2012 13:15:00 +0200
-Subject: [Buildroot] BuildRoot not starting with Udev
-In-Reply-To: <507E9181.5060000@mind.be>
-References: <loom.20121015T104727-737@post.gmane.org>
- <20121016194117.2ed3a609@skate>
- <CA+mmYj1=cP3p24SnQ3HsRxQUo_gJBQidGXv5EiVKZc2D7kfjZQ@mail.gmail.com>
- <507E9181.5060000@mind.be>
-Message-ID: <CA+mmYj3CmLstqpS6-pJZ=AgifAzYBCJJpid0_kqBGNHHmC-k2Q@mail.gmail.com>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Wed, 17 Oct 2012 14:04:07 +0200
+Subject: [Buildroot] no /dev/console;
+ /dev/null when booting with initrd of type 'ext2'
+In-Reply-To: <507D86C9.2050008@mind.be>
+References: <507D6C50.4060607@wanadoo.fr> <507D86C9.2050008@mind.be>
+Message-ID: <507E9EB7.3010008@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok! Thanks for the information!
+Le 16/10/2012 18:09, Arnout Vandecappelle a ?crit :
+> On 16/10/12 16:16, Thierry Bultel wrote:
+>> When booting with an initrd of type "ext2", as it is the case when
+>> using a generated ISO image,
+>
+>  ISO?
+>
+>> the kernel (a 3.2.21 in my case) does not automagically create the
+>> "/dev/null" and "dev/console" entries,
+>> whereas it does when using a cpio.
+>
+>  The kernel doesn't, but buildroot does.  We copy fs/cpio/init to /init
+> for cpio (and initramfs) archives, because those are the ones that are
+> normally used for initrd.
+>
+>  You can copy fs/cpio/init to /init in your post-build script, if you
+> like.
+>
+>
+>> Would the solution be to always have these inodes created in
+>> 'device_table.txt' ?
+>> (Works in my case, I do not plan to use the static table)
+>
+>  Not really: the kernel doesn't automount devtmps for initrd.
+>
+>> Or change the ISO generation for using cpio instead of ext2 ?
+>
+>  There's no point in using ext2 for initrd, it just adds overhead.
+> So yes, switch to cpio.
+>
+>  Oh, now I see your point with the iso image: fs/iso9660 uses an ext2
+> initrd...  Hm, that seems like a bad idea.  Someone should rewrite that.
 
-Antoine
+FYI, I have hacked into "iso9660.mk"
 
-On Wed, Oct 17, 2012 at 1:07 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 17/10/12 13:03, Antoine Caurier wrote:
->>
->> I found one of your previous post, where you said that if kernel was
->> build by buildroot, it should be ok. So I was thinking that it should
->> be ok just activating udev as I am building kernel with buildroot.
->>
->> I tried to manually set DEVTMPFS in linux-menuconfig, and then
->> recompile the kernel (with buildroot), and it is now working.
->>
->> Is it normal to have manualy to set DEVTMPFS in kernel configuration
->> in order to have udev working?
->
->
->  The DEVTMPFS is set automatically by buildroot - but only when configuring
-> the kernel.  Once your kernel is configured, it's not touched again.
->
->  So you'd have to run 'make linux-reconfigure' to get the devtmpfs (note
-> that
-> you also loose your local modifications that way, unless you saved them to
-> a custom defconfig).
->
+diff -r1.1.1.1 iso9660.mk
+18c18
+< $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux
+rootfs-ext2 grub
+---
+> $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux
+rootfs-cpio grub
+22a23
+
+25c26
+<     cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
+---
+>     cp $(BINARIES_DIR)/rootfs.cpio $(ISO9660_TARGET_DIR)/initrd
+
+and it works perfectly without having to use the "device_table_dev.txt"
+
+The other thing that is missing here is that the iso9660 build does not
+support the grub splashscreen.
+
 >
 >  Regards,
 >  Arnout
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
