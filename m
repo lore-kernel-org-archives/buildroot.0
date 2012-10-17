@@ -1,53 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Oct 2012 22:20:14 +0200
-Subject: [Buildroot] Configuring for a custom kernel.
-In-Reply-To: <1350317845.18861.38.camel@Homeserver>
-References: <1350317845.18861.38.camel@Homeserver>
-Message-ID: <507F12FE.9030108@mind.be>
+Date: Wed, 17 Oct 2012 22:32:19 +0200
+Subject: [Buildroot] post-buil script in chrooted
+In-Reply-To: <507C882B.5080609@free.fr>
+References: <5077A820.7050202@free.fr> <20121012093032.7ef6b972@skate>
+ <CAAXf6LVCr25_i_6CMR6DYs-5z1+bVuNNYEF4DedEe3j-6=4hqg@mail.gmail.com>
+ <507866D6.8020608@mind.be> <507C882B.5080609@free.fr>
+Message-ID: <507F15D3.2080805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/10/12 18:17, Chris Wilkinson wrote:
+On 16/10/12 00:03, David Bonnin wrote:
+> Hello,
 >
-> I saved a custom kernel tarball to<BR>/dl.
+> yes, sorry , i mean , i was looking for a post-build script for my board in a fakeroot environnement.
+> customize package is deprecated.
 >
-> I extracted the kernel with 'make linux-extract', creating
-> <BR>/output/build/linux-custom/.
+> in board/me/Myproject/rootfs-adds/root/
 >
-> I configured the kernel with 'make linux-menuconfig'.
->
-> This saves the kernel config in<BR>/output/build/linux-custom/.config.
->
-> What should the kernel settings be in<BR>  'make menuconfig' for
->
-> kernel version (custom tarball and its filename?)
+> i want to cp files of root user.
 
-  Put the custom tarball in some other location (which may, BTW, be
-an URL or a scp:// location), not in the dl dir.  Buildroot will
-download/copy it to the dl dir.
+  Do you mean, files that are owned by root and are not readable by you?
+That won't be possible.
 
-> kernel configuration ('using defconfig' or 'using custom config'?)
+  Or do you mean, files that should be owned by root in the target?  In that
+case, you can just copy them in the post-build script - buildroot will make
+everything owned by root.
 
-  Select 'using custom config'.  Then specify a location for your
-custom config (which doesn't exist yet).  Then, run
-'make linux-update-defconfig' (assuming your kernel is 2.6.33 or later,
-otherwise you have to use 'make linux-update-config').  The latter command
-will copy the linux-custom/.config file to the location you specified
-in menuconfig.
 
+> So i need to use custom skeletonfs or use customize package.
+
+  Neither of these will do anything that the post-build script cannot do.
 
   Regards,
   Arnout
-
-
-> Defconfig name
->
-> Neither of the two kernel configuration options available seem to point
-> to ./config
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
