@@ -1,76 +1,79 @@
-From: David Sanchez Herrero <david.krusty@gmail.com>
-Date: Thu, 18 Oct 2012 01:24:51 -0700 (PDT)
-Subject: [Buildroot] Local SVN respository
-In-Reply-To: <1350547544.8368.8.camel@john-ubu>
-References: <1350547544.8368.8.camel@john-ubu>
-Message-ID: <CAMPeO9x3sHtbnjw3comWwnYwiL5Fwd+zmSZdmBwziDxkYScOeQ@mail.gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 18 Oct 2012 10:39:54 +0100
+Subject: [Buildroot] [PATCH] lcdapi: new package
+In-Reply-To: <507F111F.1070107@mind.be>
+References: <1350482898-5980-1-git-send-email-spdawson@gmail.com>
+ <507F111F.1070107@mind.be>
+Message-ID: <CAHt8ZCN5eJbN0e+H1jaDa_nUsSa3WtJPhnaMtjzEsuo-1rPJ_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is only an idea as a workaround, and I'm not sure if it could work, but you
-can try to add to the host file a line with the URL of the remote
-repository pointing to localhost. This will make Buildroot access the local
-repository when it tries to access the remote one.
+Hi Arnout. Thanks for taking the time to review this.
 
+On 17 October 2012 21:12, Arnout Vandecappelle <arnout@mind.be> wrote:
+>  Making it inline sounds more appropriate.
 
-Greetings, David.
+Okay; will do so.
 
-2012/10/18 john [via Buildroot (busybox)] <
-ml-node+s2317881n33259h70@n4.nabble.com>
+>  BTW, did you upstream the patches?
 
->
-> Hi,
->
-> I am trying to build a local package from a local svn repository. The
-> software I am building is a heavily hacked version of some open source
-> package. I am trying to retrieve the software from a local svn
-> repository (svn:// and not http) but buildroot keeps fetching the
-> official version of the software rather than my local copy. I have tried
-> various options like _OVERRIDE_SRCDIR but cannot change this behaviour,
-> any suggestions?
->
-> An extract from my mk file follows:
->
-> MYPACKAGE_VERSION = 1.0.1
->
-> #This should fetch it from an SVN repository and create
-> mysoftware-1.0.1.tar.gz in the dl directory
-> MYPACKAGE_SITE=svn://myserver/mydir/trunk/mysoftware-1.0.1/
->
-> #MYPACKAGE_SITE_METHOD = svn
->
-> #MYPACKAGE_OVERRIDE_SRCDIR =
-> ${BUILDROOT_LOCATION}/../../mydir/mysoftware-1.0.1/
->
-> #This should take  mysoftware-1.0.1.tar.gz directly from the dl
-> directory and place it in output/build/mysoftware directory
-> MYPACKAGE_SOURCE = mysoftware-$(MYPACKAGE_VERSION).tar.gz
->
-> _______________________________________________
-> buildroot mailing list
-> [hidden email] <http://user/SendEmail.jtp?type=node&node=33259&i=0>
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> ------------------------------
->  If you reply to this email, your message will be added to the discussion
-> below:
->
-> http://buildroot-busybox.2317881.n4.nabble.com/Local-SVN-respository-tp33259.html
->  To unsubscribe from Buildroot (busybox), click here<http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp?macro=unsubscribe_by_code&node=2&code=ZGF2aWQua3J1c3R5QGdtYWlsLmNvbXwyfC02MDk3MjQ4ODk=>
-> .
-> NAML<http://buildroot-busybox.2317881.n4.nabble.com/template/NamlServlet.jtp?macro=macro_viewer&id=instant_html%21nabble%3Aemail.naml&base=nabble.naml.namespaces.BasicNamespace-nabble.view.web.template.NabbleNamespace-nabble.view.web.template.NodeNamespace&breadcrumbs=notify_subscribers%21nabble%3Aemail.naml-instant_emails%21nabble%3Aemail.naml-send_instant_email%21nabble%3Aemail.naml>
->
+Unfortunately, the upstream project is no longer being actively
+maintained; I have attempted to contact the author, but have had no
+response.
 
+I have actually started work on a fork of the project at
+https://github.com/spdawson/lcdapi; but I thought it best to use the
+original source for the Buildroot package, at least in the first
+instance.
 
+>> +LCDAPI_DEPENDENCIES = host-lcdapi
+>
+>
+>  Why is this needed?  Or rather: I can build without this.
+> If it is not needed, the whole host-lcdapi can be removed BTW.
 
+You're quite right: the host dependency is not required. This was
+committed in error; I was using the dependency to trigger a host build
+of the package during testing. I will remove the dependency.
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Local-SVN-respository-tp33259p33260.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121018/970bc42a/attachment.html>
+>> +LCDAPI_MAKE_OPT = \
+>> +       $(TARGET_CONFIGURE_OPTS) \
+>> +       LD="$(TARGET_CXX)" \
+>> +       LDFLAGS="$(TARGET_LDFLAGS) -shared"
+>
+>
+>  It would make sense to also add CC="$(TARGET_CXX)" (although not strictly
+> necessary, because gcc recognizes the .cpp extension).
+
+Okay; will do.
+
+>  More importantly, the CFLAGS overrides the CFLAGS of lcdapi's
+> Makefile, and that contains the all-important -fPIC.  I wonder
+> how you got it built without that...  So either:
+>
+> - Set CFLAGS to "$(TARGET_CFLAGS) -fPIC"
+> - Patch the Makefile to append to CFLAGS
+> - Set CC to "$(TARGET_CXX) $(TARGET_CFLAGS)" and leave CFLAGS alone
+
+Okay, will do.
+
+>  Finally, it would make sense to call it LCDAPI_MAKE_OPTS,
+> similar to TARGET_CONFIGURE_OPTS.
+
+Okay, will do.
+
+>  We would typically use
+>         $(INSTALL) -m 0755 -D $(@D)/lib/liblcdapi.so $(1)/usr/lib
+> (which does the mkdir and the install in one shot).
+
+Okay, will do.
+
+>  But wouldn't it be cleaner to add (and upstream) an 'install' target
+> to the Makefile?
+
+Yes, okay.
+
+Simon.
