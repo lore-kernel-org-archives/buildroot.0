@@ -1,40 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Oct 2012 21:14:51 +0200
-Subject: [Buildroot] Confused by the <fenv> implementation,
- causing gsl build issues
-In-Reply-To: <13a751bd21c.19da.2760.rep.dot.nop@gmail.com>
-References: <20121018154240.25b7a7e3@skate>
- <13a751bd21c.19da.2760.rep.dot.nop@gmail.com>
-Message-ID: <20121018211451.3d1af865@skate>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Thu, 18 Oct 2012 21:21:41 +0200
+Subject: [Buildroot] export ARCH and CROSS_COMPILE for the post build
+ script
+In-Reply-To: <20121018191259.0d9d9843@skate>
+References: <507F9EFB.60601@wanadoo.fr> <20121018153822.58509c94@skate>
+ <508020C8.8000700@wanadoo.fr> <20121018191259.0d9d9843@skate>
+Message-ID: <508056C5.3080101@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le 18/10/2012 19:12, Thomas Petazzoni a ?crit :
+> Dear Thierry Bultel,
+>
+> On Thu, 18 Oct 2012 17:31:20 +0200, Thierry Bultel wrote:
+>
+>>>> What do you think about it ?
+>>> Why don't you create a Buildroot package to build your external
+>>> application? It sounds much more logical.
+>>
+>> That was my very first idea.
+>> But I wanted to keep the Buildroot tree unchanged.
+>
+> You can keep your Buildroot tree unchanged and still have Buildroot
+> packages for your own application:
+>
+>   buildroot/
+>   mysystem/
+>      mysystem.mk
+>      packages/
+>         myapp/myapp.mk
+>         myotherapp/myotherapp.mk
+>
+> And then you can do something like this in mysystem.mk:
+>
+> BR2_PACKAGE_MYAPP=y
+> BR2_PACKAGE_MYOTHERAPP=y
+> include packages/*/*.mk
+>
+> And your Buildroot configuration, set BR2_PACKAGE_OVERRIDE_FILE to
+> "$(TOPDIR)/../system.mk".
+>
 
-On Thu, 18 Oct 2012 20:21:28 +0200, Bernhard Reutner-Fischer wrote:
+Thanks, that is exactly what I need.
 
-> > Ok, but then why it can be selected on other architectures, and why
-> > does it install <fenv.h> even on architectures where it is not
-> > supported?
-> 
-> Please provide patches to add minimal fenv support for the target(s) 
-> you are interested in.
+>> And at the time I took the decision, I did not find out how
+>> to make such a package be built after all the others.
+>
+> Why would you want to do that absolutely? If your packages have
+> dependencies, put them in <yourpackage>_DEPENDENCIES, and your package
+> will be built after its required dependencies. There is no reason to
+> build after *all* packages.
 
-Well, at this point I am not interested in any particular target. I am
-interested in having uClibc building a correct toolchain, that doesn't
-contain headers describing functions that it doesn't implement, causing
-build issues in various userspace packages.
+You are right, even if I need quite a lot of things, this does not
+mean all the packages. And it is valuable to maintain a known
+list of dependencies.
 
-So I guess we should simply disable the possibility of enabling fenv
-support on those architectures that don't have the necessary code.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks
+Thierry
+>
+> Thomas
+>
