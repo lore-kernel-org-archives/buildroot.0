@@ -1,31 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 18 Oct 2012 14:43:13 +0200
-Subject: [Buildroot] [git commit] iptables: bump version
-Message-ID: <20121018124343.48F64998AE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 18 Oct 2012 15:38:22 +0200
+Subject: [Buildroot] export ARCH and CROSS_COMPILE for the post build
+ script
+In-Reply-To: <507F9EFB.60601@wanadoo.fr>
+References: <507F9EFB.60601@wanadoo.fr>
+Message-ID: <20121018153822.58509c94@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd81b498378b60b380d75b63f58418b2465731d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thierry Bultel,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/iptables/iptables.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Thu, 18 Oct 2012 08:17:31 +0200, Thierry Bultel wrote:
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index bdef575..17c191e 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPTABLES_VERSION = 1.4.15
-+IPTABLES_VERSION = 1.4.16.3
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- IPTABLES_INSTALL_STAGING = YES
+> Could we make the export of PATH and CROSS_COMPILE to the post-build 
+> script ?
+> This would be really useful for building an external user application
+> in one shot (and I need it in my case).
+> 
+> eg something like this in the top Makefile:
+> 
+> ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+>      @$(call MESSAGE,"Executing post-build script")
+> *ARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS)* 
+> $(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
+> endif
+> 
+> Of course this could be implemented as an option.
+> 
+> What do you think about it ?
+
+Why don't you create a Buildroot package to build your external
+application? It sounds much more logical.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
