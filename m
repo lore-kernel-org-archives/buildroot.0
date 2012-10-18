@@ -1,48 +1,45 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 18 Oct 2012 16:57:11 +0200
-Subject: [Buildroot] filename format for kernel patches when using kernel
-	from git ?
-Message-ID: <C22CB8643B1E42C898B890C9A3A7539F@JohanW7>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Thu, 18 Oct 2012 17:31:20 +0200
+Subject: [Buildroot] export ARCH and CROSS_COMPILE for the post build
+ script
+In-Reply-To: <20121018153822.58509c94@skate>
+References: <507F9EFB.60601@wanadoo.fr> <20121018153822.58509c94@skate>
+Message-ID: <508020C8.8000700@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-(2012.08)
- 
-I can't figure out what the filename should be for patches i want to be applied:
- 
-i have my patch named : 76e10d158efb6d4516018846f60c2ab5501900bc.patch
-and it is under /home/buildroot12git/board/kernel-patches
- 
-This is what i have in my .config:
- 
-#
-# Kernel
-#
-BR2_LINUX_KERNEL=y
-# BR2_LINUX_KERNEL_3_6 is not set
-# BR2_LINUX_KERNEL_SAME_AS_HEADERS is not set
-# BR2_LINUX_KERNEL_CUSTOM_VERSION is not set
-# BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="76e10d158efb6d4516018846f60c2ab5501900bc"
-BR2_LINUX_KERNEL_VERSION="76e10d158efb6d4516018846f60c2ab5501900bc"
-BR2_LINUX_KERNEL_PATCH="/home/buildroot12git/board/kernel-patches"
-# BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="34config"
-# BR2_LINUX_KERNEL_UIMAGE is not set
-# BR2_LINUX_KERNEL_APPENDED_UIMAGE is not set
-BR2_LINUX_KERNEL_ZIMAGE=y
-# BR2_LINUX_KERNEL_APPENDED_ZIMAGE is not set
-# BR2_LINUX_KERNEL_VMLINUX is not set
-# BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
-# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
-# BR2_LINUX_KERNEL_INSTALL_TARGET is not set
+Le 18/10/2012 15:38, Thomas Petazzoni a ?crit :
+> Dear Thierry Bultel,
+>
+> On Thu, 18 Oct 2012 08:17:31 +0200, Thierry Bultel wrote:
+>
+>> Could we make the export of PATH and CROSS_COMPILE to the post-build
+>> script ?
+>> This would be really useful for building an external user application
+>> in one shot (and I need it in my case).
+>>
+>> eg something like this in the top Makefile:
+>>
+>> ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+>>       @$(call MESSAGE,"Executing post-build script")
+>> *ARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS)*
+>> $(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
+>> endif
+>>
+>> Of course this could be implemented as an option.
+>>
+>> What do you think about it ?
+> Why don't you create a Buildroot package to build your external
+> application? It sounds much more logical.
 
-Regards Johan
+That was my very first idea.
+But I wanted to keep the Buildroot tree unchanged.
+
+And at the time I took the decision, I did not find out how
+to make such a package be built after all the others.
+So "post build" sounded appropriate.
+
+> Thomas
