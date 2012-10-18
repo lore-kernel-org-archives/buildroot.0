@@ -1,8 +1,8 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Thu, 18 Oct 2012 10:02:06 +0200
-Subject: [Buildroot] [PATCH] mxs-bootloader: Barebox entry point symbol
-	changed in 2012.08
-Message-ID: <1350547326-31407-1-git-send-email-maxime.ripard@free-electrons.com>
+Date: Thu, 18 Oct 2012 10:03:25 +0200
+Subject: [Buildroot] [PATCH] barebox: Allow to pass a custom configuration
+	file
+Message-ID: <1350547405-31491-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,21 +11,89 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- boot/mxs-bootlets/barebox_ivt.bd |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/barebox/Config.in  |   21 +++++++++++++++++++++
+ boot/barebox/barebox.mk |   16 +++++++++++-----
+ 2 files changed, 32 insertions(+), 5 deletions(-)
 
-diff --git a/boot/mxs-bootlets/barebox_ivt.bd b/boot/mxs-bootlets/barebox_ivt.bd
-index e02ddd6..0c67e9c 100644
---- a/boot/mxs-bootlets/barebox_ivt.bd
-+++ b/boot/mxs-bootlets/barebox_ivt.bd
-@@ -28,7 +28,7 @@ section (0) {
- 	//----------------------------------------------------------
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 1f86bc4..5c05270 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -75,12 +75,33 @@ config BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION
  
-         load barebox;
--        load ivt (entry = barebox:exception_vectors) > 0x8000;
-+        load ivt (entry = barebox:start) > 0x8000;
- 	hab call 0x8000;
+ endif
  
- }
++
++choice
++	prompt "Barebox configuration"
++	default BR2_TARGET_BAREBOX_USE_DEFCONFIG
++
++config BR2_TARGET_BAREBOX_USE_DEFCONFIG
++	bool "Using a defconfig"
++
++config BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
++	bool "Using a custom config file"
++
++endchoice
++
+ config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
+ 	string "board defconfig"
++	depends on BR2_TARGET_BAREBOX_USE_DEFCONFIG
+ 	help
+ 	  Name of the board for which Barebox should be built, without
+ 	  the _defconfig suffix.
+ 
++
++config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
++	help
++	  Path to the kernel configuration file
++
+ config BR2_TARGET_BAREBOX_BAREBOXENV
+ 	bool "bareboxenv tool in target"
+ 	help
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 9550cdc..3512251 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -37,8 +37,6 @@ ifneq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+ BAREBOX_INSTALL_TARGET = NO
+ endif
+ 
+-BAREBOX_BOARD_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
+-
+ ifeq ($(KERNEL_ARCH),i386)
+ BAREBOX_ARCH=x86
+ else ifeq ($(KERNEL_ARCH),powerpc)
+@@ -49,8 +47,16 @@ endif
+ 
+ BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
+ 
++
++ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
++BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
++else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
++BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
++endif
++
+ define BAREBOX_CONFIGURE_CMDS
+-	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) $(BAREBOX_BOARD_DEFCONFIG)_defconfig
++	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
++	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ endef
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+@@ -80,8 +86,8 @@ $(eval $(generic-package))
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+ # we NEED a board defconfig file unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+-ifeq ($(BAREBOX_BOARD_DEFCONFIG),)
+-$(error No Barebox defconfig file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
++ifeq ($(BAREBOX_SOURCE_CONFIG),)
++$(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
+ endif
+ endif
+ 
 -- 
 1.7.9.5
