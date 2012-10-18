@@ -1,40 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Oct 2012 21:53:14 +0200
-Subject: [Buildroot] [PATCH] mxs-bootloader: Barebox entry point symbol
- changed in 2012.08
-In-Reply-To: <1350547326-31407-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1350547326-31407-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <50805E2A.1010308@mind.be>
+Date: Thu, 18 Oct 2012 21:56:58 +0200
+Subject: [Buildroot] [PATCH] barebox: Allow to pass a custom
+ configuration file
+In-Reply-To: <1350547405-31491-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1350547405-31491-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <50805F0A.7010407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/10/12 10:02, Maxime Ripard wrote:
+On 18/10/12 10:03, Maxime Ripard wrote:
 > Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
-> ---
->   boot/mxs-bootlets/barebox_ivt.bd |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/boot/mxs-bootlets/barebox_ivt.bd b/boot/mxs-bootlets/barebox_ivt.bd
-> index e02ddd6..0c67e9c 100644
-> --- a/boot/mxs-bootlets/barebox_ivt.bd
-> +++ b/boot/mxs-bootlets/barebox_ivt.bd
-> @@ -28,7 +28,7 @@ section (0) {
->   	//----------------------------------------------------------
->
->           load barebox;
-> -        load ivt (entry = barebox:exception_vectors)>  0x8000;
-> +        load ivt (entry = barebox:start)>  0x8000;
->   	hab call 0x8000;
->
->   }
+[snip]
+> +config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
+> +	string "Configuration file path"
+> +	depends on BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
+> +	help
+> +	  Path to the kernel configuration file
+                       ^^^^^^
+                       barebox
 
-  Shouldn't this somehow depend on the selected barebox version then?
+[snip]
+> +ifeq ($(BAREBOX_SOURCE_CONFIG),)
+> +$(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
+
+  or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
+
 
   Regards,
   Arnout
+
+>   endif
+>   endif
+>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
