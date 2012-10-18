@@ -1,39 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 18 Oct 2012 15:38:22 +0200
-Subject: [Buildroot] export ARCH and CROSS_COMPILE for the post build
- script
-In-Reply-To: <507F9EFB.60601@wanadoo.fr>
-References: <507F9EFB.60601@wanadoo.fr>
-Message-ID: <20121018153822.58509c94@skate>
+Date: Thu, 18 Oct 2012 15:42:40 +0200
+Subject: [Buildroot] Confused by the <fenv> implementation,
+ causing gsl build issues
+In-Reply-To: <13a6153e698.7e7.2760.rep.dot.nop@gmail.com>
+References: <20121014120429.52067fdc@skate>
+ <13a6153e698.7e7.2760.rep.dot.nop@gmail.com>
+Message-ID: <20121018154240.25b7a7e3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
 
-On Thu, 18 Oct 2012 08:17:31 +0200, Thierry Bultel wrote:
+On Mon, 15 Oct 2012 00:10:19 +0200, Bernhard Reutner-Fischer wrote:
 
-> Could we make the export of PATH and CROSS_COMPILE to the post-build 
-> script ?
-> This would be really useful for building an external user application
-> in one shot (and I need it in my case).
+> > uClibc provides a UCLIBC_HAS_FENV option that can be enabled on any
+> > architecture.
 > 
-> eg something like this in the top Makefile:
-> 
-> ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
->      @$(call MESSAGE,"Executing post-build script")
-> *ARCH=$(ARCH) CROSS_COMPILE=$(TARGET_CROSS)* 
-> $(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
-> endif
-> 
-> Of course this could be implemented as an option.
-> 
-> What do you think about it ?
+> Fenv is IIRC only implemented for i386.
 
-Why don't you create a Buildroot package to build your external
-application? It sounds much more logical.
+Ok, but then why it can be selected on other architectures, and why
+does it install <fenv.h> even on architectures where it is not
+supported?
 
 Thomas
 -- 
