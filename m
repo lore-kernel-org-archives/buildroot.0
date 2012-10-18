@@ -1,40 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Oct 2012 21:56:58 +0200
-Subject: [Buildroot] [PATCH] barebox: Allow to pass a custom
- configuration file
-In-Reply-To: <1350547405-31491-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1350547405-31491-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <50805F0A.7010407@mind.be>
+Date: Thu, 18 Oct 2012 22:07:27 +0200
+Subject: [Buildroot] Local SVN respository
+In-Reply-To: <1350547544.8368.8.camel@john-ubu>
+References: <1350547544.8368.8.camel@john-ubu>
+Message-ID: <5080617F.9000008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/10/12 10:03, Maxime Ripard wrote:
-> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
-[snip]
-> +config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
-> +	string "Configuration file path"
-> +	depends on BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
-> +	help
-> +	  Path to the kernel configuration file
-                       ^^^^^^
-                       barebox
+On 18/10/12 10:05, john wrote:
+> I am trying to build a local package from a local svn repository. The
+> software I am building is a heavily hacked version of some open source
+> package. I am trying to retrieve the software from a local svn
+> repository (svn:// and not http) but buildroot keeps fetching the
+> official version of the software rather than my local copy. I have tried
+> various options like _OVERRIDE_SRCDIR but cannot change this behaviour,
+> any suggestions?
 
-[snip]
-> +ifeq ($(BAREBOX_SOURCE_CONFIG),)
-> +$(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
+  Is it a package that is already in buildroot or a new one?  If it is
+already in buildroot, do you create MYPACKAGE under the same name or a
+different name?  Did you change the version number from what is in buildroot?
+Is you .mk file even included by buildroot?  Is MYPACKAGE selected in the
+.config?
 
-  or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
+  If you want to debug what is happening, use
+
+make -p mypackage 2&>1 | less
+
+  That gives you a dump of all the variables and rules defined by the
+Makefiles.  You should see a lot of variables MYPACKAGE_... =
+(if that is not the case, you're missing $(eval $(generic-package))).
+You should see MYPACKAGE_SITE = ... as you defined it.
+You should see mypackage in TARGETS (if not, it's not selected in
+.config).  You should also see rules like:
+
+mypackage-build: mypackage-configure .../mypackage-1.0.1/.stamp_built
+
+.../mypackage-1.0.1/.stamp_built:
+# PKG = MYPACKAGE
+#  commands to execute (from `package/pkg-generic.mk', line 107):
+         @$(call MESSAGE,"Building")
+         $($(PKG)_BUILD_CMDS)
+         $(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
+         $(Q)touch $@
+
 
 
   Regards,
   Arnout
-
->   endif
->   endif
->
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
