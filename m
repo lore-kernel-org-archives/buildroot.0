@@ -1,20 +1,25 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 19 Oct 2012 22:39:58 +0200
-Subject: [Buildroot] [PATCH] package/time: New package for GNU time.
-In-Reply-To: <CAFbHwiRDGH0W+eRMGGui4gA+_iRhSYtHc2dhHwPDYf9uvqF5-w@mail.gmail.com>
-References: <CAFbHwiRDGH0W+eRMGGui4gA+_iRhSYtHc2dhHwPDYf9uvqF5-w@mail.gmail.com>
-Message-ID: <5081BA9E.20301@mind.be>
+Date: Fri, 19 Oct 2012 22:46:30 +0200
+Subject: [Buildroot] Kernel does not boot : dts is not appended to the
+ kernel (Karo TX53 [imx53])
+In-Reply-To: <1E9ED8BFF49147018F72AEB3007FC941@JohanW7>
+References: <1E9ED8BFF49147018F72AEB3007FC941@JohanW7>
+Message-ID: <5081BC26.3000103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/10/12 15:05, Will Newton wrote:
-> Signed-off-by: Will Newton<will.newton@imgtec.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (build-test with a WCHAR-only internal powerpc toolchain)
+On 19/10/12 17:02, Sagaert Johan wrote:
+> #2. Concatenate the kernel with the generated DT blob:
+> cat arch/arm/boot/zImage arch/arm/boot/tx53.dtb>  arch/arm/boot/zImage_tx53
+>
+> When I look under output/images I see only zImage, not the kernel with the appended dts blob (zImge_tx53).
+
+  This is what buildroot does, except it goes to images/zImage.
+Can you verify that buildroot builds arch/arm/boot/tx53.dtb correctly?  It builds
+just one specific dtb, not all dtbs, so that should be easy to verify.
 
   Regards,
   Arnout
