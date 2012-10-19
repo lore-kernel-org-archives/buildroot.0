@@ -1,67 +1,100 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 19 Oct 2012 15:13:49 +0200
-Subject: [Buildroot] [PATCH v11 4/9] gdbm: new package
+Date: Fri, 19 Oct 2012 15:13:51 +0200
+Subject: [Buildroot] [PATCH v11 6/9] perl: add option "custom install"
 In-Reply-To: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
 References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1350652434-32020-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1350652434-32020-6-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+allows same behaviour (and footprint) as microperl
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in      |    1 +
- package/gdbm/Config.in |    8 ++++++++
- package/gdbm/gdbm.mk   |   12 ++++++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/gdbm/Config.in
- create mode 100644 package/gdbm/gdbm.mk
+ package/perl/Config.in |   16 ++++++++++++++++
+ package/perl/perl.mk   |   32 ++++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 00a79ab..d9cadf9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -324,6 +324,7 @@ endmenu
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index 98b41da..0642deb 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -16,6 +16,22 @@ config BR2_PACKAGE_PERL
  
- menu "Database"
- source "package/berkeleydb/Config.in"
-+source "package/gdbm/Config.in"
- source "package/mysql_client/Config.in"
- source "package/sqlcipher/Config.in"
- source "package/sqlite/Config.in"
-diff --git a/package/gdbm/Config.in b/package/gdbm/Config.in
-new file mode 100644
-index 0000000..d5aae83
---- /dev/null
-+++ b/package/gdbm/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GDBM
-+	bool "gdbm"
+ if BR2_PACKAGE_PERL
+ 
++config BR2_PACKAGE_PERL_CUSTOM_INSTALL
++	bool "custom install"
 +	help
-+	  GNU dbm is a set of database routines that use extensible hashing.
-+	  It works similar to the standard UNIX dbm routines.
++	  Don't use the full install target
++	  Install only a selection of modules (like microperl).
 +
-+	  http://www.gnu.org/software/gdbm/gdbm.html
++config BR2_PACKAGE_PERL_MODULES
++	string "additional modules"
++	depends on BR2_PACKAGE_PERL_CUSTOM_INSTALL
++	help
++	  List of space-separated perl modules to copy to the rootfs.
 +
-diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
-new file mode 100644
-index 0000000..4971b12
---- /dev/null
-+++ b/package/gdbm/gdbm.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# gdbm
-+#
-+#############################################################
-+GDBM_VERSION = 1.10
-+GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
-+GDBM_LICENSE = GPLv3
-+GDBM_LICENSE_FILES = COPYING
-+GDBM_INSTALL_STAGING = YES
++	  Examples: constant.pm Getopt/Std.pm Time/Local.pm
 +
-+$(eval $(autotools-package))
++	  Module dependencies are not automatic so check your needs.
++
+ config BR2_PACKAGE_PERL_DB_FILE
+ 	bool "DB_File"
+ 	select BR2_PACKAGE_BERKELEYDB
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 56abbc1..81dff04 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -89,7 +89,38 @@ PERL_RUN_PERL = $(QEMU_USER) $(@D)/perl -Ilib
+ PERL_ARCHNAME = $(shell $(PERL_RUN_PERL) -MConfig -e "print Config->{archname}")
+ PERL_LIB = $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)
+ PERL_ARCHLIB = $(PERL_LIB)/$(PERL_ARCHNAME)
++PERL_MODS = $(call qstrip,$(BR2_PACKAGE_PERL_MODULES))
++# Minimal set of modules required for 'perl -V' to work
++PERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
++PERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
+ 
++define PERL_INSTALL_MODULES
++	for i in $(PERL_ARCH_MODS); do \
++		$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(PERL_ARCHLIB)/$$i; \
++	done
++	for i in $(PERL_BASE_MODS); do \
++		$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(PERL_LIB)/$$i; \
++	done
++	for i in $(PERL_MODS); do \
++		j=`echo $$i|cut -d : -f 1` ; \
++		if [ -d $(@D)/lib/$$j ] ; then \
++			cp -af $(@D)/lib/$$j $(PERL_LIB) ; \
++		fi ; \
++		if [ -f $(@D)/lib/$$i ] ; then \
++			$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(PERL_LIB)/$$i; \
++		fi ; \
++	done
++	# Remove test files
++	find $(PERL_LIB) -type f -name *.t -exec rm -f {} \;
++endef
++
++ifeq ($(BR2_PACKAGE_PERL_CUSTOM_INSTALL),y)
++define PERL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/perl $(TARGET_DIR)/usr/bin/perl
++	$(INSTALL) -m 0755 -D $(@D)/libperl.so $(PERL_ARCHLIB)/CORE/libperl.so
++	$(PERL_INSTALL_MODULES)
++endef
++else
+ define PERL_INSTALL_TARGET_CMDS
+ 	$(MAKE) INSTALL_DEPENDENCE= \
+ 		INSTALLFLAGS=-p \
+@@ -98,6 +129,7 @@ define PERL_INSTALL_TARGET_CMDS
+ 	rm -f $(PERL_ARCHLIB)/CORE/*.h
+ 	find $(PERL_ARCHLIB) -type f -name *.bs -exec rm -f {} \;
+ endef
++endif
+ 
+ define PERL_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
 -- 
 1.7.9.5
