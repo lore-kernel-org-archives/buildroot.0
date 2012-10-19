@@ -1,100 +1,128 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 19 Oct 2012 15:13:51 +0200
-Subject: [Buildroot] [PATCH v11 6/9] perl: add option "custom install"
+Date: Fri, 19 Oct 2012 15:13:52 +0200
+Subject: [Buildroot] [PATCH v11 7/9] perl: prepare the removal of microperl
 In-Reply-To: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
 References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1350652434-32020-6-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1350652434-32020-7-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-allows same behaviour (and footprint) as microperl
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl/Config.in |   16 ++++++++++++++++
- package/perl/perl.mk   |   32 ++++++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+)
+ package/autoconf/Config.in   |    2 +-
+ package/autoconf/autoconf.mk |    2 +-
+ package/automake/Config.in   |    2 +-
+ package/automake/automake.mk |    2 +-
+ package/microperl/Config.in  |    1 +
+ package/ntp/Config.in        |    4 ++--
+ package/samba/Config.in      |    4 ++--
+ 7 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 98b41da..0642deb 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -16,6 +16,22 @@ config BR2_PACKAGE_PERL
+diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
+index 00b3e2c..5f2f148 100644
+--- a/package/autoconf/Config.in
++++ b/package/autoconf/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_AUTOCONF
+ 	bool "autoconf"
+-	select BR2_PACKAGE_MICROPERL
++	select BR2_PACKAGE_PERL
+ 	help
+ 	  Extensible program for developing configure scripts.  These
+ 	  scripts handle all the mundane system/feature detection.
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 3f84e3e..0cb50db 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -10,7 +10,7 @@ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 		    ac_cv_prog_gnu_m4_gnu=no
  
- if BR2_PACKAGE_PERL
+-AUTOCONF_DEPENDENCIES = microperl host-m4
++AUTOCONF_DEPENDENCIES = host-m4 perl
  
-+config BR2_PACKAGE_PERL_CUSTOM_INSTALL
-+	bool "custom install"
-+	help
-+	  Don't use the full install target
-+	  Install only a selection of modules (like microperl).
-+
-+config BR2_PACKAGE_PERL_MODULES
-+	string "additional modules"
-+	depends on BR2_PACKAGE_PERL_CUSTOM_INSTALL
-+	help
-+	  List of space-separated perl modules to copy to the rootfs.
-+
-+	  Examples: constant.pm Getopt/Std.pm Time/Local.pm
-+
-+	  Module dependencies are not automatic so check your needs.
-+
- config BR2_PACKAGE_PERL_DB_FILE
- 	bool "DB_File"
- 	select BR2_PACKAGE_BERKELEYDB
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 56abbc1..81dff04 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -89,7 +89,38 @@ PERL_RUN_PERL = $(QEMU_USER) $(@D)/perl -Ilib
- PERL_ARCHNAME = $(shell $(PERL_RUN_PERL) -MConfig -e "print Config->{archname}")
- PERL_LIB = $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)
- PERL_ARCHLIB = $(PERL_LIB)/$(PERL_ARCHNAME)
-+PERL_MODS = $(call qstrip,$(BR2_PACKAGE_PERL_MODULES))
-+# Minimal set of modules required for 'perl -V' to work
-+PERL_ARCH_MODS = Config.pm Config_git.pl Config_heavy.pl
-+PERL_BASE_MODS = strict.pm vars.pm warnings.pm warnings/register.pm
+ HOST_AUTOCONF_CONF_ENV = ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 			ac_cv_prog_gnu_m4_gnu=no
+diff --git a/package/automake/Config.in b/package/automake/Config.in
+index 935f1f1..9a9673a 100644
+--- a/package/automake/Config.in
++++ b/package/automake/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_AUTOMAKE
+ 	bool "automake"
+ 	select BR2_PACKAGE_AUTOCONF
+-	select BR2_PACKAGE_MICROPERL
++	select BR2_PACKAGE_PERL
+ 	help
+ 	  Tool for automatically generating Makefile's for input to
+ 	  configure scripts (made by autoconf).
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 3c19085..8be56c3 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -7,7 +7,7 @@
+ AUTOMAKE_VERSION = 1.11.5
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
  
-+define PERL_INSTALL_MODULES
-+	for i in $(PERL_ARCH_MODS); do \
-+		$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(PERL_ARCHLIB)/$$i; \
-+	done
-+	for i in $(PERL_BASE_MODS); do \
-+		$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(PERL_LIB)/$$i; \
-+	done
-+	for i in $(PERL_MODS); do \
-+		j=`echo $$i|cut -d : -f 1` ; \
-+		if [ -d $(@D)/lib/$$j ] ; then \
-+			cp -af $(@D)/lib/$$j $(PERL_LIB) ; \
-+		fi ; \
-+		if [ -f $(@D)/lib/$$i ] ; then \
-+			$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(PERL_LIB)/$$i; \
-+		fi ; \
-+	done
-+	# Remove test files
-+	find $(PERL_LIB) -type f -name *.t -exec rm -f {} \;
-+endef
-+
-+ifeq ($(BR2_PACKAGE_PERL_CUSTOM_INSTALL),y)
-+define PERL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/perl $(TARGET_DIR)/usr/bin/perl
-+	$(INSTALL) -m 0755 -D $(@D)/libperl.so $(PERL_ARCHLIB)/CORE/libperl.so
-+	$(PERL_INSTALL_MODULES)
-+endef
-+else
- define PERL_INSTALL_TARGET_CMDS
- 	$(MAKE) INSTALL_DEPENDENCE= \
- 		INSTALLFLAGS=-p \
-@@ -98,6 +129,7 @@ define PERL_INSTALL_TARGET_CMDS
- 	rm -f $(PERL_ARCHLIB)/CORE/*.h
- 	find $(PERL_ARCHLIB) -type f -name *.bs -exec rm -f {} \;
- endef
-+endif
+-AUTOMAKE_DEPENDENCIES = host-autoconf autoconf microperl
++AUTOMAKE_DEPENDENCIES = host-autoconf autoconf perl
  
- define PERL_CLEAN_CMDS
- 	-$(MAKE) -C $(@D) clean
+ HOST_AUTOMAKE_DEPENDENCIES = host-autoconf
+ 
+diff --git a/package/microperl/Config.in b/package/microperl/Config.in
+index 66bbedd..19d104a 100644
+--- a/package/microperl/Config.in
++++ b/package/microperl/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MICROPERL
+ 	bool "microperl"
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Perl without operating-specific functions such as readdir.
+ 
+diff --git a/package/ntp/Config.in b/package/ntp/Config.in
+index 5996596..ec5dbbb 100644
+--- a/package/ntp/Config.in
++++ b/package/ntp/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_NTP_NTP_KEYGEN
+ 
+ config BR2_PACKAGE_NTP_NTP_WAIT
+ 	bool "ntp-wait"
+-	depends on BR2_PACKAGE_MICROPERL
++	depends on BR2_PACKAGE_PERL
+ 	help
+ 	  ntp-wait waits until the locally running ntpd is in state 4
+ 	  (synchronized). This could be useful at boot time, to delay the
+@@ -59,7 +59,7 @@ config BR2_PACKAGE_NTP_NTPSNMPD
+ 
+ config BR2_PACKAGE_NTP_NTPTRACE
+ 	bool "ntptrace"
+-	depends on BR2_PACKAGE_MICROPERL
++	depends on BR2_PACKAGE_PERL
+ 	help
+ 	  ntptrace is a perl script that uses the ntpq utility program to
+ 	  follow the chain of NTP servers from a given host back to the
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index e88b360..92714d7 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -36,12 +36,12 @@ config BR2_PACKAGE_SAMBA_FINDSMB
+ 	default y
+ 	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
+ 	depends on BR2_PACKAGE_SAMBA_NMBLOOKUP
+-	depends on BR2_PACKAGE_MICROPERL
++	depends on BR2_PACKAGE_PERL
+ 	help
+ 	  Script to browse network
+ 
+ comment "findsmb       - disabled (requires nmblookup, smbclient and perl)"
+-	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !BR2_PACKAGE_MICROPERL
++	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !BR2_PACKAGE_PERL
+ 
+ config BR2_PACKAGE_SAMBA_NET
+ 	bool "net"
 -- 
 1.7.9.5
