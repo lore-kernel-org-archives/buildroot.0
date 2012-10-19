@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 19 Oct 2012 15:13:50 +0200
-Subject: [Buildroot] [PATCH v11 5/9] perl: add GDBM_File
+Date: Fri, 19 Oct 2012 15:13:48 +0200
+Subject: [Buildroot] [PATCH v11 3/9] perl: add DB_File
 In-Reply-To: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
 References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1350652434-32020-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1350652434-32020-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl/Config.in |    6 ++++++
- package/perl/perl.mk   |    3 +++
- 2 files changed, 9 insertions(+)
+ package/perl/Config.in |   10 ++++++++++
+ package/perl/perl.mk   |    4 ++++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 6cb89f0..98b41da 100644
+index 0a41a97..6cb89f0 100644
 --- a/package/perl/Config.in
 +++ b/package/perl/Config.in
-@@ -22,6 +22,12 @@ config BR2_PACKAGE_PERL_DB_FILE
- 	help
- 	  Build the DB_File module.
+@@ -14,5 +14,15 @@ config BR2_PACKAGE_PERL
  
-+config BR2_PACKAGE_PERL_GDBM_FILE
-+	bool "GDBM_File"
-+	select BR2_PACKAGE_GDBM
-+	help
-+	  Build the GDBM_File module.
+ 	  http://www.perl.org/
+ 
++if BR2_PACKAGE_PERL
 +
- endif
- 
++config BR2_PACKAGE_PERL_DB_FILE
++	bool "DB_File"
++	select BR2_PACKAGE_BERKELEYDB
++	help
++	  Build the DB_File module.
++
++endif
++
  comment "perl requires an architecture supported by qemu"
+ 	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
 diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 186158b..56abbc1 100644
+index 7ac1aed..186158b 100644
 --- a/package/perl/perl.mk
 +++ b/package/perl/perl.mk
-@@ -16,6 +16,9 @@ PERL_DEPENDENCIES = host-qemu
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-     PERL_DEPENDENCIES += berkeleydb
- endif
-+ifeq ($(BR2_PACKAGE_GDBM),y)
-+    PERL_DEPENDENCIES += gdbm
+@@ -11,7 +11,11 @@ PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
+ PERL_LICENSE = Artistic
+ PERL_LICENSE_FILES = Artistic
+ PERL_INSTALL_STAGING = YES
++
+ PERL_DEPENDENCIES = host-qemu
++ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
++    PERL_DEPENDENCIES += berkeleydb
 +endif
  
  PERL_CONF_OPT = -des \
