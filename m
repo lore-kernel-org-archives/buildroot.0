@@ -1,103 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 19 Oct 2012 09:59:23 -0300
-Subject: [Buildroot] [PATCHv5 1/5] pkgconf: new package
-Message-ID: <1350651563-3639-1-git-send-email-gustavo@zacarias.com.ar>
+From: Will Newton <will.newton@gmail.com>
+Date: Fri, 19 Oct 2012 14:05:17 +0100
+Subject: [Buildroot] [PATCH] package/time: New package for GNU time.
+Message-ID: <CAFbHwiRDGH0W+eRMGGui4gA+_iRhSYtHc2dhHwPDYf9uvqF5-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pkgconf is a drop-in replacement for pkg-config that doesn't need
-itself to build and just requires a C89 compiler.
-
-Instead of using a patch for hardcoded sysroot support (as the patch to
-pkg-config does) we rely instead on a wrapper script that takes the
-appropiate action.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Will Newton <will.newton@imgtec.com>
 ---
- package/Config.in             |    1 +
- package/pkgconf/Config.in     |    9 +++++++++
- package/pkgconf/pkg-config.in |    2 ++
- package/pkgconf/pkgconf.mk    |   32 ++++++++++++++++++++++++++++++++
- 4 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/pkgconf/Config.in
- create mode 100644 package/pkgconf/pkg-config.in
- create mode 100644 package/pkgconf/pkgconf.mk
+ package/Config.in      |    1 +
+ package/time/Config.in |    6 ++++++
+ package/time/time.mk   |   17 +++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/time/Config.in
+ create mode 100644 package/time/time.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cfc29c6..546af88 100644
+index d7b3db6..dd4c97e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -84,6 +84,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/patch/Config.in"
- endif
- source "package/pkg-config/Config.in"
-+source "package/pkgconf/Config.in"
+@@ -672,6 +672,7 @@ source "package/logsurfer/Config.in"
+ source "package/screen/Config.in"
+ source "package/sudo/Config.in"
  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sed/Config.in"
++source "package/time/Config.in"
+ source "package/which/Config.in"
  endif
-diff --git a/package/pkgconf/Config.in b/package/pkgconf/Config.in
+ source "package/xmlstarlet/Config.in"
+diff --git a/package/time/Config.in b/package/time/Config.in
 new file mode 100644
-index 0000000..f95847f
+index 0000000..634d41a
 --- /dev/null
-+++ b/package/pkgconf/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PKGCONF
-+	bool "pkgconf"
++++ b/package/time/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TIME
++	bool "time"
 +	help
-+	  pkgconf is a program which helps to configure compiler and linker
-+	  flags for development frameworks. It is similar to pkg-config,
-+	  but was written from scratch in the summer of 2011 to replace
-+	  pkg-config, which now needs itself to build itself
++	  The GNU time utility.
 +
-+	  https://github.com/nenolod/pkgconf
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
++	  http://savannah.gnu.org/projects/time/
+diff --git a/package/time/time.mk b/package/time/time.mk
 new file mode 100644
-index 0000000..9da5187
+index 0000000..7b53286
 --- /dev/null
-+++ b/package/pkgconf/pkg-config.in
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+PKG_CONFIG_PATH=@PKG_CONFIG_PATH@ PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf $@
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-new file mode 100644
-index 0000000..84fccf3
---- /dev/null
-+++ b/package/pkgconf/pkgconf.mk
-@@ -0,0 +1,32 @@
++++ b/package/time/time.mk
+@@ -0,0 +1,17 @@
 +#############################################################
 +#
-+# pkgconf
++# time
 +#
 +#############################################################
 +
-+PKGCONF_VERSION = 0.8.9
-+PKGCONF_SITE = https://github.com/pkgconf/pkgconf/tarball/pkgconf-$(PKGCONF_VERSION)
-+PKGCONF_AUTORECONF = YES
-+HOST_PKGCONF_AUTORECONF = YES
++TIME_VERSION = 1.7
++TIME_SITE = $(BR2_GNU_MIRROR)/time
++TIME_CONF_ENV = ac_cv_func_wait3=yes
 +
-+PKG_CONFIG_HOST_BINARY = $(HOST_DIR)/usr/bin/pkg-config
-+
-+ifeq ($(BR2_PACKAGE_PKG_CONFIG),)
-+define PKGCONF_LINK_PKGCONFIG
-+	ln -sf pkgconf $(TARGET_DIR)/usr/bin/pkg-config
++# time uses an old version of automake that does not support
++# installing in DESTDIR.
++define TIME_INSTALL_TARGET_CMDS
++	install -D -m 755  $(@D)/time $(TARGET_DIR)/usr/bin/time
 +endef
-+endif
-+
-+define HOST_PKGCONF_INSTALL_WRAPPER
-+	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
-+		$(HOST_DIR)/usr/bin/pkg-config
-+	$(SED) 's, at PKG_CONFIG_PATH@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
-+		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
-+		$(HOST_DIR)/usr/bin/pkg-config
-+endef
-+
-+PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
-+HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
 +
 +$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
 -- 
-1.7.8.6
+1.7.1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-package-time-New-package-for-GNU-time.patch
+Type: application/octet-stream
+Size: 1834 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121019/6da76e07/attachment-0001.obj>
