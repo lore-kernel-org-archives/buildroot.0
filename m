@@ -1,31 +1,85 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 19 Oct 2012 21:58:23 +0200
-Subject: [Buildroot] Local SVN respository
-In-Reply-To: <1350664899.14081.7.camel@john-ubu>
-References: <1350547544.8368.8.camel@john-ubu> <5080617F.9000008@mind.be>
- <1350664899.14081.7.camel@john-ubu>
-Message-ID: <5081B0DF.6000208@mind.be>
+Date: Fri, 19 Oct 2012 22:04:35 +0200
+Subject: [Buildroot] [PATCH] lcdapi: new package
+In-Reply-To: <CAHt8ZCN5eJbN0e+H1jaDa_nUsSa3WtJPhnaMtjzEsuo-1rPJ_g@mail.gmail.com>
+References: <1350482898-5980-1-git-send-email-spdawson@gmail.com>
+ <507F111F.1070107@mind.be>
+ <CAHt8ZCN5eJbN0e+H1jaDa_nUsSa3WtJPhnaMtjzEsuo-1rPJ_g@mail.gmail.com>
+Message-ID: <5081B253.1070503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/10/12 18:41, john wrote:
-> Thank you for your help, in answer to your questions,
-> The package is already in buildroot, at the moment I have the same
-> version number and I have created it under the same name. It is selected
-> in the config and when I do make with debug (-p) on I get:
+On 18/10/12 11:39, Simon Dawson wrote:
+> Hi Arnout. Thanks for taking the time to review this.
 >
-> svn: Syntax error in revision argument '1.0.1'
+> On 17 October 2012 21:12, Arnout Vandecappelle<arnout@mind.be>  wrote:
+>>   Making it inline sounds more appropriate.
 >
-> my svn command is
-> MYPACKAGE_SITE=svn://myserver/mydir/trunk/mysoftware-1.0.1/
+> Okay; will do so.
+>
+>>   BTW, did you upstream the patches?
+>
+> Unfortunately, the upstream project is no longer being actively
+> maintained; I have attempted to contact the author, but have had no
+> response.
+>
+> I have actually started work on a fork of the project at
+> https://github.com/spdawson/lcdapi; but I thought it best to use the
+> original source for the Buildroot package, at least in the first
+> instance.
 
-  Ah, of course, I forgot that subversion doesn't have tags...  You
-should change MYPACKAGE_VERSION to the svn revision number you need,
-or HEAD.
+  I don't think that's necessary.  It's better if we don't have to
+carry patches in buildroot!
 
+[snip]
+>>> +LCDAPI_MAKE_OPT = \
+>>> +       $(TARGET_CONFIGURE_OPTS) \
+>>> +       LD="$(TARGET_CXX)" \
+>>> +       LDFLAGS="$(TARGET_LDFLAGS) -shared"
+>>
+>>
+>>   It would make sense to also add CC="$(TARGET_CXX)" (although not strictly
+>> necessary, because gcc recognizes the .cpp extension).
+>
+> Okay; will do.
+
+  If you're anyway taking over upstream, you could really fix the Makefiles
+and use CXX instead of CC!
+
+
+>>   More importantly, the CFLAGS overrides the CFLAGS of lcdapi's
+>> Makefile, and that contains the all-important -fPIC.  I wonder
+>> how you got it built without that...  So either:
+>>
+>> - Set CFLAGS to "$(TARGET_CFLAGS) -fPIC"
+>> - Patch the Makefile to append to CFLAGS
+>> - Set CC to "$(TARGET_CXX) $(TARGET_CFLAGS)" and leave CFLAGS alone
+>
+> Okay, will do.
+
+  Again, best to patch the Makefile since you can.
+
+
+>>   Finally, it would make sense to call it LCDAPI_MAKE_OPTS,
+>> similar to TARGET_CONFIGURE_OPTS.
+>
+> Okay, will do.
+>
+>>   We would typically use
+>>          $(INSTALL) -m 0755 -D $(@D)/lib/liblcdapi.so $(1)/usr/lib
+>> (which does the mkdir and the install in one shot).
+>
+> Okay, will do.
+>
+>>   But wouldn't it be cleaner to add (and upstream) an 'install' target
+>> to the Makefile?
+>
+> Yes, okay.
+
+  Sorry that I'm giving you more work :-)
 
   Regards,
   Arnout
