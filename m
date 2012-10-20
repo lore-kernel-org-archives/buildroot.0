@@ -1,49 +1,41 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Sat, 20 Oct 2012 23:27:06 +0200
-Subject: [Buildroot] [PATCH v2] Add package raspberrypi-firmware.
-In-Reply-To: <87vce4u96t.fsf@macbook.be.48ers.dk>
-References: <1348173466-10956-1-git-send-email-marek.belisko@open-nandra.com>
- <506B1924.2090208@mind.be>
- <CAAfyv37jOjsuDLX4jLendyTJq-Yv=eGMh8r+g4_Kvn_b74bHLg@mail.gmail.com>
- <CA+wH294BUL_+SP55er=j9CgEf6N3VAQsrfbtjfvzywRVn2jb-Q@mail.gmail.com>
- <87vce4u96t.fsf@macbook.be.48ers.dk>
-Message-ID: <CAAfyv35FdA58GDfm8zd5jRsy+O+LNLN=UhJ3jJYJONqrhtKP3g@mail.gmail.com>
+From: Richard Braun <rbraun@sceen.net>
+Date: Sat, 20 Oct 2012 23:55:47 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
+ proprietary packages
+In-Reply-To: <50830EB4.9090200@lucaceresoli.net>
+References: <20120928121758.GA2362@mail.sceen.net>
+ <1348834801-2672-1-git-send-email-rbraun@sceen.net>
+ <20120928142314.4810033e@skate>
+ <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
+ <20120928190526.79db5cde@skate>
+ <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
+ <5068558E.4070005@mind.be> <506AEF12.5080906@lucaceresoli.net>
+ <20121016154229.GA15417@mail.sceen.net>
+ <50830EB4.9090200@lucaceresoli.net>
+Message-ID: <20121020215547.GA13307@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 20, 2012 at 11:26 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Alex" == Alex Bradbury <asb@asbradbury.org> writes:
->
->  Alex> On 20 October 2012 20:49, Belisko Marek <marek.belisko@gmail.com> wrote:
->  >> Hi,
->  >>
->  >> just want to ask it this patch is in queue. It's month it was submitted.
->
-> Yes, sorry about that. I just started looking at the patch now.
->
->  Alex> I'd suggest it's probably not worth committing as-is, because this
->  Alex> weekend we finally got rid of the multiple start_*.elf files.
->
-> Ahh, interesting - So how is the memory layout then defined?
-Described here:
-https://github.com/raspberrypi/firmware/commit/c57ea9dd367f12bf4fb41b7b86806a2dc6281176
->
-> --
-> Bye, Peter Korsgaard
+On Sat, Oct 20, 2012 at 10:51:00PM +0200, Luca Ceresoli wrote:
+> This in confusing. In your previous e-mail dated Sep 20you quoted the
+> "Intel Software License Agreement", that one is supposed to accept before
+> downloading the package from the web page:
 
-Marek
+Confusing indeed.
+
+> What hurts me a little is that, if intel-microcode turns out to be
+> redistributable, we would have no use case in mainline Buildroot that
+> makes use of such a feature to the legal-info code.
+
+That's what troubles me as well. I don't want to introduce dead code.
+But if you do it as you seem to have planned, then I won't worry about
+it and just wait for the feature.
+
+I'll try to get some clarification from Intel in the meanwhile. Thanks
+for your answer.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+Richard Braun
