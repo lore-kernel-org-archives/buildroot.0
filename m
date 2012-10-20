@@ -1,41 +1,101 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Sat, 20 Oct 2012 23:55:47 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: produce legal info for
- proprietary packages
-In-Reply-To: <50830EB4.9090200@lucaceresoli.net>
-References: <20120928121758.GA2362@mail.sceen.net>
- <1348834801-2672-1-git-send-email-rbraun@sceen.net>
- <20120928142314.4810033e@skate>
- <CAAXf6LUF1bOSTGyMtC2OEbQSOeDiMphktpxtSZHmLj4ms9c+yQ@mail.gmail.com>
- <20120928190526.79db5cde@skate>
- <CAAXf6LVi1SKx9ZTDuROYxkP=r62fr=SpMnNxYc-Q=_bz+7Snsg@mail.gmail.com>
- <5068558E.4070005@mind.be> <506AEF12.5080906@lucaceresoli.net>
- <20121016154229.GA15417@mail.sceen.net>
- <50830EB4.9090200@lucaceresoli.net>
-Message-ID: <20121020215547.GA13307@mail.sceen.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 21 Oct 2012 01:45:30 +0200
+Subject: [Buildroot] [PATCH 09/10] uClibc: update-all-config shouldn't
+	update default uClibc config
+In-Reply-To: <1350776731-8467-1-git-send-email-arnout@mind.be>
+References: <1350776731-8467-1-git-send-email-arnout@mind.be>
+Message-ID: <1350776731-8467-10-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 20, 2012 at 10:51:00PM +0200, Luca Ceresoli wrote:
-> This in confusing. In your previous e-mail dated Sep 20you quoted the
-> "Intel Software License Agreement", that one is supposed to accept before
-> downloading the package from the web page:
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Confusing indeed.
+The new update-all-config target will update the uClibc config file
+if BR2_UCLIBC_CONFIG is set, even if it is set to the default value
+in toolchain/uClibc/uClibc-xxx.config.
 
-> What hurts me a little is that, if intel-microcode turns out to be
-> redistributable, we would have no use case in mainline Buildroot that
-> makes use of such a feature to the legal-info code.
+To avoid this, set the default BR2_UCLIBC_CONFIG to empty, and select
+a default to use in the .mk file.
 
-That's what troubles me as well. I don't want to introduce dead code.
-But if you do it as you seem to have planned, then I won't worry about
-it and just wait for the feature.
+Note that uclibc-update-config will still overwrite the default file
+in toolchain/uClibc/uClibc-xxx.config - presumably it's intentional.
 
-I'll try to get some clarification from Intel in the meanwhile. Thanks
-for your answer.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ toolchain/uClibc/Config.in |    7 ++-----
+ toolchain/uClibc/uclibc.mk |   23 +++++++++++------------
+ 2 files changed, 13 insertions(+), 17 deletions(-)
 
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index f46a415..9cce05d 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -42,15 +42,12 @@ config BR2_UCLIBC_VERSION_STRING
+ 
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+-	default "toolchain/uClibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
+-	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
+-	default "toolchain/uClibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+-	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
++	default ""
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
+ 	  file and will specify their config file location with this option.
+ 	  See also docs/README in this package.
+-	  If unsure, use the default.
++	  If left empty, a default configuration will be used.
+ 
+ config BR2_PTHREAD_DEBUG
+ 	bool "Thread library debugging"
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 0faaf18..d032684 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -6,22 +6,21 @@
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ 
+-# specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
+-# setting.
+-ifndef UCLIBC_CONFIG_FILE
+-UCLIBC_CONFIG_FILE=$(call qstrip,$(BR2_UCLIBC_CONFIG))
+-endif
+-
+-UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
++UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+ 
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+-UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
+-UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
++UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
++UCLIBC_DIR  = $(TOOLCHAIN_DIR)/uClibc
++UCLIBC_CONFIG_VERSION = snapshot
+ else
+-UCLIBC_SITE:=http://www.uclibc.org/downloads
+-UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
++UCLIBC_SITE = http://www.uclibc.org/downloads
++UCLIBC_DIR  = $(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
++UCLIBC_CONFIG_VERSION = $(subst $(space),.,$(wordlist 1,3,$(subst .,$(space),$(UCLIBC_VERSION))))
+ endif
+ 
++UCLIBC_CONFIG = $(call qstrip,$(BR2_UCLIBC_CONFIG))
++UCLIBC_CONFIG_FILE = $(or $(wildcard $(UCLIBC_CONFIG)),toolchain/uClibc/uClibc-$(UCLIBC_CONFIG_VERSION).config)
++
+ UCLIBC_PATCH_DIR:=toolchain/uClibc/
+ UCLIBC_SOURCE:=uClibc-$(UCLIBC_VERSION).tar.bz2
+ 
+@@ -508,7 +507,7 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
+ uclibc-update-config: uclibc-config
+ 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
+ 
+-ifneq ($(UCLIBC_CONFIG_FILE),)
++ifneq ($(UCLIBC_CONFIG),)
+ UPDATE_ALL_CONFIG_TARGETS += uclibc-update-config
+ endif
+ 
 -- 
-Richard Braun
+1.7.10.4
