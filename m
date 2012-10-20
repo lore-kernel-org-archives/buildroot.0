@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 21 Oct 2012 01:45:27 +0200
-Subject: [Buildroot] [PATCH 06/10] Add update-all-config target
+Date: Sun, 21 Oct 2012 01:45:23 +0200
+Subject: [Buildroot] [PATCH 02/10] target/generic: add filesystem overlay
+	option
 In-Reply-To: <1350776731-8467-1-git-send-email-arnout@mind.be>
 References: <1350776731-8467-1-git-send-email-arnout@mind.be>
-Message-ID: <1350776731-8467-7-git-send-email-arnout@mind.be>
+Message-ID: <1350776731-8467-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,177 +13,153 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-The update-all-config target updates all the external configuration
-file with their current values.  This includes:
-- buildroot
-- busybox
-- linux
-- crosstool-ng
-- uClibc
-- at91bootstrap3
+The filesystem overlay is a tree that is copied over the target fs
+after building everything - which is currently usually done in the
+post-build script.
 
-Linux and buildroot are saved as defconfigs.  For Linux, this means
-that it will fail on kernels before 2.6.33 (when the savedefconfig
-was added to Linux Kconfig).
+Also replace the documentation for a custom skeleton with the
+filesystem overlay and deprecate the custom skeleton.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Barebox is missing because there is no BR2_TARGET_BAREBOX_CONFIG option.
-Can be added once Maxime's patch has been accepted.
----
- Makefile                                         |    6 ++++++
- boot/at91bootstrap3/at91bootstrap3.mk            |    1 +
- docs/manual/customize-store.txt                  |   18 ++++--------------
- linux/linux.mk                                   |    2 ++
- package/busybox/busybox.mk                       |    4 ++++
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++++
- toolchain/uClibc/uclibc.mk                       |    4 ++++
- 7 files changed, 25 insertions(+), 14 deletions(-)
+ Makefile                         |    9 +++++++++
+ docs/manual/customize-rootfs.txt |   21 +++++++++------------
+ docs/manual/customize-store.txt  |   27 +++++++++------------------
+ target/generic/Config.in         |   11 +++++++++++
+ 4 files changed, 38 insertions(+), 30 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 2122d45..e257c61 100644
+index 0128839..2122d45 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -548,6 +548,10 @@ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
- show-targets:
- 	@echo $(TARGETS)
+@@ -463,6 +463,15 @@ endif
+ 		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
+ 	) >  $(TARGET_DIR)/etc/os-release
  
-+# UPDATE_ALL_CONFIG_TARGETS is set by the individual packages that have a
-+# save*config target.
-+update-all-config: savedefconfig $(UPDATE_ALL_CONFIG_TARGETS)
++	@for dir in $(call qstrip,$(BR2_ROOTFS_OVERLAY)); do \
++		if [ -d $${dir} ]; then \
++			$(call MESSAGE,"Copying overlay $${dir}"); \
++			rsync -a \
++				--exclude .svn --exclude .git --exclude .hg --exclude '*~' \
++				$${dir}/ $(TARGET_DIR); \
++		fi \
++	done
 +
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+ 	@$(call MESSAGE,"Executing post-build script")
+ 	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index 8c3ea82..b3c160b 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -1,5 +1,6 @@
+ Customizing the generated target filesystem
+ -------------------------------------------
++[customize-rootfs]
  
- all: menuconfig
-@@ -700,6 +704,8 @@ help:
- 	@echo '  defconfig              - New config with default answer to all options'
- 	@echo '                             BR2_DEFCONFIG, if set, is used as input'
- 	@echo '  savedefconfig          - Save current config as ./defconfig (minimal config)'
-+	@echo '  update-all-config      - Update all configuration targets that have an input:'
-+	@echo '                           buildroot, busybox, linux, crosstool-ng, uClibc'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
- 	@echo '  randpackageconfig      - New config with random answer to package options'
-diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
-index bb6ef09..1451ad8 100644
---- a/boot/at91bootstrap3/at91bootstrap3.mk
-+++ b/boot/at91bootstrap3/at91bootstrap3.mk
-@@ -69,6 +69,7 @@ endif
- ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_USE_CUSTOM_CONFIG),y)
- at91bootstrap3-update-config: at91bootstrap3-configure
- 	cp -f $(AT91BOOTSTRAP3_DIR)/.config $(AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE)
-+UPDATE_ALL_CONFIG_TARGETS += at91bootstrap3-update-defconfig
- else
- at91bootstrap3-update-config: ;
- endif
+ There are a few ways to customize the resulting target filesystem:
+ 
+@@ -10,24 +11,20 @@ There are a few ways to customize the resulting target filesystem:
+   anything to the target filesystem, but if you decide to completely
+   rebuild your toolchain and tools, these changes will be lost.
+ 
+-* Create your own 'target skeleton'. You can start with the default
+-  skeleton available under +fs/skeleton+ and then customize it to suit
+-  your needs. The +BR2_ROOTFS_SKELETON_CUSTOM+ and
+-  +BR2_ROOTFS_SKELETON_CUSTOM_PATH+ will allow you to specify the
+-  location of your custom skeleton. At build time, the contents of the
+-  skeleton are copied to output/target before any package
+-  installation.
++* Create a filesystem overlay: a tree of files that are copied directly
++  over the target filesystem after it has been built.  Set
++  +BR2_ROOTFS_OVERLAY+ to the top of the tree.  +.git+, +.svn+,
++  +.hg+ directories and files ending with +~+ are excluded.
+ 
+ * In the Buildroot configuration, you can specify the path to a
+   post-build script, that gets called 'after' Buildroot builds all the
+   selected software, but 'before' the rootfs packages are
+   assembled. The destination root filesystem folder is given as the
+   first argument to this script, and this script can then be used to
+-  copy programs, static data or any other needed file to your target
+-  filesystem. You should, however, use this feature with care.
+-  Whenever you find that a certain package generates wrong or unneeded
+-  files, you should fix that package rather than work around it with a
+-  post-build cleanup script.
++  remove or modify any file in your target filesystem. You should,
++  however, use this feature with care. Whenever you find that a certain
++  package generates wrong or unneeded files, you should fix that
++  package rather than work around it with a post-build cleanup script.
+ 
+ * A special package, 'customize', stored in +package/customize+ can be
+   used. You can put all the files that you want to see in the final
 diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index c7ef00c..6deed49 100644
+index cad1700..bc1751e 100644
 --- a/docs/manual/customize-store.txt
 +++ b/docs/manual/customize-store.txt
-@@ -60,6 +60,8 @@ configuration files easier.
-   path specified by +BR2_UCLIBC_CONFIG+.
- * +make ctng-update-config+ saves the crosstool-NG configuration to the
-   patch specified by +BR2_TOOLCHAIN_CTNG_CONFIG+.
-+* +make update-all-config+ updates all of the above configuration files
-+  for which you have defined the corresponding +_CONFIG+ option.
- 
- 
- Creating your own board support
-@@ -119,12 +121,6 @@ you can skip the steps that are not relevant for your use case.
-    * +BR2_TOOLCHAIN_CTNG_CONFIG+
-    * +BR2_UCLIBC_CONFIG+
-    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
--1. Write the configuration files:
--   * +make linux-update-defconfig+
--   * +make busybox-update-config+
--   * +make ctng-update-config+
--   * +make uclibc-update-config+
--   * +cp <output>/build/at91bootstrap3-*/.config board/<manufacturer>/<boardname>/at91bootstrap3.config+
+@@ -127,16 +127,12 @@ you can skip the steps that are not relevant for your use case.
+    * +cp <output>/build/at91bootstrap3-*/.config board/<manufacturer>/<boardname>/at91bootstrap3.config+
  1. Create +board/<manufacturer>/<boardname>/fs-overlay+ and fill it
     with additional files you need on your rootfs, e.g.
-    +board/<manufacturer>/<boardname>/etc/inittab+.  Set +BR2_ROOTFS_OVERLAY+
-@@ -136,7 +132,7 @@ you can skip the steps that are not relevant for your use case.
+-   +board/<manufacturer>/<boardname>/etc/inittab+.
++   +board/<manufacturer>/<boardname>/etc/inittab+.  Set +BR2_ROOTFS_OVERLAY+
++   to +board/<manufacturer>/<boardname>/fs-overlay+.
+ 1. Create a post-build script
+-   +board/<manufacturer>/<boardname>/post-build.sh+.  It should contain
+-   the following command:
+-+
+-------------
+-rsync -a --exclude .empty --exclude '*~' ${0%/*}/fs-overlay $1
+-------------
+-+
+-1. Set +BR2_ROOTFS_POST_BUILD_SCRIPT+ to +board/<manufacturer>/<boardname>/post-build.sh+
++   +board/<manufacturer>/<boardname>/post-build.sh+.  Set
++   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to
++   +board/<manufacturer>/<boardname>/post-build.sh+
  1. If additional setuid permissions have to be set or device nodes have
     to be created, create +board/<manufacturer>/<boardname>/device_table.txt+
     and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
--1. +make savedefconfig+ to save the buildroot configuration.
-+1. Write the configuration files: +make update-all-config+
- 1. +cp defconfig configs/<boardname>_defconfig+
- 
- 
-@@ -160,12 +156,6 @@ the buildroot tree).
-    * +BR2_TOOLCHAIN_CTNG_CONFIG+
-    * +BR2_UCLIBC_CONFIG+
-    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
--1. Write the configuration files:
--   * +make linux-update-defconfig+
--   * +make busybox-update-config+
--   * +make ctng-update-config+
--   * +make uclibc-update-config+
--   * +cp <output>/build/at91bootstrap3-*/.config <path-to-board-directory>/at91bootstrap3.config+
+@@ -172,16 +168,11 @@ the buildroot tree).
+    * +cp <output>/build/at91bootstrap3-*/.config <path-to-board-directory>/at91bootstrap3.config+
  1. Create +<path-to-board-directory>/fs-overlay+ and fill it
     with additional files you need on your rootfs, e.g.
-    +<path-to-board-directory>/etc/inittab+. Set +BR2_ROOTFS_OVERLAY+
-@@ -176,7 +166,7 @@ the buildroot tree).
+-   +<path-to-board-directory>/etc/inittab+.
++   +<path-to-board-directory>/etc/inittab+. Set +BR2_ROOTFS_OVERLAY+
++   to +<path-to-board-directory>/fs-overlay+.
+ 1. Create a post-build script
+-   +<path-to-board-directory>/post-build.sh+.  It should contain
+-   the following command:
+-+
+-------------
+-rsync -a --exclude .empty --exclude '*~' ${0%/*}/fs-overlay $1
+-------------
+-+
+-1. Set +BR2_ROOTFS_POST_BUILD_SCRIPT+ to +$(BOARDDIR)/post-build.sh+
++   +<path-to-board-directory>/post-build.sh+. Set
++   +BR2_ROOTFS_POST_BUILD_SCRIPT+ to +$(BOARDDIR)/post-build.sh+
  1. If additional setuid permissions have to be set or device nodes have
     to be created, create +<path-to-board-directory>/device_table.txt+
     and add that path to +BR2_ROOTFS_DEVICE_TABLE+.
--1. +make savedefconfig+ to save the buildroot configuration.
-+1. Write the configuration files: +make update-all-config+
- 1. +cp defconfig <path-to-board-directory>/buildroot.config+
- 1. Create a script or Makefile in the board directory that calls
-    buildroot:
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c4bdf90..98ffe44 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -151,6 +151,8 @@ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
-+# savedefconfig requires a kernel >= 2.6.33
-+UPDATE_ALL_CONFIG_TARGETS += linux-update-defconfig
- endif
+diff --git a/target/generic/Config.in b/target/generic/Config.in
+index b8472f4..7f53a7c 100644
+--- a/target/generic/Config.in
++++ b/target/generic/Config.in
+@@ -166,6 +166,17 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
  
- define LINUX_CONFIGURE_CMDS
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e95364c..c73d0d0 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -217,3 +217,7 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+ endif # BR2_ROOTFS_SKELETON_DEFAULT
  
- busybox-update-config: busybox-configure
- 	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
++config BR2_ROOTFS_OVERLAY
++	string "Root filesystem overlay"
++	default ""
++	help
++	  Specify a list of directories that are copied over the target
++	  root filesystem after the build has finished and before it is
++	  packed into the selected filesystem images.
 +
-+ifneq ($(BUSYBOX_CONFIG_FILE),)
-+UPDATE_ALL_CONFIG_TARGETS += busybox-update-config
-+endif
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index fb6da0f..37398bd 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -400,3 +400,7 @@ ctng-menuconfig: $(CTNG_DIR)/.config
- 
- ctng-update-config: $(CTNG_DIR)/.config
- 	cp -f $< $(CTNG_CONFIG_FILE)
++	  It is copied as-is into the rootfs, excluding files ending with
++	  ~ and .git, .svn and .hg directories.
 +
-+ifneq ($(CTNG_CONFIG_FILE),)
-+UPDATE_ALL_CONFIG_TARGETS += ctng-update-config
-+endif
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index d1cd718..0faaf18 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -508,6 +508,10 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
- uclibc-update-config: uclibc-config
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
-+ifneq ($(UCLIBC_CONFIG_FILE),)
-+UPDATE_ALL_CONFIG_TARGETS += uclibc-update-config
-+endif
-+
- uclibc-configured: gcc_initial kernel-headers $(UCLIBC_DIR)/.configured
- 
- uclibc-configured-source: uclibc-source
+ config BR2_ROOTFS_POST_BUILD_SCRIPT
+ 	string "Custom script to run before creating filesystem images"
+ 	default ""
 -- 
 1.7.10.4
