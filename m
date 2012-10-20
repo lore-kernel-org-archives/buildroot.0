@@ -1,36 +1,67 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 21 Oct 2012 01:45:25 +0200
-Subject: [Buildroot] [PATCH 04/10] busybox: busybox-update-config should
-	depend on busybox-configure
-In-Reply-To: <1350776731-8467-1-git-send-email-arnout@mind.be>
-References: <1350776731-8467-1-git-send-email-arnout@mind.be>
-Message-ID: <1350776731-8467-5-git-send-email-arnout@mind.be>
+Date: Sun, 21 Oct 2012 01:45:21 +0200
+Subject: [Buildroot] [PATCH 00/10] Various simplifications of the buildroot
+	configuration
+Message-ID: <1350776731-8467-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Second attempt at my "project directory" series - this time leaving out
+the project directory.
 
-Before the config file can be copied, it has to exist.  The
-other xxx-update-config targets to this as well.
+First patch adds a section to the manual to explain how to store the
+configuration.  It's basically Thomas's ELC-E presentation of last
+year, but I've added a section for when it's out-of-tree.  I also added
+a very brief explanation about how to add packages and patches
+out-of-tree.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/busybox/busybox.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The second patch adds the fs-overlay as a config option.  Skeleton
+is not deprecated this time round.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 33f8633..e95364c 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -215,5 +215,5 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
- 	rm -f $(BUSYBOX_DIR)/.stamp_built
- 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
- 
--busybox-update-config:
-+busybox-update-config: busybox-configure
- 	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
--- 
-1.7.10.4
+The next seven patches add the update-all-config target.  At
+Thomas S.'s suggestion, it's split up more.  The first three
+add missing -update-config targets and fix the busybox one;
+the last three ones make sure that the buildroot default
+config files are not overwritten by update-all-config.
+
+The final patch adds the BR2_DEFCONFIG to .config, so
+update-all-config can save directly to the right config file.
+
+Regards,
+Arnout
+
+----------------------------------------------------------------
+Arnout Vandecappelle (Essensium/Mind) (10):
+      manual: add section about storing the configuration.
+      target/generic: add filesystem overlay option
+      ctng: add ctng-update-config target
+      busybox: busybox-update-config should depend on busybox-configure
+      at91bootstrap3: add -update-config target
+      Add update-all-config target
+      busybox: update-all-config shouldn't update default busybox config
+      crosstool-ng: update-all-config shouldn't update default busybox config
+      uClibc: update-all-config shouldn't update default uClibc config
+      Make savedefconfig save to a configured file.
+
+ Config.in                                        |   12 ++
+ Makefile                                         |   32 +++-
+ boot/at91bootstrap3/at91bootstrap3.mk            |    8 +
+ docs/manual/adding-packages-directory.txt        |    1 +
+ docs/manual/board-support.txt                    |   35 ----
+ docs/manual/customize-rootfs.txt                 |   21 +-
+ docs/manual/customize-store.txt                  |  223 ++++++++++++++++++++++
+ docs/manual/customize.txt                        |    2 +
+ linux/linux.mk                                   |    2 +
+ package/busybox/Config.in                        |    7 +-
+ package/busybox/busybox.mk                       |   13 +-
+ target/generic/Config.in                         |   11 ++
+ toolchain/toolchain-crosstool-ng/Config.in       |    6 +-
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   21 +-
+ toolchain/uClibc/Config.in                       |    7 +-
+ toolchain/uClibc/uclibc.mk                       |   25 +--
+ 16 files changed, 340 insertions(+), 86 deletions(-)
+ delete mode 100644 docs/manual/board-support.txt
+ create mode 100644 docs/manual/customize-store.txt
