@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 21 Oct 2012 01:45:30 +0200
-Subject: [Buildroot] [PATCH 09/10] uClibc: update-all-config shouldn't
-	update default uClibc config
+Date: Sun, 21 Oct 2012 01:45:24 +0200
+Subject: [Buildroot] [PATCH 03/10] ctng: add ctng-update-config target
 In-Reply-To: <1350776731-8467-1-git-send-email-arnout@mind.be>
 References: <1350776731-8467-1-git-send-email-arnout@mind.be>
-Message-ID: <1350776731-8467-10-git-send-email-arnout@mind.be>
+Message-ID: <1350776731-8467-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +12,59 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-The new update-all-config target will update the uClibc config file
-if BR2_UCLIBC_CONFIG is set, even if it is set to the default value
-in toolchain/uClibc/uClibc-xxx.config.
+Analogous to linux-update-config and friends.
 
-To avoid this, set the default BR2_UCLIBC_CONFIG to empty, and select
-a default to use in the .mk file.
-
-Note that uclibc-update-config will still overwrite the default file
-in toolchain/uClibc/uClibc-xxx.config - presumably it's intentional.
+Also update documentation.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/uClibc/Config.in |    7 ++-----
- toolchain/uClibc/uclibc.mk |   23 +++++++++++------------
- 2 files changed, 13 insertions(+), 17 deletions(-)
+ docs/manual/customize-store.txt                  |    8 ++++----
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    3 +++
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index f46a415..9cce05d 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -42,15 +42,12 @@ config BR2_UCLIBC_VERSION_STRING
+diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
+index bc1751e..c7ef00c 100644
+--- a/docs/manual/customize-store.txt
++++ b/docs/manual/customize-store.txt
+@@ -58,8 +58,8 @@ configuration files easier.
+   path specified by +BR2_PACKAGE_BUSYBOX_CONFIG+.
+ * +make uclibc-update-config+ saves the uClibc configuration to the
+   path specified by +BR2_UCLIBC_CONFIG+.
+-* For crosstool-NG, no helper exists so you have to copy the config
+-  file manually to +BR2_TOOLCHAIN_CTNG_CONFIG+.
++* +make ctng-update-config+ saves the crosstool-NG configuration to the
++  patch specified by +BR2_TOOLCHAIN_CTNG_CONFIG+.
  
- config BR2_UCLIBC_CONFIG
- 	string "uClibc configuration file to use?"
--	default "toolchain/uClibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
--	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
--	default "toolchain/uClibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
--	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
-+	default ""
- 	help
- 	  Some people may wish to use their own modified uClibc configuration
- 	  file and will specify their config file location with this option.
- 	  See also docs/README in this package.
--	  If unsure, use the default.
-+	  If left empty, a default configuration will be used.
  
- config BR2_PTHREAD_DEBUG
- 	bool "Thread library debugging"
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 0faaf18..d032684 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -6,22 +6,21 @@
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- 
--# specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
--# setting.
--ifndef UCLIBC_CONFIG_FILE
--UCLIBC_CONFIG_FILE=$(call qstrip,$(BR2_UCLIBC_CONFIG))
--endif
--
--UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
-+UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
- 
- ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
--UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
--UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
-+UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
-+UCLIBC_DIR  = $(TOOLCHAIN_DIR)/uClibc
-+UCLIBC_CONFIG_VERSION = snapshot
- else
--UCLIBC_SITE:=http://www.uclibc.org/downloads
--UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
-+UCLIBC_SITE = http://www.uclibc.org/downloads
-+UCLIBC_DIR  = $(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
-+UCLIBC_CONFIG_VERSION = $(subst $(space),.,$(wordlist 1,3,$(subst .,$(space),$(UCLIBC_VERSION))))
- endif
- 
-+UCLIBC_CONFIG = $(call qstrip,$(BR2_UCLIBC_CONFIG))
-+UCLIBC_CONFIG_FILE = $(or $(wildcard $(UCLIBC_CONFIG)),toolchain/uClibc/uClibc-$(UCLIBC_CONFIG_VERSION).config)
+ Creating your own board support
+@@ -122,7 +122,7 @@ you can skip the steps that are not relevant for your use case.
+ 1. Write the configuration files:
+    * +make linux-update-defconfig+
+    * +make busybox-update-config+
+-   * +cp <output>/build/build-toolchain/.config board/<manufacturer>/<boardname>/ctng.config+
++   * +make ctng-update-config+
+    * +make uclibc-update-config+
+    * +cp <output>/build/at91bootstrap3-*/.config board/<manufacturer>/<boardname>/at91bootstrap3.config+
+ 1. Create +board/<manufacturer>/<boardname>/fs-overlay+ and fill it
+@@ -163,7 +163,7 @@ the buildroot tree).
+ 1. Write the configuration files:
+    * +make linux-update-defconfig+
+    * +make busybox-update-config+
+-   * +cp <output>/build/build-toolchain/.config <path-to-board-directory>/ctng.config+
++   * +make ctng-update-config+
+    * +make uclibc-update-config+
+    * +cp <output>/build/at91bootstrap3-*/.config <path-to-board-directory>/at91bootstrap3.config+
+ 1. Create +<path-to-board-directory>/fs-overlay+ and fill it
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index e46bb20..fb6da0f 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -397,3 +397,6 @@ ctng-menuconfig: $(CTNG_DIR)/.config
+ 	$(call ctng-oldconfig,$<)
+ 	$(call ctng-check-config-changed,$<,$<.timestamp)
+ 	$(Q)rm -f $<.timestamp
 +
- UCLIBC_PATCH_DIR:=toolchain/uClibc/
- UCLIBC_SOURCE:=uClibc-$(UCLIBC_VERSION).tar.bz2
- 
-@@ -508,7 +507,7 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
- uclibc-update-config: uclibc-config
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
--ifneq ($(UCLIBC_CONFIG_FILE),)
-+ifneq ($(UCLIBC_CONFIG),)
- UPDATE_ALL_CONFIG_TARGETS += uclibc-update-config
- endif
- 
++ctng-update-config: $(CTNG_DIR)/.config
++	cp -f $< $(CTNG_CONFIG_FILE)
 -- 
 1.7.10.4
