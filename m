@@ -1,19 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 20 Oct 2012 21:03:38 +0200
-Subject: [Buildroot] [PATCH] netsnmp: bump to version 5.7.2
-In-Reply-To: <1350688324-25979-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 19 Oct 2012 20:12:04 -0300")
-References: <1350688324-25979-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lif1ufsl.fsf@macbook.be.48ers.dk>
+Date: Sat, 20 Oct 2012 21:04:39 +0200
+Subject: [Buildroot] [PATCH] version update pcre 8.31
+In-Reply-To: <1350035032-10549-1-git-send-email-alexander@mezon.ru> (Alexander
+ Khryukin's message of "Fri, 12 Oct 2012 09:43:52 +0000")
+References: <1350035032-10549-1-git-send-email-alexander@mezon.ru>
+Message-ID: <87happufqw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Alexander" == Alexander Khryukin <alexander@mezon.ru> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Alexander> Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
 
 Committed, thanks.
 
