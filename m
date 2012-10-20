@@ -1,19 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 20 Oct 2012 21:05:18 +0200
-Subject: [Buildroot] [PATCH] hostapd: add fix for CVE-2012-4445
-In-Reply-To: <1350044109-9853-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 12 Oct 2012 09:15:09 -0300")
-References: <1350044109-9853-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d30dufpt.fsf@macbook.be.48ers.dk>
+Date: Sat, 20 Oct 2012 21:06:12 +0200
+Subject: [Buildroot] [PATCH] toolchain: have check_glibc to search
+	deeper for ld-linux
+In-Reply-To: <1350073550-779-1-git-send-email-jean-mickael.guerin@6wind.com>
+ (Jean-Mickael Guerin's message of "Fri, 12 Oct 2012 22:25:50 +0200")
+References: <1350073550-779-1-git-send-email-jean-mickael.guerin@6wind.com>
+Message-ID: <878vb1ufob.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Jean-Mickael" == Jean-Mickael Guerin <jean-mickael.guerin@6wind.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Jean-Mickael> ld-linux*.so may not be present in lib/ directory, it could be
+ Jean-Mickael> in lib32 and/or lib64 only. But check_glibc reports
+ Jean-Mickael> "Incorrect selection of the C library" in this case, which is
+ Jean-Mickael> not true.
+ Jean-Mickael> Fixed by extending the search to  SYSROOT/*/*.
 
 Committed, thanks.
 
