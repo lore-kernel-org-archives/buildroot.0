@@ -1,31 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Oct 2012 20:20:58 +0200
-Subject: [Buildroot] [PATCH 01/10] manual: add section about storing the
- configuration.
-In-Reply-To: <CAHXCMM+qPKy0qUefqnr3V5jiy7ffR1AO_aNnKiW7LBT_YfV01Q@mail.gmail.com>
-References: <1350776731-8467-1-git-send-email-arnout@mind.be>
- <1350776731-8467-2-git-send-email-arnout@mind.be>
- <CAHXCMM+qPKy0qUefqnr3V5jiy7ffR1AO_aNnKiW7LBT_YfV01Q@mail.gmail.com>
-Message-ID: <20121021202058.796a7f89@skate>
+Date: Sun, 21 Oct 2012 20:27:19 +0200
+Subject: [Buildroot] About remote debugging and library stripping
+In-Reply-To: <20121019091857.GA24434@mail.sceen.net>
+References: <20121019091857.GA24434@mail.sceen.net>
+Message-ID: <20121021202719.6c7e0a5d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 21 Oct 2012 17:05:40 +0200, Samuel Martin wrote:
-> > +   (as far as they are relevant):
-> > +   * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
-> > +   * +BR2_PACKAGE_BUSYBOX_CONFIG+
-> > +   * +BR2_TOOLCHAIN_CTNG_CONFIG+
-> > +   * +BR2_UCLIBC_CONFIG+
-> > +   * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
-> I think that we could/should/have to add such option for barebox too.
-> I've cooked a patch for that and I'll post it shortly.
+Richard,
 
-My colleague Maxime has already posted such a patch a few days ago:
+Thanks a lot for this status.
 
-  http://lists.busybox.net/pipermail/buildroot/2012-October/060102.html
+On Fri, 19 Oct 2012 11:18:57 +0200, Richard Braun wrote:
+
+> There seems to be some confusion about what has to be done to get
+> remote debugging actually working with stripped libraries. It seems
+> buildroot avoids stripping libthread_db entirely, which was
+> introduced by Mike Frysinger (hello Mike) with
+> c98bc88e3296222a20e59cfb7b9f3ec5aee3be1c. If you're absolutely
+> certain of this change, then please explain it. In my experience (and
+> some in-depth search in the sources), libthread_db and libpthread can
+> both be stripped.
+> 
+> To understand why this is possible, the big picture must get clearer.
+> First, for those who aren't aware of its existence, libthread_db is
+> part of the C library. Its purpose is to hide the implementation
+> details of the threading implementation through a well defined
+> interface that GDB and gdbserver can use. When gdbserver loads this
+> library, it doesn't need the debugging or local symbols. The
+> libthread_db library can be stripped as much as any other library.
+> 
+> This isn't the case for libpthread. As stated in the GDB FAQ [1],
+> libthread_db actually needs a few local symbols to work with its
+> libpthread counterpart. The libpthread library should only be stripped
+> from its debugging symbols (--strip-debug), not its local ones.
+> 
+> To make things even more complicated, gdbserver (and apparently only
+> gdbserver) has support for Linux threads since before 2008 [2], but
+> it's limited (you may get weird SIGTRAPs without understanding why).
+> This is important because currently, libthread_db isn't installed when
+> using the crosstool-ng backend.
+
+Can you conclude with what you think are the steps needed to get these
+things right?
+
+Thanks,
 
 Thomas
 -- 
