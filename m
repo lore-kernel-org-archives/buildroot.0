@@ -1,23 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 21 Oct 2012 16:42:21 -0300
-Subject: [Buildroot] [PATCH] openssl: disable apps for NOMMU
-In-Reply-To: <876263tz4u.fsf@macbook.be.48ers.dk>
-References: <1350388760-5447-1-git-send-email-gustavo@zacarias.com.ar>
- <876263tz4u.fsf@macbook.be.48ers.dk>
-Message-ID: <5084501D.8080405@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 21 Oct 2012 21:47:52 +0200
+Subject: [Buildroot] [PATCH] qtuio: new package
+In-Reply-To: <1348297189-29498-1-git-send-email-sho@relinux.de> (Stephan
+ Hoffmann's message of "Sat, 22 Sep 2012 08:59:49 +0200")
+References: <1348297189-29498-1-git-send-email-sho@relinux.de>
+Message-ID: <87bofvsj2v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/21/12 16:15, Peter Korsgaard wrote:
+>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
 
-> Why is this not BR2_PACKAGE_OPENSSL_BIN instead?
+ Stephan> Implementation of an interface connecting TUIO messages and QT events
+ Stephan> https://github.com/x29a/qTUIO
 
-Because the change must be done before anything is built.
-Since i'm only tweaking the build phase and not the install one in the
-build system i need to fake the openssl being built with the touch.
-It will then be removed by the BR2_PACKAGE_OPENSSL_BIN knob when it's nommu.
-Or maybe i misunderstood what you meant?
-Regards.
+ Stephan> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+ Stephan> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Stephan> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Stephan>  build-tested with a minimal internal toolchain for ARM.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
