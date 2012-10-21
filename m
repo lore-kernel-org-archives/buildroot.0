@@ -1,99 +1,170 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 21 Oct 2012 21:22:18 +0200
-Subject: [Buildroot] [git commit] webkit: Fix build issue with gcc-4.6 and
-	above
-Message-ID: <20121021192955.F38BD998BF@busybox.osuosl.org>
+Date: Sun, 21 Oct 2012 21:28:22 +0200
+Subject: [Buildroot] [git commit] luajit: bump to version 2.0.0-beta11
+Message-ID: <20121021192956.519A1998BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=787278356d19771ed32c8addd45480beae78a303
+commit: http://git.buildroot.net/buildroot/commit/?id=0a227142c9bdbd234031e107ce920c94aa85bb1b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes the "Unknown parameter for tags/attrs" build error.
-Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe
+this release includes my 2 requests, see http://www.freelists.org/post/luajit/LuaJIT-on-Buildroot
 
-[PATCH] 2011-04-17  Thierry Reding
-<thierry.reding@avionic-design.de>
-
-  Reviewed by Adam Barth.
-
-  Fix build with GCC 4.6.
-
-  * dom/make_names.pl: Execute preprocessor without the -P option. The
-  preprocessor in GCC 4.6 eats empty lines, effectively breaking the
-  parsing performed by this script. Dropping the -P option when invoking
-  the preprocessor keeps the empty lines but as a side-effect also adds
-  additional linemarkers.
-
-  From the cpp manpage:
-
-    -P  Inhibit generation of linemarkers in the output from the
-        preprocessor. This might be useful when running the preprocessor
-        on something that is not C code, and will be sent to a program
-        which might be confused by the linemarkers.
-
-  The linemarkers are not problematic, however, because the script
-  properly handles them by ignoring all lines starting with a #.
-
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
-Tested-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/webkit/webkit-fix-build-with-gcc-4-6.patch |   45 ++++++++++++++++++++
- 1 files changed, 45 insertions(+), 0 deletions(-)
+ package/luajit/luajit-01-root-path.patch      |   10 +++++-----
+ package/luajit/luajit-02-shared-lib.patch     |    2 +-
+ package/luajit/luajit-03-dont-strip.patch     |    2 +-
+ package/luajit/luajit-04-no-bin-symlink.patch |   12 ++++++------
+ package/luajit/luajit.mk                      |   17 +++++++++++------
+ 5 files changed, 24 insertions(+), 19 deletions(-)
 
-diff --git a/package/webkit/webkit-fix-build-with-gcc-4-6.patch b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
-new file mode 100644
-index 0000000..181c7f5
---- /dev/null
-+++ b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
-@@ -0,0 +1,45 @@
-+Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe:
-+Removed the ChangeLog part.
+diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
+index 3b0a585..80ad1e9 100644
+--- a/package/luajit/luajit-01-root-path.patch
++++ b/package/luajit/luajit-01-root-path.patch
+@@ -7,10 +7,10 @@ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -22,9 +22,9 @@
+- #define LUA_CPATH_DEFAULT \
+-   ".\\?.dll;" LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
+- #else
++@@ -26,9 +26,9 @@
++ ** Note to distribution maintainers: do NOT patch the following line!
++ ** Please read ../doc/install.html#distro and pass PREFIX=/usr instead.
++ */
+ -#define LUA_ROOT	"/usr/local/"
+ -#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
+ -#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
+@@ -18,5 +18,5 @@ Index: b/src/luaconf.h
+ +#define LUA_LDIR	LUA_ROOT "share/lua/"
+ +#define LUA_CDIR	LUA_ROOT "lib/lua/"
+  #ifdef LUA_XROOT
+- #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta10/"
++ #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta11/"
+  #define LUA_XPATH \
+diff --git a/package/luajit/luajit-02-shared-lib.patch b/package/luajit/luajit-02-shared-lib.patch
+index d5122ba..361e5c2 100644
+--- a/package/luajit/luajit-02-shared-lib.patch
++++ b/package/luajit/luajit-02-shared-lib.patch
+@@ -6,7 +6,7 @@ Index: b/src/Makefile
+ ===================================================================
+ --- a/src/Makefile
+ +++ b/src/Makefile
+-@@ -629,7 +629,7 @@
++@@ -669,7 +669,7 @@
+  
+  $(LUAJIT_T): $(TARGET_O) $(LUAJIT_O) $(TARGET_DEP)
+  	$(E) "LINK      $@"
+diff --git a/package/luajit/luajit-03-dont-strip.patch b/package/luajit/luajit-03-dont-strip.patch
+index 9651cdf..66bdadf 100644
+--- a/package/luajit/luajit-03-dont-strip.patch
++++ b/package/luajit/luajit-03-dont-strip.patch
+@@ -8,7 +8,7 @@ Index: b/src/Makefile
+ ===================================================================
+ --- a/src/Makefile
+ +++ b/src/Makefile
+-@@ -625,12 +625,10 @@
++@@ -665,12 +665,10 @@
+  $(LUAJIT_SO): $(LJVMCORE_O)
+  	$(E) "DYNLINK   $@"
+  	$(Q)$(TARGET_LD) $(TARGET_ASHLDFLAGS) -o $@ $(LJVMCORE_DYNO) $(TARGET_ALIBS)
+diff --git a/package/luajit/luajit-04-no-bin-symlink.patch b/package/luajit/luajit-04-no-bin-symlink.patch
+index 3eed7de..91a470a 100644
+--- a/package/luajit/luajit-04-no-bin-symlink.patch
++++ b/package/luajit/luajit-04-no-bin-symlink.patch
+@@ -6,7 +6,7 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -41,8 +41,7 @@
++@@ -43,8 +43,7 @@
+  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
+  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
+  
+@@ -16,7 +16,7 @@ Index: b/Makefile
+  INSTALL_ANAME= libluajit-$(ABIVER).a
+  INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
+  INSTALL_SOSHORT= libluajit-$(ABIVER).so
+-@@ -56,7 +55,6 @@
++@@ -58,7 +57,6 @@
+  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
+  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
+  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
+@@ -24,10 +24,10 @@ Index: b/Makefile
+  INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
+  
+  INSTALL_DIRS= $(INSTALL_BIN) $(INSTALL_LIB) $(INSTALL_INC) $(INSTALL_MAN) \
+-@@ -114,13 +112,6 @@
++@@ -120,13 +118,6 @@
+  	  $(RM) $(FILE_PC).tmp
+  	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
+- 	cd lib && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
++ 	cd src/jit && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
+ -	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
+ -	@echo ""
+ -	@echo "Note: the beta releases deliberately do NOT install a symlink for luajit"
+@@ -36,5 +36,5 @@ Index: b/Makefile
+ -	@echo "  $(SYMLINK) $(INSTALL_TNAME) $(INSTALL_TSYM)"
+ -	@echo ""
+  
+- ##############################################################################
+- 
++ uninstall:
++ 	@echo "==== Uninstalling LuaJIT $(VERSION) from $(PREFIX) ===="
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 913bc0c..2583f92 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LUAJIT_VERSION = 2.0.0-beta10
++LUAJIT_VERSION = 2.0.0-beta11
+ LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
+ LUAJIT_SITE    = http://luajit.org/download
+ LUAJIT_LICENSE = MIT
+@@ -12,12 +12,8 @@ LUAJIT_LICENSE_FILES = COPYRIGHT
+ 
+ LUAJIT_INSTALL_STAGING = YES
+ 
+-define LUAJIT_NOLARGEFILE_FIX_MAKEFILE
+-	$(SED) 's/TARGET_XCFLAGS= -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE/TARGET_XCFLAGS=/' $(@D)/src/Makefile
+-endef
+-
+ ifneq ($(BR2_LARGEFILE),y)
+-LUAJIT_POST_PATCH_HOOKS += LUAJIT_NOLARGEFILE_FIX_MAKEFILE
++LUAJIT_NO_LARGEFILE = TARGET_LFSFLAGS=
+ endif
+ 
+ # The luajit build procedure requires the host compiler to have the
+@@ -47,6 +43,7 @@ define LUAJIT_BUILD_CMDS
+ 		HOST_CC="$(LUAJIT_HOST_CC)" \
+ 		HOST_CFLAGS="$(HOST_CFLAGS)" \
+ 		HOST_LDFLAGS="$(HOST_LDFLAGS)" \
++		$(LUAJIT_NO_LARGEFILE) \
+ 		-C $(@D) amalg
+ endef
+ 
+@@ -58,6 +55,14 @@ define LUAJIT_INSTALL_TARGET_CMDS
+ 	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
+ endef
+ 
++define LUAJIT_UNINSTALL_STAGING_CMDS
++	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) uninstall
++endef
 +
-+From: "commit-queue at webkit.org"
-+ <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
-+Date: Mon, 18 Apr 2011 06:53:23 +0000
-+Subject: [PATCH] 2011-04-17  Thierry Reding 
-+ <thierry.reding@avionic-design.de>
++define LUAJIT_UNINSTALL_TARGET_CMDS
++	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) uninstall
++endef
 +
-+        Reviewed by Adam Barth.
-+
-+        Fix build with GCC 4.6.
-+
-+        * dom/make_names.pl: Execute preprocessor without the -P option. The
-+        preprocessor in GCC 4.6 eats empty lines, effectively breaking the
-+        parsing performed by this script. Dropping the -P option when invoking
-+        the preprocessor keeps the empty lines but as a side-effect also adds
-+        additional linemarkers.
-+
-+        From the cpp manpage:
-+
-+          -P  Inhibit generation of linemarkers in the output from the
-+              preprocessor. This might be useful when running the preprocessor
-+              on something that is not C code, and will be sent to a program
-+              which might be confused by the linemarkers.
-+
-+        The linemarkers are not problematic, however, because the script
-+        properly handles them by ignoring all lines starting with a #.
-+
-+diff --git a/WebCore/dom/make_names.pl b/WebCore/dom/make_names.pl
-+index 836137e..50386e0 100755
-+--- a/WebCore/dom/make_names.pl
-++++ b/WebCore/dom/make_names.pl
-+@@ -54,7 +54,7 @@ if ($ENV{CC}) {
-+ } else {
-+     $gccLocation = "/usr/bin/gcc";
-+ }
-+-my $preprocessor = $gccLocation . " -E -P -x c++";
-++my $preprocessor = $gccLocation . " -E -x c++";
-+ 
-+ GetOptions(
-+     'tags=s' => \$tagsFile, 
-+-- 
-+1.7.11.4
-+
+ define LUAJIT_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
