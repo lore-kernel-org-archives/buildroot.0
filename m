@@ -1,22 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Oct 2012 23:07:03 +0200
-Subject: [Buildroot] [PATCH] binutils: add sysroot fix from bug #3049
-In-Reply-To: <1336994568-29695-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 14 May 2012 08:22:48 -0300")
-References: <1336994568-29695-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fw57r0ug.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 21 Oct 2012 21:07:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 3049] binutils have a sysroot bug in ld
+In-Reply-To: <bug-3049-163@https.bugs.busybox.net/>
+References: <bug-3049-163@https.bugs.busybox.net/>
+Message-ID: <20121021210743.786C6998D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+https://bugs.busybox.net/show_bug.cgi?id=3049
 
- Gustavo> Add binutils ld sysroot bug fix.
- Gustavo> See http://sourceware.org/bugzilla/show_bug.cgi?id=10340
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> 2012-10-21 21:07:41 UTC ---
+Fixed in git by Gustavoz, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
