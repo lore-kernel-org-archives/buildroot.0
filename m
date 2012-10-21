@@ -1,22 +1,99 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Oct 2012 21:28:48 +0200
-Subject: [Buildroot] [PATCH] luajit: bump to version 2.0.0-beta11
-In-Reply-To: <1350586599-31757-1-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Thu, 18 Oct 2012 20:56:39 +0200")
-References: <1350586599-31757-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87txtnsjyn.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 21 Oct 2012 21:22:18 +0200
+Subject: [Buildroot] [git commit] webkit: Fix build issue with gcc-4.6 and
+	above
+Message-ID: <20121021192955.F38BD998BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=787278356d19771ed32c8addd45480beae78a303
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Francois> this release includes my 2 requests, see http://www.freelists.org/post/luajit/LuaJIT-on-Buildroot
- Francois> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This fixes the "Unknown parameter for tags/attrs" build error.
+Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe
 
-Committed, thanks.
+[PATCH] 2011-04-17  Thierry Reding
+<thierry.reding@avionic-design.de>
 
--- 
-Bye, Peter Korsgaard
+  Reviewed by Adam Barth.
+
+  Fix build with GCC 4.6.
+
+  * dom/make_names.pl: Execute preprocessor without the -P option. The
+  preprocessor in GCC 4.6 eats empty lines, effectively breaking the
+  parsing performed by this script. Dropping the -P option when invoking
+  the preprocessor keeps the empty lines but as a side-effect also adds
+  additional linemarkers.
+
+  From the cpp manpage:
+
+    -P  Inhibit generation of linemarkers in the output from the
+        preprocessor. This might be useful when running the preprocessor
+        on something that is not C code, and will be sent to a program
+        which might be confused by the linemarkers.
+
+  The linemarkers are not problematic, however, because the script
+  properly handles them by ignoring all lines starting with a #.
+
+Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/webkit/webkit-fix-build-with-gcc-4-6.patch |   45 ++++++++++++++++++++
+ 1 files changed, 45 insertions(+), 0 deletions(-)
+
+diff --git a/package/webkit/webkit-fix-build-with-gcc-4-6.patch b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
+new file mode 100644
+index 0000000..181c7f5
+--- /dev/null
++++ b/package/webkit/webkit-fix-build-with-gcc-4-6.patch
+@@ -0,0 +1,45 @@
++Backported from commit 88e08c43d0200a4b06a298b7d2541965eebc0afe:
++Removed the ChangeLog part.
++
++From: "commit-queue at webkit.org"
++ <commit-queue@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
++Date: Mon, 18 Apr 2011 06:53:23 +0000
++Subject: [PATCH] 2011-04-17  Thierry Reding 
++ <thierry.reding@avionic-design.de>
++
++        Reviewed by Adam Barth.
++
++        Fix build with GCC 4.6.
++
++        * dom/make_names.pl: Execute preprocessor without the -P option. The
++        preprocessor in GCC 4.6 eats empty lines, effectively breaking the
++        parsing performed by this script. Dropping the -P option when invoking
++        the preprocessor keeps the empty lines but as a side-effect also adds
++        additional linemarkers.
++
++        From the cpp manpage:
++
++          -P  Inhibit generation of linemarkers in the output from the
++              preprocessor. This might be useful when running the preprocessor
++              on something that is not C code, and will be sent to a program
++              which might be confused by the linemarkers.
++
++        The linemarkers are not problematic, however, because the script
++        properly handles them by ignoring all lines starting with a #.
++
++diff --git a/WebCore/dom/make_names.pl b/WebCore/dom/make_names.pl
++index 836137e..50386e0 100755
++--- a/WebCore/dom/make_names.pl
+++++ b/WebCore/dom/make_names.pl
++@@ -54,7 +54,7 @@ if ($ENV{CC}) {
++ } else {
++     $gccLocation = "/usr/bin/gcc";
++ }
++-my $preprocessor = $gccLocation . " -E -P -x c++";
+++my $preprocessor = $gccLocation . " -E -x c++";
++ 
++ GetOptions(
++     'tags=s' => \$tagsFile, 
++-- 
++1.7.11.4
++
