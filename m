@@ -1,41 +1,35 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 21 Oct 2012 19:34:19 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Oct 2012 20:20:58 +0200
 Subject: [Buildroot] [PATCH 01/10] manual: add section about storing the
  configuration.
-In-Reply-To: <1350776731-8467-2-git-send-email-arnout@mind.be>
+In-Reply-To: <CAHXCMM+qPKy0qUefqnr3V5jiy7ffR1AO_aNnKiW7LBT_YfV01Q@mail.gmail.com>
 References: <1350776731-8467-1-git-send-email-arnout@mind.be>
  <1350776731-8467-2-git-send-email-arnout@mind.be>
-Message-ID: <5084321B.60701@relinux.de>
+ <CAHXCMM+qPKy0qUefqnr3V5jiy7ffR1AO_aNnKiW7LBT_YfV01Q@mail.gmail.com>
+Message-ID: <20121021202058.796a7f89@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 21.10.2012 01:45, schrieb Arnout Vandecappelle (Essensium/Mind):
-> +Once you have a known working configuration, run +make
-> +savedefconfig+. This will generate a minimal +defconfig+ file at the
-> +root of the Buildroot source tree. Move this file into the +configs/+
-> +directory, and rename it +<boardname>_defconfig+.
-Hello all,
+On Sun, 21 Oct 2012 17:05:40 +0200, Samuel Martin wrote:
+> > +   (as far as they are relevant):
+> > +   * +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE+
+> > +   * +BR2_PACKAGE_BUSYBOX_CONFIG+
+> > +   * +BR2_TOOLCHAIN_CTNG_CONFIG+
+> > +   * +BR2_UCLIBC_CONFIG+
+> > +   * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
+> I think that we could/should/have to add such option for barebox too.
+> I've cooked a patch for that and I'll post it shortly.
 
-so we will end with a nice tree of hopefully many
-board/<manufacturer>/<boardname> folders containig special settings for
-each board, most likely at least a kernel config file. I don't expect
-that too many boards will do without other settings but those in
-buildroot's defconfig. And we will have many <boardname>_defconfig files
-in the configs folder.
+My colleague Maxime has already posted such a patch a few days ago:
 
-Wouldn't it make more sense to move buildroot's <boardname>_defconfig
-files to the respective board folder, so that everything would be
-together in one place?
+  http://lists.busybox.net/pipermail/buildroot/2012-October/060102.html
 
-Just my 2 cents
-
-Stephan
-
+Thomas
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
