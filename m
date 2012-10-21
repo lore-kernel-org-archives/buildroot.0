@@ -1,29 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 21 Oct 2012 22:29:24 +0200
-Subject: [Buildroot] [PATCH] openssl: disable apps for NOMMU
-In-Reply-To: <5084501D.8080405@zacarias.com.ar> (Gustavo Zacarias's message of
- "Sun, 21 Oct 2012 16:42:21 -0300")
-References: <1350388760-5447-1-git-send-email-gustavo@zacarias.com.ar>
- <876263tz4u.fsf@macbook.be.48ers.dk>
- <5084501D.8080405@zacarias.com.ar>
-Message-ID: <873917sh5n.fsf@macbook.be.48ers.dk>
+Date: Sun, 21 Oct 2012 22:30:53 +0200
+Subject: [Buildroot] Selecting custom skeleton hides terminal settings
+	Why ?
+In-Reply-To: <63446FE4CD66446495AD2CCBD689DCB9@JohanW7> (Sagaert Johan's
+ message of "Sun, 21 Oct 2012 21:36:49 +0200")
+References: <63446FE4CD66446495AD2CCBD689DCB9@JohanW7>
+Message-ID: <87y5izr2iq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
- Gustavo> On 10/21/12 16:15, Peter Korsgaard wrote:
- >> Why is this not BR2_PACKAGE_OPENSSL_BIN instead?
+ Sagaert> Hi
+ Sagaert> (2012.11 git)
+ 
+ Sagaert> When i select a custom skeleton the settings for the login
+ Sagaert> prompt (ttyxxx) and baudrate are hidden .
 
- Gustavo> Because the change must be done before anything is built.
+ Sagaert> Can someone explain why this was altered this way ?
 
-Ok, but why only on !MMU and not when the user has just decided that
-they don't want /usr/bin/openssl (E.G. not enable
-BR2_PACKAGE_OPENSSL_BIN)? Why would we want to build (but not install)
-it when MMU?
+Because it relies on a specific syntax in the default /etc/inittab, that
+might not be present if you use a custom skeleton (perhaps you don't
+even have an inittab).
 
 -- 
 Bye, Peter Korsgaard
