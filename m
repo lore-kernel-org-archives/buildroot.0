@@ -1,31 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Oct 2012 12:11:22 +0200
-Subject: [Buildroot] filename format for kernel patches when using
- kernelfrom git ?
-In-Reply-To: <78B6349933E14FAB8DBC181EC080FA04@JohanW7>
-References: <C22CB8643B1E42C898B890C9A3A7539F@JohanW7>
- <78B6349933E14FAB8DBC181EC080FA04@JohanW7>
-Message-ID: <20121022121122.452fe63f@skate>
+Date: Mon, 22 Oct 2012 14:06:51 +0200
+Subject: [Buildroot] [PATCH 1/7] xapp_listres: fix build against Xmu by
+	bumping the version
+Message-ID: <1350907617-14368-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Fixes
 
-On Thu, 18 Oct 2012 18:23:48 +0200, Sagaert Johan wrote:
+  http://autobuild.buildroot.org/results/06d0ef38165769df38047c1f64d4cfae835e9e54
 
-> I discovered the use of a file called 'series' to list the patches
-> and apply the patches in the order I want.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xapp_listres/xapp_listres.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Either this, or simply name your patches:
-
-	linux-<something>.patch
-
-Thomas
+diff --git a/package/x11r7/xapp_listres/xapp_listres.mk b/package/x11r7/xapp_listres/xapp_listres.mk
+index c701f43..1a3247b 100644
+--- a/package/x11r7/xapp_listres/xapp_listres.mk
++++ b/package/x11r7/xapp_listres/xapp_listres.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_LISTRES_VERSION = 1.0.1
++XAPP_LISTRES_VERSION = 1.0.3
+ XAPP_LISTRES_SOURCE = listres-$(XAPP_LISTRES_VERSION).tar.bz2
+ XAPP_LISTRES_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_LISTRES_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXmu xlib_libXt
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
