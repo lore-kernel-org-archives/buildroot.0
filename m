@@ -1,48 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 22 Oct 2012 09:50:57 +0200
-Subject: [Buildroot] [PATCH v2] libplayer: fix handling of cflags in
-	configure
-In-Reply-To: <500542BE.40504@mind.be> (Arnout Vandecappelle's message of "Tue, 
- 17 Jul 2012 12:47:26 +0200")
-References: <1342301676-23857-1-git-send-email-arnout@mind.be>
- <20120715215100.7e280618@skate> <500542BE.40504@mind.be>
-Message-ID: <87txtnndwe.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 22 Oct 2012 11:54:44 +0200
+Subject: [Buildroot] [git commit] linux: bump 3.6.x stable version
+Message-ID: <20121022095520.17A22998EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=97de600d1de0f82e6244a297267b56a5a6ca4f1d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> On 07/15/12 21:51, Thomas Petazzoni wrote:
- >> Le Sat, 14 Jul 2012 23:34:36 +0200,
- >> "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>  a ?crit :
- >> 
- >>> Problem was found when compiling libplayer with GStreamer support
- >>> on x86_64 with a Sourcery toolchain.
- >> 
- >> I've tried to build libplayer with gstreamer support for x86_64 with a
- >> Sourcery toolchain, and I didn't had an issue. Since your problem was
- >> quoting related, I thought that it could be caused by the ccache
- >> support, but it isn't.
- >> 
- >> Can you post the .config that triggers the problem, or provide more
- >> details on the problem? It's not that I don't believe that there is a
- >> problem, but without producing it, I feel a bit out of infos to review
- >> the patch.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Arnout>  The config is an allpackageyesconfig from which I removed a
- Arnout> few packages that don't work on x86_64 or that can't be
- Arnout> downloaded anymore.  I've attached the defconfig.  You'd best
- Arnout> interrupt the build after the cross-compiler is extracted and
- Arnout> then run 'make libplayer' explicitly, or you'll have to wait
- Arnout> for hours for the build to finish...
-
-Committed, thanks. The issue also triggered on the autobuilder
-yesterday:
-
-http://autobuild.buildroot.net/results/2a22f33410197f5cf546bf1974c2e168d1b1a070/build-end.log
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 257f934..aa25f89 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_3_6
+-	bool "3.6"
++	bool "3.6.3"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.6" if BR2_LINUX_KERNEL_3_6
++	default "3.6.3" if BR2_LINUX_KERNEL_3_6
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
