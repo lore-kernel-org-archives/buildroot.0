@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Oct 2012 09:46:29 -0300
-Subject: [Buildroot] [PATCH 12/12] arptables: add new package
+Date: Mon, 22 Oct 2012 09:46:28 -0300
+Subject: [Buildroot] [PATCH 11/12] ulogd: add new package
 In-Reply-To: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1350909989-1012-12-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1350909989-1012-11-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,106 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in              |    1 +
- package/arptables/Config.in    |    6 ++++++
- package/arptables/arptables.mk |   21 +++++++++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 package/arptables/Config.in
- create mode 100644 package/arptables/arptables.mk
+ package/Config.in                                 |    1 +
+ package/ulogd/Config.in                           |   16 +++++++++++
+ package/ulogd/ulogd-fix-libpcap-conditional.patch |   29 +++++++++++++++++++++
+ package/ulogd/ulogd.mk                            |   17 ++++++++++++
+ 4 files changed, 63 insertions(+), 0 deletions(-)
+ create mode 100644 package/ulogd/Config.in
+ create mode 100644 package/ulogd/ulogd-fix-libpcap-conditional.patch
+ create mode 100644 package/ulogd/ulogd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7c29ef3..5cbebbc 100644
+index a50eb33..7c29ef3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -540,6 +540,7 @@ endmenu
- 
- menu "Networking applications"
- source "package/argus/Config.in"
-+source "package/arptables/Config.in"
- source "package/avahi/Config.in"
- source "package/axel/Config.in"
- source "package/bluez_utils/Config.in"
-diff --git a/package/arptables/Config.in b/package/arptables/Config.in
+@@ -643,6 +643,7 @@ source "package/tn5250/Config.in"
+ source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
++source "package/ulogd/Config.in"
+ source "package/ushare/Config.in"
+ source "package/vpnc/Config.in"
+ source "package/vsftpd/Config.in"
+diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
 new file mode 100644
-index 0000000..510eedf
+index 0000000..7dc4f11
 --- /dev/null
-+++ b/package/arptables/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ARPTABLES
-+	bool "arptables"
++++ b/package/ulogd/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_ULOGD
++	bool "ulogd"
++	depends on BR2_INET_IPV6
++	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_LIBMNL
++	select BR2_PACKAGE_LIBNETFILTER_ACCT
++	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
++	select BR2_PACKAGE_LIBNETFILTER_LOG
++	select BR2_PACKAGE_LIBNFNETLINK
 +	help
-+	  Tool to set up, maintain, and inspect the tables of ARP rules.
++	  ulogd is a userspace logging daemon for netfilter/iptables related logging.
 +
-+	  http://ebtables.sourceforge.net
-diff --git a/package/arptables/arptables.mk b/package/arptables/arptables.mk
++	  http://www.netfilter.org/projects/ulogd/
++
++comment "ulogd requires a toolchain with IPV6 and LARGEFILE support"
++	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE
+diff --git a/package/ulogd/ulogd-fix-libpcap-conditional.patch b/package/ulogd/ulogd-fix-libpcap-conditional.patch
 new file mode 100644
-index 0000000..dac5ca4
+index 0000000..3d73d37
 --- /dev/null
-+++ b/package/arptables/arptables.mk
-@@ -0,0 +1,21 @@
++++ b/package/ulogd/ulogd-fix-libpcap-conditional.patch
+@@ -0,0 +1,29 @@
++From 08387386821f356834bac14c7c5ea7296fb0f428 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 9 Oct 2012 16:23:12 -0300
++Subject: [PATCH] autoconf/ulogd: fix broken libpcap AM_CONDITIONAL
++
++The AM_CONDITIONAL lacks the opening bracket, hence it always evaluates
++as true, even if there's no libpcap found thus causing build breakage.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 10b6e1f..57c596c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -21,7 +21,7 @@ AC_SEARCH_LIBS([dlopen], [dl], [libdl_LIBS="$LIBS"; LIBS=""])
++ AC_SUBST([libdl_LIBS])
++ AC_SEARCH_LIBS([pcap_close], [pcap], [libpcap_LIBS="-lpcap"; LIBS=""])
++ AC_SUBST([libpcap_LIBS])
++-AM_CONDITIONAL([HAVE_PCAP], test -n "$libpcap_LIBS"])
+++AM_CONDITIONAL([HAVE_PCAP],[test -n "$libpcap_LIBS"])
++ 
++ dnl Checks for header files.
++ AC_HEADER_DIRENT
++-- 
++1.7.8.6
++
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+new file mode 100644
+index 0000000..88dc88a
+--- /dev/null
++++ b/package/ulogd/ulogd.mk
+@@ -0,0 +1,17 @@
 +#############################################################
 +#
-+# arptables
++# ulogd
 +#
 +#############################################################
 +
-+ARPTABLES_VERSION = 0.0.3
-+ARPTABLES_VERSION_MINOR = 4
-+ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION)-$(ARPTABLES_VERSION_MINOR).tar.gz
-+ARPTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
++ULOGD_VERSION = 2.0.1
++ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
++ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
++ULOGD_AUTORECONF = YES
++ULOGD_DEPENDENCIES = host-pkg-config \
++	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
++	libnfnetlink
++ULOGD_LICENSE = GPLv2
++ULOGD_LICENSE_FILES = COPYING
 +
-+define ARPTABLES_BUILD_CMDS
-+	$(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)" COPT_FLAGS="$(TARGET_CFLAGS)"
-+endef
-+
-+define ARPTABLES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -D $(@D)/arptables $(TARGET_DIR)/usr/sbin/arptables
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.8.6
