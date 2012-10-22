@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Oct 2012 09:46:27 -0300
-Subject: [Buildroot] [PATCH 10/12] conntrack-tools: bump to version 1.4.0
+Date: Mon, 22 Oct 2012 09:46:29 -0300
+Subject: [Buildroot] [PATCH 12/12] arptables: add new package
 In-Reply-To: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1350909989-1012-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1350909989-1012-12-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,63 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/conntrack-tools/Config.in          |    7 +++++--
- package/conntrack-tools/conntrack-tools.mk |    5 +++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/Config.in              |    1 +
+ package/arptables/Config.in    |    6 ++++++
+ package/arptables/arptables.mk |   21 +++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/arptables/Config.in
+ create mode 100644 package/arptables/arptables.mk
 
-diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
-index be491e6..f109adf 100644
---- a/package/conntrack-tools/Config.in
-+++ b/package/conntrack-tools/Config.in
-@@ -1,9 +1,12 @@
- config BR2_PACKAGE_CONNTRACK_TOOLS
- 	bool "conntrack-tools"
- 	depends on BR2_INET_IPV6
-+	depends on BR2_INET_RPC
- 	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-+	select BR2_PACKAGE_LIBNETFILTER_CTHELPER
- 	select BR2_PACKAGE_LIBNETFILTER_CTTIMEOUT
-+	select BR2_PACKAGE_LIBNETFILTER_QUEUE
- 	help
- 	  The conntrack-tools are a set of tools targeted at
- 	  system administrators.
-@@ -12,5 +15,5 @@ config BR2_PACKAGE_CONNTRACK_TOOLS
+diff --git a/package/Config.in b/package/Config.in
+index 7c29ef3..5cbebbc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -540,6 +540,7 @@ endmenu
  
- 	  http://www.netfilter.org/projects/conntrack-tools/
- 
--comment "conntrack-tools requires a toolchain with IPV6 and LARGEFILE support"
--	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE
-+comment "conntrack-tools requires a toolchain with IPV6, LARGEFILE and RPC support"
-+	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_INET_RPC
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 6f438fc..2249a49 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
-@@ -4,11 +4,12 @@
- #
- #############################################################
- 
--CONNTRACK_TOOLS_VERSION = 1.2.2
-+CONNTRACK_TOOLS_VERSION = 1.4.0
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkg-config \
--	libnetfilter_conntrack libnetfilter_cttimeout
-+	libnetfilter_conntrack libnetfilter_cthelper libnetfilter_cttimeout \
-+	libnetfilter_queue
- CONNTRACK_TOOLS_LICENSE = GPLv2
- CONNTRACK_TOOLS_LICENSE_FILES = COPYING
- 
+ menu "Networking applications"
+ source "package/argus/Config.in"
++source "package/arptables/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
+ source "package/bluez_utils/Config.in"
+diff --git a/package/arptables/Config.in b/package/arptables/Config.in
+new file mode 100644
+index 0000000..510eedf
+--- /dev/null
++++ b/package/arptables/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ARPTABLES
++	bool "arptables"
++	help
++	  Tool to set up, maintain, and inspect the tables of ARP rules.
++
++	  http://ebtables.sourceforge.net
+diff --git a/package/arptables/arptables.mk b/package/arptables/arptables.mk
+new file mode 100644
+index 0000000..dac5ca4
+--- /dev/null
++++ b/package/arptables/arptables.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# arptables
++#
++#############################################################
++
++ARPTABLES_VERSION = 0.0.3
++ARPTABLES_VERSION_MINOR = 4
++ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION)-$(ARPTABLES_VERSION_MINOR).tar.gz
++ARPTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
++
++define ARPTABLES_BUILD_CMDS
++	$(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)" COPT_FLAGS="$(TARGET_CFLAGS)"
++endef
++
++define ARPTABLES_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/arptables $(TARGET_DIR)/usr/sbin/arptables
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.8.6
