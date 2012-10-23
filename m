@@ -1,79 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Oct 2012 18:42:15 +0200
-Subject: [Buildroot] [PATCH 9/9] firefox: GNU gnash flash,
- an open source Adobe Flash player & plugin
-In-Reply-To: <5083E62E.80705@petroprogram.com>
-References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
- <1346855344-15081-10-git-send-email-stefan.froberg@petroprogram.com>
- <5082C97A.4090207@mind.be> <5083E62E.80705@petroprogram.com>
-Message-ID: <5086C8E7.6070209@mind.be>
+Date: Tue, 23 Oct 2012 19:05:39 +0200
+Subject: [Buildroot] [PATCH] wireshark: new package
+In-Reply-To: <c866c7ffc05da225311abef42a80696310d22157.1350887157.git.baruch@tkos.co.il>
+References: <c866c7ffc05da225311abef42a80696310d22157.1350887157.git.baruch@tkos.co.il>
+Message-ID: <5086CE63.4040302@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/10/12 14:10, Stefan Fr?berg wrote:
-> 20.10.2012 18:55, Arnout Vandecappelle kirjoitti:
->> On 05/09/12 16:29, Stefan Fr?berg wrote:
->>>
-[snip]
->>> --with-npapi-plugindir=$(TARGET_DIR)/usr/lib/mozilla/plugins \
->>> +           --enable-renderer=agg,cairo --enable-doublebuf
->>> --enable-visibility --enable-offscreen --enable-ssl
->>
->>   Shouldn't cairo be a dependency as well?
->>
->
-> My mistake, it's optional. Or actually it's only one of the supported
-> renderers.
-> I intended to later make subconfig option where user could select what
-> renderer to use (agg, cairo,opengl or all).
->
-> If I understanded correctly from the Gnash website, the agg renderer is
-> the fastest and preferred way and only
-> after that comes the rest.
+On 22/10/12 08:27, Baruch Siach wrote:
+> This is only the bare minimum needed to build the textual tshark utility.
+> Support for more options, including the wireshark GUI, can be added later.
+> ---
+> I override the $prefix configure variable because otherwise the host
+> /usr/include is added to the -I and -L paths. I'm not sure this is a good idea
+> though, since it clutters the tshark RPATH with directories from the local
+> build paths. If you have a better I'd be glad to hear.
 
-
-  Then I'd start with supporting only the agg renderer, and leave a
-comment in the .mk file that mentions the absence of support for
-cairo and opengl.
+  That usually means there's a broken Makefile.am and we fix it with a patch.
+However, does installation still work with the prefix override?
 
 [snip]
-> Tell me Arnout, is the ARM-world really this ... complicated ?
->
-> I mean, there at least two dozens of defconfig files for various arm
-> vendor boards under linux source tree arch/arm/config.
-> And those config-files are just for boards right ??
->
-> Am I correct to presume that there are at least almost hundred of
-> different vendor board + arm cpu compinations that
-> are more or less incompatible with each other ?
+> diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+> new file mode 100644
+> index 0000000..c89fbf8
+> --- /dev/null
+> +++ b/package/wireshark/wireshark.mk
+> @@ -0,0 +1,10 @@
+> +WIRESHARK_VERSION = 1.8.3
+> +WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+> +WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+> +WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
+> +WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+> +WIRESHARK_CONF_OPT = --disable-wireshark --without-krb5 --disable-usr-local \
+> +		     prefix=$(STAGING_DIR)/usr --with-sysroot=$(STAGING_DIR) \
 
-  Yes, there are two reasons for that:
+  Why is the --with-sysroot needed?
 
-- Unlike for PCs, there is no BIOS in embedded platforms to hide the
-board configuration.  So the BSP has to be part of the kernel.  That is
-partially solved with a device tree, but even so you have to select a
-device tree for your particular board.
+> +		     --enable-static=no
 
-- Unlike for PowerPC, the ARM core is used by many SoC vendors who make
-completely different CPUs out of it.  Since an OS is actually about
-managing everything around the CPU core itself, there's a big impact on
-the Linux kernel. That's why you'll often see SoC-specific kernel
-patches.
-
-  However, this complexity shouldn't affect your use of buildroot too
-much - at least if there's a defconfig for your board available in
-U-Boot and in the kernel.
-
-
-> And in addition to that, I must take into account if the arm-cpu Im
-> cross-compiling stuff for has softfp or hardfp and the type of fp (vpf,
-> neon etc....) ?
-
-  That's in fact the same on x86, only nobody uses things like -mfpmath=sse
-and just uses generic 387 code.
+  We normally build both dynamic and static libraries, and remove the static
+library in the target.  Doesn't that work in wireshark?  Can you add a comment
+to explain that?
 
 
   Regards,
