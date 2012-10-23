@@ -1,51 +1,336 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Oct 2012 18:01:21 +0200
-Subject: [Buildroot] [gpsd-users] Getting ready to ship 3.8
-In-Reply-To: <20121023153611.GA23214@thyrsus.com>
-References: <20121023145349.EFC1940659@snark.thyrsus.com>
- <20121023170913.7f5d701f@skate>
- <20121023153611.GA23214@thyrsus.com>
-Message-ID: <20121023180121.62a97995@skate>
+From: dev0 <matzeton@googlemail.com>
+Date: Tue, 23 Oct 2012 20:38:12 +0200
+Subject: [Buildroot]  [PATCH] new pkg tor
+Message-ID: <201210232038.12729.matzeton@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric S. Raymond,
+I hope this little patch is useful for someone.
 
-On Tue, 23 Oct 2012 11:36:11 -0400, Eric S. Raymond wrote:
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> >  * First issue is that we still support Python 2.5 based hosts,
-> > while the current SCons based gpsd build system makes some
-> > assumption about Python 2.6 being available. This requires three
-> > patches:
-> > 
-> >    http://git.buildroot.net/buildroot/plain/package/gpsd/gpsd-01-sconstruct-python-2.5-compat.patch
-> >    http://git.buildroot.net/buildroot/plain/package/gpsd/gpsd-04-sconstruct-python-2.5-compat-distro-check.patch
-> >    http://git.buildroot.net/buildroot/plain/package/gpsd/gpsd-05-fix-leapsecond-script-python2.5.patch
-> 
-> I have merged these.
 
-Great, thanks! Looking forward to bump our gpsd version to 3.8 and get
-rid of those patches.
+--- buildroot.orig/package/Config.in    2012-10-23 19:14:27.000000000 +0200
++++ buildroot/package/Config.in 2012-10-23 15:53:16.000000000 +0200
+@@ -635,6 +636,7 @@
+ source "package/tinyhttpd/Config.in"
+ endif
+ source "package/tn5250/Config.in"
++source "package/tor/Config.in"
+ source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
+diff -Nura buildroot.orig/package/tor/Config.in 
+buildroot/package/tor/Config.in
+--- buildroot.orig/package/tor/Config.in        1970-01-01 01:00:00.000000000 
++0100
++++ buildroot/package/tor/Config.in     2012-10-23 15:26:31.000000000 +0200
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_TOR
++       bool "tor"
++       select BR2_PACKAGE_OPENSSL
++       select BR2_PACKAGE_ZLIB
++       select BR2_PACKAGE_LIBEVENT
++       help
++         Tor is free software and an open network that helps you defend
++         against a form of network surveillance that threatens personal
++         freedom and privacy, confidential business activities and
++         relationships, and state security known as traffic analysis.
++
++         https://www.torproject.org/
++
++config BR2_PACKAGE_TOR_DISABLE_TPROXY
++       bool "disable transparent proxy"
++       depends on BR2_PACKAGE_TOR
++       help
++         This option disables the function, to run the tor daemon
++         as transparent proxy.
+diff -Nura buildroot.orig/package/tor/S60tor buildroot/package/tor/S60tor
+--- buildroot.orig/package/tor/S60tor   1970-01-01 01:00:00.000000000 +0100
++++ buildroot/package/tor/S60tor        2012-10-23 19:53:53.000000000 +0200
+@@ -0,0 +1,47 @@
++#!/bin/sh
++#
++# tor        Start tor daemon.
++#
++
++# check for tor binary
++[ -f /usr/sbin/tor ] || exit 0
++
++start() {
++       echo -n "Starting tor: "
++       /usr/sbin/tor -f /etc/torrc --quiet
++       if [ $? -eq 0 ]; then
++         echo "OK"
++       else
++         echo "FAIL"
++       fi
++}
++stop() {
++       echo -n "Stopping tor: "
++       killall tor
++       echo "OK"
++}
++restart() {
++       stop
++       start
++}
++
++case "$1" in
++  start)
++       start
++       ;;
++  stop)
++       stop
++       ;;
++  restart|reload)
++       restart
++       ;;
++  check)
++       /usr/sbin/tor --verify-config
++       ;;
++  *)
++       echo "Usage: $0 {start|stop|restart|check}"
++       exit 1
++esac
++
++exit $?
++
+diff -Nura buildroot.orig/package/tor/tor.mk buildroot/package/tor/tor.mk
+--- buildroot.orig/package/tor/tor.mk   1970-01-01 01:00:00.000000000 +0100
++++ buildroot/package/tor/tor.mk        2012-10-23 17:14:10.000000000 +0200
+@@ -0,0 +1,48 @@
++#############################################################
++#
++# tor-0.2.2.39
++#
++#############################################################
++
++TOR_VERSION = 0.2.2.39
++TOR_SITE = https://www.torproject.org/dist
++TOR_DEPENDENCIES = zlib libevent openssl
++TOR_CONF_OPT =
++
++ifeq ($(BR2_PACKAGE_TOR_DISABLE_TPROXY),y)
++TOR_CONF_OPT += --disable-transparent
++endif
++
++ifeq ($(BR2_PTHREADS_NONE),y)
++TOR_CONF_OPT += --disable-threads
++endif
++
++ifneq ($(BR2_LARGEFILE),y)
++TOR_CONF_OPT += --disable-largefile
++endif
++
++define TOR_INSTALL_INITSCRIPT
++if [ ! -f $(TARGET_DIR)/etc/init.d/S60tor ]; then \
++       $(INSTALL) -D -m 755 package/tor/S60tor 
+$(TARGET_DIR)/etc/init.d/S60tor; \
++fi
++endef
++
++define TOR_INSTALL_CONF
++if [ ! -f $(TARGET_DIR)/etc/torrc ]; then \
++        $(INSTALL) -D -m 644 package/tor/torrc $(TARGET_DIR)/etc/torrc; \
++fi
++endef
++
++define TOR_INSTALL_TARGET_CMDS
++       $(INSTALL) -D -m 755 $(TOR_DIR)/src/or/tor $(TARGET_DIR)/usr/sbin/tor
++       $(TOR_INSTALL_INITSCRIPT)
++       $(TOR_INSTALL_CONF)
++endef
++
++define TOR_UNINSTALL_TARGET_CMDS
++       rm -f $(TARGET_DIR)/usr/sbin/tor
++       rm -f $(TARGET_DIR)/etc/torrc
++       rm -f $(TARGET_DIR)/etc/init.d/S60tor
++endef
++
++$(eval $(autotools-package))
+diff -Nura buildroot.orig/package/tor/torrc buildroot/package/tor/torrc
+--- buildroot.orig/package/tor/torrc    1970-01-01 01:00:00.000000000 +0100
++++ buildroot/package/tor/torrc 2012-10-23 17:27:24.000000000 +0200
+@@ -0,0 +1,170 @@
++## Configuration file for a typical Tor user
++## Last updated 16 July 2009 for Tor 0.2.2.1-alpha.
++## (May or may not work for much older or much newer versions of Tor.)
++##
++## Lines that begin with "## " try to explain what's going on. Lines
++## that begin with just "#" are disabled commands: you can enable them
++## by removing the "#" symbol.
++##
++## See 'man tor', or https://www.torproject.org/tor-manual.html,
++## for more options you can use in this file.
++##
++## Tor will look for this file in various places based on your platform:
++## https://wiki.torproject.org/noreply/TheOnionRouter/TorFAQ#torrc
++
++
++## Replace this with "SocksPort 0" if you plan to run Tor only as a
++## relay, and not make any local application connections yourself.
++SocksPort 9050 # what port to open for local application connections
++SocksListenAddress 127.0.0.1 # accept connections only from localhost
++#SocksListenAddress 192.168.0.1:9100 # listen on this IP:port also
++
++## Entry policies to allow/deny SOCKS requests based on IP address.
++## First entry that matches wins. If no SocksPolicy is set, we accept
++## all (and only) requests from SocksListenAddress.
++#SocksPolicy accept 192.168.0.0/16
++#SocksPolicy reject *
++
++## Logs go to stdout at level "notice" unless redirected by something
++## else, like one of the below lines. You can have as many Log lines as
++## you want.
++##
++## We advise using "notice" in most cases, since anything more verbose
++## may provide sensitive information to an attacker who obtains the logs.
++##
++## Send all messages of level 'notice' or higher 
+to /usr/local/var/log/tor/notices.log
++#Log notice file /usr/local/var/log/tor/notices.log
++## Send every possible message to /usr/local/var/log/tor/debug.log
++#Log debug file /usr/local/var/log/tor/debug.log
++## Use the system log instead of Tor's logfiles
++#Log notice syslog
++## To send all messages to stderr:
++#Log debug stderr
++
++## Uncomment this to start the process in the background... or use
++## --runasdaemon 1 on the command line. This is ignored on Windows;
++## see the FAQ entry if you want Tor to run as an NT service.
++RunAsDaemon 1
++
++## The directory for keeping all the keys/etc. By default, we store
++## things in $HOME/.tor on Unix, and in Application Data\tor on Windows.
++#DataDirectory /usr/local/var/lib/tor
++
++## The port on which Tor will listen for local connections from Tor
++## controller applications, as documented in control-spec.txt.
++#ControlPort 9051
++## If you enable the controlport, be sure to enable one of these
++## authentication methods, to prevent attackers from accessing it.
++#HashedControlPassword 
+16:872860B76453A77D60CA2BB8C1A7042072093276A3D701AD684053EC4C
++#CookieAuthentication 1
++
++############### This section is just for location-hidden services ###
++
++## Once you have configured a hidden service, you can look at the
++## contents of the file ".../hidden_service/hostname" for the address
++## to tell people.
++##
++## HiddenServicePort x y:z says to redirect requests on port x to the
++## address y:z.
++
++#HiddenServiceDir /usr/local/var/lib/tor/hidden_service/
++#HiddenServicePort 80 127.0.0.1:80
++
++#HiddenServiceDir /usr/local/var/lib/tor/other_hidden_service/
++#HiddenServicePort 80 127.0.0.1:80
++#HiddenServicePort 22 127.0.0.1:22
++
++################ This section is just for relays #####################
++#
++## See https://www.torproject.org/docs/tor-doc-relay for details.
++
++## Required: what port to advertise for incoming Tor connections.
++#ORPort 9001
++## If you want to listen on a port other than the one advertised
++## in ORPort (e.g. to advertise 443 but bind to 9090), uncomment the
++## line below too. You'll need to do ipchains or other port forwarding
++## yourself to make this work.
++#ORListenAddress 0.0.0.0:9090
++
++## A handle for your relay, so people don't have to refer to it by key.
++#Nickname ididnteditheconfig
++
++## The IP address or full DNS name for your relay. Leave commented out
++## and Tor will guess.
++#Address noname.example.com
++
++## Define these to limit how much relayed traffic you will allow. Your
++## own traffic is still unthrottled. Note that RelayBandwidthRate must
++## be at least 20 KB.
++#RelayBandwidthRate 100 KB  # Throttle traffic to 100KB/s (800Kbps)
++#RelayBandwidthBurst 200 KB # But allow bursts up to 200KB/s (1600Kbps)
++
++## Use these to restrict the maximum traffic per day, week, or month.
++## Note that this threshold applies to sent _and_ to received bytes,
++## not to their sum: Setting "4 GB" may allow up to 8 GB
++## total before hibernating.
++##
++## Set a maximum of 4 gigabytes each way per period.
++#AccountingMax 4 GB
++## Each period starts daily at midnight (AccountingMax is per day)
++#AccountingStart day 00:00
++## Each period starts on the 3rd of the month at 15:00 (AccountingMax
++## is per month)
++#AccountingStart month 3 15:00
++
++## Contact info to be published in the directory, so we can contact you
++## if your relay is misconfigured or something else goes wrong. Google
++## indexes this, so spammers might also collect it.
++#ContactInfo Random Person <nobody AT example dot com>
++## You might also include your PGP or GPG fingerprint if you have one:
++#ContactInfo 1234D/FFFFFFFF Random Person <nobody AT example dot com>
++
++## Uncomment this to mirror directory information for others. Please do
++## if you have enough bandwidth.
++#DirPort 9030 # what port to advertise for directory connections
++## If you want to listen on a port other than the one advertised
++## in DirPort (e.g. to advertise 80 but bind to 9091), uncomment the line
++## below too. You'll need to do ipchains or other port forwarding yourself
++## to make this work.
++#DirListenAddress 0.0.0.0:9091
++## Uncomment to return an arbitrary blob of html on your DirPort. Now you
++## can explain what Tor is if anybody wonders why your IP address is
++## contacting them. See contrib/tor-exit-notice.html in Tor's source
++## distribution for a sample.
++#DirPortFrontPage /usr/local/etc/tor/tor-exit-notice.html
++
++## Uncomment this if you run more than one Tor relay, and add the identity
++## key fingerprint of each Tor relay you control, even if they're on
++## different networks. You declare it here so Tor clients can avoid
++## using more than one of your relays in a single circuit. See
++## https://wiki.torproject.org/noreply/TheOnionRouter/TorFAQ#MultipleServers
++#MyFamily $keyid,$keyid,...
++
++## A comma-separated list of exit policies. They're considered first
++## to last, and the first match wins. If you want to _replace_
++## the default exit policy, end this with either a reject *:* or an
++## accept *:*. Otherwise, you're _augmenting_ (prepending to) the
++## default exit policy. Leave commented to just use the default, which is
++## described in the man page or at
++## https://www.torproject.org/documentation.html
++##
++## Look at https://www.torproject.org/faq-abuse.html#TypicalAbuses
++## for issues you might encounter if you use the default exit policy.
++##
++## If certain IPs and ports are blocked externally, e.g. by your firewall,
++## you should update your exit policy to reflect this -- otherwise Tor
++## users will be told that those destinations are down.
++##
++#ExitPolicy accept *:6660-6667,reject *:* # allow irc ports but no more
++#ExitPolicy accept *:119 # accept nntp as well as default exit policy
++#ExitPolicy reject *:* # no exits allowed
++#
++## Bridge relays (or "bridges") are Tor relays that aren't listed in the
++## main directory. Since there is no complete public list of them, even if an
++## ISP is filtering connections to all the known Tor relays, they probably
++## won't be able to block all the bridges. Also, websites won't treat you
++## differently because they won't know you're running Tor. If you can
++## be a real relay, please do; but if not, be a bridge!
++#BridgeRelay 1
++#ExitPolicy reject *:*
++
 
-> >  * Second issue is that gpsd hardcodes a runtime library path
-> > (RPATH) in its libraries, which when cross-compiling means that
-> > paths of the build machine are leaked into the target machine. So
-> > we have a simple patch that disables the RPATH usage:
-> > 
-> >    http://git.buildroot.net/buildroot/plain/package/gpsd/gpsd-02-sconstruct-disable-rpath.patch
-> 
-> This, absolutely not.  Investigate setting chrpath=no.
 
-Indeed, will have a look. Thanks!
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+
+powered by Linux 2.6.32-5-amd64
+ && KDE: 3.5.13.1
+ *support ur local antifa*
