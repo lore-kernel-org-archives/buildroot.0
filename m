@@ -1,42 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Oct 2012 15:05:52 +0200
-Subject: [Buildroot] [PATCH 01/10] manual: add section about storing the
- configuration.
-In-Reply-To: <5084321B.60701@relinux.de>
+Date: Tue, 23 Oct 2012 15:09:43 +0200
+Subject: [Buildroot] [PATCH 03/10] ctng: add ctng-update-config target
+In-Reply-To: <CAHXCMMJbU2F-cO9w-as6bxz1ZyBZy4cc66jog-6LuWQHDdqTaQ@mail.gmail.com>
 References: <1350776731-8467-1-git-send-email-arnout@mind.be>
- <1350776731-8467-2-git-send-email-arnout@mind.be> <5084321B.60701@relinux.de>
-Message-ID: <50869630.6020703@mind.be>
+ <1350776731-8467-4-git-send-email-arnout@mind.be>
+ <CAHXCMMJbU2F-cO9w-as6bxz1ZyBZy4cc66jog-6LuWQHDdqTaQ@mail.gmail.com>
+Message-ID: <50869717.6080207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/10/12 19:34, Stephan Hoffmann wrote:
-> Am 21.10.2012 01:45, schrieb Arnout Vandecappelle (Essensium/Mind):
->> +Once you have a known working configuration, run +make
->> +savedefconfig+. This will generate a minimal +defconfig+ file at the
->> +root of the Buildroot source tree. Move this file into the +configs/+
->> +directory, and rename it +<boardname>_defconfig+.
-> Hello all,
->
-> so we will end with a nice tree of hopefully many
-> board/<manufacturer>/<boardname>  folders containig special settings for
-> each board, most likely at least a kernel config file. I don't expect
-> that too many boards will do without other settings but those in
-> buildroot's defconfig. And we will have many<boardname>_defconfig files
-> in the configs folder.
->
-> Wouldn't it make more sense to move buildroot's<boardname>_defconfig
-> files to the respective board folder, so that everything would be
-> together in one place?
+On 21/10/12 17:06, Samuel Martin wrote:
+>> >  +
+>> >  +ctng-update-config: $(CTNG_DIR)/.config
+>> >  +       cp -f $<  $(CTNG_CONFIG_FILE)
+> IIRC, crosstool-NG (recently) learns how to save defconfig, so how
+> about saving the ct-ng defconfig instead?
 
-  I fully agree, but I think we should first get these clean-ups committed
-before considering that.
+  Good idea, but non-trivial.  Feel free to add it :-)
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
