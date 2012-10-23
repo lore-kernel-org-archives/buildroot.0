@@ -1,25 +1,48 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Oct 2012 15:09:43 +0200
-Subject: [Buildroot] [PATCH 03/10] ctng: add ctng-update-config target
-In-Reply-To: <CAHXCMMJbU2F-cO9w-as6bxz1ZyBZy4cc66jog-6LuWQHDdqTaQ@mail.gmail.com>
+Date: Tue, 23 Oct 2012 15:15:13 +0200
+Subject: [Buildroot] [PATCH 04/10] busybox: busybox-update-config should
+ depend on busybox-configure
+In-Reply-To: <CAHXCMM+sp=qu29Qu8XxM80Jd7_y1z4ph4zsWz_XgKJpwYAAG3Q@mail.gmail.com>
 References: <1350776731-8467-1-git-send-email-arnout@mind.be>
- <1350776731-8467-4-git-send-email-arnout@mind.be>
- <CAHXCMMJbU2F-cO9w-as6bxz1ZyBZy4cc66jog-6LuWQHDdqTaQ@mail.gmail.com>
-Message-ID: <50869717.6080207@mind.be>
+ <1350776731-8467-5-git-send-email-arnout@mind.be>
+ <CAHXCMM+sp=qu29Qu8XxM80Jd7_y1z4ph4zsWz_XgKJpwYAAG3Q@mail.gmail.com>
+Message-ID: <50869861.6050402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/10/12 17:06, Samuel Martin wrote:
->> >  +
->> >  +ctng-update-config: $(CTNG_DIR)/.config
->> >  +       cp -f $<  $(CTNG_CONFIG_FILE)
-> IIRC, crosstool-NG (recently) learns how to save defconfig, so how
-> about saving the ct-ng defconfig instead?
+On 21/10/12 17:07, Samuel Martin wrote:
+> Arnout, all,
+>
+> 2012/10/21 Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>:
+>> >  From: "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>
+>> >
+>> >  Before the config file can be copied, it has to exist.  The
+>> >  other xxx-update-config targets to this as well.
+>> >
+>> >  Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+>> >  ---
+>> >    package/busybox/busybox.mk |    2 +-
+>> >    1 file changed, 1 insertion(+), 1 deletion(-)
+>> >
+>> >  diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+>> >  index 33f8633..e95364c 100644
+>> >  --- a/package/busybox/busybox.mk
+>> >  +++ b/package/busybox/busybox.mk
+>> >  @@ -215,5 +215,5 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+>> >           rm -f $(BUSYBOX_DIR)/.stamp_built
+>> >           rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+>> >
+>> >  -busybox-update-config:
+>> >  +busybox-update-config: busybox-configure
+>> >           cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
+> How about saving the busybox-defconfig instead?
 
-  Good idea, but non-trivial.  Feel free to add it :-)
+  Is there a busybox version that has a savedefconfig target?
+
+  Anyway, that would again be a separate patch.
 
   Regards,
   Arnout
