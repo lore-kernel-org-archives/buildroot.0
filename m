@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:38 +0200
-Subject: [Buildroot] [PATCH 12/47] package/spice: enable client
+Date: Wed, 24 Oct 2012 23:25:39 +0200
+Subject: [Buildroot] [PATCH 13/47] package/spice: enable GUI
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-13-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-14-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/spice/Config.in |   12 ++++++++++++
+ package/spice/Config.in |    8 ++++++++
  package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 19 insertions(+), 1 deletions(-)
+ 2 files changed, 15 insertions(+), 1 deletions(-)
 
 diff --git a/package/spice/Config.in b/package/spice/Config.in
-index ced3ec7..e906acf 100644
+index e906acf..6e6233d 100644
 --- a/package/spice/Config.in
 +++ b/package/spice/Config.in
-@@ -21,3 +21,15 @@ config BR2_PACKAGE_SPICE
- 	  This package implements the server-part of Spice.
- 	  
- 	  http://www.spice-space.org/
+@@ -32,4 +32,12 @@ config BR2_PACKAGE_SPICE_CLIENT
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 
++config BR2_PACKAGE_SPICE_GUI
++	bool "Enable GUI"
++	depends on BR2_PACKAGE_SPICE_CLIENT
++	select BR2_PACKAGE_CEGUI06
++	help
++	  Say 'y' here to enable the Graphical User Interface (GUI)
++	  start dialog.
 +
-+if BR2_PACKAGE_SPICE
-+
-+comment "client depends on X.org"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_SPICE_CLIENT
-+	bool "Enable client"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+
-+endif # BR2_PACKAGE_SPICE
+ endif # BR2_PACKAGE_SPICE
 diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 37b1bff..de7bf71 100644
+index de7bf71..9253e35 100644
 --- a/package/spice/spice.mk
 +++ b/package/spice/spice.mk
-@@ -26,10 +26,16 @@ SPICE_CONF_OPT =            \
-   --disable-gui             \
+@@ -23,7 +23,6 @@ SPICE_DEPENDENCIES    = \
+ # quite deep if we try to enable some features, and I have not tested that.
+ SPICE_CONF_OPT =            \
+   --disable-tunnel          \
+-  --disable-gui             \
    --disable-opengl          \
    --disable-smartcard       \
--  --disable-client          \
    --disable-automated-tests \
-   --without-sasl            \
+@@ -36,6 +35,13 @@ else
+ SPICE_CONF_OPT += --disable-client
+ endif
  
-+ifeq ($(BR2_PACKAGE_SPICE_CLIENT),y)
-+SPICE_CONF_OPT += --enable-client
-+SPICE_DEPENDENCIES += xlib_libXrandr xlib_libXfixes
++ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
++SPICE_CONF_OPT += --enable-gui
++SPICE_DEPENDENCIES += cegui06
 +else
-+SPICE_CONF_OPT += --disable-client
++SPICE_CONF_OPT += --disable-gui
 +endif
 +
  SPICE_DEPENDENCIES += host-pkg-config
