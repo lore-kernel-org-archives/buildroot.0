@@ -1,22 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 24 Oct 2012 22:00:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 5624] When building directfb,
- BR2_TARGET_LDFLAGS not used by libtool
-In-Reply-To: <bug-5624-163@https.bugs.busybox.net/>
-References: <bug-5624-163@https.bugs.busybox.net/>
-Message-ID: <20121024220001.85C6899913@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 24 Oct 2012 19:17:24 -0300
+Subject: [Buildroot] [PATCH] gnutls: fix link-time build failures
+Message-ID: <1351117044-4556-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5624
+Fixes
+http://autobuild.buildroot.net/results/23da17446266bdd49ea0da0c1892d66d3ac6607f/build-end.log
+And may the <BEEP> rest in peace at last...
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-10-24 22:00:00 UTC ---
-You mean globally (in package/Makefile.in) or specifically for this package?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index f9bab73..2634642 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -10,8 +10,9 @@ GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING lib/COPYING
+ GNUTLS_DEPENDENCIES = host-pkgconf libgcrypt $(if $(BR2_PACKAGE_ZLIB),zlib)
++GNUTLS_CONF_ENV = acl_cv_rpath=no
+ GNUTLS_CONF_OPT = --with-libgcrypt --without-libgcrypt-prefix \
+-		--without-p11-kit
++		--without-p11-kit --disable-rpath
+ GNUTLS_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.8.6
