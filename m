@@ -1,151 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:28 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_02/47=5D_package/libfdt=3A_new_pac?=
-	=?utf-8?q?kage?=
+Date: Wed, 24 Oct 2012 23:25:34 +0200
+Subject: [Buildroot] [PATCH 08/47] package/spice-protocol: new package
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-3-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-9-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libfdt allows one to manipulate a Flat Device Tree.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |    1 +
- package/dtc/Config.in                      |    9 +++++++
- package/dtc/dtc-extra_cflags.patch         |   12 +++++++++
- package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++
- package/dtc/dtc.mk                         |   36 ++++++++++++++++++++++++++++
- 5 files changed, 86 insertions(+), 0 deletions(-)
- create mode 100644 package/dtc/Config.in
- create mode 100644 package/dtc/dtc-extra_cflags.patch
- create mode 100644 package/dtc/dtc-separate-lib-install.patch
- create mode 100644 package/dtc/dtc.mk
+ package/Config.in                        |    1 +
+ package/spice-protocol/Config.in         |   12 ++++++++++++
+ package/spice-protocol/spice-protocol.mk |   14 ++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
+ create mode 100644 package/spice-protocol/Config.in
+ create mode 100644 package/spice-protocol/spice-protocol.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1650c71..c9cb3ed 100644
+index 62500ce..330d8a3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -396,6 +396,7 @@ source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
- source "package/libfreefare/Config.in"
-+source "package/dtc/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
-diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+@@ -629,6 +629,7 @@ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
++source "package/spice-protocol/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
 new file mode 100644
-index 0000000..7b86c60
+index 0000000..b354361
 --- /dev/null
-+++ b/package/dtc/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_DTC
-+	bool "dtc"
-+	help
-+	  dtc is the Device Tree Compiler, to generate Device Trees.
-+	  libfdt if a library to manipulate Flat Device Trees.
-+	  
-+	  Note that only the library is installed for now.
-+	  
-+	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
-new file mode 100644
-index 0000000..03225e7
---- /dev/null
-+++ b/package/dtc/dtc-extra_cflags.patch
++++ b/package/spice-protocol/Config.in
 @@ -0,0 +1,12 @@
-+diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
-+--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
-++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
-+@@ -18,7 +18,7 @@
-+ CPPFLAGS = -I libfdt -I .
-+ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
-+ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
-+-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
-++CFLAGS = -g -Os -fPIC -Werror $(WARNINGS) $(EXTRA_CFLAGS)
-+ 
-+ BISON = bison
-+ LEX = flex
-diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
++config BR2_PACKAGE_SPICE_PROTOCOL
++	bool "spice protocol"
++	help
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
++	  
++	  This package implements the protocol-part of Spice.
++	  
++	  http://www.spice-space.org/
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
 new file mode 100644
-index 0000000..c86d587
+index 0000000..dcfe50d
 --- /dev/null
-+++ b/package/dtc/dtc-separate-lib-install.patch
-@@ -0,0 +1,28 @@
-+Makefile: add a rule to only install libfdt
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Patch not sent upstream.
-+
-+It's really specific to buildroot, and is probably not
-+good (aka generic) enough to be pushed upstream.
-+
-+diff --git a/Makefile b/Makefile
-+index 1169e6c..39e7190 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -160,10 +160,12 @@ endif
-+ # intermediate target and building them again "for real"
-+ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
-+ 
-+-install: all $(SCRIPTS)
-++install: all $(SCRIPTS) libfdt_install
-+ 	@$(VECHO) INSTALL
-+ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
-+ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
-++
-++libfdt_install: libfdt
-+ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
-+ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
-+ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-new file mode 100644
-index 0000000..d53e78a
---- /dev/null
-+++ b/package/dtc/dtc.mk
-@@ -0,0 +1,36 @@
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# libcurl
++# Spice-protocol
 +#
 +#############################################################
 +
-+DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
-+DTC_SITE            = git://git.jdl.com/software/dtc.git
-+DTC_LICENSE         = GPLv2+/BSD-2c
-+DTC_LICENSE_FILES   = README.license GPL
-+# Note: the dual-license only applies to the library.
-+#       The DT compiler (dtc) is GPLv2+, but we do not install it.
-+DTC_INSTALL_STAGING = YES
++SPICE_PROTOCOL_VERSION         = 0.12.2
++SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
++SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
++SPICE_PROTOCOL_LICENSE         = BSD-3c
++SPICE_PROTOCOL_LICENSE_FILES   = COPYING
++SPICE_PROTOCOL_INSTALL_STAGING = YES
 +
-+# Need -fPIC for x86-64
-+define DTC_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)                          \
-+	                                  EXTRA_CFLAGS="$(TARGET_CFLAGS)"   \
-+	                                  PREFIX=/usr                       \
-+	                                  libfdt
-+endef
-+
-+#?libfdt_install is our own install rule added by our patch
-+define DTC_INSTALL_STAGING_CMDS
-+	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
-+endef
-+
-+define DTC_INSTALL_TARGET_CMDS
-+	$(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
-+endef
-+
-+define DTC_CLEAN_CMDS
-+	$(MAKE) -C $(@D) libfdt_clean
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.2.5
