@@ -1,317 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:46 +0200
-Subject: [Buildroot] [PATCH 20/47] package/ceph: new package
+Date: Wed, 24 Oct 2012 23:25:53 +0200
+Subject: [Buildroot] [PATCH 27/47] package/qemu: add VNC TLS-encryption
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-21-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-28-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Only TLS is supported, as buildroot has no package for the SASL library.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                          |    1 +
- package/ceph/Config.in                     |   19 ++++++++
- package/ceph/ceph-no-envz.patch            |   63 ++++++++++++++++++++++++++++
- package/ceph/ceph-no-getloadavg.patch      |   61 +++++++++++++++++++++++++++
- package/ceph/ceph-no-posix_fallocate.patch |   50 ++++++++++++++++++++++
- package/ceph/ceph.mk                       |   53 +++++++++++++++++++++++
- 6 files changed, 247 insertions(+), 0 deletions(-)
- create mode 100644 package/ceph/Config.in
- create mode 100644 package/ceph/ceph-no-envz.patch
- create mode 100644 package/ceph/ceph-no-getloadavg.patch
- create mode 100644 package/ceph/ceph-no-posix_fallocate.patch
- create mode 100644 package/ceph/ceph.mk
+ package/qemu/Config.in |   11 +++++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f882301..a24df21 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -555,6 +555,7 @@ source "package/bind/Config.in"
- source "package/bmon/Config.in"
- source "package/bridge-utils/Config.in"
- source "package/can-utils/Config.in"
-+source "package/ceph/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
- source "package/conntrack-tools/Config.in"
-diff --git a/package/ceph/Config.in b/package/ceph/Config.in
-new file mode 100644
-index 0000000..5704883
---- /dev/null
-+++ b/package/ceph/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_CEPH_AVAILABLE
-+	def_bool y
-+	depends on BR2_PACKAGE_LIBNSS
-+	depends on BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	depends on BR2_PACKAGE_LIBEDIT2_AVAILABLE
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index 9574221..4a2c5bf 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -97,6 +97,17 @@ config BR2_PACKAGE_QEMU_VNC_JPEG
+ 	depends on BR2_PACKAGE_QEMU_VNC
+ 	select BR2_PACKAGE_JPEG
+ 
++# TLS does not work with static link, because the gnutls .pc is missing a
++# dependency on libintl... :-(
++config BR2_PACKAGE_QEMU_VNC_TLS
++	bool "TLS encryption"
++	depends on BR2_PACKAGE_QEMU_VNC
++	depends on !BR2_PREFER_STATIC_LIB
++	select BR2_PACKAGE_GNUTLS
 +
-+comment "ceph requires libnss, and libuuid (from util-linux)"
-+	depends on !BR2_PACKAGE_CEPH_AVAILABLE
++comment "VNC TLS encryption does not work for static link"
++    depends on BR2_PACKAGE_QEMU_VNC && BR2_PREFER_STATIC_LIB
 +
-+config BR2_PACKAGE_CEPH
-+	bool "ceph"
-+	depends on BR2_PACKAGE_CEPH_AVAILABLE
-+	select BR2_PACKAGE_LIBEDIT2
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  Ceph is a distributed object store and file system designed to
-+	  provide excellent performance, reliability and scalability.
-+	  
-+	  http://ceph.com/
-diff --git a/package/ceph/ceph-no-envz.patch b/package/ceph/ceph-no-envz.patch
-new file mode 100644
-index 0000000..c0369ba
---- /dev/null
-+++ b/package/ceph/ceph-no-envz.patch
-@@ -0,0 +1,63 @@
-+tools+base: do not include envz.h on uClibc
-+
-+uClibc does not have envz, and no envz function is in fact used.
-+So, simply do not include it under uClibc.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+--- ceph-0.51.orig/src/tools/common.cc	2012-09-09 00:13:32.128838177 +0200
-++++ ceph-0.51/src/tools/common.cc	2012-09-09 00:13:59.432064556 +0200
-+@@ -17,9 +17,9 @@
-+ #include <string>
-+ using namespace std;
-+ 
-+-#if !defined(DARWIN) && !defined(__FreeBSD__)
-++#if !defined(DARWIN) && !defined(__FreeBSD__) && !defined(__UCLIBC__)
-+ #include <envz.h>
-+-#endif // DARWIN
-++#endif // DARWIN || __UCLIBC__
-+ 
-+ #include <memory>
-+ #include <sys/types.h>
-+--- ceph-0.51.orig/src/ceph_syn.cc	2012-09-09 00:25:23.302722032 +0200
-++++ ceph-0.51/src/ceph_syn.cc	2012-09-09 00:24:39.702892463 +0200
-+@@ -31,9 +31,9 @@
-+ #include "common/ceph_argparse.h"
-+ #include "common/pick_address.h"
-+ 
-+-#if !defined(DARWIN) && !defined(__FreeBSD__)
-++#if !defined(DARWIN) && !defined(__FreeBSD__) && !defined(__UCLIBC__)
-+ #include <envz.h>
-+-#endif // DARWIN || __FreeBSD__
-++#endif // DARWIN || __FreeBSD__ || __UCLIBC__
-+ 
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+--- ceph-0.51.orig/src/ceph_fuse.cc	2012-09-09 00:43:46.875065556 +0200
-++++ ceph-0.51/src/ceph_fuse.cc	2012-09-09 00:44:21.161597834 +0200
-+@@ -32,9 +32,9 @@
-+ #include "global/global_init.h"
-+ #include "common/safe_io.h"
-+        
-+-#ifndef DARWIN
-++#if !defined(DARWIN) && !defined(__UCLIBC__)
-+ #include <envz.h>
-+-#endif // DARWIN
-++#endif // DARWIN || __UCLIBC__
-+ 
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+--- ceph-0.51.orig/src/testmsgr.cc	2012-09-09 00:44:48.108158886 +0200
-++++ ceph-0.51/src/testmsgr.cc	2012-09-09 00:45:18.218040882 +0200
-+@@ -28,9 +28,9 @@
-+ #include "global/global_init.h"
-+ #include "common/ceph_argparse.h"
-+ 
-+-#ifndef DARWIN
-++#if !defined(DARWIN) && !defined(__UCLIBC__)
-+ #include <envz.h>
-+-#endif // DARWIN
-++#endif // DARWIN || __UCLIBC__
-+ 
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-diff --git a/package/ceph/ceph-no-getloadavg.patch b/package/ceph/ceph-no-getloadavg.patch
-new file mode 100644
-index 0000000..7e887df
---- /dev/null
-+++ b/package/ceph/ceph-no-getloadavg.patch
-@@ -0,0 +1,61 @@
-+OSD: do not use getloadavg(3) on uClibc
-+
-+getloadavg(3) is not available on uClibc, so do not use it.
-+
-+getloadavg is used in two places:
-+  - once to log the loadavg in the heartbeat logs: we simply remove this;
-+  - once to decide whether to schedule scrub (whatever it is) or not: we
-+    simply use the existing coin-flip random choice in this case.
-+
-+The second change will probably have an impact on performances... :-(
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN ceph-0.51.orig/src/osd/OSD.cc ceph-0.51/src/osd/OSD.cc
-+--- ceph-0.51.orig/src/osd/OSD.cc	2012-08-26 00:58:06.000000000 +0200
-++++ ceph-0.51/src/osd/OSD.cc	2012-09-08 23:56:31.396177885 +0200
-+@@ -15,6 +15,7 @@
-+ #include <fstream>
-+ #include <iostream>
-+ #include <errno.h>
-++#include <features.h> /* For __ULIBC__ */
-+ #include <sys/stat.h>
-+ #include <signal.h>
-+ #include <boost/scoped_ptr.hpp>
-+@@ -1942,10 +1943,12 @@
-+ {
-+   dout(30) << "heartbeat" << dendl;
-+ 
-++#ifndef __UCLIBC__
-+   // get CPU load avg
-+   double loadavgs[1];
-+   if (getloadavg(loadavgs, 1) == 1)
-+     logger->fset(l_osd_loadavg, loadavgs[0]);
-++#endif
-+ 
-+   dout(30) << "heartbeat checking stats" << dendl;
-+ 
-+@@ -3216,6 +3219,7 @@
-+ 
-+ bool OSDService::scrub_should_schedule()
-+ {
-++#ifndef __UCLIBC__
-+   double loadavgs[1];
-+ 
-+   // TODOSAM: is_active should be conveyed to OSDService
-+@@ -3249,6 +3253,15 @@
-+ 	   << " < max " << g_conf->osd_scrub_load_threshold
-+ 	   << " = yes" << dendl;
-+   return loadavgs[0] < g_conf->osd_scrub_load_threshold;
-++#else // ! defined  __UCLIBC__
-++  bool coin_flip = (rand() % 3) == whoami % 3;
-++  if (coin_flip) {
-++    dout(20) << "scrub_should_schedule randomly yes" << dendl;
-++  } else {
-++    dout(20) << "scrub_should_schedule randomly backing off" << dendl;
-++  }
-++  return coin_flip;
-++#endif // ! defined  __UCLIBC__
-+ }
-+ 
-+ void OSD::sched_scrub()
-diff --git a/package/ceph/ceph-no-posix_fallocate.patch b/package/ceph/ceph-no-posix_fallocate.patch
-new file mode 100644
-index 0000000..479705d
---- /dev/null
-+++ b/package/ceph/ceph-no-posix_fallocate.patch
-@@ -0,0 +1,50 @@
-+Do not call posix_fallocate() on uClibc
-+
-+Based on a patch by Thomas, for lttng-babeltrace, in which he states:
-+
-+    uClibc does not implement posix_fallocate(), and posix_fallocate() is
-+    mostly only an hint to the kernel that we will need such or such
-+    amount of space inside a file. So we just don't call posix_fallocate()
-+    when building against uClibc.
-+
-+Just do the same here.
-+
-+NOTE! IMHO, this patch is not correct, because overcommit (eg. for sparse
-+files) on the underlying filesystem may cause allocation failures later on,
-+which is exactly the situation that posix_fallocate is supposed to avoid.
-+But, as uClibc still lacks posix_fallocate, we have no choice.
-+
-+If you really are concerned about this issue, there exists a posix_fallocate
-+patch that is not upstream, but is used by the AlpineLinux distribution:
-+    http://git.alpinelinux.org/cgit/aports/tree/main/libc0.9.32/posix_fallocate.patch?id=98a000b8e92b3aa1e0b7a5f94a74910bb0993c4d
-+    http://git.alpinelinux.org/cgit/aports/tree/main/libc0.9.32/posix_fallocate-fix.patch?id=98a000b8e92b3aa1e0b7a5f94a74910bb0993c4d
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN ceph-0.50.orig/src/os/FileJournal.cc ceph-0.50/src/os/FileJournal.cc
-+--- ceph-0.50.orig/src/os/FileJournal.cc	2012-08-13 18:43:14.000000000 +0200
-++++ ceph-0.50/src/os/FileJournal.cc	2012-09-08 23:07:12.597910027 +0200
-+@@ -23,6 +23,7 @@
-+ #include "include/compat.h"
-+ 
-+ #include <fcntl.h>
-++#include <features.h>
-+ #include <sstream>
-+ #include <stdio.h>
-+ #include <sys/types.h>
-+@@ -303,6 +304,7 @@
-+ 	   << newsize << " bytes: " << cpp_strerror(err) << dendl;
-+       return -err;
-+     }
-++#ifndef __UCLIBC__
-+     ret = ::posix_fallocate(fd, 0, newsize);
-+     if (ret < 0) {
-+       int err = errno;
-+@@ -310,6 +312,7 @@
-+ 	   << newsize << " bytes: " << cpp_strerror(err) << dendl;
-+       return -err;
-+     }
-++#endif
-+     max_size = newsize;
-+   }
-+   else {
-diff --git a/package/ceph/ceph.mk b/package/ceph/ceph.mk
-new file mode 100644
-index 0000000..2d9592c
---- /dev/null
-+++ b/package/ceph/ceph.mk
-@@ -0,0 +1,53 @@
-+#############################################################
-+#
-+# ceph
-+#
-+#############################################################
-+
-+CEPH_VERSION         = 0.51
-+CEPH_SOURCE          = ceph-$(CEPH_VERSION).tar.bz2
-+CEPH_SITE            = http://ceph.com/download/
-+CEPH_LICENSE         = LGPLv2.1 CC-BY-SA Apache-2.0 GPLv2 LGPLv2+ BSD-3c MIT PD
-+CEPH_LICENSE_FILES   = COPYING
-+CEPH_INSTALL_STAGING = YES
-+
-+CEPH_DEPENDENCIES    = \
-+    util-linux         \
-+    keyutils           \
-+    libnss             \
-+	libedit2           \
-+	boost              \
-+	expat              \
-+
-+# We disable everything for now, because the dependency tree can become
-+# quite deep if we try to enable some features, and I have not tested that.
-+# We need@least one crypto lib, and the currently only one available in
-+# BR, that ceph can use, is libnss
-+CEPH_CONF_OPT =                     \
-+    --with-nss                      \
-+    --without-profiler              \
-+    --without-debug                 \
-+    --without-tcmalloc              \
-+    --without-hadoop                \
-+    --without-libatomic-ops         \
-+    --without-system-leveldb        \
-+    --without-system-libs3          \
-+    --without-rest-bench            \
-+    --without-cryptopp              \
-+    --with-ocf                      \
-+
-+ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-+CEPH_DEPENDENCIES += libfuse
-+CEPH_CONF_OPT     += --with-fuse
+ config BR2_PACKAGE_QEMU_SDL
+ 	bool "Enable SDL frontend"
+ 	select BR2_PACKAGE_SDL
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 3d45cdc..f7bcb16 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -68,6 +68,13 @@ else
+ QEMU_OPTS += --disable-vnc-jpeg
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_VNC_TLS),y)
++QEMU_OPTS += --enable-vnc-tls
++QEMU_DEPENDENCIES += gnutls
 +else
-+CEPH_CONF_OPT     += --without-fuse
++QEMU_OPTS += --disable-vnc-tls
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBAIO),y)
-+CEPH_DEPENDENCIES += libaio
-+CEPH_CONF_OPT     += --with-libaio
-+else
-+CEPH_CONF_OPT     += --without-libaio
-+endif
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ QEMU_OPTS += --enable-sdl
+ QEMU_DEPENDENCIES += sdl
+@@ -98,7 +105,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --enable-vhost-net                  \
+ 	        --disable-xen                       \
+ 	        --disable-slirp                     \
+-	        --disable-vnc-tls                   \
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-virtfs                    \
+ 	        --disable-brlapi                    \
 -- 
 1.7.2.5
