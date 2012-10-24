@@ -1,67 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:26:08 +0200
-Subject: [Buildroot] [PATCH 42/47] package/qemu: add support for Spice
+Date: Wed, 24 Oct 2012 23:26:12 +0200
+Subject: [Buildroot] [PATCH 46/47] package/qemu: move sub-options into a
+	sub-menu
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-43-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-47-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As there are now quite a few options to QEMU, move them into their own
+sub-menu, so it looks a bit less crowded in the 'misc' menu.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   10 ++++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 3f608cc..01962ea 100644
+index 0299f69..a082cc8 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -126,6 +126,16 @@ config BR2_PACKAGE_QEMU_CURSES
- 	  frontend (although you can still use the SDL or VNC frontends to
- 	  display the graphical output).
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_QEMU_AVAILABLE
+ comment "qemu requires a toolchain with threads"
+ 	depends on !BR2_PACKAGE_QEMU_AVAILABLE
  
-+config BR2_PACKAGE_QEMU_SPICE
-+	bool "Enable Spice frontend"
-+	depends on BR2_PACKAGE_SPICE
-+	help
-+	  Say 'y' here to have QEMU support Spice as a (VNC-like) frontend.
-+
-+if !BR2_PACKAGE_SPICE
-+comment "Spice support requires spice-server"
-+endif
-+
- comment "Block backends"
- 
- config BR2_PACKAGE_QEMU_VIRTFS
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index a2d84e1..69a5382 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -90,6 +90,13 @@ else
- QEMU_OPTS += --disable-curses
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_SPICE),y)
-+QEMU_OPTS += --enable-spice
-+QEMU_DEPENDENCIES += spice
-+else
-+QEMU_OPTS += --disable-spice
-+endif
-+
- ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
- QEMU_OPTS += --enable-virtfs
- else
-@@ -252,7 +259,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-brlapi                    \
- 	        --disable-guest-base                \
- 	        --disable-docs                      \
--	        --disable-spice                     \
- 	        --disable-rbd                       \
- 	        --disable-smartcard                 \
- 	        --disable-strip                     \
+-config BR2_PACKAGE_QEMU
++menuconfig BR2_PACKAGE_QEMU
+ 	bool "QEMU"
+ 	depends on BR2_PACKAGE_QEMU_AVAILABLE
+ 	select BR2_PACKAGE_ZLIB
 -- 
 1.7.2.5
