@@ -1,44 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Oct 2012 14:29:39 +0200
-Subject: [Buildroot] Odp: Re:  XZ extracting issue
-In-Reply-To: <5087caa237ade3.77250733@wp.pl>
-References: <5087caa237ade3.77250733@wp.pl>
-Message-ID: <20121024142939.72b188b5@skate>
+Date: Wed, 24 Oct 2012 14:30:09 +0200
+Subject: [Buildroot] [git commit] fs/skeleton: remove /etc/TZ
+In-Reply-To: <20121024071711.0DF3599913@busybox.osuosl.org>
+References: <20121024071711.0DF3599913@busybox.osuosl.org>
+Message-ID: <20121024143009.23f6b698@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
 
-Please fix your e-mail client, it is horribly broken.
-
-On Wed, 24 Oct 2012 13:01:54 +0200, Jerzy Grzegorek wrote:
-
-> Really
+On Wed, 24 Oct 2012 09:16:50 +0200, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=5a61fbd82394f9bc9317535b717a2e1dd51dea7d
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 > 
-> BR2_XZCAT="xzcat -xzOf"
-> I set it to
-> 
-> BR2_XZCAT="xzcat -df"
-> 
-> For what reason default setting of BR2_XZCAT="xzcat -xzOf" ?
+> Defaulting to UTC (which is what uClibc will default to when /etc/TZ is
+> missing) seems more sensible than US Mountain Time Zone in the default
+> rootfs skeleton.
 
-The default value is just "xzcat" :
-
-config BR2_XZCAT
-        string "xzcat command"
-        default "xzcat"
-        help
-          Command to be used to extract a xz'ed file to stdout.
-          Default is "xzcat"
-
-and it has always been like this. So I really don't see how you could
-have end up with having options here, except if you customized this
-option yourself.
-
-Unless you have special needs, the value should remain just "xzcat".
+And with glibc/eglibc?
 
 Thomas
 -- 
