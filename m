@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:49 +0200
-Subject: [Buildroot] [PATCH 23/47] package/qemu: add fine-grained target
-	selection
+Date: Wed, 24 Oct 2012 23:25:50 +0200
+Subject: [Buildroot] [PATCH 24/47] package/qemu: add SDL frontends
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-24-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-25-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,61 +12,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   21 +++++++++++++++++++++
- package/qemu/qemu.mk   |    4 ++++
- 2 files changed, 25 insertions(+), 0 deletions(-)
+ package/qemu/Config.in |    9 +++++++++
+ package/qemu/qemu.mk   |   10 +++++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index c8623bf..bd4b939 100644
+index bd4b939..a624632 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -30,6 +30,25 @@ if BR2_PACKAGE_QEMU
+@@ -78,4 +78,13 @@ config BR2_PACKAGE_QEMU_BSD_USER
  
- comment "Emulators selection"
+ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
  
-+config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
-+	string "Enable specific targets"
++comment "Frontends"
++
++config BR2_PACKAGE_QEMU_SDL
++	bool "Enable SDL frontend"
++	select BR2_PACKAGE_SDL
 +	help
-+	  Enter here the list of QEMU targets you want to build. For example:
-+
-+	    System emulation      | User-land emulation
-+	    ----------------------+-----------------------
-+	    i386-softmmu          | i386-linux-user
-+	    arm-softmmu           | ppc-linux-user
-+	    x86_64-softmmu        | sparc-bsd-user
-+	    ...                   | ...
-+
-+config QEMU_FOO
-+	bool # To break the indentation
-+
-+if BR2_PACKAGE_QEMU_CUSTOM_TARGETS = ""
-+
-+comment "... or you can select emulator families to enable, below:"
-+
- # We need at least one to be selected
- config BR2_PACKAGE_QEMU_EMUL_SET
- 	bool
-@@ -57,4 +76,6 @@ config BR2_PACKAGE_QEMU_BSD_USER
- 	help
- 	  Say 'y' to build all BSD user-land emulators that QEMU supports.
- 
-+endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
++	  Say 'y' to enable the SDL frontend, that is, a graphical window
++	  presenting the VM's display.
 +
  endif # BR2_PACKAGE_QEMU
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 14d0505..a942e0b 100644
+index a942e0b..acba0d4 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -43,6 +43,10 @@ else
- QEMU_OPTS += --disable-bsd-user
+@@ -24,6 +24,7 @@ QEMU_OPTS =
+ QEMU_VARS =                                                                         \
+     PYTHON=$(HOST_DIR)/usr/bin/python                                               \
+     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
++    SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config                                    \
+ 
+ ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
+ QEMU_OPTS += --enable-system
+@@ -47,6 +48,14 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
+ QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
  endif
  
-+ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
-+QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
++ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
++QEMU_OPTS += --enable-sdl
++QEMU_DEPENDENCIES += sdl
++QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
++else
++QEMU_OPTS += --disable-sdl
 +endif
 +
  # Note: although QEMU uses a ./configure script, it is not compatible with
  #       the traditional autotools options (eg. --target et al.), so we can
  #       not use the autotools-package infrastructure. So we have to use the
+@@ -69,7 +78,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --enable-vhost-net                  \
+ 	        --disable-xen                       \
+ 	        --disable-slirp                     \
+-	        --disable-sdl                       \
+ 	        --disable-vnc                       \
+ 	        --disable-virtfs                    \
+ 	        --disable-brlapi                    \
 -- 
 1.7.2.5
