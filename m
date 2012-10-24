@@ -1,35 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Oct 2012 17:06:29 +0200
-Subject: [Buildroot] [PATCH v2] wireshark: new package
-In-Reply-To: <20121024144837.GA25255@sapphire.tkos.co.il>
-References: <4b73cf9536d6cde485299c9afb9fc41affa909ae.1351087817.git.baruch@tkos.co.il>
- <20121024164059.10666049@skate>
- <20121024144837.GA25255@sapphire.tkos.co.il>
-Message-ID: <20121024170629.40348273@skate>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Wed, 24 Oct 2012 23:22:52 +0400
+Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
+In-Reply-To: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+Message-ID: <5088400C.4040000@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On 10/07/2012 12:35 AM, Valentine Barshak wrote:
+> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+> ---
+>   package/gqview/gqview.mk | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/gqview/gqview.mk b/package/gqview/gqview.mk
+> index 2f64cd0..7d09fda 100644
+> --- a/package/gqview/gqview.mk
+> +++ b/package/gqview/gqview.mk
+> @@ -7,6 +7,7 @@ GQVIEW_VERSION = 2.1.5
+>   GQVIEW_SOURCE = gqview-$(GQVIEW_VERSION).tar.gz
+>   GQVIEW_SITE = http://prdownloads.sourceforge.net/gqview
+>   GQVIEW_DEPENDENCIES = host-pkg-config libgtk2
+> +GQVIEW_CONF_ENV = LIBS="-lm"
+>
+>   $(eval $(autotools-package))
+>
+>
 
-On Wed, 24 Oct 2012 16:48:37 +0200, Baruch Siach wrote:
+Does this work for everyone else or is it just deprecated and nobody 
+should use it?
 
-> Well, the ultimate solution would probably be to add a --disable-usr configure 
-> option, like the existing --disable-usr-local. I see if I can find time to 
-> work on this. I'm no autotools expert.
+I can't build without -lm neither in BR nor using my native host tools.
 
-This really shouldn't be needed. No autotools-based package that I'm
-aware of needs this. If the default include flags are not good, you
-pass additional CFLAGS/CPPFLAGS, that's the way autoconf works.
-
-So basically, the whole idea of adding /usr/include forcefully is
-stupid and should be removed, IMO.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks,
+Val.
