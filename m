@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:59 +0200
-Subject: [Buildroot] [PATCH 33/47] package/qemu: add support for virtfs
+Date: Wed, 24 Oct 2012 23:26:10 +0200
+Subject: [Buildroot] [PATCH 44/47] package/qemu: add support for libseccomp
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-34-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-45-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +12,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   16 ++++++++++++++++
+ package/qemu/Config.in |    7 +++++++
  package/qemu/qemu.mk   |    7 ++++++-
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ 2 files changed, 13 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index e15f14c..567b9af 100644
+index a74fd4b..0299f69 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -115,6 +115,22 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
+@@ -273,6 +273,13 @@ config BR2_PACKAGE_QEMU_ATTR
+ 	  Say 'y' here to have QEMU support attributes (attr) and eXtended
+ 	  attibutes (xattr).
  
-+comment "Block backends"
-+
-+config BR2_PACKAGE_QEMU_VIRTFS
-+	bool "Enable plan9 ressources using VirtFS"
-+	select BR2_PACKAGE_QEMU_CAP
-+	select BR2_PACKAGE_QEMU_ATTR
++config BR2_PACKAGE_QEMU_SECCOMP
++	bool "Enable seccomp filter"
++	select BR2_PACKAGE_LIBSECCOMP
 +	help
-+	  Say 'y' here if you want QEMU to provide a plan9 virtual "share"
-+	  accessible from the guest OS for relatively fast access to host
-+	  files.
-+	  
-+	  This requires that the guest OS is capable of accessing plan9
-+	  ressources (typically, in Linux, this is done by a network
-+	  file-system called 9p, and can be accelerated by using the 9p
-+	  virtio).
++	  Say 'y' here to have QEMU to use the Linux kernel's seccomp filter,
++	  to more tightly confine the VMs.
 +
- comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_UUID
+ config BR2_PACKAGE_QEMU_BLOBS
+ 	bool "Install binary blobs"
+ 	default y
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 70d3f7e..bc3f437 100644
+index 7609aea..d087291 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -83,6 +83,12 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -192,6 +192,12 @@ else
+ QEMU_OPTS += --disable-attr
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
-+QEMU_OPTS += --enable-virtfs
++ifeq ($(BR2_PACKAGE_QEMU_SECCOMP),y)
++QEMU_OPTS += --enable-seccomp
 +else
-+QEMU_OPTS += --disable-virtfs
++QEMU_OPTS += --disable-seccomp
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -187,7 +193,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
- 	        --disable-vnc-sasl                  \
--	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
- 	        --disable-curses                    \
- 	        --disable-curl                      \
+ ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
+ QEMU_OPTS += --disable-blobs
+ endif
+@@ -277,7 +283,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-rbd                       \
+ 	        --disable-smartcard                 \
+ 	        --disable-strip                     \
+-	        --disable-seccomp                   \
+ 	        --disable-sparse                    \
+ 	        $(QEMU_OPTS)                        \
+ 	)
 -- 
 1.7.2.5
