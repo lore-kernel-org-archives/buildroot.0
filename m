@@ -1,82 +1,38 @@
-From: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-Date: Wed, 24 Oct 2012 23:58:12 +0300
-Subject: [Buildroot] [PATCH] keyutils: new package
-Message-ID: <1351112292-5617-1-git-send-email-jarkko.sakkinen@iki.fi>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Oct 2012 22:59:50 +0200
+Subject: [Buildroot] [PATCH 12/12] arptables: add new package
+In-Reply-To: <1350909989-1012-12-git-send-email-gustavo@zacarias.com.ar>
+References: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
+ <1350909989-1012-12-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <508856C6.1060504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Linux key management utilities
+On 22/10/12 14:46, Gustavo Zacarias wrote:
+[snip]
+> +ARPTABLES_VERSION = 0.0.3
+> +ARPTABLES_VERSION_MINOR = 4
+> +ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION)-$(ARPTABLES_VERSION_MINOR).tar.gz
+> +ARPTABLES_SITE =http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
----
- package/Config.in            |    1 +
- package/keyutils/Config.in   |    7 +++++++
- package/keyutils/keyutils.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/keyutils/Config.in
- create mode 100644 package/keyutils/keyutils.mk
+  We usually put
+ARPTABLES_VERSION_MAJOR = v0.0.3
+ARPTABLES_VERSION = $(ARPTABLES_VERSION_MAJOR)-4
+ARPTABLES_SITE =http://downloads.sourceforge.net/project/ebtables/arptables/arptables-$(ARPTABLES_VERSION_MAJOR)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1650c71..00d242d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -715,6 +715,7 @@ source "package/supervisor/Config.in"
- source "package/systemd/Config.in"
- source "package/util-linux/Config.in"
- source "package/dsp-tools/Config.in"
-+source "package/keyutils/Config.in"
- endmenu
- 
- menu "Text editors and viewers"
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-new file mode 100644
-index 0000000..2296e5b
---- /dev/null
-+++ b/package/keyutils/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KEYUTILS
-+	bool "keyutils"
-+	help
-+	  Linux key management utilities
-+
-+	  http://people.redhat.com/dhowells/keyutils/
-+
-diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
-new file mode 100644
-index 0000000..82b1f58
---- /dev/null
-+++ b/package/keyutils/keyutils.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# keyutils
-+#
-+#############################################################
-+
-+KEYUTILS_VERSION = 1.5.5
-+KEYUTILS_SITE = http://people.redhat.com/dhowells/keyutils/
-+KEYUTILS_SOURCE = keyutils-$(KEYUTILS_VERSION).tar.bz2
-+
-+define KEYUTILS_BUILD_CMDS
-+	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CC="$(TARGET_CC)" -C $(@D)
-+endef
-+
-+define KEYUTILS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/keyctl $(TARGET_DIR)/bin/keyctl
-+endef
-+
-+define KEYUTILS_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/bin/keyctl
-+endef
-+
-+define KEYUTILS_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
+(_SITE is at its default value)
+
+  I can't say if that's really better, though :-)
+
+  Regards,
+  Arnout
 -- 
-1.7.10.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
