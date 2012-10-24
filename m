@@ -1,79 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:26 +0200
-Subject: [Buildroot] [PATCH 0/47] Add QEMU for runing on the target
-Message-ID: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 24 Oct 2012 23:25:27 +0200
+Subject: [Buildroot] [PATCH 01/47] package/cURL: fix static link whith
+	openSSL
+In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
+References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-2-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+When openSSL is selected, cURL is configured to use it.
 
-This patch series adds qemu as a package to run on the target.
+But in this case, the libcurl.pc file /forgets/ to require link
+against -ldl.
 
-Although this may sound weird in a first place, I use it to build a simple
-VM server.
+This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
+but an executable wants to be linked statically (for various reasons
+which are irrelevant here).
 
-I also use it to build statically-linked user-emulation to run foreign
-chroots on my PC (eg. running an ARM chroot on my x86_64), because using
-glibc for static-linking is not possible (it still requires some shared
-libs that it dlopens at runtime).
+Fix that by appending a 'Requires: openssl' line to the installed
+libcurl.pc, if openSSL is enabled.
 
-For now, I've only build-tested it for an x86_64 uClibc-based target.
-It's not complete, but there have been requests (on IRC) by a few users
-that are trrying to achieve a similar setup (looks like it). So, to
-avoid duplication, here's the full patchset I have here.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/libcurl/libcurl.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-In the future, I plan on adding libvirt to remotely manage the VM server.
-
-    [PATCH 01/47] package/cURL: fix static link whith openSSL
-    [PATCH 02/47] package/libfdt: new package
-    [PATCH 03/47] package/vde2: new package
-    [PATCH 04/47] package/libiscsi: new package
-    [PATCH 05/47] package/usbredir: new package
-    [PATCH 06/47] package/celt051: new package
-    [PATCH 07/47] package/python-pyparsing: new package
-    [PATCH 08/47] package/spice-protocol: new package
-    [PATCH 09/47] package/libcegui: new package
-    [PATCH 10/47] package/slirp: new package
-    [PATCH 11/47] package/spice-server: new package
-    [PATCH 12/47] package/spice: enable client
-    [PATCH 13/47] package/spice: enable GUI
-    [PATCH 14/47] package/spice: enable slirp support
-    [PATCH 15/47] package/libseccomp: new package
-    [PATCH 16/47] package/keyutils: new package
-    [PATCH 17/47] package/pmake: add host pmake
-    [PATCH 18/47] package/libbsd: new package
-    [PATCH 19/47] package/libedit2: new package
-    [PATCH 20/47] package/ceph: new package
-    [PATCH 21/47] package/qemu: new package
-    [PATCH 22/47] package/qemu: add basic target selection
-    [PATCH 23/47] package/qemu: add fine-grained target selection
-    [PATCH 24/47] package/qemu: add SDL frontends
-    [PATCH 25/47] package/qemu: add option to enable/disable the VNC frontend
-    [PATCH 26/47] package/qemu: add VNC jpeg and png compression
-    [PATCH 27/47] package/qemu: add VNC TLS-encryption
-    [PATCH 28/47] package/qemu: add option to not install blobs
-    [PATCH 29/47] package/qemu: add option to remove unwanted keymaps
-    [PATCH 30/47] package/qemu: add uuid support
-    [PATCH 31/47] package/qemu: add support for capabilities
-    [PATCH 32/47] package/qemu: add attr/xattr option
-    [PATCH 33/47] package/qemu: add support for virtfs
-    [PATCH 34/47] package/qemu: add support for cURL
-    [PATCH 35/47] package/qemu: enable use of the curses frontend
-    [PATCH 36/47] package/qemu: add BlueZ connectivity
-    [PATCH 37/47] package/qemu: add AIO support
-    [PATCH 38/47] package/qemu: add support for FDT
-    [PATCH 39/47] package/qemu: add support for VDE switches
-    [PATCH 40/47] package/qemu: add iSCSI support
-    [PATCH 41/47] package/qemu: add support for USB redirection
-    [PATCH 42/47] package/qemu: add support for Spice
-    [PATCH 43/47] package/qemu: enable sound
-    [PATCH 44/47] package/qemu: add support for libseccomp
-    [PATCH 45/47] package/qemu: option to build the docs
-    [PATCH 46/47] package/qemu: move sub-options into a sub-menu
-    [PATCH 47/47] package/qemu: enable a static build
-
-Regards,
-Yann E. MORIN.
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 8d8fdb4..80e2922 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -29,14 +29,20 @@ define LIBCURL_TARGET_CLEANUP
+ 	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
+ 	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
+ endef
+-
++define LIBCURL_FIX_TARGET_PC
++	printf 'Requires: openssl\n' >>$(TARGET_DIR)/usr/lib/pkgconfig/libcurl.pc
++endef
+ LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
++LIBCURL_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_TARGET_PC)
+ 
+ define LIBCURL_STAGING_FIXUP_CURL_CONFIG
+ 	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
+ endef
+-
++define LIBCURL_FIX_STAGING_PC
++	printf 'Requires: openssl\n' >>$(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
++endef
+ LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
++LIBCURL_POST_INSTALL_STAGING_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_STAGING_PC)
+ 
+ $(eval $(autotools-package))
+ 
+-- 
+1.7.2.5
