@@ -1,46 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Oct 2012 14:47:28 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain/uClibc: correct a slip of the
- pen
-In-Reply-To: <20121024105439.5945.qmail@s221.sureserver.com>
-References: <20121024105439.5945.qmail@s221.sureserver.com>
-Message-ID: <20121024144728.2466f491@skate>
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Wed, 24 Oct 2012 14:52:55 +0200
+Subject: [Buildroot] Trying to BUMP libglib2 to a version >= 2.33.1
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB67039E83EE@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ 
+Hi all,
+ 
+Trying to BUMP libglib2 to a version >= 2.33.1 .. 
+ 
+I've ran into a strange situation where I do not yet the clue.
+ 
+When ever I try to build the new libglib2 version 2.33.1 ..  it fails
+... with  the following error's):
 
-Your patch is OK on the idea, but it isn't properly formatted. If you
-generate your patch with git format-patch, then could you use git
-send-email to send it?
+ 
+/imx537/du8pe_NVL/host/usr/bin/../lib/gcc/arm-unknown-linux-uclibcgnueab
+i/4.5.3/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: warning:
+libgthread-2.0.so.0, needed by ../gobject/.libs/libgobject-2.0.so, not
+found (try using -rpath or -rpath-link)
+/imx537/du8pe_NVL/host/usr/bin/../lib/gcc/arm-unknown-linux-uclibcgnueab
+i/4.5.3/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: warning:
+libgmodule-2.0.so.0, needed by ./.libs/libgio-2.0.so, not found (try
+using -rpath or -rpath-link)
+./.libs/libgio-2.0.so: undefined reference to `g_module_close'
+./.libs/libgio-2.0.so: undefined reference to `g_module_symbol'
+./.libs/libgio-2.0.so: undefined reference to `g_module_supported'
 
-On Wed, 24 Oct 2012 18:54:39 +0800, liaoxinglong at icubecorp.com wrote:
-> From 3c5a0047108cb10d8e5e3605f002e12d02c53102 Mon Sep 17 00:00:00 2001
-> From: Xinglong Liao <liaoxinglong@icubecorp.com>
-> Date: Wed, 24 Oct 2012 18:42:05 +0800
-> Subject: [PATCH]     toolchain/uClibc: correct a slip of the pen
+ 
+ 
+BUT, when I did compile the old-version of libglib2 before, then, if I
+build the libglib2-2.33.1 (afterwards) everything is building..... 
+ 
+In short it comes up to this: when building the 'old' version of
+libglib2 before libglib2-2.33.1 everything builds, if not building the
+old version of ligblib2 before building libglib2-2.33.1 it fails.
 
-The spaces between [PATCH] and toolchain/uClibc shouldn't be there
 
-> 
->     UCLIB_EXTRA_CFLAGS->UCLIBC_EXTRA_CFLAGS
-> 
->     Signed-off-by: Xinglong Liao <liaoxinglong@icubecorp.com>
-
-Those lines shouldn't be indented.
-
-Once this is fixed, your patch gets my:
-
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Any clue where to look at ?
+ 
+ 
+Regards,
+Noel
