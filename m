@@ -1,36 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 24 Oct 2012 19:20:15 -0300
-Subject: [Buildroot] [PATCHv2] gnutls: fix link-time build failures
-Message-ID: <1351117215-4614-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Oct 2012 00:20:34 +0200
+Subject: [Buildroot] [PATCH 15/47] package/libseccomp: new package
+In-Reply-To: <1351113973-17237-16-git-send-email-yann.morin.1998@free.fr>
+References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
+ <1351113973-17237-16-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <201210250020.34545.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/23da17446266bdd49ea0da0c1892d66d3ac6607f/build-end.log
-And may the <BEEP> rest in peace at last...
+All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+On Wednesday 24 October 2012 Yann E. MORIN wrote:
+[--SNIP--]
+> diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+> new file mode 100644
+> index 0000000..f287377
+> --- /dev/null
+> +++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+> @@ -0,0 +1,19 @@
+> +diff -du libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
+> +--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
+> ++++ libseccomp-1.0.0/configure	2012-09-07 00:00:09.918429292 +0200
+> +@@ -205,7 +205,8 @@
+> + #
+> + 
+> + # system seccomp includes
+> +-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
+> ++# ${SYSROOT} added by buildroot for cross-compilation
+> ++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
+> + 	opt_sysinc_seccomp="yes"
+> + else
+> + 	opt_sysinc_seccomp="no"
+> +Common subdirectories: libseccomp-1.0.0.orig/doc and libseccomp-1.0.0/doc
+> +Common subdirectories: libseccomp-1.0.0.orig/include and libseccomp-1.0.0/include
+> +Common subdirectories: libseccomp-1.0.0.orig/install and libseccomp-1.0.0/install
+> +Common subdirectories: libseccomp-1.0.0.orig/src and libseccomp-1.0.0/src
+> +Common subdirectories: libseccomp-1.0.0.orig/tests and libseccomp-1.0.0/tests
+> +Common subdirectories: libseccomp-1.0.0.orig/tools and libseccomp-1.0.0/tools
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index e889821..1ef6e3f 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -10,8 +10,9 @@ GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
- GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
- GNUTLS_LICENSE_FILES = COPYING lib/COPYING
- GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt $(if $(BR2_PACKAGE_ZLIB),zlib)
-+GNUTLS_CONF_ENV = acl_cv_rpath=no
- GNUTLS_CONF_OPT = --with-libgcrypt --without-libgcrypt-prefix \
--		--without-p11-kit
-+		--without-p11-kit --disable-rpath
- GNUTLS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+Hmm. I'll have to rework that patch before it can be included...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.8.6
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
