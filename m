@@ -1,109 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:41 +0200
-Subject: [Buildroot] [PATCH 15/47] package/libseccomp: new package
+Date: Wed, 24 Oct 2012 23:25:44 +0200
+Subject: [Buildroot] [PATCH 18/47] package/libbsd: new package
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-16-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-19-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Yann E. MORIN <yann.morin@orange.com>
+
+Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 ---
- package/Config.in                                  |    1 +
- package/libseccomp/Config.in                       |   13 +++++++++++
- ...ibseccomp-use-system-headers-from-sysroot.patch |   19 +++++++++++++++++
- package/libseccomp/libseccomp.mk                   |   22 ++++++++++++++++++++
- 4 files changed, 55 insertions(+), 0 deletions(-)
- create mode 100644 package/libseccomp/Config.in
- create mode 100644 package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
- create mode 100644 package/libseccomp/libseccomp.mk
+ package/Config.in        |    1 +
+ package/libbsd/Config.in |   17 +++++++++++++++++
+ package/libbsd/libbsd.mk |   25 +++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 package/libbsd/Config.in
+ create mode 100644 package/libbsd/libbsd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 844873a..ba3ef2c 100644
+index f3d78d0..5cc5fac 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -489,6 +489,7 @@ source "package/libical/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
- source "package/libtpl/Config.in"
-+source "package/libseccomp/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
- source "package/lttng-libust/Config.in"
-diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+@@ -476,6 +476,7 @@ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+ source "package/boost/Config.in"
+ source "package/libatomic_ops/Config.in"
++source "package/libbsd/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
+ source "package/libdaemon/Config.in"
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
 new file mode 100644
-index 0000000..183cf4e
+index 0000000..d1f9e46
 --- /dev/null
-+++ b/package/libseccomp/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBSECCOMP
-+	bool "libseccomp"
++++ b/package/libbsd/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBBSD_AVAILABLE
++	def_bool y
++
++comment "libbsd requires (other packages)"
++	depends on !BR2_PACKAGE_LIBBSD_AVAILABLE
++
++config BR2_PACKAGE_LIBBSD
++	bool "libbsd"
++	depends on BR2_PACKAGE_LIBBSD_AVAILABLE
 +	help
-+	  High level interface to the Linux Kernel's seccomp filter 
++	  This library provides useful functions commonly found on BSD
++	  systems, and lacking on others like GNU systems, thus making
++	  it easier to port projects with strong BSD origins, without
++	  needing to embed the same code over and over again on each
++	  project.
 +	  
-+	  The libseccomp library provides and easy to use, platform independent,
-+	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
-+	  The libseccomp API is designed to abstract away the underlying BPF
-+	  based syscall filter language and present a more conventional
-+	  function-call based filtering interface that should be familiar to,
-+	  and easily adopted by application developers.
-+	  
-+	  http://sourceforge.net/projects/libseccomp/
-diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
++	  http://libbsd.freedesktop.org/
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
 new file mode 100644
-index 0000000..f287377
+index 0000000..d7438e8
 --- /dev/null
-+++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
-@@ -0,0 +1,19 @@
-+diff -du libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
-+--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
-++++ libseccomp-1.0.0/configure	2012-09-07 00:00:09.918429292 +0200
-+@@ -205,7 +205,8 @@
-+ #
-+ 
-+ # system seccomp includes
-+-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
-++# ${SYSROOT} added by buildroot for cross-compilation
-++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
-+ 	opt_sysinc_seccomp="yes"
-+ else
-+ 	opt_sysinc_seccomp="no"
-+Common subdirectories: libseccomp-1.0.0.orig/doc and libseccomp-1.0.0/doc
-+Common subdirectories: libseccomp-1.0.0.orig/include and libseccomp-1.0.0/include
-+Common subdirectories: libseccomp-1.0.0.orig/install and libseccomp-1.0.0/install
-+Common subdirectories: libseccomp-1.0.0.orig/src and libseccomp-1.0.0/src
-+Common subdirectories: libseccomp-1.0.0.orig/tests and libseccomp-1.0.0/tests
-+Common subdirectories: libseccomp-1.0.0.orig/tools and libseccomp-1.0.0/tools
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-new file mode 100644
-index 0000000..73fe632
---- /dev/null
-+++ b/package/libseccomp/libseccomp.mk
-@@ -0,0 +1,22 @@
++++ b/package/libbsd/libbsd.mk
+@@ -0,0 +1,25 @@
 +#############################################################
 +#
-+# libseccomp
++# libbsd
 +#
 +#############################################################
 +
-+LIBSECCOMP_VERSION         = 1.0.0
-+LIBSECCOMP_SOURCE          = libseccomp-$(LIBSECCOMP_VERSION).tar.gz
-+LIBSECCOMP_SITE            = http://downloads.sourceforge.net/project/libseccomp
-+LIBSECCOMP_LICENSE         = LGPLv2.1
-+LIBSECCOMP_LICENSE_FILES   = LICENSE
-+LIBSECCOMP_INSTALL_STAGING = YES
++LIBBSD_VERSION         = 0.4.2
++LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
++LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
++LIBBSD_LICENSE         = BSD-3c MIT
++LIBBSD_LICENSE_FILES   = LICENSE
 +
-+# Needed for configure to find our system headers:
-+LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
-+LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
-+LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
-+LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
-+LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
++# man-pages are BSD-4c, so that license only matters
++# if doc is kept in the target rootfs
++ifeq ($(BR2_HAVE_DOCUMENTATION),y)
++LIBBSD_LICENSE        += BSD-4c
++endif
 +
-+# Not a real autotools package, but works quite OK nonetheless
++LIBBSD_AUTORECONF      = YES
++LIBBSD_AUTORECONF_OPT  = -f -i
++LIBBSD_DEPENDENCIES    = host-automake
++
++LIBBSD_INSTALL_STAGING = YES
++
 +$(eval $(autotools-package))
 -- 
 1.7.2.5
