@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:26:09 +0200
-Subject: [Buildroot] [PATCH 43/47] package/qemu: enable sound
+Date: Wed, 24 Oct 2012 23:26:11 +0200
+Subject: [Buildroot] [PATCH 45/47] package/qemu: option to build the docs
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-44-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-46-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,95 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   38 ++++++++++++++++++++++++++++++++++++++
- package/qemu/qemu.mk   |   19 +++++++++++++++++--
- 2 files changed, 55 insertions(+), 2 deletions(-)
+ package/qemu/qemu.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 01962ea..a74fd4b 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -204,6 +204,44 @@ config BR2_PACKAGE_QEMU_VDE
- 	  Say 'y' here to have QEMU connect to VDE (Virtual Distributed
- 	  Ethernet) switches.
- 
-+comment "Sound"
-+
-+config BR2_PACKAGE_QEMU_SOUND_CARDS
-+	string "Enable sound cards"
-+	default "ac97 es1370 hda"
-+	help
-+	  Enter here the list of sound cards you want QEMU to emulate.
-+	  The available sound cards are:
-+	    ac97 es1370 sb16 cs4231a adlib gus hda
-+	  
-+	  The default is: ac97 es1370 hda
-+	  
-+	  Note: even if you say 'n' to both alsa and SDL drivers, below, QEMU
-+	  always include the 'wav' driver, which stores the generated sound
-+	  into a file, and the 'none' driver, which discards generated sound.
-+
-+config BR2_PACKAGE_QEMU_MIXEMU
-+	bool "Enable mixer emulation"
-+	help
-+	  Say 'y' here to have QEMU emulate a mixer device.
-+
-+config BR2_PACKAGE_QEMU_SOUND_SDL
-+	bool "Enable sound via SDL"
-+	select BR2_PACKAGE_QEMU_SDL # Requires that SDL frontend be selected
-+	select BR2_PACKAGE_SDL
-+	help
-+	  Say 'y' here to have QEMU play sound from the VMs via SDL.
-+	  
-+	  Note: this is only for system emulation, not user emulation.
-+
-+config BR2_PACKAGE_QEMU_SOUND_ALSA
-+	bool "Enable sound via alsa"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Say 'y' here to have QEMU play sound from the VMs via alsa.
-+	  
-+	  Note: this is only for system emulation, not user emulation.
-+
- comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_FDT
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 69a5382..7609aea 100644
+index d087291..199d230 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -145,6 +145,23 @@ else
- QEMU_OPTS += --disable-vde
+@@ -202,6 +202,12 @@ ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
+ QEMU_OPTS += --disable-blobs
  endif
  
-+QEMU_SND_DRV =
-+ifeq ($(BR2_PACKAGE_QEMU_SOUND_ALSA),y)
-+QEMU_SND_DRV += alsa
-+QEMU_DEPENDENCIES += alsa-lib
-+endif
-+ifeq ($(BR2_PACKAGE_QEMU_SOUND_SDL),y)
-+QEMU_SND_DRV += sdl
-+QEMU_DEPENDENCIES += sdl
-+endif
-+ifneq ($(QEMU_SND_DRV),)
-+QEMU_OPTS += --audio-drv-list="$(QEMU_SND_DRV)"
-+endif
-+QEMU_OPTS += --audio-card-list=$(BR2_PACKAGE_QEMU_SOUND_CARDS)
-+ifeq ($(BR2_PACKAGE_QEMU_MIXEMU),y)
-+QEMU_OPTS += --enable-mixemu
++ifeq ($(BR2_HAVE_DOCUMENTATION),y)
++QEMU_OPTS += --enable-docs
++else
++QEMU_OPTS += --disable-docs
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
- QEMU_OPTS += --enable-fdt
- QEMU_DEPENDENCIES += dtc
-@@ -248,8 +265,6 @@ define QEMU_CONFIGURE_CMDS
- 	    ./configure                             \
- 	        --prefix=/usr                       \
- 	        --cross-prefix=$(TARGET_CROSS)      \
--	        --audio-drv-list=                   \
--	        --audio-card-list=                  \
- 	        --enable-kvm                        \
- 	        --enable-nptl                       \
- 	        --enable-vhost-net                  \
+ # Post-install removal of unwanted keymaps:
+ # - if we want 'all', we do nothing;
+ # - if we want none, we completely remove the keymap dir
+@@ -279,7 +285,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
+ 	        --disable-guest-base                \
+-	        --disable-docs                      \
+ 	        --disable-rbd                       \
+ 	        --disable-smartcard                 \
+ 	        --disable-strip                     \
 -- 
 1.7.2.5
