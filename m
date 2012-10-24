@@ -1,78 +1,107 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Wed, 24 Oct 2012 16:43:35 +0300
-Subject: [Buildroot] [PATCH 9/9] firefox: GNU gnash flash,
- an open source Adobe Flash player & plugin
-In-Reply-To: <5086C8E7.6070209@mind.be>
-References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
- <1346855344-15081-10-git-send-email-stefan.froberg@petroprogram.com>
- <5082C97A.4090207@mind.be> <5083E62E.80705@petroprogram.com>
- <5086C8E7.6070209@mind.be>
-Message-ID: <5087F087.8010307@petroprogram.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 24 Oct 2012 16:13:33 +0200
+Subject: [Buildroot] [PATCH v2] wireshark: new package
+Message-ID: <4b73cf9536d6cde485299c9afb9fc41affa909ae.1351087817.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-23.10.2012 19:42, Arnout Vandecappelle kirjoitti:
-> [snip]
->> Tell me Arnout, is the ARM-world really this ... complicated ?
->>
->> I mean, there at least two dozens of defconfig files for various arm
->> vendor boards under linux source tree arch/arm/config.
->> And those config-files are just for boards right ??
->>
->> Am I correct to presume that there are at least almost hundred of
->> different vendor board + arm cpu compinations that
->> are more or less incompatible with each other ?
->
->  Yes, there are two reasons for that:
->
-> - Unlike for PCs, there is no BIOS in embedded platforms to hide the
-> board configuration.  So the BSP has to be part of the kernel.  That is
-> partially solved with a device tree, but even so you have to select a
-> device tree for your particular board.
->
-> - Unlike for PowerPC, the ARM core is used by many SoC vendors who make
-> completely different CPUs out of it.  Since an OS is actually about
-> managing everything around the CPU core itself, there's a big impact on
-> the Linux kernel. That's why you'll often see SoC-specific kernel
-> patches.
->
->  However, this complexity shouldn't affect your use of buildroot too
-> much - at least if there's a defconfig for your board available in
-> U-Boot and in the kernel.
->
+This is only the bare minimum needed to build the textual tshark utility.
+Support for more options, including the wireshark GUI, can be added later.
 
-I just read the following:
-http://www.extremetech.com/mobile/137412-linux-kernel-version-3-7-will-support-multiple-arm-socs
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
 
-So it seems things are now getting more easier.
+Changes v1 -> v2:
+	* Patch configure.in and enable autoreconf, instead of overriding
+	  $prefix
+	* Remove --with-sysroot as suggested by Arnout Vandecappelle
 
-Im certainly going to upgrade to that kernel version and try if I have
-better luck
-this time with exonys board (basically the same stuff that those Samsung
-Galaxy S II and III are using ????)
-under qemu.
+The tshark RPATH is still cluttered with local build paths. Adding
+--libdir=/usr/lib doesn't solve this. Any suggestion?
 
->
->> And in addition to that, I must take into account if the arm-cpu Im
->> cross-compiling stuff for has softfp or hardfp and the type of fp (vpf,
->> neon etc....) ?
->
->  That's in fact the same on x86, only nobody uses things like
-> -mfpmath=sse
-> and just uses generic 387 code.
->
->
+ package/Config.in                                    |    1 +
+ package/wireshark/Config.in                          |   14 ++++++++++++++
+ .../wireshark/wireshark-dont-include-prefix.patch    |   18 ++++++++++++++++++
+ package/wireshark/wireshark.mk                       |   10 ++++++++++
+ 4 files changed, 43 insertions(+)
+ create mode 100644 package/wireshark/Config.in
+ create mode 100644 package/wireshark/wireshark-dont-include-prefix.patch
+ create mode 100644 package/wireshark/wireshark.mk
 
-I didn't know about that optimization switch.
-Maybe it will give my systems some extra boost  ...  :-)
-Thanks!
-
-Best Regards
-Stefan
-
->  Regards,
->  Arnout
->
+diff --git a/package/Config.in b/package/Config.in
+index 1650c71..cd8d9ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -646,6 +646,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/wget/Config.in"
+ endif
+ source "package/wireless_tools/Config.in"
++source "package/wireshark/Config.in"
+ source "package/wpa_supplicant/Config.in"
+ source "package/xinetd/Config.in"
+ source "package/xl2tp/Config.in"
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+new file mode 100644
+index 0000000..e6d4e72
+--- /dev/null
++++ b/package/wireshark/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_WIRESHARK
++	bool "wireshark"
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBGCRYPT
++	select BR2_PACKAGE_LIBGLIB2
++	depends on BR2_USE_WCHAR # glib2
++	help
++	  Network traffic sniffer and protocol decoder. Currently only tshark,
++	  the console interface, is enabled.
++
++	  http://www.wireshark.org
++
++comment "wireshark requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/wireshark/wireshark-dont-include-prefix.patch b/package/wireshark/wireshark-dont-include-prefix.patch
+new file mode 100644
+index 0000000..6f3c946
+--- /dev/null
++++ b/package/wireshark/wireshark-dont-include-prefix.patch
+@@ -0,0 +1,18 @@
++configure.in: don't add the build host's /usr/include and /usr/lib to the 
++search path of include files and libraries. This is not what you want when 
++cross compiling.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -Nuar wireshark-1.8.3.orig/configure.in wireshark-1.8.3/configure.in
++--- wireshark-1.8.3.orig/configure.in	2012-08-15 23:33:32.000000000 +0300
+++++ wireshark-1.8.3/configure.in	2012-10-24 09:54:15.259853331 +0200
++@@ -639,7 +639,7 @@
++ # If using $prefix we add "$prefix/include" to the include search path
++ # and "$prefix/lib" to the library search path.
++ #
++-if test "x$prefix" != "x" ; then
+++if false ; then
++ 	AC_MSG_CHECKING(whether to use $prefix for headers and libraries)
++ 	if test -d $prefix/include ; then
++ 		AC_MSG_RESULT(yes)
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+new file mode 100644
+index 0000000..b50c223
+--- /dev/null
++++ b/package/wireshark/wireshark.mk
+@@ -0,0 +1,10 @@
++WIRESHARK_VERSION = 1.8.3
++WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
++WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
++WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
++WIRESHARK_AUTORECONF = YES
++WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
++WIRESHARK_CONF_OPT = --disable-wireshark --without-krb5 --disable-usr-local \
++		     --enable-static=no
++
++$(eval $(call autotools-package))
+-- 
+1.7.10.4
