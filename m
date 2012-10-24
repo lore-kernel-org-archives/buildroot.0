@@ -1,59 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Oct 2012 15:14:40 +0200
-Subject: [Buildroot] [git commit] fs/skeleton: remove /etc/TZ
-In-Reply-To: <877gqgm36w.fsf@macbook.be.48ers.dk>
-References: <20121024071711.0DF3599913@busybox.osuosl.org>
- <20121024143009.23f6b698@skate>
- <877gqgm36w.fsf@macbook.be.48ers.dk>
-Message-ID: <20121024151440.63792051@skate>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Wed, 24 Oct 2012 16:43:35 +0300
+Subject: [Buildroot] [PATCH 9/9] firefox: GNU gnash flash,
+ an open source Adobe Flash player & plugin
+In-Reply-To: <5086C8E7.6070209@mind.be>
+References: <1346855344-15081-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1346855344-15081-10-git-send-email-stefan.froberg@petroprogram.com>
+ <5082C97A.4090207@mind.be> <5083E62E.80705@petroprogram.com>
+ <5086C8E7.6070209@mind.be>
+Message-ID: <5087F087.8010307@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+23.10.2012 19:42, Arnout Vandecappelle kirjoitti:
+> [snip]
+>> Tell me Arnout, is the ARM-world really this ... complicated ?
+>>
+>> I mean, there at least two dozens of defconfig files for various arm
+>> vendor boards under linux source tree arch/arm/config.
+>> And those config-files are just for boards right ??
+>>
+>> Am I correct to presume that there are at least almost hundred of
+>> different vendor board + arm cpu compinations that
+>> are more or less incompatible with each other ?
+>
+>  Yes, there are two reasons for that:
+>
+> - Unlike for PCs, there is no BIOS in embedded platforms to hide the
+> board configuration.  So the BSP has to be part of the kernel.  That is
+> partially solved with a device tree, but even so you have to select a
+> device tree for your particular board.
+>
+> - Unlike for PowerPC, the ARM core is used by many SoC vendors who make
+> completely different CPUs out of it.  Since an OS is actually about
+> managing everything around the CPU core itself, there's a big impact on
+> the Linux kernel. That's why you'll often see SoC-specific kernel
+> patches.
+>
+>  However, this complexity shouldn't affect your use of buildroot too
+> much - at least if there's a defconfig for your board available in
+> U-Boot and in the kernel.
+>
 
-On Wed, 24 Oct 2012 15:04:23 +0200, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  Thomas> On Wed, 24 Oct 2012 09:16:50 +0200, Peter Korsgaard wrote:
->  >> commit: http://git.buildroot.net/buildroot/commit/?id=5a61fbd82394f9bc9317535b717a2e1dd51dea7d
->  >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->  >> 
->  >> Defaulting to UTC (which is what uClibc will default to when /etc/TZ is
->  >> missing) seems more sensible than US Mountain Time Zone in the default
->  >> rootfs skeleton.
-> 
->  Thomas> And with glibc/eglibc?
-> 
-> As far as I understand it (e)glibc doesn't use /etc/TZ:
-> 
-> https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html
-> 
-> https://www.kernel.org/pub/linux/libs/uclibc/Glibc_vs_uClibc_Differences.txt
-> 
-> time functions
-> --------------
-> 1) Leap seconds are not supported.
-> 2) /etc/timezone and the whole zoneinfo directory tree are not supported.
->    To set the timezone, set the TZ environment variable as specified in
->    http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap08.html
->    or you may also create an /etc/TZ file of a single line, ending with a
->    newline, containing the TZ setting.  For example
->    echo CST6CDT > /etc/TZ
-> 3) Currently, locale specific eras and alternate digits are not supported.
->    They are on my TODO list.
+I just read the following:
+http://www.extremetech.com/mobile/137412-linux-kernel-version-3-7-will-support-multiple-arm-socs
 
-Ok. I know remember, on glibc I used /etc/localtime. I have patches
-here that allow to configure the installation of a certain number of
-zoneinfo files, and set a default zoneinfo, when glibc is used. I
-should probably submit them someday.
+So it seems things are now getting more easier.
 
-Thanks for the clarification,
+Im certainly going to upgrade to that kernel version and try if I have
+better luck
+this time with exonys board (basically the same stuff that those Samsung
+Galaxy S II and III are using ????)
+under qemu.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+>
+>> And in addition to that, I must take into account if the arm-cpu Im
+>> cross-compiling stuff for has softfp or hardfp and the type of fp (vpf,
+>> neon etc....) ?
+>
+>  That's in fact the same on x86, only nobody uses things like
+> -mfpmath=sse
+> and just uses generic 387 code.
+>
+>
+
+I didn't know about that optimization switch.
+Maybe it will give my systems some extra boost  ...  :-)
+Thanks!
+
+Best Regards
+Stefan
+
+>  Regards,
+>  Arnout
+>
