@@ -1,37 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Oct 2012 00:27:15 +0200
-Subject: [Buildroot] [PATCH] keyutils: new package
-In-Reply-To: <201210242306.38368.yann.morin.1998@free.fr>
-References: <1351112292-5617-1-git-send-email-jarkko.sakkinen@iki.fi>
- <201210242306.38368.yann.morin.1998@free.fr>
-Message-ID: <201210250027.15661.yann.morin.1998@free.fr>
+From: Randy Graham <surfbytes@gmail.com>
+Date: Wed, 24 Oct 2012 15:41:16 -0700
+Subject: [Buildroot] Confused about kernel-headers.
+Message-ID: <CAG_HyLzE8YJkdyrTCXzNeM6=8YvCfR7xdd6DBRW7rjj091FY0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jarkko, All,
+Hello,
 
-On Wednesday 24 October 2012 Yann E. MORIN wrote:
-> On Wednesday 24 October 2012 Jarkko Sakkinen wrote:
-> > Linux key management utilities
-> 
-> There are two memleaks known in keyutils.
-> 
-> I'm about to post a patch series that includes keyutils
-> with patches to fix the memleaks.
+I am using buildroot snapshot 2012.10 to build a linux-3.7-rc1 kernel for
+an ARM board and see that the latest kernel-header selectable is 3.5.x (3.7
+headers are not listed).
 
-Also, the install rule needs to be fixed. See:
-  http://lists.busybox.net/pipermail/buildroot/2012-October/060377.html
+So, my questions are:
 
-Regards,
-Yann E. MORIN.
+1. Why do I need to specify a kernel-headers version when the source
+tarball for linux-3.7-rc1 already has it ?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2. How does buildroot use the specified kernel-headers version?
+
+3. How do I go about adding the 3.7 headers if they must be used with my
+3.7 kernel ?
+
+I have googled, searched the buildroot source and mailing list but am still
+confused.
+
+Thanks for any insights.
+
+-Randy
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121024/2601cd4f/attachment.html>
