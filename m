@@ -1,96 +1,116 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:29 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_03/47=5D_package/vde2=3A_new_packa?=
-	=?utf-8?q?ge?=
+Date: Wed, 24 Oct 2012 23:25:37 +0200
+Subject: [Buildroot] [PATCH 11/47] package/spice-server: new package
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-4-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-12-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-VDE is an ethernet compliant virtual network that can be
-spawned over a set of physical computer over the Internet.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in      |    1 +
- package/vde2/Config.in |   10 ++++++++++
- package/vde2/vde2.mk   |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/vde2/Config.in
- create mode 100644 package/vde2/vde2.mk
+ package/Config.in       |    1 +
+ package/spice/Config.in |   23 +++++++++++++++++++++++
+ package/spice/spice.mk  |   47 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 71 insertions(+), 0 deletions(-)
+ create mode 100644 package/spice/Config.in
+ create mode 100644 package/spice/spice.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c9cb3ed..c64a54a 100644
+index 33d4525..844873a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -640,6 +640,7 @@ source "package/transmission/Config.in"
- source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
- source "package/ushare/Config.in"
-+source "package/vde2/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
- source "package/vtun/Config.in"
-diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+@@ -632,6 +632,7 @@ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/spice-protocol/Config.in"
++source "package/spice/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/spice/Config.in b/package/spice/Config.in
 new file mode 100644
-index 0000000..1591bc4
+index 0000000..ced3ec7
 --- /dev/null
-+++ b/package/vde2/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_VDE2
-+	bool "vde2"
++++ b/package/spice/Config.in
+@@ -0,0 +1,23 @@
++comment "spice server depends on python"
++	depends on !BR2_PACKAGE_PYTHON
++
++config BR2_PACKAGE_SPICE
++	bool "spice server"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_PYPARSING
++	select BR2_PACKAGE_SPICE_PROTOCOL
++	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_CELT051
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_JPEG
 +	help
-+	  VDE is an ethernet compliant virtual network that can be
-+	  spawned over a set of physical computer over the Internet.
-+	  VDE is part of virtualsquare project.
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
 +	  
-+	  http://vde.sourceforge.net/
++	  This package implements the server-part of Spice.
 +	  
-+	  Note: only the libraries are installed.
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
++	  http://www.spice-space.org/
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
 new file mode 100644
-index 0000000..b2e0fea
+index 0000000..37b1bff
 --- /dev/null
-+++ b/package/vde2/vde2.mk
-@@ -0,0 +1,36 @@
++++ b/package/spice/spice.mk
+@@ -0,0 +1,47 @@
 +#############################################################
 +#
-+# vde2
++# Spice
 +#
 +#############################################################
 +
-+VDE2_VERSION         = 2.3.2
-+VDE2_SOURCE          = vde2-$(VDE2_VERSION).tar.bz2
-+VDE2_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
-+VDE2_LICENSE         = GPLv2+ LGPLv2.1+ BSD-3c
-+VDE2_LICENSE_FILES   = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_INSTALL_STAGING = YES
++SPICE_VERSION         = 0.12.0
++SPICE_SOURCE          = spice-$(SPICE_VERSION).tar.bz2
++SPICE_SITE            = http://www.spice-space.org/download/releases/
++SPICE_LICENSE         = LGPLv2.1+
++SPICE_LICENSE_FILES   = COPYING
++SPICE_INSTALL_STAGING = YES
++SPICE_DEPENDENCIES    = \
++    spice-protocol      \
++    pixman              \
++    celt051             \
++    python-pyparsing    \
++    alsa-lib            \
++    openssl             \
++    jpeg                \
 +
-+# Reasons for enabling/disabling stuff:
-+#?- tuntap is enabled in the hope we're using a recent-enough toolchain
-+#   that does have if_tun.h (virtually everything these days)
-+# - kvde_switch is disabled because it requires a patched kernel
-+# - cryptcab is disabled to not depend on openSSL
-+# - python is disabled to not depend on Python
-+# - pcap is disabled to not depend on libpcap
-+# - profiling is disabled because we do not want to debug/profile
-+#
-+# Note: disabled features can be added with corresponding dependencies
-+#       in future commits.
-+VDE2_CONF_OPT = --disable-experimental  \
-+                --disable-cryptcab      \
-+                --disable-pcap          \
-+                --disable-python        \
-+                --disable-profile       \
-+                --disable-kernel-switch \
-+                --enable-tuntap         \
++# We disable everything for now, because the dependency tree can become
++# quite deep if we try to enable some features, and I have not tested that.
++SPICE_CONF_OPT =            \
++  --disable-tunnel          \
++  --disable-gui             \
++  --disable-opengl          \
++  --disable-smartcard       \
++  --disable-client          \
++  --disable-automated-tests \
++  --without-sasl            \
 +
-+#?Package does not build in parallel due to improper make rules
-+VDE2_MAKE = $(MAKE1)
++SPICE_DEPENDENCIES += host-pkg-config
++
++SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++# We need to tweak spice.pc because it /forgets/ (for static linking) that
++# it should link against libz and libjpeg. libz is pkg-config-aware, while
++# libjpeg isn't, hence the two-line tweak
++define SPICE_POST_INSTALL_STAGING_FIX_PC
++	$(SED) 's/^\(Requires.private:.*\)$$/\1 zlib/; s/^\(Libs.private:.*\)$$/\1 -ljpeg/;'    \
++	       "$(STAGING_DIR)/usr/lib/pkgconfig/spice-server.pc"
++endef
++SPICE_POST_INSTALL_STAGING_HOOKS += SPICE_POST_INSTALL_STAGING_FIX_PC
 +
 +$(eval $(autotools-package))
 -- 
