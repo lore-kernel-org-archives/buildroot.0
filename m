@@ -1,140 +1,79 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 24 Oct 2012 09:17:07 +0200
-Subject: [Buildroot] [PATCHv2 10/10] Make savedefconfig save to a configured
-	file.
-In-Reply-To: <1351063027-13800-1-git-send-email-arnout@mind.be>
-References: <1351063027-13800-1-git-send-email-arnout@mind.be>
-Message-ID: <1351063027-13800-11-git-send-email-arnout@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 24 Oct 2012 09:31:56 +0200
+Subject: [Buildroot] [PATCH] wireshark: new package
+In-Reply-To: <5086CE63.4040302@mind.be>
+References: <c866c7ffc05da225311abef42a80696310d22157.1350887157.git.baruch@tkos.co.il>
+ <5086CE63.4040302@mind.be>
+Message-ID: <20121024073156.GA29646@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Hi Anout,
 
-Store BR2_DEFCONFIG in .config, and use it to update the original input
-defconfig file after updating the configuration.  When a config is
-created by using the BR2_DEFCONFIG=... option, this is saved in the
-.config file; later runs of savedefconfig will update that same location.
-It is also possible to configure this place in the interactive
-configuration.
+Thanks for reviewing.
 
-The BR2_DEFCONFIG value itself is not saved into the generated
-defconfig, since Kconfig considers it at its default. This is
-intentional, to avoid hard-coding an absolute path in the defconfig.
-It will anyway be set again when the defconfig is used with the
-'make BR2_DEFCONFIG=... defconfig' command.
+On Tue, Oct 23, 2012 at 07:05:39PM +0200, Arnout Vandecappelle wrote:
+> On 22/10/12 08:27, Baruch Siach wrote:
+> >This is only the bare minimum needed to build the textual tshark utility.
+> >Support for more options, including the wireshark GUI, can be added later.
+> >---
+> >I override the $prefix configure variable because otherwise the host
+> >/usr/include is added to the -I and -L paths. I'm not sure this is a good idea
+> >though, since it clutters the tshark RPATH with directories from the local
+> >build paths. If you have a better I'd be glad to hear.
+> 
+>  That usually means there's a broken Makefile.am and we fix it with a patch.
+> However, does installation still work with the prefix override?
 
-As a side-effect of this change, the *config options have been moved out
-of the BR2_HAVE_DOT_CONFIG condition.  This doesn't make any functional
-difference, because the .config is still not read for the *config targets.
-However, the defconfig and savedefconfig targets do need to include
-.config now, which makes them slightly slower.
+Yes. However I see $prefix added to the tshark binary RPATH, which is not 
+nice. I'll try patching configure.in.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- Config.in                       |   12 ++++++++++++
- Makefile                        |   17 +++++++++++++----
- docs/manual/customize-store.txt |    1 +
- 3 files changed, 26 insertions(+), 4 deletions(-)
+> [snip]
+> >diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+> >new file mode 100644
+> >index 0000000..c89fbf8
+> >--- /dev/null
+> >+++ b/package/wireshark/wireshark.mk
+> >@@ -0,0 +1,10 @@
+> >+WIRESHARK_VERSION = 1.8.3
+> >+WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+> >+WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+> >+WIRESHARK_DEPENDENCIES = libpcap libgcrypt libglib2
+> >+WIRESHARK_CONF_ENV = LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+> >+WIRESHARK_CONF_OPT = --disable-wireshark --without-krb5 --disable-usr-local \
+> >+		     prefix=$(STAGING_DIR)/usr --with-sysroot=$(STAGING_DIR) \
+> 
+>  Why is the --with-sysroot needed?
 
-diff --git a/Config.in b/Config.in
-index dab7787..670ce84 100644
---- a/Config.in
-+++ b/Config.in
-@@ -16,6 +16,18 @@ config BR2_HOSTARCH
- 
- source "target/Config.in.arch"
- 
-+config BR2_DEFCONFIG_FROM_ENV
-+	string
-+	option env="BR2_DEFCONFIG"
-+
-+config BR2_DEFCONFIG
-+	string "Location to save buildroot config"
-+	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
-+	default "$(CONFIG_DIR)/defconfig"
-+	help
-+	  When running 'make savedefconfig', the defconfig file will be saved
-+	  in this location.
-+
- menu "Build options"
- 
- menu "Commands"
-diff --git a/Makefile b/Makefile
-index e257c61..f6b8ef8 100644
---- a/Makefile
-+++ b/Makefile
-@@ -56,7 +56,7 @@ DATE:=$(shell date +%Y%m%d)
- export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
- 
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
-+	%_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	source-check print-version
- 
-@@ -556,6 +556,8 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
- 
-+endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-+
- # configuration
- # ---------------------------------------------------------------------------
- 
-@@ -566,7 +568,12 @@ $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
- 	$(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
- 
-+DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
-+
-+# We don't want to fully expand BR2_DEFCONFIG here, so Kconfig will
-+# recognize that if it's still at its default $(CONFIG_DIR)/defconfig
- COMMON_CONFIG_ENV = \
-+	BR2_DEFCONFIG='$(call qstrip,$(value BR2_DEFCONFIG))' \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
-@@ -638,7 +645,7 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -646,13 +653,15 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< \
-+		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
-+		$(CONFIG_CONFIG_IN)
- 
- # check if download URLs are outdated
- source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
- 
--endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-+.PHONY: defconfig savedefconfig
- 
- #############################################################
- #
-diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index 05d1061..77b079c 100644
---- a/docs/manual/customize-store.txt
-+++ b/docs/manual/customize-store.txt
-@@ -163,6 +163,7 @@ the buildroot tree).
-    * +BR2_TOOLCHAIN_CTNG_CONFIG+
-    * +BR2_UCLIBC_CONFIG+
-    * +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+
-+1. Set +BR2_DEFCONFIG+ to +<path-to-board-directory>/buildroot.config+
- 1. Create +<path-to-board-directory>/fs-overlay+ and fill it
-    with additional files you need on your rootfs, e.g.
-    +<path-to-board-directory>/etc/inittab+. Set +BR2_ROOTFS_OVERLAY+
+Removing --with-sysroot doesn't negatively affect build or run of tshark. I 
+get the following line during configure, however:
+
+checking for sysroot... no
+
+Is it significant?
+
+> >+		     --enable-static=no
+> 
+>  We normally build both dynamic and static libraries, and remove the static
+> library in the target.  Doesn't that work in wireshark?  Can you add a comment
+> to explain that?
+
+Without --enable-static=no build fails with:
+
+ld: tshark: hidden symbol `__GI_atan' isn't defined
+
+My toolchain is external:
+
+powerpc-linux-gnu-gcc (Sourcery G++ Lite 2011.03-38) 4.5.2
+
+Any ideas?
+
+baruch
+
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
