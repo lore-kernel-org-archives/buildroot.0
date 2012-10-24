@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 24 Oct 2012 09:17:04 +0200
-Subject: [Buildroot] [PATCHv2 07/10] busybox: update-all-config shouldn't
-	update default busybox config
+Date: Wed, 24 Oct 2012 09:17:06 +0200
+Subject: [Buildroot] [PATCHv2 09/10] uClibc: update-all-config shouldn't
+	update default uClibc config
 In-Reply-To: <1351063027-13800-1-git-send-email-arnout@mind.be>
 References: <1351063027-13800-1-git-send-email-arnout@mind.be>
-Message-ID: <1351063027-13800-8-git-send-email-arnout@mind.be>
+Message-ID: <1351063027-13800-10-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,80 +13,89 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-The new update-all-config target will update the busybox config file
-if BR2_PACKAGE_BUSYBOX_CONFIG is set, even if it is set to the
-default value in package/busybox/busybox-xxx.config.
+The new update-all-config target will update the uClibc config file
+if BR2_UCLIBC_CONFIG is set, even if it is set to the default value
+in toolchain/uClibc/uClibc-xxx.config.
 
-To avoid this, set the default BR2_PACKAGE_BUSYBOX_CONFIG to empty,
-and select a default to use in the .mk file.
+To avoid this, set the default BR2_UCLIBC_CONFIG to empty, and select
+a default to use in the .mk file.
 
-Note that busybox-update-config will still overwrite the default
-file in package/busybox/busybox-xxx.config - presumably it's
-intentional.
+Note that uclibc-update-config will still overwrite the default file
+in toolchain/uClibc/uClibc-xxx.config - presumably it's intentional.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/busybox/Config.in  |    7 ++-----
- package/busybox/busybox.mk |    9 +++++----
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ toolchain/uClibc/Config.in |    7 ++-----
+ toolchain/uClibc/uclibc.mk |   23 +++++++++++------------
+ 2 files changed, 13 insertions(+), 17 deletions(-)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index dedcf18..0b77872 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -40,15 +40,12 @@ config BR2_BUSYBOX_VERSION
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index f46a415..9cce05d 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -42,15 +42,12 @@ config BR2_UCLIBC_VERSION_STRING
  
- config BR2_PACKAGE_BUSYBOX_CONFIG
- 	string "BusyBox configuration file to use?"
--	default "package/busybox/busybox-1.20.x.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
--	default "package/busybox/busybox-1.18.x.config" if BR2_BUSYBOX_VERSION_1_18_X
--	default "package/busybox/busybox-1.19.x.config" if BR2_BUSYBOX_VERSION_1_19_X
--	default "package/busybox/busybox-1.20.x.config" if BR2_BUSYBOX_VERSION_1_20_X
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+-	default "toolchain/uClibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
+-	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
+-	default "toolchain/uClibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+-	default "toolchain/uClibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
 +	default ""
  	help
- 	  Some people may wish to use their own modified BusyBox configuration
- 	  file, and will specify their config file location with this option.
+ 	  Some people may wish to use their own modified uClibc configuration
+ 	  file and will specify their config file location with this option.
+ 	  See also docs/README in this package.
+-	  If unsure, use the default.
++	  If left empty, a default configuration will be used.
  
--	  Most people will just use the default BusyBox configuration file.
-+	  If left empty, a default configuration file is used.
+ config BR2_PTHREAD_DEBUG
+ 	bool "Thread library debugging"
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 0faaf18..d032684 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -6,22 +6,21 @@
  
- config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	bool "Show packages that are also provided by busybox"
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index c73d0d0..5c54319 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -6,9 +6,11 @@
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
  
- ifeq ($(BR2_PACKAGE_BUSYBOX_SNAPSHOT),y)
- BUSYBOX_VERSION = snapshot
-+BUSYBOX_CONFIG_VERSION = 1.20
- BUSYBOX_SITE = http://www.busybox.net/downloads/snapshots
- else
- BUSYBOX_VERSION = $(call qstrip,$(BR2_BUSYBOX_VERSION))
-+BUSYBOX_CONFIG_VERSION = $(subst $(space),.,$(wordlist 1,2,$(subst .,$(space),$(BUSYBOX_VERSION))))
- BUSYBOX_SITE = http://www.busybox.net/downloads
- endif
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
-@@ -27,9 +29,8 @@ BUSYBOX_MAKE_OPTS = \
- 	CONFIG_PREFIX="$(TARGET_DIR)" \
- 	SKIP_STRIP=y
- 
--ifndef BUSYBOX_CONFIG_FILE
--	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+-# specifying UCLIBC_CONFIG_FILE on the command-line overrides the .config
+-# setting.
+-ifndef UCLIBC_CONFIG_FILE
+-UCLIBC_CONFIG_FILE=$(call qstrip,$(BR2_UCLIBC_CONFIG))
 -endif
-+BUSYBOX_CONFIG = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
-+BUSYBOX_CONFIG_FILE = $(or $(wildcard $(BUSYBOX_CONFIG)),package/busybox/busybox-$(BUSYBOX_CONFIG_VERSION).x.config)
+-
+-UCLIBC_VERSION:=$(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
++UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
  
- define BUSYBOX_PERMISSIONS
- /bin/busybox			 f 4755	0 0 - - - - -
-@@ -218,6 +219,6 @@ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
- busybox-update-config: busybox-configure
- 	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
- 
--ifneq ($(BUSYBOX_CONFIG_FILE),)
-+ifneq ($(BUSYBOX_CONFIG),)
- UPDATE_ALL_CONFIG_TARGETS += busybox-update-config
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+-UCLIBC_SITE:=http://www.uclibc.org/downloads/snapshots
+-UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc
++UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
++UCLIBC_DIR  = $(TOOLCHAIN_DIR)/uClibc
++UCLIBC_CONFIG_VERSION = snapshot
+ else
+-UCLIBC_SITE:=http://www.uclibc.org/downloads
+-UCLIBC_DIR:=$(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
++UCLIBC_SITE = http://www.uclibc.org/downloads
++UCLIBC_DIR  = $(TOOLCHAIN_DIR)/uClibc-$(UCLIBC_VERSION)
++UCLIBC_CONFIG_VERSION = $(subst $(space),.,$(wordlist 1,3,$(subst .,$(space),$(UCLIBC_VERSION))))
  endif
+ 
++UCLIBC_CONFIG = $(call qstrip,$(BR2_UCLIBC_CONFIG))
++UCLIBC_CONFIG_FILE = $(or $(wildcard $(UCLIBC_CONFIG)),toolchain/uClibc/uClibc-$(UCLIBC_CONFIG_VERSION).config)
++
+ UCLIBC_PATCH_DIR:=toolchain/uClibc/
+ UCLIBC_SOURCE:=uClibc-$(UCLIBC_VERSION).tar.bz2
+ 
+@@ -508,7 +507,7 @@ uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
+ uclibc-update-config: uclibc-config
+ 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
+ 
+-ifneq ($(UCLIBC_CONFIG_FILE),)
++ifneq ($(UCLIBC_CONFIG),)
+ UPDATE_ALL_CONFIG_TARGETS += uclibc-update-config
+ endif
+ 
 -- 
 1.7.10.4
