@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:40 +0200
-Subject: [Buildroot] [PATCH 14/47] package/spice: enable slirp support
+Date: Wed, 24 Oct 2012 23:25:41 +0200
+Subject: [Buildroot] [PATCH 15/47] package/libseccomp: new package
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-15-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-16-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,98 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/spice/Config.in |    7 +++++++
- package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+ package/Config.in                                  |    1 +
+ package/libseccomp/Config.in                       |   13 +++++++++++
+ ...ibseccomp-use-system-headers-from-sysroot.patch |   19 +++++++++++++++++
+ package/libseccomp/libseccomp.mk                   |   22 ++++++++++++++++++++
+ 4 files changed, 55 insertions(+), 0 deletions(-)
+ create mode 100644 package/libseccomp/Config.in
+ create mode 100644 package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+ create mode 100644 package/libseccomp/libseccomp.mk
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 6e6233d..846bee1 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -40,4 +40,11 @@ config BR2_PACKAGE_SPICE_GUI
- 	  Say 'y' here to enable the Graphical User Interface (GUI)
- 	  start dialog.
- 
-+config BR2_PACKAGE_SPICE_TUNNEL
-+	bool "Enable network redirection"
-+	select BR2_PACKAGE_SLIRP
+diff --git a/package/Config.in b/package/Config.in
+index 844873a..ba3ef2c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -489,6 +489,7 @@ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libtpl/Config.in"
++source "package/libseccomp/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+ source "package/lttng-libust/Config.in"
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+new file mode 100644
+index 0000000..183cf4e
+--- /dev/null
++++ b/package/libseccomp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBSECCOMP
++	bool "libseccomp"
 +	help
-+	  Say 'y' here to enable network redirection, aka tunnelling
-+	  through a SLIP/SLIRP session.
++	  High level interface to the Linux Kernel's seccomp filter 
++	  
++	  The libseccomp library provides and easy to use, platform independent,
++	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
++	  The libseccomp API is designed to abstract away the underlying BPF
++	  based syscall filter language and present a more conventional
++	  function-call based filtering interface that should be familiar to,
++	  and easily adopted by application developers.
++	  
++	  http://sourceforge.net/projects/libseccomp/
+diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+new file mode 100644
+index 0000000..f287377
+--- /dev/null
++++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+@@ -0,0 +1,19 @@
++diff -du libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
++--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
+++++ libseccomp-1.0.0/configure	2012-09-07 00:00:09.918429292 +0200
++@@ -205,7 +205,8 @@
++ #
++ 
++ # system seccomp includes
++-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
+++# ${SYSROOT} added by buildroot for cross-compilation
+++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
++ 	opt_sysinc_seccomp="yes"
++ else
++ 	opt_sysinc_seccomp="no"
++Common subdirectories: libseccomp-1.0.0.orig/doc and libseccomp-1.0.0/doc
++Common subdirectories: libseccomp-1.0.0.orig/include and libseccomp-1.0.0/include
++Common subdirectories: libseccomp-1.0.0.orig/install and libseccomp-1.0.0/install
++Common subdirectories: libseccomp-1.0.0.orig/src and libseccomp-1.0.0/src
++Common subdirectories: libseccomp-1.0.0.orig/tests and libseccomp-1.0.0/tests
++Common subdirectories: libseccomp-1.0.0.orig/tools and libseccomp-1.0.0/tools
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+new file mode 100644
+index 0000000..73fe632
+--- /dev/null
++++ b/package/libseccomp/libseccomp.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# libseccomp
++#
++#############################################################
 +
- endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 9253e35..2bc452b 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -22,7 +22,6 @@ SPICE_DEPENDENCIES    = \
- # We disable everything for now, because the dependency tree can become
- # quite deep if we try to enable some features, and I have not tested that.
- SPICE_CONF_OPT =            \
--  --disable-tunnel          \
-   --disable-opengl          \
-   --disable-smartcard       \
-   --disable-automated-tests \
-@@ -42,6 +41,13 @@ else
- SPICE_CONF_OPT += --disable-gui
- endif
- 
-+ifeq ($(BR2_PACKAGE_SPICE_TUNNEL),y)
-+SPICE_CONF_OPT += --enable-tunnel
-+SPICE_DEPENDENCIES += slirp
-+else
-+SPICE_CONF_OPT += --disable-tunnel
-+endif
++LIBSECCOMP_VERSION         = 1.0.0
++LIBSECCOMP_SOURCE          = libseccomp-$(LIBSECCOMP_VERSION).tar.gz
++LIBSECCOMP_SITE            = http://downloads.sourceforge.net/project/libseccomp
++LIBSECCOMP_LICENSE         = LGPLv2.1
++LIBSECCOMP_LICENSE_FILES   = LICENSE
++LIBSECCOMP_INSTALL_STAGING = YES
 +
- SPICE_DEPENDENCIES += host-pkg-config
- 
- SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++# Needed for configure to find our system headers:
++LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
++LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
++LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
++LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
++LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
++
++# Not a real autotools package, but works quite OK nonetheless
++$(eval $(autotools-package))
 -- 
 1.7.2.5
