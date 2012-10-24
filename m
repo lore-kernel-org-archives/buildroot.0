@@ -1,49 +1,22 @@
-From: Valentine Barshak <gvaxon@gmail.com>
-Date: Thu, 25 Oct 2012 01:35:34 +0400
-Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
-In-Reply-To: <CAFbHwiSwLqa=JSw=yqsEmHO7sqvgRmPQEgR454g=rBCu0qLdOg@mail.gmail.com>
-References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
- <5088400C.4040000@gmail.com>
- <CAFbHwiSwLqa=JSw=yqsEmHO7sqvgRmPQEgR454g=rBCu0qLdOg@mail.gmail.com>
-Message-ID: <50885F26.8000701@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Oct 2012 22:00:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 5624] When building directfb,
+ BR2_TARGET_LDFLAGS not used by libtool
+In-Reply-To: <bug-5624-163@https.bugs.busybox.net/>
+References: <bug-5624-163@https.bugs.busybox.net/>
+Message-ID: <20121024220001.85C6899913@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/25/2012 12:51 AM, Will Newton wrote:
-> On Wed, Oct 24, 2012 at 8:22 PM, Valentine Barshak <gvaxon@gmail.com> wrote:
->> On 10/07/2012 12:35 AM, Valentine Barshak wrote:
->>>
->>> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
->>> ---
->>>    package/gqview/gqview.mk | 1 +
->>>    1 file changed, 1 insertion(+)
->>>
->>> diff --git a/package/gqview/gqview.mk b/package/gqview/gqview.mk
->>> index 2f64cd0..7d09fda 100644
->>> --- a/package/gqview/gqview.mk
->>> +++ b/package/gqview/gqview.mk
->>> @@ -7,6 +7,7 @@ GQVIEW_VERSION = 2.1.5
->>>    GQVIEW_SOURCE = gqview-$(GQVIEW_VERSION).tar.gz
->>>    GQVIEW_SITE = http://prdownloads.sourceforge.net/gqview
->>>    GQVIEW_DEPENDENCIES = host-pkg-config libgtk2
->>> +GQVIEW_CONF_ENV = LIBS="-lm"
->>>
->>>    $(eval $(autotools-package))
->>>
->>>
->>
->> Does this work for everyone else or is it just deprecated and nobody should
->> use it?
->>
->> I can't build without -lm neither in BR nor using my native host tools.
->
-> Which version of binutils are you using? 2.22?
->
+https://bugs.busybox.net/show_bug.cgi?id=5624
 
-Yes, 2.22.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-10-24 22:00:00 UTC ---
+You mean globally (in package/Makefile.in) or specifically for this package?
 
-Thanks,
-Val.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
