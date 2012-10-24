@@ -1,62 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:06:38 +0200
-Subject: [Buildroot] [PATCH] keyutils: new package
-In-Reply-To: <1351112292-5617-1-git-send-email-jarkko.sakkinen@iki.fi>
-References: <1351112292-5617-1-git-send-email-jarkko.sakkinen@iki.fi>
-Message-ID: <201210242306.38368.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 24 Oct 2012 18:10:51 -0300
+Subject: [Buildroot] [PATCH 12/12] arptables: add new package
+In-Reply-To: <508856C6.1060504@mind.be>
+References: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
+ <1350909989-1012-12-git-send-email-gustavo@zacarias.com.ar>
+ <508856C6.1060504@mind.be>
+Message-ID: <5088595B.1060803@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jarkko, All,
+On 10/24/12 17:59, Arnout Vandecappelle wrote:
 
-On Wednesday 24 October 2012 Jarkko Sakkinen wrote:
-> Linux key management utilities
+>  We usually put
+> ARPTABLES_VERSION_MAJOR = v0.0.3
+> ARPTABLES_VERSION = $(ARPTABLES_VERSION_MAJOR)-4
+> ARPTABLES_SITE
+> =http://downloads.sourceforge.net/project/ebtables/arptables/arptables-$(ARPTABLES_VERSION_MAJOR)
+> 
+> 
+> (_SITE is at its default value)
+> 
+>  I can't say if that's really better, though :-)
+> 
+>  Regards,
+>  Arnout
 
-There are two memleaks known in keyutils.
-
-I'm about to post a patch series that includes keyutils
-with patches to fix the memleaks.
-
-[--SNIP--]
-> diff --git a/package/keyutils/keyutils.mk b/package/keyutils/keyutils.mk
-> new file mode 100644
-> index 0000000..82b1f58
-> --- /dev/null
-> +++ b/package/keyutils/keyutils.mk
-> @@ -0,0 +1,28 @@
-> +#############################################################
-> +#
-> +# keyutils
-> +#
-> +#############################################################
-> +
-> +KEYUTILS_VERSION = 1.5.5
-> +KEYUTILS_SITE = http://people.redhat.com/dhowells/keyutils/
-> +KEYUTILS_SOURCE = keyutils-$(KEYUTILS_VERSION).tar.bz2
-> +
-> +define KEYUTILS_BUILD_CMDS
-> +	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)" \
-> +		CC="$(TARGET_CC)" -C $(@D)
-> +endef
-
-I have:
-define KEYUTILS_BUILD_CMDS
-        $(KEYUTILS_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-endef
-
-Which includes all our CFLAGS, while doing the way you did overrides the
-CFLAGS in keytuils' Makefile, and breaks (at least for me on one arch).
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+In some cases it's also _MAJOR & _MINOR.
+Dunno what's preferred, it seems overkill to use soo many zeros for very
+few versions released :)
+Regards.
