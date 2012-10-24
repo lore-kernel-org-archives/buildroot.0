@@ -1,95 +1,149 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:33 +0200
-Subject: [Buildroot] [PATCH 07/47] package/python-pyparsing: new package
+Date: Wed, 24 Oct 2012 23:25:28 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_02/47=5D_package/libfdt=3A_new_pac?=
+	=?utf-8?q?kage?=
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-8-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-3-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+libfdt allows one to manipulate a Flat Device Tree.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                            |    1 +
- package/python-pyparsing/Config.in           |   11 +++++++
- package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pyparsing/Config.in
- create mode 100644 package/python-pyparsing/python-pyparsing.mk
+ package/Config.in                          |    1 +
+ package/dtc/Config.in                      |    9 +++++++
+ package/dtc/dtc-extra_cflags.patch         |   12 +++++++++
+ package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++
+ package/dtc/dtc.mk                         |   36 ++++++++++++++++++++++++++++
+ 5 files changed, 86 insertions(+), 0 deletions(-)
+ create mode 100644 package/dtc/Config.in
+ create mode 100644 package/dtc/dtc-extra_cflags.patch
+ create mode 100644 package/dtc/dtc-separate-lib-install.patch
+ create mode 100644 package/dtc/dtc.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 55bb0b2..62500ce 100644
+index 1650c71..c9cb3ed 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -291,6 +291,7 @@ source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
-+source "package/python-pyparsing/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- endmenu
-diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+@@ -396,6 +396,7 @@ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
+ source "package/libfreefare/Config.in"
++source "package/dtc/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
 new file mode 100644
-index 0000000..126dd0e
+index 0000000..7b86c60
 --- /dev/null
-+++ b/package/python-pyparsing/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYPARSING
-+	bool "pyparsing"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/dtc/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DTC
++	bool "dtc"
 +	help
-+	  The pyparsing module is an alternative approach to creating and
-+	  executing simple grammars, vs. the traditional lex/yacc approach,
-+	  or the use of regular expressions. The pyparsing module provides
-+	  a library of classes that client code uses to construct the grammar
-+	  directly in Python code.
++	  dtc is the Device Tree Compiler, to generate Device Trees.
++	  libfdt if a library to manipulate Flat Device Trees.
 +	  
-+	  http://pyparsing.wikispaces.com/
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
++	  Note that only the library is installed for now.
++	  
++	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
+diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
 new file mode 100644
-index 0000000..621f636
+index 0000000..03225e7
 --- /dev/null
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -0,0 +1,38 @@
++++ b/package/dtc/dtc-extra_cflags.patch
+@@ -0,0 +1,12 @@
++diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
++--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
+++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
++@@ -18,7 +18,7 @@
++ CPPFLAGS = -I libfdt -I .
++ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
++ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
++-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
+++CFLAGS = -g -Os -fPIC -Werror $(WARNINGS) $(EXTRA_CFLAGS)
++ 
++ BISON = bison
++ LEX = flex
+diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
+new file mode 100644
+index 0000000..c86d587
+--- /dev/null
++++ b/package/dtc/dtc-separate-lib-install.patch
+@@ -0,0 +1,28 @@
++Makefile: add a rule to only install libfdt
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Patch not sent upstream.
++
++It's really specific to buildroot, and is probably not
++good (aka generic) enough to be pushed upstream.
++
++diff --git a/Makefile b/Makefile
++index 1169e6c..39e7190 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -160,10 +160,12 @@ endif
++ # intermediate target and building them again "for real"
++ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
++ 
++-install: all $(SCRIPTS)
+++install: all $(SCRIPTS) libfdt_install
++ 	@$(VECHO) INSTALL
++ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
++ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+++
+++libfdt_install: libfdt
++ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
++ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
++ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+new file mode 100644
+index 0000000..d53e78a
+--- /dev/null
++++ b/package/dtc/dtc.mk
+@@ -0,0 +1,36 @@
 +#############################################################
 +#
-+# python-pyparsing
++# libcurl
 +#
 +#############################################################
 +
-+PYTHON_PYPARSING_VERSION         = 1.5.6
-+PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
-+PYTHON_PYPARSING_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
-+PYTHON_PYPARSING_LICENSE         = MIT
-+PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
-+PYTHON_PYPARSING_INSTALL_STAGING = YES
-+PYTHON_PYPARSING_DEPENDENCIES    = python
++DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
++DTC_SITE            = git://git.jdl.com/software/dtc.git
++DTC_LICENSE         = GPLv2+/BSD-2c
++DTC_LICENSE_FILES   = README.license GPL
++# Note: the dual-license only applies to the library.
++#       The DT compiler (dtc) is GPLv2+, but we do not install it.
++DTC_INSTALL_STAGING = YES
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_BUILD_CMDS
-+	(cd $(@D);                                              \
-+	 CC="$(TARGET_CC)"                                      \
-+	 CFLAGS="$(TARGET_CFLAGS)"                              \
-+	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
-+	 CROSS_COMPILING=yes                                    \
-+	 _python_sysroot=$(STAGING_DIR)                         \
-+	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
-+	 _python_prefix=/usr                                    \
-+	 _python_exec_prefix=/usr                               \
-+	 $(HOST_DIR)/usr/bin/python setup.py build              \
-+	)
++# Need -fPIC for x86-64
++define DTC_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)                          \
++	                                  EXTRA_CFLAGS="$(TARGET_CFLAGS)"   \
++	                                  PREFIX=/usr                       \
++	                                  libfdt
 +endef
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
-+	(cd $(@D);                                              \
-+	 $(HOST_DIR)/usr/bin/python setup.py install            \
-+	                            --prefix=$(TARGET_DIR)/usr  \
-+	)
++#?libfdt_install is our own install rule added by our patch
++define DTC_INSTALL_STAGING_CMDS
++	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_INSTALL_TARGET_CMDS
++	$(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_CLEAN_CMDS
++	$(MAKE) -C $(@D) libfdt_clean
 +endef
 +
 +$(eval $(generic-package))
