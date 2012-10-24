@@ -1,73 +1,96 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:34 +0200
-Subject: [Buildroot] [PATCH 08/47] package/spice-protocol: new package
+Date: Wed, 24 Oct 2012 23:25:29 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_03/47=5D_package/vde2=3A_new_packa?=
+	=?utf-8?q?ge?=
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-9-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-4-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+VDE is an ethernet compliant virtual network that can be
+spawned over a set of physical computer over the Internet.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                        |    1 +
- package/spice-protocol/Config.in         |   12 ++++++++++++
- package/spice-protocol/spice-protocol.mk |   14 ++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/spice-protocol/Config.in
- create mode 100644 package/spice-protocol/spice-protocol.mk
+ package/Config.in      |    1 +
+ package/vde2/Config.in |   10 ++++++++++
+ package/vde2/vde2.mk   |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/vde2/Config.in
+ create mode 100644 package/vde2/vde2.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 62500ce..330d8a3 100644
+index c9cb3ed..c64a54a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -629,6 +629,7 @@ source "package/ser2net/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
-+source "package/spice-protocol/Config.in"
- source "package/squid/Config.in"
- source "package/stunnel/Config.in"
- source "package/tcpdump/Config.in"
-diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
+@@ -640,6 +640,7 @@ source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
+ source "package/ushare/Config.in"
++source "package/vde2/Config.in"
+ source "package/vpnc/Config.in"
+ source "package/vsftpd/Config.in"
+ source "package/vtun/Config.in"
+diff --git a/package/vde2/Config.in b/package/vde2/Config.in
 new file mode 100644
-index 0000000..b354361
+index 0000000..1591bc4
 --- /dev/null
-+++ b/package/spice-protocol/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SPICE_PROTOCOL
-+	bool "spice protocol"
++++ b/package/vde2/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_VDE2
++	bool "vde2"
 +	help
-+	  The Spice project aims to provide a complete open source
-+	  solution for interaction with virtualized desktop devices.
-+	  The Spice project deals with both the virtualized devices
-+	  and the front-end. Interaction between front-end and
-+	  back-end is done using VD-Interfaces.
++	  VDE is an ethernet compliant virtual network that can be
++	  spawned over a set of physical computer over the Internet.
++	  VDE is part of virtualsquare project.
 +	  
-+	  This package implements the protocol-part of Spice.
++	  http://vde.sourceforge.net/
 +	  
-+	  http://www.spice-space.org/
-diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
++	  Note: only the libraries are installed.
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
 new file mode 100644
-index 0000000..dcfe50d
+index 0000000..b2e0fea
 --- /dev/null
-+++ b/package/spice-protocol/spice-protocol.mk
-@@ -0,0 +1,14 @@
++++ b/package/vde2/vde2.mk
+@@ -0,0 +1,36 @@
 +#############################################################
 +#
-+# Spice-protocol
++# vde2
 +#
 +#############################################################
 +
-+SPICE_PROTOCOL_VERSION         = 0.12.2
-+SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
-+SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
-+SPICE_PROTOCOL_LICENSE         = BSD-3c
-+SPICE_PROTOCOL_LICENSE_FILES   = COPYING
-+SPICE_PROTOCOL_INSTALL_STAGING = YES
++VDE2_VERSION         = 2.3.2
++VDE2_SOURCE          = vde2-$(VDE2_VERSION).tar.bz2
++VDE2_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
++VDE2_LICENSE         = GPLv2+ LGPLv2.1+ BSD-3c
++VDE2_LICENSE_FILES   = COPYING COPYING.libvdeplug COPYING.slirpvde
++VDE2_INSTALL_STAGING = YES
++
++# Reasons for enabling/disabling stuff:
++#?- tuntap is enabled in the hope we're using a recent-enough toolchain
++#   that does have if_tun.h (virtually everything these days)
++# - kvde_switch is disabled because it requires a patched kernel
++# - cryptcab is disabled to not depend on openSSL
++# - python is disabled to not depend on Python
++# - pcap is disabled to not depend on libpcap
++# - profiling is disabled because we do not want to debug/profile
++#
++# Note: disabled features can be added with corresponding dependencies
++#       in future commits.
++VDE2_CONF_OPT = --disable-experimental  \
++                --disable-cryptcab      \
++                --disable-pcap          \
++                --disable-python        \
++                --disable-profile       \
++                --disable-kernel-switch \
++                --enable-tuntap         \
++
++#?Package does not build in parallel due to improper make rules
++VDE2_MAKE = $(MAKE1)
 +
 +$(eval $(autotools-package))
 -- 
