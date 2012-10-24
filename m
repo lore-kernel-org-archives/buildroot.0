@@ -1,29 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Oct 2012 14:30:09 +0200
-Subject: [Buildroot] [git commit] fs/skeleton: remove /etc/TZ
-In-Reply-To: <20121024071711.0DF3599913@busybox.osuosl.org>
-References: <20121024071711.0DF3599913@busybox.osuosl.org>
-Message-ID: <20121024143009.23f6b698@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Oct 2012 12:32:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 5624] When building directfb,
+ BR2_TARGET_LDFLAGS not used by libtool
+In-Reply-To: <bug-5624-163@https.bugs.busybox.net/>
+References: <bug-5624-163@https.bugs.busybox.net/>
+Message-ID: <20121024123226.24095998BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=5624
 
-On Wed, 24 Oct 2012 09:16:50 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=5a61fbd82394f9bc9317535b717a2e1dd51dea7d
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Defaulting to UTC (which is what uClibc will default to when /etc/TZ is
-> missing) seems more sensible than US Mountain Time Zone in the default
-> rootfs skeleton.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-10-24 12:32:25 UTC ---
+The first problem is that DirectFB is stupid in its usage of ld. It should
+always use gcc, even for pure linking steps, as gcc will pass the appropriate
+arguments to ld.
 
-And with glibc/eglibc?
+The second problem is that we don't generate a toolchain wrapper for ld, so yes
+the BR2_TARGET_LDFLAGS are not passed.
 
-Thomas
+I am not sure if we should fix DirectFB, or add the toolchain wrapper for ld.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
