@@ -1,29 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 24 Oct 2012 12:32:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 5624] When building directfb,
- BR2_TARGET_LDFLAGS not used by libtool
-In-Reply-To: <bug-5624-163@https.bugs.busybox.net/>
-References: <bug-5624-163@https.bugs.busybox.net/>
-Message-ID: <20121024123226.24095998BB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Oct 2012 14:47:28 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain/uClibc: correct a slip of the
+ pen
+In-Reply-To: <20121024105439.5945.qmail@s221.sureserver.com>
+References: <20121024105439.5945.qmail@s221.sureserver.com>
+Message-ID: <20121024144728.2466f491@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5624
+Hello,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-10-24 12:32:25 UTC ---
-The first problem is that DirectFB is stupid in its usage of ld. It should
-always use gcc, even for pure linking steps, as gcc will pass the appropriate
-arguments to ld.
+Your patch is OK on the idea, but it isn't properly formatted. If you
+generate your patch with git format-patch, then could you use git
+send-email to send it?
 
-The second problem is that we don't generate a toolchain wrapper for ld, so yes
-the BR2_TARGET_LDFLAGS are not passed.
+On Wed, 24 Oct 2012 18:54:39 +0800, liaoxinglong at icubecorp.com wrote:
+> From 3c5a0047108cb10d8e5e3605f002e12d02c53102 Mon Sep 17 00:00:00 2001
+> From: Xinglong Liao <liaoxinglong@icubecorp.com>
+> Date: Wed, 24 Oct 2012 18:42:05 +0800
+> Subject: [PATCH]     toolchain/uClibc: correct a slip of the pen
 
-I am not sure if we should fix DirectFB, or add the toolchain wrapper for ld.
+The spaces between [PATCH] and toolchain/uClibc shouldn't be there
 
+> 
+>     UCLIB_EXTRA_CFLAGS->UCLIBC_EXTRA_CFLAGS
+> 
+>     Signed-off-by: Xinglong Liao <liaoxinglong@icubecorp.com>
+
+Those lines shouldn't be indented.
+
+Once this is fixed, your patch gets my:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
