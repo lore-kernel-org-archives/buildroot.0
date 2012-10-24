@@ -1,59 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Oct 2012 23:25:27 +0200
-Subject: [Buildroot] [PATCH 01/47] package/cURL: fix static link whith
-	openSSL
+Date: Wed, 24 Oct 2012 23:25:30 +0200
+Subject: [Buildroot] [PATCH 04/47] package/libiscsi: new package
 In-Reply-To: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1351113973-17237-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1351113973-17237-5-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When openSSL is selected, cURL is configured to use it.
-
-But in this case, the libcurl.pc file /forgets/ to require link
-against -ldl.
-
-This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
-but an executable wants to be linked statically (for various reasons
-which are irrelevant here).
-
-Fix that by appending a 'Requires: openssl' line to the installed
-libcurl.pc, if openSSL is enabled.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libcurl/libcurl.mk |   10 ++++++++--
- 1 files changed, 8 insertions(+), 2 deletions(-)
+ package/Config.in            |    1 +
+ package/libiscsi/Config.in   |   12 ++++++++++++
+ package/libiscsi/libiscsi.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/libiscsi/Config.in
+ create mode 100644 package/libiscsi/libiscsi.mk
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8d8fdb4..80e2922 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -29,14 +29,20 @@ define LIBCURL_TARGET_CLEANUP
- 	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
- 	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
- endef
--
-+define LIBCURL_FIX_TARGET_PC
-+	printf 'Requires: openssl\n' >>$(TARGET_DIR)/usr/lib/pkgconfig/libcurl.pc
+diff --git a/package/Config.in b/package/Config.in
+index c64a54a..2c5ad8c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -440,6 +440,7 @@ source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
+ source "package/libidn/Config.in"
++source "package/libiscsi/Config.in"
+ source "package/liboauth/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+new file mode 100644
+index 0000000..f3fc29e
+--- /dev/null
++++ b/package/libiscsi/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBISCSI
++	bool "libiscsi"
++	select BR2_PACKAGE_POPT
++	help
++	  Libiscsi is a client-side library to implement the iSCSI protocol
++	  that can be used to access resource of an iSCSI Target.
++	  
++	  The library is fully async with regards to iscsi commands and scsi
++	  tasks, but a sync layer is also provided for ease of use for simpler
++	  applications.
++	  
++	  https://github.com/sahlberg/libiscsi  (no proper homepage)
+diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
+new file mode 100644
+index 0000000..319b5b6
+--- /dev/null
++++ b/package/libiscsi/libiscsi.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# libiscsi
++#
++#############################################################
++
++LIBISCSI_VERSION         = 1.6.0
++LIBISCSI_SOURCE          = libiscsi-$(LIBISCSI_VERSION).tar.gz
++LIBISCSI_SITE            = https://github.com/downloads/sahlberg/libiscsi
++LIBISCSI_LICENSE         = GPLv2+ LGPLv2.1+
++LIBISCSI_LICENSE_FILES   = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt 
++LIBISCSI_INSTALL_STAGING = YES
++LIBISCSI_DEPENDENCIES    = popt
++
++LIBISCSI_AUTORECONF = YES
++# Having a m4/ directory is mandatory for autoreconf to work
++define LIBISCSI_CREATE_M4_DIR
++	mkdir -p $(@D)/m4
 +endef
- LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
-+LIBCURL_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_TARGET_PC)
- 
- define LIBCURL_STAGING_FIXUP_CURL_CONFIG
- 	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
- endef
--
-+define LIBCURL_FIX_STAGING_PC
-+	printf 'Requires: openssl\n' >>$(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
-+endef
- LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
-+LIBCURL_POST_INSTALL_STAGING_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_STAGING_PC)
- 
- $(eval $(autotools-package))
- 
++LIBISCSI_PRE_CONFIGURE_HOOKS += LIBISCSI_CREATE_M4_DIR
++
++$(eval $(autotools-package))
 -- 
 1.7.2.5
