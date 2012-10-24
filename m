@@ -1,35 +1,29 @@
-From: Randy Graham <surfbytes@gmail.com>
-Date: Wed, 24 Oct 2012 15:41:16 -0700
-Subject: [Buildroot] Confused about kernel-headers.
-Message-ID: <CAG_HyLzE8YJkdyrTCXzNeM6=8YvCfR7xdd6DBRW7rjj091FY0Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Oct 2012 00:43:03 +0200
+Subject: [Buildroot] [PATCHv2] gnutls: fix link-time build failures
+In-Reply-To: <1351117215-4614-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1351117215-4614-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20121025004303.41a0ee64@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I am using buildroot snapshot 2012.10 to build a linux-3.7-rc1 kernel for
-an ARM board and see that the latest kernel-header selectable is 3.5.x (3.7
-headers are not listed).
+On Wed, 24 Oct 2012 19:20:15 -0300, Gustavo Zacarias wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/23da17446266bdd49ea0da0c1892d66d3ac6607f/build-end.log
+> And may the <BEEP> rest in peace at last...
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/gnutls/gnutls.mk |    3 ++-
+>  1 files changed, 2 insertions(+), 1 deletions(-)
 
-So, my questions are:
-
-1. Why do I need to specify a kernel-headers version when the source
-tarball for linux-3.7-rc1 already has it ?
-
-2. How does buildroot use the specified kernel-headers version?
-
-3. How do I go about adding the 3.7 headers if they must be used with my
-3.7 kernel ?
-
-I have googled, searched the buildroot source and mailing list but am still
-confused.
-
-Thanks for any insights.
-
--Randy
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121024/2601cd4f/attachment.html>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
