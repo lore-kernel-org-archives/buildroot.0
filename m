@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Oct 2012 08:53:55 +0200
-Subject: [Buildroot] [PATCH] netatalk: bump version
-In-Reply-To: <1349108616-5814-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1349108616-5814-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20121025085355.379e9cb3@skate>
+Date: Thu, 25 Oct 2012 08:56:32 +0200
+Subject: [Buildroot] [PATCH] qtuio: new package
+In-Reply-To: <1348297189-29498-1-git-send-email-sho@relinux.de>
+References: <1348297189-29498-1-git-send-email-sho@relinux.de>
+Message-ID: <20121025085632.30c9878f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Dear Stephan Hoffmann,
 
-On Mon,  1 Oct 2012 18:23:36 +0200, Maxime Hadjinlian wrote:
-> Netatalk goes to version 3.0.
-> The startup script has changed too, there is now only one binary called
-> netatalk. No more afpd, cnid, ... at startup ! They are executed by netatalk.
+On Sat, 22 Sep 2012 08:59:49 +0200, Stephan Hoffmann wrote:
+> Implementation of an interface connecting TUIO messages and QT events
 > 
-> All the config is done within /etc/afp.conf, look at :
-> http://netatalk.sourceforge.net/3.0/htmldocs/upgrade.html
-> for more info about the upgrade process.
+> https://github.com/x29a/qTUIO
+> 
+> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  build-tested with a minimal internal toolchain for ARM.
 > ---
->  package/netatalk/S50netatalk |   32 +++++++++++---------------------
->  package/netatalk/netatalk.mk |    4 ++--
->  2 files changed, 13 insertions(+), 23 deletions(-)
+>  package/Config.in       |    6 ++++
+>  package/qtuio/Config.in |   18 ++++++++++++
+>  package/qtuio/qtuio.mk  |   70 +++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 94 insertions(+), 0 deletions(-)
+>  create mode 100644 package/qtuio/Config.in
+>  create mode 100644 package/qtuio/qtuio.mk
 
-This update is apparently breaking the build in certain configurations:
-http://autobuild.buildroot.net/results/4fada48332abc7f9bcd49a70debbc7950bc2263a/build-end.log
+Looks like it breaks the build in certain configurations:
+http://autobuild.buildroot.net/results/c4a12fe6b8e7eb8c31ee2fd48893480bd098a008/build-end.log
 
-I see that your package as a dependency on berkeyleydb, but somehow,
-the configure script fails to find it.
+It seems like a debug version of the library, named libqTUIO_d.so, has
+been generated, which prevents the install rules from working.
 
-Can you look into it?
-
-See
-http://autobuild.buildroot.net/results/4fada48332abc7f9bcd49a70debbc7950bc2263a/
-for the full configuration files.
-
-Thanks,
+Could you have a look into this? Thanks!
 
 Thomas
 -- 
