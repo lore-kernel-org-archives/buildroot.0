@@ -1,44 +1,109 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 25 Oct 2012 20:23:32 +0200
-Subject: [Buildroot] buildroot for AM3358 AM3359 with wireless-tools
- shared library
-In-Reply-To: <50897A02.7000407@rie.eu>
-References: <50897A02.7000407@rie.eu>
-Message-ID: <20121025182332.GC5178@tarshish>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Thu, 25 Oct 2012 23:02:38 +0400
+Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
+In-Reply-To: <CAFbHwiTUPKXvQt6akZUmUzPnUMXp9QDjbO28R6irCbDzd75deg@mail.gmail.com>
+References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+ <5088400C.4040000@gmail.com>
+ <CAFbHwiSwLqa=JSw=yqsEmHO7sqvgRmPQEgR454g=rBCu0qLdOg@mail.gmail.com>
+ <50885F26.8000701@gmail.com>
+ <CAFbHwiSDub+CF-Dax-peGOBP0WUYq9JeNsXMN1xf0uy1=byArg@mail.gmail.com>
+ <50897608.5080805@gmail.com>
+ <CAFbHwiTUPKXvQt6akZUmUzPnUMXp9QDjbO28R6irCbDzd75deg@mail.gmail.com>
+Message-ID: <50898CCE.8090601@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+On 10/25/2012 10:23 PM, Will Newton wrote:
+> On Thu, Oct 25, 2012 at 6:25 PM, Valentine Barshak <gvaxon@gmail.com> wrote:
+>> On 10/25/2012 01:02 PM, Will Newton wrote:
+>>>
+>>> On Wed, Oct 24, 2012 at 10:35 PM, Valentine Barshak <gvaxon@gmail.com>
+>>> wrote:
+>>>>
+>>>> On 10/25/2012 12:51 AM, Will Newton wrote:
+>>>>>
+>>>>>
+>>>>> On Wed, Oct 24, 2012 at 8:22 PM, Valentine Barshak <gvaxon@gmail.com>
+>>>>> wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 10/07/2012 12:35 AM, Valentine Barshak wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+>>>>>>> ---
+>>>>>>>      package/gqview/gqview.mk | 1 +
+>>>>>>>      1 file changed, 1 insertion(+)
+>>>>>>>
+>>>>>>> diff --git a/package/gqview/gqview.mk b/package/gqview/gqview.mk
+>>>>>>> index 2f64cd0..7d09fda 100644
+>>>>>>> --- a/package/gqview/gqview.mk
+>>>>>>> +++ b/package/gqview/gqview.mk
+>>>>>>> @@ -7,6 +7,7 @@ GQVIEW_VERSION = 2.1.5
+>>>>>>>      GQVIEW_SOURCE = gqview-$(GQVIEW_VERSION).tar.gz
+>>>>>>>      GQVIEW_SITE = http://prdownloads.sourceforge.net/gqview
+>>>>>>>      GQVIEW_DEPENDENCIES = host-pkg-config libgtk2
+>>>>>>> +GQVIEW_CONF_ENV = LIBS="-lm"
+>>>>>>>
+>>>>>>>      $(eval $(autotools-package))
+>>>>>>>
+>>>>>>>
+>>>>>>
+>>>>>> Does this work for everyone else or is it just deprecated and nobody
+>>>>>> should
+>>>>>> use it?
+>>>>>>
+>>>>>> I can't build without -lm neither in BR nor using my native host tools.
+>>>>>
+>>>>>
+>>>>>
+>>>>> Which version of binutils are you using? 2.22?
+>>>>>
+>>>>
+>>>> Yes, 2.22.
+>>>
+>>>
+>>> I believe this is caused by an issue with linking indirectly with the
+>>> newer binutils. gqview relies on a library that is linked against libm
+>>> but does not explicitly link against libm itself. Before 2.22 binutils
+>>> would copy the DT_NEEDED entries from the library into gqview but it
+>>> does not do this any more.
+>>
+>>
+>> gqview calls pow() and sqrt() directly, though it doesn't link against libm.
+>>
+>>
+>>>
+>>> A number of packages are affected by this. I believe the correct fix
+>>> is to modify the affected packages to link against the libraries they
+>>> use explicitly.
+>>>
+>>
+>> Is the above patch OK?
+>
+> I think so, although it could do with a comment to say why it is
+> needed. Peter or Thomas may disagree though?
 
-On Thu, Oct 25, 2012 at 07:42:26PM +0200, Michael Stieler wrote:
-> we are using buildroot for arm development. we are migrating from
-> arm926t to AM3358 and AM3359.
-> 
-> i was hoping to continue to use buildroot for the processors, but i
-> cannot build the right compiler for these 2.
-> 
-> in make menuconfig i choose:
-> 
-> target architecture ARM (big endian)
+I thought it was kind of obvious.
 
-Why big endian? As far as I know all TI SoCs (as almost all ARM SoCs) are 
-little endian.
+>
+>> Or do you mean configure/makefile(.in) should be patched to add libm
+>> dependency?
+>
+> That is the proper long term fix that should be pushed to gqview upstream.
+>
 
-baruch
+Gqview is no longer supported. There's a Geeqie project that has been 
+forked from gqview and is currently active.
 
-> target architecture variant cortex-a8        # for sitara am3358 cortex a8 ?
-> toolchain ->  Kernel headers 3.2.x
-> package selection for target -> network applications --> X wireless
-> tools --> X install shared library
-> 
-> i need the wireless tools library. liw
-> 
-> any suggestions ?
+I still use gqview since it has all the features I need and is smaller 
+than geeqie. I also prefer gqview because it opens a window and shows
+a "broken image" icon for unsupported image types, while geeqie doesn't 
+create any window (even an error message box), which is a bit confusing.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thanks,
+Val.
