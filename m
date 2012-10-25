@@ -1,26 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 25 Oct 2012 23:30:00 +0200
-Subject: [Buildroot] [PATCHv6 5/5] iw: pkg-config cleanup
-In-Reply-To: <20121025005246.32170c83@skate>
-References: <1350956875-1726-1-git-send-email-gustavo@zacarias.com.ar>
- <1350956875-1726-5-git-send-email-gustavo@zacarias.com.ar>
- <20121025005246.32170c83@skate>
-Message-ID: <5089AF58.8010707@mind.be>
+Date: Thu, 25 Oct 2012 23:36:03 +0200
+Subject: [Buildroot] [PATCH 01/47] package/cURL: fix static link whith
+ openSSL
+In-Reply-To: <1351113973-17237-2-git-send-email-yann.morin.1998@free.fr>
+References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
+ <1351113973-17237-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5089B0C3.1060005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/12 00:52, Thomas Petazzoni wrote:
->> >  -IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
->> >  -	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
->> >  +IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
->> >    	GIT_DIR=$(IW_DIR)
-> I think the PKG_CONFIG variable can be removed as well. All packages
-> are being compiled with TARGET_MAKE_ENV, which includes
+On 24/10/12 23:25, Yann E. MORIN wrote:
+> When openSSL is selected, cURL is configured to use it.
+>
+> But in this case, the libcurl.pc file /forgets/ to require link
+> against -ldl.
+>
+> This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
+> but an executable wants to be linked statically (for various reasons
+> which are irrelevant here).
+>
+> Fix that by appending a 'Requires: openssl' line to the installed
+> libcurl.pc, if openSSL is enabled.
+>
+> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+> ---
+>   package/libcurl/libcurl.mk |   10 ++++++++--
+>   1 files changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 8d8fdb4..80e2922 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -29,14 +29,20 @@ define LIBCURL_TARGET_CLEANUP
+>   	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
+>   	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
+>   endef
+> -
+> +define LIBCURL_FIX_TARGET_PC
+> +	printf 'Requires: openssl\n'>>$(TARGET_DIR)/usr/lib/pkgconfig/libcurl.pc
+> +endef
+>   LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+> +LIBCURL_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_TARGET_PC)
+>
+>   define LIBCURL_STAGING_FIXUP_CURL_CONFIG
+>   	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
+>   endef
+> -
+> +define LIBCURL_FIX_STAGING_PC
+> +	printf 'Requires: openssl\n'>>$(STAGING_DIR)/usr/lib/pkgconfig/libcurl.pc
+> +endef
+>   LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
+> +LIBCURL_POST_INSTALL_STAGING_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_STAGING_PC)
 
-  iw.mk doesn't use TARGET_MAKE_ENV, but it probably should.
+  Why not add it to $(@D)/libcurl.pc.in in a post-patch hook?  Then it only has
+to be done once, and I also feel it's a better place to patch things.
 
   Regards,
   Arnout
