@@ -1,101 +1,78 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Thu, 25 Oct 2012 13:04:30 +0100
-Subject: [Buildroot] [PATCH v2] lcdapi: new package
-Message-ID: <1351166671-16726-1-git-send-email-spdawson@gmail.com>
+From: Valentine Barshak <gvaxon@gmail.com>
+Date: Thu, 25 Oct 2012 21:25:28 +0400
+Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
+In-Reply-To: <CAFbHwiSDub+CF-Dax-peGOBP0WUYq9JeNsXMN1xf0uy1=byArg@mail.gmail.com>
+References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+ <5088400C.4040000@gmail.com>
+ <CAFbHwiSwLqa=JSw=yqsEmHO7sqvgRmPQEgR454g=rBCu0qLdOg@mail.gmail.com>
+ <50885F26.8000701@gmail.com>
+ <CAFbHwiSDub+CF-Dax-peGOBP0WUYq9JeNsXMN1xf0uy1=byArg@mail.gmail.com>
+Message-ID: <50897608.5080805@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 10/25/2012 01:02 PM, Will Newton wrote:
+> On Wed, Oct 24, 2012 at 10:35 PM, Valentine Barshak <gvaxon@gmail.com> wrote:
+>> On 10/25/2012 12:51 AM, Will Newton wrote:
+>>>
+>>> On Wed, Oct 24, 2012 at 8:22 PM, Valentine Barshak <gvaxon@gmail.com>
+>>> wrote:
+>>>>
+>>>> On 10/07/2012 12:35 AM, Valentine Barshak wrote:
+>>>>>
+>>>>>
+>>>>> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
+>>>>> ---
+>>>>>     package/gqview/gqview.mk | 1 +
+>>>>>     1 file changed, 1 insertion(+)
+>>>>>
+>>>>> diff --git a/package/gqview/gqview.mk b/package/gqview/gqview.mk
+>>>>> index 2f64cd0..7d09fda 100644
+>>>>> --- a/package/gqview/gqview.mk
+>>>>> +++ b/package/gqview/gqview.mk
+>>>>> @@ -7,6 +7,7 @@ GQVIEW_VERSION = 2.1.5
+>>>>>     GQVIEW_SOURCE = gqview-$(GQVIEW_VERSION).tar.gz
+>>>>>     GQVIEW_SITE = http://prdownloads.sourceforge.net/gqview
+>>>>>     GQVIEW_DEPENDENCIES = host-pkg-config libgtk2
+>>>>> +GQVIEW_CONF_ENV = LIBS="-lm"
+>>>>>
+>>>>>     $(eval $(autotools-package))
+>>>>>
+>>>>>
+>>>>
+>>>> Does this work for everyone else or is it just deprecated and nobody
+>>>> should
+>>>> use it?
+>>>>
+>>>> I can't build without -lm neither in BR nor using my native host tools.
+>>>
+>>>
+>>> Which version of binutils are you using? 2.22?
+>>>
+>>
+>> Yes, 2.22.
+>
+> I believe this is caused by an issue with linking indirectly with the
+> newer binutils. gqview relies on a library that is linked against libm
+> but does not explicitly link against libm itself. Before 2.22 binutils
+> would copy the DT_NEEDED entries from the library into gqview but it
+> does not do this any more.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v2: Incorporated changes suggested by Arnout Vandecappelle, use new upstream
+gqview calls pow() and sqrt() directly, though it doesn't link against libm.
 
- package/Config.in        |    1 +
- package/lcdapi/Config.in |   11 +++++++++++
- package/lcdapi/lcdapi.mk |   41 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/lcdapi/Config.in
- create mode 100644 package/lcdapi/lcdapi.mk
+>
+> A number of packages are affected by this. I believe the correct fix
+> is to modify the affected packages to link against the libraries they
+> use explicitly.
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 1650c71..6ebf2ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -392,6 +392,7 @@ endmenu
- 
- menu "Hardware handling"
- source "package/ccid/Config.in"
-+source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
-diff --git a/package/lcdapi/Config.in b/package/lcdapi/Config.in
-new file mode 100644
-index 0000000..5c997d1
---- /dev/null
-+++ b/package/lcdapi/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LCDAPI
-+	bool "lcdapi"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  C++ client API for lcdproc, containing a set of widget classes.
-+
-+	  https://github.com/spdawson/lcdapi
-+
-+comment "lcdapi requires a toolchain with C++ and thread support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
-new file mode 100644
-index 0000000..3b5aaa3
---- /dev/null
-+++ b/package/lcdapi/lcdapi.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# lcdapi
-+#
-+#############################################################
-+LCDAPI_VERSION = 27e16c37a39c7fab2cf2e912795a730c0e92bcf1
-+LCDAPI_SITE = git://github.com/spdawson/lcdapi.git
-+LCDAPI_LICENSE = LGPLv2.1+
-+LCDAPI_LICENSE_FILES = COPYING
-+
-+LCDAPI_INSTALL_STAGING = YES
-+
-+define LCDAPI_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define LCDAPI_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR="$(STAGING_DIR)" install
-+endef
-+
-+define LCDAPI_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+define LCDAPI_UNINSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR="$(STAGING_DIR)" uninstall
-+endef
-+
-+define LCDAPI_UNINSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+		DESTDIR="$(TARGET_DIR)" uninstall
-+endef
-+
-+define LCDAPI_CLEAN_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) clean
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+Is the above patch OK?
+
+Or do you mean configure/makefile(.in) should be patched to add libm 
+dependency?
+
+Thanks,
+Val.
