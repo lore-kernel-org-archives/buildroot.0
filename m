@@ -1,28 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 Oct 2012 09:09:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 5624] When building directfb,
- BR2_TARGET_LDFLAGS not used by libtool
-In-Reply-To: <bug-5624-163@https.bugs.busybox.net/>
-References: <bug-5624-163@https.bugs.busybox.net/>
-Message-ID: <20121025090949.10AFC99924@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 25 Oct 2012 12:40:52 +0200
+Subject: [Buildroot] [PATCH v2] fluxbox: select xmodmap
+Message-ID: <1351161652-9231-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5624
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
---- Comment #5 from Duncan <dunk_palmer@yahoo.com> 2012-10-25 09:09:47 UTC ---
-Arnout, I've made the change you suggested to package/directfb/directfb.mk; now
-directfb, and all the other packages I have selected, are building for me.
-Patch against 2012.08 attached.
+Fluxbox uses xmodmap in its startup script.
 
-I'm not sure how many packages have the same problem as directfb; if there are
-a few, then I'd imagine that a more robust solution may be to create a
-toolchain wrapper for ld.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+v2: add comment to the Config.in (Thomas Petazzoni)
 
+ package/fluxbox/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/fluxbox/Config.in b/package/fluxbox/Config.in
+index e4d6c37..588e83b 100644
+--- a/package/fluxbox/Config.in
++++ b/package/fluxbox/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_FLUXBOX
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_XLIB_LIBX11
++	# Runtime dependency, needed by startup script
++	select BR2_PACKAGE_XAPP_XMODMAP
+ 	help
+ 	  The Fluxbox lightweight window manager for X
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.7
