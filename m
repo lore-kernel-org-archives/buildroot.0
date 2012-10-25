@@ -1,617 +1,279 @@
 From: Alexandre Belloni <alexandre.belloni@piout.net>
-Date: Fri, 26 Oct 2012 00:15:32 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_2/3=5D_u-boot=3A_update_at91_patch?=
-	=?utf-8?q?es_to_match_mainline?=
+Date: Fri, 26 Oct 2012 00:15:31 +0200
+Subject: [Buildroot] [PATCH 1/3] at91bootstrap: update patch for latest
+	u-boot
 In-Reply-To: <1351203333-26588-1-git-send-email-alexandre.belloni@piout.net>
 References: <1351203333-26588-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <1351203333-26588-3-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <1351203333-26588-2-git-send-email-alexandre.belloni@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch that was included in buildroot was not the same as the final
-one submitted in the mainline.
+The u-boot patch got mainlined but not exactly as it was submitted to
+buildroot. Update the at91bootstrap to match what is in the mainline.
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
 ---
- ...011.12-change-kernel-address-in-dataflash.patch |  210 +++++++++++---------
- ...012.04-change-kernel-address-in-dataflash.patch |  210 +++++++++++---------
- 2 files changed, 224 insertions(+), 196 deletions(-)
+ .../at91bootstrap-1.16-u-boot-relocation-fix.patch |  127 +++++++++-----------
+ 1 file changed, 56 insertions(+), 71 deletions(-)
 
-diff --git a/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch b/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch
-index 4cdbb98..c7d9a7e 100644
---- a/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch
-+++ b/boot/uboot/uboot-2011.12/uboot-2011.12-change-kernel-address-in-dataflash.patch
-@@ -1,7 +1,9 @@
--From 9fc4787c7a6c797db649831f86e49c4bf9780b4e Mon Sep 17 00:00:00 2001
-+From e139cb31d32a4f39241bfd83bf622a97d08f6c9d Mon Sep 17 00:00:00 2001
- From: Alexandre Belloni <alexandre.belloni@piout.net>
--Date: Mon, 2 Jan 2012 03:51:11 +0100
--Subject: [PATCH] Change kernel address in dataflash to match u-boot's size
-+Date: Mon, 2 Jul 2012 04:26:58 +0000
-+Subject: [PATCH] AT91SAM9*: Change kernel address in dataflash to
-+ match u-boot's size
+diff --git a/boot/at91bootstrap/at91bootstrap-1.16-u-boot-relocation-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-u-boot-relocation-fix.patch
+index 884519c..0c9b911 100644
+--- a/boot/at91bootstrap/at91bootstrap-1.16-u-boot-relocation-fix.patch
++++ b/boot/at91bootstrap/at91bootstrap-1.16-u-boot-relocation-fix.patch
+@@ -1,3 +1,8 @@
++From d4e4a1aad559e35d84b445d1379be94ad036984e Mon Sep 17 00:00:00 2001
++From: Alexandre Belloni <alexandre.belloni@piout.net>
++Date: Thu, 25 Oct 2012 22:57:14 +0200
++Subject: [PATCH] u-boot relocation fix
 +
+ Every AT91SAM plaforms were broken between 2010.12 and 2011.03 because
+ of the relocation changes.
  
- On at91sam platforms, u-boot grew larger than the allocated size in
- dataflash, the layout was:
-@@ -9,173 +11,185 @@ bootstrap  0x00000000
- ubootenv   0x00004200
- uboot      0x00008400
- kernel     0x00042000
-+fs         0x00252000
+@@ -8,13 +13,11 @@ I didn't know what to do with at91sam9m10g45ek as it doesn't seems to be
+ converted yet. But anyway, that means that it is either not working or
+ doesn't care so changing it here shouldn't harm.
  
- u-boot with the defconfig doesn't seem to fit in 0x42000 - 0x8400 =
- 0x39C00 bytes anymore.
+-I also chose to "repartition" the dataflash. u-boot is now living at
+-0x4000, letting 16kB for the bootstrap. We also have to increase the
+-IMG_SIZE as u-boot as grown larger than the default value.
+-As requested on the u-boot ML, we assume that it could be up to 512kB
+-big.
++We also have to increase the IMG_SIZE as u-boot as grown larger than the
++default value. As requested on the u-boot ML, we assume that it could
++be up to 495kB big.
  
- Now, the layout is:
- bootstrap  0x00000000
--uboot      0x00004000
--ubootenv   0x00084000
--ubootenv2  0x00088000
--kernel     0x0008C000
-+ubootenv   0x00004200
-+uboot      0x00008400
-+kernel     0x00084000
-+fs         0x00294000
+-It means that now, you have to flash your kernel at 0x0008C000 instead
++It means that now, you have to flash your kernel at 0x00084000 instead
+ of 0x00042000. And so you also have to load it from that adress from
+ u-boot.
+ 
+@@ -22,36 +25,34 @@ Then, remember that you could decrease IMG_SIZE to boot faster.
  
  Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
-+Signed-off-by: Andreas Bie?mann <andreas.devel@googlemail.com>
  ---
-- include/configs/at91sam9260ek.h |   18 ++++++++++++------
-- include/configs/at91sam9261ek.h |   18 ++++++++++++------
-- include/configs/at91sam9263ek.h |   10 +++++++---
-- include/configs/at91sam9rlek.h  |   10 +++++++---
-- 4 files changed, 38 insertions(+), 18 deletions(-)
-+ board/atmel/at91sam9260ek/partition.c |    6 +++---
-+ board/atmel/at91sam9261ek/partition.c |    6 +++---
-+ board/atmel/at91sam9263ek/partition.c |    6 +++---
-+ board/atmel/at91sam9rlek/partition.c  |    6 +++---
-+ include/configs/at91sam9260ek.h       |    5 +++--
-+ include/configs/at91sam9261ek.h       |    5 +++--
-+ include/configs/at91sam9263ek.h       |    2 +-
-+ include/configs/at91sam9rlek.h        |    3 ++-
-+ 8 files changed, 21 insertions(+), 18 deletions(-)
+- board/at91sam9260ek/dataflash/at91sam9260ek.h      |    6 +++---
++ board/at91sam9260ek/dataflash/at91sam9260ek.h      |    4 ++--
+  board/at91sam9260ek/nandflash/at91sam9260ek.h      |    2 +-
+- board/at91sam9261ek/dataflash/at91sam9261ek.h      |    6 +++---
++ board/at91sam9261ek/dataflash/at91sam9261ek.h      |    4 ++--
+  board/at91sam9261ek/nandflash/at91sam9261ek.h      |    2 +-
+- board/at91sam9263ek/dataflash/at91sam9263ek.h      |    6 +++---
++ board/at91sam9263ek/dataflash/at91sam9263ek.h      |    4 ++--
+  board/at91sam9263ek/nandflash/at91sam9263ek.h      |    2 +-
+- board/at91sam9g10ek/dataflash/at91sam9g10ek.h      |    6 +++---
++ board/at91sam9g10ek/dataflash/at91sam9g10ek.h      |    4 ++--
+  board/at91sam9g10ek/nandflash/at91sam9g10ek.h      |    2 +-
+- board/at91sam9g20ek/dataflash/at91sam9g20ek.h      |    6 +++---
++ board/at91sam9g20ek/dataflash/at91sam9g20ek.h      |    4 ++--
+  board/at91sam9g20ek/nandflash/at91sam9g20ek.h      |    2 +-
+- board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h  |    4 ++--
+- .../at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h  |    4 ++--
+- board/at91sam9rlek/dataflash/at91sam9rlek.h        |    6 +++---
++ board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h  |    2 +-
++ .../at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h  |    2 +-
++ board/at91sam9rlek/dataflash/at91sam9rlek.h        |    4 ++--
+  board/at91sam9rlek/nandflash/at91sam9rlek.h        |    2 +-
+- board/at91sam9xeek/dataflash/at91sam9xeek.h        |    6 +++---
++ board/at91sam9xeek/dataflash/at91sam9xeek.h        |    4 ++--
+  board/at91sam9xeek/nandflash/at91sam9xeek.h        |    2 +-
+- 16 files changed, 32 insertions(+), 32 deletions(-)
++ 16 files changed, 23 insertions(+), 23 deletions(-)
  
-+diff --git a/board/atmel/at91sam9260ek/partition.c b/board/atmel/at91sam9260ek/partition.c
-+index 2629c67..9ec054f 100644
-+--- a/board/atmel/at91sam9260ek/partition.c
-++++ b/board/atmel/at91sam9260ek/partition.c
-+@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
-+diff --git a/board/atmel/at91sam9261ek/partition.c b/board/atmel/at91sam9261ek/partition.c
-+index c739b11..51cac77 100644
-+--- a/board/atmel/at91sam9261ek/partition.c
-++++ b/board/atmel/at91sam9261ek/partition.c
-+@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
-+diff --git a/board/atmel/at91sam9263ek/partition.c b/board/atmel/at91sam9263ek/partition.c
-+index 7e1d46f..d48fab7 100644
-+--- a/board/atmel/at91sam9263ek/partition.c
-++++ b/board/atmel/at91sam9263ek/partition.c
-+@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
-+diff --git a/board/atmel/at91sam9rlek/partition.c b/board/atmel/at91sam9rlek/partition.c
-+index 7e1d46f..d48fab7 100644
-+--- a/board/atmel/at91sam9rlek/partition.c
-++++ b/board/atmel/at91sam9rlek/partition.c
-+@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
- diff --git a/include/configs/at91sam9260ek.h b/include/configs/at91sam9260ek.h
--index db52ee6..b537760 100644
-+index 07b1968..ef25fa5 100644
- --- a/include/configs/at91sam9260ek.h
- +++ b/include/configs/at91sam9260ek.h
--@@ -185,10 +185,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -187,7 +187,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -199,10 +201,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS1 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS1 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -201,7 +201,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS1 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xD008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -231,6 +235,8 @@
-+@@ -230,6 +230,7 @@
-  #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-  #define CONFIG_SYS_LONGHELP		1
-  #define CONFIG_CMDLINE_EDITING	1
- +#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+ diff --git a/board/at91sam9260ek/dataflash/at91sam9260ek.h b/board/at91sam9260ek/dataflash/at91sam9260ek.h
+-index 1834246..5c52bc6 100644
++index 1834246..91081a1 100644
+ --- a/board/at91sam9260ek/dataflash/at91sam9260ek.h
+ +++ b/board/at91sam9260ek/dataflash/at91sam9260ek.h
+-@@ -73,11 +73,11 @@
+- /* ******************************************************************* */
++@@ -74,10 +74,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS1_DATAFLASH	/* Boot on SPI NCS0 */
   
-  /*
-   * Size of malloc() pool
- diff --git a/include/configs/at91sam9261ek.h b/include/configs/at91sam9261ek.h
--index 5140b26..fa461da 100644
-+index 6fd0b83..014437b 100644
- --- a/include/configs/at91sam9261ek.h
- +++ b/include/configs/at91sam9261ek.h
--@@ -187,10 +187,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET	0x4200
--+#define CONFIG_ENV_OFFSET	0x84000
-+@@ -189,7 +189,7 @@
-+ #define CONFIG_ENV_OFFSET	0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -201,10 +203,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS3 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS3 + 0x8400)
---#define CONFIG_ENV_OFFSET	0x4200
--+#define CONFIG_ENV_OFFSET	0x84000
-+@@ -203,7 +203,7 @@
-+ #define CONFIG_ENV_OFFSET	0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS3 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xD008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -233,6 +237,8 @@
-+@@ -232,6 +232,7 @@
-  #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-  #define CONFIG_SYS_LONGHELP
-  #define CONFIG_CMDLINE_EDITING
- +#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash    */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
   
-  /*
-   * Size of malloc() pool
- diff --git a/include/configs/at91sam9263ek.h b/include/configs/at91sam9263ek.h
--index 8399246..253bee4 100644
-+index f2163f1..4309f71 100644
- --- a/include/configs/at91sam9263ek.h
- +++ b/include/configs/at91sam9263ek.h
--@@ -314,10 +314,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -318,7 +318,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
-  				"root=/dev/mtdblock0 " \
-  				"mtdparts=atmel_nand:-(root) "\
--@@ -347,6 +349,8 @@
-- #define CONFIG_AUTO_COMPLETE
-- #define CONFIG_SYS_HUSH_PARSER
-- #define CONFIG_SYS_PROMPT_HUSH_PS2	"> "
--+#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
-- 
-- /*
--  * Size of malloc() pool
- diff --git a/include/configs/at91sam9rlek.h b/include/configs/at91sam9rlek.h
--index 79ea1f2..423f523 100644
-+index 45f8baf..c5952e9 100644
- --- a/include/configs/at91sam9rlek.h
- +++ b/include/configs/at91sam9rlek.h
--@@ -153,10 +153,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -155,7 +155,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
-  				"root=/dev/mtdblock0 " \
-  				"mtdparts=atmel_nand:-(root) "\
--@@ -183,6 +185,8 @@
-+@@ -182,6 +182,7 @@
-  #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-  #define CONFIG_SYS_LONGHELP		1
-  #define CONFIG_CMDLINE_EDITING		1
- +#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+  #define MACH_TYPE       0x44B       /* AT91SAM9260-EK */
+ -#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
+@@ -73,17 +74,15 @@ index 2cac601..f8fdff2 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
+ diff --git a/board/at91sam9261ek/dataflash/at91sam9261ek.h b/board/at91sam9261ek/dataflash/at91sam9261ek.h
+-index 8ce30e9..675f80b 100644
++index 8ce30e9..276ba3d 100644
+ --- a/board/at91sam9261ek/dataflash/at91sam9261ek.h
+ +++ b/board/at91sam9261ek/dataflash/at91sam9261ek.h
+-@@ -96,11 +96,11 @@
+- /* ******************************************************************* */
++@@ -97,10 +97,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
   
-  /*
-   * Size of malloc() pool
- -- 
--1.7.5.4
-+1.7.9.5
- 
-diff --git a/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch b/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch
-index 4cdbb98..c7d9a7e 100644
---- a/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch
-+++ b/boot/uboot/uboot-2012.04.01/uboot-2012.04-change-kernel-address-in-dataflash.patch
-@@ -1,7 +1,9 @@
--From 9fc4787c7a6c797db649831f86e49c4bf9780b4e Mon Sep 17 00:00:00 2001
-+From e139cb31d32a4f39241bfd83bf622a97d08f6c9d Mon Sep 17 00:00:00 2001
- From: Alexandre Belloni <alexandre.belloni@piout.net>
--Date: Mon, 2 Jan 2012 03:51:11 +0100
--Subject: [PATCH] Change kernel address in dataflash to match u-boot's size
-+Date: Mon, 2 Jul 2012 04:26:58 +0000
-+Subject: [PATCH] AT91SAM9*: Change kernel address in dataflash to
-+ match u-boot's size
-+
- 
- On at91sam platforms, u-boot grew larger than the allocated size in
- dataflash, the layout was:
-@@ -9,173 +11,185 @@ bootstrap  0x00000000
- ubootenv   0x00004200
- uboot      0x00008400
- kernel     0x00042000
-+fs         0x00252000
- 
- u-boot with the defconfig doesn't seem to fit in 0x42000 - 0x8400 =
- 0x39C00 bytes anymore.
- 
- Now, the layout is:
- bootstrap  0x00000000
--uboot      0x00004000
--ubootenv   0x00084000
--ubootenv2  0x00088000
--kernel     0x0008C000
-+ubootenv   0x00004200
-+uboot      0x00008400
-+kernel     0x00084000
-+fs         0x00294000
- 
- Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
-+Signed-off-by: Andreas Bie?mann <andreas.devel@googlemail.com>
- ---
-- include/configs/at91sam9260ek.h |   18 ++++++++++++------
-- include/configs/at91sam9261ek.h |   18 ++++++++++++------
-- include/configs/at91sam9263ek.h |   10 +++++++---
-- include/configs/at91sam9rlek.h  |   10 +++++++---
-- 4 files changed, 38 insertions(+), 18 deletions(-)
-+ board/atmel/at91sam9260ek/partition.c |    6 +++---
-+ board/atmel/at91sam9261ek/partition.c |    6 +++---
-+ board/atmel/at91sam9263ek/partition.c |    6 +++---
-+ board/atmel/at91sam9rlek/partition.c  |    6 +++---
-+ include/configs/at91sam9260ek.h       |    5 +++--
-+ include/configs/at91sam9261ek.h       |    5 +++--
-+ include/configs/at91sam9263ek.h       |    2 +-
-+ include/configs/at91sam9rlek.h        |    3 ++-
-+ 8 files changed, 21 insertions(+), 18 deletions(-)
- 
-+diff --git a/board/atmel/at91sam9260ek/partition.c b/board/atmel/at91sam9260ek/partition.c
-+index 2629c67..9ec054f 100644
-+--- a/board/atmel/at91sam9260ek/partition.c
-++++ b/board/atmel/at91sam9260ek/partition.c
-+@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
-+diff --git a/board/atmel/at91sam9261ek/partition.c b/board/atmel/at91sam9261ek/partition.c
-+index c739b11..51cac77 100644
-+--- a/board/atmel/at91sam9261ek/partition.c
-++++ b/board/atmel/at91sam9261ek/partition.c
-+@@ -34,7 +34,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
-+diff --git a/board/atmel/at91sam9263ek/partition.c b/board/atmel/at91sam9263ek/partition.c
-+index 7e1d46f..d48fab7 100644
-+--- a/board/atmel/at91sam9263ek/partition.c
-++++ b/board/atmel/at91sam9263ek/partition.c
-+@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
-+diff --git a/board/atmel/at91sam9rlek/partition.c b/board/atmel/at91sam9rlek/partition.c
-+index 7e1d46f..d48fab7 100644
-+--- a/board/atmel/at91sam9rlek/partition.c
-++++ b/board/atmel/at91sam9rlek/partition.c
-+@@ -33,7 +33,7 @@ struct dataflash_addr cs[CONFIG_SYS_MAX_DATAFLASH_BANKS] = {
-+ dataflash_protect_t area_list[NB_DATAFLASH_AREA] = {
-+ 	{0x00000000, 0x000041FF, FLAG_PROTECT_SET,   0, "Bootstrap"},
-+ 	{0x00004200, 0x000083FF, FLAG_PROTECT_CLEAR, 0, "Environment"},
-+-	{0x00008400, 0x00041FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-+-	{0x00042000, 0x00251FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-+-	{0x00252000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-++	{0x00008400, 0x00083FFF, FLAG_PROTECT_SET,   0, "U-Boot"},
-++	{0x00084000, 0x00293FFF, FLAG_PROTECT_CLEAR, 0,	"Kernel"},
-++	{0x00294000, 0xFFFFFFFF, FLAG_PROTECT_CLEAR, 0,	"FS"},
-+ };
- diff --git a/include/configs/at91sam9260ek.h b/include/configs/at91sam9260ek.h
--index db52ee6..b537760 100644
-+index 07b1968..ef25fa5 100644
- --- a/include/configs/at91sam9260ek.h
- +++ b/include/configs/at91sam9260ek.h
--@@ -185,10 +185,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -187,7 +187,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -199,10 +201,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS1 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS1 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -201,7 +201,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS1 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xD008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -231,6 +235,8 @@
-+@@ -230,6 +230,7 @@
-  #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-  #define CONFIG_SYS_LONGHELP		1
-  #define CONFIG_CMDLINE_EDITING	1
- +#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash    */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
   
-  /*
-   * Size of malloc() pool
- diff --git a/include/configs/at91sam9261ek.h b/include/configs/at91sam9261ek.h
--index 5140b26..fa461da 100644
-+index 6fd0b83..014437b 100644
- --- a/include/configs/at91sam9261ek.h
- +++ b/include/configs/at91sam9261ek.h
--@@ -187,10 +187,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET	0x4200
--+#define CONFIG_ENV_OFFSET	0x84000
-+@@ -189,7 +189,7 @@
-+ #define CONFIG_ENV_OFFSET	0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -201,10 +203,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS3 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS3 + 0x8400)
---#define CONFIG_ENV_OFFSET	0x4200
--+#define CONFIG_ENV_OFFSET	0x84000
-+@@ -203,7 +203,7 @@
-+ #define CONFIG_ENV_OFFSET	0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS3 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xD0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xD008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xD0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 "			\
-  				"root=/dev/mtdblock0 "			\
-  				"mtdparts=atmel_nand:-(root) "		\
--@@ -233,6 +237,8 @@
-+@@ -232,6 +232,7 @@
-  #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-  #define CONFIG_SYS_LONGHELP
-  #define CONFIG_CMDLINE_EDITING
- +#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+  #define MACH_TYPE       0x350       /* AT91SAM9261-EK */
+ -#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
+@@ -105,17 +104,15 @@ index badc3ac..e628c97 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
+ diff --git a/board/at91sam9263ek/dataflash/at91sam9263ek.h b/board/at91sam9263ek/dataflash/at91sam9263ek.h
+-index 5c9da4b..d07b5d1 100644
++index 5c9da4b..870f9e2 100644
+ --- a/board/at91sam9263ek/dataflash/at91sam9263ek.h
+ +++ b/board/at91sam9263ek/dataflash/at91sam9263ek.h
+-@@ -95,11 +95,11 @@
+- /* ******************************************************************* */
++@@ -96,10 +96,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
   
-  /*
-   * Size of malloc() pool
- diff --git a/include/configs/at91sam9263ek.h b/include/configs/at91sam9263ek.h
--index 8399246..253bee4 100644
-+index f2163f1..4309f71 100644
- --- a/include/configs/at91sam9263ek.h
- +++ b/include/configs/at91sam9263ek.h
--@@ -314,10 +314,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -318,7 +318,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
-  				"root=/dev/mtdblock0 " \
-  				"mtdparts=atmel_nand:-(root) "\
--@@ -347,6 +349,8 @@
-- #define CONFIG_AUTO_COMPLETE
-- #define CONFIG_SYS_HUSH_PARSER
-- #define CONFIG_SYS_PROMPT_HUSH_PS2	"> "
--+#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
-- 
-- /*
--  * Size of malloc() pool
- diff --git a/include/configs/at91sam9rlek.h b/include/configs/at91sam9rlek.h
--index 79ea1f2..423f523 100644
-+index 45f8baf..c5952e9 100644
- --- a/include/configs/at91sam9rlek.h
- +++ b/include/configs/at91sam9rlek.h
--@@ -153,10 +153,12 @@
-- /* bootstrap + u-boot + env + linux in dataflash on CS0 */
-- #define CONFIG_ENV_IS_IN_DATAFLASH	1
-- #define CONFIG_SYS_MONITOR_BASE	(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + 0x8400)
---#define CONFIG_ENV_OFFSET		0x4200
--+#define CONFIG_ENV_OFFSET		0x84000
-+@@ -155,7 +155,7 @@
-+ #define CONFIG_ENV_OFFSET		0x4200
-  #define CONFIG_ENV_ADDR		(CONFIG_SYS_DATAFLASH_LOGIC_ADDR_CS0 + CONFIG_ENV_OFFSET)
---#define CONFIG_ENV_SIZE		0x4200
-+ #define CONFIG_ENV_SIZE		0x4200
- -#define CONFIG_BOOTCOMMAND	"cp.b 0xC0042000 0x22000000 0x210000; bootm"
--+#define CONFIG_ENV_SIZE		0x4000
--+#define CONFIG_ENV_ADDR_REDUND (CONFIG_ENV_ADDR+CONFIG_ENV_SIZE)
--+#define CONFIG_ENV_SIZE_REDUND CONFIG_ENV_SIZE
--+#define CONFIG_BOOTCOMMAND	"cp.b 0xC008C000 0x22000000 0x210000; bootm"
-++#define CONFIG_BOOTCOMMAND	"cp.b 0xC0084000 0x22000000 0x210000; bootm"
-  #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
-  				"root=/dev/mtdblock0 " \
-  				"mtdparts=atmel_nand:-(root) "\
--@@ -183,6 +185,8 @@
-+@@ -182,6 +182,7 @@
-  #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + sizeof(CONFIG_SYS_PROMPT) + 16)
-  #define CONFIG_SYS_LONGHELP		1
-  #define CONFIG_CMDLINE_EDITING		1
- +#define CONFIG_AUTO_COMPLETE
--+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
+--#define IMG_ADDRESS 			0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 			0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE			0x33900			/* Image Size in DataFlash    */
+-+#define IMG_ADDRESS 			0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE			0x80000			/* Image Size in DataFlash    */
+++#define	IMG_SIZE			0x7BC00			/* Image Size in DataFlash    */
   
-  /*
-   * Size of malloc() pool
+  #define MACH_TYPE       		0x4B2       		/* AT91SAM9263-EK */
+ -#define JUMP_ADDR			0x23F00000		/* Final Jump Address 	      */
+@@ -137,17 +134,15 @@ index 505afc7..8ab4f46 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
+ diff --git a/board/at91sam9g10ek/dataflash/at91sam9g10ek.h b/board/at91sam9g10ek/dataflash/at91sam9g10ek.h
+-index b2faf44..0882644 100644
++index b2faf44..f4f556b 100644
+ --- a/board/at91sam9g10ek/dataflash/at91sam9g10ek.h
+ +++ b/board/at91sam9g10ek/dataflash/at91sam9g10ek.h
+-@@ -97,11 +97,11 @@
+- /* ******************************************************************* */
++@@ -98,10 +98,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
+  
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash    */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
+  
+  #define MACH_TYPE       0x350       /* AT91SAM9261-EK */
+ -#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
+@@ -169,17 +164,15 @@ index 66c40a3..6c3ecda 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
+ diff --git a/board/at91sam9g20ek/dataflash/at91sam9g20ek.h b/board/at91sam9g20ek/dataflash/at91sam9g20ek.h
+-index eea0439..44bd578 100644
++index eea0439..7fc70d6 100644
+ --- a/board/at91sam9g20ek/dataflash/at91sam9g20ek.h
+ +++ b/board/at91sam9g20ek/dataflash/at91sam9g20ek.h
+-@@ -74,11 +74,11 @@
+- /* ******************************************************************* */
++@@ -75,10 +75,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS1_DATAFLASH	/* Boot on SPI NCS1 */
+  
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash */
+  
+  #define MACH_TYPE		0x658			/* AT91SAM9G20-EK */
+ -#define JUMP_ADDR		0x23F00000		/* Final Jump Address */
+@@ -201,47 +194,41 @@ index 31bd499..e797e4d 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
+ diff --git a/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h b/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h
+-index a60fd41..144dd6d 100644
++index a60fd41..5587a00 100644
+ --- a/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h
+ +++ b/board/at91sam9m10ekes/dataflash/at91sam9m10ekes.h
+-@@ -88,8 +88,8 @@
+- /* ******************************************************************* */
++@@ -89,7 +89,7 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
+  
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash */
+  
+  #define MACH_TYPE		0x9CD			/* AT91SAM9M10-EKES */
+  #define JUMP_ADDR		0x73F00000		/* Final Jump Address */
+ diff --git a/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h b/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h
+-index 5c726b5..3152b79 100644
++index 5c726b5..9090097 100644
+ --- a/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h
+ +++ b/board/at91sam9m10g45ek/dataflash/at91sam9m10g45ek.h
+-@@ -84,8 +84,8 @@
+- /* ******************************************************************* */
++@@ -85,7 +85,7 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
+  
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash */
+  
+  #define MACH_TYPE		0x726			/* AT91SAM9M10G45-EK */
+  #define JUMP_ADDR		0x73F00000		/* Final Jump Address */
+ diff --git a/board/at91sam9rlek/dataflash/at91sam9rlek.h b/board/at91sam9rlek/dataflash/at91sam9rlek.h
+-index 05c42dc..be277b6 100644
++index 05c42dc..150f17e 100644
+ --- a/board/at91sam9rlek/dataflash/at91sam9rlek.h
+ +++ b/board/at91sam9rlek/dataflash/at91sam9rlek.h
+-@@ -88,11 +88,11 @@
+- /* ******************************************************************* */
++@@ -89,10 +89,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS0_DATAFLASH	/* Boot on SPI NCS0 */
+  
+--#define IMG_ADDRESS 	0x8400		/* Image Address in DataFlash */
++ #define IMG_ADDRESS 	0x8400		/* Image Address in DataFlash */
+ -#define	IMG_SIZE	0x33900		/* Image Size in DataFlash    */
+-+#define IMG_ADDRESS 	0x4000		/* Image Address in DataFlash */
+-+#define	IMG_SIZE	0x80000		/* Image Size in DataFlash    */
+++#define	IMG_SIZE	0x7BC00		/* Image Size in DataFlash    */
+  
+  #define MACH_TYPE       1326       	/* AT91SAM9RL-EK */
+ -#define JUMP_ADDR	0x23F00000	/* Final Jump Address 	      */
+@@ -263,17 +250,15 @@ index 656b4ba..594db8f 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
+ diff --git a/board/at91sam9xeek/dataflash/at91sam9xeek.h b/board/at91sam9xeek/dataflash/at91sam9xeek.h
+-index 27d1822..e3172da 100644
++index 27d1822..08e515d 100644
+ --- a/board/at91sam9xeek/dataflash/at91sam9xeek.h
+ +++ b/board/at91sam9xeek/dataflash/at91sam9xeek.h
+-@@ -73,11 +73,11 @@
+- /* ******************************************************************* */
++@@ -74,10 +74,10 @@
+  #define AT91C_SPI_PCS_DATAFLASH		AT91C_SPI_PCS1_DATAFLASH	/* Boot on SPI NCS1 */
+  
+--#define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
++ #define IMG_ADDRESS 		0x8400			/* Image Address in DataFlash */
+ -#define	IMG_SIZE		0x33900			/* Image Size in DataFlash    */
+-+#define IMG_ADDRESS 		0x4000			/* Image Address in DataFlash */
+-+#define	IMG_SIZE		0x80000			/* Image Size in DataFlash    */
+++#define	IMG_SIZE		0x7BC00			/* Image Size in DataFlash    */
+  
+  #define MACH_TYPE		0x44B			/* AT91SAM9XE-EK same id as AT91SAM9260-EK*/
+ -#define JUMP_ADDR		0x23F00000		/* Final Jump Address 	      */
+@@ -295,5 +280,5 @@ index 5dbc63e..9fac7cb 100644
+  /* ******************************************************************* */
+  /* Application Settings                                                */
  -- 
 -1.7.5.4
 +1.7.9.5
