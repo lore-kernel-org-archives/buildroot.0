@@ -1,109 +1,33 @@
-From: Valentine Barshak <gvaxon@gmail.com>
-Date: Thu, 25 Oct 2012 23:02:38 +0400
-Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
-In-Reply-To: <CAFbHwiTUPKXvQt6akZUmUzPnUMXp9QDjbO28R6irCbDzd75deg@mail.gmail.com>
-References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
- <5088400C.4040000@gmail.com>
- <CAFbHwiSwLqa=JSw=yqsEmHO7sqvgRmPQEgR454g=rBCu0qLdOg@mail.gmail.com>
- <50885F26.8000701@gmail.com>
- <CAFbHwiSDub+CF-Dax-peGOBP0WUYq9JeNsXMN1xf0uy1=byArg@mail.gmail.com>
- <50897608.5080805@gmail.com>
- <CAFbHwiTUPKXvQt6akZUmUzPnUMXp9QDjbO28R6irCbDzd75deg@mail.gmail.com>
-Message-ID: <50898CCE.8090601@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 25 Oct 2012 23:30:00 +0200
+Subject: [Buildroot] [PATCHv6 5/5] iw: pkg-config cleanup
+In-Reply-To: <20121025005246.32170c83@skate>
+References: <1350956875-1726-1-git-send-email-gustavo@zacarias.com.ar>
+ <1350956875-1726-5-git-send-email-gustavo@zacarias.com.ar>
+ <20121025005246.32170c83@skate>
+Message-ID: <5089AF58.8010707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/25/2012 10:23 PM, Will Newton wrote:
-> On Thu, Oct 25, 2012 at 6:25 PM, Valentine Barshak <gvaxon@gmail.com> wrote:
->> On 10/25/2012 01:02 PM, Will Newton wrote:
->>>
->>> On Wed, Oct 24, 2012 at 10:35 PM, Valentine Barshak <gvaxon@gmail.com>
->>> wrote:
->>>>
->>>> On 10/25/2012 12:51 AM, Will Newton wrote:
->>>>>
->>>>>
->>>>> On Wed, Oct 24, 2012 at 8:22 PM, Valentine Barshak <gvaxon@gmail.com>
->>>>> wrote:
->>>>>>
->>>>>>
->>>>>> On 10/07/2012 12:35 AM, Valentine Barshak wrote:
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
->>>>>>> ---
->>>>>>>      package/gqview/gqview.mk | 1 +
->>>>>>>      1 file changed, 1 insertion(+)
->>>>>>>
->>>>>>> diff --git a/package/gqview/gqview.mk b/package/gqview/gqview.mk
->>>>>>> index 2f64cd0..7d09fda 100644
->>>>>>> --- a/package/gqview/gqview.mk
->>>>>>> +++ b/package/gqview/gqview.mk
->>>>>>> @@ -7,6 +7,7 @@ GQVIEW_VERSION = 2.1.5
->>>>>>>      GQVIEW_SOURCE = gqview-$(GQVIEW_VERSION).tar.gz
->>>>>>>      GQVIEW_SITE = http://prdownloads.sourceforge.net/gqview
->>>>>>>      GQVIEW_DEPENDENCIES = host-pkg-config libgtk2
->>>>>>> +GQVIEW_CONF_ENV = LIBS="-lm"
->>>>>>>
->>>>>>>      $(eval $(autotools-package))
->>>>>>>
->>>>>>>
->>>>>>
->>>>>> Does this work for everyone else or is it just deprecated and nobody
->>>>>> should
->>>>>> use it?
->>>>>>
->>>>>> I can't build without -lm neither in BR nor using my native host tools.
->>>>>
->>>>>
->>>>>
->>>>> Which version of binutils are you using? 2.22?
->>>>>
->>>>
->>>> Yes, 2.22.
->>>
->>>
->>> I believe this is caused by an issue with linking indirectly with the
->>> newer binutils. gqview relies on a library that is linked against libm
->>> but does not explicitly link against libm itself. Before 2.22 binutils
->>> would copy the DT_NEEDED entries from the library into gqview but it
->>> does not do this any more.
->>
->>
->> gqview calls pow() and sqrt() directly, though it doesn't link against libm.
->>
->>
->>>
->>> A number of packages are affected by this. I believe the correct fix
->>> is to modify the affected packages to link against the libraries they
->>> use explicitly.
->>>
->>
->> Is the above patch OK?
->
-> I think so, although it could do with a comment to say why it is
-> needed. Peter or Thomas may disagree though?
+On 25/10/12 00:52, Thomas Petazzoni wrote:
+>> >  -IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+>> >  -	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+>> >  +IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
+>> >    	GIT_DIR=$(IW_DIR)
+> I think the PKG_CONFIG variable can be removed as well. All packages
+> are being compiled with TARGET_MAKE_ENV, which includes
 
-I thought it was kind of obvious.
+  iw.mk doesn't use TARGET_MAKE_ENV, but it probably should.
 
->
->> Or do you mean configure/makefile(.in) should be patched to add libm
->> dependency?
->
-> That is the proper long term fix that should be pushed to gqview upstream.
->
-
-Gqview is no longer supported. There's a Geeqie project that has been 
-forked from gqview and is currently active.
-
-I still use gqview since it has all the features I need and is smaller 
-than geeqie. I also prefer gqview because it opens a window and shows
-a "broken image" icon for unsupported image types, while geeqie doesn't 
-create any window (even an error message box), which is a bit confusing.
-
-Thanks,
-Val.
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
