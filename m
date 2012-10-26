@@ -1,29 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Oct 2012 09:34:21 +0200
-Subject: [Buildroot] [Bug 5624] When building directfb,
- BR2_TARGET_LDFLAGS not used by libtool
-In-Reply-To: <20121025090918.77F51998D6@busybox.osuosl.org>
-References: <bug-5624-163@https.bugs.busybox.net/>
- <20121025090918.77F51998D6@busybox.osuosl.org>
-Message-ID: <508A3CFD.5050107@mind.be>
+Date: Fri, 26 Oct 2012 09:38:00 +0200
+Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
+In-Reply-To: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+Message-ID: <508A3DD8.8060009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/12 11:09, bugzilla at busybox.net wrote:
-> https://bugs.busybox.net/show_bug.cgi?id=5624
->
-> --- Comment #4 from Duncan<dunk_palmer@yahoo.com>  2012-10-25 09:09:17 UTC ---
-> Created attachment 4598
->    -->  https://bugs.busybox.net/attachment.cgi?id=4598
-> Change as suggested by Arnout.
+On 06/10/12 22:35, Valentine Barshak wrote:
+> Signed-off-by: Valentine Barshak<gvaxon@gmail.com>
 
-  Patch looks good. Should we ask to repost it on the list?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Problem can be reproduced on e.g. x86_64 with external toolchain.
+
+  And since upstream is dead, the simple addition of -lm to LIBS is an
+adequate solution.
 
   Regards,
   Arnout
+
+> ---
+>   package/gqview/gqview.mk | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/gqview/gqview.mk b/package/gqview/gqview.mk
+> index 2f64cd0..7d09fda 100644
+> --- a/package/gqview/gqview.mk
+> +++ b/package/gqview/gqview.mk
+> @@ -7,6 +7,7 @@ GQVIEW_VERSION = 2.1.5
+>   GQVIEW_SOURCE = gqview-$(GQVIEW_VERSION).tar.gz
+>   GQVIEW_SITE = http://prdownloads.sourceforge.net/gqview
+>   GQVIEW_DEPENDENCIES = host-pkg-config libgtk2
+> +GQVIEW_CONF_ENV = LIBS="-lm"
+>
+>   $(eval $(autotools-package))
+>
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
