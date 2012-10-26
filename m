@@ -1,44 +1,80 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 27 Oct 2012 23:20:56 +0200
-Subject: [Buildroot] [PATCHv2] gnutls: fix link-time build failures
-In-Reply-To: <1351117215-4614-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 24 Oct 2012 19:20:15 -0300")
-References: <1351117215-4614-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehkjk3wn.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 26 Oct 2012 13:23:29 +0200
+Subject: [Buildroot] [git commit] toolchain/uClibc: correct a slip of the pen
+Message-ID: <20121027212117.05AD099962@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d3e7759f85ab07680c7ba412b0c84d0e300fc4bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Fixes
- Gustavo> http://autobuild.buildroot.net/results/23da17446266bdd49ea0da0c1892d66d3ac6607f/build-end.log
- Gustavo> And may the <BEEP> rest in peace at last...
+UCLIB_EXTRA_CFLAGS -> UCLIBC_EXTRA_CFLAGS
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/gnutls/gnutls.mk |    3 ++-
- Gustavo>  1 files changed, 2 insertions(+), 1 deletions(-)
+Signed-off-by: Xinglong Liao <xinglong.liao@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/uClibc/uclibc.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
- Gustavo> diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
- Gustavo> index e889821..1ef6e3f 100644
- Gustavo> --- a/package/gnutls/gnutls.mk
- Gustavo> +++ b/package/gnutls/gnutls.mk
- Gustavo> @@ -10,8 +10,9 @@ GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
- Gustavo>  GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
- Gustavo>  GNUTLS_LICENSE_FILES = COPYING lib/COPYING
- Gustavo>  GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt $(if $(BR2_PACKAGE_ZLIB),zlib)
- Gustavo> +GNUTLS_CONF_ENV = acl_cv_rpath=no
- Gustavo>  GNUTLS_CONF_OPT = --with-libgcrypt --without-libgcrypt-prefix \
- Gustavo> -		--without-p11-kit
- Gustavo> +		--without-p11-kit --disable-rpath
-
-It's a bit odd that you need both the variable and the configure
-options, but OK - You presumably do.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index d1cd718..397cdd4 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -379,7 +379,7 @@ $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		UCLIB_EXTRA_CFLAGS="$(TARGET_ABI)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" \
+ 		oldconfig
+ 	touch $@
+@@ -398,7 +398,7 @@ $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.confi
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		UCLIB_EXTRA_CFLAGS="$(TARGET_ABI)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" headers \
+ 		lib/crt1.o lib/crti.o lib/crtn.o \
+ 		install_headers
+@@ -420,7 +420,7 @@ $(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate) $(LIBFLO
+ 		DEVEL_PREFIX=/ \
+ 		RUNTIME_PREFIX=/ \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		UCLIB_EXTRA_CFLAGS="$(TARGET_ABI)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" \
+ 		all
+ 	touch -c $@
+@@ -432,7 +432,7 @@ uclibc-menuconfig: dirs $(UCLIBC_DIR)/.config
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		UCLIB_EXTRA_CFLAGS="$(TARGET_ABI)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		HOSTCC="$(HOSTCC)" \
+ 		menuconfig && \
+ 	touch -c $(UCLIBC_DIR)/.config
+@@ -445,7 +445,7 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		UCLIB_EXTRA_CFLAGS="$(TARGET_ABI)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		install_runtime install_dev
+ 	# Install the kernel headers to the staging dir if necessary
+ 	if [ ! -f $(STAGING_DIR)/usr/include/linux/version.h ]; then \
+@@ -475,7 +475,7 @@ $(TARGET_DIR)/lib/libc.so.0: $(STAGING_DIR)/usr/lib/libc.a
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
+ 		CROSS_COMPILE="$(TARGET_CROSS)" \
+-		UCLIB_EXTRA_CFLAGS="$(TARGET_ABI)" \
++		UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)" \
+ 		install_runtime
+ 	touch -c $@
+ 
