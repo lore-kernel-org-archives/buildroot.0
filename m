@@ -1,64 +1,71 @@
-From: David Bonnin <dboml@free.fr>
-Date: Fri, 26 Oct 2012 22:56:15 +0200
-Subject: [Buildroot] post-buil script in chrooted
-In-Reply-To: <507F15D3.2080805@mind.be>
-References: <5077A820.7050202@free.fr> <20121012093032.7ef6b972@skate>
- <CAAXf6LVCr25_i_6CMR6DYs-5z1+bVuNNYEF4DedEe3j-6=4hqg@mail.gmail.com>
- <507866D6.8020608@mind.be> <507C882B.5080609@free.fr>
- <507F15D3.2080805@mind.be>
-Message-ID: <508AF8EF.4070002@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Oct 2012 00:02:49 +0200
+Subject: [Buildroot] Licensing information
+Message-ID: <201210270002.49578.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello All!
 
-Exactly, i want to create few users on the target, and copy files for 
-each user, like ftpUser , httpdUser, userMyApp, userMyBackupApp.
-I doesn't want to copy files only for root.
+In a few packages I've encountered, and for which we may install only part
+of the package (eg. only the libs, or the libs and the programs), and those
+parts are not under the same licensing terms (but not necesarily conflicting),
+there is no way in buildroot to convey such information.
 
-My apps(2) on the target doesn't run under root privileveges, and have 
-theirs own default files/directory.
+Also, there is no way (AFAICS) to specify a muti-licensed component.
 
-Now, i understand BR, i did it statically, with copy files by post-build 
-script and permissions target in customize package ( deprecated).
-My next step, will be put the default directory/files in root folder, 
-and at target board starting create/copy files for my users, in goal to 
-remove customize package and my own Skeleton.
+For example, let's look at dtc, the Device Tree Compiler:
+ - there are two parts in dtc:
+   - libfdt, dual-licensed GPLv2+/BSD-2c
+   - dtc (and accompanying tools), licensed GPLv2+
 
-Thinking of starting, It seemed implicit that we can execute a personnal 
-script in a fakeroot script for modify the target dir before make images.
+If we only install the library, should we write:
+  DTC_LICENSE = GPLv2+/BSD-2c    # notice this is a single word
+or
+  DTC_LICENSE = GPLv2+ BSD-2c    # notice the space-separation
 
-My project works  now, and looking back BR is a good choice(better than 
-TI-SDK, and easy to understand).
+Then, now we also install the programs, should we write:
+  DTC_LICENSE = GPLv2+/BSD-2c GPLv2+
+or
+  DTC_LICENSE = GPLv2+ BSD-2c
 
-Le 17/10/2012 22:32, Arnout Vandecappelle a ?crit :
-> On 16/10/12 00:03, David Bonnin wrote:
->> Hello,
->>
->> yes, sorry , i mean , i was looking for a post-build script for my 
->> board in a fakeroot environnement.
->> customize package is deprecated.
->>
->> in board/me/Myproject/rootfs-adds/root/
->>
->> i want to cp files of root user.
->
->  Do you mean, files that are owned by root and are not readable by you?
-> That won't be possible.
->
->  Or do you mean, files that should be owned by root in the target?  In 
-> that
-> case, you can just copy them in the post-build script - buildroot will 
-> make
-> everything owned by root.
->
->
->> So i need to use custom skeletonfs or use customize package.
->
->  Neither of these will do anything that the post-build script cannot do.
->
->  Regards,
->  Arnout
+Then, reviewing the licensing information, the user may conclude (wrongly)
+that dtc (the package) is dual-licensed GPLv2+ and BSD-2c, and thus decide
+to choose the BSD-2c, and not redistribute the dtc package. This would be
+bad (TM) in case the dtc programs are installed.
+
+Unfortunately, we have no way to express this kind of multi-licensing cases.
+Not that we would want to handle all possibilities either (it would be such
+a nightmare), we should at least have a way to draw the user's attention
+to such cases.
+
+Here are a few ideas I write as I think of them:
+
+ - add a keyword which genarates a warning:
+    DTC_LICENSE = GPLv2+/BDS2- GPLv2+ WARNING
+
+ - allow multi-licensing constructs:
+    DTC_LICENSE = GPLV2+/BSD-2c GPLv2+
+   (which would say: one part is dual-licensed GPLv2+/BSD-2c, another
+   part is licensed GPLv2+)
+
+ - add multi-license keywords:
+    DTC_LICENSE += multi:GPLV2+/BSD-2c GPLv2+
+   or to be pedantic:
+    DTC_LICENSE += multi:GPLV2+/BSD-2c single:GPLv2+
+
+ - don't care. ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
