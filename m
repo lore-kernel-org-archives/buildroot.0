@@ -1,36 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Oct 2012 19:23:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 5630] New: makefile error with toolchain helpers.mk
-Message-ID: <bug-5630-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 26 Oct 2012 22:39:30 +0200
+Subject: [Buildroot] [PATCH 01/47] package/cURL: fix static link
+	whithopenSSL
+In-Reply-To: <7D104BEF3E404707964408D74CCF1F01@JohanW7>
+References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
+ <201210261925.14598.yann.morin.1998@free.fr>
+ <7D104BEF3E404707964408D74CCF1F01@JohanW7>
+Message-ID: <201210262239.30917.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5630
+Johan, All,
 
-           Summary: makefile error with toolchain helpers.mk
-           Product: buildroot
-           Version: 2012.08
-          Platform: All
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: gunslnger_ at hotmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+[Please keep the list in CC, don't reply only to me]
 
+On Friday 26 October 2012 Sagaert Johan wrote:
+> Is this fixing the problem I had 6 months ago where the curl binary just
+> said :segmentation fault when it was build with openssl support ?
 
-There are a couple errors in toolchain/helpers.mk in the check_glibc function. 
-First, the strip $1 appears to remove everything, not just the trailing '/'. 
-Second, the test command has a typo; it references SYSDROOT_DIR instead of
-SYSROOT_DIR.
+No idea; probably not. This fixes a build-time issue.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
