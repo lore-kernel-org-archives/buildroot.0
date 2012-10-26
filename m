@@ -1,35 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Oct 2012 22:39:30 +0200
-Subject: [Buildroot] [PATCH 01/47] package/cURL: fix static link
-	whithopenSSL
-In-Reply-To: <7D104BEF3E404707964408D74CCF1F01@JohanW7>
-References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
- <201210261925.14598.yann.morin.1998@free.fr>
- <7D104BEF3E404707964408D74CCF1F01@JohanW7>
-Message-ID: <201210262239.30917.yann.morin.1998@free.fr>
+From: David Bonnin <dboml@free.fr>
+Date: Fri, 26 Oct 2012 22:56:15 +0200
+Subject: [Buildroot] post-buil script in chrooted
+In-Reply-To: <507F15D3.2080805@mind.be>
+References: <5077A820.7050202@free.fr> <20121012093032.7ef6b972@skate>
+ <CAAXf6LVCr25_i_6CMR6DYs-5z1+bVuNNYEF4DedEe3j-6=4hqg@mail.gmail.com>
+ <507866D6.8020608@mind.be> <507C882B.5080609@free.fr>
+ <507F15D3.2080805@mind.be>
+Message-ID: <508AF8EF.4070002@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+Hello,
 
-[Please keep the list in CC, don't reply only to me]
+Exactly, i want to create few users on the target, and copy files for 
+each user, like ftpUser , httpdUser, userMyApp, userMyBackupApp.
+I doesn't want to copy files only for root.
 
-On Friday 26 October 2012 Sagaert Johan wrote:
-> Is this fixing the problem I had 6 months ago where the curl binary just
-> said :segmentation fault when it was build with openssl support ?
+My apps(2) on the target doesn't run under root privileveges, and have 
+theirs own default files/directory.
 
-No idea; probably not. This fixes a build-time issue.
+Now, i understand BR, i did it statically, with copy files by post-build 
+script and permissions target in customize package ( deprecated).
+My next step, will be put the default directory/files in root folder, 
+and at target board starting create/copy files for my users, in goal to 
+remove customize package and my own Skeleton.
 
-Regards,
-Yann E. MORIN.
+Thinking of starting, It seemed implicit that we can execute a personnal 
+script in a fakeroot script for modify the target dir before make images.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+My project works  now, and looking back BR is a good choice(better than 
+TI-SDK, and easy to understand).
+
+Le 17/10/2012 22:32, Arnout Vandecappelle a ?crit :
+> On 16/10/12 00:03, David Bonnin wrote:
+>> Hello,
+>>
+>> yes, sorry , i mean , i was looking for a post-build script for my 
+>> board in a fakeroot environnement.
+>> customize package is deprecated.
+>>
+>> in board/me/Myproject/rootfs-adds/root/
+>>
+>> i want to cp files of root user.
+>
+>  Do you mean, files that are owned by root and are not readable by you?
+> That won't be possible.
+>
+>  Or do you mean, files that should be owned by root in the target?  In 
+> that
+> case, you can just copy them in the post-build script - buildroot will 
+> make
+> everything owned by root.
+>
+>
+>> So i need to use custom skeletonfs or use customize package.
+>
+>  Neither of these will do anything that the post-build script cannot do.
+>
+>  Regards,
+>  Arnout
