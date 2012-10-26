@@ -1,29 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Oct 2012 01:00:19 +0200
-Subject: [Buildroot] [PATCH 05/47] package/usbredir: new package
-In-Reply-To: <201210261939.13810.yann.morin.1998@free.fr>
-References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
- <1351113973-17237-6-git-send-email-yann.morin.1998@free.fr>
- <5089B76F.8070003@mind.be> <201210261939.13810.yann.morin.1998@free.fr>
-Message-ID: <508B1603.6040403@mind.be>
+Date: Sat, 27 Oct 2012 01:05:07 +0200
+Subject: [Buildroot] post-buil script in chrooted
+In-Reply-To: <508AF8EF.4070002@free.fr>
+References: <5077A820.7050202@free.fr> <20121012093032.7ef6b972@skate>
+ <CAAXf6LVCr25_i_6CMR6DYs-5z1+bVuNNYEF4DedEe3j-6=4hqg@mail.gmail.com>
+ <507866D6.8020608@mind.be> <507C882B.5080609@free.fr>
+ <507F15D3.2080805@mind.be> <508AF8EF.4070002@free.fr>
+Message-ID: <508B1723.80503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 26/10/12 19:39, Yann E. MORIN wrote:
-> BTW, this series was just a kind of "drop the stuff onto the wall and see
-> what happens", after requests on the IRC chan. It was not meant for
-> inclusion. But getting early review is very nice! Thank you!
+On 26/10/12 22:56, David Bonnin wrote:
+> Exactly, i want to create few users on the target, and copy files for each user, like ftpUser , httpdUser, userMyApp,
+> userMyBackupApp.
+> I doesn't want to copy files only for root.
+>
+> My apps(2) on the target doesn't run under root privileveges, and have theirs own default files/directory.
 
-  I think in general it makes more sense to post an early version of a patch
-and catch some review already, rather than spending a lot time to make a
-patch that you think is perfect and then still get a lot of comments...
+  If you want to set file owners and permissions on the target, you should use
+the device table (BR2_ROOTFS_DEVICE_TABLE).  Look at
+target/generic/device_table.txt for an example.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
