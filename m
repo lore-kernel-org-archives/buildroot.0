@@ -1,25 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Oct 2012 09:27:12 +0200
-Subject: [Buildroot] [PATCH v2] fluxbox: select xmodmap
-In-Reply-To: <1351161652-9231-1-git-send-email-yegorslists@googlemail.com>
-References: <1351161652-9231-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <508A3B50.1030202@mind.be>
+Date: Fri, 26 Oct 2012 09:34:21 +0200
+Subject: [Buildroot] [Bug 5624] When building directfb,
+ BR2_TARGET_LDFLAGS not used by libtool
+In-Reply-To: <20121025090918.77F51998D6@busybox.osuosl.org>
+References: <bug-5624-163@https.bugs.busybox.net/>
+ <20121025090918.77F51998D6@busybox.osuosl.org>
+Message-ID: <508A3CFD.5050107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/12 12:40, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov<yegorslists@googlemail.com>
+On 25/10/12 11:09, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=5624
 >
-> Fluxbox uses xmodmap in its startup script.
+> --- Comment #4 from Duncan<dunk_palmer@yahoo.com>  2012-10-25 09:09:17 UTC ---
+> Created attachment 4598
+>    -->  https://bugs.busybox.net/attachment.cgi?id=4598
+> Change as suggested by Arnout.
 
-  I'm not so sure...  The user could change the startup script to remove the
-xmodmap (e.g. for a keyboardless device), but now you take away the
-possibility to build without it.
-
-  OTOH, xmodmap is so small compared to (tiny)X that it shouldn't matter much.
+  Patch looks good. Should we ask to repost it on the list?
 
   Regards,
   Arnout
