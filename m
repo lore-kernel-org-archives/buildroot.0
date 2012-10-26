@@ -1,69 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Oct 2012 13:13:41 +0200
-Subject: [Buildroot] [PATCH v2] lcdapi: new package
-In-Reply-To: <1351166671-16726-1-git-send-email-spdawson@gmail.com>
-References: <1351166671-16726-1-git-send-email-spdawson@gmail.com>
-Message-ID: <508A7065.8030304@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 26 Oct 2012 13:12:33 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add support for Linaro
+	2012.10 toolchain
+Message-ID: <20121026111421.0220E99941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/10/12 14:04, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
->
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
-[snip]
-> diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
-> new file mode 100644
-> index 0000000..3b5aaa3
-> --- /dev/null
-> +++ b/package/lcdapi/lcdapi.mk
-> @@ -0,0 +1,41 @@
-> +#############################################################
-> +#
-> +# lcdapi
-> +#
-> +#############################################################
-> +LCDAPI_VERSION = 27e16c37a39c7fab2cf2e912795a730c0e92bcf1
-> +LCDAPI_SITE = git://github.com/spdawson/lcdapi.git
+commit: http://git.buildroot.net/buildroot/commit/?id=94ca09c4725c423cda5f9a97039158fa79329c02
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  From docs/manual/manual.txt:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-external/Config.in   |   17 +++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
-How to add package from github
-------------------------------
-
-If the package has no release version, or its version cannot be
-identified using tag, then the sha1 of the particular commit should be
-used to identify the version (the first 7 characters of the sha1 are
-enough):
-
-------------------------
-FOO_VERSION = 1234567
-FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
-------------------------
-
-If the package version matches a tag, then this tag should be used to
-identify the version:
-
-------------------------
-FOO_VERSION = v1.0
-FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
-------------------------
-
-
-  Maybe you can just create a tag?
-
-  Regards,
-  Arnout
-
-[snip]
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 105fb2a..7a9ec1d 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -3,6 +3,22 @@ if BR2_TOOLCHAIN_EXTERNAL
+ choice
+ 	prompt "Toolchain"
+ 
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
++	bool "Linaro 2012.10"
++	depends on BR2_arm
++	depends on BR2_cortex_a8 || BR2_cortex_a9
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Linaro toolchain for the ARM architecture. It uses Linaro
++	  GCC 2012.10 (based on gcc 4.7), Linaro GDB 2012.10 (based on
++	  GDB 7.5), eglibc 2.15. It generates code that runs on all
++	  Cortex-A profile devices, but tuned for the Cortex-A9. The
++	  code generated is Thumb 2, with the hard floating point
++	  calling convention, and uses the VFPv3-D16 FPU instructions.
++
++	  To use this toolchain, you must disable soft float usage.
++
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
+ 	bool "Linaro 2012.09"
+ 	depends on BR2_arm
+@@ -637,6 +653,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_07
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_08
+ 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 43d747c..a7e4ab6 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -205,6 +205,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-2012.08-20120827_linux.
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.09/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-2012.09-20120921_linux.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10),y)
++TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.10/+download/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.10-20121022_linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
