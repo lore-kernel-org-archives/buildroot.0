@@ -1,44 +1,29 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sat, 27 Oct 2012 09:33:55 +0100
-Subject: [Buildroot] [PATCH] sconeserver: fix bluetooth module build problem
-Message-ID: <1351326835-9339-1-git-send-email-spdawson@gmail.com>
+From: David Bonnin <dboml@free.fr>
+Date: Sat, 27 Oct 2012 11:45:54 +0200
+Subject: [Buildroot] make help add-in
+Message-ID: <508BAD52.4030000@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hello,
 
-This fixes a build problem in the sconeserver bluetooth module, as reported
-by the Buildroot autobuild system:
+Because, i start to use BR:
+     - I add manually files to output/target.
+     - add files to output/staging  (was a mistake ;) )
+     - start develop own package (without UNINSTALL_TARGET_CMDS in 
+developement phase).
+     - start make own board/defconfig ( with a lot ajustements).
 
-  http://autobuild.buildroot.net/results/d1133da3f8d74c58fd271e0cab197a1108000e90/build-end.log
+So i do a lot of times cleaning target output folder:
 
-The build problem, due to the use of BDADDR_ANY, has been fixed upstream;
-consequently, this patch simply bumps the sconeserver svn revision.
+find output/build/ -name .stamp_target_installed -exec rm {} \;
+rm output/build/.root output/build/.customize
+rm -rf output/target
+rm -rf output/stamps/ext-toolchain-installed
 
-Further details of the underlying problem at the following URL.
+is there a such target?
 
-  http://stackoverflow.com/questions/9751710/c-c-warning-address-of-temporary-with-bdaddr-any-bluetooth-library
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/sconeserver/sconeserver.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 2313cd2..15a1edc 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -5,7 +5,7 @@
- #############################################################
- # Release 0.6.0 doesn't build cleanly, so use a recent
- # Subversion trunk snapshot.
--SCONESERVER_VERSION = 178
-+SCONESERVER_VERSION = 180
- SCONESERVER_SITE = \
- 	https://sconeserver.svn.sourceforge.net/svnroot/sconeserver/trunk
- SCONESERVER_SITE_METHOD = svn
--- 
-1.7.10.4
+or an idea to put it in...
