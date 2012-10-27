@@ -1,29 +1,32 @@
-From: David Bonnin <dboml@free.fr>
-Date: Sat, 27 Oct 2012 11:45:54 +0200
-Subject: [Buildroot] make help add-in
-Message-ID: <508BAD52.4030000@free.fr>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 27 Oct 2012 12:32:20 +0200
+Subject: [Buildroot] [PATCH 1/1] directfb bump version 1.4.17
+Message-ID: <1351333940-8793-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Because, i start to use BR:
-     - I add manually files to output/target.
-     - add files to output/staging  (was a mistake ;) )
-     - start develop own package (without UNINSTALL_TARGET_CMDS in 
-developement phase).
-     - start make own board/defconfig ( with a lot ajustements).
+Bump version to 1.4.17  (buxfix release)
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/directfb/directfb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So i do a lot of times cleaning target output folder:
-
-find output/build/ -name .stamp_target_installed -exec rm {} \;
-rm output/build/.root output/build/.customize
-rm -rf output/target
-rm -rf output/stamps/ext-toolchain-installed
-
-is there a such target?
-
-or an idea to put it in...
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index e5763d7..b1e35ae 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ DIRECTFB_VERSION_MAJOR = 1.4
+-DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).16
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).17
+ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_LICENSE = LGPLv2.1+
+-- 
+1.8.0
