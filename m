@@ -1,38 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 27 Oct 2012 23:23:14 +0200
-Subject: [Buildroot] [git commit] binutils version 2.23 is only available is
-	.gz format
-Message-ID: <20121027213137.0C7E19991A@busybox.osuosl.org>
+Date: Sat, 27 Oct 2012 23:25:30 +0200
+Subject: [Buildroot] [git commit] directfb bump version 1.4.17
+Message-ID: <20121027213137.645069991A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7195019be4d138bc457f23fb2ce472ba9817dd86
+commit: http://git.buildroot.net/buildroot/commit/?id=6ae8b1262f209c3e1ede42bfdfd0c51d64be06b0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-binutils version 2.23 is only available in .gz format, the older versions are in .bz2 format.
+Bump version to 1.4.17  (buxfix release)
+
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/binutils/binutils.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/directfb/directfb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index d41cac4..e1aac9b 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -16,7 +16,12 @@ BINUTILS_VERSION = 2.21
- endif
- endif
- 
-+ifeq ($(BINUTILS_VERSION),2.23)
-+BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
-+else
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.bz2
-+endif
-+
- BINUTILS_SITE = $(BR2_GNU_MIRROR)/binutils
- ifeq ($(ARCH),avr32)
- BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index e5763d7..b1e35ae 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ DIRECTFB_VERSION_MAJOR = 1.4
+-DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).16
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).17
+ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_LICENSE = LGPLv2.1+
