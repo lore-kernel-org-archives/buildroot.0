@@ -1,27 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 27 Oct 2012 19:52:45 -0300
-Subject: [Buildroot] [PATCHv2] gnutls: fix link-time build failures
-In-Reply-To: <87ehkjk3wn.fsf@macbook.be.48ers.dk>
-References: <1351117215-4614-1-git-send-email-gustavo@zacarias.com.ar>
- <87ehkjk3wn.fsf@macbook.be.48ers.dk>
-Message-ID: <508C65BD.6080107@zacarias.com.ar>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun, 28 Oct 2012 01:14:50 +0200
+Subject: [Buildroot] [PATCH 1/1] Bump version to 2.9.0
+Message-ID: <1351379690-17391-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/27/12 18:20, Peter Korsgaard wrote:
 
-> It's a bit odd that you need both the variable and the configure
-> options, but OK - You presumably do.
-> 
-> Committed, thanks.
+Bump version from 2.8.0 -> 2.9.0
+Many bug fixes and improvements.
+Visit http://www.xmlsoft.org/news.html for more details.
 
---disable-rpath surely isn't enough, we've tested it with Thomas.
-Looking at the complete source they're each referenced in different
-inclusive and exclusive parts so i'd rather stay on the safe side with both.
-I didn't test with just the configure env variable but looking at
-configure they're both doing their separate assignments and i think we
-don't want this to rear it's ugly head again :)
-Regards.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/libxml2/libxml2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index b63200f..91042fa 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBXML2_VERSION = 2.8.0
++LIBXML2_VERSION = 2.9.0
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_AUTORECONF = YES
+-- 
+1.8.0
