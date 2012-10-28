@@ -1,81 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Oct 2012 11:48:11 +0100
-Subject: [Buildroot] [PATCH 06/47] package/celt051: new package
-In-Reply-To: <508C31BF.20806@mind.be>
-References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
- <1351113973-17237-7-git-send-email-yann.morin.1998@free.fr>
- <508C31BF.20806@mind.be>
-Message-ID: <201210281148.11878.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 28 Oct 2012 12:28:22 +0100
+Subject: [Buildroot] [PATCH 1/1] Bump version to 2.9.0
+In-Reply-To: <1351379690-17391-1-git-send-email-sagaert.johan@skynet.be>
+References: <1351379690-17391-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20121028122822.37d10ffc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Dear Sagaert Johan,
 
-On Saturday 27 October 2012 Arnout Vandecappelle wrote:
->   Package should be called celt, not celt051
+Please include the name of the package in the title, i.e:
 
-Nope, see below.
+	libxml2: bump version to 2.9.0
 
-> On 24/10/12 23:25, Yann E. MORIN wrote:
-> > Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> > Reviewed-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> [snip]
-> > diff --git a/package/multimedia/celt051/celt.mk b/package/multimedia/celt051/celt.mk
-> > new file mode 100644
-> > index 0000000..9baaa82
-> > --- /dev/null
-> > +++ b/package/multimedia/celt051/celt.mk
-> > @@ -0,0 +1,30 @@
-> > +#############################################################
-> > +#
-> > +# celt051
-> > +#
-> > +#############################################################
-> > +
-> > +# Although version newer than 0.5.1.3 exists, we're
-> > +# stuck with 0.5.1.3 for use by Spice (coming later)
+Thanks,
+
+Thomas
+
+On Sun, 28 Oct 2012 01:14:50 +0200, Sagaert Johan wrote:
 > 
->   How come spice requires a specific version of celt?
-
-The build instructions say:
-    celt = 0.5.1.3 (this is important, newer versions use a
-    different protocol)
-
-    (from: http://www.spice-space.org/page/Building_Instructions)
-
-Also, their ./configure enforce this check.
-
-> > +CELT051_VERSION         = 0.5.1.3
-> > +CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
+> Bump version from 2.8.0 -> 2.9.0
+> Many bug fixes and improvements.
+> Visit http://www.xmlsoft.org/news.html for more details.
 > 
->   If it's called celt, this is the default so can be left out.
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+> ---
+>  package/libxml2/libxml2.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+> index b63200f..91042fa 100644
+> --- a/package/libxml2/libxml2.mk
+> +++ b/package/libxml2/libxml2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  #############################################################
+>  
+> -LIBXML2_VERSION = 2.8.0
+> +LIBXML2_VERSION = 2.9.0
+>  LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+>  LIBXML2_INSTALL_STAGING = YES
+>  LIBXML2_AUTORECONF = YES
 
-I called it 'celt051' because it's not the latest version, and I want to
-make it clear that the version shall *not* be updated. See the discussion
-we had with Thomas last August:
-    http://lists.busybox.net/pipermail/buildroot/2012-August/057562.html
 
-I think we should keep calling it 'celt051' and not just 'celt', so that
-the version is never updated.
-
-To be noted: celt is now deprecated, as it was merged into Opus, as
-it's now standardised by RFC6716:
-    http://www.celt-codec.org/  (at the bottom of the page)
-    http://opus-codec.org/
-    https://tools.ietf.org/html/rfc6716
-
-However, spice still requires celt-0.5.1.3.
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
