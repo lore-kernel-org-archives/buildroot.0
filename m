@@ -1,7 +1,7 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 28 Oct 2012 13:47:26 +0100
-Subject: [Buildroot] [PATCH 1/1] libxml2: bump version to 2.9.0
-Message-ID: <1351428446-14828-1-git-send-email-sagaert.johan@skynet.be>
+Date: Sun, 28 Oct 2012 13:50:53 +0100
+Subject: [Buildroot] [PATCH 1/1]  mysql_client: bump version to 5.1.65
+Message-ID: <1351428653-14964-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,26 +9,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-libxml: bump version to 2.9.0
-Many bug fixes and improvements.
-Visit http://www.xmlsoft.org/news.html for more details.
+mysql_client: bump version to 5.1.65
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/libxml2/libxml2.mk | 2 +-
+ package/mysql_client/mysql_client.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index b63200f..91042fa 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index c48d78f..46862a1 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--LIBXML2_VERSION = 2.8.0
-+LIBXML2_VERSION = 2.9.0
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_AUTORECONF = YES
+-MYSQL_CLIENT_VERSION = 5.1.63
++MYSQL_CLIENT_VERSION = 5.1.65
+ MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
+ MYSQL_CLIENT_INSTALL_STAGING = YES
 -- 
 1.8.0
