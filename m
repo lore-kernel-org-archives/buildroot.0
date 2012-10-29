@@ -1,24 +1,24 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 29 Oct 2012 12:44:37 +0100
-Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
- scripts instead of only one
-In-Reply-To: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
-References: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
-Message-ID: <508E6C25.6070603@lucaceresoli.net>
+From: =?UTF-8?B?R3LDqWdvcnkgSGVybWFudA==?= <gregory.hermant@calao-systems.com>
+Date: Mon, 29 Oct 2012 13:23:38 +0100
+Subject: [Buildroot] [PATCH 6/6] bluez-utils: add cg2900 support for
+ snowball board
+In-Reply-To: <CAGm1_ktgYOTN_J41BfcFEdsrX91O8o2mbyWx2-HbZ_mmdjO8gA@mail.gmail.com>
+References: <1351500073-4351-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1351500073-4351-7-git-send-email-gregory.hermant@calao-systems.com>
+ <CAGm1_ktgYOTN_J41BfcFEdsrX91O8o2mbyWx2-HbZ_mmdjO8gA@mail.gmail.com>
+Message-ID: <508E754A.5090702@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Philippe Reynes wrote:
-> Using severals post build scripts is usefull to share
-> script between severals boards/projects.
->
-> Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
+Hello Yegor,
+I don't know if this patch has been sent to the bt mailing list because i'm not in charge of this task.
+AFAIK linaro and STE are working on the DT support for the snowball but i don't know what is the status about bt.
+gregory
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-But, as Samuel suggested, you should update the manual as well.
-
-Luca
+Le 29/10/2012 10:43, Yegor Yefremov a ?crit :
+> have you sent this patch to the bt mailing list?
+> 
+> Yegor
