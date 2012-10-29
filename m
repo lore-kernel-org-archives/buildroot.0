@@ -1,45 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 29 Oct 2012 21:53:44 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
-	6}.x stable versions
-Message-ID: <20121029205444.CFA7699691@busybox.osuosl.org>
+Date: Mon, 29 Oct 2012 21:55:16 +0100
+Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
+In-Reply-To: <871ugyt92h.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+ of "Tue, 16 Oct 2012 23:12:54 +0200")
+References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
+ <87a9w20xrj.fsf@macbook.be.48ers.dk>
+ <87boghzdjc.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
+ <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
+ <87ipapxbp2.fsf@macbook.be.48ers.dk>
+ <87ehkytcjx.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8i=z_RAvEdYt_Tx4Ma5DK7e6b9djTQsu81MVULqOte1mg@mail.gmail.com>
+ <871ugyt92h.fsf@macbook.be.48ers.dk>
+Message-ID: <87fw4xhubv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=702e34697a0f8ec0d6cf9cec22723b505d2a18d7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <jacmet@sunsite.dk> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index d4be60b..2270e0c 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.47"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.49"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.32"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.15"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.16"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
--	default "3.6.3"		if BR2_KERNEL_HEADERS_3_6
-+	default "3.6.4"		if BR2_KERNEL_HEADERS_3_6
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.47-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.47-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch
+ Markos> I haven't managed to find a solution yet and I think all the
+ Markos> LFS problems are buildroot specific.  I don't have a native LFS
+ Markos> toolchain so I can try an out-of-buildroot build.  You can
+ Markos> either revert the commit or disable the LFS support in the
+ Markos> package for now.
+
+ Peter> ok, thanks.
+
+ Peter> I'll try to take another look, and revert if I don't see an easy
+ Peter> solution.
+
+I luckily found a solution (23f6455bff), which I've applied.
+
+-- 
+Bye, Peter Korsgaard
