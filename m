@@ -1,29 +1,24 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 29 Oct 2012 12:22:03 +0100
-Subject: [Buildroot] [PATCH] feh: bump to 2.7
-Message-ID: <1351509723-4326-1-git-send-email-yegorslists@googlemail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 29 Oct 2012 12:44:37 +0100
+Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
+ scripts instead of only one
+In-Reply-To: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
+References: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
+Message-ID: <508E6C25.6070603@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Philippe Reynes wrote:
+> Using severals post build scripts is usefull to share
+> script between severals boards/projects.
+>
+> Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/feh/feh.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index 2dbe296..fab1c0a 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -1,4 +1,4 @@
--FEH_VERSION = 2.6.3
-+FEH_VERSION = 2.7
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org/
- FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
--- 
-1.7.7
+But, as Samuel suggested, you should update the manual as well.
+
+Luca
