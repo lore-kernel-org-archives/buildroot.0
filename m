@@ -1,128 +1,29 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 29 Oct 2012 10:43:33 +0100
-Subject: [Buildroot] [PATCH 6/6] bluez-utils: add cg2900 support for
- snowball board
-In-Reply-To: <1351500073-4351-7-git-send-email-gregory.hermant@calao-systems.com>
-References: <1351500073-4351-1-git-send-email-gregory.hermant@calao-systems.com>
- <1351500073-4351-7-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <CAGm1_ktgYOTN_J41BfcFEdsrX91O8o2mbyWx2-HbZ_mmdjO8gA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Oct 2012 11:55:43 +0100
+Subject: [Buildroot] [UNSURE] State of Perl: remaining questions
+In-Reply-To: <CAB0FRsuK1DVFdLX=2UQdum-Zd=-aMWyQ6Bg+SETRsXS-3emX6g@mail.gmail.com>
+References: <20121014203524.5dc66a9d@skate>
+ <CAB0FRsuK1DVFdLX=2UQdum-Zd=-aMWyQ6Bg+SETRsXS-3emX6g@mail.gmail.com>
+Message-ID: <20121029115543.47211351@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 29, 2012 at 9:41 AM, Gregory Hermant
-<gregory.hermant@calao-systems.com> wrote:
->
-> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-> ---
->  ...an_patches_enable_cg2900_on_upstream_4.91.patch |   88 ++++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
->
-> diff --git a/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch b/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
-> new file mode 100644
-> index 0000000..02b84c4
-> --- /dev/null
-> +++ b/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
-> @@ -0,0 +1,88 @@
-> +diff -Naupr bluez-4.91/tools/hciattach.c bluez-4.91.cg2900/tools/hciattach.c
-> +--- bluez-4.91/tools/hciattach.c       2010-11-30 15:50:48.000000000 +0100
-> ++++ bluez-4.91.cg2900/tools/hciattach.c        2011-05-20 10:47:45.849685569 +0200
-> +@@ -1066,6 +1066,11 @@ struct uart_t uart[] = {
-> +       { "texasalt",   0x0000, 0x0000, HCI_UART_LL,   115200, 115200,
-> +                               FLOW_CTL, DISABLE_PM, NULL, texasalt, NULL   },
-> +
-> ++      /* ST-Ericsson CG2900 GPS FM Bluetooth combo controller */
-> ++      { "cg2900",     0x0000, 0x0000, HCI_UART_STE,  115200, 115200,
-> ++                              FLOW_CTL, DISABLE_PM, NULL, NULL     },
-> ++
-> ++
-> +       /* ST Microelectronics minikits based on STLC2410/STLC2415 */
-> +       { "st",         0x0000, 0x0000, HCI_UART_H4,    57600, 115200,
-> +                               FLOW_CTL, DISABLE_PM,  NULL, st       },
-> +@@ -1157,10 +1162,10 @@ static struct uart_t * get_by_type(char
-> + }
-> +
-> + /* Initialize UART driver */
-> +-static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
-> ++static int init_uart(char *dev, struct uart_t *u, int send_break, int raw, int line_disc)
-> + {
-> +       struct termios ti;
-> +-      int fd, i;
-> ++      int fd;
-> +       unsigned long flags = 0;
-> +
-> +       if (raw)
-> +@@ -1217,8 +1222,7 @@ static int init_uart(char *dev, struct u
-> +       }
-> +
-> +       /* Set TTY to N_HCI line discipline */
-> +-      i = N_HCI;
-> +-      if (ioctl(fd, TIOCSETD, &i) < 0) {
-> ++      if (ioctl(fd, TIOCSETD, &line_disc) < 0) {
-> +               perror("Can't set line discipline");
-> +               return -1;
-> +       }
-> +@@ -1243,7 +1247,7 @@ static void usage(void)
-> + {
-> +       printf("hciattach - HCI UART driver initialization utility\n");
-> +       printf("Usage:\n");
-> +-      printf("\thciattach [-n] [-p] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
-> ++      printf("\thciattach [-n] [-p] [-a line_disc_nr] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
-> +       printf("\thciattach -l\n");
-> + }
-> +
-> +@@ -1252,6 +1256,7 @@ int main(int argc, char *argv[])
-> +       struct uart_t *u = NULL;
-> +       int detach, printpid, raw, opt, i, n, ld, err;
-> +       int to = 10;
-> ++      int line_disc = N_HCI;
-> +       int init_speed = 0;
-> +       int send_break = 0;
-> +       pid_t pid;
-> +@@ -1264,8 +1269,11 @@ int main(int argc, char *argv[])
-> +       printpid = 0;
-> +       raw = 0;
-> +
-> +-      while ((opt=getopt(argc, argv, "bnpt:s:lr")) != EOF) {
-> ++      while ((opt=getopt(argc, argv, "bnpt:s:lra:")) != EOF) {
-> +               switch(opt) {
-> ++              case 'a':
-> ++                        line_disc = atoi(optarg);
-> ++                        break;
-> +               case 'b':
-> +                       send_break = 1;
-> +                       break;
-> +@@ -1381,7 +1389,7 @@ int main(int argc, char *argv[])
-> +       alarm(to);
-> +       bcsp_max_retries = to;
-> +
-> +-      n = init_uart(dev, u, send_break, raw);
-> ++      n = init_uart(dev, u, send_break, raw, line_disc);
-> +       if (n < 0) {
-> +               perror("Can't initialize device");
-> +               exit(1);
-> +diff -Naupr bluez-4.91/tools/hciattach.h bluez-4.91.cg2900/tools/hciattach.h
-> +--- bluez-4.91/tools/hciattach.h       2010-11-30 15:50:48.000000000 +0100
-> ++++ bluez-4.91.cg2900/tools/hciattach.h        2011-05-20 10:47:48.199685573 +0200
-> +@@ -39,6 +39,7 @@
-> + #define HCI_UART_H4DS 3
-> + #define HCI_UART_LL   4
-> + #define HCI_UART_ATH3K  5
-> ++#define HCI_UART_STE  6
-> +
-> + #define HCI_UART_RAW_DEVICE   0
-> +
-> --
-> 1.7.9.5
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
-have you sent this patch to the bt mailing list?
+On Mon, 15 Oct 2012 15:51:30 +0200, Fran?ois Perrad wrote:
 
-Yegor
+> I added the removal of microperl in my patch serie in the last
+> position (10/10). But in my mind, this patch will be applied after a
+> deprecation cycle. I wasn't been explicit about this, because I think
+> that deprecation cycle is mandatory.
+
+Ok, thanks, makes sense.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
