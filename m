@@ -1,23 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 29 Oct 2012 21:53:22 +0100
-Subject: [Buildroot] [PATCH] feh: bump to 2.7
-In-Reply-To: <1351509723-4326-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 29 Oct 2012 12:22:03
- +0100")
-References: <1351509723-4326-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87objlhuf1.fsf@macbook.be.48ers.dk>
+Date: Mon, 29 Oct 2012 21:54:05 +0100
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
+	6}.x stable versions
+In-Reply-To: <1351468669-9669-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 28 Oct 2012 20:57:48 -0300")
+References: <1351468669-9669-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k3u9hudu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
