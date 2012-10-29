@@ -1,10 +1,10 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Mon, 29 Oct 2012 09:41:10 +0100
-Subject: [Buildroot] [PATCH 3/6] Add firmware for the AW-NH580 connectivity
-	module of the snowball
+Date: Mon, 29 Oct 2012 09:41:13 +0100
+Subject: [Buildroot] [PATCH 6/6] bluez-utils: add cg2900 support for
+	snowball board
 In-Reply-To: <1351500073-4351-1-git-send-email-gregory.hermant@calao-systems.com>
 References: <1351500073-4351-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1351500073-4351-4-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1351500073-4351-7-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +14,103 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- package/Config.in                              |    1 +
- package/snowball-firmware/Config.in            |    8 ++++++++
- package/snowball-firmware/snowball-firmware.mk |   17 +++++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/snowball-firmware/Config.in
- create mode 100644 package/snowball-firmware/snowball-firmware.mk
+ ...an_patches_enable_cg2900_on_upstream_4.91.patch |   88 ++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+ create mode 100644 package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 097a94d..fd5281f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -532,6 +532,7 @@ source "package/googlefontdirectory/Config.in"
- source "package/hdmiservice/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
-+source "package/snowball-firmware/Config.in"
- source "package/sound-theme-borealis/Config.in"
- source "package/sound-theme-freedesktop/Config.in"
- endmenu
-diff --git a/package/snowball-firmware/Config.in b/package/snowball-firmware/Config.in
+diff --git a/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch b/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
 new file mode 100644
-index 0000000..1d0789d
+index 0000000..02b84c4
 --- /dev/null
-+++ b/package/snowball-firmware/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SNOWBALL_FIRMWARE
-+	bool "snowball-firmware"
-+	help
-+	  This package provides various binary firmware files (closed binary blobs)
-+	  for the Azurewave AW-NH580 combo module (wifi, bt, gps).
-+
-+	  https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
-+
-diff --git a/package/snowball-firmware/snowball-firmware.mk b/package/snowball-firmware/snowball-firmware.mk
-new file mode 100644
-index 0000000..05326e2
---- /dev/null
-+++ b/package/snowball-firmware/snowball-firmware.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# snowball-firmware
-+#
-+#############################################################
-+SNOWBALL_FIRMWARE_VERSION = 1.1.3-5
-+SNOWBALL_FIRMWARE_SOURCE = ux500-firmware_$(SNOWBALL_FIRMWARE_VERSION).tar.gz
-+SNOWBALL_FIRMWARE_SITE = https://launchpad.net/~linaro-maintainers/+archive/overlay/+files/
-+SNOWBALL_FIRMWARE_LICENSE = PROPRIETARY
-+
-+define SNOWBALL_FIRMWARE_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/firmware
-+	cp -r $(@D)/* $(TARGET_DIR)/lib/firmware/
-+	rename 's/CG2900/CG29XX/' $(TARGET_DIR)/lib/firmware/*.fw
-+endef
-+
-+$(eval $(generic-package))
++++ b/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
+@@ -0,0 +1,88 @@
++diff -Naupr bluez-4.91/tools/hciattach.c bluez-4.91.cg2900/tools/hciattach.c
++--- bluez-4.91/tools/hciattach.c	2010-11-30 15:50:48.000000000 +0100
+++++ bluez-4.91.cg2900/tools/hciattach.c	2011-05-20 10:47:45.849685569 +0200
++@@ -1066,6 +1066,11 @@ struct uart_t uart[] = {
++ 	{ "texasalt",   0x0000, 0x0000, HCI_UART_LL,   115200, 115200,
++ 				FLOW_CTL, DISABLE_PM, NULL, texasalt, NULL   },
++ 
+++	/* ST-Ericsson CG2900 GPS FM Bluetooth combo controller */
+++	{ "cg2900",     0x0000, 0x0000, HCI_UART_STE,  115200, 115200,
+++				FLOW_CTL, DISABLE_PM, NULL, NULL     },
+++
+++
++ 	/* ST Microelectronics minikits based on STLC2410/STLC2415 */
++ 	{ "st",         0x0000, 0x0000, HCI_UART_H4,    57600, 115200,
++ 				FLOW_CTL, DISABLE_PM,  NULL, st       },
++@@ -1157,10 +1162,10 @@ static struct uart_t * get_by_type(char
++ }
++ 
++ /* Initialize UART driver */
++-static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
+++static int init_uart(char *dev, struct uart_t *u, int send_break, int raw, int line_disc)
++ {
++ 	struct termios ti;
++-	int fd, i;
+++	int fd;
++ 	unsigned long flags = 0;
++ 
++ 	if (raw)
++@@ -1217,8 +1222,7 @@ static int init_uart(char *dev, struct u
++ 	}
++ 
++ 	/* Set TTY to N_HCI line discipline */
++-	i = N_HCI;
++-	if (ioctl(fd, TIOCSETD, &i) < 0) {
+++	if (ioctl(fd, TIOCSETD, &line_disc) < 0) {
++ 		perror("Can't set line discipline");
++ 		return -1;
++ 	}
++@@ -1243,7 +1247,7 @@ static void usage(void)
++ {
++ 	printf("hciattach - HCI UART driver initialization utility\n");
++ 	printf("Usage:\n");
++-	printf("\thciattach [-n] [-p] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
+++	printf("\thciattach [-n] [-p] [-a line_disc_nr] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
++ 	printf("\thciattach -l\n");
++ }
++ 
++@@ -1252,6 +1256,7 @@ int main(int argc, char *argv[])
++ 	struct uart_t *u = NULL;
++ 	int detach, printpid, raw, opt, i, n, ld, err;
++ 	int to = 10;
+++	int line_disc = N_HCI;
++ 	int init_speed = 0;
++ 	int send_break = 0;
++ 	pid_t pid;
++@@ -1264,8 +1269,11 @@ int main(int argc, char *argv[])
++ 	printpid = 0;
++ 	raw = 0;
++ 
++-	while ((opt=getopt(argc, argv, "bnpt:s:lr")) != EOF) {
+++	while ((opt=getopt(argc, argv, "bnpt:s:lra:")) != EOF) {
++ 		switch(opt) {
+++		case 'a':
+++                        line_disc = atoi(optarg);
+++                        break;
++ 		case 'b':
++ 			send_break = 1;
++ 			break;
++@@ -1381,7 +1389,7 @@ int main(int argc, char *argv[])
++ 	alarm(to);
++ 	bcsp_max_retries = to;
++ 
++-	n = init_uart(dev, u, send_break, raw);
+++	n = init_uart(dev, u, send_break, raw, line_disc);
++ 	if (n < 0) {
++ 		perror("Can't initialize device");
++ 		exit(1);
++diff -Naupr bluez-4.91/tools/hciattach.h bluez-4.91.cg2900/tools/hciattach.h
++--- bluez-4.91/tools/hciattach.h	2010-11-30 15:50:48.000000000 +0100
+++++ bluez-4.91.cg2900/tools/hciattach.h	2011-05-20 10:47:48.199685573 +0200
++@@ -39,6 +39,7 @@
++ #define HCI_UART_H4DS	3
++ #define HCI_UART_LL	4
++ #define HCI_UART_ATH3K  5
+++#define HCI_UART_STE	6
++ 
++ #define HCI_UART_RAW_DEVICE	0
++ 
 -- 
 1.7.9.5
