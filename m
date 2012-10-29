@@ -1,27 +1,34 @@
-From: Thiago A. Correa <thiago.correa@gmail.com>
-Date: Mon, 29 Oct 2012 13:53:19 -0200
-Subject: [Buildroot] [PATCH] cmake: bump version to 2.8.9 Signed-off-by:
- Thiago A. Correa <thiago.correa@gmail.com>
-Message-ID: <20121029155319.GA15056@localhost.comm5.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Oct 2012 19:43:14 +0100
+Subject: [Buildroot] Topics for the Buildroot Developers meeting
+Message-ID: <20121029194314.7545a446@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/cmake/cmake.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hello all,
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 2406e5c..e2bc31f 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -1,4 +1,4 @@
--CMAKE_VERSION = 2.8.5
-+CMAKE_VERSION = 2.8.9
- CMAKE_SITE = http://www.cmake.org/files/v2.8/
- 
- define HOST_CMAKE_CONFIGURE_CMDS
+This message is not only for the developers who will participate to the
+upcoming Buildroot Developers meeting, but for all Buildroot
+contributors, users and developers.
+
+We are currently putting together a list of items to discuss/work on
+during this two days meeting that will take place in Barcelona next
+week-end. The list of topics we have for now is
+http://elinux.org/Buildroot:DeveloperDaysELCE2012#List_of_topics_to_discuss.
+
+Please let us know if you have other topics that you would like us to
+discuss: issues with Buildroot, missing features, anything. The best is
+to reply to this e-mail because the Wiki requires a login and due to
+spam, they have disabled the creation of new accounts for now.
+
+Best regards,
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
