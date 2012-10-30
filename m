@@ -1,9 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 30 Oct 2012 14:04:26 +0100
-Subject: [Buildroot] [PATCH 2/2] lm-sensors: bump to 3.3.2
-In-Reply-To: <1351602266-14650-1-git-send-email-yegorslists@googlemail.com>
-References: <1351602266-14650-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1351602266-14650-2-git-send-email-yegorslists@googlemail.com>
+Date: Tue, 30 Oct 2012 14:04:25 +0100
+Subject: [Buildroot] [PATCH 1/2] xz: bump to 5.0.4
+Message-ID: <1351602266-14650-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +12,21 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/lm-sensors/lm-sensors.mk |    2 +-
+ package/xz/xz.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index b596d44..ba183ec 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index e700c0d..e00c91b 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -3,7 +3,7 @@
+ # xz-utils
  #
  #############################################################
- 
--LM_SENSORS_VERSION = 3.3.1
-+LM_SENSORS_VERSION = 3.3.2
- LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
- LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
- LM_SENSORS_INSTALL_STAGING = YES
+-XZ_VERSION = 5.0.3
++XZ_VERSION = 5.0.4
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = http://tukaani.org/xz/
+ XZ_INSTALL_STAGING = YES
 -- 
 1.7.7
