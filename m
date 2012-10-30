@@ -1,20 +1,23 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Oct 2012 23:50:43 +0100
-Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
- scripts instead of only one
-In-Reply-To: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
-References: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
-Message-ID: <509059C3.4080109@mind.be>
+Date: Tue, 30 Oct 2012 23:55:33 +0100
+Subject: [Buildroot] [PATCH] libcap: disable progs altogether
+In-Reply-To: <1351470854-15435-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1351470854-15435-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <50905AE5.4030506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/29/12 07:53, Philippe Reynes wrote:
-> +	@$(call MESSAGE,"Executing post-build script\(s\)")
+On 10/29/12 01:34, Gustavo Zacarias wrote:
+> +# progs use fork()
+>   define LIBCAP_BUILD_CMDS
+> +	$(SED) '/-C progs/d' $(@D)/Makefile
+>   	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
 
-  Aren't these backslashes redundant?
+  Could you do this in a post-patch hook instead? It's more verbose, but
+more appropriate I think.
 
   Regards,
   Arnout
