@@ -1,60 +1,40 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 30 Oct 2012 21:45:19 +0100
-Subject: [Buildroot] [PATCH 1/1] Do not ask for hostname and system banner
-	when selecting a custom skeleton.
-Message-ID: <1351629919-11452-1-git-send-email-sagaert.johan@skynet.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 30 Oct 2012 21:59:57 +0100
+Subject: [Buildroot] [PATCH] strace: fix build for x86_64
+Message-ID: <1351630798-4390-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hostname and system banner should not be overwritten when a custom skeleton is selected.
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- target/generic/Config.in | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+strace fails to build on x86_64 because stat64 is not available.  This
+is because the automatic detection of stat64 in configure is overridden
+by buildroot, by setting ac_cv_type_stat64.  Just remove that override -
+current strace seems to detect it correctly for non-largefile platforms.
 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index b8472f4..6490b0d 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -1,17 +1,5 @@
- menu "System configuration"
+Build-tested on x86_64 (with largefile), ARM (with and without largefile),
+sh4, MIPS and ppc-32 (no largefile).
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+---
+ package/strace/strace.mk |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 7876848..ad1d042 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -9,8 +9,7 @@ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
  
--config BR2_TARGET_GENERIC_HOSTNAME
--       string "System hostname"
--       default "buildroot"
--       help
--         Select system hostname to be stored in /etc/hostname.
--
--config BR2_TARGET_GENERIC_ISSUE
--       string "System banner"
--       default "Welcome to Buildroot"
--       help
--         Select system banner (/etc/issue) to be displayed at login.
--
- choice
- 	prompt "/dev management"
- 	default BR2_ROOTFS_DEVICE_CREATION_STATIC
-@@ -118,6 +106,18 @@ endif
+ STRACE_CONF_ENV = ac_cv_header_linux_if_packet_h=yes \
+-		  ac_cv_header_linux_netlink_h=yes \
+-	          $(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
++		  ac_cv_header_linux_netlink_h=yes
  
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
-+config BR2_TARGET_GENERIC_HOSTNAME
-+       string "System hostname"
-+       default "buildroot"
-+       help
-+         Select system hostname to be stored in /etc/hostname.
-+
-+config BR2_TARGET_GENERIC_ISSUE
-+       string "System banner"
-+       default "Welcome to Buildroot"
-+       help
-+         Select system banner (/etc/issue) to be displayed at login.
-+
- config BR2_TARGET_GENERIC_GETTY_PORT
- 	string "Port to run a getty (login prompt) on"
- 	default "ttyS0"
+ ifeq ($(BR2_LARGEFILE),y)
+ # strace gets confused when lfs mode is forced, so don't
 -- 
-1.8.0
+tg: (29266a3..) t/strace-x86_64 (depends on: master)
