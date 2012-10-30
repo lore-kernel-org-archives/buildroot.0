@@ -1,74 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Oct 2012 09:29:53 -0300
-Subject: [Buildroot] [PATCHv2 12/12] arptables: add new package
-In-Reply-To: <1351600193-21511-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1351600193-21511-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1351600193-21511-13-git-send-email-gustavo@zacarias.com.ar>
+From: Alexander Varnin <fenixk19@mail.ru>
+Date: Tue, 30 Oct 2012 16:33:34 +0400
+Subject: [Buildroot] Problem building curlftpfs within buildroot
+In-Reply-To: <20121030122439.GA27320@mail.sceen.net>
+References: <508FB158.1090205@mail.ru> <20121030122439.GA27320@mail.sceen.net>
+Message-ID: <508FC91E.5000505@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in              |    1 +
- package/arptables/Config.in    |    6 ++++++
- package/arptables/arptables.mk |   21 +++++++++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 package/arptables/Config.in
- create mode 100644 package/arptables/arptables.mk
+Does your patch going to be included in a mainline?
 
-diff --git a/package/Config.in b/package/Config.in
-index 8d46460..870e921 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -543,6 +543,7 @@ endmenu
- 
- menu "Networking applications"
- source "package/argus/Config.in"
-+source "package/arptables/Config.in"
- source "package/avahi/Config.in"
- source "package/axel/Config.in"
- source "package/bluez_utils/Config.in"
-diff --git a/package/arptables/Config.in b/package/arptables/Config.in
-new file mode 100644
-index 0000000..510eedf
---- /dev/null
-+++ b/package/arptables/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_ARPTABLES
-+	bool "arptables"
-+	help
-+	  Tool to set up, maintain, and inspect the tables of ARP rules.
-+
-+	  http://ebtables.sourceforge.net
-diff --git a/package/arptables/arptables.mk b/package/arptables/arptables.mk
-new file mode 100644
-index 0000000..dac5ca4
---- /dev/null
-+++ b/package/arptables/arptables.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# arptables
-+#
-+#############################################################
-+
-+ARPTABLES_VERSION = 0.0.3
-+ARPTABLES_VERSION_MINOR = 4
-+ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION)-$(ARPTABLES_VERSION_MINOR).tar.gz
-+ARPTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
-+
-+define ARPTABLES_BUILD_CMDS
-+	$(MAKE) -C $(@D) \
-+		CC="$(TARGET_CC)" COPT_FLAGS="$(TARGET_CFLAGS)"
-+endef
-+
-+define ARPTABLES_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 -D $(@D)/arptables $(TARGET_DIR)/usr/sbin/arptables
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.8.6
+30.10.2012 16:24, Richard Braun ?????:
+> On Tue, Oct 30, 2012 at 02:52:08PM +0400, Alexander Varnin wrote:
+>> Hello. I'm trying to build self-made package curlftpfs within
+>> buildroot. It is simple autotools based package. Build fails with
+> Please use my patch as a basis for your work :
+>
+> http://lists.busybox.net/pipermail/buildroot/2012-July/056319.html
+>
