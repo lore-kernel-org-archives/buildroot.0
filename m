@@ -1,26 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Oct 2012 14:23:15 -0300
-Subject: [Buildroot] [PATCH] squid: bump to version 3.2.3
-In-Reply-To: <87txtcgckd.fsf@macbook.be.48ers.dk>
-References: <1351544236-23479-1-git-send-email-gustavo@zacarias.com.ar>
- <87txtcgckd.fsf@macbook.be.48ers.dk>
-Message-ID: <50900D03.8000304@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 30 Oct 2012 20:30:42 +0200
+Subject: [Buildroot] Inconsistent kallsyms data error on ARM
+In-Reply-To: <1351536890.13635.11.camel@Homeserver>
+References: <1351536890.13635.11.camel@Homeserver>
+Message-ID: <20121030183041.GB4690@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/30/12 13:16, Peter Korsgaard wrote:
+Hi Chris,
 
-> This seems to have caused some build failures:
+On Mon, Oct 29, 2012 at 02:54:50PM -0400, Chris Wilkinson wrote:
+> I intermittently get the below error on ARM/EM7210 after make clean,
+> make.
 > 
-> http://autobuild.buildroot.net/results/c9e590a1034c3869cb7391984ce8281ec4c3ef9c/build-end.log
+> In  the past it has gone away following config changes but I was never
+> able to isolate just what buildroot or kernel config changes were
+> responsible.
 > 
-> http://autobuild.buildroot.net/results/7f8201ebcafd611cab95788e030b768fa84ad28b/build-end.log
+> What would cause this?
 > 
-> The 2nd you can probably not do much about though.
+> chrisw at Homeserver:~/embedded/buildroot-2012.08$ make
 
-Give the patch i've sent a try, it should fix the first one.
-Yes, not much we can do about heavy C++ code breaking some toolchain guts...
-Regards.
+[...]
+
+> Inconsistent kallsyms data
+
+Try the patch at http://git.kernel.org/linus/9973290ce. This patch is included 
+in kernel version 3.5, but didn't make it into the stable series.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
