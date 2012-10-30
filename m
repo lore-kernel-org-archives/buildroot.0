@@ -1,62 +1,114 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 31 Oct 2012 00:58:14 +0100
-Subject: [Buildroot] [PATCH 0/7] Introduce the _AVAILABLE mechanism
-In-Reply-To: <50906736.90602@mind.be>
-References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
- <201210310035.38831.yann.morin.1998@free.fr> <50906736.90602@mind.be>
-Message-ID: <201210310058.15006.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 31 Oct 2012 00:58:17 +0100
+Subject: [Buildroot] [PATCH] grantlee: new package
+In-Reply-To: <508EFA6D.7000404@gmail.com>
+References: <508EFA6D.7000404@gmail.com>
+Message-ID: <50906999.9000002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 10/29/12 22:51, Zoltan Gyarmati wrote:
+> Support for the Grantlee library
 
-On Wednesday 31 October 2012 Arnout Vandecappelle wrote:
-> On 10/31/12 00:35, Yann E. MORIN wrote:
-> >> >     There is still an alternative: patch Kconfig to "properly" handle
-> >> >  select/depend transitivity.  I.e., when a symbol selects another symbol,
-> >> >  this implies that all dependencies of the other symbol are inherited.  Did
-> >> >  anyone ever investigate the feasibility of such an feature?
-> > Yes. Both Thomas and I have had a look (but separately). I got an headache
-> > each time I tried to understand the kconfig code. IIRC, Thomas' experience
-> > was a bit in the same vein.
-> >
-> > My point of view is that we must consider (unless proven otherwise) that
-> > modifying kconfig to handle this select/depends mess is not possible.
-> 
->   I completely agree.  But if it had been easy to do, it might have been
-> preferable over adding verbosity to Config.in.
-> 
->   In that case, I guess I'll have to take the time to review those patches
-> before Saturday :-)
+  This sentence is redundant.
 
-I am supposed to send an updated series tomorrow evening.
-"Supposed to", that's the problematic phrase in this sentence.
+> Grantlee is a Qt implementation of the Django template system, see here: http://www.gitorious.org/grantlee/pages/Home
 
-I am late. So late.
+  Word-wrap the commit message at +- 75 characters.  But actually, this
+part of the commit message is redundant because it's already in the help text.
 
-But on the other hand, this new series would not be very different from
-the last I sent, so I wonder if it really makes sense to re-post.
+>
+> (it's my first patch to buildroot, so please let me know any notes, thx)
 
-But, I want to send an email that sums up the state of the change:
-  - for the series as it is:
-    - what's been done
-    - where there are issues
-    - what's left to do
-  - for future work:
-    - options dependening on another package
-    - package depending on option of another package
-    - ...
+  Doing that :-)
 
-Regards,
-Yann E. MORIN.
+  Something like this (a note that shouldn't be part of the final commit message)
+should go below your SOB, separated by --- on a line by itself.  Then
+git-am will strip it off while applying the patch.
+
+>
+> Signed-off-by: "Zoltan Gyarmati" <mr.zoltan.gyarmati@gmail.com>
+[snip]
+> diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+> new file mode 100644
+> index 0000000..6e3b80d
+> --- /dev/null
+> +++ b/package/grantlee/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_GRANTLEE
+> + bool "grantlee"
+
+  Config.in indentation should be one tab.
+
+> + depends on BR2_PACKAGE_QT
+
+  This is redundant, because it's already inside an
+if BR2_PACKAGE_QT (in package/Config.in).
+
+> + select BR2_PACKAGE_QT_STL
+
+  It looks like BR2_PACKAGE_QT_SCRIPT and BR2_PACKAGE_QT_GUI_MODULE
+are also required.  I didn't continue testing, so maybe even that
+is not enough.
+
+
+> + help
+> + Qt implemantation of the Django template framework
+> +
+> + http://www.grantlee.org/apidox
+
+  And the help text indentation: one tab + 2 spaces.
+
+  Also I think http://grantlee.org is a more appropriate URL, even
+if it just redirects to gitorious.
+
+> diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+> new file mode 100644
+> index 0000000..9264f80
+> --- /dev/null
+> +++ b/package/grantlee/grantlee.mk
+> @@ -0,0 +1,14 @@
+> +#############################################################
+> +#
+> +# grantlee
+> +#
+> +#############################################################
+> +
+> +GRANTLEE_VERSION = 0.2.0
+> +GRANTLEE_SITE = http://downloads.grantlee.org/
+
+  Trailing / is redundant.
+
+> +GRANTLEE_INSTALL_STAGING = YES
+> +GRANTLEE_INSTALL_TARGET = YES
+
+  INSTALL_TARGET defaults to YES, so can be removed.
+
+> +GRANTLEE_DEPENDENCIES = host-pkg-config qt
+
+  pkgconf just got committed, so should be host-pkgconf.  But AFAICS it isn't
+using pkg-config for anything.
+
+
+  Also, your mailer messed up the whitespace in your patch.  Use
+git-send-email, that works well.  The man page explains how to use it with
+gmail.
+
+  Regards,
+  Arnout
+
+
+> +
+> +$(eval $(cmake-package))
+> +
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
