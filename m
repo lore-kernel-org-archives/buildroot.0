@@ -1,9 +1,7 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Tue, 30 Oct 2012 13:24:02 +0100
-Subject: [Buildroot] [PATCH] package: add linknx
-In-Reply-To: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
-References: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1351599843-24291-3-git-send-email-gregory.hermant@calao-systems.com>
+Date: Tue, 30 Oct 2012 13:24:00 +0100
+Subject: [Buildroot] [PATCH] package: add libpthsem
+Message-ID: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,156 +11,98 @@ To: buildroot@busybox.net
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
  package/Config.in                                  |    1 +
- package/linknx/Config.in                           |   20 ++++++++++++
- .../linknx-0.0.1.30-fix-pthsem-config-issue.patch  |   33 ++++++++++++++++++++
- ...0.0.1.30-link-with-libdl-when-lua-enabled.patch |   27 ++++++++++++++++
- package/linknx/linknx.mk                           |   25 +++++++++++++++
- 5 files changed, 106 insertions(+)
- create mode 100644 package/linknx/Config.in
- create mode 100644 package/linknx/linknx-0.0.1.30-fix-pthsem-config-issue.patch
- create mode 100644 package/linknx/linknx-0.0.1.30-link-with-libdl-when-lua-enabled.patch
- create mode 100644 package/linknx/linknx.mk
+ package/libpthsem/Config.in                        |    9 +++++++
+ ...bpthsem-2.0.8-fix-build-on-linux-3.x-host.patch |   28 ++++++++++++++++++++
+ package/libpthsem/libpthsem.mk                     |   18 +++++++++++++
+ 4 files changed, 56 insertions(+)
+ create mode 100644 package/libpthsem/Config.in
+ create mode 100644 package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
+ create mode 100644 package/libpthsem/libpthsem.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a6d0517..3dd169f 100644
+index ab966e0..a55a584 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -582,6 +582,7 @@ source "package/kismet/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/lighttpd/Config.in"
- endif
-+source "package/linknx/Config.in"
- source "package/links/Config.in"
- source "package/linphone/Config.in"
- source "package/lrzsz/Config.in"
-diff --git a/package/linknx/Config.in b/package/linknx/Config.in
+@@ -483,6 +483,7 @@ source "package/gsl/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
++source "package/libpthsem/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libtpl/Config.in"
+ source "package/liburcu/Config.in"
+diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
 new file mode 100644
-index 0000000..c5b49af
+index 0000000..f818ee0
 --- /dev/null
-+++ b/package/linknx/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LINKNX
-+	bool "linknx"
-+	select BR2_PACKAGE_LIBPTHSEM
++++ b/package/libpthsem/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBPTHSEM
++	bool "libpthsem"
++	select BR2_PACKAGE_ARGP_STANDALONE
 +	help
-+	  Linknx is only one component of a bigger project.The goal is to get
-+	  the maximum comfort and flexibility from a KNX domotic system while
-+	  keeping the smallest possible resource consumption.
++	  GNU pth is a user mode multi threading library. pthsem is an extend
++	  version, with support for semaphores added.
 +
-+	  http://belnet.dl.sourceforge.net/sourceforge/linknx/
++	  http://www.auto.tuwien.ac.at/~mkoegler/pth/
 +
-+if BR2_PACKAGE_LINKNX
-+
-+config BR2_PACKAGE_LINKNX_LUA
-+	bool "lua support"
-+	depends on BR2_PACKAGE_LINKNX
-+	select BR2_PACKAGE_LUA
-+	help
-+	  Enable Lua support.
-+
-+endif
-diff --git a/package/linknx/linknx-0.0.1.30-fix-pthsem-config-issue.patch b/package/linknx/linknx-0.0.1.30-fix-pthsem-config-issue.patch
+diff --git a/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
 new file mode 100644
-index 0000000..82649f0
+index 0000000..21fff4e
 --- /dev/null
-+++ b/package/linknx/linknx-0.0.1.30-fix-pthsem-config-issue.patch
-@@ -0,0 +1,33 @@
-+From 8129fd135b0674017854fd722105eb0558cd3987 Mon Sep 17 00:00:00 2001
++++ b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
+@@ -0,0 +1,28 @@
++From 2d0450bfa3fb7003098da1a7fe24c3ae140912dc Mon Sep 17 00:00:00 2001
 +From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Mon, 22 Oct 2012 15:29:43 +0200
-+Subject: [PATCH] Prevent pthsem-config script to return bad include path.
++Date: Mon, 22 Oct 2012 15:11:53 +0200
++Subject: [PATCH] pthsem build on Linux 3.x host
 +
-+During the bcusdk configuration step, the script pthsem-config
-+is used to return some parameters about the pthsem library location.
-+Unfortunately this script returns host include path and prevents
-+the bcusdk build.
 +
++Signed-off-by: Michael Markstaller <mm@elabnet.de>
 +Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 +---
-+ configure |    4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ acinclude.m4 |    2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/configure b/configure
-+index 843e017..f77d5a9 100755
-+--- a/configure
-++++ b/configure
-+@@ -15958,8 +15958,8 @@ if test ".$with_pth" != .no; then
-+                                         if test ".$_pth_version" != .; then
-+                         _pth_location=`$_dir/pthsem-config --prefix`
-+                         _pth_type="installed"
-+-                        _pth_cppflags=`$_dir/pthsem-config --cflags`
-+-                        _pth_cflags=`$_dir/pthsem-config --cflags`
-++#                       _pth_cppflags=`$_dir/pthsem-config --cflags`
-++#                       _pth_cflags=`$_dir/pthsem-config --cflags`
-+                         _pth_ldflags=`$_dir/pthsem-config --ldflags`
-+                         _pth_libs=`$_dir/pthsem-config --libs --all`
-+                         _pth_found=yes
++diff --git a/acinclude.m4 b/acinclude.m4
++index 03b42de..fea9bc8 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -892,6 +892,8 @@ case $PLATFORM in
++         case "x`uname -r`" in
++ changequote(, )dnl
++             x2.[23456789]* ) ;;
+++changequote(, )dnl
+++            x3.* ) ;;
++ changequote([, ])
++             * ) braindead=yes ;;
++         esac
 +-- 
 +1.7.9.5
 +
-diff --git a/package/linknx/linknx-0.0.1.30-link-with-libdl-when-lua-enabled.patch b/package/linknx/linknx-0.0.1.30-link-with-libdl-when-lua-enabled.patch
+diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
 new file mode 100644
-index 0000000..22fea47
+index 0000000..8fdf1e1
 --- /dev/null
-+++ b/package/linknx/linknx-0.0.1.30-link-with-libdl-when-lua-enabled.patch
-@@ -0,0 +1,27 @@
-+From 6e377c72555ffc5f9b729292b802440f155854d7 Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Mon, 29 Oct 2012 17:45:43 +0100
-+Subject: [PATCH] Link with libdl when lua is enabled
-+
-+
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ src/Makefile.in |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile.in b/src/Makefile.in
-+index 9eccf8d..90e02f0 100644
-+--- a/src/Makefile.in
-++++ b/src/Makefile.in
-+@@ -184,7 +184,7 @@ top_build_prefix = @top_build_prefix@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LOG4CPP_CFLAGS) $(LUA_CFLAGS)
-+-linknx_LDADD = ../ticpp/libticpp.a $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) -lm
-++linknx_LDADD = ../ticpp/libticpp.a $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) -lm -ldl
-+ linknx_SOURCES = linknx.cpp logger.cpp ruleserver.cpp objectcontroller.cpp eibclient.c threads.cpp timermanager.cpp  persistentstorage.cpp xmlserver.cpp smsgateway.cpp emailgateway.cpp knxconnection.cpp services.cpp suncalc.cpp  luacondition.cpp ioport.cpp ruleserver.h objectcontroller.h threads.h timermanager.h persistentstorage.h xmlserver.h smsgateway.h emailgateway.h knxconnection.h services.h suncalc.h luacondition.h ioport.h logger.h
-+ all: all-am
-+ 
-+-- 
-+1.7.9.5
-+
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-new file mode 100644
-index 0000000..219eca4
---- /dev/null
-+++ b/package/linknx/linknx.mk
-@@ -0,0 +1,25 @@
++++ b/package/libpthsem/libpthsem.mk
+@@ -0,0 +1,18 @@
 +#############################################################
 +#
-+# linknx
++# libpthsem
 +#
 +#############################################################
 +
-+LINKNX_VERSION = 0.0.1.30
-+LINKNX_SOURCE = linknx-${LINKNX_VERSION}.tar.gz
-+LINKNX_SITE = http://sourceforge.net/projects/linknx/files/linknx/linknx-0.0.1.30/
-+LINKNX_LICENSE = GPLv2+
-+LINKNX_LICENSE_FILES = COPYING
-+LINKNX_INSTALL_STAGING = YES
-+LINKNX_INSTALL_TARGET = YES
-+LINKNX_CONF_OPT = --without-log4cpp --without-pth-test \
-+		  --with-pth=$(STAGING_DIR)/usr
-+LINKNX_DEPENDENCIES = libpthsem
++LIBPTHSEM_VERSION = 2.0.8
++LIBPTHSEM_SOURCE = pthsem_$(LIBPTHSEM_VERSION).tar.gz
++LIBPTHSEM_SITE = http://www.auto.tuwien.ac.at/~mkoegler/pth/
++LIBPTHSEM_LICENSE = LGPLv2.1+
++LIBPTHSEM_LICENSE_FILES = COPYING
++LIBPTHSEM_AUTORECONF = YES
++LIBPTHSEM_INSTALL_STAGING = YES
++LIBPTHSEM_INSTALL_TARGET = YES
++LIBPTHSEM_DEPENDENCIES = argp-standalone
 +
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+LINKNX_DEPENDENCIES += lua
-+LINKNX_CONF_OPT += --with-lua
-+else
-+LINKNX_CONF_OPT += --without-lua
-+endif
-+ 
 +$(eval $(autotools-package))
++
 -- 
 1.7.9.5
