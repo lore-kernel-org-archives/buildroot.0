@@ -1,7 +1,9 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Tue, 30 Oct 2012 13:24:00 +0100
-Subject: [Buildroot] [PATCH] package: add libpthsem
-Message-ID: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
+Date: Tue, 30 Oct 2012 13:24:01 +0100
+Subject: [Buildroot] [PATCH] package: add bcusdk
+In-Reply-To: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
+References: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1351599843-24291-2-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,98 +13,108 @@ To: buildroot@busybox.net
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
  package/Config.in                                  |    1 +
- package/libpthsem/Config.in                        |    9 +++++++
- ...bpthsem-2.0.8-fix-build-on-linux-3.x-host.patch |   28 ++++++++++++++++++++
- package/libpthsem/libpthsem.mk                     |   18 +++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/libpthsem/Config.in
- create mode 100644 package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
- create mode 100644 package/libpthsem/libpthsem.mk
+ package/bcusdk/Config.in                           |   11 +++++++
+ .../bcusdk-0.0.5-fix-pthsem-config-issue.patch     |   33 ++++++++++++++++++++
+ package/bcusdk/bcusdk.mk                           |   21 +++++++++++++
+ 4 files changed, 66 insertions(+)
+ create mode 100644 package/bcusdk/Config.in
+ create mode 100644 package/bcusdk/bcusdk-0.0.5-fix-pthsem-config-issue.patch
+ create mode 100644 package/bcusdk/bcusdk.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ab966e0..a55a584 100644
+index a55a584..a6d0517 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -483,6 +483,7 @@ source "package/gsl/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
-+source "package/libpthsem/Config.in"
- source "package/libsigc/Config.in"
- source "package/libtpl/Config.in"
- source "package/liburcu/Config.in"
-diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
+@@ -541,6 +541,7 @@ menu "Networking applications"
+ source "package/argus/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
++source "package/bcusdk/Config.in"
+ source "package/bluez_utils/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/boa/Config.in"
+diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
 new file mode 100644
-index 0000000..f818ee0
+index 0000000..81d8882
 --- /dev/null
-+++ b/package/libpthsem/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBPTHSEM
-+	bool "libpthsem"
-+	select BR2_PACKAGE_ARGP_STANDALONE
++++ b/package/bcusdk/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BCUSDK
++	bool "bcusdk"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBPTHSEM
 +	help
-+	  GNU pth is a user mode multi threading library. pthsem is an extend
-+	  version, with support for semaphores added.
++	  A free development environment for BCU1 and BCU2
 +
-+	  http://www.auto.tuwien.ac.at/~mkoegler/pth/
++	  http://www.auto.tuwien.ac.at/~mkoegler/eib/
 +
-diff --git a/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
++comment "bcusdk requires a toolchain with C++ "
++	depends on !(BR2_INSTALL_LIBSTDCPP)
+diff --git a/package/bcusdk/bcusdk-0.0.5-fix-pthsem-config-issue.patch b/package/bcusdk/bcusdk-0.0.5-fix-pthsem-config-issue.patch
 new file mode 100644
-index 0000000..21fff4e
+index 0000000..82649f0
 --- /dev/null
-+++ b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
-@@ -0,0 +1,28 @@
-+From 2d0450bfa3fb7003098da1a7fe24c3ae140912dc Mon Sep 17 00:00:00 2001
++++ b/package/bcusdk/bcusdk-0.0.5-fix-pthsem-config-issue.patch
+@@ -0,0 +1,33 @@
++From 8129fd135b0674017854fd722105eb0558cd3987 Mon Sep 17 00:00:00 2001
 +From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Mon, 22 Oct 2012 15:11:53 +0200
-+Subject: [PATCH] pthsem build on Linux 3.x host
++Date: Mon, 22 Oct 2012 15:29:43 +0200
++Subject: [PATCH] Prevent pthsem-config script to return bad include path.
 +
++During the bcusdk configuration step, the script pthsem-config
++is used to return some parameters about the pthsem library location.
++Unfortunately this script returns host include path and prevents
++the bcusdk build.
 +
-+Signed-off-by: Michael Markstaller <mm@elabnet.de>
 +Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 +---
-+ acinclude.m4 |    2 ++
-+ 1 file changed, 2 insertions(+)
++ configure |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 03b42de..fea9bc8 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -892,6 +892,8 @@ case $PLATFORM in
-+         case "x`uname -r`" in
-+ changequote(, )dnl
-+             x2.[23456789]* ) ;;
-++changequote(, )dnl
-++            x3.* ) ;;
-+ changequote([, ])
-+             * ) braindead=yes ;;
-+         esac
++diff --git a/configure b/configure
++index 843e017..f77d5a9 100755
++--- a/configure
+++++ b/configure
++@@ -15958,8 +15958,8 @@ if test ".$with_pth" != .no; then
++                                         if test ".$_pth_version" != .; then
++                         _pth_location=`$_dir/pthsem-config --prefix`
++                         _pth_type="installed"
++-                        _pth_cppflags=`$_dir/pthsem-config --cflags`
++-                        _pth_cflags=`$_dir/pthsem-config --cflags`
+++#                       _pth_cppflags=`$_dir/pthsem-config --cflags`
+++#                       _pth_cflags=`$_dir/pthsem-config --cflags`
++                         _pth_ldflags=`$_dir/pthsem-config --ldflags`
++                         _pth_libs=`$_dir/pthsem-config --libs --all`
++                         _pth_found=yes
 +-- 
 +1.7.9.5
 +
-diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
 new file mode 100644
-index 0000000..8fdf1e1
+index 0000000..9ed615d
 --- /dev/null
-+++ b/package/libpthsem/libpthsem.mk
-@@ -0,0 +1,18 @@
++++ b/package/bcusdk/bcusdk.mk
+@@ -0,0 +1,21 @@
 +#############################################################
 +#
-+# libpthsem
++# bcusck
 +#
 +#############################################################
 +
-+LIBPTHSEM_VERSION = 2.0.8
-+LIBPTHSEM_SOURCE = pthsem_$(LIBPTHSEM_VERSION).tar.gz
-+LIBPTHSEM_SITE = http://www.auto.tuwien.ac.at/~mkoegler/pth/
-+LIBPTHSEM_LICENSE = LGPLv2.1+
-+LIBPTHSEM_LICENSE_FILES = COPYING
-+LIBPTHSEM_AUTORECONF = YES
-+LIBPTHSEM_INSTALL_STAGING = YES
-+LIBPTHSEM_INSTALL_TARGET = YES
-+LIBPTHSEM_DEPENDENCIES = argp-standalone
++BCUSDK_VERSION = 0.0.5
++BCUSDK_SOURCE = bcusdk_$(BCUSDK_VERSION).tar.gz
++BCUSDK_SITE = http://www.auto.tuwien.ac.at/~mkoegler/eib/
++BCUSDK_LICENSE = GPLv2+
++BCUSDK_LICENSE_FILES = COPYING
++BCUSDK_INSTALL_STAGING = YES
++BCUSDK_INSTALL_TARGET = YES
++BCUSDK_CONF_OPT =  --enable-onlyeibd --enable-ft12 --enable-pei16 \
++		 --enable-eibnetip --enable-eibnetipserver \
++		 --enable-eibnetiptunnel --without-pth-test \
++		 --with-pth=$(STAGING_DIR)/usr 
++
++BCUSDK_DEPENDENCIES = libpthsem
 +
 +$(eval $(autotools-package))
-+
 -- 
 1.7.9.5
