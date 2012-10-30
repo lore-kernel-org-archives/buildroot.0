@@ -1,26 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Oct 2012 23:55:33 +0100
-Subject: [Buildroot] [PATCH] libcap: disable progs altogether
-In-Reply-To: <1351470854-15435-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1351470854-15435-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <50905AE5.4030506@mind.be>
+Date: Wed, 31 Oct 2012 00:04:37 +0100
+Subject: [Buildroot] mpg123 segfaults on A8 (imx53)
+In-Reply-To: <1A05C4080C29496381D223141719DD30@JohanW7>
+References: <1A05C4080C29496381D223141719DD30@JohanW7>
+Message-ID: <50905D05.5010000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/29/12 01:34, Gustavo Zacarias wrote:
-> +# progs use fork()
->   define LIBCAP_BUILD_CMDS
-> +	$(SED) '/-C progs/d' $(@D)/Makefile
->   	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+On 10/30/12 11:08, Sagaert Johan wrote:
+> So i had a look at the configuration options and i think it might have something to do the the option  --with-cpu not
+> being correct..
 
-  Could you do this in a post-patch hook instead? It's more verbose, but
-more appropriate I think.
+  arm_nofpu should work for any ARM processor...
+
+> I tried :
+> MPG123_CPU = neon
+> But the build fails:
+> ....
+> dct64_neon_float.S:125: Error: selected processor does not support ARM mode `vmul.f32 q7,q11,q14'
+> dct64_neon_float.S:127: Error: selected processor does not support ARM mode `vdup.32 q12,d31[0]'
+> dct64_neon_float.S:128: Error: selected processor does not support ARM mode `vmov d31,d30'
+> dct64_neon_float.S:130: Error: selected processor does not support ARM mode `vsw
+> ....
+
+  Depending on how the toolchain is compiled, you may need to add
+-mfloat-abi=softfp -mfpu=neon or -mfloat-abi=hard -mfpu=neon to the CFLAGS
+to get neon support.
+
+  But I doubt that that's the issue - illegal instructions give SIGILL, not
+SIGSEGV.  So your only option is to debug mpg123 with gdbserver or valgrind.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
