@@ -1,40 +1,25 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 30 Oct 2012 21:59:57 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 30 Oct 2012 22:05:02 +0100
 Subject: [Buildroot] [PATCH] strace: fix build for x86_64
-Message-ID: <1351630798-4390-1-git-send-email-arnout@mind.be>
+In-Reply-To: <1351630798-4390-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 30 Oct 2012 21:59:57 +0100")
+References: <1351630798-4390-1-git-send-email-arnout@mind.be>
+Message-ID: <87ip9rhds1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-strace fails to build on x86_64 because stat64 is not available.  This
-is because the automatic detection of stat64 in configure is overridden
-by buildroot, by setting ac_cv_type_stat64.  Just remove that override -
-current strace seems to detect it correctly for non-largefile platforms.
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Build-tested on x86_64 (with largefile), ARM (with and without largefile),
-sh4, MIPS and ppc-32 (no largefile).
+ Arnout> strace fails to build on x86_64 because stat64 is not
+ Arnout> available.  This is because the automatic detection of stat64
+ Arnout> in configure is overridden by buildroot, by setting
+ Arnout> ac_cv_type_stat64.  Just remove that override - current strace
+ Arnout> seems to detect it correctly for non-largefile platforms.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Committed, thanks.
 
----
- package/strace/strace.mk |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 7876848..ad1d042 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -9,8 +9,7 @@ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = http://downloads.sourceforge.net/project/strace/strace/$(STRACE_VERSION)
- 
- STRACE_CONF_ENV = ac_cv_header_linux_if_packet_h=yes \
--		  ac_cv_header_linux_netlink_h=yes \
--	          $(if $(BR2_LARGEFILE),ac_cv_type_stat64=yes,ac_cv_type_stat64=no)
-+		  ac_cv_header_linux_netlink_h=yes
- 
- ifeq ($(BR2_LARGEFILE),y)
- # strace gets confused when lfs mode is forced, so don't
 -- 
-tg: (29266a3..) t/strace-x86_64 (depends on: master)
+Bye, Peter Korsgaard
