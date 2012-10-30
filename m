@@ -1,39 +1,32 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 30 Oct 2012 13:53:02 +0000
-Subject: [Buildroot] [PATCH] matchbox-lib: Append -lX11 to the linker
-In-Reply-To: <20121030143003.6af62df4@skate>
-References: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
- <20121030140043.7ba2722b@skate>
- <CAG2jQ8hieHZUbMXA4pXecX81+hkFermPVYXCggRHhXxz3BYamA@mail.gmail.com>
- <20121030143003.6af62df4@skate>
-Message-ID: <CAG2jQ8hyuwRZDJRLF9R5c9KzkEUA2xrU2Rd78h4uAmd3NpEAhg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 30 Oct 2012 13:14:28 -0300
+Subject: [Buildroot] [PATCH 1/2] php: bump to version 5.3.18
+In-Reply-To: <20121030140156.4117a077@skate>
+References: <1351599635-21356-1-git-send-email-gustavo@zacarias.com.ar>
+ <20121030140156.4117a077@skate>
+Message-ID: <508FFCE4.9030802@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 30, 2012 at 1:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Markos Chandras,
->
-> On Tue, 30 Oct 2012 13:21:22 +0000, Markos Chandras wrote:
->
->> There is no matchbox upstream. Latest release was in 2007 and the
->> latest post in the mailing list was in 2007 as well.
->> Their svn repo seems dead too
->>
->> http://svn.o-hand.com/view/matchbox/trunk/
->
-> Hum, right. Do we want to keep those packages in Buildroot then? :-)
->
+On 10/30/12 10:01, Thomas Petazzoni wrote:
 
-Well at least they build now :) There are other alternatives of course
-(openbox, fluxbox) but I think matchbox
-targets different devices (like PDAs or devices with small screens).
-My personal opinion is to keep them
-around until we reach a point where patching them becomes a non-trivial process.
+> Dear Gustavo Zacarias,
+> 
+> On Tue, 30 Oct 2012 09:20:34 -0300, Gustavo Zacarias wrote:
+>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>> ---
+>>  package/php/Config.in                     |    4 ++
+>>  package/php/php-force-cross-compile.patch |   50 -----------------------------
+> 
+> So you are sure this patch is no longer needed? See the explanation
+> below: the problem can only be triggered if the build machine has the
+> same architecture as the target machine.
 
--- 
-Regards,
-Markos
+Oh yes, i've tested x86_64->x86_64 besides a "cross" target.
+They've dropped all of the cross macros, guess they switched everything
+to AC_TRY_LINK and other similar macros.
+It's kind of amazing they've fixed this upstream right? :)
+Regards.
