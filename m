@@ -1,32 +1,63 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 30 Oct 2012 14:04:25 +0100
-Subject: [Buildroot] [PATCH 1/2] xz: bump to 5.0.4
-Message-ID: <1351602266-14650-1-git-send-email-yegorslists@googlemail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 30 Oct 2012 13:21:22 +0000
+Subject: [Buildroot] [PATCH] matchbox-lib: Append -lX11 to the linker
+In-Reply-To: <20121030140043.7ba2722b@skate>
+References: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
+ <20121030140043.7ba2722b@skate>
+Message-ID: <CAG2jQ8hieHZUbMXA4pXecX81+hkFermPVYXCggRHhXxz3BYamA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Tue, Oct 30, 2012 at 1:00 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Tue, 30 Oct 2012 11:29:14 +0000, Markos Chandras wrote:
+>> From: Markos Chandras <markos.chandras@imgtec.com>
+>>
+>> Fixes building with binutils-2.22
+>> http://autobuild.buildroot.net/results/b4b26dd9c7d7bebe45638ba125fb49a5f5d0cc14/build-end.log
+>>
+>> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>> ---
+>>  package/matchbox/matchbox-lib/matchbox-lib.mk |    1 +
+>>  1 files changed, 1 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
+>> index de11dfc..339f512 100644
+>> --- a/package/matchbox/matchbox-lib/matchbox-lib.mk
+>> +++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
+>> @@ -10,6 +10,7 @@ MATCHBOX_LIB_SITE = http://matchbox-project.org/sources/libmatchbox/$(MATCHBOX_L
+>>  MATCHBOX_LIB_INSTALL_STAGING = YES
+>>  MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
+>>  MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
+>> +MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
+>
+> This works but is a hack. Has the problem been fixed in newer upstream
+> releases? If not, would it be possible to cook a patch to send upstream?
+>
+> Ditto for the matchbox-desktop patch.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/xz/xz.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hi Thomas,
 
-diff --git a/package/xz/xz.mk b/package/xz/xz.mk
-index e700c0d..e00c91b 100644
---- a/package/xz/xz.mk
-+++ b/package/xz/xz.mk
-@@ -3,7 +3,7 @@
- # xz-utils
- #
- #############################################################
--XZ_VERSION = 5.0.3
-+XZ_VERSION = 5.0.4
- XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
- XZ_SITE = http://tukaani.org/xz/
- XZ_INSTALL_STAGING = YES
+There is no matchbox upstream. Latest release was in 2007 and the
+latest post in the mailing list was in 2007 as well.
+Their svn repo seems dead too
+
+http://svn.o-hand.com/view/matchbox/trunk/
+
 -- 
-1.7.7
+Regards,
+Markos
