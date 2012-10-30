@@ -1,38 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Oct 2012 12:03:16 +0100
-Subject: [Buildroot] Problem building curlftpfs within buildroot
-In-Reply-To: <508FB158.1090205@mail.ru>
-References: <508FB158.1090205@mail.ru>
-Message-ID: <20121030120316.0faf8a0e@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 30 Oct 2012 11:25:01 +0000
+Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
+In-Reply-To: <508A3DD8.8060009@mind.be>
+References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
+ <508A3DD8.8060009@mind.be>
+Message-ID: <CAG2jQ8js-jqe2QYKVgehCeQL1iy8vsEDGV4OEo3NT=JS=akJ6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Varnin,
+On Fri, Oct 26, 2012 at 8:38 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/10/12 22:35, Valentine Barshak wrote:
+>>
+>> Signed-off-by: Valentine Barshak<gvaxon@gmail.com>
+>
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>  Problem can be reproduced on e.g. x86_64 with external toolchain.
+>
+>  And since upstream is dead, the simple addition of -lm to LIBS is an
+> adequate solution.
+>
+>  Regards,
+>  Arnout
+>
+>
 
-On Tue, 30 Oct 2012 14:52:08 +0400, Alexander Varnin wrote:
-> Hello. I'm trying to build self-made package curlftpfs within buildroot. 
-> It is simple autotools based package. Build fails with pthread error:
-> 
-> /home/varnin/buildroot/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.5.4/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: 
-> note: 'pthread_create' is defined in DSO 
-> /home/varnin/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 
-> so try adding it to the linker command line
-> /home/varnin/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: 
-> could not read symbols: Invalid operation
-> collect2: ld returned 1 exit status
-> 
-> I'm using buildroot toolchain to build my application that uses threads, 
-> and it compiles and works normally. What could be the problem?
-> I'm attaching build log.
+Works for me as well.
 
-For some reason -lpthread is missing on the link command line.
+Tested-by: Markos Chandras <markos.chandras@imgtec.com>
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Markos
