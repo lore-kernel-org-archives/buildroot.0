@@ -1,115 +1,114 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Oct 2012 22:43:43 +0100
-Subject: [Buildroot] [PATCH] Add support for custom package patches
-In-Reply-To: <1351632205-15815-1-git-send-email-spdawson@gmail.com>
-References: <1351632205-15815-1-git-send-email-spdawson@gmail.com>
-Message-ID: <50904A0F.5020206@mind.be>
+Date: Tue, 30 Oct 2012 23:09:27 +0100
+Subject: [Buildroot] [PATCH 1/6] Add config file for the snowball board
+In-Reply-To: <1351500073-4351-2-git-send-email-gregory.hermant@calao-systems.com>
+References: <1351500073-4351-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1351500073-4351-2-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <50905017.8080301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/30/12 22:23, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
+On 10/29/12 09:41, Gregory Hermant wrote:
 >
-> Add a configuration item to allow a space-separated list of directories
-> to be specified, from which custom package patches will be applied.
-
-  Good idea!
-
->
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-but some potential improvements below.
-
+> Signed-off-by: Gregory Hermant<gregory.hermant@calao-systems.com>
 > ---
->   Config.in              |    7 +++++++
->   package/pkg-generic.mk |   28 ++++++++++++++++------------
->   2 files changed, 23 insertions(+), 12 deletions(-)
+>   configs/calao_snowball_defconfig |   52 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 52 insertions(+)
+>   create mode 100644 configs/calao_snowball_defconfig
 >
-> diff --git a/Config.in b/Config.in
-> index dab7787..13a7daf 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -415,6 +415,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
->   	  as the source directory for a particular package. See the
->   	  Buildroot documentation for more details on this feature.
->
-> +config BR2_CUSTOM_PACKAGE_PATCH_DIRS
-> +	string "custom package patch directories"
+> diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
+> new file mode 100644
+> index 0000000..68f0a51
+> --- /dev/null
+> +++ b/configs/calao_snowball_defconfig
+> @@ -0,0 +1,52 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
 
-  I would call it extra patch dirs, otherwise it sounds like it's overriding
-the BR patch set.
+  We don't use external toolchains for the defconfigs, unless the internal
+one doesn't work for some reason (e.g. microblaze).
 
-> +	help
-> +	  You may specify a space-separated list of directories containing
-> +	  custom package patches. Note that any custom patches for a package
-> +	  will be applied AFTER the Buildroot patch set for the package.
-> +
->   endmenu
->
->   source "toolchain/Config.in"
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 270da60..d77662e 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -69,6 +69,20 @@ else
->   	@true # Nothing to do to source a local package
->   endif
->
-> +# Apply package patches from the specified directory
-> +define pkg-apply-patch-directory
-> +	if test -d $(1); then \
-> +	  if test "$(wildcard $(1)/$(NAMEVER)*.patch*)"; then \
-> +	    support/scripts/apply-patches.sh $(@D) $(1) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
-> +	  else \
-> +	    support/scripts/apply-patches.sh $(@D) $(1) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
-> +	    if test -d $(1)/$(NAMEVER); then \
-> +	      support/scripts/apply-patches.sh $(@D) $(1)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
+> +BR2_PACKAGE_BUSYBOX_CONFIG="board/calao/snowball/busybox-1.20.x.config"
 
-  For the custom patch dirs, we may also want to support the
-$(1)/$(RAWNAME)/*.patch pattern.  So that would give:
+  This file should be created in the same patch, otherwise this defconfig
+isn't working.
 
-	    elif test -d $(1)/$(RAWNAME); then \
-	      support/scripts/apply-patches.sh $(@D) $(1)/$(RAWNAME) \*.patch \*.patch.$(ARCH) || exit 1; \
+  Also, is it really necessary to have a custom busybox config?
 
-  We should also get rid of the patch.$(ARCH) pattern, but that's
-a separate issue.
+> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> +BR2_PACKAGE_BZIP2=y
+> +BR2_PACKAGE_FBSET=y
+> +BR2_PACKAGE_FBTERM=y
+> +BR2_PACKAGE_FBV=y
+> +BR2_PACKAGE_QT=y
+> +BR2_PACKAGE_QT_DEMOS=y
+> +BR2_PACKAGE_QT_LICENSE_APPROVED=y
+> +BR2_PACKAGE_QT_MOUSE_PC=y
+> +BR2_PACKAGE_QT_MOUSE_LINUXTP=y
+> +BR2_PACKAGE_QT_MOUSE_LINUXINPUT=y
+> +BR2_PACKAGE_QT_MOUSE_TSLIB=y
+> +BR2_PACKAGE_MINICOM=y
+> +BR2_PACKAGE_LUA=y
+> +BR2_PACKAGE_OPENSSL=y
+> +BR2_PACKAGE_SQLITE=y
+> +BR2_PACKAGE_LIBELF=y
+> +BR2_PACKAGE_PCRE=y
+> +BR2_PACKAGE_LIBXML2=y
 
-> +	    fi; \
-> +	  fi; \
-> +	fi;
-> +endef
-> +
->   # Patch
->   #
->   # The RAWNAME variable is the lowercased package name, which allows to
-> @@ -79,18 +93,8 @@ $(BUILD_DIR)/%/.stamp_patched:
->   	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
->   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
->   	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
-> -	$(Q)( \
-> -	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
-> -	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
-> -	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
-> -	  else \
-> -	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
-> -	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
-> -	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
-> -	    fi; \
-> -	  fi; \
-> -	fi; \
-> -	)
-> +	$(Q)($(call pkg-apply-patch-directory,$($(PKG)_DIR_PREFIX)/$(RAWNAME)))
-> +	$(Q)($(foreach	patchdir,$(call qstrip,$(BR2_CUSTOM_PACKAGE_PATCH_DIRS)),$(call pkg-apply-patch-directory,$(patchdir))))
+  We don't select any packages in a defconfig, unless they're required
+for booting correctly.  We certainly don't want to build Qt!
 
-  This actually looks a lot nicer!
+> +BR2_PACKAGE_HDMISERVICE=y
+> +BR2_PACKAGE_SNOWBALL_FIRMWARE=y
+> +BR2_PACKAGE_SNOWBALL_INIT=y
 
->   	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
->   	$(Q)touch $@
->
+  These packages don't exist yet; the patches adding them should come
+before this patch.
+
+  Note that for these, it could be relevant to include them in the
+defconfig - they're not strictly required for booting, but I guess
+you want them in practice.
+
+> +BR2_PACKAGE_BLUEZ_UTILS=y
+> +BR2_PACKAGE_IW=y
+> +BR2_PACKAGE_WGET=y
+> +BR2_PACKAGE_WIRELESS_TOOLS=y
+> +BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
+> +BR2_PACKAGE_WPA_SUPPLICANT=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
+> +BR2_TARGET_ROOTFS_TAR_GZIP=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="u8500_snowball"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/boot/u-boot-ux500.git"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
+> +BR2_LINUX_KERNEL_PATCH="board/calao/snowball/linux-3.4.patch"
+
+  This patch is more than a month old - how come it's not yet accepted
+upstream?
+
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/calao/snowball/linux-3.4.config"
+
+  Any reason why the u8500_defconfig isn't appropriate?
+
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+  Why?
+
 
   Regards,
   Arnout
