@@ -1,33 +1,111 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 30 Oct 2012 11:36:05 +0000
-Subject: [Buildroot] [PATCH] matchbox-desktop: Append -ldl to the linker
-Message-ID: <1351596965-20672-1-git-send-email-markos.chandras@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 30 Oct 2012 09:20:34 -0300
+Subject: [Buildroot] [PATCH 1/2] php: bump to version 5.3.18
+Message-ID: <1351599635-21356-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
-
-Fixes building with binutils-2.22
-
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/php/Config.in                     |    4 ++
+ package/php/php-force-cross-compile.patch |   50 -----------------------------
+ package/php/php.mk                        |    2 +-
+ 3 files changed, 5 insertions(+), 51 deletions(-)
+ delete mode 100644 package/php/php-force-cross-compile.patch
 
-diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-index 5c518e5..bd64680 100644
---- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-+++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-@@ -9,6 +9,7 @@ MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
- MATCHBOX_DESKTOP_SITE = http://matchbox-project.org/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION)
- MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
- MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
-+MATCHBOX_DESKTOP_CONF_ENV = LIBS="-ldl"
+diff --git a/package/php/Config.in b/package/php/Config.in
+index c8c100c..6d15da5 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -25,6 +25,8 @@ choice
  
+ config BR2_PACKAGE_PHP_SAPI_CGI
+ 	bool "CGI"
++	# CGI uses fork()
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_PHP_CGI
+ 	help
+ 	  Common Gateway Interface
+@@ -37,6 +39,8 @@ config BR2_PACKAGE_PHP_SAPI_CLI
+ 
+ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
+         bool "CGI and CLI"
++	# CGI uses fork()
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_PHP_CLI
+ 	select BR2_PACKAGE_PHP_CGI
+ 	help
+diff --git a/package/php/php-force-cross-compile.patch b/package/php/php-force-cross-compile.patch
+deleted file mode 100644
+index f14b477..0000000
+--- a/package/php/php-force-cross-compile.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-php: force cross-compilation
+-
+-In its configure script, PHP detects whether we're cross-compiling or
+-not, by compiling and running a simple C program. Depending on whether
+-cross-compiling has been detected or not, then PHP enables or disables
+-the AC_TRY_RUN tests (which verify the availability of something by
+-*executing* a program, which, by definition, cannot work in
+-cross-compilation mode).
+-
+-This works just fine when the target architecture is ARM or PowerPC
+-and the build machine is x86 or x86_64. Unfortunately, when the target
+-architecture is x86_64 and the build machine is also x86_64, the
+-cross-compilation mode detection concludes that we are not
+-cross-compiling, because it succeeds in running this small program.
+-
+-However, while it succeeds in running this basic small program, some
+-other programs executed later through AC_TRY_RUN tests do not work,
+-because they have target library dependencies that are not available
+-on the build machine. For example, the libxml2 test fails to *run*
+-because libxml2 is not available on the build machine, only in the
+-target/staging directories. So trying to run a program linked against
+-libxml2, on the build machine, simply doesn't make sense.
+-
+-We fix this problem by just forcing PHP to think that we're
+-cross-compiling (which is always the case with Buildroot, as we're at
+-the moment never building PHP for the host). Unfortunately, the
+-configure.in file dates back from the autoconf 2.13 era, so the
+-configure script does not understand the ac_cv_prog_cc_cross cache
+-variable, and we cannot easily regenerate the configure script using
+-our package autoconf version. The easiest solution is therefore to
+-simply patch the configure script to make the cross-compilation test
+-fail: we replace the execution of the program by a call to false,
+-which always fail, leading the configure script to understand that we
+-*are* cross-compiling.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/configure
+-===================================================================
+---- a/configure
+-+++ b/configure
+-@@ -2387,7 +2387,7 @@
+- if { (eval echo configure:2388: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+-   ac_cv_prog_cc_works=yes
+-   # If we can't run a trivial program, we are probably using a cross compiler.
+--  if (./conftest; exit) 2>/dev/null; then
+-+  if (false; exit) 2>/dev/null; then
+-     ac_cv_prog_cc_cross=no
+-   else
+-     ac_cv_prog_cc_cross=yes
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 2f8e99e..6ac9f29 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
  #############################################################
  
+-PHP_VERSION = 5.3.16
++PHP_VERSION = 5.3.18
+ PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
 -- 
-1.7.1
+1.7.8.6
