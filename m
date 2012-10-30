@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Oct 2012 09:29:46 -0300
-Subject: [Buildroot] [PATCHv2 05/12] libnetfilter_queue: add new package
+Date: Tue, 30 Oct 2012 09:29:47 -0300
+Subject: [Buildroot] [PATCHv2 06/12] libnetfilter_acct: add new package
 In-Reply-To: <1351600193-21511-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1351600193-21511-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1351600193-21511-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1351600193-21511-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,64 +12,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                                |    1 +
- package/libnetfilter_queue/Config.in             |   14 ++++++++++++++
- package/libnetfilter_queue/libnetfilter-queue.mk |   15 +++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/libnetfilter_queue/Config.in
- create mode 100644 package/libnetfilter_queue/libnetfilter-queue.mk
+ package/Config.in                              |    1 +
+ package/libnetfilter_acct/Config.in            |   12 ++++++++++++
+ package/libnetfilter_acct/libnetfilter-acct.mk |   15 +++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnetfilter_acct/Config.in
+ create mode 100644 package/libnetfilter_acct/libnetfilter-acct.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d0718bf..33933f9 100644
+index 33933f9..908ad01 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -451,6 +451,7 @@ source "package/libmbus/Config.in"
+@@ -448,6 +448,7 @@ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
+ source "package/libmbus/Config.in"
++source "package/libnetfilter_acct/Config.in"
  source "package/libnetfilter_conntrack/Config.in"
  source "package/libnetfilter_cthelper/Config.in"
  source "package/libnetfilter_cttimeout/Config.in"
-+source "package/libnetfilter_queue/Config.in"
- source "package/libnfnetlink/Config.in"
- source "package/libnl/Config.in"
- source "package/liboping/Config.in"
-diff --git a/package/libnetfilter_queue/Config.in b/package/libnetfilter_queue/Config.in
+diff --git a/package/libnetfilter_acct/Config.in b/package/libnetfilter_acct/Config.in
 new file mode 100644
-index 0000000..d06aa77
+index 0000000..76cdf7d
 --- /dev/null
-+++ b/package/libnetfilter_queue/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LIBNETFILTER_QUEUE
-+	bool "libnetfilter_queue"
++++ b/package/libnetfilter_acct/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBNETFILTER_ACCT
++	bool "libnetfilter_acct"
 +	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_LIBNFNETLINK
 +	select BR2_PACKAGE_LIBMNL
 +	help
-+	  libnetfilter_queue is the userspace library that provides
-+	  the programming interface to the fine-grain
-+	  connection tracking timeout infrastructure.
++	  libnetfilter_acct is the userspace library providing interface
++	  to extended accounting infrastructure.
 +
-+	  http://www.netfilter.org/projects/libnetfilter_queue/
++	  http://www.netfilter.org/projects/libnetfilter_acct/
 +
-+comment "libnetfilter_queue requires a toolchain with LARGEFILE support"
++comment "libnetfilter_acct requires a toolchain with LARGEFILE support"
 +	depends on !BR2_LARGEFILE
-diff --git a/package/libnetfilter_queue/libnetfilter-queue.mk b/package/libnetfilter_queue/libnetfilter-queue.mk
+diff --git a/package/libnetfilter_acct/libnetfilter-acct.mk b/package/libnetfilter_acct/libnetfilter-acct.mk
 new file mode 100644
-index 0000000..8f9ad5c
+index 0000000..615c94c
 --- /dev/null
-+++ b/package/libnetfilter_queue/libnetfilter-queue.mk
++++ b/package/libnetfilter_acct/libnetfilter-acct.mk
 @@ -0,0 +1,15 @@
 +#############################################################
 +#
-+# libnetfilter-queue
++# libnetfilter-acct
 +#
 +#############################################################
 +
-+LIBNETFILTER_QUEUE_VERSION = 1.0.2
-+LIBNETFILTER_QUEUE_SOURCE = libnetfilter_queue-$(LIBNETFILTER_QUEUE_VERSION).tar.bz2
-+LIBNETFILTER_QUEUE_SITE = http://www.netfilter.org/projects/libnetfilter_queue/files
-+LIBNETFILTER_QUEUE_INSTALL_STAGING = YES
-+LIBNETFILTER_QUEUE_DEPENDENCIES = host-pkgconf libnfnetlink libmnl
-+LIBNETFILTER_QUEUE_LICENSE = GPLv2
-+LIBNETFILTER_QUEUE_LICENSE_FILES = COPYING
++LIBNETFILTER_ACCT_VERSION = 1.0.1
++LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz2
++LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
++LIBNETFILTER_ACCT_INSTALL_STAGING = YES
++LIBNETFILTER_ACCT_DEPENDENCIES = host-pkgconf libmnl
++LIBNETFILTER_ACCT_LICENSE = LGPLv2.1+
++LIBNETFILTER_ACCT_LICENSE_FILES = COPYING
 +
 +$(eval $(autotools-package))
 -- 
