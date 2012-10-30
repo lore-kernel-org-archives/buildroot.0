@@ -1,32 +1,122 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 30 Oct 2012 22:37:29 +0100
-Subject: [Buildroot] [git commit] samba: bump to version 3.6.9
-Message-ID: <20121030213943.CC90C99664@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 30 Oct 2012 22:43:43 +0100
+Subject: [Buildroot] [PATCH] Add support for custom package patches
+In-Reply-To: <1351632205-15815-1-git-send-email-spdawson@gmail.com>
+References: <1351632205-15815-1-git-send-email-spdawson@gmail.com>
+Message-ID: <50904A0F.5020206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e48bf899f6f11dbe19ce62c24c10639d0ad0ef5a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 10/30/12 22:23, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
+>
+> Add a configuration item to allow a space-separated list of directories
+> to be specified, from which custom package patches will be applied.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/samba/samba.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+  Good idea!
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 7c06e14..06f58d6 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SAMBA_VERSION = 3.6.8
-+SAMBA_VERSION = 3.6.9
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
+>
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+but some potential improvements below.
+
+> ---
+>   Config.in              |    7 +++++++
+>   package/pkg-generic.mk |   28 ++++++++++++++++------------
+>   2 files changed, 23 insertions(+), 12 deletions(-)
+>
+> diff --git a/Config.in b/Config.in
+> index dab7787..13a7daf 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -415,6 +415,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
+>   	  as the source directory for a particular package. See the
+>   	  Buildroot documentation for more details on this feature.
+>
+> +config BR2_CUSTOM_PACKAGE_PATCH_DIRS
+> +	string "custom package patch directories"
+
+  I would call it extra patch dirs, otherwise it sounds like it's overriding
+the BR patch set.
+
+> +	help
+> +	  You may specify a space-separated list of directories containing
+> +	  custom package patches. Note that any custom patches for a package
+> +	  will be applied AFTER the Buildroot patch set for the package.
+> +
+>   endmenu
+>
+>   source "toolchain/Config.in"
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 270da60..d77662e 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -69,6 +69,20 @@ else
+>   	@true # Nothing to do to source a local package
+>   endif
+>
+> +# Apply package patches from the specified directory
+> +define pkg-apply-patch-directory
+> +	if test -d $(1); then \
+> +	  if test "$(wildcard $(1)/$(NAMEVER)*.patch*)"; then \
+> +	    support/scripts/apply-patches.sh $(@D) $(1) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+> +	  else \
+> +	    support/scripts/apply-patches.sh $(@D) $(1) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
+> +	    if test -d $(1)/$(NAMEVER); then \
+> +	      support/scripts/apply-patches.sh $(@D) $(1)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+
+  For the custom patch dirs, we may also want to support the
+$(1)/$(RAWNAME)/*.patch pattern.  So that would give:
+
+	    elif test -d $(1)/$(RAWNAME); then \
+	      support/scripts/apply-patches.sh $(@D) $(1)/$(RAWNAME) \*.patch \*.patch.$(ARCH) || exit 1; \
+
+  We should also get rid of the patch.$(ARCH) pattern, but that's
+a separate issue.
+
+> +	    fi; \
+> +	  fi; \
+> +	fi;
+> +endef
+> +
+>   # Patch
+>   #
+>   # The RAWNAME variable is the lowercased package name, which allows to
+> @@ -79,18 +93,8 @@ $(BUILD_DIR)/%/.stamp_patched:
+>   	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+>   	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+>   	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
+> -	$(Q)( \
+> -	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+> -	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+> -	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+> -	  else \
+> -	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
+> -	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
+> -	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+> -	    fi; \
+> -	  fi; \
+> -	fi; \
+> -	)
+> +	$(Q)($(call pkg-apply-patch-directory,$($(PKG)_DIR_PREFIX)/$(RAWNAME)))
+> +	$(Q)($(foreach	patchdir,$(call qstrip,$(BR2_CUSTOM_PACKAGE_PATCH_DIRS)),$(call pkg-apply-patch-directory,$(patchdir))))
+
+  This actually looks a lot nicer!
+
+>   	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
+>   	$(Q)touch $@
+>
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
