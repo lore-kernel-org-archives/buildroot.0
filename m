@@ -1,64 +1,51 @@
-From: David Bonnin <dboml@free.fr>
-Date: Tue, 30 Oct 2012 10:53:24 +0100 (CET)
-Subject: [Buildroot] libglib and vim doesn't compile with -g3 -O0
-In-Reply-To: <20121030095957.692cf5a4@skate>
-Message-ID: <1184166027.227040120.1351590804295.JavaMail.root@zimbra49-e8.priv.proxad.net>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Tue, 30 Oct 2012 10:07:59 +0000
+Subject: [Buildroot] [PATCH] strace: Version bump to 4.7
+In-Reply-To: <87fw4xhubv.fsf@macbook.be.48ers.dk>
+References: <1348821796-28798-1-git-send-email-markos.chandras@gmail.com>
+ <87a9w20xrj.fsf@macbook.be.48ers.dk>
+ <87boghzdjc.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8i1KwuFQKkpW=5=M=tx5QB0SPKowpxbejPVPUrnaSG5AQ@mail.gmail.com>
+ <CAG2jQ8jMZ=PQEd=YJipP1cH=6-CyHD01YWsMYxZs67Rb5Wd2PQ@mail.gmail.com>
+ <87ipapxbp2.fsf@macbook.be.48ers.dk>
+ <87ehkytcjx.fsf@macbook.be.48ers.dk>
+ <CAG2jQ8i=z_RAvEdYt_Tx4Ma5DK7e6b9djTQsu81MVULqOte1mg@mail.gmail.com>
+ <871ugyt92h.fsf@macbook.be.48ers.dk>
+ <87fw4xhubv.fsf@macbook.be.48ers.dk>
+Message-ID: <CAG2jQ8jSGeO7WowC_j2ij_QeAJackxXSiqnK4Ya4X7Eb2cKNhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Files are join to this mail.
-It is an external toolchain build with CTNG 1.16.0+hg+unknown-20120917.140812. with toolchain suite src from linaro linaro-4.7-2012.08
+On Mon, Oct 29, 2012 at 8:55 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+>>>>>> "Peter" == Peter Korsgaard <jacmet@sunsite.dk> writes:
+>
+> Hi,
+>
+>  Markos> I haven't managed to find a solution yet and I think all the
+>  Markos> LFS problems are buildroot specific.  I don't have a native LFS
+>  Markos> toolchain so I can try an out-of-buildroot build.  You can
+>  Markos> either revert the commit or disable the LFS support in the
+>  Markos> package for now.
+>
+>  Peter> ok, thanks.
+>
+>  Peter> I'll try to take another look, and revert if I don't see an easy
+>  Peter> solution.
+>
+> I luckily found a solution (23f6455bff), which I've applied.
+>
+> --
+> Bye, Peter Korsgaard
 
-forgot BR version: 2012.08
+Hi Peter,
 
-Thanks,
+Hmm I thought that -D_FILE_OFFSET_BITS=64 was required when building
+with LFS. I guess I was wrong.
+Thanks for fixing it.
 
-David Bonnin.
-
------ Mail original -----
-De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-?: dboml at free.fr
-Cc: "buildroot" <buildroot@busybox.net>
-Envoy?: Mardi 30 Octobre 2012 09:59:57
-Objet: Re: [Buildroot] libglib and vim doesn't compile with -g3 -O0
-
-Hello,
-
-On Tue, 30 Oct 2012 09:56:46 +0100 (CET), dboml at free.fr wrote:
-
-> For information my gdb error before rebuild BR with -g3 -O0: 
-
-[..]
-
-> 021,773 &"warning: Unable to find dynamic linker breakpoint function.\nGDB will be unable to debug shared library initializers\nand track explicitly loaded dynamic code." 
-> 021,773 &"\n" 
-> 021,793 *stopped,frame={addr="0x4006ad10",func="??",args=[]},thread-id="1",stopped-threads="all",cor\ 
-> e="0" 
-
-Which toolchain are you using? Please post your Buildroot .config file.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br.config
-Type: application/xml
-Size: 25693 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121030/1f27f13c/attachment-0002.wsdl>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: crosstool.config
-Type: application/xml
-Size: 12279 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121030/1f27f13c/attachment-0003.wsdl>
+Regards,
+Markos
