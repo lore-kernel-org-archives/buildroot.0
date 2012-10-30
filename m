@@ -1,39 +1,17 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Tue, 30 Oct 2012 11:25:01 +0000
-Subject: [Buildroot] [PATCH] gqview: Fix build failure due to missing -lm
-In-Reply-To: <508A3DD8.8060009@mind.be>
-References: <1349555736-10008-1-git-send-email-gvaxon@gmail.com>
- <508A3DD8.8060009@mind.be>
-Message-ID: <CAG2jQ8js-jqe2QYKVgehCeQL1iy8vsEDGV4OEo3NT=JS=akJ6w@mail.gmail.com>
+From: Alexander Varnin <fenixk19@mail.ru>
+Date: Tue, 30 Oct 2012 15:25:06 +0400
+Subject: [Buildroot] Problem building curlftpfs within buildroot
+In-Reply-To: <20121030120316.0faf8a0e@skate>
+References: <508FB158.1090205@mail.ru> <20121030120316.0faf8a0e@skate>
+Message-ID: <508FB912.305@mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Oct 26, 2012 at 8:38 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 06/10/12 22:35, Valentine Barshak wrote:
->>
->> Signed-off-by: Valentine Barshak<gvaxon@gmail.com>
+30.10.2012 15:03, Thomas Petazzoni ?????:
+> For some reason -lpthread is missing on the link command line.
 >
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->  Problem can be reproduced on e.g. x86_64 with external toolchain.
->
->  And since upstream is dead, the simple addition of -lm to LIBS is an
-> adequate solution.
->
->  Regards,
->  Arnout
->
->
-
-Works for me as well.
-
-Tested-by: Markos Chandras <markos.chandras@imgtec.com>
-
--- 
-Regards,
-Markos
+> Thomas
+Thanks. It's curlftpfs issue then. I'll write report to them.
