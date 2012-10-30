@@ -1,32 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 30 Oct 2012 13:14:28 -0300
-Subject: [Buildroot] [PATCH 1/2] php: bump to version 5.3.18
-In-Reply-To: <20121030140156.4117a077@skate>
-References: <1351599635-21356-1-git-send-email-gustavo@zacarias.com.ar>
- <20121030140156.4117a077@skate>
-Message-ID: <508FFCE4.9030802@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 30 Oct 2012 17:16:34 +0100
+Subject: [Buildroot] [PATCH] squid: bump to version 3.2.3
+In-Reply-To: <1351544236-23479-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 29 Oct 2012 17:57:16 -0300")
+References: <1351544236-23479-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87txtcgckd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/30/12 10:01, Thomas Petazzoni wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Dear Gustavo Zacarias,
-> 
-> On Tue, 30 Oct 2012 09:20:34 -0300, Gustavo Zacarias wrote:
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> ---
->>  package/php/Config.in                     |    4 ++
->>  package/php/php-force-cross-compile.patch |   50 -----------------------------
-> 
-> So you are sure this patch is no longer needed? See the explanation
-> below: the problem can only be triggered if the build machine has the
-> same architecture as the target machine.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/squid/Config.in |    2 ++
+ Gustavo>  package/squid/squid.mk  |   24 +++++++++++++++++-------
+ Gustavo>  2 files changed, 19 insertions(+), 7 deletions(-)
 
-Oh yes, i've tested x86_64->x86_64 besides a "cross" target.
-They've dropped all of the cross macros, guess they switched everything
-to AC_TRY_LINK and other similar macros.
-It's kind of amazing they've fixed this upstream right? :)
-Regards.
+This seems to have caused some build failures:
+
+http://autobuild.buildroot.net/results/c9e590a1034c3869cb7391984ce8281ec4c3ef9c/build-end.log
+
+http://autobuild.buildroot.net/results/7f8201ebcafd611cab95788e030b768fa84ad28b/build-end.log
+
+The 2nd you can probably not do much about though.
+
+-- 
+Bye, Peter Korsgaard
