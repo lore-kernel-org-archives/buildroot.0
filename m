@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 30 Oct 2012 23:10:20 +0100
-Subject: [Buildroot] [PATCH 1/2] php: bump to version 5.3.18
-In-Reply-To: <508FFCE4.9030802@zacarias.com.ar>
-References: <1351599635-21356-1-git-send-email-gustavo@zacarias.com.ar>
- <20121030140156.4117a077@skate> <508FFCE4.9030802@zacarias.com.ar>
-Message-ID: <20121030231020.56a97e96@skate>
+Date: Tue, 30 Oct 2012 23:13:27 +0100
+Subject: [Buildroot] buildroot for AM3358 AM3359 with wireless-tools
+ shared library
+In-Reply-To: <1351596954.5576.22.camel@debian.fritz.box>
+References: <50897A02.7000407@rie.eu> <20121025182332.GC5178@tarshish>
+ <1351596954.5576.22.camel@debian.fritz.box>
+Message-ID: <20121030231327.4f22281c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Tue, 30 Oct 2012 13:14:28 -0300, Gustavo Zacarias wrote:
+On Tue, 30 Oct 2012 12:35:54 +0100, J?rgen Benjamin Ronshausen wrote:
 
-> Oh yes, i've tested x86_64->x86_64 besides a "cross" target.
-> They've dropped all of the cross macros, guess they switched everything
-> to AC_TRY_LINK and other similar macros.
+> The new Board is a AM335x Starter Kit with a Sitara AM3358 Cortex A8 cpu
+> and WL1271 Wifi/bluetooth module.
+> 
+> to make my toolchain i issue:
+> 
+> make beaglebone_defconfig
+> make menuconfig and select under packages, networking wireless-tools and
+> library. i included contents of .config below.
+> 
+> The first problem is, that there are no files in
+> /home/john/AM335/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib
+> i am not sure about it, but i think there should be the .so files for
+> the compiler.
 
-Great.
+Strange. Can you do:
 
-> It's kind of amazing they've fixed this upstream right? :)
+	make clean
+	make 2>&1 | tee logfile1
+	find output/host > logfile2
 
-Incredible, indeed :)
+Post logfile1 and logfile2 to some pastebin site (pastebin.com for
+example), and give us the pastebin URLs.
 
 Thanks,
 
