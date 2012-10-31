@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Oct 2012 19:44:20 +0100
+Date: Wed, 31 Oct 2012 19:54:44 +0100
 Subject: [Buildroot] RPC.h and busybox
-In-Reply-To: <20121031145249.GJ30343@sapphire.tkos.co.il>
+In-Reply-To: <CABtOAfzOS9ofm=TyVKbA7v++DoF+HGCGpnGu52nwo5yFNiUZ6g@mail.gmail.com>
 References: <CABtOAfwBq_mbzxnaBd8s0Wu4PeYOiVWUr5AXoZCcaxL5o=T4MQ@mail.gmail.com>
  <20121031114118.GF30343@sapphire.tkos.co.il>
  <20121031153101.41b26063@skate>
  <20121031145249.GJ30343@sapphire.tkos.co.il>
-Message-ID: <20121031194420.1e066252@skate>
+ <50913CA5.4050307@zacarias.com.ar>
+ <20121031150042.GK30343@sapphire.tkos.co.il>
+ <CABtOAfzOS9ofm=TyVKbA7v++DoF+HGCGpnGu52nwo5yFNiUZ6g@mail.gmail.com>
+Message-ID: <20121031195444.4985a35e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Alexander Khryukin,
 
-On Wed, 31 Oct 2012 16:52:49 +0200, Baruch Siach wrote:
+On Wed, 31 Oct 2012 18:28:27 +0300, Alexander Khryukin wrote:
 
-> > I intend to adjust a few things and update it, before resending it.
-> > Maybe before the Buildroot meeting this week-end, maybe after.
-> 
-> Well, this only solves the problem for internal toolchains, isn't it?
+> MIght you can share your patch?
 
-No, the intention is to solve the problem for glibc/eglibc toolchains.
-The existing support for glibc/eglibc toolchains (both the external
-toolchain support and the crosstool-ng backend) assume that if the C
-library is glibc or eglibc, then the C library *always* has RPC
-support. Starting (e)glibc 2.14 this is no longer correct, so my patch
-set takes this into account at the Buildroot level.
+Sure. However note that it is still a preliminary version, and I intend
+to make some more changes to it before asking for it to be merged.
+
+See:
+http://lists.busybox.net/pipermail/buildroot/2012-August/057230.html.
+
+Note that those patches are 2+ months old, so you will have so work to
+do to be able to apply them.
 
 Best regards,
 
