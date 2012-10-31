@@ -1,39 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Oct 2012 16:27:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 5636] New: agetty - cannot get controlling tty
- error - need updated util-linux
-Message-ID: <bug-5636-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 31 Oct 2012 14:23:34 -0300
+Subject: [Buildroot] [PATCH 2/2] rtorrent: bump to version 0.9.3
+In-Reply-To: <1351704214-11511-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1351704214-11511-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1351704214-11511-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5636
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/rtorrent/rtorrent.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-           Summary: agetty - cannot get controlling tty error - need
-                    updated util-linux
-           Product: buildroot
-           Version: 2012.08
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: ccs_dba at hotmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Using agetty and login from util-linux (no busybox utils), receive error
-'cannot get controlling tty', unable to use without fix submitted to 2.21.1 and
-beyound:
-
-http://marc.info/?l=util-linux-ng&m=132334597319406&w=2
-
+diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
+index ff1ae2f..c9cf8ff 100644
+--- a/package/rtorrent/rtorrent.mk
++++ b/package/rtorrent/rtorrent.mk
+@@ -4,9 +4,11 @@
+ #
+ #############################################################
+ 
+-RTORRENT_VERSION = 0.9.2
++RTORRENT_VERSION = 0.9.3
+ RTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
+ RTORRENT_DEPENDENCIES = host-pkgconf libcurl libsigc libtorrent ncurses
+ RTORRENT_AUTORECONF = YES
++RTORRENT_LICENSE = GPLv2
++RTORRENT_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.8.6
