@@ -1,70 +1,57 @@
-From: Zoltan at osuosl.org <Zoltan@osuosl.org>
-Date: Wed, 31 Oct 2012 21:38:03 +0100
-Subject: [Buildroot] [PATCH] add new package grantlee
-Message-ID: <1351715883-10799-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 31 Oct 2012 21:47:44 +0100
+Subject: [Buildroot] [PATCH v2] Add support for custom package patches
+In-Reply-To: <1351688107-6194-1-git-send-email-spdawson@gmail.com>
+References: <1351688107-6194-1-git-send-email-spdawson@gmail.com>
+Message-ID: <CAHXCMMJjQDsjzEzgFOa5oi6W-s8V6A3W-_LJK3-0tTEJv+BbyA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Hi Simon,
+
+2012/10/31  <spdawson@gmail.com>:
+> From: Simon Dawson <spdawson@gmail.com>
+>
+> Add a configuration item to allow a space-separated list of directories
+> to be specified, from which custom package patches will be applied.
+>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> ---
+>  v2: Incorporate improvements suggested by Arnout Vandecappelle, and
+>      fix handling of the case where the new configuration item is not set
+>
+>  Config.in              |    7 +++++++
+>  package/pkg-generic.mk |   28 ++++++++++++++++------------
+>  2 files changed, 23 insertions(+), 12 deletions(-)
+>
+> diff --git a/Config.in b/Config.in
+> index dab7787..2ea3fbb 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -415,6 +415,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
+>           as the source directory for a particular package. See the
+>           Buildroot documentation for more details on this feature.
+>
+> +config BR2_EXTRA_PACKAGE_PATCH_DIRS
+> +       string "extra package patch directories"
+> +       help
+> +         You may specify a space-separated list of directories containing
+> +         extra package patches. Note that any extra patches for a package
+> +         will be applied AFTER the Buildroot patch set for the package.
+> +
+>  endmenu
+>
+
+It'd be great to have a section in the documentation about this feature.
 
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
- package/Config.in            |    1 +
- package/grantlee/Config.in   |    9 +++++++++
- package/grantlee/grantlee.mk |   13 +++++++++++++
- 3 files changed, 23 insertions(+)
- create mode 100644 package/grantlee/Config.in
- create mode 100644 package/grantlee/grantlee.mk
+Regards,
 
-diff --git a/package/Config.in b/package/Config.in
-index ab966e0..ef68b37 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -139,6 +139,7 @@ source "package/qt/Config.in"
- if BR2_PACKAGE_QT
- comment "QT libraries and helper libraries"
- source "package/qtuio/Config.in"
-+source "package/grantlee/Config.in"
- endif
- 
- source "package/x11r7/Config.in"
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-new file mode 100644
-index 0000000..84afad2
---- /dev/null
-+++ b/package/grantlee/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_GRANTLEE
-+	bool "grantlee"
-+	select BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_QT_SCRIPT
-+	select BR2_PACKAGE_QT_GUI_MODULE
-+	help
-+	  Qt implemantation of the Django template framework
-+
-+	  http://www.grantlee.org
-diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-new file mode 100644
-index 0000000..10adfd9
---- /dev/null
-+++ b/package/grantlee/grantlee.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# grantlee
-+#
-+#############################################################
-+
-+GRANTLEE_VERSION = 0.2.0
-+GRANTLEE_SITE = http://downloads.grantlee.org
-+GRANTLEE_INSTALL_STAGING = YES
-+GRANTLEE_DEPENDENCIES =  qt
-+
-+$(eval $(cmake-package))
-+
+
 -- 
-1.7.9.5
+Sam
