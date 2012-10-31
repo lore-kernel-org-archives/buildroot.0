@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 31 Oct 2012 23:15:07 +0100
-Subject: [Buildroot] [git commit] rtorrent: bump to version 0.9.3
-Message-ID: <20121031223835.4511C999B3@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 31 Oct 2012 23:43:22 +0100
+Subject: [Buildroot] Build gcc debugger for the Target
+In-Reply-To: <CABtOAfxuz7Hn+05yeTgGZTExttKFk_w31Pot3e-YSvx+weVpnw@mail.gmail.com>
+References: <CABtOAfxuz7Hn+05yeTgGZTExttKFk_w31Pot3e-YSvx+weVpnw@mail.gmail.com>
+Message-ID: <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ff05f80ffb82e077a332b0c0625f4696a138528
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Alexander,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/rtorrent/rtorrent.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+2012/10/31 Alexander Khryukin <alexander@mezon.ru>
+>
+> Hello.
+> How i can build and package gcc for taget image?
+> Looks i need option like "Build gdb debugger for the Target"
+> but for gcc.
+To enable gcc package on the target you need the enable "Development
+files inthe target FS" under the "Build options" menu, then gcc
+package will be available in the "Package Selection >> Development
+tools" submenu.
 
-diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
-index ff1ae2f..c9cf8ff 100644
---- a/package/rtorrent/rtorrent.mk
-+++ b/package/rtorrent/rtorrent.mk
-@@ -4,9 +4,11 @@
- #
- #############################################################
- 
--RTORRENT_VERSION = 0.9.2
-+RTORRENT_VERSION = 0.9.3
- RTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
- RTORRENT_DEPENDENCIES = host-pkgconf libcurl libsigc libtorrent ncurses
- RTORRENT_AUTORECONF = YES
-+RTORRENT_LICENSE = GPLv2
-+RTORRENT_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+>
+> Now my image compiles fine, but without gcc on target it
+>  worthless
+
+Note that gcc on the target is not really tested, so it may not build or work...
+
+
+Regards,
+
+--
+Sam
