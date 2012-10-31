@@ -1,22 +1,34 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Wed, 31 Oct 2012 14:32:08 +0300
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 31 Oct 2012 13:41:18 +0200
 Subject: [Buildroot] RPC.h and busybox
-Message-ID: <CABtOAfwBq_mbzxnaBd8s0Wu4PeYOiVWUr5AXoZCcaxL5o=T4MQ@mail.gmail.com>
+In-Reply-To: <CABtOAfwBq_mbzxnaBd8s0Wu4PeYOiVWUr5AXoZCcaxL5o=T4MQ@mail.gmail.com>
+References: <CABtOAfwBq_mbzxnaBd8s0Wu4PeYOiVWUr5AXoZCcaxL5o=T4MQ@mail.gmail.com>
+Message-ID: <20121031114118.GF30343@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
-I'm trying to build busybox with glibc
-and faced with error
+Hi Alexander,
 
-util-linux/mount.c:140:22: fatal error: rpc/rpc.h: No such file or directory
+On Wed, Oct 31, 2012 at 02:32:08PM +0300, Alexander Khryukin wrote:
+> I'm trying to build busybox with glibc
+> and faced with error
+> 
+> util-linux/mount.c:140:22: fatal error: rpc/rpc.h: No such file or directory
 
-Does anybody have any solution?
+glibc version newer than 2.13 omits built time support for RPC. See 
+http://sourceware.org/ml/crossgcc/2011-09/msg00005.html.
 
-My config: http://pastie.org/5142303
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121031/344de3af/attachment.html>
+> Does anybody have any solution?
+
+This is a toolchain level problem. Either downgrade to a toolchain with 2.13 
+glibc, or use a toolchain with tirpc.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
