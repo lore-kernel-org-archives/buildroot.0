@@ -1,83 +1,31 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 31 Oct 2012 22:16:20 +0100
-Subject: [Buildroot] [PATCH] luajit: bump to version 2.0.0-rc1
-Message-ID: <1351718180-18402-1-git-send-email-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 31 Oct 2012 23:09:54 +0100
+Subject: [Buildroot] cannot compile a program within a uclibc build
+	chroot
+In-Reply-To: <50913F89.3000802@scalemp.com>
+References: <50913F89.3000802@scalemp.com>
+Message-ID: <5091A1B2.7060407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luajit/luajit-01-root-path.patch      |    2 +-
- package/luajit/luajit-04-no-bin-symlink.patch |   18 ++----------------
- package/luajit/luajit.mk                      |    2 +-
- 3 files changed, 4 insertions(+), 18 deletions(-)
+On 10/31/12 16:11, Eial Czerwacki wrote:
+> '/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.0/../../../../i686-unknown-linux-uclibc/bin/as':
+> execv: No such file or directory
 
-diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
-index 80ad1e9..cc2f04f 100644
---- a/package/luajit/luajit-01-root-path.patch
-+++ b/package/luajit/luajit-01-root-path.patch
-@@ -18,5 +18,5 @@ Index: b/src/luaconf.h
- +#define LUA_LDIR	LUA_ROOT "share/lua/"
- +#define LUA_CDIR	LUA_ROOT "lib/lua/"
-  #ifdef LUA_XROOT
-- #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta11/"
-+ #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0/"
-  #define LUA_XPATH \
-diff --git a/package/luajit/luajit-04-no-bin-symlink.patch b/package/luajit/luajit-04-no-bin-symlink.patch
-index 91a470a..0de3162 100644
---- a/package/luajit/luajit-04-no-bin-symlink.patch
-+++ b/package/luajit/luajit-04-no-bin-symlink.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -43,8 +43,7 @@
-+@@ -42,8 +42,7 @@
-  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
-  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
-  
-@@ -16,7 +16,7 @@ Index: b/Makefile
-  INSTALL_ANAME= libluajit-$(ABIVER).a
-  INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
-  INSTALL_SOSHORT= libluajit-$(ABIVER).so
--@@ -58,7 +57,6 @@
-+@@ -57,7 +56,6 @@
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-@@ -24,17 +24,3 @@ Index: b/Makefile
-  INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
-  
-  INSTALL_DIRS= $(INSTALL_BIN) $(INSTALL_LIB) $(INSTALL_INC) $(INSTALL_MAN) \
--@@ -120,13 +118,6 @@
-- 	  $(RM) $(FILE_PC).tmp
-- 	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
-- 	cd src/jit && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
---	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
---	@echo ""
---	@echo "Note: the beta releases deliberately do NOT install a symlink for luajit"
---	@echo "You can do this now by running this command (with sudo):"
---	@echo ""
---	@echo "  $(SYMLINK) $(INSTALL_TNAME) $(INSTALL_TSYM)"
---	@echo ""
-- 
-- uninstall:
-- 	@echo "==== Uninstalling LuaJIT $(VERSION) from $(PREFIX) ===="
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 2583f92..78ddeef 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LUAJIT_VERSION = 2.0.0-beta11
-+LUAJIT_VERSION = 2.0.0-rc1
- LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE    = http://luajit.org/download
- LUAJIT_LICENSE = MIT
+  This is probably because one of the libraries against which as is linked
+cannot be found.  It's probably linked with the host libc instead of the
+target libc.  You can verify that with 'readelf -d': if you see libc.so.6
+in there, it's been linked with the host's glibc.
+
+  Regards,
+  Arnout
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
