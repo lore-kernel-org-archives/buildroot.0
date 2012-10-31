@@ -1,24 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 31 Oct 2012 23:09:54 +0100
-Subject: [Buildroot] cannot compile a program within a uclibc build
-	chroot
-In-Reply-To: <50913F89.3000802@scalemp.com>
-References: <50913F89.3000802@scalemp.com>
-Message-ID: <5091A1B2.7060407@mind.be>
+Date: Wed, 31 Oct 2012 23:27:02 +0100
+Subject: [Buildroot] [PATCH v2] Add support for custom package patches
+In-Reply-To: <1351688107-6194-1-git-send-email-spdawson@gmail.com>
+References: <1351688107-6194-1-git-send-email-spdawson@gmail.com>
+Message-ID: <5091A5B6.8010609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/31/12 16:11, Eial Czerwacki wrote:
-> '/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.0/../../../../i686-unknown-linux-uclibc/bin/as':
-> execv: No such file or directory
+On 10/31/12 13:55, spdawson at gmail.com wrote:
+> +	$(Q)($(call pkg-apply-patch-directory,$($(PKG)_DIR_PREFIX)/$(RAWNAME)))
+> +	$(if $(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS)),$(Q)($(foreach patchdir,$(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS)),$(call pkg-apply-patch-directory,$(patchdir)))))
 
-  This is probably because one of the libraries against which as is linked
-cannot be found.  It's probably linked with the host libc instead of the
-target libc.  You can verify that with 'readelf -d': if you see libc.so.6
-in there, it's been linked with the host's glibc.
+  I could be wrong, but I think this would also work:
+
+	$(foreach patchdir,$(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS)),$(Q)$(call pkg-apply-patch-directory,$(patchdir))$(sep)))
+
+(and the semicolon at the end of pkg-apply-patch-directory is redundant then).
+
+
+  Alternatively, you could define:
+
+PACKAGE_PATCH_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS))
+...
+	$(Q)$(foreach patchdir,$(PACKAGE_PATCH_DIRS),$(call pkg-apply-patch-directory,$(patchdir)))
+
 
   Regards,
   Arnout
