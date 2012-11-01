@@ -1,42 +1,50 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 1 Nov 2012 10:28:05 +0000
-Subject: [Buildroot] [PATCH v2] fs/common: Create initial console device
-Message-ID: <1351765685-8128-1-git-send-email-markos.chandras@gmail.com>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Thu, 1 Nov 2012 13:41:31 +0300
+Subject: [Buildroot] Build gcc debugger for the Target
+In-Reply-To: <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
+References: <CABtOAfxuz7Hn+05yeTgGZTExttKFk_w31Pot3e-YSvx+weVpnw@mail.gmail.com>
+ <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
+Message-ID: <CABtOAfxVfcmYSAa+X6ksTdbVVCq4_piWCyO-L0-JAdAnrq_TSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Markos Chandras <markos.chandras@imgtec.com>
+2012/11/1 Samuel Martin <s.martin49@gmail.com>
 
-A /dev/console node must be present in rootfs when the Linux kernel
-boots otherwise the kernel will print the following warning:
-"Warning: unable to open an initial console"
+> Hi Alexander,
+>
+> 2012/10/31 Alexander Khryukin <alexander@mezon.ru>
+> >
+> > Hello.
+> > How i can build and package gcc for taget image?
+> > Looks i need option like "Build gdb debugger for the Target"
+> > but for gcc.
+> To enable gcc package on the target you need the enable "Development
+> files inthe target FS" under the "Build options" menu, then gcc
+> package will be available in the "Package Selection >> Development
+> tools" submenu.
+>
+> >
+> > Now my image compiles fine, but without gcc on target it
+> >  worthless
+>
+> Note that gcc on the target is not really tested, so it may not build or
+> work...
+>
+>
+> Regards,
+>
+> --
+> Sam
+>
 
-This is because when we use an initramfs the /dev directory is not
-populated at this point. This can cause problems when a program
-(e.g ldso with early debugging enabled) opens a standard file
-descriptor for read/write before these descriptors are actually
-created by the init process later on.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- fs/cpio/cpio.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Yes, i enabled Devel files on target, but gcc not available into
+"Development Tools".
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index aa20b41..3293bc9 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -21,6 +21,8 @@ define ROOTFS_CPIO_ADD_INIT
-         fi
- endef
- 
-+PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1
-+
- endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
- 
- ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
--- 
-1.7.1
+Also i using external toolchain, not buildroot.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121101/09f91dbd/attachment-0001.html>
