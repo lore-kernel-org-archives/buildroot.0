@@ -1,55 +1,57 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Thu, 1 Nov 2012 09:22:28 +0000
-Subject: [Buildroot] [PATCH buildroot] fs/common: Create initial console
-	device
-In-Reply-To: <5091AA49.6070300@mind.be>
-References: <1351677232-14959-1-git-send-email-markos.chandras@gmail.com>
- <5091AA49.6070300@mind.be>
-Message-ID: <CAG2jQ8jVWWesP4TNnPRca-U9e4AfjCPDkNM8S27vnjCen+GQnA@mail.gmail.com>
+From: Robert Schwebel <r.schwebel@pengutronix.de>
+Date: Thu, 1 Nov 2012 10:26:30 +0100
+Subject: [Buildroot] Topics for the Buildroot Developers meeting
+In-Reply-To: <20121029233815.62dad9b3@skate>
+References: <20121029194314.7545a446@skate>
+ <CABYt4-a-3ozfyg-6dRg35vSAv-u8czNyi4cZ=QngtAND0jhcyA@mail.gmail.com>
+ <20121029233815.62dad9b3@skate>
+Message-ID: <20121101092630.GG23204@pengutronix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Oct 31, 2012 at 10:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 10/31/12 10:53, Markos Chandras wrote:
->>
->> From: Markos Chandras<markos.chandras@imgtec.com>
->>
->> A /dev/console node must be present in rootfs when the Linux kernel
->> boots otherwise the kernel will print the following warning:
->> "Warning: unable to open an initial console"
->>
->> This is because when we use an initramfs along with devtmpfs, the /dev
->> directory is not populated at this point. This can cause problems when a
->> program (e.g ldso with early debugging enabled) opens a standard file
->> descriptor for read/write before these descriptors are actually created by
->> the init process later on.
->>
->> Signed-off-by: Markos Chandras<markos.chandras@imgtec.com>
+On Mon, Oct 29, 2012 at 11:38:15PM +0100, Thomas Petazzoni wrote:
+> Except that it doesn't work properly, even in PTXdist (as far as I
+> know, of course). We had a discussion about this last year at ELCE with
+> PTXdist developers. Basically, do the following:
 >
+>  * Build program foo with OpenSSL support (the OpenSSL support in foo
+>    is optional, foo can work without OpenSSL). Both foo and openssl are
+>    installed in the target.
 >
->  Good point.  However:
+>  * Enjoy foo with OpenSSL on your target, you're happy.
 >
-> - this is also true for mdev/udev;
-> - it is only relevant in a cpio/initramfs rootfs;
-> - it's cleaner to use the device table.
+>  * Now, remove OpenSSL from your target.
 >
-> So I'd add a device table line to PACKAGES_PERMISSIONS_TABLE in
-> fs/cpio/cpio.mk, where the init script is also installed.
->
->  Regards,
->  Arnout
->
->
+> Beng, "foo" no longer works, because a library it is linked against no
+> longer exists, and "foo" has not been rebuilt without OpenSSL support.
+> As far as I know, PTXdist doesn't keep track of reverse dependencies
+> when removing a package, and that can lead to invalid root filesystems.
 
-Hi Arnout,
+You are basically right, but ptxdist's intention is to make reproducable
+systems, which means that a system stays consistent to itself when you
 
-Hmm I didn't know that the same problem exists in udev/mdev
-configurations. I will prepare a new patch
-like you suggested.
+a) check out the BSP from your repository
+b) build it from scratch
 
+That's the only guarantee it gives you. There is no promise that
+anything stays consistent if you configure around while a half-built
+system is already there.
+
+Because we have dependencies derived from the "select" statements in
+Kconfig, it most times works pretty well if you switch things on, which
+is what people most often do while developing.
+
+If you switch things off, packages might become inconsistent, but again,
+there is no promise that this works.
+
+Any idea for a better mechanism is welcome :-)
+
+rsc
 -- 
-Regards,
-Markos
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
