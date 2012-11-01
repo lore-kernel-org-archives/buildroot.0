@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 01 Nov 2012 15:35:55 +0100
-Subject: [Buildroot] [PATCH 3 4/9] util-linux: only needs gettext if locale
-	is selected
+Date: Thu, 01 Nov 2012 15:36:00 +0100
+Subject: [Buildroot] [PATCH 3 5/9] lshw: fix build with no LOCALE support
 In-Reply-To: <20121101143539.8550.70150.stgit@localhost>
 References: <20121101143539.8550.70150.stgit@localhost>
-Message-ID: <20121101143555.8550.69229.stgit@localhost>
+Message-ID: <20121101143600.8550.67194.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +12,48 @@ To: buildroot@busybox.net
 
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Also add missing select in Config.in.
+lshw doesn't need libintl if -DNONLS is defined.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/util-linux/Config.in     |    1 +
- package/util-linux/util-linux.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/lshw/Config.in |    2 +-
+ package/lshw/lshw.mk   |   12 +++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 43a8444..88d08e7 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_UTIL_LINUX
- 	bool "util-linux"
+diff --git a/package/lshw/Config.in b/package/lshw/Config.in
+index 98beacd..afefa6c 100644
+--- a/package/lshw/Config.in
++++ b/package/lshw/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LSHW
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_LARGEFILE
  	depends on BR2_USE_WCHAR
+-	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
 +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
  	help
- 	  Various useful/essential Linux utilities.
+ 	  lshw (Hardware Lister) is a small tool to provide
+ 	  detailed information on the hardware configuration of the machine.
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index 68daa0d..b3c2214 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -6,10 +6,16 @@
  
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index f6028f4..f15baa7 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -29,7 +29,7 @@ else
- UTIL_LINUX_CONF_OPT += --without-ncurses
- endif
+ LSHW_VERSION = B.02.16
+ LSHW_SITE = http://ezix.org/software/files
++
++LSHW_CFLAGS = $(TARGET_CFLAGS)
++ifeq ($(BR2_ENABLE_LOCALE),)
++LSHW_CFLAGS += -DNONLS
++endif
++
+ LSHW_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)" \
+-	RPM_OPT_FLAGS="$(TARGET_CFLAGS)" all
+-LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT),-lintl)"
+-LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),gettext)
++	RPM_OPT_FLAGS="$(LSHW_CFLAGS)" all
++LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
++LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
  
--ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- UTIL_LINUX_DEPENDENCIES += gettext
- UTIL_LINUX_MAKE_OPT += LIBS=-lintl
- endif
+ define LSHW_BUILD_CMDS
+ 	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPT)
