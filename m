@@ -1,26 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 01 Nov 2012 23:11:54 +0100
-Subject: [Buildroot] Build gcc debugger for the Target
-In-Reply-To: <CABtOAfxVfcmYSAa+X6ksTdbVVCq4_piWCyO-L0-JAdAnrq_TSA@mail.gmail.com>
-References: <CABtOAfxuz7Hn+05yeTgGZTExttKFk_w31Pot3e-YSvx+weVpnw@mail.gmail.com>
- <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
- <CABtOAfxVfcmYSAa+X6ksTdbVVCq4_piWCyO-L0-JAdAnrq_TSA@mail.gmail.com>
-Message-ID: <5092F3AA.8090300@mind.be>
+Date: Thu, 01 Nov 2012 23:21:20 +0100
+Subject: [Buildroot] [PATCH v2] fs/common: Create initial console device
+In-Reply-To: <1351765685-8128-1-git-send-email-markos.chandras@gmail.com>
+References: <1351765685-8128-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <5092F5E0.80704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/12 11:41, Alexander Khryukin wrote:
-> Yes, i enabled Devel files on target, but gcc not available into "Development Tools".
+On 11/01/12 11:28, Markos Chandras wrote:
+> From: Markos Chandras<markos.chandras@imgtec.com>
 >
-> Also i using external toolchain, not buildroot.
+> A /dev/console node must be present in rootfs when the Linux kernel
+> boots otherwise the kernel will print the following warning:
+> "Warning: unable to open an initial console"
+>
+> This is because when we use an initramfs the /dev directory is not
+> populated at this point. This can cause problems when a program
+> (e.g ldso with early debugging enabled) opens a standard file
+> descriptor for read/write before these descriptors are actually
+> created by the init process later on.
+>
+> Signed-off-by: Markos Chandras<markos.chandras@imgtec.com>
+> ---
+>   fs/cpio/cpio.mk |    2 ++
+>   1 files changed, 2 insertions(+), 0 deletions(-)
+>
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index aa20b41..3293bc9 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -21,6 +21,8 @@ define ROOTFS_CPIO_ADD_INIT
+>           fi
+>   endef
+>
+> +PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1
 
-  gcc on the target is only available with a buildroot toolchain.
+  The last three entries are missing (start, inc, count). Also, there should
+be a $(sep) at the end of the line; otherwise, any subsequent entries are
+appended at the end of the line.  (This will probably be the last line in
+the table anyway, because the fs/ tree is included at the end of Makefile,
+but we shouldn't rely on that).
+
 
   Regards,
   Arnout
+
+> +
+>   endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+>
+>   ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
