@@ -1,31 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 01 Nov 2012 15:26:29 +0100
-Subject: [Buildroot] [PATCH 10/10] libsoup: remove redundant dependency
- on gettext
-In-Reply-To: <201210142324.20324.yann.morin.1998@free.fr>
-References: <20121014210734.17845.64519.stgit@localhost>
- <20121014211121.17845.45817.stgit@localhost>
- <201210142324.20324.yann.morin.1998@free.fr>
-Message-ID: <50928695.4070307@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 01 Nov 2012 15:35:39 +0100
+Subject: [Buildroot] [PATCH 3 1/9] diffutils: only needs gettext if locale
+	is selected
+Message-ID: <20121101143539.8550.70150.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/14/12 23:24, Yann E. MORIN wrote:
-> Or maybe you meant that gettext is needed by libglib2, not by libsoup
-> itself? In which case you want to remove the select altogether.
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  In fact, libsoup doesn't use libintl directly, but does use gi18n.  So
-I guess the dependency can indeed be removed.
+Also add missing select in Config.in.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/diffutils/Config.in    |    1 +
+ package/diffutils/diffutils.mk |    3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/diffutils/Config.in b/package/diffutils/Config.in
+index 86da5d3..4cc16e2 100644
+--- a/package/diffutils/Config.in
++++ b/package/diffutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DIFFUTILS
+ 	bool"diffutils"
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  GNU diff. Compare files per line.
+ 
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 168d040..2530763 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -6,8 +6,7 @@
+ 
+ DIFFUTILS_VERSION = 3.2
+ DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+-DIFFUTILS_DEPENDENCIES = \
+-	$(if $(BR2_PACKAGE_GETTEXT),gettext)
++DIFFUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ 
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ DIFFUTILS_DEPENDENCIES += busybox
