@@ -1,50 +1,45 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Thu, 1 Nov 2012 13:41:31 +0300
-Subject: [Buildroot] Build gcc debugger for the Target
-In-Reply-To: <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
-References: <CABtOAfxuz7Hn+05yeTgGZTExttKFk_w31Pot3e-YSvx+weVpnw@mail.gmail.com>
- <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
-Message-ID: <CABtOAfxVfcmYSAa+X6ksTdbVVCq4_piWCyO-L0-JAdAnrq_TSA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  1 Nov 2012 08:07:47 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2, 4,
+	6}.x stable versions
+Message-ID: <1351768068-2241-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/1 Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-> Hi Alexander,
->
-> 2012/10/31 Alexander Khryukin <alexander@mezon.ru>
-> >
-> > Hello.
-> > How i can build and package gcc for taget image?
-> > Looks i need option like "Build gdb debugger for the Target"
-> > but for gcc.
-> To enable gcc package on the target you need the enable "Development
-> files inthe target FS" under the "Build options" menu, then gcc
-> package will be available in the "Package Selection >> Development
-> tools" submenu.
->
-> >
-> > Now my image compiles fine, but without gcc on target it
-> >  worthless
->
-> Note that gcc on the target is not really tested, so it may not build or
-> work...
->
->
-> Regards,
->
-> --
-> Sam
->
-
-
-Yes, i enabled Devel files on target, but gcc not available into
-"Development Tools".
-
-Also i using external toolchain, not buildroot.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121101/09f91dbd/attachment-0001.html>
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 2270e0c..d596870 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.49"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.50"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.32"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.16"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.17"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+-	default "3.6.4"		if BR2_KERNEL_HEADERS_3_6
++	default "3.6.5"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.7.8.6
