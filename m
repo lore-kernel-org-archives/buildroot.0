@@ -1,52 +1,60 @@
-From: Eial Czerwacki <eial@scalemp.com>
-Date: Thu, 01 Nov 2012 13:28:26 +0200
-Subject: [Buildroot] [PATCH] uClibc: install libc.so even if
- BR2_PREFER_STATIC_LIB is enabled
-In-Reply-To: <1351764953-24251-1-git-send-email-arnout@mind.be>
-References: <1351764953-24251-1-git-send-email-arnout@mind.be>
-Message-ID: <50925CDA.1060704@scalemp.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 01 Nov 2012 14:48:01 +0100
+Subject: [Buildroot] [PATCH 09/10] glib-networking: remove redundant
+ dependency on gettext
+In-Reply-To: <201210142321.11131.yann.morin.1998@free.fr>
+References: <20121014210734.17845.64519.stgit@localhost>
+ <20121014211110.17845.3033.stgit@localhost>
+ <201210142321.11131.yann.morin.1998@free.fr>
+Message-ID: <50927D91.6060804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/2012 12:15 PM, Arnout Vandecappelle (Essensium/Mind) wrote:
-> BR2_PREFER_STATIC_LIB _prefers_ static linking, but doesn't force it for
-> all packages.  So some binaries may still be built without -static, and
-> they will need libc.so on the target.
+On 10/14/12 23:21, Yann E. MORIN wrote:
+> Arnout, All,
 >
-> Therefore, put libc.so.0 in the target unconditionally.
+> On Sunday 14 October 2012 Arnout Vandecappelle (Essensium/Mind) wrote:
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+>> ---
+>>   package/glib-networking/Config.in |    2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+>> index dab35ea..f1aa7ee 100644
+>> --- a/package/glib-networking/Config.in
+>> +++ b/package/glib-networking/Config.in
+>> @@ -2,7 +2,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
+>>   	bool "glib-networking"
+>>   	depends on BR2_USE_WCHAR # glib2
+>>   	select BR2_PACKAGE_LIBGLIB2
+>> -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+>> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+>>   	help
+>>   	  Network-related GIO modules for glib.
 >
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Untested!
+> The commit message says "remove redundant dependency on gettext", but this
+> change changes the dependency on plain gettext to gettext-if-locales.
 >
->  toolchain/uClibc/uclibc.mk |    2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-> index 397cdd4..65ff90b 100644
-> --- a/toolchain/uClibc/uclibc.mk
-> +++ b/toolchain/uClibc/uclibc.mk
-> @@ -486,9 +486,7 @@ $(TARGET_DIR)/usr/bin/ldd: $(cross_compiler)
->  		PREFIX=$(TARGET_DIR) utils install_utils
->  	touch -c $@
->  
-> -ifneq ($(BR2_PREFER_STATIC_LIB),y)
->  UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
-> -endif
->  
->  ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
->  UCLIBC_TARGETS+=uclibc-test
-I can confirm it works:
-# find / -name "libc*"
-/lib/libcrypt.so.0
-/lib/libc.so.0
-/lib/libcrypt-0.9.32.1.so
-/usr/include/bits/libc-lock.h
-/usr/lib/libc.a
-/usr/lib/libcrypt_pic.a
-/usr/lib/libc_pic.a
-/usr/lib/libcurses.a
-/usr/lib/libcrypt.a
+> Thus, I think the subject is wrong, and should be changed to something like:
+>      glib-networking: only depends on gettext if locales are used
+
+  Actually, on second revision: glib-networking uses gettext directly so we should
+therefore select it here as well.  It worked fine in testing because libglib2
+anyway depends on locale.
+
+  Therefore, I'll replace this with unconditionally depending on gettext in
+the .mk file.
+
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
