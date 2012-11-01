@@ -1,82 +1,40 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 1 Nov 2012 20:10:26 +0100
-Subject: [Buildroot] [PATCH 1/1] Create a symbolic link to the target
-	kernel directory. example
-In-Reply-To: <20121101101912.310579d7@skate>
-References: <1351729065-31324-1-git-send-email-sagaert.johan@skynet.be><5091CB65.8070409@mind.be><75B2C156488F433AB22D082571AE6D4E@JohanW7>
- <20121101101912.310579d7@skate>
-Message-ID: <D4127A04D6B846E881F6B42F61985647@JohanW7>
+Date: Thu,  1 Nov 2012 20:32:22 +0100
+Subject: [Buildroot] [PATCH 1/1] bump latest stable kernel headers
+Message-ID: <1351798342-4427-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
 
-An example makefile explains it all :
+bump latest stable kernel headers.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ toolchain/kernel-headers/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-With my patch I can write a makefile for my kernel modules like this:
-
-MODULENAME := digitalio
-
-obj-m += $(MODULENAME).o
-
-KERNELDIR=/home/buildroot12git/targetkernel
-
-all:$(MODULENAME).ko
-
-$(MODULENAME).ko:$(MODULENAME).c
-	make -C $(KERNELDIR) SUBDIRS=$(PWD) modules CC=arm-linux-gcc LD=arm-linux-ld ARCH=arm
-
-.PHONY clean:
-	make -C $(KERNELDIR) M=$(PWD) clean
-
-
-
-
-Without the symbolic link I had to use this makefile, and change it everytime I used another kernel version.
-
-MODULENAME := digitalio
-
-obj-m += $(MODULENAME).o
-
-KERNELDIR=/home/buildroot12git/output/build/linux-76e10d158efb6d4516018846f60c2ab5501900bc
-
-all:$(MODULENAME).ko
-
-$(MODULENAME).ko:$(MODULENAME).c
-	make -C $(KERNELDIR) SUBDIRS=$(PWD) modules CC=arm-linux-gcc LD=arm-linux-ld ARCH=arm
-
-.PHONY clean:
-	make -C $(KERNELDIR) M=$(PWD) clean 
-
-
-As I onderstood from Arnout, I could build the module from within buildroot (making use of the buildroot vars) but this not an
-option while still developing a module. Every buildroot make would also force a regeneration of the rootfs tar, and this takes a
-serious ammount of time with a large rootfs.
-So I develop it outside the build system and use the symlink to the kernel I have selected.
-
-Regards, Johan
-
------Oorspronkelijk bericht-----
-Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Verzonden: donderdag 1 november 2012 10:19
-Aan: Sagaert Johan
-CC: 'Arnout Vandecappelle'; buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH 1/1] Create a symbolic link to the target kernel directory.
-
-
-On Thu, 1 Nov 2012 02:14:35 +0100, Sagaert Johan wrote:
-
-> I always build modules outside of the buildroot system.
-> Is there another (fast ) way ? I don't like to wait 20 seconds for 
-> buildroot tarring the rootfs.
-
-I don't see the relation between waiting 20 seconds for Buildroot to tar the rootfs and the patch you're posting. Care to explain?
-
-Thomas
---
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 2270e0c..d596870 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.49"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.50"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.32"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.16"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.17"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+-	default "3.6.4"		if BR2_KERNEL_HEADERS_3_6
++	default "3.6.5"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.8.0
