@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 01 Nov 2012 15:36:10 +0100
-Subject: [Buildroot] [PATCH 3 7/9] pulseaudio: remove dependency on gettext
+Date: Thu, 01 Nov 2012 15:36:16 +0100
+Subject: [Buildroot] [PATCH 3 8/9] gdk-pixbuf: remove dependency on gettext
 In-Reply-To: <20121101143539.8550.70150.stgit@localhost>
 References: <20121101143539.8550.70150.stgit@localhost>
-Message-ID: <20121101143610.8550.65129.stgit@localhost>
+Message-ID: <20121101143616.8550.78988.stgit@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +12,36 @@ To: buildroot@busybox.net
 
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The dependency on gettext is only due to libglib2, not due to
-pulseaudio itself.  It works fine without gettext if libglib2 is
-not selected.
+The dependency on gettext comes from libglib2, not from gdk-pixbuf
+itself.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-v2: actually remove the gettext dependency this time; thanks Thomas
----
- package/multimedia/pulseaudio/Config.in     |    1 -
- package/multimedia/pulseaudio/pulseaudio.mk |    1 -
+ package/gdk-pixbuf/Config.in     |    1 -
+ package/gdk-pixbuf/gdk-pixbuf.mk |    1 -
  2 files changed, 2 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/Config.in b/package/multimedia/pulseaudio/Config.in
-index 6c767bb..0844192 100644
---- a/package/multimedia/pulseaudio/Config.in
-+++ b/package/multimedia/pulseaudio/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_JSON_C
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_SPEEX
+diff --git a/package/gdk-pixbuf/Config.in b/package/gdk-pixbuf/Config.in
+index 33b5f7c..f205793 100644
+--- a/package/gdk-pixbuf/Config.in
++++ b/package/gdk-pixbuf/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_GDK_PIXBUF
+ 	bool "gdk-pixbuf"
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
 -	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
- 	  PulseAudio is a sound system for POSIX OSes, meaning that it
- 	  is a proxy for your sound applications. It allows you to do
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index e78eb42..a842180 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -16,7 +16,6 @@ PULSEAUDIO_CONF_OPT = \
+ 	  Gdk-Pixbuf is an image loader and scaler. It uses GObject
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 4e00c40..8c785cd 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -40,7 +40,6 @@ GDK_PIXBUF_DEPENDENCIES += xlib_libX11
+ endif
  
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkgconf libtool json-c libsndfile speex host-intltool \
--	$(if $(BR2_NEEDS_GETTEXT),gettext) \
- 	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
- 	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
+ GDK_PIXBUF_DEPENDENCIES += \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
+ 	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+ 	host-pkgconf libglib2
+ 
