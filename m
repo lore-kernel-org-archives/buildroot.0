@@ -1,86 +1,209 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 01 Nov 2012 23:40:21 +0100
-Subject: [Buildroot] [PATCH 1/7] docs/manual: update 'adding packages'
- with the new _AVAILABLE symbol
-In-Reply-To: <201211011721.23581.yann.morin.1998@free.fr>
-References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
- <1347234052-10527-2-git-send-email-yann.morin.1998@free.fr>
- <5091D0B8.6050404@mind.be> <201211011721.23581.yann.morin.1998@free.fr>
-Message-ID: <5092FA55.9000800@mind.be>
+Date: Fri, 02 Nov 2012 00:34:14 +0100
+Subject: [Buildroot] [PATCH] efl is now at 1.7.1
+In-Reply-To: <1351266080-12424-1-git-send-email-evgeni@plan42bg.com>
+References: <1351266080-12424-1-git-send-email-evgeni@plan42bg.com>
+Message-ID: <509306F6.9050008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/12 17:21, Yann E. MORIN wrote:
-> Arnout, All,
->
-> On Thursday 01 November 2012 Arnout Vandecappelle wrote:
->> On 09/10/12 01:40, Yann E. MORIN wrote:
+On 10/26/12 17:41, Evgeni Dobrev wrote:
+> - bumped up revision to 1.7.1
+> - choose between external and Buildroot built edje_cc and eet when building elemntary
+> - finer control over building options
+
+  This should be split up into separate patches.  We'd usually have one version-bump
+patch per package, but I guess in this case bumping all of them together is
+acceptable.  However, the feature-adding patches should definitely be done
+separately (one per package).
+
 [snip]
->>> +21: ifeq ($(BR2_PACKAGE_LIBFOO_GOO),y)
->>> +22: LIBFOO_DEPENDENCIES += goo
->>> +23: LIBFOO_CONF_OPT += --enable-goo
->>> +24: else
->>> +25: LIBFOO_CONF_OPT += --disable-goo
->>> +26: endif
->>
->>    While you're at it, an automatic enable/disable example would
->> be nice too.
->
-> What do you mean by "automatic"?
+> +config BR2_PACKAGE_LIBEDJE_PROGRAM_CACHE
+> +	bool "edje program cache"
+> +	depends on BR2_PACKAGE_LIBEDJE
+> +	help
+> +	  Enable EDJE_PROGRAM_CACHE support.
 
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-LIBFOO_DEPENDENCIES += openssl
-LIBFOO_CONF_OPT += --enable-openssl
-else
-LIBFOO_CONF_OPT += --disable-openssl
-endif
+  Can you give a more detailed explanation?
 
+[snip]
+> diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
+> index 59af80e..13d03dc 100644
+> --- a/package/efl/libelementary/Config.in
+> +++ b/package/efl/libelementary/Config.in
+> @@ -10,3 +10,74 @@ config BR2_PACKAGE_LIBELEMENTARY
+>   	  with less code.
 >
->>> --- a/docs/manual/adding-packages-directory.txt
->>> +++ b/docs/manual/adding-packages-directory.txt
->>> +* The syntax of the +Config.in+ file is the same as the one for the kernel
->>> +  Kconfig file. The documentation for this syntax is available at:
->>> +  https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/kbuild/kconfig-language.txt[]
->>
->>    http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt
->
-> Does this URL always match the latest version in the git tree?
+>   	  http://trac.enlightenment.org/e/wiki/Elementary
+> +
+> +choice
+> +	prompt "edje_cc type"
 
-  I'm not sure, but anyway we don't sync with the upstream kconfig very
-often either.
+  It's conceivable that several packages use edje_cc, so it makes more
+sense to have this config option as part of libedje itself.  Then you'll
+also need to define a variable $(host-libedje) which is empty if an external
+edje_cc is used, and which is host-libedje if the buildroot-built one is
+used, so dependent packages can add $(host-libedje) to their dependencies.
 
->
->>> +1. The +BR2_PACKAGE_LIBFOO_AVAILABLE+ symbol shall +depends on+ any
->>> +other package's +_AVAILABLE+ symbol. It may also depend on any other
->>> +symbol, such as toolchain features, but should not directly depend on
->>> +any package's main symbol.
->>
->>    ... except for _XORG7, _PYTHON, etc.
->
-> Well, my opinion (FWIW) is those packages should not be treated
-> differently just because they are /big/.
->
-> (One of) the goal(s) of _AVAILABLE is to allow the user to say either:
->    - I want this package, enable whatever dependencies are required.
-> or:
->    - I need this package, but I have to provide a toolchain that has
->      such and such feature
->
-> _AVAILABLE makes that easy.
->
-> Then, it's up to the user to understand what pulling-in a package implies.
 
-  I actually agree, but that's not the current reality.
+> +	default BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_BUILDROOT
+> +	depends on BR2_PACKAGE_LIBELEMENTARY
 
-  OTOH, it makes sense to promote the wanted reality in the documentation.
+  Wrap everything in a single
+if BR2_PACKAGE_LIBELEMENTARY
+
+choice
+...
+
+choice
+...
+
+endif # BR2_PACKAGE_LIBELEMENTARY
+
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_BUILDROOT
+> +	bool "Buildroot built"
+> +	select BR2_PACKAGE_LIBEDJE_CC
+
+  Why do you need edje_cc on the target in order to build it on
+the host?
+
+> +	help
+> +	  Select this option if you want Buildroot to build edje_cc on your host.
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PREINSTALLED
+> +	bool "Pre-installed"
+> +	help
+> +	  Select this option if you want to use a pre-installed edje_cc
+> +	  Specify the path to edje_cc in BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PATH
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PATH
+> +	string "edje_cc path"
+> +	default "/path/to/edje_cc"
+
+  I guess one typical use case is when edje_cc is already installed on
+the host, so this should default to "edje_cc".
+
+> +	depends on BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PREINSTALLED
+> +	help
+> +	  Path to an externally provided edje_cc
+> +
+> +choice
+> +	prompt "eet type"
+> +	default BR2_PACKAGE_LIBELEMENTARY_EET_BUILDROOT
+> +	depends on BR2_PACKAGE_LIBELEMENTARY
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_EET_BUILDROOT
+> +	bool "Buildroot built"
+> +	help
+> +	  Select this option if you want Buildroot to build eet on your host.
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_EET_PREINSTALLED
+> +	bool "Pre-installed"
+> +	help
+> +	  Select this option if you want to use a pre-installed eer.
+
+  eer -> eet.
+
+> +	  Specify the path to eet in BR2_PACKAGE_LIBELEMENTARY_EET_PATH
+> +
+> +endchoice
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_EET_PATH
+> +	string "eet path"
+> +	default "/path/to/eet"
+
+	default "eet"
+
+> +	depends on BR2_PACKAGE_LIBELEMENTARY_EET_PREINSTALLED
+> +	help
+> +	  Path to an externally provided eet
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_TEST
+> +	bool "build elementary_test"
+> +	depends on BR2_PACKAGE_LIBELEMENTARY
+> +	help
+> +	  Build and install elementary_test for the target. Normally this
+> +	  is not required.
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_CONFIG
+> +	bool "build elementary_config"
+> +	depends on BR2_PACKAGE_LIBELEMENTARY
+> +	help
+> +	  Build and install elementary_config for the target. Normally this
+> +	  is not required.
+> +
+> +config BR2_PACKAGE_LIBELEMENTARY_QUICK_LAUNCH
+> +	bool "enable quick-launch support"
+> +	depends on BR2_PACKAGE_LIBELEMENTARY
+> +	help
+> +	  Enable quick-launch support.
+> diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+> index 83c9005..18319d1 100644
+> --- a/package/efl/libelementary/libelementary.mk
+> +++ b/package/efl/libelementary/libelementary.mk
+> @@ -4,15 +4,42 @@
+>   #
+>   ################################################################################
+>
+> -LIBELEMENTARY_VERSION = 0.8.0.65643
+> +LIBELEMENTARY_VERSION = 1.7.1
+>   LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
+> -LIBELEMENTARY_SITE = http://download.enlightenment.org/snapshots/2011-11-28
+> +LIBELEMENTARY_SITE = http://download.enlightenment.org/releases/
+>   LIBELEMENTARY_INSTALL_STAGING = YES
+>
+> -LIBELEMENTARY_DEPENDENCIES = libeina libevas libecore libedje host-libedje \
+> -				host-libeet
+> +LIBELEMENTARY_DEPENDENCIES = libeina libevas libecore libedje
+>
+> -LIBELEMENTARY_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+> -			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet
+> +ifneq ($(BR2_PACKAGE_LIBELEMENTARY_TEST),y)
+> +LIBELEMENTARY_CONF_OPT += --disable-elementary-test
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LIBELEMENTARY_CONFIG),y)
+> +LIBELEMENTARY_CONF_OPT += --disable-elementary-config
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_LIBELEMENTARY_QUICK_LAUNCH),y)
+> +LIBELEMENTARY_CONF_OPT += --disable-quick-launch
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PREINSTALLED),y)
+> +LIBELEMENTARY_CONF_OPT += --with-edje-cc=$(BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PATH)
+
+  If configure doesn't support searching path for what you specify here,
+you can use --with-edje-cc=`which $(BR2_PACKAGE_LIBELEMENTARY_EDJE_CC_PATH)`
+
+> +else
+> +LIBELEMENTARY_DEPENDENCIES += host-libedje
+> +LIBELEMENTARY_CONF_OPT += --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBELEMENTARY_EET_PREINSTALLED),y)
+> +LIBELEMENTARY_CONF_OPT += --with-eet-eet=$(BR2_PACKAGE_LIBELEMENTARY_EET_PATH)
+> +else
+> +LIBELEMENTARY_DEPENDENCIES += host-libeet
+> +LIBELEMENTARY_CONF_OPT += --with-eet-eet=$(HOST_DIR)/usr/bin/eet
+> +endif
+> +
+> +
+> +ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+> +LIBELEMENTARY_CONF_OPT += --disable-doc
+> +endif
+>
+>   $(eval $(autotools-package))
+[snip]
 
   Regards,
   Arnout
-
-[snip]
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
