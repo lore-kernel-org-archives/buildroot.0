@@ -1,49 +1,112 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 01 Nov 2012 15:36:21 +0100
-Subject: [Buildroot] [PATCH 3 9/9] libsoup: Remove redundant dependency on
-	gettext
-In-Reply-To: <20121101143539.8550.70150.stgit@localhost>
-References: <20121101143539.8550.70150.stgit@localhost>
-Message-ID: <20121101143621.8550.4383.stgit@localhost>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 1 Nov 2012 17:21:23 +0100
+Subject: [Buildroot] [PATCH 1/7] docs/manual: update 'adding packages'
+	with the new _AVAILABLE symbol
+In-Reply-To: <5091D0B8.6050404@mind.be>
+References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
+ <1347234052-10527-2-git-send-email-yann.morin.1998@free.fr>
+ <5091D0B8.6050404@mind.be>
+Message-ID: <201211011721.23581.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Arnout, All,
 
-libsoup doesn't use intl stuff directly, but uses gi18n.  libglib2
-already has all required dependencies on gettext.
+On Thursday 01 November 2012 Arnout Vandecappelle wrote:
+> On 09/10/12 01:40, Yann E. MORIN wrote:
+> > --- a/docs/manual/adding-packages-autotools.txt
+> > +++ b/docs/manual/adding-packages-autotools.txt
+> > +12:
+> > +13: ifeq ($(BR2_PACKAGE_LIBFOO_FROBBLE),y)
+> > +14: LIBFOO_CONF_OPT += --enable-frobble
+> > +15: else
+> > +16: LIBFOO_CONF_OPT += --disable-frobble
+> > +17: endif
+> > +18:
+> > +19: LIBFOO_CONF_OPT += --with-gazzle-level=$(BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL)
+> 
+>   This one is going a bit too far...  And if you keep it, it should
+> probably have a qstrip.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/libsoup/Config.in  |    1 -
- package/libsoup/libsoup.mk |    2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+It's an 'int', so is not quoted in the .config.
+(but I'll use a 'string' to address your other comment, so
+I'll qstrip it.)
 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 57b425f..b79108e 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBSOUP
- 	depends on BR2_USE_WCHAR # glib2 and gnutls
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	help
- 	  libsoup is an HTTP client/server library. It uses GObject
- 	  and the GLib main loop, to integrate well with GNOME
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 2f173df..2a2d8bf 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -19,7 +19,7 @@ endif
- 
- LIBSOUP_CONF_OPT = --disable-glibtest --without-gnome
- 
--LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-pkgconf host-libglib2 libglib2 libxml2
-+LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 libxml2
- 
- ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
- LIBSOUP_DEPENDENCIES += glib-networking
+> > +20:
+> > +21: ifeq ($(BR2_PACKAGE_LIBFOO_GOO),y)
+> > +22: LIBFOO_DEPENDENCIES += goo
+> > +23: LIBFOO_CONF_OPT += --enable-goo
+> > +24: else
+> > +25: LIBFOO_CONF_OPT += --disable-goo
+> > +26: endif
+> 
+>   While you're at it, an automatic enable/disable example would
+> be nice too.
+
+What do you mean by "automatic"?
+
+> > --- a/docs/manual/adding-packages-directory.txt
+> > +++ b/docs/manual/adding-packages-directory.txt
+> > +* The syntax of the +Config.in+ file is the same as the one for the kernel
+> > +  Kconfig file. The documentation for this syntax is available at:
+> > +  https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/kbuild/kconfig-language.txt[]
+> 
+>   http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt
+
+Does this URL always match the latest version in the git tree?
+
+> > +1. The +BR2_PACKAGE_LIBFOO_AVAILABLE+ symbol shall +depends on+ any
+> > +other package's +_AVAILABLE+ symbol. It may also depend on any other
+> > +symbol, such as toolchain features, but should not directly depend on
+> > +any package's main symbol.
+> 
+>   ... except for _XORG7, _PYTHON, etc.
+
+Well, my opinion (FWIW) is those packages should not be treated
+differently just because they are /big/.
+
+(One of) the goal(s) of _AVAILABLE is to allow the user to say either:
+  - I want this package, enable whatever dependencies are required.
+or:
+  - I need this package, but I have to provide a toolchain that has
+    such and such feature
+
+_AVAILABLE makes that easy.
+
+Then, it's up to the user to understand what pulling-in a package implies.
+
+> > +config BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL
+> > +	int "Gazzle level"
+> > +	range 0 10
+> 
+>   We currently don't have a single range config option, and only one int.
+> So the example is a bit contrived...  If you add an extra example, a string
+> option that is qstripped in the .mk file is more appropriate.
+
+OK.
+
+> > --- a/docs/manual/adding-packages-generic.txt
+> > +++ b/docs/manual/adding-packages-generic.txt
+> > @@ -79,11 +102,11 @@ steps should be performed to install the package in the staging space.
+> >   +LIBFOO_INSTALL_TARGET_CMDS+ tells what steps should be
+> >   performed to install the package in the target space.
+> 
+>   Shouldn't _DEVICES and _PERMISSIONS be explained?
+
+Da, tovarich!
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
