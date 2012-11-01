@@ -1,31 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Nov 2012 10:19:12 +0100
-Subject: [Buildroot] [PATCH 1/1] Create a symbolic link to the target
- kernel directory.
-In-Reply-To: <75B2C156488F433AB22D082571AE6D4E@JohanW7>
-References: <1351729065-31324-1-git-send-email-sagaert.johan@skynet.be>
- <5091CB65.8070409@mind.be>
- <75B2C156488F433AB22D082571AE6D4E@JohanW7>
-Message-ID: <20121101101912.310579d7@skate>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 1 Nov 2012 09:22:28 +0000
+Subject: [Buildroot] [PATCH buildroot] fs/common: Create initial console
+	device
+In-Reply-To: <5091AA49.6070300@mind.be>
+References: <1351677232-14959-1-git-send-email-markos.chandras@gmail.com>
+ <5091AA49.6070300@mind.be>
+Message-ID: <CAG2jQ8jVWWesP4TNnPRca-U9e4AfjCPDkNM8S27vnjCen+GQnA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Oct 31, 2012 at 10:46 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 10/31/12 10:53, Markos Chandras wrote:
+>>
+>> From: Markos Chandras<markos.chandras@imgtec.com>
+>>
+>> A /dev/console node must be present in rootfs when the Linux kernel
+>> boots otherwise the kernel will print the following warning:
+>> "Warning: unable to open an initial console"
+>>
+>> This is because when we use an initramfs along with devtmpfs, the /dev
+>> directory is not populated at this point. This can cause problems when a
+>> program (e.g ldso with early debugging enabled) opens a standard file
+>> descriptor for read/write before these descriptors are actually created by
+>> the init process later on.
+>>
+>> Signed-off-by: Markos Chandras<markos.chandras@imgtec.com>
+>
+>
+>  Good point.  However:
+>
+> - this is also true for mdev/udev;
+> - it is only relevant in a cpio/initramfs rootfs;
+> - it's cleaner to use the device table.
+>
+> So I'd add a device table line to PACKAGES_PERMISSIONS_TABLE in
+> fs/cpio/cpio.mk, where the init script is also installed.
+>
+>  Regards,
+>  Arnout
+>
+>
 
-On Thu, 1 Nov 2012 02:14:35 +0100, Sagaert Johan wrote:
+Hi Arnout,
 
-> I always build modules outside of the buildroot system.
-> Is there another (fast ) way ? I don't like to wait 20 seconds for
-> buildroot tarring the rootfs. 
+Hmm I didn't know that the same problem exists in udev/mdev
+configurations. I will prepare a new patch
+like you suggested.
 
-I don't see the relation between waiting 20 seconds for Buildroot to
-tar the rootfs and the patch you're posting. Care to explain?
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards,
+Markos
