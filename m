@@ -1,57 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 23:09:40 -0800
-Subject: [Buildroot] Buildroot 2012.11-rc2 released
-Message-ID: <87sj7q6yff.fsf@dell.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu,  1 Nov 2012 01:17:45 +0100
+Subject: [Buildroot] [PATCH 1/1] Create a symbolic link to the target kernel
+	directory.
+Message-ID: <1351729065-31324-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-Once more delayed, but here goes:
+This symbolic link makes it easier when building kernel modules.
+The makefile for a module no longer has to point to the full directory name of the kernel but can use this symbolic link instead.
+You no longer need to edit the path to the kernel tree in the module's makefiles when changing your target kernel version.
 
-Buildroot 2012.11-rc2 is released - Go download it at:
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ Makefile       | 1 +
+ linux/linux.mk | 2 ++
+ 2 files changed, 3 insertions(+)
 
-http://buildroot.net/downloads/buildroot-2012.11-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2012.11-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2012.11_rc1..
-
-    17  Samuel Martin
-    10  Arnout Vandecappelle (Essensium/Mind)
-     9  Gustavo Zacarias
-     8  Peter Korsgaard
-     3  Richard Braun
-     3  Simon Dawson
-     3  Thomas Petazzoni
-     2  Charles Manning
-     2  Chris Zankel
-     2  Markos Chandras
-     2  Maxime Ripard
-     1  Arnout Vandecappelle
-     1  Beno?t Th?baudeau
-     1  Danomi Manchego
-     1  Davide Viti
-     1  Gregory Hermant
-     1  James Hogan
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.11_rc2
-
-Expect the final 2012.11 release at the end of the weekend.
-
+diff --git a/Makefile b/Makefile
+index 0128839..8356aeb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -668,6 +668,7 @@ ifeq ($(O),output)
+ 	rm -rf $(O)
+ endif
+ 	rm -rf $(CONFIG_DIR)/.config $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/.auto.deps
++	rm -f targetkernel 
+ 
+ cross: $(BASE_TARGETS)
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c4bdf90..4541081 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -219,6 +219,8 @@ define LINUX_BUILD_CMDS
+ 	fi
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
++	rm -f targetkernel
++	ln -s $(LINUX_DIR) targetkernel
+ endef
+ 
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.0
