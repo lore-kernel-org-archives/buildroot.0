@@ -1,40 +1,30 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu,  1 Nov 2012 20:32:22 +0100
-Subject: [Buildroot] [PATCH 1/1] bump latest stable kernel headers
-Message-ID: <1351798342-4427-1-git-send-email-sagaert.johan@skynet.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 01 Nov 2012 23:11:54 +0100
+Subject: [Buildroot] Build gcc debugger for the Target
+In-Reply-To: <CABtOAfxVfcmYSAa+X6ksTdbVVCq4_piWCyO-L0-JAdAnrq_TSA@mail.gmail.com>
+References: <CABtOAfxuz7Hn+05yeTgGZTExttKFk_w31Pot3e-YSvx+weVpnw@mail.gmail.com>
+ <CAHXCMM+aZH-FaqQ62CF=oapVK5zGPnbkEUNpUsHBvgY2Z_Dy0A@mail.gmail.com>
+ <CABtOAfxVfcmYSAa+X6ksTdbVVCq4_piWCyO-L0-JAdAnrq_TSA@mail.gmail.com>
+Message-ID: <5092F3AA.8090300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 11/01/12 11:41, Alexander Khryukin wrote:
+> Yes, i enabled Devel files on target, but gcc not available into "Development Tools".
+>
+> Also i using external toolchain, not buildroot.
 
-bump latest stable kernel headers.
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- toolchain/kernel-headers/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+  gcc on the target is only available with a buildroot toolchain.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 2270e0c..d596870 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.49"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.50"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.32"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.16"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.17"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
--	default "3.6.4"		if BR2_KERNEL_HEADERS_3_6
-+	default "3.6.5"		if BR2_KERNEL_HEADERS_3_6
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+  Regards,
+  Arnout
 -- 
-1.8.0
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
