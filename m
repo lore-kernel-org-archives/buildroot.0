@@ -1,44 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Nov 2012 18:25:12 +0100
-Subject: [Buildroot] [PATCH 2/7] support/scripts: add a script to add a
-	new package
-In-Reply-To: <5091D7B6.8070703@mind.be>
-References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
- <1347234052-10527-3-git-send-email-yann.morin.1998@free.fr>
- <5091D7B6.8070703@mind.be>
-Message-ID: <201211011825.13012.yann.morin.1998@free.fr>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 1 Nov 2012 20:10:26 +0100
+Subject: [Buildroot] [PATCH 1/1] Create a symbolic link to the target
+	kernel directory. example
+In-Reply-To: <20121101101912.310579d7@skate>
+References: <1351729065-31324-1-git-send-email-sagaert.johan@skynet.be><5091CB65.8070409@mind.be><75B2C156488F433AB22D082571AE6D4E@JohanW7>
+ <20121101101912.310579d7@skate>
+Message-ID: <D4127A04D6B846E881F6B42F61985647@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi
 
-On Thursday 01 November 2012 Arnout Vandecappelle wrote:
-> On 09/10/12 01:40, Yann E. MORIN wrote:
-> > This script asks a few questions to the user, and creates the skeleton
-> > files (Config.in and package.mk).
-[--SNIP--]
-> > +# --------------------------------------
-> > +# Can't use 'cat<<-_EOF_', as Config.in uses leading tabs.
-> 
->   I don't think the indented Config.in block is very readable; I'd use a
-> plain <<_EOF_ with no extra indentation.  Then you can use cat after all.
+An example makefile explains it all :
 
-Hmm. Maybe that's because my default tabstop is 4, not 8.
-I just tried with 8, and it is indeed less readable.
+With my patch I can write a makefile for my kernel modules like this:
 
-Yet, I prefer that here-documents be indented rather than not.
-I'll see to make it readable for tabstop=8.
+MODULENAME := digitalio
 
-Regards,
-Yann E. MORIN.
+obj-m += $(MODULENAME).o
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+KERNELDIR=/home/buildroot12git/targetkernel
+
+all:$(MODULENAME).ko
+
+$(MODULENAME).ko:$(MODULENAME).c
+	make -C $(KERNELDIR) SUBDIRS=$(PWD) modules CC=arm-linux-gcc LD=arm-linux-ld ARCH=arm
+
+.PHONY clean:
+	make -C $(KERNELDIR) M=$(PWD) clean
+
+
+
+
+Without the symbolic link I had to use this makefile, and change it everytime I used another kernel version.
+
+MODULENAME := digitalio
+
+obj-m += $(MODULENAME).o
+
+KERNELDIR=/home/buildroot12git/output/build/linux-76e10d158efb6d4516018846f60c2ab5501900bc
+
+all:$(MODULENAME).ko
+
+$(MODULENAME).ko:$(MODULENAME).c
+	make -C $(KERNELDIR) SUBDIRS=$(PWD) modules CC=arm-linux-gcc LD=arm-linux-ld ARCH=arm
+
+.PHONY clean:
+	make -C $(KERNELDIR) M=$(PWD) clean 
+
+
+As I onderstood from Arnout, I could build the module from within buildroot (making use of the buildroot vars) but this not an
+option while still developing a module. Every buildroot make would also force a regeneration of the rootfs tar, and this takes a
+serious ammount of time with a large rootfs.
+So I develop it outside the build system and use the symlink to the kernel I have selected.
+
+Regards, Johan
+
+-----Oorspronkelijk bericht-----
+Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Verzonden: donderdag 1 november 2012 10:19
+Aan: Sagaert Johan
+CC: 'Arnout Vandecappelle'; buildroot at busybox.net
+Onderwerp: Re: [Buildroot] [PATCH 1/1] Create a symbolic link to the target kernel directory.
+
+
+On Thu, 1 Nov 2012 02:14:35 +0100, Sagaert Johan wrote:
+
+> I always build modules outside of the buildroot system.
+> Is there another (fast ) way ? I don't like to wait 20 seconds for 
+> buildroot tarring the rootfs.
+
+I don't see the relation between waiting 20 seconds for Buildroot to tar the rootfs and the patch you're posting. Care to explain?
+
+Thomas
+--
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux development, consulting, training and support.
+http://free-electrons.com
