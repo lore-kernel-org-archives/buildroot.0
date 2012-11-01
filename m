@@ -1,41 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu,  1 Nov 2012 11:15:53 +0100
-Subject: [Buildroot] [PATCH] uClibc: install libc.so even if
-	BR2_PREFER_STATIC_LIB is enabled
-In-Reply-To: <50924B99.5080605@mind.be>
-Message-ID: <1351764953-24251-1-git-send-email-arnout@mind.be>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Thu, 1 Nov 2012 10:28:05 +0000
+Subject: [Buildroot] [PATCH v2] fs/common: Create initial console device
+Message-ID: <1351765685-8128-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PREFER_STATIC_LIB _prefers_ static linking, but doesn't force it for
-all packages.  So some binaries may still be built without -static, and
-they will need libc.so on the target.
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-Therefore, put libc.so.0 in the target unconditionally.
+A /dev/console node must be present in rootfs when the Linux kernel
+boots otherwise the kernel will print the following warning:
+"Warning: unable to open an initial console"
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This is because when we use an initramfs the /dev directory is not
+populated at this point. This can cause problems when a program
+(e.g ldso with early debugging enabled) opens a standard file
+descriptor for read/write before these descriptors are actually
+created by the init process later on.
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 ---
-Untested!
+ fs/cpio/cpio.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- toolchain/uClibc/uclibc.mk |    2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 397cdd4..65ff90b 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -486,9 +486,7 @@ $(TARGET_DIR)/usr/bin/ldd: $(cross_compiler)
- 		PREFIX=$(TARGET_DIR) utils install_utils
- 	touch -c $@
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index aa20b41..3293bc9 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -21,6 +21,8 @@ define ROOTFS_CPIO_ADD_INIT
+         fi
+ endef
  
--ifneq ($(BR2_PREFER_STATIC_LIB),y)
- UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
--endif
++PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1
++
+ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
  
- ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
- UCLIBC_TARGETS+=uclibc-test
+ ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
 -- 
-tg: (29266a3..) t/prefer-static-install-libc.so (depends on: master)
+1.7.1
