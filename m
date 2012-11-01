@@ -1,62 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 01 Nov 2012 23:21:20 +0100
-Subject: [Buildroot] [PATCH v2] fs/common: Create initial console device
-In-Reply-To: <1351765685-8128-1-git-send-email-markos.chandras@gmail.com>
-References: <1351765685-8128-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <5092F5E0.80704@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Nov 2012 23:24:35 +0100
+Subject: [Buildroot] [PATCH 1/1] Create a symbolic link to the target
+ kernel directory. example
+In-Reply-To: <D4127A04D6B846E881F6B42F61985647@JohanW7>
+References: <1351729065-31324-1-git-send-email-sagaert.johan@skynet.be>
+ <5091CB65.8070409@mind.be>
+ <75B2C156488F433AB22D082571AE6D4E@JohanW7>
+ <20121101101912.310579d7@skate>
+ <D4127A04D6B846E881F6B42F61985647@JohanW7>
+Message-ID: <20121101232435.06994360@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/12 11:28, Markos Chandras wrote:
-> From: Markos Chandras<markos.chandras@imgtec.com>
->
-> A /dev/console node must be present in rootfs when the Linux kernel
-> boots otherwise the kernel will print the following warning:
-> "Warning: unable to open an initial console"
->
-> This is because when we use an initramfs the /dev directory is not
-> populated at this point. This can cause problems when a program
-> (e.g ldso with early debugging enabled) opens a standard file
-> descriptor for read/write before these descriptors are actually
-> created by the init process later on.
->
-> Signed-off-by: Markos Chandras<markos.chandras@imgtec.com>
-> ---
->   fs/cpio/cpio.mk |    2 ++
->   1 files changed, 2 insertions(+), 0 deletions(-)
->
-> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-> index aa20b41..3293bc9 100644
-> --- a/fs/cpio/cpio.mk
-> +++ b/fs/cpio/cpio.mk
-> @@ -21,6 +21,8 @@ define ROOTFS_CPIO_ADD_INIT
->           fi
->   endef
->
-> +PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1
+Dear Sagaert Johan,
 
-  The last three entries are missing (start, inc, count). Also, there should
-be a $(sep) at the end of the line; otherwise, any subsequent entries are
-appended at the end of the line.  (This will probably be the last line in
-the table anyway, because the fs/ tree is included at the end of Makefile,
-but we shouldn't rely on that).
+On Thu, 1 Nov 2012 20:10:26 +0100, Sagaert Johan wrote:
 
+> KERNELDIR=/home/buildroot12git/output/build/linux-76e10d158efb6d4516018846f60c2ab5501900bc
 
-  Regards,
-  Arnout
+Turn this into:
 
-> +
->   endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
->
->   ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+KERNELDIR=$(shell ls -1 /home/buildroot12git/output/build/linux-[0-9a-f]*)
 
+or, if you want something cleaner, add a <pkg>-show-builddir target for
+all packages in pkg-generic.mk (we could probably get this patch
+upstream), and do:
+
+KERNELDIR=($shell make -C /home/buildroot12git/ linux-show-builddir)
+
+And voil?.
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
