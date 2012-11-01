@@ -1,57 +1,46 @@
-From: Robert Schwebel <r.schwebel@pengutronix.de>
-Date: Thu, 1 Nov 2012 10:26:30 +0100
-Subject: [Buildroot] Topics for the Buildroot Developers meeting
-In-Reply-To: <20121029233815.62dad9b3@skate>
-References: <20121029194314.7545a446@skate>
- <CABYt4-a-3ozfyg-6dRg35vSAv-u8czNyi4cZ=QngtAND0jhcyA@mail.gmail.com>
- <20121029233815.62dad9b3@skate>
-Message-ID: <20121101092630.GG23204@pengutronix.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 01 Nov 2012 11:14:49 +0100
+Subject: [Buildroot] cannot compile a program within a uclibc build
+	chroot
+In-Reply-To: <50921F41.6040502@scalemp.com>
+References: <50913F89.3000802@scalemp.com> <5091A1B2.7060407@mind.be>
+ <50921057.2080606@scalemp.com> <20121101061028.GA17989@sapphire.tkos.co.il>
+ <5092141C.8030100@scalemp.com> <20121101065835.GC17989@sapphire.tkos.co.il>
+ <50921F41.6040502@scalemp.com>
+Message-ID: <50924B99.5080605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Oct 29, 2012 at 11:38:15PM +0100, Thomas Petazzoni wrote:
-> Except that it doesn't work properly, even in PTXdist (as far as I
-> know, of course). We had a discussion about this last year at ELCE with
-> PTXdist developers. Basically, do the following:
+On 11/01/12 08:05, Eial Czerwacki wrote:
+> 09:03:00 $ find root -name "libc*"
+> find: root/lost+found: Permission denied
+> root/usr/include/bits/libc-lock.h
+> _root/usr/lib/libc.a_
+> root/usr/lib/libcrypt_pic.a
+> root/usr/lib/libc_pic.a
+> root/usr/lib/libcurses.a
+> root/usr/lib/libcrypt.a
 >
->  * Build program foo with OpenSSL support (the OpenSSL support in foo
->    is optional, foo can work without OpenSSL). Both foo and openssl are
->    installed in the target.
->
->  * Enjoy foo with OpenSSL on your target, you're happy.
->
->  * Now, remove OpenSSL from your target.
->
-> Beng, "foo" no longer works, because a library it is linked against no
-> longer exists, and "foo" has not been rebuilt without OpenSSL support.
-> As far as I know, PTXdist doesn't keep track of reverse dependencies
-> when removing a package, and that can lead to invalid root filesystems.
+> from what I can understand, although I've marked it to be static as possible, not all packages can be linked to static
+> libs, gcc is an example as it needs libc.so.0 rather than libc.a
 
-You are basically right, but ptxdist's intention is to make reproducable
-systems, which means that a system stays consistent to itself when you
+  (it's actually as (from binutils), not gcc).
 
-a) check out the BSP from your repository
-b) build it from scratch
+  Good catch!  With PREFER_STATIC, buildroot's uClibc doesn't install in the target.
+I'll post an untested patch as a follow-up, can you test it?
 
-That's the only guarantee it gives you. There is no promise that
-anything stays consistent if you configure around while a half-built
-system is already there.
+  Note: the other part of the problem is that binutils sets --enable-shared
+unconditionally.  But there may be other reasons for that.
 
-Because we have dependencies derived from the "select" statements in
-Kconfig, it most times works pretty well if you switch things on, which
-is what people most often do while developing.
-
-If you switch things off, packages might become inconsistent, but again,
-there is no promise that this works.
-
-Any idea for a better mechanism is welcome :-)
-
-rsc
+  Regards,
+  Arnout
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
