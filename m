@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Nov 2012 17:21:23 +0100
-Subject: [Buildroot] [PATCH 1/7] docs/manual: update 'adding packages'
-	with the new _AVAILABLE symbol
-In-Reply-To: <5091D0B8.6050404@mind.be>
+Date: Thu, 1 Nov 2012 17:56:53 +0100
+Subject: [Buildroot] [PATCH 2/7] support/scripts: add a script to add a
+	new package
+In-Reply-To: <5091D7B6.8070703@mind.be>
 References: <1347234052-10527-1-git-send-email-yann.morin.1998@free.fr>
- <1347234052-10527-2-git-send-email-yann.morin.1998@free.fr>
- <5091D0B8.6050404@mind.be>
-Message-ID: <201211011721.23581.yann.morin.1998@free.fr>
+ <1347234052-10527-3-git-send-email-yann.morin.1998@free.fr>
+ <5091D7B6.8070703@mind.be>
+Message-ID: <201211011756.54242.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,88 +17,106 @@ Arnout, All,
 
 On Thursday 01 November 2012 Arnout Vandecappelle wrote:
 > On 09/10/12 01:40, Yann E. MORIN wrote:
-> > --- a/docs/manual/adding-packages-autotools.txt
-> > +++ b/docs/manual/adding-packages-autotools.txt
-> > +12:
-> > +13: ifeq ($(BR2_PACKAGE_LIBFOO_FROBBLE),y)
-> > +14: LIBFOO_CONF_OPT += --enable-frobble
-> > +15: else
-> > +16: LIBFOO_CONF_OPT += --disable-frobble
-> > +17: endif
-> > +18:
-> > +19: LIBFOO_CONF_OPT += --with-gazzle-level=$(BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL)
+> > --- /dev/null
+> > +++ b/docs/manual/adding-packages-script.txt
+> > @@ -0,0 +1,41 @@
+> > +$ ./support/script/pkg-new
+> > +Name of the package: libfoo
+> > +
+> > +1) none
+> > +2) multimedia
+> > +3) java
+> > +4) x11r7
+> > +5) games
+> > +Category of your package: 1
 > 
->   This one is going a bit too far...  And if you keep it, it should
-> probably have a qstrip.
+>   I would skip this question and always create it in packages/libfoo.  The
+> subdirectories are rare, we want to get rid of them, and anyway you can
+> easily move the generated directory to a different place after the fact.
 
-It's an 'int', so is not quoted in the .config.
-(but I'll use a 'string' to address your other comment, so
-I'll qstrip it.)
+OK
 
-> > +20:
-> > +21: ifeq ($(BR2_PACKAGE_LIBFOO_GOO),y)
-> > +22: LIBFOO_DEPENDENCIES += goo
-> > +23: LIBFOO_CONF_OPT += --enable-goo
-> > +24: else
-> > +25: LIBFOO_CONF_OPT += --disable-goo
-> > +26: endif
+> > --- a/docs/manual/adding-packages.txt
+> > +++ b/docs/manual/adding-packages.txt
+> > @@ -19,4 +19,6 @@ include::adding-packages-handwritten.txt[]
+> >
+> >   include::adding-packages-gettext.txt[]
+> >
+> > +include::adding-packages-script.txt[]
+> > +
 > 
->   While you're at it, an automatic enable/disable example would
-> be nice too.
+>   I would put this before the rest of adding-packages.
 
-What do you mean by "automatic"?
+I've poundered this, too, but the script just an /implementation/ of the
+documentation, so I think it should go last.
 
-> > --- a/docs/manual/adding-packages-directory.txt
-> > +++ b/docs/manual/adding-packages-directory.txt
-> > +* The syntax of the +Config.in+ file is the same as the one for the kernel
-> > +  Kconfig file. The documentation for this syntax is available at:
-> > +  https://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/kbuild/kconfig-language.txt[]
+> > --- /dev/null
+> > +++ b/support/scripts/pkg-new
+> > @@ -0,0 +1,151 @@
+> > +#!/bin/bash
 > 
->   http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt
+>   Does it have to be bash?  Hm, yes, for the arrays...  It would be better
+> if we can avoid relying on bash for new functionality.
 
-Does this URL always match the latest version in the git tree?
+I'll check if I can make it a POSIX-compliant script.
 
-> > +1. The +BR2_PACKAGE_LIBFOO_AVAILABLE+ symbol shall +depends on+ any
-> > +other package's +_AVAILABLE+ symbol. It may also depend on any other
-> > +symbol, such as toolchain features, but should not directly depend on
-> > +any package's main symbol.
+
+> > +# --------------------------------------
+> > +# Can't use 'cat<<-_EOF_', as Config.in uses leading tabs.
 > 
->   ... except for _XORG7, _PYTHON, etc.
+>   I don't think the indented Config.in block is very readable; I'd use a
+> plain <<_EOF_ with no extra indentation.  Then you can use cat after all.
 
-Well, my opinion (FWIW) is those packages should not be treated
-differently just because they are /big/.
+Indenting here-documents allows one to easily see the end of it. I
+personally have difficulties reading scripts where this is not the case.
 
-(One of) the goal(s) of _AVAILABLE is to allow the user to say either:
-  - I want this package, enable whatever dependencies are required.
-or:
-  - I need this package, but I have to provide a toolchain that has
-    such and such feature
-
-_AVAILABLE makes that easy.
-
-Then, it's up to the user to understand what pulling-in a package implies.
-
-> > +config BR2_PACKAGE_LIBFOO_GAZZLE_LEVEL
-> > +	int "Gazzle level"
-> > +	range 0 10
+> > +# --------------------------------------
+> > +# Create the package.mk file
+> > +cat>"${pkg_dir}/${pkg_name}.mk"<<-_EOF_
 > 
->   We currently don't have a single range config option, and only one int.
-> So the example is a bit contrived...  If you add an extra example, a string
-> option that is qstripped in the .mk file is more appropriate.
+>   Same here, indentation doesn't look natural to me.
 
-OK.
+Hmmm. Let's ask a neutral party, then! ;-)
 
-> > --- a/docs/manual/adding-packages-generic.txt
-> > +++ b/docs/manual/adding-packages-generic.txt
-> > @@ -79,11 +102,11 @@ steps should be performed to install the package in the staging space.
-> >   +LIBFOO_INSTALL_TARGET_CMDS+ tells what steps should be
-> >   performed to install the package in the target space.
+> > +	#############################################################
+> > +	#
+> > +	# ${pkg_name}
+> > +	#
+> > +	#############################################################
+> > +	
+> > +	${PKG_NAME}_VERSION       =
+> > +	${PKG_NAME}_SOURCE        =
+> > +	${PKG_NAME}_SITE          =
+> > +	${PKG_NAME}_DEPENDENCIES  =
+> > +	${PKG_NAME}_LICENSE       =
+> > +	${PKG_NAME}_LICENSE_FILES =
+> > +	
+> > +_EOF_
 > 
->   Shouldn't _DEVICES and _PERMISSIONS be explained?
+>   For autotools-package and cmake-package, _CONF_OPT is also a very useful one.
+>   Maybe also add _INSTALL_STAGING.
 
-Da, tovarich!
+I think we should fill-in only strictly-required variables.
 
-Thank you!
+> > +if [ "${pkg_bs}" = "generic" ]; then
+> > +    cat>>"${pkg_dir}/${pkg_name}.mk"<<-_EOF_
+> > +		# See docs/manual/ for the complete list of actions that can
+> > +		# be defined; only the most common ones are listed below:
+> > +		
+> > +		define ${PKG_NAME}_CONFIGURE_CMDS
+> > +		endef
+> > +		
+> > +		define ${PKG_NAME}_BUILD_CMDS
+> > +		endef
+> > +		
+> > +		define ${PKG_NAME}_INSTALL_TARGET_CMDS
+> 
+>   Putting a sample
+> 	install -D -m 0644 $(@D)/... $(TARGET_DIR)/...
+> isn't a bad idea.
+
+I don't like it. This is just a skeleton file. No default value has been
+provided for any variable.
 
 Regards,
 Yann E. MORIN.
