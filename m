@@ -1,39 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 02 Nov 2012 23:32:44 +0100
-Subject: [Buildroot] [PATCH 2/2] legal-info: split _LICENSE and
- _REDISTRIBUTE constants
-In-Reply-To: <1351848341-5905-3-git-send-email-luca@lucaceresoli.net>
-References: <1351848341-5905-1-git-send-email-luca@lucaceresoli.net>
- <1351848341-5905-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <50944A0C.4000900@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 02 Nov 2012 23:52:34 +0100
+Subject: [Buildroot] [PATCH 0/3] Update AT91SAM926* patches and configs
+In-Reply-To: <1351203333-26588-1-git-send-email-alexandre.belloni@piout.net>
+ (Alexandre Belloni's message of "Fri, 26 Oct 2012 00:15:30 +0200")
+References: <1351203333-26588-1-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <87fw4r1utp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/12 10:25, Luca Ceresoli wrote:
-> Currently packages can be described in two ways: proprietary (tarball not
-> saved, license not described in further detail), and others (tarball
-> saved, license described).
->
-> Split the logic to allow the license to be always described whether or not
-> the source code can be redistributed.
->
-> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@piout.net> writes:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(untested)
+ Alexandre> As u-boot took the patch in the mainline, I updated the
+ Alexandre> at91bootstrap and u-boot patches accordingly.
 
-  Pending the discussion at the BR developer days, of course; my ack is just
-concerning the implementation.
+ Alexandre> Also, update defconfigs to use latest u-boot.
 
-  Regards,
-  Arnout
+ Alexandre> Tested on at91sam9261ek with u-boot 2011.12, 2012.04.1 and 2012.10.
+
+Committed series, thanks.
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
