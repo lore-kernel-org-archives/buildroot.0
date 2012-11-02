@@ -1,46 +1,88 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 2 Nov 2012 21:23:19 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2, 4,
-	6}.x stable versions
-Message-ID: <20121102231433.AEFB6999E0@busybox.osuosl.org>
+Date: Fri, 2 Nov 2012 23:36:02 +0100
+Subject: [Buildroot] [git commit] at91sam92*: update defconfigs to use
+	latest u-boot
+Message-ID: <20121102231434.D011A999E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2251b7502a1d09602ed203280427da403993497a
+commit: http://git.buildroot.net/buildroot/commit/?id=8f4ffd8c0b7fcc36309b0dbd73463745042496f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    8 ++++----
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/at91sam9260dfc_defconfig |    6 ------
+ configs/at91sam9261ek_defconfig  |    6 ------
+ configs/at91sam9263ek_defconfig  |    6 ------
+ 3 files changed, 0 insertions(+), 18 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 2270e0c..d596870 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.49"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.50"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.32"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.16"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.17"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
--	default "3.6.4"		if BR2_KERNEL_HEADERS_3_6
-+	default "3.6.5"		if BR2_KERNEL_HEADERS_3_6
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.49-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+index 921afa8..085997a 100644
+--- a/configs/at91sam9260dfc_defconfig
++++ b/configs/at91sam9260dfc_defconfig
+@@ -9,17 +9,11 @@ BR2_PACKAGE_HOST_SAM_BA=y
+ # First stage bootloader
+ BR2_TARGET_AT91BOOTSTRAP=y
+ BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9260ek"
+-BR2_TARGET_AT91BOOTSTRAP_DATAFLASH=y
+ 
+ # Second stage bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9260ek_dataflash_cs0"
+-BR2_TARGET_UBOOT_2011_12=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/at91sam9261ek_defconfig b/configs/at91sam9261ek_defconfig
+index aafb166..c53e732 100644
+--- a/configs/at91sam9261ek_defconfig
++++ b/configs/at91sam9261ek_defconfig
+@@ -9,17 +9,11 @@ BR2_PACKAGE_HOST_SAM_BA=y
+ # First stage bootloader
+ BR2_TARGET_AT91BOOTSTRAP=y
+ BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9261ek"
+-BR2_TARGET_AT91BOOTSTRAP_DATAFLASH=y
+ 
+ # Second stage bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9261ek_dataflash_cs0"
+-BR2_TARGET_UBOOT_2011_12=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="at91sam9261"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_TAR=y
+diff --git a/configs/at91sam9263ek_defconfig b/configs/at91sam9263ek_defconfig
+index 2cd82c0..208e057 100644
+--- a/configs/at91sam9263ek_defconfig
++++ b/configs/at91sam9263ek_defconfig
+@@ -9,17 +9,11 @@ BR2_PACKAGE_HOST_SAM_BA=y
+ # First stage bootloader
+ BR2_TARGET_AT91BOOTSTRAP=y
+ BR2_TARGET_AT91BOOTSTRAP_BOARD="at91sam9263ek"
+-BR2_TARGET_AT91BOOTSTRAP_DATAFLASH=y
+ 
+ # Second stage bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91sam9263ek_dataflash_cs0"
+-BR2_TARGET_UBOOT_2011_12=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="at91sam9263"
+-
+-# Filesystem
+-BR2_TARGET_ROOTFS_TAR=y
