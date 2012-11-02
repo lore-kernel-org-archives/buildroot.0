@@ -1,39 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 02 Nov 2012 23:21:58 +0100
-Subject: [Buildroot] BR2_PREFER_STATIC_LIB and LDFLAGS+= -static
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6287244@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C6287244@ex-mb1.corp.adtran.com>
-Message-ID: <50944786.4040407@mind.be>
+Date: Fri, 02 Nov 2012 23:32:44 +0100
+Subject: [Buildroot] [PATCH 2/2] legal-info: split _LICENSE and
+ _REDISTRIBUTE constants
+In-Reply-To: <1351848341-5905-3-git-send-email-luca@lucaceresoli.net>
+References: <1351848341-5905-1-git-send-email-luca@lucaceresoli.net>
+ <1351848341-5905-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <50944A0C.4000900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/12 18:06, ANDY KENNEDY wrote:
-> All,
+On 11/02/12 10:25, Luca Ceresoli wrote:
+> Currently packages can be described in two ways: proprietary (tarball not
+> saved, license not described in further detail), and others (tarball
+> saved, license described).
 >
-> Near line 302 in package/Makefile.in was added TARGET_LDFLAGS += -static
-> to satisfy a request I made a while back.  This really needs to be
-> --static so that it filters down through autoconf the correct way.  If
-> -static is passed in LDFLAGS, autoconf regularly mishandles this by
-> setting a variable then never reconfiguring the package's make system
-> to build static.  However, the --static to ld is the same as -static,
-> but autoconf does not compare for --static, thus, packages get built as
-> desired.
-
-  I don't really understand how it can go wrong...  Can you give an example
-of a package with a configure script that handles it the wrong way?
-
+> Split the logic to allow the license to be always described whether or not
+> the source code can be redistributed.
 >
-> Can someone change this in package/Makefile.in or should I submit a
-> dinky patch for this?
+> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
 
-  Yes, please submit a patch.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(untested)
+
+  Pending the discussion at the BR developer days, of course; my ack is just
+concerning the implementation.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
