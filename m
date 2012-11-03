@@ -1,67 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Nov 2012 18:47:46 +0100
-Subject: [Buildroot] [PATCH 01/18] uClibc: use the Buildroot toolchain
-	options instead of the hidden common options
+Date: Sat,  3 Nov 2012 18:47:47 +0100
+Subject: [Buildroot] [PATCH 02/18] busybox: don't force FEATURE_NFS_MOUNT
 In-Reply-To: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ce9a6aa9dfc0c6dc3496b272670a8370b638aa21.1351964808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we are some day going to finally rename the badly named common
-toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
-etc.) into something more logical, let's start using the Buildroot
-toolchain options in the uClibc code.
+Instead of making the Busybox configuration more complicated by trying
+to adjust it depending on whether RPC is available or not (which gets
+complicated when RPC support can be provided by libtirpc), simplify
+things by letting the user enable FEATURE_NFS_MOUNT or not depending
+on whether RPC support is available or not.
+
+Our default configuration do not enable FEATURE_NFS_MOUNT, so users
+will not face any build problems by default. Only if they explicitly
+enable FEATURE_NFS_MOUNT will they have to make sure that the
+toolchain has RPC support, or that libtirpc is enabled (support for
+this added in a followup patch).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/uClibc/uclibc.mk |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/busybox/busybox.mk |   11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index d1cd718..14430d7 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -230,19 +230,19 @@ ifneq ($(UCLIBC_TARGET_ENDIAN),)
- 		-e 's/.*\(ARCH_WANTS_$(UCLIBC_TARGET_ENDIAN)_ENDIAN\).*/\1=y/g' \
- 		$(UCLIBC_DIR)/.oldconfig
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 33f8633..306b46f 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -81,17 +81,6 @@ define BUSYBOX_SET_IPV6
+ endef
  endif
--ifeq ($(BR2_LARGEFILE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LARGEFILE),y)
- 	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=y,g' $(UCLIBC_DIR)/.oldconfig
- else
- 	$(SED) 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=n,g' $(UCLIBC_DIR)/.oldconfig
- 	$(SED) '/.*UCLIBC_HAS_FOPEN_LARGEFILE_MODE.*/d' $(UCLIBC_DIR)/.oldconfig
- 	echo "# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set" >> $(UCLIBC_DIR)/.oldconfig
- endif
--ifeq ($(BR2_INET_IPV6),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_IPV6),y)
- 	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=y,g' $(UCLIBC_DIR)/.oldconfig
- else
- 	$(SED) 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=n,g' $(UCLIBC_DIR)/.oldconfig
- endif
+ 
+-# If RPC is enabled then enable nfs mounts
 -ifeq ($(BR2_INET_RPC),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_RPC),y)
- 	$(SED) 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=y,g' \
- 		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=y,g' \
- 		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=y,g' \
-@@ -302,12 +302,12 @@ ifeq ($(BR2_PTHREAD_DEBUG),y)
- else
- 	echo "# PTHREADS_DEBUG_SUPPORT is not set" >> $(UCLIBC_DIR)/.oldconfig
- endif
--ifeq ($(BR2_ENABLE_LOCALE),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LOCALE),y)
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\n# UCLIBC_BUILD_ALL_LOCALE is not set\nUCLIBC_BUILD_MINIMAL_LOCALE=y\nUCLIBC_BUILD_MINIMAL_LOCALES="$(UCLIBC_LOCALES)"\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g' $(UCLIBC_DIR)/.oldconfig
- else
- 	$(SED) 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=n,g' $(UCLIBC_DIR)/.oldconfig
- endif
--ifeq ($(BR2_USE_WCHAR),y)
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
- 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' $(UCLIBC_DIR)/.oldconfig
- else
- 	$(SED) 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=n,g' $(UCLIBC_DIR)/.oldconfig
+-define BUSYBOX_SET_RPC
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-else
+-define BUSYBOX_SET_RPC
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ # If we're using static libs do the same for busybox
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ define BUSYBOX_PREFER_STATIC
 -- 
 1.7.9.5
