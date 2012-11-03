@@ -1,72 +1,116 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 3 Nov 2012 17:51:29 +0100
-Subject: [Buildroot] [git commit] gdb: adjust behavior when thread debug is
-	not available
-Message-ID: <20121103165737.AC55C99AA6@busybox.osuosl.org>
+Date: Sat, 3 Nov 2012 17:20:15 +0100
+Subject: [Buildroot] [git commit] barebox: Allow to pass a custom
+	configuration file
+Message-ID: <20121103165737.6AAB799AA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db09796532d1b7b09bae61d1b297261a4a51b7c1
+commit: http://git.buildroot.net/buildroot/commit/?id=1e9b963255fd20c2532f71c62d5c80eb5643d4c9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When an external toolchain without thread debug is used, the gdb
-package can be selected, but no version can be choosen, since none
-match any of the requirements. This leads Buildroot to try to build
-gdb for the target without a version being defined, as in the
-following build log:
-
- http://autobuild.buildroot.org/results/84e8fd2df0cc22448052a572c2e9a6e03dd137eb/build-end.log
-
-To fix this, we adjust the dependencies of the BR2_PACKAGE_GDB option
-so that the package as a whole is not selectable when the required
-conditions are not met. Basically, we have the choice of:
-
- * Having a toolchain that supports thread debugging, which is needed
-   for gdb >= 7.x
-
- * Having BR2_DEPRECATED enabled, which allows gdb 6.8 to be selected,
-   which doesn't require thread debugging
-
- * Using bfin, since this architectures has a special old gdb version
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in |   13 +++++++++----
- 1 files changed, 9 insertions(+), 4 deletions(-)
+ boot/barebox/Config.in  |   21 +++++++++++++++++++++
+ boot/barebox/barebox.mk |   26 +++++++++++++++++++++-----
+ 2 files changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 272e196..8acce1e 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -4,8 +4,14 @@ config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze
-+	# The newest versions of gdb require thread debugging in the
-+	# toolchain. The only cases for which this is not needed is if
-+	# we use gdb 6.8 (marked deprecated)
-+	depends on \
-+		BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED || \
-+		BR2_DEPRECATED || \
-+		BR2_bfin
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index bd70e58..d6ce8dd 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -67,12 +67,33 @@ config BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION
+ 
+ endif
+ 
++
++choice
++	prompt "Barebox configuration"
++	default BR2_TARGET_BAREBOX_USE_DEFCONFIG
++
++config BR2_TARGET_BAREBOX_USE_DEFCONFIG
++	bool "Using a defconfig"
++
++config BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
++	bool "Using a custom config file"
++
++endchoice
++
+ config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
+ 	string "board defconfig"
++	depends on BR2_TARGET_BAREBOX_USE_DEFCONFIG
  	help
- 	    Build the full gdb debugger to run on the target.
+ 	  Name of the board for which Barebox should be built, without
+ 	  the _defconfig suffix.
  
-@@ -90,9 +96,8 @@ choice
++
++config BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG
++	help
++	  Path to the barebox configuration file
++
+ config BR2_TARGET_BAREBOX_BAREBOXENV
+ 	bool "bareboxenv tool in target"
+ 	help
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index ee84831..a025d5f 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -37,8 +37,6 @@ ifneq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+ BAREBOX_INSTALL_TARGET = NO
+ endif
  
- endchoice
+-BAREBOX_BOARD_DEFCONFIG = $(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))
+-
+ ifeq ($(KERNEL_ARCH),i386)
+ BAREBOX_ARCH=x86
+ else ifeq ($(KERNEL_ARCH),powerpc)
+@@ -49,8 +47,16 @@ endif
  
--comment "gdb 7.x support needs pthread debug support in toolchain"
--	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_GDB_SERVER || BR2_PACKAGE_GDB_HOST
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
-+comment "gdb support needs pthread debug support in toolchain"
-+	depends on !BR2_DEPRECATED && !BR2_bfin && !BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
+ BAREBOX_MAKE_FLAGS = ARCH=$(BAREBOX_ARCH) CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)"
  
- config BR2_GDB_VERSION
- 	string
++
++ifeq ($(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
++BAREBOX_SOURCE_CONFIG = $(@D)/arch/$(BAREBOX_ARCH)/configs/$(call qstrip,$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
++else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
++BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
++endif
++
+ define BAREBOX_CONFIGURE_CMDS
+-	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) $(BAREBOX_BOARD_DEFCONFIG)_defconfig
++	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
++	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+ endef
+ 
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+@@ -80,8 +86,8 @@ $(eval $(generic-package))
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+ # we NEED a board defconfig file unless we're at make source
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
+-ifeq ($(BAREBOX_BOARD_DEFCONFIG),)
+-$(error No Barebox defconfig file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG setting)
++ifeq ($(BAREBOX_SOURCE_CONFIG),)
++$(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
+ endif
+ endif
+ 
+@@ -94,4 +100,14 @@ barebox-savedefconfig: barebox-configure
+ 	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) \
+ 		$(subst barebox-,,$@)
+ 
++ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
++barebox-update-config: barebox-configure $(BAREBOX_DIR)/.config
++	cp -f $(BAREBOX_DIR)/.config $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
++
++barebox-update-defconfig: barebox-savedefconfig
++	cp -f $(BAREBOX_DIR)/defconfig $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
++else
++barebox-update-config: ;
++barebox-update-defconfig: ;
++endif
+ endif
