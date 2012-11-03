@@ -1,114 +1,190 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 3 Nov 2012 19:13:51 +0100
-Subject: [Buildroot] [git commit] ulogd: add new package
-Message-ID: <20121103182342.8016199A6E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  3 Nov 2012 19:27:57 +0100
+Subject: [Buildroot] [pull request] Pull request for branch remove-target-dir
+Message-ID: <cover.1351967245.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b3770a8dc2c93c0a97786846e4c60037e52e7579
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Changes since last posting:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                 |    1 +
- package/ulogd/Config.in                           |   16 +++++++++++
- package/ulogd/ulogd-fix-libpcap-conditional.patch |   29 +++++++++++++++++++++
- package/ulogd/ulogd.mk                            |   17 ++++++++++++
- 4 files changed, 63 insertions(+), 0 deletions(-)
+ * Rebase on current master (mostly take into account the arrival of
+   aarch64)
 
-diff --git a/package/Config.in b/package/Config.in
-index ab0c205..3b7458f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -647,6 +647,7 @@ source "package/tn5250/Config.in"
- source "package/transmission/Config.in"
- source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
-+source "package/ulogd/Config.in"
- source "package/ushare/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
-diff --git a/package/ulogd/Config.in b/package/ulogd/Config.in
-new file mode 100644
-index 0000000..7dc4f11
---- /dev/null
-+++ b/package/ulogd/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_ULOGD
-+	bool "ulogd"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_LIBMNL
-+	select BR2_PACKAGE_LIBNETFILTER_ACCT
-+	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
-+	select BR2_PACKAGE_LIBNETFILTER_LOG
-+	select BR2_PACKAGE_LIBNFNETLINK
-+	help
-+	  ulogd is a userspace logging daemon for netfilter/iptables related logging.
-+
-+	  http://www.netfilter.org/projects/ulogd/
-+
-+comment "ulogd requires a toolchain with IPV6 and LARGEFILE support"
-+	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE
-diff --git a/package/ulogd/ulogd-fix-libpcap-conditional.patch b/package/ulogd/ulogd-fix-libpcap-conditional.patch
-new file mode 100644
-index 0000000..3d73d37
---- /dev/null
-+++ b/package/ulogd/ulogd-fix-libpcap-conditional.patch
-@@ -0,0 +1,29 @@
-+From 08387386821f356834bac14c7c5ea7296fb0f428 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 9 Oct 2012 16:23:12 -0300
-+Subject: [PATCH] autoconf/ulogd: fix broken libpcap AM_CONDITIONAL
-+
-+The AM_CONDITIONAL lacks the opening bracket, hence it always evaluates
-+as true, even if there's no libpcap found thus causing build breakage.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ configure.ac |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 10b6e1f..57c596c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -21,7 +21,7 @@ AC_SEARCH_LIBS([dlopen], [dl], [libdl_LIBS="$LIBS"; LIBS=""])
-+ AC_SUBST([libdl_LIBS])
-+ AC_SEARCH_LIBS([pcap_close], [pcap], [libpcap_LIBS="-lpcap"; LIBS=""])
-+ AC_SUBST([libpcap_LIBS])
-+-AM_CONDITIONAL([HAVE_PCAP], test -n "$libpcap_LIBS"])
-++AM_CONDITIONAL([HAVE_PCAP],[test -n "$libpcap_LIBS"])
-+ 
-+ dnl Checks for header files.
-+ AC_HEADER_DIRENT
-+-- 
-+1.7.8.6
-+
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-new file mode 100644
-index 0000000..7d31b73
---- /dev/null
-+++ b/package/ulogd/ulogd.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# ulogd
-+#
-+#############################################################
-+
-+ULOGD_VERSION = 2.0.1
-+ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
-+ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
-+ULOGD_AUTORECONF = YES
-+ULOGD_DEPENDENCIES = host-pkgconf \
-+	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
-+	libnfnetlink
-+ULOGD_LICENSE = GPLv2
-+ULOGD_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ * Add Arnout's Acked-by on the first patch
+
+Thomas
+
+The following changes since commit 51f3425e3d6c69758c071b9327eecaa14b5e053a:
+
+  use avr32linux.org mirror (2012-11-03 18:11:49 +0100)
+
+are available in the git repository at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git remove-target-dir
+
+for you to fetch changes up to 9b972f2db74b874534b3548249241f5bccc1d7cf:
+
+  arch: improve definition of gcc mtune, mcpu, etc. (2012-11-03 19:27:02 +0100)
+
+----------------------------------------------------------------
+Thomas Petazzoni (3):
+      New top-level directory: system
+      Split target/Config.in.arch into multiple Config.in.* in arch/
+      arch: improve definition of gcc mtune, mcpu, etc.
+
+ Config.in                                          |    4 +-
+ Makefile                                           |    2 +-
+ arch/Config.in                                     |  212 +++++
+ arch/Config.in.aarch64                             |    5 +
+ arch/Config.in.arm                                 |  114 +++
+ arch/Config.in.avr32                               |    5 +
+ arch/Config.in.bfin                                |   16 +
+ arch/Config.in.m68k                                |   21 +
+ arch/Config.in.microblaze                          |   10 +
+ arch/Config.in.mips                                |   79 ++
+ arch/Config.in.powerpc                             |  128 +++
+ arch/Config.in.sh                                  |   41 +
+ arch/Config.in.sparc                               |   69 ++
+ arch/Config.in.x86                                 |  235 ++++++
+ {target/generic => system}/Config.in               |    2 +-
+ {target/generic => system}/device_table.txt        |    0
+ {target/generic => system}/device_table_dev.txt    |    0
+ {fs => system}/skeleton/bin/.empty                 |    0
+ {fs => system}/skeleton/dev/log                    |    0
+ {fs => system}/skeleton/dev/pts/.empty             |    0
+ {fs => system}/skeleton/etc/fstab                  |    0
+ {fs => system}/skeleton/etc/group                  |    0
+ {fs => system}/skeleton/etc/hostname               |    0
+ {fs => system}/skeleton/etc/hosts                  |    0
+ {fs => system}/skeleton/etc/init.d/S20urandom      |    0
+ {fs => system}/skeleton/etc/init.d/S40network      |    0
+ {fs => system}/skeleton/etc/init.d/rcK             |    0
+ {fs => system}/skeleton/etc/init.d/rcS             |    0
+ {fs => system}/skeleton/etc/inittab                |    0
+ {fs => system}/skeleton/etc/inputrc                |    0
+ {fs => system}/skeleton/etc/issue                  |    0
+ {fs => system}/skeleton/etc/ld.so.conf.d/.empty    |    0
+ {fs => system}/skeleton/etc/mtab                   |    0
+ .../skeleton/etc/network/if-down.d/.empty          |    0
+ .../skeleton/etc/network/if-post-down.d/.empty     |    0
+ .../skeleton/etc/network/if-pre-up.d/.empty        |    0
+ {fs => system}/skeleton/etc/network/if-up.d/.empty |    0
+ {fs => system}/skeleton/etc/network/interfaces     |    0
+ {fs => system}/skeleton/etc/passwd                 |    0
+ {fs => system}/skeleton/etc/profile                |    0
+ {fs => system}/skeleton/etc/protocols              |    0
+ {fs => system}/skeleton/etc/random-seed            |  Bin 512 -> 512 bytes
+ {fs => system}/skeleton/etc/resolv.conf            |    0
+ {fs => system}/skeleton/etc/securetty              |    0
+ {fs => system}/skeleton/etc/services               |    0
+ {fs => system}/skeleton/etc/shadow                 |    0
+ {fs => system}/skeleton/home/ftp/.empty            |    0
+ {fs => system}/skeleton/lib/.empty                 |    0
+ {fs => system}/skeleton/media/.empty               |    0
+ {fs => system}/skeleton/mnt/.empty                 |    0
+ {fs => system}/skeleton/opt/.empty                 |    0
+ {fs => system}/skeleton/proc/.empty                |    0
+ {fs => system}/skeleton/root/.bash_history         |    0
+ {fs => system}/skeleton/root/.bash_logout          |    0
+ {fs => system}/skeleton/root/.bash_profile         |    0
+ {fs => system}/skeleton/root/.empty                |    0
+ {fs => system}/skeleton/run                        |    0
+ {fs => system}/skeleton/sbin/.empty                |    0
+ {fs => system}/skeleton/sys/.empty                 |    0
+ {fs => system}/skeleton/tmp/.empty                 |    0
+ {fs => system}/skeleton/usr/bin/.empty             |    0
+ {fs => system}/skeleton/usr/lib/.empty             |    0
+ {fs => system}/skeleton/usr/sbin/.empty            |    0
+ {fs => system}/skeleton/var/cache                  |    0
+ {fs => system}/skeleton/var/lib/misc               |    0
+ {fs => system}/skeleton/var/lib/pcmcia             |    0
+ {fs => system}/skeleton/var/lock                   |    0
+ {fs => system}/skeleton/var/log                    |    0
+ {fs => system}/skeleton/var/pcmcia                 |    0
+ {fs => system}/skeleton/var/run                    |    0
+ {fs => system}/skeleton/var/spool                  |    0
+ {fs => system}/skeleton/var/tmp                    |    0
+ target/generic/Makefile.in => system/system.mk     |    0
+ target/Config.in.arch                              |  830 --------------------
+ target/Makefile.in                                 |    3 -
+ 75 files changed, 939 insertions(+), 837 deletions(-)
+ create mode 100644 arch/Config.in
+ create mode 100644 arch/Config.in.aarch64
+ create mode 100644 arch/Config.in.arm
+ create mode 100644 arch/Config.in.avr32
+ create mode 100644 arch/Config.in.bfin
+ create mode 100644 arch/Config.in.m68k
+ create mode 100644 arch/Config.in.microblaze
+ create mode 100644 arch/Config.in.mips
+ create mode 100644 arch/Config.in.powerpc
+ create mode 100644 arch/Config.in.sh
+ create mode 100644 arch/Config.in.sparc
+ create mode 100644 arch/Config.in.x86
+ rename {target/generic => system}/Config.in (99%)
+ rename {target/generic => system}/device_table.txt (100%)
+ rename {target/generic => system}/device_table_dev.txt (100%)
+ rename {fs => system}/skeleton/bin/.empty (100%)
+ rename {fs => system}/skeleton/dev/log (100%)
+ rename {fs => system}/skeleton/dev/pts/.empty (100%)
+ rename {fs => system}/skeleton/etc/fstab (100%)
+ rename {fs => system}/skeleton/etc/group (100%)
+ rename {fs => system}/skeleton/etc/hostname (100%)
+ rename {fs => system}/skeleton/etc/hosts (100%)
+ rename {fs => system}/skeleton/etc/init.d/S20urandom (100%)
+ rename {fs => system}/skeleton/etc/init.d/S40network (100%)
+ rename {fs => system}/skeleton/etc/init.d/rcK (100%)
+ rename {fs => system}/skeleton/etc/init.d/rcS (100%)
+ rename {fs => system}/skeleton/etc/inittab (100%)
+ rename {fs => system}/skeleton/etc/inputrc (100%)
+ rename {fs => system}/skeleton/etc/issue (100%)
+ rename {fs => system}/skeleton/etc/ld.so.conf.d/.empty (100%)
+ rename {fs => system}/skeleton/etc/mtab (100%)
+ rename {fs => system}/skeleton/etc/network/if-down.d/.empty (100%)
+ rename {fs => system}/skeleton/etc/network/if-post-down.d/.empty (100%)
+ rename {fs => system}/skeleton/etc/network/if-pre-up.d/.empty (100%)
+ rename {fs => system}/skeleton/etc/network/if-up.d/.empty (100%)
+ rename {fs => system}/skeleton/etc/network/interfaces (100%)
+ rename {fs => system}/skeleton/etc/passwd (100%)
+ rename {fs => system}/skeleton/etc/profile (100%)
+ rename {fs => system}/skeleton/etc/protocols (100%)
+ rename {fs => system}/skeleton/etc/random-seed (100%)
+ rename {fs => system}/skeleton/etc/resolv.conf (100%)
+ rename {fs => system}/skeleton/etc/securetty (100%)
+ rename {fs => system}/skeleton/etc/services (100%)
+ rename {fs => system}/skeleton/etc/shadow (100%)
+ rename {fs => system}/skeleton/home/ftp/.empty (100%)
+ rename {fs => system}/skeleton/lib/.empty (100%)
+ rename {fs => system}/skeleton/media/.empty (100%)
+ rename {fs => system}/skeleton/mnt/.empty (100%)
+ rename {fs => system}/skeleton/opt/.empty (100%)
+ rename {fs => system}/skeleton/proc/.empty (100%)
+ rename {fs => system}/skeleton/root/.bash_history (100%)
+ rename {fs => system}/skeleton/root/.bash_logout (100%)
+ rename {fs => system}/skeleton/root/.bash_profile (100%)
+ rename {fs => system}/skeleton/root/.empty (100%)
+ rename {fs => system}/skeleton/run (100%)
+ rename {fs => system}/skeleton/sbin/.empty (100%)
+ rename {fs => system}/skeleton/sys/.empty (100%)
+ rename {fs => system}/skeleton/tmp/.empty (100%)
+ rename {fs => system}/skeleton/usr/bin/.empty (100%)
+ rename {fs => system}/skeleton/usr/lib/.empty (100%)
+ rename {fs => system}/skeleton/usr/sbin/.empty (100%)
+ rename {fs => system}/skeleton/var/cache (100%)
+ rename {fs => system}/skeleton/var/lib/misc (100%)
+ rename {fs => system}/skeleton/var/lib/pcmcia (100%)
+ rename {fs => system}/skeleton/var/lock (100%)
+ rename {fs => system}/skeleton/var/log (100%)
+ rename {fs => system}/skeleton/var/pcmcia (100%)
+ rename {fs => system}/skeleton/var/run (100%)
+ rename {fs => system}/skeleton/var/spool (100%)
+ rename {fs => system}/skeleton/var/tmp (100%)
+ rename target/generic/Makefile.in => system/system.mk (100%)
+ delete mode 100644 target/Config.in.arch
+ delete mode 100644 target/Makefile.in
+
+Thanks,
+-- 
+Thomas Petazzoni
