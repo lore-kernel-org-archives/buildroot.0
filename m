@@ -1,52 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Nov 2012 18:47:59 +0100
-Subject: [Buildroot] [PATCH 14/18] xinetd: add support to use RPC support
-	from libtirpc
+Date: Sat,  3 Nov 2012 18:47:58 +0100
+Subject: [Buildroot] [PATCH 13/18] samba: unconditionally enable
+	--with-sys-quotas
 In-Reply-To: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <782d19b832389c1e512ff8c0c8b9886dc2ca33c3.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6160401a3e433528546f580220f4696fc8a58f82.1351964808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Contrary to what was written in samba.mk, the sys-quotas option
+apparently does not depend on RPC support in the toolchain: Samba
+builds perfectly fine on an uClibc toolchain without RPC support with
+sys-quotas enabled.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xinetd/xinetd.mk |   19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ package/samba/samba.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index a420425..cb48145 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -9,10 +9,25 @@ XINETD_SITE          = http://www.xinetd.org
- XINETD_LICENSE       = xinetd license
- XINETD_LICENSE_FILES = COPYRIGHT
- 
--ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
--XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
-+XINETD_CFLAGS = $(TARGET_CFLAGS)
-+
-+# Three cases here:
-+#  1. We have libtirpc, use it by passing special flags
-+#  2. We have native RPC support, use it, no need to pass special
-+#     flags (so this case 2 is implicit and not visible below)
-+#  3. We don't have RPC support, pass -DNO_RPC to disable it
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+XINETD_DEPENDENCIES += libtirpc
-+XINETD_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-+XINETD_LIBS += -ltirpc
-+else ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
-+XINETD_CFLAGS += -DNO_RPC
- endif
- 
-+XINETD_CONF_ENV += \
-+	CFLAGS="$(XINETD_CFLAGS)" \
-+	LIBS="$(XINETD_LIBS)"
-+
- XINETD_MAKE_OPT = AR="$(TARGET_AR)"
- 
- $(eval $(autotools-package))
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 7dd0a1d..3000b99 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -51,7 +51,7 @@ SAMBA_CONF_OPT = \
+ 	\
+ 	--without-cluster-support \
+ 	--without-dnsupdate \
+-	$(if $(BR2_TOOLCHAIN_HAS_NATIVE_RPC),--with-sys-quotas,--without-sys-quotas) \
++	--with-sys-quotas \
+ 	--without-ads \
+ 	--without-ldap \
+ 	--with-included-iniparser \
 -- 
 1.7.9.5
