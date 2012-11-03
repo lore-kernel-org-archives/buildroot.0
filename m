@@ -1,72 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 3 Nov 2012 19:11:47 +0100
-Subject: [Buildroot] [git commit] libnetfilter_acct: add new package
-Message-ID: <20121103182340.BBD1D99A6E@busybox.osuosl.org>
+Date: Sat, 3 Nov 2012 19:14:18 +0100
+Subject: [Buildroot] [git commit] arptables: add new package
+Message-ID: <20121103182342.C805199A6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b48aa7eed99ca980548ade72949dfd4108e8d05d
+commit: http://git.buildroot.net/buildroot/commit/?id=efc10eb6b87884f1f7917462d78af6953fcd99e3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                              |    1 +
- package/libnetfilter_acct/Config.in            |   12 ++++++++++++
- package/libnetfilter_acct/libnetfilter-acct.mk |   15 +++++++++++++++
+ package/Config.in              |    1 +
+ package/arptables/Config.in    |    6 ++++++
+ package/arptables/arptables.mk |   21 +++++++++++++++++++++
  3 files changed, 28 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index eae415b..dde8475 100644
+index 3b7458f..6125abc 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -455,6 +455,7 @@ source "package/neon/Config.in"
- source "package/libmnl/Config.in"
- source "package/libmodbus/Config.in"
- source "package/libmbus/Config.in"
-+source "package/libnetfilter_acct/Config.in"
- source "package/libnetfilter_conntrack/Config.in"
- source "package/libnetfilter_cthelper/Config.in"
- source "package/libnetfilter_cttimeout/Config.in"
-diff --git a/package/libnetfilter_acct/Config.in b/package/libnetfilter_acct/Config.in
+@@ -550,6 +550,7 @@ endmenu
+ 
+ menu "Networking applications"
+ source "package/argus/Config.in"
++source "package/arptables/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
+ source "package/bluez_utils/Config.in"
+diff --git a/package/arptables/Config.in b/package/arptables/Config.in
 new file mode 100644
-index 0000000..76cdf7d
+index 0000000..510eedf
 --- /dev/null
-+++ b/package/libnetfilter_acct/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBNETFILTER_ACCT
-+	bool "libnetfilter_acct"
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_LIBMNL
++++ b/package/arptables/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_ARPTABLES
++	bool "arptables"
 +	help
-+	  libnetfilter_acct is the userspace library providing interface
-+	  to extended accounting infrastructure.
++	  Tool to set up, maintain, and inspect the tables of ARP rules.
 +
-+	  http://www.netfilter.org/projects/libnetfilter_acct/
-+
-+comment "libnetfilter_acct requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/libnetfilter_acct/libnetfilter-acct.mk b/package/libnetfilter_acct/libnetfilter-acct.mk
++	  http://ebtables.sourceforge.net
+diff --git a/package/arptables/arptables.mk b/package/arptables/arptables.mk
 new file mode 100644
-index 0000000..615c94c
+index 0000000..dac5ca4
 --- /dev/null
-+++ b/package/libnetfilter_acct/libnetfilter-acct.mk
-@@ -0,0 +1,15 @@
++++ b/package/arptables/arptables.mk
+@@ -0,0 +1,21 @@
 +#############################################################
 +#
-+# libnetfilter-acct
++# arptables
 +#
 +#############################################################
 +
-+LIBNETFILTER_ACCT_VERSION = 1.0.1
-+LIBNETFILTER_ACCT_SOURCE = libnetfilter_acct-$(LIBNETFILTER_ACCT_VERSION).tar.bz2
-+LIBNETFILTER_ACCT_SITE = http://www.netfilter.org/projects/libnetfilter_acct/files
-+LIBNETFILTER_ACCT_INSTALL_STAGING = YES
-+LIBNETFILTER_ACCT_DEPENDENCIES = host-pkgconf libmnl
-+LIBNETFILTER_ACCT_LICENSE = LGPLv2.1+
-+LIBNETFILTER_ACCT_LICENSE_FILES = COPYING
++ARPTABLES_VERSION = 0.0.3
++ARPTABLES_VERSION_MINOR = 4
++ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION)-$(ARPTABLES_VERSION_MINOR).tar.gz
++ARPTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
 +
-+$(eval $(autotools-package))
++define ARPTABLES_BUILD_CMDS
++	$(MAKE) -C $(@D) \
++		CC="$(TARGET_CC)" COPT_FLAGS="$(TARGET_CFLAGS)"
++endef
++
++define ARPTABLES_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 755 -D $(@D)/arptables $(TARGET_DIR)/usr/sbin/arptables
++endef
++
++$(eval $(generic-package))
