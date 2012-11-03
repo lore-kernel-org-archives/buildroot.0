@@ -1,42 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 04 Nov 2012 00:28:48 +0100
-Subject: [Buildroot] [PATCH] uClibc: install libc.so even if
- BR2_PREFER_STATIC_LIB is enabled
-In-Reply-To: <20121102231708.7d28d857@skate>
-References: <50924B99.5080605@mind.be>
- <1351764953-24251-1-git-send-email-arnout@mind.be>
- <20121102231708.7d28d857@skate>
-Message-ID: <5095A8B0.9070106@mind.be>
+Date: Sun, 04 Nov 2012 00:32:02 +0100
+Subject: [Buildroot] [PATCH 01/18] uClibc: use the Buildroot toolchain
+ options instead of the hidden common options
+In-Reply-To: <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
+ <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5095A972.7050603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/02/12 23:17, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle (Essensium/Mind),
+On 11/03/12 18:47, Thomas Petazzoni wrote:
+> Since we are some day going to finally rename the badly named common
+> toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
+> etc.) into something more logical, let's start using the Buildroot
+> toolchain options in the uClibc code.
 >
-> On Thu,  1 Nov 2012 11:15:53 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> >  BR2_PREFER_STATIC_LIB_prefers_  static linking, but doesn't force it
->> >  for all packages.  So some binaries may still be built without
->> >  -static, and they will need libc.so on the target.
->> >
->> >  Therefore, put libc.so.0 in the target unconditionally.
->> >
->> >  Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
->> >  ---
->> >  Untested!
-> This is an exact revert of c95174a8dfb6f72b80768b73b8f04448f846c122. Do
-> we really want to make circles and redo/undo our changes?:-)
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
-  If they break things, yes.  The alternative is to disable all packages that
-don't support static linking of executables if BR2_PREFER_STATIC_LIB is
-selected.
-
-  Regards,
-  Arnout
-
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
