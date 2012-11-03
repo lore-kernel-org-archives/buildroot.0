@@ -1,21 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Nov 2012 19:18:16 +0100
-Subject: [Buildroot] [PATCH 1/1] bump latest stable kernel headers
-In-Reply-To: <1351798342-4427-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Thu, 1 Nov 2012 20:32:22 +0100")
-References: <1351798342-4427-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87sj8qwnx3.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Nov 2012 19:18:56 +0100
+Subject: [Buildroot] [PATCH 05/10] qextserialport: new package
+In-Reply-To: <32f4831f7961e448c93c0eef1a9564436183cc73.1338653505.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 2 Jun 2012 18:13:55 +0200")
+References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+ <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+ <32f4831f7961e448c93c0eef1a9564436183cc73.1338653505.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mwyywnvz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Sagaert> bump latest stable kernel headers.
+ Thomas> ---
+ Thomas>  package/Config.in                                  |    1 +
+ Thomas>  package/qextserialport/Config.in                   |    9 +++++
+ Thomas>  .../qextserialport-main-include.patch              |   15 +++++++++
+ Thomas>  .../qextserialport-no-examples.patch               |   17 ++++++++++
+ Thomas>  .../qextserialport/qextserialport-pkgconfig.patch  |   19 +++++++++++
+ Thomas>  package/qextserialport/qextserialport.mk           |   35
 
-Sorry, committed Gustavoz patches doing the same instead.
+Committed with minor fixups to match current buildroot, thanks.
 
 -- 
 Bye, Peter Korsgaard
