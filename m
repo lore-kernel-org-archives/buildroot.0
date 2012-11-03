@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Nov 2012 18:48:02 +0100
-Subject: [Buildroot] [PATCH 17/18] netkitbase: mark as deprecated
+Date: Sat,  3 Nov 2012 18:48:03 +0100
+Subject: [Buildroot] [PATCH 18/18] netkittelnet: mark as deprecated
 In-Reply-To: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <bbf044155e3134db1522481725076c32a6473fdd.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0003a7e4a071871640d8d842c6838611bf210ae5.1351964808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,20 +18,20 @@ to this package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netkitbase/Config.in |    1 +
+ package/netkittelnet/Config.in |    1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
-index 75bd728..dd9166c 100644
---- a/package/netkitbase/Config.in
-+++ b/package/netkitbase/Config.in
+diff --git a/package/netkittelnet/Config.in b/package/netkittelnet/Config.in
+index 10eb022..1f11d88 100644
+--- a/package/netkittelnet/Config.in
++++ b/package/netkittelnet/Config.in
 @@ -1,6 +1,7 @@
- config BR2_PACKAGE_NETKITBASE
- 	bool "netkitbase"
+ config BR2_PACKAGE_NETKITTELNET
+ 	bool "netkittelnet"
  	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
 +	depends on BR2_DEPRECATED
+ 	select BR2_PACKAGE_NETKITBASE
  	help
- 	  Old-style inetd.
- 
+ 	  Standard Linux telnet client and server.
 -- 
 1.7.9.5
