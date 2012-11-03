@@ -1,44 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 3 Nov 2012 09:21:25 +0100
-Subject: [Buildroot] [git commit] iproute2: fix build with toolchains
-	providing setns(2)
-Message-ID: <20121103082553.B5A6B99A6E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 03 Nov 2012 10:39:24 +0100
+Subject: [Buildroot] [PATCH] lcdapi: fix autobuilder failures
+In-Reply-To: <1351586827-17432-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Tue, 30 Oct 2012 08:47:07 +0000")
+References: <1351586827-17432-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87y5ijyqib.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=102f79865e21158c9153148bef189f810aad5814
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-Fixes http://autobuild.buildroot.net/results/b2f28621bc9d6048057c406048b3f7d665cef165
+ spdawson> From: Simon Dawson <spdawson@gmail.com> Version 0.3 of the
+ spdawson> lcdapi package does not correctly handle CXXFLAGS passed in
+ spdawson> from the environment/command line. In particular, the passing
+ spdawson> in of CXXFLAGS clobbers the -fPIC flag which is set in the
+ spdawson> top-level lcdapi makefile.
 
-ipnetns.c contains a replacement setns implementation, which is used
-if the toolchain doesn't provide any (HAVE_SETNS not set).
+ spdawson> The following autobuild logs highlight the problem.
+  
+ spdawson>   http://autobuild.buildroot.net/results/9a47b4a70d29308f668d65d983ba6146c0c56365/build-end.log
 
-We don't have any knowledge of toolchain setns support on buildroot
-level, but the (handwritten) configure script contains a test for it,
-so run the configure script before building.
+ spdawson>   http://autobuild.buildroot.net/results/4a4f6e2e7f80d5a23c9d26069094e9dafb1468e7/build-end.log
 
-The configure script isn't written for cross compilation, so it needs
-to be massaged slightly to use the cross compiler / flags.
+ spdawson>   http://autobuild.buildroot.net/results/0d96c207a9db44cf2791a66cad5162a739e7053a/build-end.log
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/iproute2/iproute2.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ spdawson> This has been fixed upstream in version 0.4; this patch
+ spdawson> simply bumps the version number in the Buildroot lcdapi
+ spdawson> package.
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 62328ab..03767cc 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -27,6 +27,8 @@ endef
- endif
- 
- define IPROUTE2_CONFIGURE_CMDS
-+	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
-+	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
- 	# arpd needs berkeleydb
- 	$(SED) "/^TARGETS=/s: arpd : :" $(IPROUTE2_DIR)/misc/Makefile
- 	echo "IPT_LIB_DIR:=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
