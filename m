@@ -1,48 +1,44 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 3 Nov 2012 08:59:21 +0100
-Subject: [Buildroot] [git commit] gdisk: close(2) needs unistd.h
-Message-ID: <20121103080054.174F599A70@busybox.osuosl.org>
+Date: Sat, 3 Nov 2012 09:21:25 +0100
+Subject: [Buildroot] [git commit] iproute2: fix build with toolchains
+	providing setns(2)
+Message-ID: <20121103082553.B5A6B99A6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7053563f5c4d55edac75eaf833f473b7818b6e8
+commit: http://git.buildroot.net/buildroot/commit/?id=102f79865e21158c9153148bef189f810aad5814
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/c557ee7cd1247e024b5edccf5f824eb4d5212e25
+Fixes http://autobuild.buildroot.net/results/b2f28621bc9d6048057c406048b3f7d665cef165
 
-Fixed upstream as well in the (big) 0.8.3 commit:
-http://gptfdisk.git.sourceforge.net/git/gitweb.cgi?p=gptfdisk/gptfdisk;a=commit;h=3488294d718a0e8b7f312c80c9e5729671173f6a
+ipnetns.c contains a replacement setns implementation, which is used
+if the toolchain doesn't provide any (HAVE_SETNS not set).
+
+We don't have any knowledge of toolchain setns support on buildroot
+level, but the (handwritten) configure script contains a test for it,
+so run the configure script before building.
+
+The configure script isn't written for cross compilation, so it needs
+to be massaged slightly to use the cross compiler / flags.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gdisk/gdisk-0.6.14-unistd.patch |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdisk/gdisk-0.6.14-unistd.patch b/package/gdisk/gdisk-0.6.14-unistd.patch
-new file mode 100644
-index 0000000..97627da
---- /dev/null
-+++ b/package/gdisk/gdisk-0.6.14-unistd.patch
-@@ -0,0 +1,19 @@
-+[PATCH] close(2) needs unistd.h
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ diskio-unix.cc |    1 +
-+ 1 file changed, 1 insertion(+)
-+
-+Index: gdisk-0.6.14/diskio-unix.cc
-+===================================================================
-+--- gdisk-0.6.14.orig/diskio-unix.cc
-++++ gdisk-0.6.14/diskio-unix.cc
-+@@ -22,6 +22,7 @@
-+ #include <errno.h>
-+ #include <fcntl.h>
-+ #include <sys/stat.h>
-++#include <unistd.h>
-+ #include <iostream>
-+ 
-+ #include "diskio.h"
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 62328ab..03767cc 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -27,6 +27,8 @@ endef
+ endif
+ 
+ define IPROUTE2_CONFIGURE_CMDS
++	$(SED) 's/gcc/$$CC $$CFLAGS/g' $(@D)/configure
++	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure
+ 	# arpd needs berkeleydb
+ 	$(SED) "/^TARGETS=/s: arpd : :" $(IPROUTE2_DIR)/misc/Makefile
+ 	echo "IPT_LIB_DIR:=/usr/lib/xtables" >>$(IPROUTE2_DIR)/Config
