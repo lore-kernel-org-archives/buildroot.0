@@ -1,29 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Nov 2012 19:18:56 +0100
-Subject: [Buildroot] [PATCH 05/10] qextserialport: new package
-In-Reply-To: <32f4831f7961e448c93c0eef1a9564436183cc73.1338653505.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 2 Jun 2012 18:13:55 +0200")
-References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
- <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
- <32f4831f7961e448c93c0eef1a9564436183cc73.1338653505.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwyywnvz.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 3 Nov 2012 18:35:58 +0100
+Subject: [Buildroot] [git commit] cmake: bump version to 2.8.9
+Message-ID: <20121103182338.8DB6599A6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cc77d6437d9a25de746596e127e230fac8f99286
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> ---
- Thomas>  package/Config.in                                  |    1 +
- Thomas>  package/qextserialport/Config.in                   |    9 +++++
- Thomas>  .../qextserialport-main-include.patch              |   15 +++++++++
- Thomas>  .../qextserialport-no-examples.patch               |   17 ++++++++++
- Thomas>  .../qextserialport/qextserialport-pkgconfig.patch  |   19 +++++++++++
- Thomas>  package/qextserialport/qextserialport.mk           |   35
+Signed-off-by: Thiago A. Correa <thiago.correa@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cmake/cmake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed with minor fixups to match current buildroot, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 2406e5c..e2bc31f 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -1,4 +1,4 @@
+-CMAKE_VERSION = 2.8.5
++CMAKE_VERSION = 2.8.9
+ CMAKE_SITE = http://www.cmake.org/files/v2.8/
+ 
+ define HOST_CMAKE_CONFIGURE_CMDS
