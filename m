@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 04 Nov 2012 00:45:18 +0100
-Subject: [Buildroot] [PATCH 05/18] toolchain-external: improve glibc
- support to test availability of RPC
-In-Reply-To: <7d47e559b9e51b8d03614c61f47873302604c744.1351964808.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 04 Nov 2012 00:53:26 +0100
+Subject: [Buildroot] [PATCH 06/18] libtirpc: new package
+In-Reply-To: <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <7d47e559b9e51b8d03614c61f47873302604c744.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5095AC8E.7060707@mind.be>
+ <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5095AE76.70301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,70 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 11/03/12 18:47, Thomas Petazzoni wrote:
-> Basically, the BR2_TOOLCHAIN_EXTERNAL_GLIBC option no longer
-> unconditionally selects BR2_TOOLCHAIN_HAS_NATIVE_RPC since there are
-> glibc toolchains that don't have RPC support. All the predefined
-> toolchain profiles are updated to take into account this change: for
-> the moment, all glibc toolchains that have pre-defined toolchains have
-> RPC support, but further patches in the series add pre-defined glibc
-> toolchains that don't have RPC support. In the case of custom glibc
-> toolchains, a question is asked to the user so that he can say whether
-> the external glibc toolchain has RPC support or not. The validity of
-> this configuration option is checked by the new
-> check_glibc_rpc_feature function in helpers.mk.
->
 > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+[snip]
+> diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+> new file mode 100644
+> index 0000000..0172f0d
+> --- /dev/null
+> +++ b/package/libtirpc/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_LIBTIRPC
+> +	bool "libtirpc"
+> +	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (Visual review only)
+  This line is removed again in the next patch.
 
+> +	help
+> +	  Libtirpc is a port of Sun's Transport-Independent RPC
+> +	  library to Linux.
+> +
+> +	  http://sourceforge.net/projects/libtirpc/
+> +
+> +config BR2_RPC_SUPPORT_AVAILABLE
+> +       bool
+> +       default y if (BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_PACKAGE_LIBTIRPC)
+> diff --git a/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+
+  What's the upstream status of the patches?  I guess at least this one will not be accepted
+upstream...
+
+[snip]
+> diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+> new file mode 100644
+> index 0000000..32fbeb5
+> --- /dev/null
+> +++ b/package/libtirpc/libtirpc.mk
+> @@ -0,0 +1,17 @@
+> +#############################################################
+> +#
+> +# libtirpc
+> +#
+> +#############################################################
+> +
+> +LIBTIRPC_VERSION = 0.2.2
+> +LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+> +LIBTIRPC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+
+  http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+
+> +LIBTIRPC_LICENSE = BSD-3c
+> +LIBTIRPC_LICENSE_FILES = COPYING
+> +
+> +LIBTIRPC_INSTALL_STAGING = YES
+> +LIBTIRPC_AUTORECONF = YES
+> +LIBTIRPC_DEPENDENCIES = host-pkg-config
+
+  host-pkgconf
+
+> +
+> +$(eval $(autotools-package))
+
+
+  Maybe test your patch :-)
+
+  Regards,
+  Arnout
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
