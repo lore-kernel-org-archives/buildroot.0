@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 04 Nov 2012 00:53:26 +0100
-Subject: [Buildroot] [PATCH 06/18] libtirpc: new package
-In-Reply-To: <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 04 Nov 2012 00:56:22 +0100
+Subject: [Buildroot] [PATCH 07/18] busybox: add support to link against
+ libtirpc when available
+In-Reply-To: <97979d348585d1faffa214caeaf25becfd129004.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5095AE76.70301@mind.be>
+ <97979d348585d1faffa214caeaf25becfd129004.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5095AF26.7020204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +14,12 @@ To: buildroot@busybox.net
 
 On 11/03/12 18:47, Thomas Petazzoni wrote:
 > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-[snip]
-> diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
-> new file mode 100644
-> index 0000000..0172f0d
-> --- /dev/null
-> +++ b/package/libtirpc/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_LIBTIRPC
-> +	bool "libtirpc"
-> +	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
 
-  This line is removed again in the next patch.
+  Except for the lines that shouldn't have been added by the previous patch:
 
-> +	help
-> +	  Libtirpc is a port of Sun's Transport-Independent RPC
-> +	  library to Linux.
-> +
-> +	  http://sourceforge.net/projects/libtirpc/
-> +
-> +config BR2_RPC_SUPPORT_AVAILABLE
-> +       bool
-> +       default y if (BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_PACKAGE_LIBTIRPC)
-> diff --git a/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (Visual inspection only)
 
-  What's the upstream status of the patches?  I guess at least this one will not be accepted
-upstream...
-
-[snip]
-> diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-> new file mode 100644
-> index 0000000..32fbeb5
-> --- /dev/null
-> +++ b/package/libtirpc/libtirpc.mk
-> @@ -0,0 +1,17 @@
-> +#############################################################
-> +#
-> +# libtirpc
-> +#
-> +#############################################################
-> +
-> +LIBTIRPC_VERSION = 0.2.2
-> +LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
-> +LIBTIRPC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
-
-  http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
-
-> +LIBTIRPC_LICENSE = BSD-3c
-> +LIBTIRPC_LICENSE_FILES = COPYING
-> +
-> +LIBTIRPC_INSTALL_STAGING = YES
-> +LIBTIRPC_AUTORECONF = YES
-> +LIBTIRPC_DEPENDENCIES = host-pkg-config
-
-  host-pkgconf
-
-> +
-> +$(eval $(autotools-package))
-
-
-  Maybe test your patch :-)
-
-  Regards,
-  Arnout
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
