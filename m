@@ -1,27 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 01:11:36 +0100
-Subject: [Buildroot] [PATCH 01/18] uClibc: use the Buildroot toolchain
-	options instead of the hidden common options
-In-Reply-To: <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:46 +0100")
-References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <878vaiw7k7.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 4 Nov 2012 00:55:35 +0100
+Subject: [Buildroot] [git commit] pkg-download: Make a shallow clone for git
+	downloads
+Message-ID: <20121104090716.8261D99929@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3dd4bcf1eb55f957dba2351f3626933f06adb107
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Since we are some day going to finally rename the badly named common
- Thomas> toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
- Thomas> etc.) into something more logical, let's start using the Buildroot
- Thomas> toolchain options in the uClibc code.
+When downloading from git, we clone the whole repository and then only
+use the latest commit.  That's a lot of redundant stuff.  So instead,
+make a shallow clone.  Unfortunately that's only possible when
+downloading a branch or tag, so fall back to the old method if git gives
+an error.
 
-Committed, thanks.
+This speeds up the cloning of a linux git from more than 2 hours to
+20 minutes on a 200KB/s link).
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pkg-download.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index fa9a3e8..6c57244 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -73,10 +73,13 @@ domainseparator=$(if $(1),$(1),/)
+ # "external dependencies" of a given build configuration.
+ ################################################################################
+ 
++# Try a shallow clone - but that only works if the version is a ref (tag or
++# branch). Fall back on a full clone if it's a generic sha1.
+ define DOWNLOAD_GIT
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+-	$(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
++	 ($(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) || \
++	  $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) && \
+ 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+ 	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+ 		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
