@@ -1,343 +1,307 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Nov 2012 18:47:49 +0100
-Subject: [Buildroot] [PATCH 04/18] Rename BR2_INET_RPC to
-	BR2_TOOLCHAIN_HAS_NATIVE_RPC
+Date: Sat,  3 Nov 2012 18:47:51 +0100
+Subject: [Buildroot] [PATCH 06/18] libtirpc: new package
 In-Reply-To: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <df263474cae4ecb6cf8100906a8093bf2dab2c29.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_INET_RPC has for a long time been a not very descriptive
-configuration option name, and with the advent of non-RPC glibc
-toolchains and the apparition of libtirpc, we really need to rename it
-to something more sensible, BR2_TOOLCHAIN_HAS_NATIVE_RPC.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lmbench/Config.in                  |    4 ++--
- package/netkitbase/Config.in               |    4 ++--
- package/netkittelnet/Config.in             |    4 ++--
- package/nfs-utils/Config.in                |    4 ++--
- package/portmap/Config.in                  |    4 ++--
- package/quota/Config.in                    |    4 ++--
- package/samba/samba.mk                     |    2 +-
- package/xinetd/xinetd.mk                   |    2 +-
- toolchain/helpers.mk                       |    4 ++--
- toolchain/toolchain-buildroot/Config.in.2  |    2 +-
- toolchain/toolchain-common.in              |    2 +-
- toolchain/toolchain-crosstool-ng/Config.in |   10 +++++++---
- toolchain/toolchain-external/Config.in     |   14 +++++++-------
- toolchain/toolchain-external/ext-tool.mk   |    8 ++++----
- 14 files changed, 36 insertions(+), 32 deletions(-)
+ package/Config.in                                  |    1 +
+ package/libtirpc/Config.in                         |   12 ++++
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |   70 ++++++++++++++++++++
+ ...out-RPC-support-does-not-install-rpcent.h.patch |   26 ++++++++
+ ...btirpc-0003-Add-missing-INET6-conditional.patch |   60 +++++++++++++++++
+ .../libtirpc-0004-Make-IPv6-support-optional.patch |   43 ++++++++++++
+ package/libtirpc/libtirpc.mk                       |   17 +++++
+ 7 files changed, 229 insertions(+)
+ create mode 100644 package/libtirpc/Config.in
+ create mode 100644 package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+ create mode 100644 package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
+ create mode 100644 package/libtirpc/libtirpc-0003-Add-missing-INET6-conditional.patch
+ create mode 100644 package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch
+ create mode 100644 package/libtirpc/libtirpc.mk
 
-diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
-index c8423d1..70449b6 100644
---- a/package/lmbench/Config.in
-+++ b/package/lmbench/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LMBENCH
- 	bool "lmbench"
- 	# Uses pmap_set, pmap__unset, pmap_getport, etc.
--	depends on BR2_INET_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  LMbench is a suite of simple, portable,
- 	  ANSI/C microbenchmarks for UNIX/POSIX.
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_LMBENCH
- 	  http://sourceforge.net/projects/lmbench/
- 
- comment "lmbench requires a toolchain with RPC support"
--	depends on !BR2_INET_RPC
+diff --git a/package/Config.in b/package/Config.in
+index 1650c71..644e968 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -454,6 +454,7 @@ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
++source "package/libtirpc/Config.in"
+ source "package/libtorrent/Config.in"
+ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
+new file mode 100644
+index 0000000..0172f0d
+--- /dev/null
++++ b/package/libtirpc/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBTIRPC
++	bool "libtirpc"
 +	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
-index 725e500..75bd728 100644
---- a/package/netkitbase/Config.in
-+++ b/package/netkitbase/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_NETKITBASE
- 	bool "netkitbase"
--	depends on BR2_INET_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Old-style inetd.
- 
- 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
- 
- comment "netkitbase requires a toolchain with RPC support"
--        depends on !BR2_INET_RPC
-+        depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/netkittelnet/Config.in b/package/netkittelnet/Config.in
-index 058d210..10eb022 100644
---- a/package/netkittelnet/Config.in
-+++ b/package/netkittelnet/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_NETKITTELNET
- 	bool "netkittelnet"
--	depends on BR2_INET_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_NETKITBASE
- 	help
- 	  Standard Linux telnet client and server.
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_NETKITTELNET
- 	  ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/
- 
- comment "netkittelnet requires a toolchain with RPC support"
--	depends on !BR2_INET_RPC
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 67d25a7..c87502f 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_NFS_UTILS
- 	bool "nfs-utils"
--	depends on BR2_INET_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_PORTMAP
- 	help
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_NFS_UTILS
- 	  http://sourceforge.net/projects/nfs
- 
- comment "nfs-utils requires a toolchain with RPC and LARGEFILE support"
--	depends on !BR2_INET_RPC || !BR2_LARGEFILE
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_LARGEFILE
- 
- menu "NFS utilities selection"
- 	depends on BR2_PACKAGE_NFS_UTILS
-diff --git a/package/portmap/Config.in b/package/portmap/Config.in
-index 5914357..f017cb6 100644
---- a/package/portmap/Config.in
-+++ b/package/portmap/Config.in
-@@ -1,10 +1,10 @@
- config BR2_PACKAGE_PORTMAP
- 	bool "portmap"
--	depends on BR2_INET_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  The standard portmapper for RPC services.
- 
- 	  http://neil.brown.name/portmap/
- 
- comment "portmap requires a toolchain with RPC support"
--	depends on !BR2_INET_RPC
-+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index 3ad0b8c..a26f91f 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_QUOTA
- 	bool "quota"
--	depends on BR2_INET_RPC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_UTIL_LINUX
-@@ -12,4 +12,4 @@ config BR2_PACKAGE_QUOTA
- 	  http://sourceforge.net/projects/linuxquota/
- 
- comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
--	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
-+	depends on !(BR2_TOOLCHAIN_HAS_NATIVE_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 7c06e14..7dd0a1d 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -51,7 +51,7 @@ SAMBA_CONF_OPT = \
- 	\
- 	--without-cluster-support \
- 	--without-dnsupdate \
--	$(if $(BR2_INET_RPC),--with-sys-quotas,--without-sys-quotas) \
-+	$(if $(BR2_TOOLCHAIN_HAS_NATIVE_RPC),--with-sys-quotas,--without-sys-quotas) \
- 	--without-ads \
- 	--without-ldap \
- 	--with-included-iniparser \
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index 4fc2de9..a420425 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -9,7 +9,7 @@ XINETD_SITE          = http://www.xinetd.org
- XINETD_LICENSE       = xinetd license
- XINETD_LICENSE_FILES = COPYRIGHT
- 
--ifneq ($(BR2_INET_RPC),y)
-+ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
- XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
- endif
- 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 497cfff..34e9c17 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -202,7 +202,7 @@ check_glibc = \
- 	fi; \
- 	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
- 	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
--	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
-+	$(call check_glibc_feature,BR2_TOOLCHAIN_HAS_NATIVE_RPC,RPC support) ;\
- 	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
- 	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
- 	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
-@@ -248,7 +248,7 @@ check_uclibc = \
- 	$(call check_uclibc_feature,__ARCH_USE_MMU__,BR2_USE_MMU,$${UCLIBC_CONFIG_FILE},MMU support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LFS__,BR2_LARGEFILE,$${UCLIBC_CONFIG_FILE},Large file support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_IPV6__,BR2_INET_IPV6,$${UCLIBC_CONFIG_FILE},IPv6 support) ;\
--	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_INET_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
-+	$(call check_uclibc_feature,__UCLIBC_HAS_RPC__,BR2_TOOLCHAIN_HAS_NATIVE_RPC,$${UCLIBC_CONFIG_FILE},RPC support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_LOCALE__,BR2_ENABLE_LOCALE,$${UCLIBC_CONFIG_FILE},Locale support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_WCHAR__,BR2_USE_WCHAR,$${UCLIBC_CONFIG_FILE},Wide char support) ;\
- 	$(call check_uclibc_feature,__UCLIBC_HAS_THREADS__,BR2_TOOLCHAIN_HAS_THREADS,$${UCLIBC_CONFIG_FILE},Thread support) ;\
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 7580946..956ec2f 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -20,7 +20,7 @@ config BR2_TOOLCHAIN_BUILDROOT_INET_IPV6
- 
- config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
- 	bool "Enable RPC support"
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Enable this option if you want your toolchain to support
- 	  RPC (needed for NFS, for example).
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 10950ba..4c2a28b 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -11,7 +11,7 @@ config BR2_LARGEFILE
- config BR2_INET_IPV6
- 	bool
- 
--config BR2_INET_RPC
-+config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
- config BR2_USE_WCHAR
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 35ea2b1..9cd5ca5 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -14,7 +14,9 @@ config BR2_TOOLCHAIN_CTNG_eglibc
- 	bool "eglibc"
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_INET_RPC
-+	# Our default ct-ng configuration uses eglibc 2.12, which has
-+	# native RPC support
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
- 
-@@ -22,7 +24,9 @@ config BR2_TOOLCHAIN_CTNG_glibc
- 	bool "glibc"
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_INET_RPC
-+	# Our default ct-ng configuration uses glibc 2.9, which has
-+	# native RPC support
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
- 
-@@ -66,7 +70,7 @@ config BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6
- 
- config BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC
- 	bool "Enable RPC support"
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Enable this option if you want your toolchain to support
- 	  RPC (needed for NFS, for example).
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 105fb2a..8d3240a 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -450,7 +450,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	depends on BR2_sh2a
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_LARGEFILE
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-@@ -467,7 +467,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	depends on BR2_sh2a
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_LARGEFILE
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-@@ -528,7 +528,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-@@ -543,7 +543,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-@@ -558,7 +558,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-@@ -668,7 +668,7 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	bool
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -722,7 +722,7 @@ config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
- 
- config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
- 	bool "Toolchain has RPC support?"
--	select BR2_INET_RPC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Select this option if your external toolchain supports
- 	  RPC. If you don't know, leave the default value, Buildroot
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 43d747c..459bc12 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -24,10 +24,10 @@
- #  the Buildroot configuration system knows whether the toolchain
- #  supports RPC, IPv6, locales, large files, etc. Unfortunately, these
- #  things cannot be detected automatically, since the value of these
--#  options (such as BR2_INET_RPC) are needed at configuration time
--#  because these options are used as dependencies for other
--#  options. And at configuration time, we are not able to retrieve the
--#  external toolchain configuration.
-+#  options (such as BR2_TOOLCHAIN_HAS_NATIVE_RPC) are needed at
-+#  configuration time because these options are used as dependencies
-+#  for other options. And at configuration time, we are not able to
-+#  retrieve the external toolchain configuration.
- #
- #  3. Copy the libraries needed at runtime to the target directory,
- #  $(TARGET_DIR). Obviously, things such as the C library, the dynamic
++	help
++	  Libtirpc is a port of Sun's Transport-Independent RPC
++	  library to Linux.
++
++	  http://sourceforge.net/projects/libtirpc/
++
++config BR2_RPC_SUPPORT_AVAILABLE
++       bool
++       default y if (BR2_TOOLCHAIN_HAS_NATIVE_RPC || BR2_PACKAGE_LIBTIRPC)
+diff --git a/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch b/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+new file mode 100644
+index 0000000..bdbe021
+--- /dev/null
++++ b/package/libtirpc/libtirpc-0001-Disable-parts-of-TIRPC-requiring-NIS-support.patch
+@@ -0,0 +1,70 @@
++From f4c022c526ce061dfdd3c46f544a9495a3a3a97e Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 23 Jun 2012 21:57:39 +0200
++Subject: [PATCH 1/4] Disable parts of TIRPC requiring NIS support
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/Makefile.am  |    3 +--
++ src/rpc_soc.c    |    2 ++
++ tirpc/rpc/auth.h |    3 +++
++ 3 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 7ee8cbc..6d36b93 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -49,8 +49,7 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
++         pmap_prot.c pmap_prot2.c pmap_rmt.c rpc_prot.c rpc_commondata.c \
++         rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
++         rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_generic.c \
++-        svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c \
++-        auth_time.c auth_des.c authdes_prot.c des_crypt.c
+++        svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c
++ 
++ ## XDR
++ libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
++diff --git a/src/rpc_soc.c b/src/rpc_soc.c
++index c678429..27f2136 100644
++--- a/src/rpc_soc.c
+++++ b/src/rpc_soc.c
++@@ -515,6 +515,7 @@ clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp, eachresult)
++ 	    (resultproc_t) rpc_wrap_bcast, "udp");
++ }
++ 
+++#if 0
++ /*
++  * Create the client des authentication object. Obsoleted by
++  * authdes_seccreate().
++@@ -546,6 +547,7 @@ fallback:
++ 	dummy = authdes_seccreate(servername, window, NULL, ckey);
++ 	return (dummy);
++ }
+++#endif
++ 
++ /*
++  * Create a client handle for a unix connection. Obsoleted by clnt_vc_create()
++diff --git a/tirpc/rpc/auth.h b/tirpc/rpc/auth.h
++index 734e6b9..6e7e54e 100644
++--- a/tirpc/rpc/auth.h
+++++ b/tirpc/rpc/auth.h
++@@ -282,6 +282,8 @@ extern AUTH *authunix_create(char *, uid_t, uid_t, int, uid_t *);
++ extern AUTH *authunix_create_default(void);	/* takes no parameters */
++ extern AUTH *authnone_create(void);		/* takes no parameters */
++ __END_DECLS
+++
+++#if 0
++ /*
++  * DES style authentication
++  * AUTH *authsecdes_create(servername, window, timehost, ckey)
++@@ -295,6 +297,7 @@ extern AUTH *authdes_create (char *, u_int, struct sockaddr *, des_block *);
++ extern AUTH *authdes_seccreate (const char *, const u_int, const  char *,
++     const  des_block *);
++ __END_DECLS
+++#endif
++ 
++ __BEGIN_DECLS
++ extern bool_t xdr_opaque_auth		(XDR *, struct opaque_auth *);
++-- 
++1.7.9.5
++
+diff --git a/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch b/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
+new file mode 100644
+index 0000000..0798c34
+--- /dev/null
++++ b/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
+@@ -0,0 +1,26 @@
++From c91721dc289397dfe38fdae175f4ee37e824667c Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 23 Jun 2012 21:58:07 +0200
++Subject: [PATCH 2/4] uClibc without RPC support does not install rpcent.h
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ tirpc/rpc/rpcent.h |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tirpc/rpc/rpcent.h b/tirpc/rpc/rpcent.h
++index 7fd93d9..df1f5ed 100644
++--- a/tirpc/rpc/rpcent.h
+++++ b/tirpc/rpc/rpcent.h
++@@ -47,7 +47,7 @@
++ __BEGIN_DECLS
++ 
++ /* These are defined in /usr/include/rpc/netdb.h */
++-#if 0
+++#if __UCLIBC__
++ struct rpcent {
++ 	char	*r_name;	/* name of server for this rpc program */
++ 	char	**r_aliases;	/* alias list */
++-- 
++1.7.9.5
++
+diff --git a/package/libtirpc/libtirpc-0003-Add-missing-INET6-conditional.patch b/package/libtirpc/libtirpc-0003-Add-missing-INET6-conditional.patch
+new file mode 100644
+index 0000000..64d3da8
+--- /dev/null
++++ b/package/libtirpc/libtirpc-0003-Add-missing-INET6-conditional.patch
+@@ -0,0 +1,60 @@
++From a4852bd653ac917165de1d41b60168cd88dc6672 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 23 Jun 2012 21:58:36 +0200
++Subject: [PATCH 3/4] Add missing INET6 conditional
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/rpc_generic.c |    2 ++
++ src/svc_dg.c      |    4 ++++
++ 2 files changed, 6 insertions(+)
++
++diff --git a/src/rpc_generic.c b/src/rpc_generic.c
++index 509fb36..2eb91ad 100644
++--- a/src/rpc_generic.c
+++++ b/src/rpc_generic.c
++@@ -535,7 +535,9 @@ __rpc_nconf2fd_flags(const struct netconfig *nconf, int flags)
++ 	    si.si_af == AF_INET6) {
++ 		int val = 1;
++ 
+++#ifdef INET6
++ 		setsockopt(fd, SOL_IPV6, IPV6_V6ONLY, &val, sizeof(val));
+++#endif
++ 	}
++ 	return fd;
++ }
++diff --git a/src/svc_dg.c b/src/svc_dg.c
++index 66a56ee..e8faf33 100644
++--- a/src/svc_dg.c
+++++ b/src/svc_dg.c
++@@ -627,9 +627,11 @@ svc_dg_enable_pktinfo(int fd, const struct __rpc_sockinfo *si)
++ 		(void) setsockopt(fd, SOL_IP, IP_PKTINFO, &val, sizeof(val));
++ 		break;
++ 
+++#ifdef INET6
++ 	case AF_INET6:
++ 		(void) setsockopt(fd, SOL_IPV6, IPV6_PKTINFO, &val, sizeof(val));
++ 		break;
+++#endif
++ 	}
++ }
++ 
++@@ -667,6 +669,7 @@ svc_dg_valid_pktinfo(struct msghdr *msg)
++ 		}
++ 		break;
++ 
+++#ifdef INET6
++ 	case AF_INET6:
++ 		if (cmsg->cmsg_level != SOL_IPV6
++ 		 || cmsg->cmsg_type != IPV6_PKTINFO
++@@ -679,6 +682,7 @@ svc_dg_valid_pktinfo(struct msghdr *msg)
++ 			pkti->ipi6_ifindex = 0;
++ 		}
++ 		break;
+++#endif
++ 
++ 	default:
++ 		return 0;
++-- 
++1.7.9.5
++
+diff --git a/package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch b/package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch
+new file mode 100644
+index 0000000..455ad74
+--- /dev/null
++++ b/package/libtirpc/libtirpc-0004-Make-IPv6-support-optional.patch
+@@ -0,0 +1,43 @@
++From 1f36736733eac5080f3a4f3abd1c3a04ac42f1dd Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 24 Jun 2012 21:40:21 +0200
++Subject: [PATCH 4/4] Make IPv6 support optional
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac    |    5 +++++
++ src/Makefile.am |    2 +-
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 97c6f2c..487ec83 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -22,6 +22,11 @@ AC_PROG_LIBTOOL
++ AC_HEADER_DIRENT
++ AC_PREFIX_DEFAULT(/usr)
++ AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h limits.h locale.h netdb.h netinet/in.h stddef.h stdint.h stdlib.h string.h sys/ioctl.h sys/param.h sys/socket.h sys/time.h syslog.h unistd.h])
+++
+++AC_CHECK_HEADER(netinet/ip6.h,
+++	AC_DEFINE(INET6, 1, [Define to 1 if IPv6 is available]),
+++	[AC_MSG_WARN([no IPv6])])
+++
++ AC_CHECK_LIB([pthread], [pthread_create])
++ 
++ 
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 6d36b93..6dc259e 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -6,7 +6,7 @@
++ ## anything like that.
++ 
++ 
++-INCLUDES = -I$(top_srcdir)/tirpc -DPORTMAP -DINET6 -DVERSION="\"$(VERSION)\"" \
+++INCLUDES = -I$(top_srcdir)/tirpc -DPORTMAP -DVERSION="\"$(VERSION)\"" \
++ 		-D_GNU_SOURCE -Wall -pipe  
++ 
++ lib_LTLIBRARIES = libtirpc.la
++-- 
++1.7.9.5
++
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+new file mode 100644
+index 0000000..32fbeb5
+--- /dev/null
++++ b/package/libtirpc/libtirpc.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# libtirpc
++#
++#############################################################
++
++LIBTIRPC_VERSION = 0.2.2
++LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
++LIBTIRPC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
++LIBTIRPC_LICENSE = BSD-3c
++LIBTIRPC_LICENSE_FILES = COPYING
++
++LIBTIRPC_INSTALL_STAGING = YES
++LIBTIRPC_AUTORECONF = YES
++LIBTIRPC_DEPENDENCIES = host-pkg-config
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
