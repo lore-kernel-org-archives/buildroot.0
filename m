@@ -1,79 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  3 Nov 2012 18:48:01 +0100
-Subject: [Buildroot] [PATCH 16/18] toolchain-external: add Sourcery
-	CodeBench x86 2012.03
+Date: Sat,  3 Nov 2012 18:48:02 +0100
+Subject: [Buildroot] [PATCH 17/18] netkitbase: mark as deprecated
 In-Reply-To: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0fb2f4844c35414a5834f06bcce989451ed03621.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <bbf044155e3134db1522481725076c32a6473fdd.1351964808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+It is no longer being developed, the FTP is dead, and Debian has
+removed it from the distribution.
+
+Also it allows to not worry about adding RPC support through libtirpc
+to this package.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   26 ++++++++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 29 insertions(+)
+ package/netkitbase/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2bf4e0b..d5006b4 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -514,6 +514,31 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	  has support for the following variants:
- 	    - SH2A, uClibc, big endian
+diff --git a/package/netkitbase/Config.in b/package/netkitbase/Config.in
+index 75bd728..dd9166c 100644
+--- a/package/netkitbase/Config.in
++++ b/package/netkitbase/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NETKITBASE
+ 	bool "netkitbase"
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Old-style inetd.
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
-+	bool "Sourcery CodeBench x86/x86_64 2012.03"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Sourcery CodeBench toolchain for the x86/x86_64
-+	  architectures, from Mentor Graphics. It uses gcc 4.6.3,
-+	  binutils 2.21.53, glibc 2.15, gdb 7.2.50 and kernel headers
-+	  3.2.10. It has support for the following variants:
-+	    - Intel Pentium 4, glibc, 32 bits
-+	      Default for x86, nothing special to do.
-+	    - Intel Atom, glibc, 32 bits
-+	      Select an Atom core
-+	    - Intel Xeon, glibc, 64 bits
-+	      Default for x86_64, nothing special to do.
-+	    - Intel Core 2, glibc, 64 bits
-+	      Select a Core 2 core
-+	  Other architecture variants (beyond Pentium-4/Xeon) are
-+	  supported as well, but glibc is not optimised for it.
-+
-+	  Note that due to the upgrade to glibc 2.15, this toolchain
-+	  no longer provides RPC functions. The TI-RPC library should
-+	  be used instead, but isn't available in Buildroot yet.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	bool "Sourcery CodeBench x86/x86_64 2011.09"
- 	depends on BR2_i386 || BR2_x86_64
-@@ -695,6 +720,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
-+	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && !BR2_BFIN_FDPIC
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index df1ef15..27a0302 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -241,6 +241,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2010.09-44-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
- TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/GNUToolchain/package10163/public/i686-pc-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
- TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
- TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
 -- 
 1.7.9.5
