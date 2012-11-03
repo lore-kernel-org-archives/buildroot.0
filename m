@@ -1,37 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 Nov 2012 19:15:39 +0100
-Subject: [Buildroot] [PATCHv2 00/12] Netfilter bumps and additions
-In-Reply-To: <1351600193-21511-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 30 Oct 2012 09:29:41 -0300")
-References: <1351600193-21511-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871ugay2lw.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Nov 2012 19:17:32 +0100
+Subject: [Buildroot] [PATCHv3] QtSerialPort: new package
+In-Reply-To: <CAGm1_kuNWVOTovggPq7CEeAJMP_PDGVXYaM+92nw6JfhcY0boA@mail.gmail.com>
+ (Yegor Yefremov's message of "Sat, 3 Nov 2012 18:21:59 +0100")
+References: <20121029154949.GA15033@localhost.comm5.com.br>
+ <87y5iiy6pw.fsf@dell.be.48ers.dk>
+ <CAGm1_kuNWVOTovggPq7CEeAJMP_PDGVXYaM+92nw6JfhcY0boA@mail.gmail.com>
+Message-ID: <87wqy2wnyb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
- Gustavo> v1 -> v2
- Gustavo> Fixed Config.in wrapping in libnetfilter_cthelper as pointed by Thomas.
- Gustavo> Switch from host-pkg-config to host-pkgconf for relevant packages.
+ Thiago> +++ b/package/Config.in
+ Thiago> @@ -133,6 +133,7 @@ source "package/sdl_gfx/Config.in"
+ Thiago> comment "other GUIs"
+ Thiago> source "package/efl/Config.in"
+ Thiago> source "package/qt/Config.in"
+ Thiago> +source "package/qtserialport/Config.in"
 
- Gustavo> Gustavo Zacarias (12):
- Gustavo>   libnetfilter_conntrack: bump to version 1.0.2
- Gustavo>   libnetfilter_cttimeout: add license info
- Gustavo>   libnfnetlink: bump to version 1.0.1
- Gustavo>   libnetfilter_cthelper: add new package
- Gustavo>   libnetfilter_queue: add new package
- Gustavo>   libnetfilter_acct: add new package
- Gustavo>   libmnl: add license info
- Gustavo>   libnetfilter_log: add new package
- Gustavo>   nfacct: add new package
- Gustavo>   conntrack-tools: bump to version 1.4.0
- Gustavo>   ulogd: add new package
- Gustavo>   arptables: add new package
+ Yegor> Don't we want to pull all pure Qt libs under "Qt external packages" as
+ Yegor> was made with Python packages in Kconfig?
 
-Committed entire series, thanks.
+Yes, we have "QT libraries and helper libraries" where it should go.
+
+ >> What is the relation between qtserialport and qtextserialport? Do we
+ >> need both?
+
+ Yegor> The situation with serial port libraries under Qt is not so
+ Yegor> simple as with Python. I know at least 3 different libraries. So
+ Yegor> having them all won't hurt.
+
+Ok.
 
 -- 
 Bye, Peter Korsgaard
