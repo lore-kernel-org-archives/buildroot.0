@@ -1,21 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 01:02:04 +0100
-Subject: [Buildroot] [PATCH] libhid: disable on avr32
-In-Reply-To: <1351963254-17491-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 3 Nov 2012 18:20:54 +0100")
-References: <1351963254-17491-1-git-send-email-arnout@mind.be>
-Message-ID: <87d2zuw803.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Nov 2012 01:18:32 +0100
+Subject: [Buildroot] [PATCH 17/18] netkitbase: mark as deprecated
+In-Reply-To: <bbf044155e3134db1522481725076c32a6473fdd.1351964808.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:48:02 +0100")
+References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
+ <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
+ <bbf044155e3134db1522481725076c32a6473fdd.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r4oauso7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Arnout> libhid uses timerfd, which is not yet available in the uClibc-0.9.31
- Arnout> that we have to rely on for avr32.  Since this is pretty much a corner
- Arnout> case, just disable libhid for avr32.
+ Thomas> It is no longer being developed, the FTP is dead, and Debian has
+ Thomas> removed it from the distribution.
+
+ Thomas> Also it allows to not worry about adding RPC support through libtirpc
+ Thomas> to this package.
 
 Committed, thanks.
 
