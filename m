@@ -1,58 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 01:12:32 +0100
-Subject: [Buildroot] [PATCH 02/18] busybox: don't force FEATURE_NFS_MOUNT
-In-Reply-To: <ce9a6aa9dfc0c6dc3496b272670a8370b638aa21.1351964808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:47 +0100")
-References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <ce9a6aa9dfc0c6dc3496b272670a8370b638aa21.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874nl6w7in.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Nov 2012 01:02:04 +0100
+Subject: [Buildroot] [PATCH] libhid: disable on avr32
+In-Reply-To: <1351963254-17491-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 3 Nov 2012 18:20:54 +0100")
+References: <1351963254-17491-1-git-send-email-arnout@mind.be>
+Message-ID: <87d2zuw803.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- Thomas> Instead of making the Busybox configuration more complicated by trying
- Thomas> to adjust it depending on whether RPC is available or not (which gets
- Thomas> complicated when RPC support can be provided by libtirpc), simplify
- Thomas> things by letting the user enable FEATURE_NFS_MOUNT or not depending
- Thomas> on whether RPC support is available or not.
+ Arnout> libhid uses timerfd, which is not yet available in the uClibc-0.9.31
+ Arnout> that we have to rely on for avr32.  Since this is pretty much a corner
+ Arnout> case, just disable libhid for avr32.
 
- Thomas> Our default configuration do not enable FEATURE_NFS_MOUNT, so users
- Thomas> will not face any build problems by default. Only if they explicitly
- Thomas> enable FEATURE_NFS_MOUNT will they have to make sure that the
- Thomas> toolchain has RPC support, or that libtirpc is enabled (support for
- Thomas> this added in a followup patch).
-
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  package/busybox/busybox.mk |   11 -----------
- Thomas>  1 file changed, 11 deletions(-)
-
- Thomas> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
- Thomas> index 33f8633..306b46f 100644
- Thomas> --- a/package/busybox/busybox.mk
- Thomas> +++ b/package/busybox/busybox.mk
- Thomas> @@ -81,17 +81,6 @@ define BUSYBOX_SET_IPV6
- Thomas>  endef
- Thomas>  endif
- 
- Thomas> -# If RPC is enabled then enable nfs mounts
- Thomas> -ifeq ($(BR2_INET_RPC),y)
- Thomas> -define BUSYBOX_SET_RPC
- Thomas> -	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
- Thomas> -endef
- Thomas> -else
- Thomas> -define BUSYBOX_SET_RPC
- Thomas> -	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
- Thomas> -endef
- Thomas> -endif
-
-You forgot to remove it from BUSYBOX_CONFIGURE_CMDS. I've fixed that and
-committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
