@@ -1,33 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 04 Nov 2012 12:39:57 +0100
-Subject: [Buildroot] [PATCH] QT: Fix build for architectures using
- generic atomics
-In-Reply-To: <1352027774-27536-1-git-send-email-mischa.jonker@synopsys.com>
-References: <1352027774-27536-1-git-send-email-mischa.jonker@synopsys.com>
-Message-ID: <5096540D.7040401@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 04 Nov 2012 12:52:10 +0100
+Subject: [Buildroot] [PATCH 2/3] Split target/Config.in.arch into
+	multiple Config.in.* in arch/
+In-Reply-To: <c251b8520aca36ac7b0b0573a25cc7763d9a056a.1351967245.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Nov 2012 19:27:59 +0100")
+References: <cover.1351967245.git.thomas.petazzoni@free-electrons.com>
+ <cover.1351967245.git.thomas.petazzoni@free-electrons.com>
+ <c251b8520aca36ac7b0b0573a25cc7763d9a056a.1351967245.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mwyxr3f9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/04/12 12:16, Mischa Jonker wrote:
-> The problem has to do with const-correctness. This has been resolved
-> for various architectures, but not for the generic case.
->
->      Signed-off-by: Mischa Jonker<mischa.jonker@synopsys.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  Looks like a horrible hack, but since there's nothing better upstream:
+ Thomas> target/Config.in.arch had become too long, and we want to remove the
+ Thomas> target/ directory. So let's move it to arch/ and split it this way:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (untested)
+ Thomas>  * An initial Config.in that lists the top-level architecture, and
+ Thomas>    sources the arch-specific Config.in.<arch> files, as well as
+ Thomas>    Config.in.common (see below)
 
-  Regards,
-  Arnout
+ Thomas>  * One Config.in.<arch> per architecture, listing the CPU families,
+ Thomas>    ABI choices, etc.
+
+ Thomas>  * One Config.in.common that defines the gcc mtune, march, mcpu values
+ Thomas>    and other hidden options.
+
+Committed with the issues noted by Arnout fixed, thanks.
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
