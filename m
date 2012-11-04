@@ -1,44 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Nov 2012 18:53:01 +0100
-Subject: [Buildroot] new perl build issue
-In-Reply-To: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
-References: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
-Message-ID: <20121104185301.0616b2f9@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 04 Nov 2012 19:19:42 +0100
+Subject: [Buildroot] [PATCHv2 02/10] target/generic: add filesystem
+ overlay option
+In-Reply-To: <1351063027-13800-3-git-send-email-arnout@mind.be>
+References: <1351063027-13800-1-git-send-email-arnout@mind.be>
+ <1351063027-13800-3-git-send-email-arnout@mind.be>
+Message-ID: <5096B1BE.7010802@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexander Khryukin,
+Arnout Vandecappelle (Essensium/Mind) wrote:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>
+> The filesystem overlay is a tree that is copied over the target fs
+> after building everything - which is currently usually done in the
+> post-build script.
+>
+> Also replace the documentation for a custom skeleton with the
+> filesystem overlay and deprecate the custom skeleton.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Thanks for your report.
+This is definitely something we should have in Buildroot!
 
-Fran?ois, would you mind looking into this?
+With the fixes below,
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-Thanks!
+> --- a/target/generic/Config.in
+> +++ b/target/generic/Config.in
+> @@ -166,6 +166,17 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>
+>   endif # BR2_ROOTFS_SKELETON_DEFAULT
+>
+> +config BR2_ROOTFS_OVERLAY
+> +	string "Root filesystem overlay"
 
-Thomas
-
-On Sun, 4 Nov 2012 20:02:22 +0300, Alexander Khryukin wrote:
-> Hi.
-> I'm trying to build new perl package
-> and get error
-> http://pastie.org/5181814
-> 
-> 
-> FATAL: kernel too old
-> The program compiled OK, but exited with status 1.
-> You have a problem.  Shall I abort Configure [y]
-> Ok.  Stopping Configure.
-> 
-> Looks like perl package get kernel version string via uname or /proc
-> 2.6.32-279.9.1.el6.x86_64 my kernel
+s/overlay/overlays/
+or, even better: string "Root filesystem overlay directories"
 
 
+> +	default ""
+> +	help
+> +	  Specify a list of directories that are copied over the target
+> +	  root filesystem after the build has finished and before it is
+> +	  packed into the selected filesystem images.
+> +
+> +	  It is copied as-is into the rootfs, excluding files ending with
 
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+s/It is/They are/
+
+Luca
