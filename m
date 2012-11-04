@@ -1,38 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  4 Nov 2012 13:04:10 +0100
-Subject: [Buildroot] [PATCH 09/20] samba: unconditionally enable
-	--with-sys-quotas
+Date: Sun,  4 Nov 2012 13:04:11 +0100
+Subject: [Buildroot] [PATCH 10/20] xinetd: add support to use RPC support
+	from libtirpc
 In-Reply-To: <cover.1352030430.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352030430.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e7758f4c4e7a7949bafb3dadcd46946d6803954a.1352030430.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <94b700ff4570051f6408d4264efcbff74ae014cd.1352030430.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contrary to what was written in samba.mk, the sys-quotas option
-apparently does not depend on RPC support in the toolchain: Samba
-builds perfectly fine on an uClibc toolchain without RPC support with
-sys-quotas enabled.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba/samba.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/xinetd/xinetd.mk |   19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index dec60d0..4f87917 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -51,7 +51,7 @@ SAMBA_CONF_OPT = \
- 	\
- 	--without-cluster-support \
- 	--without-dnsupdate \
--	$(if $(BR2_TOOLCHAIN_HAS_NATIVE_RPC),--with-sys-quotas,--without-sys-quotas) \
-+	--with-sys-quotas \
- 	--without-ads \
- 	--without-ldap \
- 	--with-included-iniparser \
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index a420425..cb48145 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -9,10 +9,25 @@ XINETD_SITE          = http://www.xinetd.org
+ XINETD_LICENSE       = xinetd license
+ XINETD_LICENSE_FILES = COPYRIGHT
+ 
+-ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+-XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
++XINETD_CFLAGS = $(TARGET_CFLAGS)
++
++# Three cases here:
++#  1. We have libtirpc, use it by passing special flags
++#  2. We have native RPC support, use it, no need to pass special
++#     flags (so this case 2 is implicit and not visible below)
++#  3. We don't have RPC support, pass -DNO_RPC to disable it
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++XINETD_DEPENDENCIES += libtirpc
++XINETD_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
++XINETD_LIBS += -ltirpc
++else ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
++XINETD_CFLAGS += -DNO_RPC
+ endif
+ 
++XINETD_CONF_ENV += \
++	CFLAGS="$(XINETD_CFLAGS)" \
++	LIBS="$(XINETD_LIBS)"
++
+ XINETD_MAKE_OPT = AR="$(TARGET_AR)"
+ 
+ $(eval $(autotools-package))
 -- 
 1.7.9.5
