@@ -1,23 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 11:24:09 +0100
-Subject: [Buildroot] [PATCH 1/7] xapp_listres: fix build against Xmu by
-	bumping the version
-In-Reply-To: <1350907617-14368-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 22 Oct 2012 14:06:51 +0200")
-References: <1350907617-14368-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87625lvf7a.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Nov 2012 11:27:39 +0100
+Subject: [Buildroot] [PATCH 1/2] bison: bump to version 2.6.3
+In-Reply-To: <1350998291-31932-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 23 Oct 2012 10:18:10 -0300")
+References: <1350998291-31932-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871ug9vf1g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Fixes
- Thomas>   http://autobuild.buildroot.org/results/06d0ef38165769df38047c1f64d4cfae835e9e54
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed entire series, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
