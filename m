@@ -1,74 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  4 Nov 2012 18:34:21 +0100
-Subject: [Buildroot] [PATCH 13/21] toolchain-external: add support for
-	Sourcery CodeBench SH 2012.09
-In-Reply-To: <cover.1352050008.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1352050008.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5df3408bf5f517e538419e3ae97565666a0b49ca.1352050008.git.thomas.petazzoni@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun,  4 Nov 2012 18:37:37 +0100
+Subject: [Buildroot] [PATCH] pkg-stats: fix the broken "results" link
+Message-ID: <1352050657-919-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in   |   21 +++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 24 insertions(+)
+At the top of the output html page there is a dangling "results" link.
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e7c9995..ae965fa 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -422,6 +422,26 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	    - 970 glibc hard-float, 64 bits
- 	      Set BR2_TARGET_OPTIMIZATION to -m64
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ support/scripts/pkg-stats |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 9c8ec49..929b8d1 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -227,6 +227,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ done
+ echo "</table>"
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
-+	bool "Sourcery CodeBench SH 2012.09"
-+	depends on BR2_sh4a || BR2_sh4aeb
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Sourcery CodeBench toolchain for the SuperH architecture,
-+	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
-+	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
-+	  3.5.4. It has support for the following variants:
-+            - SH4A, glibc, little endian
-+              Default.
-+            - SH4A, glibc, big endian
-+              Add -mb to BR2_TARGET_OPTIMIZATION
-+            - SH4A, uClibc, little endian
-+              Not usable in Buildroot yet.
-+            - SH4A, uClibc, big endian
-+              Not usable in Buildroot yet.
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- 	bool "Sourcery CodeBench SH 2012.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
-@@ -723,6 +743,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
-+	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 726f76f..6fb0e70 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -229,6 +229,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203),y)
- TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/GNUToolchain/package10148/public/sh-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=renesas-2012.03-35-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7859/public/sh-uclinux/
- TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
++echo "<a id="results"></a>"
+ echo "<table>"
+ echo "<tr>"
+ echo "<td>Packages using the <i>generic</i> infrastructure</td>"
 -- 
 1.7.9.5
