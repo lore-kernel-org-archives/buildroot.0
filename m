@@ -1,289 +1,81 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Nov 2012 01:22:43 +0100
-Subject: [Buildroot] [git commit] toolchain-external: improve glibc support
-	to test availability of RPC
-Message-ID: <20121104090719.3412299A5C@busybox.osuosl.org>
+Date: Sun, 4 Nov 2012 10:28:13 +0100
+Subject: [Buildroot] [git commit] opus-tools: fix build on i386
+Message-ID: <20121104093832.9A53B99B3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fbdf062b93c6c2ed7e35897bcb0ad4c60f29d41
+commit: http://git.buildroot.net/buildroot/commit/?id=9de85f7d8c82316669350a50a0e024cc9ada518d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Basically, the BR2_TOOLCHAIN_EXTERNAL_GLIBC option no longer
-unconditionally selects BR2_TOOLCHAIN_HAS_NATIVE_RPC since there are
-glibc toolchains that don't have RPC support. All the predefined
-toolchain profiles are updated to take into account this change: for
-the moment, all glibc toolchains that have pre-defined toolchains have
-RPC support, but further patches in the series add pre-defined glibc
-toolchains that don't have RPC support. In the case of custom glibc
-toolchains, a question is asked to the user so that he can say whether
-the external glibc toolchain has RPC support or not. The validity of
-this configuration option is checked by the new
-check_glibc_rpc_feature function in helpers.mk.
+Upstream patch.  Fixes e.g.
+http://autobuild.buildroot.net/results/03cf0ee3c092960c37a6a78f2531b047a317d516/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/helpers.mk                   |   27 +++++++++++++++++++----
- toolchain/toolchain-external/Config.in |   37 ++++++++++++++++++++++++-------
- 2 files changed, 50 insertions(+), 14 deletions(-)
+ .../opus-tools-fix-compilation-on-non-win.patch    |   53 ++++++++++++++++++++
+ 1 files changed, 53 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 34e9c17..1509ff8 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -172,9 +172,10 @@ create_lib64_symlinks = \
- 	(cd $(STAGING_DIR)/usr ; ln -s lib lib64)
- 
- #
--# Check the availability of a particular glibc feature. We assume that
--# all Buildroot toolchain options are supported by glibc, so we just
--# check that they are enabled.
-+# Check the availability of a particular glibc feature. This function
-+# is used to check toolchain options that are always supported by
-+# glibc, so we simply check that the corresponding option is properly
-+# enabled.
- #
- # $1: Buildroot option name
- # $2: feature description
-@@ -186,6 +187,22 @@ check_glibc_feature = \
- 	fi
- 
- #
-+# Check the availability of RPC support in a glibc toolchain
-+#
-+# $1: sysroot directory
-+#
-+check_glibc_rpc_feature = \
-+	IS_IN_LIBC=`test -f $(1)/usr/include/rpc/rpc.h && echo y` ; \
-+	if [ "$(BR2_TOOLCHAIN_HAS_NATIVE_RPC)" != "y" -a "$${IS_IN_LIBC}" = "y" ] ; then \
-+		echo "RPC support available in C library, please enable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
-+		exit 1 ; \
-+	fi ; \
-+	if [ "$(BR2_TOOLCHAIN_HAS_NATIVE_RPC)" = "y" -a "$${IS_IN_LIBC}" != "y" ] ; then \
-+		echo "RPC support not available in C library, please disable BR2_TOOLCHAIN_HAS_NATIVE_RPC" ; \
-+		exit 1 ; \
-+	fi
+diff --git a/package/opus-tools/opus-tools-fix-compilation-on-non-win.patch b/package/opus-tools/opus-tools-fix-compilation-on-non-win.patch
+new file mode 100644
+index 0000000..c8cb6a2
+--- /dev/null
++++ b/package/opus-tools/opus-tools-fix-compilation-on-non-win.patch
+@@ -0,0 +1,53 @@
++From 7734f55bc535c6d3d0fbb27c55e38f52ba6b7764 Mon Sep 17 00:00:00 2001
++From: Andreas Schlick <schlick@lavabit.com>
++Date: Thu, 13 Sep 2012 19:44:50 +0200
++Subject: [PATCH] Fix compilation on non-Windows x86-32 w/ -msse.
 +
-+#
- # Check the correctness of a glibc external toolchain configuration.
- #  1. Check that the C library selected in Buildroot matches the one
- #     of the external toolchain
-@@ -202,10 +219,10 @@ check_glibc = \
- 	fi; \
- 	$(call check_glibc_feature,BR2_LARGEFILE,Large file support) ;\
- 	$(call check_glibc_feature,BR2_INET_IPV6,IPv6 support) ;\
--	$(call check_glibc_feature,BR2_TOOLCHAIN_HAS_NATIVE_RPC,RPC support) ;\
- 	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
- 	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
--	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
-+	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
-+	$(call check_glibc_rpc_feature,$${SYSROOT_DIR})
- 
- #
- # Check the conformity of Buildroot configuration with regard to the
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 595864b..4f6934e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -8,6 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -24,6 +25,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -40,6 +42,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_08
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -56,6 +59,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_07
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -72,6 +76,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_06
- 	depends on BR2_arm
- 	depends on BR2_cortex_a8 || BR2_cortex_a9
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Linaro toolchain for the ARM architecture. It uses Linaro
-@@ -108,6 +113,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	bool "Sourcery CodeBench ARM 2011.09"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -129,6 +135,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	bool "Sourcery CodeBench ARM 2011.03"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -150,6 +157,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
- 	bool "Sourcery CodeBench ARM 2010.09"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -171,6 +179,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	bool "Sourcery CodeBench ARM 2010q1"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
-@@ -192,6 +201,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- 	bool "Sourcery CodeBench MIPS 2011.09"
- 	depends on BR2_mips || BR2_mipsel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
-@@ -259,6 +269,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	bool "Sourcery CodeBench MIPS 2011.03"
- 	depends on BR2_mips || BR2_mipsel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
-@@ -308,6 +319,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
- 	bool "Sourcery CodeBench MIPS 4.4"
- 	depends on BR2_mips || BR2_mipsel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
-@@ -357,6 +369,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
-@@ -384,6 +397,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	bool "Sourcery CodeBench PowerPC 2010.09"
- 	depends on BR2_powerpc
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
-@@ -411,6 +425,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	bool "Sourcery CodeBench SH 2011.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
-@@ -430,6 +445,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
- 	bool "Sourcery CodeBench SH 2010.09"
- 	depends on BR2_sh4a || BR2_sh4aeb
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the SuperH architecture,
-@@ -483,6 +499,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	bool "Sourcery CodeBench x86/x86_64 2011.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
-@@ -504,6 +521,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	bool "Sourcery CodeBench x86/x86_64 2010.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the x86/x86_64
-@@ -570,6 +588,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	bool "Xilinx Little Endian Microblaze GNU Tools"
- 	depends on BR2_microblazeel
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
-@@ -578,6 +597,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	bool "Xilinx Big Endian Microblaze GNU Tools"
- 	depends on BR2_microblazebe
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Toolchain for the Microblaze architecture, from
- 	  http://wiki.xilinx.com/mb-gnu-tools
-@@ -678,7 +698,6 @@ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	bool
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_USE_WCHAR
- 	select BR2_ENABLE_LOCALE
- 	select BR2_TOOLCHAIN_HAS_THREADS
-@@ -730,14 +749,6 @@ config BR2_TOOLCHAIN_EXTERNAL_INET_IPV6
- 	  IPv6. If you don't know, leave the default value, Buildroot
- 	  will tell you if it's correct or not.
- 
--config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
--	bool "Toolchain has RPC support?"
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	help
--	  Select this option if your external toolchain supports
--	  RPC. If you don't know, leave the default value, Buildroot
--	  will tell you if it's correct or not.
--
- config BR2_TOOLCHAIN_EXTERNAL_WCHAR
- 	bool "Toolchain has WCHAR support?"
- 	select BR2_USE_WCHAR
-@@ -776,6 +787,14 @@ config BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG
- 
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 
-+config BR2_TOOLCHAIN_EXTERNAL_INET_RPC
-+	bool "Toolchain has RPC support?"
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	help
-+	  Select this option if your external toolchain supports
-+	  RPC. If you don't know, leave the default value, Buildroot
-+	  will tell you if it's correct or not.
++cpusupport.h used __cpuid() from the Windows specific header file intrin.h
++which is not available under gcc. But we can use __get_cpuid() from cpuid.h
++instead.
 +
- config BR2_TOOLCHAIN_EXTERNAL_CXX
- 	bool "Toolchain has C++ support?"
- 	select BR2_INSTALL_LIBSTDCPP
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++
++---
++ src/cpusupport.h |   18 +++++++++++++++++-
++ 1 files changed, 17 insertions(+), 1 deletions(-)
++
++diff --git a/src/cpusupport.h b/src/cpusupport.h
++index 1986d31..5e42337 100644
++--- a/src/cpusupport.h
+++++ b/src/cpusupport.h
++@@ -32,7 +32,9 @@
++ # if !defined(__SSE__) || defined(_M_X64) || defined(__amd64__)
++ #  define query_cpu_support() 0
++ #else
++-# include <intrin.h>
+++
+++#if defined WIN32 || defined _WIN32
+++#include <intrin.h>
++ static inline int query_cpu_support(void)
++ {
++    int buffer[4];
++@@ -43,5 +45,19 @@ static inline int query_cpu_support(void)
++ #  endif
++        ;
++ }
+++#else
+++#include <cpuid.h>
+++static inline int query_cpu_support(void)
+++{
+++   unsigned int eax, ebx, ecx, edx=0;
+++   __get_cpuid(1, &eax, &ebx, &ecx, &edx);
+++   return ((edx & 1<<25) == 0) /*SSE*/
+++#ifdef __SSE2__
+++        + ((edx & 1<<26) == 0) /*SSE2*/
+++#endif
+++       ;
+++}
+++#endif
+++
++ # endif
++ #endif
++-- 
++1.7.2.5
++
