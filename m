@@ -1,86 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Nov 2012 12:15:09 +0100
-Subject: [Buildroot] [git commit] sqlite: Add new compile-time options
-Message-ID: <20121104111846.7517199A11@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun,  4 Nov 2012 12:30:06 +0100
+Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
+Message-ID: <1352028606-11338-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef1e76ae433e744d2cebf23f1c6d3b6446790270
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+xlib_libX11 builds a makekeys executable for the host, but uses the
+targets X11_CFLAGS. This leads to build failures like
+http://autobuild.buildroot.net/results/411eb3aefea859a7e31986a44acd50b475f174cb/
 
-[Peter: whitespace/wording tweaks]
-Signed-off-by: Stefan Froberg <stefan.froberg@petroprogram.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+This problem was introduced by the version bump, because then also
+the AUTORECONF was removed so the existing fix didn't work anymore.
+
+As a slightly cleaner solution, just remove X11_CFLAGS from the
+Makefile.  We know we don't need it, because the X11 stuff is in
+$(HOST_DIR)/usr/include which is already in HOST_CFLAGS.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 ---
- package/sqlite/Config.in |   34 ++++++++++++++++++++++++++++++++++
- package/sqlite/sqlite.mk |   12 ++++++++++++
- 2 files changed, 46 insertions(+), 0 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.mk |   19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index 25aaa3f..8766786 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -22,3 +22,37 @@ config BR2_PACKAGE_SQLITE_STAT3
- 	  planner that can help SQLite to choose a better query plan under
- 	  certain situations.
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 79b2d54..c8fea3d 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -19,21 +19,14 @@ HOST_XLIB_LIBX11_CONF_OPT = \
  
-+config BR2_PACKAGE_SQLITE_ENABLE_FTS3
-+	bool "Enable version 3 of the full-text search engine"
-+	depends on BR2_PACKAGE_SQLITE
-+	help
-+	  When this option is defined in the amalgamation
-+	  (see http://www.sqlite.org/amalgamation.html), version 3 of
-+	  the full-text search engine is added to the build automatically.
-+
-+config BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY
-+	bool "Enable sqlite3_unlock_notify() interface"
-+	depends on BR2_PACKAGE_SQLITE
-+	help
-+	  This option enables the sqlite3_unlock_notify() interface and its
-+	  accosiated functionality. See the documentation
-+	  http://www.sqlite.org/unlock_notify.html for additional information.
-+
-+config BR2_PACKAGE_SQLITE_SECURE_DELETE
-+	bool "Set the secure_delete pragma on by default"
-+	depends on BR2_PACKAGE_SQLITE
-+	help
-+	  This compile-time option changes the default settings of the
-+	  secure_delete pragma. When this option is not used, secure_delete
-+	  defaults to off. When this option is present, secure_delete defaults
-+	  to on.
-+
-+	  The secure_delete setting causes deleted content to be overwritten
-+	  with zeros. There is a small performance penalty for this since
-+	  additional I/O must occur. On the other hand, secure_delete can
-+	  prevent sensitive information from lingering in unused parts
-+	  of the database file after it has allegedly been deleted.
-+	  See the documentation on the
-+	  http://www.sqlite.org/pragma.html#pragma_secure_delete
-+	  for additional information.
-+
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 7b5b4aa..0320cc4 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -21,6 +21,18 @@ ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
- endif
+ # src/util/makekeys is executed at build time to generate ks_tables.h, so
+ # it should get compiled for the host. The libX11 makefile unfortunately
+-# doesn't know about cross compilation so this doesn't work.
+-# Long term, we should probably teach it about HOSTCC / HOST_CFLAGS, but for
+-# now simply disable the src/util Makefile and build makekeys by hand in
+-# advance
+-define XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
+-	echo '' > $(@D)/src/util/Makefile.am
++# doesn't have X11_CFLAGS_FOR_BUILD so this doesn't work.  For buildroot,
++# we now the X11 includes are in $(HOST_DIR)/usr/include with are already
++# in the CFLAGS_FOR_BUILD, so we can just remove the X11_CFLAGS
++define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
++	$(SED) '/X11_CFLAGS/d' $(@D)/src/util/Makefile*
+ endef
  
-+ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
-+SQLITE_CFLAGS += -DSQLITE_ENABLE_FTS3
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY),y)
-+SQLITE_CFLAGS += -DSQLITE_ENABLE_UNLOCK_NOTIFY
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLITE_SECURE_DELETE),y)
-+SQLITE_CFLAGS += -DSQLITE_SECURE_DELETE
-+endif
-+
- SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
+-XLIB_LIBX11_POST_EXTRACT_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
+-
+-define XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
+-	cd $(@D)/src/util && $(HOSTCC) $(HOST_CFLAGS) -o makekeys makekeys.c
+-endef
+-
+-XLIB_LIBX11_POST_CONFIGURE_HOOKS += XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
++XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
  
- SQLITE_CONF_OPT = \
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+tg: (9de85f7..) t/xlib_libX11-makekeys (depends on: master)
