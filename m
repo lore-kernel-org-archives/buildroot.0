@@ -1,24 +1,83 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 11:48:16 +0100
-Subject: [Buildroot] [PATCH] opus-tools: fix build on i386
-In-Reply-To: <1351984395-5980-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 4 Nov 2012 00:13:15 +0100")
-References: <1351984395-5980-1-git-send-email-arnout@mind.be>
-Message-ID: <87wqy1tzin.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun,  4 Nov 2012 11:52:03 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: pass --disable-doc if documentation
+	is not enabled
+In-Reply-To: <871uhm7a0m.fsf@macbook.be.48ers.dk>
+Message-ID: <1352026323-17193-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Many configure scripts support an option like --disable-doc, --disable-docs
+or --disable-documentation.  Pass all of these to configure.
 
- Arnout> Upstream patch.  Fixes e.g.
- Arnout> http://autobuild.buildroot.net/results/03cf0ee3c092960c37a6a78f2531b047a317d516/
+In addition, not all Xorg packages accept the --disable-xxx. Instead they
+look for xmlto and/or fop and build documentation if they exist.  For host
+packages, this may lead to build errors because /usr/bin/xmlto uses libxml2
+and we set LD_LIBRARY_PATH to point to $(HOST_DIR)/lib, which may contain
+a libxml2 as well.  So it's essential to disable xmlto for host packages.
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Also some whitespace cleanup.
 
-Committed, thanks.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+This obviously has far-ranging effects and I didn't rebuild all packages.
+However, from inspecting the configure scripts of all packages, it looks
+like --with-xmlto and --with-fop are only used for generating documentation.
 
+ package/Makefile.in      |   10 +++++++++-
+ package/pkg-autotools.mk |    9 +++++++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a939882..d7c73e5 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -277,7 +277,15 @@ DISABLE_LARGEFILE= --disable-largefile
+ endif
+ 
+ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+-DISABLE_DOCUMENTATION=--disable-gtk-doc
++# The configure option varies, but since unknown options are ignored
++# we can pass all of them.
++DISABLE_DOCUMENTATION = \
++	--disable-gtk-doc \
++	--disable-doc \
++	--disable-docs \
++	--disable-documentation \
++	--with-xmlto=no \
++	--with-fop=no
+ endif
+ 
+ ifeq ($(BR2_INET_IPV6),y)
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 785daab..890506b 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -116,6 +116,9 @@ endef
+ else
+ 
+ # Configure package for host
++# disable all kind of documentation generation in the process,
++# because it often relies on host tools which may or may not be
++# installed.
+ define $(2)_CONFIGURE_CMDS
+ 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
+ 	        $$(HOST_CONFIGURE_OPTS) \
+@@ -126,6 +129,12 @@ define $(2)_CONFIGURE_CMDS
+ 		--prefix="$$(HOST_DIR)/usr" \
+ 		--sysconfdir="$$(HOST_DIR)/etc" \
+ 		--enable-shared --disable-static \
++		--disable-gtk-doc \
++		--disable-doc \
++		--disable-docs \
++		--disable-documentation \
++		--with-xmlto=no \
++		--with-fop=no \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+ endef
 -- 
-Bye, Peter Korsgaard
+tg: (9de85f7..) t/disable-doc (depends on: master)
