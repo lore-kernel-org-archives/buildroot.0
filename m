@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  4 Nov 2012 13:04:02 +0100
-Subject: [Buildroot] [PATCH 01/20] toolchain-external: ARM 2012.03 has RPC
-	support
+Date: Sun,  4 Nov 2012 13:04:04 +0100
+Subject: [Buildroot] [PATCH 03/20] busybox: add support to link against
+	libtirpc when available
 In-Reply-To: <cover.1352030430.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352030430.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6a408e9ce2dc70b58fd96f4a0d246e9e895f35f5.1352030430.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <376cc049393ad00f28f4e973015ae5ecd078cb73.1352030430.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ package/busybox/busybox.mk |   19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 4f6934e..ad72de0 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -92,6 +92,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	bool "Sourcery CodeBench ARM 2012.03"
- 	depends on BR2_arm
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the ARM architecture, from
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 2fa1aa5..549e150 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -15,14 +15,29 @@ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPLv2
+ BUSYBOX_LICENSE_FILES = LICENSE
+ 
++BUSYBOX_CFLAGS = \
++	$(TARGET_CFLAGS) \
++	-I$(LINUX_HEADERS_DIR)/include
++
++BUSYBOX_LDFLAGS = \
++	$(TARGET_LDFLAGS)
++
++# Link against libtirpc if available so that we can leverage its RPC
++# support for NFS mounting with Busybox
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++BUSYBOX_DEPENDENCIES += libtirpc
++BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
++BUSYBOX_LDFLAGS += -ltirpc
++endif
++
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+-BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
++BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(BUSYBOX_CFLAGS)"
+ BUSYBOX_MAKE_OPTS = \
+ 	CC="$(TARGET_CC)" \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	PREFIX="$(TARGET_DIR)" \
+-	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
++	EXTRA_LDFLAGS="$(BUSYBOX_LDFLAGS)" \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	CONFIG_PREFIX="$(TARGET_DIR)" \
+ 	SKIP_STRIP=y
 -- 
 1.7.9.5
