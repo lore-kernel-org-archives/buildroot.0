@@ -1,31 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 17:41:14 +0100
-Subject: [Buildroot] [RFC 0/2] legal-info: split _LICENSE and
-	_REDISTRIBUTE constants
-In-Reply-To: <1351848341-5905-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Fri, 2 Nov 2012 10:25:39 +0100")
-References: <1351848341-5905-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87sj8ppbh1.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 4 Nov 2012 17:25:10 +0100
+Subject: [Buildroot] [git commit] legal-info: move $(2)_LICENSE to a proper
+	line
+Message-ID: <20121104164656.22DE399B67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c6917357ed6e7ce537f8277049a55440d5b4bb95
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> Hi,
- Luca> this small patchset implements the recent proposal to split the license
- Luca> description (<PKG>_LICENSE) from the fact that a package can be
- Luca> redistributed or not (<PKG>_REDISTRIBUTE).
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pkg-generic.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- Luca> The idea is to let the _LICENSE do its work, i.e. simply describe the
- Luca> license, and add a new _REDISTRUBUTE parameter (defaulting to YES), to
- Luca> specify if the tarball must be copied or not.
- Luca> Defining the license and choosing whether or not to redistribute would
- Luca> become technically independent, which is more correct.
-
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9c87aec..d3a6db6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -268,14 +268,14 @@ ifndef $(2)_LICENSE
+  endif
+ endif
+ 
++$(2)_LICENSE			?= unknown
++
+ ifndef $(2)_LICENSE_FILES
+  ifdef $(3)_LICENSE_FILES
+   $(2)_LICENSE_FILES = $($(3)_LICENSE_FILES)
+  endif
+ endif
+ 
+-$(2)_LICENSE			?= unknown
+-
+ $(2)_DEPENDENCIES ?= $(filter-out $(1),$(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES))))
+ 
+ $(2)_INSTALL_STAGING		?= NO
