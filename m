@@ -1,30 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 00:57:55 +0100
-Subject: [Buildroot] [PATCH] pkg-download: Make a shallow clone for git
-	downloads
-In-Reply-To: <1351732866-29730-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Thu, 1 Nov 2012 02:21:05 +0100")
-References: <1351732866-29730-1-git-send-email-arnout@mind.be>
-Message-ID: <87hap6w870.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Nov 2012 01:11:36 +0100
+Subject: [Buildroot] [PATCH 01/18] uClibc: use the Buildroot toolchain
+	options instead of the hidden common options
+In-Reply-To: <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:46 +0100")
+References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
+ <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
+ <1849f29646ff6a451e17700961f988cb38e4e3a4.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878vaiw7k7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Arnout> When downloading from git, we clone the whole repository and then only
- Arnout> use the latest commit.  That's a lot of redundant stuff.  So instead,
- Arnout> make a shallow clone.  Unfortunately that's only possible when
- Arnout> downloading a branch or tag, so fall back to the old method if git gives
- Arnout> an error.
-
- Arnout> This speeds up the cloning of a linux git from more than 2 hours to
- Arnout> 20 minutes on a 200KB/s link).
-
-And just think what difference it will make on the hotel Grumps
-connection ;)
+ Thomas> Since we are some day going to finally rename the badly named common
+ Thomas> toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
+ Thomas> etc.) into something more logical, let's start using the Buildroot
+ Thomas> toolchain options in the uClibc code.
 
 Committed, thanks.
 
