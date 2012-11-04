@@ -1,40 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  4 Nov 2012 08:35:12 -0300
-Subject: [Buildroot] [PATCH] ulogd: fix build failure
-Message-ID: <1352028912-23845-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 04 Nov 2012 12:39:57 +0100
+Subject: [Buildroot] [PATCH] QT: Fix build for architectures using
+ generic atomics
+In-Reply-To: <1352027774-27536-1-git-send-email-mischa.jonker@synopsys.com>
+References: <1352027774-27536-1-git-send-email-mischa.jonker@synopsys.com>
+Message-ID: <5096540D.7040401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix Peter's reported build failure:
-http://autobuild.buildroot.net/results/1dcf63799937f2216e3c712af8880ad431dbd47c/build-end.log
-This is because the configure script uses absolute paths to detect dbi,
-mysql and pgsql, so forcibly disable them.
-Also add the optional sqlite dependency when it's selected.
+On 11/04/12 12:16, Mischa Jonker wrote:
+> The problem has to do with const-correctness. This has been resolved
+> for various architectures, but not for the generic case.
+>
+>      Signed-off-by: Mischa Jonker<mischa.jonker@synopsys.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ulogd/ulogd.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+  Looks like a horrible hack, but since there's nothing better upstream:
 
-diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
-index 7d31b73..4620bbd 100644
---- a/package/ulogd/ulogd.mk
-+++ b/package/ulogd/ulogd.mk
-@@ -7,10 +7,11 @@
- ULOGD_VERSION = 2.0.1
- ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
- ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
-+ULOGD_CONF_OPT = --with-dbi=no --with-mysql=no --with-pgsql=no
- ULOGD_AUTORECONF = YES
- ULOGD_DEPENDENCIES = host-pkgconf \
- 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
--	libnfnetlink
-+	libnfnetlink $(if $(BR2_PACKAGE_SQLITE),sqlite)
- ULOGD_LICENSE = GPLv2
- ULOGD_LICENSE_FILES = COPYING
- 
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (untested)
+
+  Regards,
+  Arnout
 -- 
-1.7.8.6
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
