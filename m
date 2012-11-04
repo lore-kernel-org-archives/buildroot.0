@@ -1,55 +1,26 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 04 Nov 2012 19:19:42 +0100
-Subject: [Buildroot] [PATCHv2 02/10] target/generic: add filesystem
- overlay option
-In-Reply-To: <1351063027-13800-3-git-send-email-arnout@mind.be>
-References: <1351063027-13800-1-git-send-email-arnout@mind.be>
- <1351063027-13800-3-git-send-email-arnout@mind.be>
-Message-ID: <5096B1BE.7010802@lucaceresoli.net>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sun, 4 Nov 2012 19:24:56 +0100
+Subject: [Buildroot] new perl build issue
+References: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
+ <20121104185301.0616b2f9@skate>
+Message-ID: <otb67k.0pj.ln@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle (Essensium/Mind) wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
->
-> The filesystem overlay is a tree that is copied over the target fs
-> after building everything - which is currently usually done in the
-> post-build script.
->
-> Also replace the documentation for a custom skeleton with the
-> filesystem overlay and deprecate the custom skeleton.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20121104185301.0616b2f9 at skate:
 
-This is definitely something we should have in Buildroot!
+> Fran??ois, would you mind looking into this?
 
-With the fixes below,
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Hi,
 
-> --- a/target/generic/Config.in
-> +++ b/target/generic/Config.in
-> @@ -166,6 +166,17 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
->
->   endif # BR2_ROOTFS_SKELETON_DEFAULT
->
-> +config BR2_ROOTFS_OVERLAY
-> +	string "Root filesystem overlay"
+@Francois: Could you also please have a look at my report?
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/48229
 
-s/overlay/overlays/
-or, even better: string "Root filesystem overlay directories"
+I had some registration issues while sending the post via Gmane, so it 
+arrived a day later than written, so maybe it went unnoticed.
 
-
-> +	default ""
-> +	help
-> +	  Specify a list of directories that are copied over the target
-> +	  root filesystem after the build has finished and before it is
-> +	  packed into the selected filesystem images.
-> +
-> +	  It is copied as-is into the rootfs, excluding files ending with
-
-s/It is/They are/
-
-Luca
+Kind regards, Bernd
