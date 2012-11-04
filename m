@@ -1,27 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 14:06:38 +0100
-Subject: [Buildroot] [PATCH] ulogd: fix build failure
-In-Reply-To: <50965AF5.2010701@zacarias.com.ar> (Gustavo Zacarias's message of
- "Sun, 04 Nov 2012 09:09:25 -0300")
-References: <1352028912-23845-1-git-send-email-gustavo@zacarias.com.ar>
- <87bofdr2qn.fsf@dell.be.48ers.dk> <50965AF5.2010701@zacarias.com.ar>
-Message-ID: <87y5ihplep.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 4 Nov 2012 13:55:42 +0100
+Subject: [Buildroot] [git commit] ulogd: fix build failure
+Message-ID: <20121104130704.C813899BD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3da67a081e55431f7b0cfae850a3f6851ff39409
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> On 11/04/12 09:06, Peter Korsgaard wrote:
- >> We do have mysql_client though - Any reason to not build support for it
- >> if enabled?
+Fix Peter's reported build failure:
+http://autobuild.buildroot.net/results/1dcf63799937f2216e3c712af8880ad431dbd47c/build-end.log
+This is because the configure script uses absolute paths to detect dbi,
+mysql and pgsql, so forcibly disable them.
+Also add the optional sqlite dependency when it's selected.
 
- Gustavo> I'm still running a fever from flu and i don't have the
- Gustavo> necessary brain power to test it right at this moment :)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ulogd/ulogd.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Fair enough, I'll leave it for now then - Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 7d31b73..4620bbd 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -7,10 +7,11 @@
+ ULOGD_VERSION = 2.0.1
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
++ULOGD_CONF_OPT = --with-dbi=no --with-mysql=no --with-pgsql=no
+ ULOGD_AUTORECONF = YES
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+-	libnfnetlink
++	libnfnetlink $(if $(BR2_PACKAGE_SQLITE),sqlite)
+ ULOGD_LICENSE = GPLv2
+ ULOGD_LICENSE_FILES = COPYING
+ 
