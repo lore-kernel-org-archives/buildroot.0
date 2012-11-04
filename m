@@ -1,7 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun,  4 Nov 2012 13:43:15 +0100
+Date: Sun,  4 Nov 2012 13:45:24 +0100
 Subject: [Buildroot] [PATCH] lua: remove shared library feature
-Message-ID: <1352032995-1850-1-git-send-email-arnout@mind.be>
+Message-ID: <1352033124-2514-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,10 +12,15 @@ The shared library is a feature we added to lua, but it doesn't work
 correctly.  Since we anyway normally don't add features to packages,
 just remove all the support for the shared library.
 
+Fixes
+http://autobuild.buildroot.net/results/3946da859a0dcab99a8db8b91fd9428d9e85bdf1/
+
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Francois, Gustavo, could you review and Ack this patch please?  You're
 more or less the lua maintainers...
+
+v2: Added reference to autobuild failure
 
  package/lua/Config.in                         |    7 --
  package/lua/lua-02-shared-libs-for-lua.patch  |   49 -------------
