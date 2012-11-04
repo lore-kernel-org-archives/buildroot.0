@@ -1,32 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Nov 2012 11:25:17 +0100
-Subject: [Buildroot] [git commit] bison: bump to version 2.6.3
-Message-ID: <20121104102956.2418699ADE@busybox.osuosl.org>
+Date: Sun, 4 Nov 2012 11:23:23 +0100
+Subject: [Buildroot] [git commit] xapp_xmag: fix build against Xmu by
+	bumping version
+Message-ID: <20121104102955.6E54199ADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa554ff5a851c018feb4d938d267f0c269c63fcc
+commit: http://git.buildroot.net/buildroot/commit/?id=010217a23d25cba1530287f4a72bb8b192a6b90d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fix a build issue similar to the one encountered on xapp_listres at
+http://autobuild.buildroot.org/results/06d0ef38165769df38047c1f64d4cfae835e9e54/.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bison/bison.mk |    2 +-
+ package/x11r7/xapp_xmag/xapp_xmag.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index 8c33a7a..c93f716 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
+diff --git a/package/x11r7/xapp_xmag/xapp_xmag.mk b/package/x11r7/xapp_xmag/xapp_xmag.mk
+index 235787a..0496c8a 100644
+--- a/package/x11r7/xapp_xmag/xapp_xmag.mk
++++ b/package/x11r7/xapp_xmag/xapp_xmag.mk
 @@ -4,7 +4,7 @@
  #
- #############################################################
+ ################################################################################
  
--BISON_VERSION = 2.6.2
-+BISON_VERSION = 2.6.3
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPLv3+
- BISON_LICENSE_FILES = COPYING
+-XAPP_XMAG_VERSION = 1.0.2
++XAPP_XMAG_VERSION = 1.0.4
+ XAPP_XMAG_SOURCE = xmag-$(XAPP_XMAG_VERSION).tar.bz2
+ XAPP_XMAG_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XMAG_DEPENDENCIES = xlib_libXaw
