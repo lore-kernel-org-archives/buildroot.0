@@ -1,39 +1,78 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Nov 2012 12:07:12 +0100
-Subject: [Buildroot] [git commit] cups: fix libdir handling
-Message-ID: <20121104110820.6199B9997D@busybox.osuosl.org>
+From: Mischa Jonker <mischa.jonker@synopsys.com>
+Date: Sun,  4 Nov 2012 12:16:14 +0100
+Subject: [Buildroot] [PATCH] QT: Fix build for architectures using generic
+	atomics
+Message-ID: <1352027774-27536-1-git-send-email-mischa.jonker@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7655b95e27c3eebf7456a726e48b7e5448692b31
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The problem has to do with const-correctness. This has been resolved
+for various architectures, but not for the generic case.
 
-Cups uses /usr/lib64 if the HOST has it, no matter if it is cross compiling
-for a 32bit arch, breaking the build for stuff looking in /usr/lib.
-
-The fix of commit edd2716c didn't work, it would just force /usr/lib64 if
-the target is 64 bit.  Instead, force installation in /usr/lib regardless
-of the host.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+    Signed-off-by: Mischa Jonker <mischa.jonker@synopsys.com>
 ---
- package/cups/cups.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt/qt-fix-const-atomics.patch |   50 +++++++++++++++++++++++++++++++++
+ 1 files changed, 50 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt/qt-fix-const-atomics.patch
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index 226a832..3eb83ea 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -14,7 +14,7 @@ CUPS_CONF_OPT = --without-perl \
- 		--without-java \
- 		--disable-gnutls \
- 		--disable-gssapi \
--		--libdir=/usr/$(if $(BR2_ARCH_IS_64),lib64,lib)
-+		--libdir=/usr/lib
- 
- CUPS_DEPENDENCIES = $(if $(BR2_PACKAGE_ZLIB),zlib) \
- 		    $(if $(BR2_PACKAGE_LIBPNG),libpng) \
+diff --git a/package/qt/qt-fix-const-atomics.patch b/package/qt/qt-fix-const-atomics.patch
+new file mode 100644
+index 0000000..6485356
+--- /dev/null
++++ b/package/qt/qt-fix-const-atomics.patch
+@@ -0,0 +1,50 @@
++From d4d07dac01796b2aa0fb501c14865cab7e42b3a9 Mon Sep 17 00:00:00 2001
++From: Mischa Jonker <mischa.jonker@synopsys.com>
++Date: Sun, 4 Nov 2012 11:42:04 +0100
++Subject: [PATCH] Fix const-related build error in generic atomic ops
++
++It's still not entirely const-correct though. In all other architectures
++this is obfuscated through the use of inline asm (which the compiler
++doesn't check). This patch obfuscates through const_cast
++---
++ src/corelib/arch/generic/qatomic_generic_unix.cpp |    8 ++++----
++ src/corelib/arch/qatomic_generic.h                |    2 +-
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/corelib/arch/generic/qatomic_generic_unix.cpp b/src/corelib/arch/generic/qatomic_generic_unix.cpp
++index 1c6cbf0..6fce81d 100644
++--- a/src/corelib/arch/generic/qatomic_generic_unix.cpp
+++++ b/src/corelib/arch/generic/qatomic_generic_unix.cpp
++@@ -85,13 +85,13 @@ int QBasicAtomicInt_fetchAndAddOrdered(volatile int *_q_value, int valueToAdd)
++ 
++ Q_CORE_EXPORT
++ bool QBasicAtomicPointer_testAndSetOrdered(void * volatile *_q_value,
++-                                           void *expectedValue,
++-                                           void *newValue)
+++                                           const void *expectedValue,
+++                                           const void *newValue)
++ {
++     bool returnValue = false;
++     pthread_mutex_lock(&qAtomicMutex);
++     if (*_q_value == expectedValue) {
++-        *_q_value = newValue;
+++        *_q_value = const_cast<void*>(newValue);
++         returnValue = true;
++     }
++     pthread_mutex_unlock(&qAtomicMutex);
++diff --git a/src/corelib/arch/qatomic_generic.h b/src/corelib/arch/qatomic_generic.h
++index 621a767..4c14679 100644
++--- a/src/corelib/arch/qatomic_generic.h
+++++ b/src/corelib/arch/qatomic_generic.h
++@@ -105,7 +105,7 @@ Q_CORE_EXPORT bool QBasicAtomicInt_testAndSetOrdered(volatile int *, int, int);
++ Q_CORE_EXPORT int QBasicAtomicInt_fetchAndStoreOrdered(volatile int *, int);
++ Q_CORE_EXPORT int QBasicAtomicInt_fetchAndAddOrdered(volatile int *, int);
++ 
++-Q_CORE_EXPORT bool QBasicAtomicPointer_testAndSetOrdered(void * volatile *, void *, void *);
+++Q_CORE_EXPORT bool QBasicAtomicPointer_testAndSetOrdered(void * volatile *, const void *, const void *);
++ Q_CORE_EXPORT void *QBasicAtomicPointer_fetchAndStoreOrdered(void * volatile *, void *);
++ Q_CORE_EXPORT void *QBasicAtomicPointer_fetchAndAddOrdered(void * volatile *, qptrdiff);
++ 
++-- 
++1.7.0.4
++
+-- 
+1.7.0.4
