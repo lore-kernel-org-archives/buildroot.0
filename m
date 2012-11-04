@@ -1,12 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 01:47:50 +0100
-Subject: [Buildroot] [PATCH 06/18] libtirpc: new package
-In-Reply-To: <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:51 +0100")
+Date: Sun, 04 Nov 2012 01:15:16 +0100
+Subject: [Buildroot] [PATCH 04/18] Rename BR2_INET_RPC to
+	BR2_TOOLCHAIN_HAS_NATIVE_RPC
+In-Reply-To: <df263474cae4ecb6cf8100906a8093bf2dab2c29.1351964808.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:49 +0100")
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
  <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <045efa9091a2b75fca45da07eeeb107d90418771.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fw4qurbd.fsf@dell.be.48ers.dk>
+ <df263474cae4ecb6cf8100906a8093bf2dab2c29.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87vcdmustn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +16,12 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> The BR2_INET_RPC has for a long time been a not very descriptive
+ Thomas> configuration option name, and with the advent of non-RPC glibc
+ Thomas> toolchains and the apparition of libtirpc, we really need to rename it
+ Thomas> to something more sensible, BR2_TOOLCHAIN_HAS_NATIVE_RPC.
 
- Thomas> +++ b/package/libtirpc/libtirpc.mk
- Thomas> @@ -0,0 +1,17 @@
- Thomas> +#############################################################
- Thomas> +#
- Thomas> +# libtirpc
- Thomas> +#
- Thomas> +#############################################################
- Thomas> +
- Thomas> +LIBTIRPC_VERSION = 0.2.2
- Thomas> +LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- Thomas> +LIBTIRPC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- Thomas> +LIBTIRPC_LICENSE = BSD-3c
- Thomas> +LIBTIRPC_LICENSE_FILES = COPYING
- Thomas> +
- Thomas> +LIBTIRPC_INSTALL_STAGING = YES
- Thomas> +LIBTIRPC_AUTORECONF = YES
- Thomas> +LIBTIRPC_DEPENDENCIES = host-pkg-config
-
-It is called host-pkgconf now. Why do we need it if libtirpc doesn't
-have any other dependencies?
-
+Committed, thanks.
+ 
 -- 
 Bye, Peter Korsgaard
