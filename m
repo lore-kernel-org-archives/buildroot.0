@@ -1,36 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Nov 2012 11:22:19 +0100
-Subject: [Buildroot] [git commit] xapp_xedit: fix build against Xmu by
-	bumping version
-Message-ID: <20121104102954.87ADF99ADE@busybox.osuosl.org>
+Date: Sun, 4 Nov 2012 11:25:17 +0100
+Subject: [Buildroot] [git commit] bison: bump to version 2.6.3
+Message-ID: <20121104102956.2418699ADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac150b9f5b8a99198d19176a29db07409fdf094d
+commit: http://git.buildroot.net/buildroot/commit/?id=fa554ff5a851c018feb4d938d267f0c269c63fcc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix a build issue similar to the one encountered on xapp_listres at
-http://autobuild.buildroot.org/results/06d0ef38165769df38047c1f64d4cfae835e9e54/.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xapp_xedit/xapp_xedit.mk |    2 +-
+ package/bison/bison.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xapp_xedit/xapp_xedit.mk b/package/x11r7/xapp_xedit/xapp_xedit.mk
-index 577bd5a..f69d122 100644
---- a/package/x11r7/xapp_xedit/xapp_xedit.mk
-+++ b/package/x11r7/xapp_xedit/xapp_xedit.mk
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 8c33a7a..c93f716 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
 @@ -4,7 +4,7 @@
  #
- ################################################################################
+ #############################################################
  
--XAPP_XEDIT_VERSION = 1.0.2
-+XAPP_XEDIT_VERSION = 1.2.0
- XAPP_XEDIT_SOURCE = xedit-$(XAPP_XEDIT_VERSION).tar.bz2
- XAPP_XEDIT_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XEDIT_DEPENDENCIES = xlib_libXaw xlib_libXprintUtil
+-BISON_VERSION = 2.6.2
++BISON_VERSION = 2.6.3
+ BISON_SITE = $(BR2_GNU_MIRROR)/bison
+ BISON_LICENSE = GPLv3+
+ BISON_LICENSE_FILES = COPYING
