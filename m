@@ -1,35 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 12:30:53 +0100
-Subject: [Buildroot] [PATCH 1/3] New top-level directory: system
-In-Reply-To: <8cae188654e0346c6569a5045b515ec118c07f7d.1351967245.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Nov 2012 19:27:58 +0100")
-References: <cover.1351967245.git.thomas.petazzoni@free-electrons.com>
- <cover.1351967245.git.thomas.petazzoni@free-electrons.com>
- <8cae188654e0346c6569a5045b515ec118c07f7d.1351967245.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r4o9r4eq.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  4 Nov 2012 08:35:12 -0300
+Subject: [Buildroot] [PATCH] ulogd: fix build failure
+Message-ID: <1352028912-23845-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Fix Peter's reported build failure:
+http://autobuild.buildroot.net/results/1dcf63799937f2216e3c712af8880ad431dbd47c/build-end.log
+This is because the configure script uses absolute paths to detect dbi,
+mysql and pgsql, so forcibly disable them.
+Also add the optional sqlite dependency when it's selected.
 
- Thomas> This directory groups the following elements:
- Thomas>  * the default root filesystem skeleton
- Thomas>  * the default device tables
- Thomas>  * the Config.in options for system configuration (UART port for
- Thomas>    getty, system hostname, etc.)
- Thomas>  * the make rules to apply the system configuration options
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ulogd/ulogd.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
- Thomas> Even though the skeleton and device tables could have lived in fs/, it
- Thomas> would have been strange to have the UART, system hostname and other
- Thomas> related options into fs/. A new system/ directory makes more sense.
-
- Thomas> As a consequence, this patch also removes target/Makefile.in, which
- Thomas> has become useless in the process.
-
-Committed, thanks.
-
+diff --git a/package/ulogd/ulogd.mk b/package/ulogd/ulogd.mk
+index 7d31b73..4620bbd 100644
+--- a/package/ulogd/ulogd.mk
++++ b/package/ulogd/ulogd.mk
+@@ -7,10 +7,11 @@
+ ULOGD_VERSION = 2.0.1
+ ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
++ULOGD_CONF_OPT = --with-dbi=no --with-mysql=no --with-pgsql=no
+ ULOGD_AUTORECONF = YES
+ ULOGD_DEPENDENCIES = host-pkgconf \
+ 	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+-	libnfnetlink
++	libnfnetlink $(if $(BR2_PACKAGE_SQLITE),sqlite)
+ ULOGD_LICENSE = GPLv2
+ ULOGD_LICENSE_FILES = COPYING
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.8.6
