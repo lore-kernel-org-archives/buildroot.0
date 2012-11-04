@@ -1,26 +1,32 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Sun, 4 Nov 2012 20:02:22 +0300
-Subject: [Buildroot] new perl build issue
-Message-ID: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Nov 2012 18:03:37 +0100
+Subject: [Buildroot] [PATCH 1/3] qemu: needs pkg-config
+In-Reply-To: <1352046926-10804-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1352046926-10804-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20121104180337.76cc8973@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi.
-I'm trying to build new perl package
-and get error
-http://pastie.org/5181814
 
+On Sun,  4 Nov 2012 17:35:24 +0100, Thomas Petazzoni wrote:
 
-FATAL: kernel too old
-The program compiled OK, but exited with status 1.
-You have a problem.  Shall I abort Configure [y]
-Ok.  Stopping Configure.
+>  define HOST_QEMU_CONFIGURE_CMDS
+> -	(cd $(@D); ./configure                          \
+> +	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
+>  		--target-list="$(HOST_QEMU_TARGETS)"    \
+>  		--prefix="$(HOST_DIR)/usr"              \
+>  		--interp-prefix=$(STAGING_DIR)          \
 
-Looks like perl package get kernel version string via uname or /proc
-2.6.32-279.9.1.el6.x86_64 my kernel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121104/820319b0/attachment.html>
+I should have explained this change in the commit log: it is needed so
+that $(HOST_DIR)/usr/bin/ is in the PATH, which allows Qemu's configure
+script to find our pkg-config.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
