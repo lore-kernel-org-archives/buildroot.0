@@ -1,71 +1,48 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  4 Nov 2012 20:25:23 +0100
-Subject: [Buildroot] [PATCH 2/2] Make BerkeleyDB optional for Netatalk
-In-Reply-To: <1352057123-7137-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1352057123-7137-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1352057123-7137-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 4 Nov 2012 20:41:45 +0100
+Subject: [Buildroot] new perl build issue
+In-Reply-To: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
+References: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
+Message-ID: <CAB0FRstkx1+Eg0WTv4eVJ+KPFX9RY2C8X4SaL0EDoBK0P642SQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As the documentation of netatalk states :
-"dbd is the default backend since version 2.1"
-So cdb (which is the CNID provided by BerkeleyDB) should not be the default.
+2012/11/4 Alexander Khryukin <alexander@mezon.ru>:
+> Hi.
+> I'm trying to build new perl package
+> and get error
+> http://pastie.org/5181814
+>
+>
+> FATAL: kernel too old
+> The program compiled OK, but exited with status 1.
+> You have a problem.  Shall I abort Configure [y]
+> Ok.  Stopping Configure.
+>
+> Looks like perl package get kernel version string via uname or /proc
+> 2.6.32-279.9.1.el6.x86_64 my kernel
+>
 
-Also, this patches fixes a trouble when compiling with berkeleydb in 64bits
-where netatalk would look the berkeleylib in [...]/lib64 instead of [...]/lib
----
- package/netatalk/Config.in   |    1 -
- package/netatalk/netatalk.mk |   16 ++++++++++++----
- 2 files changed, 12 insertions(+), 5 deletions(-)
+the message 'FATAL: kernel too old' seems to come from qemu.
 
-diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
-index 26f14c3..e602acd 100644
---- a/package/netatalk/Config.in
-+++ b/package/netatalk/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_NETATALK
- 	bool "netatalk"
--	select BR2_PACKAGE_BERKELEYDB
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGPG_ERROR
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index 4aa179e..70c8a13 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -7,11 +7,10 @@ NETATALK_VERSION = 3.0
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+refering line number from http://pastie.org/5181814
+a file 'try.c' containing line 74 & 75 is cross-compiled successfully
+into 'try' by the command line 79.
+the command line 80 fails to execute it with qemu.
+    $ /home/fdkit/buildroot/output/build/perl-5.16.1/Cross/run-qemu-arm ./try
 
--NETATALK_DEPENDENCIES = host-pkg-config openssl berkeleydb libgcrypt libgpg-error
-+NETATALK_DEPENDENCIES = host-pkg-config openssl libgcrypt libgpg-error
- NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
--NETATALK_CONF_OPT += --with-cnid-cdb-backend \
--	--with-bdb=$(STAGING_DIR)/usr \
--	--disable-zeroconf \
-+
-+NETATALK_CONF_OPT += --disable-zeroconf \
- 	--with-ssl-dir=$(STAGING_DIR)/usr \
- 	--with-libgcrypt-dir=$(STAGING_DIR)/usr \
- 	--with-shadow \
-@@ -19,6 +18,15 @@ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
- 	--without-kerberos \
- 	--without-pam
+'Cross/run-qemu-arm' is a one line script which wraps 'qemu-arm'.
 
-+ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-+	NETATALK_DEPENDENCIES += berkeleydb
-+	NETATALK_CONF_ENV += BDB_LIB=$(STAGING_LIB)/usr/lib
-+	NETATALK_CONF_OPT += --with-cnid-cdb-backend \
-+		--with-bdb=$(STAGING_DIR)/usr
-+else
-+	NETATALK_CONF_OPT += --without-cnid-cdb-backend
-+endif
-+
- ifeq ($(BR2_PACKAGE_CUPS),y)
- 	NETATALK_DEPENDENCIES += cups
- 	NETATALK_CONF_ENV += ac_cv_path_CUPS_CONFIG=$(STAGING_DIR)/usr/bin/cups-config
---
-1.7.10.4
+this afternoon, Thomas has posted 3 patches for qemu (see
+http://patchwork.ozlabs.org/patch/197055/).
+Alexander, try to rebuild host-qemu with them.
+
+Fran?ois
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
