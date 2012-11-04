@@ -1,83 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun,  4 Nov 2012 11:52:03 +0100
-Subject: [Buildroot] [PATCH] pkg-infra: pass --disable-doc if documentation
-	is not enabled
-In-Reply-To: <871uhm7a0m.fsf@macbook.be.48ers.dk>
-Message-ID: <1352026323-17193-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 04 Nov 2012 11:53:01 +0100
+Subject: [Buildroot] [PATCH 11/12] ulogd: add new package
+In-Reply-To: <1350909989-1012-11-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 22 Oct 2012 09:46:28 -0300")
+References: <1350909989-1012-1-git-send-email-gustavo@zacarias.com.ar>
+ <1350909989-1012-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bofdtzaq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Many configure scripts support an option like --disable-doc, --disable-docs
-or --disable-documentation.  Pass all of these to configure.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-In addition, not all Xorg packages accept the --disable-xxx. Instead they
-look for xmlto and/or fop and build documentation if they exist.  For host
-packages, this may lead to build errors because /usr/bin/xmlto uses libxml2
-and we set LD_LIBRARY_PATH to point to $(HOST_DIR)/lib, which may contain
-a libxml2 as well.  So it's essential to disable xmlto for host packages.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo> @@ -0,0 +1,17 @@
+ Gustavo> +#############################################################
+ Gustavo> +#
+ Gustavo> +# ulogd
+ Gustavo> +#
+ Gustavo> +#############################################################
+ Gustavo> +
+ Gustavo> +ULOGD_VERSION = 2.0.1
+ Gustavo> +ULOGD_SOURCE = ulogd-$(ULOGD_VERSION).tar.bz2
+ Gustavo> +ULOGD_SITE = http://www.netfilter.org/projects/ulogd/files
+ Gustavo> +ULOGD_AUTORECONF = YES
+ Gustavo> +ULOGD_DEPENDENCIES = host-pkg-config \
+ Gustavo> +	libmnl libnetfilter_acct libnetfilter_conntrack libnetfilter_log \
+ Gustavo> +	libnfnetlink
+ Gustavo> +ULOGD_LICENSE = GPLv2
+ Gustavo> +ULOGD_LICENSE_FILES = COPYING
 
-Also some whitespace cleanup.
+I seems to try to build a postgresql backend on the autobuilder, perhaps
+you're missing a configure option?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-This obviously has far-ranging effects and I didn't rebuild all packages.
-However, from inspecting the configure scripts of all packages, it looks
-like --with-xmlto and --with-fop are only used for generating documentation.
+http://autobuild.buildroot.net/results/1dcf63799937f2216e3c712af8880ad431dbd47c/build-end.log
 
- package/Makefile.in      |   10 +++++++++-
- package/pkg-autotools.mk |    9 +++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index a939882..d7c73e5 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -277,7 +277,15 @@ DISABLE_LARGEFILE= --disable-largefile
- endif
- 
- ifneq ($(BR2_HAVE_DOCUMENTATION),y)
--DISABLE_DOCUMENTATION=--disable-gtk-doc
-+# The configure option varies, but since unknown options are ignored
-+# we can pass all of them.
-+DISABLE_DOCUMENTATION = \
-+	--disable-gtk-doc \
-+	--disable-doc \
-+	--disable-docs \
-+	--disable-documentation \
-+	--with-xmlto=no \
-+	--with-fop=no
- endif
- 
- ifeq ($(BR2_INET_IPV6),y)
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 785daab..890506b 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -116,6 +116,9 @@ endef
- else
- 
- # Configure package for host
-+# disable all kind of documentation generation in the process,
-+# because it often relies on host tools which may or may not be
-+# installed.
- define $(2)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
- 	        $$(HOST_CONFIGURE_OPTS) \
-@@ -126,6 +129,12 @@ define $(2)_CONFIGURE_CMDS
- 		--prefix="$$(HOST_DIR)/usr" \
- 		--sysconfdir="$$(HOST_DIR)/etc" \
- 		--enable-shared --disable-static \
-+		--disable-gtk-doc \
-+		--disable-doc \
-+		--disable-docs \
-+		--disable-documentation \
-+		--with-xmlto=no \
-+		--with-fop=no \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
- endef
 -- 
-tg: (9de85f7..) t/disable-doc (depends on: master)
+Bye, Peter Korsgaard
