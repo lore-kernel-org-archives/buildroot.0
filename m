@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Nov 2012 01:13:28 +0100
-Subject: [Buildroot] [PATCH 03/18] toolchain-crosstool-ng: use the
-	Crosstool-ng config options instead of the common hidden ones
-In-Reply-To: <cfe1f812fb80ad1cdbd18ea18cf08e0557773d96.1351964808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:48 +0100")
+Date: Sun, 04 Nov 2012 01:12:32 +0100
+Subject: [Buildroot] [PATCH 02/18] busybox: don't force FEATURE_NFS_MOUNT
+In-Reply-To: <ce9a6aa9dfc0c6dc3496b272670a8370b638aa21.1351964808.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 3 Nov 2012 18:47:47 +0100")
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
  <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <cfe1f812fb80ad1cdbd18ea18cf08e0557773d96.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87zk2yuswn.fsf@dell.be.48ers.dk>
+ <ce9a6aa9dfc0c6dc3496b272670a8370b638aa21.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874nl6w7in.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,12 +15,44 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Since we are some day going to finally rename the badly named common
- Thomas> toolchain options (BR2_USE_WCHAR, BR2_ENABLE_LOCALE, BR2_INET_RPC,
- Thomas> etc.) into something more logical, let's start using the Crosstool-NG
- Thomas> toolchain options in the Crosstool-NG code.
+ Thomas> Instead of making the Busybox configuration more complicated by trying
+ Thomas> to adjust it depending on whether RPC is available or not (which gets
+ Thomas> complicated when RPC support can be provided by libtirpc), simplify
+ Thomas> things by letting the user enable FEATURE_NFS_MOUNT or not depending
+ Thomas> on whether RPC support is available or not.
 
-Committed, thanks.
+ Thomas> Our default configuration do not enable FEATURE_NFS_MOUNT, so users
+ Thomas> will not face any build problems by default. Only if they explicitly
+ Thomas> enable FEATURE_NFS_MOUNT will they have to make sure that the
+ Thomas> toolchain has RPC support, or that libtirpc is enabled (support for
+ Thomas> this added in a followup patch).
+
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/busybox/busybox.mk |   11 -----------
+ Thomas>  1 file changed, 11 deletions(-)
+
+ Thomas> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+ Thomas> index 33f8633..306b46f 100644
+ Thomas> --- a/package/busybox/busybox.mk
+ Thomas> +++ b/package/busybox/busybox.mk
+ Thomas> @@ -81,17 +81,6 @@ define BUSYBOX_SET_IPV6
+ Thomas>  endef
+ Thomas>  endif
+ 
+ Thomas> -# If RPC is enabled then enable nfs mounts
+ Thomas> -ifeq ($(BR2_INET_RPC),y)
+ Thomas> -define BUSYBOX_SET_RPC
+ Thomas> -	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
+ Thomas> -endef
+ Thomas> -else
+ Thomas> -define BUSYBOX_SET_RPC
+ Thomas> -	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_MOUNT_NFS,$(BUSYBOX_BUILD_CONFIG))
+ Thomas> -endef
+ Thomas> -endif
+
+You forgot to remove it from BUSYBOX_CONFIGURE_CMDS. I've fixed that and
+committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
