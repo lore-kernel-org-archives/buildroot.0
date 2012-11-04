@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 04 Nov 2012 00:56:22 +0100
-Subject: [Buildroot] [PATCH 07/18] busybox: add support to link against
- libtirpc when available
-In-Reply-To: <97979d348585d1faffa214caeaf25becfd129004.1351964808.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 04 Nov 2012 01:01:10 +0100
+Subject: [Buildroot] [PATCH 08/18] lmbench: add support to use libtirpc
+ when available
+In-Reply-To: <50a55c7abef1a7f980e000258521ecc703226b31.1351964808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1351964808.git.thomas.petazzoni@free-electrons.com>
- <97979d348585d1faffa214caeaf25becfd129004.1351964808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5095AF26.7020204@mind.be>
+ <50a55c7abef1a7f980e000258521ecc703226b31.1351964808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5095B046.7080604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 11/03/12 18:47, Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> -	# Uses pmap_set, pmap__unset, pmap_getport, etc.
+> -	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+>   	help
+>   	  LMbench is a suite of simple, portable,
+>   	  ANSI/C microbenchmarks for UNIX/POSIX.
+>
+>   	http://sourceforge.net/projects/lmbench/
+> -
+> -comment "lmbench requires a toolchain with RPC support"
+> -	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+> index d3d0f8f..1932adb 100644
+> --- a/package/lmbench/lmbench.mk
+> +++ b/package/lmbench/lmbench.mk
+> @@ -9,6 +9,15 @@ LMBENCH_SITE:=http://downloads.sourceforge.net/project/lmbench/development/lmben
+>   LMBENCH_LICENSE =  lmbench license (based on GPLv2)
+>   LMBENCH_LICENSE_FILES = COPYING COPYING-2
+>
+> +LMBENCH_CFLAGS = $(TARGET_CFLAGS)
+> +LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
+> +
+> +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+> +LMBENCH_DEPENDENCIES += libtirpc
+> +LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+> +LMBENCH_LDFLAGS += -ltirpc
+> +endif
 
-  Except for the lines that shouldn't have been added by the previous patch:
+  For discussion tomorrow: do we want to use a similar strategy as Yann's proposal
+for gettext, i.e.:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (Visual inspection only)
+select BR2_NEEDS_RPC
+
+LMBENCH_DEPENDENCIES += $(rpc-dependency)
+LMBENCH_CFLAGS       += $(rpc-cflags)
+LMBENCH_LDFLAGS      += $(rpc-ldflags)
+
+
+  Regards,
+  Arnout
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
