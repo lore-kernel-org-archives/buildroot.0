@@ -1,44 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 05 Nov 2012 08:43:00 +0100
-Subject: [Buildroot] [PATCH 1/2] Add missing dependency to netatalk
-In-Reply-To: <20121105075550.41dbed52@skate>
-References: <1352057123-7137-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20121105075550.41dbed52@skate>
-Message-ID: <50976E04.4060009@mind.be>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Mon, 5 Nov 2012 11:10:26 +0300
+Subject: [Buildroot] new perl build issue
+In-Reply-To: <20121105075317.75f9f85c@skate>
+References: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
+ <CAB0FRstkx1+Eg0WTv4eVJ+KPFX9RY2C8X4SaL0EDoBK0P642SQ@mail.gmail.com>
+ <20121105075317.75f9f85c@skate>
+Message-ID: <CABtOAfyXrgHyg2ggDJvYXExhU4RMabsOVRXfAkE0p9+bnGVrZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/05/12 07:55, Thomas Petazzoni wrote:
-> Dear Maxime Hadjinlian,
->
-> On Sun,  4 Nov 2012 20:25:22 +0100, Maxime Hadjinlian wrote:
->
->> -NETATALK_DEPENDENCIES = openssl berkeleydb libgcrypt libgpg-error
->> +NETATALK_DEPENDENCIES = host-pkg-config openssl berkeleydb libgcrypt libgpg-error
->
-> host-pkg-config should now be host-pkgconf.
->
-> Peter, Arnout, shouldn't we be adding a dummy 'host-pkg-config' target
-> in order to avoid breaking all external packages that are using
-> host-pkg-config? Didn't we talk about not breaking APIs? :-)
+2012/11/5 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  Seems like a good idea.
+>
+> On Sun, 4 Nov 2012 20:41:45 +0100, Fran?ois Perrad wrote:
+>
+> > this afternoon, Thomas has posted 3 patches for qemu (see
+> > http://patchwork.ozlabs.org/patch/197055/).
+> > Alexander, try to rebuild host-qemu with them.
+>
+> Unfortunately, none of those patches have a chance to fix Alexander's
+> problem. My patches only fix missing dependencies.
+>
+> Also, could you have a look at http://autobuild.buildroot.org/ for perl
+> build failures? It seems like Qemu doesn't start properly on some
+> platforms, for some reason.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
-  But I would make it issue an error, so people update their .mk files.
 
-  Maybe we can create a top-level Makefile.legacy and Config.in.legacy that
-collects all the API-compatibility-warnings-and-errors.  That makes it easier
-to remove them later.
+I applied your patch but looks it not helps me.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+http://pastie.org/5188031
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121105/5b9893a8/attachment.html>
