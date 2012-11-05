@@ -1,8 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  5 Nov 2012 10:53:39 -0300
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
-	6}.x stable versions
-Message-ID: <1352123620-16466-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  5 Nov 2012 10:53:40 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump 3.6.x stable version
+In-Reply-To: <1352123620-16466-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1352123620-16466-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1352123620-16466-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index d596870..e195def 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.50"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.51"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.17"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.18"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
--	default "3.6.5"		if BR2_KERNEL_HEADERS_3_6
-+	default "3.6.6"		if BR2_KERNEL_HEADERS_3_6
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/linux/Config.in b/linux/Config.in
+index 60d7794..277ef0e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_3_6
+-	bool "3.6.5"
++	bool "3.6.6"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.6.5" if BR2_LINUX_KERNEL_3_6
++	default "3.6.6" if BR2_LINUX_KERNEL_3_6
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 1.7.8.6
