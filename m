@@ -1,36 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 06 Nov 2012 00:23:11 +0100
-Subject: [Buildroot] Build root local site method
-In-Reply-To: <CADfuMF4YnAPm_m6YbjO0oCYPJKxqgGwX9amz7SOXhRB3x3mewg@mail.gmail.com>
-References: <CADfuMF4YnAPm_m6YbjO0oCYPJKxqgGwX9amz7SOXhRB3x3mewg@mail.gmail.com>
-Message-ID: <50984A5F.1060409@mind.be>
+Date: Tue, 06 Nov 2012 00:35:51 +0100
+Subject: [Buildroot] [PATCH] BR2_PREFER_STATIC_LIB and LDFLAGS+= -static
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
+Message-ID: <50984D57.3080402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/05/12 13:41, Vasanth Ragavendran wrote:
-> Hi
+On 11/05/12 17:55, ANDY KENNEDY wrote:
+> The following changes LDFLAGS from += -static to += --static if building
+> with BR2_PREFER_STATIC_LIB so that various components actually build
+> statically.
 >
-> This is with reference to the download method which is specified while compiling a new package. I'm writing certain
-> programs which needs to be cross compiled and run in my embedded board. In my <pkg>.mk file I'm specifying the 'site' to
-> the directory containing my source code and the 'site_method' to "local". I've made necessary changes to the Config.in
-> files in all locations. I am able to select this package of mine from the menuconfig, however the package refuses to
-> build for some unknown reason neither does the build print any errors. It just quietly skips compiling this package and
-> finishes generating the file system. And the location which I'm pointing to in the mk file contains the necessary source
-> code. I'm wondering what step I've skipped. Attaching the Config.in and <pkg>.mk file which I've created for my package.
-> Kindly help as I'm struck in this and unable to proceed. I've referred to the manual but unable to solve this issue.
+> Signed-off-by: Andy Kennedy<andy.kennedy@adtran.com>
 
-  FTPCLIENT_INSTALL_TARGET should be YES, in capitals, else it will NOT install.
-(Actually, YES is the default so you can just remove that line).
+  Although I'm OK with this patch, I have been unable to reproduce the problem
+and I'd like to know why it is going wrong with -static.  Can you post a
+defconfig that I can rebuild and that exposes the problem?
 
-  Maybe we should check that _INSTALL_TARGET etc. are either YES or NO.  But
-I'm afraid that will make an empty make much slower again...  So maybe there
-should be a 'make ftpclient-wtf-is-wrong-with-it' that does the checks :-)
+  Note: a few autobuilders with BR2_PREFER_STATIC_LIB enabled could be nice -
+or maybe not, because many packages _will_break.
 
   Regards,
   Arnout
+
+> ---
+> diff -Naur a/package/Makefile.in b/package/Makefile.in
+> --- a/package/Makefile.in       2012-08-31 03:49:41.000000000 -0500
+> +++ b/package/Makefile.in       2012-11-05 10:45:45.000000000 -0600
+> @@ -299,7 +299,7 @@
+>
+>   ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>   SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+> -TARGET_LDFLAGS += -static
+> +TARGET_LDFLAGS += --static
+>   else
+>   SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+>   endif
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
