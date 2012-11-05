@@ -1,61 +1,72 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Mon, 05 Nov 2012 14:28:27 +0200
-Subject: [Buildroot] [git commit] package: drop games/ subdir
-In-Reply-To: <5097AE66.1080607@mind.be>
-References: <20121105081344.74B5F99BE5@busybox.osuosl.org>
- <5097A1CD.30009@petroprogram.com> <5097AE66.1080607@mind.be>
-Message-ID: <5097B0EB.9060108@petroprogram.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 05 Nov 2012 13:38:58 +0100
+Subject: [Buildroot] Fwd: Re:  mesa3d:  "ImportError: No module named
+In-Reply-To: <5097B350.8020701@free-electrons.com>
+References: <5097B350.8020701@free-electrons.com>
+Message-ID: <5097B362.4010908@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-5.11.2012 14:17, Arnout Vandecappelle kirjoitti:
-> On 11/05/12 12:23, Stefan Fr?berg wrote:
->> 5.11.2012 9:23, Peter Korsgaard kirjoitti:
->>> commit:
->>> http://git.buildroot.net/buildroot/commit/?id=9b809e1a6ad2a82bfe0d2383f69f45ae8c6283bb
->>> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->>>
->>> As discussed during the dev day.
->
->  Looks like I was distracted when it was discussed, because I didn't
-> write it in the
-> report. But that's probably not really needed anymore...
->
-> [snip]
->> Aww...
->>
->> And I had just finished porting dosbox, DOS emulator that can run old
->> classic DOS games
->> and programs, to buildroot.
->>
->> No games for buildroot developers/users then ?
->
->  It just moved out of the games/ subdirectory, e.g. package/doomwad
-> instead of
-> package/games/doomwad.
->
->  The general idea is that the subdirectories are confusing and we want
-> to get
-> rid of them.
->
 
-Ah, I see.
 
-Well, you are right.
-They can be a little confusing.
 
-For example, when I start porting some fresh stuff to buildroot the
-first thing I usually do is just throw them under the dir named "hacking"
-:D
+-------- Message original --------
+Sujet: Re: [Buildroot] mesa3d:  "ImportError: No module named
+Date : Mon, 05 Nov 2012 13:38:40 +0100
+De : Maxime Ripard <maxime.ripard@free-electrons.com>
+Pour : Vellemans, Noel <Noel.Vellemans@visionBMS.com>
 
-And only afterwards I start wondering what belongs to what subdir.
+Hi,
 
-Best regards
-Stefan
+(Please keep the mailing list in CC)
 
->  Regards,
->  Arnout
->
+Le 05/11/2012 11:20, Vellemans, Noel a ?crit :
+> Hi Maxime,
+> 
+> 
+> I'm still trying to dig a little deeper into the problem.
+> 
+> Is this reproducible? 
+> Yes, if you delete de mesa3d output directory completely you also run
+> into the same problem (so there is no need to have a CLEAN output
+> directory)
+> 
+> 
+> Some info:
+> TARGET : ARM - imx537
+> 
+> HOST: Ubuntu 64 bit 
+> HOST-Python: 2.6.6 (see HOST-python_version.txt)
+> 
+>>> Also, do you know what python interpreter it is actually using? 
+>>> The one found in your distribution or host-python built by Buildroot?
+> 
+> At this time  (as test) I did rename the host-python [ sudo mv
+> /usr/bin/python /usr/bin/_python ] 
+> and buildroot bails out with you must install python on your
+> build-machine.
+> So I "guess" (which is not my best) buildroot is using the host-python
+> (2.6.6). 
+
+Ok, so basically, you will probably need to do a few things here to get
+that fixed I guess:
+  - In libxml2, remove the --without-python option if python emulator is
+selected
+  - Make the mesa3d package depends on host-python and host-libxml2 (I
+guess?) (basically, just add these two packages to MESA3D_DEPENDENCIES)
+  - Make mesa3d use the host-python package we just built instead of the
+one found on our distribution
+
+I guess something like that would work. But what are the others think on
+making mesa depends on host-python? It looks a bit oe-ish, but I don't
+quite see a better way.
+
+Maxime
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
