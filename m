@@ -1,29 +1,34 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 5 Nov 2012 16:55:26 +0000
-Subject: [Buildroot] [PATCH] BR2_PREFER_STATIC_LIB and LDFLAGS+= -static
-Message-ID: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 05 Nov 2012 18:48:47 +0100 (CET)
+Subject: [Buildroot] [PATCH] add new package fxload
+In-Reply-To: <1781554.153.1352137532474.JavaMail.rosen@pcrosen>
+Message-ID: <30360444.162.1352137687822.JavaMail.rosen@pcrosen>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes LDFLAGS from += -static to += --static if building
-with BR2_PREFER_STATIC_LIB so that various components actually build
-statically.
+Hello everybody
 
-Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
----
-diff -Naur a/package/Makefile.in b/package/Makefile.in
---- a/package/Makefile.in       2012-08-31 03:49:41.000000000 -0500
-+++ b/package/Makefile.in       2012-11-05 10:45:45.000000000 -0600
-@@ -299,7 +299,7 @@
+I recently had to add a small utility called fxload to buildroot
 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
--TARGET_LDFLAGS += -static
-+TARGET_LDFLAGS += --static
- else
- SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
- endif
- 
+fxload is provided by the linux-hotplug project and is used to upload firmware into usb device
+it is generally used as a helper function by udev.
+
+This is my first patch to buildroot, so feel free to tell me if I didn't follow the proper protocol, I will gladly correct and resubmit
+
+Regards
+J?r?my Rosen
+
+
+
+fight key loggers : write some perl using vim
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-add-new-package-fxload.patch
+Type: text/x-patch
+Size: 2207 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121105/ea1fa413/attachment-0001.bin>
