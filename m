@@ -1,34 +1,41 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 05 Nov 2012 18:48:47 +0100 (CET)
-Subject: [Buildroot] [PATCH] add new package fxload
-In-Reply-To: <1781554.153.1352137532474.JavaMail.rosen@pcrosen>
-Message-ID: <30360444.162.1352137687822.JavaMail.rosen@pcrosen>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 06 Nov 2012 00:23:11 +0100
+Subject: [Buildroot] Build root local site method
+In-Reply-To: <CADfuMF4YnAPm_m6YbjO0oCYPJKxqgGwX9amz7SOXhRB3x3mewg@mail.gmail.com>
+References: <CADfuMF4YnAPm_m6YbjO0oCYPJKxqgGwX9amz7SOXhRB3x3mewg@mail.gmail.com>
+Message-ID: <50984A5F.1060409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody
+On 11/05/12 13:41, Vasanth Ragavendran wrote:
+> Hi
+>
+> This is with reference to the download method which is specified while compiling a new package. I'm writing certain
+> programs which needs to be cross compiled and run in my embedded board. In my <pkg>.mk file I'm specifying the 'site' to
+> the directory containing my source code and the 'site_method' to "local". I've made necessary changes to the Config.in
+> files in all locations. I am able to select this package of mine from the menuconfig, however the package refuses to
+> build for some unknown reason neither does the build print any errors. It just quietly skips compiling this package and
+> finishes generating the file system. And the location which I'm pointing to in the mk file contains the necessary source
+> code. I'm wondering what step I've skipped. Attaching the Config.in and <pkg>.mk file which I've created for my package.
+> Kindly help as I'm struck in this and unable to proceed. I've referred to the manual but unable to solve this issue.
 
-I recently had to add a small utility called fxload to buildroot
+  FTPCLIENT_INSTALL_TARGET should be YES, in capitals, else it will NOT install.
+(Actually, YES is the default so you can just remove that line).
 
-fxload is provided by the linux-hotplug project and is used to upload firmware into usb device
-it is generally used as a helper function by udev.
+  Maybe we should check that _INSTALL_TARGET etc. are either YES or NO.  But
+I'm afraid that will make an empty make much slower again...  So maybe there
+should be a 'make ftpclient-wtf-is-wrong-with-it' that does the checks :-)
 
-This is my first patch to buildroot, so feel free to tell me if I didn't follow the proper protocol, I will gladly correct and resubmit
+  Regards,
+  Arnout
 
-Regards
-J?r?my Rosen
-
-
-
-fight key loggers : write some perl using vim
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-add-new-package-fxload.patch
-Type: text/x-patch
-Size: 2207 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121105/ea1fa413/attachment-0001.bin>
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
