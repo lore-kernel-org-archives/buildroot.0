@@ -1,84 +1,51 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 5 Nov 2012 15:33:56 +0100
-Subject: [Buildroot] new perl build issue
-In-Reply-To: <CABtOAfy84BF1p_KZ2m3sqr-o72xuj_TL1eZfQj-BsH5Z+kmnWA@mail.gmail.com>
-References: <CABtOAfw6A4jH1h1W1Bbm7kKsmz_hJLymP8JRBo5A6a4o09wS8g@mail.gmail.com>
- <CAB0FRstkx1+Eg0WTv4eVJ+KPFX9RY2C8X4SaL0EDoBK0P642SQ@mail.gmail.com>
- <20121105075317.75f9f85c@skate>
- <CABtOAfyXrgHyg2ggDJvYXExhU4RMabsOVRXfAkE0p9+bnGVrZg@mail.gmail.com>
- <CABtOAfy84BF1p_KZ2m3sqr-o72xuj_TL1eZfQj-BsH5Z+kmnWA@mail.gmail.com>
-Message-ID: <CAB0FRssio4MnFavizgHUnLa-_tJAZAUNcb4hxKb=RjQKoXnfQg@mail.gmail.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 5 Nov 2012 16:24:32 +0000
+Subject: [Buildroot] BR2_PREFER_STATIC_LIB and LDFLAGS+= -static
+In-Reply-To: <50944786.4040407@mind.be>
+References: <F9C551623D2CBB4C9488801D14F864C6287244@ex-mb1.corp.adtran.com>
+ <50944786.4040407@mind.be>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C6289CBB@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/5 Alexander Khryukin <alexander@mezon.ru>:
->
->
-> 2012/11/5 Alexander Khryukin <alexander@mezon.ru>
->>
->>
->>
->> 2012/11/5 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>>
->>>
->>> On Sun, 4 Nov 2012 20:41:45 +0100, Fran?ois Perrad wrote:
->>>
->>> > this afternoon, Thomas has posted 3 patches for qemu (see
->>> > http://patchwork.ozlabs.org/patch/197055/).
->>> > Alexander, try to rebuild host-qemu with them.
->>>
->>> Unfortunately, none of those patches have a chance to fix Alexander's
->>> problem. My patches only fix missing dependencies.
->>>
->>> Also, could you have a look at http://autobuild.buildroot.org/ for perl
->>> build failures? It seems like Qemu doesn't start properly on some
->>> platforms, for some reason.
->>>
->>> Thomas
->>> --
->>> Thomas Petazzoni, Free Electrons
->>> Kernel, drivers, real-time and embedded Linux
->>> development, consulting, training and support.
->>> http://free-electrons.com
->>
->>
->>
->> I applied your patch but looks it not helps me.
->>
->> http://pastie.org/5188031
->
->
->
-> Also if i compile it by my default system gcc it's ok
->
->
-> [fdkit at kvm-host UU]$ gcc try.c
-> [fdkit at kvm-host UU]$ ls ./a.out
-> ./a.out*
-> [fdkit at kvm-host UU]$ ./a.out
-> Ok
->
+> On 11/02/12 18:06, ANDY KENNEDY wrote:
+> > All,
+> >
+> > Near line 302 in package/Makefile.in was added TARGET_LDFLAGS += -static
+> > to satisfy a request I made a while back.  This really needs to be
+> > --static so that it filters down through autoconf the correct way.  If
+> > -static is passed in LDFLAGS, autoconf regularly mishandles this by
+> > setting a variable then never reconfiguring the package's make system
+> > to build static.  However, the --static to ld is the same as -static,
+> > but autoconf does not compare for --static, thus, packages get built as
+> > desired.
+> 
+>   I don't really understand how it can go wrong...  Can you give an example
+> of a package with a configure script that handles it the wrong way?
 
-Alexander,
+kexec, htop, proftpd, dropbear, etc.
 
-the 'qemu-arm' built by Buildroot doesn't work properly.
-could you try this workaround ?
-1) install a 'qemu-arm' with your distro package manager,
-     $ apt-get install qemu-kvm-extras # or equivalent
-2) apply this patch :
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -22,7 +22,7 @@ endif
+kexec is special in that it also has kdump which I never figured out how
+to get that make system to build it static (I drop it off, however, as I
+don't need it).
 
- PERL_CONF_OPT = -des \
-                -Dusecrosscompile \
--               -Dtargetrun=$(QEMU_USER) \
-+               -Dtargetrun=qemu-arm \
-                -Dqemulib=$(STAGING_DIR) \
-                -Dar="$(TARGET_AR)" \
-                -Dcc="$(TARGET_CC)" \
-
-Fran?ois
+> 
+> >
+> > Can someone change this in package/Makefile.in or should I submit a
+> > dinky patch for this?
+> 
+>   Yes, please submit a patch.
+> 
+>   Regards,
+>   Arnout
+> 
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
