@@ -1,41 +1,42 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 05 Nov 2012 10:38:04 +0100
-Subject: [Buildroot] mesa3d:  "ImportError: No module named libxml2"
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
-References: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
-Message-ID: <509788FC.2050005@free-electrons.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Mon, 5 Nov 2012 09:44:54 +0000
+Subject: [Buildroot] [PATCH v3] fs/common: Create initial console device
+Message-ID: <1352108694-11875-1-git-send-email-markos.chandras@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Markos Chandras <markos.chandras@imgtec.com>
 
-Le 05/11/2012 10:18, Vellemans, Noel a ?crit :
-> Hi all,
-> 
-> I've been test running/building a recent buildroot (git-version).. 
-> 
-> I do end up with this error while building mesa3d"  "ImportError: No
-> module named libxml2" (ONLY if I do build into a clean-output
-> directory!)
-> 
-> The strange thing is that when building for a second time it all builds
-> fine.
->  
-> Any clue where to look at? 
+A /dev/console node must be present in rootfs when the Linux kernel
+boots otherwise the kernel will print the following warning:
+"Warning: unable to open an initial console"
 
-Could you post your configuration file and the complete failing build log?
+This is because when we use an initramfs the /dev directory is not
+populated at this point. This can cause problems when a program
+(e.g ldso with early debugging enabled) opens a standard file
+descriptor for read/write before these descriptors are actually
+created by the init process later on.
 
-Also, do you know what python interpreter it is actually using? The one
-found in your distribution or host-python built by Buildroot?
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ fs/cpio/cpio.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Thanks.
-Maxime
-
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index aa20b41..5533322 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -21,6 +21,8 @@ define ROOTFS_CPIO_ADD_INIT
+         fi
+ endef
+ 
++PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
++
+ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+ 
+ ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
