@@ -1,34 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Nov 2012 08:22:57 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.11/rpc-support
-In-Reply-To: <cover.1352050008.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 4 Nov 2012 18:34:08 +0100")
-References: <cover.1352050008.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vcdjnqjy.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 5 Nov 2012 09:17:24 +0100
+Subject: [Buildroot] [git commit] pkg-stats: fix the broken "results" link
+Message-ID: <20121106072422.6378299BFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f54752b67306a0b2648379db2102b1ea297ba448
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Yet another version of the RPC set of patches. Changes since the last
- Thomas> posting:
+At the top of the output html page there is a dangling "results" link.
 
- Thomas>  * The kernel headers version chunk has been properly moved to the SH
- Thomas>    2012.03 toolchain patch. Noticed by Baruch.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ support/scripts/pkg-stats |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Thomas>  * Assume that by default, custom external glibc toolchains have RPC
- Thomas>    support, so that autobuilders configuration continue to work nicely
- Thomas>    (and also because it is most likely the case for most
- Thomas>    toolchains). Suggested by Peter.
-
-Committed series, thanks.
-
-I fixed up the getrpcby{name,number} issue as well.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 9c8ec49..929b8d1 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -227,6 +227,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
+ done
+ echo "</table>"
+ 
++echo "<a id="results"></a>"
+ echo "<table>"
+ echo "<tr>"
+ echo "<td>Packages using the <i>generic</i> infrastructure</td>"
