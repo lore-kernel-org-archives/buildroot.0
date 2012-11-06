@@ -1,85 +1,55 @@
-From: Antony Vennard <antony.vennard@macrium.com>
-Date: Tue, 06 Nov 2012 14:02:22 +0000
-Subject: [Buildroot] Udev on a live CD system does not appear to populate
-	/dev
-Message-ID: <5099186E.1030409@macrium.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 6 Nov 2012 15:06:35 +0000
+Subject: [Buildroot] [PATCH] BR2_PREFER_STATIC_LIB and LDFLAGS+= -static
+In-Reply-To: <50984D57.3080402@mind.be>
+References: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
+ <50984D57.3080402@mind.be>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C628B69F@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+> 
+>   Although I'm OK with this patch, I have been unable to reproduce the problem
+> and I'd like to know why it is going wrong with -static.  Can you post a
+> defconfig that I can rebuild and that exposes the problem?
+> 
+>   Note: a few autobuilders with BR2_PREFER_STATIC_LIB enabled could be nice -
+> or maybe not, because many packages _will_break.
+> 
+>   Regards,
+>   Arnout
 
-I'm currently looking at using udev for a live cd environment built with
-buildroot, and I'm having trouble getting udev to pick up the machine's
-devices.
+First off, I built again with a clean copy of BuildRoot (2012.08) and
+produced this output this time:
 
-I have some questions and some details that will (hopefully) help
-identify my problem
+root at akennedy_lin:~/deleteme/buildroot-2012.08# find output/target/ \
+-exec file {} \; 2>&1 | grep dynamic | awk -F: '{print $1}'
+output/target/usr/bin/ldd
+output/target/usr/bin/htop
+output/target/usr/bin/getconf
+output/target/usr/sbin/kdump
+output/target/usr/sbin/proftpd
+output/target/sbin/ldconfig
 
-Firstly, my kernel is configured to use devtmpfs:
+Note that htop and proftpd got linked dynamically.  The odd part is
+that kexec built static this time.  What's up with that?  I repeated
+this twice and kexec builds static every time. . . though I really
+thought I did this last week and it was dynamically linked.  Perhaps
+I'm smokin' something. . .  BTW, I have _NEVER_ been able to build
+kdump static through their build.  I can reproduce it manually, but
+there seems to be no way to do it with their current Makefile.
 
-681:CONFIG_DEVTMPFS=y
-682:CONFIG_DEVTMPFS_MOUNT=y
+Attached is the config file.  You may want to change the primary
+download site as I have it set to ftp://localhost/pub/dl.
 
-so as I understand it, /dev should be mounted as a tmpfs by the kernel
-and populated with /dev/null, /dev/console etc. Yet, my
-buildroot/output/target contains a dev folder with subdirectories
-created by buildroot.
-
-So, I tried both creating the entries with target/generic_device_table
-for tty0, tty1, console, null. This works, and udev reports it is
-scanning for devices and done, yet /dev never picks up e.g. /dev/sda, or
-/dev/disk/..., or so on. I have, in this configuration, copied
-/usr/lib/udev/rules.d/* to buildroot/output/target/etc/udev/rules.d to
-no avail; as far as I can see whatever rules I supply, even from my
-Fedora or Ubuntu distributions, do not seem to affect udev.
-
-Wondering if this creation method was wrong, I have then removed all of
-the entries in /dev so that the kernel can mount its own devtmpfs. When
-booting, /dev/null and /dev/tty1 are reported as missing. I imagine
-there is nothing in /dev at this stage
-
-Various possibly related points:
- * I thought udev required udevd, yet I can't see that either running or
-available on the ISO, nor can I find a configuration option to create it.
- * I have D-Bus built for the system, as I read udev required it.
- * I can see sda1 in /sys/block/sda/sda1; likewise for other attached
-storage devices.
-
-Am I doing anything very wrong? I get the feeling I must be missing
-something for this to not work, yet I'm not sure what.
-
-Can anyone offer any advice? Happy to provide config snippets etc.
-
-Using buildroot 2012.08.
-
-Thanks,
-
-Antony
-
-
--- 
-________________
-
-Macrium? Software is a trading name of Paramount Software UK Ltd, 
-Registered in England and Wales Number 02973414
-Registered Office: Kilburn House, Manchester Science Park, Lloyd St. North, 
-Manchester M15 6SE United Kingdom
-
-The information contained in this e-mail is confidential, privileged, or 
-otherwise protected from disclosure. It is intended only for the use of the 
-authorized individual as indicated in the e-mail. Any unauthorized 
-disclosure, copying, distribution or taking of any action based on the 
-contents of this material is strictly prohibited.
-
-If you have received this e-mail in error, please delete it immediately.
-
+Andy
 -------------- next part --------------
 A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 895 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/29afbc10/attachment.asc>
+Name: buildroot-2012_08.config
+Type: application/octet-stream
+Size: 25887 bytes
+Desc: buildroot-2012_08.config
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/a48d4e15/attachment-0001.obj>
