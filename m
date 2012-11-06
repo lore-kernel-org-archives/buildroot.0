@@ -1,37 +1,156 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Tue, 6 Nov 2012 15:33:45 +0000
-Subject: [Buildroot] [PATCH] add new package fxload
-In-Reply-To: <27204261.196.1352192268013.JavaMail.rosen@pcrosen>
-References: <5098536C.5060903@mind.be>
- <27204261.196.1352192268013.JavaMail.rosen@pcrosen>
-Message-ID: <CA+wH294f5XRybWuZhs6YEaStxv+=LP9gH7F42V_qPwUzttvS0A@mail.gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 6 Nov 2012 17:23:03 +0100
+Subject: [Buildroot] [PATCH v11 2/9] perl: new package
+In-Reply-To: <CAB0FRsv058=3G7qbFPS6xrSr_TG5=QDhRKcOU8O6mCot_dCuMQ@mail.gmail.com>
+References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
+ <1350652434-32020-2-git-send-email-francois.perrad@gadz.org>
+ <upcp6k.3q9.ln@bernd-kuhls.de>
+ <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
+ <CAB0FRsv058=3G7qbFPS6xrSr_TG5=QDhRKcOU8O6mCot_dCuMQ@mail.gmail.com>
+Message-ID: <CAB0FRsvVa1x9Lp+x0P+YSnBG2eqWNd0bchtmQrWDnhqHUxx=Cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 6 November 2012 08:58, Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
->>   Also I'll warn you: it may take a while (months) before your patch
->>   is
->> accepted even if you make all necessary correction, and we may even
->> forget
->> to include it in the end.  That's not because we're evil :-) but
->> because
->> our contribution process is still sub-optimal.  Buildroot has grown
->> significantly in number of contributions over the last two years, and
->> our maintainer (Peter Korsgaard) is just saturated.  We're still
->> experimenting
->> with ways to improve the process.
+2012/11/6 Fran?ois Perrad <francois.perrad@gadz.org>:
+> 2012/11/5 Fran?ois Perrad <francois.perrad@gadz.org>:
+>> 2012/10/30 Bernd Kuhls <berndkuhls@hotmail.com>:
+>>> Hi,
+>>>
+>>> Francois Perrad <fperrad@gmail.com> wrote in
+>>> news:1350652434-32020-2-git-send-email-francois.perrad at gadz.org:
+>>>
+>>> currently I am testing your patchset, but I found problems during
+>>> compiling, some I could solve myself:
+>>>
+>>>> +PERL_CONF_OPT = -des \
+>>>
+>>> [...]
+>>>
+>>>> +          -Dlibc=$(STAGING_DIR)/lib/libc.so \
+>>>
+>>> I had to change this line to
+>>>
+>>>              -Dlibc=$(STAGING_DIR)/usr/lib/libc.so.0 \
+>>>
+>>> for usage with uClibc 0.9.33.2
+>>>
+>>> [...]
+>>>
+>>>> +          -Uoptimize
+>>>
+>>> Here I had to add "-Ud_eaccess" to avoid a compilation bug.
+>>>
+>>> Perl will still not finish to compile, stopping with this error message:
+>>>
+>>>> LD_LIBRARY_PATH=/home/bernd/.fbr/build/output/build/perl-5.16.1
+>>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>>> ./miniperl -Ilib make_ext.pl cpan/Archive-Extract/pm_to_blib
+>>> MAKE=/home/bernd/.fbr/build/output/host/usr/bin/make LIBPERL_A=libperl.so
+>>>>         Making Archive::Extract (all)
+>>>>
+>>>> Creating Makefile.PL in cpan/Archive-Extract for Archive::Extract
+>>>>
+>>>> Running Makefile.PL in cpan/Archive-Extract
+>>>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>>> ../../miniperl -I../../lib Makefile.PL INSTALLDIRS=perl INSTALLMAN1DIR=none
+>>> INSTALLMAN3DIR=none PERL_CORE=1 LIBPERL_A=libperl.so
+>>>> -1 from cpan/Archive-Extract's Makefile.PL at make_ext.pl line 409.
+>>>> Warning: No Makefile!
+>>>> /home/bernd/.fbr/build/output/host/usr/bin/make config PERL_CORE=1
+>>> LIBPERL_A=libperl.so failed, continuing anyway...
+>>>> Making all in cpan/Archive-Extract
+>>>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>>> /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
+>>> LIBPERL_A=libperl.so
+>>>> Unsuccessful make(cpan/Archive-Extract): code=-1 at make_ext.pl line 468.
+>>>> make[1]: *** [cpan/Archive-Extract/pm_to_blib] Fehler 22
+>>>> make[1]: Leaving directory `/home/bernd/.fbr/build/output/build/perl-
+>>> 5.16.1'
+>>>> make: *** [/home/bernd/.fbr/build/output/build/perl-5.16.1/.stamp_built]
+>>> Fehler 2
+>>>
+>>> Executing the last command alone provides this error hinting at a problem
+>>> with host-qemu, which I was able to solve yet.
+>>>
+>>> $ /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>>> /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
+>>> LIBPERL_A=libperl.so
+>>> qemu: Unsupported syscall: 240
+>>> qemu: Unsupported syscall: 240
+>>>
+>>> First I got this error message with Debian Squeeze i386 (virtualbox guest,
+>>> Win XP host), but also on Debian wheezy amd64 running non-virtualized.
+>>>
+>>> My .config can be found here: http://pastebin.com/yz1SzeB2
+>>> I am using buildroot as part of the FLI4L source package[1].
+>>>
+>>> Kind regards, Bernd
+>>>
+>>
+>> I could reproduce the lastest problem on the HEAD of Buildroot with
+>> qemu_x86_defconfig (which is a smaller config than your FLI4L config).
 >>
 >
-> Fair enough, i'm a maintainer for other FOSS projects, so I know how that sort of problem go...
+> first, before manually running a command in the build tree, you must
+> set PERL_MM_OPT
+>    $ export PERL_MM_OPT="PERL=`pwd`/Cross/miniperl"
 >
-> is Peter the only one comitting ? couldn't someone help with simple patches (like updating version of existing packages)
+> the error
+>     -1 from cpan/Archive-Extract's Makefile.PL at make_ext.pl line 409.
+> comes from miniperl which fails with a 'system' call.
+>
+> this problem could be reproduced with a simple one-liner :
+>
+> $ perl -e "my \$code = system( q(echo), q(hello) ); print(\$code);"
+> hello
+> 0
+>
+> $ Cross/miniperl -e "my \$code = system( q(echo), q(hello) ); print(\$code);"
+> -1
+>
+> Fran?ois
+>
 
-Note it was decided at the recent Developer Days meeting that patches
-would be accepted more aggressively. Presumably this means the chances
-of patches that have been appropriately cleaned up to meet the
-buildroot guidelines are less likely to be accidentally dropped.
+after an installation on the target, this 'miniperl' works fine.
+so, the problem comes from Qemu.
 
-Alex
+I write a small C example :
+
+$ cat sys.c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+ 	int ret = system("echo hello");
+	printf("%d\n", ret);
+}
+
+$ ../../host/usr/bin/i686-buildroot-linux-uclibc-gcc -o sys sys.c
+$ file sys
+sys: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV),
+dynamically linked (uses shared libs), not stripped
+$ ../../host/usr/bin/qemu-i386 ./sys
+-1
+
+I also try on various architecture.
+I build Perl successfully with qemu-arm and qemu-mips,
+the problem occurs with qemu-i386 and qemu-x86_64,
+with a qemu-i386 version 1.2.0 built with Buildroot and with a
+qemu-i386 version 1.0.50 which comes my distro Ubuntu 12.04 LTS.
+
+Other bad new, these days, the homepage of Qemu (http://wiki.qemu.org) is down.
+
+Fran?ois
+
+>> Fran?ois
+>>
+>>> [1] http://www.fli4l.de/download/tarball-version/aktuell.html
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
