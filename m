@@ -1,73 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Nov 2012 08:20:17 +0100
-Subject: [Buildroot] [git commit] quota: add support to use RPC support from
-	libtirpc
-Message-ID: <20121106072426.99EFF99BFF@busybox.osuosl.org>
+Date: Tue, 6 Nov 2012 08:20:18 +0100
+Subject: [Buildroot] [git commit] xinetd: add support to use RPC support
+	from libtirpc
+Message-ID: <20121106072428.BEE0B99BFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5fc090f562af3a6afe8f83070abb74bb27a3d84
+commit: http://git.buildroot.net/buildroot/commit/?id=e2b8a97603687add5dd7a39b0dac75400769af50
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/quota/Config.in |    6 +++---
- package/quota/quota.mk  |   13 +++++++++++--
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ package/xinetd/xinetd.mk |   19 +++++++++++++++++--
+ 1 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index a26f91f..f7d0fe9 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -1,15 +1,15 @@
- config BR2_PACKAGE_QUOTA
- 	bool "quota"
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Implementation of the disk quota system.
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index a420425..cb48145 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -9,10 +9,25 @@ XINETD_SITE          = http://www.xinetd.org
+ XINETD_LICENSE       = xinetd license
+ XINETD_LICENSE_FILES = COPYRIGHT
  
- 	  http://sourceforge.net/projects/linuxquota/
- 
--comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
--	depends on !(BR2_TOOLCHAIN_HAS_NATIVE_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
-+comment "quota requires a toolchain with LARGEFILE + WCHAR support"
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index abe3675..7019059 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -8,13 +8,22 @@ QUOTA_VERSION = 4.00
- QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
- QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
- 
--QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+QUOTA_CFLAGS = $(TARGET_CFLAGS)
-+QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
- 
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
- QUOTA_DEPENDENCIES = gettext
--QUOTA_MAKE_OPT += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+QUOTA_LDFLAGS += -lintl
+-ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
+-XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
++XINETD_CFLAGS = $(TARGET_CFLAGS)
++
++# Three cases here:
++#  1. We have libtirpc, use it by passing special flags
++#  2. We have native RPC support, use it, no need to pass special
++#     flags (so this case 2 is implicit and not visible below)
++#  3. We don't have RPC support, pass -DNO_RPC to disable it
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++XINETD_DEPENDENCIES += libtirpc
++XINETD_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
++XINETD_LIBS += -ltirpc
++else ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
++XINETD_CFLAGS += -DNO_RPC
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+QUOTA_DEPENDENCIES += libtirpc
-+QUOTA_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-+QUOTA_LDFLAGS += -ltirpc
-+endif
++XINETD_CONF_ENV += \
++	CFLAGS="$(XINETD_CFLAGS)" \
++	LIBS="$(XINETD_LIBS)"
 +
-+QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
-+
- # Package uses autoconf but not automake.
- QUOTA_INSTALL_TARGET_OPT = \
- 	ROOTDIR=$(TARGET_DIR) \
+ XINETD_MAKE_OPT = AR="$(TARGET_AR)"
+ 
+ $(eval $(autotools-package))
