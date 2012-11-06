@@ -1,53 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 06 Nov 2012 02:05:52 +0100
-Subject: [Buildroot] [PATCH v11 2/9] perl: new package
-In-Reply-To: <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
-References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
- <1350652434-32020-2-git-send-email-francois.perrad@gadz.org>
- <upcp6k.3q9.ln@bernd-kuhls.de>
- <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
-Message-ID: <50986270.4070804@mind.be>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue,  6 Nov 2012 02:20:03 +0100
+Subject: [Buildroot] [PATCH 1/1] libmbus : bump version to 0.8
+Message-ID: <1352164803-8201-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/05/12 17:41, Fran?ois Perrad wrote:
->> >  $/home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
->> >  /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
->> >  LIBPERL_A=libperl.so
->> >  qemu: Unsupported syscall: 240
->> >  qemu: Unsupported syscall: 240
->> >
->> >  First I got this error message with Debian Squeeze i386 (virtualbox guest,
->> >  Win XP host), but also on Debian wheezy amd64 running non-virtualized.
->> >
->> >  My .config can be found here:http://pastebin.com/yz1SzeB2
->> >  I am using buildroot as part of the FLI4L source package[1].
->> >
->> >  Kind regards, Bernd
->> >
-> I could reproduce the lastest problem on the HEAD of Buildroot with
-> qemu_x86_defconfig (which is a smaller config than your FLI4L config).
 
-  Is it possible that this is because the target binary is created with
-kernel headers 3.2, but you're running it on a host which is only 2.6.32
-(squeeze)?  But then it should work on wheezy, because that has 3.2 as
-well (at least since about four months IIRC).  Although...  240 on i386
-is futex, which has existed already since long before 2.6.32.
+This release contains many improvements bug fixes, and major new features and
+support for float point numbers and support for multi-telegram communication...
 
-  I do find this bug report:
-https://bugs.launchpad.net/ubuntu/+source/qemu-linaro/+bug/758424
-but I'm not sure if it is relevant.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/libmbus/libmbus-bcopy.patch | 16 ----------------
+ package/libmbus/libmbus.mk          |  2 +-
+ 2 files changed, 1 insertion(+), 17 deletions(-)
+ delete mode 100644 package/libmbus/libmbus-bcopy.patch
 
-  Regards,
-  Arnout
-
+diff --git a/package/libmbus/libmbus-bcopy.patch b/package/libmbus/libmbus-bcopy.patch
+deleted file mode 100644
+index 660cc37..0000000
+--- a/package/libmbus/libmbus-bcopy.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Drop bcopy since it's deprecated.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libmbus-0.7.0/mbus/mbus-tcp.c libmbus-0.7.0-bcopy/mbus/mbus-tcp.c
+---- libmbus-0.7.0/mbus/mbus-tcp.c	2011-12-08 13:21:19.000000000 -0300
+-+++ libmbus-0.7.0-bcopy/mbus/mbus-tcp.c	2012-05-03 09:08:36.987106612 -0300
+-@@ -78,7 +78,7 @@
+-         return NULL;
+-     }
+- 
+--    bcopy((void *)(host_addr->h_addr), (void *)(&s.sin_addr), host_addr->h_length);
+-+    memmove((void *)(&s.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
+- 
+-     if (connect(handle->sock, (struct sockaddr *)&s, sizeof(s)) < 0)
+-     {
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+index 16e9e6a..9f25a3a 100644
+--- a/package/libmbus/libmbus.mk
++++ b/package/libmbus/libmbus.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBMBUS_VERSION = 0.7.0
++LIBMBUS_VERSION = 0.8.0
+ LIBMBUS_SITE = http://www.freescada.com/public-dist
+ LIBMBUS_INSTALL_STAGING = YES
+ 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.8.0
