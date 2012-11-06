@@ -1,68 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Nov 2012 08:20:17 +0100
-Subject: [Buildroot] [git commit] lmbench: add support to use libtirpc when
-	available
-Message-ID: <20121106072424.93A5499BFF@busybox.osuosl.org>
+Date: Tue, 6 Nov 2012 08:20:18 +0100
+Subject: [Buildroot] [git commit] toolchain-external: add support for
+	Sourcery CodeBench SH 2012.09
+Message-ID: <20121106072429.D32F299C07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80f7a4b6797d11fbf3808a8af8b5e5f58048f117
+commit: http://git.buildroot.net/buildroot/commit/?id=e067a449df5bfe5853b473b4b9b3967836094d2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lmbench/Config.in  |    6 +-----
- package/lmbench/lmbench.mk |   11 ++++++++++-
- 2 files changed, 11 insertions(+), 6 deletions(-)
+ toolchain/toolchain-external/Config.in   |   21 +++++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
-index 70449b6..d710e1f 100644
---- a/package/lmbench/Config.in
-+++ b/package/lmbench/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_LMBENCH
- 	bool "lmbench"
--	# Uses pmap_set, pmap__unset, pmap_getport, etc.
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  LMbench is a suite of simple, portable,
- 	  ANSI/C microbenchmarks for UNIX/POSIX.
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index e7c9995..ae965fa 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -422,6 +422,26 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	    - 970 glibc hard-float, 64 bits
+ 	      Set BR2_TARGET_OPTIMIZATION to -m64
  
- 	  http://sourceforge.net/projects/lmbench/
--
--comment "lmbench requires a toolchain with RPC support"
--	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index d3d0f8f..1932adb 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -9,6 +9,15 @@ LMBENCH_SITE:=http://downloads.sourceforge.net/project/lmbench/development/lmben
- LMBENCH_LICENSE =  lmbench license (based on GPLv2)
- LMBENCH_LICENSE_FILES = COPYING COPYING-2
- 
-+LMBENCH_CFLAGS = $(TARGET_CFLAGS)
-+LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
++	bool "Sourcery CodeBench SH 2012.09"
++	depends on BR2_sh4a || BR2_sh4aeb
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Sourcery CodeBench toolchain for the SuperH architecture,
++	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
++	  glibc 2.16, uClibc 0.9.30, gdb 7.4.50 and kernel headers
++	  3.5.4. It has support for the following variants:
++            - SH4A, glibc, little endian
++              Default.
++            - SH4A, glibc, big endian
++              Add -mb to BR2_TARGET_OPTIMIZATION
++            - SH4A, uClibc, little endian
++              Not usable in Buildroot yet.
++            - SH4A, uClibc, big endian
++              Not usable in Buildroot yet.
 +
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+LMBENCH_DEPENDENCIES += libtirpc
-+LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-+LMBENCH_LDFLAGS += -ltirpc
-+endif
-+
- define LMBENCH_CONFIGURE_CMDS
- 	$(call CONFIG_UPDATE,$(@D))
- 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
-@@ -18,7 +27,7 @@ define LMBENCH_CONFIGURE_CMDS
- endef
- 
- define LMBENCH_BUILD_CMDS
--	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
-+	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
- endef
- 
- define LMBENCH_INSTALL_TARGET_CMDS
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+ 	bool "Sourcery CodeBench SH 2012.03"
+ 	depends on BR2_sh4a || BR2_sh4aeb
+@@ -723,6 +743,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
++	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 726f76f..6fb0e70 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -229,6 +229,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/GNUToolchain/package10148/public/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2012.03-35-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209),y)
++TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=renesas-2012.09-61-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7859/public/sh-uclinux/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
