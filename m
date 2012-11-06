@@ -1,65 +1,34 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  7 Nov 2012 00:41:48 +0100
-Subject: [Buildroot] [PATCH] cpio/initramfs: clarify their use in the help
-	text
-Message-ID: <1352245308-10348-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 07 Nov 2012 00:46:20 +0100
+Subject: [Buildroot] Udev on a live CD system does not appear to
+ populate /dev
+In-Reply-To: <509958D9.7050108@petroprogram.com>
+References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
+Message-ID: <5099A14C.5000204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent mails on the list show that it is not very clear how to create
-an initial RAM fs with buildroot.  So make this more explicit in the
-cpio and initramfs help texts.  Hopefully this will reduce the /init
-debugging we have to do.
+On 06/11/12 19:37, Stefan Fr?berg wrote:
+> Here's what I have minimally in my own buildroot's fs/skeleton/dev folder (which is copied at the end of the buildroot
+> process into output/target/dev )
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Is this a documentation patch that should be picked up by Samuel, or
-is it for Peter?
+  Err... That can only work if you have sudo in your post-build script - which
+we consider bad practice.  We have the device_table to deal with device nodes.
+And all of that shouldn't be necessary if you use devtmpfs (or udev or mdev,
+which implies devtmpfs).  If you use static device nodes, then the default
+device_table_dev creates all of those.
 
- fs/cpio/Config.in      |   11 ++++++++---
- fs/initramfs/Config.in |    2 +-
- 2 files changed, 9 insertions(+), 4 deletions(-)
+  If that doesn't work for you, then we should try to fix it in buildroot.
 
-diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-index 374cfe0..0669a44 100644
---- a/fs/cpio/Config.in
-+++ b/fs/cpio/Config.in
-@@ -1,14 +1,19 @@
- config BR2_TARGET_ROOTFS_CPIO
--	bool "cpio the root filesystem"
-+	bool "cpio the root filesystem (for use as an initial RAM filesystem)"
- 	help
--	  Build a cpio archive of the root filesystem
-+	  Build a cpio archive of the root filesystem.  This is typically
-+	  used for an initial RAM filesystem that is passed to the kernel
-+	  by the bootloader.
- 
- choice
-         prompt "Compression method"
-         default BR2_TARGET_ROOTFS_CPIO_NONE
-         depends on BR2_TARGET_ROOTFS_CPIO
-         help
--          Select compressor for cpio filesystem of the root filesystem
-+          Select compressor for cpio filesystem of the root filesystem.
-+          If you use the cpio archive as an initial RAM filesystem, make
-+          sure the kernel contains the decompression algorithm selected
-+          here.
- 
- config BR2_TARGET_ROOTFS_CPIO_NONE
-         bool "no compression"
-diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
-index bbc2ab0..22066ee 100644
---- a/fs/initramfs/Config.in
-+++ b/fs/initramfs/Config.in
-@@ -1,5 +1,5 @@
- config BR2_TARGET_ROOTFS_INITRAMFS
--	bool "initramfs for initial ramdisk of linux kernel"
-+	bool "initial RAM filesystem linked into linux kernel"
- 	depends on BR2_LINUX_KERNEL
- 	select BR2_TARGET_ROOTFS_CPIO
- 	help
+  Regards,
+  Arnout
 -- 
-tg: (5a63922..) t/cpio-clarify-help (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
