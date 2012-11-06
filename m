@@ -1,91 +1,66 @@
-From: Philippe REYNES <philippe.reynes@sagemcom.com>
-Date: Tue, 6 Nov 2012 07:38:54 +0100
-Subject: [Buildroot] [PATCH] [v3] Allow to run severals post build
- scripts instead of only one
-In-Reply-To: <509059C3.4080109@mind.be>
-References: <3558_1351493584_508E27D0_3558_1558_1_1351493605-22269-1-git-send-email-philippe.reynes@sagemcom.com>
- <509059C3.4080109@mind.be>
-Message-ID: <21241_1352183937_5098B081_21241_18787_1_OF7B519B75.588186A9-ONC1257AAE.002464C5-C1257AAE.0024853E@sagemcom.com>
+From: Vasanth Ragavendran <ragavendra.2007@gmail.com>
+Date: Tue, 6 Nov 2012 14:48:39 +0800
+Subject: [Buildroot] Build root local site method
+In-Reply-To: <50984A5F.1060409@mind.be>
+References: <CADfuMF4YnAPm_m6YbjO0oCYPJKxqgGwX9amz7SOXhRB3x3mewg@mail.gmail.com>
+ <50984A5F.1060409@mind.be>
+Message-ID: <CADfuMF4EHOgsdNJf89T9SvCSjgRC8Tr4Pk_O4TxHqehuxz1FPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-I've tried to remove this backslashes, and I've got an error when building:
-
-
-/bin/sh: -c: line 0: syntax error near unexpected token `('
-/bin/sh: -c: line 0: `echo ">>>   "Executing post-build script(s)""'
-make: *** [target-finalize] Error 1
-
-So those backslashes are usefull.
-
-Regards,
-Philippe
+Thanks you so much Arnout. It works fine. My mistake. I hadn't looked into
+the case sensitive feature. Thanks again!
 
 
+On Tue, Nov 6, 2012 at 7:23 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-
-                                                                           
-             Arnout                                                        
-             Vandecappelle                                                 
-             <arnout@mind.be>                                            A 
-                                       Philippe Reynes                     
-             10/30/2012 23:50          <philippe.reynes@sagemcom.com>      
-                                                                        cc 
-                                       buildroot at busybox.net               
-                                                                     Objet 
-                                       Re: [Buildroot] [PATCH] [v3] Allow  
-                                       to run severals post build scripts  
-                                       instead of only one                 
-                                                                           
-                                                                           
-                                                                           
-                                                                           
-                                                                           
-                                                                           
-
-
-
-
-On 10/29/12 07:53, Philippe Reynes wrote:
-> +          @$(call MESSAGE,"Executing post-build script\(s\)")
-
-  Aren't these backslashes redundant?
-
-  Regards,
-  Arnout
---
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-
-
-
-#
-" Ce courriel et les documents qui lui sont joints peuvent contenir des
-informations confidentielles ou ayant un caract?re priv?. S'ils ne vous sont
-pas destin?s, nous vous signalons qu'il est strictement interdit de les
-divulguer, de les reproduire ou d'en utiliser de quelque mani?re que ce
-soit le contenu. Si ce message vous a ?t? transmis par erreur, merci d'en
-informer l'exp?diteur et de supprimer imm?diatement de votre syst?me
-informatique ce courriel ainsi que tous les documents qui y sont attach?s."
-
-
-                               ******
-
-" This e-mail and any attached documents may contain confidential or
-proprietary information. If you are not the intended recipient, you are
-notified that any dissemination, copying of this e-mail and any attachments
-thereto or use of their contents by any means whatsoever is strictly
-prohibited. If you have received this e-mail in error, please advise the
-sender immediately and delete this e-mail and all attached documents
-from your computer system."
-#
+> On 11/05/12 13:41, Vasanth Ragavendran wrote:
+>
+>> Hi
+>>
+>> This is with reference to the download method which is specified while
+>> compiling a new package. I'm writing certain
+>> programs which needs to be cross compiled and run in my embedded board.
+>> In my <pkg>.mk file I'm specifying the 'site' to
+>> the directory containing my source code and the 'site_method' to "local".
+>> I've made necessary changes to the Config.in
+>> files in all locations. I am able to select this package of mine from the
+>> menuconfig, however the package refuses to
+>> build for some unknown reason neither does the build print any errors. It
+>> just quietly skips compiling this package and
+>> finishes generating the file system. And the location which I'm pointing
+>> to in the mk file contains the necessary source
+>> code. I'm wondering what step I've skipped. Attaching the Config.in and
+>> <pkg>.mk file which I've created for my package.
+>> Kindly help as I'm struck in this and unable to proceed. I've referred to
+>> the manual but unable to solve this issue.
+>>
+>
+>  FTPCLIENT_INSTALL_TARGET should be YES, in capitals, else it will NOT
+> install.
+> (Actually, YES is the default so you can just remove that line).
+>
+>  Maybe we should check that _INSTALL_TARGET etc. are either YES or NO.  But
+> I'm afraid that will make an empty make much slower again...  So maybe
+> there
+> should be a 'make ftpclient-wtf-is-wrong-with-**it' that does the checks
+> :-)
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/c75c785f/attachment.html>
