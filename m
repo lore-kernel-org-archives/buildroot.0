@@ -1,45 +1,59 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Nov 2012 12:11:08 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 4,
-	6}.x stable versions
-Message-ID: <20121106111408.59F9099C06@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue,  6 Nov 2012 13:14:58 +0000
+Subject: [Buildroot] [PATCH] lcdproc: bump version to 0.5.6
+Message-ID: <1352207698-3407-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d80d382620ac57926b13cbfce49ebda197c9be0a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch   |   19 -------------------
+ package/lcdproc/lcdproc.mk                          |    2 +-
+ 2 files changed, 1 insertion(+), 20 deletions(-)
+ delete mode 100644 package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index d596870..e195def 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.50"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.51"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
--	default "3.4.17"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.18"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
--	default "3.6.5"		if BR2_KERNEL_HEADERS_3_6
-+	default "3.6.6"		if BR2_KERNEL_HEADERS_3_6
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.50-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch b/package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch
+deleted file mode 100644
+index f0ebe2d..0000000
+--- a/package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Trying to add a menu item using menu_add_item causes a segmentation fault
+-in the LCDd server. This is caused by a read beyond the end of an array.
+-
+-This patch adds a safety check on the size of the argument array.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/server/commands/menu_commands.c b/server/commands/menu_commands.c
+---- a/server/commands/menu_commands.c	2011-08-14 13:29:16.000000000 +0100
+-+++ b/server/commands/menu_commands.c	2012-10-04 22:19:07.997409193 +0100
+-@@ -198,7 +198,7 @@ menu_add_item_func(Client *c, int argc,
+- 
+- 	/* call menu_set_item() with a temporarily allocated argv
+- 	 * to process the remaining options */
+--	if ((argc > 5) || (argv[4][0] == '-')) {
+-+	if ((argc > 5) || ((argc == 5) && argv[4][0] == '-')) {
+- 		// menu_add_item <menuid> <newitemid> <type> [<text>]
+- 		// menu_set_item <menuid> <itemid> {<option>}+
+- 		int i, j;
+diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+index 7914c85..aa204f1 100644
+--- a/package/lcdproc/lcdproc.mk
++++ b/package/lcdproc/lcdproc.mk
+@@ -3,7 +3,7 @@
+ # lcdproc
+ #
+ #############################################################
+-LCDPROC_VERSION = 0.5.5
++LCDPROC_VERSION = 0.5.6
+ LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
+ LCDPROC_SITE = http://downloads.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
+ LCDPROC_LICENSE = GPLv2+
+-- 
+1.7.10.4
