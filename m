@@ -1,121 +1,55 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 6 Nov 2012 11:24:58 +0100
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Tue, 6 Nov 2012 13:28:41 +0300
 Subject: [Buildroot] [PATCH v11 2/9] perl: new package
-In-Reply-To: <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
+In-Reply-To: <20121106080812.4e7bd01a@skate>
 References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
  <1350652434-32020-2-git-send-email-francois.perrad@gadz.org>
  <upcp6k.3q9.ln@bernd-kuhls.de>
  <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
-Message-ID: <CAB0FRsv058=3G7qbFPS6xrSr_TG5=QDhRKcOU8O6mCot_dCuMQ@mail.gmail.com>
+ <50986270.4070804@mind.be> <20121106080812.4e7bd01a@skate>
+Message-ID: <CABtOAfw7M5y9p7B1ObpNOqsjPVi5wjKpmRTe59dzRZRut7XbRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/5 Fran?ois Perrad <francois.perrad@gadz.org>:
-> 2012/10/30 Bernd Kuhls <berndkuhls@hotmail.com>:
->> Hi,
->>
->> Francois Perrad <fperrad@gmail.com> wrote in
->> news:1350652434-32020-2-git-send-email-francois.perrad at gadz.org:
->>
->> currently I am testing your patchset, but I found problems during
->> compiling, some I could solve myself:
->>
->>> +PERL_CONF_OPT = -des \
->>
->> [...]
->>
->>> +          -Dlibc=$(STAGING_DIR)/lib/libc.so \
->>
->> I had to change this line to
->>
->>              -Dlibc=$(STAGING_DIR)/usr/lib/libc.so.0 \
->>
->> for usage with uClibc 0.9.33.2
->>
->> [...]
->>
->>> +          -Uoptimize
->>
->> Here I had to add "-Ud_eaccess" to avoid a compilation bug.
->>
->> Perl will still not finish to compile, stopping with this error message:
->>
->>> LD_LIBRARY_PATH=/home/bernd/.fbr/build/output/build/perl-5.16.1
->> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
->> ./miniperl -Ilib make_ext.pl cpan/Archive-Extract/pm_to_blib
->> MAKE=/home/bernd/.fbr/build/output/host/usr/bin/make LIBPERL_A=libperl.so
->>>         Making Archive::Extract (all)
->>>
->>> Creating Makefile.PL in cpan/Archive-Extract for Archive::Extract
->>>
->>> Running Makefile.PL in cpan/Archive-Extract
->>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
->> ../../miniperl -I../../lib Makefile.PL INSTALLDIRS=perl INSTALLMAN1DIR=none
->> INSTALLMAN3DIR=none PERL_CORE=1 LIBPERL_A=libperl.so
->>> -1 from cpan/Archive-Extract's Makefile.PL at make_ext.pl line 409.
->>> Warning: No Makefile!
->>> /home/bernd/.fbr/build/output/host/usr/bin/make config PERL_CORE=1
->> LIBPERL_A=libperl.so failed, continuing anyway...
->>> Making all in cpan/Archive-Extract
->>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
->> /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
->> LIBPERL_A=libperl.so
->>> Unsuccessful make(cpan/Archive-Extract): code=-1 at make_ext.pl line 468.
->>> make[1]: *** [cpan/Archive-Extract/pm_to_blib] Fehler 22
->>> make[1]: Leaving directory `/home/bernd/.fbr/build/output/build/perl-
->> 5.16.1'
->>> make: *** [/home/bernd/.fbr/build/output/build/perl-5.16.1/.stamp_built]
->> Fehler 2
->>
->> Executing the last command alone provides this error hinting at a problem
->> with host-qemu, which I was able to solve yet.
->>
->> $ /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
->> /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
->> LIBPERL_A=libperl.so
->> qemu: Unsupported syscall: 240
->> qemu: Unsupported syscall: 240
->>
->> First I got this error message with Debian Squeeze i386 (virtualbox guest,
->> Win XP host), but also on Debian wheezy amd64 running non-virtualized.
->>
->> My .config can be found here: http://pastebin.com/yz1SzeB2
->> I am using buildroot as part of the FLI4L source package[1].
->>
->> Kind regards, Bernd
->>
+2012/11/6 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
 >
-> I could reproduce the lastest problem on the HEAD of Buildroot with
-> qemu_x86_defconfig (which is a smaller config than your FLI4L config).
+> On Tue, 06 Nov 2012 02:05:52 +0100, Arnout Vandecappelle wrote:
+>
+> >   Is it possible that this is because the target binary is created with
+> > kernel headers 3.2, but you're running it on a host which is only 2.6.32
+> > (squeeze)?  But then it should work on wheezy, because that has 3.2 as
+> > well (at least since about four months IIRC).  Although...  240 on i386
+> > is futex, which has existed already since long before 2.6.32.
+>
+> Aaah, I didn't think about this problem. This is indeed going to be
+> really annoying, if the kernel headers chosen for the target have to
+> somewhat match the kernel version running on the host :-(
+>
+> I guess this whole qemu thing for Perl is going to be annoying on the
+> long term. We might need to start looking for a different option, i.e
+> seeing how to get Perl to build without needing qemu.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
-first, before manually running a command in the build tree, you must
-set PERL_MM_OPT
-   $ export PERL_MM_OPT="PERL=`pwd`/Cross/miniperl"
 
-the error
-    -1 from cpan/Archive-Extract's Makefile.PL at make_ext.pl line 409.
-comes from miniperl which fails with a 'system' call.
-
-this problem could be reproduced with a simple one-liner :
-
-$ perl -e "my \$code = system( q(echo), q(hello) ); print(\$code);"
-hello
-0
-
-$ Cross/miniperl -e "my \$code = system( q(echo), q(hello) ); print(\$code);"
--1
-
-Fran?ois
-
-> Fran?ois
->
->> [1] http://www.fli4l.de/download/tarball-version/aktuell.html
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+I'm working in chroot. that includes headers from 3.6, but host-system is
+CentOS 6.2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/b5229cd9/attachment.html>
