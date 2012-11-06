@@ -1,57 +1,79 @@
-From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Tue,  6 Nov 2012 11:48:23 +0100
-Subject: [Buildroot] [PATCH v4] at91bootstrap: fix overlap linker issue
-Message-ID: <1352198903-6297-1-git-send-email-gregory.hermant@calao-systems.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Tue,  6 Nov 2012 11:50:12 +0100
+Subject: [Buildroot] [PATCH] add new package fxload
+Message-ID: <1352199012-7746-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The linker script of the at91bootstrap package has to be modified when
-built from gcc-4.6.x version. Indeed a section named text.startup is
-created and has to be added into the text section.
-
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
 ---
- ...at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch |   29 ++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+v2: Incorporated comments from Arnout,
 
-diff --git a/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
+I am not sure about the make install target line,
+
+I would have expected prefix= to be set by the environement, but maybe it is not a standard var name for make...
+---
+ package/Config.in        |    1 +
+ package/fxload/Config.in |    9 +++++++++
+ package/fxload/fxload.mk |   19 +++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/fxload/Config.in
+ create mode 100644 package/fxload/fxload.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e531c41..bcd1b47 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -211,6 +211,7 @@ source "package/flashrom/Config.in"
+ source "package/fconfig/Config.in"
+ source "package/fis/Config.in"
+ source "package/fmtools/Config.in"
++source "package/fxload/Config.in"
+ source "package/gadgetfs-test/Config.in"
+ source "package/gdisk/Config.in"
+ source "package/gpsd/Config.in"
+diff --git a/package/fxload/Config.in b/package/fxload/Config.in
 new file mode 100644
-index 0000000..e4ed04e
+index 0000000..ac190f0
 --- /dev/null
-+++ b/boot/at91bootstrap/at91bootstrap-1.16-gcc-4.6.x-ldscript-fix.patch
-@@ -0,0 +1,29 @@
-+From b783d1f9bf985c0981e755bd2c13e091e9d6837f Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Tue, 6 Nov 2012 09:38:50 +0100
-+Subject: [PATCH] at91bootstrap: fix overlap linker issue
++++ b/package/fxload/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FXLOAD
++	bool "fxload"
++	help
++	  This program is conveniently able to download firmware into FX, FX2,
++	  and FX2LP EZ-USB devices, as well as the original AnchorChips EZ-USB.
++	  It is intended to be invoked by hotplug scripts when the unprogrammed
++	  device appears on the bus.
 +
-+The linker script of the at91bootstrap package has to be modified when
-+built from gcc-4.6.x version. Indeed a section named text.startup is
-+created and has to be added into the text section.
++	  http://sourceforge.net/projects/linux-hotplug/
+diff --git a/package/fxload/fxload.mk b/package/fxload/fxload.mk
+new file mode 100644
+index 0000000..1b5e8c7
+--- /dev/null
++++ b/package/fxload/fxload.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# fxload
++#
++#############################################################
++FXLOAD_VERSION = 2008_10_13
++FXLOAD_SITE = http://downloads.sourceforge.net/project/linux-hotplug/fxload/$(FXLOAD_VERSION)
++FXLOAD_LICENSE = GPLv2+
++FXLOAD_LICENSE_FILE = COPYING
 +
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ elf32-littlearm.lds |    1 +
-+ 1 file changed, 1 insertion(+)
++define FXLOAD_BUILD_CMDS
++    $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
++endef
 +
-+diff --git a/elf32-littlearm.lds b/elf32-littlearm.lds
-+index a33952f..4f3ba25 100644
-+--- a/elf32-littlearm.lds
-++++ b/elf32-littlearm.lds
-+@@ -7,6 +7,7 @@ SECTIONS
-+ 	.text : { 
-+ 		_stext = .;
-+ 		*(.text)
-++		*(.text*)
-+ 		*(.rodata)                 /* read-only data (constants) */
-+ 		*(.rodata*)
-+ 		. = ALIGN(4);
-+-- 
-+1.7.9.5
++define FXLOAD_INSTALL_TARGET_CMDS
++    $(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) prefix=$(TARGET_DIR) -C $(@D) install
++endef
 +
++$(eval $(generic-package))
 -- 
-1.7.9.5
+1.7.10.4
