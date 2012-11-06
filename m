@@ -1,59 +1,123 @@
-From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Date: Tue,  6 Nov 2012 18:53:40 +0100
-Subject: [Buildroot] [PATCH] boost: bump to version 1.52.0
-Message-ID: <1352224420-14184-1-git-send-email-victor.hiairrassary.ml@gmail.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Tue, 06 Nov 2012 20:37:13 +0200
+Subject: [Buildroot] Udev on a live CD system does not appear to
+ populate /dev
+In-Reply-To: <5099186E.1030409@macrium.com>
+References: <5099186E.1030409@macrium.com>
+Message-ID: <509958D9.7050108@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: mecanix <victor.hiairrassary.ml@gmail.com>
+6.11.2012 16:02, Antony Vennard kirjoitti:
+> Hi All,
+>
+> I'm currently looking at using udev for a live cd environment built with
+> buildroot, and I'm having trouble getting udev to pick up the machine's
+> devices.
+>
+> I have some questions and some details that will (hopefully) help
+> identify my problem
+>
+> Firstly, my kernel is configured to use devtmpfs:
+>
+> 681:CONFIG_DEVTMPFS=y
+> 682:CONFIG_DEVTMPFS_MOUNT=y
+>
+> so as I understand it, /dev should be mounted as a tmpfs by the kernel
+> and populated with /dev/null, /dev/console etc. Yet, my
+> buildroot/output/target contains a dev folder with subdirectories
+> created by buildroot.
+>
+> So, I tried both creating the entries with target/generic_device_table
+> for tty0, tty1, console, null. This works, and udev reports it is
+> scanning for devices and done, yet /dev never picks up e.g. /dev/sda, or
+> /dev/disk/..., or so on. I have, in this configuration, copied
+> /usr/lib/udev/rules.d/* to buildroot/output/target/etc/udev/rules.d to
+> no avail; as far as I can see whatever rules I supply, even from my
+> Fedora or Ubuntu distributions, do not seem to affect udev.
+>
+> Wondering if this creation method was wrong, I have then removed all of
+> the entries in /dev so that the kernel can mount its own devtmpfs. When
+> booting, /dev/null and /dev/tty1 are reported as missing. I imagine
+> there is nothing in /dev at this stage
+Im not sure but I tought that device nodes /dev/null and /dev/console
+(and some others)
+have to always be created manually
+(either with buildroot device tables, by doing the mknod thing or just
+by copying those
+nodes from host system to output/target/dev or fs/skeleton/dev)
+to be of any use.
 
----
- package/boost/Config.in | 4 ++++
- package/boost/boost.mk  | 4 ++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+At least that's what I have done always, created those /dev/null and
+/dev/cosole and also
+/dev/ram0 etc.. myself into output/target/dev and then make my initramfs
+from that directory and
+ let the hotplug program (either busybox's own mdev or udev) do the rest.
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 8798367..58e62a0 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -1,9 +1,13 @@
- comment "boost requires a toolchain with C++ support enabled"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 
-+comment "boost requires a toolchain with large file support enabled"
-+	depends on !BR2_LARGEFILE
-+
- config BR2_PACKAGE_BOOST
- 	bool "boost"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_ZLIB
- 	help
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 64856bc..005c7ca 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BOOST_VERSION = 1.49.0
-+BOOST_VERSION = 1.52.0
- BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
- BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
-@@ -15,7 +15,7 @@ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
- BOOST_DEPENDENCIES = bzip2 zlib
- 
- BOOST_FLAGS =
--BOOST_WITHOUT_FLAGS = python
-+BOOST_WITHOUT_FLAGS = python context
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
--- 
-1.8.0
+Here's what I have minimally in my own buildroot's fs/skeleton/dev
+folder (which is copied at the end of the buildroot
+process into output/target/dev )
+
+crw-------.  1 root root 5, 1 11.1.2012 console
+lrwxrwxrwx.  1 root root   10 19.3.2012 log -> ../tmp/log
+brw-rw----.  1 root root 7, 0 20.8. 00:58 loop0
+crw-------.  1 root root 1, 1 11.1.2012 mem
+crw-r--r--.  1 root root 1, 3 12.1.2012 null
+drwxr-xr-x.  2 root root 1024 12.1.2012 pts
+brw-r-----.  1 root root 5, 0 12.1.2012 ram0
+crw-r--r--.  1 root root 5, 0 12.1.2012 tty
+crw-------.  1 root root 4, 0 11.1.2012 tty0
+crw-------.  1 root root 4, 1 11.1.2012 tty1
+crw-------.  1 root root 1, 5 11.1.2012 zero
+
+Now, some of those might not be strictly necessary and should be created
+by mdev/udev.
+But it's good to have them just in case.
+
+Besides some pre-made device nodes, make sure that you have S10udev in your
+output/target/etc/init.d.
+That is the one responsible of starting udev.
+
+You can also copy S10udev to fs/skeleton/etc/init.d to make sure that
+it's included in
+output/target/etc/init.d everytime you make complete new rebuild
+(make clean && make)
+
+
+Im presuming you *are* using initramfs in your early device initialization ?
+(if not then you absolutely should. Live CD without initramfs is useless)
+
+Best regards
+Stefan
+> Various possibly related points:
+>  * I thought udev required udevd, yet I can't see that either running or
+> available on the ISO, nor can I find a configuration option to create it.
+>  * I have D-Bus built for the system, as I read udev required it.
+>  * I can see sda1 in /sys/block/sda/sda1; likewise for other attached
+> storage devices.
+>
+> Am I doing anything very wrong? I get the feeling I must be missing
+> something for this to not work, yet I'm not sure what.
+>
+> Can anyone offer any advice? Happy to provide config snippets etc.
+>
+> Using buildroot 2012.08.
+>
+> Thanks,
+>
+> Antony
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/3d142432/attachment.html>
