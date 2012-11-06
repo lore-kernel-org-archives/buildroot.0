@@ -1,72 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Nov 2012 08:20:17 +0100
-Subject: [Buildroot] [git commit] nfs-utils: add support to use RPC support
-	from libtirpc
-Message-ID: <20121106072425.0170199BFF@busybox.osuosl.org>
+Date: Tue, 6 Nov 2012 08:20:16 +0100
+Subject: [Buildroot] [git commit] busybox: add support to link against
+	libtirpc when available
+Message-ID: <20121106072424.0371B99BFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2fb1a48ad80a765a1f46e183d3ecf742adfbfca9
+commit: http://git.buildroot.net/buildroot/commit/?id=7266e7630d4785e6228fdc981e2ce560291d085d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/nfs-utils/Config.in    |    7 +++----
- package/nfs-utils/nfs-utils.mk |    8 +++++++-
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ package/busybox/busybox.mk |   19 +++++++++++++++++--
+ 1 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index c87502f..fa35f35 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_NFS_UTILS
- 	bool "nfs-utils"
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_LARGEFILE
--	select BR2_PACKAGE_PORTMAP
- 	help
- 	  The NFS Linux kernel server.
- 	  Warning: We do not force largefile support on here on purpose.
-@@ -10,8 +9,8 @@ config BR2_PACKAGE_NFS_UTILS
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 2fa1aa5..549e150 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -15,14 +15,29 @@ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPLv2
+ BUSYBOX_LICENSE_FILES = LICENSE
  
- 	  http://sourceforge.net/projects/nfs
- 
--comment "nfs-utils requires a toolchain with RPC and LARGEFILE support"
--	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_LARGEFILE
-+comment "nfs-utils requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
- 
- menu "NFS utilities selection"
- 	depends on BR2_PACKAGE_NFS_UTILS
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 41a0e05..e59619f 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -16,7 +16,6 @@ NFS_UTILS_CONF_OPT = \
- 		--disable-nfsv4 \
- 		--disable-nfsv41 \
- 		--disable-gss \
--		--disable-tirpc \
- 		--disable-uuid \
- 		--disable-ipv6 \
- 		--without-tcp-wrappers \
-@@ -26,6 +25,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += usr/sbin/rpcdebug
- NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_LOCKD) += usr/sbin/rpc.lockd
- NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
- 
++BUSYBOX_CFLAGS = \
++	$(TARGET_CFLAGS) \
++	-I$(LINUX_HEADERS_DIR)/include
++
++BUSYBOX_LDFLAGS = \
++	$(TARGET_LDFLAGS)
++
++# Link against libtirpc if available so that we can leverage its RPC
++# support for NFS mounting with Busybox
 +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+NFS_UTILS_CONF_OPT += --enable-tirpc --with-tirpcinclude=$(STAGING_DIR)/usr/include/tirpc/
-+NFS_UTILS_DEPENDENCIES += libtirpc
-+else
-+NFS_UTILS_CONF_OPT += --disable-tirpc
++BUSYBOX_DEPENDENCIES += libtirpc
++BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
++BUSYBOX_LDFLAGS += -ltirpc
 +endif
 +
- define NFS_UTILS_INSTALL_FIXUP
- 	$(INSTALL) -m 0755 package/nfs-utils/S60nfs \
- 		$(TARGET_DIR)/etc/init.d/S60nfs
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+-BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_HEADERS_DIR)/include"
++BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(BUSYBOX_CFLAGS)"
+ BUSYBOX_MAKE_OPTS = \
+ 	CC="$(TARGET_CC)" \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	PREFIX="$(TARGET_DIR)" \
+-	EXTRA_LDFLAGS="$(TARGET_LDFLAGS)" \
++	EXTRA_LDFLAGS="$(BUSYBOX_LDFLAGS)" \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	CONFIG_PREFIX="$(TARGET_DIR)" \
+ 	SKIP_STRIP=y
