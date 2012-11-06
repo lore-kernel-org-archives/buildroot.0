@@ -1,34 +1,30 @@
 From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 6 Nov 2012 22:03:22 +0100
+Date: Tue, 6 Nov 2012 22:09:26 +0100
 Subject: [Buildroot] [PATCH v11 2/9] perl: new package
 References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
  <1350652434-32020-2-git-send-email-francois.perrad@gadz.org>
  <upcp6k.3q9.ln@bernd-kuhls.de>
  <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
- <50986270.4070804@mind.be>
-Message-ID: <qutb7k.9fm.ln@bernd-kuhls.de>
+ <50986270.4070804@mind.be> <20121106080812.4e7bd01a@skate>
+Message-ID: <6aub7k.9fm.ln@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> wrote in 
-news:50986270.4070804 at mind.be:
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20121106080812.4e7bd01a at skate:
 
->   Is it possible that this is because the target binary is created with
-> kernel headers 3.2, but you're running it on a host which is only 2.6.32
-> (squeeze)?  But then it should work on wheezy, because that has 3.2 as
-> well (at least since about four months IIRC).  Although...  240 on i386
-> is futex, which has existed already since long before 2.6.32.
+> I guess this whole qemu thing for Perl is going to be annoying on the
+> long term. We might need to start looking for a different option, i.e
+> seeing how to get Perl to build without needing qemu.
 
 Hi,
 
-on wheezy I am using kernel 3.5.5.
-
-$ LC_ALL=C apt-cache policy linux-image-3.5-trunk-amd64
-linux-image-3.5-trunk-amd64:
-  Installed: 3.5.5-1~experimental.1
-  Candidate: 3.5.5-1~experimental.1
+maybe this can be of help: http://perlcross.berlios.de/
 
 Kind regards, Bernd
+
+PS: The reason I am fiddling around with Perl is to compile 
+Mail::Spamassassin which needs a lot of other modules.
