@@ -1,59 +1,85 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue,  6 Nov 2012 13:14:58 +0000
-Subject: [Buildroot] [PATCH] lcdproc: bump version to 0.5.6
-Message-ID: <1352207698-3407-1-git-send-email-spdawson@gmail.com>
+From: Antony Vennard <antony.vennard@macrium.com>
+Date: Tue, 06 Nov 2012 14:02:22 +0000
+Subject: [Buildroot] Udev on a live CD system does not appear to populate
+	/dev
+Message-ID: <5099186E.1030409@macrium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi All,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- .../lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch   |   19 -------------------
- package/lcdproc/lcdproc.mk                          |    2 +-
- 2 files changed, 1 insertion(+), 20 deletions(-)
- delete mode 100644 package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch
+I'm currently looking at using udev for a live cd environment built with
+buildroot, and I'm having trouble getting udev to pick up the machine's
+devices.
 
-diff --git a/package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch b/package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch
-deleted file mode 100644
-index f0ebe2d..0000000
---- a/package/lcdproc/lcdproc-0.5.5-fix-menu-segfault.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Trying to add a menu item using menu_add_item causes a segmentation fault
--in the LCDd server. This is caused by a read beyond the end of an array.
--
--This patch adds a safety check on the size of the argument array.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/server/commands/menu_commands.c b/server/commands/menu_commands.c
----- a/server/commands/menu_commands.c	2011-08-14 13:29:16.000000000 +0100
--+++ b/server/commands/menu_commands.c	2012-10-04 22:19:07.997409193 +0100
--@@ -198,7 +198,7 @@ menu_add_item_func(Client *c, int argc,
-- 
-- 	/* call menu_set_item() with a temporarily allocated argv
-- 	 * to process the remaining options */
---	if ((argc > 5) || (argv[4][0] == '-')) {
--+	if ((argc > 5) || ((argc == 5) && argv[4][0] == '-')) {
-- 		// menu_add_item <menuid> <newitemid> <type> [<text>]
-- 		// menu_set_item <menuid> <itemid> {<option>}+
-- 		int i, j;
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-index 7914c85..aa204f1 100644
---- a/package/lcdproc/lcdproc.mk
-+++ b/package/lcdproc/lcdproc.mk
-@@ -3,7 +3,7 @@
- # lcdproc
- #
- #############################################################
--LCDPROC_VERSION = 0.5.5
-+LCDPROC_VERSION = 0.5.6
- LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
- LCDPROC_SITE = http://downloads.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
- LCDPROC_LICENSE = GPLv2+
+I have some questions and some details that will (hopefully) help
+identify my problem
+
+Firstly, my kernel is configured to use devtmpfs:
+
+681:CONFIG_DEVTMPFS=y
+682:CONFIG_DEVTMPFS_MOUNT=y
+
+so as I understand it, /dev should be mounted as a tmpfs by the kernel
+and populated with /dev/null, /dev/console etc. Yet, my
+buildroot/output/target contains a dev folder with subdirectories
+created by buildroot.
+
+So, I tried both creating the entries with target/generic_device_table
+for tty0, tty1, console, null. This works, and udev reports it is
+scanning for devices and done, yet /dev never picks up e.g. /dev/sda, or
+/dev/disk/..., or so on. I have, in this configuration, copied
+/usr/lib/udev/rules.d/* to buildroot/output/target/etc/udev/rules.d to
+no avail; as far as I can see whatever rules I supply, even from my
+Fedora or Ubuntu distributions, do not seem to affect udev.
+
+Wondering if this creation method was wrong, I have then removed all of
+the entries in /dev so that the kernel can mount its own devtmpfs. When
+booting, /dev/null and /dev/tty1 are reported as missing. I imagine
+there is nothing in /dev at this stage
+
+Various possibly related points:
+ * I thought udev required udevd, yet I can't see that either running or
+available on the ISO, nor can I find a configuration option to create it.
+ * I have D-Bus built for the system, as I read udev required it.
+ * I can see sda1 in /sys/block/sda/sda1; likewise for other attached
+storage devices.
+
+Am I doing anything very wrong? I get the feeling I must be missing
+something for this to not work, yet I'm not sure what.
+
+Can anyone offer any advice? Happy to provide config snippets etc.
+
+Using buildroot 2012.08.
+
+Thanks,
+
+Antony
+
+
 -- 
-1.7.10.4
+________________
+
+Macrium? Software is a trading name of Paramount Software UK Ltd, 
+Registered in England and Wales Number 02973414
+Registered Office: Kilburn House, Manchester Science Park, Lloyd St. North, 
+Manchester M15 6SE United Kingdom
+
+The information contained in this e-mail is confidential, privileged, or 
+otherwise protected from disclosure. It is intended only for the use of the 
+authorized individual as indicated in the e-mail. Any unauthorized 
+disclosure, copying, distribution or taking of any action based on the 
+contents of this material is strictly prohibited.
+
+If you have received this e-mail in error, please delete it immediately.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 895 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/29afbc10/attachment.asc>
