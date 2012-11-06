@@ -1,66 +1,41 @@
-From: Vasanth Ragavendran <ragavendra.2007@gmail.com>
-Date: Tue, 6 Nov 2012 14:48:39 +0800
-Subject: [Buildroot] Build root local site method
-In-Reply-To: <50984A5F.1060409@mind.be>
-References: <CADfuMF4YnAPm_m6YbjO0oCYPJKxqgGwX9amz7SOXhRB3x3mewg@mail.gmail.com>
- <50984A5F.1060409@mind.be>
-Message-ID: <CADfuMF4EHOgsdNJf89T9SvCSjgRC8Tr4Pk_O4TxHqehuxz1FPw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Nov 2012 08:08:12 +0100
+Subject: [Buildroot] [PATCH v11 2/9] perl: new package
+In-Reply-To: <50986270.4070804@mind.be>
+References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
+ <1350652434-32020-2-git-send-email-francois.perrad@gadz.org>
+ <upcp6k.3q9.ln@bernd-kuhls.de>
+ <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
+ <50986270.4070804@mind.be>
+Message-ID: <20121106080812.4e7bd01a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks you so much Arnout. It works fine. My mistake. I hadn't looked into
-the case sensitive feature. Thanks again!
 
+On Tue, 06 Nov 2012 02:05:52 +0100, Arnout Vandecappelle wrote:
 
-On Tue, Nov 6, 2012 at 7:23 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>   Is it possible that this is because the target binary is created with
+> kernel headers 3.2, but you're running it on a host which is only 2.6.32
+> (squeeze)?  But then it should work on wheezy, because that has 3.2 as
+> well (at least since about four months IIRC).  Although...  240 on i386
+> is futex, which has existed already since long before 2.6.32.
 
-> On 11/05/12 13:41, Vasanth Ragavendran wrote:
->
->> Hi
->>
->> This is with reference to the download method which is specified while
->> compiling a new package. I'm writing certain
->> programs which needs to be cross compiled and run in my embedded board.
->> In my <pkg>.mk file I'm specifying the 'site' to
->> the directory containing my source code and the 'site_method' to "local".
->> I've made necessary changes to the Config.in
->> files in all locations. I am able to select this package of mine from the
->> menuconfig, however the package refuses to
->> build for some unknown reason neither does the build print any errors. It
->> just quietly skips compiling this package and
->> finishes generating the file system. And the location which I'm pointing
->> to in the mk file contains the necessary source
->> code. I'm wondering what step I've skipped. Attaching the Config.in and
->> <pkg>.mk file which I've created for my package.
->> Kindly help as I'm struck in this and unable to proceed. I've referred to
->> the manual but unable to solve this issue.
->>
->
->  FTPCLIENT_INSTALL_TARGET should be YES, in capitals, else it will NOT
-> install.
-> (Actually, YES is the default so you can just remove that line).
->
->  Maybe we should check that _INSTALL_TARGET etc. are either YES or NO.  But
-> I'm afraid that will make an empty make much slower again...  So maybe
-> there
-> should be a 'make ftpclient-wtf-is-wrong-with-**it' that does the checks
-> :-)
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121106/c75c785f/attachment.html>
+Aaah, I didn't think about this problem. This is indeed going to be
+really annoying, if the kernel headers chosen for the target have to
+somewhat match the kernel version running on the host :-(
+
+I guess this whole qemu thing for Perl is going to be annoying on the
+long term. We might need to start looking for a different option, i.e
+seeing how to get Perl to build without needing qemu.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
