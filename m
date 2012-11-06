@@ -1,34 +1,68 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  6 Nov 2012 09:07:54 +0100
-Subject: [Buildroot] [PATCH 3/3] xapp_bitmap: bump to 1.0.6
-In-Reply-To: <1352189274-7000-1-git-send-email-yegorslists@googlemail.com>
-References: <1352189274-7000-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1352189274-7000-3-git-send-email-yegorslists@googlemail.com>
+From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
+Date: Tue, 06 Nov 2012 09:19:33 +0100
+Subject: [Buildroot] [PATCH] package: add knxweb
+In-Reply-To: <20121030135544.6f6d0e40@skate>
+References: <1351599843-24291-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1351599843-24291-4-git-send-email-gregory.hermant@calao-systems.com>
+ <20121030135544.6f6d0e40@skate>
+Message-ID: <5098C815.8080901@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi thomas,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/x11r7/xapp_bitmap/xapp_bitmap.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Le 30/10/2012 13:55, Thomas Petazzoni a ?crit :
+> Dear Gregory Hermant,
+> 
+> On Tue, 30 Oct 2012 13:24:03 +0100, Gregory Hermant wrote:
+>> diff --git a/package/knxweb/knxweb.mk b/package/knxweb/knxweb.mk
+>> new file mode 100644
+>> index 0000000..5ca1760
+>> --- /dev/null
+>> +++ b/package/knxweb/knxweb.mk
+>> @@ -0,0 +1,20 @@
+>> +#############################################################
+>> +#
+>> +# knxweb
+>> +#
+>> +#############################################################
+>> +
+>> +KNXWEB_VERSION = 0.6.1
+>> +KNXWEB_SOURCE = knxweb-$(KNXWEB_VERSION).tar.gz
+>> +KNXWEB_SITE = http://sourceforge.net/projects/linknx/files/knxweb/knxweb-0.6.1/
+> 
+> The tarball has no license information, this is quite annoying.
 
-diff --git a/package/x11r7/xapp_bitmap/xapp_bitmap.mk b/package/x11r7/xapp_bitmap/xapp_bitmap.mk
-index 92428ac..1ce450a 100644
---- a/package/x11r7/xapp_bitmap/xapp_bitmap.mk
-+++ b/package/x11r7/xapp_bitmap/xapp_bitmap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_BITMAP_VERSION = 1.0.3
-+XAPP_BITMAP_VERSION = 1.0.6
- XAPP_BITMAP_SOURCE = bitmap-$(XAPP_BITMAP_VERSION).tar.bz2
- XAPP_BITMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_BITMAP_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXmu xdata_xbitmaps
--- 
-1.7.7
+How can we manage this kind of package in buildroot ?
+> 
+>> +define KNXWEB_INSTALL_TARGET_CMDS
+>> +	mkdir -p $(TARGET_DIR)/var/www
+>> +	cp -rdpf $(@D)/* $(TARGET_DIR)/var/www
+>> +endef
+>> +
+>> +define KNXWEB__UNINSTALL_TARGET_CMDS
+>> +	rm -rf $(TARGET_DIR)/var/www/
+>> +endef
+> 
+> Double _ here, so this doesn't work.
+> 
+> However, how does this web interface works? I see a few PHP scripts,
+> but they don't seem to be essential for the operation of the Web
+> interface. There's a lot of JS though. Does it communicate with the
+> server somehow?
+> 
+knxweb needs a web server with PHP support.
+
+> I'm surprised that no interpreter like PHP, Lua or Python is needed
+> here for the server side, that's why I'm asking.
+> 
+
+> Thanks,
+> 
+> Thomas
+> 
+
+gregory
