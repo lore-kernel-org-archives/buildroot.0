@@ -1,34 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 7 Nov 2012 00:10:43 +0100
-Subject: [Buildroot] [git commit] adding-package-generic.txt:
-	BR2_SOURCEFORGE_MIRROR is no more
-Message-ID: <20121106231131.4612D99C05@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 07 Nov 2012 00:12:48 +0100
+Subject: [Buildroot] no jack?
+In-Reply-To: <CAN0CFw31RjieVoSKf9QOAud5yHe6w-oy_J77V9iLYxu2-pSz5g@mail.gmail.com>
+References: <CAN0CFw31RjieVoSKf9QOAud5yHe6w-oy_J77V9iLYxu2-pSz5g@mail.gmail.com>
+Message-ID: <50999970.3020308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf76170cc3418f36dd9e4daa2f3d0618ce3dc389
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/11/12 22:39, Grant wrote:
+> Is there a jack package available for buildroot?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/manual/adding-packages-generic.txt |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+  No, but it shouldn't be too difficult to integrate.  Look at midori for an
+example of a package using waf as the build system.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index e1b46b0..7ecdb91 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -167,9 +167,7 @@ information is (assuming the package name is +libfoo+) :
-   slash for absolute paths:
-   +scp://[user@]host:/absolutepath+. +
-   If +HOST_LIBFOO_SITE+ is not specified, it defaults to
--  +LIBFOO_SITE+. If none are specified, then the location is assumed
--  to be
--  +http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/packagename+. +
-+  +LIBFOO_SITE+.
-   Examples: +
-     +LIBFOO_SITE=http://www.libfoosoftware.org/libfoo+ +
-     +LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/+ +
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
