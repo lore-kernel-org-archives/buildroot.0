@@ -1,33 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 7 Nov 2012 00:07:51 +0100
-Subject: [Buildroot] [git commit] rpcbind: correct download URL
-Message-ID: <20121106231131.0126099C05@busybox.osuosl.org>
+Date: Wed, 7 Nov 2012 00:10:43 +0100
+Subject: [Buildroot] [git commit] adding-package-generic.txt:
+	BR2_SOURCEFORGE_MIRROR is no more
+Message-ID: <20121106231131.4612D99C05@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=456f9de2fd6feffa465aeef44fb3d0082e3b0e0f
+commit: http://git.buildroot.net/buildroot/commit/?id=cf76170cc3418f36dd9e4daa2f3d0618ce3dc389
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-BR2_SOURCEFORGE_MIRROR is gone.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpcbind/rpcbind.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ docs/manual/adding-packages-generic.txt |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index d9a80de..de9a421 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -5,7 +5,7 @@
- #############################################################
- 
- RPCBIND_VERSION = 0.2.0
--RPCBIND_SITE    = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
-+RPCBIND_SITE    = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
- RPCBIND_SOURCE  = rpcbind-$(RPCBIND_VERSION).tar.bz2
- RPCBIND_LICENSE = BSD-3c
- RPCBIND_LICENSE_FILES = COPYING
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index e1b46b0..7ecdb91 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -167,9 +167,7 @@ information is (assuming the package name is +libfoo+) :
+   slash for absolute paths:
+   +scp://[user@]host:/absolutepath+. +
+   If +HOST_LIBFOO_SITE+ is not specified, it defaults to
+-  +LIBFOO_SITE+. If none are specified, then the location is assumed
+-  to be
+-  +http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/packagename+. +
++  +LIBFOO_SITE+.
+   Examples: +
+     +LIBFOO_SITE=http://www.libfoosoftware.org/libfoo+ +
+     +LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/+ +
