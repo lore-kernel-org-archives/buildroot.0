@@ -1,7 +1,9 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Tue,  6 Nov 2012 10:05:26 +0100
-Subject: [Buildroot] [PATCH v2] package: add libpthsem
-Message-ID: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
+Date: Tue,  6 Nov 2012 10:05:27 +0100
+Subject: [Buildroot] [PATCH v2] package: add bcusdk
+In-Reply-To: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352192728-4816-2-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,114 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- package/Config.in                                  |    1 +
- package/libpthsem/Config.in                        |    9 ++++++
- ...bpthsem-2.0.8-fix-build-on-linux-3.x-host.patch |   28 +++++++++++++++++
- package/libpthsem/libpthsem.mk                     |   33 ++++++++++++++++++++
- 4 files changed, 71 insertions(+)
- create mode 100644 package/libpthsem/Config.in
- create mode 100644 package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
- create mode 100644 package/libpthsem/libpthsem.mk
+ package/Config.in        |    1 +
+ package/bcusdk/Config.in |   11 +++++++++++
+ package/bcusdk/bcusdk.mk |   20 ++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/bcusdk/Config.in
+ create mode 100644 package/bcusdk/bcusdk.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e531c41..941b458 100644
+index 941b458..1a545ef 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -496,6 +496,7 @@ source "package/gsl/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
-+source "package/libpthsem/Config.in"
- source "package/libsigc/Config.in"
- source "package/libtpl/Config.in"
- source "package/liburcu/Config.in"
-diff --git a/package/libpthsem/Config.in b/package/libpthsem/Config.in
+@@ -555,6 +555,7 @@ source "package/argus/Config.in"
+ source "package/arptables/Config.in"
+ source "package/avahi/Config.in"
+ source "package/axel/Config.in"
++source "package/bcusdk/Config.in"
+ source "package/bluez_utils/Config.in"
+ source "package/boa/Config.in"
+ source "package/bind/Config.in"
+diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
 new file mode 100644
-index 0000000..f818ee0
+index 0000000..c7b1b95
 --- /dev/null
-+++ b/package/libpthsem/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBPTHSEM
-+	bool "libpthsem"
-+	select BR2_PACKAGE_ARGP_STANDALONE
++++ b/package/bcusdk/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BCUSDK
++	bool "bcusdk"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBPTHSEM
 +	help
-+	  GNU pth is a user mode multi threading library. pthsem is an extend
-+	  version, with support for semaphores added.
++	  A free development environment for BCU1 and BCU2
 +
-+	  http://www.auto.tuwien.ac.at/~mkoegler/pth/
++	  http://www.auto.tuwien.ac.at/~mkoegler/eib/
 +
-diff --git a/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
++comment "bcusdk requires a toolchain with C++ "
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
 new file mode 100644
-index 0000000..21fff4e
+index 0000000..18e3673
 --- /dev/null
-+++ b/package/libpthsem/libpthsem-2.0.8-fix-build-on-linux-3.x-host.patch
-@@ -0,0 +1,28 @@
-+From 2d0450bfa3fb7003098da1a7fe24c3ae140912dc Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Mon, 22 Oct 2012 15:11:53 +0200
-+Subject: [PATCH] pthsem build on Linux 3.x host
-+
-+
-+Signed-off-by: Michael Markstaller <mm@elabnet.de>
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ acinclude.m4 |    2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 03b42de..fea9bc8 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -892,6 +892,8 @@ case $PLATFORM in
-+         case "x`uname -r`" in
-+ changequote(, )dnl
-+             x2.[23456789]* ) ;;
-++changequote(, )dnl
-++            x3.* ) ;;
-+ changequote([, ])
-+             * ) braindead=yes ;;
-+         esac
-+-- 
-+1.7.9.5
-+
-diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
-new file mode 100644
-index 0000000..4fc9095
---- /dev/null
-+++ b/package/libpthsem/libpthsem.mk
-@@ -0,0 +1,33 @@
++++ b/package/bcusdk/bcusdk.mk
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# libpthsem
++# bcusck
 +#
 +#############################################################
 +
-+LIBPTHSEM_VERSION = 2.0.8
-+LIBPTHSEM_SOURCE = pthsem_$(LIBPTHSEM_VERSION).tar.gz
-+LIBPTHSEM_SITE = http://www.auto.tuwien.ac.at/~mkoegler/pth/
-+LIBPTHSEM_LICENSE = LGPLv2.1+
-+LIBPTHSEM_LICENSE_FILES = COPYING
-+LIBPTHSEM_AUTORECONF = YES
-+LIBPTHSEM_INSTALL_STAGING = YES
-+LIBPTHSEM_DEPENDENCIES = argp-standalone
++BCUSDK_VERSION = 0.0.5
++BCUSDK_SOURCE = bcusdk_$(BCUSDK_VERSION).tar.gz
++BCUSDK_SITE = http://www.auto.tuwien.ac.at/~mkoegler/eib/
++BCUSDK_LICENSE = GPLv2+
++BCUSDK_LICENSE_FILES = COPYING
++BCUSDK_INSTALL_STAGING = YES
++BCUSDK_CONF_OPT =  --enable-onlyeibd --enable-ft12 --enable-pei16 \
++		 --enable-eibnetip --enable-eibnetipserver \
++		 --enable-eibnetiptunnel --without-pth-test \
++		 --with-pth=$(STAGING_DIR)/usr 
 +
-+define LIBPTHSEM_STAGING_LIBPTHSEM_CONFIG_FIXUP
-+	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/pthsem-config
-+	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/pthsem-config
-+endef
-+
-+LIBPTHSEM_POST_INSTALL_STAGING_HOOKS += LIBPTHSEM_STAGING_LIBPTHSEM_CONFIG_FIXUP
-+
-+define LIBPTHSEM_REMOVE_CONFIG_SCRIPTS
-+	$(RM) -f $(TARGET_DIR)/usr/bin/pthsem-config
-+endef
-+
-+ifneq ($(BR2_HAVE_DEVFILES),y)
-+LIBPTHSEM_POST_INSTALL_TARGET_HOOKS += LIBPTHSEM_REMOVE_CONFIG_SCRIPTS
-+endif
-+
++BCUSDK_DEPENDENCIES = libpthsem
 +
 +$(eval $(autotools-package))
-+
 -- 
 1.7.9.5
