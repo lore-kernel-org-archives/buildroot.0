@@ -1,52 +1,68 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Nov 2012 08:20:18 +0100
-Subject: [Buildroot] [git commit] xinetd: add support to use RPC support
-	from libtirpc
-Message-ID: <20121106072428.BEE0B99BFF@busybox.osuosl.org>
+Date: Tue, 6 Nov 2012 08:20:17 +0100
+Subject: [Buildroot] [git commit] lmbench: add support to use libtirpc when
+	available
+Message-ID: <20121106072424.93A5499BFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2b8a97603687add5dd7a39b0dac75400769af50
+commit: http://git.buildroot.net/buildroot/commit/?id=80f7a4b6797d11fbf3808a8af8b5e5f58048f117
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xinetd/xinetd.mk |   19 +++++++++++++++++--
- 1 files changed, 17 insertions(+), 2 deletions(-)
+ package/lmbench/Config.in  |    6 +-----
+ package/lmbench/lmbench.mk |   11 ++++++++++-
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index a420425..cb48145 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -9,10 +9,25 @@ XINETD_SITE          = http://www.xinetd.org
- XINETD_LICENSE       = xinetd license
- XINETD_LICENSE_FILES = COPYRIGHT
+diff --git a/package/lmbench/Config.in b/package/lmbench/Config.in
+index 70449b6..d710e1f 100644
+--- a/package/lmbench/Config.in
++++ b/package/lmbench/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_LMBENCH
+ 	bool "lmbench"
+-	# Uses pmap_set, pmap__unset, pmap_getport, etc.
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  LMbench is a suite of simple, portable,
+ 	  ANSI/C microbenchmarks for UNIX/POSIX.
  
--ifneq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),y)
--XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
-+XINETD_CFLAGS = $(TARGET_CFLAGS)
+ 	  http://sourceforge.net/projects/lmbench/
+-
+-comment "lmbench requires a toolchain with RPC support"
+-	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index d3d0f8f..1932adb 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -9,6 +9,15 @@ LMBENCH_SITE:=http://downloads.sourceforge.net/project/lmbench/development/lmben
+ LMBENCH_LICENSE =  lmbench license (based on GPLv2)
+ LMBENCH_LICENSE_FILES = COPYING COPYING-2
+ 
++LMBENCH_CFLAGS = $(TARGET_CFLAGS)
++LMBENCH_LDLIBS = $(TARGET_LDFLAGS)
 +
-+# Three cases here:
-+#  1. We have libtirpc, use it by passing special flags
-+#  2. We have native RPC support, use it, no need to pass special
-+#     flags (so this case 2 is implicit and not visible below)
-+#  3. We don't have RPC support, pass -DNO_RPC to disable it
 +ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+XINETD_DEPENDENCIES += libtirpc
-+XINETD_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
-+XINETD_LIBS += -ltirpc
-+else ifeq ($(BR2_TOOLCHAIN_HAS_NATIVE_RPC),)
-+XINETD_CFLAGS += -DNO_RPC
- endif
- 
-+XINETD_CONF_ENV += \
-+	CFLAGS="$(XINETD_CFLAGS)" \
-+	LIBS="$(XINETD_LIBS)"
++LMBENCH_DEPENDENCIES += libtirpc
++LMBENCH_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
++LMBENCH_LDFLAGS += -ltirpc
++endif
 +
- XINETD_MAKE_OPT = AR="$(TARGET_AR)"
+ define LMBENCH_CONFIGURE_CMDS
+ 	$(call CONFIG_UPDATE,$(@D))
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
+@@ -18,7 +27,7 @@ define LMBENCH_CONFIGURE_CMDS
+ endef
  
- $(eval $(autotools-package))
+ define LMBENCH_BUILD_CMDS
+-	$(MAKE) CFLAGS="$(TARGET_CFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
++	$(MAKE) CFLAGS="$(LMBENCH_CFLAGS)" LDFLAGS="$(LMBENCH_LDFLAGS)" OS=$(ARCH) CC="$(TARGET_CC)" -C $(@D)/src
+ endef
+ 
+ define LMBENCH_INSTALL_TARGET_CMDS
