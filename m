@@ -1,73 +1,121 @@
-From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Tue,  6 Nov 2012 10:05:28 +0100
-Subject: [Buildroot] [PATCH v2] package: add linknx
-In-Reply-To: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
-References: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1352192728-4816-3-git-send-email-gregory.hermant@calao-systems.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 6 Nov 2012 11:24:58 +0100
+Subject: [Buildroot] [PATCH v11 2/9] perl: new package
+In-Reply-To: <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
+References: <1350652434-32020-1-git-send-email-francois.perrad@gadz.org>
+ <1350652434-32020-2-git-send-email-francois.perrad@gadz.org>
+ <upcp6k.3q9.ln@bernd-kuhls.de>
+ <CAB0FRsvaWPoSfSOv1uyPjpzHMU4a_hxPF_jB4XEhuVUFg4KcSQ@mail.gmail.com>
+Message-ID: <CAB0FRsv058=3G7qbFPS6xrSr_TG5=QDhRKcOU8O6mCot_dCuMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
----
- package/Config.in        |    1 +
- package/linknx/Config.in |    8 ++++++++
- package/linknx/linknx.mk |   18 ++++++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/linknx/Config.in
- create mode 100644 package/linknx/linknx.mk
+2012/11/5 Fran?ois Perrad <francois.perrad@gadz.org>:
+> 2012/10/30 Bernd Kuhls <berndkuhls@hotmail.com>:
+>> Hi,
+>>
+>> Francois Perrad <fperrad@gmail.com> wrote in
+>> news:1350652434-32020-2-git-send-email-francois.perrad at gadz.org:
+>>
+>> currently I am testing your patchset, but I found problems during
+>> compiling, some I could solve myself:
+>>
+>>> +PERL_CONF_OPT = -des \
+>>
+>> [...]
+>>
+>>> +          -Dlibc=$(STAGING_DIR)/lib/libc.so \
+>>
+>> I had to change this line to
+>>
+>>              -Dlibc=$(STAGING_DIR)/usr/lib/libc.so.0 \
+>>
+>> for usage with uClibc 0.9.33.2
+>>
+>> [...]
+>>
+>>> +          -Uoptimize
+>>
+>> Here I had to add "-Ud_eaccess" to avoid a compilation bug.
+>>
+>> Perl will still not finish to compile, stopping with this error message:
+>>
+>>> LD_LIBRARY_PATH=/home/bernd/.fbr/build/output/build/perl-5.16.1
+>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>> ./miniperl -Ilib make_ext.pl cpan/Archive-Extract/pm_to_blib
+>> MAKE=/home/bernd/.fbr/build/output/host/usr/bin/make LIBPERL_A=libperl.so
+>>>         Making Archive::Extract (all)
+>>>
+>>> Creating Makefile.PL in cpan/Archive-Extract for Archive::Extract
+>>>
+>>> Running Makefile.PL in cpan/Archive-Extract
+>>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>> ../../miniperl -I../../lib Makefile.PL INSTALLDIRS=perl INSTALLMAN1DIR=none
+>> INSTALLMAN3DIR=none PERL_CORE=1 LIBPERL_A=libperl.so
+>>> -1 from cpan/Archive-Extract's Makefile.PL at make_ext.pl line 409.
+>>> Warning: No Makefile!
+>>> /home/bernd/.fbr/build/output/host/usr/bin/make config PERL_CORE=1
+>> LIBPERL_A=libperl.so failed, continuing anyway...
+>>> Making all in cpan/Archive-Extract
+>>> /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>> /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
+>> LIBPERL_A=libperl.so
+>>> Unsuccessful make(cpan/Archive-Extract): code=-1 at make_ext.pl line 468.
+>>> make[1]: *** [cpan/Archive-Extract/pm_to_blib] Fehler 22
+>>> make[1]: Leaving directory `/home/bernd/.fbr/build/output/build/perl-
+>> 5.16.1'
+>>> make: *** [/home/bernd/.fbr/build/output/build/perl-5.16.1/.stamp_built]
+>> Fehler 2
+>>
+>> Executing the last command alone provides this error hinting at a problem
+>> with host-qemu, which I was able to solve yet.
+>>
+>> $ /home/bernd/.fbr/build/output/build/perl-5.16.1/Cross/run-qemu-i386
+>> /home/bernd/.fbr/build/output/host/usr/bin/make all PERL_CORE=1
+>> LIBPERL_A=libperl.so
+>> qemu: Unsupported syscall: 240
+>> qemu: Unsupported syscall: 240
+>>
+>> First I got this error message with Debian Squeeze i386 (virtualbox guest,
+>> Win XP host), but also on Debian wheezy amd64 running non-virtualized.
+>>
+>> My .config can be found here: http://pastebin.com/yz1SzeB2
+>> I am using buildroot as part of the FLI4L source package[1].
+>>
+>> Kind regards, Bernd
+>>
+>
+> I could reproduce the lastest problem on the HEAD of Buildroot with
+> qemu_x86_defconfig (which is a smaller config than your FLI4L config).
+>
 
-diff --git a/package/Config.in b/package/Config.in
-index 1a545ef..36803bc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -590,6 +590,7 @@ source "package/iptables/Config.in"
- source "package/iw/Config.in"
- source "package/kismet/Config.in"
- source "package/lighttpd/Config.in"
-+source "package/linknx/Config.in"
- source "package/links/Config.in"
- source "package/linphone/Config.in"
- source "package/lrzsz/Config.in"
-diff --git a/package/linknx/Config.in b/package/linknx/Config.in
-new file mode 100644
-index 0000000..db54171
---- /dev/null
-+++ b/package/linknx/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LINKNX
-+	bool "linknx"
-+	select BR2_PACKAGE_LIBPTHSEM
-+	help
-+	  Linknx is an automation platform providing high level functionalities
-+	  to EIB/KNX installation.
-+	  
-+	  http://linknx.sourceforge.net/
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-new file mode 100644
-index 0000000..8e38c21
---- /dev/null
-+++ b/package/linknx/linknx.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# linknx
-+#
-+#############################################################
-+
-+LINKNX_VERSION = 0.0.1.30
-+LINKNX_SOURCE = linknx-${LINKNX_VERSION}.tar.gz
-+LINKNX_SITE = http://downloads.sourceforge.net/project/linknx/linknx/linknx-${LINKNX_VERSION}
-+LINKNX_LICENSE = GPLv2+
-+LINKNX_LICENSE_FILES = COPYING
-+LINKNX_INSTALL_STAGING = YES
-+LINKNX_CONF_OPT = --without-lua --without-log4cpp --without-pth-test \
-+		  --with-pth=$(STAGING_DIR)/usr
-+
-+LINKNX_DEPENDENCIES = libpthsem
-+
-+$(eval $(autotools-package))
--- 
-1.7.9.5
+first, before manually running a command in the build tree, you must
+set PERL_MM_OPT
+   $ export PERL_MM_OPT="PERL=`pwd`/Cross/miniperl"
+
+the error
+    -1 from cpan/Archive-Extract's Makefile.PL at make_ext.pl line 409.
+comes from miniperl which fails with a 'system' call.
+
+this problem could be reproduced with a simple one-liner :
+
+$ perl -e "my \$code = system( q(echo), q(hello) ); print(\$code);"
+hello
+0
+
+$ Cross/miniperl -e "my \$code = system( q(echo), q(hello) ); print(\$code);"
+-1
+
+Fran?ois
+
+> Fran?ois
+>
+>> [1] http://www.fli4l.de/download/tarball-version/aktuell.html
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
