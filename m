@@ -1,78 +1,94 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed,  7 Nov 2012 20:39:46 +0100
-Subject: [Buildroot] [PATCH 1/1] qextserialport : fix download and bump
-	version
-Message-ID: <1352317186-2905-1-git-send-email-sagaert.johan@skynet.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Nov 2012 21:33:11 +0100
+Subject: [Buildroot] [PATCH] sstrip preserve permissions
+In-Reply-To: <1338083152-2359-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Sat, 26 May 2012 21:45:52 -0400")
+References: <1338083152-2359-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87hap1cfw8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/qextserialport/qextserialport-no-examples.patch | 17 -----------------
- package/qextserialport/qextserialport.mk                | 12 +++++++-----
- 2 files changed, 7 insertions(+), 22 deletions(-)
- delete mode 100644 package/qextserialport/qextserialport-no-examples.patch
+ Danomi> Unlike "strip", the "sstrip" does not preserve the file permissions
+ Danomi> of its target.  So if you have a package that sets special permissions,
+ Danomi> such as the setuid bit, sstrip will remove it.  This patch adds some
+ Danomi> minimal lines to preserve the permissions of stripped files.
 
-diff --git a/package/qextserialport/qextserialport-no-examples.patch b/package/qextserialport/qextserialport-no-examples.patch
-deleted file mode 100644
-index c7d2d41..0000000
---- a/package/qextserialport/qextserialport-no-examples.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Disable compilation of examples
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: qextserialport-ef4af2a2ee3f/qextserialport.pro
--===================================================================
----- qextserialport-ef4af2a2ee3f.orig/qextserialport.pro
--+++ qextserialport-ef4af2a2ee3f/qextserialport.pro
--@@ -1,7 +1,4 @@
-- #
-- TEMPLATE = subdirs
-- CONFIG   += ordered
---SUBDIRS  = src \
---           examples/enumerator \
---           examples/event
---
--+SUBDIRS  = src
-diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
-index 6ffb9eb..f240cda 100644
---- a/package/qextserialport/qextserialport.mk
-+++ b/package/qextserialport/qextserialport.mk
-@@ -4,9 +4,11 @@
- #
- #############################################################
- 
--QEXTSERIALPORT_VERSION     = ef4af2a2ee3f
--QEXTSERIALPORT_SITE        = https://qextserialport.googlecode.com/hg/
--QEXTSERIALPORT_SITE_METHOD = hg
-+QEXTSERIALPORT_VERSION     = f83b4e7ca922e53
-+QEXTSERIALPORT_SITE        = https://qextserialport.googlecode.com/git/
-+QEXTSERIALPORT_SITE_METHOD = git
-+
-+QEXTSERIALPORT_LICENSE = MIT
- 
- QEXTSERIALPORT_DEPENDENCIES = qt
- 
-@@ -24,12 +26,12 @@ define QEXTSERIALPORT_INSTALL_STAGING_CMDS
- 	mkdir -p $(STAGING_DIR)/usr/include/QExtSerialPort
- 	cp $(@D)/src/*.h $(STAGING_DIR)/usr/include/QExtSerialPort/
- 	cp $(@D)/src/QExtSerialPort $(STAGING_DIR)/usr/include/QExtSerialPort/
--	cp -a $(@D)/src/build/*.so* $(STAGING_DIR)/usr/lib/
-+	cp -a $(@D)/*.so* $(STAGING_DIR)/usr/lib/
- 	cp $(@D)/qextserialport.pc $(STAGING_DIR)/usr/lib/pkgconfig/
- endef
- 
- define QEXTSERIALPORT_INSTALL_TARGET_CMDS
--	cp -a $(@D)/src/build/*.so.* $(TARGET_DIR)/usr/lib
-+	cp -a $(@D)/*.so.* $(TARGET_DIR)/usr/lib
- endef
- 
- $(eval $(generic-package))
+What is the use case for this? From a quick look it seems sstrip just
+truncates the source file, so permissions shouldn't change.
+
+setuid (to root) doesn't make much sense as we're building as non-root
+and fixing up permissions at the end using fakeroot (E.G. see
+BUSYBOX_PERMISSIONS).
+
+
+ Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ Danomi> ---
+ Danomi>  .../sstrip/sstrip-20154-preserve-permissions.patch |   43 ++++++++++++++++++++
+ Danomi>  1 file changed, 43 insertions(+)
+ Danomi>  create mode 100644 package/sstrip/sstrip-20154-preserve-permissions.patch
+
+ Danomi> diff --git a/package/sstrip/sstrip-20154-preserve-permissions.patch b/package/sstrip/sstrip-20154-preserve-permissions.patch
+ Danomi> new file mode 100644
+ Danomi> index 0000000..0bd9162
+ Danomi> --- /dev/null
+ Danomi> +++ b/package/sstrip/sstrip-20154-preserve-permissions.patch
+ Danomi> @@ -0,0 +1,43 @@
+ Danomi> +diff -urN sstrip.ORIG/src/sstrip.c sstrip/src/sstrip.c
+ Danomi> +--- sstrip.ORIG/src/sstrip.c	2010-12-11 23:59:51.464374000 -0500
+ Danomi> ++++ sstrip/src/sstrip.c	2012-02-21 11:58:56.320295827 -0500
+ Danomi> +@@ -60,6 +60,10 @@
+ Danomi> + #include	<fcntl.h>
+ Danomi> + #include	<elf.h>
+ Danomi> + 
+ Danomi> ++#include <sys/types.h>
+ Danomi> ++#include <sys/stat.h>
+ Danomi> ++#include <unistd.h>
+ Danomi> ++
+ Danomi> + #ifndef TRUE
+ Danomi> + #define	TRUE		1
+ Danomi> + #define	FALSE		0
+ Danomi> +@@ -427,6 +431,7 @@
+ Danomi> + 
+ Danomi> + 	for (arg = argv + 1 ; *arg != NULL ; ++arg) {
+ Danomi> + 		filename = *arg;
+ Danomi> ++		struct stat sb;
+ Danomi> + 
+ Danomi> + 		fd = open(*arg, O_RDWR);
+ Danomi> + 		if (fd < 0) {
+ Danomi> +@@ -435,6 +440,9 @@
+ Danomi> + 			continue;
+ Danomi> + 		}
+ Danomi> + 
+ Danomi> ++		/* Get original file's permissions */
+ Danomi> ++		if (fstat(fd, &sb) == -1) { perror("fstat"); sb.st_mode = 0; }
+ Danomi> ++
+ Danomi> + 		switch (readelfheaderident(fd, &e.ehdr32)) {
+ Danomi> + 			case ELFCLASS32:
+ Danomi> + 				if (!(readelfheader32(fd, &e.ehdr32)					&&
+ Danomi> +@@ -458,6 +466,10 @@
+ Danomi> + 				++failures;
+ Danomi> + 				break;
+ Danomi> + 		}
+ Danomi> ++
+ Danomi> ++		/* Set original file's permissions, including setuid */
+ Danomi> ++		if (sb.st_mode != 0) { fchmod(fd, sb.st_mode & 07777); }
+ Danomi> ++
+ Danomi> + 		close(fd);
+ Danomi> + 	}
+ Danomi> + 
+ Danomi> -- 
+ Danomi> 1.7.9.5
+
+ Danomi> _______________________________________________
+ Danomi> buildroot mailing list
+ Danomi> buildroot at busybox.net
+ Danomi> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-1.8.0
+Bye, Peter Korsgaard
