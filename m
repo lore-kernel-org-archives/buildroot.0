@@ -1,46 +1,23 @@
-From: =?ISO-8859-1?Q?J=FCrgen?= Benjamin Ronshausen <b.r@rie.eu>
-Date: Wed, 07 Nov 2012 12:04:28 +0100
-Subject: [Buildroot] buildroot for AM3358 AM3359 with wireless-tools
- shared library
-In-Reply-To: <5091AF07.5040803@mind.be>
-References: <50897A02.7000407@rie.eu> <20121025182332.GC5178@tarshish>
- <1351596954.5576.22.camel@debian.fritz.box> <20121030231327.4f22281c@skate>
- <1351683059.5576.42.camel@debian.fritz.box>  <5091AF07.5040803@mind.be>
-Message-ID: <1352286268.3710.9.camel@debian.fritz.box>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Wed, 7 Nov 2012 04:56:13 -0800 (PST)
+Subject: [Buildroot] basic Qt questions
+Message-ID: <1352292973.99906.YahooMailNeo@web164602.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sorry it took me so long.
-
-regards J?rgen
-
-output/toolchain/gcc-4.6.3-intermediate/gcc/config.status
-
-http://pastebin.com/fLGkJmKi
-
-config.log
-
-http://pastebin.com/WEZd2w7n
-
-auto-host.h
-
-http://pastebin.com/sJZXZvAN
-
-On Thu, 2012-11-01 at 00:06 +0100, Arnout Vandecappelle wrote:
-> On 10/31/12 12:30, J?rgen Benjamin Ronshausen wrote:
-> > logfile1's size is 3MB, to big for pastebin, so i uploaded both to
-> > github
-> >
-> > https://github.com/steven11/the-hunt-for-wireless-tools
-> 
->   gcc-intermediate's config thinks that largefile is enabled...  Can you post
-> output/toolchain/gcc-4.6.3-intermediate/gcc/config.status, config.log and
-> auto-host.h?
-> 
->   BTW what kind of build machine do you use?
-> 
->   Regards,
->   Arnout
+I've build linux with GTK support and now I want to try Qt.
+I was using TinyX with frame buffer support. So I have directfb
+options selected in "Graphic libraries and application" menu.
+What I am interested about is the opitons 
+(meaning + what to choose) regarding Qt->Graphics drivers 
+menu (Linux Framebuffer is default choise but what the rest mean).
+Also is there some Qt samples that could be also built - like 
+it was the case with GTK samples ?
+?
+Regards
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121107/928043ad/attachment.html>
