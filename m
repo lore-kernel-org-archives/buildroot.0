@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Nov 2012 20:39:14 +0100
-Subject: [Buildroot] [PATCH 1/1] libmbus : bump version to 0.8
-In-Reply-To: <1352164803-8201-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Tue, 6 Nov 2012 02:20:03 +0100")
-References: <1352164803-8201-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87txt1cie5.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 7 Nov 2012 20:15:22 +0100
+Subject: [Buildroot] [git commit] iw: add license information
+Message-ID: <20121107193959.87A4E99C3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9e15babb4980abeaa4a392145989af11a757ba7d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sagaert> This release contains many improvements bug fixes, and major
- Sagaert> new features and support for float point numbers and support
- Sagaert> for multi-telegram communication...
+Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/iw/iw.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Looks like we can also drop the autoreconf. Committed with that fixed,
-thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 651a2ca..19ede3a 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -7,6 +7,8 @@
+ IW_VERSION = 3.7
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+ IW_SITE = http://wireless.kernel.org/download/iw
++IW_LICENSE = iw license
++IW_LICENSE_FILES = COPYING
+ IW_DEPENDENCIES = host-pkgconf libnl
+ IW_CONFIG = $(IW_DIR)/.config
+ IW_MAKE_ENV = PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
