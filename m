@@ -1,42 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 07 Nov 2012 01:23:07 +0100
-Subject: [Buildroot] [PATCH] add new package fxload
-In-Reply-To: <1352199012-7746-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1352199012-7746-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <5099A9EB.4070200@mind.be>
+From: Wu, Woody <Woody.Wu@landisgyr.com>
+Date: Wed, 7 Nov 2012 03:26:25 +0100
+Subject: [Buildroot] Build a Linux on a Customized Board (SAMSUNG S3C2410
+	ARM)
+Message-ID: <8D7B975D62E20A43BFBC3E04F56C6F29AB6678A6DD@FRPARSV10.mx.bm.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/12 11:50, J?r?my Rosen wrote:
-> Signed-off-by: J?r?my Rosen<jeremy.rosen@openwide.fr>
+Hi, List
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+I want to build a Linux system on a customized board.  I desire to get professional suggestions from you about how possible to have the task done with buildroot.  I also like to know your suggestions what else if not buildroot I still need to go for a learn.
 
-> ---
-> v2: Incorporated comments from Arnout,
+I don't so much care what the version of the resulting OS kernel, I just know a need a c lib to support a set of C applications that originally run on the board.
 
-  Yep, this is the way to separate additional comments from the commit message.
+The board current already had a Linux OS run on it, together with our applications.  I have on-hand three binary image files, a boot loader,
+a kernel image and a root file system image.  But I don't have the source.  Several guys prepared the board and the OS for our company, but it's long long time ago.  These guys had already dismissed their some company and we lost contacts to them.
 
->
-> I am not sure about the make install target line,
->
-> I would have expected prefix= to be set by the environement, but maybe it is not a standard var name for make...
+I know there have one or two customized drivers inside the kernel, but don't know what they are.  I also know, there is a CPLD chip on the board that is doing some memory mapping to translate between virtual addresses to some peripherals.  I see 4 pcs of 16C554DIQ(D2) chips on the board.
 
-  Nope.  The usual variable is DESTDIR.  I guess in fxload they have chosen prefix
-because it's similar to 'configure --prefix'.
+The CPU is a SAMSUNG S3C2410AL-20 ARM. Other common peripherals on the board includes: flash chips, SD card, Ethernet ports.
 
-  Regards,
-  Arnout
+For the unclear hardware, I have a hardware guy who can support me to clarify the functionality of the hardware part. But, as the only firmware guy, I have to build and prepare the Linux OS.  We cannot use the original binary version of Linux any more because we cannot extend that for new needs.
 
-[snip]
+Where should I start? And, whether the famous Buildroot can save my ass?  It will be highly appreciated if you give me any suggestions and clues.
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+--
+woody
+
+
+P PLEASE CONSIDER OUR ENVIRONMENT BEFORE PRINTING THIS EMAIL.
+
+This e-mail (including any attachments) is confidential and may be legally privileged. If you are not an intended recipient or an authorized representative of an intended recipient, you are prohibited from using, copying or distributing the information in this e-mail or its attachments. If you have received this e-mail in error, please notify the sender immediately by return e-mail and delete all copies of this message and any attachments. Thank you.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121107/cd045555/attachment-0001.html>
