@@ -1,64 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 7 Nov 2012 20:38:37 +0100
-Subject: [Buildroot] [git commit] libmbus : bump version to 0.8
-Message-ID: <20121107194001.59E2399C3E@busybox.osuosl.org>
+Date: Wed, 7 Nov 2012 20:24:44 +0100
+Subject: [Buildroot] [git commit] xapp_x11perf: bump to 1.5.4
+Message-ID: <20121107194000.23E4199960@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d727a4da444cb0001f8b5f73e73809780542be65
+commit: http://git.buildroot.net/buildroot/commit/?id=3432745d2a48ec80ad2d8b3b264ca4e8d607cd3a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release contains many improvements bug fixes, and major new features and
-support for float point numbers and support for multi-telegram communication...
-
-[Peter: also drop autoreconf]
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libmbus/libmbus-bcopy.patch |   16 ----------------
- package/libmbus/libmbus.mk          |    6 +-----
- 2 files changed, 1 insertions(+), 21 deletions(-)
+ package/x11r7/xapp_x11perf/xapp_x11perf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmbus/libmbus-bcopy.patch b/package/libmbus/libmbus-bcopy.patch
-deleted file mode 100644
-index 660cc37..0000000
---- a/package/libmbus/libmbus-bcopy.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Drop bcopy since it's deprecated.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura libmbus-0.7.0/mbus/mbus-tcp.c libmbus-0.7.0-bcopy/mbus/mbus-tcp.c
----- libmbus-0.7.0/mbus/mbus-tcp.c	2011-12-08 13:21:19.000000000 -0300
--+++ libmbus-0.7.0-bcopy/mbus/mbus-tcp.c	2012-05-03 09:08:36.987106612 -0300
--@@ -78,7 +78,7 @@
--         return NULL;
--     }
-- 
---    bcopy((void *)(host_addr->h_addr), (void *)(&s.sin_addr), host_addr->h_length);
--+    memmove((void *)(&s.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
-- 
--     if (connect(handle->sock, (struct sockaddr *)&s, sizeof(s)) < 0)
--     {
-diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
-index 16e9e6a..b3cae97 100644
---- a/package/libmbus/libmbus.mk
-+++ b/package/libmbus/libmbus.mk
-@@ -4,12 +4,8 @@
+diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.mk b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+index d58a45c..33e8628 100644
+--- a/package/x11r7/xapp_x11perf/xapp_x11perf.mk
++++ b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
+@@ -4,7 +4,7 @@
  #
- #############################################################
+ ################################################################################
  
--LIBMBUS_VERSION = 0.7.0
-+LIBMBUS_VERSION = 0.8.0
- LIBMBUS_SITE = http://www.freescada.com/public-dist
- LIBMBUS_INSTALL_STAGING = YES
- 
--# Without this the build yields an error:
--#   cannot find input file: `test/Makefile.in'
--LIBMBUS_AUTORECONF = YES
--
- $(eval $(autotools-package))
+-XAPP_X11PERF_VERSION = 1.5.2
++XAPP_X11PERF_VERSION = 1.5.4
+ XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.bz2
+ XAPP_X11PERF_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_X11PERF_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXft
