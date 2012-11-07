@@ -1,33 +1,73 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Wed, 07 Nov 2012 11:00:21 +0100 (CET)
-Subject: [Buildroot] [PATCH] add new package fxload
-In-Reply-To: <87zk2teo8w.fsf@dell.be.48ers.dk>
-Message-ID: <f84ecc2d-4bd7-4d96-a14f-3d79a2d7e983@zimbra2.corp.accelance.fr>
+From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
+Date: Wed, 7 Nov 2012 11:41:27 +0100
+Subject: [Buildroot] [PATCH] boost: bump to version 1.52.0
+In-Reply-To: <1352224420-14184-1-git-send-email-victor.hiairrassary.ml@gmail.com>
+References: <1352224420-14184-1-git-send-email-victor.hiairrassary.ml@gmail.com>
+Message-ID: <BFCCB8B5-B861-4F12-A798-B79846826D38@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-yay, my first commit to buildroot :)
+Hi,
 
-fight key loggers : write some perl using vim
+This is the first time I send a patch to an open source project! The next patch bump boost version to 1.52.0.
 
------ Mail original -----
-> De: "Peter Korsgaard" <jacmet@uclibc.org>
-> ?: "J?r?my Rosen" <jeremy.rosen@openwide.fr>
-> Cc: buildroot at busybox.net
-> Envoy?: Mercredi 7 Novembre 2012 10:49:51
-> Objet: Re: [PATCH] add new package fxload
+For that, I needed to add dependance on BR2_LARGEFILE and exclude the new context lib.
+
+Thanks for buildroot! :)
+
+
+Le 6 nov. 2012 ? 18:53, Victor Hiairrassary <victor.hiairrassary.ml@gmail.com> a ?crit :
+
+> From: mecanix <victor.hiairrassary.ml@gmail.com>
 > 
-> >>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
+> ---
+> package/boost/Config.in | 4 ++++
+> package/boost/boost.mk  | 4 ++--
+> 2 files changed, 6 insertions(+), 2 deletions(-)
 > 
->  J?r?my> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
->  J?r?my> ---
->  J?r?my> v2: Incorporated comments from Arnout,
+> diff --git a/package/boost/Config.in b/package/boost/Config.in
+> index 8798367..58e62a0 100644
+> --- a/package/boost/Config.in
+> +++ b/package/boost/Config.in
+> @@ -1,9 +1,13 @@
+> comment "boost requires a toolchain with C++ support enabled"
+>    depends on !BR2_INSTALL_LIBSTDCPP
 > 
-> Committed, thanks.
+> +comment "boost requires a toolchain with large file support enabled"
+> +    depends on !BR2_LARGEFILE
+> +
+> config BR2_PACKAGE_BOOST
+>    bool "boost"
+>    depends on BR2_INSTALL_LIBSTDCPP
+> +    depends on BR2_LARGEFILE
+>    select BR2_PACKAGE_BZIP2
+>    select BR2_PACKAGE_ZLIB
+>    help
+> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> index 64856bc..005c7ca 100644
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -4,7 +4,7 @@
+> #
+> #############################################################
 > 
-> --
-> Bye, Peter Korsgaard
+> -BOOST_VERSION = 1.49.0
+> +BOOST_VERSION = 1.52.0
+> BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
+> BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
+> BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+> @@ -15,7 +15,7 @@ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
+> BOOST_DEPENDENCIES = bzip2 zlib
+> 
+> BOOST_FLAGS =
+> -BOOST_WITHOUT_FLAGS = python
+> +BOOST_WITHOUT_FLAGS = python context
+> 
+> BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+> BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+> -- 
+> 1.8.0
 > 
