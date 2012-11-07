@@ -1,39 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 07 Nov 2012 20:24:11 +0100
-Subject: [Buildroot] [PATCHv2 10/10] Make savedefconfig save to a
- configured file.
-In-Reply-To: <509A1872.1040108@lucaceresoli.net>
-References: <1351063027-13800-1-git-send-email-arnout@mind.be>
- <1351063027-13800-11-git-send-email-arnout@mind.be>
- <509A1872.1040108@lucaceresoli.net>
-Message-ID: <509AB55B.7090307@mind.be>
+Date: Wed, 07 Nov 2012 22:51:40 +0100
+Subject: [Buildroot] [PATCH v2] package: add libpthsem
+In-Reply-To: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <509AD7EC.6060508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/07/12 09:14, Luca Ceresoli wrote:
->> +1. Set +BR2_DEFCONFIG+ to +<path-to-board-directory>/buildroot.config+
->
-> I've always been saving my Buildroot board config in configs/, to allow
-> me to startup from a clean working copy with a simple:
->    make myboard_defconfig
+On 11/06/12 10:05, Gregory Hermant wrote:
+> Signed-off-by: Gregory Hermant<gregory.hermant@calao-systems.com>
+> +config BR2_PACKAGE_LIBPTHSEM
+> +	bool "libpthsem"
+> +	select BR2_PACKAGE_ARGP_STANDALONE
+> +	help
+> +	  GNU pth is a user mode multi threading library. pthsem is an extend
+> +	  version, with support for semaphores added.
 
-  This was actually in the out-of-buildroot-tree section.  And I removed that
-section completely, so it's irrelevant.
+  If it is similar to pth, then it will probably not work on half our
+architectures...
 
->
-> The location you suggest requires a bit more typing, but it is probably
-> cleaner, and it does not prevent me to continue my way... so:
->
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> +
+> +	  http://www.auto.tuwien.ac.at/~mkoegler/pth/
+[snip]
+> diff --git a/package/libpthsem/libpthsem.mk b/package/libpthsem/libpthsem.mk
+> new file mode 100644
+> index 0000000..4fc9095
+> --- /dev/null
+> +++ b/package/libpthsem/libpthsem.mk
+> @@ -0,0 +1,33 @@
+> +#############################################################
+> +#
+> +# libpthsem
+> +#
+> +#############################################################
+> +
+> +LIBPTHSEM_VERSION = 2.0.8
+> +LIBPTHSEM_SOURCE = pthsem_$(LIBPTHSEM_VERSION).tar.gz
+> +LIBPTHSEM_SITE = http://www.auto.tuwien.ac.at/~mkoegler/pth/
+> +LIBPTHSEM_LICENSE = LGPLv2.1+
+> +LIBPTHSEM_LICENSE_FILES = COPYING
+> +LIBPTHSEM_AUTORECONF = YES
+> +LIBPTHSEM_INSTALL_STAGING = YES
+> +LIBPTHSEM_DEPENDENCIES = argp-standalone
+> +
+> +define LIBPTHSEM_STAGING_LIBPTHSEM_CONFIG_FIXUP
+> +	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/pthsem-config
+> +	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/pthsem-config
 
-  Thanks for all your acks.  I've refreshed the patches, made some additional
-fixes, and will repost right away.
+  The \' quotes are redundant here, no?  And isn't one $(SED) enough if you
+leave out the ^ in the beginning?  Then prefix=.* will match both of them.
+
+> +endef
+> +
+> +LIBPTHSEM_POST_INSTALL_STAGING_HOOKS += LIBPTHSEM_STAGING_LIBPTHSEM_CONFIG_FIXUP
+> +
+> +define LIBPTHSEM_REMOVE_CONFIG_SCRIPTS
+> +	$(RM) -f $(TARGET_DIR)/usr/bin/pthsem-config
+> +endef
+
+  Good idea, I guess there are plenty of packages that should have this as well...
+
 
   Regards,
   Arnout
+
+> +
+> +ifneq ($(BR2_HAVE_DEVFILES),y)
+> +LIBPTHSEM_POST_INSTALL_TARGET_HOOKS += LIBPTHSEM_REMOVE_CONFIG_SCRIPTS
+> +endif
+> +
+> +
+> +$(eval $(autotools-package))
+> +
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
