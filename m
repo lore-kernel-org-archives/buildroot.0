@@ -1,32 +1,78 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 7 Nov 2012 20:24:44 +0100
-Subject: [Buildroot] [git commit] xapp_x11perf: bump to 1.5.4
-Message-ID: <20121107194000.23E4199960@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed,  7 Nov 2012 20:39:46 +0100
+Subject: [Buildroot] [PATCH 1/1] qextserialport : fix download and bump
+	version
+Message-ID: <1352317186-2905-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3432745d2a48ec80ad2d8b3b264ca4e8d607cd3a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/x11r7/xapp_x11perf/xapp_x11perf.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qextserialport/qextserialport-no-examples.patch | 17 -----------------
+ package/qextserialport/qextserialport.mk                | 12 +++++++-----
+ 2 files changed, 7 insertions(+), 22 deletions(-)
+ delete mode 100644 package/qextserialport/qextserialport-no-examples.patch
 
-diff --git a/package/x11r7/xapp_x11perf/xapp_x11perf.mk b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
-index d58a45c..33e8628 100644
---- a/package/x11r7/xapp_x11perf/xapp_x11perf.mk
-+++ b/package/x11r7/xapp_x11perf/xapp_x11perf.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/qextserialport/qextserialport-no-examples.patch b/package/qextserialport/qextserialport-no-examples.patch
+deleted file mode 100644
+index c7d2d41..0000000
+--- a/package/qextserialport/qextserialport-no-examples.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Disable compilation of examples
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: qextserialport-ef4af2a2ee3f/qextserialport.pro
+-===================================================================
+---- qextserialport-ef4af2a2ee3f.orig/qextserialport.pro
+-+++ qextserialport-ef4af2a2ee3f/qextserialport.pro
+-@@ -1,7 +1,4 @@
+- #
+- TEMPLATE = subdirs
+- CONFIG   += ordered
+--SUBDIRS  = src \
+--           examples/enumerator \
+--           examples/event
+--
+-+SUBDIRS  = src
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 6ffb9eb..f240cda 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -4,9 +4,11 @@
  #
- ################################################################################
+ #############################################################
  
--XAPP_X11PERF_VERSION = 1.5.2
-+XAPP_X11PERF_VERSION = 1.5.4
- XAPP_X11PERF_SOURCE = x11perf-$(XAPP_X11PERF_VERSION).tar.bz2
- XAPP_X11PERF_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_X11PERF_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libXft
+-QEXTSERIALPORT_VERSION     = ef4af2a2ee3f
+-QEXTSERIALPORT_SITE        = https://qextserialport.googlecode.com/hg/
+-QEXTSERIALPORT_SITE_METHOD = hg
++QEXTSERIALPORT_VERSION     = f83b4e7ca922e53
++QEXTSERIALPORT_SITE        = https://qextserialport.googlecode.com/git/
++QEXTSERIALPORT_SITE_METHOD = git
++
++QEXTSERIALPORT_LICENSE = MIT
+ 
+ QEXTSERIALPORT_DEPENDENCIES = qt
+ 
+@@ -24,12 +26,12 @@ define QEXTSERIALPORT_INSTALL_STAGING_CMDS
+ 	mkdir -p $(STAGING_DIR)/usr/include/QExtSerialPort
+ 	cp $(@D)/src/*.h $(STAGING_DIR)/usr/include/QExtSerialPort/
+ 	cp $(@D)/src/QExtSerialPort $(STAGING_DIR)/usr/include/QExtSerialPort/
+-	cp -a $(@D)/src/build/*.so* $(STAGING_DIR)/usr/lib/
++	cp -a $(@D)/*.so* $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/qextserialport.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+ endef
+ 
+ define QEXTSERIALPORT_INSTALL_TARGET_CMDS
+-	cp -a $(@D)/src/build/*.so.* $(TARGET_DIR)/usr/lib
++	cp -a $(@D)/*.so.* $(TARGET_DIR)/usr/lib
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+1.8.0
