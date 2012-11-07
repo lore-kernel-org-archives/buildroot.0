@@ -1,35 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Nov 2012 00:09:17 +0100
-Subject: [Buildroot] [PATCH 2/2] Add python3 package
-In-Reply-To: <1352300481-825-3-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Wed, 7 Nov 2012 16:01:21 +0100")
-References: <1352300481-825-1-git-send-email-maxime.ripard@free-electrons.com>
- <1352300481-825-3-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <87vcdh9fj6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 7 Nov 2012 23:35:39 +0100
+Subject: [Buildroot] [git commit] TARGET_CONFIGURE_OPTS: pass READELF
+Message-ID: <20121107231055.9205699C3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a32fa707e5d79c92908bb81142b00afe81a3e3e2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Give the path to the realdelf binary for the target, similar to how we
+do for the other tools.
 
- Maxime> +comment "python requires a toolchain with WCHAR support"
+[Peter: reworded]
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-s/python/python3/
-
- Maxime> +#
- Maxime> +# Development files removal
- Maxime> +#
- Maxime> +define PYTHON3_REMOVE_DEVFILES
- Maxime> +	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
- Maxime> +	rm -f $(TARGET_DIR)/usr/bin/python-config
-
-As far as I can see it doesn't install python-config.
-
-Committed with these minor fixes, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Makefile.in b/package/Makefile.in
+index a939882..9fdc745 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -113,6 +113,7 @@ TARGET_FC       = $(TARGET_CROSS)gfortran
+ TARGET_LD       = $(TARGET_CROSS)ld
+ TARGET_NM       = $(TARGET_CROSS)nm
+ TARGET_RANLIB   = $(TARGET_CROSS)ranlib
++TARGET_READELF  = $(TARGET_CROSS)readelf
+ TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
+ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ 
+@@ -170,6 +171,7 @@ TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+ 		CXX="$(TARGET_CXX)" \
+ 		FC="$(TARGET_FC)" \
+ 		RANLIB="$(TARGET_RANLIB)" \
++		READELF="$(TARGET_READELF)" \
+ 		STRIP="$(TARGET_STRIP)" \
+ 		OBJCOPY="$(TARGET_OBJCOPY)" \
+ 		OBJDUMP="$(TARGET_OBJDUMP)" \
