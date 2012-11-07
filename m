@@ -1,40 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Nov 2012 00:02:09 +0100
-Subject: [Buildroot] [PATCH 1/1] qextserialport : fix download and bump
-	version
-In-Reply-To: <874nl1avsi.fsf@dell.be.48ers.dk>
-References: <1352317186-2905-1-git-send-email-sagaert.johan@skynet.be>
- <874nl1avsi.fsf@dell.be.48ers.dk>
-Message-ID: <20121108000209.223413fe@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 08 Nov 2012 00:09:17 +0100
+Subject: [Buildroot] [PATCH 2/2] Add python3 package
+In-Reply-To: <1352300481-825-3-git-send-email-maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Wed, 7 Nov 2012 16:01:21 +0100")
+References: <1352300481-825-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1352300481-825-3-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <87vcdh9fj6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-On Wed, 07 Nov 2012 23:32:45 +0100, Peter Korsgaard wrote:
-> >>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
-> 
->  Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> 
-> Thanks, but it still doesn't build with a base Qt config here as it
-> tries to link with QtGui / QtNetwork, which imho doesn't make much sense
-> for a serial lib.
-> 
-> Now, I know next to nothing about qmake, but it is probably related to
-> the windows version using QtGui.
-> 
-> Thomas, can you take a look at it?
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-I'll have a look, but I can't say when. I'll most likely be very busy
-over the next 3 weeks or so.
+ Maxime> +comment "python requires a toolchain with WCHAR support"
 
-Best regards,
+s/python/python3/
 
-Thomas
+ Maxime> +#
+ Maxime> +# Development files removal
+ Maxime> +#
+ Maxime> +define PYTHON3_REMOVE_DEVFILES
+ Maxime> +	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)-config
+ Maxime> +	rm -f $(TARGET_DIR)/usr/bin/python-config
+
+As far as I can see it doesn't install python-config.
+
+Committed with these minor fixes, thanks!
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
