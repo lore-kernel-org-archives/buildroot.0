@@ -1,73 +1,25 @@
-From: Victor Hiairrassary <victor.hiairrassary.ml@gmail.com>
-Date: Wed, 7 Nov 2012 11:41:27 +0100
-Subject: [Buildroot] [PATCH] boost: bump to version 1.52.0
-In-Reply-To: <1352224420-14184-1-git-send-email-victor.hiairrassary.ml@gmail.com>
-References: <1352224420-14184-1-git-send-email-victor.hiairrassary.ml@gmail.com>
-Message-ID: <BFCCB8B5-B861-4F12-A798-B79846826D38@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Nov 2012 11:48:38 +0100
+Subject: [Buildroot] [PATCH] cpio/initramfs: clarify their use in the
+	help text
+In-Reply-To: <1352245308-10348-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 7 Nov 2012 00:41:48 +0100")
+References: <1352245308-10348-1-git-send-email-arnout@mind.be>
+Message-ID: <87vcdhelix.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-This is the first time I send a patch to an open source project! The next patch bump boost version to 1.52.0.
+ Arnout> Recent mails on the list show that it is not very clear how to create
+ Arnout> an initial RAM fs with buildroot.  So make this more explicit in the
+ Arnout> cpio and initramfs help texts.  Hopefully this will reduce the /init
+ Arnout> debugging we have to do.
 
-For that, I needed to add dependance on BR2_LARGEFILE and exclude the new context lib.
+Committed, thanks.
 
-Thanks for buildroot! :)
-
-
-Le 6 nov. 2012 ? 18:53, Victor Hiairrassary <victor.hiairrassary.ml@gmail.com> a ?crit :
-
-> From: mecanix <victor.hiairrassary.ml@gmail.com>
-> 
-> ---
-> package/boost/Config.in | 4 ++++
-> package/boost/boost.mk  | 4 ++--
-> 2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/boost/Config.in b/package/boost/Config.in
-> index 8798367..58e62a0 100644
-> --- a/package/boost/Config.in
-> +++ b/package/boost/Config.in
-> @@ -1,9 +1,13 @@
-> comment "boost requires a toolchain with C++ support enabled"
->    depends on !BR2_INSTALL_LIBSTDCPP
-> 
-> +comment "boost requires a toolchain with large file support enabled"
-> +    depends on !BR2_LARGEFILE
-> +
-> config BR2_PACKAGE_BOOST
->    bool "boost"
->    depends on BR2_INSTALL_LIBSTDCPP
-> +    depends on BR2_LARGEFILE
->    select BR2_PACKAGE_BZIP2
->    select BR2_PACKAGE_ZLIB
->    help
-> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-> index 64856bc..005c7ca 100644
-> --- a/package/boost/boost.mk
-> +++ b/package/boost/boost.mk
-> @@ -4,7 +4,7 @@
-> #
-> #############################################################
-> 
-> -BOOST_VERSION = 1.49.0
-> +BOOST_VERSION = 1.52.0
-> BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
-> BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
-> BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
-> @@ -15,7 +15,7 @@ TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
-> BOOST_DEPENDENCIES = bzip2 zlib
-> 
-> BOOST_FLAGS =
-> -BOOST_WITHOUT_FLAGS = python
-> +BOOST_WITHOUT_FLAGS = python context
-> 
-> BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
-> BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
-> -- 
-> 1.8.0
-> 
+-- 
+Bye, Peter Korsgaard
