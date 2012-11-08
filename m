@@ -1,38 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Nov 2012 00:33:32 +0100
-Subject: [Buildroot] [PATCH 1/1] qextserialport : fix download and bump
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 9 Nov 2012 00:31:49 +0100
+Subject: [Buildroot] [git commit] qextserialport : fix download and bump
 	version
-In-Reply-To: <20121108000209.223413fe@skate> (Thomas Petazzoni's message of
- "Thu, 8 Nov 2012 00:02:09 +0100")
-References: <1352317186-2905-1-git-send-email-sagaert.johan@skynet.be>
- <874nl1avsi.fsf@dell.be.48ers.dk> <20121108000209.223413fe@skate>
-Message-ID: <87haoz8yb7.fsf@dell.be.48ers.dk>
+Message-ID: <20121108233354.6B70799C7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=35b7560a1bf9bc3a46ff9d3942fb38bc51c6e378
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../qextserialport-no-examples.patch               |   17 -----------------
+ package/qextserialport/qextserialport.mk           |   12 +++++++-----
+ 2 files changed, 7 insertions(+), 22 deletions(-)
 
- Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
- >> 
- >> Thanks, but it still doesn't build with a base Qt config here as it
- >> tries to link with QtGui / QtNetwork, which imho doesn't make much sense
- >> for a serial lib.
- >> 
- >> Now, I know next to nothing about qmake, but it is probably related to
- >> the windows version using QtGui.
- >> 
- >> Thomas, can you take a look at it?
-
- Thomas> I'll have a look, but I can't say when. I'll most likely be
- Thomas> very busy over the next 3 weeks or so.
-
-Ok, then I'll commit Johan's patch. It's not 100% correct, but it's
-atleast better than what we have now (where download even doesn't work).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/qextserialport/qextserialport-no-examples.patch b/package/qextserialport/qextserialport-no-examples.patch
+deleted file mode 100644
+index c7d2d41..0000000
+--- a/package/qextserialport/qextserialport-no-examples.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Disable compilation of examples
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: qextserialport-ef4af2a2ee3f/qextserialport.pro
+-===================================================================
+---- qextserialport-ef4af2a2ee3f.orig/qextserialport.pro
+-+++ qextserialport-ef4af2a2ee3f/qextserialport.pro
+-@@ -1,7 +1,4 @@
+- #
+- TEMPLATE = subdirs
+- CONFIG   += ordered
+--SUBDIRS  = src \
+--           examples/enumerator \
+--           examples/event
+--
+-+SUBDIRS  = src
+diff --git a/package/qextserialport/qextserialport.mk b/package/qextserialport/qextserialport.mk
+index 6ffb9eb..f240cda 100644
+--- a/package/qextserialport/qextserialport.mk
++++ b/package/qextserialport/qextserialport.mk
+@@ -4,9 +4,11 @@
+ #
+ #############################################################
+ 
+-QEXTSERIALPORT_VERSION     = ef4af2a2ee3f
+-QEXTSERIALPORT_SITE        = https://qextserialport.googlecode.com/hg/
+-QEXTSERIALPORT_SITE_METHOD = hg
++QEXTSERIALPORT_VERSION     = f83b4e7ca922e53
++QEXTSERIALPORT_SITE        = https://qextserialport.googlecode.com/git/
++QEXTSERIALPORT_SITE_METHOD = git
++
++QEXTSERIALPORT_LICENSE = MIT
+ 
+ QEXTSERIALPORT_DEPENDENCIES = qt
+ 
+@@ -24,12 +26,12 @@ define QEXTSERIALPORT_INSTALL_STAGING_CMDS
+ 	mkdir -p $(STAGING_DIR)/usr/include/QExtSerialPort
+ 	cp $(@D)/src/*.h $(STAGING_DIR)/usr/include/QExtSerialPort/
+ 	cp $(@D)/src/QExtSerialPort $(STAGING_DIR)/usr/include/QExtSerialPort/
+-	cp -a $(@D)/src/build/*.so* $(STAGING_DIR)/usr/lib/
++	cp -a $(@D)/*.so* $(STAGING_DIR)/usr/lib/
+ 	cp $(@D)/qextserialport.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+ endef
+ 
+ define QEXTSERIALPORT_INSTALL_TARGET_CMDS
+-	cp -a $(@D)/src/build/*.so.* $(TARGET_DIR)/usr/lib
++	cp -a $(@D)/*.so.* $(TARGET_DIR)/usr/lib
+ endef
+ 
+ $(eval $(generic-package))
