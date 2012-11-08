@@ -1,23 +1,24 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Nov 2012 22:01:08 +0100
-Subject: [Buildroot] [PATCH 1/2] xtensa: add support for the Xtensa
-	architecture
-In-Reply-To: <509b2947.a6e6440a.547c.7082@mx.google.com>
-References: <509b2947.a6e6440a.547c.7082@mx.google.com>
-Message-ID: <509C1D94.2010107@mind.be>
+Date: Thu, 08 Nov 2012 22:09:55 +0100
+Subject: [Buildroot] Udev on a live CD system does not appear to
+ populate /dev
+In-Reply-To: <509AA0C4.4060506@petroprogram.com>
+References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
+ <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
+Message-ID: <509C1FA3.5060206@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/12 04:38, Chris Zankel wrote:
->   config BR2_USE_MMU
-> -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
-> +	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
->   	default y if !BR2_bfin
+On 11/07/12 18:56, Stefan Fr?berg wrote:
+> Nope, no sudo in my live Cd.
+> Just few pre-made device nodes in fs/skeleton/dev
 
-  So the Xtensa, a configurable processor, always has a MMU?
+  So, when buildroot copies these to output/target/dev you get:
+cp: cannot create special file `...': Operation not permitted
+unless you run the build as root.
 
   Regards,
   Arnout
