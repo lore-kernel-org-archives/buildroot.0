@@ -1,32 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Nov 2012 22:52:20 +0100
-Subject: [Buildroot] [PATCH] add new package grantlee
-In-Reply-To: <1351715883-10799-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1351715883-10799-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <509C2994.5060002@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu,  8 Nov 2012 23:04:29 +0100
+Subject: [Buildroot] [PATCH v3 1/2] netatalk: Add missing dependency to
+	netatalk
+Message-ID: <1352412269-11107-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/31/12 21:38, Zoltan at osuosl.org wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Netatalk need host-pkgconf, otherwise the configure script is complaining.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (build-test on an internal ppc toolchain with wchar, C++, X11, Qt)
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/netatalk/netatalk.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index c01e360..4aa179e 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -7,7 +7,7 @@ NETATALK_VERSION = 3.0
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
 
-  Regards,
-  Arnout
-
-PS There is something wrong with your git-send-email setup: the quotes around
-your full name are missing.
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-NETATALK_DEPENDENCIES = openssl berkeleydb libgcrypt libgpg-error
++NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
+ NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+ 	--with-bdb=$(STAGING_DIR)/usr \
+--
+1.7.10.4
