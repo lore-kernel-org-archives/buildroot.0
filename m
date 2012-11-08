@@ -1,37 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Nov 2012 16:12:38 +0100
-Subject: [Buildroot] Udev on a live CD system does not appear to
- populate /dev
-In-Reply-To: <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
-References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
- <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
- <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
-Message-ID: <509BCBE6.8060505@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 8 Nov 2012 16:26:12 +0100
+Subject: [Buildroot] [git commit] kmod: don't build documentation if not
+	needed
+Message-ID: <20121108152636.554B599C7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/12 10:56, Antony Vennard wrote:
-> I'm not using initramfs - I'm using the ISO 9660 target which as far as I can see produces an initrd, a kernel and an
-> ext2 raw image which it mounts as a ramdisk.
+commit: http://git.buildroot.net/buildroot/commit/?id=2fc64312d4840eb777df7e10b8405a364e813b9e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Right!  I completely forgot that!  The iso9660 target is currently broken
-(and has been for quite some time already).  For the time being, you have to
-manually copy fs/cpio/init to the target (either copy it to $1/init in the
-post-build script, or copy it to skeleton/init and do a clean build).
+No sense in building it if we throw it away in target-finalize anyway.
 
-  Or, you could modify fs/iso9660/iso9660.mk and Config.in to use a cpio
-archive as rootfs instead of an ext2.  If you do that and it works, please
-post a patch for inclusion in buildroot, thanks!
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/kmod/kmod.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index c6ef6a1..2833629 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,6 +4,10 @@ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
+ KMOD_INSTALL_STAGING = YES
+ KMOD_DEPENDENCIES = host-pkgconf
+ 
++ifneq ($(BR2_HAVE_DOCUMENTATION),y)
++KMOD_CONF_OPT += --disable-manpages
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ KMOD_DEPENDENCIES += zlib
+ KMOD_CONF_OPT += --with-zlib
