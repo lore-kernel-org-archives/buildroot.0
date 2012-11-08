@@ -1,28 +1,24 @@
-From: Javier Viguera <javier.viguera@digi.com>
-Date: Thu, 8 Nov 2012 17:21:06 +0100
-Subject: [Buildroot] Autotest infrastructure (a bit of off-topic: git
-	repo URL)
-In-Reply-To: <509BC913.3080902@mind.be>
-References: <509BC913.3080902@mind.be>
-Message-ID: <509BDBF2.1060700@digi.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 08 Nov 2012 17:28:03 +0100
+Subject: [Buildroot] [PATCH v4] at91bootstrap: fix overlap linker issue
+In-Reply-To: <1352198903-6297-1-git-send-email-gregory.hermant@calao-systems.com>
+ (Gregory Hermant's message of "Tue, 6 Nov 2012 11:48:23 +0100")
+References: <1352198903-6297-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <878vac9i0c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+>>>>> "Gregory" == Gregory Hermant <gregory.hermant@calao-systems.com> writes:
 
-I attended the other day to your talk on "upgrading without bricking" 
-(congrats for that, i learned a lot) and you mentioned a repo where you 
-have started collecting some tools/scripts to do the job.
+ Gregory> The linker script of the at91bootstrap package has to be
+ Gregory> modified when built from gcc-4.6.x version. Indeed a section
+ Gregory> named text.startup is created and has to be added into the
+ Gregory> text section.
 
-Could you remind me that repo URL? I shouldn't have trust i would 
-remember it some days after.
-
-Sorry the rest for the thread hijacking.
+Committed, thanks.
 
 -- 
-Javier Viguera
-Software Engineer
-Digi International? Spain S.A.U.
+Bye, Peter Korsgaard
