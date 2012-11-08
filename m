@@ -1,50 +1,56 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 8 Nov 2012 11:49:58 +0100
-Subject: [Buildroot] problem building a SDL app with buildroot
-In-Reply-To: <ec166773-a3e8-47b9-be33-ea05a0cfccab@zimbra2.corp.accelance.fr>
-References: <18ba4b30-2ac3-44e7-ae59-5ca40d8137b3@zimbra2.corp.accelance.fr>
- <ec166773-a3e8-47b9-be33-ea05a0cfccab@zimbra2.corp.accelance.fr>
-Message-ID: <CAHXCMMJjaafke3POAv04fdK80L_DWguu+UdbDrah9HSYPfwf-g@mail.gmail.com>
+From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
+Date: Thu, 08 Nov 2012 11:52:39 +0100
+Subject: [Buildroot] [PATCH v2] package: add bcusdk
+In-Reply-To: <509B6EA8.3090605@mind.be>
+References: <1352192728-4816-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1352192728-4816-2-git-send-email-gregory.hermant@calao-systems.com>
+ <509B6EA8.3090605@mind.be>
+Message-ID: <509B8EF7.9090809@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jeremy,
+Le 08/11/2012 09:34, Arnout Vandecappelle a ?crit :
+>> diff --git a/package/bcusdk/Config.in b/package/bcusdk/Config.in
+>> new file mode 100644
+>> index 0000000..c7b1b95
+>> --- /dev/null
+>> +++ b/package/bcusdk/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_BCUSDK
+>> +    bool "bcusdk"
+>> +    depends on BR2_INSTALL_LIBSTDCPP
+>> +    select BR2_PACKAGE_LIBPTHSEM
+> 
+>  ... and the architecture dependencies of libpthsem...
 
-2012/11/8 Jeremy Rosen <jeremy.rosen@openwide.fr>:
-> Hello everybody
->
-> I am trying to compile and package an app that is using the sdl library and I have a problem
->
-> the program uses cmake as its build system and uses a small script called "sdl-config" to find the compile time parameters for sdl.
->
-> that script is provided by the sdl library, and when grepping the output/ directory I can find it installed in
->
-> output/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/bin/sdl-config
->
-> however cmake seems not to be able to find it... I am not sure if the sysroot directory should be added to the path, and if not how I am supposed to have sdl apps find their configureation (I can probably overrid the path to sdl-config for my particual app, but I am wondering if there isn't a more generic problem with the way sdl is installed in the cross-compile environement)
->
-> relevent lines from the cmake configuration file :
->
-> CMakeCache.txt:SDL_CONFIG:STRING=sdl-config
-> CMakeLists.txt: set(SDL_CONFIG "sdl-config" CACHE STRING "Path to sdl-config script")
-> CMakeLists.txt: exec_program(${SDL_CONFIG} ARGS "--cflags" OUTPUT_VARIABLE SDL_CFLAGS)
+Could you please enlighten me on this point ?
 
-As a quick fix, in your app *.mk file, you can try to add:
-<your app prefix>_CONF_OPT += -DSDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config"
-
-You don't have to change anything in the sdl-config from the staging
-area, it is already handled by the sdl package.
+BR,
+gregory
 
 
-BTW, that an issue we are aware of, and we talked a bit about it
-during the last Buildroot Dev Days.
-We just need some time to work on and figure out the best way to fix this.
+
+CALAO SYSTEMS <http://www.calao-systems.com/>
 
 
-Regards,
+*CALAO SYSTEMS*
+Le Magist?re II
+334, rue des Vingt Toises
+38950 Saint Martin le Vinoux
+France
+Phone : *+33 (0)4 76 56 38 05*
+Fax     : *+33 (0)4 76 56 38 06*
 
--- 
-Sam
+Cette communication (y compris les pi?ces jointes) est r?serv?e ? l'usage exclusif du destinataire (des destinataires) et peut contenir des informations privil?gi?es, confidentielles, exempt?es de
+divulgation selon la loi ou prot?g?es par les droits d'auteur. Si vous n'?tes pas un destinataire, toute utilisation, divulgation, distribution, reproduction, examen ou copie (totale ou partielle) est
+non-autoris?e et peut ?tre ill?gale. Tout message ?lectronique est susceptible d'alt?ration et son int?grit? ne peut ?tre assur?e. CALAO SYSTEMS d?cline toute responsabilit? au titre de ce message
+s'il a ?t? modifi? ou falsifi?. Si vous n'?tes pas destinataire de ce message, merci de le d?truire imm?diatement et d'avertir l'exp?diteur de l'erreur de distribution et de la destruction du message.
+Merci.
+
+This transmission (including any attachments) is intended solely for the use of the addressee(s) and may contain confidential information including trade secrets which are privileged, confidential,
+exempt from disclosure under applicable law and/or subject to copyright. If you are not an intended recipient, any use, disclosure, distribution, reproduction, review or copying (either whole or
+partial) is unauthorized and may be unlawful. E-mails are susceptible to alteration and their integrity cannot be guaranteed. CALAO SYSTEMS shall not be liable for this e-mail if modified or
+falsified. If you are not the intended recipient of this e-mail, please delete it immediately from your system and notify the sender of the wrong delivery and the mail deletion. Thank you.
