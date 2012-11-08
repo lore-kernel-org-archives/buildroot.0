@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu,  8 Nov 2012 09:36:16 +0100
-Subject: [Buildroot] [PATCH v3 10/10] Make savedefconfig save to a
-	configured file.
+Date: Thu,  8 Nov 2012 09:36:09 +0100
+Subject: [Buildroot] [PATCH v3 03/10] ctng: add ctng-update-config target
 In-Reply-To: <1352363776-23638-1-git-send-email-arnout@mind.be>
 References: <1352363776-23638-1-git-send-email-arnout@mind.be>
-Message-ID: <1352363776-23638-10-git-send-email-arnout@mind.be>
+Message-ID: <1352363776-23638-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,143 +12,58 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Store BR2_DEFCONFIG in .config, and use it to update the original input
-defconfig file after updating the configuration.  When a config is
-created by using the BR2_DEFCONFIG=... option, this is saved in the
-.config file; later runs of savedefconfig will update that same location.
-It is also possible to configure this place in the interactive
-configuration.
+Analogous to linux-update-config and friends.
 
-The BR2_DEFCONFIG value itself is not saved into the generated
-defconfig, since Kconfig considers it at its default. This is
-intentional, to avoid hard-coding an absolute path in the defconfig.
-It will anyway be set again when the defconfig is used with the
-'make BR2_DEFCONFIG=... defconfig' command.
-
-As a side-effect of this change, the *config options have been moved out
-of the BR2_HAVE_DOT_CONFIG condition.  This doesn't make any functional
-difference, because the .config is still not read for the *config targets.
-However, the defconfig and savedefconfig targets do need to include
-.config now, which makes them slightly slower.
+Also update documentation.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-v3: replaced foo_defconfig documentation with BR2_DEFCONFIG.
----
- Config.in                       |   12 ++++++++++++
- Makefile                        |   17 +++++++++++++----
- docs/manual/customize-store.txt |   10 ++++++----
- 3 files changed, 31 insertions(+), 8 deletions(-)
+ docs/manual/customize-store.txt                  |   11 ++++++-----
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    3 +++
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 68190a5..27afbd1 100644
---- a/Config.in
-+++ b/Config.in
-@@ -16,6 +16,18 @@ config BR2_HOSTARCH
- 
- source "arch/Config.in"
- 
-+config BR2_DEFCONFIG_FROM_ENV
-+	string
-+	option env="BR2_DEFCONFIG"
-+
-+config BR2_DEFCONFIG
-+	string "Location to save buildroot config"
-+	default BR2_DEFCONFIG_FROM_ENV if BR2_DEFCONFIG_FROM_ENV != ""
-+	default "$(CONFIG_DIR)/defconfig"
-+	help
-+	  When running 'make savedefconfig', the defconfig file will be saved
-+	  in this location.
-+
- menu "Build options"
- 
- menu "Commands"
-diff --git a/Makefile b/Makefile
-index 0e9ae92..a1b0742 100644
---- a/Makefile
-+++ b/Makefile
-@@ -56,7 +56,7 @@ DATE:=$(shell date +%Y%m%d)
- export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlocalversion)
- 
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
--	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
-+	%_defconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
- 	source-check print-version
- 
-@@ -557,6 +557,8 @@ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
- 
-+endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-+
- # configuration
- # ---------------------------------------------------------------------------
- 
-@@ -567,7 +569,12 @@ $(BUILD_DIR)/buildroot-config/%onf:
- 	mkdir -p $(@D)/lxdialog
- 	$(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" obj=$(@D) -C $(CONFIG) -f Makefile.br $(@F)
- 
-+DEFCONFIG = $(call qstrip,$(BR2_DEFCONFIG))
-+
-+# We don't want to fully expand BR2_DEFCONFIG here, so Kconfig will
-+# recognize that if it's still at its default $(CONFIG_DIR)/defconfig
- COMMON_CONFIG_ENV = \
-+	BR2_DEFCONFIG='$(call qstrip,$(value BR2_DEFCONFIG))' \
- 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
- 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
-@@ -639,7 +646,7 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
-@@ -647,13 +654,15 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@mkdir -p $(BUILD_DIR)/buildroot-config
--	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< \
-+		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
-+		$(CONFIG_CONFIG_IN)
- 
- # check if download URLs are outdated
- source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
- 
--endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-+.PHONY: defconfig savedefconfig
- 
- #############################################################
- #
 diff --git a/docs/manual/customize-store.txt b/docs/manual/customize-store.txt
-index e1bce3a..c175606 100644
+index aa57660..3eb76ef 100644
 --- a/docs/manual/customize-store.txt
 +++ b/docs/manual/customize-store.txt
-@@ -18,13 +18,15 @@ Buildroot configuration
- ^^^^^^^^^^^^^^^^^^^^^^^
+@@ -59,12 +59,13 @@ configuration files easier.
+   path specified by +BR2_PACKAGE_BUSYBOX_CONFIG+.
+ * +make uclibc-update-config+ saves the uClibc configuration to the
+   path specified by +BR2_UCLIBC_CONFIG+.
++* +make ctng-update-config+ saves the crosstool-NG configuration to the
++  patch specified by +BR2_TOOLCHAIN_CTNG_CONFIG+.
+ * +make barebox-update-defconfig+ saves the barebox configuration to the
+   path specified by +BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE+.
+-* For crosstool-NG and at91bootstrap3 and no helper exists so you
+-  have to copy the config file manually to +BR2_TOOLCHAIN_CTNG_CONFIG+,
+-  resp. +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
+-
++* For at91bootstrap3, no helper exists so you
++  have to copy the config file manually to
++  +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_CONFIG_FILE+.
  
- For storing the buildroot configuration itself, buildroot offers the
--following command: +make savedefconfig+
-+following command: +make savedefconfig+.
- 
- This strips the buildroot configuration down by removing configuration
- options that are@their default value. The result is stored in a file
--called +defconfig+. Copy this file to +foo_defconfig+ in the +configs+
--directory. The configuration can then be rebuilt by running
--+make foo_defconfig+
-+called +defconfig+.  If you want to save it in another place, update set
-+the +BR2_DEFCONFIG+ option, or call make with +make savedefconfig
-+BR2_DEFCONFIG=<path-to-defconfig>+.  The usual place is
-++configs/<boardname>_defconfig+. The configuration can then be rebuilt by
-+running +make <boardname>_defconfig+.
- 
- Alternatively, you can copy the file to any other place and rebuild with
- +make defconfig BR2_DEFCONFIG=<path-to-defconfig-file>+.
+ Creating your own board support
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@ -127,7 +128,7 @@ you can skip the steps that are not relevant for your use case.
+ 1. Write the configuration files:
+    * +make linux-update-defconfig+
+    * +make busybox-update-config+
+-   * +cp <output>/build/build-toolchain/.config board/<manufacturer>/<boardname>/ctng.config+
++   * +make ctng-update-config+
+    * +make uclibc-update-config+
+    * +cp <output>/build/at91bootstrap3-*/.config board/<manufacturer>/<boardname>/at91bootstrap3.config+
+    * +make barebox-update-defconfig+
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+index 5f9119d..85ca71e 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+@@ -397,3 +397,6 @@ ctng-menuconfig: $(CTNG_DIR)/.config
+ 	$(call ctng-oldconfig,$<)
+ 	$(call ctng-check-config-changed,$<,$<.timestamp)
+ 	$(Q)rm -f $<.timestamp
++
++ctng-update-config: $(CTNG_DIR)/.config
++	cp -f $< $(CTNG_CONFIG_FILE)
 -- 
 1.7.10.4
