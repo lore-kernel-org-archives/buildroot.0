@@ -1,9 +1,9 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu,  8 Nov 2012 22:31:13 +0100
+Date: Thu,  8 Nov 2012 22:32:37 +0100
 Subject: [Buildroot] [PATCH 1/2] netatalk: Add missing dependency to netatalk
 In-Reply-To: <CAGduivyH58U-11zTOZRqpcF-HrtFxeunom1xtjPFZaPZBvswpQ@mail.gmail.com>
 References: <CAGduivyH58U-11zTOZRqpcF-HrtFxeunom1xtjPFZaPZBvswpQ@mail.gmail.com>
-Message-ID: <1352410273-10598-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1352410357-10639-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
