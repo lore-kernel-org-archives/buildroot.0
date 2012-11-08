@@ -1,43 +1,29 @@
-From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
-Date: Thu, 08 Nov 2012 09:47:00 +0100
-Subject: [Buildroot] [PATCH 3/6] Add firmware for the AW-NH580
- connectivity module of the snowball
-In-Reply-To: <509055D9.3040805@mind.be>
-References: <1351500073-4351-1-git-send-email-gregory.hermant@calao-systems.com>
- <1351500073-4351-4-git-send-email-gregory.hermant@calao-systems.com>
- <509055D9.3040805@mind.be>
-Message-ID: <509B7184.3090501@calao-systems.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  8 Nov 2012 10:09:58 +0100
+Subject: [Buildroot] [PATCH 1/2] kmod: bump to 11
+Message-ID: <1352365799-27913-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 30/10/2012 23:34, Arnout Vandecappelle a ?crit :
-> 
->> +
->> diff --git a/package/snowball-firmware/snowball-firmware.mk b/package/snowball-firmware/snowball-firmware.mk
->> new file mode 100644
->> index 0000000..05326e2
->> --- /dev/null
->> +++ b/package/snowball-firmware/snowball-firmware.mk
->> @@ -0,0 +1,17 @@
->> +#############################################################
->> +#
->> +# snowball-firmware
->> +#
->> +#############################################################
->> +SNOWBALL_FIRMWARE_VERSION = 1.1.3-5
->> +SNOWBALL_FIRMWARE_SOURCE = ux500-firmware_$(SNOWBALL_FIRMWARE_VERSION).tar.gz
->> +SNOWBALL_FIRMWARE_SITE = https://launchpad.net/~linaro-maintainers/+archive/overlay/+files/
->> +SNOWBALL_FIRMWARE_LICENSE = PROPRIETARY
-> 
->  Again not a very accurate license.  "Snowball click-wrap license" is more
-> appropriate.  It does come pretty close to proprietary, however.  I wonder
-> if the linaro maintainers have permission to redistribute it via launchpad...
-> 
->  The license file is license.txt.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-What do you suggest for the UX500_FIRMWARE_LICENSE = ?
-BR,
-gregory
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/kmod/kmod.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 10f70f5..c6ef6a1 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -1,4 +1,4 @@
+-KMOD_VERSION = 10
++KMOD_VERSION = 11
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
+ KMOD_INSTALL_STAGING = YES
+-- 
+1.7.7
