@@ -1,57 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Nov 2012 22:43:18 +0100
-Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
-In-Reply-To: <20121108201326.2676f417@skate>
-References: <1352028606-11338-1-git-send-email-arnout@mind.be>
- <20121108201326.2676f417@skate>
-Message-ID: <509C2776.2060706@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Thu, 8 Nov 2012 22:44:14 +0100
+Subject: [Buildroot] [PATCH 1/2] netatalk: Add missing dependency to
+	netatalk
+In-Reply-To: <1352410357-10639-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <CAGduivyH58U-11zTOZRqpcF-HrtFxeunom1xtjPFZaPZBvswpQ@mail.gmail.com>
+ <1352410357-10639-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <CAGduivwHS+q348W=XtyNi+Jx0yiTHJtmz4jimxU7WTCDKYT-9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/12 20:13, Thomas Petazzoni wrote:
-> Arnout,
+Sorry, I messed up with the message id and did not end up in the right
+thread (should have tested with my own mail), do you want me to resend
+them so they correctly appear in the right thread (also I should have
+marked them as v2 :/)
+
+On Thu, Nov 8, 2012 at 10:32 PM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> Netatalk need pkg-config, otherwise the configure script is complaining.
 >
-> On Sun,  4 Nov 2012 12:30:06 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> xlib_libX11 builds a makekeys executable for the host, but uses the
->> targets X11_CFLAGS. This leads to build failures like
->> http://autobuild.buildroot.net/results/411eb3aefea859a7e31986a44acd50b475f174cb/
->>
->> This problem was introduced by the version bump, because then also
->> the AUTORECONF was removed so the existing fix didn't work anymore.
->>
->> As a slightly cleaner solution, just remove X11_CFLAGS from the
->> Makefile.  We know we don't need it, because the X11 stuff is in
->> $(HOST_DIR)/usr/include which is already in HOST_CFLAGS.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/netatalk/netatalk.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Hasn't this broken the xlib-x11 build? See
-> http://autobuild.buildroot.org/results/6a5a16f901215acca06cb7a89f7d7fb0bc1741af/build-end.log.
+> diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+> index c01e360..4aa179e 100644
+> --- a/package/netatalk/netatalk.mk
+> +++ b/package/netatalk/netatalk.mk
+> @@ -7,7 +7,7 @@ NETATALK_VERSION = 3.0
+>  NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+>  NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
 >
-> It is including a host header (Xos.h) which itself includes target
-> headers. Sounds really wrong.
-
-  Indeed, and this patch fixes that.  It's a different symptom of the same
-error: makekeys is a host binary, but it's built with target CFLAGS
-(X11_CFLAGS = -I$(STAGING_DIR)/usr/include).  This will barf in surprising
-ways.
-
-  (That is, unless you have an autobuilder that runs against a git tree that
-has already integrated this patch; if that is the case, then I made a
-mistake somewhere.)
-
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> -NETATALK_DEPENDENCIES = openssl berkeleydb libgcrypt libgpg-error
+> +NETATALK_DEPENDENCIES = host-pkg-config openssl berkeleydb libgcrypt libgpg-error
+>  NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+>  NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+>         --with-bdb=$(STAGING_DIR)/usr \
+> --
+> 1.7.10.4
+>
