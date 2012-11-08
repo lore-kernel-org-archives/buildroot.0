@@ -1,32 +1,57 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 8 Nov 2012 22:36:09 +0100
-Subject: [Buildroot] [git commit] libgcrypt: add license information
-Message-ID: <20121108213748.A729A99C34@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 08 Nov 2012 22:43:18 +0100
+Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
+In-Reply-To: <20121108201326.2676f417@skate>
+References: <1352028606-11338-1-git-send-email-arnout@mind.be>
+ <20121108201326.2676f417@skate>
+Message-ID: <509C2776.2060706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ce70d058f55096a16352d4428f6833c953cd9b7c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/08/12 20:13, Thomas Petazzoni wrote:
+> Arnout,
+>
+> On Sun,  4 Nov 2012 12:30:06 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> xlib_libX11 builds a makekeys executable for the host, but uses the
+>> targets X11_CFLAGS. This leads to build failures like
+>> http://autobuild.buildroot.net/results/411eb3aefea859a7e31986a44acd50b475f174cb/
+>>
+>> This problem was introduced by the version bump, because then also
+>> the AUTORECONF was removed so the existing fix didn't work anymore.
+>>
+>> As a slightly cleaner solution, just remove X11_CFLAGS from the
+>> Makefile.  We know we don't need it, because the X11 stuff is in
+>> $(HOST_DIR)/usr/include which is already in HOST_CFLAGS.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+>
+> Hasn't this broken the xlib-x11 build? See
+> http://autobuild.buildroot.org/results/6a5a16f901215acca06cb7a89f7d7fb0bc1741af/build-end.log.
+>
+> It is including a host header (Xos.h) which itself includes target
+> headers. Sounds really wrong.
 
-Signed-off-by: Mark Jackson <mpfj@newflow.co.uk>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libgcrypt/libgcrypt.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+  Indeed, and this patch fixes that.  It's a different symptom of the same
+error: makekeys is a host binary, but it's built with target CFLAGS
+(X11_CFLAGS = -I$(STAGING_DIR)/usr/include).  This will barf in surprising
+ways.
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index db5781b..a320e48 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -6,6 +6,8 @@
- 
- LIBGCRYPT_VERSION = 1.5.0
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
-+LIBGCRYPT_LICENSE = LGPLv2.1+
-+LIBGCRYPT_LICENSE_FILES = COPYING.LIB
- LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
- LIBGCRYPT_INSTALL_STAGING = YES
- 
+  (That is, unless you have an autobuilder that runs against a git tree that
+has already integrated this patch; if that is the case, then I made a
+mistake somewhere.)
+
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
