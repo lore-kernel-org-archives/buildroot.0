@@ -1,36 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Nov 2012 22:17:26 +0100
-Subject: [Buildroot] Udev on a live CD system does not appear to
- populate /dev
-In-Reply-To: <509BD78A.8050908@macrium.com>
-References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
- <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
- <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
- <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
-Message-ID: <509C2166.8050705@mind.be>
+Date: Thu, 08 Nov 2012 22:21:15 +0100
+Subject: [Buildroot] Autotest infrastructure (a bit of off-topic: git
+ repo URL)
+In-Reply-To: <509BDBF2.1060700@digi.com>
+References: <509BC913.3080902@mind.be> <509BDBF2.1060700@digi.com>
+Message-ID: <509C224B.8000405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/08/12 17:02, Antony Vennard wrote:
-> I am using grub, and have modified my grub command line to use:
->
-> title LiveCD
-> kernel /vmlinuz vga=0x317
-> initrd /initramfs.bz2
->
-> The kernel has bz2, xz and gzip initramfs support built in - so all good
-> there. However, the kernel complains there's no root parameter. What
-> should I specify for this?
+  Pretty off-topic indeed... but I don't mind :-)
 
-  If you build a cpio rootfs, you shouldn't need any additional command line
-parameters because the kernel never gets to mounting the root filesystem.  It
-just runs the /init in the initramfs.
+On 11/08/12 17:21, Javier Viguera wrote:
+> I attended the other day to your talk on "upgrading without bricking" (congrats for that, i learned a lot) and you
+> mentioned a repo where you have started collecting some tools/scripts to do the job.
+>
+> Could you remind me that repo URL? I shouldn't have trust i would remember it some days after.
 
-  Using a cpio rootfs should also solve your problems with the device nodes,
-because we provide a /init that mounts devtmpfs explicitly.
+  https://gitorious.org/gupies
+
+  But as I mentioned, it's still pretty empty...  I expect to really start
+committing something in a week or two.
+
+  I've also created a mailing list, but it's on google groups which sucks
+somewhat: https://groups.google.com/group/gupies/subscribe
+If you have a better idea, I'd welcome that.
 
   Regards,
   Arnout
