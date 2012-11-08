@@ -1,164 +1,107 @@
 From: Chris Zankel <chris@zankel.net>
-Date: Wed, 07 Nov 2012 19:38:45 -0800
-Subject: [Buildroot] [PATCH 1/2] xtensa: add support for the Xtensa
-	architecture
-Message-ID: <509b2947.a6e6440a.547c.7082@mx.google.com>
+Date: Wed, 07 Nov 2012 19:38:52 -0800
+Subject: [Buildroot] [PATCH 2/2] xtensa: support configurable processor
+	configurations
+Message-ID: <509b294d.49eb440a.3492.7475@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original support for the Xtensa architecture in buildroot required a lot
-of special handling and additional files, so it became hard to maintain.
-This implementation is much more aligned to other architectures with only
-minimal overhead.
+Xtensa is a configurable processor architecture, which allows to define
+additional instructions and registers. The required variant specific
+information for the toolchain is delivered in an 'overlay' file, which
+needs to be 'untarred' to the corresponding directories after the
+source is installed and patched.
+This patch provides support for binutils, gcc, and gdb with a very
+limited changes to the build scripts. These additions are only executed
+for the Xtensa architecture and have no effect on other architectures.
 
 Signed-off-by: Chris Zankel <chris@zankel.net>
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 4d1f81f..ad4a9e0 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -145,6 +145,13 @@ config BR2_x86_64
- 	  architecture compatible microprocessor).
- 	  http://en.wikipedia.org/wiki/X86_64
- 
-+config BR2_xtensa
-+	bool "Xtensa"
-+	help
-+	  Xtensa is a Tensilica processor IP architecture.
-+	  http://en.wikipedia.org/wiki/Xtensa
-+	  http://www.tensilica.com/
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+new file mode 100644
+index 0000000..61c0235
+--- /dev/null
++++ b/arch/Config.in.xtensa
+@@ -0,0 +1,30 @@
++choice
++	prompt "Target ABI"
++	depends on BR2_xtensa
++	default BR2_xtensa_fsf
++config BR2_xtensa_custom
++	bool "Custom Xtensa processor configuration"
++config BR2_xtensa_fsf
++	bool "fsf - Default configuration"
++endchoice
 +
- endchoice
- 
- config BR2_microblaze
-@@ -158,4 +165,5 @@ source "arch/Config.in.powerpc"
- source "arch/Config.in.sh"
- source "arch/Config.in.sparc"
- source "arch/Config.in.x86"
-+source "arch/Config.in.xtensa"
- source "arch/Config.in.common"
-diff --git a/arch/Config.in.common b/arch/Config.in.common
-index 1ed9929..d2bfd59 100644
---- a/arch/Config.in.common
-+++ b/arch/Config.in.common
-@@ -49,6 +49,7 @@ config BR2_ARCH
- 	default "sh4aeb"	if BR2_sh4aeb
- 	default "sh64"		if BR2_sh64
- 	default "sparc"		if BR2_sparc
-+	default "xtensa"	if BR2_xtensa
- 
- 
- config BR2_ENDIAN
-diff --git a/linux/Config.in b/linux/Config.in
-index 277ef0e..29a2110 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -152,7 +152,8 @@ config BR2_LINUX_KERNEL_BZIMAGE
- 
- config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
--	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64
-+	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || \
-+		   BR2_sh || BR2_sh64 || BR2_xtensa
- 
- config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
- 	bool "zImage with appended DT"
-diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
-index c304572..3622f3d 100644
---- a/package/autoconf/Config.in
-+++ b/package/autoconf/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_AUTOCONF
- 	bool "autoconf"
--	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
-+	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
-+	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
- 	select BR2_PACKAGE_PERL
- 	help
- 	  Extensible program for developing configure scripts.  These
-@@ -9,4 +10,5 @@ config BR2_PACKAGE_AUTOCONF
- 	  http://www.gnu.org/software/autoconf/
- 
- comment "autoconf requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
-+	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
-+		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
-diff --git a/package/automake/Config.in b/package/automake/Config.in
-index f8d74ef..6e48517 100644
---- a/package/automake/Config.in
-+++ b/package/automake/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_AUTOMAKE
- 	bool "automake"
--	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
-+	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
-+	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
- 	select BR2_PACKAGE_AUTOCONF
- 	select BR2_PACKAGE_PERL
- 	help
-@@ -10,4 +11,5 @@ config BR2_PACKAGE_AUTOMAKE
- 	  http://www.gnu.org/software/automake/
- 
- comment "automake requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
-+	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
-+		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index a65ca48..4cce767 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
- 	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
-+	depends on !BR2_xtensa
- 	select BR2_PACKAGE_LIBELF
- 	help
- 	  Debugging program which runs a specified command until it exits.
-diff --git a/package/perl/Config.in b/package/perl/Config.in
-index 0642deb..2906714 100644
---- a/package/perl/Config.in
-+++ b/package/perl/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_PERL
- 	depends on !BR2_sh3
- 	depends on !BR2_sh3eb
- 	depends on !BR2_sh64
-+	depends on !BR2_xtensa
- 	help
- 	  Larry Wall's Practical Extraction and Report Language
- 	  An interpreted scripting language, known among some as "Unix's Swiss
-@@ -47,4 +48,5 @@ config BR2_PACKAGE_PERL_GDBM_FILE
++config BR2_xtensa_custom_name
++	string "Custom Xtensa processor configuration anme"
++	depends on BR2_xtensa_custom
++	default ""
++	help
++	  Name given to a custom Xtensa processor configuration.
++
++config BR2_xtensa_core_name
++	string
++	default BR2_xtensa_custom_name	if BR2_xtensa_custom
++	default ""			if BR2_xtensa_fsf
++
++config BR2_xtensa_overlay_dir
++	string "Overlay directory for custom configuration"
++	depends on BR2_xtensa_custom
++	default ""
++	help
++	  Provide a directory path that contains the overlay files
++	  for the custom configuration. The path is based on the
++	  buildroot top directory.
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index e1aac9b..0c69cb5 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -66,5 +66,14 @@ define BINUTILS_INSTALL_TARGET_CMDS
+ endef
  endif
  
- comment "perl requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
-+	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
-+		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 4c2a28b..9f11a39 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -93,7 +93,7 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
- 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
++XTENSA_CORE_NAME = $(call qstrip, $(BR2_xtensa_core_name))
++ifneq ($(XTENSA_CORE_NAME),)
++define BINUTILS_XTENSA_PRE_PATCH
++	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(XTENSA_CORE_NAME).tar \
++		-C $(@D) bfd include ld
++endef
++HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 1a075cc..1710070 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -251,6 +251,10 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+ 	rm -rf $(GCC_DIR)
+ 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+ 	$(call CONFIG_UPDATE,$(@D))
++ifneq ($(call qstrip, $(BR2_xtensa_core_name)),)
++	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(call qstrip,\
++		$(BR2_xtensa_core_name)).tar -C $(@D) include
++endif
+ 	touch $@
  
- config BR2_USE_MMU
--	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
-+	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
- 	default y if !BR2_bfin
- 	help
- 	  If your target has a MMU, you should say Y here.  If you
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 8cf59bc..055267c 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -38,6 +38,7 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
- 		-e 's/sh[234].*/sh/' \
- 		-e 's/mips.*/mips/' \
- 		-e 's/cris.*/cris/' \
-+		-e 's/xtensa.*/xtensa/' \
- ")
- 
- UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
+ gcc-patched: $(GCC_DIR)/.patched
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 6b029a8..dc305a6 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -25,6 +25,10 @@ gdb-unpacked: $(GDB_DIR)/.unpacked
+ $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
+ 	mkdir -p $(GDB_DIR)
+ 	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(GDB_DIR) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
++ifneq ($(call qstrip, $(BR2_xtensa_core_name)),)
++	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(call qstrip, \
++		$(BR2_xtensa_core_name)).tar -C $(@D) bfd include gdb
++endif
+ ifneq ($(wildcard $(GDB_PATCH_DIR)),)
+ 	support/scripts/apply-patches.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
+ endif
