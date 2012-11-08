@@ -1,36 +1,65 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Wed, 7 Nov 2012 21:26:19 -0200
-Subject: [Buildroot] [PATCH 1/1] qextserialport : fix download and bump
-	version
-In-Reply-To: <874nl1avsi.fsf@dell.be.48ers.dk>
-References: <1352317186-2905-1-git-send-email-sagaert.johan@skynet.be>
- <874nl1avsi.fsf@dell.be.48ers.dk>
-Message-ID: <CAExDhvZVYFjMHZvcoC4MAMjWS+cyaPt33tBNfFvtA9GavXc54A@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 7 Nov 2012 21:47:27 -0500
+Subject: [Buildroot] [PATCH] sstrip preserve permissions
+In-Reply-To: <87hap1cfw8.fsf@dell.be.48ers.dk>
+References: <1338083152-2359-1-git-send-email-danomimanchego123@gmail.com>
+ <87hap1cfw8.fsf@dell.be.48ers.dk>
+Message-ID: <CANxTyt7YdwDGWSaOaYrxw+XroAokpjy8uL8hP+0RBXAVJrkXmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 7, 2012 at 8:32 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->
-> >>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
->
->  Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
->
-> Thanks, but it still doesn't build with a base Qt config here as it
-> tries to link with QtGui / QtNetwork, which imho doesn't make much sense
-> for a serial lib.
->
+Hi Peter,
 
-It's quite likely one of the examples being built.
-The changeset removes a patch that removes the examples, but you don't
-actually have to do that, you can build from within src and the .pro
-in there will most likely have a line with QT -= gui, just like the
-QtSerialPort package I sent a while back.
+>  Danomi> Unlike "strip", the "sstrip" does not preserve the file permissions
+>  Danomi> of its target.  So if you have a package that sets special permissions,
+>  Danomi> such as the setuid bit, sstrip will remove it.  This patch adds some
+>  Danomi> minimal lines to preserve the permissions of stripped files.
+>
+> What is the use case for this? From a quick look it seems sstrip just
 
-The toplevel .pro file tells qmake that those listed folders should be
-built and each contain a .pro file inside that matches the folder
-name. It will simply iterate thru them and call qmake over them.
-Those "subprojects" contain the actual description of how to build the
-project, which qmake reads.
+We have a proprietary CGI app that gets called by lighttpd, so the
+caller isn't root.  I don't quite remember the exact operation that
+caused us to do a chmod +s.  That's when we noticed that the +s perms
+were disappearing when sstrip was used, but conserved when strip was
+used.
+
+
+> truncates the source file, so permissions shouldn't change.
+
+Nope.  Just try it on a file that gets cut down.  For example:
+
+	$ ll output/target/usr/bin/i2cdetect
+	-rwxr-xr-x 1 dmocelo dmocelo 34726 Nov  7 21:34
+output/target/usr/bin/i2cdetect*
+
+	$ chmod a+s output/target/usr/bin/i2cdetect
+
+	$ ll output/target/usr/bin/i2cdetect
+	-rwsr-sr-x 1 dmocelo dmocelo 34726 Nov  7 21:34
+output/target/usr/bin/i2cdetect*
+
+	$ # now I'll run a make with sstrip enabled
+	$ make
+	...
+
+	$ ll output/target/usr/bin/i2cdetect
+	-rwxr-xr-x 1 dmocelo dmocelo 11630 Nov  7 21:36
+output/target/usr/bin/i2cdetect*
+
+
+> setuid (to root) doesn't make much sense as we're building as non-root
+> and fixing up permissions at the end using fakeroot (E.G. see
+> BUSYBOX_PERMISSIONS).
+
+We make our packages to be friendly to multiple build systems, so the
+package makefile's install operation is taking care of the special
+permission, rather than using a buildroot-specific mechanism.
+
+But regardless, I was thinking that the difference compared to normal
+strip operation was reason enough to want to preserve permissions.
+No?
+
+Danomi -
