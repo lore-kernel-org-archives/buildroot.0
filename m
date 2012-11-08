@@ -1,27 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 Nov 2012 22:09:55 +0100
+Date: Thu, 08 Nov 2012 22:17:26 +0100
 Subject: [Buildroot] Udev on a live CD system does not appear to
  populate /dev
-In-Reply-To: <509AA0C4.4060506@petroprogram.com>
+In-Reply-To: <509BD78A.8050908@macrium.com>
 References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
  <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
-Message-ID: <509C1FA3.5060206@mind.be>
+ <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
+ <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
+Message-ID: <509C2166.8050705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/07/12 18:56, Stefan Fr?berg wrote:
-> Nope, no sudo in my live Cd.
-> Just few pre-made device nodes in fs/skeleton/dev
+On 11/08/12 17:02, Antony Vennard wrote:
+> I am using grub, and have modified my grub command line to use:
+>
+> title LiveCD
+> kernel /vmlinuz vga=0x317
+> initrd /initramfs.bz2
+>
+> The kernel has bz2, xz and gzip initramfs support built in - so all good
+> there. However, the kernel complains there's no root parameter. What
+> should I specify for this?
 
-  So, when buildroot copies these to output/target/dev you get:
-cp: cannot create special file `...': Operation not permitted
-unless you run the build as root.
+  If you build a cpio rootfs, you shouldn't need any additional command line
+parameters because the kernel never gets to mounting the root filesystem.  It
+just runs the /init in the initramfs.
+
+  Using a cpio rootfs should also solve your problems with the device nodes,
+because we provide a /init that mounts devtmpfs explicitly.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
