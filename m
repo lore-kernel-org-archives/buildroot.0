@@ -1,28 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Nov 2012 17:32:54 +0100
-Subject: [Buildroot] no jack?
-In-Reply-To: <50999970.3020308@mind.be> (Arnout Vandecappelle's message of
- "Wed, 07 Nov 2012 00:12:48 +0100")
-References: <CAN0CFw31RjieVoSKf9QOAud5yHe6w-oy_J77V9iLYxu2-pSz5g@mail.gmail.com>
- <50999970.3020308@mind.be>
-Message-ID: <874nl09hs9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Nov 2012 18:36:49 +0100
+Subject: [Buildroot] problem building a SDL app with buildroot
+In-Reply-To: <CAHXCMMJjaafke3POAv04fdK80L_DWguu+UdbDrah9HSYPfwf-g@mail.gmail.com>
+References: <18ba4b30-2ac3-44e7-ae59-5ca40d8137b3@zimbra2.corp.accelance.fr>
+ <ec166773-a3e8-47b9-be33-ea05a0cfccab@zimbra2.corp.accelance.fr>
+ <CAHXCMMJjaafke3POAv04fdK80L_DWguu+UdbDrah9HSYPfwf-g@mail.gmail.com>
+Message-ID: <20121108183649.0cae75f1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Samuel,
 
- Arnout> On 06/11/12 22:39, Grant wrote:
- >> Is there a jack package available for buildroot?
+On Thu, 8 Nov 2012 11:49:58 +0100, Samuel Martin wrote:
 
- Arnout>  No, but it shouldn't be too difficult to integrate.  Look at
- Arnout> midori for an example of a package using waf as the build
- Arnout> system.
+> As a quick fix, in your app *.mk file, you can try to add:
+> <your app prefix>_CONF_OPT += -DSDL_CONFIG="$(STAGING_DIR)/usr/bin/sdl-config"
+> 
+> You don't have to change anything in the sdl-config from the staging
+> area, it is already handled by the sdl package.
+> 
+> BTW, that an issue we are aware of, and we talked a bit about it
+> during the last Buildroot Dev Days.
+> We just need some time to work on and figure out the best way to fix this.
 
-Waf is btw a pain. It seems to fail on one of the autobuilders (host
-python issue?)
+We indeed discussed it, but as far as I understood, there isn't really
+another solution than what we're doing at the moment. Options we
+discussed where:
 
+ (1) Install those <foo>-config scripts in $(HOST_DIR)/usr/bin. This
+ isn't possible as they would clash with other <foo>-config scripts
+ installed by host packages.
+
+ (2) Create a special directory, which is in the PATH passed when
+ configuring/building packages, in which we would install those
+ <foo>-config script. This works quite OK when those <foo>-config
+ scripts are self-contained (which is the case most of the time), but
+ not necessarily if they are more elaborate.
+
+So in general, I think we said it wasn't really worth the effort, and
+it was probably a lot better to work on moving packages to pkg-config
+instead.
+
+For example, in this case, Jeremy should rather use the pkg-config
+files of SDL to discover the right compiler/linker flags. pkg-config is
+very nicely integrated with CMake, it should even simplify the
+CMakeLists.txt.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
