@@ -1,43 +1,38 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 8 Nov 2012 23:07:32 +0100
-Subject: [Buildroot] [PATCH v3 1/2] netatalk: Add missing dependency to
-	netatalk
-In-Reply-To: <1352412269-11107-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1352412269-11107-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <CAGduivxSHZHWyU2e1OMM7RYSgUhaHxtHMkcRT2DPkRJyWam8YA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 Nov 2012 00:33:32 +0100
+Subject: [Buildroot] [PATCH 1/1] qextserialport : fix download and bump
+	version
+In-Reply-To: <20121108000209.223413fe@skate> (Thomas Petazzoni's message of
+ "Thu, 8 Nov 2012 00:02:09 +0100")
+References: <1352317186-2905-1-git-send-email-sagaert.johan@skynet.be>
+ <874nl1avsi.fsf@dell.be.48ers.dk> <20121108000209.223413fe@skate>
+Message-ID: <87haoz8yb7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Okay, here is the real patch v2, the one I sent before this one was
-the same as the real first one so don't take it into account.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Again sorry about the subject missing a v2/v3.
+Hi,
 
-On Thu, Nov 8, 2012 at 11:04 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> Netatalk need host-pkgconf, otherwise the configure script is complaining.
->
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/netatalk/netatalk.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-> index c01e360..4aa179e 100644
-> --- a/package/netatalk/netatalk.mk
-> +++ b/package/netatalk/netatalk.mk
-> @@ -7,7 +7,7 @@ NETATALK_VERSION = 3.0
->  NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
->  NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
->
-> -NETATALK_DEPENDENCIES = openssl berkeleydb libgcrypt libgpg-error
-> +NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
->  NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
->  NETATALK_CONF_OPT += --with-cnid-cdb-backend \
->         --with-bdb=$(STAGING_DIR)/usr \
-> --
-> 1.7.10.4
->
+ Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+ >> 
+ >> Thanks, but it still doesn't build with a base Qt config here as it
+ >> tries to link with QtGui / QtNetwork, which imho doesn't make much sense
+ >> for a serial lib.
+ >> 
+ >> Now, I know next to nothing about qmake, but it is probably related to
+ >> the windows version using QtGui.
+ >> 
+ >> Thomas, can you take a look at it?
+
+ Thomas> I'll have a look, but I can't say when. I'll most likely be
+ Thomas> very busy over the next 3 weeks or so.
+
+Ok, then I'll commit Johan's patch. It's not 100% correct, but it's
+atleast better than what we have now (where download even doesn't work).
+
+-- 
+Bye, Peter Korsgaard
