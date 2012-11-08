@@ -1,29 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 8 Nov 2012 11:10:50 +0100
-Subject: [Buildroot] [git commit] kmod: bump to 11
-Message-ID: <20121108101149.F2B7E99C76@busybox.osuosl.org>
+Date: Thu, 8 Nov 2012 11:11:00 +0100
+Subject: [Buildroot] [git commit] lm-sensors: bump to 3.3.3
+Message-ID: <20121108101150.C4B8C99C76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4c0618b51c6b9a17d57364c621d6f279718a974
+commit: http://git.buildroot.net/buildroot/commit/?id=8ab9660933b76e53e316e973cacdc1ae3655f3b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/kmod/kmod.mk |    2 +-
+ package/lm-sensors/lm-sensors.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 10f70f5..c6ef6a1 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -1,4 +1,4 @@
--KMOD_VERSION = 10
-+KMOD_VERSION = 11
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
- KMOD_INSTALL_STAGING = YES
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index ba183ec..34aa742 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LM_SENSORS_VERSION = 3.3.2
++LM_SENSORS_VERSION = 3.3.3
+ LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
+ LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
+ LM_SENSORS_INSTALL_STAGING = YES
