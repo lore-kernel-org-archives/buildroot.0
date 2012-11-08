@@ -1,28 +1,30 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 08 Nov 2012 21:25:11 +0200
-Subject: [Buildroot] Need arm-buildroot config and arm-linux config
-Message-ID: <509C0717.7030100@petroprogram.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 08 Nov 2012 22:01:08 +0100
+Subject: [Buildroot] [PATCH 1/2] xtensa: add support for the Xtensa
+	architecture
+In-Reply-To: <509b2947.a6e6440a.547c.7082@mx.google.com>
+References: <509b2947.a6e6440a.547c.7082@mx.google.com>
+Message-ID: <509C1D94.2010107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone
+On 11/08/12 04:38, Chris Zankel wrote:
+>   config BR2_USE_MMU
+> -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
+> +	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
+>   	default y if !BR2_bfin
 
-I have now tried several times to build working arm-virtual image for
-use with qemu.
-Once i even managed to run it with qemu but then I made some changes
-that I don't remember anymore
-and it has stopped working again (just black screen in qemu).
+  So the Xtensa, a configurable processor, always has a MMU?
 
-Could somebody kindly provide a minimal (just kernel, uclibc and busybox
-is enough),
-working arm buildroot .config and arm kernel .config  so
-that I can run it under qemu, so that I can finally start testing
-firefox under arm, so that
-I can finally kick the updated, cleaned firefox patch out before
-Christmas :-)
-
-Best regards
-Stefan
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
