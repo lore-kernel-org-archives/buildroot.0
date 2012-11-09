@@ -1,63 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 9 Nov 2012 08:12:31 +0100
-Subject: [Buildroot] [git commit] xlib_libX11: fix compilation of makekeys
-Message-ID: <20121109082217.DEDC699C94@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 Nov 2012 09:22:39 +0100
+Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
+In-Reply-To: <20121109090946.3c88e6f2@skate> (Thomas Petazzoni's message of
+ "Fri, 9 Nov 2012 09:09:46 +0100")
+References: <1352028606-11338-1-git-send-email-arnout@mind.be>
+ <20121108201326.2676f417@skate> <509C2776.2060706@mind.be>
+ <20121109090946.3c88e6f2@skate>
+Message-ID: <87zk2r6v8w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc73d4d262bd9c1ba6f6874f93513d9ca56a1ddb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-xlib_libX11 builds a makekeys executable for the host, but uses the
-targets X11_CFLAGS. This leads to build failures like
-http://autobuild.buildroot.net/results/411eb3aefea859a7e31986a44acd50b475f174cb/
+ Thomas> Dear Arnout Vandecappelle,
+ Thomas> On Thu, 08 Nov 2012 22:43:18 +0100, Arnout Vandecappelle wrote:
 
-This problem was introduced by the version bump, because then also
-the AUTORECONF was removed so the existing fix didn't work anymore.
+ >> Indeed, and this patch fixes that.  It's a different symptom of the same
+ >> error: makekeys is a host binary, but it's built with target CFLAGS
+ >> (X11_CFLAGS = -I$(STAGING_DIR)/usr/include).  This will barf in surprising
+ >> ways.
+ >> 
+ >> (That is, unless you have an autobuilder that runs against a git tree that
+ >> has already integrated this patch; if that is the case, then I made a
+ >> mistake somewhere.)
 
-As a slightly cleaner solution, just remove X11_CFLAGS from the
-Makefile.  We know we don't need it, because the X11 stuff is in
-$(HOST_DIR)/usr/include which is already in HOST_CFLAGS.
+ Thomas> Aaah, your patch hasn't been integrated yet. My bad. Peter, could you
+ Thomas> merge Arnout's patch then?
 
-[Peter: reword comments]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/xlib_libX11/xlib_libX11.mk |   19 ++++++-------------
- 1 files changed, 6 insertions(+), 13 deletions(-)
+I did this morning (but forgot to push before now).
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 79b2d54..f7dc4eb 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -19,21 +19,14 @@ HOST_XLIB_LIBX11_CONF_OPT = \
- 
- # src/util/makekeys is executed at build time to generate ks_tables.h, so
- # it should get compiled for the host. The libX11 makefile unfortunately
--# doesn't know about cross compilation so this doesn't work.
--# Long term, we should probably teach it about HOSTCC / HOST_CFLAGS, but for
--# now simply disable the src/util Makefile and build makekeys by hand in
--# advance
--define XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
--	echo '' > $(@D)/src/util/Makefile.am
-+# doesn't have X11_CFLAGS_FOR_BUILD so this doesn't work.  For buildroot,
-+# we know the X11 includes are in $(HOST_DIR)/usr/include, which are already
-+# in the CFLAGS_FOR_BUILD, so we can just remove the X11_CFLAGS
-+define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
-+	$(SED) '/X11_CFLAGS/d' $(@D)/src/util/Makefile*
- endef
- 
--XLIB_LIBX11_POST_EXTRACT_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_BUILD
--
--define XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
--	cd $(@D)/src/util && $(HOSTCC) $(HOST_CFLAGS) -o makekeys makekeys.c
--endef
--
--XLIB_LIBX11_POST_CONFIGURE_HOOKS += XLIB_LIBX11_BUILD_MAKEKEYS_FOR_HOST
-+XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-- 
+Bye, Peter Korsgaard
