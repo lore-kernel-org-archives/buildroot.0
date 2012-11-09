@@ -1,36 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Nov 2012 09:22:39 +0100
-Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
-In-Reply-To: <20121109090946.3c88e6f2@skate> (Thomas Petazzoni's message of
- "Fri, 9 Nov 2012 09:09:46 +0100")
-References: <1352028606-11338-1-git-send-email-arnout@mind.be>
- <20121108201326.2676f417@skate> <509C2776.2060706@mind.be>
- <20121109090946.3c88e6f2@skate>
-Message-ID: <87zk2r6v8w.fsf@dell.be.48ers.dk>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Fri, 9 Nov 2012 11:58:19 +0300
+Subject: [Buildroot] [PATCH] perl: build with perlcross instead of qemu
+In-Reply-To: <878vab8cr8.fsf@dell.be.48ers.dk>
+References: <1352425626-10628-1-git-send-email-arnout@mind.be>
+ <878vab8cr8.fsf@dell.be.48ers.dk>
+Message-ID: <CABtOAfzb9n8HQ9Xbk1+1KnmTh7hHyxiQvD_7vPw5afs3YDyZMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+2012/11/9 Peter Korsgaard <jacmet@uclibc.org>
 
- Thomas> Dear Arnout Vandecappelle,
- Thomas> On Thu, 08 Nov 2012 22:43:18 +0100, Arnout Vandecappelle wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> writes:
+>
+> Hi,
+>
+>  Arnout> Peter, if Francois confirms that the perl binary actually runs
+>  Arnout> and if he has no other concerns, then I'd commit this patch
+>  Arnout> quickly and wait for the autobuilder fallout.
+>
+> I completely agree, thanks for doing this!
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
- >> Indeed, and this patch fixes that.  It's a different symptom of the same
- >> error: makekeys is a host binary, but it's built with target CFLAGS
- >> (X11_CFLAGS = -I$(STAGING_DIR)/usr/include).  This will barf in surprising
- >> ways.
- >> 
- >> (That is, unless you have an autobuilder that runs against a git tree that
- >> has already integrated this patch; if that is the case, then I made a
- >> mistake somewhere.)
 
- Thomas> Aaah, your patch hasn't been integrated yet. My bad. Peter, could you
- Thomas> merge Arnout's patch then?
-
-I did this morning (but forgot to push before now).
-
--- 
-Bye, Peter Korsgaard
+How about to include perl-cross into buildroot packages?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121109/d206e606/attachment.html>
