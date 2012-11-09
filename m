@@ -1,104 +1,50 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri,  9 Nov 2012 16:49:02 +0400
-Subject: [Buildroot] [PATCH] nspr version update 4.9.2 old patch removed
-Message-ID: <1352465342-23297-1-git-send-email-alexander@mezon.ru>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 9 Nov 2012 17:48:29 +0100
+Subject: [Buildroot] [PATCH] boost version update 1.52.0
+In-Reply-To: <1352464603-22886-1-git-send-email-alexander@mezon.ru>
+References: <1352464603-22886-1-git-send-email-alexander@mezon.ru>
+Message-ID: <CAHXCMMJJFop7bpOpJRzDWy6Xq0SW4Fe80bM-hrh3fQfkPtw=Jw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Alexander,
 
-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
----
- package/libnspr/libnspr-fix-flags.patch | 65 ---------------------------------
- package/libnspr/libnspr.mk              |  2 +-
- 2 files changed, 1 insertion(+), 66 deletions(-)
- delete mode 100644 package/libnspr/libnspr-fix-flags.patch
+2012/11/9 Alexander Khryukin <alexander@mezon.ru>:
+>
+> Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+> ---
+>  package/boost/boost.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> index 64856bc..e03c81d 100644
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  #############################################################
+>
+> -BOOST_VERSION = 1.49.0
+> +BOOST_VERSION = 1.52.0
+>  BOOST_FILE_VERSION = $(subst .,_,$(BOOST_VERSION))
+>  BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
+>  BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+> --
+> 1.7.11.3
+>
 
-diff --git a/package/libnspr/libnspr-fix-flags.patch b/package/libnspr/libnspr-fix-flags.patch
-deleted file mode 100644
-index d5ad4fa..0000000
---- a/package/libnspr/libnspr-fix-flags.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--Fix build issues on ARM with certain toolchains
--
--Some gcc/binutils combinations do not like having a space between
--"-Wa," and the following assembler option, so we simply remove those
--spaces.
--
--However, fixing the configure.in is not sufficient, because libnspr
--absolutely requires the prehistoric autoconf 2.13 to re-generate the
--configure script. So, since the patch to the configure script is not
--horrible, we also patch this script directly.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/mozilla/nsprpub/configure.in
--===================================================================
----- a/mozilla/nsprpub/configure.in
--+++ b/mozilla/nsprpub/configure.in
--@@ -925,8 +925,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
---        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
--+        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--+        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--         ASFLAGS="$ASFLAGS -march=armv7-a -mthumb"
--       else
--         AC_MSG_ERROR([--enable-thumb2 is not supported for non-GNU toolchains])
--@@ -940,8 +940,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
---        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
--+       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--+        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--         ASFLAGS="$ASFLAGS -march=armv5te -mthumb-interwork"
--       fi
--       ;;
--Index: b/mozilla/nsprpub/configure
--===================================================================
----- a/mozilla/nsprpub/configure
--+++ b/mozilla/nsprpub/configure
--@@ -3101,8 +3101,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
---        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
--+        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--+        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--         ASFLAGS="$ASFLAGS -march=armv7-a -mthumb"
--       else
--         { echo "configure: error: --enable-thumb2 is not supported for non-GNU toolchains" 1>&2; exit 1; }
--@@ -3116,8 +3116,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
---        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
--+       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--+        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--         ASFLAGS="$ASFLAGS -march=armv5te -mthumb-interwork"
--       fi
--       ;;
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 736984d..4308ac3 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -3,7 +3,7 @@
- # libnspr
- #
- #############################################################
--LIBNSPR_VERSION = 4.8.7
-+LIBNSPR_VERSION = 4.9.2
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
- LIBNSPR_SUBDIR = mozilla/nsprpub
+Some patch has already been sent to the ml, but not yet reviewed nor tested.
+
+See:
+http://lists.busybox.net/pipermail/buildroot/2012-November/061084.html
+or:
+http://patchwork.ozlabs.org/patch/197508/
+
+
+Regards,
+
 -- 
-1.7.11.3
+Sam
