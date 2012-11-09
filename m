@@ -1,35 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 10:20:59 +0100
+Date: Fri, 09 Nov 2012 10:22:59 +0100
 Subject: [Buildroot] [PATCH] perl: build with perlcross instead of qemu
-In-Reply-To: <87pq3n6stb.fsf@dell.be.48ers.dk>
+In-Reply-To: <20121109101810.6f61c6a9@skate>
 References: <1352425626-10628-1-git-send-email-arnout@mind.be>
  <878vab8cr8.fsf@dell.be.48ers.dk>
  <CABtOAfzb9n8HQ9Xbk1+1KnmTh7hHyxiQvD_7vPw5afs3YDyZMg@mail.gmail.com>
- <87pq3n6stb.fsf@dell.be.48ers.dk>
-Message-ID: <509CCAFB.2030808@mind.be>
+ <509CC99A.4010700@mind.be> <20121109101810.6f61c6a9@skate>
+Message-ID: <509CCB73.7080106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/12 10:15, Peter Korsgaard wrote:
->>>>>> "Alexander" == Alexander Khryukin<alexander@mezon.ru>  writes:
+On 11/09/12 10:18, Thomas Petazzoni wrote:
 >
-> Hi,
+> On Fri, 09 Nov 2012 10:15:06 +0100, Arnout Vandecappelle wrote:
 >
->   Alexander>  How about to include perl-cross into buildroot packages?
+>>    Doesn't make sense.  perlcross has to be extracted over the perl source: it
+>> replaces a few configuration scripts and creates a few more.  There is nothing
+>> in there to install on the host or on the target.
 >
-> I'm doing a test build right now, and will commit if that works. Perhaps
-> it isn't perfect yet, but certainly better than all the qemu issues
-> we're seing right now.
+> First of all, thanks a lot for doing this work.
+>
+> Do you have details on how perl-cross is maintained with regard to
+> perl? I.e, is it kept reasonably updated with new perl versions, or is
+> it a hack that works on a single perl version that will force us to
+> stay with only this version of perl?
 
-  BTW, please everybody do review this patch even after it's committed - there
-could very well be some things that I missed and that can be caught with visual
-review.  (Just look at the time that I sent the patch to know why :-)
+  There are about 12 versions on the download site, one per major perl.  I guess
+it doesn't make much difference which perl patchlevel it is applied to (this one
+is actually for perl-5.16.0 but it work fine on our perl-5.16.1).
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
