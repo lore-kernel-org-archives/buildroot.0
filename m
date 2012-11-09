@@ -1,59 +1,81 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Nov 2012 13:13:12 +0100
-Subject: [Buildroot] Autotest infrastructure (a bit of off-topic: git
-	repo URL)
-In-Reply-To: <20121109114750.6a4dc53a@skate> (Thomas Petazzoni's message of
- "Fri, 9 Nov 2012 11:47:50 +0100")
-References: <509BC913.3080902@mind.be> <509BDBF2.1060700@digi.com>
- <509C224B.8000405@mind.be> <20121109114750.6a4dc53a@skate>
-Message-ID: <87bof76kkn.fsf@dell.be.48ers.dk>
+From: Antony Vennard <antony.vennard@macrium.com>
+Date: Fri, 09 Nov 2012 12:20:08 +0000
+Subject: [Buildroot] Udev on a live CD system does not appear to
+ populate /dev
+In-Reply-To: <509C2166.8050705@mind.be>
+References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
+ <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
+ <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
+ <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
+ <509C2166.8050705@mind.be>
+Message-ID: <509CF4F8.6080608@macrium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 08/11/2012 21:17, Arnout Vandecappelle wrote:
+>  If you build a cpio rootfs, you shouldn't need any additional command line
+> parameters because the kernel never gets to mounting the root
+> filesystem.  It
+> just runs the /init in the initramfs.
+> 
+>  Using a cpio rootfs should also solve your problems with the device nodes,
+> because we provide a /init that mounts devtmpfs explicitly.
+> 
+>  Regards,
+>  Arnout
+> 
 
-Hi,
+Yep, I'd come to the conclusion I needed an /init to exist, constructing
+the root file system. Manually creating the CD as a test, the kernel
+panics (root file system not found) if init doesn't exist. I used the
+one from fs/cpio/init as you suggested.
 
- Thomas> On a related topic (firmware upgrade), I have:
- Thomas> https://gitorious.org/embedded-linux-firmware-upgrade-tool/embedded-linux-firmware-upgrade-tool
+The ram_disk_size parameter does appear to be entirely optional.
 
- Thomas> It has a:
+I'm now on to the next problem - that script exec's /sbin/init which is
+really /bin/busybox... which is exiting straight away or crashing, as
+the kernel is now panicking about an exiting init :(
 
- Thomas>  * A host utility to prepare firmware images composed of multiple parts
- Thomas>    (usually a kernel image + root filesystem image, but there could be
- Thomas>    more)
+I'm going to have an experiment with this, see if I can understand what
+the issue is.
 
- Thomas>  * A target utility that can run either on the command line or as a CGI
- Thomas>    script. This utility does the firmware upgrade itself by fiddling
- Thomas>    with the U-Boot environment.
+I have also grabbed a copy of buildroot git. Once I've got this working,
+I'll have a go at modifying buildroot to build iso9660 targets via this
+mechanism. I'm no expert in this kind of thing, but it'll be a good
+learning experience.
 
- Thomas> The tool assumes that the flash has two partitions for each component
- Thomas> been upgraded (one active partition, one to upgrade).
+I may also potentially be looking to integrate EFI boot into our live CD
+at some stage - if this is of interest I can have a go at adding this to
+buildroot also.
 
- Thomas> The documentation at
- Thomas> https://gitorious.org/embedded-linux-firmware-upgrade-tool/embedded-linux-firmware-upgrade-tool/blobs/master/fwupgrade-doc.txt
- Thomas> has a few details.
+Thanks for your help,
 
-This is getting pretty offtopic, but from a quick look at it, it seems
-nice, but:
+Antony
 
-- hardcoded for nand (E.G. uses nandwrite)
-- non-atomic (E.G. uboot environment is handled per-part, so you can end
-  up with a halfway upgraded system if something goes wrong)
-- fairly inflexible (hardcoded upgrade procedure, hw id handling, cgi)
-
-I've solved it in the past by wrapping firmware upgrades in .deb files,
-and used the depends on / conflicts stuff for hw id/version handling,
-and the pre/post scripts to define the upgrade handling in the upgrade
-itself. To ensure an atomic change between current and upgraded system I
-key off the choice of kernel/rootfs from a single u-boot variable
-(typically called boot=high|low) which is only changed at the very end.
-
-Maybe we should do some more firmware upgrade talks at an upcoming
-conference ;)
 
 -- 
-Bye, Peter Korsgaard
+________________
+
+Macrium? Software is a trading name of Paramount Software UK Ltd, 
+Registered in England and Wales Number 02973414
+Registered Office: Kilburn House, Manchester Science Park, Lloyd St. North, 
+Manchester M15 6SE United Kingdom
+
+The information contained in this e-mail is confidential, privileged, or 
+otherwise protected from disclosure. It is intended only for the use of the 
+authorized individual as indicated in the e-mail. Any unauthorized 
+disclosure, copying, distribution or taking of any action based on the 
+contents of this material is strictly prohibited.
+
+If you have received this e-mail in error, please delete it immediately.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 895 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121109/742b79b0/attachment.asc>
