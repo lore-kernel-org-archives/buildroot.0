@@ -1,9 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  9 Nov 2012 20:34:06 +0100
-Subject: [Buildroot] [PATCH 4/4] cpanminus: requires host-qemu
-In-Reply-To: <1352489646-30635-1-git-send-email-arnout@mind.be>
-References: <1352489646-30635-1-git-send-email-arnout@mind.be>
-Message-ID: <1352489646-30635-4-git-send-email-arnout@mind.be>
+Date: Fri,  9 Nov 2012 20:34:03 +0100
+Subject: [Buildroot] [PATCH 1/4] perl: remove redundant patches
+Message-ID: <1352489646-30635-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +10,174 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Must also disable all non-supported architectures, including x86
-(which doesn't have a working fork()).
+Now we are using perlcross, the patches to make perl work with qemu are
+redundant, so remove them.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-It still only works half the time.  For instance, in one arm configuration
-I have qemu sitting there consuming 100% CPU without any output, system
-calls, or nothing...
----
- package/cpanminus/Config.in    |   11 +++++++++++
- package/cpanminus/cpanminus.mk |    2 +-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ package/perl/perl-configure-qemu.patch   |   53 ------------------------------
+ package/perl/perl-fix-Module-Build.patch |   16 ---------
+ package/perl/perl-make-ext.patch         |   24 --------------
+ package/perl/perl-mkppport.patch         |   37 ---------------------
+ 4 files changed, 130 deletions(-)
+ delete mode 100644 package/perl/perl-configure-qemu.patch
+ delete mode 100644 package/perl/perl-fix-Module-Build.patch
+ delete mode 100644 package/perl/perl-make-ext.patch
+ delete mode 100644 package/perl/perl-mkppport.patch
 
-diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
-index b8b39dc..cf93a7e 100644
---- a/package/cpanminus/Config.in
-+++ b/package/cpanminus/Config.in
-@@ -1,5 +1,16 @@
- config BR2_PACKAGE_CPANMINUS
- 	bool "cpanminus"
-+	# host-qemu doesn't work for the following platforms
-+	depends on !BR2_avr32
-+	depends on !BR2_bfin
-+	depends on !BR2_sh2
-+	depends on !BR2_sh2a
-+	depends on !BR2_sh3
-+	depends on !BR2_sh3eb
-+	depends on !BR2_sh64
-+	# host-qemu doesn't support system() on the following platforms
-+	depends on !BR2_i386
-+	depends on !BR2_x86_64
- 	help
- 	  cpanminus is a script to get, unpack, build and install Perl modules
- 	  from CPAN.
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index d3a338b..af35e93 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -7,7 +7,7 @@
- CPANMINUS_VERSION = 1.5018
- CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
- CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
--CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
-+CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
- 
- CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
- CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
+diff --git a/package/perl/perl-configure-qemu.patch b/package/perl/perl-configure-qemu.patch
+deleted file mode 100644
+index c2d6b92..0000000
+--- a/package/perl/perl-configure-qemu.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-Add qemu support
+-
+-see https://rt.perl.org/rt3//Public/Bug/Display.html?id=114798
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/Configure
+-===================================================================
+---- a/Configure
+-+++ b/Configure
+-@@ -2837,6 +2837,9 @@
+-             ;;
+-         *)  echo "Using usrinc $usrinc." >&4 ;;
+- 	esac
+-+	case "$targetrun" in
+-+	*qemu*) targethost=dummy ;;
+-+	esac
+- 	case "$targethost" in
+- 	'') echo "Targethost not defined." >&4; croak=y ;;
+-         *)  echo "Using targethost $targethost." >&4
+-@@ -2868,7 +2871,7 @@
+- 	case "$targetfrom" in
+- 	'') targetfrom=scp ;;
+- 	esac
+--    	run=$run-$targetrun
+-+    	run=$run-`basename $targetrun`
+-     	to=$to-$targetto
+-     	from=$from-$targetfrom
+- 	case "$targetdir" in
+-@@ -2908,6 +2911,14 @@
+- $targetrun -l $targetuser $targethost "cd \$cwd && ./\$exe \$@"
+- EOF
+- 	    ;;
+-+	*qemu*)
+-+	    to=:
+-+	    from=:
+-+	    cat >$run <<EOF
+-+#!/bin/sh
+-+$targetrun -L $qemulib "\$@"
+-+EOF
+-+	    ;;
+- 	*)  echo "Unknown targetrun '$targetrun'" >&4
+- 	    exit 1
+- 	    ;;
+-@@ -5048,7 +5059,7 @@
+- echo " ";
+- echo "Checking if your compiler accepts $flag" 2>&1;
+- echo "int main(void) { return 0; }" > gcctest.c;
+--if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && ./gcctest; then
+-+if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && $run ./gcctest; then
+-     echo "Yes, it does." 2>&1;
+-     if $test -s gcctest.out ; then
+-         echo "But your platform does not like it:";
+diff --git a/package/perl/perl-fix-Module-Build.patch b/package/perl/perl-fix-Module-Build.patch
+deleted file mode 100644
+index 26b15e4..0000000
+--- a/package/perl/perl-fix-Module-Build.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/cpan/Module-Build/lib/Module/Build/Base.pm
+-===================================================================
+---- a/cpan/Module-Build/lib/Module/Build/Base.pm
+-+++ b/cpan/Module-Build/lib/Module/Build/Base.pm
+-@@ -456,7 +456,7 @@
+-   my $proto = shift;
+-   my $c     = ref($proto) ? $proto->{config} : 'Module::Build::Config';
+- 
+--  my $perl  = $^X;
+-+  my $perl  = $ENV{RUN_PERL} || $^X;
+-   my $perl_basename = File::Basename::basename($perl);
+- 
+-   my @potential_perls;
+diff --git a/package/perl/perl-make-ext.patch b/package/perl/perl-make-ext.patch
+deleted file mode 100644
+index e0195e7..0000000
+--- a/package/perl/perl-make-ext.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Don't use RUN with make (only for perl)
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/make_ext.pl
+-===================================================================
+---- a/make_ext.pl
+-+++ b/make_ext.pl
+-@@ -458,11 +458,13 @@
+- 	# Give makefile an opportunity to rewrite itself.
+- 	# reassure users that life goes on...
+- 	my @args = ('config', @$pass_through);
+--	system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
+-+#	system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
+-+	system(@make, @args) and print "@make @args failed, continuing anyway...\n";
+-     }
+-     my @targ = ($target, @$pass_through);
+-     print "Making $target in $ext_dir\n at run @make @targ\n";
+--    my $code = system(@run, @make, @targ);
+-+#    my $code = system(@run, @make, @targ);
+-+    my $code = system(@make, @targ);
+-     die "Unsuccessful make($ext_dir): code=$code" if $code != 0;
+- 
+-     chdir $return_dir || die "Cannot cd to $return_dir: $!";
+diff --git a/package/perl/perl-mkppport.patch b/package/perl/perl-mkppport.patch
+deleted file mode 100644
+index 97f27a2..0000000
+--- a/package/perl/perl-mkppport.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Add RUN
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+-
+-Index: b/mkppport
+-===================================================================
+---- a/mkppport
+-+++ b/mkppport
+-@@ -1,6 +1,7 @@
+- use strict;
+- use warnings;
+- 
+-+use Config;
+- use Getopt::Long;
+- use File::Spec;
+- use File::Compare qw( compare );
+-@@ -136,14 +137,18 @@
+- #----------------------------------------------
+- sub run
+- {
+-+  my @run = $Config{run};
+-+  @run = () if not defined $run[0] or $run[0] eq '';
+-   my @args = ("-I" . File::Spec->catdir((File::Spec->updir) x 2, 'lib'), @_);
+-   my $run = $perl =~ m/\s/ ? qq("$perl") : $perl;
+-   for (@args) {
+-     $_ = qq("$_") if $^O eq 'VMS' && /^[^"]/;
+-     $run .= " $_";
+-   }
+--  print "running $run\n";
+--  system $run and die "$run failed: $?\n";
+-+#  print "running $run\n";
+-+#  system $run and die "$run failed: $?\n";
+-+  print "running ", join(' ', @run, $run), "\n";
+-+  system join(' ', @run, $run) and die "@run $run failed: $?\n";
+- }
+- 
+- __END__
 -- 
 1.7.10.4
