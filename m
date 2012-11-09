@@ -1,46 +1,51 @@
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri,  9 Nov 2012 17:02:10 +0400
-Subject: [Buildroot] [PATCH] diffutils stdio: don't assume gets any more
-Message-ID: <1352466130-23535-1-git-send-email-alexander@mezon.ru>
+Date: Fri, 9 Nov 2012 20:19:51 +0300
+Subject: [Buildroot] [PATCH] gnutls-2.12.20-glibc-2.16.patch glibc-2.16
+ and gnutls2 fix i forgot my signoff
+In-Reply-To: <CAHXCMMLpVAHmvEHdpkyorLHb=DJGmHhG6cnWkpZ0pkfEp5Sg9g@mail.gmail.com>
+References: <1352464266-22684-1-git-send-email-alexander@mezon.ru>
+ <CAHXCMMLpVAHmvEHdpkyorLHb=DJGmHhG6cnWkpZ0pkfEp5Sg9g@mail.gmail.com>
+Message-ID: <CABtOAfyJB5Px6+69ej4_1cALv+_rXstdrcQ813Cd8zzYzghTMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+2012/11/9 Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
----
- package/diffutils/diffutils-3.2-no-gets.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/diffutils/diffutils-3.2-no-gets.patch
+> Hi Alexander,
+>
+> 2012/11/9 Alexander Khryukin <alexander@mezon.ru>:
+> >
+> > Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+> > ---
+> >  package/gnutls/gnutls-2.12.20-glibc2.16.patch | 26
+> ++++++++++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> >  create mode 100644 package/gnutls/gnutls-2.12.20-glibc2.16.patch
+> >
+> > diff --git a/package/gnutls/gnutls-2.12.20-glibc2.16.patch
+> b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
+> > new file mode 100644
+> > index 0000000..6b7f545
+> > --- /dev/null
+> > +++ b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
+> > @@ -0,0 +1,26 @@
+> > +--- gnutls-2.12.20/gl/stdio.in.h
+> > ++++ gnutls-2.12.20/gl/stdio.in.h
+> When adding a patch to a package, we usually add a header to the patch
+> containing a description and the SoB line.
+>
+> Regards,
+>
+> --
+> Sam
+>
 
-diff --git a/package/diffutils/diffutils-3.2-no-gets.patch b/package/diffutils/diffutils-3.2-no-gets.patch
-new file mode 100644
-index 0000000..56ca22d
---- /dev/null
-+++ b/package/diffutils/diffutils-3.2-no-gets.patch
-@@ -0,0 +1,21 @@
-+hack until gzip pulls a newer gnulib version
-+
-+From 66712c23388e93e5c518ebc8515140fa0c807348 Mon Sep 17 00:00:00 2001
-+From: Eric Blake <eblake@redhat.com>
-+Date: Thu, 29 Mar 2012 13:30:41 -0600
-+Subject: [PATCH] stdio: don't assume gets any more
-+
-+Gnulib intentionally does not have a gets module, and now that C11
-+and glibc have dropped it, we should be more proactive about warning
-+any user on a platform that still has a declaration of this dangerous
-+interface.
-+
-+--- a/lib/stdio.in.h
-++++ b/lib/stdio.in.h
-+@@ -125,7 +125,6 @@
-+ /* It is very rare that the developer ever has full control of stdin,
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-+ #endif
-+ 
--- 
-1.7.11.3
+
+Looks as my mistake.
+In a short time i'll send good patch.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121109/9678e105/attachment-0001.html>
