@@ -1,29 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Nov 2012 10:23:49 +0100
-Subject: [Buildroot] [PATCH] perl: build with perlcross instead of qemu
-In-Reply-To: <509CCAFB.2030808@mind.be> (Arnout Vandecappelle's message of
- "Fri, 09 Nov 2012 10:20:59 +0100")
-References: <1352425626-10628-1-git-send-email-arnout@mind.be>
- <878vab8cr8.fsf@dell.be.48ers.dk>
- <CABtOAfzb9n8HQ9Xbk1+1KnmTh7hHyxiQvD_7vPw5afs3YDyZMg@mail.gmail.com>
- <87pq3n6stb.fsf@dell.be.48ers.dk> <509CCAFB.2030808@mind.be>
-Message-ID: <87k3tv6sey.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Nov 2012 09:58:31 +0100
+Subject: [Buildroot] [PATCH] add new package grantlee
+In-Reply-To: <1351715883-10799-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ (Zoltan@osuosl.org's message of "Wed, 31 Oct 2012 21:38:03 +0100")
+References: <1351715883-10799-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <87txsz6tl4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Zoltan" == Zoltan  <Zoltan@osuosl.org> writes:
 
-Hi,
+ Zoltan> From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ Zoltan> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ Zoltan> ---
+ Zoltan>  package/Config.in            |    1 +
+ Zoltan>  package/grantlee/Config.in   |    9 +++++++++
+ Zoltan>  package/grantlee/grantlee.mk |   13 +++++++++++++
+ Zoltan>  3 files changed, 23 insertions(+)
+ Zoltan>  create mode 100644 package/grantlee/Config.in
+ Zoltan>  create mode 100644 package/grantlee/grantlee.mk
 
- Arnout>  BTW, please everybody do review this patch even after it's
- Arnout> committed - there could very well be some things that I missed
- Arnout> and that can be caught with visual review.  (Just look at the
- Arnout> time that I sent the patch to know why :-)
+ Zoltan> diff --git a/package/Config.in b/package/Config.in
+ Zoltan> index ab966e0..ef68b37 100644
+ Zoltan> --- a/package/Config.in
+ Zoltan> +++ b/package/Config.in
+ Zoltan> @@ -139,6 +139,7 @@ source "package/qt/Config.in"
+ Zoltan>  if BR2_PACKAGE_QT
+ Zoltan>  comment "QT libraries and helper libraries"
+ Zoltan>  source "package/qtuio/Config.in"
+ Zoltan> +source "package/grantlee/Config.in"
 
-Yeah, I noticed ;) Thanks for doing it.
+We normally sort entries alphabetically, so I put it over qtuio and
+committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
