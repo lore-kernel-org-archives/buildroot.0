@@ -1,26 +1,28 @@
 From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri,  9 Nov 2012 16:10:54 +0400
+Date: Fri,  9 Nov 2012 16:31:06 +0400
 Subject: [Buildroot] [PATCH] gnutls-2.12.20-glibc-2.16.patch glibc-2.16 and
-	gnutls2 fix
-Message-ID: <1352463054-21894-1-git-send-email-alexander@mezon.ru>
+	gnutls2 fix i forgot my signoff
+Message-ID: <1352464266-22684-1-git-send-email-alexander@mezon.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/gnutls/gnutls-2.12.20-glibc-2.16.patch | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/gnutls/gnutls-2.12.20-glibc-2.16.patch
 
-diff --git a/package/gnutls/gnutls-2.12.20-glibc-2.16.patch b/package/gnutls/gnutls-2.12.20-glibc-2.16.patch
+Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+---
+ package/gnutls/gnutls-2.12.20-glibc2.16.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/gnutls/gnutls-2.12.20-glibc2.16.patch
+
+diff --git a/package/gnutls/gnutls-2.12.20-glibc2.16.patch b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
 new file mode 100644
-index 0000000..eaa050e
+index 0000000..6b7f545
 --- /dev/null
-+++ b/package/gnutls/gnutls-2.12.20-glibc-2.16.patch
++++ b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
 @@ -0,0 +1,26 @@
-+-2.12.20/gl/stdio.in.h
++--- gnutls-2.12.20/gl/stdio.in.h
 ++++ gnutls-2.12.20/gl/stdio.in.h
 +@@ -714,8 +714,10 @@
 + /* It is very rare that the developer ever has full control of stdin,
