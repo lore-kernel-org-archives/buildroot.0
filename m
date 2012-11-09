@@ -1,14 +1,33 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 18:33:07 +0100
-Subject: [Buildroot] autobuild server down...
-Message-ID: <509D3E53.2000403@mind.be>
+Date: Fri, 09 Nov 2012 19:07:19 +0100
+Subject: [Buildroot] [PATCH] perl: build with perlcross instead of qemu
+In-Reply-To: <20121109113112.1a7606ff@skate>
+References: <1352425626-10628-1-git-send-email-arnout@mind.be>
+ <20121109113112.1a7606ff@skate>
+Message-ID: <509D4657.3050001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Did the autobuild server die under the pressure of all the failed perl builds? :-)
+On 11/09/12 11:31, Thomas Petazzoni wrote:
+> This patch unfortunately breaks the build of cpanminus, which
+> apparently still requires qemu:
+
+  Yep, it does require qemu.  To make it work with perlcross, you'd need to
+build a host-perl with a few extra modules (to support network downloads) - but
+building those modules can't be done with cross-miniperl because it has the
+target's settings for which headers etc. exist.  The perlcross docs state:
+"And thinking of possible need to install additional modules for hostperl makes
+my head spin."
+
+  So instead, I'll make cpanminus depend on host-qemu and try to exclude the
+failing architectures.
+
+  The long term solution is probably to replace cpanminus with something
+buildroot-friendly.  The cross-build of the downloaded modules is probably
+doable with cross-miniperl.
 
   Regards,
   Arnout
