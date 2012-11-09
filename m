@@ -1,41 +1,38 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri,  9 Nov 2012 16:55:22 +0400
-Subject: [Buildroot] [PATCH] libatomic_ops version update 7.3alpha2 old
-	version 1.2 does not compiles with modern gcc and utils
-Message-ID: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 09 Nov 2012 17:56:51 +0100
+Subject: [Buildroot] [PATCH 1/2 v2] xtensa: add support for the Xtensa
+ architecture
+In-Reply-To: <20121109101959.70d640d5@skate>
+References: <509ca3b9.e9c5440a.24b8.24a1@mx.google.com>
+ <20121109101959.70d640d5@skate>
+Message-ID: <509D35D3.6070607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 11/09/12 10:19, Thomas Petazzoni wrote:
+> Unfortunately, the default toolchain configuration for Xtensa doesn't.
+> I.e, I tried to build the minimal configuration:
+>
+> BR2_xtensa=y
+> BR2_PACKAGE_LUA=y
+> BR2_PACKAGE_LUA_INTERPRETER=y
+> BR2_PACKAGE_AVAHI=y
+>
+> And the build of gcc intermediate fails horribly with pthread errors:
 
-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
----
- package/libatomic_ops/libatomic_ops.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+  I get these same error with the default bfin config, and it also breaks
+with BR2_PTHREADS_NONE=y
 
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index 6d50d0a..c946df0 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -1,12 +1,12 @@
- #############################################################
- #
--# Atomic_ops library
-+## Atomic_ops library
- #
--#############################################################
-+##############################################################
- 
--LIBATOMIC_OPS_VERSION = 1.2
-+LIBATOMIC_OPS_VERSION = 7.3alpha2
- LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
--LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
--LIBATOMIC_OPS_INSTALL_STAGING = YES
-+LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/
-+	LIBATOMIC_OPS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+
+  Regards,
+  Arnout
 -- 
-1.7.11.3
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
