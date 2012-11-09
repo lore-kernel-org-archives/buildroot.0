@@ -1,57 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Nov 2012 09:14:35 +0100
-Subject: [Buildroot] [PATCH 0/2] add support for xtensa back to buildroot
-In-Reply-To: <509C8B4F.6000308@zankel.net>
-References: <509b2928.67dc440a.70c6.6325@mx.google.com>
- <20121108082247.55eac2b2@skate> <509C8B4F.6000308@zankel.net>
-Message-ID: <20121109091435.0603a98c@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 Nov 2012 09:14:20 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-11-08
+In-Reply-To: <CAGm1_kt9vX6NvVXxSESARNAVbgLA0kMjFx61hzvg+B7HtnRkeg@mail.gmail.com>
+ (Yegor Yefremov's message of "Fri, 9 Nov 2012 08:46:32 +0100")
+References: <20121109073404.B9B4552C106@lolut.humanoidz.org>
+ <CAGm1_kt9vX6NvVXxSESARNAVbgLA0kMjFx61hzvg+B7HtnRkeg@mail.gmail.com>
+Message-ID: <874nkz8a77.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Chris,
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-On Thu, 08 Nov 2012 20:49:19 -0800, Chris Zankel wrote:
+ >> Build 6b6c23641e5e166f15142d6127029314c91d87a2
+ >> ==============================================
+ >> 
+ >> Status         : NOK
+ >> Failure reason : xapp_mkfontdir-1.0.7
+ >> Architecture   : arm
+ >> Submitted by   : Peter Korsgaard (gcc10)
+ >> Submitted at   : 2012-11-08 01:33:06
+ >> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d727a4da444cb0001f8b5f73e73809780542be65
+ >> End of log     : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/build-end.log
+ >> Complete log   : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/build.log.bz2
+ >> Configuration  : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/config
+ >> Defconfig      : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/defconfig
 
-> I understand your concern, and I guess it won't help that I had patches
-> to clean up Buildroot for Xtensa laying around for over a year :-[ So,
-> my promise would be to actually submit patches when I have them.
-> 
-> Part of the problem was that it wasn't just Buildroot, but other parts
-> (uClibc, kernel, etc.) were also missing or having outdated changes, so
-> it would have required to push a lot of patches. I have been working to
-> get those patches in the corresponding trees first, and Buildroot
-> actually now builds and runs out of the box on Xtensa with just those
-> two patches and a generic patch for uClibc-snapshot. So, maintainability
-> and detecting breakage will be much easier, and I intend to verify it on
-> a more regular basis.
-> 
-> I'll send an updated version of the two patches where Crosstool-NG is
-> disabled for Xtensa.
+ Yegor> Just tried "wget
+ Yegor> http://xorg.freedesktop.org/releases/individual/app/mkfontdir-1.0.7.tar.bz2"
+ Yegor> and had no problems.
 
-Excellent, sounds good.
+Probably it was just a temporary issue with freedesktop.
 
-I've also seen that Qemu has an Xtensa support. It would be nice if you
-could create a qemu_xtensa_<somemachine>_defconfig with the necessary
-kernel configuration and al (see other qemu_<foo>_defconfig that we
-have in configs/) so that other people could build a Xtensa userspace
-and run it inside qemu. At the moment, the qemu-system-xtensa supports
-the following machines:
+ Yegor> Btw have you tried to compile xdm with the latest
+ Yegor> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203=y for OMAP3? gcc
+ Yegor> consumes 100% CPU time but build/link process doesn't advance. With
+ Yegor> the previous toolchain version xdm has no problems, but alsamixer
+ Yegor> shows run-time error related to libc. Haven't tested the stuff with
+ Yegor> Linaro toolchain yet.
 
-$ qemu-system-xtensa -M ?
-Supported machines are:
-none                 empty machine
-lx60                 lx60 EVB (dc232b)
-lx200                lx200 EVB (dc232b)
-sim                  sim machine (dc232b) (default)
+:/ No I haven't.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
