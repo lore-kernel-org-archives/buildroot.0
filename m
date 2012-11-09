@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  9 Nov 2012 20:34:04 +0100
-Subject: [Buildroot] [PATCH 2/4] perl: substitute perlcross pod with
-	perl-version-specific pod
+Date: Fri,  9 Nov 2012 20:34:06 +0100
+Subject: [Buildroot] [PATCH 4/4] cpanminus: requires host-qemu
 In-Reply-To: <1352489646-30635-1-git-send-email-arnout@mind.be>
 References: <1352489646-30635-1-git-send-email-arnout@mind.be>
-Message-ID: <1352489646-30635-2-git-send-email-arnout@mind.be>
+Message-ID: <1352489646-30635-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +12,52 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-As suggested by Dan Pattison at ethertek ca.
+Must also disable all non-supported architectures, including x86
+(which doesn't have a working fork()).
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/perl/perl.mk |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+It still only works half the time.  For instance, in one arm configuration
+I have qemu sitting there consuming 100% CPU without any output, system
+calls, or nothing...
+---
+ package/cpanminus/Config.in    |   11 +++++++++++
+ package/cpanminus/cpanminus.mk |    2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index f3c73dd..b84917b 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,8 +13,11 @@ PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
+diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
+index b8b39dc..cf93a7e 100644
+--- a/package/cpanminus/Config.in
++++ b/package/cpanminus/Config.in
+@@ -1,5 +1,16 @@
+ config BR2_PACKAGE_CPANMINUS
+ 	bool "cpanminus"
++	# host-qemu doesn't work for the following platforms
++	depends on !BR2_avr32
++	depends on !BR2_bfin
++	depends on !BR2_sh2
++	depends on !BR2_sh2a
++	depends on !BR2_sh3
++	depends on !BR2_sh3eb
++	depends on !BR2_sh64
++	# host-qemu doesn't support system() on the following platforms
++	depends on !BR2_i386
++	depends on !BR2_x86_64
+ 	help
+ 	  cpanminus is a script to get, unpack, build and install Perl modules
+ 	  from CPAN.
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+index d3a338b..af35e93 100644
+--- a/package/cpanminus/cpanminus.mk
++++ b/package/cpanminus/cpanminus.mk
+@@ -7,7 +7,7 @@
+ CPANMINUS_VERSION = 1.5018
+ CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
+ CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
+-CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
++CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
  
- PERL_CROSS_VERSION = 0.7
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
- PERL_CROSS_SITE    = http://download.berlios.de/perlcross
--PERL_CROSS_SOURCE  = perl-5.$(PERL_VERSION_MAJOR).0-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
-+PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
- 
- # We use the perlcross hack to cross-compile perl. It should
- # be extracted over the perl sources, so we don't define that
-@@ -32,6 +35,11 @@ define PERL_CROSS_EXTRACT
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
-+define PERL_CROSS_SET_POD
-+	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
-+endef
-+PERL_POST_PATCH_HOOKS += PERL_CROSS_SET_POD
-+
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-     PERL_DEPENDENCIES += berkeleydb
- endif
+ CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
+ CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
 -- 
 1.7.10.4
