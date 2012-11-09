@@ -1,22 +1,20 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 22:47:00 +0100
-Subject: [Buildroot] [PATCH 5/5] lua: refactor without useless define's
-In-Reply-To: <1346741921-28968-5-git-send-email-francois.perrad@gadz.org>
-References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
- <1346741921-28968-5-git-send-email-francois.perrad@gadz.org>
-Message-ID: <509D79D4.6050600@mind.be>
+Date: Fri, 09 Nov 2012 22:48:56 +0100
+Subject: [Buildroot] QT packackage grantlee not building
+In-Reply-To: <28814AE91EA94801B84C55B81555379F@JohanW7>
+References: <28814AE91EA94801B84C55B81555379F@JohanW7>
+Message-ID: <509D7A48.4030002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/12 08:58, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
+On 11/09/12 22:44, Sagaert Johan wrote:
+> Currently the build of the QT grantlee package is broken:
+> it seems like libpthread is not linked in.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (build test on a few configs)
+  Could you post a defconfig so we can try to reproduce?
 
   Regards,
   Arnout
