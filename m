@@ -1,38 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 17:56:51 +0100
-Subject: [Buildroot] [PATCH 1/2 v2] xtensa: add support for the Xtensa
- architecture
-In-Reply-To: <20121109101959.70d640d5@skate>
-References: <509ca3b9.e9c5440a.24b8.24a1@mx.google.com>
- <20121109101959.70d640d5@skate>
-Message-ID: <509D35D3.6070607@mind.be>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Fri,  9 Nov 2012 17:02:10 +0400
+Subject: [Buildroot] [PATCH] diffutils stdio: don't assume gets any more
+Message-ID: <1352466130-23535-1-git-send-email-alexander@mezon.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/12 10:19, Thomas Petazzoni wrote:
-> Unfortunately, the default toolchain configuration for Xtensa doesn't.
-> I.e, I tried to build the minimal configuration:
->
-> BR2_xtensa=y
-> BR2_PACKAGE_LUA=y
-> BR2_PACKAGE_LUA_INTERPRETER=y
-> BR2_PACKAGE_AVAHI=y
->
-> And the build of gcc intermediate fails horribly with pthread errors:
 
-  I get these same error with the default bfin config, and it also breaks
-with BR2_PTHREADS_NONE=y
+Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+---
+ package/diffutils/diffutils-3.2-no-gets.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/diffutils/diffutils-3.2-no-gets.patch
 
-
-  Regards,
-  Arnout
+diff --git a/package/diffutils/diffutils-3.2-no-gets.patch b/package/diffutils/diffutils-3.2-no-gets.patch
+new file mode 100644
+index 0000000..56ca22d
+--- /dev/null
++++ b/package/diffutils/diffutils-3.2-no-gets.patch
+@@ -0,0 +1,21 @@
++hack until gzip pulls a newer gnulib version
++
++From 66712c23388e93e5c518ebc8515140fa0c807348 Mon Sep 17 00:00:00 2001
++From: Eric Blake <eblake@redhat.com>
++Date: Thu, 29 Mar 2012 13:30:41 -0600
++Subject: [PATCH] stdio: don't assume gets any more
++
++Gnulib intentionally does not have a gets module, and now that C11
++and glibc have dropped it, we should be more proactive about warning
++any user on a platform that still has a declaration of this dangerous
++interface.
++
++--- a/lib/stdio.in.h
+++++ b/lib/stdio.in.h
++@@ -125,7 +125,6 @@
++ /* It is very rare that the developer ever has full control of stdin,
++    so any use of gets warrants an unconditional warning.  Assume it is
++    always declared, since it is required by C89.  */
++-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
++ #endif
++ 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.11.3
