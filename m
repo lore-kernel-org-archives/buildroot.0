@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri,  9 Nov 2012 11:24:19 +0000
-Subject: [Buildroot] [PATCH] beecrypt: add license information
-Message-ID: <1352460259-15607-1-git-send-email-spdawson@gmail.com>
+Date: Fri,  9 Nov 2012 11:36:05 +0000
+Subject: [Buildroot] [PATCH] autoconf: add license information
+Message-ID: <1352460965-17114-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/beecrypt/beecrypt.mk |    2 ++
+ package/autoconf/autoconf.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index d165aee..a9cf133 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -7,6 +7,8 @@ BEECRYPT_VERSION = 4.2.1
- BEECRYPT_SITE = http://downloads.sourceforge.net/project/beecrypt/beecrypt/$(BEECRYPT_VERSION)
- BEECRYPT_AUTORECONF = YES
- BEECRYPT_INSTALL_STAGING = YES
-+BEECRYPT_LICENSE = LGPLv2.1+
-+BEECRYPT_LICENSE_FILES = COPYING.LIB
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 0cb50db..9530ee6 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -6,6 +6,8 @@
  
- # beecrypt contains C++ code that g++ 4.7 doesn't really
- # like. Upstream does not seem to be really active, so workaround this
+ AUTOCONF_VERSION = 2.68
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
++AUTOCONF_LICENSE = GPLv3+ with exceptions
++AUTOCONF_LICENSE_FILES = COPYINGv3 COPYING.EXCEPTION
+ 
+ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 		    ac_cv_prog_gnu_m4_gnu=no
 -- 
 1.7.10.4
