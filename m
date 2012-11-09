@@ -1,12 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Nov 2012 14:18:15 +0100
-Subject: [Buildroot] Autotest infrastructure (a bit of off-topic: git
-	repo URL)
-In-Reply-To: <87bof76kkn.fsf@dell.be.48ers.dk>
-References: <509BC913.3080902@mind.be> <509BDBF2.1060700@digi.com>
- <509C224B.8000405@mind.be> <20121109114750.6a4dc53a@skate>
- <87bof76kkn.fsf@dell.be.48ers.dk>
-Message-ID: <20121109141815.1630955a@skate>
+Date: Fri, 9 Nov 2012 14:20:44 +0100
+Subject: [Buildroot] [PATCH 1/2] neard: new package
+In-Reply-To: <1352459105-13590-2-git-send-email-spdawson@gmail.com>
+References: <1352459105-13590-1-git-send-email-spdawson@gmail.com>
+ <1352459105-13590-2-git-send-email-spdawson@gmail.com>
+Message-ID: <20121109142044.09933dfa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +12,59 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Fri, 09 Nov 2012 13:13:12 +0100, Peter Korsgaard wrote:
+On Fri,  9 Nov 2012 11:05:04 +0000, spdawson at gmail.com wrote:
 
-> This is getting pretty offtopic, but from a quick look at it, it seems
-> nice, but:
-> 
-> - hardcoded for nand (E.G. uses nandwrite)
-> - non-atomic (E.G. uboot environment is handled per-part, so you can end
->   up with a halfway upgraded system if something goes wrong)
-> - fairly inflexible (hardcoded upgrade procedure, hw id handling, cgi)
+> diff --git a/package/neard/Config.in b/package/neard/Config.in
+> new file mode 100644
+> index 0000000..f973fdd
+> --- /dev/null
+> +++ b/package/neard/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_NEARD
+> +	bool "neard"
+> +	depends on BR2_LINUX_KERNEL
 
-Agreed. I've written this stuff for only one project at the moment, so
-it hasn't been made more generic than it was needed at the time.
+Why this dependency?
 
-> I've solved it in the past by wrapping firmware upgrades in .deb files,
-> and used the depends on / conflicts stuff for hw id/version handling,
-> and the pre/post scripts to define the upgrade handling in the upgrade
-> itself. To ensure an atomic change between current and upgraded system I
-> key off the choice of kernel/rootfs from a single u-boot variable
-> (typically called boot=high|low) which is only changed at the very end.
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_LIBNL
+> +	help
+> +	  Near Field Communication (NFC) manager
 
-I also did an .ipk wrapping of firmware upgrade images for some other
-project, for the same reason (post-install script triggering the
-upgrade).
+A slightly longer description would be useful here.
 
-> Maybe we should do some more firmware upgrade talks at an upcoming
-> conference ;)
+> +
+> +	  http://git.kernel.org/?p=network/nfc/neard.git;a=summary
+> +
+> +	  https://01.org/linux-nfc/documentation/how-start-linux-nfc-code...
 
-Eeh, why not :-)
+Those "..." at the end look strange.
 
-Best regards,
+> diff --git a/package/neard/neard.mk b/package/neard/neard.mk
+> new file mode 100644
+> index 0000000..3d73932
+> --- /dev/null
+> +++ b/package/neard/neard.mk
+> @@ -0,0 +1,16 @@
+> +#############################################################
+> +#
+> +# neard
+> +#
+> +#############################################################
+> +NEARD_VERSION = 0.7
+> +NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
+> +NEARD_INSTALL_STAGING = YES
+> +NEARD_LICENSE = GPLv2
+> +NEARD_LICENSE_FILES = COPYING
+> +
+> +NEARD_DEPENDENCIES = linux dbus libglib2 libnl
+> +NEARD_AUTORECONF = YES
+
+The package does not have any patches, and is downloaded from a
+tarball. Why is an autoreconf needed?
+
+Thanks,
 
 Thomas
 -- 
