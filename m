@@ -1,70 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 9 Nov 2012 09:56:58 +0100
-Subject: [Buildroot] [git commit] add new package grantlee
-Message-ID: <20121109092607.3004799C8E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 09 Nov 2012 10:27:02 +0100
+Subject: [Buildroot] [PATCH] perl: build with perlcross instead of qemu
+In-Reply-To: <509C71ED.9010906@ethertek.ca>
+References: <1352425626-10628-1-git-send-email-arnout@mind.be>
+ <509C71ED.9010906@ethertek.ca>
+Message-ID: <509CCC66.4040004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=062129c16eeea69c72d7d65b109bc7667449cb71
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/09/12 04:01, Dan Pattison wrote:
+> In the perlcross Makefile, if you change perl5160delta.pod   to perl5162delta.pod in three places then you can compile
+> the newest perl-5.16.2. Tested for arm, confirmed working.
 
-[Peter: sort alphabetically in Config.in]
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in            |    1 +
- package/grantlee/Config.in   |    9 +++++++++
- package/grantlee/grantlee.mk |   13 +++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+  Thanks, I'll try that later.
 
-diff --git a/package/Config.in b/package/Config.in
-index 2ab6b6e..074e9df 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -138,6 +138,7 @@ source "package/qt/Config.in"
- 
- if BR2_PACKAGE_QT
- comment "QT libraries and helper libraries"
-+source "package/grantlee/Config.in"
- source "package/qextserialport/Config.in"
- source "package/qtuio/Config.in"
- endif
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-new file mode 100644
-index 0000000..84afad2
---- /dev/null
-+++ b/package/grantlee/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_GRANTLEE
-+	bool "grantlee"
-+	select BR2_PACKAGE_QT_STL
-+	select BR2_PACKAGE_QT_SCRIPT
-+	select BR2_PACKAGE_QT_GUI_MODULE
-+	help
-+	  Qt implemantation of the Django template framework
-+
-+	  http://www.grantlee.org
-diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-new file mode 100644
-index 0000000..10adfd9
---- /dev/null
-+++ b/package/grantlee/grantlee.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# grantlee
-+#
-+#############################################################
-+
-+GRANTLEE_VERSION = 0.2.0
-+GRANTLEE_SITE = http://downloads.grantlee.org
-+GRANTLEE_INSTALL_STAGING = YES
-+GRANTLEE_DEPENDENCIES =  qt
-+
-+$(eval $(cmake-package))
-+
+  Regards,
+  Arnout
+
+  PS Dan, if you reply to such a long mail, it helps if you strip away some of
+the quoted text.  Saves people with simple mail readers a lot of scrolling.
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
