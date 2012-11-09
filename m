@@ -1,66 +1,176 @@
 From: Chris Zankel <chris@zankel.net>
-Date: Thu, 08 Nov 2012 20:49:19 -0800
-Subject: [Buildroot] [PATCH 0/2] add support for xtensa back to buildroot
-In-Reply-To: <20121108082247.55eac2b2@skate>
-References: <509b2928.67dc440a.70c6.6325@mx.google.com>
- <20121108082247.55eac2b2@skate>
-Message-ID: <509C8B4F.6000308@zankel.net>
+Date: Thu, 08 Nov 2012 22:33:28 -0800
+Subject: [Buildroot] [PATCH 1/2 v2] xtensa: add support for the Xtensa
+	architecture
+Message-ID: <509ca3b9.e9c5440a.24b8.24a1@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The Xtensa architecture had been removed because it required special
+handling and depended on additional directories and files that became
+obsolete over time. This change is more aligned to other architectures.
 
-I understand your concern, and I guess it won't help that I had patches
-to clean up Buildroot for Xtensa laying around for over a year :-[ So,
-my promise would be to actually submit patches when I have them.
+Signed-off-by: Chris Zankel <chris@zankel.net>
 
-Part of the problem was that it wasn't just Buildroot, but other parts
-(uClibc, kernel, etc.) were also missing or having outdated changes, so
-it would have required to push a lot of patches. I have been working to
-get those patches in the corresponding trees first, and Buildroot
-actually now builds and runs out of the box on Xtensa with just those
-two patches and a generic patch for uClibc-snapshot. So, maintainability
-and detecting breakage will be much easier, and I intend to verify it on
-a more regular basis.
-
-I'll send an updated version of the two patches where Crosstool-NG is
-disabled for Xtensa.
-
-Thanks,
--Chris
-
-
-
-
-On 11/07/2012 11:22 PM, Thomas Petazzoni wrote:
-> Dear Chris Zankel,
->
-> On Wed, 07 Nov 2012 19:38:14 -0800, Chris Zankel wrote:
->
->> It would be great if you could add support for Xtensa back to buildroot.
->> I understand that it was removed because it required a lot of additional
->> files and special handling, which became obsolete and hard to maintain
->> over time.
->> These two patches are much more aligned with other architectures with only
->> very minimal overhead. I also just recently updated uClibc and can build
->> buildroot out of the box, so we can now better support and maintain it.
-> I just skimmed through the patches, but it indeed looks a lot more
-> reasonable than the support we originally had for Xtensa, thanks for
-> this work!. One thing that should be added is to make sure that the
-> Crosstool-NG backend cannot be selected for Xtensa, as it doesn't
-> support this architecture.
->
-> Also, the issue we had with the original Xtensa implementation is that
-> the original submitters sent some patches that we merged, and
-> subsequently never maintained them. Do you have plans to use this
-> Xtensa architecture on a regular basis, and help us fixing build issues
-> related to this architecture? Of course, we don't require you any sort
-> of strict commitment or anything like that, I'd just like to know how
-> much you'll be using this architecture.
->
-> Thanks again for having worked on this,
->
-> Thomas
+diff --git a/arch/Config.in b/arch/Config.in
+index 4d1f81f..ad4a9e0 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -145,6 +145,13 @@ config BR2_x86_64
+ 	  architecture compatible microprocessor).
+ 	  http://en.wikipedia.org/wiki/X86_64
+ 
++config BR2_xtensa
++	bool "Xtensa"
++	help
++	  Xtensa is a Tensilica processor IP architecture.
++	  http://en.wikipedia.org/wiki/Xtensa
++	  http://www.tensilica.com/
++
+ endchoice
+ 
+ config BR2_microblaze
+@@ -158,4 +165,5 @@ source "arch/Config.in.powerpc"
+ source "arch/Config.in.sh"
+ source "arch/Config.in.sparc"
+ source "arch/Config.in.x86"
++source "arch/Config.in.xtensa"
+ source "arch/Config.in.common"
+diff --git a/arch/Config.in.common b/arch/Config.in.common
+index 1ed9929..d2bfd59 100644
+--- a/arch/Config.in.common
++++ b/arch/Config.in.common
+@@ -49,6 +49,7 @@ config BR2_ARCH
+ 	default "sh4aeb"	if BR2_sh4aeb
+ 	default "sh64"		if BR2_sh64
+ 	default "sparc"		if BR2_sparc
++	default "xtensa"	if BR2_xtensa
+ 
+ 
+ config BR2_ENDIAN
+diff --git a/linux/Config.in b/linux/Config.in
+index 277ef0e..29a2110 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -152,7 +152,8 @@ config BR2_LINUX_KERNEL_BZIMAGE
+ 
+ config BR2_LINUX_KERNEL_ZIMAGE
+ 	bool "zImage"
+-	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64
++	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || \
++		   BR2_sh || BR2_sh64 || BR2_xtensa
+ 
+ config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
+ 	bool "zImage with appended DT"
+diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
+index c304572..3622f3d 100644
+--- a/package/autoconf/Config.in
++++ b/package/autoconf/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_AUTOCONF
+ 	bool "autoconf"
+-	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
++	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
++	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
+ 	select BR2_PACKAGE_PERL
+ 	help
+ 	  Extensible program for developing configure scripts.  These
+@@ -9,4 +10,5 @@ config BR2_PACKAGE_AUTOCONF
+ 	  http://www.gnu.org/software/autoconf/
+ 
+ comment "autoconf requires an architecture supported by qemu"
+-	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
++	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
++		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
+diff --git a/package/automake/Config.in b/package/automake/Config.in
+index f8d74ef..6e48517 100644
+--- a/package/automake/Config.in
++++ b/package/automake/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_AUTOMAKE
+ 	bool "automake"
+-	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
++	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
++	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
+ 	select BR2_PACKAGE_AUTOCONF
+ 	select BR2_PACKAGE_PERL
+ 	help
+@@ -10,4 +11,5 @@ config BR2_PACKAGE_AUTOMAKE
+ 	  http://www.gnu.org/software/automake/
+ 
+ comment "automake requires an architecture supported by qemu"
+-	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
++	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
++		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index a65ca48..4cce767 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+ 	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
++	depends on !BR2_xtensa
+ 	select BR2_PACKAGE_LIBELF
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index 0642deb..2906714 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_PERL
+ 	depends on !BR2_sh3
+ 	depends on !BR2_sh3eb
+ 	depends on !BR2_sh64
++	depends on !BR2_xtensa
+ 	help
+ 	  Larry Wall's Practical Extraction and Report Language
+ 	  An interpreted scripting language, known among some as "Unix's Swiss
+@@ -47,4 +48,5 @@ config BR2_PACKAGE_PERL_GDBM_FILE
+ endif
+ 
+ comment "perl requires an architecture supported by qemu"
+-	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
++	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
++		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 29ed2f0..7edf82b 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL
+ 
+ config BR2_TOOLCHAIN_CTNG
+ 	bool "Crosstool-NG toolchain"
+-	depends on !BR2_microblaze && !BR2_aarch64
++	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
+ 	help
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 4c2a28b..9f11a39 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -93,7 +93,7 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+ 
+ config BR2_USE_MMU
+-	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
++	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
+ 	default y if !BR2_bfin
+ 	help
+ 	  If your target has a MMU, you should say Y here.  If you
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 8cf59bc..055267c 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -38,6 +38,7 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
+ 		-e 's/sh[234].*/sh/' \
+ 		-e 's/mips.*/mips/' \
+ 		-e 's/cris.*/cris/' \
++		-e 's/xtensa.*/xtensa/' \
+ ")
+ 
+ UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
