@@ -1,43 +1,53 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 09 Nov 2012 15:13:27 +0200
-Subject: [Buildroot] Need arm-buildroot config and arm-linux config
-In-Reply-To: <509C2800.4080900@mind.be>
-References: <509C0717.7030100@petroprogram.com> <509C2800.4080900@mind.be>
-Message-ID: <509D0177.80705@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Nov 2012 14:18:15 +0100
+Subject: [Buildroot] Autotest infrastructure (a bit of off-topic: git
+	repo URL)
+In-Reply-To: <87bof76kkn.fsf@dell.be.48ers.dk>
+References: <509BC913.3080902@mind.be> <509BDBF2.1060700@digi.com>
+ <509C224B.8000405@mind.be> <20121109114750.6a4dc53a@skate>
+ <87bof76kkn.fsf@dell.be.48ers.dk>
+Message-ID: <20121109141815.1630955a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-8.11.2012 23:45, Arnout Vandecappelle kirjoitti:
-> On 11/08/12 20:25, Stefan Fr?berg wrote:
->> Hello everyone
->>
->> I have now tried several times to build working arm-virtual image for
->> use with qemu.
->> Once i even managed to run it with qemu but then I made some changes
->> that I don't remember anymore
->> and it has stopped working again (just black screen in qemu).
->>
->> Could somebody kindly provide a minimal (just kernel, uclibc and busybox
->> is enough),
->> working arm buildroot .config and arm kernel .config  so
->> that I can run it under qemu, so that I can finally start testing
->> firefox under arm, so that
->> I can finally kick the updated, cleaned firefox patch out before
->> Christmas :-)
->
->  Do qemu_arm_versatile_defconfig or qemu_arm_vexpress_defconfig not work
-> for you?  See board/qemu/arm-versatile/readme.txt for instructions how
-> to run qemu.
->
->  Regards,
->  Arnout
 
-Thank Arnout!
+On Fri, 09 Nov 2012 13:13:12 +0100, Peter Korsgaard wrote:
 
-I will try that
+> This is getting pretty offtopic, but from a quick look at it, it seems
+> nice, but:
+> 
+> - hardcoded for nand (E.G. uses nandwrite)
+> - non-atomic (E.G. uboot environment is handled per-part, so you can end
+>   up with a halfway upgraded system if something goes wrong)
+> - fairly inflexible (hardcoded upgrade procedure, hw id handling, cgi)
 
-Regards
-Stefan
+Agreed. I've written this stuff for only one project at the moment, so
+it hasn't been made more generic than it was needed at the time.
+
+> I've solved it in the past by wrapping firmware upgrades in .deb files,
+> and used the depends on / conflicts stuff for hw id/version handling,
+> and the pre/post scripts to define the upgrade handling in the upgrade
+> itself. To ensure an atomic change between current and upgraded system I
+> key off the choice of kernel/rootfs from a single u-boot variable
+> (typically called boot=high|low) which is only changed at the very end.
+
+I also did an .ipk wrapping of firmware upgrade images for some other
+project, for the same reason (post-install script triggering the
+upgrade).
+
+> Maybe we should do some more firmware upgrade talks at an upcoming
+> conference ;)
+
+Eeh, why not :-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
