@@ -1,40 +1,110 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 19:07:19 +0100
-Subject: [Buildroot] [PATCH] perl: build with perlcross instead of qemu
-In-Reply-To: <20121109113112.1a7606ff@skate>
-References: <1352425626-10628-1-git-send-email-arnout@mind.be>
- <20121109113112.1a7606ff@skate>
-Message-ID: <509D4657.3050001@mind.be>
+From: Chris Zankel <chris@zankel.net>
+Date: Fri, 09 Nov 2012 10:34:46 -0800
+Subject: [Buildroot] [PATCH 1/2 v2] xtensa: add support for the Xtensa
+ architecture
+In-Reply-To: <20121109101959.70d640d5@skate>
+References: <509ca3b9.e9c5440a.24b8.24a1@mx.google.com>
+ <20121109101959.70d640d5@skate>
+Message-ID: <509D4CC6.3080600@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/12 11:31, Thomas Petazzoni wrote:
-> This patch unfortunately breaks the build of cpanminus, which
-> apparently still requires qemu:
+Hi Thomas,
 
-  Yep, it does require qemu.  To make it work with perlcross, you'd need to
-build a host-perl with a few extra modules (to support network downloads) - but
-building those modules can't be done with cross-miniperl because it has the
-target's settings for which headers etc. exist.  The perlcross docs state:
-"And thinking of possible need to install additional modules for hostperl makes
-my head spin."
+Sorry that you had to spend so much time on it. There are currently the
+following restrictions:
 
-  So instead, I'll make cpanminus depend on host-qemu and try to exclude the
-failing architectures.
+Only linuxthreads/old and no-threads is supported for Xtensa. There
+actually is a port for NPTL, and I'm trying to get it, but might take
+some time. I will update the patch to disable NTPL on linuxthreads for
+Xtensa for now.
 
-  The long term solution is probably to replace cpanminus with something
-buildroot-friendly.  The cross-build of the downloaded modules is probably
-doable with cross-miniperl.
+uClibc 0.9.33 doesn't have the required Xtensa patches, so you would
+have to select snapshot. I'm not sure what the best approach is here.
+Provide a 'back-port' patch with these patches for 0.9.33 or only enable
+'snapshot' for Xtensa. I'll update the two patches to only allow to
+select snapshot for now.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Note that uClibc has added a new config and the current patch that is in
+buildroot (uClibc.snapshot.linuxthreads-errno-fix.patch) doesn't apply
+anymore. I noticed that a similar patch was dropped for 0.9.33.2, so I
+was just also removing this patch for snapshot. I believe you created
+that patch, so do you know if it can be removed? I can provide a patch
+for buildroot to fix uClibc snapshot.
+
+Thanks,
+-Chris
+
+
+
+
+
+On 11/09/2012 01:19 AM, Thomas Petazzoni wrote:
+> Dear Chris Zankel,
+>
+> On Thu, 08 Nov 2012 22:33:28 -0800, Chris Zankel wrote:
+>> The Xtensa architecture had been removed because it required special
+>> handling and depended on additional directories and files that became
+>> obsolete over time. This change is more aligned to other architectures.
+>>
+>> Signed-off-by: Chris Zankel <chris@zankel.net>
+> Unfortunately, the default toolchain configuration for Xtensa doesn't.
+> I.e, I tried to build the minimal configuration:
+>
+> BR2_xtensa=y
+> BR2_PACKAGE_LUA=y
+> BR2_PACKAGE_LUA_INTERPRETER=y
+> BR2_PACKAGE_AVAHI=y
+>
+> And the build of gcc intermediate fails horribly with pthread errors:
+>
+> xtensa-buildroot-linux-uclibc/bin/ -B/home/test/outputs/xtensa/host/usr/xtensa-buildroot-linux-uclibc/lib/ -isystem /home/test/outputs/xtensa/host/usr/xtensa-buildroot-linux-u
+> clibc/include -isystem /home/test/outputs/xtensa/host/usr/xtensa-buildroot-linux-uclibc/sys-include    -g -Os -O2  -g -Os -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE  -W -Wall -Wwrit
+> e-strings -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition  -isystem ./include  -fPIC -g -DHAVE_GTHR_DEFAULT -DIN_LIBGCC2 -D__GCC_FLOAT_NOT_NEEDED -
+> fno-stack-protector   -I. -I. -I../.././gcc -I/home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc -I/home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/. -I/home/test/output
+> s/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc -I/home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../include  -DHAVE_CC_TLS  -o _negdi2.o -MT _negdi2.o -MD -MP -MF _negdi2.dep
+>  -DL_negdi2 -c /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/libgcc2.c \
+>           -fvisibility=hidden -DHIDE_EXPORTS
+> In file included from /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/stdio.h:72:0,
+>                  from /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/tsystem.h:87,
+>                  from /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/libgcc2.c:29:
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/bits/uClibc_stdio.h:274:2: error: unknown type name 'pthread_mutex_t'
+> In file included from /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/bits/uClibc_mutex.h:15:0,
+>                  from /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/bits/uClibc_stdio.h:107,
+>                  from /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/stdio.h:72,
+>                  from /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/tsystem.h:87,
+>                  from /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/libgcc2.c:29:
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:227:28: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:228:7: error: unknown type name 'pthread_attr_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:244:26: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:249:32: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:257:34: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:265:28: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:269:1: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:272:27: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:272:48: error: unknown type name 'pthread_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:280:31: error: unknown type name 'pthread_attr_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:283:34: error: unknown type name 'pthread_attr_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:287:1: error: unknown type name 'pthread_attr_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:292:41: error: unknown type name 'pthread_attr_t'
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/pthread.h:298:1: error: unknown type name 'pthread_attr_t'
+> [... many more ...]
+> In file included from /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/stdio.h:72:0,
+>                  from /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/tsystem.h:87,
+>                  from /home/test/outputs/xtensa/toolchain/gcc-4.6.3/libgcc/../gcc/libgcc2.c:29:
+> /home/test/outputs/xtensa/toolchain/uClibc_dev//usr/include/bits/uClibc_stdio.h:274:2: error: unknown type name 'pthread_mutex_t'
+> make[3]: *** [_muldi3.o] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> make[3]: *** [_negdi2.o] Error 1
+> make[2]: *** [all-target-libgcc] Error 2
+> make[1]: *** [/home/test/outputs/xtensa/toolchain/gcc-4.6.3-intermediate/.compiled] Error 2
+> make: *** [all] Error 2
+>
+> Is it that the pthread support for Xtensa is not available in uClibc?
+>
+> Best regards,
+>
+> Thomas
