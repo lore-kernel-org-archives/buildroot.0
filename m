@@ -1,38 +1,41 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 9 Nov 2012 17:54:39 +0100
-Subject: [Buildroot] [PATCH] gnutls-2.12.20-glibc-2.16.patch glibc-2.16
- and gnutls2 fix i forgot my signoff
-In-Reply-To: <1352464266-22684-1-git-send-email-alexander@mezon.ru>
-References: <1352464266-22684-1-git-send-email-alexander@mezon.ru>
-Message-ID: <CAHXCMMLpVAHmvEHdpkyorLHb=DJGmHhG6cnWkpZ0pkfEp5Sg9g@mail.gmail.com>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Fri,  9 Nov 2012 16:55:22 +0400
+Subject: [Buildroot] [PATCH] libatomic_ops version update 7.3alpha2 old
+	version 1.2 does not compiles with modern gcc and utils
+Message-ID: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexander,
 
-2012/11/9 Alexander Khryukin <alexander@mezon.ru>:
->
-> Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
-> ---
->  package/gnutls/gnutls-2.12.20-glibc2.16.patch | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/gnutls/gnutls-2.12.20-glibc2.16.patch
->
-> diff --git a/package/gnutls/gnutls-2.12.20-glibc2.16.patch b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
-> new file mode 100644
-> index 0000000..6b7f545
-> --- /dev/null
-> +++ b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
-> @@ -0,0 +1,26 @@
-> +--- gnutls-2.12.20/gl/stdio.in.h
-> ++++ gnutls-2.12.20/gl/stdio.in.h
-When adding a patch to a package, we usually add a header to the patch
-containing a description and the SoB line.
+Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+---
+ package/libatomic_ops/libatomic_ops.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 6d50d0a..c946df0 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -1,12 +1,12 @@
+ #############################################################
+ #
+-# Atomic_ops library
++## Atomic_ops library
+ #
+-#############################################################
++##############################################################
+ 
+-LIBATOMIC_OPS_VERSION = 1.2
++LIBATOMIC_OPS_VERSION = 7.3alpha2
+ LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
+-LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
+-LIBATOMIC_OPS_INSTALL_STAGING = YES
++LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/
++	LIBATOMIC_OPS_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
 -- 
-Sam
+1.7.11.3
