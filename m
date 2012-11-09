@@ -1,33 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Nov 2012 09:09:46 +0100
-Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
-In-Reply-To: <509C2776.2060706@mind.be>
-References: <1352028606-11338-1-git-send-email-arnout@mind.be>
- <20121108201326.2676f417@skate> <509C2776.2060706@mind.be>
-Message-ID: <20121109090946.3c88e6f2@skate>
+Date: Fri, 9 Nov 2012 09:14:35 +0100
+Subject: [Buildroot] [PATCH 0/2] add support for xtensa back to buildroot
+In-Reply-To: <509C8B4F.6000308@zankel.net>
+References: <509b2928.67dc440a.70c6.6325@mx.google.com>
+ <20121108082247.55eac2b2@skate> <509C8B4F.6000308@zankel.net>
+Message-ID: <20121109091435.0603a98c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hello Chris,
 
-On Thu, 08 Nov 2012 22:43:18 +0100, Arnout Vandecappelle wrote:
+On Thu, 08 Nov 2012 20:49:19 -0800, Chris Zankel wrote:
 
->   Indeed, and this patch fixes that.  It's a different symptom of the same
-> error: makekeys is a host binary, but it's built with target CFLAGS
-> (X11_CFLAGS = -I$(STAGING_DIR)/usr/include).  This will barf in surprising
-> ways.
+> I understand your concern, and I guess it won't help that I had patches
+> to clean up Buildroot for Xtensa laying around for over a year :-[ So,
+> my promise would be to actually submit patches when I have them.
 > 
->   (That is, unless you have an autobuilder that runs against a git tree that
-> has already integrated this patch; if that is the case, then I made a
-> mistake somewhere.)
+> Part of the problem was that it wasn't just Buildroot, but other parts
+> (uClibc, kernel, etc.) were also missing or having outdated changes, so
+> it would have required to push a lot of patches. I have been working to
+> get those patches in the corresponding trees first, and Buildroot
+> actually now builds and runs out of the box on Xtensa with just those
+> two patches and a generic patch for uClibc-snapshot. So, maintainability
+> and detecting breakage will be much easier, and I intend to verify it on
+> a more regular basis.
+> 
+> I'll send an updated version of the two patches where Crosstool-NG is
+> disabled for Xtensa.
 
-Aaah, your patch hasn't been integrated yet. My bad. Peter, could you
-merge Arnout's patch then?
+Excellent, sounds good.
 
-Thanks,
+I've also seen that Qemu has an Xtensa support. It would be nice if you
+could create a qemu_xtensa_<somemachine>_defconfig with the necessary
+kernel configuration and al (see other qemu_<foo>_defconfig that we
+have in configs/) so that other people could build a Xtensa userspace
+and run it inside qemu. At the moment, the qemu-system-xtensa supports
+the following machines:
+
+$ qemu-system-xtensa -M ?
+Supported machines are:
+none                 empty machine
+lx60                 lx60 EVB (dc232b)
+lx200                lx200 EVB (dc232b)
+sim                  sim machine (dc232b) (default)
+
+Thanks!
 
 Thomas
 -- 
