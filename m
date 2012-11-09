@@ -1,30 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 22:41:11 +0100
-Subject: [Buildroot] [PATCH 4/5] lua: remove 3 sub-options,
- always install all
-In-Reply-To: <1346741921-28968-4-git-send-email-francois.perrad@gadz.org>
-References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
- <1346741921-28968-4-git-send-email-francois.perrad@gadz.org>
-Message-ID: <509D7877.40506@mind.be>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri, 9 Nov 2012 22:44:32 +0100
+Subject: [Buildroot] QT packackage grantlee not building
+Message-ID: <28814AE91EA94801B84C55B81555379F@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/04/12 08:58, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi
+ 
+Currently the build of the QT grantlee package is broken:
+it seems like libpthread is not linked in.
+ 
+[ 97%] Building CXX object templates/defaulttags/CMakeFiles/grantlee_defaulttags.dir/moc_spaceless.cxx.o
+[ 97%] Building CXX object templates/defaulttags/CMakeFiles/grantlee_defaulttags.dir/moc_ssi.cxx.o
+[ 97%] Building CXX object templates/defaulttags/CMakeFiles/grantlee_defaulttags.dir/moc_templatetag.cxx.o
+[ 98%] Building CXX object templates/defaulttags/CMakeFiles/grantlee_defaulttags.dir/moc_widthratio.cxx.o
+[ 98%] Building CXX object templates/defaulttags/CMakeFiles/grantlee_defaulttags.dir/moc_with.cxx.o
+Linking CXX shared module ../../grantlee/0.2/grantlee_defaulttags.so
+make[3]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+[ 98%] Built target grantlee_defaulttags
+Linking CXX executable testgenerictypes_exec
+/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/b
+in/ld: /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libQtCore.so: undefined reference to
+symbol 'pthread_cancel'
+/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/b
+in/ld: note: 'pthread_cancel' is defined in DSO
+/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 so try adding it to the linker
+command line
+/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: could not read symbols: Invalid
+operation
+collect2: ld returned 1 exit status
+make[3]: *** [templates/tests/testgenerictypes_exec] Error 1
+make[3]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+make[2]: *** [templates/tests/CMakeFiles/testgenerictypes_exec.dir/all] Error 2
+make[2]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+make: *** [/home/buildroot12git/output/build/grantlee-0.2.0/.stamp_built] Error 
+ 
+ 
 
-  Peter, please commit this one before -rc1, it fixes
-http://autobuild.buildroot.net/results/d47b983abde8eebe02c228d638101b8d5cd92965/
+Regards Johan
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121109/fe4fbd19/attachment.html>
