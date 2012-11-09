@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri,  9 Nov 2012 12:35:03 +0000
-Subject: [Buildroot] [PATCH] screen: add license information
-Message-ID: <1352464503-18359-1-git-send-email-spdawson@gmail.com>
+Date: Fri,  9 Nov 2012 12:45:45 +0000
+Subject: [Buildroot] [PATCH] oprofile: add license information
+Message-ID: <1352465145-18842-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/screen/screen.mk |    2 ++
+ package/oprofile/oprofile.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index 8786322..50bb1a6 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 54c46dd..17d225a 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
 @@ -6,6 +6,8 @@
  
- SCREEN_VERSION = 4.0.3
- SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
-+SCREEN_LICENSE = GPLv2
-+SCREEN_LICENSE_FILES = COPYING
- SCREEN_DEPENDENCIES = ncurses
- SCREEN_CONF_ENV = ac_cv_header_elf_h=no ac_cv_header_dwarf_h=no \
- 	CFLAGS="$(TARGET_CFLAGS) -DTERMINFO"
+ OPROFILE_VERSION = 0.9.7
+ OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
++OPROFILE_LICENSE = GPLv2
++OPROFILE_LICENSE_FILES = COPYING
+ OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
+ OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
+ OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
 -- 
 1.7.10.4
