@@ -1,39 +1,37 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 9 Nov 2012 08:46:32 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-11-08
-In-Reply-To: <20121109073404.B9B4552C106@lolut.humanoidz.org>
-References: <20121109073404.B9B4552C106@lolut.humanoidz.org>
-Message-ID: <CAGm1_kt9vX6NvVXxSESARNAVbgLA0kMjFx61hzvg+B7HtnRkeg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Nov 2012 09:09:46 +0100
+Subject: [Buildroot] [PATCH] xlib_libX11: fix compilation of makekeys
+In-Reply-To: <509C2776.2060706@mind.be>
+References: <1352028606-11338-1-git-send-email-arnout@mind.be>
+ <20121108201326.2676f417@skate> <509C2776.2060706@mind.be>
+Message-ID: <20121109090946.3c88e6f2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Build 6b6c23641e5e166f15142d6127029314c91d87a2
-> ==============================================
->
-> Status         : NOK
-> Failure reason : xapp_mkfontdir-1.0.7
-> Architecture   : arm
-> Submitted by   : Peter Korsgaard (gcc10)
-> Submitted at   : 2012-11-08 01:33:06
-> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d727a4da444cb0001f8b5f73e73809780542be65
-> End of log     : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/build-end.log
-> Complete log   : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/build.log.bz2
-> Configuration  : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/config
-> Defconfig      : http://autobuild.buildroot.net/results/6b6c23641e5e166f15142d6127029314c91d87a2/defconfig
+Dear Arnout Vandecappelle,
 
-Just tried "wget
-http://xorg.freedesktop.org/releases/individual/app/mkfontdir-1.0.7.tar.bz2"
-and had no problems.
+On Thu, 08 Nov 2012 22:43:18 +0100, Arnout Vandecappelle wrote:
 
-Btw have you tried to compile xdm with the latest
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203=y for OMAP3? gcc
-consumes 100% CPU time but build/link process doesn't advance. With
-the previous toolchain version xdm has no problems, but alsamixer
-shows run-time error related to libc. Haven't tested the stuff with
-Linaro toolchain yet.
+>   Indeed, and this patch fixes that.  It's a different symptom of the same
+> error: makekeys is a host binary, but it's built with target CFLAGS
+> (X11_CFLAGS = -I$(STAGING_DIR)/usr/include).  This will barf in surprising
+> ways.
+> 
+>   (That is, unless you have an autobuilder that runs against a git tree that
+> has already integrated this patch; if that is the case, then I made a
+> mistake somewhere.)
 
-Yegor
+Aaah, your patch hasn't been integrated yet. My bad. Peter, could you
+merge Arnout's patch then?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
