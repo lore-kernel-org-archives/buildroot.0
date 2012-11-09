@@ -1,116 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Nov 2012 00:28:59 +0100
-Subject: [Buildroot] [PATCH] target: add option to set the root password
-Message-ID: <1352503739-20083-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 10 Nov 2012 00:54:09 +0100
+Subject: [Buildroot] [PATCH] iso9660 fs: use cpio initrd instead of ext2
+Message-ID: <1352505249-32028-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option in the menuconfig to specify a root password.
+The ext2 initrd is pretty broken, because it requires an additional
+root=/dev/ram0 command line parameter, and a /init to mount
+devtmps that isn't there in out ext2 rootfs.  So just use a cpio
+instead.
 
-If set to empty, no root password is created; otherwise, the password is
-encrypted using MD5 (MD5 is not the default for crypt(3), DES-56 is, but
-MD5 is widely available, not-so-strong, but not-so-weak either).
+Note that there is no check if the kernel supports initramfs or the
+selected compression method.
 
-Add a check for 'mkpasswd' as a new dependency.
+Also removed a bit of dead code in iso9660.mk.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 ---
-Switched to using MD5 as per Arnout's suggestion:
-    http://lists.busybox.net/pipermail/buildroot/2012-September/058712.html
----
- support/dependencies/dependencies.sh |    7 +++++++
- system/Config.in                     |   21 +++++++++++++++++++++
- system/system.mk                     |   14 ++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+ fs/iso9660/Config.in  |    2 +-
+ fs/iso9660/iso9660.mk |   11 +++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 9f0f6a9..edf49e9 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -158,3 +158,10 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
-        exit 1 ;
-    fi
- fi
-+
-+if grep -E '^TARGET_GENERIC_ROOT_PASSWD=".+"$' $CONFIG_FILE > /dev/null 2>&1; then
-+    if ! which mkpasswd > /dev/null 2>&1; then
-+        /bin/echo -e "\nYou need the 'mkpasswd' utility to set the root password\n"
-+        exit 1
-+    fi
-+fi
-diff --git a/system/Config.in b/system/Config.in
-index 10c9d9d..9a9c197 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -12,6 +12,27 @@ config BR2_TARGET_GENERIC_ISSUE
-        help
-          Select system banner (/etc/issue) to be displayed at login.
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 4c00583..98ff78b 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -2,7 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
+ 	bool "iso image"
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_LINUX_KERNEL
+-	select BR2_TARGET_ROOTFS_EXT2
++	select BR2_TARGET_ROOTFS_CPIO
+ 	select BR2_TARGET_GRUB
+ 	help
+ 	  Build a bootable iso9660 image
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index f51b6ee..029c0dd 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -9,20 +9,19 @@
  
-+config BR2_TARGET_GENERIC_ROOT_PASSWD
-+	string "root password"
-+	default ""
-+	help
-+	  Set the initial root password. It will be md5-encrypted.
-+	  
-+	  If set to empty (the default), then no root password will be set,
-+	  and root will need no password to log in.
-+	  
-+	  WARNING! WARNING!
-+	  Although pretty strong, MD5 is now an old hash function, and
-+	  suffers from som weaknesses, wihch makes it susceptible to attacks.
-+	  It is showing its age, so this root password should not be trusted
-+	  to properly secure any product that can be shipped to the wide,
-+	  hostile world.
-+	  
-+	  WARNING! WARNING!
-+	  The password appears in clear in the .config file, and may appear
-+	  in the build log! Avoid using a valuable password if either the
-+	  .config file or the build log may be distributed!
-+
- choice
- 	prompt "/dev management"
- 	default BR2_ROOTFS_DEVICE_CREATION_STATIC
-diff --git a/system/system.mk b/system/system.mk
-index 4185202..5219f3f 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -1,5 +1,6 @@
- TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
-+TARGET_GENERIC_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
- TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+ ISO9660_TARGET_DIR=$(BUILD_DIR)/iso9660
+ ISO9660_BOOT_MENU:=$(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+-ISO9660_OPTS:=
  
-@@ -13,6 +14,13 @@ target-generic-issue:
- 	mkdir -p $(TARGET_DIR)/etc
- 	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
+-ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
+-ISO9660_OPTS+=-U
+-endif
++ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_GZIP)  = .gz
++ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_BZIP2) = .bz2
++ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_LZMA)  = .lzma
  
-+target-no-root-passwd:
-+	$(SED) "s/^root:[^:]*:/root::/" $(TARGET_DIR)/etc/shadow
-+
-+target-root-passwd:
-+	root_passwd="$$( mkpasswd -m md5 "$(TARGET_GENERIC_ROOT_PASSWD)" )"; \
-+	$(SED) "s,^root::,root:$${root_passwd}:," $(TARGET_DIR)/etc/shadow
-+
- target-generic-getty-busybox:
- 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
- 		$(TARGET_DIR)/etc/inittab
-@@ -39,6 +47,12 @@ ifneq ($(TARGET_GENERIC_ISSUE),)
- TARGETS += target-generic-issue
- endif
- 
-+ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
-+TARGETS += target-root-passwd
-+else
-+TARGETS += target-no-root-passwd
-+endif
-+
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- ifeq ($(BR2_PACKAGE_SYSVINIT),y)
- TARGETS += target-generic-getty-sysvinit
+-$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-ext2 grub
++$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
+ 	mkdir -p $(ISO9660_TARGET_DIR)
+ 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
+ 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
+ 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
+ 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
+-	cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
++	cp $(BINARIES_DIR)/rootfs.cpio$(ISO9660_CPIO_EXT-y) $(ISO9660_TARGET_DIR)/initrd
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
 -- 
-1.7.2.5
+tg: (234fe44..) t/iso9660 (depends on: master)
