@@ -1,31 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 Nov 2012 14:01:34 +0100
-Subject: [Buildroot] Udev on a live CD system does not appear to
- populate /dev
-In-Reply-To: <509CF4F8.6080608@macrium.com>
-References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
- <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
- <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
- <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
- <509C2166.8050705@mind.be> <509CF4F8.6080608@macrium.com>
-Message-ID: <509CFEAE.6090906@mind.be>
+Date: Fri, 09 Nov 2012 14:03:14 +0100
+Subject: [Buildroot] [PATCH] autoconf: add license information
+In-Reply-To: <1352460965-17114-1-git-send-email-spdawson@gmail.com>
+References: <1352460965-17114-1-git-send-email-spdawson@gmail.com>
+Message-ID: <509CFF12.80900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/12 13:20, Antony Vennard wrote:
-> I may also potentially be looking to integrate EFI boot into our live CD
-> at some stage - if this is of interest I can have a go at adding this to
-> buildroot also.
+On 11/09/12 12:36, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
+>
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+> ---
+>   package/autoconf/autoconf.mk |    2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+> index 0cb50db..9530ee6 100644
+> --- a/package/autoconf/autoconf.mk
+> +++ b/package/autoconf/autoconf.mk
+> @@ -6,6 +6,8 @@
+>
+>   AUTOCONF_VERSION = 2.68
+>   AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
+> +AUTOCONF_LICENSE = GPLv3+ with exceptions
 
-  I guess that will mean you'll need grub2.  A posted grub2 patches a while
-ago, if you could get them a spin and give feedback, that would be nice.  Or
-I can repost them if you like.
+  Just thought I'd give a
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+for this one, because I agree with how it's formulated here.
 
-  Regards,
-  Arnout
+> +AUTOCONF_LICENSE_FILES = COPYINGv3 COPYING.EXCEPTION
+>
+>   AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+>   		    ac_cv_prog_gnu_m4_gnu=no
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
