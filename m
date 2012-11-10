@@ -1,46 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 10 Nov 2012 02:02:58 +0100
-Subject: [Buildroot] [PATCH] diffutils stdio: don't assume gets any more
-In-Reply-To: <1352466130-23535-1-git-send-email-alexander@mezon.ru>
-References: <1352466130-23535-1-git-send-email-alexander@mezon.ru>
-Message-ID: <509DA7C2.9060304@mind.be>
+Date: Sat, 10 Nov 2012 02:08:44 +0100
+Subject: [Buildroot] [PATCH] libatomic_ops version update 7.3alpha2 old
+ version 1.2 does not compiles with modern gcc and utils
+In-Reply-To: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
+References: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
+Message-ID: <509DA91C.8070805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Change the commit message into:
-
-diffutils: fix build with glibc2.16, which doesn't declare gets()
-
-On 11/09/12 14:02, Alexander Khryukin wrote:
+On 11/09/12 13:55, Alexander Khryukin wrote:
 >
 > Signed-off-by: Alexander Khryukin<alexander@mezon.ru>
 > ---
->   package/diffutils/diffutils-3.2-no-gets.patch | 21 +++++++++++++++++++++
->   1 file changed, 21 insertions(+)
->   create mode 100644 package/diffutils/diffutils-3.2-no-gets.patch
+>   package/libatomic_ops/libatomic_ops.mk | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
 >
-> diff --git a/package/diffutils/diffutils-3.2-no-gets.patch b/package/diffutils/diffutils-3.2-no-gets.patch
-> new file mode 100644
-> index 0000000..56ca22d
-> --- /dev/null
-> +++ b/package/diffutils/diffutils-3.2-no-gets.patch
-> @@ -0,0 +1,21 @@
-> +hack until gzip pulls a newer gnulib version
-> +
+> diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+> index 6d50d0a..c946df0 100644
+> --- a/package/libatomic_ops/libatomic_ops.mk
+> +++ b/package/libatomic_ops/libatomic_ops.mk
+> @@ -1,12 +1,12 @@
+>  #############################################################
+>  #
+> -# Atomic_ops library
+> +## Atomic_ops library
+>  #
+> -#############################################################
+> +##############################################################
 
-  You should still add your SoB here, to indicate that you were in the
-forwarding path.
+  Please don't modify the header.
 
-  Even so,
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> -LIBATOMIC_OPS_VERSION = 1.2
+> +LIBATOMIC_OPS_VERSION = 7.3alpha2
+
+  Is there a particular reason to use the experimental version, instead of
+the "current" version 7.2d?
+
+>   LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
+> -LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
+> -LIBATOMIC_OPS_INSTALL_STAGING = YES
+> +LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/
+> +	LIBATOMIC_OPS_INSTALL_STAGING = YES
+
+  What's wrong with the old download site? It works fine for me...
+And please don't mess up the indentation of the _INSTALL_STAGING line.
+
 
   Regards,
   Arnout
 
-[snip]
+>
+>   $(eval $(autotools-package))
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
