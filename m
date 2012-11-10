@@ -1,86 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 17:07:35 +0100
-Subject: [Buildroot] [PATCH 1/2] perl: fix configure step
-In-Reply-To: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
-References: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20121110170735.01056125@skate>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Sat, 10 Nov 2012 19:31:21 +0300
+Subject: [Buildroot] [PATCH] libtool version update 2.4.2
+In-Reply-To: <20121110105308.740a3bfa@skate>
+References: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
+ <20121110105308.740a3bfa@skate>
+Message-ID: <CABtOAfzk8GHBemVXM7_at5RwOo24eo4d+sb=wrzjkEEdShsnFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+2012/11/10 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Sat, 10 Nov 2012 15:41:07 +0100, Francois Perrad wrote:
-> Configure -A symbol=val generates a extra space in config.sh,
-> which causes failure like this :
->     Building Module-Runtime-0.013
->     Unknown OS type ' linux' - using default settings
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Alexander,
+>
+> On Fri,  9 Nov 2012 16:38:52 +0400, Alexander Khryukin wrote:
+>
+> > -LIBTOOL_VERSION = 2.2.10
+> > +LIBTOOL_VERSION = 2.4.2
+>
+> How much testing did you give to this version bump? A libtool version
+> bump is a very sensitive operation, as host-libtool is used to
+> autoreconfigure many packages in Buildroot. Therefore, this patch needs
+> a good amount of testing before being committed (ideally testing that
+> all packages having <foo>_AUTORECONF = YES still build).
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
-Instead of doing what the patch does below, wouldn't it be better to
-fix this -A option so that it doesn't add inappropriate spaces?
-
-Thanks,
-
-Thomas
-
-> ---
->  package/perl/perl.mk |   27 +++++++++++++++++++--------
->  1 file changed, 19 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index 0893eb5..cbfeeab 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -55,14 +55,8 @@ PERL_CONF_OPT = \
->  	--target-tools-prefix=$(TARGET_CROSS) \
->  	--prefix=/usr \
->  	-Dld="$(TARGET_CC_NOCCACHE)" \
-> -	-A ccflags="$(TARGET_CFLAGS)" \
-> -	-A ldflags="$(TARGET_LDFLAGS) -lm" \
-> -	-A mydomain="" \
-> -	-A myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
-> -	-A myuname="Buildroot $(BR2_VERSION_FULL)" \
-> -	-A osname=linux \
-> -	-A osvers=$(LINUX_VERSION) \
-> -	-A perladmin=root
-> +	-Dccflags="$(TARGET_CFLAGS)" \
-> +	-Dldflags="$(TARGET_LDFLAGS) -lm"
->  
->  ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
->      PERL_CONF_OPT += -Dusedevel
-> @@ -79,6 +73,23 @@ endif
->  
->  define PERL_CONFIGURE_CMDS
->  	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPT))
-> +	echo "# patched values" >>$(@D)/config.sh
-> +	$(SED) '/^myarchname=/d' \
-> +		-e '/^mydomain=/d' \
-> +		-e '/^myhostname=/d' \
-> +		-e '/^myuname=/d' \
-> +		-e '/^osname=/d' \
-> +		-e '/^osvers=/d' \
-> +		-e '/^perladmin=/d' \
-> +		$(@D)/config.sh
-> +	echo "myarchname='$(GNU_TARGET_NAME)'"                  >>$(@D)/config.sh
-> +	echo "mydomain=''"                                      >>$(@D)/config.sh
-> +	echo "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'"      >>$(@D)/config.sh
-> +	echo "myuname='Buildroot $(BR2_VERSION_FULL)'"          >>$(@D)/config.sh
-> +	echo "osname='linux'"                                   >>$(@D)/config.sh
-> +	echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'"             >>$(@D)/config.sh
-> +	echo "perladmin='root'"                                 >>$(@D)/config.sh
-> +	(cd $(@D); ./Configure -S)
->  	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
->  endef
->  
-
-
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+With new libtool i built my system many times
+and it works.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121110/1f5fde48/attachment-0001.html>
