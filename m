@@ -1,34 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 10 Nov 2012 01:33:33 +0100
-Subject: [Buildroot] [PATCH 1/2] xtensa: add support for the Xtensa
-	architecture
-In-Reply-To: <509D9F95.1040806@zankel.net>
-References: <509b2947.a6e6440a.547c.7082@mx.google.com>
- <509C1D94.2010107@mind.be> <509D9F95.1040806@zankel.net>
-Message-ID: <509DA0DD.3040904@mind.be>
+Date: Sat, 10 Nov 2012 01:38:12 +0100
+Subject: [Buildroot] [PATCH 1/2 v3] xtensa: add support for the Xtensa
+ architecture
+In-Reply-To: <509d9da3.e2d5440a.1892.015f@mx.google.com>
+References: <509d9da3.e2d5440a.1892.015f@mx.google.com>
+Message-ID: <509DA1F4.7010009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/12 01:28, Chris Zankel wrote:
-> On 11/08/2012 01:01 PM, Arnout Vandecappelle wrote:
->> >  On 11/08/12 04:38, Chris Zankel wrote:
->>> >>     config BR2_USE_MMU
->>> >>  -	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
->>> >>  +	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
->>> >>     	default y if !BR2_bfin
->> >     So the Xtensa, a configurable processor, always has a MMU?
-> Good point. Actually, you can configure Xtensa with and without an MMU,
-> so I think the above logic is correct. It allows to configure MMU if the
-> processor is Xtensa, am I wrong?
+On 11/10/12 01:19, Chris Zankel wrote:
+> diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
+> index c304572..3622f3d 100644
+> --- a/package/autoconf/Config.in
+> +++ b/package/autoconf/Config.in
+> @@ -1,6 +1,7 @@
+>   config BR2_PACKAGE_AUTOCONF
+>   	bool "autoconf"
+> -	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
+> +	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
+> +	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
+>   	select BR2_PACKAGE_PERL
+>   	help
+>   	  Extensible program for developing configure scripts.  These
 
-  Err, yes, I was misreading the patch... Sorry about that.
+  Actually, these dependencies can be removed again, because perl no longer
+depends on host-qemu. I'll post a patch removing them.
+
+  And anyway, host-qemu exists for xtensa, no?
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
