@@ -1,67 +1,45 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 10 Nov 2012 15:41:07 +0100
-Subject: [Buildroot] [PATCH 1/2] perl: fix configure step
-Message-ID: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
+Date: Sat, 10 Nov 2012 15:41:08 +0100
+Subject: [Buildroot] [PATCH 2/2] cpanminus: fix paths
+In-Reply-To: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
+References: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1352558468-3643-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Configure -A symbol=val generates a extra space in config.sh,
-which causes failure like this :
-    Building Module-Runtime-0.013
-    Unknown OS type ' linux' - using default settings
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl/perl.mk |   27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ package/cpanminus/cpanminus.mk |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0893eb5..cbfeeab 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -55,14 +55,8 @@ PERL_CONF_OPT = \
- 	--target-tools-prefix=$(TARGET_CROSS) \
- 	--prefix=/usr \
- 	-Dld="$(TARGET_CC_NOCCACHE)" \
--	-A ccflags="$(TARGET_CFLAGS)" \
--	-A ldflags="$(TARGET_LDFLAGS) -lm" \
--	-A mydomain="" \
--	-A myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
--	-A myuname="Buildroot $(BR2_VERSION_FULL)" \
--	-A osname=linux \
--	-A osvers=$(LINUX_VERSION) \
--	-A perladmin=root
-+	-Dccflags="$(TARGET_CFLAGS)" \
-+	-Dldflags="$(TARGET_LDFLAGS) -lm"
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+index af35e93..e07ef38 100644
+--- a/package/cpanminus/cpanminus.mk
++++ b/package/cpanminus/cpanminus.mk
+@@ -11,8 +11,8 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
  
- ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
-     PERL_CONF_OPT += -Dusedevel
-@@ -79,6 +73,23 @@ endif
- 
- define PERL_CONFIGURE_CMDS
- 	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPT))
-+	echo "# patched values" >>$(@D)/config.sh
-+	$(SED) '/^myarchname=/d' \
-+		-e '/^mydomain=/d' \
-+		-e '/^myhostname=/d' \
-+		-e '/^myuname=/d' \
-+		-e '/^osname=/d' \
-+		-e '/^osvers=/d' \
-+		-e '/^perladmin=/d' \
-+		$(@D)/config.sh
-+	echo "myarchname='$(GNU_TARGET_NAME)'"                  >>$(@D)/config.sh
-+	echo "mydomain=''"                                      >>$(@D)/config.sh
-+	echo "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'"      >>$(@D)/config.sh
-+	echo "myuname='Buildroot $(BR2_VERSION_FULL)'"          >>$(@D)/config.sh
-+	echo "osname='linux'"                                   >>$(@D)/config.sh
-+	echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'"             >>$(@D)/config.sh
-+	echo "perladmin='root'"                                 >>$(@D)/config.sh
-+	(cd $(@D); ./Configure -S)
- 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
- endef
- 
+ CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
+ CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
+-CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
+-CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
++CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
++CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
+ CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
+@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
+ 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
+ 	chmod +x $(@D)/run_perl
+ 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
+-	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
+-	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
++	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
++	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
+ 	RUN_PERL="$(@D)/run_perl" \
+ 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
+ 		--perl=$(@D)/run_perl \
 -- 
 1.7.9.5
