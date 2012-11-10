@@ -1,197 +1,90 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 10 Nov 2012 08:59:58 +0100
-Subject: [Buildroot] [PATCH 1/4] perl: remove redundant patches
-In-Reply-To: <1352489646-30635-1-git-send-email-arnout@mind.be>
-References: <1352489646-30635-1-git-send-email-arnout@mind.be>
-Message-ID: <CAB0FRssmgee+7MMrFhfN9BC3NPp2jwL-jA1HCJRfOXdwfPmzBA@mail.gmail.com>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Sat, 10 Nov 2012 11:46:26 +0300
+Subject: [Buildroot] [PATCH] libatomic_ops version update 7.3alpha2 old
+ version 1.2 does not compiles with modern gcc and utils
+In-Reply-To: <509DA91C.8070805@mind.be>
+References: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
+ <509DA91C.8070805@mind.be>
+Message-ID: <CABtOAfzFYAfVJ7BxmFNGFu=3RcGQ=esoyPJqjzjbZD8VV=rBzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+2012/11/10 Arnout Vandecappelle <arnout@mind.be>
 
-package/perl/perl-fix-Module-Build.patch is still useful for cpanminus.
-
-Fran?ois
-
-2012/11/9 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> On 11/09/12 13:55, Alexander Khryukin wrote:
 >
-> Now we are using perlcross, the patches to make perl work with qemu are
-> redundant, so remove them.
+>>
+>> Signed-off-by: Alexander Khryukin<alexander@mezon.ru>
+>> ---
+>>   package/libatomic_ops/libatomi**c_ops.mk <http://libatomic_ops.mk> |
+>> 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/package/libatomic_ops/libato**mic_ops.mk<http://libatomic_ops.mk>b/package/libatomic_ops/
+>> libato**mic_ops.mk <http://libatomic_ops.mk>
+>> index 6d50d0a..c946df0 100644
+>> --- a/package/libatomic_ops/libato**mic_ops.mk <http://libatomic_ops.mk>
+>> +++ b/package/libatomic_ops/libato**mic_ops.mk <http://libatomic_ops.mk>
+>> @@ -1,12 +1,12 @@
+>>  ##############################**##############################**#
+>>  #
+>> -# Atomic_ops library
+>> +## Atomic_ops library
+>>  #
+>> -#############################**##############################**##
+>> +#############################**##############################**###
+>>
 >
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  package/perl/perl-configure-qemu.patch   |   53 ------------------------------
->  package/perl/perl-fix-Module-Build.patch |   16 ---------
->  package/perl/perl-make-ext.patch         |   24 --------------
->  package/perl/perl-mkppport.patch         |   37 ---------------------
->  4 files changed, 130 deletions(-)
->  delete mode 100644 package/perl/perl-configure-qemu.patch
->  delete mode 100644 package/perl/perl-fix-Module-Build.patch
->  delete mode 100644 package/perl/perl-make-ext.patch
->  delete mode 100644 package/perl/perl-mkppport.patch
+>  Please don't modify the header.
 >
-> diff --git a/package/perl/perl-configure-qemu.patch b/package/perl/perl-configure-qemu.patch
-> deleted file mode 100644
-> index c2d6b92..0000000
-> --- a/package/perl/perl-configure-qemu.patch
-> +++ /dev/null
-> @@ -1,53 +0,0 @@
-> -Add qemu support
-> -
-> -see https://rt.perl.org/rt3//Public/Bug/Display.html?id=114798
-> -
-> -Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> -
-> -Index: b/Configure
-> -===================================================================
-> ---- a/Configure
-> -+++ b/Configure
-> -@@ -2837,6 +2837,9 @@
-> -             ;;
-> -         *)  echo "Using usrinc $usrinc." >&4 ;;
-> -       esac
-> -+      case "$targetrun" in
-> -+      *qemu*) targethost=dummy ;;
-> -+      esac
-> -       case "$targethost" in
-> -       '') echo "Targethost not defined." >&4; croak=y ;;
-> -         *)  echo "Using targethost $targethost." >&4
-> -@@ -2868,7 +2871,7 @@
-> -       case "$targetfrom" in
-> -       '') targetfrom=scp ;;
-> -       esac
-> --      run=$run-$targetrun
-> -+      run=$run-`basename $targetrun`
-> -       to=$to-$targetto
-> -       from=$from-$targetfrom
-> -       case "$targetdir" in
-> -@@ -2908,6 +2911,14 @@
-> - $targetrun -l $targetuser $targethost "cd \$cwd && ./\$exe \$@"
-> - EOF
-> -           ;;
-> -+      *qemu*)
-> -+          to=:
-> -+          from=:
-> -+          cat >$run <<EOF
-> -+#!/bin/sh
-> -+$targetrun -L $qemulib "\$@"
-> -+EOF
-> -+          ;;
-> -       *)  echo "Unknown targetrun '$targetrun'" >&4
-> -           exit 1
-> -           ;;
-> -@@ -5048,7 +5059,7 @@
-> - echo " ";
-> - echo "Checking if your compiler accepts $flag" 2>&1;
-> - echo "int main(void) { return 0; }" > gcctest.c;
-> --if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && ./gcctest; then
-> -+if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && $run ./gcctest; then
-> -     echo "Yes, it does." 2>&1;
-> -     if $test -s gcctest.out ; then
-> -         echo "But your platform does not like it:";
-> diff --git a/package/perl/perl-fix-Module-Build.patch b/package/perl/perl-fix-Module-Build.patch
-> deleted file mode 100644
-> index 26b15e4..0000000
-> --- a/package/perl/perl-fix-Module-Build.patch
-> +++ /dev/null
-> @@ -1,16 +0,0 @@
-> -
-> -Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> -
-> -Index: b/cpan/Module-Build/lib/Module/Build/Base.pm
-> -===================================================================
-> ---- a/cpan/Module-Build/lib/Module/Build/Base.pm
-> -+++ b/cpan/Module-Build/lib/Module/Build/Base.pm
-> -@@ -456,7 +456,7 @@
-> -   my $proto = shift;
-> -   my $c     = ref($proto) ? $proto->{config} : 'Module::Build::Config';
-> -
-> --  my $perl  = $^X;
-> -+  my $perl  = $ENV{RUN_PERL} || $^X;
-> -   my $perl_basename = File::Basename::basename($perl);
-> -
-> -   my @potential_perls;
-> diff --git a/package/perl/perl-make-ext.patch b/package/perl/perl-make-ext.patch
-> deleted file mode 100644
-> index e0195e7..0000000
-> --- a/package/perl/perl-make-ext.patch
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -Don't use RUN with make (only for perl)
-> -
-> -Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> -
-> -Index: b/make_ext.pl
-> -===================================================================
-> ---- a/make_ext.pl
-> -+++ b/make_ext.pl
-> -@@ -458,11 +458,13 @@
-> -       # Give makefile an opportunity to rewrite itself.
-> -       # reassure users that life goes on...
-> -       my @args = ('config', @$pass_through);
-> --      system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
-> -+#     system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
-> -+      system(@make, @args) and print "@make @args failed, continuing anyway...\n";
-> -     }
-> -     my @targ = ($target, @$pass_through);
-> -     print "Making $target in $ext_dir\n at run @make @targ\n";
-> --    my $code = system(@run, @make, @targ);
-> -+#    my $code = system(@run, @make, @targ);
-> -+    my $code = system(@make, @targ);
-> -     die "Unsuccessful make($ext_dir): code=$code" if $code != 0;
-> -
-> -     chdir $return_dir || die "Cannot cd to $return_dir: $!";
-> diff --git a/package/perl/perl-mkppport.patch b/package/perl/perl-mkppport.patch
-> deleted file mode 100644
-> index 97f27a2..0000000
-> --- a/package/perl/perl-mkppport.patch
-> +++ /dev/null
-> @@ -1,37 +0,0 @@
-> -Add RUN
-> -
-> -Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> -
-> -Index: b/mkppport
-> -===================================================================
-> ---- a/mkppport
-> -+++ b/mkppport
-> -@@ -1,6 +1,7 @@
-> - use strict;
-> - use warnings;
-> -
-> -+use Config;
-> - use Getopt::Long;
-> - use File::Spec;
-> - use File::Compare qw( compare );
-> -@@ -136,14 +137,18 @@
-> - #----------------------------------------------
-> - sub run
-> - {
-> -+  my @run = $Config{run};
-> -+  @run = () if not defined $run[0] or $run[0] eq '';
-> -   my @args = ("-I" . File::Spec->catdir((File::Spec->updir) x 2, 'lib'), @_);
-> -   my $run = $perl =~ m/\s/ ? qq("$perl") : $perl;
-> -   for (@args) {
-> -     $_ = qq("$_") if $^O eq 'VMS' && /^[^"]/;
-> -     $run .= " $_";
-> -   }
-> --  print "running $run\n";
-> --  system $run and die "$run failed: $?\n";
-> -+#  print "running $run\n";
-> -+#  system $run and die "$run failed: $?\n";
-> -+  print "running ", join(' ', @run, $run), "\n";
-> -+  system join(' ', @run, $run) and die "@run $run failed: $?\n";
-> - }
-> -
-> - __END__
+>
+>
+>> -LIBATOMIC_OPS_VERSION = 1.2
+>> +LIBATOMIC_OPS_VERSION = 7.3alpha2
+>>
+>
+>  Is there a particular reason to use the experimental version, instead of
+> the "current" version 7.2d?
+>
+>
+>    LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_**VERSION).tar.gz
+>> -LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/**research/linux/atomic_ops/*
+>> *download <http://www.hpl.hp.com/research/linux/atomic_ops/download>
+>> -LIBATOMIC_OPS_INSTALL_STAGING = YES
+>> +LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/**personal/Hans_Boehm/gc/gc_*
+>> *source/ <http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/>
+>> +       LIBATOMIC_OPS_INSTALL_STAGING = YES
+>>
+>
+>  What's wrong with the old download site? It works fine for me...
+> And please don't mess up the indentation of the _INSTALL_STAGING line.
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>>   $(eval $(autotools-package))
+>>
+>
 > --
-> 1.7.10.4
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+Current version not compiles with modern gcc (4.7x) and no compiles with
+armhf compiler even with thumb-interwork.
+I'm tried own toolchain, linaro toolchains. sourcery and buildroot.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121110/d6f791d3/attachment.html>
