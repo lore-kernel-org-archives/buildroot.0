@@ -1,56 +1,148 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 22:42:41 +0100
-Subject: [Buildroot] [PATCH 04/11] libtirpc: handle the case where uClibc
-	may have RPC support
+Date: Sat, 10 Nov 2012 22:42:43 +0100
+Subject: [Buildroot] [PATCH 06/11] nfs-utils: add patches to allow
+	compilation against libtirpc
 In-Reply-To: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5863a180ea3dd2e145070efa109e54b2c1093102.1352583641.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c60fd14b8d9ba699b94ab2ac60f363fa97f1920f.1352583641.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When uClibc has RPC support, it is not needed to define the 'struct
-rpcent' structure.
+libtirpc does not implement the reentrant function getrpcbynumber_r(),
+so allow nfs-utils to use the non-reentrant version
+getrpcbynumber(). This should not be a problem as nfs-utils tools are
+not multi-threaded.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...out-RPC-support-does-not-install-rpcent.h.patch |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ ...-of-getrpcbynumber-when-getrpcbynumber_r-.patch |   70 ++++++++++++++++++++
+ ...figure-script-find-getrpcbynumber-in-libt.patch |   38 +++++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+ create mode 100644 package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
 
-diff --git a/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch b/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-index b950cb3..3ad25af 100644
---- a/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-+++ b/package/libtirpc/libtirpc-0002-uClibc-without-RPC-support-does-not-install-rpcent.h.patch
-@@ -5,19 +5,22 @@ Subject: [PATCH] uClibc without RPC support does not install rpcent.h
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-- tirpc/rpc/rpcent.h |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
-+ tirpc/rpc/rpcent.h |    5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
- 
- diff --git a/tirpc/rpc/rpcent.h b/tirpc/rpc/rpcent.h
--index 7fd93d9..df1f5ed 100644
-+index 7fd93d9..8ce05ed 100644
- --- a/tirpc/rpc/rpcent.h
- +++ b/tirpc/rpc/rpcent.h
--@@ -47,7 +47,7 @@
-+@@ -46,8 +46,9 @@
+diff --git a/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch b/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+new file mode 100644
+index 0000000..7c9f3c3
+--- /dev/null
++++ b/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+@@ -0,0 +1,70 @@
++From a4c15a4f9f49fd2ae5eee7eef54c67f4842952b2 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 10 Nov 2012 18:42:28 +0100
++Subject: [PATCH] Allow usage of getrpcbynumber() when getrpcbynumber_r() is
++ not available
++
++getrpcbynumber_r() is not implemented by libtirpc at the moment, only
++the non-reentrant getrpcbynumber() is available. Since nfs-utils seems
++to only be using getrpcbynumber_r() is a non multithreaded context,
++using getrpcbynumber() should work just as well.
++
++We also take this opportunity to adjust the autoconf checks to verify
++whether any of getrpcbynumber() or getrpcbynumber_r() is available,
++and error out if none of them is available.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac             |    8 ++++----
++ support/nfs/svc_socket.c |    6 ++++++
++ 2 files changed, 10 insertions(+), 4 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index b408f1b..41216c9 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -246,9 +246,6 @@ AC_CHECK_FUNC([connect], ,
++ AC_CHECK_FUNC([getaddrinfo], ,
++               [AC_MSG_ERROR([Function 'getaddrinfo' not found.])])
 + 
-  __BEGIN_DECLS
-  
-- /* These are defined in /usr/include/rpc/netdb.h */
-+-/* These are defined in /usr/include/rpc/netdb.h */
- -#if 0
--+#if __UCLIBC__
-++/* These are defined in /usr/include/rpc/netdb.h, unless we are using
-++   the C library without RPC support. */
-++#if defined(__UCLIBC__) && !defined(__UCLIBC_HAS_RPC__)
-  struct rpcent {
-  	char	*r_name;	/* name of server for this rpc program */
-  	char	**r_aliases;	/* alias list */
++-AC_CHECK_FUNC([getrpcbynumber], ,
++-              [AC_MSG_ERROR([Function 'getrpcbynumber' not found.])])
++-
++ AC_CHECK_FUNC([getservbyname], ,
++               [AC_MSG_ERROR([Function 'getservbyname' not found.])])
++ 
++@@ -393,8 +390,11 @@ AC_CHECK_FUNCS([alarm atexit dup2 fdatasync ftruncate getcwd \
++                getnameinfo getrpcbyname getifaddrs \
++                gettimeofday hasmntopt inet_ntoa innetgr memset mkdir pathconf \
++                realpath rmdir select socket strcasecmp strchr strdup \
++-               strerror strrchr strtol strtoul sigprocmask])
+++               strerror strrchr strtol strtoul sigprocmask getrpcbynumber getrpcbynumber_r])
++ 
+++if test "$ac_cv_func_getrpcbynumber_r" != "yes" -a "$ac_cv_func_getrpcbynumber" != "yes"; then
+++   AC_MSG_ERROR([Neither getrpcbynumber_r nor getrpcbynumber are available])
+++fi
++ 
++ dnl *************************************************************
++ dnl Check for data sizes
++diff --git a/support/nfs/svc_socket.c b/support/nfs/svc_socket.c
++index f56f310..61ccf5b 100644
++--- a/support/nfs/svc_socket.c
+++++ b/support/nfs/svc_socket.c
++@@ -42,8 +42,14 @@ int getservport(u_long number, const char *proto)
++ 	struct servent servbuf, *servp = NULL;
++ 	int ret;
++ 
+++#if HAVE_GETRPCBYNUMBER_R
++ 	ret = getrpcbynumber_r(number, &rpcbuf, rpcdata, sizeof rpcdata,
++ 				&rpcp);
+++#else
+++	rpcp = getrpcbynumber(number);
+++	ret = 0;
+++#endif
+++
++ 	if (ret == 0 && rpcp != NULL) {
++ 		/* First try name.  */
++ 		ret = getservbyname_r(rpcp->r_name, proto, &servbuf, servdata,
++-- 
++1.7.9.5
++
+diff --git a/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch b/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+new file mode 100644
+index 0000000..1ca17b7
+--- /dev/null
++++ b/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+@@ -0,0 +1,38 @@
++From 7ea7814a8b87a0faa50fb9f4a486bfd7a376f3fc Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 10 Nov 2012 18:53:03 +0100
++Subject: [PATCH] Let the configure script find getrpcbynumber in libtirpc
++
++The getrpcbynumber() function may not be available in the C library,
++but only in the libtirpc library. Take this into account when checking
++for the existence of getrpcbynumber() and getrpcbynumber_r().
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac |   10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 41216c9..1bbecfa 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -390,7 +390,15 @@ AC_CHECK_FUNCS([alarm atexit dup2 fdatasync ftruncate getcwd \
++                getnameinfo getrpcbyname getifaddrs \
++                gettimeofday hasmntopt inet_ntoa innetgr memset mkdir pathconf \
++                realpath rmdir select socket strcasecmp strchr strdup \
++-               strerror strrchr strtol strtoul sigprocmask getrpcbynumber getrpcbynumber_r])
+++               strerror strrchr strtol strtoul sigprocmask])
+++
+++save_CFLAGS=$CFLAGS
+++save_LIBS=$LIBS
+++CFLAGS="$CFLAGS $AM_CPPFLAGS"
+++LIBS="$LIBS $LIBTIRPC"
+++AC_CHECK_FUNCS([getrpcbynumber getrpcbynumber_r])
+++CFLAGS=$save_CFLAGS
+++LIBS=$save_LIBS
++ 
++ if test "$ac_cv_func_getrpcbynumber_r" != "yes" -a "$ac_cv_func_getrpcbynumber" != "yes"; then
++    AC_MSG_ERROR([Neither getrpcbynumber_r nor getrpcbynumber are available])
++-- 
++1.7.9.5
++
 -- 
 1.7.9.5
