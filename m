@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 10:53:08 +0100
-Subject: [Buildroot] [PATCH] libtool version update 2.4.2
-In-Reply-To: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
-References: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
-Message-ID: <20121110105308.740a3bfa@skate>
+Date: Sat, 10 Nov 2012 10:55:34 +0100
+Subject: [Buildroot] [PATCH 1/2 v2] xtensa: add support for the Xtensa
+ architecture
+In-Reply-To: <509D35D3.6070607@mind.be>
+References: <509ca3b9.e9c5440a.24b8.24a1@mx.google.com>
+ <20121109101959.70d640d5@skate> <509D35D3.6070607@mind.be>
+Message-ID: <20121110105534.614885e3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander,
 
-On Fri,  9 Nov 2012 16:38:52 +0400, Alexander Khryukin wrote:
+On Fri, 09 Nov 2012 17:56:51 +0100, Arnout Vandecappelle wrote:
 
-> -LIBTOOL_VERSION = 2.2.10
-> +LIBTOOL_VERSION = 2.4.2
+>   I get these same error with the default bfin config, and it also breaks
+> with BR2_PTHREADS_NONE=y
 
-How much testing did you give to this version bump? A libtool version
-bump is a very sensitive operation, as host-libtool is used to
-autoreconfigure many packages in Buildroot. Therefore, this patch needs
-a good amount of testing before being committed (ideally testing that
-all packages having <foo>_AUTORECONF = YES still build).
-
-Thanks,
+Right, I should fix the Blackfin architecture so it uses the external
+toolchain instead. I don't think gcc/uclibc/binutils have upstream the
+needed code to build a Blackfin toolchain. We could certainly point
+Buildroot to the Blackfin specific gcc/uclibc/binutils repositories, if
+someone has a usage for the internal backend on Blackfin.
 
 Thomas
 -- 
