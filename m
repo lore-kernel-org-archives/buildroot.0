@@ -1,61 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 10 Nov 2012 01:40:25 +0100
-Subject: [Buildroot] [PATCH] Revert "auto{conf,
-	make}: only make available on archs supported by qemu"
-Message-ID: <1352508025-32365-1-git-send-email-arnout@mind.be>
+From: Chris Zankel <chris@zankel.net>
+Date: Fri, 09 Nov 2012 16:50:21 -0800
+Subject: [Buildroot] [PATCH 1/2 v3] xtensa: add support for the Xtensa
+ architecture
+In-Reply-To: <509DA1F4.7010009@mind.be>
+References: <509d9da3.e2d5440a.1892.015f@mx.google.com>
+ <509DA1F4.7010009@mind.be>
+Message-ID: <509DA4CD.5000904@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+HI Arnout,
 
-Since perl no longer requires host-qemu, autoconf and automake work
-again on the architectures that are not supported by host-qemu.
+On 11/09/2012 04:38 PM, Arnout Vandecappelle wrote:
+> On 11/10/12 01:19, Chris Zankel wrote:
+>> diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
+>> index c304572..3622f3d 100644
+>> --- a/package/autoconf/Config.in
+>> +++ b/package/autoconf/Config.in
+>> @@ -1,6 +1,7 @@
+>>   config BR2_PACKAGE_AUTOCONF
+>>   	bool "autoconf"
+>> -	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
+>> +	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
+>> +	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
+>>   	select BR2_PACKAGE_PERL
+>>   	help
+>>   	  Extensible program for developing configure scripts.  These
+>   Actually, these dependencies can be removed again, because perl no longer
+> depends on host-qemu. I'll post a patch removing them.
+So, I guess that breaks my patch ;-)
 
-This reverts commit c65d92e8e2767b09aaee6b717cbd9b66f88ea39c.
+>   And anyway, host-qemu exists for xtensa, no?
+Yes, there is a version of Qemu that was done my Max, but it might
+require a different processor configuration than what's in the toolchain
+by default.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/autoconf/Config.in |    4 ----
- package/automake/Config.in |    4 ----
- 2 files changed, 8 deletions(-)
-
-diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
-index c304572..5f2f148 100644
---- a/package/autoconf/Config.in
-+++ b/package/autoconf/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_AUTOCONF
- 	bool "autoconf"
--	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
- 	select BR2_PACKAGE_PERL
- 	help
- 	  Extensible program for developing configure scripts.  These
- 	  scripts handle all the mundane system/feature detection.
- 
- 	  http://www.gnu.org/software/autoconf/
--
--comment "autoconf requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
-diff --git a/package/automake/Config.in b/package/automake/Config.in
-index f8d74ef..9a9673a 100644
---- a/package/automake/Config.in
-+++ b/package/automake/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_AUTOMAKE
- 	bool "automake"
--	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
- 	select BR2_PACKAGE_AUTOCONF
- 	select BR2_PACKAGE_PERL
- 	help
-@@ -8,6 +7,3 @@ config BR2_PACKAGE_AUTOMAKE
- 	  configure scripts (made by autoconf).
- 
- 	  http://www.gnu.org/software/automake/
--
--comment "automake requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
--- 
-1.7.10.4
+-Chris
