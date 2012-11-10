@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 23:28:55 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain/gdb: disable support of full gdb
-	on target for blackfin
-Message-ID: <1352586536-19621-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Nov 2012 23:36:01 +0100
+Subject: [Buildroot] Deprecate the support for toolchain on the target
+Message-ID: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no support in gdb 6.6 for the Blackfin architecture, so
-disallow this choice. This fixes the following build failure:
+The following changes since commit 234fe4433489bca81b79311239569525cc008d9d:
 
-  http://autobuild.buildroot.org/results/e37db29810265a756833da163fda444d967d7874/build-end.log
+  perl: build with perlcross instead of qemu (2012-11-09 10:04:31 +0100)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gdb/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+are available in the git repository at:
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 8acce1e..ca0c821 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze
-+	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
- 	# The newest versions of gdb require thread debugging in the
- 	# toolchain. The only cases for which this is not needed is if
- 	# we use gdb 6.8 (marked deprecated)
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git no-target-toolchain
+
+for you to fetch changes up to c42b5a3ae08ae07779a6ee389a8367318efe96bf:
+
+  Mark a number of development related packages as deprecated (2012-11-10 23:34:39 +0100)
+
+----------------------------------------------------------------
+Thomas Petazzoni (2):
+      Deprecate the support for the toolchain on target
+      Mark a number of development related packages as deprecated
+
+ Config.in                  |    4 ++++
+ package/autoconf/Config.in |    3 +++
+ package/automake/Config.in |    3 +++
+ package/libtool/Config.in  |    2 ++
+ package/make/Config.in     |    2 ++
+ toolchain/gcc/Config.in.2  |    5 ++---
+ 6 files changed, 16 insertions(+), 3 deletions(-)
+
+Thanks,
 -- 
-1.7.9.5
+Thomas Petazzoni
