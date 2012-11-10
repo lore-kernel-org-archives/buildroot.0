@@ -1,64 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 22:42:45 +0100
-Subject: [Buildroot] [PATCH 08/11] rpcbind: convert to git patch
+Date: Sat, 10 Nov 2012 22:42:46 +0100
+Subject: [Buildroot] [PATCH 09/11] rpcbind: allow build without NSS support
 In-Reply-To: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ef36c3fca4c7412f1605a84a52e448280e69432e.1352583641.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <13ca6c8f55f92df21dc9ba86e09dfe0b17a686d6.1352583641.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+uClibc doesn't provide NSS support, so we shouldn't try to include nss
+related headers or call nss related functions.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...rpcbind-0001-Remove-yellow-pages-support.patch} |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
- rename package/rpcbind/{rpcbind-01-no-yp-support.patch => rpcbind-0001-Remove-yellow-pages-support.patch} (65%)
+ ...to-use-NSS-support-when-not-available-in-.patch |   60 ++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
 
-diff --git a/package/rpcbind/rpcbind-01-no-yp-support.patch b/package/rpcbind/rpcbind-0001-Remove-yellow-pages-support.patch
-similarity index 65%
-rename from package/rpcbind/rpcbind-01-no-yp-support.patch
-rename to package/rpcbind/rpcbind-0001-Remove-yellow-pages-support.patch
-index e9e6c9d..eba17bf 100644
---- a/package/rpcbind/rpcbind-01-no-yp-support.patch
-+++ b/package/rpcbind/rpcbind-0001-Remove-yellow-pages-support.patch
-@@ -1,12 +1,19 @@
--Remove yellow pages support
-+From 6b5db966ae01c0bdaa7b3b90d9332394af6ea0be Mon Sep 17 00:00:00 2001
+diff --git a/package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch b/package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
+new file mode 100644
+index 0000000..f7cc4a6
+--- /dev/null
++++ b/package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
+@@ -0,0 +1,60 @@
++From cfc70fb4c54e044f724516e9352f974187adb448 Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 10 Nov 2012 22:03:43 +0100
-+Subject: [PATCH] Remove yellow pages support
- 
- This support requires yellow pages support in libtirpc, which isn't
- available. As most Buildroot users are most likely never going to need
- such feature, get rid of it.
- 
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Index: b/src/security.c
--===================================================================
-+---
-+ src/security.c |   18 ------------------
-+ 1 file changed, 18 deletions(-)
++Date: Sat, 10 Nov 2012 22:04:12 +0100
++Subject: [PATCH] Do not try to use NSS support when not available in the C
++ library
 +
-+diff --git a/src/security.c b/src/security.c
-+index 0edeac6..c6c977f 100644
- --- a/src/security.c
- +++ b/src/security.c
- @@ -23,9 +23,6 @@
-@@ -19,7 +26,7 @@ Index: b/src/security.c
-  
-  #include "rpcbind.h"
-  
--@@ -322,24 +319,9 @@
-+@@ -322,24 +319,9 @@ check_callit(SVCXPRT *xprt, struct r_rmtcall_args *args, int versnum /*__unused*
-  		    args->rmt_proc != MOUNTPROC_UMNT)
-  			break;
-  		goto deny;
-@@ -44,3 +51,6 @@ Index: b/src/security.c
-  	default:
-  		break;
-  	}
++uClibc does not have NSS support, so it is unnecessary to tell the C
++library to use the "files" as the source for "services", since it is
++the only possible choice.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ src/rpcbind.c |    6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/src/rpcbind.c b/src/rpcbind.c
++index 525ffba..cde8685 100644
++--- a/src/rpcbind.c
+++++ b/src/rpcbind.c
++@@ -67,7 +67,9 @@
++ #include <pwd.h>
++ #include <string.h>
++ #include <errno.h>
+++#ifdef HAVE_NSS_H
++ #include <nss.h>
+++#endif
++ #include "config.h"
++ #include "rpcbind.h"
++ 
++@@ -156,11 +158,13 @@ main(int argc, char *argv[])
++ 		exit(1);
++ 	}
++ 
+++#ifdef HAVE_NSS_H
++ 	/*
++ 	 * Make sure we use the local service file 
++ 	 * for service lookkups
++ 	 */
++ 	__nss_configure_lookup("services", "files");
+++#endif
++ 
++ 	nc_handle = setnetconfig(); 	/* open netconfig file */
++ 	if (nc_handle == NULL) {
++@@ -222,11 +226,13 @@ main(int argc, char *argv[])
++ 		struct passwd *p;
++ 		char *id = runasdaemon ? RUN_AS : rpcbinduser;
++ 
+++#ifdef HAVE_NSS_H
++ 		/*
++ 		 * Make sure we use the local password file
++ 		 * for these lookups.
++ 		 */
++ 		__nss_configure_lookup("passwd", "files");
+++#endif
++ 
++ 		if((p = getpwnam(id)) == NULL) {
++ 			syslog(LOG_ERR, "cannot get uid of '%s': %m", id);
 +-- 
 +1.7.9.5
 +
