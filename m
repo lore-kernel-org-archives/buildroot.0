@@ -1,45 +1,81 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 10 Nov 2012 15:41:08 +0100
-Subject: [Buildroot] [PATCH 2/2] cpanminus: fix paths
-In-Reply-To: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
-References: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1352558468-3643-2-git-send-email-francois.perrad@gadz.org>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Sat, 10 Nov 2012 16:51:41 +0200
+Subject: [Buildroot] Various problem using buildroot-2012.05
+In-Reply-To: <qaol7k.eta.ln@bernd-kuhls.de>
+References: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
+ <20120618103657.721db39b@skate> <qaol7k.eta.ln@bernd-kuhls.de>
+Message-ID: <509E69FD.2000804@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/cpanminus/cpanminus.mk |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Hi Bernd
 
-diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index af35e93..e07ef38 100644
---- a/package/cpanminus/cpanminus.mk
-+++ b/package/cpanminus/cpanminus.mk
-@@ -11,8 +11,8 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
- 
- CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
- CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
--CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
--CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
-+CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
-+CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
- CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
-@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
- 	chmod +x $(@D)/run_perl
- 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
--	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
--	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
-+	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
-+	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
- 	RUN_PERL="$(@D)/run_perl" \
- 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
- 		--perl=$(@D)/run_perl \
--- 
-1.7.9.5
+10.11.2012 16:28, Bernd Kuhls kirjoitti:
+> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+> @public.gmane.org> wrote in news:20120618103657.721db39b at skate:
+>
+>> Le Mon, 18 Jun 2012 00:46:05 -0700 (PDT),
+>> Ming-Ching Tiew <mctiew@yahoo.com> a ??crit :
+>>> Because there are many packages are not made to compile in a cross
+>>> environment. For many, it's not a trial task to adapt those packages
+>>> for cross compiling. 
+>> Which packages are you talking about? If there are of general interest,
+>> some people might be interested in helping to get them to cross-compile.
+> Hi,
+>
+> in my case it?s Perl, along with Spamassassin to be build on-top of it. The 
+> current effort to cross-compile Perl is problematic in regard to cross-
+> compile CPAN modules, so now I am trying to compile Perl on the target 
+> machine using a buildroot-made gcc_target toolchain along with some 
+> dependency libs.
+
+Yes, Perl is a (as you can see from various patches and problems related
+to perl in this mailing list) is a really
+major PITA to cross-compile.
+
+If you try to use buildroot-made target gcc to compile perl, that is,
+you use buildroot to cross-compile gcc to run natively inside
+uClibc (?) environment, then you might encounter problems.
+
+As Thomas has said in few times here for people telling about problems
+of native gcc-toolchain, buildroot is about cross-compiling stuff
+and buildroot produced native gcc-toolchain is really not supported and
+might be still broken
+(I don't know what the current status of it is now).
+
+I remember that I promised to Thomas to investigate the native gcc for
+x86 (under uClibc) thing and the only solution I have so far
+managed to cook is by making a completely self-sustaining, buildroot
+independent environment with working perl 5.16, python 2.7,
+gcc 4.7, binutils 2.22 and lot's of other stuff. I decided to use RPM
+for package management and spend healthy amount of three
+weekends of studying how to make RPMs.
+
+Maybe, when I have more time, I will compare my working native uClibc
+gcc-toolchain and buildroot produced native uClibc gcc-toolchain
+and cook some patches.
+
+In case that buildroot produced native toolchain won't work, I will be
+happy to send you my native uClibc-based gcc-toolchain
+that you can chroot into, and see if that is of any help.
+
+Mind you that it's still in beta-phase...
+
+Best Regards
+Stefan
+
+> Kind regards, Bernd
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121110/080ae49e/attachment.html>
