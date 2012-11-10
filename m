@@ -1,83 +1,105 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 10 Nov 2012 21:21:13 +0100
-Subject: [Buildroot] Various problem using buildroot-2012.05
-References: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
- <20120618103657.721db39b@skate> <qaol7k.eta.ln@bernd-kuhls.de>
- <509E69FD.2000804@petroprogram.com>
-Message-ID: <pvcm7k.fkn.ln@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Nov 2012 22:42:37 +0100
+Subject: [Buildroot] Fixes for RPC support
+Message-ID: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Stefan Fr?berg <stefan.froberg@petroprogram.com>
-wrote in news:509E69FD.2000804 at petroprogram.com: 
+Here is a set of fixes that should hopefully fix most RPC related
+build failures. At least, I have now tested all packages that use RPC
+support, and built all of them on:
 
-> If you try to use buildroot-made target gcc to compile perl, that is,
-> you use buildroot to cross-compile gcc to run natively inside
-> uClibc (?) environment, then you might encounter problems.
+ * uClibc with RPC support + libtirpc
 
-yes, I am trying exactly that with uClibc. I copied the buildroot-created 
-toolchain along with some needed cross-compiled libs (z, openssl, db, ...) 
-to my target and could successfully compile perl:
+ * uClibc without RPC support + libtirpc
 
+ * glibc with RPC support + libtirpc
 
-fli4l 3.9.0-rev24280 # perl -V
-Summary of my perl5 (revision 5 version 16 subversion 2) configuration:
+ * glibc without RPC support + libtirpc
 
-  Platform:
-    osname=linux, osvers=3.6.6-nonfree, archname=i686-linux
-    uname='linux fli4l 3.6.6-nonfree #1 smp tue nov 6 16:59:31 cet 2012 
-i686 gnulinux '
-    config_args='-des -Dprefix=/usr -Duseshrplib -Dusedl -
-Ddlsrc=dl_dlopen.xs -Duselargefiles -Accflags=-fno-stack-protector -
-Dperllibs=-ldl -lm -Dlibs=-ldl -lm -Dpager=/usr/bin/less -d'
-    hint=recommended, useposix=true, d_sigaction=define
-    useithreads=undef, usemultiplicity=undef
-    useperlio=define, d_sfio=undef, uselargefiles=define, usesocks=undef
-    use64bitint=undef, use64bitall=undef, uselongdouble=undef
-    usemymalloc=n, bincompat5005=undef
-  Compiler:
-    cc='cc', ccflags ='-fno-stack-protector -fno-strict-aliasing -pipe -
-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64',
-    optimize='-O2',
-    cppflags='-fno-stack-protector -fno-strict-aliasing -pipe'
-    ccversion='', gccversion='4.6.3', gccosandvers=''
-    intsize=4, longsize=4, ptrsize=4, doublesize=8, byteorder=1234
-    d_longlong=define, longlongsize=8, d_longdbl=define, longdblsize=12
-    ivtype='long', ivsize=4, nvtype='double', nvsize=8, Off_t='off_t', 
-lseeksize=8
-    alignbytes=4, prototype=define
-  Linker and Libraries:
-    ld='cc', ldflags =''
-    libpth=/lib /usr/lib
-    libs=-ldl -lm
-    perllibs=-ldl -lm
-    libc=/lib/libc.so.0, so=so, useshrplib=true, libperl=libperl.so
-    gnulibc_version=''
-  Dynamic Linking:
-    dlsrc=dl_dlopen.xs, dlext=so, d_dlsymun=undef, ccdlflags='-Wl,-E -Wl,-
-rpath,/usr/lib/perl5/5.16.2/i686-linux/CORE'
-    cccdlflags='-fPIC', lddlflags='-shared -O2'
+ * uClibc without RPC without IPv6 + libtirpc
 
+Some of the patches against libtirpc are really big, and I currently
+am working with upstream to get a solution for these.
 
-Characteristics of this binary (from libperl):
-  Compile-time options: HAS_TIMES PERLIO_LAYERS PERL_DONT_CREATE_GVSV
-                        PERL_MALLOC_WRAP PERL_PRESERVE_IVUV USE_LARGE_FILES
-                        USE_LOCALE USE_LOCALE_COLLATE USE_LOCALE_CTYPE
-                        USE_LOCALE_NUMERIC USE_PERLIO USE_PERL_ATOF
-  Built under linux
-  Compiled at Nov 10 2012 15:51:03
-  @INC:
-    /usr/lib/perl5/site_perl/5.16.2/i686-linux
-    /usr/lib/perl5/site_perl/5.16.2
-    /usr/lib/perl5/5.16.2/i686-linux
-    /usr/lib/perl5/5.16.2
+Thomas
 
+The following changes since commit 234fe4433489bca81b79311239569525cc008d9d:
 
-Keep up the fine work with buildroot!
+  perl: build with perlcross instead of qemu (2012-11-09 10:04:31 +0100)
 
-Kind regards, Bernd
+are available in the git repository at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git fixes
+
+for you to fetch changes up to e5c6caff3ca4c3d97249a23a5a3b062ffb48af61:
+
+  rpcbind: fix build on toolchains without IPv6 support (2012-11-10 22:34:53 +0100)
+
+----------------------------------------------------------------
+Thomas Petazzoni (11):
+      conntrack-tools: do not depend on BR2_INET_RPC and use libtirpc when available
+      libtirpc: remove patch numbers from patch titles
+      libtirpc: add patches to fix a number of issues
+      libtirpc: handle the case where uClibc may have RPC support
+      nfs-utils: reformat patch set as git patches
+      nfs-utils: add patches to allow compilation against libtirpc
+      quota: allow usage of getrpcbynumber() instead of getrpcbynumber_r()
+      rpcbind: convert to git patch
+      rpcbind: allow build without NSS support
+      libnetfilter_queue: does not build without IPv6 support
+      rpcbind: fix build on toolchains without IPv6 support
+
+ package/conntrack-tools/Config.in                  |    6 +-
+ package/conntrack-tools/conntrack-tools.mk         |    6 +
+ package/libnetfilter_queue/Config.in               |    5 +-
+ ...able-parts-of-TIRPC-requiring-NIS-support.patch |    4 +-
+ ...out-RPC-support-does-not-install-rpcent.h.patch |   19 +-
+ ...btirpc-0003-Add-missing-INET6-conditional.patch |    4 +-
+ .../libtirpc-0004-Make-IPv6-support-optional.patch |    4 +-
+ ...-getrpcbyname-name-argument-as-const-char.patch |   43 +
+ ...t-remove-prototypes-of-reentrant-variants.patch |   33 +
+ ...-Makefile.am-fix-out-of-tree-installation.patch |   24 +
+ ...Add-rpcgen-program-from-nfs-utils-sources.patch | 6504 ++++++++++++++++++++
+ ...ly-generate-XDR-header-files-from-.x-sour.patch |  999 +++
+ ...R-files-needed-to-build-rpcbind-on-top-of.patch | 1649 +++++
+ ...-AM_CONDITIONAL-in-conditional-execution.patch} |    9 +-
+ ...> nfs-utils-0002-Patch-taken-from-Gentoo.patch} |   22 +-
+ ...-Switch-legacy-index-in-favour-of-strchr.patch} |   44 +-
+ ... => nfs-utils-0004-fix-build-with-uClibc.patch} |   16 +-
+ ...-of-getrpcbynumber-when-getrpcbynumber_r-.patch |   70 +
+ ...figure-script-find-getrpcbynumber-in-libt.patch |   38 +
+ package/nfs-utils/nfs-utils-dont-mix-flags.patch   |  288 -
+ package/quota/quota-tools-getrpcbynumber.patch     |   42 +
+ package/quota/quota.mk                             |    4 +
+ ...rpcbind-0001-Remove-yellow-pages-support.patch} |   18 +-
+ ...to-use-NSS-support-when-not-available-in-.patch |   60 +
+ .../rpcbind-0003-Make-IPv6-configurable.patch      |   42 +
+ package/rpcbind/rpcbind.mk                         |    1 +
+ 26 files changed, 9615 insertions(+), 339 deletions(-)
+ create mode 100644 package/libtirpc/libtirpc-0005-rpcent-mark-getrpcbyname-name-argument-as-const-char.patch
+ create mode 100644 package/libtirpc/libtirpc-0006-rpcent-remove-prototypes-of-reentrant-variants.patch
+ create mode 100644 package/libtirpc/libtirpc-0007-doc-Makefile.am-fix-out-of-tree-installation.patch
+ create mode 100644 package/libtirpc/libtirpc-0008-Add-rpcgen-program-from-nfs-utils-sources.patch
+ create mode 100644 package/libtirpc/libtirpc-0009-Automatically-generate-XDR-header-files-from-.x-sour.patch
+ create mode 100644 package/libtirpc/libtirpc-0010-Add-more-XDR-files-needed-to-build-rpcbind-on-top-of.patch
+ rename package/nfs-utils/{nfs-utils-conditionals.patch => nfs-utils-0001-build-avoid-AM_CONDITIONAL-in-conditional-execution.patch} (89%)
+ rename package/nfs-utils/{nfs-utils-cross-build.patch => nfs-utils-0002-Patch-taken-from-Gentoo.patch} (69%)
+ rename package/nfs-utils/{nfs-utils-susv3-legacy.patch => nfs-utils-0003-Switch-legacy-index-in-favour-of-strchr.patch} (50%)
+ rename package/nfs-utils/{nfs-utils-uclibc-libio.h.patch => nfs-utils-0004-fix-build-with-uClibc.patch} (56%)
+ create mode 100644 package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+ create mode 100644 package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+ delete mode 100644 package/nfs-utils/nfs-utils-dont-mix-flags.patch
+ create mode 100644 package/quota/quota-tools-getrpcbynumber.patch
+ rename package/rpcbind/{rpcbind-01-no-yp-support.patch => rpcbind-0001-Remove-yellow-pages-support.patch} (65%)
+ create mode 100644 package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
+ create mode 100644 package/rpcbind/rpcbind-0003-Make-IPv6-configurable.patch
+
+Thanks,
+-- 
+Thomas Petazzoni
