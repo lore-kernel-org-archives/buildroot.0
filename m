@@ -1,60 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 10 Nov 2012 12:48:44 +0100
-Subject: [Buildroot] [PATCH] target: add option to set the root password
-In-Reply-To: <509DA03F.1020501@mind.be>
-References: <1352503739-20083-1-git-send-email-yann.morin.1998@free.fr>
- <509DA03F.1020501@mind.be>
-Message-ID: <201211101248.44388.yann.morin.1998@free.fr>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 10 Nov 2012 15:28:42 +0100
+Subject: [Buildroot] Various problem using buildroot-2012.05
+References: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
+ <20120618103657.721db39b@skate>
+Message-ID: <qaol7k.eta.ln@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20120618103657.721db39b at skate:
 
-On Saturday 10 November 2012 Arnout Vandecappelle wrote:
-> On 11/10/12 00:28, Yann E. MORIN wrote:
-> > Add an option in the menuconfig to specify a root password.
-> >
-> > If set to empty, no root password is created; otherwise, the password is
-> > encrypted using MD5 (MD5 is not the default for crypt(3), DES-56 is, but
-> > MD5 is widely available, not-so-strong, but not-so-weak either).
-> >
-> > Add a check for 'mkpasswd' as a new dependency.
-> 
-> Is it necessary to put the plaintext password in the .config?
+> Le Mon, 18 Jun 2012 00:46:05 -0700 (PDT),
+> Ming-Ching Tiew <mctiew@yahoo.com> a ??crit :
+>> Because there are many packages are not made to compile in a cross
+>> environment. For many, it's not a trial task to adapt those packages
+>> for cross compiling. 
+> Which packages are you talking about? If there are of general interest,
+> some people might be interested in helping to get them to cross-compile.
 
-At least, that's what /I/ would expect.
+Hi,
 
-> Why not put the output of mkpasswd in the config, and explain in the help
-> text how to produce it?
+in my case it?s Perl, along with Spamassassin to be build on-top of it. The 
+current effort to cross-compile Perl is problematic in regard to cross-
+compile CPAN modules, so now I am trying to compile Perl on the target 
+machine using a buildroot-made gcc_target toolchain along with some 
+dependency libs.
 
-I'm afraid relying on the user to enter the properly-formatted encrypted
-password is doomed:
-  - it means the user has to read the help text (and we know users do not
-    not read help texts ;-) ), switch to another terminal, enter the command,
-    copy the ouput, switch back to the terminal with the menu, paste the
-    output;
-  - user may decide to use another encryption scheme (eg. SHA256), when we
-    can only guarantee that MD5 and DES-56 are available;
-  - user input is unreliable, by definition. Even copy-paste is prone to
-    errors (eg. missing few first or last chars). In case the user /forgets/
-    his/her root pasword, he/she can recover the password by looking at the
-    .config file afterward.
-
-> Obviously, this will make the patch much simpler, as there won't be a need
-> anymore to distinguish between no-root-passwd and root-passwd.
-
-Well, the patch is not very complex in the state, either.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Kind regards, Bernd
