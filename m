@@ -1,61 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 10 Nov 2012 02:08:44 +0100
-Subject: [Buildroot] [PATCH] libatomic_ops version update 7.3alpha2 old
- version 1.2 does not compiles with modern gcc and utils
-In-Reply-To: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
-References: <1352465722-23459-1-git-send-email-alexander@mezon.ru>
-Message-ID: <509DA91C.8070805@mind.be>
+Date: Sat, 10 Nov 2012 02:51:24 +0100
+Subject: [Buildroot] mesa3d:  "ImportError: No module named libxml2"
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
+References: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
+Message-ID: <509DB31C.90903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/12 13:55, Alexander Khryukin wrote:
+On 11/05/12 10:18, Vellemans, Noel wrote:
+> I do end up with this error while building mesa3d"  "ImportError: No
+> module named libxml2" (ONLY if I do build into a clean-output
+> directory!)
 >
-> Signed-off-by: Alexander Khryukin<alexander@mezon.ru>
-> ---
->   package/libatomic_ops/libatomic_ops.mk | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-> index 6d50d0a..c946df0 100644
-> --- a/package/libatomic_ops/libatomic_ops.mk
-> +++ b/package/libatomic_ops/libatomic_ops.mk
-> @@ -1,12 +1,12 @@
->  #############################################################
->  #
-> -# Atomic_ops library
-> +## Atomic_ops library
->  #
-> -#############################################################
-> +##############################################################
+> The strange thing is that when building for a second time it all builds
+> fine.
 
-  Please don't modify the header.
+  The problem is that host-python is used, not native python, and host-python
+doesn't have libxml2 bindings.  python is used to generate api_exec_es1.c:
+python -t -O -O main/es_generator.py -S main/APIspec.xml -V GLES1.1 > main/api_exec_es1.c
+When you run it the second time, the file exists (and is empty), so you
+won't get an error.  But as soon as you try to use GLES, you'll notice that
+it doesn't work :-)
 
->
-> -LIBATOMIC_OPS_VERSION = 1.2
-> +LIBATOMIC_OPS_VERSION = 7.3alpha2
+  The problem is that libxml2 python bindings are part of libxml2.  If we want
+to build them, we would have to make host-libxml2 depend on host-python...
+And that's certainly something we don't want.
 
-  Is there a particular reason to use the experimental version, instead of
-the "current" version 7.2d?
+  A work-around is to set
+MESA3D_CONF_ENV = PYTHON2=/usr/bin/python
+but that's not something we want to do in buildroot either, because there is
+not guarantee that native python has libxml2, or that the native python is
+python2, or that it is in /usr/bin.
 
->   LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
-> -LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
-> -LIBATOMIC_OPS_INSTALL_STAGING = YES
-> +LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/
-> +	LIBATOMIC_OPS_INSTALL_STAGING = YES
+  The only realistic solution I can think of is to create a blind
+BR2_NEED_HOST_LIBXML2_PYTHON_BINDINGS and select this from mesa3d.  Then we
+can conditionally depend on host-python and build the bindings in libxml2.mk.
+But it is still fairly horrible.
 
-  What's wrong with the old download site? It works fine for me...
-And please don't mess up the indentation of the _INSTALL_STAGING line.
-
+  BTW, Thomas already told you this on October 12 (though his explanation
+was a bit shorter :-).
 
   Regards,
   Arnout
-
->
->   $(eval $(autotools-package))
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
