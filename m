@@ -1,38 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 10:47:56 +0100
-Subject: [Buildroot] [PATCH 4/4] cpanminus: requires host-qemu
-In-Reply-To: <1352489646-30635-4-git-send-email-arnout@mind.be>
-References: <1352489646-30635-1-git-send-email-arnout@mind.be>
- <1352489646-30635-4-git-send-email-arnout@mind.be>
-Message-ID: <20121110104756.3d08566b@skate>
+Date: Sat, 10 Nov 2012 10:48:54 +0100
+Subject: [Buildroot] autobuild server down...
+In-Reply-To: <509D3E53.2000403@mind.be>
+References: <509D3E53.2000403@mind.be>
+Message-ID: <20121110104854.26c8644e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Arnout Vandecappelle,
 
-On Fri,  9 Nov 2012 20:34:06 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> 
-> Must also disable all non-supported architectures, including x86
-> (which doesn't have a working fork()).
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> It still only works half the time.  For instance, in one arm configuration
-> I have qemu sitting there consuming 100% CPU without any output, system
-> calls, or nothing...
+On Fri, 09 Nov 2012 18:33:07 +0100, Arnout Vandecappelle wrote:
 
-I don't think it is worth spending too much time getting cpanminus to
-work with host-qemu. The entire idea of using host-qemu is broken due
-to the potential incompatibility between the kernel headers used to
-build the target C library and applications and the kernel currently
-running on the build machine.
+>   Did the autobuild server die under the pressure of all the failed perl builds? :-)
 
-So any usage of host-qemu to do cross-compilation is doomed to fail,
-unless we force very old kernel headers versions.
+The Apache server running on the autobuild server sometimes has issues,
+for unknown reasons (and sysadmin is definitely not my cup of tea). I
+restarted the server yesterday evening, and it now works again.
+
+Thanks for the notice,
 
 Thomas
 -- 
