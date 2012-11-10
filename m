@@ -1,72 +1,208 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 10 Nov 2012 00:54:09 +0100
-Subject: [Buildroot] [PATCH] iso9660 fs: use cpio initrd instead of ext2
-Message-ID: <1352505249-32028-1-git-send-email-arnout@mind.be>
+From: Chris Zankel <chris@zankel.net>
+Date: Fri, 09 Nov 2012 16:19:45 -0800
+Subject: [Buildroot] [PATCH 1/2 v3] xtensa: add support for the Xtensa
+	architecture
+Message-ID: <509d9da3.e2d5440a.1892.015f@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ext2 initrd is pretty broken, because it requires an additional
-root=/dev/ram0 command line parameter, and a /init to mount
-devtmps that isn't there in out ext2 rootfs.  So just use a cpio
-instead.
+The Xtensa architecture had been removed because it required special
+handling and depended on additional directories and files that became
+obsolete over time. This change is more aligned to other architectures.
 
-Note that there is no check if the kernel supports initramfs or the
-selected compression method.
+Signed-off-by: Chris Zankel <chris@zankel.net>
 
-Also removed a bit of dead code in iso9660.mk.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
----
- fs/iso9660/Config.in  |    2 +-
- fs/iso9660/iso9660.mk |   11 +++++------
- 2 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 4c00583..98ff78b 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -2,7 +2,7 @@ config BR2_TARGET_ROOTFS_ISO9660
- 	bool "iso image"
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_LINUX_KERNEL
--	select BR2_TARGET_ROOTFS_EXT2
-+	select BR2_TARGET_ROOTFS_CPIO
- 	select BR2_TARGET_GRUB
+diff --git a/arch/Config.in b/arch/Config.in
+index 4d1f81f..ad4a9e0 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -145,6 +145,13 @@ config BR2_x86_64
+ 	  architecture compatible microprocessor).
+ 	  http://en.wikipedia.org/wiki/X86_64
+ 
++config BR2_xtensa
++	bool "Xtensa"
++	help
++	  Xtensa is a Tensilica processor IP architecture.
++	  http://en.wikipedia.org/wiki/Xtensa
++	  http://www.tensilica.com/
++
+ endchoice
+ 
+ config BR2_microblaze
+@@ -158,4 +165,5 @@ source "arch/Config.in.powerpc"
+ source "arch/Config.in.sh"
+ source "arch/Config.in.sparc"
+ source "arch/Config.in.x86"
++source "arch/Config.in.xtensa"
+ source "arch/Config.in.common"
+diff --git a/arch/Config.in.common b/arch/Config.in.common
+index 1ed9929..d2bfd59 100644
+--- a/arch/Config.in.common
++++ b/arch/Config.in.common
+@@ -49,6 +49,7 @@ config BR2_ARCH
+ 	default "sh4aeb"	if BR2_sh4aeb
+ 	default "sh64"		if BR2_sh64
+ 	default "sparc"		if BR2_sparc
++	default "xtensa"	if BR2_xtensa
+ 
+ 
+ config BR2_ENDIAN
+diff --git a/linux/Config.in b/linux/Config.in
+index 277ef0e..29a2110 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -152,7 +152,8 @@ config BR2_LINUX_KERNEL_BZIMAGE
+ 
+ config BR2_LINUX_KERNEL_ZIMAGE
+ 	bool "zImage"
+-	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64
++	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || \
++		   BR2_sh || BR2_sh64 || BR2_xtensa
+ 
+ config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
+ 	bool "zImage with appended DT"
+diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
+index c304572..3622f3d 100644
+--- a/package/autoconf/Config.in
++++ b/package/autoconf/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_AUTOCONF
+ 	bool "autoconf"
+-	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
++	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
++	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
+ 	select BR2_PACKAGE_PERL
  	help
- 	  Build a bootable iso9660 image
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index f51b6ee..029c0dd 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -9,20 +9,19 @@
+ 	  Extensible program for developing configure scripts.  These
+@@ -9,4 +10,5 @@ config BR2_PACKAGE_AUTOCONF
+ 	  http://www.gnu.org/software/autoconf/
  
- ISO9660_TARGET_DIR=$(BUILD_DIR)/iso9660
- ISO9660_BOOT_MENU:=$(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
--ISO9660_OPTS:=
+ comment "autoconf requires an architecture supported by qemu"
+-	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
++	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
++		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
+diff --git a/package/automake/Config.in b/package/automake/Config.in
+index f8d74ef..6e48517 100644
+--- a/package/automake/Config.in
++++ b/package/automake/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_AUTOMAKE
+ 	bool "automake"
+-	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
++	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3)
++	depends on !(BR2_sh3eb || BR2_sh64 || BR2_xtensa)
+ 	select BR2_PACKAGE_AUTOCONF
+ 	select BR2_PACKAGE_PERL
+ 	help
+@@ -10,4 +11,5 @@ config BR2_PACKAGE_AUTOMAKE
+ 	  http://www.gnu.org/software/automake/
  
--ifeq ($(BR2_TARGET_ROOTFS_ISO9660_SQUASH),y)
--ISO9660_OPTS+=-U
--endif
-+ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_GZIP)  = .gz
-+ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_BZIP2) = .bz2
-+ISO9660_CPIO_EXT-$(BR2_TARGET_ROOTFS_CPIO_LZMA)  = .lzma
+ comment "automake requires an architecture supported by qemu"
+-	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
++	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || \
++		   BR2_sh3eb || BR2_sh64 || BR2_xtensa
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index a65ca48..4cce767 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+ 	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
++	depends on !BR2_xtensa
+ 	select BR2_PACKAGE_LIBELF
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 29ed2f0..7edf82b 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL
  
--$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-ext2 grub
-+$(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-cpio grub
- 	@$(call MESSAGE,"Generating root filesystem image rootfs.iso9660")
- 	mkdir -p $(ISO9660_TARGET_DIR)
- 	mkdir -p $(ISO9660_TARGET_DIR)/boot/grub
- 	cp $(GRUB_DIR)/stage2/stage2_eltorito $(ISO9660_TARGET_DIR)/boot/grub/
- 	cp $(ISO9660_BOOT_MENU) $(ISO9660_TARGET_DIR)/boot/grub/menu.lst
- 	cp $(LINUX_IMAGE_PATH) $(ISO9660_TARGET_DIR)/kernel
--	cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
-+	cp $(BINARIES_DIR)/rootfs.cpio$(ISO9660_CPIO_EXT-y) $(ISO9660_TARGET_DIR)/initrd
- 	# Use fakeroot to pretend all target binaries are owned by root
- 	rm -f $(FAKEROOT_SCRIPT)
- 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
--- 
-tg: (234fe44..) t/iso9660 (depends on: master)
+ config BR2_TOOLCHAIN_CTNG
+ 	bool "Crosstool-NG toolchain"
+-	depends on !BR2_microblaze && !BR2_aarch64
++	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa
+ 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
+ 	help
+diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
+index 956ec2f..d27c9f3 100644
+--- a/toolchain/toolchain-buildroot/Config.in.2
++++ b/toolchain/toolchain-buildroot/Config.in.2
+@@ -68,7 +68,7 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 
+ choice
+ 	prompt "Thread library implementation"
+-	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !BR2_ARM_OABI
++	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !BR2_ARM_OABI && !BR2_xtensa
+ 	default BR2_PTHREADS_OLD
+ 	help
+ 	  Use this option to select the thread library implementation
+@@ -82,6 +82,7 @@ choice
+ 
+ 	config BR2_PTHREADS
+ 		bool "linuxthreads"
++		depends on !BR2_xtensa
+ 	        select BR2_TOOLCHAIN_HAS_THREADS
+ 
+ 	config BR2_PTHREADS_OLD
+@@ -94,6 +95,7 @@ choice
+ 		depends on !BR2_UCLIBC_VERSION_0_9_31
+ 		depends on !BR2_ARM_OABI
+ 		depends on !BR2_x86_i386
++		depends on !BR2_xtensa
+ endchoice
+ 
+ source "toolchain/elf2flt/Config.in"
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 4c2a28b..9f11a39 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -93,7 +93,7 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
+ 
+ config BR2_USE_MMU
+-	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
++	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
+ 	default y if !BR2_bfin
+ 	help
+ 	  If your target has a MMU, you should say Y here.  If you
+diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
+index f46a415..e47bc9b 100644
+--- a/toolchain/uClibc/Config.in
++++ b/toolchain/uClibc/Config.in
+@@ -12,14 +12,15 @@ choice
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_31
+ 		bool "uClibc 0.9.31.x"
++		depends on !BR2_xtensa
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_32
+ 		bool "uClibc 0.9.32.x"
+-		depends on !(BR2_avr32 || BR2_sh)
++		depends on !(BR2_avr32 || BR2_sh || BR2_xtensa)
+ 
+ 	config BR2_UCLIBC_VERSION_0_9_33
+ 		bool "uClibc 0.9.33.x"
+-		depends on !BR2_avr32
++		depends on !(BR2_avr32 || BR2_xtensa)
+ 
+ 	config BR2_UCLIBC_VERSION_SNAPSHOT
+ 		bool "daily snapshot"
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 8cf59bc..055267c 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -38,6 +38,7 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
+ 		-e 's/sh[234].*/sh/' \
+ 		-e 's/mips.*/mips/' \
+ 		-e 's/cris.*/cris/' \
++		-e 's/xtensa.*/xtensa/' \
+ ")
+ 
+ UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
