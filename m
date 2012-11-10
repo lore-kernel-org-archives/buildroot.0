@@ -1,42 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 10 Nov 2012 01:55:15 +0100
+Date: Sat, 10 Nov 2012 01:59:59 +0100
 Subject: [Buildroot] [PATCH] gnutls-2.12.20-glibc-2.16.patch glibc-2.16
  and gnutls2 fix i forgot my signoff
-In-Reply-To: <CAHXCMMLpVAHmvEHdpkyorLHb=DJGmHhG6cnWkpZ0pkfEp5Sg9g@mail.gmail.com>
+In-Reply-To: <509DA5F3.2000108@mind.be>
 References: <1352464266-22684-1-git-send-email-alexander@mezon.ru>
  <CAHXCMMLpVAHmvEHdpkyorLHb=DJGmHhG6cnWkpZ0pkfEp5Sg9g@mail.gmail.com>
-Message-ID: <509DA5F3.2000108@mind.be>
+ <509DA5F3.2000108@mind.be>
+Message-ID: <509DA70F.7070102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/09/12 17:54, Samuel Martin wrote:
-> Hi Alexander,
+On 11/10/12 01:55, Arnout Vandecappelle wrote:
+> On 11/09/12 17:54, Samuel Martin wrote:
+>> Hi Alexander,
+>>
+>> 2012/11/9 Alexander Khryukin<alexander@mezon.ru>:
+>>> >
+>>> > Signed-off-by: Alexander Khryukin<alexander@mezon.ru>
+>>> > ---
+>>> > package/gnutls/gnutls-2.12.20-glibc2.16.patch | 26 ++++++++++++++++++++++++++
+>>> > 1 file changed, 26 insertions(+)
+>>> > create mode 100644 package/gnutls/gnutls-2.12.20-glibc2.16.patch
+>>> >
+>>> > diff --git a/package/gnutls/gnutls-2.12.20-glibc2.16.patch b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
+>>> > new file mode 100644
+>>> > index 0000000..6b7f545
+>>> > --- /dev/null
+>>> > +++ b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
+>>> > @@ -0,0 +1,26 @@
+>>> > +--- gnutls-2.12.20/gl/stdio.in.h
+>>> > ++++ gnutls-2.12.20/gl/stdio.in.h
+>> When adding a patch to a package, we usually add a header to the patch
+>> containing a description and the SoB line.
 >
-> 2012/11/9 Alexander Khryukin<alexander@mezon.ru>:
->> >
->> >  Signed-off-by: Alexander Khryukin<alexander@mezon.ru>
->> >  ---
->> >    package/gnutls/gnutls-2.12.20-glibc2.16.patch | 26 ++++++++++++++++++++++++++
->> >    1 file changed, 26 insertions(+)
->> >    create mode 100644 package/gnutls/gnutls-2.12.20-glibc2.16.patch
->> >
->> >  diff --git a/package/gnutls/gnutls-2.12.20-glibc2.16.patch b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
->> >  new file mode 100644
->> >  index 0000000..6b7f545
->> >  --- /dev/null
->> >  +++ b/package/gnutls/gnutls-2.12.20-glibc2.16.patch
->> >  @@ -0,0 +1,26 @@
->> >  +--- gnutls-2.12.20/gl/stdio.in.h
->> >  ++++ gnutls-2.12.20/gl/stdio.in.h
-> When adding a patch to a package, we usually add a header to the patch
-> containing a description and the SoB line.
+> And the commit message itself should also be something more explanatory, e.g.:
+>
+> gnutls: fix build with glibc2.16, which doesn't declare gets()
 
-  And the commit message itself should also be something more explanatory, e.g.:
+  BTW, I verified that this indeed fixes the build for glibc2.16, so with a
+corrected commit message and a SoB in the patch, this gets my
 
-gnutls: fix build with glibc2.16, which doesn't declare gets()
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
   Regards,
   Arnout
