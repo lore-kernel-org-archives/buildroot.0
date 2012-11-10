@@ -1,81 +1,86 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Sat, 10 Nov 2012 16:51:41 +0200
-Subject: [Buildroot] Various problem using buildroot-2012.05
-In-Reply-To: <qaol7k.eta.ln@bernd-kuhls.de>
-References: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
- <20120618103657.721db39b@skate> <qaol7k.eta.ln@bernd-kuhls.de>
-Message-ID: <509E69FD.2000804@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Nov 2012 17:07:35 +0100
+Subject: [Buildroot] [PATCH 1/2] perl: fix configure step
+In-Reply-To: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
+References: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20121110170735.01056125@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd
+Dear Francois Perrad,
 
-10.11.2012 16:28, Bernd Kuhls kirjoitti:
-> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-> @public.gmane.org> wrote in news:20120618103657.721db39b at skate:
->
->> Le Mon, 18 Jun 2012 00:46:05 -0700 (PDT),
->> Ming-Ching Tiew <mctiew@yahoo.com> a ??crit :
->>> Because there are many packages are not made to compile in a cross
->>> environment. For many, it's not a trial task to adapt those packages
->>> for cross compiling. 
->> Which packages are you talking about? If there are of general interest,
->> some people might be interested in helping to get them to cross-compile.
-> Hi,
->
-> in my case it?s Perl, along with Spamassassin to be build on-top of it. The 
-> current effort to cross-compile Perl is problematic in regard to cross-
-> compile CPAN modules, so now I am trying to compile Perl on the target 
-> machine using a buildroot-made gcc_target toolchain along with some 
-> dependency libs.
+On Sat, 10 Nov 2012 15:41:07 +0100, Francois Perrad wrote:
+> Configure -A symbol=val generates a extra space in config.sh,
+> which causes failure like this :
+>     Building Module-Runtime-0.013
+>     Unknown OS type ' linux' - using default settings
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Yes, Perl is a (as you can see from various patches and problems related
-to perl in this mailing list) is a really
-major PITA to cross-compile.
+Instead of doing what the patch does below, wouldn't it be better to
+fix this -A option so that it doesn't add inappropriate spaces?
 
-If you try to use buildroot-made target gcc to compile perl, that is,
-you use buildroot to cross-compile gcc to run natively inside
-uClibc (?) environment, then you might encounter problems.
+Thanks,
 
-As Thomas has said in few times here for people telling about problems
-of native gcc-toolchain, buildroot is about cross-compiling stuff
-and buildroot produced native gcc-toolchain is really not supported and
-might be still broken
-(I don't know what the current status of it is now).
+Thomas
 
-I remember that I promised to Thomas to investigate the native gcc for
-x86 (under uClibc) thing and the only solution I have so far
-managed to cook is by making a completely self-sustaining, buildroot
-independent environment with working perl 5.16, python 2.7,
-gcc 4.7, binutils 2.22 and lot's of other stuff. I decided to use RPM
-for package management and spend healthy amount of three
-weekends of studying how to make RPMs.
+> ---
+>  package/perl/perl.mk |   27 +++++++++++++++++++--------
+>  1 file changed, 19 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index 0893eb5..cbfeeab 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -55,14 +55,8 @@ PERL_CONF_OPT = \
+>  	--target-tools-prefix=$(TARGET_CROSS) \
+>  	--prefix=/usr \
+>  	-Dld="$(TARGET_CC_NOCCACHE)" \
+> -	-A ccflags="$(TARGET_CFLAGS)" \
+> -	-A ldflags="$(TARGET_LDFLAGS) -lm" \
+> -	-A mydomain="" \
+> -	-A myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
+> -	-A myuname="Buildroot $(BR2_VERSION_FULL)" \
+> -	-A osname=linux \
+> -	-A osvers=$(LINUX_VERSION) \
+> -	-A perladmin=root
+> +	-Dccflags="$(TARGET_CFLAGS)" \
+> +	-Dldflags="$(TARGET_LDFLAGS) -lm"
+>  
+>  ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+>      PERL_CONF_OPT += -Dusedevel
+> @@ -79,6 +73,23 @@ endif
+>  
+>  define PERL_CONFIGURE_CMDS
+>  	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPT))
+> +	echo "# patched values" >>$(@D)/config.sh
+> +	$(SED) '/^myarchname=/d' \
+> +		-e '/^mydomain=/d' \
+> +		-e '/^myhostname=/d' \
+> +		-e '/^myuname=/d' \
+> +		-e '/^osname=/d' \
+> +		-e '/^osvers=/d' \
+> +		-e '/^perladmin=/d' \
+> +		$(@D)/config.sh
+> +	echo "myarchname='$(GNU_TARGET_NAME)'"                  >>$(@D)/config.sh
+> +	echo "mydomain=''"                                      >>$(@D)/config.sh
+> +	echo "myhostname='$(BR2_TARGET_GENERIC_HOSTNAME)'"      >>$(@D)/config.sh
+> +	echo "myuname='Buildroot $(BR2_VERSION_FULL)'"          >>$(@D)/config.sh
+> +	echo "osname='linux'"                                   >>$(@D)/config.sh
+> +	echo "osvers='$(BR2_LINUX_KERNEL_VERSION)'"             >>$(@D)/config.sh
+> +	echo "perladmin='root'"                                 >>$(@D)/config.sh
+> +	(cd $(@D); ./Configure -S)
+>  	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
+>  endef
+>  
 
-Maybe, when I have more time, I will compare my working native uClibc
-gcc-toolchain and buildroot produced native uClibc gcc-toolchain
-and cook some patches.
 
-In case that buildroot produced native toolchain won't work, I will be
-happy to send you my native uClibc-based gcc-toolchain
-that you can chroot into, and see if that is of any help.
 
-Mind you that it's still in beta-phase...
-
-Best Regards
-Stefan
-
-> Kind regards, Bernd
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121110/080ae49e/attachment.html>
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
