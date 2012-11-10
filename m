@@ -1,89 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 22:42:46 +0100
-Subject: [Buildroot] [PATCH 09/11] rpcbind: allow build without NSS support
+Date: Sat, 10 Nov 2012 22:42:47 +0100
+Subject: [Buildroot] [PATCH 10/11] libnetfilter_queue: does not build
+	without IPv6 support
 In-Reply-To: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <13ca6c8f55f92df21dc9ba86e09dfe0b17a686d6.1352583641.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <729e8d4f5d8ca2d7d1821b514e30a175e6331562.1352583641.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc doesn't provide NSS support, so we shouldn't try to include nss
-related headers or call nss related functions.
+Fixes the following build failure:
+
+extra/checksum.c:16:25: fatal error: netinet/ip6.h: No such file or directory
+compilation terminated.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...to-use-NSS-support-when-not-available-in-.patch |   60 ++++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
+ package/libnetfilter_queue/Config.in |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch b/package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
-new file mode 100644
-index 0000000..f7cc4a6
---- /dev/null
-+++ b/package/rpcbind/rpcbind-0002-Do-not-try-to-use-NSS-support-when-not-available-in-.patch
-@@ -0,0 +1,60 @@
-+From cfc70fb4c54e044f724516e9352f974187adb448 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 10 Nov 2012 22:04:12 +0100
-+Subject: [PATCH] Do not try to use NSS support when not available in the C
-+ library
-+
-+uClibc does not have NSS support, so it is unnecessary to tell the C
-+library to use the "files" as the source for "services", since it is
-+the only possible choice.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/rpcbind.c |    6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/src/rpcbind.c b/src/rpcbind.c
-+index 525ffba..cde8685 100644
-+--- a/src/rpcbind.c
-++++ b/src/rpcbind.c
-+@@ -67,7 +67,9 @@
-+ #include <pwd.h>
-+ #include <string.h>
-+ #include <errno.h>
-++#ifdef HAVE_NSS_H
-+ #include <nss.h>
-++#endif
-+ #include "config.h"
-+ #include "rpcbind.h"
-+ 
-+@@ -156,11 +158,13 @@ main(int argc, char *argv[])
-+ 		exit(1);
-+ 	}
-+ 
-++#ifdef HAVE_NSS_H
-+ 	/*
-+ 	 * Make sure we use the local service file 
-+ 	 * for service lookkups
-+ 	 */
-+ 	__nss_configure_lookup("services", "files");
-++#endif
-+ 
-+ 	nc_handle = setnetconfig(); 	/* open netconfig file */
-+ 	if (nc_handle == NULL) {
-+@@ -222,11 +226,13 @@ main(int argc, char *argv[])
-+ 		struct passwd *p;
-+ 		char *id = runasdaemon ? RUN_AS : rpcbinduser;
-+ 
-++#ifdef HAVE_NSS_H
-+ 		/*
-+ 		 * Make sure we use the local password file
-+ 		 * for these lookups.
-+ 		 */
-+ 		__nss_configure_lookup("passwd", "files");
-++#endif
-+ 
-+ 		if((p = getpwnam(id)) == NULL) {
-+ 			syslog(LOG_ERR, "cannot get uid of '%s': %m", id);
-+-- 
-+1.7.9.5
-+
+diff --git a/package/libnetfilter_queue/Config.in b/package/libnetfilter_queue/Config.in
+index d06aa77..d04853d 100644
+--- a/package/libnetfilter_queue/Config.in
++++ b/package/libnetfilter_queue/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBNETFILTER_QUEUE
+ 	bool "libnetfilter_queue"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_INET_IPV6
+ 	select BR2_PACKAGE_LIBNFNETLINK
+ 	select BR2_PACKAGE_LIBMNL
+ 	help
+@@ -10,5 +11,5 @@ config BR2_PACKAGE_LIBNETFILTER_QUEUE
+ 
+ 	  http://www.netfilter.org/projects/libnetfilter_queue/
+ 
+-comment "libnetfilter_queue requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++comment "libnetfilter_queue requires a toolchain with LARGEFILE and IPv6 support"
++	depends on !BR2_LARGEFILE && !BR2_INET_IPV6
 -- 
 1.7.9.5
