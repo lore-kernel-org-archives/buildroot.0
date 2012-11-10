@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Nov 2012 22:42:43 +0100
-Subject: [Buildroot] [PATCH 06/11] nfs-utils: add patches to allow
-	compilation against libtirpc
+Date: Sat, 10 Nov 2012 22:42:44 +0100
+Subject: [Buildroot] [PATCH 07/11] quota: allow usage of getrpcbynumber()
+	instead of getrpcbynumber_r()
 In-Reply-To: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c60fd14b8d9ba699b94ab2ac60f363fa97f1920f.1352583641.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <da4725dab4e7f68385bcdb698ea5e494bd5032de.1352583641.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,137 +12,85 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 libtirpc does not implement the reentrant function getrpcbynumber_r(),
-so allow nfs-utils to use the non-reentrant version
-getrpcbynumber(). This should not be a problem as nfs-utils tools are
-not multi-threaded.
+so allow quota to use the non-reentrant version getrpcbynumber(). This
+should not be a problem as quota tools are not multi-threaded.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-of-getrpcbynumber-when-getrpcbynumber_r-.patch |   70 ++++++++++++++++++++
- ...figure-script-find-getrpcbynumber-in-libt.patch |   38 +++++++++++
- 2 files changed, 108 insertions(+)
- create mode 100644 package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
- create mode 100644 package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
+ package/quota/quota-tools-getrpcbynumber.patch |   42 ++++++++++++++++++++++++
+ package/quota/quota.mk                         |    4 +++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 package/quota/quota-tools-getrpcbynumber.patch
 
-diff --git a/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch b/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
+diff --git a/package/quota/quota-tools-getrpcbynumber.patch b/package/quota/quota-tools-getrpcbynumber.patch
 new file mode 100644
-index 0000000..7c9f3c3
+index 0000000..3fed853
 --- /dev/null
-+++ b/package/nfs-utils/nfs-utils-0005-Allow-usage-of-getrpcbynumber-when-getrpcbynumber_r-.patch
-@@ -0,0 +1,70 @@
-+From a4c15a4f9f49fd2ae5eee7eef54c67f4842952b2 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 10 Nov 2012 18:42:28 +0100
-+Subject: [PATCH] Allow usage of getrpcbynumber() when getrpcbynumber_r() is
-+ not available
++++ b/package/quota/quota-tools-getrpcbynumber.patch
+@@ -0,0 +1,42 @@
++allow usage of getrpcbynumber() instead of getrpcbynumber_r()
 +
-+getrpcbynumber_r() is not implemented by libtirpc at the moment, only
-+the non-reentrant getrpcbynumber() is available. Since nfs-utils seems
-+to only be using getrpcbynumber_r() is a non multithreaded context,
-+using getrpcbynumber() should work just as well.
-+
-+We also take this opportunity to adjust the autoconf checks to verify
-+whether any of getrpcbynumber() or getrpcbynumber_r() is available,
-+and error out if none of them is available.
++libtirpc does not implement the reentrant function getrpcbynumber_r(),
++so allow quota to use the non-reentrant version getrpcbynumber(). This
++should not be a problem as quota tools are not multi-threaded.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac             |    8 ++++----
-+ support/nfs/svc_socket.c |    6 ++++++
-+ 2 files changed, 10 insertions(+), 4 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index b408f1b..41216c9 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -246,9 +246,6 @@ AC_CHECK_FUNC([connect], ,
-+ AC_CHECK_FUNC([getaddrinfo], ,
-+               [AC_MSG_ERROR([Function 'getaddrinfo' not found.])])
++Index: b/configure.in
++===================================================================
++--- a/configure.in
+++++ b/configure.in
++@@ -182,6 +182,12 @@
++ AC_C_CONST
++ AC_C_INLINE
 + 
-+-AC_CHECK_FUNC([getrpcbynumber], ,
-+-              [AC_MSG_ERROR([Function 'getrpcbynumber' not found.])])
-+-
-+ AC_CHECK_FUNC([getservbyname], ,
-+               [AC_MSG_ERROR([Function 'getservbyname' not found.])])
-+ 
-+@@ -393,8 +390,11 @@ AC_CHECK_FUNCS([alarm atexit dup2 fdatasync ftruncate getcwd \
-+                getnameinfo getrpcbyname getifaddrs \
-+                gettimeofday hasmntopt inet_ntoa innetgr memset mkdir pathconf \
-+                realpath rmdir select socket strcasecmp strchr strdup \
-+-               strerror strrchr strtol strtoul sigprocmask])
-++               strerror strrchr strtol strtoul sigprocmask getrpcbynumber getrpcbynumber_r])
-+ 
+++AC_CHECK_FUNCS([getrpcbynumber getrpcbynumber_r])
+++
 ++if test "$ac_cv_func_getrpcbynumber_r" != "yes" -a "$ac_cv_func_getrpcbynumber" != "yes"; then
 ++   AC_MSG_ERROR([Neither getrpcbynumber_r nor getrpcbynumber are available])
 ++fi
+++
++ AC_ARG_ENABLE(altformat,
++ 	[  --enable-altformat=[yes/no]     Enable alternative format used by edquota [default=yes].],
++ 	,
++Index: b/svc_socket.c
++===================================================================
++--- a/svc_socket.c
+++++ b/svc_socket.c
++@@ -55,7 +55,12 @@
++ 	addr.sin_family = AF_INET;
 + 
-+ dnl *************************************************************
-+ dnl Check for data sizes
-+diff --git a/support/nfs/svc_socket.c b/support/nfs/svc_socket.c
-+index f56f310..61ccf5b 100644
-+--- a/support/nfs/svc_socket.c
-++++ b/support/nfs/svc_socket.c
-+@@ -42,8 +42,14 @@ int getservport(u_long number, const char *proto)
-+ 	struct servent servbuf, *servp = NULL;
-+ 	int ret;
-+ 
++ 	if (!port) {
 ++#if HAVE_GETRPCBYNUMBER_R
-+ 	ret = getrpcbynumber_r(number, &rpcbuf, rpcdata, sizeof rpcdata,
-+ 				&rpcp);
++ 		ret = getrpcbynumber_r(number, &rpcbuf, rpcdata, sizeof(rpcdata), &rpcp);
 ++#else
-++	rpcp = getrpcbynumber(number);
-++	ret = 0;
+++		rpcp = getrpcbynumber(number);
+++		ret = 0;
 ++#endif
-++
-+ 	if (ret == 0 && rpcp != NULL) {
-+ 		/* First try name.  */
-+ 		ret = getservbyname_r(rpcp->r_name, proto, &servbuf, servdata,
-+-- 
-+1.7.9.5
++ 		if (ret == 0 && rpcp != NULL) {
++ 			/* First try name */
++ 			ret = getservbyname_r(rpcp->r_name, proto, &servbuf, servdata,
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 7019059..899dfdd 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -8,6 +8,8 @@ QUOTA_VERSION = 4.00
+ QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
+ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
+ 
++QUOTA_AUTORECONF = YES
 +
-diff --git a/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch b/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
-new file mode 100644
-index 0000000..1ca17b7
---- /dev/null
-+++ b/package/nfs-utils/nfs-utils-0006-Let-the-configure-script-find-getrpcbynumber-in-libt.patch
-@@ -0,0 +1,38 @@
-+From 7ea7814a8b87a0faa50fb9f4a486bfd7a376f3fc Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 10 Nov 2012 18:53:03 +0100
-+Subject: [PATCH] Let the configure script find getrpcbynumber in libtirpc
-+
-+The getrpcbynumber() function may not be available in the C library,
-+but only in the libtirpc library. Take this into account when checking
-+for the existence of getrpcbynumber() and getrpcbynumber_r().
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac |   10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 41216c9..1bbecfa 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -390,7 +390,15 @@ AC_CHECK_FUNCS([alarm atexit dup2 fdatasync ftruncate getcwd \
-+                getnameinfo getrpcbyname getifaddrs \
-+                gettimeofday hasmntopt inet_ntoa innetgr memset mkdir pathconf \
-+                realpath rmdir select socket strcasecmp strchr strdup \
-+-               strerror strrchr strtol strtoul sigprocmask getrpcbynumber getrpcbynumber_r])
-++               strerror strrchr strtol strtoul sigprocmask])
-++
-++save_CFLAGS=$CFLAGS
-++save_LIBS=$LIBS
-++CFLAGS="$CFLAGS $AM_CPPFLAGS"
-++LIBS="$LIBS $LIBTIRPC"
-++AC_CHECK_FUNCS([getrpcbynumber getrpcbynumber_r])
-++CFLAGS=$save_CFLAGS
-++LIBS=$save_LIBS
-+ 
-+ if test "$ac_cv_func_getrpcbynumber_r" != "yes" -a "$ac_cv_func_getrpcbynumber" != "yes"; then
-+    AC_MSG_ERROR([Neither getrpcbynumber_r nor getrpcbynumber are available])
-+-- 
-+1.7.9.5
-+
+ QUOTA_CFLAGS = $(TARGET_CFLAGS)
+ QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
+ 
+@@ -23,6 +25,8 @@ QUOTA_LDFLAGS += -ltirpc
+ endif
+ 
+ QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
++QUOTA_CONF_ENV = \
++	CFLAGS="$(QUOTA_CFLAGS) -D_GNU_SOURCE" LDFLAGS="$(QUOTA_LDFLAGS)"
+ 
+ # Package uses autoconf but not automake.
+ QUOTA_INSTALL_TARGET_OPT = \
 -- 
 1.7.9.5
