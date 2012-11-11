@@ -1,48 +1,26 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Nov 2012 23:47:40 +0100
-Subject: [Buildroot] Various problem using buildroot-2012.05
-In-Reply-To: <509E69FD.2000804@petroprogram.com>
-References: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
- <20120618103657.721db39b@skate> <qaol7k.eta.ln@bernd-kuhls.de>
- <509E69FD.2000804@petroprogram.com>
-Message-ID: <50A02B0C.4000107@mind.be>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sun, 11 Nov 2012 22:52:07 +0000
+Subject: [Buildroot] [PATCH 1/2 v3] neard: new package
+In-Reply-To: <50A025C1.4040809@mind.be>
+References: <1352628468-14490-1-git-send-email-spdawson@gmail.com>
+ <1352628468-14490-2-git-send-email-spdawson@gmail.com>
+ <50A025C1.4040809@mind.be>
+Message-ID: <CAHt8ZCPKMU1Fsn+VZ=wSa0XnR+XRrQ7nDkeQC31Ar1ag7g6CBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/12 15:51, Stefan Fr?berg wrote:
+On 11 Nov 2012 22:25, "Arnout Vandecappelle" <arnout@mind.be> wrote:
+>  Since you changed the version number, you shouldn't keep my Tested-by
+> (Ack is debatable).
 >
-> If you try to use buildroot-made target gcc to compile perl, that is, you use buildroot to cross-compile gcc to run
-> natively inside
-> uClibc (?) environment, then you might encounter problems.
->
-> As Thomas has said in few times here for people telling about problems of native gcc-toolchain, buildroot is about
-> cross-compiling stuff
-> and buildroot produced native gcc-toolchain is really not supported and might be still broken
-> (I don't know what the current status of it is now).
+>  However, I retested it so you can add it again :-)
 
-  The current status is: we're going to remove it.  Thomas has just posted some
-patches to do that.
+Thanks Arnout; sorry about the faux pas.
 
-  The idea is: if you need a toolchain on the target, there is no reason not to
-use a normal distro: debian, ubuntu, gentoo, ....
-
-
-  As for perl, however, I think we really would like to be able to cross-compile
-perl modules.  But that unfortunately still needs some work.  I messed about
-with it for a bit, but I can't say I really understand how the perl build system
-works.
-
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Simon.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121111/252ddf4a/attachment.html>
