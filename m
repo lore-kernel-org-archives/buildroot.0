@@ -1,33 +1,26 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Sun, 11 Nov 2012 22:05:16 +0100
-Subject: [Buildroot] QT packackage grantlee not building
-In-Reply-To: <509D7A48.4030002@mind.be>
-References: <28814AE91EA94801B84C55B81555379F@JohanW7>
- <509D7A48.4030002@mind.be>
-Message-ID: <50A0130C.4020402@gmail.com>
+From: Zvi Vered <veredz72@gmail.com>
+Date: Sun, 11 Nov 2012 23:05:22 +0200
+Subject: [Buildroot] buildroot-2012.08: Handling drm module
+Message-ID: <CABRndgxqqO3HC08rVngxm2eaSVjQ9Ks04U7Mss5-xu=B4WGMdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-going to check it as soon a spossible, a defconfig would be
-useful indeed.
-Thx for the report!
+I just tried buildroot-2012.08
 
-BR,
-Zoltan Gyarmati
+According to .config buildroot does not handle 'drm'. at all.
+Am I right ?
 
+When I booted my PC104 module with 'knoppix 2 nodrm' the text screen flickers.
+With 'knoppix 2' the screen is OK.
 
+Now I want to boot the PC104 with "my" distribution based on vanilla
+3.4.7, busybox.
+Can you help ?
 
-On 11/09/2012 10:48 PM, Arnout Vandecappelle wrote:
-> On 11/09/12 22:44, Sagaert Johan wrote:
->> Currently the build of the QT grantlee package is broken:
->> it seems like libpthread is not linked in.
->
->  Could you post a defconfig so we can try to reproduce?
->
->  Regards,
->  Arnout
+Thanks,
+Zvika
