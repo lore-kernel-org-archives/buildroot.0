@@ -1,32 +1,31 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 11 Nov 2012 10:04:08 +0000
-Subject: [Buildroot] [PATCH 1/2 v2] neard: new package
-In-Reply-To: <20121111051107.GA20951@sapphire.tkos.co.il>
-References: <1352469107-25993-1-git-send-email-spdawson@gmail.com>
- <20121111051107.GA20951@sapphire.tkos.co.il>
-Message-ID: <CAHt8ZCOZ_cRYB=zUg0FXVRhxeVTAYGDBEtmYRMo3k7eazHc1FQ@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sun, 11 Nov 2012 10:07:46 +0000
+Subject: [Buildroot] [PATCH 0/2 v3] Add neard and neardal packages
+Message-ID: <1352628468-14490-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch; thanks for the feedback.
+From: Simon Dawson <spdawson@gmail.com>
 
-On 11 November 2012 05:11, Baruch Siach <baruch@tkos.co.il> wrote:
->> +NEARD_VERSION = 0.7
->
-> Version 0.8 seems to be available. Any reason not to use that one?
+This patch set adds the neard and neardal packages for linux-nfc support.
 
-No reason --- I just hadn't spotted that 0.8 had been released.
+Simon Dawson (2):
+  neard: new package
+  neardal: new package
 
->> +NEARD_INSTALL_STAGING = YES
->
-> Why is this needed? Does this package export headers needed by others?
+ package/Config.in          |    2 ++
+ package/neard/Config.in    |   12 ++++++++++++
+ package/neard/neard.mk     |   14 ++++++++++++++
+ package/neardal/Config.in  |    7 +++++++
+ package/neardal/neardal.mk |   16 ++++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 package/neard/Config.in
+ create mode 100644 package/neard/neard.mk
+ create mode 100644 package/neardal/Config.in
+ create mode 100644 package/neardal/neardal.mk
 
-In fact, this is not needed. I had thought that the neardal package
-depended on headers installed by neard, but this is not the case.
-
-I'll rework the neard and neardal patches, and resubmit.
-
-Simon.
+-- 
+1.7.10.4
