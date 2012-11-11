@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:48 +0100
-Subject: [Buildroot] [PATCH 10/23] manual: add prerequisite.txt
+Date: Sun, 11 Nov 2012 14:14:49 +0100
+Subject: [Buildroot] [PATCH 11/23] manual: add make-tips.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-12-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,110 +13,84 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/prerequisite.txt
+ create mode 100644 docs/manual/make-tips.txt
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
 new file mode 100644
-index 0000000..b24731f
+index 0000000..5b00536
 --- /dev/null
-+++ b/docs/manual/prerequisite.txt
-@@ -0,0 +1,84 @@
++++ b/docs/manual/make-tips.txt
+@@ -0,0 +1,58 @@
 +// -*- mode:doc -*- ;
 +
-+[[requirement]]
-+System requirements
-+-------------------
++[[make-tips]]
++'make' tips
++-----------
 +
-+Buildroot is design to run on Linux system.
++Because Buildroot is a set of Makefiles and patches, there are few
++things useful to know, such as:
 +
-+Buildroot needs some software to be already installed on the host
-+system; hereafter the lists of the mandatory and optional packages
-+(package names may vary between distributions).
+++make *config+ commands offer a search tool. Read the help message in
++the different frontend menu to know how to use it:
 +
-+Take care of _installing both runtime and development data_, especially
-+for the libraries that may be packaged in 2 distinct packages.
++* in _menuconfig_, search tool is called by pressing +/+;
++* in _xconfig_, search tool is called by pressing +ctrl+ + +f+.
 +
++The result of the search show the help message of the matching items.
 +
-+[[requirement-mandatory]]
++Display all command executed by make:
 +
-+Mandatory packages
-+~~~~~~~~~~~~~~~~~~
++--------------------
++ $ make V=0|1 <target>
++--------------------
 +
-+* Build tools:
++Display all available targets:
 +
-+** +which+
-+** +sed+
-+** +make+ (version 3.82 or any later)
-+** +binutils+
-+** +build-essential+ (only for Debian based systems)
-+** +gcc+ (version 2.95 or any later)
-+** `g++` (version 2.95 or any later)
-+** +bash+
-+** +gawk+
-+** +bison+
-+** +flex+
-+** +gettext+
-+** +patch+
-+** +gzip+
-+** +bzip2+
-+** +perl+
-+** +tar+
-+** +cpio+
-+** +python+ (version 2.6 or 2.7)
-+** +unzip+
-+** +rsync+
++--------------------
++ $ make help
++--------------------
 +
-+* Source fetching tools:
-+** +wget+
++Note that some settings in the +.config+ file may hide some targets:
 +
-+* Configuration interface dependencies (requires development libraries):
-+** +ncurses5+
++* +busybox-menuconfig+ depends on whether +busybox+ is enabled or not
++  in the +Package selection+ menu
++* +linux-menuconfig+ and +linux-savedefconfig+ depend on whether
++  +linux+ is enabled or not
++* +uclibc-menuconfig+ depends on whether the toolchain uses the
++  Buildroot internal toolchain backend or not
++* +ctng-menuconfig+ depends on whether the toolchain uses the
++  crosstool-NG backend or not
++* +barebox-menuconfig+ and +barebox-savedefconfig+ depend on whether
++  +barebox+ bootloader is enabled or not
 +
-+[[requirement-optional]]
++Delete all build products (including build directories, host, staging
++and target trees, the images and the toolchain):
 +
-+Optional packages
-+~~~~~~~~~~~~~~~~~
++--------------------
++ $ make clean
++--------------------
 +
-+* Source fetching tools:
-++
-+In the official tree, most of the package sources are retrieved
-+using +wget+, few are only available through their +git+, +mercurial+,
-+or +svn+ repository.
-++
-+All other source fetching methods are implemented and may be used in a
-+development context.
-++
-+** +bazaar+
-+** +cvs+
-+** +git+
-+** +mercurial+
-+** +rsync+
-+** +scp+
-+** +subversion+
++Delete all build products as well as the configuration:
 +
-+* Configuration interface dependencies (requires development libraries):
-+** +qt4+ to use the 'xconfig' interface
-+** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
++--------------------
++ $ make distclean
++--------------------
 +
-+* Development libraries:
-+** +zlib1+
-+** +netpbm10+ (for +fbtest+)
-+** +python-xcbgen+ (for +Matchbox+ on Debian based system)
-+
-+* Documentation generation tools:
-+** +asciidoc+
-diff --git a/docs/manual/starting-up.txt b/docs/manual/starting-up.txt
-index 8ba16c9..2999fd4 100644
---- a/docs/manual/starting-up.txt
-+++ b/docs/manual/starting-up.txt
-@@ -3,6 +3,8 @@
- Starting up
- ===========
++Note that if +ccache+ is enabled, running +make clean|distclean+ does
++not empty the cache of compiler used by Buildroot. To delete it, refer
++to xref:ccache[].
+diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
+index 3c57504..4ea9239 100644
+--- a/docs/manual/working-with.txt
++++ b/docs/manual/working-with.txt
+@@ -6,6 +6,8 @@ Working with Buildroot
+ This section explains how you can customize Buildroot to fit your
+ needs.
  
-+include::prerequisite.txt[]
++include::make-tips.txt[]
 +
- include::getting.txt[]
+ include::customize.txt[]
  
- include::using.txt[]
+ include::common-usage.txt[]
 -- 
 1.8.0
