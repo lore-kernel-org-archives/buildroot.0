@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Nov 2012 23:53:33 +0100
-Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
- on target
-In-Reply-To: <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Nov 2012 23:54:39 +0100
+Subject: [Buildroot] [PATCH 2/2] Mark a number of development related
+ packages as deprecated
+In-Reply-To: <c42b5a3ae08ae07779a6ee389a8367318efe96bf.1352586949.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
- <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50A02C6D.1040105@mind.be>
+ <c42b5a3ae08ae07779a6ee389a8367318efe96bf.1352586949.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50A02CAF.1010707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,16 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 11/10/12 23:36, Thomas Petazzoni wrote:
->   config BR2_HAVE_DOCUMENTATION
->   	bool "documentation on the target"
-> +	# We no longer want to support a toolchain on the target
-> +	depends on BR2_DEPRECATED
->   	help
->   	  Install the documentation, including manual pages and info
->   	  pages, on the target.
+> automake, autoconf, libtool and make on the target are basically
+> useless if we don't support building a toolchain on the target. Of
+> course, the host variant of automake, autoconf and libtool will remain
+> available.
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
-  Who, documentation has nothing to do with the toolchain on target!  I can
-easily imagine use cases where you want to be able to do 'man tcpdump' on
-the target.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Still for 2012.11 please :-)
 
   Regards,
   Arnout
