@@ -1,41 +1,55 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Sat, 10 Nov 2012 23:26:19 +0000
-Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
- on target
-In-Reply-To: <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
- <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CA+wH294SsYiTG9AP9_q==F2-3MKf_Oe75yCM21rSDSgyNTeGcA@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 10 Nov 2012 22:08:35 -0500
+Subject: [Buildroot] [PATCH] group file: define groups expected by udev
+Message-ID: <1352603315-1731-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10 November 2012 22:36, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> As discussed during the ELCE 2012 Buildroot Developers Meeting, we no
-> longer want to support the possibility of building a toolchain for the
-> target. None of the core developers have any use for this, it has been
-> known to be broken or cause problems for a long time without anyone
-> providing fixes for it.
->
-> In addition to this, Buildroot is inherently a cross-compilation tool,
-> so the usage of a native toolchain on the target is not really
-> useful. Many newcomers are tempted to use this possibility even though
-> it is clearly not the intended usage of Buildroot.
+udev-182 requires several groups to be resolvable at udev startup,
+including disk, cdrom, floppy, tape, audio, video, lp, tty, dialout,
+and kmem.  Only some of these are in the default skeleton's group
+file, So let's add the missing groups, and plugdev too.
 
-If someone took lead on reintroducing this functionality would it be
-accepted? There are at least a couple of cases where installing
-development files are useful:
-* When using buildroot to build a rootfs that is used as a sysroot for
-an external build system
-* When using e.g. luajit packages which can make use of header files
-to generate bindings (not exploited all that much right now due to
-lack of preprocessor support in luajit)
+This avoids getting these logs in /var/logs/messages:
 
-Not disagreeing with this being marked deprecated for the time being
-at all, I'm just not so sure that devfiles or event native toolchains
-are inherently out of the scope of buildroot.
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'dialout' unknown
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'kmem' unknown
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'video' unknown
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'lp' unknown
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'floppy' unknown
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'cdrom' unknown
+Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'tape' unknown
 
-Alex
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ system/skeleton/etc/group |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index 8fc486d..864d1db 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -5,10 +5,18 @@ sys:x:3:
+ adm:x:4:
+ tty:x:5:
+ disk:x:6:
++lp:x:7:
++kmem:x:9:
+ wheel:x:10:root
++cdrom:x:11:
++dialout:x:18:
++floppy:x:19:
++video:x:28:
+ audio:x:29:
++tape:x:32:
+ www-data:x:33:
+ utmp:x:43:
++plugdev:x:46:
+ staff:x:50:
+ lock:x:54:
+ haldaemon:x:68:
+-- 
+1.7.9.5
