@@ -1,32 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 Nov 2012 23:25:05 +0100
-Subject: [Buildroot] [PATCH 1/2 v3] neard: new package
-In-Reply-To: <1352628468-14490-2-git-send-email-spdawson@gmail.com>
-References: <1352628468-14490-1-git-send-email-spdawson@gmail.com>
- <1352628468-14490-2-git-send-email-spdawson@gmail.com>
-Message-ID: <50A025C1.4040809@mind.be>
+Date: Sun, 11 Nov 2012 23:42:40 +0100
+Subject: [Buildroot] buildroot-2012.08: Handling drm module
+In-Reply-To: <CABRndgxqqO3HC08rVngxm2eaSVjQ9Ks04U7Mss5-xu=B4WGMdg@mail.gmail.com>
+References: <CABRndgxqqO3HC08rVngxm2eaSVjQ9Ks04U7Mss5-xu=B4WGMdg@mail.gmail.com>
+Message-ID: <50A029E0.4020802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/12 11:07, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
+On 11/11/12 22:05, Zvi Vered wrote:
+> Hello,
 >
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
->   (built-test on a minimal powerpc config)
+> I just tried buildroot-2012.08
+>
+> According to .config buildroot does not handle 'drm'. at all.
+> Am I right ?
+>
+> When I booted my PC104 module with 'knoppix 2 nodrm' the text screen flickers.
+> With 'knoppix 2' the screen is OK.
+>
+> Now I want to boot the PC104 with "my" distribution based on vanilla
+> 3.4.7, busybox.
+> Can you help ?
 
-  Since you changed the version number, you shouldn't keep my Tested-by
-(Ack is debatable).
+  Can you explain what your problem is?  Is it that the build fails, or that the
+resulting image doesn't boot, or that the screen still flickers with the
+buildroot image?
 
-  However, I retested it so you can add it again :-)
+  In any case, it is probably a kernel problem.  If you use exactly the same kernel
+version and kernel configuration as in knoppix, you should get the same behaviour.
+(You can usually get the configuration of a running kernel from /proc/config.gz).
+Note that knoppix may have additional kernel patches as well.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
