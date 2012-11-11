@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:51 +0100
-Subject: [Buildroot] [PATCH 13/23] manual: add writing-rules.txt
+Date: Sun, 11 Nov 2012 14:14:52 +0100
+Subject: [Buildroot] [PATCH 14/23] manual: add get-involved.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-14-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-15-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,151 +13,122 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/writing-rules.txt
+ create mode 100644 docs/manual/get-involved.txt
 
-diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
-index 37f703d..b254b0f 100644
---- a/docs/manual/developer-guide.txt
-+++ b/docs/manual/developer-guide.txt
-@@ -3,6 +3,8 @@
- Developer Guidelines
- ====================
- 
-+include::writing-rules.txt[]
-+
- include::adding-packages.txt[]
- 
- include::board-support.txt[]
-diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
 new file mode 100644
-index 0000000..e0a5a2a
+index 0000000..566516b
 --- /dev/null
-+++ b/docs/manual/writing-rules.txt
-@@ -0,0 +1,125 @@
++++ b/docs/manual/get-involved.txt
+@@ -0,0 +1,98 @@
 +// -*- mode:doc; -*-
 +
-+Writing rules
-+-------------
++Getting involved
++================
 +
-+Overall, those writing rules are here to help you add new files in
-+Buildroot or refactor existing ones.
++Like any open source project, Buildroot has different ways to share
++information in its community and outside.
 +
-+If you slightly modify some existing file, the important thing is
-+keeping the consistency of the whole file, so you can:
-+* either follow the potentially deprecated rules used all over this
-+file
-+* or entirely rework it in order to make it comply with those rules.
++One piece of it is the document you are currently reading ;-).
 +
-+[[writing-rules-config-in]]
++Each of those ways may interest you if you are looking for some help,
++want to understand Buildroot or contribute to the project.
 +
-++Config.in+ file
-+~~~~~~~~~~~~~~~~
++Mailing List
++------------
 +
-++Config.in+ files contain entries for almost anything configurable in
-+Buildroot.
++Buildroot has a mailing list
++http://lists.busybox.net/pipermail/buildroot[] for discussion and
++development.
 +
-+An entry has the following pattern:
++[[mailing-list-subscribe]]
 +
-+---------------------
-+config BR2_PACKAGE_LIBFOO
-+	bool "libfoo"
-+	depends on BR2_PACKAGE_LIBBAZ
-+	select BR2_PACKAGE_LIBBAR
-+	help
-+	  This is a comment that explains what libfoo is.
++Subscribing to the mailing list
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+	  http://foosoftware.org/libfoo/
-+---------------------
++You can subscribe by visiting
++http://lists.busybox.net/mailman/listinfo/buildroot[].
++Only subscribers to the Buildroot mailing list are allowed to post to
++this list.
 +
-+* The +bool+, +depends on+, +select+ and +help+ lines are indented
-+  with one tab.
++The list is also available through _Gmane_ http://gmane.org[], at
+++gmane.comp.lib.uclibc.buildroot+
++http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
 +
-+* The help text itself should be indented with one tab and two
-+  spaces.
++Searching the List Archives
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+The configuration system used in Buildroot, so the content of the
-++Config.in+ files, is regular _Kconfig_. Further details about
-+_Kconfig_: refer to
-+http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[].
++Please search the mailing list archives before asking questions on the
++mailing list, since there is a good chance someone else has asked the
++same question before. Checking the archives is a great way to avoid
++annoying everyone on the list with frequently asked questions...
 +
-+[[writing-rules-mk]]
++IRC
++---
 +
-+The +.mk+ file
-+~~~~~~~~~~~~~~
++The Buildroot IRC is irc://freenode.net/#buildroot[].
++The channel +#buildroot+ is hosted on Freenode
++http://webchat.freenode.net[].
 +
-+* Assignment: use +=+ preceded and followed by one space:
-++
-+---------------------
-+LIBFOO_VERSION = 1.0
-+LIBFOO_CONF_OPT += --without-python-support
-+---------------------
++When asking for help on IRC, share relevant logs or pieces of code
++using a code sharing website (see
++http://en.wikipedia.org/wiki/Comparison_of_pastebins[], and pick one).
 +
-+* Indentation: use tab only:
-++
-+---------------------
-+define LIBFOO_REMOVE_DOC
-+$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
-+	$(TARGET_DIR)/usr/share/man/man3/libfoo*
-+endef
-+---------------------
++[[patchwork]]
++Patchwork
++---------
 +
-+* Optional dependency:
++The Buildroot patch management interface is at
++http://patchwork.buildroot.org[].
 +
-+** Prefer multi-line syntax.
-++
-+YES:
-++
-+---------------------
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+LIBFOO_CONF_OPT += --with-python-support
-+LIBFOO_DEPENDENCIES += python
-+else
-+LIBFOO_CONF_OPT += --without-python-support
-+endif
-+---------------------
-++
-+NO:
-++
-+---------------------
-+LIBFOO_CONF_OPT += --with$(if $(BR2_PACKAGE_PYTHON),,out)-python-support
-+LIBFOO_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,)
-+---------------------
++All patches and comments sent through the mailing list are
++automatically indexed in http://patchwork.buildroot.org[patchwork].
 +
-+** Keep configure options and dependencies close together.
++Bugtracker
++----------
 +
-+* Optional hooks: keep hook definition and assignment together in one
-+  if block.
-++
-+YES:
-++
-+---------------------
-+ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
-+define LIBFOO_REMOVE_DATA
-+	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-+endef
-+LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
-+endif
-+---------------------
-++
-+NO:
-++
-+---------------------
-+define LIBFOO_REMOVE_DATA
-+	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-+endef
++The Buildroot bugtracker is at https://bugs.busybox.net[].
 +
-+ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
-+LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
-+endif
-+---------------------
++Buildroot wikipage
++------------------
 +
-+The documentation
-+~~~~~~~~~~~~~~~~~
++After the Buildroot developer day on February 3, 2012,
++a page dedicated to Buildroot has been created on
++http://elinux.org[elinux.org].
 +
-+The documentation uses the
-+http://www.methods.co.nz/asciidoc/[asciidoc] format.
++This page is reachable at http://elinux.org/Buildroot[].
 +
-+Further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
-+syntax: refer to http://www.methods.co.nz/asciidoc/userguide.html[].
++Currently, this page is mainly used as a _todo-list_.
++
++[[events]]
++Events
++------
++
++Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++* Event page: http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
++
++Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++* Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
++
++Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
++* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index 4df1657..3331cbf 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -23,4 +23,6 @@ include::going-further.txt[]
+ 
+ include::developer-guide.txt[]
+ 
++include::get-involved.txt[]
++
+ include::appendix.txt[]
 -- 
 1.8.0
