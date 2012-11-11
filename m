@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Nov 2012 23:05:46 +0100
-Subject: [Buildroot] [PATCH] libtool version update 2.4.2
-In-Reply-To: <50A02018.1000804@mind.be>
-References: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
- <20121110105308.740a3bfa@skate> <50A02018.1000804@mind.be>
-Message-ID: <20121111230546.709735e3@skate>
+Date: Sun, 11 Nov 2012 23:09:46 +0100
+Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
+ on target
+In-Reply-To: <CA+wH294SsYiTG9AP9_q==F2-3MKf_Oe75yCM21rSDSgyNTeGcA@mail.gmail.com>
+References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <CA+wH294SsYiTG9AP9_q==F2-3MKf_Oe75yCM21rSDSgyNTeGcA@mail.gmail.com>
+Message-ID: <20121111230946.43e57600@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Alex,
 
-On Sun, 11 Nov 2012 23:00:56 +0100, Arnout Vandecappelle wrote:
-> On 11/10/12 10:53, Thomas Petazzoni wrote:
-> > Alexander,
-> >
-> > On Fri,  9 Nov 2012 16:38:52 +0400, Alexander Khryukin wrote:
-> >
-> >> -LIBTOOL_VERSION = 2.2.10
-> >> +LIBTOOL_VERSION = 2.4.2
-> >
-> > How much testing did you give to this version bump? A libtool
-> > version bump is a very sensitive operation, as host-libtool is used
-> > to autoreconfigure many packages in Buildroot. Therefore, this
-> > patch needs a good amount of testing before being committed
-> > (ideally testing that all packages having<foo>_AUTORECONF = YES
-> > still build).
-> 
->   Can't we rely on the autobuilders to do that?
+On Sat, 10 Nov 2012 23:26:19 +0000, Alex Bradbury wrote:
 
-Sure, we'll certainly rely on the autobuilders for a complete testing.
-But I wanted to know if it had been tested again 2 packages or 20-40
-packages, which makes quite a bit of difference :)
+> If someone took lead on reintroducing this functionality would it be
+> accepted? There are at least a couple of cases where installing
+> development files are useful:
+> * When using buildroot to build a rootfs that is used as a sysroot for
+> an external build system
 
->   That said, I wouldn't do this for 2012.11 anymore...
+To build a sysroot containing a cross-compiler + header files and
+libraries you don't need the support for the toolchain on target.
 
-For sure, it should not be part of 2012.11, we already have enough
-issues to fix.
+> * When using e.g. luajit packages which can make use of header files
+> to generate bindings (not exploited all that much right now due to
+> lack of preprocessor support in luajit)
+
+What do you need the toolchain on target for this? Header files are
+available in the toolchain sysroot, i.e in
+output/host/usr/<arch-tuple>/sysroot/.
+
+So unless I'm wrong, none of those use-cases require a toolchain on the
+target. Or maybe you could provide more details about those use cases
+to convince us that having a toolchain on the target is important?
+
+Best regards,
 
 Thomas
 -- 
