@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:15:00 +0100
-Subject: [Buildroot] [PATCH 22/23] manual: add deprecated-list.txt
+Date: Sun, 11 Nov 2012 14:15:01 +0100
+Subject: [Buildroot] [PATCH 23/23] manual: add beyond-buildroot.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-23-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-24-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,64 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/deprecated-list.txt
+ create mode 100644 docs/manual/beyond-buildroot.txt
 
-diff --git a/docs/manual/deprecated-list.txt b/docs/manual/deprecated-list.txt
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
 new file mode 100644
-index 0000000..6dc87a4
+index 0000000..12ce78c
 --- /dev/null
-+++ b/docs/manual/deprecated-list.txt
-@@ -0,0 +1,46 @@
-+// -*- mode:doc -*- ;
++++ b/docs/manual/beyond-buildroot.txt
+@@ -0,0 +1,38 @@
++// -*- mode:doc; -*-
 +
-+[[deprecated]]
-+Deprecated list
-+---------------
++Beyond Buildroot
++================
 +
-+The following stuff are marked as _deprecated_ in Buildroot due to
-+their status either too old or unmaintained.
++Boot the generated images
++-------------------------
 +
-+// list generated using the followings command:
-+// $ git grep -EB4 'depends on BR2_DEPRECATED'
-+// and
-+// $ git grep -EB4 'depends on BR2_DEPRECATED' | \
-+//     grep -Eo '(:|-).*?(config|comment) BR2_.*'
-+//
-+// Need manual checks and sorting.
++NFS boot
++~~~~~~~~
 +
-+* Packages:
++To achieve NFS-boot, enable _tar root filesystem_ in the _Filesystem
++images_ menu.
 +
-+** +busybox+ 1.18.x
-+** +customize+
-+** +lzma+
-+** +microperl+
-+** +netkitbase+
-+** +netkittelnet+
-+** +pkg-config+
-+** +squashfs3+
-+** +ttcp+
++After complete build, just run the following commands to setup the
++NFS-root directory:
 +
-+* Toolchain:
++-------------------
++sudo tar -xavf /path/to/output_dir/rootfs.tar -C /path/to/nfs_root_dir
++-------------------
 +
-+** +gdb+ 6.8
-+** +gdb+ 7.0.1
-+** +gdb+ 7.1
-+** +kernel headers+ 2.6.37
-+** +kernel headers+ 2.6.38
-+** +kernel headers+ 2.6.39
++Then, you can execute a NFS-boot from your target.
 +
-+* Bootloaders:
++Chroot
++------
 +
-+** +u-boot+ 2011-06
-+** +u-boot+ 2011-09
++If you want to chroot in a generated image, then there are few thing
++you should be aware of:
 +
-+* Output images:
++* you should setup the new root from the _tar root filesystem_ image;
 +
-+** squashfs3 image
++* either the selected target architecture is compatible with your host
++  machine, or you should use some +qemu-*+ binary and correctly set it
++  within the +binfmt+ properties to be able to run the binaries built
++  for the target on your host machine;
++
++* Buildroot does not currently provide +host-qemu+ and +binfmt+
++  correctly built and set for that kind of use.
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index a1ee68a..c34e0ca 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -25,6 +25,8 @@ include::developer-guide.txt[]
+ 
+ include::legal-notice.txt[]
+ 
++include::beyond-buildroot.txt[]
++
+ include::get-involved.txt[]
+ 
+ include::contribute.txt[]
 -- 
 1.8.0
