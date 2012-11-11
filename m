@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:56 +0100
-Subject: [Buildroot] [PATCH 18/23] manual: add patch-policy.txt
+Date: Sun, 11 Nov 2012 14:14:57 +0100
+Subject: [Buildroot] [PATCH 19/23] manual: add adding-package-tips.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-19-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-20-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,154 +13,78 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/patch-policy.txt
+ create mode 100644 docs/manual/adding-packages-tips.txt
 
-diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
-index f3fc1dd..5002897 100644
---- a/docs/manual/developer-guide.txt
-+++ b/docs/manual/developer-guide.txt
-@@ -7,6 +7,8 @@ include::writing-rules.txt[]
- 
- include::adding-packages.txt[]
- 
-+include::patch-policy.txt[]
-+
- include::download-infra.txt[]
- 
- include::board-support.txt[]
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
 new file mode 100644
-index 0000000..551ea12
+index 0000000..acc73d3
 --- /dev/null
-+++ b/docs/manual/patch-policy.txt
-@@ -0,0 +1,128 @@
++++ b/docs/manual/adding-packages-tips.txt
+@@ -0,0 +1,54 @@
 +// -*- mode:doc; -*-
 +
-+[[patch-policy]]
++Tips and tricks
++~~~~~~~~~~~~~~~
 +
-+Patch Policy
-+------------
++[[package-name-variable-relation]]
++Package name, config entry name and makefile variable relationship
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+While integrating a new package or updating an existing one, it may be
-+necessary to patch the source of the software to get it built within
-+Buildroot.
++In Buildroot, there are some relation between:
 +
-+Buildroot offers an infrastructure to automatically handle this during
-+the builds. It support several ways of applying patch sets:
++* the _package name_, which is the package directory name (and the
++  name of the +*.mk+ file);
 +
-+Provinding patches
-+~~~~~~~~~~~~~~~~~~
++* the config entry name that is declared in the +Config.in+ file;
 +
-+Additionnal tarball
-+^^^^^^^^^^^^^^^^^^^
++* the makefile variable prefix.
 +
-+If there needs to apply a patch set available as a tarball and
-+downloadable, then add the patch tarball to the +<packagename>_PATCH+
-+variable.
++Thus, it is mandatory to keep consistency between all this stuff,
++matching the following rules:
 +
-+Note that the patch tarballs are downloaded from the same site as the
-+sources.
++* the _make_ target name will be the _package name_ itself (e.g.:
++  +foo-bar_boo+);
 +
-+Within Buildroot
-+^^^^^^^^^^^^^^^^
++* the config entry is the upper case _package name_ with `.` and `-`
++  characters substituted with `_`, prefixed with +BR2_PACKAGE_+ (e.g.:
++  +BR2_PACKAGE_FOO_BAR_BOO+);
 +
-+Most of the patches are provided within Buildroot, in the package
-+directory, because they aim to fix cross-compilation, +libc+ support,
-+or whatever the reason is.
++* the +*.mk+ file variable prefix is the upper case _package name_
++  `.` and `-` characters substituted with `_` (e.g.:
++  +FOO_BAR_BOO_VERSION+).
 +
-+These patch files should have the extension +*.patch+.
 +
-+A +series+ file, like +quilt+ uses it, may also be added in the
-+package directory. In that case, the +series+ file defines the patch
-+application order.
++[[github-download-url]]
++How to add package from github
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+How patches are applied
-+~~~~~~~~~~~~~~~~~~~~~~~
++If the package has no release version, or its version cannot be
++identified using tag, then the sha1 of the particular commit should be
++used to identify the version (the first 7 characters of the sha1 are
++enough):
 +
-+. Run the +<packagename>_PRE_PATCH_HOOKS+ commands if defined;
++------------------------
++FOO_VERSION = 1234567
++FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
++------------------------
 +
-+. Cleanup the build directory from any existing +*.rej+ files;
++If the package version matches a tag, then this tag should be used to
++identify the version:
 +
-+. If +<packagename>_PATCH+ is defined, then patches from these
-+  tarballs are applied;
++------------------------
++FOO_VERSION = v1.0
++FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
++------------------------
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 8221c85..b909d47 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -19,4 +19,6 @@ include::adding-packages-cmake.txt[]
+ 
+ include::adding-packages-gettext.txt[]
+ 
++include::adding-packages-tips.txt[]
 +
-+. If there are some +*.patch+ files in the package directory or in the
-+  a package subdirectory named +<packagename>-<packageversion>+, then:
-++
-+* If a +series+ file exists in the package directory, then patches are
-+  applied according to the +series+ file;
-++
-+* Otherwise, patch files matching `<packagename>-*.patch` or
-+  `<packagename>-*.patch.<arch>` (where +<arch>+ is the architecture
-+  name) are applied following the +ls+ command order.
-+
-+. Run the +<packagename>_POST_PATCH_HOOKS+ commands if defined.
-+
-+If something goes wrong in the steps _3_ or _4_, then the build fails.
-+
-+Format and licensing of the package patches
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Patches are released under the same license the software that is
-+modified.
-+
-+A message explaining what does the patch and why should be add in the
-+patch's header.
-+
-+You should add a +signed-off-by+ statement in the header of the each
-+patch to help keeping track of the changes.
-+
-+If the software is under versionning, it is recommended to use the SCM
-+software to generate the patch set.
-+
-+Otherwise, concatenate the header with the output of the
-++diff -purN source.c.orig source.c+ command.
-+
-+At the end, the patch should look like:
-+
-+---------------
-+configure.ac: add C++ support test
-+
-+signed-off-by John Doe <john.doe@noname.org>
-+
-+--- configure.ac.orig
-++++ configure.ac
-+@@ -40,2 +40,12 @@
-+
-+AC_PROG_MAKE_SET
-++
-++AC_CACHE_CHECK([whether the C++ compiler works],
-++               [rw_cv_prog_cxx_works],
-++               [AC_LANG_PUSH([C++])
-++                AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
-++                               [rw_cv_prog_cxx_works=yes],
-++                               [rw_cv_prog_cxx_works=no])
-++                AC_LANG_POP([C++])])
-++
-++AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
-+---------------
-+
-+Integrating patches found on the Web
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+When integrating a patch whom you are not the author, you have to add
-+few things in the header of the patch itself.
-+
-+Depending on whether the patch has been pick-up from the project
-+repository itself, or from somewhere on the web, add one of the
-+following tags:
-+
-+---------------
-+Backported from: <some commit id>
-+---------------
-+
-+or
-+
-+---------------
-+Fetch from: <some url>
-+---------------
-+
-+It is also possible to add few words about the changes that may have
-+been necessary if any.
+ include::adding-packages-conclusion.txt[]
 -- 
 1.8.0
