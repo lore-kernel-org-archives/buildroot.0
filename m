@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:52 +0100
-Subject: [Buildroot] [PATCH 14/23] manual: add get-involved.txt
+Date: Sun, 11 Nov 2012 14:14:53 +0100
+Subject: [Buildroot] [PATCH 15/23] manual: add contribute.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-15-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-16-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,121 +13,168 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/get-involved.txt
+ create mode 100644 docs/manual/contribute.txt
 
-diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 new file mode 100644
-index 0000000..566516b
+index 0000000..ddf790d
 --- /dev/null
-+++ b/docs/manual/get-involved.txt
-@@ -0,0 +1,98 @@
++++ b/docs/manual/contribute.txt
+@@ -0,0 +1,126 @@
 +// -*- mode:doc; -*-
 +
-+Getting involved
-+================
++Contibuting to Buildroot
++========================
 +
-+Like any open source project, Buildroot has different ways to share
-+information in its community and outside.
++If you want to contribute to Buildroot, you will need a git view of
++the project. Refer to xref:getting-buildroot[] to get it.
 +
-+One piece of it is the document you are currently reading ;-).
++Currently, the mailing list is the central place for contribution.
++If you have not already subscribed to it, then refer to
++xref:mailing-list-subscribe[].
 +
-+Each of those ways may interest you if you are looking for some help,
-+want to understand Buildroot or contribute to the project.
++Recently, a web interface is also used to manage patches sent to the
++mailing list, see xref:patchwork[].
 +
-+Mailing List
-+------------
++[NOTE]
++_Please, do not attach patches to bugs, send them to the mailing list
++instead_ (see xref:submitting-patches[]).
 +
-+Buildroot has a mailing list
-+http://lists.busybox.net/pipermail/buildroot[] for discussion and
-+development.
-+
-+[[mailing-list-subscribe]]
-+
-+Subscribing to the mailing list
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+You can subscribe by visiting
-+http://lists.busybox.net/mailman/listinfo/buildroot[].
-+Only subscribers to the Buildroot mailing list are allowed to post to
-+this list.
-+
-+The list is also available through _Gmane_ http://gmane.org[], at
-++gmane.comp.lib.uclibc.buildroot+
-+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
-+
-+Searching the List Archives
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Please search the mailing list archives before asking questions on the
-+mailing list, since there is a good chance someone else has asked the
-+same question before. Checking the archives is a great way to avoid
-+annoying everyone on the list with frequently asked questions...
-+
-+IRC
-+---
-+
-+The Buildroot IRC is irc://freenode.net/#buildroot[].
-+The channel +#buildroot+ is hosted on Freenode
-+http://webchat.freenode.net[].
-+
-+When asking for help on IRC, share relevant logs or pieces of code
-+using a code sharing website (see
-+http://en.wikipedia.org/wiki/Comparison_of_pastebins[], and pick one).
-+
-+[[patchwork]]
-+Patchwork
-+---------
-+
-+The Buildroot patch management interface is at
-+http://patchwork.buildroot.org[].
-+
-+All patches and comments sent through the mailing list are
-+automatically indexed in http://patchwork.buildroot.org[patchwork].
-+
-+Bugtracker
-+----------
-+
-+The Buildroot bugtracker is at https://bugs.busybox.net[].
-+
-+Buildroot wikipage
++[[submitting-patches]]
++Submitting patches
 +------------------
 +
-+After the Buildroot developer day on February 3, 2012,
-+a page dedicated to Buildroot has been created on
-+http://elinux.org[elinux.org].
++When your changes are done, and committed in your local git view,
++_rebase_ your development branch on top of the upstream tree before
++generating the patch set. To do so, run:
 +
-+This page is reachable at http://elinux.org/Buildroot[].
++---------------------
++ $ git fetch --all --tags
++ $ git rebase origin/master
++---------------------
 +
-+Currently, this page is mainly used as a _todo-list_.
++Here, you are ready to generate then submit your patch set.
 +
-+[[events]]
-+Events
-+------
++To generate it, run:
 +
-+Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++---------------------
++ $ git format-patch -M -n -s -o outgoing origin/master
++---------------------
 +
-+* Event page: http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
++This will generate patch files in the +outgoing+ subdirectory,
++automatically adding the +signed-off-by+ line.
 +
-+Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++If you want to present the whole patch set in a separate mail, add
+++--cover-letter --summary+ to the previous command line (+man
++git-format-patch+ for further information).
 +
-+* Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
++Once patch files are generated, you can review/edit the commit message
++before submitting them using your favorite text editor.
 +
-+Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++Lastly, send/submit your patch set to the Buildroot mailing list:
 +
-+* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
-+* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
++---------------------
++ $ git send-email --to buildroot at busybox.net outgoing/*
++---------------------
++
++Note that +git+ should be configured to use your mail account.
++To configure +git+, see +man git-send-email+ or google it.
++
++Make sure posted *patches are not line-wrapped*, otherwise it cannot
++easily be applied. In such a case, fix your e-mail client, or better,
++use +git send-email+ to send your patches.
++
++Reviewing/Testing patches
++-------------------------
++
++In the review process, do not hesitate to respond to patch submissions
++for remarks, suggestions or anything that will help everyone to
++understand the patches and make them better.
++
++Some tags are used to help following the state of any patch posted on
++the mailing-list:
++
++Acked-by:: Indicates that the patch can be committed.
++
++Tested-by:: Indicates that the patch has been tested. It is useful
++  but not necessary to add a comment about what has been tested.
++
++Autobuild
++---------
++
++The Buildroot community is currently setting up automatic build i
++order to test more and more configuration. All build results are
++available at http://autobuild.buildroot.org[]
++
++A way to contribute is fixing broken builds.
++
++In the commit message of a patch fixing an _autobuild_, add a
++reference to the _build result directory_ (the +dir+ link in the _data
++column_):
++
++---------------------
++Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
++---------------------
++
++[[reporting-bugs]]
++Reporting issues/bugs, get help
++-------------------------------
++
++Before reporting some issues, please chek
++xref:mailing-list-subscribe[the mailing list archive] in case someone had
++already reported and fixed a similar problem.
++
++Whatever the way you choose to report some bugs or get help,
++xref:bugtracker[opening a bug] or
++xref:mailing-list-subscribe[send a mail to the mailing list], there is
++a number of detail to provide in order to help people reproduce and
++find a solution to the issue.
++
++Try to think as you would be the one who will help someone else; in
++that case, what would you need?
++
++Here is a short list of details to provide in such case:
++
++* host machine (OS/release)
++* version of Buildroot
++* target for which the build fails
++* package(s) which the build fails
++* the command that fails and its output
++* any information you think that may be relevant
++
++Additionnally, your can add the +.config+ file.
++
++If some of these details are too large, do not hesitate to use some
++pastebin service (see
++http://en.wikipedia.org/wiki/Comparison_of_pastebins[]).
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+index 566516b..3a00b1e 100644
+--- a/docs/manual/get-involved.txt
++++ b/docs/manual/get-involved.txt
+@@ -61,11 +61,14 @@ http://patchwork.buildroot.org[].
+ All patches and comments sent through the mailing list are
+ automatically indexed in http://patchwork.buildroot.org[patchwork].
+ 
++[[bugtracker]]
+ Bugtracker
+ ----------
+ 
+ The Buildroot bugtracker is at https://bugs.busybox.net[].
+ 
++To open a bug, see xref:reporting-bugs[].
++
+ Buildroot wikipage
+ ------------------
+ 
 diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 4df1657..3331cbf 100644
+index 3331cbf..4032a6b 100644
 --- a/docs/manual/manual.txt
 +++ b/docs/manual/manual.txt
-@@ -23,4 +23,6 @@ include::going-further.txt[]
+@@ -25,4 +25,6 @@ include::developer-guide.txt[]
  
- include::developer-guide.txt[]
+ include::get-involved.txt[]
  
-+include::get-involved.txt[]
++include::contribute.txt[]
 +
  include::appendix.txt[]
 -- 
