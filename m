@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:53 +0100
-Subject: [Buildroot] [PATCH 15/23] manual: add contribute.txt
+Date: Sun, 11 Nov 2012 14:14:54 +0100
+Subject: [Buildroot] [PATCH 16/23] manual: add package-make-target.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-16-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-17-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,169 +13,123 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/contribute.txt
+ create mode 100644 docs/manual/package-make-target.txt
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
+index cd53182..ba6574c 100644
+--- a/docs/manual/advanced.txt
++++ b/docs/manual/advanced.txt
+@@ -10,3 +10,5 @@ include::external-toolchain.txt[]
+ include::ccache-support.txt[]
+ 
+ include::download-location.txt[]
++
++include::package-make-target.txt[]
+diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
 new file mode 100644
-index 0000000..ddf790d
+index 0000000..1813af3
 --- /dev/null
-+++ b/docs/manual/contribute.txt
-@@ -0,0 +1,126 @@
++++ b/docs/manual/package-make-target.txt
+@@ -0,0 +1,88 @@
 +// -*- mode:doc; -*-
 +
-+Contibuting to Buildroot
-+========================
++[[pkg-build-steps]]
 +
-+If you want to contribute to Buildroot, you will need a git view of
-+the project. Refer to xref:getting-buildroot[] to get it.
++Package make targets
++~~~~~~~~~~~~~~~~~~~~
 +
-+Currently, the mailing list is the central place for contribution.
-+If you have not already subscribed to it, then refer to
-+xref:mailing-list-subscribe[].
++A +make <package>+ call achieves several _make targets_ with, as a
++result, this particular package and its dependencies built, installed
++in their destination directory (target, staging or host directory).
 +
-+Recently, a web interface is also used to manage patches sent to the
-+mailing list, see xref:patchwork[].
++For packages based on the Buildroot infrastructures (+generic-package+,
+++autotools-package+ or +cmake-package+), each of those
++actions/steps/commands. For packages relying on other build system,
++then there is no other choice than looking at the +.mk+ file (see also
++the xref:rebuild-pkg[]).
 +
-+[NOTE]
-+_Please, do not attach patches to bugs, send them to the mailing list
-+instead_ (see xref:submitting-patches[]).
++For packages relying on the Buildroot infrastructures, there are
++numerous special make targets that can be called independently like
++this:
 +
-+[[submitting-patches]]
-+Submitting patches
-+------------------
++------------
++make <package>-<target>
++------------
 +
-+When your changes are done, and committed in your local git view,
-+_rebase_ your development branch on top of the upstream tree before
-+generating the patch set. To do so, run:
++In order, the package build commands are:
 +
-+---------------------
-+ $ git fetch --all --tags
-+ $ git rebase origin/master
-+---------------------
++[width="90%",cols="^1,4",options="header"]
++|===================================================
++| command/target    | Description
 +
-+Here, you are ready to generate then submit your patch set.
++| +source+          | Fetch the source (download the tarball, clone
++the source repository, etc)
 +
-+To generate it, run:
++| +depends+         | Build and install all dependencies required to
++build the package
 +
-+---------------------
-+ $ git format-patch -M -n -s -o outgoing origin/master
-+---------------------
++| +extract+         | Put the source in the package build directory
++(extract the tarball, copy the source, etc)
 +
-+This will generate patch files in the +outgoing+ subdirectory,
-+automatically adding the +signed-off-by+ line.
++| +patch+           | Apply the patches if any
 +
-+If you want to present the whole patch set in a separate mail, add
-++--cover-letter --summary+ to the previous command line (+man
-+git-format-patch+ for further information).
++| +configure+       | Run the configure command
 +
-+Once patch files are generated, you can review/edit the commit message
-+before submitting them using your favorite text editor.
++| +build+           | Compile the source
 +
-+Lastly, send/submit your patch set to the Buildroot mailing list:
++| +install-staging+ |
++*target package:* Run the installation of the package in the
++staging directory
 +
-+---------------------
-+ $ git send-email --to buildroot at busybox.net outgoing/*
-+---------------------
++*host package:* Does nothing
 +
-+Note that +git+ should be configured to use your mail account.
-+To configure +git+, see +man git-send-email+ or google it.
++| +install-target+  |
++*target package:* Run the installation of the package in the
++staging directory
 +
-+Make sure posted *patches are not line-wrapped*, otherwise it cannot
-+easily be applied. In such a case, fix your e-mail client, or better,
-+use +git send-email+ to send your patches.
++*host package:* Does nothing
 +
-+Reviewing/Testing patches
-+-------------------------
++| +install+         |
++*target package:* Run the 2 previous installation commands for the
++target packages
 +
-+In the review process, do not hesitate to respond to patch submissions
-+for remarks, suggestions or anything that will help everyone to
-+understand the patches and make them better.
++*host package:* Run the installation of the package in the host
++directory
 +
-+Some tags are used to help following the state of any patch posted on
-+the mailing-list:
++|===================================================
 +
-+Acked-by:: Indicates that the patch can be committed.
++Additionally, there are some other useful make targets:
 +
-+Tested-by:: Indicates that the patch has been tested. It is useful
-+  but not necessary to add a comment about what has been tested.
++[width="90%",cols="^1,4",options="header"]
++|===================================================
++| command/target    | Description
 +
-+Autobuild
-+---------
++| +show-depends+    | Displays the dependencies required to build the
++package
 +
-+The Buildroot community is currently setting up automatic build i
-+order to test more and more configuration. All build results are
-+available at http://autobuild.buildroot.org[]
++| +clean+           | Clean the package build directory, also
++uninstall the package from both the target and the staging directory
 +
-+A way to contribute is fixing broken builds.
++| +dirclean+        | Remove the whole package build directory
 +
-+In the commit message of a patch fixing an _autobuild_, add a
-+reference to the _build result directory_ (the +dir+ link in the _data
-+column_):
++| +rebuild+         | Rebuild only necessary binaries and install them
++again
 +
-+---------------------
-+Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
-+---------------------
++| +reconfigure+     | Run again the configure command, then rebuild
++only necessary binaries, and lastly install them again
 +
-+[[reporting-bugs]]
-+Reporting issues/bugs, get help
-+-------------------------------
++|===================================================
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index 2225200..a723d11 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -83,3 +83,7 @@ Buildroot infrastructures.
+ use any Buildroot infrastructure).
+ - Most packages and toolchain packages, if not all, will progressively
+ be ported over to the generic, autotools or CMake infrastructure,
++making it much easier to rebuild individual packages.
 +
-+Before reporting some issues, please chek
-+xref:mailing-list-subscribe[the mailing list archive] in case someone had
-+already reported and fixed a similar problem.
-+
-+Whatever the way you choose to report some bugs or get help,
-+xref:bugtracker[opening a bug] or
-+xref:mailing-list-subscribe[send a mail to the mailing list], there is
-+a number of detail to provide in order to help people reproduce and
-+find a solution to the issue.
-+
-+Try to think as you would be the one who will help someone else; in
-+that case, what would you need?
-+
-+Here is a short list of details to provide in such case:
-+
-+* host machine (OS/release)
-+* version of Buildroot
-+* target for which the build fails
-+* package(s) which the build fails
-+* the command that fails and its output
-+* any information you think that may be relevant
-+
-+Additionnally, your can add the +.config+ file.
-+
-+If some of these details are too large, do not hesitate to use some
-+pastebin service (see
-+http://en.wikipedia.org/wiki/Comparison_of_pastebins[]).
-diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
-index 566516b..3a00b1e 100644
---- a/docs/manual/get-involved.txt
-+++ b/docs/manual/get-involved.txt
-@@ -61,11 +61,14 @@ http://patchwork.buildroot.org[].
- All patches and comments sent through the mailing list are
- automatically indexed in http://patchwork.buildroot.org[patchwork].
- 
-+[[bugtracker]]
- Bugtracker
- ----------
- 
- The Buildroot bugtracker is at https://bugs.busybox.net[].
- 
-+To open a bug, see xref:reporting-bugs[].
-+
- Buildroot wikipage
- ------------------
- 
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 3331cbf..4032a6b 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -25,4 +25,6 @@ include::developer-guide.txt[]
- 
- include::get-involved.txt[]
- 
-+include::contribute.txt[]
-+
- include::appendix.txt[]
++Further details about package special make target at the
++xref:pkg-build-steps[].
 -- 
 1.8.0
