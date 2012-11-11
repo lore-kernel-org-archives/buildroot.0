@@ -1,28 +1,33 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 11 Nov 2012 21:02:00 +0000
-Subject: [Buildroot] [PATCH] lcdproc: bump version to 0.5.6
-In-Reply-To: <20121111210859.5c6f7510@skate>
-References: <1352207698-3407-1-git-send-email-spdawson@gmail.com>
- <20121111210859.5c6f7510@skate>
-Message-ID: <CAHt8ZCM-ZSqQd=5WByXDvqY-2_NNfizWawJwMgNhPr=oMYrP7w@mail.gmail.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sun, 11 Nov 2012 22:05:16 +0100
+Subject: [Buildroot] QT packackage grantlee not building
+In-Reply-To: <509D7A48.4030002@mind.be>
+References: <28814AE91EA94801B84C55B81555379F@JohanW7>
+ <509D7A48.4030002@mind.be>
+Message-ID: <50A0130C.4020402@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas.
+Hi,
 
-On 11 November 2012 20:08, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> There are apparently build issues with lcdproc 0.5.6. Not sure if they
-> are new or if they were present in older versions. See
-> http://autobuild.buildroot.org/results/9967bc20a6094e836c4c18ff2cd30edef143bb8e/build-end.log.
-> Basically, lcdproc uses -I<foo>/host/usr/include -L<foo>/host/usr/lib
-> to build things for the target.
+going to check it as soon a spossible, a defconfig would be
+useful indeed.
+Thx for the report!
 
-Okay; I'll have a look. (I must have missed this problem because I'm
-applying quite a large local patch to lcdproc, which necessitates an
-autoreconf.)
+BR,
+Zoltan Gyarmati
 
-Simon.
+
+
+On 11/09/2012 10:48 PM, Arnout Vandecappelle wrote:
+> On 11/09/12 22:44, Sagaert Johan wrote:
+>> Currently the build of the QT grantlee package is broken:
+>> it seems like libpthread is not linked in.
+>
+>  Could you post a defconfig so we can try to reproduce?
+>
+>  Regards,
+>  Arnout
