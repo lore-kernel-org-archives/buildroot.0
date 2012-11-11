@@ -1,77 +1,262 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:45 +0100
-Subject: [Buildroot] [PATCH 07/23] manual: customize-rootfs.txt: refactoring,
-	misc. fixes and update
+Date: Sun, 11 Nov 2012 14:14:44 +0100
+Subject: [Buildroot] [PATCH 06/23] manual: rework using.txt and update
+	common-usage.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Consider the second chapter: "starting-up", as a tutorial.
+Assuming that, using.txt only contains the very first commands used to get
+configure and build its very first target system.
+
+So, the following subsection from using.txt have been to common-usage.txt:
+- Offline builds
+- Building out-of-tree
+- Environment variables
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
-index 7ac5195..d6224ff 100644
---- a/docs/manual/customize-rootfs.txt
-+++ b/docs/manual/customize-rootfs.txt
-@@ -4,7 +4,8 @@
- Customizing the generated target filesystem
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index b343606..c08c10e 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -4,3 +4,98 @@ Daily use
+ ---------
  
--There are a few ways to customize the resulting target filesystem:
-+Besides changing one or another configuration through +make *config+,
-+there are a few ways to customize the resulting target filesystem:
+ include::rebuilding-packages.txt[]
++
++Offline builds
++~~~~~~~~~~~~~~
++
++If you intend to do an offline build and just want to download
++all sources that you previously selected in the configurator
++('menuconfig', 'xconfig' or 'gconfig'), then issue:
++
++--------------------
++ $ make source
++--------------------
++
++You can now disconnect or copy the content of your +dl+
++directory to the build-host.
++
++Building out-of-tree
++~~~~~~~~~~~~~~~~~~~~
++
++As default, everything built by Buildroot is stored in the directory
+++output+ in the buildroot tree.
++
++Buildroot also supports building out of tree with a syntax similar to
++the Linux kernel. To use it, add +O=<directory>+ to the make command
++line:
++
++--------------------
++ $ make O=/tmp/build
++--------------------
++
++Or:
++
++--------------------
++ $ cd /tmp/build; make O=$PWD -C path/to/buildroot
++--------------------
++
++All the output files will be located under +/tmp/build+.
++
++When using out-of-tree builds, the Buildroot +.config+ and temporary
++files are also stored in the output directory. This means that you can
++safely run multiple builds in parallel using the same source tree as
++long as they use unique output directories.
++
++For ease of use, Buildroot generates a Makefile wrapper in the output
++directory - So after the first run, you no longer need to pass +O=..+
++and +-C ..+, simply run (in the output directory):
++
++--------------------
++ $ make <target>
++--------------------
++
++[[env-vars]]
++
++Environment variables
++~~~~~~~~~~~~~~~~~~~~~
++
++Buildroot also honors some environment variables, when they are passed
++to +make+ or set in the environment:
++
++* +HOSTCXX+, the host C++ compiler to use
++* +HOSTCC+, the host C compiler to use
++* +UCLIBC_CONFIG_FILE=<path/to/.config>+, path to
++  the uClibc configuration file, used to compile uClibc, if an
++  internal toolchain is being built.
++  +
++  Note that the uClibc configuration file can also be set from the
++  configuration interface, so through the Buildroot .config file; this
++  the actual recommended way of setting it.
++  +
++* +BUSYBOX_CONFIG_FILE=<path/to/.config>+, path to
++  the Busybox configuration file.
++  +
++  Note that the Busybox configuration file can also be set from the
++  configuration interface, so through the Buildroot .config file; this
++  the actual recommended way of setting it.
++  +
++* +BUILDROOT_DL_DIR+ to override the directory in which
++  Buildroot stores/retrieves downloaded files
++  +
++  Note that the Buildroot download directory can also be set from the
++  configuration interface, so through the Buildroot .config file; this
++  the actual recommended way of setting it.
++
++An example that uses config files located in the toplevel directory and
++in your $HOME:
++
++--------------------
++ $ make UCLIBC_CONFIG_FILE=uClibc.config BUSYBOX_CONFIG_FILE=$HOME/bb.config
++--------------------
++
++If you want to use a compiler other than the default +gcc+
++or +g+++ for building helper-binaries on your host, then do
++
++--------------------
++ $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
++--------------------
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 5741473..56ed23b 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -5,8 +5,8 @@ Using Buildroot
  
- * Customize the target filesystem directly and rebuild the image.  The
-   target filesystem is available under +output/target/+.  You can
-@@ -12,28 +13,33 @@ There are a few ways to customize the resulting target filesystem:
-   rebuild the target filesystem image. This method allows you to do
-   anything to the target filesystem, but if you decide to completely
-   rebuild your toolchain and tools, these changes will be lost.
-+  _Changes are not resistent to the +make clean+ command_.
+ Buildroot has a nice configuration tool similar to the one you can
+ find in the http://www.kernel.org/[Linux kernel] or in
+-http://www.busybox.net/[Busybox]. Note that you can (and should) build
+-everything as a normal user. There is no need to be root to configure
++http://www.busybox.net/[Busybox]. Note that you can *and should build
++everything as a normal user*. There is no need to be root to configure
+ and use Buildroot. The first step is to run the configuration
+ assistant:
  
- * Create your own 'target skeleton'. You can start with the default
-   skeleton available under +system/skeleton+ and then customize it to
-   suit your needs. The +BR2_ROOTFS_SKELETON_CUSTOM+ and
-   +BR2_ROOTFS_SKELETON_CUSTOM_PATH+ will allow you to specify the
--  location of your custom skeleton. At build time, the contents of the
-+  location of your custom skeleton. These options can be found in the
-+  +System configuration+ menu. At build time, the contents of the
-   skeleton are copied to output/target before any package
-   installation.
+@@ -29,12 +29,11 @@ or
+ to run the Qt or GTK-based configurators.
  
- * In the Buildroot configuration, you can specify the path to a
--  post-build script, that gets called 'after' Buildroot builds all the
-+  *post-build script*, that gets called 'after' Buildroot builds all the
-   selected software, but 'before' the rootfs packages are
--  assembled. The destination root filesystem folder is given as the
--  first argument to this script, and this script can then be used to
--  copy programs, static data or any other needed file to your target
--  filesystem. You should, however, use this feature with care.
--  Whenever you find that a certain package generates wrong or unneeded
--  files, you should fix that package rather than work around it with a
--  post-build cleanup script.
-+  assembled. The +BR2_ROOTFS_POST_BUILD_SCRIPT+ will allow you to
-+  specify the location of your post-build script. This option can be
-+  found in the +System configuration+ menu. The destination root
-+  filesystem folder *is given as the first argument to this script,
-+  and this script can then be used to copy programs, static data or
-+  any other needed file to your target filesystem. You should,
-+  however, use this feature with care. Whenever you find that a
-+  certain package generates wrong or unneeded files, you should fix
-+  that package rather than work around it with a post-build cleanup
-+  script. _Among these first 3 methods, this one should be prefere_d.
+ All of these "make" commands will need to build a configuration
+-utility, so you may need to install "development" packages for
+-relevant libraries used by the configuration utilities. On Debian-like
+-systems, the +libncurses5-dev+ package is required to use the
+-'menuconfig' interface, +libqt4-dev+ is required to use the 'xconfig'
+-interface, and +libglib2.0-dev, libgtk2.0-dev and libglade2-dev+ are
+-needed to use the 'gconfig' interface.
++utility (including the interface), so you may need to install
++"development" packages for relevant libraries used by the
++configuration utilities. Check the xref:requirement[] to know what
++Buildroot needs, and specifically the xref:requirement-optional[system requirements]
++to get the dependencies of favorite interface.
  
- * A special package, 'customize', stored in +package/customize+ can be
-   used. You can put all the files that you want to see in the final
-   target root filesystem in +package/customize/source+, and then
--  enable this special package in the configuration system.
+ For each menu entry in the configuration tool, you can find associated
+ help that describes the purpose of the entry.
+@@ -56,9 +55,9 @@ tell Buildroot to run each package compilation with +make -jN+.
+ This command will generally perform the following steps:
+ 
+ * Download source files (as required)
+-* Configure, build and install the cross-compiling toolchain if an
+-  internal toolchain is used, or import a toolchain if an external
+-  toolchain is used
++* Configure, build and install the cross-compiling toolchain using the
++  appropriate toolchain backend is used, or simply import a toolchain
++  if an external toolchain
+ * Build/install selected target packages
+ * Build a kernel image, if selected
+ * Build a bootloader image, if selected
+@@ -105,81 +104,12 @@ This directory contains several subdirectories:
+ * +toolchain/+ contains the build directories for the various
+   components of the cross-compilation toolchain.
+ 
+-Offline builds
+---------------
++These commands, +make menuconfig|gconfig|xconfig+ and +make+, are the
++basic ones that allow to easily and quickly generate images fitting
++your needs, with all the supports and applications you enabled.
+ 
+-If you intend to do an offline build and just want to download
+-all sources that you previously selected in the configurator
+-('menuconfig', 'xconfig' or 'gconfig'), then issue:
 -
-+  enable this special package in the configuration system. _This
-+  method is marked as deprecated_.
+---------------------
+- $ make source
+---------------------
+-
+-You can now disconnect or copy the content of your +dl+
+-directory to the build-host.
+-
+-Building out-of-tree
+---------------------
+-
+-Buildroot supports building out of tree with a syntax similar to the
+-Linux kernel. To use it, add +O=<directory>+ to the make command line:
+-
+---------------------
+- $ make O=/tmp/build
+---------------------
+-
+-Or:
+-
+---------------------
+- $ cd /tmp/build; make O=$PWD -C path/to/buildroot
+---------------------
+-
+-All the output files will be located under +/tmp/build+.
+-
+-When using out-of-tree builds, the Buildroot +.config+ and temporary
+-files are also stored in the output directory. This means that you can
+-safely run multiple builds in parallel using the same source tree as
+-long as they use unique output directories.
+-
+-For ease of use, Buildroot generates a Makefile wrapper in the output
+-directory - So after the first run, you no longer need to pass +O=..+
+-and +-C ..+, simply run (in the output directory):
+-
+---------------------
+- $ make <target>
+---------------------
+-
+-Environment variables
+----------------------
+-[[env-vars]]
+-
+-Buildroot also honors some environment variables, when they are passed
+-to +make+ or set in the environment:
+-
+-* +HOSTCXX+, the host C++ compiler to use
+-* +HOSTCC+, the host C compiler to use
+-* +UCLIBC_CONFIG_FILE=<path/to/.config>+, path to
+-  the uClibc configuration file, used to compile uClibc, if an
+-  internal toolchain is being built
+-* +BUSYBOX_CONFIG_FILE=<path/to/.config>+, path to
+-  the Busybox configuration file
+-* +BUILDROOT_DL_DIR+ to override the directory in which
+-  Buildroot stores/retrieves downloaded files
+-
+-An example that uses config files located in the toplevel directory and
+-in your $HOME:
+-
+---------------------
+- $ make UCLIBC_CONFIG_FILE=uClibc.config BUSYBOX_CONFIG_FILE=$HOME/bb.config
+---------------------
+-
+-If you want to use a compiler other than the default +gcc+
+-or +g+++ for building helper-binaries on your host, then do
+-
+---------------------
+- $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
+---------------------
++More details about the "make" command usage are given in
++xref:make-tips[].
+ 
+ Complying with opensource licenses
+ ----------------------------------
 -- 
 1.8.0
