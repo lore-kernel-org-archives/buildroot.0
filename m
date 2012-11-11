@@ -1,48 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Nov 2012 23:09:46 +0100
-Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
- on target
-In-Reply-To: <CA+wH294SsYiTG9AP9_q==F2-3MKf_Oe75yCM21rSDSgyNTeGcA@mail.gmail.com>
-References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
- <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
- <CA+wH294SsYiTG9AP9_q==F2-3MKf_Oe75yCM21rSDSgyNTeGcA@mail.gmail.com>
-Message-ID: <20121111230946.43e57600@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 11 Nov 2012 23:12:52 +0100
+Subject: [Buildroot] [PATCH] group file: define groups expected by udev
+In-Reply-To: <1352603315-1731-1-git-send-email-danomimanchego123@gmail.com>
+References: <1352603315-1731-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <50A022E4.20604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex,
+On 11/11/12 04:08, Danomi Manchego wrote:
+> udev-182 requires several groups to be resolvable at udev startup,
+> including disk, cdrom, floppy, tape, audio, video, lp, tty, dialout,
+> and kmem.  Only some of these are in the default skeleton's group
+> file, So let's add the missing groups, and plugdev too.
+>
+> This avoids getting these logs in /var/logs/messages:
+>
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'dialout' unknown
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'kmem' unknown
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'video' unknown
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'lp' unknown
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'floppy' unknown
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'cdrom' unknown
+> Jan  1 00:00:08 buildroot daemon.err udevd[37]: specified group 'tape' unknown
+>
+> Signed-off-by: Danomi Manchego<danomimanchego123@gmail.com>
 
-On Sat, 10 Nov 2012 23:26:19 +0000, Alex Bradbury wrote:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> If someone took lead on reintroducing this functionality would it be
-> accepted? There are at least a couple of cases where installing
-> development files are useful:
-> * When using buildroot to build a rootfs that is used as a sysroot for
-> an external build system
+  Not tested or anything, but I agree with the principle and the patch looks
+good.
 
-To build a sysroot containing a cross-compiler + header files and
-libraries you don't need the support for the toolchain on target.
-
-> * When using e.g. luajit packages which can make use of header files
-> to generate bindings (not exploited all that much right now due to
-> lack of preprocessor support in luajit)
-
-What do you need the toolchain on target for this? Header files are
-available in the toolchain sysroot, i.e in
-output/host/usr/<arch-tuple>/sysroot/.
-
-So unless I'm wrong, none of those use-cases require a toolchain on the
-target. Or maybe you could provide more details about those use cases
-to convince us that having a toolchain on the target is important?
-
-Best regards,
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
