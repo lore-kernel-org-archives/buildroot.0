@@ -1,98 +1,84 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:46 +0100
-Subject: [Buildroot] [PATCH 08/23] manual: update rebuilding-packages.txt
+Date: Sun, 11 Nov 2012 14:14:47 +0100
+Subject: [Buildroot] [PATCH 09/23] manual: adding-package-directory.txt:
+	update, cleanup and typo fixes
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-10-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update "Understanding how to rebuild packages" section
-- add "Understanding when a full rebuild is necessary" section
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 824b35c..2225200 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -1,5 +1,39 @@
- // -*- mode:doc -*- ;
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 6030e08..35d28b6 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -49,6 +49,7 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
  
-+[[full-rebuild]]
-+Understanding when a full rebuild is necessary
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+A full rebuild is achieved by running:
-+
-+---------------
-+$ make clean all
-+---------------
-+
-+In what cases, a full rebuild is mandatory:
-+
-+* each time the toolchain properties are changed, this includes:
-+
-+** after changing some toolchain option under the _Toolchain_ menu (if
-+   the internal Buildroot backend is used);
-+** after running +make ctng-menuconfig+ (if the crosstool-NG backend
-+   is used);
-+** after running +make uclibc-menuconfig+.
-+
-+* after removing some libraries from the package selection.
-+
-+In what cases, a full rebuild is recommended:
-+
-+* after adding some libraries to the package selection (otherwise,
-+  some packages that can be optionally linked against those libraries
-+  won't be rebuilt, so they won't support those new available
-+  features).
-+
-+In other cases, it is up to you to decide if you should or not run a
-+full rebuild, but you should know what is impacted and understand what
-+you are doing anyway.
-+
-+[[rebuild-pkg]]
- Understanding how to rebuild packages
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++[[depends-on-vs-select]]
+ The +Config.in+ file of your package must also ensure that
+ dependencies are enabled. Typically, Buildroot uses the following
+ rules:
+@@ -59,15 +60,26 @@ rules:
+   dependencies are selected. For example, the _libgtk2_ package uses
+   +select BR2_PACKAGE_LIBGLIB2+ to make sure this library is also
+   enabled.
++  The +select+ keyword express the dependency with a backward
++  semantic.
  
-@@ -42,27 +76,10 @@ files are relevant:
-   Buildroot will trigger the recompilation of the package from the
-   compilation step (execution of +make+).
+ * Use a +depends on+ type of dependency when the user really needs to
+   be aware of the dependency. Typically, Buildroot uses this type of
+-  dependency for dependencies on toolchain options (large file
+-  support, RPC support, IPV6 support), or for dependencies on "big"
+-  things, such as the X.org system. In some cases, especially
+-  dependency on toolchain options, it is recommended to add a
+-  +comment+ displayed when the option is not enabled, so that the user
+-  knows why the package is not available.
++  dependency for dependencies on toolchain options (target
++  architecture, MMU support, C library, C++ support, large file
++  support, thread support, RPC support, IPV6 support, WCHAR support),
++  or for dependencies on "big" things, such as the X.org system. In
++  some cases, especially dependency on toolchain options, it is
++  recommended to add a +comment+ displayed when the option is not
++  enabled, so that the user knows why the package is not available.
++  The +depends on+ keyword express the dependency with a forward
++  semantic.
++
++.Note
++The current problem with the _kconfig_ language is that these two
++dependency semantics are not internally linked. Therefore, it may be
++possible to select a package, whom one of its dependencies/requirement
++is not met.
  
--For other packages, an analysis of the specific 'package.mk' file is
--needed. For example, the zlib Makefile used to look like this (before
--it was converted to the generic package infrastructure):
+ An example illustrates both the usage of +select+ and +depends on+.
+ 
+@@ -147,6 +159,9 @@ is also enabled, but not necessarily built before your package. To do
+ so, the dependency also needs to be expressed in the +.mk+ file of the
+ package.
+ 
++Further formating details: see xref:writing-rules-config-in[the
++writing rules].
++
+ The +.mk+ file
+ ^^^^^^^^^^^^^^
+ 
+@@ -182,8 +197,5 @@ different way, using different infrastructures:
+    CMake. We cover them through a xref:cmake-package-tutorial[tutorial]
+    and xref:cmake-package-reference[reference].
+ 
+-* *Hand-written Makefiles:* These are currently obsolete, and no new
+-  manual Makefiles should be added. However, since there are still
+-  many of them in the tree, we keep them documented in a
+-  xref:handwritten-tutorial[tutorial].
 -
-------------------
--$(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
--	(cd $(ZLIB_DIR); rm -rf config.cache; \
--		[...]
--	)
--	touch $@
--
--$(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
--	$(MAKE) -C $(ZLIB_DIR) all libz.a
--	touch -c $@
-------------------
--
--If you want to trigger the reconfiguration, you need to remove
--+output/build/zlib-version/.configured+. If you want to trigger only
--the recompilation, you need to remove
--+output/build/zlib-version/libz.a+.
--
--Note that most packages, if not all, will progressively be ported over
--to the generic or autotools infrastructure, making it much easier to
--rebuild individual packages.
-+.Notes
-+- Since the _Buildroot-2012.11_ release, all packages rely on the
-+Buildroot infrastructures.
-+- Only toolchain packages remain using custom makefiles (i.e. do not
-+use any Buildroot infrastructure).
-+- Most packages and toolchain packages, if not all, will progressively
-+be ported over to the generic, autotools or CMake infrastructure,
++Further formating details: see xref:writing-rules-mk[the writing
++rules].
 -- 
 1.8.0
