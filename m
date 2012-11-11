@@ -1,26 +1,36 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 11 Nov 2012 22:52:07 +0000
-Subject: [Buildroot] [PATCH 1/2 v3] neard: new package
-In-Reply-To: <50A025C1.4040809@mind.be>
-References: <1352628468-14490-1-git-send-email-spdawson@gmail.com>
- <1352628468-14490-2-git-send-email-spdawson@gmail.com>
- <50A025C1.4040809@mind.be>
-Message-ID: <CAHt8ZCPKMU1Fsn+VZ=wSa0XnR+XRrQ7nDkeQC31Ar1ag7g6CBw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 11 Nov 2012 23:53:33 +0100
+Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
+ on target
+In-Reply-To: <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50A02C6D.1040105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11 Nov 2012 22:25, "Arnout Vandecappelle" <arnout@mind.be> wrote:
->  Since you changed the version number, you shouldn't keep my Tested-by
-> (Ack is debatable).
->
->  However, I retested it so you can add it again :-)
+On 11/10/12 23:36, Thomas Petazzoni wrote:
+>   config BR2_HAVE_DOCUMENTATION
+>   	bool "documentation on the target"
+> +	# We no longer want to support a toolchain on the target
+> +	depends on BR2_DEPRECATED
+>   	help
+>   	  Install the documentation, including manual pages and info
+>   	  pages, on the target.
 
-Thanks Arnout; sorry about the faux pas.
+  Who, documentation has nothing to do with the toolchain on target!  I can
+easily imagine use cases where you want to be able to do 'man tcpdump' on
+the target.
 
-Simon.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121111/252ddf4a/attachment.html>
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
