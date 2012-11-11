@@ -1,31 +1,24 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2012 00:11:14 +0100
-Subject: [Buildroot] [PATCH 21/23] manual: add pkg-list.txt (generated
- list of available packages)
-In-Reply-To: <1352639701-27829-22-git-send-email-s.martin49@gmail.com>
+Date: Mon, 12 Nov 2012 00:13:20 +0100
+Subject: [Buildroot] [PATCH 00/23] Pull request for branch for-2012/doc
+In-Reply-To: <CAHXCMMLJvvLUXss-Cvt77sUA8RrUHjSLQSAD5sLmMKjdXxvS9Q@mail.gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
- <1352639701-27829-22-git-send-email-s.martin49@gmail.com>
-Message-ID: <50A03092.3060809@mind.be>
+ <CAHXCMMLJvvLUXss-Cvt77sUA8RrUHjSLQSAD5sLmMKjdXxvS9Q@mail.gmail.com>
+Message-ID: <50A03110.6020509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/12 14:14, Samuel Martin wrote:
-> +Available packages
-> +------------------
-> +// docs/manaual/pkg-list.txt is generated using the following command:
-> +// $ git grep -E '\((autotools|cmake|generic)-package\)' package/ |  \
-> +//     cut -d':' -f1 | grep '\.mk$' | \
-> +//     sed -e 's;.*\?/\(.*\?\).mk;* \1;' | \
-> +//     sort>  docs/manual/pkg-list.txt
-> +
-> +include::pkg-list.txt[]
+On 11/11/12 14:23, Samuel Martin wrote:
+> Ooops, forgot to mention that there still is some "TODO" here and
+> there in this series,
+> because I think I haven't all inputs to write them...
+> So, feel free to fill the gaps!
 
-  Would it be possible to generate this list dynamically?  Saves us the trouble
-of keeping it consistent manually.  It could be difficult to convince a2x to
-look into the output directory for its include:: files, though.
+  Once this has been committed, I'll read the whole manual and (try to) fix
+open issues and spelling mistakes (if any :-) and fill in the gaps.
 
   Regards,
   Arnout
