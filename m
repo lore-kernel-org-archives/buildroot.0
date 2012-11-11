@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:54 +0100
-Subject: [Buildroot] [PATCH 16/23] manual: add package-make-target.txt
+Date: Sun, 11 Nov 2012 14:14:55 +0100
+Subject: [Buildroot] [PATCH 17/23] manual: add download-infra.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-17-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-18-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,123 +13,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/package-make-target.txt
+ create mode 100644 docs/manual/download-infra.txt
 
-diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
-index cd53182..ba6574c 100644
---- a/docs/manual/advanced.txt
-+++ b/docs/manual/advanced.txt
-@@ -10,3 +10,5 @@ include::external-toolchain.txt[]
- include::ccache-support.txt[]
+diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
+index b254b0f..f3fc1dd 100644
+--- a/docs/manual/developer-guide.txt
++++ b/docs/manual/developer-guide.txt
+@@ -7,4 +7,6 @@ include::writing-rules.txt[]
  
- include::download-location.txt[]
+ include::adding-packages.txt[]
+ 
++include::download-infra.txt[]
 +
-+include::package-make-target.txt[]
-diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
+ include::board-support.txt[]
+diff --git a/docs/manual/download-infra.txt b/docs/manual/download-infra.txt
 new file mode 100644
-index 0000000..1813af3
+index 0000000..63908ad
 --- /dev/null
-+++ b/docs/manual/package-make-target.txt
-@@ -0,0 +1,88 @@
-+// -*- mode:doc; -*-
++++ b/docs/manual/download-infra.txt
+@@ -0,0 +1,8 @@
++// -*- mode:doc -*- ;
 +
-+[[pkg-build-steps]]
++[[download-infra]]
 +
-+Package make targets
-+~~~~~~~~~~~~~~~~~~~~
++Download infrastructure
++-----------------------
 +
-+A +make <package>+ call achieves several _make targets_ with, as a
-+result, this particular package and its dependencies built, installed
-+in their destination directory (target, staging or host directory).
-+
-+For packages based on the Buildroot infrastructures (+generic-package+,
-++autotools-package+ or +cmake-package+), each of those
-+actions/steps/commands. For packages relying on other build system,
-+then there is no other choice than looking at the +.mk+ file (see also
-+the xref:rebuild-pkg[]).
-+
-+For packages relying on the Buildroot infrastructures, there are
-+numerous special make targets that can be called independently like
-+this:
-+
-+------------
-+make <package>-<target>
-+------------
-+
-+In order, the package build commands are:
-+
-+[width="90%",cols="^1,4",options="header"]
-+|===================================================
-+| command/target    | Description
-+
-+| +source+          | Fetch the source (download the tarball, clone
-+the source repository, etc)
-+
-+| +depends+         | Build and install all dependencies required to
-+build the package
-+
-+| +extract+         | Put the source in the package build directory
-+(extract the tarball, copy the source, etc)
-+
-+| +patch+           | Apply the patches if any
-+
-+| +configure+       | Run the configure command
-+
-+| +build+           | Compile the source
-+
-+| +install-staging+ |
-+*target package:* Run the installation of the package in the
-+staging directory
-+
-+*host package:* Does nothing
-+
-+| +install-target+  |
-+*target package:* Run the installation of the package in the
-+staging directory
-+
-+*host package:* Does nothing
-+
-+| +install+         |
-+*target package:* Run the 2 previous installation commands for the
-+target packages
-+
-+*host package:* Run the installation of the package in the host
-+directory
-+
-+|===================================================
-+
-+Additionally, there are some other useful make targets:
-+
-+[width="90%",cols="^1,4",options="header"]
-+|===================================================
-+| command/target    | Description
-+
-+| +show-depends+    | Displays the dependencies required to build the
-+package
-+
-+| +clean+           | Clean the package build directory, also
-+uninstall the package from both the target and the staging directory
-+
-+| +dirclean+        | Remove the whole package build directory
-+
-+| +rebuild+         | Rebuild only necessary binaries and install them
-+again
-+
-+| +reconfigure+     | Run again the configure command, then rebuild
-+only necessary binaries, and lastly install them again
-+
-+|===================================================
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 2225200..a723d11 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -83,3 +83,7 @@ Buildroot infrastructures.
- use any Buildroot infrastructure).
- - Most packages and toolchain packages, if not all, will progressively
- be ported over to the generic, autotools or CMake infrastructure,
-+making it much easier to rebuild individual packages.
-+
-+Further details about package special make target at the
-+xref:pkg-build-steps[].
++TODO
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index b24731f..693347b 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -61,7 +61,7 @@ using +wget+, few are only available through their +git+, +mercurial+,
+ or +svn+ repository.
+ +
+ All other source fetching methods are implemented and may be used in a
+-development context.
++development context (further details: refer to xref:download-infra[]).
+ +
+ ** +bazaar+
+ ** +cvs+
 -- 
 1.8.0
