@@ -1,243 +1,163 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:50 +0100
-Subject: [Buildroot] [PATCH 12/23] manual: faq.txt: rework and update
+Date: Sun, 11 Nov 2012 14:14:51 +0100
+Subject: [Buildroot] [PATCH 13/23] manual: add writing-rules.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-13-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-14-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also rename faq.txt -> faq-troubleshooting.txt
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 docs/manual/faq-troubleshooting.txt
- delete mode 100644 docs/manual/faq.txt
+ create mode 100644 docs/manual/writing-rules.txt
 
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
+index 37f703d..b254b0f 100644
+--- a/docs/manual/developer-guide.txt
++++ b/docs/manual/developer-guide.txt
+@@ -3,6 +3,8 @@
+ Developer Guidelines
+ ====================
+ 
++include::writing-rules.txt[]
++
+ include::adding-packages.txt[]
+ 
+ include::board-support.txt[]
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
 new file mode 100644
-index 0000000..6911c55
+index 0000000..e0a5a2a
 --- /dev/null
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -0,0 +1,134 @@
++++ b/docs/manual/writing-rules.txt
+@@ -0,0 +1,125 @@
 +// -*- mode:doc; -*-
 +
-+Frequently Asked Questions & Troubleshooting
-+============================================
++Writing rules
++-------------
 +
-+[[faq-boot-hang-after-starting]]
-+The boot hangs after 'Starting network...'
-+------------------------------------------
++Overall, those writing rules are here to help you add new files in
++Buildroot or refactor existing ones.
 +
-+If the boot process seems to hand after the following messages
-+(messages not necessarily exactly similar, depending on the list of
-+packages selected):
++If you slightly modify some existing file, the important thing is
++keeping the consistency of the whole file, so you can:
++* either follow the potentially deprecated rules used all over this
++file
++* or entirely rework it in order to make it comply with those rules.
 +
-+------------------------
-+Freeing init memory: 3972K
-+Initializing random number generator... done.
-+Starting network...
-+Starting dropbear sshd: generating rsa key... generating dsa key... OK
-+------------------------
++[[writing-rules-config-in]]
 +
-+then it means that your system is running, but didn't start a shell on
-+the serial console. In order to have the system start a shell on your
-+serial console, you have to go in the Buildroot configuration, +System
-+configuration+, and modify +Port to run a getty (login prompt) on+ and
-++Baudrate to use+ as appropriate. This will automatically tune the
-++/etc/inittab+ file of the generated system so that a shell starts on
-+the correct serial port.
+++Config.in+ file
++~~~~~~~~~~~~~~~~
 +
-+[[faq-module-init-tool-build-failure]]
-+module-init-tools fails to build with 'cannot find -lc'
-+-------------------------------------------------------
+++Config.in+ files contain entries for almost anything configurable in
++Buildroot.
 +
-+If the build of +module-init-tools+ for the host fails with:
++An entry has the following pattern:
 +
-+------------------------
-+/usr/bin/ld: cannot find -lc
-+------------------------
++---------------------
++config BR2_PACKAGE_LIBFOO
++	bool "libfoo"
++	depends on BR2_PACKAGE_LIBBAZ
++	select BR2_PACKAGE_LIBBAR
++	help
++	  This is a comment that explains what libfoo is.
 +
-+then probably you are running a Fedora (or similar) distribution, and
-+you should install the +glibc-static+ package. This is because the
-++module-init-tools+ build process wants to link statically against the
-+C library.
++	  http://foosoftware.org/libfoo/
++---------------------
 +
-+[[faq-no-compiler-on-target]]
-+Why there is no compiler on the target?
-+---------------------------------------
++* The +bool+, +depends on+, +select+ and +help+ lines are indented
++  with one tab.
 +
-+It has been decided that the support of the _native compiler for the
-+target_ would be stopped since the Buildroot-2012.11 release because:
++* The help text itself should be indented with one tab and two
++  spaces.
 +
-+* this feature was not maintained nor tested and often broken;
-+* this feature was only available for Buildroot toolchains;
-+* Buildroot mostly targets _small_ or _very small_ target hardware
-+  with limited resource onboard (CPU, ram, mass-storage), on which
-+  compiling does not make much sense.
++The configuration system used in Buildroot, so the content of the
+++Config.in+ files, is regular _Kconfig_. Further details about
++_Kconfig_: refer to
++http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt[].
 +
-+If you need a compiler on your target anyway, then Buildroot is not
-+suitable for your purpose. In such case, you need a _real
-+distribution_ and you should for something like:
++[[writing-rules-mk]]
 +
-+* http://www.openembedded.org[openembedded]
-+* https://www.yoctoproject.org[yocto]
-+* http://www.emdebian.org[emdebian]
-+* https://fedoraproject.org/wiki/Architectures[Fedora]
-+* http://en.opensuse.org/Portal:ARM[openSUSE ARM]
-+* http://archlinuxarm.org[Arch Linux ARM]
-+* ...
++The +.mk+ file
++~~~~~~~~~~~~~~
 +
-+[[faq-no-dev-files-on-target]]
-+Why there is no development files on the target?
-+------------------------------------------------
++* Assignment: use +=+ preceded and followed by one space:
+++
++---------------------
++LIBFOO_VERSION = 1.0
++LIBFOO_CONF_OPT += --without-python-support
++---------------------
 +
-+Since there is no compiler available on the target (see
-+xref:faq-no-compiler-on-target[]), it does not make sense to waste
-+space with headers or static libraries.
++* Indentation: use tab only:
+++
++---------------------
++define LIBFOO_REMOVE_DOC
++$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
++	$(TARGET_DIR)/usr/share/man/man3/libfoo*
++endef
++---------------------
 +
-+Therefore, those files are always removed from the target since the
-+Buildroot-2012.11 release.
++* Optional dependency:
 +
-+[[faq-no-doc-on-target]]
-+Why there is no documentation on the target?
-+--------------------------------------------
++** Prefer multi-line syntax.
+++
++YES:
+++
++---------------------
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++LIBFOO_CONF_OPT += --with-python-support
++LIBFOO_DEPENDENCIES += python
++else
++LIBFOO_CONF_OPT += --without-python-support
++endif
++---------------------
+++
++NO:
+++
++---------------------
++LIBFOO_CONF_OPT += --with$(if $(BR2_PACKAGE_PYTHON),,out)-python-support
++LIBFOO_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,)
++---------------------
 +
-+Because Buildroot mostly targets _small_ or _very small_ target
-+hardware with limited resource onboard (CPU, ram, mass-storage), it
-+does not make sense to waste space with the documentation data.
++** Keep configure options and dependencies close together.
 +
-+If you need documentation data on your target anyway, then Buildroot
-+is not suitable for your purpose, and you should look for a _real
-+distribution_ (see: xref:faq-no-compiler-on-target[]).
++* Optional hooks: keep hook definition and assignment together in one
++  if block.
+++
++YES:
+++
++---------------------
++ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
++define LIBFOO_REMOVE_DATA
++	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
++endef
++LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
++endif
++---------------------
+++
++NO:
+++
++---------------------
++define LIBFOO_REMOVE_DATA
++	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
++endef
 +
-+[[faq-depends-on-vs-select]]
-++Config.in+: _depends on_ vs _select_
-+-------------------------------------
++ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
++LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
++endif
++---------------------
 +
-+When adding a new package to Buildroot, you will most likely have to
-+deal with expressing the dependencies of this package.
++The documentation
++~~~~~~~~~~~~~~~~~
 +
-+In the +Config.in+ file, dependencies may be expressed following two
-+semantics.
-+See xref:depends-on-vs-select[].
++The documentation uses the
++http://www.methods.co.nz/asciidoc/[asciidoc] format.
 +
-+[[faq-why-not-visible-package]]
-+Why some packages are not visible in the Buildroot config menu?
-+---------------------------------------------------------------
-+
-+If a package exists in the Buildroot tree and does not appears in the
-+config menu, this most likely means that some of the package's
-+dependencies are not met.
-+
-+To know more about the dependencies of a package, search the package
-+symbol using in teh config menu (see xref:make-tips[]).
-+
-+Then, you may have to recursively enable several options (which
-+correspond to the unmeet dependencies) to finally be able to select
-+the package.
-+
-+If the package is not visible due to some unmeet toolchain options,
-+then you should certainly run a full rebuild (see xref:make-tips[] for
-+more explanations).
-+
-+[[faq-why-not-use-target-as-chroot]]
-+Why not use the target directory as a chroot directory?
-+-------------------------------------------------------
-+
-+There are plenty of reason to *not* use the target directory a chroot
-+one, among these:
-+
-+* files' owners, modes and permissions are not correctly set in the
-+  target directory;
-+* devices nodes are not created in the target directory.
-+
-+Because of that, commands run in through chroot, using the target
-+directory as new root, will fail.
-diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
-deleted file mode 100644
-index 97a754b..0000000
---- a/docs/manual/faq.txt
-+++ /dev/null
-@@ -1,59 +0,0 @@
--Frequently Asked Questions
--==========================
--
--The boot hangs after 'Starting network...'
--------------------------------------------
--
--If the boot process seems to hand after the following messages
--(messages not necessarily exactly similar, depending on the list of
--packages selected):
--
--------------------------
--Freeing init memory: 3972K
--Initializing random number generator... done.
--Starting network...
--Starting dropbear sshd: generating rsa key... generating dsa key... OK
--------------------------
--
--then it means that your system is running, but didn't start a shell on
--the serial console. In order to have the system start a shell on your
--serial console, you have to go in the Buildroot configuration, +System
--configuration+, and modify +Port to run a getty (login prompt) on+ and
--+Baudrate to use+ as appropriate. This will automatically tune the
--+/etc/inittab+ file of the generated system so that a shell starts on
--the correct serial port.
--
--module-init-tools fails to build with 'cannot find -lc'
---------------------------------------------------------
--
--If the build of +module-init-tools+ for the host fails with:
--
--------------------------
--/usr/bin/ld: cannot find -lc
--------------------------
--
--then probably you are running a Fedora (or similar) distribution, and
--you should install the +glibc-static+ package. This is because the
--+module-init-tools+ build process wants to link statically against the
--C library.
--
--How to add package from github
--------------------------------
--
--If the package has no release version, or its version cannot be
--identified using tag, then the sha1 of the particular commit should be
--used to identify the version (the first 7 characters of the sha1 are
--enough):
--
--------------------------
--FOO_VERSION = 1234567
--FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
--------------------------
--
--If the package version matches a tag, then this tag should be used to
--identify the version:
--
--------------------------
--FOO_VERSION = v1.0
--FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
--------------------------
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 00bd037..4df1657 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -17,10 +17,10 @@ include::starting-up.txt[]
- 
- include::working-with.txt[]
- 
-+include::faq-troubleshooting.txt[]
-+
- include::going-further.txt[]
- 
- include::developer-guide.txt[]
- 
--include::faq.txt[]
--
- include::appendix.txt[]
++Further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
++syntax: refer to http://www.methods.co.nz/asciidoc/userguide.html[].
 -- 
 1.8.0
