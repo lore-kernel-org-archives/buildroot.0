@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 11 Nov 2012 14:14:47 +0100
-Subject: [Buildroot] [PATCH 09/23] manual: adding-package-directory.txt:
-	update, cleanup and typo fixes
+Date: Sun, 11 Nov 2012 14:14:48 +0100
+Subject: [Buildroot] [PATCH 10/23] manual: add prerequisite.txt
 In-Reply-To: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
 References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1352639701-27829-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <1352639701-27829-11-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,71 +13,110 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 6030e08..35d28b6 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -49,6 +49,7 @@ supposed to contain anything but the 'bare' name of the package.
- source "package/libfoo/Config.in"
- --------------------------
- 
-+[[depends-on-vs-select]]
- The +Config.in+ file of your package must also ensure that
- dependencies are enabled. Typically, Buildroot uses the following
- rules:
-@@ -59,15 +60,26 @@ rules:
-   dependencies are selected. For example, the _libgtk2_ package uses
-   +select BR2_PACKAGE_LIBGLIB2+ to make sure this library is also
-   enabled.
-+  The +select+ keyword express the dependency with a backward
-+  semantic.
- 
- * Use a +depends on+ type of dependency when the user really needs to
-   be aware of the dependency. Typically, Buildroot uses this type of
--  dependency for dependencies on toolchain options (large file
--  support, RPC support, IPV6 support), or for dependencies on "big"
--  things, such as the X.org system. In some cases, especially
--  dependency on toolchain options, it is recommended to add a
--  +comment+ displayed when the option is not enabled, so that the user
--  knows why the package is not available.
-+  dependency for dependencies on toolchain options (target
-+  architecture, MMU support, C library, C++ support, large file
-+  support, thread support, RPC support, IPV6 support, WCHAR support),
-+  or for dependencies on "big" things, such as the X.org system. In
-+  some cases, especially dependency on toolchain options, it is
-+  recommended to add a +comment+ displayed when the option is not
-+  enabled, so that the user knows why the package is not available.
-+  The +depends on+ keyword express the dependency with a forward
-+  semantic.
+ create mode 100644 docs/manual/prerequisite.txt
+
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+new file mode 100644
+index 0000000..b24731f
+--- /dev/null
++++ b/docs/manual/prerequisite.txt
+@@ -0,0 +1,84 @@
++// -*- mode:doc -*- ;
 +
-+.Note
-+The current problem with the _kconfig_ language is that these two
-+dependency semantics are not internally linked. Therefore, it may be
-+possible to select a package, whom one of its dependencies/requirement
-+is not met.
- 
- An example illustrates both the usage of +select+ and +depends on+.
- 
-@@ -147,6 +159,9 @@ is also enabled, but not necessarily built before your package. To do
- so, the dependency also needs to be expressed in the +.mk+ file of the
- package.
- 
-+Further formating details: see xref:writing-rules-config-in[the
-+writing rules].
++[[requirement]]
++System requirements
++-------------------
 +
- The +.mk+ file
- ^^^^^^^^^^^^^^
++Buildroot is design to run on Linux system.
++
++Buildroot needs some software to be already installed on the host
++system; hereafter the lists of the mandatory and optional packages
++(package names may vary between distributions).
++
++Take care of _installing both runtime and development data_, especially
++for the libraries that may be packaged in 2 distinct packages.
++
++
++[[requirement-mandatory]]
++
++Mandatory packages
++~~~~~~~~~~~~~~~~~~
++
++* Build tools:
++
++** +which+
++** +sed+
++** +make+ (version 3.82 or any later)
++** +binutils+
++** +build-essential+ (only for Debian based systems)
++** +gcc+ (version 2.95 or any later)
++** `g++` (version 2.95 or any later)
++** +bash+
++** +gawk+
++** +bison+
++** +flex+
++** +gettext+
++** +patch+
++** +gzip+
++** +bzip2+
++** +perl+
++** +tar+
++** +cpio+
++** +python+ (version 2.6 or 2.7)
++** +unzip+
++** +rsync+
++
++* Source fetching tools:
++** +wget+
++
++* Configuration interface dependencies (requires development libraries):
++** +ncurses5+
++
++[[requirement-optional]]
++
++Optional packages
++~~~~~~~~~~~~~~~~~
++
++* Source fetching tools:
+++
++In the official tree, most of the package sources are retrieved
++using +wget+, few are only available through their +git+, +mercurial+,
++or +svn+ repository.
+++
++All other source fetching methods are implemented and may be used in a
++development context.
+++
++** +bazaar+
++** +cvs+
++** +git+
++** +mercurial+
++** +rsync+
++** +scp+
++** +subversion+
++
++* Configuration interface dependencies (requires development libraries):
++** +qt4+ to use the 'xconfig' interface
++** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
++
++* Development libraries:
++** +zlib1+
++** +netpbm10+ (for +fbtest+)
++** +python-xcbgen+ (for +Matchbox+ on Debian based system)
++
++* Documentation generation tools:
++** +asciidoc+
+diff --git a/docs/manual/starting-up.txt b/docs/manual/starting-up.txt
+index 8ba16c9..2999fd4 100644
+--- a/docs/manual/starting-up.txt
++++ b/docs/manual/starting-up.txt
+@@ -3,6 +3,8 @@
+ Starting up
+ ===========
  
-@@ -182,8 +197,5 @@ different way, using different infrastructures:
-    CMake. We cover them through a xref:cmake-package-tutorial[tutorial]
-    and xref:cmake-package-reference[reference].
++include::prerequisite.txt[]
++
+ include::getting.txt[]
  
--* *Hand-written Makefiles:* These are currently obsolete, and no new
--  manual Makefiles should be added. However, since there are still
--  many of them in the tree, we keep them documented in a
--  xref:handwritten-tutorial[tutorial].
--
-+Further formating details: see xref:writing-rules-mk[the writing
-+rules].
+ include::using.txt[]
 -- 
 1.8.0
