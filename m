@@ -1,78 +1,53 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 12 Nov 2012 11:47:21 +0000
-Subject: [Buildroot] [PATCH] lcdproc: remove patch rejected upstream
-Message-ID: <1352720842-5781-1-git-send-email-spdawson@gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 12 Nov 2012 11:56:50 +0000
+Subject: [Buildroot] mesa3d:  "ImportError: No module named libxml2"
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6703AA459A@wetmex10>
+References: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
+ <509DB31C.90903@mind.be> <1531E53627F1F749B4FE809BF2A4EB6703AA459A@wetmex10>
+Message-ID: <50A0E402.1050805@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 12/11/2012 11:39, Vellemans, Noel wrote:
 
-Remove an lcdproc patch which has been rejected upstream. It has been
-decided by lcdproc developer Markus Dolze that the behaviour of the
-client_add_key command when handling the minus key is "intentional to
-some degree."
+>>> The problem is that libxml2 python bindings are part of libxml2.  If
+> we want to build them, we would have to make host-libxml2 depend on
+>>> host-python...
+>>> And that's certainly something we don't want.
+>
+> NOTE: At this time I did experiment a little with the libxml-2/python
+> (in the latest-git-buildroot), in order to get mesa3d working, but I'm
+> not 100% happy with it (as Maxime and Thomas an now you told me, and yes
+> I do agree, it is not something that looks good, to make host-libxml2
+> depend on host-python.)
+>
+>
+>>>    BTW, Thomas already told you this on October 12 (though his
+> explanation was a bit shorter :-).
+>
+>
 
-This patch also takes the opportunity to remove the version number from the
-single remaining lcdproc patch.
+I ported newer X11 to buildroot a while back a posted a link to the 
+repository. At the time the only comment I got was from Thomas about the 
+requirement for python/libxml2 which he hated then as well :)
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- ...cdproc-0.5.5-fix-client_add_key-for-minus.patch |   38 --------------------
- ...5.5-LCDd.conf.patch => lcdproc-LCDd.conf.patch} |    0
- 2 files changed, 38 deletions(-)
- delete mode 100644 package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch
- rename package/lcdproc/{lcdproc-0.5.5-LCDd.conf.patch => lcdproc-LCDd.conf.patch} (100%)
+I patched it so that it conditionally build host-libxml2 with the 
+reuqired support if mesa3d was selected. My patch for this is at 
+https://gitorious.org/willw-buildroot/willw-buildroot/commit/421b4fd572869b22de11a0f0fad161e284c41bcc
 
-diff --git a/package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch b/package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch
-deleted file mode 100644
-index c17ee83..0000000
---- a/package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--Calling client_add_key as follows
--
--  client_add_key -
--
--will fail. However using an explicit -shared option, like this:
--
--  client_add_key -shared -
--
--will succeed. This is caused by a failure to parse the - key token, which is
--mistaken for the first character of an option argument.
--
--The client_add_key command also returns a spurious "success" message when a
--malformed option is supplied.
--
--This patch fixes both issues.
--
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--
--diff -Nurp a/server/commands/client_commands.c b/server/commands/client_commands.c
----- a/server/commands/client_commands.c	2011-08-14 13:29:16.000000000 +0100
--+++ b/server/commands/client_commands.c	2012-10-05 07:50:40.357795535 +0100
--@@ -181,7 +181,7 @@ client_add_key_func(Client *c, int argc,
-- 	}
-- 
-- 	argnr = 1;
---	if (argv[argnr][0] == '-') {
--+	if (argv[argnr][0] == '-' && strcmp(argv[argnr], "-") != 0) {
-- 		if (strcmp( argv[argnr], "-shared") == 0) {
-- 			exclusively = 0;
-- 		}
--@@ -190,6 +190,7 @@ client_add_key_func(Client *c, int argc,
-- 		}
-- 		else {
-- 			sock_printf_error(c->sock, "Invalid option: %s\n", argv[argnr]);
--+			return 0;
-- 		}
-- 		argnr++;
-- 	}
-diff --git a/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch b/package/lcdproc/lcdproc-LCDd.conf.patch
-similarity index 100%
-rename from package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-rename to package/lcdproc/lcdproc-LCDd.conf.patch
+If we want newer mesa3d support I think we are going to have to come up 
+with some suitable solution for this.
+
+Regards
+Will
+
+
 -- 
-1.7.10.4
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
