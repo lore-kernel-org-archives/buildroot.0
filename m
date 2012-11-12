@@ -1,81 +1,71 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 12 Nov 2012 10:10:01 +0000
-Subject: [Buildroot] [PATCH v4 2/2] neardal: new package
-In-Reply-To: <1352715001-6673-1-git-send-email-spdawson@gmail.com>
-References: <1352715001-6673-1-git-send-email-spdawson@gmail.com>
-Message-ID: <1352715001-6673-3-git-send-email-spdawson@gmail.com>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Mon, 12 Nov 2012 13:18:40 +0300
+Subject: [Buildroot] [PATCH] libtool version update 2.4.2
+In-Reply-To: <50A0A952.5090001@relinux.de>
+References: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
+ <20121110105308.740a3bfa@skate> <50A02018.1000804@mind.be>
+ <20121111230546.709735e3@skate> <50A0A952.5090001@relinux.de>
+Message-ID: <CABtOAfwrYH2Kzv2qKUCO5PueNR-h+Hi0oYDae0zYsrAF=_OYOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+2012/11/12 Stephan Hoffmann <sho@relinux.de>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- v4: Incorporate Arnout Vandecappelle's suggested improvements
- v3: Remove spurious dependency on neard, add Arnout Vandecappelle's acks
- v2: (No v2, bumped entire patch series to v3)
+> Am 11.11.2012 23:05, schrieb Thomas Petazzoni:
+> > On Sun, 11 Nov 2012 23:00:56 +0100, Arnout Vandecappelle wrote:
+> >> On 11/10/12 10:53, Thomas Petazzoni wrote:
+> >>> Alexander,
+> >>>
+> >>> On Fri,  9 Nov 2012 16:38:52 +0400, Alexander Khryukin wrote:
+> >>>
+> >>>> -LIBTOOL_VERSION = 2.2.10
+> >>>> +LIBTOOL_VERSION = 2.4.2
+> >>> How much testing did you give to this version bump? A libtool
+> >>> version bump is a very sensitive operation, as host-libtool is used
+> >>> to autoreconfigure many packages in Buildroot. Therefore, this
+> >>> patch needs a good amount of testing before being committed
+> >>> (ideally testing that all packages having<foo>_AUTORECONF = YES
+> >>> still build).
+> >>   Can't we rely on the autobuilders to do that?
+> > Sure, we'll certainly rely on the autobuilders for a complete testing.
+> Hello,
+>
+> did you ever think about inventing a kind of "testing" branch with a
+> seperate autobuilder running on? That could keep major build problems
+> away from the master branch.
+>
+> Just my 2 cents
+>
+> Stephan
+> > But I wanted to know if it had been tested again 2 packages or 20-40
+> > packages, which makes quite a bit of difference :)
+> >
+> >>   That said, I wouldn't do this for 2012.11 anymore...
+> > For sure, it should not be part of 2012.11, we already have enough
+> > issues to fix.
+> >
+> > Thomas
+>
+>
+> --
+> reLinux     -    Stephan Hoffmann
+> Am Schmidtgrund 124    50765 K?ln
+> Tel. +49.221.95595-19    Fax: -64
+> www.reLinux.de     sho at reLinux.de
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
- package/Config.in          |    1 +
- package/neardal/Config.in  |   12 ++++++++++++
- package/neardal/neardal.mk |   16 ++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/neardal/Config.in
- create mode 100644 package/neardal/neardal.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 6115fb4..0e6970c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -419,6 +419,7 @@ source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
- source "package/libv4l/Config.in"
- source "package/mtdev/Config.in"
-+source "package/neardal/Config.in"
- source "package/pcsc-lite/Config.in"
- endmenu
- 
-diff --git a/package/neardal/Config.in b/package/neardal/Config.in
-new file mode 100644
-index 0000000..990b302
---- /dev/null
-+++ b/package/neardal/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_NEARDAL
-+	bool "neardal"
-+	depends on BR2_USE_WCHAR # glib2
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS_GLIB
-+	help
-+	  Provides a simple C API to exchange data with the neard NFC manager daemon.
-+
-+	  https://github.com/connectivity/neardal
-+
-+comment "neardal requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
-new file mode 100644
-index 0000000..f898df5
---- /dev/null
-+++ b/package/neardal/neardal.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# neardal
-+#
-+#############################################################
-+NEARDAL_VERSION = 0.7
-+NEARDAL_SITE = http://github.com/connectivity/neardal/tarball/$(NEARDAL_VERSION)
-+NEARDAL_SOURCE = connectivity-neardal-$(NEARDAL_VERSION).tar.gz
-+NEARDAL_INSTALL_STAGING = YES
-+NEARDAL_LICENSE = GPLv2
-+NEARDAL_LICENSE_FILES = COPYING
-+
-+NEARDAL_DEPENDENCIES = dbus-glib
-+NEARDAL_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
--- 
-1.7.10.4
+I tested new libtool for all packages in Develop section + a lot of others.
+Also i can share own .config
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121112/a5d7ce44/attachment.html>
