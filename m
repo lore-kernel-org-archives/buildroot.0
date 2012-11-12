@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Nov 2012 22:01:21 +0100
-Subject: [Buildroot] [PATCH 0/2] add support for xtensa back to buildroot
-In-Reply-To: <50A15AAB.5020202@zankel.net>
-References: <509b2928.67dc440a.70c6.6325@mx.google.com>
- <20121108082247.55eac2b2@skate> <509C8B4F.6000308@zankel.net>
- <20121109091435.0603a98c@skate> <20121110115729.357ebfdd@skate>
- <50A15AAB.5020202@zankel.net>
-Message-ID: <20121112220121.70f2ebc8@skate>
+Date: Mon, 12 Nov 2012 22:05:39 +0100
+Subject: [Buildroot] [PATCH for-2012.11 1/5] pkg-infra: introduce errors
+ for legacy API
+In-Reply-To: <1352750912-16012-2-git-send-email-arnout@mind.be>
+References: <1352750912-16012-1-git-send-email-arnout@mind.be>
+ <1352750912-16012-2-git-send-email-arnout@mind.be>
+Message-ID: <20121112220539.7e41409b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Chris,
 
-On Mon, 12 Nov 2012 12:23:07 -0800, Chris Zankel wrote:
+On Mon, 12 Nov 2012 21:08:28 +0100, Arnout Vandecappelle
 
-> > Do you have any plans for proposing the support of a Qemu board using
-> > the Xtensa architecture? Qemu already supports 2-3 platforms, so it
-> > would be nice if Buildroot had a defconfig to generate a working system
-> > for one of them.
-> Yes, I'm planing to add support for QEMU, but it will probably take a
-> bit to understand it better before I have a config and maybe some patches.
+> +# Include legacy before the other things, because package .mk files
+> +# may rely on it.
+> +ifneq ($(BR2_DEPRECATED),y)
+> +include Makefile.legacy
+> +endif
 
-Excellent, thanks!
+BR2_LEGACY here maybe?
 
 Thomas
 -- 
