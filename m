@@ -1,25 +1,76 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Nov 2012 14:35:15 +0000 (UTC)
-Subject: [Buildroot] [Bug 5666] Fails to build python 2.7.2 for 2440 arm
-In-Reply-To: <bug-5666-163@https.bugs.busybox.net/>
-References: <bug-5666-163@https.bugs.busybox.net/>
-Message-ID: <20121112143515.AAD7999E6D@busybox.osuosl.org>
+From: Gregory Hermant <gregory.hermant@calao-systems.com>
+Date: Mon, 12 Nov 2012 18:41:42 +0100
+Subject: [Buildroot] [PATCH v2 6/6] Add config file for the snowball board
+In-Reply-To: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352742102-19010-7-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5666
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+---
+ configs/calao_snowball_defconfig |   49 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 configs/calao_snowball_defconfig
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
-
+diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
+new file mode 100644
+index 0000000..e5e67bf
+--- /dev/null
++++ b/configs/calao_snowball_defconfig
+@@ -0,0 +1,49 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_GCC_VERSION_4_7_X=y
++# BR2_SOFT_FLOAT is not set
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
++BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
++BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_VFP_FLOAT=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
++BR2_PACKAGE_BUSYBOX_CONFIG="board/calao/snowball/busybox-1.20.x.config"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_BZIP2=y
++BR2_PACKAGE_FBSET=y
++BR2_PACKAGE_FBTERM=y
++BR2_PACKAGE_HDMISERVICE=y
++BR2_PACKAGE_MINICOM=y
++BR2_PACKAGE_LUA=y
++BR2_PACKAGE_OPENSSL=y
++BR2_PACKAGE_SQLITE=y
++BR2_PACKAGE_JPEG=y
++BR2_PACKAGE_LIBPNG=y
++BR2_PACKAGE_LIBUNGIF=y
++BR2_PACKAGE_LIBELF=y
++BR2_PACKAGE_PCRE=y
++BR2_PACKAGE_LIBXML2=y
++BR2_PACKAGE_SNOWBALL_INIT=y
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_WGET=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
++BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
++BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
++BR2_TARGET_ROOTFS_TAR_GZIP=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="snowball"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
++BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
++BR2_LINUX_KERNEL_DEFCONFIG="u8500"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
