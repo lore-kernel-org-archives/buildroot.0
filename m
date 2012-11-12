@@ -1,58 +1,116 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Mon, 12 Nov 2012 18:41:36 +0100
-Subject: [Buildroot] [PATCH v2 0/6] Add support for the snowball board
-Message-ID: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
+Date: Mon, 12 Nov 2012 18:41:41 +0100
+Subject: [Buildroot] [PATCH v2 5/6] bluez-utils: add cg2900 support for
+	snowball board
+In-Reply-To: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352742102-19010-6-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Snowball board is a low power, low cost Single Board Computer based
-on the ST-Ericsson Nova A9500 processor (Dual Cortex-A9 + MALI 400 GPU).
-More info at www.igloocommunity.org
 
-The snowball board boots from eMMC, loads the linux kernel and mounts
-its root filesystem either from eMMC or from a microSD card.
-The user should prepare a microSD card with two partitions.
-On the fist partition he will install the kernel image and on the second
-one the root filesystem.
-
-TO DO:
-
-* Add the GPS support.
-* Add the possibility to build an eMMC image directly from buildroot.
-
-Gregory Hermant (6):
-  hdmiservice: new package
-  ux500-firmware: new package
-  Add board files for snowball
-  Add init script files for snowball board
-  bluez-utils: add cg2900 support for snowball board
-  Add config file for the snowball board
-
- board/calao/snowball/busybox-1.20.x.config         | 1024 ++++++++++++++++++++
- board/calao/snowball/linux-3.4.patch               |  126 +++
- configs/calao_snowball_defconfig                   |   49 +
- package/Config.in                                  |    3 +
- ...an_patches_enable_cg2900_on_upstream_4.91.patch |   88 ++
- package/hdmiservice/Config.in                      |   10 +
- package/hdmiservice/hdmiservice.mk                 |   43 +
- package/snowball-init/Config.in                    |   10 +
- package/snowball-init/snowball-init.mk             |   15 +
- package/ux500-firmware/Config.in                   |    7 +
- package/ux500-firmware/ux500-firmware.mk           |   20 +
- 11 files changed, 1395 insertions(+)
- create mode 100644 board/calao/snowball/busybox-1.20.x.config
- create mode 100644 board/calao/snowball/linux-3.4.patch
- create mode 100644 configs/calao_snowball_defconfig
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+---
+ ...an_patches_enable_cg2900_on_upstream_4.91.patch |   88 ++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
  create mode 100644 package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
- create mode 100644 package/hdmiservice/Config.in
- create mode 100644 package/hdmiservice/hdmiservice.mk
- create mode 100644 package/snowball-init/Config.in
- create mode 100644 package/snowball-init/snowball-init.mk
- create mode 100644 package/ux500-firmware/Config.in
- create mode 100644 package/ux500-firmware/ux500-firmware.mk
 
+diff --git a/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch b/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
+new file mode 100644
+index 0000000..02b84c4
+--- /dev/null
++++ b/package/bluez_utils/bluez_utils-4.101-debian_patches_enable_cg2900_on_upstream_4.91.patch
+@@ -0,0 +1,88 @@
++diff -Naupr bluez-4.91/tools/hciattach.c bluez-4.91.cg2900/tools/hciattach.c
++--- bluez-4.91/tools/hciattach.c	2010-11-30 15:50:48.000000000 +0100
+++++ bluez-4.91.cg2900/tools/hciattach.c	2011-05-20 10:47:45.849685569 +0200
++@@ -1066,6 +1066,11 @@ struct uart_t uart[] = {
++ 	{ "texasalt",   0x0000, 0x0000, HCI_UART_LL,   115200, 115200,
++ 				FLOW_CTL, DISABLE_PM, NULL, texasalt, NULL   },
++ 
+++	/* ST-Ericsson CG2900 GPS FM Bluetooth combo controller */
+++	{ "cg2900",     0x0000, 0x0000, HCI_UART_STE,  115200, 115200,
+++				FLOW_CTL, DISABLE_PM, NULL, NULL     },
+++
+++
++ 	/* ST Microelectronics minikits based on STLC2410/STLC2415 */
++ 	{ "st",         0x0000, 0x0000, HCI_UART_H4,    57600, 115200,
++ 				FLOW_CTL, DISABLE_PM,  NULL, st       },
++@@ -1157,10 +1162,10 @@ static struct uart_t * get_by_type(char
++ }
++ 
++ /* Initialize UART driver */
++-static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
+++static int init_uart(char *dev, struct uart_t *u, int send_break, int raw, int line_disc)
++ {
++ 	struct termios ti;
++-	int fd, i;
+++	int fd;
++ 	unsigned long flags = 0;
++ 
++ 	if (raw)
++@@ -1217,8 +1222,7 @@ static int init_uart(char *dev, struct u
++ 	}
++ 
++ 	/* Set TTY to N_HCI line discipline */
++-	i = N_HCI;
++-	if (ioctl(fd, TIOCSETD, &i) < 0) {
+++	if (ioctl(fd, TIOCSETD, &line_disc) < 0) {
++ 		perror("Can't set line discipline");
++ 		return -1;
++ 	}
++@@ -1243,7 +1247,7 @@ static void usage(void)
++ {
++ 	printf("hciattach - HCI UART driver initialization utility\n");
++ 	printf("Usage:\n");
++-	printf("\thciattach [-n] [-p] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
+++	printf("\thciattach [-n] [-p] [-a line_disc_nr] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
++ 	printf("\thciattach -l\n");
++ }
++ 
++@@ -1252,6 +1256,7 @@ int main(int argc, char *argv[])
++ 	struct uart_t *u = NULL;
++ 	int detach, printpid, raw, opt, i, n, ld, err;
++ 	int to = 10;
+++	int line_disc = N_HCI;
++ 	int init_speed = 0;
++ 	int send_break = 0;
++ 	pid_t pid;
++@@ -1264,8 +1269,11 @@ int main(int argc, char *argv[])
++ 	printpid = 0;
++ 	raw = 0;
++ 
++-	while ((opt=getopt(argc, argv, "bnpt:s:lr")) != EOF) {
+++	while ((opt=getopt(argc, argv, "bnpt:s:lra:")) != EOF) {
++ 		switch(opt) {
+++		case 'a':
+++                        line_disc = atoi(optarg);
+++                        break;
++ 		case 'b':
++ 			send_break = 1;
++ 			break;
++@@ -1381,7 +1389,7 @@ int main(int argc, char *argv[])
++ 	alarm(to);
++ 	bcsp_max_retries = to;
++ 
++-	n = init_uart(dev, u, send_break, raw);
+++	n = init_uart(dev, u, send_break, raw, line_disc);
++ 	if (n < 0) {
++ 		perror("Can't initialize device");
++ 		exit(1);
++diff -Naupr bluez-4.91/tools/hciattach.h bluez-4.91.cg2900/tools/hciattach.h
++--- bluez-4.91/tools/hciattach.h	2010-11-30 15:50:48.000000000 +0100
+++++ bluez-4.91.cg2900/tools/hciattach.h	2011-05-20 10:47:48.199685573 +0200
++@@ -39,6 +39,7 @@
++ #define HCI_UART_H4DS	3
++ #define HCI_UART_LL	4
++ #define HCI_UART_ATH3K  5
+++#define HCI_UART_STE	6
++ 
++ #define HCI_UART_RAW_DEVICE	0
++ 
 -- 
 1.7.9.5
