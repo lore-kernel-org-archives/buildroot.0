@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 12 Nov 2012 21:08:32 +0100
-Subject: [Buildroot] [PATCH for-2012.11 5/5] legacy: BR2_PACKAGE_LIBINTL is
-	replaced by gettext
+Date: Mon, 12 Nov 2012 21:08:30 +0100
+Subject: [Buildroot] [PATCH for-2012.11 3/5] legacy: add error target for
+	host-pkg-config
 In-Reply-To: <1352750912-16012-1-git-send-email-arnout@mind.be>
 References: <1352750912-16012-1-git-send-email-arnout@mind.be>
-Message-ID: <1352750912-16012-6-git-send-email-arnout@mind.be>
+Message-ID: <1352750912-16012-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,34 +15,29 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ Makefile.legacy |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 04ccb92..7ddc6ea 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -48,6 +48,21 @@ if BR2_LEGACY_CHECK_2012_11
- # Legacy options from 2012.08
- #
+diff --git a/Makefile.legacy b/Makefile.legacy
+index c8b568d..e0b7ec2 100644
+--- a/Makefile.legacy
++++ b/Makefile.legacy
+@@ -13,6 +13,16 @@ $(error "You have legacy configuration in your .config! Please check your config
+ endif
  
-+config BR2_PACKAGE_GETTEXT_STATIC
-+	bool "libgettext.a is now selected by BR2_PREFER_STATIC_LIB"
-+	select BR2_LEGACY
-+	help
-+	  To build a static gettext library, select BR2_PREFER_STATIC_LIB.
+ #
++# Legacy options from 2012.08
++#
 +
++host-pkg-config:
++	@$(call MESSAGE,host-pkg-config is replaced by host-pkgconf)
++	@$(call MESSAGE,please update your .mk files)
++	@false
++.PHONY: host-pkg-config
 +
-+config BR2_PACKAGE_LIBINTL
-+	bool "libintl"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GETTEXT
-+	help
-+	  libintl is now installed by selecting BR2_PACKAGE_GETTEXT. This now
-+	  only installs the library, not the executables.
-+
- config BR2_PACKAGE_INPUT_TOOLS_EVTEST
- 	bool "input-tools evtest is now a separate package evtest"
- 	select BR2_LEGACY
++#
+ # Legacy options from 2012.05
+ #
+ GENTARGETS = $$(error The GENTARGETS macro no longer exists; use $$$$(eval $$$$(generic-package)) or $$$$(eval $$$$(host-generic-package)))
 -- 
 1.7.10.4
