@@ -1,38 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2012 00:52:04 +0100
-Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
- on target
-In-Reply-To: <20121111235938.358914c5@skate>
-References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
- <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
- <50A02C6D.1040105@mind.be> <20121111235938.358914c5@skate>
-Message-ID: <50A03A24.2010000@mind.be>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Mon, 12 Nov 2012 02:04:57 +0200
+Subject: [Buildroot] Various problem using buildroot-2012.05
+In-Reply-To: <50A02B0C.4000107@mind.be>
+References: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
+ <20120618103657.721db39b@skate> <qaol7k.eta.ln@bernd-kuhls.de>
+ <509E69FD.2000804@petroprogram.com> <50A02B0C.4000107@mind.be>
+Message-ID: <50A03D29.7070608@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/12 23:59, Thomas Petazzoni wrote:
+12.11.2012 0:47, Arnout Vandecappelle kirjoitti:
+> On 11/10/12 15:51, Stefan Fr?berg wrote:
+>>
+>> If you try to use buildroot-made target gcc to compile perl, that is,
+>> you use buildroot to cross-compile gcc to run
+>> natively inside
+>> uClibc (?) environment, then you might encounter problems.
+>>
+>> As Thomas has said in few times here for people telling about
+>> problems of native gcc-toolchain, buildroot is about
+>> cross-compiling stuff
+>> and buildroot produced native gcc-toolchain is really not supported
+>> and might be still broken
+>> (I don't know what the current status of it is now).
 >
-> On Sun, 11 Nov 2012 23:53:33 +0100, Arnout Vandecappelle wrote:
+>  The current status is: we're going to remove it.  Thomas has just
+> posted some
+> patches to do that.
 >
->>    Who, documentation has nothing to do with the toolchain on target!
->> I can easily imagine use cases where you want to be able to do 'man
->> tcpdump' on the target.
->
-> Well this is what we agreed during the meeting, and is even noted in
-> your Action Points at
-> http://elinux.org/Buildroot:DeveloperDaysELCE2012#Action_points :-)
 
-  Right.  Typing turns of your brain, to some extent :-)
+Awww...
+Well, it's good that he mentioned it at this point, before I started
+doing any real work with that native toolchain.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+>  The idea is: if you need a toolchain on the target, there is no
+> reason not to
+> use a normal distro: debian, ubuntu, gentoo, ....
+>
+>
+>  As for perl, however, I think we really would like to be able to
+> cross-compile
+> perl modules.  But that unfortunately still needs some work.  I messed
+> about
+> with it for a bit, but I can't say I really understand how the perl
+> build system
+> works.
+>
+
+Yeah.
+
+Another "little" difficult case is Python.
+
+Even tought Python uses autotools, it (and Perl) will always be the
+worst cross-compile
+friendly citizens in my book.
+Way back, before buildroot, I tried many times to cross-compile it in
+Mingw32 environment and it was an
+absolute nightmare. With Perl I had even less luck.
+
+Every time I find an interesting open source project that I would like
+to try and cross-compile,
+I will make an silent prayer to God's of programmers that the build
+system that is revealed from
+tarball will be a GNU autoconf script (or even cmake one for God's sake)
+and not
+some hodge-bodge, custom made, configuration nightmare.
+
+Regards
+Stefan
+
+>
+>  Regards,
+>  Arnout
+>
