@@ -1,9 +1,9 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Mon, 12 Nov 2012 18:41:42 +0100
-Subject: [Buildroot] [PATCH v2 6/6] Add config file for the snowball board
+Date: Mon, 12 Nov 2012 18:41:40 +0100
+Subject: [Buildroot] [PATCH v2 4/6] Add init script files for snowball board
 In-Reply-To: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
 References: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1352742102-19010-7-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352742102-19010-5-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +13,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- configs/calao_snowball_defconfig |   49 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 configs/calao_snowball_defconfig
+ package/Config.in                      |    1 +
+ package/snowball-init/Config.in        |   10 ++++++++++
+ package/snowball-init/snowball-init.mk |   15 +++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/snowball-init/Config.in
+ create mode 100644 package/snowball-init/snowball-init.mk
 
-diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 6da6e73..3f941fc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -550,6 +550,7 @@ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
++source "package/snowball-init/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
 new file mode 100644
-index 0000000..e5e67bf
+index 0000000..906ff2d
 --- /dev/null
-+++ b/configs/calao_snowball_defconfig
-@@ -0,0 +1,49 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_GCC_VERSION_4_7_X=y
-+# BR2_SOFT_FLOAT is not set
-+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_VFP_FLOAT=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
-+BR2_PACKAGE_BUSYBOX_CONFIG="board/calao/snowball/busybox-1.20.x.config"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_FBSET=y
-+BR2_PACKAGE_FBTERM=y
-+BR2_PACKAGE_HDMISERVICE=y
-+BR2_PACKAGE_MINICOM=y
-+BR2_PACKAGE_LUA=y
-+BR2_PACKAGE_OPENSSL=y
-+BR2_PACKAGE_SQLITE=y
-+BR2_PACKAGE_JPEG=y
-+BR2_PACKAGE_LIBPNG=y
-+BR2_PACKAGE_LIBUNGIF=y
-+BR2_PACKAGE_LIBELF=y
-+BR2_PACKAGE_PCRE=y
-+BR2_PACKAGE_LIBXML2=y
-+BR2_PACKAGE_SNOWBALL_INIT=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_WGET=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WIRELESS_TOOLS_LIB=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_EAP=y
-+BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_WPS=y
-+BR2_TARGET_ROOTFS_TAR_GZIP=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="snowball"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
-+BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
-+BR2_LINUX_KERNEL_DEFCONFIG="u8500"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
++++ b/package/snowball-init/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_SNOWBALL_INIT
++	bool "snowball-init"
++	# Runtime dependency, needed by snowball startup script
++	select BR2_PACKAGE_BLUEZ_UTILS
++	select BR2_PACKAGE_UX500_FIRMWARE
++	help
++	  Snowball init scripts
++
++	  http://www.igloocommunity.org
++
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+new file mode 100644
+index 0000000..278cacb
+--- /dev/null
++++ b/package/snowball-init/snowball-init.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# snowball-init
++#
++#############################################################
++SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
++SNOWBALL_INIT_SITE = git://igloocommunity.org/git/bsp/snowball-init.git
++SNOWBALL_INIT_LICENSE = BSD-4c
++SNOWBALL_INIT_LICENSE_FILES = debian/copyright
++
++define SNOWBALL_INIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.9.5
