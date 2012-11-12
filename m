@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 12 Nov 2012 21:08:31 +0100
-Subject: [Buildroot] [PATCH for-2012.11 4/5] legacy: evtest is dropped from
-	input-tools package
+Date: Mon, 12 Nov 2012 21:08:29 +0100
+Subject: [Buildroot] [PATCH for-2012.11 2/5] legacy: move old GENTARGETS
+	macros to Makefile.legacy
 In-Reply-To: <1352750912-16012-1-git-send-email-arnout@mind.be>
 References: <1352750912-16012-1-git-send-email-arnout@mind.be>
-Message-ID: <1352750912-16012-5-git-send-email-arnout@mind.be>
+Message-ID: <1352750912-16012-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,43 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-We select BR2_PACKAGE_EVTEST automatically. This has only limited use:
-when the LEGACY_CHECK menu is disabled in menuconfig (or even oldconfig),
-it will also unselect BR2_PACKAGE_EVTEST again. Still, it can serve as a
-hint of how to fix things.
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- Config.in.legacy |    7 +++++++
- 1 file changed, 7 insertions(+)
+ Makefile.legacy     |    7 +++++++
+ package/Makefile.in |    6 ------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4bc8784..04ccb92 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -48,4 +48,11 @@ if BR2_LEGACY_CHECK_2012_11
- # Legacy options from 2012.08
- #
- 
-+config BR2_PACKAGE_INPUT_TOOLS_EVTEST
-+	bool "input-tools evtest is now a separate package evtest"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_EVTEST
-+	help
-+	  The evtest program from input-tools is now a separate package.
-+
+diff --git a/Makefile.legacy b/Makefile.legacy
+index 2e015a1..c8b568d 100644
+--- a/Makefile.legacy
++++ b/Makefile.legacy
+@@ -11,3 +11,10 @@
+ ifeq ($(BR2_LEGACY),y)
+ $(error "You have legacy configuration in your .config! Please check your configuration.")
  endif
++
++#
++# Legacy options from 2012.05
++#
++GENTARGETS = $$(error The GENTARGETS macro no longer exists; use $$$$(eval $$$$(generic-package)) or $$$$(eval $$$$(host-generic-package)))
++AUTOTARGETS = $$(error The AUTOTARGETS macro no longer exists; use $$$$(eval $$$$(autotools-package)) or $$$$(eval $$$$(host-autotools-package)))
++CMAKETARGETS = $$(error The CMAKETARGETS macro no longer exists; use $$$$(eval $$$$(cmake-package)) or $$$$(eval $$$$(host-cmake-package)))
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 9fdc745..2dd81c7 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -305,12 +305,6 @@ else
+ SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+ endif
+ 
+-# Warn if a package uses the deprecated GENTARGETS macros.  This can be
+-# removed again for BR-2012.11.
+-GENTARGETS = $$(error The GENTARGETS macro no longer exists; use $$$$(eval $$$$(generic-package)) or $$$$(eval $$$$(host-generic-package)))
+-AUTOTARGETS = $$(error The AUTOTARGETS macro no longer exists; use $$$$(eval $$$$(autotools-package)) or $$$$(eval $$$$(host-autotools-package)))
+-CMAKETARGETS = $$(error The CMAKETARGETS macro no longer exists; use $$$$(eval $$$$(cmake-package)) or $$$$(eval $$$$(host-cmake-package)))
+-
+ include package/pkg-utils.mk
+ include package/pkg-download.mk
+ include package/pkg-autotools.mk
 -- 
 1.7.10.4
