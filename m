@@ -1,37 +1,44 @@
-From: Chris Zankel <chris@zankel.net>
-Date: Mon, 12 Nov 2012 12:23:07 -0800
-Subject: [Buildroot] [PATCH 0/2] add support for xtensa back to buildroot
-In-Reply-To: <20121110115729.357ebfdd@skate>
-References: <509b2928.67dc440a.70c6.6325@mx.google.com>
- <20121108082247.55eac2b2@skate> <509C8B4F.6000308@zankel.net>
- <20121109091435.0603a98c@skate> <20121110115729.357ebfdd@skate>
-Message-ID: <50A15AAB.5020202@zankel.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 12 Nov 2012 21:57:11 +0100
+Subject: [Buildroot] [PATCH] libtool version update 2.4.2
+In-Reply-To: <20121112112637.42d1a425@skate>
+References: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
+ <20121110105308.740a3bfa@skate> <50A02018.1000804@mind.be>
+ <20121111230546.709735e3@skate> <50A0A952.5090001@relinux.de>
+ <20121112112637.42d1a425@skate>
+Message-ID: <50A162A7.3080901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/10/2012 02:57 AM, Thomas Petazzoni wrote:
->> I've also seen that Qemu has an Xtensa support. It would be nice if you
->> could create a qemu_xtensa_<somemachine>_defconfig with the necessary
->> kernel configuration and al (see other qemu_<foo>_defconfig that we
->> have in configs/) so that other people could build a Xtensa userspace
->> and run it inside qemu. At the moment, the qemu-system-xtensa supports
->> the following machines:
->>
->> $ qemu-system-xtensa -M ?
->> Supported machines are:
->> none                 empty machine
->> lx60                 lx60 EVB (dc232b)
->> lx200                lx200 EVB (dc232b)
->> sim                  sim machine (dc232b) (default)
-> Do you have any plans for proposing the support of a Qemu board using
-> the Xtensa architecture? Qemu already supports 2-3 platforms, so it
-> would be nice if Buildroot had a defconfig to generate a working system
-> for one of them.
-Yes, I'm planing to add support for QEMU, but it will probably take a
-bit to understand it better before I have a config and maybe some patches.
+On 11/12/12 11:26, Thomas Petazzoni wrote:
+> Stephan,
+>
+> On Mon, 12 Nov 2012 08:46:26 +0100, Stephan Hoffmann wrote:
+>
+>> did you ever think about inventing a kind of "testing" branch with a
+>> seperate autobuilder running on? That could keep major build problems
+>> away from the master branch.
+>
+> Yes, this has been discussed during the Developers Meeting, at least
+> for the "next" branch that gets created once -rc1 is out, to accumulate
+> patches for the next release.
 
-Thanks,
--Chris
+  Actually it does make sense to have it in general.  We could allow more committers
+on that branch, and Peter could cherry-pick from it, which could save him a few
+seconds per patch.  And it could make master slightly more stable, because only
+patches that don't kill the autobuilders would get cherry-picked.
+
+  Maybe something to discuss in February.
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
