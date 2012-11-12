@@ -1,9 +1,9 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Mon, 12 Nov 2012 18:41:37 +0100
-Subject: [Buildroot] [PATCH v2 1/6] hdmiservice: new package
+Date: Mon, 12 Nov 2012 18:41:38 +0100
+Subject: [Buildroot] [PATCH v2 2/6] ux500-firmware: new package
 In-Reply-To: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
 References: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1352742102-19010-2-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352742102-19010-3-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,88 +13,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- package/Config.in                  |    1 +
- package/hdmiservice/Config.in      |   10 +++++++++
- package/hdmiservice/hdmiservice.mk |   43 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 54 insertions(+)
- create mode 100644 package/hdmiservice/Config.in
- create mode 100644 package/hdmiservice/hdmiservice.mk
+ package/Config.in                        |    1 +
+ package/ux500-firmware/Config.in         |    7 +++++++
+ package/ux500-firmware/ux500-firmware.mk |   20 ++++++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/ux500-firmware/Config.in
+ create mode 100644 package/ux500-firmware/ux500-firmware.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 074e9df..cb78d2f 100644
+index cb78d2f..6da6e73 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -217,6 +217,7 @@ source "package/gadgetfs-test/Config.in"
- source "package/gdisk/Config.in"
- source "package/gpsd/Config.in"
- source "package/gvfs/Config.in"
-+source "package/hdmiservice/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/hdparm/Config.in"
- endif
-diff --git a/package/hdmiservice/Config.in b/package/hdmiservice/Config.in
+@@ -261,6 +261,7 @@ source "package/usb_modeswitch/Config.in"
+ source "package/usb_modeswitch_data/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/ux500-firmware/Config.in"
+ source "package/wipe/Config.in"
+ endmenu
+ 
+diff --git a/package/ux500-firmware/Config.in b/package/ux500-firmware/Config.in
 new file mode 100644
-index 0000000..7fb2cf4
+index 0000000..7e8a94b
 --- /dev/null
-+++ b/package/hdmiservice/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HDMISERVICE
-+	bool "hdmiservice"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS	
++++ b/package/ux500-firmware/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_UX500_FIRMWARE
++	bool "ux500-firmware"
 +	help
-+	  HDMI userspace control daemon
++	  This package provides various binary firmware files (closed binary blobs)
++	  for the Azurewave AW-NH580 combo module (wifi, bt, gps).
 +
-+	  This package contains the HDMI userspace control daemon for the 
-+	  snowball board
-+	  
-+	  http://www.igloocommunity.org
-diff --git a/package/hdmiservice/hdmiservice.mk b/package/hdmiservice/hdmiservice.mk
++	  https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
+diff --git a/package/ux500-firmware/ux500-firmware.mk b/package/ux500-firmware/ux500-firmware.mk
 new file mode 100644
-index 0000000..7199f1c
+index 0000000..522113a
 --- /dev/null
-+++ b/package/hdmiservice/hdmiservice.mk
-@@ -0,0 +1,43 @@
++++ b/package/ux500-firmware/ux500-firmware.mk
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# hdmiservice
++# ux500-firmware
 +#
 +#############################################################
-+HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
-+HDMISERVICE_SITE = git://igloocommunity.org/git/bsp/hdmiservice.git
-+HDMISERVICE_LICENSE = MIT
-+HDMISERVICE_LICENSE_FILES = debian/copyright
-+HDMISERVICE_INSTALL_STAGING = YES
++UX500_FIRMWARE_VERSION = 1.1.3-6
++UX500_FIRMWARE_SOURCE = ux500-firmware_$(UX500_FIRMWARE_VERSION)linaro1.tar.gz
++UX500_FIRMWARE_SITE = https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
++UX500_FIRMWARE_LICENSE = Snowball click-wrap license
++UX500_FIRMWARE_REDISTRIBUTE = NO
 +
-+define HDMISERVICE_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
++define UX500_FIRMWARE_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/lib/firmware
++	cp -r $(@D)/* $(TARGET_DIR)/lib/firmware/
++	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
++		mv $$f $${f/CG2900/CG29XX}; \
++	done
 +endef
-+
-+define HDMISERVICE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/hdmiservice.so $(STAGING_DIR)/usr/lib/hdmiservice.so
-+	$(INSTALL) -D -m 0644 $(@D)/include/hdmi_service_api.h $(STAGING_DIR)/usr/include/hdmi_service_api.h
-+	$(INSTALL) -D -m 0644 $(@D)/include/hdmi_service_local.h $(STAGING_DIR)/usr/include/hdmi_service_local.h
-+endef
-+
-+define HDMISERVICE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/hdmiservice.so $(TARGET_DIR)/usr/lib/hdmiservice.so
-+	$(INSTALL) -D -m 0755 $(@D)/hdmistart $(TARGET_DIR)/usr/bin/hdmistart
-+endef
-+
-+define HDMISERVICE_UNINSTALL_STAGING_CMDS
-+	rm -f $(STAGING_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_api.h
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_local.h
-+endef
-+
-+define HDMISERVICE_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(TARGET_DIR)/usr/bin/hdmistart
-+endef
-+
-+define HDMISERVICE_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
 +
 +$(eval $(generic-package))
 -- 
