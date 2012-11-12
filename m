@@ -1,98 +1,91 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2012 22:33:18 +0100
-Subject: [Buildroot] [PATCH 2/2 v3] xtensa: support configurable
- processor configurations
-In-Reply-To: <50A169FC.6010708@zankel.net>
-References: <509d9db2.4883440a.7065.016e@mx.google.com>
- <509DA516.40007@mind.be> <50A169FC.6010708@zankel.net>
-Message-ID: <50A16B1E.8030703@mind.be>
+Date: Mon, 12 Nov 2012 22:44:21 +0100
+Subject: [Buildroot] [PATCH v2 2/6] ux500-firmware: new package
+In-Reply-To: <1352742102-19010-3-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1352742102-19010-3-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <50A16DB5.8090101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/12/12 22:28, Chris Zankel wrote:
-> Hi Arnout,
+On 11/12/12 18:41, Gregory Hermant wrote:
 >
-> On 11/09/2012 04:51 PM, Arnout Vandecappelle wrote:
->> On 11/10/12 01:20, Chris Zankel wrote:
->>> +config BR2_xtensa_custom
->>> +	bool "Custom Xtensa processor configuration"
->>> +config BR2_xtensa_fsf
->>> +	bool "fsf - Default configuration"
->>> +endchoice
->>    Put empty lines between the different config options.
-> Done.
->>    All config names should be in capitals - the only exception is the
->> arch name itself (i.e. BR2_xtensa, but BR2_XTENSA_FSF).
-> To give you some background, 'fsf' describes the default configuration
-> used in the various toolchain packages (gcc, buildroot, etc.). The idea
-> is to append the name of the processor configuration (for example,
-> dc232b), so to follow other architectures, I think it would be best to
-> keep lower-case for processor names, and upper case for other options.
+> Signed-off-by: Gregory Hermant<gregory.hermant@calao-systems.com>
+> ---
+>   package/Config.in                        |    1 +
+>   package/ux500-firmware/Config.in         |    7 +++++++
+>   package/ux500-firmware/ux500-firmware.mk |   20 ++++++++++++++++++++
+>   3 files changed, 28 insertions(+)
+>   create mode 100644 package/ux500-firmware/Config.in
+>   create mode 100644 package/ux500-firmware/ux500-firmware.mk
 >
-> For the case above, it would look like this:
+> diff --git a/package/Config.in b/package/Config.in
+> index cb78d2f..6da6e73 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -261,6 +261,7 @@ source "package/usb_modeswitch/Config.in"
+>   source "package/usb_modeswitch_data/Config.in"
+>   source "package/usbmount/Config.in"
+>   source "package/usbutils/Config.in"
+> +source "package/ux500-firmware/Config.in"
+>   source "package/wipe/Config.in"
+>   endmenu
 >
-> config BR_XTENSA_CUSTOM
-> ...
->
-> config BR_xtensa_fsf
-> ...
->
-> config BR_xtensa_dc232b
-> ...
->
-> etc.
->
-> I actually think that this makes a nice distinction between processor
-> names and buildroot configuration options.
+> diff --git a/package/ux500-firmware/Config.in b/package/ux500-firmware/Config.in
+> new file mode 100644
+> index 0000000..7e8a94b
+> --- /dev/null
+> +++ b/package/ux500-firmware/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_UX500_FIRMWARE
+> +	bool "ux500-firmware"
+> +	help
+> +	  This package provides various binary firmware files (closed binary blobs)
+> +	  for the Azurewave AW-NH580 combo module (wifi, bt, gps).
+> +
+> +	  https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
+> diff --git a/package/ux500-firmware/ux500-firmware.mk b/package/ux500-firmware/ux500-firmware.mk
+> new file mode 100644
+> index 0000000..522113a
+> --- /dev/null
+> +++ b/package/ux500-firmware/ux500-firmware.mk
+> @@ -0,0 +1,20 @@
+> +#############################################################
+> +#
+> +# ux500-firmware
+> +#
+> +#############################################################
+> +UX500_FIRMWARE_VERSION = 1.1.3-6
+> +UX500_FIRMWARE_SOURCE = ux500-firmware_$(UX500_FIRMWARE_VERSION)linaro1.tar.gz
+> +UX500_FIRMWARE_SITE = https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
+> +UX500_FIRMWARE_LICENSE = Snowball click-wrap license
 
-  ACK good point.
+  UX500_FIRMWARE_LICENSE_FILES = license.txt
+> +UX500_FIRMWARE_REDISTRIBUTE = NO
+> +
+> +define UX500_FIRMWARE_INSTALL_TARGET_CMDS
+> +	mkdir -p $(TARGET_DIR)/lib/firmware
+> +	cp -r $(@D)/* $(TARGET_DIR)/lib/firmware/
 
->
->
->>> +
->>> +config BR2_xtensa_custom_name
->>> +	string "Custom Xtensa processor configuration anme"
->>    anme ->  name
-> Done
->>
->>> +	depends on BR2_xtensa_custom
->>> +	default ""
->>> +	help
->>> +	  Name given to a custom Xtensa processor configuration.
->>> +
->>> +config BR2_xtensa_core_name
->>> +	string
->>> +	default BR2_xtensa_custom_name	if BR2_xtensa_custom
->>> +	default ""			if BR2_xtensa_fsf
->>    Minor detail: missing "depends on BR2_xtensa".
-> Done.
->>    Perhaps it's better to move the condition to a
->> if BR2_xtensa
->> ...
->> endif
->> around the entire file.  Thomas has a patch lined up to move all
->> the conditions outside of the Config.in.*
-> It seems Xtensa would be the only one that uses that scheme, so maybe
-> wait for the generic patch from Thomas?
+  This also installs the debian directory etc. to the target.  Why not use
+the Makefile that is delivered with the package?
 
-  I don't think so. Then it means more work for Thomas to refresh his
-patch.  There will be a merge conflict anyway between the two, but
-with the condition outside the file the conflict will be small.
+> +	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
+> +		mv $$f $${f/CG2900/CG29XX}; \
+> +	done
 
-  That said, Peter hasn't merged Thomas's patch even though I acked
-it, so maybe he has some fundamental objection to the principle.
-Or maybe it's just because I didn't test it.
+  This warrants a comment why it is needed to rename some files.
 
-  Bottom line: this issue won't stop my ack.
+> +endef
+> +
+> +$(eval $(generic-package))
 
-[snip]
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
