@@ -1,62 +1,45 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Mon, 12 Nov 2012 22:17:39 +0100
-Subject: [Buildroot] QT packackage grantlee not building
-In-Reply-To: <5ECF3E39D913490AB1D4F8AF7FA3450B@JohanW7>
-References: <28814AE91EA94801B84C55B81555379F@JohanW7>
- <509D7A48.4030002@mind.be> <50A0130C.4020402@gmail.com>
- <5ECF3E39D913490AB1D4F8AF7FA3450B@JohanW7>
-Message-ID: <50A16773.6020400@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 12 Nov 2012 22:18:30 +0100
+Subject: [Buildroot] [PATCH for-2012.11 1/5] pkg-infra: introduce errors
+ for legacy API
+In-Reply-To: <20121112220539.7e41409b@skate>
+References: <1352750912-16012-1-git-send-email-arnout@mind.be>
+ <1352750912-16012-2-git-send-email-arnout@mind.be>
+ <20121112220539.7e41409b@skate>
+Message-ID: <50A167A6.5000705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/11/2012 11:26 PM, Sagaert Johan wrote:
-> Hi
+On 11/12/12 22:05, Thomas Petazzoni wrote:
 >
->   I included my config
+> On Mon, 12 Nov 2012 21:08:28 +0100, Arnout Vandecappelle
 >
-> Regards , Johan
+>> +# Include legacy before the other things, because package .mk files
+>> +# may rely on it.
+>> +ifneq ($(BR2_DEPRECATED),y)
+>> +include Makefile.legacy
+>> +endif
 >
->
->
-> -----Oorspronkelijk bericht-----
-> Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Zoltan Gyarmati
-> Verzonden: zondag 11 november 2012 22:05
-> Aan: buildroot at busybox.net
-> Onderwerp: Re: [Buildroot] QT packackage grantlee not building
->
-> Hi,
->
-> going to check it as soon a spossible, a defconfig would be useful indeed.
-> Thx for the report!
->
-> BR,
-> Zoltan Gyarmati
->
->
->
-> On 11/09/2012 10:48 PM, Arnout Vandecappelle wrote:
->> On 11/09/12 22:44, Sagaert Johan wrote:
->>> Currently the build of the QT grantlee package is broken:
->>> it seems like libpthread is not linked in.
->>   Could you post a defconfig so we can try to reproduce?
->>
->>   Regards,
->>   Arnout
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> BR2_LEGACY here maybe?
+
+  No that would not make sense - we want to get the error message if BR2_LEGACY
+is selected (automatically, by Config.in.legacy).
+
+The idea of the condition is to have an escape path, if you don't want to deal
+with all the stuff that is misconfigured (not only legacy config symbols but also
+host-pkg-config etc.), you can just build with BR2_DEPRECATED=y and see how far
+you get.
 
 
-Hi,
-
-i just managed to reproduce the issue, i'll send a patch to fix it, thx
-
+  Regards,
+  Arnout
 -- 
-br,
-Zoltan Gyarmati
-mail: mr.zoltan.gyarmati at gmail.com
-freenode nick: zgyarmati
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
