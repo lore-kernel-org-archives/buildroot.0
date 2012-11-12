@@ -1,24 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Nov 2012 22:32:38 +0000 (UTC)
-Subject: [Buildroot] [Bug 5666] Fails to build python 2.7.2 for 2440 arm
-In-Reply-To: <bug-5666-163@https.bugs.busybox.net/>
-References: <bug-5666-163@https.bugs.busybox.net/>
-Message-ID: <20121112223238.7D78A99E6B@busybox.osuosl.org>
+From: Joe Lorenz <joe.lorenz@plexxi.com>
+Date: Mon, 12 Nov 2012 17:45:21 -0500
+Subject: [Buildroot] grub problems since upgrading build host to CentOS 6.3
+Message-ID: <50A17C01.1010109@plexxi.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5666
+We updated our build host to CentOS 6.3 which apparently has a newer host gcc.
 
---- Comment #4 from hardcorefs <hardcore@hardcoreforensics.com> 2012-11-12 22:32:37 UTC ---
-HI,
-Yep you are indeed a fortune teller........
-Did "make clean all" and it did solve the problem, just it extends the build
-time every time.
+Our crosstools are set for x86_64 target, and we know about grub not being 
+supported for 64-bit compiler (Bug 5024). This newer gcc and/or binutils might 
+be to blame.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+The problem shows when we try to install it - we see this:
+
+grub> device (hd0) /dev/sdb
+grub>     root (hd0,1)
+  Filesystem type is ext2fs, partition type 0x83
+grub>     setup (hd0)
+  Checking if "/boot/grub/stage1" exists... no
+  Checking if "/grub/stage1" exists... no
+
+Error 15: File not found
+grub>
+
+But 'stage1' and all the others are indeed present on the root partition at 
+/boot/grub/.
+
+It's important to us to be able to build grub as needed in case we have to 
+modify any networking hardware support, so falling back to using older binaries 
+is not optimal. We're wondering if anyone else has gotten around this in a 
+CentOS 6.3 build environment.
+
+	-Joe
