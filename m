@@ -1,41 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2012 09:15:18 +0100
-Subject: [Buildroot] buildroot-2012.08: Handling drm module
-In-Reply-To: <785D21F16C354A27B5E83E9F56FEA59B@ZviVeredPC>
-References: <CABRndgxqqO3HC08rVngxm2eaSVjQ9Ks04U7Mss5-xu=B4WGMdg@mail.gmail.com>
- <50A029E0.4020802@mind.be> <785D21F16C354A27B5E83E9F56FEA59B@ZviVeredPC>
-Message-ID: <50A0B016.4030402@mind.be>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Mon, 12 Nov 2012 09:27:58 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: rename <pkg>-rsync to
+	<pkg>-extract
+In-Reply-To: <1350225704-5693-1-git-send-email-arnout@mind.be>
+References: <1350225704-5693-1-git-send-email-arnout@mind.be>
+Message-ID: <50A0B30E.3090308@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/12/12 04:58, Zvi Vered wrote:
-> Hello,
+Am 14.10.2012 16:41, schrieb Arnout Vandecappelle (Essensium/Mind):
+> The legal-info target (and possibly others as well) depends on
+> <pkg>-extract to make sure the license file is available.  However,
+> when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
+> doesn't exist.
 >
-> Build is OK.
-> The resulting image boots OK.
-> But the screen flickers with this image.
-> The image was not built with buildroot.
-
-  So, why are you asking this on the buildroot mailing list then?
-
-> I built vanilla 3.4.7 downloaded from kernel.org
+> To solve this, we just call the target that rsyncs the source
+> <pkg>-extract.
 >
-> With knoppix 7.0.4, when I boot with: "knoppix 2" there is no flickering.
-> When I boot with "knoppix 2 nodrm" the screen flickers.
+> While we're at it, also add a <pkg>-patch target (which is equivalent
+> to <pkg>-extract).  That avoids the same problem in the future if
+> something starts depending on <pkg>-patch.
 >
-> Is "nodrm" a boot parameter (like vga=normal) ?
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> ---
+>  package/pkg-generic.mk |    6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index ffe7dfb..c2c1b06 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -378,9 +378,11 @@ else
+>  $(1)-configure:		$(1)-depends \
+>  			$$($(2)_TARGET_CONFIGURE)
+>  
+> -$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
+> +$(1)-depends:		$(1)-extract $$($(2)_DEPENDENCIES)
+>  
+> -$(1)-rsync:		$$($(2)_TARGET_RSYNC)
+> +$(1)-patch:		$(1)-extract
+> +
+> +$(1)-extract:		$$($(2)_TARGET_RSYNC)
+>  
+>  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+>  endif
+Hello,
 
-  I have no idea - perhaps a question to ask on the knoppix mailing list?
+this does not fix my issue, not even after doing a "make clean".
 
-  Regards,
-  Arnout
+> LANG=C make legal-info
+> mkdir -p /home/stephan/Dokumente/BeagleBone/buildroot/output/target
+> if ! [ -d
+> "/home/stephan/Dokumente/BeagleBone/buildroot/output/target/bin" ]; then \
+>                 if [ -d
+> "/home/stephan/Dokumente/BeagleBone/buildroot/fs/skeleton" ]; then \
+>                         cp -fa
+> /home/stephan/Dokumente/BeagleBone/buildroot/fs/skeleton/*
+> /home/stephan/Dokumente/BeagleBone/buildroot/output/target/; \
+>                 fi; \
+>         fi
+> find /home/stephan/Dokumente/BeagleBone/buildroot/output/target -type
+> d -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
+> find /home/stephan/Dokumente/BeagleBone/buildroot/output/target -type
+> f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
+> touch /home/stephan/Dokumente/BeagleBone/buildroot/output/build/.root
+> >>>   Collecting legal info
+<snip>
+> >>> linux custom Syncing from source dir
+> /home/stephan/Dokumente/BeagleBone/kernel/kernel
+> rsync -au /home/stephan/Dokumente/BeagleBone/kernel/kernel/
+> /home/stephan/Dokumente/BeagleBone/buildroot/output/build/linux-custom
+> cp: cannot stat `/home/stephan/Dokumente/dl/linux-custom.tar.gz': No
+> such file or directory
+> make: *** [linux-legal-info] Error 1
+
+Regards
+
+Stephan
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
+
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: defconfig
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121112/c4961bf1/attachment.ksh>
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: local.mk
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121112/c4961bf1/attachment-0001.ksh>
