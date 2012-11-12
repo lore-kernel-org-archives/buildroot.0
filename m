@@ -1,53 +1,83 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 12 Nov 2012 11:56:50 +0000
-Subject: [Buildroot] mesa3d:  "ImportError: No module named libxml2"
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6703AA459A@wetmex10>
-References: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
- <509DB31C.90903@mind.be> <1531E53627F1F749B4FE809BF2A4EB6703AA459A@wetmex10>
-Message-ID: <50A0E402.1050805@carallon.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Nov 2012 12:28:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 5666] New: Fails to build python 2.7.2 for 2440 arm
+Message-ID: <bug-5666-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/11/2012 11:39, Vellemans, Noel wrote:
+https://bugs.busybox.net/show_bug.cgi?id=5666
 
->>> The problem is that libxml2 python bindings are part of libxml2.  If
-> we want to build them, we would have to make host-libxml2 depend on
->>> host-python...
->>> And that's certainly something we don't want.
->
-> NOTE: At this time I did experiment a little with the libxml-2/python
-> (in the latest-git-buildroot), in order to get mesa3d working, but I'm
-> not 100% happy with it (as Maxime and Thomas an now you told me, and yes
-> I do agree, it is not something that looks good, to make host-libxml2
-> depend on host-python.)
->
->
->>>    BTW, Thomas already told you this on October 12 (though his
-> explanation was a bit shorter :-).
->
->
+           Summary: Fails to build python 2.7.2 for 2440 arm
+           Product: buildroot
+           Version: 2012.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: hardcore at hardcoreforensics.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I ported newer X11 to buildroot a while back a posted a link to the 
-repository. At the time the only comment I got was from Thomas about the 
-requirement for python/libxml2 which he hated then as well :)
 
-I patched it so that it conditionally build host-libxml2 with the 
-reuqired support if mesa3d was selected. My patch for this is at 
-https://gitorious.org/willw-buildroot/willw-buildroot/commit/421b4fd572869b22de11a0f0fad161e284c41bcc
+The build process for  Python under the samsung cpu 2440 fails to build with
+the following error
 
-If we want newer mesa3d support I think we are going to have to come up 
-with some suitable solution for this.
 
-Regards
-Will
-
+bob at bob-virtual-machine:~/buildroot-2012.08$ make
+>>> python 2.7.2 Building
+PATH="/home/bob/buildroot-2012.08/output/host/bin:/home/bob/buildroot-2012.08/output/host/usr/bin:/home/bob/buildroot-2012.08/output/host/usr/sbin/:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+PERLLIB="/home/bob/buildroot-2012.08/output/host/usr/lib/perl"
+PYTHON_MODULES_INCLUDE=/home/bob/buildroot-2012.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+PYTHON_MODULES_LIB="/home/bob/buildroot-2012.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/lib
+/home/bob/buildroot-2012.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib"
+/usr/bin/make -j2  -C /home/bob/buildroot-2012.08/output/build/python-2.7.2/
+make[1]: Entering directory
+`/home/bob/buildroot-2012.08/output/build/python-2.7.2'
+/home/bob/buildroot-2012.08/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+-c -fno-strict-aliasing  -pipe -Os  -DNDEBUG -g -fwrapv -O3 -Wall
+-Wstrict-prototypes  -I. -IInclude -I./Include  -fPIC -DPy_BUILD_CORE -o
+Modules/python.o ./Modules/python.c
+/home/bob/buildroot-2012.08/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+-c -fno-strict-aliasing  -pipe -Os  -DNDEBUG -g -fwrapv -O3 -Wall
+-Wstrict-prototypes  -I. -IInclude -I./Include  -fPIC -DPy_BUILD_CORE -o
+Parser/acceler.o Parser/acceler.c
+In file included from Include/Python.h:85:0,
+                 from ./Modules/python.c:3:
+Include/unicodeobject.h:575:20: warning: type defaults to 'int' in declaration
+of 'wchar_t'
+Include/unicodeobject.h:575:28: error: expected ';', ',' or ')' before '*'
+token
+Include/unicodeobject.h:593:14: warning: type defaults to 'int' in declaration
+of 'wchar_t'
+Include/unicodeobject.h:593:22: error: expected ';', ',' or ')' before '*'
+token
+In file included from Include/Python.h:85:0,
+                 from Include/pgenheaders.h:10,
+                 from Parser/acceler.c:13:
+Include/unicodeobject.h:575:20: warning: type defaults to 'int' in declaration
+of 'wchar_t'
+Include/unicodeobject.h:575:28: error: expected ';', ',' or ')' before '*'
+token
+Include/unicodeobject.h:593:14: warning: type defaults to 'int' in declaration
+of 'wchar_t'
+Include/unicodeobject.h:593:22: error: expected ';', ',' or ')' before '*'
+token
+make[1]: *** [Modules/python.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make[1]: *** [Parser/acceler.o] Error 1
+make[1]: Leaving directory
+`/home/bob/buildroot-2012.08/output/build/python-2.7.2'
+make: *** [/home/bob/buildroot-2012.08/output/build/python-2.7.2/.stamp_built]
+Error 2
+bob at bob-virtual-machine:~/buildroot-2012.08$
 
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
