@@ -1,23 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Nov 2012 19:37:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 5222] pango1.14.x build failed for ARM
-In-Reply-To: <bug-5222-163@https.bugs.busybox.net/>
-References: <bug-5222-163@https.bugs.busybox.net/>
-Message-ID: <20121112193711.E929D99E32@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 12 Nov 2012 21:08:31 +0100
+Subject: [Buildroot] [PATCH for-2012.11 4/5] legacy: evtest is dropped from
+	input-tools package
+In-Reply-To: <1352750912-16012-1-git-send-email-arnout@mind.be>
+References: <1352750912-16012-1-git-send-email-arnout@mind.be>
+Message-ID: <1352750912-16012-5-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5222
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
---- Comment #6 from aleek <aleksander@dutkowski.me> 2012-11-12 19:37:10 UTC ---
-Created attachment 4628
-  --> https://bugs.busybox.net/attachment.cgi?id=4628
-buildroot 2012.08 config file
+We select BR2_PACKAGE_EVTEST automatically. This has only limited use:
+when the LEGACY_CHECK menu is disabled in menuconfig (or even oldconfig),
+it will also unselect BR2_PACKAGE_EVTEST again. Still, it can serve as a
+hint of how to fix things.
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Config.in.legacy |    7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 4bc8784..04ccb92 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -48,4 +48,11 @@ if BR2_LEGACY_CHECK_2012_11
+ # Legacy options from 2012.08
+ #
+ 
++config BR2_PACKAGE_INPUT_TOOLS_EVTEST
++	bool "input-tools evtest is now a separate package evtest"
++	select BR2_LEGACY
++	select BR2_PACKAGE_EVTEST
++	help
++	  The evtest program from input-tools is now a separate package.
++
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
