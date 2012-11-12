@@ -1,71 +1,42 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Mon, 12 Nov 2012 13:18:40 +0300
-Subject: [Buildroot] [PATCH] libtool version update 2.4.2
-In-Reply-To: <50A0A952.5090001@relinux.de>
-References: <1352464732-22984-1-git-send-email-alexander@mezon.ru>
- <20121110105308.740a3bfa@skate> <50A02018.1000804@mind.be>
- <20121111230546.709735e3@skate> <50A0A952.5090001@relinux.de>
-Message-ID: <CABtOAfwrYH2Kzv2qKUCO5PueNR-h+Hi0oYDae0zYsrAF=_OYOA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Nov 2012 11:24:16 +0100
+Subject: [Buildroot] arm920t Linux implementation
+In-Reply-To: <801077173.321754841.1352707282691.JavaMail.root@zimbra29-e5.priv.proxad.net>
+References: <803750442.321754226.1352707257219.JavaMail.root@zimbra29-e5.priv.proxad.net>
+ <801077173.321754841.1352707282691.JavaMail.root@zimbra29-e5.priv.proxad.net>
+Message-ID: <20121112112416.0e1b9630@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/12 Stephan Hoffmann <sho@relinux.de>
+Lionel,
 
-> Am 11.11.2012 23:05, schrieb Thomas Petazzoni:
-> > On Sun, 11 Nov 2012 23:00:56 +0100, Arnout Vandecappelle wrote:
-> >> On 11/10/12 10:53, Thomas Petazzoni wrote:
-> >>> Alexander,
-> >>>
-> >>> On Fri,  9 Nov 2012 16:38:52 +0400, Alexander Khryukin wrote:
-> >>>
-> >>>> -LIBTOOL_VERSION = 2.2.10
-> >>>> +LIBTOOL_VERSION = 2.4.2
-> >>> How much testing did you give to this version bump? A libtool
-> >>> version bump is a very sensitive operation, as host-libtool is used
-> >>> to autoreconfigure many packages in Buildroot. Therefore, this
-> >>> patch needs a good amount of testing before being committed
-> >>> (ideally testing that all packages having<foo>_AUTORECONF = YES
-> >>> still build).
-> >>   Can't we rely on the autobuilders to do that?
-> > Sure, we'll certainly rely on the autobuilders for a complete testing.
-> Hello,
->
-> did you ever think about inventing a kind of "testing" branch with a
-> seperate autobuilder running on? That could keep major build problems
-> away from the master branch.
->
-> Just my 2 cents
->
-> Stephan
-> > But I wanted to know if it had been tested again 2 packages or 20-40
-> > packages, which makes quite a bit of difference :)
-> >
-> >>   That said, I wouldn't do this for 2012.11 anymore...
-> > For sure, it should not be part of 2012.11, we already have enough
-> > issues to fix.
-> >
-> > Thomas
->
->
-> --
-> reLinux     -    Stephan Hoffmann
-> Am Schmidtgrund 124    50765 K?ln
-> Tel. +49.221.95595-19    Fax: -64
-> www.reLinux.de     sho at reLinux.de
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+On Mon, 12 Nov 2012 09:01:22 +0100 (CET), lionel.jourdren at free.fr wrote:
 
+> I?m trying to build up a configuration for a card embedding an ARM
+> AT91RM9200 processor.
+> 
+> I?d like it to work in little endian mode, and expect to get a zImage
+> and initrd file for a linux 2.6.38/uClibC 0.9.31
+> 
+> From what I understood it seems that it?s not necessary  to  set
+> BR2_TARGET_ROOTFS_INITRAMFS (which should embedd initramfs in zImage)
+> 
+> Could someone have a quick look to the configuration below, and see
+> if I?ve done something wrong ?
 
-I tested new libtool for all packages in Develop section + a lot of others.
-Also i can share own .config
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121112/a5d7ce44/attachment.html>
+At first sight, nothing looks particularly wrong in your configuration.
+But you're not explaining the problem(s) you're facing... so it's hard
+to help you. Or are you just seeking a theoretical confirmation that
+you configuration looks not too bad?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
