@@ -1,40 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 Nov 2012 22:06:07 +0100
-Subject: [Buildroot] mesa3d:  "ImportError: No module named libxml2"
-In-Reply-To: <50A0E402.1050805@carallon.com>
-References: <1531E53627F1F749B4FE809BF2A4EB6703A24FFD@wetmex10>
- <509DB31C.90903@mind.be> <1531E53627F1F749B4FE809BF2A4EB6703AA459A@wetmex10>
- <50A0E402.1050805@carallon.com>
-Message-ID: <50A164BF.7080603@mind.be>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Mon, 12 Nov 2012 22:17:39 +0100
+Subject: [Buildroot] QT packackage grantlee not building
+In-Reply-To: <5ECF3E39D913490AB1D4F8AF7FA3450B@JohanW7>
+References: <28814AE91EA94801B84C55B81555379F@JohanW7>
+ <509D7A48.4030002@mind.be> <50A0130C.4020402@gmail.com>
+ <5ECF3E39D913490AB1D4F8AF7FA3450B@JohanW7>
+Message-ID: <50A16773.6020400@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/12/12 12:56, Will Wagner wrote:
-> I ported newer X11 to buildroot a while back a posted a link to the repository. At the time the only comment I got was
-> from Thomas about the requirement for python/libxml2 which he hated then as well :)
+On 11/11/2012 11:26 PM, Sagaert Johan wrote:
+> Hi
 >
-> I patched it so that it conditionally build host-libxml2 with the reuqired support if mesa3d was selected. My patch for
-> this is at https://gitorious.org/willw-buildroot/willw-buildroot/commit/421b4fd572869b22de11a0f0fad161e284c41bcc
+>   I included my config
 >
-> If we want newer mesa3d support I think we are going to have to come up with some suitable solution for this.
+> Regards , Johan
+>
+>
+>
+> -----Oorspronkelijk bericht-----
+> Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Zoltan Gyarmati
+> Verzonden: zondag 11 november 2012 22:05
+> Aan: buildroot at busybox.net
+> Onderwerp: Re: [Buildroot] QT packackage grantlee not building
+>
+> Hi,
+>
+> going to check it as soon a spossible, a defconfig would be useful indeed.
+> Thx for the report!
+>
+> BR,
+> Zoltan Gyarmati
+>
+>
+>
+> On 11/09/2012 10:48 PM, Arnout Vandecappelle wrote:
+>> On 11/09/12 22:44, Sagaert Johan wrote:
+>>> Currently the build of the QT grantlee package is broken:
+>>> it seems like libpthread is not linked in.
+>>   Could you post a defconfig so we can try to reproduce?
+>>
+>>   Regards,
+>>   Arnout
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  Yes, and your patch looks in pretty good shape already.  I would make
-BR2_PACKAGE_HOST_LIBXML2_PYTHON a blind option (i.e. remove the string after
-bool).  I'd also remove the dependency on BR2_PACKAGE_LIBXML2 (in fact,
-mesa3d doesn't require libxml2).  And I'd keep the --without-debug.  But
-otherwise the patch looks good :-)
 
-  Care to post it to the list, followed by a mesa3d patch that uses it?
+Hi,
 
-  Regards,
-  Arnout
+i just managed to reproduce the issue, i'll send a patch to fix it, thx
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+br,
+Zoltan Gyarmati
+mail: mr.zoltan.gyarmati at gmail.com
+freenode nick: zgyarmati
