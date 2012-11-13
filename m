@@ -1,33 +1,35 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Tue, 13 Nov 2012 18:30:40 +0300
-Subject: [Buildroot] libgomp.so.1.0.0 not in target image
-Message-ID: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 13 Nov 2012 15:43:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 5678] New: linux.mk: linux-menuconfig fails
+Message-ID: <bug-5678-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello.
-I'm built rpm5 package but when i trying to run it i see
+https://bugs.busybox.net/show_bug.cgi?id=5678
 
-[root at localhost rpm]# rpmbuild
-rpmbuild: error while loading shared libraries: libgomp.so.1: cannot open
-shared object file: No such file or directory
-
-Lib not exist in filesystem but exit into
-
-
-find . -name *gomp*
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/libgomp.spec
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/libgomp.so.1.0.0
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/libgomp.so
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/libgomp.a
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/libgomp.la
-./output/host/usr/arm-buildroot-linux-gnueabi/sysroot/lib/libgomp.so.1
+           Summary: linux.mk: linux-menuconfig fails
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: matzeton at googlemail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-It's a bug or feature?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121113/8f056b91/attachment.html>
+make linux-menuconfig fails after make clean if using c cache
+
+This was caused by the missing dep hostcc.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
