@@ -1,46 +1,38 @@
-From: Chris Zankel <chris@zankel.net>
-Date: Tue, 13 Nov 2012 13:01:03 -0800
-Subject: [Buildroot] [PATCH 2/2 v3] xtensa: support configurable
- processor configurations
-In-Reply-To: <50A2ADBC.9080704@mind.be>
-References: <509d9db2.4883440a.7065.016e@mx.google.com>
- <509DA516.40007@mind.be> <50A169FC.6010708@zankel.net>
- <50A16B1E.8030703@mind.be> <50A18A2B.1050102@zankel.net>
- <50A2ADBC.9080704@mind.be>
-Message-ID: <50A2B50F.60609@zankel.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Nov 2012 22:04:54 +0100
+Subject: [Buildroot] howto incorporate buildroot into an autobuild
+In-Reply-To: <CAHqTa-2vZ_xs26oCX8kFtgQQzGaOcLWG=r2S+hsmUi1E6WZ2Vg@mail.gmail.com>
+References: <1352767649.18724.34.camel@genx>
+ <CAHqTa-2vZ_xs26oCX8kFtgQQzGaOcLWG=r2S+hsmUi1E6WZ2Vg@mail.gmail.com>
+Message-ID: <50A2B5F6.2040106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
-
-Sorry, I got your email after I sent out version 4 of the patch, which
-doesn't include the change you mentioned (somehow, fetchmail was stuck
-:-( So, please let me know if you want me to send out another version
-that includes that change. I don't want to confuse Thomas with all those
-versions...
-
-Thanks,
--Chris
-
-
-
-On 11/13/2012 12:29 PM, Arnout Vandecappelle wrote:
->> I guess I don't understand what that patch does, i.e. where is the
->> 'if...endif'? Could you maybe point to the patch?
->   I'm talking about http://patchwork.ozlabs.org/patch/196916/
-> In arch/Config.in, it introduces the following construct:
+On 13/11/12 06:02, Avery Pennarun wrote:
+> I also severely hacked up buildroot to be able to build multiple
+> packages in parallel on a multicore machine; this makes builds
+> typically 2-3x faster on our setup, and probably even more so if you
+> use a really fast disk (SSD RAID?) and lots of RAM and multiple CPUs.
+> You can see our hacked-up version here:
+> http://gfiber.googlesource.com/buildroot
 >
-> if BR2_xtensa
-> source "arch/Config.in.xtensa"
-> endif
->
->   This removes the need for adding 'depend on BR2_xtensa' in every config
-> option in that file.
->
->   It's true that _now_ xtensa would be the only one using that scheme, but the
-> idea is that if you do that for xtensa now, it will be easier to merge in
-> Thomas's patch later (or vice versa, it will be easier to rebase your patch
-> once Thomas's patch gets merged).
+> Beware, however, as it may burn your eyes.  Someday I would like to
+> clean up the parallelism patches and submit them here.
+
+  Wow!  There are a couple of great ideas in that repository.  I certainly
+wouldn't mind seeing some of these things upstreamed.  Like the shuffle
+thing, that would be really great for the autobuilders.
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
