@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Nov 2012 09:10:48 +0100
-Subject: [Buildroot] [PATCH v2 6/6] cpanminus: fix installation paths
+Date: Tue, 13 Nov 2012 09:10:47 +0100
+Subject: [Buildroot] [PATCH v2 5/6] cpanminus: requires host-qemu
 In-Reply-To: <1352794248-15617-1-git-send-email-arnout@mind.be>
 References: <1352794248-15617-1-git-send-email-arnout@mind.be>
-Message-ID: <1352794248-15617-6-git-send-email-arnout@mind.be>
+Message-ID: <1352794248-15617-5-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,52 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-perlcross seems to set the installation paths differently than perl's
-Configure, so adapt the reference to these paths in cpanminus.
+Must also disable all non-supported architectures, including x86
+(which doesn't have a working fork()).
 
-[Francois: install into /usr/lib/perl]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v2: integrated Francois' patch, merged with this one
+It still only works half the time.  For instance, in one arm configuration
+I have qemu sitting there consuming 100% CPU without any output, system
+calls, or nothing...
 ---
- package/cpanminus/cpanminus.mk |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/cpanminus/Config.in    |   11 +++++++++++
+ package/cpanminus/cpanminus.mk |    2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
+diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
+index b8b39dc..cf93a7e 100644
+--- a/package/cpanminus/Config.in
++++ b/package/cpanminus/Config.in
+@@ -1,5 +1,16 @@
+ config BR2_PACKAGE_CPANMINUS
+ 	bool "cpanminus"
++	# host-qemu doesn't work for the following platforms
++	depends on !BR2_avr32
++	depends on !BR2_bfin
++	depends on !BR2_sh2
++	depends on !BR2_sh2a
++	depends on !BR2_sh3
++	depends on !BR2_sh3eb
++	depends on !BR2_sh64
++	# host-qemu doesn't support system() on the following platforms
++	depends on !BR2_i386
++	depends on !BR2_x86_64
+ 	help
+ 	  cpanminus is a script to get, unpack, build and install Perl modules
+ 	  from CPAN.
 diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
-index af35e93..e7e3f29 100644
+index d3a338b..af35e93 100644
 --- a/package/cpanminus/cpanminus.mk
 +++ b/package/cpanminus/cpanminus.mk
-@@ -11,8 +11,8 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
+@@ -7,7 +7,7 @@
+ CPANMINUS_VERSION = 1.5018
+ CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
+ CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
+-CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
++CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
  
  CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
  CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
--CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
--CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
-+CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
-+CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
- CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
- CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
-@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
- 	chmod +x $(@D)/run_perl
- 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
--	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
--	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
-+	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
-+	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
- 	RUN_PERL="$(@D)/run_perl" \
- 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
- 		--perl=$(@D)/run_perl \
-@@ -36,7 +36,7 @@ define CPANMINUS_INSTALL_TARGET_CMDS
- 		--no-man-pages \
- 		$(CPANMINUS_MIRROR) \
- 		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
--	find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
-+	-find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
- endef
- else
- define CPANMINUS_INSTALL_TARGET_CMDS
 -- 
 1.7.10.4
