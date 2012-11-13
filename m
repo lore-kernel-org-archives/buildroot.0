@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Nov 2012 09:50:08 +0100
-Subject: [Buildroot] [PATCH v2 5/6] cpanminus: requires host-qemu
-In-Reply-To: <1352794248-15617-5-git-send-email-arnout@mind.be>
-References: <1352794248-15617-1-git-send-email-arnout@mind.be>
- <1352794248-15617-5-git-send-email-arnout@mind.be>
-Message-ID: <20121113095008.68bb25a7@skate>
+Date: Tue, 13 Nov 2012 09:51:40 +0100
+Subject: [Buildroot] [PATCH for-2012.11 1/5] pkg-infra: introduce errors
+ for legacy API
+In-Reply-To: <50A167A6.5000705@mind.be>
+References: <1352750912-16012-1-git-send-email-arnout@mind.be>
+ <1352750912-16012-2-git-send-email-arnout@mind.be>
+ <20121112220539.7e41409b@skate> <50A167A6.5000705@mind.be>
+Message-ID: <20121113095140.034cf667@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
 
-On Tue, 13 Nov 2012 09:10:47 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On Mon, 12 Nov 2012 22:18:30 +0100, Arnout Vandecappelle wrote:
+
+> > BR2_LEGACY here maybe?
 > 
-> Must also disable all non-supported architectures, including x86
-> (which doesn't have a working fork()).
+>   No that would not make sense - we want to get the error message if BR2_LEGACY
+> is selected (automatically, by Config.in.legacy).
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> It still only works half the time.  For instance, in one arm configuration
-> I have qemu sitting there consuming 100% CPU without any output, system
-> calls, or nothing...
+> The idea of the condition is to have an escape path, if you don't want to deal
+> with all the stuff that is misconfigured (not only legacy config symbols but also
+> host-pkg-config etc.), you can just build with BR2_DEPRECATED=y and see how far
+> you get.
 
-From my point of view, cpanminus should be marked as broken, or even
-removed unless another solution that qemu is found. The usage of
-host-qemu simply doesn't work: if the kernel headers used for the
-toolchain built by Buildroot are newer than the kernel version on the
-build machine, it will break... so it really isn't a viable solution.
+Aaah, ok.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
