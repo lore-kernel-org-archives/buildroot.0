@@ -1,33 +1,34 @@
-From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
-Date: Tue, 13 Nov 2012 12:03:21 +0100
-Subject: [Buildroot] [PATCH v2 3/6] Add board files for snowball
-In-Reply-To: <20121112193716.54622654@skate>
-References: <1352742102-19010-1-git-send-email-gregory.hermant@calao-systems.com>
- <1352742102-19010-4-git-send-email-gregory.hermant@calao-systems.com>
- <20121112193716.54622654@skate>
-Message-ID: <50A228F9.20605@calao-systems.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 13 Nov 2012 12:05:38 +0100
+Subject: [Buildroot] [PATCH 04/30] binutils: add license info
+In-Reply-To: <1352804764-24026-1-git-send-email-arnout@mind.be>
+References: <1352804764-24026-1-git-send-email-arnout@mind.be>
+Message-ID: <1352804764-24026-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 12/11/2012 19:37, Thomas Petazzoni a ?crit :
-> Dear Gregory Hermant,
-> 
-> On Mon, 12 Nov 2012 18:41:39 +0100, Gregory Hermant wrote:
->>
->> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
->> ---
->>  board/calao/snowball/busybox-1.20.x.config | 1024 ++++++++++++++++++++++++++++
-> 
-> Is there a specific reason to have a custom Busybox configuration file?
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Enable the firmware loading (mdev).
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/binutils/binutils.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
-> Thanks,
-> 
-> Thomas
-> 
-gregory
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index e1aac9b..6c51fc7 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -29,6 +29,8 @@ endif
+ BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+ BINUTILS_INSTALL_STAGING = YES
+ BINUTILS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
++BINUTILS_LICENSE = GPLv3+, libiberty LGPLv2.1+
++BINUTILS_LICENSE_FILES = COPYING3 COPYING.LIB
+ 
+ # We need to specify host & target to avoid breaking ARM EABI
+ BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
+-- 
+1.7.10.4
