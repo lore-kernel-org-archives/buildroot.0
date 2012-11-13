@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Nov 2012 00:07:14 +0100
-Subject: [Buildroot] [PATCH 08/47] package/spice-protocol: new package
-In-Reply-To: <1351113973-17237-9-git-send-email-yann.morin.1998@free.fr>
+Date: Wed, 14 Nov 2012 00:12:03 +0100
+Subject: [Buildroot] [PATCH 09/47] package/libcegui: new package
+In-Reply-To: <1351113973-17237-10-git-send-email-yann.morin.1998@free.fr>
 References: <1351113973-17237-1-git-send-email-yann.morin.1998@free.fr>
- <1351113973-17237-9-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <50A2D2A2.6040206@mind.be>
+ <1351113973-17237-10-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <50A2D3C3.3060809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,47 @@ To: buildroot@busybox.net
 
 On 24/10/12 23:25, Yann E. MORIN wrote:
 > Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> Reviewed-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  on a minimal powerpc internal toolchain
+
+  I guess this again has to be a specific version for spice?  Could be good
+to document that in the commit message.
+
+  It fails to build in a toolchain without threads.
+
+[snip]
+> diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
+> new file mode 100644
+> index 0000000..7225f9c
+> --- /dev/null
+> +++ b/package/cegui06/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_CEGUI06
+> +	bool "libcegui06"
+
+  Naming is inconsistent: cegui06 is the package name, but here you call it
+libcegui06 and in the commit message libcegui.
+
+[snip]
+> diff --git a/package/cegui06/cegui06.mk b/package/cegui06/cegui06.mk
+> new file mode 100644
+> index 0000000..2f562ac
+> --- /dev/null
+> +++ b/package/cegui06/cegui06.mk
+> @@ -0,0 +1,34 @@
+> +#############################################################
+> +#
+> +# libcegui
+> +#
+> +#############################################################
+> +
+> +CEGUI06_VERSION         = 0.6.2
+> +CEGUI06_SOURCE          = CEGUI-$(CEGUI06_VERSION)b.tar.gz
+> +CEGUI06_SITE            = http://downloads.sourceforge.net/project/crayzedsgui/CEGUI%20Mk-2/$(CEGUI06_VERSION)
+
+  I would use CEGUI06_VERSION_MAJOR = 0.6.2 and
+CEGUI06_VERSION = $(CEGUI06_VERSION_MAJOR)b
+
+[snip]
 
   Regards,
   Arnout
