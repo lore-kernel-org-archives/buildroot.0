@@ -1,54 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Nov 2012 14:49:56 +0100
-Subject: [Buildroot] Report from the Buildroot Developers Day at ELCE
-Message-ID: <20121113144956.1ba92182@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 13 Nov 2012 15:29:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 5672] htop: remove X11 stuff
+In-Reply-To: <bug-5672-163@https.bugs.busybox.net/>
+References: <bug-5672-163@https.bugs.busybox.net/>
+Message-ID: <20121113152903.D5FDF99FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+https://bugs.busybox.net/show_bug.cgi?id=5672
 
-As everyone most likely knows, a Buildroot Developers meeting took
-place on November 3rd and 4th in Barcelona, right before the Embedded
-Linux Conference Europe.
+--- Comment #2 from matzeton at googlemail.com 2012-11-13 15:29:02 UTC ---
+(In reply to comment #1)
+> Hum, thanks, but it seems that your bug report lacks a description, no?
 
-Nine participants, joined by another surprise participant, were present
-at this meeting, and we had some really good discussions and hacking
-sessions.
+Sorry, this was my fault.
 
-Arnout Vandecappelle has taken a lot of notes during the meeting, which
-he compiled into a nice report and list of action items:
+This was my first time I used bugzilla :o)
 
-  http://elinux.org/Buildroot:DeveloperDaysELCE2012#Report_of_the_meeting
-
-I also posted a news on the Emlinews site:
-
-  http://www.emlinews.net/2012/11/report-from-the-buildroot-developers-day-in-barcelona/
-
-Do not hesitate to ask questions if anything remains imprecise in the
-report.
-
-I would like to thank again our sponsors Fluendo
-<http://www.fluendo.com> and Synopsys <http://www.synopsys.com>, that
-kindly sponsored the meeting room and the saturday evening dinner.
-
-At the end of the meeting, the participants agreed on the date and
-location for the next meeting: it will take place on February 4th and
-5th in Brussels, Belgium, right after the FOSDEM
-<http://www.fosdem.org>. Since the meeting will take place during work
-days, we do not necessarily expect all participants to join for the two
-days. Therefore, the first day (which is more likely to have the
-highest number of participants) will be mostly dedicated to
-discussions, and the second day to hacking. Book your dates and flight
-tickets for FOSDEM!
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
