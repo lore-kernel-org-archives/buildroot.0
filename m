@@ -1,32 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Nov 2012 08:06:43 +0100
-Subject: [Buildroot] [PATCH 1/2] perl: fix configure step
-In-Reply-To: <20121110170735.01056125@skate>
-References: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
- <20121110170735.01056125@skate>
-Message-ID: <50A1F183.5070405@mind.be>
+Date: Tue, 13 Nov 2012 07:47:41 +0100
+Subject: [Buildroot] [PATCH 03/11] libtirpc: add patches to fix a number
+ of issues
+In-Reply-To: <56daf58a13bf6cc3b2e2f696c961c9f3a8de21ce.1352583641.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1352583641.git.thomas.petazzoni@free-electrons.com>
+ <56daf58a13bf6cc3b2e2f696c961c9f3a8de21ce.1352583641.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50A1ED0D.5020104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/11/12 17:07, Thomas Petazzoni wrote:
-> Dear Francois Perrad,
+On 10/11/12 22:42, Thomas Petazzoni wrote:
+> libtirpc-0005-rpcent-mark-getrpcbyname-name-argument-as-const-char.patch
+> fixes build failures like
+> http://autobuild.buildroot.org/results/7a3a751fe02c639ca75c575ca7fe20a72372b8d6/build-end.log.
 >
-> On Sat, 10 Nov 2012 15:41:07 +0100, Francois Perrad wrote:
->> >  Configure -A symbol=val generates a extra space in config.sh,
->> >  which causes failure like this :
->> >       Building Module-Runtime-0.013
->> >       Unknown OS type ' linux' - using default settings
->> >
->> >  Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
-> Instead of doing what the patch does below, wouldn't it be better to
-> fix this -A option so that it doesn't add inappropriate spaces?
+> libtirpc-0006-rpcent-remove-prototypes-of-reentrant-variants.patch
+> ensures that functions not implemented by libtirpc are not described
+> in a header file. It also allows to remove those prototypes that were
+> not matching the functions available in glibc or uClibc, causing
+> mismatch in prototypes.
+>
+> libtirpc-0007-doc-Makefile.am-fix-out-of-tree-installation.patch is a
+> minor fix.
+>
+> The following patches (8 to 9) allow libtirpc to provide sufficient
+> things to be able to build rpcbind on top of it.
+>
+> All these patches have been submitted upstream on the libtirpc-devel@
+> mailing list.
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
-  I've adapted the patch accordingly and added it to my perl-fixes series (which
-I'll repost in a moment).
+  After a quick browse:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (untested)
 
+  I would have split up the rpcbind things as a separate commit, but that's
+a minor detail.
 
   Regards,
   Arnout
