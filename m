@@ -1,30 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Nov 2012 22:04:54 +0100
-Subject: [Buildroot] howto incorporate buildroot into an autobuild
-In-Reply-To: <CAHqTa-2vZ_xs26oCX8kFtgQQzGaOcLWG=r2S+hsmUi1E6WZ2Vg@mail.gmail.com>
-References: <1352767649.18724.34.camel@genx>
- <CAHqTa-2vZ_xs26oCX8kFtgQQzGaOcLWG=r2S+hsmUi1E6WZ2Vg@mail.gmail.com>
-Message-ID: <50A2B5F6.2040106@mind.be>
+Date: Tue, 13 Nov 2012 22:09:42 +0100
+Subject: [Buildroot] libgomp.so.1.0.0 not in target image
+In-Reply-To: <CABtOAfyZQW+0KxtNF-cv-eFxBBqkMoyKAw1fSLgTN1WA-S8LrA@mail.gmail.com>
+References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
+ <50A284A8.9070304@mind.be>
+ <CABtOAfyZQW+0KxtNF-cv-eFxBBqkMoyKAw1fSLgTN1WA-S8LrA@mail.gmail.com>
+Message-ID: <50A2B716.1070803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/11/12 06:02, Avery Pennarun wrote:
-> I also severely hacked up buildroot to be able to build multiple
-> packages in parallel on a multicore machine; this makes builds
-> typically 2-3x faster on our setup, and probably even more so if you
-> use a really fast disk (SSD RAID?) and lots of RAM and multiple CPUs.
-> You can see our hacked-up version here:
-> http://gfiber.googlesource.com/buildroot
+On 13/11/12 21:55, Alexander Khryukin wrote:
 >
-> Beware, however, as it may burn your eyes.  Someday I would like to
-> clean up the parallelism patches and submit them here.
+>
+> 2012/11/13 Arnout Vandecappelle <arnout at mind.be <mailto:arnout@mind.be>>
+>
+>     On 13/11/12 16:30, Alexander Khryukin wrote:
+>
+>         Hello.
+>         I'm built rpm5 package but when i trying to run it i see
+>
+>         [root at localhost rpm]# rpmbuild
+>         rpmbuild: error while loading shared libraries: libgomp.so.1: cannot open shared object file: No such file or
+>         directory
+>
+[snip]
+>
+>       Alexander, you are using a recent external Linaro toolchain, right?
+>
+>       Thomas, I think this should be fixed by adding libgomp to LIB_EXTERNAL_LIBS
+>     in ext-tool.mk.  Is that right?  Will that also work if libgomp doesn't exist?
+>
+[snip]
+>
+> I'm using own toolchain but it based on linaro
+> also linaro toolchain affected too
 
-  Wow!  There are a couple of great ideas in that repository.  I certainly
-wouldn't mind seeing some of these things upstreamed.  Like the shuffle
-thing, that would be really great for the autobuilders.
+  But still as an external toolchain, right?  Ouch, now I see crosstool-ng has the
+same problem...  But an internal toolchain should work, I think.
 
   Regards,
   Arnout
