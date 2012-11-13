@@ -1,57 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Nov 2012 21:29:48 +0100
-Subject: [Buildroot] [PATCH 2/2 v3] xtensa: support configurable
- processor configurations
-In-Reply-To: <50A18A2B.1050102@zankel.net>
-References: <509d9db2.4883440a.7065.016e@mx.google.com>
- <509DA516.40007@mind.be> <50A169FC.6010708@zankel.net>
- <50A16B1E.8030703@mind.be> <50A18A2B.1050102@zankel.net>
-Message-ID: <50A2ADBC.9080704@mind.be>
+Date: Tue, 13 Nov 2012 21:43:50 +0100
+Subject: [Buildroot] howto incorporate buildroot into an autobuild
+In-Reply-To: <20121113094526.6392ab30@skate>
+References: <1352767649.18724.34.camel@genx> <20121113094526.6392ab30@skate>
+Message-ID: <50A2B106.8000804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/11/12 00:45, Chris Zankel wrote:
-> On 11/12/2012 01:33 PM, Arnout Vandecappelle wrote:
+On 13/11/12 09:45, Thomas Petazzoni wrote:
+> Hello John,
+>
+> On Mon, 12 Nov 2012 16:47:29 -0800, John Stile wrote:
+>> I am using buildroot for an embedded Arm project.
 >>
->>     Perhaps it's better to move the condition to a
->> if BR2_xtensa
->> ...
->> endif
->> around the entire file.  Thomas has a patch lined up to move all
->> the conditions outside of the Config.in.*
->>> It seems Xtensa would be the only one that uses that scheme, so maybe
->>> wait for the generic patch from Thomas?
->>    I don't think so. Then it means more work for Thomas to refresh his
->> patch.  There will be a merge conflict anyway between the two, but
->> with the condition outside the file the conflict will be small.
+>> I was wondering how people using buildroot implement continuous
+>> integration builds?
 >>
->>    That said, Peter hasn't merged Thomas's patch even though I acked
->> it, so maybe he has some fundamental objection to the principle.
->> Or maybe it's just because I didn't test it.
+>> Do you start from a clean checkout, build the whole tool chain (which
+>> takes a long time), and then build the project specific stuff?
+>>
+>> I worry about not starting from a clean checkout, since some options may
+>> change, and the tools won't be rebuilt.
+>>
+>> But I also worry people will complain how long the build takes.
+>>
+>> Is there a good strategy to balance these concerns?
+>
+> If you do continuous integration builds, do you really care that much
+> about the build time? Even if the build takes an hour, it is still very
+> reasonable for an continuous integration build system.
 
-> I guess I don't understand what that patch does, i.e. where is the
-> 'if...endif'? Could you maybe point to the patch?
+  If you take the approach of e.g. Qt and require *every* patch to pass an
+individual CI run before its accepted, then an hour is not acceptable...
 
-  I'm talking about http://patchwork.ozlabs.org/patch/196916/
-In arch/Config.in, it introduces the following construct:
+> Tips to reduce the build time:
+>
+>   * Get a fast machine. Many people complaining about build time are
+>     building inside a virtual machine on a slow laptop. This simply
+>     cannot work. Get a 4 or 8 cores machine, with 16+ GB of RAM, and
+>     some good I/Os.
 
-if BR2_xtensa
-source "arch/Config.in.xtensa"
-endif
+  I don't know...  Buildroot currently serializes a lot (cfr. Avery's
+remark), so going beyond 2 cores will not help that much.  It's better
+to have several machines (or a single big machine) that do different
+CI builds in parallel.
 
-  This removes the need for adding 'depend on BR2_xtensa' in every config
-option in that file.
+>   * Use an external toolchain.
 
-  It's true that _now_ xtensa would be the only one using that scheme, but the
-idea is that if you do that for xtensa now, it will be easier to merge in
-Thomas's patch later (or vice versa, it will be easier to rebase your patch
-once Thomas's patch gets merged).
+  I.e. build only your toolchain with BR2_HOST_DIR set to a different path,
+and use that path as an external toolchain in future builds.
+
+
+  * Staggered builds. Assuming most commits are in your own software, you
+can usually define a base layer that usually doesn't change.  Do a build
+of this base layer once and reuse it for later builds.  Of course, you still
+need to do full, clean builds occasionally.
+
+
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
