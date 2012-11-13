@@ -1,46 +1,42 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 13 Nov 2012 08:01:45 +0000
-Subject: [Buildroot] [PATCH] kexec: disable on avr32
-Message-ID: <1352793705-30377-1-git-send-email-spdawson@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Nov 2012 07:53:04 +0100
+Subject: [Buildroot] Udev on a live CD system does not appear to
+ populate /dev
+In-Reply-To: <509BDDDD.3040002@petroprogram.com>
+References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
+ <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
+ <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
+ <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
+ <509BDDDD.3040002@petroprogram.com>
+Message-ID: <50A1EE50.4010008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 08/11/12 17:29, Stefan Fr?berg wrote:
+> If you ever want to use the maximum compression method supported by
+> modern kernels (XZ compression)
+> then change that initramfs generation command to this:
+>
+> find .  -not \( -path "./boot" -prune \) -print0 | cpio --null -ov --format=newc
+>   | xz --check=crc32>  /livecd/initramfs.xz
+>
+> Without that --check=crc32 parameter you won't be able to boot
+> XZ-compressed initramfs.
 
-kexec does not support the avr32 architecture; this results in autobuilder
-failures such as the following.
+  It would be good to have this in buildroot.  Care to add a config option
+BR2_TARGET_ROOTFS_CPIO_XZ?  Using host-xz, of course, since not all systems
+have xz installed.
 
-  http://autobuild.buildroot.net/results/5f5e91c3eb622bce88402a9afc8a3e7bd5007136/build-end.log
 
-This patch disables support for the kexec package on the avr32 architecture.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/kexec/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index 6f10b89..98514d9 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -1,11 +1,15 @@
- config BR2_PACKAGE_KEXEC
- 	bool "kexec"
-+	depends on !BR2_avr32
- 	help
- 	  Kexec is a user space utiltity for loading another kernel
- 	  and asking the currently running kernel to do something with it.
- 
- 	  http://www.kernel.org/pub/linux/kernel/people/horms/kexec-tools/
- 
-+comment "kexec is not supported on avr32"
-+	depends on BR2_avr32
-+
- config BR2_PACKAGE_KEXEC_ZLIB
- 	bool "zlib support"
- 	depends on BR2_PACKAGE_KEXEC
+  Regards,
+  Arnout
 -- 
-1.7.10.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
