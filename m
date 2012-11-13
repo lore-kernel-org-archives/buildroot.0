@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Nov 2012 12:06:01 +0100
-Subject: [Buildroot] [PATCH 27/30] util-linux: add license info
+Date: Tue, 13 Nov 2012 12:05:57 +0100
+Subject: [Buildroot] [PATCH 23/30] python: add license info
 In-Reply-To: <1352804764-24026-1-git-send-email-arnout@mind.be>
 References: <1352804764-24026-1-git-send-email-arnout@mind.be>
-Message-ID: <1352804764-24026-27-git-send-email-arnout@mind.be>
+Message-ID: <1352804764-24026-23-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,21 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/util-linux/util-linux.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
+ package/python/python.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index f6028f4..73ae174 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -7,6 +7,12 @@ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
- UTIL_LINUX_VERSION_MAJOR = 2.20
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.bz2
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
-+
-+# README.licensing claims that some files are GPLv2-only, but this is not true.
-+# Some files are GPLv3+ but only in tests.
-+UTIL_LINUX_LICENSE = GPLv2+, BSD-4c, libblkid and libmount LGPLv2+, libuuid BSD-3c
-+UTIL_LINUX_LICENSE_FILES = README.licensing COPYING licenses/COPYING.UCB libblkid/COPYING.libblkid libuuid/COPYING.libuuid
-+
- UTIL_LINUX_AUTORECONF = YES
- UTIL_LINUX_INSTALL_STAGING = YES
- UTIL_LINUX_DEPENDENCIES = host-pkgconf
+diff --git a/package/python/python.mk b/package/python/python.mk
+index fae4e5c..87237bb 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -7,6 +7,8 @@ PYTHON_VERSION_MAJOR = 2.7
+ PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).2
+ PYTHON_SOURCE        = Python-$(PYTHON_VERSION).tar.bz2
+ PYTHON_SITE          = http://python.org/ftp/python/$(PYTHON_VERSION)
++PYTHON_LICENSE       = Python software foundation license v2, others
++PYTHON_LICENSE_FILES = LICENSE
+ 
+ # Python needs itself and a "pgen" program to build itself, both being
+ # provided in the Python sources. So in order to cross-compile Python,
 -- 
 1.7.10.4
