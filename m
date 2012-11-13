@@ -1,72 +1,46 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Tue, 13 Nov 2012 23:55:21 +0300
-Subject: [Buildroot] libgomp.so.1.0.0 not in target image
-In-Reply-To: <50A284A8.9070304@mind.be>
-References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
- <50A284A8.9070304@mind.be>
-Message-ID: <CABtOAfyZQW+0KxtNF-cv-eFxBBqkMoyKAw1fSLgTN1WA-S8LrA@mail.gmail.com>
+From: Chris Zankel <chris@zankel.net>
+Date: Tue, 13 Nov 2012 13:01:03 -0800
+Subject: [Buildroot] [PATCH 2/2 v3] xtensa: support configurable
+ processor configurations
+In-Reply-To: <50A2ADBC.9080704@mind.be>
+References: <509d9db2.4883440a.7065.016e@mx.google.com>
+ <509DA516.40007@mind.be> <50A169FC.6010708@zankel.net>
+ <50A16B1E.8030703@mind.be> <50A18A2B.1050102@zankel.net>
+ <50A2ADBC.9080704@mind.be>
+Message-ID: <50A2B50F.60609@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/13 Arnout Vandecappelle <arnout@mind.be>
+Hi Arnout,
 
-> On 13/11/12 16:30, Alexander Khryukin wrote:
+Sorry, I got your email after I sent out version 4 of the patch, which
+doesn't include the change you mentioned (somehow, fetchmail was stuck
+:-( So, please let me know if you want me to send out another version
+that includes that change. I don't want to confuse Thomas with all those
+versions...
+
+Thanks,
+-Chris
+
+
+
+On 11/13/2012 12:29 PM, Arnout Vandecappelle wrote:
+>> I guess I don't understand what that patch does, i.e. where is the
+>> 'if...endif'? Could you maybe point to the patch?
+>   I'm talking about http://patchwork.ozlabs.org/patch/196916/
+> In arch/Config.in, it introduces the following construct:
 >
->> Hello.
->> I'm built rpm5 package but when i trying to run it i see
->>
->> [root at localhost rpm]# rpmbuild
->> rpmbuild: error while loading shared libraries: libgomp.so.1: cannot open
->> shared object file: No such file or directory
->>
->> Lib not exist in filesystem but exit into
->>
->>
->> find . -name *gomp*
->> ./output/host/usr/arm-**buildroot-linux-gnueabi/**
->> sysroot/lib/libgomp.spec
->> ./output/host/usr/arm-**buildroot-linux-gnueabi/**
->> sysroot/lib/libgomp.so.1.0.0
->> ./output/host/usr/arm-**buildroot-linux-gnueabi/**sysroot/lib/libgomp.so
->> ./output/host/usr/arm-**buildroot-linux-gnueabi/**sysroot/lib/libgomp.a
->> ./output/host/usr/arm-**buildroot-linux-gnueabi/**sysroot/lib/libgomp.la<
->> http://libgomp.la>
->>
->> ./output/host/usr/arm-**buildroot-linux-gnueabi/**
->> sysroot/lib/libgomp.so.1
->>
->>
->> It's a bug or feature?
->>
+> if BR2_xtensa
+> source "arch/Config.in.xtensa"
+> endif
 >
->  Yep, that's a bug. It's surprising that nobody has run into this before -
-> maybe
-> OpenMP support was only recently added to the Linaro toolchain.
+>   This removes the need for adding 'depend on BR2_xtensa' in every config
+> option in that file.
 >
->  Alexander, you are using a recent external Linaro toolchain, right?
->
->  Thomas, I think this should be fixed by adding libgomp to
-> LIB_EXTERNAL_LIBS
-> in ext-tool.mk.  Is that right?  Will that also work if libgomp doesn't
-> exist?
->
->  Regards,
->  Arnout
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
->
-I'm using own toolchain but it based on linaro
-also linaro toolchain affected too
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121113/014aba4e/attachment.html>
+>   It's true that _now_ xtensa would be the only one using that scheme, but the
+> idea is that if you do that for xtensa now, it will be easier to merge in
+> Thomas's patch later (or vice versa, it will be easier to rebase your patch
+> once Thomas's patch gets merged).
