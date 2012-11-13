@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Nov 2012 12:05:53 +0100
-Subject: [Buildroot] [PATCH 19/30] openntpd: add license info
+Date: Tue, 13 Nov 2012 12:05:36 +0100
+Subject: [Buildroot] [PATCH 02/30] ncurses: add license info
 In-Reply-To: <1352804764-24026-1-git-send-email-arnout@mind.be>
 References: <1352804764-24026-1-git-send-email-arnout@mind.be>
-Message-ID: <1352804764-24026-19-git-send-email-arnout@mind.be>
+Message-ID: <1352804764-24026-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +14,21 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-There is one license that I didn't include in the summary (but it's in
-the license file):
-"It may be used for any purpose as long as this notice remains intact
-on all source code distributions."
-Since the whole work is also covered by the much stronger BSD and MIT
-licenses, I think it's OK to leave this out from the summary.  The
-details are anyway in the full license text.
----
- package/openntpd/openntpd.mk |    2 ++
+ package/ncurses/ncurses.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index f63a9c6..fab68b6 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -7,6 +7,8 @@
- OPENNTPD_VERSION = 3.9p1
- OPENNTPD_SITE = ftp://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
- OPENNTPD_CONF_OPT = --with-builtin-arc4random --disable-strip
-+OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
-+OPENNTPD_LICENSE_FILES = LICENCE
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index d823996..4c48e8d 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -27,6 +27,8 @@ NCURSES_VERSION = 5.9
+ NCURSES_SITE = $(BR2_GNU_MIRROR)/ncurses
+ NCURSES_INSTALL_STAGING = YES
+ NCURSES_DEPENDENCIES = host-ncurses
++NCURSES_LICENSE = MIT with advertising clause
++NCURSES_LICENSE_FILES = README
  
- define OPENNTPD_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/ntpd
+ NCURSES_CONF_OPT = \
+ 	$(if $(BR2_PREFER_STATIC_LIB),--without-shared,--with-shared) \
 -- 
 1.7.10.4
