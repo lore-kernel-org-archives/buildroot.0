@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Nov 2012 12:05:42 +0100
-Subject: [Buildroot] [PATCH 08/30] ethtool: fix license info variable
+Date: Tue, 13 Nov 2012 12:05:45 +0100
+Subject: [Buildroot] [PATCH 11/30] liblockfile: add license info
 In-Reply-To: <1352804764-24026-1-git-send-email-arnout@mind.be>
 References: <1352804764-24026-1-git-send-email-arnout@mind.be>
-Message-ID: <1352804764-24026-8-git-send-email-arnout@mind.be>
+Message-ID: <1352804764-24026-11-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,22 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/ethtool/ethtool.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/liblockfile/liblockfile.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index a336b52..8c5961c 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -7,6 +7,6 @@
- ETHTOOL_VERSION = 3.6
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
--ETHTOOL_LICENSE_FILE = COPYING
-+ETHTOOL_LICENSE_FILES = COPYING
+diff --git a/package/liblockfile/liblockfile.mk b/package/liblockfile/liblockfile.mk
+index 037983e..84b0212 100644
+--- a/package/liblockfile/liblockfile.mk
++++ b/package/liblockfile/liblockfile.mk
+@@ -8,6 +8,9 @@ LIBLOCKFILE_SOURCE:=liblockfile_$(LIBLOCKFILE_VERSION).orig.tar.gz
+ LIBLOCKFILE_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/libl/liblockfile/
+ LIBLOCKFILE_PATCH:=liblockfile_$(LIBLOCKFILE_VERSION)-4.debian.tar.bz2
  
- $(eval $(autotools-package))
++LIBLOCKFILE_LICENSE = LGPLv2+, dotlockfile GPLv2+
++# No license file included, it refers to the gnu.org website
++
+ LIBLOCKFILE_INSTALL_STAGING = YES
+ LIBLOCKFILE_CONF_OPT = --mandir=/usr/share/man
+ 
 -- 
 1.7.10.4
