@@ -1,34 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Nov 2012 07:53:04 +0100
-Subject: [Buildroot] Udev on a live CD system does not appear to
- populate /dev
-In-Reply-To: <509BDDDD.3040002@petroprogram.com>
-References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
- <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
- <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
- <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
- <509BDDDD.3040002@petroprogram.com>
-Message-ID: <50A1EE50.4010008@mind.be>
+Date: Tue, 13 Nov 2012 08:06:43 +0100
+Subject: [Buildroot] [PATCH 1/2] perl: fix configure step
+In-Reply-To: <20121110170735.01056125@skate>
+References: <1352558468-3643-1-git-send-email-francois.perrad@gadz.org>
+ <20121110170735.01056125@skate>
+Message-ID: <50A1F183.5070405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/11/12 17:29, Stefan Fr?berg wrote:
-> If you ever want to use the maximum compression method supported by
-> modern kernels (XZ compression)
-> then change that initramfs generation command to this:
+On 10/11/12 17:07, Thomas Petazzoni wrote:
+> Dear Francois Perrad,
 >
-> find .  -not \( -path "./boot" -prune \) -print0 | cpio --null -ov --format=newc
->   | xz --check=crc32>  /livecd/initramfs.xz
->
-> Without that --check=crc32 parameter you won't be able to boot
-> XZ-compressed initramfs.
+> On Sat, 10 Nov 2012 15:41:07 +0100, Francois Perrad wrote:
+>> >  Configure -A symbol=val generates a extra space in config.sh,
+>> >  which causes failure like this :
+>> >       Building Module-Runtime-0.013
+>> >       Unknown OS type ' linux' - using default settings
+>> >
+>> >  Signed-off-by: Francois Perrad<francois.perrad@gadz.org>
+> Instead of doing what the patch does below, wouldn't it be better to
+> fix this -A option so that it doesn't add inappropriate spaces?
 
-  It would be good to have this in buildroot.  Care to add a config option
-BR2_TARGET_ROOTFS_CPIO_XZ?  Using host-xz, of course, since not all systems
-have xz installed.
+  I've adapted the patch accordingly and added it to my perl-fixes series (which
+I'll repost in a moment).
 
 
   Regards,
