@@ -1,21 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 13 Nov 2012 08:46:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 5672] htop: remove X11 stuff
-In-Reply-To: <bug-5672-163@https.bugs.busybox.net/>
-References: <bug-5672-163@https.bugs.busybox.net/>
-Message-ID: <20121113084611.BFF8699FBE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Nov 2012 09:46:51 +0100
+Subject: [Buildroot] [PATCH] kexec: disable on avr32
+In-Reply-To: <1352793705-30377-1-git-send-email-spdawson@gmail.com>
+References: <1352793705-30377-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20121113094651.3035f9fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5672
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-11-13 08:46:10 UTC ---
-Hum, thanks, but it seems that your bug report lacks a description, no?
+On Tue, 13 Nov 2012 08:01:45 +0000, spdawson at gmail.com wrote:
 
+> +comment "kexec is not supported on avr32"
+> +	depends on BR2_avr32
+> +
+
+Until now, we generally didn't put a comment when a package wasn't
+available for a particular architecture.
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
