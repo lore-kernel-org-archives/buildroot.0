@@ -1,9 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Nov 2012 12:05:41 +0100
-Subject: [Buildroot] [PATCH 07/30] e2fsprogs: add license info
-In-Reply-To: <1352804764-24026-1-git-send-email-arnout@mind.be>
-References: <1352804764-24026-1-git-send-email-arnout@mind.be>
-Message-ID: <1352804764-24026-7-git-send-email-arnout@mind.be>
+Date: Tue, 13 Nov 2012 12:05:35 +0100
+Subject: [Buildroot] [PATCH 01/30] autoconf: add license info
+Message-ID: <1352804764-24026-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +12,22 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/e2fsprogs/e2fsprogs.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/autoconf/autoconf.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index e958158..5b3b7d0 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/autoconf/autoconf.mk b/package/autoconf/autoconf.mk
+index 0cb50db..8807c10 100644
+--- a/package/autoconf/autoconf.mk
++++ b/package/autoconf/autoconf.mk
+@@ -7,6 +7,9 @@
+ AUTOCONF_VERSION = 2.68
+ AUTOCONF_SITE = $(BR2_GNU_MIRROR)/autoconf
  
- E2FSPROGS_VERSION = 1.42.6
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
-+E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
-+E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
++AUTOCONF_LICENSE = GPLv3+ with exceptions
++AUTOCONF_LICENSE_FILES = COPYINGv3 COPYING.EXCEPTION
++
+ AUTOCONF_CONF_ENV = EMACS="no" ac_cv_path_M4=$(HOST_DIR)/usr/bin/m4 \
+ 		    ac_cv_prog_gnu_m4_gnu=no
  
- E2FSPROGS_CONF_OPT = \
- 	--disable-tls \
 -- 
 1.7.10.4
