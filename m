@@ -1,51 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Nov 2012 09:45:26 +0100
-Subject: [Buildroot] howto incorporate buildroot into an autobuild
-In-Reply-To: <1352767649.18724.34.camel@genx>
-References: <1352767649.18724.34.camel@genx>
-Message-ID: <20121113094526.6392ab30@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 13 Nov 2012 08:46:11 +0000 (UTC)
+Subject: [Buildroot] [Bug 5672] htop: remove X11 stuff
+In-Reply-To: <bug-5672-163@https.bugs.busybox.net/>
+References: <bug-5672-163@https.bugs.busybox.net/>
+Message-ID: <20121113084611.BFF8699FBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello John,
+https://bugs.busybox.net/show_bug.cgi?id=5672
 
-On Mon, 12 Nov 2012 16:47:29 -0800, John Stile wrote:
-> I am using buildroot for an embedded Arm project.
-> 
-> I was wondering how people using buildroot implement continuous
-> integration builds?
-> 
-> Do you start from a clean checkout, build the whole tool chain (which
-> takes a long time), and then build the project specific stuff?
-> 
-> I worry about not starting from a clean checkout, since some options may
-> change, and the tools won't be rebuilt.
-> 
-> But I also worry people will complain how long the build takes.
-> 
-> Is there a good strategy to balance these concerns?
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-11-13 08:46:10 UTC ---
+Hum, thanks, but it seems that your bug report lacks a description, no?
 
-If you do continuous integration builds, do you really care that much
-about the build time? Even if the build takes an hour, it is still very
-reasonable for an continuous integration build system.
-
-Tips to reduce the build time:
-
- * Get a fast machine. Many people complaining about build time are
-   building inside a virtual machine on a slow laptop. This simply
-   cannot work. Get a 4 or 8 cores machine, with 16+ GB of RAM, and
-   some good I/Os.
-
- * Use an external toolchain.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
