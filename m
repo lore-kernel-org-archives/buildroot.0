@@ -1,44 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Nov 2012 23:51:02 +0100
-Subject: [Buildroot] [PATCH for-2012.11] qextserialport: don't require Qt
-	GUI module
-Message-ID: <1352847062-16275-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Nov 2012 00:06:34 +0100
+Subject: [Buildroot] libgomp.so.1.0.0 not in target image
+In-Reply-To: <20121113231021.6995bd28@skate>
+References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
+ <50A284A8.9070304@mind.be> <20121113231021.6995bd28@skate>
+Message-ID: <50A2D27A.5000706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes e.g.
-http://autobuild.buildroot.net/results/e80ae76fa21f87bef10e08c7452b796dc0986ff2/
+On 13/11/12 23:10, Thomas Petazzoni wrote:
+> Arnout,
+>
+> On Tue, 13 Nov 2012 18:34:32 +0100, Arnout Vandecappelle wrote:
+>
+>>    Thomas, I think this should be fixed by adding libgomp to
+>> LIB_EXTERNAL_LIBS in ext-tool.mk.  Is that right?  Will that also
+>> work if libgomp doesn't exist?
+>
+> Do we really need to be linked against libgomp? Under what conditions
+> does that happen? Can't we avoid that even if the toolchain has OpenMP
+> support?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  beecrypt links agains libgomp if libgomp is available; rpm uses beecrypt.
 
----
- package/qextserialport/qextserialport-gui.patch |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+  The point is not avoiding to link with libgomp (you have to do that explicitly),
+the point is that if somebody links against libgomp, it has to be in target.
 
-diff --git a/package/qextserialport/qextserialport-gui.patch b/package/qextserialport/qextserialport-gui.patch
-new file mode 100644
-index 0000000..d3dedae
---- /dev/null
-+++ b/package/qextserialport/qextserialport-gui.patch
-@@ -0,0 +1,16 @@
-+Don't require Qt GUI module
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+diff -Nrup qextserialport-f83b4e7ca922e53.orig/qextserialport.pro qextserialport-f83b4e7ca922e53/qextserialport.pro
-+--- qextserialport-f83b4e7ca922e53.orig/qextserialport.pro	2012-10-17 09:13:53.000000000 +0200
-++++ qextserialport-f83b4e7ca922e53/qextserialport.pro	2012-11-13 22:48:29.249431510 +0100
-+@@ -41,6 +41,8 @@ macx:qesp_mac_framework {
-+ 
-+ win32|mac:!wince*:!win32-msvc:!macx-xcode:CONFIG += debug_and_release build_all
-+ 
-++!win32*:!wince*:QT -= gui
-++
-+ #generate proper library name
-+ greaterThan(QT_MAJOR_VERSION, 4) {
-+     QESP_LIB_BASENAME = QtExtSerialPort
+  Regards,
+  Arnout
+
 -- 
-tg: (234fe44..) t/qtextserialport (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
