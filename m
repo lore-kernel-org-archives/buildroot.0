@@ -1,73 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Nov 2012 21:43:50 +0100
-Subject: [Buildroot] howto incorporate buildroot into an autobuild
-In-Reply-To: <20121113094526.6392ab30@skate>
-References: <1352767649.18724.34.camel@genx> <20121113094526.6392ab30@skate>
-Message-ID: <50A2B106.8000804@mind.be>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Tue, 13 Nov 2012 23:55:21 +0300
+Subject: [Buildroot] libgomp.so.1.0.0 not in target image
+In-Reply-To: <50A284A8.9070304@mind.be>
+References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
+ <50A284A8.9070304@mind.be>
+Message-ID: <CABtOAfyZQW+0KxtNF-cv-eFxBBqkMoyKAw1fSLgTN1WA-S8LrA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/11/12 09:45, Thomas Petazzoni wrote:
-> Hello John,
+2012/11/13 Arnout Vandecappelle <arnout@mind.be>
+
+> On 13/11/12 16:30, Alexander Khryukin wrote:
 >
-> On Mon, 12 Nov 2012 16:47:29 -0800, John Stile wrote:
->> I am using buildroot for an embedded Arm project.
+>> Hello.
+>> I'm built rpm5 package but when i trying to run it i see
 >>
->> I was wondering how people using buildroot implement continuous
->> integration builds?
+>> [root at localhost rpm]# rpmbuild
+>> rpmbuild: error while loading shared libraries: libgomp.so.1: cannot open
+>> shared object file: No such file or directory
 >>
->> Do you start from a clean checkout, build the whole tool chain (which
->> takes a long time), and then build the project specific stuff?
+>> Lib not exist in filesystem but exit into
 >>
->> I worry about not starting from a clean checkout, since some options may
->> change, and the tools won't be rebuilt.
 >>
->> But I also worry people will complain how long the build takes.
+>> find . -name *gomp*
+>> ./output/host/usr/arm-**buildroot-linux-gnueabi/**
+>> sysroot/lib/libgomp.spec
+>> ./output/host/usr/arm-**buildroot-linux-gnueabi/**
+>> sysroot/lib/libgomp.so.1.0.0
+>> ./output/host/usr/arm-**buildroot-linux-gnueabi/**sysroot/lib/libgomp.so
+>> ./output/host/usr/arm-**buildroot-linux-gnueabi/**sysroot/lib/libgomp.a
+>> ./output/host/usr/arm-**buildroot-linux-gnueabi/**sysroot/lib/libgomp.la<
+>> http://libgomp.la>
 >>
->> Is there a good strategy to balance these concerns?
+>> ./output/host/usr/arm-**buildroot-linux-gnueabi/**
+>> sysroot/lib/libgomp.so.1
+>>
+>>
+>> It's a bug or feature?
+>>
 >
-> If you do continuous integration builds, do you really care that much
-> about the build time? Even if the build takes an hour, it is still very
-> reasonable for an continuous integration build system.
-
-  If you take the approach of e.g. Qt and require *every* patch to pass an
-individual CI run before its accepted, then an hour is not acceptable...
-
-> Tips to reduce the build time:
+>  Yep, that's a bug. It's surprising that nobody has run into this before -
+> maybe
+> OpenMP support was only recently added to the Linaro toolchain.
 >
->   * Get a fast machine. Many people complaining about build time are
->     building inside a virtual machine on a slow laptop. This simply
->     cannot work. Get a 4 or 8 cores machine, with 16+ GB of RAM, and
->     some good I/Os.
-
-  I don't know...  Buildroot currently serializes a lot (cfr. Avery's
-remark), so going beyond 2 cores will not help that much.  It's better
-to have several machines (or a single big machine) that do different
-CI builds in parallel.
-
->   * Use an external toolchain.
-
-  I.e. build only your toolchain with BR2_HOST_DIR set to a different path,
-and use that path as an external toolchain in future builds.
-
-
-  * Staggered builds. Assuming most commits are in your own software, you
-can usually define a base layer that usually doesn't change.  Do a build
-of this base layer once and reuse it for later builds.  Of course, you still
-need to do full, clean builds occasionally.
-
-
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>  Alexander, you are using a recent external Linaro toolchain, right?
+>
+>  Thomas, I think this should be fixed by adding libgomp to
+> LIB_EXTERNAL_LIBS
+> in ext-tool.mk.  Is that right?  Will that also work if libgomp doesn't
+> exist?
+>
+>  Regards,
+>  Arnout
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+>
+I'm using own toolchain but it based on linaro
+also linaro toolchain affected too
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121113/014aba4e/attachment.html>
