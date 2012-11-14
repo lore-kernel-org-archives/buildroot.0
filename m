@@ -1,53 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Nov 2012 10:25:45 +0100
-Subject: [Buildroot] [PATCH 1/1] libxml2: add support for building host
- library with python support
-In-Reply-To: <1352883977-16288-1-git-send-email-noel.vellemans@visionbms.com>
-References: <1352883977-16288-1-git-send-email-noel.vellemans@visionbms.com>
-Message-ID: <20121114102545.7f835367@skate>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Wed, 14 Nov 2012 12:50:52 +0300
+Subject: [Buildroot] libgomp.so.1.0.0 not in target image
+In-Reply-To: <20121114092103.5f057441@skate>
+References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
+ <50A284A8.9070304@mind.be> <20121113231021.6995bd28@skate>
+ <50A2D27A.5000706@mind.be> <20121114092103.5f057441@skate>
+Message-ID: <CABtOAfx=fYpokmXoRd84=QAn=iutCTbVj0ycC64nCqz3B4rj7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noel,
+2012/11/14 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Wed, 14 Nov 2012 10:06:17 +0100, Noel vellemans wrote:
+> Arnout,
+>
+> On Wed, 14 Nov 2012 00:06:34 +0100, Arnout Vandecappelle wrote:
+> > On 13/11/12 23:10, Thomas Petazzoni wrote:
+> > > Arnout,
+> > >
+> > > On Tue, 13 Nov 2012 18:34:32 +0100, Arnout Vandecappelle wrote:
+> > >
+> > >>    Thomas, I think this should be fixed by adding libgomp to
+> > >> LIB_EXTERNAL_LIBS in ext-tool.mk.  Is that right?  Will that also
+> > >> work if libgomp doesn't exist?
+> > >
+> > > Do we really need to be linked against libgomp? Under what
+> > > conditions does that happen? Can't we avoid that even if the
+> > > toolchain has OpenMP support?
+> >
+> >   beecrypt links agains libgomp if libgomp is available; rpm uses
+> > beecrypt.
+> >
+> >   The point is not avoiding to link with libgomp (you have to do that
+> > explicitly), the point is that if somebody links against libgomp, it
+> > has to be in target.
+>
+> My point is precisely to avoid linking with libgomp. OpenMP in beecrypt
+> is only used in one location, the RSA algorithm, and OpenMP support can
+> be disabled by passing --disable-openmp.
+>
+> So instead of unconditionally copying a 232 KB library just to
+> parallelize a single RSA algorithm in beecrypt, I'd rather advocate to
+> disable OpenMP support in beecrypt.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-> +config BR2_PACKAGE_HOST_LIBXML2_PYTHON
-> +    bool
-> \ No newline at end of file
 
-I don't know if we want to introduce sub-options for host packages.
+If you want to disable openmp in beecrypt
+next step it is disabling openmp in rpm package like
 
-> diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-> index 71f2bd1..fde3735 100644
-> --- a/package/libxml2/libxml2.mk
-> +++ b/package/libxml2/libxml2.mk
-> @@ -26,7 +26,15 @@ LIBXML2_POST_INSTALL_STAGING_HOOKS +=
-> LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP 
->  HOST_LIBXML2_DEPENDENCIES = host-pkgconf
->  
-> -HOST_LIBXML2_CONF_OPT = --without-debug --without-python
-> +HOST_LIBXML2_CONF_OPT = --without-debug
-> +
-> +ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
-> +HOST_LIBXML2_DEPENDENCIES += host-python
-> +HOST_LIBXML2_CONF_OPT += --with-python=$(HOST_DIR)/usr
-> +else
-> +HOST_LIBXML2_CONF_OPT += --without-python
-> +endif
-
-I'm confused here. I thought mesa required a Python that has xml2
-support. But here you're building xml2 with Python support. Could you
-enlighten me? :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+--disable-openmp
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121114/42d46b76/attachment.html>
