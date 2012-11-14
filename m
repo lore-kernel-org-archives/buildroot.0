@@ -1,60 +1,53 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Wed, 14 Nov 2012 09:20:47 +0100
-Subject: [Buildroot] [PATCH] pkg-infra: rename <pkg>-rsync to
-	<pkg>-extract
-In-Reply-To: <50A2DC5E.1010303@mind.be>
-References: <1350225704-5693-1-git-send-email-arnout@mind.be>
- <50A0B30E.3090308@relinux.de> <50A2DC5E.1010303@mind.be>
-Message-ID: <50A3545F.2090602@relinux.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Nov 2012 09:21:03 +0100
+Subject: [Buildroot] libgomp.so.1.0.0 not in target image
+In-Reply-To: <50A2D27A.5000706@mind.be>
+References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
+ <50A284A8.9070304@mind.be> <20121113231021.6995bd28@skate>
+ <50A2D27A.5000706@mind.be>
+Message-ID: <20121114092103.5f057441@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 14.11.2012 00:48, schrieb Arnout Vandecappelle:
-> On 12/11/12 09:27, Stephan Hoffmann wrote:
->> Am 14.10.2012 16:41, schrieb Arnout Vandecappelle (Essensium/Mind):
-> [snip]
->>> +$(1)-extract:        $$($(2)_TARGET_RSYNC)
->>>
->>>   $(1)-source:        $$($(2)_TARGET_RSYNC_SOURCE)
->>>   endif
->> Hello,
->>
->> this does not fix my issue, not even after doing a "make clean".
-> [snip]
->>>>>> linux custom Syncing from source dir
->>> /home/stephan/Dokumente/BeagleBone/kernel/kernel
->>> rsync -au /home/stephan/Dokumente/BeagleBone/kernel/kernel/
->>> /home/stephan/Dokumente/BeagleBone/buildroot/output/build/linux-custom
->>> cp: cannot stat `/home/stephan/Dokumente/dl/linux-custom.tar.gz': No
->>> such file or directory
->>> make: *** [linux-legal-info] Error 1
->
->  One step at a time :-)
->
->  The .tar.gz doesn't exist for overridden packages.  So what should we
-> do -
-> exclude the source for overridden packages?
-Good point. At the first glance, I'd suggest to create the tar.gz using
-the x_OVERRIDE_SRCDIR. That seems to be better than nothing.
+Arnout,
 
-After creating a linux-custom.tar.gz, "make legal-info" works for me,
-but it does not seem to make sence to copy a .tar.gz file that has not
-been extracted to build the packet.
+On Wed, 14 Nov 2012 00:06:34 +0100, Arnout Vandecappelle wrote:
+> On 13/11/12 23:10, Thomas Petazzoni wrote:
+> > Arnout,
+> >
+> > On Tue, 13 Nov 2012 18:34:32 +0100, Arnout Vandecappelle wrote:
+> >
+> >>    Thomas, I think this should be fixed by adding libgomp to
+> >> LIB_EXTERNAL_LIBS in ext-tool.mk.  Is that right?  Will that also
+> >> work if libgomp doesn't exist?
+> >
+> > Do we really need to be linked against libgomp? Under what
+> > conditions does that happen? Can't we avoid that even if the
+> > toolchain has OpenMP support?
+> 
+>   beecrypt links agains libgomp if libgomp is available; rpm uses
+> beecrypt.
+> 
+>   The point is not avoiding to link with libgomp (you have to do that
+> explicitly), the point is that if somebody links against libgomp, it
+> has to be in target.
 
-Kind regards
+My point is precisely to avoid linking with libgomp. OpenMP in beecrypt
+is only used in one location, the RSA algorithm, and OpenMP support can
+be disabled by passing --disable-openmp.
 
-Stephan
->
->  Regards,
->  Arnout
->
+So instead of unconditionally copying a 232 KB library just to
+parallelize a single RSA algorithm in beecrypt, I'd rather advocate to
+disable OpenMP support in beecrypt.
 
+Best regards,
 
+Thomas
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
