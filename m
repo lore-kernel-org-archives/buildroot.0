@@ -1,61 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Nov 2012 23:03:53 +0100
-Subject: [Buildroot] [git commit] Revert "auto{conf,
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 14 Nov 2012 23:04:06 +0100
+Subject: [Buildroot] [PATCH] Revert "auto{conf,
 	make}: only make available on archs supported by qemu"
-Message-ID: <20121114220416.1441699FD7@busybox.osuosl.org>
+In-Reply-To: <1352508025-32365-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 10 Nov 2012 01:40:25 +0100")
+References: <1352508025-32365-1-git-send-email-arnout@mind.be>
+Message-ID: <87haor7sfd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c86cfd91c480671a9223a3c2adc8aaa9ca6b33e0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Since perl no longer requires host-qemu, autoconf and automake work
-again on the architectures that are not supported by host-qemu.
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> Since perl no longer requires host-qemu, autoconf and automake work
+ Arnout> again on the architectures that are not supported by host-qemu.
 
-This reverts commit c65d92e8e2767b09aaee6b717cbd9b66f88ea39c.
+ Arnout> This reverts commit c65d92e8e2767b09aaee6b717cbd9b66f88ea39c.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/autoconf/Config.in |    4 ----
- package/automake/Config.in |    4 ----
- 2 files changed, 0 insertions(+), 8 deletions(-)
+Committed, thanks.
 
-diff --git a/package/autoconf/Config.in b/package/autoconf/Config.in
-index c304572..5f2f148 100644
---- a/package/autoconf/Config.in
-+++ b/package/autoconf/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_AUTOCONF
- 	bool "autoconf"
--	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
- 	select BR2_PACKAGE_PERL
- 	help
- 	  Extensible program for developing configure scripts.  These
- 	  scripts handle all the mundane system/feature detection.
- 
- 	  http://www.gnu.org/software/autoconf/
--
--comment "autoconf requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
-diff --git a/package/automake/Config.in b/package/automake/Config.in
-index f8d74ef..9a9673a 100644
---- a/package/automake/Config.in
-+++ b/package/automake/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_AUTOMAKE
- 	bool "automake"
--	depends on !(BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64)
- 	select BR2_PACKAGE_AUTOCONF
- 	select BR2_PACKAGE_PERL
- 	help
-@@ -8,6 +7,3 @@ config BR2_PACKAGE_AUTOMAKE
- 	  configure scripts (made by autoconf).
- 
- 	  http://www.gnu.org/software/automake/
--
--comment "automake requires an architecture supported by qemu"
--	depends on BR2_avr32 || BR2_bfin || BR2_sh2 || BR2_sh2a || BR2_sh3 || BR2_sh3eb || BR2_sh64
+-- 
+Bye, Peter Korsgaard
