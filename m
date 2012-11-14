@@ -1,34 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Nov 2012 22:32:10 +0100
-Subject: [Buildroot] [git commit] dmalloc: add license info
-Message-ID: <20121114214725.1319899FD2@busybox.osuosl.org>
+Date: Wed, 14 Nov 2012 22:33:01 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: add license info
+Message-ID: <20121114214726.4AB13972CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6737b052b2d75dffb3f4098e85588ea406ccbcb2
+commit: http://git.buildroot.net/buildroot/commit/?id=342d54e9a595d013030dbd4a24c458ecfcf93fe5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dmalloc/dmalloc.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index e2fdda4..42e2e64 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -7,6 +7,10 @@ DMALLOC_VERSION:=5.4.3
- DMALLOC_SOURCE:=dmalloc-$(DMALLOC_VERSION).tgz
- DMALLOC_SITE:=http://dmalloc.com/releases
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index e958158..5b3b7d0 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -6,6 +6,8 @@
  
-+DMALLOC_LICENSE = MIT-like
-+# license is in each file, dmalloc.h.1 is the smallest one
-+DMALLOC_LICENSE_FILES = dmalloc.h.1
-+
- DMALLOC_INSTALL_STAGING = YES
- DMALLOC_CONF_OPT:= --enable-shlib
+ E2FSPROGS_VERSION = 1.42.6
+ E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
++E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
++E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
  
+ E2FSPROGS_CONF_OPT = \
+ 	--disable-tls \
