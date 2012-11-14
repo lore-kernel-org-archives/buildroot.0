@@ -1,28 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 14 Nov 2012 12:42:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 5222] pango1.14.x build failed for ARM
-In-Reply-To: <bug-5222-163@https.bugs.busybox.net/>
-References: <bug-5222-163@https.bugs.busybox.net/>
-Message-ID: <20121114124251.E9EE499FD1@busybox.osuosl.org>
+From: woody <narkewoody@gmail.com>
+Date: Wed, 14 Nov 2012 17:19:15 +0800
+Subject: [Buildroot] How to build Kernel 2.6.x
+Message-ID: <k7vnmj$27j$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5222
+Hi,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I want to build kernel version 2.6.16 for ARM (s3c2410).  The 2.6.16 is 
+not listed in either tool chains kernel headers options list or kernel 
+version options list.  What I can do is manual specify the version via 
+the buildroot menus.  However, it then failed in a stable of buidling 
+toolchain, it complains that there is no a '.config' found under the 
+kernel source directory and also not found the "headers_install" targets.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |thomas.petazzoni at free-elect
-                   |.org                        |rons.com
+I've already manually downloaded the 2.6.16 tarball to the correct 
+location that can be found by buildroot.
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-11-14 12:42:50 UTC ---
-Thanks, I now identified the bug. I'm working on a fix.
+So, what should I do?  Is may method wrong?
+
+Thanks in advance!
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+woody
+I can't go back to yesterday - because I was a different person then.
