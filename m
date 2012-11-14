@@ -1,53 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Nov 2012 09:21:03 +0100
-Subject: [Buildroot] libgomp.so.1.0.0 not in target image
-In-Reply-To: <50A2D27A.5000706@mind.be>
-References: <CABtOAfzcjFWUVELMn0X4fRF8fcdqBL5HsBzo7sw1wt8JJc+Ghw@mail.gmail.com>
- <50A284A8.9070304@mind.be> <20121113231021.6995bd28@skate>
- <50A2D27A.5000706@mind.be>
-Message-ID: <20121114092103.5f057441@skate>
+From: Noel vellemans <noel.vellemans@visionbms.com>
+Date: Wed, 14 Nov 2012 10:06:17 +0100
+Subject: [Buildroot] [PATCH 1/1] libxml2: add support for building host
+	library with python support
+Message-ID: <1352883977-16288-1-git-send-email-noel.vellemans@visionbms.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+From: Vellemans Noel <noel.vellemans@visionbms.com>
 
-On Wed, 14 Nov 2012 00:06:34 +0100, Arnout Vandecappelle wrote:
-> On 13/11/12 23:10, Thomas Petazzoni wrote:
-> > Arnout,
-> >
-> > On Tue, 13 Nov 2012 18:34:32 +0100, Arnout Vandecappelle wrote:
-> >
-> >>    Thomas, I think this should be fixed by adding libgomp to
-> >> LIB_EXTERNAL_LIBS in ext-tool.mk.  Is that right?  Will that also
-> >> work if libgomp doesn't exist?
-> >
-> > Do we really need to be linked against libgomp? Under what
-> > conditions does that happen? Can't we avoid that even if the
-> > toolchain has OpenMP support?
-> 
->   beecrypt links agains libgomp if libgomp is available; rpm uses
-> beecrypt.
-> 
->   The point is not avoiding to link with libgomp (you have to do that
-> explicitly), the point is that if somebody links against libgomp, it
-> has to be in target.
 
-My point is precisely to avoid linking with libgomp. OpenMP in beecrypt
-is only used in one location, the RSA algorithm, and OpenMP support can
-be disabled by passing --disable-openmp.
+Patch based on the initial work of Will Wagner (Thanks Will).
+libxml2 host library with python support is required to build mesa3d (7.10.1)
 
-So instead of unconditionally copying a 232 KB library just to
-parallelize a single RSA algorithm in beecrypt, I'd rather advocate to
-disable OpenMP support in beecrypt.
+Signed-off-by: Vellemans Noel <noel.vellemans@visionbms.com>
+---
+ package/libxml2/Config.in  |    3 +++
+ package/libxml2/libxml2.mk |   10 +++++++++-
+ 2 files changed, 12 insertions(+), 1 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/package/libxml2/Config.in b/package/libxml2/Config.in
+index ebd63fe..ea62663 100644
+--- a/package/libxml2/Config.in
++++ b/package/libxml2/Config.in
+@@ -4,3 +4,6 @@ config BR2_PACKAGE_LIBXML2
+ 	  XML C Parser
+ 
+ 	  http://xmlsoft.org/
++
++config BR2_PACKAGE_HOST_LIBXML2_PYTHON
++    bool
+\ No newline at end of file
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 71f2bd1..fde3735 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -26,7 +26,15 @@ LIBXML2_POST_INSTALL_STAGING_HOOKS += LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
+ 
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+ 
+-HOST_LIBXML2_CONF_OPT = --without-debug --without-python
++HOST_LIBXML2_CONF_OPT = --without-debug
++
++ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
++HOST_LIBXML2_DEPENDENCIES += host-python
++HOST_LIBXML2_CONF_OPT += --with-python=$(HOST_DIR)/usr
++else
++HOST_LIBXML2_CONF_OPT += --without-python
++endif
++
+ 
+ define LIBXML2_REMOVE_CONFIG_SCRIPTS
+ 	$(RM) -f $(TARGET_DIR)/usr/bin/xml2-config
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
