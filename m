@@ -1,73 +1,31 @@
-From: Daniel Price <daniel.price@gmail.com>
-Date: Wed, 14 Nov 2012 13:52:36 -0800
-Subject: [Buildroot] Problems building openssh in buildroot with glibc
-Message-ID: <CAKduhStLWvGt0cSq4JoKKVmFw4knKZ-k=p-tyj1vtne3XKhR0w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 14 Nov 2012 22:53:40 +0100
+Subject: [Buildroot] [PATCH] iso9660 fs: use cpio initrd instead of ext2
+In-Reply-To: <1352505249-32028-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 10 Nov 2012 00:54:09 +0100")
+References: <1352505249-32028-1-git-send-email-arnout@mind.be>
+Message-ID: <87pq3f7swr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, I'm using a glibc x86_64 based toolchain, and, despite a lot of
-hacking, cannot seem to get the openssh included with buildroot to
-configure.  My host environment is Fedora 15.  The error I encounter
-looks like this:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
------
-checking OpenSSL header version... not found
-configure: error: OpenSSL version header not found.
-make: *** [/aux0/dp/distro-x86-br-xtools/output-minimal/build/openssh-6.0p1/.stamp_configured]
-Error 1
------
+ Arnout> The ext2 initrd is pretty broken, because it requires an additional
+ Arnout> root=/dev/ram0 command line parameter, and a /init to mount
+ Arnout> devtmps that isn't there in out ext2 rootfs.  So just use a cpio
+ Arnout> instead.
 
-In config.log, I see:
+ Arnout> Note that there is no check if the kernel supports initramfs or the
+ Arnout> selected compression method.
 
------
-configure:10816: checking OpenSSL header version
-configure:10853:
-/aux0/dp/distro-x86-br-xtools/output-minimal/host/usr/bin/x86_64-dssd-linux-gnu-gcc
--o conftest  -pipe -O3 -g2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Wall -Wpointer-arith -Wuninitialized
--Wsign-compare -Wformat-security -Wno-pointer-sign -Wno-unused-result
--fno-strict-aliasing -D_FORTIFY_SOURCE=2 -fno-builtin-memset
--fstack-protector-all   -pipe -O3 -g2 -D_LARGEFILE_SOURCE
--D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fstack-protector-all
-conftest.c -lcrypto -ldl -lutil -lz -lnsl  >&5
-configure:10853: $? = 0
-configure:10853: ./conftest
-./conftest: error while loading shared libraries: libcrypto.so.1.0.0:
-cannot open shared object file: No such file or directory
-configure:10853: $? = 127
-configure: program exited with status 127
------
+ Arnout> Also removed a bit of dead code in iso9660.mk.
 
-To summarize: the conftest compiles fine but fails to link at runtime.
- I've tried various settings of CFLAGS, LDFLAGS, etc. without much
-luck, although my experience with linux's linker in this regard is
-very limited.  I went on a search to see if libcrypto.so.1.0.0 was
-present in my build environment and here is what I found:
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
------
-$ find output -name libcrypto.so.1.0.0
-output/host/usr/x86_64-unknown-linux-gnu/sysroot/usr/lib/libcrypto.so.1.0.0
-output/build/openssl-1.0.0j/libcrypto.so.1.0.0
-output/target/usr/lib/libcrypto.so.1.0.0
+Committed, thanks.
 
-$ find output -name opensslv.h
-output/host/usr/x86_64-unknown-linux-gnu/sysroot/usr/include/openssl/opensslv.h
-output/build/openssl-1.0.0j/include/openssl/opensslv.h
-output/build/openssl-1.0.0j/crypto/opensslv.h
-output/target/usr/include/openssl/opensslv.h
------
-
-Can anyone else confirm the same problem?  Can anyone suggest a
-solution?  If I use uclibc, it compiles fine, but I'm constrained and
-can't do that.  I also know that I could switch to DropBear but I'd
-like to solve this.  I'm happy to file a bug if that helps.
-
-Thanks for your help,
-
-         -dp
-
---
-Daniel.Price at gmail.com
+-- 
+Bye, Peter Korsgaard
