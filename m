@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Nov 2012 22:35:49 +0100
-Subject: [Buildroot] [git commit] mii-diag: add license info
-Message-ID: <20121114214730.C6B8499B26@busybox.osuosl.org>
+Date: Wed, 14 Nov 2012 22:36:23 +0100
+Subject: [Buildroot] [git commit] openntpd: add license info
+Message-ID: <20121114214731.9CD0099B26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bbe6cc414b954dc29ef0a351cd4ea72ba636da3
+commit: http://git.buildroot.net/buildroot/commit/?id=c4030d3acf64c338eb7c4f8b77508fc7762bfcab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mii-diag/mii-diag.mk |    2 ++
+ package/openntpd/openntpd.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index 702e5a2..a4ad474 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -7,6 +7,8 @@ MII_DIAG_VERSION = 2.11
- MII_DIAG_SOURCE  = mii-diag_$(MII_DIAG_VERSION).orig.tar.gz
- MII_DIAG_PATCH   = mii-diag_$(MII_DIAG_VERSION)-3.diff.gz
- MII_DIAG_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
-+MII_DIAG_LICENSE = GPL # No version specified
-+MII_DIAG_LICENSE_FILES = mii-diag.c
+diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+index f63a9c6..fab68b6 100644
+--- a/package/openntpd/openntpd.mk
++++ b/package/openntpd/openntpd.mk
+@@ -7,6 +7,8 @@
+ OPENNTPD_VERSION = 3.9p1
+ OPENNTPD_SITE = ftp://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
+ OPENNTPD_CONF_OPT = --with-builtin-arc4random --disable-strip
++OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
++OPENNTPD_LICENSE_FILES = LICENCE
  
- MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
- 
+ define OPENNTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/ntpd
