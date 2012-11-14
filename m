@@ -1,34 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Nov 2012 22:35:27 +0100
-Subject: [Buildroot] [git commit] lsof: add license info
-Message-ID: <20121114214730.38DC299B26@busybox.osuosl.org>
+Date: Wed, 14 Nov 2012 22:33:22 +0100
+Subject: [Buildroot] [git commit] ethtool: fix license info variable
+Message-ID: <20121114214726.9494699C3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3322e2c7ebe739aa67abfb0775f9b5e5e43a3b0
+commit: http://git.buildroot.net/buildroot/commit/?id=4869f2ecabf050a916912a1fe4d63bbe9f1e403f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lsof/lsof.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/ethtool/ethtool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index fa55e6a..f74eca4 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -7,6 +7,10 @@
- LSOF_VERSION = 4.85
- LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
- LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
-+LSOF_LICENSE = lsof license
-+# License is repeated in each file, this is a relatively small one.
-+# It is also defined in 00README, but that contains a lot of other cruft.
-+LSOF_LICENSE_FILES = dialects/linux/dproto.h
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index a336b52..8c5961c 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -7,6 +7,6 @@
+ ETHTOOL_VERSION = 3.6
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
+-ETHTOOL_LICENSE_FILE = COPYING
++ETHTOOL_LICENSE_FILES = COPYING
  
- # Make certain full-blown lsof gets built after the busybox version (1.20+)
- LSOF_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ $(eval $(autotools-package))
