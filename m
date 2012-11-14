@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Nov 2012 22:34:28 +0100
-Subject: [Buildroot] [git commit] lockfile-progs: add license info
-Message-ID: <20121114214729.204CC99B26@busybox.osuosl.org>
+Date: Wed, 14 Nov 2012 22:34:20 +0100
+Subject: [Buildroot] [git commit] lm-sensors: add license info
+Message-ID: <20121114214728.ADDF499B26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7b49179a53f47a3e78a05b243e887dd8f108d391
+commit: http://git.buildroot.net/buildroot/commit/?id=56f14aac04e1705c00313f9ef177c9cf820265de
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lockfile-progs/lockfile-progs.mk |    2 ++
+ package/lm-sensors/lm-sensors.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
-index 333ddce..1c3cb51 100644
---- a/package/lockfile-progs/lockfile-progs.mk
-+++ b/package/lockfile-progs/lockfile-progs.mk
-@@ -7,6 +7,8 @@ LOCKFILE_PROGS_VERSION = 0.1.15
- LOCKFILE_PROGS_SOURCE = lockfile-progs_$(LOCKFILE_PROGS_VERSION).tar.gz
- LOCKFILE_PROGS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/l/lockfile-progs/
- LOCKFILE_PROGS_DEPENDENCIES = liblockfile
-+LOCKFILE_PROGS_LICENSE = GPLv2
-+LOCKFILE_PROGS_LICENSE_FILES = COPYING
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index 34aa742..3f95676 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -8,6 +8,8 @@ LM_SENSORS_VERSION = 3.3.3
+ LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
+ LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
+ LM_SENSORS_INSTALL_STAGING = YES
++LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
++LM_SENSORS_LICENSE_FILES = COPYING.LGPL COPYING
  
- LOCKFILE_BINS = \
- 	$(addprefix lockfile-,check create remove touch) \
+ LM_SENSORS_BINS_ = bin/sensors-conf-convert
+ LM_SENSORS_BINS_$(BR2_PACKAGE_LM_SENSORS_SENSORS) += bin/sensors
