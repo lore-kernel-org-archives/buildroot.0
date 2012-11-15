@@ -1,68 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2012 14:38:30 +0100
-Subject: [Buildroot] [PATCH 1/5] arch: improve definition of gcc mtune,
-	mcpu, etc.
-In-Reply-To: <8ef94365af539b190e9525a10c5b642dc7108cb9.1352986210.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1352986210.git.thomas.petazzoni@free-electrons.com>
- <8ef94365af539b190e9525a10c5b642dc7108cb9.1352986210.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201211151438.30221.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Nov 2012 14:53:47 +0100
+Subject: [Buildroot] [pull request] Pull request for branch xtensa
+Message-ID: <cover.1352987586.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On Thursday 15 November 2012 14:30:11 Thomas Petazzoni wrote:
-[--SNIP--]
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 8d9db3c..2acedc4 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -60,3 +60,55 @@ config BR2_ARM_OABI
->  	depends on !BR2_GCC_VERSION_4_7_X
->  endchoice
->  
-> +config BR2_ARCH
-> +	default "arm"	if BR2_arm
-> +	default "armeb"	if BR2_armeb
-> +
-> +config BR2_ENDIAN
-> +	default "LITTLE" if BR2_arm
-> +	default "BIG"	 if BR2_armeb
-> +
-> +config BR2_GCC_TARGET_TUNE
-> +	default arm600		if BR2_arm600
+This version includes an additional patch that quotes the string
+configuration options, as suggested by Yann E. Morin.
 
-I know you are just moving stuff around, but those symbols are typed
-as strings, so the default values should be enclosed in-between double
-quotes:
-    default "arm600"   if BR2_arm600
+Thomas
 
-Moreover, the code is not coherent with itslef, even in a single file.
-For example, you have (both are string symbols):
+The following changes since commit 53adfc5f4976704d426681a0404c1643db009552:
 
-    config BR2_ENDIAN
-        default "LITTLE" if BR2_arm
+  lua: refactor without useless define's (2012-11-15 12:39:19 +0100)
 
-    config BR2_GCC_TARGET_TUNE
-        default arm600   if BR2_arm600
+are available in the git repository at:
 
-That it currently works is just happenstance, and may well break in
-the future when we upgrade to a newer kconfig version.
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git xtensa
 
-Maybe we can just apply this for now, and fix that in a future patch?
+for you to fetch changes up to 4376ef19f7a7e37034dc1ce844b6a13548e43653:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  arch: Config.in string configuration options must be quoted (2012-11-15 14:52:30 +0100)
 
-Regards,
-Yann E. MORIN.
+----------------------------------------------------------------
+Chris Zankel (2):
+      xtensa: add support for the Xtensa architecture
+      xtensa: support configurable processor configurations
 
+Thomas Petazzoni (4):
+      arch: improve definition of gcc mtune, mcpu, etc.
+      uClibc: remove useless linuxthreads-errno-fix patch
+      uClibc: update uClibc-snapshot.config to recent uClibcs
+      arch: Config.in string configuration options must be quoted
+
+ arch/Config.in                                     |   70 +++++-
+ arch/Config.in.aarch64                             |    5 +
+ arch/Config.in.arm                                 |   52 +++++
+ arch/Config.in.avr32                               |    5 +
+ arch/Config.in.bfin                                |    6 +
+ arch/Config.in.common                              |  245 --------------------
+ arch/Config.in.m68k                                |   21 ++
+ arch/Config.in.microblaze                          |   10 +
+ arch/Config.in.mips                                |   25 ++
+ arch/Config.in.powerpc                             |   45 ++++
+ arch/Config.in.sh                                  |   17 ++
+ arch/Config.in.sparc                               |   31 +++
+ arch/Config.in.x86                                 |   89 +++++++
+ arch/Config.in.xtensa                              |   33 +++
+ linux/Config.in                                    |    3 +-
+ package/binutils/binutils.mk                       |    9 +
+ package/ltrace/Config.in                           |    1 +
+ toolchain/Config.in                                |    2 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |    4 +
+ toolchain/gdb/gdb.mk                               |    4 +
+ toolchain/toolchain-buildroot/Config.in.2          |    4 +-
+ toolchain/toolchain-common.in                      |    2 +-
+ toolchain/uClibc/Config.in                         |    5 +-
+ toolchain/uClibc/uClibc-snapshot.config            |    1 +
+ .../uClibc.snapshot.linuxthreads-errno-fix.patch   |   68 ------
+ toolchain/uClibc/uclibc.mk                         |    1 +
+ 26 files changed, 435 insertions(+), 323 deletions(-)
+ create mode 100644 arch/Config.in.aarch64
+ create mode 100644 arch/Config.in.avr32
+ delete mode 100644 arch/Config.in.common
+ create mode 100644 arch/Config.in.m68k
+ create mode 100644 arch/Config.in.microblaze
+ create mode 100644 arch/Config.in.xtensa
+ delete mode 100644 toolchain/uClibc/uClibc.snapshot.linuxthreads-errno-fix.patch
+
+Thanks,
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Thomas Petazzoni
