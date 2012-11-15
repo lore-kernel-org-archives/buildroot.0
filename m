@@ -1,84 +1,123 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Nov 2012 22:49:17 +0100
-Subject: [Buildroot] [git commit] qemu/microblaze: update to use kernel 3.6.6
-Message-ID: <20121115230535.67D899A031@busybox.osuosl.org>
+Date: Thu, 15 Nov 2012 23:58:49 +0100
+Subject: [Buildroot] [git commit] manual: add prerequisite.txt
+Message-ID: <20121115230539.4FA2499E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5072c2a8a1579dfc1c58efdfaa4f8d2f6f585d4f
+commit: http://git.buildroot.net/buildroot/commit/?id=4ea3644afdd396efadbe1e1efd2eaa098cc2bc03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../{kernel-3.5.config => linux-3.6.config}        |    0
- board/qemu/microblazebe-mmu/readme.txt             |    2 +-
- .../{kernel-3.5.config => linux-3.6.config}        |    0
- board/qemu/microblazeel-mmu/readme.txt             |    2 +-
- configs/qemu_microblazebe_mmu_defconfig            |    4 ++--
- configs/qemu_microblazeel_mmu_defconfig            |    4 ++--
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ docs/manual/prerequisite.txt |   84 ++++++++++++++++++++++++++++++++++++++++++
+ docs/manual/starting-up.txt  |    2 +
+ 2 files changed, 86 insertions(+), 0 deletions(-)
 
-diff --git a/board/qemu/microblazebe-mmu/kernel-3.5.config b/board/qemu/microblazebe-mmu/linux-3.6.config
-similarity index 100%
-rename from board/qemu/microblazebe-mmu/kernel-3.5.config
-rename to board/qemu/microblazebe-mmu/linux-3.6.config
-diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
-index 5281a0f..889b561 100644
---- a/board/qemu/microblazebe-mmu/readme.txt
-+++ b/board/qemu/microblazebe-mmu/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+new file mode 100644
+index 0000000..b24731f
+--- /dev/null
++++ b/docs/manual/prerequisite.txt
+@@ -0,0 +1,84 @@
++// -*- mode:doc -*- ;
++
++[[requirement]]
++System requirements
++-------------------
++
++Buildroot is design to run on Linux system.
++
++Buildroot needs some software to be already installed on the host
++system; hereafter the lists of the mandatory and optional packages
++(package names may vary between distributions).
++
++Take care of _installing both runtime and development data_, especially
++for the libraries that may be packaged in 2 distinct packages.
++
++
++[[requirement-mandatory]]
++
++Mandatory packages
++~~~~~~~~~~~~~~~~~~
++
++* Build tools:
++
++** +which+
++** +sed+
++** +make+ (version 3.82 or any later)
++** +binutils+
++** +build-essential+ (only for Debian based systems)
++** +gcc+ (version 2.95 or any later)
++** `g++` (version 2.95 or any later)
++** +bash+
++** +gawk+
++** +bison+
++** +flex+
++** +gettext+
++** +patch+
++** +gzip+
++** +bzip2+
++** +perl+
++** +tar+
++** +cpio+
++** +python+ (version 2.6 or 2.7)
++** +unzip+
++** +rsync+
++
++* Source fetching tools:
++** +wget+
++
++* Configuration interface dependencies (requires development libraries):
++** +ncurses5+
++
++[[requirement-optional]]
++
++Optional packages
++~~~~~~~~~~~~~~~~~
++
++* Source fetching tools:
+++
++In the official tree, most of the package sources are retrieved
++using +wget+, few are only available through their +git+, +mercurial+,
++or +svn+ repository.
+++
++All other source fetching methods are implemented and may be used in a
++development context.
+++
++** +bazaar+
++** +cvs+
++** +git+
++** +mercurial+
++** +rsync+
++** +scp+
++** +subversion+
++
++* Configuration interface dependencies (requires development libraries):
++** +qt4+ to use the 'xconfig' interface
++** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
++
++* Development libraries:
++** +zlib1+
++** +netpbm10+ (for +fbtest+)
++** +python-xcbgen+ (for +Matchbox+ on Debian based system)
++
++* Documentation generation tools:
++** +asciidoc+
+diff --git a/docs/manual/starting-up.txt b/docs/manual/starting-up.txt
+index 8ba16c9..2999fd4 100644
+--- a/docs/manual/starting-up.txt
++++ b/docs/manual/starting-up.txt
+@@ -3,6 +3,8 @@
+ Starting up
+ ===========
  
- The login prompt will appear in the terminal that started Qemu.
++include::prerequisite.txt[]
++
+ include::getting.txt[]
  
--Tested with QEMU 1.1.1
-+Tested with QEMU 1.2.0
-diff --git a/board/qemu/microblazeel-mmu/kernel-3.5.config b/board/qemu/microblazeel-mmu/linux-3.6.config
-similarity index 100%
-rename from board/qemu/microblazeel-mmu/kernel-3.5.config
-rename to board/qemu/microblazeel-mmu/linux-3.6.config
-diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
-index 003d2a8..9bc5440 100644
---- a/board/qemu/microblazeel-mmu/readme.txt
-+++ b/board/qemu/microblazeel-mmu/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
- 
- The login prompt will appear in the terminal that started Qemu.
- 
--Tested with QEMU 1.1.1
-+Tested with QEMU 1.2.0
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 1d7be07..6ca7cc9 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/kernel-3.5.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux-3.6.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 941bc30..a4e13d2 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -19,9 +19,9 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/kernel-3.5.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux-3.6.config"
- BR2_LINUX_KERNEL_LINUX_BIN=y
- BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazeel-mmu/system.dts"
+ include::using.txt[]
