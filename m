@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Nov 2012 14:53:51 +0100
-Subject: [Buildroot] [PATCH 4/6] xtensa: add support for the Xtensa
-	architecture
+Date: Thu, 15 Nov 2012 14:53:52 +0100
+Subject: [Buildroot] [PATCH 5/6] xtensa: support configurable processor
+	configurations
 In-Reply-To: <cover.1352987586.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1352987586.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f2f83e43d6e7b7ee45cc14780a344f9c16557b76.1352987586.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7c693cd311e2993cf78952db386b977b21196979.1352987586.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,176 +13,114 @@ To: buildroot@busybox.net
 
 From: Chris Zankel <chris@zankel.net>
 
-The Xtensa architecture had been removed because it required special
-handling and depended on additional directories and files that became
-obsolete over time. This change is more aligned to other architectures.
+Xtensa is a configurable processor architecture, which allows to define
+additional instructions and registers. The required variant specific
+information for the toolchain is delivered in an 'overlay' file, which
+needs to be 'untarred' to the corresponding directories after the
+source is installed and patched.
+This patch provides support for binutils, gcc, and gdb with a very
+limited changes to the build scripts. These additions are only executed
+for the Xtensa architecture and have no effect on other architectures.
 
-[Thomas: rebased on top of the "arch: improve definition of gcc mtune,
-mcpu, etc." patch].
+[Thomas: rebased on top of the 'arch: improve definition of gcc mtune,
+mcpu, etc.' patch, and changed 'Target ABI' to 'Target Architecture
+Variant'].
 
 Signed-off-by: Chris Zankel <chris@zankel.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in                            |   11 +++++++++++
- arch/Config.in.xtensa                     |    2 ++
- linux/Config.in                           |    3 ++-
- package/ltrace/Config.in                  |    1 +
- toolchain/Config.in                       |    2 +-
- toolchain/toolchain-buildroot/Config.in.2 |    4 +++-
- toolchain/toolchain-common.in             |    2 +-
- toolchain/uClibc/Config.in                |    5 +++--
- toolchain/uClibc/uclibc.mk                |    1 +
- 9 files changed, 25 insertions(+), 6 deletions(-)
- create mode 100644 arch/Config.in.xtensa
+ arch/Config.in.xtensa           |   31 +++++++++++++++++++++++++++++++
+ package/binutils/binutils.mk    |    9 +++++++++
+ toolchain/gcc/gcc-uclibc-4.x.mk |    4 ++++
+ toolchain/gdb/gdb.mk            |    4 ++++
+ 4 files changed, 48 insertions(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index b326cb5..472b10c 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -145,6 +145,13 @@ config BR2_x86_64
- 	  architecture compatible microprocessor).
- 	  http://en.wikipedia.org/wiki/X86_64
- 
-+config BR2_xtensa
-+	bool "Xtensa"
-+	help
-+	  Xtensa is a Tensilica processor IP architecture.
-+	  http://en.wikipedia.org/wiki/Xtensa
-+	  http://www.tensilica.com/
-+
- endchoice
- 
- # The following string values are defined by the individual
-@@ -210,3 +217,7 @@ endif
- if BR2_i386 || BR2_x86_64
- source "arch/Config.in.x86"
- endif
-+
-+if BR2_xtensa
-+source "arch/Config.in.xtensa"
-+endif
 diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-new file mode 100644
-index 0000000..66749ee
---- /dev/null
+index 66749ee..af66125 100644
+--- a/arch/Config.in.xtensa
 +++ b/arch/Config.in.xtensa
-@@ -0,0 +1,2 @@
-+config BR2_ARCH
-+	default "xtensa"	if BR2_xtensa
-diff --git a/linux/Config.in b/linux/Config.in
-index 277ef0e..29a2110 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -152,7 +152,8 @@ config BR2_LINUX_KERNEL_BZIMAGE
+@@ -1,2 +1,33 @@
++choice
++	prompt "Target Architecture Variant"
++	depends on BR2_xtensa
++	default BR2_xtensa_fsf
++config BR2_xtensa_custom
++	bool "Custom Xtensa processor configuration"
++config BR2_xtensa_fsf
++	bool "fsf - Default configuration"
++endchoice
++
++config BR2_xtensa_custom_name
++	string "Custom Xtensa processor configuration anme"
++	depends on BR2_xtensa_custom
++	default ""
++	help
++	  Name given to a custom Xtensa processor configuration.
++
++config BR2_xtensa_core_name
++	string
++	default BR2_xtensa_custom_name	if BR2_xtensa_custom
++	default ""			if BR2_xtensa_fsf
++
++config BR2_xtensa_overlay_dir
++	string "Overlay directory for custom configuration"
++	depends on BR2_xtensa_custom
++	default ""
++	help
++	  Provide a directory path that contains the overlay files
++	  for the custom configuration. The path is based on the
++	  buildroot top directory.
++
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 6c51fc7..82f8fd2 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -68,5 +68,14 @@ define BINUTILS_INSTALL_TARGET_CMDS
+ endef
+ endif
  
- config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
--	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64
-+	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || \
-+		   BR2_sh || BR2_sh64 || BR2_xtensa
++XTENSA_CORE_NAME = $(call qstrip, $(BR2_xtensa_core_name))
++ifneq ($(XTENSA_CORE_NAME),)
++define BINUTILS_XTENSA_PRE_PATCH
++	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(XTENSA_CORE_NAME).tar \
++		-C $(@D) bfd include ld
++endef
++HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 1a075cc..1710070 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -251,6 +251,10 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+ 	rm -rf $(GCC_DIR)
+ 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+ 	$(call CONFIG_UPDATE,$(@D))
++ifneq ($(call qstrip, $(BR2_xtensa_core_name)),)
++	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(call qstrip,\
++		$(BR2_xtensa_core_name)).tar -C $(@D) include
++endif
+ 	touch $@
  
- config BR2_LINUX_KERNEL_APPENDED_ZIMAGE
- 	bool "zImage with appended DT"
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index a65ca48..4cce767 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
- 	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
-+	depends on !BR2_xtensa
- 	select BR2_PACKAGE_LIBELF
- 	help
- 	  Debugging program which runs a specified command until it exits.
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 29ed2f0..7edf82b 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL
- 
- config BR2_TOOLCHAIN_CTNG
- 	bool "Crosstool-NG toolchain"
--	depends on !BR2_microblaze && !BR2_aarch64
-+	depends on !BR2_microblaze && !BR2_aarch64 && !BR2_xtensa
- 	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG_IF_NEEDED
- 	help
-diff --git a/toolchain/toolchain-buildroot/Config.in.2 b/toolchain/toolchain-buildroot/Config.in.2
-index 956ec2f..d27c9f3 100644
---- a/toolchain/toolchain-buildroot/Config.in.2
-+++ b/toolchain/toolchain-buildroot/Config.in.2
-@@ -68,7 +68,7 @@ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
- 
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !BR2_ARM_OABI
-+	default BR2_PTHREADS_NATIVE if (!BR2_UCLIBC_VERSION_0_9_31) && !BR2_ARM_OABI && !BR2_xtensa
- 	default BR2_PTHREADS_OLD
- 	help
- 	  Use this option to select the thread library implementation
-@@ -82,6 +82,7 @@ choice
- 
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
-+		depends on !BR2_xtensa
- 	        select BR2_TOOLCHAIN_HAS_THREADS
- 
- 	config BR2_PTHREADS_OLD
-@@ -94,6 +95,7 @@ choice
- 		depends on !BR2_UCLIBC_VERSION_0_9_31
- 		depends on !BR2_ARM_OABI
- 		depends on !BR2_x86_i386
-+		depends on !BR2_xtensa
- endchoice
- 
- source "toolchain/elf2flt/Config.in"
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 4c2a28b..9f11a39 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -93,7 +93,7 @@ config BR2_NEEDS_GETTEXT_IF_LOCALE
- 	default y if (BR2_NEEDS_GETTEXT && BR2_ENABLE_LOCALE)
- 
- config BR2_USE_MMU
--	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh
-+	bool "Enable MMU support" if BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_sh || BR2_xtensa
- 	default y if !BR2_bfin
- 	help
- 	  If your target has a MMU, you should say Y here.  If you
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index f46a415..e47bc9b 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -12,14 +12,15 @@ choice
- 
- 	config BR2_UCLIBC_VERSION_0_9_31
- 		bool "uClibc 0.9.31.x"
-+		depends on !BR2_xtensa
- 
- 	config BR2_UCLIBC_VERSION_0_9_32
- 		bool "uClibc 0.9.32.x"
--		depends on !(BR2_avr32 || BR2_sh)
-+		depends on !(BR2_avr32 || BR2_sh || BR2_xtensa)
- 
- 	config BR2_UCLIBC_VERSION_0_9_33
- 		bool "uClibc 0.9.33.x"
--		depends on !BR2_avr32
-+		depends on !(BR2_avr32 || BR2_xtensa)
- 
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 8cf59bc..055267c 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -38,6 +38,7 @@ UCLIBC_TARGET_ARCH:=$(shell $(SHELL) -c "echo $(ARCH) | sed \
- 		-e 's/sh[234].*/sh/' \
- 		-e 's/mips.*/mips/' \
- 		-e 's/cris.*/cris/' \
-+		-e 's/xtensa.*/xtensa/' \
- ")
- 
- UCLIBC_TARGET_ENDIAN:=$(call qstrip,$(BR2_ENDIAN))
+ gcc-patched: $(GCC_DIR)/.patched
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 6b029a8..dc305a6 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -25,6 +25,10 @@ gdb-unpacked: $(GDB_DIR)/.unpacked
+ $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
+ 	mkdir -p $(GDB_DIR)
+ 	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(GDB_DIR) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
++ifneq ($(call qstrip, $(BR2_xtensa_core_name)),)
++	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(call qstrip, \
++		$(BR2_xtensa_core_name)).tar -C $(@D) bfd include gdb
++endif
+ ifneq ($(wildcard $(GDB_PATCH_DIR)),)
+ 	support/scripts/apply-patches.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
+ endif
 -- 
 1.7.9.5
