@@ -1,135 +1,91 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 15 Nov 2012 23:59:54 +0100
-Subject: [Buildroot] [git commit] manual: add get-involved.txt
-Message-ID: <20121115230540.A5B7699E3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] manual: add adding-package-tips.txt
+Message-ID: <20121115230542.6832399E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3b785593b61c4ec9bdde56e35c0e7f62e03d6cd5
+commit: http://git.buildroot.net/buildroot/commit/?id=baa838e39251d298dbb4c031638b83a1b28f6881
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/get-involved.txt |   98 ++++++++++++++++++++++++++++++++++++++++++
- docs/manual/manual.txt       |    2 +
- 2 files changed, 100 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-tips.txt |   54 ++++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt      |    2 +
+ 2 files changed, 56 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
 new file mode 100644
-index 0000000..566516b
+index 0000000..acc73d3
 --- /dev/null
-+++ b/docs/manual/get-involved.txt
-@@ -0,0 +1,98 @@
++++ b/docs/manual/adding-packages-tips.txt
+@@ -0,0 +1,54 @@
 +// -*- mode:doc; -*-
 +
-+Getting involved
-+================
++Tips and tricks
++~~~~~~~~~~~~~~~
 +
-+Like any open source project, Buildroot has different ways to share
-+information in its community and outside.
++[[package-name-variable-relation]]
++Package name, config entry name and makefile variable relationship
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+One piece of it is the document you are currently reading ;-).
++In Buildroot, there are some relation between:
 +
-+Each of those ways may interest you if you are looking for some help,
-+want to understand Buildroot or contribute to the project.
++* the _package name_, which is the package directory name (and the
++  name of the +*.mk+ file);
 +
-+Mailing List
-+------------
++* the config entry name that is declared in the +Config.in+ file;
 +
-+Buildroot has a mailing list
-+http://lists.busybox.net/pipermail/buildroot[] for discussion and
-+development.
++* the makefile variable prefix.
 +
-+[[mailing-list-subscribe]]
++Thus, it is mandatory to keep consistency between all this stuff,
++matching the following rules:
 +
-+Subscribing to the mailing list
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++* the _make_ target name will be the _package name_ itself (e.g.:
++  +foo-bar_boo+);
 +
-+You can subscribe by visiting
-+http://lists.busybox.net/mailman/listinfo/buildroot[].
-+Only subscribers to the Buildroot mailing list are allowed to post to
-+this list.
++* the config entry is the upper case _package name_ with `.` and `-`
++  characters substituted with `_`, prefixed with +BR2_PACKAGE_+ (e.g.:
++  +BR2_PACKAGE_FOO_BAR_BOO+);
 +
-+The list is also available through _Gmane_ http://gmane.org[], at
-++gmane.comp.lib.uclibc.buildroot+
-+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
++* the +*.mk+ file variable prefix is the upper case _package name_
++  `.` and `-` characters substituted with `_` (e.g.:
++  +FOO_BAR_BOO_VERSION+).
 +
-+Searching the List Archives
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +
-+Please search the mailing list archives before asking questions on the
-+mailing list, since there is a good chance someone else has asked the
-+same question before. Checking the archives is a great way to avoid
-+annoying everyone on the list with frequently asked questions...
++[[github-download-url]]
++How to add package from github
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+IRC
-+---
++If the package has no release version, or its version cannot be
++identified using tag, then the sha1 of the particular commit should be
++used to identify the version (the first 7 characters of the sha1 are
++enough):
 +
-+The Buildroot IRC is irc://freenode.net/#buildroot[].
-+The channel +#buildroot+ is hosted on Freenode
-+http://webchat.freenode.net[].
++------------------------
++FOO_VERSION = 1234567
++FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
++------------------------
 +
-+When asking for help on IRC, share relevant logs or pieces of code
-+using a code sharing website (see
-+http://en.wikipedia.org/wiki/Comparison_of_pastebins[], and pick one).
++If the package version matches a tag, then this tag should be used to
++identify the version:
 +
-+[[patchwork]]
-+Patchwork
-+---------
-+
-+The Buildroot patch management interface is at
-+http://patchwork.buildroot.org[].
-+
-+All patches and comments sent through the mailing list are
-+automatically indexed in http://patchwork.buildroot.org[patchwork].
-+
-+Bugtracker
-+----------
-+
-+The Buildroot bugtracker is at https://bugs.busybox.net[].
-+
-+Buildroot wikipage
-+------------------
-+
-+After the Buildroot developer day on February 3, 2012,
-+a page dedicated to Buildroot has been created on
-+http://elinux.org[elinux.org].
-+
-+This page is reachable at http://elinux.org/Buildroot[].
-+
-+Currently, this page is mainly used as a _todo-list_.
-+
-+[[events]]
-+Events
-+------
-+
-+Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+* Event page: http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
-+
-+Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+* Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
-+
-+Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
-+* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 4df1657..3331cbf 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -23,4 +23,6 @@ include::going-further.txt[]
++------------------------
++FOO_VERSION = v1.0
++FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
++------------------------
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 8221c85..b909d47 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -19,4 +19,6 @@ include::adding-packages-cmake.txt[]
  
- include::developer-guide.txt[]
+ include::adding-packages-gettext.txt[]
  
-+include::get-involved.txt[]
++include::adding-packages-tips.txt[]
 +
- include::appendix.txt[]
+ include::adding-packages-conclusion.txt[]
