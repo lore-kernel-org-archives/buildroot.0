@@ -1,245 +1,183 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Nov 2012 23:59:48 +0100
-Subject: [Buildroot] [git commit] manual: faq.txt: rework and update
-Message-ID: <20121115230539.DB6CD99E3A@busybox.osuosl.org>
+Date: Thu, 15 Nov 2012 23:59:54 +0100
+Subject: [Buildroot] [git commit] manual: add contribute.txt
+Message-ID: <20121115230540.E335799E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc02514f954e8280c010044320790caed698174a
+commit: http://git.buildroot.net/buildroot/commit/?id=a79a54a0e7effdc1f06caa01a5441ffbf2ad554b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also rename faq.txt -> faq-troubleshooting.txt
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/faq-troubleshooting.txt |  134 +++++++++++++++++++++++++++++++++++
- docs/manual/faq.txt                 |   59 ---------------
- docs/manual/manual.txt              |    4 +-
- 3 files changed, 136 insertions(+), 61 deletions(-)
+ docs/manual/contribute.txt   |  126 ++++++++++++++++++++++++++++++++++++++++++
+ docs/manual/get-involved.txt |    3 +
+ docs/manual/manual.txt       |    2 +
+ 3 files changed, 131 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
 new file mode 100644
-index 0000000..6911c55
+index 0000000..ddf790d
 --- /dev/null
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -0,0 +1,134 @@
++++ b/docs/manual/contribute.txt
+@@ -0,0 +1,126 @@
 +// -*- mode:doc; -*-
 +
-+Frequently Asked Questions & Troubleshooting
-+============================================
++Contibuting to Buildroot
++========================
 +
-+[[faq-boot-hang-after-starting]]
-+The boot hangs after 'Starting network...'
-+------------------------------------------
++If you want to contribute to Buildroot, you will need a git view of
++the project. Refer to xref:getting-buildroot[] to get it.
 +
-+If the boot process seems to hand after the following messages
-+(messages not necessarily exactly similar, depending on the list of
-+packages selected):
++Currently, the mailing list is the central place for contribution.
++If you have not already subscribed to it, then refer to
++xref:mailing-list-subscribe[].
 +
-+------------------------
-+Freeing init memory: 3972K
-+Initializing random number generator... done.
-+Starting network...
-+Starting dropbear sshd: generating rsa key... generating dsa key... OK
-+------------------------
++Recently, a web interface is also used to manage patches sent to the
++mailing list, see xref:patchwork[].
 +
-+then it means that your system is running, but didn't start a shell on
-+the serial console. In order to have the system start a shell on your
-+serial console, you have to go in the Buildroot configuration, +System
-+configuration+, and modify +Port to run a getty (login prompt) on+ and
-++Baudrate to use+ as appropriate. This will automatically tune the
-++/etc/inittab+ file of the generated system so that a shell starts on
-+the correct serial port.
++[NOTE]
++_Please, do not attach patches to bugs, send them to the mailing list
++instead_ (see xref:submitting-patches[]).
 +
-+[[faq-module-init-tool-build-failure]]
-+module-init-tools fails to build with 'cannot find -lc'
-+-------------------------------------------------------
++[[submitting-patches]]
++Submitting patches
++------------------
 +
-+If the build of +module-init-tools+ for the host fails with:
++When your changes are done, and committed in your local git view,
++_rebase_ your development branch on top of the upstream tree before
++generating the patch set. To do so, run:
 +
-+------------------------
-+/usr/bin/ld: cannot find -lc
-+------------------------
++---------------------
++ $ git fetch --all --tags
++ $ git rebase origin/master
++---------------------
 +
-+then probably you are running a Fedora (or similar) distribution, and
-+you should install the +glibc-static+ package. This is because the
-++module-init-tools+ build process wants to link statically against the
-+C library.
++Here, you are ready to generate then submit your patch set.
 +
-+[[faq-no-compiler-on-target]]
-+Why there is no compiler on the target?
-+---------------------------------------
++To generate it, run:
 +
-+It has been decided that the support of the _native compiler for the
-+target_ would be stopped since the Buildroot-2012.11 release because:
++---------------------
++ $ git format-patch -M -n -s -o outgoing origin/master
++---------------------
 +
-+* this feature was not maintained nor tested and often broken;
-+* this feature was only available for Buildroot toolchains;
-+* Buildroot mostly targets _small_ or _very small_ target hardware
-+  with limited resource onboard (CPU, ram, mass-storage), on which
-+  compiling does not make much sense.
++This will generate patch files in the +outgoing+ subdirectory,
++automatically adding the +signed-off-by+ line.
 +
-+If you need a compiler on your target anyway, then Buildroot is not
-+suitable for your purpose. In such case, you need a _real
-+distribution_ and you should for something like:
++If you want to present the whole patch set in a separate mail, add
+++--cover-letter --summary+ to the previous command line (+man
++git-format-patch+ for further information).
 +
-+* http://www.openembedded.org[openembedded]
-+* https://www.yoctoproject.org[yocto]
-+* http://www.emdebian.org[emdebian]
-+* https://fedoraproject.org/wiki/Architectures[Fedora]
-+* http://en.opensuse.org/Portal:ARM[openSUSE ARM]
-+* http://archlinuxarm.org[Arch Linux ARM]
-+* ...
++Once patch files are generated, you can review/edit the commit message
++before submitting them using your favorite text editor.
 +
-+[[faq-no-dev-files-on-target]]
-+Why there is no development files on the target?
-+------------------------------------------------
++Lastly, send/submit your patch set to the Buildroot mailing list:
 +
-+Since there is no compiler available on the target (see
-+xref:faq-no-compiler-on-target[]), it does not make sense to waste
-+space with headers or static libraries.
++---------------------
++ $ git send-email --to buildroot at busybox.net outgoing/*
++---------------------
 +
-+Therefore, those files are always removed from the target since the
-+Buildroot-2012.11 release.
++Note that +git+ should be configured to use your mail account.
++To configure +git+, see +man git-send-email+ or google it.
 +
-+[[faq-no-doc-on-target]]
-+Why there is no documentation on the target?
-+--------------------------------------------
++Make sure posted *patches are not line-wrapped*, otherwise it cannot
++easily be applied. In such a case, fix your e-mail client, or better,
++use +git send-email+ to send your patches.
 +
-+Because Buildroot mostly targets _small_ or _very small_ target
-+hardware with limited resource onboard (CPU, ram, mass-storage), it
-+does not make sense to waste space with the documentation data.
++Reviewing/Testing patches
++-------------------------
 +
-+If you need documentation data on your target anyway, then Buildroot
-+is not suitable for your purpose, and you should look for a _real
-+distribution_ (see: xref:faq-no-compiler-on-target[]).
++In the review process, do not hesitate to respond to patch submissions
++for remarks, suggestions or anything that will help everyone to
++understand the patches and make them better.
 +
-+[[faq-depends-on-vs-select]]
-++Config.in+: _depends on_ vs _select_
-+-------------------------------------
++Some tags are used to help following the state of any patch posted on
++the mailing-list:
 +
-+When adding a new package to Buildroot, you will most likely have to
-+deal with expressing the dependencies of this package.
++Acked-by:: Indicates that the patch can be committed.
 +
-+In the +Config.in+ file, dependencies may be expressed following two
-+semantics.
-+See xref:depends-on-vs-select[].
++Tested-by:: Indicates that the patch has been tested. It is useful
++  but not necessary to add a comment about what has been tested.
 +
-+[[faq-why-not-visible-package]]
-+Why some packages are not visible in the Buildroot config menu?
-+---------------------------------------------------------------
++Autobuild
++---------
 +
-+If a package exists in the Buildroot tree and does not appears in the
-+config menu, this most likely means that some of the package's
-+dependencies are not met.
++The Buildroot community is currently setting up automatic build i
++order to test more and more configuration. All build results are
++available at http://autobuild.buildroot.org[]
 +
-+To know more about the dependencies of a package, search the package
-+symbol using in teh config menu (see xref:make-tips[]).
++A way to contribute is fixing broken builds.
 +
-+Then, you may have to recursively enable several options (which
-+correspond to the unmeet dependencies) to finally be able to select
-+the package.
++In the commit message of a patch fixing an _autobuild_, add a
++reference to the _build result directory_ (the +dir+ link in the _data
++column_):
 +
-+If the package is not visible due to some unmeet toolchain options,
-+then you should certainly run a full rebuild (see xref:make-tips[] for
-+more explanations).
++---------------------
++Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
++---------------------
 +
-+[[faq-why-not-use-target-as-chroot]]
-+Why not use the target directory as a chroot directory?
-+-------------------------------------------------------
++[[reporting-bugs]]
++Reporting issues/bugs, get help
++-------------------------------
 +
-+There are plenty of reason to *not* use the target directory a chroot
-+one, among these:
++Before reporting some issues, please chek
++xref:mailing-list-subscribe[the mailing list archive] in case someone had
++already reported and fixed a similar problem.
 +
-+* files' owners, modes and permissions are not correctly set in the
-+  target directory;
-+* devices nodes are not created in the target directory.
++Whatever the way you choose to report some bugs or get help,
++xref:bugtracker[opening a bug] or
++xref:mailing-list-subscribe[send a mail to the mailing list], there is
++a number of detail to provide in order to help people reproduce and
++find a solution to the issue.
 +
-+Because of that, commands run in through chroot, using the target
-+directory as new root, will fail.
-diff --git a/docs/manual/faq.txt b/docs/manual/faq.txt
-deleted file mode 100644
-index 97a754b..0000000
---- a/docs/manual/faq.txt
-+++ /dev/null
-@@ -1,59 +0,0 @@
--Frequently Asked Questions
--==========================
--
--The boot hangs after 'Starting network...'
--------------------------------------------
--
--If the boot process seems to hand after the following messages
--(messages not necessarily exactly similar, depending on the list of
--packages selected):
--
--------------------------
--Freeing init memory: 3972K
--Initializing random number generator... done.
--Starting network...
--Starting dropbear sshd: generating rsa key... generating dsa key... OK
--------------------------
--
--then it means that your system is running, but didn't start a shell on
--the serial console. In order to have the system start a shell on your
--serial console, you have to go in the Buildroot configuration, +System
--configuration+, and modify +Port to run a getty (login prompt) on+ and
--+Baudrate to use+ as appropriate. This will automatically tune the
--+/etc/inittab+ file of the generated system so that a shell starts on
--the correct serial port.
--
--module-init-tools fails to build with 'cannot find -lc'
---------------------------------------------------------
--
--If the build of +module-init-tools+ for the host fails with:
--
--------------------------
--/usr/bin/ld: cannot find -lc
--------------------------
--
--then probably you are running a Fedora (or similar) distribution, and
--you should install the +glibc-static+ package. This is because the
--+module-init-tools+ build process wants to link statically against the
--C library.
--
--How to add package from github
--------------------------------
--
--If the package has no release version, or its version cannot be
--identified using tag, then the sha1 of the particular commit should be
--used to identify the version (the first 7 characters of the sha1 are
--enough):
--
--------------------------
--FOO_VERSION = 1234567
--FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
--------------------------
--
--If the package version matches a tag, then this tag should be used to
--identify the version:
--
--------------------------
--FOO_VERSION = v1.0
--FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
--------------------------
++Try to think as you would be the one who will help someone else; in
++that case, what would you need?
++
++Here is a short list of details to provide in such case:
++
++* host machine (OS/release)
++* version of Buildroot
++* target for which the build fails
++* package(s) which the build fails
++* the command that fails and its output
++* any information you think that may be relevant
++
++Additionnally, your can add the +.config+ file.
++
++If some of these details are too large, do not hesitate to use some
++pastebin service (see
++http://en.wikipedia.org/wiki/Comparison_of_pastebins[]).
+diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+index 566516b..3a00b1e 100644
+--- a/docs/manual/get-involved.txt
++++ b/docs/manual/get-involved.txt
+@@ -61,11 +61,14 @@ http://patchwork.buildroot.org[].
+ All patches and comments sent through the mailing list are
+ automatically indexed in http://patchwork.buildroot.org[patchwork].
+ 
++[[bugtracker]]
+ Bugtracker
+ ----------
+ 
+ The Buildroot bugtracker is at https://bugs.busybox.net[].
+ 
++To open a bug, see xref:reporting-bugs[].
++
+ Buildroot wikipage
+ ------------------
+ 
 diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 00bd037..4df1657 100644
+index 3331cbf..4032a6b 100644
 --- a/docs/manual/manual.txt
 +++ b/docs/manual/manual.txt
-@@ -17,10 +17,10 @@ include::starting-up.txt[]
+@@ -25,4 +25,6 @@ include::developer-guide.txt[]
  
- include::working-with.txt[]
+ include::get-involved.txt[]
  
-+include::faq-troubleshooting.txt[]
++include::contribute.txt[]
 +
- include::going-further.txt[]
- 
- include::developer-guide.txt[]
- 
--include::faq.txt[]
--
  include::appendix.txt[]
