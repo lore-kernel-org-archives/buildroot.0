@@ -1,32 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Nov 2012 22:56:16 +0100
-Subject: [Buildroot] [PATCH 02/23] manual: make clean target consistent
-	with others in buildroot
-In-Reply-To: <CAHXCMMJC5CA4jtpX9HscYhpq-E5jntjkrWYej6CZi=SBwy7dSA@mail.gmail.com>
- (Samuel Martin's message of "Mon, 12 Nov 2012 00:34:13 +0100")
-References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
- <1352639701-27829-3-git-send-email-s.martin49@gmail.com>
- <50A02D3E.8060701@mind.be>
- <CAHXCMMJC5CA4jtpX9HscYhpq-E5jntjkrWYej6CZi=SBwy7dSA@mail.gmail.com>
-Message-ID: <87zk2i1qf3.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 Nov 2012 23:04:36 +0100
+Subject: [Buildroot] Xtensa updates
+In-Reply-To: <CAC1BbcRQ1ecodzDHFCwemK8DkP7t5wD08FRKJ_qbP_jOGi+sOA@mail.gmail.com>
+References: <87bofdvg25.fsf@dell.be.48ers.dk> <20121112123519.228f7544@skate>
+ <CAC1BbcRQ1ecodzDHFCwemK8DkP7t5wD08FRKJ_qbP_jOGi+sOA@mail.gmail.com>
+Message-ID: <201211152304.37056.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+Bernhard, All,
 
- >> I think you can safely remove clean-$(1) - or should we consider this API?
+On Monday 12 November 2012 Bernhard Reutner-Fischer wrote:
+> On 12 November 2012 12:35, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+> > In the process, would you mind changing the irker configuration so that
+> > the updates made on the Buildroot Git repository get notified on
+> > #buildroot instead of #uclibc?
+> done.
 
- Samuel> Actually, I kept it to, at least, not break the release.  IIRC,
- Samuel> Peter generates the manual and includes it in the release
- Samuel> tarball.  That's why I choose the safe path ;-) but I can
- Samuel> remove it as soon as Peter has confirmed it does not break
- Samuel> anything.
+Would it be possible for you to change the commit notifications to be
+shorter, please?
 
-I just use 'make release' which doesn't use the clean target, so it can
-get removed.
+Something like:
+  project:branch short-hash author subject
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
