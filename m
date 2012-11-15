@@ -1,76 +1,93 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Nov 2012 00:08:24 +0100
-Subject: [Buildroot] [git commit] binutils: bump 2.23 series to 2.23.1 and
-	deprecate 2.20
-Message-ID: <20121115231003.30C7599C8A@busybox.osuosl.org>
+Date: Fri, 16 Nov 2012 00:09:02 +0100
+Subject: [Buildroot] [git commit] xlib_libXt: add patch to fix
+	cross-compilation issue
+Message-ID: <20121115231003.A6E4B99C8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dcc6bcd516ceeacf556c37364570796cd0d1eba7
+commit: http://git.buildroot.net/buildroot/commit/?id=cea473d8afaf164a83b1bef92965d3d28e11c41f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes the following build failure:
+
+ http://autobuild.buildroot.org/results/2815885d589d75259508bcce4f272b8dddb3be77/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/binutils/Config.in.host                    |   10 +++++-----
- .../120-sh-conf.patch                              |    0
- .../300-001_ld_makefile_patch.patch                |    0
- .../300-012_check_ldrunpath_length.patch           |    0
- .../500-sysroot.patch                              |    0
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ ...il-don-t-link-makestrs-with-target-cflags.patch |   51 ++++++++++++++++++++
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    1 +
+ 2 files changed, 52 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 26c5f73..81a4cf7 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -13,7 +13,7 @@ choice
- 	       bool "binutils 2.18-avr32-1.0.1"
- 
- 	config BR2_BINUTILS_VERSION_2_20
--		depends on !BR2_avr32
-+		depends on !BR2_avr32 && BR2_DEPRECATED
- 		bool "binutils 2.20"
- 
- 	config BR2_BINUTILS_VERSION_2_20_1
-@@ -31,10 +31,10 @@ choice
- 	config BR2_BINUTILS_VERSION_2_22
- 		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
- 		bool "binutils 2.22"
--	
--	config BR2_BINUTILS_VERSION_2_23
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
+new file mode 100644
+index 0000000..aafb352
+--- /dev/null
++++ b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
+@@ -0,0 +1,51 @@
++From 9324466141626518e5a67838813562ec6ef62ba3 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 15 Nov 2012 18:31:53 +0100
++Subject: [PATCH] util: don't link makestrs with target cflags
 +
-+	config BR2_BINUTILS_VERSION_2_23_1
- 		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
--		bool "binutils 2.23"
-+		bool "binutils 2.23.1"
++The line:
++
++makestrs_CFLAGS = $(XT_CFLAGS)
++
++in util/Makefile.am is wrong because it adds target cflags to the
++compilation of makestrs, which is built for the build machine, which
++leads to build failures when cross-compiling.
++
++We also remove the inclusion of <X11/Xos.h> from makestrs.c, because
++it was the only non-standard header being included (and therefore
++possibly requiring special cflags), but it was in reality not useful
++at all to build makestrs.c.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ util/Makefile.am |    1 -
++ util/makestrs.c  |    1 -
++ 2 files changed, 2 deletions(-)
++
++diff --git a/util/Makefile.am b/util/Makefile.am
++index 969ecef..cc6f3fc 100644
++--- a/util/Makefile.am
+++++ b/util/Makefile.am
++@@ -10,7 +10,6 @@ EXTRA_DIST = \
++ 	StrDefs.ht \
++ 	string.list
++ 
++-makestrs_CFLAGS = $(XT_CFLAGS)
++ makestrs_SOURCES = makestrs.c
++ 
++ 
++diff --git a/util/makestrs.c b/util/makestrs.c
++index 3551cc1..456735b 100644
++--- a/util/makestrs.c
+++++ b/util/makestrs.c
++@@ -27,7 +27,6 @@ in this Software without prior written authorization from The Open Group.
++ /* Constructs string definitions */
++ 
++ #include <stdio.h>
++-#include <X11/Xos.h>
++ #include <stdlib.h>
++ #include <unistd.h>
++ #if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
++-- 
++1.7.9.5
++
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index b2667d3..fd8f079 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -10,5 +10,6 @@ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_INSTALL_STAGING = YES
+ XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xproto_kbproto xproto_xproto xcb-proto libxcb host-xproto_xproto
+ XLIB_LIBXT_CONF_OPT = --disable-malloc0returnsnull --disable-install-makestrs
++XLIB_LIBXT_AUTORECONF = YES
  
- endchoice
- 
-@@ -46,7 +46,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
- 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
--	default "2.23"		if BR2_BINUTILS_VERSION_2_23
-+	default "2.23.1"	if BR2_BINUTILS_VERSION_2_23_1
- 
- config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
- 	string "Additional binutils options"
-diff --git a/package/binutils/binutils-2.23/120-sh-conf.patch b/package/binutils/binutils-2.23.1/120-sh-conf.patch
-similarity index 100%
-rename from package/binutils/binutils-2.23/120-sh-conf.patch
-rename to package/binutils/binutils-2.23.1/120-sh-conf.patch
-diff --git a/package/binutils/binutils-2.23/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.23.1/300-001_ld_makefile_patch.patch
-similarity index 100%
-rename from package/binutils/binutils-2.23/300-001_ld_makefile_patch.patch
-rename to package/binutils/binutils-2.23.1/300-001_ld_makefile_patch.patch
-diff --git a/package/binutils/binutils-2.23/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.23.1/300-012_check_ldrunpath_length.patch
-similarity index 100%
-rename from package/binutils/binutils-2.23/300-012_check_ldrunpath_length.patch
-rename to package/binutils/binutils-2.23.1/300-012_check_ldrunpath_length.patch
-diff --git a/package/binutils/binutils-2.23/500-sysroot.patch b/package/binutils/binutils-2.23.1/500-sysroot.patch
-similarity index 100%
-rename from package/binutils/binutils-2.23/500-sysroot.patch
-rename to package/binutils/binutils-2.23.1/500-sysroot.patch
+ $(eval $(autotools-package))
