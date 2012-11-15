@@ -1,41 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Nov 2012 22:48:13 +0100
-Subject: [Buildroot] [git commit] qemu/ppc-mpc8544ds: update to use kernel
+Date: Thu, 15 Nov 2012 22:49:07 +0100
+Subject: [Buildroot] [git commit] qemu/arm-versatile: update to use kernel
 	3.6.6
-Message-ID: <20121115230533.C52209A031@busybox.osuosl.org>
+Message-ID: <20121115230535.209E59A031@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e35f3d4b8d32c1621c9604ba4e4dc7989045432
+commit: http://git.buildroot.net/buildroot/commit/?id=b099efd367d5169a9af1c26f955e47db87ebd601
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- board/qemu/powerpc-mpc8544ds/readme.txt |    2 +-
- configs/qemu_ppc_mpc8544ds_defconfig    |    6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../{linux-3.5.config => linux-3.6.config}         |    0
+ board/qemu/arm-versatile/readme.txt                |    2 ++
+ configs/qemu_arm_versatile_defconfig               |    8 ++++----
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
-index 646f459..07a9e3b 100644
---- a/board/qemu/powerpc-mpc8544ds/readme.txt
-+++ b/board/qemu/powerpc-mpc8544ds/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
+diff --git a/board/qemu/arm-versatile/linux-3.5.config b/board/qemu/arm-versatile/linux-3.6.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-3.5.config
+rename to board/qemu/arm-versatile/linux-3.6.config
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index 2ca5dec..7868204 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -4,3 +4,5 @@ Run the emulation with:
  
- The login prompt will appear in the terminal that started Qemu.
- 
--Tested with QEMU 1.1.1
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
++
 +Tested with QEMU 1.2.0
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index cc8b81a..95218a7 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -6,13 +6,13 @@ BR2_powerpc_8548=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 2037565..85efa2b 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
  
 -# Lock to 3.5 headers to avoid breaking with newer kernels
 -BR2_KERNEL_HEADERS_3_5=y
@@ -47,6 +52,7 @@ index cc8b81a..95218a7 100644
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.5.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.6.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
