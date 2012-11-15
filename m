@@ -1,244 +1,266 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Nov 2012 23:58:44 +0100
-Subject: [Buildroot] [git commit] manual: rework introduction.txt and add
-	embedded-basics.txt
-Message-ID: <20121115230537.71E1799E3A@busybox.osuosl.org>
+Date: Thu, 15 Nov 2012 23:58:48 +0100
+Subject: [Buildroot] [git commit] manual: rework using.txt and update
+	common-usage.txt
+Message-ID: <20121115230537.A863199E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0119ef3778e33d71020d6c812c967d87e42d959a
+commit: http://git.buildroot.net/buildroot/commit/?id=a90382616cfa02f784c24c8bc540c21e64c2c449
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Split and rephrasing of introduction.txt.
+Consider the second chapter: "starting-up", as a tutorial.
+Assuming that, using.txt only contains the very first commands used to get
+configure and build its very first target system.
 
-Cross-toolchain explainations moved from introduction.txt into
-embedded-basics.txt.
+So, the following subsection from using.txt have been to common-usage.txt:
+- Offline builds
+- Building out-of-tree
+- Environment variables
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/embedded-basics.txt |  110 +++++++++++++++++++++++++++++++++++++++
- docs/manual/going-further.txt   |    4 ++
- docs/manual/introduction.txt    |   72 ++++---------------------
- 3 files changed, 126 insertions(+), 60 deletions(-)
+ docs/manual/common-usage.txt |   95 +++++++++++++++++++++++++++++++++++++++
+ docs/manual/using.txt        |  100 ++++++-----------------------------------
+ 2 files changed, 110 insertions(+), 85 deletions(-)
 
-diff --git a/docs/manual/embedded-basics.txt b/docs/manual/embedded-basics.txt
-new file mode 100644
-index 0000000..27dda37
---- /dev/null
-+++ b/docs/manual/embedded-basics.txt
-@@ -0,0 +1,110 @@
-+// -*- mode:doc; -*-
-+
-+Embedded system basics
-+----------------------
-+
-+When developing an embedded system, there are a number of choices to
-+do:
-+
-+* the cross-toolchain: target architecture/C library/...
-+* the bootloader
-+* kernel options
-+* the device management
-+* the init system
-+* the package selection (busybox vs. "real" programs, ...)
-+* ...
-+
-+Some of them may be influenced by the target hardware.
-+
-+Some of them may also add some constraints when you will develop the
-+final application for what your target is designed (e.g. some
-+functions may be provided by soem C libraries and missing in some
-+others, ...). So, these choices should be carefully done.
-+
-+Buildroot allows to set most of these options to fit your needs.
-+
-+Moreover, Buildroot provides an infrastructure for reproducing the
-+build process of your kernel, cross-toolchain, and embedded root
-+filesystem. Being able to reproduce the build process will be useful
-+when a component needs to be patched or updated or when another person
-+is supposed to take over the project.
-+
-+[[cross-compilation-and-cross-toolchain]]
-+Cross-compilation & cross-toolchain
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+A compilation toolchain is the set of tools that allows you to compile
-+code for your system. It consists of a compiler (in our case, +gcc+),
-+binary utils like assembler and linker (in our case, +binutils+) and a
-+C standard library (for example
-+http://www.gnu.org/software/libc/libc.html[GNU Libc],
-+http://www.uclibc.org/[uClibc] or
-+http://www.fefe.de/dietlibc/[dietlibc]).
-+
-+The system installed on your development station certainly already has
-+a compilation toolchain that you can use to compile an application
-+that runs on your system. If you're using a PC, your compilation
-+toolchain runs on an x86 processor and generates code for an x86
-+processor. Under most Linux systems, the compilation toolchain uses
-+the GNU libc (glibc) as the C standard library. This compilation
-+toolchain is called the "host compilation toolchain". The machine on
-+which it is running, and on which you're working, is called the "host
-+system".
-+
-+The compilation toolchain is provided by your distribution, and
-+Buildroot has nothing to do with it (other than using it to build a
-+cross-compilation toolchain and other tools that are run on the
-+development host).
-+
-+As said above, the compilation toolchain that comes with your system
-+runs on and generates code for the processor in your host system. As
-+your embedded system has a different processor, you need a
-+cross-compilation toolchain - a compilation toolchain that runs on
-+your _host system_ but generates code for your _target system_ (and
-+target processor). For example, if your host system uses x86 and your
-+target system uses ARM, the regular compilation toolchain on your host
-+runs on x86 and generates code for x86, while the cross-compilation
-+toolchain runs on x86 and generates code for ARM.
-+
-+Even if your embedded system uses an x86 processor, you might be
-+interested in Buildroot for two reasons:
-+
-+* The compilation toolchain on your host certainly uses the GNU Libc
-+  which is a complete but huge C standard library. Instead of using
-+  GNU Libc on your target system, you can use uClibc which is a tiny C
-+  standard library. If you want to use this C library, then you need a
-+  compilation toolchain to generate binaries linked with it. Buildroot
-+  can do that for you.
-+
-+* Buildroot automates the building of a root filesystem with all
-+  needed tools like busybox. That makes it much easier than doing it
-+  by hand.
-+
-+You might wonder why such a tool is needed when you can compile +gcc+,
-++binutils+, +uClibc+ and all the other tools by hand. Of course doing
-+so is possible but, dealing with all of the configure options and
-+problems of every +gcc+ or +binutils+ version is very time-consuming
-+and uninteresting.  Buildroot automates this process through the use
-+of Makefiles and has a collection of patches for each +gcc+ and
-++binutils+ version to make them work on most architectures.
-+
-+Buildroot offers a number of options and settings that can be tuned
-+when defining the cross-toolchain (refer to xref:toolchain-custom[]).
-+
-+[[bootloader]]
-+Bootloader
-+~~~~~~~~~~
-+
-+TODO
-+
-+[[device-management]]
-+Device management
-+~~~~~~~~~~~~~~~~~
-+
-+TODO
-+
-+[[init-system]]
-+Init system
-+~~~~~~~~~~~
-+
-+TODO
-diff --git a/docs/manual/going-further.txt b/docs/manual/going-further.txt
-index 6f3cd6e..15324c4 100644
---- a/docs/manual/going-further.txt
-+++ b/docs/manual/going-further.txt
-@@ -1,6 +1,10 @@
-+// -*- mode:doc; -*-
-+
- Going further in Buildroot's innards
- ====================================
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index b343606..c08c10e 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -4,3 +4,98 @@ Daily use
+ ---------
  
-+include::embedded-basics.txt[]
+ include::rebuilding-packages.txt[]
 +
- include::how-buildroot-works.txt[]
- 
- include::advanced.txt[]
-diff --git a/docs/manual/introduction.txt b/docs/manual/introduction.txt
-index 476ce25..91ecb04 100644
---- a/docs/manual/introduction.txt
-+++ b/docs/manual/introduction.txt
-@@ -1,69 +1,21 @@
-+// -*- mode:doc; -*-
++Offline builds
++~~~~~~~~~~~~~~
 +
- About Buildroot
- ===============
++If you intend to do an offline build and just want to download
++all sources that you previously selected in the configurator
++('menuconfig', 'xconfig' or 'gconfig'), then issue:
++
++--------------------
++ $ make source
++--------------------
++
++You can now disconnect or copy the content of your +dl+
++directory to the build-host.
++
++Building out-of-tree
++~~~~~~~~~~~~~~~~~~~~
++
++As default, everything built by Buildroot is stored in the directory
+++output+ in the buildroot tree.
++
++Buildroot also supports building out of tree with a syntax similar to
++the Linux kernel. To use it, add +O=<directory>+ to the make command
++line:
++
++--------------------
++ $ make O=/tmp/build
++--------------------
++
++Or:
++
++--------------------
++ $ cd /tmp/build; make O=$PWD -C path/to/buildroot
++--------------------
++
++All the output files will be located under +/tmp/build+.
++
++When using out-of-tree builds, the Buildroot +.config+ and temporary
++files are also stored in the output directory. This means that you can
++safely run multiple builds in parallel using the same source tree as
++long as they use unique output directories.
++
++For ease of use, Buildroot generates a Makefile wrapper in the output
++directory - So after the first run, you no longer need to pass +O=..+
++and +-C ..+, simply run (in the output directory):
++
++--------------------
++ $ make <target>
++--------------------
++
++[[env-vars]]
++
++Environment variables
++~~~~~~~~~~~~~~~~~~~~~
++
++Buildroot also honors some environment variables, when they are passed
++to +make+ or set in the environment:
++
++* +HOSTCXX+, the host C++ compiler to use
++* +HOSTCC+, the host C compiler to use
++* +UCLIBC_CONFIG_FILE=<path/to/.config>+, path to
++  the uClibc configuration file, used to compile uClibc, if an
++  internal toolchain is being built.
++  +
++  Note that the uClibc configuration file can also be set from the
++  configuration interface, so through the Buildroot .config file; this
++  the actual recommended way of setting it.
++  +
++* +BUSYBOX_CONFIG_FILE=<path/to/.config>+, path to
++  the Busybox configuration file.
++  +
++  Note that the Busybox configuration file can also be set from the
++  configuration interface, so through the Buildroot .config file; this
++  the actual recommended way of setting it.
++  +
++* +BUILDROOT_DL_DIR+ to override the directory in which
++  Buildroot stores/retrieves downloaded files
++  +
++  Note that the Buildroot download directory can also be set from the
++  configuration interface, so through the Buildroot .config file; this
++  the actual recommended way of setting it.
++
++An example that uses config files located in the toplevel directory and
++in your $HOME:
++
++--------------------
++ $ make UCLIBC_CONFIG_FILE=uClibc.config BUSYBOX_CONFIG_FILE=$HOME/bb.config
++--------------------
++
++If you want to use a compiler other than the default +gcc+
++or +g+++ for building helper-binaries on your host, then do
++
++--------------------
++ $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
++--------------------
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 5741473..56ed23b 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -5,8 +5,8 @@ Using Buildroot
  
--Buildroot is a set of Makefiles and patches that allows you to easily
--generate a cross-compilation toolchain, a root filesystem and a Linux
--kernel image for your target. Buildroot can be used for one, two or
--all of these options, independently.
-+Buildroot provides a full featured environment for cross-development.
-+Buildroot is able to generate a cross-compilation toolchain, a root
-+filesystem, a Linux kernel image and a bootloader for your target.
-+Buildroot can be used for any combinaison of these options,
-+independently.
+ Buildroot has a nice configuration tool similar to the one you can
+ find in the http://www.kernel.org/[Linux kernel] or in
+-http://www.busybox.net/[Busybox]. Note that you can (and should) build
+-everything as a normal user. There is no need to be root to configure
++http://www.busybox.net/[Busybox]. Note that you can *and should build
++everything as a normal user*. There is no need to be root to configure
+ and use Buildroot. The first step is to run the configuration
+ assistant:
  
- Buildroot is useful mainly for people working with embedded systems.
- Embedded systems often use processors that are not the regular x86
- processors everyone is used to having in his PC. They can be PowerPC
- processors, MIPS processors, ARM processors, etc.
+@@ -29,12 +29,11 @@ or
+ to run the Qt or GTK-based configurators.
  
--A compilation toolchain is the set of tools that allows you to compile
--code for your system. It consists of a compiler (in our case, +gcc+),
--binary utils like assembler and linker (in our case, +binutils+) and a
--C standard library (for example
--http://www.gnu.org/software/libc/libc.html[GNU Libc],
--http://www.uclibc.org/[uClibc] or
--http://www.fefe.de/dietlibc/[dietlibc]). The system installed on your
--development station certainly already has a compilation toolchain that
--you can use to compile an application that runs on your system. If
--you're using a PC, your compilation toolchain runs on an x86 processor
--and generates code for an x86 processor. Under most Linux systems, the
--compilation toolchain uses the GNU libc (glibc) as the C standard
--library.  This compilation toolchain is called the "host compilation
--toolchain". The machine on which it is running, and on which you're
--working, is called the "host system". The compilation toolchain is
--provided by your distribution, and Buildroot has nothing to do with it
--(other than using it to build a cross-compilation toolchain and other
--tools that are run on the development host).
+ All of these "make" commands will need to build a configuration
+-utility, so you may need to install "development" packages for
+-relevant libraries used by the configuration utilities. On Debian-like
+-systems, the +libncurses5-dev+ package is required to use the
+-'menuconfig' interface, +libqt4-dev+ is required to use the 'xconfig'
+-interface, and +libglib2.0-dev, libgtk2.0-dev and libglade2-dev+ are
+-needed to use the 'gconfig' interface.
++utility (including the interface), so you may need to install
++"development" packages for relevant libraries used by the
++configuration utilities. Check the xref:requirement[] to know what
++Buildroot needs, and specifically the xref:requirement-optional[system requirements]
++to get the dependencies of favorite interface.
+ 
+ For each menu entry in the configuration tool, you can find associated
+ help that describes the purpose of the entry.
+@@ -56,9 +55,9 @@ tell Buildroot to run each package compilation with +make -jN+.
+ This command will generally perform the following steps:
+ 
+ * Download source files (as required)
+-* Configure, build and install the cross-compiling toolchain if an
+-  internal toolchain is used, or import a toolchain if an external
+-  toolchain is used
++* Configure, build and install the cross-compiling toolchain using the
++  appropriate toolchain backend is used, or simply import a toolchain
++  if an external toolchain
+ * Build/install selected target packages
+ * Build a kernel image, if selected
+ * Build a bootloader image, if selected
+@@ -105,81 +104,12 @@ This directory contains several subdirectories:
+ * +toolchain/+ contains the build directories for the various
+   components of the cross-compilation toolchain.
+ 
+-Offline builds
+---------------
++These commands, +make menuconfig|gconfig|xconfig+ and +make+, are the
++basic ones that allow to easily and quickly generate images fitting
++your needs, with all the supports and applications you enabled.
+ 
+-If you intend to do an offline build and just want to download
+-all sources that you previously selected in the configurator
+-('menuconfig', 'xconfig' or 'gconfig'), then issue:
 -
--As said above, the compilation toolchain that comes with your system
--runs on and generates code for the processor in your host system. As
--your embedded system has a different processor, you need a
--cross-compilation toolchain - a compilation toolchain that runs on
--your host system but generates code for your target system (and target
--processor). For example, if your host system uses x86 and your target
--system uses ARM, the regular compilation toolchain on your host runs on
--x86 and generates code for x86, while the cross-compilation toolchain
--runs on x86 and generates code for ARM.
+---------------------
+- $ make source
+---------------------
 -
--Even if your embedded system uses an x86 processor, you might be
--interested in Buildroot for two reasons:
+-You can now disconnect or copy the content of your +dl+
+-directory to the build-host.
 -
--* The compilation toolchain on your host certainly uses the GNU Libc
--  which is a complete but huge C standard library. Instead of using
--  GNU Libc on your target system, you can use uClibc which is a tiny C
--  standard library. If you want to use this C library, then you need a
--  compilation toolchain to generate binaries linked with it. Buildroot
--  can do that for you.
+-Building out-of-tree
+---------------------
 -
--* Buildroot automates the building of a root filesystem with all
--  needed tools like busybox. That makes it much easier than doing it
--  by hand.
+-Buildroot supports building out of tree with a syntax similar to the
+-Linux kernel. To use it, add +O=<directory>+ to the make command line:
 -
--You might wonder why such a tool is needed when you can compile +gcc+,
--+binutils+, +uClibc+ and all the other tools by hand. Of course doing
--so is possible but, dealing with all of the configure options and
--problems of every +gcc+ or +binutils+ version is very time-consuming
--and uninteresting.  Buildroot automates this process through the use
--of Makefiles and has a collection of patches for each +gcc+ and
--+binutils+ version to make them work on most architectures.
+---------------------
+- $ make O=/tmp/build
+---------------------
 -
--Moreover, Buildroot provides an infrastructure for reproducing the
--build process of your kernel, cross-toolchain, and embedded root
--filesystem. Being able to reproduce the build process will be useful
--when a component needs to be patched or updated or when another person
--is supposed to take over the project.
-+Buildroot supports numerous processors and their variants; it also
-+comes with default configuration for several boards available
-+off-the-shelf. Besides, a number of third-party projects are based on
-+or develop their BSP footnote:[BSP: Board Software Package] or
-+SDK footnote:[SDK: Standard Development Kit] on top of Buildroot.
+-Or:
+-
+---------------------
+- $ cd /tmp/build; make O=$PWD -C path/to/buildroot
+---------------------
+-
+-All the output files will be located under +/tmp/build+.
+-
+-When using out-of-tree builds, the Buildroot +.config+ and temporary
+-files are also stored in the output directory. This means that you can
+-safely run multiple builds in parallel using the same source tree as
+-long as they use unique output directories.
+-
+-For ease of use, Buildroot generates a Makefile wrapper in the output
+-directory - So after the first run, you no longer need to pass +O=..+
+-and +-C ..+, simply run (in the output directory):
+-
+---------------------
+- $ make <target>
+---------------------
+-
+-Environment variables
+----------------------
+-[[env-vars]]
+-
+-Buildroot also honors some environment variables, when they are passed
+-to +make+ or set in the environment:
+-
+-* +HOSTCXX+, the host C++ compiler to use
+-* +HOSTCC+, the host C compiler to use
+-* +UCLIBC_CONFIG_FILE=<path/to/.config>+, path to
+-  the uClibc configuration file, used to compile uClibc, if an
+-  internal toolchain is being built
+-* +BUSYBOX_CONFIG_FILE=<path/to/.config>+, path to
+-  the Busybox configuration file
+-* +BUILDROOT_DL_DIR+ to override the directory in which
+-  Buildroot stores/retrieves downloaded files
+-
+-An example that uses config files located in the toplevel directory and
+-in your $HOME:
+-
+---------------------
+- $ make UCLIBC_CONFIG_FILE=uClibc.config BUSYBOX_CONFIG_FILE=$HOME/bb.config
+---------------------
+-
+-If you want to use a compiler other than the default +gcc+
+-or +g+++ for building helper-binaries on your host, then do
+-
+---------------------
+- $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
+---------------------
++More details about the "make" command usage are given in
++xref:make-tips[].
+ 
+ Complying with opensource licenses
+ ----------------------------------
