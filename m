@@ -1,33 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2012 21:08:04 +0100
-Subject: [Buildroot] [PATCH] support/gnuconfig: update config.{guess,
-	sub} to a newer version
-In-Reply-To: <20121115182348.639c11c2@skate>
-References: <1352995994-10048-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <50A51F48.7020803@mind.be> <20121115182348.639c11c2@skate>
-Message-ID: <201211152108.04766.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Nov 2012 17:25:34 -0300
+Subject: [Buildroot] [PATCH 01/11] qemu/x86: update to use kernel 3.6.6
+Message-ID: <1353011144-28584-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../x86/{linux-3.5.config => linux-3.6.config}     |    0
+ board/qemu/x86/readme.txt                          |    2 +-
+ configs/qemu_x86_defconfig                         |    8 ++++----
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+ rename board/qemu/x86/{linux-3.5.config => linux-3.6.config} (100%)
 
-On Thursday 15 November 2012 Thomas Petazzoni wrote:
-> On Thu, 15 Nov 2012 17:58:48 +0100, Arnout Vandecappelle wrote:
-> >   Did you forget -M in git send-email?
-> Does git send-email supports -M ?
-
-Yes, it does. I usually use it, along with -C and --find-copies-harder.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/board/qemu/x86/linux-3.5.config b/board/qemu/x86/linux-3.6.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.5.config
+rename to board/qemu/x86/linux-3.6.config
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index f6f5437..3cca682 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.1.1
++Tested with QEMU 1.2.0
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 73c16a3..90524b5 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.5 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_5=y
++# Lock to 3.6 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_3_6=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.5.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.6.config"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.8.6
