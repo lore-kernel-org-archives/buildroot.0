@@ -1,60 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Nov 2012 22:48:19 +0100
-Subject: [Buildroot] [git commit] qemu/ppc-g3beige: update to use kernel
+Date: Thu, 15 Nov 2012 22:48:23 +0100
+Subject: [Buildroot] [git commit] qemu/arm-vexpress: update to use kernel
 	3.6.6
-Message-ID: <20121115230534.6EBC99A031@busybox.osuosl.org>
+Message-ID: <20121115230534.B5CEE9A031@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=033be287bb07b63e56c952beaf8a5acd18e53fa5
+commit: http://git.buildroot.net/buildroot/commit/?id=6fc80273b7c9b5289e0a8ef48f5d4c7851112862
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../{linux-3.3.config => linux-3.6.config}         |    0
- board/qemu/powerpc-g3beige/readme.txt              |    2 ++
- configs/qemu_ppc_g3beige_defconfig                 |    8 ++++----
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ board/qemu/arm-vexpress/readme.txt  |    2 +-
+ configs/qemu_arm_vexpress_defconfig |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/powerpc-g3beige/linux-3.3.config b/board/qemu/powerpc-g3beige/linux-3.6.config
-similarity index 100%
-rename from board/qemu/powerpc-g3beige/linux-3.3.config
-rename to board/qemu/powerpc-g3beige/linux-3.6.config
-diff --git a/board/qemu/powerpc-g3beige/readme.txt b/board/qemu/powerpc-g3beige/readme.txt
-index a481b11..01f0baf 100644
---- a/board/qemu/powerpc-g3beige/readme.txt
-+++ b/board/qemu/powerpc-g3beige/readme.txt
-@@ -4,3 +4,5 @@ Run the emulation with:
- 
+diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+index aeea842..41a5f67 100644
+--- a/board/qemu/arm-vexpress/readme.txt
++++ b/board/qemu/arm-vexpress/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
  The login prompt will appear in the terminal that started Qemu. The
  graphical window is the framebuffer.
-+
+ 
+-Tested with QEMU 1.1.1
 +Tested with QEMU 1.2.0
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 1e297e5..420710b 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -6,15 +6,15 @@ BR2_powerpc_750=y
+diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+index 8ac7a07..424a7c5 100644
+--- a/configs/qemu_arm_vexpress_defconfig
++++ b/configs/qemu_arm_vexpress_defconfig
+@@ -11,12 +11,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
--# Lock to 3.3 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_3=y
+-# Lock to 3.5 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_3_5=y
 +# Lock to 3.6 headers to avoid breaking with newer kernels
 +BR2_KERNEL_HEADERS_3_6=y
  
  # Kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.7"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.3.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.6.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
+ BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ BR2_LINUX_KERNEL_ZIMAGE=y
