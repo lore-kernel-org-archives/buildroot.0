@@ -1,86 +1,53 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Nov 2012 12:23:45 +0100
-Subject: [Buildroot] [PATCH for-2012.11 0/5] Introduce errors for legacy
-	API
-In-Reply-To: <1352750912-16012-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Mon, 12 Nov 2012 21:08:27 +0100")
-References: <1352750912-16012-1-git-send-email-arnout@mind.be>
-Message-ID: <87wqxn5cu6.fsf@dell.be.48ers.dk>
+Date: Thu, 15 Nov 2012 12:36:35 +0100
+Subject: [Buildroot] [PATCH 1/5] lua-msgpack-native: new package v2
+In-Reply-To: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Tue, 4 Sep 2012 08:58:37 +0200")
+References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87390b5c8s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- Arnout>  This patch series introduces a mechanism to give relatively
- Arnout> clear error messages when legacy API is used. The first patch
- Arnout> introduces the mechanism, subsequent messages use it to report
- Arnout> each of the API changes since 2012.08.
+ Francois> Signed-off-by: Wojciech M. Zabolotny <wzab01@gmail.com>
+ Francois> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ Francois> ---
+ Francois>  package/Config.in                                |    1 +
+ Francois>  package/lua-msgpack-native/Config.in             |    7 ++++++
+ Francois>  package/lua-msgpack-native/lua-msgpack-native.mk |   29 ++++++++++++++++++++++
+ Francois>  3 files changed, 37 insertions(+)
+ Francois>  create mode 100644 package/lua-msgpack-native/Config.in
+ Francois>  create mode 100644 package/lua-msgpack-native/lua-msgpack-native.mk
 
-Cool, thanks!
+ Francois> diff --git a/package/Config.in b/package/Config.in
+ Francois> index f308de7..f05f5f4 100644
+ Francois> --- a/package/Config.in
+ Francois> +++ b/package/Config.in
+ Francois> @@ -257,6 +257,7 @@ source "package/luacjson/Config.in"
+ Francois>  source "package/luaexpat/Config.in"
+ Francois>  source "package/luafilesystem/Config.in"
+ Francois>  source "package/luasocket/Config.in"
+ Francois> +source "package/lua-msgpack-native/Config.in"
+ Francois>  source "package/rings/Config.in"
+ Francois>  source "package/wsapi/Config.in"
+ Francois>  source "package/xavante/Config.in"
+ Francois> diff --git a/package/lua-msgpack-native/Config.in b/package/lua-msgpack-native/Config.in
+ Francois> new file mode 100644
+ Francois> index 0000000..90eecc3
+ Francois> --- /dev/null
+ Francois> +++ b/package/lua-msgpack-native/Config.in
+ Francois> @@ -0,0 +1,7 @@
+ Francois> +config BR2_PACKAGE_LUA_MSGPACK_NATIVE
+ Francois> +	bool "lua-msgpack-native"
+ Francois> +	help
+ Francois> +	  This is a native, C language implementation of msgpack (http://msgpack.org)
 
- Arnout>  Config options that are no longer supported are moved to
- Arnout> Config.in.legacy.  When any of these is selected in an old
- Arnout> .config file, a comment will appear to warn the user of it, and
- Arnout> it is possible to see which option caused the error in the new
- Arnout> 'Check legacy' menu.  Unselecting that menuconfig disables all
- Arnout> the legacy options in one go.
-
-Is there ever any use case for not checking for legacy stuff?
-
-I like it, the only problem is that the legacy warnings are shown as
-options when they are really warnings/instructions to the user about
-what has changed/what needs to get fixed.
-
-I played around with making the options hidden and instead display a
-comment when it is selected - E.G:
-
-config BR2_PACKAGE_LIBINTL
-	bool
-	select BR2_LEGACY
-	select BR2_PACKAGE_GETTEXT
-
-config BR2_PACKAGE_LIBINTL
-	bool
-	select BR2_LEGACY
-	select BR2_PACKAGE_GETTEXT
-
-if BR2_PACKAGE_LIBINTL
-comment "libintl is now installed by selecting"
-comment "BR2_PACKAGE_GETTEXT. This now only installs the"
-comment "library, not the executables."
-endif
-
-The syntax is not so nice as kconfig doesn't support multi line
-comments, but OK. More importantly, hidden symbols like
-BR2_PACKAGE_LIBINTL seems to be ignored when the .config is read (which
-is what we normally want so they can be disabled again) so this only
-works when a custom package selects BR2_PACKAGE_LIBINTL, not if the user
-has manually enabled it.
-
-Anybody with a better idea?
-
- Arnout>  If any such option remains, 'make' will fail immediately with
- Arnout> a message that legacy options are still selected.  However, if
- Arnout> BR2_DEPRECATED is selected, that error message is suppressed.
-
-Would it make sense to still warn (but not halt) when DEPRECATED is
-enabled?
-
- Arnout> - BR2_INET_RPC: since packages 'depend on' this option, there
- Arnout> is really no way to detect that some Config.in is still using
- Arnout> it.  The result will be that some packages are just not
- Arnout> selectable. Hopefully that's enough of a hint for users to find
- Arnout> the issue.
-
- Arnout> - xtensa: since there are patches on the list to re-introduce
- Arnout> xtensa, I haven't added it to Config.in.legacy. If these xtensa
- Arnout> patches don't make it into 2012.11, then there probably should
- Arnout> be a Config.in.legacy for it.
-
-I'll try to get xtensa in.
+This doesn't fit in the normal 80-col menuconfig window. I've
+reformatted it and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
