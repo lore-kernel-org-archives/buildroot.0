@@ -1,116 +1,36 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Thu, 15 Nov 2012 15:42:03 +0100
-Subject: [Buildroot] [PATCH 1/1] grantlee: fix lpthread build error
-In-Reply-To: <50A2A6F7.4050309@mind.be>
-References: <1352808310-6303-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
- <50A2A6F7.4050309@mind.be>
-Message-ID: <50A4FF3B.1070800@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 Nov 2012 15:45:53 +0100
+Subject: [Buildroot] [PATCH 6/6] arch: Config.in string configuration
+	options must be quoted
+In-Reply-To: <4376ef19f7a7e37034dc1ce844b6a13548e43653.1352987586.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1352987586.git.thomas.petazzoni@free-electrons.com>
+ <4376ef19f7a7e37034dc1ce844b6a13548e43653.1352987586.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201211151545.53171.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/13/2012 09:00 PM, Arnout Vandecappelle wrote:
-> On 13/11/12 13:05, Zoltan at osuosl.org wrote:
->> From: "Zoltan Gyarmati"<mr.zoltan.gyarmati@gmail.com>
->>
->>
->> Signed-off-by: Zoltan Gyarmati<mr.zoltan.gyarmati@gmail.com>
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  (it already worked for me, but at least this patch doesn't break things)
->
->  However, your patch still misses the following things:
->
-> - The commit message is too vague.  It should describe the problem in 
-> more detail,
-> including the root cause.  For example:
->
-> grantlee: fix -lpthread build error
->
-> Build fails because of missing -lpthread with toolchains that need it. It
-> gives an error log like:
-> Linking CXX executable testgenerictypes_exec
-> /home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: 
-> /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libQtCore.so: 
-> undefined reference to symbol 'pthread_cancel'
-> /home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: 
-> note: 'pthread_cancel' is defined in DSO 
-> /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 
-> so try adding it to the linker command line
-> /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: 
-> could not read symbols: Invalid operation
-> collect2: ld returned 1 exit status
-> make[3]: *** [templates/tests/testgenerictypes_exec] Error 1
-> make[3]: Leaving directory 
-> `/home/buildroot12git/output/build/grantlee-0.2.0'
-> make[2]: *** 
-> [templates/tests/CMakeFiles/testgenerictypes_exec.dir/all] Error 2
-> make[2]: Leaving directory 
-> `/home/buildroot12git/output/build/grantlee-0.2.0'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory 
-> `/home/buildroot12git/output/build/grantlee-0.2.0'
-> make: *** 
-> [/home/buildroot12git/output/build/grantlee-0.2.0/.stamp_built] Error
->
->
-> - The patch itself should contain an equally detailed description (can 
-> be a copy
-> of the commit message).  It should also have your Signed-off-by line.
->
->
->  Both of these are minor things, however.
->
->  Regards,
->  Arnout
->
->> ---
->>   .../grantlee-0.2.0-fix-lphread-link-error.patch    |   13 
->> +++++++++++++
->>   1 file changed, 13 insertions(+)
->>   create mode 100644 
->> package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
->>
->> diff --git 
->> a/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch 
->> b/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
->> new file mode 100644
->> index 0000000..8293172
->> --- /dev/null
->> +++ b/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
->> @@ -0,0 +1,13 @@
->> +diff -rupN grantlee-0.2.0_orig/templates/tests/CMakeLists.txt 
->> grantlee-0.2.0/templates/tests/CMakeLists.txt
->> +--- grantlee-0.2.0_orig/templates/tests/CMakeLists.txt 2012-11-13 
->> 12:11:44.583379820 +0100
->> ++++ grantlee-0.2.0/templates/tests/CMakeLists.txt    2012-11-13 
->> 11:35:18.000000000 +0100
->> +@@ -68,7 +68,8 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
->> +                   ${_testresource_rcc_src}
->> +     )
->> +     add_test(${_testname} ${_testname}_exec )
->> +-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} 
->> grantlee_core )
->> ++    find_package (Threads)
->> ++    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} 
->> ${CMAKE_THREAD_LIBS_INIT}  grantlee_core )
->> +
->> +     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE 
->> "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
->> +   endforeach(_testname)
->
+On Thursday 15 November 2012 14:53:53 Thomas Petazzoni wrote:
+> Suggested by Yann E. Morin.
 
-Hi Arnout,
+In kernel-land, that would be written thus:
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thanks for checking! Should i resend it with corrections, or it will be 
-ok like this?
+;-)
 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
 
 -- 
-br,
-Zoltan Gyarmati
-mail: mr.zoltan.gyarmati at gmail.com
-freenode nick: zgyarmati
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
