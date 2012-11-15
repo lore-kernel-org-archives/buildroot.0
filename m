@@ -1,91 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Nov 2012 23:59:54 +0100
-Subject: [Buildroot] [git commit] manual: add adding-package-tips.txt
-Message-ID: <20121115230542.6832399E3A@busybox.osuosl.org>
+Date: Thu, 15 Nov 2012 23:59:55 +0100
+Subject: [Buildroot] [git commit] manual: add deprecated-list.txt
+Message-ID: <20121115230543.B52B999E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=baa838e39251d298dbb4c031638b83a1b28f6881
+commit: http://git.buildroot.net/buildroot/commit/?id=8cbd58f013502652e29f7b5ba342cdfd543b485d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-tips.txt |   54 ++++++++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt      |    2 +
- 2 files changed, 56 insertions(+), 0 deletions(-)
+ docs/manual/deprecated-list.txt |   46 +++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 46 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+diff --git a/docs/manual/deprecated-list.txt b/docs/manual/deprecated-list.txt
 new file mode 100644
-index 0000000..acc73d3
+index 0000000..6dc87a4
 --- /dev/null
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -0,0 +1,54 @@
-+// -*- mode:doc; -*-
++++ b/docs/manual/deprecated-list.txt
+@@ -0,0 +1,46 @@
++// -*- mode:doc -*- ;
 +
-+Tips and tricks
-+~~~~~~~~~~~~~~~
++[[deprecated]]
++Deprecated list
++---------------
 +
-+[[package-name-variable-relation]]
-+Package name, config entry name and makefile variable relationship
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++The following stuff are marked as _deprecated_ in Buildroot due to
++their status either too old or unmaintained.
 +
-+In Buildroot, there are some relation between:
++// list generated using the followings command:
++// $ git grep -EB4 'depends on BR2_DEPRECATED'
++// and
++// $ git grep -EB4 'depends on BR2_DEPRECATED' | \
++//     grep -Eo '(:|-).*?(config|comment) BR2_.*'
++//
++// Need manual checks and sorting.
 +
-+* the _package name_, which is the package directory name (and the
-+  name of the +*.mk+ file);
++* Packages:
 +
-+* the config entry name that is declared in the +Config.in+ file;
++** +busybox+ 1.18.x
++** +customize+
++** +lzma+
++** +microperl+
++** +netkitbase+
++** +netkittelnet+
++** +pkg-config+
++** +squashfs3+
++** +ttcp+
 +
-+* the makefile variable prefix.
++* Toolchain:
 +
-+Thus, it is mandatory to keep consistency between all this stuff,
-+matching the following rules:
++** +gdb+ 6.8
++** +gdb+ 7.0.1
++** +gdb+ 7.1
++** +kernel headers+ 2.6.37
++** +kernel headers+ 2.6.38
++** +kernel headers+ 2.6.39
 +
-+* the _make_ target name will be the _package name_ itself (e.g.:
-+  +foo-bar_boo+);
++* Bootloaders:
 +
-+* the config entry is the upper case _package name_ with `.` and `-`
-+  characters substituted with `_`, prefixed with +BR2_PACKAGE_+ (e.g.:
-+  +BR2_PACKAGE_FOO_BAR_BOO+);
++** +u-boot+ 2011-06
++** +u-boot+ 2011-09
 +
-+* the +*.mk+ file variable prefix is the upper case _package name_
-+  `.` and `-` characters substituted with `_` (e.g.:
-+  +FOO_BAR_BOO_VERSION+).
++* Output images:
 +
-+
-+[[github-download-url]]
-+How to add package from github
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+If the package has no release version, or its version cannot be
-+identified using tag, then the sha1 of the particular commit should be
-+used to identify the version (the first 7 characters of the sha1 are
-+enough):
-+
-+------------------------
-+FOO_VERSION = 1234567
-+FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
-+------------------------
-+
-+If the package version matches a tag, then this tag should be used to
-+identify the version:
-+
-+------------------------
-+FOO_VERSION = v1.0
-+FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
-+------------------------
-diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
-index 8221c85..b909d47 100644
---- a/docs/manual/adding-packages.txt
-+++ b/docs/manual/adding-packages.txt
-@@ -19,4 +19,6 @@ include::adding-packages-cmake.txt[]
- 
- include::adding-packages-gettext.txt[]
- 
-+include::adding-packages-tips.txt[]
-+
- include::adding-packages-conclusion.txt[]
++** squashfs3 image
