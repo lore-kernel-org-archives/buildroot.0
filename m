@@ -1,93 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Nov 2012 00:09:02 +0100
-Subject: [Buildroot] [git commit] xlib_libXt: add patch to fix
-	cross-compilation issue
-Message-ID: <20121115231003.A6E4B99C8A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 Nov 2012 00:28:02 +0100
+Subject: [Buildroot] [PATCH] libnspr: fix build with ARMv7 toolchains
+In-Reply-To: <1352585525-25600-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 10 Nov 2012 23:12:05 +0100")
+References: <1352585525-25600-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87sj8azbst.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cea473d8afaf164a83b1bef92965d3d28e11c41f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Fixes the following build failure:
+ Thomas> Fixes the following build failure:
+ Thomas>   http://autobuild.buildroot.org/results/d7323831372050e425a34f5104a46d8cbd6be214/build-end.log
 
- http://autobuild.buildroot.org/results/2815885d589d75259508bcce4f272b8dddb3be77/build-end.log
+Committed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...il-don-t-link-makestrs-with-target-cflags.patch |   51 ++++++++++++++++++++
- package/x11r7/xlib_libXt/xlib_libXt.mk             |    1 +
- 2 files changed, 52 insertions(+), 0 deletions(-)
-
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
-new file mode 100644
-index 0000000..aafb352
---- /dev/null
-+++ b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
-@@ -0,0 +1,51 @@
-+From 9324466141626518e5a67838813562ec6ef62ba3 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Thu, 15 Nov 2012 18:31:53 +0100
-+Subject: [PATCH] util: don't link makestrs with target cflags
-+
-+The line:
-+
-+makestrs_CFLAGS = $(XT_CFLAGS)
-+
-+in util/Makefile.am is wrong because it adds target cflags to the
-+compilation of makestrs, which is built for the build machine, which
-+leads to build failures when cross-compiling.
-+
-+We also remove the inclusion of <X11/Xos.h> from makestrs.c, because
-+it was the only non-standard header being included (and therefore
-+possibly requiring special cflags), but it was in reality not useful
-+at all to build makestrs.c.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ util/Makefile.am |    1 -
-+ util/makestrs.c  |    1 -
-+ 2 files changed, 2 deletions(-)
-+
-+diff --git a/util/Makefile.am b/util/Makefile.am
-+index 969ecef..cc6f3fc 100644
-+--- a/util/Makefile.am
-++++ b/util/Makefile.am
-+@@ -10,7 +10,6 @@ EXTRA_DIST = \
-+ 	StrDefs.ht \
-+ 	string.list
-+ 
-+-makestrs_CFLAGS = $(XT_CFLAGS)
-+ makestrs_SOURCES = makestrs.c
-+ 
-+ 
-+diff --git a/util/makestrs.c b/util/makestrs.c
-+index 3551cc1..456735b 100644
-+--- a/util/makestrs.c
-++++ b/util/makestrs.c
-+@@ -27,7 +27,6 @@ in this Software without prior written authorization from The Open Group.
-+ /* Constructs string definitions */
-+ 
-+ #include <stdio.h>
-+-#include <X11/Xos.h>
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ #if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
-+-- 
-+1.7.9.5
-+
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
-index b2667d3..fd8f079 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.mk
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
-@@ -10,5 +10,6 @@ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXT_INSTALL_STAGING = YES
- XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xproto_kbproto xproto_xproto xcb-proto libxcb host-xproto_xproto
- XLIB_LIBXT_CONF_OPT = --disable-malloc0returnsnull --disable-install-makestrs
-+XLIB_LIBXT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
