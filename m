@@ -1,9 +1,9 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Thu, 15 Nov 2012 09:25:18 +0100
-Subject: [Buildroot] [PATCH v3 4/6] Add init script files for snowball board
+Date: Thu, 15 Nov 2012 09:25:15 +0100
+Subject: [Buildroot] [PATCH v3 1/6] snowball-hdmiservice: new package
 In-Reply-To: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
 References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1352967920-3164-5-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352967920-3164-2-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,86 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- package/Config.in                      |    1 +
- package/snowball-init/Config.in        |   10 ++++++++++
- package/snowball-init/snowball-init.mk |   15 +++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/snowball-init/Config.in
- create mode 100644 package/snowball-init/snowball-init.mk
+ package/Config.in                                  |    1 +
+ package/snowball-hdmiservice/Config.in             |   10 +++++
+ .../snowball-hdmiservice/snowball-hdmiservice.mk   |   41 ++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
+ create mode 100644 package/snowball-hdmiservice/Config.in
+ create mode 100644 package/snowball-hdmiservice/snowball-hdmiservice.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4fa21ca..488d4be 100644
+index 074e9df..e9fd4a9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -550,6 +550,7 @@ source "package/empty/Config.in"
- source "package/googlefontdirectory/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
-+source "package/snowball-init/Config.in"
- source "package/sound-theme-borealis/Config.in"
- source "package/sound-theme-freedesktop/Config.in"
- endmenu
-diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
+@@ -250,6 +250,7 @@ source "package/sane-backends/Config.in"
+ source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
+ source "package/smartmontools/Config.in"
++source "package/snowball-hdmiservice/Config.in"
+ source "package/sredird/Config.in"
+ source "package/statserial/Config.in"
+ source "package/sysstat/Config.in"
+diff --git a/package/snowball-hdmiservice/Config.in b/package/snowball-hdmiservice/Config.in
 new file mode 100644
-index 0000000..906ff2d
+index 0000000..0ea7c81
 --- /dev/null
-+++ b/package/snowball-init/Config.in
++++ b/package/snowball-hdmiservice/Config.in
 @@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SNOWBALL_INIT
-+	bool "snowball-init"
-+	# Runtime dependency, needed by snowball startup script
-+	select BR2_PACKAGE_BLUEZ_UTILS
-+	select BR2_PACKAGE_UX500_FIRMWARE
++config BR2_PACKAGE_SNOWBALL_HDMISERVICE
++	bool "snowball-hdmiservice"
++	depends on BR2_TOOLCHAIN_HAS_THREADS	
 +	help
-+	  Snowball init scripts
++	  HDMI userspace control daemon
 +
++	  This package contains the HDMI userspace control daemon for the 
++	  snowball board
++	  
 +	  http://www.igloocommunity.org
-+
-diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
 new file mode 100644
-index 0000000..278cacb
+index 0000000..fefa95d
 --- /dev/null
-+++ b/package/snowball-init/snowball-init.mk
-@@ -0,0 +1,15 @@
++++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
+@@ -0,0 +1,41 @@
 +#############################################################
 +#
-+# snowball-init
++# snowball-hdmiservice
 +#
 +#############################################################
-+SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
-+SNOWBALL_INIT_SITE = git://igloocommunity.org/git/bsp/snowball-init.git
-+SNOWBALL_INIT_LICENSE = BSD-4c
-+SNOWBALL_INIT_LICENSE_FILES = debian/copyright
++SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
++SNOWBALL_HDMISERVICE_SITE = git://igloocommunity.org/git/bsp/hdmiservice.git
++SNOWBALL_HDMISERVICE_LICENSE = MIT
++SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
++SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
 +
-+define SNOWBALL_INIT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
++define SNOWBALL_HDMISERVICE_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
 +endef
++
++define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
++	$(MAKE) CC="$(TARGET_CC)" -C $(@D) DESTDIR=$(STAGING_DIR) install 
++endef
++
++define SNOWBALL_HDMISERVICE_INSTALL_TARGET_CMDS
++	$(MAKE) CC="$(TARGET_CC)" -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++define SNOWBALL_HDMISERVICE_UNINSTALL_STAGING_CMDS
++	rm -f $(STAGING_DIR)/usr/lib/hdmiservice.so
++	rm -f $(STAGING_DIR)/usr/bin/hdmistart
++	rm -f $(STAGING_DIR)/usr/include/hdmi_service_api.h
++	rm -f $(STAGING_DIR)/usr/include/hdmi_service_local.h
++endef
++
++define SNOWBALL_HDMISERVICE_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/lib/hdmiservice.so
++	rm -f $(TARGET_DIR)/usr/bin/hdmistart
++endef
++
++define SNOWBALL_HDMISERVICE_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
 +
 +$(eval $(generic-package))
 -- 
