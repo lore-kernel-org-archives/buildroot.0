@@ -1,41 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 Nov 2012 23:04:36 +0100
-Subject: [Buildroot] Xtensa updates
-In-Reply-To: <CAC1BbcRQ1ecodzDHFCwemK8DkP7t5wD08FRKJ_qbP_jOGi+sOA@mail.gmail.com>
-References: <87bofdvg25.fsf@dell.be.48ers.dk> <20121112123519.228f7544@skate>
- <CAC1BbcRQ1ecodzDHFCwemK8DkP7t5wD08FRKJ_qbP_jOGi+sOA@mail.gmail.com>
-Message-ID: <201211152304.37056.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 Nov 2012 19:07:50 -0300
+Subject: [Buildroot] [PATCH] binutils: bump 2.23 series to 2.23.1 and
+	deprecate 2.20
+Message-ID: <1353017270-28511-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernhard, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/binutils/Config.in.host                    |    8 ++++----
+ .../120-sh-conf.patch                              |    0
+ .../300-001_ld_makefile_patch.patch                |    0
+ .../300-012_check_ldrunpath_length.patch           |    0
+ .../500-sysroot.patch                              |    0
+ 5 files changed, 4 insertions(+), 4 deletions(-)
+ rename package/binutils/{binutils-2.23 => binutils-2.23.1}/120-sh-conf.patch (100%)
+ rename package/binutils/{binutils-2.23 => binutils-2.23.1}/300-001_ld_makefile_patch.patch (100%)
+ rename package/binutils/{binutils-2.23 => binutils-2.23.1}/300-012_check_ldrunpath_length.patch (100%)
+ rename package/binutils/{binutils-2.23 => binutils-2.23.1}/500-sysroot.patch (100%)
 
-On Monday 12 November 2012 Bernhard Reutner-Fischer wrote:
-> On 12 November 2012 12:35, Thomas Petazzoni <
-> thomas.petazzoni at free-electrons.com> wrote:
-> > In the process, would you mind changing the irker configuration so that
-> > the updates made on the Buildroot Git repository get notified on
-> > #buildroot instead of #uclibc?
-> done.
-
-Would it be possible for you to change the commit notifications to be
-shorter, please?
-
-Something like:
-  project:branch short-hash author subject
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 26c5f73..44b953a 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -13,7 +13,7 @@ choice
+ 	       bool "binutils 2.18-avr32-1.0.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_20
+-		depends on !BR2_avr32
++		depends on !BR2_avr32 && BR2_DEPRECATED
+ 		bool "binutils 2.20"
+ 
+ 	config BR2_BINUTILS_VERSION_2_20_1
+@@ -32,9 +32,9 @@ choice
+ 		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
+ 		bool "binutils 2.22"
+ 	
+-	config BR2_BINUTILS_VERSION_2_23
++	config BR2_BINUTILS_VERSION_2_23_1
+ 		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
+-		bool "binutils 2.23"
++		bool "binutils 2.23.1"
+ 
+ endchoice
+ 
+@@ -46,7 +46,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
+ 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
+ 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+-	default "2.23"		if BR2_BINUTILS_VERSION_2_23
++	default "2.23.1"	if BR2_BINUTILS_VERSION_2_23_1
+ 
+ config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
+ 	string "Additional binutils options"
+diff --git a/package/binutils/binutils-2.23/120-sh-conf.patch b/package/binutils/binutils-2.23.1/120-sh-conf.patch
+similarity index 100%
+rename from package/binutils/binutils-2.23/120-sh-conf.patch
+rename to package/binutils/binutils-2.23.1/120-sh-conf.patch
+diff --git a/package/binutils/binutils-2.23/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.23.1/300-001_ld_makefile_patch.patch
+similarity index 100%
+rename from package/binutils/binutils-2.23/300-001_ld_makefile_patch.patch
+rename to package/binutils/binutils-2.23.1/300-001_ld_makefile_patch.patch
+diff --git a/package/binutils/binutils-2.23/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.23.1/300-012_check_ldrunpath_length.patch
+similarity index 100%
+rename from package/binutils/binutils-2.23/300-012_check_ldrunpath_length.patch
+rename to package/binutils/binutils-2.23.1/300-012_check_ldrunpath_length.patch
+diff --git a/package/binutils/binutils-2.23/500-sysroot.patch b/package/binutils/binutils-2.23.1/500-sysroot.patch
+similarity index 100%
+rename from package/binutils/binutils-2.23/500-sysroot.patch
+rename to package/binutils/binutils-2.23.1/500-sysroot.patch
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.8.6
