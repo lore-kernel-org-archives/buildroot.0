@@ -1,55 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Nov 2012 18:23:48 +0100
-Subject: [Buildroot] [PATCH] support/gnuconfig: update config.{guess,
- sub} to a newer version
-In-Reply-To: <50A51F48.7020803@mind.be>
-References: <1352995994-10048-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <50A51F48.7020803@mind.be>
-Message-ID: <20121115182348.639c11c2@skate>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Thu, 15 Nov 2012 18:41:35 +0100
+Subject: [Buildroot] [PATCH for-2012.11 1/1] grantlee: fix -lpthread build
+	error
+Message-ID: <1353001295-8337-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Fixing linking time error with certain toolchains. The issue caused by a missing explicit linking to
+libpthread. The failed buildlog:
+Linking CXX executable testgenerictypes_exec
+/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libQtCore.so: undefined reference to symbol 'pthread_cancel'
+/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: note: 'pthread_cancel' is defined in DSO /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 so try adding it to the linker command line
+/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: could not read symbols: Invalid operation
+collect2: ld returned 1 exit status
+make[3]: *** [templates/tests/testgenerictypes_exec] Error 1
+make[3]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+make[2]: *** [templates/tests/CMakeFiles/testgenerictypes_exec.dir/all] Error 2
+make[2]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
+make: *** [/home/buildroot12git/output/build/grantlee-0.2.0/.stamp_built] Error
 
-On Thu, 15 Nov 2012 17:58:48 +0100, Arnout Vandecappelle wrote:
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+---
+ .../grantlee-0.2.0-fix-lphread-link-error.patch    |   42 ++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
 
-> >   support/gnuconfig/README.buildroot                 |    5 +-
-> >   support/gnuconfig/config.guess                     |   74 +++++---
-> >   support/gnuconfig/config.sub                       |  138 ++++++++++-----
-> >   .../0001-config-add-support-for-uClibc.patch       |  184 ++++++++++++++++++++
-> >   .../patches/0002-config-add-support-for-ps2.patch  |   60 +++++++
-> >   .../gnuconfig/patches/config.guess.uclibc.patch    |  149 ----------------
-> >   support/gnuconfig/patches/config.sub.ps2.patch     |   45 -----
-> >   7 files changed, 392 insertions(+), 263 deletions(-)
-> >   create mode 100644 support/gnuconfig/patches/0001-config-add-support-for-uClibc.patch
-> >   create mode 100644 support/gnuconfig/patches/0002-config-add-support-for-ps2.patch
-> >   delete mode 100644 support/gnuconfig/patches/config.guess.uclibc.patch
-> >   delete mode 100644 support/gnuconfig/patches/config.sub.ps2.patch
-> 
->   Did you forget -M in git send-email?
-
-Does git send-email supports -M ? I know format-patch does, but I used
-directly send-email to format+send the patch.
-
->   Is the ps2 patch still relevant? We certainly don't have mipsEE or ps2 or irx or iop or dvp
-> in out target tuple, and I can't imagine that anyone tries to build on a ps2...
-
-I don't think it is necessary, but is was there, so I just updated it.
-
->   Can the uClibc patch be upstreamed?
-
-It probably could, yes. Do you want to try pushing it? I'm already
-working with the libtirpc developers to get our patches merged, and
-it's quite a bit of work.
-
-Thanks!
-
-Thomas
+diff --git a/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch b/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
+new file mode 100644
+index 0000000..7964fd0
+--- /dev/null
++++ b/package/grantlee/grantlee-0.2.0-fix-lphread-link-error.patch
+@@ -0,0 +1,42 @@
++From d46475b6bb9d99a4c5c95489be6c14d0d219d5f8 Mon Sep 17 00:00:00 2001
++From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++Date: Thu, 15 Nov 2012 17:00:39 +0100
++Subject: [PATCH] fix -lpthread build error
++
++Fixing linking time error with certain toolchains. The issue caused by a missing explicit linking to
++libpthread. The failed buildlog:
++Linking CXX executable testgenerictypes_exec
++/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libQtCore.so: undefined reference to symbol 'pthread_cancel'
++/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: note: 'pthread_cancel' is defined in DSO /home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 so try adding it to the linker command line
++/home/buildroot12git/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0: could not read symbols: Invalid operation
++collect2: ld returned 1 exit status
++make[3]: *** [templates/tests/testgenerictypes_exec] Error 1
++make[3]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
++make[2]: *** [templates/tests/CMakeFiles/testgenerictypes_exec.dir/all] Error 2
++make[2]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
++make[1]: *** [all] Error 2
++make[1]: Leaving directory `/home/buildroot12git/output/build/grantlee-0.2.0'
++make: *** [/home/buildroot12git/output/build/grantlee-0.2.0/.stamp_built] Error
++
++Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++---
++ templates/tests/CMakeLists.txt |    3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/templates/tests/CMakeLists.txt b/templates/tests/CMakeLists.txt
++index caab003..f400622 100644
++--- a/templates/tests/CMakeLists.txt
+++++ b/templates/tests/CMakeLists.txt
++@@ -68,7 +68,8 @@ macro(GRANTLEE_TEMPLATES_UNIT_TESTS)
++                   ${_testresource_rcc_src}
++     )
++     add_test(${_testname} ${_testname}_exec )
++-    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} grantlee_core )
+++    find_package (Threads)
+++    target_link_libraries(${_testname}_exec ${QT_QTTEST_LIBRARY} ${CMAKE_THREAD_LIBS_INIT}  grantlee_core )
++ 
++     set_property(GLOBAL APPEND PROPERTY TEST_COVERAGE "${CMAKE_CURRENT_BINARY_DIR}/${_testname}_exec" )
++   endforeach(_testname)
++-- 
++1.7.9.5
++
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
