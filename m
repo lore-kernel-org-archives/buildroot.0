@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Nov 2012 12:37:59 +0100
-Subject: [Buildroot] [PATCH 4/5] lua: remove 3 sub-options,
-	always install all
-In-Reply-To: <1346741921-28968-4-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Tue, 4 Sep 2012 08:58:40 +0200")
+Date: Thu, 15 Nov 2012 12:38:25 +0100
+Subject: [Buildroot] [PATCH 5/5] lua: refactor without useless define's
+In-Reply-To: <1346741921-28968-5-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Tue, 4 Sep 2012 08:58:41 +0200")
 References: <1346741921-28968-1-git-send-email-francois.perrad@gadz.org>
- <1346741921-28968-4-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87y5i33xm0.fsf@dell.be.48ers.dk>
+ <1346741921-28968-5-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87txsr3xla.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
