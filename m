@@ -1,52 +1,92 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri, 16 Nov 2012 01:20:32 +0300
-Subject: [Buildroot] gcc on target system issue
-Message-ID: <CABtOAfxKdUhvGHF2K_BG__vPPcqmio24DW0suz86Hfzngzc01g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Nov 2012 23:28:47 +0100
+Subject: [Buildroot] [PATCH] xlib_libXt: add patch to fix cross-compilation
+	issue
+Message-ID: <1353018527-25481-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all.
-I'm trying to build gcc on target but it fails with
+Fixes the following build failure:
 
+ http://autobuild.buildroot.org/results/2815885d589d75259508bcce4f272b8dddb3be77/build-end.log
 
-./gcc -I/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/../include
--DHAVE_CC_TLS  -o _negdi2_s.o -MT _negdi2_s.o -MD -MP -MF _negdi2_s.dep
--DSHARED -DL_negdi2 -c
-/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/libgcc2.c
-In file included from
-/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/config/arm/unwind-arm.c:154:0:
-/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/unwind-arm-common.inc:
-At top level:
-/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/unwind-arm-common.inc:30:21:
-fatal error: sys/sdt.h: No such file or directory
-compilation terminated.
-make[3]: *** [unwind-arm.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from
-/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/unwind-c.c:29:0:
-./unwind.h: In function '_Unwind_decode_typeinfo_ptr':
-./unwind.h:42:45: warning: unused parameter 'base' [-Wunused-parameter]
-./unwind.h: In function '__gnu_unwind_24bit':
-./unwind.h:68:41: warning: unused parameter 'context' [-Wunused-parameter]
-./unwind.h:68:54: warning: unused parameter 'data' [-Wunused-parameter]
-./unwind.h:68:64: warning: unused parameter 'compact' [-Wunused-parameter]
-make[3]: Leaving directory
-`/home/user/buildroot/output/build/gcc-4.7.2-target/arm-buildroot-linux-uclibcgnueabi/libgcc'
-make[2]: *** [all-target-libgcc] Error 2
-make[2]: Leaving directory
-`/home/user/buildroot/output/build/gcc-4.7.2-target'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/user/buildroot/output/build/gcc-4.7.2-target'
-make: *** [/home/user/buildroot/output/build/gcc-4.7.2-target/.compiled]
-Error 2
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...il-don-t-link-makestrs-with-target-cflags.patch |   51 ++++++++++++++++++++
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    1 +
+ 2 files changed, 52 insertions(+)
+ create mode 100644 package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
 
-
-
-Also sys/sdt.h provides by systemtap
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121116/38957449/attachment.html>
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
+new file mode 100644
+index 0000000..aafb352
+--- /dev/null
++++ b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
+@@ -0,0 +1,51 @@
++From 9324466141626518e5a67838813562ec6ef62ba3 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Thu, 15 Nov 2012 18:31:53 +0100
++Subject: [PATCH] util: don't link makestrs with target cflags
++
++The line:
++
++makestrs_CFLAGS = $(XT_CFLAGS)
++
++in util/Makefile.am is wrong because it adds target cflags to the
++compilation of makestrs, which is built for the build machine, which
++leads to build failures when cross-compiling.
++
++We also remove the inclusion of <X11/Xos.h> from makestrs.c, because
++it was the only non-standard header being included (and therefore
++possibly requiring special cflags), but it was in reality not useful
++at all to build makestrs.c.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ util/Makefile.am |    1 -
++ util/makestrs.c  |    1 -
++ 2 files changed, 2 deletions(-)
++
++diff --git a/util/Makefile.am b/util/Makefile.am
++index 969ecef..cc6f3fc 100644
++--- a/util/Makefile.am
+++++ b/util/Makefile.am
++@@ -10,7 +10,6 @@ EXTRA_DIST = \
++ 	StrDefs.ht \
++ 	string.list
++ 
++-makestrs_CFLAGS = $(XT_CFLAGS)
++ makestrs_SOURCES = makestrs.c
++ 
++ 
++diff --git a/util/makestrs.c b/util/makestrs.c
++index 3551cc1..456735b 100644
++--- a/util/makestrs.c
+++++ b/util/makestrs.c
++@@ -27,7 +27,6 @@ in this Software without prior written authorization from The Open Group.
++ /* Constructs string definitions */
++ 
++ #include <stdio.h>
++-#include <X11/Xos.h>
++ #include <stdlib.h>
++ #include <unistd.h>
++ #if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
++-- 
++1.7.9.5
++
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index b2667d3..fd8f079 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -10,5 +10,6 @@ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_INSTALL_STAGING = YES
+ XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xproto_kbproto xproto_xproto xcb-proto libxcb host-xproto_xproto
+ XLIB_LIBXT_CONF_OPT = --disable-malloc0returnsnull --disable-install-makestrs
++XLIB_LIBXT_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.9.5
