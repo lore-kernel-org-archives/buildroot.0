@@ -1,34 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Nov 2012 16:16:09 +0100
-Subject: [Buildroot] [PATCH] tremor: force ARM mode when building to
- avoid Thumb2 build problems
-In-Reply-To: <1352587381-9864-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1352587381-9864-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20121115161609.4a44a363@skate>
+From: Will Newton <will.newton@gmail.com>
+Date: Thu, 15 Nov 2012 15:17:45 +0000
+Subject: [Buildroot] [PATCH] binutils: add version 2.23.1
+In-Reply-To: <87lie25299.fsf@dell.be.48ers.dk>
+References: <1352988528-20158-1-git-send-email-gustavo@zacarias.com.ar>
+ <87lie25299.fsf@dell.be.48ers.dk>
+Message-ID: <CAFbHwiRBmDSdfWL2pxFRrS-xkRoa0VB_FgrjFDk2oQG42pxeuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Nov 15, 2012 at 3:12 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>
+>  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>  Gustavo> ---
+>  Gustavo>  package/binutils/Config.in.host                    |    5 +++
+>  Gustavo>  package/binutils/binutils-2.23.1/120-sh-conf.patch |   29 +++++++++++++++
+>  Gustavo>  .../300-001_ld_makefile_patch.patch                |   24 +++++++++++++
+>  Gustavo>  .../300-012_check_ldrunpath_length.patch           |   21 +++++++++++
+>  Gustavo>  package/binutils/binutils-2.23.1/500-sysroot.patch |   37 ++++++++++++++++++++
+>  Gustavo>  5 files changed, 116 insertions(+), 0 deletions(-)
+>  Gustavo>  create mode 100644 package/binutils/binutils-2.23.1/120-sh-conf.patch
+>  Gustavo>  create mode 100644 package/binutils/binutils-2.23.1/300-001_ld_makefile_patch.patch
+>  Gustavo>  create mode 100644 package/binutils/binutils-2.23.1/300-012_check_ldrunpath_length.patch
+>  Gustavo>  create mode 100644 package/binutils/binutils-2.23.1/500-sysroot.patch
+>
+>  Gustavo> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+>  Gustavo> index 26c5f73..7a9eae8 100644
+>  Gustavo> --- a/package/binutils/Config.in.host
+>  Gustavo> +++ b/package/binutils/Config.in.host
+>  Gustavo> @@ -36,6 +36,10 @@ choice
+>  Gustavo>               depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
+>  Gustavo>               bool "binutils 2.23"
+>
+>  Gustavo> +     config BR2_BINUTILS_VERSION_2_23_1
+>  Gustavo> +             depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
+>  Gustavo> +             bool "binutils 2.23.1"
+>  Gustavo> +
+>
+> I know we have been doing it in the past because of various arch issues,
+> but does it make sense to keep both 2.23 and 2.23.1?
 
-On Sat, 10 Nov 2012 23:43:01 +0100, Thomas Petazzoni wrote:
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/502b7d3f29d7982d56de2ae4a0b943315e04713b/build-end.log
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/tremor/tremor.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
-
-This one should be applied for 2012.11.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I believe that 2.23 was never officially packaged so it is probably
+better to remove it.
