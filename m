@@ -1,87 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Nov 2012 09:13:30 +0100
-Subject: [Buildroot] Problems building openssh in buildroot with glibc
-In-Reply-To: <CAKduhStLWvGt0cSq4JoKKVmFw4knKZ-k=p-tyj1vtne3XKhR0w@mail.gmail.com>
-References: <CAKduhStLWvGt0cSq4JoKKVmFw4knKZ-k=p-tyj1vtne3XKhR0w@mail.gmail.com>
-Message-ID: <20121115091330.02d328d9@skate>
+From: Gregory Hermant <gregory.hermant@calao-systems.com>
+Date: Thu, 15 Nov 2012 09:25:17 +0100
+Subject: [Buildroot] [PATCH v3 3/6] Add board files for snowball
+In-Reply-To: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1352967920-3164-4-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Daniel Price,
 
-On Wed, 14 Nov 2012 13:52:36 -0800, Daniel Price wrote:
-> Hi, I'm using a glibc x86_64 based toolchain, and, despite a lot of
-> hacking, cannot seem to get the openssh included with buildroot to
-> configure.  My host environment is Fedora 15.  The error I encounter
-> looks like this:
-> 
-> -----
-> checking OpenSSL header version... not found
-> configure: error: OpenSSL version header not found.
-> make: *** [/aux0/dp/distro-x86-br-xtools/output-minimal/build/openssh-6.0p1/.stamp_configured]
-> Error 1
-> -----
-> 
-> In config.log, I see:
-> 
-> -----
-> configure:10816: checking OpenSSL header version
-> configure:10853:
-> /aux0/dp/distro-x86-br-xtools/output-minimal/host/usr/bin/x86_64-dssd-linux-gnu-gcc
-> -o conftest  -pipe -O3 -g2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64 -Wall -Wpointer-arith -Wuninitialized
-> -Wsign-compare -Wformat-security -Wno-pointer-sign -Wno-unused-result
-> -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -fno-builtin-memset
-> -fstack-protector-all   -pipe -O3 -g2 -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -fstack-protector-all
-> conftest.c -lcrypto -ldl -lutil -lz -lnsl  >&5
-> configure:10853: $? = 0
-> configure:10853: ./conftest
-> ./conftest: error while loading shared libraries: libcrypto.so.1.0.0:
-> cannot open shared object file: No such file or directory
-> configure:10853: $? = 127
-> configure: program exited with status 127
-> -----
-> 
-> To summarize: the conftest compiles fine but fails to link at runtime.
->  I've tried various settings of CFLAGS, LDFLAGS, etc. without much
-> luck, although my experience with linux's linker in this regard is
-> very limited.  I went on a search to see if libcrypto.so.1.0.0 was
-> present in my build environment and here is what I found:
-> 
-> -----
-> $ find output -name libcrypto.so.1.0.0
-> output/host/usr/x86_64-unknown-linux-gnu/sysroot/usr/lib/libcrypto.so.1.0.0
-> output/build/openssl-1.0.0j/libcrypto.so.1.0.0
-> output/target/usr/lib/libcrypto.so.1.0.0
-> 
-> $ find output -name opensslv.h
-> output/host/usr/x86_64-unknown-linux-gnu/sysroot/usr/include/openssl/opensslv.h
-> output/build/openssl-1.0.0j/include/openssl/opensslv.h
-> output/build/openssl-1.0.0j/crypto/opensslv.h
-> output/target/usr/include/openssl/opensslv.h
-> -----
-> 
-> Can anyone else confirm the same problem?  Can anyone suggest a
-> solution?  If I use uclibc, it compiles fine, but I'm constrained and
-> can't do that.  I also know that I could switch to DropBear but I'd
-> like to solve this.  I'm happy to file a bug if that helps.
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+---
+ board/calao/snowball/linux-3.4.patch |   45 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 board/calao/snowball/linux-3.4.patch
 
-Which Buildroot version are you using? If you're using 2012.08, then it
-might be 11017f081fc5b034e680d89eaea729c19f450e01 that is missing,
-which leads OpenSSH to not understand we're cross-compiling.
-
-Can you show the entire build output of OpenSSH, preferably in a
-pastebin?
-
-Thanks,
-
-Thomas
+diff --git a/board/calao/snowball/linux-3.4.patch b/board/calao/snowball/linux-3.4.patch
+new file mode 100644
+index 0000000..4e6fb51
+--- /dev/null
++++ b/board/calao/snowball/linux-3.4.patch
+@@ -0,0 +1,45 @@
++From 3d1a9b44b9dcd2c0f5d54c09596c96c0524d8340 Mon Sep 17 00:00:00 2001
++From: Gregory Hermant <gregory.hermant@calao-systems.com>
++Date: Tue, 13 Nov 2012 11:47:41 +0100
++Subject: [PATCH] trace-debug[stm]: Fix for BT/WLAN instability
++
++Pins under mop500_ske_pins array are used for different
++functionalities in snowball. Ex: GPIO161 pin configured
++for keypad here must stay configured as GPIO alternate
++function for operating PMU_EN pin of BT/WLAN chip in snowball.
++So forbid configuring these pins, for snowball
++
++Signed-off-by: Rajanikanth H.V <rajanikanth.hv@stericsson.com>
++Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
++---
++ arch/arm/mach-ux500/board-mop500-stm.c |    7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/arch/arm/mach-ux500/board-mop500-stm.c b/arch/arm/mach-ux500/board-mop500-stm.c
++index 1bef2a0..532fb9e 100644
++--- a/arch/arm/mach-ux500/board-mop500-stm.c
+++++ b/arch/arm/mach-ux500/board-mop500-stm.c
++@@ -121,7 +121,9 @@ static int stm_ste_disable_ape_on_mipi60(void)
++ 	if (retval)
++ 		STM_ERR("Failed to disable MIPI60\n");
++ 	else {
++-		retval = nmk_config_pins(ARRAY_AND_SIZE(mop500_ske_pins));
+++		if (!machine_is_snowball())
+++			retval = nmk_config_pins(
+++				ARRAY_AND_SIZE(mop500_ske_pins));
++ 		if (retval)
++ 			STM_ERR("Failed to enable SKE gpio\n");
++ 	}
++@@ -314,7 +316,8 @@ static int stm_ste_connection(enum stm_connection_type con_type)
++ 		/* Enable altC3 on GPIO70-74 (STMMOD) and GPIO75-76 (UARTMOD) */
++ 		prcmu_enable_stm_mod_uart();
++ 		/* Enable APE on MIPI60 */
++-		retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
+++		if (!machine_is_snowball())
+++			retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
++ 		if (retval)
++ 			STM_ERR("Failed to disable SKE GPIO\n");
++ 		else {
++-- 
++1.7.9.5
++
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
