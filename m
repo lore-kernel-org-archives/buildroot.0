@@ -1,53 +1,76 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Nov 2012 00:06:10 +0100
-Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
-Message-ID: <20121115230738.33E869A031@busybox.osuosl.org>
+Date: Fri, 16 Nov 2012 00:06:57 +0100
+Subject: [Buildroot] [git commit] lcdproc: remove patch rejected upstream
+Message-ID: <20121115230738.9F57A9A031@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffdb08d2219d2613f3aa9b20c30b20090948dded
+commit: http://git.buildroot.net/buildroot/commit/?id=a5004bcab189b3dc72e682bd37f0adabeb71cb30
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The lcdproc version bump to 0.5.6 has resulted in autobuilder failures such as
-the following.
+Remove an lcdproc patch which has been rejected upstream. It has been
+decided by lcdproc developer Markus Dolze that the behaviour of the
+client_add_key command when handling the minus key is "intentional to
+some degree."
 
-  http://autobuild.buildroot.org/results/9967bc20a6094e836c4c18ff2cd30edef143bb8e/build-end.log
-
-The 0.5.6 release added a new glcd driver, which requires the freetype and zlib
-libraries. This patch makes the lcdproc package depend on freetype and zlib.
+This patch also takes the opportunity to remove the version number from the
+single remaining lcdproc patch.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lcdproc/Config.in  |    2 ++
- package/lcdproc/lcdproc.mk |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ ...cdproc-0.5.5-fix-client_add_key-for-minus.patch |   38 --------------------
+ ...5.5-LCDd.conf.patch => lcdproc-LCDd.conf.patch} |    0
+ 2 files changed, 0 insertions(+), 38 deletions(-)
 
-diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
-index 820f4ea..e0afc44 100644
---- a/package/lcdproc/Config.in
-+++ b/package/lcdproc/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_LCDPROC
-        bool "lcdproc"
-+       select BR2_PACKAGE_FREETYPE
-        select BR2_PACKAGE_NCURSES
-+       select BR2_PACKAGE_ZLIB
-        help
-          LCD display driver daemon and clients
- 
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-index aa204f1..2a80289 100644
---- a/package/lcdproc/lcdproc.mk
-+++ b/package/lcdproc/lcdproc.mk
-@@ -16,6 +16,6 @@ ifeq ($(BR2_PACKAGE_LCDPROC_MENUS),y)
- LCDPROC_CONF_OPT += --enable-lcdproc-menus
- endif
- 
--LCDPROC_DEPENDENCIES = ncurses
-+LCDPROC_DEPENDENCIES = freetype ncurses zlib
- 
- $(eval $(autotools-package))
+diff --git a/package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch b/package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch
+deleted file mode 100644
+index c17ee83..0000000
+--- a/package/lcdproc/lcdproc-0.5.5-fix-client_add_key-for-minus.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-Calling client_add_key as follows
+-
+-  client_add_key -
+-
+-will fail. However using an explicit -shared option, like this:
+-
+-  client_add_key -shared -
+-
+-will succeed. This is caused by a failure to parse the - key token, which is
+-mistaken for the first character of an option argument.
+-
+-The client_add_key command also returns a spurious "success" message when a
+-malformed option is supplied.
+-
+-This patch fixes both issues.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/server/commands/client_commands.c b/server/commands/client_commands.c
+---- a/server/commands/client_commands.c	2011-08-14 13:29:16.000000000 +0100
+-+++ b/server/commands/client_commands.c	2012-10-05 07:50:40.357795535 +0100
+-@@ -181,7 +181,7 @@ client_add_key_func(Client *c, int argc,
+- 	}
+- 
+- 	argnr = 1;
+--	if (argv[argnr][0] == '-') {
+-+	if (argv[argnr][0] == '-' && strcmp(argv[argnr], "-") != 0) {
+- 		if (strcmp( argv[argnr], "-shared") == 0) {
+- 			exclusively = 0;
+- 		}
+-@@ -190,6 +190,7 @@ client_add_key_func(Client *c, int argc,
+- 		}
+- 		else {
+- 			sock_printf_error(c->sock, "Invalid option: %s\n", argv[argnr]);
+-+			return 0;
+- 		}
+- 		argnr++;
+- 	}
+diff --git a/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch b/package/lcdproc/lcdproc-LCDd.conf.patch
+similarity index 100%
+rename from package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
+rename to package/lcdproc/lcdproc-LCDd.conf.patch
