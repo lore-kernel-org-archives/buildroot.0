@@ -1,21 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Nov 2012 23:17:10 +0100
-Subject: [Buildroot] [PATCH 01/11] qemu/x86: update to use kernel 3.6.6
-In-Reply-To: <1353011144-28584-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 15 Nov 2012 17:25:34 -0300")
-References: <1353011144-28584-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87vcd61pg9.fsf@dell.be.48ers.dk>
+Date: Fri, 16 Nov 2012 00:00:50 +0100
+Subject: [Buildroot] [PATCH 01/23] dependencies.sh: remove makeinfo
+	(texinfo) from the requirement list
+In-Reply-To: <20121111181034.33a1c150@skate> (Thomas Petazzoni's message of
+ "Sun, 11 Nov 2012 18:10:34 +0100")
+References: <1352639701-27829-1-git-send-email-s.martin49@gmail.com>
+ <1352639701-27829-2-git-send-email-s.martin49@gmail.com>
+ <20121111181034.33a1c150@skate>
+Message-ID: <87lie21nfh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> Dear Samuel Martin,
+ Thomas> On Sun, 11 Nov 2012 14:14:39 +0100, Samuel Martin wrote:
+ >> 
+ >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Committed series, thanks.
+ Thomas> Why do you think they are no longer necessary? IIRC, they are
+ Thomas> needed for the build of binutils/gcc during the internal
+ Thomas> backend toolchain build. But I admittedly haven't tested
+ Thomas> building with these recently.
+
+Ok, I'll drop this patch for now as discussed on IRC.
 
 -- 
 Bye, Peter Korsgaard
