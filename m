@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Nov 2012 17:25:35 -0300
-Subject: [Buildroot] [PATCH 02/11] qemu/x86_64: update to use kernel 3.6.6
+Date: Thu, 15 Nov 2012 17:25:36 -0300
+Subject: [Buildroot] [PATCH 03/11] qemu/sparc: update to use kernel 3.6.6
 In-Reply-To: <1353011144-28584-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1353011144-28584-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1353011144-28584-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1353011144-28584-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../x86_64/{linux-3.5.config => linux-3.6.config}  |    0
- board/qemu/x86_64/readme.txt                       |    2 +-
- configs/qemu_x86_64_defconfig                      |    8 ++++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
- rename board/qemu/x86_64/{linux-3.5.config => linux-3.6.config} (100%)
+ board/qemu/sparc-ss10/readme.txt  |    2 +-
+ configs/qemu_sparc_ss10_defconfig |    6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/qemu/x86_64/linux-3.5.config b/board/qemu/x86_64/linux-3.6.config
-similarity index 100%
-rename from board/qemu/x86_64/linux-3.5.config
-rename to board/qemu/x86_64/linux-3.6.config
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-index de50f3c..791109c 100644
---- a/board/qemu/x86_64/readme.txt
-+++ b/board/qemu/x86_64/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
- 
- The login prompt will appear in the graphical window.
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index 4c20702..e5a1d45 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
  
 -Tested with QEMU 1.1.1
 +Tested with QEMU 1.2.0
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index b7dac33..03cc5b3 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -9,12 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 8818ad1..e13b610 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -6,12 +6,12 @@ BR2_sparc_supersparc=y
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -45,13 +39,12 @@ index b7dac33..03cc5b3 100644
 +# Lock to 3.6 headers to avoid breaking with newer kernels
 +BR2_KERNEL_HEADERS_3_6=y
  
- # Kernel
+ # Linux kernel
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.5.4"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.5.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.6.config"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 1.7.8.6
