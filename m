@@ -1,99 +1,86 @@
-From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Thu, 15 Nov 2012 09:25:15 +0100
-Subject: [Buildroot] [PATCH v3 1/6] snowball-hdmiservice: new package
-In-Reply-To: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
-References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1352967920-3164-2-git-send-email-gregory.hermant@calao-systems.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 15 Nov 2012 12:23:45 +0100
+Subject: [Buildroot] [PATCH for-2012.11 0/5] Introduce errors for legacy
+	API
+In-Reply-To: <1352750912-16012-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 12 Nov 2012 21:08:27 +0100")
+References: <1352750912-16012-1-git-send-email-arnout@mind.be>
+Message-ID: <87wqxn5cu6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
----
- package/Config.in                                  |    1 +
- package/snowball-hdmiservice/Config.in             |   10 +++++
- .../snowball-hdmiservice/snowball-hdmiservice.mk   |   41 ++++++++++++++++++++
- 3 files changed, 52 insertions(+)
- create mode 100644 package/snowball-hdmiservice/Config.in
- create mode 100644 package/snowball-hdmiservice/snowball-hdmiservice.mk
+ Arnout>  This patch series introduces a mechanism to give relatively
+ Arnout> clear error messages when legacy API is used. The first patch
+ Arnout> introduces the mechanism, subsequent messages use it to report
+ Arnout> each of the API changes since 2012.08.
 
-diff --git a/package/Config.in b/package/Config.in
-index 074e9df..e9fd4a9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -250,6 +250,7 @@ source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- source "package/smartmontools/Config.in"
-+source "package/snowball-hdmiservice/Config.in"
- source "package/sredird/Config.in"
- source "package/statserial/Config.in"
- source "package/sysstat/Config.in"
-diff --git a/package/snowball-hdmiservice/Config.in b/package/snowball-hdmiservice/Config.in
-new file mode 100644
-index 0000000..0ea7c81
---- /dev/null
-+++ b/package/snowball-hdmiservice/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SNOWBALL_HDMISERVICE
-+	bool "snowball-hdmiservice"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS	
-+	help
-+	  HDMI userspace control daemon
-+
-+	  This package contains the HDMI userspace control daemon for the 
-+	  snowball board
-+	  
-+	  http://www.igloocommunity.org
-diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-new file mode 100644
-index 0000000..fefa95d
---- /dev/null
-+++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# snowball-hdmiservice
-+#
-+#############################################################
-+SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
-+SNOWBALL_HDMISERVICE_SITE = git://igloocommunity.org/git/bsp/hdmiservice.git
-+SNOWBALL_HDMISERVICE_LICENSE = MIT
-+SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
-+SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
-+
-+define SNOWBALL_HDMISERVICE_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D)
-+endef
-+
-+define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D) DESTDIR=$(STAGING_DIR) install 
-+endef
-+
-+define SNOWBALL_HDMISERVICE_INSTALL_TARGET_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define SNOWBALL_HDMISERVICE_UNINSTALL_STAGING_CMDS
-+	rm -f $(STAGING_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(STAGING_DIR)/usr/bin/hdmistart
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_api.h
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_local.h
-+endef
-+
-+define SNOWBALL_HDMISERVICE_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(TARGET_DIR)/usr/bin/hdmistart
-+endef
-+
-+define SNOWBALL_HDMISERVICE_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+
-+$(eval $(generic-package))
+Cool, thanks!
+
+ Arnout>  Config options that are no longer supported are moved to
+ Arnout> Config.in.legacy.  When any of these is selected in an old
+ Arnout> .config file, a comment will appear to warn the user of it, and
+ Arnout> it is possible to see which option caused the error in the new
+ Arnout> 'Check legacy' menu.  Unselecting that menuconfig disables all
+ Arnout> the legacy options in one go.
+
+Is there ever any use case for not checking for legacy stuff?
+
+I like it, the only problem is that the legacy warnings are shown as
+options when they are really warnings/instructions to the user about
+what has changed/what needs to get fixed.
+
+I played around with making the options hidden and instead display a
+comment when it is selected - E.G:
+
+config BR2_PACKAGE_LIBINTL
+	bool
+	select BR2_LEGACY
+	select BR2_PACKAGE_GETTEXT
+
+config BR2_PACKAGE_LIBINTL
+	bool
+	select BR2_LEGACY
+	select BR2_PACKAGE_GETTEXT
+
+if BR2_PACKAGE_LIBINTL
+comment "libintl is now installed by selecting"
+comment "BR2_PACKAGE_GETTEXT. This now only installs the"
+comment "library, not the executables."
+endif
+
+The syntax is not so nice as kconfig doesn't support multi line
+comments, but OK. More importantly, hidden symbols like
+BR2_PACKAGE_LIBINTL seems to be ignored when the .config is read (which
+is what we normally want so they can be disabled again) so this only
+works when a custom package selects BR2_PACKAGE_LIBINTL, not if the user
+has manually enabled it.
+
+Anybody with a better idea?
+
+ Arnout>  If any such option remains, 'make' will fail immediately with
+ Arnout> a message that legacy options are still selected.  However, if
+ Arnout> BR2_DEPRECATED is selected, that error message is suppressed.
+
+Would it make sense to still warn (but not halt) when DEPRECATED is
+enabled?
+
+ Arnout> - BR2_INET_RPC: since packages 'depend on' this option, there
+ Arnout> is really no way to detect that some Config.in is still using
+ Arnout> it.  The result will be that some packages are just not
+ Arnout> selectable. Hopefully that's enough of a hint for users to find
+ Arnout> the issue.
+
+ Arnout> - xtensa: since there are patches on the list to re-introduce
+ Arnout> xtensa, I haven't added it to Config.in.legacy. If these xtensa
+ Arnout> patches don't make it into 2012.11, then there probably should
+ Arnout> be a Config.in.legacy for it.
+
+I'll try to get xtensa in.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
