@@ -1,73 +1,38 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Fri, 16 Nov 2012 10:16:39 +0100
-Subject: [Buildroot] Xtensa updates
-In-Reply-To: <CAC1BbcTvCC3O_edGmRgNXCPXRn2uq-sA4gs5_Sx=mvLf9XkQ=g@mail.gmail.com>
-References: <87bofdvg25.fsf@dell.be.48ers.dk> <20121112123519.228f7544@skate>
- <CAC1BbcRQ1ecodzDHFCwemK8DkP7t5wD08FRKJ_qbP_jOGi+sOA@mail.gmail.com>
- <201211152304.37056.yann.morin.1998@free.fr>
- <CAC1BbcTvCC3O_edGmRgNXCPXRn2uq-sA4gs5_Sx=mvLf9XkQ=g@mail.gmail.com>
-Message-ID: <CAC1BbcQWtqJkc0vf3Lj+ngD-Etgv=UQ7PTe+umDmzFTqhGmr0g@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 16 Nov 2012 10:00:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 5690] New: python3 does not obey to
+ BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+Message-ID: <bug-5690-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 November 2012 09:53, Bernhard Reutner-Fischer
-<rep.dot.nop@gmail.com>wrote:
+https://bugs.busybox.net/show_bug.cgi?id=5690
 
->
->
-> On 15 November 2012 23:04, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
->> Bernhard, All,
->>
->> On Monday 12 November 2012 Bernhard Reutner-Fischer wrote:
->> > On 12 November 2012 12:35, Thomas Petazzoni <
->> > thomas.petazzoni at free-electrons.com> wrote:
->> > > In the process, would you mind changing the irker configuration so
->> that
->> > > the updates made on the Buildroot Git repository get notified on
->> > > #buildroot instead of #uclibc?
->> > done.
->>
->> Would it be possible for you to change the commit notifications to be
->> shorter, please?
->>
->
-> The default was
-> self.template = '%(bold)s%(project)s:%(reset)s
-> %(green)s%(author)s%(reset)s %(repo)s:%(yellow)s%(branch)s%(reset)s *
-> %(bold)s%(rev)s%(reset)s / %(bold)s%(files)s%(reset)s: %(logmsg)s
-> %(brown)s%(url)s%(reset)s'
->
->
->> Something like:
->>   project:branch short-hash author subject
->>
->
->  I have changed this to
-> --template="%(repo)s:%(branch)s %(author)s * %(rev)s %(logmsg)s" \
-> now.
-> buildroot: s.martin49 buildroot:master * 2012.08-735-gb04a6d7 /
-> docs/manual/contribute.txt: manual: contribute.txt: do not use --summary
-> option with 'git format-patch'
-> http://git.buildroot.org/buildroot/commit/?id=b04a6d7bda0a0241003a79d026569d6e81e07105
-> vs.
-> buildroot:master s.martin49 * 2012.08-735-gb04a6d7 manual: contribute.txt:
-> do not use --summary option with 'git format-patch'
->
-> I still liked the url though.
->
+           Summary: python3 does not obey to
+                    BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: maxime.ripard at free-electrons.com
+        ReportedBy: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I do wonder what esr et al mean with "self.tinyifier" perhaps tinyfier ?
-Furthermore one cannot use post requests (as needed by some tinyfiers) due
-to the inconvenient way urllib.urlretrieve is called. I'll refrain from
-fixing it for now.
 
-perhaps someone enjoys to have a look (with
-https://developers.google.com/url-shortener/v1/url/insert#request in mind)..
-cheers,
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121116/b5479bfb/attachment.html>
+Even though I have BR2_PACKAGE_PYTHON3_PYC_ONLY=y in my configuration, I have a
+lot of *.py files in /usr/lib/python3.3/. The BR2_PACKAGE_PYTHON3_PY_ONLY,
+BR2_PACKAGE_PYTHON3_PYC_ONLY and BR2_PACKAGE_PYTHON3_PY_PYC options should be
+tested and fixed as needed.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
