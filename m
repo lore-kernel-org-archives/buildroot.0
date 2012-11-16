@@ -1,34 +1,73 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Fri, 16 Nov 2012 09:07:55 +0000
-Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
-In-Reply-To: <20121116004452.635cf645@skate>
-References: <20121115230738.33E869A031@busybox.osuosl.org>
- <20121116004452.635cf645@skate>
-Message-ID: <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Fri, 16 Nov 2012 10:16:39 +0100
+Subject: [Buildroot] Xtensa updates
+In-Reply-To: <CAC1BbcTvCC3O_edGmRgNXCPXRn2uq-sA4gs5_Sx=mvLf9XkQ=g@mail.gmail.com>
+References: <87bofdvg25.fsf@dell.be.48ers.dk> <20121112123519.228f7544@skate>
+ <CAC1BbcRQ1ecodzDHFCwemK8DkP7t5wD08FRKJ_qbP_jOGi+sOA@mail.gmail.com>
+ <201211152304.37056.yann.morin.1998@free.fr>
+ <CAC1BbcTvCC3O_edGmRgNXCPXRn2uq-sA4gs5_Sx=mvLf9XkQ=g@mail.gmail.com>
+Message-ID: <CAC1BbcQWtqJkc0vf3Lj+ngD-Etgv=UQ7PTe+umDmzFTqhGmr0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 November 2012 23:44, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Looking at the build failure (which got triggered again today), I am a
-> bit suspicious about this fix. The build failure is:
+On 16 November 2012 09:53, Bernhard Reutner-Fischer
+<rep.dot.nop@gmail.com>wrote:
+
 >
-> /scratch/peko/host/usr/bin/ccache /scratch/peko/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -I/scratch/peko/host/usr/include/freetype2 -I/scratch/peko/host/usr/include   -fPIC -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wno-unused-function -shared  -o glcd.so glcd-glcd_drv.o glcd-glcd-render.o libLCD.a  glcd-t6963.o t6963_low.o -L/scratch/peko/host/usr/lib -lfreetype -lz -lbz2    -ldl
-> /scratch/peko/host/usr/lib/libfreetype.so: file not recognized: File format not recognized
 >
-> The problem here is not a missing dependency on freetype, but rather
-> the fact that we have -I and -L options pointing to host headers and
-> libraries, while we are building something on the target. So maybe
-> adding freetype and zlib as dependencies work around the problem, but I
-> suspect that those wrong -I and -L lines might still be there, no?
+> On 15 November 2012 23:04, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+>> Bernhard, All,
+>>
+>> On Monday 12 November 2012 Bernhard Reutner-Fischer wrote:
+>> > On 12 November 2012 12:35, Thomas Petazzoni <
+>> > thomas.petazzoni at free-electrons.com> wrote:
+>> > > In the process, would you mind changing the irker configuration so
+>> that
+>> > > the updates made on the Buildroot Git repository get notified on
+>> > > #buildroot instead of #uclibc?
+>> > done.
+>>
+>> Would it be possible for you to change the commit notifications to be
+>> shorter, please?
+>>
+>
+> The default was
+> self.template = '%(bold)s%(project)s:%(reset)s
+> %(green)s%(author)s%(reset)s %(repo)s:%(yellow)s%(branch)s%(reset)s *
+> %(bold)s%(rev)s%(reset)s / %(bold)s%(files)s%(reset)s: %(logmsg)s
+> %(brown)s%(url)s%(reset)s'
+>
+>
+>> Something like:
+>>   project:branch short-hash author subject
+>>
+>
+>  I have changed this to
+> --template="%(repo)s:%(branch)s %(author)s * %(rev)s %(logmsg)s" \
+> now.
+> buildroot: s.martin49 buildroot:master * 2012.08-735-gb04a6d7 /
+> docs/manual/contribute.txt: manual: contribute.txt: do not use --summary
+> option with 'git format-patch'
+> http://git.buildroot.org/buildroot/commit/?id=b04a6d7bda0a0241003a79d026569d6e81e07105
+> vs.
+> buildroot:master s.martin49 * 2012.08-735-gb04a6d7 manual: contribute.txt:
+> do not use --summary option with 'git format-patch'
+>
+> I still liked the url though.
+>
 
-Hi Thomas.
+I do wonder what esr et al mean with "self.tinyifier" perhaps tinyfier ?
+Furthermore one cannot use post requests (as needed by some tinyfiers) due
+to the inconvenient way urllib.urlretrieve is called. I'll refrain from
+fixing it for now.
 
-If lcdproc finds freetype in the staging area, then the host header
-and library search paths do not get added to the build commands. So I
-think this patch does more than simply work around the problem.
-
-Simon.
+perhaps someone enjoys to have a look (with
+https://developers.google.com/url-shortener/v1/url/insert#request in mind)..
+cheers,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121116/b5479bfb/attachment.html>
