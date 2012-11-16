@@ -1,35 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 16 Nov 2012 10:02:46 +0000 (UTC)
-Subject: [Buildroot] [Bug 5702] New: python3 should install a "python"
-	symbolic link
-Message-ID: <bug-5702-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Nov 2012 11:32:50 +0100
+Subject: [Buildroot] [PATCH] kexec: disable on unsupported architectures
+In-Reply-To: <1353053588-5156-1-git-send-email-spdawson@gmail.com>
+References: <1353053588-5156-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20121116113250.10aa952d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5702
+Dear spdawson at gmail.com,
 
-           Summary: python3 should install a "python" symbolic link
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: maxime.ripard at free-electrons.com
-        ReportedBy: thomas.petazzoni at free-electrons.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Fri, 16 Nov 2012 08:13:08 +0000, spdawson at gmail.com wrote:
+> diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+> index e59a07b..fe50e06 100644
+> --- a/package/kexec/Config.in
+> +++ b/package/kexec/Config.in
+> @@ -1,6 +1,6 @@
+>  config BR2_PACKAGE_KEXEC
+>  	bool "kexec"
+> -	depends on !BR2_avr32
+> +	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || BR2_powerpc || BR2_sh4 || BR2_sh4a || BR2_sh3
+>  	help
+>  	  Kexec is a user space utiltity for loading another kernel
+>  	  and asking the currently running kernel to do something with it.
 
+Provided the line gets split to ~80 characters:
 
-When the Python 3 package is selected, and Python 2 is not selected, then
-Python 3 should install a python -> python3 symbolic link in /usr/bin.
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
