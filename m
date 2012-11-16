@@ -1,55 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 16 Nov 2012 15:07:16 +0100
-Subject: [Buildroot] [PATCH] cpanminus: mark as broken
-In-Reply-To: <1353074474-1684-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1353074474-1684-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <50A64894.5000705@mind.be>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Fri, 16 Nov 2012 14:14:31 +0000
+Subject: [Buildroot] [PATCH] manual: minor tweaks
+In-Reply-To: <201211161355.19631.yann.morin.1998@free.fr>
+References: <1353067194-32240-1-git-send-email-spdawson@gmail.com>
+ <201211161355.19631.yann.morin.1998@free.fr>
+Message-ID: <CAHt8ZCNWA0qceeq-KJneZQ7Vyqfk3oVVTc1zxeyhXrxz4GcMSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/11/12 15:01, Thomas Petazzoni wrote:
-> cpanminus is currently responsible for about half of the autobuilder
-> failures, due to the missing dependency on host-qemu. However, even
-> with the host-qemu proposed by Arnout, cpanminus will still not work
-> properly: it will try to execute on the build machine executables
-> built for the target. While qemu is here to emulate the instruction
-> set, there is still the unsolved problem of kernel headers version
-> mismatch between the target and the build environments.
->
-> So the whole approach that consists in using host-qemu for building
-> simply cannot work properly, and until it is solved, the package
-> should be marked as broken.
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+On 16 November 2012 12:55, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Please find my comments below.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi Yann; thanks for the feedback.
 
-> ---
->   package/cpanminus/Config.in |    4 ++++
->   1 file changed, 4 insertions(+)
+>> diff --git a/docs/manual/how-buildroot-works.txt b/docs/manual/how-buildroot-works.txt
+>> index 879cff3..31774c0 100644
+>> --- a/docs/manual/how-buildroot-works.txt
+>> +++ b/docs/manual/how-buildroot-works.txt
+>> @@ -9,7 +9,7 @@ also includes patches for various software packages - mainly the ones
+>>  involved in the cross-compilation tool chain (+gcc+, +binutils+ and
+>>  +uClibc+).
+>>
+>> -There is basically one Makefile per software package, and they are
+>> +There is basically one Makefile for each software package, and they are
 >
-> diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
-> index b8b39dc..b10d211 100644
-> --- a/package/cpanminus/Config.in
-> +++ b/package/cpanminus/Config.in
-> @@ -1,5 +1,9 @@
->   config BR2_PACKAGE_CPANMINUS
->   	bool "cpanminus"
-> +	# Requires host-qemu, which cannot work properly due to kernel
-> +	# headers mismatch between the build environment and the
-> +	# target.
-> +	depends on BR2_BROKEN
->   	help
->   	  cpanminus is a script to get, unpack, build and install Perl modules
->   	  from CPAN.
+> Why? 'per' is perfectly legit in this context.
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+I tend to avoid the Latin "per" habitually in my writing, because of
+previous bad experiences with (human) translators. But I don't feel
+strongly about it, so let's leave it in here.
+
+>> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+>> index e0a5a2a..c32f855 100644
+>> --- a/docs/manual/writing-rules.txt
+>> +++ b/docs/manual/writing-rules.txt
+>> @@ -3,7 +3,7 @@
+>>  Writing rules
+>>  -------------
+>>
+>> -Overall, those writing rules are here to help you add new files in
+>> +Overall, these writing rules are here to help you add new files in
+>
+> Proper use of 'these' in this case! ;-)
+
+Well, either "those" refers to "those people" here --- in which case
+it is correct --- or else the reference is to the rules themselves. It
+is not completely clear to me from the context which sense is
+intended, but I assume that it is the rules themselves that are
+referred to.
+
+> When you have addressed these changes, you can add my:
+>   - Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thanks,
+
+Simon.
