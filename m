@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Nov 2012 08:44:17 +0100
-Subject: [Buildroot] [PATCH 1/2] manual: prerequisite.txt: add texinfo
-	to the mandatory package list
-In-Reply-To: <1353046413-3015-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Fri, 16 Nov 2012 07:13:32 +0100")
-References: <1353046413-3015-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87fw4ayotq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 16 Nov 2012 08:43:43 +0100
+Subject: [Buildroot] [git commit] manual: prerequisite.txt: add texinfo to
+	the mandatory package list
+Message-ID: <20121116074438.0C3AA9A043@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c7ece205fae5070b2ddaddf60ee73357ce4ad2bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Samuel> Using the internal Buildroot toolchain backend, makeinfo, whom
- Samuel> belongs to the texinfo package, is required to build gcc and
- Samuel> gdb.
+Using the internal Buildroot toolchain backend, makeinfo, whom belongs to
+the texinfo package, is required to build gcc and gdb.
 
-Committed both, thanks.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/manual/prerequisite.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 693347b..31d437d 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -42,6 +42,7 @@ Mandatory packages
+ ** +python+ (version 2.6 or 2.7)
+ ** +unzip+
+ ** +rsync+
++** +texinfo+ (required for internal Buildroot toolchain backend)
+ 
+ * Source fetching tools:
+ ** +wget+
