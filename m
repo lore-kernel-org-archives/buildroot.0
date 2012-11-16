@@ -1,31 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Nov 2012 22:25:30 +0100
-Subject: [Buildroot] [PATCH] cpanminus: mark as broken
-In-Reply-To: <1353074474-1684-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 16 Nov 2012 15:01:14 +0100")
-References: <1353074474-1684-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2zdxmt1.fsf@dell.be.48ers.dk>
+From: Alexander Khryukin <alexander@mezon.ru>
+Date: Sat, 17 Nov 2012 00:59:20 +0300
+Subject: [Buildroot] gcc on target system issue
+In-Reply-To: <20121116183044.6dcfc297@skate>
+References: <CABtOAfxKdUhvGHF2K_BG__vPPcqmio24DW0suz86Hfzngzc01g@mail.gmail.com>
+ <20121116183044.6dcfc297@skate>
+Message-ID: <CABtOAfyM4gF-AUi0cNSusC542dxcRps=TM20pJe3RdXWU69AuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+2012/11/16 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Thomas> cpanminus is currently responsible for about half of the autobuilder
- Thomas> failures, due to the missing dependency on host-qemu. However, even
- Thomas> with the host-qemu proposed by Arnout, cpanminus will still not work
- Thomas> properly: it will try to execute on the build machine executables
- Thomas> built for the target. While qemu is here to emulate the instruction
- Thomas> set, there is still the unsolved problem of kernel headers version
- Thomas> mismatch between the target and the build environments.
+> Dear Alexander Khryukin,
+>
+> On Fri, 16 Nov 2012 01:20:32 +0300, Alexander Khryukin wrote:
+>
+> > I'm trying to build gcc on target but it fails with
+>
+> Why are you trying to build gcc on target? What is the purpose of
+> getting gcc on the target when building a small embedded Linux system
+> with Buildroot?
+>
+> Notice that as per the decisions taken during the last Buildroot
+> Developers Meeting, the possibility of building gcc for the target in
+> Buildroot should soon be deprecated. So there is not a strong interest
+> to fix problems reported by users.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
- Thomas> So the whole approach that consists in using host-qemu for building
- Thomas> simply cannot work properly, and until it is solved, the package
- Thomas> should be marked as broken.
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Ah, it bad solution to deprecate gcc on target.
+i'm embedded linux developer and trying to build OpenMandriva linux
+for cortex-a9, but without gcc on target my work is totally unuseful.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121117/9d30a93c/attachment.html>
