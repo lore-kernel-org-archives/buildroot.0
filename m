@@ -1,20 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Nov 2012 22:25:49 +0100
-Subject: [Buildroot] [PATCH] gdb: not available on aarch64 for the target
-In-Reply-To: <1353074230-1493-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 16 Nov 2012 14:57:10 +0100")
-References: <1353074230-1493-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878va1xmsi.fsf@dell.be.48ers.dk>
+Date: Fri, 16 Nov 2012 22:26:03 +0100
+Subject: [Buildroot] [PATCH] mysql_client: security bump to version
+	5.1.66
+In-Reply-To: <1353072262-31240-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 16 Nov 2012 10:24:22 -0300")
+References: <1353072262-31240-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874nkpxms4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Fixes
- Thomas>   http://autobuild.buildroot.org/results/d32a0fb1584a125cccde521a3960fb87ff7e2de6/build-end.log
+ Gustavo> Fixes multiple security isssues, most of them of the server component
+ Gustavo> though.
 
 Committed, thanks.
 
