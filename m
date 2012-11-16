@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Nov 2012 18:23:59 +0100
-Subject: [Buildroot] [PATCH 10/12] xapp_xlogo: bump version to 1.0.4 to fix
-	Xmu related build failure
-In-Reply-To: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2725296aa4bb5b7dbdc19320a3fe51007f9bb016.1353086601.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Nov 2012 18:30:44 +0100
+Subject: [Buildroot] gcc on target system issue
+In-Reply-To: <CABtOAfxKdUhvGHF2K_BG__vPPcqmio24DW0suz86Hfzngzc01g@mail.gmail.com>
+References: <CABtOAfxKdUhvGHF2K_BG__vPPcqmio24DW0suz86Hfzngzc01g@mail.gmail.com>
+Message-ID: <20121116183044.6dcfc297@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xapp_xlogo/xapp_xlogo.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Alexander Khryukin,
 
-diff --git a/package/x11r7/xapp_xlogo/xapp_xlogo.mk b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-index c3467ba..674b943 100644
---- a/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-+++ b/package/x11r7/xapp_xlogo/xapp_xlogo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XAPP_XLOGO_VERSION = 1.0.1
-+XAPP_XLOGO_VERSION = 1.0.4
- XAPP_XLOGO_SOURCE = xlogo-$(XAPP_XLOGO_VERSION).tar.bz2
- XAPP_XLOGO_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XLOGO_DEPENDENCIES = xlib_libXaw xlib_libXprintUtil xlib_libXrender \
+On Fri, 16 Nov 2012 01:20:32 +0300, Alexander Khryukin wrote:
+
+> I'm trying to build gcc on target but it fails with
+
+Why are you trying to build gcc on target? What is the purpose of
+getting gcc on the target when building a small embedded Linux system
+with Buildroot?
+
+Notice that as per the decisions taken during the last Buildroot
+Developers Meeting, the possibility of building gcc for the target in
+Buildroot should soon be deprecated. So there is not a strong interest
+to fix problems reported by users.
+
+Thanks,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
