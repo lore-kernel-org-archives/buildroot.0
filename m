@@ -1,47 +1,32 @@
-From: Martin Peevski <martin@ronetix.at>
-Date: Fri, 16 Nov 2012 17:53:25 +0200
-Subject: [Buildroot] Buildroot fail to build when configure for dev
- managment: dynamically with udev
-In-Reply-To: <20121116164504.6270393b@skate>
-References: <50A65094.7080202@ronetix.at> <50A6539F.8040507@gmail.com>
- <50A65565.9050001@ronetix.at> <50A6559A.3050300@gmail.com>
- <20121116164504.6270393b@skate>
-Message-ID: <50A66175.6090107@ronetix.at>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 16 Nov 2012 15:28:44 +0100
+Subject: [Buildroot] [git commit] can-utils: add CAN FD support
+Message-ID: <20121116160049.4E9079A048@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/11/12 17:45, Thomas Petazzoni wrote:
-> On Fri, 16 Nov 2012 16:02:50 +0100, Zoltan Gyarmati wrote:
->
->>> Thanks for the fast response but when I configure Buildroot to use
->>> external toolchain the Kernel headers option dissapear. Any other advice?
->> yes, in this case it comes from the toolchain itself, sou you have to
->> check it in the toolchain.
-> If Martin is using the external toolchain backend, then he cannot check
-> anything related to the kernel headers version in the menuconfig.
-> External toolchains are pre-built toolchains, so Buildroot just uses
-> them as-is, you have no way of changing the Buildroot version.
->
-> Martin: your external toolchain is using too old kernel headers to
-> build udev. So your options are:
->
->   *) Use a more recent external toolchain that will have more recent
->      kernel headers.
->
->   *) Add a patch to udev that defines BTN_TRIGGER_HAPPY to the correct
->      value when it is not already defined by kernel headers.
->
-> BTW, which external toolchain are you using?
->
-> Thanks,
->
-> Thomas
+commit: http://git.buildroot.net/buildroot/commit/?id=b5ffa8e3dfca9db911de15e06daafae1f5cc2b07
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks, Thomas! I use arm-oe-gnueabi- toolchain. Can you explain how to 
-add a patch to udev to correct the problem?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/can-utils/can-utils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I'm afraid of using another toolchain because I compile the Kernel and 
-the rootfs separately.
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index ea1dc06..321dc52 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-CAN_UTILS_VERSION = 50775159276d896d8b3102b6dbc658a91a2a1d53
++CAN_UTILS_VERSION = 836d3cc0122ce31a1b732d369cbd27b690c3110f
+ CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
+ CAN_UTILS_AUTORECONF = YES
+ 
