@@ -1,46 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Nov 2012 22:24:31 +0100
-Subject: [Buildroot] [git commit] cpanminus: mark as broken
-Message-ID: <20121116212645.4677E99FD7@busybox.osuosl.org>
+Date: Fri, 16 Nov 2012 22:25:40 +0100
+Subject: [Buildroot] [git commit] gdb: not available on aarch64 for the
+	target
+Message-ID: <20121116212646.0A71B99FD7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30d99041ce5f32c30c470c3b114d612ba26e49ef
+commit: http://git.buildroot.net/buildroot/commit/?id=b392a68308d587162e8cf9bf52ede5e8d3dcd2c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpanminus is currently responsible for about half of the autobuilder
-failures, due to the missing dependency on host-qemu. However, even
-with the host-qemu proposed by Arnout, cpanminus will still not work
-properly: it will try to execute on the build machine executables
-built for the target. While qemu is here to emulate the instruction
-set, there is still the unsolved problem of kernel headers version
-mismatch between the target and the build environments.
+Fixes
 
-So the whole approach that consists in using host-qemu for building
-simply cannot work properly, and until it is solved, the package
-should be marked as broken.
+  http://autobuild.buildroot.org/results/d32a0fb1584a125cccde521a3960fb87ff7e2de6/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cpanminus/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ toolchain/gdb/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/cpanminus/Config.in b/package/cpanminus/Config.in
-index b8b39dc..b10d211 100644
---- a/package/cpanminus/Config.in
-+++ b/package/cpanminus/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_CPANMINUS
- 	bool "cpanminus"
-+	# Requires host-qemu, which cannot work properly due to kernel
-+	# headers mismatch between the build environment and the
-+	# target.
-+	depends on BR2_BROKEN
- 	help
- 	  cpanminus is a script to get, unpack, build and install Perl modules
- 	  from CPAN.
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index ca0c821..50aafdf 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_GDB
+ 	bool "Build gdb debugger for the Target"
+ 	select BR2_PACKAGE_NCURSES
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin
++	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
+ 	# The newest versions of gdb require thread debugging in the
+ 	# toolchain. The only cases for which this is not needed is if
+ 	# we use gdb 6.8 (marked deprecated)
