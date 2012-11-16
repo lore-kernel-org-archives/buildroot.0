@@ -1,41 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 Nov 2012 14:01:22 +0100
-Subject: [Buildroot] [PATCH] manual: minor tweaks
-In-Reply-To: <1353067194-32240-1-git-send-email-spdawson@gmail.com>
-References: <1353067194-32240-1-git-send-email-spdawson@gmail.com>
-Message-ID: <201211161401.22658.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 16 Nov 2012 10:24:22 -0300
+Subject: [Buildroot] [PATCH] mysql_client: security bump to version 5.1.66
+Message-ID: <1353072262-31240-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, All,
+Fixes multiple security isssues, most of them of the server component
+though.
 
-On Friday 16 November 2012 12:59:54 spdawson at gmail.com wrote:
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> index b2e6e7d..b94b670 100644
-> --- a/docs/manual/contribute.txt
-> +++ b/docs/manual/contribute.txt
-[--SNIp--]
-> @@ -121,6 +121,6 @@ Here is a short list of details to provide in such case:
->  
->  Additionnally, your can add the +.config+ file.
->  
-> -If some of these details are too large, do not hesitate to use some
-> +If some of these details are too large, do not hesitate to use a
->  pastebin service (see
->  http://en.wikipedia.org/wiki/Comparison_of_pastebins[]).
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mysql_client/mysql_client.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-That page has been deleted from wikipedia.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 46862a1..9785aee 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-MYSQL_CLIENT_VERSION = 5.1.65
++MYSQL_CLIENT_VERSION = 5.1.66
+ MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
+ MYSQL_CLIENT_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+1.7.8.6
