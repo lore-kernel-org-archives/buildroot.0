@@ -1,2356 +1,821 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Nov 2012 11:48:10 +0100
-Subject: [Buildroot] [PATCH 2/2] libffi: add aarch64 support from upstream
-In-Reply-To: <1353062890-30563-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1353062890-30563-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1353062890-30563-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 16 Nov 2012 11:59:54 +0000
+Subject: [Buildroot] [PATCH] manual: minor tweaks
+Message-ID: <1353067194-32240-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build failures like:
+From: Simon Dawson <spdawson@gmail.com>
 
-  http://autobuild.buildroot.org/results/6b4b4c414d366c936df480747c78272050c84293/build-end.log
+Minor grammatical and spelling tweaks to the manual content.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- ...fi-0002-Add-aarch64-support-from-upstream.patch | 2326 ++++++++++++++++++++
- 1 file changed, 2326 insertions(+)
- create mode 100644 package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch
+ docs/manual/adding-packages-conclusion.txt |    2 +-
+ docs/manual/adding-packages-directory.txt  |    6 ++--
+ docs/manual/adding-packages-gettext.txt    |    6 ++--
+ docs/manual/adding-packages-tips.txt       |    6 ++--
+ docs/manual/beyond-buildroot.txt           |    2 +-
+ docs/manual/board-support.txt              |    8 ++---
+ docs/manual/common-usage.txt               |    8 ++---
+ docs/manual/contribute.txt                 |   22 +++++++-------
+ docs/manual/customize-uclibc-config.txt    |    2 +-
+ docs/manual/download-location.txt          |    2 +-
+ docs/manual/embedded-basics.txt            |   14 ++++-----
+ docs/manual/faq-troubleshooting.txt        |   44 ++++++++++++++--------------
+ docs/manual/how-buildroot-works.txt        |    2 +-
+ docs/manual/introduction.txt               |    8 ++---
+ docs/manual/legal-notice.txt               |   21 ++++++-------
+ docs/manual/make-tips.txt                  |   12 ++++----
+ docs/manual/makedev-syntax.txt             |   17 +++++------
+ docs/manual/package-make-target.txt        |    2 +-
+ docs/manual/patch-policy.txt               |   44 ++++++++++++++--------------
+ docs/manual/prerequisite.txt               |    8 ++---
+ docs/manual/rebuilding-packages.txt        |    8 ++---
+ docs/manual/using.txt                      |    3 +-
+ docs/manual/writing-rules.txt              |    2 +-
+ 23 files changed, 124 insertions(+), 125 deletions(-)
 
-diff --git a/package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch b/package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch
-new file mode 100644
-index 0000000..a407130
---- /dev/null
-+++ b/package/libffi/libffi-0002-Add-aarch64-support-from-upstream.patch
-@@ -0,0 +1,2326 @@
-+From c77c9625dd63138512ce0f67e07dd254771e566f Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 16 Nov 2012 01:15:28 +0100
-+Subject: [PATCH 2/2] Add aarch64 support from upstream
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ ChangeLog                |   27 ++
-+ Makefile.am              |    4 +
-+ Makefile.in              |   44 +-
-+ README                   |    3 +
-+ configure                |  185 +++++---
-+ configure.ac             |    5 +
-+ src/aarch64/ffi.c        | 1076 ++++++++++++++++++++++++++++++++++++++++++++++
-+ src/aarch64/ffitarget.h  |   59 +++
-+ src/aarch64/sysv.S       |  307 +++++++++++++
-+ testsuite/lib/libffi.exp |    4 +
-+ 10 files changed, 1647 insertions(+), 67 deletions(-)
-+ create mode 100644 src/aarch64/ffi.c
-+ create mode 100644 src/aarch64/ffitarget.h
-+ create mode 100644 src/aarch64/sysv.S
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index 376edf7..4e8ea91 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -1,3 +1,30 @@
-++2012-10-30  James Greenhalgh  <james.greenhalgh@arm.com>
-++            Marcus Shawcroft  <marcus.shawcroft@arm.com>
-++
-++        * README: Add details of aarch64 port.
-++        * src/aarch64/ffi.c: New.
-++        * src/aarch64/ffitarget.h: Likewise.
-++        * src/aarch64/sysv.S: Likewise.
-++	* Makefile.am: Support aarch64.
-++	* configure.ac: Support aarch64.
-++	* Makefile.in, configure: Rebuilt.
-++
-++2012-10-30  James Greenhalgh  <james.greenhalgh@arm.com>
-++            Marcus Shawcroft  <marcus.shawcroft@arm.com>
-++
-++        * testsuite/lib/libffi.exp: Add support for aarch64.
-++        * testsuite/libffi.call/cls_struct_va1.c: New.
-++        * testsuite/libffi.call/cls_uchar_va.c: Likewise.
-++        * testsuite/libffi.call/cls_uint_va.c: Likewise.
-++        * testsuite/libffi.call/cls_ulong_va.c: Liekwise.
-++        * testsuite/libffi.call/cls_ushort_va.c: Likewise.
-++        * testsuite/libffi.call/nested_struct11.c: Likewise.
-++        * testsuite/libffi.call/uninitialized.c: Likewise.
-++        * testsuite/libffi.call/va_1.c: Likewise.
-++        * testsuite/libffi.call/va_struct1.c: Likewise.
-++        * testsuite/libffi.call/va_struct2.c: Likewise.
-++        * testsuite/libffi.call/va_struct3.c: Likewise.
-++
-+ 2012-04-23  Alexandre Keunecke I. de Mendonca <alexandre.keunecke@gmail.com>
-+ 
-+ 	* configure.ac: Add Blackfin/sysv support
-+diff --git a/Makefile.am b/Makefile.am
-+index 16f32a6..bd4d5c4 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -5,6 +5,7 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
-+ SUBDIRS = include testsuite man
-+ 
-+ EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host \
-++	src/aarch64/ffi.c src/aarch64/ffitarget.h \
-+ 	src/alpha/ffi.c src/alpha/osf.S src/alpha/ffitarget.h \
-+ 	src/arm/ffi.c src/arm/sysv.S src/arm/ffitarget.h \
-+ 	src/avr32/ffi.c src/avr32/sysv.S src/avr32/ffitarget.h \
-+@@ -151,6 +152,9 @@ endif
-+ if POWERPC_FREEBSD
-+ nodist_libffi_la_SOURCES += src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S
-+ endif
-++if AARCH64
-++nodist_libffi_la_SOURCES += src/aarch64/sysv.S src/aarch64/ffi.c
-++endif
-+ if ARM
-+ nodist_libffi_la_SOURCES += src/arm/sysv.S src/arm/ffi.c
-+ if FFI_EXEC_TRAMPOLINE_TABLE
-+diff --git a/Makefile.in b/Makefile.in
-+index f5c10af..c4f4470 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -65,9 +65,10 @@ target_triplet = @target@
-+ @SH64_TRUE at am__append_27 = src/sh64/sysv.S src/sh64/ffi.c
-+ @PA_LINUX_TRUE at am__append_28 = src/pa/linux.S src/pa/ffi.c
-+ @PA_HPUX_TRUE at am__append_29 = src/pa/hpux32.S src/pa/ffi.c
-++ at AARCH64_TRUE@am__append_30 = src/aarch64/sysv.S src/aarch64/ffi.c
-+ # Build debug. Define FFI_DEBUG on the commandline so that, when building with
-+ # MSVC, it can link against the debug CRT.
-+- at FFI_DEBUG_TRUE@am__append_30 = -DFFI_DEBUG
-++ at FFI_DEBUG_TRUE@am__append_31 = -DFFI_DEBUG
-+ subdir = .
-+ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(srcdir)/doc/stamp-vti \
-+@@ -156,6 +157,7 @@ am_libffi_la_OBJECTS = src/prep_cif.lo src/types.lo src/raw_api.lo \
-+ @SH64_TRUE at am__objects_27 = src/sh64/sysv.lo src/sh64/ffi.lo
-+ @PA_LINUX_TRUE at am__objects_28 = src/pa/linux.lo src/pa/ffi.lo
-+ @PA_HPUX_TRUE at am__objects_29 = src/pa/hpux32.lo src/pa/ffi.lo
-++ at AARCH64_TRUE@am__objects_29 = src/aarch64/sysv.lo src/aarch64/ffi.lo
-+ nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
-+ 	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
-+ 	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
-+@@ -165,17 +167,18 @@ nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
-+ 	$(am__objects_18) $(am__objects_19) $(am__objects_20) \
-+ 	$(am__objects_21) $(am__objects_22) $(am__objects_23) \
-+ 	$(am__objects_24) $(am__objects_25) $(am__objects_26) \
-+-	$(am__objects_27) $(am__objects_28) $(am__objects_29)
-++	$(am__objects_27) $(am__objects_28) $(am__objects_29) \
-++	$(am__objects_30)
-+ libffi_la_OBJECTS = $(am_libffi_la_OBJECTS) \
-+ 	$(nodist_libffi_la_OBJECTS)
-+ libffi_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-+ 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-+ 	$(libffi_la_LDFLAGS) $(LDFLAGS) -o $@
-+ libffi_convenience_la_LIBADD =
-+-am__objects_30 = src/prep_cif.lo src/types.lo src/raw_api.lo \
-++am__objects_31 = src/prep_cif.lo src/types.lo src/raw_api.lo \
-+ 	src/java_raw_api.lo src/closures.lo
-+-am_libffi_convenience_la_OBJECTS = $(am__objects_30)
-+-am__objects_31 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
-++am_libffi_convenience_la_OBJECTS = $(am__objects_31)
-++am__objects_32 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
-+ 	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
-+ 	$(am__objects_7) $(am__objects_8) $(am__objects_9) \
-+ 	$(am__objects_10) $(am__objects_11) $(am__objects_12) \
-+@@ -185,7 +188,7 @@ am__objects_31 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
-+ 	$(am__objects_22) $(am__objects_23) $(am__objects_24) \
-+ 	$(am__objects_25) $(am__objects_26) $(am__objects_27) \
-+ 	$(am__objects_28) $(am__objects_29)
-+-nodist_libffi_convenience_la_OBJECTS = $(am__objects_31)
-++nodist_libffi_convenience_la_OBJECTS = $(am__objects_32)
-+ libffi_convenience_la_OBJECTS = $(am_libffi_convenience_la_OBJECTS) \
-+ 	$(nodist_libffi_convenience_la_OBJECTS)
-+ DEFAULT_INCLUDES = -I. at am__isrc@
-+@@ -410,6 +413,7 @@ top_srcdir = @top_srcdir@
-+ AUTOMAKE_OPTIONS = foreign subdir-objects
-+ SUBDIRS = include testsuite man
-+ EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host \
-++	src/aarch64/ffi.c src/aarch64/ffitarget.h \
-+ 	src/alpha/ffi.c src/alpha/osf.S src/alpha/ffitarget.h \
-+ 	src/arm/ffi.c src/arm/sysv.S src/arm/ffitarget.h \
-+ 	src/avr32/ffi.c src/avr32/sysv.S src/avr32/ffitarget.h \
-+@@ -501,10 +505,11 @@ nodist_libffi_la_SOURCES = $(am__append_1) $(am__append_2) \
-+ 	$(am__append_18) $(am__append_19) $(am__append_20) \
-+ 	$(am__append_21) $(am__append_22) $(am__append_23) \
-+ 	$(am__append_24) $(am__append_25) $(am__append_26) \
-+-	$(am__append_27) $(am__append_28) $(am__append_29)
-++	$(am__append_27) $(am__append_28) $(am__append_29) \
-++	$(am__append_30)
-+ libffi_convenience_la_SOURCES = $(libffi_la_SOURCES)
-+ nodist_libffi_convenience_la_SOURCES = $(nodist_libffi_la_SOURCES)
-+-AM_CFLAGS = -g $(am__append_30)
-++AM_CFLAGS = -g $(am__append_31)
-+ libffi_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version` $(LTLDFLAGS) $(AM_LTLDFLAGS)
-+ AM_CPPFLAGS = -I. -I$(top_srcdir)/include -Iinclude -I$(top_srcdir)/src -DFFI_BUILDING
-+ AM_CCASFLAGS = $(AM_CPPFLAGS) -g
-+@@ -640,6 +645,16 @@ src/bfin/ffi.lo: src/bfin/$(am__dirstamp) \
-+ 	src/bfin/$(DEPDIR)/$(am__dirstamp)
-+ src/bfin/sysv.lo: src/bfin/$(am__dirstamp) \
-+ 	src/bfin/$(DEPDIR)/$(am__dirstamp)
-++src/aarch64/$(am__dirstamp):
-++	@$(MKDIR_P) src/aarch64
-++	@: > src/aarch64/$(am__dirstamp)
-++src/aarch64/$(DEPDIR)/$(am__dirstamp):
-++	@$(MKDIR_P) src/aarch64/$(DEPDIR)
-++	@: > src/aarch64/$(DEPDIR)/$(am__dirstamp)
-++src/aarch64/ffi.lo: src/aarch64/$(am__dirstamp) \
-++	src/aarch64/$(DEPDIR)/$(am__dirstamp)
-++src/aarch64/sysv.lo: src/aarch64/$(am__dirstamp) \
-++	src/aarch64/$(DEPDIR)/$(am__dirstamp)
-+ src/x86/$(am__dirstamp):
-+ 	@$(MKDIR_P) src/x86
-+ 	@: > src/x86/$(am__dirstamp)
-+@@ -859,6 +874,10 @@ mostlyclean-compile:
-+ 	-rm -f src/bfin/ffi.lo
-+ 	-rm -f src/bfin/sysv.$(OBJEXT)
-+ 	-rm -f src/bfin/sysv.lo
-++	-rm -f src/aarch64/ffi.$(OBJEXT)
-++	-rm -f src/aarch64/ffi.lo
-++	-rm -f src/aarch64/sysv.$(OBJEXT)
-++	-rm -f src/aarch64/sysv.lo
-+ 	-rm -f src/closures.$(OBJEXT)
-+ 	-rm -f src/closures.lo
-+ 	-rm -f src/cris/ffi.$(OBJEXT)
-+@@ -973,6 +992,8 @@ distclean-compile:
-+ @AMDEP_TRUE@@am__include@ @am__quote at src/$(DEPDIR)/prep_cif.Plo at am__quote@
-+ @AMDEP_TRUE@@am__include@ @am__quote at src/$(DEPDIR)/raw_api.Plo at am__quote@
-+ @AMDEP_TRUE@@am__include@ @am__quote at src/$(DEPDIR)/types.Plo at am__quote@
-++ at AMDEP_TRUE@@am__include@ @am__quote at src/aarch64/$(DEPDIR)/ffi.Plo at am__quote@
-++ at AMDEP_TRUE@@am__include@ @am__quote at src/aarch64/$(DEPDIR)/sysv.Plo at am__quote@
-+ @AMDEP_TRUE@@am__include@ @am__quote at src/alpha/$(DEPDIR)/ffi.Plo at am__quote@
-+ @AMDEP_TRUE@@am__include@ @am__quote at src/alpha/$(DEPDIR)/osf.Plo at am__quote@
-+ @AMDEP_TRUE@@am__include@ @am__quote at src/arm/$(DEPDIR)/ffi.Plo at am__quote@
-+@@ -1083,6 +1104,7 @@ mostlyclean-libtool:
-+ clean-libtool:
-+ 	-rm -rf .libs _libs
-+ 	-rm -rf src/.libs src/_libs
-++	-rm -rf src/aarch64/.libs src/aarch64/_libs
-+ 	-rm -rf src/alpha/.libs src/alpha/_libs
-+ 	-rm -rf src/arm/.libs src/arm/_libs
-+ 	-rm -rf src/avr32/.libs src/avr32/_libs
-+@@ -1635,6 +1657,8 @@ distclean-generic:
-+ 	-rm -f doc/$(am__dirstamp)
-+ 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
-+ 	-rm -f src/$(am__dirstamp)
-++	-rm -f src/aarch64/$(DEPDIR)/$(am__dirstamp)
-++	-rm -f src/aarch64/$(am__dirstamp)
-+ 	-rm -f src/alpha/$(DEPDIR)/$(am__dirstamp)
-+ 	-rm -f src/alpha/$(am__dirstamp)
-+ 	-rm -f src/arm/$(DEPDIR)/$(am__dirstamp)
-+@@ -1682,7 +1706,7 @@ clean-am: clean-aminfo clean-generic clean-libLTLIBRARIES \
-+ 
-+ distclean: distclean-recursive
-+ 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-+-	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
-++	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
-+ 	-rm -f Makefile
-+ distclean-am: clean-am distclean-compile distclean-generic \
-+ 	distclean-hdr distclean-libtool distclean-tags
-+@@ -1802,7 +1826,7 @@ installcheck-am:
-+ maintainer-clean: maintainer-clean-recursive
-+ 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-+ 	-rm -rf $(top_srcdir)/autom4te.cache
-+-	-rm -rf src/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
-++	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/x86/$(DEPDIR)
-+ 	-rm -f Makefile
-+ maintainer-clean-am: distclean-am maintainer-clean-aminfo \
-+ 	maintainer-clean-generic maintainer-clean-vti
-+diff --git a/README b/README
-+index ec240a4..9aa99f4 100644
-+--- a/README
-++++ b/README
-+@@ -51,6 +51,7 @@ tested:
-+ |--------------+------------------|
-+ | Architecture | Operating System |
-+ |--------------+------------------|
-++| AArch64         | Linux            |
-+ | Alpha        | Linux            |
-+ | Alpha        | Tru64            |
-+ | ARM          | Linux            |
-+@@ -151,6 +152,7 @@ See the ChangeLog files for details.
-+ 
-+ 3.0.12 XXX-XX-XX
-+         Add Blackfin support.
-++	Add AArch64 support.
-+ 
-+ 3.0.11 Apr-11-12
-+         Add support for variadic functions (ffi_prep_cif_var).
-+@@ -320,6 +322,7 @@ Thorup.
-+ Major processor architecture ports were contributed by the following
-+ developers:
-+ 
-++aarch64		Marcus Shawcroft, James Greenhalgh
-+ alpha		Richard Henderson
-+ arm		Raffaele Sena
-+ cris		Simon Posnjak, Hans-Peter Nilsson
-+diff --git a/configure b/configure
-+index 4ccba55..419275b 100755
-+--- a/configure
-++++ b/configure
-+@@ -649,6 +649,8 @@ AVR32_FALSE
-+ AVR32_TRUE
-+ ARM_FALSE
-+ ARM_TRUE
-++AARCH64_FALSE
-++AARCH64_TRUE
-+ POWERPC_FREEBSD_FALSE
-+ POWERPC_FREEBSD_TRUE
-+ POWERPC_DARWIN_FALSE
-+@@ -1478,7 +1480,7 @@ Optional Features:
-+ Optional Packages:
-+   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-+   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-+-  --with-pic              try to use only PIC/non-PIC objects [default=use
-++  --with-pic[=PKGS]       try to use only PIC/non-PIC objects [default=use
-+                           both]
-+   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
-+   --with-sysroot=DIR Search for dependent libraries within DIR
-+@@ -5276,6 +5278,11 @@ else
-+     lt_cv_sys_max_cmd_len=196608
-+     ;;
-+ 
-++  os2*)
-++    # The test takes a long time on OS/2.
-++    lt_cv_sys_max_cmd_len=8192
-++    ;;
-++
-+   osf*)
-+     # Dr. Hans Ekkehard Plesser reports seeing a kernel panic running configure
-+     # due to this test when exec_disable_arg_limit is 1 on Tru64. It is not
-+@@ -5315,7 +5322,7 @@ else
-+       # If test is not a shell built-in, we'll probably end up computing a
-+       # maximum length that is only half of the actual maximum length, but
-+       # we can't tell.
-+-      while { test "X"`func_fallback_echo "$teststring$teststring" 2>/dev/null` \
-++      while { test "X"`env echo "$teststring$teststring" 2>/dev/null` \
-+ 	         = "X$teststring$teststring"; } >/dev/null 2>&1 &&
-+ 	      test $i != 17 # 1/2 MB should be enough
-+       do
-+@@ -5744,7 +5751,7 @@ irix5* | irix6* | nonstopux*)
-+   lt_cv_deplibs_check_method=pass_all
-+   ;;
-+ 
-+-# This must be Linux ELF.
-++# This must be glibc/ELF.
-+ linux* | k*bsd*-gnu | kopensolaris*-gnu)
-+   lt_cv_deplibs_check_method=pass_all
-+   ;;
-+@@ -6538,6 +6545,7 @@ for ac_symprfx in "" "_"; do
-+     # which start with @ or ?.
-+     lt_cv_sys_global_symbol_pipe="$AWK '"\
-+ "     {last_section=section; section=\$ 3};"\
-++"     /^COFF SYMBOL TABLE/{for(i in hide) delete hide[i]};"\
-+ "     /Section length .*#relocs.*(pick any)/{hide[last_section]=1};"\
-+ "     \$ 0!~/External *\|/{next};"\
-+ "     / 0+ UNDEF /{next}; / UNDEF \([^|]\)*()/{next};"\
-+@@ -6926,7 +6934,7 @@ $as_echo "$lt_cv_cc_needs_belf" >&6; }
-+     CFLAGS="$SAVE_CFLAGS"
-+   fi
-+   ;;
-+-sparc*-*solaris*)
-++*-*solaris*)
-+   # Find out which ABI we are using.
-+   echo 'int i;' > conftest.$ac_ext
-+   if { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_compile\""; } >&5
-+@@ -6937,7 +6945,20 @@ sparc*-*solaris*)
-+     case `/usr/bin/file conftest.o` in
-+     *64-bit*)
-+       case $lt_cv_prog_gnu_ld in
-+-      yes*) LD="${LD-ld} -m elf64_sparc" ;;
-++      yes*)
-++        case $host in
-++        i?86-*-solaris*)
-++          LD="${LD-ld} -m elf_x86_64"
-++          ;;
-++        sparc*-*-solaris*)
-++          LD="${LD-ld} -m elf64_sparc"
-++          ;;
-++        esac
-++        # GNU ld 2.21 introduced _sol2 emulations.  Use them if available.
-++        if ${LD-ld} -V | grep _sol2 >/dev/null 2>&1; then
-++          LD="${LD-ld}_sol2"
-++        fi
-++        ;;
-+       *)
-+ 	if ${LD-ld} -64 -r -o conftest2.o conftest.o >/dev/null 2>&1; then
-+ 	  LD="${LD-ld} -64"
-+@@ -7577,7 +7598,13 @@ else
-+ 	$LTCC $LTCFLAGS $LDFLAGS -o libconftest.dylib \
-+ 	  -dynamiclib -Wl,-single_module conftest.c 2>conftest.err
-+         _lt_result=$?
-+-	if test -f libconftest.dylib && test ! -s conftest.err && test $_lt_result = 0; then
-++	# If there is a non-empty error log, and "single_module"
-++	# appears in it, assume the flag caused a linker warning
-++        if test -s conftest.err && $GREP single_module conftest.err; then
-++	  cat conftest.err >&5
-++	# Otherwise, if the output was created with a 0 exit code from
-++	# the compiler, it worked.
-++	elif test -f libconftest.dylib && test $_lt_result -eq 0; then
-+ 	  lt_cv_apple_cc_single_mod=yes
-+ 	else
-+ 	  cat conftest.err >&5
-+@@ -7588,6 +7615,7 @@ else
-+ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_apple_cc_single_mod" >&5
-+ $as_echo "$lt_cv_apple_cc_single_mod" >&6; }
-++
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -exported_symbols_list linker flag" >&5
-+ $as_echo_n "checking for -exported_symbols_list linker flag... " >&6; }
-+ if ${lt_cv_ld_exported_symbols_list+:} false; then :
-+@@ -7620,6 +7648,7 @@ rm -f core conftest.err conftest.$ac_objext \
-+ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $lt_cv_ld_exported_symbols_list" >&5
-+ $as_echo "$lt_cv_ld_exported_symbols_list" >&6; }
-++
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for -force_load linker flag" >&5
-+ $as_echo_n "checking for -force_load linker flag... " >&6; }
-+ if ${lt_cv_ld_force_load+:} false; then :
-+@@ -7641,7 +7670,9 @@ _LT_EOF
-+       echo "$LTCC $LTCFLAGS $LDFLAGS -o conftest conftest.c -Wl,-force_load,./libconftest.a" >&5
-+       $LTCC $LTCFLAGS $LDFLAGS -o conftest conftest.c -Wl,-force_load,./libconftest.a 2>conftest.err
-+       _lt_result=$?
-+-      if test -f conftest && test ! -s conftest.err && test $_lt_result = 0 && $GREP forced_load conftest 2>&1 >/dev/null; then
-++      if test -s conftest.err && $GREP force_load conftest.err; then
-++	cat conftest.err >&5
-++      elif test -f conftest && test $_lt_result -eq 0 && $GREP forced_load conftest >/dev/null 2>&1 ; then
-+ 	lt_cv_ld_force_load=yes
-+       else
-+ 	cat conftest.err >&5
-+@@ -8046,7 +8077,22 @@ fi
-+ 
-+ # Check whether --with-pic was given.
-+ if test "${with_pic+set}" = set; then :
-+-  withval=$with_pic; pic_mode="$withval"
-++  withval=$with_pic; lt_p=${PACKAGE-default}
-++    case $withval in
-++    yes|no) pic_mode=$withval ;;
-++    *)
-++      pic_mode=default
-++      # Look at the argument we got.  We use all the common list separators.
-++      lt_save_ifs="$IFS"; IFS="${IFS}$PATH_SEPARATOR,"
-++      for lt_pkg in $withval; do
-++	IFS="$lt_save_ifs"
-++	if test "X$lt_pkg" = "X$lt_p"; then
-++	  pic_mode=yes
-++	fi
-++      done
-++      IFS="$lt_save_ifs"
-++      ;;
-++    esac
-+ else
-+   pic_mode=default
-+ fi
-+@@ -8124,6 +8170,10 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
-+ 
-+ 
-+ 
-++
-++
-++
-++
-+ test -z "$LN_S" && LN_S="ln -s"
-+ 
-+ 
-+@@ -8579,7 +8629,9 @@ lt_prog_compiler_static=
-+     case $cc_basename in
-+     nvcc*) # Cuda Compiler Driver 2.2
-+       lt_prog_compiler_wl='-Xlinker '
-+-      lt_prog_compiler_pic='-Xcompiler -fPIC'
-++      if test -n "$lt_prog_compiler_pic"; then
-++        lt_prog_compiler_pic="-Xcompiler $lt_prog_compiler_pic"
-++      fi
-+       ;;
-+     esac
-+   else
-+@@ -8670,18 +8722,33 @@ lt_prog_compiler_static=
-+ 	;;
-+       *)
-+ 	case `$CC -V 2>&1 | sed 5q` in
-+-	*Sun\ F* | *Sun*Fortran*)
-++	*Sun\ Ceres\ Fortran* | *Sun*Fortran*\ [1-7].* | *Sun*Fortran*\ 8.[0-3]*)
-+ 	  # Sun Fortran 8.3 passes all unrecognized flags to the linker
-+ 	  lt_prog_compiler_pic='-KPIC'
-+ 	  lt_prog_compiler_static='-Bstatic'
-+ 	  lt_prog_compiler_wl=''
-+ 	  ;;
-++	*Sun\ F* | *Sun*Fortran*)
-++	  lt_prog_compiler_pic='-KPIC'
-++	  lt_prog_compiler_static='-Bstatic'
-++	  lt_prog_compiler_wl='-Qoption ld '
-++	  ;;
-+ 	*Sun\ C*)
-+ 	  # Sun C 5.9
-+ 	  lt_prog_compiler_pic='-KPIC'
-+ 	  lt_prog_compiler_static='-Bstatic'
-+ 	  lt_prog_compiler_wl='-Wl,'
-+ 	  ;;
-++        *Intel*\ [CF]*Compiler*)
-++	  lt_prog_compiler_wl='-Wl,'
-++	  lt_prog_compiler_pic='-fPIC'
-++	  lt_prog_compiler_static='-static'
-++	  ;;
-++	*Portland\ Group*)
-++	  lt_prog_compiler_wl='-Wl,'
-++	  lt_prog_compiler_pic='-fpic'
-++	  lt_prog_compiler_static='-Bstatic'
-++	  ;;
-+ 	esac
-+ 	;;
-+       esac
-+@@ -9043,7 +9110,6 @@ $as_echo_n "checking whether the $compiler linker ($LD) supports shared librarie
-+   hardcode_direct=no
-+   hardcode_direct_absolute=no
-+   hardcode_libdir_flag_spec=
-+-  hardcode_libdir_flag_spec_ld=
-+   hardcode_libdir_separator=
-+   hardcode_minus_L=no
-+   hardcode_shlibpath_var=unsupported
-+@@ -9293,8 +9359,7 @@ _LT_EOF
-+ 	xlf* | bgf* | bgxlf* | mpixlf*)
-+ 	  # IBM XL Fortran 10.1 on PPC cannot create shared libs itself
-+ 	  whole_archive_flag_spec='--whole-archive$convenience --no-whole-archive'
-+-	  hardcode_libdir_flag_spec=
-+-	  hardcode_libdir_flag_spec_ld='-rpath $libdir'
-++	  hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
-+ 	  archive_cmds='$LD -shared $libobjs $deplibs $linker_flags -soname $soname -o $lib'
-+ 	  if test "x$supports_anon_versioning" = xyes; then
-+ 	    archive_expsym_cmds='echo "{ global:" > $output_objdir/$libname.ver~
-+@@ -9673,6 +9738,7 @@ fi
-+ 	# The linker will not automatically build a static lib if we build a DLL.
-+ 	# _LT_TAGVAR(old_archive_from_new_cmds, )='true'
-+ 	enable_shared_with_static_runtimes=yes
-++	exclude_expsyms='_NULL_IMPORT_DESCRIPTOR|_IMPORT_DESCRIPTOR_.*'
-+ 	export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGRS][ ]/s/.*[ ]\([^ ]*\)/\1,DATA/'\'' | $SED -e '\''/^[AITW][ ]/s/.*[ ]//'\'' | sort | uniq > $export_symbols'
-+ 	# Don't use ranlib
-+ 	old_postinstall_cmds='chmod 644 $oldlib'
-+@@ -9718,6 +9784,7 @@ fi
-+   hardcode_shlibpath_var=unsupported
-+   if test "$lt_cv_ld_force_load" = "yes"; then
-+     whole_archive_flag_spec='`for conv in $convenience\"\"; do test  -n \"$conv\" && new_convenience=\"$new_convenience ${wl}-force_load,$conv\"; done; func_echo_all \"$new_convenience\"`'
-++
-+   else
-+     whole_archive_flag_spec=''
-+   fi
-+@@ -9746,10 +9813,6 @@ fi
-+       hardcode_shlibpath_var=no
-+       ;;
-+ 
-+-    freebsd1*)
-+-      ld_shlibs=no
-+-      ;;
-+-
-+     # FreeBSD 2.2.[012] allows us to include c++rt0.o to get C++ constructor
-+     # support.  Future versions do this automatically, but an explicit c++rt0.o
-+     # does not break anything, and helps significantly (at the cost of a little
-+@@ -9762,7 +9825,7 @@ fi
-+       ;;
-+ 
-+     # Unfortunately, older versions of FreeBSD 2 do not have this feature.
-+-    freebsd2*)
-++    freebsd2.*)
-+       archive_cmds='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'
-+       hardcode_direct=yes
-+       hardcode_minus_L=yes
-+@@ -9801,7 +9864,6 @@ fi
-+       fi
-+       if test "$with_gnu_ld" = no; then
-+ 	hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
-+-	hardcode_libdir_flag_spec_ld='+b $libdir'
-+ 	hardcode_libdir_separator=:
-+ 	hardcode_direct=yes
-+ 	hardcode_direct_absolute=yes
-+@@ -10425,11 +10487,6 @@ esac
-+ 
-+ 
-+ 
-+-
-+-
-+-
-+-
-+-
-+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking dynamic linker characteristics" >&5
-+ $as_echo_n "checking dynamic linker characteristics... " >&6; }
-+ 
-+@@ -10519,7 +10576,7 @@ need_version=unknown
-+ 
-+ case $host_os in
-+ aix3*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix $libname.a'
-+   shlibpath_var=LIBPATH
-+ 
-+@@ -10528,7 +10585,7 @@ aix3*)
-+   ;;
-+ 
-+ aix[4-9]*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   hardcode_into_libs=yes
-+@@ -10593,7 +10650,7 @@ beos*)
-+   ;;
-+ 
-+ bsdi[45]*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+   soname_spec='${libname}${release}${shared_ext}$major'
-+@@ -10732,7 +10789,7 @@ darwin* | rhapsody*)
-+   ;;
-+ 
-+ dgux*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname$shared_ext'
-+@@ -10740,10 +10797,6 @@ dgux*)
-+   shlibpath_var=LD_LIBRARY_PATH
-+   ;;
-+ 
-+-freebsd1*)
-+-  dynamic_linker=no
-+-  ;;
-+-
-+ freebsd* | dragonfly*)
-+   # DragonFly does not have aout.  When/if they implement a new
-+   # versioning mechanism, adjust this.
-+@@ -10751,7 +10804,7 @@ freebsd* | dragonfly*)
-+     objformat=`/usr/bin/objformat`
-+   else
-+     case $host_os in
-+-    freebsd[123]*) objformat=aout ;;
-++    freebsd[23].*) objformat=aout ;;
-+     *) objformat=elf ;;
-+     esac
-+   fi
-+@@ -10769,7 +10822,7 @@ freebsd* | dragonfly*)
-+   esac
-+   shlibpath_var=LD_LIBRARY_PATH
-+   case $host_os in
-+-  freebsd2*)
-++  freebsd2.*)
-+     shlibpath_overrides_runpath=yes
-+     ;;
-+   freebsd3.[01]* | freebsdelf3.[01]*)
-+@@ -10789,17 +10842,18 @@ freebsd* | dragonfly*)
-+   ;;
-+ 
-+ gnu*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
-+   soname_spec='${libname}${release}${shared_ext}$major'
-+   shlibpath_var=LD_LIBRARY_PATH
-++  shlibpath_overrides_runpath=no
-+   hardcode_into_libs=yes
-+   ;;
-+ 
-+ haiku*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   dynamic_linker="$host_os runtime_loader"
-+@@ -10860,7 +10914,7 @@ hpux9* | hpux10* | hpux11*)
-+   ;;
-+ 
-+ interix[3-9]*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major ${libname}${shared_ext}'
-+@@ -10876,7 +10930,7 @@ irix5* | irix6* | nonstopux*)
-+     nonstopux*) version_type=nonstopux ;;
-+     *)
-+ 	if test "$lt_cv_prog_gnu_ld" = yes; then
-+-		version_type=linux
-++		version_type=linux # correct to gnu/linux during the next big refactor
-+ 	else
-+ 		version_type=irix
-+ 	fi ;;
-+@@ -10913,9 +10967,9 @@ linux*oldld* | linux*aout* | linux*coff*)
-+   dynamic_linker=no
-+   ;;
-+ 
-+-# This must be Linux ELF.
-++# This must be glibc/ELF.
-+ linux* | k*bsd*-gnu | kopensolaris*-gnu)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+@@ -11001,7 +11055,7 @@ netbsd*)
-+   ;;
-+ 
-+ newsos6)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+   shlibpath_var=LD_LIBRARY_PATH
-+   shlibpath_overrides_runpath=yes
-+@@ -11070,7 +11124,7 @@ rdos*)
-+   ;;
-+ 
-+ solaris*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+@@ -11095,7 +11149,7 @@ sunos4*)
-+   ;;
-+ 
-+ sysv4 | sysv4.3*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+   soname_spec='${libname}${release}${shared_ext}$major'
-+   shlibpath_var=LD_LIBRARY_PATH
-+@@ -11119,7 +11173,7 @@ sysv4 | sysv4.3*)
-+ 
-+ sysv4*MP*)
-+   if test -d /usr/nec ;then
-+-    version_type=linux
-++    version_type=linux # correct to gnu/linux during the next big refactor
-+     library_names_spec='$libname${shared_ext}.$versuffix $libname${shared_ext}.$major $libname${shared_ext}'
-+     soname_spec='$libname${shared_ext}.$major'
-+     shlibpath_var=LD_LIBRARY_PATH
-+@@ -11150,7 +11204,7 @@ sysv5* | sco3.2v5* | sco5v6* | unixware* | OpenUNIX* | sysv4*uw2*)
-+ 
-+ tpf*)
-+   # TPF is a cross-target only.  Preferred cross-host = GNU/Linux.
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   need_lib_prefix=no
-+   need_version=no
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+@@ -11160,7 +11214,7 @@ tpf*)
-+   ;;
-+ 
-+ uts4*)
-+-  version_type=linux
-++  version_type=linux # correct to gnu/linux during the next big refactor
-+   library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}$major $libname${shared_ext}'
-+   soname_spec='${libname}${release}${shared_ext}$major'
-+   shlibpath_var=LD_LIBRARY_PATH
-+@@ -11942,6 +11996,8 @@ CC="$lt_save_CC"
-+ 
-+ 
-+ 
-++
-++
-+         ac_config_commands="$ac_config_commands libtool"
-+ 
-+ 
-+@@ -13132,6 +13188,10 @@ fi
-+ 
-+ TARGETDIR="unknown"
-+ case "$host" in
-++  aarch64*-*-*)
-++	TARGET=AARCH64; TARGETDIR=aarch64
-++	;;
-++
-+   alpha*-*-*)
-+ 	TARGET=ALPHA; TARGETDIR=alpha;
-+ 	# Support 128-bit long double, changeable via command-line switch.
-+@@ -13431,6 +13491,14 @@ else
-+   POWERPC_FREEBSD_FALSE=
-+ fi
-+ 
-++ if test x$TARGET = xAARCH64; then
-++  AARCH64_TRUE=
-++  AARCH64_FALSE='#'
-++else
-++  AARCH64_TRUE='#'
-++  AARCH64_FALSE=
-++fi
-++
-+  if test x$TARGET = xARM; then
-+   ARM_TRUE=
-+   ARM_FALSE='#'
-+@@ -14786,6 +14854,10 @@ if test -z "${POWERPC_FREEBSD_TRUE}" && test -z "${POWERPC_FREEBSD_FALSE}"; then
-+   as_fn_error $? "conditional \"POWERPC_FREEBSD\" was never defined.
-+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
-+ fi
-++if test -z "${AARCH64_TRUE}" && test -z "${AARCH64_FALSE}"; then
-++  as_fn_error $? "conditional \"AARCH64\" was never defined.
-++Usually this means the macro was only invoked conditionally." "$LINENO" 5
-++fi
-+ if test -z "${ARM_TRUE}" && test -z "${ARM_FALSE}"; then
-+   as_fn_error $? "conditional \"ARM\" was never defined.
-+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
-+@@ -15463,6 +15535,7 @@ pic_mode='`$ECHO "$pic_mode" | $SED "$delay_single_quote_subst"`'
-+ enable_fast_install='`$ECHO "$enable_fast_install" | $SED "$delay_single_quote_subst"`'
-+ SHELL='`$ECHO "$SHELL" | $SED "$delay_single_quote_subst"`'
-+ ECHO='`$ECHO "$ECHO" | $SED "$delay_single_quote_subst"`'
-++PATH_SEPARATOR='`$ECHO "$PATH_SEPARATOR" | $SED "$delay_single_quote_subst"`'
-+ host_alias='`$ECHO "$host_alias" | $SED "$delay_single_quote_subst"`'
-+ host='`$ECHO "$host" | $SED "$delay_single_quote_subst"`'
-+ host_os='`$ECHO "$host_os" | $SED "$delay_single_quote_subst"`'
-+@@ -15545,7 +15618,6 @@ with_gnu_ld='`$ECHO "$with_gnu_ld" | $SED "$delay_single_quote_subst"`'
-+ allow_undefined_flag='`$ECHO "$allow_undefined_flag" | $SED "$delay_single_quote_subst"`'
-+ no_undefined_flag='`$ECHO "$no_undefined_flag" | $SED "$delay_single_quote_subst"`'
-+ hardcode_libdir_flag_spec='`$ECHO "$hardcode_libdir_flag_spec" | $SED "$delay_single_quote_subst"`'
-+-hardcode_libdir_flag_spec_ld='`$ECHO "$hardcode_libdir_flag_spec_ld" | $SED "$delay_single_quote_subst"`'
-+ hardcode_libdir_separator='`$ECHO "$hardcode_libdir_separator" | $SED "$delay_single_quote_subst"`'
-+ hardcode_direct='`$ECHO "$hardcode_direct" | $SED "$delay_single_quote_subst"`'
-+ hardcode_direct_absolute='`$ECHO "$hardcode_direct_absolute" | $SED "$delay_single_quote_subst"`'
-+@@ -15601,6 +15673,7 @@ _LTECHO_EOF'
-+ # Quote evaled strings.
-+ for var in SHELL \
-+ ECHO \
-++PATH_SEPARATOR \
-+ SED \
-+ GREP \
-+ EGREP \
-+@@ -15651,7 +15724,6 @@ with_gnu_ld \
-+ allow_undefined_flag \
-+ no_undefined_flag \
-+ hardcode_libdir_flag_spec \
-+-hardcode_libdir_flag_spec_ld \
-+ hardcode_libdir_separator \
-+ exclude_expsyms \
-+ include_expsyms \
-+@@ -16633,8 +16705,8 @@ $as_echo X"$file" |
-+ # NOTE: Changes made to this file will be lost: look at ltmain.sh.
-+ #
-+ #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
-+-#                 2006, 2007, 2008, 2009, 2010 Free Software Foundation,
-+-#                 Inc.
-++#                 2006, 2007, 2008, 2009, 2010, 2011 Free Software
-++#                 Foundation, Inc.
-+ #   Written by Gordon Matzigkeit, 1996
-+ #
-+ #   This file is part of GNU Libtool.
-+@@ -16688,6 +16760,9 @@ SHELL=$lt_SHELL
-+ # An echo program that protects backslashes.
-+ ECHO=$lt_ECHO
-+ 
-++# The PATH separator for the build system.
-++PATH_SEPARATOR=$lt_PATH_SEPARATOR
-++
-+ # The host system.
-+ host_alias=$host_alias
-+ host=$host
-+@@ -16989,10 +17064,6 @@ no_undefined_flag=$lt_no_undefined_flag
-+ # This must work even if \$libdir does not exist
-+ hardcode_libdir_flag_spec=$lt_hardcode_libdir_flag_spec
-+ 
-+-# If ld is used when linking, flag to hardcode \$libdir into a binary
-+-# during linking.  This must work even if \$libdir does not exist.
-+-hardcode_libdir_flag_spec_ld=$lt_hardcode_libdir_flag_spec_ld
-+-
-+ # Whether we need a single "-rpath" flag with a separated argument.
-+ hardcode_libdir_separator=$lt_hardcode_libdir_separator
-+ 
-+diff --git a/configure.ac b/configure.ac
-+index 9b946a2..8c3f40c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -53,6 +53,10 @@ AM_CONDITIONAL(TESTSUBDIR, test -d $srcdir/testsuite)
-+ 
-+ TARGETDIR="unknown"
-+ case "$host" in
-++  aarch64*-*-*)
-++	TARGET=AARCH64; TARGETDIR=aarch64
-++	;;
-++
-+   alpha*-*-*)
-+ 	TARGET=ALPHA; TARGETDIR=alpha;
-+ 	# Support 128-bit long double, changeable via command-line switch.
-+@@ -233,6 +237,7 @@ AM_CONDITIONAL(POWERPC, test x$TARGET = xPOWERPC)
-+ AM_CONDITIONAL(POWERPC_AIX, test x$TARGET = xPOWERPC_AIX)
-+ AM_CONDITIONAL(POWERPC_DARWIN, test x$TARGET = xPOWERPC_DARWIN)
-+ AM_CONDITIONAL(POWERPC_FREEBSD, test x$TARGET = xPOWERPC_FREEBSD)
-++AM_CONDITIONAL(AARCH64, test x$TARGET = xAARCH64)
-+ AM_CONDITIONAL(ARM, test x$TARGET = xARM)
-+ AM_CONDITIONAL(AVR32, test x$TARGET = xAVR32)
-+ AM_CONDITIONAL(LIBFFI_CRIS, test x$TARGET = xLIBFFI_CRIS)
-+diff --git a/src/aarch64/ffi.c b/src/aarch64/ffi.c
-+new file mode 100644
-+index 0000000..1405665
-+--- /dev/null
-++++ b/src/aarch64/ffi.c
-+@@ -0,0 +1,1076 @@
-++/* Copyright (c) 2009, 2010, 2011, 2012 ARM Ltd.
-++
-++Permission is hereby granted, free of charge, to any person obtaining
-++a copy of this software and associated documentation files (the
-++``Software''), to deal in the Software without restriction, including
-++without limitation the rights to use, copy, modify, merge, publish,
-++distribute, sublicense, and/or sell copies of the Software, and to
-++permit persons to whom the Software is furnished to do so, subject to
-++the following conditions:
-++
-++The above copyright notice and this permission notice shall be
-++included in all copies or substantial portions of the Software.
-++
-++THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
-++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-++IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-++CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-++TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-++SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
-++
-++#include <stdio.h>
-++
-++#include <ffi.h>
-++#include <ffi_common.h>
-++
-++#include <stdlib.h>
-++
-++/* Stack alignment requirement in bytes */
-++#define AARCH64_STACK_ALIGN 16
-++
-++#define N_X_ARG_REG 8
-++#define N_V_ARG_REG 8
-++
-++#define AARCH64_FFI_WITH_V (1 << AARCH64_FFI_WITH_V_BIT)
-++
-++union _d
-++{
-++  UINT64 d;
-++  UINT32 s[2];
-++};
-++
-++struct call_context
-++{
-++  UINT64 x [AARCH64_N_XREG];
-++  struct
-++  {
-++    union _d d[2];
-++  } v [AARCH64_N_VREG];
-++};
-++
-++static void *
-++get_x_addr (struct call_context *context, unsigned n)
-++{
-++  return &context->x[n];
-++}
-++
-++static void *
-++get_s_addr (struct call_context *context, unsigned n)
-++{
-++#if defined __AARCH64EB__
-++  return &context->v[n].d[1].s[1];
-++#else
-++  return &context->v[n].d[0].s[0];
-++#endif
-++}
-++
-++static void *
-++get_d_addr (struct call_context *context, unsigned n)
-++{
-++#if defined __AARCH64EB__
-++  return &context->v[n].d[1];
-++#else
-++  return &context->v[n].d[0];
-++#endif
-++}
-++
-++static void *
-++get_v_addr (struct call_context *context, unsigned n)
-++{
-++  return &context->v[n];
-++}
-++
-++/* Return the memory location at which a basic type would reside
-++   were it to have been stored in register n.  */
-++
-++static void *
-++get_basic_type_addr (unsigned short type, struct call_context *context,
-++		     unsigned n)
-++{
-++  switch (type)
-++    {
-++    case FFI_TYPE_FLOAT:
-++      return get_s_addr (context, n);
-++    case FFI_TYPE_DOUBLE:
-++      return get_d_addr (context, n);
-++    case FFI_TYPE_LONGDOUBLE:
-++      return get_v_addr (context, n);
-++    case FFI_TYPE_UINT8:
-++    case FFI_TYPE_SINT8:
-++    case FFI_TYPE_UINT16:
-++    case FFI_TYPE_SINT16:
-++    case FFI_TYPE_UINT32:
-++    case FFI_TYPE_SINT32:
-++    case FFI_TYPE_INT:
-++    case FFI_TYPE_POINTER:
-++    case FFI_TYPE_UINT64:
-++    case FFI_TYPE_SINT64:
-++      return get_x_addr (context, n);
-++    default:
-++      FFI_ASSERT (0);
-++      return NULL;
-++    }
-++}
-++
-++/* Return the alignment width for each of the basic types.  */
-++
-++static size_t
-++get_basic_type_alignment (unsigned short type)
-++{
-++  switch (type)
-++    {
-++    case FFI_TYPE_FLOAT:
-++    case FFI_TYPE_DOUBLE:
-++      return sizeof (UINT64);
-++    case FFI_TYPE_LONGDOUBLE:
-++      return sizeof (long double);
-++    case FFI_TYPE_UINT8:
-++    case FFI_TYPE_SINT8:
-++    case FFI_TYPE_UINT16:
-++    case FFI_TYPE_SINT16:
-++    case FFI_TYPE_UINT32:
-++    case FFI_TYPE_INT:
-++    case FFI_TYPE_SINT32:
-++    case FFI_TYPE_POINTER:
-++    case FFI_TYPE_UINT64:
-++    case FFI_TYPE_SINT64:
-++      return sizeof (UINT64);
-++
-++    default:
-++      FFI_ASSERT (0);
-++      return 0;
-++    }
-++}
-++
-++/* Return the size in bytes for each of the basic types.  */
-++
-++static size_t
-++get_basic_type_size (unsigned short type)
-++{
-++  switch (type)
-++    {
-++    case FFI_TYPE_FLOAT:
-++      return sizeof (UINT32);
-++    case FFI_TYPE_DOUBLE:
-++      return sizeof (UINT64);
-++    case FFI_TYPE_LONGDOUBLE:
-++      return sizeof (long double);
-++    case FFI_TYPE_UINT8:
-++      return sizeof (UINT8);
-++    case FFI_TYPE_SINT8:
-++      return sizeof (SINT8);
-++    case FFI_TYPE_UINT16:
-++      return sizeof (UINT16);
-++    case FFI_TYPE_SINT16:
-++      return sizeof (SINT16);
-++    case FFI_TYPE_UINT32:
-++      return sizeof (UINT32);
-++    case FFI_TYPE_INT:
-++    case FFI_TYPE_SINT32:
-++      return sizeof (SINT32);
-++    case FFI_TYPE_POINTER:
-++    case FFI_TYPE_UINT64:
-++      return sizeof (UINT64);
-++    case FFI_TYPE_SINT64:
-++      return sizeof (SINT64);
-++
-++    default:
-++      FFI_ASSERT (0);
-++      return 0;
-++    }
-++}
-++
-++extern void
-++ffi_call_SYSV (unsigned (*)(struct call_context *context, unsigned char *,
-++			    extended_cif *),
-++               struct call_context *context,
-++               extended_cif *,
-++               unsigned,
-++               void (*fn)(void));
-++
-++extern void
-++ffi_closure_SYSV (ffi_closure *);
-++
-++/* Test for an FFI floating point representation.  */
-++
-++static unsigned
-++is_floating_type (unsigned short type)
-++{
-++  return (type == FFI_TYPE_FLOAT || type == FFI_TYPE_DOUBLE
-++	  || type == FFI_TYPE_LONGDOUBLE);
-++}
-++
-++/* Test for a homogeneous structure.  */
-++
-++static unsigned short
-++get_homogeneous_type (ffi_type *ty)
-++{
-++  if (ty->type == FFI_TYPE_STRUCT && ty->elements)
-++    {
-++      unsigned i;
-++      unsigned short candidate_type
-++	= get_homogeneous_type (ty->elements[0]);
-++      for (i =1; ty->elements[i]; i++)
-++	{
-++	  unsigned short iteration_type = 0;
-++	  /* If we have a nested struct, we must find its homogeneous type.
-++	     If that fits with our candidate type, we are still
-++	     homogeneous.  */
-++	  if (ty->elements[i]->type == FFI_TYPE_STRUCT
-++	      && ty->elements[i]->elements)
-++	    {
-++	      iteration_type = get_homogeneous_type (ty->elements[i]);
-++	    }
-++	  else
-++	    {
-++	      iteration_type = ty->elements[i]->type;
-++	    }
-++
-++	  /* If we are not homogeneous, return FFI_TYPE_STRUCT.  */
-++	  if (candidate_type != iteration_type)
-++	    return FFI_TYPE_STRUCT;
-++	}
-++      return candidate_type;
-++    }
-++
-++  /* Base case, we have no more levels of nesting, so we
-++     are a basic type, and so, trivially homogeneous in that type.  */
-++  return ty->type;
-++}
-++
-++/* Determine the number of elements within a STRUCT.
-++
-++   Note, we must handle nested structs.
-++
-++   If ty is not a STRUCT this function will return 0.  */
-++
-++static unsigned
-++element_count (ffi_type *ty)
-++{
-++  if (ty->type == FFI_TYPE_STRUCT && ty->elements)
-++    {
-++      unsigned n;
-++      unsigned elems = 0;
-++      for (n = 0; ty->elements[n]; n++)
-++	{
-++	  if (ty->elements[n]->type == FFI_TYPE_STRUCT
-++	      && ty->elements[n]->elements)
-++	    elems += element_count (ty->elements[n]);
-++	  else
-++	    elems++;
-++	}
-++      return elems;
-++    }
-++  return 0;
-++}
-++
-++/* Test for a homogeneous floating point aggregate.
-++
-++   A homogeneous floating point aggregate is a homogeneous aggregate of
-++   a half- single- or double- precision floating point type with one
-++   to four elements.  Note that this includes nested structs of the
-++   basic type.  */
-++
-++static int
-++is_hfa (ffi_type *ty)
-++{
-++  if (ty->type == FFI_TYPE_STRUCT
-++      && ty->elements[0]
-++      && is_floating_type (get_homogeneous_type (ty)))
-++    {
-++      unsigned n = element_count (ty);
-++      return n >= 1 && n <= 4;
-++    }
-++  return 0;
-++}
-++
-++/* Test if an ffi_type is a candidate for passing in a register.
-++
-++   This test does not check that sufficient registers of the
-++   appropriate class are actually available, merely that IFF
-++   sufficient registers are available then the argument will be passed
-++   in register(s).
-++
-++   Note that an ffi_type that is deemed to be a register candidate
-++   will always be returned in registers.
-++
-++   Returns 1 if a register candidate else 0.  */
-++
-++static int
-++is_register_candidate (ffi_type *ty)
-++{
-++  switch (ty->type)
-++    {
-++    case FFI_TYPE_VOID:
-++    case FFI_TYPE_FLOAT:
-++    case FFI_TYPE_DOUBLE:
-++    case FFI_TYPE_LONGDOUBLE:
-++    case FFI_TYPE_UINT8:
-++    case FFI_TYPE_UINT16:
-++    case FFI_TYPE_UINT32:
-++    case FFI_TYPE_UINT64:
-++    case FFI_TYPE_POINTER:
-++    case FFI_TYPE_SINT8:
-++    case FFI_TYPE_SINT16:
-++    case FFI_TYPE_SINT32:
-++    case FFI_TYPE_INT:
-++    case FFI_TYPE_SINT64:
-++      return 1;
-++
-++    case FFI_TYPE_STRUCT:
-++      if (is_hfa (ty))
-++        {
-++          return 1;
-++        }
-++      else if (ty->size > 16)
-++        {
-++          /* Too large. Will be replaced with a pointer to memory. The
-++             pointer MAY be passed in a register, but the value will
-++             not. This test specifically fails since the argument will
-++             never be passed by value in registers. */
-++          return 0;
-++        }
-++      else
-++        {
-++          /* Might be passed in registers depending on the number of
-++             registers required. */
-++          return (ty->size + 7) / 8 < N_X_ARG_REG;
-++        }
-++      break;
-++
-++    default:
-++      FFI_ASSERT (0);
-++      break;
-++    }
-++
-++  return 0;
-++}
-++
-++/* Test if an ffi_type argument or result is a candidate for a vector
-++   register.  */
-++
-++static int
-++is_v_register_candidate (ffi_type *ty)
-++{
-++  return is_floating_type (ty->type)
-++	   || (ty->type == FFI_TYPE_STRUCT && is_hfa (ty));
-++}
-++
-++/* Representation of the procedure call argument marshalling
-++   state.
-++
-++   The terse state variable names match the names used in the AARCH64
-++   PCS. */
-++
-++struct arg_state
-++{
-++  unsigned ngrn;                /* Next general-purpose register number. */
-++  unsigned nsrn;                /* Next vector register number. */
-++  unsigned nsaa;                /* Next stack offset. */
-++};
-++
-++/* Initialize a procedure call argument marshalling state.  */
-++static void
-++arg_init (struct arg_state *state, unsigned call_frame_size)
-++{
-++  state->ngrn = 0;
-++  state->nsrn = 0;
-++  state->nsaa = 0;
-++}
-++
-++/* Return the number of available consecutive core argument
-++   registers.  */
-++
-++static unsigned
-++available_x (struct arg_state *state)
-++{
-++  return N_X_ARG_REG - state->ngrn;
-++}
-++
-++/* Return the number of available consecutive vector argument
-++   registers.  */
-++
-++static unsigned
-++available_v (struct arg_state *state)
-++{
-++  return N_V_ARG_REG - state->nsrn;
-++}
-++
-++static void *
-++allocate_to_x (struct call_context *context, struct arg_state *state)
-++{
-++  FFI_ASSERT (state->ngrn < N_X_ARG_REG)
-++  return get_x_addr (context, (state->ngrn)++);
-++}
-++
-++static void *
-++allocate_to_s (struct call_context *context, struct arg_state *state)
-++{
-++  FFI_ASSERT (state->nsrn < N_V_ARG_REG)
-++  return get_s_addr (context, (state->nsrn)++);
-++}
-++
-++static void *
-++allocate_to_d (struct call_context *context, struct arg_state *state)
-++{
-++  FFI_ASSERT (state->nsrn < N_V_ARG_REG)
-++  return get_d_addr (context, (state->nsrn)++);
-++}
-++
-++static void *
-++allocate_to_v (struct call_context *context, struct arg_state *state)
-++{
-++  FFI_ASSERT (state->nsrn < N_V_ARG_REG)
-++  return get_v_addr (context, (state->nsrn)++);
-++}
-++
-++/* Allocate an aligned slot on the stack and return a pointer to it.  */
-++static void *
-++allocate_to_stack (struct arg_state *state, void *stack, unsigned alignment,
-++		   unsigned size)
-++{
-++  void *allocation;
-++
-++  /* Round up the NSAA to the larger of 8 or the natural
-++     alignment of the argument's type.  */
-++  state->nsaa = ALIGN (state->nsaa, alignment);
-++  state->nsaa = ALIGN (state->nsaa, alignment);
-++  state->nsaa = ALIGN (state->nsaa, 8);
-++
-++  allocation = stack + state->nsaa;
-++
-++  state->nsaa += size;
-++  return allocation;
-++}
-++
-++static void
-++copy_basic_type (void *dest, void *source, unsigned short type)
-++{
-++  /* This is neccessary to ensure that basic types are copied
-++     sign extended to 64-bits as libffi expects.  */
-++  switch (type)
-++    {
-++    case FFI_TYPE_FLOAT:
-++      *(float *) dest = *(float *) source;
-++      break;
-++    case FFI_TYPE_DOUBLE:
-++      *(double *) dest = *(double *) source;
-++      break;
-++    case FFI_TYPE_LONGDOUBLE:
-++      *(long double *) dest = *(long double *) source;
-++      break;
-++    case FFI_TYPE_UINT8:
-++      *(ffi_arg *) dest = *(UINT8 *) source;
-++      break;
-++    case FFI_TYPE_SINT8:
-++      *(ffi_sarg *) dest = *(SINT8 *) source;
-++      break;
-++    case FFI_TYPE_UINT16:
-++      *(ffi_arg *) dest = *(UINT16 *) source;
-++      break;
-++    case FFI_TYPE_SINT16:
-++      *(ffi_sarg *) dest = *(SINT16 *) source;
-++      break;
-++    case FFI_TYPE_UINT32:
-++      *(ffi_arg *) dest = *(UINT32 *) source;
-++      break;
-++    case FFI_TYPE_INT:
-++    case FFI_TYPE_SINT32:
-++      *(ffi_sarg *) dest = *(SINT32 *) source;
-++      break;
-++    case FFI_TYPE_POINTER:
-++    case FFI_TYPE_UINT64:
-++      *(ffi_arg *) dest = *(UINT64 *) source;
-++      break;
-++    case FFI_TYPE_SINT64:
-++      *(ffi_sarg *) dest = *(SINT64 *) source;
-++      break;
-++
-++    default:
-++      FFI_ASSERT (0);
-++    }
-++}
-++
-++static void
-++copy_hfa_to_reg_or_stack (void *memory,
-++			  ffi_type *ty,
-++			  struct call_context *context,
-++			  unsigned char *stack,
-++			  struct arg_state *state)
-++{
-++  unsigned elems = element_count (ty);
-++  if (available_v (state) < elems)
-++    {
-++      /* There are insufficient V registers. Further V register allocations
-++	 are prevented, the NSAA is adjusted (by allocate_to_stack ())
-++	 and the argument is copied to memory@the adjusted NSAA.  */
-++      state->nsrn = N_V_ARG_REG;
-++      memcpy (allocate_to_stack (state, stack, ty->alignment, ty->size),
-++	      memory,
-++	      ty->size);
-++    }
-++  else
-++    {
-++      int i;
-++      unsigned short type = get_homogeneous_type (ty);
-++      unsigned elems = element_count (ty);
-++      for (i = 0; i < elems; i++)
-++	{
-++	  void *reg = allocate_to_v (context, state);
-++	  copy_basic_type (reg, memory, type);
-++	  memory += get_basic_type_size (type);
-++	}
-++    }
-++}
-++
-++/* Either allocate an appropriate register for the argument type, or if
-++   none are available, allocate a stack slot and return a pointer
-++   to the allocated space.  */
-++
-++static void *
-++allocate_to_register_or_stack (struct call_context *context,
-++			       unsigned char *stack,
-++			       struct arg_state *state,
-++			       unsigned short type)
-++{
-++  size_t alignment = get_basic_type_alignment (type);
-++  size_t size = alignment;
-++  switch (type)
-++    {
-++    case FFI_TYPE_FLOAT:
-++      /* This is the only case for which the allocated stack size
-++	 should not match the alignment of the type.  */
-++      size = sizeof (UINT32);
-++      /* Fall through.  */
-++    case FFI_TYPE_DOUBLE:
-++      if (state->nsrn < N_V_ARG_REG)
-++	return allocate_to_d (context, state);
-++      state->nsrn = N_V_ARG_REG;
-++      break;
-++    case FFI_TYPE_LONGDOUBLE:
-++      if (state->nsrn < N_V_ARG_REG)
-++	return allocate_to_v (context, state);
-++      state->nsrn = N_V_ARG_REG;
-++      break;
-++    case FFI_TYPE_UINT8:
-++    case FFI_TYPE_SINT8:
-++    case FFI_TYPE_UINT16:
-++    case FFI_TYPE_SINT16:
-++    case FFI_TYPE_UINT32:
-++    case FFI_TYPE_SINT32:
-++    case FFI_TYPE_INT:
-++    case FFI_TYPE_POINTER:
-++    case FFI_TYPE_UINT64:
-++    case FFI_TYPE_SINT64:
-++      if (state->ngrn < N_X_ARG_REG)
-++	return allocate_to_x (context, state);
-++      state->ngrn = N_X_ARG_REG;
-++      break;
-++    default:
-++      FFI_ASSERT (0);
-++    }
-++
-++    return allocate_to_stack (state, stack, alignment, size);
-++}
-++
-++/* Copy a value to an appropriate register, or if none are
-++   available, to the stack.  */
-++
-++static void
-++copy_to_register_or_stack (struct call_context *context,
-++			   unsigned char *stack,
-++			   struct arg_state *state,
-++			   void *value,
-++			   unsigned short type)
-++{
-++  copy_basic_type (
-++	  allocate_to_register_or_stack (context, stack, state, type),
-++	  value,
-++	  type);
-++}
-++
-++/* Marshall the arguments from FFI representation to procedure call
-++   context and stack.  */
-++
-++static unsigned
-++aarch64_prep_args (struct call_context *context, unsigned char *stack,
-++		   extended_cif *ecif)
-++{
-++  int i;
-++  struct arg_state state;
-++
-++  arg_init (&state, ALIGN(ecif->cif->bytes, 16));
-++
-++  for (i = 0; i < ecif->cif->nargs; i++)
-++    {
-++      ffi_type *ty = ecif->cif->arg_types[i];
-++      switch (ty->type)
-++	{
-++	case FFI_TYPE_VOID:
-++	  FFI_ASSERT (0);
-++	  break;
-++
-++	/* If the argument is a basic type the argument is allocated to an
-++	   appropriate register, or if none are available, to the stack.  */
-++	case FFI_TYPE_FLOAT:
-++	case FFI_TYPE_DOUBLE:
-++	case FFI_TYPE_LONGDOUBLE:
-++	case FFI_TYPE_UINT8:
-++	case FFI_TYPE_SINT8:
-++	case FFI_TYPE_UINT16:
-++	case FFI_TYPE_SINT16:
-++	case FFI_TYPE_UINT32:
-++	case FFI_TYPE_INT:
-++	case FFI_TYPE_SINT32:
-++	case FFI_TYPE_POINTER:
-++	case FFI_TYPE_UINT64:
-++	case FFI_TYPE_SINT64:
-++	  copy_to_register_or_stack (context, stack, &state,
-++				     ecif->avalue[i], ty->type);
-++	  break;
-++
-++	case FFI_TYPE_STRUCT:
-++	  if (is_hfa (ty))
-++	    {
-++	      copy_hfa_to_reg_or_stack (ecif->avalue[i], ty, context,
-++					stack, &state);
-++	    }
-++	  else if (ty->size > 16)
-++	    {
-++	      /* If the argument is a composite type that is larger than 16
-++		 bytes, then the argument has been copied to memory, and
-++		 the argument is replaced by a pointer to the copy.  */
-++
-++	      copy_to_register_or_stack (context, stack, &state,
-++					 &(ecif->avalue[i]), FFI_TYPE_POINTER);
-++	    }
-++	  else if (available_x (&state) >= (ty->size + 7) / 8)
-++	    {
-++	      /* If the argument is a composite type and the size in
-++		 double-words is not more than the number of available
-++		 X registers, then the argument is copied into consecutive
-++		 X registers.  */
-++	      int j;
-++	      for (j = 0; j < (ty->size + 7) / 8; j++)
-++		{
-++		  memcpy (allocate_to_x (context, &state),
-++			  &(((UINT64 *) ecif->avalue[i])[j]),
-++			  sizeof (UINT64));
-++		}
-++	    }
-++	  else
-++	    {
-++	      /* Otherwise, there are insufficient X registers. Further X
-++		 register allocations are prevented, the NSAA is adjusted
-++		 (by allocate_to_stack ()) and the argument is copied to
-++		 memory at the adjusted NSAA.  */
-++	      state.ngrn = N_X_ARG_REG;
-++
-++	      memcpy (allocate_to_stack (&state, stack, ty->alignment,
-++					 ty->size), ecif->avalue + i, ty->size);
-++	    }
-++	  break;
-++
-++	default:
-++	  FFI_ASSERT (0);
-++	  break;
-++	}
-++    }
-++
-++  return ecif->cif->aarch64_flags;
-++}
-++
-++ffi_status
-++ffi_prep_cif_machdep (ffi_cif *cif)
-++{
-++  /* Round the stack up to a multiple of the stack alignment requirement. */
-++  cif->bytes =
-++    (cif->bytes + (AARCH64_STACK_ALIGN - 1)) & ~ (AARCH64_STACK_ALIGN - 1);
-++
-++  /* Initialize our flags. We are interested if this CIF will touch a
-++     vector register, if so we will enable context save and load to
-++     those registers, otherwise not. This is intended to be friendly
-++     to lazy float context switching in the kernel.  */
-++  cif->aarch64_flags = 0;
-++
-++  if (is_v_register_candidate (cif->rtype))
-++    {
-++      cif->aarch64_flags |= AARCH64_FFI_WITH_V;
-++    }
-++  else
-++    {
-++      int i;
-++      for (i = 0; i < cif->nargs; i++)
-++        if (is_v_register_candidate (cif->arg_types[i]))
-++          {
-++            cif->aarch64_flags |= AARCH64_FFI_WITH_V;
-++            break;
-++          }
-++    }
-++
-++  return FFI_OK;
-++}
-++
-++/* Call a function with the provided arguments and capture the return
-++   value.  */
-++void
-++ffi_call (ffi_cif *cif, void (*fn)(void), void *rvalue, void **avalue)
-++{
-++  extended_cif ecif;
-++
-++  ecif.cif = cif;
-++  ecif.avalue = avalue;
-++  ecif.rvalue = rvalue;
-++
-++  switch (cif->abi)
-++    {
-++    case FFI_SYSV:
-++      {
-++        struct call_context context;
-++	unsigned stack_bytes;
-++
-++	/* Figure out the total amount of stack space we need, the
-++	   above call frame space needs to be 16 bytes aligned to
-++	   ensure correct alignment of the first object inserted in
-++	   that space hence the ALIGN applied to cif->bytes.*/
-++	stack_bytes = ALIGN(cif->bytes, 16);
-++
-++	memset (&context, 0, sizeof (context));
-++        if (is_register_candidate (cif->rtype))
-++          {
-++            ffi_call_SYSV (aarch64_prep_args, &context, &ecif, stack_bytes, fn);
-++            switch (cif->rtype->type)
-++              {
-++              case FFI_TYPE_VOID:
-++              case FFI_TYPE_FLOAT:
-++              case FFI_TYPE_DOUBLE:
-++              case FFI_TYPE_LONGDOUBLE:
-++              case FFI_TYPE_UINT8:
-++              case FFI_TYPE_SINT8:
-++              case FFI_TYPE_UINT16:
-++              case FFI_TYPE_SINT16:
-++              case FFI_TYPE_UINT32:
-++              case FFI_TYPE_SINT32:
-++              case FFI_TYPE_POINTER:
-++              case FFI_TYPE_UINT64:
-++              case FFI_TYPE_INT:
-++              case FFI_TYPE_SINT64:
-++		{
-++		  void *addr = get_basic_type_addr (cif->rtype->type,
-++						    &context, 0);
-++		  copy_basic_type (rvalue, addr, cif->rtype->type);
-++		  break;
-++		}
-++
-++              case FFI_TYPE_STRUCT:
-++                if (is_hfa (cif->rtype))
-++		  {
-++		    int j;
-++		    unsigned short type = get_homogeneous_type (cif->rtype);
-++		    unsigned elems = element_count (cif->rtype);
-++		    for (j = 0; j < elems; j++)
-++		      {
-++			void *reg = get_basic_type_addr (type, &context, j);
-++			copy_basic_type (rvalue, reg, type);
-++			rvalue += get_basic_type_size (type);
-++		      }
-++		  }
-++                else if ((cif->rtype->size + 7) / 8 < N_X_ARG_REG)
-++                  {
-++                    unsigned size = ALIGN (cif->rtype->size, sizeof (UINT64));
-++                    memcpy (rvalue, get_x_addr (&context, 0), size);
-++                  }
-++                else
-++                  {
-++                    FFI_ASSERT (0);
-++                  }
-++                break;
-++
-++              default:
-++                FFI_ASSERT (0);
-++                break;
-++              }
-++          }
-++        else
-++          {
-++            memcpy (get_x_addr (&context, 8), &rvalue, sizeof (UINT64));
-++            ffi_call_SYSV (aarch64_prep_args, &context, &ecif,
-++			   stack_bytes, fn);
-++          }
-++        break;
-++      }
-++
-++    default:
-++      FFI_ASSERT (0);
-++      break;
-++    }
-++}
-++
-++static unsigned char trampoline [] =
-++{ 0x70, 0x00, 0x00, 0x58,	/* ldr	x16, 1f	*/
-++  0x91, 0x00, 0x00, 0x10,	/* adr	x17, 2f	*/
-++  0x00, 0x02, 0x1f, 0xd6	/* br	x16	*/
-++};
-++
-++/* Build a trampoline.  */
-++
-++#define FFI_INIT_TRAMPOLINE(TRAMP,FUN,CTX,FLAGS)			\
-++  ({unsigned char *__tramp = (unsigned char*)(TRAMP);			\
-++    UINT64  __fun = (UINT64)(FUN);					\
-++    UINT64  __ctx = (UINT64)(CTX);					\
-++    UINT64  __flags = (UINT64)(FLAGS);					\
-++    memcpy (__tramp, trampoline, sizeof (trampoline));			\
-++    memcpy (__tramp + 12, &__fun, sizeof (__fun));			\
-++    memcpy (__tramp + 20, &__ctx, sizeof (__ctx));			\
-++    memcpy (__tramp + 28, &__flags, sizeof (__flags));			\
-++    __clear_cache(__tramp, __tramp + FFI_TRAMPOLINE_SIZE);		\
-++  })
-++
-++ffi_status
-++ffi_prep_closure_loc (ffi_closure* closure,
-++                      ffi_cif* cif,
-++                      void (*fun)(ffi_cif*,void*,void**,void*),
-++                      void *user_data,
-++                      void *codeloc)
-++{
-++  if (cif->abi != FFI_SYSV)
-++    return FFI_BAD_ABI;
-++
-++  FFI_INIT_TRAMPOLINE (&closure->tramp[0], &ffi_closure_SYSV, codeloc,
-++		       cif->aarch64_flags);
-++
-++  closure->cif  = cif;
-++  closure->user_data = user_data;
-++  closure->fun  = fun;
-++
-++  return FFI_OK;
-++}
-++
-++/* Primary handler to setup and invoke a function within a closure.
-++
-++   A closure when invoked enters via the assembler wrapper
-++   ffi_closure_SYSV(). The wrapper allocates a call context on the
-++   stack, saves the interesting registers (from the perspective of
-++   the calling convention) into the context then passes control to
-++   ffi_closure_SYSV_inner() passing the saved context and a pointer to
-++   the stack at the point ffi_closure_SYSV() was invoked.
-++
-++   On the return path the assembler wrapper will reload call context
-++   regsiters.
-++
-++   ffi_closure_SYSV_inner() marshalls the call context into ffi value
-++   desriptors, invokes the wrapped function, then marshalls the return
-++   value back into the call context.  */
-++
-++void
-++ffi_closure_SYSV_inner (ffi_closure *closure, struct call_context *context,
-++			void *stack)
-++{
-++  ffi_cif *cif = closure->cif;
-++  void **avalue = (void**) alloca (cif->nargs * sizeof (void*));
-++  void *rvalue = NULL;
-++  int i;
-++  struct arg_state state;
-++
-++  arg_init (&state, ALIGN(cif->bytes, 16));
-++
-++  for (i = 0; i < cif->nargs; i++)
-++    {
-++      ffi_type *ty = cif->arg_types[i];
-++
-++      switch (ty->type)
-++	{
-++	case FFI_TYPE_VOID:
-++	  FFI_ASSERT (0);
-++	  break;
-++
-++	case FFI_TYPE_UINT8:
-++	case FFI_TYPE_SINT8:
-++	case FFI_TYPE_UINT16:
-++	case FFI_TYPE_SINT16:
-++	case FFI_TYPE_UINT32:
-++	case FFI_TYPE_SINT32:
-++	case FFI_TYPE_INT:
-++	case FFI_TYPE_POINTER:
-++	case FFI_TYPE_UINT64:
-++	case FFI_TYPE_SINT64:
-++	case  FFI_TYPE_FLOAT:
-++	case  FFI_TYPE_DOUBLE:
-++	case  FFI_TYPE_LONGDOUBLE:
-++	  avalue[i] = allocate_to_register_or_stack (context, stack,
-++						     &state, ty->type);
-++	  break;
-++
-++	case FFI_TYPE_STRUCT:
-++	  if (is_hfa (ty))
-++	    {
-++	      unsigned n = element_count (ty);
-++	      if (available_v (&state) < n)
-++		{
-++		  state.nsrn = N_V_ARG_REG;
-++		  avalue[i] = allocate_to_stack (&state, stack, ty->alignment,
-++						 ty->size);
-++		}
-++	      else
-++		{
-++		  switch (get_homogeneous_type (ty))
-++		    {
-++		    case FFI_TYPE_FLOAT:
-++		      {
-++			/* Eeek! We need a pointer to the structure,
-++			   however the homogeneous float elements are
-++			   being passed in individual S registers,
-++			   therefore the structure is not represented as
-++			   a contiguous sequence of bytes in our saved
-++			   register context. We need to fake up a copy
-++			   of the structure layed out in memory
-++			   correctly. The fake can be tossed once the
-++			   closure function has returned hence alloca()
-++			   is sufficient. */
-++			int j;
-++			UINT32 *p = avalue[i] = alloca (ty->size);
-++			for (j = 0; j < element_count (ty); j++)
-++			  memcpy (&p[j],
-++				  allocate_to_s (context, &state),
-++				  sizeof (*p));
-++			break;
-++		      }
-++
-++		    case FFI_TYPE_DOUBLE:
-++		      {
-++			/* Eeek! We need a pointer to the structure,
-++			   however the homogeneous float elements are
-++			   being passed in individual S registers,
-++			   therefore the structure is not represented as
-++			   a contiguous sequence of bytes in our saved
-++			   register context. We need to fake up a copy
-++			   of the structure layed out in memory
-++			   correctly. The fake can be tossed once the
-++			   closure function has returned hence alloca()
-++			   is sufficient. */
-++			int j;
-++			UINT64 *p = avalue[i] = alloca (ty->size);
-++			for (j = 0; j < element_count (ty); j++)
-++			  memcpy (&p[j],
-++				  allocate_to_d (context, &state),
-++				  sizeof (*p));
-++			break;
-++		      }
-++
-++		    case FFI_TYPE_LONGDOUBLE:
-++			  memcpy (&avalue[i],
-++				  allocate_to_v (context, &state),
-++				  sizeof (*avalue));
-++		      break;
-++
-++		    default:
-++		      FFI_ASSERT (0);
-++		      break;
-++		    }
-++		}
-++	    }
-++	  else if (ty->size > 16)
-++	    {
-++	      /* Replace Composite type of size greater than 16 with a
-++		 pointer.  */
-++	      memcpy (&avalue[i],
-++		      allocate_to_register_or_stack (context, stack,
-++						     &state, FFI_TYPE_POINTER),
-++		      sizeof (avalue[i]));
-++	    }
-++	  else if (available_x (&state) >= (ty->size + 7) / 8)
-++	    {
-++	      avalue[i] = get_x_addr (context, state.ngrn);
-++	      state.ngrn += (ty->size + 7) / 8;
-++	    }
-++	  else
-++	    {
-++	      state.ngrn = N_X_ARG_REG;
-++
-++	      avalue[i] = allocate_to_stack (&state, stack, ty->alignment,
-++					     ty->size);
-++	    }
-++	  break;
-++
-++	default:
-++	  FFI_ASSERT (0);
-++	  break;
-++	}
-++    }
-++
-++  /* Figure out where the return value will be passed, either in
-++     registers or in a memory block allocated by the caller and passed
-++     in x8.  */
-++
-++  if (is_register_candidate (cif->rtype))
-++    {
-++      /* Register candidates are *always* returned in registers. */
-++
-++      /* Allocate a scratchpad for the return value, we will let the
-++         callee scrible the result into the scratch pad then move the
-++         contents into the appropriate return value location for the
-++         call convention.  */
-++      rvalue = alloca (cif->rtype->size);
-++      (closure->fun) (cif, rvalue, avalue, closure->user_data);
-++
-++      /* Copy the return value into the call context so that it is returned
-++         as expected to our caller.  */
-++      switch (cif->rtype->type)
-++        {
-++        case FFI_TYPE_VOID:
-++          break;
-++
-++        case FFI_TYPE_UINT8:
-++        case FFI_TYPE_UINT16:
-++        case FFI_TYPE_UINT32:
-++        case FFI_TYPE_POINTER:
-++        case FFI_TYPE_UINT64:
-++        case FFI_TYPE_SINT8:
-++        case FFI_TYPE_SINT16:
-++        case FFI_TYPE_INT:
-++        case FFI_TYPE_SINT32:
-++        case FFI_TYPE_SINT64:
-++        case FFI_TYPE_FLOAT:
-++        case FFI_TYPE_DOUBLE:
-++        case FFI_TYPE_LONGDOUBLE:
-++	  {
-++	    void *addr = get_basic_type_addr (cif->rtype->type, context, 0);
-++	    copy_basic_type (addr, rvalue, cif->rtype->type);
-++            break;
-++	  }
-++        case FFI_TYPE_STRUCT:
-++          if (is_hfa (cif->rtype))
-++	    {
-++	      int i;
-++	      unsigned short type = get_homogeneous_type (cif->rtype);
-++	      unsigned elems = element_count (cif->rtype);
-++	      for (i = 0; i < elems; i++)
-++		{
-++		  void *reg = get_basic_type_addr (type, context, i);
-++		  copy_basic_type (reg, rvalue, type);
-++		  rvalue += get_basic_type_size (type);
-++		}
-++	    }
-++          else if ((cif->rtype->size + 7) / 8 < N_X_ARG_REG)
-++            {
-++              unsigned size = ALIGN (cif->rtype->size, sizeof (UINT64)) ;
-++              memcpy (get_x_addr (context, 0), rvalue, size);
-++            }
-++          else
-++            {
-++              FFI_ASSERT (0);
-++            }
-++          break;
-++        default:
-++          FFI_ASSERT (0);
-++          break;
-++        }
-++    }
-++  else
-++    {
-++      memcpy (&rvalue, get_x_addr (context, 8), sizeof (UINT64));
-++      (closure->fun) (cif, rvalue, avalue, closure->user_data);
-++    }
-++}
-++
-+diff --git a/src/aarch64/ffitarget.h b/src/aarch64/ffitarget.h
-+new file mode 100644
-+index 0000000..6f1a348
-+--- /dev/null
-++++ b/src/aarch64/ffitarget.h
-+@@ -0,0 +1,59 @@
-++/* Copyright (c) 2009, 2010, 2011, 2012 ARM Ltd.
-++
-++Permission is hereby granted, free of charge, to any person obtaining
-++a copy of this software and associated documentation files (the
-++``Software''), to deal in the Software without restriction, including
-++without limitation the rights to use, copy, modify, merge, publish,
-++distribute, sublicense, and/or sell copies of the Software, and to
-++permit persons to whom the Software is furnished to do so, subject to
-++the following conditions:
-++
-++The above copyright notice and this permission notice shall be
-++included in all copies or substantial portions of the Software.
-++
-++THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
-++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-++IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-++CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-++TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-++SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
-++
-++#ifndef LIBFFI_TARGET_H
-++#define LIBFFI_TARGET_H
-++
-++#ifndef LIBFFI_H
-++#error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
-++#endif
-++
-++#ifndef LIBFFI_ASM
-++typedef unsigned long ffi_arg;
-++typedef signed long ffi_sarg;
-++
-++typedef enum ffi_abi
-++  {
-++    FFI_FIRST_ABI = 0,
-++    FFI_SYSV,
-++    FFI_LAST_ABI,
-++    FFI_DEFAULT_ABI = FFI_SYSV
-++  } ffi_abi;
-++#endif
-++
-++/* ---- Definitions for closures ----------------------------------------- */
-++
-++#define FFI_CLOSURES 1
-++#define FFI_TRAMPOLINE_SIZE 36
-++#define FFI_NATIVE_RAW_API 0
-++
-++/* ---- Internal ---- */
-++
-++
-++#define FFI_EXTRA_CIF_FIELDS unsigned aarch64_flags
-++
-++#define AARCH64_FFI_WITH_V_BIT 0
-++
-++#define AARCH64_N_XREG 32
-++#define AARCH64_N_VREG 32
-++#define AARCH64_CALL_CONTEXT_SIZE (AARCH64_N_XREG * 8 + AARCH64_N_VREG * 16)
-++
-++#endif
-+diff --git a/src/aarch64/sysv.S b/src/aarch64/sysv.S
-+new file mode 100644
-+index 0000000..b8cd421
-+--- /dev/null
-++++ b/src/aarch64/sysv.S
-+@@ -0,0 +1,307 @@
-++/* Copyright (c) 2009, 2010, 2011, 2012 ARM Ltd.
-++
-++Permission is hereby granted, free of charge, to any person obtaining
-++a copy of this software and associated documentation files (the
-++``Software''), to deal in the Software without restriction, including
-++without limitation the rights to use, copy, modify, merge, publish,
-++distribute, sublicense, and/or sell copies of the Software, and to
-++permit persons to whom the Software is furnished to do so, subject to
-++the following conditions:
-++
-++The above copyright notice and this permission notice shall be
-++included in all copies or substantial portions of the Software.
-++
-++THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
-++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-++IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-++CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-++TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-++SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
-++
-++#define LIBFFI_ASM
-++#include <fficonfig.h>
-++#include <ffi.h>
-++
-++#define cfi_adjust_cfa_offset(off)	.cfi_adjust_cfa_offset off
-++#define cfi_rel_offset(reg, off)	.cfi_rel_offset reg, off
-++#define cfi_restore(reg)		.cfi_restore reg
-++#define cfi_def_cfa_register(reg)	.cfi_def_cfa_register reg
-++
-++        .text
-++        .globl ffi_call_SYSV
-++        .type ffi_call_SYSV, #function
-++
-++/* ffi_call_SYSV()
-++
-++   Create a stack frame, setup an argument context, call the callee
-++   and extract the result.
-++
-++   The maximum required argument stack size is provided,
-++   ffi_call_SYSV() allocates that stack space then calls the
-++   prepare_fn to populate register context and stack.  The
-++   argument passing registers are loaded from the register
-++   context and the callee called, on return the register passing
-++   register are saved back to the context.  Our caller will
-++   extract the return value from the final state of the saved
-++   register context.
-++
-++   Prototype:
-++
-++   extern unsigned
-++   ffi_call_SYSV (void (*)(struct call_context *context, unsigned char *,
-++			   extended_cif *),
-++                  struct call_context *context,
-++                  extended_cif *,
-++                  unsigned required_stack_size,
-++                  void (*fn)(void));
-++
-++   Therefore on entry we have:
-++
-++   x0 prepare_fn
-++   x1 &context
-++   x2 &ecif
-++   x3 bytes
-++   x4 fn
-++
-++   This function uses the following stack frame layout:
-++
-++   ==
-++                saved x30(lr)
-++   x29(fp)->    saved x29(fp)
-++                saved x24
-++                saved x23
-++                saved x22
-++   sp'    ->    saved x21
-++                ...
-++   sp     ->    (constructed callee stack arguments)
-++   ==
-++
-++   Voila! */
-++
-++#define ffi_call_SYSV_FS (8 * 4)
-++
-++        .cfi_startproc
-++ffi_call_SYSV:
-++        stp     x29, x30, [sp, #-16]!
-++	cfi_adjust_cfa_offset (16)
-++        cfi_rel_offset (x29, 0)
-++        cfi_rel_offset (x30, 8)
-++
-++        mov     x29, sp
-++	cfi_def_cfa_register (x29)
-++        sub     sp, sp, #ffi_call_SYSV_FS
-++
-++        stp     x21, x22, [sp, 0]
-++        cfi_rel_offset (x21, 0 - ffi_call_SYSV_FS)
-++        cfi_rel_offset (x22, 8 - ffi_call_SYSV_FS)
-++
-++        stp     x23, x24, [sp, 16]
-++        cfi_rel_offset (x23, 16 - ffi_call_SYSV_FS)
-++        cfi_rel_offset (x24, 24 - ffi_call_SYSV_FS)
-++
-++        mov     x21, x1
-++        mov     x22, x2
-++        mov     x24, x4
-++
-++        /* Allocate the stack space for the actual arguments, many
-++           arguments will be passed in registers, but we assume
-++           worst case and allocate sufficient stack for ALL of
-++           the arguments.  */
-++        sub     sp, sp, x3
-++
-++        /* unsigned (*prepare_fn) (struct call_context *context,
-++				   unsigned char *stack, extended_cif *ecif);
-++	 */
-++        mov     x23, x0
-++        mov     x0, x1
-++        mov     x1, sp
-++        /* x2 already in place */
-++        blr     x23
-++
-++        /* Preserve the flags returned.  */
-++        mov     x23, x0
-++
-++        /* Figure out if we should touch the vector registers.  */
-++        tbz     x23, #AARCH64_FFI_WITH_V_BIT, 1f
-++
-++        /* Load the vector argument passing registers.  */
-++        ldp     q0, q1, [x21, #8*32 +  0]
-++        ldp     q2, q3, [x21, #8*32 + 32]
-++        ldp     q4, q5, [x21, #8*32 + 64]
-++        ldp     q6, q7, [x21, #8*32 + 96]
-++1:
-++        /* Load the core argument passing registers.  */
-++        ldp     x0, x1, [x21,  #0]
-++        ldp     x2, x3, [x21, #16]
-++        ldp     x4, x5, [x21, #32]
-++        ldp     x6, x7, [x21, #48]
-++
-++        /* Don't forget x8 which may be holding the address of a return buffer.
-++	 */
-++        ldr     x8,     [x21, #8*8]
-++
-++        blr     x24
-++
-++        /* Save the core argument passing registers.  */
-++        stp     x0, x1, [x21,  #0]
-++        stp     x2, x3, [x21, #16]
-++        stp     x4, x5, [x21, #32]
-++        stp     x6, x7, [x21, #48]
-++
-++        /* Note nothing useful ever comes back in x8!  */
-++
-++        /* Figure out if we should touch the vector registers.  */
-++        tbz     x23, #AARCH64_FFI_WITH_V_BIT, 1f
-++
-++        /* Save the vector argument passing registers.  */
-++        stp     q0, q1, [x21, #8*32 + 0]
-++        stp     q2, q3, [x21, #8*32 + 32]
-++        stp     q4, q5, [x21, #8*32 + 64]
-++        stp     q6, q7, [x21, #8*32 + 96]
-++1:
-++        /* All done, unwind our stack frame.  */
-++        ldp     x21, x22, [x29,  # - ffi_call_SYSV_FS]
-++        cfi_restore (x21)
-++        cfi_restore (x22)
-++
-++        ldp     x23, x24, [x29,  # - ffi_call_SYSV_FS + 16]
-++        cfi_restore (x23)
-++        cfi_restore (x24)
-++
-++        mov     sp, x29
-++	cfi_def_cfa_register (sp)
-++
-++        ldp     x29, x30, [sp], #16
-++	cfi_adjust_cfa_offset (-16)
-++        cfi_restore (x29)
-++        cfi_restore (x30)
-++
-++        ret
-++
-++        .cfi_endproc
-++        .size ffi_call_SYSV, .-ffi_call_SYSV
-++
-++#define ffi_closure_SYSV_FS (8 * 2 + AARCH64_CALL_CONTEXT_SIZE)
-++
-++/* ffi_closure_SYSV
-++
-++   Closure invocation glue. This is the low level code invoked directly by
-++   the closure trampoline to setup and call a closure.
-++
-++   On entry x17 points to a struct trampoline_data, x16 has been clobbered
-++   all other registers are preserved.
-++
-++   We allocate a call context and save the argument passing registers,
-++   then invoked the generic C ffi_closure_SYSV_inner() function to do all
-++   the real work, on return we load the result passing registers back from
-++   the call context.
-++
-++   On entry
-++
-++   extern void
-++   ffi_closure_SYSV (struct trampoline_data *);
-++
-++   struct trampoline_data
-++   {
-++        UINT64 *ffi_closure;
-++        UINT64 flags;
-++   };
-++
-++   This function uses the following stack frame layout:
-++
-++   ==
-++                saved x30(lr)
-++   x29(fp)->    saved x29(fp)
-++                saved x22
-++                saved x21
-++                ...
-++   sp     ->    call_context
-++   ==
-++
-++   Voila!  */
-++
-++        .text
-++        .globl ffi_closure_SYSV
-++        .cfi_startproc
-++ffi_closure_SYSV:
-++        stp     x29, x30, [sp, #-16]!
-++	cfi_adjust_cfa_offset (16)
-++        cfi_rel_offset (x29, 0)
-++        cfi_rel_offset (x30, 8)
-++
-++        mov     x29, sp
-++
-++        sub     sp, sp, #ffi_closure_SYSV_FS
-++	cfi_adjust_cfa_offset (ffi_closure_SYSV_FS)
-++
-++        stp     x21, x22, [x29, #-16]
-++        cfi_rel_offset (x21, 0)
-++        cfi_rel_offset (x22, 8)
-++
-++        /* Load x21 with &call_context.  */
-++        mov     x21, sp
-++        /* Preserve our struct trampoline_data *  */
-++        mov     x22, x17
-++
-++        /* Save the rest of the argument passing registers.  */
-++        stp     x0, x1, [x21, #0]
-++        stp     x2, x3, [x21, #16]
-++        stp     x4, x5, [x21, #32]
-++        stp     x6, x7, [x21, #48]
-++        /* Don't forget we may have been given a result scratch pad address.
-++	 */
-++        str     x8,     [x21, #64]
-++
-++        /* Figure out if we should touch the vector registers.  */
-++        ldr     x0, [x22, #8]
-++        tbz     x0, #AARCH64_FFI_WITH_V_BIT, 1f
-++
-++        /* Save the argument passing vector registers.  */
-++        stp     q0, q1, [x21, #8*32 + 0]
-++        stp     q2, q3, [x21, #8*32 + 32]
-++        stp     q4, q5, [x21, #8*32 + 64]
-++        stp     q6, q7, [x21, #8*32 + 96]
-++1:
-++        /* Load &ffi_closure..  */
-++        ldr     x0, [x22, #0]
-++        mov     x1, x21
-++        /* Compute the location of the stack at the point that the
-++           trampoline was called.  */
-++        add     x2, x29, #16
-++
-++        bl      ffi_closure_SYSV_inner
-++
-++        /* Figure out if we should touch the vector registers.  */
-++        ldr     x0, [x22, #8]
-++        tbz     x0, #AARCH64_FFI_WITH_V_BIT, 1f
-++
-++        /* Load the result passing vector registers.  */
-++        ldp     q0, q1, [x21, #8*32 + 0]
-++        ldp     q2, q3, [x21, #8*32 + 32]
-++        ldp     q4, q5, [x21, #8*32 + 64]
-++        ldp     q6, q7, [x21, #8*32 + 96]
-++1:
-++        /* Load the result passing core registers.  */
-++        ldp     x0, x1, [x21,  #0]
-++        ldp     x2, x3, [x21, #16]
-++        ldp     x4, x5, [x21, #32]
-++        ldp     x6, x7, [x21, #48]
-++        /* Note nothing usefull is returned in x8.  */
-++
-++        /* We are done, unwind our frame.  */
-++        ldp     x21, x22, [x29,  #-16]
-++        cfi_restore (x21)
-++        cfi_restore (x22)
-++
-++        mov     sp, x29
-++	cfi_adjust_cfa_offset (-ffi_closure_SYSV_FS)
-++
-++        ldp     x29, x30, [sp], #16
-++	cfi_adjust_cfa_offset (-16)
-++        cfi_restore (x29)
-++        cfi_restore (x30)
-++
-++        ret
-++        .cfi_endproc
-++        .size ffi_closure_SYSV, .-ffi_closure_SYSV
-+diff --git a/testsuite/lib/libffi.exp b/testsuite/lib/libffi.exp
-+index 4a65ed1..8ee3f15 100644
-+--- a/testsuite/lib/libffi.exp
-++++ b/testsuite/lib/libffi.exp
-+@@ -203,6 +203,10 @@ proc libffi_target_compile { source dest type options } {
-+ 
-+     lappend options "libs= -lffi"
-+ 
-++    if { [string match "aarch64*-*-linux*" $target_triplet] } {
-++	lappend options "libs= -lpthread"
-++    }
-++
-+     verbose "options: $options"
-+     return [target_compile $source $dest $type $options]
-+ }
-+-- 
-+1.7.9.5
-+
+diff --git a/docs/manual/adding-packages-conclusion.txt b/docs/manual/adding-packages-conclusion.txt
+index ac20875..42f1c8f 100644
+--- a/docs/manual/adding-packages-conclusion.txt
++++ b/docs/manual/adding-packages-conclusion.txt
+@@ -4,7 +4,7 @@ Conclusion
+ ~~~~~~~~~~
+ 
+ As you can see, adding a software package to Buildroot is simply a
+-matter of writing a Makefile using an  existing example and modifying it
++matter of writing a Makefile using an existing example and modifying it
+ according to the compilation process required by the package.
+ 
+ If you package software that might be useful for other people, don't
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 35d28b6..c8f41ff 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -154,12 +154,12 @@ config BR2_PACKAGE_E
+ Overall, for package library dependencies, +select+ should be
+ preferred.
+ 
+-Note that such dependencies will make sure that the dependency option
++Note that such dependencies will ensure that the dependency option
+ is also enabled, but not necessarily built before your package. To do
+ so, the dependency also needs to be expressed in the +.mk+ file of the
+ package.
+ 
+-Further formating details: see xref:writing-rules-config-in[the
++Further formatting details: see xref:writing-rules-config-in[the
+ writing rules].
+ 
+ The +.mk+ file
+@@ -174,7 +174,7 @@ different way, using different infrastructures:
+ 
+ * *Makefiles for generic packages* (not using autotools or CMake):
+   These are based on an infrastructure similar to the one used for
+-  autotools-based packages, but requires a little more work from the
++  autotools-based packages, but require a little more work from the
+   developer. They specify what should be done for the configuration,
+   compilation, installation and cleanup of the package. This
+   infrastructure must be used for all packages that do not use the
+diff --git a/docs/manual/adding-packages-gettext.txt b/docs/manual/adding-packages-gettext.txt
+index 89461a7..e9446d2 100644
+--- a/docs/manual/adding-packages-gettext.txt
++++ b/docs/manual/adding-packages-gettext.txt
+@@ -5,12 +5,12 @@ Gettext integration and interaction with packages
+ 
+ Many packages that support internationalization use the gettext
+ library. Dependencies for this library are fairly complicated and
+-therefore, deserves some explanation.
++therefore, deserve some explanation.
+ 
+-The 'uClibc' C library doesn't implement gettext functionality,
++The 'uClibc' C library doesn't implement gettext functionality;
+ therefore with this C library, a separate gettext must be compiled. On
+ the other hand, the 'glibc' C library does integrate its own gettext,
+-and in this case, the separate gettext library should not be compiled,
++and in this case the separate gettext library should not be compiled,
+ because it creates various kinds of build failures.
+ 
+ Additionally, some packages (such as +libglib2+) do require gettext
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index acc73d3..38dfa2b 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -7,7 +7,7 @@ Tips and tricks
+ Package name, config entry name and makefile variable relationship
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+-In Buildroot, there are some relation between:
++In Buildroot, there are some relationships between:
+ 
+ * the _package name_, which is the package directory name (and the
+   name of the +*.mk+ file);
+@@ -16,8 +16,8 @@ In Buildroot, there are some relation between:
+ 
+ * the makefile variable prefix.
+ 
+-Thus, it is mandatory to keep consistency between all this stuff,
+-matching the following rules:
++It is mandatory to be maintain consistency between these elements,
++using the following rules:
+ 
+ * the _make_ target name will be the _package name_ itself (e.g.:
+   +foo-bar_boo+);
+diff --git a/docs/manual/beyond-buildroot.txt b/docs/manual/beyond-buildroot.txt
+index 12ce78c..e7b902d 100644
+--- a/docs/manual/beyond-buildroot.txt
++++ b/docs/manual/beyond-buildroot.txt
+@@ -12,7 +12,7 @@ NFS boot
+ To achieve NFS-boot, enable _tar root filesystem_ in the _Filesystem
+ images_ menu.
+ 
+-After complete build, just run the following commands to setup the
++After a complete build, just run the following commands to setup the
+ NFS-root directory:
+ 
+ -------------------
+diff --git a/docs/manual/board-support.txt b/docs/manual/board-support.txt
+index e20e721..271f3e0 100644
+--- a/docs/manual/board-support.txt
++++ b/docs/manual/board-support.txt
+@@ -23,10 +23,10 @@ savedefconfig+. This will generate a minimal +defconfig+ file at the
+ root of the Buildroot source tree. Move this file into the +configs/+
+ directory, and rename it +MYBOARD_defconfig+.
+ 
+-It is recommended to use as much as possible upstream versions of the
+-Linux kernel and bootloaders, and to use as much as possible default
+-kernel and bootloader configurations. If they are incorrect for your
+-platform, we encourage you to send fixes to the corresponding upstream
++It is recommended to use upstream versions of the Linux kernel and
++bootloaders where possible, and also to use default kernel and bootloader
++configurations if possible. If the defaults are incorrect for
++your platform, we encourage you to send fixes to the corresponding upstream
+ projects.
+ 
+ However, in the mean time, you may want to store kernel or bootloader
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index c08c10e..98503b5 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -23,7 +23,7 @@ Building out-of-tree
+ ~~~~~~~~~~~~~~~~~~~~
+ 
+ As default, everything built by Buildroot is stored in the directory
+-+output+ in the buildroot tree.
+++output+ in the Buildroot tree.
+ 
+ Buildroot also supports building out of tree with a syntax similar to
+ the Linux kernel. To use it, add +O=<directory>+ to the make command
+@@ -70,21 +70,21 @@ to +make+ or set in the environment:
+   +
+   Note that the uClibc configuration file can also be set from the
+   configuration interface, so through the Buildroot .config file; this
+-  the actual recommended way of setting it.
++  is the recommended way of setting it.
+   +
+ * +BUSYBOX_CONFIG_FILE=<path/to/.config>+, path to
+   the Busybox configuration file.
+   +
+   Note that the Busybox configuration file can also be set from the
+   configuration interface, so through the Buildroot .config file; this
+-  the actual recommended way of setting it.
++  is the recommended way of setting it.
+   +
+ * +BUILDROOT_DL_DIR+ to override the directory in which
+   Buildroot stores/retrieves downloaded files
+   +
+   Note that the Buildroot download directory can also be set from the
+   configuration interface, so through the Buildroot .config file; this
+-  the actual recommended way of setting it.
++  is the recommended way of setting it.
+ 
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index b2e6e7d..b94b670 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -57,7 +57,7 @@ Lastly, send/submit your patch set to the Buildroot mailing list:
+ Note that +git+ should be configured to use your mail account.
+ To configure +git+, see +man git-send-email+ or google it.
+ 
+-Make sure posted *patches are not line-wrapped*, otherwise it cannot
++Make sure posted *patches are not line-wrapped*, otherwise they cannot
+ easily be applied. In such a case, fix your e-mail client, or better,
+ use +git send-email+ to send your patches.
+ 
+@@ -79,11 +79,11 @@ Tested-by:: Indicates that the patch has been tested. It is useful
+ Autobuild
+ ---------
+ 
+-The Buildroot community is currently setting up automatic build i
+-order to test more and more configuration. All build results are
++The Buildroot community is currently setting up automatic builds in
++order to test more and more configurations. All build results are
+ available at http://autobuild.buildroot.org[]
+ 
+-A way to contribute is fixing broken builds.
++A good way to contribute is by fixing broken builds.
+ 
+ In the commit message of a patch fixing an _autobuild_, add a
+ reference to the _build result directory_ (the +dir+ link in the _data
+@@ -97,17 +97,17 @@ Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2
+ Reporting issues/bugs, get help
+ -------------------------------
+ 
+-Before reporting some issues, please chek
+-xref:mailing-list-subscribe[the mailing list archive] in case someone had
++Before reporting some issues, please check
++xref:mailing-list-subscribe[the mailing list archive] in case someone has
+ already reported and fixed a similar problem.
+ 
+-Whatever the way you choose to report some bugs or get help,
++However you choose to report bugs or get help,
+ xref:bugtracker[opening a bug] or
+-xref:mailing-list-subscribe[send a mail to the mailing list], there is
+-a number of detail to provide in order to help people reproduce and
++xref:mailing-list-subscribe[send a mail to the mailing list], there are
++a number of details to provide in order to help people reproduce and
+ find a solution to the issue.
+ 
+-Try to think as you would be the one who will help someone else; in
++Try to think as you would if you were helping someone else; in
+ that case, what would you need?
+ 
+ Here is a short list of details to provide in such case:
+@@ -121,6 +121,6 @@ Here is a short list of details to provide in such case:
+ 
+ Additionnally, your can add the +.config+ file.
+ 
+-If some of these details are too large, do not hesitate to use some
++If some of these details are too large, do not hesitate to use a
+ pastebin service (see
+ http://en.wikipedia.org/wiki/Comparison_of_pastebins[]).
+diff --git a/docs/manual/customize-uclibc-config.txt b/docs/manual/customize-uclibc-config.txt
+index 88121ea..d340c9a 100644
+--- a/docs/manual/customize-uclibc-config.txt
++++ b/docs/manual/customize-uclibc-config.txt
+@@ -14,7 +14,7 @@ follow these steps:
+ * Do an initial compilation of Buildroot without trying to customize
+   uClibc.
+ 
+-* Invoke +make uclibc-menuconfig+.  The nice configuration assistant,
++* Invoke +make uclibc-menuconfig+. The nice configuration assistant,
+   similar to the one used in the Linux kernel or Buildroot,
+   appears. Make your configuration changes as appropriate.
+ 
+diff --git a/docs/manual/download-location.txt b/docs/manual/download-location.txt
+index 8c66a76..dac5669 100644
+--- a/docs/manual/download-location.txt
++++ b/docs/manual/download-location.txt
+@@ -5,7 +5,7 @@ Location of downloaded packages
+ 
+ It might be useful to know that the various tarballs that are
+ downloaded by the Makefiles are all stored in the +DL_DIR+ which by
+-default is the +dl+ directory. It's useful, for example, if you want
++default is the +dl+ directory. This is useful, for example, if you want
+ to keep a complete version of Buildroot which is known to be working
+ with the associated tarballs. This will allow you to regenerate the
+ toolchain and the target filesystem with exactly the same versions.
+diff --git a/docs/manual/embedded-basics.txt b/docs/manual/embedded-basics.txt
+index 27dda37..bf65554 100644
+--- a/docs/manual/embedded-basics.txt
++++ b/docs/manual/embedded-basics.txt
+@@ -4,7 +4,7 @@ Embedded system basics
+ ----------------------
+ 
+ When developing an embedded system, there are a number of choices to
+-do:
++make:
+ 
+ * the cross-toolchain: target architecture/C library/...
+ * the bootloader
+@@ -14,14 +14,14 @@ do:
+ * the package selection (busybox vs. "real" programs, ...)
+ * ...
+ 
+-Some of them may be influenced by the target hardware.
++Some of these may be influenced by the target hardware.
+ 
+-Some of them may also add some constraints when you will develop the
+-final application for what your target is designed (e.g. some
+-functions may be provided by soem C libraries and missing in some
+-others, ...). So, these choices should be carefully done.
++Some of the choices may also add some constraints when you develop the
++final application for which your target is designed (e.g. some
++functions may be provided by some C libraries and missing in some
++others, ...). So, these choices should be carefully made.
+ 
+-Buildroot allows to set most of these options to fit your needs.
++Buildroot allows you to set most of these options to fit your needs.
+ 
+ Moreover, Buildroot provides an infrastructure for reproducing the
+ build process of your kernel, cross-toolchain, and embedded root
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index 6911c55..3ecc3ae 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -7,7 +7,7 @@ Frequently Asked Questions & Troubleshooting
+ The boot hangs after 'Starting network...'
+ ------------------------------------------
+ 
+-If the boot process seems to hand after the following messages
++If the boot process seems to hang after the following messages
+ (messages not necessarily exactly similar, depending on the list of
+ packages selected):
+ 
+@@ -20,7 +20,7 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK
+ 
+ then it means that your system is running, but didn't start a shell on
+ the serial console. In order to have the system start a shell on your
+-serial console, you have to go in the Buildroot configuration, +System
++serial console, you have to go into the Buildroot configuration, +System
+ configuration+, and modify +Port to run a getty (login prompt) on+ and
+ +Baudrate to use+ as appropriate. This will automatically tune the
+ +/etc/inittab+ file of the generated system so that a shell starts on
+@@ -42,21 +42,21 @@ you should install the +glibc-static+ package. This is because the
+ C library.
+ 
+ [[faq-no-compiler-on-target]]
+-Why there is no compiler on the target?
++Why is there no compiler on the target?
+ ---------------------------------------
+ 
+-It has been decided that the support of the _native compiler for the
+-target_ would be stopped since the Buildroot-2012.11 release because:
++It has been decided that support for the _native compiler on the
++target_ would be stopped from the Buildroot-2012.11 release because:
+ 
+-* this feature was not maintained nor tested and often broken;
++* this feature was not maintained or tested, and often broken;
+ * this feature was only available for Buildroot toolchains;
+ * Buildroot mostly targets _small_ or _very small_ target hardware
+-  with limited resource onboard (CPU, ram, mass-storage), on which
++  with limited resource onboard (CPU, ram, mass-storage), for which
+   compiling does not make much sense.
+ 
+ If you need a compiler on your target anyway, then Buildroot is not
+ suitable for your purpose. In such case, you need a _real
+-distribution_ and you should for something like:
++distribution_ and you should opt for something like:
+ 
+ * http://www.openembedded.org[openembedded]
+ * https://www.yoctoproject.org[yocto]
+@@ -67,8 +67,8 @@ distribution_ and you should for something like:
+ * ...
+ 
+ [[faq-no-dev-files-on-target]]
+-Why there is no development files on the target?
+-------------------------------------------------
++Why are there no development files on the target?
++-------------------------------------------------
+ 
+ Since there is no compiler available on the target (see
+ xref:faq-no-compiler-on-target[]), it does not make sense to waste
+@@ -78,7 +78,7 @@ Therefore, those files are always removed from the target since the
+ Buildroot-2012.11 release.
+ 
+ [[faq-no-doc-on-target]]
+-Why there is no documentation on the target?
++Why is there no documentation on the target?
+ --------------------------------------------
+ 
+ Because Buildroot mostly targets _small_ or _very small_ target
+@@ -101,21 +101,21 @@ semantics.
+ See xref:depends-on-vs-select[].
+ 
+ [[faq-why-not-visible-package]]
+-Why some packages are not visible in the Buildroot config menu?
++Why are some packages not visible in the Buildroot config menu?
+ ---------------------------------------------------------------
+ 
+-If a package exists in the Buildroot tree and does not appears in the
++If a package exists in the Buildroot tree and does not appear in the
+ config menu, this most likely means that some of the package's
+ dependencies are not met.
+ 
+-To know more about the dependencies of a package, search the package
+-symbol using in teh config menu (see xref:make-tips[]).
++To know more about the dependencies of a package, search for the
++package symbol in the config menu (see xref:make-tips[]).
+ 
+ Then, you may have to recursively enable several options (which
+-correspond to the unmeet dependencies) to finally be able to select
++correspond to the unmet dependencies) to finally be able to select
+ the package.
+ 
+-If the package is not visible due to some unmeet toolchain options,
++If the package is not visible due to some unmet toolchain options,
+ then you should certainly run a full rebuild (see xref:make-tips[] for
+ more explanations).
+ 
+@@ -123,12 +123,12 @@ more explanations).
+ Why not use the target directory as a chroot directory?
+ -------------------------------------------------------
+ 
+-There are plenty of reason to *not* use the target directory a chroot
++There are plenty of reasons to *not* use the target directory a chroot
+ one, among these:
+ 
+-* files' owners, modes and permissions are not correctly set in the
++* file ownerships, modes and permissions are not correctly set in the
+   target directory;
+-* devices nodes are not created in the target directory.
++* device nodes are not created in the target directory.
+ 
+-Because of that, commands run in through chroot, using the target
+-directory as new root, will fail.
++For these reasons, commands run through chroot, using the target
++directory as the new root, will fail.
+diff --git a/docs/manual/how-buildroot-works.txt b/docs/manual/how-buildroot-works.txt
+index 879cff3..31774c0 100644
+--- a/docs/manual/how-buildroot-works.txt
++++ b/docs/manual/how-buildroot-works.txt
+@@ -9,7 +9,7 @@ also includes patches for various software packages - mainly the ones
+ involved in the cross-compilation tool chain (+gcc+, +binutils+ and
+ +uClibc+).
+ 
+-There is basically one Makefile per software package, and they are
++There is basically one Makefile for each software package, and they are
+ named with the +.mk+ extension. Makefiles are split into three main
+ sections:
+ 
+diff --git a/docs/manual/introduction.txt b/docs/manual/introduction.txt
+index 91ecb04..3f4cca8 100644
+--- a/docs/manual/introduction.txt
++++ b/docs/manual/introduction.txt
+@@ -3,10 +3,10 @@
+ About Buildroot
+ ===============
+ 
+-Buildroot provides a full featured environment for cross-development.
++Buildroot provides a full-featured environment for cross-development.
+ Buildroot is able to generate a cross-compilation toolchain, a root
+ filesystem, a Linux kernel image and a bootloader for your target.
+-Buildroot can be used for any combinaison of these options,
++Buildroot can be used for any combination of these options,
+ independently.
+ 
+ Buildroot is useful mainly for people working with embedded systems.
+@@ -15,7 +15,7 @@ processors everyone is used to having in his PC. They can be PowerPC
+ processors, MIPS processors, ARM processors, etc.
+ 
+ Buildroot supports numerous processors and their variants; it also
+-comes with default configuration for several boards available
+-off-the-shelf. Besides, a number of third-party projects are based on
++comes with default configurations for several boards available
++off-the-shelf. Besides this, a number of third-party projects are based on
+ or develop their BSP footnote:[BSP: Board Software Package] or
+ SDK footnote:[SDK: Standard Development Kit] on top of Buildroot.
+diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+index 22e5769..c98da6c 100644
+--- a/docs/manual/legal-notice.txt
++++ b/docs/manual/legal-notice.txt
+@@ -12,17 +12,18 @@ All of the end products of Buildroot (toolchain, root filesystem, kernel,
+ bootloaders) contain opensource software, released under various licenses.
+ 
+ Using opensource software gives you the freedom to build rich embedded
+-systems choosing from a wide range of packages, but also gives some
++systems choosing from a wide range of packages, but also imposes some
+ obligations that you must know and honour.
+ Some licenses require you to publish the license text in the documentation of
+-your product. Other require you to redistribute the source code of the
++your product. Others require you to redistribute the source code of the
+ software to those that receive your product.
+ 
+ The exact requirements of each license is documented in each package, and it is
+-your (or your legal office's) responsibility to comply with these requirements.
++your responsibility (or that of your legal office) to comply with these
++requirements.
+ To make this easier for you, Buildroot can collect for you some material you
+-will probably need. To produce this material, after you configured Buildroot
+-with +make menuconfig+, +make xconfig+ or +make gconfig+, run:
++will probably need. To produce this material, after you have configured
++Buildroot with +make menuconfig+, +make xconfig+ or +make gconfig+, run:
+ 
+ --------------------
+ make legal-info
+@@ -44,8 +45,8 @@ There you will find:
+   Buildroot sources and are not duplicated in the +sources/+ subdirectory.
+ * A manifest file listing the configured packages, their version, license and
+   related information.
+-  Some of these information might be not defined in Buildroot; in this case
+-  they are clearly marked as "unknown" or similar.
++  Some of this information might not be defined in Buildroot; such items are
++  clearly marked as "unknown" or similar.
+ * A +licenses/+ subdirectory, which contains the license text of packages.
+   If the license file(s) are not defined in Buildroot, the file is not produced
+   and a warning in the +README+ indicates this.
+@@ -53,7 +54,7 @@ There you will find:
+ Please note that the aim of the +legal-info+ feature of Buildroot is to
+ produce all the material that is somehow relevant for legal compliance with the
+ package licenses. Buildroot does not try to produce the exact material that
+-you must somehow make public. It does surely produce some more material than is
++you must somehow make public. Certainly, more material is produced than is
+ needed for a strict legal compliance. For example, it produces the source code
+ for packages released under BSD-like licenses, that you might not want to
+ redistribute in source form.
+@@ -132,5 +133,5 @@ Buildroot is part of the 'scripts used to control compilation and
+ installation of the executable', and as such it is considered part of the
+ material that must be redistributed.
+ 
+-Keep in mind this is only the Buildroot developers' opinion, and you should
+-consult your legal department or lawyer in case of any doubt.
++Keep in mind that this is only the Buildroot developers' opinion, and you
++should consult your legal department or lawyer in case of any doubt.
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 5b00536..25c4e35 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -4,18 +4,18 @@
+ 'make' tips
+ -----------
+ 
+-Because Buildroot is a set of Makefiles and patches, there are few
+-things useful to know, such as:
++Because Buildroot is a set of Makefiles and patches, there are a few
++things that are useful to know, such as:
+ 
+ +make *config+ commands offer a search tool. Read the help message in
+-the different frontend menu to know how to use it:
++the different frontend menus to know how to use it:
+ 
+ * in _menuconfig_, search tool is called by pressing +/+;
+ * in _xconfig_, search tool is called by pressing +ctrl+ + +f+.
+ 
+-The result of the search show the help message of the matching items.
++The result of the search shows the help message of the matching items.
+ 
+-Display all command executed by make:
++Display all commands executed by make:
+ 
+ --------------------
+  $ make V=0|1 <target>
+@@ -54,5 +54,5 @@ Delete all build products as well as the configuration:
+ --------------------
+ 
+ Note that if +ccache+ is enabled, running +make clean|distclean+ does
+-not empty the cache of compiler used by Buildroot. To delete it, refer
++not empty the compiler cache used by Buildroot. To delete it, refer
+ to xref:ccache[].
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index 4703b2f..99ecdea 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -4,12 +4,11 @@
+ Makedev syntax documentation
+ ----------------------------
+ 
+-The makedev syntax is used across several places in Buildroot to
+-define changes to be made for permissions or which device files to
+-create and how to create them, in order to avoid to call mkdnod every
+-now and then.
++The makedev syntax is used in several places in Buildroot to
++define changes to be made for permissions, or which device files to
++create and how to create them, in order to avoid calls to mknod.
+ 
+-This syntax is derived from the makedev utility, and a more complete
++This syntax is derived from the makedev utility, and more complete
+ documentation can be found in the +package/makedevs/README+ file.
+ 
+ It takes the form of a line for each file, with the following layout:
+@@ -18,7 +17,7 @@ It takes the form of a line for each file, with the following layout:
+ |name |type |mode |uid |gid |major |minor |start |inc |count
+ |===========================================================
+ 
+-There is a few non-trivial blocks here:
++There are a few non-trivial blocks here:
+ 
+ - +name+ is the path to the file you want to create/modify
+ - +type+ is the type of the file, being one of :
+@@ -27,13 +26,13 @@ There is a few non-trivial blocks here:
+   * c: a character device file
+   * b: a block device file
+   * p: a named pipe
+-- +mode+, +uid+ and +gid+ are the usual permissions stuff
++- +mode+, +uid+ and +gid+ are the usual permissions settings
+ - +major+ and +minor+ are here for device files
+-- +start+, +inc+ and +count+ are when you want to create a whole batch
++- +start+, +inc+ and +count+ are for when you want to create a batch
+   of files, and can be reduced to a loop, beginning at +start+,
+   incrementing its counter by +inc+ until it reaches +count+
+ 
+-Let's say you want to change the permissions of a given file, using
++Let's say you want to change the permissions of a given file; using
+ this syntax, you will need to put:
+ -------------------------------------------------------------------
+ /usr/bin/foobar	f	644	0	0	-	-	-	-	-
+diff --git a/docs/manual/package-make-target.txt b/docs/manual/package-make-target.txt
+index 1813af3..e8d5f53 100644
+--- a/docs/manual/package-make-target.txt
++++ b/docs/manual/package-make-target.txt
+@@ -82,7 +82,7 @@ uninstall the package from both the target and the staging directory
+ | +rebuild+         | Rebuild only necessary binaries and install them
+ again
+ 
+-| +reconfigure+     | Run again the configure command, then rebuild
++| +reconfigure+     | Re-run the configure command, then rebuild
+ only necessary binaries, and lastly install them again
+ 
+ |===================================================
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 551ea12..a54df35 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -10,16 +10,16 @@ necessary to patch the source of the software to get it built within
+ Buildroot.
+ 
+ Buildroot offers an infrastructure to automatically handle this during
+-the builds. It support several ways of applying patch sets:
++the builds. It supports several ways of applying patch sets:
+ 
+-Provinding patches
++Providing patches
+ ~~~~~~~~~~~~~~~~~~
+ 
+-Additionnal tarball
+-^^^^^^^^^^^^^^^^^^^
++Additional tarball
++^^^^^^^^^^^^^^^^^^
+ 
+-If there needs to apply a patch set available as a tarball and
+-downloadable, then add the patch tarball to the +<packagename>_PATCH+
++If it is necessary to apply a patch set available as a downloadable
++tarball, then add the patch tarball to the +<packagename>_PATCH+
+ variable.
+ 
+ Note that the patch tarballs are downloaded from the same site as the
+@@ -28,13 +28,13 @@ sources.
+ Within Buildroot
+ ^^^^^^^^^^^^^^^^
+ 
+-Most of the patches are provided within Buildroot, in the package
+-directory, because they aim to fix cross-compilation, +libc+ support,
+-or whatever the reason is.
++Most patches are provided within Buildroot, in the package
++directory; these typically aim to fix cross-compilation, +libc+ support,
++or other such issues.
+ 
+ These patch files should have the extension +*.patch+.
+ 
+-A +series+ file, like +quilt+ uses it, may also be added in the
++A +series+ file, as used by +quilt+, may also be added in the
+ package directory. In that case, the +series+ file defines the patch
+ application order.
+ 
+@@ -43,7 +43,7 @@ How patches are applied
+ 
+ . Run the +<packagename>_PRE_PATCH_HOOKS+ commands if defined;
+ 
+-. Cleanup the build directory from any existing +*.rej+ files;
++. Cleanup the build directory, removing any existing +*.rej+ files;
+ 
+ . If +<packagename>_PATCH+ is defined, then patches from these
+   tarballs are applied;
+@@ -65,17 +65,17 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
+ Format and licensing of the package patches
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-Patches are released under the same license the software that is
++Patches are released under the same license as the software that is
+ modified.
+ 
+-A message explaining what does the patch and why should be add in the
+-patch's header.
++A message explaining what the patch does, and why it is needed, should
++be added in the header commentary of the patch.
+ 
+ You should add a +signed-off-by+ statement in the header of the each
+-patch to help keeping track of the changes.
++patch to help with keeping track of the changes.
+ 
+-If the software is under versionning, it is recommended to use the SCM
+-software to generate the patch set.
++If the software is under version control, it is recommended to use the
++SCM software to generate the patch set.
+ 
+ Otherwise, concatenate the header with the output of the
+ +diff -purN source.c.orig source.c+ command.
+@@ -107,10 +107,10 @@ AC_PROG_MAKE_SET
+ Integrating patches found on the Web
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+-When integrating a patch whom you are not the author, you have to add
+-few things in the header of the patch itself.
++When integrating a patch of which you are not the author, you have to
++add a few things in the header of the patch itself.
+ 
+-Depending on whether the patch has been pick-up from the project
++Depending on whether the patch has been obtained from the project
+ repository itself, or from somewhere on the web, add one of the
+ following tags:
+ 
+@@ -124,5 +124,5 @@ or
+ Fetch from: <some url>
+ ---------------
+ 
+-It is also possible to add few words about the changes that may have
+-been necessary if any.
++It is also sensible to add a few words about any changes to the patch
++that may have been necessary.
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 31d437d..36d8da7 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -4,13 +4,13 @@
+ System requirements
+ -------------------
+ 
+-Buildroot is design to run on Linux system.
++Buildroot is designed to run on Linux systems.
+ 
+ Buildroot needs some software to be already installed on the host
+-system; hereafter the lists of the mandatory and optional packages
++system; here are the lists of the mandatory and optional packages
+ (package names may vary between distributions).
+ 
+-Take care of _installing both runtime and development data_, especially
++Take care to _install both runtime and development data_, especially
+ for the libraries that may be packaged in 2 distinct packages.
+ 
+ 
+@@ -58,7 +58,7 @@ Optional packages
+ * Source fetching tools:
+ +
+ In the official tree, most of the package sources are retrieved
+-using +wget+, few are only available through their +git+, +mercurial+,
++using +wget+; a few are only available through their +git+, +mercurial+,
+ or +svn+ repository.
+ +
+ All other source fetching methods are implemented and may be used in a
+diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
+index a723d11..d3c087a 100644
+--- a/docs/manual/rebuilding-packages.txt
++++ b/docs/manual/rebuilding-packages.txt
+@@ -10,7 +10,7 @@ A full rebuild is achieved by running:
+ $ make clean all
+ ---------------
+ 
+-In what cases, a full rebuild is mandatory:
++In certain cases, a full rebuild is mandatory:
+ 
+ * each time the toolchain properties are changed, this includes:
+ 
+@@ -22,14 +22,14 @@ In what cases, a full rebuild is mandatory:
+ 
+ * after removing some libraries from the package selection.
+ 
+-In what cases, a full rebuild is recommended:
++In certain cases, a full rebuild is recommended:
+ 
+ * after adding some libraries to the package selection (otherwise,
+   some packages that can be optionally linked against those libraries
+   won't be rebuilt, so they won't support those new available
+   features).
+ 
+-In other cases, it is up to you to decide if you should or not run a
++In other cases, it is up to you to decide if you should run a
+ full rebuild, but you should know what is impacted and understand what
+ you are doing anyway.
+ 
+@@ -81,7 +81,7 @@ files are relevant:
+ Buildroot infrastructures.
+ - Only toolchain packages remain using custom makefiles (i.e. do not
+ use any Buildroot infrastructure).
+-- Most packages and toolchain packages, if not all, will progressively
++- Most, if not all, packages and toolchain packages will progressively
+ be ported over to the generic, autotools or CMake infrastructure,
+ making it much easier to rebuild individual packages.
+ 
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index e8136f8..892caf5 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -56,8 +56,7 @@ This command will generally perform the following steps:
+ 
+ * Download source files (as required)
+ * Configure, build and install the cross-compiling toolchain using the
+-  appropriate toolchain backend is used, or simply import a toolchain
+-  if an external toolchain
++  appropriate toolchain backend, or simply import an external toolchain
+ * Build/install selected target packages
+ * Build a kernel image, if selected
+ * Build a bootloader image, if selected
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index e0a5a2a..c32f855 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -3,7 +3,7 @@
+ Writing rules
+ -------------
+ 
+-Overall, those writing rules are here to help you add new files in
++Overall, these writing rules are here to help you add new files in
+ Buildroot or refactor existing ones.
+ 
+ If you slightly modify some existing file, the important thing is
 -- 
-1.7.9.5
+1.7.10.4
