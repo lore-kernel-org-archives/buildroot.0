@@ -1,44 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Nov 2012 08:44:32 +0100
-Subject: [Buildroot] [git commit] qextserialport: don't require Qt GUI
- module
-In-Reply-To: <87k3tmysez.fsf@dell.be.48ers.dk>
-References: <20121114214738.427A799B26@busybox.osuosl.org>
- <50A580BA.5020402@mind.be> <87k3tmysez.fsf@dell.be.48ers.dk>
-Message-ID: <20121116084432.6dde4f80@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 16 Nov 2012 08:13:08 +0000
+Subject: [Buildroot] [PATCH] kexec: disable on unsupported architectures
+Message-ID: <1353053588-5156-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Simon Dawson <spdawson@gmail.com>
 
-On Fri, 16 Nov 2012 07:26:44 +0100, Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  Arnout>  While we're at it, we could also throw out our patching of the
->  Arnout> platform-specific qws config file: we are anyway replacing all
->  Arnout> "interesting" variables with our own values, so all useful
->  Arnout> content is thrown away.  Instead, we could make our own spec
->  Arnout> file that contains exactly what we need:
-> 
->  Arnout> include(../../common/linux.conf)
->  Arnout> include(../../common/gcc-base-unix.conf)
->  Arnout> include(../../common/g++-unix.conf)
->  Arnout> include(../../common/qws.conf)
->  Arnout> <our stuff goes here>
->  Arnout> load(qt_config)
-> 
->  Arnout>  What do you think?
-> 
-> I'm no Qt expert, but it sounds sensible - Thomas?
+kexec only supports the following architectures.
 
-I don't remember all the details of those spec files, but yes, it
-sounds good.
+  i?86
+  powerpc
+  powerpc64
+  arm*
+  s390x|s390
+  sh4|sh4a|sh3|sh
+  mips*
+  cris
+  crisv32
+  ia64
+  x86_64
+  alpha
 
-Thomas
+The Buildroot kexec package is available when an unsupported target
+architecture is selected, leading to autobuild failures like the following.
+
+  http://autobuild.buildroot.net/results/e706b08abb4fd1987fc4aa970d6be50fc92dc1fa/build-end.log
+
+This patch makes the kexec package available only for the supported
+architectures.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/kexec/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index e59a07b..fe50e06 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
+-	depends on !BR2_avr32
++	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || BR2_powerpc || BR2_sh4 || BR2_sh4a || BR2_sh3
+ 	help
+ 	  Kexec is a user space utiltity for loading another kernel
+ 	  and asking the currently running kernel to do something with it.
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
