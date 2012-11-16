@@ -1,66 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Nov 2012 18:23:49 +0100
-Subject: [Buildroot] [pull request] Pull request for branch xorg-fixes
-Message-ID: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Nov 2012 18:23:50 +0100
+Subject: [Buildroot] [PATCH 01/12] xlib_libXt: bump version to 1.1.3
+In-Reply-To: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c98f62e0da7cc519b4cd46b66e24e025a3bfe964.1353086601.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Needed by the bump of xapp_clipboard, itself needed to avoid the
+following build failure:
 
-Here is a set of X.org related bumps needed to get rid of the Xmu
-related build failures (like
-http://autobuild.buildroot.org/results/1a4f84ad76ad8c4e70bff6878fc232edf46ff8f1/build-end.log)
-that occur on multiple X.org application packages.
+  http://autobuild.buildroot.org/results/1a4f84ad76ad8c4e70bff6878fc232edf46ff8f1/build-end.log
 
-Thanks,
-
-thomas
-
-The following changes since commit 3116742e8f0c45e5ca06b32f91e481763356e03e:
-
-  kexec: disable on unsupported architectures (2012-11-16 17:01:04 +0100)
-
-are available in the git repository at:
-
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git xorg-fixes
-
-for you to fetch changes up to fb160f69ac3eb6495ffd1b93a14da77606f16b69:
-
-  xapp_xvidtune: bump version to 1.0.2 to fix Xmu related build failure (2012-11-16 18:21:45 +0100)
-
-----------------------------------------------------------------
-Thomas Petazzoni (12):
-      xlib_libXt: bump version to 1.1.3
-      xutil_util-macros: bump to version 1.17
-      xapp_editres: bump to 1.0.5 to fix Xmu related build failure
-      xapp_twm: bump to 1.0.6 to fix Xmu related build failure
-      xapp_viewres: bump to 1.0.3 to fix Xmu related build failure
-      xapp_xclipboard: bump to 1.1.2 to fix Xmu related build failure
-      xapp_xditview: bump version to 1.0.2 to fix Xmu related build failure
-      xapp_xfd: bump version to 1.1.1 to fix Xmu related build failure
-      xapp_xload: bump version to 1.1.1 to fix Xmu related build failure
-      xapp_xlogo: bump version to 1.0.4 to fix Xmu related build failure
-      xapp_xmh: bump version to 1.0.2 to fix Xmu related build failure
-      xapp_xvidtune: bump version to 1.0.2 to fix Xmu related build failure
-
- package/x11r7/xapp_editres/xapp_editres.mk         |    2 +-
- package/x11r7/xapp_twm/xapp_twm.mk                 |    2 +-
- package/x11r7/xapp_viewres/xapp_viewres.mk         |    2 +-
- package/x11r7/xapp_xclipboard/xapp_xclipboard.mk   |    4 ++--
- package/x11r7/xapp_xditview/xapp_xditview.mk       |    2 +-
- package/x11r7/xapp_xfd/xapp_xfd.mk                 |    2 +-
- package/x11r7/xapp_xload/xapp_xload.mk             |    2 +-
- package/x11r7/xapp_xlogo/xapp_xlogo.mk             |    2 +-
- package/x11r7/xapp_xmh/xapp_xmh.mk                 |    2 +-
- package/x11r7/xapp_xvidtune/xapp_xvidtune.mk       |    2 +-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  ...il-don-t-link-makestrs-with-target-cflags.patch |   19 +++++++++----------
  package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
- .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    2 +-
- 13 files changed, 22 insertions(+), 23 deletions(-)
+ 2 files changed, 10 insertions(+), 11 deletions(-)
 
-Thanks,
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
+index aafb352..692d03b 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
++++ b/package/x11r7/xlib_libXt/xlib_libXt-0001-util-don-t-link-makestrs-with-target-cflags.patch
+@@ -1,11 +1,11 @@
+-From 9324466141626518e5a67838813562ec6ef62ba3 Mon Sep 17 00:00:00 2001
++From 3f064076c783914cafdff028db303681dae4291d Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Thu, 15 Nov 2012 18:31:53 +0100
+-Subject: [PATCH] util: don't link makestrs with target cflags
++Subject: [PATCH] libXt: util: don't link makestrs with target cflags
+ 
+ The line:
+ 
+-makestrs_CFLAGS = $(XT_CFLAGS)
++AM_CFLAGS = $(XT_CFLAGS)
+ 
+ in util/Makefile.am is wrong because it adds target cflags to the
+ compilation of makestrs, which is built for the build machine, which
+@@ -23,19 +23,19 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  2 files changed, 2 deletions(-)
+ 
+ diff --git a/util/Makefile.am b/util/Makefile.am
+-index 969ecef..cc6f3fc 100644
++index dedfa6b..cc6f3fc 100644
+ --- a/util/Makefile.am
+ +++ b/util/Makefile.am
+ @@ -10,7 +10,6 @@ EXTRA_DIST = \
+- 	StrDefs.ht \
+- 	string.list
++        StrDefs.ht \
++        string.list
+  
+--makestrs_CFLAGS = $(XT_CFLAGS)
++-AM_CFLAGS = $(XT_CFLAGS)
+  makestrs_SOURCES = makestrs.c
+  
+  
+ diff --git a/util/makestrs.c b/util/makestrs.c
+-index 3551cc1..456735b 100644
++index a52866a..00c861f 100644
+ --- a/util/makestrs.c
+ +++ b/util/makestrs.c
+ @@ -27,7 +27,6 @@ in this Software without prior written authorization from The Open Group.
+@@ -45,7 +45,6 @@ index 3551cc1..456735b 100644
+ -#include <X11/Xos.h>
+  #include <stdlib.h>
+  #include <unistd.h>
+- #if defined(macII) && !defined(__STDC__)  /* stdlib.h fails to define these */
++ 
+ -- 
+ 1.7.9.5
+-
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index fd8f079..9f9aaea 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXT_VERSION = 1.0.9
++XLIB_LIBXT_VERSION = 1.1.3
+ XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
+ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni
+1.7.9.5
