@@ -1,60 +1,66 @@
-From: Alexander Khryukin <alexander@mezon.ru>
-Date: Fri, 16 Nov 2012 20:10:39 +0300
-Subject: [Buildroot] gcc on target system issue
-In-Reply-To: <CABtOAfxKdUhvGHF2K_BG__vPPcqmio24DW0suz86Hfzngzc01g@mail.gmail.com>
-References: <CABtOAfxKdUhvGHF2K_BG__vPPcqmio24DW0suz86Hfzngzc01g@mail.gmail.com>
-Message-ID: <CABtOAfxNwcnBobZs-naW6aK2Z+xCpbf_qwcrF5hfipF0Rn-vXw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 Nov 2012 18:23:49 +0100
+Subject: [Buildroot] [pull request] Pull request for branch xorg-fixes
+Message-ID: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/16 Alexander Khryukin <alexander@mezon.ru>
+Hello,
 
-> Hi all.
-> I'm trying to build gcc on target but it fails with
->
->
-> ./gcc -I/home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/../include
-> -DHAVE_CC_TLS  -o _negdi2_s.o -MT _negdi2_s.o -MD -MP -MF _negdi2_s.dep
-> -DSHARED -DL_negdi2 -c
-> /home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/libgcc2.c
-> In file included from
-> /home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/config/arm/unwind-arm.c:154:0:
-> /home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/unwind-arm-common.inc:
-> At top level:
-> /home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/unwind-arm-common.inc:30:21:
-> fatal error: sys/sdt.h: No such file or directory
-> compilation terminated.
-> make[3]: *** [unwind-arm.o] Error 1
-> make[3]: *** Waiting for unfinished jobs....
-> In file included from
-> /home/user/buildroot/output/toolchain/gcc-4.7.2/libgcc/unwind-c.c:29:0:
-> ./unwind.h: In function '_Unwind_decode_typeinfo_ptr':
-> ./unwind.h:42:45: warning: unused parameter 'base' [-Wunused-parameter]
-> ./unwind.h: In function '__gnu_unwind_24bit':
-> ./unwind.h:68:41: warning: unused parameter 'context' [-Wunused-parameter]
-> ./unwind.h:68:54: warning: unused parameter 'data' [-Wunused-parameter]
-> ./unwind.h:68:64: warning: unused parameter 'compact' [-Wunused-parameter]
-> make[3]: Leaving directory
-> `/home/user/buildroot/output/build/gcc-4.7.2-target/arm-buildroot-linux-uclibcgnueabi/libgcc'
-> make[2]: *** [all-target-libgcc] Error 2
-> make[2]: Leaving directory
-> `/home/user/buildroot/output/build/gcc-4.7.2-target'
-> make[1]: *** [all] Error 2
-> make[1]: Leaving directory
-> `/home/user/buildroot/output/build/gcc-4.7.2-target'
-> make: *** [/home/user/buildroot/output/build/gcc-4.7.2-target/.compiled]
-> Error 2
->
->
->
-> Also sys/sdt.h provides by systemtap
->
+Here is a set of X.org related bumps needed to get rid of the Xmu
+related build failures (like
+http://autobuild.buildroot.org/results/1a4f84ad76ad8c4e70bff6878fc232edf46ff8f1/build-end.log)
+that occur on multiple X.org application packages.
 
+Thanks,
 
-Bump
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121116/c1c77f5b/attachment-0001.html>
+thomas
+
+The following changes since commit 3116742e8f0c45e5ca06b32f91e481763356e03e:
+
+  kexec: disable on unsupported architectures (2012-11-16 17:01:04 +0100)
+
+are available in the git repository at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git xorg-fixes
+
+for you to fetch changes up to fb160f69ac3eb6495ffd1b93a14da77606f16b69:
+
+  xapp_xvidtune: bump version to 1.0.2 to fix Xmu related build failure (2012-11-16 18:21:45 +0100)
+
+----------------------------------------------------------------
+Thomas Petazzoni (12):
+      xlib_libXt: bump version to 1.1.3
+      xutil_util-macros: bump to version 1.17
+      xapp_editres: bump to 1.0.5 to fix Xmu related build failure
+      xapp_twm: bump to 1.0.6 to fix Xmu related build failure
+      xapp_viewres: bump to 1.0.3 to fix Xmu related build failure
+      xapp_xclipboard: bump to 1.1.2 to fix Xmu related build failure
+      xapp_xditview: bump version to 1.0.2 to fix Xmu related build failure
+      xapp_xfd: bump version to 1.1.1 to fix Xmu related build failure
+      xapp_xload: bump version to 1.1.1 to fix Xmu related build failure
+      xapp_xlogo: bump version to 1.0.4 to fix Xmu related build failure
+      xapp_xmh: bump version to 1.0.2 to fix Xmu related build failure
+      xapp_xvidtune: bump version to 1.0.2 to fix Xmu related build failure
+
+ package/x11r7/xapp_editres/xapp_editres.mk         |    2 +-
+ package/x11r7/xapp_twm/xapp_twm.mk                 |    2 +-
+ package/x11r7/xapp_viewres/xapp_viewres.mk         |    2 +-
+ package/x11r7/xapp_xclipboard/xapp_xclipboard.mk   |    4 ++--
+ package/x11r7/xapp_xditview/xapp_xditview.mk       |    2 +-
+ package/x11r7/xapp_xfd/xapp_xfd.mk                 |    2 +-
+ package/x11r7/xapp_xload/xapp_xload.mk             |    2 +-
+ package/x11r7/xapp_xlogo/xapp_xlogo.mk             |    2 +-
+ package/x11r7/xapp_xmh/xapp_xmh.mk                 |    2 +-
+ package/x11r7/xapp_xvidtune/xapp_xvidtune.mk       |    2 +-
+ ...il-don-t-link-makestrs-with-target-cflags.patch |   19 +++++++++----------
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
+ .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    2 +-
+ 13 files changed, 22 insertions(+), 23 deletions(-)
+
+Thanks,
+-- 
+Thomas Petazzoni
