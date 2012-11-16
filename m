@@ -1,31 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 Nov 2012 11:33:43 +0100
-Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
-In-Reply-To: <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
-References: <20121115230738.33E869A031@busybox.osuosl.org>
- <20121116004452.635cf645@skate>
- <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
-Message-ID: <20121116113343.15dd3eb3@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 16 Nov 2012 10:42:10 +0000
+Subject: [Buildroot] [PATCH v2] kexec: disable on unsupported architectures
+Message-ID: <1353062530-31224-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Simon Dawson <spdawson@gmail.com>
 
-On Fri, 16 Nov 2012 09:07:55 +0000, Simon Dawson wrote:
+kexec only supports the following architectures.
 
-> If lcdproc finds freetype in the staging area, then the host header
-> and library search paths do not get added to the build commands. So I
-> think this patch does more than simply work around the problem.
+  i?86
+  powerpc
+  powerpc64
+  arm*
+  s390x|s390
+  sh4|sh4a|sh3|sh
+  mips*
+  cris
+  crisv32
+  ia64
+  x86_64
+  alpha
 
-Ok, thanks!
+The Buildroot kexec package is available when an unsupported target
+architecture is selected, leading to autobuild failures like the following.
 
-Best regards,
+  http://autobuild.buildroot.net/results/e706b08abb4fd1987fc4aa970d6be50fc92dc1fa/build-end.log
 
-Thomas
+This patch makes the kexec package available only for the supported
+architectures.
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ v2: Split long line, as suggested by Thomas Petazzoni, add ack
+
+ package/kexec/Config.in |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index e59a07b..886144f 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_KEXEC
+ 	bool "kexec"
+-	depends on !BR2_avr32
++	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
++		BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el || \
++		BR2_powerpc || BR2_sh4 || BR2_sh4a || BR2_sh3
+ 	help
+ 	  Kexec is a user space utiltity for loading another kernel
+ 	  and asking the currently running kernel to do something with it.
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
