@@ -1,61 +1,37 @@
 From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Fri, 16 Nov 2012 16:02:50 +0100
+Date: Fri, 16 Nov 2012 16:40:04 +0100
 Subject: [Buildroot] Buildroot fail to build when configure for dev
  managment: dynamically with udev
-In-Reply-To: <50A65565.9050001@ronetix.at>
+In-Reply-To: <50A6577F.3030505@ronetix.at>
 References: <50A65094.7080202@ronetix.at> <50A6539F.8040507@gmail.com>
- <50A65565.9050001@ronetix.at>
-Message-ID: <50A6559A.3050300@gmail.com>
+ <50A65565.9050001@ronetix.at> <50A6559A.3050300@gmail.com>
+ <50A6577F.3030505@ronetix.at>
+Message-ID: <50A65E54.2080905@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/16/2012 04:01 PM, Martin Peevski wrote:
-> On 16/11/12 16:54, Zoltan Gyarmati wrote:
->> On 11/16/2012 03:41 PM, Martin Peevski wrote:
->>> Hi,
->>>
->>>     I tryed to build Buildroot with only rootfs, I have already 
->>> built Kernel image. Use external toolchain for the building. I 
->>> configure Buildroot for dynamically /dev managment with udev but 
->>> during udev building I got the following errors:
->>>
->>> src/udev-builtin-input_id.c: In function 'test_key':
->>> src/udev-builtin-input_id.c:165: error: 'BTN_TRIGGER_HAPPY' 
->>> undeclared (first use in this function)
->>> src/udev-builtin-input_id.c:165: error: (Each undeclared identifier 
->>> is reported only once
->>> src/udev-builtin-input_id.c:165: error: for each function it appears 
->>> in.)
->>> make[4]: *** [src/udevadm-udev-builtin-input_id.o] Error 1
->>> make[4]: *** Waiting for unfinished jobs....
->>> make[3]: *** [all-recursive] Error 1
->>> make[2]: *** [all] Error 2
->>> make[1]: *** 
->>> [/home/martin/Desktop/sam9x5-linux-sources/rootfs/build/udev-182/.stamp_built] 
->>> Error 2
->>> make: *** [all] Error 2
->>>
->>>      Can you, please, give me some advices?
->>>
+On 11/16/2012 04:10 PM, Martin Peevski wrote:
+> On 16/11/12 17:02, Zoltan Gyarmati wrote:
 >>
+>> Hi,
 >>
->> Hi Martin,
+>> yes, in this case it comes from the toolchain itself, sou you have to 
+>> check it in the toolchain.
 >>
->> what version of kernel headers the toolchain uses? Most likely to 
->> problem will be around the kernel header version...
 >>
 >
-> Thanks for the fast response but when I configure Buildroot to use 
-> external toolchain the Kernel headers option dissapear. Any other advice?
+> Thanks! But how to do that? where in the toolchain must search and what?
+>
 
 Hi,
 
-yes, in this case it comes from the toolchain itself, sou you have to 
-check it in the toolchain.
+depends on the toolchain... just look around in the toolchain's directory.
 
+PS,
+let's try to stay on the maillist, maybe others are interested as well...
 
 -- 
 br,
