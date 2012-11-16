@@ -1,35 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Nov 2012 08:43:43 +0100
-Subject: [Buildroot] [git commit] manual: prerequisite.txt: add texinfo to
-	the mandatory package list
-Message-ID: <20121116074438.0C3AA9A043@busybox.osuosl.org>
+Date: Fri, 16 Nov 2012 08:43:47 +0100
+Subject: [Buildroot] [git commit] manual: contribute.txt: do not use
+	--summary option with 'git format-patch'
+Message-ID: <20121116074438.4B97F9A043@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7ece205fae5070b2ddaddf60ee73357ce4ad2bf
+commit: http://git.buildroot.net/buildroot/commit/?id=b04a6d7bda0a0241003a79d026569d6e81e07105
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Using the internal Buildroot toolchain backend, makeinfo, whom belongs to
-the texinfo package, is required to build gcc and gdb.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/prerequisite.txt |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ docs/manual/contribute.txt |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 693347b..31d437d 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -42,6 +42,7 @@ Mandatory packages
- ** +python+ (version 2.6 or 2.7)
- ** +unzip+
- ** +rsync+
-+** +texinfo+ (required for internal Buildroot toolchain backend)
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index ddf790d..b2e6e7d 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -42,8 +42,8 @@ This will generate patch files in the +outgoing+ subdirectory,
+ automatically adding the +signed-off-by+ line.
  
- * Source fetching tools:
- ** +wget+
+ If you want to present the whole patch set in a separate mail, add
+-+--cover-letter --summary+ to the previous command line (+man
+-git-format-patch+ for further information).
+++--cover-letter+ to the previous command line (+man git-format-patch+
++for further information).
+ 
+ Once patch files are generated, you can review/edit the commit message
+ before submitting them using your favorite text editor.
