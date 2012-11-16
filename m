@@ -1,23 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Nov 2012 22:26:03 +0100
-Subject: [Buildroot] [PATCH] mysql_client: security bump to version
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 16 Nov 2012 22:26:14 +0100
+Subject: [Buildroot] [git commit] mysql_client: security bump to version
 	5.1.66
-In-Reply-To: <1353072262-31240-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 16 Nov 2012 10:24:22 -0300")
-References: <1353072262-31240-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nkpxms4.fsf@dell.be.48ers.dk>
+Message-ID: <20121116212646.71EBD9A039@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4b8215714da48367fa67bdbc98fa12fd9371e6ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Fixes multiple security isssues, most of them of the server component
- Gustavo> though.
+Fixes multiple security isssues, most of them of the server component
+though.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mysql_client/mysql_client.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 46862a1..9785aee 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-MYSQL_CLIENT_VERSION = 5.1.65
++MYSQL_CLIENT_VERSION = 5.1.66
+ MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
+ MYSQL_CLIENT_INSTALL_STAGING = YES
