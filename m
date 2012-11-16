@@ -1,32 +1,34 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 16 Nov 2012 09:56:22 +0100
-Subject: [Buildroot] [PATCH] can-utils: add CAN FD support
-Message-ID: <1353056182-13051-1-git-send-email-yegorslists@googlemail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Fri, 16 Nov 2012 09:07:55 +0000
+Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
+In-Reply-To: <20121116004452.635cf645@skate>
+References: <20121115230738.33E869A031@busybox.osuosl.org>
+ <20121116004452.635cf645@skate>
+Message-ID: <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On 15 November 2012 23:44, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Looking at the build failure (which got triggered again today), I am a
+> bit suspicious about this fix. The build failure is:
+>
+> /scratch/peko/host/usr/bin/ccache /scratch/peko/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -I/scratch/peko/host/usr/include/freetype2 -I/scratch/peko/host/usr/include   -fPIC -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -Wno-unused-function -shared  -o glcd.so glcd-glcd_drv.o glcd-glcd-render.o libLCD.a  glcd-t6963.o t6963_low.o -L/scratch/peko/host/usr/lib -lfreetype -lz -lbz2    -ldl
+> /scratch/peko/host/usr/lib/libfreetype.so: file not recognized: File format not recognized
+>
+> The problem here is not a missing dependency on freetype, but rather
+> the fact that we have -I and -L options pointing to host headers and
+> libraries, while we are building something on the target. So maybe
+> adding freetype and zlib as dependencies work around the problem, but I
+> suspect that those wrong -I and -L lines might still be there, no?
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/can-utils/can-utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hi Thomas.
 
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index ea1dc06..321dc52 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--CAN_UTILS_VERSION = 50775159276d896d8b3102b6dbc658a91a2a1d53
-+CAN_UTILS_VERSION = 836d3cc0122ce31a1b732d369cbd27b690c3110f
- CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
- CAN_UTILS_AUTORECONF = YES
- 
--- 
-1.7.7
+If lcdproc finds freetype in the staging area, then the host header
+and library search paths do not get added to the build commands. So I
+think this patch does more than simply work around the problem.
+
+Simon.
