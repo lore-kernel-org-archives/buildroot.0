@@ -1,67 +1,27 @@
-From: Juha Lumme <juha.lumme@gmail.com>
-Date: Sat, 17 Nov 2012 17:22:27 +0900
-Subject: [Buildroot] Built a file system,
-	have a working kernel - how to login ?
-Message-ID: <CAF-Ht3yZfCDAMpPGJ7NFd_RQ0brOwxw3pSSoA3YFtzVf7kpf2g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 17 Nov 2012 09:26:09 +0100
+Subject: [Buildroot] [PATCH 2/2] Mark a number of development related
+	packages as deprecated
+In-Reply-To: <c42b5a3ae08ae07779a6ee389a8367318efe96bf.1352586949.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 10 Nov 2012 23:36:03 +0100")
+References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <c42b5a3ae08ae07779a6ee389a8367318efe96bf.1352586949.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878va0ws7y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I'm new to buildroot, and actually also to creating linux systems. I really
-need help understanding some basics of how a system bring up should happen..
-I have been working on a custom system of mine, running currently on a
-reference HW from Olimex.
+ Thomas> automake, autoconf, libtool and make on the target are basically
+ Thomas> useless if we don't support building a toolchain on the target. Of
+ Thomas> course, the host variant of automake, autoconf and libtool will remain
+ Thomas> available.
 
-I have built a working kernel, and now I created a file system with
-buildroot with all the settings default. Well, I did change the default
-console to ttyAMA0, as that is passed to the kernel by the loader.
+Committed with some fixups to apply after the perl/qemu changes.
 
-Now, the system boots up to the mounting filesystem, and then just hangs
-there:
-.....
-[    3.130000] VFS: Mounted root (ext3 filesystem) on device 179:2.
-[    3.140000] Freeing init memory: 144K
-Starting logging: OK
-Starting network...
-ip: RTNETLINK answers: Operation not permitted
-ip: SIOCSIFFLAGS: Permission denied
-
-(The whole boot log is here: http://paste.ubuntu.com/1364407/ )
-
-Can someone please educate me a bit what are the steps needed to get a
-login prompt, and to be able to access the system ? I don't really
-understand how the TTY links in /dev/ work, and how I need to tie them to
-the kernel configuration..
-
-My understanding is that inittab is the file I should modify.. Contents of
-that is:
-# Startup the system
-null::sysinit:/bin/mount -t proc proc /proc
-null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
-null::sysinit:/bin/mkdir -p /dev/pts
-null::sysinit:/bin/mkdir -p /dev/shm
-null::sysinit:/bin/mount -a
-null::sysinit:/bin/hostname -F /etc/hostname
-# now run any rc scripts
-::sysinit:/etc/init.d/rcS
-
-# Put a getty on the sttyAMA0::respawn:/sbin/getty -L ttyAMA0 115200 vt100
-# GENERIC_SERIAL
-
-# Stuff to do for the 3-finger salute
-::ctrlaltdel:/sbin/reboot
-
-# Stuff to do before rebooting
-null::shutdown:/etc/init.d/rcK
-null::shutdown:/bin/umount -a -r
-null::shutdown:/sbin/swapoff -a
-
-Thank you for any advice or tips in advance!
-Juha
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121117/3187a9ec/attachment.html>
+-- 
+Bye, Peter Korsgaard
