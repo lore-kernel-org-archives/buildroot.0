@@ -1,29 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 20:56:25 +0100
-Subject: [Buildroot] [PATCH] host-lua: fix bug #5354
-In-Reply-To: <87boewt3hv.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sat, 17 Nov 2012 20:48:28 +0100")
-References: <1353146744-13529-1-git-send-email-francois.perrad@gadz.org>
- <87boewt3hv.fsf@dell.be.48ers.dk>
-Message-ID: <871ufst34m.fsf@dell.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Sat, 17 Nov 2012 19:55:56 +0000
+Subject: [Buildroot] [PATCH] libusb: disable on avr32
+Message-ID: <1353182156-28906-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
- Francois> see https://bugs.busybox.net/show_bug.cgi?id=5354
+For target architecture avr32, the gpsd package fails to build when
+libusb is selected. The following autobuild failure illustrates the problem.
 
- Peter> Thanks, but I don't get the problem in the first place. Lua links
- Peter> lua/luac using gcc, so why doesn't it pick up the stack protection bits?
+  http://autobuild.buildroot.net/results/aa3d4763a0e90c995bc8431cf345730ee22e65a1/build-end.log
 
-Ahh, I see it now - It's because we're passing -nostdlib -lgcc when
-creating the shared library. Why are we doing that in the first place?
+The issue is that libusb requires timerfd_settime and timerfd_create, but
+the underlying syscalls are not implemented on avr32.
 
-Gustavo, it seems to date back to 46913a2d4. Do you have any idea why it
-was done like that?
+This patch disables the libusb package for the avr32 target architecture.
 
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/libusb/Config.in |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/libusb/Config.in b/package/libusb/Config.in
+index 2eed3fa..cbaeac6 100644
+--- a/package/libusb/Config.in
++++ b/package/libusb/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBUSB
+ 	bool "libusb"
++	depends on !BR2_avr32 # timerfd not in uClibc-0.9.31
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Userspace library for accessing USB devices
+@@ -7,4 +8,4 @@ config BR2_PACKAGE_LIBUSB
+ 	  http://libusb.sourceforge.net/
+ 
+ comment "libusb needs a toolchain with thread support"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS && !BR2_avr32
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
