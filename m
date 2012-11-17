@@ -1,33 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 09:33:01 +0100
-Subject: [Buildroot] [git commit] mxs-bootloader: Barebox entry point symbol
-	changed in 2012.08
-Message-ID: <20121117083404.6FE6499ECF@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Sat, 17 Nov 2012 09:38:50 +0100
+Subject: [Buildroot] [PATCH] python: uses fork(),
+	only available on MMU platforms
+In-Reply-To: <874nkowrzl.fsf@dell.be.48ers.dk>
+References: <1353139970-25414-1-git-send-email-maxime.ripard@free-electrons.com>
+ <874nkowrzl.fsf@dell.be.48ers.dk>
+Message-ID: <50A74D1A.5030903@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f72b561789032b69e7fa62479abd34259731605c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 17/11/2012 09:31, Peter Korsgaard a ?crit :
+>>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+> 
+>  Maxime> Fixes
+>  Maxime> http://autobuild.buildroot.org/results/1738a8b09b04d2b2fc1de6d1ff5eb0363fed6348/build-end.log
+> 
+> Committed, thanks. What about python3?
+> 
+Ah, yes
+Same thing for python3. I send a patch for that
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/mxs-bootlets/barebox_ivt.bd |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Maxime
 
-diff --git a/boot/mxs-bootlets/barebox_ivt.bd b/boot/mxs-bootlets/barebox_ivt.bd
-index e02ddd6..0c67e9c 100644
---- a/boot/mxs-bootlets/barebox_ivt.bd
-+++ b/boot/mxs-bootlets/barebox_ivt.bd
-@@ -28,7 +28,7 @@ section (0) {
- 	//----------------------------------------------------------
- 
-         load barebox;
--        load ivt (entry = barebox:exception_vectors) > 0x8000;
-+        load ivt (entry = barebox:start) > 0x8000;
- 	hab call 0x8000;
- 
- }
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
