@@ -1,24 +1,26 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sat, 17 Nov 2012 20:19:30 +0000
-Subject: [Buildroot] [PATCH] libusb: disable on avr32
-In-Reply-To: <87sj88rns4.fsf@dell.be.48ers.dk>
-References: <1353182156-28906-1-git-send-email-spdawson@gmail.com>
- <87wqxkrofx.fsf@dell.be.48ers.dk>
- <CAHt8ZCMF-cvx4W+GrGUxqn1iBx9XDmGutVv-xGr1uF4M=o-A1A@mail.gmail.com>
- <87sj88rns4.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCMoOjmGooxO5oR5+CbXKWkn2ATpL5P3B_YbOBuB8zaDgQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 17 Nov 2012 17:21:37 -0300
+Subject: [Buildroot] [PATCH] host-lua: fix bug #5354
+In-Reply-To: <871ufst34m.fsf@dell.be.48ers.dk>
+References: <1353146744-13529-1-git-send-email-francois.perrad@gadz.org>
+ <87boewt3hv.fsf@dell.be.48ers.dk> <871ufst34m.fsf@dell.be.48ers.dk>
+Message-ID: <50A7F1D1.9060405@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17 November 2012 20:13, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Yes, that's the only solution we have right now.
->
-> Remember to look recursively upwards. These libusb users might be
-> selected by other packages.
+On 11/17/2012 04:56 PM, Peter Korsgaard wrote:
 
-Okay; thanks Peter.
+> Ahh, I see it now - It's because we're passing -nostdlib -lgcc when
+> creating the shared library. Why are we doing that in the first place?
+> 
+> Gustavo, it seems to date back to 46913a2d4. Do you have any idea why it
+> was done like that?
 
-Simon.
+https://bugs.busybox.net/show_bug.cgi?id=803 has rvpaasen's work, i just
+reworked it IIRC.
+OpenWRT doesn't try to link to libgcc or ditch the standard startup and
+libraries, it's worth a try to kill that bit.
+Regards.
