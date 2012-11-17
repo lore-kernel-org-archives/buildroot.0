@@ -1,52 +1,67 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sat, 17 Nov 2012 22:11:00 +0000
-Subject: [Buildroot] [PATCH v2] libusb: disable on avr32
-In-Reply-To: <87ehjsrksw.fsf@dell.be.48ers.dk>
-References: <1353186466-2269-1-git-send-email-spdawson@gmail.com>
- <87ehjsrksw.fsf@dell.be.48ers.dk>
-Message-ID: <CAHt8ZCNvE-f7N=7n3XCoWsv2YK0qSK5D67f0zqF-Pae5AC3RDA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Nov 2012 23:23:58 +0100
+Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
+Message-ID: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter; thanks for the comments.
+The following changes since commit ee3a96137b6cbb8f970c540c61f75300a44ea803:
 
-On 17 November 2012 21:17, Peter Korsgaard <jacmet@uclibc.org> wrote:
->  spdawson> diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
->  spdawson> index 985939e..a8a9e14 100644
->  spdawson> --- a/package/efl/libedbus/Config.in
->  spdawson> +++ b/package/efl/libedbus/Config.in
->  spdawson> @@ -15,6 +15,7 @@ if BR2_PACKAGE_LIBEDBUS
->
->  spdawson>  config BR2_PACKAGE_LIBEDBUS_BLUEZ
->  spdawson>      bool "bluez support"
->  spdawson> +    depends on !BR2_avr32 # libusb
->  spdawson>      select BR2_PACKAGE_BLUEZ_UTILS
->
-> But bluez doesn't depend on libusb, only the BR2_PACKAGE_BLUEZ_UTILS_USB
-> suboption (which should depend on !BR2_avr32).
+  lua-msgpack-native: fix fetch (2012-11-17 10:15:24 +0100)
 
-Well, bluez-utils already depends as a whole on !BR2_avr32, so I don't
-need to add that dependency to the BR2_PACKAGE_BLUEZ_UTILS_USB
-suboption. However, I think the correct dependency information for the
-BR2_PACKAGE_LIBEDBUS_BLUEZ suboption should probably be as follows.
+are available in the git repository at:
 
-  depends on !BR2_avr32 && BR2_USE_WCHAR # bluez-utils
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git misc-fixes
 
-That expresses all dependencies of bluez-utils (except for
-BR2_TOOLCHAIN_HAS_THREADS, which is already an overall dependency of
-BR2_PACKAGE_LIBEDBUS). Does that sound alright?
+for you to fetch changes up to e269850f46106974a04c05f22889e61202608453:
 
->  spdawson>  config BR2_PACKAGE_SCONESERVER_BLUETOOTH
->  spdawson>      bool "bluetooth"
->  spdawson> +    depends on !BR2_avr32 && BR2_USE_WCHAR && \
->  spdawson> +            BR2_TOOLCHAIN_HAS_THREADS # bluez-utils
->  spdawson>      select BR2_PACKAGE_BLUEZ_UTILS
->
-> Same here.
+  dbus: uses fork(), requires MMU (2012-11-17 23:23:17 +0100)
 
-If I'm right above, then this can stay as it is.
+----------------------------------------------------------------
+Thomas Petazzoni (8):
+      python: use default configure commands to get shared build
+      libatomic_ops: bump to version 7.2
+      gnutls: fix build failure due to non-existing gets in recent C libraries
+      gsl: fix build on !i386 uClibc
+      libffi: make thread support optional
+      php: fix C++ link issue
+      attr: fix static build
+      dbus: uses fork(), requires MMU
 
-Simon.
+Vellemans Noel (2):
+      libxml2: add support for building host library with python support
+      mesa3d: requires host-libxml2 and host-python to generate some files
+
+ ...r-0001-attr-Fix-static-build-installation.patch |   30 ++++++++
+ package/bluez_utils/Config.in                      |    1 +
+ package/connman/Config.in                          |    1 +
+ package/dbus/Config.in                             |    2 +
+ package/efl/libedbus/Config.in                     |    1 +
+ ...001-gets-no-longer-exists-in-e-glibc-2.16.patch |   56 +++++++++++++++
+ package/gsl/gsl.mk                                 |   13 ++++
+ package/gvfs/Config.in                             |    2 +
+ package/libatomic_ops/libatomic_ops.mk             |    2 +-
+ ...ffi-0003-Make-thread-support-conditionnal.patch |   73 ++++++++++++++++++++
+ package/libxml2/Config.in                          |    3 +
+ package/libxml2/libxml2.mk                         |   10 ++-
+ package/network-manager/Config.in                  |    1 +
+ package/ofono/Config.in                            |    1 +
+ package/php/php.mk                                 |    4 ++
+ package/python/python.mk                           |   14 +---
+ package/qt/Config.in                               |    1 +
+ package/samba/Config.in                            |    1 +
+ package/systemd/Config.in                          |    1 +
+ package/x11r7/mesa3d/Config.in                     |    1 +
+ package/x11r7/mesa3d/mesa3d.mk                     |    4 +-
+ system/Config.in                                   |    1 +
+ 22 files changed, 207 insertions(+), 16 deletions(-)
+ create mode 100644 package/attr/attr-0001-attr-Fix-static-build-installation.patch
+ create mode 100644 package/gnutls/gnutls-0001-gets-no-longer-exists-in-e-glibc-2.16.patch
+ create mode 100644 package/libffi/libffi-0003-Make-thread-support-conditionnal.patch
+
+Thanks,
+-- 
+Thomas Petazzoni
