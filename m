@@ -1,36 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 09:31:09 +0100
-Subject: [Buildroot] [git commit] python: uses fork(),
-	only available on MMU platforms
-Message-ID: <20121117083205.A0E9F9A06E@busybox.osuosl.org>
+Date: Sat, 17 Nov 2012 09:32:47 +0100
+Subject: [Buildroot] [PATCH] mxs-bootloader: Barebox entry point symbol
+	changed in 2012.08
+In-Reply-To: <50A745D3.2050804@free-electrons.com> (Maxime Ripard's message of
+ "Sat, 17 Nov 2012 09:07:47 +0100")
+References: <1350547326-31407-1-git-send-email-maxime.ripard@free-electrons.com>
+ <50A745D3.2050804@free-electrons.com>
+Message-ID: <87zk2gvdcg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7bf219a900d3070e8e954617131f54210825419f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Fixes
-http://autobuild.buildroot.org/results/1738a8b09b04d2b2fc1de6d1ff5eb0363fed6348/build-end.log
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/python/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ >> load barebox;
+ >> -        load ivt (entry = barebox:exception_vectors) > 0x8000;
+ >> +        load ivt (entry = barebox:start) > 0x8000;
+ >> hab call 0x8000;
+ >> 
+ >> }
 
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 11aa267..4089cce 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PYTHON
- 	bool "python"
- 	depends on BR2_USE_WCHAR
-+	# uses fork()
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
+ Maxime> Can we apply this patch now that all supported barebox versions have
+ Maxime> this entry point ?
+
+Yes, will do so now. Thanks for reminding me.
+
+-- 
+Bye, Peter Korsgaard
