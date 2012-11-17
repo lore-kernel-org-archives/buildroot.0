@@ -1,89 +1,47 @@
-From: Philippe Reynes <philippe.reynes@sagemcom.com>
-Date: Sat, 17 Nov 2012 13:01:22 +0100
-Subject: [Buildroot] [PATCH v4] Allow to run severals post build scripts
-	instead of only one
-Message-ID: <30186_1353153693_50A77C9C_30186_8127_1_1353153682-31020-1-git-send-email-philippe.reynes@sagemcom.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Nov 2012 13:07:03 +0100
+Subject: [Buildroot] Built a file system,
+ have a working kernel - how to login ?
+In-Reply-To: <CAF-Ht3zwxboYWZ6Q3ocMtFaAnQ9xEo+qfWfSsovdZuZa3sotkQ@mail.gmail.com>
+References: <CAF-Ht3yZfCDAMpPGJ7NFd_RQ0brOwxw3pSSoA3YFtzVf7kpf2g@mail.gmail.com>
+ <20121117111132.17a91542@skate>
+ <CAF-Ht3xTA8gLLFS5j64LFSQ9_U5O7+42Uj0Yq4CMZWWZb3g3YA@mail.gmail.com>
+ <20121117123531.431cbd65@skate>
+ <CAF-Ht3zwxboYWZ6Q3ocMtFaAnQ9xEo+qfWfSsovdZuZa3sotkQ@mail.gmail.com>
+Message-ID: <20121117130703.03beb6e1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using severals post build scripts is usefull to share
-script between severals boards/projects.
+Dear Juha Lumme,
 
-Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
----
+On Sat, 17 Nov 2012 20:45:09 +0900, Juha Lumme wrote:
 
-v4: rebase patch with latest change
+> The board boots from memory card currently, and I tarball the output/target
+> directory and then decompress to the second partition on the memory card.
+> This worked for a full 250MB debian file system, so I'm assuming it should
+> work here as well..?
 
- Makefile         |    5 +++--
- system/Config.in |   11 ++++++-----
- 2 files changed, 9 insertions(+), 7 deletions(-)
+Aaargggh, no!
 
-diff --git a/Makefile b/Makefile
-index c526fe1..03be469 100644
---- a/Makefile
-+++ b/Makefile
-@@ -465,8 +465,9 @@ endif
- 	) >  $(TARGET_DIR)/etc/os-release
- 
- ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
--	@$(call MESSAGE,"Executing post-build script")
--	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
-+	@$(call MESSAGE,"Executing post-build script\(s\)")
-+	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-+		$(s) $(TARGET_DIR)$(sep))
- endif
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-diff --git a/system/Config.in b/system/Config.in
-index 10c9d9d..e448a40 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -170,15 +170,16 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	string "Custom script to run before creating filesystem images"
- 	default ""
- 	help
--	  Specify a script to be run after the build has finished and before
--	  Buildroot starts packing the files into selected filesystem images.
-+	  Specify a space-separated list of scripts to be run after the build
-+	  has finished and before Buildroot starts packing the files into 
-+	  selected filesystem images.
- 
- 	  This gives users the oportunity to do board-specific cleanups,
- 	  add-ons and the like, so the generated files can be used directly
- 	  without further processing.
- 
--	  The script is called with the target directory name as first and
--	  only argument. Make sure the exit code of that script is 0,
--	  otherwise make will stop after calling it.
-+	  These scripts are called with the target directory name as first and
-+	  only argument. Make sure the exit code of those scripts are 0,
-+	  otherwise make will stop after calling them.
- 
- endmenu
+From the Buildroot manual:
+
+   target/ which contains almost the complete root filesystem for the
+   target: everything needed is present except the device files
+   in /dev/ (Buildroot can?t create them because Buildroot doesn?t run
+   as root and doesn?t want to run as root). Therefore, this directory
+   should not be used on your target.
+
+Please enable a tarball root filesystem image, and then extract is as
+root on the partition of your memory card.
+
+Best regards,
+
+Thomas
 -- 
-1.7.1
-
-
-#
-" Ce courriel et les documents qui lui sont joints peuvent contenir des
-informations confidentielles ou ayant un caract?re priv?. S'ils ne vous sont
-pas destin?s, nous vous signalons qu'il est strictement interdit de les
-divulguer, de les reproduire ou d'en utiliser de quelque mani?re que ce
-soit le contenu. Si ce message vous a ?t? transmis par erreur, merci d'en
-informer l'exp?diteur et de supprimer imm?diatement de votre syst?me
-informatique ce courriel ainsi que tous les documents qui y sont attach?s."
-
-
-                               ******
-
-" This e-mail and any attached documents may contain confidential or
-proprietary information. If you are not the intended recipient, you are
-notified that any dissemination, copying of this e-mail and any attachments
-thereto or use of their contents by any means whatsoever is strictly
-prohibited. If you have received this e-mail in error, please advise the
-sender immediately and delete this e-mail and all attached documents
-from your computer system."
-#
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
