@@ -1,69 +1,432 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Nov 2012 23:46:41 +0100
-Subject: [Buildroot] [PATCH 07/10] libffi: make thread support optional
-In-Reply-To: <1952f1984c0a2fae4cd5eabc15f9b7eb37623224.1353191025.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 17 Nov 2012 23:24:05 +0100")
-References: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
- <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
- <1952f1984c0a2fae4cd5eabc15f9b7eb37623224.1353191025.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pq3brgoe.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Nov 2012 23:46:59 +0100
+Subject: [Buildroot] [PATCH] x11r7: deprecate a number of unused old X.org
+	video drivers
+Message-ID: <1353192419-5405-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Amongst the large number of X.org video drivers that are packaged in
+Buildroot, a number of them are related to very old hardware that
+presumably nobody uses anymore, at least for embedded Linux
+developments.
 
- Thomas> Fixes:
- Thomas>   http://autobuild.buildroot.org/results/7ee57d01917ea72d1811469e482513dda2ceb1ea/build-end.log
+Mark those drivers as deprecated so that we might remove them in the
+future if nobody comes up to say that they are using such drivers.
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  ...ffi-0003-Make-thread-support-conditionnal.patch |   73 ++++++++++++++++++++
- Thomas>  1 file changed, 73 insertions(+)
- Thomas>  create mode 100644 package/libffi/libffi-0003-Make-thread-support-conditionnal.patch
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xdriver_xf86-video-apm/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-ark/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-ast/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-chips/Config.in   |    1 +
+ package/x11r7/xdriver_xf86-video-glide/Config.in   |    1 +
+ package/x11r7/xdriver_xf86-video-glint/Config.in   |    1 +
+ package/x11r7/xdriver_xf86-video-i128/Config.in    |    1 +
+ package/x11r7/xdriver_xf86-video-i740/Config.in    |    1 +
+ package/x11r7/xdriver_xf86-video-mach64/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-mga/Config.in     |    1 +
+ .../x11r7/xdriver_xf86-video-neomagic/Config.in    |    1 +
+ package/x11r7/xdriver_xf86-video-newport/Config.in |    1 +
+ package/x11r7/xdriver_xf86-video-r128/Config.in    |    1 +
+ .../x11r7/xdriver_xf86-video-rendition/Config.in   |    1 +
+ package/x11r7/xdriver_xf86-video-s3/Config.in      |    1 +
+ package/x11r7/xdriver_xf86-video-s3virge/Config.in |    1 +
+ package/x11r7/xdriver_xf86-video-savage/Config.in  |    1 +
+ .../xdriver_xf86-video-siliconmotion/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-sis/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-sisusb/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-suncg14/Config.in |    1 +
+ package/x11r7/xdriver_xf86-video-suncg3/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-suncg6/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-sunffb/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-sunleo/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-suntcx/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-tdfx/Config.in    |    1 +
+ package/x11r7/xdriver_xf86-video-tga/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-trident/Config.in |    1 +
+ package/x11r7/xdriver_xf86-video-tseng/Config.in   |    1 +
+ package/x11r7/xdriver_xf86-video-voodoo/Config.in  |    1 +
+ package/x11r7/xdriver_xf86-video-wsfb/Config.in    |    1 +
+ package/x11r7/xdriver_xf86-video-xgi/Config.in     |    1 +
+ package/x11r7/xdriver_xf86-video-xgixp/Config.in   |    1 +
+ 34 files changed, 34 insertions(+)
 
- Thomas> diff --git a/package/libffi/libffi-0003-Make-thread-support-conditionnal.patch b/package/libffi/libffi-0003-Make-thread-support-conditionnal.patch
- Thomas> new file mode 100644
- Thomas> index 0000000..90d98d6
- Thomas> --- /dev/null
- Thomas> +++ b/package/libffi/libffi-0003-Make-thread-support-conditionnal.patch
- Thomas> @@ -0,0 +1,73 @@
- Thomas> +From a7f6342120060564a829704cceb843e53e0b34a9 Mon Sep 17 00:00:00 2001
- Thomas> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> +Date: Sat, 17 Nov 2012 18:44:16 +0100
- Thomas> +Subject: [PATCH 3/3] Make thread support conditionnal
- Thomas> +
- Thomas> +When libffi is linked against a C library that does not have thread
- Thomas> +support, it is not necessary to use a mutex to protect global
- Thomas> +variables, since the application calling libffi cannot be
- Thomas> +multi-threaded.
- Thomas> +
- Thomas> +Therefore, make the libffi thread support conditionnal: when we're
- Thomas> +building against uClibc with no thread support, don't use the
- Thomas> +pthread_mutex.
- Thomas> +
- Thomas> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> +---
- Thomas> + src/closures.c |   12 ++++++++++++
- Thomas> + 1 file changed, 12 insertions(+)
- Thomas> +
- Thomas> +diff --git a/src/closures.c b/src/closures.c
- Thomas> +index 1b37827..3d151f6 100644
- Thomas> +--- a/src/closures.c
- Thomas> ++++ b/src/closures.c
- Thomas> +@@ -70,7 +70,10 @@
- Thomas> + 
- Thomas> + # elif FFI_MMAP_EXEC_WRIT /* !FFI_EXEC_TRAMPOLINE_TABLE */
- Thomas> + 
- Thomas> ++#if defined(__UCLIBC__) && !defined(__HAS_NO_THREADS__)
- Thomas> + #define USE_LOCKS 1
- Thomas> ++#endif
-
-Ehh, what about glibc?
-
-Shouldn't it be !__UCLIBC__ || !__HAS_NO_THREADS__ ?
-
+diff --git a/package/x11r7/xdriver_xf86-video-apm/Config.in b/package/x11r7/xdriver_xf86-video-apm/Config.in
+index dea5258..b4b852c 100644
+--- a/package/x11r7/xdriver_xf86-video-apm/Config.in
++++ b/package/x11r7/xdriver_xf86-video-apm/Config.in
+@@ -8,5 +8,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_APM
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86RUSHPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Alliance ProMotion video driver
+diff --git a/package/x11r7/xdriver_xf86-video-ark/Config.in b/package/x11r7/xdriver_xf86-video-ark/Config.in
+index d9703de..c58401d 100644
+--- a/package/x11r7/xdriver_xf86-video-ark/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ark/Config.in
+@@ -6,5 +6,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ARK
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  X.Org driver for ark cards
+diff --git a/package/x11r7/xdriver_xf86-video-ast/Config.in b/package/x11r7/xdriver_xf86-video-ast/Config.in
+index b2a0bc8..8d255c1 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ast/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AST
+ 	bool "xf86-video-ast"
++	depends on BR2_DEPRECATED
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xdriver_xf86-video-chips/Config.in b/package/x11r7/xdriver_xf86-video-chips/Config.in
+index 29a99ec..77f4a7b 100644
+--- a/package/x11r7/xdriver_xf86-video-chips/Config.in
++++ b/package/x11r7/xdriver_xf86-video-chips/Config.in
+@@ -6,5 +6,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_CHIPS
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Chips and Technologies video driver
+diff --git a/package/x11r7/xdriver_xf86-video-glide/Config.in b/package/x11r7/xdriver_xf86-video-glide/Config.in
+index ea9abd7..d3a581b 100644
+--- a/package/x11r7/xdriver_xf86-video-glide/Config.in
++++ b/package/x11r7/xdriver_xf86-video-glide/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLIDE
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	depends on BROKEN # needs glide library from http://glide.sourceforge.net/
++	depends on BR2_DEPRECATED
+ 	help
+ 	  video driver for glide device
+diff --git a/package/x11r7/xdriver_xf86-video-glint/Config.in b/package/x11r7/xdriver_xf86-video-glint/Config.in
+index 782b6da..9393aac 100644
+--- a/package/x11r7/xdriver_xf86-video-glint/Config.in
++++ b/package/x11r7/xdriver_xf86-video-glint/Config.in
+@@ -12,5 +12,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
+ 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  GLINT/Permedia video driver
+diff --git a/package/x11r7/xdriver_xf86-video-i128/Config.in b/package/x11r7/xdriver_xf86-video-i128/Config.in
+index a66fda6..737a01a 100644
+--- a/package/x11r7/xdriver_xf86-video-i128/Config.in
++++ b/package/x11r7/xdriver_xf86-video-i128/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_I128
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Number 9 I128 video driver
+diff --git a/package/x11r7/xdriver_xf86-video-i740/Config.in b/package/x11r7/xdriver_xf86-video-i740/Config.in
+index 9d1a040..85b073e 100644
+--- a/package/x11r7/xdriver_xf86-video-i740/Config.in
++++ b/package/x11r7/xdriver_xf86-video-i740/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_I740
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Intel i740 video driver
+diff --git a/package/x11r7/xdriver_xf86-video-mach64/Config.in b/package/x11r7/xdriver_xf86-video-mach64/Config.in
+index f2464e7..d1e5e57 100644
+--- a/package/x11r7/xdriver_xf86-video-mach64/Config.in
++++ b/package/x11r7/xdriver_xf86-video-mach64/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_MACH64
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  mach64 video driver
+diff --git a/package/x11r7/xdriver_xf86-video-mga/Config.in b/package/x11r7/xdriver_xf86-video-mga/Config.in
+index 40c6f3a..bbcffb7 100644
+--- a/package/x11r7/xdriver_xf86-video-mga/Config.in
++++ b/package/x11r7/xdriver_xf86-video-mga/Config.in
+@@ -11,5 +11,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_MGA
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Matrox video driver
+diff --git a/package/x11r7/xdriver_xf86-video-neomagic/Config.in b/package/x11r7/xdriver_xf86-video-neomagic/Config.in
+index 2e028a7..e015b4f 100644
+--- a/package/x11r7/xdriver_xf86-video-neomagic/Config.in
++++ b/package/x11r7/xdriver_xf86-video-neomagic/Config.in
+@@ -8,5 +8,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_NEOMAGIC
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Neomagic video driver
+diff --git a/package/x11r7/xdriver_xf86-video-newport/Config.in b/package/x11r7/xdriver_xf86-video-newport/Config.in
+index e2effe8..820c824 100644
+--- a/package/x11r7/xdriver_xf86-video-newport/Config.in
++++ b/package/x11r7/xdriver_xf86-video-newport/Config.in
+@@ -6,5 +6,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_NEWPORT
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Newport video driver
+diff --git a/package/x11r7/xdriver_xf86-video-r128/Config.in b/package/x11r7/xdriver_xf86-video-r128/Config.in
+index 96bd8d7..56bb2bc 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/Config.in
++++ b/package/x11r7/xdriver_xf86-video-r128/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_R128
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  R128 video driver
+diff --git a/package/x11r7/xdriver_xf86-video-rendition/Config.in b/package/x11r7/xdriver_xf86-video-rendition/Config.in
+index 9238aec..8558894 100644
+--- a/package/x11r7/xdriver_xf86-video-rendition/Config.in
++++ b/package/x11r7/xdriver_xf86-video-rendition/Config.in
+@@ -6,5 +6,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_RENDITION
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Rendition video driver
+diff --git a/package/x11r7/xdriver_xf86-video-s3/Config.in b/package/x11r7/xdriver_xf86-video-s3/Config.in
+index 1091028..6d8d1df 100644
+--- a/package/x11r7/xdriver_xf86-video-s3/Config.in
++++ b/package/x11r7/xdriver_xf86-video-s3/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_S3
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  X.Org driver for s3 cards
+diff --git a/package/x11r7/xdriver_xf86-video-s3virge/Config.in b/package/x11r7/xdriver_xf86-video-s3virge/Config.in
+index 6f31864..7bdf3c4 100644
+--- a/package/x11r7/xdriver_xf86-video-s3virge/Config.in
++++ b/package/x11r7/xdriver_xf86-video-s3virge/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_S3VIRGE
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  S3 ViRGE video driver
+diff --git a/package/x11r7/xdriver_xf86-video-savage/Config.in b/package/x11r7/xdriver_xf86-video-savage/Config.in
+index a9c8f6c..16f249c 100644
+--- a/package/x11r7/xdriver_xf86-video-savage/Config.in
++++ b/package/x11r7/xdriver_xf86-video-savage/Config.in
+@@ -10,5 +10,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SAVAGE
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  S3 Savage video driver
+diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in b/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
+index db15116..6216167 100644
+--- a/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
++++ b/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SILICONMOTION
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Silicon Motion video driver
+diff --git a/package/x11r7/xdriver_xf86-video-sis/Config.in b/package/x11r7/xdriver_xf86-video-sis/Config.in
+index ac2b632..f88a549 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/Config.in
++++ b/package/x11r7/xdriver_xf86-video-sis/Config.in
+@@ -12,5 +12,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SIS
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  SiS and XGI video driver
+diff --git a/package/x11r7/xdriver_xf86-video-sisusb/Config.in b/package/x11r7/xdriver_xf86-video-sisusb/Config.in
+index b00a8a7..ecb4faf 100644
+--- a/package/x11r7/xdriver_xf86-video-sisusb/Config.in
++++ b/package/x11r7/xdriver_xf86-video-sisusb/Config.in
+@@ -8,5 +8,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SISUSB
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  SiS USB video driver
+diff --git a/package/x11r7/xdriver_xf86-video-suncg14/Config.in b/package/x11r7/xdriver_xf86-video-suncg14/Config.in
+index 661c179..89d836c 100644
+--- a/package/x11r7/xdriver_xf86-video-suncg14/Config.in
++++ b/package/x11r7/xdriver_xf86-video-suncg14/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNCG14
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  CG14 video driver
+diff --git a/package/x11r7/xdriver_xf86-video-suncg3/Config.in b/package/x11r7/xdriver_xf86-video-suncg3/Config.in
+index 539a95a..79024f8 100644
+--- a/package/x11r7/xdriver_xf86-video-suncg3/Config.in
++++ b/package/x11r7/xdriver_xf86-video-suncg3/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNCG3
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  CG3 video driver
+diff --git a/package/x11r7/xdriver_xf86-video-suncg6/Config.in b/package/x11r7/xdriver_xf86-video-suncg6/Config.in
+index 9496f8d..c9203d7 100644
+--- a/package/x11r7/xdriver_xf86-video-suncg6/Config.in
++++ b/package/x11r7/xdriver_xf86-video-suncg6/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNCG6
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  GX/Turbo GX video driver
+diff --git a/package/x11r7/xdriver_xf86-video-sunffb/Config.in b/package/x11r7/xdriver_xf86-video-sunffb/Config.in
+index 76f5b9a..807db91 100644
+--- a/package/x11r7/xdriver_xf86-video-sunffb/Config.in
++++ b/package/x11r7/xdriver_xf86-video-sunffb/Config.in
+@@ -8,5 +8,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNFFB
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  SUNFFB video driver
+diff --git a/package/x11r7/xdriver_xf86-video-sunleo/Config.in b/package/x11r7/xdriver_xf86-video-sunleo/Config.in
+index 29d24a2..b480448 100644
+--- a/package/x11r7/xdriver_xf86-video-sunleo/Config.in
++++ b/package/x11r7/xdriver_xf86-video-sunleo/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNLEO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Leo video driver
+diff --git a/package/x11r7/xdriver_xf86-video-suntcx/Config.in b/package/x11r7/xdriver_xf86-video-suntcx/Config.in
+index 3c82739..c0aaa8f 100644
+--- a/package/x11r7/xdriver_xf86-video-suntcx/Config.in
++++ b/package/x11r7/xdriver_xf86-video-suntcx/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNTCX
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  TCX video driver
+diff --git a/package/x11r7/xdriver_xf86-video-tdfx/Config.in b/package/x11r7/xdriver_xf86-video-tdfx/Config.in
+index 57bb411..f60b7a7 100644
+--- a/package/x11r7/xdriver_xf86-video-tdfx/Config.in
++++ b/package/x11r7/xdriver_xf86-video-tdfx/Config.in
+@@ -10,5 +10,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TDFX
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  3Dfx video driver
+diff --git a/package/x11r7/xdriver_xf86-video-tga/Config.in b/package/x11r7/xdriver_xf86-video-tga/Config.in
+index 800a8f6..54ffb3d 100644
+--- a/package/x11r7/xdriver_xf86-video-tga/Config.in
++++ b/package/x11r7/xdriver_xf86-video-tga/Config.in
+@@ -8,5 +8,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  X.Org driver for tga cards
+diff --git a/package/x11r7/xdriver_xf86-video-trident/Config.in b/package/x11r7/xdriver_xf86-video-trident/Config.in
+index 4a7a477..805f58f 100644
+--- a/package/x11r7/xdriver_xf86-video-trident/Config.in
++++ b/package/x11r7/xdriver_xf86-video-trident/Config.in
+@@ -8,5 +8,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TRIDENT
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Trident video driver
+diff --git a/package/x11r7/xdriver_xf86-video-tseng/Config.in b/package/x11r7/xdriver_xf86-video-tseng/Config.in
+index f72b87b..f58fa69 100644
+--- a/package/x11r7/xdriver_xf86-video-tseng/Config.in
++++ b/package/x11r7/xdriver_xf86-video-tseng/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TSENG
+ 	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Tseng Labs video driver
+diff --git a/package/x11r7/xdriver_xf86-video-voodoo/Config.in b/package/x11r7/xdriver_xf86-video-voodoo/Config.in
+index 9b770be..4cffbf7 100644
+--- a/package/x11r7/xdriver_xf86-video-voodoo/Config.in
++++ b/package/x11r7/xdriver_xf86-video-voodoo/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_VOODOO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Voodoo video driver
+diff --git a/package/x11r7/xdriver_xf86-video-wsfb/Config.in b/package/x11r7/xdriver_xf86-video-wsfb/Config.in
+index 3b3d406..e8ed01f 100644
+--- a/package/x11r7/xdriver_xf86-video-wsfb/Config.in
++++ b/package/x11r7/xdriver_xf86-video-wsfb/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_WSFB
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	depends on BROKEN # Fails to build. Actually this is OpenBSD/NetBSD stuff.
++	depends on BR2_DEPRECATED
+ 	help
+ 	  WSFB based chips video driver
+diff --git a/package/x11r7/xdriver_xf86-video-xgi/Config.in b/package/x11r7/xdriver_xf86-video-xgi/Config.in
+index d0fe665..f630a6c 100644
+--- a/package/x11r7/xdriver_xf86-video-xgi/Config.in
++++ b/package/x11r7/xdriver_xf86-video-xgi/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_XGI
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  XGI based chips video driver
+diff --git a/package/x11r7/xdriver_xf86-video-xgixp/Config.in b/package/x11r7/xdriver_xf86-video-xgixp/Config.in
+index 8d466f4..8b11e96 100644
+--- a/package/x11r7/xdriver_xf86-video-xgixp/Config.in
++++ b/package/x11r7/xdriver_xf86-video-xgixp/Config.in
+@@ -7,5 +7,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_XGIXP
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_DEPRECATED
+ 	help
+ 	  XGIXP based chips video driver
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
