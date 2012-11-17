@@ -1,48 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 09:01:41 +0100
-Subject: [Buildroot] [git commit] barebox: Add 2012.11, remove 2012.07
-Message-ID: <20121117081559.03F439A05D@busybox.osuosl.org>
+Date: Sat, 17 Nov 2012 09:02:03 +0100
+Subject: [Buildroot] [git commit] xutil_util-macros: bump to version 1.17
+Message-ID: <20121117081559.B24449A05D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0003b0d1f7975f4528c402eefe995b655f64ea4e
+commit: http://git.buildroot.net/buildroot/commit/?id=a1ca198dd79bdbd9c73aa94a075e3c2e5464c010
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Needed by other xapp versions bump, which themselves are needed to fix
+the missing link against the Xmu library (build failures similar to
+http://autobuild.buildroot.org/results/1a4f84ad76ad8c4e70bff6878fc232edf46ff8f1/build-end.log).
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/barebox/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index d6ce8dd..c9e7088 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
- if BR2_TARGET_BAREBOX
- choice
- 	prompt "version"
--	default BR2_TARGET_BAREBOX_2012_10
-+	default BR2_TARGET_BAREBOX_2012_11
- 	help
- 	  Select the specific Barebox version you want to use
+diff --git a/package/x11r7/xutil_util-macros/xutil_util-macros.mk b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
+index 7a13a61..6171c39 100644
+--- a/package/x11r7/xutil_util-macros/xutil_util-macros.mk
++++ b/package/x11r7/xutil_util-macros/xutil_util-macros.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--config BR2_TARGET_BAREBOX_2012_07
--	bool "2012.07"
--
- config BR2_TARGET_BAREBOX_2012_08
- 	bool "2012.08"
- 
-@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2012_09
- config BR2_TARGET_BAREBOX_2012_10
- 	bool "2012.10"
- 
-+config BR2_TARGET_BAREBOX_2012_11
-+	bool "2012.11"
-+
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
+-XUTIL_UTIL_MACROS_VERSION = 1.11.0
++XUTIL_UTIL_MACROS_VERSION = 1.17
+ XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
+ XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_UTIL_MACROS_INSTALL_STAGING = YES
