@@ -1,26 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 17 Nov 2012 17:21:37 -0300
-Subject: [Buildroot] [PATCH] host-lua: fix bug #5354
-In-Reply-To: <871ufst34m.fsf@dell.be.48ers.dk>
-References: <1353146744-13529-1-git-send-email-francois.perrad@gadz.org>
- <87boewt3hv.fsf@dell.be.48ers.dk> <871ufst34m.fsf@dell.be.48ers.dk>
-Message-ID: <50A7F1D1.9060405@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 17 Nov 2012 22:08:31 +0100
+Subject: [Buildroot] [PATCH] collectd: bump to version 5.1.1
+In-Reply-To: <1353170528-12967-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 17 Nov 2012 13:42:08 -0300")
+References: <1353170528-12967-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87obiwrl80.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/17/2012 04:56 PM, Peter Korsgaard wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Ahh, I see it now - It's because we're passing -nostdlib -lgcc when
-> creating the shared library. Why are we doing that in the first place?
-> 
-> Gustavo, it seems to date back to 46913a2d4. Do you have any idea why it
-> was done like that?
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-https://bugs.busybox.net/show_bug.cgi?id=803 has rvpaasen's work, i just
-reworked it IIRC.
-OpenWRT doesn't try to link to libgcc or ditch the standard startup and
-libraries, it's worth a try to kill that bit.
-Regards.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
