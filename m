@@ -1,87 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Nov 2012 23:24:03 +0100
-Subject: [Buildroot] [PATCH 05/10] gnutls: fix build failure due to
-	non-existing gets in recent C libraries
+Date: Sat, 17 Nov 2012 23:24:04 +0100
+Subject: [Buildroot] [PATCH 06/10] gsl: fix build on !i386 uClibc
 In-Reply-To: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a7e7ca7a144217a66117fb2352bb5d4d4dabb1bd.1353191025.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <03dca9a70c465309e3295c0051d31fd932132cec.1353191025.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+uClibc pretends to implement <fenv.h> as it installs the header, but
+in practice, it only implements the functions for i386. This makes gsl
+unhappy as it detects fenv.h, but then cannot use the fenv functions.
+
 Fixes:
 
-  http://autobuild.buildroot.org/results/7414989c182f8fd5b3ac849b7897b8e15df0024f/build-end.log
+  http://autobuild.buildroot.org/results/732cc07faeca2a9098dc5106e8f654eb1323451a/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...001-gets-no-longer-exists-in-e-glibc-2.16.patch |   56 ++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/gnutls/gnutls-0001-gets-no-longer-exists-in-e-glibc-2.16.patch
+ package/gsl/gsl.mk |   13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/gnutls/gnutls-0001-gets-no-longer-exists-in-e-glibc-2.16.patch b/package/gnutls/gnutls-0001-gets-no-longer-exists-in-e-glibc-2.16.patch
-new file mode 100644
-index 0000000..802e7ac
---- /dev/null
-+++ b/package/gnutls/gnutls-0001-gets-no-longer-exists-in-e-glibc-2.16.patch
-@@ -0,0 +1,56 @@
-+From 855f72c4fe7f4bbf2137ab60357ae3b27bb65185 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 17 Nov 2012 17:45:41 +0100
-+Subject: [PATCH] gets() no longer exists in (e)glibc >= 2.16
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+index 7196859..6591591 100644
+--- a/package/gsl/gsl.mk
++++ b/package/gsl/gsl.mk
+@@ -10,4 +10,17 @@ GSL_INSTALL_STAGING = YES
+ GSL_LICENSE = GPLv3
+ GSL_LICENSE_FILES = COPYING
+ 
++# uClibc pretends to have fenv support as it installs <fenv.h>, but in
++# practice, it only implements it for i386. Problem reported upstream
++# at: http://lists.busybox.net/pipermail/uclibc/2012-October/047067.html.
++# So we tell gsl that fenv related functions are not available in this
++# case.
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
++ifneq ($(BR2_i386),y)
++GSL_CONF_ENV = \
++       ac_cv_have_decl_feenableexcept=no \
++       ac_cv_have_decl_fesettrapenable=no
++endif
++endif
 +
-+gnutls has already updated gnulib upstream in more recent versions
-+(3.x) but apparently not in the 2.x branch that we are using.
-+
-+This patch comes from OpenEmbedded, and has originally been written by
-+Khem Raj <raj.khem@gmail.com>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ gl/stdio.in.h     |    2 ++
-+ lib/gl/stdio.in.h |    2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/gl/stdio.in.h b/gl/stdio.in.h
-+index 9dc7c4a..8cb19d7 100644
-+--- a/gl/stdio.in.h
-++++ b/gl/stdio.in.h
-+@@ -710,11 +710,13 @@ _GL_CXXALIAS_RPL (gets, char *, (char *s));
-+ _GL_CXXALIAS_SYS (gets, char *, (char *s));
-+ #  undef gets
-+ # endif
-++# if defined gets
-+ _GL_CXXALIASWARN (gets);
-+ /* It is very rare that the developer ever has full control of stdin,
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++# endif
-+ #endif
-+ 
-+ 
-+diff --git a/lib/gl/stdio.in.h b/lib/gl/stdio.in.h
-+index 03bea2a..cb6483b 100644
-+--- a/lib/gl/stdio.in.h
-++++ b/lib/gl/stdio.in.h
-+@@ -710,11 +710,13 @@ _GL_CXXALIAS_RPL (gets, char *, (char *s));
-+ _GL_CXXALIAS_SYS (gets, char *, (char *s));
-+ #  undef gets
-+ # endif
-++# if defined gets
-+ _GL_CXXALIASWARN (gets);
-+ /* It is very rare that the developer ever has full control of stdin,
-+    so any use of gets warrants an unconditional warning.  Assume it is
-+    always declared, since it is required by C89.  */
-+ _GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
-++# endif
-+ #endif
-+ 
-+ 
-+-- 
-+1.7.9.5
-+
+ $(eval $(autotools-package))
 -- 
 1.7.9.5
