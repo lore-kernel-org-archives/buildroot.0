@@ -1,37 +1,93 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 22:07:49 +0100
-Subject: [Buildroot] [git commit] collectd: bump to version 5.1.1
-Message-ID: <20121117210903.A5CDF9A07E@busybox.osuosl.org>
+Date: Sat, 17 Nov 2012 22:08:00 +0100
+Subject: [Buildroot] [git commit] polarssl: bump to version 1.2.0
+Message-ID: <20121117210904.18ADB9A07E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7451db3d3aed29c65b7c9acfc880536b381ce1dd
+commit: http://git.buildroot.net/buildroot/commit/?id=b5a34e750f25cd97b1717c7cf56d0e90d6b0f895
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/collectd/collectd.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ .../polarssl-shared-and-static-library.patch       |   19 +++++++++++--------
+ package/polarssl/polarssl.mk                       |    6 ++++--
+ 2 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 6164df2..f6aeb0d 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -4,10 +4,12 @@
- #
- #############################################################
+diff --git a/package/polarssl/polarssl-shared-and-static-library.patch b/package/polarssl/polarssl-shared-and-static-library.patch
+index 562b900..e11cab3 100644
+--- a/package/polarssl/polarssl-shared-and-static-library.patch
++++ b/package/polarssl/polarssl-shared-and-static-library.patch
+@@ -9,21 +9,22 @@ This patch adds the USE_STATIC_POLARSSL_LIBRARY (which defaults to ON)
+ in addition to the existing USE_SHARED_POLARSSL_LIBRARY (which
+ defaults to OFF). Both options can be manipulated independently.
  
--COLLECTD_VERSION = 5.1.0
-+COLLECTD_VERSION = 5.1.1
- COLLECTD_SITE = http://collectd.org/files
- COLLECTD_MAKE_OPT = LDFLAGS="$(TARGET_LDFLAGS) -lm"
- COLLECTD_CONF_ENV = ac_cv_lib_yajl_yajl_alloc=yes
-+COLLECTD_LICENSE = GPLv2 LGPLv2.1
-+COLLECTD_LICENSE_FILES = COPYING
++[Gustavo: update for polarssl 1.2.0]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  
- # These require unmet dependencies, are fringe, pointless or deprecated
- COLLECTD_PLUGINS_DISABLE = amqp apple_sensors ascent dbi email \
+-Index: polarssl-1.1.1/library/CMakeLists.txt
+-===================================================================
+---- polarssl-1.1.1.orig/library/CMakeLists.txt
+-+++ polarssl-1.1.1/library/CMakeLists.txt
++diff -Nura polarssl-1.2.0.orig/library/CMakeLists.txt polarssl-1.2.0/library/CMakeLists.txt
++--- polarssl-1.2.0.orig/library/CMakeLists.txt	2012-11-15 15:01:58.239248830 -0300
+++++ polarssl-1.2.0/library/CMakeLists.txt	2012-11-15 15:00:10.310806353 -0300
+ @@ -1,4 +1,5 @@
+  option(USE_SHARED_POLARSSL_LIBRARY "Build PolarSSL as a shared library." OFF)
+ +option(USE_STATIC_POLARSSL_LIBRARY "Build PolarSSL as a static library." ON)
+  
+  set(src
+       aes.c
+-@@ -40,17 +41,21 @@
+-      xtea.c
+- )
++@@ -50,19 +51,23 @@
++ set(libs ws2_32)
++ endif(WIN32)
+  
+ -if(NOT USE_SHARED_POLARSSL_LIBRARY)
+ -
+@@ -33,7 +34,7 @@ Index: polarssl-1.1.1/library/CMakeLists.txt
+ +if(USE_SHARED_POLARSSL_LIBRARY)
+  
+  add_library(polarssl SHARED ${src})
+- set_target_properties(polarssl PROPERTIES VERSION 1.1.3 SOVERSION 1)
++ set_target_properties(polarssl PROPERTIES VERSION 1.2.0 SOVERSION 2)
+ +set_target_properties(polarssl PROPERTIES OUTPUT_NAME polarssl)
+ +
+ +endif(USE_SHARED_POLARSSL_LIBRARY)
+@@ -46,6 +47,8 @@ Index: polarssl-1.1.1/library/CMakeLists.txt
+ -endif(NOT USE_SHARED_POLARSSL_LIBRARY)
+ +endif(USE_STATIC_POLARSSL_LIBRARY)
+  
++ target_link_libraries(polarssl ${libs})
++ 
+ -install(TARGETS polarssl
+ +install(TARGETS polarssl polarssl-static
+          DESTINATION ${LIB_INSTALL_DIR}
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 34fbe29..edda9bf 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -1,5 +1,5 @@
+-POLARSSL_SITE = http://polarssl.org/code/releases/
+-POLARSSL_VERSION = 1.1.4
++POLARSSL_SITE = https://polarssl.org/download
++POLARSSL_VERSION = 1.2.0
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+ 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
+@@ -8,6 +8,8 @@ POLARSSL_CONF_OPT = \
+ 	-DBUILD_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+ 
+ POLARSSL_INSTALL_STAGING = YES
++POLARSSL_LICENSE = GPLv2
++POLARSSL_LICENSE_FILES = LICENSE
+ 
+ $(eval $(cmake-package))
+ 
