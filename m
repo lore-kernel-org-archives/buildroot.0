@@ -1,25 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Nov 2012 09:15:08 +0100
-Subject: [Buildroot] [pull request] Pull request for branch xorg-fixes
-In-Reply-To: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 16 Nov 2012 18:23:49 +0100")
-References: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r4nswsqb.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 17 Nov 2012 09:01:41 +0100
+Subject: [Buildroot] [git commit] barebox: Add 2012.11, remove 2012.07
+Message-ID: <20121117081559.03F439A05D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0003b0d1f7975f4528c402eefe995b655f64ea4e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Here is a set of X.org related bumps needed to get rid of the Xmu
- Thomas> related build failures (like
- Thomas> http://autobuild.buildroot.org/results/1a4f84ad76ad8c4e70bff6878fc232edf46ff8f1/build-end.log)
- Thomas> that occur on multiple X.org application packages.
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/barebox/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index d6ce8dd..c9e7088 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2012_10
++	default BR2_TARGET_BAREBOX_2012_11
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2012_07
+-	bool "2012.07"
+-
+ config BR2_TARGET_BAREBOX_2012_08
+ 	bool "2012.08"
+ 
+@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2012_09
+ config BR2_TARGET_BAREBOX_2012_10
+ 	bool "2012.10"
+ 
++config BR2_TARGET_BAREBOX_2012_11
++	bool "2012.11"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
