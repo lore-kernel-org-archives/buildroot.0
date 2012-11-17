@@ -1,34 +1,25 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Sat, 17 Nov 2012 09:12:50 +0100
-Subject: [Buildroot] [PATCH] python: uses fork(),
-	only available on MMU platforms
-Message-ID: <1353139970-25414-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 17 Nov 2012 09:15:08 +0100
+Subject: [Buildroot] [pull request] Pull request for branch xorg-fixes
+In-Reply-To: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 16 Nov 2012 18:23:49 +0100")
+References: <cover.1353086601.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87r4nswsqb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/1738a8b09b04d2b2fc1de6d1ff5eb0363fed6348/build-end.log
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- package/python/Config.in |    2 ++
- 1 file changed, 2 insertions(+)
+ Thomas> Hello,
+ Thomas> Here is a set of X.org related bumps needed to get rid of the Xmu
+ Thomas> related build failures (like
+ Thomas> http://autobuild.buildroot.org/results/1a4f84ad76ad8c4e70bff6878fc232edf46ff8f1/build-end.log)
+ Thomas> that occur on multiple X.org application packages.
 
-diff --git a/package/python/Config.in b/package/python/Config.in
-index 11aa267..4089cce 100644
---- a/package/python/Config.in
-+++ b/package/python/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_PYTHON
- 	bool "python"
- 	depends on BR2_USE_WCHAR
-+	# uses fork()
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  The python language interpreter.
+Committed series, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
