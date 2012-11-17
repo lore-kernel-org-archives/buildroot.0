@@ -1,32 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Nov 2012 11:12:52 +0100
-Subject: [Buildroot] [PATCH] libffi: Needs threads support in toolchain
-In-Reply-To: <1353140814-26164-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1353140814-26164-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <20121117111252.7fe4e9d1@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 17 Nov 2012 07:42:36 -0300
+Subject: [Buildroot] [PATCH 1/2] Deprecate the support for the toolchain
+ on target
+In-Reply-To: <87haoowsgi.fsf@dell.be.48ers.dk>
+References: <cover.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <4afe9c298939f3701caa09c2cc5c4bc04f6d4408.1352586949.git.thomas.petazzoni@free-electrons.com>
+ <50A02C6D.1040105@mind.be> <20121111235938.358914c5@skate>
+ <50A03A24.2010000@mind.be> <87haoowsgi.fsf@dell.be.48ers.dk>
+Message-ID: <50A76A1C.6030101@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Ripard,
-
-On Sat, 17 Nov 2012 09:26:54 +0100, Maxime Ripard wrote:
-> Fixes
-> http://autobuild.buildroot.org/results/7ee57d01917ea72d1811469e482513dda2ceb1ea/build-end.log
+On 11/17/2012 05:21 AM, Peter Korsgaard wrote:
+> On the other hand, documentation on the target doesn't have the same
+> problems as toolchain, so if people do use it, I don't have a problem
+> keeping it.
 > 
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> I've never personally used it though.
 
-As Peter said, your patch cannot work, as we have to fix all the
-reverse dependencies. I'll try to cook a patch that removes the libffi
-dependency on threads when threads are not available.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+On a related note there's no man-pages so the documentation is always
+kind of incomplete. There's no man package either, though busybox has one.
+And i don't recall anyone asking where man-pages is :)
+But it's a no brainer, it doesn't cause any significant overhead.
+Personally i've never used it either.
+Regards.
