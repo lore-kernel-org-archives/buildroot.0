@@ -1,67 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Nov 2012 23:23:58 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-Message-ID: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Nov 2012 23:23:59 +0100
+Subject: [Buildroot] [PATCH 01/10] python: use default configure commands to
+	get shared build
+In-Reply-To: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1353191025.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7020eae0800f390bf69f92dfe2e060dc09821abf.1353191025.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit ee3a96137b6cbb8f970c540c61f75300a44ea803:
+Commit 3c90f754961c6d99059c0b6d0a66bc797a3c017b made Python use a
+special ./configure command in order to avoid --enable-shared
+--disable-static being passed, because it was causing issues when
+building certain modules for a 64 bits system.
 
-  lua-msgpack-native: fix fetch (2012-11-17 10:15:24 +0100)
+However, not having a shared libpython2.7 library for the host
+prevents the libxml2 Python binding to get built.
 
-are available in the git repository at:
+So instead, we use the default configure command, but we add
+--enable-static which is needed for Python to build correctly.
 
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git misc-fixes
+Note that we tested the build of Python on a 64 bits host as well as
+the build of Python for a 64 bits target, and both went fine, with all
+modules built properly.
 
-for you to fetch changes up to e269850f46106974a04c05f22889e61202608453:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python/python.mk |   14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-  dbus: uses fork(), requires MMU (2012-11-17 23:23:17 +0100)
-
-----------------------------------------------------------------
-Thomas Petazzoni (8):
-      python: use default configure commands to get shared build
-      libatomic_ops: bump to version 7.2
-      gnutls: fix build failure due to non-existing gets in recent C libraries
-      gsl: fix build on !i386 uClibc
-      libffi: make thread support optional
-      php: fix C++ link issue
-      attr: fix static build
-      dbus: uses fork(), requires MMU
-
-Vellemans Noel (2):
-      libxml2: add support for building host library with python support
-      mesa3d: requires host-libxml2 and host-python to generate some files
-
- ...r-0001-attr-Fix-static-build-installation.patch |   30 ++++++++
- package/bluez_utils/Config.in                      |    1 +
- package/connman/Config.in                          |    1 +
- package/dbus/Config.in                             |    2 +
- package/efl/libedbus/Config.in                     |    1 +
- ...001-gets-no-longer-exists-in-e-glibc-2.16.patch |   56 +++++++++++++++
- package/gsl/gsl.mk                                 |   13 ++++
- package/gvfs/Config.in                             |    2 +
- package/libatomic_ops/libatomic_ops.mk             |    2 +-
- ...ffi-0003-Make-thread-support-conditionnal.patch |   73 ++++++++++++++++++++
- package/libxml2/Config.in                          |    3 +
- package/libxml2/libxml2.mk                         |   10 ++-
- package/network-manager/Config.in                  |    1 +
- package/ofono/Config.in                            |    1 +
- package/php/php.mk                                 |    4 ++
- package/python/python.mk                           |   14 +---
- package/qt/Config.in                               |    1 +
- package/samba/Config.in                            |    1 +
- package/systemd/Config.in                          |    1 +
- package/x11r7/mesa3d/Config.in                     |    1 +
- package/x11r7/mesa3d/mesa3d.mk                     |    4 +-
- system/Config.in                                   |    1 +
- 22 files changed, 207 insertions(+), 16 deletions(-)
- create mode 100644 package/attr/attr-0001-attr-Fix-static-build-installation.patch
- create mode 100644 package/gnutls/gnutls-0001-gets-no-longer-exists-in-e-glibc-2.16.patch
- create mode 100644 package/libffi/libffi-0003-Make-thread-support-conditionnal.patch
-
-Thanks,
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 87237bb..e0ec9bb 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -17,6 +17,7 @@ PYTHON_LICENSE_FILES = LICENSE
+ # third-party Python modules.
+ 
+ HOST_PYTHON_CONF_OPT += 	\
++	--enable-static		\
+ 	--without-cxx-main 	\
+ 	--disable-sqlite3	\
+ 	--disable-tk		\
+@@ -38,19 +39,6 @@ HOST_PYTHON_MAKE_ENV = \
+ 
+ HOST_PYTHON_AUTORECONF = YES
+ 
+-define HOST_PYTHON_CONFIGURE_CMDS
+-	(cd $(@D) && rm -rf config.cache; \
+-	        $(HOST_CONFIGURE_OPTS) \
+-		CFLAGS="$(HOST_CFLAGS)" \
+-		LDFLAGS="$(HOST_LDFLAGS)" \
+-                $(HOST_PYTHON_CONF_ENV) \
+-		./configure \
+-		--prefix="$(HOST_DIR)/usr" \
+-		--sysconfdir="$(HOST_DIR)/etc" \
+-		$(HOST_PYTHON_CONF_OPT) \
+-	)
+-endef
+-
+ PYTHON_DEPENDENCIES  = host-python libffi
+ 
+ HOST_PYTHON_DEPENDENCIES = host-expat host-zlib
 -- 
-Thomas Petazzoni
+1.7.9.5
