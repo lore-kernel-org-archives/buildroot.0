@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Nov 2012 22:08:31 +0100
-Subject: [Buildroot] [PATCH] collectd: bump to version 5.1.1
-In-Reply-To: <1353170528-12967-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 17 Nov 2012 13:42:08 -0300")
-References: <1353170528-12967-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87obiwrl80.fsf@dell.be.48ers.dk>
+Date: Sat, 17 Nov 2012 22:08:45 +0100
+Subject: [Buildroot] [PATCH 1/2] polarssl: bump to version 1.2.0
+In-Reply-To: <1353170548-13069-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 17 Nov 2012 13:42:27 -0300")
+References: <1353170548-13069-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k3tkrl7m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ To: buildroot@busybox.net
 
  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
