@@ -1,58 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 23:41:41 +0100
-Subject: [Buildroot] [git commit] libxml2: add support for building host
-	library with python support
-Message-ID: <20121117225525.0B8859A081@busybox.osuosl.org>
+Date: Sat, 17 Nov 2012 23:41:48 +0100
+Subject: [Buildroot] [git commit] libatomic_ops: bump to version 7.2
+Message-ID: <20121117225525.CC4779A081@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e445f54bc74ea762a2444cf92be0864e639027a3
+commit: http://git.buildroot.net/buildroot/commit/?id=b2ed6a0564946932ebfc6eaf2470d333bf188f62
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch based on the initial work of Will Wagner (Thanks Will).
-libxml2 host library with python support is required to build mesa3d (7.10.1)
+The 1.2 we were using doesn't build on ARM Thumb platforms:
 
-Signed-off-by: Vellemans Noel <noel.vellemans@visionbms.com>
+  http://autobuild.buildroot.org/results/94ef6be7dcb31021462e7313724217627d4b29df/build-end.log
+
+Moreover, the 7.2 version is the one used by Debian/Ubuntu, and it has
+been tested to build fine with the two packages that depend on
+libatomic_ops: libdrm and pulseaudio.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libxml2/Config.in  |    3 +++
- package/libxml2/libxml2.mk |   10 +++++++++-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+ package/libatomic_ops/libatomic_ops.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libxml2/Config.in b/package/libxml2/Config.in
-index ebd63fe..ea62663 100644
---- a/package/libxml2/Config.in
-+++ b/package/libxml2/Config.in
-@@ -4,3 +4,6 @@ config BR2_PACKAGE_LIBXML2
- 	  XML C Parser
+diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
+index 6d50d0a..8f66f88 100644
+--- a/package/libatomic_ops/libatomic_ops.mk
++++ b/package/libatomic_ops/libatomic_ops.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- 	  http://xmlsoft.org/
-+
-+config BR2_PACKAGE_HOST_LIBXML2_PYTHON
-+    bool
-\ No newline at end of file
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 71f2bd1..fde3735 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -26,7 +26,15 @@ LIBXML2_POST_INSTALL_STAGING_HOOKS += LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
- 
- HOST_LIBXML2_DEPENDENCIES = host-pkgconf
- 
--HOST_LIBXML2_CONF_OPT = --without-debug --without-python
-+HOST_LIBXML2_CONF_OPT = --without-debug
-+
-+ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
-+HOST_LIBXML2_DEPENDENCIES += host-python
-+HOST_LIBXML2_CONF_OPT += --with-python=$(HOST_DIR)/usr
-+else
-+HOST_LIBXML2_CONF_OPT += --without-python
-+endif
-+
- 
- define LIBXML2_REMOVE_CONFIG_SCRIPTS
- 	$(RM) -f $(TARGET_DIR)/usr/bin/xml2-config
+-LIBATOMIC_OPS_VERSION = 1.2
++LIBATOMIC_OPS_VERSION = 7.2
+ LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
+ LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
+ LIBATOMIC_OPS_INSTALL_STAGING = YES
