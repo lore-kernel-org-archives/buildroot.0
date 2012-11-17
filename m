@@ -1,40 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Nov 2012 23:41:48 +0100
-Subject: [Buildroot] [git commit] libatomic_ops: bump to version 7.2
-Message-ID: <20121117225525.CC4779A081@busybox.osuosl.org>
+Date: Sat, 17 Nov 2012 23:41:45 +0100
+Subject: [Buildroot] [git commit] mesa3d: requires host-libxml2 and
+	host-python to generate some files
+Message-ID: <20121117225525.598AA9A081@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2ed6a0564946932ebfc6eaf2470d333bf188f62
+commit: http://git.buildroot.net/buildroot/commit/?id=517e5395a187d9c6b7dc322ee15f7b75f5ffe7fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 1.2 we were using doesn't build on ARM Thumb platforms:
+mesa3d now generates some C files at build time (related to the OpenGL
+API) from XML files. This generation process is done using Python
+scripts that require the libxml2 Python module.
 
-  http://autobuild.buildroot.org/results/94ef6be7dcb31021462e7313724217627d4b29df/build-end.log
+Patch based on the initial work of Will Wagner (Thanks Will).
 
-Moreover, the 7.2 version is the one used by Debian/Ubuntu, and it has
-been tested to build fine with the two packages that depend on
-libatomic_ops: libdrm and pulseaudio.
-
+Signed-off-by: Vellemans Noel <noel.vellemans@visionbms.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libatomic_ops/libatomic_ops.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/mesa3d/Config.in |    1 +
+ package/x11r7/mesa3d/mesa3d.mk |    4 +++-
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index 6d50d0a..8f66f88 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/x11r7/mesa3d/Config.in b/package/x11r7/mesa3d/Config.in
+index 47ded29..e5b426e 100644
+--- a/package/x11r7/mesa3d/Config.in
++++ b/package/x11r7/mesa3d/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+ 	depends on BR2_PACKAGE_XSERVER_xorg
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk
+index 8d311e1..b16d5e6 100644
+--- a/package/x11r7/mesa3d/mesa3d.mk
++++ b/package/x11r7/mesa3d/mesa3d.mk
+@@ -28,6 +28,8 @@ MESA3D_DEPENDENCIES = \
+ 	xproto_dri2proto \
+ 	libdrm \
+ 	expat \
+-	host-xutil_makedepend
++	host-xutil_makedepend \
++	host-libxml2 \
++	host-python
  
--LIBATOMIC_OPS_VERSION = 1.2
-+LIBATOMIC_OPS_VERSION = 7.2
- LIBATOMIC_OPS_SOURCE = libatomic_ops-$(LIBATOMIC_OPS_VERSION).tar.gz
- LIBATOMIC_OPS_SITE = http://www.hpl.hp.com/research/linux/atomic_ops/download
- LIBATOMIC_OPS_INSTALL_STAGING = YES
+ $(eval $(autotools-package))
