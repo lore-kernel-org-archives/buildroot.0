@@ -1,47 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Nov 2012 13:07:03 +0100
-Subject: [Buildroot] Built a file system,
- have a working kernel - how to login ?
-In-Reply-To: <CAF-Ht3zwxboYWZ6Q3ocMtFaAnQ9xEo+qfWfSsovdZuZa3sotkQ@mail.gmail.com>
-References: <CAF-Ht3yZfCDAMpPGJ7NFd_RQ0brOwxw3pSSoA3YFtzVf7kpf2g@mail.gmail.com>
- <20121117111132.17a91542@skate>
- <CAF-Ht3xTA8gLLFS5j64LFSQ9_U5O7+42Uj0Yq4CMZWWZb3g3YA@mail.gmail.com>
- <20121117123531.431cbd65@skate>
- <CAF-Ht3zwxboYWZ6Q3ocMtFaAnQ9xEo+qfWfSsovdZuZa3sotkQ@mail.gmail.com>
-Message-ID: <20121117130703.03beb6e1@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 17 Nov 2012 09:28:00 -0300
+Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.0.26
+Message-ID: <1353155281-15122-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Juha Lumme,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/alsa-lib/alsa-lib.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 17 Nov 2012 20:45:09 +0900, Juha Lumme wrote:
-
-> The board boots from memory card currently, and I tarball the output/target
-> directory and then decompress to the second partition on the memory card.
-> This worked for a full 250MB debian file system, so I'm assuming it should
-> work here as well..?
-
-Aaargggh, no!
-
-From the Buildroot manual:
-
-   target/ which contains almost the complete root filesystem for the
-   target: everything needed is present except the device files
-   in /dev/ (Buildroot can?t create them because Buildroot doesn?t run
-   as root and doesn?t want to run as root). Therefore, this directory
-   should not be used on your target.
-
-Please enable a tarball root filesystem image, and then extract is as
-root on the partition of your memory card.
-
-Best regards,
-
-Thomas
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 8ed1339..daa551d 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
+ 
+-ALSA_LIB_VERSION = 1.0.25
++ALSA_LIB_VERSION = 1.0.26
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+-ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
++ALSA_LIB_SITE = http://alsa.cybermirror.org/lib
+ ALSA_LIB_LICENSE = LGPLv2.1+
+ ALSA_LIB_LICENSE_FILES = COPYING
+ ALSA_LIB_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
