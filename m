@@ -1,41 +1,30 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 18 Nov 2012 02:15:13 +0200
-Subject: [Buildroot] [PATCH] busybox: needs linux-pam dependency added if
-	using custom busybox .config & busybox login applet
-Message-ID: <1353197713-20796-1-git-send-email-stefan.froberg@petroprogram.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 17 Nov 2012 21:14:00 -0500
+Subject: [Buildroot] [PATCH] busybox: needs linux-pam dependency added
+ if using custom busybox .config & busybox login applet
+In-Reply-To: <1353197713-20796-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1353197713-20796-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <CANxTyt6cjey_R_w+ZupOqUF_oaN09eF5jUDt=TWu6fUSNT8SWA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If BusyBox custom .config has login applet (CONFIG_LOGIN) enabled
-then the build process will complain about missing Linux PAM
-headers.
-This will add the needed linux-pam dependency
+On Sat, Nov 17, 2012 at 7:15 PM, Stefan Fr?berg <
+stefan.froberg@petroprogram.com> wrote:
+>
+> +ifeq ($(shell sed -n "s/CONFIG_LOGIN=\(y\)/\1/p"
+> $(BR2_PACKAGE_BUSYBOX_CONFIG)),y)
+> +BUSYBOX_DEPENDENCIES += linux-pam
+> +endif
+>
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
- package/busybox/busybox.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+Why bother with the sed?  Could you not do "ifeq
+($(BR2_PACKAGE_LINUX_PAM),y)"?
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 549e150..f2a102a 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -30,6 +30,13 @@ BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
- BUSYBOX_LDFLAGS += -ltirpc
- endif
- 
-+# linux-pam must be built first if user has custom
-+# BusyBox .config file and that file has also login
-+# applet (CONFIG_LOGIN) enabled.
-+ifeq ($(shell sed -n "s/CONFIG_LOGIN=\(y\)/\1/p" $(BR2_PACKAGE_BUSYBOX_CONFIG)),y)
-+BUSYBOX_DEPENDENCIES += linux-pam
-+endif
-+
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
- # Allows the build system to tweak CFLAGS
- BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(BUSYBOX_CFLAGS)"
--- 
-1.7.7.6
+Just a thought ...
+Danomi -
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121117/279dff61/attachment.html>
