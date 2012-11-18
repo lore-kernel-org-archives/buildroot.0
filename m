@@ -1,50 +1,48 @@
-From: =?windows-1252?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Sun, 18 Nov 2012 22:11:38 +0200
-Subject: [Buildroot] Udev on a live CD system does not appear to
- populate /dev
-In-Reply-To: <50A93EBF.6080304@mind.be>
-References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
- <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
- <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
- <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
- <509BDDDD.3040002@petroprogram.com> <50A1EE50.4010008@mind.be>
- <50A81599.3000002@petroprogram.com> <50A93EBF.6080304@mind.be>
-Message-ID: <50A940FA.7020402@petroprogram.com>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Sun, 18 Nov 2012 21:11:43 +0100
+Subject: [Buildroot] Built a file system,
+ have a working kernel - how to login ?
+In-Reply-To: <CAF-Ht3w505-MDPNBizt4EcWFC=rB9QH2-=eDrGbtn+-pxOf9TQ@mail.gmail.com>
+References: <CAF-Ht3yZfCDAMpPGJ7NFd_RQ0brOwxw3pSSoA3YFtzVf7kpf2g@mail.gmail.com>
+ <20121117111132.17a91542@skate>
+ <CAF-Ht3xTA8gLLFS5j64LFSQ9_U5O7+42Uj0Yq4CMZWWZb3g3YA@mail.gmail.com>
+ <20121117123531.431cbd65@skate>
+ <CAF-Ht3zwxboYWZ6Q3ocMtFaAnQ9xEo+qfWfSsovdZuZa3sotkQ@mail.gmail.com>
+ <20121117130703.03beb6e1@skate>
+ <CABYt4-ZRHdmbCAwtt8+swiwRHNwg=0_zEJxe7UnxetBgudXGKg@mail.gmail.com>
+ <CAF-Ht3w505-MDPNBizt4EcWFC=rB9QH2-=eDrGbtn+-pxOf9TQ@mail.gmail.com>
+Message-ID: <50A940FF.7000808@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-18.11.2012 22:02, Arnout Vandecappelle kirjoitti:
-> On 17/11/12 23:54, Stefan Fr?berg wrote:
-> [snip]
->> But the real problem now is that grub refuses to load. It just shows
->> Loading stage2 .... and hangs there.
->>
->> If I copy my old grub stuff  (namely, the stage2_eltorito file) from
->> 2012.05 build to inside the boot/grub/ of the
->> new buildroot generated livecd (of course, first mounted throught
->> loopback and copied to some other dir for modifying)
->> and then build the livecd from that manually, it will work and show
->> grub menu normally.
->>
->> I did a quick *md5sum* and *ls* and there indeed is a difference with
->> the git-version and 2012.05 version of
->> stage2_eltorito file,  git-version of stage2_eltorito being very
->> large (258 KB vs. working 103 KB)
->>
->  Is this on a x86_64 target? Then a difference is that we removed
-> -fPIC -DPIC from CFLAGS.  Can you try if that makes a difference?
->
+Hi Juha,
 
-No, just building i586 target inside 32-bit Fedora 16 host.
+ironically i just started to add board support to Buildroot for this 
+board, it's not totally ready yet, it still needs some cleanup, and i 
+also had to add config option to the mxs-bootlets package to enable 
+custom patches, so i can't really send a patchset yet to the mainstream, 
+but i uploaded it to gitorious, if you still want to play around with it 
+then you can get it here:
 
-Ok, Im now going to rebuild both 2012.05 and latest git again and
-see what happens.
+https://gitorious.org/buildroot-olinuxino/buildroot-olinuxino
 
-Regards
-Stefan
+to build a kernel and a base root filesystem, clone the repository, and 
+just follow the readme.txt:
 
->  Regards,
->  Arnout
+https://gitorious.org/buildroot-olinuxino/buildroot-olinuxino/blobs/master/board/olinuxino/olinuxino-maxi/readme.txt
+
+Any feedback is welcome, as i still need to test this before i make a 
+patchset :)
+Otherwise it seems everything is working well with the built image, but 
+i cannot test the composite video output as i don't have
+any TV kind of stuff here...
+
+
+-- 
+br,
+Zoltan Gyarmati
+mail: mr.zoltan.gyarmati at gmail.com
+freenode nick: zgyarmati
