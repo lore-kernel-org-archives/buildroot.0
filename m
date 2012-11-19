@@ -1,50 +1,60 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Mon, 19 Nov 2012 13:23:01 +0000
-Subject: [Buildroot] [PATCH] matchbox-lib: Append -lX11 to the linker
-In-Reply-To: <CAG2jQ8hyuwRZDJRLF9R5c9KzkEUA2xrU2Rd78h4uAmd3NpEAhg@mail.gmail.com>
-References: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
- <20121030140043.7ba2722b@skate>
- <CAG2jQ8hieHZUbMXA4pXecX81+hkFermPVYXCggRHhXxz3BYamA@mail.gmail.com>
- <20121030143003.6af62df4@skate>
- <CAG2jQ8hyuwRZDJRLF9R5c9KzkEUA2xrU2Rd78h4uAmd3NpEAhg@mail.gmail.com>
-Message-ID: <CAG2jQ8hVCq0pJZf9wYpzyk9CCsNdi2OTtqLGYXWtNKFamr04DA@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 19 Nov 2012 14:21:00 +0000
+Subject: [Buildroot] [PATCH] x11r7: deprecate a number of unused old
+ X.org video drivers
+In-Reply-To: <20121119133038.4a1653b8@skate>
+References: <1353192419-5405-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <50AA2165.2090807@carallon.com> <20121119133038.4a1653b8@skate>
+Message-ID: <50AA404C.1060800@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 30, 2012 at 1:53 PM, Markos Chandras
-<markos.chandras@gmail.com> wrote:
-> On Tue, Oct 30, 2012 at 1:30 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Markos Chandras,
->>
->> On Tue, 30 Oct 2012 13:21:22 +0000, Markos Chandras wrote:
->>
->>> There is no matchbox upstream. Latest release was in 2007 and the
->>> latest post in the mailing list was in 2007 as well.
->>> Their svn repo seems dead too
->>>
->>> http://svn.o-hand.com/view/matchbox/trunk/
->>
->> Hum, right. Do we want to keep those packages in Buildroot then? :-)
->>
+On 19/11/2012 12:30, Thomas Petazzoni wrote:
+> Will,
 >
-> Well at least they build now :) There are other alternatives of course
-> (openbox, fluxbox) but I think matchbox
-> targets different devices (like PDAs or devices with small screens).
-> My personal opinion is to keep them
-> around until we reach a point where patching them becomes a non-trivial process.
+> On Mon, 19 Nov 2012 12:09:09 +0000, Will Wagner wrote:
 >
-> --
-> Regards,
-> Markos
+>> Once a resolution is found to the mesa3d problem and committed I will
+>> try again to get my x11r7.7 patches upstream that removes all old
+>> modules from X.
+>
+> Aah, I didn't remember you had x11r7.7 ready somewhere. Can you point
+> me to the Git tree again? As long as it removes or marks as
+> deprecated the really useless X.org drivers, I'm fine with seeing your
+> changes merged rather than mine.
+>
+> The mesa3d problem was fixed in master this week-end. It unfortunately
+> introduced a regression when building host-libglib2 on a PowerPC host
+> (seen on gcc110 build machine), but I think we'll try to address it
+> separately.
+>
+> That said, your x11r7.7 bump is certainly -next material at this point,
+> since -rc1 has been released.
 
-Hi,
+Thomas,
 
-Ping? :)
+You can find my work on updating to x11r7.7 on gitorious at 
+https://gitorious.org/willw-buildroot/willw-buildroot/commits/remotes/gitorious/x11r7.7
+
+It needs updating to buildroot head as it is now some way behind. I will 
+look at that as soon as I have time so it can be considered for -next
+
+Regards
+Will
+
+>
+> Best regards,
+>
+> Thomas
+>
+
 
 -- 
-Regards,
-Markos
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
