@@ -1,66 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Nov 2012 15:49:20 +0100
-Subject: [Buildroot] Global autoconf cache
-In-Reply-To: <E1TYkqM-0001Xd-Jb@fencepost.gnu.org>
-References: <E1TYkqM-0001Xd-Jb@fencepost.gnu.org>
-Message-ID: <20121119154920.196323b2@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 19 Nov 2012 20:41:54 +0100
+Subject: [Buildroot] [PATCH] external-toolchain: add Sourcery CodeBench
+ ARM 2012.09
+In-Reply-To: <1353324554-23461-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1353324554-23461-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <50AA8B82.6010609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Richard Stallman,
+On 19/11/12 12:29, Fabio Porcedda wrote:
+> I've added the "depends on BROKEN" because this toolchain
+> breaks linux kernel arm builds:
+> "arch/arm/lib/copy_template.S:247: Error: selected processor
+>   does not support ARM mode `ldralt r4,[r1],#4'"
 
-On Wed, 14 Nov 2012 16:49:58 -0500, Richard Stallman wrote:
+  Then why would we add support for that toolchain to buildroot?
 
-> The global cache that autoconf formerly used was very good for
-> efficiency of autoconf, especially when building lots of packages.
-> Without that, it is slow.
-> 
-> I am told it had a problem: results depended on things such as
-> compiler options, that varied from package to package, this suggests
-> the idea of recording those in the cache, so that the cached results
-> would be reused only when truly applicable.  Is this possible?
-> 
->     > 2. There were common problems where "rm config.cache" was part of the
->     >    solution. E.g., run configure, it fails to detect som library needed
->     >    for som optional feature. You install the library and rerun
->     >    configure, and ten it still won't detect the library since the result
->     >    was cached. 
-> 
-> This problem could be fixed automatically by making the the package
-> manager communicate with autoconf, to clear the cache whenever certain
-> packages are installed.
-
-In Buildroot [1], we had support to use an autoconf cache to speed up
-the build. This autoconf cache was shared amongst packages, with the
-idea that once a package has verified that such or such system feature
-was available or not, it would be written in the cache, and subsequent
-packages to be built would not have to do those tests again.
-
-Unfortunately, we ran into several corner cases where some packages
-were using the same autoconf variable name for tests that were mostly
-the same, but not exactly, leading to the autoconf cache having a nasty
-effect on the build of certain packages, if other packages built before
-had "poisoned" the cache with somewhat invalid values.
-
-I personally spent quite a significant amount of time fixing a few
-configure.{ac,in} files in various packages, but in the end, we gave up
-with this idea and no longer use the autoconf cache.
-
-However, using the autoconf cache for successive rebuilds of the same
-package should work.
-
-Best regards,
-
-Thomas
-
-
-[1] A tool that automates the process of cross-compiling an embedded
-    GNU/Linux system, http://www.buildroot.org.
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
