@@ -1,30 +1,42 @@
-From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Tue, 20 Nov 2012 12:14:46 +0100
-Subject: [Buildroot] [PATCH] barebox: Add BR2_TARGET_BAREBOX_2012_11
-Message-ID: <1353410086-10233-1-git-send-email-gregory.hermant@calao-systems.com>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Tue, 20 Nov 2012 11:24:36 +0000 (UTC)
+Subject: [Buildroot] How to regenerate zImage?
+References: <slrnkamf41.9pu.narkewoody@zuhnb712.local.com>
+ <20121120100158.15b1b159@skate>
+Message-ID: <slrnkamq24.2u9.narkewoody@zuhnb712.local.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2012-11-20, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>
+wrote:
+> Dear Woody Wu,
+>
+> On Tue, 20 Nov 2012 08:17:54 +0000 (UTC), Woody Wu wrote:
+>> After I made any small changes in kernel source, I can force the
+>> kernel to be rebuilt by removing the .stamp_built under the
+>> output/build/linux-version directory.  But, it's strange that the
+>> output/zImage file always not get recreated or rebuilt.
+>> 
+>> How should I force the buildroot to regenerate the zImage file for
+>> me?
+>
+> make linux-rebuild
+Thanks, I will try.
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
----
- boot/barebox/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+>
+> However, note that making changing to the source code anywhere in
+> output/build/... is a really stupid idea, as all those changes will be
+> lost next time you do 'make clean'.
+>
+Yes, I agree this is stupid. So I also really like to know whta's the
+best practice to do this kind of work. Would you be so kind to have a
+introduction or point me to a docment? Thanks
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index c9e7088..997f45b 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -45,6 +45,7 @@ config BR2_TARGET_BAREBOX_VERSION
- 	default "2012.08.0"	if BR2_TARGET_BAREBOX_2012_08
- 	default "2012.09.0"	if BR2_TARGET_BAREBOX_2012_09
- 	default "2012.10.0"	if BR2_TARGET_BAREBOX_2012_10
-+	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
- 
+
 -- 
-1.7.9.5
+woody
+I can't go back to yesterday - because I was a different person then.
