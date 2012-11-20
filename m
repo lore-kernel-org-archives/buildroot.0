@@ -1,54 +1,97 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 20 Nov 2012 18:42:57 +0100
-Subject: [Buildroot] [PATCH] toolchain-crosstool-ng: install
-	libthread_db if appropriate
-In-Reply-To: <1353430797-26819-1-git-send-email-rbraun@sceen.net>
-References: <1353430797-26819-1-git-send-email-rbraun@sceen.net>
-Message-ID: <201211201842.57212.yann.morin.1998@free.fr>
+From: John Tobias <john.tobias.ph@gmail.com>
+Date: Tue, 20 Nov 2012 10:26:17 -0800
+Subject: [Buildroot] Who calls to the defined function/s
+In-Reply-To: <20121120095904.20264654@skate>
+References: <CACUGKYMDKMSvqrUgRhiKyaVm6S5z7a+RMa+3oyCXspU8OVVbYQ@mail.gmail.com>
+ <20121120095904.20264654@skate>
+Message-ID: <CACUGKYNs2gHvS_6eJS22gYgZOE7rhSciSaCAeCxbEm4q5Dm=Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 20 November 2012 Richard Braun wrote:
-> Signed-off-by: Richard Braun <rbraun@sceen.net>
+Dear Thomas Petazzoni,
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thank you for the response. I was thinking to support the package
+management in the buildroot. Where, if I define XXX_CREATE_PACKAGE in
+my hello.mk
+the buildroot (for example) will create an opkg file (off-course I
+have supply the necessary information to create the package file).
 
-> ---
->  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-> index 5f9119d..ebc7b4b 100644
-> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-> @@ -41,6 +41,10 @@ uclibc-source: $(CTNG_DIR)/.config
->  CTNG_LIBS_LIB := ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so    \
->                   libnsl.so libpthread.so libresolv.so librt.so libutil.so
->  
-> +ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
-> +CTNG_LIBS_LIB += libthread_db.so
-> +endif
-> +
->  #--------------
->  # The libc-specific system libraries (in /lib)
->  # Note: it may be needed to tweak the NSS libs in the glibc and eglibc cases...
-> -- 
-> 1.7.2.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+I know the buildroot community did not support it package management
+but I would like to add some flexibility on my buildroot environment.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards,
+
+john
+
+On Tue, Nov 20, 2012 at 12:59 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear John Tobias,
+>
+> On Mon, 19 Nov 2012 18:21:03 -0800, John Tobias wrote:
+>
+>> I was trying to (fully) understand the dataflow of the buildroot's
+>> Makefile. How/who parse/calls to the functions like:
+>>
+>> HELLO_INSTALL_TARGET_CMDS
+>> HELLO_BUILD_CMDS
+>>
+>> $(eval $(generic-package))
+>
+> The generic-package macro will find in which directory your Makefile
+> is, for example package/hello/. It will take this "hello" convert it to
+> uppercase, and use it as the prefix for all variables. So basically, a
+> package in package/hello/hello.mk will have to define HELLO_SITE,
+> HELLO_SOURCE, HELLO_VERSION, and possibly HELLO_BUILD_CMDS,
+> HELLO_INSTALL_TARGET_CMDS, etc.
+>
+>> So, How I can tell to the generic-package to call HELLO_TEST_CMDS too?
+>>
+>> example:
+>> define HELLO_TEST_CMDS
+>> ...
+>> endef
+>
+> That would require a modification of the package infrastructure, which
+> you probably don't want to do. What are you trying to achieve with a
+> new command exactly?
+>
+> New commands are normally not needed:
+>
+>  *) For autotools-package and cmake-package, you have hooks so that you
+>     can do something after extraction, after patching, after
+>     configuration, after installation, etc.
+>
+>  *) For generic-package, you can do something like:
+>
+> ifeq ($(BR2_PACKAGE_HELLO_SOMETHING),y)
+> define HELLO_DO_THIS_CMDS
+>         $(MAKE) -C $(@D) do-this
+> endef
+> endif
+>
+> ifeq ($(BR2_PACKAGE_HELLO_SOMETHING_ELSE),y)
+> define HELLO_DO_THAT_CMDS
+>         $(MAKE) -C $(@D) do-that
+> endef
+> endif
+>
+> define HELLO_BUILD_CMDS
+>         $(HELLO_DO_THIS_CMDS)
+>         $(HELLO_DO_THAT_CMDS)
+> endef
+>
+> Please make sure to read our documentation at
+> http://buildroot.org/downloads/manual/manual.html#_adding_new_packages_to_buildroot
+> which explains all of this with quite some details and examples.
+>
+> Do not hesitate to get back to the list if you need further details,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
