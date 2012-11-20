@@ -1,56 +1,30 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 21 Nov 2012 09:15:36 +0100
-Subject: [Buildroot] [PATCH] busybox: fix link with tirpc
-Message-ID: <1353485736-10836-1-git-send-email-arnout@mind.be>
+From: Chris Zankel <chris@zankel.net>
+Date: Tue, 20 Nov 2012 11:01:49 -0800
+Subject: [Buildroot] [PATCH 3/3] xtensa: disable libffi for Xtensa
+Message-ID: <50ac8f69.6548420a.6f5c.2a1b@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox does partial linking of its modules before linking everything
-together into the binary.  Those partial links are done without the
-standard libraries, but that also means -ltirpc can't be found.  In
-addition, this probably fails horribly with static linking (untested).
+Xtensa currently doesn't support libffi.
 
-The problem is that the LDFLAGS are also used in the partial links.
-So instead, use CFLAGS_busybox, which is only used for the busybox
-link step.  Also make sure that this is passed through the environment,
-not on the command line, so the busybox Makefile can still append to
-it.
-
-Fixes e.g.
-http://autobuild.buildroot.net/results/e8351e3ba86fdcdb2999548658271a6fde0526a9
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Signed-off-by: Chris Zankel <chris@zankel.net>
 ---
- package/busybox/busybox.mk |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/libffi/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 549e150..9154c08 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -27,12 +27,17 @@ BUSYBOX_LDFLAGS = \
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- BUSYBOX_DEPENDENCIES += libtirpc
- BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
--BUSYBOX_LDFLAGS += -ltirpc
-+# Don't use LDFLAGS for -ltirpc, because LDFLAGS is used for
-+# the non-final link of modules as well.
-+BUSYBOX_CFLAGS_busybox += -ltirpc
- endif
- 
- BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
- # Allows the build system to tweak CFLAGS
--BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(BUSYBOX_CFLAGS)"
-+BUSYBOX_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	CFLAGS="$(BUSYBOX_CFLAGS)" \
-+	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
- BUSYBOX_MAKE_OPTS = \
- 	CC="$(TARGET_CC)" \
- 	ARCH=$(KERNEL_ARCH) \
+diff --git a/package/libffi/Config.in b/package/libffi/Config.in
+index 7211f8f..4afb669 100644
+--- a/package/libffi/Config.in
++++ b/package/libffi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBFFI
+ 	bool "libffi"
++	depends on !BR2_xtensa
+ 	help
+ 	  The libffi library provides a portable, high level
+ 	  programming interface to various calling conventions. This
 -- 
-tg: (47ee305..) t/busybox-tirpc (depends on: master)
+1.7.9.5
