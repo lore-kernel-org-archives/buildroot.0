@@ -1,17 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Nov 2012 11:09:36 +0100
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Tue, 20 Nov 2012 02:23:35 -0800 (PST)
 Subject: [Buildroot] GTK vs Qt
-In-Reply-To: <1353405771.50495.YahooMailNeo@web164602.mail.gq1.yahoo.com>
+In-Reply-To: <20121120110936.4ca119a4@skate>
 References: <1353393604.95219.YahooMailNeo@web164605.mail.gq1.yahoo.com>
  <20121120100105.4cafd18d@skate>
  <1353405771.50495.YahooMailNeo@web164602.mail.gq1.yahoo.com>
-Message-ID: <20121120110936.4ca119a4@skate>
+ <20121120110936.4ca119a4@skate>
+Message-ID: <1353407015.92864.YahooMailNeo@web164601.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+OK -let me put question this way. If I successfully compile/run 
+QT program on desktop, and then recompile the same source with
+let's say Builtroot built compiler (for ARM), should I expect that 
+this program will understand -qws option (which I thought is strictly
+related to QtCreator). The only way I succeeded to start Qt demo 
+programs was with -qws. Hope it's more clear question.
+?
+Regards
+ 
+
+________________________________
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Zoran Djordjevic <djdjdjole@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Tuesday, November 20, 2012 11:09 AM
+Subject: Re: [Buildroot] GTK vs Qt
+  
 Dear Zoran Djordjevic,
 
 On Tue, 20 Nov 2012 02:02:51 -0800 (PST), Zoran Djordjevic wrote:
@@ -39,10 +57,10 @@ I really don't see the relation between QtCreator and the whole
 discussion. QtCreator is an IDE that has some interesting features to
 do Qt development, but:
 
- * You can do Qt development without QtCreator. I've done quite a bit
-   of Qt development in Emacs.
+* You can do Qt development without QtCreator. I've done quite a bit
+?  of Qt development in Emacs.
 
- * You can do non-Qt development with QtCreator.
+* You can do non-Qt development with QtCreator.
 
 Thomas
 -- 
@@ -50,3 +68,6 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121120/015f88c3/attachment-0001.html>
