@@ -1,45 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Nov 2012 10:01:05 +0100
-Subject: [Buildroot] GTK vs Qt
-In-Reply-To: <1353393604.95219.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-References: <1353393604.95219.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-Message-ID: <20121120100105.4cafd18d@skate>
+Date: Tue, 20 Nov 2012 10:01:58 +0100
+Subject: [Buildroot] How to regenerate zImage?
+In-Reply-To: <slrnkamf41.9pu.narkewoody@zuhnb712.local.com>
+References: <slrnkamf41.9pu.narkewoody@zuhnb712.local.com>
+Message-ID: <20121120100158.15b1b159@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoran Djordjevic,
+Dear Woody Wu,
 
-On Mon, 19 Nov 2012 22:40:04 -0800 (PST), Zoran Djordjevic wrote:
+On Tue, 20 Nov 2012 08:17:54 +0000 (UTC), Woody Wu wrote:
+> After I made any small changes in kernel source, I can force the kernel
+> to be rebuilt by removing the .stamp_built under the
+> output/build/linux-version directory.  But, it's strange that the
+> output/zImage file always not get recreated or rebuilt.
+> 
+> How should I force the buildroot to regenerate the zImage file for me?
 
-> When I run GTK demo programs on my ARM board?(built during linux building 
-> by Buildroot), I start them by quoting it in xinitrc file (together with window 
-> manager)?and then giving xinit command (is there some other way ?). 
-> However, when running Qt demo?programs (linux built with Qt support), I can 
-> start them with quoting only?-qws option (obviously programs are built with
-> QtCreator) - ie. no xinit ...?
-> Difference is also regarding startup times (which is?pretty big?difference when
-> speaking of first start).
-> What interests me is why different methods of starting GTK and Qt programs and
-> also why so huge startup?time difference ?
+make linux-rebuild
 
-The Qt you're using runs directly on the framebuffer, so there is no
-X.org server. But it's also possible to run Qt on top of X.org (through
-not supported by Buildroot at this time).
+However, note that making changing to the source code anywhere in
+output/build/... is a really stupid idea, as all those changes will be
+lost next time you do 'make clean'.
 
-The Gtk version you're using runs on top of the X.org server, so the
-X.org server has to start and initialize itself before starting your
-application. It is also possible to run Gtk on top of DirectFB, which
-is a lightweight library on top of the framebuffer. However, the Gtk
-DirectFB backend has proven to not be that well maintained over the
-years, so I'm not sure it's really a good choice.
-
-So basically, you're comparing something that runs on top of X.org with
-something that doesn't run on top of X.org.
-
-Best regards,
+Best regard,s
 
 Thomas
 -- 
