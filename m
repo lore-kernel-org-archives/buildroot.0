@@ -1,19 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Nov 2012 11:45:07 +0100
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Tue, 20 Nov 2012 03:06:44 -0800 (PST)
 Subject: [Buildroot] GTK vs Qt
-In-Reply-To: <1353407015.92864.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+In-Reply-To: <20121120114507.0a14be55@skate>
 References: <1353393604.95219.YahooMailNeo@web164605.mail.gq1.yahoo.com>
  <20121120100105.4cafd18d@skate>
  <1353405771.50495.YahooMailNeo@web164602.mail.gq1.yahoo.com>
  <20121120110936.4ca119a4@skate>
  <1353407015.92864.YahooMailNeo@web164601.mail.gq1.yahoo.com>
-Message-ID: <20121120114507.0a14be55@skate>
+ <20121120114507.0a14be55@skate>
+Message-ID: <1353409604.65065.YahooMailNeo@web164606.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thanks, it's more clear now. I will read articles you
+pointed at. Maybe I will have some more questions then.
+?
+Regards
+ 
+
+________________________________
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Zoran Djordjevic <djdjdjole@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Tuesday, November 20, 2012 11:45 AM
+Subject: Re: [Buildroot] GTK vs Qt
+  
 Dear Zoran Djordjevic,
 
 On Tue, 20 Nov 2012 02:23:35 -0800 (PST), Zoran Djordjevic wrote:
@@ -45,8 +59,8 @@ and therefore be able to share the screen.
 
 You probably want to read:
 
- http://doc.qt.digia.com/qt/qt-embedded-architecture.html
- http://doc.qt.digia.com/qt/qt-embedded-running.html
+http://doc.qt.digia.com/qt/qt-embedded-architecture.html
+http://doc.qt.digia.com/qt/qt-embedded-running.html
 
 Best regards,
 
@@ -56,3 +70,6 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121120/eec4210b/attachment.html>
