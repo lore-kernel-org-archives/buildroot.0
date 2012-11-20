@@ -1,121 +1,94 @@
-From: John Tobias <john.tobias.ph@gmail.com>
-Date: Tue, 20 Nov 2012 15:00:42 -0800
-Subject: [Buildroot] Who calls to the defined function/s
-In-Reply-To: <CACUGKYNs2gHvS_6eJS22gYgZOE7rhSciSaCAeCxbEm4q5Dm=Kw@mail.gmail.com>
-References: <CACUGKYMDKMSvqrUgRhiKyaVm6S5z7a+RMa+3oyCXspU8OVVbYQ@mail.gmail.com>
- <20121120095904.20264654@skate>
- <CACUGKYNs2gHvS_6eJS22gYgZOE7rhSciSaCAeCxbEm4q5Dm=Kw@mail.gmail.com>
-Message-ID: <CACUGKYMPEgomG3VJnNitxBr7Dtxed4XuPzMdVRH0rJi_iKB7DQ@mail.gmail.com>
+From: =?windows-1252?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Wed, 21 Nov 2012 01:42:43 +0200
+Subject: [Buildroot] Udev on a live CD system does not appear to
+ populate /dev
+In-Reply-To: <50A940FA.7020402@petroprogram.com>
+References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
+ <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
+ <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
+ <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
+ <509BDDDD.3040002@petroprogram.com> <50A1EE50.4010008@mind.be>
+ <50A81599.3000002@petroprogram.com> <50A93EBF.6080304@mind.be>
+ <50A940FA.7020402@petroprogram.com>
+Message-ID: <50AC1573.4090404@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-I added some function in generic-package (snapshot of added function):
-
-$(BUILD_DIR)/%/.stamp_create_package:
-@$(call MESSAGE,"Creating package")
-$(Q)touch $@
-
-
-In buildroot directory, when I issue a command:
-
-make hello-create-package, it calls the said function. But, since the
-new function didn't know by the buildroot, I cannot do the make hello
-then the buildroot will call the create-package.
-
-The question is what environment variable should I modify in order the
-buildroot should call the create-package too?
-
-Regards,
-
-john
-
-On Tue, Nov 20, 2012 at 10:26 AM, John Tobias <john.tobias.ph@gmail.com> wrote:
-> Dear Thomas Petazzoni,
->
-> Thank you for the response. I was thinking to support the package
-> management in the buildroot. Where, if I define XXX_CREATE_PACKAGE in
-> my hello.mk
-> the buildroot (for example) will create an opkg file (off-course I
-> have supply the necessary information to create the package file).
->
-> I know the buildroot community did not support it package management
-> but I would like to add some flexibility on my buildroot environment.
->
-> Regards,
->
-> john
->
-> On Tue, Nov 20, 2012 at 12:59 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear John Tobias,
->>
->> On Mon, 19 Nov 2012 18:21:03 -0800, John Tobias wrote:
->>
->>> I was trying to (fully) understand the dataflow of the buildroot's
->>> Makefile. How/who parse/calls to the functions like:
+18.11.2012 22:11, Stefan Fr?berg kirjoitti:
+> 18.11.2012 22:02, Arnout Vandecappelle kirjoitti:
+>> On 17/11/12 23:54, Stefan Fr?berg wrote:
+>> [snip]
+>>> But the real problem now is that grub refuses to load. It just shows
+>>> Loading stage2 .... and hangs there.
 >>>
->>> HELLO_INSTALL_TARGET_CMDS
->>> HELLO_BUILD_CMDS
+>>> If I copy my old grub stuff  (namely, the stage2_eltorito file) from
+>>> 2012.05 build to inside the boot/grub/ of the
+>>> new buildroot generated livecd (of course, first mounted throught
+>>> loopback and copied to some other dir for modifying)
+>>> and then build the livecd from that manually, it will work and show
+>>> grub menu normally.
 >>>
->>> $(eval $(generic-package))
->>
->> The generic-package macro will find in which directory your Makefile
->> is, for example package/hello/. It will take this "hello" convert it to
->> uppercase, and use it as the prefix for all variables. So basically, a
->> package in package/hello/hello.mk will have to define HELLO_SITE,
->> HELLO_SOURCE, HELLO_VERSION, and possibly HELLO_BUILD_CMDS,
->> HELLO_INSTALL_TARGET_CMDS, etc.
->>
->>> So, How I can tell to the generic-package to call HELLO_TEST_CMDS too?
+>>> I did a quick *md5sum* and *ls* and there indeed is a difference with
+>>> the git-version and 2012.05 version of
+>>> stage2_eltorito file,  git-version of stage2_eltorito being very
+>>> large (258 KB vs. working 103 KB)
 >>>
->>> example:
->>> define HELLO_TEST_CMDS
->>> ...
->>> endef
+>>  Is this on a x86_64 target? Then a difference is that we removed
+>> -fPIC -DPIC from CFLAGS.  Can you try if that makes a difference?
 >>
->> That would require a modification of the package infrastructure, which
->> you probably don't want to do. What are you trying to achieve with a
->> new command exactly?
->>
->> New commands are normally not needed:
->>
->>  *) For autotools-package and cmake-package, you have hooks so that you
->>     can do something after extraction, after patching, after
->>     configuration, after installation, etc.
->>
->>  *) For generic-package, you can do something like:
->>
->> ifeq ($(BR2_PACKAGE_HELLO_SOMETHING),y)
->> define HELLO_DO_THIS_CMDS
->>         $(MAKE) -C $(@D) do-this
->> endef
->> endif
->>
->> ifeq ($(BR2_PACKAGE_HELLO_SOMETHING_ELSE),y)
->> define HELLO_DO_THAT_CMDS
->>         $(MAKE) -C $(@D) do-that
->> endef
->> endif
->>
->> define HELLO_BUILD_CMDS
->>         $(HELLO_DO_THIS_CMDS)
->>         $(HELLO_DO_THAT_CMDS)
->> endef
->>
->> Please make sure to read our documentation at
->> http://buildroot.org/downloads/manual/manual.html#_adding_new_packages_to_buildroot
->> which explains all of this with quite some details and examples.
->>
->> Do not hesitate to get back to the list if you need further details,
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
+> No, just building i586 target inside 32-bit Fedora 16 host.
+>
+> Ok, Im now going to rebuild both 2012.05 and latest git again and
+> see what happens.
+>
+> Regards
+> Stefan
+>
+>>  Regards,
+>>  Arnout
+>
+
+I have now investigated this matter three days and found out the following:
+
+1 )
+That size difference (258 KB vs. working 103 KB) was  because in
+buildroot grub I had enabled every network NIC available.
+
+But the following was shocking to me:
+The working 103 KB stage2_eltorito was not from buildroot at all in the
+first place but from Gentoo!
+I vaguely remember copying it to buildroot system from my Gentoo setup
+several months ago.
+Because I found out that the livecd build process did not work.
+
+But this also means that even 2012.05 buildroot grub did not work for me.
+
+2 )
+
+I built my own version of grub with my own uClibc-based distro and found
+out that grub is very nit-pick about CFLAGS and LDFLAGS it is feed.
+It doesn't like optimiziation very much.
+So after unsetting both flags and applying four patches from Gentoo I
+managed to run my very own made grub. Yay!! :-)
+
+3 )
+
+Naturally I then tried this CFLAGS and LDFLAGS unsetting in
+boot/grub/grub.mk.
+Also used only default buildroot configuration, with newest git.
+The damn thing still didn't show grub menu! :-(
+
+And now Im beginning to suspect that buildroot grub is very broken as it
+is now and needs some serious patching.
+The patches it uses (grub_0.97-35.diff.gz) are from old debian tree from
+2008!!
+
+I will now  grab the latest debian patches (grub_0.97-66.diff.gz), use
+only -Os for CFLAGS and nothing for LDFLAGS and see how far it will take me
+this time.
+
+Regards
+Stefan
