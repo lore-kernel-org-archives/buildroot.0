@@ -1,72 +1,45 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Tue, 20 Nov 2012 18:18:11 +0100
-Subject: [Buildroot] [PATCH] Makefile: fix thread libraries stripping
-Message-ID: <1353431891-30930-1-git-send-email-rbraun@sceen.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 Nov 2012 18:36:50 +0100
+Subject: [Buildroot] [PATCH] toolchain-crosstool-ng: install
+	libthread_db if appropriate
+In-Reply-To: <1353430797-26819-1-git-send-email-rbraun@sceen.net>
+References: <1353430797-26819-1-git-send-email-rbraun@sceen.net>
+Message-ID: <201211201836.50589.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Strip libthread_db the same as any other library, but strip libpthread
-with --strip-debug. See the relevant mailing list discussion [1] for
-additional details.
+Richard, All,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2012-October/060126.html
+On Tuesday 20 November 2012 Richard Braun wrote:
+> Signed-off-by: Richard Braun <rbraun@sceen.net>
+> ---
+>  toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> index 5f9119d..ebc7b4b 100644
+> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> @@ -41,6 +41,10 @@ uclibc-source: $(CTNG_DIR)/.config
+>  CTNG_LIBS_LIB := ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so    \
+>                   libnsl.so libpthread.so libresolv.so librt.so libutil.so
+>  
+> +ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
+> +CTNG_LIBS_LIB += libthread_db.so
 
-Signed-off-by: Richard Braun <rbraun@sceen.net>
----
- Makefile            |   10 +++++++++-
- package/Makefile.in |    2 ++
- 2 files changed, 11 insertions(+), 1 deletions(-)
+Shouldn't that be:
+    CTNG_LIBS_USR_LIB += libthread_db.so
 
-diff --git a/Makefile b/Makefile
-index 21aa054..4db5cbc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -419,7 +419,7 @@ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
- STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
- endif
- STRIP_FIND_CMD += -type f -perm +111
--STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-+STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
- 
- target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
-@@ -450,6 +450,14 @@ endif
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD) || true
- 
-+# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
-+# besides the one in which crash occurred; or SIGTRAP kills my program when
-+# I set a breakpoint"
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+	find $(TARGET_DIR)/lib -type f -name 'libpthread*.so*' | \
-+		xargs $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
-+endif
-+
- 	mkdir -p $(TARGET_DIR)/etc
- 	# Mandatory configuration file and auxilliary cache directory
- 	# for recent versions of ldconfig
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 9fdc745..4813674 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -126,6 +126,7 @@ TARGET_CXX := $(CCACHE) $(TARGET_CXX)
- endif
- 
- ifeq ($(BR2_STRIP_strip),y)
-+STRIP_STRIP_DEBUG:=--strip-debug
- STRIP_STRIP_UNNEEDED:=--strip-unneeded
- STRIP_STRIP_ALL:=--strip-all
- TARGET_STRIP=$(TARGET_CROSS)strip
-@@ -133,6 +134,7 @@ STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
- KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
- endif
- ifeq ($(BR2_STRIP_sstrip),y)
-+STRIP_STRIP_DEBUG:=
- STRIP_STRIP_UNNEEDED:=
- STRIP_STRIP_ALL:=
- TARGET_STRIP=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-sstrip
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.2.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
