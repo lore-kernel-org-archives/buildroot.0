@@ -1,132 +1,79 @@
 From: Chris Zankel <chris@zankel.net>
-Date: Tue, 20 Nov 2012 10:31:36 -0800
-Subject: [Buildroot] [PATCH 1/3] xtensa: use uppercase for configurations
- and modofied overlay structure
-Message-ID: <50ac8f31.4b53440a.7e28.05ed@mx.google.com>
+Date: Tue, 20 Nov 2012 10:43:59 -0800
+Subject: [Buildroot] [PATCH 2/3] xtensa: fix target gdb build and 64-bit
+	host side gdb
+Message-ID: <50ac8f62.a3c9440a.59e4.fffff6d9@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Except for architecture and processor names, buildroot uses capitalized
-configuration names, so change the macro names for xtensa to follow that
-standard.
-Change the overlay file to have a subdirectory for each component
-(gdb, binutils, gcc, etc.) to make it more future-prove.
+Fix build breakage, use the version of the ptrace header file in asm
+instead of sys. Also, fix GDB running on 64 bit hosts. GDB was using
+unsigned long for 32-bit registers, but unsigned long is 64 bit on
+64-bit hosts.
 
 Signed-off-by: Chris Zankel <chris@zankel.net>
 ---
- arch/Config.in.xtensa           |   26 +++++++++++++++-----------
- package/binutils/binutils.mk    |    6 +++---
- toolchain/gcc/gcc-uclibc-4.x.mk |    6 +++---
- toolchain/gdb/gdb.mk            |    6 +++---
- 4 files changed, 24 insertions(+), 20 deletions(-)
+ toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch |   22 ++++++++++++++++++++++
+ toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch  |   19 +++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+ create mode 100644 toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch
+ create mode 100644 toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch
 
-diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index af66125..60c03f5 100644
---- a/arch/Config.in.xtensa
-+++ b/arch/Config.in.xtensa
-@@ -2,32 +2,36 @@ choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_xtensa
- 	default BR2_xtensa_fsf
--config BR2_xtensa_custom
-+config BR2_XTENSA_CUSTOM
- 	bool "Custom Xtensa processor configuration"
- config BR2_xtensa_fsf
- 	bool "fsf - Default configuration"
- endchoice
- 
--config BR2_xtensa_custom_name
--	string "Custom Xtensa processor configuration anme"
--	depends on BR2_xtensa_custom
-+config BR2_XTENSA_CUSTOM_NAME
-+	string "Custom Xtensa processor configuration name"
-+	depends on BR2_XTENSA_CUSTOM
- 	default ""
- 	help
- 	  Name given to a custom Xtensa processor configuration.
- 
--config BR2_xtensa_core_name
-+config BR2_XTENSA_CORE_NAME
- 	string
--	default BR2_xtensa_custom_name	if BR2_xtensa_custom
-+	default BR2_XTENSA_CUSTOM_NAME	if BR2_XTENSA_CUSTOM
- 	default ""			if BR2_xtensa_fsf
- 
--config BR2_xtensa_overlay_dir
-+config BR2_XTENSA_OVERLAY_DIR
- 	string "Overlay directory for custom configuration"
--	depends on BR2_xtensa_custom
-+	depends on BR2_XTENSA_CUSTOM
- 	default ""
- 	help
--	  Provide a directory path that contains the overlay files
--	  for the custom configuration. The path is based on the
--	  buildroot top directory.
-+	  Provide the directory path that contains the overlay file
-+	  for a custom processor configuration. The path is relative
-+	  to the top directory of buildroot.
-+	  These overlay files are tar packages with updated configuration
-+	  files for various toolchain packages and Xtensa processor
-+	  configurations. They are provided by the processor vendor or
-+	  directly from Tensilica.
- 
- config BR2_ARCH
- 	default "xtensa"	if BR2_xtensa
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 82f8fd2..92e0a74 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -68,11 +68,11 @@ define BINUTILS_INSTALL_TARGET_CMDS
- endef
- endif
- 
--XTENSA_CORE_NAME = $(call qstrip, $(BR2_xtensa_core_name))
-+XTENSA_CORE_NAME = $(call qstrip, $(BR2_XTENSA_CORE_NAME))
- ifneq ($(XTENSA_CORE_NAME),)
- define BINUTILS_XTENSA_PRE_PATCH
--	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(XTENSA_CORE_NAME).tar \
--		-C $(@D) bfd include ld
-+	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(XTENSA_CORE_NAME).tar \
-+		-C $(@D) --strip-components=1 binutils
- endef
- HOST_BINUTILS_PRE_PATCH_HOOKS += BINUTILS_XTENSA_PRE_PATCH
- endif
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 1710070..7a0b4ca 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -251,9 +251,9 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
- 	rm -rf $(GCC_DIR)
- 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
- 	$(call CONFIG_UPDATE,$(@D))
--ifneq ($(call qstrip, $(BR2_xtensa_core_name)),)
--	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(call qstrip,\
--		$(BR2_xtensa_core_name)).tar -C $(@D) include
-+ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
-+	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip,\
-+		$(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gcc
- endif
- 	touch $@
- 
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index dc305a6..c42c755 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -25,9 +25,9 @@ gdb-unpacked: $(GDB_DIR)/.unpacked
- $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
- 	mkdir -p $(GDB_DIR)
- 	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(GDB_DIR) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
--ifneq ($(call qstrip, $(BR2_xtensa_core_name)),)
--	tar xf $(BR2_xtensa_overlay_dir)/xtensa_$(call qstrip, \
--		$(BR2_xtensa_core_name)).tar -C $(@D) bfd include gdb
-+ifneq ($(call qstrip, $(BR2_XTENSA_CORE_NAME)),)
-+	tar xf $(BR2_XTENSA_OVERLAY_DIR)/xtensa_$(call qstrip, \
-+		$(BR2_XTENSA_CORE_NAME)).tar -C $(@D) --strip-components=1 gdb
- endif
- ifneq ($(wildcard $(GDB_PATCH_DIR)),)
- 	support/scripts/apply-patches.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch
+diff --git a/toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch b/toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch
+new file mode 100644
+index 0000000..3d1b07c
+--- /dev/null
++++ b/toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch
+@@ -0,0 +1,22 @@
++--- gdb-7.4.1/gdb/xtensa-linux-nat.c.orig	2012-10-19 16:23:06.908165323 -0700
+++++ gdb-7.4.1/gdb/xtensa-linux-nat.c	2012-10-19 16:35:30.792134876 -0700
++@@ -36,7 +36,7 @@
++ #include "gdb_wait.h"
++ #include <fcntl.h>
++ #include <sys/procfs.h>
++-#include <sys/ptrace.h>
+++#include <asm/ptrace.h>
++ 
++ #include "gregset.h"
++ #include "xtensa-tdep.h"
++--- gdb-7.4.1/gdb/gdbserver/linux-xtensa-low.c.orig	2012-10-19 16:24:06.260162894 -0700
+++++ gdb-7.4.1/gdb/gdbserver/linux-xtensa-low.c	2012-10-19 16:36:07.920133357 -0700
++@@ -23,7 +23,7 @@
++ /* Defined in auto-generated file reg-xtensa.c.  */
++ void init_registers_xtensa (void);
++ 
++-#include <sys/ptrace.h>
+++#include <asm/ptrace.h>
++ #include <xtensa-config.h>
++ 
++ #include "xtensa-xtregs.c"
+diff --git a/toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch b/toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch
+new file mode 100644
+index 0000000..e10bb8f
+--- /dev/null
++++ b/toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch
+@@ -0,0 +1,19 @@
++--- gdb-7.4.1/gdb/xtensa-tdep.h.orig	2012-10-30 11:40:23.546448594 -0700
+++++ gdb-7.4.1/gdb/xtensa-tdep.h	2012-10-30 11:41:43.078445337 -0700
++@@ -17,6 +17,7 @@
++    You should have received a copy of the GNU General Public License
++    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
++ 
+++#include <stdint.h>
++ 
++ /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
++    whenever the "tdep" structure changes in an incompatible way.  */
++@@ -84,7 +85,7 @@
++ /* Xtensa ELF core file register set representation ('.reg' section).
++    Copied from target-side ELF header <xtensa/elf.h>.  */
++ 
++-typedef unsigned long xtensa_elf_greg_t;
+++typedef uint32_t xtensa_elf_greg_t;
++ 
++ typedef struct
++ {
 -- 
 1.7.9.5
