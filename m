@@ -1,25 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Nov 2012 11:15:02 +0100
-Subject: [Buildroot] [PATCH 2/3] xtensa: fix target gdb build and 64-bit
-	host side gdb
-In-Reply-To: <50ac8f62.a3c9440a.59e4.fffff6d9@mx.google.com> (Chris Zankel's
- message of "Tue, 20 Nov 2012 10:43:59 -0800")
-References: <50ac8f62.a3c9440a.59e4.fffff6d9@mx.google.com>
-Message-ID: <87k3tfi7o9.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 21 Nov 2012 11:05:55 +0100
+Subject: [Buildroot] [git commit] cjson: fix copy/paste error in target
+	installation
+Message-ID: <20121121101539.1C3499540A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Zankel <chris@zankel.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cd0f43a2c56e1ac2cb30c0af15cb7029e668a219
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Chris> Fix build breakage, use the version of the ptrace header file in asm
- Chris> instead of sys. Also, fix GDB running on 64 bit hosts. GDB was using
- Chris> unsigned long for 32-bit registers, but unsigned long is 64 bit on
- Chris> 64-bit hosts.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cjson/cjson.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index dd64010..ccc6010 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -23,7 +23,7 @@ define CJSON_INSTALL_STAGING_CMDS
+ endef
+ 
+ define CJSON_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/cJSON/cJSON.h $(STAGING_DIR)/usr/include/cJSON.h
++	$(INSTALL) -D $(@D)/cJSON/cJSON.h $(TARGET_DIR)/usr/include/cJSON.h
+ 	$(INSTALL) -D $(@D)/cJSON/libcJSON.so $(TARGET_DIR)/usr/lib/libcJSON.so
+ endef
+ 
