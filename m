@@ -1,10 +1,12 @@
-From: Chris Zankel <chris@zankel.net>
-Date: Tue, 20 Nov 2012 16:35:34 -0800
-Subject: [Buildroot] Xtensa in the autobuilders, first build failures
-In-Reply-To: <20121119234601.6274d4a6@skate>
-References: <20121118232518.091b6154@skate> <50AAA88E.3090603@zankel.net>
- <20121119234601.6274d4a6@skate>
-Message-ID: <50AC21D6.2080405@zankel.net>
+From: John Tobias <john.tobias.ph@gmail.com>
+Date: Tue, 20 Nov 2012 16:52:04 -0800
+Subject: [Buildroot] Who calls to the defined function/s
+In-Reply-To: <CACUGKYMPEgomG3VJnNitxBr7Dtxed4XuPzMdVRH0rJi_iKB7DQ@mail.gmail.com>
+References: <CACUGKYMDKMSvqrUgRhiKyaVm6S5z7a+RMa+3oyCXspU8OVVbYQ@mail.gmail.com>
+ <20121120095904.20264654@skate>
+ <CACUGKYNs2gHvS_6eJS22gYgZOE7rhSciSaCAeCxbEm4q5Dm=Kw@mail.gmail.com>
+ <CACUGKYMPEgomG3VJnNitxBr7Dtxed4XuPzMdVRH0rJi_iKB7DQ@mail.gmail.com>
+Message-ID: <CACUGKYO0kCxFQgMTdnCMM7WdM6ghsNHHpNwMDcDcv64svL0d_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +15,117 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On 11/19/2012 02:46 PM, Thomas Petazzoni wrote:
-> On Mon, 19 Nov 2012 13:45:50 -0800, Chris Zankel wrote:
+I found where to add the function.
+
+Regards,
+
+john
+
+On Tue, Nov 20, 2012 at 3:00 PM, John Tobias <john.tobias.ph@gmail.com> wrote:
+> Hi Thomas,
 >
->> However, I noticed that it was not the most recent version where I
->> incorporated suggestions from Arnout, so will provide a small patch on
->> top of it.
-> Ah, sorry, my bad. Don't hesitate to send a follow-up patch that fixes
-> the remaining problems.
-No worries, I think my email system wasn't working, so maybe you didn't
-even get them.
-
-I'm lining up a few patches, just running some more build tests (which
-always take some time)
-
-> Adding support for one architecture in libffi is not very simple, so if
-> you don't need it for your own projects, I don't think you'll have the
-> energy to work on this. 
-You are right, it looks like some work, and it would be lower priority.
-I'll just disable it for Xtensa for now.
-
->>> Besides those issues, I'm just reminding you that we are still very
->>> interested in having a Qemu Xtensa configuration to be able to run the
->>> Xtensa systems we generate with Buildroot.
->> I'm juggling between kernel, uClibc, and buildroot, so, please allow me
->> some more time.
-> Sure, no problem!
-How do you actually build qemu inside buildroot, or is this not
-supported? I couldn't find any config option to enable it.
-Also note that the current kernel version (3.6) doesn't have all
-required patches, we are 'forward-focusing' at the moment, so things
-will be easier in the future.
-
->> Regarding patches, should I send them to you and cc buildroot, or only
->> to the mailing list? What's the best path to get them looked at and
->> integrated into the tree?
-> Just send them to the list. You can Cc: me as well if you want, but I'm
-> basically reading everything that goes on the Buildroot list, so I
-> should catch them even if you don't Cc: me.
-Thanks. I'll keep them coming :-)
-
-Cheers!
--Chris
+> I added some function in generic-package (snapshot of added function):
+>
+> $(BUILD_DIR)/%/.stamp_create_package:
+> @$(call MESSAGE,"Creating package")
+> $(Q)touch $@
+>
+>
+> In buildroot directory, when I issue a command:
+>
+> make hello-create-package, it calls the said function. But, since the
+> new function didn't know by the buildroot, I cannot do the make hello
+> then the buildroot will call the create-package.
+>
+> The question is what environment variable should I modify in order the
+> buildroot should call the create-package too?
+>
+> Regards,
+>
+> john
+>
+> On Tue, Nov 20, 2012 at 10:26 AM, John Tobias <john.tobias.ph@gmail.com> wrote:
+>> Dear Thomas Petazzoni,
+>>
+>> Thank you for the response. I was thinking to support the package
+>> management in the buildroot. Where, if I define XXX_CREATE_PACKAGE in
+>> my hello.mk
+>> the buildroot (for example) will create an opkg file (off-course I
+>> have supply the necessary information to create the package file).
+>>
+>> I know the buildroot community did not support it package management
+>> but I would like to add some flexibility on my buildroot environment.
+>>
+>> Regards,
+>>
+>> john
+>>
+>> On Tue, Nov 20, 2012 at 12:59 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Dear John Tobias,
+>>>
+>>> On Mon, 19 Nov 2012 18:21:03 -0800, John Tobias wrote:
+>>>
+>>>> I was trying to (fully) understand the dataflow of the buildroot's
+>>>> Makefile. How/who parse/calls to the functions like:
+>>>>
+>>>> HELLO_INSTALL_TARGET_CMDS
+>>>> HELLO_BUILD_CMDS
+>>>>
+>>>> $(eval $(generic-package))
+>>>
+>>> The generic-package macro will find in which directory your Makefile
+>>> is, for example package/hello/. It will take this "hello" convert it to
+>>> uppercase, and use it as the prefix for all variables. So basically, a
+>>> package in package/hello/hello.mk will have to define HELLO_SITE,
+>>> HELLO_SOURCE, HELLO_VERSION, and possibly HELLO_BUILD_CMDS,
+>>> HELLO_INSTALL_TARGET_CMDS, etc.
+>>>
+>>>> So, How I can tell to the generic-package to call HELLO_TEST_CMDS too?
+>>>>
+>>>> example:
+>>>> define HELLO_TEST_CMDS
+>>>> ...
+>>>> endef
+>>>
+>>> That would require a modification of the package infrastructure, which
+>>> you probably don't want to do. What are you trying to achieve with a
+>>> new command exactly?
+>>>
+>>> New commands are normally not needed:
+>>>
+>>>  *) For autotools-package and cmake-package, you have hooks so that you
+>>>     can do something after extraction, after patching, after
+>>>     configuration, after installation, etc.
+>>>
+>>>  *) For generic-package, you can do something like:
+>>>
+>>> ifeq ($(BR2_PACKAGE_HELLO_SOMETHING),y)
+>>> define HELLO_DO_THIS_CMDS
+>>>         $(MAKE) -C $(@D) do-this
+>>> endef
+>>> endif
+>>>
+>>> ifeq ($(BR2_PACKAGE_HELLO_SOMETHING_ELSE),y)
+>>> define HELLO_DO_THAT_CMDS
+>>>         $(MAKE) -C $(@D) do-that
+>>> endef
+>>> endif
+>>>
+>>> define HELLO_BUILD_CMDS
+>>>         $(HELLO_DO_THIS_CMDS)
+>>>         $(HELLO_DO_THAT_CMDS)
+>>> endef
+>>>
+>>> Please make sure to read our documentation at
+>>> http://buildroot.org/downloads/manual/manual.html#_adding_new_packages_to_buildroot
+>>> which explains all of this with quite some details and examples.
+>>>
+>>> Do not hesitate to get back to the list if you need further details,
+>>>
+>>> Thomas
+>>> --
+>>> Thomas Petazzoni, Free Electrons
+>>> Kernel, drivers, real-time and embedded Linux
+>>> development, consulting, training and support.
+>>> http://free-electrons.com
