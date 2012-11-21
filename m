@@ -1,29 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Nov 2012 13:24:13 +0100
-Subject: [Buildroot] QtWebKit problem
-In-Reply-To: <1353494563.12720.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-References: <1353490900.77327.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <20121121105302.04d751ae@skate>
- <1353494563.12720.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-Message-ID: <20121121132413.6d9aff59@skate>
+Date: Wed, 21 Nov 2012 13:25:49 +0100
+Subject: [Buildroot] crosstools build fails when hard fpu is selected
+In-Reply-To: <50ACAB98.90607@wanadoo.fr>
+References: <50ACAB98.90607@wanadoo.fr>
+Message-ID: <20121121132549.7c180f2f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoran Djordjevic,
+Dear Thierry Bultel,
 
-On Wed, 21 Nov 2012 02:42:43 -0800 (PST), Zoran Djordjevic wrote:
+On Wed, 21 Nov 2012 11:23:20 +0100, Thierry Bultel wrote:
 
-> But before I start overall recompiling, which is (as you know) lengthy
-> process, is there maybe some dependencies, that I should check 
-> before (related to QtWebKit) ?
+> GCC has not been generated with the harware FPU support.
+> 
+> I have attempted several hacks into
+> toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+> 
+> ... with no better success
+> 
+> Any ideas ?
 
-Well, unless there is a bug (which is of course always possible),
-Buildroot normally knows all the dependencies that are needed for a
-given package. It's one of the main reason for Buildroot to exist in
-the first place...
+Yes, raise this problem on the crosstool-ng mailing list. I know Yann
+is aware of this, and he will most likely have recommendations on how
+to fix this problem.
+
+Thanks,
 
 Thomas
 -- 
