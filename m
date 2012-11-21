@@ -1,29 +1,26 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 21 Nov 2012 11:08:12 +0100
-Subject: [Buildroot] [PATCH] Remove unused barebox 2012.07 string
-Message-ID: <1353492492-29514-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Nov 2012 11:11:00 +0100
+Subject: [Buildroot] [PATCH 1/3] xtensa: use uppercase for
+	configurations and modofied overlay structure
+In-Reply-To: <50ac8f31.4b53440a.7e28.05ed@mx.google.com> (Chris Zankel's
+ message of "Tue, 20 Nov 2012 10:31:36 -0800")
+References: <50ac8f31.4b53440a.7e28.05ed@mx.google.com>
+Message-ID: <87obiri7uz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- boot/barebox/Config.in |    1 -
- 1 file changed, 1 deletion(-)
+>>>>> "Chris" == Chris Zankel <chris@zankel.net> writes:
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index c9e7088..0273dd0 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -41,7 +41,6 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2012.07.0"	if BR2_TARGET_BAREBOX_2012_07
- 	default "2012.08.0"	if BR2_TARGET_BAREBOX_2012_08
- 	default "2012.09.0"	if BR2_TARGET_BAREBOX_2012_09
- 	default "2012.10.0"	if BR2_TARGET_BAREBOX_2012_10
+ Chris> Except for architecture and processor names, buildroot uses capitalized
+ Chris> configuration names, so change the macro names for xtensa to follow that
+ Chris> standard.
+ Chris> Change the overlay file to have a subdirectory for each component
+ Chris> (gdb, binutils, gcc, etc.) to make it more future-prove.
+
+Committed, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
