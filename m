@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Nov 2012 10:33:57 +0100
-Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
-In-Reply-To: <CAG2jQ8gC5zotmF=Z2W4uu89VDxaHPpdJnf=L5Fes9xU6O2gXCQ@mail.gmail.com>
-References: <20121115230738.33E869A031@busybox.osuosl.org>
- <20121116004452.635cf645@skate>
- <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
- <20121116113343.15dd3eb3@skate>
- <CAG2jQ8gC5zotmF=Z2W4uu89VDxaHPpdJnf=L5Fes9xU6O2gXCQ@mail.gmail.com>
-Message-ID: <20121121103357.53bef338@skate>
+From: Chris Zankel <chris@zankel.net>
+Date: Wed, 21 Nov 2012 01:36:38 -0800
+Subject: [Buildroot] [PATCH 3/3] xtensa: disable libffi for Xtensa
+In-Reply-To: <20121121083521.GB28785@sapphire.tkos.co.il>
+References: <50ac8f69.6548420a.6f5c.2a1b@mx.google.com>
+ <20121121083521.GB28785@sapphire.tkos.co.il>
+Message-ID: <50ACA0A6.9020507@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Markos Chandras,
+Hi Baruch,
 
-On Wed, 21 Nov 2012 09:23:11 +0000, Markos Chandras wrote:
+On 11/21/2012 12:35 AM, Baruch Siach wrote:
+> Hi Chris,
+>
+> On Tue, Nov 20, 2012 at 11:01:49AM -0800, Chris Zankel wrote:
+>> Xtensa currently doesn't support libffi.
+>>
+>> Signed-off-by: Chris Zankel <chris@zankel.net>
+>> ---
+>>  package/libffi/Config.in |    1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/libffi/Config.in b/package/libffi/Config.in
+>> index 7211f8f..4afb669 100644
+>> --- a/package/libffi/Config.in
+>> +++ b/package/libffi/Config.in
+>> @@ -1,5 +1,6 @@
+>>  config BR2_PACKAGE_LIBFFI
+>>  	bool "libffi"
+>> +	depends on !BR2_xtensa
+>>  	help
+>>  	  The libffi library provides a portable, high level
+>>  	  programming interface to various calling conventions. This
+> You need to recursively propagate this 'depends' to all packages selecting 
+> BR2_PACKAGE_LIBFFI. This is due to a limitation of kconfig that doesn't check 
+> whether a package is actually selectable.
 
-> I don't think is fixed. I am still getting this problem in master
-> branch and the autobuilder reports similar problems too.
-> 
-> http://autobuild.buildroot.net/results/d7f51f07096a68ed5d513466ab3c1719a696cb19/build-end.log
+Ah, good to know. Thanks. Will create another patch.
 
-Indeed there is still a problem.
-
-Simon, do you have the time to look into this?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Cheers!
+-Chris
