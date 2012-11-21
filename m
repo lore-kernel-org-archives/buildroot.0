@@ -1,14 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Nov 2012 22:11:05 +0100
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Wed, 21 Nov 2012 13:47:27 -0800 (PST)
 Subject: [Buildroot] Qt accessibility support
-In-Reply-To: <1353529923.81343.YahooMailNeo@web164605.mail.gq1.yahoo.com>
+In-Reply-To: <20121121221105.2fbcfde7@skate>
 References: <1353529923.81343.YahooMailNeo@web164605.mail.gq1.yahoo.com>
-Message-ID: <20121121221105.2fbcfde7@skate>
+ <20121121221105.2fbcfde7@skate>
+Message-ID: <1353534447.77727.YahooMailNeo@web164601.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+I didn't noticed it, or better - I didn't know for it. Attached is my 
+(probably default) qt.mk file. So does it mean that because of 
+"-no-accessibility" line, I had Qt compiled without accessibility 
+support ? If so, I suppose, I only have to exclude that line, to 
+win accessibility support. OK ?
+No matter, I must confess,?you offered?an?elegant solution. 
+?
+Regards
+
+
+________________________________
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Zoran Djordjevic <djdjdjole@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Wednesday, November 21, 2012 10:11 PM
+Subject: Re: [Buildroot] Qt accessibility support
 
 Dear Zoran Djordjevic,
 
@@ -32,3 +50,13 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121121/1e811207/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qt.mk
+Type: application/octet-stream
+Size: 17290 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121121/1e811207/attachment-0001.obj>
