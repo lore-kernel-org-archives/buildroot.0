@@ -1,94 +1,57 @@
-From: =?windows-1252?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Wed, 21 Nov 2012 01:42:43 +0200
-Subject: [Buildroot] Udev on a live CD system does not appear to
- populate /dev
-In-Reply-To: <50A940FA.7020402@petroprogram.com>
-References: <5099186E.1030409@macrium.com> <509958D9.7050108@petroprogram.com>
- <5099A14C.5000204@mind.be> <509AA0C4.4060506@petroprogram.com>
- <CACpMmu9g8xXNsyQp6DheEqP9z_Q=7DwkorWc120-gW5wQj9+YA@mail.gmail.com>
- <509BA71B.6020009@petroprogram.com> <509BD78A.8050908@macrium.com>
- <509BDDDD.3040002@petroprogram.com> <50A1EE50.4010008@mind.be>
- <50A81599.3000002@petroprogram.com> <50A93EBF.6080304@mind.be>
- <50A940FA.7020402@petroprogram.com>
-Message-ID: <50AC1573.4090404@petroprogram.com>
+From: Chris Zankel <chris@zankel.net>
+Date: Tue, 20 Nov 2012 16:35:34 -0800
+Subject: [Buildroot] Xtensa in the autobuilders, first build failures
+In-Reply-To: <20121119234601.6274d4a6@skate>
+References: <20121118232518.091b6154@skate> <50AAA88E.3090603@zankel.net>
+ <20121119234601.6274d4a6@skate>
+Message-ID: <50AC21D6.2080405@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-18.11.2012 22:11, Stefan Fr?berg kirjoitti:
-> 18.11.2012 22:02, Arnout Vandecappelle kirjoitti:
->> On 17/11/12 23:54, Stefan Fr?berg wrote:
->> [snip]
->>> But the real problem now is that grub refuses to load. It just shows
->>> Loading stage2 .... and hangs there.
->>>
->>> If I copy my old grub stuff  (namely, the stage2_eltorito file) from
->>> 2012.05 build to inside the boot/grub/ of the
->>> new buildroot generated livecd (of course, first mounted throught
->>> loopback and copied to some other dir for modifying)
->>> and then build the livecd from that manually, it will work and show
->>> grub menu normally.
->>>
->>> I did a quick *md5sum* and *ls* and there indeed is a difference with
->>> the git-version and 2012.05 version of
->>> stage2_eltorito file,  git-version of stage2_eltorito being very
->>> large (258 KB vs. working 103 KB)
->>>
->>  Is this on a x86_64 target? Then a difference is that we removed
->> -fPIC -DPIC from CFLAGS.  Can you try if that makes a difference?
->>
-> No, just building i586 target inside 32-bit Fedora 16 host.
+Hi Thomas,
+
+On 11/19/2012 02:46 PM, Thomas Petazzoni wrote:
+> On Mon, 19 Nov 2012 13:45:50 -0800, Chris Zankel wrote:
 >
-> Ok, Im now going to rebuild both 2012.05 and latest git again and
-> see what happens.
->
-> Regards
-> Stefan
->
->>  Regards,
->>  Arnout
->
+>> However, I noticed that it was not the most recent version where I
+>> incorporated suggestions from Arnout, so will provide a small patch on
+>> top of it.
+> Ah, sorry, my bad. Don't hesitate to send a follow-up patch that fixes
+> the remaining problems.
+No worries, I think my email system wasn't working, so maybe you didn't
+even get them.
 
-I have now investigated this matter three days and found out the following:
+I'm lining up a few patches, just running some more build tests (which
+always take some time)
 
-1 )
-That size difference (258 KB vs. working 103 KB) was  because in
-buildroot grub I had enabled every network NIC available.
+> Adding support for one architecture in libffi is not very simple, so if
+> you don't need it for your own projects, I don't think you'll have the
+> energy to work on this. 
+You are right, it looks like some work, and it would be lower priority.
+I'll just disable it for Xtensa for now.
 
-But the following was shocking to me:
-The working 103 KB stage2_eltorito was not from buildroot at all in the
-first place but from Gentoo!
-I vaguely remember copying it to buildroot system from my Gentoo setup
-several months ago.
-Because I found out that the livecd build process did not work.
+>>> Besides those issues, I'm just reminding you that we are still very
+>>> interested in having a Qemu Xtensa configuration to be able to run the
+>>> Xtensa systems we generate with Buildroot.
+>> I'm juggling between kernel, uClibc, and buildroot, so, please allow me
+>> some more time.
+> Sure, no problem!
+How do you actually build qemu inside buildroot, or is this not
+supported? I couldn't find any config option to enable it.
+Also note that the current kernel version (3.6) doesn't have all
+required patches, we are 'forward-focusing' at the moment, so things
+will be easier in the future.
 
-But this also means that even 2012.05 buildroot grub did not work for me.
+>> Regarding patches, should I send them to you and cc buildroot, or only
+>> to the mailing list? What's the best path to get them looked at and
+>> integrated into the tree?
+> Just send them to the list. You can Cc: me as well if you want, but I'm
+> basically reading everything that goes on the Buildroot list, so I
+> should catch them even if you don't Cc: me.
+Thanks. I'll keep them coming :-)
 
-2 )
-
-I built my own version of grub with my own uClibc-based distro and found
-out that grub is very nit-pick about CFLAGS and LDFLAGS it is feed.
-It doesn't like optimiziation very much.
-So after unsetting both flags and applying four patches from Gentoo I
-managed to run my very own made grub. Yay!! :-)
-
-3 )
-
-Naturally I then tried this CFLAGS and LDFLAGS unsetting in
-boot/grub/grub.mk.
-Also used only default buildroot configuration, with newest git.
-The damn thing still didn't show grub menu! :-(
-
-And now Im beginning to suspect that buildroot grub is very broken as it
-is now and needs some serious patching.
-The patches it uses (grub_0.97-35.diff.gz) are from old debian tree from
-2008!!
-
-I will now  grab the latest debian patches (grub_0.97-66.diff.gz), use
-only -Os for CFLAGS and nothing for LDFLAGS and see how far it will take me
-this time.
-
-Regards
-Stefan
+Cheers!
+-Chris
