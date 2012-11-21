@@ -1,19 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Nov 2012 11:04:32 +0100
-Subject: [Buildroot] [PATCH] barebox: Add BR2_TARGET_BAREBOX_2012_11
-In-Reply-To: <1353410086-10233-1-git-send-email-gregory.hermant@calao-systems.com>
- (Gregory Hermant's message of "Tue, 20 Nov 2012 12:14:46 +0100")
-References: <1353410086-10233-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <871ufnjmq7.fsf@dell.be.48ers.dk>
+Date: Wed, 21 Nov 2012 11:06:03 +0100
+Subject: [Buildroot] [PATCH] cjson: fix copy/paste error in target
+	installation
+In-Reply-To: <1353468091-2152-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Tue, 20 Nov 2012 22:21:31 -0500")
+References: <1353468091-2152-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87wqxfi838.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gregory" == Gregory Hermant <gregory.hermant@calao-systems.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- Gregory> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+ Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
 Committed, thanks.
 
