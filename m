@@ -1,58 +1,46 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Thu, 22 Nov 2012 12:18:05 +0100
-Subject: [Buildroot] crosstools build fails when hard fpu is selected
-In-Reply-To: <20121122095217.7408e82a@skate>
-References: <50ACAB98.90607@wanadoo.fr> <20121121132549.7c180f2f@skate>
- <50ADE660.6000802@wanadoo.fr> <20121122095217.7408e82a@skate>
-Message-ID: <50AE09ED.5000007@wanadoo.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 22 Nov 2012 00:08:02 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2, 4,
+	6}.x stable versions
+Message-ID: <20121122121620.85FE490B87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 22/11/2012 09:52, Thomas Petazzoni a ?crit :
-> Dear Thierry Bultel,
->
-> On Thu, 22 Nov 2012 09:46:24 +0100, Thierry Bultel wrote:
->
->> I thought that is was due to the fact that the "Use soft float by
->> default" option was not available when using an external toolchain (why
->> ?) but I have the same issue when crosstol-ng is built within buildroot
->> (and the option deselected of course)
->>
->> I am still investigating, but if you have a clue I would appreciate
->
->> /home/tbultel/x-tools/arm-unknown-linux-gnueabi/lib/gcc/arm-unknown-linux-gnueabi/4.6.3/../../../../arm-unknown-linux-gnueabi/bin/ld:
->> error: ../lib/libncurses.so.5.9 uses VFP register arguments,
->> ../obj_s/hardscroll.o does not
->
->  From a quick look, it smells like not everybody has been built with the
-> same CFLAGS or something like that. Like part of it has been built with
-> hardfp, and some other with softfp. I would think "use VFP register
-> arguments" means hardfp (floating point values are passed to functions
-> through the floating-point registers). So libncurses.so.5.9 would be
-> hardfp, and hardscroll.o would be softfp or soft-float and that cannot
-> be linked together.
->
-> Are you sure you disabled BR2_SOFT_FLOAT in Buildroot? Check the entire
-> build log of ncurses to see which compiler flags are being passed.
->
+commit: http://git.buildroot.net/buildroot/commit/?id=1c7f8c45f2f6f0b2a1214ad59f6540df0e6eb4be
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, I am definitively sure that BR2_SOFT_FLOAT is disabled in my .config
-However I have BR2_PREFER_SOFT_FLOAT=y which is automatically set.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Looking at the build log, there are no '-mfpu=' flags at all when 
-invoking crosstool's gcc
-
-I do not reproduce the issue with the CodeSourcery as external 
-toolchain, letting me think that my crosstool configuration is
-wrong.
-
-best regards
-Thierry
-
-> Best regards,
->
-> Thomas
->
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index e195def..d24e7f9 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,12 +67,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.51"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.52"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.33"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.34"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.18"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.19"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+-	default "3.6.6"		if BR2_KERNEL_HEADERS_3_6
++	default "3.6.7"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.52-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.51-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.52-headers_install-fix-__packed-in-exported-kernel-head.patch
