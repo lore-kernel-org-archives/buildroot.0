@@ -1,80 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Nov 2012 13:30:36 +0100
-Subject: [Buildroot] Xtensa in the autobuilders, first build failures
-In-Reply-To: <50AC21D6.2080405@zankel.net>
-References: <20121118232518.091b6154@skate> <50AAA88E.3090603@zankel.net>
- <20121119234601.6274d4a6@skate> <50AC21D6.2080405@zankel.net>
-Message-ID: <20121121133036.65f48bc9@skate>
+Date: Wed, 21 Nov 2012 14:11:31 +0100
+Subject: [Buildroot] [PATCH] libpcap: fix static build
+Message-ID: <1353503491-4732-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Zankel,
+The libpcap package contained some interesting attempts to support a
+static-only build, but it was not working:
 
-On Tue, 20 Nov 2012 16:35:34 -0800, Chris Zankel wrote:
+ http://autobuild.buildroot.org/results/01038d3b970092d894d2bae80679247e65722785/build-end.log
 
-> > Ah, sorry, my bad. Don't hesitate to send a follow-up patch that
-> > fixes the remaining problems.
-> No worries, I think my email system wasn't working, so maybe you
-> didn't even get them.
+In fact the configure.in of libpcap has provision to support
+--enable-shared/--disable-shared, but the generated configure script
+in the libpcap package has not been regenerated with the configure.in
+changes.
 
-Yeah, after seeing your patch, I don't think I had seen those changes
-before, but I may well have overlooked them.
+So basically, enabling LIBPCAP_AUTORECONF=YES ensures that the
+configure script gets generated, which brings us a working
+--enable-shared / --disable-shared.
 
-> > Adding support for one architecture in libffi is not very simple,
-> > so if you don't need it for your own projects, I don't think you'll
-> > have the energy to work on this. 
-> You are right, it looks like some work, and it would be lower
-> priority. I'll just disable it for Xtensa for now.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libpcap/libpcap.mk |    6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Right, but as I replied, it's not that easy :)
-
-> >>> Besides those issues, I'm just reminding you that we are still
-> >>> very interested in having a Qemu Xtensa configuration to be able
-> >>> to run the Xtensa systems we generate with Buildroot.
-> >> I'm juggling between kernel, uClibc, and buildroot, so, please
-> >> allow me some more time.
-> > Sure, no problem!
-> How do you actually build qemu inside buildroot, or is this not
-> supported?
-
-We have a host-qemu package, but it only builds the user-mode
-emulation, and is not visible in menuconfig. For now, I think you can
-just use the latest version of Qemu and compile it on your own. Unless
-you have some time and want to extend the existing host-qemu package,
-of course.
-
-> I couldn't find any config option to enable it.
-> Also note that the current kernel version (3.6) doesn't have all
-> required patches, we are 'forward-focusing' at the moment, so things
-> will be easier in the future.
-
-That's a good strategy indeed. I don't mind if the Xtensa Qemu
-defconfig currently points to a special Git tree for the kernel
-sources, or if we have a few kernel patches in board/qemu/xtensa/, for
-example.
-
-Just let us what kernel version + patches, or kernel Git tree and we'll
-figure out together how to make that fit into Buildroot.
-
-> >> Regarding patches, should I send them to you and cc buildroot, or
-> >> only to the mailing list? What's the best path to get them looked
-> >> at and integrated into the tree?
-> > Just send them to the list. You can Cc: me as well if you want, but
-> > I'm basically reading everything that goes on the Buildroot list,
-> > so I should catch them even if you don't Cc: me.
-> Thanks. I'll keep them coming :-)
-
-Seen them, the first two got applied, the last one about libffi is more
-problematic.
-
-Best regards,
-
-Thomas
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 7a1d32f..468b064 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -9,12 +9,8 @@ LIBPCAP_SITE = http://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
+ LIBPCAP_INSTALL_STAGING = YES
++LIBPCAP_AUTORECONF = YES
+ 
+-# doesn't have an install-strip
+-LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
+-	$(if $(BR2_PREFER_STATIC_LIB),install,install-shared)
+-LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
+-	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
+ LIBPCAP_DEPENDENCIES = zlib \
+ 	$(if $(BR2_PACKAGE_LIBUSB),libusb)
+ LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
