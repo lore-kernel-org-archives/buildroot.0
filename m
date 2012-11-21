@@ -1,44 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 21 Nov 2012 10:35:21 +0200
-Subject: [Buildroot] [PATCH 3/3] xtensa: disable libffi for Xtensa
-In-Reply-To: <50ac8f69.6548420a.6f5c.2a1b@mx.google.com>
-References: <50ac8f69.6548420a.6f5c.2a1b@mx.google.com>
-Message-ID: <20121121083521.GB28785@sapphire.tkos.co.il>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 21 Nov 2012 09:23:11 +0000
+Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
+In-Reply-To: <20121116113343.15dd3eb3@skate>
+References: <20121115230738.33E869A031@busybox.osuosl.org>
+ <20121116004452.635cf645@skate>
+ <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
+ <20121116113343.15dd3eb3@skate>
+Message-ID: <CAG2jQ8gC5zotmF=Z2W4uu89VDxaHPpdJnf=L5Fes9xU6O2gXCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
+On Fri, Nov 16, 2012 at 10:33 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>
+> On Fri, 16 Nov 2012 09:07:55 +0000, Simon Dawson wrote:
+>
+>> If lcdproc finds freetype in the staging area, then the host header
+>> and library search paths do not get added to the build commands. So I
+>> think this patch does more than simply work around the problem.
+>
+> Ok, thanks!
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-On Tue, Nov 20, 2012 at 11:01:49AM -0800, Chris Zankel wrote:
-> Xtensa currently doesn't support libffi.
-> 
-> Signed-off-by: Chris Zankel <chris@zankel.net>
-> ---
->  package/libffi/Config.in |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/libffi/Config.in b/package/libffi/Config.in
-> index 7211f8f..4afb669 100644
-> --- a/package/libffi/Config.in
-> +++ b/package/libffi/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBFFI
->  	bool "libffi"
-> +	depends on !BR2_xtensa
->  	help
->  	  The libffi library provides a portable, high level
->  	  programming interface to various calling conventions. This
+Hi,
 
-You need to recursively propagate this 'depends' to all packages selecting 
-BR2_PACKAGE_LIBFFI. This is due to a limitation of kconfig that doesn't check 
-whether a package is actually selectable.
+I don't think is fixed. I am still getting this problem in master
+branch and the autobuilder reports similar problems too.
 
-baruch
+http://autobuild.buildroot.net/results/d7f51f07096a68ed5d513466ab3c1719a696cb19/build-end.log
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards,
+Markos
