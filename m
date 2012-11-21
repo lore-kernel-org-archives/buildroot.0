@@ -1,45 +1,56 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Wed, 21 Nov 2012 10:19:27 +0000
-Subject: [Buildroot] [PATCH v3] fs/common: Create initial console device
-In-Reply-To: <509DBB40.1050100@mind.be>
-References: <1352108694-11875-1-git-send-email-markos.chandras@gmail.com>
- <509DBB40.1050100@mind.be>
-Message-ID: <CAG2jQ8gOXf=uREZt1D0Vwy7RwzBvjGeyqXtbqL=fiiykbXG5Ow@mail.gmail.com>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Wed, 21 Nov 2012 11:23:20 +0100
+Subject: [Buildroot] crosstools build fails when hard fpu is selected
+Message-ID: <50ACAB98.90607@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Nov 10, 2012 at 2:26 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 11/05/12 10:44, Markos Chandras wrote:
->>
->> From: Markos Chandras<markos.chandras@imgtec.com>
->>
->> A /dev/console node must be present in rootfs when the Linux kernel
->> boots otherwise the kernel will print the following warning:
->> "Warning: unable to open an initial console"
->>
->> This is because when we use an initramfs the /dev directory is not
->> populated at this point. This can cause problems when a program
->> (e.g ldso with early debugging enabled) opens a standard file
->> descriptor for read/write before these descriptors are actually
->> created by the init process later on.
->>
->> Signed-off-by: Markos Chandras<markos.chandras@imgtec.com>
->
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->  Regards,
->  Arnout
->
-Hi Arnout,
+Hello,
 
-Thanks. Lets see if this will make it to the final release as this
-warning is a bit annoying :)
+Using Buildroot-2012-08, I am building for arm-cortexa9-eabi,
+crosstools+glibc, kernel base 2.6.38.8
 
--- 
-Regards,
-Markos
+I want to activate hardware floating point support, thus I have
+unchecked the  "Use software floating point by default"
+
+My final aim is to use Neon, but the defaut Hardware FPU is fine at this
+time.
+
+The build (from scratch) fails when at glibc:
+
+[INFO ]  Installing C library headers & start files
+[EXTRA]    Configuring C library
+[CFG  ]    configure: loading cache
+/bigdisk/shared/Buildroot/output.imx6hardfpu/build/build-toolchain/.build/arm-unknown-linux-gnueabi/build/build-libc-startfiles/config.cache
+[CFG  ]    checking build system type... i686-build_pc-linux-gnu
+[CFG  ]    checking host system type... arm-unknown-linux-gnueabi
+[CFG  ]    checking for arm-unknown-linux-gnueabi-gcc...
+arm-unknown-linux-gnueabi-gcc
+[ERROR]    checking for suffix of object files... configure: error: in
+`/bigdisk/shared/Buildroot/output.imx6hardfpu/build/build-toolchain/.build/arm-unknown-linux-gnueabi/build/build-libc-startfiles':
+[ERROR]    configure: error: cannot compute suffix of object files:
+cannot compile
+
+
+The config.log shows:
+
+configure:2477: arm-unknown-linux-gnueabi-gcc     -c  -U_FORTIFY_SOURCE
+ -mlittle-endian -march=armv7-a   -mtune=cortex-a9 -mfpu=neon
+-mhard-float  -O2   conftest.c >&5
+conftest.c:1: sorry, unimplemented: -mfloat-abi=hard and VFP
+
+
+GCC has not been generated with the harware FPU support.
+
+I have attempted several hacks into
+toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+
+... with no better success
+
+Any ideas ?
+
+Thanks and cheers
+Thierry
