@@ -1,41 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Nov 2012 07:35:20 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.6.x stable version
-In-Reply-To: <1353494120-19414-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1353494120-19414-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1353494120-19414-2-git-send-email-gustavo@zacarias.com.ar>
+From: Zoran Djordjevic <djdjdjole@yahoo.com>
+Date: Wed, 21 Nov 2012 02:42:43 -0800 (PST)
+Subject: [Buildroot] QtWebKit problem
+In-Reply-To: <20121121105302.04d751ae@skate>
+References: <1353490900.77327.YahooMailNeo@web164601.mail.gq1.yahoo.com>
+ <20121121105302.04d751ae@skate>
+Message-ID: <1353494563.12720.YahooMailNeo@web164605.mail.gq1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+But before I start overall recompiling, which is (as you know) lengthy
+process, is there maybe some dependencies, that I should check 
+before (related to QtWebKit) ?
+?
+Regards? 
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 29a2110..e24273c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_3_6
--	bool "3.6.6"
-+	bool "3.6.7"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.6.6" if BR2_LINUX_KERNEL_3_6
-+	default "3.6.7" if BR2_LINUX_KERNEL_3_6
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+________________________________
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Zoran Djordjevic <djdjdjole@yahoo.com> 
+Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
+Sent: Wednesday, November 21, 2012 10:53 AM
+Subject: Re: [Buildroot] QtWebKit problem
+  
+Dear Zoran Djordjevic,
+
+On Wed, 21 Nov 2012 01:41:40 -0800 (PST), Zoran Djordjevic wrote:
+> I've built linux with Qt support, and later decided to add
+> QtWebKit. I checked it, and rebuild (previously deleting
+> stamp.build and stamp.install in ../output/build/qt-4.7.4)
+> After building I didn't get QtWebKit in .../sysroot/usr/include.
+> Where I go wrong ?
+
+Don't do magic with stamp files, do:
+
+??? make qt-reconfigure
+
+Or preferably, a 'make clean all' cycle.
+
+Thomas
 -- 
-1.7.8.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121121/ab049bb4/attachment.html>
