@@ -1,34 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Nov 2012 07:39:34 +0100
-Subject: [Buildroot] Who calls to the defined function/s
-In-Reply-To: <CACUGKYNs2gHvS_6eJS22gYgZOE7rhSciSaCAeCxbEm4q5Dm=Kw@mail.gmail.com>
-References: <CACUGKYMDKMSvqrUgRhiKyaVm6S5z7a+RMa+3oyCXspU8OVVbYQ@mail.gmail.com>
- <20121120095904.20264654@skate>
- <CACUGKYNs2gHvS_6eJS22gYgZOE7rhSciSaCAeCxbEm4q5Dm=Kw@mail.gmail.com>
-Message-ID: <50AC7726.70607@mind.be>
+Date: Wed, 21 Nov 2012 07:54:28 +0100
+Subject: [Buildroot] [PATCH v3 2/6] ux500-firmware: new package
+In-Reply-To: <1352967920-3164-3-git-send-email-gregory.hermant@calao-systems.com>
+References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1352967920-3164-3-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <50AC7AA4.6060806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/11/12 19:26, John Tobias wrote:
-> I was thinking to support the package
-> management in the buildroot. Where, if I define XXX_CREATE_PACKAGE in
-> my hello.mk
-> the buildroot (for example) will create an opkg file (off-course I
-> have supply the necessary information to create the package file).
+On 15/11/12 09:25, Gregory Hermant wrote:
 >
-> I know the buildroot community did not support it package management
-> but I would like to add some flexibility on my buildroot environment.
+> Signed-off-by: Gregory Hermant<gregory.hermant@calao-systems.com>
 
-  Even though it's very likely that we will not include support for packages in
-buildroot, it's worthwhile to post your patches to the list. That way, anybody
-else that needs it can pick it up.  In addition, you may get some review comments
-which are useful for yourself.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Minor detail below.
+
+[snip]
+
+> +define UX500_FIRMWARE_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +# The CG2900 linux driver has to load firmware named CG29XX_* but the firmware
+> +# filenames contained in this package are CG2900_* hence the code below
+
+  Comments inside the _CMDS macros don't work well: they are interpreted by
+the shell.  It's better to put them before the macro definition.
+
 
   Regards,
   Arnout
+
+> +	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
+> +		mv $$f $${f/CG2900/CG29XX}; \
+> +	done
+> +endef
+> +
+> +$(eval $(generic-package))
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
