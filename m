@@ -1,79 +1,44 @@
-From: Chris Zankel <chris@zankel.net>
-Date: Tue, 20 Nov 2012 10:43:59 -0800
-Subject: [Buildroot] [PATCH 2/3] xtensa: fix target gdb build and 64-bit
-	host side gdb
-Message-ID: <50ac8f62.a3c9440a.59e4.fffff6d9@mx.google.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 21 Nov 2012 10:35:21 +0200
+Subject: [Buildroot] [PATCH 3/3] xtensa: disable libffi for Xtensa
+In-Reply-To: <50ac8f69.6548420a.6f5c.2a1b@mx.google.com>
+References: <50ac8f69.6548420a.6f5c.2a1b@mx.google.com>
+Message-ID: <20121121083521.GB28785@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build breakage, use the version of the ptrace header file in asm
-instead of sys. Also, fix GDB running on 64 bit hosts. GDB was using
-unsigned long for 32-bit registers, but unsigned long is 64 bit on
-64-bit hosts.
+Hi Chris,
 
-Signed-off-by: Chris Zankel <chris@zankel.net>
----
- toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch |   22 ++++++++++++++++++++++
- toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch  |   19 +++++++++++++++++++
- 2 files changed, 41 insertions(+)
- create mode 100644 toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch
- create mode 100644 toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch
+On Tue, Nov 20, 2012 at 11:01:49AM -0800, Chris Zankel wrote:
+> Xtensa currently doesn't support libffi.
+> 
+> Signed-off-by: Chris Zankel <chris@zankel.net>
+> ---
+>  package/libffi/Config.in |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libffi/Config.in b/package/libffi/Config.in
+> index 7211f8f..4afb669 100644
+> --- a/package/libffi/Config.in
+> +++ b/package/libffi/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBFFI
+>  	bool "libffi"
+> +	depends on !BR2_xtensa
+>  	help
+>  	  The libffi library provides a portable, high level
+>  	  programming interface to various calling conventions. This
 
-diff --git a/toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch b/toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch
-new file mode 100644
-index 0000000..3d1b07c
---- /dev/null
-+++ b/toolchain/gdb/7.4.1/xtensa-asm-ptrace-h.patch
-@@ -0,0 +1,22 @@
-+--- gdb-7.4.1/gdb/xtensa-linux-nat.c.orig	2012-10-19 16:23:06.908165323 -0700
-++++ gdb-7.4.1/gdb/xtensa-linux-nat.c	2012-10-19 16:35:30.792134876 -0700
-+@@ -36,7 +36,7 @@
-+ #include "gdb_wait.h"
-+ #include <fcntl.h>
-+ #include <sys/procfs.h>
-+-#include <sys/ptrace.h>
-++#include <asm/ptrace.h>
-+ 
-+ #include "gregset.h"
-+ #include "xtensa-tdep.h"
-+--- gdb-7.4.1/gdb/gdbserver/linux-xtensa-low.c.orig	2012-10-19 16:24:06.260162894 -0700
-++++ gdb-7.4.1/gdb/gdbserver/linux-xtensa-low.c	2012-10-19 16:36:07.920133357 -0700
-+@@ -23,7 +23,7 @@
-+ /* Defined in auto-generated file reg-xtensa.c.  */
-+ void init_registers_xtensa (void);
-+ 
-+-#include <sys/ptrace.h>
-++#include <asm/ptrace.h>
-+ #include <xtensa-config.h>
-+ 
-+ #include "xtensa-xtregs.c"
-diff --git a/toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch b/toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch
-new file mode 100644
-index 0000000..e10bb8f
---- /dev/null
-+++ b/toolchain/gdb/7.4.1/xtensa-gdb-regsize.patch
-@@ -0,0 +1,19 @@
-+--- gdb-7.4.1/gdb/xtensa-tdep.h.orig	2012-10-30 11:40:23.546448594 -0700
-++++ gdb-7.4.1/gdb/xtensa-tdep.h	2012-10-30 11:41:43.078445337 -0700
-+@@ -17,6 +17,7 @@
-+    You should have received a copy of the GNU General Public License
-+    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-+ 
-++#include <stdint.h>
-+ 
-+ /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
-+    whenever the "tdep" structure changes in an incompatible way.  */
-+@@ -84,7 +85,7 @@
-+ /* Xtensa ELF core file register set representation ('.reg' section).
-+    Copied from target-side ELF header <xtensa/elf.h>.  */
-+ 
-+-typedef unsigned long xtensa_elf_greg_t;
-++typedef uint32_t xtensa_elf_greg_t;
-+ 
-+ typedef struct
-+ {
+You need to recursively propagate this 'depends' to all packages selecting 
+BR2_PACKAGE_LIBFFI. This is due to a limitation of kconfig that doesn't check 
+whether a package is actually selectable.
+
+baruch
+
 -- 
-1.7.9.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
