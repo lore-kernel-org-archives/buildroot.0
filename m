@@ -1,32 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Nov 2012 11:32:03 +0100
-Subject: [Buildroot] [PATCH v3] fs/common: Create initial console device
-In-Reply-To: <CAG2jQ8gOXf=uREZt1D0Vwy7RwzBvjGeyqXtbqL=fiiykbXG5Ow@mail.gmail.com>
- (Markos Chandras's message of "Wed, 21 Nov 2012 10:19:27 +0000")
-References: <1352108694-11875-1-git-send-email-markos.chandras@gmail.com>
- <509DBB40.1050100@mind.be>
- <CAG2jQ8gOXf=uREZt1D0Vwy7RwzBvjGeyqXtbqL=fiiykbXG5Ow@mail.gmail.com>
-Message-ID: <878v9vi6vw.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 21 Nov 2012 11:31:33 +0100
+Subject: [Buildroot] [git commit] fs/common: Create initial console device
+Message-ID: <20121121103218.0C2D896997@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e1ebae700ace80ded99e1a977e28375dc4f7255d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- >> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- >> 
- >> Regards,
- >> Arnout
- >> 
- Markos> Hi Arnout,
+A /dev/console node must be present in rootfs when the Linux kernel
+boots otherwise the kernel will print the following warning:
+"Warning: unable to open an initial console"
 
- Markos> Thanks. Lets see if this will make it to the final release as this
- Markos> warning is a bit annoying :)
+This is because when we use an initramfs the /dev directory is not
+populated at this point. This can cause problems when a program
+(e.g ldso with early debugging enabled) opens a standard file
+descriptor for read/write before these descriptors are actually
+created by the init process later on.
 
-Committed, thanks.
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/cpio/cpio.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index aa20b41..5533322 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -21,6 +21,8 @@ define ROOTFS_CPIO_ADD_INIT
+         fi
+ endef
+ 
++PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
++
+ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+ 
+ ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
