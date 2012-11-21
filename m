@@ -1,82 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 21 Nov 2012 18:33:12 +0100
-Subject: [Buildroot] crosstools in buildroot build fails when hard fpu
-	is selected
-In-Reply-To: <50ACEDD1.4010707@wanadoo.fr>
-References: <50ACAB98.90607@wanadoo.fr> <50ACEDD1.4010707@wanadoo.fr>
-Message-ID: <201211211833.13010.yann.morin.1998@free.fr>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Wed, 21 Nov 2012 20:26:23 +0000
+Subject: [Buildroot] [git commit] lcdproc: fix autobuilder failures
+In-Reply-To: <20121121103357.53bef338@skate>
+References: <20121115230738.33E869A031@busybox.osuosl.org>
+ <20121116004452.635cf645@skate>
+ <CAHt8ZCNQwhHyxiVy5pMtq5KJnYKS2RHm=0sOPp2VH5s7BePF3Q@mail.gmail.com>
+ <20121116113343.15dd3eb3@skate>
+ <CAG2jQ8gC5zotmF=Z2W4uu89VDxaHPpdJnf=L5Fes9xU6O2gXCQ@mail.gmail.com>
+ <20121121103357.53bef338@skate>
+Message-ID: <CAHt8ZCOq05Ss96mda3HuX0qOFNEdbq6_ZU5kJ+zPQQXFUxEHrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thierry, All,
+Hi Markus, Thomas.
 
-On Wednesday 21 November 2012 Thierry Bultel wrote:
-> Using Buildroot-2012-08, I am building for arm-cortexa9-eabi,
-> crosstools+glibc, kernel base 2.6.38.8
+On 21 November 2012 09:33, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Markos Chandras,
+>
+> On Wed, 21 Nov 2012 09:23:11 +0000, Markos Chandras wrote:
+>
+>> I don't think is fixed. I am still getting this problem in master
+>> branch and the autobuilder reports similar problems too.
+>>
+>> http://autobuild.buildroot.net/results/d7f51f07096a68ed5d513466ab3c1719a696cb19/build-end.log
+>
+> Indeed there is still a problem.
+>
+> Simon, do you have the time to look into this?
 
-'crosstool-NG', not 'crosstools' ;-)
+Unfortunately, I'm probably not going to get a chance to look at this
+for a week or so. It's building correctly for me --- indeed, I don't
+even see the problematic host include/library paths in the compiler
+commands --- but clearly there is something wrong. I'll investigate as
+soon as I can.
 
-> I want to activate hardware floating point support, thus I have
-> unchecked the  "Use software floating point by default"
-> 
-> My final aim is to use Neon, but the defaut Hardware FPU is fine at this
-> time.
-> 
-> The build (from scratch) fails when at glibc:
-[--SNIP--]
-> The config.log shows:
-> 
-> configure:2477: arm-unknown-linux-gnueabi-gcc     -c  -U_FORTIFY_SOURCE
->  -mlittle-endian -march=armv7-a   -mtune=cortex-a9 -mfpu=neon
-> -mhard-float  -O2   conftest.c >&5
-> conftest.c:1: sorry, unimplemented: -mfloat-abi=hard and VFP
-> 
-> GCC has not been generated with the harware FPU support.
-
-No, gcc has indeed be configured with hard-float. It's just that gcc does
-*not* support emitting VFP instructions for the hard-float ABI. See:
-  gcc-X.Y.Z/gcc/config/arm/arm.c
-  1850        if (arm_float_abi == ARM_FLOAT_ABI_HARD && TARGET_VFP)
-  1851          sorry ("-mfloat-abi=hard and VFP");
-
-So, no matter what, it is not possible, with stock gcc, to use the VFP.
-
-However, it is possible to use neon. There is a sample in crosstool-NG
-that builds a NEON-enabled toolchain. You can look at how it is configured
-and replicate that in your setup:
-  ct-ng list-samples
-  ct-ng arm-cortex_a15-linux-gnueabi    <- this sample enables neon
-  ct-ng menuconfig
-
-Then, to reproduce those options with buildroot:
-    make ctng-menuconfig
-
-Also, you could use 'softfp' instead of 'hard'. The name is (IMHO) a
-msi-nomer, as this ABI does emit hardware floating point instructions,
-but uses the software ABI (the way floats are represented). Look at
-the help entries for 'soft', 'hard' and 'softfp' for more info.
-
-Note: Unfortunately, the ct-ng integration in buildroot does not allow
-building a 'softfp' toolchain; it's either 'soft' or 'hard', because BR
-does not differentiate between 'hard' and 'softfp'.
-
-> I have attempted several hacks into
-> toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-> ... with no better success
-
-The problem is *not* in glibc, so you can't fix anything by hacking the
-glibc build script.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Simon.
