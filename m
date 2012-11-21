@@ -1,49 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Nov 2012 07:54:28 +0100
-Subject: [Buildroot] [PATCH v3 2/6] ux500-firmware: new package
-In-Reply-To: <1352967920-3164-3-git-send-email-gregory.hermant@calao-systems.com>
-References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
- <1352967920-3164-3-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <50AC7AA4.6060806@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 21 Nov 2012 09:15:36 +0100
+Subject: [Buildroot] [PATCH] busybox: fix link with tirpc
+Message-ID: <1353485736-10836-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/11/12 09:25, Gregory Hermant wrote:
->
-> Signed-off-by: Gregory Hermant<gregory.hermant@calao-systems.com>
+Busybox does partial linking of its modules before linking everything
+together into the binary.  Those partial links are done without the
+standard libraries, but that also means -ltirpc can't be found.  In
+addition, this probably fails horribly with static linking (untested).
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The problem is that the LDFLAGS are also used in the partial links.
+So instead, use CFLAGS_busybox, which is only used for the busybox
+link step.  Also make sure that this is passed through the environment,
+not on the command line, so the busybox Makefile can still append to
+it.
 
-  Minor detail below.
+Fixes e.g.
+http://autobuild.buildroot.net/results/e8351e3ba86fdcdb2999548658271a6fde0526a9
 
-[snip]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> +define UX500_FIRMWARE_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +# The CG2900 linux driver has to load firmware named CG29XX_* but the firmware
-> +# filenames contained in this package are CG2900_* hence the code below
+---
+ package/busybox/busybox.mk |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-  Comments inside the _CMDS macros don't work well: they are interpreted by
-the shell.  It's better to put them before the macro definition.
-
-
-  Regards,
-  Arnout
-
-> +	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
-> +		mv $$f $${f/CG2900/CG29XX}; \
-> +	done
-> +endef
-> +
-> +$(eval $(generic-package))
-
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 549e150..9154c08 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -27,12 +27,17 @@ BUSYBOX_LDFLAGS = \
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ BUSYBOX_DEPENDENCIES += libtirpc
+ BUSYBOX_CFLAGS += -I$(STAGING_DIR)/usr/include/tirpc/
+-BUSYBOX_LDFLAGS += -ltirpc
++# Don't use LDFLAGS for -ltirpc, because LDFLAGS is used for
++# the non-final link of modules as well.
++BUSYBOX_CFLAGS_busybox += -ltirpc
+ endif
+ 
+ BUSYBOX_BUILD_CONFIG = $(BUSYBOX_DIR)/.config
+ # Allows the build system to tweak CFLAGS
+-BUSYBOX_MAKE_ENV = $(TARGET_MAKE_ENV) CFLAGS="$(BUSYBOX_CFLAGS)"
++BUSYBOX_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	CFLAGS="$(BUSYBOX_CFLAGS)" \
++	CFLAGS_busybox="$(BUSYBOX_CFLAGS_busybox)"
+ BUSYBOX_MAKE_OPTS = \
+ 	CC="$(TARGET_CC)" \
+ 	ARCH=$(KERNEL_ARCH) \
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (47ee305..) t/busybox-tirpc (depends on: master)
