@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:17:56 +0100
-Subject: [Buildroot] [PATCH 06/33] sylpheed: fix build disabling gpgme
-	support
+Date: Thu, 22 Nov 2012 01:18:00 +0100
+Subject: [Buildroot] [PATCH 10/33] ltp-testsuite: add warning about bessel
+	function support if uclibc toolchain
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-11-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/sylpheed/sylpheed.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ltp-testsuite/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index cf55c90..3ac2e1e 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -9,7 +9,7 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
- SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
- SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
- 
--SYLPHEED_CONF_OPT = --disable-gtkspell
-+SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
- 
- SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
- 
+diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
+index 86aa4fb..30ba70f 100644
+--- a/package/ltp-testsuite/Config.in
++++ b/package/ltp-testsuite/Config.in
+@@ -1,3 +1,7 @@
++comment "Note that ltp-testsuite needs a uclibc toolchain with DO_XSI_MATH (bessel functions) enabled"
++	depends on BR2_PACKAGE_LTP_TESTSUITE
++	depends on BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_UCLIBC || BR2_TOOLCHAIN_CTNG_uClibc
++
+ config BR2_PACKAGE_LTP_TESTSUITE
+ 	bool "ltp-testsuite"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.8.0
