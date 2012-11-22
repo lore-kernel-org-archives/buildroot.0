@@ -1,42 +1,117 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:18:05 +0100
-Subject: [Buildroot] [PATCH 15/33] scons: force to use python2 on the host
+Date: Thu, 22 Nov 2012 01:18:07 +0100
+Subject: [Buildroot] [PATCH 17/33] matchbox packages: fix broken urls
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-16-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-18-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Scons is not yet python2/python3 compliant.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/scons/scons.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/matchbox/matchbox-common/matchbox-common.mk     | 6 +++---
+ package/matchbox/matchbox-desktop/matchbox-desktop.mk   | 5 +++--
+ package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
+ package/matchbox/matchbox-lib/matchbox-lib.mk           | 2 +-
+ package/matchbox/matchbox-panel/matchbox-panel.mk       | 6 +++---
+ package/matchbox/matchbox-wm/matchbox-wm.mk             | 2 +-
+ 6 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-index 7cc234e..45f2e1e 100644
---- a/package/scons/scons.mk
-+++ b/package/scons/scons.mk
-@@ -1,13 +1,14 @@
- SCONS_VERSION = 2.0.1
- SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
- SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
-+HOST_SCONS_DEPENDENCIES = $(NEED_PYTHON2)
+diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
+index 2e3cdff..993590c 100644
+--- a/package/matchbox/matchbox-common/matchbox-common.mk
++++ b/package/matchbox/matchbox-common/matchbox-common.mk
+@@ -3,10 +3,10 @@
+ # MatchBox Common
+ #
+ #############################################################
+-
+-MATCHBOX_COMMON_VERSION = 0.9.1
++MATCHBOX_COMMON_VERSION_MAJOR = 0.9
++MATCHBOX_COMMON_VERSION = $(MATCHBOX_COMMON_VERSION_MAJOR).1
+ MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
+-MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
++MATCHBOX_COMMON_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
+ MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
  
- define HOST_SCONS_BUILD_CMDS
--	(cd $(@D); python setup.py build)
-+	(cd $(@D); $(PYTHON2) setup.py build)
- endef
+ ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+index 5c518e5..c5f5b0d 100644
+--- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
++++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+@@ -4,9 +4,10 @@
+ #
+ #############################################################
  
- define HOST_SCONS_INSTALL_CMDS
--	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr \
-+	(cd $(@D); $(PYTHON2) setup.py install --prefix=$(HOST_DIR)/usr \
- 		--install-lib=$(HOST_DIR)/usr/lib/scons-$(SCONS_VERSION))
- endef
+-MATCHBOX_DESKTOP_VERSION = 0.9.1
++MATCHBOX_DESKTOP_VERSION_MAJOR = 0.9
++MATCHBOX_DESKTOP_VERSION = $(MATCHBOX_DESKTOP_VERSION_MAJOR).1
+ MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
+-MATCHBOX_DESKTOP_SITE = http://matchbox-project.org/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION)
++MATCHBOX_DESKTOP_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION_MAJOR)
+ MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
+ MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
+ 
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+index c6e9496..2da8dfa 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+@@ -6,7 +6,7 @@
+ 
+ MATCHBOX_KEYBOARD_VERSION = 0.1
+ MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
+-MATCHBOX_KEYBOARD_SITE = http://matchbox-project.org/sources/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
++MATCHBOX_KEYBOARD_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
+ MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
+ 
+ # Workaround bug in configure script
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
+index de11dfc..c9d7600 100644
+--- a/package/matchbox/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
+@@ -6,7 +6,7 @@
+ 
+ MATCHBOX_LIB_VERSION = 1.9
+ MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
+-MATCHBOX_LIB_SITE = http://matchbox-project.org/sources/libmatchbox/$(MATCHBOX_LIB_VERSION)
++MATCHBOX_LIB_SITE = http://projects.o-hand.com/matchbox/sources/libmatchbox/$(MATCHBOX_LIB_VERSION)
+ MATCHBOX_LIB_INSTALL_STAGING = YES
+ MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
+ MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+index db9d1a8..e216fed 100644
+--- a/package/matchbox/matchbox-panel/matchbox-panel.mk
++++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+@@ -3,10 +3,10 @@
+ # MatchBox Panel
+ #
+ #############################################################
+-
+-MATCHBOX_PANEL_VERSION = 0.9.3
++MATCHBOX_PANEL_VERSION_MAJOR = 0.9
++MATCHBOX_PANEL_VERSION = $(MATCHBOX_PANEL_VERSION_MAJOR).3
+ MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
+-MATCHBOX_PANEL_SITE = http://matchbox-project.org/sources/matchbox-panel/$(MATCHBOX_PANEL_VERSION)
++MATCHBOX_PANEL_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
+ MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
+ MATCHBOX_PANEL_CONF_OPT = --enable-expat
+ 
+diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
+index ece8866..1a07a58 100644
+--- a/package/matchbox/matchbox-wm/matchbox-wm.mk
++++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
+@@ -6,7 +6,7 @@
+ 
+ MATCHBOX_WM_VERSION = 1.2
+ MATCHBOX_WM_SOURCE = matchbox-window-manager-$(MATCHBOX_WM_VERSION).tar.bz2
+-MATCHBOX_WM_SITE = http://matchbox-project.org/sources/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
++MATCHBOX_WM_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
+ MATCHBOX_WM_DEPENDENCIES = matchbox-lib
+ MATCHBOX_WM_CONF_OPT = --enable-expat
  
 -- 
 1.8.0
