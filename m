@@ -1,117 +1,44 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:18:07 +0100
-Subject: [Buildroot] [PATCH 17/33] matchbox packages: fix broken urls
+Date: Thu, 22 Nov 2012 01:18:08 +0100
+Subject: [Buildroot] [PATCH 18/33] linux-fusion: bump to version 8.10.4
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-18-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-19-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also fix directfb build avoiding the following error to occur
+(since FCEF_FOLLOW has been added in linux-fusion-8.9.0):
+
+libtool: compile:  /opt/br/output/host/usr/bin/ccache /opt/br/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I../.. -I../../include -I../../lib -I../../include -I../../lib -DDATADIR=\"/usr/share/directfb-1.4.17\" -DMODULEDIR=\"/usr/lib/directfb-1.4-6\" -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -ffast-math -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -g2 -g3 -fno-inline -Wno-inline -D_GNU_SOURCE -finstrument-functions -std=gnu99 -Werror-implicit-function-declaration -MT call.lo -MD -MP -MF .deps/call.Tpo -c call.c  -fPIC -DPIC -o .libs/call.o
+call.c: In function 'fusion_call_execute3':
+call.c:311:66: error 'FCEF_FOLLOW' undeclared (first use in this function)
+call.c:311:66: note: each undeclared identifier is reported only once for each function it appears in
+call.c: In function 'fusion_world_flush_calls':
+call.c:444:54: error 'FCEF_FOLLOW' undeclared (first use in this function)
+make[5]: *** [call.lo] Error 1
+make[5]: Leaving directory `/opt/br/output/build/directfb-1.4.17/lib/fusion'
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/matchbox/matchbox-common/matchbox-common.mk     | 6 +++---
- package/matchbox/matchbox-desktop/matchbox-desktop.mk   | 5 +++--
- package/matchbox/matchbox-keyboard/matchbox-keyboard.mk | 2 +-
- package/matchbox/matchbox-lib/matchbox-lib.mk           | 2 +-
- package/matchbox/matchbox-panel/matchbox-panel.mk       | 6 +++---
- package/matchbox/matchbox-wm/matchbox-wm.mk             | 2 +-
- 6 files changed, 12 insertions(+), 11 deletions(-)
+ package/linux-fusion/linux-fusion.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
-index 2e3cdff..993590c 100644
---- a/package/matchbox/matchbox-common/matchbox-common.mk
-+++ b/package/matchbox/matchbox-common/matchbox-common.mk
-@@ -3,10 +3,10 @@
- # MatchBox Common
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index feb1ab3..631f526 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -3,7 +3,7 @@
+ # linux-fusion
  #
  #############################################################
--
--MATCHBOX_COMMON_VERSION = 0.9.1
-+MATCHBOX_COMMON_VERSION_MAJOR = 0.9
-+MATCHBOX_COMMON_VERSION = $(MATCHBOX_COMMON_VERSION_MAJOR).1
- MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
--MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
-+MATCHBOX_COMMON_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
- MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
- 
- ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
-diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-index 5c518e5..c5f5b0d 100644
---- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-+++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-@@ -4,9 +4,10 @@
- #
- #############################################################
- 
--MATCHBOX_DESKTOP_VERSION = 0.9.1
-+MATCHBOX_DESKTOP_VERSION_MAJOR = 0.9
-+MATCHBOX_DESKTOP_VERSION = $(MATCHBOX_DESKTOP_VERSION_MAJOR).1
- MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
--MATCHBOX_DESKTOP_SITE = http://matchbox-project.org/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION)
-+MATCHBOX_DESKTOP_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION_MAJOR)
- MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
- MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
- 
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index c6e9496..2da8dfa 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -6,7 +6,7 @@
- 
- MATCHBOX_KEYBOARD_VERSION = 0.1
- MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
--MATCHBOX_KEYBOARD_SITE = http://matchbox-project.org/sources/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
-+MATCHBOX_KEYBOARD_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
- MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
- 
- # Workaround bug in configure script
-diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
-index de11dfc..c9d7600 100644
---- a/package/matchbox/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
-@@ -6,7 +6,7 @@
- 
- MATCHBOX_LIB_VERSION = 1.9
- MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
--MATCHBOX_LIB_SITE = http://matchbox-project.org/sources/libmatchbox/$(MATCHBOX_LIB_VERSION)
-+MATCHBOX_LIB_SITE = http://projects.o-hand.com/matchbox/sources/libmatchbox/$(MATCHBOX_LIB_VERSION)
- MATCHBOX_LIB_INSTALL_STAGING = YES
- MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
- MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
-diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-index db9d1a8..e216fed 100644
---- a/package/matchbox/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-@@ -3,10 +3,10 @@
- # MatchBox Panel
- #
- #############################################################
--
--MATCHBOX_PANEL_VERSION = 0.9.3
-+MATCHBOX_PANEL_VERSION_MAJOR = 0.9
-+MATCHBOX_PANEL_VERSION = $(MATCHBOX_PANEL_VERSION_MAJOR).3
- MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
--MATCHBOX_PANEL_SITE = http://matchbox-project.org/sources/matchbox-panel/$(MATCHBOX_PANEL_VERSION)
-+MATCHBOX_PANEL_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
- MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
- MATCHBOX_PANEL_CONF_OPT = --enable-expat
- 
-diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
-index ece8866..1a07a58 100644
---- a/package/matchbox/matchbox-wm/matchbox-wm.mk
-+++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
-@@ -6,7 +6,7 @@
- 
- MATCHBOX_WM_VERSION = 1.2
- MATCHBOX_WM_SOURCE = matchbox-window-manager-$(MATCHBOX_WM_VERSION).tar.bz2
--MATCHBOX_WM_SITE = http://matchbox-project.org/sources/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
-+MATCHBOX_WM_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
- MATCHBOX_WM_DEPENDENCIES = matchbox-lib
- MATCHBOX_WM_CONF_OPT = --enable-expat
- 
+-LINUX_FUSION_VERSION = 8.8.1
++LINUX_FUSION_VERSION = 8.10.4
+ LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
+ LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
+ LINUX_FUSION_INSTALL_STAGING = YES
 -- 
 1.8.0
