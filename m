@@ -1,59 +1,42 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:17:52 +0100
-Subject: [Buildroot] [PATCH 02/33] libpcap: add pcap.pc file
+Date: Thu, 22 Nov 2012 01:17:54 +0100
+Subject: [Buildroot] [PATCH 04/33] igh-ethercat: disable drivers build with
+	kernel 3.6
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since hardware specific support is available for some given kernel
+releases (mostly for kernel <=3.2), then disable them if kernel 3.6 is
+enable. However, this still allows the generic driver build.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/libpcap/libpcap.mk | 10 ++++++++++
- package/libpcap/pcap.pc    | 12 ++++++++++++
- 2 files changed, 22 insertions(+)
- create mode 100644 package/libpcap/pcap.pc
+ package/igh-ethercat/Config.in | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 7a1d32f..d813b85 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -26,4 +26,14 @@ ifeq ($(BR2_microblaze),y)
- LIBPCAP_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
- endif
+diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+index 890bb12..4a0fd75 100644
+--- a/package/igh-ethercat/Config.in
++++ b/package/igh-ethercat/Config.in
+@@ -6,7 +6,12 @@ config BR2_PACKAGE_IGH_ETHERCAT
  
-+LIBPCAP_USB_SUPPORT = $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
-+define LIBPCAP_INSTALL_STAGING_PC
-+	sed -e 's/@LIBPCAP_VERSION@/$(LIBPCAP_VERSION)/' \
-+		-e 's/@LIBPCAP_USB_SUPPORT@/$(LIBPCAP_USB_SUPPORT)/' \
-+		< package/libpcap/pcap.pc \
-+		> $(STAGING_DIR)/usr/lib/pkgconfig/pcap.pc
-+endef
+ 	  http://www.etherlab.org/en/ethercat/index.php
+ 
+-if BR2_PACKAGE_IGH_ETHERCAT
++if BR2_PACKAGE_IGH_ETHERCAT && !BR2_LINUX_KERNEL_3_6
 +
-+LIBPCAP_POST_INSTALL_STAGING_HOOKS += LIBPCAP_INSTALL_STAGING_PC
-+
- $(eval $(autotools-package))
-diff --git a/package/libpcap/pcap.pc b/package/libpcap/pcap.pc
-new file mode 100644
-index 0000000..0bd1917
---- /dev/null
-+++ b/package/libpcap/pcap.pc
-@@ -0,0 +1,12 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: pcap
-+Description: System-independent library for user-level network packet capture
-+Requires:
-+Version: @LIBPCAP_VERSION@
-+Libs: -L${libdir} -lpcap
-+Libs.private: @LIBPCAP_USB_SUPPORT@ -lpthread
-+Cflags: -I${includedir}
++comment "The following drivers are only available for some"
++comment "releases of the kernel (mostly 2.6.x)."
++comment "Further details about the kernel/hardware support at:"
++comment "http://www.etherlab.org/en/ethercat/hardware.php"
+ 
+ config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
+ 	bool "8139too driver"
 -- 
 1.8.0
