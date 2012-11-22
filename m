@@ -1,35 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Nov 2012 11:16:12 +0100
-Subject: [Buildroot] [PATCH 19/33] python2: bump to 2.7.3
-In-Reply-To: <1353543503-8952-20-git-send-email-s.martin49@gmail.com>
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-20-git-send-email-s.martin49@gmail.com>
-Message-ID: <20121122111612.4bfdeee2@skate>
+From: Vadim Malenboim <vadim@tangotec.com>
+Date: Thu, 22 Nov 2012 12:20:52 +0200
+Subject: [Buildroot] Fwd: can't resolve symbol 'wctob'
+In-Reply-To: <CAJH6qSd6eEdg1pUK9e4tOS=1rw0xhN397Q=rx-Rmehi8fPcpeg@mail.gmail.com>
+References: <CAJH6qSd6eEdg1pUK9e4tOS=1rw0xhN397Q=rx-Rmehi8fPcpeg@mail.gmail.com>
+Message-ID: <CAJH6qSdrqbOQ_oV6TcitJ0=P5G_A950GvKAOWWfUtvwLAcvhMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+I have a uclibc based toolchain compiled with application.
+When I try to run it on target I receive - can't resolve symbol 'wctob'
 
-On Thu, 22 Nov 2012 01:18:09 +0100, Samuel Martin wrote:
-> Pyhton 2.7.3 includes several security fixes.
-> See: http://www.python.org/download/releases/2.7.3/
-> 
-> Also fixes the patch making sqlite optional.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  package/python/python-2.7-009-python-symlink.patch | 25 -----------------
+I understand that it is missing somewhere in the uclibc.
+Where do I need to add it ?
 
-Any reason for removing this one?
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+     * Vadim Malenboim.*
+      Low Level Software Engineer.
+
+      Cellular : +972(544)925862
+      E-Mail   : vadim at tangotec.com
+      WEB     : www.tangotec.com
+
+
+
+
+
+-- 
+     * Vadim Malenboim.*
+      Low Level Software Engineer.
+
+      Cellular : +972(544)925862
+      E-Mail   : vadim at tangotec.com
+      WEB     : www.tangotec.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121122/d88a1723/attachment.html>
