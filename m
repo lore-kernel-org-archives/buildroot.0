@@ -1,70 +1,75 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:18:02 +0100
-Subject: [Buildroot] [PATCH 12/33] sconeserver: fix configure.in
+Date: Thu, 22 Nov 2012 01:18:04 +0100
+Subject: [Buildroot] [PATCH 14/33] dependencies: build a host python2 if no
+	suitable one can be found
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-13-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-15-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prevent from having '-I/usr/include/mysql' appended to the cflags during
-the configuration phase.
+Some distros choose to change the /usr/bin/python binary, making it pointed
+to python3 instead of python2.
+
+This may have some bad consequences for packages that uses some
+non-python3-compliant python scripts in their build system (eg. in install
+or post-install scripts).
+
+This patch checks for a suitable python2 version (2.6 or 2.7) on the host
+system, and declares the following variables:
+- PYTHON2: pointing to the host python2 binary;
+- NEED_PYTHON2: sets to "host-python" if no python2 binary has been found.
+
+This way, a package using some python2 scripts must:
+- adds $(NEED_PYTHON2) to its dependency list;
+- sets $(PYTHON2) as the python binary to be used.
+
+A side effect of this patch is getting rid of any host python. Buildroot
+can runs on a host without python, or with a too old python2 version, or
+with only python3; in such case, $(NEED_PYTHON2) should be added to the
+dependency list. So, we can get rid of the python dependency check.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...n-do-not-hardcode-mysql-include-directory.patch | 27 ++++++++++++++++++++++
- package/sconeserver/sconeserver.mk                 |  2 ++
- 2 files changed, 29 insertions(+)
- create mode 100644 package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
+ support/dependencies/check-host-python2.mk |  6 ++++++
+ support/dependencies/check-host-python2.sh | 13 +++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 support/dependencies/check-host-python2.mk
+ create mode 100755 support/dependencies/check-host-python2.sh
 
-diff --git a/package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch b/package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
+diff --git a/support/dependencies/check-host-python2.mk b/support/dependencies/check-host-python2.mk
 new file mode 100644
-index 0000000..9388d21
+index 0000000..ddae701
 --- /dev/null
-+++ b/package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
-@@ -0,0 +1,27 @@
-+From 79aafd560037537baba3f08e9ed15a2b926a16de Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sat, 17 Nov 2012 20:18:51 +0100
-+Subject: [PATCH 1/1] configure.in: do not hardcode mysql include directory
++++ b/support/dependencies/check-host-python2.mk
+@@ -0,0 +1,6 @@
++PYTHON2 = $(call suitable-host-package,python2)
 +
++ifeq ($(PYTHON2),)
++  NEED_PYTHON2 = host-python
++  PYTHON2 = $(HOST_DIR)/usr/bin/python
++endif
+diff --git a/support/dependencies/check-host-python2.sh b/support/dependencies/check-host-python2.sh
+new file mode 100755
+index 0000000..6ad4b3a
+--- /dev/null
++++ b/support/dependencies/check-host-python2.sh
+@@ -0,0 +1,13 @@
++#!/bin/sh
 +
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ configure.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++candidates="python python2"
 +
-+diff --git a/configure.in b/configure.in
-+index 936130f..bc15ef2 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -234,7 +234,7 @@ AC_ARG_WITH([mysql],
-+ # Need mysqlclient library for mysql
-+ if test "x$MYSQL" == "xyes"; then
-+   AC_CHECK_LIB([mysqlclient],[mysql_init],
-+-    [CXXFLAGS="$CXXFLAGS -I/usr/include/mysql"
-++    [CXXFLAGS="$CXXFLAGS"
-+      MYSQL_LIBADD="-lmysqlclient"
-+      AC_SUBST(MYSQL_LIBADD)],
-+     [AC_MSG_ERROR([library 'mysqlclient' is required for the mysql module])]
-+-- 
-+1.8.0
-+
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 15a1edc..d6c9639 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -13,6 +13,8 @@ SCONESERVER_SITE_METHOD = svn
- SCONESERVER_LICENSE = GPLv2+
- SCONESERVER_LICENSE_FILES = COPYING
- 
-+SCONESERVER_AUTORECONF = YES
-+
- SCONESERVER_DEPENDENCIES += pcre
- SCONESERVER_CONF_OPT += --with-ip --with-local
- 
++for candidate in ${candidates} ; do
++  which ${candidate} &>/dev/null || continue
++  # restrict version of python2 to 2.6 or 2.7
++  if ${candidate} --version 2>&1 | grep -q 'Python 2\.[6-7].*' ; then
++    # found a valid candidate, so quit now
++    echo $(which ${candidate})
++    exit
++  fi
++done
 -- 
 1.8.0
