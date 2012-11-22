@@ -1,97 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 12:07:29 +0100
-Subject: [Buildroot] [PATCH 04/33] igh-ethercat: disable drivers build
- with kernel 3.6
-In-Reply-To: <20121122111257.7cbf0562@skate>
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-5-git-send-email-s.martin49@gmail.com>
- <20121122111257.7cbf0562@skate>
-Message-ID: <CAHXCMMKftDZ9td5fC7WveH8g0-ozFUi-aja85DfRe7NnK4io3g@mail.gmail.com>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Thu, 22 Nov 2012 12:18:05 +0100
+Subject: [Buildroot] crosstools build fails when hard fpu is selected
+In-Reply-To: <20121122095217.7408e82a@skate>
+References: <50ACAB98.90607@wanadoo.fr> <20121121132549.7c180f2f@skate>
+ <50ADE660.6000802@wanadoo.fr> <20121122095217.7408e82a@skate>
+Message-ID: <50AE09ED.5000007@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Samuel Martin,
+Le 22/11/2012 09:52, Thomas Petazzoni a ?crit :
+> Dear Thierry Bultel,
 >
-> On Thu, 22 Nov 2012 01:17:54 +0100, Samuel Martin wrote:
->> Since hardware specific support is available for some given kernel
->> releases (mostly for kernel <=3.2), then disable them if kernel 3.6 is
->> enable. However, this still allows the generic driver build.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  package/igh-ethercat/Config.in | 7 ++++++-
->>  1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
->> index 890bb12..4a0fd75 100644
->> --- a/package/igh-ethercat/Config.in
->> +++ b/package/igh-ethercat/Config.in
->> @@ -6,7 +6,12 @@ config BR2_PACKAGE_IGH_ETHERCAT
->>
->>         http://www.etherlab.org/en/ethercat/index.php
->>
->> -if BR2_PACKAGE_IGH_ETHERCAT
->> +if BR2_PACKAGE_IGH_ETHERCAT && !BR2_LINUX_KERNEL_3_6
->> +
->> +comment "The following drivers are only available for some"
->> +comment "releases of the kernel (mostly 2.6.x)."
->> +comment "Further details about the kernel/hardware support at:"
->> +comment "http://www.etherlab.org/en/ethercat/hardware.php"
+> On Thu, 22 Nov 2012 09:46:24 +0100, Thierry Bultel wrote:
 >
-> I'm sorry but I don't quite understand neither the commit log nor the
-> comment here. Could you explain a bit more? Is this fixing any sort of
-> build problem?
-You are right, it's not so clear... so lemme try to rephrase this:
+>> I thought that is was due to the fact that the "Use soft float by
+>> default" option was not available when using an external toolchain (why
+>> ?) but I have the same issue when crosstol-ng is built within buildroot
+>> (and the option deselected of course)
+>>
+>> I am still investigating, but if you have a clue I would appreciate
+>
+>> /home/tbultel/x-tools/arm-unknown-linux-gnueabi/lib/gcc/arm-unknown-linux-gnueabi/4.6.3/../../../../arm-unknown-linux-gnueabi/bin/ld:
+>> error: ../lib/libncurses.so.5.9 uses VFP register arguments,
+>> ../obj_s/hardscroll.o does not
+>
+>  From a quick look, it smells like not everybody has been built with the
+> same CFLAGS or something like that. Like part of it has been built with
+> hardfp, and some other with softfp. I would think "use VFP register
+> arguments" means hardfp (floating point values are passed to functions
+> through the floating-point registers). So libncurses.so.5.9 would be
+> hardfp, and hardscroll.o would be softfp or soft-float and that cannot
+> be linked together.
+>
+> Are you sure you disabled BR2_SOFT_FLOAT in Buildroot? Check the entire
+> build log of ncurses to see which compiler flags are being passed.
+>
 
-igh-ethercat porvides some drivers for some specific kernel releases.
+Yes, I am definitively sure that BR2_SOFT_FLOAT is disabled in my .config
+However I have BR2_PREFER_SOFT_FLOAT=y which is automatically set.
 
-At configure time, we pass the kernel build directory.
+Looking at the build log, there are no '-mfpu=' flags at all when 
+invoking crosstool's gcc
 
-igh-ethercat somehow finds the kernel version, then try to match it
-among the available driver sources.
+I do not reproduce the issue with the CodeSourcery as external 
+toolchain, letting me think that my crosstool configuration is
+wrong.
 
-Here is what looks like the source tree:
-z$ (cd output/build/igh-ethercat-1.5.1/ ; find devices/e1000e/ | sort
-| head -n20)
-devices/e1000e/
-devices/e1000e/82571-2.6.32-ethercat.c
-devices/e1000e/82571-2.6.32-orig.c
-devices/e1000e/82571-2.6.33-ethercat.c
-devices/e1000e/82571-2.6.33-orig.c
-devices/e1000e/82571-2.6.34-ethercat.c
-devices/e1000e/82571-2.6.34-orig.c
-devices/e1000e/82571-2.6.35-ethercat.c
-devices/e1000e/82571-2.6.35-orig.c
-devices/e1000e/82571-2.6.37-ethercat.c
-devices/e1000e/82571-2.6.37-orig.c
-devices/e1000e/defines-2.6.32-ethercat.h
-devices/e1000e/defines-2.6.32-orig.h
-devices/e1000e/defines-2.6.33-ethercat.h
-devices/e1000e/defines-2.6.33-orig.h
-devices/e1000e/defines-2.6.34-ethercat.h
-devices/e1000e/defines-2.6.34-orig.h
-devices/e1000e/defines-2.6.35-ethercat.h
-devices/e1000e/defines-2.6.35-orig.h
-devices/e1000e/defines-2.6.37-ethercat.h
+best regards
+Thierry
 
-So whatever is your kernel release, it should match one of the
-supported release listed at:
-http://www.etherlab.org/en/ethercat/hardware.php
-
-Otherwise, it fails :-/
-
-Hope, it's clearer.
-If you have any suggestion about how to rephrase both the help text
-and/or the commit message,
-please, share them.
-
-
-Regards,
-
-
--- 
-Sam
+> Best regards,
+>
+> Thomas
+>
