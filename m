@@ -1,49 +1,70 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:18:01 +0100
-Subject: [Buildroot] [PATCH 11/33] ltp-testsuite: fix build on uClibc exp10
+Date: Thu, 22 Nov 2012 01:18:02 +0100
+Subject: [Buildroot] [PATCH 12/33] sconeserver: fix configure.in
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-12-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-13-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Prevent from having '-I/usr/include/mysql' appended to the cflags during
+the configuration phase.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...tsuite-20101031-fix-build-on-uClibc-exp10.patch | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
+ ...n-do-not-hardcode-mysql-include-directory.patch | 27 ++++++++++++++++++++++
+ package/sconeserver/sconeserver.mk                 |  2 ++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
 
-diff --git a/package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch b/package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
+diff --git a/package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch b/package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
 new file mode 100644
-index 0000000..7a02d95
+index 0000000..9388d21
 --- /dev/null
-+++ b/package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
-@@ -0,0 +1,22 @@
-+Inspired by: http://peter.korsgaard.com/patches/alsa-utils/alsamixer-fix-build-on-uClibc-exp10.patch
-+
-+exp10 extension is not part of uClibc, so compute it.
++++ b/package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
+@@ -0,0 +1,27 @@
++From 79aafd560037537baba3f08e9ed15a2b926a16de Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sat, 17 Nov 2012 20:18:51 +0100
++Subject: [PATCH 1/1] configure.in: do not hardcode mysql include directory
 +
 +
 +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ configure.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff -purN ltp-testsuite-20101031.orig/testcases/realtime/lib/libstats.c ltp-testsuite-20101031/testcases/realtime/lib/libstats.c
-+--- ltp-testsuite-20101031.orig/testcases/realtime/lib/libstats.c	2012-10-22 23:19:02.306646174 +0200
-++++ ltp-testsuite-20101031/testcases/realtime/lib/libstats.c	2012-10-22 23:25:41.554847766 +0200
-+@@ -46,6 +46,11 @@
-+ #include <libstats.h>
-+ #include <librttest.h>
-+ 
-++#ifdef __UCLIBC__
-++/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
-++#define exp10(x) (exp((x) * log(10)))
-++#endif /* __UCLIBC__ */
-++
-+ int save_stats = 0;
-+ 
-+ /* static helper functions */
++diff --git a/configure.in b/configure.in
++index 936130f..bc15ef2 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -234,7 +234,7 @@ AC_ARG_WITH([mysql],
++ # Need mysqlclient library for mysql
++ if test "x$MYSQL" == "xyes"; then
++   AC_CHECK_LIB([mysqlclient],[mysql_init],
++-    [CXXFLAGS="$CXXFLAGS -I/usr/include/mysql"
+++    [CXXFLAGS="$CXXFLAGS"
++      MYSQL_LIBADD="-lmysqlclient"
++      AC_SUBST(MYSQL_LIBADD)],
++     [AC_MSG_ERROR([library 'mysqlclient' is required for the mysql module])]
++-- 
++1.8.0
++
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 15a1edc..d6c9639 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -13,6 +13,8 @@ SCONESERVER_SITE_METHOD = svn
+ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
+ 
++SCONESERVER_AUTORECONF = YES
++
+ SCONESERVER_DEPENDENCIES += pcre
+ SCONESERVER_CONF_OPT += --with-ip --with-local
+ 
 -- 
 1.8.0
