@@ -1,27 +1,30 @@
-From: Steve Morris <morris@buinea.com>
-Date: Thu, 22 Nov 2012 09:06:35 -0800
-Subject: [Buildroot] pygtk and friends
-Message-ID: <20121122170635.GA20098@buinea.com>
+From: =?ISO-8859-1?Q?Gr=E9gory_Hermant?= <gregory.hermant@calao-systems.com>
+Date: Thu, 22 Nov 2012 18:33:05 +0100
+Subject: [Buildroot] [PATCH v3 1/6] snowball-hdmiservice: new package
+In-Reply-To: <50AE2FE3.8020801@mind.be>
+References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1352967920-3164-2-git-send-email-gregory.hermant@calao-systems.com>
+ <50AC79F3.6000807@mind.be> <50AE1C2D.8010905@calao-systems.com>
+ <50AE2FE3.8020801@mind.be>
+Message-ID: <50AE61D1.7070303@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Le 22/11/2012 15:00, Arnout Vandecappelle a ?crit :
+> It should be passed in the environment, not in the make argument list.
+> Otherwise it will override the definition in the Makefile itself.
+>
+>  A good Makefile appends to LDFLAGS passed in from the environment, but this
+> is not always the case...  Anyway the worst that can happen is that the LDFLAGS
+> are just ignored. 
+You mean that way:
 
-I'd like to use pygtk in a buildroot based project.
+SNOWBALL_HDMISERVICE_MAKE_ENV = CC="$(TARGET_CC)" CCFLAGS="$(TARGET_CCFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
 
-After some searching, the only references I found were patches ifrom
-2007 to add pycairo, pygobject and pygtk. I'm sure I can use this a as
-basis for adding to a current build, but I'm surprised I didn't find any
-more recent references.
+$(SNOWBALL_HDMISERVICE_MAKE_ENV) $(MAKE) -C $(@D)
 
-Is anybody already doing this, or perhaps there are unseen difficulties
-which will become apparent later on?
-
-Any pointers would be appreciated.
-
-Thanks,
-
-Steve
+BR,
+gregory
