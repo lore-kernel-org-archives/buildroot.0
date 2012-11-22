@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:17:51 +0100
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_01/33=5D_libecore=3A_fix_build_wit?=
-	=?utf-8?q?h_glibc_=3E=3D2=2E16?=
+Date: Thu, 22 Nov 2012 01:17:52 +0100
+Subject: [Buildroot] [PATCH 02/33] libpcap: add pcap.pc file
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,109 +13,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- ...ecore-ecore_exe-fix-build-with-glibc-2-16.patch | 94 ++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
- create mode 100644 package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+ package/libpcap/libpcap.mk | 10 ++++++++++
+ package/libpcap/pcap.pc    | 12 ++++++++++++
+ 2 files changed, 22 insertions(+)
+ create mode 100644 package/libpcap/pcap.pc
 
-diff --git a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 7a1d32f..d813b85 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -26,4 +26,14 @@ ifeq ($(BR2_microblaze),y)
+ LIBPCAP_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
+ endif
+ 
++LIBPCAP_USB_SUPPORT = $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
++define LIBPCAP_INSTALL_STAGING_PC
++	sed -e 's/@LIBPCAP_VERSION@/$(LIBPCAP_VERSION)/' \
++		-e 's/@LIBPCAP_USB_SUPPORT@/$(LIBPCAP_USB_SUPPORT)/' \
++		< package/libpcap/pcap.pc \
++		> $(STAGING_DIR)/usr/lib/pkgconfig/pcap.pc
++endef
++
++LIBPCAP_POST_INSTALL_STAGING_HOOKS += LIBPCAP_INSTALL_STAGING_PC
++
+ $(eval $(autotools-package))
+diff --git a/package/libpcap/pcap.pc b/package/libpcap/pcap.pc
 new file mode 100644
-index 0000000..d9b439c
+index 0000000..0bd1917
 --- /dev/null
-+++ b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
-@@ -0,0 +1,94 @@
-+Backported for commit a0df6712b6afcd07facd32e5a66809170277bdf3
-+Fixed the ChangeLog part.
++++ b/package/libpcap/pcap.pc
+@@ -0,0 +1,12 @@
++prefix=/usr
++exec_prefix=${prefix}
++libdir=${exec_prefix}/lib
++includedir=${prefix}/include
 +
-+This patch fix build with glibc >=2.16, avoiding the following error occurs:
-+
-+Making all in ecore
-+make[6]: Entering directory `/opt/buildroot/output/build/host-libecore-1.1.0/src/lib/ecore'
-+  CC     ecore.lo
-+  CC     ecore_anim.lo
-+  CC     ecore_app.lo
-+  CC     ecore_events.lo
-+  CC     ecore_getopt.lo
-+  CC     ecore_idle_enterer.lo
-+  CC     ecore_idle_exiter.lo
-+  CC     ecore_idler.lo
-+  CC     ecore_job.lo
-+  CC     ecore_main.lo
-+  CC     ecore_pipe.lo
-+  CC     ecore_poll.lo
-+  CC     ecore_time.lo
-+  CC     ecore_timer.lo
-+  CC     ecore_thread.lo
-+  CC     ecore_glib.lo
-+  CC     ecore_throttle.lo
-+  CC     ecore_signal.lo
-+  CC     ecore_exe.lo
-+ecore_exe.c: In function ?ecore_exe_pipe_run?:
-+ecore_exe.c:486:15: warning: implicit declaration of function ?setpriority? [-Wimplicit-function-declaration]
-+ecore_exe.c:486:27: error ?PRIO_PROCESS? undeclared (first use in this function)
-+ecore_exe.c:486:27: note: each undeclared identifier is reported only once for each function it appears in
-+make[6]: *** [ecore_exe.lo] Error 1
-+
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+
-+---
-+From a0df6712b6afcd07facd32e5a66809170277bdf3 Mon Sep 17 00:00:00 2001
-+From: caro <caro>
-+Date: Fri, 22 Jun 2012 05:36:00 +0000
-+Subject: [PATCH] ecore_exe: fix compilation on fedora 18.
-+
-+setpriority needs sys/resource.h. See:
-+
-+http://linux.die.net/man/2/setpriority
-+
-+I let sys/time.h, it does not hurt on linux and is anyway needed for BSD systems.
-+
-+
-+git-svn-id: http://svn.enlightenment.org/svn/e at 72684 7cbeb6ba-43b4-40fd-8cce-4c39aea84d33
-+---
-+ ChangeLog                 | 4 ++++
-+ src/lib/ecore/ecore_exe.c | 7 ++-----
-+ 2 files changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index a306f75..549ad19 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -763,3 +763,7 @@
-+ 2011-11-29 Mike McCormack
-+
-+ 	* Allow quitting before entering the glib version of the main loop
-++
-++2012-06-22 Vincent Torri
-++
-++	* ecore_exe: fix compilation on fedora 18.
-+diff --git a/src/lib/ecore/ecore_exe.c b/src/lib/ecore/ecore_exe.c
-+index 7931a96..6db32a9 100644
-+--- a/src/lib/ecore/ecore_exe.c
-++++ b/src/lib/ecore/ecore_exe.c
-+@@ -2,11 +2,6 @@
-+ # include <config.h>
-+ #endif
-+ 
-+-#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
-+-# include <sys/time.h>
-+-# include <sys/resource.h>
-+-#endif
-+-
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+@@ -14,6 +9,8 @@
-+ #include <sys/types.h>
-+ #include <unistd.h>
-+ #include <fcntl.h>
-++#include <sys/time.h>
-++#include <sys/resource.h>
-+ 
-+ #ifdef HAVE_SYS_PRCTL_H
-+ # include <sys/prctl.h>
-+-- 
-+1.7.12.2
-+
++Name: pcap
++Description: System-independent library for user-level network packet capture
++Requires:
++Version: @LIBPCAP_VERSION@
++Libs: -L${libdir} -lpcap
++Libs.private: @LIBPCAP_USB_SUPPORT@ -lpthread
++Cflags: -I${includedir}
 -- 
 1.8.0
