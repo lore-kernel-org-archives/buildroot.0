@@ -1,42 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Nov 2012 11:52:06 +0100
-Subject: [Buildroot] [PATCH 19/33] python2: bump to 2.7.3
-In-Reply-To: <CAHXCMML2DTvu9uGzDe9pb+qQXhAAfDAEOsouacV50_r-+8rPLg@mail.gmail.com>
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-20-git-send-email-s.martin49@gmail.com>
- <20121122111612.4bfdeee2@skate>
- <CAHXCMML2DTvu9uGzDe9pb+qQXhAAfDAEOsouacV50_r-+8rPLg@mail.gmail.com>
-Message-ID: <20121122115206.0759c7cb@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 22 Nov 2012 07:53:58 -0300
+Subject: [Buildroot] Fwd: can't resolve symbol 'wctob'
+In-Reply-To: <CAJH6qSde3UfP0=bQH0C=EDAGRFA3AVezNE=hUT6y41=b9vegtg@mail.gmail.com>
+References: <CAJH6qSd6eEdg1pUK9e4tOS=1rw0xhN397Q=rx-Rmehi8fPcpeg@mail.gmail.com>
+ <CAJH6qSdrqbOQ_oV6TcitJ0=P5G_A950GvKAOWWfUtvwLAcvhMQ@mail.gmail.com>
+ <50ADFE85.6010306@zacarias.com.ar>
+ <CAJH6qSde3UfP0=bQH0C=EDAGRFA3AVezNE=hUT6y41=b9vegtg@mail.gmail.com>
+Message-ID: <50AE0446.3090702@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+On 11/22/2012 07:48 AM, Vadim Malenboim wrote:
 
-On Thu, 22 Nov 2012 11:47:21 +0100, Samuel Martin wrote:
-> 2012/11/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> > Dear Samuel Martin,
-> >
-> > On Thu, 22 Nov 2012 01:18:09 +0100, Samuel Martin wrote:
-> >> Pyhton 2.7.3 includes several security fixes.
-> >> See: http://www.python.org/download/releases/2.7.3/
-> >>
-> >> Also fixes the patch making sqlite optional.
-> >>
-> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> >> ---
-> >>  package/python/python-2.7-009-python-symlink.patch | 25 -----------------
-> >
-> > Any reason for removing this one?
-> Yes, fixed upstream in the 2.7.3 release :-)
+> I suspected that this is the issue, however I specially added it in the
+> configuration.
+> I'll do another build from scratch adding the WCHAR.
+> 
+> Thank you.
 
-Awesome, something fixed upstream in Python \o/ :-)
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yes, changing toolchain options requires a complete rebuild.
+Regards.
