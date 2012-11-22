@@ -1,54 +1,49 @@
-From: Tim Sheridan <Tim.Sheridan@imgtec.com>
-Date: Thu, 22 Nov 2012 13:53:46 +0000
-Subject: [Buildroot] [PATCH v2] gstreamer: Added option to disable plugin
-Message-ID: <98E3058E5505294895CA69F176CAD66272CE97@LEMAIL01.le.imgtec.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 22 Nov 2012 15:00:03 +0100
+Subject: [Buildroot] [PATCH v3 1/6] snowball-hdmiservice: new package
+In-Reply-To: <50AE1C2D.8010905@calao-systems.com>
+References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
+ <1352967920-3164-2-git-send-email-gregory.hermant@calao-systems.com>
+ <50AC79F3.6000807@mind.be> <50AE1C2D.8010905@calao-systems.com>
+Message-ID: <50AE2FE3.8020801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The plugin registry can take a while to be generated when GStreamer is initialized. Turning it off speeds up GStreamer application launch times. Default behaviour is unchanged.
+On 22/11/12 13:35, Gr?gory Hermant wrote:
+> Arnout,
+> Le 21/11/2012 07:51, Arnout Vandecappelle a ?crit :
+>> On 15/11/12 09:25, Gregory Hermant wrote:
+>>>
+>>> Signed-off-by: Gregory Hermant<gregory.hermant@calao-systems.com>
+>> [snip]
+>>> +
+>>> +define SNOWBALL_HDMISERVICE_BUILD_CMDS
+>>> +    $(MAKE) CC="$(TARGET_CC)" -C $(@D)
+>>> +endef
+>>
+>>   I may have asked this before, but is there a reason to not pass buildroot's
+>> CFLAGS and LDFLAGS?  We usually pass $(TARGET_CONFIGURE_OPTS) to sub-makes.
+>>
+>> [snip]
+>>
+> The build of the hdmiservice.so fails if i pass the buildroot's LDFLAGS.
 
-Signed-off-by: Tim Sheridan <tim.sheridan@imgtec.com>
----
- package/multimedia/gstreamer/Config.in    |    9 +++++++++
- package/multimedia/gstreamer/gstreamer.mk |    3 ++- 
- 2 files changed, 11 insertions(+), 1 deletions(-)
+  It should be passed in the environment, not in the make argument list.
+Otherwise it will override the definition in the Makefile itself.
 
-diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
-index 4d279b8..e946b18 100644
---- a/package/multimedia/gstreamer/Config.in
-+++ b/package/multimedia/gstreamer/Config.in
-@@ -16,5 +16,14 @@ config BR2_PACKAGE_GSTREAMER_GST_DEBUG
-          in gstreamer. This has limited CPU overhead, but does
-          increase the rootfs size somewhat.
- 
-+config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
-+       bool "enable plugin registry"
-+       default y
-+       depends on BR2_PACKAGE_GSTREAMER
-+       help
-+         Enable support for the GStreamer plugin registry.
-+         This may increase the launch-time for a GStreamer
-+         application.
-+
- comment "gstreamer requires a toolchain with WCHAR support"
-        depends on !BR2_USE_WCHAR
-diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
-index a9841b1..b87f029 100644
---- a/package/multimedia/gstreamer/gstreamer.mk
-+++ b/package/multimedia/gstreamer/gstreamer.mk
-@@ -21,7 +21,8 @@ GSTREAMER_CONF_OPT = \
-                --disable-tests \
-                --disable-failing-tests \
-                --disable-loadsave \
--               $(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug)
-+               $(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug) \
-+               $(if 
-+ $(BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY),,--disable-registry)
- 
- GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf
- 
---
-1.7.1
+  A good Makefile appends to LDFLAGS passed in from the environment, but this
+is not always the case...  Anyway the worst that can happen is that the LDFLAGS
+are just ignored.
+
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
