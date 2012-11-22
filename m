@@ -1,10 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:18:00 +0100
-Subject: [Buildroot] [PATCH 10/33] ltp-testsuite: add warning about bessel
-	function support if uclibc toolchain
+Date: Thu, 22 Nov 2012 01:17:59 +0100
+Subject: [Buildroot] [PATCH 09/33] linux-fusion: fix build
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-10-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/ltp-testsuite/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../linux-fusion/linux-fusion-fix-include.patch    | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/linux-fusion/linux-fusion-fix-include.patch
 
-diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 86aa4fb..30ba70f 100644
---- a/package/ltp-testsuite/Config.in
-+++ b/package/ltp-testsuite/Config.in
-@@ -1,3 +1,7 @@
-+comment "Note that ltp-testsuite needs a uclibc toolchain with DO_XSI_MATH (bessel functions) enabled"
-+	depends on BR2_PACKAGE_LTP_TESTSUITE
-+	depends on BR2_TOOLCHAIN_BUILDROOT || BR2_TOOLCHAIN_EXTERNAL_UCLIBC || BR2_TOOLCHAIN_CTNG_uClibc
+diff --git a/package/linux-fusion/linux-fusion-fix-include.patch b/package/linux-fusion/linux-fusion-fix-include.patch
+new file mode 100644
+index 0000000..fe91488
+--- /dev/null
++++ b/package/linux-fusion/linux-fusion-fix-include.patch
+@@ -0,0 +1,52 @@
++Fix directfb-fusion kernel module build.
 +
- config BR2_PACKAGE_LTP_TESTSUITE
- 	bool "ltp-testsuite"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
++This patch avoids the following error occurs:
++
++/usr/bin/make -f scripts/Makefile.build obj=/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion /opt/br/output/host/usr/bin/ccache 
++  /opt/br/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -Wp,-MD,/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/.fusioncore_impl.o.d
++  -nostdinc -isystem /opt/br/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/include -I/opt/br/output/build/linux-3.6/arch/arm/include 
++  -Iarch/arm/include/generated -Iinclude  -include /opt/br/output/build/linux-3.6/include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Iarch/arm/mach-versatile/include
++  -Iarch/arm/plat-versatile/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/opt/br/output/build/linux-fusion-8.8.1/linux/include -Wall -Wundef 
++  -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -marm 
++  -fno-dwarf2-cfi-asm -mabi=aapcs-linux -mno-thumb-interwork -funwind-tables -D__LINUX_ARM_ARCH__=5 -march=armv5te -mtune=arm9tdmi -msoft-float -Uarm -Wframe-larger-than=1024
++  -fno-stack-protector -Wno-unused-but-set-variable -fomit-frame-pointer -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fconserve-stack  -DMODULE
++  -D"KBUILD_STR(s)=#s" -D"KBUILD_BASENAME=KBUILD_STR(fusioncore_impl)"  -D"KBUILD_MODNAME=KBUILD_STR(fusion)" -c -o 
++/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.o /opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c
++/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c:25:19: fatal error: debug.h: No such file or directory
++compilation terminated.
++make[3]: *** [/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.o] Error 1
++make[2]: *** [_module_/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion] Error 2
++make[2]: Leaving directory `/opt/br/output/build/linux-3.6'
++make[1]: *** [modules] Error 2
++make[1]: Leaving directory `/opt/br/output/build/linux-fusion-8.8.1'
++
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++diff -purN linux-fusion-8.8.1.orig/linux/drivers/char/fusion/fusioncore.h linux-fusion-8.8.1/linux/drivers/char/fusion/fusioncore.h
++--- linux-fusion-8.8.1.orig/linux/drivers/char/fusion/fusioncore.h	2012-10-15 21:47:53.881834496 +0200
+++++ linux-fusion-8.8.1/linux/drivers/char/fusion/fusioncore.h	2012-10-15 22:05:27.232401023 +0200
++@@ -17,7 +17,7 @@
++ 
++ #include <linux/stddef.h>
++ 
++-#include "fusioncore_impl.h"
+++#include "single/fusioncore_impl.h"
++ 
++ typedef enum {
++      FC_OK,
++diff -purN linux-fusion-8.8.1.orig/linux/drivers/char/fusion/single/fusioncore_impl.c linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c
++--- linux-fusion-8.8.1.orig/linux/drivers/char/fusion/single/fusioncore_impl.c	2012-10-15 21:47:53.878501243 +0200
+++++ linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c	2012-10-15 22:05:38.585511304 +0200
++@@ -22,9 +22,9 @@
++ #include <linux/slab.h>
++ #include <linux/sched.h>
++ 
++-#include "debug.h"
+++#include "../debug.h"
++ 
++-#include "fusioncore.h"
+++#include "../fusioncore.h"
++ 
++ 
++ 
 -- 
 1.8.0
