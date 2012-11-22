@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:17:55 +0100
-Subject: [Buildroot] [PATCH 05/33] imagemagick: explicitly disable c++
-	support if no c++ compiler available
+Date: Thu, 22 Nov 2012 01:17:56 +0100
+Subject: [Buildroot] [PATCH 06/33] sylpheed: fix build disabling gpgme
+	support
 In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1353543503-8952-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/imagemagick/imagemagick.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/sylpheed/sylpheed.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 61a379d..365a073 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -35,6 +35,12 @@ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index cf55c90..3ac2e1e 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -9,7 +9,7 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
  
- IMAGEMAGICK_DEPENDENCIES = host-pkgconf
+-SYLPHEED_CONF_OPT = --disable-gtkspell
++SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
  
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+IMAGEMAGICK_CONF_OPT = --with-magick-plus-plus
-+else
-+IMAGEMAGICK_CONF_OPT = --without-magick-plus-plus
-+endif
-+
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- IMAGEMAGICK_CONF_OPT += --with-fontconfig
- IMAGEMAGICK_DEPENDENCIES += fontconfig
+ SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
+ 
 -- 
 1.8.0
