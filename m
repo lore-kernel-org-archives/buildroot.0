@@ -1,49 +1,33 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 11:07:17 +0100
-Subject: [Buildroot] [PATCH 32/33] rrdtool: add license info
-In-Reply-To: <20121122051744.GA10958@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Nov 2012 11:09:05 +0100
+Subject: [Buildroot] [PATCH 02/33] libpcap: add pcap.pc file
+In-Reply-To: <1353543503-8952-3-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-33-git-send-email-s.martin49@gmail.com>
- <20121122051744.GA10958@sapphire.tkos.co.il>
-Message-ID: <CAHXCMM+pc8K8BUG7TcVBr5Q+-LYy2KLFNSgs7vkPTsOhLsVptA@mail.gmail.com>
+ <1353543503-8952-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20121122110905.4b984053@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch, all,
+Dear Samuel Martin,
 
-2012/11/22 Baruch Siach <baruch@tkos.co.il>:
-> Hi Samuel,
->
-> On Thu, Nov 22, 2012 at 01:18:22AM +0100, Samuel Martin wrote:
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  package/rrdtool/rrdtool.mk | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
->> index 8799a85..4392b50 100644
->> --- a/package/rrdtool/rrdtool.mk
->> +++ b/package/rrdtool/rrdtool.mk
->> @@ -6,6 +6,9 @@
->>
->>  RRDTOOL_VERSION = 1.2.30
->>  RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
->> +RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in COPYRIGHT
->> +RRDTOOL_LICENSE_FILES = COPYING
->
-> Shouldn't COPYRIGHT also be listed with the license files?
-The Copyright file just tells us "wrt the license, you can do that and
-that, but not that with this software",
-with some real use case.
+On Thu, 22 Nov 2012 01:17:52 +0100, Samuel Martin wrote:
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/libpcap/libpcap.mk | 10 ++++++++++
+>  package/libpcap/pcap.pc    | 12 ++++++++++++
+>  2 files changed, 22 insertions(+)
+>  create mode 100644 package/libpcap/pcap.pc
 
-Shall we consider as part of the license files?
+I don't remember if I asked the question already or not, but anyway:
+has this pcap.pc been pushed upstream?
 
-Regards,
-
-
+Thomas
 -- 
-Sam
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
