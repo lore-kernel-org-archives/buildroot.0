@@ -1,35 +1,43 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 11:39:34 +0100
-Subject: [Buildroot] [PATCH 02/33] libpcap: add pcap.pc file
-In-Reply-To: <20121122110905.4b984053@skate>
+Date: Thu, 22 Nov 2012 11:46:33 +0100
+Subject: [Buildroot] [PATCH 03/33] tcpdump: use 'pkg-config pcap'
+ instead of pcap-config
+In-Reply-To: <20121122111041.73d397ee@skate>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-3-git-send-email-s.martin49@gmail.com>
- <20121122110905.4b984053@skate>
-Message-ID: <CAHXCMMKHpFLpo+6P9KdUsSPQAi3R3yJpaT37d84+QduByPFuwQ@mail.gmail.com>
+ <1353543503-8952-4-git-send-email-s.martin49@gmail.com>
+ <20121122111041.73d397ee@skate>
+Message-ID: <CAHXCMMLtuvExfmB4FBSu1L13eMu7Guy_PJt4oSfODTVJkcNwXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
+
 2012/11/22 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
 > Dear Samuel Martin,
 >
-> On Thu, 22 Nov 2012 01:17:52 +0100, Samuel Martin wrote:
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->> ---
->>  package/libpcap/libpcap.mk | 10 ++++++++++
->>  package/libpcap/pcap.pc    | 12 ++++++++++++
->>  2 files changed, 22 insertions(+)
->>  create mode 100644 package/libpcap/pcap.pc
+> On Thu, 22 Nov 2012 01:17:53 +0100, Samuel Martin wrote:
 >
-> I don't remember if I asked the question already or not, but anyway:
-> has this pcap.pc been pushed upstream?
+>> +-        AC_PATH_TOOL(PCAP_CONFIG, pcap-config)
+>> ++        AC_PATH_TOOL(PCAP_CONFIG, pkg-config)
+>
+> This is not generally how pkg-config is used. In general, people use
+> the PKG_CHECK_MODULES() autoconf macro.
+>
+> Has this been pushed upstream?
+I've not tried to push this patch upstream yet.
 
-Not yet, I'll do it.
+> I guess you need to make it smarter
+> like: start testing with pkg-config, then fallback to pcap-config, in
+> order to make this suitable for upstream.
+I agree.
+The truth is I'm not so confident with autotools, so any enlightment is welcome.
+
 
 Regards,
+
 
 -- 
 Sam
