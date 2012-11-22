@@ -1,147 +1,122 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 22 Nov 2012 01:17:50 +0100
-Subject: [Buildroot] [PATCH 00/33] Pull request for 2012.11/bug-fixes
-Message-ID: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+Date: Thu, 22 Nov 2012 01:17:51 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_01/33=5D_libecore=3A_fix_build_wit?=
+	=?utf-8?q?h_glibc_=3E=3D2=2E16?=
+In-Reply-To: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1353543503-8952-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
 
-Here is a bug fixes series which targets the 2012.11 released.
-
-Series detail:
-- Patches 1 to 16 are random package fixes (help text/source urls/build fixes);
-- Patch 17 is linux-fusion package update, which fix directfb build;
-- Patch 18 is a python security update;
-- Patch 19 is an improvement for the download infrastructure;
-- Patch 20 enables rrdtool python bindings;
-- Patch 21-33 add license info to most of the packages touched by this series.
-
-IMO, patches 1 to 18 can be integrated for the 2012.11 release.
-
-Patch 19 is more open to be discussed, somehow making echo to what has been
-said during the lastest BR dev days.
-
-Patch 20 can be merged in the next branch.
-
-
-Yours,
-
-
-Samuel Martin (33):
-  libecore: fix build with glibc >=2.16
-  libpcap: add pcap.pc file
-  tcpdump: use 'pkg-config pcap' instead of pcap-config
-  igh-ethercat: disable drivers build with kernel 3.6
-  imagemagick: explicitly disable c++ support if no c++ compiler
-    available
-  sylpheed: fix build disabling gpgme support
-  fluxbox: fix build against imlib2
-  owl-linux: update help text about linux kernel dependencies.
-  linux-fusion: fix build
-  ltp-testsuite: add warning about bessel function support if uclibc
-    toolchain
-  ltp-testsuite: fix build on uClibc exp10
-  sconeserver: fix configure.in
-  sconeserver: fix imagemagick dependency
-  dependencies: build a host python2 if no suitable one can be found
-  scons: force to use python2 on the host
-  libmad: do not install mad.pc on the target
-  matchbox packages: fix broken urls
-  linux-fusion: bump to version 8.10.4
-  python2: bump to 2.7.3
-  pkg-download.mk: add tarball check in the wget method
-  rrdtool: add python binding support
-  libmad: add license info
-  scons: add license info
-  efl packages: add license info
-  fluxbox: add license info
-  igh-ethercat: add license info
-  imagemagick: add license info
-  imlib2: add license info
-  ltp-testsuite: add license info
-  matchbox packages: add license info
-  owl-linux: add license info
-  rrdtool: add license info
-  sylpheed: add license info
-
- package/efl/expedite/expedite.mk                   |  3 +
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
  ...ecore-ecore_exe-fix-build-with-glibc-2-16.patch | 94 ++++++++++++++++++++++
- package/efl/libecore/libecore.mk                   |  3 +
- package/efl/libedbus/libedbus.mk                   |  3 +
- package/efl/libedje/libedje.mk                     |  3 +
- package/efl/libeet/libeet.mk                       |  3 +
- package/efl/libefreet/libefreet.mk                 |  3 +
- package/efl/libeina/libeina.mk                     |  3 +
- package/efl/libelementary/libelementary.mk         |  3 +
- package/efl/libembryo/libembryo.mk                 |  3 +
- package/efl/libethumb/libethumb.mk                 |  3 +
- package/efl/libevas/libevas.mk                     |  3 +
- package/fluxbox/fluxbox-fix-configure.patch        | 19 +++++
- package/fluxbox/fluxbox.mk                         |  8 +-
- package/igh-ethercat/Config.in                     |  7 +-
- package/igh-ethercat/igh-ethercat.mk               |  4 +
- package/imagemagick/imagemagick.mk                 |  9 +++
- package/imlib2/imlib2.mk                           |  4 +-
- package/libmad/libmad.mk                           |  8 +-
- package/libpcap/libpcap.mk                         | 10 +++
- package/libpcap/pcap.pc                            | 12 +++
- .../linux-fusion/linux-fusion-fix-include.patch    | 43 ++++++++++
- package/linux-fusion/linux-fusion.mk               |  2 +-
- package/ltp-testsuite/Config.in                    |  4 +
- ...tsuite-20101031-fix-build-on-uClibc-exp10.patch | 22 +++++
- package/ltp-testsuite/ltp-testsuite.mk             |  2 +
- .../matchbox/matchbox-common/matchbox-common.mk    |  9 ++-
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |  8 +-
- .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |  3 +
- .../matchbox-keyboard/matchbox-keyboard.mk         |  5 +-
- package/matchbox/matchbox-lib/matchbox-lib.mk      |  5 +-
- package/matchbox/matchbox-panel/matchbox-panel.mk  |  9 ++-
- .../matchbox-startup-monitor.mk                    |  3 +
- package/matchbox/matchbox-wm/matchbox-wm.mk        |  5 +-
- package/owl-linux/Config.in                        |  2 +
- package/owl-linux/owl-linux.mk                     |  2 +
- package/pkg-download.mk                            | 13 ++-
- package/python/python-2.7-009-python-symlink.patch | 25 ------
- .../python-2.7-100-optional-test-modules.patch     |  3 +-
- package/python/python-2.7-101-optional-pydoc.patch |  3 +-
- package/python/python-2.7-102-optional-2to3.patch  | 12 +--
- .../python/python-2.7-103-optional-sqlite.patch    | 31 ++++++-
- package/python/python-2.7-104-optional-tk.patch    |  3 +-
- .../python/python-2.7-105-optional-curses.patch    |  3 +-
- package/python/python-2.7-106-optional-expat.patch |  3 +-
- package/python/python-2.7-110-optional-db.patch    |  7 +-
- package/python/python.mk                           |  2 +-
- package/rrdtool/Config.in                          |  8 ++
- package/rrdtool/rrdtool-fix-python-includes.patch  | 29 +++++++
- package/rrdtool/rrdtool.mk                         | 22 ++++-
- package/sconeserver/Config.in                      |  3 +
- ...-dependency-use-pkg-config-instead-of-Mag.patch | 41 ++++++++++
- ...n-do-not-hardcode-mysql-include-directory.patch | 27 +++++++
- package/sconeserver/sconeserver.mk                 |  4 +-
- package/scons/scons.mk                             |  8 +-
- package/sylpheed/sylpheed.mk                       |  4 +-
- ...ump-use-pkg-config-instead-of-pcap-config.patch | 68 ++++++++++++++++
- package/tcpdump/tcpdump.mk                         |  3 +-
- support/dependencies/check-host-python2.mk         |  6 ++
- support/dependencies/check-host-python2.sh         | 13 +++
- support/dependencies/dependencies.sh               |  2 +-
- 61 files changed, 599 insertions(+), 76 deletions(-)
+ 1 file changed, 94 insertions(+)
  create mode 100644 package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
- create mode 100644 package/fluxbox/fluxbox-fix-configure.patch
- create mode 100644 package/libpcap/pcap.pc
- create mode 100644 package/linux-fusion/linux-fusion-fix-include.patch
- create mode 100644 package/ltp-testsuite/ltp-testsuite-20101031-fix-build-on-uClibc-exp10.patch
- delete mode 100644 package/python/python-2.7-009-python-symlink.patch
- create mode 100644 package/rrdtool/rrdtool-fix-python-includes.patch
- create mode 100644 package/sconeserver/sconeserver-180-ImageMagick-dependency-use-pkg-config-instead-of-Mag.patch
- create mode 100644 package/sconeserver/sconeserver-180-configure.in-do-not-hardcode-mysql-include-directory.patch
- create mode 100644 package/tcpdump/tcpdump-use-pkg-config-instead-of-pcap-config.patch
- create mode 100644 support/dependencies/check-host-python2.mk
- create mode 100755 support/dependencies/check-host-python2.sh
 
---
+diff --git a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+new file mode 100644
+index 0000000..d9b439c
+--- /dev/null
++++ b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+@@ -0,0 +1,94 @@
++Backported for commit a0df6712b6afcd07facd32e5a66809170277bdf3
++Fixed the ChangeLog part.
++
++This patch fix build with glibc >=2.16, avoiding the following error occurs:
++
++Making all in ecore
++make[6]: Entering directory `/opt/buildroot/output/build/host-libecore-1.1.0/src/lib/ecore'
++  CC     ecore.lo
++  CC     ecore_anim.lo
++  CC     ecore_app.lo
++  CC     ecore_events.lo
++  CC     ecore_getopt.lo
++  CC     ecore_idle_enterer.lo
++  CC     ecore_idle_exiter.lo
++  CC     ecore_idler.lo
++  CC     ecore_job.lo
++  CC     ecore_main.lo
++  CC     ecore_pipe.lo
++  CC     ecore_poll.lo
++  CC     ecore_time.lo
++  CC     ecore_timer.lo
++  CC     ecore_thread.lo
++  CC     ecore_glib.lo
++  CC     ecore_throttle.lo
++  CC     ecore_signal.lo
++  CC     ecore_exe.lo
++ecore_exe.c: In function ?ecore_exe_pipe_run?:
++ecore_exe.c:486:15: warning: implicit declaration of function ?setpriority? [-Wimplicit-function-declaration]
++ecore_exe.c:486:27: error ?PRIO_PROCESS? undeclared (first use in this function)
++ecore_exe.c:486:27: note: each undeclared identifier is reported only once for each function it appears in
++make[6]: *** [ecore_exe.lo] Error 1
++
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++
++---
++From a0df6712b6afcd07facd32e5a66809170277bdf3 Mon Sep 17 00:00:00 2001
++From: caro <caro>
++Date: Fri, 22 Jun 2012 05:36:00 +0000
++Subject: [PATCH] ecore_exe: fix compilation on fedora 18.
++
++setpriority needs sys/resource.h. See:
++
++http://linux.die.net/man/2/setpriority
++
++I let sys/time.h, it does not hurt on linux and is anyway needed for BSD systems.
++
++
++git-svn-id: http://svn.enlightenment.org/svn/e at 72684 7cbeb6ba-43b4-40fd-8cce-4c39aea84d33
++---
++ ChangeLog                 | 4 ++++
++ src/lib/ecore/ecore_exe.c | 7 ++-----
++ 2 files changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/ChangeLog b/ChangeLog
++index a306f75..549ad19 100644
++--- a/ChangeLog
+++++ b/ChangeLog
++@@ -763,3 +763,7 @@
++ 2011-11-29 Mike McCormack
++
++ 	* Allow quitting before entering the glib version of the main loop
+++
+++2012-06-22 Vincent Torri
+++
+++	* ecore_exe: fix compilation on fedora 18.
++diff --git a/src/lib/ecore/ecore_exe.c b/src/lib/ecore/ecore_exe.c
++index 7931a96..6db32a9 100644
++--- a/src/lib/ecore/ecore_exe.c
+++++ b/src/lib/ecore/ecore_exe.c
++@@ -2,11 +2,6 @@
++ # include <config.h>
++ #endif
++ 
++-#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
++-# include <sys/time.h>
++-# include <sys/resource.h>
++-#endif
++-
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <string.h>
++@@ -14,6 +9,8 @@
++ #include <sys/types.h>
++ #include <unistd.h>
++ #include <fcntl.h>
+++#include <sys/time.h>
+++#include <sys/resource.h>
++ 
++ #ifdef HAVE_SYS_PRCTL_H
++ # include <sys/prctl.h>
++-- 
++1.7.12.2
++
+-- 
 1.8.0
