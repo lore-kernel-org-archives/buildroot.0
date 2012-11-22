@@ -1,41 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 22 Nov 2012 00:08:05 +0100
-Subject: [Buildroot] [git commit] linux: bump 3.6.x stable version
-Message-ID: <20121122121620.D946690B87@busybox.osuosl.org>
+From: Gregory Hermant <gregory.hermant@calao-systems.com>
+Date: Thu, 22 Nov 2012 13:35:11 +0100
+Subject: [Buildroot] [PATCH] barebox: use the symlink to copy the barebox
+	binary to the images directory
+Message-ID: <1353587711-26855-1-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36d36f0de19bd5f23453dc1391f83843f9042849
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Barebox creates a symlink to the binary. This symlink points to
+the barebox.bin or to the compressed zbarebox.bin binary.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/barebox.mk |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 29a2110..e24273c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index a025d5f..6cc4976 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -72,7 +72,11 @@ define BAREBOX_BUILD_CMDS
+ endef
  
- config BR2_LINUX_KERNEL_3_6
--	bool "3.6.6"
-+	bool "3.6.7"
+ define BAREBOX_INSTALL_IMAGES_CMDS
+-	cp $(@D)/barebox.bin $(BINARIES_DIR)
++	if test -h $(@D)/barebox-flash-image ; then \
++		cp -L $(@D)/barebox-flash-image $(BINARIES_DIR)/barebox.bin ; \
++	else \
++		cp $(@D)/barebox.bin $(BINARIES_DIR);\
++	fi
+ endef
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.6.6" if BR2_LINUX_KERNEL_3_6
-+	default "3.6.7" if BR2_LINUX_KERNEL_3_6
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
+-- 
+1.7.9.5
