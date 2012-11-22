@@ -1,34 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Nov 2012 11:58:14 +0100
-Subject: [Buildroot] output/target isn't synced with the actual target
-In-Reply-To: <CAJH6qSeGCdkP7rZL7iVxRoHXu6n0R-26K+kTqxH3MB6zVyUO3A@mail.gmail.com>
-References: <CAJH6qSeGCdkP7rZL7iVxRoHXu6n0R-26K+kTqxH3MB6zVyUO3A@mail.gmail.com>
-Message-ID: <20121122115814.18adfcd2@skate>
+From: Tim Sheridan <Tim.Sheridan@imgtec.com>
+Date: Thu, 22 Nov 2012 10:43:59 +0000
+Subject: [Buildroot] [PATCH] gstreamer: Added option to disable plugin
+	registry.
+Message-ID: <98E3058E5505294895CA69F176CAD66272CB5B@LEMAIL01.le.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vadim Malenboim,
+The plugin registry can take a while to be generated when GStreamer is
+initialized. Turning it off can speed up GStreamer application launch times.
+Default behavior is unchanged.
+---
+ package/multimedia/gstreamer/Config.in    |    9 +++++++++
+ package/multimedia/gstreamer/gstreamer.mk |    3 ++- 
+ 2 files changed, 11 insertions(+), 1 deletions(-)
 
-On Thu, 22 Nov 2012 11:01:26 +0200, Vadim Malenboim wrote:
-
-> I have libs in output/target/usr/lib but nothing on the actual target.
-> In addition no all libs that are present in output/target/lib are actually
-> present on the target.
-
-Well, are you sure you did reflash/transfer the new root filesystem
-image to your target?
-
-If you want to check, enable the generation of a "tar" image in
-Buildroot, and verify that all files are properly in the tarball.
-
-Best regards,
-
-Thomas
+diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+index 4d279b8..e946b18 100644
+--- a/package/multimedia/gstreamer/Config.in
++++ b/package/multimedia/gstreamer/Config.in
+@@ -16,5 +16,14 @@ config BR2_PACKAGE_GSTREAMER_GST_DEBUG
+          in gstreamer. This has limited CPU overhead, but does
+          increase the rootfs size somewhat.
+ 
++config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
++       bool "enable plugin registry"
++       default y
++       depends on BR2_PACKAGE_GSTREAMER
++       help
++         Enable support for the GStreamer plugin registry.
++         This may increase the launch-time for a GStreamer
++         application.
++
+ comment "gstreamer requires a toolchain with WCHAR support"
+        depends on !BR2_USE_WCHAR
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index a9841b1..b87f029 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -21,7 +21,8 @@ GSTREAMER_CONF_OPT = \
+                --disable-tests \
+                --disable-failing-tests \
+                --disable-loadsave \
+-               $(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug)
++               $(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug) \
++               $(if $(BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY),,--disable-registry)
+ 
+ GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
