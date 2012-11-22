@@ -1,41 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Nov 2012 18:45:21 +0100
-Subject: [Buildroot] [PATCH v3 1/6] snowball-hdmiservice: new package
-In-Reply-To: <50AE61D1.7070303@calao-systems.com>
-References: <1352967920-3164-1-git-send-email-gregory.hermant@calao-systems.com>
- <1352967920-3164-2-git-send-email-gregory.hermant@calao-systems.com>
- <50AC79F3.6000807@mind.be> <50AE1C2D.8010905@calao-systems.com>
- <50AE2FE3.8020801@mind.be> <50AE61D1.7070303@calao-systems.com>
-Message-ID: <20121122184521.1599d90d@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 22 Nov 2012 22:08:11 +0100
+Subject: [Buildroot] git sourced packages
+Message-ID: <140A1F4F62E34D098AF770FE7C37486A@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gr?gory Hermant,
+Hi
+ 
+I think it would be a good idea to always specify a hash or tag when packages are sourced from git.
+There i no way otherwise to be sure what you are actually building.
+ 
 
-On Thu, 22 Nov 2012 18:33:05 +0100, Gr?gory Hermant wrote:
-> Le 22/11/2012 15:00, Arnout Vandecappelle a ?crit :
-> > It should be passed in the environment, not in the make argument list.
-> > Otherwise it will override the definition in the Makefile itself.
-> >
-> >  A good Makefile appends to LDFLAGS passed in from the environment, but this
-> > is not always the case...  Anyway the worst that can happen is that the LDFLAGS
-> > are just ignored. 
-> You mean that way:
-> 
-> SNOWBALL_HDMISERVICE_MAKE_ENV = CC="$(TARGET_CC)" CCFLAGS="$(TARGET_CCFLAGS)" LDFLAGS="$(TARGET_LDFLAGS)"
-> 
-> $(SNOWBALL_HDMISERVICE_MAKE_ENV) $(MAKE) -C $(@D)
+ 
 
-No, just:
+Johan
 
-$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121122/842ccb5f/attachment.html>
