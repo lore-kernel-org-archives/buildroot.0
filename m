@@ -1,33 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 22 Nov 2012 06:46:35 -0300
-Subject: [Buildroot] [PATCH] arptables: needs mmu
-Message-ID: <1353577595-23602-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 22 Nov 2012 11:07:17 +0100
+Subject: [Buildroot] [PATCH 32/33] rrdtool: add license info
+In-Reply-To: <20121122051744.GA10958@sapphire.tkos.co.il>
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+ <1353543503-8952-33-git-send-email-s.martin49@gmail.com>
+ <20121122051744.GA10958@sapphire.tkos.co.il>
+Message-ID: <CAHXCMM+pc8K8BUG7TcVBr5Q+-LYy2KLFNSgs7vkPTsOhLsVptA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-arptables uses fork() and breaks on !mmu.
-Fixes
-http://autobuild.buildroot.net/results/fe18dd4a0b0d17404560abf3e4a332b58751f5cb/
+Hi Baruch, all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/arptables/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+2012/11/22 Baruch Siach <baruch@tkos.co.il>:
+> Hi Samuel,
+>
+> On Thu, Nov 22, 2012 at 01:18:22AM +0100, Samuel Martin wrote:
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> ---
+>>  package/rrdtool/rrdtool.mk | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+>> index 8799a85..4392b50 100644
+>> --- a/package/rrdtool/rrdtool.mk
+>> +++ b/package/rrdtool/rrdtool.mk
+>> @@ -6,6 +6,9 @@
+>>
+>>  RRDTOOL_VERSION = 1.2.30
+>>  RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+>> +RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in COPYRIGHT
+>> +RRDTOOL_LICENSE_FILES = COPYING
+>
+> Shouldn't COPYRIGHT also be listed with the license files?
+The Copyright file just tells us "wrt the license, you can do that and
+that, but not that with this software",
+with some real use case.
 
-diff --git a/package/arptables/Config.in b/package/arptables/Config.in
-index 510eedf..414fabb 100644
---- a/package/arptables/Config.in
-+++ b/package/arptables/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_ARPTABLES
- 	bool "arptables"
-+	# needs fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  Tool to set up, maintain, and inspect the tables of ARP rules.
- 
+Shall we consider as part of the license files?
+
+Regards,
+
+
 -- 
-1.7.8.6
+Sam
