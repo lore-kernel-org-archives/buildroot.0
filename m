@@ -1,96 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Nov 2012 15:59:07 +0100
-Subject: [Buildroot] [PATCH for-2012.11 0/5] Introduce errors for legacy
-	API
-In-Reply-To: <87wqxn5cu6.fsf@dell.be.48ers.dk>
-References: <1352750912-16012-1-git-send-email-arnout@mind.be>
- <87wqxn5cu6.fsf@dell.be.48ers.dk>
-Message-ID: <50AF8F3B.9090504@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 23 Nov 2012 22:01:38 +0100
+Subject: [Buildroot] [git commit] directfb: needs threads support
+Message-ID: <20121123210237.B1AA08F50D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/11/12 12:23, Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>  writes:
-[snip]
->   Arnout>   Config options that are no longer supported are moved to
->   Arnout>  Config.in.legacy.  When any of these is selected in an old
->   Arnout>  .config file, a comment will appear to warn the user of it, and
->   Arnout>  it is possible to see which option caused the error in the new
->   Arnout>  'Check legacy' menu.  Unselecting that menuconfig disables all
->   Arnout>  the legacy options in one go.
->
-> Is there ever any use case for not checking for legacy stuff?
+commit: http://git.buildroot.net/buildroot/commit/?id=ade0a8a856e1009210538170cd72d92a07c06233
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Maybe not. Easy enough to remove the condition around the check.
+Fixes http://autobuild.buildroot.net/results/237aaf7b036a98867de1df47d39d01ec4137efd3
 
-> I like it, the only problem is that the legacy warnings are shown as
-> options when they are really warnings/instructions to the user about
-> what has changed/what needs to get fixed.
->
-> I played around with making the options hidden and instead display a
-> comment when it is selected - E.G:
->
-> config BR2_PACKAGE_LIBINTL
->     bool
->     select BR2_LEGACY
->     select BR2_PACKAGE_GETTEXT
->
-> config BR2_PACKAGE_LIBINTL
->     bool
->     select BR2_LEGACY
->     select BR2_PACKAGE_GETTEXT
->
-> if BR2_PACKAGE_LIBINTL
-> comment "libintl is now installed by selecting"
-> comment "BR2_PACKAGE_GETTEXT. This now only installs the"
-> comment "library, not the executables."
-> endif
->
-> The syntax is not so nice as kconfig doesn't support multi line
-> comments, but OK. More importantly, hidden symbols like
-> BR2_PACKAGE_LIBINTL seems to be ignored when the .config is read (which
-> is what we normally want so they can be disabled again) so this only
-> works when a custom package selects BR2_PACKAGE_LIBINTL, not if the user
-> has manually enabled it.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/directfb/Config.in                   |    4 ++++
+ package/multimedia/gst-plugins-bad/Config.in |    1 +
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
-  I see this as a major problem.  I think most use cases in the Config.in
-will be for user-selectable options that are no longer available, like
-BR2_PACKAGE_GETTEXT_STATIC and BR2_PACKAGE_INPUT_TOOLS_EVTEST.
-BR2_PACKAGE_LIBINTL is one that is normally used in select statements,
-but that's a bit exceptional.
-
-  In addition, if they are blind options, they will just disappear after running
-silentoldconfig.  The comment will get printed, but who will see that between
-all the other output?
-
->
-> Anybody with a better idea?
->
->   Arnout>   If any such option remains, 'make' will fail immediately with
->   Arnout>  a message that legacy options are still selected.  However, if
->   Arnout>  BR2_DEPRECATED is selected, that error message is suppressed.
->
-> Would it make sense to still warn (but not halt) when DEPRECATED is
-> enabled?
-
-  The problem with warnings is that we produce so much output that they'll
-just be hidden. They would make sense if an error follows soon after. But
-in all likelihood, if an error follows, it will be much further down.
-
-  [snip]
-
-  So, is there still anything that I should change?
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 47f9fea..a184568 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DIRECTFB
+ 	bool "directfb"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -107,3 +108,6 @@ config BR2_PACKAGE_DIRECTB_TESTS
+ 	bool "build directfb tests"
+ 
+ endif # BR2_PACKAGE_DIRECTFB
++
++comment "directfb needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 7784ad7..d87aec4 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -262,6 +262,7 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CURL
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DIRECTFB
+ 	bool "directfb"
+ 	select BR2_PACKAGE_DIRECTFB
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
+ 	bool "dvb"
