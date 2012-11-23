@@ -1,44 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 23 Nov 2012 10:40:45 +0100
-Subject: [Buildroot] [git commit] AVR32: fix libusb build
-Message-ID: <20121123094117.286E896E37@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Fri, 23 Nov 2012 10:44:26 +0100
+Subject: [Buildroot] [PATCH] AVR32: fix libusb build
+In-Reply-To: <874nkgfyhp.fsf@dell.be.48ers.dk>
+References: <1353662196-3350-1-git-send-email-maxime.ripard@free-electrons.com>
+ <874nkgfyhp.fsf@dell.be.48ers.dk>
+Message-ID: <50AF457A.8000305@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d15637d1715f155f7af6cd5fdf8ed3ffeedad04a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le 23/11/2012 10:40, Peter Korsgaard a ?crit :
+>>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+> 
+>  Maxime> The libc of the avr32 toolchains seem to lack the timerfd-associated
+>  Maxime> functions.
+> 
+>  Maxime> Pass --disable-timerfd to libusb configure script when building for
+>  Maxime> avr32.
+> 
+>  Maxime> Fixes most of the recent avr32 breakages, such as
+>  Maxime> http://autobuild.buildroot.org/results/f418b6c0b026891c27467f61444b6eac8c105681
+>  Maxime> or
+>  Maxime> http://autobuild.buildroot.org/results/1a9e571998bc0a40822dca84267abbdd969bab5e
+> 
+> Committed, thanks. Does this mean we can revert 2424cc6 (libhid: disable
+> on avr32)?
 
-The libc of the avr32 toolchains seem to lack the timerfd-associated
-functions.
+Yes, from the build logs, it looks like it was the same error, so this
+patch should fix it as well.
 
-Pass --disable-timerfd to libusb configure script when building for
-avr32.
+Maxime
 
-Fixes most of the recent avr32 breakages, such as
-http://autobuild.buildroot.org/results/f418b6c0b026891c27467f61444b6eac8c105681
-or
-http://autobuild.buildroot.org/results/1a9e571998bc0a40822dca84267abbdd969bab5e
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libusb/libusb.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index 06a1485..fc2f10b 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -11,5 +11,9 @@ LIBUSB_LICENSE_FILES = COPYING
- LIBUSB_DEPENDENCIES = host-pkgconf
- LIBUSB_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_avr32),y)
-+LIBUSB_CONF_OPT += --disable-timerfd
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
