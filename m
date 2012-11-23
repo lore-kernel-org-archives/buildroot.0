@@ -1,34 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Nov 2012 10:48:29 +0100
-Subject: [Buildroot] [PATCH] AVR32: fix libusb build
-In-Reply-To: <50AF457A.8000305@free-electrons.com> (Maxime Ripard's message of
- "Fri, 23 Nov 2012 10:44:26 +0100")
-References: <1353662196-3350-1-git-send-email-maxime.ripard@free-electrons.com>
- <874nkgfyhp.fsf@dell.be.48ers.dk>
- <50AF457A.8000305@free-electrons.com>
-Message-ID: <87zk28ejki.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 23 Nov 2012 10:47:38 +0100
+Subject: [Buildroot] [git commit] Revert "libhid: disable on avr32"
+Message-ID: <20121123094843.900C69032D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bf5d51717ba4988d41c2e86157b95b08b26f379b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+This reverts commit 2424cc6783bbfb542f08cf1985b8c9ef18282161.
 
- Maxime> Fixes most of the recent avr32 breakages, such as
- Maxime> http://autobuild.buildroot.org/results/f418b6c0b026891c27467f61444b6eac8c105681
- Maxime> or
- Maxime> http://autobuild.buildroot.org/results/1a9e571998bc0a40822dca84267abbdd969bab5e
- >> 
- >> Committed, thanks. Does this mean we can revert 2424cc6 (libhid: disable
- >> on avr32)?
+Now that we have a timerfd fix for libusb, this can be reverted.
 
- Maxime> Yes, from the build logs, it looks like it was the same error, so this
- Maxime> patch should fix it as well.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libhid/Config.in |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-Ok, will revert - Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libhid/Config.in b/package/libhid/Config.in
+index bd1cfcb..093b98f 100644
+--- a/package/libhid/Config.in
++++ b/package/libhid/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBHID
+ 	bool "libhid"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+-	depends on !BR2_avr32 # timerfd not in uClibc-0.9.31
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+@@ -10,4 +9,4 @@ config BR2_PACKAGE_LIBHID
+ 	  http://libhid.alioth.debian.org
+ 
+ comment "libhid needs a toolchain with thread support"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS && !BR2_avr32
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
