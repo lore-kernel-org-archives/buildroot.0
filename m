@@ -1,31 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Nov 2012 10:40:50 +0100
-Subject: [Buildroot] [PATCH] AVR32: fix libusb build
-In-Reply-To: <1353662196-3350-1-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Fri, 23 Nov 2012 10:16:36 +0100")
-References: <1353662196-3350-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <874nkgfyhp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 23 Nov 2012 10:40:45 +0100
+Subject: [Buildroot] [git commit] AVR32: fix libusb build
+Message-ID: <20121123094117.286E896E37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d15637d1715f155f7af6cd5fdf8ed3ffeedad04a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> The libc of the avr32 toolchains seem to lack the timerfd-associated
- Maxime> functions.
+The libc of the avr32 toolchains seem to lack the timerfd-associated
+functions.
 
- Maxime> Pass --disable-timerfd to libusb configure script when building for
- Maxime> avr32.
+Pass --disable-timerfd to libusb configure script when building for
+avr32.
 
- Maxime> Fixes most of the recent avr32 breakages, such as
- Maxime> http://autobuild.buildroot.org/results/f418b6c0b026891c27467f61444b6eac8c105681
- Maxime> or
- Maxime> http://autobuild.buildroot.org/results/1a9e571998bc0a40822dca84267abbdd969bab5e
+Fixes most of the recent avr32 breakages, such as
+http://autobuild.buildroot.org/results/f418b6c0b026891c27467f61444b6eac8c105681
+or
+http://autobuild.buildroot.org/results/1a9e571998bc0a40822dca84267abbdd969bab5e
 
-Committed, thanks. Does this mean we can revert 2424cc6 (libhid: disable
-on avr32)?
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libusb/libusb.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 06a1485..fc2f10b 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -11,5 +11,9 @@ LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkgconf
+ LIBUSB_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_avr32),y)
++LIBUSB_CONF_OPT += --disable-timerfd
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
