@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Nov 2012 10:09:00 +0100
-Subject: [Buildroot] [PATCH 05/33] imagemagick: explicitly disable c++
-	support if no c++ compiler available
-In-Reply-To: <1353543503-8952-6-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Thu, 22 Nov 2012 01:17:55 +0100")
+Date: Fri, 23 Nov 2012 10:10:22 +0100
+Subject: [Buildroot] [PATCH 06/33] sylpheed: fix build disabling gpgme
+	support
+In-Reply-To: <1353543503-8952-7-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Thu, 22 Nov 2012 01:17:56 +0100")
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-6-git-send-email-s.martin49@gmail.com>
-Message-ID: <87haogfzyr.fsf@dell.be.48ers.dk>
+ <1353543503-8952-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <87d2z4fzwh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,40 +17,35 @@ To: buildroot@busybox.net
 
  Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
  Samuel> ---
- Samuel>  package/imagemagick/imagemagick.mk | 6 ++++++
- Samuel>  1 file changed, 6 insertions(+)
+ Samuel>  package/sylpheed/sylpheed.mk | 2 +-
+ Samuel>  1 file changed, 1 insertion(+), 1 deletion(-)
 
- Samuel> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
- Samuel> index 61a379d..365a073 100644
- Samuel> --- a/package/imagemagick/imagemagick.mk
- Samuel> +++ b/package/imagemagick/imagemagick.mk
- Samuel> @@ -35,6 +35,12 @@ IMAGEMAGICK_CONF_OPT = --program-transform-name='s,,,' \
+ Samuel> diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+ Samuel> index cf55c90..3ac2e1e 100644
+ Samuel> --- a/package/sylpheed/sylpheed.mk
+ Samuel> +++ b/package/sylpheed/sylpheed.mk
+ Samuel> @@ -9,7 +9,7 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+ Samuel>  SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+ Samuel>  SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
  
- Samuel>  IMAGEMAGICK_DEPENDENCIES = host-pkgconf
+ Samuel> -SYLPHEED_CONF_OPT = --disable-gtkspell
+ Samuel> +SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
+
+Why? Does it pick up libgpgme from the host?
+
+It would be good if you could write a bit more detailed commit messages.
+
  
- Samuel> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- Samuel> +IMAGEMAGICK_CONF_OPT = --with-magick-plus-plus
- Samuel> +else
- Samuel> +IMAGEMAGICK_CONF_OPT = --without-magick-plus-plus
- Samuel> +endif
+ Samuel>  SYLPHEED_DEPENDENCIES = host-pkgconf libgtk2
+ 
+ Samuel> -- 
+ Samuel> 1.8.0
 
-Why? We set TARGET_CXX to 'false' if we don't have C++ support, and the
-configure script seems to handle it OK. I just did a quick test build
-with a minimal config:
+ Samuel> _______________________________________________
+ Samuel> buildroot mailing list
+ Samuel> buildroot at busybox.net
+ Samuel> http://lists.busybox.net/mailman/listinfo/buildroot
 
-BR2_arm=y
-BR2_arm926t=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/br/arm926t/usr"
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_PACKAGE_IMAGEMAGICK=y
-
-And I see the imagemagick configure script saying:
-
-Magick++          --with-magick-plus-plus=yes	no (failed tests)
-
-(and the build doesn't fail)
 
 -- 
 Bye, Peter Korsgaard
