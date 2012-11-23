@@ -1,40 +1,113 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 23 Nov 2012 10:47:38 +0100
-Subject: [Buildroot] [git commit] Revert "libhid: disable on avr32"
-Message-ID: <20121123094843.900C69032D@busybox.osuosl.org>
+From: Ronny Meeus <ronny.meeus@gmail.com>
+Date: Fri, 23 Nov 2012 14:04:24 +0100
+Subject: [Buildroot] Passing arguments to the linker when external toolchain
+	is used.
+Message-ID: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf5d51717ba4988d41c2e86157b95b08b26f379b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello
 
-This reverts commit 2424cc6783bbfb542f08cf1985b8c9ef18282161.
+I'm using buildroot to build an environment for MIPS (Cavium).
+For this I use a 64 bit toolchain provided by Cavium as an external toolchain.
 
-Now that we have a timerfd fix for libusb, this can be reverted.
+My buildroot configuration is as follows:
+* Buildroot 2012.05
+* Target Architecture: MIPS (big endian)
+* Target Architecture Variant: mips 64
+* Target ABI: n32
+* glibc
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+In my application we need to create partially linked objects that will
+be linked together in a final link step.
+I see that the correct options (ABI etc) are passed to the compiler
+via the ext-toolchain-wrapper construction, but for the linker this
+technique is not used. It is directly invoked without modifying the
+command line. If I want to create this partially linked file, I need
+to pass an extra option the linker to indicate that is needs to use
+the N32 abi (-melf32btsmipn32).
+
+To make this work, I needed to make 2 changes:
+- make the linker a link to the ext-toolchain-wrapper
+- change the ext-toolchain-wrapper so that it passes to options to the
+linker (currently the option is hardcoded but this needs to be changed
+so that the BR2_TARGET_LDFLAGS are used.
+Both changes are shown below.
+
+Please comment on whether this approach is the correct one or is there
+a better alternative available.
+
+$ hg diff toolchain/toolchain-external/ext-toolchain-wrapper.c
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c
+b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -19,7 +19,7 @@
+
+ static char path[PATH_MAX] = BR_CROSS_PATH;
+
+-static char *predef_args[] = {
++static char *predef_args_cc[] = {
+        path,
+        "--sysroot", BR_SYSROOT,
+ #ifdef BR_ARCH
+@@ -48,6 +48,11 @@ static char *predef_args[] = {
+ #endif
+ };
+
++static char *predef_args_lnk[] = {
++       path,
++       "-melf32btsmipn32",
++};
++
+ static const char *get_basename(const char *name)
+ {
+        const char *base;
+@@ -64,16 +69,24 @@ static const char *get_basename(const ch
+ int main(int argc, char **argv)
+ {
+        char **args, **cur;
++       char **predef_args = predef_args_cc;
++       int size_args = sizeof(predef_args_cc);
+
+-       cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
++       if (strcmp(argv[0]+strlen(argv[0])-3,"-ld") == 0) {
++               predef_args = predef_args_lnk;
++               size_args = sizeof(predef_args_lnk);
++       }
++
++       cur = args = malloc(size_args + (sizeof(char *) * argc));
+        if (args == NULL) {
+                perror(__FILE__ ": malloc");
+                return 2;
+        }
+
+        /* start with predefined args */
+-       memcpy(cur, predef_args, sizeof(predef_args));
+-       cur += sizeof(predef_args) / sizeof(predef_args[0]);
++       memcpy(cur, predef_args, size_args);
++       cur += size_args / sizeof(predef_args[0]);
+
+        /* append forward args */
+        memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
+
+
+diff --git a/toolchain/toolchain-external/ext-tool.mk
+b/toolchain/toolchain-external/ext-tool.mk
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -440,7 +440,7 @@ endif
+        for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
+                base=$${i##*/}; \
+                case "$$base" in \
+-               *cc|*cc-*|*++|*++-*|*cpp) \
++               *cc|*cc-*|*++|*++-*|*cpp|*ld) \
+                        ln -sf $(@F) $$base; \
+                        ;; \
+                *) \
+
 ---
- package/libhid/Config.in |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
-
-diff --git a/package/libhid/Config.in b/package/libhid/Config.in
-index bd1cfcb..093b98f 100644
---- a/package/libhid/Config.in
-+++ b/package/libhid/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LIBHID
- 	bool "libhid"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
--	depends on !BR2_avr32 # timerfd not in uClibc-0.9.31
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
-@@ -10,4 +9,4 @@ config BR2_PACKAGE_LIBHID
- 	  http://libhid.alioth.debian.org
- 
- comment "libhid needs a toolchain with thread support"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS && !BR2_avr32
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Ronny
