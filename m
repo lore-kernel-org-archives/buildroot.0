@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:48:46 +0100
-Subject: [Buildroot] [PATCH 25/33] fluxbox: add license info
-In-Reply-To: <1353543503-8952-26-git-send-email-s.martin49@gmail.com>
+Date: Sun, 25 Nov 2012 00:04:58 +0100
+Subject: [Buildroot] [PATCH 24/33] efl packages: add license info
+In-Reply-To: <1353543503-8952-25-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-26-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B132AE.4040004@mind.be>
+ <1353543503-8952-25-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B1529A.2090704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,81 @@ To: buildroot@busybox.net
 On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
-> ---
->   package/fluxbox/fluxbox.mk | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-> index bb34379..d8f2723 100644
-> --- a/package/fluxbox/fluxbox.mk
-> +++ b/package/fluxbox/fluxbox.mk
+[snip]
+> diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
+> index 8b4814e..f768dba 100644
+> --- a/package/efl/libedje/libedje.mk
+> +++ b/package/efl/libedje/libedje.mk
 > @@ -7,6 +7,9 @@
->   FLUXBOX_VERSION = 1.3.2
->   FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.bz2
->   FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBOX_VERSION)
-> +FLUXBOX_LICENSE = as-is
-> +FLUXBOX_LICENSE_FILES = COPYING
-> +
+>   LIBEDJE_VERSION = 1.1.0
+>   LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
+>   LIBEDJE_SITE =  http://download.enlightenment.org/releases/
+> +LIBEDJE_LICENSE = epp binary is licensed under GPLv2, everything else is licensed under BSD-2c
 
-  It's a MIT license.
+  Although I'm OK with verbose license text, I think this is a bit too much.
+How about: "GPLv2+ (epp binary), BSD-2c (everything else)"
+
+  Note that it's GPLv2+
+
+> +LIBEDJE_LICENSE_FILES = COPYING
+> +
+>   LIBEDJE_INSTALL_STAGING = YES
+>
+>   LIBEDJE_DEPENDENCIES = host-pkgconf lua libeina libeet libecore libevas \
+[snip]
+> diff --git a/package/efl/libembryo/libembryo.mk b/package/efl/libembryo/libembryo.mk
+> index 5484ccf..6f66b10 100644
+> --- a/package/efl/libembryo/libembryo.mk
+> +++ b/package/efl/libembryo/libembryo.mk
+> @@ -7,6 +7,9 @@
+>   LIBEMBRYO_VERSION = 1.1.0
+>   LIBEMBRYO_SOURCE = embryo-$(LIBEMBRYO_VERSION).tar.bz2
+>   LIBEMBRYO_SITE = http://download.enlightenment.org/releases/
+> +LIBEMBRYO_LICENSE = source containing the ITB CompuPhase copyright are released as-is  and the others are licensed under BSD-2c
+
+  Again a bit too verbose.  I think the following should be sufficient:
+"BSD-2c, Embryo license"
+
+> +LIBEMBRYO_LICENSE_FILES = COPYING
+> +
+>   LIBEMBRYO_INSTALL_STAGING = YES
+>
+>   LIBEMBRYO_DEPENDENCIES = host-pkgconf libeina
+> diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
+> index 92e4c83..785fb28 100644
+> --- a/package/efl/libethumb/libethumb.mk
+> +++ b/package/efl/libethumb/libethumb.mk
+> @@ -7,6 +7,9 @@
+>   LIBETHUMB_VERSION = 0.1.1.65643
+>   LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
+>   LIBETHUMB_SITE = http://download.enlightenment.org/snapshots/2011-11-28
+> +LIBETHUMB_LICENSE = LGPLv2.1
+
+  LGPLv2.1+
 
 
   Regards,
   Arnout
 
->   FLUXBOX_AUTORECONF = YES
->   FLUXBOX_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
->   		   --x-libraries=$(STAGING_DIR)/usr/lib \
+> +LIBETHUMB_LICENSE_FILES = COPYING
+> +
+>   LIBETHUMB_INSTALL_STAGING = YES
+>
+>   LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
+> diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+> index 594db60..402aa48 100644
+> --- a/package/efl/libevas/libevas.mk
+> +++ b/package/efl/libevas/libevas.mk
+> @@ -7,6 +7,9 @@
+>   LIBEVAS_VERSION = 1.1.0
+>   LIBEVAS_SOURCE = evas-$(LIBEVAS_VERSION).tar.bz2
+>   LIBEVAS_SITE = http://download.enlightenment.org/releases/
+> +LIBEVAS_LICENSE = BSD-2c
+> +LIBEVAS_LICENSE_FILES = COPYING
+> +
+>   LIBEVAS_INSTALL_STAGING = YES
+>
+>   LIBEVAS_DEPENDENCIES = host-pkgconf zlib libeina freetype
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
