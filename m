@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Nov 2012 00:08:04 +0100
-Subject: [Buildroot] [PATCH 22/33] libmad: add license info
-In-Reply-To: <1353543503-8952-23-git-send-email-s.martin49@gmail.com>
+Date: Sun, 25 Nov 2012 00:15:24 +0100
+Subject: [Buildroot] [PATCH 33/33] sylpheed: add license info
+In-Reply-To: <1353543503-8952-34-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-23-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B15354.2040607@mind.be>
+ <1353543503-8952-34-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B1550C.7080709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +15,29 @@ On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
 > ---
->   package/libmad/libmad.mk | 2 ++
+>   package/sylpheed/sylpheed.mk | 2 ++
 >   1 file changed, 2 insertions(+)
 >
-> diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-> index 6999b66..1ce52ec 100644
-> --- a/package/libmad/libmad.mk
-> +++ b/package/libmad/libmad.mk
-> @@ -8,6 +8,8 @@ LIBMAD_VERSION = 0.15.1b
->   LIBMAD_SITE = http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
->   LIBMAD_INSTALL_STAGING = YES
->   LIBMAD_LIBTOOL_PATCH = NO
-> +LIBMAD_LICENSE = GPLv2
+> diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+> index 3ac2e1e..149c2a3 100644
+> --- a/package/sylpheed/sylpheed.mk
+> +++ b/package/sylpheed/sylpheed.mk
+> @@ -8,6 +8,8 @@ SYLPHEED_VERSION_MINOR = 0
+>   SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+>   SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+>   SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+> +SYLPHEED_LICENSE = GPLv2, except the libraries which are released under LGPLv2.1
 
-  It's GPLv2+
+  Both of them are +, so: GPLv2+ (executables), LGPLv2.1+ (library, attachment plugin)
 
 
   Regards,
   Arnout
 
-> +LIBMAD_LICENSE_FILES = COPYING
+> +SYLPHEED_LICENSE_FILES = COPIYNG COPYING.LIB
 >
->   define LIBMAD_PREVENT_AUTOMAKE
->   	# Prevent automake from running.
+>   SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
+>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
