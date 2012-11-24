@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:42:21 +0100
-Subject: [Buildroot] [PATCH 27/33] imagemagick: add license info
-In-Reply-To: <1353543503-8952-28-git-send-email-s.martin49@gmail.com>
+Date: Sat, 24 Nov 2012 21:46:54 +0100
+Subject: [Buildroot] [PATCH 26/33] igh-ethercat: add license info
+In-Reply-To: <1353543503-8952-27-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-28-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B1312D.6070405@mind.be>
+ <1353543503-8952-27-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B1323E.6070809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,33 @@ To: buildroot@busybox.net
 On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
+> ---
+>   package/igh-ethercat/igh-ethercat.mk | 4 ++++
+>   1 file changed, 4 insertions(+)
+>
+> diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+> index 9182f76..d37b6d3 100644
+> --- a/package/igh-ethercat/igh-ethercat.mk
+> +++ b/package/igh-ethercat/igh-ethercat.mk
+> @@ -1,6 +1,10 @@
+>   IGH_ETHERCAT_VERSION = 1.5.1
+>   IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
+>   IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
+> +# According to the README file IgH EtherCAT master is licensed under GPLv2,
+> +# while the source-tree contains a copy of the GPLv2 and one of the LGPLv3
+> +IGH_ETHERCAT_LICENSE = GPLv2
+> +IGH_ETHERCAT_LICENSE_FILES = COPYING COPYING.LESSER
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  The library is under LGPLv2.1. I guess they included the LGPLv3 by
+accident.
+
 
   Regards,
   Arnout
 
-> ---
->   package/imagemagick/imagemagick.mk | 3 +++
->   1 file changed, 3 insertions(+)
 >
-> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> index 365a073..725e529 100644
-> --- a/package/imagemagick/imagemagick.mk
-> +++ b/package/imagemagick/imagemagick.mk
-> @@ -11,6 +11,9 @@ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
->   # available, which is annoying. Use an alternate site that keeps all
->   # older versions.
->   IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick/
-> +IMAGEMAGICK_LICENSE = Apache-v2
-> +IMAGEMAGICK_LICENSE_FILES = LICENSE
-> +
->   IMAGEMAGICK_INSTALL_STAGING = YES
->   IMAGEMAGICK_AUTORECONF = YES
->
+>   IGH_ETHERCAT_DEPENDENCIES    = linux
+>   IGH_ETHERCAT_INSTALL_STAGING = YES
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
