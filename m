@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:41:32 +0100
-Subject: [Buildroot] [PATCH 29/33] ltp-testsuite: add license info
-In-Reply-To: <1353543503-8952-30-git-send-email-s.martin49@gmail.com>
+Date: Sat, 24 Nov 2012 21:42:21 +0100
+Subject: [Buildroot] [PATCH 27/33] imagemagick: add license info
+In-Reply-To: <1353543503-8952-28-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-30-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B130FC.9080904@mind.be>
+ <1353543503-8952-28-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B1312D.6070405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,30 @@ To: buildroot@busybox.net
 On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
-> ---
->   package/ltp-testsuite/ltp-testsuite.mk | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index c6b34f0..72d3a08 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -6,5 +6,7 @@
->   LTP_TESTSUITE_VERSION = 20101031
->   LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
->   LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
-> +LTP_TESTSUITE_LICENSE = GPLv2
-> +LTP_TESTSUITE_LICENSE_FILES = COPYING
 
-  Parts are GPLv2 and parts are GPLv2+, so I'd put both.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
 
+> ---
+>   package/imagemagick/imagemagick.mk | 3 +++
+>   1 file changed, 3 insertions(+)
 >
->   $(eval $(autotools-package))
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 365a073..725e529 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -11,6 +11,9 @@ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
+>   # available, which is annoying. Use an alternate site that keeps all
+>   # older versions.
+>   IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick/
+> +IMAGEMAGICK_LICENSE = Apache-v2
+> +IMAGEMAGICK_LICENSE_FILES = LICENSE
+> +
+>   IMAGEMAGICK_INSTALL_STAGING = YES
+>   IMAGEMAGICK_AUTORECONF = YES
+>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
