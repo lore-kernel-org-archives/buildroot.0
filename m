@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:29:41 +0100
-Subject: [Buildroot] [PATCH 28/33] imlib2: add license info
-In-Reply-To: <1353543503-8952-29-git-send-email-s.martin49@gmail.com>
+Date: Sat, 24 Nov 2012 21:37:40 +0100
+Subject: [Buildroot] [PATCH 30/33] matchbox packages: add license info
+In-Reply-To: <1353543503-8952-31-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-29-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B12E35.7080901@mind.be>
+ <1353543503-8952-31-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B13014.30301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,26 +15,33 @@ On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
 > ---
->   package/imlib2/imlib2.mk | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   package/matchbox/matchbox-common/matchbox-common.mk                   | 3 +++
+>   package/matchbox/matchbox-desktop/matchbox-desktop.mk                 | 3 +++
+>   package/matchbox/matchbox-fakekey/matchbox-fakekey.mk                 | 3 +++
+>   package/matchbox/matchbox-keyboard/matchbox-keyboard.mk               | 3 +++
+>   package/matchbox/matchbox-lib/matchbox-lib.mk                         | 3 +++
+>   package/matchbox/matchbox-panel/matchbox-panel.mk                     | 3 +++
+>   package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk | 3 +++
+>   package/matchbox/matchbox-wm/matchbox-wm.mk                           | 3 +++
+>   8 files changed, 24 insertions(+)
 >
-> diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-> index 3c6c473..52d80df 100644
-> --- a/package/imlib2/imlib2.mk
-> +++ b/package/imlib2/imlib2.mk
-> @@ -6,6 +6,9 @@
->   IMLIB2_VERSION = 1.4.5
->   IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
->   IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)/
-> +IMLIB2_LICENSE = as-is
-> +IMLIB2_LICENSE_FILES = COPYING
+> diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
+> index 993590c..2909f27 100644
+> --- a/package/matchbox/matchbox-common/matchbox-common.mk
+> +++ b/package/matchbox/matchbox-common/matchbox-common.mk
+> @@ -7,6 +7,9 @@ MATCHBOX_COMMON_VERSION_MAJOR = 0.9
+>   MATCHBOX_COMMON_VERSION = $(MATCHBOX_COMMON_VERSION_MAJOR).1
+>   MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
+>   MATCHBOX_COMMON_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
+> +MATCHBOX_COMMON_LICENSE = GPLv2
 
-  I think we'll have to call this 'imlib2 license'.  'as-is' is too meaningless
-if you ask me.  The license resembles MIT a bit, but the requirement of public
-acknowledgement diverges too much to still call it MIT-like.
+  As far as I can see, all files say 'or later', so it should
+be GPLv2+.  And this is for all matchbox-xxx packages.
 
   Regards,
   Arnout
+
+[snip]
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
