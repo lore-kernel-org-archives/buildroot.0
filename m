@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Nov 2012 00:06:53 +0100
-Subject: [Buildroot] [PATCH 23/33] scons: add license info
-In-Reply-To: <1353543503-8952-24-git-send-email-s.martin49@gmail.com>
+Date: Sun, 25 Nov 2012 00:08:04 +0100
+Subject: [Buildroot] [PATCH 22/33] libmad: add license info
+In-Reply-To: <1353543503-8952-23-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-24-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B1530D.2050403@mind.be>
+ <1353543503-8952-23-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B15354.2040607@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,30 @@ To: buildroot@busybox.net
 On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
+> ---
+>   package/libmad/libmad.mk | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
+> index 6999b66..1ce52ec 100644
+> --- a/package/libmad/libmad.mk
+> +++ b/package/libmad/libmad.mk
+> @@ -8,6 +8,8 @@ LIBMAD_VERSION = 0.15.1b
+>   LIBMAD_SITE = http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
+>   LIBMAD_INSTALL_STAGING = YES
+>   LIBMAD_LIBTOOL_PATCH = NO
+> +LIBMAD_LICENSE = GPLv2
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  It's GPLv2+
 
 
   Regards,
   Arnout
 
-> ---
->   package/scons/scons.mk | 3 +++
->   1 file changed, 3 insertions(+)
+> +LIBMAD_LICENSE_FILES = COPYING
 >
-> diff --git a/package/scons/scons.mk b/package/scons/scons.mk
-> index 45f2e1e..92cfe93 100644
-> --- a/package/scons/scons.mk
-> +++ b/package/scons/scons.mk
-> @@ -1,6 +1,9 @@
->   SCONS_VERSION = 2.0.1
->   SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
->   SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
-> +SCONS_LICENSE = MIT
-> +SCONS_LICENSE_FILES = LICENSE.txt
-> +
->   HOST_SCONS_DEPENDENCIES = $(NEED_PYTHON2)
->
->   define HOST_SCONS_BUILD_CMDS
+>   define LIBMAD_PREVENT_AUTOMAKE
+>   	# Prevent automake from running.
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
