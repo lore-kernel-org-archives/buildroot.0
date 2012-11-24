@@ -1,60 +1,87 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Nov 2012 00:33:25 +0100
-Subject: [Buildroot] Passing arguments to the linker when external
- toolchain is used.
-In-Reply-To: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
-References: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
-Message-ID: <50B15945.90300@mind.be>
+Date: Sun, 25 Nov 2012 00:51:45 +0100
+Subject: [Buildroot] [PATCH v2] gstreamer: Added option to disable plugin
+In-Reply-To: <98E3058E5505294895CA69F176CAD66272CE97@LEMAIL01.le.imgtec.org>
+References: <98E3058E5505294895CA69F176CAD66272CE97@LEMAIL01.le.imgtec.org>
+Message-ID: <50B15D91.8090708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/11/12 14:04, Ronny Meeus wrote:
-> Hello
->
-> I'm using buildroot to build an environment for MIPS (Cavium).
-> For this I use a 64 bit toolchain provided by Cavium as an external toolchain.
->
-> My buildroot configuration is as follows:
-> * Buildroot 2012.05
-> * Target Architecture: MIPS (big endian)
-> * Target Architecture Variant: mips 64
-> * Target ABI: n32
-> * glibc
->
-> In my application we need to create partially linked objects that will
-> be linked together in a final link step.
-> I see that the correct options (ABI etc) are passed to the compiler
-> via the ext-toolchain-wrapper construction, but for the linker this
-> technique is not used. It is directly invoked without modifying the
-> command line. If I want to create this partially linked file, I need
-> to pass an extra option the linker to indicate that is needs to use
-> the N32 abi (-melf32btsmipn32).
+  Hi Tim,
 
-  First of all, I don't understand why ld needs any option that we normally
-pass to the compiler.  Do the -march, -mtune and -mfpu options even work
-in ld?
+  The whitespace in your patch is messed up by your e-mail client.  Please use
+git send-email to avoid this.
 
-  That said, if you do need the CFLAGS, then perhaps you should use
-'$(CC) -nostdlib' rather than $(LD) (and of course pass ld-specific
-options using -Wl,...).
+
+On 22/11/12 14:53, Tim Sheridan wrote:
+> The plugin registry can take a while to be generated when GStreamer is initialized. Turning it off speeds up GStreamer application launch times. Default behaviour is unchanged.
+
+  Please wrap the commit message at +- 72 characters
 
 >
-> To make this work, I needed to make 2 changes:
-> - make the linker a link to the ext-toolchain-wrapper
-> - change the ext-toolchain-wrapper so that it passes to options to the
-> linker (currently the option is hardcoded but this needs to be changed
-> so that the BR2_TARGET_LDFLAGS are used.
+> Signed-off-by: Tim Sheridan<tim.sheridan@imgtec.com>
+> ---
+>   package/multimedia/gstreamer/Config.in    |    9 +++++++++
+>   package/multimedia/gstreamer/gstreamer.mk |    3 ++-
+>   2 files changed, 11 insertions(+), 1 deletions(-)
+>
+> diff --git a/package/multimedia/gstreamer/Config.in b/package/multimedia/gstreamer/Config.in
+> index 4d279b8..e946b18 100644
+> --- a/package/multimedia/gstreamer/Config.in
+> +++ b/package/multimedia/gstreamer/Config.in
+> @@ -16,5 +16,14 @@ config BR2_PACKAGE_GSTREAMER_GST_DEBUG
+>            in gstreamer. This has limited CPU overhead, but does
+>            increase the rootfs size somewhat.
+>
+> +config BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY
+> +       bool "enable plugin registry"
+> +       default y
+> +       depends on BR2_PACKAGE_GSTREAMER
+> +       help
+> +         Enable support for the GStreamer plugin registry.
+> +         This may increase the launch-time for a GStreamer
+> +         application.
 
-  Since not all gcc flags are supported by ld, I think it should be a
-separate toolchain wrapper, specific for ld.  It can be generated from
-the same source code, though (using ifdefs).
+  The Config.in things should be indented with 1 tab, help text with
+1 tab and 2 spaces.  Wrapping should be at 80 characters, with the tab
+counting as 8 characters.
+
+> +
+>   comment "gstreamer requires a toolchain with WCHAR support"
+>          depends on !BR2_USE_WCHAR
+> diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+> index a9841b1..b87f029 100644
+> --- a/package/multimedia/gstreamer/gstreamer.mk
+> +++ b/package/multimedia/gstreamer/gstreamer.mk
+> @@ -21,7 +21,8 @@ GSTREAMER_CONF_OPT = \
+>                  --disable-tests \
+>                  --disable-failing-tests \
+>                  --disable-loadsave \
+> -               $(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug)
+> +               $(if $(BR2_PACKAGE_GSTREAMER_GST_DEBUG),,--disable-gst-debug) \
+> +               $(if
+> + $(BR2_PACKAGE_GSTREAMER_PLUGIN_REGISTRY),,--disable-registry)
+
+  No need to split this line, even if it goes over 80 characters. It's less readable
+when split.
+
+
+  All my comments are just whitespace-related, so:
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
   Regards,
   Arnout
+
+>
+>   GSTREAMER_DEPENDENCIES = libglib2 host-pkgconf
+>
+> --
+> 1.7.1
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
