@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:37:40 +0100
-Subject: [Buildroot] [PATCH 30/33] matchbox packages: add license info
-In-Reply-To: <1353543503-8952-31-git-send-email-s.martin49@gmail.com>
+Date: Sat, 24 Nov 2012 21:41:32 +0100
+Subject: [Buildroot] [PATCH 29/33] ltp-testsuite: add license info
+In-Reply-To: <1353543503-8952-30-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-31-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B13014.30301@mind.be>
+ <1353543503-8952-30-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B130FC.9080904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +15,28 @@ On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
 > ---
->   package/matchbox/matchbox-common/matchbox-common.mk                   | 3 +++
->   package/matchbox/matchbox-desktop/matchbox-desktop.mk                 | 3 +++
->   package/matchbox/matchbox-fakekey/matchbox-fakekey.mk                 | 3 +++
->   package/matchbox/matchbox-keyboard/matchbox-keyboard.mk               | 3 +++
->   package/matchbox/matchbox-lib/matchbox-lib.mk                         | 3 +++
->   package/matchbox/matchbox-panel/matchbox-panel.mk                     | 3 +++
->   package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk | 3 +++
->   package/matchbox/matchbox-wm/matchbox-wm.mk                           | 3 +++
->   8 files changed, 24 insertions(+)
+>   package/ltp-testsuite/ltp-testsuite.mk | 2 ++
+>   1 file changed, 2 insertions(+)
 >
-> diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
-> index 993590c..2909f27 100644
-> --- a/package/matchbox/matchbox-common/matchbox-common.mk
-> +++ b/package/matchbox/matchbox-common/matchbox-common.mk
-> @@ -7,6 +7,9 @@ MATCHBOX_COMMON_VERSION_MAJOR = 0.9
->   MATCHBOX_COMMON_VERSION = $(MATCHBOX_COMMON_VERSION_MAJOR).1
->   MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
->   MATCHBOX_COMMON_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
-> +MATCHBOX_COMMON_LICENSE = GPLv2
+> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+> index c6b34f0..72d3a08 100644
+> --- a/package/ltp-testsuite/ltp-testsuite.mk
+> +++ b/package/ltp-testsuite/ltp-testsuite.mk
+> @@ -6,5 +6,7 @@
+>   LTP_TESTSUITE_VERSION = 20101031
+>   LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
+>   LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
+> +LTP_TESTSUITE_LICENSE = GPLv2
+> +LTP_TESTSUITE_LICENSE_FILES = COPYING
 
-  As far as I can see, all files say 'or later', so it should
-be GPLv2+.  And this is for all matchbox-xxx packages.
+  Parts are GPLv2 and parts are GPLv2+, so I'd put both.
 
   Regards,
   Arnout
 
-[snip]
+>
+>   $(eval $(autotools-package))
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
