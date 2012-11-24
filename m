@@ -1,43 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Nov 2012 00:15:24 +0100
-Subject: [Buildroot] [PATCH 33/33] sylpheed: add license info
-In-Reply-To: <1353543503-8952-34-git-send-email-s.martin49@gmail.com>
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-34-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B1550C.7080709@mind.be>
+Date: Sun, 25 Nov 2012 00:33:25 +0100
+Subject: [Buildroot] Passing arguments to the linker when external
+ toolchain is used.
+In-Reply-To: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
+References: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
+Message-ID: <50B15945.90300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/11/12 01:18, Samuel Martin wrote:
+On 23/11/12 14:04, Ronny Meeus wrote:
+> Hello
 >
-> Signed-off-by: Samuel Martin<s.martin49@gmail.com>
-> ---
->   package/sylpheed/sylpheed.mk | 2 ++
->   1 file changed, 2 insertions(+)
+> I'm using buildroot to build an environment for MIPS (Cavium).
+> For this I use a 64 bit toolchain provided by Cavium as an external toolchain.
 >
-> diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-> index 3ac2e1e..149c2a3 100644
-> --- a/package/sylpheed/sylpheed.mk
-> +++ b/package/sylpheed/sylpheed.mk
-> @@ -8,6 +8,8 @@ SYLPHEED_VERSION_MINOR = 0
->   SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
->   SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
->   SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
-> +SYLPHEED_LICENSE = GPLv2, except the libraries which are released under LGPLv2.1
+> My buildroot configuration is as follows:
+> * Buildroot 2012.05
+> * Target Architecture: MIPS (big endian)
+> * Target Architecture Variant: mips 64
+> * Target ABI: n32
+> * glibc
+>
+> In my application we need to create partially linked objects that will
+> be linked together in a final link step.
+> I see that the correct options (ABI etc) are passed to the compiler
+> via the ext-toolchain-wrapper construction, but for the linker this
+> technique is not used. It is directly invoked without modifying the
+> command line. If I want to create this partially linked file, I need
+> to pass an extra option the linker to indicate that is needs to use
+> the N32 abi (-melf32btsmipn32).
 
-  Both of them are +, so: GPLv2+ (executables), LGPLv2.1+ (library, attachment plugin)
+  First of all, I don't understand why ld needs any option that we normally
+pass to the compiler.  Do the -march, -mtune and -mfpu options even work
+in ld?
+
+  That said, if you do need the CFLAGS, then perhaps you should use
+'$(CC) -nostdlib' rather than $(LD) (and of course pass ld-specific
+options using -Wl,...).
+
+>
+> To make this work, I needed to make 2 changes:
+> - make the linker a link to the ext-toolchain-wrapper
+> - change the ext-toolchain-wrapper so that it passes to options to the
+> linker (currently the option is hardcoded but this needs to be changed
+> so that the BR2_TARGET_LDFLAGS are used.
+
+  Since not all gcc flags are supported by ld, I think it should be a
+separate toolchain wrapper, specific for ld.  It can be generated from
+the same source code, though (using ifdefs).
 
 
   Regards,
   Arnout
-
-> +SYLPHEED_LICENSE_FILES = COPIYNG COPYING.LIB
->
->   SYLPHEED_CONF_OPT = --disable-gtkspell --disable-gpgme
->
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
