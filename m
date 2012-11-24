@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:20:46 +0100
-Subject: [Buildroot] [PATCH 31/33] owl-linux: add license info
-In-Reply-To: <1353543503-8952-32-git-send-email-s.martin49@gmail.com>
+Date: Sat, 24 Nov 2012 21:29:41 +0100
+Subject: [Buildroot] [PATCH 28/33] imlib2: add license info
+In-Reply-To: <1353543503-8952-29-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-32-git-send-email-s.martin49@gmail.com>
-Message-ID: <50B12C1E.6070100@mind.be>
+ <1353543503-8952-29-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B12E35.7080901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +15,26 @@ On 22/11/12 01:18, Samuel Martin wrote:
 >
 > Signed-off-by: Samuel Martin<s.martin49@gmail.com>
 > ---
->   package/owl-linux/owl-linux.mk | 2 ++
->   1 file changed, 2 insertions(+)
+>   package/imlib2/imlib2.mk | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
-> index 0a111c8..e5846a4 100644
-> --- a/package/owl-linux/owl-linux.mk
-> +++ b/package/owl-linux/owl-linux.mk
-> @@ -5,6 +5,8 @@
->   #############################################################
->   OWL_LINUX_VERSION = 1.0.7
->   OWL_LINUX_SITE = http://linux.hd-wireless.se/pub/Linux/DownloadDrivers
-> +OWL_LINUX_LICENSE = as-is
-> +OWL_LINUX_LICENSE_FILES = LICENSE
+> diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+> index 3c6c473..52d80df 100644
+> --- a/package/imlib2/imlib2.mk
+> +++ b/package/imlib2/imlib2.mk
+> @@ -6,6 +6,9 @@
+>   IMLIB2_VERSION = 1.4.5
+>   IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
+>   IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)/
+> +IMLIB2_LICENSE = as-is
+> +IMLIB2_LICENSE_FILES = COPYING
 
-  The way I read this license, it's PROPRIETARY.  The 'as-is' is just a
-warranty disclaimer.  The only reference to copyright is "All rights
-reserved" - i.e., you're not allowed to copy it (or even compile it).
-
-  This means you should also set OWL_LINUX_REDISTRIBUTE = NO.
+  I think we'll have to call this 'imlib2 license'.  'as-is' is too meaningless
+if you ask me.  The license resembles MIT a bit, but the requirement of public
+acknowledgement diverges too much to still call it MIT-like.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
