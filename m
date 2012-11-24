@@ -1,57 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 24 Nov 2012 21:09:08 +0100
-Subject: [Buildroot] [PATCH 32/33] rrdtool: add license info
-In-Reply-To: <CAHXCMM+pc8K8BUG7TcVBr5Q+-LYy2KLFNSgs7vkPTsOhLsVptA@mail.gmail.com>
+Date: Sat, 24 Nov 2012 21:20:46 +0100
+Subject: [Buildroot] [PATCH 31/33] owl-linux: add license info
+In-Reply-To: <1353543503-8952-32-git-send-email-s.martin49@gmail.com>
 References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-33-git-send-email-s.martin49@gmail.com>
- <20121122051744.GA10958@sapphire.tkos.co.il>
- <CAHXCMM+pc8K8BUG7TcVBr5Q+-LYy2KLFNSgs7vkPTsOhLsVptA@mail.gmail.com>
-Message-ID: <50B12964.4030803@mind.be>
+ <1353543503-8952-32-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B12C1E.6070100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/11/12 11:07, Samuel Martin wrote:
-> Hi Baruch, all,
+On 22/11/12 01:18, Samuel Martin wrote:
 >
-> 2012/11/22 Baruch Siach<baruch@tkos.co.il>:
-> > Hi Samuel,
-> >
-> > On Thu, Nov 22, 2012 at 01:18:22AM +0100, Samuel Martin wrote:
-> >>
-> >> Signed-off-by: Samuel Martin<s.martin49@gmail.com>
-> >> ---
-> >>   package/rrdtool/rrdtool.mk | 3 +++
-> >>   1 file changed, 3 insertions(+)
-> >>
-> >> diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
-> >> index 8799a85..4392b50 100644
-> >> --- a/package/rrdtool/rrdtool.mk
-> >> +++ b/package/rrdtool/rrdtool.mk
-> >> @@ -6,6 +6,9 @@
-> >>
-> >>   RRDTOOL_VERSION = 1.2.30
-> >>   RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
-> >> +RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in COPYRIGHT
-> >> +RRDTOOL_LICENSE_FILES = COPYING
-> >
-> > Shouldn't COPYRIGHT also be listed with the license files?
-> The Copyright file just tells us "wrt the license, you can do that and
-> that, but not that with this software",
-> with some real use case.
+> Signed-off-by: Samuel Martin<s.martin49@gmail.com>
+> ---
+>   package/owl-linux/owl-linux.mk | 2 ++
+>   1 file changed, 2 insertions(+)
 >
-> Shall we consider as part of the license files?
+> diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
+> index 0a111c8..e5846a4 100644
+> --- a/package/owl-linux/owl-linux.mk
+> +++ b/package/owl-linux/owl-linux.mk
+> @@ -5,6 +5,8 @@
+>   #############################################################
+>   OWL_LINUX_VERSION = 1.0.7
+>   OWL_LINUX_SITE = http://linux.hd-wireless.se/pub/Linux/DownloadDrivers
+> +OWL_LINUX_LICENSE = as-is
+> +OWL_LINUX_LICENSE_FILES = LICENSE
 
-  Since you refer to it in the RRDTOOL_LICENSE, yes the COPYRIGHT file
-should be included.
+  The way I read this license, it's PROPRIETARY.  The 'as-is' is just a
+warranty disclaimer.  The only reference to copyright is "All rights
+reserved" - i.e., you're not allowed to copy it (or even compile it).
 
-  Note that "GPLv2+ with exceptions" is probably enough, since the
-user should anyway look at COPYRIGHT to find out the details.
+  This means you should also set OWL_LINUX_REDISTRIBUTE = NO.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
