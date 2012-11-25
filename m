@@ -1,48 +1,33 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Nov 2012 23:25:37 +0100
-Subject: [Buildroot] Passing arguments to the linker when external
- toolchain is used.
-In-Reply-To: <CAMJ=MEcBJR8R_2SsfuLSz1dxheVz-iede6R6wG-xd7RvxAdpTQ@mail.gmail.com>
-References: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
- <50B15945.90300@mind.be>
- <CAMJ=MEfp0Bevk141N4n8KAn2AzbRpEDfLX9513crSDLTxBKkwA@mail.gmail.com>
- <50B28348.7090701@mind.be>
- <CAMJ=MEcBJR8R_2SsfuLSz1dxheVz-iede6R6wG-xd7RvxAdpTQ@mail.gmail.com>
-Message-ID: <50B29AE1.1000100@mind.be>
+Date: Sun, 25 Nov 2012 23:31:24 +0100
+Subject: [Buildroot] [PATCH 2/2] manual: autogenerate *-list.txt
+In-Reply-To: <1353544211-9308-2-git-send-email-s.martin49@gmail.com>
+References: <1353544211-9308-1-git-send-email-s.martin49@gmail.com>
+ <1353544211-9308-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <50B29C3C.5090702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/11/12 21:56, Ronny Meeus wrote:
-> On Sun, Nov 25, 2012 at 9:44 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
-[snip]
->>   In that case, why not just pass them with LDFLAGS?
->>
+On 22/11/12 01:30, Samuel Martin wrote:
+> I wonder whether the deprecated-list.txt file should be kept under
+> scm; here I've just removed it and auto-generate it whenever the
+> manual is built.
 >
-> Our SW is build in 2 parts: the Linux kernel, buildroot and other
-> components are build via buildroot itself.
-> Next to this we also have other applications that we build in with "a
-> private build infrastructure" using the toolchain, include files etc
-> of buildroot.
+> It works well because the python script does not miss anything... so far.
 >
-> By adding the extra linker parameters with the wrapper construction we
-> can transparantly introduce a new toolchain (with the required
-> parameters) in that environment without impact on our build
-> infrastructure. The big advantage is that the complete toolchain
-> selection (CPU,ABI etc) only needs to be done in buildroot.
+> However, at the end, manual checking is still recommended.
+>
+> OTOH, keeping the deprecated-list.txt file under scm allows us to
+> enforce synchronization between marking something as deprecated and
+> the update of this list.
 
-  Yes, sounds like a valid use case.
-
-  I also expect that the LDFLAGS are not passed reliably for all packages:
-they are hardly ever used, and there are no autobuilder configurations with
-any LDFLAGS, so errors in passing LDFLAGS can go unnoticed.
-
-  I don't think we have any other architecture currently in buildroot that
-requires something to be passed to ld. If this wrapper construction is
-added to buildroot, it would be good if we would also have an internal
-use case.
+  I think these things should be kept under SCM.  Not just because manual
+checking is recommended, but also because I don't like writing anything outside
+the output directory.  Some people may have the buildroot tree in a shared,
+readonly location.
 
   Regards,
   Arnout
