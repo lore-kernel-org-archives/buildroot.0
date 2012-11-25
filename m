@@ -1,14 +1,15 @@
 From: Davide Viti <zinosat@tiscali.it>
-Date: Sun, 25 Nov 2012 13:57:57 +0100
-Subject: [Buildroot] [PATCH] List all the available hook points
-Message-ID: <1353848277-3759-1-git-send-email-zinosat@tiscali.it>
+Date: Sun, 25 Nov 2012 14:52:32 +0100
+Subject: [Buildroot] [PATCH] List the useful hook points available in
+	buildroot
+Message-ID: <1353851552-3986-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The list was obtained with the following command:
+The complete list can be obtained with the following command:
   grep "_HOOKS[ ]\+?=" package/pkg-generic.mk
 ---
  docs/manual/adding-packages-generic.txt |    3 +++
