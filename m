@@ -1,9 +1,9 @@
 From: Gregory Hermant <gregory.hermant@calao-systems.com>
-Date: Mon, 26 Nov 2012 12:05:14 +0100
-Subject: [Buildroot] [PATCH v4 1/6] snowball-hdmiservice: new package
+Date: Mon, 26 Nov 2012 12:05:19 +0100
+Subject: [Buildroot] [PATCH v4 6/6] Add config file for the snowball board
 In-Reply-To: <1353927919-7250-1-git-send-email-gregory.hermant@calao-systems.com>
 References: <1353927919-7250-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <1353927919-7250-2-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <1353927919-7250-7-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,87 +13,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 ---
- package/Config.in                                  |    1 +
- package/snowball-hdmiservice/Config.in             |   10 +++++
- .../snowball-hdmiservice/snowball-hdmiservice.mk   |   41 ++++++++++++++++++++
- 3 files changed, 52 insertions(+)
- create mode 100644 package/snowball-hdmiservice/Config.in
- create mode 100644 package/snowball-hdmiservice/snowball-hdmiservice.mk
+ configs/calao_snowball_defconfig |   28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 configs/calao_snowball_defconfig
 
-diff --git a/package/Config.in b/package/Config.in
-index 5d9783a..54cc841 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -250,6 +250,7 @@ source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- source "package/smartmontools/Config.in"
-+source "package/snowball-hdmiservice/Config.in"
- source "package/sredird/Config.in"
- source "package/statserial/Config.in"
- source "package/sysstat/Config.in"
-diff --git a/package/snowball-hdmiservice/Config.in b/package/snowball-hdmiservice/Config.in
+diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
 new file mode 100644
-index 0000000..0ea7c81
+index 0000000..700be5d
 --- /dev/null
-+++ b/package/snowball-hdmiservice/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SNOWBALL_HDMISERVICE
-+	bool "snowball-hdmiservice"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS	
-+	help
-+	  HDMI userspace control daemon
-+
-+	  This package contains the HDMI userspace control daemon for the 
-+	  snowball board
-+	  
-+	  http://www.igloocommunity.org
-diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-new file mode 100644
-index 0000000..ebd65df
---- /dev/null
-+++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# snowball-hdmiservice
-+#
-+#############################################################
-+SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
-+SNOWBALL_HDMISERVICE_SITE = git://igloocommunity.org/git/bsp/hdmiservice.git
-+SNOWBALL_HDMISERVICE_LICENSE = MIT
-+SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
-+SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
-+
-+define SNOWBALL_HDMISERVICE_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	
-+endef
-+
-+define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+define SNOWBALL_HDMISERVICE_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define SNOWBALL_HDMISERVICE_UNINSTALL_STAGING_CMDS
-+	rm -f $(STAGING_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(STAGING_DIR)/usr/bin/hdmistart
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_api.h
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_local.h
-+endef
-+
-+define SNOWBALL_HDMISERVICE_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(TARGET_DIR)/usr/bin/hdmistart
-+endef
-+
-+define SNOWBALL_HDMISERVICE_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+
-+$(eval $(generic-package))
++++ b/configs/calao_snowball_defconfig
+@@ -0,0 +1,28 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_GCC_VERSION_4_7_X=y
++# BR2_SOFT_FLOAT is not set
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
++BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
++BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_VFP_FLOAT=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_FBSET=y
++BR2_PACKAGE_SNOWBALL_HDMISERVICE=y
++BR2_PACKAGE_LIBNL=y
++BR2_PACKAGE_SNOWBALL_INIT=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_TARGET_ROOTFS_TAR_GZIP=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="snowball"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
++BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
++BR2_LINUX_KERNEL_DEFCONFIG="u8500"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 1.7.9.5
