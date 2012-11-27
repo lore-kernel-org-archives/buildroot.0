@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Nov 2012 10:54:28 +0100
-Subject: [Buildroot] How to regenerate zImage?
-In-Reply-To: <slrnkb87f4.2hp.narkewoody@zuhnb712.local.com>
-References: <slrnkamf41.9pu.narkewoody@zuhnb712.local.com>
- <20121120100158.15b1b159@skate>
- <slrnkamq24.2u9.narkewoody@zuhnb712.local.com>
- <20121121103844.0eeefba6@skate>
- <CAAsE_ud49Ku0NKg-8Ku1mbMXVxkSfLNefvV6pnst2B9GD-4o+A@mail.gmail.com>
- <20121126090218.69c0b3af@skate>
- <slrnkb87f4.2hp.narkewoody@zuhnb712.local.com>
-Message-ID: <20121127105428.2f8c2665@skate>
+Date: Tue, 27 Nov 2012 10:55:51 +0100
+Subject: [Buildroot] [PATCH for-2012.11 1/4] manual: various fixes
+In-Reply-To: <1354005013-28626-1-git-send-email-arnout@mind.be>
+References: <1354005013-28626-1-git-send-email-arnout@mind.be>
+Message-ID: <20121127105551.2ea1adb5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+Arnout,
 
-On Tue, 27 Nov 2012 01:57:46 +0000 (UTC), Woody Wu wrote:
+On Tue, 27 Nov 2012 09:30:10 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> 
+> Various minor linguistic fixes and consistency and correctness
+> improvements.
+> 
+> Also removing some sentences that are not or no longer relevant.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> Since you need a lot of context to review documentation, I increased
+> the context to 5 lines.
+> 
+> I originally planned to include only trivial fixes, but there turn
+> out to be a few more invasive changes. If necessary, I can split the
+> patch into trivial and potentially-controversial. I haven't done that
+> yet because I wanted to get this patch out ASAP for the 2012.11
+> release. Unless I get some ACKs earlier, I'll split the patch
+> tomorrow. ---
+>  .topdeps                                   |    1 +
+>  .topmsg                                    |   18 +++++++++
 
-> Many thanks.  I also want to do the same thing for the uboot, but I am
-> not certain what's the correct package name for it.  Should I use
-> UBOOT_OVERRIDE_SRCDIR or BOOT_OVERRIDE_SRCDIR? Thanks.
-
-The package is in boot/uboot/. The name of the package is the name of
-the directory, so 'uboot', which should be uppercased to UBOOT.
-Therefore:
-
-	UBOOT_OVERRIDE_SRCDIR
+The patch series contains those topgit things, that most likely
+shouldn't have been there :)
 
 Thomas
 -- 
