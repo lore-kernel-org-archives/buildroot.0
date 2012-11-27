@@ -1,9 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 27 Nov 2012 22:04:04 +0100
-Subject: [Buildroot] [PATCHv2 for-2012.11 1/5] manual: trivial fixes
-In-Reply-To: <1354046527-13132-1-git-send-email-arnout@mind.be>
+Date: Tue, 27 Nov 2012 22:04:32 +0100
+Subject: [Buildroot] [PATCHv2 for-2012.11 2/5] manual: various fixes
+In-Reply-To: <1354046527-13132-2-git-send-email-arnout@mind.be>
 References: <1354046527-13132-1-git-send-email-arnout@mind.be>
-Message-ID: <CAHXCMMLr9SVK7S=4k2TmtZ8+HuZecpL-Xqw5ST+kNduY4iO-Aw@mail.gmail.com>
+ <1354046527-13132-2-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMMJqkV-M2k8d9Xo1v1YQ8E5oEQobpJHUrSbg=6fUWi4pmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +16,111 @@ Hi Arnout, all,
 2012/11/27 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>:
 > From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 >
+> Various consistency and correctness improvements.
+>
+> Also removing some sentences that are not or no longer relevant.
+>
 > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 [...]
-> diff --git a/docs/manual/adding-packages-conclusion.txt b/docs/manual/adding-packages-conclusion.txt
-> index 42f1c8f..137b7c3 100644
-> --- a/docs/manual/adding-packages-conclusion.txt
-> +++ b/docs/manual/adding-packages-conclusion.txt
-> @@ -6,7 +6,7 @@ Conclusion
->  As you can see, adding a software package to Buildroot is simply a
->  matter of writing a Makefile using an existing example and modifying it
->  according to the compilation process required by the package.
->
->  If you package software that might be useful for other people, don't
-> -forget to send a patch to Buildroot developers!
-> +forget to send a patch to the Buildroot mailing list!
-You could add a cross-ref to the section "Contributing to Buildroot" here ;)
+>  * Use a +depends on+ type of dependency when the user really needs to
+>    be aware of the dependency. Typically, Buildroot uses this type of
+>    dependency for dependencies on toolchain options (target
+>    architecture, MMU support, C library, C++ support, large file
+>    support, thread support, RPC support, IPV6 support, WCHAR support),
+> -  or for dependencies on "big" things, such as the X.org system. In
+> -  some cases, especially dependency on toolchain options, it is
+> -  recommended to add a +comment+ displayed when the option is not
+> +  or for dependencies on "big" things, such as the X.org system. For
+> +  dependencies on toolchain options,there should be a +comment+ that
+s/options,there/options, there/
 
+> +  is displayed when the option is not
+>    enabled, so that the user knows why the package is not available.
+>    The +depends on+ keyword express the dependency with a forward
+>    semantic.
 >
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index c8f41ff..88a4645 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -5,11 +5,11 @@ Package directory
+>  .Note
+> @@ -158,11 +159,11 @@ Note that such dependencies will ensure that the dependency option
+>  is also enabled, but not necessarily built before your package. To do
+>  so, the dependency also needs to be expressed in the +.mk+ file of the
+>  package.
 >
->  First of all, create a directory under the +package+ directory for
->  your software, for example +libfoo+.
+>  Further formatting details: see xref:writing-rules-config-in[the
+> -writing rules].
+> +coding style].
 >
->  Some packages have been grouped by topic in a sub-directory:
-> -+multimedia+, +java+, +x11r7+, and +games+. If your package fits in
-> ++multimedia+, +x11r7+, +efl+ and +matchbox+. If your package fits in
->  one of these categories, then create your package directory in these.
+>  The +.mk+ file
+>  ^^^^^^^^^^^^^^
 >
->
->  +Config.in+ file
->  ^^^^^^^^^^^^^^^^
+>  Finally, here's the hardest part. Create a file named +libfoo.mk+. It
 > diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-> index b05043a..ee96bc1 100644
+> index ee96bc1..7025320 100644
 > --- a/docs/manual/adding-packages-generic.txt
 > +++ b/docs/manual/adding-packages-generic.txt
-> @@ -173,12 +173,12 @@ information is (assuming the package name is +libfoo+) :
->    If +HOST_LIBFOO_SITE+ is not specified, it defaults to
->    +LIBFOO_SITE+.
->    Examples: +
->      +LIBFOO_SITE=http://www.libfoosoftware.org/libfoo+ +
->      +LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/+ +
-> -    +LIBFOO_SITE=git://github.com/kergoth/tslib.git+
-> -    +LIBFOO_SITE=/opt/software/libfoo.tar.gz+
-> +    +LIBFOO_SITE=git://github.com/kergoth/tslib.git+ +
-> +    +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
->      +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
-Well, clearly in the whole section, the example html rendering is not
-so nice and should be reworked.
-Something for the todo list ;)
-
+> @@ -149,15 +149,15 @@ information is (assuming the package name is +libfoo+) :
+>    Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
 >
->  * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
->    package source code. In many cases, Buildroot guesses the method
->    from the contents of +LIBFOO_SITE+ and setting +LIBFOO_SITE_METHOD+
-> @@ -219,11 +219,11 @@ information is (assuming the package name is +libfoo+) :
+>  * +LIBFOO_PATCH+ may contain the name of a patch, that will be
+>    downloaded from the same location as the tarball indicated in
+>    +LIBFOO_SOURCE+. If +HOST_LIBFOO_PATCH+ is not specified, it
+> -  defaults to +LIBFOO_PATCH+. Also note that another mechanism is
+> -  available to patch a package: all files of the form
+> -  +packagename-packageversion-description.patch+ present in the
+> +  defaults to +LIBFOO_PATCH+. Note that patches that are included
+> +  in Buildroot itself use a different mechanism: all files of the
+> +  form +packagename-packageversion-description.patch+ present in the
+Well, actually the pattern is "packagename-*.patch" in the following
+directories:
+- package/<packagename>/<packagename-packageversion>/ if this
+subdirectory exists;
+- package/<packagename>/ otherwise.
+
+>    package directory inside Buildroot will be applied to the package
+> -  after extraction.
+> +  after extraction (see xref:patch-policy[patching a package]).
+>
 [...]
+>  [[github-download-url]]
+>  How to add a package from github
+>  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >
->  [[legal-info-list-licenses]]
-> +License abbreviations
-> +---------------------
+> -If the package has no release version, or its version cannot be
+> -identified using tag, then the sha1 of the particular commit should be
+> -used to identify the version (the first 7 characters of the sha1 are
+> -enough):
+> -
+> -------------------------
+> -FOO_VERSION = 1234567
+> -FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
+> -------------------------
+> +Packages on github often don't have a download area with release tarballs.
+> +However, it is possible to download tarballs directly from the repository
+> +on github.
+>
+>  If the package version matches a tag, then this tag should be used to
+>  identify the version:
+>
+>  ------------------------
+>  FOO_VERSION = v1.0
+>  FOO_SITE = http://github.com/<user>/<package>/tarball/$(FOO_VERSION)
+>  ------------------------
 > +
->  Here is a list of the licenses that are most widely used by packages in
->  Buildroot, with the name used in the manifest file:
->
->  * +GPLv2+:
->    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
-> @@ -84,10 +88,17 @@ Buildroot, with the name used in the manifest file:
->    GNU General Public License, version 3]
->    or (at your option) any later version;
->  * +GPL+:
->    http://www.gnu.org/licenses/gpl.html[
->    GNU General Public License] (any version);
-> +* +LGPLv2+:
-> +  http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html[
-> +  GNU Library General Public License, version 2];
-> +* +LGPLv2++:
-You may need to use `...` instead of +...+ here.
+> +If the package has no release version, or its version cannot be
+> +identified using tag, then the SHA1 of the particular commit should be
+> +used to identify the version (the first 7 characters of the SHA1 are
+> +enough):
+> +
+> +------------------------
+> +FOO_VERSION = 1234567
+> +FOO_SITE = http://github.com/<user>/<package>/tarball/<branch>
+> +------------------------
+> +
+> +Note that the name of the name of the tarball is the default
+s/the name of the name of/the name of/
 
-> +  http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html[
-> +  GNU Library General Public License, version 2.1]
-> +  or (at your option) any later version;
->  * +LGPLv2.1+:
->    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html[
->    GNU Lesser General Public License, version 2.1];
->  * +LGPLv2.1++:
-ditto
+> ++foo-1234567.tar.gz+ so it is not necessary to specify it in the +.mk+
+> +file.
+[...]
 
 Regards,
 
