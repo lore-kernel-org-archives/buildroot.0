@@ -1,59 +1,39 @@
-From: John Tobias <john.tobias.ph@gmail.com>
-Date: Tue, 27 Nov 2012 10:25:18 -0800
-Subject: [Buildroot] Package Management
-Message-ID: <CACUGKYNYvemiQqxvu03Pdzax8X2mxVKZhKy7CYbd9yq_gVkQYg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Nov 2012 16:23:08 -0300
+Subject: [Buildroot] [PATCH] ocf-linux: tweak kernel patch for newer kernels
+Message-ID: <1354044188-23646-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Newer kernels had a slight change in the random number API so the OCF
+patchset requires a slight tweak to build and run properly.
 
-My package management support is working in generic-package,
-pkg-autotools, pkg-cmake. By default, if you compile any libraries, it
-will create a package file (.pkg) with or without modifying the .mk
-file of the library, except for generic-package. I will provide a
-patch file sometimes next week if you guys are interested to try it...
+Affected kernels are, per series:
+>=3.0.41, >=3.2.29, >=3.4.9, >=3.5.2 and any newer version.
 
-Right now, if I compile the busybox for example, I have to add the
-function BUSYBOX_CREATE_PACKAGE_CMDS definition in the .mk file of the
-busybox.
+The fix is applied by detecting the API change rather than guessing the
+kernel version.
 
-define BUSYBOX_CREATE_PACKAGE_CMDS
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ linux/linux-ext-ocf-linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-endif
-
-
-So, in my pkg-generic.mk I added the following:
-
-# Create package
-$(BUILD_DIR)/%/.stamp_create_package:
-@$(call MESSAGE,"Creating package")
-$($(PKG)_CREATE_PACKAGE_CMDS)
-$(foreach hook,$($(PKG)_POST_CREATE_PACKAGE_HOOKS),$(call $(hook))$(sep))
-$(Q)touch $@
-
-
-I need to check if the $(PKG)_CREATE_PACKAGE_CMDS exist or not in the
-current building library, so I did the following:
-
-# Create package
-$(BUILD_DIR)/%/.stamp_create_package:
-ifdef $(PKG)_CREATE_PACKAGE_CMDS
-@$(call MESSAGE,"Creating package")
-$($(PKG)_CREATE_PACKAGE_CMDS)
-$(foreach hook,$($(PKG)_POST_CREATE_PACKAGE_HOOKS),$(call $(hook))$(sep))
-endif
-$(Q)touch $@
-
-
-But, calling "ifdef $(PKG)_CREATE_PACKAGE_CMDS" to filter if the said
-function is exist or not.
-
-So my question is, how to check if the $(PKG)_CREATE_PACKAGE_CMDS is
-exist or not?.
-
-Regards,
-
-john
+diff --git a/linux/linux-ext-ocf-linux.mk b/linux/linux-ext-ocf-linux.mk
+index faf7360..1a601d5 100644
+--- a/linux/linux-ext-ocf-linux.mk
++++ b/linux/linux-ext-ocf-linux.mk
+@@ -15,6 +15,8 @@ LINUX_DEPENDENCIES += ocf-linux
+ define OCF_LINUX_PREPARE_KERNEL
+ 	support/scripts/apply-patches.sh $(LINUX_DIR) \
+ 		$(OCF_LINUX_DIR)/patches/ linux-3.2.1-ocf.patch ; \
++	grep -q __mix_pool_bytes $(LINUX_DIR)/drivers/char/random.c && \
++	$(SED) 's:wordcount\*4:&, NULL:' $(LINUX_DIR)/drivers/char/random.c ; \
+ 	cp -rf $(OCF_LINUX_DIR)/ocf $(LINUX_DIR)/crypto/ocf ;
+ endef
+ 
+-- 
+1.7.8.6
