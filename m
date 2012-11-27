@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 27 Nov 2012 22:59:19 +0100
-Subject: [Buildroot] [PATCHv3 for-2012.11 4/5] manual: give example where
-	_INSTALL_TARGET = NO
+Date: Tue, 27 Nov 2012 22:59:20 +0100
+Subject: [Buildroot] [PATCHv3 for-2012.11 5/5] manual: restructure 'Adding
+	packages' chapter
 In-Reply-To: <1354053560-30352-1-git-send-email-arnout@mind.be>
 References: <1354053560-30352-1-git-send-email-arnout@mind.be>
-Message-ID: <1354053560-30352-4-git-send-email-arnout@mind.be>
+Message-ID: <1354053560-30352-5-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,101 +13,60 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-The tutorial for autotools-package and cmake-package currently gives
-the bad example of setting _INSTALL_TARGET to YES, which is the default.
-So change this into an example with _INSTALL_TARGET = NO, and explain in
-which case this is relevant.
+The depends-on-vs-select part of the manual really deserves its own
+section title (especially because it is referred to and the xref gets
+a 'sinpara' in PDF if the section doesn't have a title). So restructure
+the surrounding sections to reduce the section nesting depth.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/adding-packages-autotools.txt |   16 ++++++++--------
- docs/manual/adding-packages-cmake.txt     |   14 +++++++-------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ docs/manual/adding-packages-directory.txt |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index 4127df4..84d76f9 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -19,12 +19,12 @@ package, with an example :
- 05: #############################################################
- 06: LIBFOO_VERSION = 1.0
- 07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
- 08: LIBFOO_SITE = http://www.foosoftware.org/download
- 09: LIBFOO_INSTALL_STAGING = YES
--10: LIBFOO_INSTALL_TARGET = YES
--11: LIBFOO_CONF_OPT = --enable-shared
-+10: LIBFOO_INSTALL_TARGET = NO
-+11: LIBFOO_CONF_OPT = --disable-shared
- 12: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
- 13:
- 14: $(eval $(autotools-package))
- ------------------------
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 5903ed1..5d17aac 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -11,11 +11,11 @@ Some packages have been grouped by topic in a sub-directory:
+ one of these categories, then create your package directory in these.
+ New subdirectories are discouraged, however.
  
-@@ -42,17 +42,17 @@ staging directory, since usually, only libraries need to be installed in
- the staging directory: their development files are needed to compile
- other libraries or applications depending on them. Also by default, when
- staging installation is enabled, packages are installed in this location
- using the +make install+ command.
  
--On line 10, we tell Buildroot to also install the package to the
-+On line 10, we tell Buildroot to not install the package to the
- target directory. This directory contains what will become the root
--filesystem running on the target. Usually, we try not to install header
--files and to install stripped versions of the binary. By default, target
--installation is enabled, so in fact, this line is not strictly
--necessary. Also by default, packages are installed in this location
--using the +make install+ command.
-+filesystem running on the target. For purely static libraries, it is
-+not necessary to install them in the target directory because they will
-+not be used at runtime. By default, target installation is enabled; setting
-+this variable to NO is almost never needed. Also by default, packages are
-+installed in this location using the +make install+ command.
+ +Config.in+ file
+-^^^^^^^^^^^^^^^^
++~~~~~~~~~~~~~~~~
  
- On line 11, we tell Buildroot to pass a custom configure option, that
- will be passed to the +./configure+ script before configuring
- and building the package.
+ Then, create a file named +Config.in+. This file will contain the
+ option descriptions related to our +libfoo+ software that will be used
+ and displayed in the configuration tool. It should basically contain:
  
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index 4a9e893..bb1705b 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -19,11 +19,11 @@ with an example :
- 05: #############################################################
- 06: LIBFOO_VERSION = 1.0
- 07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
- 08: LIBFOO_SITE = http://www.foosoftware.org/download
- 09: LIBFOO_INSTALL_STAGING = YES
--10: LIBFOO_INSTALL_TARGET = YES
-+10: LIBFOO_INSTALL_TARGET = NO
- 11: LIBFOO_CONF_OPT = -DBUILD_DEMOS=ON
- 12: LIBFOO_DEPENDENCIES = libglib2 host-pkgconf
- 13:
- 14: $(eval $(cmake-package))
- ------------------------
-@@ -42,17 +42,17 @@ staging directory, since usually, only libraries need to be installed in
- the staging directory: their development files are needed to compile
- other libraries or applications depending on them. Also by default, when
- staging installation is enabled, packages are installed in this location
- using the +make install+ command.
+@@ -49,10 +49,13 @@ supposed to contain anything but the 'bare' name of the package.
+ --------------------------
+ source "package/libfoo/Config.in"
+ --------------------------
  
--On line 10, we tell Buildroot to also install the package to the
-+On line 10, we tell Buildroot to not install the package to the
- target directory. This directory contains what will become the root
--filesystem running on the target. Usually, we try not to install header
--files and to install stripped versions of the binary. By default, target
--installation is enabled, so in fact, this line is not strictly
--necessary. Also by default, packages are installed in this location
--using the +make install+ command.
-+filesystem running on the target. For purely static libraries, it is
-+not necessary to install them in the target directory because they will
-+not be used at runtime. By default, target installation is enabled; setting
-+this variable to NO is almost never needed. Also by default, packages are
-+installed in this location using the +make install+ command.
+ [[depends-on-vs-select]]
++Choosing +depends on+ or +select+
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
+ The +Config.in+ file of your package must also ensure that
+ dependencies are enabled. Typically, Buildroot uses the following
+ rules:
  
- On line 11, we tell Buildroot to pass custom options to CMake when it is
- configuring the package.
+ * Use a +select+ type of dependency for dependencies on
+@@ -162,11 +165,11 @@ package.
  
- On line 12, we declare our dependencies, so that they are built
+ Further formatting details: see xref:writing-rules-config-in[the
+ coding style].
+ 
+ The +.mk+ file
+-^^^^^^^^^^^^^^
++~~~~~~~~~~~~~~
+ 
+ Finally, here's the hardest part. Create a file named +libfoo.mk+. It
+ describes how the package should be downloaded, configured, built,
+ installed, etc.
+ 
 -- 
 1.7.10.4
