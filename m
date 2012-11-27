@@ -1,149 +1,104 @@
-From: Zoran Djordjevic <djdjdjole@yahoo.com>
-Date: Mon, 26 Nov 2012 23:46:15 -0800 (PST)
-Subject: [Buildroot] Qt mouse, keyboard, touchscreen
-In-Reply-To: <50B32588.7010800@relinux.de>
-References: <1353748764.40553.YahooMailNeo@web164602.mail.gq1.yahoo.com>
- <50B09888.9000907@relinux.de>
- <1353916198.97471.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <50B3210E.2010806@relinux.de>
- <1353917395.39625.YahooMailNeo@web164603.mail.gq1.yahoo.com>
- <50B32588.7010800@relinux.de>
-Message-ID: <1354002375.96935.YahooMailNeo@web164604.mail.gq1.yahoo.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Tue, 27 Nov 2012 09:12:33 +0100
+Subject: [Buildroot] [PATCH] [PATCH][RFC] new target: live filesystem
+Message-ID: <1354003953-10875-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I recompiled my RFS. This is what I checked in Buildroot menues:
-for mouse: tslib, linux input, qvfb (what qvfb means ?)
-for keyboard: linux input, qvfb
-My /dev/input node has event0, event1, mouse0 and mice.
-When I give: export QWS_MOUSE_PROTO=tslib:/dev/input/event0, 
-touch screen works fine. However, tried different options for USB?mouse,
-and neither one works (cat /dev/input/mouse0 or mice gives terminal "garbage").
-Regarding keyboard, I gave: export QWS_KEYBOARD=linuxinput:/dev/input/event1
-Keyboard (USB)?does work, but from that moment my terminal connected 
-keyboard (via COM port) - doesn't work (Ctrl-C). When exiting application,
-I can't give commands via terminal. Any help ?
-?
+add a new target to deploy a live filesystem to be used by NFS
+
+---
+
+Hello everybody
+
+this patch is not ready for commit, it's a proposal to help me solve the very common use case of
+a developement FS deployed on NFS. I am not very happy of how it's done at this point but I would
+like to discuss it to see if it has a chance to get merged... What I don't like (and would gladly
+have ideas on how to solve this)
+* no dependency on host-sudo, i'm not sure how to add that
+* using sudo to break out of fakeroot is not clean
+* I am abusing the fs building framework, but I don't know of a cleaner way
+* filesystem can only be under output/images at this point
+
+so this patch is more to start a discussion than anything, i'll gladly take any comments or plain
+'ol rejection if the project doesn't want it... but if there is some interest i'll work it into
+something mainline worthy
+
 Regards
 
+J?r?my Rosen
+---
+ fs/Config.in      |    1 +
+ fs/live/Config.in |   16 ++++++++++++++++
+ fs/live/live.mk   |   23 +++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
+ create mode 100644 fs/live/Config.in
+ create mode 100644 fs/live/live.mk
+
+diff --git a/fs/Config.in b/fs/Config.in
+index 94154ea..de2377e 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -11,5 +11,6 @@ source "fs/cpio/Config.in"
+ source "fs/iso9660/Config.in"
+ source "fs/initramfs/Config.in"
+ source "fs/romfs/Config.in"
++source "fs/live/Config.in"
  
-
-________________________________
- From: Stephan Hoffmann <sho@relinux.de>
-To: Zoran Djordjevic <djdjdjole@yahoo.com> 
-Cc: buildroot at busybox.net 
-Sent: Monday, November 26, 2012 9:17 AM
-Subject: Re: [Buildroot] Qt mouse, keyboard, touchscreen
-  
-
- 
-Am 26.11.2012 09:09, schrieb Zoran Djordjevic: 
-I didn't go that way -?with make clean?(rather tried with deleting .stamp files). 
->It is because building process is so lengthy. But I will probably try that.  
-My experience is that often "make xxx-reconfigure" is enough. But when there are strange error messages "make clean" often is worth the waiting.
-
-What? else is left for me to do. 
->? 
->Regards 
->
-> 
->From: Stephan Hoffmann mailto:sho at relinux.de
->To: Zoran Djordjevic mailto:djdjdjole at yahoo.com 
->Sent: Monday, November 26, 2012 8:58 AM
->Subject: Re: [Buildroot] Qt mouse, keyboard, touchscreen
->  
->
->Am 26.11.2012 08:49, schrieb Zoran Djordjevic: 
->OK - now I checked few options regarding Qt drivers in Buildroot 
->>menu and try rebuilding, but got error: 
->>The tslib functionality test failed!  
-Did you try "make clean"?
->
->You might need to modify the indluce and library search paths by editing
->>QMAKE_INCDIR and QMAKE_LIBDIR in ....... (name
-                        of the config folder). 
->>I don't see either of those ones in qmake.conf in folder quoted, and also 
->>if I add them, don't know what to quote ? 
->>? 
->>Regards
-? 
->>From: Stephan Hoffmann mailto:sho at relinux.de
->>To: buildroot at busybox.net 
->>Sent: Saturday, November 24, 2012 10:51 AM
->>Subject: Re: [Buildroot] Qt mouse, keyboard, touchscreen
->>  
->>
->> 
->>Am 24.11.2012 10:19, schrieb Zoran Djordjevic: 
->>Thanks to helpful information you provided, I managed to built 
->>>simple Qt application on my ARM board and it works - meaning 
->>>I got some window and some simple effect inside. I am using  
->>>framebuffer so started program with?-qws option. 
->>>However mouse, keyboard and touchscreen are dead. In fact they  
->>>are probably visible by kernel (ts_calibrate and ts_test for example, 
->>>works OK and cat /dev/input/event0 shows "usuall" garbage on  
->>>terminal) however I don't know how to start them to work with Qt. 
->>>I successfully started them earlier?while using TinyX and GTK, by 
->>>simply quoting them?with xinit command parameters. 
->>>But don't know how to do the same with Qt.  
-Hi,
->>
->>there are two things to consider:
->>
->>1. Check if there are drivers enabled in
-                            buildroot config. The default configuration
-                            does not include any drivers. I stepped in
-                            this trap when I started to use QT.
->>
->>BTW: Shouldn't we change this to some useful
-                            default?
->>
->>2. QT needs environment variables to
-                            configure input devices.
->>
->>http://doc.qt.digia.com/4.7/qt-embedded-envvars.html
->>
->>Hope this helps
->>
->>Stephan
->>
->>
->>
->>>
->>>Regards  
->>>
-_______________________________________________
-buildroot mailing list buildroot at busybox.net http://lists.busybox.net/mailman/listinfo/buildroot  
->>
->>
->>-- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-http://www.relinux.de/ sho at reLinux.de    
->>_______________________________________________
->>buildroot mailing list
->>buildroot at busybox.net
->>http://lists.busybox.net/mailman/listinfo/buildroot
->>
->>    
->
->
->-- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64 http://www.relinux.de/ sho at reLinux.de    
->
->    
-
-
+ endmenu
+diff --git a/fs/live/Config.in b/fs/live/Config.in
+new file mode 100644
+index 0000000..bf24754
+--- /dev/null
++++ b/fs/live/Config.in
+@@ -0,0 +1,16 @@
++config BR2_TARGET_ROOTFS_LIVE
++	bool "live root filesystem"
++	help
++	  uses sudo to create a live image of the filesystem
++	  this is mainly usefull if you want to use your filesystem
++	  over NFS
++config BR2_TARGET_ROOTFS_LIVE_DEST
++	string "directory to put the live image"
++	depends on BR2_TARGET_ROOTFS_LIVE
++	default "live"
++	help
++	  The directory where the image should be stored.
++	  this directory will be emptied and recreated, it is given
++	  relative to the buildroot output/images directory
++
++
+diff --git a/fs/live/live.mk b/fs/live/live.mk
+new file mode 100644
+index 0000000..73bcd3e
+--- /dev/null
++++ b/fs/live/live.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# Build the live root filesystem directory
++#
++#############################################################
++
++LIVE_OPTS :=
++
++
++ROOTFS_LIVE_DEPENDENCIES = #host-sudo
++
++define ROOTFS_LIVE_CMD
++ sudo cp -r $(TARGET_DIR)/* $(BINARIES_DIR)/$(BR2_TARGET_ROOTFS_LIVE_DEST)/
++endef
++
++define ROOTFS_LIVE_INIT
++	sudo rm -rf $(BINARIES_DIR)/$(BR2_TARGET_ROOTFS_LIVE_DEST)
++	sudo mkdir $(BINARIES_DIR)/$(BR2_TARGET_ROOTFS_LIVE_DEST)
++endef
++
++ROOTFS_LIVE_PRE_GEN_HOOKS += ROOTFS_LIVE_INIT
++
++$(eval $(call ROOTFS_TARGET,live))
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64 http://www.relinux.de/ sho at reLinux.de   
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121126/68a53a49/attachment.html>
+1.7.10.4
