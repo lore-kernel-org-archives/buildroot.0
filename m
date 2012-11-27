@@ -1,104 +1,69 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Tue, 27 Nov 2012 09:12:33 +0100
-Subject: [Buildroot] [PATCH] [PATCH][RFC] new target: live filesystem
-Message-ID: <1354003953-10875-1-git-send-email-jeremy.rosen@openwide.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 27 Nov 2012 09:30:11 +0100
+Subject: [Buildroot] [PATCH for-2012.11 2/4] manual: more warnings to not
+	use output/target
+In-Reply-To: <1354005013-28626-1-git-send-email-arnout@mind.be>
+References: <1354005013-28626-1-git-send-email-arnout@mind.be>
+Message-ID: <1354005013-28626-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add a new target to deploy a live filesystem to be used by NFS
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+ .topdeps              |    2 +-
+ .topmsg               |   16 +---------------
+ docs/manual/using.txt |    3 ++-
+ 3 files changed, 4 insertions(+), 17 deletions(-)
 
-Hello everybody
-
-this patch is not ready for commit, it's a proposal to help me solve the very common use case of
-a developement FS deployed on NFS. I am not very happy of how it's done at this point but I would
-like to discuss it to see if it has a chance to get merged... What I don't like (and would gladly
-have ideas on how to solve this)
-* no dependency on host-sudo, i'm not sure how to add that
-* using sudo to break out of fakeroot is not clean
-* I am abusing the fs building framework, but I don't know of a cleaner way
-* filesystem can only be under output/images at this point
-
-so this patch is more to start a discussion than anything, i'll gladly take any comments or plain
-'ol rejection if the project doesn't want it... but if there is some interest i'll work it into
-something mainline worthy
-
-Regards
-
-J?r?my Rosen
----
- fs/Config.in      |    1 +
- fs/live/Config.in |   16 ++++++++++++++++
- fs/live/live.mk   |   23 +++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
- create mode 100644 fs/live/Config.in
- create mode 100644 fs/live/live.mk
-
-diff --git a/fs/Config.in b/fs/Config.in
-index 94154ea..de2377e 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -11,5 +11,6 @@ source "fs/cpio/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/initramfs/Config.in"
- source "fs/romfs/Config.in"
-+source "fs/live/Config.in"
+diff --git a/.topdeps b/.topdeps
+index 1f7391f..d46ee1c 100644
+--- a/.topdeps
++++ b/.topdeps
+@@ -1 +1 @@
+-master
++t/manual
+diff --git a/.topmsg b/.topmsg
+index f070122..367c0df 100644
+--- a/.topmsg
++++ b/.topmsg
+@@ -1,18 +1,4 @@
+ From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+-Subject: [PATCH] manual: various fixes
+-
+-Various minor linguistic fixes and consistency and correctness
+-improvements.
+-
+-Also removing some sentences that are not or no longer relevant.
++Subject: [PATCH] manual: more warnings to not use output/target
  
- endmenu
-diff --git a/fs/live/Config.in b/fs/live/Config.in
-new file mode 100644
-index 0000000..bf24754
---- /dev/null
-+++ b/fs/live/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_TARGET_ROOTFS_LIVE
-+	bool "live root filesystem"
-+	help
-+	  uses sudo to create a live image of the filesystem
-+	  this is mainly usefull if you want to use your filesystem
-+	  over NFS
-+config BR2_TARGET_ROOTFS_LIVE_DEST
-+	string "directory to put the live image"
-+	depends on BR2_TARGET_ROOTFS_LIVE
-+	default "live"
-+	help
-+	  The directory where the image should be stored.
-+	  this directory will be emptied and recreated, it is given
-+	  relative to the buildroot output/images directory
-+
-+
-diff --git a/fs/live/live.mk b/fs/live/live.mk
-new file mode 100644
-index 0000000..73bcd3e
---- /dev/null
-+++ b/fs/live/live.mk
-@@ -0,0 +1,23 @@
-+#############################################################
-+#
-+# Build the live root filesystem directory
-+#
-+#############################################################
-+
-+LIVE_OPTS :=
-+
-+
-+ROOTFS_LIVE_DEPENDENCIES = #host-sudo
-+
-+define ROOTFS_LIVE_CMD
-+ sudo cp -r $(TARGET_DIR)/* $(BINARIES_DIR)/$(BR2_TARGET_ROOTFS_LIVE_DEST)/
-+endef
-+
-+define ROOTFS_LIVE_INIT
-+	sudo rm -rf $(BINARIES_DIR)/$(BR2_TARGET_ROOTFS_LIVE_DEST)
-+	sudo mkdir $(BINARIES_DIR)/$(BR2_TARGET_ROOTFS_LIVE_DEST)
-+endef
-+
-+ROOTFS_LIVE_PRE_GEN_HOOKS += ROOTFS_LIVE_INIT
-+
-+$(eval $(call ROOTFS_TARGET,live))
+ Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+-Since you need a lot of context to review documentation, I increased the
+-context to 5 lines.
+-
+-I originally planned to include only trivial fixes, but there turn
+-out to be a few more invasive changes. If necessary, I can split the
+-patch into trivial and potentially-controversial. I haven't done that
+-yet because I wanted to get this patch out ASAP for the 2012.11 release.
+-Unless I get some ACKs earlier, I'll split the patch tomorrow.
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 6e144d0..857aa33 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -86,7 +86,8 @@ This directory contains several subdirectories:
+ * +target/+ which contains 'almost' the complete root filesystem for
+   the target: everything needed is present except the device files in
+   +/dev/+ (Buildroot can't create them because Buildroot doesn't run
+-  as root and doesn't want to run as root). Therefore, this directory
++  as root and doesn't want to run as root). Also, it doesn't have the correct
++  permissions (e.g. setuid for the busybox binary). Therefore, this directory
+   *should not be used on your target*.  Instead, you should use one of
+   the images built in the +images/+ directory. If you need an
+   extracted image of the root filesystem for booting over NFS, then
 -- 
 1.7.10.4
