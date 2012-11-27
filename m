@@ -1,46 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Nov 2012 22:30:54 +0100
-Subject: [Buildroot] [PATCHv2 for-2012.11 1/5] manual: trivial fixes
-In-Reply-To: <CAHXCMMJWX2pWf=teZD_02P_jXws83vcfv5Vqsj4OyCsQNHaOFQ@mail.gmail.com>
+Date: Tue, 27 Nov 2012 22:58:01 +0100
+Subject: [Buildroot] [PATCHv2 for-2012.11 2/5] manual: various fixes
+In-Reply-To: <CAHXCMMJqkV-M2k8d9Xo1v1YQ8E5oEQobpJHUrSbg=6fUWi4pmQ@mail.gmail.com>
 References: <1354046527-13132-1-git-send-email-arnout@mind.be>
- <CAHXCMMLr9SVK7S=4k2TmtZ8+HuZecpL-Xqw5ST+kNduY4iO-Aw@mail.gmail.com>
- <50B52E36.9020604@mind.be>
- <CAHXCMMJWX2pWf=teZD_02P_jXws83vcfv5Vqsj4OyCsQNHaOFQ@mail.gmail.com>
-Message-ID: <50B5310E.50903@mind.be>
+ <1354046527-13132-2-git-send-email-arnout@mind.be>
+ <CAHXCMMJqkV-M2k8d9Xo1v1YQ8E5oEQobpJHUrSbg=6fUWi4pmQ@mail.gmail.com>
+Message-ID: <50B53769.8080504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/11/12 22:28, Samuel Martin wrote:
-> 2012/11/27 Arnout Vandecappelle<arnout@mind.be>:
->> On 27/11/12 22:04, Samuel Martin wrote:
->>>
->>> Hi Arnout, all,
->>>
->>> 2012/11/27 Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>:
->>>>
-> [...]
->>>> @@ -84,10 +88,17 @@ Buildroot, with the name used in the manifest file:
->>>>      GNU General Public License, version 3]
->>>>      or (at your option) any later version;
->>>>    * +GPL+:
->>>>      http://www.gnu.org/licenses/gpl.html[
->>>>      GNU General Public License] (any version);
->>>> +* +LGPLv2+:
->>>> +  http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html[
->>>> +  GNU Library General Public License, version 2];
->>>> +* +LGPLv2++:
->>>
->>> You may need to use `...` instead of +...+ here.
->>
->>
->>   I don't see the issue here - it seems to work fine for me (checked
->> PDF and HTML).
-> The '+' of "LGPLv2+" is outside of the inline monospace text section.
+On 27/11/12 22:04, Samuel Martin wrote:
+>> >    * +LIBFOO_PATCH+ may contain the name of a patch, that will be
+>> >      downloaded from the same location as the tarball indicated in
+>> >      +LIBFOO_SOURCE+. If +HOST_LIBFOO_PATCH+ is not specified, it
+>> >  -  defaults to +LIBFOO_PATCH+. Also note that another mechanism is
+>> >  -  available to patch a package: all files of the form
+>> >  -  +packagename-packageversion-description.patch+ present in the
+>> >  +  defaults to +LIBFOO_PATCH+. Note that patches that are included
+>> >  +  in Buildroot itself use a different mechanism: all files of the
+>> >  +  form +packagename-packageversion-description.patch+ present in the
+> Well, actually the pattern is "packagename-*.patch" in the following
+> directories:
+> - package/<packagename>/<packagename-packageversion>/ if this
+> subdirectory exists;
+> - package/<packagename>/ otherwise.
 
-  Yes, now I see.  I'll change everything to ` in that list.
+  I think mentioning those two directories goes a bit too far, but I'll
+correct the pattern.
+
 
   Regards,
   Arnout
