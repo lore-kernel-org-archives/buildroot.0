@@ -1,32 +1,111 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Nov 2012 21:03:03 +0100
-Subject: [Buildroot] [PATCH for-2012.11 1/4] manual: various fixes
-In-Reply-To: <20121127105551.2ea1adb5@skate>
-References: <1354005013-28626-1-git-send-email-arnout@mind.be>
- <20121127105551.2ea1adb5@skate>
-Message-ID: <50B51C77.5020805@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 27 Nov 2012 22:04:04 +0100
+Subject: [Buildroot] [PATCHv2 for-2012.11 1/5] manual: trivial fixes
+In-Reply-To: <1354046527-13132-1-git-send-email-arnout@mind.be>
+References: <1354046527-13132-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMMLr9SVK7S=4k2TmtZ8+HuZecpL-Xqw5ST+kNduY4iO-Aw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/11/12 10:55, Thomas Petazzoni wrote:
->> >    .topdeps                                   |    1 +
->> >    .topmsg                                    |   18 +++++++++
-> The patch series contains those topgit things, that most likely
-> shouldn't have been there
+Hi Arnout, all,
 
-  I was a bit in a hurry this morning :-)
+2012/11/27 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[...]
+> diff --git a/docs/manual/adding-packages-conclusion.txt b/docs/manual/adding-packages-conclusion.txt
+> index 42f1c8f..137b7c3 100644
+> --- a/docs/manual/adding-packages-conclusion.txt
+> +++ b/docs/manual/adding-packages-conclusion.txt
+> @@ -6,7 +6,7 @@ Conclusion
+>  As you can see, adding a software package to Buildroot is simply a
+>  matter of writing a Makefile using an existing example and modifying it
+>  according to the compilation process required by the package.
+>
+>  If you package software that might be useful for other people, don't
+> -forget to send a patch to Buildroot developers!
+> +forget to send a patch to the Buildroot mailing list!
+You could add a cross-ref to the section "Contributing to Buildroot" here ;)
 
-  New series has been posted, which also has the trivial stuff split off.
+>
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index c8f41ff..88a4645 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -5,11 +5,11 @@ Package directory
+>
+>  First of all, create a directory under the +package+ directory for
+>  your software, for example +libfoo+.
+>
+>  Some packages have been grouped by topic in a sub-directory:
+> -+multimedia+, +java+, +x11r7+, and +games+. If your package fits in
+> ++multimedia+, +x11r7+, +efl+ and +matchbox+. If your package fits in
+>  one of these categories, then create your package directory in these.
+>
+>
+>  +Config.in+ file
+>  ^^^^^^^^^^^^^^^^
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index b05043a..ee96bc1 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -173,12 +173,12 @@ information is (assuming the package name is +libfoo+) :
+>    If +HOST_LIBFOO_SITE+ is not specified, it defaults to
+>    +LIBFOO_SITE+.
+>    Examples: +
+>      +LIBFOO_SITE=http://www.libfoosoftware.org/libfoo+ +
+>      +LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/+ +
+> -    +LIBFOO_SITE=git://github.com/kergoth/tslib.git+
+> -    +LIBFOO_SITE=/opt/software/libfoo.tar.gz+
+> +    +LIBFOO_SITE=git://github.com/kergoth/tslib.git+ +
+> +    +LIBFOO_SITE=/opt/software/libfoo.tar.gz+ +
+>      +LIBFOO_SITE=$(TOPDIR)/../src/libfoo/+
+Well, clearly in the whole section, the example html rendering is not
+so nice and should be reworked.
+Something for the todo list ;)
 
-  Regards,
-  Arnout
+>
+>  * +LIBFOO_SITE_METHOD+ determines the method used to fetch or copy the
+>    package source code. In many cases, Buildroot guesses the method
+>    from the contents of +LIBFOO_SITE+ and setting +LIBFOO_SITE_METHOD+
+> @@ -219,11 +219,11 @@ information is (assuming the package name is +libfoo+) :
+[...]
+>
+>  [[legal-info-list-licenses]]
+> +License abbreviations
+> +---------------------
+> +
+>  Here is a list of the licenses that are most widely used by packages in
+>  Buildroot, with the name used in the manifest file:
+>
+>  * +GPLv2+:
+>    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
+> @@ -84,10 +88,17 @@ Buildroot, with the name used in the manifest file:
+>    GNU General Public License, version 3]
+>    or (at your option) any later version;
+>  * +GPL+:
+>    http://www.gnu.org/licenses/gpl.html[
+>    GNU General Public License] (any version);
+> +* +LGPLv2+:
+> +  http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html[
+> +  GNU Library General Public License, version 2];
+> +* +LGPLv2++:
+You may need to use `...` instead of +...+ here.
+
+> +  http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html[
+> +  GNU Library General Public License, version 2.1]
+> +  or (at your option) any later version;
+>  * +LGPLv2.1+:
+>    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html[
+>    GNU Lesser General Public License, version 2.1];
+>  * +LGPLv2.1++:
+ditto
+
+Regards,
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Samuel
