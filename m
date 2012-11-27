@@ -1,43 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Nov 2012 22:58:01 +0100
-Subject: [Buildroot] [PATCHv2 for-2012.11 2/5] manual: various fixes
-In-Reply-To: <CAHXCMMJqkV-M2k8d9Xo1v1YQ8E5oEQobpJHUrSbg=6fUWi4pmQ@mail.gmail.com>
-References: <1354046527-13132-1-git-send-email-arnout@mind.be>
- <1354046527-13132-2-git-send-email-arnout@mind.be>
- <CAHXCMMJqkV-M2k8d9Xo1v1YQ8E5oEQobpJHUrSbg=6fUWi4pmQ@mail.gmail.com>
-Message-ID: <50B53769.8080504@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 27 Nov 2012 22:59:18 +0100
+Subject: [Buildroot] [PATCHv3 for-2012.11 3/5] manual: more warnings to not
+	use output/target
+In-Reply-To: <1354053560-30352-1-git-send-email-arnout@mind.be>
+References: <1354053560-30352-1-git-send-email-arnout@mind.be>
+Message-ID: <1354053560-30352-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 27/11/12 22:04, Samuel Martin wrote:
->> >    * +LIBFOO_PATCH+ may contain the name of a patch, that will be
->> >      downloaded from the same location as the tarball indicated in
->> >      +LIBFOO_SOURCE+. If +HOST_LIBFOO_PATCH+ is not specified, it
->> >  -  defaults to +LIBFOO_PATCH+. Also note that another mechanism is
->> >  -  available to patch a package: all files of the form
->> >  -  +packagename-packageversion-description.patch+ present in the
->> >  +  defaults to +LIBFOO_PATCH+. Note that patches that are included
->> >  +  in Buildroot itself use a different mechanism: all files of the
->> >  +  form +packagename-packageversion-description.patch+ present in the
-> Well, actually the pattern is "packagename-*.patch" in the following
-> directories:
-> - package/<packagename>/<packagename-packageversion>/ if this
-> subdirectory exists;
-> - package/<packagename>/ otherwise.
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-  I think mentioning those two directories goes a bit too far, but I'll
-correct the pattern.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/using.txt |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
-  Regards,
-  Arnout
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 6e144d0..857aa33 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -84,11 +84,12 @@ This directory contains several subdirectories:
+   libraries.
+ 
+ * +target/+ which contains 'almost' the complete root filesystem for
+   the target: everything needed is present except the device files in
+   +/dev/+ (Buildroot can't create them because Buildroot doesn't run
+-  as root and doesn't want to run as root). Therefore, this directory
++  as root and doesn't want to run as root). Also, it doesn't have the correct
++  permissions (e.g. setuid for the busybox binary). Therefore, this directory
+   *should not be used on your target*.  Instead, you should use one of
+   the images built in the +images/+ directory. If you need an
+   extracted image of the root filesystem for booting over NFS, then
+   use the tarball image generated in +images/+ and extract it as
+   root. Compared to +staging/+, +target/+ contains only the files and
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
