@@ -1,47 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Nov 2012 16:30:37 +0100
-Subject: [Buildroot] Qt mouse, keyboard, touchscreen
-In-Reply-To: <1354002375.96935.YahooMailNeo@web164604.mail.gq1.yahoo.com>
-References: <1353748764.40553.YahooMailNeo@web164602.mail.gq1.yahoo.com>
- <50B09888.9000907@relinux.de>
- <1353916198.97471.YahooMailNeo@web164601.mail.gq1.yahoo.com>
- <50B3210E.2010806@relinux.de>
- <1353917395.39625.YahooMailNeo@web164603.mail.gq1.yahoo.com>
- <50B32588.7010800@relinux.de>
- <1354002375.96935.YahooMailNeo@web164604.mail.gq1.yahoo.com>
-Message-ID: <20121127163037.3f619184@skate>
+From: John Tobias <john.tobias.ph@gmail.com>
+Date: Tue, 27 Nov 2012 10:25:18 -0800
+Subject: [Buildroot] Package Management
+Message-ID: <CACUGKYNYvemiQqxvu03Pdzax8X2mxVKZhKy7CYbd9yq_gVkQYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoran Djordjevic,
+Hello all,
 
-On Mon, 26 Nov 2012 23:46:15 -0800 (PST), Zoran Djordjevic wrote:
+My package management support is working in generic-package,
+pkg-autotools, pkg-cmake. By default, if you compile any libraries, it
+will create a package file (.pkg) with or without modifying the .mk
+file of the library, except for generic-package. I will provide a
+patch file sometimes next week if you guys are interested to try it...
 
-> My /dev/input node has event0, event1, mouse0 and mice.
-> When I give: export QWS_MOUSE_PROTO=tslib:/dev/input/event0, 
-> touch screen works fine. However, tried different options for
-> USB?mouse, and neither one works (cat /dev/input/mouse0 or mice gives
-> terminal "garbage"). Regarding keyboard, I gave: export
-> QWS_KEYBOARD=linuxinput:/dev/input/event1 Keyboard (USB)?does work,
-> but from that moment my terminal connected keyboard (via COM port) -
-> doesn't work (Ctrl-C). When exiting application, I can't give
-> commands via terminal. Any help ? 
+Right now, if I compile the busybox for example, I have to add the
+function BUSYBOX_CREATE_PACKAGE_CMDS definition in the .mk file of the
+busybox.
 
-Apply the attached patch to Qt.
+define BUSYBOX_CREATE_PACKAGE_CMDS
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: qt-4.7.3-remove-ioctl.patch
-Type: text/x-patch
-Size: 721 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121127/37192ff9/attachment.bin>
+endif
+
+
+So, in my pkg-generic.mk I added the following:
+
+# Create package
+$(BUILD_DIR)/%/.stamp_create_package:
+@$(call MESSAGE,"Creating package")
+$($(PKG)_CREATE_PACKAGE_CMDS)
+$(foreach hook,$($(PKG)_POST_CREATE_PACKAGE_HOOKS),$(call $(hook))$(sep))
+$(Q)touch $@
+
+
+I need to check if the $(PKG)_CREATE_PACKAGE_CMDS exist or not in the
+current building library, so I did the following:
+
+# Create package
+$(BUILD_DIR)/%/.stamp_create_package:
+ifdef $(PKG)_CREATE_PACKAGE_CMDS
+@$(call MESSAGE,"Creating package")
+$($(PKG)_CREATE_PACKAGE_CMDS)
+$(foreach hook,$($(PKG)_POST_CREATE_PACKAGE_HOOKS),$(call $(hook))$(sep))
+endif
+$(Q)touch $@
+
+
+But, calling "ifdef $(PKG)_CREATE_PACKAGE_CMDS" to filter if the said
+function is exist or not.
+
+So my question is, how to check if the $(PKG)_CREATE_PACKAGE_CMDS is
+exist or not?.
+
+Regards,
+
+john
