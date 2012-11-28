@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:33 +0100
-Subject: [Buildroot] [PATCH 34/51] package/qemu: add uuid support
+Date: Thu, 29 Nov 2012 00:54:27 +0100
+Subject: [Buildroot] [PATCH 28/51] package/qemu: add SDL frontends
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-35-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-29-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +13,61 @@ To: buildroot@busybox.net
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
  package/qemu/Config.in |    9 +++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 16 insertions(+), 1 deletions(-)
+ package/qemu/qemu.mk   |   10 +++++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index b5944dc..3177dd2 100644
+index 29fd513..baa7037 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -118,6 +118,15 @@ config BR2_PACKAGE_QEMU_SDL
+@@ -79,4 +79,13 @@ config BR2_PACKAGE_QEMU_BSD_USER
  
- comment "Misc. features"
+ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
  
-+config BR2_PACKAGE_QEMU_UUID
-+	bool "Enable VMs UUID"
-+	depends on BR2_PACKAGE_UTIL_LINUX_LIBUUID
++comment "Frontends"
++
++config BR2_PACKAGE_QEMU_SDL
++	bool "Enable SDL frontend"
++	select BR2_PACKAGE_SDL
 +	help
-+	  Say 'y' here to have QEMU support UUIDs for VMs.
++	  Say 'y' to enable the SDL frontend, that is, a graphical window
++	  presenting the VM's display.
 +
-+comment "UUID support requires libuuid (from util-linux)"
-+	depends on !BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
+ endif # BR2_PACKAGE_QEMU
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index a943362..980a75e 100644
+index d77e3b8..75969d5 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -164,6 +164,13 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -105,6 +105,7 @@ QEMU_OPTS =
+ QEMU_VARS =                                                                         \
+     PYTHON=$(HOST_DIR)/usr/bin/python                                               \
+     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
++    SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config                                    \
+ 
+ ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
+ QEMU_OPTS += --enable-system
+@@ -128,6 +129,14 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
+ QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
-+QEMU_OPTS += --enable-uuid
-+QEMU_DEPENDENCIES += util-linux
++ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
++QEMU_OPTS += --enable-sdl
++QEMU_DEPENDENCIES += sdl
++QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
 +else
-+QEMU_OPTS += --disable-uuid
++QEMU_OPTS += --disable-sdl
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -258,7 +265,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-fdt                       \
- 	        --disable-bluez                     \
- 	        --disable-guest-base                \
--	        --disable-uuid                      \
- 	        --disable-vde                       \
- 	        --disable-linux-aio                 \
- 	        --disable-cap-ng                    \
+ # Note: although QEMU uses a ./configure script, it is not compatible with
+ #       the traditional autotools options (eg. --target et al.), so we can
+ #       not use the autotools-package infrastructure. So we have to use the
+@@ -155,7 +164,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --enable-vhost-net                  \
+ 	        --disable-xen                       \
+ 	        --disable-slirp                     \
+-	        --disable-sdl                       \
+ 	        --disable-vnc                       \
+ 	        --disable-virtfs                    \
+ 	        --disable-brlapi                    \
 -- 
 1.7.2.5
