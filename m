@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:29 +0100
-Subject: [Buildroot] [PATCH 30/51] package/qemu: add VNC jpeg and png
-	compression
+Date: Thu, 29 Nov 2012 00:54:45 +0100
+Subject: [Buildroot] [PATCH 46/51] package/qemu: add support for Spice
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-31-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-47-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,63 +13,55 @@ To: buildroot@busybox.net
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
  package/qemu/Config.in |   10 ++++++++++
- package/qemu/qemu.mk   |   16 ++++++++++++++--
- 2 files changed, 24 insertions(+), 2 deletions(-)
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 2648e71..9282ce9 100644
+index 67b6083..fd14c3c 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -88,6 +88,16 @@ config BR2_PACKAGE_QEMU_VNC
- 	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
- 	  VNC server presenting the VM's display.
+@@ -127,6 +127,16 @@ config BR2_PACKAGE_QEMU_CURSES
+ 	  frontend (although you can still use the SDL or VNC frontends to
+ 	  display the graphical output).
  
-+config BR2_PACKAGE_QEMU_VNC_PNG
-+	bool "PNG compression"
-+	depends on BR2_PACKAGE_QEMU_VNC
-+	select BR2_PACKAGE_LIBPNG
++config BR2_PACKAGE_QEMU_SPICE
++	bool "Enable Spice frontend"
++	depends on BR2_PACKAGE_SPICE
++	help
++	  Say 'y' here to have QEMU support Spice as a (VNC-like) frontend.
 +
-+config BR2_PACKAGE_QEMU_VNC_JPEG
-+	bool "JPEG compression"
-+	depends on BR2_PACKAGE_QEMU_VNC
-+	select BR2_PACKAGE_JPEG
++if !BR2_PACKAGE_SPICE
++comment "Spice support requires spice-server"
++endif
 +
- config BR2_PACKAGE_QEMU_SDL
- 	bool "Enable SDL frontend"
- 	select BR2_PACKAGE_SDL
+ comment "Block backends"
+ 
+ config BR2_PACKAGE_QEMU_VIRTFS
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 5640848..11b5b12 100644
+index 8d889a8..0495233 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -135,6 +135,20 @@ else
- QEMU_OPTS += --disable-vnc
+@@ -171,6 +171,13 @@ else
+ QEMU_OPTS += --disable-curses
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VNC_PNG),y)
-+QEMU_OPTS += --enable-vnc-png
-+QEMU_DEPENDENCIES += libpng
++ifeq ($(BR2_PACKAGE_QEMU_SPICE),y)
++QEMU_OPTS += --enable-spice
++QEMU_DEPENDENCIES += spice
 +else
-+QEMU_OPTS += --disable-vnc-png
++QEMU_OPTS += --disable-spice
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QEMU_VNC_JPEG),y)
-+QEMU_OPTS += --enable-vnc-jpeg
-+QEMU_DEPENDENCIES += jpeg
-+else
-+QEMU_OPTS += --disable-vnc-jpeg
-+endif
-+
- ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
- QEMU_OPTS += --enable-sdl
- QEMU_DEPENDENCIES += sdl
-@@ -170,8 +184,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --enable-vhost-net                  \
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
--	        --disable-vnc-jpeg                  \
--	        --disable-vnc-png                   \
- 	        --disable-vnc-tls                   \
- 	        --disable-vnc-sasl                  \
- 	        --disable-virtfs                    \
+ ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
+ QEMU_OPTS += --enable-virtfs
+ else
+@@ -338,7 +345,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-brlapi                    \
+ 	        --disable-guest-base                \
+ 	        --disable-docs                      \
+-	        --disable-spice                     \
+ 	        --disable-rbd                       \
+ 	        --disable-smartcard                 \
+ 	        --disable-strip                     \
 -- 
 1.7.2.5
