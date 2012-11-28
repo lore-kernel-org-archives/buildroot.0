@@ -1,50 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Nov 2012 17:34:52 +0100
-Subject: [Buildroot] [PATCH] gdb: properly pass the PATH when building gdb
-	for the host
-Message-ID: <1354120492-17059-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Nov 2012 17:42:17 +0100
+Subject: [Buildroot] [PATCH] matchbox-lib: Append -lX11 to the linker
+In-Reply-To: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
+References: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <20121128174217.6bd003dd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building gdb for the host, we properly pass the PATH (through
-HOST_CONFIGURE_OPTS) during the configure step, but we forget to do so
-for the compilation step.
+Peter,
 
-The result of this is that when the Crosstool-NG backend is used, gawk
-is built and installed in $(HOST_DIR), as a dependency of the
-crosstool-ng package.
+Could you apply this one to 2012.11 ? Thanks!
 
-Then, the host gdb configure script detects this gawk binary
-($(HOST_DIR) is in the PATH), and assumes gawk is
-available. Unfortunately, during the compilation step, it fails to
-find the expected gawk binary, because $(HOST_DIR) is no longer in the
-PATH. This causes the following build failure:
+On Tue, 30 Oct 2012 11:29:14 +0000, Markos Chandras wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
+> 
+> Fixes building with binutils-2.22
+> http://autobuild.buildroot.net/results/b4b26dd9c7d7bebe45638ba125fb49a5f5d0cc14/build-end.log
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
-  http://autobuild.buildroot.org/results/067d0c2ea01673ba98ec11de2426f1ab92dac800/build-end.log
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-In order to fix this, we simply call the compilation step of gdb for
-the host with $(HOST_MAKE_ENV), as it should have been done from the
-beginning.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gdb/gdb.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index c42c755..4b8fe3a 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -196,6 +196,7 @@ $(GDB_HOST_DIR)/.configured: $(GDB_DIR)/.unpacked
- 
- $(GDB_HOST_DIR)/gdb/gdb: $(GDB_HOST_DIR)/.configured
- 	# force ELF support since it fails due to BFD linking problems
-+	$(HOST_MAKE_ENV) \
- 	gdb_cv_var_elf=yes \
- 	$(MAKE) -C $(GDB_HOST_DIR)
- 	strip $(GDB_HOST_DIR)/gdb/gdb
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
