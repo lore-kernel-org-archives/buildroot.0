@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:46 +0100
-Subject: [Buildroot] [PATCH 47/51] package/qemu: enable sound
+Date: Thu, 29 Nov 2012 00:54:42 +0100
+Subject: [Buildroot] [PATCH 43/51] package/qemu: add support for VDE switches
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-48-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-44-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,95 +12,53 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   38 ++++++++++++++++++++++++++++++++++++++
- package/qemu/qemu.mk   |   19 +++++++++++++++++--
- 2 files changed, 55 insertions(+), 2 deletions(-)
+ package/qemu/Config.in |    7 +++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index fd14c3c..6c50746 100644
+index a6fe857..a82a1c6 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -205,6 +205,44 @@ config BR2_PACKAGE_QEMU_VDE
- 	  Say 'y' here to have QEMU connect to VDE (Virtual Distributed
- 	  Ethernet) switches.
+@@ -173,6 +173,13 @@ config BR2_PACKAGE_QEMU_BLUEZ
+ comment "BlueZ connectivity depends on bluez-utils"
+ 	depends on !BR2_PACKAGE_BLUEZ_UTILS
  
-+comment "Sound"
-+
-+config BR2_PACKAGE_QEMU_SOUND_CARDS
-+	string "Enable sound cards"
-+	default "ac97 es1370 hda"
++config BR2_PACKAGE_QEMU_VDE
++	bool "Enable VDE"
++	select BR2_PACKAGE_VDE2
 +	help
-+	  Enter here the list of sound cards you want QEMU to emulate.
-+	  The available sound cards are:
-+	    ac97 es1370 sb16 cs4231a adlib gus hda
-+	  
-+	  The default is: ac97 es1370 hda
-+	  
-+	  Note: even if you say 'n' to both alsa and SDL drivers, below, QEMU
-+	  always include the 'wav' driver, which stores the generated sound
-+	  into a file, and the 'none' driver, which discards generated sound.
-+
-+config BR2_PACKAGE_QEMU_MIXEMU
-+	bool "Enable mixer emulation"
-+	help
-+	  Say 'y' here to have QEMU emulate a mixer device.
-+
-+config BR2_PACKAGE_QEMU_SOUND_SDL
-+	bool "Enable sound via SDL"
-+	select BR2_PACKAGE_QEMU_SDL # Requires that SDL frontend be selected
-+	select BR2_PACKAGE_SDL
-+	help
-+	  Say 'y' here to have QEMU play sound from the VMs via SDL.
-+	  
-+	  Note: this is only for system emulation, not user emulation.
-+
-+config BR2_PACKAGE_QEMU_SOUND_ALSA
-+	bool "Enable sound via alsa"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Say 'y' here to have QEMU play sound from the VMs via alsa.
-+	  
-+	  Note: this is only for system emulation, not user emulation.
++	  Say 'y' here to have QEMU connect to VDE (Virtual Distributed
++	  Ethernet) switches.
 +
  comment "Misc. features"
  
  config BR2_PACKAGE_QEMU_FDT
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 0495233..80424e6 100644
+index 25af62c..ce7307c 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -226,6 +226,23 @@ else
- QEMU_OPTS += --disable-vde
+@@ -198,6 +198,13 @@ else
+ QEMU_OPTS += --disable-bluez
  endif
  
-+QEMU_SND_DRV =
-+ifeq ($(BR2_PACKAGE_QEMU_SOUND_ALSA),y)
-+QEMU_SND_DRV += alsa
-+QEMU_DEPENDENCIES += alsa-lib
-+endif
-+ifeq ($(BR2_PACKAGE_QEMU_SOUND_SDL),y)
-+QEMU_SND_DRV += sdl
-+QEMU_DEPENDENCIES += sdl
-+endif
-+ifneq ($(QEMU_SND_DRV),)
-+QEMU_OPTS += --audio-drv-list="$(QEMU_SND_DRV)"
-+endif
-+QEMU_OPTS += --audio-card-list=$(BR2_PACKAGE_QEMU_SOUND_CARDS)
-+ifeq ($(BR2_PACKAGE_QEMU_MIXEMU),y)
-+QEMU_OPTS += --enable-mixemu
++ifeq ($(BR2_PACKAGE_QEMU_VDE),y)
++QEMU_OPTS += --enable-vde
++QEMU_DEPENDENCIES += vde2
++else
++QEMU_OPTS += --disable-vde
 +endif
 +
  ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
  QEMU_OPTS += --enable-fdt
  QEMU_DEPENDENCIES += dtc
-@@ -334,8 +351,6 @@ define QEMU_CONFIGURE_CMDS
- 	    ./configure                             \
- 	        --prefix=/usr                       \
- 	        --cross-prefix=$(TARGET_CROSS)      \
--	        --audio-drv-list=                   \
--	        --audio-card-list=                  \
- 	        --enable-kvm                        \
- 	        --enable-nptl                       \
- 	        --enable-vhost-net                  \
+@@ -316,7 +323,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
+ 	        --disable-guest-base                \
+-	        --disable-vde                       \
+ 	        --disable-docs                      \
+ 	        --disable-spice                     \
+ 	        --disable-rbd                       \
 -- 
 1.7.2.5
