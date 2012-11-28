@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:26 +0100
-Subject: [Buildroot] [PATCH 27/51] package/qemu: add fine-grained target
-	selection
+Date: Thu, 29 Nov 2012 00:54:15 +0100
+Subject: [Buildroot] [PATCH 16/51] package/libseccomp: new package
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-28-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-17-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,61 +12,96 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   21 +++++++++++++++++++++
- package/qemu/qemu.mk   |    4 ++++
- 2 files changed, 25 insertions(+), 0 deletions(-)
+ package/Config.in                                  |    1 +
+ package/libseccomp/Config.in                       |   13 +++++++++++
+ ...ibseccomp-use-system-headers-from-sysroot.patch |   17 +++++++++++++++
+ package/libseccomp/libseccomp.mk                   |   22 ++++++++++++++++++++
+ 4 files changed, 53 insertions(+), 0 deletions(-)
+ create mode 100644 package/libseccomp/Config.in
+ create mode 100644 package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+ create mode 100644 package/libseccomp/libseccomp.mk
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index aceff18..29fd513 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -31,6 +31,25 @@ if BR2_PACKAGE_QEMU
- 
- comment "Emulators selection"
- 
-+config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
-+	string "Enable specific targets"
+diff --git a/package/Config.in b/package/Config.in
+index 4ce5e48..4b0fbae 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libtpl/Config.in"
++source "package/libseccomp/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+ source "package/lttng-libust/Config.in"
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+new file mode 100644
+index 0000000..183cf4e
+--- /dev/null
++++ b/package/libseccomp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBSECCOMP
++	bool "libseccomp"
 +	help
-+	  Enter here the list of QEMU targets you want to build. For example:
++	  High level interface to the Linux Kernel's seccomp filter 
++	  
++	  The libseccomp library provides and easy to use, platform independent,
++	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
++	  The libseccomp API is designed to abstract away the underlying BPF
++	  based syscall filter language and present a more conventional
++	  function-call based filtering interface that should be familiar to,
++	  and easily adopted by application developers.
++	  
++	  http://sourceforge.net/projects/libseccomp/
+diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+new file mode 100644
+index 0000000..0997edd
+--- /dev/null
++++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+@@ -0,0 +1,17 @@
++configure: check headers in sysroot, not in host's system headers
 +
-+	    System emulation      | User-land emulation
-+	    ----------------------+-----------------------
-+	    i386-softmmu          | i386-linux-user
-+	    arm-softmmu           | ppc-linux-user
-+	    x86_64-softmmu        | sparc-bsd-user
-+	    ...                   | ...
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
-+config QEMU_FOO
-+	bool # To break the indentation
++diff -durN libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
++--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
+++++ libseccomp-1.0.0/configure	2012-10-27 00:12:50.739196219 +0200
++@@ -205,7 +205,8 @@
++ #
++ 
++ # system seccomp includes
++-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
+++# ${SYSROOT} added by buildroot for cross-compilation
+++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
++ 	opt_sysinc_seccomp="yes"
++ else
++ 	opt_sysinc_seccomp="no"
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+new file mode 100644
+index 0000000..73fe632
+--- /dev/null
++++ b/package/libseccomp/libseccomp.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# libseccomp
++#
++#############################################################
 +
-+if BR2_PACKAGE_QEMU_CUSTOM_TARGETS = ""
++LIBSECCOMP_VERSION         = 1.0.0
++LIBSECCOMP_SOURCE          = libseccomp-$(LIBSECCOMP_VERSION).tar.gz
++LIBSECCOMP_SITE            = http://downloads.sourceforge.net/project/libseccomp
++LIBSECCOMP_LICENSE         = LGPLv2.1
++LIBSECCOMP_LICENSE_FILES   = LICENSE
++LIBSECCOMP_INSTALL_STAGING = YES
 +
-+comment "... or you can select emulator families to enable, below:"
++# Needed for configure to find our system headers:
++LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
++LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
++LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
++LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
++LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
 +
- # We need at least one to be selected
- config BR2_PACKAGE_QEMU_EMUL_SET
- 	bool
-@@ -58,4 +77,6 @@ config BR2_PACKAGE_QEMU_BSD_USER
- 	help
- 	  Say 'y' to build all BSD user-land emulators that QEMU supports.
- 
-+endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
-+
- endif # BR2_PACKAGE_QEMU
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 89d62c0..d77e3b8 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -124,6 +124,10 @@ else
- QEMU_OPTS += --disable-bsd-user
- endif
- 
-+ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
-+QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
-+endif
-+
- # Note: although QEMU uses a ./configure script, it is not compatible with
- #       the traditional autotools options (eg. --target et al.), so we can
- #       not use the autotools-package infrastructure. So we have to use the
++# Not a real autotools package, but works quite OK nonetheless
++$(eval $(autotools-package))
 -- 
 1.7.2.5
