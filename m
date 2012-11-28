@@ -1,60 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Nov 2012 15:42:38 +0100
-Subject: [Buildroot] [PATCH v2] libpcap: fix static build
-Message-ID: <1354113758-23544-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 28 Nov 2012 17:09:22 +0100
+Subject: [Buildroot] [PATCHv3 for-next 6/6] cpanminus: fix installation paths
+In-Reply-To: <1354118962-18601-1-git-send-email-arnout@mind.be>
+References: <1354118962-18601-1-git-send-email-arnout@mind.be>
+Message-ID: <1354118962-18601-6-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libpcap package contained some interesting attempts to support a
-static-only build, but it was not working:
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- http://autobuild.buildroot.org/results/01038d3b970092d894d2bae80679247e65722785/build-end.log
+perlcross seems to set the installation paths differently than perl's
+Configure, so adapt the reference to these paths in cpanminus.
 
-In fact the configure.in of libpcap has provision to support
---enable-shared/--disable-shared, but the generated configure script
-in the libpcap package has not been regenerated with the configure.in
-changes.
-
-So basically, enabling LIBPCAP_AUTORECONF=YES ensures that the
-configure script gets generated, which brings us a working
---enable-shared / --disable-shared.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Francois: install into /usr/lib/perl]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-v2: Add comment above the AUTORECONF=YES line that explains why it is
-    needed.
+v2: integrated Francois' patch, merged with this one
 ---
- package/libpcap/libpcap.mk |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ package/cpanminus/cpanminus.mk |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 7a1d32f..d35c228 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -10,11 +10,16 @@ LIBPCAP_LICENSE = BSD-3c
- LIBPCAP_LICENSE_FILES = LICENSE
- LIBPCAP_INSTALL_STAGING = YES
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+index af35e93..e7e3f29 100644
+--- a/package/cpanminus/cpanminus.mk
++++ b/package/cpanminus/cpanminus.mk
+@@ -11,8 +11,8 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
  
--# doesn't have an install-strip
--LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
--	$(if $(BR2_PREFER_STATIC_LIB),install,install-shared)
--LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
--	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
-+# The configure.in file contains the necessary code to handle
-+# --enable-shared/--disable-shared properly, but the configure script
-+# bundled with the libpcap tarball is not up-to-date with the
-+# configure.in file. In order to get proper handling of
-+# --enable-shared/--disable-shared, which is needed when doing a
-+# static library build, we autoreconfigure this package. This can be
-+# removed when bumping libpcap, after checking that the bundled
-+# configure script correctly handles --enable-shared/--disable-shared.
-+LIBPCAP_AUTORECONF = YES
-+
- LIBPCAP_DEPENDENCIES = zlib \
- 	$(if $(BR2_PACKAGE_LIBUSB),libusb)
- LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
+ CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
+ CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
+-CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
+-CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
++CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
++CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
+ CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
+@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
+ 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
+ 	chmod +x $(@D)/run_perl
+ 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
+-	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
+-	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
++	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
++	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
+ 	RUN_PERL="$(@D)/run_perl" \
+ 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
+ 		--perl=$(@D)/run_perl \
+@@ -36,7 +36,7 @@ define CPANMINUS_INSTALL_TARGET_CMDS
+ 		--no-man-pages \
+ 		$(CPANMINUS_MIRROR) \
+ 		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
+-	find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
++	-find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
+ endef
+ else
+ define CPANMINUS_INSTALL_TARGET_CMDS
 -- 
-1.7.9.5
+1.7.10.4
