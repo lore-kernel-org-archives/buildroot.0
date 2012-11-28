@@ -1,63 +1,107 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:00 +0100
-Subject: [Buildroot] [PATCH 01/51] package/cURL: fix static link whith
-	openSSL
+Date: Thu, 29 Nov 2012 00:54:02 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_03/51=5D_package/dtc=3A_add_option?=
+	=?utf-8?q?_to_install_programs?=
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-2-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-4-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When openSSL is selected, cURL is configured to use it.
+By default, we only install the libfdt library.
 
-But in this case, the libcurl.pc file /forgets/ to require link
-against -ldl.
-
-This can happen, for example, when BR2_PREFER_STATIC_LIB is not set,
-but an executable wants to be linked statically (for various reasons
-which are irrelevant here).
-
-Fix that by appending a 'Requires: openssl' line to libcurl.pc.in,
-but only if openSSL is enabled.
-
-As suggested by Arnout, do it in a post-patch hook, rather as a
-post-install hook.
+As suggested by Arnout, add an option that also
+installs the few dtc programs.
 
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/libcurl/libcurl.mk |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 8d8fdb4..888f6d0 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -25,17 +25,20 @@ else
- LIBCURL_CONF_OPT += --without-ssl
- endif
- 
-+define LIBCURL_FIX_DOT_PC
-+	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
-+endef
-+LIBCURL_POST_PATCH_HOOKS += $(if $(BR2_PACKAGE_OPENSSL),LIBCURL_FIX_DOT_PC)
+---
+There is some (minor?) issues wrt the licensing terms.
+The libfdt library is dual-licensed GPLv2+/BSD-2c, and the
+executables are licensed GPLv2+.
+
+There is no way in BR to properly convey this information.
+So I decided to add some explanatory comments in the .mk
+file, in retaliation. ;-)
+---
+ package/dtc/Config.in |   20 ++++++++++++++++++--
+ package/dtc/dtc.mk    |   14 +++++++++-----
+ 2 files changed, 27 insertions(+), 7 deletions(-)
+
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+index 96225e3..04edab2 100644
+--- a/package/dtc/Config.in
++++ b/package/dtc/Config.in
+@@ -1,9 +1,25 @@
+ config BR2_PACKAGE_DTC
+-	bool "dtc"
++	bool "dtc (libfdt)"
+ 	help
+ 	  The Device Tree Compiler, dtc, takes as input a device-tree in
+ 	  a given format and outputs a device-tree in another format.
+ 	  
+-	  Note that only the library is installed for now.
++	  Note that only the library is installed.
++	  If you want the programs, say 'y' here, and to "dtc programs", below.
+ 	  
+ 	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
 +
- define LIBCURL_TARGET_CLEANUP
- 	rm -rf $(TARGET_DIR)/usr/bin/curl-config \
- 	       $(if $(BR2_PACKAGE_CURL),,$(TARGET_DIR)/usr/bin/curl)
- endef
--
- LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
++if BR2_PACKAGE_DTC
++
++config BR2_PACKAGE_DTC_BINARY
++	bool "dtc programs"
++	help
++	  Say 'y' here if you also want the programs on the target:
++	    - convert-dtsv0     convert from version 0 to version 1
++	    - dtc               the device tree compiler
++	    - dtdiff            compare two device trees (needs bash)
++	    - fdtdump           print a readable version of a flat device tree
++	    - fdtget            read values from device tree
++	    - fdtput            write a property value to a device tree
++
++endif
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index a0e1e35..1ffd341 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -6,25 +6,29 @@
  
- define LIBCURL_STAGING_FIXUP_CURL_CONFIG
- 	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
- endef
--
- LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
+ DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
+ DTC_SITE            = git://git.jdl.com/software/dtc.git
+-DTC_LICENSE         = GPLv2+/BSD-2c
++DTC_LICENSE         = GPLv2+/BSD-2c GPLv2+
+ DTC_LICENSE_FILES   = README.license GPL
+ # Note: the dual-license only applies to the library.
+-#       The DT compiler (dtc) is GPLv2+, but we do not install it.
++#       The DT compiler (dtc) is GPLv2+.
+ DTC_INSTALL_STAGING = YES
  
- $(eval $(autotools-package))
++#?libfdt_install is our own install rule added by our patch
++DTC_BUILD_RULE=$(if $(BR2_PACKAGE_DTC_BINARY),,libfdt)
++DTC_INSTALL_RULE=$(if $(BR2_PACKAGE_DTC_BINARY),install,libfdt_install)
++
+ define DTC_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS)    \
+ 	CFLAGS="$(TARGET_CFLAGS)"   \
+-	$(MAKE) -C $(@D) PREFIX=/usr libfdt
++	$(MAKE) -C $(@D) PREFIX=/usr $(DTC_BUILD_RULE)
+ endef
+ 
+-#?libfdt_install is our own install rule added by our patch
++# For staging, only the library is needed
+ define DTC_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
+ endef
+ 
+ define DTC_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr $(DTC_INSTALL_RULE)
+ endef
+ 
+ define DTC_CLEAN_CMDS
 -- 
 1.7.2.5
