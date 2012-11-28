@@ -1,107 +1,87 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:05 +0100
-Subject: [Buildroot] [PATCH 06/51] package/usbredir: new package
-In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-7-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 29 Nov 2012 00:53:59 +0100
+Subject: [Buildroot] [PATCH for-next 0/51 v3] Add QEMU for runing on the
+	target
+Message-ID: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in            |    1 +
- package/usbredir/Config.in   |   28 ++++++++++++++++++++++++++++
- package/usbredir/usbredir.mk |   31 +++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+), 0 deletions(-)
- create mode 100644 package/usbredir/Config.in
- create mode 100644 package/usbredir/usbredir.mk
+Hello!
 
-diff --git a/package/Config.in b/package/Config.in
-index 9a7e409..25b9d3f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -480,6 +480,7 @@ source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/ortp/Config.in"
-+source "package/usbredir/Config.in"
- source "package/zeromq/Config.in"
- endmenu
- 
-diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
-new file mode 100644
-index 0000000..8d8ac5a
---- /dev/null
-+++ b/package/usbredir/Config.in
-@@ -0,0 +1,28 @@
-+comment "usbredir requires libusb"
-+	depends on !BR2_PACKAGE_LIBUSB
-+
-+config BR2_PACKAGE_USBREDIR
-+	bool "usbredir"
-+	depends on BR2_PACKAGE_LIBUSB
-+	help
-+	  usbredir is the name of a network protocol for sending usb device
-+	  traffic over a network connection. It is also the name of the
-+	  software package offering a parsing library, a usbredirhost library
-+	  and several utilities implementing this protocol.
-+	  
-+	  Note: only the library is installed, not the utilities. Say 'y'
-+	  below if you want the server too.
-+	  
-+	  http://www.spice-space.org/page/UsbRedir
-+
-+if BR2_PACKAGE_USBREDIR
-+
-+config BR2_PACKAGE_USBREDIR_SERVER
-+	bool "usbredirserver on target"
-+	help
-+	  If you want to serve usbredir requests on your target, say 'y'
-+	  here to have the usbredir server on the target.
-+	  
-+	  Note: the server is not required to use the library.
-+
-+endif
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
-new file mode 100644
-index 0000000..9f6c011
---- /dev/null
-+++ b/package/usbredir/usbredir.mk
-@@ -0,0 +1,31 @@
-+#############################################################
-+#
-+# usbredir
-+#
-+#############################################################
-+
-+USBREDIR_VERSION         = 0.4.3
-+USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
-+USBREDIR_SITE            = http://spice-space.org/download/usbredir
-+USBREDIR_LICENSE         = LGPLv2.1+
-+USBREDIR_LICENSE_FILES   = COPYING.LIB
-+USBREDIR_INSTALL_STAGING = YES
-+USBREDIR_DEPENDENCIES    = libusb
-+
-+USBREDIR_DEPENDENCIES    += host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
-+
-+USBREDIR_LICENSE         += GPLv2+
-+USBREDIR_LICENSE_FILES   += COPYING
-+
-+else # BR2_PACKAGE_USBREDIR_SERVER != y
-+
-+define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
-+	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
-+endef
-+USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
-+
-+endif # BR2_PACKAGE_USBREDIR_SERVER
-+
-+$(eval $(autotools-package))
--- 
-1.7.2.5
+This patch series adds qemu as a package to run on the target.
+
+Although this may sound weird in a first place, I use it to build a
+simple VM server.
+
+I also use it to build statically-linked user-emulation to run foreign
+chroots on my PC (eg. running an ARM chroot on my x86_64), because
+using glibc for static-linking is not possible (it still requires some
+shared libs that it dlopens at runtime).
+
+In the future, I plan on adding libvirt to remotely manage the VM server.
+
+Changes since v2:
+  - act on Arnout's comments on v2:
+    - cURL fix as a post-patch hook rather than post-install hook
+    - dtc package name, install tools
+    - usbredir cleanups
+    - cegui06 package name
+  - update to qemu 1.2.1
+
+   [PATCH 01/51] package/cURL: fix static link whith openSSL
+   [PATCH 02/51] package/dtc: new package
+   [PATCH 03/51] package/dtc: add option to install programs
+   [PATCH 04/51] package/vde2: new package
+   [PATCH 05/51] package/libiscsi: new package
+   [PATCH 06/51] package/usbredir: new package
+   [PATCH 07/51] package/celt051: new package
+   [PATCH 08/51] package/python-pyparsing: new package
+   [PATCH 09/51] package/spice-protocol: new package
+   [PATCH 10/51] package/cegui06: new package
+   [PATCH 11/51] package/slirp: new package
+   [PATCH 12/51] package/spice: new package
+   [PATCH 13/51] package/spice: enable client
+   [PATCH 14/51] package/spice: enable GUI
+   [PATCH 15/51] package/spice: enable slirp support
+   [PATCH 16/51] package/libseccomp: new package
+   [PATCH 17/51] package/keyutils: new package
+   [PATCH 18/51] package/pmake: add host pmake
+   [PATCH 19/51] package/libbsd: new package
+   [PATCH 20/51] package/libedit2: new package
+   [PATCH 21/51] package/ceph: new package
+   [PATCH 22/51] package/qemu: add license information
+   [PATCH 23/51] package/qemu: bump version
+   [PATCH 24/51] package/qemu: fix host-qemu variable names
+   [PATCH 25/51] package/qemu: build for the target (i386 or x86_64 only)
+   [PATCH 26/51] package/qemu: add basic target selection
+   [PATCH 27/51] package/qemu: add fine-grained target selection
+   [PATCH 28/51] package/qemu: add SDL frontends
+   [PATCH 29/51] package/qemu: add option to enable/disable the VNC frontend
+   [PATCH 30/51] package/qemu: add VNC jpeg and png compression
+   [PATCH 31/51] package/qemu: add VNC TLS-encryption
+   [PATCH 32/51] package/qemu: add option to not install blobs
+   [PATCH 33/51] package/qemu: add option to remove unwanted keymaps
+   [PATCH 34/51] package/qemu: add uuid support
+   [PATCH 35/51] package/qemu: add support for capabilities
+   [PATCH 36/51] package/qemu: add attr/xattr option
+   [PATCH 37/51] package/qemu: add support for virtfs
+   [PATCH 38/51] package/qemu: add support for cURL
+   [PATCH 39/51] package/qemu: enable use of the curses frontend
+   [PATCH 40/51] package/qemu: add BlueZ connectivity
+   [PATCH 41/51] package/qemu: add AIO support
+   [PATCH 42/51] package/qemu: add support for FDT
+   [PATCH 43/51] package/qemu: add support for VDE switches
+   [PATCH 44/51] package/qemu: add iSCSI support
+   [PATCH 45/51] package/qemu: add support for USB redirection
+   [PATCH 46/51] package/qemu: add support for Spice
+   [PATCH 47/51] package/qemu: enable sound
+   [PATCH 48/51] package/qemu: add support for libseccomp
+   [PATCH 49/51] package/qemu: option to build the docs
+   [PATCH 50/51] package/qemu: move sub-options into a sub-menu
+   [PATCH 51/51] package/qemu: enable a static build
+
+Regards,
+Yann E. MORIN.
