@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Nov 2012 14:02:48 +0100
-Subject: [Buildroot] PATCH > To integrate pycrypto into Buildroot
-In-Reply-To: <07407110F438184D9D87521726FF42D41F64FE15@M357PRD1.ad.bcc.qld.gov.au>
-References: <07407110F438184D9D87521726FF42D41F64FE15@M357PRD1.ad.bcc.qld.gov.au>
-Message-ID: <20121128140248.56c55f5d@skate>
+Date: Wed, 28 Nov 2012 14:06:55 +0100
+Subject: [Buildroot] [git commit branch/next] package: add gd package
+In-Reply-To: <20121128052616.GA29377@sapphire.tkos.co.il>
+References: <20121128011244.B677B8F461@busybox.osuosl.org>
+ <20121128052616.GA29377@sapphire.tkos.co.il>
+Message-ID: <20121128140655.094861cd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Noel Roberts,
+Dear Baruch Siach,
 
-On Wed, 28 Nov 2012 05:05:29 +0000, Noel Roberts wrote:
+On Wed, 28 Nov 2012 07:26:17 +0200, Baruch Siach wrote:
 
-> This patch allows Buildroot to cross compile the crypto libraries
-> needed for python integration, enabling good cryptographic support
-> within Python.
+> On Tue, Nov 27, 2012 at 11:21:06AM -0800, Peter Korsgaard wrote:
+> 
+> [...]
+> 
+> > +GD_TOOLS_                         	+= gdlib-config
+> 
+> Shouldn't this be 'GD_TOOLS_y'?
 
-Good. The part adding the package in package/Config.in is missing.
+No, the idea is to have all tools to be kept in GD_TOOLS_y and all
+tools to be removed in GD_TOOLS_. Since we always want to remove
+gdlib-config from the target, we unconditionally add it to GD_TOOLS_.
 
-> This is my first patch submission - please advise me, if I need to
-> rework anything.
+> > +define GD_REMOVE_TOOLS
+> > +	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GD_TOOLS_))
+> 
+> And here.
 
-Could you use git send-email to send your patch?
-
-Thanks!
+No, that's correct. GD_TOOLS_ is the list of things to be removed.
 
 Thomas
 -- 
