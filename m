@@ -1,74 +1,36 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Wed, 28 Nov 2012 00:05:52 +0100
-Subject: [Buildroot] [RFC 1/2] barebox: Build barebox in separate directory.
-In-Reply-To: <1354057553-6337-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1354057553-6337-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1354057553-6337-2-git-send-email-marek.belisko@open-nandra.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Wed, 28 Nov 2012 13:12:03 +1300
+Subject: [Buildroot] Improving config navigation for mtd tools
+Message-ID: <CAE21AQqPOGLxFVdCjaFpPo1x2kXCSo3+VbwvYk=THKfRbk+-UQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is necessary when we would like to add support for building also barebox
-xloader (MLO).
+Hello All
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
----
- boot/barebox/barebox.mk |   17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+The mtd utilities are part flash utilities and part file system
+utilities. This makes it a bit cryptic to put them under "Filesystem
+utilities".
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index a025d5f..16110b9 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -54,9 +54,12 @@ else ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
- BAREBOX_SOURCE_CONFIG = $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
- endif
- 
-+BAREBOX_BUILD_DIR = barebox
-+
- define BAREBOX_CONFIGURE_CMDS
-+	mkdir -p $(@D)/$(BAREBOX_BUILD_DIR)
- 	cp $(BAREBOX_SOURCE_CONFIG) $(@D)/arch/$(BAREBOX_ARCH)/configs/buildroot_defconfig
--	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
-+	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) buildroot_defconfig O=$(BAREBOX_BUILD_DIR)
- endef
- 
- ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
-@@ -68,11 +71,11 @@ endif
- 
- define BAREBOX_BUILD_CMDS
- 	$(BAREBOX_BUILD_BAREBOXENV_CMDS)
--	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
-+	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D) O=$(BAREBOX_BUILD_DIR)
- endef
- 
- define BAREBOX_INSTALL_IMAGES_CMDS
--	cp $(@D)/barebox.bin $(BINARIES_DIR)
-+	cp $(@D)/$(BAREBOX_BUILD_DIR)/barebox.bin $(BINARIES_DIR)
- endef
- 
- ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
-@@ -97,15 +100,15 @@ barebox-menuconfig barebox-xconfig barebox-gconfig barebox-nconfig: barebox-conf
- 	rm -f $(BAREBOX_DIR)/.stamp_{built,target_installed,images_installed}
- 
- barebox-savedefconfig: barebox-configure
--	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) \
-+	$(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(BAREBOX_DIR) O=$(BAREBOX_BUILD_DIR) \
- 		$(subst barebox-,,$@)
- 
- ifeq ($(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
--barebox-update-config: barebox-configure $(BAREBOX_DIR)/.config
--	cp -f $(BAREBOX_DIR)/.config $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
-+barebox-update-config: barebox-configure $(BAREBOX_DIR)/$(BAREBOX_BUILD_DIR)/.config
-+	cp -f $(BAREBOX_DIR)/$(BAREBOX_BUILD_DIR)/.config $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
- 
- barebox-update-defconfig: barebox-savedefconfig
--	cp -f $(BAREBOX_DIR)/defconfig $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
-+	cp -f $(BAREBOX_DIR)/$(BAREBOX_BUILD_DIR)/defconfig $(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE)
- else
- barebox-update-config: ;
- barebox-update-defconfig: ;
--- 
-1.7.10.4
+I suggest this can be resolved by remaining the heading to "Filesystem
+and flash utilities"
+
+
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -177,7 +177,7 @@ source "package/xterm/Config.in"
+ source "package/xvkbd/Config.in"
+ endmenu
+
+-menu "Filesystem utilities"
++menu "Filesystem and flash utilities"
+ source "package/cifs-utils/Config.in"
+ source "package/cramfs/Config.in"
+ source "package/dosfstools/Config.in"
+
+
+Regards
+
+Charles
