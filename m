@@ -1,42 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Nov 2012 17:05:02 -0800
-Subject: [Buildroot] [git commit] ocf-linux: tweak kernel patch for newer
-	kernels
-Message-ID: <20121128011237.BA60C97200@busybox.osuosl.org>
+Date: Tue, 27 Nov 2012 17:07:47 -0800
+Subject: [Buildroot] [git commit] manual: more warnings to not use
+	output/target
+Message-ID: <20121128011238.C017297200@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=670d60dc919fe6d99224ad1056c426812b38d108
+commit: http://git.buildroot.net/buildroot/commit/?id=13562ddd2ac2f15e14d5f244675bc3ab2bc63fb2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Newer kernels had a slight change in the random number API so the OCF
-patchset requires a slight tweak to build and run properly.
-
-Affected kernels are, per series:
->=3.0.41, >=3.2.29, >=3.4.9, >=3.5.2 and any newer version.
-
-The fix is applied by detecting the API change rather than guessing the
-kernel version.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/linux-ext-ocf-linux.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ docs/manual/using.txt |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/linux/linux-ext-ocf-linux.mk b/linux/linux-ext-ocf-linux.mk
-index faf7360..1a601d5 100644
---- a/linux/linux-ext-ocf-linux.mk
-+++ b/linux/linux-ext-ocf-linux.mk
-@@ -15,6 +15,8 @@ LINUX_DEPENDENCIES += ocf-linux
- define OCF_LINUX_PREPARE_KERNEL
- 	support/scripts/apply-patches.sh $(LINUX_DIR) \
- 		$(OCF_LINUX_DIR)/patches/ linux-3.2.1-ocf.patch ; \
-+	grep -q __mix_pool_bytes $(LINUX_DIR)/drivers/char/random.c && \
-+	$(SED) 's:wordcount\*4:&, NULL:' $(LINUX_DIR)/drivers/char/random.c ; \
- 	cp -rf $(OCF_LINUX_DIR)/ocf $(LINUX_DIR)/crypto/ocf ;
- endef
- 
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 6e144d0..857aa33 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -86,7 +86,8 @@ This directory contains several subdirectories:
+ * +target/+ which contains 'almost' the complete root filesystem for
+   the target: everything needed is present except the device files in
+   +/dev/+ (Buildroot can't create them because Buildroot doesn't run
+-  as root and doesn't want to run as root). Therefore, this directory
++  as root and doesn't want to run as root). Also, it doesn't have the correct
++  permissions (e.g. setuid for the busybox binary). Therefore, this directory
+   *should not be used on your target*.  Instead, you should use one of
+   the images built in the +images/+ directory. If you need an
+   extracted image of the root filesystem for booting over NFS, then
