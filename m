@@ -1,47 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Nov 2012 15:36:14 +0100
-Subject: [Buildroot] [PATCH] binutils: not available for the target on
-	AArch64
-Message-ID: <1354113374-15476-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Nov 2012 15:42:38 +0100
+Subject: [Buildroot] [PATCH v2] libpcap: fix static build
+Message-ID: <1354113758-23544-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+The libpcap package contained some interesting attempts to support a
+static-only build, but it was not working:
 
-  http://autobuild.buildroot.org/results/74082860f607cbd857654e9504f5f7e7ae47c0ac/build-end.log
+ http://autobuild.buildroot.org/results/01038d3b970092d894d2bae80679247e65722785/build-end.log
+
+In fact the configure.in of libpcap has provision to support
+--enable-shared/--disable-shared, but the generated configure script
+in the libpcap package has not been regenerated with the configure.in
+changes.
+
+So basically, enabling LIBPCAP_AUTORECONF=YES ensures that the
+configure script gets generated, which brings us a working
+--enable-shared / --disable-shared.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in |    1 +
- package/oprofile/Config.in |    1 +
- 2 files changed, 2 insertions(+)
+v2: Add comment above the AUTORECONF=YES line that explains why it is
+    needed.
+---
+ package/libpcap/libpcap.mk |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/binutils/Config.in b/package/binutils/Config.in
-index 6480370..38d519a 100644
---- a/package/binutils/Config.in
-+++ b/package/binutils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BINUTILS
- 	bool "binutils"
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	depends on !BR2_aarch64
- 	help
- 	  Install binutils on the target
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 7a1d32f..d35c228 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -10,11 +10,16 @@ LIBPCAP_LICENSE = BSD-3c
+ LIBPCAP_LICENSE_FILES = LICENSE
+ LIBPCAP_INSTALL_STAGING = YES
  
-diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
-index 562c910..8c881d1 100644
---- a/package/oprofile/Config.in
-+++ b/package/oprofile/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPROFILE
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_BINUTILS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_aarch64 # binutils
- 	help
- 	  OProfile is a system-wide profiler for Linux systems,
- 	  capable of profiling all running code at low overhead.
+-# doesn't have an install-strip
+-LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
+-	$(if $(BR2_PREFER_STATIC_LIB),install,install-shared)
+-LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
+-	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
++# The configure.in file contains the necessary code to handle
++# --enable-shared/--disable-shared properly, but the configure script
++# bundled with the libpcap tarball is not up-to-date with the
++# configure.in file. In order to get proper handling of
++# --enable-shared/--disable-shared, which is needed when doing a
++# static library build, we autoreconfigure this package. This can be
++# removed when bumping libpcap, after checking that the bundled
++# configure script correctly handles --enable-shared/--disable-shared.
++LIBPCAP_AUTORECONF = YES
++
+ LIBPCAP_DEPENDENCIES = zlib \
+ 	$(if $(BR2_PACKAGE_LIBUSB),libusb)
+ LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
 -- 
 1.7.9.5
