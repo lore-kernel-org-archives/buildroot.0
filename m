@@ -1,40 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Nov 2012 17:11:45 -0800
-Subject: [Buildroot] [git commit] toolchain-external: on ARM,
-	show comment about the availability of Linaro toolchains
-Message-ID: <20121203145713.48B0B99848@busybox.osuosl.org>
+Date: Wed, 28 Nov 2012 14:03:23 -0800
+Subject: [Buildroot] [git commit] ccache: Bump version
+Message-ID: <20121203145713.7E2D299808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90f763c77d2316c2fdefa1301e96d5b31376e2cf
+commit: http://git.buildroot.net/buildroot/commit/?id=dd6c3d5fc769a1cd11e4f86147bc63103093fcdc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On ARM, Linaro external toolchains are only visible if the user
-selects Cortex-A8 or Cortex-A9. Therefore, we add a comment that tells
-the user that the Linaro toolchains are only available under those
-conditions.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/ccache/ccache.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 469c283..4fe605d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -54,6 +54,10 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index b9c2039..1cbad6e 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- 	  To use this toolchain, you must disable soft float usage.
+-CCACHE_VERSION = 3.1.7
++CCACHE_VERSION = 3.1.8
+ CCACHE_SITE    = http://samba.org/ftp/ccache
+ CCACHE_SOURCE  = ccache-$(CCACHE_VERSION).tar.bz2
  
-+comment "Linaro toolchains available for Cortex-A{8,9}"
-+	depends on BR2_arm
-+	depends on !BR2_cortex_a8 && !BR2_cortex_a9
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	bool "Sourcery CodeBench ARM 2012.03"
- 	depends on BR2_arm
