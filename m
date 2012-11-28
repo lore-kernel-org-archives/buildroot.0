@@ -1,161 +1,50 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 28 Nov 2012 17:09:17 +0100
-Subject: [Buildroot] [PATCHv3 for-next 1/6] perl: remove redundant patches
-Message-ID: <1354118962-18601-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Nov 2012 17:34:52 +0100
+Subject: [Buildroot] [PATCH] gdb: properly pass the PATH when building gdb
+	for the host
+Message-ID: <1354120492-17059-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+When building gdb for the host, we properly pass the PATH (through
+HOST_CONFIGURE_OPTS) during the configure step, but we forget to do so
+for the compilation step.
 
-Now we are using perlcross, the patches to make perl work with qemu are
-redundant, so remove them.
+The result of this is that when the Crosstool-NG backend is used, gawk
+is built and installed in $(HOST_DIR), as a dependency of the
+crosstool-ng package.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Then, the host gdb configure script detects this gawk binary
+($(HOST_DIR) is in the PATH), and assumes gawk is
+available. Unfortunately, during the compilation step, it fails to
+find the expected gawk binary, because $(HOST_DIR) is no longer in the
+PATH. This causes the following build failure:
+
+  http://autobuild.buildroot.org/results/067d0c2ea01673ba98ec11de2426f1ab92dac800/build-end.log
+
+In order to fix this, we simply call the compilation step of gdb for
+the host with $(HOST_MAKE_ENV), as it should have been done from the
+beginning.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: don't remove perl-fix-Module-Build.patch [Francois Perrad]
----
- package/perl/perl-configure-qemu.patch |   53 --------------------------------
- package/perl/perl-make-ext.patch       |   24 ---------------
- package/perl/perl-mkppport.patch       |   37 ----------------------
- 3 files changed, 114 deletions(-)
- delete mode 100644 package/perl/perl-configure-qemu.patch
- delete mode 100644 package/perl/perl-make-ext.patch
- delete mode 100644 package/perl/perl-mkppport.patch
+ toolchain/gdb/gdb.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/perl/perl-configure-qemu.patch b/package/perl/perl-configure-qemu.patch
-deleted file mode 100644
-index c2d6b92..0000000
---- a/package/perl/perl-configure-qemu.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--Add qemu support
--
--see https://rt.perl.org/rt3//Public/Bug/Display.html?id=114798
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/Configure
--===================================================================
----- a/Configure
--+++ b/Configure
--@@ -2837,6 +2837,9 @@
--             ;;
--         *)  echo "Using usrinc $usrinc." >&4 ;;
-- 	esac
--+	case "$targetrun" in
--+	*qemu*) targethost=dummy ;;
--+	esac
-- 	case "$targethost" in
-- 	'') echo "Targethost not defined." >&4; croak=y ;;
--         *)  echo "Using targethost $targethost." >&4
--@@ -2868,7 +2871,7 @@
-- 	case "$targetfrom" in
-- 	'') targetfrom=scp ;;
-- 	esac
---    	run=$run-$targetrun
--+    	run=$run-`basename $targetrun`
--     	to=$to-$targetto
--     	from=$from-$targetfrom
-- 	case "$targetdir" in
--@@ -2908,6 +2911,14 @@
-- $targetrun -l $targetuser $targethost "cd \$cwd && ./\$exe \$@"
-- EOF
-- 	    ;;
--+	*qemu*)
--+	    to=:
--+	    from=:
--+	    cat >$run <<EOF
--+#!/bin/sh
--+$targetrun -L $qemulib "\$@"
--+EOF
--+	    ;;
-- 	*)  echo "Unknown targetrun '$targetrun'" >&4
-- 	    exit 1
-- 	    ;;
--@@ -5048,7 +5059,7 @@
-- echo " ";
-- echo "Checking if your compiler accepts $flag" 2>&1;
-- echo "int main(void) { return 0; }" > gcctest.c;
---if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && ./gcctest; then
--+if $cc -O2 $flag -o gcctest gcctest.c 2>gcctest.out && $run ./gcctest; then
--     echo "Yes, it does." 2>&1;
--     if $test -s gcctest.out ; then
--         echo "But your platform does not like it:";
-diff --git a/package/perl/perl-make-ext.patch b/package/perl/perl-make-ext.patch
-deleted file mode 100644
-index e0195e7..0000000
---- a/package/perl/perl-make-ext.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Don't use RUN with make (only for perl)
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/make_ext.pl
--===================================================================
----- a/make_ext.pl
--+++ b/make_ext.pl
--@@ -458,11 +458,13 @@
-- 	# Give makefile an opportunity to rewrite itself.
-- 	# reassure users that life goes on...
-- 	my @args = ('config', @$pass_through);
---	system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
--+#	system(@run, @make, @args) and print "@run @make @args failed, continuing anyway...\n";
--+	system(@make, @args) and print "@make @args failed, continuing anyway...\n";
--     }
--     my @targ = ($target, @$pass_through);
--     print "Making $target in $ext_dir\n at run @make @targ\n";
---    my $code = system(@run, @make, @targ);
--+#    my $code = system(@run, @make, @targ);
--+    my $code = system(@make, @targ);
--     die "Unsuccessful make($ext_dir): code=$code" if $code != 0;
-- 
--     chdir $return_dir || die "Cannot cd to $return_dir: $!";
-diff --git a/package/perl/perl-mkppport.patch b/package/perl/perl-mkppport.patch
-deleted file mode 100644
-index 97f27a2..0000000
---- a/package/perl/perl-mkppport.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--Add RUN
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/mkppport
--===================================================================
----- a/mkppport
--+++ b/mkppport
--@@ -1,6 +1,7 @@
-- use strict;
-- use warnings;
-- 
--+use Config;
-- use Getopt::Long;
-- use File::Spec;
-- use File::Compare qw( compare );
--@@ -136,14 +137,18 @@
-- #----------------------------------------------
-- sub run
-- {
--+  my @run = $Config{run};
--+  @run = () if not defined $run[0] or $run[0] eq '';
--   my @args = ("-I" . File::Spec->catdir((File::Spec->updir) x 2, 'lib'), @_);
--   my $run = $perl =~ m/\s/ ? qq("$perl") : $perl;
--   for (@args) {
--     $_ = qq("$_") if $^O eq 'VMS' && /^[^"]/;
--     $run .= " $_";
--   }
---  print "running $run\n";
---  system $run and die "$run failed: $?\n";
--+#  print "running $run\n";
--+#  system $run and die "$run failed: $?\n";
--+  print "running ", join(' ', @run, $run), "\n";
--+  system join(' ', @run, $run) and die "@run $run failed: $?\n";
-- }
-- 
-- __END__
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index c42c755..4b8fe3a 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -196,6 +196,7 @@ $(GDB_HOST_DIR)/.configured: $(GDB_DIR)/.unpacked
+ 
+ $(GDB_HOST_DIR)/gdb/gdb: $(GDB_HOST_DIR)/.configured
+ 	# force ELF support since it fails due to BFD linking problems
++	$(HOST_MAKE_ENV) \
+ 	gdb_cv_var_elf=yes \
+ 	$(MAKE) -C $(GDB_HOST_DIR)
+ 	strip $(GDB_HOST_DIR)/gdb/gdb
 -- 
-1.7.10.4
+1.7.9.5
