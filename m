@@ -1,23 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Nov 2012 17:06:29 -0800
-Subject: [Buildroot] [PATCH] ocf-linux: tweak kernel patch for newer
-	kernels
-In-Reply-To: <1354044188-23646-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 27 Nov 2012 16:23:08 -0300")
-References: <1354044188-23646-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nka1qp6.fsf@dell.be.48ers.dk>
+Date: Tue, 27 Nov 2012 17:10:55 -0800
+Subject: [Buildroot] [PATCHv3 for-2012.11 1/5] manual: trivial fixes
+In-Reply-To: <1354053560-30352-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 27 Nov 2012 22:59:16 +0100")
+References: <1354053560-30352-1-git-send-email-arnout@mind.be>
+Message-ID: <87zk22zg4g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- Gustavo> Newer kernels had a slight change in the random number API so the OCF
- Gustavo> patchset requires a slight tweak to build and run properly.
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> ---
+ Arnout> As promised, here is the series with the trivial fixes split off.
+ Arnout> This patch doesn't require review IMHO.
 
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
