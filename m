@@ -1,36 +1,23 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Wed, 28 Nov 2012 13:12:03 +1300
-Subject: [Buildroot] Improving config navigation for mtd tools
-Message-ID: <CAE21AQqPOGLxFVdCjaFpPo1x2kXCSo3+VbwvYk=THKfRbk+-UQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 Nov 2012 17:06:29 -0800
+Subject: [Buildroot] [PATCH] ocf-linux: tweak kernel patch for newer
+	kernels
+In-Reply-To: <1354044188-23646-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 27 Nov 2012 16:23:08 -0300")
+References: <1354044188-23646-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874nka1qp6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-The mtd utilities are part flash utilities and part file system
-utilities. This makes it a bit cryptic to put them under "Filesystem
-utilities".
+ Gustavo> Newer kernels had a slight change in the random number API so the OCF
+ Gustavo> patchset requires a slight tweak to build and run properly.
 
-I suggest this can be resolved by remaining the heading to "Filesystem
-and flash utilities"
+Committed, thanks.
 
-
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -177,7 +177,7 @@ source "package/xterm/Config.in"
- source "package/xvkbd/Config.in"
- endmenu
-
--menu "Filesystem utilities"
-+menu "Filesystem and flash utilities"
- source "package/cifs-utils/Config.in"
- source "package/cramfs/Config.in"
- source "package/dosfstools/Config.in"
-
-
-Regards
-
-Charles
+-- 
+Bye, Peter Korsgaard
