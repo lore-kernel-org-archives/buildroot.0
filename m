@@ -1,42 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Nov 2012 14:06:55 +0100
-Subject: [Buildroot] [git commit branch/next] package: add gd package
-In-Reply-To: <20121128052616.GA29377@sapphire.tkos.co.il>
-References: <20121128011244.B677B8F461@busybox.osuosl.org>
- <20121128052616.GA29377@sapphire.tkos.co.il>
-Message-ID: <20121128140655.094861cd@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 28 Nov 2012 10:24:02 -0300
+Subject: [Buildroot] [PATCH 1/2] hiawatha: needs mmu
+Message-ID: <1354109043-12022-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/hiawatha/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-On Wed, 28 Nov 2012 07:26:17 +0200, Baruch Siach wrote:
-
-> On Tue, Nov 27, 2012 at 11:21:06AM -0800, Peter Korsgaard wrote:
-> 
-> [...]
-> 
-> > +GD_TOOLS_                         	+= gdlib-config
-> 
-> Shouldn't this be 'GD_TOOLS_y'?
-
-No, the idea is to have all tools to be kept in GD_TOOLS_y and all
-tools to be removed in GD_TOOLS_. Since we always want to remove
-gdlib-config from the target, we unconditionally add it to GD_TOOLS_.
-
-> > +define GD_REMOVE_TOOLS
-> > +	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GD_TOOLS_))
-> 
-> And here.
-
-No, that's correct. GD_TOOLS_ is the list of things to be removed.
-
-Thomas
+diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
+index 431a9fa..ac0aa10 100644
+--- a/package/hiawatha/Config.in
++++ b/package/hiawatha/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_HIAWATHA
+ 	bool "hiawatha"
++	# needs fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  Hiawatha is a webserver for Unix and has been built with
+ 	  security in mind. This resulted in a highly secure
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
