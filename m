@@ -1,30 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Nov 2012 14:31:00 +0100
-Subject: [Buildroot] Problem building libglib2
-In-Reply-To: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
-References: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
-Message-ID: <20121128143100.152d26d6@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 28 Nov 2012 06:09:07 -0800
+Subject: [Buildroot] [git commit branch/next] package: add gd package
+In-Reply-To: <20121128052616.GA29377@sapphire.tkos.co.il> (Baruch Siach's
+ message of "Wed, 28 Nov 2012 07:26:17 +0200")
+References: <20121128011244.B677B8F461@busybox.osuosl.org>
+ <20121128052616.GA29377@sapphire.tkos.co.il>
+Message-ID: <87lidlzunw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Manning,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Wed, 28 Nov 2012 14:37:46 +1300, Charles Manning wrote:
+Hi,
 
-> I'm a buildroot newbie and am trying to figure out what went wrong
-> here.
+ >> +GD_TOOLS_                         	+= gdlib-config
 
-This looks odd. Could you give us your Buildroot .config and tell us
-the Buildroot version you're using?
+ Baruch> Shouldn't this be 'GD_TOOLS_y'?
 
-Thanks,
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_ANNOTATE)	+= annotate
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_BDFTOGD)	+= bdftogd
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GD2COPYPAL)	+= gd2copypal
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GD2TOGIF)	+= gd2togif
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GD2TOPNG)	+= gd2topng
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GDCMPGIF)	+= gdcmpgif
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GDPARTTOPNG)	+= gdparttopng
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GDTOPNG)	+= gdtopng
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_GIFTOGD2)	+= giftogd2
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_PNGTOGD)	+= pngtogd
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_PNGTOGD2)	+= pngtogd2
+ >> +GD_TOOLS_$(BR2_PACKAGE_GD_WEBPNG)	+= webpng
+ >> +
+ >> +define GD_REMOVE_TOOLS
+ >> +	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GD_TOOLS_))
 
-Thomas
+ Baruch> And here.
+
+No - The makefile installs everything, so I need to remove all programs
+NOT enabled (and gdlib-config is never needed).
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
