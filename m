@@ -1,132 +1,170 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:11 +0100
-Subject: [Buildroot] [PATCH 12/51] package/spice: new package
+Date: Thu, 29 Nov 2012 00:54:01 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_02/51=5D_package/dtc=3A_new_packag?=
+	=?utf-8?q?e?=
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-13-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-3-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+dtc is the Device Tree Compiler, and manipulates device trees.
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
- package/Config.in       |    1 +
- package/spice/Config.in |   23 +++++++++++++++++
- package/spice/spice.mk  |   62 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+), 0 deletions(-)
- create mode 100644 package/spice/Config.in
- create mode 100644 package/spice/spice.mk
+Although Arnout suggested to move it out of the libraries sub-menu,
+I kept it there, as by default, only the library is installed, like
+it is done for, eg., libcurl.
+---
+ package/Config.in                          |    1 +
+ package/dtc/Config.in                      |    9 +++++++
+ package/dtc/dtc-extra_cflags.patch         |   27 ++++++++++++++++++++++
+ package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++++
+ package/dtc/dtc.mk                         |   34 ++++++++++++++++++++++++++++
+ 5 files changed, 99 insertions(+), 0 deletions(-)
+ create mode 100644 package/dtc/Config.in
+ create mode 100644 package/dtc/dtc-extra_cflags.patch
+ create mode 100644 package/dtc/dtc-separate-lib-install.patch
+ create mode 100644 package/dtc/dtc.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1d8df2a..4ce5e48 100644
+index 5d9783a..738ffd5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -648,6 +648,7 @@ source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
- source "package/spice-protocol/Config.in"
-+source "package/spice/Config.in"
- source "package/squid/Config.in"
- source "package/stunnel/Config.in"
- source "package/tcpdump/Config.in"
-diff --git a/package/spice/Config.in b/package/spice/Config.in
+@@ -405,6 +405,7 @@ endmenu
+ 
+ menu "Hardware handling"
+ source "package/ccid/Config.in"
++source "package/dtc/Config.in"
+ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
 new file mode 100644
-index 0000000..ced3ec7
+index 0000000..96225e3
 --- /dev/null
-+++ b/package/spice/Config.in
-@@ -0,0 +1,23 @@
-+comment "spice server depends on python"
-+	depends on !BR2_PACKAGE_PYTHON
-+
-+config BR2_PACKAGE_SPICE
-+	bool "spice server"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_PYPARSING
-+	select BR2_PACKAGE_SPICE_PROTOCOL
-+	select BR2_PACKAGE_PIXMAN
-+	select BR2_PACKAGE_CELT051
-+	select BR2_PACKAGE_ALSA_LIB
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_JPEG
++++ b/package/dtc/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DTC
++	bool "dtc"
 +	help
-+	  The Spice project aims to provide a complete open source
-+	  solution for interaction with virtualized desktop devices.
-+	  The Spice project deals with both the virtualized devices
-+	  and the front-end. Interaction between front-end and
-+	  back-end is done using VD-Interfaces.
++	  The Device Tree Compiler, dtc, takes as input a device-tree in
++	  a given format and outputs a device-tree in another format.
 +	  
-+	  This package implements the server-part of Spice.
++	  Note that only the library is installed for now.
 +	  
-+	  http://www.spice-space.org/
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
++	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
+diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
 new file mode 100644
-index 0000000..dbd2d5f
+index 0000000..9d1882b
 --- /dev/null
-+++ b/package/spice/spice.mk
-@@ -0,0 +1,62 @@
++++ b/package/dtc/dtc-extra_cflags.patch
+@@ -0,0 +1,27 @@
++Makefile: append the CFLAGS to existing ones
++
++Allow the user to pass custom CFLAGS (eg. optimisation flags).
++
++Do not use EXTRA_CFLAGS, append to existing CFLAGS with +=  (Arnout)
++
++Cc: Arnout Vandecappelle <arnout@mind.be>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Patch not sent upstream.
++
++Although not specific to buildroot, I am not sure this is the best
++way to handle user-supplied CFLAGS.
++
++diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
++--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
+++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
++@@ -18,7 +18,7 @@
++ CPPFLAGS = -I libfdt -I .
++ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
++ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
++-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
+++CFLAGS += -g -Os -fPIC -Werror $(WARNINGS)
++ 
++ BISON = bison
++ LEX = flex
+diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
+new file mode 100644
+index 0000000..c86d587
+--- /dev/null
++++ b/package/dtc/dtc-separate-lib-install.patch
+@@ -0,0 +1,28 @@
++Makefile: add a rule to only install libfdt
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Patch not sent upstream.
++
++It's really specific to buildroot, and is probably not
++good (aka generic) enough to be pushed upstream.
++
++diff --git a/Makefile b/Makefile
++index 1169e6c..39e7190 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -160,10 +160,12 @@ endif
++ # intermediate target and building them again "for real"
++ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
++ 
++-install: all $(SCRIPTS)
+++install: all $(SCRIPTS) libfdt_install
++ 	@$(VECHO) INSTALL
++ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
++ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+++
+++libfdt_install: libfdt
++ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
++ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
++ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+new file mode 100644
+index 0000000..a0e1e35
+--- /dev/null
++++ b/package/dtc/dtc.mk
+@@ -0,0 +1,34 @@
 +#############################################################
 +#
-+# Spice
++# dtc
 +#
 +#############################################################
 +
-+SPICE_VERSION         = 0.12.0
-+SPICE_SOURCE          = spice-$(SPICE_VERSION).tar.bz2
-+SPICE_SITE            = http://www.spice-space.org/download/releases/
-+SPICE_LICENSE         = LGPLv2.1+
-+SPICE_LICENSE_FILES   = COPYING
-+SPICE_INSTALL_STAGING = YES
-+SPICE_DEPENDENCIES    = \
-+    spice-protocol      \
-+    pixman              \
-+    celt051             \
-+    python-pyparsing    \
-+    alsa-lib            \
-+    openssl             \
-+    jpeg                \
++DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
++DTC_SITE            = git://git.jdl.com/software/dtc.git
++DTC_LICENSE         = GPLv2+/BSD-2c
++DTC_LICENSE_FILES   = README.license GPL
++# Note: the dual-license only applies to the library.
++#       The DT compiler (dtc) is GPLv2+, but we do not install it.
++DTC_INSTALL_STAGING = YES
 +
-+# We disable everything for now, because the dependency tree can become
-+# quite deep if we try to enable some features, and I have not tested that.
-+SPICE_CONF_OPT =            \
-+  --disable-tunnel          \
-+  --disable-gui             \
-+  --disable-opengl          \
-+  --disable-smartcard       \
-+  --disable-client          \
-+  --disable-automated-tests \
-+  --without-sasl            \
-+
-+SPICE_DEPENDENCIES += host-pkgconf
-+
-+SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
-+
-+# We need to tweak spice.pc because it /forgets/ (for static linking) that
-+# it should link against libz and libjpeg. libz is pkg-config-aware, while
-+# libjpeg isn't, hence the two-line tweak
-+define SPICE_POST_INSTALL_STAGING_FIX_PC
-+	$(SED) 's/^\(Requires.private:.*\)$$/\1 zlib/; s/^\(Libs.private:.*\)$$/\1 -ljpeg/;'    \
-+	       "$(STAGING_DIR)/usr/lib/pkgconfig/spice-server.pc"
++define DTC_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS)    \
++	CFLAGS="$(TARGET_CFLAGS)"   \
++	$(MAKE) -C $(@D) PREFIX=/usr libfdt
 +endef
-+SPICE_POST_INSTALL_STAGING_HOOKS += SPICE_POST_INSTALL_STAGING_FIX_PC
 +
-+# It is currently not possible to detect if stack-protection is available
-+# or not, because it requires support from both the compiler *and* the
-+# C library, but the C library (eg. uClibc) can be compiled without that
-+# support, even if gcc accepts the -fstack-protector-all option.
-+# spice's ./configure only checks for gcc's -fstack-protector-all option,
-+# so it misses the case where the C library doe not provide the requires
-+# support.
-+# A correct fix would be to fix spice's ./configure to also check the C
-+# library, but it might be much more involved.
-+# So, we simply disable it for now. After all, as uClibc's help puts it:
-+#     Note that NOEXECSTACK on a kernel with address space randomization
-+#     is generally sufficient to prevent most buffer overflow exploits
-+#     without increasing code size.
-+SPICE_CONF_OPT += gl_cv_warn__fstack_protector_all=no
++#?libfdt_install is our own install rule added by our patch
++define DTC_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
++endef
 +
-+$(eval $(autotools-package))
++define DTC_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_CLEAN_CMDS
++	$(MAKE) -C $(@D) libfdt_clean
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
