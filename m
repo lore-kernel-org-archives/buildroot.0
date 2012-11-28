@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:15 +0100
-Subject: [Buildroot] [PATCH 16/51] package/libseccomp: new package
+Date: Thu, 29 Nov 2012 00:54:28 +0100
+Subject: [Buildroot] [PATCH 29/51] package/qemu: add option to
+	enable/disable the VNC frontend
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-17-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-30-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,96 +13,56 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in                                  |    1 +
- package/libseccomp/Config.in                       |   13 +++++++++++
- ...ibseccomp-use-system-headers-from-sysroot.patch |   17 +++++++++++++++
- package/libseccomp/libseccomp.mk                   |   22 ++++++++++++++++++++
- 4 files changed, 53 insertions(+), 0 deletions(-)
- create mode 100644 package/libseccomp/Config.in
- create mode 100644 package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
- create mode 100644 package/libseccomp/libseccomp.mk
+ package/qemu/Config.in |    7 +++++++
+ package/qemu/qemu.mk   |   11 ++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4ce5e48..4b0fbae 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -508,6 +508,7 @@ source "package/libical/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
- source "package/libtpl/Config.in"
-+source "package/libseccomp/Config.in"
- source "package/liburcu/Config.in"
- source "package/linux-pam/Config.in"
- source "package/lttng-libust/Config.in"
-diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
-new file mode 100644
-index 0000000..183cf4e
---- /dev/null
-+++ b/package/libseccomp/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LIBSECCOMP
-+	bool "libseccomp"
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+index baa7037..2648e71 100644
+--- a/package/qemu/Config.in
++++ b/package/qemu/Config.in
+@@ -81,6 +81,13 @@ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
+ 
+ comment "Frontends"
+ 
++config BR2_PACKAGE_QEMU_VNC
++	bool "Enable VNC frontend"
++	select BR2_PACKAGE_VNC
 +	help
-+	  High level interface to the Linux Kernel's seccomp filter 
-+	  
-+	  The libseccomp library provides and easy to use, platform independent,
-+	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
-+	  The libseccomp API is designed to abstract away the underlying BPF
-+	  based syscall filter language and present a more conventional
-+	  function-call based filtering interface that should be familiar to,
-+	  and easily adopted by application developers.
-+	  
-+	  http://sourceforge.net/projects/libseccomp/
-diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
-new file mode 100644
-index 0000000..0997edd
---- /dev/null
-+++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
-@@ -0,0 +1,17 @@
-+configure: check headers in sysroot, not in host's system headers
++	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
++	  VNC server presenting the VM's display.
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ config BR2_PACKAGE_QEMU_SDL
+ 	bool "Enable SDL frontend"
+ 	select BR2_PACKAGE_SDL
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 75969d5..5640848 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -129,6 +129,12 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
+ QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QEMU_VNC),y)
++QEMU_OPTS += --enable-vnc
++else
++QEMU_OPTS += --disable-vnc
++endif
 +
-+diff -durN libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
-+--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
-++++ libseccomp-1.0.0/configure	2012-10-27 00:12:50.739196219 +0200
-+@@ -205,7 +205,8 @@
-+ #
-+ 
-+ # system seccomp includes
-+-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
-++# ${SYSROOT} added by buildroot for cross-compilation
-++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
-+ 	opt_sysinc_seccomp="yes"
-+ else
-+ 	opt_sysinc_seccomp="no"
-diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
-new file mode 100644
-index 0000000..73fe632
---- /dev/null
-+++ b/package/libseccomp/libseccomp.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# libseccomp
-+#
-+#############################################################
-+
-+LIBSECCOMP_VERSION         = 1.0.0
-+LIBSECCOMP_SOURCE          = libseccomp-$(LIBSECCOMP_VERSION).tar.gz
-+LIBSECCOMP_SITE            = http://downloads.sourceforge.net/project/libseccomp
-+LIBSECCOMP_LICENSE         = LGPLv2.1
-+LIBSECCOMP_LICENSE_FILES   = LICENSE
-+LIBSECCOMP_INSTALL_STAGING = YES
-+
-+# Needed for configure to find our system headers:
-+LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
-+LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
-+LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
-+LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
-+LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
-+
-+# Not a real autotools package, but works quite OK nonetheless
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
+ QEMU_OPTS += --enable-sdl
+ QEMU_DEPENDENCIES += sdl
+@@ -164,7 +170,10 @@ define QEMU_CONFIGURE_CMDS
+ 	        --enable-vhost-net                  \
+ 	        --disable-xen                       \
+ 	        --disable-slirp                     \
+-	        --disable-vnc                       \
++	        --disable-vnc-jpeg                  \
++	        --disable-vnc-png                   \
++	        --disable-vnc-tls                   \
++	        --disable-vnc-sasl                  \
+ 	        --disable-virtfs                    \
+ 	        --disable-brlapi                    \
+ 	        --disable-curses                    \
 -- 
 1.7.2.5
