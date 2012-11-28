@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:28 +0100
-Subject: [Buildroot] [PATCH 29/51] package/qemu: add option to
-	enable/disable the VNC frontend
+Date: Thu, 29 Nov 2012 00:54:31 +0100
+Subject: [Buildroot] [PATCH 32/51] package/qemu: add option to not install
+	blobs
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-30-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-33-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    7 +++++++
- package/qemu/qemu.mk   |   11 ++++++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   16 ++++++++++++++++
+ package/qemu/qemu.mk   |    4 ++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index baa7037..2648e71 100644
+index 8ddd491..a5f3b35 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -81,6 +81,13 @@ endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
+@@ -116,4 +116,20 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
- comment "Frontends"
- 
-+config BR2_PACKAGE_QEMU_VNC
-+	bool "Enable VNC frontend"
-+	select BR2_PACKAGE_VNC
-+	help
-+	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
-+	  VNC server presenting the VM's display.
++comment "Misc. features"
 +
- config BR2_PACKAGE_QEMU_SDL
- 	bool "Enable SDL frontend"
- 	select BR2_PACKAGE_SDL
++config BR2_PACKAGE_QEMU_BLOBS
++	bool "Install binary blobs"
++	default y
++	help
++	  Say 'y' here (the default) to install binary blobs (such as BIOS
++	  or firmwares for the different machines simulated by QEMU).
++	  Say 'n' to not install those blobs.
++	  
++	  Note: Some machines may be unbootable without those blobs.
++	        If unsure, say 'y'.
++	  
++	  Note2: This has nothing to do with the licensing of the blobs;
++	         some (most?) even have a free and/or open source license.
++
+ endif # BR2_PACKAGE_QEMU
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 75969d5..5640848 100644
+index 3b13b36..59c37c8 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -129,6 +129,12 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
- QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
+@@ -164,6 +164,10 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VNC),y)
-+QEMU_OPTS += --enable-vnc
-+else
-+QEMU_OPTS += --disable-vnc
++ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
++QEMU_OPTS += --disable-blobs
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
- QEMU_OPTS += --enable-sdl
- QEMU_DEPENDENCIES += sdl
-@@ -164,7 +170,10 @@ define QEMU_CONFIGURE_CMDS
- 	        --enable-vhost-net                  \
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
--	        --disable-vnc                       \
-+	        --disable-vnc-jpeg                  \
-+	        --disable-vnc-png                   \
-+	        --disable-vnc-tls                   \
-+	        --disable-vnc-sasl                  \
- 	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
- 	        --disable-curses                    \
+ # Note: although QEMU uses a ./configure script, it is not compatible with
+ #       the traditional autotools options (eg. --target et al.), so we can
+ #       not use the autotools-package infrastructure. So we have to use the
 -- 
 1.7.2.5
