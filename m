@@ -1,31 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 28 Nov 2012 10:39:05 -0800
-Subject: [Buildroot] [git commit] hiawatha: needs mmu
-Message-ID: <20121128184035.B6DE19729E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 Nov 2012 10:58:52 -0800
+Subject: [Buildroot] [PATCH v2] libpcap: fix static build
+In-Reply-To: <1354113758-23544-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 28 Nov 2012 15:42:38 +0100")
+References: <1354113758-23544-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87boehzh8z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=737d92d9c271093e76a47d1e7c90b3c1e315f16a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/hiawatha/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Thomas> The libpcap package contained some interesting attempts to support a
+ Thomas> static-only build, but it was not working:
 
-diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
-index 431a9fa..ac0aa10 100644
---- a/package/hiawatha/Config.in
-+++ b/package/hiawatha/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_HIAWATHA
- 	bool "hiawatha"
-+	# needs fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  Hiawatha is a webserver for Unix and has been built with
- 	  security in mind. This resulted in a highly secure
+ Thomas>  http://autobuild.buildroot.org/results/01038d3b970092d894d2bae80679247e65722785/build-end.log
+
+ Thomas> In fact the configure.in of libpcap has provision to support
+ Thomas> --enable-shared/--disable-shared, but the generated configure script
+ Thomas> in the libpcap package has not been regenerated with the configure.in
+ Thomas> changes.
+
+ Thomas> So basically, enabling LIBPCAP_AUTORECONF=YES ensures that the
+ Thomas> configure script gets generated, which brings us a working
+ Thomas> --enable-shared / --disable-shared.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
