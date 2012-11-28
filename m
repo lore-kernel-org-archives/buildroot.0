@@ -1,70 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:23 +0100
-Subject: [Buildroot] [PATCH 24/51] package/qemu: fix host-qemu variable names
+Date: Thu, 29 Nov 2012 00:54:14 +0100
+Subject: [Buildroot] [PATCH 15/51] package/spice: enable slirp support
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-25-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-16-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the upcoming introduction of qemu-on-target, we need to properly
-separate the variables used for the host qemu, from the variables
-used for the target qemu.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/qemu.mk |   25 ++++++++++++++-----------
- 1 files changed, 14 insertions(+), 11 deletions(-)
+ package/spice/Config.in |    7 +++++++
+ package/spice/spice.mk  |    8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 36d855e..64be5c7 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -13,7 +13,10 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #       the non-(L)GPL license texts are specified in the affected
- #       individual source files.
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index 6e6233d..846bee1 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -40,4 +40,11 @@ config BR2_PACKAGE_SPICE_GUI
+ 	  Say 'y' here to enable the Graphical User Interface (GUI)
+ 	  start dialog.
  
--QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
-+#-------------------------------------------------------------
-+# Host-qemu
++config BR2_PACKAGE_SPICE_TUNNEL
++	bool "Enable network redirection"
++	select BR2_PACKAGE_SLIRP
++	help
++	  Say 'y' here to enable network redirection, aka tunnelling
++	  through a SLIP/SLIRP session.
 +
-+HOST_QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+ endif # BR2_PACKAGE_SPICE
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index 350c4a9..80fbf22 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -22,7 +22,6 @@ SPICE_DEPENDENCIES    = \
+ # We disable everything for now, because the dependency tree can become
+ # quite deep if we try to enable some features, and I have not tested that.
+ SPICE_CONF_OPT =            \
+-  --disable-tunnel          \
+   --disable-opengl          \
+   --disable-smartcard       \
+   --disable-automated-tests \
+@@ -44,6 +43,13 @@ else
+ SPICE_CONF_OPT += --disable-gui
+ endif
  
- #       BR ARCH         qemu
- #       -------         ----
-@@ -44,20 +47,20 @@ QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
- #       sh64            not supported
- #       sparc           sparc
++ifeq ($(BR2_PACKAGE_SPICE_TUNNEL),y)
++SPICE_CONF_OPT += --enable-tunnel
++SPICE_DEPENDENCIES += slirp
++else
++SPICE_CONF_OPT += --disable-tunnel
++endif
++
+ SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
  
--QEMU_ARCH = $(ARCH)
--ifeq ($(QEMU_ARCH),i486)
--    QEMU_ARCH = i386
-+HOST_QEMU_ARCH = $(ARCH)
-+ifeq ($(HOST_QEMU_ARCH),i486)
-+    HOST_QEMU_ARCH = i386
- endif
--ifeq ($(QEMU_ARCH),i586)
--    QEMU_ARCH = i386
-+ifeq ($(HOST_QEMU_ARCH),i586)
-+    HOST_QEMU_ARCH = i386
- endif
--ifeq ($(QEMU_ARCH),i686)
--    QEMU_ARCH = i386
-+ifeq ($(HOST_QEMU_ARCH),i686)
-+    HOST_QEMU_ARCH = i386
- endif
--ifeq ($(QEMU_ARCH),powerpc)
--    QEMU_ARCH = ppc
-+ifeq ($(HOST_QEMU_ARCH),powerpc)
-+    HOST_QEMU_ARCH = ppc
- endif
--HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
-+HOST_QEMU_TARGETS=$(HOST_QEMU_ARCH)-linux-user
- 
- define HOST_QEMU_CONFIGURE_CMDS
- 	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
 -- 
 1.7.2.5
