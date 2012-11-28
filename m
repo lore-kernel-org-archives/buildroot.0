@@ -1,36 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 Nov 2012 11:37:04 -0800
-Subject: [Buildroot] [PATCH] gdb: properly pass the PATH when building
-	gdb for the host
-In-Reply-To: <1354120492-17059-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 28 Nov 2012 17:34:52 +0100")
-References: <1354120492-17059-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8738ztzfhb.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 28 Nov 2012 11:35:43 -0800
+Subject: [Buildroot] [git commit] binutils: not available for the target on
+	AArch64
+Message-ID: <20121128193726.3439280F4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=660d16f490500ce02c3e4eb78384bfa08a5589c5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> When building gdb for the host, we properly pass the PATH (through
- Thomas> HOST_CONFIGURE_OPTS) during the configure step, but we forget to do so
- Thomas> for the compilation step.
+Fixes:
 
- Thomas> The result of this is that when the Crosstool-NG backend is used, gawk
- Thomas> is built and installed in $(HOST_DIR), as a dependency of the
- Thomas> crosstool-ng package.
+  http://autobuild.buildroot.org/results/74082860f607cbd857654e9504f5f7e7ae47c0ac/build-end.log
 
- Thomas> Then, the host gdb configure script detects this gawk binary
- Thomas> ($(HOST_DIR) is in the PATH), and assumes gawk is
- Thomas> available. Unfortunately, during the compilation step, it fails to
- Thomas> find the expected gawk binary, because $(HOST_DIR) is no longer in the
- Thomas> PATH. This causes the following build failure:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/binutils/Config.in |    1 +
+ package/oprofile/Config.in |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
- Thomas>   http://autobuild.buildroot.org/results/067d0c2ea01673ba98ec11de2426f1ab92dac800/build-end.log
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 6480370..38d519a 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	depends on !BR2_aarch64
+ 	help
+ 	  Install binutils on the target
+ 
+diff --git a/package/oprofile/Config.in b/package/oprofile/Config.in
+index 562c910..8c881d1 100644
+--- a/package/oprofile/Config.in
++++ b/package/oprofile/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPROFILE
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_BINUTILS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_aarch64 # binutils
+ 	help
+ 	  OProfile is a system-wide profiler for Linux systems,
+ 	  capable of profiling all running code at low overhead.
