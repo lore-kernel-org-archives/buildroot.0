@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:13 +0100
-Subject: [Buildroot] [PATCH 14/51] package/spice: enable GUI
+Date: Thu, 29 Nov 2012 00:54:07 +0100
+Subject: [Buildroot] [PATCH 08/51] package/python-pyparsing: new package
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-15-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-9-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,53 +11,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/spice/Config.in |    8 ++++++++
- package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletions(-)
+ package/Config.in                            |    1 +
+ package/python-pyparsing/Config.in           |   11 +++++++
+ package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-pyparsing/Config.in
+ create mode 100644 package/python-pyparsing/python-pyparsing.mk
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index e906acf..6e6233d 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -32,4 +32,12 @@ config BR2_PACKAGE_SPICE_CLIENT
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 
-+config BR2_PACKAGE_SPICE_GUI
-+	bool "Enable GUI"
-+	depends on BR2_PACKAGE_SPICE_CLIENT
-+	select BR2_PACKAGE_CEGUI06
+diff --git a/package/Config.in b/package/Config.in
+index 25b9d3f..58a9e36 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -303,6 +303,7 @@ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
+ source "package/python-pygame/Config.in"
++source "package/python-pyparsing/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ endmenu
+diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+new file mode 100644
+index 0000000..126dd0e
+--- /dev/null
++++ b/package/python-pyparsing/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYPARSING
++	bool "pyparsing"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  Say 'y' here to enable the Graphical User Interface (GUI)
-+	  start dialog.
++	  The pyparsing module is an alternative approach to creating and
++	  executing simple grammars, vs. the traditional lex/yacc approach,
++	  or the use of regular expressions. The pyparsing module provides
++	  a library of classes that client code uses to construct the grammar
++	  directly in Python code.
++	  
++	  http://pyparsing.wikispaces.com/
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+new file mode 100644
+index 0000000..621f636
+--- /dev/null
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# python-pyparsing
++#
++#############################################################
 +
- endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 2f9dcbd..350c4a9 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -23,7 +23,6 @@ SPICE_DEPENDENCIES    = \
- # quite deep if we try to enable some features, and I have not tested that.
- SPICE_CONF_OPT =            \
-   --disable-tunnel          \
--  --disable-gui             \
-   --disable-opengl          \
-   --disable-smartcard       \
-   --disable-automated-tests \
-@@ -38,6 +37,13 @@ else
- SPICE_CONF_OPT += --disable-client
- endif
- 
-+ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
-+SPICE_CONF_OPT += --enable-gui
-+SPICE_DEPENDENCIES += cegui06
-+else
-+SPICE_CONF_OPT += --disable-gui
-+endif
++PYTHON_PYPARSING_VERSION         = 1.5.6
++PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
++PYTHON_PYPARSING_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
++PYTHON_PYPARSING_LICENSE         = MIT
++PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
++PYTHON_PYPARSING_INSTALL_STAGING = YES
++PYTHON_PYPARSING_DEPENDENCIES    = python
 +
- SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
++# Shamelessly vampirised from python-pygame ;-)
++define PYTHON_PYPARSING_BUILD_CMDS
++	(cd $(@D);                                              \
++	 CC="$(TARGET_CC)"                                      \
++	 CFLAGS="$(TARGET_CFLAGS)"                              \
++	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
++	 CROSS_COMPILING=yes                                    \
++	 _python_sysroot=$(STAGING_DIR)                         \
++	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
++	 _python_prefix=/usr                                    \
++	 _python_exec_prefix=/usr                               \
++	 $(HOST_DIR)/usr/bin/python setup.py build              \
++	)
++endef
++
++# Shamelessly vampirised from python-pygame ;-)
++define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
++	(cd $(@D);                                              \
++	 $(HOST_DIR)/usr/bin/python setup.py install            \
++	                            --prefix=$(TARGET_DIR)/usr  \
++	)
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
