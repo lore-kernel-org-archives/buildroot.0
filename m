@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:36 +0100
-Subject: [Buildroot] [PATCH 37/51] package/qemu: add support for virtfs
+Date: Thu, 29 Nov 2012 00:54:39 +0100
+Subject: [Buildroot] [PATCH 40/51] package/qemu: add BlueZ connectivity
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-38-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-41-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   16 ++++++++++++++++
- package/qemu/qemu.mk   |    7 ++++++-
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   11 +++++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 9422caf..ba43e5f 100644
+index 4d138f6..8addc9e 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -116,6 +116,22 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
+@@ -153,6 +153,17 @@ config BR2_PACKAGE_QEMU_CURL
+ comment "cURL support is not possible with static linking"
+     depends on BR2_PREFER_STATIC_LIB
  
-+comment "Block backends"
++comment "Networking"
 +
-+config BR2_PACKAGE_QEMU_VIRTFS
-+	bool "Enable plan9 ressources using VirtFS"
-+	select BR2_PACKAGE_QEMU_CAP
-+	select BR2_PACKAGE_QEMU_ATTR
++config BR2_PACKAGE_QEMU_BLUEZ
++	bool "Enable BlueZ connectivity"
++	depends on BR2_PACKAGE_BLUEZ_UTILS
 +	help
-+	  Say 'y' here if you want QEMU to provide a plan9 virtual "share"
-+	  accessible from the guest OS for relatively fast access to host
-+	  files.
-+	  
-+	  This requires that the guest OS is capable of accessing plan9
-+	  ressources (typically, in Linux, this is done by a network
-+	  file-system called 9p, and can be accelerated by using the 9p
-+	  virtio).
++	  Say 'y' here to enable BlueZ (bluetooth) connectivity in QEMU.
++
++comment "BlueZ connectivity depends on bluez-utils"
++	depends on !BR2_PACKAGE_BLUEZ_UTILS
 +
  comment "Misc. features"
  
  config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 43ba5df..8c9302f 100644
+index 6aed3bb..d6c1538 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -164,6 +164,12 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -184,6 +184,13 @@ else
+ QEMU_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
-+QEMU_OPTS += --enable-virtfs
++ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
++QEMU_OPTS += --enable-bluez
++QEMU_DEPENDENCIES += bluez_utils
 +else
-+QEMU_OPTS += --disable-virtfs
++QEMU_OPTS += --disable-bluez
 +endif
 +
  ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
  QEMU_OPTS += --enable-uuid
  QEMU_DEPENDENCIES += util-linux
-@@ -273,7 +279,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
+@@ -295,7 +302,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-vnc-sasl                  \
--	        --disable-virtfs                    \
  	        --disable-brlapi                    \
- 	        --disable-curses                    \
- 	        --disable-curl                      \
+ 	        --disable-fdt                       \
+-	        --disable-bluez                     \
+ 	        --disable-guest-base                \
+ 	        --disable-vde                       \
+ 	        --disable-linux-aio                 \
 -- 
 1.7.2.5
