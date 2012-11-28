@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:34 +0100
-Subject: [Buildroot] [PATCH 35/51] package/qemu: add support for capabilities
+Date: Thu, 29 Nov 2012 00:54:38 +0100
+Subject: [Buildroot] [PATCH 39/51] package/qemu: enable use of the curses
+	frontend
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-36-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-40-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +13,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    7 +++++++
- package/qemu/qemu.mk   |   11 ++++++++++-
- 2 files changed, 17 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   11 +++++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 3177dd2..0eaad57 100644
+index bfdb082..4d138f6 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -127,6 +127,13 @@ config BR2_PACKAGE_QEMU_UUID
- comment "UUID support requires libuuid (from util-linux)"
- 	depends on !BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -116,6 +116,17 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
-+config BR2_PACKAGE_QEMU_CAP
-+	bool "Enable capabilities"
-+	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_LIBCAP_NG
++config BR2_PACKAGE_QEMU_CURSES
++	bool "Enable the curses frontend"
++	select BR2_PACKAGE_NCURSES
 +	help
-+	  Say 'y' here if you want QEMU to support capabilities.
++	  Say 'y' to use curses to display the text-mode of VGA outpout.
++	  
++	  If the VM's graphic adapter does not support VGA text-mode, or it
++	  is in graphical mode, then nothing will be displayed with this
++	  frontend (although you can still use the SDL or VNC frontends to
++	  display the graphical output).
 +
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
+ comment "Block backends"
+ 
+ config BR2_PACKAGE_QEMU_VIRTFS
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 980a75e..deac3a8 100644
+index f27e06b..6aed3bb 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -171,6 +171,16 @@ else
- QEMU_OPTS += --disable-uuid
+@@ -164,6 +164,13 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+# There's no configure flag to disable use of libcap
-+# so we must use an environment variable
-+ifeq ($(BR2_PACKAGE_QEMU_CAP),y)
-+QEMU_OPTS += --enable-cap-ng
-+QEMU_DEPENDENCIES += libcap libcap-ng
++ifeq ($(BR2_PACKAGE_QEMU_CURSES),y)
++QEMU_OPTS += --enable-curses
++QEMU_DEPENDENCIES += ncurses
 +else
-+QEMU_OPTS += --disable-cap-ng
-+QEMU_VARS += cap=no
++QEMU_OPTS += --disable-curses
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -267,7 +277,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
+ QEMU_OPTS += --enable-virtfs
+ else
+@@ -287,7 +294,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-slirp                     \
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
+-	        --disable-curses                    \
+ 	        --disable-fdt                       \
+ 	        --disable-bluez                     \
  	        --disable-guest-base                \
- 	        --disable-vde                       \
- 	        --disable-linux-aio                 \
--	        --disable-cap-ng                    \
- 	        --disable-docs                      \
- 	        --disable-spice                     \
- 	        --disable-rbd                       \
 -- 
 1.7.2.5
