@@ -1,25 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 Nov 2012 17:10:55 -0800
-Subject: [Buildroot] [PATCHv3 for-2012.11 1/5] manual: trivial fixes
-In-Reply-To: <1354053560-30352-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Tue, 27 Nov 2012 22:59:16 +0100")
-References: <1354053560-30352-1-git-send-email-arnout@mind.be>
-Message-ID: <87zk22zg4g.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 27 Nov 2012 17:05:02 -0800
+Subject: [Buildroot] [git commit] ocf-linux: tweak kernel patch for newer
+	kernels
+Message-ID: <20121128011237.BA60C97200@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=670d60dc919fe6d99224ad1056c426812b38d108
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout> As promised, here is the series with the trivial fixes split off.
- Arnout> This patch doesn't require review IMHO.
+Newer kernels had a slight change in the random number API so the OCF
+patchset requires a slight tweak to build and run properly.
 
-Committed series, thanks.
+Affected kernels are, per series:
+>=3.0.41, >=3.2.29, >=3.4.9, >=3.5.2 and any newer version.
 
--- 
-Bye, Peter Korsgaard
+The fix is applied by detecting the API change rather than guessing the
+kernel version.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux-ext-ocf-linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/linux/linux-ext-ocf-linux.mk b/linux/linux-ext-ocf-linux.mk
+index faf7360..1a601d5 100644
+--- a/linux/linux-ext-ocf-linux.mk
++++ b/linux/linux-ext-ocf-linux.mk
+@@ -15,6 +15,8 @@ LINUX_DEPENDENCIES += ocf-linux
+ define OCF_LINUX_PREPARE_KERNEL
+ 	support/scripts/apply-patches.sh $(LINUX_DIR) \
+ 		$(OCF_LINUX_DIR)/patches/ linux-3.2.1-ocf.patch ; \
++	grep -q __mix_pool_bytes $(LINUX_DIR)/drivers/char/random.c && \
++	$(SED) 's:wordcount\*4:&, NULL:' $(LINUX_DIR)/drivers/char/random.c ; \
+ 	cp -rf $(OCF_LINUX_DIR)/ocf $(LINUX_DIR)/crypto/ocf ;
+ endef
+ 
