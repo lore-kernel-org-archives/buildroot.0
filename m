@@ -1,52 +1,73 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 28 Nov 2012 11:35:57 -0800
-Subject: [Buildroot] [git commit] gdb: properly pass the PATH when building
-	gdb for the host
-Message-ID: <20121128193726.6F85480F4C@busybox.osuosl.org>
+From: Ronny Meeus <ronny.meeus@gmail.com>
+Date: Wed, 28 Nov 2012 20:38:08 +0100
+Subject: [Buildroot] Passing arguments to the linker when external
+ toolchain is used.
+In-Reply-To: <50B3EE2F.2020901@mind.be>
+References: <CAMJ=MEc1T6Uz2tLS3ybdp5hwv7zX15ufGYMVuAY7jOSA+U=sYg@mail.gmail.com>
+ <50B15945.90300@mind.be>
+ <CAMJ=MEfp0Bevk141N4n8KAn2AzbRpEDfLX9513crSDLTxBKkwA@mail.gmail.com>
+ <50B28348.7090701@mind.be>
+ <CAMJ=MEcBJR8R_2SsfuLSz1dxheVz-iede6R6wG-xd7RvxAdpTQ@mail.gmail.com>
+ <50B29AE1.1000100@mind.be>
+ <CAMJ=MEcN43B=aMbLGcG4dwMGXf5dq0Reu-qBe_UEhuDi3O13Rw@mail.gmail.com>
+ <50B3EE2F.2020901@mind.be>
+Message-ID: <CAMJ=MEf5O9JTg7kMzN7R1snPFQuAtp80z+70J4NZsucmzzsjeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21a0c11a90f9ff19c78a5f32e0a2e9064fd28054
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Nov 26, 2012 at 11:33 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 26/11/12 21:45, Ronny Meeus wrote:
+>>>
+>>> >    I don't think we have any other architecture currently in buildroot
+>>> > that
+>>> >  requires something to be passed to ld. If this wrapper construction is
+>>> >  added to buildroot, it would be good if we would also have an internal
+>>> >  use case.
+>>> >
+>>
+>> I do not really understand. On one hand you say it is a valid use-case
+>> and on the other hand you say that an internal use-case is needed.
+>
+>
+>  If ld requires some architecture specific flag to work, then it's a valid
+> use case to add this in the wrapper. (However, I now realize that this
+> would only work for external toolchains...  For internal and crosstool-NG
+> toolchains, we don't have a wrapper and it's not needed because those
+> things are hard-coded at compile time. So how would you deal with that for
+> this ld case?)
+>
+>  But it would improve acceptance if there were also a use case inside
+> buildroot. I tried to find a package that would also require the additional
+> LD flag, but it seems that most packages that do partial linking use
+> $(CC) -nostdlib.
+>
+>
+>> Shall I put some more effort in generalising the C code of the
+>> wrapper?
+>> Is there any chance that it gets accepted by the community?
+>
+>
+>  If you can show a .config that fails to build without it: certainly.
+> Otherwise, it depends on how hard you push it :-)
+>
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 
-When building gdb for the host, we properly pass the PATH (through
-HOST_CONFIGURE_OPTS) during the configure step, but we forget to do so
-for the compilation step.
+I will update the private build-infrastructure, so there is no need to
+change anything to buildroot.
 
-The result of this is that when the Crosstool-NG backend is used, gawk
-is built and installed in $(HOST_DIR), as a dependency of the
-crosstool-ng package.
-
-Then, the host gdb configure script detects this gawk binary
-($(HOST_DIR) is in the PATH), and assumes gawk is
-available. Unfortunately, during the compilation step, it fails to
-find the expected gawk binary, because $(HOST_DIR) is no longer in the
-PATH. This causes the following build failure:
-
-  http://autobuild.buildroot.org/results/067d0c2ea01673ba98ec11de2426f1ab92dac800/build-end.log
-
-In order to fix this, we simply call the compilation step of gdb for
-the host with $(HOST_MAKE_ENV), as it should have been done from the
-beginning.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Thanks for the support.
 ---
- toolchain/gdb/gdb.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index c42c755..4b8fe3a 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -196,6 +196,7 @@ $(GDB_HOST_DIR)/.configured: $(GDB_DIR)/.unpacked
- 
- $(GDB_HOST_DIR)/gdb/gdb: $(GDB_HOST_DIR)/.configured
- 	# force ELF support since it fails due to BFD linking problems
-+	$(HOST_MAKE_ENV) \
- 	gdb_cv_var_elf=yes \
- 	$(MAKE) -C $(GDB_HOST_DIR)
- 	strip $(GDB_HOST_DIR)/gdb/gdb
+Ronny
