@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:18 +0100
-Subject: [Buildroot] [PATCH 19/51] package/libbsd: new package
+Date: Thu, 29 Nov 2012 00:54:13 +0100
+Subject: [Buildroot] [PATCH 14/51] package/spice: enable GUI
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-20-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-15-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,78 +12,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in        |    1 +
- package/libbsd/Config.in |   17 +++++++++++++++++
- package/libbsd/libbsd.mk |   25 +++++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 0 deletions(-)
- create mode 100644 package/libbsd/Config.in
- create mode 100644 package/libbsd/libbsd.mk
+ package/spice/Config.in |    8 ++++++++
+ package/spice/spice.mk  |    8 +++++++-
+ 2 files changed, 15 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 22b47a0..fb999d6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -495,6 +495,7 @@ source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
- source "package/boost/Config.in"
- source "package/libatomic_ops/Config.in"
-+source "package/libbsd/Config.in"
- source "package/libcap/Config.in"
- source "package/libcap-ng/Config.in"
- source "package/libdaemon/Config.in"
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-new file mode 100644
-index 0000000..d1f9e46
---- /dev/null
-+++ b/package/libbsd/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBBSD_AVAILABLE
-+	def_bool y
-+
-+comment "libbsd requires (other packages)"
-+	depends on !BR2_PACKAGE_LIBBSD_AVAILABLE
-+
-+config BR2_PACKAGE_LIBBSD
-+	bool "libbsd"
-+	depends on BR2_PACKAGE_LIBBSD_AVAILABLE
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index e906acf..6e6233d 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -32,4 +32,12 @@ config BR2_PACKAGE_SPICE_CLIENT
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 
++config BR2_PACKAGE_SPICE_GUI
++	bool "Enable GUI"
++	depends on BR2_PACKAGE_SPICE_CLIENT
++	select BR2_PACKAGE_CEGUI06
 +	help
-+	  This library provides useful functions commonly found on BSD
-+	  systems, and lacking on others like GNU systems, thus making
-+	  it easier to port projects with strong BSD origins, without
-+	  needing to embed the same code over and over again on each
-+	  project.
-+	  
-+	  http://libbsd.freedesktop.org/
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-new file mode 100644
-index 0000000..d7438e8
---- /dev/null
-+++ b/package/libbsd/libbsd.mk
-@@ -0,0 +1,25 @@
-+#############################################################
-+#
-+# libbsd
-+#
-+#############################################################
++	  Say 'y' here to enable the Graphical User Interface (GUI)
++	  start dialog.
 +
-+LIBBSD_VERSION         = 0.4.2
-+LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
-+LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
-+LIBBSD_LICENSE         = BSD-3c MIT
-+LIBBSD_LICENSE_FILES   = LICENSE
-+
-+# man-pages are BSD-4c, so that license only matters
-+# if doc is kept in the target rootfs
-+ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-+LIBBSD_LICENSE        += BSD-4c
+ endif # BR2_PACKAGE_SPICE
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index 2f9dcbd..350c4a9 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -23,7 +23,6 @@ SPICE_DEPENDENCIES    = \
+ # quite deep if we try to enable some features, and I have not tested that.
+ SPICE_CONF_OPT =            \
+   --disable-tunnel          \
+-  --disable-gui             \
+   --disable-opengl          \
+   --disable-smartcard       \
+   --disable-automated-tests \
+@@ -38,6 +37,13 @@ else
+ SPICE_CONF_OPT += --disable-client
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
++SPICE_CONF_OPT += --enable-gui
++SPICE_DEPENDENCIES += cegui06
++else
++SPICE_CONF_OPT += --disable-gui
 +endif
 +
-+LIBBSD_AUTORECONF      = YES
-+LIBBSD_AUTORECONF_OPT  = -f -i
-+LIBBSD_DEPENDENCIES    = host-automake
-+
-+LIBBSD_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+ SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ 
 -- 
 1.7.2.5
