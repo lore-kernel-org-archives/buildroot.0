@@ -1,67 +1,56 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Wed, 28 Nov 2012 14:37:46 +1300
-Subject: [Buildroot] Problem building libglib2
-Message-ID: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
+From: Noel Roberts <Noel.Roberts@brisbane.qld.gov.au>
+Date: Wed, 28 Nov 2012 05:05:29 +0000
+Subject: [Buildroot] PATCH > To integrate pycrypto into Buildroot
+Message-ID: <07407110F438184D9D87521726FF42D41F64FE15@M357PRD1.ad.bcc.qld.gov.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
 
-I'm a buildroot newbie and am trying to figure out what went wrong here.
+This patch allows Buildroot to cross compile the crypto libraries needed for python integration, enabling good cryptographic support within Python.
 
-make[5]: Entering directory
-`/opt/buildroot/buildroot/output/build/libglib2-2.30.3/gobject'
-  CCLD   libgobject-2.0.la
-/opt/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-skipping incompatible /lib/libpthread.so.0 when searching for
-/lib/libpthread.so.0
-/opt/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-cannot find /lib/libpthread.so.0
-/opt/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-skipping incompatible /usr/lib/libpthread_nonshared.a when searching
-for /usr/lib/libpthread_nonshared.a
-/opt/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.6.3/../../../../arm-none-linux-gnueabi/bin/ld:
-cannot find /usr/lib/libpthread_nonshared.a
-collect2: ld returned 1 exit status
-make[5]: *** [libgobject-2.0.la] Error 1
-make[5]: Leaving directory
-`/opt/buildroot/buildroot/output/build/libglib2-2.30.3/gobject'
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory
-`/opt/buildroot/buildroot/output/build/libglib2-2.30.3/gobject'
-make[3]: *** [all] Error 2
-make[3]: Leaving directory
-`/opt/buildroot/buildroot/output/build/libglib2-2.30.3/gobject'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/opt/buildroot/buildroot/output/build/libglib2-2.30.3'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/opt/buildroot/buildroot/output/build/libglib2-2.30.3'
-make: *** [/opt/buildroot/buildroot/output/build/libglib2-2.30.3/.stamp_built]
-Error 2
+This is my first patch submission - please advise me, if I need to rework anything.
+
+[Below is the original developer?s permission for inclusion]
+
+Regards
+Noel
+
+From: Dwayne Litzenberger [mailto:dlitz at dlitz.net]
+Sent: Wednesday, 28 November 2012 9:01 AM
+To: Noel Roberts
+Subject: Re: Including pycrypto in Buildroot
+
+You don't need my permission. Go nuts!
+
+Out of curiosity, what uses PyCryptoin buildroot?
+
+Noel Roberts <Noel.Roberts at brisbane.qld.gov.au<mailto:Noel.Roberts@brisbane.qld.gov.au>> wrote:
+Good day
+
+Would you object to me submitting a patch to buildroot, to allow the inclusion of pycrypto within the buildroot environment?
+
+Regards
+Noel
 
 
-As far as I can tell, this failed building libglib because various
-files were missing. For example  /lib/libpthread.so.0.
+**************************************************** This message has passed through an insecure network. Please direct all enquiries to the message author. ****************************************************
 
-However if I look in staging, that file exists:
+**************************************************** This message has passed through an insecure network. Please direct all enquiries to the message author. ****************************************************
 
-charles at charles-laptop:/opt/buildroot/buildroot$ ls -al
-output/staging/lib/libp*
--rwxr-xr-x 1 charles charles  19467 2012-05-29 00:41
-output/staging/lib/libpcprofile.so
--rwxr-xr-x 1 charles charles 144489 2012-05-29 00:41
-output/staging/lib/libpthread-2.15.so
-lrwxrwxrwx 1 charles charles     18 2012-11-28 12:03
-output/staging/lib/libpthread.so.0 -> libpthread-2.15.so
-charles at charles-laptop:/opt/buildroot/buildroot$
-
-So... please help the newbie....
-
-Thanks
-
-Charles
+****************************************************
+This message has passed through an insecure network.
+Please direct all enquiries to the message author.
+****************************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121128/5d0f509c/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Adding-pyCrypto-functionality-in-Buildroot.patch
+Type: application/octet-stream
+Size: 1759 bytes
+Desc: 0001-Adding-pyCrypto-functionality-in-Buildroot.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121128/5d0f509c/attachment.obj>
