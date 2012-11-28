@@ -1,44 +1,41 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 28 Nov 2012 22:40:30 +0100
-Subject: [Buildroot] [PATCH 4/6] manual: add manual-update-lists and
-	manual-clean-lists targets
+Date: Wed, 28 Nov 2012 22:40:31 +0100
+Subject: [Buildroot] [PATCH 5/6] Makefile: add to the release target a
+	warning about the manual updates.
 In-Reply-To: <1354138832-18149-1-git-send-email-s.martin49@gmail.com>
 References: <1354138832-18149-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1354138832-18149-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1354138832-18149-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The manual-update-lists target is not added to the dependencies of the
+release target to allow editing the generated files.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- docs/manual/manual.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
-index a344efe..2e4ff6d 100644
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -47,6 +47,18 @@ $(TOPDIR)/docs/manual/package-list.txt:
- $(TOPDIR)/docs/manual/deprecated-list.txt:
- 	python2 $(TOPDIR)/support/scripts/deprecated.py > $@
+diff --git a/Makefile b/Makefile
+index 21aa054..3cca919 100644
+--- a/Makefile
++++ b/Makefile
+@@ -749,6 +749,8 @@ release: OUT=buildroot-$(BR2_VERSION)
+ # Create release tarballs. We need to fiddle a bit to add the generated
+ # documentation to the git output
+ release:
++	$(warning Make sure the manual is up-to-date. To update the manual, run:)
++	$(warning $$ make manual-update-lists)
+ 	git archive --format=tar --prefix=$(OUT)/ master > $(OUT).tar
+ 	$(MAKE) O=$(OUT) manual-html manual-txt manual-pdf
+ 	tar rf $(OUT).tar $(OUT)
+@@ -762,4 +764,3 @@ print-version:
+ include docs/manual/manual.mk
  
-+manual-clean-lists:
-+	-@$(RM) $(TOPDIR)/docs/manual/package-list.txt
-+	-@$(RM) $(TOPDIR)/docs/manual/deprecated-list.txt
-+
-+manual-update-lists: manual-clean-lists $(TOPDIR)/docs/manual/package-list.txt \
-+			$(TOPDIR)/docs/manual/deprecated-list.txt
-+	@$(call MESSAGE,"Updating the manual lists...")
-+	@test -d $(TOPDIR)/.git && \
-+	  ( cd $(TOPDIR) ; git diff --exit-code docs/manual/ &>/dev/null && \
-+	    echo -en "\nManual is up-to-date.\n\n" ) || \
-+	  echo -en "\nManual is out of date.\nCheck and save the changes if necessary.\n\n"
-+
- ################################################################################
- # GENDOC -- generates the make targets needed to build asciidoc documentation.
- #
+ .PHONY: $(noconfig_targets)
+-
 -- 
 1.8.0.1
