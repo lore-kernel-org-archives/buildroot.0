@@ -1,64 +1,107 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:12 +0100
-Subject: [Buildroot] [PATCH 13/51] package/spice: enable client
+Date: Thu, 29 Nov 2012 00:54:05 +0100
+Subject: [Buildroot] [PATCH 06/51] package/usbredir: new package
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-14-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-7-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/spice/Config.in |   12 ++++++++++++
- package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 19 insertions(+), 1 deletions(-)
+ package/Config.in            |    1 +
+ package/usbredir/Config.in   |   28 ++++++++++++++++++++++++++++
+ package/usbredir/usbredir.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+), 0 deletions(-)
+ create mode 100644 package/usbredir/Config.in
+ create mode 100644 package/usbredir/usbredir.mk
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index ced3ec7..e906acf 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -21,3 +21,15 @@ config BR2_PACKAGE_SPICE
- 	  This package implements the server-part of Spice.
- 	  
- 	  http://www.spice-space.org/
-+
-+if BR2_PACKAGE_SPICE
-+
-+comment "client depends on X.org"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_SPICE_CLIENT
-+	bool "Enable client"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+
-+endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index dbd2d5f..2f9dcbd 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -26,12 +26,18 @@ SPICE_CONF_OPT =            \
-   --disable-gui             \
-   --disable-opengl          \
-   --disable-smartcard       \
--  --disable-client          \
-   --disable-automated-tests \
-   --without-sasl            \
+diff --git a/package/Config.in b/package/Config.in
+index 9a7e409..25b9d3f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -480,6 +480,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/ortp/Config.in"
++source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
+ endmenu
  
- SPICE_DEPENDENCIES += host-pkgconf
- 
-+ifeq ($(BR2_PACKAGE_SPICE_CLIENT),y)
-+SPICE_CONF_OPT += --enable-client
-+SPICE_DEPENDENCIES += xlib_libXrandr xlib_libXfixes
-+else
-+SPICE_CONF_OPT += --disable-client
+diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+new file mode 100644
+index 0000000..8d8ac5a
+--- /dev/null
++++ b/package/usbredir/Config.in
+@@ -0,0 +1,28 @@
++comment "usbredir requires libusb"
++	depends on !BR2_PACKAGE_LIBUSB
++
++config BR2_PACKAGE_USBREDIR
++	bool "usbredir"
++	depends on BR2_PACKAGE_LIBUSB
++	help
++	  usbredir is the name of a network protocol for sending usb device
++	  traffic over a network connection. It is also the name of the
++	  software package offering a parsing library, a usbredirhost library
++	  and several utilities implementing this protocol.
++	  
++	  Note: only the library is installed, not the utilities. Say 'y'
++	  below if you want the server too.
++	  
++	  http://www.spice-space.org/page/UsbRedir
++
++if BR2_PACKAGE_USBREDIR
++
++config BR2_PACKAGE_USBREDIR_SERVER
++	bool "usbredirserver on target"
++	help
++	  If you want to serve usbredir requests on your target, say 'y'
++	  here to have the usbredir server on the target.
++	  
++	  Note: the server is not required to use the library.
++
 +endif
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+new file mode 100644
+index 0000000..9f6c011
+--- /dev/null
++++ b/package/usbredir/usbredir.mk
+@@ -0,0 +1,31 @@
++#############################################################
++#
++# usbredir
++#
++#############################################################
 +
- SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
++USBREDIR_VERSION         = 0.4.3
++USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
++USBREDIR_SITE            = http://spice-space.org/download/usbredir
++USBREDIR_LICENSE         = LGPLv2.1+
++USBREDIR_LICENSE_FILES   = COPYING.LIB
++USBREDIR_INSTALL_STAGING = YES
++USBREDIR_DEPENDENCIES    = libusb
++
++USBREDIR_DEPENDENCIES    += host-pkgconf
++
++ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
++
++USBREDIR_LICENSE         += GPLv2+
++USBREDIR_LICENSE_FILES   += COPYING
++
++else # BR2_PACKAGE_USBREDIR_SERVER != y
++
++define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
++	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
++endef
++USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
++
++endif # BR2_PACKAGE_USBREDIR_SERVER
++
++$(eval $(autotools-package))
 -- 
 1.7.2.5
