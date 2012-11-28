@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Nov 2012 23:33:30 +0100
-Subject: [Buildroot] [PATCH v4 1/6] snowball-hdmiservice: new package
-In-Reply-To: <1353927919-7250-2-git-send-email-gregory.hermant@calao-systems.com>
+Date: Wed, 28 Nov 2012 23:36:04 +0100
+Subject: [Buildroot] [PATCH v4 2/6] ux500-firmware: new package
+In-Reply-To: <1353927919-7250-3-git-send-email-gregory.hermant@calao-systems.com>
 References: <1353927919-7250-1-git-send-email-gregory.hermant@calao-systems.com>
- <1353927919-7250-2-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <50B6913A.3020000@mind.be>
+ <1353927919-7250-3-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <50B691D4.1020107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,7 +16,7 @@ On 26/11/12 12:05, Gregory Hermant wrote:
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (on various archs an toolchains)
+  (with the calao_snowball_defconfig)
 
   Regards,
   Arnout
