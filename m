@@ -1,87 +1,132 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:53:59 +0100
-Subject: [Buildroot] [PATCH for-next 0/51 v3] Add QEMU for runing on the
-	target
-Message-ID: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 29 Nov 2012 00:54:11 +0100
+Subject: [Buildroot] [PATCH 12/51] package/spice: new package
+In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
+References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-13-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/Config.in       |    1 +
+ package/spice/Config.in |   23 +++++++++++++++++
+ package/spice/spice.mk  |   62 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 86 insertions(+), 0 deletions(-)
+ create mode 100644 package/spice/Config.in
+ create mode 100644 package/spice/spice.mk
 
-This patch series adds qemu as a package to run on the target.
-
-Although this may sound weird in a first place, I use it to build a
-simple VM server.
-
-I also use it to build statically-linked user-emulation to run foreign
-chroots on my PC (eg. running an ARM chroot on my x86_64), because
-using glibc for static-linking is not possible (it still requires some
-shared libs that it dlopens at runtime).
-
-In the future, I plan on adding libvirt to remotely manage the VM server.
-
-Changes since v2:
-  - act on Arnout's comments on v2:
-    - cURL fix as a post-patch hook rather than post-install hook
-    - dtc package name, install tools
-    - usbredir cleanups
-    - cegui06 package name
-  - update to qemu 1.2.1
-
-   [PATCH 01/51] package/cURL: fix static link whith openSSL
-   [PATCH 02/51] package/dtc: new package
-   [PATCH 03/51] package/dtc: add option to install programs
-   [PATCH 04/51] package/vde2: new package
-   [PATCH 05/51] package/libiscsi: new package
-   [PATCH 06/51] package/usbredir: new package
-   [PATCH 07/51] package/celt051: new package
-   [PATCH 08/51] package/python-pyparsing: new package
-   [PATCH 09/51] package/spice-protocol: new package
-   [PATCH 10/51] package/cegui06: new package
-   [PATCH 11/51] package/slirp: new package
-   [PATCH 12/51] package/spice: new package
-   [PATCH 13/51] package/spice: enable client
-   [PATCH 14/51] package/spice: enable GUI
-   [PATCH 15/51] package/spice: enable slirp support
-   [PATCH 16/51] package/libseccomp: new package
-   [PATCH 17/51] package/keyutils: new package
-   [PATCH 18/51] package/pmake: add host pmake
-   [PATCH 19/51] package/libbsd: new package
-   [PATCH 20/51] package/libedit2: new package
-   [PATCH 21/51] package/ceph: new package
-   [PATCH 22/51] package/qemu: add license information
-   [PATCH 23/51] package/qemu: bump version
-   [PATCH 24/51] package/qemu: fix host-qemu variable names
-   [PATCH 25/51] package/qemu: build for the target (i386 or x86_64 only)
-   [PATCH 26/51] package/qemu: add basic target selection
-   [PATCH 27/51] package/qemu: add fine-grained target selection
-   [PATCH 28/51] package/qemu: add SDL frontends
-   [PATCH 29/51] package/qemu: add option to enable/disable the VNC frontend
-   [PATCH 30/51] package/qemu: add VNC jpeg and png compression
-   [PATCH 31/51] package/qemu: add VNC TLS-encryption
-   [PATCH 32/51] package/qemu: add option to not install blobs
-   [PATCH 33/51] package/qemu: add option to remove unwanted keymaps
-   [PATCH 34/51] package/qemu: add uuid support
-   [PATCH 35/51] package/qemu: add support for capabilities
-   [PATCH 36/51] package/qemu: add attr/xattr option
-   [PATCH 37/51] package/qemu: add support for virtfs
-   [PATCH 38/51] package/qemu: add support for cURL
-   [PATCH 39/51] package/qemu: enable use of the curses frontend
-   [PATCH 40/51] package/qemu: add BlueZ connectivity
-   [PATCH 41/51] package/qemu: add AIO support
-   [PATCH 42/51] package/qemu: add support for FDT
-   [PATCH 43/51] package/qemu: add support for VDE switches
-   [PATCH 44/51] package/qemu: add iSCSI support
-   [PATCH 45/51] package/qemu: add support for USB redirection
-   [PATCH 46/51] package/qemu: add support for Spice
-   [PATCH 47/51] package/qemu: enable sound
-   [PATCH 48/51] package/qemu: add support for libseccomp
-   [PATCH 49/51] package/qemu: option to build the docs
-   [PATCH 50/51] package/qemu: move sub-options into a sub-menu
-   [PATCH 51/51] package/qemu: enable a static build
-
-Regards,
-Yann E. MORIN.
+diff --git a/package/Config.in b/package/Config.in
+index 1d8df2a..4ce5e48 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -648,6 +648,7 @@ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/spice-protocol/Config.in"
++source "package/spice/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+new file mode 100644
+index 0000000..ced3ec7
+--- /dev/null
++++ b/package/spice/Config.in
+@@ -0,0 +1,23 @@
++comment "spice server depends on python"
++	depends on !BR2_PACKAGE_PYTHON
++
++config BR2_PACKAGE_SPICE
++	bool "spice server"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_PYPARSING
++	select BR2_PACKAGE_SPICE_PROTOCOL
++	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_CELT051
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_JPEG
++	help
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
++	  
++	  This package implements the server-part of Spice.
++	  
++	  http://www.spice-space.org/
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+new file mode 100644
+index 0000000..dbd2d5f
+--- /dev/null
++++ b/package/spice/spice.mk
+@@ -0,0 +1,62 @@
++#############################################################
++#
++# Spice
++#
++#############################################################
++
++SPICE_VERSION         = 0.12.0
++SPICE_SOURCE          = spice-$(SPICE_VERSION).tar.bz2
++SPICE_SITE            = http://www.spice-space.org/download/releases/
++SPICE_LICENSE         = LGPLv2.1+
++SPICE_LICENSE_FILES   = COPYING
++SPICE_INSTALL_STAGING = YES
++SPICE_DEPENDENCIES    = \
++    spice-protocol      \
++    pixman              \
++    celt051             \
++    python-pyparsing    \
++    alsa-lib            \
++    openssl             \
++    jpeg                \
++
++# We disable everything for now, because the dependency tree can become
++# quite deep if we try to enable some features, and I have not tested that.
++SPICE_CONF_OPT =            \
++  --disable-tunnel          \
++  --disable-gui             \
++  --disable-opengl          \
++  --disable-smartcard       \
++  --disable-client          \
++  --disable-automated-tests \
++  --without-sasl            \
++
++SPICE_DEPENDENCIES += host-pkgconf
++
++SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++# We need to tweak spice.pc because it /forgets/ (for static linking) that
++# it should link against libz and libjpeg. libz is pkg-config-aware, while
++# libjpeg isn't, hence the two-line tweak
++define SPICE_POST_INSTALL_STAGING_FIX_PC
++	$(SED) 's/^\(Requires.private:.*\)$$/\1 zlib/; s/^\(Libs.private:.*\)$$/\1 -ljpeg/;'    \
++	       "$(STAGING_DIR)/usr/lib/pkgconfig/spice-server.pc"
++endef
++SPICE_POST_INSTALL_STAGING_HOOKS += SPICE_POST_INSTALL_STAGING_FIX_PC
++
++# It is currently not possible to detect if stack-protection is available
++# or not, because it requires support from both the compiler *and* the
++# C library, but the C library (eg. uClibc) can be compiled without that
++# support, even if gcc accepts the -fstack-protector-all option.
++# spice's ./configure only checks for gcc's -fstack-protector-all option,
++# so it misses the case where the C library doe not provide the requires
++# support.
++# A correct fix would be to fix spice's ./configure to also check the C
++# library, but it might be much more involved.
++# So, we simply disable it for now. After all, as uClibc's help puts it:
++#     Note that NOEXECSTACK on a kernel with address space randomization
++#     is generally sufficient to prevent most buffer overflow exploits
++#     without increasing code size.
++SPICE_CONF_OPT += gl_cv_warn__fstack_protector_all=no
++
++$(eval $(autotools-package))
+-- 
+1.7.2.5
