@@ -1,56 +1,48 @@
-From: Noel Roberts <Noel.Roberts@brisbane.qld.gov.au>
-Date: Wed, 28 Nov 2012 05:05:29 +0000
-Subject: [Buildroot] PATCH > To integrate pycrypto into Buildroot
-Message-ID: <07407110F438184D9D87521726FF42D41F64FE15@M357PRD1.ad.bcc.qld.gov.au>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 28 Nov 2012 07:26:17 +0200
+Subject: [Buildroot] [git commit branch/next] package: add gd package
+In-Reply-To: <20121128011244.B677B8F461@busybox.osuosl.org>
+References: <20121128011244.B677B8F461@busybox.osuosl.org>
+Message-ID: <20121128052616.GA29377@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
-This patch allows Buildroot to cross compile the crypto libraries needed for python integration, enabling good cryptographic support within Python.
+On Tue, Nov 27, 2012 at 11:21:06AM -0800, Peter Korsgaard wrote:
 
-This is my first patch submission - please advise me, if I need to rework anything.
+[...]
 
-[Below is the original developer?s permission for inclusion]
+> +GD_TOOLS_                         	+= gdlib-config
 
-Regards
-Noel
+Shouldn't this be 'GD_TOOLS_y'?
 
-From: Dwayne Litzenberger [mailto:dlitz at dlitz.net]
-Sent: Wednesday, 28 November 2012 9:01 AM
-To: Noel Roberts
-Subject: Re: Including pycrypto in Buildroot
+> +GD_TOOLS_$(BR2_PACKAGE_GD_ANNOTATE)	+= annotate
+> +GD_TOOLS_$(BR2_PACKAGE_GD_BDFTOGD)	+= bdftogd
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GD2COPYPAL)	+= gd2copypal
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GD2TOGIF)	+= gd2togif
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GD2TOPNG)	+= gd2topng
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GDCMPGIF)	+= gdcmpgif
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GDPARTTOPNG)	+= gdparttopng
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GDTOPNG)	+= gdtopng
+> +GD_TOOLS_$(BR2_PACKAGE_GD_GIFTOGD2)	+= giftogd2
+> +GD_TOOLS_$(BR2_PACKAGE_GD_PNGTOGD)	+= pngtogd
+> +GD_TOOLS_$(BR2_PACKAGE_GD_PNGTOGD2)	+= pngtogd2
+> +GD_TOOLS_$(BR2_PACKAGE_GD_WEBPNG)	+= webpng
+> +
+> +define GD_REMOVE_TOOLS
+> +	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GD_TOOLS_))
 
-You don't need my permission. Go nuts!
+And here.
 
-Out of curiosity, what uses PyCryptoin buildroot?
+> +endef
 
-Noel Roberts <Noel.Roberts at brisbane.qld.gov.au<mailto:Noel.Roberts@brisbane.qld.gov.au>> wrote:
-Good day
+baruch
 
-Would you object to me submitting a patch to buildroot, to allow the inclusion of pycrypto within the buildroot environment?
-
-Regards
-Noel
-
-
-**************************************************** This message has passed through an insecure network. Please direct all enquiries to the message author. ****************************************************
-
-**************************************************** This message has passed through an insecure network. Please direct all enquiries to the message author. ****************************************************
-
-****************************************************
-This message has passed through an insecure network.
-Please direct all enquiries to the message author.
-****************************************************
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121128/5d0f509c/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Adding-pyCrypto-functionality-in-Buildroot.patch
-Type: application/octet-stream
-Size: 1759 bytes
-Desc: 0001-Adding-pyCrypto-functionality-in-Buildroot.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121128/5d0f509c/attachment.obj>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
