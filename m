@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:10 +0100
-Subject: [Buildroot] [PATCH 11/51] package/slirp: new package
+Date: Thu, 29 Nov 2012 00:54:08 +0100
+Subject: [Buildroot] [PATCH 09/51] package/spice-protocol: new package
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-12-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-10-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,34 +11,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in       |    1 +
- package/slirp/Config.in |   25 +++++++++++++++++++++++++
- package/slirp/slirp.mk  |   15 +++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 package/slirp/Config.in
- create mode 100644 package/slirp/slirp.mk
+ package/Config.in                        |    1 +
+ package/spice-protocol/Config.in         |   12 ++++++++++++
+ package/spice-protocol/spice-protocol.mk |   14 ++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
+ create mode 100644 package/spice-protocol/Config.in
+ create mode 100644 package/spice-protocol/spice-protocol.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 92b07b6..1d8df2a 100644
+index 58a9e36..634a63e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -482,6 +482,7 @@ source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/ortp/Config.in"
-+source "package/slirp/Config.in"
- source "package/usbredir/Config.in"
- source "package/zeromq/Config.in"
- endmenu
-diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+@@ -645,6 +645,7 @@ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
++source "package/spice-protocol/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
 new file mode 100644
-index 0000000..dedded3
+index 0000000..b354361
 --- /dev/null
-+++ b/package/slirp/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_SLIRP
-+	bool "slirp"
++++ b/package/spice-protocol/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SPICE_PROTOCOL
++	bool "spice protocol"
 +	help
 +	  The Spice project aims to provide a complete open source
 +	  solution for interaction with virtualized desktop devices.
@@ -46,41 +49,27 @@ index 0000000..dedded3
 +	  and the front-end. Interaction between front-end and
 +	  back-end is done using VD-Interfaces.
 +	  
-+	  This package implements the slirp-part for Spice.
-+	  Slirp emulates a PPP or SLIP connection over a normal terminal.
++	  This package implements the protocol-part of Spice.
 +	  
 +	  http://www.spice-space.org/
-+	  
-+	  NOTE:
-+	  This package has some history of a unique kind:
-+	    - originally developped as 'slirp' by Danny Gasparovski, and
-+	      seemingly abandonned (developper /disapeared/)
-+	    - then re-maintained at sourceforge by "Kelly", up to some
-+	      time around 2009: http://slirp.sourceforge.net/
-+	    - during that period, QEMU (Fabrice BELLARD) forked the code
-+	      and included it in QEMU
-+	    - and it was imported from this breed by the Spice project
-+	      around May 2009
-+	    - which is what we use here
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
 new file mode 100644
-index 0000000..04a4736
+index 0000000..dcfe50d
 --- /dev/null
-+++ b/package/slirp/slirp.mk
-@@ -0,0 +1,15 @@
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# Spice-slirp
++# Spice-protocol
 +#
 +#############################################################
 +
-+SLIRP_VERSION         = 8c2da74c1385242f20799fec8c04f8378edc6550
-+SLIRP_SITE            = git://anongit.freedesktop.org/spice/slirp
-+SLIRP_LICENSE         = BSD-4c BSD-2c
-+# Note: The license file 'COPYRIGHT' is missing from the sources,
-+# although some files refer to it.
-+SLIRP_INSTALL_STAGING = YES
-+SLIRP_AUTORECONF      = YES
++SPICE_PROTOCOL_VERSION         = 0.12.2
++SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
++SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
++SPICE_PROTOCOL_LICENSE         = BSD-3c
++SPICE_PROTOCOL_LICENSE_FILES   = COPYING
++SPICE_PROTOCOL_INSTALL_STAGING = YES
 +
 +$(eval $(autotools-package))
 -- 
