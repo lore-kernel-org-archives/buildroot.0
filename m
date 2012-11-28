@@ -1,73 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 Nov 2012 00:54:27 +0100
-Subject: [Buildroot] [PATCH 28/51] package/qemu: add SDL frontends
+Date: Thu, 29 Nov 2012 00:54:37 +0100
+Subject: [Buildroot] [PATCH 38/51] package/qemu: add support for cURL
 In-Reply-To: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1354146890-27380-29-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1354146890-27380-39-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+QEMU can use libcurl as a block backend, to access remote block devices.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    9 +++++++++
- package/qemu/qemu.mk   |   10 +++++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   10 ++++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 29fd513..baa7037 100644
+index ba43e5f..bfdb082 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -79,4 +79,13 @@ config BR2_PACKAGE_QEMU_BSD_USER
+@@ -132,6 +132,16 @@ config BR2_PACKAGE_QEMU_VIRTFS
+ 	  file-system called 9p, and can be accelerated by using the 9p
+ 	  virtio).
  
- endif # BR2_PACKAGE_QEMU_CUSTOM_TARGETS == ""
- 
-+comment "Frontends"
-+
-+config BR2_PACKAGE_QEMU_SDL
-+	bool "Enable SDL frontend"
-+	select BR2_PACKAGE_SDL
++config BR2_PACKAGE_QEMU_CURL
++	bool "Enable remote block-devices using cURL"
++	depends on !BR2_PREFER_STATIC_LIB
++	select BR2_PACKAGE_LIBCURL
 +	help
-+	  Say 'y' to enable the SDL frontend, that is, a graphical window
-+	  presenting the VM's display.
++	  Say 'y' to access remote block-devices using libcurl.
 +
- endif # BR2_PACKAGE_QEMU
++comment "cURL support is not possible with static linking"
++    depends on BR2_PREFER_STATIC_LIB
++
+ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index d77e3b8..75969d5 100644
+index 8c9302f..f27e06b 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -105,6 +105,7 @@ QEMU_OPTS =
- QEMU_VARS =                                                                         \
-     PYTHON=$(HOST_DIR)/usr/bin/python                                               \
-     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
-+    SDL_CONFIG=$(STAGING_DIR)/usr/bin/sdl-config                                    \
- 
- ifeq ($(BR2_PACKAGE_QEMU_SYSTEM),y)
- QEMU_OPTS += --enable-system
-@@ -128,6 +129,14 @@ ifneq ($(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS)),)
- QEMU_OPTS += --target-list="$(call qstrip,$(BR2_PACKAGE_QEMU_CUSTOM_TARGETS))"
+@@ -170,6 +170,13 @@ else
+ QEMU_OPTS += --disable-virtfs
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
-+QEMU_OPTS += --enable-sdl
-+QEMU_DEPENDENCIES += sdl
-+QEMU_VARS += SDL_CONFIG=$(BR2_STAGING_DIR)/usr/bin/sdl-config
++ifeq ($(BR2_PACKAGE_QEMU_CURL),y)
++QEMU_OPTS += --enable-curl
++QEMU_DEPENDENCIES += libcurl
 +else
-+QEMU_OPTS += --disable-sdl
++QEMU_OPTS += --disable-curl
 +endif
 +
- # Note: although QEMU uses a ./configure script, it is not compatible with
- #       the traditional autotools options (eg. --target et al.), so we can
- #       not use the autotools-package infrastructure. So we have to use the
-@@ -155,7 +164,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --enable-vhost-net                  \
- 	        --disable-xen                       \
- 	        --disable-slirp                     \
--	        --disable-sdl                       \
- 	        --disable-vnc                       \
- 	        --disable-virtfs                    \
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -281,7 +288,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-vnc-sasl                  \
  	        --disable-brlapi                    \
+ 	        --disable-curses                    \
+-	        --disable-curl                      \
+ 	        --disable-fdt                       \
+ 	        --disable-bluez                     \
+ 	        --disable-guest-base                \
 -- 
 1.7.2.5
