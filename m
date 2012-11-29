@@ -1,32 +1,40 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Thu, 29 Nov 2012 14:10:36 -0200
-Subject: [Buildroot] Buildroot for avr32
-In-Reply-To: <CAHt8ZCO6Be2V+qPZ6Lu5y8kMaKipt2J=JgbbU7ZHqRXSF0c=tg@mail.gmail.com>
-References: <memo.20121129102031.4232H@postmaster+dexdyne.com.cix.co.uk>
- <20121129113710.63d5676c@skate>
- <CAHt8ZCN5eB8shsxz+gVz6neYbwVC7kE-O=cT66MCTRQNq6o_qQ@mail.gmail.com>
- <20121129162848.5a761c63@skate>
- <CAHt8ZCO6Be2V+qPZ6Lu5y8kMaKipt2J=JgbbU7ZHqRXSF0c=tg@mail.gmail.com>
-Message-ID: <CAExDhvZUT2KpJfuxqg__y=PqpLYQsHXaSEa6s1Ni61UW6D4skQ@mail.gmail.com>
+From: James Hogan <james.hogan@imgtec.com>
+Date: Thu, 29 Nov 2012 17:11:58 +0000
+Subject: [Buildroot] [PATCH 1/1] strace: remove undef-CTL_PROC patch
+Message-ID: <1354209118-12653-1-git-send-email-james.hogan@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Nov 29, 2012 at 2:05 PM, Simon Dawson <spdawson@gmail.com> wrote:
-> Hi Thomas,
->
-> On 29 Nov 2012 15:29, "Thomas Petazzoni"
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Do you know what is the status of AVR32 support in upstream gcc,
->> binutils and gdb?
->
-> No, I don't. I suspect Atmel have all but stopped attempting to upstream
-> patches for the architecture, but that is pure conjecture.
->
+This patch is no longer necessary since strace-v4.5.15 which always
+defines CTL_PROC. Specifically strace git commit
+35a55785ea8ff44d214af52085e3a5ea624730aa.
 
-I have bugged them in support ticket and even in public forum which
-they keep in avrfreaks.net before the EOL announcement.
-The answer was that they would after finishing porting their patches
-to gcc 3.4.x, but I guess they never did.
+Signed-off-by: James Hogan <james.hogan@imgtec.com>
+---
+ package/strace/strace-undef-CTL_PROC.patch |   12 ------------
+ 1 files changed, 0 insertions(+), 12 deletions(-)
+ delete mode 100644 package/strace/strace-undef-CTL_PROC.patch
+
+diff --git a/package/strace/strace-undef-CTL_PROC.patch b/package/strace/strace-undef-CTL_PROC.patch
+deleted file mode 100644
+index d841999..0000000
+--- a/package/strace/strace-undef-CTL_PROC.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- a/system.c
+-+++ b/system.c
+-@@ -1614,7 +1614,9 @@ static const struct xlat sysctl_root[] =
+- 	{ CTL_KERN, "CTL_KERN" },
+- 	{ CTL_VM, "CTL_VM" },
+- 	{ CTL_NET, "CTL_NET" },
+-+#ifdef CTL_PROC
+- 	{ CTL_PROC, "CTL_PROC" },
+-+#endif
+- 	{ CTL_FS, "CTL_FS" },
+- 	{ CTL_DEBUG, "CTL_DEBUG" },
+- 	{ CTL_DEV, "CTL_DEV" },
+-- 
+1.7.7.6
