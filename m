@@ -1,45 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Nov 2012 19:08:13 +0100
-Subject: [Buildroot] Problem building libglib2
-In-Reply-To: <201211300652.45293.manningc2@actrix.gen.nz>
-References: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
- <201211291121.46456.manningc2@actrix.gen.nz>
- <50B72AAB.2020402@mind.be>
- <201211300652.45293.manningc2@actrix.gen.nz>
-Message-ID: <20121129190813.5dc97298@skate>
+Date: Thu, 29 Nov 2012 19:09:55 +0100
+Subject: [Buildroot] Buildroot for avr32
+In-Reply-To: <CAExDhvZUT2KpJfuxqg__y=PqpLYQsHXaSEa6s1Ni61UW6D4skQ@mail.gmail.com>
+References: <memo.20121129102031.4232H@postmaster+dexdyne.com.cix.co.uk>
+ <20121129113710.63d5676c@skate>
+ <CAHt8ZCN5eB8shsxz+gVz6neYbwVC7kE-O=cT66MCTRQNq6o_qQ@mail.gmail.com>
+ <20121129162848.5a761c63@skate>
+ <CAHt8ZCO6Be2V+qPZ6Lu5y8kMaKipt2J=JgbbU7ZHqRXSF0c=tg@mail.gmail.com>
+ <CAExDhvZUT2KpJfuxqg__y=PqpLYQsHXaSEa6s1Ni61UW6D4skQ@mail.gmail.com>
+Message-ID: <20121129190955.416f2373@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Manning,
+Dear Thiago A. Corr?a,
 
-On Fri, 30 Nov 2012 06:52:44 +1300, Charles Manning wrote:
-> >   Maybe there's something fishy in your environment.  Can you run
-> > env | grep /lib
-> 
-> Aaaarrrrggghhhh!!!!
-> 
-> I have this system set up to automatically set up for openembedded.
->  That defines PKG_CONFIG_PATH and adds some stuff to PATH which is probably 
-> messing things up.
-> 
-> I turned off the openembedded auto configuration, nuked output/ and make ran 
-> to completion.
-> 
-> I have now also learned a lot more about digging around in buildroot.
+On Thu, 29 Nov 2012 14:10:36 -0200, Thiago A. Corr?a wrote:
 
-Wait, wait, could you please reproduce the problem, and reply to
-Arnout's questions (sending us the output of env | grep /lib, or even
-the entire output of env if it doesn't contain any sensitive
-information).
+> I have bugged them in support ticket and even in public forum which
+> they keep in avrfreaks.net before the EOL announcement.
+> The answer was that they would after finishing porting their patches
+> to gcc 3.4.x, but I guess they never did.
 
-I would like to this which environment variable was causing the
-problem, and if we can add a check in Buildroot for this environment
-variable, in order to avoid similar issues in the future.
-
-Thanks!
+OpenWRT has gcc 4.4.7 patches and binutils 2.21.1 patches. I've tried
+them, but unfortunately ld segfaults when linking uClibc. I'll do a
+quick investigation, but I don't think I want to invest too much time
+in this architecture...
 
 Thomas
 -- 
