@@ -1,9 +1,9 @@
 From: Woody Wu <narkewoody@gmail.com>
-Date: Thu, 29 Nov 2012 08:51:42 +0000 (UTC)
+Date: Thu, 29 Nov 2012 08:52:17 +0000 (UTC)
 Subject: [Buildroot] no /etc/hosts error in building root
 References: <slrnkbdlmd.33p.narkewoody@zuhnb712.local.com>
- <20121129093344.0d4c46a0@skate>
-Message-ID: <slrnkbe8f7.2kq.narkewoody@zuhnb712.local.com>
+ <20121129093416.2cf28e51@skate>
+Message-ID: <slrnkbe8g9.2kq.narkewoody@zuhnb712.local.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +17,17 @@ wrote:
 >
 > On Thu, 29 Nov 2012 03:31:16 +0000 (UTC), Woody Wu wrote:
 >
->> I just removed the output/target directory and want to root filesystem
->> to be rebuilt by running 'make' again.  But this time I got an error:
+>> BTW:  If I also want the root iamges under output/images directory to be
+>> regenerated, is that enough to only remobe the output/target and run
+>> 'make'?  I tried something like 'make root-rebuild' and 'make
+>> rootfs-rebuild' but they do not work.
 >
-> This is not supported. You can't remove output/target and expect
-> Buildroot to reinstall everything.
->
-> Best regards,
+> Just run "make". The images in output/images/ and re-generated from the
+> contents of output/target at every make invocation.
 >
 > Thomas
 
-Yes, I understood.  After did that, I now already get a strange error
-in building.  Now I had already delete everything from the disck and
-trying to rebuild from scratch.
-
-Thanks.
-
+This is a good news. Thanks.
 
 -- 
 woody
