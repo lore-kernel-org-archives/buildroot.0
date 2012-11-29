@@ -1,34 +1,43 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Thu, 29 Nov 2012 12:38:51 +0000
-Subject: [Buildroot] [PATCH 18/33] linux-fusion: bump to version 8.10.4
-In-Reply-To: <1353543503-8952-19-git-send-email-s.martin49@gmail.com>
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-19-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAHt8ZCOHDmb1bb8+5kLpDtJSM84Uy1Br0Zb3P_h7DaqiSBkxnA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 29 Nov 2012 13:58:54 +0100
+Subject: [Buildroot] [PATCH] libroxml: bump version to 2.2.1
+In-Reply-To: <1354169996-22703-1-git-send-email-blunderer@blunderer.org>
+References: <1354169996-22703-1-git-send-email-blunderer@blunderer.org>
+Message-ID: <50B75C0E.4070200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22 November 2012 00:18, Samuel Martin <s.martin49@gmail.com> wrote:
-> Also fix directfb build avoiding the following error to occur
-> (since FCEF_FOLLOW has been added in linux-fusion-8.9.0):
+On 29/11/12 07:19, blunderer at blunderer.org wrote:
+> From: Tristan Lelong<tristan.lelong@blunderer.org>
 >
-> libtool: compile:  /opt/br/output/host/usr/bin/ccache /opt/br/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I../.. -I../../include -I../../lib -I../../include -I../../lib -DDATADIR=\"/usr/share/directfb-1.4.17\" -DMODULEDIR=\"/usr/lib/directfb-1.4-6\" -D_REENTRANT -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O3 -ffast-math -pipe -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -g2 -g3 -fno-inline -Wno-inline -D_GNU_SOURCE -finstrument-functions -std=gnu99 -Werror-implicit-function-declaration -MT call.lo -MD -MP -MF .deps/call.Tpo -c call.c  -fPIC -DPIC -o .libs/call.o
-> call.c: In function 'fusion_call_execute3':
-> call.c:311:66: error 'FCEF_FOLLOW' undeclared (first use in this function)
-> call.c:311:66: note: each undeclared identifier is reported only once for each function it appears in
-> call.c: In function 'fusion_world_flush_calls':
-> call.c:444:54: error 'FCEF_FOLLOW' undeclared (first use in this function)
-> make[5]: *** [call.lo] Error 1
-> make[5]: Leaving directory `/opt/br/output/build/directfb-1.4.17/lib/fusion'
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Signed-off-by: Tristan Lelong<tristan.lelong@blunderer.org>
 > ---
->  package/linux-fusion/linux-fusion.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/libroxml/libroxml-2.2.0-werror.patch |   22 ----------------------
+>   package/libroxml/libroxml-2.2.1-werror.patch |   22 ++++++++++++++++++++++
 
-Acked-by: Simon Dawson <spdawson@gmail.com>
-Tested-by: Simon Dawson <spdawson@gmail.com>
- (built-test on a minimal arm config)
+  Please send patches with the -M option to git send-email (or format-patch).
+That will detect that this is just a rename.
+
+  Please also rename it to libroxml-werror.patch, i.e. removing the version
+number.  Nowadays, the policy is to make patches without version number,
+unless a package supports several versions.
+
+
+  Regards,
+  Arnout
+
+>   package/libroxml/libroxml.mk                 |    2 +-
+>   3 files changed, 23 insertions(+), 23 deletions(-)
+>   delete mode 100644 package/libroxml/libroxml-2.2.0-werror.patch
+>   create mode 100644 package/libroxml/libroxml-2.2.1-werror.patch
+[snip]
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
