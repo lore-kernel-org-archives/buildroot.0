@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Nov 2012 09:40:31 +0100
-Subject: [Buildroot] [PATCH 03/51] package/dtc: add option to install
- programs
-In-Reply-To: <1354146890-27380-4-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 29 Nov 2012 09:42:47 +0100
+Subject: [Buildroot] [PATCH 06/51] package/usbredir: new package
+In-Reply-To: <1354146890-27380-7-git-send-email-yann.morin.1998@free.fr>
 References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
- <1354146890-27380-4-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20121129094031.3173b9a0@skate>
+ <1354146890-27380-7-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20121129094247.03f7c7d2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +13,52 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Thu, 29 Nov 2012 00:54:02 +0100, Yann E. MORIN wrote:
+On Thu, 29 Nov 2012 00:54:05 +0100, Yann E. MORIN wrote:
 
-> There is some (minor?) issues wrt the licensing terms.
-> The libfdt library is dual-licensed GPLv2+/BSD-2c, and the
-> executables are licensed GPLv2+.
-> 
-> There is no way in BR to properly convey this information.
-> So I decided to add some explanatory comments in the .mk
-> file, in retaliation. ;-)
+> +comment "usbredir requires libusb"
+> +	depends on !BR2_PACKAGE_LIBUSB
 
-As per the discussion during the Developers Days, there is now a way to
-convey this information. From the report:
+Hum, why a "depends on" and not a "select", like we normally do for
+libraries? libusb is not a "big" thing, so I'd say it should be
+automatically selected.
 
-     multiple licenses: we don't want to make things very complex. It
-     doesn't have to be machine-readable (we don't need to support
-     machine analysis of the license field), so we don't have to
-     formally decide how the license text must be written. It does make
-     sense to have some convention, though. Proposal: "GPLv2+ or BSD-2c
-     for the library, GPLv2+ for the dtc executable". 
+> diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+> new file mode 100644
+> index 0000000..9f6c011
+> --- /dev/null
+> +++ b/package/usbredir/usbredir.mk
+> @@ -0,0 +1,31 @@
+> +#############################################################
+> +#
+> +# usbredir
+> +#
+> +#############################################################
+> +
+> +USBREDIR_VERSION         = 0.4.3
+> +USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
+> +USBREDIR_SITE            = http://spice-space.org/download/usbredir
+> +USBREDIR_LICENSE         = LGPLv2.1+
 
-Thanks,
+Maybe:
+
+USBREDIR_LICENSE         = LGPLv2.1+ (library)
+
+> +USBREDIR_LICENSE_FILES   = COPYING.LIB
+> +USBREDIR_INSTALL_STAGING = YES
+> +USBREDIR_DEPENDENCIES    = libusb
+> +
+> +USBREDIR_DEPENDENCIES    += host-pkgconf
+> +
+> +ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
+> +
+> +USBREDIR_LICENSE         += GPLv2+
+
+USBREDIR_LICENSE         += , GPLv2+ (server)
+
+Or something equivalent, as per the conclusion of the Buildroot
+Developer Days.
+
+Best regards,
 
 Thomas
 -- 
