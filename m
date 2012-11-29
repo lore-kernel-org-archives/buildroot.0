@@ -1,64 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 29 Nov 2012 19:22:14 +0100
-Subject: [Buildroot] Problem building libglib2
-In-Reply-To: <20121129190813.5dc97298@skate>
-References: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
- <201211291121.46456.manningc2@actrix.gen.nz> <50B72AAB.2020402@mind.be>
- <201211300652.45293.manningc2@actrix.gen.nz> <20121129190813.5dc97298@skate>
-Message-ID: <50B7A7D6.5090607@mind.be>
+From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
+Date: Thu, 29 Nov 2012 16:25:23 -0200
+Subject: [Buildroot] Buildroot for avr32
+In-Reply-To: <20121129190955.416f2373@skate>
+References: <memo.20121129102031.4232H@postmaster+dexdyne.com.cix.co.uk>
+ <20121129113710.63d5676c@skate>
+ <CAHt8ZCN5eB8shsxz+gVz6neYbwVC7kE-O=cT66MCTRQNq6o_qQ@mail.gmail.com>
+ <20121129162848.5a761c63@skate>
+ <CAHt8ZCO6Be2V+qPZ6Lu5y8kMaKipt2J=JgbbU7ZHqRXSF0c=tg@mail.gmail.com>
+ <CAExDhvZUT2KpJfuxqg__y=PqpLYQsHXaSEa6s1Ni61UW6D4skQ@mail.gmail.com>
+ <20121129190955.416f2373@skate>
+Message-ID: <CAExDhva8qpnukgyEAogo=cJhxZkdWaFU9ekPAujCgBtgMbaTOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/11/12 19:08, Thomas Petazzoni wrote:
-> Dear Charles Manning,
+Hi Thomas,
+
+On Thu, Nov 29, 2012 at 4:09 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thiago A. Corr?a,
 >
-> On Fri, 30 Nov 2012 06:52:44 +1300, Charles Manning wrote:
->>>    Maybe there's something fishy in your environment.  Can you run
->>> env | grep /lib
->>
->> Aaaarrrrggghhhh!!!!
->>
->> I have this system set up to automatically set up for openembedded.
->>   That defines PKG_CONFIG_PATH and adds some stuff to PATH which is probably
->> messing things up.
->>
->> I turned off the openembedded auto configuration, nuked output/ and make ran
->> to completion.
->>
->> I have now also learned a lot more about digging around in buildroot.
+> On Thu, 29 Nov 2012 14:10:36 -0200, Thiago A. Corr?a wrote:
 >
-> Wait, wait, could you please reproduce the problem, and reply to
-> Arnout's questions (sending us the output of env | grep /lib, or even
-> the entire output of env if it doesn't contain any sensitive
-> information).
+>> I have bugged them in support ticket and even in public forum which
+>> they keep in avrfreaks.net before the EOL announcement.
+>> The answer was that they would after finishing porting their patches
+>> to gcc 3.4.x, but I guess they never did.
 >
-> I would like to this which environment variable was causing the
-> problem, and if we can add a check in Buildroot for this environment
-> variable, in order to avoid similar issues in the future.
+> OpenWRT has gcc 4.4.7 patches and binutils 2.21.1 patches. I've tried
+> them, but unfortunately ld segfaults when linking uClibc. I'll do a
+> quick investigation, but I don't think I want to invest too much time
+> in this architecture...
+>
 
-  After a second look in config.log:
+I'm talking from memory, because I haven't touched much of this for a while.
+Back then I tried patches from them and from Atmel, but complex
+software such as Qt had problems with them. They might have been
+updated since, but the most stable option was the current 4.2.2.
 
-pkg_cv_DBUS1_CFLAGS='-I/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include/dbus-1.0 
--I/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib/dbus-1.0/include  '
-pkg_cv_DBUS1_LIBS='-L/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib -ldbus-1 -lpthread -lrt  '
-pkg_cv_LIBFFI_CFLAGS=' '
-pkg_cv_LIBFFI_LIBS='-L/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib -lffi  '
-pkg_cv_ZLIB_CFLAGS='-I/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/include  '
-pkg_cv_ZLIB_LIBS='-L/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib -lz  '
-
-
-  I really don't see how this can happen: we unexport PKG_CONFIG_PATH and set
-PKG_CONFIG explicitly in the Makefile...
-
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+I suspect that at some point the AVR32 support will be dropped, even
+from kernel.
