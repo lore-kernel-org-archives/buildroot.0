@@ -1,40 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Nov 2012 19:31:23 +0100
-Subject: [Buildroot] Buildroot for avr32
-In-Reply-To: <CAExDhva8qpnukgyEAogo=cJhxZkdWaFU9ekPAujCgBtgMbaTOw@mail.gmail.com>
-References: <memo.20121129102031.4232H@postmaster+dexdyne.com.cix.co.uk>
- <20121129113710.63d5676c@skate>
- <CAHt8ZCN5eB8shsxz+gVz6neYbwVC7kE-O=cT66MCTRQNq6o_qQ@mail.gmail.com>
- <20121129162848.5a761c63@skate>
- <CAHt8ZCO6Be2V+qPZ6Lu5y8kMaKipt2J=JgbbU7ZHqRXSF0c=tg@mail.gmail.com>
- <CAExDhvZUT2KpJfuxqg__y=PqpLYQsHXaSEa6s1Ni61UW6D4skQ@mail.gmail.com>
- <20121129190955.416f2373@skate>
- <CAExDhva8qpnukgyEAogo=cJhxZkdWaFU9ekPAujCgBtgMbaTOw@mail.gmail.com>
-Message-ID: <20121129193123.503b489b@skate>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Fri, 30 Nov 2012 07:31:52 +1300
+Subject: [Buildroot] Problem building libglib2
+In-Reply-To: <20121129190813.5dc97298@skate>
+References: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
+ <201211300652.45293.manningc2@actrix.gen.nz> <20121129190813.5dc97298@skate>
+Message-ID: <201211300731.53056.manningc2@actrix.gen.nz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thiago A. Corr?a,
+On Friday 30 November 2012 07:08:13 Thomas Petazzoni wrote:
+> Dear Charles Manning,
+>
+> On Fri, 30 Nov 2012 06:52:44 +1300, Charles Manning wrote:
+> > >   Maybe there's something fishy in your environment.  Can you run
+> > > env | grep /lib
+> >
+> > Aaaarrrrggghhhh!!!!
+> >
+> > I have this system set up to automatically set up for openembedded.
+> >  That defines PKG_CONFIG_PATH and adds some stuff to PATH which is
+> > probably messing things up.
+> >
+> > I turned off the openembedded auto configuration, nuked output/ and make
+> > ran to completion.
+> >
+> > I have now also learned a lot more about digging around in buildroot.
+>
+> Wait, wait, could you please reproduce the problem, and reply to
+> Arnout's questions (sending us the output of env | grep /lib, or even
+> the entire output of env if it doesn't contain any sensitive
+> information).
+>
+> I would like to this which environment variable was causing the
+> problem, and if we can add a check in Buildroot for this environment
+> variable, in order to avoid similar issues in the future.
+>
 
-On Thu, 29 Nov 2012 16:25:23 -0200, Thiago A. Corr?a wrote:
+The problem was cause by running the openembedded toolchain env setup script 
+shown below and attached incase it gets too badly messed up by mail.
 
-> I'm talking from memory, because I haven't touched much of this for a while.
-> Back then I tried patches from them and from Atmel, but complex
-> software such as Qt had problems with them. They might have been
-> updated since, but the most stable option was the current 4.2.2.
-> 
-> I suspect that at some point the AVR32 support will be dropped, even
-> from kernel.
+export PATH=/usr/local/angstrom/arm/bin:$PATH
+export LIBTOOL_SYSROOT_PATH=/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi
+export 
+PKG_CONFIG_SYSROOT_DIR=/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi
+export 
+PKG_CONFIG_PATH=/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib/pkgconfig
+export QTDIR=/usr/local/angstrom/arm
+export CONFIG_SITE=/usr/local/angstrom/arm/site-config
+alias 
+opkg='LD_LIBRARY_PATH=/usr/local/angstrom/arm/lib /usr/local/angstrom/arm/bin/opkg-cl -f /usr/local/angstrom/arm/etc/opkg-sdk.conf -o /usr/local/angstrom/arm'
+alias 
+opkg-target='LD_LIBRARY_PATH=/usr/local/angstrom/arm/lib /usr/local/angstrom/arm/bin/opkg-cl -f /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/etc/opkg.conf -o /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi'
 
-Ok, so your suggestion is to just maintain the AVR32 support in
-Buildroot as is, and not spend time improving it. Is that correct?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+I had added the following line to bashrc:
+
+. /path/environment-setup
+
+that caused it to always be added.
+
+I see the Makefile has a line
+ unexport PKG_CONFIG_PATH
+perhaps that should be
+ unset PKG_CONFIG_PATH
+
+
+Is that enough info?
+
+Sorry I have to go to the day job now, so if you want more I will have to work 
+on that later.
+
+
+Thanks for your efforts!
+
+-- CHarles
+-------------- next part --------------
+export PATH=/usr/local/angstrom/arm/bin:$PATH
+export LIBTOOL_SYSROOT_PATH=/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi
+export PKG_CONFIG_SYSROOT_DIR=/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi
+export PKG_CONFIG_PATH=/usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/usr/lib/pkgconfig
+export QTDIR=/usr/local/angstrom/arm
+export CONFIG_SITE=/usr/local/angstrom/arm/site-config
+alias opkg='LD_LIBRARY_PATH=/usr/local/angstrom/arm/lib /usr/local/angstrom/arm/bin/opkg-cl -f /usr/local/angstrom/arm/etc/opkg-sdk.conf -o /usr/local/angstrom/arm'
+alias opkg-target='LD_LIBRARY_PATH=/usr/local/angstrom/arm/lib /usr/local/angstrom/arm/bin/opkg-cl -f /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi/etc/opkg.conf -o /usr/local/angstrom/arm/arm-angstrom-linux-gnueabi'
