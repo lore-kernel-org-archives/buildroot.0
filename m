@@ -1,22 +1,39 @@
-From: Alain Mouflet <alain.mouflet@univ-rouen.fr>
-Date: Thu, 29 Nov 2012 09:50:31 +0100
-Subject: [Buildroot] Buildroot and ClassPath
-In-Reply-To: <20121129094247.03f7c7d2@skate>
-References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
- <1354146890-27380-7-git-send-email-yann.morin.1998@free.fr>
- <20121129094247.03f7c7d2@skate>
-Message-ID: <50B721D7.4050607@univ-rouen.fr>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Thu, 29 Nov 2012 08:51:42 +0000 (UTC)
+Subject: [Buildroot] no /etc/hosts error in building root
+References: <slrnkbdlmd.33p.narkewoody@zuhnb712.local.com>
+ <20121129093344.0d4c46a0@skate>
+Message-ID: <slrnkbe8f7.2kq.narkewoody@zuhnb712.local.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I'm trying to add classPath and Jamvm to build root.
-I've got the fixjava.patch of D.Smyth then I can compile jamvm but... on 
-my rootfs, I haven't the /usr/share/classpath/ directory...
+On 2012-11-29, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>
+wrote:
+> Dear Woody Wu,
+>
+> On Thu, 29 Nov 2012 03:31:16 +0000 (UTC), Woody Wu wrote:
+>
+>> I just removed the output/target directory and want to root filesystem
+>> to be rebuilt by running 'make' again.  But this time I got an error:
+>
+> This is not supported. You can't remove output/target and expect
+> Buildroot to reinstall everything.
+>
+> Best regards,
+>
+> Thomas
 
-What's happens ?
-Thank a lot,
-Alain
+Yes, I understood.  After did that, I now already get a strange error
+in building.  Now I had already delete everything from the disck and
+trying to rebuild from scratch.
+
+Thanks.
+
+
+-- 
+woody
+I can't go back to yesterday - because I was a different person then.
