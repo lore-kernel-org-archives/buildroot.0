@@ -1,26 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Nov 2012 09:34:16 +0100
-Subject: [Buildroot] no /etc/hosts error in building root
-In-Reply-To: <slrnkbdlmd.33p.narkewoody@zuhnb712.local.com>
-References: <slrnkbdlmd.33p.narkewoody@zuhnb712.local.com>
-Message-ID: <20121129093416.2cf28e51@skate>
+Date: Thu, 29 Nov 2012 09:39:25 +0100
+Subject: [Buildroot] [PATCH 05/51] package/libiscsi: new package
+In-Reply-To: <1354146890-27380-6-git-send-email-yann.morin.1998@free.fr>
+References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
+ <1354146890-27380-6-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20121129093925.69619997@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+Dear Yann E. MORIN,
 
-On Thu, 29 Nov 2012 03:31:16 +0000 (UTC), Woody Wu wrote:
+On Thu, 29 Nov 2012 00:54:04 +0100, Yann E. MORIN wrote:
 
-> BTW:  If I also want the root iamges under output/images directory to be
-> regenerated, is that enough to only remobe the output/target and run
-> 'make'?  I tried something like 'make root-rebuild' and 'make
-> rootfs-rebuild' but they do not work.
+> +LIBISCSI_AUTORECONF = YES
+> +# Having a m4/ directory is mandatory for autoreconf to work
+> +define LIBISCSI_CREATE_M4_DIR
+> +	mkdir -p $(@D)/m4
+> +endef
+> +LIBISCSI_PRE_CONFIGURE_HOOKS += LIBISCSI_CREATE_M4_DIR
 
-Just run "make". The images in output/images/ and re-generated from the
-contents of output/target at every make invocation.
+I think the reason why AUTORECONF=YES is needed should be mention with
+a comment on top of it. You don't have any patch touching
+configure.{ac,in} or Makefile.am, so the need for AUTORECONF=YES
+doesn't seem very obvious.
 
 Thomas
 -- 
