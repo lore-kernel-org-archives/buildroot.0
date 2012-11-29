@@ -1,42 +1,36 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Thu, 29 Nov 2012 12:26:19 +0100
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 29 Nov 2012 11:35:18 +0000
 Subject: [Buildroot] Buildroot for avr32
-In-Reply-To: <memo.20121129102031.4232H@postmaster+dexdyne.com.cix.co.uk>
+In-Reply-To: <20121129113710.63d5676c@skate>
 References: <memo.20121129102031.4232H@postmaster+dexdyne.com.cix.co.uk>
-Message-ID: <CAEYzJUFwwAQnBu3opGyLKkpmc98FJL-rfvndtuPns4rATx8A7w@mail.gmail.com>
+ <20121129113710.63d5676c@skate>
+Message-ID: <CAHt8ZCN5eB8shsxz+gVz6neYbwVC7kE-O=cT66MCTRQNq6o_qQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29 November 2012 11:20, David Collier <from_buildroot@dexdyne.com> wrote:
+Hi David, Thomas.
 
-> Hi - we have a design based on the AVR32.
->
-> Historically Atmel provided a "special-buildroot-for-AVR32". Trouble is
-> their only AVR32 that ran Linux is now end-of-life, and I'm not sure they
-> have any interest.
->
-> The last version of it I can find is based on a buildroot that is 2 years
-> out of date.
->
+On Thu, 29 Nov 2012 10:20 +0000 (GMT Standard Time), David Collier
 > So the question is - should I be able to use "standard buildroot" with an
 > AVR32 - or was Atmel adding some magic of their own that has not been
 > back-ported to the main trunk?
->
 
-I'm not sure what Atmel put in their Buildroot fork, but we've been using
-mainline buildroot 2010.08 for one of our AVR32 projects. The only thing
-needed to make that version build (I think) is to apply this commit:
+On 29 November 2012 10:37, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Normally, we have a working AVR32 setup, with certainly old versions of
+> uClibc, binutils and gdb. I was told by AVR32 people that upgrading to
+> uClibc 0.9.33 should work, but there are a few missing system calls in
+> the AVR32 upstream kernel. If you are interested, we can look at this
+> together, as I lack AVR32 hardware to dive into this.
 
-http://git.buildroot.net/buildroot/commit/?id=96652637ccfd94442224019c54341bf86094366a
+I'm using mainline Buildroot for a custom board that is based on the
+Atmel NGW100 board, with an ap7000 processor. I haven't had any major
+problems; I've had to patch the 3.6.x mainline kernel to get the board
+to boot from SD card --- I'm not using any Atmel kernel patches.
 
-But right now I'm actually in the process of switching that project over to
-using an ARM device ;-)
+I'd be very interested in helping with the migration to uClibc 0.9.33.
 
-Best regards,
-Bj?rn Forsman
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121129/d749267f/attachment-0001.html>
+Simon.
