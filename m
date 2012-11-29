@@ -1,28 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 29 Nov 2012 23:44:57 +0100
-Subject: [Buildroot] [PATCH 1/1] strace: remove undef-CTL_PROC patch
-In-Reply-To: <1354209118-12653-1-git-send-email-james.hogan@imgtec.com>
-References: <1354209118-12653-1-git-send-email-james.hogan@imgtec.com>
-Message-ID: <50B7E569.70804@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Nov 2012 00:11:54 +0100
+Subject: [Buildroot] Problem building libglib2
+In-Reply-To: <50B7C54C.3010103@mind.be>
+References: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
+ <201211300652.45293.manningc2@actrix.gen.nz>
+ <20121129190813.5dc97298@skate>
+ <201211300731.53056.manningc2@actrix.gen.nz>
+ <50B7C54C.3010103@mind.be>
+Message-ID: <20121130001154.129b9238@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/11/12 18:11, James Hogan wrote:
-> This patch is no longer necessary since strace-v4.5.15 which always
-> defines CTL_PROC. Specifically strace git commit
-> 35a55785ea8ff44d214af52085e3a5ea624730aa.
->
-> Signed-off-by: James Hogan<james.hogan@imgtec.com>
+Dear Arnout Vandecappelle,
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Thu, 29 Nov 2012 21:27:56 +0100, Arnout Vandecappelle wrote:
 
+>   We could obviously solve this by unexporting PKG_CONFIG_SYSROOT_DIR, but
+> perhaps the better approach is to remove those environment variables from our
+> custom pkgconf?
+
+No, we use PKG_CONFIG_SYSROOT_DIR="/" when we build packages for the
+host, so we can't simply remove support for the PKG_CONFIG_SYSROOT_DIR
+environment variable. Unexporting PKG_CONFIG_SYSROOT_DIR sounds like
+the good solution here.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
