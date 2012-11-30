@@ -1,26 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 11:53:20 -0800
-Subject: [Buildroot] [PATCHv2] flex: fix build for nommu systems
-In-Reply-To: <1354272363-10162-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 30 Nov 2012 07:46:03 -0300")
-References: <1354272363-10162-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87txs6amvj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Nov 2012 11:48:52 -0800
+Subject: [Buildroot] [git commit] Add /var/www to device table
+Message-ID: <20121130195702.6392E8017A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e2af1822252af1a70a5b199921ede15572b46d0e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> The flex binary uses fork() so it breaks on !MMU builds.
- Gustavo> Since we usually don't require flex in the target and the common
- Gustavo> scenario is that we just want libfl in staging reverse the options so
- Gustavo> that BR2_PACKAGE_FLEX just builds and install libfl.a and change the
- Gustavo> LIBFL option to BR2_PACKAGE_FLEX_BINARY to install the binary in the
- Gustavo> target.
+The /var/www directory is listed in /etc/passwd in the skeleton target
+filesystem as the home directory of the www-data user (uid 33).
 
-Committed, thanks.
+In the final target filesystem, /var/www should be owned by www-data. This
+is important for the lighttpd package, for example.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ system/device_table.txt |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/system/device_table.txt b/system/device_table.txt
+index fc397a9..421728b 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -10,6 +10,7 @@
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
+ /home/default				d	2755	1000	1000	-	-	-	-	-
++/var/www				d	755	33	33	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
