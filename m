@@ -1,28 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 30 Nov 2012 07:07:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 5732] Error : package/alsa-lib/alsa-lib.mk
-In-Reply-To: <bug-5732-163@https.bugs.busybox.net/>
-References: <bug-5732-163@https.bugs.busybox.net/>
-Message-ID: <20121130070748.2DDA5993D5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 29 Nov 2012 23:00:40 -0800
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20121130070800.EA80B993D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5732
+commit: http://git.buildroot.net/buildroot/commit/?id=0f9bad95a08fad5469185628ef91f446ea616d48
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2012-11-30 07:07:43 UTC ---
-Thanks, fixed in git as 2b7be2f1de3e (alsa-lib: fix static linking check)
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/CHANGES b/CHANGES
+index f8ac04b..0da2d77 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,13 @@
++2012.11, Not released yet:
++
++	Minor fixes around the tree.
++
++	Various manual updates and fixes.
++
++	Updated/fixed packages: arptables, binutils, busybox, ccache,
++	cjson, directfb, gdb, hiawatha, lcdproc, libdaemon, libecore,
++	libhid, libpcap, libusb, linux-fusion, ocf-linux, strace,
++
+ 2012.11-rc1, Released November 17th, 2012
+ 
+ 	Fixes all over the tree and new features.
