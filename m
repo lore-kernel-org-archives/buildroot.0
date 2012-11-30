@@ -1,77 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 07:59:16 -0800
-Subject: [Buildroot] [git commit] ux500-firmware: new package
-Message-ID: <20121203145714.52FD599808@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 08:00:55 -0800
+Subject: [Buildroot] [git commit] Add init script files for snowball board
+Message-ID: <20121203145714.B56C399808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=367096b0e33913f47545ef8702eaa609960baa1f
+commit: http://git.buildroot.net/buildroot/commit/?id=4d4b1e4c5d98cbaafb8473c29d06b0d472cb34df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (with the calao_snowball_defconfig)
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                        |    1 +
- package/ux500-firmware/Config.in         |    7 +++++++
- package/ux500-firmware/ux500-firmware.mk |   22 ++++++++++++++++++++++
+ package/Config.in                      |    1 +
+ package/snowball-init/Config.in        |   14 ++++++++++++++
+ package/snowball-init/snowball-init.mk |   15 +++++++++++++++
  3 files changed, 30 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 663a17b..c369f74 100644
+index c369f74..9c23ae3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -261,6 +261,7 @@ source "package/usb_modeswitch/Config.in"
- source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
-+source "package/ux500-firmware/Config.in"
- source "package/wipe/Config.in"
+@@ -554,6 +554,7 @@ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
++source "package/snowball-init/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
  endmenu
- 
-diff --git a/package/ux500-firmware/Config.in b/package/ux500-firmware/Config.in
+diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
 new file mode 100644
-index 0000000..7e8a94b
+index 0000000..99abb35
 --- /dev/null
-+++ b/package/ux500-firmware/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_UX500_FIRMWARE
-+	bool "ux500-firmware"
++++ b/package/snowball-init/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_SNOWBALL_INIT
++	bool "snowball-init"
++	# Runtime dependency, needed by snowball startup script
++	select BR2_PACKAGE_BLUEZ_UTILS
++	depends on !BR2_avr32
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_UX500_FIRMWARE
 +	help
-+	  This package provides various binary firmware files (closed binary blobs)
-+	  for the Azurewave AW-NH580 combo module (wifi, bt, gps).
++	  Snowball init scripts
 +
-+	  https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
-diff --git a/package/ux500-firmware/ux500-firmware.mk b/package/ux500-firmware/ux500-firmware.mk
++	  http://www.igloocommunity.org
++
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
 new file mode 100644
-index 0000000..d354468
+index 0000000..278cacb
 --- /dev/null
-+++ b/package/ux500-firmware/ux500-firmware.mk
-@@ -0,0 +1,22 @@
++++ b/package/snowball-init/snowball-init.mk
+@@ -0,0 +1,15 @@
 +#############################################################
 +#
-+# ux500-firmware
++# snowball-init
 +#
 +#############################################################
-+UX500_FIRMWARE_VERSION = 1.1.3-6
-+UX500_FIRMWARE_SOURCE = ux500-firmware_$(UX500_FIRMWARE_VERSION)linaro1.tar.gz
-+UX500_FIRMWARE_SITE = https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
-+UX500_FIRMWARE_LICENSE = Snowball click-wrap license
-+UX500_FIRMWARE_LICENSE_FILES = license.txt 
-+UX500_FIRMWARE_REDISTRIBUTE = NO
++SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
++SNOWBALL_INIT_SITE = git://igloocommunity.org/git/bsp/snowball-init.git
++SNOWBALL_INIT_LICENSE = BSD-4c
++SNOWBALL_INIT_LICENSE_FILES = debian/copyright
 +
-+# The CG2900 linux driver has to load firmware named CG29XX_* but the firmware
-+# filenames contained in this package are CG2900_* hence the code below
-+define UX500_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
-+		mv $$f $${f/CG2900/CG29XX}; \
-+	done
++define SNOWBALL_INIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
 +endef
 +
 +$(eval $(generic-package))
