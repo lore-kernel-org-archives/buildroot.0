@@ -1,28 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 12:16:07 -0800
-Subject: [Buildroot] [PATCH 17/33] matchbox packages: fix broken urls
-In-Reply-To: <CAHXCMML9f9eM7odmYWDrztZeK_ivwNeZDz5LWFMbhRV_xxFagg@mail.gmail.com>
- (Samuel Martin's message of "Fri, 30 Nov 2012 20:57:15 +0100")
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-18-git-send-email-s.martin49@gmail.com>
- <87fw3rayff.fsf@dell.be.48ers.dk>
- <CAHXCMML9f9eM7odmYWDrztZeK_ivwNeZDz5LWFMbhRV_xxFagg@mail.gmail.com>
-Message-ID: <8738zqaltk.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Nov 2012 12:18:40 -0800
+Subject: [Buildroot] [PATCHv3 for-next 1/6] perl: remove redundant
+	patches
+In-Reply-To: <1354118962-18601-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 28 Nov 2012 17:09:17 +0100")
+References: <1354118962-18601-1-git-send-email-arnout@mind.be>
+Message-ID: <87y5hi974v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- Samuel> Indeed... it seems pretty down :-(
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> Now we are using perlcross, the patches to make perl work with qemu are
+ Arnout> redundant, so remove them.
 
- Samuel> Luckily, by the time this patch tried to be merged it got down!
-
- Samuel> Well, I'll switch to some alive location and repost.
-
-Thanks!
+Committed series to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
