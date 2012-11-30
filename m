@@ -1,49 +1,27 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 30 Nov 2012 19:31:13 +0100
-Subject: [Buildroot] can-utils or site method git broken
-Message-ID: <50B8FB71.4000309@relinux.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Nov 2012 11:49:07 -0800
+Subject: [Buildroot] [PATCH v5] Add /var/www to device table
+In-Reply-To: <1354298185-2974-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Fri, 30 Nov 2012 17:56:25 +0000")
+References: <1354298185-2974-1-git-send-email-spdawson@gmail.com>
+Message-ID: <8738zqc1n0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-I am currently trying to build can-utils without success. Obviously,
-getting the required commit from gitorious.org fails. I verified that I
-can clone the repo by hand and that it contains the right hash.
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> The /var/www directory is listed in /etc/passwd in the skeleton target
+ spdawson> filesystem as the home directory of the www-data user (uid 33).
 
-Configuration: beaglebone_defconfig, added can-utils, branch master from
-today (82583bf4), Ubuntu 10.04 LTS.
+ spdawson> In the final target filesystem, /var/www should be owned by
+ spdawson> www-data. This is important for the lighttpd package, for
+ spdawson> example.
 
-Kind regards
+Committed, thanks.
 
-Stephan
-> >>> can-utils 836d3cc0122ce31a1b732d369cbd27b690c3110f Downloading
-> Initialized empty Git repository in
-> /home/stephan/Dokumente/dl/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f/
-> remote: Counting objects: 62, done.
-> remote: Compressing objects: 100% (51/51), done.
-> remote: Total 62 (delta 10), reused 22 (delta 0)
-> Receiving objects: 100% (62/62), 100.37 KiB, done.
-> Resolving deltas: 100% (10/10), done.
-> warning: Remote branch 836d3cc0122ce31a1b732d369cbd27b690c3110f not
-> found in upstream origin, using HEAD instead
-> fatal: not a tree object
-> >>> can-utils 836d3cc0122ce31a1b732d369cbd27b690c3110f Extracting
-> gzip -d -c
-> /home/stephan/Dokumente/dl/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f.tar.gz
-> | tar --strip-components=1 -C
-> /home/stephan/Dokumente/BeagleBone/buildroot/output/build/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f 
-> -xf -
-> tar: This does not look like a tar archive
-> tar: Exiting with failure status due to previous errors
-> make: ***
-> [/home/stephan/Dokumente/BeagleBone/buildroot/output/build/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f/.stamp_extracted]
-> Error 2
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+Bye, Peter Korsgaard
