@@ -1,31 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Nov 2012 23:25:09 -0800
-Subject: [Buildroot] [git commit] cramfs.mk: drop invalid -q option
-Message-ID: <20121130072907.27436994D1@busybox.osuosl.org>
+Date: Thu, 29 Nov 2012 23:14:41 -0800
+Subject: [Buildroot] [git commit branch/next] libroxml: bump version to 2.2.1
+Message-ID: <20121130072908.6F129994D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f27ec358ef9b6ecfc0204a3e9e899a778c55bfe8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=b17c7963890354d2cffdda2f16eeeaf4c1288e99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- fs/cramfs/cramfs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...ml-2.2.0-werror.patch => libroxml-werror.patch} |    6 +++---
+ package/libroxml/libroxml.mk                       |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/cramfs/cramfs.mk b/fs/cramfs/cramfs.mk
-index 9b0141f..55f6bdb 100644
---- a/fs/cramfs/cramfs.mk
-+++ b/fs/cramfs/cramfs.mk
-@@ -10,7 +10,7 @@ CRAMFS_OPTS=-l
- endif
+diff --git a/package/libroxml/libroxml-2.2.0-werror.patch b/package/libroxml/libroxml-werror.patch
+similarity index 86%
+rename from package/libroxml/libroxml-2.2.0-werror.patch
+rename to package/libroxml/libroxml-werror.patch
+index a72f2a7..a99962f 100644
+--- a/package/libroxml/libroxml-2.2.0-werror.patch
++++ b/package/libroxml/libroxml-werror.patch
+@@ -7,10 +7,10 @@ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+  Makefile |    2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
- define ROOTFS_CRAMFS_CMD
-- $(HOST_DIR)/usr/bin/mkcramfs -q $(CRAMFS_OPTS) $(TARGET_DIR) $$@
-+ $(HOST_DIR)/usr/bin/mkcramfs $(CRAMFS_OPTS) $(TARGET_DIR) $$@
- endef
+-Index: libroxml-2.1.0/Makefile
++Index: a/Makefile
+ ===================================================================
+---- libroxml-2.1.0.orig/Makefile
+-+++ libroxml-2.1.0/Makefile
++--- a/Makefile
+++++ b/Makefile
+ @@ -41,7 +41,7 @@
+  
+  # options
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index 457a28a..d7ef6a4 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -2,7 +2,7 @@
+ # libroxml
+ #
  
- ROOTFS_CRAMFS_DEPENDENCIES = host-cramfs
+-LIBROXML_VERSION = 2.2.0
++LIBROXML_VERSION = 2.2.1
+ LIBROXML_SITE = http://libroxml.googlecode.com/files
+ LIBROXML_INSTALL_STAGING = YES
+ 
