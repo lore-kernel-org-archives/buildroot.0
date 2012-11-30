@@ -1,51 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 12:16:56 -0800
-Subject: [Buildroot] [git commit] perl: substitute perlcross pod with
-	perl-version-specific pod
-Message-ID: <20121203145715.C500D99808@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 12:17:03 -0800
+Subject: [Buildroot] [git commit] perl: remove the double configure hack
+Message-ID: <20121203145716.3BF3199808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a002b5a9d2317a046d97c242ba48f79f3fabbd3
+commit: http://git.buildroot.net/buildroot/commit/?id=92cad6008d6b6a18f09d77f6e4c08572967eb9f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As suggested by Dan Pattison at ethertek ca.
+configure had to be called twice because with --mode=cross the
+miniperl-step failed.  However, just leaving out the --mode parameter
+is sufficient to make it work.  Since GNU_TARGET_NAME is always
+different from the host's tuple (it has -buildroot- in it), we can
+safely assume that the configure script will automatically enter
+cross mode.
+
+Also fix a type in perladmin definition.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/perl/perl.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ package/perl/perl.mk |   14 ++------------
+ 1 files changed, 2 insertions(+), 12 deletions(-)
 
 diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index f3c73dd..b84917b 100644
+index b84917b..0893eb5 100644
 --- a/package/perl/perl.mk
 +++ b/package/perl/perl.mk
-@@ -13,8 +13,11 @@ PERL_LICENSE_FILES = Artistic
- PERL_INSTALL_STAGING = YES
- 
- PERL_CROSS_VERSION = 0.7
-+PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).0
- PERL_CROSS_SITE    = http://download.berlios.de/perlcross
--PERL_CROSS_SOURCE  = perl-5.$(PERL_VERSION_MAJOR).0-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
-+PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
-+PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
- 
- # We use the perlcross hack to cross-compile perl. It should
- # be extracted over the perl sources, so we don't define that
-@@ -32,6 +35,11 @@ define PERL_CROSS_EXTRACT
- endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
- 
-+define PERL_CROSS_SET_POD
-+	$(SED) s/$(PERL_CROSS_OLD_POD)/$(PERL_CROSS_NEW_POD)/g $(@D)/Makefile
-+endef
-+PERL_POST_PATCH_HOOKS += PERL_CROSS_SET_POD
-+
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
-     PERL_DEPENDENCIES += berkeleydb
+@@ -47,19 +47,10 @@ ifeq ($(BR2_PACKAGE_GDBM),y)
+     PERL_DEPENDENCIES += gdbm
  endif
+ 
+-# Normally, --mode=cross should automatically do the two steps
+-# below, but it doesn't work for some reason.
+-PERL_HOST_CONF_OPT = \
+-	--mode=buildmini \
+-	--target=$(GNU_TARGET_NAME) \
+-	--target-arch=$(GNU_TARGET_NAME) \
+-	--set-target-name=$(GNU_TARGET_NAME)
+-
+ # We have to override LD, because an external multilib toolchain ld is not
+ # wrapped to provide the required sysroot options.  We also can't use ccache
+ # because the configure script doesn't support it.
+ PERL_CONF_OPT = \
+-	--mode=target \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--target-tools-prefix=$(TARGET_CROSS) \
+ 	--prefix=/usr \
+@@ -71,7 +62,7 @@ PERL_CONF_OPT = \
+ 	-A myuname="Buildroot $(BR2_VERSION_FULL)" \
+ 	-A osname=linux \
+ 	-A osvers=$(LINUX_VERSION) \
+-	-A perlamdin=root
++	-A perladmin=root
+ 
+ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+     PERL_CONF_OPT += -Dusedevel
+@@ -87,8 +78,7 @@ PERL_CONF_OPT += --only-mod=$(subst $(space),$(comma),$(PERL_MODULES))
+ endif
+ 
+ define PERL_CONFIGURE_CMDS
+-	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_HOST_CONF_OPT))
+-	(cd $(@D); ./configure $(PERL_CONF_OPT))
++	(cd $(@D); HOSTCC='$(HOSTCC_NOCACHE)' ./configure $(PERL_CONF_OPT))
+ 	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
+ endef
+ 
