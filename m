@@ -1,47 +1,23 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Fri, 30 Nov 2012 15:44:27 +0100
-Subject: [Buildroot] [PATCH] reorder fs alphabetically
-In-Reply-To: <c8631e11-d170-46a4-bb81-306bda1b745d@zimbra2.corp.accelance.fr>
-References: <c8631e11-d170-46a4-bb81-306bda1b745d@zimbra2.corp.accelance.fr>
-Message-ID: <1354286667-19952-1-git-send-email-jeremy.rosen@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Nov 2012 07:24:10 -0800
+Subject: [Buildroot] [PATCH 18/33] linux-fusion: bump to version 8.10.4
+In-Reply-To: <1353543503-8952-19-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Thu, 22 Nov 2012 01:18:08 +0100")
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+ <1353543503-8952-19-git-send-email-s.martin49@gmail.com>
+Message-ID: <87wqx3azc5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
----
-v2: really put them in alphabetical order
----
- fs/Config.in |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-diff --git a/fs/Config.in b/fs/Config.in
-index 94154ea..da4c5ff 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -1,15 +1,15 @@
- menu "Filesystem images"
- 
--source "fs/cramfs/Config.in"
- source "fs/cloop/Config.in"
-+source "fs/cpio/Config.in"
-+source "fs/cramfs/Config.in"
- source "fs/ext2/Config.in"
-+source "fs/initramfs/Config.in"
-+source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
--source "fs/ubifs/Config.in"
-+source "fs/romfs/Config.in"
- source "fs/squashfs/Config.in"
- source "fs/tar/Config.in"
--source "fs/cpio/Config.in"
--source "fs/iso9660/Config.in"
--source "fs/initramfs/Config.in"
--source "fs/romfs/Config.in"
-+source "fs/ubifs/Config.in"
- 
- endmenu
+ Samuel> Also fix directfb build avoiding the following error to occur
+ Samuel> (since FCEF_FOLLOW has been added in linux-fusion-8.9.0):
+
+Committed, thanks.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
