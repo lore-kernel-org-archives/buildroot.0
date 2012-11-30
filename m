@@ -1,34 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 07:34:39 -0800
-Subject: [Buildroot] [git commit] imagemagick: add license info
-Message-ID: <20121130154710.E169299369@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 07:44:53 -0800
+Subject: [Buildroot] [git commit] owl-linux: update help text about linux
+	kernel dependencies.
+Message-ID: <20121130154711.17E219950B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e6d537eb7c4805943a2bceb0e1fb338bbf42ab5
+commit: http://git.buildroot.net/buildroot/commit/?id=82583bf4b7765df6edad45aaec0aba0ddbd571a7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/imagemagick/imagemagick.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/owl-linux/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 61a379d..0476ace 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -11,6 +11,9 @@ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
- # available, which is annoying. Use an alternate site that keeps all
- # older versions.
- IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick/
-+IMAGEMAGICK_LICENSE = Apache-v2
-+IMAGEMAGICK_LICENSE_FILES = LICENSE
-+
- IMAGEMAGICK_INSTALL_STAGING = YES
- IMAGEMAGICK_AUTORECONF = YES
+diff --git a/package/owl-linux/Config.in b/package/owl-linux/Config.in
+index f6e18d5..1dcf5f1 100644
+--- a/package/owl-linux/Config.in
++++ b/package/owl-linux/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_OWL_LINUX
+ 	help
+ 	  Linux kernel driver for the H&D Wireless SPB104 SD-card WiFi SIP.
  
++	  owl-linux requires the hidden kernel option WIRELESS_EXT enabled.
++
+ 	  http://linux.hd-wireless.se/bin/view/Linux/GettingStarted
+ 
+ comment "owl-linux requires a Linux kernel"
