@@ -1,64 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Nov 2012 09:18:08 +0100
-Subject: [Buildroot] [PATCH 2/2] libsigc: Don't copy devel documentation
- onto target
-In-Reply-To: <1354239752-18102-1-git-send-email-cdhmanning@gmail.com>
-References: <1354239752-18102-1-git-send-email-cdhmanning@gmail.com>
-Message-ID: <50B86BC0.5070107@mind.be>
+Date: Fri, 30 Nov 2012 09:37:07 +0100
+Subject: [Buildroot] Problem building libglib2
+In-Reply-To: <20121130001154.129b9238@skate>
+References: <CAE21AQquyvDfegH5f8FebeE8LFTnOY3r75Yuy6ZpWs72uD80MQ@mail.gmail.com>
+ <201211300652.45293.manningc2@actrix.gen.nz> <20121129190813.5dc97298@skate>
+ <201211300731.53056.manningc2@actrix.gen.nz> <50B7C54C.3010103@mind.be>
+ <20121130001154.129b9238@skate>
+Message-ID: <50B87033.7090609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/11/12 02:42, Charles Manning wrote:
-> The libsigc++ developer documentation was being copied onto the target.
-> Add a clean-up to fix that.
+On 30/11/12 00:11, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> There is probably a better way to do this but I still have training wheels.
-
-  A command like that should typically go below ---, otherwise it will
-appear in the git log for all eternity...
-
+> On Thu, 29 Nov 2012 21:27:56 +0100, Arnout Vandecappelle wrote:
 >
-> Signed-off-by: Charles Manning<cdhmanning@gmail.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
-> ---
->   package/libsigc/libsigc.mk |    6 ++++++
->   1 files changed, 6 insertions(+), 0 deletions(-)
+>>    We could obviously solve this by unexporting PKG_CONFIG_SYSROOT_DIR, but
+>> perhaps the better approach is to remove those environment variables from our
+>> custom pkgconf?
 >
-> diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
-> index 92d1d8b..10f5803 100644
-> --- a/package/libsigc/libsigc.mk
-> +++ b/package/libsigc/libsigc.mk
-> @@ -8,4 +8,10 @@ LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.bz2
->   LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
->   LIBSIGC_INSTALL_STAGING = YES
->
-> +define LIBSIGC_INSTALL_TARGET_FIXUP
-> +	rm -rf $(TARGET_DIR)/usr/share/devhelp/books/libsigc++*
+> No, we use PKG_CONFIG_SYSROOT_DIR="/" when we build packages for the
+> host, so we can't simply remove support for the PKG_CONFIG_SYSROOT_DIR
+> environment variable. Unexporting PKG_CONFIG_SYSROOT_DIR sounds like
+> the good solution here.
 
-  Perhaps we should globally remove devhelp together with man and doc?
-OTOH this is currently the only package that installs anything in
-devhelp.
+  Right.
 
-  BTW, if someone wanted to remark that this shouldn't be done if
-BR2_HAVE_DOCUMENTATION is y: we don't have a devhelp reader, so installing
-the devhelp texts is always pointless.
-
+  Charles, would you care to prepare a patch that unexports PKG_CONFIG_SYSROOT_DIR
+and test it in your angstrom environment?
 
   Regards,
   Arnout
-
-> +endef
-> +
-> +LIBSIGC_POST_INSTALL_TARGET_HOOKS += LIBSIGC_INSTALL_TARGET_FIXUP
-> +
->   $(eval $(autotools-package))
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
