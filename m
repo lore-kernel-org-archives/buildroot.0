@@ -1,54 +1,60 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 12:17:08 -0800
-Subject: [Buildroot] [git commit branch/next] perl: fix configure step
-Message-ID: <20121130201902.8BAE797280@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 12:17:19 -0800
+Subject: [Buildroot] [git commit branch/next] cpanminus: fix installation
+	paths
+Message-ID: <20121130201902.EF76B8194B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ba19df16ab9da681c2e5be2f2c7693c24ed0d8d
+commit: http://git.buildroot.net/buildroot/commit/?id=c4fbc4202ea47829396bc446e84fd85153513974
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Configure -A symbol=val generates a extra space in config.sh,
-which causes failure like this :
-    Building Module-Runtime-0.013
-    Unknown OS type ' linux' - using default settings
+perlcross seems to set the installation paths differently than perl's
+Configure, so adapt the reference to these paths in cpanminus.
 
-[Arnout: use -A define:foo instead of patching config.sh]
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Francois: install into /usr/lib/perl]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/perl/perl.mk |   16 ++++++++--------
- 1 files changed, 8 insertions(+), 8 deletions(-)
+ package/cpanminus/cpanminus.mk |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 0893eb5..391047d 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -55,14 +55,14 @@ PERL_CONF_OPT = \
- 	--target-tools-prefix=$(TARGET_CROSS) \
- 	--prefix=/usr \
- 	-Dld="$(TARGET_CC_NOCCACHE)" \
--	-A ccflags="$(TARGET_CFLAGS)" \
--	-A ldflags="$(TARGET_LDFLAGS) -lm" \
--	-A mydomain="" \
--	-A myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
--	-A myuname="Buildroot $(BR2_VERSION_FULL)" \
--	-A osname=linux \
--	-A osvers=$(LINUX_VERSION) \
--	-A perladmin=root
-+	-Dccflags="$(TARGET_CFLAGS)" \
-+	-Dldflags="$(TARGET_LDFLAGS) -lm" \
-+	-A define:mydomain="" \
-+	-A define:myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
-+	-A define:myuname="Buildroot $(BR2_VERSION_FULL)" \
-+	-A define:osname=linux \
-+	-A define:osvers=$(LINUX_VERSION) \
-+	-A define:perladmin=root
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+index af35e93..e7e3f29 100644
+--- a/package/cpanminus/cpanminus.mk
++++ b/package/cpanminus/cpanminus.mk
+@@ -11,8 +11,8 @@ CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NA
  
- ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
-     PERL_CONF_OPT += -Dusedevel
+ CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
+ CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
+-CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)
+-CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl5/site_perl/$(PERL_VERSION)
++CPANMINUS_PERL_LIB      = $(STAGING_DIR)/usr/lib/perl
++CPANMINUS_PERL_SITELIB  = $(TARGET_DIR)/usr/lib/perl
+ CPANMINUS_PERL_ARCHLIB  = $(CPANMINUS_PERL_LIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL_SITEARCH = $(CPANMINUS_PERL_SITELIB)/$(CPANMINUS_ARCHNAME)
+ CPANMINUS_PERL5LIB = $(CPANMINUS_PERL_SITEARCH):$(CPANMINUS_PERL_SITELIB):$(CPANMINUS_PERL_ARCHLIB):$(CPANMINUS_PERL_LIB)
+@@ -27,8 +27,8 @@ define CPANMINUS_INSTALL_TARGET_CMDS
+ 	echo "PERL5LIB=$(CPANMINUS_PERL5LIB) $(CPANMINUS_RUN_PERL) \"\$$@\""    >>$(@D)/run_perl
+ 	chmod +x $(@D)/run_perl
+ 	PERL5LIB=$(CPANMINUS_PERL5LIB) \
+-	PERL_MM_OPT="DESTDIR=$(TARGET_DIR) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
+-	PERL_MB_OPT="--destdir $(TARGET_DIR)" \
++	PERL_MM_OPT="DESTDIR=$(CPANMINUS_PERL_SITELIB) PERL=$(@D)/run_perl PERL_LIB=$(CPANMINUS_PERL_LIB) PERL_ARCHLIB=$(CPANMINUS_PERL_ARCHLIB)" \
++	PERL_MB_OPT="--destdir $(CPANMINUS_PERL_SITELIB)" \
+ 	RUN_PERL="$(@D)/run_perl" \
+ 	$(CPANMINUS_RUN_PERL) $(@D)/cpanm \
+ 		--perl=$(@D)/run_perl \
+@@ -36,7 +36,7 @@ define CPANMINUS_INSTALL_TARGET_CMDS
+ 		--no-man-pages \
+ 		$(CPANMINUS_MIRROR) \
+ 		$(call qstrip,$(BR2_PACKAGE_CPANMINUS_MODULES))
+-	find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
++	-find $(CPANMINUS_PERL_SITEARCH) -type f -name *.bs -exec rm -f {} \;
+ endef
+ else
+ define CPANMINUS_INSTALL_TARGET_CMDS
