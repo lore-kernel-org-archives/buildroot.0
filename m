@@ -1,100 +1,70 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 07:58:22 -0800
-Subject: [Buildroot] [git commit branch/next] snowball-hdmiservice: new
-	package
-Message-ID: <20121130160325.B2F3E99369@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 07:59:35 -0800
+Subject: [Buildroot] [git commit branch/next] Add board files for snowball
+Message-ID: <20121130160326.2E3B099369@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e9f8ad164e4776ff89e0f7d674e77032a472d54
+commit: http://git.buildroot.net/buildroot/commit/?id=4052e3325c240034e24cbb1b445adf32320baa98
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (on various archs and toolchains)
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    1 +
- package/snowball-hdmiservice/Config.in             |   10 +++++
- .../snowball-hdmiservice/snowball-hdmiservice.mk   |   41 ++++++++++++++++++++
- 3 files changed, 52 insertions(+), 0 deletions(-)
+ board/calao/snowball/linux-3.4.patch |   45 ++++++++++++++++++++++++++++++++++
+ 1 files changed, 45 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f3ca496..663a17b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -250,6 +250,7 @@ source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- source "package/smartmontools/Config.in"
-+source "package/snowball-hdmiservice/Config.in"
- source "package/sredird/Config.in"
- source "package/statserial/Config.in"
- source "package/sysstat/Config.in"
-diff --git a/package/snowball-hdmiservice/Config.in b/package/snowball-hdmiservice/Config.in
+diff --git a/board/calao/snowball/linux-3.4.patch b/board/calao/snowball/linux-3.4.patch
 new file mode 100644
-index 0000000..0ea7c81
+index 0000000..4e6fb51
 --- /dev/null
-+++ b/package/snowball-hdmiservice/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SNOWBALL_HDMISERVICE
-+	bool "snowball-hdmiservice"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS	
-+	help
-+	  HDMI userspace control daemon
++++ b/board/calao/snowball/linux-3.4.patch
+@@ -0,0 +1,45 @@
++From 3d1a9b44b9dcd2c0f5d54c09596c96c0524d8340 Mon Sep 17 00:00:00 2001
++From: Gregory Hermant <gregory.hermant@calao-systems.com>
++Date: Tue, 13 Nov 2012 11:47:41 +0100
++Subject: [PATCH] trace-debug[stm]: Fix for BT/WLAN instability
 +
-+	  This package contains the HDMI userspace control daemon for the 
-+	  snowball board
-+	  
-+	  http://www.igloocommunity.org
-diff --git a/package/snowball-hdmiservice/snowball-hdmiservice.mk b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-new file mode 100644
-index 0000000..ebd65df
---- /dev/null
-+++ b/package/snowball-hdmiservice/snowball-hdmiservice.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# snowball-hdmiservice
-+#
-+#############################################################
-+SNOWBALL_HDMISERVICE_VERSION = f75c99d1c52707240a78b4ba78e41d20d3aa3b08
-+SNOWBALL_HDMISERVICE_SITE = git://igloocommunity.org/git/bsp/hdmiservice.git
-+SNOWBALL_HDMISERVICE_LICENSE = MIT
-+SNOWBALL_HDMISERVICE_LICENSE_FILES = debian/copyright
-+SNOWBALL_HDMISERVICE_INSTALL_STAGING = YES
++Pins under mop500_ske_pins array are used for different
++functionalities in snowball. Ex: GPIO161 pin configured
++for keypad here must stay configured as GPIO alternate
++function for operating PMU_EN pin of BT/WLAN chip in snowball.
++So forbid configuring these pins, for snowball
 +
-+define SNOWBALL_HDMISERVICE_BUILD_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" 	
-+endef
++Signed-off-by: Rajanikanth H.V <rajanikanth.hv@stericsson.com>
++Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
++---
++ arch/arm/mach-ux500/board-mop500-stm.c |    7 +++++--
++ 1 file changed, 5 insertions(+), 2 deletions(-)
 +
-+define SNOWBALL_HDMISERVICE_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(STAGING_DIR) install
-+endef
++diff --git a/arch/arm/mach-ux500/board-mop500-stm.c b/arch/arm/mach-ux500/board-mop500-stm.c
++index 1bef2a0..532fb9e 100644
++--- a/arch/arm/mach-ux500/board-mop500-stm.c
+++++ b/arch/arm/mach-ux500/board-mop500-stm.c
++@@ -121,7 +121,9 @@ static int stm_ste_disable_ape_on_mipi60(void)
++ 	if (retval)
++ 		STM_ERR("Failed to disable MIPI60\n");
++ 	else {
++-		retval = nmk_config_pins(ARRAY_AND_SIZE(mop500_ske_pins));
+++		if (!machine_is_snowball())
+++			retval = nmk_config_pins(
+++				ARRAY_AND_SIZE(mop500_ske_pins));
++ 		if (retval)
++ 			STM_ERR("Failed to enable SKE gpio\n");
++ 	}
++@@ -314,7 +316,8 @@ static int stm_ste_connection(enum stm_connection_type con_type)
++ 		/* Enable altC3 on GPIO70-74 (STMMOD) and GPIO75-76 (UARTMOD) */
++ 		prcmu_enable_stm_mod_uart();
++ 		/* Enable APE on MIPI60 */
++-		retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
+++		if (!machine_is_snowball())
+++			retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
++ 		if (retval)
++ 			STM_ERR("Failed to disable SKE GPIO\n");
++ 		else {
++-- 
++1.7.9.5
 +
-+define SNOWBALL_HDMISERVICE_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)" DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define SNOWBALL_HDMISERVICE_UNINSTALL_STAGING_CMDS
-+	rm -f $(STAGING_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(STAGING_DIR)/usr/bin/hdmistart
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_api.h
-+	rm -f $(STAGING_DIR)/usr/include/hdmi_service_local.h
-+endef
-+
-+define SNOWBALL_HDMISERVICE_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/lib/hdmiservice.so
-+	rm -f $(TARGET_DIR)/usr/bin/hdmistart
-+endef
-+
-+define SNOWBALL_HDMISERVICE_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+
-+$(eval $(generic-package))
