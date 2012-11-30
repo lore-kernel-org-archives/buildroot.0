@@ -1,52 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 30 Nov 2012 17:48:02 +0100
-Subject: [Buildroot] [PATCH 06/51] package/usbredir: new package
-In-Reply-To: <20121129094247.03f7c7d2@skate>
-References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
- <1354146890-27380-7-git-send-email-yann.morin.1998@free.fr>
- <20121129094247.03f7c7d2@skate>
-Message-ID: <201211301748.02948.yann.morin.1998@free.fr>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 30 Nov 2012 17:56:25 +0000
+Subject: [Buildroot] [PATCH v5] Add /var/www to device table
+Message-ID: <1354298185-2974-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Thursday 29 November 2012 Thomas Petazzoni wrote:
-> On Thu, 29 Nov 2012 00:54:05 +0100, Yann E. MORIN wrote:
-> > +comment "usbredir requires libusb"
-> > +	depends on !BR2_PACKAGE_LIBUSB
-> 
-> Hum, why a "depends on" and not a "select", like we normally do for
-> libraries? libusb is not a "big" thing, so I'd say it should be
-> automatically selected.
+The /var/www directory is listed in /etc/passwd in the skeleton target
+filesystem as the home directory of the www-data user (uid 33).
 
-Because libusb depends on THREADS, and I do not want to play the ugly
-game of inheriting dependencies of my own dependencies.
-Hence "depends on" rather than "select".
+In the final target filesystem, /var/www should be owned by www-data. This
+is important for the lighttpd package, for example.
 
-> > diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
-> > new file mode 100644
-> > index 0000000..9f6c011
-> > --- /dev/null
-> > +++ b/package/usbredir/usbredir.mk
-[--SNIP==]
-> > +USBREDIR_LICENSE         = LGPLv2.1+
-> 
-> Maybe:
-> USBREDIR_LICENSE         = LGPLv2.1+ (library)
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ v5: Rework for relocation device table file (now under system)
+ v4: Resend.
+ v3: Added Acked-by information.
+ v2: Removed redundant TAB from line added device table file.
 
-Yep.
+ system/device_table.txt |    1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/system/device_table.txt b/system/device_table.txt
+index fc397a9..421728b 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -10,6 +10,7 @@
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
+ /home/default				d	2755	1000	1000	-	-	-	-	-
++/var/www				d	755	33	33	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
