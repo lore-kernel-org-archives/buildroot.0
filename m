@@ -1,40 +1,33 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 30 Nov 2012 20:57:15 +0100
-Subject: [Buildroot] [PATCH 17/33] matchbox packages: fix broken urls
-In-Reply-To: <87fw3rayff.fsf@dell.be.48ers.dk>
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-18-git-send-email-s.martin49@gmail.com>
- <87fw3rayff.fsf@dell.be.48ers.dk>
-Message-ID: <CAHXCMML9f9eM7odmYWDrztZeK_ivwNeZDz5LWFMbhRV_xxFagg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Nov 2012 12:10:57 -0800
+Subject: [Buildroot] [PATCH for-2012.11 0/5] Introduce errors for legacy
+	API
+In-Reply-To: <50AF8F3B.9090504@mind.be> (Arnout Vandecappelle's message of
+ "Fri, 23 Nov 2012 15:59:07 +0100")
+References: <1352750912-16012-1-git-send-email-arnout@mind.be>
+ <87wqxn5cu6.fsf@dell.be.48ers.dk> <50AF8F3B.9090504@mind.be>
+Message-ID: <877gp2am26.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/11/30 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
-[...]
->  Samuel> -MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
->  Samuel> +MATCHBOX_COMMON_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
->
-> Hmm, projects.o-hand.com doesn't seem to exist?
-At least, it did...
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
->
-> host -a projects.o-hand.com
-> Trying "projects.o-hand.com"
-> Received 105 bytes from 64.71.0.60#53 in 59 ms
-> Trying "projects.o-hand.com"
-> Host projects.o-hand.com not found: 3(NXDOMAIN)
-Indeed... it seems pretty down :-(
+Hi,
 
-Luckily, by the time this patch tried to be merged it got down!
+ Arnout>  The problem with warnings is that we produce so much output
+ Arnout> that they'll just be hidden. They would make sense if an error
+ Arnout> follows soon after. But in all likelihood, if an error follows,
+ Arnout> it will be much further down.
 
-Well, I'll switch to some alive location and repost.
+ Arnout>  [snip]
 
+ Arnout>  So, is there still anything that I should change?
 
-Regards,
+I'm still not 100% happy with it, but I think this is the best we can do
+for 2012.11, so I've committed the series, thanks!
 
 -- 
-Sam
+Bye, Peter Korsgaard
