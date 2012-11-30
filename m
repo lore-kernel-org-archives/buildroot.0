@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 12:18:40 -0800
-Subject: [Buildroot] [PATCHv3 for-next 1/6] perl: remove redundant
-	patches
-In-Reply-To: <1354118962-18601-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Wed, 28 Nov 2012 17:09:17 +0100")
-References: <1354118962-18601-1-git-send-email-arnout@mind.be>
-Message-ID: <87y5hi974v.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Nov 2012 12:17:11 -0800
+Subject: [Buildroot] [git commit branch/next] cpanminus: requires host-qemu
+Message-ID: <20121130201902.B9C0B8194B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3ffc4815b79de99228de9b605cec91e2ff5d467c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Now we are using perlcross, the patches to make perl work with qemu are
- Arnout> redundant, so remove them.
+It's still broken, but is someone wants to try it out then at least
+the dependency is there.
 
-Committed series to next, thanks.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cpanminus/cpanminus.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cpanminus/cpanminus.mk b/package/cpanminus/cpanminus.mk
+index d3a338b..af35e93 100644
+--- a/package/cpanminus/cpanminus.mk
++++ b/package/cpanminus/cpanminus.mk
+@@ -7,7 +7,7 @@
+ CPANMINUS_VERSION = 1.5018
+ CPANMINUS_SOURCE = miyagawa-cpanminus-$(CPANMINUS_VERSION)-0-gee6cd30.tar.gz
+ CPANMINUS_SITE = https://github.com/miyagawa/cpanminus/tarball/$(CPANMINUS_VERSION)
+-CPANMINUS_DEPENDENCIES = perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
++CPANMINUS_DEPENDENCIES = host-qemu perl $(call qstrip,$(BR2_PACKAGE_CPANMINUS_NATIVE_DEPENDENCIES))
+ 
+ CPANMINUS_RUN_PERL = $(QEMU_USER) $(STAGING_DIR)/usr/bin/perl
+ CPANMINUS_ARCHNAME = $(shell $(CPANMINUS_RUN_PERL) -MConfig -e "print Config->{archname}")
