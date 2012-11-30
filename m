@@ -1,144 +1,303 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 13:07:43 -0800
-Subject: [Buildroot] [git commit] matchbox packages: fix broken urls
-Message-ID: <20121130211218.1B8E699340@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 30 Nov 2012 22:46:27 +0100
+Subject: [Buildroot] [PATCH v2] python2: bump to 2.7.3
+Message-ID: <1354311995-21598-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b0b177b26f3d3cf785e5c46a3ec963bbfd9cebc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Pyhton 2.7.3 includes several security fixes.
+See: http://www.python.org/download/releases/2.7.3/
+
+Also fixes the patch making sqlite optional and remove the symlink patch
+(which has been fixed upstream).
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../matchbox/matchbox-common/matchbox-common.mk    |    6 +++---
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    5 +++--
- .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |    2 +-
- .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
- package/matchbox/matchbox-lib/matchbox-lib.mk      |    2 +-
- package/matchbox/matchbox-panel/matchbox-panel.mk  |    6 +++---
- .../matchbox-startup-monitor.mk                    |    2 +-
- package/matchbox/matchbox-wm/matchbox-wm.mk        |    2 +-
- 8 files changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
-index 2e3cdff..3248e74 100644
---- a/package/matchbox/matchbox-common/matchbox-common.mk
-+++ b/package/matchbox/matchbox-common/matchbox-common.mk
-@@ -3,10 +3,10 @@
- # MatchBox Common
- #
- #############################################################
+---
+v2: update commit message about the removed patch (spotted by Thomas P.)
+---
+ package/python/python-2.7-009-python-symlink.patch | 25 -----------------
+ .../python-2.7-100-optional-test-modules.patch     |  3 ++-
+ package/python/python-2.7-101-optional-pydoc.patch |  3 ++-
+ package/python/python-2.7-102-optional-2to3.patch  | 12 +++------
+ .../python/python-2.7-103-optional-sqlite.patch    | 31 +++++++++++++++++++++-
+ package/python/python-2.7-104-optional-tk.patch    |  3 ++-
+ .../python/python-2.7-105-optional-curses.patch    |  3 ++-
+ package/python/python-2.7-106-optional-expat.patch |  3 ++-
+ package/python/python-2.7-110-optional-db.patch    |  7 ++---
+ package/python/python.mk                           |  2 +-
+ 10 files changed, 48 insertions(+), 44 deletions(-)
+ delete mode 100644 package/python/python-2.7-009-python-symlink.patch
+
+diff --git a/package/python/python-2.7-009-python-symlink.patch b/package/python/python-2.7-009-python-symlink.patch
+deleted file mode 100644
+index 1b1d0c8..0000000
+--- a/package/python/python-2.7-009-python-symlink.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-Use a symlink between python and pythonVERSION
 -
--MATCHBOX_COMMON_VERSION = 0.9.1
-+MATCHBOX_COMMON_VERSION_MAJOR = 0.9
-+MATCHBOX_COMMON_VERSION = $(MATCHBOX_COMMON_VERSION_MAJOR).1
- MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
--MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
-+MATCHBOX_COMMON_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
- MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
- 
- ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
-diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-index 5c518e5..2ef29c6 100644
---- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-+++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-@@ -4,9 +4,10 @@
- #
- #############################################################
- 
--MATCHBOX_DESKTOP_VERSION = 0.9.1
-+MATCHBOX_DESKTOP_VERSION_MAJOR = 0.9
-+MATCHBOX_DESKTOP_VERSION = $(MATCHBOX_DESKTOP_VERSION_MAJOR).1
- MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
--MATCHBOX_DESKTOP_SITE = http://matchbox-project.org/sources/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION)
-+MATCHBOX_DESKTOP_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION_MAJOR)
- MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
- MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
- 
-diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
-index 255f3c1..7a6ac00 100644
---- a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
-+++ b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
-@@ -6,7 +6,7 @@
- 
- MATCHBOX_FAKEKEY_VERSION = 0.1
- MATCHBOX_FAKEKEY_SOURCE = libfakekey-$(MATCHBOX_FAKEKEY_VERSION).tar.bz2
--MATCHBOX_FAKEKEY_SITE = http://matchbox-project.org/sources/libfakekey/$(MATCHBOX_FAKEKEY_VERSION)
-+MATCHBOX_FAKEKEY_SITE = http://downloads.yoctoproject.org/releases/matchbox/libfakekey/$(MATCHBOX_FAKEKEY_VERSION)
- MATCHBOX_FAKEKEY_INSTALL_STAGING = YES
- MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
- MATCHBOX_FAKEKEY_CONF_OPT = --enable-expat
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index c6e9496..44aab5c 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -6,7 +6,7 @@
- 
- MATCHBOX_KEYBOARD_VERSION = 0.1
- MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
--MATCHBOX_KEYBOARD_SITE = http://matchbox-project.org/sources/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
-+MATCHBOX_KEYBOARD_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
- MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
- 
- # Workaround bug in configure script
-diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
-index 339f512..6b6025a 100644
---- a/package/matchbox/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
-@@ -6,7 +6,7 @@
- 
- MATCHBOX_LIB_VERSION = 1.9
- MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
--MATCHBOX_LIB_SITE = http://matchbox-project.org/sources/libmatchbox/$(MATCHBOX_LIB_VERSION)
-+MATCHBOX_LIB_SITE = http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/$(MATCHBOX_LIB_VERSION)
- MATCHBOX_LIB_INSTALL_STAGING = YES
- MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
- MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
-diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
-index db9d1a8..0e980ef 100644
---- a/package/matchbox/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
-@@ -3,10 +3,10 @@
- # MatchBox Panel
- #
- #############################################################
+-By default, a hard link is used between /usr/bin/python and
+-/usr/bin/pythonVERSION. Using hard links for such things is fairly
+-uncommon, so let's make a symbolic link instead.
 -
--MATCHBOX_PANEL_VERSION = 0.9.3
-+MATCHBOX_PANEL_VERSION_MAJOR = 0.9
-+MATCHBOX_PANEL_VERSION = $(MATCHBOX_PANEL_VERSION_MAJOR).3
- MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
--MATCHBOX_PANEL_SITE = http://matchbox-project.org/sources/matchbox-panel/$(MATCHBOX_PANEL_VERSION)
-+MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
- MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
- MATCHBOX_PANEL_CONF_OPT = --enable-expat
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+----
+- Makefile.pre.in |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: Python-2.7.2/Makefile.pre.in
+-===================================================================
+---- Python-2.7.2.orig/Makefile.pre.in
+-+++ Python-2.7.2/Makefile.pre.in
+-@@ -796,7 +796,7 @@
+- 	then rm -f $(DESTDIR)$(BINDIR)/$(PYTHON); \
+- 	else true; \
+- 	fi
+--	(cd $(DESTDIR)$(BINDIR); $(LN) python$(VERSION)$(EXE) $(PYTHON))
+-+	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)$(EXE) $(PYTHON))
+- 	-rm -f $(DESTDIR)$(BINDIR)/python-config
+- 	(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-config python-config)
+- 	-test -d $(DESTDIR)$(LIBPC) || $(INSTALL) -d -m $(DIRMODE) $(DESTDIR)$(LIBPC)
+diff --git a/package/python/python-2.7-100-optional-test-modules.patch b/package/python/python-2.7-100-optional-test-modules.patch
+index fc49d52..a988717 100644
+--- a/package/python/python-2.7-100-optional-test-modules.patch
++++ b/package/python/python-2.7-100-optional-test-modules.patch
+@@ -4,6 +4,7 @@ The Python standard distribution comes with many test modules, that
+ are not necessarly useful on embedded targets.
  
-diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
-index 6f37bf4..6b30e80 100644
---- a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
-+++ b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
-@@ -6,7 +6,7 @@
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
  
- MATCHBOX_STARTUP_MONITOR_VERSION = 0.1
- MATCHBOX_STARTUP_MONITOR_SOURCE = mb-applet-startup-monitor-$(MATCHBOX_STARTUP_MONITOR_VERSION).tar.bz2
--MATCHBOX_STARTUP_MONITOR_SITE = http://matchbox-project.org/sources/mb-applet-startup-monitor/$(MATCHBOX_STARTUP_MONITOR_VERSION)
-+MATCHBOX_STARTUP_MONITOR_SITE = http://downloads.yoctoproject.org/releases/matchbox/mb-applet-startup-monitor/$(MATCHBOX_STARTUP_MONITOR_VERSION)
- MATCHBOX_STARTUP_MONITOR_DEPENDENCIES = matchbox-lib startup-notification
- MATCHBOX_STARTUP_MONITOR_CONF_OPT =
+ ---
+  Makefile.pre.in |   40 +++++++++++++++++++++++++++-------------
+@@ -55,7 +56,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +		ctypes/test distutils/tests unittest/test
+ +endif
+ +
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python-2.7-101-optional-pydoc.patch b/package/python/python-2.7-101-optional-pydoc.patch
+index 195abcc..ccc937b 100644
+--- a/package/python/python-2.7-101-optional-pydoc.patch
++++ b/package/python/python-2.7-101-optional-pydoc.patch
+@@ -4,6 +4,7 @@ It removes 0.5 MB of data from the target plus the pydoc script
+ itself.
  
-diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
-index ece8866..b04cf76 100644
---- a/package/matchbox/matchbox-wm/matchbox-wm.mk
-+++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
-@@ -6,7 +6,7 @@
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
  
- MATCHBOX_WM_VERSION = 1.2
- MATCHBOX_WM_SOURCE = matchbox-window-manager-$(MATCHBOX_WM_VERSION).tar.bz2
--MATCHBOX_WM_SITE = http://matchbox-project.org/sources/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
-+MATCHBOX_WM_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
- MATCHBOX_WM_DEPENDENCIES = matchbox-lib
- MATCHBOX_WM_CONF_OPT = --enable-expat
+ ---
+  Makefile.pre.in |    6 +++++-
+@@ -32,7 +33,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +LIBSUBDIRS += pydoc_data
+ +endif
+ +
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python-2.7-102-optional-2to3.patch b/package/python/python-2.7-102-optional-2to3.patch
+index 1e04540..0321619 100644
+--- a/package/python/python-2.7-102-optional-2to3.patch
++++ b/package/python/python-2.7-102-optional-2to3.patch
+@@ -4,6 +4,7 @@ lib2to3 is a library to convert Python 2.x code to Python 3.x. As
+ such, it is probably not very useful on embedded system targets.
  
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+ ---
+  Makefile.pre.in |   24 +++++++++++++++++-------
+@@ -33,7 +34,7 @@ Index: Python-2.7.2/Makefile.pre.in
+  		ctypes/test distutils/tests unittest/test
+  endif
+  
+-@@ -884,6 +882,23 @@
++@@ -884,6 +882,16 @@
+  LIBSUBDIRS += pydoc_data
+  endif
+  
+@@ -47,14 +48,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +endif
+ +endif
+ +
+-+ifeq (@SQLITE3@,yes)
+-+LIBSUBDIRS += sqlite3
+-+ifeq (@TEST_MODULES@,yes)
+-+LIBSUBDIRS += sqlite3/test
+-+endif
+-+endif
+-+
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python-2.7-103-optional-sqlite.patch b/package/python/python-2.7-103-optional-sqlite.patch
+index 4172bae..a915c55 100644
+--- a/package/python/python-2.7-103-optional-sqlite.patch
++++ b/package/python/python-2.7-103-optional-sqlite.patch
+@@ -1,10 +1,12 @@
+ Add option to disable the sqlite3 module
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+ ---
++ Makefile.pre.in |   24 +++++++++++++++++-------
+  configure.in |    9 +++++++++
+- 1 file changed, 9 insertions(+)
++ 2 file changed, 9 insertions(+)
+ 
+ Index: Python-2.7.2/configure.in
+ ===================================================================
+@@ -26,3 +28,30 @@ Index: Python-2.7.2/configure.in
+  AC_SUBST(PYDOC)
+  
+  AC_ARG_ENABLE(pydoc,
++Index: Python-2.7.2/Makefile.pre.in
++===================================================================
++--- Python-2.7.2.orig/Makefile.pre.in
+++++ Python-2.7.2/Makefile.pre.in
++@@ -875,7 +874,7 @@
++ 		lib-tk/test/test_ttk test test/data \
++ 		test/cjkencodings test/decimaltestdata test/xmltestdata test/subprocessdata \
++ 		test/tracedmodules email/test email/test/data \
++-		json/tests sqlite3/test bsddb/test \
+++		json/tests  bsddb/test \
++ 		ctypes/test distutils/tests unittest/test
++ endif
++ 
++@@ -884,6 +882,13 @@
++ LIBSUBDIRS += pydoc_data
++ endif
++ 
+++ifeq (@SQLITE3@,yes)
+++LIBSUBDIRS += sqlite3
+++ifeq (@TEST_MODULES@,yes)
+++LIBSUBDIRS += sqlite3/test
+++endif
+++endif
+++
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
++ 	@for i in $(SCRIPTDIR) $(LIBDEST); \
++ 	do \
+diff --git a/package/python/python-2.7-104-optional-tk.patch b/package/python/python-2.7-104-optional-tk.patch
+index 12f1236..9333e33 100644
+--- a/package/python/python-2.7-104-optional-tk.patch
++++ b/package/python/python-2.7-104-optional-tk.patch
+@@ -1,6 +1,7 @@
+ Add an option to disable the tk module
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+ ---
+  Makefile.pre.in |   14 ++++++++++----
+@@ -42,7 +43,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +endif
+ +endif
+ +
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python-2.7-105-optional-curses.patch b/package/python/python-2.7-105-optional-curses.patch
+index e3705cb..7f8da7c 100644
+--- a/package/python/python-2.7-105-optional-curses.patch
++++ b/package/python/python-2.7-105-optional-curses.patch
+@@ -1,6 +1,7 @@
+ Add an option to disable the curses module
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+ ---
+  Makefile.pre.in |    6 +++++-
+@@ -28,7 +29,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +LIBSUBDIRS += curses
+ +endif
+ +
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python-2.7-106-optional-expat.patch b/package/python/python-2.7-106-optional-expat.patch
+index be1b4a3..2d8ae74 100644
+--- a/package/python/python-2.7-106-optional-expat.patch
++++ b/package/python/python-2.7-106-optional-expat.patch
+@@ -7,6 +7,7 @@ builtin the Python sources, or no expat at all (which disables the
+ installation of XML modules).
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+ ---
+  Makefile.pre.in |    6 +++++-
+@@ -35,7 +36,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +LIBSUBDIRS += $(XMLLIBSUBDIRS)
+ +endif
+ +
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python-2.7-110-optional-db.patch b/package/python/python-2.7-110-optional-db.patch
+index 0d5ee0c..b32eea9 100644
+--- a/package/python/python-2.7-110-optional-db.patch
++++ b/package/python/python-2.7-110-optional-db.patch
+@@ -5,6 +5,7 @@ able to build Python without it, this patch adds an option to disable
+ the build/installation of this Python module.
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+ ---
+  Makefile.pre.in |   10 ++++++++--
+@@ -28,8 +29,8 @@ Index: Python-2.7.2/Makefile.pre.in
+  LIBSUBDIRS +=   test test/data \
+  		test/cjkencodings test/decimaltestdata test/xmltestdata test/subprocessdata \
+  		test/tracedmodules email/test email/test/data \
+--		json/tests sqlite3/test bsddb/test \
+-+		json/tests sqlite3/test \
++-		json/tests  bsddb/test \
+++		json/tests \
+  		ctypes/test distutils/tests unittest/test
+  endif
+  
+@@ -44,7 +45,7 @@ Index: Python-2.7.2/Makefile.pre.in
+ +endif
+ +endif
+ +
+- libinstall:	build_all $(srcdir)/Lib/$(PLATDIR)
++ libinstall:	build_all $(srcdir)/Lib/$(PLATDIR) $(srcdir)/Modules/xxmodule.c
+  	@for i in $(SCRIPTDIR) $(LIBDEST); \
+  	do \
+ Index: Python-2.7.2/configure.in
+diff --git a/package/python/python.mk b/package/python/python.mk
+index e0ec9bb..6e960cd 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).2
++PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).3
+ PYTHON_SOURCE        = Python-$(PYTHON_VERSION).tar.bz2
+ PYTHON_SITE          = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE       = Python software foundation license v2, others
+-- 
+1.8.0.1
