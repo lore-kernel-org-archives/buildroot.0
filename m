@@ -1,85 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Nov 2012 07:46:03 -0300
-Subject: [Buildroot] [PATCHv2] flex: fix build for nommu systems
-Message-ID: <1354272363-10162-1-git-send-email-gustavo@zacarias.com.ar>
+From: Gregory Hermant <gregory.hermant@calao-systems.com>
+Date: Fri, 30 Nov 2012 13:39:10 +0100
+Subject: [Buildroot] [PATCH v5 0/6] Add support for the snowball board
+Message-ID: <1354279156-20649-1-git-send-email-gregory.hermant@calao-systems.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The flex binary uses fork() so it breaks on !MMU builds.
-Since we usually don't require flex in the target and the common
-scenario is that we just want libfl in staging reverse the options so
-that BR2_PACKAGE_FLEX just builds and install libfl.a and change the
-LIBFL option to BR2_PACKAGE_FLEX_BINARY to install the binary in the
-target.
+Snowball board is a low power, low cost Single Board Computer based
+on the ST-Ericsson Nova A9500 processor (Dual Cortex-A9 + MALI 400 GPU).
+More info at www.igloocommunity.org
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/flex/Config.in |   10 +++++-----
- package/flex/flex.mk   |   20 +++++---------------
- 2 files changed, 10 insertions(+), 20 deletions(-)
+The snowball board boots from eMMC, loads the linux kernel and mounts
+its root filesystem either from eMMC or from a microSD card.
+The user should prepare a microSD card with two partitions.
+On the fist partition he will install the kernel image and on the second
+one the root filesystem.
 
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index b10eb00..adef468 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -6,10 +6,10 @@ config BR2_PACKAGE_FLEX
- 
- 	  http://www.gnu.org/software/flex/
- 
--config BR2_PACKAGE_FLEX_LIBFL
--	bool "Install libfl.a under staging_dir/usr/lib"
--	default y
-+config BR2_PACKAGE_FLEX_BINARY
-+	bool "Install tool in the target"
-+	# needs fork()
-+	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_FLEX
- 	help
--	  Install libfl.a under staging_dir/usr/lib for further development
--	  on a host machine.
-+	  Install the flex binary tool in the target filesystem.
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 2599cdc..0c1ed5a 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -16,30 +16,20 @@ FLEX_DEPENDENCIES = \
- # we don't have a host-gettext/libintl
- HOST_FLEX_DEPENDENCIES =
- 
-+ifeq ($(BR2_PACKAGE_FLEX_BINARY),y)
- # lex -> flex
- define FLEX_INSTALL_LEX
- 	cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
- endef
--
--define FLEX_UNINSTALL_LEX
--	-rm $(TARGET_DIR)/usr/bin/lex
--endef
--
- FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
--FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LEX
- 
--# libfl installation
--ifeq ($(BR2_PACKAGE_FLEX_LIBFL),y)
--define FLEX_INSTALL_LIBFL
--	install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
--endef
-+else
- 
--define FLEX_UNINSTALL_LIBFL
--	-rm $(STAGING_DIR)/lib/libfl.a
-+define FLEX_DISABLE_PROGRAM
-+	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
- endef
-+FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
- 
--FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LIBFL
--FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LIBFL
- endif
- 
- $(eval $(autotools-package))
+TO DO:
+
+* Add the GPS support.
+* Add the possibility to build an eMMC image directly from buildroot.
+* Add the riff tool package
+
+Gregory Hermant (6):
+  snowball-hdmiservice: new package
+  ux500-firmware: new package
+  Add board files for snowball
+  Add init script files for snowball board
+  bluez-utils: add support for the ST-Ericsson cg2900 combo controller
+  Add config file for the snowball board
+
+ board/calao/snowball/linux-3.4.patch               |   45 +++++++++
+ configs/calao_snowball_defconfig                   |   24 +++++
+ package/Config.in                                  |    3 +
+ ...tils-4.101-enable_cg2900_on_upstream_4.91.patch |  106 ++++++++++++++++++++
+ package/snowball-hdmiservice/Config.in             |   10 ++
+ .../snowball-hdmiservice/snowball-hdmiservice.mk   |   41 ++++++++
+ package/snowball-init/Config.in                    |   14 +++
+ package/snowball-init/snowball-init.mk             |   15 +++
+ package/ux500-firmware/Config.in                   |    7 ++
+ package/ux500-firmware/ux500-firmware.mk           |   22 ++++
+ 10 files changed, 287 insertions(+)
+ create mode 100644 board/calao/snowball/linux-3.4.patch
+ create mode 100644 configs/calao_snowball_defconfig
+ create mode 100644 package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch
+ create mode 100644 package/snowball-hdmiservice/Config.in
+ create mode 100644 package/snowball-hdmiservice/snowball-hdmiservice.mk
+ create mode 100644 package/snowball-init/Config.in
+ create mode 100644 package/snowball-init/snowball-init.mk
+ create mode 100644 package/ux500-firmware/Config.in
+ create mode 100644 package/ux500-firmware/ux500-firmware.mk
+
 -- 
-1.7.8.6
+1.7.9.5
