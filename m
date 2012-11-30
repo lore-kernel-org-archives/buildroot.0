@@ -1,49 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 08:02:15 -0800
-Subject: [Buildroot] [git commit] Add config file for the snowball board
-Message-ID: <20121203145715.55FC199808@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 12:17:08 -0800
+Subject: [Buildroot] [git commit] perl: fix configure step
+Message-ID: <20121203145716.A100599848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd1b89f9c97660a8c0c5c2e7dedf9ef577ec3ac8
+commit: http://git.buildroot.net/buildroot/commit/?id=9ba19df16ab9da681c2e5be2f2c7693c24ed0d8d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+Configure -A symbol=val generates a extra space in config.sh,
+which causes failure like this :
+    Building Module-Runtime-0.013
+    Unknown OS type ' linux' - using default settings
+
+[Arnout: use -A define:foo instead of patching config.sh]
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/calao_snowball_defconfig |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ package/perl/perl.mk |   16 ++++++++--------
+ 1 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
-new file mode 100644
-index 0000000..360ed51
---- /dev/null
-+++ b/configs/calao_snowball_defconfig
-@@ -0,0 +1,24 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_GCC_VERSION_4_7_X=y
-+# BR2_SOFT_FLOAT is not set
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_VFP_FLOAT=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_SNOWBALL_HDMISERVICE=y
-+BR2_PACKAGE_LIBNL=y
-+BR2_PACKAGE_SNOWBALL_INIT=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_TARGET_ROOTFS_TAR_GZIP=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="snowball"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
-+BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
-+BR2_LINUX_KERNEL_DEFCONFIG="u8500"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0893eb5..391047d 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -55,14 +55,14 @@ PERL_CONF_OPT = \
+ 	--target-tools-prefix=$(TARGET_CROSS) \
+ 	--prefix=/usr \
+ 	-Dld="$(TARGET_CC_NOCCACHE)" \
+-	-A ccflags="$(TARGET_CFLAGS)" \
+-	-A ldflags="$(TARGET_LDFLAGS) -lm" \
+-	-A mydomain="" \
+-	-A myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
+-	-A myuname="Buildroot $(BR2_VERSION_FULL)" \
+-	-A osname=linux \
+-	-A osvers=$(LINUX_VERSION) \
+-	-A perladmin=root
++	-Dccflags="$(TARGET_CFLAGS)" \
++	-Dldflags="$(TARGET_LDFLAGS) -lm" \
++	-A define:mydomain="" \
++	-A define:myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
++	-A define:myuname="Buildroot $(BR2_VERSION_FULL)" \
++	-A define:osname=linux \
++	-A define:osvers=$(LINUX_VERSION) \
++	-A define:perladmin=root
+ 
+ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+     PERL_CONF_OPT += -Dusedevel
