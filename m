@@ -1,62 +1,31 @@
-From: blunderer at blunderer.org <blunderer@blunderer.org>
-Date: Fri, 30 Nov 2012 04:20:58 +0100
-Subject: [Buildroot] [PATCH v2] libroxml: bump version to 2.2.1
-In-Reply-To: <[PATCH] libroxml: bump version to 2.2.1>
-References: <[PATCH] libroxml: bump version to 2.2.1>
-Message-ID: <1354245658-7675-1-git-send-email-blunderer@blunderer.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 30 Nov 2012 06:21:40 +0100
+Subject: [Buildroot] PATCH > To integrate pycrypto into Buildroot
+In-Reply-To: <07407110F438184D9D87521726FF42D41F65F296@M357PRD2.ad.bcc.qld.gov.au>
+References: <07407110F438184D9D87521726FF42D41F64FE15@M357PRD1.ad.bcc.qld.gov.au>
+ <50B67E54.4060006@mind.be>
+ <07407110F438184D9D87521726FF42D41F65F296@M357PRD2.ad.bcc.qld.gov.au>
+Message-ID: <CAHXCMMJdt8Kicd0GObuNNFnOibo9US1NM=1euW7o_u0Cnh1=xQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Tristan Lelong <tristan.lelong@blunderer.org>
+Hi Noel,
 
-Thank you Arnout for your quick answer.
-I regenerated the patch according to your advice.
+2012/11/30 Noel Roberts <Noel.Roberts@brisbane.qld.gov.au>:
+> Good day Arnout
+>
+> Grrrr, git send-email has issues with my virtual machine/proxy configuration. Not getting decent error messages and googling didn't help either. Not sure which part isn't working, just that SMPT couldn't initialize correctly.
+>
+To use git send-email you may need some additional Perl packages:
+net-smtp-ssl, authen-sasl.
+(see the Example section in:
+http://www.kernel.org/pub/software/scm/git/docs/git-send-email.html)
+
 
 Regards,
 
-Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
----
- .../{libroxml-2.2.0-werror.patch => libroxml-werror.patch}       |    6 +++---
- package/libroxml/libroxml.mk                                     |    2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
- rename package/libroxml/{libroxml-2.2.0-werror.patch => libroxml-werror.patch} (86%)
-
-diff --git a/package/libroxml/libroxml-2.2.0-werror.patch b/package/libroxml/libroxml-werror.patch
-similarity index 86%
-rename from package/libroxml/libroxml-2.2.0-werror.patch
-rename to package/libroxml/libroxml-werror.patch
-index a72f2a7..a99962f 100644
---- a/package/libroxml/libroxml-2.2.0-werror.patch
-+++ b/package/libroxml/libroxml-werror.patch
-@@ -7,10 +7,10 @@ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-  Makefile |    2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
--Index: libroxml-2.1.0/Makefile
-+Index: a/Makefile
- ===================================================================
----- libroxml-2.1.0.orig/Makefile
--+++ libroxml-2.1.0/Makefile
-+--- a/Makefile
-++++ b/Makefile
- @@ -41,7 +41,7 @@
-  
-  # options
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index 457a28a..d7ef6a4 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
-@@ -2,7 +2,7 @@
- # libroxml
- #
- 
--LIBROXML_VERSION = 2.2.0
-+LIBROXML_VERSION = 2.2.1
- LIBROXML_SITE = http://libroxml.googlecode.com/files
- LIBROXML_INSTALL_STAGING = YES
- 
 -- 
-1.7.10.4
+Sam
