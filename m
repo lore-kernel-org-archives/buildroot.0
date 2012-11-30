@@ -1,34 +1,34 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 30 Nov 2012 10:14:37 +0000
-Subject: [Buildroot] [PATCH 2/8] argus: add license information
+Date: Fri, 30 Nov 2012 10:14:38 +0000
+Subject: [Buildroot] [PATCH 3/8] beecrypt: add license information
 In-Reply-To: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
 References: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
-Message-ID: <1354270483-32356-3-git-send-email-spdawson@gmail.com>
+Message-ID: <1354270483-32356-4-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+From: Simon Dawson <simond@trainfx.com>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Simon Dawson <simond@trainfx.com>
 ---
- package/argus/argus.mk |    2 ++
+ package/beecrypt/beecrypt.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/argus/argus.mk b/package/argus/argus.mk
-index da7ecac..a4b5330 100644
---- a/package/argus/argus.mk
-+++ b/package/argus/argus.mk
-@@ -8,6 +8,8 @@ ARGUS_SOURCE:=argus_$(ARGUS_VERSION).orig.tar.gz
- ARGUS_PATCH:=argus_$(ARGUS_VERSION)-1.diff.gz
- ARGUS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/a/argus/
- ARGUS_DEPENDENCIES=libpcap
-+ARGUS_LICENSE = GPLv2+
-+ARGUS_LICENSE_FILES = COPYING
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index d165aee..a9cf133 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -7,6 +7,8 @@ BEECRYPT_VERSION = 4.2.1
+ BEECRYPT_SITE = http://downloads.sourceforge.net/project/beecrypt/beecrypt/$(BEECRYPT_VERSION)
+ BEECRYPT_AUTORECONF = YES
+ BEECRYPT_INSTALL_STAGING = YES
++BEECRYPT_LICENSE = LGPLv2.1+
++BEECRYPT_LICENSE_FILES = COPYING.LIB
  
- define ARGUS_DEBIAN_PATCH_APPLY
- 	if [ -d $(@D)/debian/patches ]; then \
+ # beecrypt contains C++ code that g++ 4.7 doesn't really
+ # like. Upstream does not seem to be really active, so workaround this
 -- 
 1.7.10.4
