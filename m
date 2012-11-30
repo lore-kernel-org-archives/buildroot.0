@@ -1,50 +1,77 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 08:02:15 -0800
-Subject: [Buildroot] [git commit branch/next] Add config file for the
-	snowball board
-Message-ID: <20121130160327.2563499369@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 07:59:16 -0800
+Subject: [Buildroot] [git commit branch/next] ux500-firmware: new package
+Message-ID: <20121130160325.F1F8A99369@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd1b89f9c97660a8c0c5c2e7dedf9ef577ec3ac8
+commit: http://git.buildroot.net/buildroot/commit/?id=367096b0e33913f47545ef8702eaa609960baa1f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ (with the calao_snowball_defconfig)
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/calao_snowball_defconfig |   24 ++++++++++++++++++++++++
- 1 files changed, 24 insertions(+), 0 deletions(-)
+ package/Config.in                        |    1 +
+ package/ux500-firmware/Config.in         |    7 +++++++
+ package/ux500-firmware/ux500-firmware.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 663a17b..c369f74 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -261,6 +261,7 @@ source "package/usb_modeswitch/Config.in"
+ source "package/usb_modeswitch_data/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/ux500-firmware/Config.in"
+ source "package/wipe/Config.in"
+ endmenu
+ 
+diff --git a/package/ux500-firmware/Config.in b/package/ux500-firmware/Config.in
 new file mode 100644
-index 0000000..360ed51
+index 0000000..7e8a94b
 --- /dev/null
-+++ b/configs/calao_snowball_defconfig
-@@ -0,0 +1,24 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_GCC_VERSION_4_7_X=y
-+# BR2_SOFT_FLOAT is not set
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_VFP_FLOAT=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_SNOWBALL_HDMISERVICE=y
-+BR2_PACKAGE_LIBNL=y
-+BR2_PACKAGE_SNOWBALL_INIT=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_TARGET_ROOTFS_TAR_GZIP=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="snowball"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
-+BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
-+BR2_LINUX_KERNEL_DEFCONFIG="u8500"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
++++ b/package/ux500-firmware/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_UX500_FIRMWARE
++	bool "ux500-firmware"
++	help
++	  This package provides various binary firmware files (closed binary blobs)
++	  for the Azurewave AW-NH580 combo module (wifi, bt, gps).
++
++	  https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
+diff --git a/package/ux500-firmware/ux500-firmware.mk b/package/ux500-firmware/ux500-firmware.mk
+new file mode 100644
+index 0000000..d354468
+--- /dev/null
++++ b/package/ux500-firmware/ux500-firmware.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# ux500-firmware
++#
++#############################################################
++UX500_FIRMWARE_VERSION = 1.1.3-6
++UX500_FIRMWARE_SOURCE = ux500-firmware_$(UX500_FIRMWARE_VERSION)linaro1.tar.gz
++UX500_FIRMWARE_SITE = https://launchpad.net/~igloocommunity-maintainers/+archive/snowball/+files/
++UX500_FIRMWARE_LICENSE = Snowball click-wrap license
++UX500_FIRMWARE_LICENSE_FILES = license.txt 
++UX500_FIRMWARE_REDISTRIBUTE = NO
++
++# The CG2900 linux driver has to load firmware named CG29XX_* but the firmware
++# filenames contained in this package are CG2900_* hence the code below
++define UX500_FIRMWARE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	for f in $(TARGET_DIR)/lib/firmware/CG2900* ; do \
++		mv $$f $${f/CG2900/CG29XX}; \
++	done
++endef
++
++$(eval $(generic-package))
