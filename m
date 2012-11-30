@@ -1,25 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 14:01:56 -0800
-Subject: [Buildroot] [PATCH] Makefile: fix thread libraries stripping
-In-Reply-To: <1353431891-30930-1-git-send-email-rbraun@sceen.net> (Richard
- Braun's message of "Tue, 20 Nov 2012 18:18:11 +0100")
-References: <1353431891-30930-1-git-send-email-rbraun@sceen.net>
-Message-ID: <87624m92cr.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Nov 2012 14:31:33 -0800
+Subject: [Buildroot] [PATCH v2] python2: bump to 2.7.3
+In-Reply-To: <1354311995-21598-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Fri, 30 Nov 2012 22:46:27 +0100")
+References: <1354311995-21598-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <871ufa90ze.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Richard" == Richard Braun <rbraun@sceen.net> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- Richard> Strip libthread_db the same as any other library, but strip libpthread
- Richard> with --strip-debug. See the relevant mailing list discussion [1] for
- Richard> additional details.
+ Samuel> Pyhton 2.7.3 includes several security fixes.
+ Samuel> See: http://www.python.org/download/releases/2.7.3/
 
- Richard> [1] http://lists.busybox.net/pipermail/buildroot/2012-October/060126.html
+ Samuel> Also fixes the patch making sqlite optional and remove the
 
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
