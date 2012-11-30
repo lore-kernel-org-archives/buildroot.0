@@ -1,24 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 14:31:33 -0800
-Subject: [Buildroot] [PATCH v2] python2: bump to 2.7.3
-In-Reply-To: <1354311995-21598-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Fri, 30 Nov 2012 22:46:27 +0100")
-References: <1354311995-21598-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <871ufa90ze.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Nov 2012 13:57:49 -0800
+Subject: [Buildroot] [git commit] toolchain-external: fix installation of
+	libthread_db
+Message-ID: <20121130223213.8FE73995BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=696365f69bdf6261e8b312f98bdc177754bd5517
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Samuel> Pyhton 2.7.3 includes several security fixes.
- Samuel> See: http://www.python.org/download/releases/2.7.3/
+Whatever the gdbserver source, as long as it's installed on the target,
+assume it requires libthread_db.
 
- Samuel> Also fixes the patch making sqlite optional and remove the
+Signed-off-by: Richard Braun <rbraun@sceen.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-external/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index a6025db..8ce0a84 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -61,7 +61,7 @@ endif
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ LIB_EXTERNAL_LIBS+=libpthread.so
+-ifeq ($(BR2_PACKAGE_GDB_SERVER),y)
++ifneq ($(BR2_PACKAGE_GDB_SERVER)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
+ LIB_EXTERNAL_LIBS+=libthread_db.so
+ endif # gdbserver
+ endif # ! no threads
