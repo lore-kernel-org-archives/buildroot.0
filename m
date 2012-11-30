@@ -1,32 +1,131 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 14:28:13 -0800
-Subject: [Buildroot] [git commit] fluxbox: add license info
-Message-ID: <20121130223214.6B776820F7@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 14:30:08 -0800
+Subject: [Buildroot] [git commit] matchbox packages: add license info
+Message-ID: <20121130223215.9331799340@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c788354145b5c10a993c1c9afb2905fa64ce5e96
+commit: http://git.buildroot.net/buildroot/commit/?id=7364f0cb2288262786e38401c91a47a01ba024cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/fluxbox/fluxbox.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ .../matchbox/matchbox-common/matchbox-common.mk    |    2 ++
+ .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    2 ++
+ .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |    2 ++
+ .../matchbox-keyboard/matchbox-keyboard.mk         |    2 ++
+ package/matchbox/matchbox-lib/matchbox-lib.mk      |    2 ++
+ package/matchbox/matchbox-panel/matchbox-panel.mk  |    2 ++
+ .../matchbox-startup-monitor.mk                    |    2 ++
+ package/matchbox/matchbox-wm/matchbox-wm.mk        |    3 +++
+ 8 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
-index 15136c9..356c5a2 100644
---- a/package/fluxbox/fluxbox.mk
-+++ b/package/fluxbox/fluxbox.mk
-@@ -7,6 +7,8 @@
- FLUXBOX_VERSION = 1.3.2
- FLUXBOX_SOURCE = fluxbox-$(FLUXBOX_VERSION).tar.bz2
- FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBOX_VERSION)
-+FLUXBOX_LICENSE = MIT
-+FLUXBOX_LICENSE_FILES = COPYING
+diff --git a/package/matchbox/matchbox-common/matchbox-common.mk b/package/matchbox/matchbox-common/matchbox-common.mk
+index 3248e74..89c00c2 100644
+--- a/package/matchbox/matchbox-common/matchbox-common.mk
++++ b/package/matchbox/matchbox-common/matchbox-common.mk
+@@ -7,6 +7,8 @@ MATCHBOX_COMMON_VERSION_MAJOR = 0.9
+ MATCHBOX_COMMON_VERSION = $(MATCHBOX_COMMON_VERSION_MAJOR).1
+ MATCHBOX_COMMON_SOURCE = matchbox-common-$(MATCHBOX_COMMON_VERSION).tar.bz2
+ MATCHBOX_COMMON_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
++MATCHBOX_COMMON_LICENSE = GPLv2+
++MATCHBOX_COMMON_LICENSE_FILES = COPYING
+ MATCHBOX_COMMON_DEPENDENCIES = matchbox-lib
  
- FLUXBOX_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
- 		   --x-libraries=$(STAGING_DIR)/usr/lib
+ ifeq ($(strip $(BR2_PACKAGE_MATCHBOX_COMMON_PDA)),y)
+diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+index 2ef29c6..d180d1d 100644
+--- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
++++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
+@@ -8,6 +8,8 @@ MATCHBOX_DESKTOP_VERSION_MAJOR = 0.9
+ MATCHBOX_DESKTOP_VERSION = $(MATCHBOX_DESKTOP_VERSION_MAJOR).1
+ MATCHBOX_DESKTOP_SOURCE = matchbox-desktop-$(MATCHBOX_DESKTOP_VERSION).tar.bz2
+ MATCHBOX_DESKTOP_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-desktop/$(MATCHBOX_DESKTOP_VERSION_MAJOR)
++MATCHBOX_DESKTOP_LICENSE = GPLv2+
++MATCHBOX_DESKTOP_LICENSE_FILES = COPYING
+ MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
+ MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
+ 
+diff --git a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
+index 7a6ac00..c3165e0 100644
+--- a/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
++++ b/package/matchbox/matchbox-fakekey/matchbox-fakekey.mk
+@@ -7,6 +7,8 @@
+ MATCHBOX_FAKEKEY_VERSION = 0.1
+ MATCHBOX_FAKEKEY_SOURCE = libfakekey-$(MATCHBOX_FAKEKEY_VERSION).tar.bz2
+ MATCHBOX_FAKEKEY_SITE = http://downloads.yoctoproject.org/releases/matchbox/libfakekey/$(MATCHBOX_FAKEKEY_VERSION)
++MATCHBOX_FAKEKEY_LICENSE = GPLv2+
++MATCHBOX_FAKEKEY_LICENSE_FILES = COPYING
+ MATCHBOX_FAKEKEY_INSTALL_STAGING = YES
+ MATCHBOX_FAKEKEY_DEPENDENCIES = matchbox-lib xlib_libXtst
+ MATCHBOX_FAKEKEY_CONF_OPT = --enable-expat
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+index 44aab5c..97e3a36 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+@@ -7,6 +7,8 @@
+ MATCHBOX_KEYBOARD_VERSION = 0.1
+ MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz2
+ MATCHBOX_KEYBOARD_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
++MATCHBOX_KEYBOARD_LICENSE = GPLv2+
++MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING
+ MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
+ 
+ # Workaround bug in configure script
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
+index 6b6025a..7730d94 100644
+--- a/package/matchbox/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
+@@ -7,6 +7,8 @@
+ MATCHBOX_LIB_VERSION = 1.9
+ MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
+ MATCHBOX_LIB_SITE = http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/$(MATCHBOX_LIB_VERSION)
++MATCHBOX_LIB_LICENSE = LGPLv2.1
++MATCHBOX_LIB_LICENSE_FILES = COPYING
+ MATCHBOX_LIB_INSTALL_STAGING = YES
+ MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
+ MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
+diff --git a/package/matchbox/matchbox-panel/matchbox-panel.mk b/package/matchbox/matchbox-panel/matchbox-panel.mk
+index 0e980ef..c9ef3f4 100644
+--- a/package/matchbox/matchbox-panel/matchbox-panel.mk
++++ b/package/matchbox/matchbox-panel/matchbox-panel.mk
+@@ -7,6 +7,8 @@ MATCHBOX_PANEL_VERSION_MAJOR = 0.9
+ MATCHBOX_PANEL_VERSION = $(MATCHBOX_PANEL_VERSION_MAJOR).3
+ MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
+ MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
++MATCHBOX_PANEL_LICENSE = GPLv2+
++MATCHBOX_PANEL_LICENSE_FILES = COPYING
+ MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
+ MATCHBOX_PANEL_CONF_OPT = --enable-expat
+ 
+diff --git a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
+index 6b30e80..18c3b13 100644
+--- a/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
++++ b/package/matchbox/matchbox-startup-monitor/matchbox-startup-monitor.mk
+@@ -7,6 +7,8 @@
+ MATCHBOX_STARTUP_MONITOR_VERSION = 0.1
+ MATCHBOX_STARTUP_MONITOR_SOURCE = mb-applet-startup-monitor-$(MATCHBOX_STARTUP_MONITOR_VERSION).tar.bz2
+ MATCHBOX_STARTUP_MONITOR_SITE = http://downloads.yoctoproject.org/releases/matchbox/mb-applet-startup-monitor/$(MATCHBOX_STARTUP_MONITOR_VERSION)
++MATCHBOX_STARTUP_MONITOR_LICENSE = GPLv2+
++MATCHBOX_STARTUP_MONITOR_LICENSE_FILES = COPYING
+ MATCHBOX_STARTUP_MONITOR_DEPENDENCIES = matchbox-lib startup-notification
+ MATCHBOX_STARTUP_MONITOR_CONF_OPT =
+ 
+diff --git a/package/matchbox/matchbox-wm/matchbox-wm.mk b/package/matchbox/matchbox-wm/matchbox-wm.mk
+index b04cf76..4c556e5 100644
+--- a/package/matchbox/matchbox-wm/matchbox-wm.mk
++++ b/package/matchbox/matchbox-wm/matchbox-wm.mk
+@@ -7,6 +7,9 @@
+ MATCHBOX_WM_VERSION = 1.2
+ MATCHBOX_WM_SOURCE = matchbox-window-manager-$(MATCHBOX_WM_VERSION).tar.bz2
+ MATCHBOX_WM_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-window-manager/$(MATCHBOX_WM_VERSION)
++MATCHBOX_WM_LICENSE = GPLv2+
++MATCHBOX_WM_LICENSE_FILES = COPYING
++
+ MATCHBOX_WM_DEPENDENCIES = matchbox-lib
+ MATCHBOX_WM_CONF_OPT = --enable-expat
+ 
