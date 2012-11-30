@@ -1,135 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 08:01:55 -0800
-Subject: [Buildroot] [git commit branch/next] bluez-utils: add support for
-	the ST-Ericsson cg2900 combo controller
-Message-ID: <20121130160326.CA44C9951A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 30 Nov 2012 17:38:37 +0100
+Subject: [Buildroot] [PATCH 03/51] package/dtc: add option to install
+	programs
+In-Reply-To: <50B77872.80005@mind.be>
+References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
+ <1354146890-27380-4-git-send-email-yann.morin.1998@free.fr>
+ <50B77872.80005@mind.be>
+Message-ID: <201211301738.37463.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ca2a3bb51ff8f69030b12bc67cefde9846348c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Arnout, All,
 
-Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (with the calao_snowball_defconfig)
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...tils-4.101-enable_cg2900_on_upstream_4.91.patch |  106 ++++++++++++++++++++
- 1 files changed, 106 insertions(+), 0 deletions(-)
+On Thursday 29 November 2012 Arnout Vandecappelle wrote:
+>   I (and I think Peter as well) prefer the more verbose
+> 
+> ifeq ($(BR2_PACKAGE_DTC_BINARY),y)
+> DTC_INSTALL_RULE = install
+> else
+> DTC_BUILD_RULE   = libfdt
+> DTC_INSTALL_RULE = libfdt_install
+> endif
 
-diff --git a/package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch b/package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch
-new file mode 100644
-index 0000000..e80af5f
---- /dev/null
-+++ b/package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch
-@@ -0,0 +1,106 @@
-+From ac7992081abba87627c9e91735b3309584b48585 Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Wed, 14 Nov 2012 14:27:02 +0100
-+Subject: [PATCH] add support for the ST-Ericsson CG2900 GPS FM Bluetooth
-+ combo controller
-+
-+
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ tools/hciattach.c |   22 +++++++++++++++-------
-+ tools/hciattach.h |    1 +
-+ 2 files changed, 16 insertions(+), 7 deletions(-)
-+
-+diff --git a/tools/hciattach.c b/tools/hciattach.c
-+index e4d5aa1..7f08243 100644
-+--- a/tools/hciattach.c
-++++ b/tools/hciattach.c
-+@@ -1066,6 +1066,11 @@ struct uart_t uart[] = {
-+ 	{ "texasalt",   0x0000, 0x0000, HCI_UART_LL,   115200, 115200,
-+ 				FLOW_CTL, DISABLE_PM, NULL, texasalt, NULL   },
-+ 
-++	/* ST-Ericsson CG2900 GPS FM Bluetooth combo controller */
-++	{ "cg2900",     0x0000, 0x0000, HCI_UART_STE,  115200, 115200,
-++				FLOW_CTL, DISABLE_PM, NULL, NULL     },
-++
-++
-+ 	/* ST Microelectronics minikits based on STLC2410/STLC2415 */
-+ 	{ "st",         0x0000, 0x0000, HCI_UART_H4,    57600, 115200,
-+ 				FLOW_CTL, DISABLE_PM,  NULL, st       },
-+@@ -1157,10 +1162,10 @@ static struct uart_t * get_by_type(char *type)
-+ }
-+ 
-+ /* Initialize UART driver */
-+-static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
-++static int init_uart(char *dev, struct uart_t *u, int send_break, int raw, int line_disc)
-+ {
-+ 	struct termios ti;
-+-	int fd, i;
-++	int fd;
-+ 	unsigned long flags = 0;
-+ 
-+ 	if (raw)
-+@@ -1217,8 +1222,7 @@ static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
-+ 	}
-+ 
-+ 	/* Set TTY to N_HCI line discipline */
-+-	i = N_HCI;
-+-	if (ioctl(fd, TIOCSETD, &i) < 0) {
-++	if (ioctl(fd, TIOCSETD, &line_disc) < 0) {
-+ 		perror("Can't set line discipline");
-+ 		return -1;
-+ 	}
-+@@ -1243,7 +1247,7 @@ static void usage(void)
-+ {
-+ 	printf("hciattach - HCI UART driver initialization utility\n");
-+ 	printf("Usage:\n");
-+-	printf("\thciattach [-n] [-p] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
-++	printf("\thciattach [-n] [-p] [-a line_disc_nr] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
-+ 	printf("\thciattach -l\n");
-+ }
-+ 
-+@@ -1252,6 +1256,7 @@ int main(int argc, char *argv[])
-+ 	struct uart_t *u = NULL;
-+ 	int detach, printpid, raw, opt, i, n, ld, err;
-+ 	int to = 10;
-++	int line_disc = N_HCI;
-+ 	int init_speed = 0;
-+ 	int send_break = 0;
-+ 	pid_t pid;
-+@@ -1264,8 +1269,11 @@ int main(int argc, char *argv[])
-+ 	printpid = 0;
-+ 	raw = 0;
-+ 
-+-	while ((opt=getopt(argc, argv, "bnpt:s:lr")) != EOF) {
-++	while ((opt=getopt(argc, argv, "bnpt:s:lra:")) != EOF) {
-+ 		switch(opt) {
-++		case 'a':
-++                        line_disc = atoi(optarg);
-++                        break;
-+ 		case 'b':
-+ 			send_break = 1;
-+ 			break;
-+@@ -1381,7 +1389,7 @@ int main(int argc, char *argv[])
-+ 	alarm(to);
-+ 	bcsp_max_retries = to;
-+ 
-+-	n = init_uart(dev, u, send_break, raw);
-++	n = init_uart(dev, u, send_break, raw, line_disc);
-+ 	if (n < 0) {
-+ 		perror("Can't initialize device");
-+ 		exit(1);
-+diff --git a/tools/hciattach.h b/tools/hciattach.h
-+index fed0d11..09b534d 100644
-+--- a/tools/hciattach.h
-++++ b/tools/hciattach.h
-+@@ -39,6 +39,7 @@
-+ #define HCI_UART_H4DS	3
-+ #define HCI_UART_LL	4
-+ #define HCI_UART_ATH3K  5
-++#define HCI_UART_STE	6
-+ 
-+ #define HCI_UART_RAW_DEVICE	0
-+ 
-+-- 
-+1.7.9.5
-+
+Yes, it's easier to read.
+
+>   I would also call it _TARGET instead of _RULE.
+
+Why? DTC_INSTALL_TARGET already exists, and is meant to specify if the
+package is to be installed in tharget.
+
+OTOH, DTC_INSTALL_RULE (or DTC_INSTALL_MAKERULE, but it's ugly) is more
+explicit: it is the make rule to install the package.
+
+>   I would prefer the same rule for staging and target install:
+> - it doesn't hurt to have the executable in staging;
+> - it's easier to read if it's the same;
+
+Well, not too fond of it: staging serves a different purpose than target,
+so I prefer separating the rules. Peter: arbitration, please! ;-)
+
+> - when we finally get around to creating $(make-package), the default install
+> commands will be
+> $(MAKE) -C $(@D) DESTDIR=... $($(PKG)_INSTALL_TARGET)
+> (where _INSTALL_TARGET is the same for target and staging and defaults to
+> 'install')
+
+I was not aware of the make-package upcoming infra. However:
+
+- as already said above: $(PKG)_INSTALL_TARGET is already used.
+- I'd suggest using _RULE (or _MAKERULE) as the suffix
+- hopefully, we'll have a way to specify different rules for straging
+  and target.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
