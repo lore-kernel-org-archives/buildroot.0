@@ -1,38 +1,87 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 11:48:52 -0800
-Subject: [Buildroot] [git commit] Add /var/www to device table
-Message-ID: <20121130195702.6392E8017A@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 11:52:38 -0800
+Subject: [Buildroot] [git commit] flex: fix build for nommu systems
+Message-ID: <20121130195702.C15048017A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2af1822252af1a70a5b199921ede15572b46d0e
+commit: http://git.buildroot.net/buildroot/commit/?id=bd72a13a4ca3033bacbaf9e9a2b424acf149f83d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The /var/www directory is listed in /etc/passwd in the skeleton target
-filesystem as the home directory of the www-data user (uid 33).
+The flex binary uses fork() so it breaks on !MMU builds.
+Since we usually don't require flex in the target and the common
+scenario is that we just want libfl in staging reverse the options so
+that BR2_PACKAGE_FLEX just builds and install libfl.a and change the
+LIBFL option to BR2_PACKAGE_FLEX_BINARY to install the binary in the
+target.
 
-In the final target filesystem, /var/www should be owned by www-data. This
-is important for the lighttpd package, for example.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- system/device_table.txt |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/flex/Config.in |   10 +++++-----
+ package/flex/flex.mk   |   20 +++++---------------
+ 2 files changed, 10 insertions(+), 20 deletions(-)
 
-diff --git a/system/device_table.txt b/system/device_table.txt
-index fc397a9..421728b 100644
---- a/system/device_table.txt
-+++ b/system/device_table.txt
-@@ -10,6 +10,7 @@
- /tmp					d	1777	0	0	-	-	-	-	-
- /etc					d	755	0	0	-	-	-	-	-
- /home/default				d	2755	1000	1000	-	-	-	-	-
-+/var/www				d	755	33	33	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
- /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+diff --git a/package/flex/Config.in b/package/flex/Config.in
+index b10eb00..adef468 100644
+--- a/package/flex/Config.in
++++ b/package/flex/Config.in
+@@ -6,10 +6,10 @@ config BR2_PACKAGE_FLEX
+ 
+ 	  http://www.gnu.org/software/flex/
+ 
+-config BR2_PACKAGE_FLEX_LIBFL
+-	bool "Install libfl.a under staging_dir/usr/lib"
+-	default y
++config BR2_PACKAGE_FLEX_BINARY
++	bool "Install tool in the target"
++	# needs fork()
++	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_FLEX
+ 	help
+-	  Install libfl.a under staging_dir/usr/lib for further development
+-	  on a host machine.
++	  Install the flex binary tool in the target filesystem.
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 2599cdc..0c1ed5a 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -16,30 +16,20 @@ FLEX_DEPENDENCIES = \
+ # we don't have a host-gettext/libintl
+ HOST_FLEX_DEPENDENCIES =
+ 
++ifeq ($(BR2_PACKAGE_FLEX_BINARY),y)
+ # lex -> flex
+ define FLEX_INSTALL_LEX
+ 	cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
+ endef
+-
+-define FLEX_UNINSTALL_LEX
+-	-rm $(TARGET_DIR)/usr/bin/lex
+-endef
+-
+ FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
+-FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LEX
+ 
+-# libfl installation
+-ifeq ($(BR2_PACKAGE_FLEX_LIBFL),y)
+-define FLEX_INSTALL_LIBFL
+-	install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
+-endef
++else
+ 
+-define FLEX_UNINSTALL_LIBFL
+-	-rm $(STAGING_DIR)/lib/libfl.a
++define FLEX_DISABLE_PROGRAM
++	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
+ endef
++FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
+ 
+-FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LIBFL
+-FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LIBFL
+ endif
+ 
+ $(eval $(autotools-package))
