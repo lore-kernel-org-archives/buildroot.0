@@ -1,36 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 11:54:03 -0800
-Subject: [Buildroot] [git commit] matchbox-lib: Append -lX11 to the linker
-Message-ID: <20121130195703.2F8608017A@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 30 Nov 2012 20:57:15 +0100
+Subject: [Buildroot] [PATCH 17/33] matchbox packages: fix broken urls
+In-Reply-To: <87fw3rayff.fsf@dell.be.48ers.dk>
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+ <1353543503-8952-18-git-send-email-s.martin49@gmail.com>
+ <87fw3rayff.fsf@dell.be.48ers.dk>
+Message-ID: <CAHXCMML9f9eM7odmYWDrztZeK_ivwNeZDz5LWFMbhRV_xxFagg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc6da8b28ef6b6dde2eaaaf40d21f366508221ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2012/11/30 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+[...]
+>  Samuel> -MATCHBOX_COMMON_SITE = http://matchbox-project.org/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION)
+>  Samuel> +MATCHBOX_COMMON_SITE = http://projects.o-hand.com/matchbox/sources/matchbox-common/$(MATCHBOX_COMMON_VERSION_MAJOR)
+>
+> Hmm, projects.o-hand.com doesn't seem to exist?
+At least, it did...
 
-Fixes building with binutils-2.22
-http://autobuild.buildroot.net/results/b4b26dd9c7d7bebe45638ba125fb49a5f5d0cc14/build-end.log
+>
+> host -a projects.o-hand.com
+> Trying "projects.o-hand.com"
+> Received 105 bytes from 64.71.0.60#53 in 59 ms
+> Trying "projects.o-hand.com"
+> Host projects.o-hand.com not found: 3(NXDOMAIN)
+Indeed... it seems pretty down :-(
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/matchbox/matchbox-lib/matchbox-lib.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Luckily, by the time this patch tried to be merged it got down!
 
-diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
-index de11dfc..339f512 100644
---- a/package/matchbox/matchbox-lib/matchbox-lib.mk
-+++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
-@@ -10,6 +10,7 @@ MATCHBOX_LIB_SITE = http://matchbox-project.org/sources/libmatchbox/$(MATCHBOX_L
- MATCHBOX_LIB_INSTALL_STAGING = YES
- MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
- MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
-+MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
- 
- define MATCHBOX_LIB_POST_INSTALL_FIXES
-  $(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
+Well, I'll switch to some alive location and repost.
+
+
+Regards,
+
+-- 
+Sam
