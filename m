@@ -1,43 +1,49 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 30 Nov 2012 17:56:25 +0000
-Subject: [Buildroot] [PATCH v5] Add /var/www to device table
-Message-ID: <1354298185-2974-1-git-send-email-spdawson@gmail.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Fri, 30 Nov 2012 19:31:13 +0100
+Subject: [Buildroot] can-utils or site method git broken
+Message-ID: <50B8FB71.4000309@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi,
 
-The /var/www directory is listed in /etc/passwd in the skeleton target
-filesystem as the home directory of the www-data user (uid 33).
+I am currently trying to build can-utils without success. Obviously,
+getting the required commit from gitorious.org fails. I verified that I
+can clone the repo by hand and that it contains the right hash.
 
-In the final target filesystem, /var/www should be owned by www-data. This
-is important for the lighttpd package, for example.
+Configuration: beaglebone_defconfig, added can-utils, branch master from
+today (82583bf4), Ubuntu 10.04 LTS.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- v5: Rework for relocation device table file (now under system)
- v4: Resend.
- v3: Added Acked-by information.
- v2: Removed redundant TAB from line added device table file.
+Kind regards
 
- system/device_table.txt |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/system/device_table.txt b/system/device_table.txt
-index fc397a9..421728b 100644
---- a/system/device_table.txt
-+++ b/system/device_table.txt
-@@ -10,6 +10,7 @@
- /tmp					d	1777	0	0	-	-	-	-	-
- /etc					d	755	0	0	-	-	-	-	-
- /home/default				d	2755	1000	1000	-	-	-	-	-
-+/var/www				d	755	33	33	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
- /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+Stephan
+> >>> can-utils 836d3cc0122ce31a1b732d369cbd27b690c3110f Downloading
+> Initialized empty Git repository in
+> /home/stephan/Dokumente/dl/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f/
+> remote: Counting objects: 62, done.
+> remote: Compressing objects: 100% (51/51), done.
+> remote: Total 62 (delta 10), reused 22 (delta 0)
+> Receiving objects: 100% (62/62), 100.37 KiB, done.
+> Resolving deltas: 100% (10/10), done.
+> warning: Remote branch 836d3cc0122ce31a1b732d369cbd27b690c3110f not
+> found in upstream origin, using HEAD instead
+> fatal: not a tree object
+> >>> can-utils 836d3cc0122ce31a1b732d369cbd27b690c3110f Extracting
+> gzip -d -c
+> /home/stephan/Dokumente/dl/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f.tar.gz
+> | tar --strip-components=1 -C
+> /home/stephan/Dokumente/BeagleBone/buildroot/output/build/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f 
+> -xf -
+> tar: This does not look like a tar archive
+> tar: Exiting with failure status due to previous errors
+> make: ***
+> [/home/stephan/Dokumente/BeagleBone/buildroot/output/build/can-utils-836d3cc0122ce31a1b732d369cbd27b690c3110f/.stamp_extracted]
+> Error 2
 -- 
-1.7.10.4
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
