@@ -1,75 +1,50 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 08:00:55 -0800
-Subject: [Buildroot] [git commit branch/next] Add init script files for
+Date: Fri, 30 Nov 2012 08:02:15 -0800
+Subject: [Buildroot] [git commit branch/next] Add config file for the
 	snowball board
-Message-ID: <20121130160326.88B259950E@busybox.osuosl.org>
+Message-ID: <20121130160327.2563499369@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d4b1e4c5d98cbaafb8473c29d06b0d472cb34df
+commit: http://git.buildroot.net/buildroot/commit/?id=fd1b89f9c97660a8c0c5c2e7dedf9ef577ec3ac8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                      |    1 +
- package/snowball-init/Config.in        |   14 ++++++++++++++
- package/snowball-init/snowball-init.mk |   15 +++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ configs/calao_snowball_defconfig |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c369f74..9c23ae3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -554,6 +554,7 @@ source "package/empty/Config.in"
- source "package/googlefontdirectory/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
-+source "package/snowball-init/Config.in"
- source "package/sound-theme-borealis/Config.in"
- source "package/sound-theme-freedesktop/Config.in"
- endmenu
-diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
+diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
 new file mode 100644
-index 0000000..99abb35
+index 0000000..360ed51
 --- /dev/null
-+++ b/package/snowball-init/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_SNOWBALL_INIT
-+	bool "snowball-init"
-+	# Runtime dependency, needed by snowball startup script
-+	select BR2_PACKAGE_BLUEZ_UTILS
-+	depends on !BR2_avr32
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
-+	depends on BR2_USE_MMU # dbus
-+	select BR2_PACKAGE_UX500_FIRMWARE
-+	help
-+	  Snowball init scripts
-+
-+	  http://www.igloocommunity.org
-+
-diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
-new file mode 100644
-index 0000000..278cacb
---- /dev/null
-+++ b/package/snowball-init/snowball-init.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# snowball-init
-+#
-+#############################################################
-+SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
-+SNOWBALL_INIT_SITE = git://igloocommunity.org/git/bsp/snowball-init.git
-+SNOWBALL_INIT_LICENSE = BSD-4c
-+SNOWBALL_INIT_LICENSE_FILES = debian/copyright
-+
-+define SNOWBALL_INIT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
-+endef
-+
-+$(eval $(generic-package))
++++ b/configs/calao_snowball_defconfig
+@@ -0,0 +1,24 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_GCC_VERSION_4_7_X=y
++# BR2_SOFT_FLOAT is not set
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_VFP_FLOAT=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_SNOWBALL_HDMISERVICE=y
++BR2_PACKAGE_LIBNL=y
++BR2_PACKAGE_SNOWBALL_INIT=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_TARGET_ROOTFS_TAR_GZIP=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="snowball"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
++BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
++BR2_LINUX_KERNEL_DEFCONFIG="u8500"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
