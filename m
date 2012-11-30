@@ -1,87 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 11:52:38 -0800
-Subject: [Buildroot] [git commit] flex: fix build for nommu systems
-Message-ID: <20121130195702.C15048017A@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 11:54:03 -0800
+Subject: [Buildroot] [git commit] matchbox-lib: Append -lX11 to the linker
+Message-ID: <20121130195703.2F8608017A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd72a13a4ca3033bacbaf9e9a2b424acf149f83d
+commit: http://git.buildroot.net/buildroot/commit/?id=cc6da8b28ef6b6dde2eaaaf40d21f366508221ad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The flex binary uses fork() so it breaks on !MMU builds.
-Since we usually don't require flex in the target and the common
-scenario is that we just want libfl in staging reverse the options so
-that BR2_PACKAGE_FLEX just builds and install libfl.a and change the
-LIBFL option to BR2_PACKAGE_FLEX_BINARY to install the binary in the
-target.
+Fixes building with binutils-2.22
+http://autobuild.buildroot.net/results/b4b26dd9c7d7bebe45638ba125fb49a5f5d0cc14/build-end.log
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/flex/Config.in |   10 +++++-----
- package/flex/flex.mk   |   20 +++++---------------
- 2 files changed, 10 insertions(+), 20 deletions(-)
+ package/matchbox/matchbox-lib/matchbox-lib.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/flex/Config.in b/package/flex/Config.in
-index b10eb00..adef468 100644
---- a/package/flex/Config.in
-+++ b/package/flex/Config.in
-@@ -6,10 +6,10 @@ config BR2_PACKAGE_FLEX
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
+index de11dfc..339f512 100644
+--- a/package/matchbox/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
+@@ -10,6 +10,7 @@ MATCHBOX_LIB_SITE = http://matchbox-project.org/sources/libmatchbox/$(MATCHBOX_L
+ MATCHBOX_LIB_INSTALL_STAGING = YES
+ MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
+ MATCHBOX_LIB_CONF_OPT = --enable-expat --disable-doxygen-docs
++MATCHBOX_LIB_CONF_ENV = LIBS="-lX11"
  
- 	  http://www.gnu.org/software/flex/
- 
--config BR2_PACKAGE_FLEX_LIBFL
--	bool "Install libfl.a under staging_dir/usr/lib"
--	default y
-+config BR2_PACKAGE_FLEX_BINARY
-+	bool "Install tool in the target"
-+	# needs fork()
-+	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_FLEX
- 	help
--	  Install libfl.a under staging_dir/usr/lib for further development
--	  on a host machine.
-+	  Install the flex binary tool in the target filesystem.
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 2599cdc..0c1ed5a 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -16,30 +16,20 @@ FLEX_DEPENDENCIES = \
- # we don't have a host-gettext/libintl
- HOST_FLEX_DEPENDENCIES =
- 
-+ifeq ($(BR2_PACKAGE_FLEX_BINARY),y)
- # lex -> flex
- define FLEX_INSTALL_LEX
- 	cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
- endef
--
--define FLEX_UNINSTALL_LEX
--	-rm $(TARGET_DIR)/usr/bin/lex
--endef
--
- FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
--FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LEX
- 
--# libfl installation
--ifeq ($(BR2_PACKAGE_FLEX_LIBFL),y)
--define FLEX_INSTALL_LIBFL
--	install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
--endef
-+else
- 
--define FLEX_UNINSTALL_LIBFL
--	-rm $(STAGING_DIR)/lib/libfl.a
-+define FLEX_DISABLE_PROGRAM
-+	$(SED) 's/^bin_PROGRAMS.*//' $(@D)/Makefile.in
- endef
-+FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
- 
--FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LIBFL
--FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LIBFL
- endif
- 
- $(eval $(autotools-package))
+ define MATCHBOX_LIB_POST_INSTALL_FIXES
+  $(SED) 's:-I[^$$].*/usr/include/freetype2:-I/usr/include/freetype2:' $(STAGING_DIR)/usr/lib/pkgconfig/libmb.pc
