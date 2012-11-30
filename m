@@ -1,34 +1,34 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 30 Nov 2012 10:14:40 +0000
-Subject: [Buildroot] [PATCH 5/8] midori: add license information
+Date: Fri, 30 Nov 2012 10:14:41 +0000
+Subject: [Buildroot] [PATCH 6/8] mpfr: add license information
 In-Reply-To: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
 References: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
-Message-ID: <1354270483-32356-6-git-send-email-spdawson@gmail.com>
+Message-ID: <1354270483-32356-7-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <simond@trainfx.com>
+From: Simon Dawson <spdawson@gmail.com>
 
-Signed-off-by: Simon Dawson <simond@trainfx.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/midori/midori.mk |    2 ++
+ package/mpfr/mpfr.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index 44cce40..8fac3d8 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index 9caf3ac..c6f1009 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
 @@ -7,6 +7,8 @@
- MIDORI_VERSION = 0.4.6
- MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
- MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.4/
-+MIDORI_LICENSE = LGPLv2.1+
-+MIDORI_LICENSE_FILES = COPYING
- MIDORI_DEPENDENCIES = \
- 	host-intltool \
- 	host-pkgconf \
+ MPFR_VERSION = 3.1.1
+ MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+ MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.bz2
++MPFR_LICENSE = LGPLv3+
++MPFR_LICENSE_FILES = COPYING.LESSER
+ MPFR_INSTALL_STAGING = YES
+ MPFR_DEPENDENCIES = gmp
+ MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
 -- 
 1.7.10.4
