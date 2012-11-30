@@ -1,33 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 07:44:53 -0800
-Subject: [Buildroot] [git commit] owl-linux: update help text about linux
-	kernel dependencies.
-Message-ID: <20121130154711.17E219950B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Nov 2012 08:03:04 -0800
+Subject: [Buildroot] [PATCH v5 0/6] Add support for the snowball board
+In-Reply-To: <1354279156-20649-1-git-send-email-gregory.hermant@calao-systems.com>
+ (Gregory Hermant's message of "Fri, 30 Nov 2012 13:39:10 +0100")
+References: <1354279156-20649-1-git-send-email-gregory.hermant@calao-systems.com>
+Message-ID: <877gp3axjb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82583bf4b7765df6edad45aaec0aba0ddbd571a7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gregory" == Gregory Hermant <gregory.hermant@calao-systems.com> writes:
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/owl-linux/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Gregory> Snowball board is a low power, low cost Single Board Computer based
+ Gregory> on the ST-Ericsson Nova A9500 processor (Dual Cortex-A9 + MALI 400 GPU).
+ Gregory> More info at www.igloocommunity.org
 
-diff --git a/package/owl-linux/Config.in b/package/owl-linux/Config.in
-index f6e18d5..1dcf5f1 100644
---- a/package/owl-linux/Config.in
-+++ b/package/owl-linux/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_OWL_LINUX
- 	help
- 	  Linux kernel driver for the H&D Wireless SPB104 SD-card WiFi SIP.
- 
-+	  owl-linux requires the hidden kernel option WIRELESS_EXT enabled.
-+
- 	  http://linux.hd-wireless.se/bin/view/Linux/GettingStarted
- 
- comment "owl-linux requires a Linux kernel"
+ Gregory> The snowball board boots from eMMC, loads the linux kernel and mounts
+ Gregory> its root filesystem either from eMMC or from a microSD card.
+ Gregory> The user should prepare a microSD card with two partitions.
+ Gregory> On the fist partition he will install the kernel image and on the second
+ Gregory> one the root filesystem.
+
+ Gregory> TO DO:
+
+ Gregory> * Add the GPS support.
+ Gregory> * Add the possibility to build an eMMC image directly from buildroot.
+ Gregory> * Add the riff tool package
+
+Committed to next, thanks!
+
+-- 
+Bye, Peter Korsgaard
