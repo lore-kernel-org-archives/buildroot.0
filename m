@@ -1,70 +1,75 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 07:59:35 -0800
-Subject: [Buildroot] [git commit branch/next] Add board files for snowball
-Message-ID: <20121130160326.2E3B099369@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 08:00:55 -0800
+Subject: [Buildroot] [git commit branch/next] Add init script files for
+	snowball board
+Message-ID: <20121130160326.88B259950E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4052e3325c240034e24cbb1b445adf32320baa98
+commit: http://git.buildroot.net/buildroot/commit/?id=4d4b1e4c5d98cbaafb8473c29d06b0d472cb34df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- board/calao/snowball/linux-3.4.patch |   45 ++++++++++++++++++++++++++++++++++
- 1 files changed, 45 insertions(+), 0 deletions(-)
+ package/Config.in                      |    1 +
+ package/snowball-init/Config.in        |   14 ++++++++++++++
+ package/snowball-init/snowball-init.mk |   15 +++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/board/calao/snowball/linux-3.4.patch b/board/calao/snowball/linux-3.4.patch
+diff --git a/package/Config.in b/package/Config.in
+index c369f74..9c23ae3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -554,6 +554,7 @@ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
++source "package/snowball-init/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+ source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+diff --git a/package/snowball-init/Config.in b/package/snowball-init/Config.in
 new file mode 100644
-index 0000000..4e6fb51
+index 0000000..99abb35
 --- /dev/null
-+++ b/board/calao/snowball/linux-3.4.patch
-@@ -0,0 +1,45 @@
-+From 3d1a9b44b9dcd2c0f5d54c09596c96c0524d8340 Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Tue, 13 Nov 2012 11:47:41 +0100
-+Subject: [PATCH] trace-debug[stm]: Fix for BT/WLAN instability
++++ b/package/snowball-init/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_SNOWBALL_INIT
++	bool "snowball-init"
++	# Runtime dependency, needed by snowball startup script
++	select BR2_PACKAGE_BLUEZ_UTILS
++	depends on !BR2_avr32
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, alsa-lib
++	depends on BR2_USE_MMU # dbus
++	select BR2_PACKAGE_UX500_FIRMWARE
++	help
++	  Snowball init scripts
 +
-+Pins under mop500_ske_pins array are used for different
-+functionalities in snowball. Ex: GPIO161 pin configured
-+for keypad here must stay configured as GPIO alternate
-+function for operating PMU_EN pin of BT/WLAN chip in snowball.
-+So forbid configuring these pins, for snowball
++	  http://www.igloocommunity.org
 +
-+Signed-off-by: Rajanikanth H.V <rajanikanth.hv@stericsson.com>
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ arch/arm/mach-ux500/board-mop500-stm.c |    7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+new file mode 100644
+index 0000000..278cacb
+--- /dev/null
++++ b/package/snowball-init/snowball-init.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# snowball-init
++#
++#############################################################
++SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
++SNOWBALL_INIT_SITE = git://igloocommunity.org/git/bsp/snowball-init.git
++SNOWBALL_INIT_LICENSE = BSD-4c
++SNOWBALL_INIT_LICENSE_FILES = debian/copyright
 +
-+diff --git a/arch/arm/mach-ux500/board-mop500-stm.c b/arch/arm/mach-ux500/board-mop500-stm.c
-+index 1bef2a0..532fb9e 100644
-+--- a/arch/arm/mach-ux500/board-mop500-stm.c
-++++ b/arch/arm/mach-ux500/board-mop500-stm.c
-+@@ -121,7 +121,9 @@ static int stm_ste_disable_ape_on_mipi60(void)
-+ 	if (retval)
-+ 		STM_ERR("Failed to disable MIPI60\n");
-+ 	else {
-+-		retval = nmk_config_pins(ARRAY_AND_SIZE(mop500_ske_pins));
-++		if (!machine_is_snowball())
-++			retval = nmk_config_pins(
-++				ARRAY_AND_SIZE(mop500_ske_pins));
-+ 		if (retval)
-+ 			STM_ERR("Failed to enable SKE gpio\n");
-+ 	}
-+@@ -314,7 +316,8 @@ static int stm_ste_connection(enum stm_connection_type con_type)
-+ 		/* Enable altC3 on GPIO70-74 (STMMOD) and GPIO75-76 (UARTMOD) */
-+ 		prcmu_enable_stm_mod_uart();
-+ 		/* Enable APE on MIPI60 */
-+-		retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
-++		if (!machine_is_snowball())
-++			retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
-+ 		if (retval)
-+ 			STM_ERR("Failed to disable SKE GPIO\n");
-+ 		else {
-+-- 
-+1.7.9.5
++define SNOWBALL_INIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/snowball $(TARGET_DIR)/etc/init.d/S50snowball
++endef
 +
++$(eval $(generic-package))
