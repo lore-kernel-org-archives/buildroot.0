@@ -1,135 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 08:01:55 -0800
-Subject: [Buildroot] [git commit] bluez-utils: add support for the
-	ST-Ericsson cg2900 combo controller
-Message-ID: <20121203145715.1B6B799808@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 08:02:15 -0800
+Subject: [Buildroot] [git commit] Add config file for the snowball board
+Message-ID: <20121203145715.55FC199808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ca2a3bb51ff8f69030b12bc67cefde9846348c0
+commit: http://git.buildroot.net/buildroot/commit/?id=fd1b89f9c97660a8c0c5c2e7dedf9ef577ec3ac8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (with the calao_snowball_defconfig)
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...tils-4.101-enable_cg2900_on_upstream_4.91.patch |  106 ++++++++++++++++++++
- 1 files changed, 106 insertions(+), 0 deletions(-)
+ configs/calao_snowball_defconfig |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch b/package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch
+diff --git a/configs/calao_snowball_defconfig b/configs/calao_snowball_defconfig
 new file mode 100644
-index 0000000..e80af5f
+index 0000000..360ed51
 --- /dev/null
-+++ b/package/bluez_utils/bluez_utils-4.101-enable_cg2900_on_upstream_4.91.patch
-@@ -0,0 +1,106 @@
-+From ac7992081abba87627c9e91735b3309584b48585 Mon Sep 17 00:00:00 2001
-+From: Gregory Hermant <gregory.hermant@calao-systems.com>
-+Date: Wed, 14 Nov 2012 14:27:02 +0100
-+Subject: [PATCH] add support for the ST-Ericsson CG2900 GPS FM Bluetooth
-+ combo controller
-+
-+
-+Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-+---
-+ tools/hciattach.c |   22 +++++++++++++++-------
-+ tools/hciattach.h |    1 +
-+ 2 files changed, 16 insertions(+), 7 deletions(-)
-+
-+diff --git a/tools/hciattach.c b/tools/hciattach.c
-+index e4d5aa1..7f08243 100644
-+--- a/tools/hciattach.c
-++++ b/tools/hciattach.c
-+@@ -1066,6 +1066,11 @@ struct uart_t uart[] = {
-+ 	{ "texasalt",   0x0000, 0x0000, HCI_UART_LL,   115200, 115200,
-+ 				FLOW_CTL, DISABLE_PM, NULL, texasalt, NULL   },
-+ 
-++	/* ST-Ericsson CG2900 GPS FM Bluetooth combo controller */
-++	{ "cg2900",     0x0000, 0x0000, HCI_UART_STE,  115200, 115200,
-++				FLOW_CTL, DISABLE_PM, NULL, NULL     },
-++
-++
-+ 	/* ST Microelectronics minikits based on STLC2410/STLC2415 */
-+ 	{ "st",         0x0000, 0x0000, HCI_UART_H4,    57600, 115200,
-+ 				FLOW_CTL, DISABLE_PM,  NULL, st       },
-+@@ -1157,10 +1162,10 @@ static struct uart_t * get_by_type(char *type)
-+ }
-+ 
-+ /* Initialize UART driver */
-+-static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
-++static int init_uart(char *dev, struct uart_t *u, int send_break, int raw, int line_disc)
-+ {
-+ 	struct termios ti;
-+-	int fd, i;
-++	int fd;
-+ 	unsigned long flags = 0;
-+ 
-+ 	if (raw)
-+@@ -1217,8 +1222,7 @@ static int init_uart(char *dev, struct uart_t *u, int send_break, int raw)
-+ 	}
-+ 
-+ 	/* Set TTY to N_HCI line discipline */
-+-	i = N_HCI;
-+-	if (ioctl(fd, TIOCSETD, &i) < 0) {
-++	if (ioctl(fd, TIOCSETD, &line_disc) < 0) {
-+ 		perror("Can't set line discipline");
-+ 		return -1;
-+ 	}
-+@@ -1243,7 +1247,7 @@ static void usage(void)
-+ {
-+ 	printf("hciattach - HCI UART driver initialization utility\n");
-+ 	printf("Usage:\n");
-+-	printf("\thciattach [-n] [-p] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
-++	printf("\thciattach [-n] [-p] [-a line_disc_nr] [-b] [-r] [-t timeout] [-s initial_speed] <tty> <type | id> [speed] [flow|noflow] [bdaddr]\n");
-+ 	printf("\thciattach -l\n");
-+ }
-+ 
-+@@ -1252,6 +1256,7 @@ int main(int argc, char *argv[])
-+ 	struct uart_t *u = NULL;
-+ 	int detach, printpid, raw, opt, i, n, ld, err;
-+ 	int to = 10;
-++	int line_disc = N_HCI;
-+ 	int init_speed = 0;
-+ 	int send_break = 0;
-+ 	pid_t pid;
-+@@ -1264,8 +1269,11 @@ int main(int argc, char *argv[])
-+ 	printpid = 0;
-+ 	raw = 0;
-+ 
-+-	while ((opt=getopt(argc, argv, "bnpt:s:lr")) != EOF) {
-++	while ((opt=getopt(argc, argv, "bnpt:s:lra:")) != EOF) {
-+ 		switch(opt) {
-++		case 'a':
-++                        line_disc = atoi(optarg);
-++                        break;
-+ 		case 'b':
-+ 			send_break = 1;
-+ 			break;
-+@@ -1381,7 +1389,7 @@ int main(int argc, char *argv[])
-+ 	alarm(to);
-+ 	bcsp_max_retries = to;
-+ 
-+-	n = init_uart(dev, u, send_break, raw);
-++	n = init_uart(dev, u, send_break, raw, line_disc);
-+ 	if (n < 0) {
-+ 		perror("Can't initialize device");
-+ 		exit(1);
-+diff --git a/tools/hciattach.h b/tools/hciattach.h
-+index fed0d11..09b534d 100644
-+--- a/tools/hciattach.h
-++++ b/tools/hciattach.h
-+@@ -39,6 +39,7 @@
-+ #define HCI_UART_H4DS	3
-+ #define HCI_UART_LL	4
-+ #define HCI_UART_ATH3K  5
-++#define HCI_UART_STE	6
-+ 
-+ #define HCI_UART_RAW_DEVICE	0
-+ 
-+-- 
-+1.7.9.5
-+
++++ b/configs/calao_snowball_defconfig
+@@ -0,0 +1,24 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_GCC_VERSION_4_7_X=y
++# BR2_SOFT_FLOAT is not set
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_VFP_FLOAT=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA2"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_SNOWBALL_HDMISERVICE=y
++BR2_PACKAGE_LIBNL=y
++BR2_PACKAGE_SNOWBALL_INIT=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_TARGET_ROOTFS_TAR_GZIP=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="snowball"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://igloocommunity.org/git/kernel/igloo-kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="stable-linux-ux500-3.4"
++BR2_LINUX_KERNEL_PATCH="board/calao/snowball/"
++BR2_LINUX_KERNEL_DEFCONFIG="u8500"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
