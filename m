@@ -1,23 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 11:55:23 -0800
-Subject: [Buildroot] [PATCH] matchbox-lib: Append -lX11 to the linker
-In-Reply-To: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
- (Markos Chandras's message of "Tue, 30 Oct 2012 11:29:14 +0000")
-References: <1351596554-27077-1-git-send-email-markos.chandras@gmail.com>
-Message-ID: <87obieams4.fsf@dell.be.48ers.dk>
+Date: Fri, 30 Nov 2012 12:16:07 -0800
+Subject: [Buildroot] [PATCH 17/33] matchbox packages: fix broken urls
+In-Reply-To: <CAHXCMML9f9eM7odmYWDrztZeK_ivwNeZDz5LWFMbhRV_xxFagg@mail.gmail.com>
+ (Samuel Martin's message of "Fri, 30 Nov 2012 20:57:15 +0100")
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+ <1353543503-8952-18-git-send-email-s.martin49@gmail.com>
+ <87fw3rayff.fsf@dell.be.48ers.dk>
+ <CAHXCMML9f9eM7odmYWDrztZeK_ivwNeZDz5LWFMbhRV_xxFagg@mail.gmail.com>
+Message-ID: <8738zqaltk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- Markos> From: Markos Chandras <markos.chandras@imgtec.com>
- Markos> Fixes building with binutils-2.22
- Markos> http://autobuild.buildroot.net/results/b4b26dd9c7d7bebe45638ba125fb49a5f5d0cc14/build-end.log
+ Samuel> Indeed... it seems pretty down :-(
 
-Committed, thanks.
+ Samuel> Luckily, by the time this patch tried to be merged it got down!
+
+ Samuel> Well, I'll switch to some alive location and repost.
+
+Thanks!
 
 -- 
 Bye, Peter Korsgaard
