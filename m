@@ -1,33 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 30 Nov 2012 07:28:18 -0800
-Subject: [Buildroot] [git commit] libmad: add license info
-Message-ID: <20121130154710.6935799369@busybox.osuosl.org>
+Date: Fri, 30 Nov 2012 07:32:40 -0800
+Subject: [Buildroot] [git commit] scons: add license info
+Message-ID: <20121130154710.AD71299369@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=069eccfc7185ebb514f0f1822ddfc8dd261a8841
+commit: http://git.buildroot.net/buildroot/commit/?id=75817ecd1edf2b67b2dcc395df6079182189f577
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: license is GPLv2+ as pointed out by Arnout]
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libmad/libmad.mk |    2 ++
+ package/scons/scons.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index d9ce0ae..09f3cdb 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -8,6 +8,8 @@ LIBMAD_VERSION = 0.15.1b
- LIBMAD_SITE = http://downloads.sourceforge.net/project/mad/libmad/$(LIBMAD_VERSION)
- LIBMAD_INSTALL_STAGING = YES
- LIBMAD_LIBTOOL_PATCH = NO
-+LIBMAD_LICENSE = GPLv2+
-+LIBMAD_LICENSE_FILES = COPYING
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index 7cc234e..d2489a0 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -1,6 +1,8 @@
+ SCONS_VERSION = 2.0.1
+ SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
+ SCONS_SITE = http://downloads.sourceforge.net/project/scons/scons/$(SCONS_VERSION)
++SCONS_LICENSE = MIT
++SCONS_LICENSE_FILES = LICENSE.txt
  
- define LIBMAD_PREVENT_AUTOMAKE
- 	# Prevent automake from running.
+ define HOST_SCONS_BUILD_CMDS
+ 	(cd $(@D); python setup.py build)
