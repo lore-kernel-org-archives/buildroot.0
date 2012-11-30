@@ -1,22 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Nov 2012 16:34:06 -0800
-Subject: [Buildroot] [PATCH 09/33] linux-fusion: fix build
-In-Reply-To: <1353543503-8952-10-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Thu, 22 Nov 2012 01:17:59 +0100")
-References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
- <1353543503-8952-10-git-send-email-s.martin49@gmail.com>
-Message-ID: <87y5hkc4jl.fsf@dell.be.48ers.dk>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Fri, 30 Nov 2012 00:50:48 +0000 (UTC)
+Subject: [Buildroot] mkcramfs invalid option 'q'
+Message-ID: <slrnkbg0lg.2kq.narkewoody@zuhnb712.local.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+Hi, list
 
- Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+What now concerns me is an warning message in the output of building
+cramfs image:
 
-Committed, thanks.
+
+...
+tdir=/home/buildroot/buildroot-2012.08/output/target
+table='/home/buildroot/buildroot-2012.08/output/build/_device_table.txt'
+/home/buildroot/buildroot-2012.08/output/host/usr/bin/mkcramfs: invalid
+option -- 'q'
+...
+
+I just want to ensure that this is normal and I don't need to warry
+about it. Otherwise, please someone tell me a fix.  Thanks!
 
 -- 
-Bye, Peter Korsgaard
+woody
+I can't go back to yesterday - because I was a different person then.
