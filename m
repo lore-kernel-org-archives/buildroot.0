@@ -1,70 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Nov 2012 17:11:29 -0800
-Subject: [Buildroot] [git commit] toolchain-external: add Linaro 2012.11
-Message-ID: <20121203145712.E3F2399808@busybox.osuosl.org>
+Date: Thu, 29 Nov 2012 23:14:41 -0800
+Subject: [Buildroot] [git commit] libroxml: bump version to 2.2.1
+Message-ID: <20121203145713.B878199808@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=008f635d29310b55e0bb3e9a1a6009f12f7f7400
+commit: http://git.buildroot.net/buildroot/commit/?id=b17c7963890354d2cffdda2f16eeeaf4c1288e99
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |   18 ++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 21 insertions(+), 0 deletions(-)
+ ...ml-2.2.0-werror.patch => libroxml-werror.patch} |    6 +++---
+ package/libroxml/libroxml.mk                       |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index f04ced6..56630fa 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -3,6 +3,23 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
+diff --git a/package/libroxml/libroxml-2.2.0-werror.patch b/package/libroxml/libroxml-werror.patch
+similarity index 86%
+rename from package/libroxml/libroxml-2.2.0-werror.patch
+rename to package/libroxml/libroxml-werror.patch
+index a72f2a7..a99962f 100644
+--- a/package/libroxml/libroxml-2.2.0-werror.patch
++++ b/package/libroxml/libroxml-werror.patch
+@@ -7,10 +7,10 @@ Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+  Makefile |    2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
  
-+config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
-+	bool "Linaro 2012.11"
-+	depends on BR2_arm
-+	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Linaro toolchain for the ARM architecture. It uses Linaro
-+	  GCC 2012.11 (based on gcc 4.7), Linaro GDB 2012.10 (based on
-+	  GDB 7.5), eglibc 2.15. It generates code that runs on all
-+	  Cortex-A profile devices, but tuned for the Cortex-A9. The
-+	  code generated is Thumb 2, with the hard floating point
-+	  calling convention, and uses the VFPv3-D16 FPU instructions.
-+
-+	  To use this toolchain, you must disable soft float usage.
-+
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	bool "Linaro 2012.10"
- 	depends on BR2_arm
-@@ -627,6 +644,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_08
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
-+	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index a6025db..d98fcc6 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -193,6 +193,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-2012.09-20120921_linux.
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10),y)
- TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.10/+download/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.10-20121022_linux.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.11/+download/
-+TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.11-20121123_linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+-Index: libroxml-2.1.0/Makefile
++Index: a/Makefile
+ ===================================================================
+---- libroxml-2.1.0.orig/Makefile
+-+++ libroxml-2.1.0/Makefile
++--- a/Makefile
+++++ b/Makefile
+ @@ -41,7 +41,7 @@
+  
+  # options
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index 457a28a..d7ef6a4 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -2,7 +2,7 @@
+ # libroxml
+ #
+ 
+-LIBROXML_VERSION = 2.2.0
++LIBROXML_VERSION = 2.2.1
+ LIBROXML_SITE = http://libroxml.googlecode.com/files
+ LIBROXML_INSTALL_STAGING = YES
+ 
