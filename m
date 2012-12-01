@@ -1,36 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 01 Nov 2012 00:06:47 +0100
-Subject: [Buildroot] buildroot for AM3358 AM3359 with wireless-tools
- shared library
-In-Reply-To: <1351683059.5576.42.camel@debian.fritz.box>
-References: <50897A02.7000407@rie.eu> <20121025182332.GC5178@tarshish>
- <1351596954.5576.22.camel@debian.fritz.box> <20121030231327.4f22281c@skate>
- <1351683059.5576.42.camel@debian.fritz.box>
-Message-ID: <5091AF07.5040803@mind.be>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Sat, 1 Dec 2012 02:14:23 +0000 (UTC)
+Subject: [Buildroot] mkcramfs invalid option 'q'
+References: <slrnkbg0lg.2kq.narkewoody@zuhnb712.local.com>
+ <87fw3rczxp.fsf@dell.be.48ers.dk>
+Message-ID: <slrnkbipu6.2ee.narkewoody@zuhnb712.local.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/31/12 12:30, J?rgen Benjamin Ronshausen wrote:
-> logfile1's size is 3MB, to big for pastebin, so i uploaded both to
-> github
+On 2012-11-30, Peter Korsgaard
+<jacmet@uclibc.org> wrote:
+>>>>>> "Woody" == Woody Wu
+>>>>>> <narkewoody@gmail.com> writes:
 >
-> https://github.com/steven11/the-hunt-for-wireless-tools
+> Woody> Hi, list
+> Woody> What now concerns me is an warning message in the output of building
+> Woody> cramfs image:
+>
+>
+> Woody> ...
+> Woody> tdir=/home/buildroot/buildroot-2012.08/output/target
+> Woody>
+> table='/home/buildroot/buildroot-2012.08/output/build/_device_table.txt'
+> Woody> /home/buildroot/buildroot-2012.08/output/host/usr/bin/mkcramfs:
+> invalid
+> Woody> option -- 'q'
+> Woody> ...
+>
+> Woody> I just want to ensure that this is normal and I don't need to warry
+> Woody> about it. Otherwise, please someone tell me a fix.  Thanks!
+>
+> I looked back in git history, and we have apparently had this -q option
+> ever since cramfs support was introduced in 2003! I've removed it now
+> from git as mkcramfs doesn't take a -q option, thanks.
 
-  gcc-intermediate's config thinks that largefile is enabled...  Can you post
-output/toolchain/gcc-4.6.3-intermediate/gcc/config.status, config.log and
-auto-host.h?
+Sorry, my understanding .... does it mean this error message is harmless
+and I will not show up in furture buildroot versions?
 
-  BTW what kind of build machine do you use?
+>
+> Notice: I would strongly suggest you move to squashfs instead of the
+> ancient cramfs.
 
-  Regards,
-  Arnout
+Thanks for the suggestion, I like to switch to a mordern image format.
+cramfs is just a temporary option since at this moment when I was
+testing the new kernel, I have to let it work with a verified old
+rootfs, which is a cramfs.
+
+
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+woody
+I can't go back to yesterday - because I was a different person then.
