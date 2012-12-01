@@ -1,23 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Nov 2012 22:08:20 -0800
-Subject: [Buildroot] [PATCH 2/2] libsigc: Don't copy devel documentation
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Nov 2012 22:08:03 -0800
+Subject: [Buildroot] [git commit] libsigc: Don't copy devel documentation
 	onto target
-In-Reply-To: <1354239752-18102-1-git-send-email-cdhmanning@gmail.com> (Charles
- Manning's message of "Fri, 30 Nov 2012 14:42:32 +1300")
-References: <1354239752-18102-1-git-send-email-cdhmanning@gmail.com>
-Message-ID: <87wqx2719n.fsf@dell.be.48ers.dk>
+Message-ID: <20121201062134.70DB9995F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Manning <cdhmanning@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=537556b22ca6252d319a33ac797afb45b215dbd1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Charles> The libsigc++ developer documentation was being copied onto the target.
- Charles> Add a clean-up to fix that.
+The libsigc++ developer documentation was being copied onto the target.
+Add a clean-up to fix that.
 
-Committed, thanks.
+Signed-off-by: Charles Manning <cdhmanning@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libsigc/libsigc.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+index 92d1d8b..10f5803 100644
+--- a/package/libsigc/libsigc.mk
++++ b/package/libsigc/libsigc.mk
+@@ -8,4 +8,10 @@ LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.bz2
+ LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
+ LIBSIGC_INSTALL_STAGING = YES
+ 
++define LIBSIGC_INSTALL_TARGET_FIXUP
++	rm -rf $(TARGET_DIR)/usr/share/devhelp/books/libsigc++*
++endef
++
++LIBSIGC_POST_INSTALL_TARGET_HOOKS += LIBSIGC_INSTALL_TARGET_FIXUP
++
+ $(eval $(autotools-package))
