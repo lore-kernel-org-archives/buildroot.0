@@ -1,55 +1,47 @@
-From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Sat, 1 Dec 2012 10:38:19 -0600
-Subject: [Buildroot] Problem with NFS boot
-Message-ID: <CADKZYY+nZbaXZbuG0D4RSR4N+GWQZKRALg0a7A0nZLNhMhd+rw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Dec 2012 17:49:09 +0100
+Subject: [Buildroot] [git commit] pkg-infra: introduce errors for legacy
+ API
+In-Reply-To: <20121130201152.E2AE89940D@busybox.osuosl.org>
+References: <20121130201152.E2AE89940D@busybox.osuosl.org>
+Message-ID: <20121201174909.1d52aad3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Peter Korsgaard,
 
-I'm using buildroot to create my rootfs for AM335x device and have been
-able to successfully boot using an SD Card. However, when I try to use NFS
-and boot it always gives me the following
+On Fri, 30 Nov 2012 12:06:40 -0800, Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=ebcfa987df4095a7805ff124ab648fb607c89215
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> As discussed in the BR developer days, we want to be more strict about API
+> changes in buildroot. I.e., we want to make it less likely that a user's
+> customizations break down after upgrading buildroot.
+> 
+> A first step is to make sure that the user is warned about API changes.
+> This patch introduces Makefile.legacy and Config.in.legacy, which will
+> issue clear error messages for such situations.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-[    3.628326] VFS: Mounted root (nfs filesystem) on device 0:14.
-[    3.635009] Freeing init memory: 228K
-can't open /dev/null: No such file or directory
-can't open /dev/null: No such file or directory
-can't open /dev/null: No such file or directory
-can't open /dev/null: No such file or directory
-can't open /dev/null: No such file or directory
-Starting logging: OK
-Populating /dev using udev: /etc/init.d/S10udev: line 45: can't create
-/proc/sys/kernel/hotplug: nonexistent directory
-cannot open /dev/null
-done
-Starting system message bus: done
-Starting network...
-ip: RTNETLINK answers: File exists
-can't open /dev/ttyO0: No such file or directory
-can't open /dev/ttyO0: No such file or directory
-can't open /dev/ttyO0: No such file or directory
-can't open /dev/ttyO0: No such file or directory
-can't open /dev/ttyO0: No such file or directory
-can't open /dev/ttyO0: No such file or directory
-can't open /dev/ttyO0: No such file or directory
+This doesn't really work well with randpackageconfig, and therefore
+breaks the autobuilders badly.
 
-I must clarify that I am using the Linux kernel not built by Buildroot but
-by manually building from the TI SDK. So the only thing I use from
-Buildroot is the rootfs..it works fine when I untar it on my sd card, but
-doesn't seems to work over the network  Also I've selected udev option in
-buildroot.
+For example, randpackageconfig can enable BR2_PACKAGE_GETTEXT_STATIC,
+because it matches BR2_PACKAGE_<foo>, this will select BR2_LEGACY,
+which will abort the build.
 
-Thanks for your replies.
-Regards
+Should it be fixed just in the autobuilders scripts, or do we consider
+the fact that "make randpackageconfig" generates un-buildable
+configuration is a bug by itself?
 
-Ssanthosh
-
+Thomas
 -- 
-Greater the Difficulty....Sweeter is the Victory
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121201/ad93f8ab/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
