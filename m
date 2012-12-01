@@ -1,45 +1,23 @@
-From: Valentine Barshak <gvaxon@gmail.com>
-Date: Mon, 1 Oct 2012 00:43:58 +0400
-Subject: [Buildroot] [PATCH v2] openvpn: Fix paths to external utilities
-Message-ID: <20120930204358.GA23699@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Nov 2012 22:08:20 -0800
+Subject: [Buildroot] [PATCH 2/2] libsigc: Don't copy devel documentation
+	onto target
+In-Reply-To: <1354239752-18102-1-git-send-email-cdhmanning@gmail.com> (Charles
+ Manning's message of "Fri, 30 Nov 2012 14:42:32 +1300")
+References: <1354239752-18102-1-git-send-email-cdhmanning@gmail.com>
+Message-ID: <87wqx2719n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This sets paths to ifconfig, route, netstat and ip
-in the target root filesystem.
+>>>>> "Charles" == Charles Manning <cdhmanning@gmail.com> writes:
 
-Otherwise the paths leak from the host and may not
-match those on the target.
+ Charles> The libsigc++ developer documentation was being copied onto the target.
+ Charles> Add a clean-up to fix that.
 
-Signed-off-by: Valentine Barshak <gvaxon@gmail.com>
----
- package/openvpn/openvpn.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Committed, thanks.
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 03eabcf..1c6e6ec 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -6,7 +6,16 @@
- 
- OPENVPN_VERSION = 2.2.2
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
--OPENVPN_CONF_OPT = --enable-small --disable-plugins
-+OPENVPN_CONF_OPT = --enable-small --disable-plugins \
-+			--with-ifconfig-path=/sbin/ifconfig \
-+			--with-route-path=/sbin/route \
-+			--with-netstat-path=/bin/netstat
-+
-+ifeq ($(BR2_PACKAGE_IPROUTE2),y)
-+OPENVPN_CONF_OPT += --with-iproute-path=/sbin/ip
-+else
-+OPENVPN_CONF_OPT += --with-iproute-path=/bin/ip
-+endif
- 
- ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
- 	OPENVPN_DEPENDENCIES += lzo
 -- 
-1.7.11.4
+Bye, Peter Korsgaard
