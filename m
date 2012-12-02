@@ -1,43 +1,57 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 02 Dec 2012 13:53:59 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-11-29
-In-Reply-To: <20121130073328.24CF052C08B@lolut.humanoidz.org>
-References: <20121130073328.24CF052C08B@lolut.humanoidz.org>
-Message-ID: <50BB4F67.4010002@relinux.de>
+Date: Sun,  2 Dec 2012 13:55:49 +0100
+Subject: [Buildroot] [PATCH] qtuio: fix build issue because of missing
+	include
+Message-ID: <1354452949-13691-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 30.11.2012 08:33, schrieb Thomas Petazzoni:
-> Build 0083137d721a505f79ae7940ef57f94417035b00
-> ==============================================
->
-> Status         : NOK
-> Failure reason : qtuio-abe4973ff6
-> Architecture   : arm
-> Submitted by   : Thomas Petazzoni (Free Electrons build server)
-> Submitted at   : 2012-11-29 23:30:51
-> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=7c9549e84f80d66fcb685a9f2c9b8e44e086c883
-> End of log     : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/build-end.log
-> Complete log   : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/build.log.bz2
-> Configuration  : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/config
-> Defconfig      : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/defconfig
-Hello all,
+TuioServer.cpp uses usleep but did not include <unistd.h>. This
+patch adds the missing #include. This issue has been reported
+upstream.
 
-this fauilure is caused by a missing #include in the source code. I
-reported it upstream, but there are no changes since 2 years.
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ .../qtuio-TuioServer.cpp-add-missing-include.patch |   28 ++++++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch
 
-A patch to fix this issue follows.
-
-Kind Regards
-
-Stephan
-
+diff --git a/package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch b/package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch
+new file mode 100644
+index 0000000..9933702
+--- /dev/null
++++ b/package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch
+@@ -0,0 +1,28 @@
++From 4dd7cad8c95484a882eaa2aeaa74595a3dd93a07 Mon Sep 17 00:00:00 2001
++From: Stephan Hoffmann <sho@relinux.de>
++Date: Sun, 2 Dec 2012 13:36:41 +0100
++Subject: [PATCH] TuioServer.cpp: add missing include
++
++If usleep() is used the header <unistd.h> has to be included
++
++Signed-off-by: Stephan Hoffmann <sho@relinux.de>
++---
++ src/3rdparty/tuio/TuioServer.cpp |    2 ++
++ 1 files changed, 2 insertions(+), 0 deletions(-)
++
++diff --git a/src/3rdparty/tuio/TuioServer.cpp b/src/3rdparty/tuio/TuioServer.cpp
++index f17bef9..851144c 100644
++--- a/src/3rdparty/tuio/TuioServer.cpp
+++++ b/src/3rdparty/tuio/TuioServer.cpp
++@@ -25,6 +25,8 @@ using namespace TUIO;
++ using namespace osc;
++ 
++ #ifndef WIN32
+++#include <unistd.h>
+++
++ static void* ThreadFunc( void* obj )
++ #else
++ static DWORD WINAPI ThreadFunc( LPVOID obj )
++-- 
++1.7.0.4
++
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+1.7.0.4
