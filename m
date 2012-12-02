@@ -1,69 +1,54 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 02 Dec 2012 11:42:39 +0100
-Subject: [Buildroot] Problem with NFS boot
-In-Reply-To: <CADKZYYLt90YY8rm4SCuqRN2SsAGqjXhQM7t5hQydpV9o7ZtT+A@mail.gmail.com>
-References: <CADKZYYLt90YY8rm4SCuqRN2SsAGqjXhQM7t5hQydpV9o7ZtT+A@mail.gmail.com>
-Message-ID: <50BB309F.606@relinux.de>
+Date: Sun,  2 Dec 2012 11:56:07 +0100
+Subject: [Buildroot] [PATCH] pkg-download.mk: Fix shallow clone
+Message-ID: <1354445767-15308-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 02.12.2012 02:51, schrieb Santhosh Ramani:
-> Hello Stephan,
->
-> Thank you for your reply, yes I did untar the rootfs.tar.bz2 into the
-> folder that is exported as NFS using sudo. 
->
-> Note:
-> Linux kernel from TI SDK + buildroot rootfs = no nfs (only SD Card)
-> Linux kernle from buildroot + buildroot rootfs = everything works fine.
-Hello Santhosh,
+Some git versions (e.g. 1.7.0) do not treat trying to shallow clone
+a non existing branch or tag as a fatal error but report a warning
+and clone HEAD instead. Thus the fallback mechanism does not work
+in this case.
 
-reading this I suggest double checking the kernel versions and
-configurations. I assume the rootfs' are the same, aren't they?
+This patch introduces a check for the presence of the requested
+version as a branch or tag before trying the shallow clone. It
+also removes the need to do two clones when a sha1 is given as
+a packege version.
 
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ package/pkg-download.mk |   13 ++++++++++---
+ 1 files changed, 10 insertions(+), 3 deletions(-)
 
->
-> I actually have a script that performs a distclean on the Linux folder
-> and then tars and copies the linux kernel into the dl folder for
-> buildroot. And I have set it up so that buildroot uses this custom kernel.
->
-> However there are times when I make minor modifications to the Kernel
-> code and then try it out in which case it fails. That's what I'm
-> trying to fix.
-Why don't you build the modified kernel with buildroot?
->
-> Please do let me know if I can provide more information.
-> Thank you
-> Regards
->
-> Santhosh
->
->
-> -- 
-> Greater the Difficulty....Sweeter is the Victory
-;-)
-
-Good luck
-
-Stephan
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 6c57244..627e22d 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -74,12 +74,19 @@ domainseparator=$(if $(1),$(1),/)
+ ################################################################################
+ 
+ # Try a shallow clone - but that only works if the version is a ref (tag or
+-# branch). Fall back on a full clone if it's a generic sha1.
++# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
++# is in the list provided by git ls-remote. If not we fall back on a full clone.
++#
++# Messages for the type of clone used are provided to ease debugging in case of
++# problems
+ define DOWNLOAD_GIT
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+-	 ($(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) || \
+-	  $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) && \
++	 ((test `git ls-remote  $($(PKG)_SITE) | cut -b 42- | grep $($(PKG)_DL_VERSION)` && \
++	   echo "Doing shallow clone" && \
++	   $(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) || \
++	  (echo "Doing full clone" && \
++	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
+ 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+ 	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+ 		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121202/d640e5f5/attachment.html>
+1.7.0.4
