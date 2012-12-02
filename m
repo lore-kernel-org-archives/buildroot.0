@@ -1,54 +1,43 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun,  2 Dec 2012 11:56:07 +0100
-Subject: [Buildroot] [PATCH] pkg-download.mk: Fix shallow clone
-Message-ID: <1354445767-15308-1-git-send-email-sho@relinux.de>
+Date: Sun, 02 Dec 2012 13:53:59 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-11-29
+In-Reply-To: <20121130073328.24CF052C08B@lolut.humanoidz.org>
+References: <20121130073328.24CF052C08B@lolut.humanoidz.org>
+Message-ID: <50BB4F67.4010002@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some git versions (e.g. 1.7.0) do not treat trying to shallow clone
-a non existing branch or tag as a fatal error but report a warning
-and clone HEAD instead. Thus the fallback mechanism does not work
-in this case.
+Am 30.11.2012 08:33, schrieb Thomas Petazzoni:
+> Build 0083137d721a505f79ae7940ef57f94417035b00
+> ==============================================
+>
+> Status         : NOK
+> Failure reason : qtuio-abe4973ff6
+> Architecture   : arm
+> Submitted by   : Thomas Petazzoni (Free Electrons build server)
+> Submitted at   : 2012-11-29 23:30:51
+> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=7c9549e84f80d66fcb685a9f2c9b8e44e086c883
+> End of log     : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/build-end.log
+> Complete log   : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/build.log.bz2
+> Configuration  : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/config
+> Defconfig      : http://autobuild.buildroot.net/results/0083137d721a505f79ae7940ef57f94417035b00/defconfig
+Hello all,
 
-This patch introduces a check for the presence of the requested
-version as a branch or tag before trying the shallow clone. It
-also removes the need to do two clones when a sha1 is given as
-a packege version.
+this fauilure is caused by a missing #include in the source code. I
+reported it upstream, but there are no changes since 2 years.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
- package/pkg-download.mk |   13 ++++++++++---
- 1 files changed, 10 insertions(+), 3 deletions(-)
+A patch to fix this issue follows.
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 6c57244..627e22d 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -74,12 +74,19 @@ domainseparator=$(if $(1),$(1),/)
- ################################################################################
- 
- # Try a shallow clone - but that only works if the version is a ref (tag or
--# branch). Fall back on a full clone if it's a generic sha1.
-+# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
-+# is in the list provided by git ls-remote. If not we fall back on a full clone.
-+#
-+# Messages for the type of clone used are provided to ease debugging in case of
-+# problems
- define DOWNLOAD_GIT
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
--	 ($(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) || \
--	  $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) && \
-+	 ((test `git ls-remote  $($(PKG)_SITE) | cut -b 42- | grep $($(PKG)_DL_VERSION)` && \
-+	   echo "Doing shallow clone" && \
-+	   $(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) || \
-+	  (echo "Doing full clone" && \
-+	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
- 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
- 	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
- 		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
+Kind Regards
+
+Stephan
+
 -- 
-1.7.0.4
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
