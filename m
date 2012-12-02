@@ -1,46 +1,36 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun,  2 Dec 2012 18:13:32 +0100
-Subject: [Buildroot] [PATCH] skeleton: add /etc/nsswitch.conf
-Message-ID: <1354468412-29281-1-git-send-email-sho@relinux.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Dec 2012 19:31:40 +0100
+Subject: [Buildroot] [git commit] pkg-infra: introduce errors for legacy
+	API
+In-Reply-To: <87hao56vee.fsf@dell.be.48ers.dk>
+References: <20121130201152.E2AE89940D@busybox.osuosl.org>
+ <20121201174909.1d52aad3@skate> <87hao56vee.fsf@dell.be.48ers.dk>
+Message-ID: <20121202193140.25122f4e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Toolchain Linaro 2012_09 and possibly other glibc based ones
-rely on the existence of nsswitch.conf. If it's missing names
-from /etc/hosts are not resolved and thus "localhost" is not
-known.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
- system/skeleton/etc/nsswitch.conf |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 system/skeleton/etc/nsswitch.conf
+On Sat, 01 Dec 2012 18:27:21 -0800, Peter Korsgaard wrote:
+> I would call it a bug. I've fixed it like this:
+> 
+> [PATCH] {rand,allyes}packageconfig: ensure legacy test options don't
+>  get enabled
+> 
+> The legacy BR2_PACKAGE_* options in Config.in.legacy are not supposed to
+> be user selectable, so {rand,allyes}packageconfig shouldn't enable them.
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-diff --git a/system/skeleton/etc/nsswitch.conf b/system/skeleton/etc/nsswitch.conf
-new file mode 100644
-index 0000000..d81e2f0
---- /dev/null
-+++ b/system/skeleton/etc/nsswitch.conf
-@@ -0,0 +1,17 @@
-+# /etc/nsswitch.conf
-+#
-+# Example configuration of GNU Name Service Switch functionality.
-+# If you have the `glibc-doc-reference' and `info' packages installed, try:
-+# `info libc "Name Service Switch"' for information about this file.
-+
-+passwd:         files
-+group:          files
-+shadow:         files
-+hosts:          files dns
-+networks:       files
-+
-+protocols:      files
-+services:       files
-+ethers:         files
-+rpc:            files
-+
+Looks good, thanks. At least, the autobuilders are a lot happier now :-)
+
+Thanks,
+
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
