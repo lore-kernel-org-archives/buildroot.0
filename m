@@ -1,57 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 2 Dec 2012 08:07:04 -0800
-Subject: [Buildroot] [git commit] pkg-download.mk: Fix shallow clone
-Message-ID: <20121202160725.CF72696FF4@busybox.osuosl.org>
+Date: Sun, 2 Dec 2012 07:48:18 -0800
+Subject: [Buildroot] [git commit] qtuio: fix build issue because of missing
+	include
+Message-ID: <20121202160725.8829796FF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d1f5fc29efd40d61e8a185a22e3ee6f52c10d43c
+commit: http://git.buildroot.net/buildroot/commit/?id=4a4b0bdd0753fd039d2d3992eb85ea2e118dcbf4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some git versions (e.g. 1.7.0) do not treat trying to shallow clone
-a non existing branch or tag as a fatal error but report a warning
-and clone HEAD instead. Thus the fallback mechanism does not work
-in this case.
+TuioServer.cpp uses usleep but did not include <unistd.h>. This
+patch adds the missing #include. This issue has been reported
+upstream.
 
-This patch introduces a check for the presence of the requested
-version as a branch or tag before trying the shallow clone. It
-also removes the need to do two clones when a sha1 is given as
-a packege version.
-
-[Peter: use cut -f2-]
 Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-download.mk |   13 ++++++++++---
- 1 files changed, 10 insertions(+), 3 deletions(-)
+ .../qtuio-TuioServer.cpp-add-missing-include.patch |   28 ++++++++++++++++++++
+ 1 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 6c57244..ea01b05 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -74,12 +74,19 @@ domainseparator=$(if $(1),$(1),/)
- ################################################################################
- 
- # Try a shallow clone - but that only works if the version is a ref (tag or
--# branch). Fall back on a full clone if it's a generic sha1.
-+# branch). Before trying to do a shallow clone we check if $($(PKG)_DL_VERSION)
-+# is in the list provided by git ls-remote. If not we fall back on a full clone.
-+#
-+# Messages for the type of clone used are provided to ease debugging in case of
-+# problems
- define DOWNLOAD_GIT
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
--	 ($(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) || \
--	  $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) && \
-+	 ((test `git ls-remote  $($(PKG)_SITE) | cut -f 2- | grep $($(PKG)_DL_VERSION)` && \
-+	   echo "Doing shallow clone" && \
-+	   $(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) || \
-+	  (echo "Doing full clone" && \
-+	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
- 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
- 	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
- 		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
+diff --git a/package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch b/package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch
+new file mode 100644
+index 0000000..9933702
+--- /dev/null
++++ b/package/qtuio/qtuio-TuioServer.cpp-add-missing-include.patch
+@@ -0,0 +1,28 @@
++From 4dd7cad8c95484a882eaa2aeaa74595a3dd93a07 Mon Sep 17 00:00:00 2001
++From: Stephan Hoffmann <sho@relinux.de>
++Date: Sun, 2 Dec 2012 13:36:41 +0100
++Subject: [PATCH] TuioServer.cpp: add missing include
++
++If usleep() is used the header <unistd.h> has to be included
++
++Signed-off-by: Stephan Hoffmann <sho@relinux.de>
++---
++ src/3rdparty/tuio/TuioServer.cpp |    2 ++
++ 1 files changed, 2 insertions(+), 0 deletions(-)
++
++diff --git a/src/3rdparty/tuio/TuioServer.cpp b/src/3rdparty/tuio/TuioServer.cpp
++index f17bef9..851144c 100644
++--- a/src/3rdparty/tuio/TuioServer.cpp
+++++ b/src/3rdparty/tuio/TuioServer.cpp
++@@ -25,6 +25,8 @@ using namespace TUIO;
++ using namespace osc;
++ 
++ #ifndef WIN32
+++#include <unistd.h>
+++
++ static void* ThreadFunc( void* obj )
++ #else
++ static DWORD WINAPI ThreadFunc( LPVOID obj )
++-- 
++1.7.0.4
++
