@@ -1,33 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 2 Dec 2012 16:31:54 -0800
-Subject: [Buildroot] [git commit] libtool: undeprecate for now
-Message-ID: <20121203010304.2A651996F6@busybox.osuosl.org>
+Date: Sun, 2 Dec 2012 16:32:28 -0800
+Subject: [Buildroot] [git commit] unexport PKG_CONFIG_SYSROOT_DIR
+Message-ID: <20121203010304.934AD996F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f619d5ba20ef46c57259f35a21bb98b7c85c35a4
+commit: http://git.buildroot.net/buildroot/commit/?id=4f607edffda4835884f1f013f5d0ae0cb2eadeb7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Pulseaudio selects libtool, so get rid of the deprecated annotation so
-people don't get warnings about unmet dependencies when exiting menuconfig.
+If this is not done then pkg-config can get confused.
 
+Thomas and Arnout really deserve the credit for this - I just did
+the testing.
+
+Signed-off-by: Charles Manning <cdhmanning@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libtool/Config.in |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libtool/Config.in b/package/libtool/Config.in
-index 42df25b..d3cf2d7 100644
---- a/package/libtool/Config.in
-+++ b/package/libtool/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_LIBTOOL
- 	bool "libtool"
--	# We no longer support a toolchain on the target
--	depends on BR2_DEPRECATED
- 	help
- 	  Library that hides the complexity of using shared/static libraries
- 	  on different platforms behind a consistent, portable interface.
+diff --git a/Makefile b/Makefile
+index b394fd5..87943b8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -172,6 +172,7 @@ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+ 
+ # Make sure pkg-config doesn't look outside the buildroot tree
+ unexport PKG_CONFIG_PATH
++unexport PKG_CONFIG_SYSROOT_DIR
+ 
+ # Having DESTDIR set in the environment confuses the installation
+ # steps of some packages.
