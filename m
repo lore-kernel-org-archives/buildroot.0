@@ -1,35 +1,45 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 03 Dec 2012 11:20:45 +0100 (CET)
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
+Date: Mon,  3 Dec 2012 11:21:49 +0100
 Subject: [Buildroot] [PATCH] reorder fs alphabetically
-In-Reply-To: <87a9tvpppm.fsf@dell.be.48ers.dk>
-Message-ID: <900efd3a-df36-406f-8621-eced7560da8c@zimbra2.corp.accelance.fr>
+In-Reply-To: <1354003953-10875-1-git-send-email-jeremy.rosen@openwide.fr>
+References: <1354003953-10875-1-git-send-email-jeremy.rosen@openwide.fr>
+Message-ID: <1354530109-13231-1-git-send-email-jeremy.rosen@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hmm, I can't see it, was it applied to master or next ? (trying to clean up my local branches here, no big deal...)
+Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
+---
+ fs/Config.in |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-    Regards
-
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> De: "Peter Korsgaard" <jacmet@uclibc.org>
-> ?: "J?r?my Rosen" <jeremy.rosen@openwide.fr>
-> Cc: buildroot at busybox.net
-> Envoy?: Lundi 3 D?cembre 2012 08:19:49
-> Objet: Re: [PATCH] reorder fs alphabetically
-> 
-> >>>>> "J?r?my" == J?r?my Rosen <jeremy.rosen@openwide.fr> writes:
-> 
->  J?r?my> Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
-> 
-> Committed, thanks.
-> 
-> --
-> Bye, Peter Korsgaard
-> 
+diff --git a/fs/Config.in b/fs/Config.in
+index 94154ea..da4c5ff 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -1,15 +1,15 @@
+ menu "Filesystem images"
+ 
+-source "fs/cramfs/Config.in"
+ source "fs/cloop/Config.in"
++source "fs/cpio/Config.in"
++source "fs/cramfs/Config.in"
+ source "fs/ext2/Config.in"
++source "fs/initramfs/Config.in"
++source "fs/iso9660/Config.in"
+ source "fs/jffs2/Config.in"
+-source "fs/ubifs/Config.in"
++source "fs/romfs/Config.in"
+ source "fs/squashfs/Config.in"
+ source "fs/tar/Config.in"
+-source "fs/cpio/Config.in"
+-source "fs/iso9660/Config.in"
+-source "fs/initramfs/Config.in"
+-source "fs/romfs/Config.in"
++source "fs/ubifs/Config.in"
+ 
+ endmenu
+-- 
+1.7.10.4
