@@ -1,42 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Dec 2012 14:07:58 +0100
-Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
-In-Reply-To: <1354531204-17481-1-git-send-email-jeremy.rosen@openwide.fr>
-References: <1354003953-10875-1-git-send-email-jeremy.rosen@openwide.fr>
- <1354531204-17481-1-git-send-email-jeremy.rosen@openwide.fr>
-Message-ID: <20121203140758.25732492@skate>
+Date: Mon, 3 Dec 2012 14:09:12 +0100
+Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
+ longcalls option
+In-Reply-To: <50bc6a34.45e8440a.493d.4091@mx.google.com>
+References: <50bc6a34.45e8440a.493d.4091@mx.google.com>
+Message-ID: <20121203140912.1e09f0ea@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?my Rosen,
+Dear Chris Zankel,
 
-On Mon,  3 Dec 2012 11:40:03 +0100, J?r?my Rosen wrote:
-
-> diff --git a/fs/live/live.mk b/fs/live/live.mk
-> new file mode 100644
-> index 0000000..33fe515
-> --- /dev/null
-> +++ b/fs/live/live.mk
-> @@ -0,0 +1,20 @@
-> +#############################################################
-> +#
-> +# Build the live root filesystem directory
-> +#
-> +#############################################################
+On Mon, 3 Dec 2012 00:58:46 -0800, Chris Zankel wrote:
+> The longcalls option allows calls across a greater range of addresses.
+> 
+> This option should be used when call targets can potentially be
+> out of range. It may degrade both code size and performance, but
+> the linker can generally optimize away the unnecessary overhead
+> when a call ends up within range.
+> 
+> This option is enabled by default.
+> 
+> Signed-off-by: Chris Zankel <chris@zankel.net>
+> ---
+>  arch/Config.in.xtensa |   17 +++++++++++++++++
+>  package/Makefile.in   |    6 ++++++
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+> index 60c03f5..a979108 100644
+> --- a/arch/Config.in.xtensa
+> +++ b/arch/Config.in.xtensa
+> @@ -35,3 +35,20 @@ config BR2_XTENSA_OVERLAY_DIR
+>  
+>  config BR2_ARCH
+>  	default "xtensa"	if BR2_xtensa
 > +
+> +menu "Target build options"
 > +
-> +define ROOTFS_LIVE_CMD
-> + sudo rsync -a --no-o --no-g --delete-during $(TARGET_DIR)/ $(BR2_TARGET_ROOTFS_LIVE_DEST)/
-> +endef
+> +config BR2_XTENSA_LONGCALLS
+> +	bool "Enable longcalls option"
+> +	default y
+> +	help
+> +	  Enable or disable transformation of call instructions to allow
+> +	  calls across a greater range of addresses.
+> +	  This option should be used when call targets can potentially be
+> +	  out of range. It may degrade both code size and performance, but
+> +	  the linker can generally optimize away the unnecessary overhead
+> +	  when a call ends up within range. 
+> +
+> +	  Should be enabled by default.
+> +
+> +endmenu
 
-Do we really want to include sudo commands in Buildroot? I'm not sure
-we want.
-
-What about instead a post-image script hook, that users can use to
-extract automatically the tarball image somewhere?
+Do we really want that as a configurable option? Isn't it possible
+instead to always generate longcalls, or to fix this on a per-package
+basis, when needed?
 
 Thomas
 -- 
