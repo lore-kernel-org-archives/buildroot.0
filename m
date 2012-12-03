@@ -1,47 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 2 Dec 2012 16:32:16 -0800
-Subject: [Buildroot] [git commit] skeleton: add /etc/nsswitch.conf
-Message-ID: <20121203010304.648BF996F6@busybox.osuosl.org>
+Date: Sun, 2 Dec 2012 16:31:54 -0800
+Subject: [Buildroot] [git commit] libtool: undeprecate for now
+Message-ID: <20121203010304.2A651996F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c52ff1acfb2953f1ac40cdce4387b7d1d8cef14
+commit: http://git.buildroot.net/buildroot/commit/?id=f619d5ba20ef46c57259f35a21bb98b7c85c35a4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Toolchain Linaro 2012_09 and possibly other glibc based ones
-rely on the existence of nsswitch.conf. If it's missing names
-from /etc/hosts are not resolved and thus "localhost" is not
-known.
+Pulseaudio selects libtool, so get rid of the deprecated annotation so
+people don't get warnings about unmet dependencies when exiting menuconfig.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- system/skeleton/etc/nsswitch.conf |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+ package/libtool/Config.in |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/system/skeleton/etc/nsswitch.conf b/system/skeleton/etc/nsswitch.conf
-new file mode 100644
-index 0000000..d81e2f0
---- /dev/null
-+++ b/system/skeleton/etc/nsswitch.conf
-@@ -0,0 +1,17 @@
-+# /etc/nsswitch.conf
-+#
-+# Example configuration of GNU Name Service Switch functionality.
-+# If you have the `glibc-doc-reference' and `info' packages installed, try:
-+# `info libc "Name Service Switch"' for information about this file.
-+
-+passwd:         files
-+group:          files
-+shadow:         files
-+hosts:          files dns
-+networks:       files
-+
-+protocols:      files
-+services:       files
-+ethers:         files
-+rpc:            files
-+
+diff --git a/package/libtool/Config.in b/package/libtool/Config.in
+index 42df25b..d3cf2d7 100644
+--- a/package/libtool/Config.in
++++ b/package/libtool/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_LIBTOOL
+ 	bool "libtool"
+-	# We no longer support a toolchain on the target
+-	depends on BR2_DEPRECATED
+ 	help
+ 	  Library that hides the complexity of using shared/static libraries
+ 	  on different platforms behind a consistent, portable interface.
