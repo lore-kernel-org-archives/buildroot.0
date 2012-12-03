@@ -1,70 +1,32 @@
-From: Chris Zankel <chris@zankel.net>
-Date: Mon, 3 Dec 2012 00:58:46 -0800
-Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
-	longcalls option
-Message-ID: <50bc6a34.45e8440a.493d.4091@mx.google.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 3 Dec 2012 10:21:06 +0100
+Subject: [Buildroot] [PATCH] [PATCH][RFC] new target: live filesystem
+In-Reply-To: <2f772bd2-fecd-4aeb-9bbe-83316ac7deed@zimbra2.corp.accelance.fr>
+References: <CAJJ6jxvVkLmLmMiC+3bKEqokBUd1-LrJ8nJywzYmtVYxbXsSNQ@mail.gmail.com>
+ <2f772bd2-fecd-4aeb-9bbe-83316ac7deed@zimbra2.corp.accelance.fr>
+Message-ID: <CAHXCMMLOF7j8jf55hZiQTwE1S2szCn0Ref02h6_Nn-Qo72T5Sg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The longcalls option allows calls across a greater range of addresses.
+Hi Jeremy, all,
 
-This option should be used when call targets can potentially be
-out of range. It may degrade both code size and performance, but
-the linker can generally optimize away the unnecessary overhead
-when a call ends up within range.
+2012/12/3 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+> well, it's more a question of what you consider the live filesystem to be...
+>
+> I see it a as just another filesystem format (basically a NFS target) which is why my original patch had it in output/images/live
+>
+> if you see it as a deployment, it does not really make sense to add it to buildroot (buildroot doesn't flash the filesystem directly) I can understand that both point of view make sense
+>
+> however having this target makes things simpler in a very common use case (arguably the most common use case since it's the case where you use buildroot repeatedly to prepare the fs, not the case where you run it once to build the final FS)
 
-This option is enabled by default.
+That's a controversial topic...
+But, at least, you cat start filling the gap in the doc ;-),
+especially this section:
+http://buildroot.org/downloads/manual/manual.html#_beyond_buildroot
 
-Signed-off-by: Chris Zankel <chris@zankel.net>
----
- arch/Config.in.xtensa |   17 +++++++++++++++++
- package/Makefile.in   |    6 ++++++
- 2 files changed, 23 insertions(+)
 
-diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index 60c03f5..a979108 100644
---- a/arch/Config.in.xtensa
-+++ b/arch/Config.in.xtensa
-@@ -35,3 +35,20 @@ config BR2_XTENSA_OVERLAY_DIR
- 
- config BR2_ARCH
- 	default "xtensa"	if BR2_xtensa
-+
-+menu "Target build options"
-+
-+config BR2_XTENSA_LONGCALLS
-+	bool "Enable longcalls option"
-+	default y
-+	help
-+	  Enable or disable transformation of call instructions to allow
-+	  calls across a greater range of addresses.
-+	  This option should be used when call targets can potentially be
-+	  out of range. It may degrade both code size and performance, but
-+	  the linker can generally optimize away the unnecessary overhead
-+	  when a call ends up within range. 
-+
-+	  Should be enabled by default.
-+
-+endmenu
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 9fdc745..b52d5e0 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -56,6 +56,12 @@ TARGET_ABI+=-mabi=spe -mfloat-gprs=double -Wa,-me500mc
- endif
- endif
- 
-+# Xtensa: The 'longcalls' option is required for large binary packages.
-+# Use a global option for all packages for now.
-+ifeq ($(BR2_XTENSA_LONGCALLS),y)
-+TARGET_CFLAGS += -mlongcalls
-+endif
-+
- STAGING_DIR=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot
- 
- TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
 -- 
-1.7.9.5
+Sam
