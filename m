@@ -1,41 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 3 Dec 2012 17:45:59 +0100
-Subject: [Buildroot] no crosstool-ng 1.17.0 in 2012.11
-In-Reply-To: <50BCD509.4050508@googlemail.com>
-References: <50BCD509.4050508@googlemail.com>
-Message-ID: <201212031745.59827.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 03 Dec 2012 13:48:48 -0300
+Subject: [Buildroot] [PATCH 14/14] ltrace: bump to version 0.7.1
+In-Reply-To: <20121203174545.475969fe@skate>
+References: <1354545972-26783-1-git-send-email-gustavo@zacarias.com.ar>
+ <1354545972-26783-14-git-send-email-gustavo@zacarias.com.ar>
+ <20121203174545.475969fe@skate>
+Message-ID: <50BCD7F0.7070807@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carsten, All,
+On 12/03/2012 01:45 PM, Thomas Petazzoni wrote:
 
-On Monday 03 December 2012 17:36:25 Carsten Schoenert wrote:
-> I was hoping that the current crosstool-ng version 1.17.0 would be
-> placed into buildroot 1012.11.
-> Any special reason why crosstool-ng is still 1.16.0 or was it just
-> forgotten to update? :)
+> Dear Gustavo Zacarias,
+> 
+> On Mon,  3 Dec 2012 11:46:12 -0300, Gustavo Zacarias wrote:
+> 
+>>  config BR2_PACKAGE_LTRACE
+>>  	bool "ltrace"
+>> -	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
+>> -	depends on !BR2_xtensa
+>> +	depends on !(BR2_avr32 || BR2_mips || BR2_sh || BR2_sh64 || BR2_xtensa)
+>>  	select BR2_PACKAGE_LIBELF
+> 
+> So now ltrace supports mipsel ?
 
-crosstool-NG 1.17.0 was released too late for inclusion in buildroot 2012.11.
-I did not even try to update it.
+Oh yes, qemu mipsel tested.
 
-If all goes well, I'll push the next ct-ng version in time for inclusion in
-the next BR release.
+> When there are more changes than just bumping the version name, like
+> changes in patches and other things, it'd be nice to have a slightly
+> more elaborate commit log.
 
-Hopefully, all will go well, but there's FOSDEM at just about the time the
-next release of ct-ng is due. So, we'll see... :-/
+Yes, i could be more verbose, noted.
 
-Alternatively, interested users ( eg. you! ;-) ) can post a patch! ;-)
+> And, unrelated to the commit itself, did you try this ltrace version? I
+> have never been able to get ltrace 0.6 to work on ARM/uClibc.
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+I didn't run test it on ARM, just mipsel to really verify it and ppc to
+see that it wasn't broken (and it was, hence the new ppc patch).
+I'll fire up a arm qemu build to test it.
+Regards.
