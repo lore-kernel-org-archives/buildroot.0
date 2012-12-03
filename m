@@ -1,68 +1,70 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Mon, 03 Dec 2012 09:57:03 +0100 (CET)
-Subject: [Buildroot] [PATCH] [PATCH][RFC] new target: live filesystem
-In-Reply-To: <CAJJ6jxvVkLmLmMiC+3bKEqokBUd1-LrJ8nJywzYmtVYxbXsSNQ@mail.gmail.com>
-Message-ID: <2f772bd2-fecd-4aeb-9bbe-83316ac7deed@zimbra2.corp.accelance.fr>
+From: Chris Zankel <chris@zankel.net>
+Date: Mon, 3 Dec 2012 00:58:46 -0800
+Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
+	longcalls option
+Message-ID: <50bc6a34.45e8440a.493d.4091@mx.google.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-well, it's more a question of what you consider the live filesystem to be...
+The longcalls option allows calls across a greater range of addresses.
 
-I see it a as just another filesystem format (basically a NFS target) which is why my original patch had it in output/images/live 
+This option should be used when call targets can potentially be
+out of range. It may degrade both code size and performance, but
+the linker can generally optimize away the unnecessary overhead
+when a call ends up within range.
 
-if you see it as a deployment, it does not really make sense to add it to buildroot (buildroot doesn't flash the filesystem directly) I can understand that both point of view make sense
+This option is enabled by default.
 
-however having this target makes things simpler in a very common use case (arguably the most common use case since it's the case where you use buildroot repeatedly to prepare the fs, not the case where you run it once to build the final FS)
+Signed-off-by: Chris Zankel <chris@zankel.net>
+---
+ arch/Config.in.xtensa |   17 +++++++++++++++++
+ package/Makefile.in   |    6 ++++++
+ 2 files changed, 23 insertions(+)
 
-yes it's a two line script, and yes it's a minor change, but I think it makes sense and it's simple enough for it not to be a big deal...
-
-
-
-    Regards
-
-    J?r?my Rosen
-
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> De: "Steve Calfee" <stevecalfee@gmail.com>
-> ?: "Arnout Vandecappelle" <arnout@mind.be>
-> Cc: "J?r?my Rosen" <jeremy.rosen@openwide.fr>, buildroot at busybox.net
-> Envoy?: Vendredi 30 Novembre 2012 22:46:53
-> Objet: Re: [Buildroot] [PATCH] [PATCH][RFC] new target: live filesystem
-> 
-> On Fri, Nov 30, 2012 at 1:15 AM, Arnout Vandecappelle
-> <arnout@mind.be> wrote:
-> > On 30/11/12 01:04, Steve Calfee wrote:
-> >>
-> >> I don't understand why you need this. It is a one line "sudo tar
-> >> -xf
-> >> ..." to unpack the tarball into your nfs directory. Either type
-> >> this
-> >> line or add a one line script to your ~/bin directory to do it for
-> >> each of your buildroot trees/environments. Don't add clutter to
-> >> the
-> >> buildroot makefile.
-> >
-> >
-> >  If that is the reasoning, we can also remove the compression of
-> >  the
-> > .tar file, or the -dirclean targets, etc. etc.
-> >
-> >  In addition, this target also cleans up the NFS directory first,
-> >  so
-> > it's slightly more than just untarring.
-> >
-> Hi  Arnout,
-> 
-> I guess, but buildroot is all about building, not deploying. What is
-> next, an automatic copy to my usb or sd drive? Stuff that is highly
-> user specific should not be in the makefile, especially stuff that
-> can
-> easily be added to a simple script - my opinion only,
-> 
-> Steve
-> 
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index 60c03f5..a979108 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -35,3 +35,20 @@ config BR2_XTENSA_OVERLAY_DIR
+ 
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
++
++menu "Target build options"
++
++config BR2_XTENSA_LONGCALLS
++	bool "Enable longcalls option"
++	default y
++	help
++	  Enable or disable transformation of call instructions to allow
++	  calls across a greater range of addresses.
++	  This option should be used when call targets can potentially be
++	  out of range. It may degrade both code size and performance, but
++	  the linker can generally optimize away the unnecessary overhead
++	  when a call ends up within range. 
++
++	  Should be enabled by default.
++
++endmenu
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 9fdc745..b52d5e0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -56,6 +56,12 @@ TARGET_ABI+=-mabi=spe -mfloat-gprs=double -Wa,-me500mc
+ endif
+ endif
+ 
++# Xtensa: The 'longcalls' option is required for large binary packages.
++# Use a global option for all packages for now.
++ifeq ($(BR2_XTENSA_LONGCALLS),y)
++TARGET_CFLAGS += -mlongcalls
++endif
++
+ STAGING_DIR=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot
+ 
+ TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+-- 
+1.7.9.5
