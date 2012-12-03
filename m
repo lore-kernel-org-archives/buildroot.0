@@ -1,67 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Dec 2012 14:09:12 +0100
-Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
- longcalls option
-In-Reply-To: <50bc6a34.45e8440a.493d.4091@mx.google.com>
-References: <50bc6a34.45e8440a.493d.4091@mx.google.com>
-Message-ID: <20121203140912.1e09f0ea@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 03 Dec 2012 14:42:03 +0100 (CET)
+Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
+In-Reply-To: <20121203140758.25732492@skate>
+Message-ID: <70774b99-43cc-46e9-a3ad-f9f9addb06da@zimbra2.corp.accelance.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Zankel,
 
-On Mon, 3 Dec 2012 00:58:46 -0800, Chris Zankel wrote:
-> The longcalls option allows calls across a greater range of addresses.
+> > +
+> > +define ROOTFS_LIVE_CMD
+> > + sudo rsync -a --no-o --no-g --delete-during $(TARGET_DIR)/
+> > $(BR2_TARGET_ROOTFS_LIVE_DEST)/
+> > +endef
 > 
-> This option should be used when call targets can potentially be
-> out of range. It may degrade both code size and performance, but
-> the linker can generally optimize away the unnecessary overhead
-> when a call ends up within range.
-> 
-> This option is enabled by default.
-> 
-> Signed-off-by: Chris Zankel <chris@zankel.net>
-> ---
->  arch/Config.in.xtensa |   17 +++++++++++++++++
->  package/Makefile.in   |    6 ++++++
->  2 files changed, 23 insertions(+)
-> 
-> diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-> index 60c03f5..a979108 100644
-> --- a/arch/Config.in.xtensa
-> +++ b/arch/Config.in.xtensa
-> @@ -35,3 +35,20 @@ config BR2_XTENSA_OVERLAY_DIR
->  
->  config BR2_ARCH
->  	default "xtensa"	if BR2_xtensa
-> +
-> +menu "Target build options"
-> +
-> +config BR2_XTENSA_LONGCALLS
-> +	bool "Enable longcalls option"
-> +	default y
-> +	help
-> +	  Enable or disable transformation of call instructions to allow
-> +	  calls across a greater range of addresses.
-> +	  This option should be used when call targets can potentially be
-> +	  out of range. It may degrade both code size and performance, but
-> +	  the linker can generally optimize away the unnecessary overhead
-> +	  when a call ends up within range. 
-> +
-> +	  Should be enabled by default.
-> +
-> +endmenu
+> Do we really want to include sudo commands in Buildroot? I'm not sure
+> we want.
 
-Do we really want that as a configurable option? Isn't it possible
-instead to always generate longcalls, or to fix this on a per-package
-basis, when needed?
+that's the question I wanted answered by sending this patch early... I'm still quite new in this community and I am not sure how the buildroot philosophy is seen
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+note that I check for buildroot properly in the PRE_GEN_HOOKS and that I don't try to install host-sudo (which is not possible anyway)
+
+I personally think that building target/ with sudo instead of fakeroot would be a stupid idea, but that's not what this patch does. This patch simply adds a new optional target to ease NFS deployment,
+
+> 
+> What about instead a post-image script hook, that users can use to
+> extract automatically the tarball image somewhere?
+> 
+
+yes, that would work too, I can do that locally to solve my particular problem, but I don't think you would accept it upstream either. If you consider that deploying the live filesystem is not buildroot's job, fine I'll probably do it with post-build scripts instead, but I personally believe that NFS is the most common target and that doing it in buildroot-core is more convinient and makes more sense
+
+pos-install scripts needs to be rewritten by each user, and doing it manually is a bit error prone (especially if you have lots of devs sharing a buildroot project through git, you can have weird side effects with people not cleaning before deplying the new FS) 
+
+
+again, I personally think this use-case makes sense, especially in big teams where some members don't want to learn what NFS is (yeah, sounds stupid, but it does happen) and I don't think there are any major drawback (we test sudo properly, we only call it for a specific use-case where it is really needed) except the philosophical question of "should a build tool use a tool giving root-priv like sudo" which in the case of NFS doesn't change much since the user will have to use it himself (either directly or trough post-image script). 
+
+I'd really think it makes sense in a "type make, reboot the target, test your change" philosophy which matches really well the idea behind NFS based developement, but it's your call as with any core change...
+
+Regards
+J?r?my
+
+
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> 
