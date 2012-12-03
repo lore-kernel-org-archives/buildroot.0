@@ -1,44 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 03 Dec 2012 13:48:48 -0300
-Subject: [Buildroot] [PATCH 14/14] ltrace: bump to version 0.7.1
-In-Reply-To: <20121203174545.475969fe@skate>
-References: <1354545972-26783-1-git-send-email-gustavo@zacarias.com.ar>
- <1354545972-26783-14-git-send-email-gustavo@zacarias.com.ar>
- <20121203174545.475969fe@skate>
-Message-ID: <50BCD7F0.7070807@zacarias.com.ar>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Mon, 03 Dec 2012 19:03:47 +0100
+Subject: [Buildroot] no crosstool-ng 1.17.0 in 2012.11
+In-Reply-To: <201212031745.59827.yann.morin.1998@free.fr>
+References: <50BCD509.4050508@googlemail.com>
+ <201212031745.59827.yann.morin.1998@free.fr>
+Message-ID: <50BCE983.4060104@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/03/2012 01:45 PM, Thomas Petazzoni wrote:
+Hello Yann, Thomas,
 
-> Dear Gustavo Zacarias,
+Am 03.12.2012 17:45, schrieb Yann E. MORIN:
+> crosstool-NG 1.17.0 was released too late for inclusion in buildroot 2012.11.
+> I did not even try to update it.
+
+o.k. that's the explanation. ;)
+
+> If all goes well, I'll push the next ct-ng version in time for inclusion in
+> the next BR release.
 > 
-> On Mon,  3 Dec 2012 11:46:12 -0300, Gustavo Zacarias wrote:
-> 
->>  config BR2_PACKAGE_LTRACE
->>  	bool "ltrace"
->> -	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
->> -	depends on !BR2_xtensa
->> +	depends on !(BR2_avr32 || BR2_mips || BR2_sh || BR2_sh64 || BR2_xtensa)
->>  	select BR2_PACKAGE_LIBELF
-> 
-> So now ltrace supports mipsel ?
+> Hopefully, all will go well, but there's FOSDEM at just about the time the
+> next release of ct-ng is due. So, we'll see... :-/
 
-Oh yes, qemu mipsel tested.
+Yes, FOSDEM in the cold city of Brussels. I'll be there.
 
-> When there are more changes than just bumping the version name, like
-> changes in patches and other things, it'd be nice to have a slightly
-> more elaborate commit log.
+> Alternatively, interested users ( eg. you! ;-) ) can post a patch! ;-)
 
-Yes, i could be more verbose, noted.
+I will do, right now a arm gcc 4.7.2 is builded. I will before checking
+some things inside my branch. Until now everything work well, even the
+compiler warnings are gone while cross compiler is building. ;)
 
-> And, unrelated to the commit itself, did you try this ltrace version? I
-> have never been able to get ltrace 0.6 to work on ARM/uClibc.
-
-I didn't run test it on ARM, just mipsel to really verify it and ppc to
-see that it wasn't broken (and it was, hence the new ppc patch).
-I'll fire up a arm qemu build to test it.
-Regards.
+Regards
+Carsten
