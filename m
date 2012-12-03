@@ -1,19 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 2 Dec 2012 17:19:18 -0800
-Subject: [Buildroot] [git commit] Makefile: kickoff 2013.02 cycle
-Message-ID: <20121203145717.3307081E08@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 03 Dec 2012 06:58:13 -0800
+Subject: [Buildroot] [PATCH] reorder fs alphabetically
+In-Reply-To: <900efd3a-df36-406f-8621-eced7560da8c@zimbra2.corp.accelance.fr>
+ (Jeremy Rosen's message of "Mon, 03 Dec 2012 11:20:45 +0100 (CET)")
+References: <900efd3a-df36-406f-8621-eced7560da8c@zimbra2.corp.accelance.fr>
+Message-ID: <87txs3npx6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=677d5068b955cf713b73d285e41ec8eedbda8e38
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Jeremy" == Jeremy Rosen <jeremy.rosen@openwide.fr> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Jeremy> hmm, I can't see it, was it applied to master or next ? (trying
+ Jeremy> to clean up my local branches here, no big deal...)
 
-Patch is too large, so refusing to show it
+To master, but I forgot to push the changes yesterday.
+
+-- 
+Bye, Peter Korsgaard
