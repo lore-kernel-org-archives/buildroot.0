@@ -1,25 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 3 Dec 2012 09:25:29 +0100
-Subject: [Buildroot] [git commit] libtool: undeprecate for now
-In-Reply-To: <20121203010304.2A651996F6@busybox.osuosl.org>
-References: <20121203010304.2A651996F6@busybox.osuosl.org>
-Message-ID: <20121203092529.05e8d34c@skate>
+Date: Mon, 3 Dec 2012 09:32:15 +0100
+Subject: [Buildroot] Problem with NFS boot
+In-Reply-To: <CADKZYYLt90YY8rm4SCuqRN2SsAGqjXhQM7t5hQydpV9o7ZtT+A@mail.gmail.com>
+References: <CADKZYYLt90YY8rm4SCuqRN2SsAGqjXhQM7t5hQydpV9o7ZtT+A@mail.gmail.com>
+Message-ID: <20121203093215.2b6d64c6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Santhosh Ramani,
 
-On Sun, 2 Dec 2012 16:31:54 -0800, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=f619d5ba20ef46c57259f35a21bb98b7c85c35a4
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 1 Dec 2012 19:51:37 -0600, Santhosh Ramani wrote:
+
+> Thank you for your reply, yes I did untar the rootfs.tar.bz2 into the
+> folder that is exported as NFS using sudo.
 > 
-> Pulseaudio selects libtool, so get rid of the deprecated annotation so
-> people don't get warnings about unmet dependencies when exiting menuconfig.
+> Note:
+> Linux kernel from TI SDK + buildroot rootfs = no nfs (only SD Card)
+> Linux kernle from buildroot + buildroot rootfs = everything works fine.
 
-Pulseaudio needs libtool on the target? This sounds strange, no?
+What /dev management solution are you using? Static? Dynamic?
+
+If you're using one of the dynamic solutions (devtmpfs, mdev or udev),
+make sure that your kernel is built with CONFIG_DEVTMPFS and
+CONFIG_DEVTMPFS_MOUNT. When the kernel is built by Buildroot, Buildroot
+automatically enables those options. When your kernel is built
+manually, you have to make sure those options are enabled.
+
+Best regards,
 
 Thomas
 -- 
