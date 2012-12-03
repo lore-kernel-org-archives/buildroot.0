@@ -1,37 +1,49 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Mon, 03 Dec 2012 19:03:47 +0100
-Subject: [Buildroot] no crosstool-ng 1.17.0 in 2012.11
-In-Reply-To: <201212031745.59827.yann.morin.1998@free.fr>
-References: <50BCD509.4050508@googlemail.com>
- <201212031745.59827.yann.morin.1998@free.fr>
-Message-ID: <50BCE983.4060104@googlemail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 3 Dec 2012 19:10:25 +0100
+Subject: [Buildroot] [PATCH 03/51] package/dtc: add option to install
+	programs
+In-Reply-To: <20121129094031.3173b9a0@skate>
+References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
+ <1354146890-27380-4-git-send-email-yann.morin.1998@free.fr>
+ <20121129094031.3173b9a0@skate>
+Message-ID: <201212031910.25754.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, Thomas,
+Thomas, All,
 
-Am 03.12.2012 17:45, schrieb Yann E. MORIN:
-> crosstool-NG 1.17.0 was released too late for inclusion in buildroot 2012.11.
-> I did not even try to update it.
-
-o.k. that's the explanation. ;)
-
-> If all goes well, I'll push the next ct-ng version in time for inclusion in
-> the next BR release.
+On Thursday 29 November 2012 Thomas Petazzoni wrote:
+> On Thu, 29 Nov 2012 00:54:02 +0100, Yann E. MORIN wrote:
+> > There is some (minor?) issues wrt the licensing terms.
+> > The libfdt library is dual-licensed GPLv2+/BSD-2c, and the
+> > executables are licensed GPLv2+.
+> > 
+> > There is no way in BR to properly convey this information.
+> > So I decided to add some explanatory comments in the .mk
+> > file, in retaliation. ;-)
 > 
-> Hopefully, all will go well, but there's FOSDEM at just about the time the
-> next release of ct-ng is due. So, we'll see... :-/
+> As per the discussion during the Developers Days, there is now a way to
+> convey this information. From the report:
+> 
+>      multiple licenses: we don't want to make things very complex. It
+>      doesn't have to be machine-readable (we don't need to support
+>      machine analysis of the license field), so we don't have to
+>      formally decide how the license text must be written. It does make
+>      sense to have some convention, though. Proposal: "GPLv2+ or BSD-2c
+>      for the library, GPLv2+ for the dtc executable". 
 
-Yes, FOSDEM in the cold city of Brussels. I'll be there.
+Right-o-right, I forgot that. Thanks for reminding me. :-)
 
-> Alternatively, interested users ( eg. you! ;-) ) can post a patch! ;-)
+Regards,
+Yann E. MORIN.
 
-I will do, right now a arm gcc 4.7.2 is builded. I will before checking
-some things inside my branch. Until now everything work well, even the
-compiler warnings are gone while cross compiler is building. ;)
-
-Regards
-Carsten
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
