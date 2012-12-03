@@ -1,7 +1,9 @@
-From: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
-Date: Mon, 3 Dec 2012 14:20:07 -0800 (PST)
-Subject: [Buildroot] elfutils and the perf userspace tool
-Message-ID: <1354573207.60693.YahooMailNeo@web120305.mail.ne1.yahoo.com>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 3 Dec 2012 23:17:13 +0000
+Subject: [Buildroot] How to handle modularity in buildroot?
+In-Reply-To: <CAE21AQpHdjzrJYnUBY6qwVBvd1HKpFGcKoTAsWcHyOFpua-yeA@mail.gmail.com>
+References: <CAE21AQpHdjzrJYnUBY6qwVBvd1HKpFGcKoTAsWcHyOFpua-yeA@mail.gmail.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C610B824F7@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +12,58 @@ To: buildroot@busybox.net
 
 
 
-Hello everybody,
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On Behalf Of Charles
+> Manning
+> Sent: Monday, December 03, 2012 4:01 PM
+> To: buildroot at busybox.net
+> Subject: [Buildroot] How to handle modularity in buildroot?
+> 
+> Hello All
+> 
+> Ok, first off... I must absolutely congratulate and thank everyone for
+> a really useful build system.
+> 
+> Until now I had been using openembedded to build smaller file systems
+> for embedded systems. OE is way overkill for most embedded systems and
+> is like trying to use a chainsaw to cut butter. Buildroot is much
+> faster than OE and is way easier to navigate.
+> 
+> There are a few things I could do in OE that I am struggling with in
+> buildroot - no doubt mainly due to my learner status. One of these is
+> handling modularity.
+> 
+> Is there an easy way to have modular/hierarchical projects? For
+> example I would like to have a base file system that holds common
+> stuff but then have variants (eg. production vs development).
+> 
+> In OE this is easy: just create a "basic system" package which is
+> included in the recipes for each of the variants.
+> 
+> How would this be tackled in buildroot?
 
-I am using buildroot for generating a distro for ARM. I am able to add additional packages to buildroot or to use arm-linux-gcc directly to compile simple C programs.
+I believe what you are looking for is 'make defconfig'.  This will 
+provide a basic set of configuration options to get you going, then
+you'll have to edit the things like processor family, processor type,
+whether you want uClibc vs {e,}glibc, etc.
 
-Still I haven't yet understood how to cross compile the perf userspace tool and I think it would be a very nice addition to buildroot.
+The default config is usually okay for a first attempt, however, I like
+to provide to others in my company a set of config files to choose from.
+Those, I derive from just cranking through the menuconfig and save the
+options off when I get done.
 
-The perf tool requires elfutils and the kernel sources it comes with.
+If you are looking for more than this, there are a few other default
+config files to attempt.  To list those config files do a 'make help'.
 
-My first problem is that elfutils will not successfully compile, as you can see here:
-http://pastie.org/pastes/5474687/text
+Hope this helps!
 
-My elfutils.mk file looks like this http://pastie.org/pastes/5474697/text
+Andy
 
-Please tell me how do I move further from this.
-
-Thanks,
-Bogdan
+> 
+> Thanks
+> 
+> Charles
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
