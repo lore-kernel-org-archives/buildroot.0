@@ -1,26 +1,22 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Tue, 4 Dec 2012 02:16:11 +0000 (UTC)
-Subject: [Buildroot] Chances in skeleton don't appear in filesystem
-Message-ID: <slrnkbqn5h.1p8.narkewoody@zuhnb712.local.com>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Tue, 4 Dec 2012 16:03:25 +1300
+Subject: [Buildroot] Figuring out selects
+Message-ID: <CAE21AQo_fEOqWuzfN2Z3nWiUX+1MJi4JVw=jaiDDkY4CfD6byg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, list
+Hello All
 
-After some intial builds, I come up with idea to make chances in the
-default filesystem contents. Then I change the config to use customized
-filesystem skeleton (fs/skeleton) and changed the
-fs/skeleton/network/interfaces with expection that change could appear
-in the generated target file system.  After another run of make,
-however, I did not see my chances by untar the rootfs.tar.bz2.  Then I
-tried to remove the output/target directory, this time I even got
-another error, 'output/target/etc/hosts: no such file or directory'.
+Is there any way to find out why a config item is selected?
 
-What's the correct method to modify the defualt filesystem? Thanks.
+For example libglib2 is selected by a package I am using. Which one?
 
--- 
-woody
-I can't go back to yesterday - because I was a different person then.
+I could go through all the packages and figure it out eventually, but
+surely computers should do all the boring work.
+
+Thanks
+
+Charles
