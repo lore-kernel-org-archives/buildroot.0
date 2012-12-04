@@ -1,41 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Dec 2012 14:50:02 -0800
-Subject: [Buildroot] [PATCH 8/8] screen: add license information
-In-Reply-To: <50BE723A.3040102@mind.be> (Arnout Vandecappelle's message of
- "Tue, 04 Dec 2012 22:59:22 +0100")
-References: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
- <1354270483-32356-9-git-send-email-spdawson@gmail.com>
- <50BE723A.3040102@mind.be>
-Message-ID: <87d2ypl9et.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 Dec 2012 14:42:18 -0800
+Subject: [Buildroot] [git commit] classpath: gstreamer support needs gtk as
+	well
+Message-ID: <20121204225019.BA1949995B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=39cde08e1036eab9ca5ad5a4fb231c9bf4a30522
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> On 30/11/12 11:14, spdawson at gmail.com wrote:
- >> From: Simon Dawson<spdawson@gmail.com>
- >> 
- >> Signed-off-by: Simon Dawson<spdawson@gmail.com>
- >> ---
- >> package/screen/screen.mk |    2 ++
- >> 1 file changed, 2 insertions(+)
- >> 
- >> diff --git a/package/screen/screen.mk b/package/screen/screen.mk
- >> index 8786322..50bb1a6 100644
- >> --- a/package/screen/screen.mk
- >> +++ b/package/screen/screen.mk
- >> @@ -6,6 +6,8 @@
- >> 
- >> SCREEN_VERSION = 4.0.3
- >> SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
- >> +SCREEN_LICENSE = GPLv2
+Fixes http://autobuild.buildroot.net/results/80550a210a72a64c182e00dc2cb3a15ec776b658
 
- Arnout>  GPLv2+, actually.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/classpath/classpath.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-Committed as GPLv2+, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/classpath/classpath.mk b/package/classpath/classpath.mk
+index 9142f69..2d12552 100644
+--- a/package/classpath/classpath.mk
++++ b/package/classpath/classpath.mk
+@@ -24,6 +24,10 @@ else
+ CLASSPATH_CONF_OPT += --disable-gmp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
++CLASSPATH_CONF_OPT += --enable-gtk-peer
++CLASSPATH_DEPENDENCIES += libgtk2
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
+ CLASSPATH_CONF_OPT += --enable-gstreamer-peer
+ CLASSPATH_DEPENDENCIES += gst-plugins-base
+@@ -31,11 +35,8 @@ else
+ CLASSPATH_CONF_OPT += --disable-gstreamer-peer
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
+-CLASSPATH_CONF_OPT += --enable-gtk-peer
+-CLASSPATH_DEPENDENCIES += libgtk2
+ else
+-CLASSPATH_CONF_OPT += --disable-gtk-peer
++CLASSPATH_CONF_OPT += --disable-gtk-peer --disable-gstreamer-peer
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT),y)
