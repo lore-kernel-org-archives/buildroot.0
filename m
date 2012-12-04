@@ -1,40 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 4 Dec 2012 10:54:26 -0800
-Subject: [Buildroot] [git commit] jquery-validation: bump to version 1.10.0
-Message-ID: <20121204190929.61CA099716@busybox.osuosl.org>
+Date: Tue, 4 Dec 2012 10:52:17 -0800
+Subject: [Buildroot] [git commit] linux: bump 3.6.x stable version
+Message-ID: <20121204190928.EE61299716@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48e0da1d745435f1c64c17556fc8758c6e37ce42
+commit: http://git.buildroot.net/buildroot/commit/?id=2422f13aaf6909d22414dba2fd8722135b1bb02b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/jquery-validation/jquery-validation.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index 7d30270..746b534 100644
---- a/package/jquery-validation/jquery-validation.mk
-+++ b/package/jquery-validation/jquery-validation.mk
-@@ -1,13 +1,13 @@
--JQUERY_VALIDATION_VERSION = 1.9.0
-+JQUERY_VALIDATION_VERSION = 1.10.0
- JQUERY_VALIDATION_SITE = http://jquery.bassistance.de/validate
- JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
+diff --git a/linux/Config.in b/linux/Config.in
+index f408ad5..ef3b2a1 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
- define JQUERY_VALIDATION_EXTRACT_CMDS
--	unzip -d $(BUILD_DIR) $(DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
-+	unzip -d $(@D) $(DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
- endef
+ config BR2_LINUX_KERNEL_3_6
+-	bool "3.6.8"
++	bool "3.6.9"
  
- define JQUERY_VALIDATION_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/jquery.validate.min.js \
-+	$(INSTALL) -m 0644 -D $(@D)/dist/jquery.validate.min.js \
- 		$(TARGET_DIR)/var/www/jquery.validate.js
- endef
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
  
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.6.8" if BR2_LINUX_KERNEL_3_6
++	default "3.6.9" if BR2_LINUX_KERNEL_3_6
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
