@@ -1,25 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Dec 2012 13:56:54 -0800
-Subject: [Buildroot] [PATCH 6/8] mpfr: add license information
-In-Reply-To: <50BE6DC8.7070508@mind.be> (Arnout Vandecappelle's message of
- "Tue, 04 Dec 2012 22:40:24 +0100")
-References: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
- <1354270483-32356-7-git-send-email-spdawson@gmail.com>
- <50BE6DC8.7070508@mind.be>
-Message-ID: <87liddlbvd.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 Dec 2012 13:56:00 -0800
+Subject: [Buildroot] [git commit] argus: add license information
+Message-ID: <20121204215925.B425E903AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=329ffe5a60d35f45087fe4aacad6e9026740617f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> On 30/11/12 11:14, spdawson at gmail.com wrote:
- >> Signed-off-by: Simon Dawson<spdawson@gmail.com>
- Arnout> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/argus/argus.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/argus/argus.mk b/package/argus/argus.mk
+index da7ecac..a4b5330 100644
+--- a/package/argus/argus.mk
++++ b/package/argus/argus.mk
+@@ -8,6 +8,8 @@ ARGUS_SOURCE:=argus_$(ARGUS_VERSION).orig.tar.gz
+ ARGUS_PATCH:=argus_$(ARGUS_VERSION)-1.diff.gz
+ ARGUS_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/a/argus/
+ ARGUS_DEPENDENCIES=libpcap
++ARGUS_LICENSE = GPLv2+
++ARGUS_LICENSE_FILES = COPYING
+ 
+ define ARGUS_DEBIAN_PATCH_APPLY
+ 	if [ -d $(@D)/debian/patches ]; then \
