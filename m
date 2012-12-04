@@ -1,33 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 4 Dec 2012 13:56:44 -0800
-Subject: [Buildroot] [git commit] mpfr: add license information
-Message-ID: <20121204215926.9D68C9937D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 04 Dec 2012 22:59:22 +0100
+Subject: [Buildroot] [PATCH 8/8] screen: add license information
+In-Reply-To: <1354270483-32356-9-git-send-email-spdawson@gmail.com>
+References: <1354270483-32356-1-git-send-email-spdawson@gmail.com>
+ <1354270483-32356-9-git-send-email-spdawson@gmail.com>
+Message-ID: <50BE723A.3040102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1356ea38cdee8cfa9a532ebf2c9169585a210f50
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 30/11/12 11:14, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
+>
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+> ---
+>   package/screen/screen.mk |    2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+> index 8786322..50bb1a6 100644
+> --- a/package/screen/screen.mk
+> +++ b/package/screen/screen.mk
+> @@ -6,6 +6,8 @@
+>
+>   SCREEN_VERSION = 4.0.3
+>   SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
+> +SCREEN_LICENSE = GPLv2
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/mpfr/mpfr.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+  GPLv2+, actually.
 
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index 9caf3ac..c6f1009 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
-@@ -7,6 +7,8 @@
- MPFR_VERSION = 3.1.1
- MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
- MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.bz2
-+MPFR_LICENSE = LGPLv3+
-+MPFR_LICENSE_FILES = COPYING.LESSER
- MPFR_INSTALL_STAGING = YES
- MPFR_DEPENDENCIES = gmp
- MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+
+  FYI, to verify the (GPL family) licenses, I always do:
+
+ack-grep -a -i 'version [23]'
+
+ack-grep -a -i 'gnu (lesser|library)'
+
+  or
+
+ack-grep -a -i 'gnu general'
+
+
+  (sometimes piped into an additional grep filter if it's a large
+package).
+
+> +SCREEN_LICENSE_FILES = COPYING
+>   SCREEN_DEPENDENCIES = ncurses
+>   SCREEN_CONF_ENV = ac_cv_header_elf_h=no ac_cv_header_dwarf_h=no \
+>   	CFLAGS="$(TARGET_CFLAGS) -DTERMINFO"
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
