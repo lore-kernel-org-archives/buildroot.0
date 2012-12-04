@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Dec 2012 12:17:05 -0800
-Subject: [Buildroot] [PATCH 1/2] usb_modeswitch: bump to version 1.2.5
-In-Reply-To: <1354644802-28286-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Dec 2012 15:13:21 -0300")
-References: <1354644802-28286-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87sj7lmv26.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 4 Dec 2012 12:09:10 -0800
+Subject: [Buildroot] [git commit] dependencies.sh: only javac and jar are
+	needed by classpath
+Message-ID: <20121204201924.445EA99932@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=694050ffa2f3cbbfe7234b434f16f02cb93fa940
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ support/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 1b79b23..7a02512 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -159,7 +159,7 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $CONFIG_FILE > /dev/null && \
+    fi
+ fi
+ if grep -q ^BR2_PACKAGE_CLASSPATH=y $CONFIG_FILE ; then
+-    for prog in java javac jar; do
++    for prog in javac jar; do
+ 	if ! which $prog > /dev/null ; then
+ 	    /bin/echo -e "\nYou must install '$prog' on your build machine\n" >&2
+ 	    exit 1
