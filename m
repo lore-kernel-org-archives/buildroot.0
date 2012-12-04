@@ -1,21 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 04 Dec 2012 11:08:50 -0800
-Subject: [Buildroot] [PATCH 1/3] jquery: bump to version 1.8.3
-In-Reply-To: <1354641847-5083-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 4 Dec 2012 14:24:05 -0300")
-References: <1354641847-5083-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87hao1ocsd.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 3 Dec 2012 22:55:02 -0800
+Subject: [Buildroot] [git commit] xlib_libX11: disable nls compose overview
+	generation
+Message-ID: <20121204190927.C4CF899716@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cceda0efeaaa73af490940a628dbd175db3aa277
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Perl is only used to generate compose overview documentation.
 
-Committed all 3, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index f7dc4eb..75d172c 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -12,10 +12,12 @@ XLIB_LIBX11_DEPENDENCIES = libxcb xutil_util-macros xlib_xtrans xlib_libXau xlib
+ XLIB_LIBX11_CONF_OPT = \
+ 	--disable-malloc0returnsnull \
+ 	--with-xcb \
+-	--disable-specs
++	--disable-specs \
++	--without-perl
+ 
+ HOST_XLIB_LIBX11_CONF_OPT = \
+-	--disable-specs
++	--disable-specs \
++	--without-perl
+ 
+ # src/util/makekeys is executed at build time to generate ks_tables.h, so
+ # it should get compiled for the host. The libX11 makefile unfortunately
