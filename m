@@ -1,36 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Dec 2012 20:43:49 +0100
-Subject: [Buildroot] [git commit] package: add classpath
-In-Reply-To: <20121204190928.0DF9899716@busybox.osuosl.org>
-References: <20121204190928.0DF9899716@busybox.osuosl.org>
-Message-ID: <20121204204349.15ee9b81@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Dec 2012 12:13:42 -0800
+Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
+	longcalls option
+In-Reply-To: <20121204101716.428c2f20@skate> (Thomas Petazzoni's message of
+ "Tue, 4 Dec 2012 10:17:16 +0100")
+References: <50bc6a34.45e8440a.493d.4091@mx.google.com>
+ <20121203140912.1e09f0ea@skate> <50BDB610.7080304@zankel.net>
+ <20121204101716.428c2f20@skate>
+Message-ID: <87wqwxmv7t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 4 Dec 2012 10:21:05 -0800, Peter Korsgaard wrote:
-> commit:
-> http://git.buildroot.net/buildroot/commit/?id=5062f530081913bd0487f0f879be180f30836ab8
-> branch:
-> http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Requires java, javac and jar on the build machine, similar to how we
-> require gcc/g++.
+Hi,
 
-So, it needs additional checks in support/dependencies/dependencies.sh
-I guess.
+ >> It should actually be fine to always compile with the longcalls option, 
+ >> but I didn't just want to change it without having the option to keep 
+ >> the old behavior, hence the option.
 
-> classpath: fixup
+ Thomas> I'd prefer to have it always enabled, I'd say. We try to not add
+ Thomas> gazillions of very detailed architecture-specific options that are
+ Thomas> hard to understand. Hardcore users will know how/where to remove this
+ Thomas> option is they need, or they can even override it by passing a
+ Thomas> -mno-longcalls option in BR2_TARGET_OPTIMIZATION.
 
-Doh ? :-)
+ Thomas> What do you think?
 
-Thomas
+I agree. Lets use the safe option by default.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
