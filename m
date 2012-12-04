@@ -1,35 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Dec 2012 22:40:20 +0100
-Subject: [Buildroot] [git commit] package: add classpath
-In-Reply-To: <87obi9muqy.fsf@dell.be.48ers.dk>
-References: <20121204190928.0DF9899716@busybox.osuosl.org>
- <20121204204349.15ee9b81@skate> <87obi9muqy.fsf@dell.be.48ers.dk>
-Message-ID: <20121204224020.3ee46416@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 04 Dec 2012 13:55:05 -0800
+Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
+	longcalls option
+In-Reply-To: <20121204223914.1623e889@skate> (Thomas Petazzoni's message of
+ "Tue, 4 Dec 2012 22:39:14 +0100")
+References: <50bc6a34.45e8440a.493d.4091@mx.google.com>
+ <20121203140912.1e09f0ea@skate> <50BDB610.7080304@zankel.net>
+ <20121204101716.428c2f20@skate> <87wqwxmv7t.fsf@dell.be.48ers.dk>
+ <50BE5FD3.4000502@zankel.net> <20121204223914.1623e889@skate>
+Message-ID: <877goxmqiu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, 04 Dec 2012 12:23:49 -0800, Peter Korsgaard wrote:
+ Thomas> Dear Chris Zankel,
+ Thomas> On Tue, 04 Dec 2012 12:40:51 -0800, Chris Zankel wrote:
 
->  >> Requires java, javac and jar on the build machine, similar to how
->  >> we require gcc/g++.
-> 
->  Thomas> So, it needs additional checks in
->  Thomas> support/dependencies/dependencies.sh I guess.
-> 
-> Which I have added ;)
+ >> > I agree. Lets use the safe option by default.
+ >> >
+ >> Not sure what you mean with the 'safe option'? I'm also not sure what
 
-Yes, sorry. I often reply to e-mails without reading all the other ones
-that had been posted in the mean time... so I sometimes miss something
-that has already been done/said.
+ Thomas> I guess Peter means enabling "-mlongcalls" all the time. My
+ Thomas> understanding (and I think Peter did understand it the same way) is
+ Thomas> that if you build with -mlongcalls, then all binaries will work, both
+ Thomas> small and large binaries, even though there is a small size
+ Thomas> and performance cost.
 
-Thomas
+ Thomas> So, what we propose is to simply make -mlongcalls part of the CFLAGS
+ Thomas> unconditionally in the Buildroot Xtensa support.
+
+Indeed.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
