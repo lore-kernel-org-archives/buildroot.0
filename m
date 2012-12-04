@@ -1,36 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 4 Dec 2012 12:47:19 -0800
-Subject: [Buildroot] [git commit] gd: fix build with freetype but without
-	fontconfig
-Message-ID: <20121204204807.15F8B99949@busybox.osuosl.org>
+From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
+Date: Tue, 4 Dec 2012 18:19:48 +0100
+Subject: [Buildroot] Qt library difference between E.so and just .so
+In-Reply-To: <CADKZYYJFAKFs5KmSbcU7o=wkWi1_wOVc6MhgZrOdALgr_iva+A@mail.gmail.com>
+References: <CADKZYYJFAKFs5KmSbcU7o=wkWi1_wOVc6MhgZrOdALgr_iva+A@mail.gmail.com>
+Message-ID: <20121204181948.60bfbd4e@eb-e6520>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d97187f8c813bf030b76ee9cf6d43d407d8e2966
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Santhosh,
 
-Fixes http://autobuild.buildroot.net/results/3309617d2d5e14c0713dbaf9185815d79293e33b
+Le Sat, 1 Dec 2012 16:27:54 -0600,
+Santhosh Ramani <srcoolz@gmail.com> a ?crit :
+> I'm using buildroot 2012.08 to create rootfs for AM335x device and would
+> like to compile in Qt libraries. I went through make menuconfig and I get
+> libraries for Qt 4.8.2. However, when I try and run some of the same
+> examples from the TI SDK it complains that it can't find *libQtGuiE.so.4.7.2
+> *.
+> 
+TI'SDK is generated using Yocto/OpenEmbedded which allows the creation
+of both Qt Embedded _and_ Qt for Xorg librairies. In order to make
+the difference between both libraries which may both be integrated in
+the same SDK, the Qt Embedded libraries have the 'E' suffix and the
+SDK provides the right config files to make qmake happy.
+So if you generate a rootfs using buildroot, you need to compile the
+examples with buildroot's toolchain to have a consistent library naming.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gd/gd.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index 4769764..972d8dd 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -18,6 +18,10 @@ GD_CONF_OPT = --without-x --disable-rpath
- ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- GD_DEPENDENCIES += fontconfig
- GD_CONF_OPT += --with-fontconfig
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+GD_DEPENDENCIES += freetype
- GD_CONF_ENV += ac_cv_path_FREETYPE_CONFIG=$(STAGING_DIR)/usr/bin/freetype-config
- endif
- 
+Best regards,
+Eric
