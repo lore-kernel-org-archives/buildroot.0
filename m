@@ -1,34 +1,40 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 04 Dec 2012 09:33:30 +0100
-Subject: [Buildroot] Problem with NFS boot
-In-Reply-To: <CADKZYYJZ5Y6BqUwdN9MxCHE70Li8=SKV-WRBrBj=zYwQ3c7U2Q@mail.gmail.com>
-References: <CADKZYYLt90YY8rm4SCuqRN2SsAGqjXhQM7t5hQydpV9o7ZtT+A@mail.gmail.com>
- <50BB309F.606@relinux.de>
- <CADKZYYJZ5Y6BqUwdN9MxCHE70Li8=SKV-WRBrBj=zYwQ3c7U2Q@mail.gmail.com>
-Message-ID: <50BDB55A.3070102@relinux.de>
+From: czankel <chris@zankel.net>
+Date: Tue, 04 Dec 2012 00:36:32 -0800
+Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
+ longcalls option
+In-Reply-To: <20121203140912.1e09f0ea@skate>
+References: <50bc6a34.45e8440a.493d.4091@mx.google.com>
+ <20121203140912.1e09f0ea@skate>
+Message-ID: <50BDB610.7080304@zankel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 03.12.2012 21:28, schrieb Santhosh Ramani:
-> Any thoughts on this one? In either case, the buildroot process should
-> create an identical kernel as compared to the TI -sdk should it not -
-> if the configurations are the same. Which I'm sure they are...
-Hi Santosh,
+On 12/3/12 5:09 AM, Thomas Petazzoni wrote:
+> Dear Chris Zankel,
+>
+> On Mon, 3 Dec 2012 00:58:46 -0800, Chris Zankel wrote:
+>> The longcalls option allows calls across a greater range of addresses.
+>>
+>> This option should be used when call targets can potentially be
+>> out of range. It may degrade both code size and performance, but
+>> the linker can generally optimize away the unnecessary overhead
+>> when a call ends up within range.
+>>
+> Do we really want that as a configurable option? Isn't it possible
+> instead to always generate longcalls, or to fix this on a per-package
+> basis, when needed?
+The actual distance between call and destination is probably very 
+dependent on compiler versions and compile options, etc., so might be 
+hard to figure out what packages are affected. We might end up with a 
+lot of packages with special Xtensa  'treatments'. Probably better to 
+just have it always there.
 
-did you act upon Thomas' mail about 12 hours ago?
+It should actually be fine to always compile with the longcalls option, 
+but I didn't just want to change it without having the option to keep 
+the old behavior, hence the option.
 
-Another thought: Why not create a working kernel with buildroot and use
-this binary for further work without rebuilding it each time?
-
-Good luck
-
-Stephan
-
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+Thanks,
+-Chris
