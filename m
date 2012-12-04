@@ -1,40 +1,85 @@
-From: czankel <chris@zankel.net>
-Date: Tue, 04 Dec 2012 00:36:32 -0800
-Subject: [Buildroot] [PATCH v2] xtensa: add config option to enable
- longcalls option
-In-Reply-To: <20121203140912.1e09f0ea@skate>
-References: <50bc6a34.45e8440a.493d.4091@mx.google.com>
- <20121203140912.1e09f0ea@skate>
-Message-ID: <50BDB610.7080304@zankel.net>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue, 04 Dec 2012 10:01:09 +0100
+Subject: [Buildroot] How to handle modularity in buildroot?
+In-Reply-To: <201212041249.14541.manningc2@actrix.gen.nz>
+References: <CAE21AQpHdjzrJYnUBY6qwVBvd1HKpFGcKoTAsWcHyOFpua-yeA@mail.gmail.com>
+ <F9C551623D2CBB4C9488801D14F864C610B824F7@ex-mb1.corp.adtran.com>
+ <201212041249.14541.manningc2@actrix.gen.nz>
+Message-ID: <50BDBBD5.8030402@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/3/12 5:09 AM, Thomas Petazzoni wrote:
-> Dear Chris Zankel,
+Am 04.12.2012 00:49, schrieb Charles Manning:
+> On Tuesday 04 December 2012 12:17:13 ANDY KENNEDY wrote:
 >
-> On Mon, 3 Dec 2012 00:58:46 -0800, Chris Zankel wrote:
->> The longcalls option allows calls across a greater range of addresses.
+>>> Is there an easy way to have modular/hierarchical projects? For
+>>> example I would like to have a base file system that holds common
+>>> stuff but then have variants (eg. production vs development).
+>>>
+>>> In OE this is easy: just create a "basic system" package which is
+>>> included in the recipes for each of the variants.
+>>>
+>>> How would this be tackled in buildroot?
+>> I believe what you are looking for is 'make defconfig'.  This will
+>> provide a basic set of configuration options to get you going, then
+>> you'll have to edit the things like processor family, processor type,
+>> whether you want uClibc vs {e,}glibc, etc.
 >>
->> This option should be used when call targets can potentially be
->> out of range. It may degrade both code size and performance, but
->> the linker can generally optimize away the unnecessary overhead
->> when a call ends up within range.
+>> The default config is usually okay for a first attempt, however, I like
+>> to provide to others in my company a set of config files to choose from.
+>> Those, I derive from just cranking through the menuconfig and save the
+>> options off when I get done.
 >>
-> Do we really want that as a configurable option? Isn't it possible
-> instead to always generate longcalls, or to fix this on a per-package
-> basis, when needed?
-The actual distance between call and destination is probably very 
-dependent on compiler versions and compile options, etc., so might be 
-hard to figure out what packages are affected. We might end up with a 
-lot of packages with special Xtensa  'treatments'. Probably better to 
-just have it always there.
+>> If you are looking for more than this, there are a few other default
+>> config files to attempt.  To list those config files do a 'make help'.
+>>
+>> Hope this helps!
+> Thanks Andy
+>
+> I am aware of this mechanism but I don't think it really gets me what I am 
+> after.
+>
+> I think that with defconfig, I would be able to make defconfig, then tweak the 
+> config to get a variant. But now if I change the base config, I then have to 
+> go through the process again for the variant.
+>
+> What I would like is the ability to have:
+> * A base package
+> * Production rootfs = base + production files.
+> * Development rootfs = base  + development files.
+>
+Hi Charles,
 
-It should actually be fine to always compile with the longcalls option, 
-but I didn't just want to change it without having the option to keep 
-the old behavior, hence the option.
+I think this could be best done with git. You could create a production
+and a development branch both based on your common base. After updating
+base both branches could either be rebased or the new base merged in.
+> Then a change to the base package automatically flows through the production + 
+> development rootfs.
+>
+Well, not really automatically;-) To be honest, I am currently trying to
+find an optimal git workflow for this.
 
-Thanks,
--Chris
+Kind regards
+
+Stephan
+> Is there a way to accomplish that?
+>
+> Thanks
+>
+> Charles
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
