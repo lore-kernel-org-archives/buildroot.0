@@ -1,85 +1,51 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 04 Dec 2012 10:01:09 +0100
-Subject: [Buildroot] How to handle modularity in buildroot?
-In-Reply-To: <201212041249.14541.manningc2@actrix.gen.nz>
-References: <CAE21AQpHdjzrJYnUBY6qwVBvd1HKpFGcKoTAsWcHyOFpua-yeA@mail.gmail.com>
- <F9C551623D2CBB4C9488801D14F864C610B824F7@ex-mb1.corp.adtran.com>
- <201212041249.14541.manningc2@actrix.gen.nz>
-Message-ID: <50BDBBD5.8030402@relinux.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Dec 2012 10:03:44 +0100
+Subject: [Buildroot] Chances in skeleton don't appear in filesystem
+In-Reply-To: <slrnkbqn5h.1p8.narkewoody@zuhnb712.local.com>
+References: <slrnkbqn5h.1p8.narkewoody@zuhnb712.local.com>
+Message-ID: <20121204100344.3167d0e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 04.12.2012 00:49, schrieb Charles Manning:
-> On Tuesday 04 December 2012 12:17:13 ANDY KENNEDY wrote:
->
->>> Is there an easy way to have modular/hierarchical projects? For
->>> example I would like to have a base file system that holds common
->>> stuff but then have variants (eg. production vs development).
->>>
->>> In OE this is easy: just create a "basic system" package which is
->>> included in the recipes for each of the variants.
->>>
->>> How would this be tackled in buildroot?
->> I believe what you are looking for is 'make defconfig'.  This will
->> provide a basic set of configuration options to get you going, then
->> you'll have to edit the things like processor family, processor type,
->> whether you want uClibc vs {e,}glibc, etc.
->>
->> The default config is usually okay for a first attempt, however, I like
->> to provide to others in my company a set of config files to choose from.
->> Those, I derive from just cranking through the menuconfig and save the
->> options off when I get done.
->>
->> If you are looking for more than this, there are a few other default
->> config files to attempt.  To list those config files do a 'make help'.
->>
->> Hope this helps!
-> Thanks Andy
->
-> I am aware of this mechanism but I don't think it really gets me what I am 
-> after.
->
-> I think that with defconfig, I would be able to make defconfig, then tweak the 
-> config to get a variant. But now if I change the base config, I then have to 
-> go through the process again for the variant.
->
-> What I would like is the ability to have:
-> * A base package
-> * Production rootfs = base + production files.
-> * Development rootfs = base  + development files.
->
-Hi Charles,
+Dear Woody Wu,
 
-I think this could be best done with git. You could create a production
-and a development branch both based on your common base. After updating
-base both branches could either be rebased or the new base merged in.
-> Then a change to the base package automatically flows through the production + 
-> development rootfs.
->
-Well, not really automatically;-) To be honest, I am currently trying to
-find an optimal git workflow for this.
+On Tue, 4 Dec 2012 02:16:11 +0000 (UTC), Woody Wu wrote:
 
-Kind regards
+> After some intial builds, I come up with idea to make chances in the
+> default filesystem contents. Then I change the config to use customized
+> filesystem skeleton (fs/skeleton) and changed the
+> fs/skeleton/network/interfaces with expection that change could appear
+> in the generated target file system.  After another run of make,
+> however, I did not see my chances by untar the rootfs.tar.bz2.
 
-Stephan
-> Is there a way to accomplish that?
->
-> Thanks
->
-> Charles
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The skeleton is copied to output/target during the first make, and is
+not copied again during subsequent invocations of make. If you want to
+see your filesystem skeleton changes to be taken into account, you have
+to do a "make clean; make" cycle.
 
+>  Then I
+> tried to remove the output/target directory, this time I even got
+> another error, 'output/target/etc/hosts: no such file or directory'.
 
+Removing the output/target directory does not make sense and cannot
+work. Buildroot does not know that it has been removed and therefore
+does not retrigger the installation of all packages.
+
+> What's the correct method to modify the defualt filesystem? Thanks.
+
+Do use a custom skeleton, use a custom post-build script to copy/modify
+files in output/target. See
+http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf starting
+slide 22, and particularly slides 24 and 25.
+
+Best regards,
+
+Thomas
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
