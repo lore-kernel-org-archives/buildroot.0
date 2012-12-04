@@ -1,51 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Dec 2012 10:03:44 +0100
-Subject: [Buildroot] Chances in skeleton don't appear in filesystem
-In-Reply-To: <slrnkbqn5h.1p8.narkewoody@zuhnb712.local.com>
-References: <slrnkbqn5h.1p8.narkewoody@zuhnb712.local.com>
-Message-ID: <20121204100344.3167d0e9@skate>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Tue, 4 Dec 2012 10:10:25 +0100
+Subject: [Buildroot] How to handle modularity in buildroot?
+In-Reply-To: <201212041249.14541.manningc2@actrix.gen.nz>
+References: <CAE21AQpHdjzrJYnUBY6qwVBvd1HKpFGcKoTAsWcHyOFpua-yeA@mail.gmail.com>
+ <F9C551623D2CBB4C9488801D14F864C610B824F7@ex-mb1.corp.adtran.com>
+ <201212041249.14541.manningc2@actrix.gen.nz>
+Message-ID: <CAEYzJUE5qDZ5gnbymVtnLBVCXzUEiJjzK0tjbtm+0sU5yCUf-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
+On 4 December 2012 00:49, Charles Manning <cdhmanning@gmail.com> wrote:
+[...]
+> I think that with defconfig, I would be able to make defconfig, then tweak the
+> config to get a variant. But now if I change the base config, I then have to
+> go through the process again for the variant.
+>
+> What I would like is the ability to have:
+> * A base package
+> * Production rootfs = base + production files.
+> * Development rootfs = base  + development files.
+>
+> Then a change to the base package automatically flows through the production +
+> development rootfs.
+>
+>
+> Is there a way to accomplish that?
 
-On Tue, 4 Dec 2012 02:16:11 +0000 (UTC), Woody Wu wrote:
+I don't know if it's possible to do that right now, but in principle
+this is just a merge of a base config and an addon config. Say, if
+there was an include directive in config files you'd be done. Maybe
+you could try to create this merged config file by hand and see if
+it's something that can be automated later?
 
-> After some intial builds, I come up with idea to make chances in the
-> default filesystem contents. Then I change the config to use customized
-> filesystem skeleton (fs/skeleton) and changed the
-> fs/skeleton/network/interfaces with expection that change could appear
-> in the generated target file system.  After another run of make,
-> however, I did not see my chances by untar the rootfs.tar.bz2.
+1. make a (base) defconfig
+2. make N new defconfigs with various extra options and call them addonN_config
+3. remove the symbols found in the base config from all addonN_config files
 
-The skeleton is copied to output/target during the first make, and is
-not copied again during subsequent invocations of make. If you want to
-see your filesystem skeleton changes to be taken into account, you have
-to do a "make clean; make" cycle.
-
->  Then I
-> tried to remove the output/target directory, this time I even got
-> another error, 'output/target/etc/hosts: no such file or directory'.
-
-Removing the output/target directory does not make sense and cannot
-work. Buildroot does not know that it has been removed and therefore
-does not retrigger the installation of all packages.
-
-> What's the correct method to modify the defualt filesystem? Thanks.
-
-Do use a custom skeleton, use a custom post-build script to copy/modify
-files in output/target. See
-http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf starting
-slide 22, and particularly slides 24 and 25.
+Then, before the build, you do something like "cat base_config
+addonN_config > config".
 
 Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bj?rn Forsman
