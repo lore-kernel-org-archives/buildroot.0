@@ -1,126 +1,89 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Tue, 04 Dec 2012 21:21:00 +0200
-Subject: [Buildroot] elfutils and the perf userspace tool
-In-Reply-To: <1354608794.90144.YahooMailNeo@web120304.mail.ne1.yahoo.com>
-References: <1354573207.60693.YahooMailNeo@web120305.mail.ne1.yahoo.com>
- <CAJ+oik2wb+izT2we-WcnK5cTEtzo-_jW46Q98UMm=XfbCSqAWA@mail.gmail.com>
- <1354608794.90144.YahooMailNeo@web120304.mail.ne1.yahoo.com>
-Message-ID: <50BE4D1C.3020702@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 4 Dec 2012 20:35:43 +0100
+Subject: [Buildroot] [PATCH] package/crosstool-ng: update to 1.17.0
+In-Reply-To: <201212041909.25267.yann.morin.1998@free.fr>
+References: <1354564065-24388-1-git-send-email-c.schoenert@t-online.de>
+ <1354564065-24388-2-git-send-email-c.schoenert@t-online.de>
+ <20121204101228.2e78f9a1@skate>
+ <201212041909.25267.yann.morin.1998@free.fr>
+Message-ID: <20121204203543.2e75e44b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bogdan
+Dear Yann E. MORIN,
 
-4.12.2012 10:13, Bogdan Radulescu kirjoitti:
->
->
->
-> ----- Original Message -----
-> From: Bryan Hundven <bryanhundven@gmail.com>
-> To: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
-> Cc: "buildroot at busybox.net" <buildroot@busybox.net>
-> Sent: Tuesday, December 4, 2012 5:33 AM
-> Subject: Re: [Buildroot] elfutils and the perf userspace tool
->
-> On Mon, Dec 3, 2012 at 2:20 PM, Bogdan Radulescu
-> <bogdan_radulescu99@yahoo.com> wrote:
->>
->> Hello everybody,
->>
->> I am using buildroot for generating a distro for ARM. I am able to add additional packages to buildroot or to use arm-linux-gcc directly to compile simple C programs.
->>
->> Still I haven't yet understood how to cross compile the perf userspace tool and I think it would be a very nice addition to buildroot.
->>
->> The perf tool requires elfutils and the kernel sources it comes with.
->>
->> My first problem is that elfutils will not successfully compile, as you can see here:
->> http://pastie.org/pastes/5474687/text
->>
->> My elfutils.mk file looks like this http://pastie.org/pastes/5474697/text
->>
->> Please tell me how do I move further from this.
->>
->> Thanks,
->> Bogdan
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> I forgot to cc buildroot at ... eh.
->
-> Original response:
->
-> I think you need the argp-standalone, as I don't think uclibc provides libargp.
->
-> -Bryan
->
->
->
-> Hi Bryan,
->
-> As you can see in the elfutils.mk file I already added argp-standalone as a dependency. It compiles OK.
-> I am also linking against it, still something goes wrong at some point.
->
-> Bogdan
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+On Tue, 4 Dec 2012 19:09:24 +0100, Yann E. MORIN wrote:
 
-It's not enough to give -largp in LDFLAGS.
+> > Thanks for doing this work. I think ct-ng now supports minimal
+> > defconfig files. Would it make sense to use that instead of
+> > full .config files in order to reduce the amount of churn when
+> > updating between ct-ng versions? Yann?
+> 
+> Indeed, but the defconfig support in crosstool-NG is not perfect yet,
+> so I think we should keep complete .config files for this release.
+> 
+> The problem with defconfigs in crosstool-NG is that there is no
+> guarantee about new symbols coming and going between versions, so
+> this can result in strange behaviors when a new version comes out,
+> and a defconfig from a previous version is used. Here's what may
+> happen:
+> 
+> In version X, we use the latest stable 3.6 linux kernel, which is
+> 3.6.2. This is also the absolute latest version of the kernel. So we
+> have this symbol: LINUX_VER_3_6_2
+> 
+> The user did select this version. As 3.6.3 is the latest version, it
+> is the first item in the choice, so it does not appear in the
+> defconfig, being the default of the choice.
+> 
+> Now, version X+1 is out, and the stable 3.6 kernel is updated to
+> 3.6.7, so we get a new symbol, but the previous one no longer exists.
+> Also, kernel 3.7 is out, so the 3.6.7 is not the latest version
+> available.
+> 
+> Now, the default symbol in the choice is not 3.6.x, but 3.7.x, which
+> is probably not what the user expected.
+> 
+> Thus, using the defconfig from the previous version will yield a
+> completely different .config.
+> 
+> This can be even more anoying with the gcc version, as we only have
+> one linaro release per gcc /generation/ (eg. 4.7). If the user did
+> select the latest linaro version (eg. 4.7) which was the default of
+> the choice, qnd the new release has a more recent mainstream version
+> (eg. 4.8), but no corresponding linaro version, then the gcc version
+> will be bumnped to 4.8, when the user did in fact want the linaro 4.7.
+> 
+> I have a pending change to fix this issue for all components, but it
+> will go in only for the next release, and that shall make using
+> defconfigs from a previous version relatively safe to use with a
+> newer version.
+> 
+> Then, we can switch buildroot to using the ct-ng defconfigs, but until
+> then I think it is safer to use full .config files.
 
-elfutils doesn't give a damn about LDFLAGS and goes it own way.
+To me, it is also the point of using defconfig from the first place: to
+benefit from the new default values for configuration options that we
+leave undefined.
 
-What you need is to add -largp explicitly into a line that links libdw
+Note that the crosstool-ng.config-* don't necessarily need to be pure
+defconfig files: you can add a few explicit options, whose value is
+currently the default one, but since you don't want them to change to
+newer default values, you explicit their value in the defconfig. We
+have this for a few options in Buildroot defconfig files as well.
 
-You could try saving the following and also remember to add
-ELFUTILS_AUTORECONF = YES
-line to your elfutils.mk
+defconfig files do not necessarily need to be the direct output of
+"savedefconfig", they can be hand-edited to enforce the value of
+certain options.
 
-diff -Naur elfutils-0.155.org/libdw/Makefile.am
-elfutils-0.155/libdw/Makefile.am
---- elfutils-0.155.org/libdw/Makefile.am    2012-12-04
-21:02:32.309083801 +0200
-+++ elfutils-0.155/libdw/Makefile.am    2012-12-04 21:06:41.205098676 +0200
-@@ -111,7 +111,7 @@
-         -Wl,--enable-new-dtags,-rpath,$(pkglibdir) \
-         -Wl,--version-script,$<,--no-undefined \
-         -Wl,--whole-archive $(filter-out $<,$^) -Wl,--no-whole-archive\
--        -ldl $(zip_LIBS)
-+        -ldl $(zip_LIBS) -largp
-     if readelf -d $@ | fgrep -q TEXTREL; then exit 1; fi
-     ln -fs $@ $@.$(VERSION)
+Best regards,
 
-There might other places too where you have to add that -largp
-
-You probably(if you are using uClibc) need to explicitly add also -lintl
-to the same line with -largp.
-At least that was what I had to do to make it compile even tought I had
-gived configure script the option "--disable-nls".
-
-Also you will need to probably (again if using uClibc) have fts.h with
-your uClibc-installation
-and sometime later you will probably hit into a obstack missing problem.
-That can only be solved by including gnulib stuff into your source.
-
-And there was some other (uClibc related) stuff that needed patching too
-that I can't now
-remember
-
-All in all, elfutils belongs sadly to the software category:
-
- "Im doing things my own way, Im using non-portable glibc stuff and
-I don't give a crab about portability. Nah-nah-naaa"
-
-:-(
-
-It's hard but doeable. And the end result might be that only the libelf
-part of elfutils will work
-(I only needed that so it did not matter in my case) and not the programs.
-
-Regards
-Stefan
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
