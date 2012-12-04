@@ -1,41 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  4 Dec 2012 11:36:55 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.6.x stable version
-In-Reply-To: <1354631815-18202-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1354631815-18202-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1354631815-18202-2-git-send-email-gustavo@zacarias.com.ar>
+From: Santhosh Ramani <srcoolz@gmail.com>
+Date: Tue, 4 Dec 2012 10:21:48 -0600
+Subject: [Buildroot] Problem with NFS boot
+In-Reply-To: <50BDB55A.3070102@relinux.de>
+References: <CADKZYYLt90YY8rm4SCuqRN2SsAGqjXhQM7t5hQydpV9o7ZtT+A@mail.gmail.com>
+ <50BB309F.606@relinux.de>
+ <CADKZYYJZ5Y6BqUwdN9MxCHE70Li8=SKV-WRBrBj=zYwQ3c7U2Q@mail.gmail.com>
+ <50BDB55A.3070102@relinux.de>
+Message-ID: <CADKZYYLVZc5thKrqpF6FOrkVtkRxg6596CpLpJ90Tvc6jXRVyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Hello Stephen, Thomas,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f408ad5..ef3b2a1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_3_6
--	bool "3.6.8"
-+	bool "3.6.9"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.6.8" if BR2_LINUX_KERNEL_3_6
-+	default "3.6.9" if BR2_LINUX_KERNEL_3_6
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.7.8.6
+Yes the solution mentioned by Thomas fixed it. Once I enabled devtmpfs...it
+mounts it first and the udev starts. Thank you sooo very much.
+
+[    3.581359] VFS: Mounted root (nfs filesystem) on device 0:15.
+[    3.588256] devtmpfs: mounted
+[    3.591857] Freeing init memory: 228K
+Starting logging: OK
+Populating /dev using udev: [    4.088989] udevd[712]: starting version 182
+done
+Initializing random number generator... done.
+
+This is really helpful. thank you
+Regards
+
+Santhosh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121204/507c01e9/attachment.html>
