@@ -1,56 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Dec 2012 18:14:24 +0100
-Subject: [Buildroot] How to handle modularity in buildroot?
-In-Reply-To: <CAE21AQp9tsnrS=uR0BoOuYi15Vew=swx24FapMC7Fyi+W0E3+A@mail.gmail.com>
-References: <CAE21AQpHdjzrJYnUBY6qwVBvd1HKpFGcKoTAsWcHyOFpua-yeA@mail.gmail.com>
- <F9C551623D2CBB4C9488801D14F864C610B824F7@ex-mb1.corp.adtran.com>
- <201212041249.14541.manningc2@actrix.gen.nz> <20121204101042.3ae057bb@skate>
- <CAE21AQp9tsnrS=uR0BoOuYi15Vew=swx24FapMC7Fyi+W0E3+A@mail.gmail.com>
-Message-ID: <50BF80F0.8050603@mind.be>
+Date: Wed, 05 Dec 2012 18:20:47 +0100
+Subject: [Buildroot] [Bug 5750] buildroot-2012.11 while building X11 for
+ ARM, errors on  xlib_libX11-1.4.2
+In-Reply-To: <20121205075957.00AEA99A07@busybox.osuosl.org>
+References: <bug-5750-163@https.bugs.busybox.net/>
+ <20121205075957.00AEA99A07@busybox.osuosl.org>
+Message-ID: <50BF826F.4060004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/12/12 19:18, Charles Manning wrote:
->> >  And then, when you want to do a production build:
->> >
->> >    make clean
->> >    cat mysystem_base_defconfig.frag mysystem_prod_defconfig.frag>  configs/mysystem_prod_defconfig
->> >    make mysystem_prod_defconfig
->> >    make
->> >
->> >  And when you want to do a development build:
->> >
->> >    make clean
->> >    cat mysystem_base_defconfig.frag mysystem_dev_defconfig.frag>  configs/mysystem_dev_defconfig
->> >    make mysystem_dev_defconfig
->> >    make
->> >
->> >  Basically, instead of having Buildroot providing this feature, we rely
->> >  on the simple manipulation of the configuration file.
-> This sounds like the right idea.
+On 05/12/12 08:59, bugzilla at busybox.net wrote:
+> https://bugs.busybox.net/show_bug.cgi?id=5750
 >
-> I will experiment with this a bit and see where it takes me. If there
-> is something worth sharing I'll do that.
+> --- Comment #1 from Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  2012-12-05 07:59:54 UTC ---
+> For some complicated reason, using Buildroot in a directory stored under /usr
+> doesn't work. We will work on fixing that, but in the mean time, please build
+> from /home/something, /opt or anything else, but not from a subdirectory of
+> /usr.
 
-  If you don't want to clobber your buildroot tree with
-configs/mysystem_dev_defconfig, you can instead do:
-
-  make clean
-  cat mysystem_base_defconfig.frag mysystem_dev_defconfig.frag > /tmp/mysystem_dev_defconfig
-  make defconfig BR2_DEFCONFIG=/tmp/mysystem_dev_defconfig
-  make
-
-
-  And to create the _dev fragment, you can try something like:
-
-make savedefconfig
-sort defconfig mysystem_base_defconfig.frag | uniq -u > mysystem_dev_defconfig.frag
-
-(this is just from the top of my head so YMMV).
-
+  We should at least have a check for that...
 
   Regards,
   Arnout
