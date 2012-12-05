@@ -1,41 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 11:29:37 -0800
-Subject: [Buildroot] [git commit] make legal-info: fails with OVERRIDE_SRCDIR
-Message-ID: <20121205193134.D57C4996BD@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 05 Dec 2012 18:03:44 +0100
+Subject: [Buildroot] target not ping-able
+In-Reply-To: <slrnkbqvei.uot.narkewoody@zuhnb712.local.com>
+References: <slrnkbqvei.uot.narkewoody@zuhnb712.local.com>
+Message-ID: <50BF7E70.4070203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f77121fdde5a0c16d9b6968c71e982d3e953d25
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/12/12 05:37, Woody Wu wrote:
+> Hi, list
+>
+> My generated target system (kernel and rootfs) is not ping-able.  From
+> the target I can ping outside, but hosts, even on the same ethernet
+> subnetwork cannot ping my target.
+>
+> The kernel is 3.4.19 and I enabled network options and an Ethernet
+> driver.  Is there anything I missed?
 
-There is a check for OVERRIDE_SRCDIR in pkg-generic.mk that is
-supposed to produce a warning when OVERRIDE_SRCDIR is active.
-This does not work and instead the whole make terminates with
-an error message.
+  This is unlikely to be buildroot-related...
 
-This patch changes the check for active OVERRIDE_SRCDIR so that
-it works as expected.
+  I would do a wireshark on the host to get more insight.  You can also build
+a tcpdump for the target to verify if it even receives anything.  Also try with
+a direct cable between host and target and static IP addresses, to rule out any
+influence of the switch.  And one final thing I can think of is that there is
+some netfilter rule that disallows ping replies.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/pkg-generic.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6fcd359..fc05dc6 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -477,7 +477,7 @@ ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- ifeq ($$($(2)_SITE_METHOD),local)
- # Packages without a tarball: don't save and warn
- 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
--else ifeq ($$($(2)_SITE_METHOD),override)
-+else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
- else
- # Other packages
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
