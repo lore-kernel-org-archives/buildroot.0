@@ -1,31 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Dec 2012 13:19:52 -0800
-Subject: [Buildroot] [Bug 5750] buildroot-2012.11 while building X11 for
-	ARM, errors on  xlib_libX11-1.4.2
-In-Reply-To: <50BF826F.4060004@mind.be> (Arnout Vandecappelle's message of
- "Wed, 05 Dec 2012 18:20:47 +0100")
-References: <bug-5750-163@https.bugs.busybox.net/>
- <20121205075957.00AEA99A07@busybox.osuosl.org>
- <50BF826F.4060004@mind.be>
-Message-ID: <87txs08adj.fsf@dell.be.48ers.dk>
+Date: Wed, 05 Dec 2012 13:20:11 -0800
+Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
+	uboot
+In-Reply-To: <20121205212703.98596423e9136f86fd8542b9@kinali.ch> (Attila
+ Kinali's message of "Wed, 5 Dec 2012 21:27:03 +0100")
+References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
+ <20121205180533.71706c56@skate>
+ <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
+ <87k3sw9yt1.fsf@dell.be.48ers.dk>
+ <20121205212703.98596423e9136f86fd8542b9@kinali.ch>
+Message-ID: <87pq2o8ad0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
 
-Hi,
+ >> Not really. I don't have any imx hw here. Are you able to test it?
 
- >> For some complicated reason, using Buildroot in a directory stored
- >> under /usr doesn't work. We will work on fixing that, but in the
- >> mean time, please build from /home/something, /opt or anything else,
- >> but not from a subdirectory of /usr.
+ Attila> I have an i.mx23 EVK at work. So i guess i could test it.
 
- Arnout>  We should at least have a check for that...
-
-Indeed. I'm looking into adding one.
+Great, thanks.
 
 -- 
 Bye, Peter Korsgaard
