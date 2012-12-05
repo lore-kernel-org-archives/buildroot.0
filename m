@@ -1,38 +1,45 @@
-From: Attila Kinali <attila@kinali.ch>
-Date: Wed, 5 Dec 2012 21:27:03 +0100
-Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
-	uboot
-In-Reply-To: <87k3sw9yt1.fsf@dell.be.48ers.dk>
-References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
- <20121205180533.71706c56@skate>
- <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
- <87k3sw9yt1.fsf@dell.be.48ers.dk>
-Message-ID: <20121205212703.98596423e9136f86fd8542b9@kinali.ch>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 5 Dec 2012 21:49:59 +0100
+Subject: [Buildroot] [PATCH] package/crosstool-ng: bumpimg default GCC
+	version to 4.6.3
+In-Reply-To: <1354736519-18173-2-git-send-email-c.schoenert@t-online.de>
+References: <1354736519-18173-1-git-send-email-c.schoenert@t-online.de>
+ <1354736519-18173-2-git-send-email-c.schoenert@t-online.de>
+Message-ID: <201212052149.59858.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 05 Dec 2012 09:46:50 -0800
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+Carsten, All,
 
-> >>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
+On Wednesday 05 December 2012 Carsten Schoenert wrote:
+> From: Carsten Schoenert <c.schoenert@t-online.de>
 > 
->  >> [Buildroot] [PATCH 2/2] u-boot: add support for u-boot.sb file format
->  >> 
->  >> It was more complete than this one, because it included the dependency
->  >> on host-elftosb, which is needed to bring the elftosb tool built by
->  >> Buildroot before U-Boot uses it to generate the .sb image.
+> This bumps the GCC version from 4.4.6 to 4.6.3 to for
+> *.config-eglibc
+> *.config-glibc
+> *.config-uClibc
+> be equal to the default GCC setting in buildroot as well in addition to
+> commit b855154ee8683e87afa08c6cc50b716d22879922.
 > 
->  Attila> Any reason why it has not gotten into the git repo?
-> 
-> Not really. I don't have any imx hw here. Are you able to test it?
+> Signed-off-by: Carsten Schoenert <c.schoenert@t-online.de>
 
-I have an i.mx23 EVK at work. So i guess i could test it.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-			Attila Kinali
+Sigh, Peter was too fast applying your previous patch, I had no time to
+review it, so I had no chance to ack it too. Thanks for doing the update.
+
+No, Peter, that's not a pledge for you to stop applying patches fast! ;-)
+
+Regards,
+Yann E. MORIN.
 
 -- 
-There is no secret ingredient
-         -- Po, Kung Fu Panda
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
