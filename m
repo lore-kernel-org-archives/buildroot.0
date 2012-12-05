@@ -1,30 +1,124 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Dec 2012 09:46:50 -0800
-Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
-	uboot
-In-Reply-To: <20121205181613.380b6492c8cfedefafae9655@kinali.ch> (Attila
- Kinali's message of "Wed, 5 Dec 2012 18:16:13 +0100")
-References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
- <20121205180533.71706c56@skate>
- <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
-Message-ID: <87k3sw9yt1.fsf@dell.be.48ers.dk>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  5 Dec 2012 19:06:51 +0100
+Subject: [Buildroot] [PATCH v2] linenoise: new package
+Message-ID: <1354730811-14060-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                             |    1 +
+ package/linenoise/Config.in                   |    6 ++++
+ package/linenoise/linenoise-get-columns.patch |   20 +++++++++++
+ package/linenoise/linenoise.mk                |   45 +++++++++++++++++++++++++
+ 4 files changed, 72 insertions(+)
+ create mode 100644 package/linenoise/Config.in
+ create mode 100644 package/linenoise/linenoise-get-columns.patch
+ create mode 100644 package/linenoise/linenoise.mk
 
- >> [Buildroot] [PATCH 2/2] u-boot: add support for u-boot.sb file format
- >> 
- >> It was more complete than this one, because it included the dependency
- >> on host-elftosb, which is needed to bring the elftosb tool built by
- >> Buildroot before U-Boot uses it to generate the .sb image.
-
- Attila> Any reason why it has not gotten into the git repo?
-
-Not really. I don't have any imx hw here. Are you able to test it?
-
+diff --git a/package/Config.in b/package/Config.in
+index e8b8cd7..2c1fba4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -517,6 +517,7 @@ menu "Text and terminal handling"
+ source "package/enchant/Config.in"
+ source "package/icu/Config.in"
+ source "package/libiconv/Config.in"
++source "package/linenoise/Config.in"
+ source "package/ncurses/Config.in"
+ source "package/newt/Config.in"
+ source "package/pcre/Config.in"
+diff --git a/package/linenoise/Config.in b/package/linenoise/Config.in
+new file mode 100644
+index 0000000..8e4ab91
+--- /dev/null
++++ b/package/linenoise/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LINENOISE
++	bool "linenoise"
++	help
++	  A small self-contained alternative to readline and libedit
++
++	  https://github.com/antirez/linenoise
+diff --git a/package/linenoise/linenoise-get-columns.patch b/package/linenoise/linenoise-get-columns.patch
+new file mode 100644
+index 0000000..4fb9e40
+--- /dev/null
++++ b/package/linenoise/linenoise-get-columns.patch
+@@ -0,0 +1,20 @@
++returns the default value (80) when a real value is not available
++(0 is not an acceptable value for COLUMNS, the width of the screen).
++
++see pull request on upstream : http://github.com/antirez/linenoise/pull/31
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/linenoise.c
++===================================================================
++--- a/linenoise.c
+++++ b/linenoise.c
++@@ -182,7 +182,7 @@
++ static int getColumns(void) {
++     struct winsize ws;
++ 
++-    if (ioctl(1, TIOCGWINSZ, &ws) == -1) return 80;
+++    if (ioctl(1, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) return 80;
++     return ws.ws_col;
++ }
++ 
+diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
+new file mode 100644
+index 0000000..343a107
+--- /dev/null
++++ b/package/linenoise/linenoise.mk
+@@ -0,0 +1,45 @@
++#############################################################
++#
++# linenoise
++#
++#############################################################
++LINENOISE_VERSION = g8c9b481
++LINENOISE_SITE = http://github.com/antirez/linenoise/tarball/master
++LINENOISE_LICENSE = BSD-2c
++LINENOISE_INSTALL_STAGING = YES
++
++define LINENOISE_BUILD_CMDS
++	cd $(@D); $(TARGET_CC) $(TARGET_CFLAGS) -c linenoise.c
++	cd $(@D); $(TARGET_AR) rcu liblinenoise.a linenoise.o
++	cd $(@D); $(TARGET_CC) $(TARGET_LDFLAGS) -o linenoise_example example.c -L. -llinenoise
++endef
++
++define LINENOISE_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 644 -D $(@D)/linenoise.h          $(STAGING_DIR)/usr/include/linenoise.h
++	$(INSTALL) -m 644 -D $(@D)/liblinenoise.a       $(STAGING_DIR)/usr/lib/liblinenoise.a
++	$(INSTALL) -m 755 -D $(@D)/linenoise_example    $(STAGING_DIR)/usr/bin/linenoise_example
++endef
++
++define LINENOISE_UNINSTALL_STAGING_CMDS
++	rm -f   $(STAGING_DIR)/usr/include/linenoise.h
++	rm -f   $(STAGING_DIR)/usr/lib/liblinenoise.a
++	rm -f   $(STAGING_DIR)/usr/bin/linenoise_example
++endef
++
++define LINENOISE_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 644 -D $(@D)/linenoise.h          $(TARGET_DIR)/usr/include/linenoise.h
++	$(INSTALL) -m 644 -D $(@D)/liblinenoise.a       $(TARGET_DIR)/usr/lib/liblinenoise.a
++	$(INSTALL) -m 755 -D $(@D)/linenoise_example    $(TARGET_DIR)/usr/bin/linenoise_example
++endef
++
++define LINENOISE_UNINSTALL_TARGET_CMDS
++	rm -f   $(TARGET_DIR)/usr/include/linenoise.h
++	rm -f   $(TARGET_DIR)/usr/lib/liblinenoise.a
++	rm -f   $(TARGET_DIR)/usr/bin/linenoise_example
++endef
++
++define LINENOISE_CLEAN_CMDS
++	rm -f $(@D)/*.o $(@D)/*.a $(@D)/linenoise_example
++endef
++
++$(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
