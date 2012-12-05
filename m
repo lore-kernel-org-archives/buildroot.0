@@ -1,36 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 00:40:05 -0800
-Subject: [Buildroot] [git commit] ed: bump to version 1.7
-Message-ID: <20121205091357.938BA8F555@busybox.osuosl.org>
+Date: Wed, 5 Dec 2012 00:39:44 -0800
+Subject: [Buildroot] [git commit] libnl: bump to version 3.2.16
+Message-ID: <20121205091357.25B558F555@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea2df5659831325605a0735e8ea6e7ec6fb5dfe2
+commit: http://git.buildroot.net/buildroot/commit/?id=4b61d9e9a615cfadacd432212321417ca3493e56
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ed/ed.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/libnl/libnl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index a97e19b..2bb8e0e 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index e039fd4..9bf680e 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--ED_VERSION = 1.6
-+ED_VERSION = 1.7
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_CONF_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)"
-+ED_LICENSE = GPLv3+
-+ED_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+-LIBNL_VERSION = 3.2.14
++LIBNL_VERSION = 3.2.16
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
+ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
