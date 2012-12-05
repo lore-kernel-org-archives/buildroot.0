@@ -1,157 +1,235 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 00:40:40 -0800
-Subject: [Buildroot] [git commit] hostapd: bump to version 1.1
-Message-ID: <20121205091358.602A68F555@busybox.osuosl.org>
+Date: Wed, 5 Dec 2012 00:43:07 -0800
+Subject: [Buildroot] [git commit] ltrace: bump to version 0.7.1
+Message-ID: <20121205091359.20B5D8FDC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba4021769d1aa9b72179c6da7960cc08d1c52d57
+commit: http://git.buildroot.net/buildroot/commit/?id=e1fff19a4f4f668d13aed18648e76e8b5b3b6578
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/hostapd/hostapd-cve-2012-4445.patch |   49 ------------------------
- package/hostapd/hostapd-openssl-1.0.1.patch |   54 ---------------------------
- package/hostapd/hostapd.mk                  |    4 +-
- 3 files changed, 3 insertions(+), 104 deletions(-)
+ package/ltrace/Config.in                           |    3 +-
+ ...nning-in-ARM-arch_-dis-en-able_breakpoint.patch |   67 --------------------
+ package/ltrace/ltrace-0.6.0-uclibc.patch           |   22 -------
+ ...race-0.6.0-events.patch => ltrace-events.patch} |    0
+ package/ltrace/ltrace-ppc-waitstatus.patch         |   37 +++++++++++
+ package/ltrace/ltrace-uclibc.patch                 |   20 ++++++
+ package/ltrace/ltrace.mk                           |   12 +++-
+ 7 files changed, 66 insertions(+), 95 deletions(-)
 
-diff --git a/package/hostapd/hostapd-cve-2012-4445.patch b/package/hostapd/hostapd-cve-2012-4445.patch
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 4cce767..9fd9aaa 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+-	depends on !(BR2_avr32 || BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64)
+-	depends on !BR2_xtensa
++	depends on !(BR2_avr32 || BR2_mips || BR2_sh || BR2_sh64 || BR2_xtensa)
+ 	select BR2_PACKAGE_LIBELF
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+diff --git a/package/ltrace/ltrace-0.6.0-fix-type-punning-in-ARM-arch_-dis-en-able_breakpoint.patch b/package/ltrace/ltrace-0.6.0-fix-type-punning-in-ARM-arch_-dis-en-able_breakpoint.patch
 deleted file mode 100644
-index 034a458..0000000
---- a/package/hostapd/hostapd-cve-2012-4445.patch
+index c005932..0000000
+--- a/package/ltrace/ltrace-0.6.0-fix-type-punning-in-ARM-arch_-dis-en-able_breakpoint.patch
 +++ /dev/null
-@@ -1,49 +0,0 @@
--From 567bacefd73782508bfe72d3624df495f0df4cd1 Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <j@w1.fi>
--Date: Sun, 7 Oct 2012 20:06:29 +0300
--Subject: [PATCH] EAP-TLS server: Fix TLS Message Length validation
+@@ -1,67 +0,0 @@
+-From c46448f4e5a4c124fbc75ca9b14697212e676893 Mon Sep 17 00:00:00 2001
+-From: Michael K. Edwards <m.k.edwards@gmail.com>
+-Date: Mon, 7 Mar 2011 16:15:48 +0000
+-Subject: [PATCH] fix type punning in ARM arch_(dis|en)able_breakpoint
 -
--EAP-TLS/PEAP/TTLS/FAST server implementation did not validate TLS
--Message Length value properly and could end up trying to store more
--information into the message buffer than the allocated size if the first
--fragment is longer than the indicated size. This could result in hostapd
--process terminating in wpabuf length validation. Fix this by rejecting
--messages that have invalid TLS Message Length value.
--
--This would affect cases that use the internal EAP authentication server
--in hostapd either directly with IEEE 802.1X or when using hostapd as a
--RADIUS authentication server and when receiving an incorrectly
--constructed EAP-TLS message. Cases where hostapd uses an external
--authentication are not affected.
--
--Thanks to Timo Warns for finding and reporting this issue.
--
--Signed-hostap: Jouni Malinen <j@w1.fi>
--intended-for: hostap-1
--(cherry picked from commit 586c446e0ff42ae00315b014924ec669023bd8de)
 ----
-- src/eap_server/eap_server_tls_common.c |    8 ++++++++
-- 1 files changed, 8 insertions(+), 0 deletions(-)
+- sysdeps/linux-gnu/arm/breakpoint.c |   26 ++++++++++++++++++--------
+- 1 files changed, 18 insertions(+), 8 deletions(-)
 -
--diff --git a/src/eap_server/eap_server_tls_common.c b/src/eap_server/eap_server_tls_common.c
--index e149ee3..2cbe700 100644
----- a/src/eap_server/eap_server_tls_common.c
--+++ b/src/eap_server/eap_server_tls_common.c
--@@ -224,6 +224,14 @@ static int eap_server_tls_process_fragment(struct eap_ssl_data *data,
-- 			return -1;
-- 		}
+-diff --git a/sysdeps/linux-gnu/arm/breakpoint.c b/sysdeps/linux-gnu/arm/breakpoint.c
+-index 4a5ab92..4e17940 100644
+---- a/sysdeps/linux-gnu/arm/breakpoint.c
+-+++ b/sysdeps/linux-gnu/arm/breakpoint.c
+-@@ -35,10 +35,15 @@ arch_enable_breakpoint(pid_t pid, Breakpoint *sbp) {
+- 	debug(1, "arch_enable_breakpoint(%d,%p)", pid, sbp->addr);
 - 
--+		if (len > message_length) {
--+			wpa_printf(MSG_INFO, "SSL: Too much data (%d bytes) in "
--+				   "first fragment of frame (TLS Message "
--+				   "Length %d bytes)",
--+				   (int) len, (int) message_length);
--+			return -1;
+- 	for (i = 0; i < 1 + ((BREAKPOINT_LENGTH - 1) / sizeof(long)); i++) {
+--		long a = ptrace(PTRACE_PEEKTEXT, pid, sbp->addr + i * sizeof(long), 0);
+--		unsigned char *bytes = (unsigned char *)&a;
+-+		union _ { long l; unsigned char b[SIZEOF_LONG]; };
+-+		union _ orig, current;
+-+		unsigned char *bytes = current.b;
+-+		for (j = 0; j < sizeof(long); j++) {
+-+			orig.b[j] = sbp->orig_value[i * sizeof(long) + j];
 -+		}
--+
-- 		data->tls_in = wpabuf_alloc(message_length);
-- 		if (data->tls_in == NULL) {
-- 			wpa_printf(MSG_DEBUG, "SSL: No memory for message");
---- 
--1.7.4-rc1
--
-diff --git a/package/hostapd/hostapd-openssl-1.0.1.patch b/package/hostapd/hostapd-openssl-1.0.1.patch
-deleted file mode 100644
-index 2e110f4..0000000
---- a/package/hostapd/hostapd-openssl-1.0.1.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From e6e243d97795306aeb604948e7101f9f14e8b8ca Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <j@w1.fi>
--Date: Fri, 17 Aug 2012 23:55:14 +0300
--Subject: [PATCH] Fix EAP-FAST with OpenSSL 1.0.1
--
--The mechanism to figure out key block size based on ssl->read_hash
--does not seem to work with OpenSSL 1.0.1, so add an alternative
--mechanism to figure out the NAC key size that seems to work at
--least with the current OpenSSL 1.0.1 releases.
--
--Signed-hostap: Jouni Malinen <j@w1.fi>
--intended-for: hostap-1
--(cherry picked from commit 7f996409e7e5aa0bb066257906e87ab3294d4fd0)
-----
-- src/crypto/tls_openssl.c |   14 +++++++++++++-
-- 1 files changed, 13 insertions(+), 1 deletions(-)
--
--diff --git a/src/crypto/tls_openssl.c b/src/crypto/tls_openssl.c
--index 6380ce0..c4a76be 100644
----- a/src/crypto/tls_openssl.c
--+++ b/src/crypto/tls_openssl.c
--@@ -2785,6 +2785,7 @@ int tls_connection_get_keyblock_size(void *tls_ctx,
-- {
-- 	const EVP_CIPHER *c;
-- 	const EVP_MD *h;
--+	int md_size;
+-+		current.l = ptrace(PTRACE_PEEKTEXT, pid, sbp->addr + i * sizeof(long), 0);
 - 
-- 	if (conn == NULL || conn->ssl == NULL ||
-- 	    conn->ssl->enc_read_ctx == NULL ||
--@@ -2798,9 +2799,20 @@ int tls_connection_get_keyblock_size(void *tls_ctx,
-- #else
-- 	h = conn->ssl->read_hash;
-- #endif
--+	if (h)
--+		md_size = EVP_MD_size(h);
--+#if OPENSSL_VERSION_NUMBER >= 0x10000000L
--+	else if (conn->ssl->s3)
--+		md_size = conn->ssl->s3->tmp.new_mac_secret_size;
--+#endif
--+	else
--+		return -1;
+--		debug(2, "current = 0x%lx, orig_value = 0x%lx, thumb_mode = %d", a, *(long *)&sbp->orig_value, sbp->thumb_mode);
+-+		debug(2, "current = 0x%lx, orig_value = 0x%lx, thumb_mode = %d", current.l, orig.l, sbp->thumb_mode);
+- 		for (j = 0; j < sizeof(long) && i * sizeof(long) + j < BREAKPOINT_LENGTH; j++) {
 - 
--+	wpa_printf(MSG_DEBUG, "OpenSSL: keyblock size: key_len=%d MD_size=%d "
--+		   "IV_len=%d", EVP_CIPHER_key_length(c), md_size,
--+		   EVP_CIPHER_iv_length(c));
-- 	return 2 * (EVP_CIPHER_key_length(c) +
---		    EVP_MD_size(h) +
--+		    md_size +
-- 		    EVP_CIPHER_iv_length(c));
+- 			sbp->orig_value[i * sizeof(long) + j] = bytes[j];
+-@@ -49,7 +54,7 @@ arch_enable_breakpoint(pid_t pid, Breakpoint *sbp) {
+- 				bytes[j] = thumb_break_insn[i * sizeof(long) + j];
+- 			}
+- 		}
+--		ptrace(PTRACE_POKETEXT, pid, sbp->addr + i * sizeof(long), a);
+-+		ptrace(PTRACE_POKETEXT, pid, sbp->addr + i * sizeof(long), current.l);
+- 	}
 - }
 - 
+-@@ -60,13 +65,18 @@ arch_disable_breakpoint(pid_t pid, const Breakpoint *sbp) {
+- 	debug(1, "arch_disable_breakpoint(%d,%p)", pid, sbp->addr);
+- 
+- 	for (i = 0; i < 1 + ((BREAKPOINT_LENGTH - 1) / sizeof(long)); i++) {
+--		long a = ptrace(PTRACE_PEEKTEXT, pid, sbp->addr + i * sizeof(long), 0);
+--		unsigned char *bytes = (unsigned char *)&a;
+-+		union _ { long l; unsigned char b[SIZEOF_LONG]; };
+-+		union _ orig, current;
+-+		unsigned char *bytes = current.b;
+-+		for (j = 0; j < sizeof(long); j++) {
+-+			orig.b[j] = sbp->orig_value[i * sizeof(long) + j];
+-+		}
+-+		current.l = ptrace(PTRACE_PEEKTEXT, pid, sbp->addr + i * sizeof(long), 0);
+- 
+--		debug(2, "current = 0x%lx, orig_value = 0x%lx, thumb_mode = %d", a, *(long *)&sbp->orig_value, sbp->thumb_mode);
+-+		debug(2, "current = 0x%lx, orig_value = 0x%lx, thumb_mode = %d", current.l, orig.l, sbp->thumb_mode);
+- 		for (j = 0; j < sizeof(long) && i * sizeof(long) + j < BREAKPOINT_LENGTH; j++) {
+- 			bytes[j] = sbp->orig_value[i * sizeof(long) + j];
+- 		}
+--		ptrace(PTRACE_POKETEXT, pid, sbp->addr + i * sizeof(long), a);
+-+		ptrace(PTRACE_POKETEXT, pid, sbp->addr + i * sizeof(long), current.l);
+- 	}
+- }
 --- 
--1.7.4-rc1
+-1.7.4.1
 -
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 82d6231..45a93fc 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -4,13 +4,15 @@
+diff --git a/package/ltrace/ltrace-0.6.0-uclibc.patch b/package/ltrace/ltrace-0.6.0-uclibc.patch
+deleted file mode 100644
+index 8bec2ae..0000000
+--- a/package/ltrace/ltrace-0.6.0-uclibc.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] configure.ac: Recognize linux-uclibc as well
+-
+-Ltrace works on uClibc as well as on glibc, so accept it.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- configure.ac |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: ltrace-0.6.0/configure.ac
+-===================================================================
+---- ltrace-0.6.0.orig/configure.ac
+-+++ ltrace-0.6.0/configure.ac
+-@@ -11,7 +11,7 @@
+- AC_CANONICAL_HOST
+- 
+- case "${host_os}" in
+--    linux-gnu*)	HOST_OS="linux-gnu" ;;
+-+    linux-gnu* | linux-uclibc*)	HOST_OS="linux-gnu" ;;
+-     *)		AC_MSG_ERROR([unkown host-os ${host_osx}]) ;;
+- esac
+- AC_SUBST(HOST_OS)
+diff --git a/package/ltrace/ltrace-0.6.0-events.patch b/package/ltrace/ltrace-events.patch
+similarity index 100%
+rename from package/ltrace/ltrace-0.6.0-events.patch
+rename to package/ltrace/ltrace-events.patch
+diff --git a/package/ltrace/ltrace-ppc-waitstatus.patch b/package/ltrace/ltrace-ppc-waitstatus.patch
+new file mode 100644
+index 0000000..fa87ea4
+--- /dev/null
++++ b/package/ltrace/ltrace-ppc-waitstatus.patch
+@@ -0,0 +1,37 @@
++From faa8dfe0507b56fb8a7666e326177aec7f364071 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 3 Dec 2012 11:12:08 -0300
++Subject: [PATCH] Fix build failure on ppc
++
++ppc/trace.c is using waitstatus bits without including the appropiate
++headers, leading to a build failure:
++
++libtool: link:
++/home/gustavoz/b/test/output/host/usr/bin/powerpc-buildroot-linux-uclibc-gcc
++-Wall -Wsign-compare -Wfloat-equal -Wformat-security -pipe -Os -o ltrace
++main.o  ./.libs/libltrace.a -lelf
++./.libs/libltrace.a(lt1-trace.o): In function `syscall_p':
++trace.c:(.text+0x28): undefined reference to `WIFSTOPPED'
++trace.c:(.text+0x40): undefined reference to `WSTOPSIG'
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ sysdeps/linux-gnu/ppc/trace.c |    2 ++
++ 1 files changed, 2 insertions(+), 0 deletions(-)
++
++diff --git a/sysdeps/linux-gnu/ppc/trace.c b/sysdeps/linux-gnu/ppc/trace.c
++index c152101..4357a1e 100644
++--- a/sysdeps/linux-gnu/ppc/trace.c
+++++ b/sysdeps/linux-gnu/ppc/trace.c
++@@ -29,6 +29,8 @@
++ #include <errno.h>
++ #include <signal.h>
++ #include <string.h>
+++#include <sys/types.h>
+++#include <sys/wait.h>
++ 
++ #include "backend.h"
++ #include "breakpoint.h"
++-- 
++1.7.8.6
++
+diff --git a/package/ltrace/ltrace-uclibc.patch b/package/ltrace/ltrace-uclibc.patch
+new file mode 100644
+index 0000000..c1041fb
+--- /dev/null
++++ b/package/ltrace/ltrace-uclibc.patch
+@@ -0,0 +1,20 @@
++[PATCH] configure.ac: Recognize linux-uclibc as well
++
++Ltrace works on uClibc as well as on glibc, so accept it.
++
++[Gustavo: update for ltrace 0.7.1]
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura ltrace-0.7.1.orig/configure.ac ltrace-0.7.1/configure.ac
++--- ltrace-0.7.1.orig/configure.ac	2012-12-03 09:02:32.995352741 -0300
+++++ ltrace-0.7.1/configure.ac	2012-12-03 09:02:56.579096389 -0300
++@@ -32,7 +32,7 @@
++ AC_CANONICAL_HOST
++ 
++ case "${host_os}" in
++-    linux-gnu*)	HOST_OS="linux-gnu" ;;
+++    linux-gnu* | linux-uclibc*)	HOST_OS="linux-gnu" ;;
++     *)		AC_MSG_ERROR([unkown host-os ${host_os}]) ;;
++ esac
++ AC_SUBST(HOST_OS)
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 0e684fb..ca6d621 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -3,10 +3,14 @@
+ # ltrace
  #
  #############################################################
+-LTRACE_VERSION      = 0.6.0
+-LTRACE_SITE         = git://anonscm.debian.org/collab-maint/ltrace.git
++
++LTRACE_VERSION = 0.7.1
++LTRACE_SITE = http://alioth.debian.org/frs/download.php/3844
++LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
+ LTRACE_DEPENDENCIES = libelf
+-LTRACE_AUTORECONF   = YES
+-LTRACE_CONF_OPT     += --disable-werror
++LTRACE_AUTORECONF = YES
++LTRACE_CONF_OPT = --disable-werror
++LTRACE_LICENSE = GPLv2
++LTRACE_LICENSE_FILES = COPYING
  
--HOSTAPD_VERSION = 1.0
-+HOSTAPD_VERSION = 1.1
- HOSTAPD_SITE = http://hostap.epitest.fi/releases
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = libnl
- HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- HOSTAPD_LDFLAGS = $(TARGET_LDFLAGS)
-+HOSTAPD_LICENSE = GPLv2/BSD-3c
-+HOSTAPD_LICENSE_FILES = README
- 
- # libnl needs -lm (for rint) if linking statically
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ $(eval $(autotools-package))
