@@ -1,32 +1,85 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 08:37:29 -0800
-Subject: [Buildroot] [git commit] perl: bump to version 5.16.2
-Message-ID: <20121205164221.4C9979967B@busybox.osuosl.org>
+Date: Wed, 5 Dec 2012 08:37:32 -0800
+Subject: [Buildroot] [git commit] luajit: bump to version 2.0.0
+Message-ID: <20121205164221.B96409967B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f44221c4598e3f5d96b7004b6b3fdb42edc08b0e
+commit: http://git.buildroot.net/buildroot/commit/?id=fa0cea21cdee6c5ac46fba3cceb989419083a432
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/perl/perl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/luajit/luajit-01-root-path.patch      |    2 +-
+ package/luajit/luajit-04-no-bin-symlink.patch |   18 ++----------------
+ package/luajit/luajit.mk                      |    2 +-
+ 3 files changed, 4 insertions(+), 18 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 391047d..a86ee2a 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
+index 80ad1e9..cc2f04f 100644
+--- a/package/luajit/luajit-01-root-path.patch
++++ b/package/luajit/luajit-01-root-path.patch
+@@ -18,5 +18,5 @@ Index: b/src/luaconf.h
+ +#define LUA_LDIR	LUA_ROOT "share/lua/"
+ +#define LUA_CDIR	LUA_ROOT "lib/lua/"
+  #ifdef LUA_XROOT
+- #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta11/"
++ #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0/"
+  #define LUA_XPATH \
+diff --git a/package/luajit/luajit-04-no-bin-symlink.patch b/package/luajit/luajit-04-no-bin-symlink.patch
+index 91a470a..0de3162 100644
+--- a/package/luajit/luajit-04-no-bin-symlink.patch
++++ b/package/luajit/luajit-04-no-bin-symlink.patch
+@@ -6,7 +6,7 @@ Index: b/Makefile
+ ===================================================================
+ --- a/Makefile
+ +++ b/Makefile
+-@@ -43,8 +43,7 @@
++@@ -42,8 +42,7 @@
+  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
+  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
+  
+@@ -16,7 +16,7 @@ Index: b/Makefile
+  INSTALL_ANAME= libluajit-$(ABIVER).a
+  INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
+  INSTALL_SOSHORT= libluajit-$(ABIVER).so
+-@@ -58,7 +57,6 @@
++@@ -57,7 +56,6 @@
+  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
+  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
+  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
+@@ -24,17 +24,3 @@ Index: b/Makefile
+  INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
+  
+  INSTALL_DIRS= $(INSTALL_BIN) $(INSTALL_LIB) $(INSTALL_INC) $(INSTALL_MAN) \
+-@@ -120,13 +118,6 @@
+- 	  $(RM) $(FILE_PC).tmp
+- 	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
+- 	cd src/jit && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
+--	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
+--	@echo ""
+--	@echo "Note: the beta releases deliberately do NOT install a symlink for luajit"
+--	@echo "You can do this now by running this command (with sudo):"
+--	@echo ""
+--	@echo "  $(SYMLINK) $(INSTALL_TNAME) $(INSTALL_TSYM)"
+--	@echo ""
+- 
+- uninstall:
+- 	@echo "==== Uninstalling LuaJIT $(VERSION) from $(PREFIX) ===="
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 2583f92..844122e 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -4,7 +4,7 @@
+ #
  #############################################################
  
- PERL_VERSION_MAJOR = 16
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
- PERL_SITE = http://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.bz2
- PERL_LICENSE = Artistic
+-LUAJIT_VERSION = 2.0.0-beta11
++LUAJIT_VERSION = 2.0.0
+ LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
+ LUAJIT_SITE    = http://luajit.org/download
+ LUAJIT_LICENSE = MIT
