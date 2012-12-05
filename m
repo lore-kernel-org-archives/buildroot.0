@@ -1,46 +1,96 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 5 Dec 2012 10:38:59 +0100
-Subject: [Buildroot] [PATCH 2/2] netatalk: Make BerkeleyDB optional for
-	Netatalk
-In-Reply-To: <87k3swc1if.fsf@dell.be.48ers.dk>
-References: <1352410452-10680-1-git-send-email-maxime.hadjinlian@gmail.com>
- <87k3swc1if.fsf@dell.be.48ers.dk>
-Message-ID: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
+From: Markos Chandras <markos.chandras@gmail.com>
+Date: Wed, 5 Dec 2012 12:01:20 +0000
+Subject: [Buildroot] [PATCH] libevent: Add Gentoo patch for C libraries
+ without the sysctl syscall
+In-Reply-To: <1353495389-20179-1-git-send-email-markos.chandras@gmail.com>
+References: <1353495389-20179-1-git-send-email-markos.chandras@gmail.com>
+Message-ID: <CAG2jQ8ga3RoFPshV5x7Fad4rVCnp_aiq9My_HpqPqU1w1Ri-Cg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 5, 2012 at 10:05 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+On 21 November 2012 10:56, Markos Chandras <markos.chandras@gmail.com> wrote:
+> From: Markos Chandras <markos.chandras@imgtec.com>
 >
->  Maxime> As the documentation of netatalk states :
->  Maxime> "dbd is the default backend since version 2.1"
->  Maxime> So cdb (which is the CNID provided by BerkeleyDB) should not be the default.
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> ---
+>  package/libevent/libevent-sysctl.patch |   46 ++++++++++++++++++++++++++++++++
+>  package/libevent/libevent.mk           |    1 +
+>  2 files changed, 47 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libevent/libevent-sysctl.patch
 >
->  Maxime> Also, this patches fixes a trouble when compiling with
->  Maxime> berkeleydb in 64bits where netatalk would look the berkeleylib
->  Maxime> in [...]/lib64 instead of [...]/lib
+> diff --git a/package/libevent/libevent-sysctl.patch b/package/libevent/libevent-sysctl.patch
+> new file mode 100644
+> index 0000000..8c72377
+> --- /dev/null
+> +++ b/package/libevent/libevent-sysctl.patch
+> @@ -0,0 +1,46 @@
+> +Add Gentoo fix for C libraries that lack the sysctl system call
+> +http://sources2.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/libevent/files/libevent-2.0.16-sysctl.patch?revision=1.1
+> +This patch has already been commited upstream
+> +
+> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+> +
+> +From 358c745e5432f7648b6f8b3188f32b5551cbf9d6 Mon Sep 17 00:00:00 2001
+> +From: Mike Frysinger <vapier@gentoo.org>
+> +Date: Thu, 8 Dec 2011 11:39:48 -0500
+> +Subject: [PATCH] check for sysctl before we use it
+> +
+> +Not all C libraries under Linux support the sysctl() func.
+> +---
+> + arc4random.c |    2 +-
+> + configure.in |    2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/arc4random.c b/arc4random.c
+> +index 4833169..ef10fa8 100644
+> +--- a/arc4random.c
+> ++++ b/arc4random.c
+> +@@ -166,7 +166,7 @@ arc4_seed_win32(void)
+> + }
+> + #endif
+> +
+> +-#if defined(_EVENT_HAVE_SYS_SYSCTL_H)
+> ++#if defined(_EVENT_HAVE_SYS_SYSCTL_H) && defined(_EVENT_HAVE_SYSCTL)
+> + #if _EVENT_HAVE_DECL_CTL_KERN && _EVENT_HAVE_DECL_KERN_RANDOM && _EVENT_HAVE_DECL_RANDOM_UUID
+> + #define TRY_SEED_SYSCTL_LINUX
+> + static int
+> +diff --git a/configure.in b/configure.in
+> +index da08cf4..4e24444 100644
+> +--- a/configure.in
+> ++++ b/configure.in
+> +@@ -267,7 +267,7 @@ AC_HEADER_TIME
+> +
+> + dnl Checks for library functions.
+> + AC_CHECK_FUNCS([gettimeofday vasprintf fcntl clock_gettime strtok_r strsep])
+> +-AC_CHECK_FUNCS([getnameinfo strlcpy inet_ntop inet_pton signal sigaction strtoll inet_aton pipe eventfd sendfile mmap splice arc4random arc4random_buf issetugid geteuid getegid getprotobynumber setenv unsetenv putenv])
+> ++AC_CHECK_FUNCS([getnameinfo strlcpy inet_ntop inet_pton signal sigaction strtoll inet_aton pipe eventfd sendfile mmap splice arc4random arc4random_buf issetugid geteuid getegid getprotobynumber setenv unsetenv putenv sysctl])
+> +
+> + AC_CACHE_CHECK(
+> +     [for getaddrinfo],
+> +--
+> +1.7.6.1
+> +
+> diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+> index 5ce511f..3f2dfb0 100644
+> --- a/package/libevent/libevent.mk
+> +++ b/package/libevent/libevent.mk
+> @@ -6,6 +6,7 @@
+>  LIBEVENT_VERSION = 2.0.14
+>  LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+>  LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
+> +LIBEVENT_AUTORECONF = YES
+>  LIBEVENT_INSTALL_STAGING = YES
 >
-> Thanks, but:
->
-> - It doesn't apply because of host-pkg-config -> host-pkgconf.
-> - It doesn't work:
->
-> checking for Berkeley DB headers in /usr/include/db48... no
-> checking for Berkeley DB headers in /usr/include/db4.7... no
-> checking for Berkeley DB headers in /usr/include/db47... no
-> checking for Berkeley DB headers in /usr/include/db4.6... no
-> checking for Berkeley DB headers in /usr/include/db46... no
-> checking for Berkeley DB headers in /usr/include/db4... no
-> configure: error: Berkeley DB library required but not found!
-> make[1]: *** [/home/peko/source/buildroot/testnetatalk/build/netatalk-3.0/.stamp_configured] Error 1
->
-> With an empty default BR config (only netatalk enabled).
-I'll look into it, it should not error because of this since BerkeleDB
-is not longer needed for building netatalk...
-Thanks for your feedback.
->
+>  define LIBEVENT_REMOVE_PYSCRIPT
 > --
-> Bye, Peter Korsgaard
+> 1.7.1
+>
+
+Ping? :-)
+
+-- 
+Regards,
+Markos
