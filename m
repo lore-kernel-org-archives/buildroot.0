@@ -1,26 +1,38 @@
-From: Santhosh Ramani <srcoolz@gmail.com>
-Date: Wed, 5 Dec 2012 14:07:48 -0600
-Subject: [Buildroot] Qt library difference between E.so and just .so
-In-Reply-To: <CADKZYY+HDpGpJKznaRWBSthrsHhOvxaJtHBr6ou3Gz5RNrxcdA@mail.gmail.com>
-References: <CADKZYYJFAKFs5KmSbcU7o=wkWi1_wOVc6MhgZrOdALgr_iva+A@mail.gmail.com>
- <20121204181948.60bfbd4e@eb-e6520>
- <CADKZYY+HDpGpJKznaRWBSthrsHhOvxaJtHBr6ou3Gz5RNrxcdA@mail.gmail.com>
-Message-ID: <CADKZYY+S7tXTUwwGLj4CgkMdf0tn--9g1cjHWEQh=x8uUhJtOA@mail.gmail.com>
+From: Attila Kinali <attila@kinali.ch>
+Date: Wed, 5 Dec 2012 21:27:03 +0100
+Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
+	uboot
+In-Reply-To: <87k3sw9yt1.fsf@dell.be.48ers.dk>
+References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
+ <20121205180533.71706c56@skate>
+ <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
+ <87k3sw9yt1.fsf@dell.be.48ers.dk>
+Message-ID: <20121205212703.98596423e9136f86fd8542b9@kinali.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guys,
+On Wed, 05 Dec 2012 09:46:50 -0800
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Nevermind..I found the issue, needed to export few variables.
+> >>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
+> 
+>  >> [Buildroot] [PATCH 2/2] u-boot: add support for u-boot.sb file format
+>  >> 
+>  >> It was more complete than this one, because it included the dependency
+>  >> on host-elftosb, which is needed to bring the elftosb tool built by
+>  >> Buildroot before U-Boot uses it to generate the .sb image.
+> 
+>  Attila> Any reason why it has not gotten into the git repo?
+> 
+> Not really. I don't have any imx hw here. Are you able to test it?
 
-thanks a lot, how do I mark this thread as solved??
+I have an i.mx23 EVK at work. So i guess i could test it.
 
-Regards
+			Attila Kinali
 
-Santhosh
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121205/dae3526e/attachment.html>
+-- 
+There is no secret ingredient
+         -- Po, Kung Fu Panda
