@@ -1,42 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Dec 2012 20:13:33 +0100
-Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
-	uboot
-In-Reply-To: <87k3sw9yt1.fsf@dell.be.48ers.dk>
-References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
- <20121205180533.71706c56@skate>
- <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
- <87k3sw9yt1.fsf@dell.be.48ers.dk>
-Message-ID: <20121205201333.6ef8104d@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Dec 2012 11:14:31 -0800
+Subject: [Buildroot] [PATCH v5] neard: new package
+In-Reply-To: <1354732747-5843-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 5 Dec 2012 18:39:07 +0000")
+References: <1354732747-5843-1-git-send-email-spdawson@gmail.com>
+Message-ID: <877gow9uqw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-On Wed, 05 Dec 2012 09:46:50 -0800, Peter Korsgaard wrote:
-> >>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
-> 
->  >> [Buildroot] [PATCH 2/2] u-boot: add support for u-boot.sb file
->  >> format
->  >> 
->  >> It was more complete than this one, because it included the
->  >> dependency on host-elftosb, which is needed to bring the elftosb
->  >> tool built by Buildroot before U-Boot uses it to generate the .sb
->  >> image.
-> 
->  Attila> Any reason why it has not gotten into the git repo?
-> 
-> Not really. I don't have any imx hw here. Are you able to test it?
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  v5: Resend
+ spdawson>  v4: No changes; patch series version bumped
+ spdawson>  v3: Incorporated improvements suggested by Baruch Siach,
+ spdawson>      add Arnout Vandecappelle's acks
+ spdawson>  v2: Incorporated improvements suggested by Thomas Petazzoni
 
-It was submitted in March by a guy from Armadeus, and they do use i.MX
-hardware a lot, so I guess that it works.
+ spdawson> +config BR2_PACKAGE_NEARD
+ spdawson> +	bool "neard"
+ spdawson> +	select BR2_PACKAGE_DBUS
+ spdawson> +	select BR2_PACKAGE_LIBGLIB2
+ spdawson> +	select BR2_PACKAGE_LIBNL
 
-Thomas
+You forgot to add the dependencies for the toolchain options needed by
+dbus/libglib2/libnl.
+
+Committed with that fixed, thanks.
+
+ spdawson> +++ b/package/neard/neard.mk
+ spdawson> @@ -0,0 +1,14 @@
+ spdawson> +#############################################################
+ spdawson> +#
+ spdawson> +# neard
+ spdawson> +#
+ spdawson> +#############################################################
+ spdawson> +NEARD_VERSION = 0.8
+ spdawson> +NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
+ spdawson> +NEARD_LICENSE = GPLv2
+ spdawson> +NEARD_LICENSE_FILES = COPYING
+ spdawson> +
+ spdawson> +NEARD_DEPENDENCIES = dbus libglib2 libnl
+
+I know these will indirectly pull in host-pkgconf, but I think it makes
+sense to add it here as well as configure.ac explicitly checks for it.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
