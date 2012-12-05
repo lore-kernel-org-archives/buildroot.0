@@ -1,41 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 05 Dec 2012 07:30:44 +0100
-Subject: [Buildroot] [PATCH 03/51] package/dtc: add option to install
-	programs
-In-Reply-To: <201212042310.25968.yann.morin.1998@free.fr>
-References: <1354146890-27380-1-git-send-email-yann.morin.1998@free.fr>
- <201211301738.37463.yann.morin.1998@free.fr> <50BE6AF7.8090101@mind.be>
- <201212042310.25968.yann.morin.1998@free.fr>
-Message-ID: <50BEEA14.6050603@mind.be>
+Date: Wed, 05 Dec 2012 08:18:51 +0100
+Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
+In-Reply-To: <70774b99-43cc-46e9-a3ad-f9f9addb06da@zimbra2.corp.accelance.fr>
+References: <70774b99-43cc-46e9-a3ad-f9f9addb06da@zimbra2.corp.accelance.fr>
+Message-ID: <50BEF55B.2010403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/12/12 23:10, Yann E. MORIN wrote:
-> OK, so let's first list what variables we need. I can think of at least
-> these (prefix by "$(PKG)_", of coure):
+On 03/12/12 14:42, Jeremy Rosen wrote:
 >
-> Variable            |  Default  | Notes
-> --------------------+-----------+----------------------------------
-> MAKE_CONFIG_GOAL    | (empty)   | Not used if empty (or not set?)
-> MAKE_BUILD_GOAL     | (empty)   | Will call the default target of the Makefile
-> MAKE_INSTALL_GOAL   | install   |
-> MAKE_UNINSTALL_GOAL | uninstall |
-> MAKE_CLEAN_GOAL     | clean     |
->
-> I think the names are explicit enough, save for the first one. Some packages
-> may require a step before the acutal build: for the Linux kernel, we need
-> to make oldconfig first.
->
-> Now, let's settle for a naming convention. See my proposal above.
-> Anyone wants to suggest another naming scheme?
+>>> +
+>>> +define ROOTFS_LIVE_CMD
+>>> + sudo rsync -a --no-o --no-g --delete-during $(TARGET_DIR)/
+>>> $(BR2_TARGET_ROOTFS_LIVE_DEST)/
+>>> +endef
+>>
+>> Do we really want to include sudo commands in Buildroot? I'm not sure
+>> we want.
 
-  Your proposal looks good to me!
+  I don't see a fundamental problem with using sudo within buildroot,
+as long as it's not for things that can be fakerooted.
+
+[snip]
+>>
+>> What about instead a post-image script hook, that users can use to
+>> extract automatically the tarball image somewhere?
+>>
+>
+> yes, that would work too, I can do that locally to solve my particular problem, but I don't think you would accept it upstream either. If you consider that deploying the live filesystem is not buildroot's job, fine I'll probably do it with post-build scripts instead, but I personally believe that NFS is the most common target and that doing it in buildroot-core is more convinient and makes more sense
+>
+> pos-install scripts needs to be rewritten by each user, and doing it manually is a bit error prone (especially if you have lots of devs sharing a buildroot project through git, you can have weird side effects with people not cleaning before deplying the new FS)
+
+  +1 to that.
+
+  For me, buildroot should make it *easy* to:
+
+- get an initial system up and running (quickly);
+
+- develop for the target board;
+
+- offer a reproducible and shareable build system.
+
+  We already do very well on all three counts, but we can
+always improve.
+
+
+  In addition, the NFS stuff is a FAQ.  And FAQs are bugs,
+really.
+
 
   Regards,
   Arnout
+
+
+> again, I personally think this use-case makes sense, especially in big teams where some members don't want to learn what NFS is (yeah, sounds stupid, but it does happen) and I don't think there are any major drawback (we test sudo properly, we only call it for a specific use-case where it is really needed) except the philosophical question of "should a build tool use a tool giving root-priv like sudo" which in the case of NFS doesn't change much since the user will have to use it himself (either directly or trough post-image script).
+>
+> I'd really think it makes sense in a "type make, reboot the target, test your change" philosophy which matches really well the idea behind NFS based developement, but it's your call as with any core change...
+>
+> Regards
+> J?r?my
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
