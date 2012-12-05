@@ -1,123 +1,106 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 10:56:00 -0800
-Subject: [Buildroot] [git commit] linenoise: new package
-Message-ID: <20121205190030.559C099357@busybox.osuosl.org>
+Date: Wed, 5 Dec 2012 10:58:01 -0800
+Subject: [Buildroot] [git commit] lua: support linenoise
+Message-ID: <20121205190030.811F699357@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d87847203f3b1b6af51515978563f0dee737b6fd
+commit: http://git.buildroot.net/buildroot/commit/?id=635bebf559f4f76bc4fa49c3ccb468476a654151
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                             |    1 +
- package/linenoise/Config.in                   |    6 +++
- package/linenoise/linenoise-get-columns.patch |   20 +++++++++++
- package/linenoise/linenoise.mk                |   45 +++++++++++++++++++++++++
- 4 files changed, 72 insertions(+), 0 deletions(-)
+ package/lua/Config.in              |   17 +++++++++++++++++
+ package/lua/lua-11-linenoise.patch |   24 ++++++++++++++++++++++++
+ package/lua/lua.mk                 |    8 +++++++-
+ 3 files changed, 48 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f95e29d..ae94705 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -525,6 +525,7 @@ menu "Text and terminal handling"
- source "package/enchant/Config.in"
- source "package/icu/Config.in"
- source "package/libiconv/Config.in"
-+source "package/linenoise/Config.in"
- source "package/ncurses/Config.in"
- source "package/newt/Config.in"
- source "package/pcre/Config.in"
-diff --git a/package/linenoise/Config.in b/package/linenoise/Config.in
-new file mode 100644
-index 0000000..8e4ab91
---- /dev/null
-+++ b/package/linenoise/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LINENOISE
-+	bool "linenoise"
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 8233e2a..4166730 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -7,6 +7,15 @@ config BR2_PACKAGE_LUA
+ 
+ if BR2_PACKAGE_LUA
+ 
++choice
++	prompt "Lua Interpreter command-line editing"
++	default BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++
++config BR2_PACKAGE_LUA_INTERPRETER_EDITING_NONE
++	bool "none"
 +	help
-+	  A small self-contained alternative to readline and libedit
++	  None.
 +
-+	  https://github.com/antirez/linenoise
-diff --git a/package/linenoise/linenoise-get-columns.patch b/package/linenoise/linenoise-get-columns.patch
+ config BR2_PACKAGE_LUA_INTERPRETER_READLINE
+ 	bool "readline support"
+ 	select BR2_PACKAGE_READLINE
+@@ -14,4 +23,12 @@ config BR2_PACKAGE_LUA_INTERPRETER_READLINE
+ 	help
+ 	  Enables command-line editing in the lua interpreter.
+ 
++config BR2_PACKAGE_LUA_INTERPRETER_LINENOISE
++	bool "linenoise support"
++	select BR2_PACKAGE_LINENOISE
++	help
++	  Enables command-line editing in the lua interpreter.
++
++endchoice
++
+ endif
+diff --git a/package/lua/lua-11-linenoise.patch b/package/lua/lua-11-linenoise.patch
 new file mode 100644
-index 0000000..4fb9e40
+index 0000000..488c080
 --- /dev/null
-+++ b/package/linenoise/linenoise-get-columns.patch
-@@ -0,0 +1,20 @@
-+returns the default value (80) when a real value is not available
-+(0 is not an acceptable value for COLUMNS, the width of the screen).
++++ b/package/lua/lua-11-linenoise.patch
+@@ -0,0 +1,24 @@
++Add support of linenoise (replace readline)
 +
-+see pull request on upstream : http://github.com/antirez/linenoise/pull/31
++see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
 +
 +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
-+Index: b/linenoise.c
++Index: b/src/luaconf.h
 +===================================================================
-+--- a/linenoise.c
-++++ b/linenoise.c
-+@@ -182,7 +182,7 @@
-+ static int getColumns(void) {
-+     struct winsize ws;
-+ 
-+-    if (ioctl(1, TIOCGWINSZ, &ws) == -1) return 80;
-++    if (ioctl(1, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) return 80;
-+     return ws.ws_col;
-+ }
-+ 
-diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
-new file mode 100644
-index 0000000..343a107
---- /dev/null
-+++ b/package/linenoise/linenoise.mk
-@@ -0,0 +1,45 @@
-+#############################################################
-+#
-+# linenoise
-+#
-+#############################################################
-+LINENOISE_VERSION = g8c9b481
-+LINENOISE_SITE = http://github.com/antirez/linenoise/tarball/master
-+LINENOISE_LICENSE = BSD-2c
-+LINENOISE_INSTALL_STAGING = YES
-+
-+define LINENOISE_BUILD_CMDS
-+	cd $(@D); $(TARGET_CC) $(TARGET_CFLAGS) -c linenoise.c
-+	cd $(@D); $(TARGET_AR) rcu liblinenoise.a linenoise.o
-+	cd $(@D); $(TARGET_CC) $(TARGET_LDFLAGS) -o linenoise_example example.c -L. -llinenoise
-+endef
-+
-+define LINENOISE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 644 -D $(@D)/linenoise.h          $(STAGING_DIR)/usr/include/linenoise.h
-+	$(INSTALL) -m 644 -D $(@D)/liblinenoise.a       $(STAGING_DIR)/usr/lib/liblinenoise.a
-+	$(INSTALL) -m 755 -D $(@D)/linenoise_example    $(STAGING_DIR)/usr/bin/linenoise_example
-+endef
-+
-+define LINENOISE_UNINSTALL_STAGING_CMDS
-+	rm -f   $(STAGING_DIR)/usr/include/linenoise.h
-+	rm -f   $(STAGING_DIR)/usr/lib/liblinenoise.a
-+	rm -f   $(STAGING_DIR)/usr/bin/linenoise_example
-+endef
-+
-+define LINENOISE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 644 -D $(@D)/linenoise.h          $(TARGET_DIR)/usr/include/linenoise.h
-+	$(INSTALL) -m 644 -D $(@D)/liblinenoise.a       $(TARGET_DIR)/usr/lib/liblinenoise.a
-+	$(INSTALL) -m 755 -D $(@D)/linenoise_example    $(TARGET_DIR)/usr/bin/linenoise_example
-+endef
-+
-+define LINENOISE_UNINSTALL_TARGET_CMDS
-+	rm -f   $(TARGET_DIR)/usr/include/linenoise.h
-+	rm -f   $(TARGET_DIR)/usr/lib/liblinenoise.a
-+	rm -f   $(TARGET_DIR)/usr/bin/linenoise_example
-+endef
-+
-+define LINENOISE_CLEAN_CMDS
-+	rm -f $(@D)/*.o $(@D)/*.a $(@D)/linenoise_example
-+endef
-+
-+$(eval $(generic-package))
++--- a/src/luaconf.h
+++++ b/src/luaconf.h
++@@ -279,6 +279,13 @@
++ 	if (lua_strlen(L,idx) > 0)  /* non-empty line? */ \
++ 	  add_history(lua_tostring(L, idx));  /* add it to history */
++ #define lua_freeline(L,b)	((void)L, free(b))
+++#elif defined(LUA_USE_LINENOISE)
+++#include <linenoise.h>
+++#define lua_readline(L,b,p)	((void)L, ((b)=linenoise(p)) != NULL)
+++#define lua_saveline(L,idx) \
+++	if (lua_strlen(L,idx) > 0)  /* non-empty line? */ \
+++	  linenoiseHistoryAdd(lua_tostring(L, idx));  /* add it to history */
+++#define lua_freeline(L,b)	((void)L, free(b))
++ #else
++ #define lua_readline(L,b,p)	\
++ 	((void)L, fputs(p, stdout), fflush(stdout),  /* show prompt */ \
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 9e0d387..32acc99 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -16,10 +16,16 @@ LUA_MYLIBS += -ldl
+ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+ 	LUA_DEPENDENCIES = readline ncurses
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+-	LUA_CFLAGS += -DLUA_USE_LINUX
++	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_READLINE
++else
++ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_LINENOISE),y)
++	LUA_DEPENDENCIES = linenoise
++	LUA_MYLIBS += -llinenoise
++	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN -DLUA_USE_LINENOISE
+ else
+ 	LUA_CFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
+ endif
++endif
+ 
+ # We never want to have host-readline and host-ncurses as dependencies
+ # of host-lua.
