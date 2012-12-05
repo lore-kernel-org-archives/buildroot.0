@@ -1,85 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 08:37:32 -0800
-Subject: [Buildroot] [git commit] luajit: bump to version 2.0.0
-Message-ID: <20121205164221.B96409967B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Dec 2012 08:42:00 -0800
+Subject: [Buildroot] [PATCH 3/4] linenoise: new package
+In-Reply-To: <1354551135-30056-3-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Mon, 3 Dec 2012 17:12:13 +0100")
+References: <1354551135-30056-1-git-send-email-francois.perrad@gadz.org>
+ <1354551135-30056-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87sj7ka1t3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa0cea21cdee6c5ac46fba3cceb989419083a432
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/luajit/luajit-01-root-path.patch      |    2 +-
- package/luajit/luajit-04-no-bin-symlink.patch |   18 ++----------------
- package/luajit/luajit.mk                      |    2 +-
- 3 files changed, 4 insertions(+), 18 deletions(-)
+ Francois> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ Francois> ---
+ Francois>  package/Config.in                             |    1 +
+ Francois>  package/linenoise/Config.in                   |    6 ++++
+ Francois>  package/linenoise/linenoise-get-columns.patch |   17 ++++++++++
+ Francois>  package/linenoise/linenoise.mk                |   45 +++++++++++++++++++++++++
+ Francois>  4 files changed, 69 insertions(+)
+ Francois>  create mode 100644 package/linenoise/Config.in
+ Francois>  create mode 100644 package/linenoise/linenoise-get-columns.patch
+ Francois>  create mode 100644 package/linenoise/linenoise.mk
 
-diff --git a/package/luajit/luajit-01-root-path.patch b/package/luajit/luajit-01-root-path.patch
-index 80ad1e9..cc2f04f 100644
---- a/package/luajit/luajit-01-root-path.patch
-+++ b/package/luajit/luajit-01-root-path.patch
-@@ -18,5 +18,5 @@ Index: b/src/luaconf.h
- +#define LUA_LDIR	LUA_ROOT "share/lua/"
- +#define LUA_CDIR	LUA_ROOT "lib/lua/"
-  #ifdef LUA_XROOT
-- #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta11/"
-+ #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0/"
-  #define LUA_XPATH \
-diff --git a/package/luajit/luajit-04-no-bin-symlink.patch b/package/luajit/luajit-04-no-bin-symlink.patch
-index 91a470a..0de3162 100644
---- a/package/luajit/luajit-04-no-bin-symlink.patch
-+++ b/package/luajit/luajit-04-no-bin-symlink.patch
-@@ -6,7 +6,7 @@ Index: b/Makefile
- ===================================================================
- --- a/Makefile
- +++ b/Makefile
--@@ -43,8 +43,7 @@
-+@@ -42,8 +42,7 @@
-  INSTALL_MAN= $(INSTALL_SHARE)/man/man1
-  INSTALL_PKGCONFIG= $(INSTALL_LIB)/pkgconfig
-  
-@@ -16,7 +16,7 @@ Index: b/Makefile
-  INSTALL_ANAME= libluajit-$(ABIVER).a
-  INSTALL_SONAME= libluajit-$(ABIVER).so.$(MAJVER).$(MINVER).$(RELVER)
-  INSTALL_SOSHORT= libluajit-$(ABIVER).so
--@@ -58,7 +57,6 @@
-+@@ -57,7 +56,6 @@
-  INSTALL_SHORT1= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_SHORT2= $(INSTALL_LIB)/$(INSTALL_SOSHORT)
-  INSTALL_T= $(INSTALL_BIN)/$(INSTALL_TNAME)
-@@ -24,17 +24,3 @@ Index: b/Makefile
-  INSTALL_PC= $(INSTALL_PKGCONFIG)/$(INSTALL_PCNAME)
-  
-  INSTALL_DIRS= $(INSTALL_BIN) $(INSTALL_LIB) $(INSTALL_INC) $(INSTALL_MAN) \
--@@ -120,13 +118,6 @@
-- 	  $(RM) $(FILE_PC).tmp
-- 	cd src && $(INSTALL_F) $(FILES_INC) $(INSTALL_INC)
-- 	cd src/jit && $(INSTALL_F) $(FILES_JITLIB) $(INSTALL_JITLIB)
---	@echo "==== Successfully installed LuaJIT $(VERSION) to $(PREFIX) ===="
---	@echo ""
---	@echo "Note: the beta releases deliberately do NOT install a symlink for luajit"
---	@echo "You can do this now by running this command (with sudo):"
---	@echo ""
---	@echo "  $(SYMLINK) $(INSTALL_TNAME) $(INSTALL_TSYM)"
---	@echo ""
-- 
-- uninstall:
-- 	@echo "==== Uninstalling LuaJIT $(VERSION) from $(PREFIX) ===="
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 2583f92..844122e 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LUAJIT_VERSION = 2.0.0-beta11
-+LUAJIT_VERSION = 2.0.0
- LUAJIT_SOURCE  = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE    = http://luajit.org/download
- LUAJIT_LICENSE = MIT
+ Francois> diff --git a/package/linenoise/linenoise-get-columns.patch b/package/linenoise/linenoise-get-columns.patch
+ Francois> new file mode 100644
+ Francois> index 0000000..180d1c3
+ Francois> --- /dev/null
+ Francois> +++ b/package/linenoise/linenoise-get-columns.patch
+ Francois> @@ -0,0 +1,17 @@
+ Francois> +see http://github.com/antirez/linenoise/pull/31
+
+It would still be good to describe what it does and why.
+
+
+ Francois> +
+ Francois> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ Francois> +
+ Francois> +Index: b/linenoise.c
+ Francois> +===================================================================
+ Francois> +--- a/linenoise.c
+ Francois> ++++ b/linenoise.c
+ Francois> +@@ -182,7 +182,7 @@
+ Francois> + static int getColumns(void) {
+ Francois> +     struct winsize ws;
+ Francois> + 
+ Francois> +-    if (ioctl(1, TIOCGWINSZ, &ws) == -1) return 80;
+ Francois> ++    if (ioctl(1, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0) return 80;
+ Francois> +     return ws.ws_col;
+ Francois> + }
+ Francois> + 
+ Francois> diff --git a/package/linenoise/linenoise.mk b/package/linenoise/linenoise.mk
+ Francois> new file mode 100644
+ Francois> index 0000000..e7b6124
+ Francois> --- /dev/null
+ Francois> +++ b/package/linenoise/linenoise.mk
+ Francois> @@ -0,0 +1,45 @@
+ Francois> +#############################################################
+ Francois> +#
+ Francois> +# linenoise
+ Francois> +#
+ Francois> +#############################################################
+ Francois> +LINENOISE_VERSION = g8c9b481
+ Francois> +LINENOISE_SITE = http://github.com/antirez/linenoise/tarball/master
+ Francois> +LINENOISE_LICENSE = BSD-2c
+ Francois> +LINENOISE_INSTALL_STAGING = YES
+ Francois> +
+ Francois> +define LINENOISE_BUILD_CMDS
+ Francois> +	cd $(@D); $(TARGET_CC) $(TARGET_CFLAGS) -c linenoise.c
+ Francois> +	cd $(@D); $(TARGET_AR) rcu liblinenoise.a linenoise.o
+ Francois> +	cd $(@D); $(TARGET_CC) $(TARGET_CFLAGS) -o linenoise_example example.c -L. -llinenoise
+
+Does it make sense to build and install the example? If it does, it
+should also use $(TARGET_LDFLAGS).
+
+
+-- 
+Bye, Peter Korsgaard
