@@ -1,50 +1,40 @@
-From: Gary Coulbourne <bear@bears.org>
-Date: Wed, 5 Dec 2012 11:48:27 -0500
-Subject: [Buildroot] [PATCH] add support for Freescale .sb format to uboot
-Message-ID: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Dec 2012 08:51:54 -0800
+Subject: [Buildroot] [PATCH] libevent: Add Gentoo patch for C libraries
+	without the sysctl syscall
+In-Reply-To: <CAG2jQ8ga3RoFPshV5x7Fad4rVCnp_aiq9My_HpqPqU1w1Ri-Cg@mail.gmail.com>
+ (Markos Chandras's message of "Wed, 5 Dec 2012 12:01:20 +0000")
+References: <1353495389-20179-1-git-send-email-markos.chandras@gmail.com>
+ <CAG2jQ8ga3RoFPshV5x7Fad4rVCnp_aiq9My_HpqPqU1w1Ri-Cg@mail.gmail.com>
+Message-ID: <87obi8a1cl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch offers the option to build u-boot.sb
+>>>>> "Markos" == Markos Chandras <markos.chandras@gmail.com> writes:
 
----
- boot/uboot/Config.in |    4 ++++
- boot/uboot/uboot.mk  |    3 +++
- 2 files changed, 7 insertions(+)
+Hi,
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d8458d9..9b7a3b0 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -94,6 +94,10 @@ config BR2_TARGET_UBOOT_FORMAT_AIS
-   It is required to load code/data on OMAP-L1 processors.
-   u-boot.ais contains U-Boot with the SPL support.
+ >> +++ b/package/libevent/libevent-sysctl.patch
+ >> @@ -0,0 +1,46 @@
+ >> +Add Gentoo fix for C libraries that lack the sysctl system call
+ >> +http://sources2.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/libevent/files/libevent-2.0.16-sysctl.patch?revision=1.1
+ >> +This patch has already been commited upstream
+ >> +
+ >> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ >> +
+ >> +From 358c745e5432f7648b6f8b3188f32b5551cbf9d6 Mon Sep 17 00:00:00 2001
+ >> +From: Mike Frysinger <vapier@gentoo.org>
+ >> +Date: Thu, 8 Dec 2011 11:39:48 -0500
+ >> +Subject: [PATCH] check for sysctl before we use it
+ >> +
+ >> +Not all C libraries under Linux support the sysctl() func.
 
-+config BR2_TARGET_UBOOT_FORMAT_SB
-+        depends on BR2_arm
-+        bool "u-boot.sb"
-+
- config BR2_TARGET_UBOOT_FORMAT_BIN
-  bool "u-boot.bin"
+ Markos> Ping? :-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 619f2e1..4a98583 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -37,6 +37,9 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
- UBOOT_BIN          = u-boot-nand.bin
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
- UBOOT_BIN          = u-boot.img
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
-+UBOOT_BIN          = u-boot.sb
-+UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
- else
- UBOOT_BIN          = u-boot.bin
- UBOOT_BIN_IFT      = $(UBOOT_BIN).ift
---
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121205/9181a361/attachment.html>
+What archs (in Buildroot context) are affected by this?
+
+-- 
+Bye, Peter Korsgaard
