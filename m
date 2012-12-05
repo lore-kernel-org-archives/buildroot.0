@@ -1,36 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Dec 2012 00:41:22 -0800
-Subject: [Buildroot] [git commit] links: bump to version 2.7
-Message-ID: <20121205091358.E7D628FDC0@busybox.osuosl.org>
+Date: Wed, 5 Dec 2012 00:50:21 -0800
+Subject: [Buildroot] [git commit] netatalk: Add missing dependency to
+	netatalk
+Message-ID: <20121205091359.473658FDC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e19201c98f554c267bcf3ad623dd6397615c8875
+commit: http://git.buildroot.net/buildroot/commit/?id=c0507db22c46f4a19398e5476d62e4e242075250
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Netatalk need host-pkgconf, otherwise the configure script is complaining.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/links/links.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/netatalk/netatalk.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 5db2ff7..f7401bb 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -4,9 +4,11 @@
- #
- #############################################################
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index c01e360..4063b53 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -7,7 +7,7 @@ NETATALK_VERSION = 3.0
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
  
--LINKS_VERSION = 2.5
-+LINKS_VERSION = 2.7
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
-+LINKS_LICNSE = GPLv2+
-+LINKS_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_LINKS_GRAPHICS),y)
- LINKS_CONF_OPT += --enable-graphics
+-NETATALK_DEPENDENCIES = openssl berkeleydb libgcrypt libgpg-error
++NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
+ NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+ 	--with-bdb=$(STAGING_DIR)/usr \
