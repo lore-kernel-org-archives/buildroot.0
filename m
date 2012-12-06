@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Dec 2012 15:45:57 -0300
-Subject: [Buildroot] [PATCH] qemu/ppc-virtex-ml507: add new sample config
-Message-ID: <1354819557-26247-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  6 Dec 2012 15:59:34 -0300
+Subject: [Buildroot] [PATCHv2] qemu/ppc-virtex-ml507: add new sample config
+Message-ID: <1354820374-5602-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -35,7 +35,7 @@ index 0000000..0500a95
 +Tested with QEMU 1.2.0
 diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
 new file mode 100644
-index 0000000..541d84c
+index 0000000..6b4ea74
 --- /dev/null
 +++ b/configs/qemu_ppc_virtex_ml507_defconfig
 @@ -0,0 +1,22 @@
@@ -60,6 +60,6 @@ index 0000000..541d84c
 +BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
 +BR2_LINUX_KERNEL_VMLINUX=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="44x/virtex440-ml507"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
 -- 
 1.7.8.6
