@@ -1,53 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Dec 2012 12:48:55 +0100
-Subject: [Buildroot] Support of iMX6 hardware ?
-In-Reply-To: <50C06206.6060905@wanadoo.fr>
-References: <50C06206.6060905@wanadoo.fr>
-Message-ID: <20121206124855.796d4d38@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu,  6 Dec 2012 12:46:29 +0000
+Subject: [Buildroot] [PATCH v3] Add support for custom package patches
+Message-ID: <1354797989-5888-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thierry Bultel,
+From: Simon Dawson <spdawson@gmail.com>
 
-On Thu, 06 Dec 2012 10:14:46 +0100, Thierry Bultel wrote:
+Add a configuration item to allow a space-separated list of directories
+to be specified, from which custom package patches will be applied.
 
-> I have 2 questions around the Buildroot support for iMX6 from
-> Freescale, especially around graphics.
-> 
-> 1) Is there current work on that for a coming release ?
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Everything is in the Buildroot Git repository, and besides that I
-haven't heard of people working on i.MX6 "advanced" features. We have a
-defconfig for the nitrogen6x board that was done by Peter, but I guess
-Peter hasn't investigated the entire graphics stack of i.MX6 for now.
+---
+ v3: Add documentation, as suggested by Samuel Martin. Incorporate further
+     improvements suggested by Arnout Vandecappelle
+ v2: Incorporate improvements suggested by Arnout Vandecappelle, and
+     fix handling of the case where the new configuration item is not set
 
-It would indeed be really, really great to improve i.MX6 support in
-Buildroot (and also for other SoCs).
+ Config.in                          |    7 +++++++
+ docs/manual/customize-packages.txt |   15 +++++++++++++++
+ docs/manual/customize.txt          |    2 ++
+ package/pkg-generic.mk             |   29 +++++++++++++++++------------
+ 4 files changed, 41 insertions(+), 12 deletions(-)
+ create mode 100644 docs/manual/customize-packages.txt
 
-> I have noticed that openbricks seem to already have integrated the 
-> imx6-lib and xdriver-xf86-video-imx
-> 
-> 2) I have trying to get both of them integrated in buildroot
-> The imx6-lib, which will be a 'generic-package', needs includes of
-> the target kernel; these includes are not in the sysroot.
-> 
-> What is the most appropriate way to proceed ? The underlying Makefile
-> has got a "INCLUDE" var to be set, shall I point it to my
-> linux-custom build directory ? That does not seem very good.
-
-To me, it's the right solution. If you have userspace code that depends
-on very specific kernel headers that are not part of a traditional
-toolchain, then pointing to the kernel sources is the only solution.
-
-Of course, it means that the package must "depends on BR2_LINUX_KERNEL"
-and have <foobar>_DEPENDENCIES = linux.
-
-Thomas
+diff --git a/Config.in b/Config.in
+index b319ac7..25910e5 100644
+--- a/Config.in
++++ b/Config.in
+@@ -419,6 +419,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
+ 	  as the source directory for a particular package. See the
+ 	  Buildroot documentation for more details on this feature.
+ 
++config BR2_EXTRA_PACKAGE_PATCH_DIRS
++	string "extra package patch directories"
++	help
++	  You may specify a space-separated list of directories containing
++	  extra package patches. Note that any extra patches for a package
++	  will be applied AFTER the Buildroot patch set for the package.
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+diff --git a/docs/manual/customize-packages.txt b/docs/manual/customize-packages.txt
+new file mode 100644
+index 0000000..4dea34a
+--- /dev/null
++++ b/docs/manual/customize-packages.txt
+@@ -0,0 +1,15 @@
++// -*- mode:doc -*- ;
++
++[[packages-custom]]
++Customizing packages
++~~~~~~~~~~~~~~~~~~~~
++
++It is sometimes useful to apply 'extra' patches to packages - over and
++above those provided in Buildroot. This might be used to support custom
++features in a project, for example, or when working on a new architecture.
++
++The +BR2_EXTRA_PACKAGE_PATCH_DIRS+ configuration file option can be
++used to specify a set of extra package patch directories. The option
++should be set to a space-separated list of directories containing the
++extra package patches. Note that any extra patches for a package
++will be applied *after* the Buildroot patch set for the package.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index 1e6f4e8..a2705e5 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -12,3 +12,5 @@ include::customize-uclibc-config.txt[]
+ include::customize-kernel-config.txt[]
+ 
+ include::customize-toolchain.txt[]
++
++include::customize-packages.txt[]
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index fc05dc6..31493b9 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -69,6 +69,22 @@ else
+ 	@true # Nothing to do to source a local package
+ endif
+ 
++# Apply package patches from the specified directory
++define pkg-apply-patch-directory
++	if test -d $(1); then \
++	  if test "$(wildcard $(1)/$(NAMEVER)*.patch*)"; then \
++	    support/scripts/apply-patches.sh $(@D) $(1) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
++	  else \
++	    support/scripts/apply-patches.sh $(@D) $(1) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
++	    if test -d $(1)/$(NAMEVER); then \
++	      support/scripts/apply-patches.sh $(@D) $(1)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
++	    fi; \
++	  fi; \
++	fi;
++endef
++
++PACKAGE_PATCH_DIRS = $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(call qstrip,$(BR2_EXTRA_PACKAGE_PATCH_DIRS))
++
+ # Patch
+ #
+ # The RAWNAME variable is the lowercased package name, which allows to
+@@ -79,18 +95,7 @@ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
+-	$(Q)( \
+-	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+-	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+-	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch $(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+-	  else \
+-	    support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch $(RAWNAME)\*.patch.$(ARCH) || exit 1; \
+-	    if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
+-	      support/scripts/apply-patches.sh $(@D) $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH) || exit 1; \
+-	    fi; \
+-	  fi; \
+-	fi; \
+-	)
++	$(Q)$(foreach patchdir,$(PACKAGE_PATCH_DIRS),$(call pkg-apply-patch-directory,$(patchdir)))
+ 	$(foreach hook,$($(PKG)_POST_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
