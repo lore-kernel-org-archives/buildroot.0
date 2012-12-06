@@ -1,30 +1,59 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Dec 2012 07:35:50 -0800
-Subject: [Buildroot] Support of iMX6 hardware ?
-In-Reply-To: <20121206124855.796d4d38@skate> (Thomas Petazzoni's message of
- "Thu, 6 Dec 2012 12:48:55 +0100")
-References: <50C06206.6060905@wanadoo.fr> <20121206124855.796d4d38@skate>
-Message-ID: <87fw3j2nxl.fsf@dell.be.48ers.dk>
+From: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
+Date: Thu, 6 Dec 2012 08:10:12 -0800 (PST)
+Subject: [Buildroot] elfutils and the perf userspace tool
+In-Reply-To: <20121205163111.025fed52@skate>
+References: <1354573207.60693.YahooMailNeo@web120305.mail.ne1.yahoo.com>
+ <CAJ+oik2wb+izT2we-WcnK5cTEtzo-_jW46Q98UMm=XfbCSqAWA@mail.gmail.com>
+ <1354608794.90144.YahooMailNeo@web120304.mail.ne1.yahoo.com>
+ <50BE4D1C.3020702@petroprogram.com> <20121204204232.3e5b0ec9@skate>
+ <1354720073.28172.YahooMailNeo@web120306.mail.ne1.yahoo.com>
+ <20121205163111.025fed52@skate>
+Message-ID: <1354810212.82454.YahooMailNeo@web120304.mail.ne1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello Thomas,
 
-Hi,
 
- >> 1) Is there current work on that for a coming release ?
 
- Thomas> Everything is in the Buildroot Git repository, and besides that I
- Thomas> haven't heard of people working on i.MX6 "advanced" features. We have a
- Thomas> defconfig for the nitrogen6x board that was done by Peter, but I guess
- Thomas> Peter hasn't investigated the entire graphics stack of i.MX6 for now.
+----- Original Message -----
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
+> Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>; "buildroot at busybox.net" <buildroot@busybox.net>
+> Sent: Wednesday, December 5, 2012 4:31 PM
+> Subject: Re: [Buildroot] elfutils and the perf userspace tool
+> 
+> Dear Bogdan Radulescu,
+> 
+> On Wed, 5 Dec 2012 07:07:53 -0800 (PST), Bogdan Radulescu wrote:
+>>  I had a look at the yoctoproject patches and they are a bit confusing
+>>  to me. There are way to many patches. Some of them fix problems I
+>>  don't have and are very old. I decided to go with Stefans suggestions
+>>  and I could go further, but now I am stuck again. Yes, I am using
+>>  uClibc. Do you guys have a suggestion for this:
+>>  http://pastie.org/pastes/5484094/text
+>> 
+>>  I would really like to have perf in buildroot and this thing is in
+>>  the way.
+> 
+> Did you notice that you can build perf without libelf, by passing
+> NO_LIBELF=1 to perf's Makefile?
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
-Indeed. I've only touched the open source bits. From the looks of it, I
-doubt I will be able to spend much time on further imx6 support during
-the 2013.02 cycle - So help would be ver much appreciated.
+I noticed now that this is in the newer versions. I tried to build it without libelf even though it will be pretty crippled but still I didn't have any luck.
+http://pastie.org/pastes/5489305/text
 
--- 
-Bye, Peter Korsgaard
+I tried with using 3.7-rc3. In 3.4.22 isn't patched for building without libelf.
+On which version did you manage to build it for ARM?
+
+Bogdan
