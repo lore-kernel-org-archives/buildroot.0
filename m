@@ -1,43 +1,27 @@
-From: Chris Zankel <chris@zankel.net>
-Date: Wed, 5 Dec 2012 21:36:36 -0800
-Subject: [Buildroot] [PATCH] xtensa: add -mlongcalls to CFLAGS for xtensa
-Message-ID: <50c0320c.05bf440a.60fe.60b5@mx.google.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Thu, 06 Dec 2012 07:03:54 +0100
+Subject: [Buildroot] [PATCH] package/crosstool-ng: bumpimg default GCC
+ version to 4.6.3
+In-Reply-To: <87lidc86ni.fsf@dell.be.48ers.dk>
+References: <1354736519-18173-1-git-send-email-c.schoenert@t-online.de>
+ <1354736519-18173-2-git-send-email-c.schoenert@t-online.de>
+ <87lidc86ni.fsf@dell.be.48ers.dk>
+Message-ID: <50C0354A.3030701@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The longcalls option allows calls across a greater range of addresses.
+Hello Peter, hello Yann,
 
-This option may degrade both code size and performance, but
-the linker can generally optimize away the unnecessary overhead
-when a call ends up within range
+Am 05.12.2012 23:40, schrieb Peter Korsgaard:
+> Hmm, don't you also need to set CT_CC_V_4_6_3=y (and unset
+> CT_CC_V_4_4_6)?
 
-Signed-off-by: Chris Zankel <chris@zankel.net>
----
- package/Makefile.in |    9 +++++++++
- 1 file changed, 9 insertions(+)
+of course you are right- :)
+That's why i wrote I don't have tested it (yet). Hopefully later this
+day i found some time to correct this. I will resend this patch.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 9fdc745..98e7f7c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -56,6 +56,15 @@ TARGET_ABI+=-mabi=spe -mfloat-gprs=double -Wa,-me500mc
- endif
- endif
- 
-+# Use longcalls option for Xtensa globally.
-+# The 'longcalls' option allows calls across a greater range of addresses,
-+# and is required for some packages. While this option can degrade both
-+# code size and performance, the linker can usually optimize away the
-+# overhead when a call ends up within a certain range.
-+ifeq ($(BR2_xtensa),y)
-+TARGET_ABI += -mlongcalls
-+endif
-+
- STAGING_DIR=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot
- 
- TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
--- 
-1.7.9.5
+Regards
+Carsten
