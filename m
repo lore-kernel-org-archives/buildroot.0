@@ -1,65 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  6 Dec 2012 15:59:34 -0300
-Subject: [Buildroot] [PATCHv2] qemu/ppc-virtex-ml507: add new sample config
-Message-ID: <1354820374-5602-1-git-send-email-gustavo@zacarias.com.ar>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 6 Dec 2012 19:41:28 +0000
+Subject: [Buildroot] [PATCH v5] neard: new package
+In-Reply-To: <87d2yn142e.fsf@dell.be.48ers.dk>
+References: <1354732747-5843-1-git-send-email-spdawson@gmail.com>
+ <877gow9uqw.fsf@dell.be.48ers.dk> <87d2yn142e.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCMTTUHRqPNR49BLnLxVw2afR-5tBeUuLVgGZc9B0ypDPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new powerpc-virtex-ml507 sample qemu config.
-Useful for powerpc softfloat testing.
+Hi Peter.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- board/qemu/powerpc-virtex-ml507/readme.txt |    8 ++++++++
- configs/qemu_ppc_virtex_ml507_defconfig    |   22 ++++++++++++++++++++++
- 2 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 board/qemu/powerpc-virtex-ml507/readme.txt
- create mode 100644 configs/qemu_ppc_virtex_ml507_defconfig
+On 6 December 2012 17:30, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> It seems to cause build failures though - Care to look at it?
+>
+> http://autobuild.buildroot.net/results/eb2e3e8c604e26738f73b55e788b969d4a3dee23/build-end.log
 
-diff --git a/board/qemu/powerpc-virtex-ml507/readme.txt b/board/qemu/powerpc-virtex-ml507/readme.txt
-new file mode 100644
-index 0000000..0500a95
---- /dev/null
-+++ b/board/qemu/powerpc-virtex-ml507/readme.txt
-@@ -0,0 +1,8 @@
-+Run the emulation with:
-+
-+ cp output/images/virtex440-ml507.dtb ppc.dtb
-+ qemu-system-ppc -M virtex-ml507 -kernel output/images/vmlinux -m 256 -nographic -append "console=ttyS0"
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 1.2.0
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-new file mode 100644
-index 0000000..6b4ea74
---- /dev/null
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -0,0 +1,22 @@
-+# Architecture
-+BR2_powerpc=y
-+BR2_powerpc_440=y
-+
-+# Filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Lock to 3.6 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_6=y
-+
-+# Use soft float
-+BR2_SOFT_FLOAT=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.9"
-+BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
--- 
-1.7.8.6
+The linux/nfc.h kernel header does not exist for pre-3.1.x kernels.
+The toolchain used for the autobuild linked above uses 2.6.38 kernel
+headers.
+
+To my knowledge, we do not have a mechanism for marking a package as
+requiring a [toolchain using a] minimum kernel header version. Is
+there a simple way of achieving this, or is it going to require some
+new infrastructure?
+
+Simon.
