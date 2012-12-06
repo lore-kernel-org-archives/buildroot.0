@@ -1,78 +1,54 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 06 Dec 2012 11:34:48 +0100
+Date: Thu, 06 Dec 2012 11:59:06 +0100
 Subject: [Buildroot] [PATCH] pkg-download.mk: Fix shallow clone
-In-Reply-To: <CANxTyt74ytgBNHb8koKuVTjei5sQP2FpUrwawMuG17=fAK3bXw@mail.gmail.com>
-References: <1354445767-15308-1-git-send-email-sho@relinux.de>	<8738zo7835.fsf@dell.be.48ers.dk>
+In-Reply-To: <50C0432E.2080005@mind.be>
+References: <1354445767-15308-1-git-send-email-sho@relinux.de>
+ <8738zo7835.fsf@dell.be.48ers.dk>
  <CANxTyt74ytgBNHb8koKuVTjei5sQP2FpUrwawMuG17=fAK3bXw@mail.gmail.com>
-Message-ID: <50C074C8.3070406@relinux.de>
+ <50C0432E.2080005@mind.be>
+Message-ID: <50C07A7A.2070204@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 06.12.2012 03:14, schrieb Danomi Manchego:
-> Hi all,
+Am 06.12.2012 08:03, schrieb Arnout Vandecappelle:
+> On 06/12/12 03:14, Danomi Manchego wrote:
+>> So I'm wondering why the recent changes in this area used grep at
+>> all, rather than asking ls-remote directly.  I.e.:
+>>
+>> ((test `git ls-remote $($(PKG)_SITE) $($(PKG)_DL_VERSION) | cut -f
+>> 2-` && \
+>>
+>> If there is feedback that the above is desirable, then I can send in
+>> the patch.
 >
-> I ran into a minor problem with the shallow clone changes.  The test
-> for doing a git shallow clone uses a grep.  From pkg-download.mk
-> <http://pkg-download.mk>:
+>  The argument of test should be quoted to avoid getting the same
+> problem again
+> when the ref matches more than once for some reason.
 >
->   ((test `git ls-remote  $($(PKG)_SITE) | cut -f 2- | grep
-> $($(PKG)_DL_VERSION)` && \
+>  Or even better: use the exit code:
 >
-> If the grep returns multiple matches, then the "test" will fail, and
-> then go on to do a full clone. The failure prints out:
+> git ls-remote --exit-code $($(PKG)_SITE) $($(PKG)_DL_VERSION) >
+> /dev/null 2>&1 && \
 >
->    bash: test: too many arguments
->
-> It's because the grep filter matches multiple items in the ls-remote
-> output.  For example, if you try to get your kernel from
-> "http://arago-project.org/git/projects/linux-davinci.git", specifying
-> a version of "03.22.00.02", then you will get two matches:
->
->    $ git ls-remote
-> http://arago-project.org/git/projects/linux-davinci.git | cut -f 2- |
-> grep 03.22.00.02
->     refs/heads/03.22.00.02 <http://03.22.00.02>
->     refs/tags/DEV_DAVINCIPSP_03.22.00.02
->
-> There are ways to massage the grep to do better (maybe use "grep -q",
-> or grep for "/string$" instead of just "string"), but the ls-remote
-> command seems to take a ref directly.  I.e.
->
->    $ git ls-remote
-> http://arago-project.org/git/projects/linux-davinci.git 03.22.00.02 |
-> cut -f 2-
->    refs/heads/03.22.00.02 <http://03.22.00.02>
->    $
->    $ git ls-remote
-> http://arago-project.org/git/projects/linux-davinci.git
-> DEV_DAVINCIPSP_03.22.00.02 | cut -f 2-
->    refs/tags/DEV_DAVINCIPSP_03.22.00.02
->    $
->    $ git ls-remote
-> http://arago-project.org/git/projects/linux-davinci.git JUNK | cut -f 2-
->    $
->
-> So I'm wondering why the recent changes in this area used grep at all,
-> rather than asking ls-remote directly.  I.e.:
->
-> ((test `git ls-remote $($(PKG)_SITE) $($(PKG)_DL_VERSION) | cut -f 2-`
-> && \
-Hello Danomi,
+> (hopefully the --exit-code option exists in older gits as well...)
+Hi,
 
-this is quite simple to answer: because I didn't find out this possibility.
->
-> If there is feedback that the above is desirable, then I can send in
-> the patch.
-If you send a patch I am quite sure to be able to test it.
+sorry to say, but my git 1.7.0 does not know anything about a
+--exit-code option and ls-remote always gives a exit code of 0 as long
+as the repository can be connected.
+
+Maybe its worth to think about adding a host-git to buildroot to
+overcome such compatibility issues?
 
 Kind regards
 
 Stephan
 >
-> Danomi -
+>  Regards,
+>  Arnout
 >
 
 
@@ -81,8 +57,3 @@ reLinux     -    Stephan Hoffmann
 Am Schmidtgrund 124    50765 K?ln
 Tel. +49.221.95595-19    Fax: -64
 www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121206/f6062f47/attachment.html>
