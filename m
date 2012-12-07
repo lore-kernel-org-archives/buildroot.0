@@ -1,38 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  7 Dec 2012 09:06:20 -0300
-Subject: [Buildroot] [PATCH] openssl: fix runtime failure on some powerpc
-	variants
-Message-ID: <1354881980-24101-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 07 Dec 2012 09:09:00 -0300
+Subject: [Buildroot] buildroot-2012.11  openssh: Bad trap error
+In-Reply-To: <50C1C261.2040106@shf.de>
+References: <50C06C77.7020509@shf.de> <50C0B224.2020007@zacarias.com.ar>
+ <50C1C261.2040106@shf.de>
+Message-ID: <50C1DC5C.8050404@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenSSL's assembly optimizations por PowerPC seem to be broken for at
-least 4xx cores.
-Thanks go to Jan Schunke for reporting and testing.
+On 12/07/2012 07:18 AM, Jan Schunke wrote:
+> Hi,
+> 
+> I updated all packages back to the newer version and followed your
+> suggestion:
+> 
+>> You could also try disabling the powerpc optimizations in
+>> package/openssl/openssl.mk, just remove the block from ifeq
+>> ($(ARCH),powerpc) to the first endif (3 lines).
+> 
+> and everything is ok, too. Can we just check if $ARCH is powerpc AND
+> BR2_SOFT_FLOAT is set to yes in package/openssl/openssl.mk?
+> 
+> Regards
+> Jan
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 265a4fb..160df2e 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -38,8 +38,11 @@ endif
- endif
- endif
- ifeq ($(ARCH),powerpc)
-+# 4xx cores seem to have trouble with openssl's ASM optimizations
-+ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
- 	OPENSSL_TARGET_ARCH = ppc
- endif
-+endif
- ifeq ($(ARCH),x86_64)
- 	OPENSSL_TARGET_ARCH = x86_64
- endif
--- 
-1.7.8.6
+Hi again.
+Patch just sent.
+I couldn't track it down to being an FP issue since openssl doesn't seem
+to be using any FP opcode, so i guess it's some missing opcode from the
+4xx cores that it's using.
+It wouldn't matter if the toolchain is soft or hard float either since
+openssl uses inline assembly without checking for it.
+The patch excludes powerpc assembly optimizations for al 4xx cores to
+err on the safe side.
+Thanks for the report and testing.
+Regards.
