@@ -1,35 +1,37 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri,  7 Dec 2012 14:32:30 +0100
-Subject: [Buildroot] [PATCH] iproute2: implement IPROUTE2_CLEAN_CMDS
-Message-ID: <1354887150-30038-1-git-send-email-sho@relinux.de>
+From: jengjr li <jengjr@gmail.com>
+Date: Fri, 7 Dec 2012 15:59:53 +0000 (UTC)
+Subject: [Buildroot] Invitation to connect on LinkedIn
+Message-ID: <96745644.2664264.1354895993625.JavaMail.app@ela4-app2307.prod>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since IPROUTE2_CLEAN_CMDS was missing, make iproute2-clean did
-not call "make clean" for iproute2.
+LinkedIn
+------------
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
- package/iproute2/iproute2.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 6f5ee51..da5d7a0 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -45,6 +45,10 @@ define IPROUTE2_BUILD_CMDS
- 	$(MAKE) CC="$(TARGET_CC)" CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
- endef
- 
-+define IPROUTE2_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
- define IPROUTE2_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" SBINDIR=/sbin \
- 		DOCDIR=/usr/share/doc/iproute2-$(IPROUTE2_VERSION) \
--- 
-1.7.0.4
+
+Find out why I use LinkedIn. Stay in touch and build your professional network.
+
+- jengjr
+
+jengjr li
+Deputy Project Manager at A Telecom Company
+Taiwan
+
+Confirm that you know jengjr li:
+https://www.linkedin.com/e/-lyatji-hafi3bbd-6z/isd/9941515188/DynYIN9M/?hs=false&tok=2YvsjUNXBvAlw1
+
+--
+You are receiving Invitation to Connect emails. Click to unsubscribe:
+http://www.linkedin.com/e/-lyatji-hafi3bbd-6z/v4riARYfhkIhARweXslb2rrK7kKkjKks/goo/buildroot%40uclibc%2Eorg/20061/I3315650959_1/?hs=false&tok=2d4-a47yFvAlw1
+
+(c) 2012 LinkedIn Corporation. 2029 Stierlin Ct, Mountain View, CA 94043, USA.
+
+
+  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121207/b5999ed9/attachment-0001.html>
