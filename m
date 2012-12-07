@@ -1,45 +1,58 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 07 Dec 2012 11:32:24 +0100
-Subject: [Buildroot] [PATCH] pkg-infra: add <pkg>-extract
- and	<pkg>-patch targets to OVERRIDE support
-In-Reply-To: <874njy1x58.fsf@dell.be.48ers.dk>
-References: <1354835760-9357-1-git-send-email-arnout@mind.be>
- <874njy1x58.fsf@dell.be.48ers.dk>
-Message-ID: <50C1C5B8.2020505@relinux.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri,  7 Dec 2012 11:51:30 +0100
+Subject: [Buildroot] [PATCH] barebox: add 2012.12, remove 2012.08
+Message-ID: <1354877490-15585-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 07.12.2012 02:14, schrieb Peter Korsgaard:
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
-> Hi,
->
->  Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
->  Arnout> The legal-info target (and possibly others as well) depends on
->  Arnout> <pkg>-extract to make sure the license file is available.  However,
->  Arnout> when <PKG>_OVERRIDE_SRCDIR is active, the <pkg>-extract target
->  Arnout> doesn't exist.
->
->  Arnout> To solve this, we add <pkg>-extract which depends on <pkg>-rsync.
->  Arnout> While we're at it, we do the same for <pkg>-patch.  That avoids the
->  Arnout> same problem in the future if something starts depending on
->  Arnout> <pkg>-patch.
->
->  Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  Arnout> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->  Arnout> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-> Committed, thanks.
->
-Thanks, now legal info works together with OVERRIDE.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Stephan
-
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 95f330f..e7498a8 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2012_11
++	default BR2_TARGET_BAREBOX_2012_12
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2012_08
+-	bool "2012.08"
+-
+ config BR2_TARGET_BAREBOX_2012_09
+ 	bool "2012.09"
+ 
+@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2012_10
+ config BR2_TARGET_BAREBOX_2012_11
+ 	bool "2012.11"
+ 
++config BR2_TARGET_BAREBOX_2012_12
++	bool "2012.12"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -41,10 +41,10 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2012.08.0"	if BR2_TARGET_BAREBOX_2012_08
+ 	default "2012.09.0"	if BR2_TARGET_BAREBOX_2012_09
+ 	default "2012.10.0"	if BR2_TARGET_BAREBOX_2012_10
+ 	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
++	default "2012.12.0"	if BR2_TARGET_BAREBOX_2012_12
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+1.8.0
