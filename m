@@ -1,59 +1,37 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 7 Dec 2012 13:40:21 +0100
-Subject: [Buildroot] [PATCH] barebox: use the symlink to copy the
- barebox binary to the images directory
-In-Reply-To: <CAHkwnC-cDVkM3pHJVkKa3rq3ubjR8fQS7PSrT=AFjzmyDPHpvw@mail.gmail.com>
-References: <1353587711-26855-1-git-send-email-gregory.hermant@calao-systems.com>
- <CAHkwnC-cDVkM3pHJVkKa3rq3ubjR8fQS7PSrT=AFjzmyDPHpvw@mail.gmail.com>
-Message-ID: <CAHkwnC8aSg-2DH9Hc-e9YKysjjbTn-5HXyCCyWPc7LGRiO5idg@mail.gmail.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Fri,  7 Dec 2012 14:20:13 +0100
+Subject: [Buildroot] [PATCH] Clean kernel when "make linux-clean" is called
+In-Reply-To: <20120827210633.608e9bfe@skate>
+References: <20120827210633.608e9bfe@skate>
+Message-ID: <1354886413-28939-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 7, 2012 at 12:10 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Thu, Nov 22, 2012 at 1:35 PM, Gregory Hermant
-> <gregory.hermant@calao-systems.com> wrote:
->> Barebox creates a symlink to the binary. This symlink points to
->> the barebox.bin or to the compressed zbarebox.bin binary.
->>
->> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
->> ---
->>  boot/barebox/barebox.mk |    6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
->> index a025d5f..6cc4976 100644
->> --- a/boot/barebox/barebox.mk
->> +++ b/boot/barebox/barebox.mk
->> @@ -72,7 +72,11 @@ define BAREBOX_BUILD_CMDS
->>  endef
->>
->>  define BAREBOX_INSTALL_IMAGES_CMDS
->> -       cp $(@D)/barebox.bin $(BINARIES_DIR)
->> +       if test -h $(@D)/barebox-flash-image ; then \
->> +               cp -L $(@D)/barebox-flash-image $(BINARIES_DIR)/barebox.bin ; \
->> +       else \
->> +               cp $(@D)/barebox.bin $(BINARIES_DIR);\
->> +       fi
->>  endef
->>
->>  ifeq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
->> --
->> 1.7.9.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+When "make linux-clean" is typed one expects that the kernel tree
+gets cleaned. Before this patch, only the stamp files had been
+removed.
 
-Acked-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ linux/linux.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Thanks
---
-Fabio Porcedda
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c4bdf90..e517d1d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -221,6 +221,9 @@ define LINUX_BUILD_CMDS
+ 	$(LINUX_APPEND_DTB)
+ endef
+ 
++define LINUX_CLEAN_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) clean
++endef
+ 
+ ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+-- 
+1.7.0.4
