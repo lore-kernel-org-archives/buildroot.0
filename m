@@ -1,44 +1,69 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  7 Dec 2012 08:38:07 +0100
-Subject: [Buildroot] [PATCH] perl: refactor configure step,
-Message-ID: <1354865887-6720-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 7 Dec 2012 09:14:26 +0100
+Subject: [Buildroot] Support of iMX6 hardware ?
+In-Reply-To: <50C198AD.8030703@wanadoo.fr>
+References: <50C06206.6060905@wanadoo.fr> <20121206124855.796d4d38@skate>
+ <50C198AD.8030703@wanadoo.fr>
+Message-ID: <20121207091426.316173d6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-after discussion with Perl-Cross's author (Alex Suykov)
+Dear Thierry Bultel,
 
-Note: Using -A with variables that aren't option lists makes little sense.
+On Fri, 07 Dec 2012 08:20:13 +0100, Thierry Bultel wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl/perl.mk |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> As soon as I have something working, I will obviously submit
+> a patch for it.
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index a86ee2a..da54ef1 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -57,12 +57,12 @@ PERL_CONF_OPT = \
- 	-Dld="$(TARGET_CC_NOCCACHE)" \
- 	-Dccflags="$(TARGET_CFLAGS)" \
- 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
--	-A define:mydomain="" \
--	-A define:myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
--	-A define:myuname="Buildroot $(BR2_VERSION_FULL)" \
--	-A define:osname=linux \
--	-A define:osvers=$(LINUX_VERSION) \
--	-A define:perladmin=root
-+	-Dmydomain="" \
-+	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
-+	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
-+	-Dosname=linux \
-+	-Dosvers=$(LINUX_VERSION) \
-+	-Dperladmin=root
- 
- ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
-     PERL_CONF_OPT += -Dusedevel
+Great!
+
+> Thanks for the tip.
+> I have (at least) 2 packages to build.
+> 
+> - The first one was the imx6-lib, that I have added under the Graphics
+> section, as a generic-package, and
+> 
+> define IMX6_LIB_BUILD_CMDS
+>       $(MAKE) -C $(@D) all PLATFORM=IMX6Q
+> CROSS_COMPILE=$(TARGET_CROSS) INCLUDE=$(INCLUDE)
+> endef
+
+Sounds good. We'll do a complete review when you post the entire patch,
+but it sounds ok in principle.
+
+> The second one is the xdriver_xf86-video-imx
+> It is built as an autotools-package
+> But since the 'configure' intrisincs are not really my favorite food,
+> I am looking how to add the needed INCLUDE to the CFLAGS that are
+> automatically given to it.
+> Could you please advise me on how to do it in the cleanest way ?
+
+Depends on whether you need to pass this environment variables at
+configure time or at build time.
+
+For configure time:
+
+<foobar>_CONF_ENV = \
+	INCLUDE="blabla" \
+	CFLAGS="$(TARGET_CFLAGS) -blabla"
+
+For build time:
+
+<foobar>_MAKE_ENV = \
+	INCLUDE="blabla" \
+	CFLAGS="$(TARGET_CFLAGS) -blabla"
+
+See also
+http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_autotools_based_packages
+
+Best regards,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
