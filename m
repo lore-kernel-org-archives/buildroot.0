@@ -1,118 +1,31 @@
-From: Jan Schunke <schunke@shf.de>
-Date: Fri, 07 Dec 2012 11:18:09 +0100
-Subject: [Buildroot] buildroot-2012.11  openssh: Bad trap error
-In-Reply-To: <50C0B224.2020007@zacarias.com.ar>
-References: <50C06C77.7020509@shf.de> <50C0B224.2020007@zacarias.com.ar>
-Message-ID: <50C1C261.2040106@shf.de>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Fri,  7 Dec 2012 11:29:23 +0100
+Subject: [Buildroot] [PATCH] tslib: add license info
+Message-ID: <1354876163-30452-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06.12.2012 15:56, Gustavo Zacarias wrote:
-> On 12/06/2012 06:59 AM, Jan Schunke wrote:
-> 
->> I am using buildroot-2012.11 on Powerpc 440 (Xilinx Virtex5) without FPU
->>
->> when I boot I get:
->>
->> ...
->> Starting network...
->> Generating RSA Key...
->> [    5.527467] Bad trap at PC: 48063f20, SR: 2d000, vector=2010
->> Trace/breakpoint trap
->> Generating RSA Key...
->> [    5.572257] Bad trap at PC: 48063f20, SR: 2d000, vector=2010
->> Trace/breakpoint trap
->> Generating DSA Key...
->> THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
->>
->> [    5.594576] Bad trap at PC: 48063f20, SR: 2d000, vector=2010
->> Trace/breakpoint trap
->> Generating ECDSA Key...
->> THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
->>
->> [    5.615732] Bad trap at PC: 48063f20, SR: 2d000, vector=2010
->> Trace/breakpoint trap
->> Starting sshd: [    5.940254] Bad trap at PC: 48063f20, SR: 2d000,
->> vector=2010
->> Trace/breakpoint trap
->> OK
->> ...
->>
->> I can achieve a similar behaviour if I compile a program with -mhard-float.
->>
->> So I guess for one of the following packages softfloat is not set correctly.
->>
->> Maybe someone more competent can take a look into this.
->>
->> When I roll back
->>
->> openssh from 6.1p1  to 6.0p1
->> openssl from 1.0.1c to 1.0.0j
->> zlib    from 1.27   to 1.26
->>
->> everything is fine.
-> 
-> Hi.
-> Ok, i managed to build a similar scenario as yours under qemu
-> (virtex-ml507 emulation).
-> With similar toolchain/versions/options i'm unable to hit the issue.
-> It's most likely that qemu is being too optimistic in the CPU emulation
-> department (handling the invalid opcodes for a 440 core).
-> Did you try switching just a single version?
-> I'm betting on openssl since it's got powerpc-specific optimizations
-> whereas zlib and openssh don't.
-> You could also try disabling the powerpc optimizations in
-> package/openssl/openssl.mk, just remove the block from ifeq
-> ($(ARCH),powerpc) to the first endif (3 lines).
-> And let us know :)
-> Regards.
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ package/tslib/tslib.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Hi,
-
-I updated all packages back to the newer version and followed your
-suggestion:
-
-> You could also try disabling the powerpc optimizations in
-> package/openssl/openssl.mk, just remove the block from ifeq
-> ($(ARCH),powerpc) to the first endif (3 lines).
-
-and everything is ok, too. Can we just check if $ARCH is powerpc AND
-BR2_SOFT_FLOAT is set to yes in package/openssl/openssl.mk?
-
-Regards
-Jan
-
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index b10b5ec..9b51015 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -5,6 +5,9 @@
+ #############################################################
+ TSLIB_VERSION = 412d99d
+ TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
++TSLIB_LICENSE = LGPLv2
++TSLIB_LICENSE_FILES = COPYING
++
+ TSLIB_AUTORECONF = YES
+ TSLIB_INSTALL_STAGING = YES
+ TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
 -- 
-*******************************************************
-Jan-Hendrik Schunke
-Entwickler / Developer
-SHF Communication Technologies AG
-Wilhelm-v.-Siemens-Str. 23 D; 12277 Berlin, Germany
-E-Mail: schunke at shf.de
-Phone:  +49-(0)30- 77 20 51-0 direct: -45
-Fax:    +49-(0)30- 75 31 07 8
-Web:    www.shf.de
-*******************************************************
-Sitz der Gesellschaft/Registered Office: Berlin;
-Registergericht/Register Court: AG Berlin-Charlottenburg HRB 72633;
-Vorstand/Executive Board: Dr. Frank Hieronymi, Dr. Lars Klapproth;
-Aufsichtsratsvorsitzender/Chairman of the Supervisory Board: Dr. Walter
-L. Rust.
-
-Diese E-Mail enth?lt vertrauliche und/oder rechtlich gesch?tzte
-Informationen und ist ausschlie?lich f?r den bezeichneten Adressaten
-oder dessen Vertreter bestimmt. Wenn Sie nicht der richtige Adressat
-sind oder diese E-Mail irrt?mlich erhalten haben, informieren Sie bitte
-sofort den Absender und vernichten Sie diese Mail. Jede Form der
-Kenntnisnahme, Ver?ffentlichung, Vervielf?ltigung oder Weitergabe durch
-andere Empf?nger ist unzul?ssig.
-
-This e-mail may contain confidential and/or privileged information and
-is intended solely for the addressee or a representative there of. If
-you are not the intended recipient (or have received this e-mail in
-error) please notify the sender immediately and destroy this e-mail.
-Access to, publishing and copying of the information by a third party is
-unauthorised.
+1.7.0.4
