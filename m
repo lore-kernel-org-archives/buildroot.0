@@ -1,90 +1,50 @@
-From: Viallard Anthony <viallard@syscom-instruments.com>
-Date: Fri, 07 Dec 2012 09:41:13 +0100
-Subject: [Buildroot] [PATCH] fix cjson package
-In-Reply-To: <CANxTyt4OZM0u3jyGrDoAQPvBSzVQ_=BHz_c0rNW6Y9pSr1jzbQ@mail.gmail.com>
-References: <50C0B73C.9020407@syscom-instruments.com>
- <CANxTyt4OZM0u3jyGrDoAQPvBSzVQ_=BHz_c0rNW6Y9pSr1jzbQ@mail.gmail.com>
-Message-ID: <50C1ABA9.2030202@syscom-instruments.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 7 Dec 2012 09:55:41 +0100
+Subject: [Buildroot] Support of iMX6 hardware ?
+In-Reply-To: <20121207093816.3722030d@skate>
+References: <50C06206.6060905@wanadoo.fr> <20121206124855.796d4d38@skate>
+ <50C198AD.8030703@wanadoo.fr> <20121207091426.316173d6@skate>
+ <CAHXCMML8DZ+f5euA__rE4v3bSzi2O0KqpZ4odGtoOm6sAo6f_w@mail.gmail.com>
+ <20121207093816.3722030d@skate>
+Message-ID: <CAHXCMMJOCtRun6xCjX_sZfQcZxWZLMyVVBnrbzUY1oAhXU7HDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07. 12. 12 03:14, Danomi Manchego wrote:
-> Viallard,
+Hi Thomas,
+
+2012/12/7 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Samuel Martin,
 >
->> -CJSON_VERSION         = undefined
->> -CJSON_SOURCE          = cJSONFiles.zip
->> +CJSON_VERSION         = 2011-10-10
->> +CJSON_SOURCE          = cJSONFiles-$(CJSON_VERSION).zip
->>   CJSON_SITE            = http://downloads.sourceforge.net/project/cjson/
-> This worked for you?  It doesn't work for me ... i.e. this line works for me:
+> On Fri, 7 Dec 2012 09:35:33 +0100, Samuel Martin wrote:
 >
->      wget http://downloads.sourceforge.net/project/cjson/cJSONFiles.zip
+>> Some people around Buildroot, like the Armadeus folks, have already
+>> done part of the imx-lib integration.
+>> It seems they presently support imx-lib for both imx27 and imx51.
+>>
+>> You could certainly give a look at their work, might be usefull ;-):
+>> http://armadeus.git.sourceforge.net/git/gitweb.cgi?p=armadeus/armadeus;a=blob;f=patches/buildroot/2012.11/174-imx-lib-add_package.patch;hb=HEAD
 >
-> but this line gives me ERROR 404 Not Found:
+> Any idea why they don't submit their work upstream?
 >
->      wget http://downloads.sourceforge.net/project/cjson/cJSONFiles-2011-10-10.zip
->
-> Am I missing something here?
->
-> Danomi -
-Actually, "wget 
-http://downloads.sourceforge.net/project/cjson/cJSONFiles.zip" works and 
-the other link not indeed. I just realize I've a "Backup download site" 
-with cJSONFiles-2011-10-10.zip on it ...
+> They have a huge number of patches for Buildroot in
+> http://armadeus.git.sourceforge.net/git/gitweb.cgi?p=armadeus/armadeus;a=tree;f=patches/buildroot/2012.11;hb=HEAD
+> and they don't submit anything. It's sad.
 
-But there really a problem when buildroot trying to download the file :
+They are working on it, see:
+http://www.armadeus.com/wiki/index.php?title=Buildroot_Mainline_integration
 
------------------------
-avd at avd-box:~/wksp/buildroot$ make cjson-build
- >>> cjson undefined Downloading
---2012-12-07 09:24:34--  http://192.168.2.17/files/buildroot/cJSONFiles.zip
-Connexion vers 192.168.2.17:80...connect?.
-requ?te HTTP transmise, en attente de la r?ponse...404 Not Found
-2012-12-07 09:24:34 ERREUR 404: Not Found.
+And here, the WIP branch of what I've already done, and I plan to post shortly:
+https://github.com/tSed/buildroot/commits/sma/armadeus-integration
 
---2012-12-07 09:24:34--  
-http://downloads.sourceforge.net/project/cjson//cJSONFiles.zip
-R?solution de downloads.sourceforge.net (downloads.sourceforge.net)... 
-216.34.181.59
-Connexion vers downloads.sourceforge.net 
-(downloads.sourceforge.net)|216.34.181.59|:80...connect?.
-requ?te HTTP transmise, en attente de la r?ponse...404 Not Found
-2012-12-07 09:24:35 ERREUR 404: Not Found.
 
---2012-12-07 09:24:35--  http://192.168.2.17/files/buildroot/cJSONFiles.zip
-Connexion vers 192.168.2.17:80...connect?.
-requ?te HTTP transmise, en attente de la r?ponse...404 Not Found
-2012-12-07 09:24:35 ERREUR 404: Not Found.
+It's just a slow process, not necessarly time-to-market-friendly at
+first look! ;-)
 
-make: *** 
-[/home/avd/wksp/buildroot/output/build/cjson-undefined/.stamp_downloaded] Erreur 
-1
------------------------
 
-And i know now what is the actual issue. Here the good big fix :
-
----
-  package/cjson/cjson.mk |    2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index ccc6010..55af800 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -5,7 +5,7 @@
-  #############################################################
-  CJSON_VERSION         = undefined
-  CJSON_SOURCE          = cJSONFiles.zip
--CJSON_SITE            = http://downloads.sourceforge.net/project/cjson/
-+CJSON_SITE            = http://downloads.sourceforge.net/project/cjson
-  CJSON_INSTALL_STAGING = YES
-  CJSON_LICENSE         = MIT
+Regards,
 
 -- 
-1.7.10.4
-
-Cheers,
-avd.
+Sam
