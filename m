@@ -1,53 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 7 Dec 2012 10:02:45 +0100
-Subject: [Buildroot] Support of iMX6 hardware ?
-In-Reply-To: <CAHXCMMJOCtRun6xCjX_sZfQcZxWZLMyVVBnrbzUY1oAhXU7HDw@mail.gmail.com>
-References: <50C06206.6060905@wanadoo.fr> <20121206124855.796d4d38@skate>
- <50C198AD.8030703@wanadoo.fr> <20121207091426.316173d6@skate>
- <CAHXCMML8DZ+f5euA__rE4v3bSzi2O0KqpZ4odGtoOm6sAo6f_w@mail.gmail.com>
- <20121207093816.3722030d@skate>
- <CAHXCMMJOCtRun6xCjX_sZfQcZxWZLMyVVBnrbzUY1oAhXU7HDw@mail.gmail.com>
-Message-ID: <20121207100245.4fb8ef47@skate>
+From: Richard Braun <rbraun@sceen.net>
+Date: Fri,  7 Dec 2012 10:46:44 +0100
+Subject: [Buildroot] [PATCH] linux: add option to get sources from custom
+	directory
+Message-ID: <1354873604-4304-1-git-send-email-rbraun@sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
 
-On Fri, 7 Dec 2012 09:55:41 +0100, Samuel Martin wrote:
+Signed-off-by: Richard Braun <rbraun@sceen.net>
+---
+ linux/Config.in |   15 +++++++++++++--
+ linux/linux.mk  |    3 +++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-> They are working on it, see:
-> http://www.armadeus.com/wiki/index.php?title=Buildroot_Mainline_integration
-
-Great.
-
-> And here, the WIP branch of what I've already done, and I plan to
-> post shortly:
-> https://github.com/tSed/buildroot/commits/sma/armadeus-integration
-
-Good. Please submit step by step: if you spam us with hundred patches,
-we'll never see the end of it.
-
-> It's just a slow process, not necessarly time-to-market-friendly at
-> first look! ;-)
-
-The time-to-market excuse is a bad excuse because it is very often
-wrong, especially for Buildroot where the barrier to entry is quite
-low (writing Buildroot code that gets accepted is quite easy). Armadeus
-has been carrying those Buildroot patches for multiple years, and
-everytime they upgrade to a newer Buildroot release, they have to
-upgrade those patches as well. I am pretty sure that the time they have
-spent upgrading those patches and upgrading their Buildroot versions is
-significantly larger than the time it would have taken to get those
-improvements merged in the first place.
-
-Best regards,
-
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index ef3b2a1..cafbe59 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -46,6 +46,12 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	  This option allows to specify the http or ftp location of a
+ 	  specific kernel source tarball
+ 
++config BR2_LINUX_KERNEL_CUSTOM_DIRECTORY
++	bool "Custom directory"
++	help
++	  This option allows to specify the path of a specific kernel
++	  source directory.
++
+ config BR2_LINUX_KERNEL_CUSTOM_GIT
+ 	bool "Custom Git tree"
+ 	help
+@@ -56,12 +62,16 @@ endchoice
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+-	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
++	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION || BR2_LINUX_KERNEL_CUSTOM_DIRECTORY
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 
++config BR2_LINUX_KERNEL_CUSTOM_DIRECTORY_PATH
++	string "Path of custom kernel sources"
++	depends on BR2_LINUX_KERNEL_CUSTOM_DIRECTORY
++
+ config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
+ 	string "URL of custom Git repository"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
+@@ -78,7 +88,8 @@ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "3.6.9" if BR2_LINUX_KERNEL_3_6
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+-	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
++	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION || \
++		BR2_LINUX_KERNEL_CUSTOM_DIRECTORY
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	default $BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION if BR2_LINUX_KERNEL_CUSTOM_GIT
+ 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c4bdf90..1898408 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -15,6 +15,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+ LINUX_SITE_METHOD = git
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY),y)
++LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DIRECTORY_PATH))
++LINUX_SITE_METHOD = local
+ else
+ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.5
