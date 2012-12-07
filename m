@@ -1,47 +1,83 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  7 Dec 2012 05:06:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 5774] New: Not able to build ALSA-Utils for static
-	build
-Message-ID: <bug-5774-163@https.bugs.busybox.net/>
+From: Thierry Bultel <thierry.bultel@wanadoo.fr>
+Date: Fri, 07 Dec 2012 08:20:13 +0100
+Subject: [Buildroot] Support of iMX6 hardware ?
+In-Reply-To: <20121206124855.796d4d38@skate>
+References: <50C06206.6060905@wanadoo.fr> <20121206124855.796d4d38@skate>
+Message-ID: <50C198AD.8030703@wanadoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5774
+Le 06/12/2012 12:48, Thomas Petazzoni a ?crit :
+> Dear Thierry Bultel,
 
-           Summary: Not able to build ALSA-Utils for static build
-           Product: buildroot
-           Version: 2012.08
-          Platform: PC
-        OS/Version: Windows
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: pankaj.dev at st.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Dear Thomas,
+
+> 
+> On Thu, 06 Dec 2012 10:14:46 +0100, Thierry Bultel wrote:
+> 
+>> I have 2 questions around the Buildroot support for iMX6 from
+>> Freescale, especially around graphics.
+>>
+>> 1) Is there current work on that for a coming release ?
+> 
+> Everything is in the Buildroot Git repository, and besides that I
+> haven't heard of people working on i.MX6 "advanced" features. We have a
+> defconfig for the nitrogen6x board that was done by Peter, but I guess
+> Peter hasn't investigated the entire graphics stack of i.MX6 for now.
+> 
+> It would indeed be really, really great to improve i.MX6 support in
+> Buildroot (and also for other SoCs).
+
+As soon as I have something working, I will obviously submit
+a patch for it.
+
+> 
+>> I have noticed that openbricks seem to already have integrated the 
+>> imx6-lib and xdriver-xf86-video-imx
+>>
+>> 2) I have trying to get both of them integrated in buildroot
+>> The imx6-lib, which will be a 'generic-package', needs includes of
+>> the target kernel; these includes are not in the sysroot.
+>>
+>> What is the most appropriate way to proceed ? The underlying Makefile
+>> has got a "INCLUDE" var to be set, shall I point it to my
+>> linux-custom build directory ? That does not seem very good.
+> 
+> To me, it's the right solution. 
+Ok
+If you have userspace code that depends
+> on very specific kernel headers that are not part of a traditional
+> toolchain, then pointing to the kernel sources is the only solution.
+> 
+> Of course, it means that the package must "depends on BR2_LINUX_KERNEL"
+> and have <foobar>_DEPENDENCIES = linux.
+
+Thanks for the tip.
+I have (at least) 2 packages to build.
+
+- The first one was the imx6-lib, that I have added under the Graphics
+section, as a generic-package, and
+
+define IMX6_LIB_BUILD_CMDS
+      $(MAKE) -C $(@D) all PLATFORM=IMX6Q CROSS_COMPILE=$(TARGET_CROSS)
+INCLUDE=$(INCLUDE)
+endef
+
+... was just what was needed to build it succesfully.
 
 
-Created attachment 4688
-  --> https://bugs.busybox.net/attachment.cgi?id=4688
-Patch to build alsa-utils statically
+The second one is the xdriver_xf86-video-imx
+It is built as an autotools-package
+But since the 'configure' intrisincs are not really my favorite food, I
+am looking how to add the needed INCLUDE to the CFLAGS that are
+automatically given to it.
+Could you please advise me on how to do it in the cleanest way ?
 
-When building ALSA-Utils for static build, there is a compilation faliure.
-Added
-a patch(attached) inside "package/multimedia\alsa-utils" directory to build
-properly.
+Regards
+Thierry
 
-Not able to log this bug in ALSA project, the web-site hangs. The bug also
-exists in ALSA 1.0.26(latest) included in buildroot 2012.11
-
-The correction is not a generic, one. Not able to figure out how to modify the
-configure script such that it includes "-ldl" only for non-static builds
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> 
+> Thomas
