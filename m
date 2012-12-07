@@ -1,43 +1,38 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Fri, 7 Dec 2012 06:36:04 -0500
-Subject: [Buildroot] [PATCH] fix cjson package
-In-Reply-To: <50C1ABA9.2030202@syscom-instruments.com>
-References: <50C0B73C.9020407@syscom-instruments.com>
- <CANxTyt4OZM0u3jyGrDoAQPvBSzVQ_=BHz_c0rNW6Y9pSr1jzbQ@mail.gmail.com>
- <50C1ABA9.2030202@syscom-instruments.com>
-Message-ID: <CANxTyt5w28z3o7zU8AMH+G02nY2ysir7rMiwKUkWP1Lfmm0_wQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  7 Dec 2012 09:06:20 -0300
+Subject: [Buildroot] [PATCH] openssl: fix runtime failure on some powerpc
+	variants
+Message-ID: <1354881980-24101-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 7, 2012 at 3:41 AM, Viallard Anthony
-<viallard@syscom-instruments.com> wrote:
-> And i know now what is the actual issue. Here the good big fix :
->
-> ---
->  package/cjson/cjson.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-> index ccc6010..55af800 100644
-> --- a/package/cjson/cjson.mk
-> +++ b/package/cjson/cjson.mk
-> @@ -5,7 +5,7 @@
->  #############################################################
->  CJSON_VERSION         = undefined
->  CJSON_SOURCE          = cJSONFiles.zip
-> -CJSON_SITE            = http://downloads.sourceforge.net/project/cjson/
-> +CJSON_SITE            = http://downloads.sourceforge.net/project/cjson
->
->  CJSON_INSTALL_STAGING = YES
->  CJSON_LICENSE         = MIT
->
-> --
-> 1.7.10.4
+OpenSSL's assembly optimizations por PowerPC seem to be broken for at
+least 4xx cores.
+Thanks go to Jan Schunke for reporting and testing.
 
-I'm not sure if Peter needs you to send the good fix as a
-git-send-email'ed V2, but:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssl/openssl.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Acked-by: Danomi Manchego <danomimanchego123@gmail.com>
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 265a4fb..160df2e 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -38,8 +38,11 @@ endif
+ endif
+ endif
+ ifeq ($(ARCH),powerpc)
++# 4xx cores seem to have trouble with openssl's ASM optimizations
++ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
+ 	OPENSSL_TARGET_ARCH = ppc
+ endif
++endif
+ ifeq ($(ARCH),x86_64)
+ 	OPENSSL_TARGET_ARCH = x86_64
+ endif
+-- 
+1.7.8.6
