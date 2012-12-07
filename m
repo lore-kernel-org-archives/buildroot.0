@@ -1,31 +1,37 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 6 Dec 2012 21:14:47 -0500
-Subject: [Buildroot] [PATCH] fix cjson package
-In-Reply-To: <50C0B73C.9020407@syscom-instruments.com>
-References: <50C0B73C.9020407@syscom-instruments.com>
-Message-ID: <CANxTyt4OZM0u3jyGrDoAQPvBSzVQ_=BHz_c0rNW6Y9pSr1jzbQ@mail.gmail.com>
+Date: Thu,  6 Dec 2012 21:37:07 -0500
+Subject: [Buildroot] [PATCH] pkg-download.mk: fix multiple matches in
+	shallow clone test
+Message-ID: <1354847827-4902-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Viallard,
+Move the git reference directly to git-ls-remote rather than
+piping the output to grep, to help avoid reporting partial
+matches rather than the actual requested reference.  Also,
+add quotes to protest "test" from failing when multiple
+strings are reported.
 
-> -CJSON_VERSION         = undefined
-> -CJSON_SOURCE          = cJSONFiles.zip
-> +CJSON_VERSION         = 2011-10-10
-> +CJSON_SOURCE          = cJSONFiles-$(CJSON_VERSION).zip
->  CJSON_SITE            = http://downloads.sourceforge.net/project/cjson/
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/pkg-download.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This worked for you?  It doesn't work for me ... i.e. this line works for me:
-
-    wget http://downloads.sourceforge.net/project/cjson/cJSONFiles.zip
-
-but this line gives me ERROR 404 Not Found:
-
-    wget http://downloads.sourceforge.net/project/cjson/cJSONFiles-2011-10-10.zip
-
-Am I missing something here?
-
-Danomi -
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index ea01b05..1705fcd 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -82,7 +82,7 @@ domainseparator=$(if $(1),$(1),/)
+ define DOWNLOAD_GIT
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+ 	(pushd $(DL_DIR) > /dev/null && \
+-	 ((test `git ls-remote  $($(PKG)_SITE) | cut -f 2- | grep $($(PKG)_DL_VERSION)` && \
++	 ((test "`git ls-remote $($(PKG)_SITE) $($(PKG)_DL_VERSION)`" && \
+ 	   echo "Doing shallow clone" && \
+ 	   $(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) || \
+ 	  (echo "Doing full clone" && \
+-- 
+1.7.9.5
