@@ -1,77 +1,43 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Fri,  7 Dec 2012 01:16:25 +0100
-Subject: [Buildroot] [PATCH] tcllib: new package
-In-Reply-To: <1354839385-23108-1-git-send-email-zinosat@tiscali.it>
-References: <1354839385-23108-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <1354839385-23108-2-git-send-email-zinosat@tiscali.it>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  6 Dec 2012 21:32:05 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 2,
+	4}.x stable versions
+Message-ID: <1354840325-24878-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in        |    5 +++++
- package/tcllib/Config.in |   11 +++++++++++
- package/tcllib/tcllib.mk |   14 ++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/tcllib/Config.in
- create mode 100644 package/tcllib/tcllib.mk
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.54-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.55-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-diff --git a/package/Config.in b/package/Config.in
-index 74e439e..cad1221 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -313,6 +313,11 @@ endmenu
- endif
- source "package/ruby/Config.in"
- source "package/tcl/Config.in"
-+if BR2_PACKAGE_TCL
-+menu "tcl libraries/modules"
-+source "package/tcllib/Config.in"
-+endmenu
-+endif
- endmenu
- 
- menu "Libraries"
-diff --git a/package/tcllib/Config.in b/package/tcllib/Config.in
-new file mode 100644
-index 0000000..b0a4ad0
---- /dev/null
-+++ b/package/tcllib/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_TCLLIB
-+	bool "tcllib"
-+	help
-+	  Tcllib is a collection of utility modules for Tcl. These
-+	  modules provide a wide variety of functionality, from
-+	  implementations of standard data structures to
-+	  implementations of common networking protocols. The intent
-+	  is to collect commonly used function into a single library,
-+	  which users can rely on to be available and stable
-+
-+	  http://tcl.activestate.com/software/tcllib/
-diff --git a/package/tcllib/tcllib.mk b/package/tcllib/tcllib.mk
-new file mode 100644
-index 0000000..09d617f
---- /dev/null
-+++ b/package/tcllib/tcllib.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# tcllib
-+#
-+#############################################################
-+TCLLIB_VERSION       = 1.13
-+TCLLIB_SOURCE        = tcllib-$(TCLLIB_VERSION).tar.bz2
-+TCLLIB_SITE          = http://downloads.sourceforge.net/project/tcllib/tcllib/$(TCLLIB_VERSION)
-+TCLLIB_LICENSE       = tcl license
-+TCLLIB_LICENSE_FILES = license.terms
-+TCLLIB_DEPENDENCIES  = host-tcl
-+TCLLIB_CONF_ENV      = ac_cv_path_tclsh="$(HOST_DIR)/usr/bin/tclsh8.4"
-+
-+$(eval $(autotools-package))
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 6552c62..0f3ed4f 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,11 +67,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.54"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.55"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.34"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.35"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.21"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.22"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.9"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+diff --git a/toolchain/kernel-headers/linux-3.0.54-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.55-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.54-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.55-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-1.7.2.5
+1.7.8.6
