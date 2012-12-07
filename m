@@ -1,37 +1,35 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri,  7 Dec 2012 14:20:13 +0100
-Subject: [Buildroot] [PATCH] Clean kernel when "make linux-clean" is called
-In-Reply-To: <20120827210633.608e9bfe@skate>
-References: <20120827210633.608e9bfe@skate>
-Message-ID: <1354886413-28939-1-git-send-email-sho@relinux.de>
+Date: Fri,  7 Dec 2012 14:32:30 +0100
+Subject: [Buildroot] [PATCH] iproute2: implement IPROUTE2_CLEAN_CMDS
+Message-ID: <1354887150-30038-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When "make linux-clean" is typed one expects that the kernel tree
-gets cleaned. Before this patch, only the stamp files had been
-removed.
+Since IPROUTE2_CLEAN_CMDS was missing, make iproute2-clean did
+not call "make clean" for iproute2.
 
 Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 ---
- linux/linux.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c4bdf90..e517d1d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -221,6 +221,9 @@ define LINUX_BUILD_CMDS
- 	$(LINUX_APPEND_DTB)
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 6f5ee51..da5d7a0 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -45,6 +45,10 @@ define IPROUTE2_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC)" CCOPTS="$(TARGET_CFLAGS) -D_GNU_SOURCE" -C $(@D)
  endef
  
-+define LINUX_CLEAN_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) clean
++define IPROUTE2_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
 +endef
- 
- ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
- define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
++
+ define IPROUTE2_INSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" SBINDIR=/sbin \
+ 		DOCDIR=/usr/share/doc/iproute2-$(IPROUTE2_VERSION) \
 -- 
 1.7.0.4
