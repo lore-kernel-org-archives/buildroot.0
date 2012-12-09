@@ -1,89 +1,96 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Dec 2012 23:07:03 +0100
-Subject: [Buildroot] [git commit] powerpc: update processor types
-Message-ID: <20121209224138.B606F9A15C@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 10 Dec 2012 00:06:21 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2013.02/armadeus/new-pkgs
+Message-ID: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1291304d7e482ef557cae34042488d0f714bf201
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Update the powerpc processor types.
-Remove the 801, it's the original IBM experimental implementation.
-Add the 464, 464fp, 476 and 476fp cores.
+Here is the first round of package integration from Armadeus [1,2],
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- arch/Config.in.powerpc  |   15 ++++++++++++---
- toolchain/gcc/Config.in |    4 ++--
- 2 files changed, 14 insertions(+), 5 deletions(-)
+This just includes half a doxzen of new packages, nothing scary...
+and more to come [3]... So, stay tuned! ;-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 693246b..8643efc 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -18,6 +18,14 @@ config BR2_powerpc_440
- 	bool "440"
- config BR2_powerpc_440fp
- 	bool "440 with FPU"
-+config BR2_powerpc_464
-+	bool "464"
-+config BR2_powerpc_464fp
-+	bool "464 with FPU"
-+config BR2_powerpc_476
-+	bool "476"
-+config BR2_powerpc_476fp
-+	bool "476 with FPU"
- config BR2_powerpc_505
- 	bool "505"
- config BR2_powerpc_601
-@@ -44,8 +52,6 @@ config BR2_powerpc_7450
- 	bool "7450"
- config BR2_powerpc_750
- 	bool "750"
--config BR2_powerpc_801
--	bool "801"
- config BR2_powerpc_821
- 	bool "821"
- config BR2_powerpc_823
-@@ -95,6 +101,10 @@ config BR2_GCC_TARGET_TUNE
- 	default "405fp"		if BR2_powerpc_405fp
- 	default "440"		if BR2_powerpc_440
- 	default "440fp"		if BR2_powerpc_440fp
-+	default "464"		if BR2_powerpc_464
-+	default "464fp"		if BR2_powerpc_464fp
-+	default "476"		if BR2_powerpc_476
-+	default "476fp"		if BR2_powerpc_476fp
- 	default "505"		if BR2_powerpc_505
- 	default "601"		if BR2_powerpc_601
- 	default "602"		if BR2_powerpc_602
-@@ -108,7 +118,6 @@ config BR2_GCC_TARGET_TUNE
- 	default "7400"		if BR2_powerpc_7400
- 	default "7450"		if BR2_powerpc_7450
- 	default "750"		if BR2_powerpc_750
--	default "801"		if BR2_powerpc_801
- 	default "821"		if BR2_powerpc_821
- 	default "823"		if BR2_powerpc_823
- 	default "860"		if BR2_powerpc_860
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 6456502..de79452 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -15,11 +15,11 @@ choice
- 	       bool "gcc 4.2.2-avr32-2.1.5"
- 
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc
-+		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_avr32 && !BR2_x86_atom
-+		depends on !BR2_avr32 && !BR2_x86_atom && !BR2_powerpc_476 && !BR2_powerpc_476fp
- 		bool "gcc 4.4.x"
- 
- 	config BR2_GCC_VERSION_4_5_X
+Note that:
+* openobex: still use the 1.5 release to not break ussp-push.
+  openobex can be updated to version 1.6 once integrated in BR, then
+  ussp-push fixed to linked against it.
+* urg: bump to version 0.8.18 from the original patch (which integrate
+  the 0.8.11 release).
+
+Yours,
+
+Samuel
+
+[1] www.armadeus.org
+[2] git://armadeus.git.sourceforge.net/gitroot/armadeus/armadeus
+[3] http://www.armadeus.com/wiki/index.php?title=Buildroot_Mainline_integration
+
+The following changes since commit 054f97e1f2de337ea0c788d766212a36d6d4e41c:
+
+  pkg-infra: add <pkg>-extract and <pkg>-patch targets to OVERRIDE support (2012-12-06 17:13:57 -0800)
+
+are available in the git repository at:
+
+  git://github.com/tSed/buildroot.git for-2013.02/armadeus/new-pkgs
+
+for you to fetch changes up to 810b52732660dfae986eb1cdc9cb6a878fd6bd2f:
+
+  libcanfestival: new package
+
+
+Samuel Martin (6):
+  openobex: new package
+  ussp-push: new package
+  urg: new package
+  flite: new package
+  qwt: new package
+  libcanfestival: new package
+
+ package/Config.in                                  |   5 +
+ package/libcanfestival/Config.in                   |  90 +++
+ .../libcanfestival-allow-to-set-DESTDIR.patch      | 717 +++++++++++++++++++++
+ package/libcanfestival/libcanfestival.mk           |  45 ++
+ package/multimedia/Config.in                       |   1 +
+ package/multimedia/flite/Config.in                 |  11 +
+ package/multimedia/flite/flite.mk                  |  57 ++
+ package/openobex/Config.in                         |  28 +
+ ...penobex-libusb_check_when_cross-compiling.patch |  18 +
+ .../openobex-replace_deprecated_functions.patch    |  30 +
+ package/openobex/openobex.mk                       |  35 +
+ package/qwt/Config.in                              |  17 +
+ .../qwt/qwt-5.2.1-change-install-directories.patch |  23 +
+ package/qwt/qwt-5.2.1-disable-designer.patch       |  17 +
+ package/qwt/qwt.mk                                 |  74 +++
+ package/urg/Config.in                              |   9 +
+ package/urg/urg.mk                                 |  26 +
+ package/ussp-push/Config.in                        |   9 +
+ .../ussp-push-fix-build-against-bluez-4.patch      |  15 +
+ package/ussp-push/ussp-push.mk                     |  13 +
+ 20 files changed, 1240 insertions(+)
+ create mode 100644 package/libcanfestival/Config.in
+ create mode 100644 package/libcanfestival/libcanfestival-allow-to-set-DESTDIR.patch
+ create mode 100644 package/libcanfestival/libcanfestival.mk
+ create mode 100644 package/multimedia/flite/Config.in
+ create mode 100644 package/multimedia/flite/flite.mk
+ create mode 100644 package/openobex/Config.in
+ create mode 100644 package/openobex/openobex-libusb_check_when_cross-compiling.patch
+ create mode 100644 package/openobex/openobex-replace_deprecated_functions.patch
+ create mode 100644 package/openobex/openobex.mk
+ create mode 100644 package/qwt/Config.in
+ create mode 100644 package/qwt/qwt-5.2.1-change-install-directories.patch
+ create mode 100644 package/qwt/qwt-5.2.1-disable-designer.patch
+ create mode 100644 package/qwt/qwt.mk
+ create mode 100644 package/urg/Config.in
+ create mode 100644 package/urg/urg.mk
+ create mode 100644 package/ussp-push/Config.in
+ create mode 100644 package/ussp-push/ussp-push-fix-build-against-bluez-4.patch
+ create mode 100644 package/ussp-push/ussp-push.mk
+
+--
+1.8.0.1
