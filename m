@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Dec 2012 17:34:39 +0100
-Subject: [Buildroot] [PATCH 06/51] package/libiscsi: new package
+Date: Sun,  9 Dec 2012 17:34:40 +0100
+Subject: [Buildroot] [PATCH 07/51] package/usbredir: new package
 In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355070924-8009-7-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355070924-8009-8-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,63 +12,96 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
  package/Config.in            |    1 +
- package/libiscsi/Config.in   |   12 ++++++++++++
- package/libiscsi/libiscsi.mk |   15 +++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 package/libiscsi/Config.in
- create mode 100644 package/libiscsi/libiscsi.mk
+ package/usbredir/Config.in   |   28 ++++++++++++++++++++++++++++
+ package/usbredir/usbredir.mk |   31 +++++++++++++++++++++++++++++++
+ 3 files changed, 60 insertions(+), 0 deletions(-)
+ create mode 100644 package/usbredir/Config.in
+ create mode 100644 package/usbredir/usbredir.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 529c1ce..b50eaf8 100644
+index b50eaf8..029a550 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -461,6 +461,7 @@ source "package/libesmtp/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libfcgi/Config.in"
- source "package/libidn/Config.in"
-+source "package/libiscsi/Config.in"
- source "package/liboauth/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
-diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+@@ -487,6 +487,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/ortp/Config.in"
++source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
+ endmenu
+ 
+diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
 new file mode 100644
-index 0000000..f3fc29e
+index 0000000..8d8ac5a
 --- /dev/null
-+++ b/package/libiscsi/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBISCSI
-+	bool "libiscsi"
-+	select BR2_PACKAGE_POPT
++++ b/package/usbredir/Config.in
+@@ -0,0 +1,28 @@
++comment "usbredir requires libusb"
++	depends on !BR2_PACKAGE_LIBUSB
++
++config BR2_PACKAGE_USBREDIR
++	bool "usbredir"
++	depends on BR2_PACKAGE_LIBUSB
 +	help
-+	  Libiscsi is a client-side library to implement the iSCSI protocol
-+	  that can be used to access resource of an iSCSI Target.
++	  usbredir is the name of a network protocol for sending usb device
++	  traffic over a network connection. It is also the name of the
++	  software package offering a parsing library, a usbredirhost library
++	  and several utilities implementing this protocol.
 +	  
-+	  The library is fully async with regards to iscsi commands and scsi
-+	  tasks, but a sync layer is also provided for ease of use for simpler
-+	  applications.
++	  Note: only the library is installed, not the utilities. Say 'y'
++	  below if you want the server too.
 +	  
-+	  https://github.com/sahlberg/libiscsi  (no proper homepage)
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
++	  http://www.spice-space.org/page/UsbRedir
++
++if BR2_PACKAGE_USBREDIR
++
++config BR2_PACKAGE_USBREDIR_SERVER
++	bool "usbredirserver on target"
++	help
++	  If you want to serve usbredir requests on your target, say 'y'
++	  here to have the usbredir server on the target.
++	  
++	  Note: the server is not required to use the library.
++
++endif
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
 new file mode 100644
-index 0000000..bfebd7e
+index 0000000..70b50c3
 --- /dev/null
-+++ b/package/libiscsi/libiscsi.mk
-@@ -0,0 +1,15 @@
++++ b/package/usbredir/usbredir.mk
+@@ -0,0 +1,31 @@
 +#############################################################
 +#
-+# libiscsi
++# usbredir
 +#
 +#############################################################
 +
-+LIBISCSI_VERSION         = 1.6.0
-+LIBISCSI_SOURCE          = libiscsi-$(LIBISCSI_VERSION).tar.gz
-+LIBISCSI_SITE            = https://github.com/downloads/sahlberg/libiscsi
-+LIBISCSI_LICENSE         = GPLv2+ LGPLv2.1+
-+LIBISCSI_LICENSE_FILES   = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
-+LIBISCSI_INSTALL_STAGING = YES
-+LIBISCSI_DEPENDENCIES    = popt
++USBREDIR_VERSION         = 0.4.3
++USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
++USBREDIR_SITE            = http://spice-space.org/download/usbredir
++USBREDIR_LICENSE         = LGPLv2.1+
++USBREDIR_LICENSE_FILES   = COPYING.LIB
++USBREDIR_INSTALL_STAGING = YES
++USBREDIR_DEPENDENCIES    = libusb
++
++USBREDIR_DEPENDENCIES    += host-pkgconf
++
++ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
++
++USBREDIR_LICENSE         += (for the library), GPLv2+ (for the server)
++USBREDIR_LICENSE_FILES   += COPYING
++
++else # BR2_PACKAGE_USBREDIR_SERVER != y
++
++define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
++	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
++endef
++USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
++
++endif # BR2_PACKAGE_USBREDIR_SERVER
 +
 +$(eval $(autotools-package))
 -- 
