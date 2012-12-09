@@ -1,52 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 09 Dec 2012 16:05:49 +0100
-Subject: [Buildroot] [PATCH] fbv: add license info
-In-Reply-To: <1354875156-28654-1-git-send-email-sho@relinux.de>
-References: <1354875156-28654-1-git-send-email-sho@relinux.de>
-Message-ID: <50C4A8CD.2090407@mind.be>
+Date: Sun, 09 Dec 2012 16:10:29 +0100
+Subject: [Buildroot] [PATCH] tslib: add license info
+In-Reply-To: <1354876163-30452-1-git-send-email-sho@relinux.de>
+References: <1354876163-30452-1-git-send-email-sho@relinux.de>
+Message-ID: <50C4A9E5.9060303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/12/12 11:12, Stephan Hoffmann wrote:
+On 07/12/12 11:29, Stephan Hoffmann wrote:
 > Signed-off-by: Stephan Hoffmann<sho@relinux.de>
 > ---
->   package/fbv/fbv.mk |    3 +++
+>   package/tslib/tslib.mk |    3 +++
 >   1 files changed, 3 insertions(+), 0 deletions(-)
 >
-> diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-> index 7949e99..f697fe8 100644
-> --- a/package/fbv/fbv.mk
-> +++ b/package/fbv/fbv.mk
-> @@ -7,6 +7,9 @@ FBV_VERSION:=1.0b
->   FBV_SOURCE:=fbv-$(FBV_VERSION).tar.gz
->   FBV_SITE:=http://s-tech.elsat.net.pl/fbv
->
-> +FBV_LICENSE = GPLv2
+> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+> index b10b5ec..9b51015 100644
+> --- a/package/tslib/tslib.mk
+> +++ b/package/tslib/tslib.mk
+> @@ -5,6 +5,9 @@
+>   #############################################################
+>   TSLIB_VERSION = 412d99d
+>   TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
+> +TSLIB_LICENSE = LGPLv2
 
-  Although the README and COPYING files claim it's version 2, all source files
-say version 2 or later.
+  The source files don't specify a version number. The COPYING file says:
 
-  I'm not sure what to do here.  The safe option is:
-
-FBV_LICENSE = GPLv2 (or later?)
+If the Library does not specify a license version number, you may
+choose any version ever published by the Free Software Foundation.
 
 
-> +FBV_LICENSE_FILES = COPYING
-
-  That file is just referring to the GNU website, so it doesn't help much
-to use that as the license file. Still, it's better than nothing I guess.
+  In other words, it's LGPL.
 
 
   Regards,
   Arnout
 
+
+> +TSLIB_LICENSE_FILES = COPYING
 > +
->   ### image format dependencies and configure options
->   FBV_DEPENDENCIES = # empty
->   FBV_CONFIGURE_OPTS = # empty
+>   TSLIB_AUTORECONF = YES
+>   TSLIB_INSTALL_STAGING = YES
+>   TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
