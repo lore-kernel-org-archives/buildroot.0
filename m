@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Dec 2012 21:56:47 +0100
-Subject: [Buildroot] [PATCH 4/8] rt-tests: not available on avr32,
-	too old uClibc
-In-Reply-To: <888c187be8b5ed6f62a1a7b8c825a980009fb365.1355076808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 9 Dec 2012 19:13:59 +0100")
+Date: Sun, 09 Dec 2012 21:57:10 +0100
+Subject: [Buildroot] [PATCH 6/8] xapp_xmh: add dependency on
+	xdata_xbitmap
+In-Reply-To: <166d0d20add891dc789cb3272006d75d803837cd.1355076808.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 9 Dec 2012 19:14:01 +0100")
 References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
  <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
- <888c187be8b5ed6f62a1a7b8c825a980009fb365.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y5h7uepc.fsf@dell.be.48ers.dk>
+ <166d0d20add891dc789cb3272006d75d803837cd.1355076808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87txrvueop.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +16,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The old uClibc used for the AVR32 architecture does not implement
- Thomas> priority inheritance, therefore rt-tests cannot build.
+ Thomas> Fixes:
+ Thomas>   http://autobuild.buildroot.org/results/fa059a89a305914700f63d7f0b0d4a3f63beb039/build-end.log
 
 Committed, thanks.
 
