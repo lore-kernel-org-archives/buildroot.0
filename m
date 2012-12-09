@@ -1,34 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Dec 2012 21:35:49 +0100
-Subject: [Buildroot] [git commit] bmon: needs mmu
-Message-ID: <20121209203934.117F199B0E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 09 Dec 2012 21:44:37 +0100
+Subject: [Buildroot] [PATCH] fbv: add license info
+In-Reply-To: <50C4A8CD.2090407@mind.be> (Arnout Vandecappelle's message of
+ "Sun, 09 Dec 2012 16:05:49 +0100")
+References: <1354875156-28654-1-git-send-email-sho@relinux.de>
+ <50C4A8CD.2090407@mind.be>
+Message-ID: <87r4mzvtu2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=941963d258cac48f06c1be49169d81645c5e505c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/673b0e9a1ba75123ba2c59df8ad81550170fffef
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bmon/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ >> +FBV_LICENSE = GPLv2
 
-diff --git a/package/bmon/Config.in b/package/bmon/Config.in
-index 9692118..61d72f0 100644
---- a/package/bmon/Config.in
-+++ b/package/bmon/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BMON
- 	bool "bmon"
- 	depends on BR2_INET_IPV6
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Linux bandwidth monitor
- 
+ Arnout>  Although the README and COPYING files claim it's version 2,
+ Arnout> all source files say version 2 or later.
+
+ Arnout>  I'm not sure what to do here.  The safe option is:
+
+ Arnout> FBV_LICENSE = GPLv2 (or later?)
+
+Or simply GPLv2. It might allow later as well, but GPLv2 is certainly
+true.
+
+-- 
+Bye, Peter Korsgaard
