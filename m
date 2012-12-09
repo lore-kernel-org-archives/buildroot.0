@@ -1,49 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 09 Dec 2012 16:10:29 +0100
-Subject: [Buildroot] [PATCH] tslib: add license info
-In-Reply-To: <1354876163-30452-1-git-send-email-sho@relinux.de>
-References: <1354876163-30452-1-git-send-email-sho@relinux.de>
-Message-ID: <50C4A9E5.9060303@mind.be>
+Date: Sun, 09 Dec 2012 16:12:02 +0100
+Subject: [Buildroot] [PATCH] pkg-download.mk: fix multiple matches in
+ shallow clone test
+In-Reply-To: <1354847827-4902-1-git-send-email-danomimanchego123@gmail.com>
+References: <1354847827-4902-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <50C4AA42.7020401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/12/12 11:29, Stephan Hoffmann wrote:
-> Signed-off-by: Stephan Hoffmann<sho@relinux.de>
-> ---
->   package/tslib/tslib.mk |    3 +++
->   1 files changed, 3 insertions(+), 0 deletions(-)
+On 07/12/12 03:37, Danomi Manchego wrote:
+> Move the git reference directly to git-ls-remote rather than
+> piping the output to grep, to help avoid reporting partial
+> matches rather than the actual requested reference.  Also,
+> add quotes to protest "test" from failing when multiple
+> strings are reported.
 >
-> diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-> index b10b5ec..9b51015 100644
-> --- a/package/tslib/tslib.mk
-> +++ b/package/tslib/tslib.mk
-> @@ -5,6 +5,9 @@
->   #############################################################
->   TSLIB_VERSION = 412d99d
->   TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
-> +TSLIB_LICENSE = LGPLv2
+> Signed-off-by: Danomi Manchego<danomimanchego123@gmail.com>
 
-  The source files don't specify a version number. The COPYING file says:
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-If the Library does not specify a license version number, you may
-choose any version ever published by the Free Software Foundation.
-
-
-  In other words, it's LGPL.
-
-
-  Regards,
-  Arnout
-
-
-> +TSLIB_LICENSE_FILES = COPYING
-> +
->   TSLIB_AUTORECONF = YES
->   TSLIB_INSTALL_STAGING = YES
->   TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+> ---
+>   package/pkg-download.mk |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index ea01b05..1705fcd 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -82,7 +82,7 @@ domainseparator=$(if $(1),$(1),/)
+>   define DOWNLOAD_GIT
+>   	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>   	(pushd $(DL_DIR)>  /dev/null&&  \
+> -	 ((test `git ls-remote  $($(PKG)_SITE) | cut -f 2- | grep $($(PKG)_DL_VERSION)`&&  \
+> +	 ((test "`git ls-remote $($(PKG)_SITE) $($(PKG)_DL_VERSION)`"&&  \
+>   	   echo "Doing shallow clone"&&  \
+>   	   $(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) || \
+>   	  (echo "Doing full clone"&&  \
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
