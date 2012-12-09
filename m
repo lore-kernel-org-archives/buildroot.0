@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Dec 2012 21:35:30 +0100
-Subject: [Buildroot] [PATCH] libfuse: needs threads
-In-Reply-To: <1355061941-10170-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 9 Dec 2012 11:05:41 -0300")
-References: <1355061941-10170-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877gorx8tp.fsf@dell.be.48ers.dk>
+Date: Sun, 09 Dec 2012 21:37:09 +0100
+Subject: [Buildroot] [PATCH] bmon: needs mmu
+In-Reply-To: <1355062407-19173-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 9 Dec 2012 11:13:27 -0300")
+References: <1355062407-19173-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zk1nvu6i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> libfuse needs threads, fixes:
- Gustavo> http://autobuild.buildroot.net/results/0111a67b9ed5f5f5dfc0725d009ea5c756c1755c
+ Gustavo> Fixes
+ Gustavo> http://autobuild.buildroot.net/results/673b0e9a1ba75123ba2c59df8ad81550170fffef
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/libfuse/Config.in |    5 +++--
- Gustavo>  package/sshfs/Config.in   |    1 +
- Gustavo>  package/unionfs/Config.in |    1 +
-
-You forgot to update the sshfs/unionfs comments to match, but I fixed
-that and committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
