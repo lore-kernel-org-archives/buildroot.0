@@ -1,96 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Dec 2012 17:34:38 +0100
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_05/51=5D_package/vde2=3A_new_packa?=
-	=?utf-8?q?ge?=
+Date: Sun,  9 Dec 2012 17:34:39 +0100
+Subject: [Buildroot] [PATCH 06/51] package/libiscsi: new package
 In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355070924-8009-6-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355070924-8009-7-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-VDE is an ethernet compliant virtual network that can be
-spawned over a set of physical computer over the Internet.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in      |    1 +
- package/vde2/Config.in |   10 ++++++++++
- package/vde2/vde2.mk   |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/vde2/Config.in
- create mode 100644 package/vde2/vde2.mk
+ package/Config.in            |    1 +
+ package/libiscsi/Config.in   |   12 ++++++++++++
+ package/libiscsi/libiscsi.mk |   15 +++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
+ create mode 100644 package/libiscsi/Config.in
+ create mode 100644 package/libiscsi/libiscsi.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 74e439e..529c1ce 100644
+index 529c1ce..b50eaf8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -667,6 +667,7 @@ source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
- source "package/ulogd/Config.in"
- source "package/ushare/Config.in"
-+source "package/vde2/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
- source "package/vtun/Config.in"
-diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+@@ -461,6 +461,7 @@ source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
+ source "package/libidn/Config.in"
++source "package/libiscsi/Config.in"
+ source "package/liboauth/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
 new file mode 100644
-index 0000000..1591bc4
+index 0000000..f3fc29e
 --- /dev/null
-+++ b/package/vde2/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_VDE2
-+	bool "vde2"
++++ b/package/libiscsi/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBISCSI
++	bool "libiscsi"
++	select BR2_PACKAGE_POPT
 +	help
-+	  VDE is an ethernet compliant virtual network that can be
-+	  spawned over a set of physical computer over the Internet.
-+	  VDE is part of virtualsquare project.
++	  Libiscsi is a client-side library to implement the iSCSI protocol
++	  that can be used to access resource of an iSCSI Target.
 +	  
-+	  http://vde.sourceforge.net/
++	  The library is fully async with regards to iscsi commands and scsi
++	  tasks, but a sync layer is also provided for ease of use for simpler
++	  applications.
 +	  
-+	  Note: only the libraries are installed.
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
++	  https://github.com/sahlberg/libiscsi  (no proper homepage)
+diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
 new file mode 100644
-index 0000000..b2e0fea
+index 0000000..bfebd7e
 --- /dev/null
-+++ b/package/vde2/vde2.mk
-@@ -0,0 +1,36 @@
++++ b/package/libiscsi/libiscsi.mk
+@@ -0,0 +1,15 @@
 +#############################################################
 +#
-+# vde2
++# libiscsi
 +#
 +#############################################################
 +
-+VDE2_VERSION         = 2.3.2
-+VDE2_SOURCE          = vde2-$(VDE2_VERSION).tar.bz2
-+VDE2_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
-+VDE2_LICENSE         = GPLv2+ LGPLv2.1+ BSD-3c
-+VDE2_LICENSE_FILES   = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_INSTALL_STAGING = YES
-+
-+# Reasons for enabling/disabling stuff:
-+#?- tuntap is enabled in the hope we're using a recent-enough toolchain
-+#   that does have if_tun.h (virtually everything these days)
-+# - kvde_switch is disabled because it requires a patched kernel
-+# - cryptcab is disabled to not depend on openSSL
-+# - python is disabled to not depend on Python
-+# - pcap is disabled to not depend on libpcap
-+# - profiling is disabled because we do not want to debug/profile
-+#
-+# Note: disabled features can be added with corresponding dependencies
-+#       in future commits.
-+VDE2_CONF_OPT = --disable-experimental  \
-+                --disable-cryptcab      \
-+                --disable-pcap          \
-+                --disable-python        \
-+                --disable-profile       \
-+                --disable-kernel-switch \
-+                --enable-tuntap         \
-+
-+#?Package does not build in parallel due to improper make rules
-+VDE2_MAKE = $(MAKE1)
++LIBISCSI_VERSION         = 1.6.0
++LIBISCSI_SOURCE          = libiscsi-$(LIBISCSI_VERSION).tar.gz
++LIBISCSI_SITE            = https://github.com/downloads/sahlberg/libiscsi
++LIBISCSI_LICENSE         = GPLv2+ LGPLv2.1+
++LIBISCSI_LICENSE_FILES   = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
++LIBISCSI_INSTALL_STAGING = YES
++LIBISCSI_DEPENDENCIES    = popt
 +
 +$(eval $(autotools-package))
 -- 
