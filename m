@@ -1,281 +1,170 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Dec 2012 17:35:21 +0100
-Subject: [Buildroot] [PATCH 48/51] package/qemu: enable a static build
+Date: Sun,  9 Dec 2012 17:35:22 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_49/51=5D_package/dtc=3A_new_packag?=
+	=?utf-8?q?e?=
 In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355070924-8009-49-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355070924-8009-50-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+dtc is the Device Tree Compiler, and manipulates device trees.
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
-
-It can be useful to have a statically-linked QEMU (especially the
-linux-user and bsd-user emulators) to avoid run-time issues with
-dynamically-loaded libraries.
-
-There is an issue where QEMU could not be able to properly (re)map
-libraries in memory due to some overlap between its own memory
-mappings and the mappings of the user application being translated
-(it's a complex issue, so don't count on me to properly explain it,
-I did not understood it completely either... :-/ ).
+Although Arnout suggested to move it out of the libraries sub-menu,
+I kept it there, as by default, only the library is installed, like
+it is done for, eg., libcurl.
 ---
- package/qemu/Config.in              |   38 ++++++++++++++----
- package/qemu/qemu-static-curl.patch |   72 +++++++++++++++++++++++++++++++++++
- package/qemu/qemu-static-sdl.patch  |   54 ++++++++++++++++++++++++++
- package/qemu/qemu.mk                |    4 ++
- 4 files changed, 159 insertions(+), 9 deletions(-)
- create mode 100644 package/qemu/qemu-static-curl.patch
- create mode 100644 package/qemu/qemu-static-sdl.patch
+ package/Config.in                          |    1 +
+ package/dtc/Config.in                      |    9 +++++++
+ package/dtc/dtc-extra_cflags.patch         |   27 ++++++++++++++++++++++
+ package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++++
+ package/dtc/dtc.mk                         |   34 ++++++++++++++++++++++++++++
+ 5 files changed, 99 insertions(+), 0 deletions(-)
+ create mode 100644 package/dtc/Config.in
+ create mode 100644 package/dtc/dtc-extra_cflags.patch
+ create mode 100644 package/dtc/dtc-separate-lib-install.patch
+ create mode 100644 package/dtc/dtc.mk
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index c0b905a..95fa63b 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -102,11 +102,11 @@ config BR2_PACKAGE_QEMU_VNC_JPEG
- config BR2_PACKAGE_QEMU_VNC_TLS
- 	bool "TLS encryption"
- 	depends on BR2_PACKAGE_QEMU_VNC
--	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_PACKAGE_QEMU_STATIC
- 	select BR2_PACKAGE_GNUTLS
+diff --git a/package/Config.in b/package/Config.in
+index dd4cbda..1a70ab9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -412,6 +412,7 @@ endmenu
  
- comment "VNC TLS encryption does not work for static link"
--    depends on BR2_PACKAGE_QEMU_VNC && BR2_PREFER_STATIC_LIB
-+    depends on BR2_PACKAGE_QEMU_VNC && BR2_PACKAGE_QEMU_STATIC
- 
- config BR2_PACKAGE_QEMU_SDL
- 	bool "Enable SDL frontend"
-@@ -129,11 +129,20 @@ config BR2_PACKAGE_QEMU_CURSES
- config BR2_PACKAGE_QEMU_SPICE
- 	bool "Enable Spice frontend"
- 	depends on BR2_PACKAGE_SPICE
-+	depends on !BR2_PACKAGE_QEMU_STATIC || BR2_PREFER_STATIC_LIB
- 	help
- 	  Say 'y' here to have QEMU support Spice as a (VNC-like) frontend.
--
--if !BR2_PACKAGE_SPICE
--comment "Spice support requires spice-server"
-+	  
-+	  Note:
-+	    Spice links against alsa-libs, but alsa-libs can't be built both
-+	    shared and static at the same time, so we can not link with a
-+	    static spice to get a static QEMU (BR2_PACKAGE_QEMU_STATIC) if
-+	    buildroot as a whole does not also build only static libraries
-+	    (BR2_PREFER_STATIC_LIB).
-+
-+if !BR2_PACKAGE_SPICE || ( BR2_PACKAGE_QEMU_STATIC && !BR2_PREFER_STATIC_LIB )
-+comment "Spice support requires spice-server, and does not work for a static"
-+comment "build of QEMU unless BR2_PREFER_STATIC_LIB is set, too"
- endif
- 
- comment "Block backends"
-@@ -154,14 +163,10 @@ config BR2_PACKAGE_QEMU_VIRTFS
- 
- config BR2_PACKAGE_QEMU_CURL
- 	bool "Enable remote block-devices using cURL"
--	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_LIBCURL
- 	help
- 	  Say 'y' to access remote block-devices using libcurl.
- 
--comment "cURL support is not possible with static linking"
--    depends on BR2_PREFER_STATIC_LIB
--
- config BR2_PACKAGE_QEMU_ISCSI
- 	bool "Enable remote block-devices using iSCSI"
- 	select BR2_PACKAGE_LIBISCSI
-@@ -234,14 +239,21 @@ config BR2_PACKAGE_QEMU_SOUND_SDL
- 	  
- 	  Note: this is only for system emulation, not user emulation.
- 
-+# Alsa can not build both shared and static libs at the same time.
-+# But we may want to build QEMU staticaly, even though the global
-+# BR2_PREFER_STATIC_LIB is not set. Disable that case.
- config BR2_PACKAGE_QEMU_SOUND_ALSA
- 	bool "Enable sound via alsa"
-+	depends on !BR2_PACKAGE_QEMU_STATIC || BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_ALSA_LIB
- 	help
- 	  Say 'y' here to have QEMU play sound from the VMs via alsa.
- 	  
- 	  Note: this is only for system emulation, not user emulation.
- 
-+comment "Alsa sound static link works only if BR2_PREFER_STATIC is set"
-+	depends on BR2_PACKAGE_QEMU_STATIC && !BR2_PREFER_STATIC_LIB
-+
- comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_UUID
-@@ -299,4 +311,12 @@ config BR2_PACKAGE_QEMU_KEYMAPS
- 	    - 'de fr* en-*' for german, french and english keymaps
- 	    - and so on (see the QEMU source for all supported keymaps)
- 
-+config BR2_PREFER_STATIC_LIB
-+    select BR2_PACKAGE_QEMU_STATIC
-+
-+config BR2_PACKAGE_QEMU_STATIC
-+	bool "Build statically"
+ menu "Hardware handling"
+ source "package/ccid/Config.in"
++source "package/dtc/Config.in"
+ source "package/lcdapi/Config.in"
+ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+new file mode 100644
+index 0000000..96225e3
+--- /dev/null
++++ b/package/dtc/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DTC
++	bool "dtc"
 +	help
-+	  Build static qemu executable(s).
-+
- endif # BR2_PACKAGE_QEMU
-diff --git a/package/qemu/qemu-static-curl.patch b/package/qemu/qemu-static-curl.patch
++	  The Device Tree Compiler, dtc, takes as input a device-tree in
++	  a given format and outputs a device-tree in another format.
++	  
++	  Note that only the library is installed for now.
++	  
++	  http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
+diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
 new file mode 100644
-index 0000000..0029d7d
+index 0000000..9d1882b
 --- /dev/null
-+++ b/package/qemu/qemu-static-curl.patch
-@@ -0,0 +1,72 @@
-+configure: fix detection for cURL libs when static linking
++++ b/package/dtc/dtc-extra_cflags.patch
+@@ -0,0 +1,27 @@
++Makefile: append the CFLAGS to existing ones
 +
-+Currently, to check for cURL, configure uses either pkg-config (the default),
-+or curl-config (as a fallback).
++Allow the user to pass custom CFLAGS (eg. optimisation flags).
 +
-+But curl-config and pkg-config do not have the same set of options:
-+  - to check for shared libs, both use the option: --libs
-+  - to check for static libs:
-+    - pkg-config uses: --static --libs
-+    - curl-config uses: --static-libs
++Do not use EXTRA_CFLAGS, append to existing CFLAGS with +=  (Arnout)
 +
-+To add to the complexity, pkg-config is called through the querry_pkg_config
-+wrapper, that already passes --static when static linking is required, but
-+there is no such wrapper for curl-config, so we miss the occasion to pass
-+--static-libs
-+
-+To fix this:
-+  - introduce a new variable QEMU_XXX_CONFIG_LIBS_FLAGS that mirrors the
-+    behavior of QEMU_PKG_CONFIG_FLAGS; this variable can be used by all
-+    xxx-config scripts (eg. curl-config, but later sdl-config too).
-+    Default it to '--libs', which is for shared linking;
-+  - properly use either --libs for pkg-config (--static is already takend
-+    care of in the wrapper), or $QEMU_XXX_CONFIG_LIBS_FLAGS for
-+    curl-config.
-+    
++Cc: Arnout Vandecappelle <arnout@mind.be>
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
 +---
-+Patch sent upstream:
-+    http://lists.nongnu.org/archive/html/qemu-trivial/2012-08/msg00165.html
++Patch not sent upstream.
 +
-+diff --git a/configure b/configure
-+index d97fd81..e6a7c14 100755
-+--- a/configure
-++++ b/configure
-+@@ -101,7 +101,7 @@ audio_win_int=""
-+ cc_i386=i386-pc-linux-gnu-gcc
-+ libs_qga=""
-+ debug_info="yes"
-+-
-++QEMU_XXX_CONFIG_LIBS_FLAGS="--libs"
-+ target_list=""
++Although not specific to buildroot, I am not sure this is the best
++way to handle user-supplied CFLAGS.
++
++diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
++--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
+++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
++@@ -18,7 +18,7 @@
++ CPPFLAGS = -I libfdt -I .
++ WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
++ 	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
++-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
+++CFLAGS += -g -Os -fPIC -Werror $(WARNINGS)
 + 
-+ # Default value for a variable defining feature "foo".
-+@@ -580,6 +580,7 @@ for opt do
-+     static="yes"
-+     LDFLAGS="-static $LDFLAGS"
-+     QEMU_PKG_CONFIG_FLAGS="--static $QEMU_PKG_CONFIG_FLAGS"
-++    QEMU_XXX_CONFIG_LIBS_FLAGS="--static-libs"
-+   ;;
-+   --mandir=*) mandir="$optarg"
-+   ;;
-+@@ -1977,8 +1978,10 @@ fi
-+ 
-+ if $pkg_config libcurl --modversion >/dev/null 2>&1; then
-+   curlconfig="$pkg_config libcurl"
-++  curlconfiglibs="--libs"
-+ else
-+   curlconfig=curl-config
-++  curlconfiglibs="$QEMU_XXX_CONFIG_LIBS_FLAGS"
-+ fi
-+ 
-+ if test "$curl" != "no" ; then
-+@@ -1987,7 +1990,7 @@ if test "$curl" != "no" ; then
-+ int main(void) { curl_easy_init(); curl_multi_setopt(0, 0, 0); return 0; }
-+ EOF
-+   curl_cflags=`$curlconfig --cflags 2>/dev/null`
-+-  curl_libs=`$curlconfig --libs 2>/dev/null`
-++  curl_libs=`$curlconfig $curlconfiglibs 2>/dev/null`
-+   if compile_prog "$curl_cflags" "$curl_libs" ; then
-+     curl=yes
-+     libs_tools="$curl_libs $libs_tools"
-diff --git a/package/qemu/qemu-static-sdl.patch b/package/qemu/qemu-static-sdl.patch
++ BISON = bison
++ LEX = flex
+diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
 new file mode 100644
-index 0000000..59e4a60
+index 0000000..c86d587
 --- /dev/null
-+++ b/package/qemu/qemu-static-sdl.patch
-@@ -0,0 +1,54 @@
-+configure: fix detection for SDL libs when static linking
-+
-+Currently, configure checks for SDL libs with either pkg-config (the
-+default), or with sdl-config (as a fallback).
-+
-+As for cURL (previous patch), sdl-config does not have the same set of
-+options as pkg-config:
-+  - to check for shared libs, both use the option: --libs
-+  - to check for static libs:
-+    - pkg-config uses: --static --libs
-+    - curl-config uses: --static-libs
-+
-+Fix that by using the previously introduced $QEMU_XXX_CONFIG_LIBS_FLAGS
-+variable, the way ot was done previously for cURL.
-+
-+Also, simplify the code-path for checking for SDL libs with a single,
-+non-conditional call to $sdlconfig, which is either pkg-config or
-+sdl-config, as checked just above.
++++ b/package/dtc/dtc-separate-lib-install.patch
+@@ -0,0 +1,28 @@
++Makefile: add a rule to only install libfdt
 +
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
 +---
-+Patch sent upstream:
-+    http://lists.nongnu.org/archive/html/qemu-trivial/2012-08/msg00166.html
++Patch not sent upstream.
 +
-+diff --git a/configure b/configure
-+index e6a7c14..6bfedc7 100755
-+--- a/configure
-++++ b/configure
-+@@ -1547,9 +1547,11 @@ fi
++It's really specific to buildroot, and is probably not
++good (aka generic) enough to be pushed upstream.
++
++diff --git a/Makefile b/Makefile
++index 1169e6c..39e7190 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -160,10 +160,12 @@ endif
++ # intermediate target and building them again "for real"
++ .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
 + 
-+ if $pkg_config sdl --modversion >/dev/null 2>&1; then
-+   sdlconfig="$pkg_config sdl"
-++  sdlconfiglibs="--libs"
-+   _sdlversion=`$sdlconfig --modversion 2>/dev/null | sed 's/[^0-9]//g'`
-+ elif has ${sdl_config}; then
-+   sdlconfig="$sdl_config"
-++  sdlconfiglibs="$QEMU_XXX_CONFIG_LIBS_FLAGS"
-+   _sdlversion=`$sdlconfig --version | sed 's/[^0-9]//g'`
-+ else
-+   if test "$sdl" = "yes" ; then
-+@@ -1569,11 +1571,7 @@ if test "$sdl" != "no" ; then
-+ int main( void ) { return SDL_Init (SDL_INIT_VIDEO); }
-+ EOF
-+   sdl_cflags=`$sdlconfig --cflags 2> /dev/null`
-+-  if test "$static" = "yes" ; then
-+-    sdl_libs=`$sdlconfig --static-libs 2>/dev/null`
-+-  else
-+-    sdl_libs=`$sdlconfig --libs 2> /dev/null`
-+-  fi
-++  sdl_libs=`$sdlconfig $sdlconfiglibs 2> /dev/null`
-+   if compile_prog "$sdl_cflags" "$sdl_libs" ; then
-+     if test "$_sdlversion" -lt 121 ; then
-+       sdl_too_old=yes
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 5aa12ab..ab5ad9c 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -267,6 +267,10 @@ else
- QEMU_OPTS += --disable-docs
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_STATIC),y)
-+QEMU_OPTS += --static
-+endif
++-install: all $(SCRIPTS)
+++install: all $(SCRIPTS) libfdt_install
++ 	@$(VECHO) INSTALL
++ 	$(INSTALL) -d $(DESTDIR)$(BINDIR)
++ 	$(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+++
+++libfdt_install: libfdt
++ 	$(INSTALL) -d $(DESTDIR)$(LIBDIR)
++ 	$(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
++ 	ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+new file mode 100644
+index 0000000..a0e1e35
+--- /dev/null
++++ b/package/dtc/dtc.mk
+@@ -0,0 +1,34 @@
++#############################################################
++#
++# dtc
++#
++#############################################################
 +
- # Post-install removal of unwanted keymaps:
- # - if we want 'all', we do nothing;
- # - if we want none, we completely remove the keymap dir
++DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
++DTC_SITE            = git://git.jdl.com/software/dtc.git
++DTC_LICENSE         = GPLv2+/BSD-2c
++DTC_LICENSE_FILES   = README.license GPL
++# Note: the dual-license only applies to the library.
++#       The DT compiler (dtc) is GPLv2+, but we do not install it.
++DTC_INSTALL_STAGING = YES
++
++define DTC_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS)    \
++	CFLAGS="$(TARGET_CFLAGS)"   \
++	$(MAKE) -C $(@D) PREFIX=/usr libfdt
++endef
++
++#?libfdt_install is our own install rule added by our patch
++define DTC_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
++endef
++
++define DTC_CLEAN_CMDS
++	$(MAKE) -C $(@D) libfdt_clean
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
