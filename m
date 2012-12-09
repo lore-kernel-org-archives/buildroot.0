@@ -1,41 +1,44 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Dec 2012 21:53:35 +0100
-Subject: [Buildroot] [git commit] rt-tests: not available on avr32,
-	too old uClibc
-Message-ID: <20121209210012.D84A99A157@busybox.osuosl.org>
+Date: Sun, 9 Dec 2012 22:00:05 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2,
+	4}.x stable versions
+Message-ID: <20121209210013.7151F9A157@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98e16e7849e5ad63ce084e0564c84233793e6cc1
+commit: http://git.buildroot.net/buildroot/commit/?id=b9b420bdd55a553c78a815f28ea98db87cd110a6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The old uClibc used for the AVR32 architecture does not implement
-priority inheritance, therefore rt-tests cannot build.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/695293d889128c666174d5fe03c5deadbe4d5415/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rt-tests/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 5c8a782..c253339 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# Too old uClibc, does not provide priority-inheritance
-+	# mutexes
-+	depends on !BR2_avr32
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
- 	  Linux system.
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 6552c62..0f3ed4f 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -67,11 +67,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.54"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.55"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.34"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.35"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.21"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.22"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+ 	default "3.6.9"		if BR2_KERNEL_HEADERS_3_6
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+diff --git a/toolchain/kernel-headers/linux-3.0.54-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.55-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.54-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.55-headers_install-fix-__packed-in-exported-kernel-head.patch
