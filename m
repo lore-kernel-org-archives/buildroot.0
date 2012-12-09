@@ -1,42 +1,21 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Dec 2012 22:37:39 +0100
-Subject: [Buildroot] [PATCH 12/51] package/slirp: new package
-In-Reply-To: <201212092220.26330.yann.morin.1998@free.fr>
-References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
- <20121209194223.439bff79@skate> <201212092220.26330.yann.morin.1998@free.fr>
-Message-ID: <201212092237.40208.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 09 Dec 2012 18:43:29 -0300
+Subject: [Buildroot] [PATCH] sane-backends: fix documentation build
+	failure
+In-Reply-To: <87vccbvu3b.fsf@dell.be.48ers.dk>
+References: <1355063702-4716-1-git-send-email-gustavo@zacarias.com.ar>
+ <87vccbvu3b.fsf@dell.be.48ers.dk>
+Message-ID: <50C50601.3030306@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 12/09/2012 05:39 PM, Peter Korsgaard wrote:
+> Did you have a look at moving to 1.0.23 instead?
 
-On Sunday 09 December 2012 Yann E. MORIN wrote:
-> On Sunday 09 December 2012 Thomas Petazzoni wrote:
-> > Dear Yann E. MORIN,
-> > 
-> > On Sun,  9 Dec 2012 17:34:45 +0100, Yann E. MORIN wrote:
-> > > +# Note: The license file 'COPYRIGHT' is missing from the sources,
-> > > +# although some files refer to it.
-> > > +SLIRP_INSTALL_STAGING = YES
-> > > +SLIRP_AUTORECONF      = YES
-> > 
-> > Justification for the _AUTORECONF=YES here?
-> 
-> There's no release tarball, so we're using the git tree, so there's no
-> ./configure, so we need to autoreconf.
-
-Of course, I've added a comment in slirp.mk to explain that, too.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Not really, i don't have a scanner handy for testing, so it would be
+just a blind build test.
+Also it's unlikely it would have fixed the documentation issue.
+Regards.
