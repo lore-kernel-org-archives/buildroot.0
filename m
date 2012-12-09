@@ -1,9 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 10 Dec 2012 00:06:24 +0100
-Subject: [Buildroot] [PATCH] urg: new package
+Date: Mon, 10 Dec 2012 00:06:25 +0100
+Subject: [Buildroot] [PATCH] flite: new package
 In-Reply-To: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
 References: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1355094387-22886-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1355094387-22886-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +13,102 @@ To: buildroot@busybox.net
 Cc: Eric Jarrige <eric.jarrige@armadeus.org>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/Config.in     |  1 +
- package/urg/Config.in |  9 +++++++++
- package/urg/urg.mk    | 26 ++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/urg/Config.in
- create mode 100644 package/urg/urg.mk
+ package/multimedia/Config.in       |  1 +
+ package/multimedia/flite/Config.in | 11 ++++++++
+ package/multimedia/flite/flite.mk  | 57 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 69 insertions(+)
+ create mode 100644 package/multimedia/flite/Config.in
+ create mode 100644 package/multimedia/flite/flite.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index c530305..45ccbcf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -426,6 +426,7 @@ source "package/libv4l/Config.in"
- source "package/mtdev/Config.in"
- source "package/neardal/Config.in"
- source "package/pcsc-lite/Config.in"
-+source "package/urg/Config.in"
- endmenu
- 
- menu "Javascript"
-diff --git a/package/urg/Config.in b/package/urg/Config.in
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 273d9bc..3ca0531 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -4,6 +4,7 @@ source "package/multimedia/aumix/Config.in"
+ source "package/multimedia/bellagio/Config.in"
+ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
++source "package/multimedia/flite/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+ source "package/multimedia/gstreamer/Config.in"
+ source "package/multimedia/gst-ffmpeg/Config.in"
+diff --git a/package/multimedia/flite/Config.in b/package/multimedia/flite/Config.in
 new file mode 100644
-index 0000000..9dd13bf
+index 0000000..bef989c
 --- /dev/null
-+++ b/package/urg/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_URG
-+	bool "urg library"
-+	select BR2_PACKAGE_SDL
-+	select BR2_PACKAGE_SDL_NET
++++ b/package/multimedia/flite/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_FLITE
++	bool "flite"
 +	help
-+	  Library to control Hokuyo's URG series sensors.
-+	  Requires SDL & SDL_net.
++	  Flite: a small, fast run time synthesis engine.
++	  Flite (festival-lite) is a small, fast run-time synthesis engine
++	  developed at CMU and primarily designed for small embedded machines
++	  and/or large servers. Flite is designed as an alternative synthesis
++	  engine to Festival for voices built using the FestVox suite of voice
++	  building tools.
 +
-+	  http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
-diff --git a/package/urg/urg.mk b/package/urg/urg.mk
++	  http://www.speech.cs.cmu.edu/flite
+diff --git a/package/multimedia/flite/flite.mk b/package/multimedia/flite/flite.mk
 new file mode 100644
-index 0000000..d5b752a
+index 0000000..c72988f
 --- /dev/null
-+++ b/package/urg/urg.mk
-@@ -0,0 +1,26 @@
++++ b/package/multimedia/flite/flite.mk
+@@ -0,0 +1,57 @@
 +#############################################################
 +#
-+# urg library
++# flite
 +#
 +#############################################################
-+URG_VERSION = 0.8.18
-+URG_SITE = http://www.hokuyo-aut.jp/02sensor/07scanner/download/urg_programs_en/
-+URG_SOURCE = urg-$(URG_VERSION).zip
-+URG_LICENSE = LGPLv3
-+URG_LICENSE_FILES = COPYING
++FLITE_VERSION = 1.4
++FLITE_SOURCE = flite-$(FLITE_VERSION)-release.tar.bz2
++FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
++FLITE_LICENSE = BSD-4c
++FLITE_LICENSE_FILES = COPYING
 +
-+URG_INSTALL_STAGING = YES
++FLITE_INSTALL_STAGING = YES
 +
-+URG_DEPENDENCIES = sdl sdl_net
++# Sadly, Flite does not support parallel build,
++# especially when build its shared libraries.
++FLITE_MAKE = $(MAKE1)
 +
-+URG_CONF_OPT = --with-sdl-prefix=$(STAGING_DIR)/usr \
-+		--with-sdl-exec-prefix=$(STAGING_DIR)/usr
++FLITE_CONF_OPT = \
++	$(if $(BR2_PREFER_STATIC_LIB),,--enable-shared)
 +
-+define URG_EXTRACT_CMDS
-+	$(RM) -rf $(URG_DIR)
-+	unzip -q -d $(BUILD_DIR)/ $(DL_DIR)/$(URG_SOURCE)
-+	test -d $(URG_DIR) || \
-+		mv $(BUILD_DIR)/$(subst .zip,,$(URG_SOURCE)) $(URG_DIR)
++FLITE_INSTALL_STAGING_OPT = \
++	INSTALLBINDIR=$(STAGING_DIR)/usr/bin \
++	INSTALLLIBDIR=$(STAGING_DIR)/usr/lib \
++	INSTALLINCDIR=$(STAGING_DIR)/usr/include/flite \
++	install
++
++FLITE_INSTALL_TARGET_OPT = \
++	INSTALLBINDIR=$(TARGET_DIR)/usr/bin \
++	INSTALLLIBDIR=$(TARGET_DIR)/usr/lib \
++	INSTALLINCDIR=$(TARGET_DIR)/usr/include/flite \
++	install
++
++# Flite totally screw up their tarball generation, so that:
++#
++#   $ tar tf flite-1.4-release.tar.bz2
++#   ...
++#   flite-1.4-release//install-sh
++#   flite-1.4-release//mkinstalldirs
++#   flite-1.4-release//Exports.def
++#   flite-1.4-release//flite.sln
++#   flite-1.4-release//fliteDll.vcproj
++#   flite-1.4-release/config/Makefile
++#   flite-1.4-release/config/common_make_rules
++#   flite-1.4-release/config/project.mak
++#   flite-1.4-release/config/config.in
++#   flite-1.4-release/config/system.mak.in
++#
++# So, the strip-component trick does not work at all.
++# Let's redefine the extract command.
++define FLITE_EXTRACT_CMDS
++	$(RM) -rf $(FLITE_DIR)
++	$(INFLATE$(suffix $(FLITE_SOURCE))) $(DL_DIR)/$(FLITE_SOURCE) | \
++		$(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	mv $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE)) $(FLITE_DIR)
 +endef
 +
 +$(eval $(autotools-package))
