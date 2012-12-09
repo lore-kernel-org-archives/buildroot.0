@@ -1,194 +1,906 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 10 Dec 2012 00:06:26 +0100
-Subject: [Buildroot] [PATCH] qwt: new package
+Date: Mon, 10 Dec 2012 00:06:27 +0100
+Subject: [Buildroot] [PATCH] libcanfestival: new package
 In-Reply-To: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
 References: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1355094387-22886-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1355094387-22886-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Julien Boibessot <julien.boibessot@armadeus.com>
 Cc: Eric Jarrige <eric.jarrige@armadeus.org>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/Config.in                                  |  1 +
- package/qwt/Config.in                              | 17 +++++
- .../qwt/qwt-5.2.1-change-install-directories.patch | 23 +++++++
- package/qwt/qwt-5.2.1-disable-designer.patch       | 17 +++++
- package/qwt/qwt.mk                                 | 74 ++++++++++++++++++++++
- 5 files changed, 132 insertions(+)
- create mode 100644 package/qwt/Config.in
- create mode 100644 package/qwt/qwt-5.2.1-change-install-directories.patch
- create mode 100644 package/qwt/qwt-5.2.1-disable-designer.patch
- create mode 100644 package/qwt/qwt.mk
+ package/Config.in                                  |   1 +
+ package/libcanfestival/Config.in                   |  90 +++
+ .../libcanfestival-allow-to-set-DESTDIR.patch      | 717 +++++++++++++++++++++
+ package/libcanfestival/libcanfestival.mk           |  45 ++
+ 4 files changed, 853 insertions(+)
+ create mode 100644 package/libcanfestival/Config.in
+ create mode 100644 package/libcanfestival/libcanfestival-allow-to-set-DESTDIR.patch
+ create mode 100644 package/libcanfestival/libcanfestival.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 45ccbcf..88849d3 100644
+index 88849d3..ce78f79 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -141,6 +141,7 @@ comment "QT libraries and helper libraries"
- source "package/grantlee/Config.in"
- source "package/qextserialport/Config.in"
- source "package/qtuio/Config.in"
-+source "package/qwt/Config.in"
- endif
+@@ -455,6 +455,7 @@ endmenu
  
- source "package/x11r7/Config.in"
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+ menu "Networking"
+ source "package/glib-networking/Config.in"
++source "package/libcanfestival/Config.in"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+diff --git a/package/libcanfestival/Config.in b/package/libcanfestival/Config.in
 new file mode 100644
-index 0000000..15e3925
+index 0000000..0be45cf
 --- /dev/null
-+++ b/package/qwt/Config.in
-@@ -0,0 +1,17 @@
-+comment "Qwt requires Qt to be installed"
-+	depends on !BR2_PACKAGE_QT
-+
-+config BR2_PACKAGE_QWT
-+	bool "Qwt"
-+	depends on BR2_PACKAGE_QT
++++ b/package/libcanfestival/Config.in
+@@ -0,0 +1,90 @@
++config BR2_PACKAGE_LIBCANFESTIVAL
++	bool "CanFestival"
 +	help
-+	  Qwt for Embedded Linux.
++	  CanFestival is an OpenSource CANOpen framework, licensed with GPLv2
++	  and LGPLv2.
 +
-+	  http://qwt.sourceforge.net/
++	  http://www.canfestival.org
 +
-+config BR2_PACKAGE_QWT_EXAMPLES
-+	bool "Examples"
-+	depends on BR2_PACKAGE_QWT
-+	select BR2_PACKAGE_QT_SVG
++if BR2_PACKAGE_LIBCANFESTIVAL
++
++config BR2_PACKAGE_LIBCANFESTIVAL_NBMMAXCAN
++	string "Number of can bus to use"
++	default "4"
++
++choice
++	prompt "Driver to use"
++	default BR2_PACKAGE_LIBCANFESTIVAL_SOCKET
++
++config	BR2_PACKAGE_LIBCANFESTIVAL_ANAGATE_LINUX
++	bool "anagate_linux"
 +	help
-+	  Compile & install the examples.
-diff --git a/package/qwt/qwt-5.2.1-change-install-directories.patch b/package/qwt/qwt-5.2.1-change-install-directories.patch
-new file mode 100644
-index 0000000..4c28065
---- /dev/null
-+++ b/package/qwt/qwt-5.2.1-change-install-directories.patch
-@@ -0,0 +1,23 @@
-+Change install directories.
++	  AnaGate CAN(duo) driver for linux
 +
-+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++config	BR2_PACKAGE_LIBCANFESTIVAL_PEAK_LINUX
++	bool "peak_linux"
++	help
++	  Linux build host installed Peak driver and library
 +
-+--- qwt-5.2.1/src/src.pro.orig	2010-09-28 14:40:39.000000000 +0200
-++++ qwt-5.2.1/src/src.pro	2010-09-28 14:41:29.000000000 +0200
-+@@ -218,9 +218,12 @@
-+ }
-+ 
-+ # Install directives
-+-
-+-headers.files  = $$HEADERS
-+-doc.files      = $${QWT_ROOT}/doc/html $${QWT_ROOT}/doc/qwt-5.2.0.qch
-++
-++target.path = /usr/lib
-++headers.files  = $$HEADERS
-++headers.path = /usr/include/qwt-5.2.1
-++doc.files      = $${QWT_ROOT}/doc/html $${QWT_ROOT}/doc/qwt-5.2.0.qch
-++doc.path = /usr/doc/qwt-5.2.1
-+ unix {
-+     doc.files      += $${QWT_ROOT}/doc/man
-+ }
-diff --git a/package/qwt/qwt-5.2.1-disable-designer.patch b/package/qwt/qwt-5.2.1-disable-designer.patch
-new file mode 100644
-index 0000000..5d1bbe5
---- /dev/null
-+++ b/package/qwt/qwt-5.2.1-disable-designer.patch
-@@ -0,0 +1,17 @@
-+Disable QwtDesigner.
++	  http://www.peak-system.com/linux/
 +
-+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++config	BR2_PACKAGE_LIBCANFESTIVAL_VIRTUAL
++	bool "virtual"
++	help
++	  Unix pipe based virtual can driver
 +
-+--- qwt-5.2.1/qwtconfig.pri.orig	2010-09-28 14:34:01.000000000 +0200
-++++ qwt-5.2.1/qwtconfig.pri	2010-09-28 15:37:02.000000000 +0200
-+@@ -115,7 +115,7 @@
-+ # Otherwise you have to build it from the designer directory.
-+ ######################################################################
-+ 
-+-CONFIG     += QwtDesigner
-++#CONFIG     += QwtDesigner
-+ 
-+ ######################################################################
-+ # If you want to auto build the examples, enable the line below
++config	BR2_PACKAGE_LIBCANFESTIVAL_VIRTUAL_KERNEL
++	bool "virtual_kernel"
++	help
++	  Kernel module virtual can driver
 +
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-new file mode 100644
-index 0000000..3d4e7f1
---- /dev/null
-+++ b/package/qwt/qwt.mk
-@@ -0,0 +1,74 @@
-+######################################################################
-+#
-+# QWT
-+#
-+######################################################################
-+QWT_VERSION = 5.2.1
-+QWT_SOURCE = qwt-$(QWT_VERSION).zip
-+QWT_SITE = http://sourceforge.net/projects/qwt/files/qwt/$(QWT_VERSION)
-+# Qwt License v1.0 is a LGPL v2.1 with exceptions
-+QWT_LICENSE = QWTv1.0
-+QWT_LICENSE_FILES = COPYING
++config	BR2_PACKAGE_LIBCANFESTIVAL_SOCKET
++	bool "socket"
++	help
++	  Socket-can
 +
-+QWT_DEPENDENCIES = qt
++	  http://developer.berlios.de/projects/socketcan/
 +
-+QWT_INSTALL_STAGING = YES
++config	BR2_PACKAGE_LIBCANFESTIVAL_LINCAN
++	bool "lincan"
++	help
++	  Lincan driver
 +
-+define QWT_EXTRACT_CMDS
-+	$(RM) -rf $(QWT_DIR)
-+	unzip -q -d $(BUILD_DIR)/ $(DL_DIR)/$(QWT_SOURCE)
-+	test -d $(QWT_DIR) || \
-+		mv $(BUILD_DIR)/$(subst .zip,,$(QWT_SOURCE)) $(QWT_DIR)
-+endef
++	  http://www.ocera.org/download/components/WP7/lincan-0.3.3.html
 +
-+ifeq ($(BR2_PACKAGE_QWT_EXAMPLES),y)
-+define QWT_CONFIGURE_EXAMPLES
-+	test ! -f $(@D)/examples/Makefile || $(MAKE) -C $(@D)/examples distclean
-+	cd $(@D)/examples && $(QT_QMAKE)
-+endef
++config	BR2_PACKAGE_LIBCANFESTIVAL_CAN4LINUX
++	bool "can4linux"
++	help
++	  Can4linux driver
 +
-+define QWT_BUILD_EXAMPLES
-+	$(MAKE) -C $(@D)/examples
-+endef
++	  http://www.port.de/engl/canprod/hw_can4linux.html
 +
-+define QWT_INSTALL_STAGING_EXAMPLES
-+	$(INSTALL) -d $(STAGING_DIR)/usr/local/qwt-5.2.1/examples/bin
-+	cp -f $(@D)/examples/bin/* \
-+		$(STAGING_DIR)/usr/local/qwt-5.2.1/examples/bin
-+endef
++config	BR2_PACKAGE_LIBCANFESTIVAL_COPCICAN_LINUX
++	bool "copcican_linux"
++	help
++	  User space driver interface for CO-PCICAN card
 +
-+define QWT_INSTALL_TARGET_EXAMPLES
-+	$(INSTALL) -d $(TARGET_DIR)/usr/local/qwt-5.2.1/examples/bin
-+	cp -f $(STAGING_DIR)/usr/local/qwt-5.2.1/examples/bin/* \
-+		$(TARGET_DIR)/usr/local/qwt-5.2.1/examples/bin
-+endef
++	  http://www.cosateq.com/
++
++config	BR2_PACKAGE_LIBCANFESTIVAL_COPCICAN_COMEDI
++	bool "copcican_comedi"
++	help
++	  COMEDI driver interface for CO-PCICAN card
++
++	  http://www.cosateq.com/
++
++endchoice
++
++config BR2_PACKAGE_LIBCANFESTIVAL_DRIVER
++	string
++	default "anagate_linux"	  if BR2_PACKAGE_LIBCANFESTIVAL_ANAGATE_LINUX
++	default "peak_linux"	  if BR2_PACKAGE_LIBCANFESTIVAL_PEAK_LINUX
++	default "virtual"	  if BR2_PACKAGE_LIBCANFESTIVAL_VIRTUAL
++	default "virtual_kernel"  if BR2_PACKAGE_LIBCANFESTIVAL_VIRTUAL_KERNEL
++	default "socket"	  if BR2_PACKAGE_LIBCANFESTIVAL_SOCKET
++	default "lincan"	  if BR2_PACKAGE_LIBCANFESTIVAL_LINCAN
++	default "can4linux"	  if BR2_PACKAGE_LIBCANFESTIVAL_CAN4LINUX
++	default "copcican_linux"  if BR2_PACKAGE_LIBCANFESTIVAL_COCPICAN_LINUX
++	default "copcican_comedi" if BR2_PACKAGE_LIBCANFESTIVAL_COPCICAN_COMEDI
++
 +endif
+diff --git a/package/libcanfestival/libcanfestival-allow-to-set-DESTDIR.patch b/package/libcanfestival/libcanfestival-allow-to-set-DESTDIR.patch
+new file mode 100644
+index 0000000..7e41022
+--- /dev/null
++++ b/package/libcanfestival/libcanfestival-allow-to-set-DESTDIR.patch
+@@ -0,0 +1,717 @@
++Fix install rules to allow DESTDIR usage.
 +
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 +
-+define QWT_CONFIGURE_CMDS
-+	test ! -f $(@D)/Makefile || $(MAKE) -C $(@D) distclean
-+	cd $(@D) && $(QT_QMAKE)
-+	$(QWT_CONFIGURE_EXAMPLES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_anagate_linux/Makefile libcanfestival-71623bbf8093/drivers/can_anagate_linux/Makefile
++--- libcanfestival-71623bbf8093.orig/drivers/can_anagate_linux/Makefile	2012-11-01 22:19:09.250087305 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_anagate_linux/Makefile	2012-11-01 22:19:36.936227361 +0100
++@@ -43,7 +43,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -56,8 +56,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_anagate_linux/Makefile.in libcanfestival-71623bbf8093/drivers/can_anagate_linux/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_anagate_linux/Makefile.in	2012-11-01 22:19:09.250087305 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_anagate_linux/Makefile.in	2012-11-01 22:19:36.919561011 +0100
++@@ -43,7 +43,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -56,8 +56,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_anagate_win32/Makefile.in libcanfestival-71623bbf8093/drivers/can_anagate_win32/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_anagate_win32/Makefile.in	2012-11-01 22:19:09.250087305 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_anagate_win32/Makefile.in	2012-11-01 22:19:36.902894661 +0100
++@@ -46,7 +46,7 @@ DRIVER = $(OBJS)
++ endif
++ 
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -69,8 +69,8 @@ $(DRIVER): $(OBJS)
++ 	-Wl,--exclude-libs,ALL -lws2_32
++ 		
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_can4linux/Makefile.in libcanfestival-71623bbf8093/drivers/can_can4linux/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_can4linux/Makefile.in	2012-11-01 22:19:09.256753845 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_can4linux/Makefile.in	2012-11-01 22:19:37.019559109 +0100
++@@ -42,7 +42,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -55,8 +55,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 	
++ uninstall:
++ 	rm -f $(TARGET_HFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_copcican_linux/Makefile.in libcanfestival-71623bbf8093/drivers/can_copcican_linux/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_copcican_linux/Makefile.in	2012-11-01 22:19:09.246754035 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_copcican_linux/Makefile.in	2012-11-01 22:19:36.846229073 +0100
++@@ -45,7 +45,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -58,8 +58,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_kvaser/Makefile.in libcanfestival-71623bbf8093/drivers/can_kvaser/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_kvaser/Makefile.in	2012-11-01 22:19:09.240087495 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_kvaser/Makefile.in	2012-11-01 22:19:36.766230593 +0100
++@@ -52,7 +52,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -65,8 +65,8 @@ $(DRIVER): $(OBJS)
++ 	$(CC) -shared -Wl,-soname,$(DRIVER) $(CAN_DLL_CFLAGS) -o $@ $< 
++ 
++ install: $(DRIVER)
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_lincan/Makefile.in libcanfestival-71623bbf8093/drivers/can_lincan/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_lincan/Makefile.in	2012-11-01 22:19:09.260087115 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_lincan/Makefile.in	2012-11-01 22:19:37.056225077 +0100
++@@ -42,7 +42,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -55,8 +55,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 	
++ uninstall:
++ 	rm -f $(TARGET_HFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_peak_linux/Makefile.in libcanfestival-71623bbf8093/drivers/can_peak_linux/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_peak_linux/Makefile.in	2012-11-01 22:19:09.256753845 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_peak_linux/Makefile.in	2012-11-01 22:19:37.046225267 +0100
++@@ -43,7 +43,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -56,8 +56,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_peak_win32/Makefile.in libcanfestival-71623bbf8093/drivers/can_peak_win32/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_peak_win32/Makefile.in	2012-11-01 22:19:09.243420765 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_peak_win32/Makefile.in	2012-11-01 22:19:36.816229643 +0100
++@@ -45,7 +45,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -63,8 +63,8 @@ cyg$(CAN_DRIVER).dll: $(OBJS)
++ 	-Wl,--exclude-libs,ALL
++ 		
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_serial/Makefile.in libcanfestival-71623bbf8093/drivers/can_serial/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_serial/Makefile.in	2012-11-01 22:19:09.246754035 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_serial/Makefile.in	2012-11-01 22:19:36.879561771 +0100
++@@ -46,8 +46,8 @@ endif
++ 
++ HUB=can_serial_hub
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
++-TARGET_BINFILES = $(PREFIX)/bin/$(HUB)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
+++TARGET_BINFILES = $(DESTDIR)$(PREFIX)/bin/$(HUB)
++ 
++ all: driver $(HUB)
++ 
++@@ -63,10 +63,10 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so $(HUB)
++-	mkdir -p $(PREFIX)/lib/
++-	cp libcanfestival_$(CAN_DRIVER).so $(PREFIX)/lib/
++-	mkdir -p $(PREFIX)/bin/
++-	cp $(HUB) $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp libcanfestival_$(CAN_DRIVER).so $(DESTDIR)$(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $(HUB) $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_socket/Makefile.in libcanfestival-71623bbf8093/drivers/can_socket/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_socket/Makefile.in	2012-11-01 22:19:09.283420005 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_socket/Makefile.in	2012-11-01 22:19:37.079557967 +0100
++@@ -43,7 +43,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -56,8 +56,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 	
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_tcp_win32/Makefile.in libcanfestival-71623bbf8093/drivers/can_tcp_win32/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_tcp_win32/Makefile.in	2012-11-01 22:19:09.256753845 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_tcp_win32/Makefile.in	2012-11-01 22:19:37.029558919 +0100
++@@ -47,7 +47,7 @@ endif
++ 
++ SERVER = $(CAN_DRIVER)_server
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -74,8 +74,8 @@ $(DRIVER): $(OBJS)
++ 	-Wl,--exclude-libs,ALL -lws2_32
++ 		
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 		
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_virtual/Makefile.in libcanfestival-71623bbf8093/drivers/can_virtual/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_virtual/Makefile.in	2012-11-01 22:19:09.246754035 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_virtual/Makefile.in	2012-11-01 22:19:36.859562151 +0100
++@@ -43,7 +43,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -56,8 +56,8 @@ libcanfestival_$(CAN_DRIVER).so: $(OBJS)
++ 	$(CC) -shared -Wl,-soname,libcanfestival_$(CAN_DRIVER).so $(CAN_DLL_CFLAGS) -o $@ $<
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 	
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/can_vscom/Makefile.in libcanfestival-71623bbf8093/drivers/can_vscom/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/can_vscom/Makefile.in	2012-11-01 22:19:09.283420005 +0100
+++++ libcanfestival-71623bbf8093/drivers/can_vscom/Makefile.in	2012-11-01 22:19:37.072891427 +0100
++@@ -61,7 +61,7 @@ else
++ DRIVER = $(OBJS)
++ endif
++ 
++-TARGET_SOFILES = $(PREFIX)/lib/$(DRIVER)
+++TARGET_SOFILES = $(DESTDIR)$(PREFIX)/lib/$(DRIVER)
++ 
++ all: driver
++ 
++@@ -83,8 +83,8 @@ libcanfestival_$(CAN_DRIVER).$(DLL_TYPE)
++ 	$(CC) $(PROG_CFLAGS) -shared $(CAN_VSCOM_DLL_FLAGS) -o $@ $< $(CAN_DLL_CFLAGS)
++ 
++ install: libcanfestival_$(CAN_DRIVER).so
++-	mkdir -p $(PREFIX)/lib/
++-	cp $< $(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	cp $< $(DESTDIR)$(PREFIX)/lib/
++ 
++ uninstall:
++ 	rm -f $(TARGET_SOFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/timers_rtai/Makefile.in libcanfestival-71623bbf8093/drivers/timers_rtai/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/timers_rtai/Makefile.in	2012-11-01 22:19:09.246754035 +0100
+++++ libcanfestival-71623bbf8093/drivers/timers_rtai/Makefile.in	2012-11-01 22:19:36.886228311 +0100
++@@ -38,7 +38,7 @@ OBJS = $(TIMERS_DRIVER).o
++ 
++ SRC_HFILES = ../../include/$(TIMERS_DRIVER)/timerscfg.h
++ 
++-TARGET_HFILES = $(PREFIX)/include/canfestival/timerscfg.h
+++TARGET_HFILES = $(DESTDIR)$(PREFIX)/include/canfestival/timerscfg.h
++ 
++ all: driver
++ 
++@@ -48,8 +48,8 @@ driver: $(OBJS)
++ 	$(CC) $(CFLAGS) $(PROG_CFLAGS) ${PROGDEFINES} $(INCLUDES) -o $@ -c $<
++ 
++ install:
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp $(SRC_HFILES) $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp $(SRC_HFILES) $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++ 	rm -f $(TARGET_HFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/timers_unix/Makefile.in libcanfestival-71623bbf8093/drivers/timers_unix/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/timers_unix/Makefile.in	2012-11-01 22:19:09.243420765 +0100
+++++ libcanfestival-71623bbf8093/drivers/timers_unix/Makefile.in	2012-11-01 22:19:36.796230023 +0100
++@@ -38,7 +38,7 @@ OBJS = $(TIMERS_DRIVER).o
++ 
++ SRC_HFILES = ../../include/$(TIMERS_DRIVER)/timerscfg.h
++ 
++-TARGET_HFILES = $(PREFIX)/include/canfestival/timerscfg.h
+++TARGET_HFILES = $(DESTDIR)$(PREFIX)/include/canfestival/timerscfg.h
++ 
++ all: driver
++ 
++@@ -48,8 +48,8 @@ driver: $(OBJS)
++ 	$(CC) $(CFLAGS) $(PROG_CFLAGS) ${PROGDEFINES} $(INCLUDES) -o $@ -c $<
++ 
++ install:
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp $(SRC_HFILES) $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp $(SRC_HFILES) $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++ 	rm -f $(TARGET_HFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/timers_win32/Makefile.in libcanfestival-71623bbf8093/drivers/timers_win32/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/timers_win32/Makefile.in	2012-11-01 22:19:09.246754035 +0100
+++++ libcanfestival-71623bbf8093/drivers/timers_win32/Makefile.in	2012-11-01 22:19:36.866228691 +0100
++@@ -40,7 +40,7 @@ OBJS = $(TIMERS_DRIVER).o
++ 
++ SRC_HFILES = ../../include/$(TIMERS_DRIVER)/timerscfg.h
++ 
++-TARGET_HFILES = $(PREFIX)/include/canfestival/timerscfg.h
+++TARGET_HFILES = $(DESTDIR)$(PREFIX)/include/canfestival/timerscfg.h
++ 
++ all: driver
++ 
++@@ -50,8 +50,8 @@ driver: $(OBJS)
++ 	$(CXX) $(CFLAGS) $(PROG_CFLAGS) ${PROGDEFINES} $(INCLUDES) -o $@ -c $<
++ 
++ install:
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp $(SRC_HFILES) $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp $(SRC_HFILES) $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++ 	rm -f $(TARGET_HFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/timers_xeno/Makefile.in libcanfestival-71623bbf8093/drivers/timers_xeno/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/timers_xeno/Makefile.in	2012-11-01 22:19:09.260087115 +0100
+++++ libcanfestival-71623bbf8093/drivers/timers_xeno/Makefile.in	2012-11-01 22:19:37.066224887 +0100
++@@ -38,7 +38,7 @@ OBJS = $(TIMERS_DRIVER).o
++ 
++ SRC_HFILES = ../../include/$(TIMERS_DRIVER)/timerscfg.h
++ 
++-TARGET_HFILES = $(PREFIX)/include/canfestival/timerscfg.h
+++TARGET_HFILES = $(DESTDIR)$(PREFIX)/include/canfestival/timerscfg.h
++ 
++ all: driver
++ 
++@@ -48,8 +48,8 @@ driver: $(OBJS)
++ 	$(CC) $(CFLAGS) $(PROG_CFLAGS) ${PROGDEFINES} $(INCLUDES) -o $@ -c $<
++ 
++ install:
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp $(SRC_HFILES) $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp $(SRC_HFILES) $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++ 	rm -f $(TARGET_HFILES)
++diff -purN libcanfestival-71623bbf8093.orig/drivers/unix/Makefile.in libcanfestival-71623bbf8093/drivers/unix/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/unix/Makefile.in	2012-11-01 22:19:09.250087305 +0100
+++++ libcanfestival-71623bbf8093/drivers/unix/Makefile.in	2012-11-01 22:19:36.896228121 +0100
++@@ -51,7 +51,7 @@ endif
++ 
++ SRC_HFILES = ../../include/$(TARGET)/applicfg.h ../../include/$(TARGET)/canfestival.h
++ 
++-TARGET_HFILES = $(PREFIX)/include/$(TARGET)/applicfg.h $(PREFIX)/include/$(TARGET)/canfestival.h
+++TARGET_HFILES = $(DESTDIR)$(PREFIX)/include/$(TARGET)/applicfg.h $(DESTDIR)$(PREFIX)/include/$(TARGET)/canfestival.h
++ 
++ all: driver
++ 
++@@ -104,13 +104,13 @@ libcanfestival_$(TARGET).a: $(OBJS)
++ 	$(BINUTILS_PREFIX)ranlib $@
++ 
++ install: libcanfestival_$(TARGET).a
++-	mkdir -p $(PREFIX)/lib/
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp libcanfestival_$(TARGET).a $(PREFIX)/lib/
++-	cp $(SRC_HFILES) $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp libcanfestival_$(TARGET).a $(DESTDIR)$(PREFIX)/lib/
+++	cp $(SRC_HFILES) $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++-	rm -f $(PREFIX)/lib/libcanfestival_$(TARGET).a
+++	rm -f $(DESTDIR)$(PREFIX)/lib/libcanfestival_$(TARGET).a
++ 	rm -f $(TARGET_HFILES)
++ 
++ clean:
++diff -purN libcanfestival-71623bbf8093.orig/drivers/win32/Makefile.in libcanfestival-71623bbf8093/drivers/win32/Makefile.in
++--- libcanfestival-71623bbf8093.orig/drivers/win32/Makefile.in	2012-11-01 22:19:09.253420575 +0100
+++++ libcanfestival-71623bbf8093/drivers/win32/Makefile.in	2012-11-01 22:19:36.976226599 +0100
++@@ -47,7 +47,7 @@ endif
++ 
++ SRC_HFILES = ../../include/$(TARGET)/applicfg.h ../../include/$(TARGET)/canfestival.h
++ 
++-TARGET_HFILES = $(PREFIX)/include/$(TARGET)/applicfg.h $(PREFIX)/include/$(TARGET)/canfestival.h
+++TARGET_HFILES = $(DESTDIR)$(PREFIX)/include/$(TARGET)/applicfg.h $(DESTDIR)$(PREFIX)/include/$(TARGET)/canfestival.h
++ 
++ all: driver
++ 
++@@ -71,13 +71,13 @@ libcanfestival_$(TARGET).a: $(OBJS)
++ 	$(BINUTILS_PREFIX)ranlib $@
++ 
++ install: libcanfestival_$(TARGET).a
++-	mkdir -p $(PREFIX)/lib/
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp libcanfestival_$(TARGET).a $(PREFIX)/lib/
++-	cp $(SRC_HFILES) $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp libcanfestival_$(TARGET).a $(DESTDIR)$(PREFIX)/lib/
+++	cp $(SRC_HFILES) $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++-	rm -f $(PREFIX)/lib/libcanfestival_$(TARGET).a
+++	rm -f $(DESTDIR)$(PREFIX)/lib/libcanfestival_$(TARGET).a
++ 	rm -f $(TARGET_HFILES)
++ 
++ clean:
++diff -purN libcanfestival-71623bbf8093.orig/examples/CANOpenShell/Makefile.in libcanfestival-71623bbf8093/examples/CANOpenShell/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/CANOpenShell/Makefile.in	2012-11-01 22:19:09.313419433 +0100
+++++ libcanfestival-71623bbf8093/examples/CANOpenShell/Makefile.in	2012-11-01 22:19:37.802877543 +0100
++@@ -88,8 +88,8 @@ mrproper: clean
++ 	rm -f CANOpenShellSlaveOD.c
++ 
++ install: $(CANOPENSHELL)
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/$(CANOPENSHELL)
++\ No newline at end of file
+++	rm -f $(DESTDIR)$(PREFIX)/bin/$(CANOPENSHELL)
++\ No newline@end of file
++diff -purN libcanfestival-71623bbf8093.orig/examples/DS401_Master/Makefile.in libcanfestival-71623bbf8093/examples/DS401_Master/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/DS401_Master/Makefile.in	2012-11-01 22:19:09.303419623 +0100
+++++ libcanfestival-71623bbf8093/examples/DS401_Master/Makefile.in	2012-11-01 22:19:37.642880585 +0100
++@@ -67,10 +67,10 @@ mrproper: clean
++ 	rm -f TestMaster.c
++ 	
++ install: DS401_Master
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/DS401_Master
+++	rm -f $(DESTDIR)$(PREFIX)/bin/DS401_Master
++ 
++ 
++diff -purN libcanfestival-71623bbf8093.orig/examples/DS401_Slave_Gui/Makefile.in libcanfestival-71623bbf8093/examples/DS401_Slave_Gui/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/DS401_Slave_Gui/Makefile.in	2012-11-01 22:19:09.316752703 +0100
+++++ libcanfestival-71623bbf8093/examples/DS401_Slave_Gui/Makefile.in	2012-11-01 22:19:37.889542561 +0100
++@@ -76,11 +76,11 @@ mrproper: clean
++ 	$(RM) $(EXEC) $(DEPEND_FILE)
++ 	
++ install: DS401_Slave_Gui
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/DS401_Slave_Gui
+++	rm -f $(DESTDIR)$(PREFIX)/bin/DS401_Slave_Gui
++ 
++ $(EXEC): $(OBJS)
++ 	$(LD) $(OBJS) `wx-config --libs` -o $(EXEC)
++diff -purN libcanfestival-71623bbf8093.orig/examples/kerneltest/Makefile.in libcanfestival-71623bbf8093/examples/kerneltest/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/kerneltest/Makefile.in	2012-11-01 22:19:09.320085973 +0100
+++++ libcanfestival-71623bbf8093/examples/kerneltest/Makefile.in	2012-11-01 22:19:38.102871835 +0100
++@@ -68,12 +68,12 @@ mrproper: clean
++ 
++ install:
++ 	$(MAKE) -C $(KERNELDIR) M=$(shell pwd) modules_install
++-	mkdir -p $(PREFIX)/bin/
++-	cp console/canf_ktest_console $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp console/canf_ktest_console $(DESTDIR)$(PREFIX)/bin/
++ 	/bin/sh insert.sh
++ 
++ uninstall:
++-	rm -f $(PREFIX)/bin/canf_ktest_console
+++	rm -f $(DESTDIR)$(PREFIX)/bin/canf_ktest_console
++ 
++ canf_ktest_console: console/console.c console/console.h
++ 	$(CC) console/console.c -o console/canf_ktest_console
++diff -purN libcanfestival-71623bbf8093.orig/examples/SillySlave/Makefile.in libcanfestival-71623bbf8093/examples/SillySlave/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/SillySlave/Makefile.in	2012-11-01 22:19:09.293419814 +0100
+++++ libcanfestival-71623bbf8093/examples/SillySlave/Makefile.in	2012-11-01 22:19:37.372885721 +0100
++@@ -67,10 +67,10 @@ mrproper: clean
++ 	rm -f SillySlave.c
++ 	
++ install: SillySlave
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/SillySlave
+++	rm -f $(DESTDIR)$(PREFIX)/bin/SillySlave
++ 
++ 
++diff -purN libcanfestival-71623bbf8093.orig/examples/test_copcican_linux/Makefile.in libcanfestival-71623bbf8093/examples/test_copcican_linux/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/test_copcican_linux/Makefile.in	2012-11-01 22:19:09.310086163 +0100
+++++ libcanfestival-71623bbf8093/examples/test_copcican_linux/Makefile.in	2012-11-01 22:19:37.779544653 +0100
++@@ -67,10 +67,10 @@ mrproper: clean
++ 	rm -f test_copcican_linux.c
++ 
++ install: test_copcican_linux
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 
++ uninstall:
++-	rm -f $(PREFIX)/bin/test_copcican_linux
+++	rm -f $(DESTDIR)$(PREFIX)/bin/test_copcican_linux
++ 
++ 
++diff -purN libcanfestival-71623bbf8093.orig/examples/TestMasterMicroMod/Makefile.in libcanfestival-71623bbf8093/examples/TestMasterMicroMod/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/TestMasterMicroMod/Makefile.in	2012-11-01 22:19:09.306752893 +0100
+++++ libcanfestival-71623bbf8093/examples/TestMasterMicroMod/Makefile.in	2012-11-01 22:19:37.699546175 +0100
++@@ -75,10 +75,10 @@ mrproper: clean
++ 	rm -f TestMaster.c
++ 	
++ install: TestMasterMicroMod
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/TestMasterMicroMod
+++	rm -f $(DESTDIR)$(PREFIX)/bin/TestMasterMicroMod
++ 
++ 
++diff -purN libcanfestival-71623bbf8093.orig/examples/TestMasterSlave/Makefile.in libcanfestival-71623bbf8093/examples/TestMasterSlave/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/TestMasterSlave/Makefile.in	2012-11-01 22:19:09.300086353 +0100
+++++ libcanfestival-71623bbf8093/examples/TestMasterSlave/Makefile.in	2012-11-01 22:19:37.496216709 +0100
++@@ -88,11 +88,11 @@ mrproper: clean
++ 	rm -f TestMaster.c
++ 	
++ install: TestMasterSlave
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/TestMasterSlave
+++	rm -f $(DESTDIR)$(PREFIX)/bin/TestMasterSlave
++ 
++ 
++ 
++diff -purN libcanfestival-71623bbf8093.orig/examples/TestMasterSlaveLSS/Makefile.in libcanfestival-71623bbf8093/examples/TestMasterSlaveLSS/Makefile.in
++--- libcanfestival-71623bbf8093.orig/examples/TestMasterSlaveLSS/Makefile.in	2012-11-01 22:19:09.290086545 +0100
+++++ libcanfestival-71623bbf8093/examples/TestMasterSlaveLSS/Makefile.in	2012-11-01 22:19:37.236221653 +0100
++@@ -88,11 +88,11 @@ mrproper: clean
++ 	rm -f TestMaster.c
++ 	
++ install: TestMasterSlaveLSS
++-	mkdir -p $(PREFIX)/bin/
++-	cp $< $(PREFIX)/bin/
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+++	cp $< $(DESTDIR)$(PREFIX)/bin/
++ 	
++ uninstall:
++-	rm -f $(PREFIX)/bin/TestMasterSlaveLSS
+++	rm -f $(DESTDIR)$(PREFIX)/bin/TestMasterSlaveLSS
++ 
++ 
++ 
++diff -purN libcanfestival-71623bbf8093.orig/objdictgen/Makefile.in libcanfestival-71623bbf8093/objdictgen/Makefile.in
++--- libcanfestival-71623bbf8093.orig/objdictgen/Makefile.in	2012-11-01 22:19:09.326752513 +0100
+++++ libcanfestival-71623bbf8093/objdictgen/Makefile.in	2012-11-01 22:19:38.269535333 +0100
++@@ -35,19 +35,19 @@ gnosis/version.py:
++ 	rm -rf gnosis_extract
++ 
++ install: gnosis
++-	mkdir -p $(PREFIX)/objdictgen
++-	cp -r *.py* config doc doc_index locale examples gnosis *.ico $(PREFIX)/objdictgen
++-	chmod -R a+r $(PREFIX)/objdictgen
++-	mkdir -p $(PREFIX)/bin
++-	ln -sf $(PREFIX)/objdictgen/objdictedit.py $(PREFIX)/bin/objdictedit
++-	chmod 755 $(PREFIX)/objdictgen/objdictedit.py
++-	ln -sf $(PREFIX)/objdictgen/objdictgen.py $(PREFIX)/bin/objdictgen
++-	chmod 755 $(PREFIX)/objdictgen/objdictgen.py
+++	mkdir -p $(DESTDIR)$(PREFIX)/objdictgen
+++	cp -r *.py* config doc doc_index locale examples gnosis *.ico $(DESTDIR)$(PREFIX)/objdictgen
+++	chmod -R a+r $(DESTDIR)$(PREFIX)/objdictgen
+++	mkdir -p $(DESTDIR)$(PREFIX)/bin
+++	ln -sf $(DESTDIR)$(PREFIX)/objdictgen/objdictedit.py $(DESTDIR)$(PREFIX)/bin/objdictedit
+++	chmod 755 $(DESTDIR)$(PREFIX)/objdictgen/objdictedit.py
+++	ln -sf $(DESTDIR)$(PREFIX)/objdictgen/objdictgen.py $(DESTDIR)$(PREFIX)/bin/objdictgen
+++	chmod 755 $(DESTDIR)$(PREFIX)/objdictgen/objdictgen.py
++ 
++ uninstall:
++-	rm -rf $(PREFIX)/objdictgen
++-	rm -f $(PREFIX)/bin/objdictedit
++-	rm -f $(PREFIX)/bin/objdictgen
+++	rm -rf $(DESTDIR)$(PREFIX)/objdictgen
+++	rm -f $(DESTDIR)$(PREFIX)/bin/objdictedit
+++	rm -f $(DESTDIR)$(PREFIX)/bin/objdictgen
++ 
++ clean:
++ 
++diff -purN libcanfestival-71623bbf8093.orig/src/Makefile.in libcanfestival-71623bbf8093/src/Makefile.in
++--- libcanfestival-71623bbf8093.orig/src/Makefile.in	2012-11-01 22:19:09.286753275 +0100
+++++ libcanfestival-71623bbf8093/src/Makefile.in	2012-11-01 22:19:37.129557017 +0100
++@@ -94,11 +94,11 @@ clean:
++ 
++ install:
++ 	$(MAKE) -C $(KERNELDIR) M=$(shell pwd) modules_install
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp ../include/*.h $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp ../include/*.h $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++-	rm -rf $(PREFIX)/include/canfestival
+++	rm -rf $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ else
++ CFLAGS = SUB_OPT_CFLAGS
++@@ -132,14 +132,14 @@ $(TARGET)_%.o: %.c
++ 	$(CC) $(CFLAGS) $(PROG_CFLAGS) ${PROGDEFINES} $(INCLUDES) -o $@ -c $<
++ 
++ install: libcanfestival.a
++-	mkdir -p $(PREFIX)/lib/
++-	mkdir -p $(PREFIX)/include/canfestival
++-	cp libcanfestival.a $(PREFIX)/lib/
++-	cp ../include/*.h $(PREFIX)/include/canfestival
+++	mkdir -p $(DESTDIR)$(PREFIX)/lib/
+++	mkdir -p $(DESTDIR)$(PREFIX)/include/canfestival
+++	cp libcanfestival.a $(DESTDIR)$(PREFIX)/lib/
+++	cp ../include/*.h $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ uninstall:
++-	rm -f $(PREFIX)/lib/libcanfestival.a
++-	rm -rf $(PREFIX)/include/canfestival
+++	rm -f $(DESTDIR)$(PREFIX)/lib/libcanfestival.a
+++	rm -rf $(DESTDIR)$(PREFIX)/include/canfestival
++ 
++ clean:
++ 	rm -f $(OBJS) libcanfestival.a libcanfestival.o
+diff --git a/package/libcanfestival/libcanfestival.mk b/package/libcanfestival/libcanfestival.mk
+new file mode 100644
+index 0000000..0a2b956
+--- /dev/null
++++ b/package/libcanfestival/libcanfestival.mk
+@@ -0,0 +1,45 @@
++#############################################################
++#
++# libcanfestival
++#
++#############################################################
++# Revision 760:
++LIBCANFESTIVAL_VERSION = 71623bbf8093
++LIBCANFESTIVAL_SITE_METHOD = hg
++LIBCANFESTIVAL_SITE = http://dev.automforge.net/CanFestival-3
++# Runtime code is licensed LGPLv2, whereas accompanying developer tools are
++# licensed GPLv2.
++LIBCANFESTIVAL_LICENSE = LGPL2.1/GPLv2
++LIBCANFESTIVAL_LICENSE_FILES = COPYING LICENCE
++
++LIBCANFESTIVAL_INSTALL_STAGING = YES
++
++define LIBCANFESTIVAL_CONFIGURE_CMDS
++	cd $(@D) && \
++		./configure --binutils=$(TARGET_CROSS) --cc="$(TARGET_CC)" \
++		--cxx="$(TARGET_CC)" --ld="$(TARGET_CC)" \
++		--can=$(BR2_PACKAGE_LIBCANFESTIVAL_DRIVER) \
++		--MAX_CAN_BUS_ID=$(BR2_PACKAGE_LIBCANFESTIVAL_NBMMAXCAN)
 +endef
 +
-+define QWT_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+	$(QWT_BUILD_EXAMPLES)
++define LIBCANFESTIVAL_BUILD_CMDS
++	$(MAKE) -C $(@D) all
 +endef
 +
-+define QWT_INSTALL_STAGING_CMDS
-+	$(MAKE) INSTALL_ROOT=$(STAGING_DIR) -C $(@D) install
-+	$(QWT_INSTALL_STAGING_EXAMPLES)
++define LIBCANFESTIVAL_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D)/src install DESTDIR=$(TARGET_DIR)
++	$(MAKE) -C $(@D)/drivers install DESTDIR=$(TARGET_DIR)
++	$(MAKE) -C $(@D)/examples install DESTDIR=$(TARGET_DIR)
 +endef
 +
-+define QWT_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libqwt.so* $(TARGET_DIR)/usr/lib/
-+	$(QWT_INSTALL_TARGET_EXAMPLES)
++define LIBCANFESTIVAL_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D)/src install DESTDIR=$(STAGING_DIR)
++	$(MAKE) -C $(@D)/drivers install DESTDIR=$(STAGING_DIR)
++	$(MAKE) -C $(@D)/examples install DESTDIR=$(STAGING_DIR)
 +endef
 +
-+define QWT_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+	-rm $(TARGET_DIR)/usr/lib/libqwt.so.*
++define LIBCANFESTIVAL_CLEAN_CMDS
++	$(MAKE) -C $(@D) mrproper
 +endef
 +
 +$(eval $(generic-package))
