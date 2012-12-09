@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Dec 2012 19:52:05 +0100
-Subject: [Buildroot] [PATCH 21/51] package/libedit2: new package
-In-Reply-To: <1355070924-8009-22-git-send-email-yann.morin.1998@free.fr>
-References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
- <1355070924-8009-22-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20121209195205.7fb4b643@skate>
+Date: Sun,  9 Dec 2012 20:16:44 +0100
+Subject: [Buildroot] [PATCH] libglib2: don't try to use
+	DTrace/GCov/SystemTap for host build
+Message-ID: <1355080604-27155-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+We really only need the host build of libglib2 for a few helper
+programs that are used for the target build of libglib2. Therefore,
+trying to use bells and whistles like DTrace, GCov and SystemTap is
+useful.
 
-On Sun,  9 Dec 2012 17:34:54 +0100, Yann E. MORIN wrote:
+And it is actually harmful, since it is causing build failures on the
+gcc110 PowerPC-based autobuilder that apparently has some
+DTrace-feature installed. This commit therefore fixes:
 
-> +LIBEDIT2_DEPENDENCIES    = host-pmake libbsd ncurses
+  http://autobuild.buildroot.org/results/1c62d1ce10937bd21f5afcb73782b939d10c2038/build-end.log
 
-If I'm correct, this package is the only one that needs host-pmake, no?
+Which has been polluting our autobuilder logs since several weeks now.
 
-If so, then seeing how simple libedit seems to be, I think a patch
-adding a proper configure.ac + Makefile.am to libedit2, making its
-build system correct, and independent of pmake, would be in fact a lot
-easier.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libglib2/libglib2.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-It would avoid the huge pmake package that has gazillions of patches,
-and would avoid the horrible mess in libedit2.mk to get the
-installation step correct.
-
-Since there has been no release of libedit2 since 2008, I don't expect
-the patch to migrate to the autotools to become obsolete too fast :-)
-
-Thomas
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index a32cab2..4427431 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -53,6 +53,9 @@ endif
+ HOST_LIBGLIB2_CONF_OPT = \
+ 		--disable-gtk-doc \
+ 		--enable-debug=no \
++		--disable-dtrace \
++		--disable-systemtap \
++		--disable-gcov
+ 
+ LIBGLIB2_DEPENDENCIES = host-pkgconf host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
