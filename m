@@ -1,22 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Dec 2012 22:00:21 +0100
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 2,
-	4}.x stable versions
-In-Reply-To: <1354840325-24878-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 6 Dec 2012 21:32:05 -0300")
-References: <1354840325-24878-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d2yjueje.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 9 Dec 2012 21:40:46 +0100
+Subject: [Buildroot] [git commit] sane-backends: fix documentation build
+	failure
+Message-ID: <20121209210011.E97B49A157@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fc3a89d1cde8da2df17fdcc42289f330c2711d9b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Disable documentation build, it seems to break with older
+texlive/kpathsea versions, fixes:
+http://autobuild.buildroot.net/results/44327b543d8918929bf252c5284e8691fda87fd0/
+Also switch to alioth mirror since the original tarball is gone from the
+regular site when 1.0.23 was released.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sane-backends/sane-backends.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index 56ce82d..496dca4 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ SANE_BACKENDS_VERSION = 1.0.22
+ SANE_BACKENDS_SOURCE = sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
+-SANE_BACKENDS_SITE = ftp://ftp2.sane-project.org/pub/sane/sane-backends-$(SANE_BACKENDS_VERSION)
++SANE_BACKENDS_SITE = https://alioth.debian.org/frs/download.php/3503
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ SANE_BACKENDS_DEPENDENCIES += libusb
+@@ -37,4 +37,10 @@ else
+ SANE_BACKENDS_CONF_OPT += --without-snmp
+ endif
+ 
++define SANE_BACKENDS_DISABLE_DOCS
++	$(SED) 's/ doc//' $(@D)/Makefile
++endef
++
++SANE_BACKENDS_POST_CONFIGURE_HOOKS += SANE_BACKENDS_DISABLE_DOCS
++
+ $(eval $(autotools-package))
