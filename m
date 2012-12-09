@@ -1,22 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Dec 2012 21:59:22 +0100
-Subject: [Buildroot] [PATCH 8/8] libev: disable on avr32
-In-Reply-To: <998c031cc673d7c76c7d9bd8c4402fa928ed803e.1355076808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 9 Dec 2012 19:14:03 +0100")
-References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
- <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
- <998c031cc673d7c76c7d9bd8c4402fa928ed803e.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87hanvuel1.fsf@dell.be.48ers.dk>
+Date: Sun, 09 Dec 2012 22:00:21 +0100
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 2,
+	4}.x stable versions
+In-Reply-To: <1354840325-24878-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 6 Dec 2012 21:32:05 -0300")
+References: <1354840325-24878-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2yjueje.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Fixes:
- Thomas>   http://autobuild.buildroot.org/results/4951121337fad670d8bf869483774ccf9e91dd47/build-end.log
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
