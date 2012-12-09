@@ -1,431 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Dec 2012 19:14:02 +0100
-Subject: [Buildroot] [PATCH 7/8] neard: fix build failure caused by missing
-	<linux/nfc.h>
-In-Reply-To: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a53e176d1db529eedef64c3e567ee3443b0a5605.1355076808.git.thomas.petazzoni@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 9 Dec 2012 19:14:33 +0100
+Subject: [Buildroot] [PATCH 07/33] fluxbox: fix build against imlib2
+In-Reply-To: <878v9sfzpg.fsf@dell.be.48ers.dk>
+References: <1353543503-8952-1-git-send-email-s.martin49@gmail.com>
+ <1353543503-8952-8-git-send-email-s.martin49@gmail.com>
+ <878v9sfzpg.fsf@dell.be.48ers.dk>
+Message-ID: <CAHXCMMJ8ZvNQn2212REnz1C6uo0zLCBegGY2zCppEHYz6sfiJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Hi Peter, all,
 
-  http://autobuild.buildroot.org/results/bd1cb8795415b7369a9f4268b9f058cb78d4000d/build-end.log
+2012/11/23 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>
+>  Samuel> * fix missing dependency
+>  Samuel> * set imlib2 prefix at configure time
+>  Samuel> * fix configure script to take account of the imlib2 prefix if any
+>
+> Ehh, fluxbox doesn't select imlib2 in it's Config.in and it looks like
+> it's an optional dependency:
+>
+> From configure.in:
+>
+> dnl Check whether to use imlib2
+> IMLIB2=false
+> AC_MSG_CHECKING([whether to have Imlib2 (pixmap themes) support])
+> AC_ARG_ENABLE(imlib2,
+>     AC_HELP_STRING([--enable-imlib2],
+>                    [Imlib2 (pixmap themes) support ([default=yes])]), ,
+>                    [enable_imlib2=yes])
+>
+> So all of this should only be done if BR2_PACKAGE_IMLIB2 is enabled.
+Right, I'll recook the patch.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../neard/neard-fix-missing-linux-nfc-header.patch |  387 ++++++++++++++++++++
- package/neard/neard.mk                             |    1 +
- 2 files changed, 388 insertions(+)
- create mode 100644 package/neard/neard-fix-missing-linux-nfc-header.patch
+>
+>  Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>  Samuel> ---
+>  Samuel>  package/fluxbox/fluxbox-fix-configure.patch | 19 +++++++++++++++++++
+>
+> Please consider sending this patch upstream.
+Done.
 
-diff --git a/package/neard/neard-fix-missing-linux-nfc-header.patch b/package/neard/neard-fix-missing-linux-nfc-header.patch
-new file mode 100644
-index 0000000..9b9ce32
---- /dev/null
-+++ b/package/neard/neard-fix-missing-linux-nfc-header.patch
-@@ -0,0 +1,387 @@
-+Add a private copy of <linux/nfc.h>
-+
-+The addition of the <linux/nfc.h> header in the kernel sources is
-+moderately recent, and therefore, a number of toolchains don't have
-+this header.
-+
-+As a workaround until all reasonable toolchains get this header
-+included, add a configure check in neard to test whether this header
-+is available or not, and if not, use our own private copy of it.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: neard-0.8/configure.ac
-+===================================================================
-+--- neard-0.8.orig/configure.ac	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/configure.ac	2012-12-09 17:08:00.000000000 +0100
-+@@ -88,6 +88,8 @@
-+ AC_SUBST(NETLINK_CFLAGS)
-+ AC_SUBST(NETLINK_LIBS)
-+ 
-++AC_CHECK_HEADER(linux/nfc.h, [AC_DEFINE(HAVE_LINUX_NFC_H, 1, [Defines if linux/nfc.h header is available])], [], [#include <sys/socket.h>])
-++
-+ AC_ARG_ENABLE(test, AC_HELP_STRING([--enable-test],
-+ 					[enable test/example scripts]),
-+ 					[enable_test=${enableval}])
-+Index: neard-0.8/src/near.h
-+===================================================================
-+--- neard-0.8.orig/src/near.h	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/src/near.h	2012-12-09 16:56:40.000000000 +0100
-+@@ -23,7 +23,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "linux-nfc.h"
-++#endif
-+ 
-+ #include <glib.h>
-+ 
-+Index: neard-0.8/src/linux-nfc.h
-+===================================================================
-+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
-++++ neard-0.8/src/linux-nfc.h	2012-12-09 17:11:10.000000000 +0100
-+@@ -0,0 +1,197 @@
-++/*
-++ * Copyright (C) 2011 Instituto Nokia de Tecnologia
-++ *
-++ * Authors:
-++ *    Lauro Ramos Venancio <lauro.venancio@openbossa.org>
-++ *    Aloisio Almeida Jr <aloisio.almeida@openbossa.org>
-++ *
-++ * This program is free software; you can redistribute it and/or modify
-++ * it under the terms of the GNU General Public License as published by
-++ * the Free Software Foundation; either version 2 of the License, or
-++ * (at your option) any later version.
-++ *
-++ * This program is distributed in the hope that it will be useful,
-++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-++ * GNU General Public License for more details.
-++ *
-++ * You should have received a copy of the GNU General Public License
-++ * along with this program; if not, write to the
-++ * Free Software Foundation, Inc.,
-++ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-++ */
-++
-++#ifndef __LINUX_NFC_H
-++#define __LINUX_NFC_H
-++
-++#include <linux/types.h>
-++#include <linux/socket.h>
-++
-++#define NFC_GENL_NAME "nfc"
-++#define NFC_GENL_VERSION 1
-++
-++#define NFC_GENL_MCAST_EVENT_NAME "events"
-++
-++/**
-++ * enum nfc_commands - supported nfc commands
-++ *
-++ * @NFC_CMD_UNSPEC: unspecified command
-++ *
-++ * @NFC_CMD_GET_DEVICE: request information about a device (requires
-++ *	%NFC_ATTR_DEVICE_INDEX) or dump request to get a list of all nfc devices
-++ * @NFC_CMD_DEV_UP: turn on the nfc device
-++ *	(requires %NFC_ATTR_DEVICE_INDEX)
-++ * @NFC_CMD_DEV_DOWN: turn off the nfc device
-++ *	(requires %NFC_ATTR_DEVICE_INDEX)
-++ * @NFC_CMD_START_POLL: start polling for targets using the given protocols
-++ *	(requires %NFC_ATTR_DEVICE_INDEX and %NFC_ATTR_PROTOCOLS)
-++ * @NFC_CMD_STOP_POLL: stop polling for targets (requires
-++ *	%NFC_ATTR_DEVICE_INDEX)
-++ * @NFC_CMD_GET_TARGET: dump all targets found by the previous poll (requires
-++ *	%NFC_ATTR_DEVICE_INDEX)
-++ * @NFC_EVENT_TARGETS_FOUND: event emitted when a new target is found
-++ *	(it sends %NFC_ATTR_DEVICE_INDEX)
-++ * @NFC_EVENT_DEVICE_ADDED: event emitted when a new device is registred
-++ *	(it sends %NFC_ATTR_DEVICE_NAME, %NFC_ATTR_DEVICE_INDEX and
-++ *	%NFC_ATTR_PROTOCOLS)
-++ * @NFC_EVENT_DEVICE_REMOVED: event emitted when a device is removed
-++ *	(it sends %NFC_ATTR_DEVICE_INDEX)
-++ * @NFC_EVENT_TM_ACTIVATED: event emitted when the adapter is activated in
-++ *      target mode.
-++ * @NFC_EVENT_DEVICE_DEACTIVATED: event emitted when the adapter is deactivated
-++ *      from target mode.
-++ */
-++enum nfc_commands {
-++	NFC_CMD_UNSPEC,
-++	NFC_CMD_GET_DEVICE,
-++	NFC_CMD_DEV_UP,
-++	NFC_CMD_DEV_DOWN,
-++	NFC_CMD_DEP_LINK_UP,
-++	NFC_CMD_DEP_LINK_DOWN,
-++	NFC_CMD_START_POLL,
-++	NFC_CMD_STOP_POLL,
-++	NFC_CMD_GET_TARGET,
-++	NFC_EVENT_TARGETS_FOUND,
-++	NFC_EVENT_DEVICE_ADDED,
-++	NFC_EVENT_DEVICE_REMOVED,
-++	NFC_EVENT_TARGET_LOST,
-++	NFC_EVENT_TM_ACTIVATED,
-++	NFC_EVENT_TM_DEACTIVATED,
-++/* private: internal use only */
-++	__NFC_CMD_AFTER_LAST
-++};
-++#define NFC_CMD_MAX (__NFC_CMD_AFTER_LAST - 1)
-++
-++/**
-++ * enum nfc_attrs - supported nfc attributes
-++ *
-++ * @NFC_ATTR_UNSPEC: unspecified attribute
-++ *
-++ * @NFC_ATTR_DEVICE_INDEX: index of nfc device
-++ * @NFC_ATTR_DEVICE_NAME: device name, max 8 chars
-++ * @NFC_ATTR_PROTOCOLS: nfc protocols - bitwise or-ed combination from
-++ *	NFC_PROTO_*_MASK constants
-++ * @NFC_ATTR_TARGET_INDEX: index of the nfc target
-++ * @NFC_ATTR_TARGET_SENS_RES: NFC-A targets extra information such as NFCID
-++ * @NFC_ATTR_TARGET_SEL_RES: NFC-A targets extra information (useful if the
-++ *	target is not NFC-Forum compliant)
-++ * @NFC_ATTR_TARGET_NFCID1: NFC-A targets identifier, max 10 bytes
-++ * @NFC_ATTR_TARGET_SENSB_RES: NFC-B targets extra information, max 12 bytes
-++ * @NFC_ATTR_TARGET_SENSF_RES: NFC-F targets extra information, max 18 bytes
-++ * @NFC_ATTR_COMM_MODE: Passive or active mode
-++ * @NFC_ATTR_RF_MODE: Initiator or target
-++ * @NFC_ATTR_IM_PROTOCOLS: Initiator mode protocols to poll for
-++ * @NFC_ATTR_TM_PROTOCOLS: Target mode protocols to listen for
-++ */
-++enum nfc_attrs {
-++	NFC_ATTR_UNSPEC,
-++	NFC_ATTR_DEVICE_INDEX,
-++	NFC_ATTR_DEVICE_NAME,
-++	NFC_ATTR_PROTOCOLS,
-++	NFC_ATTR_TARGET_INDEX,
-++	NFC_ATTR_TARGET_SENS_RES,
-++	NFC_ATTR_TARGET_SEL_RES,
-++	NFC_ATTR_TARGET_NFCID1,
-++	NFC_ATTR_TARGET_SENSB_RES,
-++	NFC_ATTR_TARGET_SENSF_RES,
-++	NFC_ATTR_COMM_MODE,
-++	NFC_ATTR_RF_MODE,
-++	NFC_ATTR_DEVICE_POWERED,
-++	NFC_ATTR_IM_PROTOCOLS,
-++	NFC_ATTR_TM_PROTOCOLS,
-++/* private: internal use only */
-++	__NFC_ATTR_AFTER_LAST
-++};
-++#define NFC_ATTR_MAX (__NFC_ATTR_AFTER_LAST - 1)
-++
-++#define NFC_DEVICE_NAME_MAXSIZE 8
-++#define NFC_NFCID1_MAXSIZE 10
-++#define NFC_SENSB_RES_MAXSIZE 12
-++#define NFC_SENSF_RES_MAXSIZE 18
-++#define NFC_GB_MAXSIZE        48
-++
-++/* NFC protocols */
-++#define NFC_PROTO_JEWEL		1
-++#define NFC_PROTO_MIFARE	2
-++#define NFC_PROTO_FELICA	3
-++#define NFC_PROTO_ISO14443	4
-++#define NFC_PROTO_NFC_DEP	5
-++#define NFC_PROTO_ISO14443_B	6
-++
-++#define NFC_PROTO_MAX		7
-++
-++/* NFC communication modes */
-++#define NFC_COMM_ACTIVE  0
-++#define NFC_COMM_PASSIVE 1
-++
-++/* NFC RF modes */
-++#define NFC_RF_INITIATOR 0
-++#define NFC_RF_TARGET    1
-++#define NFC_RF_NONE      2
-++
-++/* NFC protocols masks used in bitsets */
-++#define NFC_PROTO_JEWEL_MASK      (1 << NFC_PROTO_JEWEL)
-++#define NFC_PROTO_MIFARE_MASK     (1 << NFC_PROTO_MIFARE)
-++#define NFC_PROTO_FELICA_MASK	  (1 << NFC_PROTO_FELICA)
-++#define NFC_PROTO_ISO14443_MASK	  (1 << NFC_PROTO_ISO14443)
-++#define NFC_PROTO_NFC_DEP_MASK	  (1 << NFC_PROTO_NFC_DEP)
-++#define NFC_PROTO_ISO14443_B_MASK (1 << NFC_PROTO_ISO14443_B)
-++
-++struct sockaddr_nfc {
-++	sa_family_t sa_family;
-++	__u32 dev_idx;
-++	__u32 target_idx;
-++	__u32 nfc_protocol;
-++};
-++
-++#define NFC_LLCP_MAX_SERVICE_NAME 63
-++struct sockaddr_nfc_llcp {
-++	sa_family_t sa_family;
-++	__u32 dev_idx;
-++	__u32 target_idx;
-++	__u32 nfc_protocol;
-++	__u8 dsap; /* Destination SAP, if known */
-++	__u8 ssap; /* Source SAP to be bound to */
-++	char service_name[NFC_LLCP_MAX_SERVICE_NAME]; /* Service name URI */;
-++	size_t service_name_len;
-++};
-++
-++/* NFC socket protocols */
-++#define NFC_SOCKPROTO_RAW	0
-++#define NFC_SOCKPROTO_LLCP	1
-++#define NFC_SOCKPROTO_MAX	2
-++
-++#define NFC_HEADER_SIZE 1
-++
-++/**
-++ * Pseudo-header info for raw socket packets
-++ * First byte is the adapter index
-++ * Second byte contains flags
-++ *  - 0x01 - Direction (0=RX, 1=TX)
-++ *  - 0x02-0x80 - Reserved
-++ **/
-++#define NFC_LLCP_RAW_HEADER_SIZE	2
-++#define NFC_LLCP_DIRECTION_RX		0x00
-++#define NFC_LLCP_DIRECTION_TX		0x01
-++
-++#endif /*__LINUX_NFC_H */
-+Index: neard-0.8/plugins/mifare.c
-+===================================================================
-+--- neard-0.8.orig/plugins/mifare.c	2012-10-10 05:29:07.000000000 +0200
-++++ neard-0.8/plugins/mifare.c	2012-12-09 16:58:22.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/p2p.c
-+===================================================================
-+--- neard-0.8.orig/plugins/p2p.c	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/plugins/p2p.c	2012-12-09 16:59:06.000000000 +0100
-+@@ -30,7 +30,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/handover.c
-+===================================================================
-+--- neard-0.8.orig/plugins/handover.c	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/plugins/handover.c	2012-12-09 17:13:30.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/types.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/nfctype1.c
-+===================================================================
-+--- neard-0.8.orig/plugins/nfctype1.c	2012-10-10 05:29:07.000000000 +0200
-++++ neard-0.8/plugins/nfctype1.c	2012-12-09 17:09:13.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/nfctype2.c
-+===================================================================
-+--- neard-0.8.orig/plugins/nfctype2.c	2012-10-10 05:29:07.000000000 +0200
-++++ neard-0.8/plugins/nfctype2.c	2012-12-09 17:09:52.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/nfctype3.c
-+===================================================================
-+--- neard-0.8.orig/plugins/nfctype3.c	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/plugins/nfctype3.c	2012-12-09 17:11:51.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/nfctype4.c
-+===================================================================
-+--- neard-0.8.orig/plugins/nfctype4.c	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/plugins/nfctype4.c	2012-12-09 17:12:14.000000000 +0100
-+@@ -30,7 +30,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/npp.c
-+===================================================================
-+--- neard-0.8.orig/plugins/npp.c	2012-10-10 05:29:07.000000000 +0200
-++++ neard-0.8/plugins/npp.c	2012-12-09 17:12:36.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-+Index: neard-0.8/plugins/snep.c
-+===================================================================
-+--- neard-0.8.orig/plugins/snep.c	2012-11-03 19:56:07.000000000 +0100
-++++ neard-0.8/plugins/snep.c	2012-12-09 17:13:07.000000000 +0100
-+@@ -29,7 +29,11 @@
-+ #include <sys/socket.h>
-+ 
-+ #include <linux/socket.h>
-++#ifdef HAVE_LINUX_NFC_H
-+ #include <linux/nfc.h>
-++#else
-++#include "../src/linux-nfc.h"
-++#endif
-+ 
-+ #include <near/plugin.h>
-+ #include <near/log.h>
-diff --git a/package/neard/neard.mk b/package/neard/neard.mk
-index 2d3e30e..3c9dd7c 100644
---- a/package/neard/neard.mk
-+++ b/package/neard/neard.mk
-@@ -8,6 +8,7 @@ NEARD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/nfc
- NEARD_LICENSE = GPLv2
- NEARD_LICENSE_FILES = COPYING
- 
-+NEARD_AUTORECONF = YES
- NEARD_DEPENDENCIES = host-pkgconf dbus libglib2 libnl
- NEARD_CONF_OPT = --disable-traces
- 
+Regards,
+
 -- 
-1.7.9.5
+Sam
