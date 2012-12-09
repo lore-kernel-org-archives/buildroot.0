@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Dec 2012 17:34:40 +0100
-Subject: [Buildroot] [PATCH 07/51] package/usbredir: new package
+Date: Sun,  9 Dec 2012 17:34:42 +0100
+Subject: [Buildroot] [PATCH 09/51] package/python-pyparsing: new package
 In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355070924-8009-8-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355070924-8009-10-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,98 +11,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/usbredir/Config.in   |   28 ++++++++++++++++++++++++++++
- package/usbredir/usbredir.mk |   31 +++++++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+), 0 deletions(-)
- create mode 100644 package/usbredir/Config.in
- create mode 100644 package/usbredir/usbredir.mk
+ package/Config.in                            |    1 +
+ package/python-pyparsing/Config.in           |   11 +++++++
+ package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-pyparsing/Config.in
+ create mode 100644 package/python-pyparsing/python-pyparsing.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b50eaf8..029a550 100644
+index 029a550..ffe0b8f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -487,6 +487,7 @@ source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/ortp/Config.in"
-+source "package/usbredir/Config.in"
- source "package/zeromq/Config.in"
+@@ -307,6 +307,7 @@ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
+ source "package/python-pygame/Config.in"
++source "package/python-pyparsing/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
  endmenu
- 
-diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
 new file mode 100644
-index 0000000..8d8ac5a
+index 0000000..126dd0e
 --- /dev/null
-+++ b/package/usbredir/Config.in
-@@ -0,0 +1,28 @@
-+comment "usbredir requires libusb"
-+	depends on !BR2_PACKAGE_LIBUSB
-+
-+config BR2_PACKAGE_USBREDIR
-+	bool "usbredir"
-+	depends on BR2_PACKAGE_LIBUSB
++++ b/package/python-pyparsing/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYPARSING
++	bool "pyparsing"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  usbredir is the name of a network protocol for sending usb device
-+	  traffic over a network connection. It is also the name of the
-+	  software package offering a parsing library, a usbredirhost library
-+	  and several utilities implementing this protocol.
++	  The pyparsing module is an alternative approach to creating and
++	  executing simple grammars, vs. the traditional lex/yacc approach,
++	  or the use of regular expressions. The pyparsing module provides
++	  a library of classes that client code uses to construct the grammar
++	  directly in Python code.
 +	  
-+	  Note: only the library is installed, not the utilities. Say 'y'
-+	  below if you want the server too.
-+	  
-+	  http://www.spice-space.org/page/UsbRedir
-+
-+if BR2_PACKAGE_USBREDIR
-+
-+config BR2_PACKAGE_USBREDIR_SERVER
-+	bool "usbredirserver on target"
-+	help
-+	  If you want to serve usbredir requests on your target, say 'y'
-+	  here to have the usbredir server on the target.
-+	  
-+	  Note: the server is not required to use the library.
-+
-+endif
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
++	  http://pyparsing.wikispaces.com/
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
 new file mode 100644
-index 0000000..70b50c3
+index 0000000..621f636
 --- /dev/null
-+++ b/package/usbredir/usbredir.mk
-@@ -0,0 +1,31 @@
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -0,0 +1,38 @@
 +#############################################################
 +#
-+# usbredir
++# python-pyparsing
 +#
 +#############################################################
 +
-+USBREDIR_VERSION         = 0.4.3
-+USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
-+USBREDIR_SITE            = http://spice-space.org/download/usbredir
-+USBREDIR_LICENSE         = LGPLv2.1+
-+USBREDIR_LICENSE_FILES   = COPYING.LIB
-+USBREDIR_INSTALL_STAGING = YES
-+USBREDIR_DEPENDENCIES    = libusb
++PYTHON_PYPARSING_VERSION         = 1.5.6
++PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
++PYTHON_PYPARSING_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
++PYTHON_PYPARSING_LICENSE         = MIT
++PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
++PYTHON_PYPARSING_INSTALL_STAGING = YES
++PYTHON_PYPARSING_DEPENDENCIES    = python
 +
-+USBREDIR_DEPENDENCIES    += host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
-+
-+USBREDIR_LICENSE         += (for the library), GPLv2+ (for the server)
-+USBREDIR_LICENSE_FILES   += COPYING
-+
-+else # BR2_PACKAGE_USBREDIR_SERVER != y
-+
-+define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
-+	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
++# Shamelessly vampirised from python-pygame ;-)
++define PYTHON_PYPARSING_BUILD_CMDS
++	(cd $(@D);                                              \
++	 CC="$(TARGET_CC)"                                      \
++	 CFLAGS="$(TARGET_CFLAGS)"                              \
++	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
++	 CROSS_COMPILING=yes                                    \
++	 _python_sysroot=$(STAGING_DIR)                         \
++	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
++	 _python_prefix=/usr                                    \
++	 _python_exec_prefix=/usr                               \
++	 $(HOST_DIR)/usr/bin/python setup.py build              \
++	)
 +endef
-+USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
 +
-+endif # BR2_PACKAGE_USBREDIR_SERVER
++# Shamelessly vampirised from python-pygame ;-)
++define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
++	(cd $(@D);                                              \
++	 $(HOST_DIR)/usr/bin/python setup.py install            \
++	                            --prefix=$(TARGET_DIR)/usr  \
++	)
++endef
 +
-+$(eval $(autotools-package))
++$(eval $(generic-package))
 -- 
 1.7.2.5
