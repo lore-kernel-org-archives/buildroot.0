@@ -1,40 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Dec 2012 19:20:11 +0100
-Subject: [Buildroot] [PATCH 5/8] bmon: needs MMU for fork()
-In-Reply-To: <d3711ead28655ab34fded4452b0410dd13c192b1.1355076808.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
- <d3711ead28655ab34fded4452b0410dd13c192b1.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20121209192011.32848ccd@skate>
+Date: Sun, 9 Dec 2012 19:41:00 +0100
+Subject: [Buildroot] [PATCH 0/51 v4] Add QEMU for runing on the target
+In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
+References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20121209194100.72987f2c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Yann E. MORIN,
 
-On Sun,  9 Dec 2012 19:14:00 +0100, Thomas Petazzoni wrote:
+On Sun,  9 Dec 2012 17:34:33 +0100, Yann E. MORIN wrote:
 
-> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-> index 54cb8d0..1a0592f 100644
-> --- a/package/rt-tests/Config.in
-> +++ b/package/rt-tests/Config.in
-> @@ -1,8 +1,8 @@
->  config BR2_PACKAGE_RT_TESTS
->  	bool "rt-tests"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	# Too old uClibc, does not provide priority-inheritance
-> -	# mutexes
-> +	# Too old uClibc on AVR32, does not provide
-> +	# priority-inheritance mutexes
->  	depends on !BR2_avr32
->  	help
->  	  Set of utilities for testing the real-time behaviour of a
+> This patch series adds qemu as a package to run on the target.
+> 
+> Although this may sound weird in a first place, I use it to build a
+> simple VM server.
 
-FWIW, I've pushed at the same location a new version of this branch
-that removes this incorrect part (and squashed it properly in the
-previous commit).
+Do you have a public Git branch with all those patches, so that we can
+easily do some testing without having to apply manually all your
+patches?
 
-Sorry for the mess.
+Thanks,
 
 Thomas
 -- 
