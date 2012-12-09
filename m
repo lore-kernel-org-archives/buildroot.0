@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Dec 2012 17:35:10 +0100
-Subject: [Buildroot] [PATCH 37/51] package/qemu: enable use of the curses
-	frontend
+Date: Sun,  9 Dec 2012 17:35:11 +0100
+Subject: [Buildroot] [PATCH 38/51] package/qemu: add BlueZ connectivity
 In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355070924-8009-38-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355070924-8009-39-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,52 +17,52 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 2cf4d65..7b80c09 100644
+index 7b80c09..d513746 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -115,6 +115,17 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
+@@ -152,6 +152,17 @@ config BR2_PACKAGE_QEMU_CURL
+ comment "cURL support is not possible with static linking"
+     depends on BR2_PREFER_STATIC_LIB
  
-+config BR2_PACKAGE_QEMU_CURSES
-+	bool "Enable the curses frontend"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Say 'y' to use curses to display the text-mode of VGA outpout.
-+	  
-+	  If the VM's graphic adapter does not support VGA text-mode, or it
-+	  is in graphical mode, then nothing will be displayed with this
-+	  frontend (although you can still use the SDL or VNC frontends to
-+	  display the graphical output).
++comment "Networking"
 +
- comment "Block backends"
++config BR2_PACKAGE_QEMU_BLUEZ
++	bool "Enable BlueZ connectivity"
++	depends on BR2_PACKAGE_BLUEZ_UTILS
++	help
++	  Say 'y' here to enable BlueZ (bluetooth) connectivity in QEMU.
++
++comment "BlueZ connectivity depends on bluez-utils"
++	depends on !BR2_PACKAGE_BLUEZ_UTILS
++
+ comment "Misc. features"
  
- config BR2_PACKAGE_QEMU_VIRTFS
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index eb3b261..ced6009 100644
+index ced6009..021bd32 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,13 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -169,6 +169,13 @@ else
+ QEMU_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_CURSES),y)
-+QEMU_OPTS += --enable-curses
-+QEMU_DEPENDENCIES += ncurses
++ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
++QEMU_OPTS += --enable-bluez
++QEMU_DEPENDENCIES += bluez_utils
 +else
-+QEMU_OPTS += --disable-curses
++QEMU_OPTS += --disable-bluez
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
- QEMU_OPTS += --enable-virtfs
- else
-@@ -268,7 +275,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-slirp                     \
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -276,7 +283,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-vnc-sasl                  \
  	        --disable-brlapi                    \
--	        --disable-curses                    \
  	        --disable-fdt                       \
- 	        --disable-bluez                     \
+-	        --disable-bluez                     \
  	        --disable-guest-base                \
+ 	        --disable-vde                       \
+ 	        --disable-linux-aio                 \
 -- 
 1.7.2.5
