@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  9 Dec 2012 17:35:17 +0100
-Subject: [Buildroot] [PATCH 44/51] package/qemu: enable sound
+Date: Sun,  9 Dec 2012 17:35:18 +0100
+Subject: [Buildroot] [PATCH 45/51] package/qemu: add support for libseccomp
 In-Reply-To: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355070924-8009-45-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355070924-8009-46-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,95 +12,52 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   38 ++++++++++++++++++++++++++++++++++++++
- package/qemu/qemu.mk   |   19 +++++++++++++++++--
- 2 files changed, 55 insertions(+), 2 deletions(-)
+ package/qemu/Config.in |    7 +++++++
+ package/qemu/qemu.mk   |    7 ++++++-
+ 2 files changed, 13 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 4d8b401..20562a4 100644
+index 20562a4..7306f43 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -204,6 +204,44 @@ config BR2_PACKAGE_QEMU_VDE
- 	  Say 'y' here to have QEMU connect to VDE (Virtual Distributed
- 	  Ethernet) switches.
+@@ -266,6 +266,13 @@ config BR2_PACKAGE_QEMU_ATTR
+ 	  Say 'y' here to have QEMU support attributes (attr) and eXtended
+ 	  attibutes (xattr).
  
-+comment "Sound"
-+
-+config BR2_PACKAGE_QEMU_SOUND_CARDS
-+	string "Enable sound cards"
-+	default "ac97 es1370 hda"
++config BR2_PACKAGE_QEMU_SECCOMP
++	bool "Enable seccomp filter"
++	select BR2_PACKAGE_LIBSECCOMP
 +	help
-+	  Enter here the list of sound cards you want QEMU to emulate.
-+	  The available sound cards are:
-+	    ac97 es1370 sb16 cs4231a adlib gus hda
-+	  
-+	  The default is: ac97 es1370 hda
-+	  
-+	  Note: even if you say 'n' to both alsa and SDL drivers, below, QEMU
-+	  always include the 'wav' driver, which stores the generated sound
-+	  into a file, and the 'none' driver, which discards generated sound.
++	  Say 'y' here to have QEMU to use the Linux kernel's seccomp filter,
++	  to more tightly confine the VMs.
 +
-+config BR2_PACKAGE_QEMU_MIXEMU
-+	bool "Enable mixer emulation"
-+	help
-+	  Say 'y' here to have QEMU emulate a mixer device.
-+
-+config BR2_PACKAGE_QEMU_SOUND_SDL
-+	bool "Enable sound via SDL"
-+	select BR2_PACKAGE_QEMU_SDL # Requires that SDL frontend be selected
-+	select BR2_PACKAGE_SDL
-+	help
-+	  Say 'y' here to have QEMU play sound from the VMs via SDL.
-+	  
-+	  Note: this is only for system emulation, not user emulation.
-+
-+config BR2_PACKAGE_QEMU_SOUND_ALSA
-+	bool "Enable sound via alsa"
-+	select BR2_PACKAGE_ALSA_LIB
-+	help
-+	  Say 'y' here to have QEMU play sound from the VMs via alsa.
-+	  
-+	  Note: this is only for system emulation, not user emulation.
-+
- comment "Misc. features"
- 
- config BR2_PACKAGE_QEMU_UUID
+ config BR2_PACKAGE_QEMU_BLOBS
+ 	bool "Install binary blobs"
+ 	default y
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 110bd49..abcbae7 100644
+index abcbae7..1fbc810 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -211,6 +211,23 @@ else
- QEMU_OPTS += --disable-vde
+@@ -251,6 +251,12 @@ else
+ QEMU_OPTS += --disable-attr
  endif
  
-+QEMU_SND_DRV =
-+ifeq ($(BR2_PACKAGE_QEMU_SOUND_ALSA),y)
-+QEMU_SND_DRV += alsa
-+QEMU_DEPENDENCIES += alsa-lib
-+endif
-+ifeq ($(BR2_PACKAGE_QEMU_SOUND_SDL),y)
-+QEMU_SND_DRV += sdl
-+QEMU_DEPENDENCIES += sdl
-+endif
-+ifneq ($(QEMU_SND_DRV),)
-+QEMU_OPTS += --audio-drv-list="$(QEMU_SND_DRV)"
-+endif
-+QEMU_OPTS += --audio-card-list=$(BR2_PACKAGE_QEMU_SOUND_CARDS)
-+ifeq ($(BR2_PACKAGE_QEMU_MIXEMU),y)
-+QEMU_OPTS += --enable-mixemu
++ifeq ($(BR2_PACKAGE_QEMU_SECCOMP),y)
++QEMU_OPTS += --enable-seccomp
++else
++QEMU_OPTS += --disable-seccomp
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -307,8 +324,6 @@ define QEMU_CONFIGURE_CMDS
- 	    ./configure                             \
- 	        --prefix=/usr                       \
- 	        --cross-prefix=$(TARGET_CROSS)      \
--	        --audio-drv-list=                   \
--	        --audio-card-list=                  \
- 	        --enable-kvm                        \
- 	        --enable-nptl                       \
- 	        --enable-vhost-net                  \
+ ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
+ QEMU_OPTS += --disable-blobs
+ endif
+@@ -338,7 +344,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-rbd                       \
+ 	        --disable-smartcard                 \
+ 	        --disable-strip                     \
+-	        --disable-seccomp                   \
+ 	        --disable-sparse                    \
+ 	        $(QEMU_OPTS)                        \
+ 	)
 -- 
 1.7.2.5
