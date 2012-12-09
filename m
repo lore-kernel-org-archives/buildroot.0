@@ -1,92 +1,64 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  9 Dec 2012 10:57:36 -0300
-Subject: [Buildroot] [PATCH] ltrace: bump to version 0.7.2
-Message-ID: <1355061456-7191-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun,  9 Dec 2012 11:05:41 -0300
+Subject: [Buildroot] [PATCH] libfuse: needs threads
+Message-ID: <1355061941-10170-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump ltrace to version 0.7.2 which includes my ppc fixup patch.
-Also exclude aarch64 since it's not supported, fixes
-http://autobuild.buildroot.net/results/8fc3a3720d9be2525784b0488653b4fdbb29e676/
+libfuse needs threads, fixes:
+http://autobuild.buildroot.net/results/0111a67b9ed5f5f5dfc0725d009ea5c756c1755c
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ltrace/Config.in                   |    1 +
- package/ltrace/ltrace-ppc-waitstatus.patch |   37 ----------------------------
- package/ltrace/ltrace.mk                   |    2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/ltrace/ltrace-ppc-waitstatus.patch
+ package/libfuse/Config.in |    5 +++--
+ package/sshfs/Config.in   |    1 +
+ package/unionfs/Config.in |    1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 9fd9aaa..c77108f 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LTRACE
- 	bool "ltrace"
- 	depends on !(BR2_avr32 || BR2_mips || BR2_sh || BR2_sh64 || BR2_xtensa)
-+	depends on !BR2_aarch64
- 	select BR2_PACKAGE_LIBELF
+diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
+index dffadf8..2e9b7dc 100644
+--- a/package/libfuse/Config.in
++++ b/package/libfuse/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_LIBFUSE
+ 	bool "libfuse"
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
- 	  Debugging program which runs a specified command until it exits.
-diff --git a/package/ltrace/ltrace-ppc-waitstatus.patch b/package/ltrace/ltrace-ppc-waitstatus.patch
-deleted file mode 100644
-index fa87ea4..0000000
---- a/package/ltrace/ltrace-ppc-waitstatus.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From faa8dfe0507b56fb8a7666e326177aec7f364071 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Mon, 3 Dec 2012 11:12:08 -0300
--Subject: [PATCH] Fix build failure on ppc
--
--ppc/trace.c is using waitstatus bits without including the appropiate
--headers, leading to a build failure:
--
--libtool: link:
--/home/gustavoz/b/test/output/host/usr/bin/powerpc-buildroot-linux-uclibc-gcc
---Wall -Wsign-compare -Wfloat-equal -Wformat-security -pipe -Os -o ltrace
--main.o  ./.libs/libltrace.a -lelf
--./.libs/libltrace.a(lt1-trace.o): In function `syscall_p':
--trace.c:(.text+0x28): undefined reference to `WIFSTOPPED'
--trace.c:(.text+0x40): undefined reference to `WSTOPSIG'
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- sysdeps/linux-gnu/ppc/trace.c |    2 ++
-- 1 files changed, 2 insertions(+), 0 deletions(-)
--
--diff --git a/sysdeps/linux-gnu/ppc/trace.c b/sysdeps/linux-gnu/ppc/trace.c
--index c152101..4357a1e 100644
----- a/sysdeps/linux-gnu/ppc/trace.c
--+++ b/sysdeps/linux-gnu/ppc/trace.c
--@@ -29,6 +29,8 @@
-- #include <errno.h>
-- #include <signal.h>
-- #include <string.h>
--+#include <sys/types.h>
--+#include <sys/wait.h>
-- 
-- #include "backend.h"
-- #include "breakpoint.h"
---- 
--1.7.8.6
--
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index ca6d621..4b31690 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+ 	  FUSE (Filesystem in UserSpacE)
  
--LTRACE_VERSION = 0.7.1
-+LTRACE_VERSION = 0.7.2
- LTRACE_SITE = http://alioth.debian.org/frs/download.php/3844
- LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
- LTRACE_DEPENDENCIES = libelf
+ 	  http://fuse.sourceforge.net/
+ 
+-comment "libfuse requires a toolchain with LARGEFILE support"
+-        depends on !BR2_LARGEFILE
++comment "libfuse requires a toolchain with LARGEFILE and threads support"
++        depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
+index 37188ba..f729143 100644
+--- a/package/sshfs/Config.in
++++ b/package/sshfs/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_SSHFS
+ 	select BR2_PACKAGE_OPENSSH
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+ 	help
+ 	  FUSE filesystem client based on the SSH File Transfer Protocol.
+ 
+diff --git a/package/unionfs/Config.in b/package/unionfs/Config.in
+index a974c8c..84dd7d7 100644
+--- a/package/unionfs/Config.in
++++ b/package/unionfs/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_UNIONFS
+ 	bool "unionfs (FUSE)"
+ 	select BR2_PACKAGE_LIBFUSE
+ 	depends on BR2_LARGEFILE
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
+ 	help
+ 	  A userspace unionfs implementation.
+ 
 -- 
 1.7.8.6
