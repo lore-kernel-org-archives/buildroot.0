@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Dec 2012 21:50:53 +0100
-Subject: [Buildroot] [PATCH 1/8] ccache: uses fork(),
-	there only usable on MMU platforms
-In-Reply-To: <af11bb3bb397ca7a580f200d117fa68953811297.1355076808.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 9 Dec 2012 19:13:56 +0100")
+Date: Sun, 09 Dec 2012 21:51:18 +0100
+Subject: [Buildroot] [PATCH 2/8] ccache: deprecate the target package
+In-Reply-To: <7f267429ccc8c8e1615e9d6cf5016be1ac51e77e.1355076808.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 9 Dec 2012 19:13:57 +0100")
 References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
  <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
- <af11bb3bb397ca7a580f200d117fa68953811297.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ip8bvtjm.fsf@dell.be.48ers.dk>
+ <7f267429ccc8c8e1615e9d6cf5016be1ac51e77e.1355076808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ehizvtix.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,10 +15,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Fixes:
- Thomas>   http://autobuild.buildroot.org/results/2ba0eb693d24ac4ed9979762db234bfff1952c69/build-end.log
+ Thomas> Since we have deprecated the capability of building a toolchain for
+ Thomas> the target, it makes sense to also deprecate ccache for the target.
 
-Committed with commit message changed with s/there/therefore/, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
