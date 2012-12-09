@@ -1,32 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Dec 2012 19:13:58 +0100
-Subject: [Buildroot] [PATCH 3/8] rt-tests: requires thread support in the
-	toolchain
+Date: Sun,  9 Dec 2012 19:13:59 +0100
+Subject: [Buildroot] [PATCH 4/8] rt-tests: not available on avr32,
+	too old uClibc
 In-Reply-To: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3b534b03d272d7da09743acab71910ab1acb6592.1355076808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <888c187be8b5ed6f62a1a7b8c825a980009fb365.1355076808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rt-tests package extensively use threads, so this package should
-only be available if the toolchain has thread support.
+The old uClibc used for the AVR32 architecture does not implement
+priority inheritance, therefore rt-tests cannot build.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/695293d889128c666174d5fe03c5deadbe4d5415/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rt-tests/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ package/rt-tests/Config.in |    3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index e645266..337c020 100644
+index 337c020..54cb8d0 100644
 --- a/package/rt-tests/Config.in
 +++ b/package/rt-tests/Config.in
-@@ -1,5 +1,6 @@
+@@ -1,6 +1,9 @@
  config BR2_PACKAGE_RT_TESTS
  	bool "rt-tests"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# Too old uClibc, does not provide priority-inheritance
++	# mutexes
++	depends on !BR2_avr32
  	help
  	  Set of utilities for testing the real-time behaviour of a
  	  Linux system.
