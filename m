@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Dec 2012 19:14:00 +0100
-Subject: [Buildroot] [PATCH 5/8] bmon: needs MMU for fork()
+Date: Sun,  9 Dec 2012 19:13:56 +0100
+Subject: [Buildroot] [PATCH 1/8] ccache: uses fork(),
+	there only usable on MMU platforms
 In-Reply-To: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1355076808.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d3711ead28655ab34fded4452b0410dd13c192b1.1355076808.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <af11bb3bb397ca7a580f200d117fa68953811297.1355076808.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +13,24 @@ To: buildroot@busybox.net
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/673b0e9a1ba75123ba2c59df8ad81550170fffef/build-end.log
+  http://autobuild.buildroot.org/results/2ba0eb693d24ac4ed9979762db234bfff1952c69/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bmon/Config.in     |    2 ++
- package/rt-tests/Config.in |    4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/ccache/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bmon/Config.in b/package/bmon/Config.in
-index 9692118..652fd9e 100644
---- a/package/bmon/Config.in
-+++ b/package/bmon/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_BMON
- 	bool "bmon"
- 	depends on BR2_INET_IPV6
+diff --git a/package/ccache/Config.in b/package/ccache/Config.in
+index 4a37973..30e6578 100644
+--- a/package/ccache/Config.in
++++ b/package/ccache/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_CCACHE
+ 	bool "ccache"
 +	# needs fork()
 +	depends on BR2_USE_MMU
  	help
- 	  Linux bandwidth monitor
- 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index 54cb8d0..1a0592f 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# Too old uClibc, does not provide priority-inheritance
--	# mutexes
-+	# Too old uClibc on AVR32, does not provide
-+	# priority-inheritance mutexes
- 	depends on !BR2_avr32
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
+ 	  ccache is a compiler cache. It speeds up recompilation by
+ 	  caching previous compilations and detecting when the same
 -- 
 1.7.9.5
