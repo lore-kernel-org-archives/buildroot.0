@@ -1,17 +1,35 @@
-From: Dallas Clement <dallas.a.clement@gmail.com>
-Date: Mon, 10 Dec 2012 16:06:51 -0600
-Subject: [Buildroot] Is libiconv necessary to fully support
-	internationalization?
-Message-ID: <CAE9DZUSwU3BN3Esi7V8GsW7hBErhZ9eReHzNVVj9+Ua2XJcx0w@mail.gmail.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Mon, 10 Dec 2012 23:14:06 +0100
+Subject: [Buildroot] [git commit] package/crosstool-ng: bumpimg default
+ GCC version to 4.6.3
+In-Reply-To: <87ehiytfcn.fsf@dell.be.48ers.dk>
+References: <20121209203933.44D7B9A158@busybox.osuosl.org>
+ <20121210100945.0ccfbe69@skate> <87ehiytfcn.fsf@dell.be.48ers.dk>
+Message-ID: <50C65EAE.6040800@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pardon my ignorance, but it is my understanding that glibc now
-provides the same functionality as hitherto provided by libiconv.   If
-my distro needs to support mutliple languages, is there any danger in
-not linking with libiconv?
+Hello Peter,
+hello Thomas,
 
-Thanks in advance for any insight.
+Am 10.12.2012 10:40, schrieb Peter Korsgaard:
+>  Thomas> The recent updates to the crosstool-ng configs is apparently breaking
+>  Thomas> the build:
+> 
+>  Thomas>   http://autobuild.buildroot.org/results/b99c757884d14bbe8893900824763f63dd13f5dc/build-end.log
+> 
+> Yes, that looks related (but not exactly the same) as the ppl issues
+> with gcc 4.7+ mentioned yesterday.
+> 
+> Yann mentioned on IRC that he had a ppl fix pending.
+
+As far as I can see in the (complete) log the toolchain was building
+PPL 0.10.2 but 0.11 is later expected. If possible I can test one more
+change to the crosstool-ng configs later. :/
+
+-- 
+Regards
+Carsten
