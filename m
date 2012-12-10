@@ -1,60 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Dec 2012 09:11:24 +0100
-Subject: [Buildroot] [PATCH 02/51] package/qemu: fix host-qemu variable
-	names
-In-Reply-To: <50C5833C.5070602@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Dec 2012 09:14:24 +0100
+Subject: [Buildroot] [PATCH 12/51] package/slirp: new package
+In-Reply-To: <201212092237.40208.yann.morin.1998@free.fr>
 References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
- <1355070924-8009-3-git-send-email-yann.morin.1998@free.fr>
- <50C5833C.5070602@mind.be>
-Message-ID: <201212100911.24651.yann.morin.1998@free.fr>
+ <20121209194223.439bff79@skate>
+ <201212092220.26330.yann.morin.1998@free.fr>
+ <201212092237.40208.yann.morin.1998@free.fr>
+Message-ID: <20121210091424.5d54efb7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Dear Yann E. MORIN,
 
-On Monday 10 December 2012 07:37:48 Arnout Vandecappelle wrote:
-> On 09/12/12 17:34, Yann E. MORIN wrote:
-> > With the upcoming introduction of qemu-on-target, we need to properly
-> > separate the variables used for the host qemu, from the variables
-> > used for the target qemu.
-> >
-> > Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> > Cc: Francois Perrad<fperrad@gmail.com>
-> > ---
-> >   package/qemu/qemu.mk |   25 ++++++++++++++-----------
-> >   1 files changed, 14 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> > index 790d34f..81cd79f 100644
-> > --- a/package/qemu/qemu.mk
-> > +++ b/package/qemu/qemu.mk
-> > @@ -13,7 +13,10 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
-> >   #       the non-(L)GPL license texts are specified in the affected
-> >   #       individual source files.
-> >
-> > -QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
-> > +#-------------------------------------------------------------
-> > +# Host-qemu
-> > +
-> > +HOST_QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+On Sun, 9 Dec 2012 22:37:39 +0100, Yann E. MORIN wrote:
+
+> > There's no release tarball, so we're using the git tree, so there's no
+> > ./configure, so we need to autoreconf.
 > 
->   I guess this should be host-zlib and host-libglib2?
+> Of course, I've added a comment in slirp.mk to explain that, too.
 
-I think so, too, but I just renamed the variable, I did not change the
-content.
+Great, thanks!
 
-I postponed testing this host-qemu for now.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
