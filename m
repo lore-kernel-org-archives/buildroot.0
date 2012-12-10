@@ -1,35 +1,33 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Mon, 10 Dec 2012 23:14:06 +0100
-Subject: [Buildroot] [git commit] package/crosstool-ng: bumpimg default
- GCC version to 4.6.3
-In-Reply-To: <87ehiytfcn.fsf@dell.be.48ers.dk>
-References: <20121209203933.44D7B9A158@busybox.osuosl.org>
- <20121210100945.0ccfbe69@skate> <87ehiytfcn.fsf@dell.be.48ers.dk>
-Message-ID: <50C65EAE.6040800@googlemail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 10 Dec 2012 23:49:34 +0100
+Subject: [Buildroot] [PATCH] linux-fusion: don't override CFLAGS/LDFLAGS
+In-Reply-To: <1355159219-10867-1-git-send-email-arnout@mind.be>
+References: <1355159219-10867-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMML_6Q8rwVN1bvYvSb1dh1Byd1j0rLJh5Q4voOJX340=KA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
-hello Thomas,
+2012/12/10 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>:
+> Putting $(TARGET_CONFIGURE_OPTS) after $(MAKE) overrides the Makefile's
+> CFLAGS and LDFLAGS. Some of these flags are required, however. So
+> instead pass these things in the environment, which allows the Makefile
+> to append to the flags.
+>
+> This removes the need for the patch, because now the correct -I options
+> are added.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 
-Am 10.12.2012 10:40, schrieb Peter Korsgaard:
->  Thomas> The recent updates to the crosstool-ng configs is apparently breaking
->  Thomas> the build:
-> 
->  Thomas>   http://autobuild.buildroot.org/results/b99c757884d14bbe8893900824763f63dd13f5dc/build-end.log
-> 
-> Yes, that looks related (but not exactly the same) as the ppl issues
-> with gcc 4.7+ mentioned yesterday.
-> 
-> Yann mentioned on IRC that he had a ppl fix pending.
+Build-test only too.
 
-As far as I can see in the (complete) log the toolchain was building
-PPL 0.10.2 but 0.11 is later expected. If possible I can test one more
-change to the crosstool-ng configs later. :/
+> ---
+> Build-test only
+
+Reagards,
 
 -- 
-Regards
-Carsten
+Samuel
