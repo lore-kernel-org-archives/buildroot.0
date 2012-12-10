@@ -1,63 +1,64 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Dec 2012 10:41:35 +0100
-Subject: [Buildroot] [git commit] toolchain-external: Linaro toolchains are
-	available for Cortex-A{5, 15}
-Message-ID: <20121210094146.A9B769A033@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Dec 2012 07:51:20 -0300
+Subject: [Buildroot] [PATCH] dnsmasq: fix build failure without DHCP
+Message-ID: <1355136680-29052-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16dcf2d668953a33c148baebd43afdb1df34cae5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes
+http://autobuild.buildroot.net/results/26a9e152f533e467f68b72a373d0fc84d561eb87
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/toolchain-external/Config.in |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ .../dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
+ create mode 100644 package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 4fe605d..456407e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -6,7 +6,7 @@ choice
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- 	bool "Linaro 2012.11"
- 	depends on BR2_arm
--	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	bool "Linaro 2012.10"
- 	depends on BR2_arm
--	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -40,7 +40,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 	bool "Linaro 2012.09"
- 	depends on BR2_arm
--	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -54,9 +54,9 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--comment "Linaro toolchains available for Cortex-A{8,9}"
-+comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
- 	depends on BR2_arm
--	depends on !BR2_cortex_a8 && !BR2_cortex_a9
-+	depends on !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	bool "Sourcery CodeBench ARM 2012.03"
+diff --git a/package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch b/package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch
+new file mode 100644
+index 0000000..817d3b2
+--- /dev/null
++++ b/package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch
+@@ -0,0 +1,37 @@
++From acd702292afebb8550acbfbe80638995545ccd10 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 10 Dec 2012 07:47:10 -0300
++Subject: [PATCH] Move parse_server outside the HAVE_DHCP ifdef
++
++Fixes build breakage when building without DHCP support.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ src/option.c |    4 ++++
++ 1 files changed, 4 insertions(+), 0 deletions(-)
++
++diff --git a/src/option.c b/src/option.c
++index c1643a1..d6e323b 100644
++--- a/src/option.c
+++++ b/src/option.c
++@@ -641,6 +641,8 @@ static char *set_prefix(char *arg)
++    return arg;
++ }
++ 
+++#endif
+++
++ char *parse_server(char *arg, union mysockaddr *addr, union mysockaddr *source_addr, char *interface, int *flags)
++ {
++   int source_port = 0, serv_port = NAMESERVER_PORT;
++@@ -728,6 +730,8 @@ char *parse_server(char *arg, union mysockaddr *addr, union mysockaddr *source_a
++   return NULL;
++ }
++ 
+++#ifdef HAVE_DHCP
+++
++ /* This is too insanely large to keep in-line in the switch */
++ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
++ {
++-- 
++1.7.8.6
++
+-- 
+1.7.8.6
