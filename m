@@ -1,57 +1,108 @@
-From: Willy Lambert <lambert.willy@gmail.com>
-Date: Mon, 10 Dec 2012 20:38:37 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <87d2yhsoh8.fsf@dell.be.48ers.dk>
-References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
- <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
- <87d2yhsoh8.fsf@dell.be.48ers.dk>
-Message-ID: <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Dec 2012 18:06:59 +0100
+Subject: [Buildroot] [PATCH] linux-fusion: don't override CFLAGS/LDFLAGS
+Message-ID: <1355159219-10867-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/12/10 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
->
-> Hi,
->
->  >> Large file support isn't select and i have also checked it with make
->  >> uclibc-menuconfig for uclibc.
->  >> The same problem happend with beaglebone_defconfig.
->  >>
->  >> After "make clean" and selecting "large file support" the build process
->  >> works.
->  >>
->  >> This problem doesn't happend with release 2012.08.
->  >>
->  >> Has anybody a hint for me ?
->
->  Willy> I have just had the same problem, is it possible that this is a
->  Willy> regression of the 2012.11 version ?
->
-> I don't think so. I just did a:
->
-> make at91sam9263ek_defconfig && make
->
-> Without any problems. What exactly did you do?
+Putting $(TARGET_CONFIGURE_OPTS) after $(MAKE) overrides the Makefile's
+CFLAGS and LDFLAGS. Some of these flags are required, however. So
+instead pass these things in the environment, which allows the Makefile
+to append to the flags.
 
-make.
+This removes the need for the patch, because now the correct -I options
+are added.
 
-just make after having DL latest stable version few days ago from a
-tgz. Doing a make menuconfig don't change anything, and as far as I
-can remember, menuconfig was telling us about this problem (something
-depending on largefile).
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Build-test only
+ .../linux-fusion/linux-fusion-fix-include.patch    |   52 --------------------
+ package/linux-fusion/linux-fusion.mk               |    6 +--
+ 2 files changed, 3 insertions(+), 55 deletions(-)
 
-I know this has little sense, but before doing any configuration I
-want to begin from a stable build, and test step by step when doing
-configuration. I have an existing system that I want to replace by a
-custom linux, so it's basically "copy/pasting" config. But I don't
-believe doing all the config in one strike is realistic ^^.
-
-(and BTW, hi all, I'm new with buildroot).
-
->
-> --
-> Bye, Peter Korsgaard
+diff --git a/package/linux-fusion/linux-fusion-fix-include.patch b/package/linux-fusion/linux-fusion-fix-include.patch
+deleted file mode 100644
+index fe91488..0000000
+--- a/package/linux-fusion/linux-fusion-fix-include.patch
++++ /dev/null
+@@ -1,52 +0,0 @@
+-Fix directfb-fusion kernel module build.
+-
+-This patch avoids the following error occurs:
+-
+-/usr/bin/make -f scripts/Makefile.build obj=/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion /opt/br/output/host/usr/bin/ccache 
+-  /opt/br/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -Wp,-MD,/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/.fusioncore_impl.o.d
+-  -nostdinc -isystem /opt/br/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.6.3/include -I/opt/br/output/build/linux-3.6/arch/arm/include 
+-  -Iarch/arm/include/generated -Iinclude  -include /opt/br/output/build/linux-3.6/include/linux/kconfig.h -D__KERNEL__ -mlittle-endian -Iarch/arm/mach-versatile/include
+-  -Iarch/arm/plat-versatile/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/opt/br/output/build/linux-fusion-8.8.1/linux/include -Wall -Wundef 
+-  -Wstrict-prototypes -Wno-trigraphs -fno-strict-aliasing -fno-common -Werror-implicit-function-declaration -Wno-format-security -fno-delete-null-pointer-checks -O2 -marm 
+-  -fno-dwarf2-cfi-asm -mabi=aapcs-linux -mno-thumb-interwork -funwind-tables -D__LINUX_ARM_ARCH__=5 -march=armv5te -mtune=arm9tdmi -msoft-float -Uarm -Wframe-larger-than=1024
+-  -fno-stack-protector -Wno-unused-but-set-variable -fomit-frame-pointer -Wdeclaration-after-statement -Wno-pointer-sign -fno-strict-overflow -fconserve-stack  -DMODULE
+-  -D"KBUILD_STR(s)=#s" -D"KBUILD_BASENAME=KBUILD_STR(fusioncore_impl)"  -D"KBUILD_MODNAME=KBUILD_STR(fusion)" -c -o 
+-/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.o /opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c
+-/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c:25:19: fatal error: debug.h: No such file or directory
+-compilation terminated.
+-make[3]: *** [/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.o] Error 1
+-make[2]: *** [_module_/opt/br/output/build/linux-fusion-8.8.1/linux/drivers/char/fusion] Error 2
+-make[2]: Leaving directory `/opt/br/output/build/linux-3.6'
+-make[1]: *** [modules] Error 2
+-make[1]: Leaving directory `/opt/br/output/build/linux-fusion-8.8.1'
+-
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-
+-diff -purN linux-fusion-8.8.1.orig/linux/drivers/char/fusion/fusioncore.h linux-fusion-8.8.1/linux/drivers/char/fusion/fusioncore.h
+---- linux-fusion-8.8.1.orig/linux/drivers/char/fusion/fusioncore.h	2012-10-15 21:47:53.881834496 +0200
+-+++ linux-fusion-8.8.1/linux/drivers/char/fusion/fusioncore.h	2012-10-15 22:05:27.232401023 +0200
+-@@ -17,7 +17,7 @@
+- 
+- #include <linux/stddef.h>
+- 
+--#include "fusioncore_impl.h"
+-+#include "single/fusioncore_impl.h"
+- 
+- typedef enum {
+-      FC_OK,
+-diff -purN linux-fusion-8.8.1.orig/linux/drivers/char/fusion/single/fusioncore_impl.c linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c
+---- linux-fusion-8.8.1.orig/linux/drivers/char/fusion/single/fusioncore_impl.c	2012-10-15 21:47:53.878501243 +0200
+-+++ linux-fusion-8.8.1/linux/drivers/char/fusion/single/fusioncore_impl.c	2012-10-15 22:05:38.585511304 +0200
+-@@ -22,9 +22,9 @@
+- #include <linux/slab.h>
+- #include <linux/sched.h>
+- 
+--#include "debug.h"
+-+#include "../debug.h"
+- 
+--#include "fusioncore.h"
+-+#include "../fusioncore.h"
+- 
+- 
+- 
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index 631f526..5ea7900 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -22,15 +22,15 @@ LINUX_FUSION_MAKE_OPTS += CROSS_COMPILE=$(TARGET_CROSS)
+ LINUX_FUSION_MAKE_OPTS += KERNEL_MODLIB=/lib/modules/$(LINUX_FOR_FUSION)/kernel
+ 
+ define LINUX_FUSION_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LINUX_FUSION_MAKE_OPTS) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LINUX_FUSION_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define LINUX_FUSION_INSTALL_STAGING_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LINUX_FUSION_MAKE_OPTS) INSTALL_MOD_PATH=$(STAGING_DIR) -C $(@D) headers_install
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(LINUX_FUSION_MAKE_OPTS) INSTALL_MOD_PATH=$(STAGING_DIR) -C $(@D) headers_install
+ endef
+ 
+ define LINUX_FUSION_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) \
+ 		$(LINUX_FUSION_MAKE_OPTS) \
+ 		INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 		-C $(@D) install
+-- 
+tg: (422700f..) t/linux-fusion (depends on: master)
