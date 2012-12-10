@@ -1,53 +1,30 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 10 Dec 2012 00:43:44 +0100
-Subject: [Buildroot] libusb confusion
-Message-ID: <5A92242ABF2043D2B2CBFF8686E130BE@JohanW7>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Sun, 9 Dec 2012 19:29:53 -0500
+Subject: [Buildroot] [git commit] rt-tests: fix typo in Config.in
+ threads negative logic
+In-Reply-To: <20121209220341.AFD5E9A0E5@busybox.osuosl.org>
+References: <20121209220341.AFD5E9A0E5@busybox.osuosl.org>
+Message-ID: <CAC78GpcnHLN8P+jBZu9f4o0WawFMgJus1WAT6roATD=+bt++yQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Dec 9, 2012 at 5:03 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
 
-Hi
- 
-There seem to be more libusb's ....
- 
-http://sourceforge.net/projects/libusb/files/
+> commit:
+> http://git.buildroot.net/buildroot/commit/?id=e510b0fea65cf6e71c6e9c512204b04282973d43
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>  comment "rt-tests requires a toolchain with threads support"
+> -       !BR2_TOOLCHAIN_HAS_THREADS
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+>
+>
 
-Claims the latest version is  0.1.4 (buildroot libusb-compat) 
+Thank you, This was driving me crazy...
 
-#############################################################
-#
-# libusb-compat
-#
-#############################################################
-LIBUSB_COMPAT_VERSION = 0.1.4
-LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
-LIBUSB_COMPAT_SITE = http://downloads.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-$(LIBUSB_COMPAT_VERSION)
-
-
-
-And then we also have in buildroot libusb 1.0.9
-#############################################################
-#
-# libusb
-#
-#############################################################
-LIBUSB_VERSION = 1.0.9
-LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
-LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
-
-
-
-
-
-But there is also : http://libusb.sourceforge.net/download.html
-
-http://prdownloads.sourceforge.net/libusb/libusb-0.1.12.tar.gz
-
-I think usb_modeswitch needs this one.
-
-
-
-Sagaert Johan
+JC
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121209/cfcfcdf4/attachment.html>
