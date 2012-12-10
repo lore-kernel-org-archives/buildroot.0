@@ -1,64 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:45:06 +0100
-Subject: [Buildroot] [PATCH 46/52] package/qemu: add support for libseccomp
+Date: Tue, 11 Dec 2012 00:45:08 +0100
+Subject: [Buildroot] [PATCH 48/52] package/qemu: move sub-options into a
+	sub-menu
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-47-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-49-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As there are now quite a few options to QEMU, move them into their own
+sub-menu, so it looks a bit less crowded in the 'misc' menu.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    7 +++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index dad72a8..4aa8647 100644
+index 4aa8647..435775a 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -263,6 +263,13 @@ config BR2_PACKAGE_QEMU_ATTR
- 	  Say 'y' here to have QEMU support attributes (attr) and eXtended
- 	  attibutes (xattr).
+@@ -2,7 +2,7 @@ comment "QEMU requires a toolchain with threads"
+ 	depends on !BR2_i386 && !BR2_x86_64
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
-+config BR2_PACKAGE_QEMU_SECCOMP
-+	bool "Enable seccomp filter"
-+	select BR2_PACKAGE_LIBSECCOMP
-+	help
-+	  Say 'y' here to have QEMU to use the Linux kernel's seccomp filter,
-+	  to more tightly confine the VMs.
-+
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index dfe9cbb..a980c76 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -251,6 +251,13 @@ else
- QEMU_OPTS += --disable-attr
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_SECCOMP),y)
-+QEMU_OPTS += --enable-seccomp
-+QEMU_DEPENDENCIES += libseccomp
-+else
-+QEMU_OPTS += --disable-seccomp
-+endif
-+
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -338,7 +345,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-rbd                       \
- 	        --disable-smartcard                 \
- 	        --disable-strip                     \
--	        --disable-seccomp                   \
- 	        --disable-sparse                    \
- 	        $(QEMU_OPTS)                        \
- 	)
+-config BR2_PACKAGE_QEMU
++menuconfig BR2_PACKAGE_QEMU
+ 	bool "QEMU"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.7.2.5
