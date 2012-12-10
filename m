@@ -1,30 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Dec 2012 09:16:40 +0100
-Subject: [Buildroot] [PATCH] libglib2: don't try to use
- DTrace/GCov/SystemTap for host build
-In-Reply-To: <20121209192619.GB3880@tarshish>
-References: <1355080604-27155-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20121209192619.GB3880@tarshish>
-Message-ID: <20121210091640.1e687c54@skate>
+Date: Mon, 10 Dec 2012 09:17:47 +0100
+Subject: [Buildroot] [PATCH 0/51 v4] Add QEMU for runing on the target
+In-Reply-To: <201212092043.12794.yann.morin.1998@free.fr>
+References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
+ <20121209194100.72987f2c@skate>
+ <201212092043.12794.yann.morin.1998@free.fr>
+Message-ID: <20121210091747.696fae45@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Yann E. MORIN,
 
-On Sun, 9 Dec 2012 21:26:20 +0200, Baruch Siach wrote:
+On Sun, 9 Dec 2012 20:43:12 +0100, Yann E. MORIN wrote:
 
-> On Sun, Dec 09, 2012 at 08:16:44PM +0100, Thomas Petazzoni wrote:
-> > We really only need the host build of libglib2 for a few helper
-> > programs that are used for the target build of libglib2. Therefore,
-> > trying to use bells and whistles like DTrace, GCov and SystemTap is
-> > useful.
+> For those interested, I've put up the series on gitorious:
+>     git://gitorious.org/buildroot/buildroot.git
+>     branch: yem-qemu
 > 
-> Not?
+> This branch already contains the removeal of the _AVAILABLE symbols,
+> spotted by Thomas.
+> 
+> I have no clue how to manage this, and I don't know (yet?) how I'll manage
+> to push updates to this branch, so do not expect any miracle! ;-)
 
-Yes, thanks, I've sent a v2 that fixes that.
+For such a working branch, people will normally expect that it will get
+rebased. So just rebase as you do usually to rework your patches, and
+then to push, do:
+
+ git push -f your-gitorious-remote
+
+Bye,
 
 Thomas
 -- 
