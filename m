@@ -1,61 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Dec 2012 10:35:07 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: Linaro toolchains are
-	available for Cortex-A{5, 15}
-Message-ID: <1355132107-5550-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Dec 2012 10:40:24 +0100
+Subject: [Buildroot] [git commit] package/crosstool-ng: bumpimg default
+	GCC version to 4.6.3
+In-Reply-To: <20121210100945.0ccfbe69@skate> (Thomas Petazzoni's message of
+ "Mon, 10 Dec 2012 10:09:45 +0100")
+References: <20121209203933.44D7B9A158@busybox.osuosl.org>
+ <20121210100945.0ccfbe69@skate>
+Message-ID: <87ehiytfcn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 4fe605d..456407e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -6,7 +6,7 @@ choice
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- 	bool "Linaro 2012.11"
- 	depends on BR2_arm
--	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	bool "Linaro 2012.10"
- 	depends on BR2_arm
--	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -40,7 +40,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 	bool "Linaro 2012.09"
- 	depends on BR2_arm
--	depends on BR2_cortex_a8 || BR2_cortex_a9
-+	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -54,9 +54,9 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--comment "Linaro toolchains available for Cortex-A{8,9}"
-+comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
- 	depends on BR2_arm
--	depends on !BR2_cortex_a8 && !BR2_cortex_a9
-+	depends on !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	bool "Sourcery CodeBench ARM 2012.03"
+Hi,
+
+ Thomas> The recent updates to the crosstool-ng configs is apparently breaking
+ Thomas> the build:
+
+ Thomas>   http://autobuild.buildroot.org/results/b99c757884d14bbe8893900824763f63dd13f5dc/build-end.log
+
+Yes, that looks related (but not exactly the same) as the ppl issues
+with gcc 4.7+ mentioned yesterday.
+
+Yann mentioned on IRC that he had a ppl fix pending.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
