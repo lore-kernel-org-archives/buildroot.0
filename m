@@ -1,29 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 10:22:42 +0100
-Subject: [Buildroot] [PATCH v2] libglib2: don't try to use
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Dec 2012 10:22:28 +0100
+Subject: [Buildroot] [git commit] libglib2: don't try to use
 	DTrace/GCov/SystemTap for host build
-In-Reply-To: <1355081107-27706-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 9 Dec 2012 20:25:07 +0100")
-References: <1355081107-27706-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwxmtg65.fsf@dell.be.48ers.dk>
+Message-ID: <20121210092230.A7C759A0C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=695f52c17488e90cac1d4dc5a2a48ae94f2c5bb9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> We really only need the host build of libglib2 for a few helper
- Thomas> programs that are used for the target build of libglib2. Therefore,
- Thomas> trying to use bells and whistles like DTrace, GCov and SystemTap is
- Thomas> totally useless.
+We really only need the host build of libglib2 for a few helper
+programs that are used for the target build of libglib2. Therefore,
+trying to use bells and whistles like DTrace, GCov and SystemTap is
+totally useless.
 
- Thomas> And it is actually harmful, since it is causing build failures on the
- Thomas> gcc110 PowerPC-based autobuilder that apparently has some
- Thomas> DTrace-feature installed. This commit therefore fixes:
+And it is actually harmful, since it is causing build failures on the
+gcc110 PowerPC-based autobuilder that apparently has some
+DTrace-feature installed. This commit therefore fixes:
 
-Committed, thanks.
+  http://autobuild.buildroot.org/results/1c62d1ce10937bd21f5afcb73782b939d10c2038/build-end.log
 
--- 
-Bye, Peter Korsgaard
+Which has been polluting our autobuilder logs since several weeks now.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libglib2/libglib2.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index a32cab2..4427431 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -53,6 +53,9 @@ endif
+ HOST_LIBGLIB2_CONF_OPT = \
+ 		--disable-gtk-doc \
+ 		--enable-debug=no \
++		--disable-dtrace \
++		--disable-systemtap \
++		--disable-gcov
+ 
+ LIBGLIB2_DEPENDENCIES = host-pkgconf host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext)
+ 
