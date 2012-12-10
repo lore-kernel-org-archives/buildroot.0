@@ -1,33 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Dec 2012 15:07:42 +0100
-Subject: [Buildroot] [git commit] at91bootstrap: upstream moved to another
-	URL
-Message-ID: <20121210142117.6AC76996E8@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Dec 2012 11:23:30 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.7.14.1
+Message-ID: <1355149410-19395-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=422700feba3c56a5bb9534d222395c00c930df65
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/at91bootstrap/at91bootstrap.mk |    2 +-
+ package/sqlite/sqlite.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index d8caed7..46862c0 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 0320cc4..bf4b921 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
- AT91BOOTSTRAP_VERSION = 1.16
--AT91BOOTSTRAP_SITE = http://www.atmel.com/dyn/resources/prod_documents/
-+AT91BOOTSTRAP_SITE = http://www.atmel.com/Images
- AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
  
- AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+-SQLITE_VERSION = 3071300
++SQLITE_VERSION = 3071401
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_LICENSE = Public domain
+-- 
+1.7.8.6
