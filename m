@@ -1,14 +1,16 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:53 +0100
-Subject: [Buildroot] [PATCH 33/52] package/qemu: add uuid support
+Date: Tue, 11 Dec 2012 00:44:57 +0100
+Subject: [Buildroot] [PATCH 37/52] package/qemu: add support for cURL
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-34-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-38-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+QEMU can use libcurl as a block backend, to access remote block devices.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
@@ -17,51 +19,51 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  2 files changed, 17 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 5181fdc..0c4aa0a 100644
+index 237fb7b..47857ec 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -114,6 +114,16 @@ config BR2_PACKAGE_QEMU_SDL
+@@ -128,6 +128,16 @@ config BR2_PACKAGE_QEMU_VIRTFS
+ 	  file-system called 9p, and can be accelerated by using the 9p
+ 	  virtio).
  
++config BR2_PACKAGE_QEMU_CURL
++	bool "Enable remote block-devices using cURL"
++	depends on !BR2_PREFER_STATIC_LIB
++	select BR2_PACKAGE_LIBCURL
++	help
++	  Say 'y' to access remote block-devices using libcurl.
++
++comment "cURL support is not possible with static linking"
++    depends on BR2_PREFER_STATIC_LIB
++
  comment "Misc. features"
  
-+config BR2_PACKAGE_QEMU_UUID
-+	bool "Enable VMs UUID"
-+	depends on BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Say 'y' here to have QEMU support UUIDs for VMs.
-+
-+comment "UUID support requires util-linux (for libuuid)"
-+	depends on !BR2_PACKAGE_UTIL_LINUX
-+
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 9ed6d6f..54cbefc 100644
+index b34ff69..e0270f0 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,13 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -155,6 +155,13 @@ else
+ QEMU_OPTS += --disable-virtfs
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
-+QEMU_OPTS += --enable-uuid
-+QEMU_DEPENDENCIES += util-linux
++ifeq ($(BR2_PACKAGE_QEMU_CURL),y)
++QEMU_OPTS += --enable-curl
++QEMU_DEPENDENCIES += libcurl
 +else
-+QEMU_OPTS += --disable-uuid
++QEMU_OPTS += --disable-curl
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -239,7 +246,6 @@ define QEMU_CONFIGURE_CMDS
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -262,7 +269,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
+ 	        --disable-curses                    \
+-	        --disable-curl                      \
  	        --disable-fdt                       \
  	        --disable-bluez                     \
  	        --disable-guest-base                \
--	        --disable-uuid                      \
- 	        --disable-vde                       \
- 	        --disable-linux-aio                 \
- 	        --disable-cap-ng                    \
 -- 
 1.7.2.5
