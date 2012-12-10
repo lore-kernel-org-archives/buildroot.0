@@ -1,70 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:50 +0100
-Subject: [Buildroot] [PATCH 30/52] package/qemu: add VNC TLS-encryption
+Date: Tue, 11 Dec 2012 00:44:49 +0100
+Subject: [Buildroot] [PATCH 29/52] package/qemu: add VNC jpeg and png
+	compression
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-31-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-30-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Only TLS is supported, as buildroot has no package for the SASL library.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   11 +++++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   10 ++++++++++
+ package/qemu/qemu.mk   |   16 ++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 74d207c..14c3704 100644
+index 057c1d6..74d207c 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -94,6 +94,17 @@ config BR2_PACKAGE_QEMU_VNC_JPEG
- 	depends on BR2_PACKAGE_QEMU_VNC
- 	select BR2_PACKAGE_JPEG
+@@ -84,6 +84,16 @@ config BR2_PACKAGE_QEMU_VNC
+ 	  Say 'y' to enable the VNC frontend, that is, QEMU will act as a
+ 	  VNC server presenting the VM's display.
  
-+# TLS does not work with static link, because the gnutls .pc is missing a
-+# dependency on libintl... :-(
-+config BR2_PACKAGE_QEMU_VNC_TLS
-+	bool "TLS encryption"
++config BR2_PACKAGE_QEMU_VNC_PNG
++	bool "PNG compression"
 +	depends on BR2_PACKAGE_QEMU_VNC
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_LIBPNG
 +
-+comment "VNC TLS encryption does not work for static link"
-+    depends on BR2_PACKAGE_QEMU_VNC && BR2_PREFER_STATIC_LIB
++config BR2_PACKAGE_QEMU_VNC_JPEG
++	bool "JPEG compression"
++	depends on BR2_PACKAGE_QEMU_VNC
++	select BR2_PACKAGE_JPEG
 +
  config BR2_PACKAGE_QEMU_SDL
  	bool "Enable SDL frontend"
  	select BR2_PACKAGE_SDL
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 29e1315..61509ec 100644
+index 99f4114..29e1315 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -134,6 +134,13 @@ else
- QEMU_OPTS += --disable-vnc-jpeg
+@@ -120,6 +120,20 @@ else
+ QEMU_OPTS += --disable-vnc
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VNC_TLS),y)
-+QEMU_OPTS += --enable-vnc-tls
-+QEMU_DEPENDENCIES += gnutls
++ifeq ($(BR2_PACKAGE_QEMU_VNC_PNG),y)
++QEMU_OPTS += --enable-vnc-png
++QEMU_DEPENDENCIES += libpng
 +else
-+QEMU_OPTS += --disable-vnc-tls
++QEMU_OPTS += --disable-vnc-png
++endif
++
++ifeq ($(BR2_PACKAGE_QEMU_VNC_JPEG),y)
++QEMU_OPTS += --enable-vnc-jpeg
++QEMU_DEPENDENCIES += jpeg
++else
++QEMU_OPTS += --disable-vnc-jpeg
 +endif
 +
  ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
  QEMU_OPTS += --enable-sdl
  QEMU_DEPENDENCIES += sdl
-@@ -165,7 +172,6 @@ define QEMU_CONFIGURE_CMDS
+@@ -151,8 +165,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-bsd-user                  \
  	        --disable-xen                       \
  	        --disable-slirp                     \
--	        --disable-vnc-tls                   \
+-	        --disable-vnc-jpeg                  \
+-	        --disable-vnc-png                   \
+ 	        --disable-vnc-tls                   \
  	        --disable-vnc-sasl                  \
  	        --disable-virtfs                    \
- 	        --disable-brlapi                    \
 -- 
 1.7.2.5
