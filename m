@@ -1,26 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 22:37:51 +0100
-Subject: [Buildroot] [PATCH] tcllib: new package
-In-Reply-To: <1354839385-23108-2-git-send-email-zinosat@tiscali.it> (Davide
- Viti's message of "Fri, 7 Dec 2012 01:16:25 +0100")
-References: <1354839385-23108-1-git-send-email-zinosat@tiscali.it>
- <1354839385-23108-2-git-send-email-zinosat@tiscali.it>
-Message-ID: <87txrtpp00.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Dec 2012 22:33:24 +0100
+Subject: [Buildroot] [git commit] tslib: add license info
+Message-ID: <20121210213739.45C3D9A1A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Davide" == Davide Viti <zinosat@tiscali.it> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5611509259e513486dfc35941e80549b081b28fd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Davide> Signed-off-by: Davide Viti <zinosat@tiscali.it>
+[Peter: Change to LGPL as pointed out by Arnout]
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/tslib/tslib.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Please put the v4 in the topic of the patch itself in the future, as the
-cover letter doesn't make it to patchwork (and put the changelog after
-the --- line).
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index b10b5ec..c94be7d 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -5,6 +5,9 @@
+ #############################################################
+ TSLIB_VERSION = 412d99d
+ TSLIB_SITE = http://github.com/kergoth/tslib/tarball/master
++TSLIB_LICENSE = LGPL
++TSLIB_LICENSE_FILES = COPYING
++
+ TSLIB_AUTORECONF = YES
+ TSLIB_INSTALL_STAGING = YES
+ TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
