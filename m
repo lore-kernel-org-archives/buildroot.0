@@ -1,21 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 22:27:53 +0100
-Subject: [Buildroot] [PATCH] barebox: add 2012.12, remove 2012.08
-In-Reply-To: <1354877490-15585-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Fri, 7 Dec 2012 11:51:30 +0100")
-References: <1354877490-15585-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <877gopr412.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 10 Dec 2012 22:17:39 +0100
+Subject: [Buildroot] [git commit] cjson: fix download URL
+Message-ID: <20121210212803.35B9B9A188@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=190ef5bac13a1387b526309c194638bfdb6f6e23
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Fabio> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Downloads.sourceforge.net doesn't like the double '/'.
 
-Committed, thanks.
+Reported-by: Viallard Anthony <viallard@syscom-instruments.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Acked-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/cjson/cjson.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index ccc6010..55af800 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ CJSON_VERSION         = undefined
+ CJSON_SOURCE          = cJSONFiles.zip
+-CJSON_SITE            = http://downloads.sourceforge.net/project/cjson/
++CJSON_SITE            = http://downloads.sourceforge.net/project/cjson
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE         = MIT
+ 
