@@ -1,68 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:45:00 +0100
-Subject: [Buildroot] [PATCH 40/52] package/qemu: add AIO support
+Date: Tue, 11 Dec 2012 00:45:05 +0100
+Subject: [Buildroot] [PATCH 45/52] package/qemu: enable sound
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-41-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-46-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for Asynchronous Input/Ouput (AIO).
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    9 +++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 16 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   38 ++++++++++++++++++++++++++++++++++++++
+ package/qemu/qemu.mk   |   19 +++++++++++++++++--
+ 2 files changed, 55 insertions(+), 2 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index d912036..c91ce33 100644
+index deabb6f..dad72a8 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -149,6 +149,15 @@ config BR2_PACKAGE_QEMU_CURL
- comment "cURL support is not possible with static linking"
-     depends on BR2_PREFER_STATIC_LIB
+@@ -200,6 +200,44 @@ config BR2_PACKAGE_QEMU_VDE
+ 	  Say 'y' here to have QEMU connect to VDE (Virtual Distributed
+ 	  Ethernet) switches.
  
-+config BR2_PACKAGE_QEMU_AIO
-+	bool "Enable AIO"
-+	depends on BR2_PACKAGE_LIBAIO
++comment "Sound"
++
++config BR2_PACKAGE_QEMU_SOUND_CARDS
++	string "Enable sound cards"
++	default "ac97 es1370 hda"
 +	help
-+	  Say 'y' here to enable Asynchronous Input/Output (AIO).
++	  Enter here the list of sound cards you want QEMU to emulate.
++	  The available sound cards are:
++	    ac97 es1370 sb16 cs4231a adlib gus hda
++	  
++	  The default is: ac97 es1370 hda
++	  
++	  Note: even if you say 'n' to both alsa and SDL drivers, below, QEMU
++	  always include the 'wav' driver, which stores the generated sound
++	  into a file, and the 'none' driver, which discards generated sound.
 +
-+comment "AIO support depends on libaio"
-+	depends on !BR2_PACKAGE_LIBAIO
++config BR2_PACKAGE_QEMU_MIXEMU
++	bool "Enable mixer emulation"
++	help
++	  Say 'y' here to have QEMU emulate a mixer device.
 +
- comment "Networking"
++config BR2_PACKAGE_QEMU_SOUND_ALSA
++	bool "Enable sound via alsa"
++	select BR2_PACKAGE_ALSA_LIB
++	help
++	  Say 'y' here to have QEMU play sound from the VMs via alsa.
++	  
++	  Note: this is only for system emulation, not user emulation.
++
++config BR2_PACKAGE_QEMU_SOUND_SDL
++	bool "Enable sound via SDL"
++	select BR2_PACKAGE_QEMU_SDL # Requires that SDL frontend be selected
++	select BR2_PACKAGE_SDL
++	help
++	  Say 'y' here to have QEMU play sound from the VMs via SDL.
++	  
++	  Note: this is only for system emulation, not user emulation.
++
+ comment "Misc. features"
  
- config BR2_PACKAGE_QEMU_BLUEZ
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 1657b8f..941babc 100644
+index 34a3a04..dfe9cbb 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -169,6 +169,13 @@ else
- QEMU_OPTS += --disable-curl
+@@ -211,6 +211,23 @@ else
+ QEMU_OPTS += --disable-vde
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_AIO),y)
-+QEMU_OPTS += --enable-linux-aio
-+QEMU_DEPENDENCIES += libaio
-+else
-+QEMU_OPTS += --disable-linux-aio
++QEMU_SND_DRV =
++ifeq ($(BR2_PACKAGE_QEMU_SOUND_ALSA),y)
++QEMU_SND_DRV += alsa
++QEMU_DEPENDENCIES += alsa-lib
++endif
++ifeq ($(BR2_PACKAGE_QEMU_SOUND_SDL),y)
++QEMU_SND_DRV += sdl
++QEMU_DEPENDENCIES += sdl
++endif
++ifneq ($(QEMU_SND_DRV),)
++QEMU_OPTS += --audio-drv-list="$(QEMU_SND_DRV)"
++endif
++QEMU_OPTS += --audio-card-list=$(BR2_PACKAGE_QEMU_SOUND_CARDS)
++ifeq ($(BR2_PACKAGE_QEMU_MIXEMU),y)
++QEMU_OPTS += --enable-mixemu
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
- QEMU_OPTS += --enable-bluez
- QEMU_DEPENDENCIES += bluez_utils
-@@ -285,7 +292,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-fdt                       \
- 	        --disable-guest-base                \
- 	        --disable-vde                       \
--	        --disable-linux-aio                 \
- 	        --disable-docs                      \
- 	        --disable-spice                     \
- 	        --disable-rbd                       \
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -307,8 +324,6 @@ define QEMU_CONFIGURE_CMDS
+ 	    ./configure                             \
+ 	        --prefix=/usr                       \
+ 	        --cross-prefix=$(TARGET_CROSS)      \
+-	        --audio-drv-list=                   \
+-	        --audio-card-list=                  \
+ 	        --enable-kvm                        \
+ 	        --enable-nptl                       \
+ 	        --enable-vhost-net                  \
 -- 
 1.7.2.5
