@@ -1,64 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 10 Dec 2012 07:51:20 -0300
-Subject: [Buildroot] [PATCH] dnsmasq: fix build failure without DHCP
-Message-ID: <1355136680-29052-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Mon, 10 Dec 2012 11:51:38 +0100 (CET)
+Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
+In-Reply-To: <50C58B3F.4080901@mind.be>
+Message-ID: <1d14db13-a03d-496c-9e7a-3eb180d9fe11@zimbra2.corp.accelance.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/26a9e152f533e467f68b72a373d0fc84d561eb87
+As usual, sniped what I agree with and v4 is on the way
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch |   37 ++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
- create mode 100644 package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch
+> > diff --git a/fs/Config.in b/fs/Config.in
+> > index da4c5ff..664d2f6 100644
+> > --- a/fs/Config.in
+> > +++ b/fs/Config.in
+> > @@ -11,5 +11,6 @@ source "fs/romfs/Config.in"
+> >   source "fs/squashfs/Config.in"
+> >   source "fs/tar/Config.in"
+> >   source "fs/ubifs/Config.in"
+> > +source "fs/live/Config.in"
+> 
+>   Was there a problem with sorting this alphabetically?
 
-diff --git a/package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch b/package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch
-new file mode 100644
-index 0000000..817d3b2
---- /dev/null
-+++ b/package/dnsmasq/dnsmasq-fix-parse-server-no-dhcp.patch
-@@ -0,0 +1,37 @@
-+From acd702292afebb8550acbfbe80638995545ccd10 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 10 Dec 2012 07:47:10 -0300
-+Subject: [PATCH] Move parse_server outside the HAVE_DHCP ifdef
-+
-+Fixes build breakage when building without DHCP support.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/option.c |    4 ++++
-+ 1 files changed, 4 insertions(+), 0 deletions(-)
-+
-+diff --git a/src/option.c b/src/option.c
-+index c1643a1..d6e323b 100644
-+--- a/src/option.c
-++++ b/src/option.c
-+@@ -641,6 +641,8 @@ static char *set_prefix(char *arg)
-+    return arg;
-+ }
-+ 
-++#endif
-++
-+ char *parse_server(char *arg, union mysockaddr *addr, union mysockaddr *source_addr, char *interface, int *flags)
-+ {
-+   int source_port = 0, serv_port = NAMESERVER_PORT;
-+@@ -728,6 +730,8 @@ char *parse_server(char *arg, union mysockaddr *addr, union mysockaddr *source_a
-+   return NULL;
-+ }
-+ 
-++#ifdef HAVE_DHCP
-++
-+ /* This is too insanely large to keep in-line in the switch */
-+ static int parse_dhcp_opt(char *errstr, char *arg, int flags)
-+ {
-+-- 
-+1.7.8.6
-+
--- 
-1.7.8.6
+just a mixup between my "sort alphabetically" and my "live" patches... fixing that
+
+> > +
+> > +if grep ^BR2_TARGET_ROOTFS_LIVE=y $CONFIG_FILE>  /dev/null ; then
+> 
+>   We use 'grep -q' rather than redirecting to /dev/null.
+> 
+
+I copied how it was done for locale that redirect to /dev/null, thus my mistake
+
+I'll fix that in v4, but not the locale ones (to avoid mixup in my patch)
+
+
+
+Thx for the comments, i'll wait a little to see if more comments come and then i'll send a V4
+
+I also need to see what to do  with "make distclean" when the live filesystem is in output/
+
+currently there are all sorts of permission-denied errors, and i'm not sure what to do here...
+
+* I could use the config options to run "sudo rm" but i'm not sure we want to read the config option in distclean
+* I could just leave it as is and just say the user is smart enough to run "sudo make distclean" in that case
+* I could blindly run "sudo rm" in output but that sounds a bit dangerous
+
+
+I tend to think the second option is the best, but i'd gladly get feedback on that one
