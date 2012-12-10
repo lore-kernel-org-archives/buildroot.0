@@ -1,46 +1,60 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Dec 2012 22:25:45 +0100
-Subject: [Buildroot] [git commit] xtensa: add -mlongcalls to CFLAGS for
-	xtensa
-Message-ID: <20121210212803.C44EF99949@busybox.osuosl.org>
+Date: Mon, 10 Dec 2012 22:27:35 +0100
+Subject: [Buildroot] [git commit] barebox: add 2012.12, remove 2012.08
+Message-ID: <20121210212803.EB87399949@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7ccd30afbd989085be834b23ac2ea997c50b883
+commit: http://git.buildroot.net/buildroot/commit/?id=04c8ff92c3f4ca645daf44f73b40b22fc13fdc4c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The longcalls option allows calls across a greater range of addresses.
-
-This option may degrade both code size and performance, but
-the linker can generally optimize away the unnecessary overhead
-when a call ends up within range
-
-Signed-off-by: Chris Zankel <chris@zankel.net>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ boot/barebox/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 8dea51e..4281773 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -56,6 +56,15 @@ TARGET_ABI+=-mabi=spe -mfloat-gprs=double -Wa,-me500mc
- endif
- endif
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 95f330f..e7498a8 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,13 +8,10 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2012_11
++	default BR2_TARGET_BAREBOX_2012_12
+ 	help
+ 	  Select the specific Barebox version you want to use
  
-+# Use longcalls option for Xtensa globally.
-+# The 'longcalls' option allows calls across a greater range of addresses,
-+# and is required for some packages. While this option can degrade both
-+# code size and performance, the linker can usually optimize away the
-+# overhead when a call ends up within a certain range.
-+ifeq ($(BR2_xtensa),y)
-+TARGET_ABI += -mlongcalls
-+endif
+-config BR2_TARGET_BAREBOX_2012_08
+-	bool "2012.08"
+-
+ config BR2_TARGET_BAREBOX_2012_09
+ 	bool "2012.09"
+ 
+@@ -24,6 +21,9 @@ config BR2_TARGET_BAREBOX_2012_10
+ config BR2_TARGET_BAREBOX_2012_11
+ 	bool "2012.11"
+ 
++config BR2_TARGET_BAREBOX_2012_12
++	bool "2012.12"
 +
- STAGING_DIR=$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
  
- TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+@@ -41,10 +41,10 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2012.08.0"	if BR2_TARGET_BAREBOX_2012_08
+ 	default "2012.09.0"	if BR2_TARGET_BAREBOX_2012_09
+ 	default "2012.10.0"	if BR2_TARGET_BAREBOX_2012_10
+ 	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
++	default "2012.12.0"	if BR2_TARGET_BAREBOX_2012_12
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
