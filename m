@@ -1,36 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:23 +0100
-Subject: [Buildroot] [PATCH 03/52] package/qemu: fix host dependencies
+Date: Tue, 11 Dec 2012 00:44:25 +0100
+Subject: [Buildroot] [PATCH 05/52] package/qemu: bump version
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-4-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-6-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-'host-*' packages should depends on other 'host-*' packages,
-not on target packages.
+Bump QEMU to 1.2.1.
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Note: 1.3.0 is out now, but ./configure has changed a bit, and there are
+new dependencies, so the bump to 1.3.0 is postponed for a litle while...
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Francois Perrad <fperrad@gmail.com>
 ---
  package/qemu/qemu.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 81cd79f..2c0dbde 100644
+index 91d0eb8..241a392 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #-------------------------------------------------------------
- # Host-qemu
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
--HOST_QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
-+HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2
- 
- #       BR ARCH         qemu
- #       -------         ----
+-QEMU_VERSION = 1.2.0
++QEMU_VERSION = 1.2.1
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
 -- 
 1.7.2.5
