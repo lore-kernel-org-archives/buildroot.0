@@ -1,33 +1,66 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Dec 2012 22:24:08 +0100
-Subject: [Buildroot] [git commit] bump connman version to 1.9
-Message-ID: <20121210212803.92AD799949@busybox.osuosl.org>
+Date: Mon, 10 Dec 2012 22:23:22 +0100
+Subject: [Buildroot] [git commit] qemu/ppc-virtex-ml507: add new sample
+	config
+Message-ID: <20121210212803.6BC5599949@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36f96dbb7816ddeaa7f0a588f0a54ad8fd7a0ee5
+commit: http://git.buildroot.net/buildroot/commit/?id=fe3fee8bb6153be041cc6b28b6eb92ede020ab75
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A quick patch to bump connman's version to 1.9
+Add new powerpc-virtex-ml507 sample qemu config.
+Useful for powerpc softfloat testing.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/connman/connman.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ board/qemu/powerpc-virtex-ml507/readme.txt |    8 ++++++++
+ configs/qemu_ppc_virtex_ml507_defconfig    |   22 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 0 deletions(-)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 2c04cdd..2c376c9 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- #######################################################
- 
--CONNMAN_VERSION = 1.8
-+CONNMAN_VERSION = 1.9
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
- CONNMAN_INSTALL_STAGING = YES
+diff --git a/board/qemu/powerpc-virtex-ml507/readme.txt b/board/qemu/powerpc-virtex-ml507/readme.txt
+new file mode 100644
+index 0000000..0500a95
+--- /dev/null
++++ b/board/qemu/powerpc-virtex-ml507/readme.txt
+@@ -0,0 +1,8 @@
++Run the emulation with:
++
++ cp output/images/virtex440-ml507.dtb ppc.dtb
++ qemu-system-ppc -M virtex-ml507 -kernel output/images/vmlinux -m 256 -nographic -append "console=ttyS0"
++
++The login prompt will appear in the terminal that started Qemu.
++
++Tested with QEMU 1.2.0
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+new file mode 100644
+index 0000000..6b4ea74
+--- /dev/null
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -0,0 +1,22 @@
++# Architecture
++BR2_powerpc=y
++BR2_powerpc_440=y
++
++# Filesystem
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# Lock to 3.6 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_3_6=y
++
++# Use soft float
++BR2_SOFT_FLOAT=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.9"
++BR2_LINUX_KERNEL_DEFCONFIG="44x/virtex5"
++BR2_LINUX_KERNEL_VMLINUX=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
