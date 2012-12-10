@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 21:51:50 +0100
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.7.14.1
-In-Reply-To: <1355149410-19395-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 10 Dec 2012 11:23:30 -0300")
-References: <1355149410-19395-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874njtsk9l.fsf@dell.be.48ers.dk>
+Date: Mon, 10 Dec 2012 21:52:21 +0100
+Subject: [Buildroot] [PATCH] busybox: remove deprecated 1.18.x
+In-Reply-To: <1355151860-304-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 10 Dec 2012 12:04:20 -0300")
+References: <1355151860-304-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zk1lr5oa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
