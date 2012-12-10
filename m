@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:58 +0100
-Subject: [Buildroot] [PATCH 38/52] package/qemu: enable use of the curses
-	frontend
+Date: Tue, 11 Dec 2012 00:44:51 +0100
+Subject: [Buildroot] [PATCH 31/52] package/qemu: add option to not install
+	blobs
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-39-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-32-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +13,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   11 +++++++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 18 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   16 ++++++++++++++++
+ package/qemu/qemu.mk   |    4 ++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 47857ec..15239a7 100644
+index 14c3704..e530303 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -112,6 +112,17 @@ config BR2_PACKAGE_QEMU_SDL
+@@ -112,4 +112,20 @@ config BR2_PACKAGE_QEMU_SDL
  	  Say 'y' to enable the SDL frontend, that is, a graphical window
  	  presenting the VM's display.
  
-+config BR2_PACKAGE_QEMU_CURSES
-+	bool "Enable the curses frontend"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Say 'y' to use curses to display the text-mode of VGA outpout.
-+	  
-+	  If the VM's graphic adapter does not support VGA text-mode, or it
-+	  is in graphical mode, then nothing will be displayed with this
-+	  frontend (although you can still use the SDL or VNC frontends to
-+	  display the graphical output).
++comment "Misc. features"
 +
- comment "Block backends"
- 
- config BR2_PACKAGE_QEMU_VIRTFS
++config BR2_PACKAGE_QEMU_BLOBS
++	bool "Install binary blobs"
++	default y
++	help
++	  Say 'y' here (the default) to install binary blobs (such as BIOS
++	  or firmwares for the different machines simulated by QEMU).
++	  Say 'n' to not install those blobs.
++	  
++	  Note: Some machines may be unbootable without those blobs.
++	        If unsure, say 'y'.
++	  
++	  Note2: This has nothing to do with the licensing of the blobs;
++	         some (most?) even have a free and/or open source license.
++
+ endif # BR2_PACKAGE_QEMU
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index e0270f0..90197f9 100644
+index 61509ec..bf4aeb9 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,13 @@ else
+@@ -149,6 +149,10 @@ else
  QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_CURSES),y)
-+QEMU_OPTS += --enable-curses
-+QEMU_DEPENDENCIES += ncurses
-+else
-+QEMU_OPTS += --disable-curses
++ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
++QEMU_OPTS += --disable-blobs
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
- QEMU_OPTS += --enable-virtfs
- else
-@@ -268,7 +275,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-slirp                     \
- 	        --disable-vnc-sasl                  \
- 	        --disable-brlapi                    \
--	        --disable-curses                    \
- 	        --disable-fdt                       \
- 	        --disable-bluez                     \
- 	        --disable-guest-base                \
+ # Note: although QEMU uses a ./configure script, it is not compatible with
+ #       the traditional autotools options (eg. --target et al.), so we have
+ #       to override the default provided by the autotools-package infra, and
 -- 
 1.7.2.5
