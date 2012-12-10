@@ -1,23 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 21:59:57 +0100
-Subject: [Buildroot] [PATCH] barebox: use the symlink to copy the
-	barebox binary to the images directory
-In-Reply-To: <1353587711-26855-1-git-send-email-gregory.hermant@calao-systems.com>
- (Gregory Hermant's message of "Thu, 22 Nov 2012 13:35:11 +0100")
-References: <1353587711-26855-1-git-send-email-gregory.hermant@calao-systems.com>
-Message-ID: <87vcc9r5bm.fsf@dell.be.48ers.dk>
+Date: Mon, 10 Dec 2012 22:20:28 +0100
+Subject: [Buildroot] [PATCH] fix cjson package
+In-Reply-To: <CANxTyt5w28z3o7zU8AMH+G02nY2ysir7rMiwKUkWP1Lfmm0_wQ@mail.gmail.com>
+ (Danomi Manchego's message of "Fri, 7 Dec 2012 06:36:04 -0500")
+References: <50C0B73C.9020407@syscom-instruments.com>
+ <CANxTyt4OZM0u3jyGrDoAQPvBSzVQ_=BHz_c0rNW6Y9pSr1jzbQ@mail.gmail.com>
+ <50C1ABA9.2030202@syscom-instruments.com>
+ <CANxTyt5w28z3o7zU8AMH+G02nY2ysir7rMiwKUkWP1Lfmm0_wQ@mail.gmail.com>
+Message-ID: <87r4mxr4df.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gregory" == Gregory Hermant <gregory.hermant@calao-systems.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- Gregory> Barebox creates a symlink to the binary. This symlink points to
- Gregory> the barebox.bin or to the compressed zbarebox.bin binary.
+Hi,
 
-Committed, thanks.
+ Danomi> I'm not sure if Peter needs you to send the good fix as a
+ Danomi> git-send-email'ed V2, but:
+
+ Danomi> Acked-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+Yes, preferably - But I've created a git commit myself for this -
+Thanks.
 
 -- 
 Bye, Peter Korsgaard
