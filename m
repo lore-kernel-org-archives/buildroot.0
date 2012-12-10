@@ -1,40 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Dec 2012 13:35:42 +0100
-Subject: [Buildroot] [git commit] ccache: uses fork(),
-	therefore only usable on MMU platforms
-In-Reply-To: <CALR4fEJsZQVHB_-KrvoVRmYN-s-sTemXFMB9FX_VAyTu7yiyVw@mail.gmail.com>
- (Diego Iastrubni's message of "Mon, 10 Dec 2012 14:15:35 +0200")
-References: <20121209210012.5D1F49A157@busybox.osuosl.org>
- <CALR4fEJsZQVHB_-KrvoVRmYN-s-sTemXFMB9FX_VAyTu7yiyVw@mail.gmail.com>
-Message-ID: <871ueyt78h.fsf@dell.be.48ers.dk>
+From: Berns <Berns@BEKA-Elektronik.de>
+Date: Mon, 10 Dec 2012 13:35:50 +0100
+Subject: [Buildroot] buildroot 2012.11 large file support
+Message-ID: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Diego" == Diego Iastrubni <diegoiast@gmail.com> writes:
+Hi
 
- Diego> On Sun, Dec 9, 2012 at 10:49 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
- >> 
- >> diff --git a/package/ccache/Config.in b/package/ccache/Config.in
- >> index 4a37973..30e6578 100644
- >> --- a/package/ccache/Config.in
- >> +++ b/package/ccache/Config.in
- >> @@ -1,5 +1,7 @@
- >> config BR2_PACKAGE_CCACHE
- >> bool "ccache"
- >> +       # needs fork()
- >> +       depends on BR2_USE_MMU
- >> help
+i have tried to build at91sam9263ek_defconfig (without any modification)
+with the latest release 2012.11 on a 32bit Ubuntu12.04 machine.
+The build of the toolchain fails with :
+.../buildroot-2012.11/output/toolchain/uClibc_dev//usr/include/features.h:21
+9:5: Fehler: #error It appears you have defined _FILE_OFFSET_BITS=64.
+Unfortunately, uClibc was built without large file support enabled.
 
- Diego> Wait, what?
+Large file support isn't select and i have also checked it with make
+uclibc-menuconfig for uclibc.
+The same problem happend with beaglebone_defconfig.
 
- Diego> What if I am corss compiling from i386 to blackfin? ccache can work on
- Diego> i386... the only problem is for target packages, not host packages.
+After "make clean" and selecting "large file support" the build process
+works.
 
-This is a target package, E.G. ccache running on blackfin. You can still
-use host-ccache for speeding up the cross compilation.
+This problem doesn't happend with release 2012.08.
 
--- 
-Bye, Peter Korsgaard
+Has anybody a hint for me ?
+
+Thanks
+
+Rainer
