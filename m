@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Dec 2012 09:14:24 +0100
-Subject: [Buildroot] [PATCH 12/51] package/slirp: new package
-In-Reply-To: <201212092237.40208.yann.morin.1998@free.fr>
-References: <1355070924-8009-1-git-send-email-yann.morin.1998@free.fr>
- <20121209194223.439bff79@skate>
- <201212092220.26330.yann.morin.1998@free.fr>
- <201212092237.40208.yann.morin.1998@free.fr>
-Message-ID: <20121210091424.5d54efb7@skate>
+Date: Mon, 10 Dec 2012 09:16:40 +0100
+Subject: [Buildroot] [PATCH] libglib2: don't try to use
+ DTrace/GCov/SystemTap for host build
+In-Reply-To: <20121209192619.GB3880@tarshish>
+References: <1355080604-27155-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20121209192619.GB3880@tarshish>
+Message-ID: <20121210091640.1e687c54@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Baruch Siach,
 
-On Sun, 9 Dec 2012 22:37:39 +0100, Yann E. MORIN wrote:
+On Sun, 9 Dec 2012 21:26:20 +0200, Baruch Siach wrote:
 
-> > There's no release tarball, so we're using the git tree, so there's no
-> > ./configure, so we need to autoreconf.
+> On Sun, Dec 09, 2012 at 08:16:44PM +0100, Thomas Petazzoni wrote:
+> > We really only need the host build of libglib2 for a few helper
+> > programs that are used for the target build of libglib2. Therefore,
+> > trying to use bells and whistles like DTrace, GCov and SystemTap is
+> > useful.
 > 
-> Of course, I've added a comment in slirp.mk to explain that, too.
+> Not?
 
-Great, thanks!
+Yes, thanks, I've sent a v2 that fixes that.
 
 Thomas
 -- 
