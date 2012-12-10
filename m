@@ -1,40 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Dec 2012 22:29:03 +0100
-Subject: [Buildroot] [git commit] openssl: fix runtime failure on some
-	powerpc variants
-Message-ID: <20121210212912.A86BF9A188@busybox.osuosl.org>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Mon, 10 Dec 2012 22:30:39 +0100
+Subject: [Buildroot] buildroot 2012.11 large file support
+In-Reply-To: <878v95skvm.fsf@dell.be.48ers.dk>
+References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
+ <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
+ <87d2yhsoh8.fsf@dell.be.48ers.dk>
+ <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
+ <878v95skvm.fsf@dell.be.48ers.dk>
+Message-ID: <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=85736773fa06118b3a5a754f5f5bd4190298aecf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2012/12/10 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
+>
+> Hi,
+>
+>  >> I don't think so. I just did a:
+>  >>
+>  >> make at91sam9263ek_defconfig && make
+>  >>
+>  >> Without any problems. What exactly did you do?
+>
+>  Willy> make.
+>
+> With what configuration? 'make' with a clean tree will just run
+> menuconfig for you.
+>
 
-OpenSSL's assembly optimizations por PowerPC seem to be broken for at
-least 4xx cores.
-Thanks go to Jan Schunke for reporting and testing.
+Yes, so I just quit it so it leaves the default config (which seems to
+have a problem with large file)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/openssl/openssl.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+>  Willy> just make after having DL latest stable version few days ago from a
+>  Willy> tgz. Doing a make menuconfig don't change anything, and as far as I
+>  Willy> can remember, menuconfig was telling us about this problem (something
+>  Willy> depending on largefile).
+>
+> Did you perhaps forget to run 'make clean' after changing something in
+> your toolchain configuration?
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 265a4fb..160df2e 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -38,8 +38,11 @@ endif
- endif
- endif
- ifeq ($(ARCH),powerpc)
-+# 4xx cores seem to have trouble with openssl's ASM optimizations
-+ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
- 	OPENSSL_TARGET_ARCH = ppc
- endif
-+endif
- ifeq ($(ARCH),x86_64)
- 	OPENSSL_TARGET_ARCH = x86_64
- endif
+I'm quite sure I did it (make clean + make distclean + rm ccache). But
+to be sure I'll retry from zero tomorrow.
+
+I'm not blocked I already have my root image (with large file
+enabled), I'm currently setting up qemu to test it, our remark is just
+that default config seems dummy.
+
+>
+>  Willy> (and BTW, hi all, I'm new with buildroot).
+>
+> Welcome!
+>
+
+Thanks !
+
+> --
+> Bye, Peter Korsgaard
