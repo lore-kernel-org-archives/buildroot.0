@@ -1,38 +1,17 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 23:05:37 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
- (Willy Lambert's message of "Mon, 10 Dec 2012 22:30:39 +0100")
-References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
- <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
- <87d2yhsoh8.fsf@dell.be.48ers.dk>
- <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
- <878v95skvm.fsf@dell.be.48ers.dk>
- <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
-Message-ID: <87pq2hpnpq.fsf@dell.be.48ers.dk>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Mon, 10 Dec 2012 16:06:51 -0600
+Subject: [Buildroot] Is libiconv necessary to fully support
+	internationalization?
+Message-ID: <CAE9DZUSwU3BN3Esi7V8GsW7hBErhZ9eReHzNVVj9+Ua2XJcx0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
+Pardon my ignorance, but it is my understanding that glibc now
+provides the same functionality as hitherto provided by libiconv.   If
+my distro needs to support mutliple languages, is there any danger in
+not linking with libiconv?
 
-Hi,
-
- Willy> Yes, so I just quit it so it leaves the default config (which
- Willy> seems to have a problem with large file)
-
-Ok, that also works here:
-
-yes '' | make oldconfig
-make
-
- Willy> I'm not blocked I already have my root image (with large file
- Willy> enabled), I'm currently setting up qemu to test it, our remark is just
- Willy> that default config seems dummy.
-
-Notice that we have a bunch of preconfigured qemu defconfigs (look in configs/)
-
--- 
-Bye, Peter Korsgaard
+Thanks in advance for any insight.
