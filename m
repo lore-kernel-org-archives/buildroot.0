@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:31 +0100
-Subject: [Buildroot] [PATCH 11/52] package/spice-protocol: new package
+Date: Tue, 11 Dec 2012 00:44:29 +0100
+Subject: [Buildroot] [PATCH 09/52] package/celt051: new package
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-12-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-10-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,65 +11,83 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                        |    1 +
- package/spice-protocol/Config.in         |   12 ++++++++++++
- package/spice-protocol/spice-protocol.mk |   14 ++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/spice-protocol/Config.in
- create mode 100644 package/spice-protocol/spice-protocol.mk
+ package/multimedia/Config.in         |    1 +
+ package/multimedia/celt051/Config.in |   15 +++++++++++++++
+ package/multimedia/celt051/celt.mk   |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/celt051/Config.in
+ create mode 100644 package/multimedia/celt051/celt.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index d00ebf3..bf08301 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -660,6 +660,7 @@ source "package/ser2net/Config.in"
- source "package/socat/Config.in"
- source "package/socketcand/Config.in"
- source "package/spawn-fcgi/Config.in"
-+source "package/spice-protocol/Config.in"
- source "package/squid/Config.in"
- source "package/stunnel/Config.in"
- source "package/tcpdump/Config.in"
-diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 273d9bc..5e8d60c 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -2,6 +2,7 @@ menu "Audio and video applications"
+ source "package/multimedia/alsa-utils/Config.in"
+ source "package/multimedia/aumix/Config.in"
+ source "package/multimedia/bellagio/Config.in"
++source "package/multimedia/celt051/Config.in"
+ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+diff --git a/package/multimedia/celt051/Config.in b/package/multimedia/celt051/Config.in
 new file mode 100644
-index 0000000..b354361
+index 0000000..50ed069
 --- /dev/null
-+++ b/package/spice-protocol/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SPICE_PROTOCOL
-+	bool "spice protocol"
++++ b/package/multimedia/celt051/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CELT051
++	bool "celt051"
++	select BR2_PACKAGE_LIBOGG
 +	help
-+	  The Spice project aims to provide a complete open source
-+	  solution for interaction with virtualized desktop devices.
-+	  The Spice project deals with both the virtualized devices
-+	  and the front-end. Interaction between front-end and
-+	  back-end is done using VD-Interfaces.
++	  The CELT ultra-low delay audio codec
 +	  
-+	  This package implements the protocol-part of Spice.
++	  The CELT codec is a compression algorithm for audio. Like MP3,
++	  Vorbis, and AAC it is suitable for transmitting music with high
++	  quality. Unlike these formats CELT imposes very little delay on
++	  the signal, even less than is typical for speech centric formats
++	  like Speex, GSM, or G.729.
 +	  
-+	  http://www.spice-space.org/
-diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
++	  Note: this is version 0.5.1.3 of celt.
++	  
++	  http://www.celt-codec.org/
+diff --git a/package/multimedia/celt051/celt.mk b/package/multimedia/celt051/celt.mk
 new file mode 100644
-index 0000000..dcfe50d
+index 0000000..9baaa82
 --- /dev/null
-+++ b/package/spice-protocol/spice-protocol.mk
-@@ -0,0 +1,14 @@
++++ b/package/multimedia/celt051/celt.mk
+@@ -0,0 +1,30 @@
 +#############################################################
 +#
-+# Spice-protocol
++# celt051
 +#
 +#############################################################
 +
-+SPICE_PROTOCOL_VERSION         = 0.12.2
-+SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
-+SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
-+SPICE_PROTOCOL_LICENSE         = BSD-3c
-+SPICE_PROTOCOL_LICENSE_FILES   = COPYING
-+SPICE_PROTOCOL_INSTALL_STAGING = YES
++# Although version newer than 0.5.1.3 exists, we're
++# stuck with 0.5.1.3 for use by Spice (coming later)
++CELT051_VERSION         = 0.5.1.3
++CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
++CELT051_SITE            = http://downloads.xiph.org/releases/celt
++CELT051_LICENSE         = BSD-2c
++CELT051_LICENSE_FILES   = COPYING
++CELT051_INSTALL_STAGING = YES
++CELT051_DEPENDENCIES    = libogg
++
++# Need to specify --with-ogg, otherwise /usr/lib may be searched for
++# if target is the same kind as host (ie. same arch, same bitness,
++# same endianness, so that /usr/lib contains libraries linkable by
++# our cross-compiler)
++CELT051_CONF_OPT =                  \
++  --enable-fixed-point              \
++  --disable-fixed-point-debug       \
++  --disable-experimental-postfilter \
++  --disable-static-modes            \
++  --disable-assertions              \
++  --disable-oggtest                 \
++  --with-ogg=$(STAGING_DIR)/usr     \
 +
 +$(eval $(autotools-package))
 -- 
