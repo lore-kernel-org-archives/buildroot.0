@@ -1,21 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 22:23:44 +0100
-Subject: [Buildroot] [PATCHv2] qemu/ppc-virtex-ml507: add new sample
-	config
-In-Reply-To: <1354820374-5602-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 6 Dec 2012 15:59:34 -0300")
-References: <1354820374-5602-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwxlr47z.fsf@dell.be.48ers.dk>
+Date: Mon, 10 Dec 2012 22:26:28 +0100
+Subject: [Buildroot] [PATCH] xtensa: add -mlongcalls to CFLAGS for xtensa
+In-Reply-To: <50c0320c.05bf440a.60fe.60b5@mx.google.com> (Chris Zankel's
+ message of "Wed, 5 Dec 2012 21:36:36 -0800")
+References: <50c0320c.05bf440a.60fe.60b5@mx.google.com>
+Message-ID: <87boe1r43f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Chris" == Chris Zankel <chris@zankel.net> writes:
 
- Gustavo> Add new powerpc-virtex-ml507 sample qemu config.
- Gustavo> Useful for powerpc softfloat testing.
+ Chris> The longcalls option allows calls across a greater range of addresses.
+ Chris> This option may degrade both code size and performance, but
+ Chris> the linker can generally optimize away the unnecessary overhead
+ Chris> when a call ends up within range
 
 Committed, thanks.
 
