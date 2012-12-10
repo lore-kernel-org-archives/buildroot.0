@@ -1,33 +1,30 @@
-From: Berns <Berns@BEKA-Elektronik.de>
-Date: Mon, 10 Dec 2012 13:35:50 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-Message-ID: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 10 Dec 2012 10:21:54 -0300
+Subject: [Buildroot] [PATCH] at91bootstrap: upstream moved to another URL
+Message-ID: <1355145714-24628-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ boot/at91bootstrap/at91bootstrap.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-i have tried to build at91sam9263ek_defconfig (without any modification)
-with the latest release 2012.11 on a 32bit Ubuntu12.04 machine.
-The build of the toolchain fails with :
-.../buildroot-2012.11/output/toolchain/uClibc_dev//usr/include/features.h:21
-9:5: Fehler: #error It appears you have defined _FILE_OFFSET_BITS=64.
-Unfortunately, uClibc was built without large file support enabled.
-
-Large file support isn't select and i have also checked it with make
-uclibc-menuconfig for uclibc.
-The same problem happend with beaglebone_defconfig.
-
-After "make clean" and selecting "large file support" the build process
-works.
-
-This problem doesn't happend with release 2012.08.
-
-Has anybody a hint for me ?
-
-Thanks
-
-Rainer
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index d8caed7..46862c0 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ AT91BOOTSTRAP_VERSION = 1.16
+-AT91BOOTSTRAP_SITE = http://www.atmel.com/dyn/resources/prod_documents/
++AT91BOOTSTRAP_SITE = http://www.atmel.com/Images
+ AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+ 
+ AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+-- 
+1.7.8.6
