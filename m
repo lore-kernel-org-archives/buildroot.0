@@ -1,78 +1,153 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:41 +0100
-Subject: [Buildroot] [PATCH 21/52] package/libbsd: new package
+Date: Tue, 11 Dec 2012 00:44:44 +0100
+Subject: [Buildroot] [PATCH 24/52] package/qemu: build for the target (i386
+	or x86_64 only)
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-22-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-25-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Untested for other architectures, so only enabled for known-working ones.
+
+We explicitly disable all features that depends on other packages,
+for now. Such features will be added one by one in the next patches.
+Features that do not rely on external packages are explicitly enabled
+to catch the dependencies on toolchain features early.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in        |    1 +
- package/libbsd/Config.in |   10 ++++++++++
- package/libbsd/libbsd.mk |   21 +++++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
- create mode 100644 package/libbsd/Config.in
- create mode 100644 package/libbsd/libbsd.mk
+ package/Config.in      |    1 +
+ package/qemu/Config.in |   25 ++++++++++++++++
+ package/qemu/qemu.mk   |   73 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 99 insertions(+), 0 deletions(-)
+ create mode 100644 package/qemu/Config.in
 
 diff --git a/package/Config.in b/package/Config.in
-index c90fcd8..e016378 100644
+index d395326..a93aed2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -508,6 +508,7 @@ source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
- source "package/boost/Config.in"
- source "package/libatomic_ops/Config.in"
-+source "package/libbsd/Config.in"
- source "package/libcap/Config.in"
- source "package/libcap-ng/Config.in"
- source "package/libdaemon/Config.in"
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+@@ -571,6 +571,7 @@ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
++source "package/qemu/Config.in"
+ source "package/shared-mime-info/Config.in"
+ source "package/snowball-init/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
 new file mode 100644
-index 0000000..7f2b55a
+index 0000000..4b05e3d
 --- /dev/null
-+++ b/package/libbsd/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBBSD
-+	bool "libbsd"
++++ b/package/qemu/Config.in
+@@ -0,0 +1,25 @@
++comment "QEMU requires a toolchain with threads"
++	depends on !BR2_i386 && !BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_QEMU
++	bool "QEMU"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  This library provides useful functions commonly found on BSD
-+	  systems, and lacking on others like GNU systems, thus making
-+	  it easier to port projects with strong BSD origins, without
-+	  needing to embed the same code over and over again on each
-+	  project.
++	  QEMU is a generic and open source machine emulator and virtualizer.
 +	  
-+	  http://libbsd.freedesktop.org/
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-new file mode 100644
-index 0000000..3af1002
---- /dev/null
-+++ b/package/libbsd/libbsd.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# libbsd
-+#
-+#############################################################
++	  When used as a machine emulator, QEMU can run OSes and programs made
++	  for one machine (e.g. an ARM board) on a different machine (e.g.
++	  your own PC). By using dynamic translation, it achieves very good
++	  performance.
++	  
++	  When used as a virtualizer, QEMU achieves near native performances
++	  by executing the guest code directly on the host CPU. QEMU supports
++	  virtualization when executing under the Xen hypervisor or using the
++	  KVM kernel module in Linux. When using KVM, QEMU can virtualize x86,
++	  server and embedded PowerPC, and S390 guests.
++	  
++	  http://qemu.org/
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 241a392..4c7be50 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -81,3 +81,76 @@ $(eval $(host-autotools-package))
+ 
+ # variable used by other packages
+ QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(QEMU_ARCH)
 +
-+LIBBSD_VERSION         = 0.4.2
-+LIBBSD_SOURCE          = libbsd-$(LIBBSD_VERSION).tar.gz
-+LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
-+LIBBSD_LICENSE         = BSD-3c MIT
-+LIBBSD_LICENSE_FILES   = LICENSE
++#-------------------------------------------------------------
++# Target-qemu
 +
-+# man-pages are BSD-4c, so that license only matters
-+# if doc is kept in the target rootfs
-+ifeq ($(BR2_HAVE_DOCUMENTATION),y)
-+LIBBSD_LICENSE        += (libraries), BSD-4c (documentation)
-+endif
++QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib
 +
-+LIBBSD_INSTALL_STAGING = YES
++# Need the LIBS variable because librt and libm are
++# not automatically pulled. :-(
++QEMU_LIBS = -lrt -lm
++
++QEMU_OPTS =
++
++QEMU_VARS =                                                                         \
++    PYTHON=$(HOST_DIR)/usr/bin/python                                               \
++    PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
++
++# Note: although QEMU uses a ./configure script, it is not compatible with
++#       the traditional autotools options (eg. --target et al.), so we have
++#       to override the default provided by the autotools-package infra, and
++#       provide our own. Sigh... :-/
++
++define QEMU_CONFIGURE_CMDS
++	( cd $(@D);                                 \
++	    LIBS='$(QEMU_LIBS)'                     \
++	    $(TARGET_CONFIGURE_OPTS)                \
++	    $(TARGET_CONFIGURE_ARGS)                \
++	    $(QEMU_VARS)                            \
++	    ./configure                             \
++	        --prefix=/usr                       \
++	        --cross-prefix=$(TARGET_CROSS)      \
++	        --audio-drv-list=                   \
++	        --audio-card-list=                  \
++	        --enable-kvm                        \
++	        --enable-nptl                       \
++	        --enable-attr                       \
++	        --enable-vhost-net                  \
++	        --enable-system                     \
++	        --enable-linux-user                 \
++	        --disable-bsd-user                  \
++	        --disable-xen                       \
++	        --disable-slirp                     \
++	        --disable-sdl                       \
++	        --disable-vnc                       \
++	        --disable-virtfs                    \
++	        --disable-brlapi                    \
++	        --disable-curses                    \
++	        --disable-curl                      \
++	        --disable-fdt                       \
++	        --disable-bluez                     \
++	        --disable-guest-base                \
++	        --disable-uuid                      \
++	        --disable-vde                       \
++	        --disable-linux-aio                 \
++	        --disable-cap-ng                    \
++	        --disable-docs                      \
++	        --disable-spice                     \
++	        --disable-rbd                       \
++	        --disable-libiscsi                  \
++	        --disable-usb-redir                 \
++	        --disable-smartcard                 \
++	        --disable-strip                     \
++	        --disable-seccomp                   \
++	        --disable-sparse                    \
++	        $(QEMU_OPTS)                        \
++	)
++endef
++
++# Need the LIBS_QGA because it does not 'inherit' the LIBS_TOOLS
++# we set at configure time, and there is no conrresponding LIBS_QGA
++# at configure time
++QEMU_MAKE_ENV += LIBS_TOOLS="$(QEMU_LIBS)" LIBS_QGA="$(QEMU_LIBS)" LIBS="$(QEMU_LIBS)"
 +
 +$(eval $(autotools-package))
 -- 
