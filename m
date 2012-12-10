@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:56 +0100
-Subject: [Buildroot] [PATCH 36/52] package/qemu: add support for virtfs
+Date: Tue, 11 Dec 2012 00:44:58 +0100
+Subject: [Buildroot] [PATCH 38/52] package/qemu: enable use of the curses
+	frontend
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-37-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-39-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +13,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   16 ++++++++++++++++
- package/qemu/qemu.mk   |    7 ++++++-
- 2 files changed, 22 insertions(+), 1 deletions(-)
+ package/qemu/Config.in |   11 +++++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 138949c..237fb7b 100644
+index 47857ec..15239a7 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -112,6 +112,22 @@ config BR2_PACKAGE_QEMU_SDL
+@@ -112,6 +112,17 @@ config BR2_PACKAGE_QEMU_SDL
  	  Say 'y' to enable the SDL frontend, that is, a graphical window
  	  presenting the VM's display.
  
-+comment "Block backends"
-+
-+config BR2_PACKAGE_QEMU_VIRTFS
-+	bool "Enable plan9 ressources using VirtFS"
-+	select BR2_PACKAGE_QEMU_CAP
-+	select BR2_PACKAGE_QEMU_ATTR
++config BR2_PACKAGE_QEMU_CURSES
++	bool "Enable the curses frontend"
++	select BR2_PACKAGE_NCURSES
 +	help
-+	  Say 'y' here if you want QEMU to provide a plan9 virtual "share"
-+	  accessible from the guest OS for relatively fast access to host
-+	  files.
++	  Say 'y' to use curses to display the text-mode of VGA outpout.
 +	  
-+	  This requires that the guest OS is capable of accessing plan9
-+	  ressources (typically, in Linux, this is done by a network
-+	  file-system called 9p, and can be accelerated by using the 9p
-+	  virtio).
++	  If the VM's graphic adapter does not support VGA text-mode, or it
++	  is in graphical mode, then nothing will be displayed with this
++	  frontend (although you can still use the SDL or VNC frontends to
++	  display the graphical output).
 +
- comment "Misc. features"
+ comment "Block backends"
  
- config BR2_PACKAGE_QEMU_UUID
+ config BR2_PACKAGE_QEMU_VIRTFS
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 7e4d08f..b34ff69 100644
+index e0270f0..90197f9 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,12 @@ else
+@@ -149,6 +149,13 @@ else
  QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
-+QEMU_OPTS += --enable-virtfs
++ifeq ($(BR2_PACKAGE_QEMU_CURSES),y)
++QEMU_OPTS += --enable-curses
++QEMU_DEPENDENCIES += ncurses
 +else
-+QEMU_OPTS += --disable-virtfs
++QEMU_OPTS += --disable-curses
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -254,7 +260,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-xen                       \
+ ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
+ QEMU_OPTS += --enable-virtfs
+ else
+@@ -268,7 +275,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-slirp                     \
  	        --disable-vnc-sasl                  \
--	        --disable-virtfs                    \
  	        --disable-brlapi                    \
- 	        --disable-curses                    \
- 	        --disable-curl                      \
+-	        --disable-curses                    \
+ 	        --disable-fdt                       \
+ 	        --disable-bluez                     \
+ 	        --disable-guest-base                \
 -- 
 1.7.2.5
