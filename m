@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:35 +0100
-Subject: [Buildroot] [PATCH 15/52] package/spice: enable client
+Date: Tue, 11 Dec 2012 00:44:38 +0100
+Subject: [Buildroot] [PATCH 18/52] package/libseccomp: new package
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-16-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-19-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,54 +12,96 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/spice/Config.in |   13 +++++++++++++
- package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 20 insertions(+), 1 deletions(-)
+ package/Config.in                                  |    1 +
+ package/libseccomp/Config.in                       |   13 +++++++++++
+ ...ibseccomp-use-system-headers-from-sysroot.patch |   17 +++++++++++++++
+ package/libseccomp/libseccomp.mk                   |   22 ++++++++++++++++++++
+ 4 files changed, 53 insertions(+), 0 deletions(-)
+ create mode 100644 package/libseccomp/Config.in
+ create mode 100644 package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+ create mode 100644 package/libseccomp/libseccomp.mk
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 086b1bc..aacc779 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -21,3 +21,16 @@ config BR2_PACKAGE_SPICE
- 	  This package implements the server-part of Spice.
- 	  
- 	  http://www.spice-space.org/
+diff --git a/package/Config.in b/package/Config.in
+index 79a1342..6ab638d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -521,6 +521,7 @@ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libtpl/Config.in"
++source "package/libseccomp/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+ source "package/lttng-libust/Config.in"
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+new file mode 100644
+index 0000000..183cf4e
+--- /dev/null
++++ b/package/libseccomp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBSECCOMP
++	bool "libseccomp"
++	help
++	  High level interface to the Linux Kernel's seccomp filter 
++	  
++	  The libseccomp library provides and easy to use, platform independent,
++	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
++	  The libseccomp API is designed to abstract away the underlying BPF
++	  based syscall filter language and present a more conventional
++	  function-call based filtering interface that should be familiar to,
++	  and easily adopted by application developers.
++	  
++	  http://sourceforge.net/projects/libseccomp/
+diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+new file mode 100644
+index 0000000..0997edd
+--- /dev/null
++++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+@@ -0,0 +1,17 @@
++configure: check headers in sysroot, not in host's system headers
 +
-+if BR2_PACKAGE_SPICE
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
-+comment "client depends on X.org"
-+	depends on !BR2_PACKAGE_XORG7
++diff -durN libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
++--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
+++++ libseccomp-1.0.0/configure	2012-10-27 00:12:50.739196219 +0200
++@@ -205,7 +205,8 @@
++ #
++ 
++ # system seccomp includes
++-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
+++# ${SYSROOT} added by buildroot for cross-compilation
+++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
++ 	opt_sysinc_seccomp="yes"
++ else
++ 	opt_sysinc_seccomp="no"
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+new file mode 100644
+index 0000000..73fe632
+--- /dev/null
++++ b/package/libseccomp/libseccomp.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# libseccomp
++#
++#############################################################
 +
-+config BR2_PACKAGE_SPICE_CLIENT
-+	bool "Enable client"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
++LIBSECCOMP_VERSION         = 1.0.0
++LIBSECCOMP_SOURCE          = libseccomp-$(LIBSECCOMP_VERSION).tar.gz
++LIBSECCOMP_SITE            = http://downloads.sourceforge.net/project/libseccomp
++LIBSECCOMP_LICENSE         = LGPLv2.1
++LIBSECCOMP_LICENSE_FILES   = LICENSE
++LIBSECCOMP_INSTALL_STAGING = YES
 +
-+endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 2752b8a..2f7fc20 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -26,12 +26,18 @@ SPICE_CONF_OPT =            \
-   --disable-gui             \
-   --disable-opengl          \
-   --disable-smartcard       \
--  --disable-client          \
-   --disable-automated-tests \
-   --without-sasl            \
- 
- SPICE_DEPENDENCIES += host-pkgconf
- 
-+ifeq ($(BR2_PACKAGE_SPICE_CLIENT),y)
-+SPICE_CONF_OPT += --enable-client
-+SPICE_DEPENDENCIES += xlib_libXfixes xlib_libXrandr
-+else
-+SPICE_CONF_OPT += --disable-client
-+endif
++# Needed for configure to find our system headers:
++LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
++LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
++LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
++LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
++LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
 +
- SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
++# Not a real autotools package, but works quite OK nonetheless
++$(eval $(autotools-package))
 -- 
 1.7.2.5
