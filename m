@@ -1,30 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Dec 2012 22:20:28 +0100
-Subject: [Buildroot] [PATCH] fix cjson package
-In-Reply-To: <CANxTyt5w28z3o7zU8AMH+G02nY2ysir7rMiwKUkWP1Lfmm0_wQ@mail.gmail.com>
- (Danomi Manchego's message of "Fri, 7 Dec 2012 06:36:04 -0500")
-References: <50C0B73C.9020407@syscom-instruments.com>
- <CANxTyt4OZM0u3jyGrDoAQPvBSzVQ_=BHz_c0rNW6Y9pSr1jzbQ@mail.gmail.com>
- <50C1ABA9.2030202@syscom-instruments.com>
- <CANxTyt5w28z3o7zU8AMH+G02nY2ysir7rMiwKUkWP1Lfmm0_wQ@mail.gmail.com>
-Message-ID: <87r4mxr4df.fsf@dell.be.48ers.dk>
+Date: Mon, 10 Dec 2012 22:24:19 +0100
+Subject: [Buildroot] bump connman version to 1.9
+In-Reply-To: <CAEnpE0zToiU8Q5CnXxPCid5EiXHs4m4e0MiHJj--wmi-u1stkA@mail.gmail.com>
+ (Gary Coulbourne's message of "Fri, 7 Dec 2012 12:04:37 -0500")
+References: <CAEnpE0zToiU8Q5CnXxPCid5EiXHs4m4e0MiHJj--wmi-u1stkA@mail.gmail.com>
+Message-ID: <87ip89r470.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+>>>>> "Gary" == Gary Coulbourne <bear@bears.org> writes:
 
-Hi,
+ Gary> A quick patch to bump connman's version to 1.9
 
- Danomi> I'm not sure if Peter needs you to send the good fix as a
- Danomi> git-send-email'ed V2, but:
-
- Danomi> Acked-by: Danomi Manchego <danomimanchego123@gmail.com>
-
-Yes, preferably - But I've created a git commit myself for this -
-Thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
