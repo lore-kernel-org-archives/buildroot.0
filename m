@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:29 +0100
-Subject: [Buildroot] [PATCH 09/52] package/celt051: new package
+Date: Tue, 11 Dec 2012 00:44:34 +0100
+Subject: [Buildroot] [PATCH 14/52] package/spice: new package
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-10-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-15-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,83 +11,121 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/Config.in         |    1 +
- package/multimedia/celt051/Config.in |   15 +++++++++++++++
- package/multimedia/celt051/celt.mk   |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/celt051/Config.in
- create mode 100644 package/multimedia/celt051/celt.mk
+ package/Config.in       |    1 +
+ package/spice/Config.in |   23 +++++++++++++++++
+ package/spice/spice.mk  |   62 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 86 insertions(+), 0 deletions(-)
+ create mode 100644 package/spice/Config.in
+ create mode 100644 package/spice/spice.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 273d9bc..5e8d60c 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -2,6 +2,7 @@ menu "Audio and video applications"
- source "package/multimedia/alsa-utils/Config.in"
- source "package/multimedia/aumix/Config.in"
- source "package/multimedia/bellagio/Config.in"
-+source "package/multimedia/celt051/Config.in"
- source "package/multimedia/faad2/Config.in"
- source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
-diff --git a/package/multimedia/celt051/Config.in b/package/multimedia/celt051/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index f0de519..79a1342 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -663,6 +663,7 @@ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/spice-protocol/Config.in"
++source "package/spice/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/spice/Config.in b/package/spice/Config.in
 new file mode 100644
-index 0000000..50ed069
+index 0000000..086b1bc
 --- /dev/null
-+++ b/package/multimedia/celt051/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_CELT051
-+	bool "celt051"
-+	select BR2_PACKAGE_LIBOGG
++++ b/package/spice/Config.in
+@@ -0,0 +1,23 @@
++comment "spice server depends on python (for pyparsing)"
++	depends on !BR2_PACKAGE_PYTHON
++
++config BR2_PACKAGE_SPICE
++	bool "spice server"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_CELT051
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_PIXMAN
++	select BR2_PACKAGE_PYTHON_PYPARSING
++	select BR2_PACKAGE_SPICE_PROTOCOL
 +	help
-+	  The CELT ultra-low delay audio codec
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
 +	  
-+	  The CELT codec is a compression algorithm for audio. Like MP3,
-+	  Vorbis, and AAC it is suitable for transmitting music with high
-+	  quality. Unlike these formats CELT imposes very little delay on
-+	  the signal, even less than is typical for speech centric formats
-+	  like Speex, GSM, or G.729.
++	  This package implements the server-part of Spice.
 +	  
-+	  Note: this is version 0.5.1.3 of celt.
-+	  
-+	  http://www.celt-codec.org/
-diff --git a/package/multimedia/celt051/celt.mk b/package/multimedia/celt051/celt.mk
++	  http://www.spice-space.org/
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
 new file mode 100644
-index 0000000..9baaa82
+index 0000000..2752b8a
 --- /dev/null
-+++ b/package/multimedia/celt051/celt.mk
-@@ -0,0 +1,30 @@
++++ b/package/spice/spice.mk
+@@ -0,0 +1,62 @@
 +#############################################################
 +#
-+# celt051
++# Spice
 +#
 +#############################################################
 +
-+# Although version newer than 0.5.1.3 exists, we're
-+# stuck with 0.5.1.3 for use by Spice (coming later)
-+CELT051_VERSION         = 0.5.1.3
-+CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
-+CELT051_SITE            = http://downloads.xiph.org/releases/celt
-+CELT051_LICENSE         = BSD-2c
-+CELT051_LICENSE_FILES   = COPYING
-+CELT051_INSTALL_STAGING = YES
-+CELT051_DEPENDENCIES    = libogg
++SPICE_VERSION         = 0.12.0
++SPICE_SOURCE          = spice-$(SPICE_VERSION).tar.bz2
++SPICE_SITE            = http://www.spice-space.org/download/releases/
++SPICE_LICENSE         = LGPLv2.1+
++SPICE_LICENSE_FILES   = COPYING
++SPICE_INSTALL_STAGING = YES
++SPICE_DEPENDENCIES    = \
++    alsa-lib            \
++    celt051             \
++    jpeg                \
++    openssl             \
++    pixman              \
++    python-pyparsing    \
++    spice-protocol      \
 +
-+# Need to specify --with-ogg, otherwise /usr/lib may be searched for
-+# if target is the same kind as host (ie. same arch, same bitness,
-+# same endianness, so that /usr/lib contains libraries linkable by
-+# our cross-compiler)
-+CELT051_CONF_OPT =                  \
-+  --enable-fixed-point              \
-+  --disable-fixed-point-debug       \
-+  --disable-experimental-postfilter \
-+  --disable-static-modes            \
-+  --disable-assertions              \
-+  --disable-oggtest                 \
-+  --with-ogg=$(STAGING_DIR)/usr     \
++# We disable everything for now, because the dependency tree can become
++# quite deep if we try to enable some features, and I have not tested that.
++SPICE_CONF_OPT =            \
++  --disable-tunnel          \
++  --disable-gui             \
++  --disable-opengl          \
++  --disable-smartcard       \
++  --disable-client          \
++  --disable-automated-tests \
++  --without-sasl            \
++
++SPICE_DEPENDENCIES += host-pkgconf
++
++SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
++
++# We need to tweak spice.pc because it /forgets/ (for static linking) that
++# it should link against libz and libjpeg. libz is pkg-config-aware, while
++# libjpeg isn't, hence the two-line tweak
++define SPICE_POST_INSTALL_STAGING_FIX_PC
++	$(SED) 's/^\(Requires.private:.*\)$$/\1 zlib/; s/^\(Libs.private:.*\)$$/\1 -ljpeg/;'    \
++	       "$(STAGING_DIR)/usr/lib/pkgconfig/spice-server.pc"
++endef
++SPICE_POST_INSTALL_STAGING_HOOKS += SPICE_POST_INSTALL_STAGING_FIX_PC
++
++# It is currently not possible to detect if stack-protection is available
++# or not, because it requires support from both the compiler *and* the
++# C library, but the C library (eg. uClibc) can be compiled without that
++# support, even if gcc accepts the -fstack-protector-all option.
++# spice's ./configure only checks for gcc's -fstack-protector-all option,
++# so it misses the case where the C library doe not provide the requires
++# support.
++# A correct fix would be to fix spice's ./configure to also check the C
++# library, but it might be much more involved.
++# So, we simply disable it for now. After all, as uClibc's help puts it:
++#     Note that NOEXECSTACK on a kernel with address space randomization
++#     is generally sufficient to prevent most buffer overflow exploits
++#     without increasing code size.
++SPICE_CONF_OPT += gl_cv_warn__fstack_protector_all=no
 +
 +$(eval $(autotools-package))
 -- 
