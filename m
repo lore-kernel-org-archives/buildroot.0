@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:51 +0100
-Subject: [Buildroot] [PATCH 31/52] package/qemu: add option to not install
-	blobs
+Date: Tue, 11 Dec 2012 00:44:59 +0100
+Subject: [Buildroot] [PATCH 39/52] package/qemu: add BlueZ connectivity
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-32-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-40-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |   16 ++++++++++++++++
- package/qemu/qemu.mk   |    4 ++++
- 2 files changed, 20 insertions(+), 0 deletions(-)
+ package/qemu/Config.in |   11 +++++++++++
+ package/qemu/qemu.mk   |    8 +++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 14c3704..e530303 100644
+index 15239a7..d912036 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -112,4 +112,20 @@ config BR2_PACKAGE_QEMU_SDL
- 	  Say 'y' to enable the SDL frontend, that is, a graphical window
- 	  presenting the VM's display.
+@@ -149,6 +149,17 @@ config BR2_PACKAGE_QEMU_CURL
+ comment "cURL support is not possible with static linking"
+     depends on BR2_PREFER_STATIC_LIB
  
-+comment "Misc. features"
++comment "Networking"
 +
-+config BR2_PACKAGE_QEMU_BLOBS
-+	bool "Install binary blobs"
-+	default y
++config BR2_PACKAGE_QEMU_BLUEZ
++	bool "Enable BlueZ connectivity"
++	depends on BR2_PACKAGE_BLUEZ_UTILS
 +	help
-+	  Say 'y' here (the default) to install binary blobs (such as BIOS
-+	  or firmwares for the different machines simulated by QEMU).
-+	  Say 'n' to not install those blobs.
-+	  
-+	  Note: Some machines may be unbootable without those blobs.
-+	        If unsure, say 'y'.
-+	  
-+	  Note2: This has nothing to do with the licensing of the blobs;
-+	         some (most?) even have a free and/or open source license.
++	  Say 'y' here to enable BlueZ (bluetooth) connectivity in QEMU.
 +
- endif # BR2_PACKAGE_QEMU
++comment "BlueZ connectivity depends on bluez-utils"
++	depends on !BR2_PACKAGE_BLUEZ_UTILS
++
+ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 61509ec..bf4aeb9 100644
+index 90197f9..1657b8f 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -149,6 +149,10 @@ else
- QEMU_OPTS += --disable-sdl
+@@ -169,6 +169,13 @@ else
+ QEMU_OPTS += --disable-curl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
-+QEMU_OPTS += --disable-blobs
++ifeq ($(BR2_PACKAGE_QEMU_BLUEZ),y)
++QEMU_OPTS += --enable-bluez
++QEMU_DEPENDENCIES += bluez_utils
++else
++QEMU_OPTS += --disable-bluez
 +endif
 +
- # Note: although QEMU uses a ./configure script, it is not compatible with
- #       the traditional autotools options (eg. --target et al.), so we have
- #       to override the default provided by the autotools-package infra, and
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -276,7 +283,6 @@ define QEMU_CONFIGURE_CMDS
+ 	        --disable-vnc-sasl                  \
+ 	        --disable-brlapi                    \
+ 	        --disable-fdt                       \
+-	        --disable-bluez                     \
+ 	        --disable-guest-base                \
+ 	        --disable-vde                       \
+ 	        --disable-linux-aio                 \
 -- 
 1.7.2.5
