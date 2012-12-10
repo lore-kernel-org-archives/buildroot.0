@@ -1,22 +1,38 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 09 Dec 2012 23:54:39 -0300
-Subject: [Buildroot] [PATCH 1/1] libusb-compat : bump version
-In-Reply-To: <1355098775-25152-1-git-send-email-sagaert.johan@skynet.be>
-References: <1355098775-25152-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <50C54EEF.6030305@zacarias.com.ar>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Mon, 10 Dec 2012 16:11:34 +1300
+Subject: [Buildroot] Alternate sources for custom Linux kernels
+Message-ID: <CAE21AQogKvT+PpiXuy62-rkRKkT5N0pQF9n=qywuYZQWfbuhuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/09/2012 09:19 PM, Sagaert Johan wrote:
+Hello root builders
 
-> There seemed to be another more recent version around
-> of the libusb-compat package.
-> The new version fixes the Segmentation fault of the usb_modeswitch package.
+I am working on a project that stores everything, including a custom
+Linux kernel, under svn rather than git. Yes... I know, i know....
+we'll leave that discussion for another day!
 
-Not really, you're changing to the old libusb library there.
-You're "fixing" the problem probably because the old libusb wasn't threaded.
-Sounds very much like the old uClibc bug i mentioned in my previous mail.
-Regards.
+I also sometimes need to point to a kernel in a local directory.
+
+
+It seams that the place to modify is linux/linux.mk ( and
+linux/Config.in to create new configs to match).
+
+It seems there are two ways of approaching this:
+
+1) Create a whole lot of new defines parallel to the existing *GIT*
+defines eg. BR2_LINUX_KERNEL_CUSTOM_SVN_REPO_URL
+-or-
+2) Rationalize the existing stuff into
+BR2_LINUX_KERNEL_CUSTOM_SITE (can be anything from svn, http,...)
+and
+BR2_LINUX_KERNEL_CUSTOM_METHOD (selects one of the legal
+xxx_SITE_METHODs [wget, scp,svn...]
+
+It would seem that (2) gives something far more flexible and less verbose.
+
+Does this sound useful?
+
+-- Charles
