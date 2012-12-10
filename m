@@ -1,71 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Dec 2012 00:44:22 +0100
-Subject: [Buildroot] [PATCH 02/52] package/qemu: fix host-qemu variable names
+Date: Tue, 11 Dec 2012 00:44:24 +0100
+Subject: [Buildroot] [PATCH 04/52] package/qemu: use autotools-package
+	infrastructure
 In-Reply-To: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1355183112-10735-3-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <1355183112-10735-5-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the upcoming introduction of qemu-on-target, we need to properly
-separate the variables used for the host qemu, from the variables
-used for the target qemu.
+Turns out that, with a little bit of tweaking, we can use
+the autotools-package infrastructure to build QEMU.
+
+That's better than defining all the _CMDS and using the
+generic-package infra.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Francois Perrad <fperrad@gmail.com>
 ---
- package/qemu/qemu.mk |   25 ++++++++++++++-----------
- 1 files changed, 14 insertions(+), 11 deletions(-)
+ package/qemu/qemu.mk |   17 ++++-------------
+ 1 files changed, 4 insertions(+), 13 deletions(-)
 
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 790d34f..81cd79f 100644
+index 2c0dbde..91d0eb8 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -13,7 +13,10 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
- #       the non-(L)GPL license texts are specified in the affected
- #       individual source files.
- 
--QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
-+#-------------------------------------------------------------
-+# Host-qemu
-+
-+HOST_QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
- 
- #       BR ARCH         qemu
- #       -------         ----
-@@ -44,20 +47,20 @@ QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
- #       sh64            not supported
- #       sparc           sparc
- 
--QEMU_ARCH = $(ARCH)
--ifeq ($(QEMU_ARCH),i486)
--    QEMU_ARCH = i386
-+HOST_QEMU_ARCH = $(ARCH)
-+ifeq ($(HOST_QEMU_ARCH),i486)
-+    HOST_QEMU_ARCH = i386
+@@ -62,6 +62,9 @@ ifeq ($(HOST_QEMU_ARCH),powerpc)
  endif
--ifeq ($(QEMU_ARCH),i586)
--    QEMU_ARCH = i386
-+ifeq ($(HOST_QEMU_ARCH),i586)
-+    HOST_QEMU_ARCH = i386
- endif
--ifeq ($(QEMU_ARCH),i686)
--    QEMU_ARCH = i386
-+ifeq ($(HOST_QEMU_ARCH),i686)
-+    HOST_QEMU_ARCH = i386
- endif
--ifeq ($(QEMU_ARCH),powerpc)
--    QEMU_ARCH = ppc
-+ifeq ($(HOST_QEMU_ARCH),powerpc)
-+    HOST_QEMU_ARCH = ppc
- endif
--HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
-+HOST_QEMU_TARGETS=$(HOST_QEMU_ARCH)-linux-user
+ HOST_QEMU_TARGETS=$(HOST_QEMU_ARCH)-linux-user
  
++# Note: although QEMU has a ./configure script, it is not a real autotools
++# package, and ./configure chokes on options such as --host or --target.
++# So, provide out own _CONFIGURE_CMDS to override the defaults.
  define HOST_QEMU_CONFIGURE_CMDS
  	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
+ 		--target-list="$(HOST_QEMU_TARGETS)"    \
+@@ -74,19 +77,7 @@ define HOST_QEMU_CONFIGURE_CMDS
+ 	)
+ endef
+ 
+-define HOST_QEMU_BUILD_CMDS
+-	$(MAKE) -C $(@D) all
+-endef
+-
+-define HOST_QEMU_INSTALL_CMDS
+-	$(MAKE) -C $(@D) install
+-endef
+-
+-define HOST_QEMU_CLEAN_CMDS
+-	$(MAKE) -C $(@D) clean
+-endef
+-
+-$(eval $(host-generic-package))
++$(eval $(host-autotools-package))
+ 
+ # variable used by other packages
+ QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(QEMU_ARCH)
 -- 
 1.7.2.5
