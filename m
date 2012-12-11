@@ -1,51 +1,77 @@
-From: Berns <Berns@BEKA-Elektronik.de>
-Date: Tue, 11 Dec 2012 10:30:42 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
-Message-ID: <NDBBKLDECLOIHFJKBINAIEFOFPAA.Berns@BEKA-Elektronik.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 11 Dec 2012 07:39:00 -0300
+Subject: [Buildroot] [PATCH] ortp: requires threads
+Message-ID: <1355222340-6759-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I changed from gcc 4.6.X to gcc 4.5.X and now it works.
-Maybe it's an isue with ubuntu 12.04 and gcc 4.6.X.
+Fixes
+http://autobuild.buildroot.net/results/4252c2f0f85c27af0d814d8c9a4a5b4d74f4dac1/
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linphone/Config.in      |    5 +++--
+ package/mediastreamer/Config.in |    5 +++--
+ package/ortp/Config.in          |    4 ++++
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
------Original Message-----
-From: buildroot-bounces@busybox.net
-[mailto:buildroot-bounces at busybox.net]On Behalf Of Berns
-Sent: Monday, December 10, 2012 1:36 PM
-To: buildroot at busybox.net
-Subject: [Buildroot] buildroot 2012.11 large file support
-
-
-Hi
-
-i have tried to build at91sam9263ek_defconfig (without any modification)
-with the latest release 2012.11 on a 32bit Ubuntu12.04 machine.
-The build of the toolchain fails with :
-.../buildroot-2012.11/output/toolchain/uClibc_dev//usr/include/features.h:21
-9:5: Fehler: #error It appears you have defined _FILE_OFFSET_BITS=64.
-Unfortunately, uClibc was built without large file support enabled.
-
-Large file support isn't select and i have also checked it with make
-uclibc-menuconfig for uclibc.
-The same problem happend with beaglebone_defconfig.
-
-After "make clean" and selecting "large file support" the build process
-works.
-
-This problem doesn't happend with release 2012.08.
-
-Has anybody a hint for me ?
-
-Thanks
-
-Rainer
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/linphone/Config.in b/package/linphone/Config.in
+index 1a6cfdb..a2866a6 100644
+--- a/package/linphone/Config.in
++++ b/package/linphone/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LINPHONE
+ 	select BR2_PACKAGE_ORTP
+ 	select BR2_PACKAGE_MEDIASTREAMER
+ 	depends on BR2_INSTALL_LIBSTDCPP # mediastreamer
++	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
+ 	help
+ 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
+ 
+@@ -23,5 +24,5 @@ config BR2_PACKAGE_LINPHONE
+ 
+ 	  http://www.linphone.org/
+ 
+-comment "linphone requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "linphone requires a toolchain with threads and C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
+index 2e1af93..477d4fa 100644
+--- a/package/mediastreamer/Config.in
++++ b/package/mediastreamer/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 	bool "mediastreamer"
+ 	select BR2_PACKAGE_ORTP
+ 	depends on BR2_INSTALL_LIBSTDCPP # until fixed
++	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
+ 	help
+ 	  Mediastreamer is a powerful and lightweighted streaming
+ 	  engine specialized for voice/video telephony applications.
+@@ -12,5 +13,5 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 
+ 	  http://www.linphone.org/eng/documentation/dev/mediastreamer2.html
+ 
+-comment "mediastreamer requires a toolchain with C++ support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "mediastreamer requires a toolchain with threads and C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/ortp/Config.in b/package/ortp/Config.in
+index 39d9c9a..ab9cab4 100644
+--- a/package/ortp/Config.in
++++ b/package/ortp/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_ORTP
+ 	bool "oRTP"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  oRTP, a Real-time Transport Protocol (RTP,RFC3550) library
+ 
+ 	  http://www.linphone.org/eng/documentation/dev/ortp.html
++
++comment "ortp requires a toolchain with threads support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+1.7.8.6
