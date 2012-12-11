@@ -1,77 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Dec 2012 07:39:00 -0300
-Subject: [Buildroot] [PATCH] ortp: requires threads
-Message-ID: <1355222340-6759-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 11 Dec 2012 12:04:09 +0100
+Subject: [Buildroot] [PATCH] host-libxml2: enable debug for mesa3d
+Message-ID: <1355223849-3934-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/4252c2f0f85c27af0d814d8c9a4a5b4d74f4dac1/
+The API generation script in mesa3d requires libxml2 to be built with
+debug, because it uses the lsCountNode function which is only available
+in debug mode.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/linphone/Config.in      |    5 +++--
- package/mediastreamer/Config.in |    5 +++--
- package/ortp/Config.in          |    4 ++++
- 3 files changed, 10 insertions(+), 4 deletions(-)
+I'm very surprised there are not autobuilder failures for mesa3d, since
+this fails consistently for me on all configs that have python enabled.
 
-diff --git a/package/linphone/Config.in b/package/linphone/Config.in
-index 1a6cfdb..a2866a6 100644
---- a/package/linphone/Config.in
-+++ b/package/linphone/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LINPHONE
- 	select BR2_PACKAGE_ORTP
- 	select BR2_PACKAGE_MEDIASTREAMER
- 	depends on BR2_INSTALL_LIBSTDCPP # mediastreamer
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
- 	help
- 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
+ package/libxml2/libxml2.mk |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index fde3735..0c84652 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -26,7 +26,12 @@ LIBXML2_POST_INSTALL_STAGING_HOOKS += LIBXML2_STAGING_LIBXML2_CONFIG_FIXUP
  
-@@ -23,5 +24,5 @@ config BR2_PACKAGE_LINPHONE
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
  
- 	  http://www.linphone.org/
++# mesa3d uses functions that are only available with debug
++ifeq ($(BR2_PACKAGE_MESA3D),y)
++HOST_LIBXML2_CONF_OPT = --with-debug
++else
+ HOST_LIBXML2_CONF_OPT = --without-debug
++endif
  
--comment "linphone requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "linphone requires a toolchain with threads and C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
-index 2e1af93..477d4fa 100644
---- a/package/mediastreamer/Config.in
-+++ b/package/mediastreamer/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MEDIASTREAMER
- 	bool "mediastreamer"
- 	select BR2_PACKAGE_ORTP
- 	depends on BR2_INSTALL_LIBSTDCPP # until fixed
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
- 	help
- 	  Mediastreamer is a powerful and lightweighted streaming
- 	  engine specialized for voice/video telephony applications.
-@@ -12,5 +13,5 @@ config BR2_PACKAGE_MEDIASTREAMER
- 
- 	  http://www.linphone.org/eng/documentation/dev/mediastreamer2.html
- 
--comment "mediastreamer requires a toolchain with C++ support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "mediastreamer requires a toolchain with threads and C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/ortp/Config.in b/package/ortp/Config.in
-index 39d9c9a..ab9cab4 100644
---- a/package/ortp/Config.in
-+++ b/package/ortp/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_ORTP
- 	bool "oRTP"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  oRTP, a Real-time Transport Protocol (RTP,RFC3550) library
- 
- 	  http://www.linphone.org/eng/documentation/dev/ortp.html
-+
-+comment "ortp requires a toolchain with threads support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
+ HOST_LIBXML2_DEPENDENCIES += host-python
 -- 
-1.7.8.6
+tg: (c93ba9d..) t/host-libxml2-for-mesa (depends on: p/boost)
