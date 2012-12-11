@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 12 Dec 2012 07:05:39 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <NDBBKLDECLOIHFJKBINAIEFOFPAA.Berns@BEKA-Elektronik.de>
- (Berns@beka-elektronik.de's message of "Tue, 11 Dec 2012 10:30:42
- +0100")
-References: <NDBBKLDECLOIHFJKBINAIEFOFPAA.Berns@BEKA-Elektronik.de>
-Message-ID: <87lid3ole4.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 11 Dec 2012 21:25:08 +0100
+Subject: [Buildroot] [git commit] util-linux: fix typo in configuration
+	option label
+Message-ID: <20121212061933.87D3F9A1AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Berns" == Berns  <Berns@BEKA-Elektronik.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=246b384e4a0ed9503cc9c8e2e72b9cdc45225393
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Berns> I changed from gcc 4.6.X to gcc 4.5.X and now it works.
- Berns> Maybe it's an isue with ubuntu 12.04 and gcc 4.6.X.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Ok, interesting. I don't find anything specific about any largefile
-changes in 12.04, but will try to find time to install it in a vm to
-have a look.
-
-Could you perhaps put the entire (compressed) failing build log online
-somewhere so I can have a look?
-
-E.G.:
-
-make >log.txt 2>&1
-bzip2 log.txt
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 43a8444..5eab956 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -62,7 +62,7 @@ config BR2_PACKAGE_UTIL_LINUX_RENAME
+ 	bool "build \"rename\""
+ 
+ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+-	bool "build \"chrt, ionice, teskset\""
++	bool "build \"chrt, ionice, taskset\""
+ 
+ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	bool "build \"wall\""
