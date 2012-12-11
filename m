@@ -1,67 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Dec 2012 17:10:08 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
-References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
- <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
- <87d2yhsoh8.fsf@dell.be.48ers.dk>
- <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
- <878v95skvm.fsf@dell.be.48ers.dk>
- <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
- <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
-Message-ID: <20121211171008.3b869509@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 11 Dec 2012 18:24:12 +0100
+Subject: [Buildroot] Large File Support
+In-Reply-To: <000901cdd7a9$98377ab0$c8a67010$@co.uk>
+References: <000901cdd7a9$98377ab0$c8a67010$@co.uk>
+Message-ID: <CAHXCMMJk7KvzSATvMd0eqd28VYG+650GHsgAJA+chQMEZoTqiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Willy Lambert,
+Hi Ted,
 
-On Tue, 11 Dec 2012 16:09:46 +0100, Willy Lambert wrote:
+2012/12/11 Ted Wood <ted@fgh.co.uk>:
+> I hope this isn?t an inappropriate place for this...
+Yes, you're in the right place ;)
 
-> I did this again from another machine
-> (silvie at silvie-VirtualBox:~/buildroot-2012.11$ uname -a
-> Linux silvie-VirtualBox 3.2.0-34-generic-pae #53-Ubuntu SMP Thu Nov 15
-> 11:11:12 UTC 2012 i686 i686 i386 GNU/Linux)
-> 
-> In short :
-> wget buildroot, tar -xf, make, a menuconfig pops, I exit and save
-> config, make, wait a bit ... and it fails with the above error about
-> large file system.
-> 
-> So I'm sure now that the default config has a problem with largefiles.
-> I'm sorry I'm too new to investigate further. Should I open a bug
-> ticket ?
-> 
-> I did not try other versions of gcc as proposed by Berns. But my gcc
-> version is :
-> ard at ard-host(10.0):/opt/buildroot/output/host/usr$
-> ./x86_64-buildroot-linux-uclibc/bin/gcc --version
-> gcc (Buildroot 2012.11-svn2-dirty) 4.6.3
-> I wonder about the "svn2-dirty" tag.
+> I?m  completely new to Embedded Linux, and am hoping to use Buildroot as the
+> basis for a new project.
+> I?m using the November 2012 release.
+> I?m trying to build for an i586 using the internal toolchain. The make fails
+> with the error ?It appears you have defined _FILE_OFFSET_BITS=64.
+> Unfortunately uLibc was built without large file support?
+Did you change some setting in the "Toolchain" Buildroot menu after
+building the toolchain?
+In that case a full rebuild is highly recommended (for further
+information, see
+http://buildroot.org/downloads/manual/manual.html#full-rebuild)
 
-Can you do:
+> I?m pretty sure I didn?t request that when I was doing menuconfig. Web
+> search suggests that this problem has occurred elsewhere. There is an option
+> to select Large File Support under toolchain, but toggling it makes no
+> difference.
 
-	make clean
-	rm .config
-	make menuconfig / exit / save
-	env > buildroot-fails.env
-	make 2>&1 | tee buildroot-fails.log
-	cp output/toolchain/uClibc-0.9.33.2/.config buildroot-fails.uClibc.config
+When does this happen? (i mean what is the package build that fails).
+Could you pastebin the build log and your .config
 
-And then put somewhere online (do *NOT* send them by e-mail on the
-list, it will be too large) the buildroot-fails.env,
-buildroot-fails.log and buildroot-fails.uClibc.config files.
 
-I have just built the default Buildroot configuration on two Ubuntu
-12.04 machines, with zero problem.
+BTW, don't hesitate to browse the doc, you may avoid some pitfalls:
+http://buildroot.org/downloads/manual/manual.html
 
-Thanks,
 
-Thomas
+Regards,
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Sam
