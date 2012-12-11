@@ -1,46 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 11 Dec 2012 10:09:32 +0100
+From: Berns <Berns@BEKA-Elektronik.de>
+Date: Tue, 11 Dec 2012 10:30:42 +0100
 Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <CAKvQZ_2ghfJ-k2XaNEH4cP7jsr--pUjV4TNGXCY-T3aZCm2Vig@mail.gmail.com>
-References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
- <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
- <87d2yhsoh8.fsf@dell.be.48ers.dk>
- <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
- <878v95skvm.fsf@dell.be.48ers.dk>
- <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
- <87pq2hpnpq.fsf@dell.be.48ers.dk>
- <CAKvQZ_3P_nfpGsC+V6Z_eRjsmNssV-Pq0EDp0v78hfkY4vwdqg@mail.gmail.com>
- <87lid5oyr5.fsf@dell.be.48ers.dk>
- <CAKvQZ_2ghfJ-k2XaNEH4cP7jsr--pUjV4TNGXCY-T3aZCm2Vig@mail.gmail.com>
-Message-ID: <20121211100932.016b7feb@skate>
+In-Reply-To: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
+Message-ID: <NDBBKLDECLOIHFJKBINAIEFOFPAA.Berns@BEKA-Elektronik.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Willy Lambert,
+I changed from gcc 4.6.X to gcc 4.5.X and now it works.
+Maybe it's an isue with ubuntu 12.04 and gcc 4.6.X.
 
-On Tue, 11 Dec 2012 09:43:48 +0100, Willy Lambert wrote:
 
-> But for time being I'm just trying to compile a "default" buildroot
-> and run in into qemu.
-> (btw I have difficulties to put my RFS, in tgz format (cause it's the
-> default) into a .img file, is there any Buildroot hints for this, or
-> should I switch to other "RFS  image output format")
+-----Original Message-----
+From: buildroot-bounces@busybox.net
+[mailto:buildroot-bounces at busybox.net]On Behalf Of Berns
+Sent: Monday, December 10, 2012 1:36 PM
+To: buildroot at busybox.net
+Subject: [Buildroot] buildroot 2012.11 large file support
 
-Please read board/qemu/x86_64/readme.txt or board/qemu/x86/readme.txt
-and use the corresponding qemu_x86_64_defconfig and qemu_x86_defconfig
-default configuration as starting points.
 
-Those configuration are known working for Qemu, and the readme.txt file
-explain how to start them in Qemu.
+Hi
 
-Best regards,
+i have tried to build at91sam9263ek_defconfig (without any modification)
+with the latest release 2012.11 on a 32bit Ubuntu12.04 machine.
+The build of the toolchain fails with :
+.../buildroot-2012.11/output/toolchain/uClibc_dev//usr/include/features.h:21
+9:5: Fehler: #error It appears you have defined _FILE_OFFSET_BITS=64.
+Unfortunately, uClibc was built without large file support enabled.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Large file support isn't select and i have also checked it with make
+uclibc-menuconfig for uclibc.
+The same problem happend with beaglebone_defconfig.
+
+After "make clean" and selecting "large file support" the build process
+works.
+
+This problem doesn't happend with release 2012.08.
+
+Has anybody a hint for me ?
+
+Thanks
+
+Rainer
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
