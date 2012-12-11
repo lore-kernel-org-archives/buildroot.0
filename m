@@ -1,192 +1,86 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 11 Dec 2012 13:38:03 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Dec 2012 14:07:30 +0100
 Subject: [Buildroot] [PATCH 50/52] package/dtc: new package
-In-Reply-To: <1355183112-10735-51-git-send-email-yann.morin.1998@free.fr>
+In-Reply-To: <CAAXf6LW9EHjFzE9fkhHtdizS36p7cthfmbeVr6F3_EjSWCO1Tg@mail.gmail.com>
 References: <1355183112-10735-1-git-send-email-yann.morin.1998@free.fr>
  <1355183112-10735-51-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LW9EHjFzE9fkhHtdizS36p7cthfmbeVr6F3_EjSWCO1Tg@mail.gmail.com>
+ <CAAXf6LW9EHjFzE9fkhHtdizS36p7cthfmbeVr6F3_EjSWCO1Tg@mail.gmail.com>
+Message-ID: <201212111407.30429.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Thomas, All,
 
-On Tue, Dec 11, 2012 at 12:45 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> dtc is the Device Tree Compiler, and manipulates device trees.
->
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> ---
-> Although Arnout suggested to move it out of the libraries sub-menu,
-> I kept it there, as by default, only the library is installed, like
-> it is done for, eg., libcurl.
-> ---
->  package/Config.in                          |    1 +
->  package/dtc/Config.in                      |    9 +++++++
->  package/dtc/dtc-extra_cflags.patch         |   27 ++++++++++++++++++++++
->  package/dtc/dtc-separate-lib-install.patch |   28 +++++++++++++++++++++++
->  package/dtc/dtc.mk                         |   34 ++++++++++++++++++++++++++++
->  5 files changed, 99 insertions(+), 0 deletions(-)
->  create mode 100644 package/dtc/Config.in
->  create mode 100644 package/dtc/dtc-extra_cflags.patch
->  create mode 100644 package/dtc/dtc-separate-lib-install.patch
->  create mode 100644 package/dtc/dtc.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index a93aed2..ef7f44d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -417,6 +417,7 @@ endmenu
->
->  menu "Hardware handling"
->  source "package/ccid/Config.in"
-> +source "package/dtc/Config.in"
->  source "package/lcdapi/Config.in"
->  source "package/libaio/Config.in"
->  source "package/libraw1394/Config.in"
-> diff --git a/package/dtc/Config.in b/package/dtc/Config.in
-> new file mode 100644
-> index 0000000..96225e3
-> --- /dev/null
-> +++ b/package/dtc/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_DTC
-> +       bool "dtc"
-> +       help
-> +         The Device Tree Compiler, dtc, takes as input a device-tree in
-> +         a given format and outputs a device-tree in another format.
-> +
-> +         Note that only the library is installed for now.
-> +
-> +         http://git.jdl.com/gitweb/?p=dtc.git  (no home page)
-> diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
-> new file mode 100644
-> index 0000000..9d1882b
-> --- /dev/null
-> +++ b/package/dtc/dtc-extra_cflags.patch
-> @@ -0,0 +1,27 @@
-> +Makefile: append the CFLAGS to existing ones
-> +
-> +Allow the user to pass custom CFLAGS (eg. optimisation flags).
-> +
-> +Do not use EXTRA_CFLAGS, append to existing CFLAGS with +=  (Arnout)
-> +
-> +Cc: Arnout Vandecappelle <arnout@mind.be>
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +---
-> +Patch not sent upstream.
-> +
-> +Although not specific to buildroot, I am not sure this is the best
-> +way to handle user-supplied CFLAGS.
-> +
-> +diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
-> +--- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile 2012-10-22 22:02:47.541240846 +0200
-> ++++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile      2012-10-22 22:03:21.151047833 +0200
-> +@@ -18,7 +18,7 @@
-> + CPPFLAGS = -I libfdt -I .
-> + WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
-> +       -Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
-> +-CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
-> ++CFLAGS += -g -Os -fPIC -Werror $(WARNINGS)
-> +
-> + BISON = bison
-> + LEX = flex
-> diff --git a/package/dtc/dtc-separate-lib-install.patch b/package/dtc/dtc-separate-lib-install.patch
-> new file mode 100644
-> index 0000000..c86d587
-> --- /dev/null
-> +++ b/package/dtc/dtc-separate-lib-install.patch
-> @@ -0,0 +1,28 @@
-> +Makefile: add a rule to only install libfdt
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +---
-> +Patch not sent upstream.
-> +
-> +It's really specific to buildroot, and is probably not
-> +good (aka generic) enough to be pushed upstream.
-> +
-> +diff --git a/Makefile b/Makefile
-> +index 1169e6c..39e7190 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -160,10 +160,12 @@ endif
-> + # intermediate target and building them again "for real"
-> + .SECONDARY: $(DTC_GEN_SRCS) $(CONVERT_GEN_SRCS)
-> +
-> +-install: all $(SCRIPTS)
-> ++install: all $(SCRIPTS) libfdt_install
-> +       @$(VECHO) INSTALL
-> +       $(INSTALL) -d $(DESTDIR)$(BINDIR)
-> +       $(INSTALL) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
-> ++
-> ++libfdt_install: libfdt
-> +       $(INSTALL) -d $(DESTDIR)$(LIBDIR)
-> +       $(INSTALL) $(LIBFDT_lib) $(DESTDIR)$(LIBDIR)
-> +       ln -sf $(notdir $(LIBFDT_lib)) $(DESTDIR)$(LIBDIR)/$(LIBFDT_soname)
-> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-> new file mode 100644
-> index 0000000..a0e1e35
-> --- /dev/null
-> +++ b/package/dtc/dtc.mk
-> @@ -0,0 +1,34 @@
-> +#############################################################
-> +#
-> +# dtc
-> +#
-> +#############################################################
-> +
-> +DTC_VERSION         = e4b497f367a3b2ae99cc52089a14a221b13a76ef
-> +DTC_SITE            = git://git.jdl.com/software/dtc.git
-> +DTC_LICENSE         = GPLv2+/BSD-2c
-> +DTC_LICENSE_FILES   = README.license GPL
-> +# Note: the dual-license only applies to the library.
-> +#       The DT compiler (dtc) is GPLv2+, but we do not install it.
-> +DTC_INSTALL_STAGING = YES
-> +
-> +define DTC_BUILD_CMDS
-> +       $(TARGET_CONFIGURE_OPTS)    \
-> +       CFLAGS="$(TARGET_CFLAGS)"   \
-> +       $(MAKE) -C $(@D) PREFIX=/usr libfdt
-> +endef
-> +
-> +# libfdt_install is our own install rule added by our patch
-> +define DTC_INSTALL_STAGING_CMDS
-> +       $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr libfdt_install
-> +endef
-> +
-> +define DTC_INSTALL_TARGET_CMDS
-> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr libfdt_install
-> +endef
-> +
-> +define DTC_CLEAN_CMDS
-> +       $(MAKE) -C $(@D) libfdt_clean
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 1.7.2.5
+On Tuesday 11 December 2012 13:38:03 Thomas De Schampheleire wrote:
+> On Tue, Dec 11, 2012 at 12:45 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > dtc is the Device Tree Compiler, and manipulates device trees.
+> >
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Are you aware of the following code in linux/linux.mk ?
+> Are you aware of the following code in linux/linux.mk ?
+> 
+> define LINUX_INSTALL_HOST_TOOLS
+> # Installing dtc (device tree compiler) as host tool, if selected
+> if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
+> $(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ; \
+> fi
+> endef
 
-define LINUX_INSTALL_HOST_TOOLS
-# Installing dtc (device tree compiler) as host tool, if selected
-if grep -q "CONFIG_DTC=y" $(@D)/.config; then \
-$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ; \
-fi
-endef
+I was vaguely aware of it, yes, although I did not look at it, for a
+few reasons:
 
-In this case, the dtc shipped with the linux kernel is simply used.
-This was considered to be sufficient for most cases.
+  - the DTC in the kernel is not at par with the DTC in the package
+    (they diverge a bit, and the DTC in the kernel was recently
+    resynce, cset #cd29672).
 
-If this is not true and there really is a need for the separate dtc
-package, I think we should link both together in some way, either by a
-comment, or by a mutually exclusive configuration, or ...
+  - for QEMU, I really needed the libfdt library, not the tools; but
+    the dtc in the Linux kernel does not build the libfdt library.
 
-Best regards,
-Thomas
+  - as Arnout suggested adding the tools on the target too, I deemed
+    preferable to use the tools coming with the library rather than
+    risk ABI incompatibility between the ones from dtc and the .ones
+    from the kernel
+
+  - the one from the kernel is a host tool, used to build the kernel
+    itself, while the ones from dtc are target tools, that are supposed
+    to be used to build DTCs for use by QEMU. Thus they serve two
+    different purposes, and there is no strong requirement that they
+    be compatible.
+
+It's also a reason why I did not add $(eval $(host-generic-package))
+in the dtc package.
+
+And a fifth reason (the most important one, to me!):
+  - I have had a patch accepted in dtc! ;-)
+
+> In this case, the dtc shipped with the linux kernel is simply used.
+> This was considered to be sufficient for most cases.
+
+Probably, yes.
+
+> If this is not true and there really is a need for the separate dtc
+> package, I think we should link both together in some way, either by a
+> comment, or by a mutually exclusive configuration, or ...
+
+OK for a comment for now.
+
+What could probbably be done, later, is to make the dtc package a host
+package too, and have the Linux kernel depends on, and use it, instead
+of its internal copy (that can be lagging behind).
+
+Does that sound reasonable to you?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
