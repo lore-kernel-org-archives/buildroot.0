@@ -1,43 +1,45 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Tue, 11 Dec 2012 01:13:50 +0000 (UTC)
-Subject: [Buildroot] Linux build error: mixed implicit and normal rules
-References: <slrnkcb9t5.17l.narkewoody@zuhnb712.local.com>
- <20121210092000.GC5482@sapphire.tkos.co.il>
-Message-ID: <slrnkcd24f.28d.narkewoody@zuhnb712.local.com>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Tue, 11 Dec 2012 03:13:48 +0100
+Subject: [Buildroot] buildroot 2012.11 large file support
+In-Reply-To: <87pq2hpnpq.fsf@dell.be.48ers.dk>
+References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
+ <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
+ <87d2yhsoh8.fsf@dell.be.48ers.dk>
+ <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
+ <878v95skvm.fsf@dell.be.48ers.dk>
+ <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
+ <87pq2hpnpq.fsf@dell.be.48ers.dk>
+Message-ID: <CAKvQZ_3P_nfpGsC+V6Z_eRjsmNssV-Pq0EDp0v78hfkY4vwdqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-12-10, Baruch Siach
-<baruch@tkos.co.il> wrote:
-> Hi Woody,
+2012/12/10 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
 >
-> On Mon, Dec 10, 2012 at 09:14:12AM +0000, Woody Wu wrote:
->> I am trying to build an old Linux kernel 2.6.16. But got the error:
->> 
->> Makefile:441: mixed implicit and normal rules. stop.
->> 
->> The line 441 of Linux makefile is:
->> 
->> config %config: scripts_basic outputmakefile FORCE
->> 	$(Q)mkdir -p include/linux
->> 	$(Q)$(MAKE) $(build)=scripts/kconfig $@
->> 	$(Q)$(MAKE) -C $(srctree) KBUILD_SRC= .kernelrelease
->> 
->> How should I fix this?  My buildroot version is 2012.08.
+> Hi,
 >
-> Not related to Buildroot, but anyway...
+>  Willy> Yes, so I just quit it so it leaves the default config (which
+>  Willy> seems to have a problem with large file)
 >
-> If you used GNU make version 3.82 you need something like (kernel) commit 
-> 3c955b407a084810f57260d61548cc92c14bc627 (fixes for using make 3.82).
+> Ok, that also works here:
+>
+> yes '' | make oldconfig
+> make
+>
+>  Willy> I'm not blocked I already have my root image (with large file
+>  Willy> enabled), I'm currently setting up qemu to test it, our remark is
+> just
+>  Willy> that default config seems dummy.
+>
+> Notice that we have a bunch of preconfigured qemu defconfigs (look in
+> configs/)
 >
 
-Sorry, what this magic number is?
+thanks for this tips I overlooked that. I'm on a x86 atom so there is
+little config to preset.
 
-
-
--- 
-woody
-I can't go back to yesterday - because I was a different person then.
+> --
+> Bye, Peter Korsgaard
