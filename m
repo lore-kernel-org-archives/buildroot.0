@@ -1,55 +1,44 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Tue, 11 Dec 2012 06:20:26 +0000 (UTC)
-Subject: [Buildroot] Linux build error: mixed implicit and normal rules
-References: <slrnkcb9t5.17l.narkewoody@zuhnb712.local.com>
- <20121210092000.GC5482@sapphire.tkos.co.il>
- <slrnkcd24f.28d.narkewoody@zuhnb712.local.com>
- <20121211042828.GC3880@tarshish>
-Message-ID: <slrnkcdk3b.28d.narkewoody@zuhnb712.local.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 11 Dec 2012 08:04:46 +0100
+Subject: [Buildroot] buildroot 2012.11 large file support
+In-Reply-To: <CAKvQZ_3P_nfpGsC+V6Z_eRjsmNssV-Pq0EDp0v78hfkY4vwdqg@mail.gmail.com>
+ (Willy Lambert's message of "Tue, 11 Dec 2012 03:13:48 +0100")
+References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
+ <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
+ <87d2yhsoh8.fsf@dell.be.48ers.dk>
+ <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
+ <878v95skvm.fsf@dell.be.48ers.dk>
+ <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
+ <87pq2hpnpq.fsf@dell.be.48ers.dk>
+ <CAKvQZ_3P_nfpGsC+V6Z_eRjsmNssV-Pq0EDp0v78hfkY4vwdqg@mail.gmail.com>
+Message-ID: <87lid5oyr5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-12-11, Baruch Siach
-<baruch@tkos.co.il> wrote:
-> Hi Woody,
->
-> On Tue, Dec 11, 2012 at 01:13:50AM +0000, Woody Wu wrote:
->> On 2012-12-10, Baruch Siach
->> <baruch@tkos.co.il> wrote:
->> > On Mon, Dec 10, 2012 at 09:14:12AM +0000, Woody Wu wrote:
->> >> I am trying to build an old Linux kernel 2.6.16. But got the error:
->> >> 
->> >> Makefile:441: mixed implicit and normal rules. stop.
->> >> 
->> >> The line 441 of Linux makefile is:
->> >> 
->> >> config %config: scripts_basic outputmakefile FORCE
->> >> 	$(Q)mkdir -p include/linux
->> >> 	$(Q)$(MAKE) $(build)=scripts/kconfig $@
->> >> 	$(Q)$(MAKE) -C $(srctree) KBUILD_SRC= .kernelrelease
->> >> 
->> >> How should I fix this?  My buildroot version is 2012.08.
->> >
->> > Not related to Buildroot, but anyway...
->> >
->> > If you used GNU make version 3.82 you need something like (kernel) commit 
->> > 3c955b407a084810f57260d61548cc92c14bc627 (fixes for using make 3.82).
->> 
->> Sorry, what this magic number is?
->
-> It's a git commit ID. See the commit itself at 
-> http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;
-a=commitdiff;h=3c955b407a084810f57260d61548cc92c14bc627. 
-> For more information on git see http://git-scm.com.
->
+>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
 
-Many thanks and sorry for asking such a stupid question (I only used svn
-in my project)
+ Willy> Yes, so I just quit it so it leaves the default config (which
+ Willy> seems to have a problem with large file)
+ >> 
+ >> Ok, that also works here:
+ >> 
+ >> yes '' | make oldconfig
+ >> make
 
+Does that work for you?
+
+ >> Notice that we have a bunch of preconfigured qemu defconfigs (look in
+ >> configs/)
+ >> 
+
+ Willy> thanks for this tips I overlooked that. I'm on a x86 atom so
+ Willy> there is little config to preset.
+
+Is your build machine an atom? If so, beware that your build times are
+going to be quite long. Don't you have access to any faster machines?
 
 -- 
-woody
-I can't go back to yesterday - because I was a different person then.
+Bye, Peter Korsgaard
