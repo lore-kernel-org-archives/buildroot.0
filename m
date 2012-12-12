@@ -1,60 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Dec 2012 23:21:08 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <87r4mvm3gv.fsf@dell.be.48ers.dk>
-References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
- <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
- <87d2yhsoh8.fsf@dell.be.48ers.dk>
- <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
- <878v95skvm.fsf@dell.be.48ers.dk>
- <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
- <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
- <20121211171008.3b869509@skate> <50C7D14F.4060304@mind.be>
- <20121212111628.5d1e9dba@skate> <20121212120159.4292d70b@skate>
- <20121212120341.69a89e93@skate> <20121212134703.7461d9c7@skate>
- <874njrnroe.fsf@dell.be.48ers.dk> <20121212183204.718be669@skate>
- <87r4mvm3gv.fsf@dell.be.48ers.dk>
-Message-ID: <20121212232108.261e4b29@skate>
+Date: Wed, 12 Dec 2012 23:33:18 +0100
+Subject: [Buildroot] Creating/installing images
+In-Reply-To: <CAKvQZ_37DWZxZZi5yUS3im0cdHCsDfAXKg=GChc-V8NHj6mCJQ@mail.gmail.com>
+References: <CAKvQZ_37DWZxZZi5yUS3im0cdHCsDfAXKg=GChc-V8NHj6mCJQ@mail.gmail.com>
+Message-ID: <20121212233318.33c7ba9d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Willy Lambert,
 
-On Wed, 12 Dec 2012 21:15:44 +0100, Peter Korsgaard wrote:
+On Wed, 12 Dec 2012 22:28:10 +0100, Willy Lambert wrote:
 
->  Thomas> !largefile build is OK if we pass $(DISABLE_LARGEFILE) to
->  Thomas> gcc1 and gcc2 configure steps, so it solves the build
->  Thomas> problem. I haven't done more testing though (testing the
->  Thomas> generated code, building with largefile enabled, etc.).
+> I was using for my embedded system a standard debian + a set of
+> apt-get to get a customized OS on a 2GB on board persistent memory (so
+> I have a working system, as kernel config for instance). But now I
+> decided to dive into the wonderfull world of "linux from scratch" with
+> the great help of busybox in order to :
+> _ know exactly what's on my board
+> _ reduce persistent size
+> _ stop doing overkill with a 2GB system that can fit in 32Mb
 > 
-> Cool, great - I'll commit that then.
+> So I have setup busybox and spent some days into documentation and
+> sandbox, but I'm stuck with the target image installation. The
+> documentation stops at this point and I'm alone in the dark. I spent 2
+> days in searching docs on the internet without great success.
 > 
->  Thomas> That said, doesn't --disable-largefile disables largefile
->  Thomas> support at the level of gcc itself, rather than taking into
->  Thomas> account the fact that largefile support is not available on
->  Thomas> the target? Of course, it has the consequence that
->  Thomas> _FILE_OFFSET_BITS is no longer defined to 64 in auto-conf.h,
->  Thomas> which works around the problem. But gcc (the host binary)
->  Thomas> should be capable of being built with largefile support on a
->  Thomas> 32 bits host, even if the 32 bits target has no largefile
->  Thomas> support.
+> I have a successful qemu working to test the buildroot output, cause I
+> don't need bootloader or proper image, just giving bzImage and
+> rootfs.ext2 is enougth.
 > 
-> So for the cross compiler to be able to access large files? Is that
-> really important? I doubt people are using buildroot with 2G+
-> source/object/library files?
+> But as to create something that my embedded system can boot on .... I
+> really don't know what and how to do. So I would be glad if anyone
+> could help me, at least in giving links or keyword for documentation.
+> 
+> My target has an onboard flash memory. World would have been simplier
+> if I could have a removable "root" memory but it's not the case. So If
+> I'm correct I need to boot my target (either with an external boot
+> device like usb key, or with the existing linux installed on it) and
+> then replace the rootfs. What would you do in this case (knowing that
+> it will happen often in the dev cycle) ?
+> _ use a ram pivot_root from the current linux?
+> _ use a dd from an external usb key boot ?
+> _ re-partition all this to have a little 10Mb part for a "Tool OS"
+> that can be used for rootfs installation ?
+> _ do somethig else ?
+> _ take a beer and think more ?
 
-It's not that we care too much about this (even though some crazy
-library like Qt with debugging symbols reaches a very fat size, several
-hundreds of MBs in size), but the fact that it is an ugly workaround to
-use the side-effect of disabling largefile on gcc to make it play nice
-with a target system that has largefile disabled.
+I would use the capacity of your board to boot over the network. Since
+it is a x86 platform with a BIOS, I guess it is capable of doing PXE.
+So during development, I would load the kernel using PXE, and then
+mount the root filesystem over NFS.
 
-Right now, when largefile is disabled for the target, it is disabled
-for the cross gcc, when largefile is enabled for the target, it is
-enabled for the cross gcc. Doesn't make much sense.
+Then, to flash the devices before they go in production in the field, I
+would create a minimal Linux system, that you boot over the network
+using PXE, and this Linux system downloads and flash the real Linux
+system in the internal Flash of your system (which apparently is
+accessed as a normal ATA hard drive). You make sure this minimal Linux
+system makes all this process automatically when it is booted, so
+whenever you boot one of your system on a network that has your
+PXE/TFTP server on it, it will be erased and reflashed (of course, be
+careful not to boot a real laptop or desktop system in the same network
+segment, or it might boot over the network and get erased).
+
+Does this helps?
+
+For a simple PXE/TFTP server solution, I would strongly suggest using
+ptftpd/pxed: <https://ssl.bulix.org/svn/ptftpd/trunk/>. It is very
+simple to setup (just *one* command to have a complete PXE solution
+running).
+
+> For completness here is my board datasheet, but I don't expect anyone
+> to read :-). It's an Advantech PCM-3362
+> http://support.elmark.com.pl/advantech/pdf/pcm-3362man.pdf
+
+I actually read it, and verified that your board is capable of booting
+over the network, and it apparently is.
+
+> Is it possible to use other filesystems, like ext3 or 4 ?
+
+Yes, you just need to do some tuning of your ext2 image using tune2fs.
+I really should submit a patch to add support for ext3 and ext4 image
+generation in Buildroot.
 
 Best regards,
 
