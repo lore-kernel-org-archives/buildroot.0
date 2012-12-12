@@ -1,32 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 12 Dec 2012 21:24:14 +0100
-Subject: [Buildroot] [git commit] samba: bump to version 3.6.10
-Message-ID: <20121212203441.1080B82912@busybox.osuosl.org>
+From: Richard Braun <rbraun@sceen.net>
+Date: Wed, 12 Dec 2012 21:49:22 +0100
+Subject: [Buildroot] Getting It into Compact Flash
+In-Reply-To: <20121212162225.GA15887@mail.sceen.net>
+References: <000901cdd883$889a6e70$99cf4b50$@co.uk>
+ <20121212162225.GA15887@mail.sceen.net>
+Message-ID: <20121212204922.GA1265@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=53f2c75754ad7cd5958d9156e01156fe9c8fce53
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Dec 12, 2012 at 05:22:26PM +0100, Richard Braun wrote:
+> On Wed, Dec 12, 2012 at 04:12:49PM -0000, Ted Wood wrote:
+> > It starts up OK, loads the kernel and uncompresses it.
+> > 
+> > It mounts sda and sda1
+> > 
+> > Then "No filesystem could mount root, tried ext3 vfat msdos iso9660"
+> 
+> Buildroot doesn't take care of the partition table.
+> 
+> See http://lists.busybox.net/pipermail/buildroot/2012-August/057536.html
+> (and the next message for the unspoiled attached script).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/samba/samba.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+If your problem has nothing to do with the partition table, feel free to
+give us more information about it, like the boot log (so that we can see
+what is actually mounted).
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index 4f87917..161e507 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SAMBA_VERSION = 3.6.9
-+SAMBA_VERSION = 3.6.10
- SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA_SUBDIR = source3
- SAMBA_INSTALL_STAGING = YES
+-- 
+Richard Braun
