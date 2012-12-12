@@ -1,39 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Dec 2012 19:44:22 +0100
-Subject: [Buildroot] [PATCH] gadgetfs-test: requires thread support
-Message-ID: <1355337862-6519-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 12 Dec 2012 19:16:31 +0100
+Subject: [Buildroot] [PATCH RESEND] pkg-infra: pass --disable-doc if
+	documentation is not enabled
+In-Reply-To: <1355321242-1301-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 12 Dec 2012 15:07:22 +0100")
+References: <1355321242-1301-1-git-send-email-arnout@mind.be>
+Message-ID: <87zk1jm8zj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-  http://autobuild.buildroot.org/results/012914ed010eac94a2f7bfe18d8375cdb2fe9f06/build-end.log
+ Arnout> Many configure scripts support an option like --disable-doc,
+ Arnout> --disable-docs or --disable-documentation.  Pass all of these
+ Arnout> to configure.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gadgetfs-test/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
+ Arnout> In addition, not all Xorg packages accept the
+ Arnout> --disable-xxx. Instead they look for xmlto and/or fop and build
+ Arnout> documentation if they exist.  For host packages, this may lead
+ Arnout> to build errors because /usr/bin/xmlto uses libxml2 and we set
+ Arnout> LD_LIBRARY_PATH to point to $(HOST_DIR)/lib, which may contain
+ Arnout> a libxml2 as well.  So it's essential to disable xmlto for host
+ Arnout> packages.
 
-diff --git a/package/gadgetfs-test/Config.in b/package/gadgetfs-test/Config.in
-index 276ec54..a582db6 100644
---- a/package/gadgetfs-test/Config.in
-+++ b/package/gadgetfs-test/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_GADGETFS_TEST
- 	bool "gadgetfs-test"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Test program for gadgetfs from linux-usb.org
- 
-@@ -10,3 +11,6 @@ config BR2_PACKAGE_GADGETFS_TEST_USE_AIO
- 	help
- 	  Select this to have gadgetfs-test do asynchronous I/O using
- 	  the libaio library.
-+
-+comment "gadgetfs-test requires thread support in toolchain"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Committed, thanks.
+
+With this we can also drop a bunch of explicit --disable-doc* in
+packages.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
