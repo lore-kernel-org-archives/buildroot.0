@@ -1,26 +1,38 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Wed, 12 Dec 2012 17:22:26 +0100
-Subject: [Buildroot] Getting It into Compact Flash
-In-Reply-To: <000901cdd883$889a6e70$99cf4b50$@co.uk>
-References: <000901cdd883$889a6e70$99cf4b50$@co.uk>
-Message-ID: <20121212162225.GA15887@mail.sceen.net>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Wed, 12 Dec 2012 16:26:59 +0000 (UTC)
+Subject: [Buildroot] Chances in skeleton don't appear in filesystem
+References: <slrnkbqn5h.1p8.narkewoody@zuhnb712.local.com>
+ <20121204100344.3167d0e9@skate> <874nk1l7lo.fsf@dell.be.48ers.dk>
+Message-ID: <slrnkchc0i.nfe.narkewoody@zuhnb712.local.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 12, 2012 at 04:12:49PM -0000, Ted Wood wrote:
-> It starts up OK, loads the kernel and uncompresses it.
-> 
-> It mounts sda and sda1
-> 
-> Then "No filesystem could mount root, tried ext3 vfat msdos iso9660"
+On 2012-12-04, Peter Korsgaard
+<jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni
+>>>>>> <thomas.petazzoni@free-electrons.com>
+>>>>>> writes:
+>
+> >> What's the correct method to modify the defualt filesystem? Thanks.
+>
+> Thomas> Do use a custom skeleton, use a custom post-build script to
+> copy/modify Thomas> files in output/target. See
+>
+> s/Do use/Do NOT use/
+>
+> Alternatively, if you do use a custom rootfs skeleton and want the
+> skeleton changes to be taken into consideration without doing a clean
+> rebuild you can manually make the changes under output/target as well
+> and rerun make.
+>
+> Using a post-build script is easier though.
+>
 
-Buildroot doesn't take care of the partition table.
-
-See http://lists.busybox.net/pipermail/buildroot/2012-August/057536.html
-(and the next message for the unspoiled attached script).
+Thanks both. By far, the post script method works fine for me.
 
 -- 
-Richard Braun
+woody
+I can't go back to yesterday - because I was a different person then.
