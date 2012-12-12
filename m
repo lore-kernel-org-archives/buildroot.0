@@ -1,59 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Dec 2012 23:54:06 +0100
-Subject: [Buildroot] Random "Bus error" when building host-python
-Message-ID: <20121212235406.768eb752@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 13 Dec 2012 00:47:28 +0100
+Subject: [Buildroot] buildroot 2012.11 large file support
+In-Reply-To: <20121212232108.261e4b29@skate>
+References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
+ <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
+ <87d2yhsoh8.fsf@dell.be.48ers.dk>
+ <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
+ <878v95skvm.fsf@dell.be.48ers.dk>
+ <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
+ <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
+ <20121211171008.3b869509@skate> <50C7D14F.4060304@mind.be>
+ <20121212111628.5d1e9dba@skate> <20121212120159.4292d70b@skate>
+ <20121212120341.69a89e93@skate> <20121212134703.7461d9c7@skate>
+ <874njrnroe.fsf@dell.be.48ers.dk> <20121212183204.718be669@skate>
+ <87r4mvm3gv.fsf@dell.be.48ers.dk> <20121212232108.261e4b29@skate>
+Message-ID: <50C91790.6090202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 12/12/12 23:21, Thomas Petazzoni wrote:
+> Dear Peter Korsgaard,
+>
+> On Wed, 12 Dec 2012 21:15:44 +0100, Peter Korsgaard wrote:
+>
+>>   Thomas>  !largefile build is OK if we pass $(DISABLE_LARGEFILE) to
+>>   Thomas>  gcc1 and gcc2 configure steps, so it solves the build
+>>   Thomas>  problem. I haven't done more testing though (testing the
+>>   Thomas>  generated code, building with largefile enabled, etc.).
+>>
+>> Cool, great - I'll commit that then.
+>>
+>>   Thomas>  That said, doesn't --disable-largefile disables largefile
+>>   Thomas>  support at the level of gcc itself, rather than taking into
+>>   Thomas>  account the fact that largefile support is not available on
+>>   Thomas>  the target? Of course, it has the consequence that
+>>   Thomas>  _FILE_OFFSET_BITS is no longer defined to 64 in auto-conf.h,
+>>   Thomas>  which works around the problem. But gcc (the host binary)
+>>   Thomas>  should be capable of being built with largefile support on a
+>>   Thomas>  32 bits host, even if the 32 bits target has no largefile
+>>   Thomas>  support.
+>>
+>> So for the cross compiler to be able to access large files? Is that
+>> really important? I doubt people are using buildroot with 2G+
+>> source/object/library files?
+>
+> It's not that we care too much about this (even though some crazy
+> library like Qt with debugging symbols reaches a very fat size, several
+> hundreds of MBs in size), but the fact that it is an ugly workaround to
+> use the side-effect of disabling largefile on gcc to make it play nice
+> with a target system that has largefile disabled.
+>
+> Right now, when largefile is disabled for the target, it is disabled
+> for the cross gcc, when largefile is enabled for the target, it is
+> enabled for the cross gcc. Doesn't make much sense.
 
-If you have looked at the autobuilder results recently, there are some
-host-python errors sometimes:
+  Indeed, it would make much more sense to disable largefile unconditionally
+while building any gcc stage (uClibc won't complain if _FILE_OFFSET_BITS is
+not set). At least, I guess --disable-largefile only says something about
+the gcc executable, not about the crtstuff and other target support...
 
- http://autobuild.buildroot.org/results/b01a3c7233d53578961b74fb6ffb006782a43944/build-end.log
- Free Electrons build server, targeting mipsel
+  And it also deserves a BIG FAT comment explaining why this is needed.
 
- http://autobuild.buildroot.org/results/5c59266f72f234ee9863e3d54270487b05af3612/build-end.log
- gcc14 build server, targeting powerpc
-
- http://autobuild.buildroot.org/results/3cf01dabafd47813c6fe11d0250e57ef667e8d95/build-end.log
- gcc14 build server, targeting powerpc
-
- http://autobuild.buildroot.org/results/7722a16700231a49b736fae697532013dfccfd2a/build-end.log
- Free Electrons build server, targeting arm
-
-Every time, the build fail with a "Bus error". The log is not clear
-enough to really understand what process is failing with a Bus error.
-
-As you can see, the problem is not specific to one build machine, or
-one target architecture (well, since it's in host package, it's kind of
-obvious, but not the build machine fact).
-
-And the thing is that those problems are not reproducible. If you take
-the exact same commit ID of Buildroot, the exact same configuration, on
-the exact same build machine, the problem may or may not produce
-itself. I tried to reproduce it using one of those build
-configurations, and he wasn't produced.
-
-On the other hand, I did try to reproduce some other build
-configuration that failed in the autobuilders, and instead of having
-the error reported by the autobuilder web interface, I felt into the
-"Bus error" problem in host-python. I just restarted the build (not
-from scratch, simply restarted the build), and it went on without
-failing into the "Bus error" problem. So it seems like the problem is
-not in the generated code (re-executing the same code sometimes work
-sometimes doesn't work).
-
-Does anyone has ideas on how to further investigate this?
-
-Thanks,
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
