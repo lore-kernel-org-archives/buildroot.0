@@ -1,71 +1,44 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 12 Dec 2012 11:21:12 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 12 Dec 2012 12:01:59 +0100
 Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <87d2yhsoh8.fsf@dell.be.48ers.dk>
+In-Reply-To: <20121212111628.5d1e9dba@skate>
 References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
  <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
  <87d2yhsoh8.fsf@dell.be.48ers.dk>
-Message-ID: <CAHkwnC9G6xQP=TGX2Oeq8B_ToG+BMQ5DwRpFaMp-af6Sw9RcgQ@mail.gmail.com>
+ <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
+ <878v95skvm.fsf@dell.be.48ers.dk>
+ <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
+ <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
+ <20121211171008.3b869509@skate> <50C7D14F.4060304@mind.be>
+ <20121212111628.5d1e9dba@skate>
+Message-ID: <20121212120159.4292d70b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 10, 2012 at 8:20 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
->
-> Hi,
->
->  >> Large file support isn't select and i have also checked it with make
->  >> uclibc-menuconfig for uclibc.
->  >> The same problem happend with beaglebone_defconfig.
->  >>
->  >> After "make clean" and selecting "large file support" the build process
->  >> works.
->  >>
->  >> This problem doesn't happend with release 2012.08.
->  >>
->  >> Has anybody a hint for me ?
->
->  Willy> I have just had the same problem, is it possible that this is a
->  Willy> regression of the 2012.11 version ?
->
-> I don't think so. I just did a:
->
-> make at91sam9263ek_defconfig && make
->
-> Without any problems. What exactly did you do?
 
-I've the same problem,
-I'm using Ubuntu 12.10 32bit.
+On Wed, 12 Dec 2012 11:16:28 +0100, Thomas Petazzoni wrote:
 
-This configurations doesn't work:
+> I haven't looked into them for now.
 
-A)
-make at91sam9263ek_defconfig && make
-https://dl.dropbox.com/u/14668671/log-at91sam9263ek.txt.bz2
+Ok, a quick investigation shows that crtstuff.c includes auto-host.h,
+which contains _FILE_OFFSET_BITS. crtstuff.c is built for the target,
+and therefore should normally not include auto-host.h, as noted by the
+following comment:
 
-B)
-defconfig:
-BR2_arm=y
-BR2_GCC_VERSION_4_7_X=y
-
-https://dl.dropbox.com/u/14668671/log-gcc4.7.txt.bz2
-
-C)
-defconfig:
-BR2_arm=y
-
-https://dl.dropbox.com/u/14668671/log.txt.bz2
+==
+/* FIXME: Including auto-host is incorrect, but until we have
+   identified the set of defines that need to go into auto-target.h,
+   this will have to do.  */
+#include "auto-host.h"
+==
 
 
-This configuration build fine:
-BR2_arm=y
-BR2_GCC_VERSION_4_5_X=y
 
-https://dl.dropbox.com/u/14668671/log-gcc4.5.txt.bz2
-
-Best regards
---
-Fabio Porcedda
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
