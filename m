@@ -1,51 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Dec 2012 18:32:04 +0100
-Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <874njrnroe.fsf@dell.be.48ers.dk>
-References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
- <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
- <87d2yhsoh8.fsf@dell.be.48ers.dk>
- <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
- <878v95skvm.fsf@dell.be.48ers.dk>
- <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
- <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
- <20121211171008.3b869509@skate> <50C7D14F.4060304@mind.be>
- <20121212111628.5d1e9dba@skate> <20121212120159.4292d70b@skate>
- <20121212120341.69a89e93@skate> <20121212134703.7461d9c7@skate>
- <874njrnroe.fsf@dell.be.48ers.dk>
-Message-ID: <20121212183204.718be669@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 12 Dec 2012 17:11:05 +0100
+Subject: [Buildroot] [git commit] boa: needs MMU
+Message-ID: <20121212181633.B23789A1B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+commit: http://git.buildroot.net/buildroot/commit/?id=64c3ce4d886bea18f24231d09914c3be2ede144d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 12 Dec 2012 17:47:29 +0100, Peter Korsgaard wrote:
+Fixes
+http://autobuild.buildroot.net/results/0909856aea5ea5d13206c9a46b8b5174661239b4/
 
-> Hmm, we already pass --disable-largefile to the gcc configure script,
-> except for the first 2 passes. Does it work if we add
-> $(DISABLE_LARGEFILE) to the gcc1 / gcc2 configure steps?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/boa/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-!largefile build is OK if we pass $(DISABLE_LARGEFILE) to gcc1 and gcc2
-configure steps, so it solves the build problem. I haven't done more
-testing though (testing the generated code, building with largefile
-enabled, etc.).
-
-That said, doesn't --disable-largefile disables largefile support at
-the level of gcc itself, rather than taking into account the fact that
-largefile support is not available on the target? Of course, it has the
-consequence that _FILE_OFFSET_BITS is no longer defined to 64 in
-auto-conf.h, which works around the problem. But gcc (the host
-binary) should be capable of being built with largefile support on a 32
-bits host, even if the 32 bits target has no largefile support.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/boa/Config.in b/package/boa/Config.in
+index 48943ff..982833a 100644
+--- a/package/boa/Config.in
++++ b/package/boa/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_BOA
+ 	bool "boa"
++	depends on BR2_USE_MMU # uses fork()
+ 	help
+ 	  A very small and very fast http daemon.  Not intended as
+ 	  a feature-packed server.
