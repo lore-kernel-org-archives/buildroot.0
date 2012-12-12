@@ -1,88 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 12 Dec 2012 11:16:28 +0100
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 12 Dec 2012 11:21:12 +0100
 Subject: [Buildroot] buildroot 2012.11 large file support
-In-Reply-To: <50C7D14F.4060304@mind.be>
+In-Reply-To: <87d2yhsoh8.fsf@dell.be.48ers.dk>
 References: <NDBBKLDECLOIHFJKBINACEFAFPAA.Berns@BEKA-Elektronik.de>
  <CAKvQZ_0BrzUShzUyvM50CVabtw5BUM=1CupzD0-R1mfBuc3Adg@mail.gmail.com>
  <87d2yhsoh8.fsf@dell.be.48ers.dk>
- <CAKvQZ_1KXZcriA+RTjaz1=15UEUahu=Qvq5ovA7GeVvwDyxmVw@mail.gmail.com>
- <878v95skvm.fsf@dell.be.48ers.dk>
- <CAKvQZ_2MzciYPnYw0rCv_pzhHTzOS+vn=sry7nubtHd+sha3cw@mail.gmail.com>
- <CAKvQZ_3sog-JnwOYiJWE6a8eCk-LcjSZ-txr0Z_AHTiC8NnRgw@mail.gmail.com>
- <20121211171008.3b869509@skate> <50C7D14F.4060304@mind.be>
-Message-ID: <20121212111628.5d1e9dba@skate>
+Message-ID: <CAHkwnC9G6xQP=TGX2Oeq8B_ToG+BMQ5DwRpFaMp-af6Sw9RcgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On Mon, Dec 10, 2012 at 8:20 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Willy" == Willy Lambert <lambert.willy@gmail.com> writes:
+>
+> Hi,
+>
+>  >> Large file support isn't select and i have also checked it with make
+>  >> uclibc-menuconfig for uclibc.
+>  >> The same problem happend with beaglebone_defconfig.
+>  >>
+>  >> After "make clean" and selecting "large file support" the build process
+>  >> works.
+>  >>
+>  >> This problem doesn't happend with release 2012.08.
+>  >>
+>  >> Has anybody a hint for me ?
+>
+>  Willy> I have just had the same problem, is it possible that this is a
+>  Willy> regression of the 2012.11 version ?
+>
+> I don't think so. I just did a:
+>
+> make at91sam9263ek_defconfig && make
+>
+> Without any problems. What exactly did you do?
 
-On Wed, 12 Dec 2012 01:35:27 +0100, Arnout Vandecappelle wrote:
+I've the same problem,
+I'm using Ubuntu 12.10 32bit.
 
->   Except for the environment, I don't expect we'll see much interesting
-> in these...
-> 
->   Probably more useful are all the config.log under output/toolchain/gcc*
-> (especially output/toolchain/gcc-*-final/*/libgcc/config.log and config.h)
+This configurations doesn't work:
 
-I have now reproduced the problem on a fresh installation of Ubuntu
-12.04 32 bits. Nothing fancy in my system: it is an Ubuntu server, with
-just the base packages + the minimal dependencies for Buildroot to run.
+A)
+make at91sam9263ek_defconfig && make
+https://dl.dropbox.com/u/14668671/log-at91sam9263ek.txt.bz2
 
-I have posted at
-http://free-electrons.com/~thomas/pub/largefile-build-problem.tar.gz a
-tarball that contains:
+B)
+defconfig:
+BR2_arm=y
+BR2_GCC_VERSION_4_7_X=y
 
-logfile <-- this is the full build log
-output/build/host-autoconf-2.68/config.log
-output/build/host-gmp-5.0.5/config.log
-output/build/host-mpc-1.0.1/config.log
-output/build/host-m4-1.4.16/config.log
-output/build/host-mpfr-3.1.1/config.log
-output/build/host-libtool-2.2.10/config.log
-output/build/host-binutils-2.21.1/libiberty/config.log
-output/build/host-binutils-2.21.1/binutils/config.log
-output/build/host-binutils-2.21.1/bfd/config.log
-output/build/host-binutils-2.21.1/config.log
-output/build/host-binutils-2.21.1/gprof/config.log
-output/build/host-binutils-2.21.1/intl/config.log
-output/build/host-binutils-2.21.1/gas/config.log
-output/build/host-binutils-2.21.1/etc/config.log
-output/build/host-binutils-2.21.1/ld/config.log
-output/build/host-binutils-2.21.1/opcodes/config.log
-output/build/host-automake-1.11.6/config.log
-output/toolchain/gcc-4.6.3-initial/libiberty/config.log
-output/toolchain/gcc-4.6.3-initial/libdecnumber/config.log
-output/toolchain/gcc-4.6.3-initial/lto-plugin/config.log
-output/toolchain/gcc-4.6.3-initial/libcpp/config.log
-output/toolchain/gcc-4.6.3-initial/zlib/config.log
-output/toolchain/gcc-4.6.3-initial/config.log
-output/toolchain/gcc-4.6.3-initial/build-i686-pc-linux-gnu/libiberty/config.log
-output/toolchain/gcc-4.6.3-initial/build-i686-pc-linux-gnu/fixincludes/config.log
-output/toolchain/gcc-4.6.3-initial/fixincludes/config.log
-output/toolchain/gcc-4.6.3-initial/intl/config.log
-output/toolchain/gcc-4.6.3-initial/gcc/config.log
-output/toolchain/gcc-4.6.3-intermediate/libiberty/config.log
-output/toolchain/gcc-4.6.3-intermediate/libdecnumber/config.log
-output/toolchain/gcc-4.6.3-intermediate/lto-plugin/config.log
-output/toolchain/gcc-4.6.3-intermediate/libcpp/config.log
-output/toolchain/gcc-4.6.3-intermediate/zlib/config.log
-output/toolchain/gcc-4.6.3-intermediate/config.log
-output/toolchain/gcc-4.6.3-intermediate/build-i686-pc-linux-gnu/libiberty/config.log
-output/toolchain/gcc-4.6.3-intermediate/build-i686-pc-linux-gnu/fixincludes/config.log
-output/toolchain/gcc-4.6.3-intermediate/fixincludes/config.log
-output/toolchain/gcc-4.6.3-intermediate/i586-buildroot-linux-uclibc/libgcc/config.log
-output/toolchain/gcc-4.6.3-intermediate/intl/config.log
-output/toolchain/gcc-4.6.3-intermediate/gcc/config.log
-output/toolchain/uClibc-0.9.33.2/.config
+https://dl.dropbox.com/u/14668671/log-gcc4.7.txt.bz2
 
-I haven't looked into them for now.
+C)
+defconfig:
+BR2_arm=y
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+https://dl.dropbox.com/u/14668671/log.txt.bz2
+
+
+This configuration build fine:
+BR2_arm=y
+BR2_GCC_VERSION_4_5_X=y
+
+https://dl.dropbox.com/u/14668671/log-gcc4.5.txt.bz2
+
+Best regards
+--
+Fabio Porcedda
