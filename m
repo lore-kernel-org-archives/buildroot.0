@@ -1,62 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Dec 2012 22:47:12 +0100
-Subject: [Buildroot] [PATCH 12/20] package/spice: enable slirp support
-In-Reply-To: <cover.1355435224.git.yann.morin.1998@free.fr>
-References: <cover.1355435224.git.yann.morin.1998@free.fr>
-Message-ID: <cb640bc1e6f8fcf4c6441f61afddcd3f5d741dfe.1355435224.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 13 Dec 2012 22:47:36 +0100
+Subject: [Buildroot] builroot-2012.11.tar.bz2: CVS control directory
+	left in toolchain/elf2flt/elf2flt
+In-Reply-To: <50CA4C63.2000006@wanadoo.fr> (Thierry Bultel's message of "Thu, 
+ 13 Dec 2012 22:45:07 +0100")
+References: <50CA3F70.2060900@wanadoo.fr> <87lid1ljw4.fsf@dell.be.48ers.dk>
+ <50CA4C63.2000006@wanadoo.fr>
+Message-ID: <87hanplj47.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/spice/Config.in |    7 +++++++
- package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 08c3893..b1e187a 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -41,4 +41,11 @@ config BR2_PACKAGE_SPICE_GUI
- 	  Say 'y' here to enable the Graphical User Interface (GUI)
- 	  start dialog.
- 
-+config BR2_PACKAGE_SPICE_TUNNEL
-+	bool "Enable network redirection"
-+	select BR2_PACKAGE_SLIRP
-+	help
-+	  Say 'y' here to enable network redirection, aka tunnelling
-+	  through a SLIP/SLIRP session.
-+
- endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 0a5c58e..78ca202 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -22,7 +22,6 @@ SPICE_DEPENDENCIES    = \
- # We disable everything for now, because the dependency tree can become
- # quite deep if we try to enable some features, and I have not tested that.
- SPICE_CONF_OPT =            \
--  --disable-tunnel          \
-   --disable-opengl          \
-   --disable-smartcard       \
-   --disable-automated-tests \
-@@ -44,6 +43,13 @@ else
- SPICE_CONF_OPT += --disable-gui
- endif
- 
-+ifeq ($(BR2_PACKAGE_SPICE_TUNNEL),y)
-+SPICE_CONF_OPT += --enable-tunnel
-+SPICE_DEPENDENCIES += slirp
-+else
-+SPICE_CONF_OPT += --disable-tunnel
-+endif
-+
- SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
+Hi,
+
+ Thierry> Actually I am not using it either.  The CVS dir came in
+ Thierry> conflict with my versioning system and that is how I noticed
+ Thierry> it.
+
+You're using CVS in 2012? Really? ;)
+
 -- 
-1.7.2.5
+Bye, Peter Korsgaard
