@@ -1,42 +1,71 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Dec 2012 22:39:36 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	yem-host-qemu-fixes
-Message-ID: <cover.1355434710.git.yann.morin.1998@free.fr>
+Date: Thu, 13 Dec 2012 22:39:37 +0100
+Subject: [Buildroot] [PATCH 1/4] package/qemu: fix host-qemu variable names
+In-Reply-To: <cover.1355434710.git.yann.morin.1998@free.fr>
+References: <cover.1355434710.git.yann.morin.1998@free.fr>
+Message-ID: <ef84613fdc32788b96df51eb2c074c547424ac9c.1355434710.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+With the upcoming introduction of qemu-on-target, we need to properly
+separate the variables used for the host qemu, from the variables
+used for the target qemu.
 
-This short series is an extract from my larger qemu-related series.
-I did split it up to ease review and integration.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Francois Perrad <fperrad@gmail.com>
+---
+ package/qemu/qemu.mk |   25 ++++++++++++++-----------
+ 1 files changed, 14 insertions(+), 11 deletions(-)
 
-The following changes since commit e043dd6c99a801dc7f863986c78c947e25c75b3f:
-
-  barebox: bump to version 2012.12.1 (2012-12-13 09:37:10 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-host-qemu-fixes
-
-Yann E. MORIN (4):
-      package/qemu: fix host-qemu variable names
-      package/qemu: fix host dependencies
-      package/qemu: use autotools-package infrastructure
-      package/qemu: bump version
-
- package/qemu/qemu.mk |   44 +++++++++++++++++++-------------------------
- 1 files changed, 19 insertions(+), 25 deletions(-)
-
-Regards,
-Yann E. MORIN
-
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 790d34f..81cd79f 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -13,7 +13,10 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+ #       the non-(L)GPL license texts are specified in the affected
+ #       individual source files.
+ 
+-QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
++#-------------------------------------------------------------
++# Host-qemu
++
++HOST_QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+ 
+ #       BR ARCH         qemu
+ #       -------         ----
+@@ -44,20 +47,20 @@ QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+ #       sh64            not supported
+ #       sparc           sparc
+ 
+-QEMU_ARCH = $(ARCH)
+-ifeq ($(QEMU_ARCH),i486)
+-    QEMU_ARCH = i386
++HOST_QEMU_ARCH = $(ARCH)
++ifeq ($(HOST_QEMU_ARCH),i486)
++    HOST_QEMU_ARCH = i386
+ endif
+-ifeq ($(QEMU_ARCH),i586)
+-    QEMU_ARCH = i386
++ifeq ($(HOST_QEMU_ARCH),i586)
++    HOST_QEMU_ARCH = i386
+ endif
+-ifeq ($(QEMU_ARCH),i686)
+-    QEMU_ARCH = i386
++ifeq ($(HOST_QEMU_ARCH),i686)
++    HOST_QEMU_ARCH = i386
+ endif
+-ifeq ($(QEMU_ARCH),powerpc)
+-    QEMU_ARCH = ppc
++ifeq ($(HOST_QEMU_ARCH),powerpc)
++    HOST_QEMU_ARCH = ppc
+ endif
+-HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
++HOST_QEMU_TARGETS=$(HOST_QEMU_ARCH)-linux-user
+ 
+ define HOST_QEMU_CONFIGURE_CMDS
+ 	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
