@@ -1,27 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Dec 2012 23:57:26 +0100
-Subject: [Buildroot] [PATCH 2/4] package/qemu: fix host dependencies
-In-Reply-To: <f3379896be4cbb7b0c1348fb207ecd6696702842.1355434710.git.yann.morin.1998@free.fr>
-References: <cover.1355434710.git.yann.morin.1998@free.fr>
- <f3379896be4cbb7b0c1348fb207ecd6696702842.1355434710.git.yann.morin.1998@free.fr>
-Message-ID: <50CA5D56.6090807@mind.be>
+Date: Fri, 14 Dec 2012 00:02:50 +0100
+Subject: [Buildroot] Getting It into Compact Flash
+In-Reply-To: <20121213220434.GA819@mail.sceen.net>
+References: <000901cdd883$889a6e70$99cf4b50$@co.uk> <50CA4A8F.1050002@mind.be>
+ <20121213220434.GA819@mail.sceen.net>
+Message-ID: <50CA5E9A.1090505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/12/12 22:39, Yann E. MORIN wrote:
-> 'host-*' packages should depends on other 'host-*' packages,
-> not on target packages.
+On 13/12/12 23:04, Richard Braun wrote:
+> On Thu, Dec 13, 2012 at 10:37:19PM +0100, Arnout Vandecappelle wrote:
+>> - if you use anything else than static device management, the devtmps
+>> will not be mounted automatically by the kernel; the cpio filesystem
+>> adds a /init script that mounts it for you.
 >
-> Reported-by: Arnout Vandecappelle<arnout@mind.be>
-> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> Cc: Francois Perrad<fperrad@gmail.com>
+> The kernel has provided the ability to automatically mount devtmpfs for
+> quite some time now. He just needs to make sure the option is selected
+> in the kernel configuration.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  But it doesn't automount devtmpfs when the initramfs is mounted. That's
+why fs/cpio/init exists.
+
+  (Come to think of it, it is possible that an ext2 initrd is not 
+considered the same as an initramfs and the kernel _will_ mount devtmpfs 
+- I'm not sure).
 
 
+  Regards,
+  Arnout
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
