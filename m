@@ -1,27 +1,94 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 13 Dec 2012 22:47:36 +0100
-Subject: [Buildroot] builroot-2012.11.tar.bz2: CVS control directory
-	left in toolchain/elf2flt/elf2flt
-In-Reply-To: <50CA4C63.2000006@wanadoo.fr> (Thierry Bultel's message of "Thu, 
- 13 Dec 2012 22:45:07 +0100")
-References: <50CA3F70.2060900@wanadoo.fr> <87lid1ljw4.fsf@dell.be.48ers.dk>
- <50CA4C63.2000006@wanadoo.fr>
-Message-ID: <87hanplj47.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Dec 2012 22:47:07 +0100
+Subject: [Buildroot] [PATCH 07/20] package/slirp: new package
+In-Reply-To: <cover.1355435224.git.yann.morin.1998@free.fr>
+References: <cover.1355435224.git.yann.morin.1998@free.fr>
+Message-ID: <7a747d7d61e79bd553f8257d5c0826ff0e2be680.1355435224.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in       |    1 +
+ package/slirp/Config.in |   25 +++++++++++++++++++++++++
+ package/slirp/slirp.mk  |   21 +++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/slirp/Config.in
+ create mode 100644 package/slirp/slirp.mk
 
-Hi,
-
- Thierry> Actually I am not using it either.  The CVS dir came in
- Thierry> conflict with my versioning system and that is how I noticed
- Thierry> it.
-
-You're using CVS in 2012? Really? ;)
-
+diff --git a/package/Config.in b/package/Config.in
+index 61e1d60d..6bdfa2b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -494,6 +494,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/ortp/Config.in"
++source "package/slirp/Config.in"
+ source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
+ endmenu
+diff --git a/package/slirp/Config.in b/package/slirp/Config.in
+new file mode 100644
+index 0000000..dedded3
+--- /dev/null
++++ b/package/slirp/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_SLIRP
++	bool "slirp"
++	help
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
++	  
++	  This package implements the slirp-part for Spice.
++	  Slirp emulates a PPP or SLIP connection over a normal terminal.
++	  
++	  http://www.spice-space.org/
++	  
++	  NOTE:
++	  This package has some history of a unique kind:
++	    - originally developped as 'slirp' by Danny Gasparovski, and
++	      seemingly abandonned (developper /disapeared/)
++	    - then re-maintained at sourceforge by "Kelly", up to some
++	      time around 2009: http://slirp.sourceforge.net/
++	    - during that period, QEMU (Fabrice BELLARD) forked the code
++	      and included it in QEMU
++	    - and it was imported from this breed by the Spice project
++	      around May 2009
++	    - which is what we use here
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
+new file mode 100644
+index 0000000..b3f4bcd
+--- /dev/null
++++ b/package/slirp/slirp.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# Spice-slirp
++#
++#############################################################
++
++# There's no tarball releases of slirp, so we use the git repo
++# Also, there's no tag, so we use a random SHA1 (master's HEAD
++# of today)
++SLIRP_VERSION         = 8c2da74c1385242f20799fec8c04f8378edc6550
++SLIRP_SITE            = git://anongit.freedesktop.org/spice/slirp
++SLIRP_LICENSE         = BSD-4c BSD-2c
++# Note: The license file 'COPYRIGHT' is missing from the sources,
++# although some files refer to it.
++SLIRP_INSTALL_STAGING = YES
++
++# As we're using the git tree, there's no ./configure,
++# so we need to autoreconf.
++SLIRP_AUTORECONF      = YES
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.2.5
