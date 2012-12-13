@@ -1,19 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 13 Dec 2012 09:37:50 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2012.12.1
-In-Reply-To: <1355384675-8965-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Thu, 13 Dec 2012 08:44:35 +0100")
-References: <1355384675-8965-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <8738zamjoh.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Dec 2012 09:38:09 +0100
+Subject: [Buildroot] [PATCH] uboot-tools: do not override busybox
+	uninstall commands
+In-Reply-To: <1355366255-7358-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Wed, 12 Dec 2012 21:37:35 -0500")
+References: <1355366255-7358-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87y5h2l53i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
- Fabio> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ Danomi> The uboot-tools.mk has a copy of BUSYBOX_UNINSTALL_TARGET_CMDS
+ Danomi> in it, presumably due to a copy/paste error.  This definition
+ Danomi> is overriding the (identical) definition in busybox.mk.
+
+ Danomi> Also, add license info.
 
 Committed, thanks.
 
