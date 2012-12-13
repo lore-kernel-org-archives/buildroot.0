@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Dec 2012 22:47:07 +0100
-Subject: [Buildroot] [PATCH 07/20] package/slirp: new package
+Date: Thu, 13 Dec 2012 22:47:11 +0100
+Subject: [Buildroot] [PATCH 11/20] package/spice: enable GUI
 In-Reply-To: <cover.1355435224.git.yann.morin.1998@free.fr>
 References: <cover.1355435224.git.yann.morin.1998@free.fr>
-Message-ID: <7a747d7d61e79bd553f8257d5c0826ff0e2be680.1355435224.git.yann.morin.1998@free.fr>
+Message-ID: <19ce4b3617a5b0e0a74a92dc859e29cb13a57d1f.1355435224.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,84 +11,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in       |    1 +
- package/slirp/Config.in |   25 +++++++++++++++++++++++++
- package/slirp/slirp.mk  |   21 +++++++++++++++++++++
- 3 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/slirp/Config.in
- create mode 100644 package/slirp/slirp.mk
+ package/spice/Config.in |    8 ++++++++
+ package/spice/spice.mk  |    8 +++++++-
+ 2 files changed, 15 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 61e1d60d..6bdfa2b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -494,6 +494,7 @@ source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/ortp/Config.in"
-+source "package/slirp/Config.in"
- source "package/usbredir/Config.in"
- source "package/zeromq/Config.in"
- endmenu
-diff --git a/package/slirp/Config.in b/package/slirp/Config.in
-new file mode 100644
-index 0000000..dedded3
---- /dev/null
-+++ b/package/slirp/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_SLIRP
-+	bool "slirp"
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index aacc779..08c3893 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -33,4 +33,12 @@ config BR2_PACKAGE_SPICE_CLIENT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 
++config BR2_PACKAGE_SPICE_GUI
++	bool "Enable GUI"
++	depends on BR2_PACKAGE_SPICE_CLIENT
++	select BR2_PACKAGE_CEGUI06
 +	help
-+	  The Spice project aims to provide a complete open source
-+	  solution for interaction with virtualized desktop devices.
-+	  The Spice project deals with both the virtualized devices
-+	  and the front-end. Interaction between front-end and
-+	  back-end is done using VD-Interfaces.
-+	  
-+	  This package implements the slirp-part for Spice.
-+	  Slirp emulates a PPP or SLIP connection over a normal terminal.
-+	  
-+	  http://www.spice-space.org/
-+	  
-+	  NOTE:
-+	  This package has some history of a unique kind:
-+	    - originally developped as 'slirp' by Danny Gasparovski, and
-+	      seemingly abandonned (developper /disapeared/)
-+	    - then re-maintained at sourceforge by "Kelly", up to some
-+	      time around 2009: http://slirp.sourceforge.net/
-+	    - during that period, QEMU (Fabrice BELLARD) forked the code
-+	      and included it in QEMU
-+	    - and it was imported from this breed by the Spice project
-+	      around May 2009
-+	    - which is what we use here
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-new file mode 100644
-index 0000000..b3f4bcd
---- /dev/null
-+++ b/package/slirp/slirp.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# Spice-slirp
-+#
-+#############################################################
++	  Say 'y' here to enable the Graphical User Interface (GUI)
++	  start dialog.
 +
-+# There's no tarball releases of slirp, so we use the git repo
-+# Also, there's no tag, so we use a random SHA1 (master's HEAD
-+# of today)
-+SLIRP_VERSION         = 8c2da74c1385242f20799fec8c04f8378edc6550
-+SLIRP_SITE            = git://anongit.freedesktop.org/spice/slirp
-+SLIRP_LICENSE         = BSD-4c BSD-2c
-+# Note: The license file 'COPYRIGHT' is missing from the sources,
-+# although some files refer to it.
-+SLIRP_INSTALL_STAGING = YES
+ endif # BR2_PACKAGE_SPICE
+diff --git a/package/spice/spice.mk b/package/spice/spice.mk
+index 2f7fc20..0a5c58e 100644
+--- a/package/spice/spice.mk
++++ b/package/spice/spice.mk
+@@ -23,7 +23,6 @@ SPICE_DEPENDENCIES    = \
+ # quite deep if we try to enable some features, and I have not tested that.
+ SPICE_CONF_OPT =            \
+   --disable-tunnel          \
+-  --disable-gui             \
+   --disable-opengl          \
+   --disable-smartcard       \
+   --disable-automated-tests \
+@@ -38,6 +37,13 @@ else
+ SPICE_CONF_OPT += --disable-client
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
++SPICE_CONF_OPT += --enable-gui
++SPICE_DEPENDENCIES += cegui06
++else
++SPICE_CONF_OPT += --disable-gui
++endif
 +
-+# As we're using the git tree, there's no ./configure,
-+# so we need to autoreconf.
-+SLIRP_AUTORECONF      = YES
-+
-+$(eval $(autotools-package))
+ SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+ 
 -- 
 1.7.2.5
