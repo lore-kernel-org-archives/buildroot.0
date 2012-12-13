@@ -1,27 +1,23 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Thu, 13 Dec 2012 22:53:50 +0100
-Subject: [Buildroot] builroot-2012.11.tar.bz2: CVS control directory
-	left in toolchain/elf2flt/elf2flt
-In-Reply-To: <87hanplj47.fsf@dell.be.48ers.dk>
-References: <50CA3F70.2060900@wanadoo.fr> <87lid1ljw4.fsf@dell.be.48ers.dk>
- <50CA4C63.2000006@wanadoo.fr> <87hanplj47.fsf@dell.be.48ers.dk>
-Message-ID: <50CA4E6E.6000507@wanadoo.fr>
+From: Richard Braun <rbraun@sceen.net>
+Date: Thu, 13 Dec 2012 23:04:34 +0100
+Subject: [Buildroot] Getting It into Compact Flash
+In-Reply-To: <50CA4A8F.1050002@mind.be>
+References: <000901cdd883$889a6e70$99cf4b50$@co.uk> <50CA4A8F.1050002@mind.be>
+Message-ID: <20121213220434.GA819@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 13/12/2012 22:47, Peter Korsgaard a ?crit :
->>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
->
-> Hi,
->
->   Thierry> Actually I am not using it either.  The CVS dir came in
->   Thierry> conflict with my versioning system and that is how I noticed
->   Thierry> it.
->
-> You're using CVS in 2012? Really? ;)
->
-It is awesome, sometimes, to notice how people like to stay with what 
-they have, even when there is better elsewhere ;0)
+On Thu, Dec 13, 2012 at 10:37:19PM +0100, Arnout Vandecappelle wrote:
+> - if you use anything else than static device management, the devtmps
+> will not be mounted automatically by the kernel; the cpio filesystem
+> adds a /init script that mounts it for you.
+
+The kernel has provided the ability to automatically mount devtmpfs for
+quite some time now. He just needs to make sure the option is selected
+in the kernel configuration.
+
+-- 
+Richard Braun
