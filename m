@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Dec 2012 22:47:11 +0100
-Subject: [Buildroot] [PATCH 11/20] package/spice: enable GUI
+Date: Thu, 13 Dec 2012 22:47:13 +0100
+Subject: [Buildroot] [PATCH 13/20] package/libseccomp: new package
 In-Reply-To: <cover.1355435224.git.yann.morin.1998@free.fr>
 References: <cover.1355435224.git.yann.morin.1998@free.fr>
-Message-ID: <19ce4b3617a5b0e0a74a92dc859e29cb13a57d1f.1355435224.git.yann.morin.1998@free.fr>
+Message-ID: <b7b5d0116321de1c724d9802287862418aa4118c.1355435224.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,96 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/spice/Config.in |    8 ++++++++
- package/spice/spice.mk  |    8 +++++++-
- 2 files changed, 15 insertions(+), 1 deletions(-)
+ package/Config.in                                  |    1 +
+ package/libseccomp/Config.in                       |   13 +++++++++++
+ ...ibseccomp-use-system-headers-from-sysroot.patch |   17 +++++++++++++++
+ package/libseccomp/libseccomp.mk                   |   22 ++++++++++++++++++++
+ 4 files changed, 53 insertions(+), 0 deletions(-)
+ create mode 100644 package/libseccomp/Config.in
+ create mode 100644 package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+ create mode 100644 package/libseccomp/libseccomp.mk
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index aacc779..08c3893 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -33,4 +33,12 @@ config BR2_PACKAGE_SPICE_CLIENT
- 	select BR2_PACKAGE_XLIB_LIBXFIXES
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 
-+config BR2_PACKAGE_SPICE_GUI
-+	bool "Enable GUI"
-+	depends on BR2_PACKAGE_SPICE_CLIENT
-+	select BR2_PACKAGE_CEGUI06
+diff --git a/package/Config.in b/package/Config.in
+index 79a1342..6ab638d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -521,6 +521,7 @@ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/libtpl/Config.in"
++source "package/libseccomp/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/linux-pam/Config.in"
+ source "package/lttng-libust/Config.in"
+diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
+new file mode 100644
+index 0000000..183cf4e
+--- /dev/null
++++ b/package/libseccomp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBSECCOMP
++	bool "libseccomp"
 +	help
-+	  Say 'y' here to enable the Graphical User Interface (GUI)
-+	  start dialog.
++	  High level interface to the Linux Kernel's seccomp filter 
++	  
++	  The libseccomp library provides and easy to use, platform independent,
++	  interface to the Linux Kernel's syscall filtering mechanism: seccomp.
++	  The libseccomp API is designed to abstract away the underlying BPF
++	  based syscall filter language and present a more conventional
++	  function-call based filtering interface that should be familiar to,
++	  and easily adopted by application developers.
++	  
++	  http://sourceforge.net/projects/libseccomp/
+diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+new file mode 100644
+index 0000000..0997edd
+--- /dev/null
++++ b/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
+@@ -0,0 +1,17 @@
++configure: check headers in sysroot, not in host's system headers
 +
- endif # BR2_PACKAGE_SPICE
-diff --git a/package/spice/spice.mk b/package/spice/spice.mk
-index 2f7fc20..0a5c58e 100644
---- a/package/spice/spice.mk
-+++ b/package/spice/spice.mk
-@@ -23,7 +23,6 @@ SPICE_DEPENDENCIES    = \
- # quite deep if we try to enable some features, and I have not tested that.
- SPICE_CONF_OPT =            \
-   --disable-tunnel          \
--  --disable-gui             \
-   --disable-opengl          \
-   --disable-smartcard       \
-   --disable-automated-tests \
-@@ -38,6 +37,13 @@ else
- SPICE_CONF_OPT += --disable-client
- endif
- 
-+ifeq ($(BR2_PACKAGE_SPICE_GUI),y)
-+SPICE_CONF_OPT += --enable-gui
-+SPICE_DEPENDENCIES += cegui06
-+else
-+SPICE_CONF_OPT += --disable-gui
-+endif
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
- SPICE_CONF_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- SPICE_MAKE_ENV = PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- 
++diff -durN libseccomp-1.0.0.orig/configure libseccomp-1.0.0/configure
++--- libseccomp-1.0.0.orig/configure	2012-07-27 22:35:05.000000000 +0200
+++++ libseccomp-1.0.0/configure	2012-10-27 00:12:50.739196219 +0200
++@@ -205,7 +205,8 @@
++ #
++ 
++ # system seccomp includes
++-if [[ -r "/usr/include/linux/seccomp.h" ]]; then
+++# ${SYSROOT} added by buildroot for cross-compilation
+++if [[ -r "${SYSROOT}/usr/include/linux/seccomp.h" ]]; then
++ 	opt_sysinc_seccomp="yes"
++ else
++ 	opt_sysinc_seccomp="no"
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+new file mode 100644
+index 0000000..73fe632
+--- /dev/null
++++ b/package/libseccomp/libseccomp.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# libseccomp
++#
++#############################################################
++
++LIBSECCOMP_VERSION         = 1.0.0
++LIBSECCOMP_SOURCE          = libseccomp-$(LIBSECCOMP_VERSION).tar.gz
++LIBSECCOMP_SITE            = http://downloads.sourceforge.net/project/libseccomp
++LIBSECCOMP_LICENSE         = LGPLv2.1
++LIBSECCOMP_LICENSE_FILES   = LICENSE
++LIBSECCOMP_INSTALL_STAGING = YES
++
++# Needed for configure to find our system headers:
++LIBSECCOMP_CONF_ENV            = SYSROOT=$(STAGING_DIR)
++LIBSECCOMP_MAKE_ENV            = $(TARGET_CONFIGURE_OPTS)
++LIBSECCOMP_MAKE_OPT            = SUBDIRS_BUILD=src
++LIBSECCOMP_INSTALL_STAGING_OPT = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(STAGING_DIR) install
++LIBSECCOMP_INSTALL_TARGET_OPT  = SUBDIRS_BUILD=src SUBDIRS_INSTALL="src include" DESTDIR=$(TARGET_DIR) install
++
++# Not a real autotools package, but works quite OK nonetheless
++$(eval $(autotools-package))
 -- 
 1.7.2.5
