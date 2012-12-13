@@ -1,55 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Dec 2012 22:37:19 +0100
-Subject: [Buildroot] Getting It into Compact Flash
-In-Reply-To: <000901cdd883$889a6e70$99cf4b50$@co.uk>
-References: <000901cdd883$889a6e70$99cf4b50$@co.uk>
-Message-ID: <50CA4A8F.1050002@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Dec 2012 22:39:36 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-host-qemu-fixes
+Message-ID: <cover.1355434710.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/12/12 17:12, Ted Wood wrote:
-> OK Next question:
->
-> I?ve built a kernel image and a file system image.
->
-> I?ve manually installed Grub 2 and a grub.cfg file which looks like this:
->
-> menuentry ?Buildroot?
->
-> {
->
-> set root=?(hd0,msdos1)?
->
-> echo ?Loading Kernel?)
->
-> linux /boot/bzimage
->
-> echo ?Loading Root FS?
->
-> initrd /boot/rootfs.ext2
->
-> }
+Hello All!
 
-  For an initrd, you should use a cpio filesystem rather than ext2:
+This short series is an extract from my larger qemu-related series.
+I did split it up to ease review and integration.
 
-- ext2 adds overhead that is completely unnecessary for a ramdisk;
+The following changes since commit e043dd6c99a801dc7f863986c78c947e25c75b3f:
 
-- if you use anything else than static device management, the devtmps
-will not be mounted automatically by the kernel; the cpio filesystem
-adds a /init script that mounts it for you.
+  barebox: bump to version 2012.12.1 (2012-12-13 09:37:10 +0100)
 
-  I thought this was now clearly explained in the manual, is it not?
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-host-qemu-fixes
 
-  Regards,
-  Arnout
+Yann E. MORIN (4):
+      package/qemu: fix host-qemu variable names
+      package/qemu: fix host dependencies
+      package/qemu: use autotools-package infrastructure
+      package/qemu: bump version
+
+ package/qemu/qemu.mk |   44 +++++++++++++++++++-------------------------
+ 1 files changed, 19 insertions(+), 25 deletions(-)
+
+Regards,
+Yann E. MORIN
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
