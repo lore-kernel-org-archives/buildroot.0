@@ -1,55 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 13 Dec 2012 23:54:55 +0100
-Subject: [Buildroot] [PATCH] Fix xenomai build with Linaro toolchain
-In-Reply-To: <50CA5162.8090304@wanadoo.fr>
-References: <50CA5162.8090304@wanadoo.fr>
-Message-ID: <50CA5CBF.4020503@mind.be>
+Date: Thu, 13 Dec 2012 23:56:53 +0100
+Subject: [Buildroot] [PATCH 1/4] package/qemu: fix host-qemu variable
+ names
+In-Reply-To: <ef84613fdc32788b96df51eb2c074c547424ac9c.1355434710.git.yann.morin.1998@free.fr>
+References: <cover.1355434710.git.yann.morin.1998@free.fr>
+ <ef84613fdc32788b96df51eb2c074c547424ac9c.1355434710.git.yann.morin.1998@free.fr>
+Message-ID: <50CA5D35.5000406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/12/12 23:06, Thierry Bultel wrote:
-> This fixes the build with toolchains that have -mthumb by default
-> (Not supported by xenomai yet)
+On 13/12/12 22:39, Yann E. MORIN wrote:
+> With the upcoming introduction of qemu-on-target, we need to properly
+> separate the variables used for the host qemu, from the variables
+> used for the target qemu.
 >
->
-> Signed-off-by: thierry.bultel at wanadoo.fr
-> --- xenomai.mk 2012-12-13 22:48:05.841982812 +0100
-> +++ xenomai.mk.orig 2012-12-13 23:01:13.473982051 +0100
+> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+> Cc: Francois Perrad<fperrad@gmail.com>
 
-  This won't apply with git am. Could you create the patch with
-git send-email?
+  Didn't I already give my
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> @@ -24,6 +23,12 @@
->
-> XENOMAI_CONF_OPT += --includedir=/usr/include/xenomai/
->
-> +XENOMAI_CONF_ENV = \
-> + CFLAGS="$(TARGET_CFLAGS) -marm"
-
-  Wouldn't it be a good idea to make this conditional on BR2_arm? :-)
-
-  I would also use XENOMAI_CONF_ENV +=, easier for the future.
-
-> +
-> +XENOMAI_MAKE_ENV = \
-> + CFLAGS="$(TARGET_CFLAGS) -marm"
-
-  Is this needed? Should be enough to do it in the CONF_ENV because
-the CFLAGS are directly replaced in the Makefiles...
-
+?
 
   Regards,
   Arnout
-
-> +
-> ifeq ($(BR2_HAVE_DEVFILES),)
-> define XENOMAI_REMOVE_DEVFILES
-> for i in xeno-config xeno-info wrap-link.sh ; do \
-
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
