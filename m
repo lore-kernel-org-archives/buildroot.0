@@ -1,62 +1,77 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 13 Dec 2012 00:56:47 +0100
-Subject: [Buildroot] usb_modeswitch and lsusb yield Segmentation fault
-In-Reply-To: <87vcc7m4xn.fsf@dell.be.48ers.dk>
-References: <BCF3711885AE41AB966E9545FDB3C8D6@JohanW7><50C54E15.1030008@zacarias.com.ar><97E0CBC5EB794A11A2835644E2E3CC1D@JohanW7><50C5C08D.407@zacarias.com.ar><7EE27C3F912F450282DD2DE63A6A7FED@JohanW7>
- <87vcc7m4xn.fsf@dell.be.48ers.dk>
-Message-ID: <35FE416FC00F4D74B44316E0EFAE802E@JohanW7>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 13 Dec 2012 02:06:14 +0100
+Subject: [Buildroot] Random "Bus error" when building host-python
+In-Reply-To: <20121212235406.768eb752@skate>
+References: <20121212235406.768eb752@skate>
+Message-ID: <50C92A06.3010103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Hi Peter
+On 12/12/12 23:54, Thomas Petazzoni wrote:
+> Hello,
+>
+> If you have looked at the autobuilder results recently, there are some
+> host-python errors sometimes:
+>
+>   http://autobuild.buildroot.org/results/b01a3c7233d53578961b74fb6ffb006782a43944/build-end.log
+>   Free Electrons build server, targeting mipsel
+>
+>   http://autobuild.buildroot.org/results/5c59266f72f234ee9863e3d54270487b05af3612/build-end.log
+>   gcc14 build server, targeting powerpc
+>
+>   http://autobuild.buildroot.org/results/3cf01dabafd47813c6fe11d0250e57ef667e8d95/build-end.log
+>   gcc14 build server, targeting powerpc
+>
+>   http://autobuild.buildroot.org/results/7722a16700231a49b736fae697532013dfccfd2a/build-end.log
+>   Free Electrons build server, targeting arm
+>
+> Every time, the build fail with a "Bus error". The log is not clear
+> enough to really understand what process is failing with a Bus error.
 
-I tried to reproduce it, but it builds for now with NTPL 
-I am trying to figure out why I get the segfaults on lsusb (usbutils) and usb_modeswitch.
-(I need usb_modeswitch to use an HSPDA USB stick as network device)
+  At least, the logs from gcc14 tell us that it is './python -E setup.py build'
+which is crashing. So it looks like a bug in python.
 
-When I select old/stable uClibc 0.9.33.2, then QT is not building....
+  The funny thing is that this command is called in the 'sharedmods' goal,
+which is already built in the build step. So why is it built again in
+the install step?
 
-I remember I have seen this 'pthread_getattr_np' was not declared  in the past, and I am not sure about how this was fixed.
 
-snip
-../3rdparty/javascriptcore/JavaScriptCore/runtime/Collector.cpp:722:42: error: 'pthread_getattr_np' was not declared in this scope
-../3rdparty/javascriptcore/JavaScriptCore/wtf/Vector.h: In member function 'T* QTWTF::VectorBuffer<T,
-inlineCapacity>::inlineBuffer() [with T = QTWTF::Vector<QTJSC::Identifier, 64u>*, unsigned int inlineCapacity = 32u]':
-../3rdparty/javascriptcore/JavaScriptCore/wtf/Vector.h:415:17:   instantiated from 'void QTWTF::VectorBuffer<T,
-inlineCapacity>::allocateBuffer(size_t) [with T = QTWTF::Vector<QTJSC::Identifier, 64u>*, unsigned int inlineCapacity = 32u, size_t
-= unsigned int]'
-../3rdparty/javascriptcore/JavaScriptCore/wtf/Vector.h:808:9:   instantiated from 'void QTWTF::Vector<T,
-inlineCapacity>::reserveCapacity(size_t) [with T = QTWTF::Vector<QTJSC::Identifier, 64u>*, unsigned int inlineCapacity = 32u, size_t
-= unsigned int]'
-../3rdparty/javascriptcore/JavaScriptCore/wtf/Vector.h:745:9:   instantiated from 'void QTWTF::Vector<T,
-inlineCapacity>::expandCapacity(size_t) [with T = QTWTF::Vector<QTJSC::Identifier, 64u>*, unsigned int inlineCapacity = 32u, size_t
-= unsigned int]'
-Snip
+> As you can see, the problem is not specific to one build machine, or
+> one target architecture (well, since it's in host package, it's kind of
+> obvious, but not the build machine fact).
+>
+> And the thing is that those problems are not reproducible. If you take
+> the exact same commit ID of Buildroot, the exact same configuration, on
+> the exact same build machine, the problem may or may not produce
+> itself. I tried to reproduce it using one of those build
+> configurations, and he wasn't produced.
+>
+> On the other hand, I did try to reproduce some other build
+> configuration that failed in the autobuilders, and instead of having
+> the error reported by the autobuilder web interface, I felt into the
+> "Bus error" problem in host-python. I just restarted the build (not
+> from scratch, simply restarted the build), and it went on without
+> failing into the "Bus error" problem. So it seems like the problem is
+> not in the generated code (re-executing the same code sometimes work
+> sometimes doesn't work).
+>
+> Does anyone has ideas on how to further investigate this?
 
-I will try a full build again with NPTL to see if this build gets through the end...
-Time for a good night sleep now...while the build runs
+  Can you catch a core dump on the build servers?
 
-Johan
+  I have a hunch that it will be related to parallel builds. Perhaps some
+shared library is overwritten while python is running...
 
------Oorspronkelijk bericht-----
-Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
-Verzonden: woensdag 12 december 2012 20:44
-Aan: Sagaert Johan
-CC: 'Gustavo Zacarias'; buildroot at busybox.net
-Onderwerp: Re: usb_modeswitch and lsusb yield Segmentation fault
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
-
- Sagaert> Hi
-
- Sagaert> I was using the newer pthreads implementation,  Sagaert> The old/stable pthreads are working for both lsusb (usbutils) and
-for usb_modeswitch with uClibc 0.9.33  Sagaert> I did not try NTPL since this breaks the build of GDB.
-
-Really? I don't recall any issues with GDB and NTPL? Could you provide more details, please?
-
---
-Bye, Peter Korsgaard
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
