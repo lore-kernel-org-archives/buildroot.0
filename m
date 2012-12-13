@@ -1,71 +1,61 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 13 Dec 2012 23:25:53 +0100
-Subject: [Buildroot] [git commit] arch/Config.in.arm: Add
-	BR2_ARM_CPU_HAS_NEON similar to how mmx/sse is handled on x86
-Message-ID: <20121213230620.8169F9A1F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: use BR2_ARM_CPU_HAS_NEON
+Message-ID: <20121213230620.A7DD69A1F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9da98c85d661578e0f40d81fac53aa65bd08fbb
+commit: http://git.buildroot.net/buildroot/commit/?id=ce8a7d50557d8f4a8dd3ae8a2259cc8996a38c57
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-NEON support is optional on A5/A9, so let the user choose if SoC has it /
-wants to use it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- arch/Config.in.arm |   21 +++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
+ package/efl/libevas/libevas.mk        |    3 +--
+ package/multimedia/ffmpeg/ffmpeg.mk   |    3 +--
+ package/multimedia/mplayer/mplayer.mk |    2 +-
+ 3 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index b65b4ac..806b196 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -1,3 +1,11 @@
-+# arm cpu features
-+config BR2_ARM_CPU_HAS_NEON
-+	bool
-+
-+# for some cores, NEON support is optional
-+config BR2_ARM_CPU_MAYBE_HAS_NEON
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_arm || BR2_armeb
-@@ -31,12 +39,16 @@ config BR2_arm1176jzf_s
- 	bool "arm1176jzf-s"
- config BR2_cortex_a5
- 	bool "cortex-A5"
-+	select BR2_ARM_CPU_MAYBE_HAS_NEON
- config BR2_cortex_a8
- 	bool "cortex-A8"
-+	select BR2_ARM_CPU_HAS_NEON
- config BR2_cortex_a9
- 	bool "cortex-A9"
-+	select BR2_ARM_CPU_MAYBE_HAS_NEON
- config BR2_cortex_a15
- 	bool "cortex-A15"
-+	select BR2_ARM_CPU_HAS_NEON
- config BR2_sa110
- 	bool "sa110"
- config BR2_sa1100
-@@ -64,6 +76,15 @@ config BR2_ARM_OABI
- 	depends on !BR2_GCC_VERSION_4_7_X
- endchoice
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 2e9e930..1f053e3 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -142,8 +142,7 @@ else
+ LIBEVAS_CONF_OPT += --disable-cpu-altivec
+ endif
  
-+config BR2_ARM_ENABLE_NEON
-+	bool "Enable NEON SIMD extension support"
-+	depends on BR2_ARM_CPU_MAYBE_HAS_NEON
-+	select BR2_ARM_CPU_HAS_NEON
-+	help
-+	  For some CPU cores, the NEON SIMD extension is optional.
-+	  Select this option if you are certain your particular
-+	  implementation has NEON support and you want to use it.
-+
- config BR2_ARCH
- 	default "arm"	if BR2_arm
- 	default "armeb"	if BR2_armeb
+-ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
+-# NEON is optional for A9
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-neon
+ else
+ LIBEVAS_CONF_OPT += --disable-cpu-neon
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index 994c7cd..90c1f1b 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -143,8 +143,7 @@ endif
+ ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a8)$(BR2_cortex_a9),y)
+ FFMPEG_CONF_OPT += --enable-armvfp
+ endif
+-# NEON is optional for A9
+-ifeq ($(BR2_cortex_a8),y)
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ FFMPEG_CONF_OPT += --enable-neon
+ endif
+ # Set powerpc altivec appropriately
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 17680b6..4a1abf4 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -112,7 +112,7 @@ ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv6j)
+ MPLAYER_CONF_OPTS += --enable-armv6
+ endif
+ 
+-ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+ MPLAYER_CONF_OPTS += --enable-neon
+ endif
+ 
