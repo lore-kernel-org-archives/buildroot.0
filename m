@@ -1,41 +1,66 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 13 Dec 2012 09:37:10 +0100
-Subject: [Buildroot] [git commit] barebox: bump to version 2012.12.1
-Message-ID: <20121213083804.D5BD69A1F0@busybox.osuosl.org>
+From: Richard Braun <rbraun@sceen.net>
+Date: Thu, 13 Dec 2012 11:28:11 +0100
+Subject: [Buildroot] [PATCH] system: add option to configure TERM variable
+Message-ID: <1355394491-23029-1-git-send-email-rbraun@sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e043dd6c99a801dc7f863986c78c947e25c75b3f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This option is useful for cases where the terminal isn't a bare serial
+vt100, but e.g. a linux tty with more features.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Richard Braun <rbraun@sceen.net>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ system/Config.in |    6 ++++++
+ system/system.mk |    5 +++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index e7498a8..10eb650 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -22,7 +22,7 @@ config BR2_TARGET_BAREBOX_2012_11
- 	bool "2012.11"
+diff --git a/system/Config.in b/system/Config.in
+index 622b242..a557ea0 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -154,6 +154,12 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ 	default "57600"		if BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600
+ 	default "115200"	if BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200
  
- config BR2_TARGET_BAREBOX_2012_12
--	bool "2012.12"
-+	bool "2012.12.1"
++config BR2_TARGET_GENERIC_GETTY_TERM
++	string "Value to assign the TERM environment variable"
++	default "vt100"
++	help
++	  Specify a TERM type.
++
+ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 	bool "remount root filesystem read-write during boot"
+ 	default y
+diff --git a/system/system.mk b/system/system.mk
+index 4185202..353d0ba 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -2,6 +2,7 @@ TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
+ TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+ TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
++TARGET_GENERIC_GETTY_TERM:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
  
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
-@@ -44,7 +44,7 @@ config BR2_TARGET_BAREBOX_VERSION
- 	default "2012.09.0"	if BR2_TARGET_BAREBOX_2012_09
- 	default "2012.10.0"	if BR2_TARGET_BAREBOX_2012_10
- 	default "2012.11.0"	if BR2_TARGET_BAREBOX_2012_11
--	default "2012.12.0"	if BR2_TARGET_BAREBOX_2012_12
-+	default "2012.12.1"	if BR2_TARGET_BAREBOX_2012_12
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ target-generic-hostname:
+ 	mkdir -p $(TARGET_DIR)/etc
+@@ -14,13 +15,13 @@ target-generic-issue:
+ 	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
  
+ target-generic-getty-busybox:
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+ 		$(TARGET_DIR)/etc/inittab
+ 
+ # In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
+ # skip the "tty" part and keep only the remaining.
+ target-generic-getty-sysvinit:
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+ 		$(TARGET_DIR)/etc/inittab
+ 
+ # Find commented line, if any, and remove leading '#'s
+-- 
+1.7.2.5
