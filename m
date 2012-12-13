@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Dec 2012 22:47:05 +0100
-Subject: [Buildroot] [PATCH 05/20] package/python-pyparsing: new package
+Date: Thu, 13 Dec 2012 22:47:08 +0100
+Subject: [Buildroot] [PATCH 08/20] package/spice-protocol: new package
 In-Reply-To: <cover.1355435224.git.yann.morin.1998@free.fr>
 References: <cover.1355435224.git.yann.morin.1998@free.fr>
-Message-ID: <1be978d372e9aeafcbc0f39f39f3b6a549082ed4.1355435224.git.yann.morin.1998@free.fr>
+Message-ID: <bf4752b013a746779957b6a6e44355e502acf3e5.1355435224.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,86 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                            |    1 +
- package/python-pyparsing/Config.in           |   11 +++++++
- package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pyparsing/Config.in
- create mode 100644 package/python-pyparsing/python-pyparsing.mk
+ package/Config.in                        |    1 +
+ package/spice-protocol/Config.in         |   12 ++++++++++++
+ package/spice-protocol/spice-protocol.mk |   14 ++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
+ create mode 100644 package/spice-protocol/Config.in
+ create mode 100644 package/spice-protocol/spice-protocol.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9d68581..d00ebf3 100644
+index 6bdfa2b..f0de519 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -307,6 +307,7 @@ source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
-+source "package/python-pyparsing/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- endmenu
-diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+@@ -662,6 +662,7 @@ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+ source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
++source "package/spice-protocol/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/spice-protocol/Config.in b/package/spice-protocol/Config.in
 new file mode 100644
-index 0000000..126dd0e
+index 0000000..b354361
 --- /dev/null
-+++ b/package/python-pyparsing/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYPARSING
-+	bool "pyparsing"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/spice-protocol/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SPICE_PROTOCOL
++	bool "spice protocol"
 +	help
-+	  The pyparsing module is an alternative approach to creating and
-+	  executing simple grammars, vs. the traditional lex/yacc approach,
-+	  or the use of regular expressions. The pyparsing module provides
-+	  a library of classes that client code uses to construct the grammar
-+	  directly in Python code.
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
 +	  
-+	  http://pyparsing.wikispaces.com/
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
++	  This package implements the protocol-part of Spice.
++	  
++	  http://www.spice-space.org/
+diff --git a/package/spice-protocol/spice-protocol.mk b/package/spice-protocol/spice-protocol.mk
 new file mode 100644
-index 0000000..246df4d
+index 0000000..dcfe50d
 --- /dev/null
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -0,0 +1,38 @@
++++ b/package/spice-protocol/spice-protocol.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# python-pyparsing
++# Spice-protocol
 +#
 +#############################################################
 +
-+PYTHON_PYPARSING_VERSION         = 1.5.6
-+PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
-+PYTHON_PYPARSING_SITE            = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
-+PYTHON_PYPARSING_LICENSE         = MIT
-+PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
-+PYTHON_PYPARSING_INSTALL_STAGING = YES
-+PYTHON_PYPARSING_DEPENDENCIES    = python
++SPICE_PROTOCOL_VERSION         = 0.12.2
++SPICE_PROTOCOL_SOURCE          = spice-protocol-$(SPICE_PROTOCOL_VERSION).tar.bz2
++SPICE_PROTOCOL_SITE            = http://www.spice-space.org/download/releases/
++SPICE_PROTOCOL_LICENSE         = BSD-3c
++SPICE_PROTOCOL_LICENSE_FILES   = COPYING
++SPICE_PROTOCOL_INSTALL_STAGING = YES
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_BUILD_CMDS
-+	(cd $(@D);                                              \
-+	 CC="$(TARGET_CC)"                                      \
-+	 CFLAGS="$(TARGET_CFLAGS)"                              \
-+	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
-+	 CROSS_COMPILING=yes                                    \
-+	 _python_sysroot=$(STAGING_DIR)                         \
-+	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
-+	 _python_prefix=/usr                                    \
-+	 _python_exec_prefix=/usr                               \
-+	 $(HOST_DIR)/usr/bin/python setup.py build              \
-+	)
-+endef
-+
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
-+	(cd $(@D);                                              \
-+	 $(HOST_DIR)/usr/bin/python setup.py install            \
-+	                            --prefix=$(TARGET_DIR)/usr  \
-+	)
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.2.5
