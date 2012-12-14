@@ -1,73 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Dec 2012 13:48:10 +0100
-Subject: [Buildroot] [git commit] package/libiscsi: new package
-Message-ID: <20121214125328.2E4959A219@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 14 Dec 2012 14:01:11 +0100
+Subject: [Buildroot] [PATCH 03/20] package/usbredir: new package
+In-Reply-To: <87mwxgiylq.fsf@dell.be.48ers.dk>
+References: <cover.1355435224.git.yann.morin.1998@free.fr>
+ <b6f27b8d9306f0a01bd003e2c9bdc1f5c5e87128.1355435224.git.yann.morin.1998@free.fr>
+ <87mwxgiylq.fsf@dell.be.48ers.dk>
+Message-ID: <201212141401.11951.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=599b97203012dbdc4a6663be717d6f1162ff26d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in            |    1 +
- package/libiscsi/Config.in   |   12 ++++++++++++
- package/libiscsi/libiscsi.mk |   15 +++++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
+On Friday 14 December 2012 13:53:37 Peter Korsgaard wrote:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>  Yann> diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+>  Yann> new file mode 100644
+>  Yann> index 0000000..8d8ac5a
+>  Yann> --- /dev/null
+>  Yann> +++ b/package/usbredir/Config.in
+>  Yann> @@ -0,0 +1,28 @@
+>  Yann> +comment "usbredir requires libusb"
+>  Yann> +	depends on !BR2_PACKAGE_LIBUSB
+>  Yann> +
+> 
+> We normally use select for libraries. Any reason to not use it here?
 
-diff --git a/package/Config.in b/package/Config.in
-index cad1221..dbb6704 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -466,6 +466,7 @@ source "package/libesmtp/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libfcgi/Config.in"
- source "package/libidn/Config.in"
-+source "package/libiscsi/Config.in"
- source "package/liboauth/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
-diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
-new file mode 100644
-index 0000000..f3fc29e
---- /dev/null
-+++ b/package/libiscsi/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBISCSI
-+	bool "libiscsi"
-+	select BR2_PACKAGE_POPT
-+	help
-+	  Libiscsi is a client-side library to implement the iSCSI protocol
-+	  that can be used to access resource of an iSCSI Target.
-+	  
-+	  The library is fully async with regards to iscsi commands and scsi
-+	  tasks, but a sync layer is also provided for ease of use for simpler
-+	  applications.
-+	  
-+	  https://github.com/sahlberg/libiscsi  (no proper homepage)
-diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
-new file mode 100644
-index 0000000..bfebd7e
---- /dev/null
-+++ b/package/libiscsi/libiscsi.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# libiscsi
-+#
-+#############################################################
-+
-+LIBISCSI_VERSION         = 1.6.0
-+LIBISCSI_SOURCE          = libiscsi-$(LIBISCSI_VERSION).tar.gz
-+LIBISCSI_SITE            = https://github.com/downloads/sahlberg/libiscsi
-+LIBISCSI_LICENSE         = GPLv2+ LGPLv2.1+
-+LIBISCSI_LICENSE_FILES   = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
-+LIBISCSI_INSTALL_STAGING = YES
-+LIBISCSI_DEPENDENCIES    = popt
-+
-+$(eval $(autotools-package))
+libusb depends on threads, and I do not want to play the game of
+inheriting the dependencies of my own dependencies, and reproduce
+the libffi mess.
+
+libusb has a dependency I can not select, so I just depend on it.
+
+>  Yann> +USBREDIR_DEPENDENCIES    += host-pkgconf
+> 
+> Any particular reason to not merge this line with the one above?
+
+Probably no good reason, indeed.
+
+Regards,
+Yann E. MORIN.
+
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
