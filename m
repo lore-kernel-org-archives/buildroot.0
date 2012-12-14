@@ -1,39 +1,48 @@
-From: Willy Lambert <lambert.willy@gmail.com>
-Date: Fri, 14 Dec 2012 01:08:50 +0100
-Subject: [Buildroot] builroot-2012.11.tar.bz2: CVS control directory
- left in toolchain/elf2flt/elf2flt
-In-Reply-To: <50CA4E6E.6000507@wanadoo.fr>
-References: <50CA3F70.2060900@wanadoo.fr> <87lid1ljw4.fsf@dell.be.48ers.dk>
- <50CA4C63.2000006@wanadoo.fr> <87hanplj47.fsf@dell.be.48ers.dk>
- <50CA4E6E.6000507@wanadoo.fr>
-Message-ID: <CAKvQZ_1VyU5O10=PTUuQRSTRABb5WZ936K+WkS6R6EY87=cP8g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 14 Dec 2012 01:23:34 +0100
+Subject: [Buildroot] [git commit] dbus: fix build on microblaze
+Message-ID: <20121214002514.12E849A1F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/12/13 Thierry Bultel <thierry.bultel@wanadoo.fr>:
-> Le 13/12/2012 22:47, Peter Korsgaard a ?crit :
->
->>>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
->>
->>
->> Hi,
->>
->>   Thierry> Actually I am not using it either.  The CVS dir came in
->>   Thierry> conflict with my versioning system and that is how I noticed
->>   Thierry> it.
->>
->> You're using CVS in 2012? Really? ;)
->>
-> It is awesome, sometimes, to notice how people like to stay with what they
-> have, even when there is better elsewhere ;0)
->
+commit: http://git.buildroot.net/buildroot/commit/?id=24cb62ed4c7c3e0aa36500cc4d1c0b13ee722f71
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is called Love :D
+Fixes http://autobuild.buildroot.net/results/5963d35b8933c452b8574c964e407c23a5d0412f
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The microblaze toolchain has sys/inotify.h, but doesn't provide inotify_rm_*
+functions, so disable inotify support.
+
+Also disable the legacy dnotify support (which is used when inotify support
+is disabled) as it has bitrotten upstream and no longer builds.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dbus/dbus.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b7cc378..ec42874 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -18,11 +18,16 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
+ 		--disable-xml-docs \
+ 		--disable-doxygen-docs \
+ 		--disable-static \
+-		--enable-dnotify \
++		--disable-dnotify \
+ 		--localstatedir=/var \
+ 		--with-system-socket=/var/run/dbus/system_bus_socket \
+ 		--with-system-pid-file=/var/run/messagebus.pid
+ 
++ifeq ($(BR2_microblaze),y)
++# microblaze toolchain doesn't provide inotify_rm_* but does have sys/inotify.h
++DBUS_CONF_OPT += --disable-inotify
++endif
++
+ ifeq ($(BR2_DBUS_EXPAT),y)
+ DBUS_CONF_OPT += --with-xml=expat
+ DBUS_DEPENDENCIES += expat
