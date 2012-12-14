@@ -1,20 +1,88 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Fri, 14 Dec 2012 04:45:53 +0000 (UTC)
-Subject: [Buildroot] Pass CFLAGS when building kernel
-Message-ID: <slrnkclbm0.b88.narkewoody@zuhnb712.local.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 14 Dec 2012 08:01:31 +0100
+Subject: [Buildroot] [git commit] package/qemu: fix host-qemu variable
+	names
+In-Reply-To: <20121213235339.E8BC99A1F2@busybox.osuosl.org>
+References: <20121213235339.E8BC99A1F2@busybox.osuosl.org>
+Message-ID: <CAB0FRssD6gVDPgm2gjRHy_zgkCfjiB0thSb3-DpJGXTbMv97gQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, list
+2012/12/14 Peter Korsgaard <jacmet@sunsite.dk>:
+> commit: http://git.buildroot.net/buildroot/commit/?id=6f7884c81461bdb35ff47da9cd84c8a8ca5d57cb
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> With the upcoming introduction of qemu-on-target, we need to properly
+> separate the variables used for the host qemu, from the variables
+> used for the target qemu.
+>
 
-I want to enalbe pr_debug in kernel building, that means I have to to
-define CFLAGS as something like CFLAGS += DEBUG when building kernel.
+you've missed the last line of qemu.mk :
+ # variable used by other packages
+-QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(QEMU_ARCH)
++QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
 
-How should I do this with buildroot? Thanks
+Fran?ois
 
--- 
-woody
-I can't go back to yesterday - because I was a different person then.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Francois Perrad <fperrad@gmail.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  package/qemu/qemu.mk |   25 ++++++++++++++-----------
+>  1 files changed, 14 insertions(+), 11 deletions(-)
+>
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 790d34f..81cd79f 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -13,7 +13,10 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+>  #       the non-(L)GPL license texts are specified in the affected
+>  #       individual source files.
+>
+> -QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+> +#-------------------------------------------------------------
+> +# Host-qemu
+> +
+> +HOST_QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+>
+>  #       BR ARCH         qemu
+>  #       -------         ----
+> @@ -44,20 +47,20 @@ QEMU_DEPENDENCIES = host-pkgconf zlib libglib2
+>  #       sh64            not supported
+>  #       sparc           sparc
+>
+> -QEMU_ARCH = $(ARCH)
+> -ifeq ($(QEMU_ARCH),i486)
+> -    QEMU_ARCH = i386
+> +HOST_QEMU_ARCH = $(ARCH)
+> +ifeq ($(HOST_QEMU_ARCH),i486)
+> +    HOST_QEMU_ARCH = i386
+>  endif
+> -ifeq ($(QEMU_ARCH),i586)
+> -    QEMU_ARCH = i386
+> +ifeq ($(HOST_QEMU_ARCH),i586)
+> +    HOST_QEMU_ARCH = i386
+>  endif
+> -ifeq ($(QEMU_ARCH),i686)
+> -    QEMU_ARCH = i386
+> +ifeq ($(HOST_QEMU_ARCH),i686)
+> +    HOST_QEMU_ARCH = i386
+>  endif
+> -ifeq ($(QEMU_ARCH),powerpc)
+> -    QEMU_ARCH = ppc
+> +ifeq ($(HOST_QEMU_ARCH),powerpc)
+> +    HOST_QEMU_ARCH = ppc
+>  endif
+> -HOST_QEMU_TARGETS=$(QEMU_ARCH)-linux-user
+> +HOST_QEMU_TARGETS=$(HOST_QEMU_ARCH)-linux-user
+>
+>  define HOST_QEMU_CONFIGURE_CMDS
+>         (cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure   \
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
