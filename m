@@ -1,43 +1,52 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 14 Dec 2012 07:25:11 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Dec 2012 11:35:58 +0100
 Subject: [Buildroot] [PATCH] gpsd: needs threads
-Message-ID: <1355480711-12089-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1355480711-12089-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 14 Dec 2012 07:25:11 -0300")
+References: <1355480711-12089-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <876244kjjl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/05925389ac2531307f23bf5f5f3a83a5a97301bf/
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gpsd/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ Gustavo> Fixes
+ Gustavo> http://autobuild.buildroot.net/results/05925389ac2531307f23bf5f5f3a83a5a97301bf/
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 69f63f9..35e535b 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GPSD
- 	bool "gpsd"
- 	# Uses fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  gpsd is a service daemon that monitors one or more GPSes or AIS
- 	  receivers attached to a host computer through serial or USB ports,
-@@ -12,6 +13,10 @@ config BR2_PACKAGE_GPSD
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/gpsd/Config.in |    5 +++++
+ Gustavo>  1 files changed, 5 insertions(+), 0 deletions(-)
+
+ Gustavo> diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+ Gustavo> index 69f63f9..35e535b 100644
+ Gustavo> --- a/package/gpsd/Config.in
+ Gustavo> +++ b/package/gpsd/Config.in
+ Gustavo> @@ -2,6 +2,7 @@ config BR2_PACKAGE_GPSD
+ Gustavo>  	bool "gpsd"
+ Gustavo>  	# Uses fork()
+ Gustavo>  	depends on BR2_USE_MMU
+ Gustavo> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+ Gustavo>  	help
+ Gustavo>  	  gpsd is a service daemon that monitors one or more GPSes or AIS
+ Gustavo>  	  receivers attached to a host computer through serial or USB ports,
+ Gustavo> @@ -12,6 +13,10 @@ config BR2_PACKAGE_GPSD
  
- 	  http://gpsd.berlios.de/
+ Gustavo>  	  http://gpsd.berlios.de/
  
-+
-+comment "gpsd needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_GPSD_DEVICES
- 	string "Where to look for GPSes"
- 	default "/dev/ttyS1"
+ Gustavo> +
+ Gustavo> +comment "gpsd needs a toolchain with thread support"
+ Gustavo> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ Gustavo> +
+
+Menuconfig has a bug which causes suboptions to not be indented if
+there's a comment before them, so the comment needs to go either above
+BR2_PACKAGE_GPSD or below all the sub options.
+
+Committed with that fixed, thanks.
+
 -- 
-1.7.8.6
+Bye, Peter Korsgaard
