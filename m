@@ -1,60 +1,43 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@openwide.fr>
-Date: Fri, 14 Dec 2012 15:24:09 +0100
-Subject: [Buildroot] [PATCH] oprofile: bump to version 0.9.8
-Message-ID: <1355495049-14689-1-git-send-email-jeremy.rosen@openwide.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 14 Dec 2012 16:06:37 +0100
+Subject: [Buildroot] [PATCH 03/20] package/usbredir: new package
+In-Reply-To: <201212141401.11951.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 14 Dec 2012 14:01:11 +0100")
+References: <cover.1355435224.git.yann.morin.1998@free.fr>
+ <b6f27b8d9306f0a01bd003e2c9bdc1f5c5e87128.1355435224.git.yann.morin.1998@free.fr>
+ <87mwxgiylq.fsf@dell.be.48ers.dk>
+ <201212141401.11951.yann.morin.1998@free.fr>
+Message-ID: <87ip84isg2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?r?my Rosen <jeremy.rosen@openwide.fr>
----
- package/oprofile/oprofile.mk |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 75f8407..f3ea23f 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,13 +4,14 @@
- #
- #############################################################
- 
--OPROFILE_VERSION = 0.9.7
-+OPROFILE_VERSION = 0.9.8
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPLv2+
- OPROFILE_LICENSE_FILES = COPYING
- OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
- OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
- OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
-+OPROFILE_BINARIES += utils/op-check-perfevents pe_profiling/operf libabi/opimport
- 
- ifeq ($(BR2_i386),y)
- OPROFILE_ARCH = i386
-@@ -33,6 +34,7 @@ OPROFILE_DEPENDENCIES = popt binutils
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/oprofile
- 	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
- 		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
- 			$(TARGET_DIR)/usr/share/oprofile; \
-@@ -40,12 +42,14 @@ define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
- 	$(INSTALL) -m 755 $(@D)/utils/opcontrol $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
-+	$(INSTALL) -m 755 $(@D)/libopagent/.libs/*.so* $(TARGET_DIR)/usr/lib/oprofile
- endef
- 
- define OPROFILE_UNINSTALL_TARGET_CMDS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(notdir $(OPROFILE_BINARIES)))
- 	rm -f $(TARGET_DIR)/usr/bin/opcontrol
- 	rm -rf $(TARGET_DIR)/usr/share/oprofile
-+	rm -rf $(TARGET_DIR)/usr/lib/oprofile
- endef
- 
- $(eval $(autotools-package))
+ Yann> +comment "usbredir requires libusb"
+ Yann> +	depends on !BR2_PACKAGE_LIBUSB
+ Yann> +
+ >> 
+ >> We normally use select for libraries. Any reason to not use it here?
+
+ Yann> libusb depends on threads, and I do not want to play the game of
+ Yann> inheriting the dependencies of my own dependencies, and reproduce
+ Yann> the libffi mess.
+
+ Yann> libusb has a dependency I can not select, so I just depend on it.
+
+Ok, but that just moves the trouble higher up the stack. E.G. you want
+to enable qemu, but it tells you that it needs usbredir so you go
+hunting around for it only to discover that it needs libusb and finally
+you see that you need threads support in your toolchain.
+
+In other words, selects are more user friendly than depends
+on. Most likely we have more users than developers, so we should
+optimize for making things nice for users rather than devs.
+
+I would prefer you select libusb.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
