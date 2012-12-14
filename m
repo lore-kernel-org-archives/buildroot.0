@@ -1,64 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Dec 2012 22:12:16 +0100
-Subject: [Buildroot] [PATCH 01/20] package/vde2: new package
-In-Reply-To: <87vcc4j0h7.fsf@dell.be.48ers.dk>
-References: <cover.1355435224.git.yann.morin.1998@free.fr>
- <1f7225d5ca0a09c835187bbfea4eb4ce1b6eb121.1355435224.git.yann.morin.1998@free.fr>
- <87vcc4j0h7.fsf@dell.be.48ers.dk>
-Message-ID: <201212142212.16415.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 14 Dec 2012 22:24:24 +0100
+Subject: [Buildroot] [git commit] gettext: fix build failure with locale and
+	uclibc
+Message-ID: <20121214212447.9E63C9A1FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=7b6d368960f2e200a3ca4050d6ed1e7b481bb3f5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Friday 14 December 2012 Peter Korsgaard wrote:
->  Yann> diff --git a/package/vde2/Config.in b/package/vde2/Config.in
->  Yann> new file mode 100644
->  Yann> index 0000000..f344d67
->  Yann> --- /dev/null
->  Yann> +++ b/package/vde2/Config.in
->  Yann> @@ -0,0 +1,10 @@
->  Yann> +config BR2_PACKAGE_VDE2
->  Yann> +	bool "vde2"
->  Yann> +	help
->  Yann> +	  VDE is an ethernet compliant virtual network that can be
->  Yann> +	  spawned over a set of physical computers over the Internet.
->  Yann> +	  VDE is part of the virtualsquare project.
->  Yann> +	  
->  Yann> +	  http://vde.sourceforge.net/
->  Yann> +	  
->  Yann> +	  Note: only the libraries are installed.
-> 
-> Wouldn't it then make more sense to put it under Libraries ->
-> Networking?
+As reported by Johan Sagaert in the mailing list, if it's building with
+a uClibc toolchain with locale enabled the build fails since the new
+gettext does a locale hack for glibc which isn't needed nor supported.
 
-Nope, we also install the executable to drive the VDE switches. I'll remove
-that sentenc from the help text, and leave vde2 in "Network Applications".
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gettext/gettext-uclibc-compat.patch |   27 +++++++++++++++++++++++++++
+ 1 files changed, 27 insertions(+), 0 deletions(-)
 
-> A quick test build seems to show that it needs C++ support:
-> 
-> checking whether the C++ compiler works... no
-> configure: error: in `/home/peko/source/buildroot/vdetest/build/vde2-2.3.2':
-> configure: error: C++ compiler cannot create executables
-> See `config.log' for more details
-> 
-> I don't see any C++ source files though, so it's probably better to drop
-> AC_PROG_CXX from configure.ac
-
-Yup, fixed.
-
-Thank you!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/gettext/gettext-uclibc-compat.patch b/package/gettext/gettext-uclibc-compat.patch
+new file mode 100644
+index 0000000..5e52665
+--- /dev/null
++++ b/package/gettext/gettext-uclibc-compat.patch
+@@ -0,0 +1,27 @@
++The glibc fix/hack isn't valid for uClibc.
++Patch taken from OpenWRT.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- a/gettext-runtime/intl/localename.c
+++++ b/gettext-runtime/intl/localename.c
++@@ -2607,7 +2607,7 @@ gl_locale_name_thread_unsafe (int catego
++     locale_t thread_locale = uselocale (NULL);
++     if (thread_locale != LC_GLOBAL_LOCALE)
++       {
++-#  if __GLIBC__ >= 2
+++#  if __GLIBC__ >= 2 && !defined __UCLIBC__
++         /* Work around an incorrect definition of the _NL_LOCALE_NAME macro in
++            glibc < 2.12.
++            See <http://sourceware.org/bugzilla/show_bug.cgi?id=10968>.  */
++--- a/gettext-tools/gnulib-lib/localename.c
+++++ b/gettext-tools/gnulib-lib/localename.c
++@@ -2607,7 +2607,7 @@ gl_locale_name_thread_unsafe (int catego
++     locale_t thread_locale = uselocale (NULL);
++     if (thread_locale != LC_GLOBAL_LOCALE)
++       {
++-#  if __GLIBC__ >= 2
+++#  if __GLIBC__ >= 2 && !defined __UCLIBC__
++         /* Work around an incorrect definition of the _NL_LOCALE_NAME macro in
++            glibc < 2.12.
++            See <http://sourceware.org/bugzilla/show_bug.cgi?id=10968>.  */
