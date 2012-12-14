@@ -1,29 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Dec 2012 08:53:47 +0100
-Subject: [Buildroot] [git commit] qemu: fix QEMU_USER variable
-Message-ID: <20121214075403.094EB9A10B@busybox.osuosl.org>
+From: Ted Wood <ted@fgh.co.uk>
+Date: Fri, 14 Dec 2012 09:10:08 -0000
+Subject: [Buildroot] Getting It into Compact Flash
+In-Reply-To: <50CA4A8F.1050002@mind.be>
+References: <000901cdd883$889a6e70$99cf4b50$@co.uk> <50CA4A8F.1050002@mind.be>
+Message-ID: <000701cdd9da$d299b8c0$77cd2a40$@co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45eda5a15cd8e5b8d4fabfbeac45776eec51fc8a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> >
+> >  For an initrd, you should use a cpio filesystem rather than ext2:
+> >
+> >- ext2 adds overhead that is completely unnecessary for a ramdisk;
+> >
+> >- if you use anything else than static device management, the devtmps 
+> >will not be mounted automatically by the kernel; the cpio filesystem 
+> >adds a /init script that mounts it for you.
+> >
+> >  I thought this was now clearly explained in the manual, is it not?
+> >
 
-Reported-by: Fran??ois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qemu/qemu.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 3c01102..8d07807 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -89,4 +89,4 @@ endef
- $(eval $(host-generic-package))
- 
- # variable used by other packages
--QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(QEMU_ARCH)
-+QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
+There is no reference to either cpio or devtmps in the manual.
