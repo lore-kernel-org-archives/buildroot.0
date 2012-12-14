@@ -1,119 +1,64 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri, 14 Dec 2012 23:05:01 +0200
-Subject: [Buildroot] [PATCH] gettext: bump to version 0.18.1.1
-In-Reply-To: <50CB93AD.20303@petroprogram.com>
-References: <1355428977-8297-1-git-send-email-gustavo@zacarias.com.ar>
- <871ueskiar.fsf@dell.be.48ers.dk> <A30A1B4688B14FF0A9174D8D473754CD@JohanW7>
- <50CB93AD.20303@petroprogram.com>
-Message-ID: <50CB947D.8050303@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 14 Dec 2012 22:12:16 +0100
+Subject: [Buildroot] [PATCH 01/20] package/vde2: new package
+In-Reply-To: <87vcc4j0h7.fsf@dell.be.48ers.dk>
+References: <cover.1355435224.git.yann.morin.1998@free.fr>
+ <1f7225d5ca0a09c835187bbfea4eb4ce1b6eb121.1355435224.git.yann.morin.1998@free.fr>
+ <87vcc4j0h7.fsf@dell.be.48ers.dk>
+Message-ID: <201212142212.16415.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oh sorry, it seems that Gustavo was faster than I providing patch for this
- :)
+Peter, All,
 
+On Friday 14 December 2012 Peter Korsgaard wrote:
+>  Yann> diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+>  Yann> new file mode 100644
+>  Yann> index 0000000..f344d67
+>  Yann> --- /dev/null
+>  Yann> +++ b/package/vde2/Config.in
+>  Yann> @@ -0,0 +1,10 @@
+>  Yann> +config BR2_PACKAGE_VDE2
+>  Yann> +	bool "vde2"
+>  Yann> +	help
+>  Yann> +	  VDE is an ethernet compliant virtual network that can be
+>  Yann> +	  spawned over a set of physical computers over the Internet.
+>  Yann> +	  VDE is part of the virtualsquare project.
+>  Yann> +	  
+>  Yann> +	  http://vde.sourceforge.net/
+>  Yann> +	  
+>  Yann> +	  Note: only the libraries are installed.
+> 
+> Wouldn't it then make more sense to put it under Libraries ->
+> Networking?
 
-14.12.2012 23:01, Stefan Fr?berg kirjoitti:
-> Hello Johan
->
-> 14.12.2012 20:08, Sagaert Johan kirjoitti:
->> Hi
->>
->> After pulling the latest commits : 
->>
->> libtool: compile:  /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -c
->> -DLOCALEDIR=\"/usr/share/locale\" -DLOCALE_ALIAS_PATH=\"/usr/share/locale\" -DLIBDIR=\"/usr/lib\" -DBUILDING_LIBINTL -DBUILDING_DLL
->> -DIN_LIBINTL -DENABLE_RELOCATABLE=1 -DIN_LIBRARY -DINSTALLDIR=\"/usr/lib\" -DNO_XMALLOC
->> -Dset_relocation_prefix=libintl_set_relocation_prefix -Drelocate=libintl_relocate -DDEPENDS_ON_LIBICONV=1 -DHAVE_CONFIG_H -I. -I.
->> -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
->> -D_FILE_OFFSET_BITS=64 -pipe -Os -fvisibility=hidden ./printf.c -o printf.o >/dev/null 2>&1
->> ./localename.c: In function '_nl_locale_name_thread_unsafe':
->> ./localename.c:2619:31: error: dereferencing pointer to incomplete type
->> make[4]: *** [localename.lo] Error 1
->> make[4]: *** Waiting for unfinished jobs....
->>
->> Using uClibc 0.9.33.1 (NTPL)
->>
->> Regards , Johan
->>  
-> Hmmm...
-> That sounds familiar. If I remember correctly I hit exactly into same
-> problem in my own Linux distro
-> some time ago.
->
-> Could you please try the following lil patch ?
-> (I will include it as an separete attachment here also)
->
-> diff --git a/gettext-runtime/intl/localename.c
-> b/gettext-runtime/intl/localename.c
-> index 89a9692..5e86bc4 100644
-> --- a/gettext-runtime/intl/localename.c
-> +++ b/gettext-runtime/intl/localename.c
-> @@ -2607,7 +2607,7 @@ gl_locale_name_thread_unsafe (int category, const
-> char *categoryname)
->      locale_t thread_locale = uselocale (NULL);
->      if (thread_locale != LC_GLOBAL_LOCALE)
->        {
-> -#  if __GLIBC__ >= 2
-> +#  if __GLIBC__ >= 2 && !defined __UCLIBC__
->          /* Work around an incorrect definition of the _NL_LOCALE_NAME
-> macro in
->             glibc < 2.12.
->             See <http://sourceware.org/bugzilla/show_bug.cgi?id=10968>.  */
-> diff --git a/gettext-tools/gnulib-lib/localename.c
-> b/gettext-tools/gnulib-lib/localename.c
-> index dab5e5b..85149ac 100644
-> --- a/gettext-tools/gnulib-lib/localename.c
-> +++ b/gettext-tools/gnulib-lib/localename.c
-> @@ -2607,7 +2607,7 @@ gl_locale_name_thread_unsafe (int category, const
-> char *categoryname)
->      locale_t thread_locale = uselocale (NULL);
->      if (thread_locale != LC_GLOBAL_LOCALE)
->        {
-> -#  if __GLIBC__ >= 2
-> +#  if __GLIBC__ >= 2 && !defined __UCLIBC__
->          /* Work around an incorrect definition of the _NL_LOCALE_NAME
-> macro in
->             glibc < 2.12.
->             See <http://sourceware.org/bugzilla/show_bug.cgi?id=10968>.  */
->
-> Regards
-> Stefan
->
->
->> -----Oorspronkelijk bericht-----
->> Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
->> Verzonden: vrijdag 14 december 2012 12:03
->> Aan: Gustavo Zacarias
->> CC: buildroot at busybox.net
->> Onderwerp: Re: [Buildroot] [PATCH] gettext: bump to version 0.18.1.1
->>
->>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
->>  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->>
->> Committed, thanks.
->>
->> --
->> Bye, Peter Korsgaard
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Nope, we also install the executable to drive the VDE switches. I'll remove
+that sentenc from the help text, and leave vde2 in "Network Applications".
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121214/16325071/attachment.html>
+> A quick test build seems to show that it needs C++ support:
+> 
+> checking whether the C++ compiler works... no
+> configure: error: in `/home/peko/source/buildroot/vdetest/build/vde2-2.3.2':
+> configure: error: C++ compiler cannot create executables
+> See `config.log' for more details
+> 
+> I don't see any C++ source files though, so it's probably better to drop
+> AC_PROG_CXX from configure.ac
+
+Yup, fixed.
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
