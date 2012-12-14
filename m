@@ -1,36 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 14 Dec 2012 01:04:44 +0100
-Subject: [Buildroot] [git commit] qt: fix qconfig configure parameter
-Message-ID: <20121214000507.2A1959A205@busybox.osuosl.org>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Fri, 14 Dec 2012 01:08:50 +0100
+Subject: [Buildroot] builroot-2012.11.tar.bz2: CVS control directory
+ left in toolchain/elf2flt/elf2flt
+In-Reply-To: <50CA4E6E.6000507@wanadoo.fr>
+References: <50CA3F70.2060900@wanadoo.fr> <87lid1ljw4.fsf@dell.be.48ers.dk>
+ <50CA4C63.2000006@wanadoo.fr> <87hanplj47.fsf@dell.be.48ers.dk>
+ <50CA4E6E.6000507@wanadoo.fr>
+Message-ID: <CAKvQZ_1VyU5O10=PTUuQRSTRABb5WZ936K+WkS6R6EY87=cP8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=49f16f4b97abb888e918ce3d70d8a26f03db05c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+2012/12/13 Thierry Bultel <thierry.bultel@wanadoo.fr>:
+> Le 13/12/2012 22:47, Peter Korsgaard a ?crit :
+>
+>>>>>>> "Thierry" == Thierry Bultel <thierry.bultel@wanadoo.fr> writes:
+>>
+>>
+>> Hi,
+>>
+>>   Thierry> Actually I am not using it either.  The CVS dir came in
+>>   Thierry> conflict with my versioning system and that is how I noticed
+>>   Thierry> it.
+>>
+>> You're using CVS in 2012? Really? ;)
+>>
+> It is awesome, sometimes, to notice how people like to stay with what they
+> have, even when there is better elsewhere ;0)
+>
 
-The Qt configure option for specifying a custom qconfig.h
-file changed from -config to -qconfig. This makes the
-corresponding change in qt.mk.
+This is called Love :D
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index be0808d..b09d0ed 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -24,7 +24,7 @@ endif
- QT_CONFIG_FILE=$(call qstrip,$(BR2_PACKAGE_QT_CONFIG_FILE))
- 
- ifneq ($(QT_CONFIG_FILE),)
--QT_CONFIGURE_OPTS += -config buildroot
-+QT_CONFIGURE_OPTS += -qconfig buildroot
- endif
- 
- QT_CFLAGS = $(TARGET_CFLAGS)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
