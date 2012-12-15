@@ -1,21 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Dec 2012 08:46:41 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-12-14
-In-Reply-To: <87ip83hc85.fsf@dell.be.48ers.dk>
-References: <20121215073441.8B91F52C104@lolut.humanoidz.org>
- <87ip83hc85.fsf@dell.be.48ers.dk>
-Message-ID: <50CC6321.7020404@zacarias.com.ar>
+Date: Sat, 15 Dec 2012 08:46:17 -0300
+Subject: [Buildroot] [PATCH] gd: fix build failure related to iconv/gettext
+Message-ID: <1355571977-29757-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/15/2012 06:54 AM, Peter Korsgaard wrote:
+Fixes
+http://autobuild.buildroot.net/results/e3a2a81327877f9482341daff9623d759d1b2900/
 
-> This looks to be caused by the gettext bump. Gustavo, any ideas?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gd/gd-iconv.patch |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
+ create mode 100644 package/gd/gd-iconv.patch
 
-Arcane gettext used as aclocal.m4 source in gd.
-Patch sent.
-Regards.
+diff --git a/package/gd/gd-iconv.patch b/package/gd/gd-iconv.patch
+new file mode 100644
+index 0000000..821f5cb
+--- /dev/null
++++ b/package/gd/gd-iconv.patch
+@@ -0,0 +1,17 @@
++Seems gd is using an ancient gettext for m4 sources which has issues.
++Idea from OpenWRT patch and general knowledge on the internetweb.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura gd-2.0.35.orig/configure.ac gd-2.0.35/configure.ac
++--- gd-2.0.35.orig/configure.ac	2012-12-15 08:36:07.165683957 -0300
+++++ gd-2.0.35/configure.ac	2012-12-15 08:42:59.354213570 -0300
++@@ -61,7 +61,7 @@
++ AC_HEADER_STDC
++ AC_CHECK_HEADERS([errno.h limits.h stddef.h stdlib.h string.h unistd.h])
++ 
++-AM_ICONV
+++m4_pattern_allow([AM_ICONV])
++ # if test -n "$LIBICONV" ; then
++ #   LIBS="$LIBS $LIBICONV"
++ # fi
+-- 
+1.7.8.6
