@@ -1,21 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Dec 2012 08:46:17 -0300
-Subject: [Buildroot] [PATCH] gd: fix build failure related to iconv/gettext
-Message-ID: <1355571977-29757-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 15 Dec 2012 14:47:04 +0100
+Subject: [Buildroot] [git commit] gd: fix build failure related to
+	iconv/gettext
+Message-ID: <20121215162634.358879A1F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=c3e9f1cf49d8fb8039e3501417235044813cfa57
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes
 http://autobuild.buildroot.net/results/e3a2a81327877f9482341daff9623d759d1b2900/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/gd/gd-iconv.patch |   17 +++++++++++++++++
  1 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/gd/gd-iconv.patch
 
 diff --git a/package/gd/gd-iconv.patch b/package/gd/gd-iconv.patch
 new file mode 100644
@@ -40,5 +44,3 @@ index 0000000..821f5cb
 + # if test -n "$LIBICONV" ; then
 + #   LIBS="$LIBS $LIBICONV"
 + # fi
--- 
-1.7.8.6
