@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 17:56:10 +0100
-Subject: [Buildroot] [PATCH 03/19] package/celt051: new package
+Date: Sun, 16 Dec 2012 17:56:11 +0100
+Subject: [Buildroot] [PATCH 04/19] package/python-pyparsing: new package
 In-Reply-To: <cover.1355676845.git.yann.morin.1998@free.fr>
 References: <cover.1355676845.git.yann.morin.1998@free.fr>
-Message-ID: <134bb23d2dcb4fdf0686458f0d49a6eb90df3ab0.1355676845.git.yann.morin.1998@free.fr>
+Message-ID: <f35aa4bc9498a1a22279e3369612142616201dcc.1355676845.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,84 +11,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/multimedia/Config.in         |    1 +
- package/multimedia/celt051/Config.in |   15 +++++++++++++++
- package/multimedia/celt051/celt.mk   |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/celt051/Config.in
- create mode 100644 package/multimedia/celt051/celt.mk
+ package/Config.in                            |    1 +
+ package/python-pyparsing/Config.in           |   11 +++++++
+ package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-pyparsing/Config.in
+ create mode 100644 package/python-pyparsing/python-pyparsing.mk
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 273d9bc..5e8d60c 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -2,6 +2,7 @@ menu "Audio and video applications"
- source "package/multimedia/alsa-utils/Config.in"
- source "package/multimedia/aumix/Config.in"
- source "package/multimedia/bellagio/Config.in"
-+source "package/multimedia/celt051/Config.in"
- source "package/multimedia/faad2/Config.in"
- source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
-diff --git a/package/multimedia/celt051/Config.in b/package/multimedia/celt051/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 1ed77e0..f8395e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -309,6 +309,7 @@ source "package/python-netifaces/Config.in"
+ source "package/python-nfc/Config.in"
+ source "package/python-protobuf/Config.in"
+ source "package/python-pygame/Config.in"
++source "package/python-pyparsing/Config.in"
+ source "package/python-serial/Config.in"
+ source "package/python-setuptools/Config.in"
+ endmenu
+diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
 new file mode 100644
-index 0000000..50ed069
+index 0000000..126dd0e
 --- /dev/null
-+++ b/package/multimedia/celt051/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_CELT051
-+	bool "celt051"
-+	select BR2_PACKAGE_LIBOGG
++++ b/package/python-pyparsing/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYPARSING
++	bool "pyparsing"
++	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  The CELT ultra-low delay audio codec
++	  The pyparsing module is an alternative approach to creating and
++	  executing simple grammars, vs. the traditional lex/yacc approach,
++	  or the use of regular expressions. The pyparsing module provides
++	  a library of classes that client code uses to construct the grammar
++	  directly in Python code.
 +	  
-+	  The CELT codec is a compression algorithm for audio. Like MP3,
-+	  Vorbis, and AAC it is suitable for transmitting music with high
-+	  quality. Unlike these formats CELT imposes very little delay on
-+	  the signal, even less than is typical for speech centric formats
-+	  like Speex, GSM, or G.729.
-+	  
-+	  Note: this is version 0.5.1.3 of celt.
-+	  
-+	  http://www.celt-codec.org/
-diff --git a/package/multimedia/celt051/celt.mk b/package/multimedia/celt051/celt.mk
++	  http://pyparsing.wikispaces.com/
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
 new file mode 100644
-index 0000000..9baaa82
+index 0000000..246df4d
 --- /dev/null
-+++ b/package/multimedia/celt051/celt.mk
-@@ -0,0 +1,30 @@
++++ b/package/python-pyparsing/python-pyparsing.mk
+@@ -0,0 +1,38 @@
 +#############################################################
 +#
-+# celt051
++# python-pyparsing
 +#
 +#############################################################
 +
-+# Although version newer than 0.5.1.3 exists, we're
-+# stuck with 0.5.1.3 for use by Spice (coming later)
-+CELT051_VERSION         = 0.5.1.3
-+CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
-+CELT051_SITE            = http://downloads.xiph.org/releases/celt
-+CELT051_LICENSE         = BSD-2c
-+CELT051_LICENSE_FILES   = COPYING
-+CELT051_INSTALL_STAGING = YES
-+CELT051_DEPENDENCIES    = libogg
++PYTHON_PYPARSING_VERSION         = 1.5.6
++PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
++PYTHON_PYPARSING_SITE            = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
++PYTHON_PYPARSING_LICENSE         = MIT
++PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
++PYTHON_PYPARSING_INSTALL_STAGING = YES
++PYTHON_PYPARSING_DEPENDENCIES    = python
 +
-+# Need to specify --with-ogg, otherwise /usr/lib may be searched for
-+# if target is the same kind as host (ie. same arch, same bitness,
-+# same endianness, so that /usr/lib contains libraries linkable by
-+# our cross-compiler)
-+CELT051_CONF_OPT =                  \
-+  --enable-fixed-point              \
-+  --disable-fixed-point-debug       \
-+  --disable-experimental-postfilter \
-+  --disable-static-modes            \
-+  --disable-assertions              \
-+  --disable-oggtest                 \
-+  --with-ogg=$(STAGING_DIR)/usr     \
++# Shamelessly vampirised from python-pygame ;-)
++define PYTHON_PYPARSING_BUILD_CMDS
++	(cd $(@D);                                              \
++	 CC="$(TARGET_CC)"                                      \
++	 CFLAGS="$(TARGET_CFLAGS)"                              \
++	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
++	 CROSS_COMPILING=yes                                    \
++	 _python_sysroot=$(STAGING_DIR)                         \
++	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
++	 _python_prefix=/usr                                    \
++	 _python_exec_prefix=/usr                               \
++	 $(HOST_DIR)/usr/bin/python setup.py build              \
++	)
++endef
 +
-+$(eval $(autotools-package))
++# Shamelessly vampirised from python-pygame ;-)
++define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
++	(cd $(@D);                                              \
++	 $(HOST_DIR)/usr/bin/python setup.py install            \
++	                            --prefix=$(TARGET_DIR)/usr  \
++	)
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.2.5
