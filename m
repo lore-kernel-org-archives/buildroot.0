@@ -1,66 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 18:01:56 +0100
-Subject: [Buildroot] [PATCH 27/27] package/qemu: add support for FDT
-In-Reply-To: <cover.1355677144.git.yann.morin.1998@free.fr>
-References: <cover.1355677144.git.yann.morin.1998@free.fr>
-Message-ID: <ffdeea3abe0d8b910fce832bc8f04173708459b1.1355677144.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 16 Dec 2012 20:13:59 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-host-qemu-fixes
+In-Reply-To: <cover.1355676748.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 16 Dec 2012 17:52:35 +0100")
+References: <cover.1355676748.git.yann.morin.1998@free.fr>
+Message-ID: <87hanlerns.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FDT is the Flat Device Tree, and allows QEMU to pass DTs to the VMs.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/qemu/Config.in |    7 +++++++
- package/qemu/qemu.mk   |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+ Yann> Hello All!
+ Yann> The following changes since commit 3ceffe9659ae4a98a4127812126379a263ab991e:
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index f88a1f4..b258df6 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -264,6 +264,13 @@ comment "Alsa sound static link works only if BR2_PREFER_STATIC is set"
- >>>>>>> dd73234... package/qemu: enable a static build
- comment "Misc. features"
- 
-+config BR2_PACKAGE_QEMU_FDT
-+        bool "Enable FDT"
-+        select BR2_PACKAGE_DTC
-+        help
-+          Say 'y' here to have QEMU capable of constructing Device Trees,
-+          and passing them to the VMs.
-+
- config BR2_PACKAGE_QEMU_UUID
- 	bool "Enable VMs UUID"
- 	depends on BR2_PACKAGE_UTIL_LINUX
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 267d7b9..507a001 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -228,6 +228,13 @@ ifeq ($(BR2_PACKAGE_QEMU_MIXEMU),y)
- QEMU_OPTS += --enable-mixemu
- endif
- 
-+ifeq ($(BR2_PACKAGE_QEMU_FDT),y)
-+QEMU_OPTS += --enable-fdt
-+QEMU_DEPENDENCIES += dtc
-+else
-+QEMU_OPTS += --disable-fdt
-+endif
-+
- ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
- QEMU_OPTS += --enable-uuid
- QEMU_DEPENDENCIES += util-linux
-@@ -349,7 +356,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --disable-slirp                     \
- 	        --disable-vnc-sasl                  \
- 	        --disable-brlapi                    \
--	        --disable-fdt                       \
- 	        --disable-guest-base                \
- 	        --disable-rbd                       \
- 	        --disable-smartcard                 \
+ Yann>   dnsmasq: bump to version 2.65 (2012-12-16 14:30:40 +0100)
+
+ Yann> are available in the git repository at:
+ Yann>   git://gitorious.org/buildroot/buildroot.git yem-host-qemu-fixes
+
+ Yann> Yann E. MORIN (2):
+ Yann>       package/qemu: bump version to 1.2.2
+ Yann>       package/qemu: use autotools-package infrastructure
+
+Committed both, thanks.
+
 -- 
-1.7.2.5
+Bye, Peter Korsgaard
