@@ -1,37 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 17:52:35 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	yem-host-qemu-fixes
-Message-ID: <cover.1355676748.git.yann.morin.1998@free.fr>
+Date: Sun, 16 Dec 2012 17:52:36 +0100
+Subject: [Buildroot] [PATCH 1/2] package/qemu: bump version to 1.2.2
+In-Reply-To: <cover.1355676748.git.yann.morin.1998@free.fr>
+References: <cover.1355676748.git.yann.morin.1998@free.fr>
+Message-ID: <1f733ec91e025014712ed75486f80d54a83b306d.1355676748.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+There are a bunch of important fixes since 1.2.1.
 
-The following changes since commit 3ceffe9659ae4a98a4127812126379a263ab991e:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/qemu/qemu.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-  dnsmasq: bump to version 2.65 (2012-12-16 14:30:40 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-host-qemu-fixes
-
-Yann E. MORIN (2):
-      package/qemu: bump version to 1.2.2
-      package/qemu: use autotools-package infrastructure
-
- package/qemu/qemu.mk |   19 +++++--------------
- 1 files changed, 5 insertions(+), 14 deletions(-)
-
-Regards,
-Yann E. MORIN
-
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 8d07807..315886f 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-QEMU_VERSION = 1.2.1
++QEMU_VERSION = 1.2.2
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.bz2
+ QEMU_SITE = http://wiki.qemu.org/download
+ QEMU_LICENSE = GPLv2 LGPLv2.1 MIT BSD-3c BSD-2c Others/BSD-1c
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
