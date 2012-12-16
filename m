@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 17:56:09 +0100
-Subject: [Buildroot] [PATCH 02/19] package/usbredir: new package
+Date: Sun, 16 Dec 2012 17:56:10 +0100
+Subject: [Buildroot] [PATCH 03/19] package/celt051: new package
 In-Reply-To: <cover.1355676845.git.yann.morin.1998@free.fr>
 References: <cover.1355676845.git.yann.morin.1998@free.fr>
-Message-ID: <0fb0aae36595cd749f29a44b381e31293cbe8ff6.1355676845.git.yann.morin.1998@free.fr>
+Message-ID: <134bb23d2dcb4fdf0686458f0d49a6eb90df3ab0.1355676845.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,97 +11,83 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/usbredir/Config.in   |   29 +++++++++++++++++++++++++++++
- package/usbredir/usbredir.mk |   29 +++++++++++++++++++++++++++++
- 3 files changed, 59 insertions(+), 0 deletions(-)
- create mode 100644 package/usbredir/Config.in
- create mode 100644 package/usbredir/usbredir.mk
+ package/multimedia/Config.in         |    1 +
+ package/multimedia/celt051/Config.in |   15 +++++++++++++++
+ package/multimedia/celt051/celt.mk   |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/celt051/Config.in
+ create mode 100644 package/multimedia/celt051/celt.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 70a572b..1ed77e0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -494,6 +494,7 @@ source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/nss-mdns/Config.in"
- source "package/ortp/Config.in"
-+source "package/usbredir/Config.in"
- source "package/zeromq/Config.in"
- endmenu
- 
-diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 273d9bc..5e8d60c 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -2,6 +2,7 @@ menu "Audio and video applications"
+ source "package/multimedia/alsa-utils/Config.in"
+ source "package/multimedia/aumix/Config.in"
+ source "package/multimedia/bellagio/Config.in"
++source "package/multimedia/celt051/Config.in"
+ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+diff --git a/package/multimedia/celt051/Config.in b/package/multimedia/celt051/Config.in
 new file mode 100644
-index 0000000..e2a7184
+index 0000000..50ed069
 --- /dev/null
-+++ b/package/usbredir/Config.in
-@@ -0,0 +1,29 @@
-+comment "usbredir needs a toolchain with threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_USBREDIR
-+	bool "usbredir"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	select BR2_PACKAGE_LIBUSB
++++ b/package/multimedia/celt051/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CELT051
++	bool "celt051"
++	select BR2_PACKAGE_LIBOGG
 +	help
-+	  usbredir is the name of a network protocol for sending usb device
-+	  traffic over a network connection. It is also the name of the
-+	  software package offering a parsing library, a usbredirhost library
-+	  and several utilities implementing this protocol.
++	  The CELT ultra-low delay audio codec
 +	  
-+	  Note: only the library is installed, not the utilities. Say 'y'
-+	  below if you want the server too.
++	  The CELT codec is a compression algorithm for audio. Like MP3,
++	  Vorbis, and AAC it is suitable for transmitting music with high
++	  quality. Unlike these formats CELT imposes very little delay on
++	  the signal, even less than is typical for speech centric formats
++	  like Speex, GSM, or G.729.
 +	  
-+	  http://www.spice-space.org/page/UsbRedir
-+
-+if BR2_PACKAGE_USBREDIR
-+
-+config BR2_PACKAGE_USBREDIR_SERVER
-+	bool "usbredirserver on target"
-+	help
-+	  If you want to serve usbredir requests on your target, say 'y'
-+	  here to have the usbredir server on the target.
++	  Note: this is version 0.5.1.3 of celt.
 +	  
-+	  Note: the server is not required to use the library.
-+
-+endif
-diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
++	  http://www.celt-codec.org/
+diff --git a/package/multimedia/celt051/celt.mk b/package/multimedia/celt051/celt.mk
 new file mode 100644
-index 0000000..ac98472
+index 0000000..9baaa82
 --- /dev/null
-+++ b/package/usbredir/usbredir.mk
-@@ -0,0 +1,29 @@
++++ b/package/multimedia/celt051/celt.mk
+@@ -0,0 +1,30 @@
 +#############################################################
 +#
-+# usbredir
++# celt051
 +#
 +#############################################################
 +
-+USBREDIR_VERSION         = 0.4.3
-+USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
-+USBREDIR_SITE            = http://spice-space.org/download/usbredir
-+USBREDIR_LICENSE         = LGPLv2.1+
-+USBREDIR_LICENSE_FILES   = COPYING.LIB
-+USBREDIR_INSTALL_STAGING = YES
-+USBREDIR_DEPENDENCIES    = host-pkgconf libusb
++# Although version newer than 0.5.1.3 exists, we're
++# stuck with 0.5.1.3 for use by Spice (coming later)
++CELT051_VERSION         = 0.5.1.3
++CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
++CELT051_SITE            = http://downloads.xiph.org/releases/celt
++CELT051_LICENSE         = BSD-2c
++CELT051_LICENSE_FILES   = COPYING
++CELT051_INSTALL_STAGING = YES
++CELT051_DEPENDENCIES    = libogg
 +
-+ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
-+
-+USBREDIR_LICENSE         += (for the library), GPLv2+ (for the server)
-+USBREDIR_LICENSE_FILES   += COPYING
-+
-+else # BR2_PACKAGE_USBREDIR_SERVER != y
-+
-+define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
-+	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
-+endef
-+USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
-+
-+endif # BR2_PACKAGE_USBREDIR_SERVER
++# Need to specify --with-ogg, otherwise /usr/lib may be searched for
++# if target is the same kind as host (ie. same arch, same bitness,
++# same endianness, so that /usr/lib contains libraries linkable by
++# our cross-compiler)
++CELT051_CONF_OPT =                  \
++  --enable-fixed-point              \
++  --disable-fixed-point-debug       \
++  --disable-experimental-postfilter \
++  --disable-static-modes            \
++  --disable-assertions              \
++  --disable-oggtest                 \
++  --with-ogg=$(STAGING_DIR)/usr     \
 +
 +$(eval $(autotools-package))
 -- 
