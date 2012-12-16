@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 17:56:11 +0100
-Subject: [Buildroot] [PATCH 04/19] package/python-pyparsing: new package
+Date: Sun, 16 Dec 2012 17:56:13 +0100
+Subject: [Buildroot] [PATCH 06/19] package/slirp: new package
 In-Reply-To: <cover.1355676845.git.yann.morin.1998@free.fr>
 References: <cover.1355676845.git.yann.morin.1998@free.fr>
-Message-ID: <f35aa4bc9498a1a22279e3369612142616201dcc.1355676845.git.yann.morin.1998@free.fr>
+Message-ID: <4bcf84fd448ee60b9b5381196889ffc7311e43d6.1355676845.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,87 +11,84 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                            |    1 +
- package/python-pyparsing/Config.in           |   11 +++++++
- package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pyparsing/Config.in
- create mode 100644 package/python-pyparsing/python-pyparsing.mk
+ package/Config.in       |    1 +
+ package/slirp/Config.in |   25 +++++++++++++++++++++++++
+ package/slirp/slirp.mk  |   21 +++++++++++++++++++++
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/slirp/Config.in
+ create mode 100644 package/slirp/slirp.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1ed77e0..f8395e9 100644
+index 06ae57c..fc408c8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -309,6 +309,7 @@ source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
-+source "package/python-pyparsing/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
+@@ -496,6 +496,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/ortp/Config.in"
++source "package/slirp/Config.in"
+ source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
  endmenu
-diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+diff --git a/package/slirp/Config.in b/package/slirp/Config.in
 new file mode 100644
-index 0000000..126dd0e
+index 0000000..dedded3
 --- /dev/null
-+++ b/package/python-pyparsing/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYPARSING
-+	bool "pyparsing"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/slirp/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_SLIRP
++	bool "slirp"
 +	help
-+	  The pyparsing module is an alternative approach to creating and
-+	  executing simple grammars, vs. the traditional lex/yacc approach,
-+	  or the use of regular expressions. The pyparsing module provides
-+	  a library of classes that client code uses to construct the grammar
-+	  directly in Python code.
++	  The Spice project aims to provide a complete open source
++	  solution for interaction with virtualized desktop devices.
++	  The Spice project deals with both the virtualized devices
++	  and the front-end. Interaction between front-end and
++	  back-end is done using VD-Interfaces.
 +	  
-+	  http://pyparsing.wikispaces.com/
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
++	  This package implements the slirp-part for Spice.
++	  Slirp emulates a PPP or SLIP connection over a normal terminal.
++	  
++	  http://www.spice-space.org/
++	  
++	  NOTE:
++	  This package has some history of a unique kind:
++	    - originally developped as 'slirp' by Danny Gasparovski, and
++	      seemingly abandonned (developper /disapeared/)
++	    - then re-maintained at sourceforge by "Kelly", up to some
++	      time around 2009: http://slirp.sourceforge.net/
++	    - during that period, QEMU (Fabrice BELLARD) forked the code
++	      and included it in QEMU
++	    - and it was imported from this breed by the Spice project
++	      around May 2009
++	    - which is what we use here
+diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
 new file mode 100644
-index 0000000..246df4d
+index 0000000..b3f4bcd
 --- /dev/null
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -0,0 +1,38 @@
++++ b/package/slirp/slirp.mk
+@@ -0,0 +1,21 @@
 +#############################################################
 +#
-+# python-pyparsing
++# Spice-slirp
 +#
 +#############################################################
 +
-+PYTHON_PYPARSING_VERSION         = 1.5.6
-+PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
-+PYTHON_PYPARSING_SITE            = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
-+PYTHON_PYPARSING_LICENSE         = MIT
-+PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
-+PYTHON_PYPARSING_INSTALL_STAGING = YES
-+PYTHON_PYPARSING_DEPENDENCIES    = python
++# There's no tarball releases of slirp, so we use the git repo
++# Also, there's no tag, so we use a random SHA1 (master's HEAD
++# of today)
++SLIRP_VERSION         = 8c2da74c1385242f20799fec8c04f8378edc6550
++SLIRP_SITE            = git://anongit.freedesktop.org/spice/slirp
++SLIRP_LICENSE         = BSD-4c BSD-2c
++# Note: The license file 'COPYRIGHT' is missing from the sources,
++# although some files refer to it.
++SLIRP_INSTALL_STAGING = YES
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_BUILD_CMDS
-+	(cd $(@D);                                              \
-+	 CC="$(TARGET_CC)"                                      \
-+	 CFLAGS="$(TARGET_CFLAGS)"                              \
-+	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
-+	 CROSS_COMPILING=yes                                    \
-+	 _python_sysroot=$(STAGING_DIR)                         \
-+	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
-+	 _python_prefix=/usr                                    \
-+	 _python_exec_prefix=/usr                               \
-+	 $(HOST_DIR)/usr/bin/python setup.py build              \
-+	)
-+endef
++# As we're using the git tree, there's no ./configure,
++# so we need to autoreconf.
++SLIRP_AUTORECONF      = YES
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
-+	(cd $(@D);                                              \
-+	 $(HOST_DIR)/usr/bin/python setup.py install            \
-+	                            --prefix=$(TARGET_DIR)/usr  \
-+	)
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.2.5
