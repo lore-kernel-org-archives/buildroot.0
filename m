@@ -1,47 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 21:42:05 +0100
-Subject: [Buildroot] [PATCH 12/19] package/libseccomp: new package
-In-Reply-To: <871uepd968.fsf@dell.be.48ers.dk>
-References: <cover.1355676845.git.yann.morin.1998@free.fr>
- <caac6f2b10b2b3a3d473e552c106e9e748243cf9.1355676845.git.yann.morin.1998@free.fr>
- <871uepd968.fsf@dell.be.48ers.dk>
-Message-ID: <201212162142.06073.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 16 Dec 2012 23:17:30 +0100
+Subject: [Buildroot] [PATCH] netatalk : Fix BerkeleyDB library path
+In-Reply-To: <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sat, 8 Dec 2012 16:53:08 +0100")
+References: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
+ <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <87pq29bq11.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-On Sunday 16 December 2012 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-[--SNIP--]
->  Yann> diff --git a/package/libseccomp/Config.in b/package/libseccomp/Config.in
->  Yann> new file mode 100644
->  Yann> index 0000000..183cf4e
->  Yann> --- /dev/null
->  Yann> +++ b/package/libseccomp/Config.in
->  Yann> @@ -0,0 +1,13 @@
->  Yann> +config BR2_PACKAGE_LIBSECCOMP
->  Yann> +	bool "libseccomp"
->  Yann> +	help
->  Yann> +	  High level interface to the Linux Kernel's seccomp filter 
->  Yann> +	  
->  Yann> +	  The libseccomp library provides and easy to use, platform independent,
-> 
-> s/and/an/. I know this is just cut'n'pasted from the sf.net website, but
-> I've fixed it anyway and committed, thanks.
+ Maxime> This fix is needed for the 64bits build because Netatalk will assume the library
+ Maxime> are stored in [..]/lib64/ instead of [..]/lib/
 
-Thank you!
+Hmm, we still seem to have issues on the autobuilders:
 
-Regards,
-Yamnn E. MORIN.
+http://autobuild.buildroot.net/results/cf5c3ce94c229204bfa0f19b1009c13a9bcc1dfc/build-end.log
+
+ Maxime> +++ b/package/netatalk/netatalk.mk
+ Maxime> @@ -8,7 +8,7 @@ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NET
+ Maxime>  NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+
+ Maxime>  NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
+ Maxime> -NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+ Maxime> +NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" BDB_LIB=$(STAGING_LIB)/usr/lib
+
+
+I guess you meant STAGING_DIR instead here, will fix.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
