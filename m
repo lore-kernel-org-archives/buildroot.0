@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 18:01:41 +0100
-Subject: [Buildroot] [PATCH 12/27] package/qemu: add attr/xattr option
+Date: Sun, 16 Dec 2012 18:01:42 +0100
+Subject: [Buildroot] [PATCH 13/27] package/qemu: add support for virtfs
 In-Reply-To: <cover.1355677144.git.yann.morin.1998@free.fr>
 References: <cover.1355677144.git.yann.morin.1998@free.fr>
-Message-ID: <518897567864762cf0ca68201757f7b9a9bbedf4.1355677144.git.yann.morin.1998@free.fr>
+Message-ID: <769e2c82e920dfbaf97d737e79e0f65c6163e16d.1355677144.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,51 +12,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/qemu/Config.in |    6 ++++++
+ package/qemu/Config.in |   16 ++++++++++++++++
  package/qemu/qemu.mk   |    7 ++++++-
- 2 files changed, 12 insertions(+), 1 deletions(-)
+ 2 files changed, 22 insertions(+), 1 deletions(-)
 
 diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 1ef6c25..138949c 100644
+index 138949c..237fb7b 100644
 --- a/package/qemu/Config.in
 +++ b/package/qemu/Config.in
-@@ -131,6 +131,12 @@ config BR2_PACKAGE_QEMU_CAP
- 	help
- 	  Say 'y' here if you want QEMU to support capabilities.
+@@ -112,6 +112,22 @@ config BR2_PACKAGE_QEMU_SDL
+ 	  Say 'y' to enable the SDL frontend, that is, a graphical window
+ 	  presenting the VM's display.
  
-+config BR2_PACKAGE_QEMU_ATTR
-+	bool "Enable attr and xattr"
-+	help
-+	  Say 'y' here to have QEMU support attributes (attr) and eXtended
-+	  attibutes (xattr).
++comment "Block backends"
 +
- config BR2_PACKAGE_QEMU_BLOBS
- 	bool "Install binary blobs"
- 	default y
++config BR2_PACKAGE_QEMU_VIRTFS
++	bool "Enable plan9 ressources using VirtFS"
++	select BR2_PACKAGE_QEMU_CAP
++	select BR2_PACKAGE_QEMU_ATTR
++	help
++	  Say 'y' here if you want QEMU to provide a plan9 virtual "share"
++	  accessible from the guest OS for relatively fast access to host
++	  files.
++	  
++	  This requires that the guest OS is capable of accessing plan9
++	  ressources (typically, in Linux, this is done by a network
++	  file-system called 9p, and can be accelerated by using the 9p
++	  virtio).
++
+ comment "Misc. features"
+ 
+ config BR2_PACKAGE_QEMU_UUID
 diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index d64d476..00f90b7 100644
+index 00f90b7..0eda434 100644
 --- a/package/qemu/qemu.mk
 +++ b/package/qemu/qemu.mk
-@@ -166,6 +166,12 @@ QEMU_OPTS += --disable-cap-ng
- QEMU_VARS += cap=no
+@@ -149,6 +149,12 @@ else
+ QEMU_OPTS += --disable-sdl
  endif
  
-+ifeq ($(BR2_PACKAGE_QEMU_ATTR),y)
-+QEMU_OPTS += --enable-attr
++ifeq ($(BR2_PACKAGE_QEMU_VIRTFS),y)
++QEMU_OPTS += --enable-virtfs
 +else
-+QEMU_OPTS += --disable-attr
++QEMU_OPTS += --disable-virtfs
 +endif
 +
- ifeq ($(BR2_PACKAGE_QEMU_BLOBS),)
- QEMU_OPTS += --disable-blobs
- endif
-@@ -243,7 +249,6 @@ define QEMU_CONFIGURE_CMDS
- 	        --audio-card-list=                  \
- 	        --enable-kvm                        \
- 	        --enable-nptl                       \
--	        --enable-attr                       \
- 	        --enable-vhost-net                  \
- 	        --disable-bsd-user                  \
+ ifeq ($(BR2_PACKAGE_QEMU_UUID),y)
+ QEMU_OPTS += --enable-uuid
+ QEMU_DEPENDENCIES += util-linux
+@@ -254,7 +260,6 @@ define QEMU_CONFIGURE_CMDS
  	        --disable-xen                       \
+ 	        --disable-slirp                     \
+ 	        --disable-vnc-sasl                  \
+-	        --disable-virtfs                    \
+ 	        --disable-brlapi                    \
+ 	        --disable-curses                    \
+ 	        --disable-curl                      \
 -- 
 1.7.2.5
