@@ -1,41 +1,58 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Mon, 17 Dec 2012 00:15:54 +0100
-Subject: [Buildroot] [PATCH] netatalk : Fix BerkeleyDB library path
-In-Reply-To: <87pq29bq11.fsf@dell.be.48ers.dk>
-References: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
- <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
- <87pq29bq11.fsf@dell.be.48ers.dk>
-Message-ID: <CAGduivyvZNaaC8jdLzt1yVju3DS0Vu0fdaQYdHzK6LoRE==nYw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 17 Dec 2012 00:22:53 +0100
+Subject: [Buildroot] [PATCH 26/27] package/qemu: enable a static build
+In-Reply-To: <2fc3655574313a23489d70e1d777c710866b63b7.1355677144.git.yann.morin.1998@free.fr>
+References: <cover.1355677144.git.yann.morin.1998@free.fr>
+ <2fc3655574313a23489d70e1d777c710866b63b7.1355677144.git.yann.morin.1998@free.fr>
+Message-ID: <201212170022.53919.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 16, 2012 at 11:17 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
->
->  Maxime> This fix is needed for the 64bits build because Netatalk will assume the library
->  Maxime> are stored in [..]/lib64/ instead of [..]/lib/
->
-> Hmm, we still seem to have issues on the autobuilders:
->
-> http://autobuild.buildroot.net/results/cf5c3ce94c229204bfa0f19b1009c13a9bcc1dfc/build-end.log
->
->  Maxime> +++ b/package/netatalk/netatalk.mk
->  Maxime> @@ -8,7 +8,7 @@ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NET
->  Maxime>  NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
->
->  Maxime>  NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
->  Maxime> -NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
->  Maxime> +NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" BDB_LIB=$(STAGING_LIB)/usr/lib
->
->
-> I guess you meant STAGING_DIR instead here, will fix.
-This is strange because I tested with a 64 bits build and I had'nt the
-problem anymore.. And I don't remember rewriting the patch before
-sending it here. But then again, you're totally right, this does'nt
-make sense. I'm really wondering how it could have worked for me :/
->
-> --
-> Bye, Peter Korsgaard
+All,
+
+On Sunday 16 December 2012 Yann E. MORIN wrote:
+[--SNIP--]
+> diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+> index 435775a..f88a1f4 100644
+> --- a/package/qemu/Config.in
+> +++ b/package/qemu/Config.in
+[--SNIP--]
+> @@ -238,6 +244,24 @@ config BR2_PACKAGE_QEMU_SOUND_SDL
+>  	  
+>  	  Note: this is only for system emulation, not user emulation.
+>  
+> +<<<<<<< HEAD
+> +=======
+
+Bummer. Fixed.
+
+> +# Alsa can not build both shared and static libs at the same time.
+> +# But we may want to build QEMU staticaly, even though the global
+> +# BR2_PREFER_STATIC_LIB is not set. Disable that case.
+> +config BR2_PACKAGE_QEMU_SOUND_ALSA
+> +	bool "Enable sound via alsa"
+> +	depends on !BR2_PACKAGE_QEMU_STATIC || BR2_PREFER_STATIC_LIB
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	help
+> +	  Say 'y' here to have QEMU play sound from the VMs via alsa.
+> +	  
+> +	  Note: this is only for system emulation, not user emulation.
+> +
+> +comment "Alsa sound static link works only if BR2_PREFER_STATIC is set"
+> +	depends on BR2_PACKAGE_QEMU_STATIC && !BR2_PREFER_STATIC_LIB
+> +
+> +>>>>>>> dd73234... package/qemu: enable a static build
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
