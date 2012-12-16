@@ -1,48 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 Dec 2012 01:09:16 +0100
-Subject: [Buildroot] [git commit] perl: refactor configure step
-Message-ID: <20121216001446.D8A0B9A02E@busybox.osuosl.org>
+Date: Sun, 16 Dec 2012 01:05:47 +0100
+Subject: [Buildroot] [git commit] sylpheed: fix license files typo
+Message-ID: <20121216001446.AEC369A02E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efddfcbe6dc531145fe3f4d7a39818e8e27d77b9
+commit: http://git.buildroot.net/buildroot/commit/?id=6cd4b20e4a7a04d8ebde872175cb6d6b583e9f42
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After discussion with Perl-Cross's author (Alex Suykov)
+As pointed out by Arnout.
 
-Note: Using -A with variables that aren't option lists makes little sense.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/perl/perl.mk |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ package/sylpheed/sylpheed.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index a86ee2a..da54ef1 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -57,12 +57,12 @@ PERL_CONF_OPT = \
- 	-Dld="$(TARGET_CC_NOCCACHE)" \
- 	-Dccflags="$(TARGET_CFLAGS)" \
- 	-Dldflags="$(TARGET_LDFLAGS) -lm" \
--	-A define:mydomain="" \
--	-A define:myhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
--	-A define:myuname="Buildroot $(BR2_VERSION_FULL)" \
--	-A define:osname=linux \
--	-A define:osvers=$(LINUX_VERSION) \
--	-A define:perladmin=root
-+	-Dmydomain="" \
-+	-Dmyhostname="$(BR2_TARGET_GENERIC_HOSTNAME)" \
-+	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
-+	-Dosname=linux \
-+	-Dosvers=$(LINUX_VERSION) \
-+	-Dperladmin=root
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index f26e5fc..12fc18b 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -9,7 +9,7 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ SYLPHEED_LICENSE = GPLv2+ (executables), LGPLv2.1+ (library, attachment plugin)
+-SYLPHEED_LICENSE_FILES = COPIYNG COPYING.LIB
++SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
  
- ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
-     PERL_CONF_OPT += -Dusedevel
+ SYLPHEED_CONF_OPT = --disable-gtkspell
+ 
