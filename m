@@ -1,95 +1,138 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 Dec 2012 20:37:53 +0100
-Subject: [Buildroot] [git commit] package/python-pyparsing: new package
-Message-ID: <20121216200126.BDCBE9A29B@busybox.osuosl.org>
+Date: Sun, 16 Dec 2012 21:00:56 +0100
+Subject: [Buildroot] [git commit] package/cegui06: new package
+Message-ID: <20121216200127.078A79A29B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df07240d6fb4c60ecc65a54ea10dfc729773a803
+commit: http://git.buildroot.net/buildroot/commit/?id=303c922c62d2eb08ce3ffb02206b9bf959b305dc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Although there are more recent versions of CEGUI, we are stuck
+with 0.6.2b for use by spice.
+
+[Peter: add C++ dependency]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                            |    1 +
- package/python-pyparsing/Config.in           |   11 +++++++
- package/python-pyparsing/python-pyparsing.mk |   38 ++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 0 deletions(-)
+ package/Config.in                      |    1 +
+ package/cegui06/Config.in              |   19 ++++++++++++++++
+ package/cegui06/cegui06-stddef.h.patch |   26 +++++++++++++++++++++++
+ package/cegui06/cegui06.mk             |   36 ++++++++++++++++++++++++++++++++
+ 4 files changed, 82 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index f395934..07681b5 100644
+index 07681b5..de23724 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -309,6 +309,7 @@ source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pygame/Config.in"
-+source "package/python-pyparsing/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- endmenu
-diff --git a/package/python-pyparsing/Config.in b/package/python-pyparsing/Config.in
+@@ -109,6 +109,7 @@ comment "Graphic applications"
+ source "package/rrdtool/Config.in"
+ 
+ comment "graphic libraries"
++source "package/cegui06/Config.in"
+ source "package/directfb/Config.in"
+ source "package/directfb-examples/Config.in"
+ source "package/divine/Config.in"
+diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
 new file mode 100644
-index 0000000..126dd0e
+index 0000000..5ce9700
 --- /dev/null
-+++ b/package/python-pyparsing/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_PYPARSING
-+	bool "pyparsing"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/cegui06/Config.in
+@@ -0,0 +1,19 @@
++comment "cegui06 needs a toolchain with C++ and threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_CEGUI06
++	bool "cegui06"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_PCRE
 +	help
-+	  The pyparsing module is an alternative approach to creating and
-+	  executing simple grammars, vs. the traditional lex/yacc approach,
-+	  or the use of regular expressions. The pyparsing module provides
-+	  a library of classes that client code uses to construct the grammar
-+	  directly in Python code.
++	  Crazy Eddie's GUI System is a free library providing windowing and
++	  widgets for graphics APIs / engines where such functionality is not
++	  natively available, or severely lacking. The library is object
++	  orientated, written in C++, and targeted at games developers who
++	  should be spending their time creating great games, not building
++	  GUI sub-systems!
 +	  
-+	  http://pyparsing.wikispaces.com/
-diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
++	  http://www.cegui.org.uk/
+diff --git a/package/cegui06/cegui06-stddef.h.patch b/package/cegui06/cegui06-stddef.h.patch
 new file mode 100644
-index 0000000..246df4d
+index 0000000..cc16eff
 --- /dev/null
-+++ b/package/python-pyparsing/python-pyparsing.mk
-@@ -0,0 +1,38 @@
++++ b/package/cegui06/cegui06-stddef.h.patch
+@@ -0,0 +1,26 @@
++includes: ptrdiff_t is defined in stddef.h
++
++ptrdiff_t is defined in the stddef.h header, so this
++header must be included.
++
++Do the #include in a common header to avoid doing it
++all over the place.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Patch not sent upstream, it's a no-longer-maintained branch.
++To be noted, however, is that the current devel branch is
++still missing that include.
++
++diff -durN cegui06-0.6.2.orig/include/CEGUIBase.h cegui06-0.6.2/include/CEGUIBase.h
++--- cegui06-0.6.2.orig//include/CEGUIBase.h	2008-02-11 15:38:27.000000000 +0100
+++++ cegui06-0.6.2/include/CEGUIBase.h	2012-08-19 22:51:50.260385978 +0200
++@@ -34,6 +34,7 @@
++ #define _CEGUIBase_h_
++ 
++ #include <cassert>
+++#include <stddef.h>
++ 
++ // bring in configuration options
++ #include "CEGUIConfig.h"
+diff --git a/package/cegui06/cegui06.mk b/package/cegui06/cegui06.mk
+new file mode 100644
+index 0000000..817254f
+--- /dev/null
++++ b/package/cegui06/cegui06.mk
+@@ -0,0 +1,36 @@
 +#############################################################
 +#
-+# python-pyparsing
++# libcegui
 +#
 +#############################################################
 +
-+PYTHON_PYPARSING_VERSION         = 1.5.6
-+PYTHON_PYPARSING_SOURCE          = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
-+PYTHON_PYPARSING_SITE            = http://downloads.sourceforge.net/project/pyparsing/pyparsing/pyparsing-$(PYTHON_PYPARSING_VERSION)
-+PYTHON_PYPARSING_LICENSE         = MIT
-+PYTHON_PYPARSING_LICENSE_FILES   = LICENSE
-+PYTHON_PYPARSING_INSTALL_STAGING = YES
-+PYTHON_PYPARSING_DEPENDENCIES    = python
++# Do not update the version, we need exactly that one for Spice.
++CEGUI06_VERSION_MAJOR   = 0.6.2
++CEGUI06_VERSION         = $(CEGUI06_VERSION_MAJOR)b
++CEGUI06_SOURCE          = CEGUI-$(CEGUI06_VERSION).tar.gz
++CEGUI06_SITE            = http://downloads.sourceforge.net/project/crayzedsgui/CEGUI%20Mk-2/$(CEGUI06_VERSION_MAJOR)
++CEGUI06_LICENSE         = MIT
++CEGUI06_LICENSE_FILES   = COPYING
++CEGUI06_INSTALL_STAGING = YES
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_BUILD_CMDS
-+	(cd $(@D);                                              \
-+	 CC="$(TARGET_CC)"                                      \
-+	 CFLAGS="$(TARGET_CFLAGS)"                              \
-+	 LDSHARED="$(TARGET_CROSS)gcc -shared"                  \
-+	 CROSS_COMPILING=yes                                    \
-+	 _python_sysroot=$(STAGING_DIR)                         \
-+	 _python_srcdir=$(BUILD_DIR)/python$(PYTHON_VERSION)    \
-+	 _python_prefix=/usr                                    \
-+	 _python_exec_prefix=/usr                               \
-+	 $(HOST_DIR)/usr/bin/python setup.py build              \
-+	)
-+endef
++CEGUI06_DEPENDENCIES    =       \
++    expat                       \
++    freetype                    \
++    pcre                        \
 +
-+# Shamelessly vampirised from python-pygame ;-)
-+define PYTHON_PYPARSING_INSTALL_TARGET_CMDS
-+	(cd $(@D);                                              \
-+	 $(HOST_DIR)/usr/bin/python setup.py install            \
-+	                            --prefix=$(TARGET_DIR)/usr  \
-+	)
-+endef
++CEGUI06_CONF_OPT =              \
++    --enable-expat              \
++    --disable-external-tinyxml  \
++    --disable-xerces-c          \
++    --disable-libxml            \
++    --disable-tinyxml           \
++    --disable-opengl-renderer   \
++    --disable-external-glew     \
++    --disable-irrlicht-renderer \
++    --disable-directfb-renderer \
++    --disable-samples           \
++    --disable-lua-module        \
++    --disable-toluacegui        \
++    --disable-external-toluapp  \
 +
-+$(eval $(generic-package))
++$(eval $(autotools-package))
