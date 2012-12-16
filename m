@@ -1,138 +1,93 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 Dec 2012 21:00:56 +0100
-Subject: [Buildroot] [git commit] package/cegui06: new package
-Message-ID: <20121216200127.078A79A29B@busybox.osuosl.org>
+Date: Sun, 16 Dec 2012 20:35:18 +0100
+Subject: [Buildroot] [git commit] package/celt051: new package
+Message-ID: <20121216200126.903B29A29B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=303c922c62d2eb08ce3ffb02206b9bf959b305dc
+commit: http://git.buildroot.net/buildroot/commit/?id=a13fd5f4ceba61570cbfb22c452ee8abb898414e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Although there are more recent versions of CEGUI, we are stuck
-with 0.6.2b for use by spice.
-
-[Peter: add C++ dependency]
+[Peter: move to Libraries->Audio/Sound]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                      |    1 +
- package/cegui06/Config.in              |   19 ++++++++++++++++
- package/cegui06/cegui06-stddef.h.patch |   26 +++++++++++++++++++++++
- package/cegui06/cegui06.mk             |   36 ++++++++++++++++++++++++++++++++
- 4 files changed, 82 insertions(+), 0 deletions(-)
+ package/Config.in         |    1 +
+ package/celt051/Config.in |   15 +++++++++++++++
+ package/celt051/celt.mk   |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 07681b5..de23724 100644
+index 1ed77e0..f395934 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -109,6 +109,7 @@ comment "Graphic applications"
- source "package/rrdtool/Config.in"
- 
- comment "graphic libraries"
-+source "package/cegui06/Config.in"
- source "package/directfb/Config.in"
- source "package/directfb-examples/Config.in"
- source "package/divine/Config.in"
-diff --git a/package/cegui06/Config.in b/package/cegui06/Config.in
+@@ -327,6 +327,7 @@ menu "Libraries"
+ menu "Audio/Sound"
+ source "package/alsa-lib/Config.in"
+ source "package/audiofile/Config.in"
++source "package/celt051/Config.in"
+ source "package/libao/Config.in"
+ source "package/libcdaudio/Config.in"
+ source "package/libcue/Config.in"
+diff --git a/package/celt051/Config.in b/package/celt051/Config.in
 new file mode 100644
-index 0000000..5ce9700
+index 0000000..50ed069
 --- /dev/null
-+++ b/package/cegui06/Config.in
-@@ -0,0 +1,19 @@
-+comment "cegui06 needs a toolchain with C++ and threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_CEGUI06
-+	bool "cegui06"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_PCRE
++++ b/package/celt051/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CELT051
++	bool "celt051"
++	select BR2_PACKAGE_LIBOGG
 +	help
-+	  Crazy Eddie's GUI System is a free library providing windowing and
-+	  widgets for graphics APIs / engines where such functionality is not
-+	  natively available, or severely lacking. The library is object
-+	  orientated, written in C++, and targeted at games developers who
-+	  should be spending their time creating great games, not building
-+	  GUI sub-systems!
++	  The CELT ultra-low delay audio codec
 +	  
-+	  http://www.cegui.org.uk/
-diff --git a/package/cegui06/cegui06-stddef.h.patch b/package/cegui06/cegui06-stddef.h.patch
++	  The CELT codec is a compression algorithm for audio. Like MP3,
++	  Vorbis, and AAC it is suitable for transmitting music with high
++	  quality. Unlike these formats CELT imposes very little delay on
++	  the signal, even less than is typical for speech centric formats
++	  like Speex, GSM, or G.729.
++	  
++	  Note: this is version 0.5.1.3 of celt.
++	  
++	  http://www.celt-codec.org/
+diff --git a/package/celt051/celt.mk b/package/celt051/celt.mk
 new file mode 100644
-index 0000000..cc16eff
+index 0000000..9baaa82
 --- /dev/null
-+++ b/package/cegui06/cegui06-stddef.h.patch
-@@ -0,0 +1,26 @@
-+includes: ptrdiff_t is defined in stddef.h
-+
-+ptrdiff_t is defined in the stddef.h header, so this
-+header must be included.
-+
-+Do the #include in a common header to avoid doing it
-+all over the place.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Patch not sent upstream, it's a no-longer-maintained branch.
-+To be noted, however, is that the current devel branch is
-+still missing that include.
-+
-+diff -durN cegui06-0.6.2.orig/include/CEGUIBase.h cegui06-0.6.2/include/CEGUIBase.h
-+--- cegui06-0.6.2.orig//include/CEGUIBase.h	2008-02-11 15:38:27.000000000 +0100
-++++ cegui06-0.6.2/include/CEGUIBase.h	2012-08-19 22:51:50.260385978 +0200
-+@@ -34,6 +34,7 @@
-+ #define _CEGUIBase_h_
-+ 
-+ #include <cassert>
-++#include <stddef.h>
-+ 
-+ // bring in configuration options
-+ #include "CEGUIConfig.h"
-diff --git a/package/cegui06/cegui06.mk b/package/cegui06/cegui06.mk
-new file mode 100644
-index 0000000..817254f
---- /dev/null
-+++ b/package/cegui06/cegui06.mk
-@@ -0,0 +1,36 @@
++++ b/package/celt051/celt.mk
+@@ -0,0 +1,30 @@
 +#############################################################
 +#
-+# libcegui
++# celt051
 +#
 +#############################################################
 +
-+# Do not update the version, we need exactly that one for Spice.
-+CEGUI06_VERSION_MAJOR   = 0.6.2
-+CEGUI06_VERSION         = $(CEGUI06_VERSION_MAJOR)b
-+CEGUI06_SOURCE          = CEGUI-$(CEGUI06_VERSION).tar.gz
-+CEGUI06_SITE            = http://downloads.sourceforge.net/project/crayzedsgui/CEGUI%20Mk-2/$(CEGUI06_VERSION_MAJOR)
-+CEGUI06_LICENSE         = MIT
-+CEGUI06_LICENSE_FILES   = COPYING
-+CEGUI06_INSTALL_STAGING = YES
++# Although version newer than 0.5.1.3 exists, we're
++# stuck with 0.5.1.3 for use by Spice (coming later)
++CELT051_VERSION         = 0.5.1.3
++CELT051_SOURCE          = celt-$(CELT051_VERSION).tar.gz
++CELT051_SITE            = http://downloads.xiph.org/releases/celt
++CELT051_LICENSE         = BSD-2c
++CELT051_LICENSE_FILES   = COPYING
++CELT051_INSTALL_STAGING = YES
++CELT051_DEPENDENCIES    = libogg
 +
-+CEGUI06_DEPENDENCIES    =       \
-+    expat                       \
-+    freetype                    \
-+    pcre                        \
-+
-+CEGUI06_CONF_OPT =              \
-+    --enable-expat              \
-+    --disable-external-tinyxml  \
-+    --disable-xerces-c          \
-+    --disable-libxml            \
-+    --disable-tinyxml           \
-+    --disable-opengl-renderer   \
-+    --disable-external-glew     \
-+    --disable-irrlicht-renderer \
-+    --disable-directfb-renderer \
-+    --disable-samples           \
-+    --disable-lua-module        \
-+    --disable-toluacegui        \
-+    --disable-external-toluapp  \
++# Need to specify --with-ogg, otherwise /usr/lib may be searched for
++# if target is the same kind as host (ie. same arch, same bitness,
++# same endianness, so that /usr/lib contains libraries linkable by
++# our cross-compiler)
++CELT051_CONF_OPT =                  \
++  --enable-fixed-point              \
++  --disable-fixed-point-debug       \
++  --disable-experimental-postfilter \
++  --disable-static-modes            \
++  --disable-assertions              \
++  --disable-oggtest                 \
++  --with-ogg=$(STAGING_DIR)/usr     \
 +
 +$(eval $(autotools-package))
