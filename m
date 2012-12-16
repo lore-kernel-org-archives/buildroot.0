@@ -1,129 +1,107 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 17:56:08 +0100
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_01/19=5D_package/vde2=3A_new_packa?=
-	=?utf-8?q?ge?=
+Date: Sun, 16 Dec 2012 17:56:09 +0100
+Subject: [Buildroot] [PATCH 02/19] package/usbredir: new package
 In-Reply-To: <cover.1355676845.git.yann.morin.1998@free.fr>
 References: <cover.1355676845.git.yann.morin.1998@free.fr>
-Message-ID: <38d9c4091850fdb0ee049feab6f7a33bf3b09850.1355676845.git.yann.morin.1998@free.fr>
+Message-ID: <0fb0aae36595cd749f29a44b381e31293cbe8ff6.1355676845.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-VDE is an ethernet compliant virtual network that can be
-spawned over a set of physical computer over the Internet.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Peter Korsgaard <jacmet@uclibc.org>
 ---
- package/Config.in              |    1 +
- package/vde2/Config.in         |    8 ++++++++
- package/vde2/vde2-no-cxx.patch |   22 ++++++++++++++++++++++
- package/vde2/vde2.mk           |   39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 70 insertions(+), 0 deletions(-)
- create mode 100644 package/vde2/Config.in
- create mode 100644 package/vde2/vde2-no-cxx.patch
- create mode 100644 package/vde2/vde2.mk
+ package/Config.in            |    1 +
+ package/usbredir/Config.in   |   29 +++++++++++++++++++++++++++++
+ package/usbredir/usbredir.mk |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+), 0 deletions(-)
+ create mode 100644 package/usbredir/Config.in
+ create mode 100644 package/usbredir/usbredir.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c605e6f..70a572b 100644
+index 70a572b..1ed77e0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -675,6 +675,7 @@ source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
- source "package/ulogd/Config.in"
- source "package/ushare/Config.in"
-+source "package/vde2/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
- source "package/vtun/Config.in"
-diff --git a/package/vde2/Config.in b/package/vde2/Config.in
+@@ -494,6 +494,7 @@ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
+ source "package/nss-mdns/Config.in"
+ source "package/ortp/Config.in"
++source "package/usbredir/Config.in"
+ source "package/zeromq/Config.in"
+ endmenu
+ 
+diff --git a/package/usbredir/Config.in b/package/usbredir/Config.in
 new file mode 100644
-index 0000000..f069a79
+index 0000000..e2a7184
 --- /dev/null
-+++ b/package/vde2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_VDE2
-+	bool "vde2"
++++ b/package/usbredir/Config.in
+@@ -0,0 +1,29 @@
++comment "usbredir needs a toolchain with threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_USBREDIR
++	bool "usbredir"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	select BR2_PACKAGE_LIBUSB
 +	help
-+	  VDE is an ethernet compliant virtual network that can be
-+	  spawned over a set of physical computers over the Internet.
-+	  VDE is part of the virtualsquare project.
++	  usbredir is the name of a network protocol for sending usb device
++	  traffic over a network connection. It is also the name of the
++	  software package offering a parsing library, a usbredirhost library
++	  and several utilities implementing this protocol.
 +	  
-+	  http://vde.sourceforge.net/
-diff --git a/package/vde2/vde2-no-cxx.patch b/package/vde2/vde2-no-cxx.patch
++	  Note: only the library is installed, not the utilities. Say 'y'
++	  below if you want the server too.
++	  
++	  http://www.spice-space.org/page/UsbRedir
++
++if BR2_PACKAGE_USBREDIR
++
++config BR2_PACKAGE_USBREDIR_SERVER
++	bool "usbredirserver on target"
++	help
++	  If you want to serve usbredir requests on your target, say 'y'
++	  here to have the usbredir server on the target.
++	  
++	  Note: the server is not required to use the library.
++
++endif
+diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
 new file mode 100644
-index 0000000..67cefa2
+index 0000000..ac98472
 --- /dev/null
-+++ b/package/vde2/vde2-no-cxx.patch
-@@ -0,0 +1,22 @@
-+configure: do not test for CXX, it's not needed
-+
-+There is no C++ source file, so no reason to require a C++ compiler.
-+
-+Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Patch sent upstream
-+( not yet in archives, awaits moderator approval... :-/ )
-+
-+diff -durN vde2-2.3.2.orig/configure.ac vde2-2.3.2/configure.ac
-+--- vde2-2.3.2.orig/configure.ac	2011-11-23 17:41:19.000000000 +0100
-++++ vde2-2.3.2/configure.ac	2012-12-14 21:56:47.146319686 +0100
-+@@ -11,7 +11,6 @@
-+ AC_CONFIG_LIBOBJ_DIR(src/common)
-+ 
-+ # Checks for programs.
-+-AC_PROG_CXX
-+ AC_PROG_CC
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-new file mode 100644
-index 0000000..cb85f57
---- /dev/null
-+++ b/package/vde2/vde2.mk
-@@ -0,0 +1,39 @@
++++ b/package/usbredir/usbredir.mk
+@@ -0,0 +1,29 @@
 +#############################################################
 +#
-+# vde2
++# usbredir
 +#
 +#############################################################
 +
-+VDE2_VERSION         = 2.3.2
-+VDE2_SOURCE          = vde2-$(VDE2_VERSION).tar.bz2
-+VDE2_SITE            = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
-+VDE2_LICENSE         = GPLv2+ LGPLv2.1+ BSD-3c
-+VDE2_LICENSE_FILES   = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_INSTALL_STAGING = YES
++USBREDIR_VERSION         = 0.4.3
++USBREDIR_SOURCE          = usbredir-$(USBREDIR_VERSION).tar.bz2
++USBREDIR_SITE            = http://spice-space.org/download/usbredir
++USBREDIR_LICENSE         = LGPLv2.1+
++USBREDIR_LICENSE_FILES   = COPYING.LIB
++USBREDIR_INSTALL_STAGING = YES
++USBREDIR_DEPENDENCIES    = host-pkgconf libusb
 +
-+# We touch configure.ac, so we need to autoreconf
-+VDE2_AUTORECONF      = YES
++ifeq ($(BR2_PACKAGE_USBREDIR_SERVER),y)
 +
-+# Reasons for enabling/disabling stuff:
-+#?- tuntap is enabled in the hope we're using a recent-enough toolchain
-+#   that does have if_tun.h (virtually everything these days)
-+# - kvde_switch is disabled because it requires a patched kernel
-+# - cryptcab is disabled to not depend on openSSL
-+# - python is disabled to not depend on Python
-+# - pcap is disabled to not depend on libpcap
-+# - profiling is disabled because we do not want to debug/profile
-+#
-+# Note: disabled features can be added with corresponding dependencies
-+#       in future commits.
-+VDE2_CONF_OPT = --disable-experimental  \
-+                --disable-cryptcab      \
-+                --disable-pcap          \
-+                --disable-python        \
-+                --disable-profile       \
-+                --disable-kernel-switch \
-+                --enable-tuntap         \
++USBREDIR_LICENSE         += (for the library), GPLv2+ (for the server)
++USBREDIR_LICENSE_FILES   += COPYING
 +
-+#?Package does not build in parallel due to improper make rules
-+VDE2_MAKE = $(MAKE1)
++else # BR2_PACKAGE_USBREDIR_SERVER != y
++
++define USBREDIR_POST_INSTALL_TARGET_RM_SERVER
++	rm -f $(TARGET_DIR)/usr/sbin/usbredirserver
++endef
++USBREDIR_POST_INSTALL_TARGET_HOOKS += USBREDIR_POST_INSTALL_TARGET_RM_SERVER
++
++endif # BR2_PACKAGE_USBREDIR_SERVER
 +
 +$(eval $(autotools-package))
 -- 
