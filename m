@@ -1,126 +1,51 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 16 Dec 2012 20:14:44 +0100
-Subject: [Buildroot] [git commit] package/vde2: new package
-Message-ID: <20121216200125.B700F9A29B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Dec 2012 21:20:51 +0100
+Subject: [Buildroot] [git commit] usbredir: bump version
+In-Reply-To: <20121216200126.2D9129A29B@busybox.osuosl.org>
+References: <20121216200126.2D9129A29B@busybox.osuosl.org>
+Message-ID: <201212162120.51365.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b2a81e267fac465064456469ec52c8897c2f59e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-VDE is an ethernet compliant virtual network that can be
-spawned over a set of physical computer over the Internet.
+On Sunday 16 December 2012 Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=da1147e763737f5dd4da3d20c5bf2109d5d85562
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  package/usbredir/usbredir.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/usbredir/usbredir.mk b/package/usbredir/usbredir.mk
+> index ac98472..f0530a7 100644
+> --- a/package/usbredir/usbredir.mk
+> +++ b/package/usbredir/usbredir.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  #############################################################
+>  
+> -USBREDIR_VERSION         = 0.4.3
+> +USBREDIR_VERSION         = 0.4.4
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in              |    1 +
- package/vde2/Config.in         |    8 ++++++++
- package/vde2/vde2-no-cxx.patch |   22 ++++++++++++++++++++++
- package/vde2/vde2.mk           |   39 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 70 insertions(+), 0 deletions(-)
+Yes, since we want to use qemu 1.2, we still need usbredir 0.4.
+Since this series was started before 0.4.4 was released, I missed it.
 
-diff --git a/package/Config.in b/package/Config.in
-index c605e6f..70a572b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -675,6 +675,7 @@ source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
- source "package/ulogd/Config.in"
- source "package/ushare/Config.in"
-+source "package/vde2/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
- source "package/vtun/Config.in"
-diff --git a/package/vde2/Config.in b/package/vde2/Config.in
-new file mode 100644
-index 0000000..f069a79
---- /dev/null
-+++ b/package/vde2/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_VDE2
-+	bool "vde2"
-+	help
-+	  VDE is an ethernet compliant virtual network that can be
-+	  spawned over a set of physical computers over the Internet.
-+	  VDE is part of the virtualsquare project.
-+	  
-+	  http://vde.sourceforge.net/
-diff --git a/package/vde2/vde2-no-cxx.patch b/package/vde2/vde2-no-cxx.patch
-new file mode 100644
-index 0000000..67cefa2
---- /dev/null
-+++ b/package/vde2/vde2-no-cxx.patch
-@@ -0,0 +1,22 @@
-+configure: do not test for CXX, it's not needed
-+
-+There is no C++ source file, so no reason to require a C++ compiler.
-+
-+Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Patch sent upstream
-+( not yet in archives, awaits moderator approval... :-/ )
-+
-+diff -durN vde2-2.3.2.orig/configure.ac vde2-2.3.2/configure.ac
-+--- vde2-2.3.2.orig/configure.ac	2011-11-23 17:41:19.000000000 +0100
-++++ vde2-2.3.2/configure.ac	2012-12-14 21:56:47.146319686 +0100
-+@@ -11,7 +11,6 @@
-+ AC_CONFIG_LIBOBJ_DIR(src/common)
-+ 
-+ # Checks for programs.
-+-AC_PROG_CXX
-+ AC_PROG_CC
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-new file mode 100644
-index 0000000..cb85f57
---- /dev/null
-+++ b/package/vde2/vde2.mk
-@@ -0,0 +1,39 @@
-+#############################################################
-+#
-+# vde2
-+#
-+#############################################################
-+
-+VDE2_VERSION         = 2.3.2
-+VDE2_SOURCE          = vde2-$(VDE2_VERSION).tar.bz2
-+VDE2_SITE            = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
-+VDE2_LICENSE         = GPLv2+ LGPLv2.1+ BSD-3c
-+VDE2_LICENSE_FILES   = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_INSTALL_STAGING = YES
-+
-+# We touch configure.ac, so we need to autoreconf
-+VDE2_AUTORECONF      = YES
-+
-+# Reasons for enabling/disabling stuff:
-+#??- tuntap is enabled in the hope we're using a recent-enough toolchain
-+#   that does have if_tun.h (virtually everything these days)
-+# - kvde_switch is disabled because it requires a patched kernel
-+# - cryptcab is disabled to not depend on openSSL
-+# - python is disabled to not depend on Python
-+# - pcap is disabled to not depend on libpcap
-+# - profiling is disabled because we do not want to debug/profile
-+#
-+# Note: disabled features can be added with corresponding dependencies
-+#       in future commits.
-+VDE2_CONF_OPT = --disable-experimental  \
-+                --disable-cryptcab      \
-+                --disable-pcap          \
-+                --disable-python        \
-+                --disable-profile       \
-+                --disable-kernel-switch \
-+                --enable-tuntap         \
-+
-+#??Package does not build in parallel due to improper make rules
-+VDE2_MAKE = $(MAKE1)
-+
-+$(eval $(autotools-package))
+When I upgrade QEMU to 1.3.0, I'll also update usbredir version.
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
