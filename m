@@ -1,74 +1,154 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Dec 2012 18:01:29 +0100
-Subject: [Buildroot] [pull request] Pull request for branch yem-target-qemu
-Message-ID: <cover.1355677144.git.yann.morin.1998@free.fr>
+Date: Sun, 16 Dec 2012 18:01:30 +0100
+Subject: [Buildroot] [PATCH 01/27] package/qemu: build for the target (i386
+	or x86_64 only)
+In-Reply-To: <cover.1355677144.git.yann.morin.1998@free.fr>
+References: <cover.1355677144.git.yann.morin.1998@free.fr>
+Message-ID: <aaf7c74f9eff8248573cc7a04a396323443b35ef.1355677144.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Untested for other architectures, so only enabled for known-working ones.
 
-This series is the last part required to build QEMU for the target.
-It depends on the previous two series:
-  - git://gitorious.org/buildroot/buildroot.git yem-host-qemu-fixes
-  - git://gitorious.org/buildroot/buildroot.git yem-new-packages
+We explicitly disable all features that depends on other packages,
+for now. Such features will be added one by one in the next patches.
+Features that do not rely on external packages are explicitly enabled
+to catch the dependencies on toolchain features early.
 
-The following changes since commit c89762fc711fda1836af3b7895a8760ffda66aa6:
-
-  Merge branches 'yem-new-packages' and 'yem-host-qemu-fixes' into yem-merge-for-target-qemu (2012-12-16 17:28:45 +0100)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem-target-qemu
-
-Yann E. MORIN (27):
-      package/qemu: build for the target (i386 or x86_64 only)
-      package/qemu: add basic target selection
-      package/qemu: add fine-grained target selection
-      package/qemu: add SDL frontends
-      package/qemu: add option to enable/disable the VNC frontend
-      package/qemu: add VNC jpeg and png compression
-      package/qemu: add VNC TLS-encryption
-      package/qemu: add option to not install blobs
-      package/qemu: add option to remove unwanted keymaps
-      package/qemu: add uuid support
-      package/qemu: add support for capabilities
-      package/qemu: add attr/xattr option
-      package/qemu: add support for virtfs
-      package/qemu: add support for cURL
-      package/qemu: enable use of the curses frontend
-      package/qemu: add BlueZ connectivity
-      package/qemu: add AIO support
-      package/qemu: add support for VDE switches
-      package/qemu: add iSCSI support
-      package/qemu: add support for USB redirection
-      package/qemu: add support for Spice
-      package/qemu: enable sound
-      package/qemu: add support for libseccomp
-      package/qemu: option to build the docs
-      package/qemu: move sub-options into a sub-menu
-      package/qemu: enable a static build
-      package/qemu: add support for FDT
-
- package/Config.in                   |    1 +
- package/qemu/Config.in              |  338 +++++++++++++++++++++++++++++++++++
- package/qemu/qemu-static-curl.patch |   72 ++++++++
- package/qemu/qemu-static-sdl.patch  |   54 ++++++
- package/qemu/qemu.mk                |  290 ++++++++++++++++++++++++++++++
- 5 files changed, 755 insertions(+), 0 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/Config.in      |    1 +
+ package/qemu/Config.in |   25 ++++++++++++++++
+ package/qemu/qemu.mk   |   73 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 99 insertions(+), 0 deletions(-)
  create mode 100644 package/qemu/Config.in
- create mode 100644 package/qemu/qemu-static-curl.patch
- create mode 100644 package/qemu/qemu-static-sdl.patch
 
-Regards,
-Yann E. MORIN
-
+diff --git a/package/Config.in b/package/Config.in
+index 8612c7d..458c3c8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -574,6 +574,7 @@ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/googlefontdirectory/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
++source "package/qemu/Config.in"
+ source "package/shared-mime-info/Config.in"
+ source "package/snowball-init/Config.in"
+ source "package/sound-theme-borealis/Config.in"
+diff --git a/package/qemu/Config.in b/package/qemu/Config.in
+new file mode 100644
+index 0000000..4b05e3d
+--- /dev/null
++++ b/package/qemu/Config.in
+@@ -0,0 +1,25 @@
++comment "QEMU requires a toolchain with threads"
++	depends on !BR2_i386 && !BR2_x86_64
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_QEMU
++	bool "QEMU"
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_ZLIB
++	help
++	  QEMU is a generic and open source machine emulator and virtualizer.
++	  
++	  When used as a machine emulator, QEMU can run OSes and programs made
++	  for one machine (e.g. an ARM board) on a different machine (e.g.
++	  your own PC). By using dynamic translation, it achieves very good
++	  performance.
++	  
++	  When used as a virtualizer, QEMU achieves near native performances
++	  by executing the guest code directly on the host CPU. QEMU supports
++	  virtualization when executing under the Xen hypervisor or using the
++	  KVM kernel module in Linux. When using KVM, QEMU can virtualize x86,
++	  server and embedded PowerPC, and S390 guests.
++	  
++	  http://qemu.org/
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index bd42481..ddab4d0 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -81,3 +81,76 @@ $(eval $(host-autotools-package))
+ 
+ # variable used by other packages
+ QEMU_USER = $(HOST_DIR)/usr/bin/qemu-$(HOST_QEMU_ARCH)
++
++#-------------------------------------------------------------
++# Target-qemu
++
++QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib
++
++# Need the LIBS variable because librt and libm are
++# not automatically pulled. :-(
++QEMU_LIBS = -lrt -lm
++
++QEMU_OPTS =
++
++QEMU_VARS =                                                                         \
++    PYTHON=$(HOST_DIR)/usr/bin/python                                               \
++    PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages    \
++
++# Note: although QEMU uses a ./configure script, it is not compatible with
++#       the traditional autotools options (eg. --target et al.), so we have
++#       to override the default provided by the autotools-package infra, and
++#       provide our own. Sigh... :-/
++
++define QEMU_CONFIGURE_CMDS
++	( cd $(@D);                                 \
++	    LIBS='$(QEMU_LIBS)'                     \
++	    $(TARGET_CONFIGURE_OPTS)                \
++	    $(TARGET_CONFIGURE_ARGS)                \
++	    $(QEMU_VARS)                            \
++	    ./configure                             \
++	        --prefix=/usr                       \
++	        --cross-prefix=$(TARGET_CROSS)      \
++	        --audio-drv-list=                   \
++	        --audio-card-list=                  \
++	        --enable-kvm                        \
++	        --enable-nptl                       \
++	        --enable-attr                       \
++	        --enable-vhost-net                  \
++	        --enable-system                     \
++	        --enable-linux-user                 \
++	        --disable-bsd-user                  \
++	        --disable-xen                       \
++	        --disable-slirp                     \
++	        --disable-sdl                       \
++	        --disable-vnc                       \
++	        --disable-virtfs                    \
++	        --disable-brlapi                    \
++	        --disable-curses                    \
++	        --disable-curl                      \
++	        --disable-fdt                       \
++	        --disable-bluez                     \
++	        --disable-guest-base                \
++	        --disable-uuid                      \
++	        --disable-vde                       \
++	        --disable-linux-aio                 \
++	        --disable-cap-ng                    \
++	        --disable-docs                      \
++	        --disable-spice                     \
++	        --disable-rbd                       \
++	        --disable-libiscsi                  \
++	        --disable-usb-redir                 \
++	        --disable-smartcard                 \
++	        --disable-strip                     \
++	        --disable-seccomp                   \
++	        --disable-sparse                    \
++	        $(QEMU_OPTS)                        \
++	)
++endef
++
++# Need the LIBS_QGA because it does not 'inherit' the LIBS_TOOLS
++# we set at configure time, and there is no conrresponding LIBS_QGA
++# at configure time
++QEMU_MAKE_ENV += LIBS_TOOLS="$(QEMU_LIBS)" LIBS_QGA="$(QEMU_LIBS)" LIBS="$(QEMU_LIBS)"
++
++$(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
