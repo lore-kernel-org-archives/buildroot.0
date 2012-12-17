@@ -1,44 +1,45 @@
-From: Attila Kinali <attila@kinali.ch>
-Date: Mon, 17 Dec 2012 14:52:54 +0100
-Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
-	uboot
-In-Reply-To: <87pq2o8ad0.fsf@dell.be.48ers.dk>
-References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
- <20121205180533.71706c56@skate>
- <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
- <87k3sw9yt1.fsf@dell.be.48ers.dk>
- <20121205212703.98596423e9136f86fd8542b9@kinali.ch>
- <87pq2o8ad0.fsf@dell.be.48ers.dk>
-Message-ID: <20121217145254.d5e84bc903a5126aa11674d2@kinali.ch>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Dec 2012 16:50:37 +0100
+Subject: [Buildroot] [PATCH] imx-lib: new package
+In-Reply-To: <1355752131-31966-1-git-send-email-arnout@mind.be>
+References: <1355752131-31966-1-git-send-email-arnout@mind.be>
+Message-ID: <50CF3F4D.1030100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 05 Dec 2012 13:20:11 -0800
-Peter Korsgaard <jacmet@uclibc.org> wrote:
+On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
+> +IMX_LIB_INCLUDE = \
+> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
+> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
+> +	-I$(LINUX_DIR)/include
 
-> >>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
-> 
->  >> Not really. I don't have any imx hw here. Are you able to test it?
-> 
->  Attila> I have an i.mx23 EVK at work. So i guess i could test it.
-> 
-> Great, thanks.
+  Actually, I wonder if this is the right thing to do... This is a 
+userspace library that requires a platform-specific linux/xxx.h. For an 
+external toolchain, these headers don't exist in
+$(STAGING_DIR)/usr/include/linux
 
-Sorry, i didnt have time to test it yet.
-And unfortunately it doesn't look like i will have time for it
-until the end of the week. How it is between christmas and new year,
-i cannot tell. But i try to fit it in somehow.
+  Directly using $(LINUX_DIR)/include means that the headers are not 
+patched for userspace. For those platform-specific headers that's 
+probably not a problem, but it's not good for e.g. linux/types.h.
 
-Thanks for your patience and sorry for the delay
+  An easy workaround is to use -idirafter instead of -I.  However, 
+perhaps it's an even better idea to do 'make headers_install' as part of 
+the normal linux build process, so that packages depending on those 
+headers can use the patched version. But then again, is it a good idea to 
+replace the toolchain's kernel headers with a new set of kernel headers?
 
-			Attila Kinali
+  Any advice is welcome!
 
+  Regards,
+  Arnout
 
 -- 
-The trouble with you, Shev, is you don't say anything until you've saved
-up a whole truckload of damned heavy brick arguments and then you dump
-them all out and never look at the bleeding body mangled beneath the heap
-		-- Tirin, The Dispossessed, U. Le Guin
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
