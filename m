@@ -1,88 +1,27 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 17 Dec 2012 12:32:02 +0100
-Subject: [Buildroot] [PATCH] package/liburcu: Requires threads support
-Message-ID: <1355743922-26299-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Richard Genoud <richard.genoud@gmail.com>
+Date: Mon, 17 Dec 2012 13:41:24 +0100
+Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
+In-Reply-To: <805796c3-1a48-4485-8d1b-5c1c5d2cbfb4@zimbra2.corp.accelance.fr>
+References: <1354800968-16745-1-git-send-email-jeremy.rosen@openwide.fr>
+ <805796c3-1a48-4485-8d1b-5c1c5d2cbfb4@zimbra2.corp.accelance.fr>
+Message-ID: <CACQ1gAj-H5P3SaX=fhzxpW=aPwp+kJuZw2CQ9AYgmnSKZKpp7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/eeb6a81588a12e5b572a4e5d27e001b3ae5eac49/build-end.log
+2012/12/17 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+> Hello everybody
+>
+> there is a little bit more work to do on this patch (mainly updating a few more places in the documentation) but i'd like to have a go/no-go before I do that...
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- package/liburcu/Config.in      |    5 +++++
- package/lttng-libust/Config.in |    6 ++++--
- package/lttng-tools/Config.in  |    7 ++++++-
- 3 files changed, 15 insertions(+), 3 deletions(-)
+I was looking for that kind of feature, I hope it will be accepted.
+For now, I use the output/target tree and those parameters in the
+/etc/exports file:
+*(rw,all_squash,no_subtree_check,anonuid=my_uid,anongid=my_gid)
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 69878b1..f21541f 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBURCU
- 	bool "liburcu"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace implementation of the Read-Copy-Update (RCU)
- 	  synchronization mechanism. This library is mainly used by
-@@ -8,3 +9,7 @@ config BR2_PACKAGE_LIBURCU
- 	  purposes as well.
- 
- 	  http://lttng.org/urcu
-+
-+comment "liburcu needs threads support in toolchain"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index ab12963..45e0ede 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -6,8 +6,9 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	# util-linux needs wchar and largefile
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_LARGEFILE
--	# liburcu only works on some architectures
-+	# liburcu only works on some architectures and requires threads support
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace tracing library for the Lttng tracing
- 	  infrastructure. It allows userspace programs to create
-@@ -16,5 +17,6 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 
- 	  http://lttng.org
- 
--comment "lttng-libust needs WCHAR and LARGEFILE support"
-+comment "lttng-libust needs WCHAR, LARGEFILE and threads support"
- 	depends on !(BR2_USE_WCHAR || BR2_LARGEFILE)
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index b854757..3d95eeb 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -3,8 +3,9 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	depends on BR2_PACKAGE_LTTNG_MODULES
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_POPT
--	# liburcu only works on some architectures
-+	# liburcu only works on some architectures and requires thread support
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace utilities for the LTTng 2.0 tracing
- 	  infrastructure.
-@@ -22,3 +23,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	  lttng-libust.
- 
- 	  http://lttng.org
-+
-+comment "lttng-tools needs threads support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
--- 
-1.7.9.5
+But that means that all the FS is owned by my user.
+
+Regards,
+Richard.
