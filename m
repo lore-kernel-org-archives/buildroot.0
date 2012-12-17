@@ -1,96 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 23:49:19 +0100
-Subject: [Buildroot] [PATCH 1/1] Added FAAD,
- WavPack and gdk_pixbuf to gst-plugins.
-In-Reply-To: <1355774883.23993.YahooMailNeo@web120306.mail.ne1.yahoo.com>
-References: <1355774883.23993.YahooMailNeo@web120306.mail.ne1.yahoo.com>
-Message-ID: <50CFA16F.8090504@mind.be>
+Date: Tue, 18 Dec 2012 00:10:24 +0100
+Subject: [Buildroot] [PATCH] sg3-utils new package.
+In-Reply-To: <1355776546-25189-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1355776546-25189-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <50CFA660.4030007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 21:08, Bogdan Radulescu wrote:
-> Signed-off-by: Bogdan Radulescu<bogdan@nimblex.net>
-> ---
->   package/multimedia/gst-plugins-bad/Config.in            | 17 ++++++++++-------
->   package/multimedia/gst-plugins-bad/gst-plugins-bad.mk   |  7 +++++++
->   package/multimedia/gst-plugins-good/Config.in           |  7 +++++++
->   package/multimedia/gst-plugins-good/gst-plugins-good.mk | 14 ++++++++++++++
->   4 files changed, 38 insertions(+), 7 deletions(-)
->
-> diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-> index d87aec4..cd368fb 100644
-> --- a/package/multimedia/gst-plugins-bad/Config.in
-> +++ b/package/multimedia/gst-plugins-bad/Config.in
-> @@ -82,12 +82,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
->   config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FIELDANALYSIS
->       bool "fieldanalysis"
->
-> -config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
-> -    bool "freeze"
-> -
->   config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEVERB
->       bool "freeverb"
->
-> +config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
-> +    bool "freeze"
-> +
-
-  Good!
-
-  Should mention it in the commit message though, or even submit it as a 
-separate patch.
-
+On 17/12/12 21:35, Marek Belisko wrote:
+> Signed-off-by: Marek Belisko<marek.belisko@open-nandra.com>
 [snip]
-> -comment "plugins with external dependencies (there may be more available)"
-> +comment "plugins with external dependencies (not all from gstreamer are here)"
+> diff --git a/package/sg3_utils/Config.in b/package/sg3_utils/Config.in
+> new file mode 100644
+> index 0000000..1d2ab2a
+> --- /dev/null
+> +++ b/package/sg3_utils/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_SG3_UTILS
+> +	bool "sg3_utils"
 
-  Nice!
+  depends on BR2_LARGEFILE
+  depends on BR2_TOOLCHAIN_HAS_THREADS
+  (actually only sgp_dd needs threads so that could be patched out in the 
+Makefile).
 
- >
->   config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
->       bool "apexsink"
-> @@ -270,6 +270,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
->   config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV
->       bool "fbdev"
->
-> +config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD
-> +    bool "faad"
+  Not sure about IPv6.
 
-  Should select BR2_PACKAGE_FAAD2
 
-> +
->   config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBMMS
->       bool "libmms"
->       select BR2_PACKAGE_LIBMMS
-[snip]
-> diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-> index 33ecb5c..8c43ac8 100644
-> --- a/package/multimedia/gst-plugins-good/Config.in
-> +++ b/package/multimedia/gst-plugins-good/Config.in
-> @@ -161,6 +161,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOMIXER
->   config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC
->       bool "wavenc"
->
-> +config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK
-> +    bool "wavpack (*.wv audio)"
-
-  Should select BR2_PACKAGE_WAVPACK and should be put in the section with 
-external dependencies.
-
-  Otherwise, looks great!
+  Otherwise, looks good.
 
   Regards,
   Arnout
-
-> +
->   config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
->       bool "wavparse (*.wav audio)"
->       default y
-[snip]
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
