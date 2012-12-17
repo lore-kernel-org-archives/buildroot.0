@@ -1,31 +1,73 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 17 Dec 2012 14:12:01 +0100
-Subject: [Buildroot] [PATCH] inadyn: Needs MMU
-Message-ID: <1355749921-27134-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Dec 2012 14:39:30 +0100
+Subject: [Buildroot] Results of an all-package build
+In-Reply-To: <50CEDCB3.2070705@mind.be>
+References: <50C9901D.2020704@mind.be> <871ueqhna8.fsf@dell.be.48ers.dk>
+ <50CEDCB3.2070705@mind.be>
+Message-ID: <50CF2092.3040109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.org/results/11d681a7f2c1d55a3d70573e9145aa231f6d4298/build-end.log
+On 17/12/12 09:49, Arnout Vandecappelle wrote:
+> On 16/12/12 01:07, Peter Korsgaard wrote:
+>>>>>>> >>>>>>  "Arnout" == Arnout Vandecappelle<arnout@mind.be>   writes:
+>> >
+>> >  Hi,
+>> >
+>> >     Arnout>    As part of the test of the disable-doc patch I just sent, I
+>> >     Arnout>   built something approaching an allyespackageconfig for x86_64
+>> >     Arnout>   with a Sourcery-2012.09 toolchain.  Interesting to look at the
+>> >     Arnout>   results.
+>> >
+>> >     Arnout>   - The following fail to build:
+>> >
+>> >     Arnout>    * classpath
+>> >     Arnout>    * diffutils
+>> >     Arnout>    * gpsd
+>> >     Arnout>    * ipsec-tools
+>> >     Arnout>    * linux-pam
+>> >     Arnout>    * ltp-testsuite
+>> >     Arnout>    * matchbox-desktop
+>> >     Arnout>    * metacity
+>> >     Arnout>    * webkit
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- package/inadyn/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+  Webkit is fixed now.
 
-diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
-index 623da41..a2dfa74 100644
---- a/package/inadyn/Config.in
-+++ b/package/inadyn/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_INADYN
- 	bool "inadyn"
-+	depends on BR2_USE_MMU # Uses fork()
- 	help
- 	  INADYN is a free DynDNS client. It gives the possibility
- 	  to have your own fixed hostname registered on the internet,
+>> >     Arnout>    * neard
+>> >     Arnout>    * netatalk
+
+  Not fixed by lib64 patch...
+
+>> >     Arnout>    * network-manager
+>> >     Arnout>    * pcmanfm
+>> >     Arnout>    * pv
+>> >     Arnout>    * sconeserver-http-sconesite-image
+
+  Not fixed by using pkg-config...
+
+>> >     Arnout>    * xdriver_xf86-video-geode
+>> >     Arnout>    * xdriver_xf86-input-synaptics
+>> >     Arnout>    * valgrind (because glibc 2.16 is not supported, needs valgrind bump)
+>> >     Arnout>    * xstroke
+>> >     Arnout>    * grub
+>> >     Arnout>    * uboot (wrong ARCH parameter)
+
+>   I'll try to re-run current HEAD (which has fixed quite a few packages
+> already) with make -k and put it on a pastebin.
+
+  The results of a make -k of just these packages (except for grub and 
+uboot) is on http://tny.cz/8f1cf19f .
+
+  Regards,
+  Arnout
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
