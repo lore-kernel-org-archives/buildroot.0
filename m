@@ -1,50 +1,43 @@
-From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Mon, 17 Dec 2012 16:57:39 +0100 (CET)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 Dec 2012 17:01:19 +0100
 Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <50CF3F4D.1030100@mind.be>
+In-Reply-To: <50CF3F4D.1030100@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 17 Dec 2012 16:50:37 +0100")
 References: <1355752131-31966-1-git-send-email-arnout@mind.be>
  <50CF3F4D.1030100@mind.be>
-Message-ID: <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
+Message-ID: <871ueo8y7k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Monday, December 17, 2012 4:50:37 PM, Arnout Vandecappelle wrote:
-> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
-> > +IMX_LIB_INCLUDE = \
-> > +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
-> > +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
-> > +	-I$(LINUX_DIR)/include
-> 
->   Actually, I wonder if this is the right thing to do... This is a
-> userspace library that requires a platform-specific linux/xxx.h. For
-> an
-> external toolchain, these headers don't exist in
-> $(STAGING_DIR)/usr/include/linux
-> 
->   Directly using $(LINUX_DIR)/include means that the headers are not
-> patched for userspace. For those platform-specific headers that's
-> probably not a problem, but it's not good for e.g. linux/types.h.
-> 
->   An easy workaround is to use -idirafter instead of -I.  However,
-> perhaps it's an even better idea to do 'make headers_install' as part
-> of
-> the normal linux build process, so that packages depending on those
-> headers can use the patched version. But then again, is it a good
-> idea to
-> replace the toolchain's kernel headers with a new set of kernel
-> headers?
-> 
->   Any advice is welcome!
+ Arnout> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
+ >> +IMX_LIB_INCLUDE = \
+ >> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
+ >> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
+ >> +	-I$(LINUX_DIR)/include
 
-FYI, I've successfully built the 11.09.01 version under BuildRoot without the
-"-I$(LINUX_DIR)/include", and the issue that you mention is only for this
-folder. I had to make a patch to make the headers install work, but that should
-not be related. Can you try with your package?
+ Arnout>  Actually, I wonder if this is the right thing to do... This is a
+ Arnout> userspace library that requires a platform-specific linux/xxx.h. For
+ Arnout> an external toolchain, these headers don't exist in
+ Arnout> $(STAGING_DIR)/usr/include/linux
 
-Best regards,
-Beno?t
+ Arnout>  Directly using $(LINUX_DIR)/include means that the headers are not
+ Arnout> patched for userspace. For those platform-specific headers that's
+ Arnout> probably not a problem, but it's not good for e.g. linux/types.h.
+
+ Arnout>  An easy workaround is to use -idirafter instead of -I.  However,
+ Arnout> perhaps it's an even better idea to do 'make headers_install' as part
+ Arnout> of the normal linux build process, so that packages depending on those
+ Arnout> headers can use the patched version. But then again, is it a good idea
+ Arnout> to replace the toolchain's kernel headers with a new set of kernel
+ Arnout> headers?
+
+Another possibility is to bundle the needed kernel headers with the
+package, similar to how E.G. mtd-utils does it.
+
+-- 
+Bye, Peter Korsgaard
