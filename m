@@ -1,81 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 23:01:43 +0100
-Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <87mwxc76je.fsf@dell.be.48ers.dk>
-References: <1355752131-31966-1-git-send-email-arnout@mind.be>
- <50CF5987.90805@mind.be> <87mwxc76je.fsf@dell.be.48ers.dk>
-Message-ID: <50CF9647.3020506@mind.be>
+Date: Mon, 17 Dec 2012 23:05:28 +0100
+Subject: [Buildroot] [PATCH] netatalk : Fix BerkeleyDB library path
+In-Reply-To: <CAGduivzGSNwizLx8WbC+BN6J=dbmcDRjNyB7zc0stccS3X1BoQ@mail.gmail.com>
+References: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
+ <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87pq29bq11.fsf@dell.be.48ers.dk>
+ <CAGduivyvZNaaC8jdLzt1yVju3DS0Vu0fdaQYdHzK6LoRE==nYw@mail.gmail.com>
+ <50CF8203.1010601@mind.be>
+ <CAGduivzGSNwizLx8WbC+BN6J=dbmcDRjNyB7zc0stccS3X1BoQ@mail.gmail.com>
+Message-ID: <50CF9728.7050806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 21:44, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle<arnout@mind.be>  writes:
->
->   Arnout>  On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
->   >>  +if BR2_PACKAGE_IMX_LIB
->   >>  +choice
->   >>  +	prompt "i.MX platform"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
->   >>  +	bool "imx25-3stack"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
->   >>  +	bool "imx27ads"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
->   >>  +	bool "imx37-3stack"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
->   >>  +	bool "imx50"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
->   >>  +	bool "imx51"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
->   >>  +	bool "imx53"
->   >>  +
->   >>  +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
->   >>  +	bool "imx6q"
->   >>  +
->   >>  +endchoice
->
->   Arnout>   Here's a second issue that I'd like to get some feedback on:
->   Arnout>  gst-fsl-plugins also uses a PLATFORM definition, but the list of
->   Arnout>  platforms is slightly different:
->   Arnout>  MX28/MX233/MX25/MX27/MX31/MX35/MX37/MX51/MX53/MX50/MX5X/MX6
->
->   Arnout>   Ideally the 'platform' should be defined only once, but where? Or
->   Arnout>  should I add all the platforms to gst-fsl-plugins with a select of the
->   Arnout>  appropriate imx-lib platform?
->
-> We once talked about adding a SoC selection to buildroot, but decided it
-> would be too much effort to maintain.
+On 17/12/12 23:00, Maxime Hadjinlian wrote:
+> On Mon, Dec 17, 2012 at 9:35 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
+>> On 17/12/12 00:15, Maxime Hadjinlian wrote:
+[snip]
+>>   BDB_LIB isn't even used by configure, so I don't think does patch does
+>> much :-)
+> You're right, it should be BDB_LIBS at least.
 
-  But of course, maintaining it per package is even more effort...
-
->
-> Is the gst-fsl-plugins stuff still needed now that the coda driver is in
-> mainline?
-
-  Mainline v3.7 only has support for mx27 and mx51.
+  But BDB_LIBS is unconditionally set by configure.
 
 
->   Arnout>   I can only test the mx6q because that's the only one for which
->   Arnout>  I have a board... Build-testing doesn't make a difference
->   Arnout>  because all platforms use the same API.
->
-> I have access to mx28 / mx51 / mx53 / mx6q boards and could do some
-> testing during christmas.
+>>   The problem I encounter in my build is that configure uses `ls ...` to
+>> find the library, and my /bin/ls is linked against libacl.so.1. It seems
+>> LD_LIBRARY_PATH is overridden because ls fails with:
+>>
+>> /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.14' not found (required by /home/arnout/src/buildroot/output-ext-toolchain-x86_64/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libacl.so.1
+>>
+>>   And indeed, configure sets:
+>> eval export $shlibpath_var=$bdblibdir
+>>
+>>   This is OK for native builds, but not for cross-builds...
+> If I'm reading this correctly (and I'm not sure I am), there is one
+> bug with ls if you native hosts is 32bits but also, if you look the
+> value of atalk_libname, it will value lib64 and since the lib are not
+> put there by BerkeleyDB, it will also fail. And so we must look for
+> them in lib, right ? (That was I tried to fixed in my numerous
+> attempt).
 
-  OK, I'll try to post patches before the end of the week.
+  Yes, but the configure script already does that: if it fails to find it 
+in $atalk_libname and $atalk_libname != lib then it tries again in lib.
 
   Regards,
   Arnout
 
-
+[snip]
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
