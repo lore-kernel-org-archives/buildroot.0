@@ -1,59 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 18:27:19 +0100
+Date: Mon, 17 Dec 2012 18:33:21 +0100
 Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
+In-Reply-To: <871ueo8y7k.fsf@dell.be.48ers.dk>
 References: <1355752131-31966-1-git-send-email-arnout@mind.be>
- <50CF3F4D.1030100@mind.be>
- <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
-Message-ID: <50CF55F7.9090906@mind.be>
+ <50CF3F4D.1030100@mind.be> <871ueo8y7k.fsf@dell.be.48ers.dk>
+Message-ID: <50CF5761.7030902@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 16:57, Beno?t Th?baudeau wrote:
-> Dear Arnout Vandecappelle,
+On 17/12/12 17:01, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle<arnout@mind.be>  writes:
 >
-> On Monday, December 17, 2012 4:50:37 PM, Arnout Vandecappelle wrote:
->> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
->>> +IMX_LIB_INCLUDE = \
->>> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
->>> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
->>> +	-I$(LINUX_DIR)/include
->>
->>    Actually, I wonder if this is the right thing to do... This is a
->> userspace library that requires a platform-specific linux/xxx.h. For
->> an
->> external toolchain, these headers don't exist in
->> $(STAGING_DIR)/usr/include/linux
->>
->>    Directly using $(LINUX_DIR)/include means that the headers are not
->> patched for userspace. For those platform-specific headers that's
->> probably not a problem, but it's not good for e.g. linux/types.h.
->>
->>    An easy workaround is to use -idirafter instead of -I.  However,
->> perhaps it's an even better idea to do 'make headers_install' as part
->> of
->> the normal linux build process, so that packages depending on those
->> headers can use the patched version. But then again, is it a good
->> idea to
->> replace the toolchain's kernel headers with a new set of kernel
->> headers?
->>
->>    Any advice is welcome!
+>   Arnout>  On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
+>   >>  +IMX_LIB_INCLUDE = \
+>   >>  +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
+>   >>  +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
+>   >>  +	-I$(LINUX_DIR)/include
 >
-> FYI, I've successfully built the 11.09.01 version under BuildRoot without the
-> "-I$(LINUX_DIR)/include", and the issue that you mention is only for this
-> folder. I had to make a patch to make the headers install work, but that should
-> not be related. Can you try with your package?
+>   Arnout>   Actually, I wonder if this is the right thing to do... This is a
+>   Arnout>  userspace library that requires a platform-specific linux/xxx.h. For
+>   Arnout>  an external toolchain, these headers don't exist in
+>   Arnout>  $(STAGING_DIR)/usr/include/linux
+>
+>   Arnout>   Directly using $(LINUX_DIR)/include means that the headers are not
+>   Arnout>  patched for userspace. For those platform-specific headers that's
+>   Arnout>  probably not a problem, but it's not good for e.g. linux/types.h.
+>
+>   Arnout>   An easy workaround is to use -idirafter instead of -I.  However,
+>   Arnout>  perhaps it's an even better idea to do 'make headers_install' as part
+>   Arnout>  of the normal linux build process, so that packages depending on those
+>   Arnout>  headers can use the patched version. But then again, is it a good idea
+>   Arnout>  to replace the toolchain's kernel headers with a new set of kernel
+>   Arnout>  headers?
+>
+> Another possibility is to bundle the needed kernel headers with the
+> package, similar to how E.G. mtd-utils does it.
 
-  ipu/mxc_ipu_hl_lib.h needs linux/mxcfb.h which only exists in the imx 
-kernels.
+  Unfortunately, Freescale probably has a much lower standard about ABI 
+compatibility than kernel.org. Also it's relatively likely that a 
+buildroot user will use a different Freescale kernel than the one assumed 
+by buildroot. So you may end up with userspace assuming different struct 
+layouts than the kernel...
+
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
