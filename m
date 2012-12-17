@@ -1,62 +1,30 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Mon, 17 Dec 2012 21:35:46 +0100
-Subject: [Buildroot] [PATCH] sg3-utils new package.
-Message-ID: <1355776546-25189-1-git-send-email-marek.belisko@open-nandra.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 Dec 2012 21:42:32 +0100
+Subject: [Buildroot] [PATCH] imx-lib: new package
+In-Reply-To: <50CF5761.7030902@mind.be> (Arnout Vandecappelle's message of
+ "Mon, 17 Dec 2012 18:33:21 +0100")
+References: <1355752131-31966-1-git-send-email-arnout@mind.be>
+ <50CF3F4D.1030100@mind.be> <871ueo8y7k.fsf@dell.be.48ers.dk>
+ <50CF5761.7030902@mind.be>
+Message-ID: <87r4mo76mf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
----
- package/Config.in              |    1 +
- package/sg3_utils/Config.in    |    7 +++++++
- package/sg3_utils/sg3_utils.mk |   10 ++++++++++
- 3 files changed, 18 insertions(+)
- create mode 100644 package/sg3_utils/Config.in
- create mode 100644 package/sg3_utils/sg3_utils.mk
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/Config.in b/package/Config.in
-index d6af55d..269b3ff 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -253,6 +253,7 @@ source "package/rng-tools/Config.in"
- source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
-+source "package/sg3_utils/Config.in"
- source "package/smartmontools/Config.in"
- source "package/snowball-hdmiservice/Config.in"
- source "package/sredird/Config.in"
-diff --git a/package/sg3_utils/Config.in b/package/sg3_utils/Config.in
-new file mode 100644
-index 0000000..1d2ab2a
---- /dev/null
-+++ b/package/sg3_utils/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SG3_UTILS
-+	bool "sg3_utils"
-+	help
-+	  sg3_utils is a package of utilities that send SCSI commands to the
-+	  given <scsi_device> via a SCSI pass through.
-+
-+	  http://sg.danny.cz/sg/
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-new file mode 100644
-index 0000000..2eba3d3
---- /dev/null
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -0,0 +1,10 @@
-+#############################################################
-+#
-+# sg3_utils
-+#
-+#############################################################
-+SG3_UTILS_VERSION = 1.34
-+SG3_UTILS_SITE = http://sg.danny.cz/sg/p/
-+SG3_UTILS_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+ >> Another possibility is to bundle the needed kernel headers with the
+ >> package, similar to how E.G. mtd-utils does it.
+
+ Arnout>  Unfortunately, Freescale probably has a much lower standard about ABI
+ Arnout> compatibility than kernel.org. Also it's relatively likely that a
+ Arnout> buildroot user will use a different Freescale kernel than the one
+ Arnout> assumed by buildroot. So you may end up with userspace assuming
+ Arnout> different struct layouts than the kernel...
+
+Yeah, closed source mess :/
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
