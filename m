@@ -1,41 +1,158 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Mon, 17 Dec 2012 21:05:40 +0100
-Subject: [Buildroot] [PATCH] libglib2: fix g_print()
-Message-ID: <1355774740-28679-1-git-send-email-benoit.thebaudeau@advansee.com>
+From: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
+Date: Mon, 17 Dec 2012 12:08:03 -0800 (PST)
+Subject: [Buildroot] [PATCH 1/1] Added FAAD,
+	WavPack and gdk_pixbuf to gst-plugins.
+Message-ID: <1355774883.23993.YahooMailNeo@web120306.mail.ne1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If GLib is cross-compiled, the default printf settings that it selects are wrong
-for glibc. This leads to issues with the g_print() functions, e.g. "Aborted"
-errors returned by gst-inspect.
-
-This patch fixes this issue by setting printf configuration options compatible
-with glibc. These options should also be compatible with uClibc.
-
-This solution has been suggested for LTIB by Rogerio Nunes:
-https://community.freescale.com/thread/302734
-
-Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
 ---
- package/libglib2/libglib2.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+?package/multimedia/gst-plugins-bad/Config.in??????????? | 17 ++++++++++-------
+?package/multimedia/gst-plugins-bad/gst-plugins-bad.mk?? |? 7 +++++++
+?package/multimedia/gst-plugins-good/Config.in?????????? |? 7 +++++++
+?package/multimedia/gst-plugins-good/gst-plugins-good.mk | 14 ++++++++++++++
+?4 files changed, 38 insertions(+), 7 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 4427431..c3e510b 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -40,7 +40,8 @@ LIBGLIB2_CONF_ENV = \
- 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
- 		ac_use_included_regex=no gl_cv_c_restrict=no \
- 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_DIR)/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
--		ac_cv_func_posix_getgrgid_r=no \
-+		ac_cv_func_posix_getgrgid_r=no glib_cv_long_long_format=ll \
-+		ac_cv_func_printf_unix98=yes ac_cv_func_vsnprintf_c99=yes \
- 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
- 
- # old uClibc versions don't provide qsort_r
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index d87aec4..cd368fb 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -82,12 +82,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FIELDANALYSIS
+???? bool "fieldanalysis"
+?
+-config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
+-??? bool "freeze"
+-
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEVERB
+???? bool "freeverb"
+?
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
++??? bool "freeze"
++
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R
+???? bool "frei0r"
+?
+@@ -211,12 +211,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SMOOTH
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED
+???? bool "speed"
+?
+-config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
+-??? bool "subenc"
+-
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO
+???? bool "stereo"
+?
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
++??? bool "subenc"
++
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_TTA
+???? bool "tta"
+?
+@@ -241,7 +241,7 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VMNC
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_Y4M
+???? bool "y4m"
+?
+-comment "plugins with external dependencies (there may be more available)"
++comment "plugins with external dependencies (not all from gstreamer are here)"
+?
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
+???? bool "apexsink"
+@@ -270,6 +270,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV
+???? bool "fbdev"
+?
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD
++??? bool "faad"
++
+?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBMMS
+???? bool "libmms"
+???? select BR2_PACKAGE_LIBMMS
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index 714c987..183de7b 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -508,6 +508,13 @@ else
+?GST_PLUGINS_BAD_CONF_OPT += --disable-dvb
+?endif
+?
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD),y)
++GST_PLUGINS_BAD_CONF_OPT += --enable-faad
++GST_PLUGINS_BAD_DEPENDENCIES += faad2
++else
++GST_PLUGINS_BAD_CONF_OPT += --disable-faad
++endif
++
+?ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV),y)
+?GST_PLUGINS_BAD_CONF_OPT += --enable-fbdev
+?else
+diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
+index 33ecb5c..8c43ac8 100644
+--- a/package/multimedia/gst-plugins-good/Config.in
++++ b/package/multimedia/gst-plugins-good/Config.in
+@@ -161,6 +161,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOMIXER
+?config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC
+???? bool "wavenc"
+?
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK
++??? bool "wavpack (*.wv audio)"
++
+?config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
+???? bool "wavparse (*.wav audio)"
+???? default y
+@@ -186,6 +189,10 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
+???? bool "flac (libFLAC)"
+???? select BR2_PACKAGE_FLAC
+?
++config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
++??? bool "gdkpixbuf"
++??? select BR2_PACKAGE_GDK_PIXBUF
++
+?config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS
+???? bool "ossaudio (OSS audio)"
+?
+diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+index 18b4299..5e93a49 100644
+--- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
++++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+@@ -308,6 +308,13 @@ else
+?GST_PLUGINS_GOOD_CONF_OPT += --disable-wavenc
+?endif
+?
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-wavpack
++GST_PLUGINS_GOOD_DEPENDENCIES += wavpack
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-wavpack
++endif
++
+?ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE),y)
+?GST_PLUGINS_GOOD_CONF_OPT += --enable-wavparse
+?else
+@@ -347,6 +354,13 @@ else
+?GST_PLUGINS_GOOD_CONF_OPT += --disable-flac
+?endif
+?
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF),y)
++GST_PLUGINS_GOOD_CONF_OPT += --enable-gdk_pixbuf
++GST_PLUGINS_GOOD_DEPENDENCIES += gdk-pixbuf
++else
++GST_PLUGINS_GOOD_CONF_OPT += --disable-gdk_pixbuf
++endif
++
+?ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS),y)
+?GST_PLUGINS_GOOD_CONF_OPT += --enable-oss
+?else
 -- 
-1.7.10.4
+1.7.12.1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: gst-plugins.diff
+Type: application/octet-stream
+Size: 5046 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121217/d69ae7f5/attachment-0001.obj>
