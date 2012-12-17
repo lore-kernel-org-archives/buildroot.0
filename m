@@ -1,32 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 23:16:44 +0100
-Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <1905374549.1044823.1355782331560.JavaMail.root@advansee.com>
-References: <1355752131-31966-1-git-send-email-arnout@mind.be>
- <50CF5987.90805@mind.be> <87mwxc76je.fsf@dell.be.48ers.dk>
- <50CF9647.3020506@mind.be>
- <1905374549.1044823.1355782331560.JavaMail.root@advansee.com>
-Message-ID: <50CF99CC.8040603@mind.be>
+Date: Mon, 17 Dec 2012 23:18:11 +0100
+Subject: [Buildroot] [PATCH] netatalk : Fix BerkeleyDB library path
+In-Reply-To: <CAGduivzm4RUMxoUWtsQshupg5Q=OFU3BYaXAOpp8CRVxghQYtA@mail.gmail.com>
+References: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
+ <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87pq29bq11.fsf@dell.be.48ers.dk>
+ <CAGduivyvZNaaC8jdLzt1yVju3DS0Vu0fdaQYdHzK6LoRE==nYw@mail.gmail.com>
+ <50CF8203.1010601@mind.be>
+ <CAGduivzGSNwizLx8WbC+BN6J=dbmcDRjNyB7zc0stccS3X1BoQ@mail.gmail.com>
+ <50CF9728.7050806@mind.be>
+ <CAGduivzm4RUMxoUWtsQshupg5Q=OFU3BYaXAOpp8CRVxghQYtA@mail.gmail.com>
+Message-ID: <50CF9A23.4090409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 23:12, Beno?t Th?baudeau wrote:
-> On Monday, December 17, 2012 11:01:43 PM, Arnout Vandecappelle wrote:
->> On 17/12/12 21:44, Peter Korsgaard wrote:
->>> Is the gst-fsl-plugins stuff still needed now that the coda driver
->>> is in
->>> mainline?
->>
->>    Mainline v3.7 only has support for mx27 and mx51.
->
-> Even for mx27 and mx51, are you sure that the mainline implementation for CODA
-> is compatible with Freescale's imx-lib? I highly doubt it.
+On 17/12/12 23:13, Maxime Hadjinlian wrote:
+> On Mon, Dec 17, 2012 at 11:05 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
+[snip]
+>>   Yes, but the configure script already does that: if it fails to find it in
+>> $atalk_libname and $atalk_libname != lib then it tries again in lib.
+> Okay, I see what I missed and I'm looking at your patch, I'll go to
+> bed less stupid.
 
-  Peter's point is that with coda you don't need all that proprietary 
-stuff, it's just a media framework device.
+  The only reason I'm less stupid is that I spent three hours looking at 
+that configure script...
 
   Regards,
   Arnout
