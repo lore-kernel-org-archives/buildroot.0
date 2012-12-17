@@ -1,59 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 23:05:28 +0100
-Subject: [Buildroot] [PATCH] netatalk : Fix BerkeleyDB library path
-In-Reply-To: <CAGduivzGSNwizLx8WbC+BN6J=dbmcDRjNyB7zc0stccS3X1BoQ@mail.gmail.com>
-References: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
- <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
- <87pq29bq11.fsf@dell.be.48ers.dk>
- <CAGduivyvZNaaC8jdLzt1yVju3DS0Vu0fdaQYdHzK6LoRE==nYw@mail.gmail.com>
- <50CF8203.1010601@mind.be>
- <CAGduivzGSNwizLx8WbC+BN6J=dbmcDRjNyB7zc0stccS3X1BoQ@mail.gmail.com>
-Message-ID: <50CF9728.7050806@mind.be>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Mon, 17 Dec 2012 23:08:31 +0100 (CET)
+Subject: [Buildroot] [PATCH] imx-lib: new package
+In-Reply-To: <50CF9377.3040100@mind.be>
+References: <1355752131-31966-1-git-send-email-arnout@mind.be>
+ <50CF3F4D.1030100@mind.be>
+ <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
+ <50CF55F7.9090906@mind.be>
+ <58636407.1033142.1355773226690.JavaMail.root@advansee.com>
+ <50CF9377.3040100@mind.be>
+Message-ID: <500657286.1044720.1355782111169.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 23:00, Maxime Hadjinlian wrote:
-> On Mon, Dec 17, 2012 at 9:35 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
->> On 17/12/12 00:15, Maxime Hadjinlian wrote:
-[snip]
->>   BDB_LIB isn't even used by configure, so I don't think does patch does
->> much :-)
-> You're right, it should be BDB_LIBS at least.
+On Monday, December 17, 2012 10:49:43 PM, Arnout Vandecappelle wrote:
+> On 17/12/12 20:40, Beno?t Th?baudeau wrote:
+> >> >     ipu/mxc_ipu_hl_lib.h needs linux/mxcfb.h which only exists
+> >> >     in the
+> >> >     imx
+> >> >  kernels.
+> > I see. I did not have this issue because I have built a custom
+> > toolchain based
+> > on Freescale's kernel, so including these headers. This would not
+> > be very
+> > practical to impose the use of a custom toolchain here.
+> 
+>   I guess the custom toolchain isn't uClibc-based? Because it looks
+>   like
+> some of the binary packages depend on glibc.
 
-  But BDB_LIBS is unconditionally set by configure.
+It is indeed glibc-based.
 
-
->>   The problem I encounter in my build is that configure uses `ls ...` to
->> find the library, and my /bin/ls is linked against libacl.so.1. It seems
->> LD_LIBRARY_PATH is overridden because ls fails with:
->>
->> /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.14' not found (required by /home/arnout/src/buildroot/output-ext-toolchain-x86_64/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libacl.so.1
->>
->>   And indeed, configure sets:
->> eval export $shlibpath_var=$bdblibdir
->>
->>   This is OK for native builds, but not for cross-builds...
-> If I'm reading this correctly (and I'm not sure I am), there is one
-> bug with ls if you native hosts is 32bits but also, if you look the
-> value of atalk_libname, it will value lib64 and since the lib are not
-> put there by BerkeleyDB, it will also fail. And so we must look for
-> them in lib, right ? (That was I tried to fixed in my numerous
-> attempt).
-
-  Yes, but the configure script already does that: if it fails to find it 
-in $atalk_libname and $atalk_libname != lib then it tries again in lib.
-
-  Regards,
-  Arnout
-
-[snip]
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Beno?t
