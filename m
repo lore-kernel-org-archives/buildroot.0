@@ -1,53 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 18:33:21 +0100
+Date: Mon, 17 Dec 2012 18:42:31 +0100
 Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <871ueo8y7k.fsf@dell.be.48ers.dk>
+In-Reply-To: <1355752131-31966-1-git-send-email-arnout@mind.be>
 References: <1355752131-31966-1-git-send-email-arnout@mind.be>
- <50CF3F4D.1030100@mind.be> <871ueo8y7k.fsf@dell.be.48ers.dk>
-Message-ID: <50CF5761.7030902@mind.be>
+Message-ID: <50CF5987.90805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 17:01, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle<arnout@mind.be>  writes:
->
->   Arnout>  On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
->   >>  +IMX_LIB_INCLUDE = \
->   >>  +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
->   >>  +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
->   >>  +	-I$(LINUX_DIR)/include
->
->   Arnout>   Actually, I wonder if this is the right thing to do... This is a
->   Arnout>  userspace library that requires a platform-specific linux/xxx.h. For
->   Arnout>  an external toolchain, these headers don't exist in
->   Arnout>  $(STAGING_DIR)/usr/include/linux
->
->   Arnout>   Directly using $(LINUX_DIR)/include means that the headers are not
->   Arnout>  patched for userspace. For those platform-specific headers that's
->   Arnout>  probably not a problem, but it's not good for e.g. linux/types.h.
->
->   Arnout>   An easy workaround is to use -idirafter instead of -I.  However,
->   Arnout>  perhaps it's an even better idea to do 'make headers_install' as part
->   Arnout>  of the normal linux build process, so that packages depending on those
->   Arnout>  headers can use the patched version. But then again, is it a good idea
->   Arnout>  to replace the toolchain's kernel headers with a new set of kernel
->   Arnout>  headers?
->
-> Another possibility is to bundle the needed kernel headers with the
-> package, similar to how E.G. mtd-utils does it.
+On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
+> +if BR2_PACKAGE_IMX_LIB
+> +choice
+> +	prompt "i.MX platform"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
+> +	bool "imx25-3stack"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
+> +	bool "imx27ads"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
+> +	bool "imx37-3stack"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
+> +	bool "imx50"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
+> +	bool "imx51"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
+> +	bool "imx53"
+> +
+> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
+> +	bool "imx6q"
+> +
+> +endchoice
 
-  Unfortunately, Freescale probably has a much lower standard about ABI 
-compatibility than kernel.org. Also it's relatively likely that a 
-buildroot user will use a different Freescale kernel than the one assumed 
-by buildroot. So you may end up with userspace assuming different struct 
-layouts than the kernel...
+  Here's a second issue that I'd like to get some feedback on:
+gst-fsl-plugins also uses a PLATFORM definition, but the list of 
+platforms is slightly different:
+MX28/MX233/MX25/MX27/MX31/MX35/MX37/MX51/MX53/MX50/MX5X/MX6
+
+  Ideally the 'platform' should be defined only once, but where? Or 
+should I add all the platforms to gst-fsl-plugins with a select of the 
+appropriate imx-lib platform?
+
+  What to do with the platforms that are different? In some cases, I can 
+make a guess of course (e.g. MX27 -> IMX27ADS)
+
+  I can only test the mx6q because that's the only one for which I have a 
+board... Build-testing doesn't make a difference because all platforms 
+use the same API.
 
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
