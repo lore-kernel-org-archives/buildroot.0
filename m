@@ -1,67 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 18:42:31 +0100
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Mon, 17 Dec 2012 20:40:26 +0100 (CET)
 Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <1355752131-31966-1-git-send-email-arnout@mind.be>
+In-Reply-To: <50CF55F7.9090906@mind.be>
 References: <1355752131-31966-1-git-send-email-arnout@mind.be>
-Message-ID: <50CF5987.90805@mind.be>
+ <50CF3F4D.1030100@mind.be>
+ <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
+ <50CF55F7.9090906@mind.be>
+Message-ID: <58636407.1033142.1355773226690.JavaMail.root@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
-> +if BR2_PACKAGE_IMX_LIB
-> +choice
-> +	prompt "i.MX platform"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
-> +	bool "imx25-3stack"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
-> +	bool "imx27ads"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
-> +	bool "imx37-3stack"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
-> +	bool "imx50"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
-> +	bool "imx51"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
-> +	bool "imx53"
-> +
-> +config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
-> +	bool "imx6q"
-> +
-> +endchoice
+Dear Arnout Vandecappelle,
 
-  Here's a second issue that I'd like to get some feedback on:
-gst-fsl-plugins also uses a PLATFORM definition, but the list of 
-platforms is slightly different:
-MX28/MX233/MX25/MX27/MX31/MX35/MX37/MX51/MX53/MX50/MX5X/MX6
+On Monday, December 17, 2012 6:27:19 PM, Arnout Vandecappelle wrote:
+> On 17/12/12 16:57, Beno?t Th?baudeau wrote:
+> > Dear Arnout Vandecappelle,
+> >
+> > On Monday, December 17, 2012 4:50:37 PM, Arnout Vandecappelle
+> > wrote:
+> >> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
+> >>> +IMX_LIB_INCLUDE = \
+> >>> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
+> >>> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
+> >>> +	-I$(LINUX_DIR)/include
+> >>
+> >>    Actually, I wonder if this is the right thing to do... This is
+> >>    a
+> >> userspace library that requires a platform-specific linux/xxx.h.
+> >> For
+> >> an
+> >> external toolchain, these headers don't exist in
+> >> $(STAGING_DIR)/usr/include/linux
+> >>
+> >>    Directly using $(LINUX_DIR)/include means that the headers are
+> >>    not
+> >> patched for userspace. For those platform-specific headers that's
+> >> probably not a problem, but it's not good for e.g. linux/types.h.
+> >>
+> >>    An easy workaround is to use -idirafter instead of -I.
+> >>    However,
+> >> perhaps it's an even better idea to do 'make headers_install' as
+> >> part
+> >> of
+> >> the normal linux build process, so that packages depending on
+> >> those
+> >> headers can use the patched version. But then again, is it a good
+> >> idea to
+> >> replace the toolchain's kernel headers with a new set of kernel
+> >> headers?
+> >>
+> >>    Any advice is welcome!
+> >
+> > FYI, I've successfully built the 11.09.01 version under BuildRoot
+> > without the
+> > "-I$(LINUX_DIR)/include", and the issue that you mention is only
+> > for this
+> > folder. I had to make a patch to make the headers install work, but
+> > that should
+> > not be related. Can you try with your package?
+> 
+>   ipu/mxc_ipu_hl_lib.h needs linux/mxcfb.h which only exists in the
+>   imx
+> kernels.
 
-  Ideally the 'platform' should be defined only once, but where? Or 
-should I add all the platforms to gst-fsl-plugins with a select of the 
-appropriate imx-lib platform?
+I see. I did not have this issue because I have built a custom toolchain based
+on Freescale's kernel, so including these headers. This would not be very
+practical to impose the use of a custom toolchain here.
 
-  What to do with the platforms that are different? In some cases, I can 
-make a guess of course (e.g. MX27 -> IMX27ADS)
-
-  I can only test the mx6q because that's the only one for which I have a 
-board... Build-testing doesn't make a difference because all platforms 
-use the same API.
-
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Best regards,
+Beno?t
