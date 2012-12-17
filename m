@@ -1,74 +1,73 @@
-From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Mon, 17 Dec 2012 20:40:26 +0100 (CET)
-Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <50CF55F7.9090906@mind.be>
-References: <1355752131-31966-1-git-send-email-arnout@mind.be>
- <50CF3F4D.1030100@mind.be>
- <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
- <50CF55F7.9090906@mind.be>
-Message-ID: <58636407.1033142.1355773226690.JavaMail.root@advansee.com>
+From: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
+Date: Mon, 17 Dec 2012 12:04:08 -0800 (PST)
+Subject: [Buildroot] [PATCH 1/1] Added new package ncdu
+Message-ID: <1355774648.20811.YahooMailNeo@web120305.mail.ne1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
 
-On Monday, December 17, 2012 6:27:19 PM, Arnout Vandecappelle wrote:
-> On 17/12/12 16:57, Beno?t Th?baudeau wrote:
-> > Dear Arnout Vandecappelle,
-> >
-> > On Monday, December 17, 2012 4:50:37 PM, Arnout Vandecappelle
-> > wrote:
-> >> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
-> >>> +IMX_LIB_INCLUDE = \
-> >>> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
-> >>> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
-> >>> +	-I$(LINUX_DIR)/include
-> >>
-> >>    Actually, I wonder if this is the right thing to do... This is
-> >>    a
-> >> userspace library that requires a platform-specific linux/xxx.h.
-> >> For
-> >> an
-> >> external toolchain, these headers don't exist in
-> >> $(STAGING_DIR)/usr/include/linux
-> >>
-> >>    Directly using $(LINUX_DIR)/include means that the headers are
-> >>    not
-> >> patched for userspace. For those platform-specific headers that's
-> >> probably not a problem, but it's not good for e.g. linux/types.h.
-> >>
-> >>    An easy workaround is to use -idirafter instead of -I.
-> >>    However,
-> >> perhaps it's an even better idea to do 'make headers_install' as
-> >> part
-> >> of
-> >> the normal linux build process, so that packages depending on
-> >> those
-> >> headers can use the patched version. But then again, is it a good
-> >> idea to
-> >> replace the toolchain's kernel headers with a new set of kernel
-> >> headers?
-> >>
-> >>    Any advice is welcome!
-> >
-> > FYI, I've successfully built the 11.09.01 version under BuildRoot
-> > without the
-> > "-I$(LINUX_DIR)/include", and the issue that you mention is only
-> > for this
-> > folder. I had to make a patch to make the headers install work, but
-> > that should
-> > not be related. Can you try with your package?
-> 
->   ipu/mxc_ipu_hl_lib.h needs linux/mxcfb.h which only exists in the
->   imx
-> kernels.
+Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
+---
+?package/Config.in????? |? 1 +
+?package/ncdu/Config.in |? 7 +++++++
+?package/ncdu/ncdu.mk?? | 13 +++++++++++++
+?3 files changed, 21 insertions(+)
+?create mode 100644 package/ncdu/Config.in
+?create mode 100644 package/ncdu/ncdu.mk
 
-I see. I did not have this issue because I have built a custom toolchain based
-on Freescale's kernel, so including these headers. This would not be very
-practical to impose the use of a custom toolchain here.
-
-Best regards,
-Beno?t
+diff --git a/package/Config.in b/package/Config.in
+index 171db8f..2d12cdc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -732,6 +732,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+?source "package/module-init-tools/Config.in"
+?endif
+?source "package/monit/Config.in"
++source "package/ncdu/Config.in"
+?if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+?source "package/procps/Config.in"
+?source "package/psmisc/Config.in"
+diff --git a/package/ncdu/Config.in b/package/ncdu/Config.in
+new file mode 100644
+index 0000000..d8b4db4
+--- /dev/null
++++ b/package/ncdu/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_NCDU
++?????? bool "ncdu"
++?????? select BR2_PACKAGE_NCURSES
++?????? help
++???????? ncdu is a disk usage analyzer with an ncurses interface
++
++???????? http://dev.yorhel.nl/ncdu
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+new file mode 100644
+index 0000000..26f3b5e
+--- /dev/null
++++ b/package/ncdu/ncdu.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# ncdu
++#
++#############################################################
++NCDU_VERSION=1.9
++NCDU_SITE=http://dev.yorhel.nl/download/
++NCDU_INSTALL_STAGING_OPT = instroot=$(STAGING_DIR) install
++NCDU_INSTALL_TARGET_OPT = instroot=$(TARGET_DIR) install
++
++NCDU_DEPENDENCIES = ncurses
++
++$(eval $(autotools-package))
+-- 
+1.7.12.1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: ncdu.diff
+Type: application/octet-stream
+Size: 1812 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121217/42140369/attachment.obj>
