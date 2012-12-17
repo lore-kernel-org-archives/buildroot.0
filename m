@@ -1,40 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 17 Dec 2012 09:17:00 +0100
-Subject: [Buildroot] [git commit] package/spice: Only builds on x86
-Message-ID: <20121217081706.3D89A9A321@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Dec 2012 07:55:19 +0100
+Subject: [Buildroot] [PATCH] qwt: new package
+In-Reply-To: <877goifgwv.fsf@dell.be.48ers.dk>
+References: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
+ <1355094387-22886-6-git-send-email-s.martin49@gmail.com>
+ <877goifgwv.fsf@dell.be.48ers.dk>
+Message-ID: <50CEC1D7.9050207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f452a86b8523d90ffa7a94cb1d540e574ceb165
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 16/12/12 11:08, Peter Korsgaard wrote:
+>   Samuel>  +define QWT_CLEAN_CMDS
+>   Samuel>  +	-$(MAKE) -C $(@D) clean
+>   Samuel>  +	-rm $(TARGET_DIR)/usr/lib/libqwt.so.*
+>
+> If we cannot clean completely (E.G. everything else installed into
+> staging), then I prefer just not providing a clean target.
 
-The spice configure script explicitly checks for x86 or x86-64, so
-disable it on other architectures
+  Begging to differ: I think it does make sense to have clean commands
+but no uninstall commands. Of course, the definition above should have
+been split up into a clean and an uninstall.
 
-Fixes
-http://autobuild.buildroot.org/results/7f7e2d46542a685b93211f76ad063f8b2ba7b5e5/build-end.log
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/spice/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index b1e187a..1b264e7 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -1,8 +1,10 @@
- comment "spice server depends on python (for pyparsing)"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_PYTHON
- 
- config BR2_PACKAGE_SPICE
- 	bool "spice server"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_CELT051
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
