@@ -1,94 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 23:34:57 +0100
-Subject: [Buildroot] [PATCH 1/1] Added new package ncdu
-In-Reply-To: <1355774648.20811.YahooMailNeo@web120305.mail.ne1.yahoo.com>
-References: <1355774648.20811.YahooMailNeo@web120305.mail.ne1.yahoo.com>
-Message-ID: <50CF9E11.5070808@mind.be>
+From: Gary Coulbourne <bear@bears.org>
+Date: Mon, 17 Dec 2012 17:38:22 -0500
+Subject: [Buildroot] [PATCH] dbus version number bump and fix permissions of
+	launch helper
+Message-ID: <CAEnpE0y2G3GPuXk4aY5cszt2axGfUVbsr9PJdLeLvX7eVOmnhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Dear Bogdan,
+The stable version of dbus is currently a 1.6.8.  This patch bumps that
+version number.  It also fixes a bug in the installation of dbus: the
+launch helper was not being installed with the correct permissions nor
+users.
 
-  Thanks for your patch.
+---
+ package/dbus/dbus.mk |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-  We prefer generally prefer patches to be sent in-line with the correct 
-spacing - using git send-email is the easiest way to send a patch.
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index ec42874..c597dcc 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -3,7 +3,7 @@
+ # dbus
+ #
+ #############################################################
+-DBUS_VERSION = 1.4.24
++DBUS_VERSION = 1.6.8
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
+ DBUS_INSTALL_STAGING = YES
 
-  Some additional comments below.
+@@ -68,6 +68,10 @@ define DBUS_INSTALL_TARGET_FIXUP
+        $(INSTALL) -m 0755 -D package/dbus/S30dbus
+$(TARGET_DIR)/etc/init.d/S30dbus
+ endef
 
-On 17/12/12 21:04, Bogdan Radulescu wrote:
->
-> Signed-off-by: Bogdan Radulescu<bogdan@nimblex.net>
-[snip]
-> diff --git a/package/ncdu/Config.in b/package/ncdu/Config.in
-> new file mode 100644
-> index 0000000..d8b4db4
-> --- /dev/null
-> +++ b/package/ncdu/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_NCDU
-> +       bool "ncdu"
++define DBUS_PERMISSIONS
++/usr/libexec/dbus-daemon-launch-helper f 4750 0 81 - - - - -
++endef
++
+ DBUS_POST_INSTALL_TARGET_HOOKS += DBUS_INSTALL_TARGET_FIXUP
 
-  Indentation in Config.in should be a single TAB.
-
-> +       select BR2_PACKAGE_NCURSES
-> +       help
-> +         ncdu is a disk usage analyzer with an ncurses interface
-
-  ... except for help which should be one TAB + 2 spaces.
-
-> +
-> +         http://dev.yorhel.nl/ncdu
-> diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-> new file mode 100644
-> index 0000000..26f3b5e
-> --- /dev/null
-> +++ b/package/ncdu/ncdu.mk
-> @@ -0,0 +1,13 @@
-> +#############################################################
-> +#
-> +# ncdu
-> +#
-> +#############################################################
-> +NCDU_VERSION=1.9
-
-  We prefer spaces around the =
-
-NCDU_VERSION = 1.9
-
-> +NCDU_SITE=http://dev.yorhel.nl/download/
-> +NCDU_INSTALL_STAGING_OPT = instroot=$(STAGING_DIR) install
-
-  Since you don't install to staging, this is redundant.
-
-> +NCDU_INSTALL_TARGET_OPT = instroot=$(TARGET_DIR) install
-
-  I don't understand where this comes from... It looks like it should be 
-DESTDIR=$(TARGET_DIR), which is the default, so this line is redundant as 
-well.
-
-  It would be nice to also add the licensing:
-
-NCDU_LICENSE = MIT
-NCDU_LICENSE_FILES = COPYING
-
-(test with 'make legal-info')
-
-  Regards,
-  Arnout
-
-> +
-> +NCDU_DEPENDENCIES = ncurses
-> +
-> +$(eval $(autotools-package))
-
+ HOST_DBUS_DEPENDENCIES = host-pkgconf host-expat
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121217/9a560b4d/attachment.html>
