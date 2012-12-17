@@ -1,36 +1,63 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Mon, 17 Dec 2012 17:35:16 +0100
-Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
-In-Reply-To: <CAHXCMMKXJ8Crr770fXoYz=+SbNcU0VCNXkMcvXsKJKRmd0xsWg@mail.gmail.com>
-References: <1354800968-16745-1-git-send-email-jeremy.rosen@openwide.fr>
- <805796c3-1a48-4485-8d1b-5c1c5d2cbfb4@zimbra2.corp.accelance.fr>
- <CACQ1gAj-H5P3SaX=fhzxpW=aPwp+kJuZw2CQ9AYgmnSKZKpp7g@mail.gmail.com>
- <CAHXCMMKXJ8Crr770fXoYz=+SbNcU0VCNXkMcvXsKJKRmd0xsWg@mail.gmail.com>
-Message-ID: <CACQ1gAgBzAdYmraTjnCKLN5G-a6QQSuvPN4Z3KUzaLDNd0UE2A@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Dec 2012 18:27:19 +0100
+Subject: [Buildroot] [PATCH] imx-lib: new package
+In-Reply-To: <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
+References: <1355752131-31966-1-git-send-email-arnout@mind.be>
+ <50CF3F4D.1030100@mind.be>
+ <2112128925.1003709.1355759859440.JavaMail.root@advansee.com>
+Message-ID: <50CF55F7.9090906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/12/17 Samuel Martin <s.martin49@gmail.com>:
-> Hi Richard,
-> There are plenty of good reasons to not use output/target as root for
-> a chroot or a NFS root, as explained here:
-> http://buildroot.org/downloads/manual/manual.html#faq-why-not-use-target-as-chroot
+On 17/12/12 16:57, Beno?t Th?baudeau wrote:
+> Dear Arnout Vandecappelle,
 >
-> And here, you'll find the right way to do this (so far):
-> http://buildroot.org/downloads/manual/manual.html#_nfs_boot
+> On Monday, December 17, 2012 4:50:37 PM, Arnout Vandecappelle wrote:
+>> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
+>>> +IMX_LIB_INCLUDE = \
+>>> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
+>>> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
+>>> +	-I$(LINUX_DIR)/include
+>>
+>>    Actually, I wonder if this is the right thing to do... This is a
+>> userspace library that requires a platform-specific linux/xxx.h. For
+>> an
+>> external toolchain, these headers don't exist in
+>> $(STAGING_DIR)/usr/include/linux
+>>
+>>    Directly using $(LINUX_DIR)/include means that the headers are not
+>> patched for userspace. For those platform-specific headers that's
+>> probably not a problem, but it's not good for e.g. linux/types.h.
+>>
+>>    An easy workaround is to use -idirafter instead of -I.  However,
+>> perhaps it's an even better idea to do 'make headers_install' as part
+>> of
+>> the normal linux build process, so that packages depending on those
+>> headers can use the patched version. But then again, is it a good
+>> idea to
+>> replace the toolchain's kernel headers with a new set of kernel
+>> headers?
+>>
+>>    Any advice is welcome!
 >
-Yes, I know...
-It's just more convenient (fast) for me like that:
-When I recompile a small software (with make mysoft-reconfigure), I'd
-like it to be fast, and de-tar-ing the whole RFS takes some time.
-But, it's true that it's not the right way to do it.
-(I also always forgot to sudo when I want to copy something to the
-nfsroot, so, like that, the tree is mine and there's no cp problem)
+> FYI, I've successfully built the 11.09.01 version under BuildRoot without the
+> "-I$(LINUX_DIR)/include", and the issue that you mention is only for this
+> folder. I had to make a patch to make the headers install work, but that should
+> not be related. Can you try with your package?
 
-Thanks for the links though !
+  ipu/mxc_ipu_hl_lib.h needs linux/mxcfb.h which only exists in the imx 
+kernels.
 
-Regards,
-Richard.
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
