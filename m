@@ -1,145 +1,44 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 17 Dec 2012 14:48:50 +0100
-Subject: [Buildroot] [PATCH] imx-lib: new package
-Message-ID: <1355752131-31966-1-git-send-email-arnout@mind.be>
+From: Attila Kinali <attila@kinali.ch>
+Date: Mon, 17 Dec 2012 14:52:54 +0100
+Subject: [Buildroot] [PATCH] add support for Freescale .sb format to
+	uboot
+In-Reply-To: <87pq2o8ad0.fsf@dell.be.48ers.dk>
+References: <CAEnpE0yzcer9dNew-6yfwmjf+L+a=Kgrf-tZ++Y2gMRcwmGYLw@mail.gmail.com>
+ <20121205180533.71706c56@skate>
+ <20121205181613.380b6492c8cfedefafae9655@kinali.ch>
+ <87k3sw9yt1.fsf@dell.be.48ers.dk>
+ <20121205212703.98596423e9136f86fd8542b9@kinali.ch>
+ <87pq2o8ad0.fsf@dell.be.48ers.dk>
+Message-ID: <20121217145254.d5e84bc903a5126aa11674d2@kinali.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On Wed, 05 Dec 2012 13:20:11 -0800
+Peter Korsgaard <jacmet@uclibc.org> wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-I'm not sure if I'll get the packages that use this library in an
-upstreamable state - but at least this one is.
+> >>>>> "Attila" == Attila Kinali <attila@kinali.ch> writes:
+> 
+>  >> Not really. I don't have any imx hw here. Are you able to test it?
+> 
+>  Attila> I have an i.mx23 EVK at work. So i guess i could test it.
+> 
+> Great, thanks.
 
----
- package/Config.in          |    1 +
- package/imx-lib/Config.in  |   53 ++++++++++++++++++++++++++++++++++++++++++++
- package/imx-lib/imx-lib.mk |   41 ++++++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 package/imx-lib/Config.in
- create mode 100644 package/imx-lib/imx-lib.mk
+Sorry, i didnt have time to test it yet.
+And unfortunately it doesn't look like i will have time for it
+until the end of the week. How it is between christmas and new year,
+i cannot tell. But i try to fit it in somehow.
 
-diff --git a/package/Config.in b/package/Config.in
-index d6af55d..5151346 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -420,6 +420,7 @@ endmenu
- 
- menu "Hardware handling"
- source "package/ccid/Config.in"
-+source "package/imx-lib/Config.in"
- source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
-diff --git a/package/imx-lib/Config.in b/package/imx-lib/Config.in
-new file mode 100644
-index 0000000..0ed452a
---- /dev/null
-+++ b/package/imx-lib/Config.in
-@@ -0,0 +1,53 @@
-+comment "imx-lib needs an imx-specific kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_IMX_LIB
-+	bool "imx-lib"
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_arm
-+	help
-+	  Library of userspace helpers specific for the Freescale i.MX
-+	  platform. It wraps the kernel interfaces for some i.MX platform
-+	  specific drivers. It requires a kernel that includes the i.MX
-+	  specific headers to be built.
-+
-+	  This library is provided by Freescale as-is and doesn't have
-+	  an upstream.
-+
-+if BR2_PACKAGE_IMX_LIB
-+choice
-+	prompt "i.MX platform"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
-+	bool "imx25-3stack"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
-+	bool "imx27ads"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
-+	bool "imx37-3stack"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
-+	bool "imx50"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
-+	bool "imx51"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
-+	bool "imx53"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
-+	bool "imx6q"
-+
-+endchoice
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM
-+	string
-+	default "IMX25_3STACK" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
-+	default "IMX27ADS" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
-+	default "IMX37_3STACK" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
-+	default "IMX50" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
-+	default "IMX51" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
-+	default "IMX53" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
-+	default "IMX6Q" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
-+endif
-diff --git a/package/imx-lib/imx-lib.mk b/package/imx-lib/imx-lib.mk
-new file mode 100644
-index 0000000..29f5ae1
---- /dev/null
-+++ b/package/imx-lib/imx-lib.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# imx-lib
-+#
-+#############################################################
-+
-+IMX_LIB_VERSION = 12.09.01
-+# No official download site from freescale, just this mirror
-+IMX_LIB_SITE    = http://download.ossystems.com.br/bsp/freescale/source
-+IMX_LIB_LICENSE = LGPLv2.1+
-+# No license file included
-+
-+IMX_LIB_INSTALL_STAGING = YES
-+
-+# imx-lib needs access to imx-specific kernel headers
-+IMX_LIB_DEPENDENCIES += linux
-+IMX_LIB_INCLUDE = \
-+	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
-+	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
-+	-I$(LINUX_DIR)/include
-+
-+IMX_LIB_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
-+	INCLUDE="$(IMX_LIB_INCLUDE)"
-+
-+define IMX_LIB_BUILD_CMDS
-+	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D)
-+endef
-+
-+define IMX_LIB_INSTALL_STAGING_CMDS
-+	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D) DEST_DIR=$(STAGING_DIR) install
-+endef
-+
-+define IMX_LIB_INSTALL_TARGET_CMDS
-+	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D) DEST_DIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+Thanks for your patience and sorry for the delay
+
+			Attila Kinali
+
+
 -- 
-1.7.10.4
+The trouble with you, Shev, is you don't say anything until you've saved
+up a whole truckload of damned heavy brick arguments and then you dump
+them all out and never look at the bleeding body mangled beneath the heap
+		-- Tirin, The Dispossessed, U. Le Guin
