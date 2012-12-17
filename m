@@ -1,158 +1,84 @@
-From: Bogdan Radulescu <bogdan_radulescu99@yahoo.com>
-Date: Mon, 17 Dec 2012 12:08:03 -0800 (PST)
-Subject: [Buildroot] [PATCH 1/1] Added FAAD,
-	WavPack and gdk_pixbuf to gst-plugins.
-Message-ID: <1355774883.23993.YahooMailNeo@web120306.mail.ne1.yahoo.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Dec 2012 21:35:15 +0100
+Subject: [Buildroot] [PATCH] netatalk : Fix BerkeleyDB library path
+In-Reply-To: <CAGduivyvZNaaC8jdLzt1yVju3DS0Vu0fdaQYdHzK6LoRE==nYw@mail.gmail.com>
+References: <CAGduivwRviPJr6p6ypTZn4U-nDX4HQxXOPYE2s7=zzPZPYozjw@mail.gmail.com>
+ <1354981988-32415-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87pq29bq11.fsf@dell.be.48ers.dk>
+ <CAGduivyvZNaaC8jdLzt1yVju3DS0Vu0fdaQYdHzK6LoRE==nYw@mail.gmail.com>
+Message-ID: <50CF8203.1010601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
----
-?package/multimedia/gst-plugins-bad/Config.in??????????? | 17 ++++++++++-------
-?package/multimedia/gst-plugins-bad/gst-plugins-bad.mk?? |? 7 +++++++
-?package/multimedia/gst-plugins-good/Config.in?????????? |? 7 +++++++
-?package/multimedia/gst-plugins-good/gst-plugins-good.mk | 14 ++++++++++++++
-?4 files changed, 38 insertions(+), 7 deletions(-)
+On 17/12/12 00:15, Maxime Hadjinlian wrote:
+> On Sun, Dec 16, 2012 at 11:17 PM, Peter Korsgaard<jacmet@uclibc.org>  wrote:
+>>>>>>> "Maxime" == Maxime Hadjinlian<maxime.hadjinlian@gmail.com>  writes:
+>>
+>>   Maxime>  This fix is needed for the 64bits build because Netatalk will assume the library
+>>   Maxime>  are stored in [..]/lib64/ instead of [..]/lib/
+>>
+>> Hmm, we still seem to have issues on the autobuilders:
+>>
+>> http://autobuild.buildroot.net/results/cf5c3ce94c229204bfa0f19b1009c13a9bcc1dfc/build-end.log
+>>
+>>   Maxime>  +++ b/package/netatalk/netatalk.mk
+>>   Maxime>  @@ -8,7 +8,7 @@ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NET
+>>   Maxime>   NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+>>
+>>   Maxime>   NETATALK_DEPENDENCIES = host-pkgconf openssl berkeleydb libgcrypt libgpg-error
+>>   Maxime>  -NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+>>   Maxime>  +NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99" BDB_LIB=$(STAGING_LIB)/usr/lib
+>>
+>>
+>> I guess you meant STAGING_DIR instead here, will fix.
+> This is strange because I tested with a 64 bits build and I had'nt the
+> problem anymore.. And I don't remember rewriting the patch before
+> sending it here. But then again, you're totally right, this does'nt
+> make sense. I'm really wondering how it could have worked for me :/
 
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index d87aec4..cd368fb 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -82,12 +82,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FIELDANALYSIS
-???? bool "fieldanalysis"
-?
--config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
--??? bool "freeze"
--
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEVERB
-???? bool "freeverb"
-?
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
-+??? bool "freeze"
-+
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R
-???? bool "frei0r"
-?
-@@ -211,12 +211,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SMOOTH
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED
-???? bool "speed"
-?
--config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
--??? bool "subenc"
--
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO
-???? bool "stereo"
-?
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
-+??? bool "subenc"
-+
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_TTA
-???? bool "tta"
-?
-@@ -241,7 +241,7 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VMNC
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_Y4M
-???? bool "y4m"
-?
--comment "plugins with external dependencies (there may be more available)"
-+comment "plugins with external dependencies (not all from gstreamer are here)"
-?
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
-???? bool "apexsink"
-@@ -270,6 +270,9 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV
-???? bool "fbdev"
-?
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD
-+??? bool "faad"
-+
-?config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBMMS
-???? bool "libmms"
-???? select BR2_PACKAGE_LIBMMS
-diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-index 714c987..183de7b 100644
---- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-@@ -508,6 +508,13 @@ else
-?GST_PLUGINS_BAD_CONF_OPT += --disable-dvb
-?endif
-?
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-faad
-+GST_PLUGINS_BAD_DEPENDENCIES += faad2
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-faad
-+endif
-+
-?ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV),y)
-?GST_PLUGINS_BAD_CONF_OPT += --enable-fbdev
-?else
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 33ecb5c..8c43ac8 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -161,6 +161,9 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_VIDEOMIXER
-?config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC
-???? bool "wavenc"
-?
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK
-+??? bool "wavpack (*.wv audio)"
-+
-?config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE
-???? bool "wavparse (*.wav audio)"
-???? default y
-@@ -186,6 +189,10 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
-???? bool "flac (libFLAC)"
-???? select BR2_PACKAGE_FLAC
-?
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
-+??? bool "gdkpixbuf"
-+??? select BR2_PACKAGE_GDK_PIXBUF
-+
-?config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS
-???? bool "ossaudio (OSS audio)"
-?
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index 18b4299..5e93a49 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-@@ -308,6 +308,13 @@ else
-?GST_PLUGINS_GOOD_CONF_OPT += --disable-wavenc
-?endif
-?
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-wavpack
-+GST_PLUGINS_GOOD_DEPENDENCIES += wavpack
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-wavpack
-+endif
-+
-?ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE),y)
-?GST_PLUGINS_GOOD_CONF_OPT += --enable-wavparse
-?else
-@@ -347,6 +354,13 @@ else
-?GST_PLUGINS_GOOD_CONF_OPT += --disable-flac
-?endif
-?
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-gdk_pixbuf
-+GST_PLUGINS_GOOD_DEPENDENCIES += gdk-pixbuf
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-gdk_pixbuf
-+endif
-+
-?ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS),y)
-?GST_PLUGINS_GOOD_CONF_OPT += --enable-oss
-?else
+ I guess it was an accident then :-)
+
+ configure checks for libdb by doing: ls $bdblibdir/lib$lib.*
+and bdblibdir="${bdbdir}/${atalk_libname}" and atalk_libname="lib64" for 
+most 64-bit architectures.
+
+ So you happened to have an existing /usr/lib/lib64/libdb* on your build 
+machine...
+
+ BDB_LIB isn't even used by configure, so I don't think does patch does 
+much :-)
+
+
+ The problem I encounter in my build is that configure uses `ls ...` to 
+find the library, and my /bin/ls is linked against libacl.so.1. It seems 
+LD_LIBRARY_PATH is overridden because ls fails with:
+
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.14' not found (required by /home/arnout/src/buildroot/output-ext-toolchain-x86_64/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libacl.so.1
+
+ And indeed, configure sets:
+eval export $shlibpath_var=$bdblibdir
+
+ This is OK for native builds, but not for cross-builds...
+
+ Looking a bit further into macros/db3-check.m4, it looks even worse:
+after that configure step, there is an
+eval export $shlibpath_var=$saved_shlibpath_var
+which expands to
+export LD_LIBRARY_PATH=LD_LIBRARY_PATH
+:-)
+
+ I'll try to cook a fix and send a patch.
+
+ Regards,
+ Arnout
+
 -- 
-1.7.12.1
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: gst-plugins.diff
-Type: application/octet-stream
-Size: 5046 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121217/d69ae7f5/attachment-0001.obj>
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
