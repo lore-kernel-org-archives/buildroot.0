@@ -1,27 +1,31 @@
-From: Richard Genoud <richard.genoud@gmail.com>
-Date: Mon, 17 Dec 2012 13:41:24 +0100
-Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
-In-Reply-To: <805796c3-1a48-4485-8d1b-5c1c5d2cbfb4@zimbra2.corp.accelance.fr>
-References: <1354800968-16745-1-git-send-email-jeremy.rosen@openwide.fr>
- <805796c3-1a48-4485-8d1b-5c1c5d2cbfb4@zimbra2.corp.accelance.fr>
-Message-ID: <CACQ1gAj-H5P3SaX=fhzxpW=aPwp+kJuZw2CQ9AYgmnSKZKpp7g@mail.gmail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 17 Dec 2012 14:12:01 +0100
+Subject: [Buildroot] [PATCH] inadyn: Needs MMU
+Message-ID: <1355749921-27134-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/12/17 Jeremy Rosen <jeremy.rosen@openwide.fr>:
-> Hello everybody
->
-> there is a little bit more work to do on this patch (mainly updating a few more places in the documentation) but i'd like to have a go/no-go before I do that...
+Fixes
+http://autobuild.buildroot.org/results/11d681a7f2c1d55a3d70573e9145aa231f6d4298/build-end.log
 
-I was looking for that kind of feature, I hope it will be accepted.
-For now, I use the output/target tree and those parameters in the
-/etc/exports file:
-*(rw,all_squash,no_subtree_check,anonuid=my_uid,anongid=my_gid)
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+ package/inadyn/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
 
-But that means that all the FS is owned by my user.
-
-Regards,
-Richard.
+diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
+index 623da41..a2dfa74 100644
+--- a/package/inadyn/Config.in
++++ b/package/inadyn/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_INADYN
+ 	bool "inadyn"
++	depends on BR2_USE_MMU # Uses fork()
+ 	help
+ 	  INADYN is a free DynDNS client. It gives the possibility
+ 	  to have your own fixed hostname registered on the internet,
+-- 
+1.7.9.5
