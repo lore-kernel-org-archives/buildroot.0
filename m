@@ -1,29 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Dec 2012 23:15:20 +0100
-Subject: [Buildroot] [PATCH] netatalk: fix 64-bit build
-In-Reply-To: <1355780891-26657-1-git-send-email-arnout@mind.be>
-References: <1355780891-26657-1-git-send-email-arnout@mind.be>
-Message-ID: <50CF9978.9000500@mind.be>
+Date: Mon, 17 Dec 2012 23:16:44 +0100
+Subject: [Buildroot] [PATCH] imx-lib: new package
+In-Reply-To: <1905374549.1044823.1355782331560.JavaMail.root@advansee.com>
+References: <1355752131-31966-1-git-send-email-arnout@mind.be>
+ <50CF5987.90805@mind.be> <87mwxc76je.fsf@dell.be.48ers.dk>
+ <50CF9647.3020506@mind.be>
+ <1905374549.1044823.1355782331560.JavaMail.root@advansee.com>
+Message-ID: <50CF99CC.8040603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/12/12 22:48, Arnout Vandecappelle (Essensium/Mind) wrote:
-> The configure script sets LD_LIBRARY_PATH to the staging directory,
-> which makes the `ls` that is called in one of the tests fail. Fix by
-> not setting LD_LIBRARY_PATH when cross-compiling.
+On 17/12/12 23:12, Beno?t Th?baudeau wrote:
+> On Monday, December 17, 2012 11:01:43 PM, Arnout Vandecappelle wrote:
+>> On 17/12/12 21:44, Peter Korsgaard wrote:
+>>> Is the gst-fsl-plugins stuff still needed now that the coda driver
+>>> is in
+>>> mainline?
+>>
+>>    Mainline v3.7 only has support for mx27 and mx51.
 >
-> The patch has been sent upstream.
->
-> Also remove the BDB_LIB variable: it isn't used.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+> Even for mx27 and mx51, are you sure that the mainline implementation for CODA
+> is compatible with Freescale's imx-lib? I highly doubt it.
 
-  Actually, this probably has nothing to do with 64-bit, but rather with 
-host==target...
-
+  Peter's point is that with coda you don't need all that proprietary 
+stuff, it's just a media framework device.
 
   Regards,
   Arnout
