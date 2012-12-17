@@ -1,43 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 17 Dec 2012 17:01:19 +0100
-Subject: [Buildroot] [PATCH] imx-lib: new package
-In-Reply-To: <50CF3F4D.1030100@mind.be> (Arnout Vandecappelle's message of
- "Mon, 17 Dec 2012 16:50:37 +0100")
-References: <1355752131-31966-1-git-send-email-arnout@mind.be>
- <50CF3F4D.1030100@mind.be>
-Message-ID: <871ueo8y7k.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 17 Dec 2012 17:08:09 +0100
+Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
+In-Reply-To: <CACQ1gAj-H5P3SaX=fhzxpW=aPwp+kJuZw2CQ9AYgmnSKZKpp7g@mail.gmail.com>
+References: <1354800968-16745-1-git-send-email-jeremy.rosen@openwide.fr>
+ <805796c3-1a48-4485-8d1b-5c1c5d2cbfb4@zimbra2.corp.accelance.fr>
+ <CACQ1gAj-H5P3SaX=fhzxpW=aPwp+kJuZw2CQ9AYgmnSKZKpp7g@mail.gmail.com>
+Message-ID: <CAHXCMMKXJ8Crr770fXoYz=+SbNcU0VCNXkMcvXsKJKRmd0xsWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hi Richard,
 
- Arnout> On 17/12/12 14:48, Arnout Vandecappelle (Essensium/Mind) wrote:
- >> +IMX_LIB_INCLUDE = \
- >> +	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
- >> +	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
- >> +	-I$(LINUX_DIR)/include
+2012/12/17 Richard Genoud <richard.genoud@gmail.com>:
+> 2012/12/17 Jeremy Rosen <jeremy.rosen@openwide.fr>:
+>> Hello everybody
+>>
+>> there is a little bit more work to do on this patch (mainly updating a few more places in the documentation) but i'd like to have a go/no-go before I do that...
+>
+> I was looking for that kind of feature, I hope it will be accepted.
+> For now, I use the output/target tree and those parameters in the
+> /etc/exports file:
+> *(rw,all_squash,no_subtree_check,anonuid=my_uid,anongid=my_gid)
+>
+> But that means that all the FS is owned by my user.
 
- Arnout>  Actually, I wonder if this is the right thing to do... This is a
- Arnout> userspace library that requires a platform-specific linux/xxx.h. For
- Arnout> an external toolchain, these headers don't exist in
- Arnout> $(STAGING_DIR)/usr/include/linux
+There are plenty of good reasons to not use output/target as root for
+a chroot or a NFS root, as explained here:
+http://buildroot.org/downloads/manual/manual.html#faq-why-not-use-target-as-chroot
 
- Arnout>  Directly using $(LINUX_DIR)/include means that the headers are not
- Arnout> patched for userspace. For those platform-specific headers that's
- Arnout> probably not a problem, but it's not good for e.g. linux/types.h.
+And here, you'll find the right way to do this (so far):
+http://buildroot.org/downloads/manual/manual.html#_nfs_boot
 
- Arnout>  An easy workaround is to use -idirafter instead of -I.  However,
- Arnout> perhaps it's an even better idea to do 'make headers_install' as part
- Arnout> of the normal linux build process, so that packages depending on those
- Arnout> headers can use the patched version. But then again, is it a good idea
- Arnout> to replace the toolchain's kernel headers with a new set of kernel
- Arnout> headers?
 
-Another possibility is to bundle the needed kernel headers with the
-package, similar to how E.G. mtd-utils does it.
+Regards,
 
 -- 
-Bye, Peter Korsgaard
+Sam
