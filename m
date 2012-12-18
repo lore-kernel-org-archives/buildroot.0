@@ -1,35 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Dec 2012 13:53:36 +0100
-Subject: [Buildroot] Using a precompiled busybox toolchain as an
- external toolchain
-In-Reply-To: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
-References: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
-Message-ID: <20121218135336.2e24d6bc@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Tue, 18 Dec 2012 14:03:45 +0100
+Subject: [Buildroot] [PATCH] libseccomp: Fix install option order
+Message-ID: <1355835825-29410-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Willy Lambert,
+Commit ca0e5152 introduced a bad option order, leading to another build
+failure.
 
-On Tue, 18 Dec 2012 13:42:07 +0100, Willy Lambert wrote:
+Fixes
+http://autobuild.buildroot.org/results/0e7de5e7c792b5ef195ee98fe1e7bb1c6b220bfb/build-end.log
 
-> _ copy ouptut/host/usr in ${MY_TOOLCHAIN_PATH}
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+ ...eccomp-0002-Remove-the-dependency-on-proc.patch |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No, this will not work. The toolchain produced by Buildroot is not
-relocatable.
-
-Instead, set BR2_HOST_DIR to ${MY_TOOLCHAIN_PATH}, and then do your
-toolchain build. The toolchain will be installed in
-${MY_TOOLCHAIN_PATH}, and you can use it as an external toolchain for
-other Buildroot builds.
-
-Best regards,
-
-Thomas
+diff --git a/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch b/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
+index 82ae44a..081bca7 100644
+--- a/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
++++ b/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
+@@ -32,7 +32,7 @@ index 6162900..eb61ead 100644
+ -		$(INSTALL) -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 \
+ -			"$$(cat /proc/$$$$/cmdline | awk '{print $$(NF)}')" \
+ -			"$(INSTALL_LIB_DIR)/pkgconfig"; \#
+-+		$(INSTALL) -t -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 \
+++		$(INSTALL) -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 -t \
+ +			"$(INSTALL_LIB_DIR)/pkgconfig"
+  
+  ifeq ($(V),0)
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
