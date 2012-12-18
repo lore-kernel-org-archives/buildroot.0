@@ -1,44 +1,48 @@
-From: Gary Coulbourne <bear@bears.org>
-Date: Tue, 18 Dec 2012 10:38:21 -0500
-Subject: [Buildroot] [PATCH] allow wpa_supplicant to run on the dbus
- using the 'new' api
-In-Reply-To: <50D013FC.7040503@mind.be>
-References: <CAEnpE0yDTQWpUf9ctGnfuSjX8PR0uX6UcxzvdV6D6uoxrAg1zQ@mail.gmail.com>
- <50D013FC.7040503@mind.be>
-Message-ID: <50D08DED.6070109@bears.org>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Tue, 18 Dec 2012 17:50:26 +0100
+Subject: [Buildroot] Using a precompiled busybox toolchain as an
+	external toolchain
+In-Reply-To: <20121218163210.1573a9c7@skate>
+References: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
+ <20121218135336.2e24d6bc@skate>
+ <CAKvQZ_3-v9ArCy0b6Q9VmzNToDaigk1=USPJsgUKpEptzeP1yA@mail.gmail.com>
+ <20121218163210.1573a9c7@skate>
+Message-ID: <CAKvQZ_2ZJ9GOV-B2Gi1zG-gjJiFVYHxpd4GzFCHCAg7ABAPFUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle wrote:
->  Reviewing patches is more convenient for us if you do the following:
+2012/12/18 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Willy Lambert,
 >
-> * Send the patch in-line, preferably with git send-email, so we can 
-> give comments in-line.
-Sorry.  I'll keep that in mind next time.  I'm a long time hacker, but 
-not a long-time contributor to open source.   :)
-Thanks for being gentle with the criticism; I am still feeling my way 
-around what is proper etiquette.
+> On Tue, 18 Dec 2012 16:19:47 +0100, Willy Lambert wrote:
+>
+>> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah. To be honest an entry
+>> in the manual to state this would be nice.
+>
+> Indeed. Feel free to submit a patch for the manual :-)
+>
 
-> * Keep the original author information - in this case, preferably by 
-> keeping the original git authorship.
-I was only able to find a partial copy of it via a google search, so I 
-didn't have the original.  I didn't think about it at the time, but I
-should have gone and looked in the mailing list archives.
->  I did a quick comparison with Sven's patch and I don't see why you 
-> removed the BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD option.
-Purely ignorance on my part -- I didn't realize that it was a both/and 
-rather than an either/or for that option.
+yes, but how ? Should I edit html files by and in the docs/manual folder ?
+I'm not at ease with git, so I will see during hollidays if I can do
+something with it.
 
-The reason I needed the fix is because connman is expecting the new API, 
-and so fails to find wireless devices without wpa_supplicant using it.
+>> thanks, should I understand that I can't publish the buildroot
+>> toolchain on another  PC without installing it at the __same__ place ?
+>
+> Your understanding is correct. Making the toolchain relocatable is part
+> of our TODO-list, though.
+>
 
-The dbus fix I sent seperately makes dbus properly handle activation, so 
-that it can start the wpa_supplicant. The test in the autoconf fails and 
-says the fixes need to be done manually.  (I suspect it is because dbus 
-is cross compiled, so the tests can't run on the host)
+Ok thanks
 
-Peace,
-Gary
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
