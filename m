@@ -1,46 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Dec 2012 10:03:32 +0100
-Subject: [Buildroot] [PATCH] sg3-utils new package.
-In-Reply-To: <CAAfyv37=U0YtKsNkoCxTA2iRAXwgTETrcuOPWXmvNasnOqZaSA@mail.gmail.com>
-References: <1355776546-25189-1-git-send-email-marek.belisko@open-nandra.com>
- <20121218094835.688afe2c@skate>
- <CAAfyv37=U0YtKsNkoCxTA2iRAXwgTETrcuOPWXmvNasnOqZaSA@mail.gmail.com>
-Message-ID: <20121218100332.7a0c10d0@skate>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Tue, 18 Dec 2012 10:05:46 +0100 (CET)
+Subject: [Buildroot] buildroot at FOSDEM
+In-Reply-To: <20121218093839.5c356646@skate>
+Message-ID: <ac6d1334-7549-4547-9e31-27df02cf7178@zimbra2.corp.accelance.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Belisko Marek,
+isn't there a specific embedded track ?
 
-On Tue, 18 Dec 2012 09:52:41 +0100, Belisko Marek wrote:
+buildroot would probably better fit in there, no ?
 
-> > Hum, why is this needed? Does sg3_utils installs some libraries or
-> > headers that are useful for other packages?
-> I'm working on adding udisks to buildroot and udisks have dependency on
-> sg3-utils library so this is the reason why installing to staging.
+    Cordialement
 
-Ok. A comment just before the _INSTALL_STAGING line would be useful,
-then, because for a "utils" package, we don't necessarily expect to
-have a library in it.
+    J?r?my Rosen
 
-> I've read somewhere on ML you was working also on udisks package.
-> Was it successful?
+fight key loggers : write some perl using vim
 
-It was a looong time ago. I think I managed to get udisks to build, but
-I hadn't had the time to do some real testing with it: I was first
-doing some testing of polkit, which is a dependency of udisks.
-
-I've put online the 3 patches I had done at that time (note that they
-are old: they still use the old AUTOTARGETS macro name), see:
-http://free-electrons.com/~thomas/pub/udisks-buildroot/
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+----- Mail original -----
+> De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> ?: "Arnout Vandecappelle" <arnout@mind.be>
+> Cc: buildroot at busybox.net
+> Envoy?: Mardi 18 D?cembre 2012 09:38:39
+> Objet: Re: [Buildroot] buildroot at FOSDEM
+> 
+> Dear Arnout Vandecappelle,
+> 
+> On Tue, 18 Dec 2012 09:02:15 +0100, Arnout Vandecappelle wrote:
+> 
+> >   Deadlines for FOSDEM are approaching fast (i.e., this Thursday or
+> > Friday). There are a few devrooms where a buildroot presentation
+> > would fit:
+> > 
+> > - Community Development and Marketing: 5, 15 or 30 minute
+> > presentation about the community process of buildroot.
+> > 
+> > - Cross-distro devroom: buildroot as a distro, 30 or 60 minutes.
+> > 
+> > - Testing and Automation devroom: the buildroot autobuilder concept
+> > in 10 or 30 minutes.
+> > 
+> >   Any takers?
+> 
+> Does it really fit in the "Cross-distro devroom" ? I guess by "Cross"
+> they don't mean "cross-compilation", but rather exchanges between
+> distributions such as Gentoo, Fedora, Ubuntu, etc. Does Buildroot
+> really fit in the middle of those discussions? I believe we have
+> quite
+> different use cases, needs, requirements, etc.
+> 
+> But in any case, I'm definitely interested in proposing a talk
+> related
+> to Buildroot. Let's sync on how's going to propose what.
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
