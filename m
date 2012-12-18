@@ -1,32 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 18 Dec 2012 09:38:20 +0100
-Subject: [Buildroot] [PATCH] libglib2: fix g_print()
-In-Reply-To: <1355774740-28679-1-git-send-email-benoit.thebaudeau@advansee.com>
- (=?utf-8?Q?=22Beno=C3=AEt_Th=C3=A9baudeau=22's?= message of "Mon, 17 Dec
- 2012 21:05:40 +0100")
-References: <1355774740-28679-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <87d2y77o1v.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Dec 2012 09:38:39 +0100
+Subject: [Buildroot] buildroot at FOSDEM
+In-Reply-To: <50D02307.2010906@mind.be>
+References: <50D02307.2010906@mind.be>
+Message-ID: <20121218093839.5c356646@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Beno?t" == Beno?t Th?baudeau <benoit.thebaudeau@advansee.com> writes:
+Dear Arnout Vandecappelle,
 
- Beno?t> If GLib is cross-compiled, the default printf settings that it
- Beno?t> selects are wrong for glibc. This leads to issues with the
- Beno?t> g_print() functions, e.g. "Aborted" errors returned by
- Beno?t> gst-inspect.
+On Tue, 18 Dec 2012 09:02:15 +0100, Arnout Vandecappelle wrote:
 
- Beno?t> This patch fixes this issue by setting printf configuration
- Beno?t> options compatible with glibc. These options should also be
- Beno?t> compatible with uClibc.
+>   Deadlines for FOSDEM are approaching fast (i.e., this Thursday or 
+> Friday). There are a few devrooms where a buildroot presentation
+> would fit:
+> 
+> - Community Development and Marketing: 5, 15 or 30 minute
+> presentation about the community process of buildroot.
+> 
+> - Cross-distro devroom: buildroot as a distro, 30 or 60 minutes.
+> 
+> - Testing and Automation devroom: the buildroot autobuilder concept
+> in 10 or 30 minutes.
+> 
+>   Any takers?
 
- Beno?t> This solution has been suggested for LTIB by Rogerio Nunes:
- Beno?t> https://community.freescale.com/thread/302734
+Does it really fit in the "Cross-distro devroom" ? I guess by "Cross"
+they don't mean "cross-compilation", but rather exchanges between
+distributions such as Gentoo, Fedora, Ubuntu, etc. Does Buildroot
+really fit in the middle of those discussions? I believe we have quite
+different use cases, needs, requirements, etc.
 
-Committed, thanks.
+But in any case, I'm definitely interested in proposing a talk related
+to Buildroot. Let's sync on how's going to propose what.
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
