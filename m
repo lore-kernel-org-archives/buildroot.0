@@ -1,39 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Dec 2012 22:40:38 +0100
-Subject: [Buildroot] buildroot at FOSDEM
-In-Reply-To: <50D0AD2E.1080902@mind.be>
-References: <20121218093839.5c356646@skate>
- <ac6d1334-7549-4547-9e31-27df02cf7178@zimbra2.corp.accelance.fr>
- <20121218101053.6c6e4d91@skate> <50D0AD2E.1080902@mind.be>
-Message-ID: <20121218224038.7365feab@skate>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Tue, 18 Dec 2012 23:57:38 +0200
+Subject: [Buildroot] elfutils successfully compiled with buildroot 2012.05
+Message-ID: <50D0E6D2.6040602@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Hello to all
 
-On Tue, 18 Dec 2012 18:51:42 +0100, Arnout Vandecappelle wrote:
+I just want to tell that I have now managed to complete building
+elfutils version 0.155
+successfully with Buildroot version 2012.05.
 
-> > There is indeed an embedded track. I think that Arnout tries to submit
-> > talks in other tracks, to get Buildroot known a bit beyond the
-> > traditional crowd that goes to the embedded track. You know, world
-> > domination plans:-)
-> 
->   Actually, it's just because I wouldn't know what to say at the embedded 
-> track. But come to think of it, Thomas's buildroot-real-project 
-> presentation hasn't been at FOSDEM yet, so that would be an ideal 
-> candidate for the embedded track. Right, Thomas?
+After some sleep (and patch cleanup) I will send it here for initial review.
+Not all of it went smoothly but I will explain it in more detail in the
+patches.
 
-Indeed, that could be. Slides are ready, except a little bit of rework,
-so that wouldn't be too difficult to propose.
+There are few screenshots of my uClibc environment under VirtualBox
+with working readelf from elfutils package.
 
-Best regards,
+Regards
+Stefan
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+P.S.:  AFAIK, Glib from version 2.32 and up needs elfutils (or at least
+it's libelf component)
+as hard dependency ????
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: screenshot01.png
+Type: image/png
+Size: 3946 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121218/144fbcb0/attachment-0004.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: screenshot02.png
+Type: image/png
+Size: 5322 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121218/144fbcb0/attachment-0005.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: screenshot03.png
+Type: image/png
+Size: 3303 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121218/144fbcb0/attachment-0006.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: screenshot04.png
+Type: image/png
+Size: 9402 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121218/144fbcb0/attachment-0007.png>
