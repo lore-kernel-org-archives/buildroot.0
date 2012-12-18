@@ -1,75 +1,129 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 18 Dec 2012 22:12:54 +0100
-Subject: [Buildroot] [git commit] python-bottle: new package
-Message-ID: <20121218211445.525699A397@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Dec 2012 22:39:36 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_metacity=3A_fix_link_issue_agai?=
+	=?utf-8?q?nst_libm?=
+Message-ID: <1355866776-20197-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a3b19cdc92429ce4552be108283441ef4334a05
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |    1 +
- package/python-bottle/Config.in        |    8 ++++++++
- package/python-bottle/python-bottle.mk |   22 ++++++++++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+ package/metacity/metacity-add-libm-reference.patch |   51 ++++++++++++++++++++
+ .../metacity/metacity-mag-add-libm-reference.patch |   45 +++++++++++++++++
+ 2 files changed, 96 insertions(+)
+ create mode 100644 package/metacity/metacity-add-libm-reference.patch
+ create mode 100644 package/metacity/metacity-mag-add-libm-reference.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index d6af55d..66445ff 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -302,6 +302,7 @@ source "package/python/Config.in"
- source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
-+source "package/python-bottle/Config.in"
- source "package/python-dpkt/Config.in"
- source "package/python-id3/Config.in"
- source "package/python-mad/Config.in"
-diff --git a/package/python-bottle/Config.in b/package/python-bottle/Config.in
+diff --git a/package/metacity/metacity-add-libm-reference.patch b/package/metacity/metacity-add-libm-reference.patch
 new file mode 100644
-index 0000000..f9b60ca
+index 0000000..6285017
 --- /dev/null
-+++ b/package/python-bottle/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_BOTTLE
-+	bool "python-bottle"
-+	help
-+	  Bottle is a fast, simple and lightweight WSGI micro web-framework
-+	  for Python. It is distributed as a single file module and has no
-+	  dependencies other than the Python Standard Library.
++++ b/package/metacity/metacity-add-libm-reference.patch
+@@ -0,0 +1,51 @@
++Upstream fix to link metacity itself against libm
 +
-+	  http://bottlepy.org
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
++The upstream fix is modified to also include the changes on the
++configure script directly, so that autoreconfiguring is not
++needed. Autoreconfiguring cannot be done easily on metacity, due to
++missing AM_GCONF_SOURCE_2 and AM_NLS macros.
++
++http://git.gnome.org/browse/metacity/commit/configure.in?id=9cb0b6ff520ea69bdff6c328a21787202aee1bcc
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++From 9cb0b6ff520ea69bdff6c328a21787202aee1bcc Mon Sep 17 00:00:00 2001
++From: G?tz Waschk <waschk@mandriva.org>
++Date: Wed, 22 Oct 2008 12:08:48 +0000
++Subject: add libm reference. Closes #557357.
++
++2008-10-22  G?tz Waschk  <waschk@mandriva.org>
++
++        * configure.in: add libm reference.  Closes #557357.
++
++
++svn path=/trunk/; revision=3984
++---
++(limited to 'configure.in')
++
++Index: b/configure.in
++===================================================================
++--- a/configure.in
+++++ b/configure.in
++@@ -413,7 +413,7 @@
++    AC_DEFINE(HAVE_XSYNC, , [Have the Xsync extension library])
++ fi
++ 
++-METACITY_LIBS="$METACITY_LIBS $XSYNC_LIBS $RANDR_LIBS $SHAPE_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+++METACITY_LIBS="$METACITY_LIBS $XSYNC_LIBS $RANDR_LIBS $SHAPE_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS -lm"
++ METACITY_MESSAGE_LIBS="$METACITY_MESSAGE_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
++ METACITY_WINDOW_DEMO_LIBS="$METACITY_WINDOW_DEMO_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
++ METACITY_PROPS_LIBS="$METACITY_PROPS_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
++Index: b/configure
++===================================================================
++--- a/configure
+++++ b/configure
++@@ -29509,7 +29509,7 @@
++ 
++ fi
++ 
++-METACITY_LIBS="$METACITY_LIBS $XSYNC_LIBS $RANDR_LIBS $SHAPE_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+++METACITY_LIBS="$METACITY_LIBS $XSYNC_LIBS $RANDR_LIBS $SHAPE_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS -lm"
++ METACITY_MESSAGE_LIBS="$METACITY_MESSAGE_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
++ METACITY_WINDOW_DEMO_LIBS="$METACITY_WINDOW_DEMO_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
++ METACITY_PROPS_LIBS="$METACITY_PROPS_LIBS $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+diff --git a/package/metacity/metacity-mag-add-libm-reference.patch b/package/metacity/metacity-mag-add-libm-reference.patch
 new file mode 100644
-index 0000000..370b31b
+index 0000000..d47d807
 --- /dev/null
-+++ b/package/python-bottle/python-bottle.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# python-bottle
-+#
-+#############################################################
++++ b/package/metacity/metacity-mag-add-libm-reference.patch
+@@ -0,0 +1,45 @@
++Upstream patch to fix link against libm
 +
-+PYTHON_BOTTLE_VERSION = 0.11.4
-+PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
-+PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
-+PYTHON_BOTTLE_DEPENDENCIES = python
-+PYTHON_BOTTLE_LICENSE = MIT
-+# README.rst refers to the file "LICENSE" but it's not included
++The upstream patch is modified to also include the necessary
++Makefile.in, which avoids the need for autoreconfiguring the
++package. Autoreconfiguring the package unfortunately doesn't work, due
++to AM_GCONF_SOURCE_2 and AM_NLS macros being missing.
 +
-+define PYTHON_BOTTLE_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
++http://git.gnome.org/browse/metacity/commit/src/tools/Makefile.am?id=13d0d52eb885598885b6ff4b73c795c8f29c2a6b
 +
-+define PYTHON_BOTTLE_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+$(eval $(generic-package))
++From 13d0d52eb885598885b6ff4b73c795c8f29c2a6b Mon Sep 17 00:00:00 2001
++From: Matthias Clasen <mclasen@redhat.com>
++Date: Sun, 02 May 2010 14:50:42 +0000
++Subject: fails to link with pedantic linkers
++
++---
++(limited to 'src/tools/Makefile.am')
++
++Index: b/src/tools/Makefile.am
++===================================================================
++--- a/src/tools/Makefile.am
+++++ b/src/tools/Makefile.am
++@@ -26,7 +26,7 @@
++ 
++ metacity_message_LDADD= @METACITY_MESSAGE_LIBS@
++ metacity_window_demo_LDADD= @METACITY_WINDOW_DEMO_LIBS@
++-metacity_mag_LDADD= @METACITY_WINDOW_DEMO_LIBS@
+++metacity_mag_LDADD= @METACITY_WINDOW_DEMO_LIBS@ -lm
++ metacity_grayscale_LDADD = @METACITY_WINDOW_DEMO_LIBS@
++ 
++ EXTRA_DIST=$(icon_DATA)
++Index: b/src/tools/Makefile.in
++===================================================================
++--- a/src/tools/Makefile.in
+++++ b/src/tools/Makefile.in
++@@ -281,7 +281,7 @@
++ 
++ metacity_message_LDADD = @METACITY_MESSAGE_LIBS@
++ metacity_window_demo_LDADD = @METACITY_WINDOW_DEMO_LIBS@
++-metacity_mag_LDADD = @METACITY_WINDOW_DEMO_LIBS@
+++metacity_mag_LDADD = @METACITY_WINDOW_DEMO_LIBS@ -lm
++ metacity_grayscale_LDADD = @METACITY_WINDOW_DEMO_LIBS@
++ EXTRA_DIST = $(icon_DATA)
++ all: all-am
+-- 
+1.7.9.5
