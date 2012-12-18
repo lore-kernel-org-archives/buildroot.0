@@ -1,48 +1,36 @@
-From: Willy Lambert <lambert.willy@gmail.com>
-Date: Tue, 18 Dec 2012 17:50:26 +0100
-Subject: [Buildroot] Using a precompiled busybox toolchain as an
-	external toolchain
-In-Reply-To: <20121218163210.1573a9c7@skate>
-References: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
- <20121218135336.2e24d6bc@skate>
- <CAKvQZ_3-v9ArCy0b6Q9VmzNToDaigk1=USPJsgUKpEptzeP1yA@mail.gmail.com>
- <20121218163210.1573a9c7@skate>
-Message-ID: <CAKvQZ_2ZJ9GOV-B2Gi1zG-gjJiFVYHxpd4GzFCHCAg7ABAPFUA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Dec 2012 21:20:43 +0100
+Subject: [Buildroot] [PATCH 2/2] xstroke: mark as deprecated
+In-Reply-To: <1355862043-17165-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1355862043-17165-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1355862043-17165-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/12/18 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> Dear Willy Lambert,
->
-> On Tue, 18 Dec 2012 16:19:47 +0100, Willy Lambert wrote:
->
->> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah. To be honest an entry
->> in the manual to state this would be nice.
->
-> Indeed. Feel free to submit a patch for the manual :-)
->
+xstroke is just a tarball on the avr32linux.org site, the 0.6 version
+has been released in April 2004, so we can consider the upstream to be
+dead. So let's mark this package as deprecated.
 
-yes, but how ? Should I edit html files by and in the docs/manual folder ?
-I'm not at ease with git, so I will see during hollidays if I can do
-something with it.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xstroke/Config.in |    2 ++
+ 1 file changed, 2 insertions(+)
 
->> thanks, should I understand that I can't publish the buildroot
->> toolchain on another  PC without installing it at the __same__ place ?
->
-> Your understanding is correct. Making the toolchain relocatable is part
-> of our TODO-list, though.
->
-
-Ok thanks
-
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+diff --git a/package/xstroke/Config.in b/package/xstroke/Config.in
+index 1269934..4f3f5f6 100644
+--- a/package/xstroke/Config.in
++++ b/package/xstroke/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_XSTROKE
+ 	bool "xstroke"
+ 	depends on BR2_PACKAGE_XORG7
++	# dead upstream, probably not many users
++	depends on BR2_DEPRECATED
+ 	select BR2_PACKAGE_XLIB_LIBXFT
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBXPM
+-- 
+1.7.9.5
