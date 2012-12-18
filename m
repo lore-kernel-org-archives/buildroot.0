@@ -1,75 +1,66 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 18 Dec 2012 10:27:43 +0100
-Subject: [Buildroot] [git commit] libseccomp: Remove the use of /proc when
-	installing pc files
-Message-ID: <20121218092824.E440C9A379@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Dec 2012 10:40:40 +0100
+Subject: [Buildroot] allyespackageconfig build on ARM/Linaro
+In-Reply-To: <878v8v7lwq.fsf@dell.be.48ers.dk>
+References: <20121218100954.2d59c70f@skate> <878v8v7lwq.fsf@dell.be.48ers.dk>
+Message-ID: <20121218104040.7f5f3c79@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca0e51528eef57d766209de255e74f934a06a336
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Fixes http://autobuild.buildroot.org/results/d9e12bb0f5b2df9064adf3772bcf479b51d72468
+On Tue, 18 Dec 2012 10:24:37 +0100, Peter Korsgaard wrote:
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...omp-0001-use-system-headers-from-sysroot.patch} |    0
- ...eccomp-0002-Remove-the-dependency-on-proc.patch |   42 ++++++++++++++++++++
- 2 files changed, 42 insertions(+), 0 deletions(-)
+>  Thomas> Here are my notes:
+> 
+>  Thomas>  * I've disabled JamVM and Classpath, because my testing chroot does
+>  Thomas>    not have javac. So those packages are not tested.
+> 
+>  Thomas>  * mplayer failed to build, so I had to disable it, and also disable
+>  Thomas>    libplayer, which was selecting mplayer. The mplayer build failure is
+>  Thomas>    FPU related:
+> 
+> Sounds related to the mplayer/fpu discussion we had fairly recently.
 
-diff --git a/package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch b/package/libseccomp/libseccomp-0001-use-system-headers-from-sysroot.patch
-similarity index 100%
-rename from package/libseccomp/libseccomp-use-system-headers-from-sysroot.patch
-rename to package/libseccomp/libseccomp-0001-use-system-headers-from-sysroot.patch
-diff --git a/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch b/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
-new file mode 100644
-index 0000000..82ae44a
---- /dev/null
-+++ b/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
-@@ -0,0 +1,42 @@
-+From 58c34ae1343e2a452e08cd160936a231bcdb67a1 Mon Sep 17 00:00:00 2001
-+From: Maxime Ripard <maxime.ripard@free-electrons.com>
-+Date: Tue, 18 Dec 2012 09:57:47 +0100
-+Subject: [PATCH] Remove the dependency on /proc
-+
-+The Makefile relied on a broken logic for the INSTALL_PC_MACRO.
-+It was used like this: $(INSTALL_PC_MACRO) file.
-+
-+The INSTALL_PC_MACRO was then expanded with a trailing sharp, to pass
-+the name of the file to install as a comment at the end of the command.
-+
-+And then, to retrieve the file to copy, it used the $NF variable of awk
-+on the /proc/self/cmdline file to happily reinvent the argument
-+mechanism.
-+
-+This patch removes of this crazy stuff by using the -t option of
-+install, that keeps the same calling convention.
-+
-+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-+---
-+ macros.mk |    5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
-+
-+diff --git a/macros.mk b/macros.mk
-+index 6162900..eb61ead 100644
-+--- a/macros.mk
-++++ b/macros.mk
-+@@ -150,9 +150,8 @@ endif
-+ INSTALL_PC_MACRO += \
-+ 		$(INSTALL) -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) \
-+ 			-d "$(INSTALL_LIB_DIR)/pkgconfig"; \
-+-		$(INSTALL) -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 \
-+-			"$$(cat /proc/$$$$/cmdline | awk '{print $$(NF)}')" \
-+-			"$(INSTALL_LIB_DIR)/pkgconfig"; \#
-++		$(INSTALL) -t -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 \
-++			"$(INSTALL_LIB_DIR)/pkgconfig"
-+ 
-+ ifeq ($(V),0)
-+ 	INSTALL_INC_MACRO = @echo " INSTALL $^ ($(INSTALL_INC_DIR))";
-+-- 
-+1.7.9.5
-+
+Indeed.
+
+>  Thomas>  * ltp-testsuite fails to build (build failures already seen with the
+>  Thomas>    autobuilders):
+> 
+>  Thomas> common.c: In function 'create_net_namespace':
+>  Thomas> common.c:64:17: error: 'CLONE_NEWNS' undeclared (first use in this function)
+>  Thomas> common.c:64:17: note: each undeclared identifier is reported only once for each function it appears in
+>  Thomas> common.c: In function 'child_fn':
+>  Thomas> common.c:124:11: error: 'CLONE_NEWNS' undeclared (first use in this function)
+>  Thomas> common.c:127:11: error: 'CLONE_FS' undeclared (first use in this function)
+> 
+> Odd, CLONE_NEWNS has existing for many years and common.c seems to
+> include sched.h
+
+Yes, I haven't looked at this one yet, but it is strange.
+
+>  Thomas>  * pcmanfm failed to build:
+> 
+>  Thomas> /home/test/outputs/allpkg/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.7.3/../../../../arm-linux-gnueabihf/bin/ld: fm-desktop.o: undefined reference to symbol 'XSendEvent'
+>  Thomas> /home/test/outputs/allpkg/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.7.3/../../../../arm-linux-gnueabihf/bin/ld: note: 'XSendEvent' is defined in DSO /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libX11.so.6 so try adding it to the linker command line
+>  Thomas> /home/test/outputs/allpkg/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libX11.so.6: could not read symbols: Invalid operation
+>  Thomas> collect2: error: ld returned 1 exit status
+>  Thomas> make[4]: *** [pcmanfm] Error 1
+> 
+> Strange about all these linker issues.
+
+No, not really strange. There has been a change in gcc 4.6 with regard
+to linking some time ago. See
+http://www.gentoo.org/proj/en/qa/asneeded.xml. This is causing build
+breakage in some packages that had an incorrect list of libraries to
+link with.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
