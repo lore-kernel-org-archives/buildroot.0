@@ -1,7 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 Dec 2012 15:25:44 +0100
-Subject: [Buildroot] [PATCH] python-bottle: new package
-Message-ID: <1355840744-23504-1-git-send-email-arnout@mind.be>
+Date: Tue, 18 Dec 2012 16:14:44 +0100
+Subject: [Buildroot] [PATCH v2] python-bottle: new package
+Message-ID: <1355843684-10860-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,9 @@ To: buildroot@busybox.net
 
 From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v2: fix cut-and-paste error of meld3 in the comment in the .mk file.
 ---
  package/Config.in                      |    1 +
  package/python-bottle/Config.in        |    8 ++++++++
@@ -48,13 +49,13 @@ index 0000000..f9b60ca
 +	  http://bottlepy.org
 diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
 new file mode 100644
-index 0000000..d1ff351
+index 0000000..370b31b
 --- /dev/null
 +++ b/package/python-bottle/python-bottle.mk
 @@ -0,0 +1,22 @@
 +#############################################################
 +#
-+# python-meld3
++# python-bottle
 +#
 +#############################################################
 +
