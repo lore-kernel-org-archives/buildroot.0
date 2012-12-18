@@ -1,79 +1,46 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 18 Dec 2012 16:14:44 +0100
-Subject: [Buildroot] [PATCH v2] python-bottle: new package
-Message-ID: <1355843684-10860-1-git-send-email-arnout@mind.be>
+From: Willy Lambert <lambert.willy@gmail.com>
+Date: Tue, 18 Dec 2012 16:19:47 +0100
+Subject: [Buildroot] Using a precompiled busybox toolchain as an
+	external toolchain
+In-Reply-To: <20121218135336.2e24d6bc@skate>
+References: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
+ <20121218135336.2e24d6bc@skate>
+Message-ID: <CAKvQZ_3-v9ArCy0b6Q9VmzNToDaigk1=USPJsgUKpEptzeP1yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+2012/12/18 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Dear Willy Lambert,
+>
+> On Tue, 18 Dec 2012 13:42:07 +0100, Willy Lambert wrote:
+>
+>> _ copy ouptut/host/usr in ${MY_TOOLCHAIN_PATH}
+>
+> No, this will not work. The toolchain produced by Buildroot is not
+> relocatable.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: fix cut-and-paste error of meld3 in the comment in the .mk file.
----
- package/Config.in                      |    1 +
- package/python-bottle/Config.in        |    8 ++++++++
- package/python-bottle/python-bottle.mk |   22 ++++++++++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/python-bottle/Config.in
- create mode 100644 package/python-bottle/python-bottle.mk
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah. To be honest an entry
+in the manual to state this would be nice.
 
-diff --git a/package/Config.in b/package/Config.in
-index 73d9c88..9c41c56 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -269,6 +269,7 @@ source "package/php/Config.in"
- source "package/python/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
-+source "package/python-bottle/Config.in"
- source "package/python-dpkt/Config.in"
- source "package/python-id3/Config.in"
- source "package/python-mad/Config.in"
-diff --git a/package/python-bottle/Config.in b/package/python-bottle/Config.in
-new file mode 100644
-index 0000000..f9b60ca
---- /dev/null
-+++ b/package/python-bottle/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_BOTTLE
-+	bool "python-bottle"
-+	help
-+	  Bottle is a fast, simple and lightweight WSGI micro web-framework
-+	  for Python. It is distributed as a single file module and has no
-+	  dependencies other than the Python Standard Library.
-+
-+	  http://bottlepy.org
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-new file mode 100644
-index 0000000..370b31b
---- /dev/null
-+++ b/package/python-bottle/python-bottle.mk
-@@ -0,0 +1,22 @@
-+#############################################################
-+#
-+# python-bottle
-+#
-+#############################################################
-+
-+PYTHON_BOTTLE_VERSION = 0.11.4
-+PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
-+PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
-+PYTHON_BOTTLE_DEPENDENCIES = python
-+PYTHON_BOTTLE_LICENSE = MIT
-+# README.rst refers to the file "LICENSE" but it's not included
-+
-+define PYTHON_BOTTLE_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_BOTTLE_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+
+>
+> Instead, set BR2_HOST_DIR to ${MY_TOOLCHAIN_PATH}, and then do your
+> toolchain build. The toolchain will be installed in
+> ${MY_TOOLCHAIN_PATH}, and you can use it as an external toolchain for
+> other Buildroot builds.
+>
+
+thanks, should I understand that I can't publish the buildroot
+toolchain on another  PC without installing it at the __same__ place ?
+
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
