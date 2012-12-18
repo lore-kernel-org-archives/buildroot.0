@@ -1,30 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Dec 2012 09:02:15 +0100
-Subject: [Buildroot] buildroot at FOSDEM
-Message-ID: <50D02307.2010906@mind.be>
+Date: Tue, 18 Dec 2012 09:29:36 +0100
+Subject: [Buildroot] [PATCH] libglib2: fix g_print()
+In-Reply-To: <1355774740-28679-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1355774740-28679-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <50D02970.7050408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi all,
+On 17/12/12 21:05, Beno?t Th?baudeau wrote:
+> If GLib is cross-compiled, the default printf settings that it selects are wrong
+> for glibc. This leads to issues with the g_print() functions, e.g. "Aborted"
+> errors returned by gst-inspect.
+>
+> This patch fixes this issue by setting printf configuration options compatible
+> with glibc. These options should also be compatible with uClibc.
+>
+> This solution has been suggested for LTIB by Rogerio Nunes:
+> https://community.freescale.com/thread/302734
+>
+> Signed-off-by: Beno?t Th?baudeau<benoit.thebaudeau@advansee.com>
 
-  Deadlines for FOSDEM are approaching fast (i.e., this Thursday or 
-Friday). There are a few devrooms where a buildroot presentation would fit:
-
-- Community Development and Marketing: 5, 15 or 30 minute presentation 
-about the community process of buildroot.
-
-- Cross-distro devroom: buildroot as a distro, 30 or 60 minutes.
-
-- Testing and Automation devroom: the buildroot autobuilder concept in 10 
-or 30 minutes.
-
-  Any takers?
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (fixes our aborts when doing gst-inspect on an i.MX6 platform)
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
