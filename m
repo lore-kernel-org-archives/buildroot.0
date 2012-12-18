@@ -1,39 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 18 Dec 2012 14:28:35 +0100
-Subject: [Buildroot] [git commit] libidn: bump to version 1.26
-Message-ID: <20121218132916.502289A38A@busybox.osuosl.org>
+Date: Tue, 18 Dec 2012 14:27:56 +0100
+Subject: [Buildroot] [git commit] linux-firmware: add support for the
+	Marvell Wifi-Ex SD8787 firmware
+Message-ID: <20121218132915.C96B89A381@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f9f893c46ded9bc81d8aa8204dde190bfdbc8456
+commit: http://git.buildroot.net/buildroot/commit/?id=e4715c2b5b89b5a091924ea199f098963b63e470
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libidn/libidn.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/linux-firmware/Config.in         |    9 +++++++++
+ package/linux-firmware/linux-firmware.mk |    4 ++++
+ 2 files changed, 13 insertions(+), 0 deletions(-)
 
-diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
-index b06b1ec..39f3973 100644
---- a/package/libidn/libidn.mk
-+++ b/package/libidn/libidn.mk
-@@ -4,12 +4,14 @@
- #
- #############################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 0c24d98..f156756 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -41,6 +41,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
  
--LIBIDN_VERSION = 1.25
-+LIBIDN_VERSION = 1.26
- LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN_INSTALL_STAGING = YES
- LIBIDN_CONF_ENV = EMACS="no"
- LIBIDN_CONF_OPT = --disable-java --enable-csharp=no
- LIBIDN_DEPENDENCIES = host-pkgconf $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LIBIDN_LICENSE = GPLv2+ GPLv3+ LGPLv3+
-+LIBIDN_LICENSE_FILES = COPYINGv2 COPYINGv3 COPYING.LESSERv3
+ endmenu
  
- define LIBIDN_REMOVE_BINARY
- 	rm -f $(TARGET_DIR)/usr/bin/idn
++menu "Marvell WiFi-Ex"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
++	bool "Marvell Wifi-Ex SD 8787"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
++
++endmenu
++
+ menu "Ralink"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 09836a4..e9a5424 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -52,6 +52,10 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9) += \
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688) += \
+ 	libertas/sd8688.bin libertas/sd8688_helper.bin LICENCE.Marvell
+ 
++# sd8787
++LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787) += \
++	mrvl/sd8787_uapsta.bin LICENCE.Marvell
++
+ # wl127x
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
+ 	ti-connectivity/wl1271-fw-2.bin				\
