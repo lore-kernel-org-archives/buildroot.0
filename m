@@ -1,41 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Dec 2012 21:38:46 +0100
-Subject: [Buildroot] [PATCH] matchbox-desktop: fix link issue against libdl
-Message-ID: <1355863126-17526-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Dec 2012 18:06:10 +0100
+Subject: [Buildroot] [PATCH] allow wpa_supplicant to run on the dbus
+ using the 'new' api
+In-Reply-To: <50D08DED.6070109@bears.org>
+References: <CAEnpE0yDTQWpUf9ctGnfuSjX8PR0uX6UcxzvdV6D6uoxrAg1zQ@mail.gmail.com>
+ <50D013FC.7040503@mind.be> <50D08DED.6070109@bears.org>
+Message-ID: <50D0A282.8090405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-matchbox-desktop uses dlopen(), so it needs to link against libdl. The
-configure.ac and Makefile.am have the necessary provisions to do so,
-but the included configure script does not replace LIBADD_DL in
-src/Makefile.am as it should.
+On 18/12/12 16:38, Gary Coulbourne wrote:
+> Arnout Vandecappelle wrote:
+>> Reviewing patches is more convenient for us if you do the following:
+>>
+>> * Send the patch in-line, preferably with git send-email, so we can
+>> give comments in-line.
+> Sorry. I'll keep that in mind next time. I'm a long time hacker, but not
+> a long-time contributor to open source. :)
+> Thanks for being gentle with the criticism; I am still feeling my way
+> around what is proper etiquette.
 
-Therefore, we force the autoreconf of the package, which solves the
-problem.
+  The gentle criticism is of course aimed at attracting more 
+contributors... Did it work? :-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/package/matchbox/matchbox-desktop/matchbox-desktop.mk b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-index d180d1d..f8e854c 100644
---- a/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-+++ b/package/matchbox/matchbox-desktop/matchbox-desktop.mk
-@@ -13,6 +13,11 @@ MATCHBOX_DESKTOP_LICENSE_FILES = COPYING
- MATCHBOX_DESKTOP_DEPENDENCIES = matchbox-lib
- MATCHBOX_DESKTOP_CONF_OPT = --enable-expat
- 
-+# The bundled configure script does not properly replace LIBADD_DL, so
-+# we force an autoreconf even if we don't have any patches touching
-+# configure.ac/Makefile.am.
-+MATCHBOX_DESKTOP_AUTORECONF = YES
-+
- #############################################################
- 
- ifeq ($(BR2_PACKAGE_STARTUP_NOTIFICATION),y)
+>> * Keep the original author information - in this case, preferably by
+>> keeping the original git authorship.
+> I was only able to find a partial copy of it via a google search, so I
+> didn't have the original.
+
+  To find buildroot patches, patchwork is a good reference:
+http://patchwork.ozlabs.org/project/buildroot/list/
+
+> I didn't think about it at the time, but I
+> should have gone and looked in the mailing list archives.
+>> I did a quick comparison with Sven's patch and I don't see why you
+>> removed the BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD option.
+> Purely ignorance on my part -- I didn't realize that it was a both/and
+> rather than an either/or for that option.
+>
+> The reason I needed the fix is because connman is expecting the new API,
+> and so fails to find wireless devices without wpa_supplicant using it.
+
+  I resent the original patches (I forgot to put you in CC, sorry). Can 
+you check if they work as is, and correct them if needed?
+
+
+> The dbus fix I sent seperately makes dbus properly handle activation, so
+> that it can start the wpa_supplicant. The test in the autoconf fails and
+> says the fixes need to be done manually. (I suspect it is because dbus is
+> cross compiled, so the tests can't run on the host)
+
+  I'll have a look at it next and give some more gentle criticism :-)
+
+
+  Regards,
+  Arnout
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
