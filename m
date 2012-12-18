@@ -1,54 +1,45 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Tue, 18 Dec 2012 09:52:41 +0100
-Subject: [Buildroot] [PATCH] sg3-utils new package.
-In-Reply-To: <20121218094835.688afe2c@skate>
-References: <1355776546-25189-1-git-send-email-marek.belisko@open-nandra.com>
- <20121218094835.688afe2c@skate>
-Message-ID: <CAAfyv37=U0YtKsNkoCxTA2iRAXwgTETrcuOPWXmvNasnOqZaSA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 18 Dec 2012 09:37:35 +0100
+Subject: [Buildroot] [git commit] libglib2: fix g_print()
+Message-ID: <20121218085633.2267B9A376@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=9a7e06dc83b70eaed900ab5078206e1c7d0ce141
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Dec 18, 2012 at 9:48 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Marek Belisko,
->
-> On Mon, 17 Dec 2012 21:35:46 +0100, Marek Belisko wrote:
->
->> +SG3_UTILS_INSTALL_STAGING = YES
->
-> Hum, why is this needed? Does sg3_utils installs some libraries or
-> headers that are useful for other packages?
-I'm working on adding udisks to buildroot and udisks have dependency on
-sg3-utils library so this is the reason why installing to staging.
-I've read somewhere on ML you was working also on udisks package.
-Was it successful?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+If GLib is cross-compiled, the default printf settings that it selects are wrong
+for glibc. This leads to issues with the g_print() functions, e.g. "Aborted"
+errors returned by gst-inspect.
 
-Cheers,
+This patch fixes this issue by setting printf configuration options compatible
+with glibc. These options should also be compatible with uClibc.
 
-mbe
+This solution has been suggested for LTIB by Rogerio Nunes:
+https://community.freescale.com/thread/302734
 
--- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libglib2/libglib2.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 4427431..c3e510b 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -40,7 +40,8 @@ LIBGLIB2_CONF_ENV = \
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no \
+ 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_DIR)/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
+-		ac_cv_func_posix_getgrgid_r=no \
++		ac_cv_func_posix_getgrgid_r=no glib_cv_long_long_format=ll \
++		ac_cv_func_printf_unix98=yes ac_cv_func_vsnprintf_c99=yes \
+ 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
+ 
+ # old uClibc versions don't provide qsort_r
