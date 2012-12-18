@@ -1,64 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Dec 2012 18:06:10 +0100
-Subject: [Buildroot] [PATCH] allow wpa_supplicant to run on the dbus
- using the 'new' api
-In-Reply-To: <50D08DED.6070109@bears.org>
-References: <CAEnpE0yDTQWpUf9ctGnfuSjX8PR0uX6UcxzvdV6D6uoxrAg1zQ@mail.gmail.com>
- <50D013FC.7040503@mind.be> <50D08DED.6070109@bears.org>
-Message-ID: <50D0A282.8090405@mind.be>
+Date: Tue, 18 Dec 2012 18:40:23 +0100
+Subject: [Buildroot] [PATCH] linux: add option to get sources from
+ custom directory
+In-Reply-To: <20121212101407.GA9848@mail.sceen.net>
+References: <1354873604-4304-1-git-send-email-rbraun@sceen.net>
+ <20121212105418.601702fc@skate> <20121212101407.GA9848@mail.sceen.net>
+Message-ID: <50D0AA87.7010404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/12/12 16:38, Gary Coulbourne wrote:
-> Arnout Vandecappelle wrote:
->> Reviewing patches is more convenient for us if you do the following:
->>
->> * Send the patch in-line, preferably with git send-email, so we can
->> give comments in-line.
-> Sorry. I'll keep that in mind next time. I'm a long time hacker, but not
-> a long-time contributor to open source. :)
-> Thanks for being gentle with the criticism; I am still feeling my way
-> around what is proper etiquette.
-
-  The gentle criticism is of course aimed at attracting more 
-contributors... Did it work? :-)
-
-
->> * Keep the original author information - in this case, preferably by
->> keeping the original git authorship.
-> I was only able to find a partial copy of it via a google search, so I
-> didn't have the original.
-
-  To find buildroot patches, patchwork is a good reference:
-http://patchwork.ozlabs.org/project/buildroot/list/
-
-> I didn't think about it at the time, but I
-> should have gone and looked in the mailing list archives.
->> I did a quick comparison with Sven's patch and I don't see why you
->> removed the BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD option.
-> Purely ignorance on my part -- I didn't realize that it was a both/and
-> rather than an either/or for that option.
+On 12/12/12 11:14, Richard Braun wrote:
+> On Wed, Dec 12, 2012 at 10:54:18AM +0100, Thomas Petazzoni wrote:
+>> On the other side, Linux, and bootloaders, are kind of special packages
+>> in that very often people will have to work on them, and making this
+>> easier might be useful.
 >
-> The reason I needed the fix is because connman is expecting the new API,
-> and so fails to find wireless devices without wpa_supplicant using it.
+> The fact that the kernel is clearly separate from the other packages in
+> menuconfig, and that it already provides several ways of fetching the
+> source makes it hard for most people to think of the override mechanism.
+> On the other hand, the fact that it's handled almost like any other
+> package makes this hack extremely easy and safe to implement. I don't
+> see a reason not to provide this fetching method if the others aren't
+> also reconsidered (otherwise I wouldn't have bothered sending it
+> anyway).
 
-  I resent the original patches (I forgot to put you in CC, sorry). Can 
-you check if they work as is, and correct them if needed?
-
-
-> The dbus fix I sent seperately makes dbus properly handle activation, so
-> that it can start the wpa_supplicant. The test in the autoconf fails and
-> says the fixes need to be done manually. (I suspect it is because dbus is
-> cross compiled, so the tests can't run on the host)
-
-  I'll have a look at it next and give some more gentle criticism :-)
-
+  I agree. I think that if we provide several methods of downloading in 
+the menuconfig, then all SITE_METHODs should ideally be supported. In 
+particular svn is probably also of interest to some people.
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
