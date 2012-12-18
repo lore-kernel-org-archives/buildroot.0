@@ -1,36 +1,54 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Tue, 18 Dec 2012 14:03:45 +0100
-Subject: [Buildroot] [PATCH] libseccomp: Fix install option order
-Message-ID: <1355835825-29410-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 18 Dec 2012 14:20:29 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: add support for the Marvell
+	Wifi-Ex SD8787 firmware
+Message-ID: <1355836830-20865-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit ca0e5152 introduced a bad option order, leading to another build
-failure.
-
-Fixes
-http://autobuild.buildroot.org/results/0e7de5e7c792b5ef195ee98fe1e7bb1c6b220bfb/build-end.log
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...eccomp-0002-Remove-the-dependency-on-proc.patch |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-firmware/Config.in         |    9 +++++++++
+ package/linux-firmware/linux-firmware.mk |    4 ++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch b/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
-index 82ae44a..081bca7 100644
---- a/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
-+++ b/package/libseccomp/libseccomp-0002-Remove-the-dependency-on-proc.patch
-@@ -32,7 +32,7 @@ index 6162900..eb61ead 100644
- -		$(INSTALL) -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 \
- -			"$$(cat /proc/$$$$/cmdline | awk '{print $$(NF)}')" \
- -			"$(INSTALL_LIB_DIR)/pkgconfig"; \#
--+		$(INSTALL) -t -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 \
-++		$(INSTALL) -o $(INSTALL_OWNER) -g $(INSTALL_GROUP) -m 0644 -t \
- +			"$(INSTALL_LIB_DIR)/pkgconfig"
-  
-  ifeq ($(V),0)
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 0c24d98..f156756 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -41,6 +41,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
+ 
+ endmenu
+ 
++menu "Marvell WiFi-Ex"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
++	bool "Marvell Wifi-Ex SD 8787"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8787 module on SDIO.
++
++endmenu
++
+ menu "Ralink"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 09836a4..e9a5424 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -52,6 +52,10 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8686_V9) += \
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688) += \
+ 	libertas/sd8688.bin libertas/sd8688_helper.bin LICENCE.Marvell
+ 
++# sd8787
++LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787) += \
++	mrvl/sd8787_uapsta.bin LICENCE.Marvell
++
+ # wl127x
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
+ 	ti-connectivity/wl1271-fw-2.bin				\
 -- 
 1.7.9.5
