@@ -1,128 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Dec 2012 00:29:52 +0100
-Subject: [Buildroot] [PATCH] toolchain-crosstool-ng: update PPL and CLoog
-	versions in default configs
-Message-ID: <1355959792-13804-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 20 Dec 2012 00:37:32 +0100
+Subject: [Buildroot] [PATCH RFC 2/6] libfslvpuwrap: new package
+In-Reply-To: <1355960256-10786-1-git-send-email-arnout@mind.be>
+References: <1355960256-10786-1-git-send-email-arnout@mind.be>
+Message-ID: <1355960256-10786-3-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have updated our Crosstool-NG configuration to gcc 4.6.x, but the
-PPL and CLoog versions were not updated accordingly. With gcc 4.6.x,
-at least PPL 0.11 is needed, and only CLoog > 0.15.9 can work with PLL
-0.11.
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/c22758a30c3b8abb582150cefd7099605c527e14/build-end.log
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../crosstool-ng.config-eglibc                     |   16 ++++++++++------
- .../crosstool-ng.config-glibc                      |   16 ++++++++++------
- .../crosstool-ng.config-uClibc                     |   16 ++++++++++------
- 3 files changed, 30 insertions(+), 18 deletions(-)
+ package/Config.in                      |    1 +
+ package/libfslvpuwrap/Config.in        |   13 +++++++++++++
+ package/libfslvpuwrap/libfslvpuwrap.mk |   18 ++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/libfslvpuwrap/Config.in
+ create mode 100644 package/libfslvpuwrap/libfslvpuwrap.mk
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-index 11eb602..08f036c 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-@@ -474,18 +474,22 @@ CT_MPFR_V_2_4_2=y
- # CT_MPFR_V_2_4_1 is not set
- # CT_MPFR_V_2_4_0 is not set
- CT_MPFR_VERSION="2.4.2"
--# CT_PPL_V_0_11_2 is not set
-+CT_PPL_V_0_11_2=y
- # CT_PPL_V_0_11_1 is not set
- # CT_PPL_V_0_11 is not set
--CT_PPL_V_0_10_2=y
--CT_PPL_VERSION="0.10.2"
--# CT_CLOOG_V_0_15_11 is not set
-+# CT_PPL_V_0_10_2 is not set
-+CT_PPL_VERSION="0.11.2"
-+CT_PPL_0_11=y
-+CT_PPL_NEEDS_LIBPWL=y
-+CT_CLOOG_V_0_15_11=y
- # CT_CLOOG_V_0_15_10 is not set
--CT_CLOOG_V_0_15_9=y
-+# CT_CLOOG_V_0_15_9 is not set
- # CT_CLOOG_V_0_15_8 is not set
- # CT_CLOOG_V_0_15_7 is not set
- # CT_CLOOG_V_0_15_6 is not set
--CT_CLOOG_VERSION="0.15.9"
-+CT_CLOOG_VERSION="0.15.11"
-+CT_CLOOG_0_15_1x=y
-+CT_CLOOG_NEEDS_AUTORECONF=y
- CT_MPC_V_0_9=y
- # CT_MPC_V_0_8_2 is not set
- # CT_MPC_V_0_8_1 is not set
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-index c30a115..ae0bc02 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-@@ -463,18 +463,22 @@ CT_MPFR_V_2_4_2=y
- # CT_MPFR_V_2_4_1 is not set
- # CT_MPFR_V_2_4_0 is not set
- CT_MPFR_VERSION="2.4.2"
--# CT_PPL_V_0_11_2 is not set
-+CT_PPL_V_0_11_2=y
- # CT_PPL_V_0_11_1 is not set
- # CT_PPL_V_0_11 is not set
--CT_PPL_V_0_10_2=y
--CT_PPL_VERSION="0.10.2"
--# CT_CLOOG_V_0_15_11 is not set
-+# CT_PPL_V_0_10_2 is not set
-+CT_PPL_VERSION="0.11.2"
-+CT_PPL_0_11=y
-+CT_PPL_NEEDS_LIBPWL=y
-+CT_CLOOG_V_0_15_11=y
- # CT_CLOOG_V_0_15_10 is not set
--CT_CLOOG_V_0_15_9=y
-+# CT_CLOOG_V_0_15_9 is not set
- # CT_CLOOG_V_0_15_8 is not set
- # CT_CLOOG_V_0_15_7 is not set
- # CT_CLOOG_V_0_15_6 is not set
--CT_CLOOG_VERSION="0.15.9"
-+CT_CLOOG_VERSION="0.15.11"
-+CT_CLOOG_0_15_1x=y
-+CT_CLOOG_NEEDS_AUTORECONF=y
- CT_MPC_V_0_9=y
- # CT_MPC_V_0_8_2 is not set
- # CT_MPC_V_0_8_1 is not set
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-index e93128b..4f21263 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-@@ -445,18 +445,22 @@ CT_MPFR_V_2_4_2=y
- # CT_MPFR_V_2_4_1 is not set
- # CT_MPFR_V_2_4_0 is not set
- CT_MPFR_VERSION="2.4.2"
--# CT_PPL_V_0_11_2 is not set
-+CT_PPL_V_0_11_2=y
- # CT_PPL_V_0_11_1 is not set
- # CT_PPL_V_0_11 is not set
--CT_PPL_V_0_10_2=y
--CT_PPL_VERSION="0.10.2"
--# CT_CLOOG_V_0_15_11 is not set
-+# CT_PPL_V_0_10_2 is not set
-+CT_PPL_VERSION="0.11.2"
-+CT_PPL_0_11=y
-+CT_PPL_NEEDS_LIBPWL=y
-+CT_CLOOG_V_0_15_11=y
- # CT_CLOOG_V_0_15_10 is not set
--CT_CLOOG_V_0_15_9=y
-+# CT_CLOOG_V_0_15_9 is not set
- # CT_CLOOG_V_0_15_8 is not set
- # CT_CLOOG_V_0_15_7 is not set
- # CT_CLOOG_V_0_15_6 is not set
--CT_CLOOG_VERSION="0.15.9"
-+CT_CLOOG_VERSION="0.15.11"
-+CT_CLOOG_0_15_1x=y
-+CT_CLOOG_NEEDS_AUTORECONF=y
- CT_MPC_V_0_9=y
- # CT_MPC_V_0_8_2 is not set
- # CT_MPC_V_0_8_1 is not set
+diff --git a/package/Config.in b/package/Config.in
+index def4b20..ac2488e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -453,6 +453,7 @@ menu "Multimedia"
+ source "package/libdvdread/Config.in"
+ source "package/libdvdnav/Config.in"
+ source "package/libebml/Config.in"
++source "package/libfslvpuwrap/Config.in"
+ source "package/libmatroska/Config.in"
+ source "package/libmms/Config.in"
+ source "package/libmpeg2/Config.in"
+diff --git a/package/libfslvpuwrap/Config.in b/package/libfslvpuwrap/Config.in
+new file mode 100644
+index 0000000..57b8a02
+--- /dev/null
++++ b/package/libfslvpuwrap/Config.in
+@@ -0,0 +1,13 @@
++comment "libfslvpuwrap needs an imx-specific kernel to be built"
++	depends on BR2_arm && !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_LIBFSLVPUWRAP
++	bool "libfslvpuwrap"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_arm # Only relevant for i.MX
++	select BR2_PACKAGE_IMX_LIB
++	help
++	  Wrapper library for the vpu library, giving it a different API.
++
++	  This library is provided by Freescale as-is and doesn't have
++	  an upstream.
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+new file mode 100644
+index 0000000..3ad33f9
+--- /dev/null
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# buildroot makefile for libfslvpuwrap
++#
++#############################################################
++
++LIBFSLVPUWRAP_VERSION = 1.0.17
++# No official download site from freescale, just this mirror
++LIBFSLVPUWRAP_SITE = http://download.ossystems.com.br/bsp/freescale/source
++LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
++LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
++LIBFSLVPUWRAP_REDISTRIBUTE = NO
++
++LIBFSLVPUWRAP_INSTALL_STAGING = YES
++
++LIBFSLVPUWRAP_DEPENDENCIES += imx-lib
++
++$(eval $(autotools-package))
 -- 
-1.7.9.5
+1.7.10.4
