@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 20 Dec 2012 00:37:31 +0100
-Subject: [Buildroot] [PATCH RFC 1/6] imx-lib: new package
+Date: Thu, 20 Dec 2012 00:37:34 +0100
+Subject: [Buildroot] [PATCH RFC 4/6] libfslparser: new package
 In-Reply-To: <1355960256-10786-1-git-send-email-arnout@mind.be>
 References: <1355960256-10786-1-git-send-email-arnout@mind.be>
-Message-ID: <1355960256-10786-2-git-send-email-arnout@mind.be>
+Message-ID: <1355960256-10786-5-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,130 +14,84 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in          |    1 +
- package/imx-lib/Config.in  |   53 ++++++++++++++++++++++++++++++++++++++++++++
- package/imx-lib/imx-lib.mk |   41 ++++++++++++++++++++++++++++++++++
- 3 files changed, 95 insertions(+)
- create mode 100644 package/imx-lib/Config.in
- create mode 100644 package/imx-lib/imx-lib.mk
+ package/Config.in                    |    1 +
+ package/libfslparser/Config.in       |    8 +++++++
+ package/libfslparser/libfslparser.mk |   40 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
+ create mode 100644 package/libfslparser/Config.in
+ create mode 100644 package/libfslparser/libfslparser.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 66445ff..def4b20 100644
+index 52bb408..171d936 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -421,6 +421,7 @@ endmenu
- 
- menu "Hardware handling"
- source "package/ccid/Config.in"
-+source "package/imx-lib/Config.in"
- source "package/lcdapi/Config.in"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
-diff --git a/package/imx-lib/Config.in b/package/imx-lib/Config.in
+@@ -454,6 +454,7 @@ menu "Multimedia"
+ source "package/libdvdread/Config.in"
+ source "package/libdvdnav/Config.in"
+ source "package/libebml/Config.in"
++source "package/libfslparser/Config.in"
+ source "package/libfslvpuwrap/Config.in"
+ source "package/libmatroska/Config.in"
+ source "package/libmms/Config.in"
+diff --git a/package/libfslparser/Config.in b/package/libfslparser/Config.in
 new file mode 100644
-index 0000000..1617009
+index 0000000..e3ab980
 --- /dev/null
-+++ b/package/imx-lib/Config.in
-@@ -0,0 +1,53 @@
-+comment "imx-lib needs an imx-specific kernel to be built"
-+	depends on BR2_arm && !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_IMX_LIB
-+	bool "imx-lib"
-+	depends on BR2_LINUX_KERNEL
++++ b/package/libfslparser/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBFSLPARSER
++	bool "libfslparser"
 +	depends on BR2_arm # Only relevant for i.MX
 +	help
-+	  Library of userspace helpers specific for the Freescale i.MX
-+	  platform. It wraps the kernel interfaces for some i.MX platform
-+	  specific drivers. It requires a kernel that includes the i.MX
-+	  specific headers to be built.
++	  Binary parser libraries for the Freescale i.MX SoCs.
 +
 +	  This library is provided by Freescale as-is and doesn't have
 +	  an upstream.
-+
-+if BR2_PACKAGE_IMX_LIB
-+choice
-+	prompt "i.MX platform"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
-+	bool "imx25-3stack"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
-+	bool "imx27ads"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
-+	bool "imx37-3stack"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
-+	bool "imx50"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
-+	bool "imx51"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
-+	bool "imx53"
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
-+	bool "imx6q"
-+
-+endchoice
-+
-+config BR2_PACKAGE_IMX_LIB_PLATFORM
-+	string
-+	default "IMX25_3STACK" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
-+	default "IMX27ADS" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
-+	default "IMX37_3STACK" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
-+	default "IMX50" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
-+	default "IMX51" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
-+	default "IMX53" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
-+	default "IMX6Q" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
-+endif
-diff --git a/package/imx-lib/imx-lib.mk b/package/imx-lib/imx-lib.mk
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
 new file mode 100644
-index 0000000..c168c80
+index 0000000..66f48cc
 --- /dev/null
-+++ b/package/imx-lib/imx-lib.mk
-@@ -0,0 +1,41 @@
++++ b/package/libfslparser/libfslparser.mk
+@@ -0,0 +1,40 @@
 +#############################################################
 +#
-+# imx-lib
++# buildroot makefile for libfslparser
 +#
 +#############################################################
 +
-+IMX_LIB_VERSION = 12.09.01
++LIBFSLPARSER_VERSION = 3.0.1
 +# No official download site from freescale, just this mirror
-+IMX_LIB_SITE    = http://download.ossystems.com.br/bsp/freescale/source
-+IMX_LIB_LICENSE = LGPLv2.1+
-+# No license file included
++LIBFSLPARSER_SITE = http://download.ossystems.com.br/bsp/freescale/source
++LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
++LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
++LIBFSLPARSER_LICENSE_FILES = EULA EULA.txt
++# This is a legal minefield: the EULA in the bin file specifies that
++# the Board Support Package includes software and hardware (sic!)
++# for which a separate license is needed...
++LIBFSLPARSER_REDISTRIBUTE = NO
 +
-+IMX_LIB_INSTALL_STAGING = YES
++LIBFSLPARSER_INSTALL_STAGING = YES
 +
-+# imx-lib needs access to imx-specific kernel headers
-+IMX_LIB_DEPENDENCIES += linux
-+IMX_LIB_INCLUDE = \
-+	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
-+	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
-+	-idirafter $(LINUX_DIR)/include
-+
-+IMX_LIB_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-+	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
-+	INCLUDE="$(IMX_LIB_INCLUDE)"
-+
-+define IMX_LIB_BUILD_CMDS
-+	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D)
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (libfslparser-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info
++# Since the EULA in the bin file differs from the one in the tar file,
++# extract the one from the bin file as well.
++define LIBFSLPARSER_EXTRACT_CMDS
++	awk 'BEGIN      { start=0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start=1; }'\
++	    $(DL_DIR)/$(LIBFSLPARSER_SOURCE) > $(@D)/EULA
++	cd $(BUILD_DIR); \
++	sh $(DL_DIR)/$(LIBFSLPARSER_SOURCE) --force --auto-accept
 +endef
 +
-+define IMX_LIB_INSTALL_STAGING_CMDS
-+	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D) DEST_DIR=$(STAGING_DIR) install
-+endef
++# The Makefile installs several versions of the libraries, but we only
++# need one of them, depending on the platform.
 +
-+define IMX_LIB_INSTALL_TARGET_CMDS
-+	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D) DEST_DIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.10.4
