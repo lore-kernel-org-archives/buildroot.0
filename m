@@ -1,10 +1,9 @@
 From: bogdan at nimblex.org <bogdan@nimblex.org>
-Date: Wed, 19 Dec 2012 16:58:43 +0000
-Subject: [Buildroot] [PATCH 3/4] gstreamer: adjust set of plug-ins for
-	gstreamer-1.0
+Date: Wed, 19 Dec 2012 16:58:44 +0000
+Subject: [Buildroot] [PATCH 4/4] gstreamer: replace gst-ffmpeg with gst-libav
 In-Reply-To: <1355936324-9585-1-git-send-email-bogdan@nimblex.org>
 References: <1355936324-9585-1-git-send-email-bogdan@nimblex.org>
-Message-ID: <1355936324-9585-3-git-send-email-bogdan@nimblex.org>
+Message-ID: <1355936324-9585-4-git-send-email-bogdan@nimblex.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,366 +12,230 @@ To: buildroot@busybox.net
 
 From: Bogdan Radulescu <bogdan@nimblex.net>
 
-Added wavpack to gst-plugins-good and opus to gst-plugins-bad
-Added videoconvert to gst-plugins-base and gdkpixbuf to gst-plugins-good.
-Deleted plugins which will not be ported to gstreamer-1.0.
-Added FAAD
+Replaced gst-ffmepg with gst-libav plug-in.
+Didn't use external libav since the gstreamer guys use a snapshot instead of a release of libav.
+Removed gst-dsp and gst-omapfb as they are not available for gstreamer-1.0
 
 Signed-off-by: Bogdan Radulescu <bogdan@nimblex.net>
 ---
- package/multimedia/gst-plugins-bad/Config.in       | 22 +++---
- ...d-opus-jpegformat-unbreak-non-debug-build.patch | 78 ----------------------
- .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  | 30 +++++----
- package/multimedia/gst-plugins-base/Config.in      | 10 +--
- .../gst-plugins-base/gst-plugins-base.mk           | 18 ++---
- package/multimedia/gst-plugins-good/Config.in      |  8 +++
- .../gst-plugins-good/gst-plugins-good.mk           | 14 ++++
- 7 files changed, 59 insertions(+), 121 deletions(-)
- delete mode 100644 package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch
+ package/multimedia/Config.in                |  4 +---
+ package/multimedia/gst-dsp/Config.in        |  8 -------
+ package/multimedia/gst-dsp/gst-dsp.mk       | 18 ---------------
+ package/multimedia/gst-ffmpeg/Config.in     | 17 ---------------
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk | 18 ---------------
+ package/multimedia/gst-libav/Config.in      | 16 ++++++++++++++
+ package/multimedia/gst-libav/gst-libav.mk   | 34 +++++++++++++++++++++++++++++
+ package/multimedia/gst-omapfb/Config.in     |  7 ------
+ package/multimedia/gst-omapfb/gst-omapfb.mk | 19 ----------------
+ 9 files changed, 51 insertions(+), 90 deletions(-)
+ delete mode 100644 package/multimedia/gst-dsp/Config.in
+ delete mode 100644 package/multimedia/gst-dsp/gst-dsp.mk
+ delete mode 100644 package/multimedia/gst-ffmpeg/Config.in
+ delete mode 100644 package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+ create mode 100644 package/multimedia/gst-libav/Config.in
+ create mode 100644 package/multimedia/gst-libav/gst-libav.mk
+ delete mode 100644 package/multimedia/gst-omapfb/Config.in
+ delete mode 100644 package/multimedia/gst-omapfb/gst-omapfb.mk
 
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index d87aec4..ed43533 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -33,9 +33,6 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUDIOVISUALIZERS
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_BAYER
- 	bool "bayer"
- 
--config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CAMERABIN
--	bool "camerabin"
--
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CAMERABIN2
- 	bool "camerabin2"
- 
-@@ -82,9 +79,6 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FIELDANALYSIS
- 	bool "fieldanalysis"
- 
--config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
--	bool "freeze"
--
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEVERB
- 	bool "freeverb"
- 
-@@ -208,12 +202,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SIREN
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SMOOTH
- 	bool "smooth"
- 
--config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED
--	bool "speed"
--
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
- 	bool "subenc"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED
-+	bool "speed"
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO
- 	bool "stereo"
- 
-@@ -241,7 +235,7 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_VMNC
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_Y4M
- 	bool "y4m"
- 
--comment "plugins with external dependencies (there may be more available)"
-+comment "plugins with external dependencies (not all from gstreamer are here)"
- 
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_APEXSINK
- 	bool "apexsink"
-@@ -267,6 +261,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DIRECTFB
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DVB
- 	bool "dvb"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD
-+	bool "faad"
-+	select BR2_PACKAGE_FAAD2
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV
- 	bool "fbdev"
- 
-@@ -274,6 +272,10 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LIBMMS
- 	bool "libmms"
- 	select BR2_PACKAGE_LIBMMS
- 
-+config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPG123
-+	bool "mpg123"
-+	select BR2_PACKAGE_MMPG123
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MUSEPACK
- 	bool "musepack"
- 	select BR2_PACKAGE_MUSEPACK
-diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch b/package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 273d9bc..5ff7b4a 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -6,9 +6,7 @@ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+ source "package/multimedia/gstreamer/Config.in"
+-source "package/multimedia/gst-ffmpeg/Config.in"
+-source "package/multimedia/gst-dsp/Config.in"
+-source "package/multimedia/gst-omapfb/Config.in"
++source "package/multimedia/gst-libav/Config.in"
+ source "package/multimedia/gst-plugins-base/Config.in"
+ source "package/multimedia/gst-plugins-good/Config.in"
+ source "package/multimedia/gst-plugins-bad/Config.in"
+diff --git a/package/multimedia/gst-dsp/Config.in b/package/multimedia/gst-dsp/Config.in
 deleted file mode 100644
-index 2c98c3e..0000000
---- a/package/multimedia/gst-plugins-bad/gst-plugins-bad-opus-jpegformat-unbreak-non-debug-build.patch
+index 590931a..0000000
+--- a/package/multimedia/gst-dsp/Config.in
 +++ /dev/null
-@@ -1,78 +0,0 @@
--From 1725e702a3622cb45c8142622dd419fa0c410ac9 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <jacmet@sunsite.dk>
--Date: Wed, 12 Sep 2012 09:10:35 +0200
--Subject: [PATCH] gst-plugins-bad: opus + jpegformat: unbreak non-debug build
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_GST_DSP
+-	bool "gst-dsp"
+-	depends on BR2_PACKAGE_GSTREAMER && BR2_cortex_a8
+-	select BR2_PACKAGE_TIDSP_BINARIES
+-	help
+-	  GStreamer plug-in to access TI OMAP3 DSP algorithms.
 -
--opus + jpegformat plugin builds fail when gstreamer is configured with
----disable-gst-debug as they are checking the GST_DISABLE_DEBUG symbol
--instead of GST_DISABLE_GST_DEBUG.
+-	  http://code.google.com/p/gst-dsp/
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
+deleted file mode 100644
+index 74b4c98..0000000
+--- a/package/multimedia/gst-dsp/gst-dsp.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-GST_DSP_VERSION = 0.10.2
+-GST_DSP_SITE = http://gst-dsp.googlecode.com/files/
 -
--Submitted upstream as https://bugzilla.gnome.org/show_bug.cgi?id=683850
+-define GST_DSP_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
+-endef
 -
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- ext/opus/gstopusdec.c         |    2 +-
-- ext/opus/gstopusenc.c         |    4 ++--
-- gst/jpegformat/gstjpegparse.c |    4 ++--
-- 3 files changed, 5 insertions(+), 5 deletions(-)
+-define GST_DSP_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
+-endef
 -
--diff --git a/ext/opus/gstopusdec.c b/ext/opus/gstopusdec.c
--index 0e2805c..ab7221d 100644
----- a/ext/opus/gstopusdec.c
--+++ b/ext/opus/gstopusdec.c
--@@ -357,7 +357,7 @@ opus_dec_chain_parse_data (GstOpusDec * dec, GstBuffer * buffer)
-- 
--     GST_DEBUG_OBJECT (dec, "Creating decoder with %d channels, %d Hz",
--         dec->n_channels, dec->sample_rate);
---#ifndef GST_DISABLE_DEBUG
--+#ifndef GST_DISABLE_GST_DEBUG
--     gst_opus_common_log_channel_mapping_table (GST_ELEMENT (dec), opusdec_debug,
--         "Mapping table", dec->n_channels, dec->channel_mapping);
-- #endif
--diff --git a/ext/opus/gstopusenc.c b/ext/opus/gstopusenc.c
--index 240a2cb..d991795 100644
----- a/ext/opus/gstopusenc.c
--+++ b/ext/opus/gstopusenc.c
--@@ -589,7 +589,7 @@ gst_opus_enc_setup_channel_mappings (GstOpusEnc * enc,
--       }
--     }
-- 
---#ifndef GST_DISABLE_DEBUG
--+#ifndef GST_DISABLE_GST_DEBUG
--     GST_INFO_OBJECT (enc,
--         "Mapping tables built: %d channels, %d stereo streams", enc->n_channels,
--         enc->n_stereo_streams);
--@@ -654,7 +654,7 @@ gst_opus_enc_setup (GstOpusEnc * enc)
-- {
--   int error = OPUS_OK;
-- 
---#ifndef GST_DISABLE_DEBUG
--+#ifndef GST_DISABLE_GST_DEBUG
--   GST_DEBUG_OBJECT (enc,
--       "setup: %d Hz, %d channels, %d stereo streams, family %d",
--       enc->sample_rate, enc->n_channels, enc->n_stereo_streams,
--diff --git a/gst/jpegformat/gstjpegparse.c b/gst/jpegformat/gstjpegparse.c
--index f984a52..b4af9ed 100644
----- a/gst/jpegformat/gstjpegparse.c
--+++ b/gst/jpegformat/gstjpegparse.c
--@@ -545,7 +545,7 @@ gst_jpeg_parse_skip_marker (GstJpegParse * parse,
--   if (!gst_byte_reader_get_uint16_be (reader, &size))
--     return FALSE;
-- 
---#ifndef GST_DISABLE_DEBUG
--+#ifndef GST_DISABLE_GST_DEBUG
--   /* We'd pry the id of the skipped application segment */
--   if (marker >= APP0 && marker <= APP15) {
--     const gchar *id_str = NULL;
--@@ -561,7 +561,7 @@ gst_jpeg_parse_skip_marker (GstJpegParse * parse,
-- #else
--   GST_DEBUG_OBJECT (parse, "unhandled marker %x skiping %u bytes", marker,
--       size);
---#endif // GST_DISABLE_DEBUG
--+#endif // GST_DISABLE_GST_DEBUG
-- 
--   if (!gst_byte_reader_skip (reader, size - 2))
--     return FALSE;
---- 
--1.7.10
+-define GST_DSP_UNINSTALL_TARGET_CMDS
+-	$(RM) $(TARGET_DIR)/usr/lib/gstreamer-0.10/libgstdsp.so
+-endef
 -
-diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-index 714c987..6cfce08 100644
---- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-+++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
-@@ -3,8 +3,8 @@
- # gst-plugins-bad
- #
- #############################################################
--GST_PLUGINS_BAD_VERSION = 0.10.23
--GST_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST_PLUGINS_BAD_VERSION).tar.bz2
-+GST_PLUGINS_BAD_VERSION = 1.0.3
-+GST_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST_PLUGINS_BAD_VERSION).tar.xz
- GST_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
- 
- GST_PLUGINS_BAD_CONF_OPT = \
-@@ -58,12 +58,6 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-bayer
- endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CAMERABIN),y)
--GST_PLUGINS_BAD_CONF_OPT += --enable-camerabin
--else
--GST_PLUGINS_BAD_CONF_OPT += --disable-camerabin
+-GST_DSP_DEPENDENCIES = gstreamer tidsp-binaries host-pkgconf
+-
+-$(eval $(generic-package))
+diff --git a/package/multimedia/gst-ffmpeg/Config.in b/package/multimedia/gst-ffmpeg/Config.in
+deleted file mode 100644
+index 537101e..0000000
+--- a/package/multimedia/gst-ffmpeg/Config.in
++++ /dev/null
+@@ -1,17 +0,0 @@
+-config BR2_PACKAGE_GST_FFMPEG
+-	bool "gst-ffmpeg"
+-	depends on BR2_PACKAGE_GSTREAMER
+-	select BR2_PACKAGE_GST_PLUGINS_BASE
+-	select BR2_PACKAGE_FFMPEG
+-	select BR2_PACKAGE_FFMPEG_GPL
+-	select BR2_PACKAGE_FFMPEG_POSTPROC
+-	select BR2_PACKAGE_FFMPEG_SWSCALE
+-	depends on BR2_LARGEFILE
+-	depends on BR2_INET_IPV6
+-	help
+-	  GStreamer plugin using FFmpeg.
+-
+-	  http://gstreamer.freedesktop.org/
+-
+-comment "gst-ffmpeg requires a toolchain with LARGEFILE and IPV6 support"
+-	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
+diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+deleted file mode 100644
+index 2570cea..0000000
+--- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-#############################################################
+-#
+-# gst-ffmpeg
+-#
+-#############################################################
+-
+-GST_FFMPEG_VERSION = 0.11.2
+-GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
+-GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+-GST_FFMPEG_INSTALL_STAGING = YES
+-GST_FFMPEG_DEPENDENCIES = host-pkgconf gstreamer gst-plugins-base ffmpeg
+-GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
+-
+-ifeq ($(BR2_PACKAGE_BZIP2),y)
+-GST_FFMPEG_DEPENDENCIES += bzip2
 -endif
 -
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_CAMERABIN2),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-camerabin2
- else
-@@ -148,12 +142,6 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-fieldanalysis
- endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE),y)
--GST_PLUGINS_BAD_CONF_OPT += --enable-freeze
--else
--GST_PLUGINS_BAD_CONF_OPT += --disable-freeze
--endif
--
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEVERB),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-freeverb
- else
-@@ -508,6 +496,13 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-dvb
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FAAD),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-faad
-+GST_PLUGINS_BAD_DEPENDENCIES += faad2
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-faad
+-$(eval $(autotools-package))
+diff --git a/package/multimedia/gst-libav/Config.in b/package/multimedia/gst-libav/Config.in
+new file mode 100644
+index 0000000..1365256
+--- /dev/null
++++ b/package/multimedia/gst-libav/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_GST_LIBAV
++	bool "gst-libav"
++	depends on BR2_PACKAGE_GSTREAMER
++	select BR2_PACKAGE_GST_PLUGINS_BASE
++	depends on BR2_LARGEFILE
++	help
++	  GStreamer plugin (formerly gst-ffmpeg).
++
++	  This package is an implementation of the former
++	  gst-ffmpeg plugin but there is a lot missing from it.
++	  So far it only support decoding WMA and AAC.
++	  
++	  http://gstreamer.freedesktop.org/
++
++comment "gst-libav requires a toolchain with LARGEFILE support"
++	depends on !(BR2_LARGEFILE)
+diff --git a/package/multimedia/gst-libav/gst-libav.mk b/package/multimedia/gst-libav/gst-libav.mk
+new file mode 100644
+index 0000000..cff69b2
+--- /dev/null
++++ b/package/multimedia/gst-libav/gst-libav.mk
+@@ -0,0 +1,34 @@
++
++#############################################################
++#
++# gst-libav
++#
++#############################################################
++
++GST_LIBAV_VERSION = 1.0.3
++GST_LIBAV_SOURCE = gst-libav-$(GST_LIBAV_VERSION).tar.xz
++GST_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
++GST_LIBAV_INSTALL_STAGING = YES
++
++GST_LIBAV_DEPENDENCIES = host-pkgconf gstreamer
++
++GST_LIBAV_CONF_OPT = \
++	--with-libav-extra-configure="--target-os=linux \
++	                               --disable-debug \
++                                       --enable-pthreads \
++                                       --enable-zlib \
++                                       --prefix=$(STAGING_DIR)/usr \
++                                       --sysroot=$(STAGING_DIR) \
++                                       --host-cc=$(TARGET_CC) \
++                                       --cc=$(TARGET_CC) \
++                                       --arch=$(BR2_ARCH) \
++                                       --enable-cross-compile \
++                                       --cross-prefix=$(TARGET_CROSS) \
++                                       --disable-shared \
++                                       --enable-static"
++
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++GST_LIBAV_DEPENDENCIES += bzip2
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FBDEV),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-fbdev
- else
-@@ -521,6 +516,13 @@ else
- GST_PLUGINS_BAD_CONF_OPT += --disable-libmms
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPG123),y)
-+GST_PLUGINS_BAD_CONF_OPT += --enable-mpg123
-+GST_PLUGINS_BAD_DEPENDENCIES += mpg123
-+else
-+GST_PLUGINS_BAD_CONF_OPT += --disable-mpg123
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MUSEPACK),y)
- GST_PLUGINS_BAD_CONF_OPT += --enable-musepack
- GST_PLUGINS_BAD_DEPENDENCIES += musepack
-diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
-index 5d82533..4abfec6 100644
---- a/package/multimedia/gst-plugins-base/Config.in
-+++ b/package/multimedia/gst-plugins-base/Config.in
-@@ -36,13 +36,6 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC
- config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ENCODING
- 	bool "encoding"
- 
--config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE
--	bool "ffmpegcolorspace (mandatory for video playback)"
--	default y
++$(eval $(autotools-package))
+diff --git a/package/multimedia/gst-omapfb/Config.in b/package/multimedia/gst-omapfb/Config.in
+deleted file mode 100644
+index e603cb1..0000000
+--- a/package/multimedia/gst-omapfb/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_GST_OMAPFB
+-	bool "gst-omapfb"
+-	depends on BR2_PACKAGE_GSTREAMER && BR2_cortex_a8
+-	help
+-	  GStreamer plug-in to use OMAP framebuffer.
 -
--config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_GDP
--	bool "gdp"
+-	  http://github.com/felipec/gst-omapfb
+diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
+deleted file mode 100644
+index f23bc86..0000000
+--- a/package/multimedia/gst-omapfb/gst-omapfb.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-GST_OMAPFB_VERSION=1.0
+-GST_OMAPFB_SOURCE=gst-omapfb-$(GST_OMAPFB_VERSION).tar.gz
+-GST_OMAPFB_SITE=http://gst-dsp.googlecode.com/files/
 -
- config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PLAYBACK
- 	bool "playback (mandatory)"
- 	default y
-@@ -57,6 +50,9 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_TYPEFIND
- 	bool "typefind (mandatory)"
- 	default y
- 
-+config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOCONVERT
-+	bool "videoconvert"
-+
- config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC
- 	bool "videotestsrc"
- 
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index f4aab00..0203c5f 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -89,18 +89,6 @@ else
- GST_PLUGINS_BASE_CONF_OPT += --disable-encoding
- endif
- 
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_FFMPEGCOLORSPACE),y)
--GST_PLUGINS_BASE_CONF_OPT += --enable-ffmpegcolorspace
--else
--GST_PLUGINS_BASE_CONF_OPT += --disable-ffmpegcolorspace
--endif
+-define GST_OMAPFB_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
+-endef
 -
--ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_GDP),y)
--GST_PLUGINS_BASE_CONF_OPT += --enable-gdp
--else
--GST_PLUGINS_BASE_CONF_OPT += --disable-gdp
--endif
+-define GST_OMAPFB_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
+-endef
 -
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PLAYBACK),y)
- GST_PLUGINS_BASE_CONF_OPT += --enable-playback
- else
-@@ -125,6 +113,12 @@ else
- GST_PLUGINS_BASE_CONF_OPT += --disable-typefind
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOCONVERT),y)
-+GST_PLUGINS_BASE_CONF_OPT += --enable-videoconvert
-+else
-+GST_PLUGINS_BASE_CONF_OPT += --disable-videoconvert
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC),y)
- GST_PLUGINS_BASE_CONF_OPT += --enable-videotestsrc
- else
-diff --git a/package/multimedia/gst-plugins-good/Config.in b/package/multimedia/gst-plugins-good/Config.in
-index 33ecb5c..92a56c8 100644
---- a/package/multimedia/gst-plugins-good/Config.in
-+++ b/package/multimedia/gst-plugins-good/Config.in
-@@ -79,6 +79,10 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLV
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLX
- 	bool "flx"
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
-+       bool "gdkpixbuf"
-+       select BR2_PACKAGE_GDK_PIXBUF
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GOOM
- 	bool "goom"
- 
-@@ -204,4 +208,8 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SPEEX
- 	bool "speex"
- 	select BR2_PACKAGE_SPEEX
- 
-+config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK
-+	bool "wavpack (*.wv audio)"
-+	select BR2_PACKAGE_WAVPACK
-+
- endif
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index 1eefd45..a184055 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-@@ -147,6 +147,13 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-flx
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-gdk_pixbuf
-+GST_PLUGINS_GOOD_DEPENDENCIES += gdk-pixbuf
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-gdk_pixbuf
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GOOM),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-goom
- else
-@@ -303,6 +310,13 @@ else
- GST_PLUGINS_GOOD_CONF_OPT += --disable-wavenc
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPACK),y)
-+GST_PLUGINS_GOOD_CONF_OPT += --enable-wavpack
-+GST_PLUGINS_GOOD_DEPENDENCIES += wavpack
-+else
-+GST_PLUGINS_GOOD_CONF_OPT += --disable-wavpack
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVPARSE),y)
- GST_PLUGINS_GOOD_CONF_OPT += --enable-wavparse
- else
+-define GST_OMAPFB_UNINSTALL_TARGET_CMDS
+-	$(RM) $(TARGET_DIR)/usr/lib/gstreamer-0.10/libgstomapfb.so
+-endef
+-
+-GST_OMAPFB_DEPENDENCIES = gstreamer
+-
+-$(eval $(generic-package))
 -- 
 1.7.12.1
