@@ -1,33 +1,30 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 19 Dec 2012 11:54:31 +0100
-Subject: [Buildroot] [PATCH] orc: bump to version 0.4.16
-Message-ID: <1355914471-18864-1-git-send-email-s.neumann@raumfeld.com>
+From: Yvan Roch <yvan.roch@gmail.com>
+Date: Wed, 19 Dec 2012 12:32:43 +0100
+Subject: [Buildroot] Bug report in pkg-autotools.mk
+Message-ID: <CAExA2HxbO1X8zt_+Q=BtUhqnWCCSeNGZ3ALR_FhJmhWnpGLBHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gstreamer-1.0 plug-ins require this version for ORC
-acceleration.
+Hi all,
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/orc/orc.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In the pkg-autotools.mk file, line 238 (BR2012.11) or
+Makefile.autotools.in line 250 (BR2012.02), there is the following
+command:
 
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index 842ef25..77cb29f 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -3,7 +3,7 @@
- # orc
- #
- #############################################################
--ORC_VERSION = 0.4.14
-+ORC_VERSION = 0.4.16
- ORC_SITE = http://code.entropywave.com/download/orc/
- ORC_INSTALL_STAGING = YES
- ORC_DEPENDENCIES = host-orc
--- 
-1.7.10.4
+$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
+
+This command corrects the bad path for libraries installed in the
+staging directory in the libtool .la files.
+
+But, if Buildroot resides in a directory that contains /usr (for
+example /usr/local/src/buildroot-2012.11), $(STAGING_DIR) contains
+/usr and this command is not idempotent.
+Each time an autotools package is built, the paths in .la files are
+longer and false.
+
+Regards,
+
+Yvan Roch.
