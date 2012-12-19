@@ -1,49 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Dec 2012 13:35:07 +0100
-Subject: [Buildroot] Bug report in pkg-autotools.mk
-In-Reply-To: <CAExA2HxbO1X8zt_+Q=BtUhqnWCCSeNGZ3ALR_FhJmhWnpGLBHA@mail.gmail.com>
-References: <CAExA2HxbO1X8zt_+Q=BtUhqnWCCSeNGZ3ALR_FhJmhWnpGLBHA@mail.gmail.com>
-Message-ID: <20121219133507.058bf1ea@skate>
+From: =?ISO-8859-1?Q?Arnaud_R=E9billout?= <rebillout@syscom.ch>
+Date: Wed, 19 Dec 2012 13:47:11 +0100
+Subject: [Buildroot] [PATCH] package/uboot-tools: Add mkenvimage for host.
+Message-ID: <50D1B74F.805@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yvan Roch,
+Hello there,
 
-On Wed, 19 Dec 2012 12:32:43 +0100, Yvan Roch wrote:
+I need to use mkenvimage. And it seems that the easiest way is to 
+automatically install it in the HOST_UBOOT_TOOLS_INSTALL_CMDS target.
+The tool mkenvimage appeared v2011.12 of uboot, so it's present in all 
+the versions that buildroot supports.
+The patch is a simple line, if anyone is interested.
 
-> In the pkg-autotools.mk file, line 238 (BR2012.11) or
-> Makefile.autotools.in line 250 (BR2012.02), there is the following
-> command:
-> 
-> $$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
-> 
-> This command corrects the bad path for libraries installed in the
-> staging directory in the libtool .la files.
-> 
-> But, if Buildroot resides in a directory that contains /usr (for
-> example /usr/local/src/buildroot-2012.11), $(STAGING_DIR) contains
-> /usr and this command is not idempotent.
-> Each time an autotools package is built, the paths in .la files are
-> longer and false.
 
-Indeed. I have a patch fixing that:
+Regards
 
--               $$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
-+               $$(SED) "\:['= ]$(STAGING_DIR)/usr:!s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
+---
+diff --git a/package/uboot-tools/uboot-tools.mk 
+b/package/uboot-tools/uboot-tools.mk
+index 7628b77..57c59bb 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -49,6 +49,7 @@ endef
 
-However, using a Buildroot in /usr is still broken after that, due to
-libglib2 having .la files with incorrect paths (paths pointing to the
-build directory). I haven't managed to fix those, so I didn't yet send
-the patch to fix the more general .la files problem.
+  define HOST_UBOOT_TOOLS_INSTALL_CMDS
+      $(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin/mkimage
++    $(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage 
+$(HOST_DIR)/usr/bin/mkenvimage
+  endef
 
-Best regards,
+  $(eval $(generic-package))
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+---
