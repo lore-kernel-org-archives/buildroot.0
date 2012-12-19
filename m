@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 20 Dec 2012 00:37:32 +0100
-Subject: [Buildroot] [PATCH RFC 2/6] libfslvpuwrap: new package
+Date: Thu, 20 Dec 2012 00:37:35 +0100
+Subject: [Buildroot] [PATCH RFC 5/6] libfslcodec: new package
 In-Reply-To: <1355960256-10786-1-git-send-email-arnout@mind.be>
 References: <1355960256-10786-1-git-send-email-arnout@mind.be>
-Message-ID: <1355960256-10786-3-git-send-email-arnout@mind.be>
+Message-ID: <1355960256-10786-6-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +14,83 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                      |    1 +
- package/libfslvpuwrap/Config.in        |   13 +++++++++++++
- package/libfslvpuwrap/libfslvpuwrap.mk |   18 ++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/libfslvpuwrap/Config.in
- create mode 100644 package/libfslvpuwrap/libfslvpuwrap.mk
+ package/Config.in                  |    1 +
+ package/libfslcodec/Config.in      |    8 ++++++++
+ package/libfslcodec/libfslcodec.mk |   40 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
+ create mode 100644 package/libfslcodec/Config.in
+ create mode 100644 package/libfslcodec/libfslcodec.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index def4b20..ac2488e 100644
+index 171d936..a2bded6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -453,6 +453,7 @@ menu "Multimedia"
+@@ -454,6 +454,7 @@ menu "Multimedia"
  source "package/libdvdread/Config.in"
  source "package/libdvdnav/Config.in"
  source "package/libebml/Config.in"
-+source "package/libfslvpuwrap/Config.in"
++source "package/libfslcodec/Config.in"
+ source "package/libfslparser/Config.in"
+ source "package/libfslvpuwrap/Config.in"
  source "package/libmatroska/Config.in"
- source "package/libmms/Config.in"
- source "package/libmpeg2/Config.in"
-diff --git a/package/libfslvpuwrap/Config.in b/package/libfslvpuwrap/Config.in
+diff --git a/package/libfslcodec/Config.in b/package/libfslcodec/Config.in
 new file mode 100644
-index 0000000..57b8a02
+index 0000000..7b31b7a
 --- /dev/null
-+++ b/package/libfslvpuwrap/Config.in
-@@ -0,0 +1,13 @@
-+comment "libfslvpuwrap needs an imx-specific kernel to be built"
-+	depends on BR2_arm && !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_LIBFSLVPUWRAP
-+	bool "libfslvpuwrap"
-+	depends on BR2_LINUX_KERNEL
++++ b/package/libfslcodec/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBFSLCODEC
++	bool "libfslcodec"
 +	depends on BR2_arm # Only relevant for i.MX
-+	select BR2_PACKAGE_IMX_LIB
 +	help
-+	  Wrapper library for the vpu library, giving it a different API.
++	  Binary codec libraries for the Freescale i.MX SoCs.
 +
 +	  This library is provided by Freescale as-is and doesn't have
 +	  an upstream.
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
 new file mode 100644
-index 0000000..3ad33f9
+index 0000000..a2b57b8
 --- /dev/null
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -0,0 +1,18 @@
++++ b/package/libfslcodec/libfslcodec.mk
+@@ -0,0 +1,40 @@
 +#############################################################
 +#
-+# buildroot makefile for libfslvpuwrap
++# buildroot makefile for libfslcodec
 +#
 +#############################################################
 +
-+LIBFSLVPUWRAP_VERSION = 1.0.17
++LIBFSLCODEC_VERSION = 3.0.1
 +# No official download site from freescale, just this mirror
-+LIBFSLVPUWRAP_SITE = http://download.ossystems.com.br/bsp/freescale/source
-+LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
-+LIBFSLVPUWRAP_LICENSE_FILES = EULA.txt
-+LIBFSLVPUWRAP_REDISTRIBUTE = NO
++LIBFSLCODEC_SITE = http://download.ossystems.com.br/bsp/freescale/source
++LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
++LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
++LIBFSLCODEC_LICENSE_FILES = EULA EULA.txt
++# This is a legal minefield: the EULA in the bin file specifies that
++# the Board Support Package includes software and hardware (sic!)
++# for which a separate license is needed...
++LIBFSLCODEC_REDISTRIBUTE = NO
 +
-+LIBFSLVPUWRAP_INSTALL_STAGING = YES
++LIBFSLCODEC_INSTALL_STAGING = YES
 +
-+LIBFSLVPUWRAP_DEPENDENCIES += imx-lib
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (libfslcodec-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info.
++# Since the EULA in the bin file differs from the one in the tar file,
++# extract the one from the bin file as well.
++define LIBFSLCODEC_EXTRACT_CMDS
++	awk 'BEGIN      { start=0; } \
++	     /^EOEULA/  { start = 0; } \
++	                { if (start) print; } \
++	     /<<EOEULA/ { start=1; }'\
++	    $(DL_DIR)/$(LIBFSLCODEC_SOURCE) > $(@D)/EULA
++	cd $(BUILD_DIR); \
++	sh $(DL_DIR)/$(LIBFSLCODEC_SOURCE) --force --auto-accept
++endef
++
++# FIXME The Makefile installs both the arm9 and arm11 versions of the
++# libraries, but we only need one of them.
 +
 +$(eval $(autotools-package))
 -- 
