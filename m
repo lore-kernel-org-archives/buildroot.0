@@ -1,22 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 19 Dec 2012 14:46:13 +0100
-Subject: [Buildroot] [PATCH] ortp: disable Werror
-In-Reply-To: <1355922447-20410-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 19 Dec 2012 10:07:27 -0300")
-References: <1355922447-20410-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pq2640ka.fsf@dell.be.48ers.dk>
+Date: Wed, 19 Dec 2012 14:47:21 +0100
+Subject: [Buildroot] [PATCH] orc: bump to version 0.4.16
+In-Reply-To: <1355914471-18864-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Wed, 19 Dec 2012 11:54:31 +0100")
+References: <1355914471-18864-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87licu40ie.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Gustavo> Disable -Werror for the ortp build, fixes:
- Gustavo> http://autobuild.buildroot.net/results/b869fcfdfdb9d1ec4864b86c6953b0242200c502
+ Sven> The gstreamer-1.0 plug-ins require this version for ORC
+ Sven> acceleration.
 
-Committed, thanks.
+Committed, thanks. This presumably also works with gst 0.10?
 
 -- 
 Bye, Peter Korsgaard
