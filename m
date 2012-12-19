@@ -1,26 +1,38 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 19 Dec 2012 14:51:23 +0100
-Subject: [Buildroot] [PATCH] orc: bump to version 0.4.16
-In-Reply-To: <87licu40ie.fsf@dell.be.48ers.dk>
-References: <1355914471-18864-1-git-send-email-s.neumann@raumfeld.com>
- <87licu40ie.fsf@dell.be.48ers.dk>
-Message-ID: <1355925083.2864.3.camel@sven>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Dec 2012 14:52:59 +0100
+Subject: [Buildroot] [PATCH 2/3] pcmanfm: use a download URL from
+	downloads.sourceforge.net
+In-Reply-To: <1355908403-27224-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 19 Dec 2012 10:13:22 +0100")
+References: <1355908403-27224-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1355908403-27224-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87hani4090.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2012-12-19 at 14:47 +0100, Peter Korsgaard wrote:
-> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
-> 
->  Sven> The gstreamer-1.0 plug-ins require this version for ORC
->  Sven> acceleration.
-> 
-> Committed, thanks. This presumably also works with gst 0.10?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Yes. I've also tried (compiled) it with gstreamer-0.10.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  package/pcmanfm/pcmanfm.mk |    2 +-
+ Thomas>  1 file changed, 1 insertion(+), 1 deletion(-)
 
+ Thomas> diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+ Thomas> index e4c23ec..8eaa485 100644
+ Thomas> --- a/package/pcmanfm/pcmanfm.mk
+ Thomas> +++ b/package/pcmanfm/pcmanfm.mk
+ Thomas> @@ -5,7 +5,7 @@
+ Thomas>  #############################################################
+ Thomas>  PCMANFM_VERSION = 0.3.5.9
+ Thomas>  PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.gz
+ Thomas> -PCMANFM_SITE = http://internap.dl.sourceforge.net/sourceforge/pcmanfm
+ Thomas> +PCMANFM_SITE = http://downloads.sourceforge.net/project/pcmanfm/pcmanfm-legacy%20%28Old%200.5%20series%29/PCManFM%200.3.5.9/
 
-Regards,
-Sven
+I changed this to use PCMANFM_VERSION instead of hardcoding 0.3.5.9 here
+and committed all 3, thanks.
+
+-- 
+Bye, Peter Korsgaard
