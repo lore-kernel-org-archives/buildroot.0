@@ -1,65 +1,85 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 19 Dec 2012 23:03:58 +0100
-Subject: [Buildroot] [PATCH 1/4] libglib2: bumped version to 2.32.4
-In-Reply-To: <1898585649.1424283.1355934492400.JavaMail.root@advansee.com>
-References: <1355936324-9585-1-git-send-email-bogdan@nimblex.org>
- <1898585649.1424283.1355934492400.JavaMail.root@advansee.com>
-Message-ID: <1355954638.17510.17.camel@bender>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Wed, 19 Dec 2012 23:11:31 +0100
+Subject: [Buildroot] [PATCH] sg3-utils new package.
+In-Reply-To: <20121218100332.7a0c10d0@skate>
+References: <1355776546-25189-1-git-send-email-marek.belisko@open-nandra.com>
+ <20121218094835.688afe2c@skate>
+ <CAAfyv37=U0YtKsNkoCxTA2iRAXwgTETrcuOPWXmvNasnOqZaSA@mail.gmail.com>
+ <20121218100332.7a0c10d0@skate>
+Message-ID: <CAAfyv35TW9i7-R1KJEnJSkOyV2dvkhabtFPnLip-fifEdop+QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-On Wed, 2012-12-19 at 17:28 +0100, Beno?t Th?baudeau wrote:
+On Tue, Dec 18, 2012 at 10:03 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Belisko Marek,
+>
+> On Tue, 18 Dec 2012 09:52:41 +0100, Belisko Marek wrote:
+>
+>> > Hum, why is this needed? Does sg3_utils installs some libraries or
+>> > headers that are useful for other packages?
+>> I'm working on adding udisks to buildroot and udisks have dependency on
+>> sg3-utils library so this is the reason why installing to staging.
+>
+> Ok. A comment just before the _INSTALL_STAGING line would be useful,
+> then, because for a "utils" package, we don't necessarily expect to
+> have a library in it.
+>
+>> I've read somewhere on ML you was working also on udisks package.
+>> Was it successful?
+>
+> It was a looong time ago. I think I managed to get udisks to build, but
+> I hadn't had the time to do some real testing with it: I was first
+> doing some testing of polkit, which is a dependency of udisks.
+>
+> I've put online the 3 patches I had done at that time (note that they
+> are old: they still use the old AUTOTARGETS macro name), see:
+> http://free-electrons.com/~thomas/pub/udisks-buildroot/
+Thanks for patches. I made small update and I can compile polkit without
+problems but I have still problems with udisks.
 
-> > -		ac_cv_func_posix_getgrgid_r=no glib_cv_long_long_format=ll \
-> > -		ac_cv_func_printf_unix98=yes ac_cv_func_vsnprintf_c99=yes \
-> 
-> Can you explain in detail why you removed these? Did you test that gst-inspect
-> still works fine after that?
+Basically udisks have only autogen.sh script and I was trying to use:
+UDISKS_AUTORECONF = YES macro.
 
-No, actually you added this to buildroot way after we've done our
-changes to update libglib2. So the removal of these two lines is
-probably just an artefact from rebasing our old patch on top of current
-buildroot. I don't think we've removed them on purpose.
+With this change it fails during autoreconfiguring:
 
-It's been a while since we've done the switch to libglib2. And as I said
-in the patch that Bogdan submitted, not all the changes are ready for
-inclusion in buildroot. But let me try to give some background on the
-changes that we've done. I've collected this from our buildroot git log,
-so bear with me if I don't remember all the details.
+configure.ac:13: the top level
+configure.ac:225: warning: AM_NLS is m4_require'd but not m4_defun'd
+aclocal.m4:1204: IT_PROG_INTLTOOL is expanded from...
+configure.ac:225: the top level
+configure:14234: error: possibly undefined macro: AM_NLS
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
 
-+ ac_cv_alignof_guint32=4 ac_cv_alignof_guint64=4 ac_cv_alignof_unsigned_long=4 \
+Am I missing some dependency?
 
-These are definitely not right for all platforms. But I found that the
-alignment checks in the glib configure script don't get the correct
-result when cross-compiling. So I've added this to force the correct
-values for our platforms (ARM and Geode).
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-+               CPPFLAGS=-D__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4 \
+Thanks,
 
-This turned out to be necessary on our ARM platform. On ARMv5 atomic
-operations are not actually available as inlines but libgcc does still
-provide them as functions. Without tricking glib into using the
-functions it would use mutex-based fallbacks.
+marek
 
-+               ac_cv_func_newlocale=no ac_cv_func_uselocale=no \
-+               ac_cv_func_strtod_l=no ac_cv_func_strtoll_l=no ac_cv_func_strtoull_l=no \
+-- 
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
 
-The xlocale based implementations of g_ascii_strto{d,ll,ull} and
-g_ascii_formatd crash with uClibC. At least they did this with the
-version of uCLibC that we used back then (that was version 0.9.32 as far
-as I can see). So this change tricks the configure script into believing
-that this functionality was not available so that the good old
-home-grown code is used again as it was the case before 2.32.
-
-So the submitted patch for libglib2 should not be taken as final. But I
-hope that this will nevertheless help to get libglib2 updated in
-buildroot for the next release.
-
-
-Regards,
-Sven
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
