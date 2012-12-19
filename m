@@ -1,1716 +1,1787 @@
 From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 20 Dec 2012 01:43:41 +0200
-Subject: [Buildroot] [PATCH 03/12] elfutils: new package
+Date: Thu, 20 Dec 2012 01:43:50 +0200
+Subject: [Buildroot] [PATCH 12/12] elfutils: new package
 In-Reply-To: <1355960630-25089-1-git-send-email-stefan.froberg@petroprogram.com>
 References: <y>
  <1355960630-25089-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <1355960630-25089-3-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <1355960630-25089-12-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is official Fedora patch taken from their repository
+Official Fedora patch for elfutils taken from their repository
 at https://fedorahosted.org/releases/e/l/elfutils/0.155
-
-Fixing some minor portability problems
+Intended to make things more...well..robust.
 
 Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
- package/elfutils/elfutils.000-portability.patch | 1684 +++++++++++++++++++++++
- 1 files changed, 1684 insertions(+), 0 deletions(-)
- create mode 100644 package/elfutils/elfutils.000-portability.patch
+ package/elfutils/elfutils-robustify.patch | 1756 +++++++++++++++++++++++++++++
+ 1 files changed, 1756 insertions(+), 0 deletions(-)
+ create mode 100644 package/elfutils/elfutils-robustify.patch
 
-diff --git a/package/elfutils/elfutils.000-portability.patch b/package/elfutils/elfutils.000-portability.patch
+diff --git a/package/elfutils/elfutils-robustify.patch b/package/elfutils/elfutils-robustify.patch
 new file mode 100644
-index 0000000..dd9eeb2
+index 0000000..9eee984
 --- /dev/null
-+++ b/package/elfutils/elfutils.000-portability.patch
-@@ -0,0 +1,1684 @@
-+--- elfutils/backends/ChangeLog
-++++ elfutils/backends/ChangeLog
-+@@ -135,6 +135,10 @@
-+ 	* ppc_attrs.c (ppc_check_object_attribute): Handle tag
-+ 	GNU_Power_ABI_Struct_Return.
-+ 
-++2009-01-23  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (libebl_%.so): Use $(LD_AS_NEEDED).
-++
-+ 2008-10-04  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* i386_reloc.def: Fix entries for TLS_GOTDESC, TLS_DESC_CALL, and
-+@@ -462,6 +466,11 @@
-+ 	* sparc_init.c: Likewise.
-+ 	* x86_64_init.c: Likewise.
-+ 
-++2005-11-22  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (LD_AS_NEEDED): New variable, substituted by configure.
-++	(libebl_%.so rule): Use it in place of -Wl,--as-needed.
-++
-+ 2005-11-19  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* ppc64_reloc.def: REL30 -> ADDR30.
-+@@ -484,6 +493,9 @@
-+ 	* Makefile.am (uninstall): Don't try to remove $(pkgincludedir).
-+ 	(CLEANFILES): Add libebl_$(m).so.
-+ 
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-+ 	* ppc_reloc.def: Update bits per Alan Modra <amodra@bigpond.net.au>.
-+ 	* ppc64_reloc.def: Likewise.
-+ 
-+--- elfutils/backends/Makefile.am
-++++ elfutils/backends/Makefile.am
-+@@ -111,7 +111,7 @@ libebl_%.so libebl_%.map: libebl_%_pic.a
-+ 	$(LINK) -shared -o $(@:.map=.so) \
-+ 		-Wl,--whole-archive $< $(cpu_$*) -Wl,--no-whole-archive \
-+ 		-Wl,--version-script,$(@:.so=.map) \
-+-		-Wl,-z,defs -Wl,--as-needed $(libelf) $(libdw) $(libmudflap)
-++		-Wl,-z,defs $(LD_AS_NEEDED) $(libelf) $(libdw) $(libmudflap)
-+ 	$(textrel_check)
-+ 
-+ libebl_i386.so: $(cpu_i386)
-+--- elfutils/backends/Makefile.in
-++++ elfutils/backends/Makefile.in
-+@@ -38,7 +38,8 @@ build_triplet = @build@
-+ host_triplet = @host@
-+ DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-+ subdir = backends
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+ am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-+@@ -172,6 +173,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -201,6 +203,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -263,10 +266,9 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
-+ 	-I$(top_srcdir)/libebl -I$(top_srcdir)/libasm \
-+ 	-I$(top_srcdir)/libelf -I$(top_srcdir)/libdw
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1)
-++	$(am__append_1) $(am__append_2)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+@@ -719,7 +721,7 @@ libebl_%.so libebl_%.map: libebl_%_pic.a
-+ 	$(LINK) -shared -o $(@:.map=.so) \
-+ 		-Wl,--whole-archive $< $(cpu_$*) -Wl,--no-whole-archive \
-+ 		-Wl,--version-script,$(@:.so=.map) \
-+-		-Wl,-z,defs -Wl,--as-needed $(libelf) $(libdw) $(libmudflap)
-++		-Wl,-z,defs $(LD_AS_NEEDED) $(libelf) $(libdw) $(libmudflap)
-+ 	$(textrel_check)
-+ 
-+ libebl_i386.so: $(cpu_i386)
-+--- elfutils/ChangeLog
-++++ elfutils/ChangeLog
-+@@ -16,6 +16,8 @@
-+ 
-+ 2012-01-24  Mark Wielaard  <mjw@redhat.com>
-+ 
-++	* configure.ac: Wrap AC_COMPILE_IFELSE sources in AC_LANG_SOURCE.
-++
-+ 	* COPYING: Fix address. Updated version from gnulib.
-+ 
-+ 2012-01-23  Mark Wielaard  <mjw@redhat.com>
-+@@ -34,6 +36,9 @@
-+ 
-+ 2011-10-08  Mike Frysinger  <vapier@gentoo.org>
-+ 
-++	* configure.ac (--disable-werror): Handle it, controlling BUILD_WERROR
-++	automake option.
-++
-+ 	* configure.ac: Fix use of AC_ARG_ENABLE to handle $enableval correctly.
-+ 
-+ 2011-10-02  Ulrich Drepper  <drepper@gmail.com>
-+@@ -55,6 +60,10 @@
-+ 
-+ 	* configure.ac (LOCALEDIR, DATADIRNAME): Removed.
-+ 
-++2009-11-22  Roland McGrath  <roland@redhat.com>
-++
-++	* configure.ac: Use sed and expr instead of modern bash extensions.
-++
-+ 2009-09-21  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* configure.ac: Update for more modern autoconf.
-+@@ -63,6 +72,10 @@
-+ 
-+ 	* configure.ac (zip_LIBS): Check for liblzma too.
-+ 
-++2009-08-17  Roland McGrath  <roland@redhat.com>
-++
-++	* configure.ac: Check for -fgnu89-inline; add it to WEXTRA if it works.
-++
-+ 2009-04-19  Roland McGrath  <roland@redhat.com>
-+
-+	* configure.ac (eu_version): Round down here, not in version.h macros.
-+@@ -74,6 +87,8 @@
-+ 
-+ 2009-01-23  Roland McGrath  <roland@redhat.com>
-+ 
-++	* configure.ac: Check for __builtin_popcount.
-++
-+ 	* configure.ac (zlib check): Check for gzdirect, need zlib >= 1.2.2.3.
-+ 
-+ 	* configure.ac (__thread check): Use AC_LINK_IFELSE, in case of
-+@@ -154,6 +169,10 @@
-+ 	* configure.ac: Add dummy automake conditional to get dependencies
-+ 	for non-generic linker right.  See src/Makefile.am.
-+ 
-++2005-11-22  Roland McGrath  <roland@redhat.com>
-++
-++	* configure.ac: Check for --as-needed linker option.
-++
-+ 2005-11-18  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* Makefile.am (DISTCHECK_CONFIGURE_FLAGS): New variable.
-+@@ -201,6 +220,17 @@
-+ 	* Makefile.am (all_SUBDIRS): Add libdwfl.
-+ 	* configure.ac: Write libdwfl/Makefile.
-+ 
-++2005-05-31  Roland McGrath  <roland@redhat.com>
-++
-++	* configure.ac (WEXTRA): Check for -Wextra and set this substitution.
-++
-++	* configure.ac: Check for struct stat st_?tim members.
-++	* src/strip.c (process_file): Use st_?time if st_?tim are not there.
-++
-++	* configure.ac: Check for futimes function.
-++	* src/strip.c (handle_elf) [! HAVE_FUTIMES]: Use utimes instead.
-++	(handle_ar) [! HAVE_FUTIMES]: Likewise.
-++
-+ 2005-05-19  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* configure.ac [AH_BOTTOM] (INTDECL, _INTDECL): New macros.
-+--- elfutils/config/ChangeLog
-++++ elfutils/config/ChangeLog
-+@@ -19,6 +19,10 @@
-+ 
-+ 	* known-dwarf.awk: Use gawk.
-+ 
-++2011-10-08  Mike Frysinger  <vapier@gentoo.org>
-++
-++	* eu.am [BUILD_WERROR]: Conditionalize -Werror use on this.
-++
-+ 2010-07-02  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* elfutils.spec.in: Add more BuildRequires.
-+--- elfutils/config/eu.am
-++++ elfutils/config/eu.am
-+@@ -1,6 +1,6 @@
-+ ## Common automake fragments for elfutils subdirectory makefiles.
-+ ##
-+-## Copyright (C) 2010 Red Hat, Inc.
-++## Copyright (C) 2010-2011 Red Hat, Inc.
-+ ##
-+ ## This file is part of elfutils.
-+ ##
-+@@ -29,14 +29,20 @@
-+ ## not, see <http://www.gnu.org/licenses/>.
-+ ##
-+ 
-++WEXTRA = @WEXTRA@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-++
-+ DEFS = -D_GNU_SOURCE -DHAVE_CONFIG_H -DLOCALEDIR='"${localedir}"'
-+ INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow \
-+-	    $(if $($(*F)_no_Werror),,-Werror) \
-+-	    $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
-++	    $(if $($(*F)_no_Wunused),,-Wunused $(WEXTRA)) \
-+ 	    $(if $($(*F)_no_Wformat),-Wno-format,-Wformat=2) \
-+ 	    $($(*F)_CFLAGS)
-+ 
-++if BUILD_WERROR
-++AM_CFLAGS += $(if $($(*F)_no_Werror),,-Werror)
-++endif
-++
-+ if MUDFLAP
-+ AM_CFLAGS += -fmudflap
-+ libmudflap = -lmudflap
-+--- elfutils/config/Makefile.in
-++++ elfutils/config/Makefile.in
-+@@ -76,6 +76,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -105,6 +106,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+--- elfutils/config.h.in
-++++ elfutils/config.h.in
-+@@ -6,6 +6,9 @@
-+ /* Defined if libdw should support GNU ref_alt FORM, dwz multi files. */
-+ #undef ENABLE_DWZ
-+ 
-++/* Have __builtin_popcount. */
-++#undef HAVE_BUILTIN_POPCOUNT
-++
-+ /* $libdir subdirectory containing libebl modules. */
-+ #undef LIBEBL_SUBDIR
-+ 
-+@@ -64,4 +67,7 @@
-+ /* Define for large files, on AIX-style hosts. */
-+ #undef _LARGE_FILES
-+ 
-++/* Stubbed out if missing compiler support. */
-++#undef __thread
-++
-+ #include <eu-config.h>
-+--- elfutils/configure
-++++ elfutils/configure
-+@@ -598,6 +598,8 @@ ZLIB_TRUE
-+ LIBEBL_SUBDIR
-+ TESTS_RPATH_FALSE
-+ TESTS_RPATH_TRUE
-++BUILD_WERROR_FALSE
-++BUILD_WERROR_TRUE
-+ BUILD_STATIC_FALSE
-+ BUILD_STATIC_TRUE
-+ GCOV_FALSE
-+@@ -612,6 +614,8 @@ NEVER_TRUE
-+ base_cpu
-+ NATIVE_LD_FALSE
-+ NATIVE_LD_TRUE
-++LD_AS_NEEDED
-++WEXTRA
-+ LEXLIB
-+ LEX_OUTPUT_ROOT
-+ LEX
-+@@ -725,6 +729,7 @@ enable_mudflap
-+ enable_debugpred
-+ enable_gprof
-+ enable_gcov
-++enable_werror
-+ enable_tests_rpath
-+ enable_libebl_subdir
-+ with_zlib
-+@@ -1378,6 +1383,7 @@ Optional Features:
-+                           prediction
-+   --enable-gprof          build binaries with gprof support
-+   --enable-gcov           build binaries with gcov support
-++  --disable-werror        do not build with -Werror
-+   --enable-tests-rpath    build $ORIGIN-using rpath into tests
-+   --enable-libebl-subdir=DIR
-+                           install libebl_CPU modules in $(libdir)/DIR
-+@@ -3917,6 +3923,130 @@ if test "x$ac_cv_c99" != xyes; then :
-+   as_fn_error $? "gcc with C99 support required" "$LINENO" 5
-+ fi
-+ 
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for -Wextra option to $CC" >&5
-++$as_echo_n "checking for -Wextra option to $CC... " >&6; }
-++if ${ac_cv_cc_wextra+:} false; then :
-++  $as_echo_n "(cached) " >&6
-++else
-++  old_CFLAGS="$CFLAGS"
-++CFLAGS="$CFLAGS -Wextra"
-++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-++/* end confdefs.h.  */
-++void foo (void) { }
-++_ACEOF
-++if ac_fn_c_try_compile "$LINENO"; then :
-++  ac_cv_cc_wextra=yes
-++else
-++  ac_cv_cc_wextra=no
-++fi
-++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-++CFLAGS="$old_CFLAGS"
-++fi
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_cc_wextra" >&5
-++$as_echo "$ac_cv_cc_wextra" >&6; }
-++
-++if test "x$ac_cv_cc_wextra" = xyes; then :
-++  WEXTRA=-Wextra
-++else
-++  WEXTRA=-W
-++fi
-++
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for -fgnu89-inline option to $CC" >&5
-++$as_echo_n "checking for -fgnu89-inline option to $CC... " >&6; }
-++if ${ac_cv_cc_gnu89_inline+:} false; then :
-++  $as_echo_n "(cached) " >&6
-++else
-++  old_CFLAGS="$CFLAGS"
-++CFLAGS="$CFLAGS -fgnu89-inline -Werror"
-++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-++/* end confdefs.h.  */
-++
-++void foo (void)
-++{
-++  inline void bar (void) {}
-++  bar ();
-++}
-++extern inline void baz (void) {}
-++
-++_ACEOF
-++if ac_fn_c_try_compile "$LINENO"; then :
-++  ac_cv_cc_gnu89_inline=yes
-++else
-++  ac_cv_cc_gnu89_inline=no
-++fi
-++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-++CFLAGS="$old_CFLAGS"
-++fi
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_cc_gnu89_inline" >&5
-++$as_echo "$ac_cv_cc_gnu89_inline" >&6; }
-++if test "x$ac_cv_cc_gnu89_inline" = xyes; then :
-++  WEXTRA="${WEXTRA:+$WEXTRA }-fgnu89-inline"
-++fi
-++
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --as-needed linker option" >&5
-++$as_echo_n "checking for --as-needed linker option... " >&6; }
-++if ${ac_cv_as_needed+:} false; then :
-++  $as_echo_n "(cached) " >&6
-++else
-++  cat > conftest.c <<EOF
-++int main (void) { return 0; }
-++EOF
-++if { ac_try='${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS
-++			    -fPIC -shared -o conftest.so conftest.c
-++			    -Wl,--as-needed 1>&5'
-++  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-++  (eval $ac_try) 2>&5
-++  ac_status=$?
-++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-++  test $ac_status = 0; }; }
-++then
-++  ac_cv_as_needed=yes
-++else
-++  ac_cv_as_needed=no
-++fi
-++rm -f conftest*
-++fi
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_as_needed" >&5
-++$as_echo "$ac_cv_as_needed" >&6; }
-++if test "x$ac_cv_as_needed" = xyes; then :
-++  LD_AS_NEEDED=-Wl,--as-needed
-++else
-++  LD_AS_NEEDED=
-++fi
-++
-++
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for __builtin_popcount" >&5
-++$as_echo_n "checking for __builtin_popcount... " >&6; }
-++if ${ac_cv_popcount+:} false; then :
-++  $as_echo_n "(cached) " >&6
-++else
-++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-++/* end confdefs.h.  */
-++
-++int
-++main ()
-++{
-++exit (__builtin_popcount (127));
-++  ;
-++  return 0;
-++}
-++_ACEOF
-++if ac_fn_c_try_link "$LINENO"; then :
-++  ac_cv_popcount=yes
-++else
-++  ac_cv_popcount=no
-++fi
-++rm -f core conftest.err conftest.$ac_objext \
-++    conftest$ac_exeext conftest.$ac_ext
-++fi
-++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_popcount" >&5
-++$as_echo "$ac_cv_popcount" >&6; }
-++if test "x$ac_cv_popcount" = xyes; then :
-++
-++$as_echo "#define HAVE_BUILTIN_POPCOUNT 1" >>confdefs.h
-++
-++fi
-++
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread support" >&5
-+ $as_echo_n "checking for __thread support... " >&6; }
-+ if ${ac_cv_tls+:} false; then :
-+@@ -3953,7 +4083,13 @@ fi
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_tls" >&5
-+ $as_echo "$ac_cv_tls" >&6; }
-+ if test "x$ac_cv_tls" != xyes; then :
-+-  as_fn_error $? "__thread support required" "$LINENO" 5
-++  if test "$use_locks" = yes; then :
-++  as_fn_error $? "--enable-thread-safety requires __thread support" "$LINENO" 5
-++else
-++
-++$as_echo "#define __thread /* empty: no multi-thread support */" >>confdefs.h
-++
-++fi
-+ fi
-+ 
-+ # Check whether --enable-largefile was given.
-+@@ -4302,6 +4438,22 @@ else
-+ fi
-+ 
-+ 
-++# Check whether --enable-werror was given.
-++if test "${enable_werror+set}" = set; then :
-++  enableval=$enable_werror; enable_werror=$enableval
-++else
-++  enable_werror=yes
-++fi
-++
-++ if test "$enable_werror" = yes; then
-++  BUILD_WERROR_TRUE=
-++  BUILD_WERROR_FALSE='#'
-++else
-++  BUILD_WERROR_TRUE='#'
-++  BUILD_WERROR_FALSE=
-++fi
-++
-++
-+ # Check whether --enable-tests-rpath was given.
-+ if test "${enable_tests_rpath+set}" = set; then :
-+   enableval=$enable_tests_rpath; tests_use_rpath=$enableval
-+@@ -5022,7 +5174,7 @@ case "$eu_version" in
-+ esac
-+ 
-+ # Round up to the next release API (x.y) version.
-+-eu_version=$(( (eu_version + 999) / 1000 ))
-++eu_version=`expr \( $eu_version + 999 \) / 1000`
-+ 
-+ cat >confcache <<\_ACEOF
-+ # This file is a shell script that caches the results of configure
-+@@ -5185,6 +5337,10 @@ if test -z "${BUILD_STATIC_TRUE}" && tes
-+   as_fn_error $? "conditional \"BUILD_STATIC\" was never defined.
-+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
-+ fi
-++if test -z "${BUILD_WERROR_TRUE}" && test -z "${BUILD_WERROR_FALSE}"; then
-++  as_fn_error $? "conditional \"BUILD_WERROR\" was never defined.
-++Usually this means the macro was only invoked conditionally." "$LINENO" 5
-++fi
-+ if test -z "${TESTS_RPATH_TRUE}" && test -z "${TESTS_RPATH_FALSE}"; then
-+   as_fn_error $? "conditional \"TESTS_RPATH\" was never defined.
-+ Usually this means the macro was only invoked conditionally." "$LINENO" 5
-+--- elfutils/configure.ac
-++++ elfutils/configure.ac
-+@@ -90,6 +90,54 @@ CFLAGS="$old_CFLAGS"])
-+ AS_IF([test "x$ac_cv_c99" != xyes],
-+       AC_MSG_ERROR([gcc with C99 support required]))
-+ 
-++AC_CACHE_CHECK([for -Wextra option to $CC], ac_cv_cc_wextra, [dnl
-++old_CFLAGS="$CFLAGS"
-++CFLAGS="$CFLAGS -Wextra"
-++AC_COMPILE_IFELSE([AC_LANG_SOURCE([void foo (void) { }])],
-++		  ac_cv_cc_wextra=yes, ac_cv_cc_wextra=no)
-++CFLAGS="$old_CFLAGS"])
-++AC_SUBST(WEXTRA)
-++AS_IF([test "x$ac_cv_cc_wextra" = xyes], [WEXTRA=-Wextra], [WEXTRA=-W])
-++
-++AC_CACHE_CHECK([for -fgnu89-inline option to $CC], ac_cv_cc_gnu89_inline, [dnl
-++old_CFLAGS="$CFLAGS"
-++CFLAGS="$CFLAGS -fgnu89-inline -Werror"
-++AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-++void foo (void)
-++{
-++  inline void bar (void) {}
-++  bar ();
-++}
-++extern inline void baz (void) {}
-++])], ac_cv_cc_gnu89_inline=yes, ac_cv_cc_gnu89_inline=no)
-++CFLAGS="$old_CFLAGS"])
-++AS_IF([test "x$ac_cv_cc_gnu89_inline" = xyes],
-++      [WEXTRA="${WEXTRA:+$WEXTRA }-fgnu89-inline"])
-++
-++AC_CACHE_CHECK([for --as-needed linker option],
-++	       ac_cv_as_needed, [dnl
-++cat > conftest.c <<EOF
-++int main (void) { return 0; }
-++EOF
-++if AC_TRY_COMMAND([${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS
-++			    -fPIC -shared -o conftest.so conftest.c
-++			    -Wl,--as-needed 1>&AS_MESSAGE_LOG_FD])
-++then
-++  ac_cv_as_needed=yes
-++else
-++  ac_cv_as_needed=no
-++fi
-++rm -f conftest*])
-++AS_IF([test "x$ac_cv_as_needed" = xyes],
-++      [LD_AS_NEEDED=-Wl,--as-needed], [LD_AS_NEEDED=])
-++AC_SUBST(LD_AS_NEEDED)
-++
-++AC_CACHE_CHECK([for __builtin_popcount], ac_cv_popcount, [dnl
-++AC_LINK_IFELSE([AC_LANG_PROGRAM([], [[exit (__builtin_popcount (127));]])],
-++	       ac_cv_popcount=yes, ac_cv_popcount=no)])
-++AS_IF([test "x$ac_cv_popcount" = xyes],
-++      [AC_DEFINE([HAVE_BUILTIN_POPCOUNT], [1], [Have __builtin_popcount.])])
-++
-+ AC_CACHE_CHECK([for __thread support], ac_cv_tls, [dnl
-+ # Use the same flags that we use for our DSOs, so the test is representative.
-+ # Some old compiler/linker/libc combinations fail some ways and not others.
-+@@ -105,7 +153,10 @@ static __thread int a; int foo (int b) {
-+ CFLAGS="$save_CFLAGS"
-+ LDFLAGS="$save_LDFLAGS"])
-+ AS_IF([test "x$ac_cv_tls" != xyes],
-+-      AC_MSG_ERROR([__thread support required]))
-++      [AS_IF([test "$use_locks" = yes],
-++	     [AC_MSG_ERROR([--enable-thread-safety requires __thread support])],
-++	     [AC_DEFINE([__thread], [/* empty: no multi-thread support */],
-++			[Stubbed out if missing compiler support.])])])
-+ 
-+ dnl This test must come as early as possible after the compiler configuration
-+ dnl tests, because the choice of the file model can (in principle) affect
-+@@ -193,6 +244,11 @@ AM_CONDITIONAL(GCOV, test "$use_gcov" =
-+ AM_CONDITIONAL(BUILD_STATIC, [dnl
-+ test "$use_mudflap" = yes -o "$use_gprof" = yes -o "$use_gcov" = yes])
-+ 
-++AC_ARG_ENABLE([werror],
-++AS_HELP_STRING([--disable-werror],[do not build with -Werror]),
-++	       [enable_werror=$enableval], [enable_werror=yes])
-++AM_CONDITIONAL(BUILD_WERROR, test "$enable_werror" = yes)
-++
-+ AC_ARG_ENABLE([tests-rpath],
-+ AS_HELP_STRING([--enable-tests-rpath],[build $ORIGIN-using rpath into tests]),
-+ 	       [tests_use_rpath=$enableval], [tests_use_rpath=no])
-+@@ -304,6 +360,6 @@ case "$eu_version" in
-+ esac
-+ 
-+ # Round up to the next release API (x.y) version.
-+-eu_version=$(( (eu_version + 999) / 1000 ))
-++eu_version=`expr \( $eu_version + 999 \) / 1000`
-+ 
-+ AC_OUTPUT
-+--- elfutils/lib/ChangeLog
-++++ elfutils/lib/ChangeLog
-+@@ -35,6 +35,9 @@
-+ 
-+ 2009-01-23  Roland McGrath  <roland@redhat.com>
-+ 
-++	* eu-config.h [! HAVE_BUILTIN_POPCOUNT]
-++	(__builtin_popcount): New inline function.
-++
-+ 	* eu-config.h: Add multiple inclusion protection.
-+ 
-+ 2009-01-17  Ulrich Drepper  <drepper@redhat.com>
-+@@ -91,6 +94,11 @@
-+ 	* Makefile.am (libeu_a_SOURCES): Add it.
-+ 	* system.h: Declare crc32_file.
-+ 
-++2005-02-07  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-+ 2005-04-30  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* Makefile.am: Use -ffunction-sections for xmalloc.c.
-+--- elfutils/lib/eu-config.h
-++++ elfutils/lib/eu-config.h
-+@@ -162,6 +162,17 @@ asm (".section predict_data, \"aw\"; .pr
-+ /* This macro is used by the tests conditionalize for standalone building.  */
-+ #define ELFUTILS_HEADER(name) <lib##name.h>
-+ 
-++#ifndef HAVE_BUILTIN_POPCOUNT
-++# define __builtin_popcount hakmem_popcount
-++static inline unsigned int __attribute__ ((unused))
-++hakmem_popcount (unsigned int x)
-++{
-++  /* HAKMEM 169 */
-++  unsigned int n = x - ((x >> 1) & 033333333333) - ((x >> 2) & 011111111111);
-++  return ((n + (n >> 3)) & 030707070707) % 63;
-++}
-++#endif	/* HAVE_BUILTIN_POPCOUNT */
-++
-+ 
-+ #ifdef SHARED
-+ # define OLD_VERSION(name, version) \
-+--- elfutils/lib/Makefile.in
-++++ elfutils/lib/Makefile.in
-+@@ -37,7 +37,8 @@ build_triplet = @build@
-+ host_triplet = @host@
-+ DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-+ subdir = lib
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+ am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-+@@ -100,6 +101,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -129,6 +131,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -190,10 +193,9 @@ zip_LIBS = @zip_LIBS@
-+ INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I.. \
-+ 	-I$(srcdir)/../libelf
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1) -fpic
-++	$(am__append_1) $(am__append_2) -fpic
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+--- elfutils/libasm/ChangeLog
-++++ elfutils/libasm/ChangeLog
-+@@ -71,6 +71,11 @@
-+ 	* asm_error.c: Add new error ASM_E_IOERROR.
-+ 	* libasmP.h: Add ASM_E_IOERROR definition.
-+ 
-++2005-05-31  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-+ 2005-02-15  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* Makefile.am (AM_CFLAGS): Add -Wunused -Wextra -Wformat=2.
-+--- elfutils/libasm/Makefile.in
-++++ elfutils/libasm/Makefile.in
-+@@ -39,10 +39,11 @@ host_triplet = @host@
-+ DIST_COMMON = $(noinst_HEADERS) $(pkginclude_HEADERS) \
-+ 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-+ 	$(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-+ @MUDFLAP_FALSE at noinst_PROGRAMS = $(am__EXEEXT_1)
-+ @MUDFLAP_TRUE at am_libasm_pic_a_OBJECTS =
-+- at MUDFLAP_FALSE@@USE_LOCKS_TRUE at am__append_2 = -lpthread
-++ at MUDFLAP_FALSE@@USE_LOCKS_TRUE at am__append_3 = -lpthread
-+ subdir = libasm
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+ am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-+@@ -147,6 +148,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -176,6 +178,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = 1
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -238,10 +241,9 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
-+ 	-I$(top_srcdir)/libelf -I$(top_srcdir)/libebl \
-+ 	-I$(top_srcdir)/libdw
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1)
-++	$(am__append_1) $(am__append_2)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+@@ -270,7 +272,7 @@ libasm_a_SOURCES = asm_begin.c asm_abort
-+ 
-+ @MUDFLAP_FALSE at libasm_pic_a_SOURCES = 
-+ @MUDFLAP_FALSE at am_libasm_pic_a_OBJECTS = $(libasm_a_SOURCES:.c=.os)
-+- at MUDFLAP_FALSE@libasm_so_LDLIBS = $(am__append_2)
-++ at MUDFLAP_FALSE@libasm_so_LDLIBS = $(am__append_3)
-+ @MUDFLAP_FALSE at libasm_so_SOURCES = 
-+ noinst_HEADERS = libasmP.h symbolhash.h
-+ EXTRA_DIST = libasm.map
-+--- elfutils/libcpu/ChangeLog
-++++ elfutils/libcpu/ChangeLog
-+@@ -38,6 +38,9 @@
-+ 
-+ 2009-01-23  Roland McGrath  <roland@redhat.com>
-+ 
-++	* i386_disasm.c (i386_disasm): Add abort after assert-constant for old
-++	compilers that don't realize it's noreturn.
-++
-+ 	* Makefile.am (i386_parse_CFLAGS): Use quotes around command
-+ 	substitution that can produce leading whitespace.
-+ 
-+@@ -367,6 +370,11 @@
-+ 	* defs/i386.doc: New file.
-+ 	* defs/x86_64: New file.
-+ 
-++2005-04-04  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it instead of -Wextra.
-++
-+ 2005-02-15  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* Makefile (AM_CFLAGS): Add -Wunused -Wextra -Wformat=2.
-+--- elfutils/libcpu/i386_disasm.c
-++++ elfutils/libcpu/i386_disasm.c
-+@@ -822,6 +822,7 @@ i386_disasm (const uint8_t **startp, con
-+ 
-+ 			default:
-+ 			  assert (! "INVALID not handled");
-++			  abort ();
-+ 			}
-+ 		    }
-+ 		  else
-+--- elfutils/libcpu/Makefile.in
-++++ elfutils/libcpu/Makefile.in
-+@@ -39,7 +39,8 @@ host_triplet = @host@
-+ DIST_COMMON = $(am__noinst_HEADERS_DIST) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(top_srcdir)/config/eu.am ChangeLog \
-+ 	i386_lex.c i386_parse.c
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-+ @MAINTAINER_MODE_TRUE at noinst_PROGRAMS = i386_gendis$(EXEEXT)
-+ subdir = libcpu
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+@@ -117,6 +118,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = lex.$(<F:lex.l=)
-+@@ -146,6 +148,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -208,10 +211,9 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
-+ 	-I$(srcdir)/../libelf -I$(srcdir)/../libebl \
-+ 	-I$(srcdir)/../libdw -I$(srcdir)/../libasm
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1) -fpic -fdollars-in-identifiers
-++	$(am__append_1) $(am__append_2) -fpic -fdollars-in-identifiers
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+--- elfutils/libdw/ChangeLog
-++++ elfutils/libdw/ChangeLog
-+@@ -82,6 +82,10 @@
-+ 
-+ 	* Makefile.am (known-dwarf.h): Run gawk on config/known-dwarf.awk.
-+ 
-++2011-07-20  Mark Wielaard  <mjw@redhat.com>
-++
-++	* dwarf_begin_elf.c: Add fallback for be64toh if not defined.
-++
-+ 2011-07-14  Mark Wielaard  <mjw@redhat.com>
-+ 
-+ 	* libdw.h (dwarf_offdie): Fix documentation to mention .debug_info.
-+@@ -441,6 +445,10 @@
-+ 
-+ 	* dwarf_hasattr_integrate.c: Integrate DW_AT_specification too.
-+ 
-++2009-08-17  Roland McGrath  <roland@redhat.com>
-++
-++	* libdw.h: Disable extern inlines for GCC 4.2.
-++
-+ 2009-08-10  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* dwarf_getscopevar.c: Use dwarf_diename.
-+@@ -1209,6 +1217,11 @@
-+ 
-+ 2005-05-31  Roland McGrath  <roland@redhat.com>
-+ 
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-++2005-05-31  Roland McGrath  <roland@redhat.com>
-++
-+ 	* dwarf_formref_die.c (dwarf_formref_die): Add CU header offset to
-+ 	formref offset.
-+ 
-+--- elfutils/libdw/dwarf_begin_elf.c
-++++ elfutils/libdw/dwarf_begin_elf.c
-+@@ -48,6 +48,14 @@
-+ #if USE_ZLIB
-+ # include <endian.h>
-+ # define crc32		loser_crc32
-++# ifndef be64toh
-++#  include <byteswap.h>
-++#  if __BYTE_ORDER == __LITTLE_ENDIAN
-++#   define be64toh(x) bswap_64 (x)
-++#  else
-++#   define be64toh(x) (x)
-++#  endif
-++# endif
-+ # include <zlib.h>
-+ # undef crc32
-+ #endif
-+--- elfutils/libdw/libdw.h
-++++ elfutils/libdw/libdw.h
-+@@ -831,7 +831,7 @@ extern Dwarf_OOM dwarf_new_oom_handler (
-+ 
-+ 
-+ /* Inline optimizations.  */
-+-#ifdef __OPTIMIZE__
-++#if defined __OPTIMIZE__ && !(__GNUC__ == 4 && __GNUC_MINOR__ == 2)
-+ /* Return attribute code of given attribute.  */
-+ __libdw_extern_inline unsigned int
-+ dwarf_whatattr (Dwarf_Attribute *attr)
-+--- elfutils/libdw/Makefile.in
-++++ elfutils/libdw/Makefile.in
-+@@ -39,8 +39,9 @@ host_triplet = @host@
-+ DIST_COMMON = $(include_HEADERS) $(noinst_HEADERS) \
-+ 	$(pkginclude_HEADERS) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-+- at BUILD_STATIC_TRUE@am__append_2 = -fpic
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-++ at BUILD_STATIC_TRUE@am__append_3 = -fpic
-+ @MUDFLAP_FALSE at noinst_PROGRAMS = $(am__EXEEXT_1)
-+ @MUDFLAP_TRUE at am_libdw_pic_a_OBJECTS =
-+ subdir = libdw
-+@@ -192,6 +193,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -221,6 +223,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = 1
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -282,10 +285,9 @@ zip_LIBS = @zip_LIBS@
-+ INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I.. \
-+ 	-I$(srcdir)/../libelf
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1) $(am__append_2)
-++	$(am__append_1) $(am__append_2) $(am__append_3)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
++++ b/package/elfutils/elfutils-robustify.patch
+@@ -0,0 +1,1756 @@
 +--- elfutils/libdwfl/ChangeLog
 ++++ elfutils/libdwfl/ChangeLog
-+@@ -1420,6 +1420,11 @@
++@@ -52,6 +52,11 @@
++ 	* dwfl_module_getdwarf.c (open_elf): Clear errno before CBFAIL.
++ 	Reported by Kurt Roeckx <kurt@roeckx.be>.
 + 
-+ 2005-07-21  Roland McGrath  <roland@redhat.com>
-+ 
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
+++2011-03-23  Petr Machata  <pmachata@redhat.com>
 ++
-++2005-07-21  Roland McGrath  <roland@redhat.com>
+++	* relocate.c (relocate_section): Use gelf_fsize instead of relying
+++	on shdr->sh_entsize.
 ++
-+ 	* Makefile.am (noinst_HEADERS): Add loc2c.c.
++ 2011-02-11  Roland McGrath  <roland@redhat.com>
 + 
-+ 	* test2.c (main): Check sscanf result to quiet warning.
-+--- elfutils/libdwfl/Makefile.in
-++++ elfutils/libdwfl/Makefile.in
-+@@ -38,11 +38,12 @@ host_triplet = @host@
-+ DIST_COMMON = $(noinst_HEADERS) $(pkginclude_HEADERS) \
-+ 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-+ 	$(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-+- at MUDFLAP_FALSE@am__append_2 = libdwfl_pic.a
-+- at ZLIB_TRUE@am__append_3 = gzip.c
-+- at BZLIB_TRUE@am__append_4 = bzip2.c
-+- at LZMA_TRUE@am__append_5 = lzma.c
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-++ at MUDFLAP_FALSE@am__append_3 = libdwfl_pic.a
-++ at ZLIB_TRUE@am__append_4 = gzip.c
-++ at BZLIB_TRUE@am__append_5 = bzip2.c
-++ at LZMA_TRUE@am__append_6 = lzma.c
-+ @MUDFLAP_TRUE at am_libdwfl_pic_a_OBJECTS =
-+ subdir = libdwfl
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+@@ -182,6 +183,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -211,6 +213,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = 1
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -273,10 +276,9 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
-+ 	-I$(srcdir)/../libelf -I$(srcdir)/../libebl \
-+ 	-I$(srcdir)/../libdw
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1)
-++	$(am__append_1) $(am__append_2)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+@@ -284,7 +286,7 @@ COMPILE.os = $(filter-out -fprofile-arcs
++ 	* linux-kernel-modules.c (try_kernel_name): Try .gz, .bz2, .xz
++--- elfutils/libdwfl/relocate.c
+++++ elfutils/libdwfl/relocate.c
++@@ -1,5 +1,5 @@
++ /* Relocate debug information.
++-   Copyright (C) 2005-2010 Red Hat, Inc.
+++   Copyright (C) 2005-2011 Red Hat, Inc.
++    This file is part of elfutils.
 + 
-+ CLEANFILES = *.gcno *.gcda $(am_libdwfl_pic_a_OBJECTS)
-+ textrel_check = if readelf -d $@ | fgrep -q TEXTREL; then exit 1; fi
-+-noinst_LIBRARIES = libdwfl.a $(am__append_2)
-++noinst_LIBRARIES = libdwfl.a $(am__append_3)
-+ pkginclude_HEADERS = libdwfl.h
-+ libdwfl_a_SOURCES = dwfl_begin.c dwfl_end.c dwfl_error.c \
-+ 	dwfl_version.c dwfl_module.c dwfl_report_elf.c relocate.c \
-+@@ -305,8 +307,8 @@ libdwfl_a_SOURCES = dwfl_begin.c dwfl_en
-+ 	dwfl_module_getsym.c dwfl_module_addrname.c \
-+ 	dwfl_module_addrsym.c dwfl_module_return_value_location.c \
-+ 	dwfl_module_register_names.c dwfl_segment_report_module.c \
-+-	link_map.c core-file.c open.c image-header.c $(am__append_3) \
-+-	$(am__append_4) $(am__append_5)
-++	link_map.c core-file.c open.c image-header.c $(am__append_4) \
-++	$(am__append_5) $(am__append_6)
-+ @MUDFLAP_FALSE at libdwfl = $(libdw)
-+ @MUDFLAP_TRUE at libdwfl = libdwfl.a $(libdw) $(libebl) $(libelf) $(libeu)
-+ @MUDFLAP_FALSE at libdw = ../libdw/libdw.so
-+--- elfutils/libebl/ChangeLog
-++++ elfutils/libebl/ChangeLog
-+@@ -658,6 +658,11 @@
-+ 	* Makefile.am (libebl_*_so_SOURCES): Set to $(*_SRCS) so dependency
-+ 	tracking works right.
++    This file is free software; you can redistribute it and/or modify
++@@ -457,7 +457,10 @@ relocate_section (Dwfl_Module *mod, Elf
++       }
++   }
 + 
-++2005-05-31  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-+ 2005-05-21  Ulrich Drepper  <drepper@redhat.com>
++-  size_t nrels = shdr->sh_size / shdr->sh_entsize;
+++  size_t sh_entsize
+++    = gelf_fsize (relocated, shdr->sh_type == SHT_REL ? ELF_T_REL : ELF_T_RELA,
+++		  1, EV_CURRENT);
+++  size_t nrels = shdr->sh_size / sh_entsize;
++   size_t complete = 0;
++   if (shdr->sh_type == SHT_REL)
++     for (size_t relidx = 0; !result && relidx < nrels; ++relidx)
++@@ -559,7 +562,7 @@ relocate_section (Dwfl_Module *mod, Elf
++ 	  nrels = next;
++ 	}
 + 
-+ 	* libebl_x86_64.map: Add x86_64_core_note.
-+--- elfutils/libebl/Makefile.in
-++++ elfutils/libebl/Makefile.in
-+@@ -38,7 +38,8 @@ host_triplet = @host@
-+ DIST_COMMON = $(noinst_HEADERS) $(pkginclude_HEADERS) \
-+ 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-+ 	$(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-+ subdir = libebl
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+ am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-+@@ -144,6 +145,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -173,6 +175,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = 1
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -235,10 +238,9 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
-+ 	-I$(srcdir)/../libelf -I$(srcdir)/../libdw \
-+ 	-I$(srcdir)/../libasm
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1) -fpic
-++	$(am__append_1) $(am__append_2) -fpic
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
++-      shdr->sh_size = reldata->d_size = nrels * shdr->sh_entsize;
+++      shdr->sh_size = reldata->d_size = nrels * sh_entsize;
++       gelf_update_shdr (scn, shdr);
++     }
++ 
 +--- elfutils/libelf/ChangeLog
 ++++ elfutils/libelf/ChangeLog
-+@@ -34,6 +34,11 @@
++@@ -703,10 +703,53 @@
++ 	If section content hasn't been read yet, do it before looking for the
++ 	block size.  If no section data present, infer size of section header.
 + 
-+ 	* elf-knowledge.h (SECTION_STRIP_P): Remove < SHT_NUM check.
-+ 
-++2011-03-10  Roland McGrath  <roland@redhat.com>
+++2005-05-14  Jakub Jelinek  <jakub@redhat.com>
 ++
-++	* gnuhash_xlate.h (elf_cvt_gnuhash): Avoid post-increment in bswap_32
-++	argument, since some implementations are buggy macros.
-++
-+ 2011-02-26  Mark Wielaard  <mjw@redhat.com>
+++	* libelfP.h (INVALID_NDX): Define.
+++	* gelf_getdyn.c (gelf_getdyn): Use it.  Remove ndx < 0 test if any.
+++	* gelf_getlib.c (gelf_getlib): Likewise.
+++	* gelf_getmove.c (gelf_getmove): Likewise.
+++	* gelf_getrel.c (gelf_getrel): Likewise.
+++	* gelf_getrela.c (gelf_getrela): Likewise.
+++	* gelf_getsym.c (gelf_getsym): Likewise.
+++	* gelf_getsyminfo.c (gelf_getsyminfo): Likewise.
+++	* gelf_getsymshndx.c (gelf_getsymshndx): Likewise.
+++	* gelf_getversym.c (gelf_getversym): Likewise.
+++	* gelf_update_dyn.c (gelf_update_dyn): Likewise.
+++	* gelf_update_lib.c (gelf_update_lib): Likewise.
+++	* gelf_update_move.c (gelf_update_move): Likewise.
+++	* gelf_update_rel.c (gelf_update_rel): Likewise.
+++	* gelf_update_rela.c (gelf_update_rela): Likewise.
+++	* gelf_update_sym.c (gelf_update_sym): Likewise.
+++	* gelf_update_syminfo.c (gelf_update_syminfo): Likewise.
+++	* gelf_update_symshndx.c (gelf_update_symshndx): Likewise.
+++	* gelf_update_versym.c (gelf_update_versym): Likewise.
+++	* elf_newscn.c (elf_newscn): Check for overflow.
+++	* elf32_updatefile.c (__elfw2(LIBELFBITS,updatemmap)): Likewise.
+++	(__elfw2(LIBELFBITS,updatefile)): Likewise.
+++	* elf_begin.c (file_read_elf): Likewise.
+++	* elf32_newphdr.c (elfw2(LIBELFBITS,newphdr)): Likewise.
+++	* elf_getarsym.c (elf_getarsym): Likewise.
+++	* elf32_getshdr.c (elfw2(LIBELFBITS,getshdr)): Likewise.
++ 2005-05-11  Ulrich Drepper  <drepper@redhat.com>
 + 
-+ 	* elf_end.c (elf_end): Call rwlock_unlock before rwlock_fini.
-+@@ -711,6 +716,11 @@
++ 	* elf.h: Update again.
++ 
+++2005-05-17  Jakub Jelinek  <jakub@redhat.com>
+++
+++	* elf32_getphdr.c (elfw2(LIBELFBITS,getphdr)): Check if program header
+++	table fits into object's bounds.
+++	* elf_getshstrndx.c (elf_getshstrndx): Add elf->start_offset to
+++	elf->map_address.  Check if first section header fits into object's
+++	bounds.
+++	* elf32_getshdr.c (elfw2(LIBELFBITS,getshdr)):
+++	Check if section header table fits into object's bounds.
+++	* elf_begin.c (get_shnum): Ensure section headers fits into
+++	object's bounds.
+++	(file_read_elf): Make sure scncnt is small enough to allocate both
+++	ElfXX_Shdr and Elf_Scn array.  Make sure section and program header
+++	tables fit into object's bounds.  Avoid memory leak on failure.
+++
++ 2005-05-09  Ulrich Drepper  <drepper@redhat.com>
 + 
 + 	* elf.h: Update from glibc.
++--- elfutils/libelf/elf32_getphdr.c
+++++ elfutils/libelf/elf32_getphdr.c
++@@ -93,6 +93,16 @@ __elfw2(LIBELFBITS,getphdr_wrlock) (elf)
 + 
-++2005-05-31  Roland McGrath  <roland@redhat.com>
++       if (elf->map_address != NULL)
++ 	{
+++	  /* First see whether the information in the ELF header is
+++	     valid and it does not ask for too much.  */
+++	  if (unlikely (ehdr->e_phoff >= elf->maximum_size)
+++	      || unlikely (elf->maximum_size - ehdr->e_phoff < size))
+++	    {
+++	      /* Something is wrong.  */
+++	      __libelf_seterrno (ELF_E_INVALID_PHDR);
+++	      goto out;
+++	    }
 ++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
++ 	  /* All the data is already mapped.  Use it.  */
++ 	  void *file_phdr = ((char *) elf->map_address
++ 			     + elf->start_offset + ehdr->e_phoff);
++--- elfutils/libelf/elf32_getshdr.c
+++++ elfutils/libelf/elf32_getshdr.c
++@@ -60,7 +60,8 @@ load_shdr_wrlock (Elf_Scn *scn)
++     goto out;
++ 
++   size_t shnum;
++-  if (__elf_getshdrnum_rdlock (elf, &shnum) != 0)
+++  if (__elf_getshdrnum_rdlock (elf, &shnum) != 0
+++      || shnum > SIZE_MAX / sizeof (ElfW2(LIBELFBITS,Shdr)))
++     goto out;
++   size_t size = shnum * sizeof (ElfW2(LIBELFBITS,Shdr));
++ 
++@@ -77,6 +78,16 @@ load_shdr_wrlock (Elf_Scn *scn)
++ 
++   if (elf->map_address != NULL)
++     {
+++      /* First see whether the information in the ELF header is
+++	 valid and it does not ask for too much.  */
+++      if (unlikely (ehdr->e_shoff >= elf->maximum_size)
+++	  || unlikely (elf->maximum_size - ehdr->e_shoff < size))
+++	{
+++	  /* Something is wrong.  */
+++	  __libelf_seterrno (ELF_E_INVALID_SECTION_HEADER);
+++	  goto free_and_out;
+++	}
+++
++       ElfW2(LIBELFBITS,Shdr) *notcvt;
++ 
++       /* All the data is already mapped.  If we could use it
++--- elfutils/libelf/elf32_newphdr.c
+++++ elfutils/libelf/elf32_newphdr.c
++@@ -114,6 +114,12 @@ elfw2(LIBELFBITS,newphdr) (elf, count)
++ 	   || count == PN_XNUM
++ 	   || elf->state.ELFW(elf,LIBELFBITS).phdr == NULL)
++     {
+++      if (unlikely (count > SIZE_MAX / sizeof (ElfW2(LIBELFBITS,Phdr))))
+++	{
+++	  result = NULL;
+++	  goto out;
+++	}
+++
++       /* Allocate a new program header with the appropriate number of
++ 	 elements.  */
++       result = (ElfW2(LIBELFBITS,Phdr) *)
++--- elfutils/libelf/elf32_updatefile.c
+++++ elfutils/libelf/elf32_updatefile.c
++@@ -202,6 +202,9 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf
++   /* Write all the sections.  Well, only those which are modified.  */
++   if (shnum > 0)
++     {
+++      if (unlikely (shnum > SIZE_MAX / sizeof (Elf_Scn *)))
+++ 	return 1;
+++
++       Elf_ScnList *list = &elf->state.ELFW(elf,LIBELFBITS).scns;
++       Elf_Scn **scns = (Elf_Scn **) alloca (shnum * sizeof (Elf_Scn *));
++       char *const shdr_start = ((char *) elf->map_address + elf->start_offset
++@@ -624,6 +627,10 @@ __elfw2(LIBELFBITS,updatefile) (Elf *elf
++   /* Write all the sections.  Well, only those which are modified.  */
++   if (shnum > 0)
++     {
+++      if (unlikely (shnum > SIZE_MAX / (sizeof (Elf_Scn *)
+++					+ sizeof (ElfW2(LIBELFBITS,Shdr)))))
+++	return 1;
+++
++       off_t shdr_offset = elf->start_offset + ehdr->e_shoff;
++ #if EV_NUM != 2
++       xfct_t shdr_fctp = __elf_xfctstom[__libelf_version - 1][EV_CURRENT - 1][ELFW(ELFCLASS, LIBELFBITS) - 1][ELF_T_SHDR];
++--- elfutils/libelf/elf_begin.c
+++++ elfutils/libelf/elf_begin.c
++@@ -144,7 +144,8 @@ get_shnum (void *map_address, unsigned c
++ 
++       if (unlikely (result == 0) && ehdr.e32->e_shoff != 0)
++ 	{
++-	  if (ehdr.e32->e_shoff + sizeof (Elf32_Shdr) > maxsize)
+++	  if (unlikely (ehdr.e32->e_shoff >= maxsize)
+++	      || unlikely (maxsize - ehdr.e32->e_shoff < sizeof (Elf32_Shdr)))
++ 	    /* Cannot read the first section header.  */
++ 	    return 0;
++ 
++@@ -192,7 +193,8 @@ get_shnum (void *map_address, unsigned c
++ 
++       if (unlikely (result == 0) && ehdr.e64->e_shoff != 0)
++ 	{
++-	  if (ehdr.e64->e_shoff + sizeof (Elf64_Shdr) > maxsize)
+++	  if (unlikely (ehdr.e64->e_shoff >= maxsize)
+++	      || unlikely (ehdr.e64->e_shoff + sizeof (Elf64_Shdr) > maxsize))
++ 	    /* Cannot read the first section header.  */
++ 	    return 0;
++ 
++@@ -264,6 +266,15 @@ file_read_elf (int fildes, void *map_add
++     /* Could not determine the number of sections.  */
++     return NULL;
++ 
+++  /* Check for too many sections.  */
+++  if (e_ident[EI_CLASS] == ELFCLASS32)
+++    {
+++      if (scncnt > SIZE_MAX / (sizeof (Elf_Scn) + sizeof (Elf32_Shdr)))
+++	return NULL;
+++    }
+++  else if (scncnt > SIZE_MAX / (sizeof (Elf_Scn) + sizeof (Elf64_Shdr)))
+++    return NULL;
+++
++   /* We can now allocate the memory.  Even if there are no section headers,
++      we allocate space for a zeroth section in case we need it later.  */
++   const size_t scnmax = (scncnt ?: (cmd == ELF_C_RDWR || cmd == ELF_C_RDWR_MMAP)
++@@ -303,6 +314,16 @@ file_read_elf (int fildes, void *map_add
++ 	{
++ 	  /* We can use the mmapped memory.  */
++ 	  elf->state.elf32.ehdr = ehdr;
+++
+++	  if (unlikely (ehdr->e_shoff >= maxsize)
+++	      || unlikely (maxsize - ehdr->e_shoff
+++			   < scncnt * sizeof (Elf32_Shdr)))
+++	    {
+++	    free_and_out:
+++	      free (elf);
+++	      __libelf_seterrno (ELF_E_INVALID_FILE);
+++	      return NULL;
+++	    }
++ 	  elf->state.elf32.shdr
++ 	    = (Elf32_Shdr *) ((char *) ehdr + ehdr->e_shoff);
++ 
++@@ -389,6 +410,11 @@ file_read_elf (int fildes, void *map_add
++ 	{
++ 	  /* We can use the mmapped memory.  */
++ 	  elf->state.elf64.ehdr = ehdr;
+++
+++	  if (unlikely (ehdr->e_shoff >= maxsize)
+++	      || unlikely (ehdr->e_shoff
+++			   + scncnt * sizeof (Elf32_Shdr) > maxsize))
+++	    goto free_and_out;
++ 	  elf->state.elf64.shdr
++ 	    = (Elf64_Shdr *) ((char *) ehdr + ehdr->e_shoff);
++ 
++--- elfutils/libelf/elf_getarsym.c
+++++ elfutils/libelf/elf_getarsym.c
++@@ -181,6 +181,9 @@ elf_getarsym (elf, ptr)
++       size_t index_size = atol (tmpbuf);
++ 
++       if (SARMAG + sizeof (struct ar_hdr) + index_size > elf->maximum_size
+++#if SIZE_MAX <= 4294967295U
+++	  || n >= SIZE_MAX / sizeof (Elf_Arsym)
+++#endif
++ 	  || n * w > index_size)
++ 	{
++ 	  /* This index table cannot be right since it does not fit into
++--- elfutils/libelf/elf_getshdrstrndx.c
+++++ elfutils/libelf/elf_getshdrstrndx.c
++@@ -104,10 +104,25 @@ elf_getshdrstrndx (elf, dst)
++ 	      if (elf->map_address != NULL
++ 		  && elf->state.elf32.ehdr->e_ident[EI_DATA] == MY_ELFDATA
++ 		  && (ALLOW_UNALIGNED
++-		      || (((size_t) ((char *) elf->map_address + offset))
+++		      || (((size_t) ((char *) elf->map_address
+++			   + elf->start_offset + offset))
++ 			  & (__alignof__ (Elf32_Shdr) - 1)) == 0))
++-		/* We can directly access the memory.  */
++-		num = ((Elf32_Shdr *) (elf->map_address + offset))->sh_link;
+++		{
+++		  /* First see whether the information in the ELF header is
+++		     valid and it does not ask for too much.  */
+++		  if (unlikely (elf->maximum_size - offset
+++				< sizeof (Elf32_Shdr)))
+++		    {
+++		      /* Something is wrong.  */
+++		      __libelf_seterrno (ELF_E_INVALID_SECTION_HEADER);
+++		      result = -1;
+++		      goto out;
+++		    }
+++
+++		  /* We can directly access the memory.  */
+++		  num = ((Elf32_Shdr *) (elf->map_address + elf->start_offset
+++					 + offset))->sh_link;
+++		}
++ 	      else
++ 		{
++ 		  /* We avoid reading in all the section headers.  Just read
++@@ -142,10 +157,25 @@ elf_getshdrstrndx (elf, dst)
++ 	      if (elf->map_address != NULL
++ 		  && elf->state.elf64.ehdr->e_ident[EI_DATA] == MY_ELFDATA
++ 		  && (ALLOW_UNALIGNED
++-		      || (((size_t) ((char *) elf->map_address + offset))
+++		      || (((size_t) ((char *) elf->map_address
+++			   + elf->start_offset + offset))
++ 			  & (__alignof__ (Elf64_Shdr) - 1)) == 0))
++-		/* We can directly access the memory.  */
++-		num = ((Elf64_Shdr *) (elf->map_address + offset))->sh_link;
+++		{
+++		  /* First see whether the information in the ELF header is
+++		     valid and it does not ask for too much.  */
+++		  if (unlikely (elf->maximum_size - offset
+++				< sizeof (Elf64_Shdr)))
+++		    {
+++		      /* Something is wrong.  */
+++		      __libelf_seterrno (ELF_E_INVALID_SECTION_HEADER);
+++		      result = -1;
+++		      goto out;
+++		    }
+++
+++		  /* We can directly access the memory.  */
+++		  num = ((Elf64_Shdr *) (elf->map_address + elf->start_offset
+++					 + offset))->sh_link;
+++		}
++ 	      else
++ 		{
++ 		  /* We avoid reading in all the section headers.  Just read
++--- elfutils/libelf/elf_newscn.c
+++++ elfutils/libelf/elf_newscn.c
++@@ -83,10 +83,18 @@ elf_newscn (elf)
++   else
++     {
++       /* We must allocate a new element.  */
++-      Elf_ScnList *newp;
+++      Elf_ScnList *newp = NULL;
++ 
++       assert (elf->state.elf.scnincr > 0);
++ 
+++      if (
+++#if SIZE_MAX <= 4294967295U
+++	  likely (elf->state.elf.scnincr
+++		  < SIZE_MAX / 2 / sizeof (Elf_Scn) - sizeof (Elf_ScnList))
+++#else
+++	  1
+++#endif
+++	  )
++       newp = (Elf_ScnList *) calloc (sizeof (Elf_ScnList)
++ 				     + ((elf->state.elf.scnincr *= 2)
++ 					* sizeof (Elf_Scn)), 1);
++--- elfutils/libelf/gelf_getdyn.c
+++++ elfutils/libelf/gelf_getdyn.c
++@@ -1,5 +1,5 @@
++ /* Get information from dynamic table at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -72,7 +72,7 @@ gelf_getdyn (data, ndx, dst)
++ 	 table entries has to be adopted.  The user better has provided
++ 	 a buffer where we can store the information.  While copying the
++ 	 data we are converting the format.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Dyn) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Dyn, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -93,7 +93,7 @@ gelf_getdyn (data, ndx, dst)
++ 
++       /* The data is already in the correct form.  Just make sure the
++ 	 index is OK.  */
++-      if (unlikely ((ndx + 1) * sizeof (GElf_Dyn) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, GElf_Dyn, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_getlib.c
+++++ elfutils/libelf/gelf_getlib.c
++@@ -1,5 +1,5 @@
++ /* Get library from table at the given index.
++-   Copyright (C) 2004 Red Hat, Inc.
+++   Copyright (C) 2004-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2004.
++ 
++@@ -65,7 +65,7 @@ gelf_getlib (data, ndx, dst)
++   /* The data is already in the correct form.  Just make sure the
++      index is OK.  */
++   GElf_Lib *result = NULL;
++-  if (unlikely ((ndx + 1) * sizeof (GElf_Lib) > data->d_size))
+++  if (INVALID_NDX (ndx, GElf_Lib, data))
++     __libelf_seterrno (ELF_E_INVALID_INDEX);
++   else
++     {
++--- elfutils/libelf/gelf_getmove.c
+++++ elfutils/libelf/gelf_getmove.c
++@@ -1,5 +1,5 @@
++ /* Get move structure at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -62,7 +62,7 @@ gelf_getmove (data, ndx, dst)
++ 
++   /* The data is already in the correct form.  Just make sure the
++      index is OK.  */
++-  if (unlikely ((ndx + 1) * sizeof (GElf_Move) > data->d_size))
+++  if (INVALID_NDX (ndx, GElf_Move, data))
++     {
++       __libelf_seterrno (ELF_E_INVALID_INDEX);
++       goto out;
++--- elfutils/libelf/gelf_getrela.c
+++++ elfutils/libelf/gelf_getrela.c
++@@ -1,5 +1,5 @@
++ /* Get RELA relocation information at given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -50,12 +50,6 @@ gelf_getrela (data, ndx, dst)
++   if (data_scn == NULL)
++     return NULL;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return NULL;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_RELA))
++     {
++       __libelf_seterrno (ELF_E_INVALID_HANDLE);
++@@ -72,7 +66,7 @@ gelf_getrela (data, ndx, dst)
++   if (scn->elf->class == ELFCLASS32)
++     {
++       /* We have to convert the data.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Rela) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Rela, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  result = NULL;
++@@ -93,7 +87,7 @@ gelf_getrela (data, ndx, dst)
++     {
++       /* Simply copy the data after we made sure we are actually getting
++ 	 correct data.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Rela) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Rela, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  result = NULL;
++--- elfutils/libelf/gelf_getrel.c
+++++ elfutils/libelf/gelf_getrel.c
++@@ -1,5 +1,5 @@
++ /* Get REL relocation information at given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -50,12 +50,6 @@ gelf_getrel (data, ndx, dst)
++   if (data_scn == NULL)
++     return NULL;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return NULL;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_REL))
++     {
++       __libelf_seterrno (ELF_E_INVALID_HANDLE);
++@@ -72,7 +66,7 @@ gelf_getrel (data, ndx, dst)
++   if (scn->elf->class == ELFCLASS32)
++     {
++       /* We have to convert the data.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Rel) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Rel, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  result = NULL;
++@@ -92,7 +86,7 @@ gelf_getrel (data, ndx, dst)
++     {
++       /* Simply copy the data after we made sure we are actually getting
++ 	 correct data.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Rel) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Rel, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  result = NULL;
++--- elfutils/libelf/gelf_getsym.c
+++++ elfutils/libelf/gelf_getsym.c
++@@ -1,5 +1,5 @@
++ /* Get symbol information from symbol table at the given index.
++-   Copyright (C) 1999, 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 1999-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 1999.
++ 
++@@ -69,7 +69,7 @@ gelf_getsym (data, ndx, dst)
++ 	 table entries has to be adopted.  The user better has provided
++ 	 a buffer where we can store the information.  While copying the
++ 	 data we are converting the format.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Sym) > data->d_size))
+++      if (INVALID_NDX (ndx, Elf32_Sym, data))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -98,7 +98,7 @@ gelf_getsym (data, ndx, dst)
++ 
++       /* The data is already in the correct form.  Just make sure the
++ 	 index is OK.  */
++-      if (unlikely ((ndx + 1) * sizeof (GElf_Sym) > data->d_size))
+++      if (INVALID_NDX (ndx, GElf_Sym, data))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_getsyminfo.c
+++++ elfutils/libelf/gelf_getsyminfo.c
++@@ -1,5 +1,5 @@
++ /* Get additional symbol information from symbol table at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -63,7 +63,7 @@ gelf_getsyminfo (data, ndx, dst)
++ 
++   /* The data is already in the correct form.  Just make sure the
++      index is OK.  */
++-  if (unlikely ((ndx + 1) * sizeof (GElf_Syminfo) > data->d_size))
+++  if (INVALID_NDX (ndx, GElf_Syminfo, data))
++     {
++       __libelf_seterrno (ELF_E_INVALID_INDEX);
++       goto out;
++--- elfutils/libelf/gelf_getsymshndx.c
+++++ elfutils/libelf/gelf_getsymshndx.c
++@@ -1,6 +1,6 @@
++ /* Get symbol information and separate section index from symbol table
++    at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -69,7 +69,7 @@ gelf_getsymshndx (symdata, shndxdata, nd
++      section index table.  */
++   if (likely (shndxdata_scn != NULL))
++     {
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Word) > shndxdata_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Word, &shndxdata_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -89,7 +89,7 @@ gelf_getsymshndx (symdata, shndxdata, nd
++ 	 table entries has to be adopted.  The user better has provided
++ 	 a buffer where we can store the information.  While copying the
++ 	 data we are converting the format.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Sym) > symdata->d_size))
+++      if (INVALID_NDX (ndx, Elf32_Sym, symdata))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -118,7 +118,7 @@ gelf_getsymshndx (symdata, shndxdata, nd
++ 
++       /* The data is already in the correct form.  Just make sure the
++ 	 index is OK.  */
++-      if (unlikely ((ndx + 1) * sizeof (GElf_Sym) > symdata->d_size))
+++      if (INVALID_NDX (ndx, GElf_Sym, symdata))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_getversym.c
+++++ elfutils/libelf/gelf_getversym.c
++@@ -1,5 +1,5 @@
++ /* Get symbol version information at the given index.
++-   Copyright (C) 1999, 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 1999-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 1999.
++ 
++@@ -71,7 +71,7 @@ gelf_getversym (data, ndx, dst)
++ 
++   /* The data is already in the correct form.  Just make sure the
++      index is OK.  */
++-  if (unlikely ((ndx + 1) * sizeof (GElf_Versym) > data->d_size))
+++  if (INVALID_NDX (ndx, GElf_Versym, data))
++     {
++       __libelf_seterrno (ELF_E_INVALID_INDEX);
++       result = NULL;
++--- elfutils/libelf/gelf_update_dyn.c
+++++ elfutils/libelf/gelf_update_dyn.c
++@@ -1,5 +1,5 @@
++ /* Update information in dynamic table at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -50,12 +50,6 @@ gelf_update_dyn (data, ndx, src)
++   if (data == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_DYN))
++     {
++       /* The type of the data better should match.  */
++@@ -81,7 +75,7 @@ gelf_update_dyn (data, ndx, src)
++ 	}
++ 
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Dyn) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Dyn, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -95,7 +89,7 @@ gelf_update_dyn (data, ndx, src)
++   else
++     {
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Dyn) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Dyn, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_update_lib.c
+++++ elfutils/libelf/gelf_update_lib.c
++@@ -1,5 +1,5 @@
++ /* Update library in table at the given index.
++-   Copyright (C) 2004 Red Hat, Inc.
+++   Copyright (C) 2004-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2004.
++ 
++@@ -47,12 +47,6 @@ gelf_update_lib (data, ndx, src)
++   if (data == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   Elf_Data_Scn *data_scn = (Elf_Data_Scn *) data;
++   if (unlikely (data_scn->d.d_type != ELF_T_LIB))
++     {
++@@ -66,7 +60,7 @@ gelf_update_lib (data, ndx, src)
++ 
++   /* Check whether we have to resize the data buffer.  */
++   int result = 0;
++-  if (unlikely ((ndx + 1) * sizeof (Elf64_Lib) > data_scn->d.d_size))
+++  if (INVALID_NDX (ndx, Elf64_Lib, &data_scn->d))
++     __libelf_seterrno (ELF_E_INVALID_INDEX);
++   else
++     {
++--- elfutils/libelf/gelf_update_move.c
+++++ elfutils/libelf/gelf_update_move.c
++@@ -1,5 +1,5 @@
++ /* Update move structure at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -54,8 +54,7 @@ gelf_update_move (data, ndx, src)
++   assert (sizeof (GElf_Move) == sizeof (Elf64_Move));
++ 
++   /* Check whether we have to resize the data buffer.  */
++-  if (unlikely (ndx < 0)
++-      || unlikely ((ndx + 1) * sizeof (GElf_Move) > data_scn->d.d_size))
+++  if (INVALID_NDX (ndx, GElf_Move, &data_scn->d))
++     {
++       __libelf_seterrno (ELF_E_INVALID_INDEX);
++       return 0;
++--- elfutils/libelf/gelf_update_rela.c
+++++ elfutils/libelf/gelf_update_rela.c
++@@ -1,5 +1,5 @@
++ /* Update RELA relocation information at given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -47,12 +47,6 @@ gelf_update_rela (Elf_Data *dst, int ndx
++   if (dst == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_RELA))
++     {
++       /* The type of the data better should match.  */
++@@ -80,7 +74,7 @@ gelf_update_rela (Elf_Data *dst, int ndx
++ 	}
++ 
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Rela) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Rela, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -96,7 +90,7 @@ gelf_update_rela (Elf_Data *dst, int ndx
++   else
++     {
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Rela) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Rela, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_update_rel.c
+++++ elfutils/libelf/gelf_update_rel.c
++@@ -1,5 +1,5 @@
++ /* Update REL relocation information at given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -47,12 +47,6 @@ gelf_update_rel (Elf_Data *dst, int ndx,
++   if (dst == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_REL))
++     {
++       /* The type of the data better should match.  */
++@@ -78,7 +72,7 @@ gelf_update_rel (Elf_Data *dst, int ndx,
++ 	}
++ 
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Rel) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Rel, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -93,7 +87,7 @@ gelf_update_rel (Elf_Data *dst, int ndx,
++   else
++     {
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Rel) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Rel, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_update_sym.c
+++++ elfutils/libelf/gelf_update_sym.c
++@@ -1,5 +1,5 @@
++ /* Update symbol information in symbol table at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -51,12 +51,6 @@ gelf_update_sym (data, ndx, src)
++   if (data == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_SYM))
++     {
++       /* The type of the data better should match.  */
++@@ -81,7 +75,7 @@ gelf_update_sym (data, ndx, src)
++ 	}
++ 
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Sym) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Sym, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -104,7 +98,7 @@ gelf_update_sym (data, ndx, src)
++   else
++     {
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Sym) > data_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Sym, &data_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_update_syminfo.c
+++++ elfutils/libelf/gelf_update_syminfo.c
++@@ -1,5 +1,5 @@
++ /* Update additional symbol information in symbol table at the given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -51,12 +51,6 @@ gelf_update_syminfo (data, ndx, src)
++   if (data == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   if (unlikely (data_scn->d.d_type != ELF_T_SYMINFO))
++     {
++       /* The type of the data better should match.  */
++@@ -72,7 +66,7 @@ gelf_update_syminfo (data, ndx, src)
++   rwlock_wrlock (scn->elf->lock);
++ 
++   /* Check whether we have to resize the data buffer.  */
++-  if (unlikely ((ndx + 1) * sizeof (GElf_Syminfo) > data_scn->d.d_size))
+++  if (INVALID_NDX (ndx, GElf_Syminfo, &data_scn->d))
++     {
++       __libelf_seterrno (ELF_E_INVALID_INDEX);
++       goto out;
++--- elfutils/libelf/gelf_update_symshndx.c
+++++ elfutils/libelf/gelf_update_symshndx.c
++@@ -1,6 +1,6 @@
++ /* Update symbol information and section index in symbol table at the
++    given index.
++-   Copyright (C) 2000, 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2000-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2000.
++ 
++@@ -56,12 +56,6 @@ gelf_update_symshndx (symdata, shndxdata
++   if (symdata == NULL)
++     return 0;
++ 
++-  if (unlikely (ndx < 0))
++-    {
++-      __libelf_seterrno (ELF_E_INVALID_INDEX);
++-      return 0;
++-    }
++-
++   if (unlikely (symdata_scn->d.d_type != ELF_T_SYM))
++     {
++       /* The type of the data better should match.  */
++@@ -107,7 +101,7 @@ gelf_update_symshndx (symdata, shndxdata
++ 	}
++ 
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf32_Sym) > symdata_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf32_Sym, &symdata_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++@@ -130,7 +124,7 @@ gelf_update_symshndx (symdata, shndxdata
++   else
++     {
++       /* Check whether we have to resize the data buffer.  */
++-      if (unlikely ((ndx + 1) * sizeof (Elf64_Sym) > symdata_scn->d.d_size))
+++      if (INVALID_NDX (ndx, Elf64_Sym, &symdata_scn->d))
++ 	{
++ 	  __libelf_seterrno (ELF_E_INVALID_INDEX);
++ 	  goto out;
++--- elfutils/libelf/gelf_update_versym.c
+++++ elfutils/libelf/gelf_update_versym.c
++@@ -1,5 +1,5 @@
++ /* Update symbol version information.
++-   Copyright (C) 2001, 2002 Red Hat, Inc.
+++   Copyright (C) 2001-2009 Red Hat, Inc.
++    This file is part of elfutils.
++    Written by Ulrich Drepper <drepper@redhat.com>, 2001.
++ 
++@@ -54,8 +54,7 @@ gelf_update_versym (data, ndx, src)
++   assert (sizeof (GElf_Versym) == sizeof (Elf64_Versym));
++ 
++   /* Check whether we have to resize the data buffer.  */
++-  if (unlikely (ndx < 0)
++-      || unlikely ((ndx + 1) * sizeof (GElf_Versym) > data_scn->d.d_size))
+++  if (INVALID_NDX (ndx, GElf_Versym, &data_scn->d))
++     {
++       __libelf_seterrno (ELF_E_INVALID_INDEX);
++       return 0;
++--- elfutils/libelf/libelfP.h
+++++ elfutils/libelf/libelfP.h
++@@ -587,4 +587,8 @@ extern uint32_t __libelf_crc32 (uint32_t
++ /* Align offset to 4 bytes as needed for note name and descriptor data.  */
++ #define NOTE_ALIGN(n)	(((n) + 3) & -4U)
++ 
+++/* Convenience macro.  */
+++#define INVALID_NDX(ndx, type, data) \
+++  unlikely ((data)->d_size / sizeof (type) <= (unsigned int) (ndx))
+++
++ #endif  /* libelfP.h */
++--- elfutils/src/ChangeLog
+++++ elfutils/src/ChangeLog
++@@ -344,6 +344,12 @@
++ 
++ 	* readelf.c (dwarf_attr_string): Grok DW_AT_GNU_odr_signature.
++ 
+++2011-03-23  Petr Machata  <pmachata@redhat.com>
+++
+++	* readelf.c (handle_dynamic, handle_relocs_rel)
+++	(handle_relocs_rela, handle_versym, print_liblist):
+++	Use gelf_fsize instead of relying on shdr->sh_entsize.
+++
++ 2011-02-11  Roland McGrath  <roland@redhat.com>
++ 
++ 	* elfcmp.c (verbose): New variable.
++@@ -2056,6 +2062,16 @@
++ 	object symbols or symbols with unknown type.
++ 	(check_rel): Likewise.
++ 
+++2005-06-09  Roland McGrath  <roland@redhat.com>
+++
+++	* readelf.c (handle_dynamic, handle_symtab): Check for bogus sh_link.
+++	(handle_verneed, handle_verdef, handle_versym, handle_hash): Likewise.
+++	(handle_scngrp): Check for bogus sh_info.
+++
+++	* strip.c (handle_elf): Check for bogus values in sh_link, sh_info,
+++	st_shndx, e_shstrndx, and SHT_GROUP or SHT_SYMTAB_SHNDX data.
+++	Don't use assert on input values, instead bail with "illformed" error.
+++
++ 2005-06-08  Roland McGrath  <roland@redhat.com>
++ 
++ 	* readelf.c (print_ops): Add consts.
++@@ -2101,6 +2117,19 @@
++ 
++ 	* readelf.c (dwarf_tag_string): Add new tags.
++ 
+++2005-05-17  Jakub Jelinek  <jakub@redhat.com>
+++
+++	* elflint.c (check_hash): Don't check entries beyond end of section.
+++	(check_note): Don't crash if gelf_rawchunk fails.
+++	(section_name): Return <invalid> if gelf_getshdr returns NULL.
+++
+++2005-05-14  Jakub Jelinek  <jakub@redhat.com>
+++
+++	* elflint.c (section_name): Return "<invalid>" instead of
+++	crashing on invalid section name.
+++	(check_symtab, is_rel_dyn, check_rela, check_rel, check_dynamic,
+++	check_symtab_shndx, check_hash, check_versym): Robustify.
 ++
 + 2005-05-08  Roland McGrath  <roland@redhat.com>
 + 
-+ 	* elf_begin.c (read_file) [_MUDFLAP]: Don't use mmap for now.
-+--- elfutils/libelf/common.h
-++++ elfutils/libelf/common.h
-+@@ -139,7 +139,7 @@ libelf_release_all (Elf *elf)
-+   (Var) = (sizeof (Var) == 1						      \
-+ 	   ? (unsigned char) (Var)					      \
-+ 	   : (sizeof (Var) == 2						      \
-+-	      ? bswap_16 (Var)						      \
-++	      ? (unsigned short int) bswap_16 (Var)			      \
-+ 	      : (sizeof (Var) == 4					      \
-+ 		 ? bswap_32 (Var)					      \
-+ 		 : bswap_64 (Var))))
-+@@ -148,7 +148,7 @@ libelf_release_all (Elf *elf)
-+   (Dst) = (sizeof (Var) == 1						      \
-+ 	   ? (unsigned char) (Var)					      \
-+ 	   : (sizeof (Var) == 2						      \
-+-	      ? bswap_16 (Var)						      \
-++	      ? (unsigned short int) bswap_16 (Var)			      \
-+ 	      : (sizeof (Var) == 4					      \
-+ 		 ? bswap_32 (Var)					      \
-+ 		 : bswap_64 (Var))))
-+--- elfutils/libelf/gnuhash_xlate.h
-++++ elfutils/libelf/gnuhash_xlate.h
-+@@ -1,5 +1,5 @@
-+ /* Conversion functions for versioning information.
-+-   Copyright (C) 2006, 2007 Red Hat, Inc.
-++   Copyright (C) 2006-2011 Red Hat, Inc.
-+    This file is part of elfutils.
-+    Written by Ulrich Drepper <drepper@redhat.com>, 2006.
++ 	* strip.c (handle_elf): Don't translate hash and versym data formats,
++--- elfutils/src/elflint.c
+++++ elfutils/src/elflint.c
++@@ -123,6 +123,10 @@ static uint32_t shstrndx;
++ /* Array to count references in section groups.  */
++ static int *scnref;
 + 
-+@@ -68,7 +68,9 @@ elf_cvt_gnuhash (void *dest, const void
-+   dest32 = (Elf32_Word *) &dest64[bitmask_words];
-+   while (len >= 4)
-+     {
-+-      *dest32++ = bswap_32 (*src32++);
-++      *dest32 = bswap_32 (*src32);
-++      ++dest32;
-++      ++src32;
-+       len -= 4;
-+     }
+++/* Numbers of sections and program headers.  */
+++static unsigned int shnum;
+++static unsigned int phnum;
+++
++ 
++ int
++ main (int argc, char *argv[])
++@@ -311,10 +315,19 @@ section_name (Ebl *ebl, int idx)
++ {
++   GElf_Shdr shdr_mem;
++   GElf_Shdr *shdr;
+++  const char *ret;
+++
+++  if ((unsigned int) idx > shnum)
+++    return "<invalid>";
++ 
++   shdr = gelf_getshdr (elf_getscn (ebl->elf, idx), &shdr_mem);
+++  if (shdr == NULL)
+++    return "<invalid>";
++ 
++-  return elf_strptr (ebl->elf, shstrndx, shdr->sh_name);
+++  ret = elf_strptr (ebl->elf, shstrndx, shdr->sh_name);
+++  if (ret == NULL)
+++    return "<invalid>";
+++  return ret;
 + }
-+--- elfutils/libelf/Makefile.in
-++++ elfutils/libelf/Makefile.in
-+@@ -39,11 +39,12 @@ host_triplet = @host@
-+ DIST_COMMON = $(include_HEADERS) $(noinst_HEADERS) \
-+ 	$(pkginclude_HEADERS) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-+- at BUILD_STATIC_TRUE@am__append_2 = -fpic
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-++ at BUILD_STATIC_TRUE@am__append_3 = -fpic
-+ @MUDFLAP_FALSE at noinst_PROGRAMS = $(am__EXEEXT_1)
-+ @MUDFLAP_TRUE at am_libelf_pic_a_OBJECTS =
-+- at MUDFLAP_FALSE@@USE_LOCKS_TRUE at am__append_3 = -lpthread
-++ at MUDFLAP_FALSE@@USE_LOCKS_TRUE at am__append_4 = -lpthread
-+ subdir = libelf
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+ am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-+@@ -189,6 +190,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -218,6 +220,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = 1
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -278,10 +281,9 @@ top_srcdir = @top_srcdir@
-+ zip_LIBS = @zip_LIBS@
-+ INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1) $(am__append_2)
-++	$(am__append_1) $(am__append_2) $(am__append_3)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+@@ -346,7 +348,7 @@ libelf_a_SOURCES = elf_version.c elf_has
-+ 
-+ @MUDFLAP_FALSE at libelf_pic_a_SOURCES = 
-+ @MUDFLAP_FALSE at am_libelf_pic_a_OBJECTS = $(libelf_a_SOURCES:.c=.os)
-+- at MUDFLAP_FALSE@libelf_so_LDLIBS = $(am__append_3)
-++ at MUDFLAP_FALSE@libelf_so_LDLIBS = $(am__append_4)
-+ @MUDFLAP_FALSE at libelf_so_SOURCES = 
-+ noinst_HEADERS = elf.h abstract.h common.h exttypes.h gelf_xlate.h libelfP.h \
-+ 		 version_xlate.h gnuhash_xlate.h note_xlate.h dl-hash.h
-+--- elfutils/m4/Makefile.in
-++++ elfutils/m4/Makefile.in
-+@@ -75,6 +75,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -104,6 +105,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+--- elfutils/Makefile.in
-++++ elfutils/Makefile.in
-+@@ -155,6 +155,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -184,6 +185,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+--- elfutils/src/addr2line.c
-++++ elfutils/src/addr2line.c
-+@@ -447,10 +447,10 @@ handle_address (const char *string, Dwfl
-+       bool parsed = false;
-+       int i, j;
-+       char *name = NULL;
-+-      if (sscanf (string, "(%m[^)])%" PRIiMAX "%n", &name, &addr, &i) == 2
-++      if (sscanf (string, "(%a[^)])%" PRIiMAX "%n", &name, &addr, &i) == 2
-+ 	  && string[i] == '\0')
-+ 	parsed = adjust_to_section (name, &addr, dwfl);
-+-      switch (sscanf (string, "%m[^-+]%n%" PRIiMAX "%n", &name, &i, &addr, &j))
-++      switch (sscanf (string, "%a[^-+]%n%" PRIiMAX "%n", &name, &i, &addr, &j))
-+ 	{
-+ 	default:
-+ 	  break;
-+--- elfutils/src/ChangeLog
-++++ elfutils/src/ChangeLog
-+@@ -606,8 +606,16 @@
-+ 	* readelf.c (attr_callback): Use print_block only when we don't use
-+ 	print_ops.
-+ 
-++2009-08-17  Roland McGrath  <roland@redhat.com>
-++
-++	* ld.h: Disable extern inlines for GCC 4.2.
-++
-+ 2009-08-14  Roland McGrath  <roland@redhat.com>
-+ 
-++	* strings.c (read_block): Conditionalize posix_fadvise use
-++	on [POSIX_FADV_SEQUENTIAL].
-++	From Petr Salinger <Petr.Salinger@seznam.cz>.
-++
-+ 	* ar.c (do_oper_extract): Use pathconf instead of statfs.
-+ 
-+ 2009-08-01  Ulrich Drepper  <drepper@redhat.com>
-+@@ -771,6 +779,8 @@
-+ 	* readelf.c (print_debug_frame_section): Use t instead of j formats
-+ 	for ptrdiff_t OFFSET.
-+ 
-++	* addr2line.c (handle_address): Use %a instead of %m for compatibility.
-++
-+ 2009-01-21  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* elflint.c (check_program_header): Fix typo in .eh_frame_hdr section
-+@@ -954,6 +964,11 @@
-+ 	that matches its PT_LOAD's p_flags &~ PF_W.  On sparc, PF_X really
-+ 	is valid in RELRO.
-+ 
-++2008-03-01  Roland McGrath  <roland@redhat.com>
-++
-++	* readelf.c (dump_archive_index): Tweak portability hack
-++	to match [__GNUC__ < 4] too.
-++
-+ 2008-02-29  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* readelf.c (print_attributes): Add a cast.
-+@@ -1205,6 +1220,8 @@
-+ 
-+ 	* readelf.c (hex_dump): Fix rounding error in whitespace calculation.
-+ 
-++	* Makefile.am (readelf_no_Werror): New variable.
-++
-+ 2007-10-15  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* make-debug-archive.in: New file.
-+@@ -1644,6 +1661,10 @@
-+ 	* elflint.c (valid_e_machine): Add EM_ALPHA.
-+ 	Reported by Christian Aichinger <Greek0@gmx.net>.
-+ 
-++	* strings.c (map_file): Define POSIX_MADV_SEQUENTIAL to
-++	MADV_SEQUENTIAL if undefined.  	Don't call posix_madvise
-++	if neither is defined.
-++
-+ 2006-08-08  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* elflint.c (check_dynamic): Don't require DT_HASH for DT_SYMTAB.
-+@@ -1720,6 +1741,10 @@
-+ 	* Makefile.am: Add hacks to create dependency files for non-generic
-+ 	linker.
-+ 
-++2006-04-05  Roland McGrath  <roland@redhat.com>
-++
-++	* strings.c (MAP_POPULATE): Define to 0 if undefined.
-++
-+ 2006-06-12  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* ldgeneric.c (ld_generic_generate_sections): Don't create .interp
-+@@ -2068,6 +2093,11 @@
-+ 	* readelf.c (print_debug_loc_section): Fix indentation for larger
-+ 	address size.
-+ 
-++2005-05-31  Roland McGrath  <roland@redhat.com>
-++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-+ 2005-05-30  Roland McGrath  <roland@redhat.com>
-+ 
-+ 	* readelf.c (print_debug_line_section): Print section offset of each
-+--- elfutils/src/findtextrel.c
-++++ elfutils/src/findtextrel.c
-+@@ -496,7 +496,11 @@ ptrcompare (const void *p1, const void *
 + 
 + 
++@@ -337,11 +350,6 @@ static const int valid_e_machine[] =
++   (sizeof (valid_e_machine) / sizeof (valid_e_machine[0]))
++ 
++ 
++-/* Numbers of sections and program headers.  */
++-static unsigned int shnum;
++-static unsigned int phnum;
++-
++-
 + static void
-+-check_rel (size_t nsegments, struct segments segments[nsegments],
-++check_rel (size_t nsegments, struct segments segments[
-++#if __GNUC__ >= 4
-++						      nsegments
-++#endif
-++	   ],
-+ 	   GElf_Addr addr, Elf *elf, Elf_Scn *symscn, Dwarf *dw,
-+ 	   const char *fname, bool more_than_one, void **knownsrcs)
++ check_elf_header (Ebl *ebl, GElf_Ehdr *ehdr, size_t size)
 + {
-+--- elfutils/src/ld.h
-++++ elfutils/src/ld.h
-+@@ -1114,6 +1114,7 @@ extern bool dynamically_linked_p (void);
++@@ -625,7 +633,8 @@ section [%2d] '%s': symbol table cannot
++ 	  }
++       }
 + 
-+ /* Checked whether the symbol is undefined and referenced from a DSO.  */
-+ extern bool linked_from_dso_p (struct scninfo *scninfo, size_t symidx);
-++#if defined __OPTIMIZE__ && !(__GNUC__ == 4 && __GNUC_MINOR__ == 2)
-+ #ifdef __GNUC_STDC_INLINE__
-+ __attribute__ ((__gnu_inline__))
-+ #endif
-+@@ -1131,5 +1132,6 @@ linked_from_dso_p (struct scninfo *scnin
++-  if (shdr->sh_entsize != gelf_fsize (ebl->elf, ELF_T_SYM, 1, EV_CURRENT))
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_SYM, 1, EV_CURRENT);
+++  if (shdr->sh_entsize != sh_entsize)
++     ERROR (gettext ("\
++ section [%2u] '%s': entry size is does not match ElfXX_Sym\n"),
++ 	   idx, section_name (ebl, idx));
++@@ -663,7 +672,7 @@ section [%2d] '%s': XINDEX for zeroth en
++ 	       xndxscnidx, section_name (ebl, xndxscnidx));
++     }
 + 
-+   return sym->defined && sym->in_dso;
-+ }
-++#endif	/* Optimizing and not GCC 4.2.  */
++-  for (size_t cnt = 1; cnt < shdr->sh_size / shdr->sh_entsize; ++cnt)
+++  for (size_t cnt = 1; cnt < shdr->sh_size / sh_entsize; ++cnt)
++     {
++       sym = gelf_getsymshndx (data, xndxdata, cnt, &sym_mem, &xndx);
++       if (sym == NULL)
++@@ -683,7 +692,8 @@ section [%2d] '%s': symbol %zu: invalid
++       else
++ 	{
++ 	  name = elf_strptr (ebl->elf, shdr->sh_link, sym->st_name);
++-	  assert (name != NULL);
+++	  assert (name != NULL
+++		  || strshdr->sh_type != SHT_STRTAB);
++ 	}
 + 
-+ #endif	/* ld.h */
-+--- elfutils/src/Makefile.am
-++++ elfutils/src/Makefile.am
-+@@ -95,6 +95,9 @@ addr2line_no_Wformat = yes
-+ # XXX While the file is not finished, don't warn about this
-+ ldgeneric_no_Wunused = yes
++       if (sym->st_shndx == SHN_XINDEX)
++@@ -1032,9 +1042,11 @@ is_rel_dyn (Ebl *ebl, const GElf_Ehdr *e
++     {
++       GElf_Shdr rcshdr_mem;
++       const GElf_Shdr *rcshdr = gelf_getshdr (scn, &rcshdr_mem);
++-      assert (rcshdr != NULL);
 + 
-++# Buggy old compilers.
-++readelf_no_Werror = yes
++-      if (rcshdr->sh_type == SHT_DYNAMIC)
+++      if (rcshdr == NULL)
+++	break;
 ++
-+ readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl
-+ nm_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl \
-+ 	   $(demanglelib)
-+--- elfutils/src/Makefile.in
-++++ elfutils/src/Makefile.in
-+@@ -40,7 +40,8 @@ host_triplet = @host@
-+ DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
-+ 	$(srcdir)/Makefile.in $(top_srcdir)/config/eu.am ChangeLog \
-+ 	ldlex.c ldscript.c
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-+ bin_PROGRAMS = readelf$(EXEEXT) nm$(EXEEXT) size$(EXEEXT) \
-+ 	strip$(EXEEXT) ld$(EXEEXT) elflint$(EXEEXT) \
-+ 	findtextrel$(EXEEXT) addr2line$(EXEEXT) elfcmp$(EXEEXT) \
-+@@ -49,9 +50,9 @@ bin_PROGRAMS = readelf$(EXEEXT) nm$(EXEE
-+ @NATIVE_LD_FALSE at noinst_PROGRAMS = $(am__EXEEXT_1)
-+ # We never build this library but we need to get the dependency files
-+ # of all the linker backends that might be used in a non-generic linker.
-+- at NEVER_TRUE@am__append_2 = libdummy.a
-++ at NEVER_TRUE@am__append_3 = libdummy.a
-+ # -ldl is always needed for libebl.
-+- at NATIVE_LD_TRUE@am__append_3 = libld_elf.a
-++ at NATIVE_LD_TRUE@am__append_4 = libld_elf.a
-+ @NATIVE_LD_TRUE at am_libld_elf_i386_pic_a_OBJECTS =
-+ subdir = src
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+@@ -115,7 +116,7 @@ am_ld_OBJECTS = ld.$(OBJEXT) ldgeneric.$
-+ 	versionhash.$(OBJEXT)
-+ ld_OBJECTS = $(am_ld_OBJECTS)
-+ ld_DEPENDENCIES = $(libebl) $(libelf) $(libeu) $(am__DEPENDENCIES_1) \
-+-	$(am__append_3)
-++	$(am__append_4)
-+ ld_LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(ld_LDFLAGS) $(LDFLAGS) -o \
-+ 	$@
-+ am_libld_elf_i386_so_OBJECTS =
-+@@ -229,6 +230,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -258,6 +260,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -321,10 +324,9 @@ INCLUDES = -I. -I$(srcdir) -I$(top_srcdi
-+ 	-I$(srcdir)/../libdw -I$(srcdir)/../libdwfl \
-+ 	-I$(srcdir)/../libasm
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1)
-++	$(am__append_1) $(am__append_2)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+@@ -340,8 +342,8 @@ AM_LFLAGS = -Pld -olex.yy.c
-+ native_ld = @native_ld@
-+ ld_dsos = libld_elf_i386_pic.a
-+ @NATIVE_LD_FALSE at noinst_LIBRARIES = libld_elf.a libar.a $(ld_dsos) \
-+- at NATIVE_LD_FALSE@	$(am__append_2)
-+- at NATIVE_LD_TRUE@noinst_LIBRARIES = libld_elf.a libar.a $(am__append_2)
-++ at NATIVE_LD_FALSE@	$(am__append_3)
-++ at NATIVE_LD_TRUE@noinst_LIBRARIES = libld_elf.a libar.a $(am__append_3)
-+ @NATIVE_LD_TRUE at native_ld_cflags = -DBASE_ELF_NAME=elf_$(base_cpu)
-+ @NEVER_TRUE at libdummy_a_SOURCES = i386_ld.c
-+ ld_SOURCES = ld.c ldgeneric.c ldlex.l ldscript.y symbolhash.c sectionhash.c \
-+@@ -370,6 +372,9 @@ strings_no_Wformat = yes
-+ addr2line_no_Wformat = yes
-+ # XXX While the file is not finished, don't warn about this
-+ ldgeneric_no_Wunused = yes
+++      if (rcshdr->sh_type == SHT_DYNAMIC && rcshdr->sh_entsize)
++ 	{
++ 	  /* Found the dynamic section.  Look through it.  */
++ 	  Elf_Data *d = elf_getdata (scn, NULL);
++@@ -1044,7 +1056,9 @@ is_rel_dyn (Ebl *ebl, const GElf_Ehdr *e
++ 	    {
++ 	      GElf_Dyn dyn_mem;
++ 	      GElf_Dyn *dyn = gelf_getdyn (d, cnt, &dyn_mem);
++-	      assert (dyn != NULL);
 ++
-++# Buggy old compilers.
-++readelf_no_Werror = yes
-+ readelf_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl
-+ nm_LDADD = $(libdw) $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl \
-+ 	   $(demanglelib)
-+@@ -377,7 +382,7 @@ nm_LDADD = $(libdw) $(libebl) $(libelf)
-+ size_LDADD = $(libelf) $(libeu) $(libmudflap)
-+ strip_LDADD = $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl
-+ ld_LDADD = $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl \
-+-	$(am__append_3)
-++	$(am__append_4)
-+ ld_LDFLAGS = -rdynamic
-+ elflint_LDADD = $(libebl) $(libelf) $(libeu) $(libmudflap) -ldl
-+ findtextrel_LDADD = $(libdw) $(libelf) $(libmudflap)
-+--- elfutils/src/readelf.c
-++++ elfutils/src/readelf.c
-+@@ -3949,10 +3949,11 @@ struct listptr
-+ #define listptr_offset_size(p)	((p)->dwarf64 ? 8 : 4)
-+ #define listptr_address_size(p)	((p)->addr64 ? 8 : 4)
+++	      if (dyn == NULL)
+++		break;
 + 
-++static const char *listptr_name;
-+ static int
-+-compare_listptr (const void *a, const void *b, void *arg)
-++compare_listptr (const void *a, const void *b)
-+ {
-+-  const char *name = arg;
-++  const char *const name = listptr_name;
-+   struct listptr *p1 = (void *) a;
-+   struct listptr *p2 = (void *) b;
++ 	      if (dyn->d_tag == DT_RELCOUNT)
++ 		{
++@@ -1058,7 +1072,9 @@ section [%2d] '%s': DT_RELCOUNT used for
++ 		      /* Does the number specified number of relative
++ 			 relocations exceed the total number of
++ 			 relocations?  */
++-		      if (dyn->d_un.d_val > shdr->sh_size / shdr->sh_entsize)
+++		      if (shdr->sh_entsize != 0
+++			  && dyn->d_un.d_val > (shdr->sh_size
+++						/ shdr->sh_entsize))
++ 			ERROR (gettext ("\
++ section [%2d] '%s': DT_RELCOUNT value %d too high for this section\n"),
++ 			       idx, section_name (ebl, idx),
++@@ -1218,7 +1234,8 @@ section [%2d] '%s': no relocations for m
++ 	}
++     }
 + 
-+@@ -4033,8 +4034,11 @@ static void
-+ sort_listptr (struct listptr_table *table, const char *name)
-+ {
-+   if (table->n > 0)
-+-    qsort_r (table->table, table->n, sizeof table->table[0],
-+-	     &compare_listptr, (void *) name);
++-  if (shdr->sh_entsize != gelf_fsize (ebl->elf, reltype, 1, EV_CURRENT))
+++  size_t sh_entsize = gelf_fsize (ebl->elf, reltype, 1, EV_CURRENT);
+++  if (shdr->sh_entsize != sh_entsize)
++     ERROR (gettext (reltype == ELF_T_RELA ? "\
++ section [%2d] '%s': section entry size does not match ElfXX_Rela\n" : "\
++ section [%2d] '%s': section entry size does not match ElfXX_Rel\n"),
++@@ -1441,7 +1458,8 @@ check_rela (Ebl *ebl, GElf_Ehdr *ehdr, G
++   Elf_Data *symdata = elf_getdata (symscn, NULL);
++   enum load_state state = state_undecided;
++ 
++-  for (size_t cnt = 0; cnt < shdr->sh_size / shdr->sh_entsize; ++cnt)
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_RELA, 1, EV_CURRENT);
+++  for (size_t cnt = 0; cnt < shdr->sh_size / sh_entsize; ++cnt)
++     {
++       GElf_Rela rela_mem;
++       GElf_Rela *rela = gelf_getrela (data, cnt, &rela_mem);
++@@ -1491,7 +1509,8 @@ check_rel (Ebl *ebl, GElf_Ehdr *ehdr, GE
++   Elf_Data *symdata = elf_getdata (symscn, NULL);
++   enum load_state state = state_undecided;
++ 
++-  for (size_t cnt = 0; cnt < shdr->sh_size / shdr->sh_entsize; ++cnt)
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_REL, 1, EV_CURRENT);
+++  for (size_t cnt = 0; cnt < shdr->sh_size / sh_entsize; ++cnt)
++     {
++       GElf_Rel rel_mem;
++       GElf_Rel *rel = gelf_getrel (data, cnt, &rel_mem);
++@@ -1590,7 +1609,8 @@ section [%2d] '%s': referenced as string
++ 	   shdr->sh_link, section_name (ebl, shdr->sh_link),
++ 	   idx, section_name (ebl, idx));
++ 
++-  if (shdr->sh_entsize != gelf_fsize (ebl->elf, ELF_T_DYN, 1, EV_CURRENT))
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_DYN, 1, EV_CURRENT);
+++  if (shdr->sh_entsize != sh_entsize)
++     ERROR (gettext ("\
++ section [%2d] '%s': section entry size does not match ElfXX_Dyn\n"),
++ 	   idx, section_name (ebl, idx));
++@@ -1600,7 +1620,7 @@ section [%2d] '%s': section entry size d
++ 	   idx, section_name (ebl, idx));
++ 
++   bool non_null_warned = false;
++-  for (cnt = 0; cnt < shdr->sh_size / shdr->sh_entsize; ++cnt)
+++  for (cnt = 0; cnt < shdr->sh_size / sh_entsize; ++cnt)
++     {
++       GElf_Dyn dyn_mem;
++       GElf_Dyn *dyn = gelf_getdyn (data, cnt, &dyn_mem);
++@@ -1872,6 +1892,8 @@ section [%2d] '%s': entry size does not
++ 	   idx, section_name (ebl, idx));
++ 
++   if (symshdr != NULL
+++      && shdr->sh_entsize
+++      && symshdr->sh_entsize
++       && (shdr->sh_size / shdr->sh_entsize
++ 	  < symshdr->sh_size / symshdr->sh_entsize))
++     ERROR (gettext ("\
++@@ -1898,6 +1920,12 @@ section [%2d] '%s': extended section ind
++     }
++ 
++   Elf_Data *data = elf_getdata (elf_getscn (ebl->elf, idx), NULL);
+++  if (data == NULL)
 ++    {
-++      listptr_name = name;
-++      qsort (table->table, table->n, sizeof table->table[0],
-++	     &compare_listptr);
+++      ERROR (gettext ("section [%2d] '%s': cannot get section data\n"),
+++ 	     idx, section_name (ebl, idx));
+++      return;
+++    }
++ 
++   if (*((Elf32_Word *) data->d_buf) != 0)
++     ERROR (gettext ("symbol 0 should have zero extended section index\n"));
++@@ -1940,7 +1968,7 @@ section [%2d] '%s': hash table section i
++ 
++   size_t maxidx = nchain;
++ 
++-  if (symshdr != NULL)
+++  if (symshdr != NULL && symshdr->sh_entsize != 0)
++     {
++       size_t symsize = symshdr->sh_size / symshdr->sh_entsize;
++ 
++@@ -1951,18 +1979,28 @@ section [%2d] '%s': hash table section i
++       maxidx = symsize;
++     }
++ 
+++  Elf32_Word *buf = (Elf32_Word *) data->d_buf;
+++  Elf32_Word *end = (Elf32_Word *) ((char *) data->d_buf + shdr->sh_size);
++   size_t cnt;
++   for (cnt = 2; cnt < 2 + nbucket; ++cnt)
++-    if (((Elf32_Word *) data->d_buf)[cnt] >= maxidx)
+++    {
+++      if (buf + cnt >= end)
+++	break;
+++      else if (buf[cnt] >= maxidx)
++       ERROR (gettext ("\
++ section [%2d] '%s': hash bucket reference %zu out of bounds\n"),
++ 	     idx, section_name (ebl, idx), cnt - 2);
+++    }
++ 
++   for (; cnt < 2 + nbucket + nchain; ++cnt)
++-    if (((Elf32_Word *) data->d_buf)[cnt] >= maxidx)
+++    {
+++      if (buf + cnt >= end)
+++	break;
+++      else if (buf[cnt] >= maxidx)
++       ERROR (gettext ("\
++ section [%2d] '%s': hash chain reference %zu out of bounds\n"),
++ 	     idx, section_name (ebl, idx), cnt - 2 - nbucket);
 ++    }
 + }
 + 
-+ static bool
-+@@ -8442,7 +8446,7 @@ dump_archive_index (Elf *elf, const char
-+ 	  if (unlikely (elf_rand (elf, as_off) == 0)
-+ 	      || unlikely ((subelf = elf_begin (-1, ELF_C_READ_MMAP, elf))
-+ 			   == NULL))
-+-#if __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 7)
-++#if __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 7) || __GNUC__ < 4
-+ 	    while (1)
-+ #endif
-+ 	      error (EXIT_FAILURE, 0,
-+--- elfutils/src/strings.c
-++++ elfutils/src/strings.c
-+@@ -43,6 +43,10 @@
 + 
-+ #include <system.h>
-+ 
-++#ifndef MAP_POPULATE
-++# define MAP_POPULATE 0
-++#endif
-++
-+ 
-+ /* Prototypes of local functions.  */
-+ static int read_fd (int fd, const char *fname, off64_t fdlen);
-+@@ -483,8 +487,13 @@ map_file (int fd, off64_t start_off, off
-+ 		    fd, start_off);
-+       if (mem != MAP_FAILED)
-+ 	{
-++#if !defined POSIX_MADV_SEQUENTIAL && defined MADV_SEQUENTIAL
-++# define POSIX_MADV_SEQUENTIAL MADV_SEQUENTIAL
-++#endif
-++#ifdef POSIX_MADV_SEQUENTIAL
-+ 	  /* We will go through the mapping sequentially.  */
-+ 	  (void) posix_madvise (mem, map_size, POSIX_MADV_SEQUENTIAL);
-++#endif
-+ 	  break;
-+ 	}
-+       if (errno != EINVAL && errno != ENOMEM)
-+@@ -576,9 +585,11 @@ read_block (int fd, const char *fname, o
-+       elfmap_off = from & ~(ps - 1);
-+       elfmap_base = elfmap = map_file (fd, elfmap_off, fdlen, &elfmap_size);
-+ 
-++#ifdef POSIX_FADV_SEQUENTIAL
-+       if (unlikely (elfmap == MAP_FAILED))
-+ 	/* Let the kernel know we are going to read everything in sequence.  */
-+ 	(void) posix_fadvise (fd, 0, 0, POSIX_FADV_SEQUENTIAL);
-++#endif
++@@ -1992,18 +2030,28 @@ section [%2d] '%s': hash table section i
++       maxidx = symsize;
 +     }
 + 
-+   if (unlikely (elfmap == MAP_FAILED))
+++  Elf64_Xword *buf = (Elf64_Xword *) data->d_buf;
+++  Elf64_Xword *end = (Elf64_Xword *) ((char *) data->d_buf + shdr->sh_size);
++   size_t cnt;
++   for (cnt = 2; cnt < 2 + nbucket; ++cnt)
++-    if (((Elf64_Xword *) data->d_buf)[cnt] >= maxidx)
+++    {
+++      if (buf + cnt >= end)
+++	break;
+++      else if (buf[cnt] >= maxidx)
++       ERROR (gettext ("\
++ section [%2d] '%s': hash bucket reference %zu out of bounds\n"),
++ 	     idx, section_name (ebl, idx), cnt - 2);
+++    }
++ 
++   for (; cnt < 2 + nbucket + nchain; ++cnt)
++-    if (((Elf64_Xword *) data->d_buf)[cnt] >= maxidx)
+++    {
+++      if (buf + cnt >= end)
+++	break;
+++      else if (buf[cnt] >= maxidx)
++       ERROR (gettext ("\
++ section [%2d] '%s': hash chain reference %" PRIu64 " out of bounds\n"),
++-	     idx, section_name (ebl, idx), (uint64_t) (cnt - 2 - nbucket));
+++	       idx, section_name (ebl, idx), (uint64_t) cnt - 2 - nbucket);
+++    }
++ }
++ 
++ 
++@@ -2028,7 +2076,7 @@ section [%2d] '%s': bitmask size not pow
++   if (shdr->sh_size < (4 + bitmask_words + nbuckets) * sizeof (Elf32_Word))
++     {
++       ERROR (gettext ("\
++-section [%2d] '%s': hash table section is too small (is %ld, expected at least%ld)\n"),
+++section [%2d] '%s': hash table section is too small (is %ld, expected@least %ld)\n"),
++ 	     idx, section_name (ebl, idx), (long int) shdr->sh_size,
++ 	     (long int) ((4 + bitmask_words + nbuckets) * sizeof (Elf32_Word)));
++       return;
++@@ -2700,8 +2748,9 @@ section [%2d] '%s' refers in sh_link to
++ 
++   /* The number of elements in the version symbol table must be the
++      same as the number of symbols.  */
++-  if (shdr->sh_size / shdr->sh_entsize
++-      != symshdr->sh_size / symshdr->sh_entsize)
+++  if (shdr->sh_entsize && symshdr->sh_entsize
+++      && (shdr->sh_size / shdr->sh_entsize
+++	  != symshdr->sh_size / symshdr->sh_entsize))
++     ERROR (gettext ("\
++ section [%2d] '%s' has different number of entries than symbol table [%2d] '%s'\n"),
++ 	   idx, section_name (ebl, idx),
++--- elfutils/src/readelf.c
+++++ elfutils/src/readelf.c
++@@ -1189,6 +1189,8 @@ handle_scngrp (Ebl *ebl, Elf_Scn *scn, G
++   Elf32_Word *grpref = (Elf32_Word *) data->d_buf;
++ 
++   GElf_Sym sym_mem;
+++  GElf_Sym *sym = gelf_getsym (symdata, shdr->sh_info, &sym_mem);
+++
++   printf ((grpref[0] & GRP_COMDAT)
++ 	  ? ngettext ("\
++ \nCOMDAT section group [%2zu] '%s' with signature '%s' contains %zu entry:\n",
++@@ -1201,8 +1203,8 @@ handle_scngrp (Ebl *ebl, Elf_Scn *scn, G
++ 		      data->d_size / sizeof (Elf32_Word) - 1),
++ 	  elf_ndxscn (scn),
++ 	  elf_strptr (ebl->elf, shstrndx, shdr->sh_name),
++-	  elf_strptr (ebl->elf, symshdr->sh_link,
++-		      gelf_getsym (symdata, shdr->sh_info, &sym_mem)->st_name)
+++	  (sym == NULL ? NULL
+++	   : elf_strptr (ebl->elf, symshdr->sh_link, sym->st_name))
++ 	  ?: gettext ("<INVALID SYMBOL>"),
++ 	  data->d_size / sizeof (Elf32_Word) - 1);
++ 
++@@ -1353,10 +1355,12 @@ static void
++ handle_dynamic (Ebl *ebl, Elf_Scn *scn, GElf_Shdr *shdr)
++ {
++   int class = gelf_getclass (ebl->elf);
++-  GElf_Shdr glink;
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink;
++   Elf_Data *data;
++   size_t cnt;
++   size_t shstrndx;
+++  size_t sh_entsize;
++ 
++   /* Get the data of the section.  */
++   data = elf_getdata (scn, NULL);
++@@ -1368,21 +1372,26 @@ handle_dynamic (Ebl *ebl, Elf_Scn *scn,
++     error (EXIT_FAILURE, 0,
++ 	   gettext ("cannot get section header string table index"));
++ 
+++  sh_entsize = gelf_fsize (ebl->elf, ELF_T_DYN, 1, EV_CURRENT);
+++
+++  glink = gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link), &glink_mem);
+++  if (glink == NULL)
+++    error (EXIT_FAILURE, 0, gettext ("invalid sh_link value in section %Zu"),
+++	   elf_ndxscn (scn));
+++
++   printf (ngettext ("\
++ \nDynamic segment contains %lu entry:\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'\n",
++ 		    "\
++ \nDynamic segment contains %lu entries:\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'\n",
++-		    shdr->sh_size / shdr->sh_entsize),
++-	  (unsigned long int) (shdr->sh_size / shdr->sh_entsize),
+++		    shdr->sh_size / sh_entsize),
+++	  (unsigned long int) (shdr->sh_size / sh_entsize),
++ 	  class == ELFCLASS32 ? 10 : 18, shdr->sh_addr,
++ 	  shdr->sh_offset,
++ 	  (int) shdr->sh_link,
++-	  elf_strptr (ebl->elf, shstrndx,
++-		      gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
++-				    &glink)->sh_name));
+++	  elf_strptr (ebl->elf, shstrndx, glink->sh_name));
++   fputs_unlocked (gettext ("  Type              Value\n"), stdout);
++ 
++-  for (cnt = 0; cnt < shdr->sh_size / shdr->sh_entsize; ++cnt)
+++  for (cnt = 0; cnt < shdr->sh_size / sh_entsize; ++cnt)
++     {
++       GElf_Dyn dynmem;
++       GElf_Dyn *dyn = gelf_getdyn (data, cnt, &dynmem);
++@@ -1531,7 +1540,8 @@ static void
++ handle_relocs_rel (Ebl *ebl, GElf_Ehdr *ehdr, Elf_Scn *scn, GElf_Shdr *shdr)
++ {
++   int class = gelf_getclass (ebl->elf);
++-  int nentries = shdr->sh_size / shdr->sh_entsize;
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_REL, 1, EV_CURRENT);
+++  int nentries = shdr->sh_size / sh_entsize;
++ 
++   /* Get the data of the section.  */
++   Elf_Data *data = elf_getdata (scn, NULL);
++@@ -1717,7 +1727,8 @@ static void
++ handle_relocs_rela (Ebl *ebl, GElf_Ehdr *ehdr, Elf_Scn *scn, GElf_Shdr *shdr)
++ {
++   int class = gelf_getclass (ebl->elf);
++-  int nentries = shdr->sh_size / shdr->sh_entsize;
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_RELA, 1, EV_CURRENT);
+++  int nentries = shdr->sh_size / sh_entsize;
++ 
++   /* Get the data of the section.  */
++   Elf_Data *data = elf_getdata (scn, NULL);
++@@ -1964,6 +1975,13 @@ handle_symtab (Ebl *ebl, Elf_Scn *scn, G
++     error (EXIT_FAILURE, 0,
++ 	   gettext ("cannot get section header string table index"));
++ 
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink = gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
+++				   &glink_mem);
+++  if (glink == NULL)
+++    error (EXIT_FAILURE, 0, gettext ("invalid sh_link value in section %Zu"),
+++	   elf_ndxscn (scn));
+++
++   /* Now we can compute the number of entries in the section.  */
++   unsigned int nsyms = data->d_size / (class == ELFCLASS32
++ 				       ? sizeof (Elf32_Sym)
++@@ -1974,15 +1992,12 @@ handle_symtab (Ebl *ebl, Elf_Scn *scn, G
++ 		    nsyms),
++ 	  (unsigned int) elf_ndxscn (scn),
++ 	  elf_strptr (ebl->elf, shstrndx, shdr->sh_name), nsyms);
++-  GElf_Shdr glink;
++   printf (ngettext (" %lu local symbol  String table: [%2u] '%s'\n",
++ 		    " %lu local symbols  String table: [%2u] '%s'\n",
++ 		    shdr->sh_info),
++ 	  (unsigned long int) shdr->sh_info,
++ 	  (unsigned int) shdr->sh_link,
++-	  elf_strptr (ebl->elf, shstrndx,
++-		      gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
++-				    &glink)->sh_name));
+++	  elf_strptr (ebl->elf, shstrndx, glink->sh_name));
++ 
++   fputs_unlocked (class == ELFCLASS32
++ 		  ? gettext ("\
++@@ -2218,7 +2233,13 @@ handle_verneed (Ebl *ebl, Elf_Scn *scn,
++     error (EXIT_FAILURE, 0,
++ 	   gettext ("cannot get section header string table index"));
++ 
++-  GElf_Shdr glink;
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink = gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
+++				   &glink_mem);
+++  if (glink == NULL)
+++    error (EXIT_FAILURE, 0, gettext ("invalid sh_link value in section %Zu"),
+++	   elf_ndxscn (scn));
+++
++   printf (ngettext ("\
++ \nVersion needs section [%2u] '%s' contains %d entry:\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'\n",
++ 		    "\
++@@ -2229,9 +2250,7 @@ handle_verneed (Ebl *ebl, Elf_Scn *scn,
++ 	  class == ELFCLASS32 ? 10 : 18, shdr->sh_addr,
++ 	  shdr->sh_offset,
++ 	  (unsigned int) shdr->sh_link,
++-	  elf_strptr (ebl->elf, shstrndx,
++-		      gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
++-				    &glink)->sh_name));
+++	  elf_strptr (ebl->elf, shstrndx, glink->sh_name));
++ 
++   unsigned int offset = 0;
++   for (int cnt = shdr->sh_info; --cnt >= 0; )
++@@ -2284,8 +2303,14 @@ handle_verdef (Ebl *ebl, Elf_Scn *scn, G
++     error (EXIT_FAILURE, 0,
++ 	   gettext ("cannot get section header string table index"));
++ 
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink = gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
+++				   &glink_mem);
+++  if (glink == NULL)
+++    error (EXIT_FAILURE, 0, gettext ("invalid sh_link value in section %Zu"),
+++	   elf_ndxscn (scn));
+++
++   int class = gelf_getclass (ebl->elf);
++-  GElf_Shdr glink;
++   printf (ngettext ("\
++ \nVersion definition section [%2u] '%s' contains %d entry:\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'\n",
++ 		    "\
++@@ -2297,9 +2322,7 @@ handle_verdef (Ebl *ebl, Elf_Scn *scn, G
++ 	  class == ELFCLASS32 ? 10 : 18, shdr->sh_addr,
++ 	  shdr->sh_offset,
++ 	  (unsigned int) shdr->sh_link,
++-	  elf_strptr (ebl->elf, shstrndx,
++-		      gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
++-				    &glink)->sh_name));
+++	  elf_strptr (ebl->elf, shstrndx, glink->sh_name));
++ 
++   unsigned int offset = 0;
++   for (int cnt = shdr->sh_info; --cnt >= 0; )
++@@ -2561,25 +2584,30 @@ handle_versym (Ebl *ebl, Elf_Scn *scn, G
++       filename = NULL;
++     }
++ 
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink = gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
+++				   &glink_mem);
+++  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_HALF, 1, EV_CURRENT);
+++  if (glink == NULL)
+++    error (EXIT_FAILURE, 0, gettext ("invalid sh_link value in section %Zu"),
+++	   elf_ndxscn (scn));
+++
++   /* Print the header.  */
++-  GElf_Shdr glink;
++   printf (ngettext ("\
++ \nVersion symbols section [%2u] '%s' contains %d entry:\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'",
++ 		    "\
++ \nVersion symbols section [%2u] '%s' contains %d entries:\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'",
++-		    shdr->sh_size / shdr->sh_entsize),
+++		    shdr->sh_size / sh_entsize),
++ 	  (unsigned int) elf_ndxscn (scn),
++ 	  elf_strptr (ebl->elf, shstrndx, shdr->sh_name),
++-	  (int) (shdr->sh_size / shdr->sh_entsize),
+++	  (int) (shdr->sh_size / sh_entsize),
++ 	  class == ELFCLASS32 ? 10 : 18, shdr->sh_addr,
++ 	  shdr->sh_offset,
++ 	  (unsigned int) shdr->sh_link,
++-	  elf_strptr (ebl->elf, shstrndx,
++-		      gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
++-				    &glink)->sh_name));
+++	  elf_strptr (ebl->elf, shstrndx, glink->sh_name));
++ 
++   /* Now we can finally look at the actual contents of this section.  */
++-  for (unsigned int cnt = 0; cnt < shdr->sh_size / shdr->sh_entsize; ++cnt)
+++  for (unsigned int cnt = 0; cnt < shdr->sh_size / sh_entsize; ++cnt)
++     {
++       if (cnt % 2 == 0)
++ 	printf ("\n %4d:", cnt);
++@@ -2628,7 +2656,17 @@ print_hash_info (Ebl *ebl, Elf_Scn *scn,
++   for (Elf32_Word cnt = 0; cnt < nbucket; ++cnt)
++     ++counts[lengths[cnt]];
++ 
++-  GElf_Shdr glink;
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink = gelf_getshdr (elf_getscn (ebl->elf,
+++					       shdr->sh_link),
+++				   &glink_mem);
+++  if (glink == NULL)
+++    {
+++      error (0, 0, gettext ("invalid sh_link value in section %Zu"),
+++	     elf_ndxscn (scn));
+++      return;
+++    }
+++
++   printf (ngettext ("\
++ \nHistogram for bucket list length in section [%2u] '%s' (total of %d bucket):\n Addr: %#0*" PRIx64 "  Offset: %#08" PRIx64 "  Link to section: [%2u] '%s'\n",
++ 		    "\
++@@ -2641,9 +2679,7 @@ print_hash_info (Ebl *ebl, Elf_Scn *scn,
++ 	  shdr->sh_addr,
++ 	  shdr->sh_offset,
++ 	  (unsigned int) shdr->sh_link,
++-	  elf_strptr (ebl->elf, shstrndx,
++-		      gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link),
++-				    &glink)->sh_name));
+++	  elf_strptr (ebl->elf, shstrndx, glink->sh_name));
++ 
++   if (extrastr != NULL)
++     fputs (extrastr, stdout);
++@@ -2903,7 +2939,8 @@ print_liblist (Ebl *ebl)
++ 
++       if (shdr != NULL && shdr->sh_type == SHT_GNU_LIBLIST)
++ 	{
++-	  int nentries = shdr->sh_size / shdr->sh_entsize;
+++	  size_t sh_entsize = gelf_fsize (ebl->elf, ELF_T_LIB, 1, EV_CURRENT);
+++	  int nentries = shdr->sh_size / sh_entsize;
++ 	  printf (ngettext ("\
++ \nLibrary list section [%2zu] '%s' at offset %#0" PRIx64 " contains %d entry:\n",
++ 			    "\
++@@ -4164,6 +4201,16 @@ print_debug_aranges_section (Dwfl_Module
++       return;
++     }
++ 
+++  GElf_Shdr glink_mem;
+++  GElf_Shdr *glink;
+++  glink = gelf_getshdr (elf_getscn (ebl->elf, shdr->sh_link), &glink_mem);
+++  if (glink == NULL)
+++    {
+++      error (0, 0, gettext ("invalid sh_link value in section %Zu"),
+++	     elf_ndxscn (scn));
+++      return;
+++    }
+++
++   printf (ngettext ("\
++ \nDWARF section [%2zu] '%s' at offset %#" PRIx64 " contains %zu entry:\n",
++ 		    "\
 +--- elfutils/src/strip.c
 ++++ elfutils/src/strip.c
-+@@ -45,6 +45,12 @@
-+ #include <libebl.h>
-+ #include <system.h>
-+ 
-++#ifdef HAVE_FUTIMES
-++# define FUTIMES(fd, fname, tvp) futimes (fd, tvp)
-++#else
-++# define FUTIMES(fd, fname, tvp) utimes (fname, tvp)
-++#endif
-++
-+ typedef uint8_t GElf_Byte;
-+ 
-+ /* Name and version of program.  */
-+@@ -318,8 +324,18 @@ process_file (const char *fname)
-+ 
-+       /* If we have to preserve the timestamp, we need it in the
-+ 	 format utimes() understands.  */
-++#ifdef HAVE_STRUCT_STAT_ST_ATIM
-+       TIMESPEC_TO_TIMEVAL (&tv[0], &pre_st.st_atim);
-++#else
-++      tv[0].tv_sec = pre_st.st_atime;
-++      tv[0].tv_usec = 0;
-++#endif
-++#ifdef HAVE_STRUCT_STAT_ST_MTIM
-+       TIMESPEC_TO_TIMEVAL (&tv[1], &pre_st.st_mtim);
-++#else
-++      tv[1].tv_sec = pre_st.st_atime;
-++      tv[1].tv_usec = 0;
-++#endif
++@@ -564,6 +564,11 @@ handle_elf (int fd, Elf *elf, const char
++       goto fail_close;
 +     }
 + 
-+   /* Open the file.  */
-+@@ -2055,7 +2071,7 @@ while computing checksum for debug infor
-+   /* If requested, preserve the timestamp.  */
-+   if (tvp != NULL)
-+     {
-+-      if (futimes (fd, tvp) != 0)
-++      if (FUTIMES (fd, output_fname, tvp) != 0)
-+ 	{
-+ 	  error (0, errno, gettext ("\
-+ cannot set access and modification date of '%s'"),
-+@@ -2112,7 +2128,7 @@ handle_ar (int fd, Elf *elf, const char
-+ 
-+   if (tvp != NULL)
-+     {
-+-      if (unlikely (futimes (fd, tvp) != 0))
-++      if (unlikely (FUTIMES (fd, fname, tvp) != 0))
-+ 	{
-+ 	  error (0, errno, gettext ("\
-+ cannot set access and modification date of '%s'"), fname);
-+--- elfutils/tests/ChangeLog
-++++ elfutils/tests/ChangeLog
-+@@ -439,6 +439,8 @@
-+ 
-+ 2008-01-21  Roland McGrath  <roland@redhat.com>
-+ 
-++	* line2addr.c (main): Revert last change.
+++  if (shstrndx >= shnum)
+++    goto illformed;
 ++
-+ 	* testfile45.S.bz2: Add tests for cltq, cqto.
-+ 	* testfile45.expect.bz2: Adjust.
-+ 
-+@@ -1147,6 +1149,11 @@
-+ 	* Makefile.am (TESTS): Add run-elflint-test.sh.
-+ 	(EXTRA_DIST): Add run-elflint-test.sh and testfile18.bz2.
-+ 
-++2005-05-31  Roland McGrath  <roland@redhat.com>
+++#define elf_assert(test) do { if (!(test)) goto illformed; } while (0)
 ++
-++	* Makefile.am (WEXTRA): New variable, substituted by configure.
-++	(AM_CFLAGS): Use it in place of -Wextra.
-++
-+ 2005-05-24  Ulrich Drepper  <drepper@redhat.com>
-+ 
-+ 	* get-files.c (main): Use correct format specifier.
-+--- elfutils/tests/line2addr.c
-++++ elfutils/tests/line2addr.c
-+@@ -124,7 +124,7 @@ main (int argc, char *argv[])
++   /* Storage for section information.  We leave room for two more
++      entries since we unconditionally create a section header string
++      table.  Maybe some weird tool created an ELF file without one.
++@@ -585,7 +590,7 @@ handle_elf (int fd, Elf *elf, const char
 +     {
-+       struct args a = { .arg = argv[cnt] };
++       /* This should always be true (i.e., there should not be any
++ 	 holes in the numbering).  */
++-      assert (elf_ndxscn (scn) == cnt);
+++      elf_assert (elf_ndxscn (scn) == cnt);
 + 
-+-      switch (sscanf (a.arg, "%m[^:]:%d", &a.file, &a.line))
-++      switch (sscanf (a.arg, "%a[^:]:%d", &a.file, &a.line))
++       shdr_info[cnt].scn = scn;
++ 
++@@ -598,6 +603,7 @@ handle_elf (int fd, Elf *elf, const char
++ 					shdr_info[cnt].shdr.sh_name);
++       if (shdr_info[cnt].name == NULL)
 + 	{
-+ 	default:
-+ 	case 0:
-+--- elfutils/tests/Makefile.in
-++++ elfutils/tests/Makefile.in
-+@@ -35,14 +35,15 @@ build_triplet = @build@
-+ host_triplet = @host@
-+ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-+ 	$(top_srcdir)/config/eu.am ChangeLog
-+- at MUDFLAP_TRUE@am__append_1 = -fmudflap
-+- at STANDALONE_FALSE@am__append_2 = -I$(top_srcdir)/libasm -I$(top_srcdir)/libdw \
-++ at BUILD_WERROR_TRUE@am__append_1 = $(if $($(*F)_no_Werror),,-Werror)
-++ at MUDFLAP_TRUE@am__append_2 = -fmudflap
-++ at STANDALONE_FALSE@am__append_3 = -I$(top_srcdir)/libasm -I$(top_srcdir)/libdw \
-+ @STANDALONE_FALSE@	    -I$(top_srcdir)/libdwfl \
-+ @STANDALONE_FALSE@	    -I$(top_srcdir)/libebl -I$(top_srcdir)/libelf \
-+ @STANDALONE_FALSE@	    -I$(top_srcdir)/lib -I..
+++	illformed:
++ 	  error (0, 0, gettext ("illformed file '%s'"), fname);
++ 	  goto fail_close;
++ 	}
++@@ -607,6 +613,8 @@ handle_elf (int fd, Elf *elf, const char
 + 
-+- at STANDALONE_FALSE@am__append_3 = -Wl,-rpath-link,../libasm:../libdw:../libelf
-+- at TESTS_RPATH_TRUE@am__append_4 = -Wl,-rpath,$(BUILD_RPATH)
-++ at STANDALONE_FALSE@am__append_4 = -Wl,-rpath-link,../libasm:../libdw:../libelf
-++ at TESTS_RPATH_TRUE@am__append_5 = -Wl,-rpath,$(BUILD_RPATH)
-+ check_PROGRAMS = arextract$(EXEEXT) arsymtest$(EXEEXT) \
-+ 	newfile$(EXEEXT) saridx$(EXEEXT) scnnames$(EXEEXT) \
-+ 	sectiondump$(EXEEXT) showptable$(EXEEXT) update1$(EXEEXT) \
-+@@ -92,12 +93,12 @@ TESTS = run-arextract.sh run-arsymtest.s
-+ 	run-readelf-gdb_index.sh run-unstrip-n.sh run-low_high_pc.sh \
-+ 	run-macro-test.sh run-elf_cntl_gelf_getshdr.sh \
-+ 	run-test-archive64.sh $(am__EXEEXT_1) $(am__EXEEXT_3) \
-+-	$(am__append_9)
-+- at STANDALONE_FALSE@am__append_5 = msg_tst md5-sha1-test
-++	$(am__append_10)
-+ @STANDALONE_FALSE at am__append_6 = msg_tst md5-sha1-test
-+- at HAVE_LIBASM_TRUE@am__append_7 = $(asm_TESTS)
-++ at STANDALONE_FALSE@am__append_7 = msg_tst md5-sha1-test
-+ @HAVE_LIBASM_TRUE at am__append_8 = $(asm_TESTS)
-+- at ENABLE_DWZ_TRUE@am__append_9 = run-readelf-dwz-multi.sh
-++ at HAVE_LIBASM_TRUE@am__append_9 = $(asm_TESTS)
-++ at ENABLE_DWZ_TRUE@am__append_10 = run-readelf-dwz-multi.sh
-+ subdir = tests
-+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-+ am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 $(top_srcdir)/m4/po.m4 \
-+@@ -412,6 +413,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
-+ INSTALL_SCRIPT = @INSTALL_SCRIPT@
-+ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-+ LDFLAGS = @LDFLAGS@
-++LD_AS_NEEDED = @LD_AS_NEEDED@
-+ LEX = @LEX@
-+ LEXLIB = @LEXLIB@
-+ LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
-+@@ -441,6 +443,7 @@ SHELL = @SHELL@
-+ STRIP = @STRIP@
-+ USE_NLS = @USE_NLS@
-+ VERSION = @VERSION@
-++WEXTRA = @WEXTRA@
-+ XGETTEXT = @XGETTEXT@
-+ XGETTEXT_015 = @XGETTEXT_015@
-+ XGETTEXT_EXTRA_OPTIONS = @XGETTEXT_EXTRA_OPTIONS@
-+@@ -499,12 +502,11 @@ top_build_prefix = @top_build_prefix@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+ zip_LIBS = @zip_LIBS@
-+-INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I.. $(am__append_2)
-++INCLUDES = -I. -I$(srcdir) -I$(top_srcdir)/lib -I.. $(am__append_3)
-+ AM_CFLAGS = -std=gnu99 -Wall -Wshadow $(if \
-+-	$($(*F)_no_Werror),,-Werror) $(if \
-+-	$($(*F)_no_Wunused),,-Wunused -Wextra) $(if \
-++	$($(*F)_no_Wunused),,-Wunused $(WEXTRA)) $(if \
-+ 	$($(*F)_no_Wformat),-Wno-format,-Wformat=2) $($(*F)_CFLAGS) \
-+-	$(am__append_1)
-++	$(am__append_1) $(am__append_2)
-+ @MUDFLAP_FALSE at libmudflap = 
-+ @MUDFLAP_TRUE at libmudflap = -lmudflap
-+ COMPILE.os = $(filter-out -fprofile-arcs -ftest-coverage $(no_mudflap.os),\
-+@@ -514,7 +516,7 @@ CLEANFILES = *.gcno *.gcda
-+ textrel_check = if readelf -d $@ | fgrep -q TEXTREL; then exit 1; fi
-+ @MUDFLAP_FALSE at BUILD_RPATH = \$$ORIGIN/../libasm:\$$ORIGIN/../libdw:\$$ORIGIN/../backends:\$$ORIGIN/../libelf
-+ @MUDFLAP_TRUE at BUILD_RPATH = \$$ORIGIN/../backends
-+-AM_LDFLAGS = $(am__append_3) $(am__append_4)
-++AM_LDFLAGS = $(am__append_4) $(am__append_5)
-+ @TESTS_RPATH_FALSE at tests_rpath = no
-+ @TESTS_RPATH_TRUE at tests_rpath = yes
-+ asm_TESTS = asm-tst1 asm-tst2 asm-tst3 asm-tst4 asm-tst5 \
++       /* Remember the shdr.sh_link value.  */
++       shdr_info[cnt].old_sh_link = shdr_info[cnt].shdr.sh_link;
+++      if (shdr_info[cnt].old_sh_link >= shnum)
+++	goto illformed;
++ 
++       /* Sections in files other than relocatable object files which
++ 	 are not loaded can be freely moved by us.  In relocatable
++@@ -619,7 +627,7 @@ handle_elf (int fd, Elf *elf, const char
++ 	 appropriate reference.  */
++       if (unlikely (shdr_info[cnt].shdr.sh_type == SHT_SYMTAB_SHNDX))
++ 	{
++-	  assert (shdr_info[shdr_info[cnt].shdr.sh_link].symtab_idx == 0);
+++	  elf_assert (shdr_info[shdr_info[cnt].shdr.sh_link].symtab_idx == 0);
++ 	  shdr_info[shdr_info[cnt].shdr.sh_link].symtab_idx = cnt;
++ 	}
++       else if (unlikely (shdr_info[cnt].shdr.sh_type == SHT_GROUP))
++@@ -636,7 +644,12 @@ handle_elf (int fd, Elf *elf, const char
++ 	  for (inner = 1;
++ 	       inner < shdr_info[cnt].data->d_size / sizeof (Elf32_Word);
++ 	       ++inner)
+++	    {
+++	      if (grpref[inner] < shnum)
++ 	    shdr_info[grpref[inner]].group_idx = cnt;
+++	      else
+++		goto illformed;
+++	    }
++ 
++ 	  if (inner == 1 || (inner == 2 && (grpref[0] & GRP_COMDAT) == 0))
++ 	    /* If the section group contains only one element and this
++@@ -647,7 +660,7 @@ handle_elf (int fd, Elf *elf, const char
++ 	}
++       else if (unlikely (shdr_info[cnt].shdr.sh_type == SHT_GNU_versym))
++ 	{
++-	  assert (shdr_info[shdr_info[cnt].shdr.sh_link].version_idx == 0);
+++	  elf_assert (shdr_info[shdr_info[cnt].shdr.sh_link].version_idx == 0);
++ 	  shdr_info[shdr_info[cnt].shdr.sh_link].version_idx = cnt;
++ 	}
++ 
++@@ -655,7 +668,7 @@ handle_elf (int fd, Elf *elf, const char
++ 	 discarded right away.  */
++       if ((shdr_info[cnt].shdr.sh_flags & SHF_GROUP) != 0)
++ 	{
++-	  assert (shdr_info[cnt].group_idx != 0);
+++	  elf_assert (shdr_info[cnt].group_idx != 0);
++ 
++ 	  if (shdr_info[shdr_info[cnt].group_idx].idx == 0)
++ 	    {
++@@ -731,10 +744,14 @@ handle_elf (int fd, Elf *elf, const char
++ 	    {
++ 	      /* If a relocation section is marked as being removed make
++ 		 sure the section it is relocating is removed, too.  */
++-	      if ((shdr_info[cnt].shdr.sh_type == SHT_REL
+++	      if (shdr_info[cnt].shdr.sh_type == SHT_REL
++ 		   || shdr_info[cnt].shdr.sh_type == SHT_RELA)
++-		  && shdr_info[shdr_info[cnt].shdr.sh_info].idx != 0)
++-		shdr_info[cnt].idx = 1;
+++		{
+++		  if (shdr_info[cnt].shdr.sh_info >= shnum)
+++		    goto illformed;
+++		  else if (shdr_info[shdr_info[cnt].shdr.sh_info].idx != 0)
+++		    shdr_info[cnt].idx = 1;
+++		}
++ 
++ 	      /* If a group section is marked as being removed make
++ 		 sure all the sections it contains are being removed, too.  */
++@@ -778,7 +795,7 @@ handle_elf (int fd, Elf *elf, const char
++ 		  if (shdr_info[cnt].symtab_idx != 0
++ 		      && shdr_info[shdr_info[cnt].symtab_idx].data == NULL)
++ 		    {
++-		      assert (shdr_info[cnt].shdr.sh_type == SHT_SYMTAB);
+++		      elf_assert (shdr_info[cnt].shdr.sh_type == SHT_SYMTAB);
++ 
++ 		      shdr_info[shdr_info[cnt].symtab_idx].data
++ 			= elf_getdata (shdr_info[shdr_info[cnt].symtab_idx].scn,
++@@ -818,6 +835,9 @@ handle_elf (int fd, Elf *elf, const char
++ 		      else if (scnidx == SHN_XINDEX)
++ 			scnidx = xndx;
++ 
+++		      if (scnidx >= shnum)
+++			goto illformed;
+++
++ 		      if (shdr_info[scnidx].idx == 0)
++ 			/* This symbol table has a real symbol in
++ 			   a discarded section.  So preserve the
++@@ -848,12 +868,16 @@ handle_elf (int fd, Elf *elf, const char
++ 		}
++ 
++ 	      /* Handle references through sh_info.  */
++-	      if (SH_INFO_LINK_P (&shdr_info[cnt].shdr)
++-		  && shdr_info[shdr_info[cnt].shdr.sh_info].idx == 0)
+++	      if (SH_INFO_LINK_P (&shdr_info[cnt].shdr))
+++		{
+++		  if (shdr_info[cnt].shdr.sh_info >= shnum)
+++		    goto illformed;
+++		  else if ( shdr_info[shdr_info[cnt].shdr.sh_info].idx == 0)
++ 		{
++ 		  shdr_info[shdr_info[cnt].shdr.sh_info].idx = 1;
++ 		  changes |= shdr_info[cnt].shdr.sh_info < cnt;
++ 		}
+++		}
++ 
++ 	      /* Mark the section as investigated.  */
++ 	      shdr_info[cnt].idx = 2;
++@@ -994,7 +1018,7 @@ handle_elf (int fd, Elf *elf, const char
++ 	  error (EXIT_FAILURE, 0, gettext ("while generating output file: %s"),
++ 		 elf_errmsg (-1));
++ 
++-	assert (elf_ndxscn (shdr_info[cnt].newscn) == shdr_info[cnt].idx);
+++	elf_assert (elf_ndxscn (shdr_info[cnt].newscn) == shdr_info[cnt].idx);
++ 
++ 	/* Add this name to the section header string table.  */
++ 	shdr_info[cnt].se = ebl_strtabadd (shst, shdr_info[cnt].name, 0);
++@@ -1031,7 +1055,7 @@ handle_elf (int fd, Elf *elf, const char
++ 	error (EXIT_FAILURE, 0,
++ 	       gettext ("while create section header section: %s"),
++ 	       elf_errmsg (-1));
++-      assert (elf_ndxscn (shdr_info[cnt].newscn) == shdr_info[cnt].idx);
+++      elf_assert (elf_ndxscn (shdr_info[cnt].newscn) == shdr_info[cnt].idx);
++ 
++       shdr_info[cnt].data = elf_newdata (shdr_info[cnt].newscn);
++       if (shdr_info[cnt].data == NULL)
++@@ -1087,7 +1111,7 @@ handle_elf (int fd, Elf *elf, const char
++     error (EXIT_FAILURE, 0,
++ 	   gettext ("while create section header section: %s"),
++ 	   elf_errmsg (-1));
++-  assert (elf_ndxscn (shdr_info[cnt].newscn) == idx);
+++  elf_assert (elf_ndxscn (shdr_info[cnt].newscn) == idx);
++ 
++   /* Finalize the string table and fill in the correct indices in the
++      section headers.  */
++@@ -1177,20 +1201,20 @@ handle_elf (int fd, Elf *elf, const char
++ 		    shndxdata = elf_getdata (shdr_info[shdr_info[cnt].symtab_idx].scn,
++ 					     NULL);
++ 
++-		    assert ((versiondata->d_size / sizeof (Elf32_Word))
+++		    elf_assert ((versiondata->d_size / sizeof (Elf32_Word))
++ 			    >= shdr_info[cnt].data->d_size / elsize);
++ 		  }
++ 
++ 		if (shdr_info[cnt].version_idx != 0)
++ 		  {
++-		    assert (shdr_info[cnt].shdr.sh_type == SHT_DYNSYM);
+++		    elf_assert (shdr_info[cnt].shdr.sh_type == SHT_DYNSYM);
++ 		    /* This section has associated version
++ 		       information.  We have to modify that
++ 		       information, too.  */
++ 		    versiondata = elf_getdata (shdr_info[shdr_info[cnt].version_idx].scn,
++ 					       NULL);
++ 
++-		    assert ((versiondata->d_size / sizeof (GElf_Versym))
+++		    elf_assert ((versiondata->d_size / sizeof (GElf_Versym))
++ 			    >= shdr_info[cnt].data->d_size / elsize);
++ 		  }
++ 
++@@ -1245,7 +1269,7 @@ handle_elf (int fd, Elf *elf, const char
++ 		      sec = shdr_info[sym->st_shndx].idx;
++ 		    else
++ 		      {
++-			assert (shndxdata != NULL);
+++			elf_assert (shndxdata != NULL);
++ 
++ 			sec = shdr_info[xshndx].idx;
++ 		      }
++@@ -1266,7 +1290,7 @@ handle_elf (int fd, Elf *elf, const char
++ 			    nxshndx = sec;
++ 			  }
++ 
++-			assert (sec < SHN_LORESERVE || shndxdata != NULL);
+++			elf_assert (sec < SHN_LORESERVE || shndxdata != NULL);
++ 
++ 			if ((inner != destidx || nshndx != sym->st_shndx
++ 			     || (shndxdata != NULL && nxshndx != xshndx))
++@@ -1293,9 +1317,11 @@ handle_elf (int fd, Elf *elf, const char
++ 		      {
++ 			size_t sidx = (sym->st_shndx != SHN_XINDEX
++ 					? sym->st_shndx : xshndx);
++-			assert (GELF_ST_TYPE (sym->st_info) == STT_SECTION
++-				|| (shdr_info[sidx].shdr.sh_type == SHT_GROUP
++-				    && shdr_info[sidx].shdr.sh_info == inner));
+++			elf_assert (GELF_ST_TYPE (sym->st_info) == STT_SECTION
+++				    || ((shdr_info[sidx].shdr.sh_type
+++					 == SHT_GROUP)
+++					&& (shdr_info[sidx].shdr.sh_info
+++					    == inner)));
++ 		      }
++ 		  }
++ 
++@@ -1483,11 +1509,11 @@ handle_elf (int fd, Elf *elf, const char
++ 		  {
++ 		    GElf_Sym sym_mem;
++ 		    GElf_Sym *sym = gelf_getsym (symd, inner, &sym_mem);
++-		    assert (sym != NULL);
+++		    elf_assert (sym != NULL);
++ 
++ 		    const char *name = elf_strptr (elf, strshndx,
++ 						   sym->st_name);
++-		    assert (name != NULL);
+++		    elf_assert (name != NULL);
++ 		    size_t hidx = elf_hash (name) % nbucket;
++ 
++ 		    if (bucket[hidx] == 0)
++@@ -1506,8 +1532,8 @@ handle_elf (int fd, Elf *elf, const char
++ 	    else
++ 	      {
++ 		/* Alpha and S390 64-bit use 64-bit SHT_HASH entries.  */
++-		assert (shdr_info[cnt].shdr.sh_entsize
++-			== sizeof (Elf64_Xword));
+++		elf_assert (shdr_info[cnt].shdr.sh_entsize
+++                            == sizeof (Elf64_Xword));
++ 
++ 		Elf64_Xword *bucket = (Elf64_Xword *) hashd->d_buf;
++ 
++@@ -1537,11 +1563,11 @@ handle_elf (int fd, Elf *elf, const char
++ 		  {
++ 		    GElf_Sym sym_mem;
++ 		    GElf_Sym *sym = gelf_getsym (symd, inner, &sym_mem);
++-		    assert (sym != NULL);
+++		    elf_assert (sym != NULL);
++ 
++ 		    const char *name = elf_strptr (elf, strshndx,
++ 						   sym->st_name);
++-		    assert (name != NULL);
+++		    elf_assert (name != NULL);
++ 		    size_t hidx = elf_hash (name) % nbucket;
++ 
++ 		    if (bucket[hidx] == 0)
 -- 
 1.7.7.6
