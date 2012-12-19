@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 19 Dec 2012 14:54:26 +0100
-Subject: [Buildroot] [PATCH 2/3] pcmanfm: use a download URL from
- downloads.sourceforge.net
-In-Reply-To: <87hani4090.fsf@dell.be.48ers.dk>
-References: <1355908403-27224-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1355908403-27224-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87hani4090.fsf@dell.be.48ers.dk>
-Message-ID: <20121219145426.2b4fc8b3@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 19 Dec 2012 15:00:44 +0100
+Subject: [Buildroot] [PATCH 2/4] gstreamer: port to gstreamer-1.0
+In-Reply-To: <50D1BE2D.8060507@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 19 Dec 2012 14:16:29 +0100")
+References: <1355916156-17973-1-git-send-email-bogdan@nimblex.org>
+ <1355916156-17973-2-git-send-email-bogdan@nimblex.org>
+ <8738z25i4i.fsf@dell.be.48ers.dk> <50D1BE2D.8060507@mind.be>
+Message-ID: <87d2y63zw3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Wed, 19 Dec 2012 14:52:59 +0100, Peter Korsgaard wrote:
+Hi,
 
-> I changed this to use PCMANFM_VERSION instead of hardcoding 0.3.5.9 here
-> and committed all 3, thanks.
+ Arnout>  OTOH, it's probably not needed to have them side-by-side, so it's
+ Arnout> probably sufficient to have a config option in BR2_PACKAGE_GSTREAMER
+ Arnout> to differentiate the two.
 
-Indeed, thanks.
+True - If that doesn't complicate the .mk / Config.in too much.
 
-Thomas
+ Arnout>  I didn't see the original patches, so I can't say if it's easier to
+ Arnout> have them side-by-side or within a single package...
+
+It was accidentially sent to the busybox list instead. I've asked Bodgan
+to resend the series to the buildroot list.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
