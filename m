@@ -1,25 +1,22 @@
-From: Yvan Roch <yvan.roch@gmail.com>
-Date: Wed, 19 Dec 2012 14:15:48 +0100
-Subject: [Buildroot] Bug report in pkg-autotools.mk
-In-Reply-To: <20121219133507.058bf1ea@skate>
-References: <CAExA2HxbO1X8zt_+Q=BtUhqnWCCSeNGZ3ALR_FhJmhWnpGLBHA@mail.gmail.com>
- <20121219133507.058bf1ea@skate>
-Message-ID: <CAExA2Hy-wcfa12o4waVKLK08YdUfgKZO0G6X6oqxLHn_OKnaBA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 19 Dec 2012 14:46:13 +0100
+Subject: [Buildroot] [PATCH] ortp: disable Werror
+In-Reply-To: <1355922447-20410-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 19 Dec 2012 10:07:27 -0300")
+References: <1355922447-20410-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pq2640ka.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Many thanks for your quick answer.
-I will not use a /usr* path until you publish your general patch for .la files.
+ Gustavo> Disable -Werror for the ortp build, fixes:
+ Gustavo> http://autobuild.buildroot.net/results/b869fcfdfdb9d1ec4864b86c6953b0242200c502
 
-There are several other .la files with paths pointing to the build directory.
-For example: libdirect.la, libfusion.la, libuuid.la, libblkid.la, libpcre.la
-But it's not exhaustive, it's in my own build...
+Committed, thanks.
 
-Regards,
-
-Yvan.
+-- 
+Bye, Peter Korsgaard
