@@ -1,7 +1,7 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 19 Dec 2012 08:27:32 +0100
-Subject: [Buildroot] [PATCH] libcurl: needs MMU
-Message-ID: <1355902052-7507-1-git-send-email-maxime.ripard@free-electrons.com>
+Date: Wed, 19 Dec 2012 08:28:14 +0100
+Subject: [Buildroot] [PATCH] gdb: Needs threads support
+Message-ID: <1355902094-7555-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +13,31 @@ http://autobuild.buildroot.org/results/5a502f16ad94a410ca21c9a7f223d6c12086bbb5/
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- package/libcurl/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ toolchain/gdb/Config.in |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 1d6d08e..10ee0e4 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBCURL
- 	bool "libcurl"
-+	depends on BR2_USE_MMU # Uses fork()
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index 50aafdf..6a8e48e 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GDB
+ 	bool "Build gdb debugger for the Target"
+ 	select BR2_PACKAGE_NCURSES
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
+ 	# The newest versions of gdb require thread debugging in the
+ 	# toolchain. The only cases for which this is not needed is if
+@@ -15,8 +16,8 @@ config BR2_PACKAGE_GDB
  	help
- 	  cURL is a tool for getting files from FTP, HTTP, Gopher, Telnet,
- 	  and Dict servers, using any of the supported protocols.
+ 	    Build the full gdb debugger to run on the target.
+ 
+-comment "Gdb debugger for the target needs WCHAR support in toolchain"
+-	depends on !BR2_USE_WCHAR
++comment "Gdb for the target needs WCHAR and threads support in toolchain"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_GDB_SERVER
+ 	bool "Build gdb server for the Target"
 -- 
 1.7.9.5
