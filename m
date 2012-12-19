@@ -1,61 +1,175 @@
 From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 20 Dec 2012 01:43:47 +0200
-Subject: [Buildroot] [PATCH 09/12] elfutils: new package
+Date: Thu, 20 Dec 2012 01:43:46 +0200
+Subject: [Buildroot] [PATCH 08/12] elfutils: new package
 In-Reply-To: <1355960630-25089-1-git-send-email-stefan.froberg@petroprogram.com>
 References: <y>
  <1355960630-25089-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <1355960630-25089-9-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <1355960630-25089-8-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc does not have fts.h (which is nonstandard) enabled by default.
-So we use fts_.h from libgnu.a as substitute and also expose
-__UCLIBC__ macro from features.h so that ifdef ... else ... endif
-will work correctly.
+ld binary from elfutils wants to use DL_CALL_FCT().
+AFAIK, this is just some nonstandard, callback wrapper.
+Converting to normal stuff.
 
 Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 ---
- .../elfutils/elfutils-linux-kernel-modules.patch   |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/elfutils/elfutils-linux-kernel-modules.patch
+ package/elfutils/elfutils-ld.patch |  144 ++++++++++++++++++++++++++++++++++++
+ 1 files changed, 144 insertions(+), 0 deletions(-)
+ create mode 100644 package/elfutils/elfutils-ld.patch
 
-diff --git a/package/elfutils/elfutils-linux-kernel-modules.patch b/package/elfutils/elfutils-linux-kernel-modules.patch
+diff --git a/package/elfutils/elfutils-ld.patch b/package/elfutils/elfutils-ld.patch
 new file mode 100644
-index 0000000..3fc2117
+index 0000000..ccbf8b8
 --- /dev/null
-+++ b/package/elfutils/elfutils-linux-kernel-modules.patch
-@@ -0,0 +1,29 @@
-+diff -Naur elfutils-0.155.org/libdwfl/linux-kernel-modules.c elfutils-0.155/libdwfl/linux-kernel-modules.c
-+--- elfutils-0.155.org/libdwfl/linux-kernel-modules.c	2012-12-17 21:41:10.075379208 +0200
-++++ elfutils-0.155/libdwfl/linux-kernel-modules.c	2012-12-17 21:42:00.336767164 +0200
-+@@ -29,7 +29,13 @@
-+ /* We include this before config.h because it can't handle _FILE_OFFSET_BITS.
-+    Everything we need here is fine if its declarations just come first.  */
++++ b/package/elfutils/elfutils-ld.patch
+@@ -0,0 +1,144 @@
++--- elfutils-0.155.org/src/ld.h	2012-10-03 23:22:25.403785882 +0300
+++++ elfutils-0.155_backup/src/ld.h	2012-12-04 18:56:18.872566578 +0200
++@@ -291,7 +291,7 @@
++   const char **(*lib_extensions) (struct ld_state *)
++        __attribute__ ((__const__));
++ #define LIB_EXTENSION(state) \
++-  DL_CALL_FCT ((state)->callbacks.lib_extensions, (state))
+++  (state)->callbacks.lib_extensions(state)
 + 
-++#include <features.h>
-++
-++#ifdef	__UCLIBC__
-++#include <fts_.h>
-++#else
-+ #include <fts.h>
-++#endif
++   /* Process the given file.  If the file is not yet open, open it.
++      The first parameter is a file descriptor for the file which can
++@@ -302,12 +302,12 @@
++   int (*file_process) (int fd, struct usedfiles *, struct ld_state *,
++ 		       struct usedfiles **);
++ #define FILE_PROCESS(fd, file, state, nextp) \
++-  DL_CALL_FCT ((state)->callbacks.file_process, (fd, file, state, nextp))
+++  (state)->callbacks.file_process(fd, file, state, nextp)
 + 
-+ #include <config.h>
++   /* Close the given file.  */
++   int (*file_close) (struct usedfiles *, struct ld_state *);
++ #define FILE_CLOSE(file, state) \
++-  DL_CALL_FCT ((state)->callbacks.file_close, (file, state))
+++  (state)->callbacks.file_close(file, state)
 + 
-+diff -Naur elfutils-0.155.org/libdwfl/Makefile.am elfutils-0.155/libdwfl/Makefile.am
-+--- elfutils-0.155.org/libdwfl/Makefile.am	2012-12-17 21:44:27.747502320 +0200
-++++ elfutils-0.155/libdwfl/Makefile.am	2012-12-17 21:45:14.681467381 +0200
-+@@ -31,7 +31,7 @@
-+ ##
-+ include $(top_srcdir)/config/eu.am
-+ INCLUDES += -I$(srcdir) -I$(srcdir)/../libelf -I$(srcdir)/../libebl \
-+-	   -I$(srcdir)/../libdw
-++	   -I$(srcdir)/../libdw -I$(srcdir)/../gnulib
-+ VERSION = 1
++   /* Create the output sections now.  This requires knowledge about
++      all the sections we will need.  It may be necessary to sort the
++@@ -319,99 +319,97 @@
++      output routines.  */
++   void (*create_sections) (struct ld_state *);
++ #define CREATE_SECTIONS(state) \
++-  DL_CALL_FCT ((state)->callbacks.create_sections, (state))
+++  (state)->callbacks.create_sections(state)
 + 
-+ noinst_LIBRARIES = libdwfl.a
++   /* Determine whether we have any non-weak unresolved references left.  */
++   int (*flag_unresolved) (struct ld_state *);
++ #define FLAG_UNRESOLVED(state) \
++-  DL_CALL_FCT ((state)->callbacks.flag_unresolved, (state))
+++  (state)->callbacks.flag_unresolved(state)
++ 
++   /* Create the sections which are generated by the linker and are not
++      present in the input file.  */
++   void (*generate_sections) (struct ld_state *);
++ #define GENERATE_SECTIONS(state) \
++-  DL_CALL_FCT ((state)->callbacks.generate_sections, (state))
+++  (state)->callbacks.generate_sections(state)
++ 
++   /* Open the output file.  The file name is given or "a.out".  We
++      create as much of the ELF structure as possible.  */
++   int (*open_outfile) (struct ld_state *, int, int, int);
++ #define OPEN_OUTFILE(state, machine, class, data) \
++-  DL_CALL_FCT ((state)->callbacks.open_outfile, (state, machine, class, data))
+++  (state)->callbacks.open_outfile(state, machine, class, data)
++ 
++   /* Create the data for the output file.  */
++   int (*create_outfile) (struct ld_state *);
++ #define CREATE_OUTFILE(state) \
++-  DL_CALL_FCT ((state)->callbacks.create_outfile, (state))
+++  (state)->callbacks.create_outfile(state)
++ 
++   /* Process a relocation section.  */
++   void (*relocate_section) (struct ld_state *, Elf_Scn *, struct scninfo *,
++ 			    const Elf32_Word *);
++ #define RELOCATE_SECTION(state, outscn, first, dblindirect) \
++-  DL_CALL_FCT ((state)->callbacks.relocate_section, (state, outscn, first,    \
++-						     dblindirect))
+++  (state)->callbacks.relocate_section(state, outscn, first, dblindirect)
++ 
++   /* Allocate a data buffer for the relocations of the given output
++      section.  */
++   void (*count_relocations) (struct ld_state *, struct scninfo *);
++ #define COUNT_RELOCATIONS(state, scninfo) \
++-  DL_CALL_FCT ((state)->callbacks.count_relocations, (state, scninfo))
+++  (state)->callbacks.count_relocations(state, scninfo)
++ 
++   /* Create relocations for executable or DSO.  */
++   void (*create_relocations) (struct ld_state *, const Elf32_Word *);
++ #define CREATE_RELOCATIONS(state, dlbindirect) \
++-  DL_CALL_FCT ((state)->callbacks.create_relocations, (state, dblindirect))
+++  (state)->callbacks.create_relocations(state, dblindirect)
++ 
++   /* Finalize the output file.  */
++   int (*finalize) (struct ld_state *);
++ #define FINALIZE(state) \
++-  DL_CALL_FCT ((state)->callbacks.finalize, (state))
+++  (state)->callbacks.finalize(state)
++ 
++   /* Check whether special section number is known.  */
++   bool (*special_section_number_p) (struct ld_state *, size_t);
++ #define SPECIAL_SECTION_NUMBER_P(state, number) \
++-  DL_CALL_FCT ((state)->callbacks.special_section_number_p, (state, number))
+++  (state)->callbacks.special_section_number_p(state, number)
++ 
++   /* Check whether section type is known.  */
++   bool (*section_type_p) (struct ld_state *, XElf_Word);
++ #define SECTION_TYPE_P(state, type) \
++-  DL_CALL_FCT ((state)->callbacks.section_type_p, (state, type))
+++  (state)->callbacks.section_type_p(state, type)
++ 
++   /* Return section flags for .dynamic section.  */
++   XElf_Xword (*dynamic_section_flags) (struct ld_state *);
++ #define DYNAMIC_SECTION_FLAGS(state) \
++-  DL_CALL_FCT ((state)->callbacks.dynamic_section_flags, (state))
+++  (state)->callbacks.dynamic_section_flags(state)
++ 
++   /* Create the data structures for the .plt section and initialize it.  */
++   void (*initialize_plt) (struct ld_state *, Elf_Scn *scn);
++ #define INITIALIZE_PLT(state, scn) \
++-  DL_CALL_FCT ((state)->callbacks.initialize_plt, (state, scn))
+++  (state)->callbacks.initialize_plt(state, scn)
++ 
++   /* Create the data structures for the .rel.plt section and initialize it.  */
++   void (*initialize_pltrel) (struct ld_state *, Elf_Scn *scn);
++ #define INITIALIZE_PLTREL(state, scn) \
++-  DL_CALL_FCT ((state)->callbacks.initialize_pltrel, (state, scn))
+++  (state)->callbacks.initialize_pltrel(state, scn)
++ 
++   /* Finalize the .plt section the what belongs to them.  */
++   void (*finalize_plt) (struct ld_state *, size_t, size_t, struct symbol **);
++ #define FINALIZE_PLT(state, nsym, nsym_dyn, ndxtosym) \
++-  DL_CALL_FCT ((state)->callbacks.finalize_plt, (state, nsym, nsym_dyn, \
++-						 ndxtosym))
+++  (state)->callbacks.finalize_plt(state, nsym, nsym_dyn,  ndxtosym)
++ 
++   /* Create the data structures for the .got section and initialize it.  */
++   void (*initialize_got) (struct ld_state *, Elf_Scn *scn);
++ #define INITIALIZE_GOT(state, scn) \
++-  DL_CALL_FCT ((state)->callbacks.initialize_got, (state, scn))
+++  (state)->callbacks.initialize_got(state, scn)
++ 
++   /* Create the data structures for the .got.plt section and initialize it.  */
++   void (*initialize_gotplt) (struct ld_state *, Elf_Scn *scn);
++ #define INITIALIZE_GOTPLT(state, scn) \
++-  DL_CALL_FCT ((state)->callbacks.initialize_gotplt, (state, scn))
+++  (state)->callbacks.initialize_gotplt(state, scn)
++ 
++   /* Return the tag corresponding to the native relocation type for
++      the platform.  */
++   int (*rel_type) (struct ld_state *);
++ #define REL_TYPE(state) \
++-  DL_CALL_FCT ((state)->callbacks.rel_type, (state))
+++  (state)->callbacks.rel_type(state)
++ };
++ 
++ 
 -- 
 1.7.7.6
