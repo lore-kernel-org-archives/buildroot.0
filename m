@@ -1,70 +1,44 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Thu, 20 Dec 2012 12:25:19 +1300
-Subject: [Buildroot] [PATCH] Add a config override file capability.
-Message-ID: <1355959519-11726-1-git-send-email-cdhmanning@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Dec 2012 00:27:07 +0100
+Subject: [Buildroot] [PATCH] mplayer: prevent selection on Microblaze and
+	AArch64
+Message-ID: <1355959627-13525-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is similar to the package override capability and allows the overriding
-of configuration symbols without modifying .config.
+MPlayer wants to have some "support" for each architecture, and for
+now, it doesn't know about Microblaze and AArch64, so prevent the
+selection of MPlayer on those architectures.
 
-Why? Same reason as having package overriding...
+For Microblaze, fixes:
 
-Examples:
+  http://autobuild.buildroot.org/results/4e6e0d15694345ded649c92251cc2173dc45fe7c/build-end.log
 
-1) Might need to override svn on a user-by-user basis to add --username
-2) Might want to be able to set versions of code fetched from svn without
-changing the .config. Just put the overriding symbols in the override file.
-
-The override file is included straight after .config in the Makefile, so
-this limits what should be done there...
-
-Signed-off-by: Charles Manning <cdhmanning@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in |    7 +++++++
- Makefile  |    9 +++++++++
- 2 files changed, 16 insertions(+), 0 deletions(-)
+For AArch64, there was also a build failure raised by the autobuilders
+some days ago, but I can't find it anymore.
+---
+ package/multimedia/mplayer/Config.in |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index b319ac7..9f42a26 100644
---- a/Config.in
-+++ b/Config.in
-@@ -419,6 +419,13 @@ config BR2_PACKAGE_OVERRIDE_FILE
- 	  as the source directory for a particular package. See the
- 	  Buildroot documentation for more details on this feature.
- 
-+config BR2_CONFIG_OVERRIDE_FILE
-+	string "location of a configuration override file"
-+	help
-+	  A configuration override file is a short makefile that contains
-+	  variable definitions of the form  BR2_xxx to override configurations
-+	  in the .config configuration file.
-+
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/Makefile b/Makefile
-index 4b09437..d133a27 100644
---- a/Makefile
-+++ b/Makefile
-@@ -94,6 +94,15 @@ endif
- # Pull in the user's configuration file
- ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(CONFIG_DIR)/.config
-+
-+# Include the config override file if one has been provided in the
-+# configuration.
-+CONFIG_OVERRIDE_FILE=$(call qstrip,$(BR2_CONFIG_OVERRIDE_FILE))
-+ifneq ($(CONFIG_OVERRIDE_FILE),)
-+$(warning Overriding configuration with  $(CONFIG_OVERRIDE_FILE))
-+include $(CONFIG_OVERRIDE_FILE)
-+endif
-+
- endif
- 
- # To put more focus on warnings, be less verbose as default
+diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
+index c64dab7..e285644 100644
+--- a/package/multimedia/mplayer/Config.in
++++ b/package/multimedia/mplayer/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_MPLAYER
+ 	bool "mplayer"
+-	# "Error: unsupported architecture sh4a" says mplayer
+-	# configure script.
+-	depends on !BR2_sh4a && !BR2_sh4aeb
++	# Those architectures are not supported by MPlayer
++	depends on !BR2_sh4a && !BR2_sh4aeb && !BR2_microblaze && !BR2_aarch64
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  MPlayer is a movie player which runs on many systems and supports
 -- 
-1.7.1
+1.7.9.5
