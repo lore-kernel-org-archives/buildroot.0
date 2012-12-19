@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 Dec 2012 09:52:06 +0100
-Subject: [Buildroot] [git commit] libcurl: needs MMU
-Message-ID: <20121219085645.666969A3B7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Dec 2012 10:13:22 +0100
+Subject: [Buildroot] [PATCH 2/3] pcmanfm: use a download URL from
+	downloads.sourceforge.net
+In-Reply-To: <1355908403-27224-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1355908403-27224-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1355908403-27224-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9229b82d6326ea425a258b91a9f0157ef6b223b7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes
-http://autobuild.buildroot.org/results/5a502f16ad94a410ca21c9a7f223d6c12086bbb5/build-end.log
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcurl/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/pcmanfm/pcmanfm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcurl/Config.in b/package/libcurl/Config.in
-index 1d6d08e..10ee0e4 100644
---- a/package/libcurl/Config.in
-+++ b/package/libcurl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBCURL
- 	bool "libcurl"
-+	depends on BR2_USE_MMU # Uses fork()
- 	help
- 	  cURL is a tool for getting files from FTP, HTTP, Gopher, Telnet,
- 	  and Dict servers, using any of the supported protocols.
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index e4c23ec..8eaa485 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ PCMANFM_VERSION = 0.3.5.9
+ PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.gz
+-PCMANFM_SITE = http://internap.dl.sourceforge.net/sourceforge/pcmanfm
++PCMANFM_SITE = http://downloads.sourceforge.net/project/pcmanfm/pcmanfm-legacy%20%28Old%200.5%20series%29/PCManFM%200.3.5.9/
+ PCMANFM_CONF_OPT = --disable-hal
+ PCMANFM_DEPENDENCIES = host-pkgconf libgtk2 gamin startup-notification xserver_xorg-server
+ PCMANFM_AUTORECONF = YES
+-- 
+1.7.9.5
