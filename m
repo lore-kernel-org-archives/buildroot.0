@@ -1,46 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 19 Dec 2012 10:19:56 +0100
-Subject: [Buildroot] [git commit] gdb: Needs threads support
-Message-ID: <20121219092608.51E039A396@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 19 Dec 2012 10:32:54 +0100
+Subject: [Buildroot] elfutils successfully compiled with buildroot
+ 2012.05
+In-Reply-To: <50D0E6D2.6040602@petroprogram.com>
+References: <50D0E6D2.6040602@petroprogram.com>
+Message-ID: <1355909574.8626.6.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd436d46fed1228bdb417c4b5fec0122696efa41
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 2012-12-18 at 23:57 +0200, Stefan Fr?berg wrote:
+> Hello to all
+> 
+> I just want to tell that I have now managed to complete building
+> elfutils version 0.155
+> successfully with Buildroot version 2012.05.
+> 
+> After some sleep (and patch cleanup) I will send it here for initial review.
+> Not all of it went smoothly but I will explain it in more detail in the
+> patches.
+> 
+> There are few screenshots of my uClibc environment under VirtualBox
+> with working readelf from elfutils package.
+> 
+> Regards
+> Stefan
+> 
+> P.S.:  AFAIK, Glib from version 2.32 and up needs elfutils (or at least
+> it's libelf component) as hard dependency ????
 
-Fixes
-http://autobuild.buildroot.org/results/480ee3efd8ffe8043329fec173ef8187bd54e0fb/build-end.log
+No, it's a soft dependency. glib 2.32 will build without libelf. In a
+build without libelf you won't be able to use the GResource
+functionality though, see
+http://developer.gnome.org/gio/2.32/gio-GResource.html
 
-[Peter: correct autobuilder URL]
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gdb/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 50aafdf..6a8e48e 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_sh && !BR2_sh64 && !BR2_avr32 && !BR2_microblaze && !BR2_bfin && !BR2_aarch64
- 	# The newest versions of gdb require thread debugging in the
- 	# toolchain. The only cases for which this is not needed is if
-@@ -15,8 +16,8 @@ config BR2_PACKAGE_GDB
- 	help
- 	    Build the full gdb debugger to run on the target.
- 
--comment "Gdb debugger for the target needs WCHAR support in toolchain"
--	depends on !BR2_USE_WCHAR
-+comment "Gdb for the target needs WCHAR and threads support in toolchain"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_GDB_SERVER
- 	bool "Build gdb server for the Target"
+Regards,
+Sven
