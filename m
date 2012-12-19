@@ -1,44 +1,128 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 20 Dec 2012 00:27:07 +0100
-Subject: [Buildroot] [PATCH] mplayer: prevent selection on Microblaze and
-	AArch64
-Message-ID: <1355959627-13525-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 20 Dec 2012 00:29:52 +0100
+Subject: [Buildroot] [PATCH] toolchain-crosstool-ng: update PPL and CLoog
+	versions in default configs
+Message-ID: <1355959792-13804-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MPlayer wants to have some "support" for each architecture, and for
-now, it doesn't know about Microblaze and AArch64, so prevent the
-selection of MPlayer on those architectures.
+We have updated our Crosstool-NG configuration to gcc 4.6.x, but the
+PPL and CLoog versions were not updated accordingly. With gcc 4.6.x,
+at least PPL 0.11 is needed, and only CLoog > 0.15.9 can work with PLL
+0.11.
 
-For Microblaze, fixes:
+Fixes:
 
-  http://autobuild.buildroot.org/results/4e6e0d15694345ded649c92251cc2173dc45fe7c/build-end.log
+  http://autobuild.buildroot.org/results/c22758a30c3b8abb582150cefd7099605c527e14/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-For AArch64, there was also a build failure raised by the autobuilders
-some days ago, but I can't find it anymore.
----
- package/multimedia/mplayer/Config.in |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../crosstool-ng.config-eglibc                     |   16 ++++++++++------
+ .../crosstool-ng.config-glibc                      |   16 ++++++++++------
+ .../crosstool-ng.config-uClibc                     |   16 ++++++++++------
+ 3 files changed, 30 insertions(+), 18 deletions(-)
 
-diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
-index c64dab7..e285644 100644
---- a/package/multimedia/mplayer/Config.in
-+++ b/package/multimedia/mplayer/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_MPLAYER
- 	bool "mplayer"
--	# "Error: unsupported architecture sh4a" says mplayer
--	# configure script.
--	depends on !BR2_sh4a && !BR2_sh4aeb
-+	# Those architectures are not supported by MPlayer
-+	depends on !BR2_sh4a && !BR2_sh4aeb && !BR2_microblaze && !BR2_aarch64
- 	depends on BR2_LARGEFILE
- 	help
- 	  MPlayer is a movie player which runs on many systems and supports
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+index 11eb602..08f036c 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+@@ -474,18 +474,22 @@ CT_MPFR_V_2_4_2=y
+ # CT_MPFR_V_2_4_1 is not set
+ # CT_MPFR_V_2_4_0 is not set
+ CT_MPFR_VERSION="2.4.2"
+-# CT_PPL_V_0_11_2 is not set
++CT_PPL_V_0_11_2=y
+ # CT_PPL_V_0_11_1 is not set
+ # CT_PPL_V_0_11 is not set
+-CT_PPL_V_0_10_2=y
+-CT_PPL_VERSION="0.10.2"
+-# CT_CLOOG_V_0_15_11 is not set
++# CT_PPL_V_0_10_2 is not set
++CT_PPL_VERSION="0.11.2"
++CT_PPL_0_11=y
++CT_PPL_NEEDS_LIBPWL=y
++CT_CLOOG_V_0_15_11=y
+ # CT_CLOOG_V_0_15_10 is not set
+-CT_CLOOG_V_0_15_9=y
++# CT_CLOOG_V_0_15_9 is not set
+ # CT_CLOOG_V_0_15_8 is not set
+ # CT_CLOOG_V_0_15_7 is not set
+ # CT_CLOOG_V_0_15_6 is not set
+-CT_CLOOG_VERSION="0.15.9"
++CT_CLOOG_VERSION="0.15.11"
++CT_CLOOG_0_15_1x=y
++CT_CLOOG_NEEDS_AUTORECONF=y
+ CT_MPC_V_0_9=y
+ # CT_MPC_V_0_8_2 is not set
+ # CT_MPC_V_0_8_1 is not set
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index c30a115..ae0bc02 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -463,18 +463,22 @@ CT_MPFR_V_2_4_2=y
+ # CT_MPFR_V_2_4_1 is not set
+ # CT_MPFR_V_2_4_0 is not set
+ CT_MPFR_VERSION="2.4.2"
+-# CT_PPL_V_0_11_2 is not set
++CT_PPL_V_0_11_2=y
+ # CT_PPL_V_0_11_1 is not set
+ # CT_PPL_V_0_11 is not set
+-CT_PPL_V_0_10_2=y
+-CT_PPL_VERSION="0.10.2"
+-# CT_CLOOG_V_0_15_11 is not set
++# CT_PPL_V_0_10_2 is not set
++CT_PPL_VERSION="0.11.2"
++CT_PPL_0_11=y
++CT_PPL_NEEDS_LIBPWL=y
++CT_CLOOG_V_0_15_11=y
+ # CT_CLOOG_V_0_15_10 is not set
+-CT_CLOOG_V_0_15_9=y
++# CT_CLOOG_V_0_15_9 is not set
+ # CT_CLOOG_V_0_15_8 is not set
+ # CT_CLOOG_V_0_15_7 is not set
+ # CT_CLOOG_V_0_15_6 is not set
+-CT_CLOOG_VERSION="0.15.9"
++CT_CLOOG_VERSION="0.15.11"
++CT_CLOOG_0_15_1x=y
++CT_CLOOG_NEEDS_AUTORECONF=y
+ CT_MPC_V_0_9=y
+ # CT_MPC_V_0_8_2 is not set
+ # CT_MPC_V_0_8_1 is not set
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+index e93128b..4f21263 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+@@ -445,18 +445,22 @@ CT_MPFR_V_2_4_2=y
+ # CT_MPFR_V_2_4_1 is not set
+ # CT_MPFR_V_2_4_0 is not set
+ CT_MPFR_VERSION="2.4.2"
+-# CT_PPL_V_0_11_2 is not set
++CT_PPL_V_0_11_2=y
+ # CT_PPL_V_0_11_1 is not set
+ # CT_PPL_V_0_11 is not set
+-CT_PPL_V_0_10_2=y
+-CT_PPL_VERSION="0.10.2"
+-# CT_CLOOG_V_0_15_11 is not set
++# CT_PPL_V_0_10_2 is not set
++CT_PPL_VERSION="0.11.2"
++CT_PPL_0_11=y
++CT_PPL_NEEDS_LIBPWL=y
++CT_CLOOG_V_0_15_11=y
+ # CT_CLOOG_V_0_15_10 is not set
+-CT_CLOOG_V_0_15_9=y
++# CT_CLOOG_V_0_15_9 is not set
+ # CT_CLOOG_V_0_15_8 is not set
+ # CT_CLOOG_V_0_15_7 is not set
+ # CT_CLOOG_V_0_15_6 is not set
+-CT_CLOOG_VERSION="0.15.9"
++CT_CLOOG_VERSION="0.15.11"
++CT_CLOOG_0_15_1x=y
++CT_CLOOG_NEEDS_AUTORECONF=y
+ CT_MPC_V_0_9=y
+ # CT_MPC_V_0_8_2 is not set
+ # CT_MPC_V_0_8_1 is not set
 -- 
 1.7.9.5
