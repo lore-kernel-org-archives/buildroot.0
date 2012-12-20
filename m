@@ -1,28 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Dec 2012 09:22:24 +0100
-Subject: [Buildroot] [PATCH] mplayer: prevent selection on Microblaze
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 20 Dec 2012 09:21:39 +0100
+Subject: [Buildroot] [git commit] mplayer: prevent selection on Microblaze
 	and AArch64
-In-Reply-To: <1355959627-13525-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 20 Dec 2012 00:27:07 +0100")
-References: <1355959627-13525-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehilyvy7.fsf@dell.be.48ers.dk>
+Message-ID: <20121220082223.6E0779A3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=14bf3df3a649715246e13a9bf5f0902f09df84a6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> MPlayer wants to have some "support" for each architecture, and for
- Thomas> now, it doesn't know about Microblaze and AArch64, so prevent the
- Thomas> selection of MPlayer on those architectures.
+MPlayer wants to have some "support" for each architecture, and for
+now, it doesn't know about Microblaze and AArch64, so prevent the
+selection of MPlayer on those architectures.
 
- Thomas> For Microblaze, fixes:
+For Microblaze, fixes:
 
- Thomas>   http://autobuild.buildroot.org/results/4e6e0d15694345ded649c92251cc2173dc45fe7c/build-end.log
+  http://autobuild.buildroot.org/results/4e6e0d15694345ded649c92251cc2173dc45fe7c/build-end.log
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mplayer/Config.in |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/mplayer/Config.in b/package/multimedia/mplayer/Config.in
+index c64dab7..e285644 100644
+--- a/package/multimedia/mplayer/Config.in
++++ b/package/multimedia/mplayer/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_MPLAYER
+ 	bool "mplayer"
+-	# "Error: unsupported architecture sh4a" says mplayer
+-	# configure script.
+-	depends on !BR2_sh4a && !BR2_sh4aeb
++	# Those architectures are not supported by MPlayer
++	depends on !BR2_sh4a && !BR2_sh4aeb && !BR2_microblaze && !BR2_aarch64
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  MPlayer is a movie player which runs on many systems and supports
