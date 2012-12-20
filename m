@@ -1,73 +1,90 @@
 From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
-Date: Thu, 20 Dec 2012 13:47:17 +0100
-Subject: [Buildroot] [PATCH 1/2] uboot-tools: install mkenvimage.
-Message-ID: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
+Date: Thu, 20 Dec 2012 13:47:18 +0100
+Subject: [Buildroot] [PATCH 2/2] uboot: integrate mkenvimage.
+In-Reply-To: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
+References: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
+Message-ID: <1356007638-18476-2-git-send-email-rebillout@syscom.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tool mkenvimage generates a valid binary environment image from
-a text file describing the key=value pairs of the environment.
-This commit allows installation on target and host.
+This commit provides configuration options to automatically generate a
+binary environment image for U-Boot.
+Two options are available (and mandatory):
+ * the location of a text file describing U-Boot environment.
+ * the size of the environment.
 
 Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
 ---
- package/uboot-tools/Config.in      |    7 +++++++
- package/uboot-tools/uboot-tools.mk |    8 ++++++++
- 2 files changed, 15 insertions(+)
+ boot/uboot/Config.in |   21 +++++++++++++++++++++
+ boot/uboot/uboot.mk  |   16 ++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index 9cc837c..7c8f17c 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -13,6 +13,13 @@ config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
- 	  The mkimage tool from Das U-Boot bootloader, which allows
- 	  generation of U-Boot images in various formats.
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d8458d9..06f6b5a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -208,4 +208,25 @@ config BR2_TARGET_UBOOT_SPL_NAME
+ 	  u-boot build. For most platform it is u-boot-spl.bin
+ 	  but not always. It is MLO on OMAP for example.
  
-+config BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE
-+	bool "mkenvimage"
++menuconfig BR2_TARGET_UBOOT_ENVIMAGE
++	bool "Environment image"
 +	help
-+	  The mkenvimage tool from Das U-Boot bootloader, which allows
-+	  generation of a valid binary environment image from a text file
++	  Generate a valid binary environment image from a text file
 +	  describing the key=value pairs of the environment.
 +
- config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
- 	bool "fw_printenv"
- 	default y
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 75cda8e..e1739be 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -24,6 +24,12 @@ define UBOOT_TOOLS_INSTALL_MKIMAGE
++if BR2_TARGET_UBOOT_ENVIMAGE
++
++config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
++       string "Source file for environment"
++       help
++         Text file describing the environment.
++
++config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
++       string "Size of environment"
++       help
++         Size of envronment, can be prefixed with 0x for hexadecimal
++	 values.
++       
++endif # BR2_TARGET_UBOOT_ENVIMAGE
++
+ endif # BR2_TARGET_UBOOT
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 619f2e1..89a9096 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -104,6 +104,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+ 		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
++	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
++		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
++		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
  endef
+ 
+ define UBOOT_INSTALL_OMAP_IFT_IMAGE
+@@ -125,6 +128,19 @@ UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
+ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
  endif
  
-+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKENVIMAGE),y)
-+define UBOOT_TOOLS_INSTALL_MKENVIMAGE
-+	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(TARGET_DIR)/usr/bin/mkenvimage
-+endef
++ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
++# we NEED a environment settings unless we're at make source
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
++$(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
++endif
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
++$(error Please provide Uboot environment size (BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting))
++endif
++endif
++UBOOT_DEPENDENCIES += host-uboot-tools
 +endif
 +
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV),y)
- define UBOOT_TOOLS_INSTALL_FWPRINTENV
- 	$(INSTALL) -m 0755 -D $(@D)/tools/env/fw_printenv $(TARGET_DIR)/usr/sbin/fw_printenv
-@@ -33,6 +39,7 @@ endif
- 
- define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
-+	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
- endef
- 
-@@ -51,6 +58,7 @@ endef
- 
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin/mkimage
-+	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/usr/bin/mkenvimage
- endef
- 
  $(eval $(generic-package))
+ 
+ ifeq ($(BR2_TARGET_UBOOT),y)
 -- 
 1.7.10.4
