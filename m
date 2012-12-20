@@ -1,60 +1,34 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Thu, 20 Dec 2012 09:48:09 +0100
-Subject: [Buildroot] [PATCHv3] linux: Support multiple device tree build
-Message-ID: <1355993289-31804-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 20 Dec 2012 10:08:51 +0100
+Subject: [Buildroot] [PATCH RFC 5/6] libfslcodec: new package
+In-Reply-To: <50D2CA07.1060503@mind.be> (Arnout Vandecappelle's message of
+ "Thu, 20 Dec 2012 09:19:19 +0100")
+References: <1355960256-10786-1-git-send-email-arnout@mind.be>
+ <1355960256-10786-6-git-send-email-arnout@mind.be>
+ <653065179.1471991.1355965563202.JavaMail.root@advansee.com>
+ <50D2CA07.1060503@mind.be>
+Message-ID: <87a9t9ytss.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
-Fixes since v3:
-  - Remove the use of foreach but use addprefix/addsuffix instead
----
- linux/Config.in |    5 +++--
- linux/linux.mk  |    7 +++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index f408ad5..3ff6b4a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -261,11 +261,12 @@ config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
- endchoice
- 
- config BR2_LINUX_KERNEL_INTREE_DTS_NAME
--	string "Device Tree Source file name"
-+	string "Device Tree Source file names"
- 	depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
- 	help
- 	 Name of the device tree source file, without
--	 the trailing .dts
-+	 the trailing .dts. You can provide a list of
-+	 dts files to build, separated by spaces.
- 
- config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	string "Device Tree Source file path"
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c4bdf90..3321d80 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -187,10 +187,13 @@ endef
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) \
-+		$(addsuffix .dtb, $(call qstrip, $(KERNEL_DTS_NAME)))
- endef
- define LINUX_INSTALL_DTB
--	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
-+	cp $(addprefix $(KERNEL_ARCH_PATH)/boot/, \
-+		$(addsuffix .dtb, $(call qstrip, $(KERNEL_DTS_NAME)))) \
-+		$(BINARIES_DIR)/
- endef
- endif
- endif
+Hi,
+
+ >> For packages like this one that install pre-built libraries, it
+ >> would be good to document somewhere or to auto-check (e.g. with
+ >> toolchain kconfig options vs.  package kconfig options) the ABI
+ >> compatibility to make sure that there won't be any issue with the
+ >> toolchain used.
+
+ Arnout>  I agree, but how?
+
+I don't know the specifics of this package, but presumably it only works
+with glibc and a specific soft/softfp/hard floating point mode? If so,
+we could atleast catch some of these dependencies in Config.in.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
