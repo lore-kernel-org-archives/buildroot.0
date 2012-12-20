@@ -1,74 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Dec 2012 23:16:14 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: update config fro
-	glibc-based toolchains
-Message-ID: <1356041774-10868-1-git-send-email-yann.morin.1998@free.fr>
+From: Gary Coulbourne <bear@bears.org>
+Date: Thu, 20 Dec 2012 17:22:27 -0500
+Subject: [Buildroot] [PATCH] dtb: provide option to install dtb to boot
+	directory
+Message-ID: <1356042147-1532-1-git-send-email-bear@bears.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the version of glibc to be used, since older versions are
-broken with the currently-used binutils versions.
 
-Fixes build issues ending with:
-    tmpfs/ccvkz3ro.s:33: Error: CFI instruction used without
-    previous .cfi_startproc
-
-This new version does not have RPC support, so update the Config.in.
-
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gary Coulbourne <bear@bears.org>
 ---
- toolchain/toolchain-crosstool-ng/Config.in         |    5 ++---
- .../crosstool-ng.config-glibc                      |    6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ linux/Config.in |    6 ++++++
+ linux/linux.mk  |    7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 9cd5ca5..d80f547 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -24,9 +24,8 @@ config BR2_TOOLCHAIN_CTNG_glibc
- 	bool "glibc"
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	# Our default ct-ng configuration uses glibc 2.9, which has
--	# native RPC support
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	# Our default ct-ng configuration uses glibc 2.14.1, which
-+	# does not have native RPC support
- 	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
+diff --git a/linux/Config.in b/linux/Config.in
+index 9ebe0c9..8918297 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -284,6 +284,12 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	  /boot in the target root filesystem, as is typically done on
+ 	  x86/x86_64 systems.
  
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-index ae0bc02..5b4bbba 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-@@ -356,13 +356,13 @@ CT_CC_GCC_LDBL_128=m
- # C-library
- #
- CT_LIBC="glibc"
--CT_LIBC_VERSION="2.9"
-+CT_LIBC_VERSION="2.14.1"
- # CT_LIBC_eglibc is not set
- CT_LIBC_glibc=y
- # CT_LIBC_uClibc is not set
- CT_LIBC_eglibc_AVAILABLE=y
- CT_LIBC_glibc_AVAILABLE=y
--# CT_LIBC_GLIBC_V_2_14_1 is not set
-+CT_LIBC_GLIBC_V_2_14_1
- # CT_LIBC_GLIBC_V_2_14 is not set
- # CT_LIBC_GLIBC_V_2_13 is not set
- # CT_LIBC_GLIBC_V_2_12_2 is not set
-@@ -370,7 +370,7 @@ CT_LIBC_glibc_AVAILABLE=y
- # CT_LIBC_GLIBC_V_2_11_1 is not set
- # CT_LIBC_GLIBC_V_2_11 is not set
- # CT_LIBC_GLIBC_V_2_10_1 is not set
--CT_LIBC_GLIBC_V_2_9=y
-+# CT_LIBC_GLIBC_V_2_9 is not set
- # CT_LIBC_GLIBC_V_2_8 is not set
- CT_LIBC_mingw_AVAILABLE=y
- CT_LIBC_newlib_AVAILABLE=y
++config BR2_LINUX_DEVICE_TREE_INSTALL_TARGET
++	bool "Install Device Tree to /boot in target"
++	depends on BR2_LINUX_KERNEL_DTS_SUPPORT
++	help
++	  Select this option to have the device tree installed to
++	  /boot in the target root filesystem.
+ 
+ # Linux extensions
+ source "linux/Config.ext.in"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 3321d80..6d8c752 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -211,6 +211,12 @@ define LINUX_APPEND_DTB
+ endef
+ endif
+ 
++ifeq ($(BR2_LINUX_DEVICE_TREE_INSTALL_TARGET),y)
++define LINUX_INSTALL_DTB_TO_TARGET
++	install -m 0644 -D $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(TARGET_DIR)/boot/$(KERNEL_DTS_NAME).dtb
++endef
++endif
++
+ # Compilation. We make sure the kernel gets rebuilt when the
+ # configuration has changed.
+ define LINUX_BUILD_CMDS
+@@ -247,6 +253,7 @@ endef
+ define LINUX_INSTALL_TARGET_CMDS
+ 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
+ 	$(LINUX_INSTALL_DTB)
++	$(LINUX_INSTALL_DTB_TO_TARGET)
+ 	# Install modules and remove symbolic links pointing to build
+ 	# directories, not relevant on the target
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
 -- 
-1.7.2.5
+1.7.10.4
