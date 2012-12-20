@@ -1,40 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Dec 2012 23:11:33 +0100
+Date: Thu, 20 Dec 2012 23:16:14 +0100
 Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: update config fro
 	glibc-based toolchains
-In-Reply-To: <20121220230859.42de3da8@skate>
-References: <1356040912-9830-1-git-send-email-yann.morin.1998@free.fr>
- <20121220230859.42de3da8@skate>
-Message-ID: <201212202311.33345.yann.morin.1998@free.fr>
+Message-ID: <1356041774-10868-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Update the version of glibc to be used, since older versions are
+broken with the currently-used binutils versions.
 
-On Thursday 20 December 2012 Thomas Petazzoni wrote:
-> On Thu, 20 Dec 2012 23:01:52 +0100, Yann E. MORIN wrote:
-> 
-> > -CT_LIBC_VERSION="2.9"
-> > +CT_LIBC_VERSION="2.14.1"
-> 
-> How does 2.14.1 plays with regard to RPC support? For now,
-> toolchain/toolchain-external/Config.in assumes that glibc and eglibc
-> toolchains have native RPC support. So if the bump to 2.14.1 implies
-> the lack of native RPC support, then the "select
-> BR2_TOOLCHAIN_HAS_NATIVE_RPC" should be removed.
+Fixes build issues ending with:
+    tmpfs/ccvkz3ro.s:33: Error: CFI instruction used without
+    previous .cfi_startproc
 
-Gah, indeed. I'll resend.
+This new version does not have RPC support, so update the Config.in.
 
-Regards,
-Yann E. MORIN.
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ toolchain/toolchain-crosstool-ng/Config.in         |    5 ++---
+ .../crosstool-ng.config-glibc                      |    6 +++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
+diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+index 9cd5ca5..d80f547 100644
+--- a/toolchain/toolchain-crosstool-ng/Config.in
++++ b/toolchain/toolchain-crosstool-ng/Config.in
+@@ -24,9 +24,8 @@ config BR2_TOOLCHAIN_CTNG_glibc
+ 	bool "glibc"
+ 	select BR2_LARGEFILE
+ 	select BR2_INET_IPV6
+-	# Our default ct-ng configuration uses glibc 2.9, which has
+-	# native RPC support
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	# Our default ct-ng configuration uses glibc 2.14.1, which
++	# does not have native RPC support
+ 	select BR2_ENABLE_LOCALE
+ 	select BR2_USE_WCHAR
+ 
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index ae0bc02..5b4bbba 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -356,13 +356,13 @@ CT_CC_GCC_LDBL_128=m
+ # C-library
+ #
+ CT_LIBC="glibc"
+-CT_LIBC_VERSION="2.9"
++CT_LIBC_VERSION="2.14.1"
+ # CT_LIBC_eglibc is not set
+ CT_LIBC_glibc=y
+ # CT_LIBC_uClibc is not set
+ CT_LIBC_eglibc_AVAILABLE=y
+ CT_LIBC_glibc_AVAILABLE=y
+-# CT_LIBC_GLIBC_V_2_14_1 is not set
++CT_LIBC_GLIBC_V_2_14_1
+ # CT_LIBC_GLIBC_V_2_14 is not set
+ # CT_LIBC_GLIBC_V_2_13 is not set
+ # CT_LIBC_GLIBC_V_2_12_2 is not set
+@@ -370,7 +370,7 @@ CT_LIBC_glibc_AVAILABLE=y
+ # CT_LIBC_GLIBC_V_2_11_1 is not set
+ # CT_LIBC_GLIBC_V_2_11 is not set
+ # CT_LIBC_GLIBC_V_2_10_1 is not set
+-CT_LIBC_GLIBC_V_2_9=y
++# CT_LIBC_GLIBC_V_2_9 is not set
+ # CT_LIBC_GLIBC_V_2_8 is not set
+ CT_LIBC_mingw_AVAILABLE=y
+ CT_LIBC_newlib_AVAILABLE=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
