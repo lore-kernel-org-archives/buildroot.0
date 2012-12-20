@@ -1,51 +1,94 @@
 From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 19 Dec 2012 16:26:29 -0800
+Date: Wed, 19 Dec 2012 17:00:10 -0800
 Subject: [Buildroot] Any way to override .config settings?
-In-Reply-To: <50D259DC.7090509@mind.be>
+In-Reply-To: <CAE21AQpTYPzOG-M1W_ERLJjX6DijJyt4eXWeu-qg0A1=cXNPJQ@mail.gmail.com>
 References: <CAE21AQpSdqfXmX1Kv97LHQP_kqEqC9FH+rwU70ZZAPS-Xt4_DA@mail.gmail.com>
  <50D255F0.8030107@mind.be>
  <CAE21AQrTh=bTke7awGUDfp+SfJJx5K1L6HVVhMs5F4eXAaZaTA@mail.gmail.com>
  <50D259DC.7090509@mind.be>
-Message-ID: <CAJJ6jxuyeGH0iGkZ-UgaufGMKkuK8Ena80KjMfyLkzjou9t99w@mail.gmail.com>
+ <CAJJ6jxuyeGH0iGkZ-UgaufGMKkuK8Ena80KjMfyLkzjou9t99w@mail.gmail.com>
+ <CAE21AQpTYPzOG-M1W_ERLJjX6DijJyt4eXWeu-qg0A1=cXNPJQ@mail.gmail.com>
+Message-ID: <CAJJ6jxucNMGJo1pSNsL04rUMjZbcH1Z8XkGLGMGkHArsmRehMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Dec 19, 2012 at 4:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 20/12/12 01:13, Charles Manning wrote:
-
->
->>>> 1) Is there a built in mechanism in buildroot to include extra symbols
->>>> and override those in .config?
->>>
->>>
->>>
->>>   Yes, the package override file: BR2_PACKAGE_OVERRIDE_FILE, defaults to
->>> $(TOPDIR)/local.mk. I use this to include a bunch of project-specific .mk
->>> files that add packages without requiring a Config.in.
+On Wed, Dec 19, 2012 at 4:46 PM, Charles Manning <cdhmanning@gmail.com> wrote:
+> On Thu, Dec 20, 2012 at 1:26 PM, Steve Calfee <stevecalfee@gmail.com> wrote:
+>> On Wed, Dec 19, 2012 at 4:20 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>> On 20/12/12 01:13, Charles Manning wrote:
 >>
+>>>
+>>>>>> 1) Is there a built in mechanism in buildroot to include extra symbols
+>>>>>> and override those in .config?
+>>>>>
+>>>>>
+>>>>>
+>>>>>   Yes, the package override file: BR2_PACKAGE_OVERRIDE_FILE, defaults to
+>>>>> $(TOPDIR)/local.mk. I use this to include a bunch of project-specific .mk
+>>>>> files that add packages without requiring a Config.in.
+>>>>
+>>>>
+>>>> In a separate thread to this, I submitted a patch that follows the
+>>>> package overriding idea to override the config
+>>>
+>>>
+>>>  Since it does exactly the same as BR2_PACKAGE_OVERRIDE_FILE, I don't see
+>>> the point... Unless you want to start overriding toolchain configs.
+>>>
+>>>  Actually, I don't see much point to override the .config - why not just
+>>> save a different .config?
+>>>
 >>
->> In a separate thread to this, I submitted a patch that follows the
->> package overriding idea to override the config
+>> I agree. From a maintenance point of view, having one file (.config or
+>> defconfig) that describes how something is built is much nicer than
+>> having a .config and various makefiles that hack at it.
 >
+> Simplicity is pretty much my goal here too and proliferating
+> defconfigs for minor tweaks seems a nasty way to tackle the issue.
 >
->  Since it does exactly the same as BR2_PACKAGE_OVERRIDE_FILE, I don't see
-> the point... Unless you want to start overriding toolchain configs.
+> Some examples of where this might make sense:
 >
->  Actually, I don't see much point to override the .config - why not just
-> save a different .config?
+> .config defines the project and individual developers want to apply
+> tweaks to that.
+> eg.1) I sometimes have problems with my svn client and only managed to
+> get it working properly by forcing --username and --password. That is
+> not something I want to put in a defconfig.
+>
+> eg2) Keeping everything the same, except changing revisions.
+> eg3) Overriding sources for stuff while
+>
+Hi Charles,
+
+Please keep the list in CC, others may have an opinion too.
+
+I don't know how to deal with problems with the svn. All other things
+can be handled with local custom configs. Git branches work
+wonderfully for such things.
+
+>>
+>> Also, the buildroot make system is a mechanism that can easily be
+>> extended by an external script or makefile. We should resist the
+>> temptation to complicate the buildroot system just to fit a subset of
+>> people's strange build desires. Keeping it simple and clean and
+>> limiting the number of targets is good.
+>
+> Sorry... How is that logically consistent? A few lines back you say
+> "just make more defconfigs". Now you say "limit the number of
+> targets"...
+>
+> My proposed addition of config overriding  .config allows simple
+> tweaking without generating more defconfigs. Surely that is a good
+> thing?
 >
 
-I agree. From a maintenance point of view, having one file (.config or
-defconfig) that describes how something is built is much nicer than
-having a .config and various makefiles that hack at it.
-
-Also, the buildroot make system is a mechanism that can easily be
-extended by an external script or makefile. We should resist the
-temptation to complicate the buildroot system just to fit a subset of
-people's strange build desires. Keeping it simple and clean and
-limiting the number of targets is good.
+Maybe, but my objection is to adding makefile targets. That affects
+everyone, the docs etc. You having several configs that completely
+describe your build configuration is merely something that seems
+beneficial to me, maybe not you. I believe limiting the makefile
+targets is a good thing, and having a few, standard ways to externally
+configure your build is good enough.
 
 Regards, Steve
