@@ -1,90 +1,30 @@
-From: =?UTF-8?q?Arnaud=20R=C3=A9billout?= <rebillout@syscom.ch>
-Date: Thu, 20 Dec 2012 13:47:18 +0100
-Subject: [Buildroot] [PATCH 2/2] uboot: integrate mkenvimage.
-In-Reply-To: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
-References: <1356007638-18476-1-git-send-email-rebillout@syscom.ch>
-Message-ID: <1356007638-18476-2-git-send-email-rebillout@syscom.ch>
+From: Richard Braun <rbraun@sceen.net>
+Date: Thu, 20 Dec 2012 14:41:52 +0100
+Subject: [Buildroot] [PATCH] arch: fix BR2_ARCH for generic target variant
+Message-ID: <1356010912-3577-1-git-send-email-rbraun@sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit provides configuration options to automatically generate a
-binary environment image for U-Boot.
-Two options are available (and mandatory):
- * the location of a text file describing U-Boot environment.
- * the size of the environment.
 
-Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+Signed-off-by: Richard Braun <rbraun@sceen.net>
 ---
- boot/uboot/Config.in |   21 +++++++++++++++++++++
- boot/uboot/uboot.mk  |   16 ++++++++++++++++
- 2 files changed, 37 insertions(+)
+ arch/Config.in.x86 |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d8458d9..06f6b5a 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -208,4 +208,25 @@ config BR2_TARGET_UBOOT_SPL_NAME
- 	  u-boot build. For most platform it is u-boot-spl.bin
- 	  but not always. It is MLO on OMAP for example.
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index d2e0807..ce30605 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -173,6 +173,7 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_athlon
+ 	default "i686"		if BR2_x86_athlon_4
+ 	default "x86_64"	if BR2_x86_64
++	default "i386"		if BR2_x86_generic
  
-+menuconfig BR2_TARGET_UBOOT_ENVIMAGE
-+	bool "Environment image"
-+	help
-+	  Generate a valid binary environment image from a text file
-+	  describing the key=value pairs of the environment.
-+
-+if BR2_TARGET_UBOOT_ENVIMAGE
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
-+       string "Source file for environment"
-+       help
-+         Text file describing the environment.
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
-+       string "Size of environment"
-+       help
-+         Size of envronment, can be prefixed with 0x for hexadecimal
-+	 values.
-+       
-+endif # BR2_TARGET_UBOOT_ENVIMAGE
-+
- endif # BR2_TARGET_UBOOT
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 619f2e1..89a9096 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -104,6 +104,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
- 	$(if $(BR2_TARGET_UBOOT_SPL),
- 		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
-+	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
-+		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
-+		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
- endef
- 
- define UBOOT_INSTALL_OMAP_IFT_IMAGE
-@@ -125,6 +128,19 @@ UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
- UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
-+# we NEED a environment settings unless we're at make source
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
-+$(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
-+endif
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
-+$(error Please provide Uboot environment size (BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting))
-+endif
-+endif
-+UBOOT_DEPENDENCIES += host-uboot-tools
-+endif
-+
- $(eval $(generic-package))
- 
- ifeq ($(BR2_TARGET_UBOOT),y)
+ config BR2_ENDIAN
+ 	default "LITTLE"
 -- 
-1.7.10.4
+1.7.2.5
