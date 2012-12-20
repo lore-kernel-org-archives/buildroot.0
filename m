@@ -1,62 +1,59 @@
-From: Gary Coulbourne <bear@bears.org>
-Date: Thu, 20 Dec 2012 17:22:27 -0500
-Subject: [Buildroot] [PATCH] dtb: provide option to install dtb to boot
-	directory
-Message-ID: <1356042147-1532-1-git-send-email-bear@bears.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Dec 2012 00:23:19 +0100
+Subject: [Buildroot] [pull request] Pull request for branch ext-toolchains
+Message-ID: <cover.1356045729.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Gary Coulbourne <bear@bears.org>
----
- linux/Config.in |    6 ++++++
- linux/linux.mk  |    7 +++++++
- 2 files changed, 13 insertions(+)
+Here is a set of updates for external toolchains:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9ebe0c9..8918297 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -284,6 +284,12 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
- 	  /boot in the target root filesystem, as is typically done on
- 	  x86/x86_64 systems.
- 
-+config BR2_LINUX_DEVICE_TREE_INSTALL_TARGET
-+	bool "Install Device Tree to /boot in target"
-+	depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-+	help
-+	  Select this option to have the device tree installed to
-+	  /boot in the target root filesystem.
- 
- # Linux extensions
- source "linux/Config.ext.in"
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3321d80..6d8c752 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -211,6 +211,12 @@ define LINUX_APPEND_DTB
- endef
- endif
- 
-+ifeq ($(BR2_LINUX_DEVICE_TREE_INSTALL_TARGET),y)
-+define LINUX_INSTALL_DTB_TO_TARGET
-+	install -m 0644 -D $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(TARGET_DIR)/boot/$(KERNEL_DTS_NAME).dtb
-+endef
-+endif
-+
- # Compilation. We make sure the kernel gets rebuilt when the
- # configuration has changed.
- define LINUX_BUILD_CMDS
-@@ -247,6 +253,7 @@ endef
- define LINUX_INSTALL_TARGET_CMDS
- 	$(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
- 	$(LINUX_INSTALL_DTB)
-+	$(LINUX_INSTALL_DTB_TO_TARGET)
- 	# Install modules and remove symbolic links pointing to build
- 	# directories, not relevant on the target
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ * Adding two new versions of the Sourcery MIPS toolchains, removing
+   the oldest two ones.
+
+ * Simplification of download URLs.
+
+ * Add two new AArch64 toolchains. The goal, like other toolchains, is
+   to keep at most 3 toolchain versions.
+
+ * Add one new Linaro ARM toolchain, and remove the oldest one.
+
+Thanks,
+
+Thomas
+
+The following changes since commit 14bf3df3a649715246e13a9bf5f0902f09df84a6:
+
+  mplayer: prevent selection on Microblaze and AArch64 (2012-12-20 09:21:39 +0100)
+
+are available in the git repository at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git ext-toolchains
+
+for you to fetch changes up to 6210d76c7fef76a239c2e03c02998035cd13d9e8:
+
+  toolchain-external: remove support for 'Linaro ARM 2012.09' (2012-12-21 00:20:44 +0100)
+
+----------------------------------------------------------------
+Thomas Petazzoni (9):
+      toolchain-external: add support for 'Sourcery CodeBench MIPS 2012.03'
+      toolchain-external: add support for 'Sourcery CodeBench MIPS 2012.09'
+      toolchain-external: remove support for 'Sourcery CodeBench MIPS 4.4'
+      toolchain-external: remove support for 'Sourcery CodeBench MIPS 2011.03'
+      toolchain-external: simplify many Sourcery CodeBench download URLs
+      toolchain-external: add support for 'Linaro AArch64 12.11'
+      toolchain-external: add support for 'Linaro AArch64 12.12'
+      toolchain-external: add support for 'Linaro ARM 2012.12'
+      toolchain-external: remove support for 'Linaro ARM 2012.09'
+
+ toolchain/toolchain-external/Config.in   |  154 ++++++++++++++++++++----------
+ toolchain/toolchain-external/ext-tool.mk |   40 ++++----
+ 2 files changed, 128 insertions(+), 66 deletions(-)
+
+Thanks,
 -- 
-1.7.10.4
+Thomas Petazzoni
