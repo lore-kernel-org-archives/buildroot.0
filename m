@@ -1,30 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Dec 2012 17:29:08 +0100
-Subject: [Buildroot] [PATCH] Makefile: fix cross target
-In-Reply-To: <CAHkwnC-qrYqYa_sEzoS9ea6HEyprN-gdsx_6Q3JKv8g6=+Pjbw@mail.gmail.com>
- (Fabio Porcedda's message of "Thu, 20 Dec 2012 16:06:42 +0100")
-References: <1356012991-32494-1-git-send-email-fabio.porcedda@gmail.com>
- <87pq24yemq.fsf@dell.be.48ers.dk>
- <CAHkwnC-4ewBJ2qgqT3B8S9dRxsL07tuece49xvvGLjgv2fX4EQ@mail.gmail.com>
- <CAEYzJUF7Pe6je0AuVBGTMoFN+GZw=vDz3-T-Sw=BwEOq22GXbQ@mail.gmail.com>
- <CAHkwnC-qrYqYa_sEzoS9ea6HEyprN-gdsx_6Q3JKv8g6=+Pjbw@mail.gmail.com>
-Message-ID: <87licsy9ez.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 20 Dec 2012 15:15:24 +0100
+Subject: [Buildroot] [git commit] arch: fix BR2_ARCH for generic target
+	variant
+Message-ID: <20121220162903.41EAF9A3D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2a27ad3d796720c6be79f13f0bc58e595584aa35
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Richard Braun <rbraun@sceen.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ arch/Config.in.x86 |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
- Fabio> "toolchain" sounds better.
-
- Fabio> If it's ok i will send an updated patch to rename and document
- Fabio> it (make help).
-
-Yes, please do.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index d2e0807..ce30605 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -173,6 +173,7 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_athlon
+ 	default "i686"		if BR2_x86_athlon_4
+ 	default "x86_64"	if BR2_x86_64
++	default "i386"		if BR2_x86_generic
+ 
+ config BR2_ENDIAN
+ 	default "LITTLE"
