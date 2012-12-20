@@ -1,55 +1,43 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 20 Dec 2012 11:49:26 +0100
-Subject: [Buildroot] [PATCH] gst-plugins-base: make alsa plug-in configurable
-Message-ID: <1356000566-32423-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 20 Dec 2012 11:50:04 +0100
+Subject: [Buildroot] [PATCH RFC 5/6] libfslcodec: new package
+In-Reply-To: <50D2E9B2.70808@mind.be> (Arnout Vandecappelle's message of "Thu, 
+ 20 Dec 2012 11:34:26 +0100")
+References: <1355960256-10786-1-git-send-email-arnout@mind.be>
+ <1355960256-10786-6-git-send-email-arnout@mind.be>
+ <653065179.1471991.1355965563202.JavaMail.root@advansee.com>
+ <50D2CA07.1060503@mind.be> <87a9t9ytss.fsf@dell.be.48ers.dk>
+ <50D2E9B2.70808@mind.be>
+Message-ID: <874njhyp43.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It may be desirable not to use the alsa sink for playback
-even though alsa-lib is installed. So make this a configuration
-option. This also takes care of selecting the proper options
-for alsa-lib
-(BR2_PACKAGE_ALSA_LIB_MIXER and BR2_PACKAGE_ALSA_LIB_PCM).
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/multimedia/gst-plugins-base/Config.in           |    6 ++++++
- package/multimedia/gst-plugins-base/gst-plugins-base.mk |    3 +--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
-index 5d82533..70d664d 100644
---- a/package/multimedia/gst-plugins-base/Config.in
-+++ b/package/multimedia/gst-plugins-base/Config.in
-@@ -73,6 +73,12 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VOLUME
- 
- comment "plugins with external dependencies (there may be more available)"
- 
-+config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA
-+	bool "alsa (mandatory for audio playback)"
-+        select BR2_PACKAGE_ALSA_LIB
-+        select BR2_PACKAGE_ALSA_LIB_MIXER
-+        select BR2_PACKAGE_ALSA_LIB_PCM
-+
- config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG
- 	bool "ogg (*.ogg audio/video)"
- 	select BR2_PACKAGE_LIBOGG
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index b044516..02e7ca4 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -40,8 +40,7 @@ ifeq ($(BR2_PACKAGE_ORC),y)
- GST_PLUGINS_BASE_DEPENDENCIES += orc
- endif
- 
--# alsa support needs pcm+mixer support, but configure fails to check for it
--ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
-+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA),y)
- GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
- else
- GST_PLUGINS_BASE_CONF_OPT += --disable-alsa
+ >> I don't know the specifics of this package, but presumably it only
+ >> works with glibc and a specific soft/softfp/hard floating point
+ >> mode? If so, we could atleast catch some of these dependencies in
+ >> Config.in.
+
+ Arnout>  Yes, but how to know what the dependencies are (except by
+ Arnout> run-testing with all the different toolchains on all the
+ Arnout> different SoCs)?
+
+Doesn't Freescale document this anyware, or atleast mention what
+toolchain they have used to build it?
+
+ Arnout>  I'd also like to find a way to decide which of the _arm9,
+ Arnout> _arm11 or _arm12 libraries to use (they all have the same ABI
+ Arnout> flags...).
+
+Can't you decide based on the selected ARM subarchitecture? If we need
+to do this in a bunch of places we could centralize it by adding some
+BR2_ARM_Vx symbols and select the correct one from the subarch choice.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
