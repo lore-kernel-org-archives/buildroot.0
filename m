@@ -1,46 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 20 Dec 2012 21:11:57 +0100
-Subject: [Buildroot] [PATCH] toolchain-crosstool-ng: update PPL and
-	CLoog versions in default configs
-In-Reply-To: <201212202056.00373.yann.morin.1998@free.fr>
-References: <1355959792-13804-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <201212202056.00373.yann.morin.1998@free.fr>
-Message-ID: <201212202111.57697.yann.morin.1998@free.fr>
+Date: Thu, 20 Dec 2012 23:01:52 +0100
+Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: update config fro
+	glibc-based toolchains
+Message-ID: <1356040912-9830-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Update the version of glibc to be used, since older versions are
+broken with the currently-used binutils versions.
 
-On Thursday 20 December 2012 Yann E. MORIN wrote:
-> On Thursday 20 December 2012 Thomas Petazzoni wrote:
-> > We have updated our Crosstool-NG configuration to gcc 4.6.x, but the
-> > PPL and CLoog versions were not updated accordingly. With gcc 4.6.x,
-> > at least PPL 0.11 is needed, and only CLoog > 0.15.9 can work with PLL
-> > 0.11.
-> > 
-> > Fixes:
-> > 
-> >   http://autobuild.buildroot.org/results/c22758a30c3b8abb582150cefd7099605c527e14/build-end.log
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> The eglibc build is broken for a defconfig:
->     /tmpfs/ccvkz3ro.s:33: Error: CFI instruction used without
->     previous .cfi_startproc
-> But that's another issue.
+Fixes build issues ending with:
+    tmpfs/ccvkz3ro.s:33: Error: CFI instruction used without
+    previous .cfi_startproc
 
-Well, my bad, it's the glibc build that is broken.
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../crosstool-ng.config-glibc                      |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index ae0bc02..5b4bbba 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -356,13 +356,13 @@ CT_CC_GCC_LDBL_128=m
+ # C-library
+ #
+ CT_LIBC="glibc"
+-CT_LIBC_VERSION="2.9"
++CT_LIBC_VERSION="2.14.1"
+ # CT_LIBC_eglibc is not set
+ CT_LIBC_glibc=y
+ # CT_LIBC_uClibc is not set
+ CT_LIBC_eglibc_AVAILABLE=y
+ CT_LIBC_glibc_AVAILABLE=y
+-# CT_LIBC_GLIBC_V_2_14_1 is not set
++CT_LIBC_GLIBC_V_2_14_1
+ # CT_LIBC_GLIBC_V_2_14 is not set
+ # CT_LIBC_GLIBC_V_2_13 is not set
+ # CT_LIBC_GLIBC_V_2_12_2 is not set
+@@ -370,7 +370,7 @@ CT_LIBC_glibc_AVAILABLE=y
+ # CT_LIBC_GLIBC_V_2_11_1 is not set
+ # CT_LIBC_GLIBC_V_2_11 is not set
+ # CT_LIBC_GLIBC_V_2_10_1 is not set
+-CT_LIBC_GLIBC_V_2_9=y
++# CT_LIBC_GLIBC_V_2_9 is not set
+ # CT_LIBC_GLIBC_V_2_8 is not set
+ CT_LIBC_mingw_AVAILABLE=y
+ CT_LIBC_newlib_AVAILABLE=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
