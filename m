@@ -1,49 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Dec 2012 11:34:26 +0100
-Subject: [Buildroot] [PATCH RFC 5/6] libfslcodec: new package
-In-Reply-To: <87a9t9ytss.fsf@dell.be.48ers.dk>
-References: <1355960256-10786-1-git-send-email-arnout@mind.be>
- <1355960256-10786-6-git-send-email-arnout@mind.be>
- <653065179.1471991.1355965563202.JavaMail.root@advansee.com>
- <50D2CA07.1060503@mind.be> <87a9t9ytss.fsf@dell.be.48ers.dk>
-Message-ID: <50D2E9B2.70808@mind.be>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu, 20 Dec 2012 11:49:26 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-base: make alsa plug-in configurable
+Message-ID: <1356000566-32423-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/12/12 10:08, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle<arnout@mind.be>  writes:
->
-> Hi,
->
->   >>  For packages like this one that install pre-built libraries, it
->   >>  would be good to document somewhere or to auto-check (e.g. with
->   >>  toolchain kconfig options vs.  package kconfig options) the ABI
->   >>  compatibility to make sure that there won't be any issue with the
->   >>  toolchain used.
->
->   Arnout>   I agree, but how?
->
-> I don't know the specifics of this package, but presumably it only works
-> with glibc and a specific soft/softfp/hard floating point mode? If so,
-> we could atleast catch some of these dependencies in Config.in.
+It may be desirable not to use the alsa sink for playback
+even though alsa-lib is installed. So make this a configuration
+option. This also takes care of selecting the proper options
+for alsa-lib
+(BR2_PACKAGE_ALSA_LIB_MIXER and BR2_PACKAGE_ALSA_LIB_PCM).
 
-  Yes, but how to know what the dependencies are (except by run-testing 
-with all the different toolchains on all the different SoCs)?
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/multimedia/gst-plugins-base/Config.in           |    6 ++++++
+ package/multimedia/gst-plugins-base/gst-plugins-base.mk |    3 +--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-  I'd also like to find a way to decide which of the _arm9, _arm11 or 
-_arm12 libraries to use (they all have the same ABI flags...).
-
-  Regards,
-  Arnout
-
-
+diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
+index 5d82533..70d664d 100644
+--- a/package/multimedia/gst-plugins-base/Config.in
++++ b/package/multimedia/gst-plugins-base/Config.in
+@@ -73,6 +73,12 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VOLUME
+ 
+ comment "plugins with external dependencies (there may be more available)"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA
++	bool "alsa (mandatory for audio playback)"
++        select BR2_PACKAGE_ALSA_LIB
++        select BR2_PACKAGE_ALSA_LIB_MIXER
++        select BR2_PACKAGE_ALSA_LIB_PCM
++
+ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG
+ 	bool "ogg (*.ogg audio/video)"
+ 	select BR2_PACKAGE_LIBOGG
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index b044516..02e7ca4 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -40,8 +40,7 @@ ifeq ($(BR2_PACKAGE_ORC),y)
+ GST_PLUGINS_BASE_DEPENDENCIES += orc
+ endif
+ 
+-# alsa support needs pcm+mixer support, but configure fails to check for it
+-ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA),y)
+ GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
+ else
+ GST_PLUGINS_BASE_CONF_OPT += --disable-alsa
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
