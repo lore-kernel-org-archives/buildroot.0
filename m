@@ -1,71 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 Dec 2012 09:24:50 +0100
-Subject: [Buildroot] [git commit] toolchain-external: remove support for
-	'Linaro ARM 2012.09'
-Message-ID: <20121221082524.C51A89A2F9@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 21 Dec 2012 11:36:28 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Makefile: add toolchain target
+Message-ID: <1356086190-906-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25347541025401e1d575c198348e2f99b8894ce3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
+this patch set is to add a toolchain target to be able
+to build only the toolchain right after a defconfig or a clean.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-external/Config.in   |   18 ------------------
- toolchain/toolchain-external/ext-tool.mk |    3 ---
- 2 files changed, 0 insertions(+), 21 deletions(-)
+Best regards
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 9dda722..eeb40a3 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -54,23 +54,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 
- 	  To use this toolchain, you must disable soft float usage.
- 
--config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
--	bool "Linaro 2012.09"
--	depends on BR2_arm
--	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	select BR2_INSTALL_LIBSTDCPP
--	help
--	  Linaro toolchain for the ARM architecture. It uses Linaro
--	  GCC 2012.09 (based on gcc 4.7), Linaro GDB 2012.09 (based on
--	  GDB 7.5), eglibc 2.15. It generates code that runs on all
--	  Cortex-A profile devices, but tuned for the Cortex-A9. The
--	  code generated is Thumb 2, with the hard floating point
--	  calling convention, and uses the VFPv3-D16 FPU instructions.
--
--	  To use this toolchain, you must disable soft float usage.
--
- comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
- 	depends on BR2_arm
- 	depends on !BR2_cortex_a5 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15
-@@ -699,7 +682,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
--	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- 	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index ade706e..649e3a3 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -184,9 +184,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gn
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2012.03-57-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_09),y)
--TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.09/+download/
--TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-2012.09-20120921_linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10),y)
- TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.10/+download/
- TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.10-20121022_linux.tar.bz2
+Fabio Porcedda (2):
+  Makefile: rename cross target -> toolchain
+  Makefile: use toolchain target in the world target
+
+ Makefile | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+-- 
+1.8.0
