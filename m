@@ -1,60 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 Dec 2012 08:42:55 +0100
-Subject: [Buildroot] [git commit] linux: simplify dtb variables
-Message-ID: <20121221081435.3DC439A3CE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Dec 2012 09:16:50 +0100
+Subject: [Buildroot] [PATCH] toolchain-crosstool-ng: update PPL and
+	CLoog versions in default configs
+In-Reply-To: <1355959792-13804-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 20 Dec 2012 00:29:52 +0100")
+References: <1355959792-13804-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ehijyg3x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=309c2f50fa12deeaf7d809e3bdef291a12486b4f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Only qstrip once and add a KERNEL_DTBS helper variable to simplify the dtb
-rules.
+ Thomas> We have updated our Crosstool-NG configuration to gcc 4.6.x, but the
+ Thomas> PPL and CLoog versions were not updated accordingly. With gcc 4.6.x,
+ Thomas> at least PPL 0.11 is needed, and only CLoog > 0.15.9 can work with PLL
+ Thomas> 0.11.
 
-No functional change.
+ Thomas> Fixes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/linux.mk |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ Thomas>   http://autobuild.buildroot.org/results/c22758a30c3b8abb582150cefd7099605c527e14/build-end.log
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 3321d80..6586e68 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -53,7 +53,7 @@ LINUX_MAKE_FLAGS = \
- LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_INTREE_DTS),y)
--KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_INTREE_DTS_NAME)
-+KERNEL_DTS_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
- KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))
- endif
-@@ -65,6 +65,8 @@ $(error Kernel with appended device tree needs exactly one DTS source.\
- endif
- endif
- 
-+KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
-+
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
- LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- else
-@@ -187,12 +189,10 @@ endef
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
--	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) \
--		$(addsuffix .dtb, $(call qstrip, $(KERNEL_DTS_NAME)))
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTBS)
- endef
- define LINUX_INSTALL_DTB
--	cp $(addprefix $(KERNEL_ARCH_PATH)/boot/, \
--		$(addsuffix .dtb, $(call qstrip, $(KERNEL_DTS_NAME)))) \
-+	cp $(addprefix $(KERNEL_ARCH_PATH)/boot/,$(KERNEL_DTBS)) \
- 		$(BINARIES_DIR)/
- endef
- endif
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
