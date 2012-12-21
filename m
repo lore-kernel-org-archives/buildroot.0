@@ -1,69 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 21 Dec 2012 20:43:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 5810] Buildroot 2012.11: Additional GCC option
- "-msoft-float" breaks the build
-In-Reply-To: <bug-5810-163@https.bugs.busybox.net/>
-References: <bug-5810-163@https.bugs.busybox.net/>
-Message-ID: <20121221204348.3AEC29A403@busybox.osuosl.org>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Fri, 21 Dec 2012 22:44:58 +0100
+Subject: [Buildroot] [PATCH 0/6] Add support for udisks package.
+Message-ID: <1356126305-16133-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5810
+This patches add support for udisks and dependencies + fixes.
 
---- Comment #5 from Timofei Bolshakov <tbolsh@gmail.com> 2012-12-21 20:44:10 UTC ---
-(In reply to comment #4)
-> So, you're explicitly passing:
-> 
-> BR2_EXTRA_GCC_CONFIG_OPTIONS="-msoft-float"
+Patches for sg3_utils, polkit and udisks was done by
+Thomas Petazzoni and overtaken from
+http://free-electrons.com/~thomas/pub/udisks-buildroot/.
+They were fixed to work with latest buildroot.
 
-No, I am setting "Additional gcc options". That leads to 
-BR2_EXTRA_GCC_CONFIG_OPTIONS="-msoft-float"
-I surely was not understanding that it will lead to CONFIG option. 
-My fault. But that is curious conversion from "Additional gcc options" to 
-BR2_EXTRA_GCC_CONFIG_OPTIONS - it is not clear until one goes into 
-the .config in text form. Meanwhile - using it in "Target optimizations" also 
-leads to break. 
+udisks with lvm2 support (default n) have dependency on devmapper
+and lvm2 application library. There are two fixes:
 
-And that was not breaking the build in 2012.8
+- correctly install devmapper.pc to staging/target
+- add support for application library
 
-So, where should I put my -msoft-float then? I want everything to be compiled 
-with this flag.
+Marek Belisko (6):
+  sg3_utils: new package
+  polkit: new package
+  libatasmart: new package.
+  lvm2: Install devmapper.pc to staging/target pkgconfig directory.
+  lvm2: Compile and install application library.
+  udisks: new package
 
-> 
-> in your Buildroot configuration, and then you complain because GCC doesn't
-> understand your special flag? 
-
-What should I complain about then? Unclear language?
-If one will change "Additional gcc options" to "Additional gcc config options"
-there will be no confusion. Or to use anything I should go and check the source
-code? 
-
-> If you pass a special flag, aren't you supposed
-> to know what you're doing?
-> 
-> This seems like a curious bug report, isn't it ?
-
-That is clear enough:
-
--msoft-float
-           Use (do not use) the hardware floating-point instructions for
-floating-point operations.  When -msoft-float is specified, functions in
-libgcc.a will be used to perform floating-point operations. Unless they are
-replaced by routines that emulate the floating-point operations, or compiled in
-such a way as to call such emulations routines, these routines will issue
-floating-point operations. If you are compiling for an Alpha without
-floating-point operations, you must ensure that the library is built so as not
-to call them. Note that Alpha implementations without floating-point operations
-are required to have floating-point registers.
-
-That is what I want - "functions in libgcc.a will be used to perform
-floating-point operations". I was wrong to use config option labelled as
-"additional" for that. Where can I put my "-msoft-float"?
+ package/Config.in                  |    4 ++++
+ package/libatasmart/Config.in      |   11 +++++++++++
+ package/libatasmart/libatasmart.mk |   14 ++++++++++++++
+ package/lvm2/Config.in             |    6 ++++++
+ package/lvm2/lvm2.mk               |    8 +++++++-
+ package/polkit/Config.in           |    8 ++++++++
+ package/polkit/polkit.mk           |   18 ++++++++++++++++++
+ package/sg3_utils/Config.in        |   15 +++++++++++++++
+ package/sg3_utils/sg3_utils.mk     |   33 +++++++++++++++++++++++++++++++++
+ package/udisks/Config.in           |   32 ++++++++++++++++++++++++++++++++
+ package/udisks/udisks.mk           |   26 ++++++++++++++++++++++++++
+ 11 files changed, 174 insertions(+), 1 deletion(-)
+ create mode 100644 package/libatasmart/Config.in
+ create mode 100644 package/libatasmart/libatasmart.mk
+ create mode 100644 package/polkit/Config.in
+ create mode 100644 package/polkit/polkit.mk
+ create mode 100644 package/sg3_utils/Config.in
+ create mode 100644 package/sg3_utils/sg3_utils.mk
+ create mode 100644 package/udisks/Config.in
+ create mode 100644 package/udisks/udisks.mk
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.10.4
