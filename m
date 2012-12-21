@@ -1,15 +1,14 @@
 From: Shawn J. Goff <shawn7400@gmail.com>
-Date: Fri, 21 Dec 2012 08:35:32 -0500
+Date: Fri, 21 Dec 2012 09:06:33 -0500
 Subject: [Buildroot] Vector Buildroot Logo
 In-Reply-To: <50D45AE5.2010308@mind.be>
 References: <50D35EEF.9070700@gmail.com> <50D45AE5.2010308@mind.be>
-Message-ID: <50D465A4.9060509@gmail.com>
+Message-ID: <50D46CE9.3020401@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
 
 On 12/21/2012 07:49 AM, Arnout Vandecappelle wrote:
 > On 20/12/12 19:54, Shawn J. Goff wrote:
@@ -38,15 +37,16 @@ On 12/21/2012 07:49 AM, Arnout Vandecappelle wrote:
 >  Arnout
 >
 >
-Here are some variations with your suggestions, but I had to include my 
-favorite symbol, too :-). I started out with different fonts, then chose 
-my favorite and tried different stroke and background color treatments. 
-I quite think the dark grey/black either for the stroke or background 
-make it look more constructioney. My favorite here is the thick dark 
-stroke on the hat, but I don't like the thick stroke on the letters; 
-pairing the thick dark stroke on the hat with a thin stroke on the 
-letters didn't look good. The yellow letters on a light background don't 
-work too well, so my favorite is the thick stroke on the hat, no stroke 
-on the letters, dark background.
+I also forgot to mention, once it's all figured out, I'm giving the 
+copyright of the artwork to the Buildroot project if that's possible, or 
+if not, it will be licensed in whatever way you guys want it to so you 
+can use it however you want. And if folks do settle on the dark 
+background logo, it could require website rework, which I'd also be up 
+for taking on if it's desirable.
 
-http://i.imgur.com/WFmB4.png
+I forgot to lower-case the R in the previous one, so here is a new one. 
+I also realized the symbolic one could be given eyes and it becomes a 
+mascot. I like that the abstract one is a hardhat to people who know and 
+is just a symbol to others.
+
+http://i.imgur.com/fCTHZ.png
