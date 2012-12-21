@@ -1,73 +1,71 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Fri, 21 Dec 2012 22:51:06 +0100
-Subject: [Buildroot] [PATCH 2/6] polkit: new package
+Date: Fri, 21 Dec 2012 22:51:07 +0100
+Subject: [Buildroot] [PATCH 3/6] libatasmart: new package.
 In-Reply-To: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
 References: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1356126670-16186-3-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <1356126670-16186-4-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Marek Belisko <marek.belisko@streamunlimited.com>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in        |    1 +
- package/polkit/Config.in |    8 ++++++++
- package/polkit/polkit.mk |   18 ++++++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/polkit/Config.in
- create mode 100644 package/polkit/polkit.mk
+ package/Config.in                  |    1 +
+ package/libatasmart/Config.in      |   11 +++++++++++
+ package/libatasmart/libatasmart.mk |   14 ++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/libatasmart/Config.in
+ create mode 100644 package/libatasmart/libatasmart.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index afecb8e..155a429 100644
+index 155a429..7a0a852 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -749,6 +749,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- endif
- source "package/monit/Config.in"
-+source "package/polkit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
-diff --git a/package/polkit/Config.in b/package/polkit/Config.in
+@@ -231,6 +231,7 @@ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+ source "package/kbd/Config.in"
+ source "package/lcdproc/Config.in"
++source "package/libatasmart/Config.in"
+ source "package/linux-firmware/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lshw/Config.in"
+diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
 new file mode 100644
-index 0000000..9ca347a
+index 0000000..863046f
 --- /dev/null
-+++ b/package/polkit/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_POLKIT
-+        bool "polkit"
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_DBUS_EXPAT
++++ b/package/libatasmart/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBATASMART
++	bool "libatasmart"
++	depends on BR2_PACKAGE_UDEV
 +	help
-+	  PolicyKit is a toolkit for defining and handling
-+	  authorizations.  It is used for allowing unprivileged
-+	  processes to speak to privileged processes.
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
++	  Reading and Parsing Library.
++	  As the name suggests libatasmart only does ATA S.M.A.R.T.
++
++	  git://git.0pointer.de/libatasmart.git
++
++comment "libatasmart requires udev to be enabled"
++	depends on !BR2_PACKAGE_UDEV
+diff --git a/package/libatasmart/libatasmart.mk b/package/libatasmart/libatasmart.mk
 new file mode 100644
-index 0000000..8c882f2
+index 0000000..47b4720
 --- /dev/null
-+++ b/package/polkit/polkit.mk
-@@ -0,0 +1,18 @@
++++ b/package/libatasmart/libatasmart.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# polkit
++# libatasmart
 +#
 +#############################################################
-+POLKIT_VERSION = 0.103
-+POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases/
++LIBATASMART_VERSION = v0.19
++LIBATASMART_SITE    = git://git.0pointer.de/libatasmart.git
 +
-+POLKIT_INSTALL_STAGING = YES
++LIBATASMART_INSTALL_STAGING = YES
++LIBATASMART_AUTORECONF = YES
 +
-+POLKIT_DEPENDENCIES = libglib2 host-intltool expat
-+
-+# We could also support --with-authfw=pam
-+POLKIT_CONF_OPT = \
-+	--with-authfw=shadow \
-+	--with-os-type=unknown
++LIBATASMART_DEPENDENCIES = udev
 +
 +$(eval $(autotools-package))
 -- 
