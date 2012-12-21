@@ -1,76 +1,122 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 Dec 2012 09:18:33 +0100
-Subject: [Buildroot] [git commit] toolchain/crosstool-ng: update config for
-	glibc-based toolchains
-Message-ID: <20121221082523.1C02197310@busybox.osuosl.org>
+Date: Fri, 21 Dec 2012 09:22:23 +0100
+Subject: [Buildroot] [git commit] toolchain-external: add support for
+	'Sourcery CodeBench MIPS 2012.09'
+Message-ID: <20121221082523.6E7919A2F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1d0c10c99f8c2d0fabdf2e930b8c05b64813fa27
+commit: http://git.buildroot.net/buildroot/commit/?id=8de1f57e66c65a8c511cc61c47afa54ca181dcdb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the version of glibc to be used, since older versions are
-broken with the currently-used binutils versions.
-
-Fixes build issues ending with:
-    tmpfs/ccvkz3ro.s:33: Error: CFI instruction used without
-    previous .cfi_startproc
-
-This new version does not have RPC support, so update the Config.in.
-
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-crosstool-ng/Config.in         |    5 ++---
- .../crosstool-ng.config-glibc                      |    6 +++---
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ toolchain/toolchain-external/Config.in   |   69 ++++++++++++++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +
+ 2 files changed, 72 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index 9cd5ca5..d80f547 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -24,9 +24,8 @@ config BR2_TOOLCHAIN_CTNG_glibc
- 	bool "glibc"
- 	select BR2_LARGEFILE
- 	select BR2_INET_IPV6
--	# Our default ct-ng configuration uses glibc 2.9, which has
--	# native RPC support
--	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	# Our default ct-ng configuration uses glibc 2.14.1, which
-+	# does not have native RPC support
- 	select BR2_ENABLE_LOCALE
- 	select BR2_USE_WCHAR
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 4e94526..4104041 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -102,6 +102,74 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
+ 	      Select BR2_SOFT_FLOAT
+ 	      Set BR2_TARGET_OPTIMIZATION to -mthumb
  
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-index ae0bc02..5b4bbba 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-@@ -356,13 +356,13 @@ CT_CC_GCC_LDBL_128=m
- # C-library
- #
- CT_LIBC="glibc"
--CT_LIBC_VERSION="2.9"
-+CT_LIBC_VERSION="2.14.1"
- # CT_LIBC_eglibc is not set
- CT_LIBC_glibc=y
- # CT_LIBC_uClibc is not set
- CT_LIBC_eglibc_AVAILABLE=y
- CT_LIBC_glibc_AVAILABLE=y
--# CT_LIBC_GLIBC_V_2_14_1 is not set
-+CT_LIBC_GLIBC_V_2_14_1
- # CT_LIBC_GLIBC_V_2_14 is not set
- # CT_LIBC_GLIBC_V_2_13 is not set
- # CT_LIBC_GLIBC_V_2_12_2 is not set
-@@ -370,7 +370,7 @@ CT_LIBC_glibc_AVAILABLE=y
- # CT_LIBC_GLIBC_V_2_11_1 is not set
- # CT_LIBC_GLIBC_V_2_11 is not set
- # CT_LIBC_GLIBC_V_2_10_1 is not set
--CT_LIBC_GLIBC_V_2_9=y
-+# CT_LIBC_GLIBC_V_2_9 is not set
- # CT_LIBC_GLIBC_V_2_8 is not set
- CT_LIBC_mingw_AVAILABLE=y
- CT_LIBC_newlib_AVAILABLE=y
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
++	bool "Sourcery CodeBench MIPS 2012.09"
++	depends on BR2_mips || BR2_mipsel
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Sourcery CodeBench toolchain for the MIPS architecture, from
++	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
++	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
++	  3.5.4. It has support for the following variants:
++	    - MIPS32 O32 big endian glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	    - MIPS64 big endian glibc
++	      Select a MIPS generic core
++	      Select the n64 ABI
++	      Disable BR2_SOFT_FLOAT
++	    - MIPS32 O32 little endian glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS64 little endian glibc
++	      Select a MIPS generic core
++	      Select the n64 ABI
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS32 big endian soft float glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	    - MIPS64 big endian soft float glibc
++	      Select a MIPS generic core
++	      Select the n64 ABI
++	      Select BR2_SOFT_FLOAT
++	    - MIPS32 little endian soft float glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS64 little endian soft float glibc
++	      Select a MIPS generic core
++	      Select the n64 ABI
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL
++	    - MIPS32 big endian microMIPS glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mips16
++	    - MIPS32 little endian microMIPS glibc
++	      Select a MIPS generic core
++	      Disable BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
++	    - MIPS32 big endian soft float microMIPS glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -mips16
++	    - MIPS32 little endian soft float microMIPS glibc
++	      Select a MIPS generic core
++	      Select BR2_SOFT_FLOAT
++	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
++	    - MIPS32 big endian uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 little endian uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 big endian soft float uclibc
++	      Not usable in Buildroot yet.
++	    - MIPS32 little endian soft float uclibc
++	      Not usable in Buildroot yet.
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	bool "Sourcery CodeBench MIPS 2012.03"
+ 	depends on BR2_mips || BR2_mipsel
+@@ -709,6 +777,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
++	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 2d18af0..2beac1d 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -205,6 +205,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.09-75-mips-linux-gnu-i686-pc-linux-gnu.tar.b
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.03-63-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
