@@ -1,95 +1,71 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Fri, 21 Dec 2012 22:44:59 +0100
-Subject: [Buildroot] [PATCH 1/6] sg3_utils: new package
+Date: Fri, 21 Dec 2012 22:45:01 +0100
+Subject: [Buildroot] [PATCH 3/6] libatasmart: new package.
 In-Reply-To: <1356126305-16133-1-git-send-email-marek.belisko@open-nandra.com>
 References: <1356126305-16133-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1356126305-16133-2-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <1356126305-16133-4-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Marek Belisko <marek.belisko@streamunlimited.com>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in              |    1 +
- package/sg3_utils/Config.in    |   15 +++++++++++++++
- package/sg3_utils/sg3_utils.mk |   33 +++++++++++++++++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 package/sg3_utils/Config.in
- create mode 100644 package/sg3_utils/sg3_utils.mk
+ package/Config.in                  |    1 +
+ package/libatasmart/Config.in      |   11 +++++++++++
+ package/libatasmart/libatasmart.mk |   14 ++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/libatasmart/Config.in
+ create mode 100644 package/libatasmart/libatasmart.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 66445ff..afecb8e 100644
+index 155a429..7a0a852 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -253,6 +253,7 @@ source "package/rng-tools/Config.in"
- source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
-+source "package/sg3_utils/Config.in"
- source "package/smartmontools/Config.in"
- source "package/snowball-hdmiservice/Config.in"
- source "package/sredird/Config.in"
-diff --git a/package/sg3_utils/Config.in b/package/sg3_utils/Config.in
+@@ -231,6 +231,7 @@ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+ source "package/kbd/Config.in"
+ source "package/lcdproc/Config.in"
++source "package/libatasmart/Config.in"
+ source "package/linux-firmware/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lshw/Config.in"
+diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
 new file mode 100644
-index 0000000..d120e55
+index 0000000..863046f
 --- /dev/null
-+++ b/package/sg3_utils/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_SG3_UTILS
-+	bool "sgutils"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/libatasmart/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBATASMART
++	bool "libatasmart"
++	depends on BR2_PACKAGE_UDEV
 +	help
-+	  Low level utilities for devices that use a SCSI command set.
++	  Reading and Parsing Library.
++	  As the name suggests libatasmart only does ATA S.M.A.R.T.
 +
-+	  http://sg.danny.cz/sg/sg3_utils.html
++	  git://git.0pointer.de/libatasmart.git
 +
-+config BR2_PACKAGE_SG3_UTILS_PROGS
-+        bool "install programs"
-+	depends on BR2_PACKAGE_SG3_UTILS
-+
-+comment "sgutils requires a toolchain with LARGEFILE and threads support"
-+        depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
++comment "libatasmart requires udev to be enabled"
++	depends on !BR2_PACKAGE_UDEV
+diff --git a/package/libatasmart/libatasmart.mk b/package/libatasmart/libatasmart.mk
 new file mode 100644
-index 0000000..1c629e8
+index 0000000..47b4720
 --- /dev/null
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -0,0 +1,33 @@
++++ b/package/libatasmart/libatasmart.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# sg3_utils
++# libatasmart
 +#
 +#############################################################
-+SG3_UTILS_VERSION = 1.34
-+SG3_UTILS_SITE    = http://sg.danny.cz/sg/p/
++LIBATASMART_VERSION = v0.19
++LIBATASMART_SITE    = git://git.0pointer.de/libatasmart.git
 +
-+# install the libsgutils2 library
-+SG3_UTILS_INSTALL_STAGING = YES
++LIBATASMART_INSTALL_STAGING = YES
++LIBATASMART_AUTORECONF = YES
 +
-+define SG3_UTILS_REMOVE_PROGS
-+	for prog in \
-+	        dd decode_sense emc_trespass format get_config \
-+		get_lba_status ident inq logs luns map26 \
-+	        map sgm_dd modes opcodes sgp_dd persist prevent \
-+		raw rbuf rdac read readcap read_block_limits \
-+	        read_buffer read_long reassign referrals \
-+	        requests reset rmsn rtpg safte sanitize \
-+	        sat_identify sat_phy_event sat_set_features scan \
-+	        senddiag ses start stpg sync test_rwbuf turs \
-+	        unmap verify vpd write_buffer write_long \
-+	        write_same wr_mode ; do \
-+		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
-+	done
-+	$(RM) $(TARGET_DIR)/usr/bin/sginfo
-+endef
-+
-+ifneq ($(BR2_PACKAGE_SG3_UTILS_PROGS),y)
-+SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
-+endif
++LIBATASMART_DEPENDENCIES = udev
 +
 +$(eval $(autotools-package))
 -- 
