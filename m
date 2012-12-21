@@ -1,72 +1,37 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Fri, 21 Dec 2012 22:51:07 +0100
-Subject: [Buildroot] [PATCH 3/6] libatasmart: new package.
+Date: Fri, 21 Dec 2012 22:51:08 +0100
+Subject: [Buildroot] [PATCH 4/6] lvm2: Install devmapper.pc to
+	staging/target pkgconfig directory.
 In-Reply-To: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
 References: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1356126670-16186-4-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <1356126670-16186-5-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Without this change if some package which have dependency on device mapper and use
+pkgconfig to check version always fail to find library because devmapper.pc file wasn't
+installed.
+
 Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in                  |    1 +
- package/libatasmart/Config.in      |   11 +++++++++++
- package/libatasmart/libatasmart.mk |   14 ++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/libatasmart/Config.in
- create mode 100644 package/libatasmart/libatasmart.mk
+ package/lvm2/lvm2.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 155a429..7a0a852 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -231,6 +231,7 @@ source "package/iostat/Config.in"
- source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
- source "package/lcdproc/Config.in"
-+source "package/libatasmart/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/lm-sensors/Config.in"
- source "package/lshw/Config.in"
-diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
-new file mode 100644
-index 0000000..863046f
---- /dev/null
-+++ b/package/libatasmart/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBATASMART
-+	bool "libatasmart"
-+	depends on BR2_PACKAGE_UDEV
-+	help
-+	  Reading and Parsing Library.
-+	  As the name suggests libatasmart only does ATA S.M.A.R.T.
-+
-+	  git://git.0pointer.de/libatasmart.git
-+
-+comment "libatasmart requires udev to be enabled"
-+	depends on !BR2_PACKAGE_UDEV
-diff --git a/package/libatasmart/libatasmart.mk b/package/libatasmart/libatasmart.mk
-new file mode 100644
-index 0000000..47b4720
---- /dev/null
-+++ b/package/libatasmart/libatasmart.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# libatasmart
-+#
-+#############################################################
-+LIBATASMART_VERSION = v0.19
-+LIBATASMART_SITE    = git://git.0pointer.de/libatasmart.git
-+
-+LIBATASMART_INSTALL_STAGING = YES
-+LIBATASMART_AUTORECONF = YES
-+
-+LIBATASMART_DEPENDENCIES = udev
-+
-+$(eval $(autotools-package))
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 52326ea..f54caa4 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -21,7 +21,7 @@ LVM2_BINS = \
+ 
+ # Make sure that binaries and libraries are installed with write
+ # permissions for the owner.
+-LVM2_CONF_OPT += --enable-write_install
++LVM2_CONF_OPT += --enable-write_install --enable-pkgconfig
+ 
+ # LVM2 uses autoconf, but not automake, and the build system does not
+ # take into account the CC passed at configure time.
 -- 
 1.7.10.4
