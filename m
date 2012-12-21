@@ -1,75 +1,48 @@
-From: Markos Chandras <markos.chandras@gmail.com>
-Date: Fri, 21 Dec 2012 12:00:54 +0000
-Subject: [Buildroot] [PATCH v2 1/2] Makefile: rename cross target ->
-	toolchain
-In-Reply-To: <1356086190-906-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1356086190-906-1-git-send-email-fabio.porcedda@gmail.com>
- <1356086190-906-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAG2jQ8izPCUw8R_9z=dz6EM0BnoG1Sofns86rnK=y+2w5ezk8Q@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 21 Dec 2012 13:21:21 +0100
+Subject: [Buildroot] [PATCHv3] linux: Support multiple device tree build
+In-Reply-To: <87txrgyf5y.fsf@dell.be.48ers.dk>
+References: <1355993289-31804-1-git-send-email-maxime.ripard@free-electrons.com>
+ <87txrgyf5y.fsf@dell.be.48ers.dk>
+Message-ID: <50D45441.4050704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21 December 2012 10:36, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
-> - Use a more descriptive name, the same of the "toolchain" directory.
-> - Add missing dependencies to be able to successfully use the target
->   right after the configuration.
-> - Move to a better position.
-> - Documentation it in the help target.
+On 20/12/12 15:24, Peter Korsgaard wrote:
+>>>>>> "Maxime" == Maxime Ripard<maxime.ripard@free-electrons.com>  writes:
 >
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  Makefile | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>   Maxime>  Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
 >
-> diff --git a/Makefile b/Makefile
-> index 4b09437..458b8c5 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -377,9 +377,11 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
+> Committed, thanks.
 >
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>   Maxime>   define LINUX_INSTALL_DTB
+>   Maxime>  -	cp $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
+>   Maxime>  +	cp $(addprefix $(KERNEL_ARCH_PATH)/boot/, \
+>   Maxime>  +		$(addsuffix .dtb, $(call qstrip, $(KERNEL_DTS_NAME)))) \
+>   Maxime>  +		$(BINARIES_DIR)/
 >
-> +toolchain: prepare dirs dependencies $(BASE_TARGETS)
-> +
->  world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
->
-> -.PHONY: all world dirs clean distclean source outputmakefile \
-> +.PHONY: all world toolchain dirs clean distclean source outputmakefile \
->         legal-info legal-info-prepare legal-info-clean \
->         $(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
->         $(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
-> @@ -697,8 +699,6 @@ ifeq ($(O),output)
->  endif
->         rm -rf $(CONFIG_DIR)/.config $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/.auto.deps
->
-> -cross: $(BASE_TARGETS)
-> -
->  help:
->         @echo 'Cleaning:'
->         @echo '  clean                  - delete all files created by build'
-> @@ -706,6 +706,7 @@ help:
->         @echo
->         @echo 'Build:'
->         @echo '  all                    - make world'
-> +       @echo '  toolchain              - build toolchain'
->         @echo '  <package>-rebuild      - force recompile <package>'
->         @echo '  <package>-reconfigure  - force reconfigure <package>'
->         @echo
-> --
-> 1.8.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Not directly related to your patch, but this is broken by the recent
+> (post-3.7) change to put .dtb files in arch/arm/boot/dts. I wonder how
+> the best way of handling this is?
 
-This one looks good to me as well
+  How about adding this to LINUX_POST_PATCH_HOOKS
 
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+if [ ! -e $(KERNEL_ARCH_PATH)/boot/dts ]; then \
+	ln -s . $(KERNEL_ARCH_PATH)/boot/dts; \
+fi
+
+  and adding dts to the path everywhere we use it?
+
+  Regards,
+  Arnout
 
 -- 
-Regards,
-Markos
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
