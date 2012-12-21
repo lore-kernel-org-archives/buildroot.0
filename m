@@ -1,59 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Dec 2012 09:40:31 -0300
-Subject: [Buildroot] [PATCH] ffmpeg: make ARM optimizations explicit
-Message-ID: <1356093631-558-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 21 Dec 2012 13:42:55 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Makefile: rename cross target ->
+	toolchain
+In-Reply-To: <1356086190-906-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1356086190-906-1-git-send-email-fabio.porcedda@gmail.com>
+ <1356086190-906-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <50D4594F.7010402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ffmpeg configure script tries to autodetermine ARM optimizations by
-building a small code snippet with AS.
-If AS allows higher-level (>generic) assembly instructions then it
-passes and enables the relevant optimization path.
-Some toolchains allow/default to more than generic asm and then fail
-when the real code is built.
-Fixes:
-http://autobuild.buildroot.net/results/b6e1225a07a58cc7544e37bc55675be71e2b5088/
+On 21/12/12 11:36, Fabio Porcedda wrote:
+> - Use a more descriptive name, the same of the "toolchain" directory.
+> - Add missing dependencies to be able to successfully use the target
+>    right after the configuration.
+> - Move to a better position.
+> - Documentation it in the help target.
+>
+> Signed-off-by: Fabio Porcedda<fabio.porcedda@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/ffmpeg/ffmpeg.mk |   11 +++++++++--
- 1 files changed, 9 insertions(+), 2 deletions(-)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  (not tested but it's trivial enough)
 
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index 90c1f1b..b018ea0 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -133,19 +133,26 @@ FFMPEG_DEPENDENCIES += host-nasm
- endif
- endif
- 
--# ARM defaults to v5: clear if less, add extra if more
-+# Explicitly disable everything that doesn't match for ARM
-+# FFMPEG "autodetects" by compiling an extended instruction via AS
-+# This works on compilers that aren't built for generic by default
- ifeq ($(BR2_generic_arm)$(BR2_arm7tdmi)$(BR2_arm610)$(BR2_arm710)$(BR2_arm720t)$(BR2_arm920t)$(BR2_arm922t),y)
- FFMPEG_CONF_OPT += --disable-armv5te
- endif
- ifeq ($(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s),y)
- FFMPEG_CONF_OPT += --enable-armv6
-+else
-+FFMPEG_CONF_OPT += --disable-armv6 --disable-armv6t2
- endif
--ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a8)$(BR2_cortex_a9),y)
-+ifeq ($(BR2_arm10)$(BR2_arm1136jf_s)$(BR2_arm1176jz_s)$(BR2_arm1176jzf-s)$(BR2_cortex_a5)$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_a15),y)
- FFMPEG_CONF_OPT += --enable-armvfp
-+else
-+FFMPEG_CONF_OPT += --disable-armvfp
- endif
- ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
- FFMPEG_CONF_OPT += --enable-neon
- endif
-+
- # Set powerpc altivec appropriately
- ifeq ($(BR2_powerpc),y)
- ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
+  Some additional suggestions (for additional patches):
+
+- Document it in the manual.
+
+- Add toolchain as a dependency to $(1)-configure for target-packages;
+this makes it possible to remove it from the dependencies of 'world' and 
+brings us a step closer to top-level parallel build.
+
+
+  Regards,
+  Arnout
 -- 
-1.7.8.6
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
