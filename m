@@ -1,44 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 21 Dec 2012 13:49:41 +0100
-Subject: [Buildroot] Vector Buildroot Logo
-In-Reply-To: <50D35EEF.9070700@gmail.com>
-References: <50D35EEF.9070700@gmail.com>
-Message-ID: <50D45AE5.2010308@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 21 Dec 2012 13:57:14 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: make ARM optimizations explicit
+In-Reply-To: <1356093631-558-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 21 Dec 2012 09:40:31 -0300")
+References: <1356093631-558-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pq238swl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/12/12 19:54, Shawn J. Goff wrote:
-> I've been working on a vector Buildroot logo. You can see it here:
-> http://i.imgur.com/BP9K7.png . I have it in SVG format as well, but I'm
-> not sure if the list allows image attachments. I went with one that was
-> reasonably faithful to the original, then I progressively tried to make
-> the logo more like a logo - abstract/symbolic instead of photorealistic.
-> Nobody who didn't know would look at the bottom one and say it's a
-> hardhat; I'm not sure if that's good or bad, but I definitely prefer the
-> simpler one. Any feedback? Would the project maintainers be interested in
-> using one of these instead of the current one?
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-  I like it!
+ Gustavo> The ffmpeg configure script tries to autodetermine ARM optimizations by
+ Gustavo> building a small code snippet with AS.
+ Gustavo> If AS allows higher-level (>generic) assembly instructions then it
+ Gustavo> passes and enables the relevant optimization path.
+ Gustavo> Some toolchains allow/default to more than generic asm and then fail
+ Gustavo> when the real code is built.
+ Gustavo> Fixes:
+ Gustavo> http://autobuild.buildroot.net/results/b6e1225a07a58cc7544e37bc55675be71e2b5088/
 
-  I'm more in favour of the third one. Only the left corner looks a bit 
-unnatural (but IANAGD - I am not a graphical designer :-)
+Committed, thanks.
 
-  I also prefer the bright yellow of the third one. Removing the shadow 
-and choosing a narrower typeface looks like a good idea. A sans monospace 
-font would be nice. Oh, and I'd remove the capital R - we never 
-capitalize it in reality.
-
-  Regards,
-  Arnout
-
+It would be good to add some BR2_ARM_HAS_ARMVx config options so we
+don't need these written out checks in the packages which care.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
