@@ -1,131 +1,104 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 21 Dec 2012 09:15:43 +0100
-Subject: [Buildroot] [git commit] toolchain-crosstool-ng: update PPL and
-	CLoog versions in default configs
-Message-ID: <20121221082522.E83609A3F3@busybox.osuosl.org>
+Date: Fri, 21 Dec 2012 09:22:56 +0100
+Subject: [Buildroot] [git commit] toolchain-external: remove support for
+	'Sourcery CodeBench MIPS 4.4'
+Message-ID: <20121221082523.A45C69A2F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fdc61667e8d3867b1d196be33ad85f8597463d6c
+commit: http://git.buildroot.net/buildroot/commit/?id=7540ef8887a06afbdaea6fa61015cd19f6c09794
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We have updated our Crosstool-NG configuration to gcc 4.6.x, but the
-PPL and CLoog versions were not updated accordingly. With gcc 4.6.x,
-at least PPL 0.11 is needed, and only CLoog > 0.15.9 can work with PLL
-0.11.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/c22758a30c3b8abb582150cefd7099605c527e14/build-end.log
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../crosstool-ng.config-eglibc                     |   16 ++++++++++------
- .../crosstool-ng.config-glibc                      |   16 ++++++++++------
- .../crosstool-ng.config-uClibc                     |   16 ++++++++++------
- 3 files changed, 30 insertions(+), 18 deletions(-)
+ toolchain/toolchain-external/Config.in   |   51 ------------------------------
+ toolchain/toolchain-external/ext-tool.mk |    3 --
+ 2 files changed, 0 insertions(+), 54 deletions(-)
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-index 11eb602..08f036c 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-@@ -474,18 +474,22 @@ CT_MPFR_V_2_4_2=y
- # CT_MPFR_V_2_4_1 is not set
- # CT_MPFR_V_2_4_0 is not set
- CT_MPFR_VERSION="2.4.2"
--# CT_PPL_V_0_11_2 is not set
-+CT_PPL_V_0_11_2=y
- # CT_PPL_V_0_11_1 is not set
- # CT_PPL_V_0_11 is not set
--CT_PPL_V_0_10_2=y
--CT_PPL_VERSION="0.10.2"
--# CT_CLOOG_V_0_15_11 is not set
-+# CT_PPL_V_0_10_2 is not set
-+CT_PPL_VERSION="0.11.2"
-+CT_PPL_0_11=y
-+CT_PPL_NEEDS_LIBPWL=y
-+CT_CLOOG_V_0_15_11=y
- # CT_CLOOG_V_0_15_10 is not set
--CT_CLOOG_V_0_15_9=y
-+# CT_CLOOG_V_0_15_9 is not set
- # CT_CLOOG_V_0_15_8 is not set
- # CT_CLOOG_V_0_15_7 is not set
- # CT_CLOOG_V_0_15_6 is not set
--CT_CLOOG_VERSION="0.15.9"
-+CT_CLOOG_VERSION="0.15.11"
-+CT_CLOOG_0_15_1x=y
-+CT_CLOOG_NEEDS_AUTORECONF=y
- CT_MPC_V_0_9=y
- # CT_MPC_V_0_8_2 is not set
- # CT_MPC_V_0_8_1 is not set
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-index c30a115..ae0bc02 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-@@ -463,18 +463,22 @@ CT_MPFR_V_2_4_2=y
- # CT_MPFR_V_2_4_1 is not set
- # CT_MPFR_V_2_4_0 is not set
- CT_MPFR_VERSION="2.4.2"
--# CT_PPL_V_0_11_2 is not set
-+CT_PPL_V_0_11_2=y
- # CT_PPL_V_0_11_1 is not set
- # CT_PPL_V_0_11 is not set
--CT_PPL_V_0_10_2=y
--CT_PPL_VERSION="0.10.2"
--# CT_CLOOG_V_0_15_11 is not set
-+# CT_PPL_V_0_10_2 is not set
-+CT_PPL_VERSION="0.11.2"
-+CT_PPL_0_11=y
-+CT_PPL_NEEDS_LIBPWL=y
-+CT_CLOOG_V_0_15_11=y
- # CT_CLOOG_V_0_15_10 is not set
--CT_CLOOG_V_0_15_9=y
-+# CT_CLOOG_V_0_15_9 is not set
- # CT_CLOOG_V_0_15_8 is not set
- # CT_CLOOG_V_0_15_7 is not set
- # CT_CLOOG_V_0_15_6 is not set
--CT_CLOOG_VERSION="0.15.9"
-+CT_CLOOG_VERSION="0.15.11"
-+CT_CLOOG_0_15_1x=y
-+CT_CLOOG_NEEDS_AUTORECONF=y
- CT_MPC_V_0_9=y
- # CT_MPC_V_0_8_2 is not set
- # CT_MPC_V_0_8_1 is not set
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-index e93128b..4f21263 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-@@ -445,18 +445,22 @@ CT_MPFR_V_2_4_2=y
- # CT_MPFR_V_2_4_1 is not set
- # CT_MPFR_V_2_4_0 is not set
- CT_MPFR_VERSION="2.4.2"
--# CT_PPL_V_0_11_2 is not set
-+CT_PPL_V_0_11_2=y
- # CT_PPL_V_0_11_1 is not set
- # CT_PPL_V_0_11 is not set
--CT_PPL_V_0_10_2=y
--CT_PPL_VERSION="0.10.2"
--# CT_CLOOG_V_0_15_11 is not set
-+# CT_PPL_V_0_10_2 is not set
-+CT_PPL_VERSION="0.11.2"
-+CT_PPL_0_11=y
-+CT_PPL_NEEDS_LIBPWL=y
-+CT_CLOOG_V_0_15_11=y
- # CT_CLOOG_V_0_15_10 is not set
--CT_CLOOG_V_0_15_9=y
-+# CT_CLOOG_V_0_15_9 is not set
- # CT_CLOOG_V_0_15_8 is not set
- # CT_CLOOG_V_0_15_7 is not set
- # CT_CLOOG_V_0_15_6 is not set
--CT_CLOOG_VERSION="0.15.9"
-+CT_CLOOG_VERSION="0.15.11"
-+CT_CLOOG_0_15_1x=y
-+CT_CLOOG_NEEDS_AUTORECONF=y
- CT_MPC_V_0_9=y
- # CT_MPC_V_0_8_2 is not set
- # CT_MPC_V_0_8_1 is not set
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 4104041..e28da87 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -378,56 +378,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+-	bool "Sourcery CodeBench MIPS 4.4"
+-	depends on BR2_mips || BR2_mipsel
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_INSTALL_LIBSTDCPP
+-	help
+-	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
+-	  2.11, uClibc 0.9.30 and gdb 7.0, kernel headers 2.6.32. It
+-	  has support for the following variants:
+-	    - MIPS32 O32 big endian glibc
+-	      Select a MIPS generic core
+-	      Disable BR2_SOFT_FLOAT
+-	    - MIPS32 O32 little endian glibc
+-	      Select a MIPS generic core
+-	      Disable BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -EL
+-	    - MIPS32 big endian soft float glibc
+-	      Select a MIPS generic core
+-	      Select BR2_SOFT_FLOAT
+-	    - MIPS32 little endian soft float glibc
+-	      Select a MIPS generic core
+-	      Select BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -EL
+-	    - MIPS32 big endian microMIPS glibc
+-	      Select a MIPS generic core
+-	      Disable BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -mips16
+-	    - MIPS32 little endian microMIPS glibc
+-	      Select a MIPS generic core
+-	      Disable BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
+-	    - MIPS32 big endian soft float microMIPS glibc
+-	      Select a MIPS generic core
+-	      Select BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -mips16
+-	    - MIPS32 little endian soft float microMIPS glibc
+-	      Select a MIPS generic core
+-	      Select BR2_SOFT_FLOAT
+-	      Set BR2_TARGET_OPTIMIZATION to -EL -mips16
+-	    - MIPS32 big endian uclibc
+-	      Not usable in Buildroot yet.
+-	    - MIPS32 little endian uclibc
+-	      Not usable in Buildroot yet.
+-	    - MIPS32 big endian soft float uclibc
+-	      Not usable in Buildroot yet.
+-	    - MIPS32 little endian soft float uclibc
+-	      Not usable in Buildroot yet.
+-
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	bool "Sourcery CodeBench PowerPC 2011.03"
+ 	depends on BR2_powerpc
+@@ -773,7 +723,6 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "aarch64-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_10
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+-	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 2beac1d..ac639a7 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -193,9 +193,6 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.10-20121022_li
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://launchpad.net/linaro-toolchain-binaries/trunk/2012.11/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabihf-4.7-2012.11-20121123_linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
+-TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package9469/public/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-110-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
