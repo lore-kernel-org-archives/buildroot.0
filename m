@@ -1,39 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 22 Dec 2012 09:31:02 -0300
-Subject: [Buildroot] [PATCH] gettext: disable tools tests when no threads
-Message-ID: <1356179462-2125-1-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 22 Dec 2012 13:45:18 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Makefile: rename cross target ->
+	toolchain
+In-Reply-To: <1356086190-906-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1356086190-906-1-git-send-email-fabio.porcedda@gmail.com>
+ <1356086190-906-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHXCMM+TKYDv5Fo-oY13+RSp1ayD+Du0AamTq7bA6KgZ54xfkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable the gettext-tools tests build since they break when a full
-toolchain without threads is being used.
-Fixes:
-http://autobuild.buildroot.net/results/a187c76c359787f8e2ec6e12da2d7b1e33ed43c5/
+Hi Fabio,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gettext/gettext.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+2012/12/21 Fabio Porcedda <fabio.porcedda@gmail.com>:
+> - Use a more descriptive name, the same of the "toolchain" directory.
+> - Add missing dependencies to be able to successfully use the target
+>   right after the configuration.
+> - Move to a better position.
+> - Documentation it in the help target.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  Makefile | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 4b09437..458b8c5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -377,9 +377,11 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
+>
+>  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+>
+> +toolchain: prepare dirs dependencies $(BASE_TARGETS)
+> +
+>  world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+Any reason to not make the world target depend on the toolchain and
+$(TARGETS_ALL) targets?
+IOW:
+world: toolchain $(TARGETS_ALL)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 77881d3..a91cb7f 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -44,6 +44,12 @@ define GETTEXT_DISABLE_TOOLS
- endef
- endif # GETTEXT_TOOLS = n
- 
-+# The tools tests build fails with full toolchain without threads
-+define GETTEXT_DISABLE_TESTS
-+	$(SED) 's/m4 tests/m4/' $(@D)/gettext-tools/Makefile.in
-+endef
-+
- GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TOOLS
-+GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TESTS
- 
- $(eval $(autotools-package))
+Otherwise, it looks good to me with few words in the manual as already
+mentioned by Arnout.
+
+Regards,
+
 -- 
-1.7.8.6
+Sam
