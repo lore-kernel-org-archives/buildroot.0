@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Dec 2012 16:14:09 +0100
-Subject: [Buildroot] [PATCH 1/6] sg3_utils: new package
-In-Reply-To: <1356126670-16186-2-git-send-email-marek.belisko@open-nandra.com>
+Date: Sat, 22 Dec 2012 16:18:26 +0100
+Subject: [Buildroot] [PATCH 2/6] polkit: new package
+In-Reply-To: <1356126670-16186-3-git-send-email-marek.belisko@open-nandra.com>
 References: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
- <1356126670-16186-2-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20121222161409.6609bd8a@skate>
+ <1356126670-16186-3-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20121222161826.05b661e3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,108 +13,78 @@ To: buildroot@busybox.net
 
 Dear Marek Belisko,
 
-On Fri, 21 Dec 2012 22:51:05 +0100, Marek Belisko wrote:
+On Fri, 21 Dec 2012 22:51:06 +0100, Marek Belisko wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Signed-off-by: Marek Belisko <marek.belisko@streamunlimited.com>
 > ---
->  package/Config.in              |    1 +
->  package/sg3_utils/Config.in    |   15 +++++++++++++++
->  package/sg3_utils/sg3_utils.mk |   33 +++++++++++++++++++++++++++++++++
->  3 files changed, 49 insertions(+)
->  create mode 100644 package/sg3_utils/Config.in
->  create mode 100644 package/sg3_utils/sg3_utils.mk
+>  package/Config.in        |    1 +
+>  package/polkit/Config.in |    8 ++++++++
+>  package/polkit/polkit.mk |   18 ++++++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/polkit/Config.in
+>  create mode 100644 package/polkit/polkit.mk
 > 
 > diff --git a/package/Config.in b/package/Config.in
-> index 66445ff..afecb8e 100644
+> index afecb8e..155a429 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -253,6 +253,7 @@ source "package/rng-tools/Config.in"
->  source "package/sane-backends/Config.in"
->  source "package/sdparm/Config.in"
->  source "package/setserial/Config.in"
-> +source "package/sg3_utils/Config.in"
->  source "package/smartmontools/Config.in"
->  source "package/snowball-hdmiservice/Config.in"
->  source "package/sredird/Config.in"
-> diff --git a/package/sg3_utils/Config.in b/package/sg3_utils/Config.in
+> @@ -749,6 +749,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/module-init-tools/Config.in"
+>  endif
+>  source "package/monit/Config.in"
+> +source "package/polkit/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/procps/Config.in"
+>  source "package/psmisc/Config.in"
+> diff --git a/package/polkit/Config.in b/package/polkit/Config.in
 > new file mode 100644
-> index 0000000..d120e55
+> index 0000000..9ca347a
 > --- /dev/null
-> +++ b/package/sg3_utils/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_SG3_UTILS
-> +	bool "sgutils"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +++ b/package/polkit/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_POLKIT
+> +        bool "polkit"
+
+Should be a tab, not spaces.
+
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_DBUS_EXPAT
 > +	help
-> +	  Low level utilities for devices that use a SCSI command set.
-> +
-> +	  http://sg.danny.cz/sg/sg3_utils.html
-> +
-> +config BR2_PACKAGE_SG3_UTILS_PROGS
-> +        bool "install programs"
+> +	  PolicyKit is a toolkit for defining and handling
+> +	  authorizations.  It is used for allowing unprivileged
+> +	  processes to speak to privileged processes.
 
-The "bool" should be preceded by a tab, not spaces.
+Upstream URL missing.
 
-> +	depends on BR2_PACKAGE_SG3_UTILS
-> +
-> +comment "sgutils requires a toolchain with LARGEFILE and threads support"
-> +        depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-
-Tab, not spaces before the depends on.
-
-> diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
+> diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
 > new file mode 100644
-> index 0000000..1c629e8
+> index 0000000..8c882f2
 > --- /dev/null
-> +++ b/package/sg3_utils/sg3_utils.mk
-> @@ -0,0 +1,33 @@
+> +++ b/package/polkit/polkit.mk
+> @@ -0,0 +1,18 @@
 > +#############################################################
 > +#
-> +# sg3_utils
+> +# polkit
 > +#
 > +#############################################################
-> +SG3_UTILS_VERSION = 1.34
-> +SG3_UTILS_SITE    = http://sg.danny.cz/sg/p/
-
-Please add SG3_UTILS_LICENSE and SG3_UTILS_LICENSE_FILES.
-
-> +# install the libsgutils2 library
-> +SG3_UTILS_INSTALL_STAGING = YES
+> +POLKIT_VERSION = 0.103
+> +POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases/
 > +
-> +define SG3_UTILS_REMOVE_PROGS
-> +	for prog in \
-> +	        dd decode_sense emc_trespass format get_config \
-> +		get_lba_status ident inq logs luns map26 \
-> +	        map sgm_dd modes opcodes sgp_dd persist prevent \
-> +		raw rbuf rdac read readcap read_block_limits \
-> +	        read_buffer read_long reassign referrals \
-> +	        requests reset rmsn rtpg safte sanitize \
-> +	        sat_identify sat_phy_event sat_set_features scan \
-> +	        senddiag ses start stpg sync test_rwbuf turs \
-> +	        unmap verify vpd write_buffer write_long \
-> +	        write_same wr_mode ; do \
-> +		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
-> +	done
-> +	$(RM) $(TARGET_DIR)/usr/bin/sginfo
-> +endef
+> +POLKIT_INSTALL_STAGING = YES
+
+I don't remember, does polkit installs some libraries or .pc files, or
+something that justify its installation in staging ?
+
+> +POLKIT_DEPENDENCIES = libglib2 host-intltool expat
 > +
-> +ifneq ($(BR2_PACKAGE_SG3_UTILS_PROGS),y)
-> +SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
-> +endif
+> +# We could also support --with-authfw=pam
+> +POLKIT_CONF_OPT = \
+> +	--with-authfw=shadow \
+> +	--with-os-type=unknown
+> +
+> +$(eval $(autotools-package))
 
-Maybe we should turn this into positive logic, and put the
-SG3_UTILS_REMOVE_PROGS macro inside the condition. Something like:
-
-ifeq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
-define SG3_UTILS_REMOVE_PROGS
- ...
-endef
-
-SG3_UTILS_POST_INSTALL_TARGET_HOOKS += SG3_UTILS_REMOVE_PROGS
-endif
-
-Otherwise, looks good (but untested).
+Thanks,
 
 Thomas
 -- 
