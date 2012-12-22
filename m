@@ -1,39 +1,47 @@
 From: Belisko Marek <marek.belisko@gmail.com>
-Date: Sat, 22 Dec 2012 23:10:44 +0100
-Subject: [Buildroot] [PATCH 2/6] polkit: new package
-In-Reply-To: <20121222161922.59aad225@skate>
-References: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
- <1356126670-16186-3-git-send-email-marek.belisko@open-nandra.com>
- <20121222161922.59aad225@skate>
-Message-ID: <CAAfyv364mSSfqCHtxFu+DfEE8ybxszfqnQDTc20+-FiMMZXyjA@mail.gmail.com>
+Date: Sun, 23 Dec 2012 00:00:14 +0100
+Subject: [Buildroot] XBMC
+In-Reply-To: <CAGduivzZU=-GOQzAj4keyBVVMZ=9zuXaHX0wD68X7VSpB-c1aQ@mail.gmail.com>
+References: <CAGduivzZU=-GOQzAj4keyBVVMZ=9zuXaHX0wD68X7VSpB-c1aQ@mail.gmail.com>
+Message-ID: <CAAfyv37LSX4FHVSdV-DbwGBQzPqNYrg_PTjhj5FJ18MR2iUGGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Maxime Hadjinlian,
 
-On Sat, Dec 22, 2012 at 4:19 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Marek Belisko,
+On Sat, Dec 22, 2012 at 12:58 AM, Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote:
+> Hi everyone,
 >
-> On Fri, 21 Dec 2012 22:51:06 +0100, Marek Belisko wrote:
+> I wanted to add XBMC to buildroot, but since it's a pretty big
+> application with a lot of dependency, I have created a separated tree
+> at github :
+> https://github.com/maximeh/buildroot
+I was look at some last of your commits and the are some things which
+could be good to fix before sending patches for review:
+1. new packages doesn't contain licence info in mk file
+2. new packages doesn't have link to webpage
+3. packages which are autotools based don't need INSTALL_TARGET = YES
+(it is default)
+4. some packages are located at github and git protocol is used to
+fetch. Please convert
+according: http://buildroot.uclibc.org/downloads/manual/manual.html#github-download-url
+5. lot of new packages contains really big patches (e.g.: afpfs-ng).
+Patches should be post upstream
+to avoid adding then to BR.
+
 >
->> +     select BR2_PACKAGE_LIBGLIB2
->> +     select BR2_DBUS_EXPAT
+> I would like to know if it would be of any interest to upstream this
+> before sending all theses patches for review ?
 >
-> Are you sure this shouldn't be BR2_PACKAGE_EXPAT instead?
-Good catch. Thanks.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> Thanks
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 Cheers,
 
