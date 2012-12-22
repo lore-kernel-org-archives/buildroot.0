@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 22 Dec 2012 16:19:22 +0100
-Subject: [Buildroot] [PATCH 2/6] polkit: new package
-In-Reply-To: <1356126670-16186-3-git-send-email-marek.belisko@open-nandra.com>
-References: <1356126670-16186-1-git-send-email-marek.belisko@open-nandra.com>
- <1356126670-16186-3-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20121222161922.59aad225@skate>
+From: Woody Wu <narkewoody@gmail.com>
+Date: Sat, 22 Dec 2012 23:37:36 +0800
+Subject: [Buildroot] Can buildroot build kernel documentations?
+In-Reply-To: <20121221184714.0cdfded6@skate>
+References: <20121221171052.GA12422@zuhnb712> <20121221184714.0cdfded6@skate>
+Message-ID: <20121222153735.GA25167@zuhnb712>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marek Belisko,
+On Fri, Dec 21, 2012 at 06:47:14PM +0100, Thomas Petazzoni wrote:
+> Dear Woody Wu,
+> 
+> On Sat, 22 Dec 2012 01:10:52 +0800, Woody Wu wrote:
+> 
+> > In addtional to build the kernel image, if I also want to build the
+> > kernel documentation (make htmldocs), can I do it in buildroot?
+> 
+> cd output/build/linux-* ; make htmldocs
 
-On Fri, 21 Dec 2012 22:51:06 +0100, Marek Belisko wrote:
+Nice! Thanks :)
 
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_DBUS_EXPAT
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-Are you sure this shouldn't be BR2_PACKAGE_EXPAT instead?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+woody
+I can't go back to yesterday - because I was a different person then.
