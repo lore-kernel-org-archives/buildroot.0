@@ -1,42 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 23 Dec 2012 08:37:44 +0100
-Subject: [Buildroot] [git commit] gettext: disable tools tests when no
-	threads
-Message-ID: <20121223073743.3F9AE9A424@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 23 Dec 2012 10:15:55 +0100
+Subject: [Buildroot] [PATCH] new package: libpciaccess
+In-Reply-To: <1356220309-22847-1-git-send-email-stefan.froberg@petroprogram.com>
+ ("Stefan =?utf-8?Q?Fr=C3=B6berg=22's?= message of "Sun, 23 Dec 2012
+ 01:51:49 +0200")
+References: <1356220309-22847-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <87y5gpt9h0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0280921a82dcddf827417557d9e17a22e96eeecc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
 
-Disable the gettext-tools tests build since they break when a full
-toolchain without threads is being used.
-Fixes:
-http://autobuild.buildroot.net/results/a187c76c359787f8e2ec6e12da2d7b1e33ed43c5/
+ Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+ Stefan> ---
+ Stefan>  package/Config.in                    |    1 +
+ Stefan>  package/libpciaccess/Config.in       |    6 ++++++
+ Stefan>  package/libpciaccess/libpciaccess.mk |   12 ++++++++++++
+ Stefan>  3 files changed, 19 insertions(+), 0 deletions(-)
+ Stefan>  create mode 100644 package/libpciaccess/Config.in
+ Stefan>  create mode 100644 package/libpciaccess/libpciaccess.mk
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gettext/gettext.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+Ehh, we already have package/x11r7/xlib_libpciaccess - Any reason you
+cannot use that?
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index 77881d3..a91cb7f 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -44,6 +44,12 @@ define GETTEXT_DISABLE_TOOLS
- endef
- endif # GETTEXT_TOOLS = n
- 
-+# The tools tests build fails with full toolchain without threads
-+define GETTEXT_DISABLE_TESTS
-+	$(SED) 's/m4 tests/m4/' $(@D)/gettext-tools/Makefile.in
-+endef
-+
- GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TOOLS
-+GETTEXT_POST_PATCH_HOOKS += GETTEXT_DISABLE_TESTS
- 
- $(eval $(autotools-package))
+I don't think there's any issue with bumping the version to 0.13.1
+
+-- 
+Bye, Peter Korsgaard
