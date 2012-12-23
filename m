@@ -1,39 +1,39 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Sun, 23 Dec 2012 14:29:03 +0200
-Subject: [Buildroot] [PATCH] new package: libpciaccess
-In-Reply-To: <87y5gpt9h0.fsf@dell.be.48ers.dk>
-References: <1356220309-22847-1-git-send-email-stefan.froberg@petroprogram.com>
- <87y5gpt9h0.fsf@dell.be.48ers.dk>
-Message-ID: <50D6F90F.7020104@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 23 Dec 2012 14:26:49 +0100
+Subject: [Buildroot] RFC: x11r7.7 patch series
+In-Reply-To: <4FDF2526.70901@carallon.com>
+References: <4FDF2526.70901@carallon.com>
+Message-ID: <20121223142649.460e502f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-23.12.2012 11:15, Peter Korsgaard kirjoitti:
->>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
->  Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
->  Stefan> ---
->  Stefan>  package/Config.in                    |    1 +
->  Stefan>  package/libpciaccess/Config.in       |    6 ++++++
->  Stefan>  package/libpciaccess/libpciaccess.mk |   12 ++++++++++++
->  Stefan>  3 files changed, 19 insertions(+), 0 deletions(-)
->  Stefan>  create mode 100644 package/libpciaccess/Config.in
->  Stefan>  create mode 100644 package/libpciaccess/libpciaccess.mk
->
-> Ehh, we already have package/x11r7/xlib_libpciaccess - Any reason you
-> cannot use that?
-Oh, sorry.
-I was doing xserver 1.10 for buildroot 2012.08 and it was complaining
-about missing
-libpciaccess at some point (or maybe it was one of it's dependency
-package that was complaining, can't remember anymore)
+Dear Will Wagner,
 
-Didn't notice that there was already libpciaccess.
+On Mon, 18 Jun 2012 13:55:02 +0100, Will Wagner wrote:
+> You can find my work on updating to x11r7.7 on gitorious at 
+> https://gitorious.org/willw-buildroot/willw-buildroot/commits/remotes/gitorious/x11r7.7
+> 
+> There are a few parts to the patch series I am not sure about:
+> - I have deleted all packages not in the 7.7 release, this may remove 
+> things people still use and feel should still be in buildroot
+> - I had a problem updating mesa3d. The newer versions rely on host 
+> libxml2 with python support. There are a couple of patches to do this 
+> but I don't particularly like these. If someone can come up with 
+> something better then great.
+> - There was one package I couldn't compile
+> xdriver_xf86-input-synaptics. Didn't spend any time on trying to fix
+> it though (I suspect broken in current buildroot as well).
 
-Regards
-Stefan
+What is the status of this work? Do you plan to submit it?
 
-> I don't think there's any issue with bumping the version to 0.13.1
->
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
