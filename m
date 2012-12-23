@@ -1,31 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Dec 2012 16:20:12 +0100
-Subject: [Buildroot] [PATCH] new package: libpciaccess
-In-Reply-To: <50D70F60.50503@petroprogram.com>
-References: <1356220309-22847-1-git-send-email-stefan.froberg@petroprogram.com>
- <87y5gpt9h0.fsf@dell.be.48ers.dk>
- <50D6F90F.7020104@petroprogram.com>
- <87txrcuaz8.fsf@dell.be.48ers.dk> <50D70F60.50503@petroprogram.com>
-Message-ID: <20121223162012.24cfdd64@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 23 Dec 2012 19:08:04 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: re-introduce Sourcery
+	CodeBench ARM 2010.09
+In-Reply-To: <1356270120-20416-1-git-send-email-plagnioj@jcrosoft.com>
+ (Jean-Christophe PLAGNIOL-VILLARD's message of "Sun, 23 Dec 2012
+ 14:42:00 +0100")
+References: <1356270120-20416-1-git-send-email-plagnioj@jcrosoft.com>
+Message-ID: <8738ywtzej.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+>>>>> "J" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
-On Sun, 23 Dec 2012 16:04:16 +0200, Stefan Fr?berg wrote:
+ J> on the lastest release the toolchain can not produce a working rootfs for
+ J> at91rm9200
 
-> That mesa3d updating beyond 7.10.3 (that I have here) seems especially
-> interesting challenge.
+ J> Tested on at91rm9200ek
 
-Do you have more details about the issues involved in bumping mesa3d
-beyond 7.10.3 ?
+ J> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+ J> ---
+ J> Hi,
 
-Thomas
+ J> 	I try the internal toolchains of buildroot we have the same issue
+
+Interesting. How did you configure it? I've used BR on the mini2440
+(s3c2440), which is also arm920t recently without problems.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
