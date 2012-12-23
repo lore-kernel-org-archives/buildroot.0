@@ -1,94 +1,52 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 23 Dec 2012 23:19:24 +0100
-Subject: [Buildroot] [PATCH 1/2] libfribidi: new package
-In-Reply-To: <201212232249.16467.yann.morin.1998@free.fr>
-References: <CAOWBBJxB8rzAUNJNap5sLQppA68wcBByKZeE=hQK0a267zuQ7Q@mail.gmail.com>
- <201212232249.16467.yann.morin.1998@free.fr>
-Message-ID: <CAGduivyVG9j-OpdGx4fREUQ+_n=zseftm=71CdGTuJ0XSH58JA@mail.gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Sun, 23 Dec 2012 22:30:28 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: re-introduce Sourcery
+ CodeBench ARM 2010.09
+In-Reply-To: <8738ywtzej.fsf@dell.be.48ers.dk>
+References: <1356270120-20416-1-git-send-email-plagnioj@jcrosoft.com>
+ <8738ywtzej.fsf@dell.be.48ers.dk>
+Message-ID: <20121223213027.GC11142@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mikhail, All,
+On 19:08 Sun 23 Dec     , Peter Korsgaard wrote:
+> >>>>> "J" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+> 
+>  J> on the lastest release the toolchain can not produce a working rootfs for
+>  J> at91rm9200
+> 
+>  J> Tested on at91rm9200ek
+> 
+>  J> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+>  J> ---
+>  J> Hi,
+> 
+>  J> 	I try the internal toolchains of buildroot we have the same issue
+> 
+> Interesting. How did you configure it? I've used BR on the mini2440
+> (s3c2440), which is also arm920t recently without problems.
+I do nohing special just use busybox
 
-On Sun, Dec 23, 2012 at 10:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Mikhail, All,
->
-> On Sunday 23 December 2012 Mikhail Boiko wrote:
->> ---
->
-> You need to add a Signed-off-by line, like:
->     Signed-off-by: Your Real NAME <your.mail@adress>
->
-> Please see Documentation/SubmittingPatches in the kernel source tree
-> for the reasons and meaning of the SoB line.
->
-> [--SNIP--]
->> diff --git a/package/libfribidi/Config.in b/package/libfribidi/Config.in
->> new file mode 100644
->> index 0000000..11aed62
->> --- /dev/null
->> +++ b/package/libfribidi/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_LIBFRIBIDI
->> + bool "libfribidi"
->> + help
->> +  GNU FriBidi is an implementation of the Unicode
->> +  Bidirectional Algorithm (bidi).
->> +
->> +  http://www.fribidi.org/
->
-> config BR2_PACKAGE_LIBFRIBIDI
-> <TAB>bool "libfribidi"
-> <TAB>help
-> <TAB>  GNU fribidi...
->
-> That is, one TAB before keywords, and one TAB and two spaces before the
-> hepl text.
->
->> diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/
->> libfribidi.mk
->> new file mode 100644
->> index 0000000..5cd1bc9
->> --- /dev/null
->> +++ b/package/libfribidi/libfribidi.mk
->> @@ -0,0 +1,14 @@
->> +#############################################################
->> +#
->> +# libfribidi
->> +#
->> +#############################################################
->> +
->> +LIBFRIBIDI_VERSION = 0.19.5
->> +LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
->> +LIBFRIBIDI_SITE = http://www.fribidi.org/download/
->> +LIBFRIBIDI_INSTALL_STAGING = YES
->> +LIBFRIBIDI_CONF_OPT = --disable-docs
-Don't forget to add the LICENCE, I assume these are correct for fribidi :
-FRIBIDI_LICENSE = GPLv2+
-FRIBIDI_LICENSE_FILES = COPYING
->
-> --disable-docs is already passed by the autotools-package infrastructure,
-> so is not needed.
->
->> +LIBFRIBIDI_DEPENDENCIES = host-pkgconf
->> +
->> +$(eval $(autotools-package))
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+and I try generic_arm and arm920t
+
+both can not boot
+
+I get the init that try to kill itself
+
+I check the binary it's a EABIv5 so this should work
+but it does not
+
+I tried the 3.7.1, 3.6.6 and mainline (dt) none work
+
+the only toolchain I succed is this one
+
+I did not try to found a valid BR toolchain just use the default one
+
+which boot fine on my other at91 (arm926ejs) with both Sourcery & BR
+toolchains.
+
+Best Regards,
+J.
