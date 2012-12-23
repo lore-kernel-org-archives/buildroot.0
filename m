@@ -1,39 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 23 Dec 2012 14:26:49 +0100
-Subject: [Buildroot] RFC: x11r7.7 patch series
-In-Reply-To: <4FDF2526.70901@carallon.com>
-References: <4FDF2526.70901@carallon.com>
-Message-ID: <20121223142649.460e502f@skate>
+From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
+Date: Sun, 23 Dec 2012 15:43:18 +0200
+Subject: [Buildroot] [PATCH] xdriver_xf86-input-synaptics: bumped to 1.6.2
+Message-ID: <1356270198-18518-1-git-send-email-stefan.froberg@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Wagner,
+Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+---
+ .../xdriver_xf86-input-synaptics.mk                |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-On Mon, 18 Jun 2012 13:55:02 +0100, Will Wagner wrote:
-> You can find my work on updating to x11r7.7 on gitorious at 
-> https://gitorious.org/willw-buildroot/willw-buildroot/commits/remotes/gitorious/x11r7.7
-> 
-> There are a few parts to the patch series I am not sure about:
-> - I have deleted all packages not in the 7.7 release, this may remove 
-> things people still use and feel should still be in buildroot
-> - I had a problem updating mesa3d. The newer versions rely on host 
-> libxml2 with python support. There are a couple of patches to do this 
-> but I don't particularly like these. If someone can come up with 
-> something better then great.
-> - There was one package I couldn't compile
-> xdriver_xf86-input-synaptics. Didn't spend any time on trying to fix
-> it though (I suspect broken in current buildroot as well).
-
-What is the status of this work? Do you plan to submit it?
-
-Thanks!
-
-Thomas
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index e66acb5..c724f7a 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.3.0
++XDRIVER_XF86_INPUT_SYNAPTICS_VERSION = 1.6.2
+ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_SYNAPTICS_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.7.6
