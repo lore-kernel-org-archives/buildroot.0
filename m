@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Dec 2012 12:27:30 +0100
-Subject: [Buildroot] e17 and related packages
-Message-ID: <20121224122730.527a71ef@skate>
+Date: Mon, 24 Dec 2012 12:34:39 +0100
+Subject: [Buildroot] Autobuilders screwed up
+Message-ID: <20121224123439.11983c10@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +10,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-Just to prevent duplicate work, I wanted to let people know I've
-started creating a package for the recently released Enlightenment 17,
-and done the related version bumps on EFL libraries.
+As you have probably noticed, the autobuilders are screwed up.
+Basically, we reached 32000 results, and since I store each result in a
+directory, all gathered in a single directory, we reached the
+per-sub-directory limit of the filesystem.
 
-The current status of the work is visible at:
+While trying to fix that up, I did some crap, and now some older
+results appear in the middle of the latest results. I'll fix that up,
+but as you know, it's Christmas, family and all, so it might have to
+wait until tomorrow.
 
-  http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=e17
-
-For now, the enlightenment package builds, but I didn't manage to start
-it under X.org. It just seems to hang while talking with the X server,
-for some reason (strace says it's waiting on a poll() call on the Unix
-socket that it uses to talk with the X server).
-
-Help is of course welcome to improve things.
+Sorry for the mess,
 
 Thomas
 -- 
