@@ -1,34 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 24 Dec 2012 15:44:41 +0100
-Subject: [Buildroot] Autobuilders screwed up
-In-Reply-To: <20121224123439.11983c10@skate>
-References: <20121224123439.11983c10@skate>
-Message-ID: <20121224154441.5805530f@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 24 Dec 2012 23:45:14 +0100
+Subject: [Buildroot] [PATCH] package/spice: don't enable GUI if dependencies
+	not met
+Message-ID: <1356389114-9826-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The spice GUI selects unconditionally selects cegui06, but cegui06 requires
+threads and C++, so spice GUI must also depend on threads and C++.
 
-On Mon, 24 Dec 2012 12:34:39 +0100, Thomas Petazzoni wrote:
+Fixes:
+    http://autobuild.buildroot.net/results/37f8ee90bb4348db97daef83493005c42a193b91/
 
-> While trying to fix that up, I did some crap, and now some older
-> results appear in the middle of the latest results. I'll fix that up,
-> but as you know, it's Christmas, family and all, so it might have to
-> wait until tomorrow.
+Merry X-Mas! ;-)
 
-The issue should be fixed. I've sent again the build results for
-2012-12-23, but as you've noticed, only 91 build results were kept.
-Hopefully, everything should be correct for tomorrow's e-mail.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/spice/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Again, sorry for the mess.
-
-Best regards,
-
-Thomas
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index 1b264e7..5c4975a 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -35,8 +35,13 @@ config BR2_PACKAGE_SPICE_CLIENT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 
++comment "GUI requires a toolchain with threads and C++"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_SPICE_GUI
+ 	bool "Enable GUI"
++	depends on BR2_TOOLCHAIN_HAS_THREADS    # cegui06
++	depends on BR2_INSTALL_LIBSTDCPP        # cegui06
+ 	depends on BR2_PACKAGE_SPICE_CLIENT
+ 	select BR2_PACKAGE_CEGUI06
+ 	help
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.5
