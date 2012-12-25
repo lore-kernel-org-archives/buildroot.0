@@ -1,38 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 25 Dec 2012 19:11:30 +0100
-Subject: [Buildroot] [PATCH 2/2] package/keyutils: disable on avr32
-In-Reply-To: <cover.1356459033.git.yann.morin.1998@free.fr>
-References: <cover.1356459033.git.yann.morin.1998@free.fr>
-Message-ID: <8d01634829b527333c15467ad91cd0cbeb4c91bb.1356459033.git.yann.morin.1998@free.fr>
+From: Eric Jarrige <eric.jarrige@armadeus.org>
+Date: Tue, 25 Dec 2012 14:50:50 +0100
+Subject: [Buildroot] [PATCH] flite: new package
+In-Reply-To: <1355094387-22886-5-git-send-email-s.martin49@gmail.com>
+References: <1355094387-22886-1-git-send-email-s.martin49@gmail.com>
+ <1355094387-22886-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <4DEB0DBE-C9AD-4F3F-85CA-2A1C6605E39A@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-keyutils does not build on avr32 (probably
-because the toolchain is way too old).
 
-Fixes:
-    http://autobuild.buildroot.net/results/aa86f6a68f5d0ea4914ab259ed270615bc9d6a99/
+On 10 d?c. 2012, at 00:06, Samuel Martin wrote:
 
-Merry X-Mas!
+> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Eric Jarrige <eric.jarrige@armadeus.org>
+Tested on Buildroot 2012.11 with a Armadeus APF27 board
+> ---
+> package/multimedia/Config.in       |  1 +
+> package/multimedia/flite/Config.in | 11 ++++++++
+> package/multimedia/flite/flite.mk  | 57 ++++++++++++++++++++++++++++++++++++++
+> 3 files changed, 69 insertions(+)
+> create mode 100644 package/multimedia/flite/Config.in
+> create mode 100644 package/multimedia/flite/flite.mk
+> 
+> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+> index 273d9bc..3ca0531 100644
+> --- a/package/multimedia/Config.in
+> +++ b/package/multimedia/Config.in
+> @@ -4,6 +4,7 @@ source "package/multimedia/aumix/Config.in"
+> source "package/multimedia/bellagio/Config.in"
+> source "package/multimedia/faad2/Config.in"
+> source "package/multimedia/flac/Config.in"
+> +source "package/multimedia/flite/Config.in"
+> source "package/multimedia/ffmpeg/Config.in"
+> source "package/multimedia/gstreamer/Config.in"
+> source "package/multimedia/gst-ffmpeg/Config.in"
+> diff --git a/package/multimedia/flite/Config.in b/package/multimedia/flite/Config.in
+> new file mode 100644
+> index 0000000..bef989c
+> --- /dev/null
+> +++ b/package/multimedia/flite/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_FLITE
+> +	bool "flite"
+> +	help
+> +	  Flite: a small, fast run time synthesis engine.
+> +	  Flite (festival-lite) is a small, fast run-time synthesis engine
+> +	  developed at CMU and primarily designed for small embedded machines
+> +	  and/or large servers. Flite is designed as an alternative synthesis
+> +	  engine to Festival for voices built using the FestVox suite of voice
+> +	  building tools.
+> +
+> +	  http://www.speech.cs.cmu.edu/flite
+> diff --git a/package/multimedia/flite/flite.mk b/package/multimedia/flite/flite.mk
+> new file mode 100644
+> index 0000000..c72988f
+> --- /dev/null
+> +++ b/package/multimedia/flite/flite.mk
+> @@ -0,0 +1,57 @@
+> +#############################################################
+> +#
+> +# flite
+> +#
+> +#############################################################
+> +FLITE_VERSION = 1.4
+> +FLITE_SOURCE = flite-$(FLITE_VERSION)-release.tar.bz2
+> +FLITE_SITE = http://www.speech.cs.cmu.edu/flite/packed/flite-$(FLITE_VERSION)
+> +FLITE_LICENSE = BSD-4c
+> +FLITE_LICENSE_FILES = COPYING
+> +
+> +FLITE_INSTALL_STAGING = YES
+> +
+> +# Sadly, Flite does not support parallel build,
+> +# especially when build its shared libraries.
+> +FLITE_MAKE = $(MAKE1)
+> +
+> +FLITE_CONF_OPT = \
+> +	$(if $(BR2_PREFER_STATIC_LIB),,--enable-shared)
+> +
+> +FLITE_INSTALL_STAGING_OPT = \
+> +	INSTALLBINDIR=$(STAGING_DIR)/usr/bin \
+> +	INSTALLLIBDIR=$(STAGING_DIR)/usr/lib \
+> +	INSTALLINCDIR=$(STAGING_DIR)/usr/include/flite \
+> +	install
+> +
+> +FLITE_INSTALL_TARGET_OPT = \
+> +	INSTALLBINDIR=$(TARGET_DIR)/usr/bin \
+> +	INSTALLLIBDIR=$(TARGET_DIR)/usr/lib \
+> +	INSTALLINCDIR=$(TARGET_DIR)/usr/include/flite \
+> +	install
+> +
+> +# Flite totally screw up their tarball generation, so that:
+> +#
+> +#   $ tar tf flite-1.4-release.tar.bz2
+> +#   ...
+> +#   flite-1.4-release//install-sh
+> +#   flite-1.4-release//mkinstalldirs
+> +#   flite-1.4-release//Exports.def
+> +#   flite-1.4-release//flite.sln
+> +#   flite-1.4-release//fliteDll.vcproj
+> +#   flite-1.4-release/config/Makefile
+> +#   flite-1.4-release/config/common_make_rules
+> +#   flite-1.4-release/config/project.mak
+> +#   flite-1.4-release/config/config.in
+> +#   flite-1.4-release/config/system.mak.in
+> +#
+> +# So, the strip-component trick does not work at all.
+> +# Let's redefine the extract command.
+> +define FLITE_EXTRACT_CMDS
+> +	$(RM) -rf $(FLITE_DIR)
+> +	$(INFLATE$(suffix $(FLITE_SOURCE))) $(DL_DIR)/$(FLITE_SOURCE) | \
+> +		$(TAR) -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> +	mv $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE)) $(FLITE_DIR)
+> +endef
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.8.0.1
+> 
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/keyutils/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-index 9b5a24b..f77eb52 100644
---- a/package/keyutils/Config.in
-+++ b/package/keyutils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KEYUTILS
- 	bool "keyutils"
-+	depends on !BR2_avr32
- 	help
- 	  These tools are used to control the key management system
- 	  built into the Linux kernel.
--- 
-1.7.2.5
+Regards,
+Eric Jarrige
