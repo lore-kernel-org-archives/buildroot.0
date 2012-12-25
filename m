@@ -1,52 +1,60 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Mon, 24 Dec 2012 19:52:19 -0800
-Subject: [Buildroot] [RFC] How to handle targets that need more than one
- file system to boot?
-In-Reply-To: <201212240100.17473.yann.morin.1998@free.fr>
-References: <201212240100.17473.yann.morin.1998@free.fr>
-Message-ID: <CAJJ6jxuKWz3-que3MYwBSrLh_F2-L_XhMvE-+oUog+kL_2mobA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 25 Dec 2012 07:22:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 5828] New: Possible issue with python
+Message-ID: <bug-5828-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Dec 23, 2012 at 4:00 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Hello All!
->
-> Some systems require a specific partition layout to be able to boot.
-> For example:
->   - the RaspberryPi:
->     - the first, primary partition, and vfat-formatted, with the bootloader
->       files and the kernel
->     - the rest of the filesystem hierarchy can be dispatched at will
->   - on i.MX:
->     - the first, (primary?) partition must be non-FAT (special type?), with
->       the bootloader raw-binary inside
->     - the rest of the filesystem hierarchy can be whatever
->   - on OMAP paltforms:
->     - similar to the PI, but the kernel can be on ext2/3/4 (as wel as VFAT?)
->
-> For now, buildroot can build a single filesystem image. This is not useable
-> for these systems. The only possibility as of today is to configure BR to
-> generate a tarball, and have a custom script that does the required split up
-> of the different components.
->
-> It would be nice to have buildroot smoothly handle these cases.
->
-> After a quick talk on IRC with Thomas, here are a few proposals.
->
-> 0) Keep as-is
->
-> Buildroot can not handle all possibilities, we can't even *think* about
-> all such possibilities. This is the easiest for buildroot, and pushes the
-> complexity down to the users.
->
-This is my favorite. There are no known situations that cannot be
-handled by buildroot. Quit adding to the makefile. It adds
-complexities, and only fixes the one, current users complaint. Keep
-mechanism separate from policy. Buildroot should be a simple
-consistent way to build a root file system. People who have weird
-build/target desires can do that in an external script.
+https://bugs.busybox.net/show_bug.cgi?id=5828
 
-Regards, Steve
+           Summary: Possible issue with python
+           Product: buildroot
+           Version: 2012.08
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: hardcore at hardcoreforensics.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created attachment 4718
+  --> https://bugs.busybox.net/attachment.cgi?id=4718
+the config file from buildroot
+
+Once the disk images have been built and transplanted to the  embedded system.
+
+The python seems to function correctly, however some python packages require
+the use of GCC
+to build the libraries
+
+when executing the install of these packages:
+ "python setup.py install"
+
+the python setup for GCC points to the OLD location on the computer used to
+cross build the environment:
+
+/home/bob/buildroot-2012.08/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+-fno-strict-aliasing -pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall
+-Wstrict-prototypes -fPIC -I/usr/include/python2.7 -c conftest.c -o conftest.o
+unable to execute
+/home/bob/buildroot-2012.08/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc:
+No such file or directory
+error: command
+'/home/bob/buildroot-2012.08/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc'
+failed with exit status 1
+#
+
+rather than the new location in the embedded systems 'file system'
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
