@@ -1,65 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Dec 2012 10:55:49 -0300
-Subject: [Buildroot] [PATCH 3/3] libmicrohttpd: bump to version 0.9.24
-In-Reply-To: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1356530149-12305-3-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Dec 2012 18:35:21 +0200
+Subject: [Buildroot] [PATCH v3] usbip: new package
+In-Reply-To: <CAOPBCFUzO64CXWKr4Z2rJeUb2NXExu=H1Gp2QyymrHcjVNaJuA@mail.gmail.com>
+References: <CAOPBCFULJTm7iooZ8=nnpMoooaRq=1PK11hhYyyGVr=DdM2e2w@mail.gmail.com>
+ <20121226070612.GC7402@sapphire.tkos.co.il>
+ <20121226094937.3c2b9383@skate>
+ <CAOPBCFUzO64CXWKr4Z2rJeUb2NXExu=H1Gp2QyymrHcjVNaJuA@mail.gmail.com>
+Message-ID: <20121226163521.GL11946@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libmicrohttpd/Config.in        |    5 +++++
- package/libmicrohttpd/libmicrohttpd.mk |    8 ++++----
- 2 files changed, 9 insertions(+), 4 deletions(-)
+Hi Marcin,
 
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index cfedc8f..4e78a99 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBMICROHTTPD
- 	bool "libmicrohttpd"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  GNU libmicrohttpd is a small C library that makes it easy to
- 	  run an HTTP server as part of another application.
-@@ -9,6 +10,10 @@ config BR2_PACKAGE_LIBMICROHTTPD
- config BR2_PACKAGE_LIBMICROHTTPD_SSL
-        bool "https support"
-        depends on BR2_PACKAGE_LIBMICROHTTPD
-+       select BR2_PACKAGE_GNUTLS
-        select BR2_PACKAGE_LIBGCRYPT
-        help
-          Enable HTTPS (SSL) support.
-+
-+comment "libmicrohttpd needs a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index f8690ee..cf84b2d 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -3,14 +3,14 @@
- # libmicrohttpd
- #
- #############################################################
--LIBMICROHTTPD_VERSION = 0.4.6
--LIBMICROHTTPD_SOURCE = libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
-+
-+LIBMICROHTTPD_VERSION = 0.9.24
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
--LIBMICROHTTPD_DEPENDENCIES += libgcrypt
--LIBMICROHTTPD_CONF_OPT += --enable-https \
-+LIBMICROHTTPD_DEPENDENCIES += gnutls libgcrypt
-+LIBMICROHTTPD_CONF_OPT += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
- 			  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
- else
- LIBMICROHTTPD_CONF_OPT += --disable-https
+On Wed, Dec 26, 2012 at 09:55:47AM +0100, Marcin Bis wrote:
+[...]
+> +USBIP_VERSION = 0.1.7
+
+This package is very old. Newer version is distributed with the kernel sources 
+under drivers/staging/usbip/userspace/. I'm not sure how to extract these 
+files during build. Maybe the experts here have an Idea?
+
+baruch
+
+> +USBIP_SITE = http://downloads.sourceforge.net/project/usbip/usbip/$(USBIP_VERSION)
+> +USBIP_LICENSE = GPLv2+
+> +USBIP_LICENSE_FILES = COPYING
+> +USBIP_CONF_OPT = --without-tcpwrappers
+> +USBIP_DEPENDENCIES = libglib2 libsysfs
+
+baruch
+
 -- 
-1.7.8.6
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
