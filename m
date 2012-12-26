@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Dec 2012 23:41:46 +0100
-Subject: [Buildroot] [git commit] php: bump to version 5.3.20
-Message-ID: <20121226224226.262A99A496@busybox.osuosl.org>
+Date: Wed, 26 Dec 2012 23:41:52 +0100
+Subject: [Buildroot] [git commit] sed: bump to version 4.2.2
+Message-ID: <20121226224226.66AA29A496@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c1576042e7171d5229414447d99823630e4e309
+commit: http://git.buildroot.net/buildroot/commit/?id=6b449ed5dfb8c8f8c889f242cf3d5b27b18673c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sed/sed.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4290170..a1badab 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sed/sed.mk b/package/sed/sed.mk
+index 451ba54..5535754 100644
+--- a/package/sed/sed.mk
++++ b/package/sed/sed.mk
+@@ -3,9 +3,11 @@
+ # sed
  #
  #############################################################
+-SED_VERSION = 4.2.1
+-SED_SOURCE = sed-$(SED_VERSION).tar.gz
++
++SED_VERSION = 4.2.2
+ SED_SITE = $(BR2_GNU_MIRROR)/sed
++SED_LICENSE = GPLv3
++SED_LICENSE_FILES = COPYING
  
--PHP_VERSION = 5.3.19
-+PHP_VERSION = 5.3.20
- PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
+ SED_CONF_OPT = --bindir=/usr/bin \
+ 		--libdir=/lib \
