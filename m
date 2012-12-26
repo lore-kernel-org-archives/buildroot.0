@@ -1,60 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Dec 2012 07:49:19 -0300
-Subject: [Buildroot] [PATCH 2/2] libfuse: needs mmu
-In-Reply-To: <1356518959-30055-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1356518959-30055-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1356518959-30055-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 26 Dec 2012 10:55:47 -0300
+Subject: [Buildroot] [PATCH 1/3] libgcrypt: disable tests
+Message-ID: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/5c64ea05e0ffedcc78f5255f6f76afa1f159cda0
+The testsuite uses fork() hence fails on !MMU targets.
+We don't use/install these so just get rid of them.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libfuse/Config.in |    1 +
- package/sshfs/Config.in   |    1 +
- package/unionfs/Config.in |    1 +
- 3 files changed, 3 insertions(+), 0 deletions(-)
+ package/libgcrypt/libgcrypt.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
-index 2e9b7dc..5d30892 100644
---- a/package/libfuse/Config.in
-+++ b/package/libfuse/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBFUSE
- 	bool "libfuse"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  FUSE (Filesystem in UserSpacE)
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index a320e48..3aa60c6 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -10,6 +10,7 @@ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
+ LIBGCRYPT_INSTALL_STAGING = YES
++LIBGCRYPT_DEPENDENCIES = libgpg-error
  
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index d0cf932..11b6bb9 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_SSHFS
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-+	depends on BR2_USE_MMU # libfuse
- 	help
- 	  FUSE filesystem client based on the SSH File Transfer Protocol.
+ LIBGCRYPT_CONF_ENV = \
+ 	ac_cv_sys_symbol_underscore=no
+@@ -17,6 +18,12 @@ LIBGCRYPT_CONF_OPT = \
+ 	--disable-optimization \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
  
-diff --git a/package/unionfs/Config.in b/package/unionfs/Config.in
-index 92f1787..2ac7be9 100644
---- a/package/unionfs/Config.in
-+++ b/package/unionfs/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_UNIONFS
- 	select BR2_PACKAGE_LIBFUSE
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-+	depends on BR2_USE_MMU # libfuse
- 	help
- 	  A userspace unionfs implementation.
+-LIBGCRYPT_DEPENDENCIES = libgpg-error
++# Tests use fork()
++define LIBGCRYPT_DISABLE_TESTS
++	$(SED) 's/ tests//' $(@D)/Makefile.in
++endef
++
++LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
++
  
+ $(eval $(autotools-package))
 -- 
 1.7.8.6
