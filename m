@@ -1,65 +1,109 @@
-From: Mikhail Boiko <mikhailboiko85@gmail.com>
-Date: Wed, 26 Dec 2012 09:43:58 +0200
-Subject: [Buildroot] [PATCH 1/1] new package: libfribidi
-Message-ID: <1356507838-9090-1-git-send-email-mikhailboiko85@gmail.com>
+From: Marcin Bis <marcin@bis.org.pl>
+Date: Wed, 26 Dec 2012 09:27:24 +0100
+Subject: [Buildroot] [PATCH v2] usbip: new package
+In-Reply-To: <20121226070612.GC7402@sapphire.tkos.co.il>
+References: <CAOPBCFULJTm7iooZ8=nnpMoooaRq=1PK11hhYyyGVr=DdM2e2w@mail.gmail.com>
+ <20121226070612.GC7402@sapphire.tkos.co.il>
+Message-ID: <CAOPBCFUYM6Ytt2FPsUgWYzd6SbNuzfvjyA+-yYQs0gonE1vGWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mikhail Boiko <mikhailboiko85@gmail.com>
----
- package/Config.in                |    1 +
- package/libfribidi/Config.in     |    7 +++++++
- package/libfribidi/libfribidi.mk |   13 +++++++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/libfribidi/Config.in
- create mode 100644 package/libfribidi/libfribidi.mk
+Signed-off-by: Marcin Bis <marcin@bis.org.pl>
+--
+ package/Config.in       |    1 +
+ package/usbip/Config.in |   33 +++++++++++++++++++++++++++++++++
+ package/usbip/usbip.mk  |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 66 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 3d556b2..e60f22e 100644
+index 3d556b2..c773c46 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -519,6 +519,7 @@ source "package/libelf/Config.in"
- source "package/libevent/Config.in"
- source "package/libev/Config.in"
- source "package/libffi/Config.in"
-+source "package/libfribidi/Config.in"
- source "package/gsl/Config.in"
- source "package/libglib2/Config.in"
- source "package/libical/Config.in"
-diff --git a/package/libfribidi/Config.in b/package/libfribidi/Config.in
+@@ -684,6 +684,7 @@ source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
+ source "package/ulogd/Config.in"
++source "package/usbip/Config.in"
+ source "package/ushare/Config.in"
+ source "package/vde2/Config.in"
+ source "package/vpnc/Config.in"
+diff --git a/package/usbip/Config.in b/package/usbip/Config.in
 new file mode 100644
-index 0000000..11aed62
+index 0000000..7abf1d1
 --- /dev/null
-+++ b/package/libfribidi/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBFRIBIDI
-+	bool "libfribidi"
++++ b/package/usbip/Config.in
+@@ -0,0 +1,33 @@
++config BR2_PACKAGE_USBIP
++	bool "usbip"
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBSYSFS
 +	help
-+	  GNU FriBidi is an implementation of the Unicode 
-+	  Bidirectional Algorithm (bidi).
++	  Userspace tools for sharing USB devices over TCP/IP network.
 +
-+	  http://www.fribidi.org/
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
++	  http://usbip.sourceforge.net/
++
++	  Depends on glib.
++
++	  Note: For exporting or connecting to exported USB devices
++	  additional kernel drivers are needed (available since 2.6.28
++	  under Stagging).
++
++comment "usbip requires a toolchain with WCHAR support"
++        depends on !BR2_USE_WCHAR
++
++if BR2_PACKAGE_USBIP
++
++config BR2_USBIP_CLIENT
++	bool "usbip client"
++	default y
++	help
++	  the client part of usbip
++
++config BR2_USBIP_SERVER
++	bool "usbip server"
++	help
++	  the server part of usbip
++
++endif
+diff --git a/package/usbip/usbip.mk b/package/usbip/usbip.mk
 new file mode 100644
-index 0000000..578438a
+index 0000000..d1f7021
 --- /dev/null
-+++ b/package/libfribidi/libfribidi.mk
-@@ -0,0 +1,13 @@
++++ b/package/usbip/usbip.mk
+@@ -0,0 +1,32 @@
 +#############################################################
 +#
-+# libfribidi
++# usbip
 +#
 +#############################################################
 +
-+LIBFRIBIDI_VERSION = 0.19.5
-+LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
-+LIBFRIBIDI_SITE = http://www.fribidi.org/download/
-+LIBFRIBIDI_LICENSE = LGPLv2.1+
-+LIBFRIBIDI_LICENSE_FILES = COPYING
++USBIP_VERSION = 0.1.7
++USBIP_SITE = http://downloads.sourceforge.net/project/usbip/usbip/$(USBIP_VERSION)
++USBIP_LICENSE = GPLv2+
++USBIP_LICENSE_FILES = COPYING
++USBIP_CONF_OPT = --without-tcpwrappers
++USBIP_DEPENDENCIES = libglib2 libsysfs
++
++#The userspace applications are in the src/ subdirectory.
++USBIP_SUBDIR = src
++#Running autogen.sh is needed to create configure script.
++USBIP_AUTORECONF = YES
++
++ifneq ($(BR2_USBIP_CLIENT),y)
++        USBIP_TOREMOVE += usbip
++endif
++ifneq ($(BR2_USBIP_SERVER),y)
++        USBIP_TOREMOVE += usbipd bind_driver
++endif
++
++define USBIP_CLEANUP_AFTER_INSTALL
++        rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(USBIP_TOREMOVE))
++endef
++
++USBIP_POST_INSTALL_TARGET_HOOKS += USBIP_CLEANUP_AFTER_INSTALL
 +
 +$(eval $(autotools-package))
--- 
-1.7.9.5
