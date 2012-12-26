@@ -1,30 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Dec 2012 23:57:48 +0100
-Subject: [Buildroot] [PATCH 2/2] package/keyutils: disable on avr32
-In-Reply-To: <8d01634829b527333c15467ad91cd0cbeb4c91bb.1356459033.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 25 Dec 2012 19:11:30 +0100")
-References: <cover.1356459033.git.yann.morin.1998@free.fr>
- <cover.1356459033.git.yann.morin.1998@free.fr>
- <8d01634829b527333c15467ad91cd0cbeb4c91bb.1356459033.git.yann.morin.1998@free.fr>
-Message-ID: <87k3s45slv.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 26 Dec 2012 23:52:26 +0100
+Subject: [Buildroot] [git commit] package/spice: don't enable GUI if
+	dependencies not met
+Message-ID: <20121226225741.08F919A45C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a61d33a3443e535ce2fde53ffe9fa3161fb6afea
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> keyutils does not build on avr32 (probably
- Yann> because the toolchain is way too old).
+The spice GUI selects unconditionally selects cegui06, but cegui06 requires
+threads and C++, so spice GUI must also depend on threads and C++.
 
- Yann> Fixes:
- Yann>     http://autobuild.buildroot.net/results/aa86f6a68f5d0ea4914ab259ed270615bc9d6a99/
+Fixes:
+    http://autobuild.buildroot.net/results/37f8ee90bb4348db97daef83493005c42a193b91/
 
-Hmm, that just looks like a warning which the package errors out on as
-it uses -Werror and we don't override CFLAGS like we should. How about
-moving TARGET_CONFIGURE_OPTS past MAKE instead? ( $(MAKE)
-$(TARGET_CONFIGURE_OPTS) -C ..)
+Merry X-Mas! ;-)
 
--- 
-Bye, Peter Korsgaard
+[Peter: add SPICE_CLIENT dependency]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/spice/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index 1b264e7..0c2c7a6 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -35,8 +35,14 @@ config BR2_PACKAGE_SPICE_CLIENT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
+ 
++comment "GUI requires a toolchain with threads and C++"
++	depends on BR2_PACKAGE_SPICE_CLIENT
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_SPICE_GUI
+ 	bool "Enable GUI"
++	depends on BR2_TOOLCHAIN_HAS_THREADS    # cegui06
++	depends on BR2_INSTALL_LIBSTDCPP        # cegui06
+ 	depends on BR2_PACKAGE_SPICE_CLIENT
+ 	select BR2_PACKAGE_CEGUI06
+ 	help
