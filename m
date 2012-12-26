@@ -1,48 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Dec 2012 23:52:26 +0100
-Subject: [Buildroot] [git commit] package/spice: don't enable GUI if
-	dependencies not met
-Message-ID: <20121226225741.08F919A45C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 26 Dec 2012 23:59:20 +0100
+Subject: [Buildroot] Packet menu: X.org X Window System
+In-Reply-To: <20121226094719.64380938@skate> (Thomas Petazzoni's message of
+ "Wed, 26 Dec 2012 09:47:19 +0100")
+References: <20121226022529.GA5440@zuhnb712.ap.bm.net>
+ <20121226094719.64380938@skate>
+Message-ID: <87ip7o5sjb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a61d33a3443e535ce2fde53ffe9fa3161fb6afea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The spice GUI selects unconditionally selects cegui06, but cegui06 requires
-threads and C++, so spice GUI must also depend on threads and C++.
+Hi,
 
-Fixes:
-    http://autobuild.buildroot.net/results/37f8ee90bb4348db97daef83493005c42a193b91/
+ Thomas> In fact, the X.org server can be compiled in two different flavors:
 
-Merry X-Mas! ;-)
+ Thomas>  * The modular X.org flavor, which is the one used on virtually all
+ Thomas>    Linux distributions. In this flavor, the device drivers (video,
+ Thomas>    input, etc.) are compiled separately from the X.org server and can
+ Thomas>    be dynamically loaded.
 
-[Peter: add SPICE_CLIENT dependency]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/spice/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Thomas>  * The TinyX variant, in which drivers are directly bundled into the X
+ Thomas>    server. Those drivers are more limited (in number), and are directly
+ Thomas>    part of the X.org server code base (as opposed to the modular X.org,
+ Thomas>    where each driver is a separate project, separate tarball.
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 1b264e7..0c2c7a6 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -35,8 +35,14 @@ config BR2_PACKAGE_SPICE_CLIENT
- 	select BR2_PACKAGE_XLIB_LIBXFIXES
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
- 
-+comment "GUI requires a toolchain with threads and C++"
-+	depends on BR2_PACKAGE_SPICE_CLIENT
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_SPICE_GUI
- 	bool "Enable GUI"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS    # cegui06
-+	depends on BR2_INSTALL_LIBSTDCPP        # cegui06
- 	depends on BR2_PACKAGE_SPICE_CLIENT
- 	select BR2_PACKAGE_CEGUI06
- 	help
+Also notice that Tinyx/kdrive is deprecated, and there's been talks
+about completely removing it several times, most recently afaik was:
+
+http://lists.x.org/archives/xorg-devel/2012-March/030059.html
+
+ Thomas> It would probably be more clear to have the Server Type
+ Thomas> selection as a sub-option of the X.org server selection.
+
+Agreed.
+
+-- 
+Bye, Peter Korsgaard
