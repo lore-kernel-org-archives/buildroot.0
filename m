@@ -1,60 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Dec 2012 23:38:43 +0100
-Subject: [Buildroot] [git commit] libfuse: needs mmu
-Message-ID: <20121226224225.1C4739A43C@busybox.osuosl.org>
+Date: Wed, 26 Dec 2012 23:40:54 +0100
+Subject: [Buildroot] [git commit] libmicrohttpd: bump to version 0.9.24
+Message-ID: <20121226224225.9DC7C9A496@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a219e26b6a15b5a073660c96778024915877663
+commit: http://git.buildroot.net/buildroot/commit/?id=562d1ad82e33cd2234af9abac7847e990af037ce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes
-http://autobuild.buildroot.net/results/5c64ea05e0ffedcc78f5255f6f76afa1f159cda0
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libfuse/Config.in |    1 +
- package/sshfs/Config.in   |    1 +
- package/unionfs/Config.in |    1 +
- 3 files changed, 3 insertions(+), 0 deletions(-)
+ package/libmicrohttpd/Config.in        |    5 +++++
+ package/libmicrohttpd/libmicrohttpd.mk |    8 ++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfuse/Config.in b/package/libfuse/Config.in
-index 2e9b7dc..5d30892 100644
---- a/package/libfuse/Config.in
-+++ b/package/libfuse/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBFUSE
- 	bool "libfuse"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
+diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
+index cfedc8f..4e78a99 100644
+--- a/package/libmicrohttpd/Config.in
++++ b/package/libmicrohttpd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBMICROHTTPD
+ 	bool "libmicrohttpd"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
- 	  FUSE (Filesystem in UserSpacE)
+ 	  GNU libmicrohttpd is a small C library that makes it easy to
+ 	  run an HTTP server as part of another application.
+@@ -9,6 +10,10 @@ config BR2_PACKAGE_LIBMICROHTTPD
+ config BR2_PACKAGE_LIBMICROHTTPD_SSL
+        bool "https support"
+        depends on BR2_PACKAGE_LIBMICROHTTPD
++       select BR2_PACKAGE_GNUTLS
+        select BR2_PACKAGE_LIBGCRYPT
+        help
+          Enable HTTPS (SSL) support.
++
++comment "libmicrohttpd needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index f8690ee..cf84b2d 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -3,14 +3,14 @@
+ # libmicrohttpd
+ #
+ #############################################################
+-LIBMICROHTTPD_VERSION = 0.4.6
+-LIBMICROHTTPD_SOURCE = libmicrohttpd-$(LIBMICROHTTPD_VERSION).tar.gz
++
++LIBMICROHTTPD_VERSION = 0.9.24
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_INSTALL_STAGING = YES
  
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index d0cf932..11b6bb9 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_SSHFS
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-+	depends on BR2_USE_MMU # libfuse
- 	help
- 	  FUSE filesystem client based on the SSH File Transfer Protocol.
- 
-diff --git a/package/unionfs/Config.in b/package/unionfs/Config.in
-index 92f1787..2ac7be9 100644
---- a/package/unionfs/Config.in
-+++ b/package/unionfs/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_UNIONFS
- 	select BR2_PACKAGE_LIBFUSE
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libfuse
-+	depends on BR2_USE_MMU # libfuse
- 	help
- 	  A userspace unionfs implementation.
- 
+ ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+-LIBMICROHTTPD_DEPENDENCIES += libgcrypt
+-LIBMICROHTTPD_CONF_OPT += --enable-https \
++LIBMICROHTTPD_DEPENDENCIES += gnutls libgcrypt
++LIBMICROHTTPD_CONF_OPT += --enable-https --with-gnutls=$(STAGING_DIR)/usr \
+ 			  --with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+ LIBMICROHTTPD_CONF_OPT += --disable-https
