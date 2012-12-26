@@ -1,27 +1,32 @@
-From: Woody Wu <narkewoody@gmail.com>
-Date: Wed, 26 Dec 2012 10:25:29 +0800
-Subject: [Buildroot] Packet menu: X.org X Window System
-Message-ID: <20121226022529.GA5440@zuhnb712.ap.bm.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 26 Dec 2012 06:51:36 +0200
+Subject: [Buildroot] [PATCH] new package: libfribidi
+In-Reply-To: <1356469718-20828-1-git-send-email-mikhailboiko85@gmail.com>
+References: <1356469718-20828-1-git-send-email-mikhailboiko85@gmail.com>
+Message-ID: <20121226045135.GA7402@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Mikhail,
 
-I feel a little confused in the 'X.org X Window System' packet menu. It
-present me with 'X Window System server' as well as 'X11R7 servers'.
-Under 'X Window System server' I can choice TinyX, under the 'X11R7
-servers', I can choice x.org server.  Is that a conflict? Or does it
-means, in additional to TinyX, I still need to pick up a X11R7 server to
-work with it?
+On Tue, Dec 25, 2012 at 11:08:38PM +0200, Mikhail Boiko wrote:
+[...]
+> +LIBFRIBIDI_VERSION = 0.19.5
+> +LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
+> +LIBFRIBIDI_SITE = http://www.fribidi.org/download/
+> +LIBFRIBIDI_LICENSE = GPLv2+
+> +LIBFRIBIDI_LICENSE_FILES = COPYING
 
-I know I have some concepts not so clear in the area. If so, please help
-to point it out.
+The COPYING contains the LGPLv2.1 text. In addition, the README file includes 
+the "or later" language in its License section. So LIBFRIBIDI_LICENSE should 
+be LGPLv2.1+
 
-Thanks in advance!
+baruch
 
 -- 
-woody
-I can't go back to yesterday - because I was a different person then.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
