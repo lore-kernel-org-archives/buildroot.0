@@ -1,37 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Dec 2012 23:41:52 +0100
-Subject: [Buildroot] [git commit] sed: bump to version 4.2.2
-Message-ID: <20121226224226.66AA29A496@busybox.osuosl.org>
+Date: Wed, 26 Dec 2012 23:39:50 +0100
+Subject: [Buildroot] [git commit] libgcrypt: disable tests
+Message-ID: <20121226224225.47F709A496@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b449ed5dfb8c8f8c889f242cf3d5b27b18673c7
+commit: http://git.buildroot.net/buildroot/commit/?id=a12f6402e89d04798cadad8586bd347f62574b7f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The testsuite uses fork() hence fails on !MMU targets.
+We don't use/install these so just get rid of them.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sed/sed.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/libgcrypt/libgcrypt.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 451ba54..5535754 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -3,9 +3,11 @@
- # sed
- #
- #############################################################
--SED_VERSION = 4.2.1
--SED_SOURCE = sed-$(SED_VERSION).tar.gz
-+
-+SED_VERSION = 4.2.2
- SED_SITE = $(BR2_GNU_MIRROR)/sed
-+SED_LICENSE = GPLv3
-+SED_LICENSE_FILES = COPYING
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index a320e48..3aa60c6 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -10,6 +10,7 @@ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+ LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
+ LIBGCRYPT_INSTALL_STAGING = YES
++LIBGCRYPT_DEPENDENCIES = libgpg-error
  
- SED_CONF_OPT = --bindir=/usr/bin \
- 		--libdir=/lib \
+ LIBGCRYPT_CONF_ENV = \
+ 	ac_cv_sys_symbol_underscore=no
+@@ -17,6 +18,12 @@ LIBGCRYPT_CONF_OPT = \
+ 	--disable-optimization \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ 
+-LIBGCRYPT_DEPENDENCIES = libgpg-error
++# Tests use fork()
++define LIBGCRYPT_DISABLE_TESTS
++	$(SED) 's/ tests//' $(@D)/Makefile.in
++endef
++
++LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
++
+ 
+ $(eval $(autotools-package))
