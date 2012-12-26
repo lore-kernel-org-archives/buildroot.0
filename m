@@ -1,21 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 26 Dec 2012 23:37:58 +0100
-Subject: [Buildroot] [PATCH 1/1] dosfstools: fix download link
-In-Reply-To: <1356507627-8606-1-git-send-email-mikhailboiko85@gmail.com>
- (Mikhail Boiko's message of "Wed, 26 Dec 2012 09:40:27 +0200")
-References: <1356507627-8606-1-git-send-email-mikhailboiko85@gmail.com>
-Message-ID: <878v8k783d.fsf@dell.be.48ers.dk>
+Date: Wed, 26 Dec 2012 23:39:21 +0100
+Subject: [Buildroot] [PATCH 1/2] cdrkit: needs mmu
+In-Reply-To: <1356518959-30055-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 26 Dec 2012 07:49:18 -0300")
+References: <1356518959-30055-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874nj87812.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mikhail" == Mikhail Boiko <mikhailboiko85@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Mikhail> Signed-off-by: Mikhail Boiko <mikhailboiko85@gmail.com>
+ Gustavo> Fixes
+ Gustavo> autobuild.buildroot.net/results/10129d06088149a5ce9bd9762b5a17e5d89eec34
 
-Upstream server indeed seems to be down. Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
