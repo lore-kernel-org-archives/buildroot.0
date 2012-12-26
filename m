@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Dec 2012 09:47:19 +0100
-Subject: [Buildroot] Packet menu: X.org X Window System
-In-Reply-To: <20121226022529.GA5440@zuhnb712.ap.bm.net>
-References: <20121226022529.GA5440@zuhnb712.ap.bm.net>
-Message-ID: <20121226094719.64380938@skate>
+Date: Wed, 26 Dec 2012 09:49:37 +0100
+Subject: [Buildroot] [PATCH] usbip: new package
+In-Reply-To: <20121226070612.GC7402@sapphire.tkos.co.il>
+References: <CAOPBCFULJTm7iooZ8=nnpMoooaRq=1PK11hhYyyGVr=DdM2e2w@mail.gmail.com>
+ <20121226070612.GC7402@sapphire.tkos.co.il>
+Message-ID: <20121226094937.3c2b9383@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Woody Wu,
 
-On Wed, 26 Dec 2012 10:25:29 +0800, Woody Wu wrote:
+On Wed, 26 Dec 2012 09:06:12 +0200, Baruch Siach wrote:
+> Hi Marcin,
+> 
+> On Wed, Dec 26, 2012 at 07:44:32AM +0100, Marcin Bis wrote:
+> > The following patch adds new package: usbip (tools for sharing USB
+> > devices over network).
+> > I have tested it under various ARM builds.
+> > 
+> > Please consider adding it to Buildroot.
+> 
+> This sentence is not part of the commit log. You can put it below...
+> 
+> > 
+> > Signed-off-by: Marcin Bis <marcin@bis.org.pl>
 
-> I feel a little confused in the 'X.org X Window System' packet menu.
-> It present me with 'X Window System server' as well as 'X11R7
-> servers'. Under 'X Window System server' I can choice TinyX, under
-> the 'X11R7 servers', I can choice x.org server.  Is that a conflict?
-> Or does it means, in additional to TinyX, I still need to pick up a
-> X11R7 server to work with it?
+Please use a real e-mail here, i.e marcin at bis.org.pl
 
-There are two things:
+> > --
+> 
+> here.
 
- * The selection of the "Server Type" (i.e TinyX or Modular X.org)
- * The enabling or disabling of the X.org server
+And the separator should be --- and not --, if I'm correct.
 
-In fact, the X.org server can be compiled in two different flavors:
-
- * The modular X.org flavor, which is the one used on virtually all
-   Linux distributions. In this flavor, the device drivers (video,
-   input, etc.) are compiled separately from the X.org server and can
-   be dynamically loaded.
-
- * The TinyX variant, in which drivers are directly bundled into the X
-   server. Those drivers are more limited (in number), and are directly
-   part of the X.org server code base (as opposed to the modular X.org,
-   where each driver is a separate project, separate tarball.
-
-It would probably be more clear to have the Server Type selection as a
-sub-option of the X.org server selection.
+Best regards,
 
 Thomas
 -- 
