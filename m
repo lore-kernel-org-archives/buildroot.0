@@ -1,67 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 26 Dec 2012 18:32:20 +0100
-Subject: [Buildroot] [PATCH v3] usbip: new package
-In-Reply-To: <defa5c66-81f8-43bf-b529-5d890db965d4@zimbra2.corp.accelance.fr>
-References: <20121226163521.GL11946@sapphire.tkos.co.il>
- <defa5c66-81f8-43bf-b529-5d890db965d4@zimbra2.corp.accelance.fr>
-Message-ID: <20121226183220.2cf4b9c7@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 26 Dec 2012 14:36:26 -0300
+Subject: [Buildroot] [PATCH 1/3] gettext: bump to version 0.18.2
+In-Reply-To: <buildroot@busybox.net>
+References: <buildroot@busybox.net>
+Message-ID: <1356543388-23649-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gettext/gettext-uclibc-compat.patch        |   27 --------------------
+ .../gettext/gettext-uclibc-sched_param-def.patch   |   20 --------------
+ package/gettext/gettext.mk                         |    2 +-
+ 3 files changed, 1 insertions(+), 48 deletions(-)
+ delete mode 100644 package/gettext/gettext-uclibc-compat.patch
+ delete mode 100644 package/gettext/gettext-uclibc-sched_param-def.patch
 
-On Wed, 26 Dec 2012 17:49:57 +0100 (CET), Jeremy Rosen wrote:
-
-> I would be interested too, more and more tools are distributed with
-> the kernel that we might want to build... I'm thinking of the perf
-> tools in particular
-> 
-> is there an example somewhere on how to handle these ?
-
-Unfortunately, there isn't a really good and nice way of handling these
-in Buildroot for now.
-
-I see two options:
-
- * Add sub-options to the "Linux kernel" package, to allow the
-   installation of perf, usbip or other userspace packages whose source
-   code is bundled with the kernel source code. This is the easiest
-   solution, since the kernel version, sources and al. is already
-   defined. But it also has major drawbacks: 1/ it makes those tools
-   available only if you build your kernel with Buildroot and 2/ it
-   puts the configuration options to install those tools inside the
-   "Linux kernel" menu, which is not very intuitive.
-
- * Add separate packages for each of those tools in package/, with
-   those packages depending on the "linux" package. The extract step of
-   those packages could copy the source code of these tools from the
-   Linux kernel source tree into their build directory, or simply build
-   then directly from within the Linux kernel source tree. It solves
-   drawback (2) described above, but not drawback (1).
-
- * Add separate packages for each of those tools in package/, and make
-   them independent from the Linux package. They would for example
-   download the latest stable version of the Linux kernel source code,
-   and use that as a source. The extract step could be customized to
-   only extract the part of the kernel sources that are actually
-   relevant for this package. This would solve both drawbacks (1) and
-   (2), but adds different drawbacks: it's another place where we have
-   to bump the kernel version regularly, and people may want to
-   configure the version of the kernel sources used to build those
-   tools: the primary reason why those tools are bundled with the
-   kernel sources is because the userspace-to-kernel ABI specific to
-   those tools gets changed from time to time, and therefore there may
-   be compatibility issues in running those tools from kernel version X
-   under a system running kernel version Y.
-
-Best regards,
-
-Thomas
+diff --git a/package/gettext/gettext-uclibc-compat.patch b/package/gettext/gettext-uclibc-compat.patch
+deleted file mode 100644
+index 5e52665..0000000
+--- a/package/gettext/gettext-uclibc-compat.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-The glibc fix/hack isn't valid for uClibc.
+-Patch taken from OpenWRT.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+---- a/gettext-runtime/intl/localename.c
+-+++ b/gettext-runtime/intl/localename.c
+-@@ -2607,7 +2607,7 @@ gl_locale_name_thread_unsafe (int catego
+-     locale_t thread_locale = uselocale (NULL);
+-     if (thread_locale != LC_GLOBAL_LOCALE)
+-       {
+--#  if __GLIBC__ >= 2
+-+#  if __GLIBC__ >= 2 && !defined __UCLIBC__
+-         /* Work around an incorrect definition of the _NL_LOCALE_NAME macro in
+-            glibc < 2.12.
+-            See <http://sourceware.org/bugzilla/show_bug.cgi?id=10968>.  */
+---- a/gettext-tools/gnulib-lib/localename.c
+-+++ b/gettext-tools/gnulib-lib/localename.c
+-@@ -2607,7 +2607,7 @@ gl_locale_name_thread_unsafe (int catego
+-     locale_t thread_locale = uselocale (NULL);
+-     if (thread_locale != LC_GLOBAL_LOCALE)
+-       {
+--#  if __GLIBC__ >= 2
+-+#  if __GLIBC__ >= 2 && !defined __UCLIBC__
+-         /* Work around an incorrect definition of the _NL_LOCALE_NAME macro in
+-            glibc < 2.12.
+-            See <http://sourceware.org/bugzilla/show_bug.cgi?id=10968>.  */
+diff --git a/package/gettext/gettext-uclibc-sched_param-def.patch b/package/gettext/gettext-uclibc-sched_param-def.patch
+deleted file mode 100644
+index 4e39278..0000000
+--- a/package/gettext/gettext-uclibc-sched_param-def.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-uclibc defines __GLIBC__ but it does not expose struct shed_param as much as glibc
+-and is not needed too per standard. gnulib attempts to use it but we have to account
+-for it because in this case uclibc does not behave like glibc.
+-
+--Khem
+-
+-http://bugs.gentoo.org/336484
+-http://bugs.gentoo.org/323377
+-
+---- gettext/gettext-tools/gnulib-lib/spawn.in.h
+-+++ gettext/gettext-tools/gnulib-lib/spawn.in.h
+-@@ -31,7 +31,7 @@
+- 
+- /* Get definitions of 'struct sched_param' and 'sigset_t'.
+-    But avoid namespace pollution on glibc systems.  */
+--#ifndef __GLIBC__
+-+#if !defined __GLIBC__ || defined __UCLIBC__
+- # include <sched.h>
+- # include <signal.h>
+- #endif
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index a91cb7f..953077d 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GETTEXT_VERSION = 0.18.1.1
++GETTEXT_VERSION = 0.18.2
+ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_INSTALL_STAGING = YES
+ GETTEXT_LICENSE = GPLv2+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
