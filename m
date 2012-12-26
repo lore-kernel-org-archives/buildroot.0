@@ -1,32 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 26 Dec 2012 23:37:56 +0100
-Subject: [Buildroot] [git commit] dosfstools: fix download link
-Message-ID: <20121226224224.A59EE9A494@busybox.osuosl.org>
+Date: Wed, 26 Dec 2012 23:38:34 +0100
+Subject: [Buildroot] [git commit] cdrkit: needs mmu
+Message-ID: <20121226224224.E18DE9A43C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0810280fec7745b2534c2fa9d0526115e05b26f7
+commit: http://git.buildroot.net/buildroot/commit/?id=eca5721813e66d034fc9e45a83ca202dbccebd72
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mikhail Boiko <mikhailboiko85@gmail.com>
+Fixes
+autobuild.buildroot.net/results/10129d06088149a5ce9bd9762b5a17e5d89eec34
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dosfstools/dosfstools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/cdrkit/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 08201d3..507f485 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -5,7 +5,7 @@
- #############################################################
- 
- DOSFSTOOLS_VERSION = 3.0.12
--DOSFSTOOLS_SITE = http://www.daniel-baumann.ch/software/dosfstools
-+DOSFSTOOLS_SITE = http://fossies.org/linux/misc/
- MKDOSFS_BINARY = mkdosfs
- DOSFSCK_BINARY = dosfsck
- DOSFSLABEL_BINARY = dosfslabel
+diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
+index 7ff50f3..dfe3811 100644
+--- a/package/cdrkit/Config.in
++++ b/package/cdrkit/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_CDRKIT
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_LIBCAP
+ 	depends on BR2_LARGEFILE
++	depends on BR2_USE_MMU # fork
+ 	bool "cdrkit"
+ 	help
+ 	  cdrkit is a suite of programs for recording CDs and DVDs,
