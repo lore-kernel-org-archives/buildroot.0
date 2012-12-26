@@ -1,46 +1,97 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Dec 2012 10:55:47 -0300
-Subject: [Buildroot] [PATCH 1/3] libgcrypt: disable tests
-Message-ID: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 26 Dec 2012 10:55:48 -0300
+Subject: [Buildroot] [PATCH 2/3] gnutls: make it non-wchar friendly
+In-Reply-To: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1356530149-12305-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1356530149-12305-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The testsuite uses fork() hence fails on !MMU targets.
-We don't use/install these so just get rid of them.
+Make gnutls work for non-wchar toolchains.
+It's just a matter of throwing a helping hand to configure.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libgcrypt/libgcrypt.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+ package/connman/Config.in         |    2 +-
+ package/gnutls/Config.in          |    4 ----
+ package/gnutls/gnutls.mk          |    5 ++++-
+ package/libsoup/Config.in         |    2 +-
+ package/network-manager/Config.in |    2 +-
+ 5 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index a320e48..3aa60c6 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -10,6 +10,7 @@ LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
- LIBGCRYPT_SITE = ftp://ftp.gnupg.org/gcrypt/libgcrypt
- LIBGCRYPT_INSTALL_STAGING = YES
-+LIBGCRYPT_DEPENDENCIES = libgpg-error
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 93f9ab5..4c9741b 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+-	depends on BR2_USE_WCHAR # libglib2 and gnutls
++	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 556caea..cedf120 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_LIBGCRYPT
+-	depends on BR2_USE_WCHAR
+ 	help
+ 	  GnuTLS is a secure communications library implementing the SSL
+ 	  and TLS protocols and technologies around them.
  
- LIBGCRYPT_CONF_ENV = \
- 	ac_cv_sys_symbol_underscore=no
-@@ -17,6 +18,12 @@ LIBGCRYPT_CONF_OPT = \
- 	--disable-optimization \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
- 
--LIBGCRYPT_DEPENDENCIES = libgpg-error
-+# Tests use fork()
-+define LIBGCRYPT_DISABLE_TESTS
-+	$(SED) 's/ tests//' $(@D)/Makefile.in
-+endef
-+
-+LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
-+
- 
- $(eval $(autotools-package))
+ 	  http://www.gnu.org/software/gnutls/gnutls.html
+-
+-comment "gnutls requires a toolchain with WCHAR support"
+-	depends on !BR2_USE_WCHAR
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 2634642..506d7f5 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -10,7 +10,10 @@ GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
+ GNUTLS_LICENSE = GPLv3+ LGPLv2.1+
+ GNUTLS_LICENSE_FILES = COPYING lib/COPYING
+ GNUTLS_DEPENDENCIES = host-pkgconf libgcrypt $(if $(BR2_PACKAGE_ZLIB),zlib)
+-GNUTLS_CONF_ENV = acl_cv_rpath=no
++GNUTLS_CONF_ENV = acl_cv_rpath=no \
++	ac_cv_header_wchar_h=$(if $(BR2_USE_WCHAR),yes,no) \
++	gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
++	gt_cv_c_wint_t=$(if $(BR2_USE_WCHAR),yes,no)
+ GNUTLS_CONF_OPT = --with-libgcrypt --without-libgcrypt-prefix \
+ 		--without-p11-kit --disable-rpath
+ GNUTLS_INSTALL_STAGING = YES
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 57b425f..c3b4ceb 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBSOUP
+ 	bool "libsoup"
+-	depends on BR2_USE_WCHAR # glib2 and gnutls
++	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index e2324d6..f2544da 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_DBUS
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE # acl
+-	depends on BR2_USE_WCHAR # libglib2 and gnutls
++	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_DBUS_GLIB
 -- 
 1.7.8.6
