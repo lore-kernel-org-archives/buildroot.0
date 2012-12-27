@@ -1,31 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Dec 2012 18:54:31 +0100
-Subject: [Buildroot] [git commit] iptables: bump version
-Message-ID: <20121227175704.64C2F9A4B7@busybox.osuosl.org>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Thu, 27 Dec 2012 20:24:29 +0200
+Subject: [Buildroot] [PATCH] new package: libpciaccess
+In-Reply-To: <20121223162012.24cfdd64@skate>
+References: <1356220309-22847-1-git-send-email-stefan.froberg@petroprogram.com>
+ <87y5gpt9h0.fsf@dell.be.48ers.dk> <50D6F90F.7020104@petroprogram.com>
+ <87txrcuaz8.fsf@dell.be.48ers.dk> <50D70F60.50503@petroprogram.com>
+ <20121223162012.24cfdd64@skate>
+Message-ID: <50DC925D.4050805@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab76f7c0aff47c23d41bf64e31a7f1870e0417c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/iptables/iptables.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+23.12.2012 17:20, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
+>
+> On Sun, 23 Dec 2012 16:04:16 +0200, Stefan Fr?berg wrote:
+>
+>> That mesa3d updating beyond 7.10.3 (that I have here) seems especially
+>> interesting challenge.
+> Do you have more details about the issues involved in bumping mesa3d
+> beyond 7.10.3 ?
+>
+> Thomas
+Well, if you try to bump it to 8.0.5 version, it will abort at some point.
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 3243b3f..518b90e 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPTABLES_VERSION = 1.4.16.3
-+IPTABLES_VERSION = 1.4.17
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- IPTABLES_INSTALL_STAGING = YES
+It borks at the time it tries to compile glsl.
+
+It tries to build helper program (builtin_compiler) with system python
+(shouldn't that be HOST_DIR/usr/bin/python ???)
+and then it crashes.
+
+I have included here the actual screenshot of the situation.
+
+Regards
+Stefan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mesa3d.png
+Type: image/png
+Size: 39368 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20121227/91288579/attachment-0001.png>
