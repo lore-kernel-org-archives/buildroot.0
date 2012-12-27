@@ -1,36 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Dec 2012 18:56:12 +0100
-Subject: [Buildroot] [git commit] rng-tools: bump to version 4
-Message-ID: <20121227175705.5F4EA9A4B7@busybox.osuosl.org>
+Date: Thu, 27 Dec 2012 18:55:50 +0100
+Subject: [Buildroot] [git commit] iw: bump to version 3.8
+Message-ID: <20121227175704.CFFBD80D9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2529f7f4d18b18dac1ee00ac7655116cb805818
+commit: http://git.buildroot.net/buildroot/commit/?id=d8fcbcdfa05eb4bb975caccc35809e6a9f3e467c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rng-tools/rng-tools.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/iw/iw.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 347d89d..e997b15 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -4,9 +4,11 @@
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 19ede3a..22ea25c 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--RNG_TOOLS_VERSION = 3
-+RNG_TOOLS_VERSION = 4
- RNG_TOOLS_SITE = http://downloads.sourceforge.net/project/gkernel/rng-tools/$(RNG_TOOLS_VERSION)
- RNG_TOOLS_CONF_ENV = LIBS="-largp"
- RNG_TOOLS_DEPENDENCIES = argp-standalone
-+RNG_TOOLS_LICENSE = GPLv2
-+RNG_TOOLS_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+-IW_VERSION = 3.7
++IW_VERSION = 3.8
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+ IW_SITE = http://wireless.kernel.org/download/iw
+ IW_LICENSE = iw license
