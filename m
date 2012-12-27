@@ -1,63 +1,57 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Thu, 27 Dec 2012 22:43:57 +0200
-Subject: [Buildroot] [PATCH] new package: libpciaccess
-In-Reply-To: <50DC9CCB.8060304@petroprogram.com>
-References: <1356220309-22847-1-git-send-email-stefan.froberg@petroprogram.com>
- <87y5gpt9h0.fsf@dell.be.48ers.dk> <50D6F90F.7020104@petroprogram.com>
- <87txrcuaz8.fsf@dell.be.48ers.dk> <50D70F60.50503@petroprogram.com>
- <20121223162012.24cfdd64@skate> <50DC925D.4050805@petroprogram.com>
- <50DC9CCB.8060304@petroprogram.com>
-Message-ID: <50DCB30D.2000501@petroprogram.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 Dec 2012 00:20:36 +0100
+Subject: [Buildroot] [PATCH] package/keyutils: disable on avr32 & microblaze
+Message-ID: <1356650436-20697-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-27.12.2012 21:08, Stefan Fr?berg kirjoitti:
-> 27.12.2012 20:24, Stefan Fr?berg kirjoitti:
->> Hi Thomas
->>
->> 23.12.2012 17:20, Thomas Petazzoni kirjoitti:
->>> Dear Stefan Fr?berg,
->>>
->>> On Sun, 23 Dec 2012 16:04:16 +0200, Stefan Fr?berg wrote:
->>>
->>>> That mesa3d updating beyond 7.10.3 (that I have here) seems especially
->>>> interesting challenge.
->>> Do you have more details about the issues involved in bumping mesa3d
->>> beyond 7.10.3 ?
->>>
->>> Thomas
->> Well, if you try to bump it to 8.0.5 version, it will abort at some point.
->>
->> It borks at the time it tries to compile glsl.
->>
->> It tries to build helper program (builtin_compiler) with system python
->> (shouldn't that be HOST_DIR/usr/bin/python ???)
->> and then it crashes.
->>
->> I have included here the actual screenshot of the situation.
->>
->> Regards
->> Stefan
-> Update:
-> The situation starts even earlier than 8.0.5. Right at version 7.11
-> And changing system python to buildroot python (MESA3D_CONF_ENV +=
-> PYTHON2= $(HOST_DIR)/usr/bin/python)
-> didn't change anything.
->
+keyutils builds on neither avr32, nor microblaze (probably because
+the toolchains used fot those archictectures are way too old), with:
 
-Update2:
-Found out that this has nothing to do with python. The mesa glsl stuff
-building has changed since 7.10.3
-so that it build some helper programs (like builtin_compiler and others)
-and it builds them wrongly
-with cross-compiler while it should use system compiler.
+    ..../microblazeel-unknown-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+    -D_FILE_OFFSET_BITS=64 -I. -DPKGBUILD="\"2012-12-27\"" -DPKGVERSION="\"keyutils-1.5.5\""
+    -DAPIVERSION="\"libkeyutils-1.4\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+    -D_FILE_OFFSET_BITS=64  -pipe -Os  -g -Wall -Werror -UNO_GLIBC_KEYERR -o keyutils.o -c keyutils.c
+    cc1: warnings being treated as errors
+    key.dns_resolver.c: In function 'main':
+    key.dns_resolver.c:690: warning: dereferencing type-punned pointer will break strict-aliasing rules
 
-Solution:
-Try to give correct variables (APP_CXX=g++ and APP_CC=gcc)  to
-MESA3D_CONF_ENV and/or MESA3D_MAKE_ENV
-and see if problem goes away.
-If not, then make a patch that enforces the correct compiler for all
-those helper programs under src/glsl and src/glsl/glcpp
+Fixing with -fno-strict-aliasing only partially solves the issue for these
+two archs, since the C library does not export the resolver symbols so the
+link fails down the road...
+  - on microblaze, glibc-2.3.6 is tool old and does not set these symbols
+    as GLOBALs;
+  - on avr32, uClibc does not have these symbols.
+
+It is much more easy to just disable keyutils for avr32 and microblaze.
+
+Fixes both (avr2, microblaze):
+    http://autobuild.buildroot.net/results/aa86f6a68f5d0ea4914ab259ed270615bc9d6a99/
+    http://autobuild.buildroot.net/results/70ae127a6e353fd5c64c0c3b4e19a2e93d54ce52/
+
+Merry X-Mas!
+
+PS. Thanks Richard for the help understanding those issues.
+
+Cc: Richard Braun <rbraun@sceen.net>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/keyutils/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index 9b5a24b..9b9f9bc 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KEYUTILS
+ 	bool "keyutils"
++	depends on !BR2_avr32 && !BR2_microblaze
+ 	help
+ 	  These tools are used to control the key management system
+ 	  built into the Linux kernel.
+-- 
+1.7.2.5
