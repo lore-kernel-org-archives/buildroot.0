@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Dec 2012 20:42:01 +0100
-Subject: [Buildroot] [PATCH 08/20] efl/libelementary: bump to version 1.7.4
-	and change download location
+Date: Fri, 28 Dec 2012 20:42:02 +0100
+Subject: [Buildroot] [PATCH 09/20] efl/libembryo: bump to version 1.7.4
 In-Reply-To: <cover.1356723702.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1356723702.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0dfbf7bd78a5338f09d7c21e9fbbb171c3f483c7.1356723702.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7b84f01fd0fc512db3e4d32e4255b15b3bd199e4.1356723702.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libelementary/libelementary.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/efl/libembryo/libembryo.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-index 8957d03..81289ff 100644
---- a/package/efl/libelementary/libelementary.mk
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/efl/libembryo/libembryo.mk b/package/efl/libembryo/libembryo.mk
+index 9cab5aa..ce5c968 100644
+--- a/package/efl/libembryo/libembryo.mk
++++ b/package/efl/libembryo/libembryo.mk
+@@ -4,7 +4,7 @@
  #
- ################################################################################
+ #############################################################
  
--LIBELEMENTARY_VERSION = 0.8.0.65643
-+LIBELEMENTARY_VERSION = 1.7.4
- LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
--LIBELEMENTARY_SITE = http://download.enlightenment.org/snapshots/2011-11-28
-+LIBELEMENTARY_SITE = http://download.enlightenment.org/releases/
- LIBELEMENTARY_LICENSE = LGPLv2.1
- LIBELEMENTARY_LICENSE_FILES = COPYING
- 
+-LIBEMBRYO_VERSION = 1.1.0
++LIBEMBRYO_VERSION = 1.7.4
+ LIBEMBRYO_SOURCE = embryo-$(LIBEMBRYO_VERSION).tar.bz2
+ LIBEMBRYO_SITE = http://download.enlightenment.org/releases/
+ LIBEMBRYO_LICENSE = BSD-2c, Embryo license
 -- 
 1.7.9.5
