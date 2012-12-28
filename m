@@ -1,35 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Dec 2012 23:17:01 +0100
-Subject: [Buildroot] [PATCH] libplayer: propagate 'depends on' from mplayer
-Message-ID: <1356733021-15222-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Dec 2012 23:30:21 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dvb-apps: new package
+In-Reply-To: <d4ede3beb81857dfef0587def373e943f2a6100d.1356731295.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 28 Dec 2012 22:48:34 +0100")
+References: <cover.1356731295.git.yann.morin.1998@free.fr>
+ <cover.1356731295.git.yann.morin.1998@free.fr>
+ <d4ede3beb81857dfef0587def373e943f2a6100d.1356731295.git.yann.morin.1998@free.fr>
+Message-ID: <87ehi9yflu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_PACKAGE_LIBPLAYER_MPLAYER should not select BR2_PACKAGE_MPLAYER
-without having the 'depends on' that BR2_PACKAGE_MPLAYER has.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libplayer/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
+ Yann> We just need the transponders data, so we just install those.
 
-diff --git a/package/libplayer/Config.in b/package/libplayer/Config.in
-index fe851ac..5391b8b 100644
---- a/package/libplayer/Config.in
-+++ b/package/libplayer/Config.in
-@@ -11,6 +11,10 @@ config BR2_PACKAGE_LIBPLAYER
- if BR2_PACKAGE_LIBPLAYER
- config BR2_PACKAGE_LIBPLAYER_MPLAYER
- 	bool "mplayer backend"
-+	# mplayer
-+	depends on !BR2_sh4a && !BR2_sh4aeb && !BR2_microblaze && !BR2_aarch64
-+	# mplayer
-+	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_MPLAYER
- 
- config BR2_PACKAGE_LIBPLAYER_GSTREAMER
+Long term I think it would be good to make this a user visible package,
+and have sub options for what kind of transponder data you want to
+install, as it's fairly big (~3.4MB).
+
+ Yann> +define DVB_APPS_INSTALL_TARGET_CMDS
+ Yann> +	mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/atsc
+ Yann> +	mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/dvb-c
+ Yann> +	mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/dvb-s
+ Yann> +	mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/dvb-t
+ Yann> +	$(INSTALL) -D $(@D)/util/scan/atsc/* $(TARGET_DIR)/usr/share/dvb-apps/scan/atsc
+
+install -D expects you to name the destination file name, which doesn't
+make sense here, so I rewrote the install step to use a shell loop and
+not use the -D option.
+
+Committed with that change, thanks.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
