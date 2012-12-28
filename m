@@ -1,24 +1,64 @@
-From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
-Date: Fri, 28 Dec 2012 18:41:45 +0530
-Subject: [Buildroot] Setting up Perf for buildroot
-In-Reply-To: <CAPDLWs-tb5qydSKCRCAS1Zg6605_ZhmQn=fA6daVxgUm3tT2rw@mail.gmail.com>
-References: <CAPDLWs_Y9e_ecsk=U-PteDfFA=B8t9krpc8CM5ZzAYJ2uwH-hQ@mail.gmail.com>
- <45ecb208-6863-4266-9091-ec981005978b@zimbra2.corp.accelance.fr>
- <20121228115156.2f91b588@skate>
- <CAPDLWs-tb5qydSKCRCAS1Zg6605_ZhmQn=fA6daVxgUm3tT2rw@mail.gmail.com>
-Message-ID: <CAPDLWs9-NaW=ycWKJnni-Gs2KFA5NgMAX4g0a5OPey_pX+oBYA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Dec 2012 14:21:15 +0100
+Subject: [Buildroot] buildroot for AM3358 AM3359 with wireless-tools
+ shared library
+In-Reply-To: <1351596954.5576.22.camel@debian.fritz.box>
+References: <50897A02.7000407@rie.eu> <20121025182332.GC5178@tarshish>
+ <1351596954.5576.22.camel@debian.fritz.box>
+Message-ID: <20121228142115.50e3643d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Or, perhaps better:
+Dear J?rgen Benjamin Ronshausen,
 
-BR2_LINUX_KERNEL_USERMODE_TOOLS_XXX
+On Tue, 30 Oct 2012 12:35:54 +0100, J?rgen Benjamin Ronshausen wrote:
 
-On Fri, Dec 28, 2012 at 6:39 PM, Kaiwan Billimoria
-<kaiwan.billimoria@gmail.com> wrote:
-> So I was thinking, keep a config directive in linux/Config.in called
-> BR2_LINUX_KERNEL_TOOLS_XXX
-> where XXX is the user-mode tool to be built.
+> i am developing wireless tracking software. i use the wireless-tools
+> library to scan for wireless networks in the area.
+> 
+> i hope to use buildroot for compiling the c program, and to handle the
+> library part. my program includes  #include <iwlib.h>.
+> 
+> on my old board (arm926t) i could compile by 
+> ~/buildroot-2012.08/output/host/usr/bin/arm-linux-gcc -Wall -o
+> "oldboard" "main.c" -liw
+> 
+> The new Board is a AM335x Starter Kit with a Sitara AM3358 Cortex A8 cpu
+> and WL1271 Wifi/bluetooth module.
+> 
+> to make my toolchain i issue:
+> 
+> make beaglebone_defconfig
+> make menuconfig and select under packages, networking wireless-tools and
+> library. i included contents of .config below.
+> 
+> The first problem is, that there are no files in
+> /home/john/AM335/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib
+> i am not sure about it, but i think there should be the .so files for
+> the compiler.
+
+The problem you reported at
+https://raw.github.com/steven11/the-hunt-for-wireless-tools/master/logfile1
+was fixed in the current Git repository of Buildroot. It was a problem
+on 32 bits hosts while building a toolchain with largefile support
+disabled.
+
+The commit fixing it is
+http://git.buildroot.net/buildroot/commit/?id=7ce93438c12ca68c9bb12ed28c4d15d1fa840c94.
+You can either use the current Git of Buildroot, of backport this fix
+in 2012.11 (which should be trivial).
+
+Do not hesitate to let us know if this solves your problem, or if you
+face other issues.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
