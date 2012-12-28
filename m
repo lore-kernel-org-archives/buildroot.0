@@ -1,60 +1,87 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 10:06:06 +0100
-Subject: [Buildroot] [git commit] package/keyutils: disable on avr32 &
-	microblaze
-Message-ID: <20121228090623.1731A9A4B6@busybox.osuosl.org>
+From: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Date: Fri, 28 Dec 2012 11:18:06 +0100 (CET)
+Subject: [Buildroot] Setting up Perf for buildroot
+In-Reply-To: <CAPDLWs_Y9e_ecsk=U-PteDfFA=B8t9krpc8CM5ZzAYJ2uwH-hQ@mail.gmail.com>
+Message-ID: <45ecb208-6863-4266-9091-ec981005978b@zimbra2.corp.accelance.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20e0926f4469a3486629cfd6fa7f449f2b659aa8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+my guess is that ideally the config entries should be in packages->debug tools, but the makefile should be integrated in the linux kernel makefile
 
-keyutils builds on neither avr32, nor microblaze (probably because
-the toolchains used for those archictectures are way too old), with:
+I don't think it's possible with KConfig, though...
 
-    ..../microblazeel-unknown-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-    -D_FILE_OFFSET_BITS=64 -I. -DPKGBUILD="\"2012-12-27\"" -DPKGVERSION="\"keyutils-1.5.5\""
-    -DAPIVERSION="\"libkeyutils-1.4\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-    -D_FILE_OFFSET_BITS=64  -pipe -Os  -g -Wall -Werror -UNO_GLIBC_KEYERR -o keyutils.o -c keyutils.c
-    cc1: warnings being treated as errors
-    key.dns_resolver.c: In function 'main':
-    key.dns_resolver.c:690: warning: dereferencing type-punned pointer will break strict-aliasing rules
 
-Fixing with -fno-strict-aliasing only partially solves the issue for these
-two archs, since the C library does not export the resolver symbols so the
-link fails down the road...
-  - on microblaze, glibc-2.3.6 is tool old and does not set these symbols
-    as GLOBALs;
-  - on avr32, uClibc does not have these symbols.
+maybe add a perf directory in the packages/ dir with only the Config.in and use the variables set by that Config.in within the kernel makefiles to build the tool
 
-It is much more easy to just disable keyutils for avr32 and microblaze.
 
-Fixes both (avr2, microblaze):
-    http://autobuild.buildroot.net/results/aa86f6a68f5d0ea4914ab259ed270615bc9d6a99/
-    http://autobuild.buildroot.net/results/70ae127a6e353fd5c64c0c3b4e19a2e93d54ce52/
+(that's just an idea, I havn't looked precisely how it's done)
 
-Merry X-Mas!
+    Cordialement
 
-PS. Thanks Richard for the help understanding those issues.
+    J?r?my Rosen
 
-Cc: Richard Braun <rbraun@sceen.net>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/keyutils/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+fight key loggers : write some perl using vim
 
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-index 9b5a24b..9b9f9bc 100644
---- a/package/keyutils/Config.in
-+++ b/package/keyutils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KEYUTILS
- 	bool "keyutils"
-+	depends on !BR2_avr32 && !BR2_microblaze
- 	help
- 	  These tools are used to control the key management system
- 	  built into the Linux kernel.
+----- Mail original -----
+> De: "Kaiwan Billimoria" <kaiwan.billimoria@gmail.com>
+> ?: buildroot at busybox.net
+> Envoy?: Vendredi 28 D?cembre 2012 05:26:08
+> Objet: [Buildroot] Setting up Perf for buildroot
+> 
+> 
+> Hi All,
+> 
+> I saw this message titled "[Buildroot] elfutils and the perf
+> userspace tool" (see below) on the buildroot mailing list. Last
+> email is shown below:
+> 
+> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+> Dear Bogdan Radulescu,
+> 
+> On Thu, 6 Dec 2012 08:10:12 -0800 (PST), Bogdan Radulescu wrote:
+> 
+> > I noticed now that this is in the newer versions. I tried to build
+> > it
+> > without libelf even though it will be pretty crippled but still I
+> > didn't have any luck. http://pastie.org/pastes/5489305/text
+> > 
+> > I tried with using 3.7-rc3. In 3.4.22 isn't patched for building
+> > without libelf. On which version did you manage to build it for
+> > ARM?
+> 
+> I never built perf for ARM so far, so I can't really help,
+> unfortunately.
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+> 
+> 
+> I too am very interested in getting the 'perf' tools onto buildroot.
+> I would be willing to try this and submit a patch for the same (in
+> fact I already have one from
+> another source that seems to work, successfully cross-compiling perf
+> for ARM), but before that, I have a question:
+> 
+> 
+> What would be the appropriate location in the buildroot tree for
+> 'perf'?
+> Packages branch? Am asking as, of course, perf is a Linux *kernel*
+> (but) user-space component/tool (it lives under
+> <kernel-src-tree>/tools/perf).
+> So should we look at inserting a patch as part of the 'kernel' menu
+> or under 'packages' itself?
+> 
+> 
+> TIA!
+> Kaiwan.
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
