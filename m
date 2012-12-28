@@ -1,59 +1,65 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 22:45:47 +0100
-Subject: [Buildroot] [git commit] xserver_xorg-server: fix build on AArch64
-Message-ID: <20121228214705.1373F9A4EB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 Dec 2012 22:48:33 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem-tvheadend
+Message-ID: <cover.1356731295.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=695edcbabe5919fe52b593553c409e7ad9a4af83
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Fixes the following build issue:
+Here's a short series to add TVHeadend.
 
-Making all in fb
-  CC     libfb_la-fb24_32.lo
-In file included from fb24_32.c:30:0:
-fb.h:98:2: error: #error "GLYPHPADBYTES must be 4"
+TVHeadend implements a PVR/DVR solution, which can record either from
+a broadcast tunner (DVB-{T,S,C}, or ATSC), or IPTV multicast streams.
 
-See:
+TVHeadend can be used as a backend by media centers, such as XBMC, or
+it can be used stand-alone.
 
- http://autobuild.buildroot.org/results/9135238abcde29918f8cb61002f1fb9279884a47/build-end.log
+Changes v2 -> v3:
+  - fixed copy-paste and indentation (Thomas)
+  - added desc to tvheadend patch (Thomas)
+Changes v1 -> v2:
+  - got rid of tvheadend user (Peter)
+  - added dvb-apps package, get rid of cutom download (Thomas)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../xserver_xorg-server-aarch64-support.patch      |   23 ++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+The following changes since commit 4848386446b937d4d0d9d3e9489932ca3fcb1003:
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-aarch64-support.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-aarch64-support.patch
-new file mode 100644
-index 0000000..ec497c8
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-aarch64-support.patch
-@@ -0,0 +1,23 @@
-+Add necessary definitions for AArch64
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: xserver_xorg-server-1.9.4/include/servermd.h
-+===================================================================
-+--- xserver_xorg-server-1.9.4.orig/include/servermd.h	2009-11-04 20:31:46.000000000 +0100
-++++ xserver_xorg-server-1.9.4/include/servermd.h	2012-12-28 18:16:55.000000000 +0100
-+@@ -68,6 +68,14 @@
-+  * GLYPHPADBYTES is used.
-+  */
-+ 
-++#ifdef __aarch64__
-++
-++# define IMAGE_BYTE_ORDER	LSBFirst
-++# define BITMAP_BIT_ORDER       LSBFirst
-++# define GLYPHPADBYTES		4
-++
-++#endif
-++
-+ #ifdef __avr32__
-+ 
-+ #define IMAGE_BYTE_ORDER        MSBFirst
+  libffi: fix mips build failures (2012-12-28 16:55:09 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-tvheadend
+
+Yann E. MORIN (2):
+      package/dvb-apps: new package
+      package/tvheadend: new package
+
+ package/Config.in                                  |    1 +
+ package/dvb-apps/dvb-apps.mk                       |   32 ++++++++++
+ package/tvheadend/Config.in                        |   19 ++++++
+ package/tvheadend/S99tvheadend                     |   54 ++++++++++++++++++
+ package/tvheadend/accesscontrol.1                  |   13 ++++
+ package/tvheadend/etc.default.tvheadend            |    7 ++
+ .../tvheadend-no-auto-download-dvbscans.patch      |   60 ++++++++++++++++++++
+ package/tvheadend/tvheadend.mk                     |   43 ++++++++++++++
+ 8 files changed, 229 insertions(+), 0 deletions(-)
+ create mode 100644 package/dvb-apps/dvb-apps.mk
+ create mode 100644 package/tvheadend/Config.in
+ create mode 100644 package/tvheadend/S99tvheadend
+ create mode 100644 package/tvheadend/accesscontrol.1
+ create mode 100644 package/tvheadend/etc.default.tvheadend
+ create mode 100644 package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+ create mode 100644 package/tvheadend/tvheadend.mk
+
+Regards,
+Yann E. MORIN
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
