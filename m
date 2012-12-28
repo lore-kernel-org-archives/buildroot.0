@@ -1,54 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 21:53:54 +0100
-Subject: [Buildroot] [git commit] hostapd: remove gnutls support
-Message-ID: <20121228213150.4757B9A4EB@busybox.osuosl.org>
+Date: Fri, 28 Dec 2012 21:55:49 +0100
+Subject: [Buildroot] [git commit] ntfs-3g: needs libgcrypt
+Message-ID: <20121228213151.255549A4DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=788fcd99e0578e361f192aae4b89b15f1a60faac
+commit: http://git.buildroot.net/buildroot/commit/?id=2007e3b1ef5e6e2e646750496c7496ce831aae01
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-hostapd isn't API compatible with gnutls3 so remove support.
-It's probably hardly used since openssl is far more common, and hostapd
-can use its internal routines if it's not available.
+Now that we've moved to gnutls 3.x which no longer uses libgcrypt we
+need to pull it in as a dependency for ntfs-3g encrypted volume support
+to avoid build breakage.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/hostapd/hostapd.mk |    9 +--------
- 1 files changed, 1 insertions(+), 8 deletions(-)
+ package/ntfs-3g/Config.in  |    1 +
+ package/ntfs-3g/ntfs-3g.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 45a93fc..b18881a 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -27,7 +27,7 @@ define HOSTAPD_LIBTOMMATH_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(HOSTAPD_CONFIG)
- endef
+diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
+index 5301038..1d3e2fb 100644
+--- a/package/ntfs-3g/Config.in
++++ b/package/ntfs-3g/Config.in
+@@ -17,6 +17,7 @@ if BR2_PACKAGE_NTFS_3G
+ config BR2_PACKAGE_NTFS_3G_ENCRYPTED
+ 	bool "encrypted volumes"
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  Enable support for NTFS encrypted volumes.
  
--# Try to use openssl or gnutls if it's already available
-+# Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	HOSTAPD_DEPENDENCIES += openssl
- define HOSTAPD_TLS_CONFIG
-@@ -35,17 +35,10 @@ define HOSTAPD_TLS_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(HOSTAPD_CONFIG)
- endef
- else
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
--	HOSTAPD_DEPENDENCIES += gnutls
--define HOSTAPD_TLS_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2gnutls/' $(HOSTAPD_CONFIG)
--endef
--else
- define HOSTAPD_TLS_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(HOSTAPD_CONFIG)
- endef
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index d2e6861..cefb73a 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -23,7 +23,7 @@ endif
+ ifeq ($(BR2_PACKAGE_NTFS_3G_ENCRYPTED),y)
+ 	NTFS_3G_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+ 	NTFS_3G_CONF_OPT += --enable-crypto
+-	NTFS_3G_DEPENDENCIES += gnutls
++	NTFS_3G_DEPENDENCIES += gnutls libgcrypt
  endif
--endif
  
- ifeq ($(BR2_PACKAGE_HOSTAPD_EAP),y)
- define HOSTAPD_EAP_CONFIG
+ ifneq ($(BR2_PACKAGE_NTFS_3G_NTFSPROGS),y)
