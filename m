@@ -1,55 +1,59 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 16:54:01 +0100
-Subject: [Buildroot] [git commit] sconeserver: fix depends
-Message-ID: <20121228155606.BF7D59703D@busybox.osuosl.org>
+Date: Fri, 28 Dec 2012 16:52:29 +0100
+Subject: [Buildroot] [git commit] mysql: needs mmu
+Message-ID: <20121228155606.51DCA9A4DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bbd1204a69dcbdd86bb5a97fb20add667df5a81
+commit: http://git.buildroot.net/buildroot/commit/?id=496f7ca974f025f0c302e53592f4b232a17725e5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-sconeserver selects packages that have other depends that aren't taken
-account of.
-Fixes
-http://autobuild.buildroot.net/results/6e858387cfcb3f8d7422a29855a6a3c770d70c0e
-among probably others.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sconeserver/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/collectd/Config.in     |    3 ++-
+ package/mysql_client/Config.in |    1 +
+ package/poco/Config.in         |    1 +
+ 3 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index a7e5c75..0fc3a13 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -32,12 +32,16 @@ config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index fe520f8..74419f6 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -212,7 +212,8 @@ config BR2_PACKAGE_COLLECTD_MEMORY
  
- config BR2_PACKAGE_SCONESERVER_MYSQL
+ config BR2_PACKAGE_COLLECTD_MYSQL
  	bool "mysql"
+-	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_INSTALL_LIBSTDCPP # mysql
 +	depends on BR2_USE_MMU # mysql
  	select BR2_PACKAGE_MYSQL_CLIENT
  	help
- 	  MySQL module for Sconeserver
- 
- config BR2_PACKAGE_SCONESERVER_BLUETOOTH
- 	bool "bluetooth"
-+	depends on BR2_USE_WCHAR # bluez->libglib2
-+	depends on BR2_USE_MMU # bluez->dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus
- 	select BR2_PACKAGE_BLUEZ_UTILS
+ 	  Connects to a MySQL database and issues a "show status" command.
+diff --git a/package/mysql_client/Config.in b/package/mysql_client/Config.in
+index f07fdb4..970b9b9 100644
+--- a/package/mysql_client/Config.in
++++ b/package/mysql_client/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MYSQL_CLIENT
+ 	bool "MySQL client"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
  	help
- 	  Bluetooth module for Sconeserver
-@@ -50,6 +54,8 @@ config BR2_PACKAGE_SCONESERVER_RSS
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 36d8de9..20a8f2d 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -51,6 +51,7 @@ config BR2_PACKAGE_POCO_DATA_SQLITE
  
- config BR2_PACKAGE_SCONESERVER_LOCATION
- 	bool "location"
-+	depends on BR2_USE_MMU # gpsd
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
- 	select BR2_PACKAGE_GPSD
- 	help
- 	  Location module for Sconeserver
+ config BR2_PACKAGE_POCO_DATA_MYSQL
+ 	bool "mysql"
++	depends on BR2_USE_MMU # mysql
+ 	select BR2_PACKAGE_POCO_DATA
+ 	select BR2_PACKAGE_MYSQL_CLIENT
+ 
