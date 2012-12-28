@@ -1,43 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Dec 2012 20:50:48 +0100
-Subject: [Buildroot] [PATCH 15/20] efl/expedite: bump to 1.7.4
-In-Reply-To: <de051bb152fd3f20c9af502000de61e004925a95.1356723702.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1356723702.git.thomas.petazzoni@free-electrons.com>
- <de051bb152fd3f20c9af502000de61e004925a95.1356723702.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20121228205048.38c0b205@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 28 Dec 2012 20:54:24 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tvheadend: new package
+In-Reply-To: <20121228204837.7ba7b56b@skate>
+References: <cover.1356719913.git.yann.morin.1998@free.fr>
+ <10a2519ee66e733b1837c6b48c59a90887086be5.1356719913.git.yann.morin.1998@free.fr>
+ <20121228204837.7ba7b56b@skate>
+Message-ID: <201212282054.25016.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
-On Fri, 28 Dec 2012 20:42:08 +0100, Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/efl/expedite/expedite.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Friday 28 December 2012 Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
 > 
-> diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
-> index f25294e..4b245ec 100644
-> --- a/package/efl/expedite/expedite.mk
-> +++ b/package/efl/expedite/expedite.mk
-> @@ -4,7 +4,7 @@
->  #
->  #############################################################
->  
-> -EXPEDITE_VERSION = 1.7.3
-> +EXPEDITE_VERSION = 1.7.4
+> On Fri, 28 Dec 2012 19:42:12 +0100, Yann E. MORIN wrote:
+> 
+> > @@ -0,0 +1,18 @@
+> > +#comment "tvheadend requires a toolchain with WCHAR and LARGEFILE support"
+> > +#	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE
+> 
+> Hum?
 
-Gaah, this should have been merged in PATCH 02/20. I'm fixing this and
-pushing an updated branch in my public Git repo. I will not repost
-immediately to the list, but instead wait for more reviews.
+Left-over from a previous iteration.
+That was for pyton, but python is needed only at build-time.
 
-Thanks,
+> > diff --git a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+> > new file mode 100644
+> > index 0000000..103f5ef
+> > --- /dev/null
+> > +++ b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+> > @@ -0,0 +1,50 @@
+> > +diff -durN tvheadend-v3.3.orig//configure tvheadend-v3.3/configure
+> > +--- tvheadend-v3.3.orig//configure	2012-09-25 15:32:31.000000000 +0200
+> > ++++ tvheadend-v3.3/configure	2012-12-28 17:17:23.580253413 +0100
+> 
+> Patch lacks description.
 
-Thomas
+Right.
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
