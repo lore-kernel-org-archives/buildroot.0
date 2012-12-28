@@ -1,66 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 21:36:43 +0100
-Subject: [Buildroot] [git commit] nettle: add new package
-Message-ID: <20121228213150.131349A4DE@busybox.osuosl.org>
+Date: Fri, 28 Dec 2012 22:26:29 +0100
+Subject: [Buildroot] [git commit] network-manager: needs libgcrypt
+Message-ID: <20121228213151.9C4379A4DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac4e3c02d43708ed1263186b52a791c615d67cce
+commit: http://git.buildroot.net/buildroot/commit/?id=ecb73fbe0ced07034dc637eff4653f732e7487b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Since we moved to gnutls 3.x series which doesn't use libgcrypt we need
+to pull it in as a dependency to avoid build breakage.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/nettle/Config.in |    9 +++++++++
- package/nettle/nettle.mk |   12 ++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ package/network-manager/Config.in          |    1 +
+ package/network-manager/network-manager.mk |    3 ++-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3d556b2..6c82bab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -363,6 +363,7 @@ source "package/gnutls/Config.in"
- source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
- source "package/libnss/Config.in"
-+source "package/nettle/Config.in"
- source "package/ocf-linux/Config.in"
- source "package/openssl/Config.in"
- source "package/polarssl/Config.in"
-diff --git a/package/nettle/Config.in b/package/nettle/Config.in
-new file mode 100644
-index 0000000..5577621
---- /dev/null
-+++ b/package/nettle/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_NETTLE
-+	bool "nettle"
-+	select BR2_PACKAGE_GMP
-+	help
-+	  Nettle is a cryptographic library that is designed to fit easily
-+	  in more or less any context: In crypto toolkits for object-oriented
-+	  languages, in applications like LSH or GNUPG, or even in kernel space
-+
-+	  http://www.lysator.liu.se/~nisse/nettle/
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-new file mode 100644
-index 0000000..ef7640a
---- /dev/null
-+++ b/package/nettle/nettle.mk
-@@ -0,0 +1,12 @@
-+NETTLE_VERSION = 2.5
-+NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
-+NETTLE_DEPENDENCIES = gmp
-+NETTLE_INSTALL_STAGING = YES
-+
-+define NETTLE_DITCH_DEBUGGING_CFLAGS
-+	$(SED) '/CFLAGS/ s/ -ggdb3//' $(@D)/configure
-+endef
-+
-+NETTLE_POST_EXTRACT_HOOKS += NETTLE_DITCH_DEBUGGING_CFLAGS
-+
-+$(eval $(autotools-package))
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index f2544da..9b84083 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	select BR2_PACKAGE_UDEV
+ 	select BR2_PACKAGE_UDEV_ALL_EXTRAS
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBNL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index d14c98d..2a68c96 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -7,7 +7,8 @@ NETWORK_MANAGER_VERSION = 0.9.2.0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.bz2
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+-NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl wireless_tools gnutls util-linux
++NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
++	libgcrypt wireless_tools util-linux
+ 
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
