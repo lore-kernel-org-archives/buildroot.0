@@ -1,35 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 11:55:28 +0100
-Subject: [Buildroot] [git commit] freetype: fix legal-info
-Message-ID: <20121228105529.BBE939A4D1@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 28 Dec 2012 07:59:00 -0300
+Subject: [Buildroot] [PATCH 1/2] dialog: needs mmu
+Message-ID: <1356692341-26066-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=141314d38a9b8b007d338dc1caf2c6b0ccd14a9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-My mistake, wrong capitalization, fixes
-http://autobuild.buildroot.net/results/10261b94d95f7547a08d8fa1d0b0ddcae85c38a3
+Fixes
+http://autobuild.buildroot.net/results/b673ef6d6315dc5df77e000199a63f90904829d5
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/freetype/freetype.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dialog/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index be87a48..be0f1a7 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -10,7 +10,7 @@ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FR
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_LICENSE = Dual FTL/GPLv2+
--FREETYPE_LICENSE_FILES = docs/FTL.txt docs/GPLv2.txt
-+FREETYPE_LICENSE_FILES = docs/FTL.TXT docs/GPLv2.TXT
- FREETYPE_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
- 	$(if $(BR2_PACKAGE_BZIP2),bzip2)
+diff --git a/package/dialog/Config.in b/package/dialog/Config.in
+index 9d3462e..db5197f 100644
+--- a/package/dialog/Config.in
++++ b/package/dialog/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_DIALOG
+ 	bool "dialog"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # fork()
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+-- 
+1.7.8.6
