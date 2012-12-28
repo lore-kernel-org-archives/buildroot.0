@@ -1,55 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Dec 2012 09:07:37 -0300
-Subject: [Buildroot] [PATCH 3/3] sconeserver: fix depends
-In-Reply-To: <1356696457-12445-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1356696457-12445-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1356696457-12445-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 28 Dec 2012 10:05:54 -0300
+Subject: [Buildroot] [PATCH 1/2] mysql_client: bump to version 5.1.67
+Message-ID: <1356699955-27479-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sconeserver selects packages that have other depends that aren't taken
-account of.
-Fixes
-http://autobuild.buildroot.net/results/6e858387cfcb3f8d7422a29855a6a3c770d70c0e
-among probably others.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sconeserver/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/mysql_client/mysql_client.mk |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index a7e5c75..0fc3a13 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -32,12 +32,16 @@ config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 9785aee..1477b66 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -4,12 +4,14 @@
+ #
+ #############################################################
  
- config BR2_PACKAGE_SCONESERVER_MYSQL
- 	bool "mysql"
-+	depends on BR2_USE_MMU # mysql
- 	select BR2_PACKAGE_MYSQL_CLIENT
- 	help
- 	  MySQL module for Sconeserver
+-MYSQL_CLIENT_VERSION = 5.1.66
++MYSQL_CLIENT_VERSION = 5.1.67
+ MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
+ MYSQL_CLIENT_INSTALL_STAGING = YES
+ MYSQL_CLIENT_DEPENDENCIES = readline ncurses
+-MYSQL_CLIENT_AUTORECONF=YES
++MYSQL_CLIENT_AUTORECONF = YES
++MYSQL_CLIENT_LICENSE = GPLv2
++MYSQL_CLIENT_LICENSE_FILES = README COPYING
  
- config BR2_PACKAGE_SCONESERVER_BLUETOOTH
- 	bool "bluetooth"
-+	depends on BR2_USE_WCHAR # bluez->libglib2
-+	depends on BR2_USE_MMU # bluez->dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez->dbus
- 	select BR2_PACKAGE_BLUEZ_UTILS
- 	help
- 	  Bluetooth module for Sconeserver
-@@ -50,6 +54,8 @@ config BR2_PACKAGE_SCONESERVER_RSS
- 
- config BR2_PACKAGE_SCONESERVER_LOCATION
- 	bool "location"
-+	depends on BR2_USE_MMU # gpsd
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # gpsd
- 	select BR2_PACKAGE_GPSD
- 	help
- 	  Location module for Sconeserver
+ MYSQL_CLIENT_CONF_ENV = \
+ 	ac_cv_sys_restartable_syscalls=yes \
 -- 
 1.7.8.6
