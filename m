@@ -1,36 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Dec 2012 21:56:11 +0100
-Subject: [Buildroot] [git commit] glib-networking: fix build failure with
-	gnutls3
-Message-ID: <20121228213151.46FEE9A4DE@busybox.osuosl.org>
+Date: Fri, 28 Dec 2012 21:55:48 +0100
+Subject: [Buildroot] [git commit] wpa_supplicant: remove gnutls support
+Message-ID: <20121228213150.8070C9A4DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=484652cbd8d4a647f7833b2e032d0d37147e8424
+commit: http://git.buildroot.net/buildroot/commit/?id=c89cc4b4b311b927d0c02af5717c6cc1150a1480
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+wpa_supplicant isn't API compatible with gnutls3 so remove support.
+It's probably hardly used since openssl is far more common, and
+wpa_supplicant can use its internal routines if it's not available.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/glib-networking/glib-networking.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.mk |    9 +--------
+ 1 files changed, 1 insertions(+), 8 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index b1eec4d..e8d71e5 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -25,4 +25,11 @@ else
- GLIB_NETWORKING_CONF_OPT += --without-gnutls
- endif
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 71be11f..3830d65 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -59,7 +59,7 @@ define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
+ 	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ endef
  
-+# gnutls 3.x+ doesn't use libgcrypt, it uses nettle/hogweed
-+define GLIB_NETWORKING_NO_LIBGCRYPT
-+	$(SED) 's:#include <gcrypt.h>::' $(@D)/tls/gnutls/gtlsbackend-gnutls.c
-+endef
-+
-+GLIB_NETWORKING_POST_EXTRACT_HOOKS += GLIB_NETWORKING_NO_LIBGCRYPT
-+
- $(eval $(autotools-package))
+-# Try to use openssl or gnutls if it's already available
++# Try to use openssl if it's already available
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += openssl
+ define WPA_SUPPLICANT_TLS_CONFIG
+@@ -67,17 +67,10 @@ define WPA_SUPPLICANT_TLS_CONFIG
+ 	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
+ endef
+ else
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-	WPA_SUPPLICANT_DEPENDENCIES += gnutls
+-define WPA_SUPPLICANT_TLS_CONFIG
+-	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2gnutls/' $(WPA_SUPPLICANT_CONFIG)
+-endef
+-else
+ define WPA_SUPPLICANT_TLS_CONFIG
+ 	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(WPA_SUPPLICANT_CONFIG)
+ endef
+ endif
+-endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
