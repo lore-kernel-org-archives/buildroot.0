@@ -1,33 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Dec 2012 07:34:17 -0300
-Subject: [Buildroot] [PATCH] freetype: fix legal-info
-Message-ID: <1356690857-28463-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 28 Dec 2012 11:51:56 +0100
+Subject: [Buildroot] Setting up Perf for buildroot
+In-Reply-To: <45ecb208-6863-4266-9091-ec981005978b@zimbra2.corp.accelance.fr>
+References: <CAPDLWs_Y9e_ecsk=U-PteDfFA=B8t9krpc8CM5ZzAYJ2uwH-hQ@mail.gmail.com>
+ <45ecb208-6863-4266-9091-ec981005978b@zimbra2.corp.accelance.fr>
+Message-ID: <20121228115156.2f91b588@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-My mistake, wrong capitalization, fixes
-http://autobuild.buildroot.net/results/10261b94d95f7547a08d8fa1d0b0ddcae85c38a3
+Dear Jeremy Rosen,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/freetype/freetype.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Please fix your e-mail client to wrap lines at a reasonable width.
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index be87a48..be0f1a7 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -10,7 +10,7 @@ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FR
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_LICENSE = Dual FTL/GPLv2+
--FREETYPE_LICENSE_FILES = docs/FTL.txt docs/GPLv2.txt
-+FREETYPE_LICENSE_FILES = docs/FTL.TXT docs/GPLv2.TXT
- FREETYPE_DEPENDENCIES = host-pkgconf \
- 	$(if $(BR2_PACKAGE_ZLIB),zlib) \
- 	$(if $(BR2_PACKAGE_BZIP2),bzip2)
+On Fri, 28 Dec 2012 11:18:06 +0100 (CET), Jeremy Rosen wrote:
+
+> my guess is that ideally the config entries should be in packages->debug tools, but the makefile should be integrated in the linux kernel makefile
+> 
+> I don't think it's possible with KConfig, though...
+> 
+> 
+> maybe add a perf directory in the packages/ dir with only the Config.in and use the variables set by that Config.in within the kernel makefiles to build the tool
+
+See:
+
+Subject: Re: [Buildroot] [PATCH v3] usbip: new package
+Date: Wed, 26 Dec 2012 18:32:20 +0100
+
+where I did some suggestions on how to do this.
+
+Thomas
 -- 
-1.7.8.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
