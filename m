@@ -1,62 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 28 Dec 2012 20:42:10 +0100
-Subject: [Buildroot] [PATCH 17/20] librsvg: relax dependency on Gtk,
-	add gdk-pixbuf dependency
+Date: Fri, 28 Dec 2012 20:42:12 +0100
+Subject: [Buildroot] [PATCH 19/20] xcb-util-keysyms: new package
 In-Reply-To: <cover.1356723702.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1356723702.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <6d737cde125047e0aca0b94cb49512276f8506fe.1356723702.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8e728ec906c3f9d66be5dcdfe2975e630bbc38d7.1356723702.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-librsvg doesn't *require* Gtk, it can optionally build a Gtk theme
-engine, but it is not mandatory. Therefore, we make the Gtk dependency
-an optional dependency rather than a hard dependency. This will be
-useful as librsvg will become a dependency of libevas-generic-loaders,
-used in an EFL context in which building libgtk is not really what we
-want.
-
-However, gdk-pixbuf is a mandatory dependency to build librsvg, so we
-add this one.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/librsvg/Config.in  |    2 +-
- package/librsvg/librsvg.mk |    8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/x11r7/Config.in                            |    1 +
+ package/x11r7/xcb-util-keysyms/Config.in           |   14 ++++++++++++++
+ package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk |   12 ++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/x11r7/xcb-util-keysyms/Config.in
+ create mode 100644 package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
 
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index fdb7d31..855b3d6 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_LIBGLIB2
--	depends on BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_GDK_PIXBUF
- 	depends on BR2_USE_WCHAR # glib2
- 	help
- 	  The rsvg library is an efficient renderer for Scalable
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e54c06c..745fcfa 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -11,6 +11,12 @@ LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
- LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_OPT = --disable-tools
--LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
-+LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index bb538e1..94ad8a4 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -39,6 +39,7 @@ endmenu
+ 		source package/x11r7/mesa3d/Config.in
+ 		source package/x11r7/pthread-stubs/Config.in
+ 		source package/x11r7/xcb-util/Config.in
++		source package/x11r7/xcb-util-keysyms/Config.in
+ 		source package/x11r7/xlib_libFS/Config.in
+ 		source package/x11r7/xlib_libICE/Config.in
+ 		source package/x11r7/xlib_libSM/Config.in
+diff --git a/package/x11r7/xcb-util-keysyms/Config.in b/package/x11r7/xcb-util-keysyms/Config.in
+new file mode 100644
+index 0000000..ef42eb2
+--- /dev/null
++++ b/package/x11r7/xcb-util-keysyms/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_XCB_UTIL_KEYSYMS
++	bool "xcb-util-keysyms"
++	help
++	  The XCB util modules provides a number of libraries which sit on top
++	  of libxcb, the core X protocol library, and some of the extension
++	  libraries. These experimental libraries provide convenience functions
++	  and interfaces which make the raw X protocol more usable. Some of the
++	  libraries also provide client-side code which is not strictly part of
++	  the X protocol but which have traditionally been provided by Xlib.
 +
-+# If we have Gtk2, let's build it first to benefit from librsvg Gtk
-+# support.
-+ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-+LIBRSVG_DEPENDENCIES += libgtk2
-+endif
- 
- $(eval $(autotools-package))
++	  XCB util-keysyms module provides the following library: keysyms:
++	  Standard X key constants and conversion to/from keycodes.
++
++	  http://xcb.freedesktop.org/
+diff --git a/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
+new file mode 100644
+index 0000000..18db52a
+--- /dev/null
++++ b/package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# xcb-util-keysyms
++#
++#############################################################
++XCB_UTIL_KEYSYMS_VERSION = 0.3.9
++XCB_UTIL_KEYSYMS_SOURCE = xcb-util-keysyms-$(XCB_UTIL_KEYSYMS_VERSION).tar.bz2
++XCB_UTIL_KEYSYMS_SITE = http://xcb.freedesktop.org/dist/
++XCB_UTIL_KEYSYMS_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
++
 -- 
 1.7.9.5
