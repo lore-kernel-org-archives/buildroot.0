@@ -1,49 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 28 Dec 2012 16:47:20 -0300
-Subject: [Buildroot] [PATCH 4/7] ntfs-3g: needs libgcrypt
+Date: Fri, 28 Dec 2012 16:47:21 -0300
+Subject: [Buildroot] [PATCH 5/7] glib-networking: fix build failure with
+	gnutls3
 In-Reply-To: <1356724043-8879-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1356724043-8879-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1356724043-8879-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1356724043-8879-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we've moved to gnutls 3.x which no longer uses libgcrypt we
-need to pull it in as a dependency for ntfs-3g encrypted volume support
-to avoid build breakage.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ntfs-3g/Config.in  |    1 +
- package/ntfs-3g/ntfs-3g.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/glib-networking/glib-networking.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index 5301038..1d3e2fb 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -17,6 +17,7 @@ if BR2_PACKAGE_NTFS_3G
- config BR2_PACKAGE_NTFS_3G_ENCRYPTED
- 	bool "encrypted volumes"
- 	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_LIBGCRYPT
- 	help
- 	  Enable support for NTFS encrypted volumes.
- 
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index d2e6861..cefb73a 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -23,7 +23,7 @@ endif
- ifeq ($(BR2_PACKAGE_NTFS_3G_ENCRYPTED),y)
- 	NTFS_3G_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
- 	NTFS_3G_CONF_OPT += --enable-crypto
--	NTFS_3G_DEPENDENCIES += gnutls
-+	NTFS_3G_DEPENDENCIES += gnutls libgcrypt
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+index b1eec4d..e8d71e5 100644
+--- a/package/glib-networking/glib-networking.mk
++++ b/package/glib-networking/glib-networking.mk
+@@ -25,4 +25,11 @@ else
+ GLIB_NETWORKING_CONF_OPT += --without-gnutls
  endif
  
- ifneq ($(BR2_PACKAGE_NTFS_3G_NTFSPROGS),y)
++# gnutls 3.x+ doesn't use libgcrypt, it uses nettle/hogweed
++define GLIB_NETWORKING_NO_LIBGCRYPT
++	$(SED) 's:#include <gcrypt.h>::' $(@D)/tls/gnutls/gtlsbackend-gnutls.c
++endef
++
++GLIB_NETWORKING_POST_EXTRACT_HOOKS += GLIB_NETWORKING_NO_LIBGCRYPT
++
+ $(eval $(autotools-package))
 -- 
 1.7.8.6
