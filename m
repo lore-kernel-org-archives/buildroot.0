@@ -1,27 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Dec 2012 22:34:32 +0100
-Subject: [Buildroot] [pull request] Pull request for branch yem-tvheadend
-In-Reply-To: <201212282226.18134.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 28 Dec 2012 22:26:18 +0100")
-References: <cover.1356719913.git.yann.morin.1998@free.fr>
- <201212282226.18134.yann.morin.1998@free.fr>
-Message-ID: <87r4m9yi6v.fsf@dell.be.48ers.dk>
+Date: Fri, 28 Dec 2012 22:46:15 +0100
+Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: fix build on
+	AArch64
+In-Reply-To: <1356727276-13075-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 28 Dec 2012 21:41:16 +0100")
+References: <1356727276-13075-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mwwxyhnc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Yann> Hello All!
- Yann> On Friday 28 December 2012 Yann E. MORIN wrote:
- >> Here's a short series to add TVHeadend.
+ Thomas> Fixes the following build issue:
+ Thomas> Making all in fb
+ Thomas>   CC     libfb_la-fb24_32.lo
+ Thomas> In file included from fb24_32.c:30:0:
+ Thomas> fb.h:98:2: error: #error "GLYPHPADBYTES must be 4"
 
- Yann> After Thomas' review, I've pushed an updated series, to be pulled from
- Yann> the same location.
+Committed, thanks.
 
-It's a short series, could you please resend it (easier for review).
+Don't forget to send patch upstream.
 
 -- 
 Bye, Peter Korsgaard
