@@ -1,30 +1,44 @@
-From: =?ISO-8859-15?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Sat, 29 Dec 2012 22:18:52 +0200
-Subject: [Buildroot] Generating patches against packages source code
-In-Reply-To: <201212292056.25164.yann.morin.1998@free.fr>
-References: <1356745553-15362-1-git-send-email-stefan.froberg@petroprogram.com>
- <20121229193947.2e157779@skate> <50DF3ED3.60702@petroprogram.com>
- <201212292056.25164.yann.morin.1998@free.fr>
-Message-ID: <50DF502C.90300@petroprogram.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 29 Dec 2012 21:15:32 +0100
+Subject: [Buildroot] [PATCH 15/20] efl/expedite: bump to 1.7.4
+In-Reply-To: <20121228205048.38c0b205@skate> (Thomas Petazzoni's message of
+ "Fri, 28 Dec 2012 20:50:48 +0100")
+References: <cover.1356723702.git.thomas.petazzoni@free-electrons.com>
+ <de051bb152fd3f20c9af502000de61e004925a95.1356723702.git.thomas.petazzoni@free-electrons.com>
+ <20121228205048.38c0b205@skate>
+Message-ID: <87bodcwr6j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-29.12.2012 21:56, Yann E. MORIN kirjoitti:
-> Stefan, All,
->
-> On Saturday 29 December 2012 Stefan Fr?berg wrote:
->> We "real" programmers just use nano as editor and raw diff as our patch
->> generating tool.
->> ;-)
-> Real Programmers use butterflies:
->     https://xkcd.com/378/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-ROLF!
-:D
+ Thomas> On Fri, 28 Dec 2012 20:42:08 +0100, Thomas Petazzoni wrote:
+ >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ >> ---
+ >> package/efl/expedite/expedite.mk |    2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> 
+ >> diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
+ >> index f25294e..4b245ec 100644
+ >> --- a/package/efl/expedite/expedite.mk
+ >> +++ b/package/efl/expedite/expedite.mk
+ >> @@ -4,7 +4,7 @@
+ >> #
+ >> #############################################################
+ >> 
+ >> -EXPEDITE_VERSION = 1.7.3
+ >> +EXPEDITE_VERSION = 1.7.4
 
-> Regards,
-> Yann E. MORIN.
->
+ Thomas> Gaah, this should have been merged in PATCH 02/20. I'm fixing
+ Thomas> this and pushing an updated branch in my public Git repo. I
+ Thomas> will not repost immediately to the list, but instead wait for
+ Thomas> more reviews.
+
+I believe it is good to go +/- the small comments I had. Care to fix up
+those and resend?
+
+-- 
+Bye, Peter Korsgaard
