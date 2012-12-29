@@ -1,45 +1,69 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 29 Dec 2012 14:23:56 +0100
-Subject: [Buildroot] [git commit] nettle: fix missing link to libm
-Message-ID: <20121229133117.BF1589A51C@busybox.osuosl.org>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Sat, 29 Dec 2012 16:13:14 +0200
+Subject: [Buildroot] (no subject)
+In-Reply-To: <20121229085947.130784d2@skate>
+References: <1356745553-15362-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20121229085947.130784d2@skate>
+Message-ID: <50DEFA7A.7020002@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7665bab422e79a252a4a45cfd696c34a19dabfdf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+29.12.2012 9:59, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
+>
+> On Sat, 29 Dec 2012 03:45:48 +0200, Stefan Fr?berg wrote:
+>
+>> Finally after dosens of reruns got damn Mesa 8.0.5 to compile.
+>> The biggest obstacle was src/glsl/builtin_compiler but after
+>> searching Net for how others had done it I finally got it.
+>>
+>> mesa3d-uclibc-locale.patch did not apply cleanly anymore to this
+>> version.
+>> So I had to fetch new one from openembedded repo.
+>> Did take also few other patches from there 
+>> and fixed execinfo.h stuff.
+> Thanks. Having five patches with the same title is not correct. And
+> since it seems your five patches are all together needed to get Mesa
+> 8.0.5 to build, then you should simply merge your five patches into
+> just one.
+>
+> I'm adding specific comments on each patch.
+>
+> Thanks!
+>
+> Thomas
 
-nettle-benchmark uses ldexp without explicitly linking to libm, fixes:
-http://autobuild.buildroot.net/results/c8e64fabcb98b1ff4bf737e2181b7cf2ae731550
+Thomas, can you tell a git newbie like me how to make single patch but
+still keeping that Signed-off line in
+each logical file in that single one patch ?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...le-Added-lm-when-linking-nettle-benchmark.patch |   17 +++++++++++++++++
- 1 files changed, 17 insertions(+), 0 deletions(-)
+I mean like this:
 
-diff --git a/package/nettle/nettle-Added-lm-when-linking-nettle-benchmark.patch b/package/nettle/nettle-Added-lm-when-linking-nettle-benchmark.patch
-new file mode 100644
-index 0000000..ca4d639
---- /dev/null
-+++ b/package/nettle/nettle-Added-lm-when-linking-nettle-benchmark.patch
-@@ -0,0 +1,17 @@
-+Added -lm when linking nettle-benchmark.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff --git a/examples/Makefile.in b/examples/Makefile.in
-+index 909fdda..3becd08 100644
-+--- a/examples/Makefile.in
-++++ b/examples/Makefile.in
-+@@ -11,7 +11,7 @@ PRE_CPPFLAGS = -I.. -I$(top_srcdir)
-+ PRE_LDFLAGS = -L..
-+ 
-+ OPENSSL_LIBFLAGS = @OPENSSL_LIBFLAGS@
-+-BENCH_LIBS = @BENCH_LIBS@
-++BENCH_LIBS = @BENCH_LIBS@ -lm
-+ 
-+ RSA_TARGETS = rsa-keygen$(EXEEXT) rsa-sign$(EXEEXT) \
-+ 	      rsa-verify$(EXEEXT) rsa-encrypt$(EXEEXT) rsa-decrypt$(EXEEXT)
+Signef-off: Stefan
+
+Some stuff....
+
+Signef-off: Stefan
+
+Some more stuff ....
+
+
+etc.....
+
+
+So far I have done the following:
+
+create branch
+
+make some changes
+git add those_changes
+git commit -s -m "description"
+
+repeat the previous three if necessary
+
+git format-patch -M master
+
+git send-email .......
