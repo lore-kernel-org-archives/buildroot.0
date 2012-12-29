@@ -1,51 +1,208 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 29 Dec 2012 22:42:34 +0100
-Subject: [Buildroot] [git commit] docs/manual: remove FAQ entry about
-	'depends on' vs. 'select'
-Message-ID: <20121229214338.8866F9A52D@busybox.osuosl.org>
+Date: Sat, 29 Dec 2012 22:42:23 +0100
+Subject: [Buildroot] [git commit] docs/manual: add a new 'Details on
+	Buildroot configuration' section
+Message-ID: <20121229214337.E9E549A52D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=163ec179046b83c3362f288a0589b502ee7610ae
+commit: http://git.buildroot.net/buildroot/commit/?id=d21a858792e4646d7b366387608400ff29bca575
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The FAQ is before the section on package development, and only covers
-user issues, not developer issues, so the FAQ entry about 'depends on'
-vs. 'select' really doesn't have its place here.
+As discussed with Samuel Martin, there are a few questions about some
+Buildroot configuration aspects that come very often on the IRC
+channel and on the mailing-list. Topics such as the /dev management
+and init systems are often raised.
 
-And the 'depends on' vs. 'select' issue is already covered in a later
-section, see
-http://buildroot.org/downloads/manual/manual.html#depends-on-vs-select.
+Therefore, this patch adds a new section that provides details about
+the Buildroot configuration possibilities. It does not aim at
+replacing the help text of each configuration option, but rather to
+complement them by providing more background. Having those
+informations in the manual will also make it easier for us to point
+newcomers to the right place in the documentation when they have
+questions.
+
+Note that this section will replace the "Embedded basics" section that
+comes way too late in the manual. This is done in a followup commit.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/faq-troubleshooting.txt |   11 -----------
- 1 files changed, 0 insertions(+), 11 deletions(-)
+ docs/manual/configure.txt    |  151 ++++++++++++++++++++++++++++++++++++++++++
+ docs/manual/working-with.txt |    2 +
+ 2 files changed, 153 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index 5a22702..5d9531b 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -89,17 +89,6 @@ If you need documentation data on your target anyway, then Buildroot
- is not suitable for your purpose, and you should look for a _real
- distribution_ (see: xref:faq-no-compiler-on-target[]).
+diff --git a/docs/manual/configure.txt b/docs/manual/configure.txt
+new file mode 100644
+index 0000000..2c7987d
+--- /dev/null
++++ b/docs/manual/configure.txt
+@@ -0,0 +1,151 @@
++// -*- mode:doc -*- ;
++
++[[configure]]
++Details on Buildroot configuration
++----------------------------------
++
++All the configuration options in +make *config+ have a help text
++providing details about the option. However, a number of topics
++require additional details that cannot easily be covered in the help
++text and are there covered in the following sections.
++
++/dev management
++~~~~~~~~~~~~~~~
++
++On a Linux system, the +/dev+ directory contains special files, called
++_device files_, that allow userspace applications to access the
++hardware devices managed by the Linux kernel. Without these _device
++files_, your userspace applications would not be able to use the
++hardware devices, even if they are properly recognized by the Linux
++kernel.
++
++Under +System configuration+, +/dev management+, Buildroot offers four
++different solutions to handle the +/dev+ directory :
++
++ * The first solution is *Static using device table*. This is the old
++   classical way of handling device files in Linux. With this method,
++   the device files are persistently stored in the root filesystem
++   (i.e they persist accross reboots), and there is nothing that will
++   automatically create and remove those device files when hardware
++   devices are added or removed from the system. Buildroot therefore
++   creates a standard set of device files using a _device table_, the
++   default one being stored in +system/device_table_dev.txt+ in the
++   Buildroot source code. This file is processed when Buildroot
++   generates the final root filesystem image, and the _device files_
++   are therefore not visible in the +output/target+ directory. The
++   +BR2_ROOTFS_STATIC_DEVICE_TABLE+ option allows to change the
++   default device table used by Buildroot, or to add an additional
++   device table, so that additional _device files_ are created by
++   Buildroot during the build. So, if you use this method, and a
++   _device file_ is missing in your system, you can for example create
++   a +board/<yourcompany>/<yourproject>/device_table_dev.txt+ file
++   that contains the description of your additional _device files_,
++   and then you can set +BR2_ROOTFS_STATIC_DEVICE_TABLE+ to
++   +system/device_table_dev.txt
++   board/<yourcompany>/<yourproject>/device_table_dev.txt+. For more
++   details about the format of the device table file, see
++   xref:makedev-syntax[].
++
++ * The second solution is *Dynamic using devtmpfs only*. _devtmpfs_ is
++   a virtual filesystem inside the Linux kernel that has been
++   introduced in kernel 2.6.32 (if you use an older kernel, it is not
++   possible to use this option). When mounted in +/dev+, this virtual
++   filesystem will automatically make _device files_ appear and
++   disappear as hardware devices are added and removed from the
++   system. This filesystem is not persistent accross reboots: it is
++   filled dynamically by the kernel. Using _devtmpfs_ requires the
++   following kernel configuration options to be enabled:
++   +CONFIG_DEVTMPFS+ and +CONFIG_DEVTMPFS_MOUNT+. When Buildroot is in
++   charge of building the Linux kernel for your embedded device, it
++   makes sure that those two options are enabled. However, if you
++   build your Linux kernel outside of Buildroot, then it is your
++   responsability to enable those two options (if you fail to do so,
++   your Buildroot system will not boot).
++
++ * The third solution is *Dynamic using mdev*. This method also relies
++   on the _devtmpfs_ virtual filesystem detailed above (so the
++   requirement to have +CONFIG_DEVTMPFS+ and +CONFIG_DEVTMPFS_MOUNT+
++   enabled in the kernel configuration still apply), but adds the
++   +mdev+ userspace utility on top of it. +mdev+ is a program part of
++   Busybox that the kernel will call every time a device is added or
++   removed. Thanks to the +/etc/mdev.conf+ configuration file, +mdev+
++   can be configured to for example, set specific permissions or
++   ownership on a device file, call a script or application whenever a
++   device appears or disappear, etc. Basically, it allows _userspace_
++   to react on device addition and removal events. +mdev+ can for
++   example be used to automatically load kernel modules when devices
++   appear on the system. +mdev+ is also important if you have devices
++   that require a firmware, as it will be responsible for pushing the
++   firmware contents to the kernel. +mdev+ is a lightweight
++   implementation (with fewer features) of +udev+. For more details
++   about +mdev+ and the syntax of its configuration file, see
++   http://git.busybox.net/busybox/tree/docs/mdev.txt.
++
++ * The fourth solution is *Dynamic using udev*. This method also
++   relies on the _devtmpfs_ virtual filesystem detailed above, but
++   adds the +udev+ userspace daemon on top of it. +udev+ is a daemon
++   that runs in the background, and gets called by the kernel when a
++   device gets added or removed from the system. It is a more
++   heavyweight solution than +mdev+, but provides higher flexibility
++   and is sometimes mandatory for some system components (systemd for
++   example). +udev+ is the mechanism used in most desktop Linux
++   distributions. For more details about +udev+, see
++   http://en.wikipedia.org/wiki/Udev.
++
++The Buildroot developers recommandation is to start with the *Dynamic
++using devtmpfs only* solution, until you have the need for userspace
++to be notified when devices are added/removed, or if firmwares are
++needed, in which case *Dynamic using mdev* is usually a good solution.
++
++init system
++~~~~~~~~~~~
++
++The _init_ program is the first userspace program started by the
++kernel (it carries the PID number 1), and is responsible for starting
++the userspace services and programs (for example: web server,
++graphical applications, other network servers, etc.).
++
++Buildroot allows to use three different types of init systems, which
++can be chosen from +System configuration+, +Init system+:
++
++ * The first solution is *Busybox*. Amongst many programs, Busybox has
++   an implementation of a basic +init+ program, which is sufficient
++   for most embedded systems. Enabling the +BR2_INIT_BUSYBOX+ will
++   ensure Busybox will build and install its +init+ program. This is
++   the default solution in Buildroot. The Busybox +init+ program will
++   read the +/etc/inittab+ file at boot to know what to do. The syntax
++   of this file can be found in
++   http://git.busybox.net/busybox/tree/examples/inittab (note that
++   Busybox +inittab+ syntax is special: do not use a random +inittab+
++   documentation from the Internet to learn about Busybox
++   +inittab+). The default +inittab+ in Buildroot is stored in
++   +system/skeleton/etc/inittab+. Apart from mounting a few important
++   filesystems, the main job the default inittab does is to start the
++   +/etc/init.d/rcS+ shell script, and start a +getty+ program (which
++   provides a login prompt).
++
++ * The second solution is *systemV*. This solution uses the old
++   traditional _sysvinit_ program, packed in Buildroot in
++   +package/sysvinit+. This was the solution used in most desktop
++   Linux distributions, until they switched to more recent
++   alternatives such as Upstart or Systemd. +sysvinit+ also works with
++   an +inittab+ file (which has a slightly different syntax than the
++   one from Busybox). The default +inittab+ installed with this init
++   solution is located in +package/sysvinit/inittab+.
++
++ * The third solution is *systemd*. +systemd+ is the new generation
++   init system for Linux. It does far more than traditional _init_
++   programs: aggressive parallelization capabilities, uses socket and
++   D-Bus activation for starting services, offers on-demand starting
++   of daemons, keeps track of processes using Linux control groups,
++   supports snapshotting and restoring of the system state,
++   etc. +systemd+ will be useful on relatively complex embedded
++   systems, for example the ones requiring D-Bus and services
++   communicating between each other. It is worth noting that +systemd+
++   brings a fairly big number of large dependencies: +dbus+, +glib+
++   and more. For more details about +systemd+, see
++   http://www.freedesktop.org/wiki/Software/systemd.
++
++The solution recommended by Buildroot developers is to use the
++*Busybox init* as it is sufficient for most embedded
++systems. *systemd* can be used for more complex situations.
+diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
+index 4ea9239..b62bacd 100644
+--- a/docs/manual/working-with.txt
++++ b/docs/manual/working-with.txt
+@@ -6,6 +6,8 @@ Working with Buildroot
+ This section explains how you can customize Buildroot to fit your
+ needs.
  
--[[faq-depends-on-vs-select]]
--+Config.in+: _depends on_ vs _select_
---------------------------------------
--
--When adding a new package to Buildroot, you will most likely have to
--deal with expressing the dependencies of this package.
--
--In the +Config.in+ file, dependencies may be expressed following two
--semantics.
--See xref:depends-on-vs-select[choosing between _depends_ and _select_].
--
- [[faq-why-not-visible-package]]
- Why are some packages not visible in the Buildroot config menu?
- ---------------------------------------------------------------
++include::configure.txt[]
++
+ include::make-tips.txt[]
+ 
+ include::customize.txt[]
