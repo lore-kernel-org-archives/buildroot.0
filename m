@@ -1,44 +1,45 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 29 Dec 2012 14:30:59 +0100
-Subject: [Buildroot] [git commit] wavpack: fix broken link on newer binutils
-Message-ID: <20121229133118.557E79A4E8@busybox.osuosl.org>
+Date: Sat, 29 Dec 2012 14:23:56 +0100
+Subject: [Buildroot] [git commit] nettle: fix missing link to libm
+Message-ID: <20121229133117.BF1589A51C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c5b4ddc1932e7dedec1e412a5c5465f4fbe6f8b
+commit: http://git.buildroot.net/buildroot/commit/?id=7665bab422e79a252a4a45cfd696c34a19dabfdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Newer versions of binutils (2.22+) default to --no-copy-dt-needed hence
-all the used libraries must be explicitly named.
-This is accounted for in the source configure script but not in the
-compiled form so we just need to autoreconf it.
+nettle-benchmark uses ldexp without explicitly linking to libm, fixes:
+http://autobuild.buildroot.net/results/c8e64fabcb98b1ff4bf737e2181b7cf2ae731550
 
-[Peter: add comment why autoconf is needed]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/wavpack/wavpack.mk |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ ...le-Added-lm-when-linking-nettle-benchmark.patch |   17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/wavpack/wavpack.mk b/package/multimedia/wavpack/wavpack.mk
-index 4b1c59e..cd9b4f7 100644
---- a/package/multimedia/wavpack/wavpack.mk
-+++ b/package/multimedia/wavpack/wavpack.mk
-@@ -8,9 +8,10 @@ WAVPACK_VERSION = 4.60.1
- WAVPACK_SITE = http://www.wavpack.com
- WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.bz2
- WAVPACK_INSTALL_STAGING = YES
--
--ifneq ($(BR2_ENABLE_LOCALE),y)
--WAVPACK_DEPENDENCIES += libiconv
--endif
-+# configure not up to date
-+WAVPACK_AUTORECONF = YES
-+WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),libiconv)
-+WAVPACK_LICENSE = BSD-3c
-+WAVPACK_LICENSE_FILES = license.txt
- 
- $(eval $(autotools-package))
+diff --git a/package/nettle/nettle-Added-lm-when-linking-nettle-benchmark.patch b/package/nettle/nettle-Added-lm-when-linking-nettle-benchmark.patch
+new file mode 100644
+index 0000000..ca4d639
+--- /dev/null
++++ b/package/nettle/nettle-Added-lm-when-linking-nettle-benchmark.patch
+@@ -0,0 +1,17 @@
++Added -lm when linking nettle-benchmark.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff --git a/examples/Makefile.in b/examples/Makefile.in
++index 909fdda..3becd08 100644
++--- a/examples/Makefile.in
+++++ b/examples/Makefile.in
++@@ -11,7 +11,7 @@ PRE_CPPFLAGS = -I.. -I$(top_srcdir)
++ PRE_LDFLAGS = -L..
++ 
++ OPENSSL_LIBFLAGS = @OPENSSL_LIBFLAGS@
++-BENCH_LIBS = @BENCH_LIBS@
+++BENCH_LIBS = @BENCH_LIBS@ -lm
++ 
++ RSA_TARGETS = rsa-keygen$(EXEEXT) rsa-sign$(EXEEXT) \
++ 	      rsa-verify$(EXEEXT) rsa-encrypt$(EXEEXT) rsa-decrypt$(EXEEXT)
