@@ -1,63 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 29 Dec 2012 15:42:33 +0100
-Subject: [Buildroot] [PATCH 7/7] docs/manual: do not suggest to create a
-	symlink for shared download directory
-In-Reply-To: <1356792153-24033-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1356792153-24033-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1356792153-24033-8-git-send-email-thomas.petazzoni@free-electrons.com>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Sat, 29 Dec 2012 16:56:51 +0200
+Subject: [Buildroot] (no subject)
+In-Reply-To: <20121229153251.6bdfecfe@skate>
+References: <1356745553-15362-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20121229085947.130784d2@skate> <50DEFA7A.7020002@petroprogram.com>
+ <20121229153251.6bdfecfe@skate>
+Message-ID: <50DF04B3.30801@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Creating a symbolic link for the download directory is really not a
-useful suggestion, since we have the much better solution of the
-BUILDROOT_DL_DIR environment variable. So emphasize this solution
-instead, and remove the suggestion of the symbolic link.
+29.12.2012 16:32, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
+>
+> On Sat, 29 Dec 2012 16:13:14 +0200, Stefan Fr?berg wrote:
+>
+>> Thomas, can you tell a git newbie like me how to make single patch but
+>> still keeping that Signed-off line in
+>> each logical file in that single one patch ?
+> I am not sure to understand your question. I think you're confusing the
+> SoB line in the Buildroot patch with the SoB line in the patches that
+> apply on mesa3d, aren't you?
+>
+> So basically, your final patch should look like this:
+>
+> =======================================================================
+> mesa3d: bump to version 8.0.5
+>
+> Here you explain that you're bumping to 8.0.5, and that it requires new
+> patches, for this reason and that reason, and blablabla.
+>
+> Signed-off-by: Stefan Fr?berg <...>
+> ---
+> Here git will generate the diff-stat of your overall patch
+>
+> diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk 
+> index ...
+> --- a/package/x11r7/mesa3d/mesa3d.mk
+> +++ b/package/x11r7/mesa3d/mesa3d.mk
+> ... here your changes to mesa3d.mk
+>
+> diff --git a/package/x11r7/mesa3d/mesa3d-01-something.patch b/package/x11r7/mesa3d/mesa3d-01-something.patch
+> index ...
+> --- /dev/null
+> +++ b/package/x11r7/mesa3d/mesa3d-01-something.patch
+> + mesa3d: fix something
+> +
+> + This is the description of the mesa3d-01-something.patch. You explain
+> + what you are doing here.
+> +
+> + Signed-off-by: Stefan Fr?berg <...>
+> +
+> + ... here your mesa3d-01-something.patch ...
+>
+> diff --git a/package/x11r7/mesa3d/mesa3d-02-something-else.patch b/package/x11r7/mesa3d/mesa3d-02-something-else.patch
+> index ...
+> --- /dev/null
+> +++ b/package/x11r7/mesa3d/mesa3d-02-something-else.patch
+> + mesa3d: fix something else
+> +
+> + This is the description of the mesa3d-02-something-else.patch. You explain
+> + what you are doing here.
+> +
+> + Signed-off-by: Stefan Fr?berg <...>
+> +
+> + ... here your mesa3d-02-something-else.patch ...
+> =======================================================================
+>
+> And that's it. See the recently posted "[Buildroot] [PATCH 20/20]
+> enlightenment: new package" e-mail. It adds enlightenment.mk and
+> contains a patch to it.
+>
+> Basically you need *one* Signed-off-by in the commit log of the Git
+> patch that applies to Buildroot. And then one Signed-off-by per patch
+> that you're applying to mesa3d, but those Signed-off-by are *inside*
+> the patch applied to mesa3d, not in the commit log of the Git patch
+> applied to Buildroot.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/download-location.txt |   23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+That's what I meant. Those *inside* Signed-off tags.
+How should I add those inside Signed-off tags to individual patches
+(either my own make or 3rd party)
+applied to mesa3d ?
 
-diff --git a/docs/manual/download-location.txt b/docs/manual/download-location.txt
-index 4befe0a..36a1356 100644
---- a/docs/manual/download-location.txt
-+++ b/docs/manual/download-location.txt
-@@ -3,25 +3,18 @@
- Location of downloaded packages
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--The various tarballs that are downloaded by Buildroot are all stored in
--+DL_DIR+, which by default is the +dl+ directory. If you want
-+The various tarballs that are downloaded by Buildroot are all stored
-+in +BR2_DL_DIR+, which by default is the +dl+ directory. If you want
- to keep a complete version of Buildroot which is known to be working
- with the associated tarballs, you can make a copy of this directory.
--This will allow you to regenerate the toolchain and the target filesystem
--with exactly the same versions.
-+This will allow you to regenerate the toolchain and the target
-+filesystem with exactly the same versions.
- 
- If you maintain several Buildroot trees, it might be better to have a
--shared download location. This can be accessed by creating a symbolic
--link from the +dl+ directory to the shared download location:
--
-------------------
-- $ ln -s <shared download location> dl
-------------------
--
--Another way of accessing a shared download location is to create the
--+BUILDROOT_DL_DIR+ environment variable.  If this is set, then the
--value of DL_DIR in the project is overridden. The following line
--should be added to +<~/.bashrc>+.
-+shared download location. This can be achieved by pointing the
-++BUILDROOT_DL_DIR+ environment variable to a directory.  If this is
-+set, then the value of +BR2_DL_DIR+ in the Buildroot configuration is
-+overridden. The following line should be added to +<~/.bashrc>+.
- 
- -----------------
-  $ export BUILDROOT_DL_DIR <shared download location>
--- 
-1.7.9.5
+Does git diff command do that ? It does not have -s switch like commit does.
+
+Regards
+Stefan
