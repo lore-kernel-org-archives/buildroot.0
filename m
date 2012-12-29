@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 29 Dec 2012 13:29:04 -0300
-Subject: [Buildroot] [PATCH 1/2] taglib: bump to version 1.8
-Message-ID: <1356798545-9246-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 29 Dec 2012 13:29:05 -0300
+Subject: [Buildroot] [PATCH 2/2] ruby: bump to version 1.9.3-p362
+In-Reply-To: <1356798545-9246-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1356798545-9246-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1356798545-9246-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +12,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/taglib/Config.in |    2 +-
- package/taglib/taglib.mk |    7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/ruby/ruby-configure.patch |   30 ------------------------------
+ package/ruby/ruby.mk              |   10 +++++-----
+ 2 files changed, 5 insertions(+), 35 deletions(-)
+ delete mode 100644 package/ruby/ruby-configure.patch
 
-diff --git a/package/taglib/Config.in b/package/taglib/Config.in
-index d172c34..2777d0d 100644
---- a/package/taglib/Config.in
-+++ b/package/taglib/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_TAGLIB
-           and ID3v2 for MP3 files, Ogg Vorbis comments and ID3 tags and
-           Vorbis comments in FLAC, MPC, Speex, WavPack and TrueAudio files.
- 
--	  http://developer.kde.org/~wheeler/taglib.html
-+	  http://taglib.github.com
- 
- config BR2_PACKAGE_TAGLIB_MP4
- 	depends on BR2_PACKAGE_TAGLIB
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 268318e..e1e1694 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/ruby/ruby-configure.patch b/package/ruby/ruby-configure.patch
+deleted file mode 100644
+index 0077a67..0000000
+--- a/package/ruby/ruby-configure.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-diff -Nura ruby-1.9.2-p0.orig/configure.in ruby-1.9.2-p0/configure.in
+---- ruby-1.9.2-p0.orig/configure.in	2010-08-14 05:11:59.000000000 -0300
+-+++ ruby-1.9.2-p0/configure.in	2010-11-04 15:46:22.478191926 -0300
+-@@ -1410,7 +1410,25 @@
+- fi
+- 
+- AC_FUNC_GETPGRP
+--AC_FUNC_SETPGRP
+-+
+-+dnl AC_FUNC_SETPGRP does not work if cross compiling
+-+dnl Instead, assume we will have a prototype for setpgrp if cross compiling.
+-+if test "$cross_compiling" = no; then
+-+  AC_FUNC_SETPGRP
+-+else
+-+  AC_CACHE_CHECK([whether setpgrp takes no argument], ac_cv_func_setpgrp_void,
+-+    [AC_TRY_COMPILE([
+-+#include <unistd.h>
+-+], [
+-+  if (setpgrp(1,1) == -1)
+-+    exit (0);
+-+  else
+-+    exit (1);
+-+], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes)])
+-+if test $ac_cv_func_setpgrp_void = yes; then
+-+  AC_DEFINE(SETPGRP_VOID, 1)
+-+fi
+-+fi
+- 
+- AC_C_BIGENDIAN
+- AC_C_CONST
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index a5b8cde..ee1f9ed 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,15 +4,15 @@
  #
  #############################################################
  
--TAGLIB_VERSION = 1.7.1
--TAGLIB_SOURCE = taglib-$(TAGLIB_VERSION).tar.gz
--TAGLIB_SITE = http://developer.kde.org/~wheeler/files/src
-+TAGLIB_VERSION = 1.8
-+TAGLIB_SITE = http://github.com/downloads/taglib/taglib
- TAGLIB_INSTALL_STAGING = YES
-+TAGLIB_LICENSE = LGPLv2.1 MPL
-+TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+-RUBY_VERSION = 1.9.2-p320
++RUBY_VERSION = 1.9.3-p362
+ RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
+-RUBY_AUTORECONF = YES
+-HOST_RUBY_AUTORECONF = YES
+-RUBY_DEPENDENCIES = host-ruby
+-HOST_RUBY_DEPENDENCIES =
++RUBY_DEPENDENCIES = host-pkgconf host-ruby
++HOST_RUBY_DEPENDENCIES = host-pkgconf
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPT = --disable-install-doc --disable-rpath
+ HOST_RUBY_CONF_OPT = --disable-install-doc --with-out-ext=curses,readline
++RUBY_LICENSE = Ruby
++RUBY_LICENSE_FILES = LEGAL
  
- ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
- TAGLIB_CONF_OPT += -DWITH_ASF=ON
+ # Force optionals to build before we do
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
 -- 
 1.7.8.6
