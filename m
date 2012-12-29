@@ -1,81 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 29 Dec 2012 20:39:42 +0100
-Subject: [Buildroot] [git commit] ruby: bump to version 1.9.3-p362
-Message-ID: <20121229194003.355F097058@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 29 Dec 2012 20:52:47 +0100
+Subject: [Buildroot] Generating patches against packages source code
+In-Reply-To: <20121229193947.2e157779@skate>
+References: <1356745553-15362-1-git-send-email-stefan.froberg@petroprogram.com>
+ <201212291903.06705.yann.morin.1998@free.fr> <20121229193947.2e157779@skate>
+Message-ID: <201212292052.48467.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a497e3d8c07d816ec5b8d612d4f7563dff9e756
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ruby/ruby-configure.patch |   30 ------------------------------
- package/ruby/ruby.mk              |   10 +++++-----
- 2 files changed, 5 insertions(+), 35 deletions(-)
+On Saturday 29 December 2012 Thomas Petazzoni wrote:
+> On Sat, 29 Dec 2012 19:03:06 +0100, Yann E. MORIN wrote:
+> > So, I would recommend against using quilt; rather use the package's
+> > upstream repository, or at worse, create a temporary git tree just in
+> > the package's extracted directory: it's much more convenient and
+> > powerfull than using quilt.
+> 
+> <troll severity="strong">
+> 
+> That's because you're using a prehistoric, basic, limited and
+> feature-less text editor named vim.
 
-diff --git a/package/ruby/ruby-configure.patch b/package/ruby/ruby-configure.patch
-deleted file mode 100644
-index 0077a67..0000000
---- a/package/ruby/ruby-configure.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--diff -Nura ruby-1.9.2-p0.orig/configure.in ruby-1.9.2-p0/configure.in
----- ruby-1.9.2-p0.orig/configure.in	2010-08-14 05:11:59.000000000 -0300
--+++ ruby-1.9.2-p0/configure.in	2010-11-04 15:46:22.478191926 -0300
--@@ -1410,7 +1410,25 @@
-- fi
-- 
-- AC_FUNC_GETPGRP
---AC_FUNC_SETPGRP
--+
--+dnl AC_FUNC_SETPGRP does not work if cross compiling
--+dnl Instead, assume we will have a prototype for setpgrp if cross compiling.
--+if test "$cross_compiling" = no; then
--+  AC_FUNC_SETPGRP
--+else
--+  AC_CACHE_CHECK([whether setpgrp takes no argument], ac_cv_func_setpgrp_void,
--+    [AC_TRY_COMPILE([
--+#include <unistd.h>
--+], [
--+  if (setpgrp(1,1) == -1)
--+    exit (0);
--+  else
--+    exit (1);
--+], ac_cv_func_setpgrp_void=no, ac_cv_func_setpgrp_void=yes)])
--+if test $ac_cv_func_setpgrp_void = yes; then
--+  AC_DEFINE(SETPGRP_VOID, 1)
--+fi
--+fi
-- 
-- AC_C_BIGENDIAN
-- AC_C_CONST
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index a5b8cde..ee1f9ed 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,15 +4,15 @@
- #
- #############################################################
- 
--RUBY_VERSION = 1.9.2-p320
-+RUBY_VERSION = 1.9.3-p362
- RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
--RUBY_AUTORECONF = YES
--HOST_RUBY_AUTORECONF = YES
--RUBY_DEPENDENCIES = host-ruby
--HOST_RUBY_DEPENDENCIES =
-+RUBY_DEPENDENCIES = host-pkgconf host-ruby
-+HOST_RUBY_DEPENDENCIES = host-pkgconf
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPT = --disable-install-doc --disable-rpath
- HOST_RUBY_CONF_OPT = --disable-install-doc --with-out-ext=curses,readline
-+RUBY_LICENSE = Ruby
-+RUBY_LICENSE_FILES = LEGAL
- 
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+<troll mode="answer" next="no-more-please!">
+
+OK, I've been stung to the quick! ;-)
+    http://www.vim.org/scripts/script.php?script_id=1656
+
+Whatever emacs can do, vim does it better! ;-)
+Cheers!
+
+</troll>
+
+Regards,
+Yann E. MORIN, hiding...
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
