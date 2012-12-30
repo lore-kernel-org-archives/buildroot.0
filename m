@@ -1,34 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 30 Dec 2012 12:29:01 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch e17
-In-Reply-To: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 30 Dec 2012 07:31:38 +0100")
-References: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwwvu6bm.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Dec 2012 07:21:55 +0100
+Subject: [Buildroot] [git commit] efl/expedite: bump to version 1.7.4
+Message-ID: <20121230112954.684E89A52C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=698e18f295e542f0d168d6df675b904c5248e831
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> This set of patches bumps all the EFL (Enlightenment Foundation
- Thomas> Libraries) packages to the latest version 1.7.4 which was released on
- Thomas> December, 21st with E17.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/efl/expedite/expedite.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> It also adds a package for E17 itself, in order to provide a
- Thomas> demonstration of a lightweight desktop environment in Buildroot.
-
- Thomas> It has been tested on ARM Glibc (Linaro toolchain) and uClibc
- Thomas> (internal toolchain), booted under X.org in Qemu, and it starts fine.
-
- Thomas> Of course, some additional improvements and tests can be made
- Thomas> later: test with the XCB backend (only the X11 backend has been
- Thomas> tested), test with the OpenGL backend, test more features, etc.
-
-Pulled, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
+index 26d25f5..4b245ec 100644
+--- a/package/efl/expedite/expedite.mk
++++ b/package/efl/expedite/expedite.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-EXPEDITE_VERSION = 1.1.0
++EXPEDITE_VERSION = 1.7.4
+ EXPEDITE_SITE = http://download.enlightenment.org/releases/
+ EXPEDITE_LICENSE = BSD-2c
+ EXPEDITE_LICENSE_FILES = COPYING
