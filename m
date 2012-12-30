@@ -1,55 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Dec 2012 23:14:43 +0100
-Subject: [Buildroot] [PATCH 4/8] package/pkg-cmake.mk: make sure
- $(HOST_PATH) is in the PATH at configure time
-In-Reply-To: <5e67b559958501e38ddd579c1fce3b18cd363ad2.1356903063.git.s.martin49@gmail.com>
-References: <cover.1356903063.git.s.martin49@gmail.com>
- <5e67b559958501e38ddd579c1fce3b18cd363ad2.1356903063.git.s.martin49@gmail.com>
-Message-ID: <20121230231443.3a5ffb1f@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 30 Dec 2012 23:17:43 +0100
+Subject: [Buildroot] [pull request] Pull request for branch for-master/lttng
+Message-ID: <cover.1356905589.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hello,
 
-On Sun, 30 Dec 2012 22:33:28 +0100, Samuel Martin wrote:
-> ---
->  package/pkg-cmake.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 626a0b0..1e8302f 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -62,7 +62,8 @@ ifeq ($(5),target)
->  define $(2)_CONFIGURE_CMDS
->  	(cd $$($$(PKG)_BUILDDIR) && \
->  	rm -f CMakeCache.txt && \
-> -	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> +	PATH="$(TARGET_PATH)" $$($$(PKG)_CONF_ENV) \
-> +		$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
->  		$$($$(PKG)_CONF_OPT) \
-> @@ -74,7 +75,7 @@ else
->  define $(2)_CONFIGURE_CMDS
->  	(cd $$($$(PKG)_BUILDDIR) && \
->  	rm -f CMakeCache.txt && \
-> -	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-> +	PATH="$(HOST_PATH)" $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
->  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
->  		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+Here is version bump for Lttng and related packages.
 
-In fact, with your previous patch TARGET_PATH becomes equal to
-HOST_PATH. And I find the name TARGET_PATH to be misleading. Maybe we
-should just refactor that in a single variable instead?
+The following changes since commit f1d44593a04ff3be981c8a3b01a502f0b18193ee:
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+  docs/manual: small fixes and enhancements to adding generic packages (2012-12-30 22:39:13 +0100)
+
+are available in the git repository at:
+
+  git at github.com:tSed/buildroot.git for-master/lttng
+
+for you to fetch changes up to 192d7031d43a55c00114dbb0bc54b697e4baf02e:
+
+  lttng-babeltrace: bump to 1.0.0 (2012-12-30 23:04:51 +0100)
+
+----------------------------------------------------------------
+Samuel Martin (4):
+      lttng-libust: bump to 2.1.0
+      lttng-modules: bump to 2.1.0
+      lttng-tools: bump to 2.1.0
+      lttng-babeltrace: bump to 1.0.0
+
+ package/lttng-babeltrace/lttng-babeltrace.mk       |  2 +-
+ ...t-dont-build-cxx-tests-when-not-available.patch | 13 ++--
+ .../lttng-libust-uclibc-sched_getcpu.patch         | 32 ---------
+ package/lttng-libust/lttng-libust.mk               |  2 +-
+ package/lttng-modules/lttng-modules.mk             |  2 +-
+ ...ng-tools-Support-new-lttng-ust-error-code.patch | 82 ++++++++++++++++++++++
+ .../lttng-tools-no-sync-file-range-in-uclibc.patch | 51 +++++++-------
+ package/lttng-tools/lttng-tools.mk                 |  5 +-
+ 8 files changed, 122 insertions(+), 67 deletions(-)
+ delete mode 100644 package/lttng-libust/lttng-libust-uclibc-sched_getcpu.patch
+ create mode 100644 package/lttng-tools/lttng-tools-Support-new-lttng-ust-error-code.patch
+
+Yours,
+
+--
+
+Samuel
