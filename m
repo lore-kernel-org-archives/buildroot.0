@@ -1,47 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Dec 2012 22:55:11 +0100
-Subject: [Buildroot] [PATCH] system/skeleton: add the shadow-group file
-Message-ID: <1356904511-22452-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Dec 2012 23:09:44 +0100
+Subject: [Buildroot] [PATCH 1/8] matchbox-lib: fix license info
+In-Reply-To: <d624c5b2d5dad59e45c49cc41a40266430020751.1356903063.git.s.martin49@gmail.com>
+References: <cover.1356903063.git.s.martin49@gmail.com>
+ <d624c5b2d5dad59e45c49cc41a40266430020751.1356903063.git.s.martin49@gmail.com>
+Message-ID: <20121230230944.1553afcd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/etc/gshadow is to /etc/group what /etc/shadow is to /etc/passwd.
+Dear Samuel Martin,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- system/skeleton/etc/gshadow |   21 +++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 system/skeleton/etc/gshadow
+On Sun, 30 Dec 2012 22:33:25 +0100, Samuel Martin wrote:
+> ---
+>  package/matchbox/matchbox-lib/matchbox-lib.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/system/skeleton/etc/gshadow b/system/skeleton/etc/gshadow
-new file mode 100644
-index 0000000..0af6dad
---- /dev/null
-+++ b/system/skeleton/etc/gshadow
-@@ -0,0 +1,21 @@
-+root:*::
-+daemon:*::
-+bin:*::
-+sys:*::
-+adm:*::
-+tty:*::
-+disk:*::
-+wheel:*::
-+audio:*::
-+www-data:*::
-+utmp:*::
-+staff:*::
-+lock:*::
-+haldaemon:*::
-+dbus:*::
-+netdev:*::
-+ftp:*::
-+nobody:*::
-+nogroup:*::
-+users:*::
-+default:*::
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.7.2.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
