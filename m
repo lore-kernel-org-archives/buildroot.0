@@ -1,97 +1,138 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 29 Dec 2012 23:23:24 -0300
-Subject: [Buildroot] [PATCH 13/13] qemu/arm-versatile: update to use kernel
-	3.7.1
-In-Reply-To: <1356834204-21952-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1356834204-21952-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1356834204-21952-13-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Dec 2012 07:31:39 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_01/19=5D_efl/libecore=3A_bump_vers?=
+	=?utf-8?q?ion_to_1=2E7=2E4?=
+In-Reply-To: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5def1c1ab747e1650786e1cfe4d9d45042bd6ec1.1356849033.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../{linux-3.6.config => linux-3.7.config}         |    6 +++---
- board/qemu/arm-versatile/readme.txt                |    2 +-
- configs/qemu_arm_versatile_defconfig               |    8 ++++----
- 3 files changed, 8 insertions(+), 8 deletions(-)
- rename board/qemu/arm-versatile/{linux-3.6.config => linux-3.7.config} (96%)
+The libecore-ecore_exe-fix-build-with-glibc-2-16 patch is no longer
+needed, since it has been merged upstream.
 
-diff --git a/board/qemu/arm-versatile/linux-3.6.config b/board/qemu/arm-versatile/linux-3.7.config
-similarity index 96%
-rename from board/qemu/arm-versatile/linux-3.6.config
-rename to board/qemu/arm-versatile/linux-3.7.config
-index 5f58b97..da73575 100644
---- a/board/qemu/arm-versatile/linux-3.6.config
-+++ b/board/qemu/arm-versatile/linux-3.7.config
-@@ -1,3 +1,4 @@
-+CONFIG_ARCH_VERSATILE=y
- CONFIG_EXPERIMENTAL=y
- # CONFIG_LOCALVERSION_AUTO is not set
- CONFIG_SYSVIPC=y
-@@ -15,7 +16,6 @@ CONFIG_LEDS_CPU=y
- CONFIG_ZBOOT_ROM_TEXT=0x0
- CONFIG_ZBOOT_ROM_BSS=0x0
- CONFIG_CMDLINE="root=1f03 mem=32M"
--CONFIG_VFP=y
- CONFIG_PM=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -34,11 +34,12 @@ CONFIG_MTD_BLOCK=y
- CONFIG_MTD_CFI=y
- CONFIG_MTD_CFI_ADV_OPTIONS=y
- CONFIG_MTD_CFI_INTELEXT=y
--CONFIG_MTD_ARM_INTEGRATOR=y
-+CONFIG_MTD_PHYSMAP=y
- CONFIG_BLK_DEV_RAM=y
- CONFIG_SCSI=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_SCSI_SYM53C8XX_2=y
-+CONFIG_EEPROM_LEGACY=m
- CONFIG_NETDEVICES=y
- CONFIG_NET_ETHERNET=y
- CONFIG_SMC91X=y
-@@ -69,7 +70,6 @@ CONFIG_MMC=y
- CONFIG_MMC_ARMMMCI=m
- CONFIG_EXT2_FS=y
- CONFIG_VFAT_FS=m
--CONFIG_TMPFS=y
- CONFIG_JFFS2_FS=y
- CONFIG_CRAMFS=y
- CONFIG_MINIX_FS=y
-diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
-index 7868204..51364c7 100644
---- a/board/qemu/arm-versatile/readme.txt
-+++ b/board/qemu/arm-versatile/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...ecore-ecore_exe-fix-build-with-glibc-2-16.patch |   94 --------------------
+ package/efl/libecore/libecore.mk                   |    2 +-
+ 2 files changed, 1 insertion(+), 95 deletions(-)
+ delete mode 100644 package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+
+diff --git a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+deleted file mode 100644
+index d9b439c..0000000
+--- a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-Backported for commit a0df6712b6afcd07facd32e5a66809170277bdf3
+-Fixed the ChangeLog part.
+-
+-This patch fix build with glibc >=2.16, avoiding the following error occurs:
+-
+-Making all in ecore
+-make[6]: Entering directory `/opt/buildroot/output/build/host-libecore-1.1.0/src/lib/ecore'
+-  CC     ecore.lo
+-  CC     ecore_anim.lo
+-  CC     ecore_app.lo
+-  CC     ecore_events.lo
+-  CC     ecore_getopt.lo
+-  CC     ecore_idle_enterer.lo
+-  CC     ecore_idle_exiter.lo
+-  CC     ecore_idler.lo
+-  CC     ecore_job.lo
+-  CC     ecore_main.lo
+-  CC     ecore_pipe.lo
+-  CC     ecore_poll.lo
+-  CC     ecore_time.lo
+-  CC     ecore_timer.lo
+-  CC     ecore_thread.lo
+-  CC     ecore_glib.lo
+-  CC     ecore_throttle.lo
+-  CC     ecore_signal.lo
+-  CC     ecore_exe.lo
+-ecore_exe.c: In function ?ecore_exe_pipe_run?:
+-ecore_exe.c:486:15: warning: implicit declaration of function ?setpriority? [-Wimplicit-function-declaration]
+-ecore_exe.c:486:27: error ?PRIO_PROCESS? undeclared (first use in this function)
+-ecore_exe.c:486:27: note: each undeclared identifier is reported only once for each function it appears in
+-make[6]: *** [ecore_exe.lo] Error 1
+-
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-
+----
+-From a0df6712b6afcd07facd32e5a66809170277bdf3 Mon Sep 17 00:00:00 2001
+-From: caro <caro>
+-Date: Fri, 22 Jun 2012 05:36:00 +0000
+-Subject: [PATCH] ecore_exe: fix compilation on fedora 18.
+-
+-setpriority needs sys/resource.h. See:
+-
+-http://linux.die.net/man/2/setpriority
+-
+-I let sys/time.h, it does not hurt on linux and is anyway needed for BSD systems.
+-
+-
+-git-svn-id: http://svn.enlightenment.org/svn/e at 72684 7cbeb6ba-43b4-40fd-8cce-4c39aea84d33
+----
+- ChangeLog                 | 4 ++++
+- src/lib/ecore/ecore_exe.c | 7 ++-----
+- 2 files changed, 6 insertions(+), 5 deletions(-)
+-
+-diff --git a/ChangeLog b/ChangeLog
+-index a306f75..549ad19 100644
+---- a/ChangeLog
+-+++ b/ChangeLog
+-@@ -763,3 +763,7 @@
+- 2011-11-29 Mike McCormack
+-
+- 	* Allow quitting before entering the glib version of the main loop
+-+
+-+2012-06-22 Vincent Torri
+-+
+-+	* ecore_exe: fix compilation on fedora 18.
+-diff --git a/src/lib/ecore/ecore_exe.c b/src/lib/ecore/ecore_exe.c
+-index 7931a96..6db32a9 100644
+---- a/src/lib/ecore/ecore_exe.c
+-+++ b/src/lib/ecore/ecore_exe.c
+-@@ -2,11 +2,6 @@
+- # include <config.h>
+- #endif
+- 
+--#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
+--# include <sys/time.h>
+--# include <sys/resource.h>
+--#endif
+--
+- #include <stdlib.h>
+- #include <stdio.h>
+- #include <string.h>
+-@@ -14,6 +9,8 @@
+- #include <sys/types.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+-+#include <sys/time.h>
+-+#include <sys/resource.h>
+- 
+- #ifdef HAVE_SYS_PRCTL_H
+- # include <sys/prctl.h>
+--- 
+-1.7.12.2
+-
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
+index 9eb09ac..0220017 100644
+--- a/package/efl/libecore/libecore.mk
++++ b/package/efl/libecore/libecore.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
--Tested with QEMU 1.2.0
-+Tested with QEMU 1.3.0
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 85efa2b..428e07e 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.6 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_6=y
-+# Lock to 3.7 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_7=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.6.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.7.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+-LIBECORE_VERSION = 1.1.0
++LIBECORE_VERSION = 1.7.4
+ LIBECORE_SOURCE = ecore-$(LIBECORE_VERSION).tar.bz2
+ LIBECORE_SITE = http://download.enlightenment.org/releases/
+ LIBECORE_LICENSE = BSD-2c
 -- 
-1.7.8.6
+1.7.9.5
