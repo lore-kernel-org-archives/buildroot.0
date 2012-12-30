@@ -1,62 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Dec 2012 07:31:54 +0100
-Subject: [Buildroot] [PATCH 16/19] librsvg: relax dependency on Gtk,
-	add gdk-pixbuf dependency
+Date: Sun, 30 Dec 2012 07:31:55 +0100
+Subject: [Buildroot] [PATCH 17/19] efl/libevas-generic-loaders: new package
 In-Reply-To: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <99f711e9c9d6278ca7471d5ed7c21efb155da1bb.1356849033.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d18ac532cf83ee95b61848c4b32576232c369c26.1356849033.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-librsvg doesn't *require* Gtk, it can optionally build a Gtk theme
-engine, but it is not mandatory. Therefore, we make the Gtk dependency
-an optional dependency rather than a hard dependency. This will be
-useful as librsvg will become a dependency of libevas-generic-loaders,
-used in an EFL context in which building libgtk is not really what we
-want.
-
-However, gdk-pixbuf is a mandatory dependency to build librsvg, so we
-add this one.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/librsvg/Config.in  |    2 +-
- package/librsvg/librsvg.mk |    8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/efl/Config.in                              |    1 +
+ package/efl/libevas-generic-loaders/Config.in      |   21 +++++++++++++
+ .../libevas-generic-loaders.mk                     |   31 ++++++++++++++++++++
+ 3 files changed, 53 insertions(+)
+ create mode 100644 package/efl/libevas-generic-loaders/Config.in
+ create mode 100644 package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
 
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index fdb7d31..855b3d6 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_LIBGLIB2
--	depends on BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_GDK_PIXBUF
- 	depends on BR2_USE_WCHAR # glib2
- 	help
- 	  The rsvg library is an efficient renderer for Scalable
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e54c06c..745fcfa 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -11,6 +11,12 @@ LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
- LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_OPT = --disable-tools
--LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
-+LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index a526d87..bb1a986 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -15,6 +15,7 @@ source "package/efl/libeet/Config.in"
+ source "package/efl/libefreet/Config.in"
+ source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
++source "package/efl/libevas-generic-loaders/Config.in"
+ source "package/efl/libembryo/Config.in"
+ source "package/efl/libedje/Config.in"
+ source "package/efl/libethumb/Config.in"
+diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
+new file mode 100644
+index 0000000..44bc37d
+--- /dev/null
++++ b/package/efl/libevas-generic-loaders/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
++	bool "libevas generic loaders"
++	select BR2_PACKAGE_LIBEINA
++	help
++	  These are additional "generic" loaders for Evas that are
++	  stand-alone executables that evas may run from its generic
++	  loader module.
 +
-+# If we have Gtk2, let's build it first to benefit from librsvg Gtk
-+# support.
-+ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-+LIBRSVG_DEPENDENCIES += libgtk2
++	  http://trac.enlightenment.org/e/wiki/Evas_Generic_Loaders
++
++if BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
++
++config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
++	bool "SVG loader"
++	select BR2_PACKAGE_LIBRSVG
++	select BR2_PACKAGE_CAIRO
++	depends on BR2_USE_WCHAR # librsvg -> glib2
++	help
++	  This option enables the Evas generic SVG loader
++
 +endif
- 
- $(eval $(autotools-package))
+diff --git a/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk b/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
+new file mode 100644
+index 0000000..76236b1
+--- /dev/null
++++ b/package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
+@@ -0,0 +1,31 @@
++#############################################################
++#
++# libevas-generic-loaders
++#
++#############################################################
++
++LIBEVAS_GENERIC_LOADERS_VERSION = 1.7.4
++LIBEVAS_GENERIC_LOADERS_SOURCE = evas_generic_loaders-$(LIBEVAS_GENERIC_LOADERS_VERSION).tar.bz2
++LIBEVAS_GENERIC_LOADERS_SITE = http://download.enlightenment.org/releases/
++LIBEVAS_GENERIC_LOADERS_LICENSE = GPLv2
++LIBEVAS_GENERIC_LOADERS_LICENSE_FILES = COPYING
++
++LIBEVAS_GENERIC_LOADERS_INSTALL_STAGING = YES
++
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES = libeina
++
++# For now, we only support the SVG loader
++LIBEVAS_GENERIC_LOADERS_CONF_OPT += \
++	--disable-poppler \
++	--disable-spectre \
++	--disable-libraw \
++	--disable-gstreamer
++
++ifeq ($(BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG),y)
++LIBEVAS_GENERIC_LOADERS_DEPENDENCIES += librsvg cairo
++LIBEVAS_GENERIC_LOADERS_CONF_OPT += --enable-svg
++else
++LIBEVAS_GENERIC_LOADERS_CONF_OPT += --disable-svg
++endif
++
++$(eval $(autotools-package))
 -- 
 1.7.9.5
