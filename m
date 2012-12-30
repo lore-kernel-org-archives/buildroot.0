@@ -1,114 +1,64 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 30 Dec 2012 14:53:55 +0100
-Subject: [Buildroot] Using a precompiled busybox toolchain as an
-	external toolchain
-In-Reply-To: <CAKvQZ_1hK1dXwVs5W5XpuZY=O6AZj-Y8XtCHirW+wyXQ4Fwx8g@mail.gmail.com>
-References: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
- <20121218135336.2e24d6bc@skate>
- <CAKvQZ_3-v9ArCy0b6Q9VmzNToDaigk1=USPJsgUKpEptzeP1yA@mail.gmail.com>
- <20121218163210.1573a9c7@skate>
- <CAKvQZ_2ZJ9GOV-B2Gi1zG-gjJiFVYHxpd4GzFCHCAg7ABAPFUA@mail.gmail.com>
- <CAKvQZ_1hK1dXwVs5W5XpuZY=O6AZj-Y8XtCHirW+wyXQ4Fwx8g@mail.gmail.com>
-Message-ID: <CAHXCMMKctqMgQxnTzX1nG8Sm8W9NuxwLgaf8sGC_dH6aQr8uDg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 30 Dec 2012 18:01:21 +0100
+Subject: [Buildroot] [PATCH 1/2] target: add option to set the root
+	password
+In-Reply-To: <0e6cac687daa80382f614d38c6394947eab5d892.1356739565.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sat, 29 Dec 2012 01:07:33 +0100")
+References: <cover.1356739565.git.yann.morin.1998@free.fr>
+ <cover.1356739565.git.yann.morin.1998@free.fr>
+ <0e6cac687daa80382f614d38c6394947eab5d892.1356739565.git.yann.morin.1998@free.fr>
+Message-ID: <87a9svtqxq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Willy, all,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Apologize for the late answer.
+ Yann> Add an option in the menuconfig to specify a root password.
+ Yann> If set to empty, no root password is created; otherwise, the password is
+ Yann> encrypted using MD5 (MD5 is not the default for crypt(3), DES-56 is, but
+ Yann> MD5 is widely available, not-so-strong, but not-so-weak either).
 
-2012/12/30 Willy Lambert <lambert.willy@gmail.com>:
-> 2012/12/18 Willy Lambert <lambert.willy@gmail.com>:
->> 2012/12/18 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->>> Dear Willy Lambert,
->>>
->>> On Tue, 18 Dec 2012 16:19:47 +0100, Willy Lambert wrote:
->>>
->>>> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah. To be honest an entry
->>>> in the manual to state this would be nice.
->>>
->>> Indeed. Feel free to submit a patch for the manual :-)
->>>
->>
->> yes, but how ? Should I edit html files by and in the docs/manual folder ?
-Please edit the manual from docs/manual, this is the reference now.
-See http://buildroot.org/downloads/manual/manual.html#_the_documentation
+ Yann> Add a check for 'mkpasswd' as a new dependency.
 
->> I'm not at ease with git, so I will see during hollidays if I can do
->> something with it.
-Well, from my experience, playing with git is the best way to learn it! :P
-BTW, there is a lot of doc and so on around the web, e.g.:
-- http://try.github.com/levels/1/challenges/1
-- http://git-scm.com/documentation
-- ...
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Yann> Cc: Arnout Vandecappelle <arnout@mind.be>
+ Yann> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ 
+ Yann> +config BR2_TARGET_GENERIC_ROOT_PASSWD
+ Yann> +	string "root password"
 
-Concerning patch posting to Buildroot, the online manual gathers the
-few useful things, see:
-http://buildroot.org/downloads/manual/manual.html#submitting-patches
+The rest of the options here are capitilized, so I've done that as well
+here.
 
-Lastly, if you sneak around on the Buildroot IRC channel, there will
-most likely be
-someone who will be able to help you with git. ;-)
+ Yann> +	default ""
+ Yann> +	help
+ Yann> +	  Set the initial root password (in clear). It will be md5-encrypted.
+ Yann> +	  
+ Yann> +	  If set to empty (the default), then no root password will be set,
+ Yann> +	  and root will need no password to log in.
+ Yann> +	  
+ Yann> +	  WARNING! WARNING!
+ Yann> +	  Although pretty strong, MD5 is now an old hash function, and
+ Yann> +	  suffers from som weaknesses, which makes it susceptible to attacks.
 
->>
->>>> thanks, should I understand that I can't publish the buildroot
->>>> toolchain on another  PC without installing it at the __same__ place ?
->>>
->
-> may I bump this, how should I edit documentation ?
-I guess you're using a git view of BR, so please pull it and rebuild the manual:
-make manual-clean manual
+s/som/some/
 
-Few things related to this have been merged yesterday thanks to Thomas! ;-)
+ Yann> +target-no-root-passwd:
+ Yann> +	$(SED) "s/^root:[^:]*:/root::/" $(TARGET_DIR)/etc/shadow
+ Yann> +
+ Yann> +target-root-passwd:
+ Yann> +	root_passwd="$$( mkpasswd -m md5 "$(TARGET_GENERIC_ROOT_PASSWD)" )"; \
+ Yann> +	$(SED) "s,^root::,root:$${root_passwd}:," $(TARGET_DIR)/etc/shadow
+ Yann> +
 
->
-> I succeeded in creating the toolchain in "MY_TOOLCAHIN_PATH", but :
-> _ if I do a make clean it disapear, so I suppose I have to change
-> BR2_HOST_DIR back the default value after having creating the
-> toolchain ?
-> _ what's happening if I create several toolchain for several arch in
-> the same "MY_TOOLCHAIN_PATH ? does they override or do they install
-> nicely both in the same dir ?
-> _ what is the path I have to give to buildroot ? "MY_TOOLCHAIN_PATH'
-> or something like "MY_TOOLCHAIN_PATH'/usr/...
-In the updated manual (the one you should have built; unfortunately
-not online until the next release),
-check the paragraph entitled "External toolchain backend" in the 3.1.1 section.
-
-Basically, if you want to build a toolchain with BR, but avoid de
-remove and rebuild it after each "make clean",
-you should build the toolchain first with Buildroot in some place (see
-http://buildroot.org/downloads/manual/manual.html#_building_out_of_tree),
-then use it as an external toolchain in another configuration, in
-another build directory
-(see http://buildroot.org/downloads/manual/manual.html#external-toolchain).
-
-To do so (after backuping your current BR config):
-
-1) run 'make menuconfig O=/path/to/somewhere',
-
-2) set the same toolchain configuration as your working configuration,
-and disable everything from the following menus:
-- System configuration
-- Package Selection for the target
-- Filesystem images
-- Bootloaders
-- Kernel
-
-3) run 'make O=/path/to/somewhere'.
-This should build the toolchain and pretty much nothing else.
-
-4) run 'make menuconfig' and update the toolchain configuration:
-Toolchain type (External toolchain)
-Toolchain (Custom toolchain)
-Toolchain origin (Pre-installed toolchain)
-(/path/to/somewhere/host/usr) Toolchain path
-
-
-Regards,
+The 2nd sed only applies if the root passwd isn't set (E.G. running make
+menuconfig and changing password + make doesn't work), so I've
+simplified the two cases together to simply replace root:[^:]*: with
+root:$(TARGET_GENERIC_ROOT_PASSWD_HASH): which is either the empty
+string or the mkpasswd -m md5 output.
 
 -- 
-Samuel
+Bye, Peter Korsgaard
