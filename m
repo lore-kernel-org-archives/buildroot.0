@@ -1,49 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 31 Dec 2012 00:26:02 +0100
-Subject: [Buildroot] [PATCH 1/3] system/skeleton: add the shadow-group file
+Date: Mon, 31 Dec 2012 00:26:04 +0100
+Subject: [Buildroot] [PATCH 3/3] package/tvheadend: use a non-root user to
+	run the daemon
 In-Reply-To: <cover.1356909238.git.yann.morin.1998@free.fr>
 References: <cover.1356909238.git.yann.morin.1998@free.fr>
-Message-ID: <3633f72d3f35d4413bec319971b1a8d26c2fbaeb.1356909238.git.yann.morin.1998@free.fr>
+Message-ID: <ecbad345cac79b4dc01a6dee03a4db0a3ea31296.1356909238.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/etc/gshadow is to /etc/group what /etc/shadow is to /etc/passwd.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- system/skeleton/etc/gshadow |   21 +++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 system/skeleton/etc/gshadow
+ package/tvheadend/etc.default.tvheadend |    5 ++---
+ package/tvheadend/tvheadend.mk          |   10 ++++++++--
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/system/skeleton/etc/gshadow b/system/skeleton/etc/gshadow
-new file mode 100644
-index 0000000..0af6dad
---- /dev/null
-+++ b/system/skeleton/etc/gshadow
-@@ -0,0 +1,21 @@
-+root:*::
-+daemon:*::
-+bin:*::
-+sys:*::
-+adm:*::
-+tty:*::
-+disk:*::
-+wheel:*::
-+audio:*::
-+www-data:*::
-+utmp:*::
-+staff:*::
-+lock:*::
-+haldaemon:*::
-+dbus:*::
-+netdev:*::
-+ftp:*::
-+nobody:*::
-+nogroup:*::
-+users:*::
-+default:*::
+diff --git a/package/tvheadend/etc.default.tvheadend b/package/tvheadend/etc.default.tvheadend
+index c769055..253f832 100644
+--- a/package/tvheadend/etc.default.tvheadend
++++ b/package/tvheadend/etc.default.tvheadend
+@@ -1,6 +1,5 @@
+-# Once we have a real user, we'll use it
+-TVH_USER=root
+-TVH_GROUP=root
++TVH_USER=tvheadend
++TVH_GROUP=tvheadend
+ #TVH_ADAPTERS=
+ #TVH_HTTP_PORT=9981
+ #TVH_HTSP_PORT=9982
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 5100781..f63b433 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -26,9 +26,11 @@ TVHEADEND_DEPENDENCIES     += dvb-apps
+ # To run tvheadend, we need:
+ #  - a startup script, and its config file
+ #  - a default DB with a tvheadend admin
++#  - a non-root user to run as
+ define TVHEADEND_INSTALL_DB
+-	$(INSTALL) -D package/tvheadend/accesscontrol.1     \
+-	              $(TARGET_DIR)/root/.hts/tvheadend/accesscontrol/1
++	$(INSTALL) -D -m 0600 package/tvheadend/accesscontrol.1     \
++	              $(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
++	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
+ endef
+ TVHEADEND_POST_INSTALL_TARGET_HOOKS  = TVHEADEND_INSTALL_DB
+ 
+@@ -37,6 +39,10 @@ define TVHEADEND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D package/tvheadend/S99tvheadend          $(TARGET_DIR)/etc/init.d/S99tvheadend
+ endef
+ 
++define TVHEADEND_USERS
++tvheadend -1 tvheadend -1 * /home/tvheadend - - TVHeadend daemon
++endef
++
+ #----------------------------------------------------------------------------
+ # tvheadend is not an autotools-based package, but it is possible to
+ # call its ./configure script as if it were an autotools one.
 -- 
 1.7.2.5
