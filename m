@@ -1,128 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Dec 2012 19:08:05 +0100
-Subject: [Buildroot] [PATCH 1/1] target: add different methods to encode
-	passwords
-In-Reply-To: <cover.1356890711.git.yann.morin.1998@free.fr>
-References: <cover.1356890711.git.yann.morin.1998@free.fr>
-Message-ID: <4286e89fcb929e0f8280fe2da2782c93227c0353.1356890711.git.yann.morin.1998@free.fr>
+Date: Sun, 30 Dec 2012 21:47:21 +0100
+Subject: [Buildroot] [PATCH] docs/manual: small fixes and enhancements to
+	adding generic packages
+Message-ID: <1356900441-15304-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Passwords can be encoded in different ways (from the weakest
-to the strongest): des, md5, sha-256, sha-512
+Add overall description of LIBFOO_DEVICES and LIBFOO_PERMISSIONS.
+Fix line numbers.
 
-Add a choice entry to select the method, defaulting to 'md5'.
-
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Previously, this was specific to encode the root password.
-I have made it generic (ie. not root-specific), in case
-buildroot needs to encode other passwords in the future
-(eg. when packages can create users, for which I've just
-sent an RFC)
----
- system/Config.in |   62 +++++++++++++++++++++++++++++++++++++++++++++++++----
- system/system.mk |    3 +-
- 2 files changed, 59 insertions(+), 6 deletions(-)
+ docs/manual/adding-packages-generic.txt |   32 +++++++++++++++++++-----------
+ 1 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index f1c260a..0978be7 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -12,6 +12,60 @@ config BR2_TARGET_GENERIC_ISSUE
-        help
-          Select system banner (/etc/issue) to be displayed at login.
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 6c1c35e..0759d4f 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -53,30 +53,32 @@ system is based on hand-written Makefiles or shell scripts.
+ 37: $(eval $(generic-package))
+ --------------------------------
  
-+choice
-+	bool "Passwords encoding"
-+	default BR2_TARGET_GENERIC_PASSWD_MD5
-+	help
-+	  Choose the password encoding scheme to use when Buildroot
-+	  needs to encode a password (eg. the root password, below).
-+	  
-+	  Note: this is used at build-time, and *not* at runtime.
+-The Makefile begins on line 6 to 8 with metadata information: the
++The Makefile begins on line 6 to 10 with metadata information: the
+ version of the package (+LIBFOO_VERSION+), the name of the
+-tarball containing the package (+LIBFOO_SOURCE+) and the
+-Internet location at which the tarball can be downloaded
+-(+LIBFOO_SITE+). All variables must start with the same prefix,
+-+LIBFOO_+ in this case. This prefix is always the uppercased
+-version of the package name (see below to understand where the package
+-name is defined).
+-
+-On line 9, we specify that this package wants to install something to
++tarball containing the package (+LIBFOO_SOURCE+) the
++Internet location at which the tarball can be downloaded from
++(+LIBFOO_SITE+), the license (+LIBFOO_LICENSE+) and file with the
++license text (+LIBFOO_LICENSE_FILES+). All variables must start with
++the same prefix, +LIBFOO_+ in this case. This prefix is always the
++uppercased version of the package name (see below to understand where
++the package name is defined).
 +
-+config BR2_TARGET_GENERIC_PASSWD_DES
-+	bool "des"
-+	help
-+	  Use standard 56-bit DES-based crypt(3) to encode passwords.
-+	  
-+	  Old, wildly available, but also the weakest, very susceptible to
-+	  brute-force attacks.
++On line 11, we specify that this package wants to install something to
+ the staging space. This is often needed for libraries, since they must
+ install header files and other development files in the staging space.
+ This will ensure that the commands listed in the
+ +LIBFOO_INSTALL_STAGING_CMDS+ variable will be executed.
+ 
+-On line 10, we specify the list of dependencies this package relies
++On line 12, we specify the list of dependencies this package relies
+ on. These dependencies are listed in terms of lower-case package names,
+ which can be packages for the target (without the +host-+
+ prefix) or packages for the host (with the +host-+) prefix).
+ Buildroot will ensure that all these packages are built and installed
+ 'before' the current package starts its configuration.
+ 
+-The rest of the Makefile defines what should be done at the different
+-steps of the package configuration, compilation and installation.
++The rest of the Makefile, lines 14..27, defines what should be done
++at the different steps of the package configuration, compilation and
++installation.
+ +LIBFOO_BUILD_CMDS+ tells what steps should be performed to
+ build the package. +LIBFOO_INSTALL_STAGING_CMDS+ tells what
+ steps should be performed to install the package in the staging space.
+@@ -87,7 +89,13 @@ All these steps rely on the +$(@D)+ variable, which
+ contains the directory where the source code of the package has been
+ extracted.
+ 
+-Finally, on line 35, we call the +generic-package+ which
++On line 29..31, we define a device-node file used by this package
++(+LIBFOO_DEVICES+).
 +
-+config BR2_TARGET_GENERIC_PASSWD_MD5
-+	bool "md5"
-+	help
-+	  Use MD5 to encode passwords.
-+	  
-+	  The default. Wildly available, and pretty good.
-+	  Although pretty strong, MD5 is now an old hash function, and
-+	  suffers from some weaknesses, which makes it susceptible to
-+	  brute-force attacks.
++On line 33..35, we define the permissions to set to specific files
++installed by this package (+LIBFOO_PERMISSIONS+).
 +
-+config BR2_TARGET_GENERIC_PASSWD_SHA256
-+	bool "sha-256"
-+	help
-+	  Use SHA256 to encode passwords.
-+	  
-+	  Very strong, but not ubiquitous, although available in glibc
-+	  for some time now. Choose only if you are sure your C library
-+	  understands SHA256 passwords.
-+
-+config BR2_TARGET_GENERIC_PASSWD_SHA512
-+	bool "sha-512"
-+	help
-+	  Use SHA512 to encode passwords.
-+	  
-+	  Extremely strong, but not ubiquitous, although available in glibc
-+	  for some time now. Choose only if you are sure your C library
-+	  understands SHA512 passwords.
-+
-+endchoice # Passwd encoding
-+
-+config BR2_TARGET_GENERIC_PASSWD_METHOD
-+	string
-+	default "des"       if BR2_TARGET_GENERIC_PASSWD_DES
-+	default "md5"       if BR2_TARGET_GENERIC_PASSWD_MD5
-+	default "sha-256"   if BR2_TARGET_GENERIC_PASSWD_SHA256
-+	default "sha-512"   if BR2_TARGET_GENERIC_PASSWD_SHA512
-+
- config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	string "Root password"
- 	default ""
-@@ -22,11 +76,9 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	  and root will need no password to log in.
- 	  
- 	  WARNING! WARNING!
--	  Although pretty strong, MD5 is now an old hash function, and
--	  suffers from some weaknesses, which makes it susceptible to attacks.
--	  It is showing its age, so this root password should not be trusted
--	  to properly secure any product that can be shipped to the wide,
--	  hostile world.
-+	  You should not trust this password to properly secure any product that
-+	  can be shipped to the wide, hostile world, depending on the type of
-+	  password encoding you choose above (especially if you choose md5 or des).
- 	  
- 	  WARNING! WARNING!
- 	  The password appears in clear in the .config file, and may appear
-diff --git a/system/system.mk b/system/system.mk
-index 7536ce6..e964e46 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -1,8 +1,9 @@
- TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
- TARGET_GENERIC_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-+TARGET_GENERIC_PASSWD_METHOD:=$(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
- ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
--TARGET_GENERIC_ROOT_PASSWD_HASH=$(shell mkpasswd -m md5 "$(TARGET_GENERIC_ROOT_PASSWD)")
-+TARGET_GENERIC_ROOT_PASSWD_HASH=$(shell mkpasswd -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
- endif
- TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
++Finally, on line 37, we call the +generic-package+ function, which
+ generates, according to the variables defined previously, all the
+ Makefile code necessary to make your package working.
+ 
 -- 
 1.7.2.5
