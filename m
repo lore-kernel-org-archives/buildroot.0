@@ -1,56 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 30 Dec 2012 12:32:42 +0100
-Subject: [Buildroot] [git commit] qemu/x86: update to use kernel 3.7.1
-Message-ID: <20121230113340.47D5C81ED9@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 30 Dec 2012 09:03:27 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-12-29
+In-Reply-To: <87r4m7uacj.fsf@dell.be.48ers.dk>
+References: <20121230073456.2BCF452C08C@lolut.humanoidz.org>
+ <87r4m7uacj.fsf@dell.be.48ers.dk>
+Message-ID: <50E02D8F.7020504@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6420570f6697405a033d00875739661d39edae5a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/30/2012 07:02 AM, Peter Korsgaard wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../x86/{linux-3.6.config => linux-3.7.config}     |    0
- board/qemu/x86/readme.txt                          |    2 +-
- configs/qemu_x86_defconfig                         |    8 ++++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
+> These two looks related to your recent gnutls version bump. Care to have
+> a look?
 
-diff --git a/board/qemu/x86/linux-3.6.config b/board/qemu/x86/linux-3.7.config
-similarity index 100%
-rename from board/qemu/x86/linux-3.6.config
-rename to board/qemu/x86/linux-3.7.config
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 3cca682..4342556 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -4,4 +4,4 @@ Run the emulation with:
- 
- The login prompt will appear in the graphical window.
- 
--Tested with QEMU 1.2.0
-+Tested with QEMU 1.3.0
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 90524b5..ddb9fd1 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -10,12 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.6 headers to avoid breaking with newer kernels
--BR2_KERNEL_HEADERS_3_6=y
-+# Lock to 3.7 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_7=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.6.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.7.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.6.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.7.config"
+Running a failing config now, i don't think i'll hit it barebones though
+since they look like a pretty regular config.
+Probably have to debootstrap.
+
+> This is probably also related to it, but perhaps that gets fixed by
+> Thomas' e17 update.
+
+Seems unlikely from looking at the source of ecore.
+Since people have been using and accustomed to gnutls-2.x which required
+libgcrypt they've been including it blindly.
+I'll test to see if it really requires libgcrypt (like ntfs-3g) or it's
+just probably following old gnutls instructions and fix accordingly.
+
+> Did you have a look at the host-gawk issue?
+
+Yes, it seems peko-specific so my hunch says it's a distro toolchain
+thing. I've asked Thomas and it seems it's runnig gcc 4.3.2.
+Looks like the new gawk DFA is triggering a bug or using a newer feature
+that it shouldn't.
+Couldn't reproduce yet, so an old gentoo stage or debootstrap might help me.
+So also looking into it.
+A puny dual-core won't help me with getting these things solved quickly
+though, except libecore :)
+Regards.
