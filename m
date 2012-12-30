@@ -1,44 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 30 Dec 2012 18:44:24 +0100
-Subject: [Buildroot] [RFC] Allow packages to create users
-Message-ID: <201212301844.24383.yann.morin.1998@free.fr>
+From: Richard Braun <rbraun@sceen.net>
+Date: Sun, 30 Dec 2012 18:50:09 +0100
+Subject: [Buildroot] Bootloader
+In-Reply-To: <CAKvQZ_069zGz=-uY_uTP90ycd8+S9LBXiR_RuOUYrtZW4g3WEw@mail.gmail.com>
+References: <CAKvQZ_069zGz=-uY_uTP90ycd8+S9LBXiR_RuOUYrtZW4g3WEw@mail.gmail.com>
+Message-ID: <20121230175009.GA4412@mail.sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+On Sun, Dec 30, 2012 at 06:18:39PM +0100, Willy Lambert wrote:
+> The one I know the most is grub, but I need a "grub-install" phasis
+> but no "host-tool" seems to be provided.
 
-Recently, I've had the need for a package to create a user to
-run its daemon as:
-    http://lists.busybox.net/pipermail/buildroot/2012-December/064044.html
-
-The solution was ugly and very specific to this package, so it was
-(rightfully!) refused, until there is a generic way for packages to
-create users.
-
-I now have a prototype that is working in simple cases:
-    https://gitorious.org/buildroot/buildroot/commits/yem-package-create-user
-
-(The commit titled 'package/foo: new package to test adding users' is a
-dummy, temporary commit, it will be removed before a pull-request is made).
-
-The documentation for this new feature is available at:
-    http://ymorin.is-a-geek.org/download/tmp/br/manual/manual.html#generic-package-reference
-
-The new variable is FOO_USERS, with its syntax defined here:
-    http://ymorin.is-a-geek.org/download/tmp/br/manual/manual.html#makeuser-syntax
-
-I'd appreciate comments, especially on the syntax.
-
-Regards,
-Yann E. MORIN.
+This problem is specific to the x86 architecture. I've posted a way to
+work around this issue [1] some time ago, along with a template script
+you can adjust to your needs [2]. If your host is an x86_64 machine, be
+sure to install 32-bit versions of your main libraries (e.g. libc6-i386
+on Debian Squeeze). Hope it helps.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Richard Braun
+
+[1] http://lists.busybox.net/pipermail/buildroot/2012-August/057536.html
+[2] http://lists.busybox.net/pipermail/buildroot/2012-August/057538.html
