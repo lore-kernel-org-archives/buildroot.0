@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Dec 2012 07:21:56 +0100
-Subject: [Buildroot] [git commit] efl/libedje: bump to version 1.7.4
-Message-ID: <20121230112955.3CAFE9A52C@busybox.osuosl.org>
+Date: Sun, 30 Dec 2012 07:21:55 +0100
+Subject: [Buildroot] [git commit] efl/libedbus: bump to version 1.7.4
+Message-ID: <20121230112954.C6D709A52C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=acb2d8cd0b0b9b19ef73d22f2a46172f49e31029
+commit: http://git.buildroot.net/buildroot/commit/?id=6725c0d378c62623309ff182e0417b4e39cdd2c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libedje/libedje.mk |    2 +-
+ package/efl/libedbus/libedbus.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
-index ce17da5..a02eaa9 100644
---- a/package/efl/libedje/libedje.mk
-+++ b/package/efl/libedje/libedje.mk
+diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
+index 60651e3..9c62ead 100644
+--- a/package/efl/libedbus/libedbus.mk
++++ b/package/efl/libedbus/libedbus.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--LIBEDJE_VERSION = 1.1.0
-+LIBEDJE_VERSION = 1.7.4
- LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
- LIBEDJE_SITE =  http://download.enlightenment.org/releases/
- LIBEDJE_LICENSE = GPLv2+ (epp binary), BSD-2c (everything else)
+-LIBEDBUS_VERSION = 1.1.0
++LIBEDBUS_VERSION = 1.7.4
+ LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
+ LIBEDBUS_SITE = http://download.enlightenment.org/releases/
+ LIBEDBUS_LICENSE = BSD-2c
