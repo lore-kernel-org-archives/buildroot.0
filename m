@@ -1,61 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 30 Dec 2012 07:21:58 +0100
-Subject: [Buildroot] [git commit] librsvg: relax dependency on Gtk,
-	add gdk-pixbuf dependency
-Message-ID: <20121230112958.663679A53C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] efl/libeio: new package
+Message-ID: <20121230112957.A31589A53C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99f711e9c9d6278ca7471d5ed7c21efb155da1bb
+commit: http://git.buildroot.net/buildroot/commit/?id=20e90e4f0d2628322b0f376043b29668806cf3d3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-librsvg doesn't *require* Gtk, it can optionally build a Gtk theme
-engine, but it is not mandatory. Therefore, we make the Gtk dependency
-an optional dependency rather than a hard dependency. This will be
-useful as librsvg will become a dependency of libevas-generic-loaders,
-used in an EFL context in which building libgtk is not really what we
-want.
-
-However, gdk-pixbuf is a mandatory dependency to build librsvg, so we
-add this one.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/librsvg/Config.in  |    2 +-
- package/librsvg/librsvg.mk |    8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/efl/Config.in        |    1 +
+ package/efl/libeio/Config.in |   18 ++++++++++++++++++
+ package/efl/libeio/libeio.mk |   16 ++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index fdb7d31..855b3d6 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_PANGO
- 	select BR2_PACKAGE_LIBGLIB2
--	depends on BR2_PACKAGE_LIBGTK2
-+	select BR2_PACKAGE_GDK_PIXBUF
- 	depends on BR2_USE_WCHAR # glib2
- 	help
- 	  The rsvg library is an efficient renderer for Scalable
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index e54c06c..745fcfa 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -11,6 +11,12 @@ LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
- LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_OPT = --disable-tools
--LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
-+LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index c783d7f..a526d87 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -13,6 +13,7 @@ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
+ source "package/efl/libeet/Config.in"
+ source "package/efl/libefreet/Config.in"
++source "package/efl/libeio/Config.in"
+ source "package/efl/libevas/Config.in"
+ source "package/efl/libembryo/Config.in"
+ source "package/efl/libedje/Config.in"
+diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
+new file mode 100644
+index 0000000..0b2751c
+--- /dev/null
++++ b/package/efl/libeio/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBEIO
++	bool "libeio"
++	select BR2_PACKAGE_LIBEET
++	select BR2_PACKAGE_LIBEINA
++	select BR2_PACKAGE_LIBECORE
++	help
++	  Eio integrates with EFL (Ecore, Eina) to provide efficient
++	  filesystem Input/Output (I/O). It use the best techniques to
++	  achieve such purpose, like using at-variants, splice,
++	  properly handling errors and doing it in an asynchronous
++	  fashion by means of worker threads. It is also ported to
++	  Windows, so multi-platform.
 +
-+# If we have Gtk2, let's build it first to benefit from librsvg Gtk
-+# support.
-+ifeq ($(BR2_PACKAGE_LIBGTK2),y)
-+LIBRSVG_DEPENDENCIES += libgtk2
-+endif
- 
- $(eval $(autotools-package))
++	  Whenever you need to list a directory, copy, move or delete
++	  files, Eio will do that task better than you'd achieve with
++	  naive implementations, and it is easy to use.
++
++	  http://trac.enlightenment.org/e/wiki/Eio
+diff --git a/package/efl/libeio/libeio.mk b/package/efl/libeio/libeio.mk
+new file mode 100644
+index 0000000..f5e08de
+--- /dev/null
++++ b/package/efl/libeio/libeio.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# libeio
++#
++#############################################################
++
++LIBEIO_VERSION = 1.7.4
++LIBEIO_SOURCE = eio-$(LIBEIO_VERSION).tar.bz2
++LIBEIO_SITE = http://download.enlightenment.org/releases/
++LIBEIO_LICENSE = LGPLv2.1
++LIBEIO_LICENSE_FILES = COPYING
++
++LIBEIO_INSTALL_STAGING = YES
++LIBEIO_DEPENDENCIES = libeina libeet libecore
++
++$(eval $(autotools-package))
