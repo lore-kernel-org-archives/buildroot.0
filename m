@@ -1,138 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Dec 2012 07:31:39 +0100
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_01/19=5D_efl/libecore=3A_bump_vers?=
-	=?utf-8?q?ion_to_1=2E7=2E4?=
-In-Reply-To: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5def1c1ab747e1650786e1cfe4d9d45042bd6ec1.1356849033.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Dec 2012 07:31:38 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch e17
+Message-ID: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libecore-ecore_exe-fix-build-with-glibc-2-16 patch is no longer
-needed, since it has been merged upstream.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
+This set of patches bumps all the EFL (Enlightenment Foundation
+Libraries) packages to the latest version 1.7.4 which was released on
+December, 21st with E17.
+
+It also adds a package for E17 itself, in order to provide a
+demonstration of a lightweight desktop environment in Buildroot.
+
+It has been tested on ARM Glibc (Linaro toolchain) and uClibc
+(internal toolchain), booted under X.org in Qemu, and it starts fine.
+
+Of course, some additional improvements and tests can be made later:
+test with the XCB backend (only the X11 backend has been tested), test
+with the OpenGL backend, test more features, etc.
+
+Changes since v1:
+
+ * Fix typo in libeio help text.
+
+ * Add dependencies on libeet, libecore and libeina in the libeio
+   package. I have now properly build tested a simple libeio build.
+
+ * Add an help text for the enlightenment package.
+
+ * Properly squash the expedite version bump patches
+
+Best regards,
+
+Thomas
+
+The following changes since commit 2c5b4ddc1932e7dedec1e412a5c5465f4fbe6f8b:
+
+  wavpack: fix broken link on newer binutils (2012-12-29 14:30:59 +0100)
+
+are available in the git repository at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git e17
+
+for you to fetch changes up to 473af436480f08e78377154783276b1c348b2625:
+
+  enlightenment: new package (2012-12-30 07:24:10 +0100)
+
+----------------------------------------------------------------
+Thomas Petazzoni (19):
+      efl/libecore: bump version to 1.7.4
+      efl/expedite: bump to version 1.7.4
+      efl/libedbus: bump to version 1.7.4
+      efl/libedje: bump to version 1.7.4
+      efl/libeet: bump to version 1.7.4
+      efl/libefreet: bump to version 1.7.4
+      efl/libeina: bump to version 1.7.4
+      efl/libelementary: bump to version 1.7.4 and change download location
+      efl/libembryo: bump to version 1.7.4
+      efl/libevas: bump to version 1.7.4
+      efl/libevas: remove SVG support
+      efl/libevas: adjust dependency on X11 libraries
+      efl/libevas: remove examples source code from target filesystem
+      efl/libeio: new package
+      efl/libethumb: bump to 1.7.4 and change download location
+      librsvg: relax dependency on Gtk, add gdk-pixbuf dependency
+      efl/libevas-generic-loaders: new package
+      xcb-util-keysyms: new package
+      enlightenment: new package
+
+ package/Config.in                                  |    1 +
+ package/efl/Config.in                              |    2 +
+ package/efl/expedite/expedite.mk                   |    2 +-
  ...ecore-ecore_exe-fix-build-with-glibc-2-16.patch |   94 --------------------
  package/efl/libecore/libecore.mk                   |    2 +-
- 2 files changed, 1 insertion(+), 95 deletions(-)
+ package/efl/libedbus/libedbus.mk                   |    2 +-
+ package/efl/libedje/libedje.mk                     |    2 +-
+ package/efl/libeet/libeet.mk                       |    2 +-
+ package/efl/libefreet/libefreet.mk                 |    2 +-
+ package/efl/libeina/libeina.mk                     |    2 +-
+ package/efl/libeio/Config.in                       |   18 ++++
+ package/efl/libeio/libeio.mk                       |   16 ++++
+ package/efl/libelementary/libelementary.mk         |    4 +-
+ package/efl/libembryo/libembryo.mk                 |    2 +-
+ package/efl/libethumb/libethumb.mk                 |    4 +-
+ package/efl/libevas-generic-loaders/Config.in      |   21 +++++
+ .../libevas-generic-loaders.mk                     |   31 +++++++
+ package/efl/libevas/Config.in                      |    6 +-
+ package/efl/libevas/libevas.mk                     |   18 ++--
+ package/enlightenment/Config.in                    |   37 ++++++++
+ .../enlightenment/enlightenment-no-execinfo.patch  |   27 ++++++
+ package/enlightenment/enlightenment.mk             |   40 +++++++++
+ package/librsvg/Config.in                          |    2 +-
+ package/librsvg/librsvg.mk                         |    8 +-
+ package/x11r7/Config.in                            |    1 +
+ package/x11r7/xcb-util-keysyms/Config.in           |   14 +++
+ package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk |   12 +++
+ 27 files changed, 251 insertions(+), 121 deletions(-)
  delete mode 100644 package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
+ create mode 100644 package/efl/libeio/Config.in
+ create mode 100644 package/efl/libeio/libeio.mk
+ create mode 100644 package/efl/libevas-generic-loaders/Config.in
+ create mode 100644 package/efl/libevas-generic-loaders/libevas-generic-loaders.mk
+ create mode 100644 package/enlightenment/Config.in
+ create mode 100644 package/enlightenment/enlightenment-no-execinfo.patch
+ create mode 100644 package/enlightenment/enlightenment.mk
+ create mode 100644 package/x11r7/xcb-util-keysyms/Config.in
+ create mode 100644 package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk
 
-diff --git a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch b/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
-deleted file mode 100644
-index d9b439c..0000000
---- a/package/efl/libecore/libecore-ecore_exe-fix-build-with-glibc-2-16.patch
-+++ /dev/null
-@@ -1,94 +0,0 @@
--Backported for commit a0df6712b6afcd07facd32e5a66809170277bdf3
--Fixed the ChangeLog part.
--
--This patch fix build with glibc >=2.16, avoiding the following error occurs:
--
--Making all in ecore
--make[6]: Entering directory `/opt/buildroot/output/build/host-libecore-1.1.0/src/lib/ecore'
--  CC     ecore.lo
--  CC     ecore_anim.lo
--  CC     ecore_app.lo
--  CC     ecore_events.lo
--  CC     ecore_getopt.lo
--  CC     ecore_idle_enterer.lo
--  CC     ecore_idle_exiter.lo
--  CC     ecore_idler.lo
--  CC     ecore_job.lo
--  CC     ecore_main.lo
--  CC     ecore_pipe.lo
--  CC     ecore_poll.lo
--  CC     ecore_time.lo
--  CC     ecore_timer.lo
--  CC     ecore_thread.lo
--  CC     ecore_glib.lo
--  CC     ecore_throttle.lo
--  CC     ecore_signal.lo
--  CC     ecore_exe.lo
--ecore_exe.c: In function ?ecore_exe_pipe_run?:
--ecore_exe.c:486:15: warning: implicit declaration of function ?setpriority? [-Wimplicit-function-declaration]
--ecore_exe.c:486:27: error ?PRIO_PROCESS? undeclared (first use in this function)
--ecore_exe.c:486:27: note: each undeclared identifier is reported only once for each function it appears in
--make[6]: *** [ecore_exe.lo] Error 1
--
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--
-----
--From a0df6712b6afcd07facd32e5a66809170277bdf3 Mon Sep 17 00:00:00 2001
--From: caro <caro>
--Date: Fri, 22 Jun 2012 05:36:00 +0000
--Subject: [PATCH] ecore_exe: fix compilation on fedora 18.
--
--setpriority needs sys/resource.h. See:
--
--http://linux.die.net/man/2/setpriority
--
--I let sys/time.h, it does not hurt on linux and is anyway needed for BSD systems.
--
--
--git-svn-id: http://svn.enlightenment.org/svn/e at 72684 7cbeb6ba-43b4-40fd-8cce-4c39aea84d33
-----
-- ChangeLog                 | 4 ++++
-- src/lib/ecore/ecore_exe.c | 7 ++-----
-- 2 files changed, 6 insertions(+), 5 deletions(-)
--
--diff --git a/ChangeLog b/ChangeLog
--index a306f75..549ad19 100644
----- a/ChangeLog
--+++ b/ChangeLog
--@@ -763,3 +763,7 @@
-- 2011-11-29 Mike McCormack
--
-- 	* Allow quitting before entering the glib version of the main loop
--+
--+2012-06-22 Vincent Torri
--+
--+	* ecore_exe: fix compilation on fedora 18.
--diff --git a/src/lib/ecore/ecore_exe.c b/src/lib/ecore/ecore_exe.c
--index 7931a96..6db32a9 100644
----- a/src/lib/ecore/ecore_exe.c
--+++ b/src/lib/ecore/ecore_exe.c
--@@ -2,11 +2,6 @@
-- # include <config.h>
-- #endif
-- 
---#if defined (__FreeBSD__) || defined (__OpenBSD__) || defined (__NetBSD__)
---# include <sys/time.h>
---# include <sys/resource.h>
---#endif
---
-- #include <stdlib.h>
-- #include <stdio.h>
-- #include <string.h>
--@@ -14,6 +9,8 @@
-- #include <sys/types.h>
-- #include <unistd.h>
-- #include <fcntl.h>
--+#include <sys/time.h>
--+#include <sys/resource.h>
-- 
-- #ifdef HAVE_SYS_PRCTL_H
-- # include <sys/prctl.h>
---- 
--1.7.12.2
--
-diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
-index 9eb09ac..0220017 100644
---- a/package/efl/libecore/libecore.mk
-+++ b/package/efl/libecore/libecore.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBECORE_VERSION = 1.1.0
-+LIBECORE_VERSION = 1.7.4
- LIBECORE_SOURCE = ecore-$(LIBECORE_VERSION).tar.bz2
- LIBECORE_SITE = http://download.enlightenment.org/releases/
- LIBECORE_LICENSE = BSD-2c
+Thanks,
 -- 
-1.7.9.5
+Thomas Petazzoni
