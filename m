@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 30 Dec 2012 07:21:57 +0100
-Subject: [Buildroot] [git commit] efl/libeina: bump to version 1.7.4
-Message-ID: <20121230112956.007C79A53C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] efl/libevas: bump to version 1.7.4
+Message-ID: <20121230112956.7F4019A53C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8cba182b99f625da169b1ca9643ed165463e2963
+commit: http://git.buildroot.net/buildroot/commit/?id=58f10d0d1c51f4b1326153bb1aeeaa627b0a5925
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libeina/libeina.mk |    2 +-
+ package/efl/libevas/libevas.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
-index e5b89c1..d99a237 100644
---- a/package/efl/libeina/libeina.mk
-+++ b/package/efl/libeina/libeina.mk
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 1f053e3..8e03ba6 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--LIBEINA_VERSION = 1.1.0
-+LIBEINA_VERSION = 1.7.4
- LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
- LIBEINA_SITE = http://download.enlightenment.org/releases/
- LIBEINA_LICENSE = LGPLv2.1+
+-LIBEVAS_VERSION = 1.1.0
++LIBEVAS_VERSION = 1.7.4
+ LIBEVAS_SOURCE = evas-$(LIBEVAS_VERSION).tar.bz2
+ LIBEVAS_SITE = http://download.enlightenment.org/releases/
+ LIBEVAS_LICENSE = BSD-2c
