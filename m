@@ -1,62 +1,33 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 30 Dec 2012 23:54:07 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-master/misc-fixes
-Message-ID: <cover.1356907750.git.s.martin49@gmail.com>
+Date: Sun, 30 Dec 2012 23:54:08 +0100
+Subject: [Buildroot] [PATCH 1/8] matchbox-lib: fix license info
+In-Reply-To: <cover.1356907750.git.s.martin49@gmail.com>
+References: <cover.1356907750.git.s.martin49@gmail.com>
+Message-ID: <d22e14e3ddf58fbdd932691f83e2e8025adf77ab.1356907750.git.s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Here are few random fixes, some of them are related to python handling
-from the host system.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ package/matchbox/matchbox-lib/matchbox-lib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The patches handling the python binary provided by the host system are
-also an RFC that summarize few discussions on the IRC channel.
-
-The following changes since commit f1d44593a04ff3be981c8a3b01a502f0b18193ee:
-
-  docs/manual: small fixes and enhancements to adding generic packages (2012-12-30 22:39:13 +0100)
-
-are available in the git repository at:
-
-  git at github.com:tSed/buildroot.git for-master/misc-fixes
-
-for you to fetch changes up to 8de478e5aa4b0f15008159ea3ad238605e5ffe0e:
-
-  manual: add host python2 dependency section (2012-12-30 23:47:23 +0100)
-
-----------------------------------------------------------------
-Samuel Martin (8):
-      matchbox-lib: fix license info
-      fluxbox: fix build against imlib2
-      package/Makefile.in: update/fix HOST_PATH variable
-      package/pkg-cmake.mk: make sure $(HOST_PATH) is in the PATH at configure time
-      dependencies: build a host python2 if no suitable one can be found
-      scons: add host-python2-if-needed dependency
-      scons: ensure $(HOST_DIR)/usr/bin is in the PATH when invoking $(SCONS)
-      manual: add host python2 dependency section
-
- docs/manual/adding-packages-tips.txt              | 38 +++++++++++++++++++++++
- package/Makefile.in                               |  2 +-
- package/fluxbox/fluxbox-1.3.2-fix-configure.patch | 19 ++++++++++++
- package/fluxbox/fluxbox.mk                        | 10 +++++-
- package/matchbox/matchbox-lib/matchbox-lib.mk     |  2 +-
- package/pkg-cmake.mk                              |  5 +--
- package/scons/scons.mk                            | 10 ++++--
- support/dependencies/check-host-python2.mk        | 18 +++++++++++
- support/dependencies/check-host-python2.sh        | 13 ++++++++
- support/dependencies/dependencies.sh              |  2 +-
- 10 files changed, 110 insertions(+), 9 deletions(-)
- create mode 100644 package/fluxbox/fluxbox-1.3.2-fix-configure.patch
- create mode 100644 support/dependencies/check-host-python2.mk
- create mode 100755 support/dependencies/check-host-python2.sh
-
-Yours,
-
---
-
-Samuel
+diff --git a/package/matchbox/matchbox-lib/matchbox-lib.mk b/package/matchbox/matchbox-lib/matchbox-lib.mk
+index 7730d94..d18df6b 100644
+--- a/package/matchbox/matchbox-lib/matchbox-lib.mk
++++ b/package/matchbox/matchbox-lib/matchbox-lib.mk
+@@ -7,7 +7,7 @@
+ MATCHBOX_LIB_VERSION = 1.9
+ MATCHBOX_LIB_SOURCE = libmatchbox-$(MATCHBOX_LIB_VERSION).tar.bz2
+ MATCHBOX_LIB_SITE = http://downloads.yoctoproject.org/releases/matchbox/libmatchbox/$(MATCHBOX_LIB_VERSION)
+-MATCHBOX_LIB_LICENSE = LGPLv2.1
++MATCHBOX_LIB_LICENSE = LGPLv2.1+
+ MATCHBOX_LIB_LICENSE_FILES = COPYING
+ MATCHBOX_LIB_INSTALL_STAGING = YES
+ MATCHBOX_LIB_DEPENDENCIES = host-pkgconf expat xlib_libXext
+-- 
+1.8.0.3
