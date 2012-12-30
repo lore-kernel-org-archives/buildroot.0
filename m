@@ -1,63 +1,58 @@
-From: Willy Lambert <lambert.willy@gmail.com>
-Date: Sun, 30 Dec 2012 13:56:54 +0100
-Subject: [Buildroot] Using a precompiled busybox toolchain as an
-	external toolchain
-In-Reply-To: <CAKvQZ_2ZJ9GOV-B2Gi1zG-gjJiFVYHxpd4GzFCHCAg7ABAPFUA@mail.gmail.com>
-References: <CAKvQZ_0sLwXqmGeTdeC6EBqqZ_FN4s6cVcnM3OwVrSHHYHfWDA@mail.gmail.com>
- <20121218135336.2e24d6bc@skate>
- <CAKvQZ_3-v9ArCy0b6Q9VmzNToDaigk1=USPJsgUKpEptzeP1yA@mail.gmail.com>
- <20121218163210.1573a9c7@skate>
- <CAKvQZ_2ZJ9GOV-B2Gi1zG-gjJiFVYHxpd4GzFCHCAg7ABAPFUA@mail.gmail.com>
-Message-ID: <CAKvQZ_1hK1dXwVs5W5XpuZY=O6AZj-Y8XtCHirW+wyXQ4Fwx8g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 30 Dec 2012 14:08:40 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-12-29
+In-Reply-To: <50E02D8F.7020504@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Sun, 30 Dec 2012 09:03:27 -0300")
+References: <20121230073456.2BCF452C08C@lolut.humanoidz.org>
+ <87r4m7uacj.fsf@dell.be.48ers.dk> <50E02D8F.7020504@zacarias.com.ar>
+Message-ID: <87ehi7u1pj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/12/18 Willy Lambert <lambert.willy@gmail.com>:
-> 2012/12/18 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
->> Dear Willy Lambert,
->>
->> On Tue, 18 Dec 2012 16:19:47 +0100, Willy Lambert wrote:
->>
->>> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah. To be honest an entry
->>> in the manual to state this would be nice.
->>
->> Indeed. Feel free to submit a patch for the manual :-)
->>
->
-> yes, but how ? Should I edit html files by and in the docs/manual folder ?
-> I'm not at ease with git, so I will see during hollidays if I can do
-> something with it.
->
->>> thanks, should I understand that I can't publish the buildroot
->>> toolchain on another  PC without installing it at the __same__ place ?
->>
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-may I bump this, how should I edit documentation ?
+Hi,
 
-I succeeded in creating the toolchain in "MY_TOOLCAHIN_PATH", but :
-_ if I do a make clean it disapear, so I suppose I have to change
-BR2_HOST_DIR back the default value after having creating the
-toolchain ?
-_ what's happening if I create several toolchain for several arch in
-the same "MY_TOOLCHAIN_PATH ? does they override or do they install
-nicely both in the same dir ?
-_ what is the path I have to give to buildroot ? "MY_TOOLCHAIN_PATH'
-or something like "MY_TOOLCHAIN_PATH'/usr/...
+ Gustavo> On 12/30/2012 07:02 AM, Peter Korsgaard wrote:
+ >> These two looks related to your recent gnutls version bump. Care to have
+ >> a look?
 
->> Your understanding is correct. Making the toolchain relocatable is part
->> of our TODO-list, though.
->>
->
-> Ok thanks
->
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, Free Electrons
->> Kernel, drivers, real-time and embedded Linux
->> development, consulting, training and support.
->> http://free-electrons.com
+ Gustavo> Running a failing config now, i don't think i'll hit it
+ Gustavo> barebones though since they look like a pretty regular config.
+ Gustavo> Probably have to debootstrap.
+
+Thanks.
+
+ >> This is probably also related to it, but perhaps that gets fixed by
+ >> Thomas' e17 update.
+
+ Gustavo> Seems unlikely from looking at the source of ecore.
+ Gustavo> Since people have been using and accustomed to gnutls-2.x
+ Gustavo> which required libgcrypt they've been including it blindly.
+ Gustavo> I'll test to see if it really requires libgcrypt (like
+ Gustavo> ntfs-3g) or it's just probably following old gnutls
+ Gustavo> instructions and fix accordingly.
+
+Great, thanks.
+
+ >> Did you have a look at the host-gawk issue?
+
+ Gustavo> Yes, it seems peko-specific so my hunch says it's a distro
+ Gustavo> toolchain thing. I've asked Thomas and it seems it's runnig
+ Gustavo> gcc 4.3.2.  Looks like the new gawk DFA is triggering a bug or
+ Gustavo> using a newer feature that it shouldn't.  Couldn't reproduce
+ Gustavo> yet, so an old gentoo stage or debootstrap might help me.  So
+ Gustavo> also looking into it.  A puny dual-core won't help me with
+ Gustavo> getting these things solved quickly though, except libecore :)
+
+You can always request a login to the GCC compile farm if you want to
+check on gcc14:
+
+http://gcc.gnu.org/wiki/CompileFarm
+
+-- 
+Bye, Peter Korsgaard
