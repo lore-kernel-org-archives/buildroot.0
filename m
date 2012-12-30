@@ -1,36 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 30 Dec 2012 07:31:53 +0100
-Subject: [Buildroot] [PATCH 15/19] efl/libethumb: bump to 1.7.4 and change
-	download location
+Date: Sun, 30 Dec 2012 07:31:54 +0100
+Subject: [Buildroot] [PATCH 16/19] librsvg: relax dependency on Gtk,
+	add gdk-pixbuf dependency
 In-Reply-To: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1356849033.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ad2e427004f93d9f3d3f88991eb66898f8d25347.1356849033.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <99f711e9c9d6278ca7471d5ed7c21efb155da1bb.1356849033.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+librsvg doesn't *require* Gtk, it can optionally build a Gtk theme
+engine, but it is not mandatory. Therefore, we make the Gtk dependency
+an optional dependency rather than a hard dependency. This will be
+useful as librsvg will become a dependency of libevas-generic-loaders,
+used in an EFL context in which building libgtk is not really what we
+want.
+
+However, gdk-pixbuf is a mandatory dependency to build librsvg, so we
+add this one.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libethumb/libethumb.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/librsvg/Config.in  |    2 +-
+ package/librsvg/librsvg.mk |    8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
-index ba77e4c..eb098ea 100644
---- a/package/efl/libethumb/libethumb.mk
-+++ b/package/efl/libethumb/libethumb.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+index fdb7d31..855b3d6 100644
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_LIBGLIB2
+-	depends on BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_GDK_PIXBUF
+ 	depends on BR2_USE_WCHAR # glib2
+ 	help
+ 	  The rsvg library is an efficient renderer for Scalable
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index e54c06c..745fcfa 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -11,6 +11,12 @@ LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
+ LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_OPT = --disable-tools
+-LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
++LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
++
++# If we have Gtk2, let's build it first to benefit from librsvg Gtk
++# support.
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++LIBRSVG_DEPENDENCIES += libgtk2
++endif
  
--LIBETHUMB_VERSION = 0.1.1.65643
-+LIBETHUMB_VERSION = 1.7.4
- LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
--LIBETHUMB_SITE = http://download.enlightenment.org/snapshots/2011-11-28
-+LIBETHUMB_SITE = http://download.enlightenment.org/releases/
- LIBETHUMB_LICENSE = LGPLv2.1+
- LIBETHUMB_LICENSE_FILES = COPYING
- 
+ $(eval $(autotools-package))
 -- 
 1.7.9.5
