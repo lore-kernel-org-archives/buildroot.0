@@ -1,56 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 30 Dec 2012 07:21:58 +0100
-Subject: [Buildroot] [git commit] efl/libevas: remove SVG support
-Message-ID: <20121230112956.B023E9A53C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] librsvg: relax dependency on Gtk,
+	add gdk-pixbuf dependency
+Message-ID: <20121230112958.663679A53C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=212a5abdbd41298647627a977b336c2f4b1f646c
+commit: http://git.buildroot.net/buildroot/commit/?id=99f711e9c9d6278ca7471d5ed7c21efb155da1bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The SVG support requires esvg, which hasn't been released yet. The
-recommandation of the EFL developers is to use the SVG loader from the
-evas-generic-loaders project.
+librsvg doesn't *require* Gtk, it can optionally build a Gtk theme
+engine, but it is not mandatory. Therefore, we make the Gtk dependency
+an optional dependency rather than a hard dependency. This will be
+useful as librsvg will become a dependency of libevas-generic-loaders,
+used in an EFL context in which building libgtk is not really what we
+want.
+
+However, gdk-pixbuf is a mandatory dependency to build librsvg, so we
+add this one.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/efl/libevas/Config.in  |    5 -----
- package/efl/libevas/libevas.mk |    6 ------
- 2 files changed, 0 insertions(+), 11 deletions(-)
+ package/librsvg/Config.in  |    2 +-
+ package/librsvg/librsvg.mk |    8 +++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
-index ddac49e..d8e5002 100644
---- a/package/efl/libevas/Config.in
-+++ b/package/efl/libevas/Config.in
-@@ -181,11 +181,6 @@ config BR2_PACKAGE_LIBEVAS_TIFF
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+index fdb7d31..855b3d6 100644
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_LIBGLIB2
+-	depends on BR2_PACKAGE_LIBGTK2
++	select BR2_PACKAGE_GDK_PIXBUF
+ 	depends on BR2_USE_WCHAR # glib2
  	help
- 	  This enables the loader code that loads tiff files.
+ 	  The rsvg library is an efficient renderer for Scalable
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index e54c06c..745fcfa 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -11,6 +11,12 @@ LIBRSVG_SOURCE:=librsvg-$(LIBRSVG_VERSION).tar.gz
+ LIBRSVG_SITE:=http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)/
+ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_OPT = --disable-tools
+-LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 libgtk2
++LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
++
++# If we have Gtk2, let's build it first to benefit from librsvg Gtk
++# support.
++ifeq ($(BR2_PACKAGE_LIBGTK2),y)
++LIBRSVG_DEPENDENCIES += libgtk2
++endif
  
--config BR2_PACKAGE_LIBEVAS_SVG
--	bool "libevas svg loader"
--	help
--	  This enables the loader code that loads svg files.
--
- config BR2_PACKAGE_LIBEVAS_XPM
- 	bool "libevas xpm loader"
- 	help
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-index 8e03ba6..6e69d7f 100644
---- a/package/efl/libevas/libevas.mk
-+++ b/package/efl/libevas/libevas.mk
-@@ -176,12 +176,6 @@ else
- LIBEVAS_CONF_OPT += --disable-image-loader-pmaps
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBEVAS_SVG),y)
--LIBEVAS_CONF_OPT += --enable-image-loader-svg
--else
--LIBEVAS_CONF_OPT += --disable-image-loader-svg
--endif
--
- ifeq ($(BR2_PACKAGE_LIBEVAS_TIFF),y)
- LIBEVAS_CONF_OPT += --enable-image-loader-tiff
- LIBEVAS_DEPENDENCIES += tiff
+ $(eval $(autotools-package))
