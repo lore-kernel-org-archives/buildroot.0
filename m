@@ -1,47 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Jan 2013 17:49:23 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: does not reqquire wordexp
-Message-ID: <1357058963-18751-1-git-send-email-yann.morin.1998@free.fr>
+Date: Tue,  1 Jan 2013 21:10:10 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-package-create-user
+Message-ID: <cover.1357070939.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Builds just fine without it (probably stray include?)
+Hello All!
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/tvheadend/tvheadend-no-wordexp.patch |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/tvheadend/tvheadend-no-wordexp.patch
+Here is a series that allows packages to create users.
 
-diff --git a/package/tvheadend/tvheadend-no-wordexp.patch b/package/tvheadend/tvheadend-no-wordexp.patch
-new file mode 100644
-index 0000000..ae290ed
---- /dev/null
-+++ b/package/tvheadend/tvheadend-no-wordexp.patch
-@@ -0,0 +1,20 @@
-+epggrab: do not include wordexp.h
-+
-+Nothing from wordexp.h is needed (stray include?)
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Patch sent upstream, but no mailing-list. :-(
-+Status: awaiting feedback.
-+
-+diff -durN tvheadend-v3.3.orig/src/epggrab.c tvheadend-v3.3/src/epggrab.c
-+--- tvheadend-v3.3.orig/src/epggrab.c	2012-09-25 15:32:31.000000000 +0200
-++++ tvheadend-v3.3/src/epggrab.c	2012-12-31 19:22:29.768431849 +0100
-+@@ -20,7 +20,6 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <assert.h>
-+-#include <wordexp.h>
-+ #include <unistd.h>
-+ #include <sys/types.h>
-+ #include <sys/un.h>
+Packages that install daemons may well want to run those daemons as
+non-root users to avoid security issues. Currently, there are two users
+of choice to run 'generic' daemons: root or daemon (although there are
+a few dedicated users to run a few services: mail, sshd, ftp...).
+
+This series builds upon both the package infrastrucutre to define the
+user(s) a package may want to create, and the filesystem infrastructure
+to actually generate these users, and chown their ${HOME}s.
+
+Documentation is updated accordingly.
+
+Note: for now, users' passwords are md5-encrypted. Once the pending
+change to introduce alternative password-encryption schemes is applied,
+we can use that to encode users' passwords, too.
+
+As a proof of concept, the package tvheadend has been updated to use
+a dedicated user to run its daemon as (call me stubborn! ;-] ).
+
+Changes v1 -. v2:
+  - drop the gshadow patch (Thomas)
+  - tvheadend user is now part of the video secondary group
+
+
+The following changes since commit 560e7db37433fc82760f71557dbc3e495f05f909:
+
+  efl/libecore: fix build with gcrypt (2013-01-01 15:34:40 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-package-create-user
+
+Yann E. MORIN (2):
+      packages: add ability for packages to create users
+      package/tvheadend: use a non-root user to run the daemon
+
+ docs/manual/adding-packages-generic.txt |   16 ++-
+ docs/manual/makedev-syntax.txt          |   65 ++++++
+ fs/common.mk                            |    5 +-
+ package/pkg-generic.mk                  |    1 +
+ package/tvheadend/etc.default.tvheadend |    5 +-
+ package/tvheadend/tvheadend.mk          |   10 +-
+ support/scripts/mkusers                 |  348 +++++++++++++++++++++++++++++++
+ 7 files changed, 442 insertions(+), 8 deletions(-)
+ create mode 100755 support/scripts/mkusers
+
+Regards,
+Yann E. MORIN
+
 -- 
-1.7.2.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
