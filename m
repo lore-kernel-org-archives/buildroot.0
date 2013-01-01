@@ -1,37 +1,42 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jan 2013 22:21:03 +0100
-Subject: [Buildroot] [PATCH 3/4] lttng-tools: bump to 2.1.0
-In-Reply-To: <20121231181629.727e4aa7@skate> (Thomas Petazzoni's message of
- "Mon, 31 Dec 2012 18:16:29 +0100")
+Date: Tue, 01 Jan 2013 22:21:19 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-master/lttng
+In-Reply-To: <cover.1356905589.git.s.martin49@gmail.com> (Samuel Martin's
+ message of "Sun, 30 Dec 2012 23:17:43 +0100")
 References: <cover.1356905589.git.s.martin49@gmail.com>
- <9454e547b508f2f70f9891c14b4fe409ca02e1f4.1356905589.git.s.martin49@gmail.com>
- <20121231181629.727e4aa7@skate>
-Message-ID: <87bod8sips.fsf@dell.be.48ers.dk>
+Message-ID: <877gnwsipc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- Thomas> Dear Samuel Martin,
- Thomas> On Sun, 30 Dec 2012 23:17:46 +0100, Samuel Martin wrote:
+ Samuel> Hello,
+ Samuel> Here is version bump for Lttng and related packages.
 
- >> +# Since the 2.1.0 release, lttng-tools depends on flex and bison,
- >> +# but they are not added to the dependency list since they are
- >> +# already Buildroot dependencies.
+ Samuel> The following changes since commit f1d44593a04ff3be981c8a3b01a502f0b18193ee:
 
- Thomas> We are not very clear about this: we have packages for host-flex and
- Thomas> host-bison, and they are actually used by some of our packages. But we
- Thomas> also require the user to have flex and bison installed in his
- Thomas> distribution.
+ Samuel>   docs/manual: small fixes and enhancements to adding generic packages (2012-12-30 22:39:13 +0100)
 
- Thomas> Probably something that should be clarified, in one direction or
- Thomas> another.
+ Samuel> are available in the git repository at:
 
-Yes, it would be good to get rid of the flex/bison deps, and use our own
-everywhere if possible.
+ Samuel>   git at github.com:tSed/buildroot.git for-master/lttng
+
+ Samuel> for you to fetch changes up to 192d7031d43a55c00114dbb0bc54b697e4baf02e:
+
+ Samuel>   lttng-babeltrace: bump to 1.0.0 (2012-12-30 23:04:51 +0100)
+
+ Samuel> ----------------------------------------------------------------
+ Samuel> Samuel Martin (4):
+ Samuel>       lttng-libust: bump to 2.1.0
+ Samuel>       lttng-modules: bump to 2.1.0
+ Samuel>       lttng-tools: bump to 2.1.0
+ Samuel>       lttng-babeltrace: bump to 1.0.0
+
+Committed all 4, thanks.
 
 -- 
 Bye, Peter Korsgaard
