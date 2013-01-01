@@ -1,40 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Jan 2013 14:00:01 +0100
-Subject: [Buildroot] [git commit] libeet: fix build with gcrypt
-Message-ID: <20130101130012.16B069A585@busybox.osuosl.org>
+Date: Tue, 1 Jan 2013 13:26:16 +0100
+Subject: [Buildroot] [git commit] libevas-generic-loaders: fix rsvg
+	dependencies
+Message-ID: <20130101130011.87EA49A585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3628791f6f978d23fc07ae0d94a09a1153d2de85
+commit: http://git.buildroot.net/buildroot/commit/?id=65207ec2d1066ec45c77ad8a644e10d1074905f5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libeet needs both gnutls and libgcrypt for ssl handling.
-
-Fixes http://autobuild.buildroot.net/results/tmp/f45782cf73338930644c69dccf2f18167083d121/
+Fixes http://autobuild.buildroot.net/results/f9bab292708f885f5e9713901952406f650491c2
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/efl/libeet/libeet.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ package/efl/libevas-generic-loaders/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/efl/libeet/libeet.mk b/package/efl/libeet/libeet.mk
-index a5a1ce1..7034198 100644
---- a/package/efl/libeet/libeet.mk
-+++ b/package/efl/libeet/libeet.mk
-@@ -14,5 +14,13 @@ LIBEET_INSTALL_STAGING = YES
+diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
+index 44bc37d..bfa6097 100644
+--- a/package/efl/libevas-generic-loaders/Config.in
++++ b/package/efl/libevas-generic-loaders/Config.in
+@@ -15,7 +15,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+ 	depends on BR2_USE_WCHAR # librsvg -> glib2
++	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+ 	help
+ 	  This option enables the Evas generic SVG loader
  
- LIBEET_DEPENDENCIES = host-pkgconf zlib jpeg libeina
- 
-+ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
-+LIBEET_DEPENDENCIES += gnutls libgcrypt
-+LIBEET_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+LIBEET_CONF_OPT += --enable-gnutls
-+else
-+LIBEET_CONF_OPT += --disable-gnutls
-+endif
++comment "SVG loader requires a toolchain with WCHAR and C++ support"
++	depends on !BR2_USE_WCHAR && !BR2_INSTALL_LIBSTDCPP
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ endif
