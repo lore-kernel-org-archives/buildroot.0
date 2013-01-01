@@ -1,49 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Jan 2013 21:53:31 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: does not reqquire
-	wordexp
-Message-ID: <20130101211021.AEFA99A546@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Jan 2013 22:21:03 +0100
+Subject: [Buildroot] [PATCH 3/4] lttng-tools: bump to 2.1.0
+In-Reply-To: <20121231181629.727e4aa7@skate> (Thomas Petazzoni's message of
+ "Mon, 31 Dec 2012 18:16:29 +0100")
+References: <cover.1356905589.git.s.martin49@gmail.com>
+ <9454e547b508f2f70f9891c14b4fe409ca02e1f4.1356905589.git.s.martin49@gmail.com>
+ <20121231181629.727e4aa7@skate>
+Message-ID: <87bod8sips.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2147db9bdecd7b52ed53bbcd49f4f0e7a1ad1b23
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Builds just fine without it (probably stray include?)
+ Thomas> Dear Samuel Martin,
+ Thomas> On Sun, 30 Dec 2012 23:17:46 +0100, Samuel Martin wrote:
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/tvheadend/tvheadend-no-wordexp.patch |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
+ >> +# Since the 2.1.0 release, lttng-tools depends on flex and bison,
+ >> +# but they are not added to the dependency list since they are
+ >> +# already Buildroot dependencies.
 
-diff --git a/package/tvheadend/tvheadend-no-wordexp.patch b/package/tvheadend/tvheadend-no-wordexp.patch
-new file mode 100644
-index 0000000..ae290ed
---- /dev/null
-+++ b/package/tvheadend/tvheadend-no-wordexp.patch
-@@ -0,0 +1,20 @@
-+epggrab: do not include wordexp.h
-+
-+Nothing from wordexp.h is needed (stray include?)
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+Patch sent upstream, but no mailing-list. :-(
-+Status: awaiting feedback.
-+
-+diff -durN tvheadend-v3.3.orig/src/epggrab.c tvheadend-v3.3/src/epggrab.c
-+--- tvheadend-v3.3.orig/src/epggrab.c	2012-09-25 15:32:31.000000000 +0200
-++++ tvheadend-v3.3/src/epggrab.c	2012-12-31 19:22:29.768431849 +0100
-+@@ -20,7 +20,6 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <assert.h>
-+-#include <wordexp.h>
-+ #include <unistd.h>
-+ #include <sys/types.h>
-+ #include <sys/un.h>
+ Thomas> We are not very clear about this: we have packages for host-flex and
+ Thomas> host-bison, and they are actually used by some of our packages. But we
+ Thomas> also require the user to have flex and bison installed in his
+ Thomas> distribution.
+
+ Thomas> Probably something that should be clarified, in one direction or
+ Thomas> another.
+
+Yes, it would be good to get rid of the flex/bison deps, and use our own
+everywhere if possible.
+
+-- 
+Bye, Peter Korsgaard
