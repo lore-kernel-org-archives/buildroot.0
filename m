@@ -1,37 +1,47 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Jan 2013 13:26:16 +0100
-Subject: [Buildroot] [git commit] libevas-generic-loaders: fix rsvg
-	dependencies
-Message-ID: <20130101130011.87EA49A585@busybox.osuosl.org>
+Date: Tue, 1 Jan 2013 13:34:15 +0100
+Subject: [Buildroot] [git commit] spice: entire client support needs
+	C++/threads, not just start dialog gui
+Message-ID: <20130101130011.AFDC69A586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65207ec2d1066ec45c77ad8a644e10d1074905f5
+commit: http://git.buildroot.net/buildroot/commit/?id=76d190078dc0960e4278cbcb18c85c0b8e82b47b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/f9bab292708f885f5e9713901952406f650491c2
+Fixes http://autobuild.buildroot.net/results/230e6d78e3ec740a7794316cc388c6685e040946
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/efl/libevas-generic-loaders/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/spice/Config.in |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
-index 44bc37d..bfa6097 100644
---- a/package/efl/libevas-generic-loaders/Config.in
-+++ b/package/efl/libevas-generic-loaders/Config.in
-@@ -15,7 +15,11 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
- 	depends on BR2_USE_WCHAR # librsvg -> glib2
-+	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	help
- 	  This option enables the Evas generic SVG loader
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index 0c2c7a6..cd91833 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -32,17 +32,17 @@ comment "client depends on X.org"
+ config BR2_PACKAGE_SPICE_CLIENT
+ 	bool "Enable client"
+ 	depends on BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR
  
-+comment "SVG loader requires a toolchain with WCHAR and C++ support"
-+	depends on !BR2_USE_WCHAR && !BR2_INSTALL_LIBSTDCPP
-+
- endif
+-comment "GUI requires a toolchain with threads and C++"
+-	depends on BR2_PACKAGE_SPICE_CLIENT
++comment "client requires a toolchain with threads and C++"
++	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 
+ config BR2_PACKAGE_SPICE_GUI
+ 	bool "Enable GUI"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS    # cegui06
+-	depends on BR2_INSTALL_LIBSTDCPP        # cegui06
+ 	depends on BR2_PACKAGE_SPICE_CLIENT
+ 	select BR2_PACKAGE_CEGUI06
+ 	help
