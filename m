@@ -1,43 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Jan 2013 15:33:09 +0100
-Subject: [Buildroot] [git commit] package/dvb-apps: fix downloading
-Message-ID: <20130101143640.EF4CA9A584@busybox.osuosl.org>
+Date: Tue, 1 Jan 2013 15:34:40 +0100
+Subject: [Buildroot] [git commit] efl/libecore: fix build with gcrypt
+Message-ID: <20130101143641.244D69A57F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a24479144fb71a1c6a6b6fb16799cc83f49be56c
+commit: http://git.buildroot.net/buildroot/commit/?id=560e7db37433fc82760f71557dbc3e495f05f909
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As we're using the sources from the Mercurial repository, and Buildroot
-does support retrieving from a Mercurial repository, there is no need
-to try (and fail1) getting the archive from the Mercurial built-in
-tarball mechanism.
+When building with gnutls, libecore also needs libgcrypt.
 
-(Note: I was beaten by this because I had a cached copy locally, left
-after the previous tvheadend-vampirises-files-from-toher-packages attempt,
-that I forgot to delete before testing. Ouch...)
+Fixes:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  http://autobuild.buildroot.org/results/4da454d6414cf8f4e638defae9b793fb46a0a072/build-end.log
+
+While we're at it, also explicit the --enable-openssl /
+--disable-openssl depending on whether openssl is available or not.
+
+[Peter: only enable gnutls support when both gnutls and gcrypt are enabled]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dvb-apps/dvb-apps.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/efl/libecore/libecore.mk |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 721fbf0..5db8148 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -5,8 +5,8 @@
- #############################################################
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
+index 0220017..dfc5750 100644
+--- a/package/efl/libecore/libecore.mk
++++ b/package/efl/libecore/libecore.mk
+@@ -36,10 +36,16 @@ endif
  
- DVB_APPS_VERSION        = 3fc7dfa68484
--DVB_APPS_SOURCE         = dvb-apps-$(DVB_APPS_VERSION).tar.bz2
--DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps/archive/
-+DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps
-+DVB_APPS_SITE_METHOD    = hg
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBECORE_DEPENDENCIES += openssl
++LIBECORE_CONF_OPT += --enable-openssl
++else
++LIBECORE_CONF_OPT += --disable-openssl
+ endif
  
- # We just install the transponders data. As this is not a 'work' as per
- # traditional copyright, but just a collection of 'facts', there's probably
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-LIBECORE_DEPENDENCIES += gnutls
++ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
++LIBECORE_DEPENDENCIES += gnutls libgcrypt
++LIBECORE_CONF_OPT += --enable-gnutls --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++else
++LIBECORE_CONF_OPT += --disable-gnutls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
