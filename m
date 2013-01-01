@@ -1,47 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 Jan 2013 13:34:15 +0100
-Subject: [Buildroot] [git commit] spice: entire client support needs
-	C++/threads, not just start dialog gui
-Message-ID: <20130101130011.AFDC69A586@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  1 Jan 2013 14:23:58 +0100
+Subject: [Buildroot] [PATCH] efl/libecore: fix build with gcrypt
+Message-ID: <1357046638-2195-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=76d190078dc0960e4278cbcb18c85c0b8e82b47b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When building with gnutls, libecore also needs libgcrypt.
 
-Fixes http://autobuild.buildroot.net/results/230e6d78e3ec740a7794316cc388c6685e040946
+Fixes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+  http://autobuild.buildroot.org/results/4da454d6414cf8f4e638defae9b793fb46a0a072/build-end.log
+
+While we're at it, also explicit the --enable-openssl /
+--disable-openssl depending on whether openssl is available or not.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/spice/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/efl/libecore/libecore.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index 0c2c7a6..cd91833 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -32,17 +32,17 @@ comment "client depends on X.org"
- config BR2_PACKAGE_SPICE_CLIENT
- 	bool "Enable client"
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_XLIB_LIBXFIXES
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
+index 0220017..e824bfa 100644
+--- a/package/efl/libecore/libecore.mk
++++ b/package/efl/libecore/libecore.mk
+@@ -36,10 +36,16 @@ endif
  
--comment "GUI requires a toolchain with threads and C++"
--	depends on BR2_PACKAGE_SPICE_CLIENT
-+comment "client requires a toolchain with threads and C++"
-+	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBECORE_DEPENDENCIES += openssl
++LIBECORE_CONF_OPT += --enable-openssl
++else
++LIBECORE_CONF_OPT += --disable-openssl
+ endif
  
- config BR2_PACKAGE_SPICE_GUI
- 	bool "Enable GUI"
--	depends on BR2_TOOLCHAIN_HAS_THREADS    # cegui06
--	depends on BR2_INSTALL_LIBSTDCPP        # cegui06
- 	depends on BR2_PACKAGE_SPICE_CLIENT
- 	select BR2_PACKAGE_CEGUI06
- 	help
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-LIBECORE_DEPENDENCIES += gnutls
++LIBECORE_DEPENDENCIES += gnutls libgcrypt
++LIBECORE_CONF_OPT += --enable-gnutls --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++else
++LIBECORE_CONF_OPT += --disable-gnutls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-- 
+1.7.9.5
