@@ -1,42 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jan 2013 22:21:19 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-master/lttng
-In-Reply-To: <cover.1356905589.git.s.martin49@gmail.com> (Samuel Martin's
- message of "Sun, 30 Dec 2012 23:17:43 +0100")
-References: <cover.1356905589.git.s.martin49@gmail.com>
-Message-ID: <877gnwsipc.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 Jan 2013 22:19:01 +0100
+Subject: [Buildroot] [git commit] lttng-modules: bump to 2.1.0
+Message-ID: <20130101212113.D8BA49A59B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cf32809c5e04eb0fffa3edf0b8323c8ea0183b05
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Samuel> Hello,
- Samuel> Here is version bump for Lttng and related packages.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/lttng-modules/lttng-modules.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Samuel> The following changes since commit f1d44593a04ff3be981c8a3b01a502f0b18193ee:
-
- Samuel>   docs/manual: small fixes and enhancements to adding generic packages (2012-12-30 22:39:13 +0100)
-
- Samuel> are available in the git repository at:
-
- Samuel>   git at github.com:tSed/buildroot.git for-master/lttng
-
- Samuel> for you to fetch changes up to 192d7031d43a55c00114dbb0bc54b697e4baf02e:
-
- Samuel>   lttng-babeltrace: bump to 1.0.0 (2012-12-30 23:04:51 +0100)
-
- Samuel> ----------------------------------------------------------------
- Samuel> Samuel Martin (4):
- Samuel>       lttng-libust: bump to 2.1.0
- Samuel>       lttng-modules: bump to 2.1.0
- Samuel>       lttng-tools: bump to 2.1.0
- Samuel>       lttng-babeltrace: bump to 1.0.0
-
-Committed all 4, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index a245b19..54ae864 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -3,7 +3,7 @@
+ # LTTng-modules: the kernel modules (requires at least Linux 2.6.38)
+ #
+ #############################################################
+-LTTNG_MODULES_VERSION = 2.0.3
++LTTNG_MODULES_VERSION = 2.1.0
+ LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules/
+ LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ 
