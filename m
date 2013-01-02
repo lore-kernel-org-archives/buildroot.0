@@ -1,95 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Jan 2013 14:59:55 +0100
-Subject: [Buildroot] [git commit] arch/sparc: drop old SUN-specific variants
-Message-ID: <20130102140022.650CC9A5BC@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Jan 2013 11:50:09 -0300
+Subject: [Buildroot] [PATCH 1/2] gnutls: fix build failure related to
+	pthreads
+Message-ID: <1357138210-4455-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16bcf46a63871b6f0768a59b786a272f8fa312a2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Drop the old Sun-specific variants used in old workstations (pre-1997)
-and other useless ones.
-
-The V7 ISA is a very old cpu only used in the first Sun workstations,
-the toolchain support is broken: the cpu doesn't do hardware div and
-it's not handled elsewhere.
-
-The sparclite is also a very old Fujitsu cpu only used in early 90s Sun
-machines (includes f930 & f934).
-
-The sparclet (tsc701) was a microcontroller-variant.
-
-The supersparc and hypersparc are just V8 variants also used in old Sun
-workstations/servers.
+The pthreads autodetection posions the linkpath thus making other
+distribution libraries to take precedence over the cross ones.
+Leading to failures such as:
+http://autobuild.buildroot.net/results/tmp/3f979d4e2186ee31012c332fedec9591890b0b77
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- arch/Config.in.sparc |   32 +-------------------------------
- 1 files changed, 1 insertions(+), 31 deletions(-)
+ package/gnutls/gnutls.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
-index e1f72cc..33204a2 100644
---- a/arch/Config.in.sparc
-+++ b/arch/Config.in.sparc
-@@ -1,14 +1,10 @@
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_sparc
--	default BR2_sparc_v7
-+	default BR2_sparc_v8
- 	help
- 	  Specific CPU variant to use
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 0166a74..1cbcf70 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -17,6 +17,9 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=$(if $(BR2_INET_IPV6),yes,no) \
+ 	gt_cv_c_wint_t=$(if $(BR2_USE_WCHAR),yes,no)
+ GNUTLS_INSTALL_STAGING = YES
  
--config BR2_sparc_v7
--	bool "v7"
--config BR2_sparc_cypress
--	bool "cypress"
- config BR2_sparc_v8
- 	bool "v8"
- config BR2_sparc_sparchfleon
-@@ -19,22 +15,6 @@ config BR2_sparc_sparcsfleon
- 	bool "sfleon"
- config BR2_sparc_sparcsfleonv8
- 	bool "sfleonv8"
--config BR2_sparc_supersparc
--	bool "supersparc"
--config BR2_sparc_sparclite
--	bool "sparclite"
--config BR2_sparc_f930
--	bool "f930"
--config BR2_sparc_f934
--	bool "f934"
--config BR2_sparc_hypersparc
--	bool "hypersparc"
--config BR2_sparc_sparclite86x
--	bool "sparclite86x"
--config BR2_sparc_sparclet
--	bool "sparclet"
--config BR2_sparc_tsc701
--	bool "tsc701"
- endchoice
- 
- config BR2_ARCH
-@@ -44,17 +24,7 @@ config BR2_ENDIAN
- 	default "BIG"
- 
- config BR2_GCC_TARGET_TUNE
--	default "v7"		if BR2_sparc_v7
--	default "cypress"	if BR2_sparc_cypress
- 	default "v8"		if BR2_sparc_v8
--	default "supersparc"	if BR2_sparc_supersparc
--	default "hypersparc"	if BR2_sparc_hypersparc
--	default "sparclite"	if BR2_sparc_sparclite
--	default "f930"		if BR2_sparc_f930
--	default "f934"		if BR2_sparc_f934
--	default "sparclite86x"	if BR2_sparc_sparclite86x
--	default "sparclet"	if BR2_sparc_sparclet
--	default "tsc701"	if BR2_sparc_tsc701
- 	default "v9"		if BR2_sparc_v9
- 	default "v9"		if BR2_sparc_v9a
- 	default "v9"		if BR2_sparc_v9b
++# libpthread autodetection poisons the linkpath
++GNUTLS_CONF_OPT += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
++
+ # Some examples in doc/examples use wchar
+ define GNUTLS_DISABLE_DOCS
+ 	$(SED) 's/ doc / /' $(@D)/Makefile.in
+-- 
+1.7.8.6
