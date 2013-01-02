@@ -1,93 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Jan 2013 18:08:48 +0100
-Subject: [Buildroot] [PATCH 1/6] graph-depends: remove redundant dependencies
+Date: Wed,  2 Jan 2013 18:08:49 +0100
+Subject: [Buildroot] [PATCH 2/6] graph-depends: use a separate
+	TARGET_EXCEPTIONS variable
 In-Reply-To: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fcb1779bc395e8fecbe3e2f6a7cc4448d10b8ec1.1357146432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3a22dcd536aa95094c44ee2d7b3ce4e22718ff67.1357146432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When doing a full graph of the dependencies, graph-depends starts by
-doing a "make show-targets", which lists all the packages registered
-in the $(TARGETS) variable. This variable contains all packages that
-are enabled according to the .config file. Then, for each of those
-packages, we used to create a "all" -> "package" dependency, even if
-in fact most of some packages are already dependencies of other
-packages. This creates a needlessly complex dependency graph.
-
-This patch modifies graph-depends so that it filters out the unneeded
-"all" -> "package" dependencies when "package" is already the
-dependency of another package.
-
-For example, if you have a configuration with libpng (which selects
-zlib), "make show-targets" displays "libpng zlib", so graph-depends
-used to create the following dependencies: (all -> libpng, all ->
-zlib, libpng -> zlib). However, the (all -> zlib) dependency is not
-really needed, as zlib is already the dependency of libpng. Those
-dependencies are now filtered out.
+In preparation for more graph-depends improvements, use a
+TARGET_EXCEPTIONS list to list all the targets that should be ignored
+while building the dependency graph.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-For an example of the difference on a bigger configuration, see:
-  http://free-electrons.com/~thomas/pub/buildroot/graph-depends-before-redundant-removal.pdf
-  http://free-electrons.com/~thomas/pub/buildroot/graph-depends-after-redundant-removal.pdf
----
- support/scripts/graph-depends |   33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ support/scripts/graph-depends |   16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 409c123..c80a65a 100755
+index c80a65a..d5ef6e0 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -119,6 +119,37 @@ def get_all_depends(pkg):
- def pkg_node_name(pkg):
-     return pkg.replace("-","")
+@@ -150,6 +150,15 @@ def remove_redundant_deps(deps):
+         sys.stderr.write("Removing redundant dep all -> %s\n" % dep[1])
+     return newdeps
  
-+# Helper function for remove_redundant_deps(). This function tells
-+# whether package "pkg" is the dependency of another package that is
-+# not the special "all" package.
-+def has_redundant_deps(deps, pkg):
-+    for dep in deps:
-+        if dep[0] != "all" and dep[1] == pkg:
-+            return True
-+    return False
-+
-+# This function removes redundant dependencies of the special "all"
-+# package. This "all" package is created to reflect the origin of the
-+# selection for all packages that are not themselves selected by any
-+# other package. So for example if you enable libpng, zlib is enabled
-+# as a dependency. But zlib being selected by libpng, it also appears
-+# as a dependency of the "all" package. This needlessly complicates
-+# the generated dependency graph. So when we have the dependency list
-+# (all -> zlib, all -> libpn, libpng -> zlib), we get rid of the 'all
-+# -> zlib' dependency, because zlib is already a dependency of a
-+# regular package.
-+def remove_redundant_deps(deps):
-+    newdeps = []
-+    for dep in deps:
-+        if dep[0] != "all":
-+            newdeps.append(dep)
-+            continue
-+        if not has_redundant_deps(deps, dep[1]):
-+            newdeps.append(dep)
-+            continue
-+        sys.stderr.write("Removing redundant dep all -> %s\n" % dep[1])
-+    return newdeps
++TARGET_EXCEPTIONS = [
++    "target-generic-issue",
++    "target-generic-getty-busybox",
++    "target-generic-do-remount-rw",
++    "target-finalize",
++    "erase-fakeroots",
++    "target-generic-hostname",
++]
 +
  # In full mode, start with the result of get_targets() to get the main
  # targets and then use get_all_depends() for each individual target.
  if mode == FULL_MODE:
-@@ -144,6 +175,8 @@ if mode == FULL_MODE:
- elif mode == PKG_MODE:
-     dependencies = get_all_depends(rootpkg)
- 
-+dependencies = remove_redundant_deps(dependencies)
-+
- # Start printing the graph data
- print "digraph G {"
- 
+@@ -158,12 +167,7 @@ if mode == FULL_MODE:
+     allpkgs.append('all')
+     for tg in targets:
+         # Skip uninteresting targets
+-        if tg == 'target-generic-issue' or \
+-                tg == 'target-generic-getty-busybox' or \
+-                tg == 'target-generic-do-remount-rw' or \
+-                tg == 'target-finalize' or \
+-                tg == 'erase-fakeroots' or \
+-                tg == 'target-generic-hostname':
++        if tg in TARGET_EXCEPTIONS:
+             continue
+         dependencies.append(('all', tg))
+         deps = get_all_depends(tg)
 -- 
 1.7.9.5
