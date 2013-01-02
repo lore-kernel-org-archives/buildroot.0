@@ -1,34 +1,95 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Jan 2013 14:59:58 +0100
-Subject: [Buildroot] [git commit] qemu/sparc-ss10: switch to v8 optimization
-Message-ID: <20130102140022.9ECAD9A5BD@busybox.osuosl.org>
+Date: Wed, 2 Jan 2013 14:59:55 +0100
+Subject: [Buildroot] [git commit] arch/sparc: drop old SUN-specific variants
+Message-ID: <20130102140022.650CC9A5BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5406b810d032efbabd09e767c16324b912750d46
+commit: http://git.buildroot.net/buildroot/commit/?id=16bcf46a63871b6f0768a59b786a272f8fa312a2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to generic V8 optimization for gcc since we dropped the explicit
-supersparc one and works just the same.
+Drop the old Sun-specific variants used in old workstations (pre-1997)
+and other useless ones.
+
+The V7 ISA is a very old cpu only used in the first Sun workstations,
+the toolchain support is broken: the cpu doesn't do hardware div and
+it's not handled elsewhere.
+
+The sparclite is also a very old Fujitsu cpu only used in early 90s Sun
+machines (includes f930 & f934).
+
+The sparclet (tsc701) was a microcontroller-variant.
+
+The supersparc and hypersparc are just V8 variants also used in old Sun
+workstations/servers.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_sparc_ss10_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ arch/Config.in.sparc |   32 +-------------------------------
+ 1 files changed, 1 insertions(+), 31 deletions(-)
 
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 38bf243..0b65866 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -1,6 +1,6 @@
- # Architecture
- BR2_sparc=y
--BR2_sparc_supersparc=y
-+BR2_sparc_v8=y
+diff --git a/arch/Config.in.sparc b/arch/Config.in.sparc
+index e1f72cc..33204a2 100644
+--- a/arch/Config.in.sparc
++++ b/arch/Config.in.sparc
+@@ -1,14 +1,10 @@
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_sparc
+-	default BR2_sparc_v7
++	default BR2_sparc_v8
+ 	help
+ 	  Specific CPU variant to use
  
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
+-config BR2_sparc_v7
+-	bool "v7"
+-config BR2_sparc_cypress
+-	bool "cypress"
+ config BR2_sparc_v8
+ 	bool "v8"
+ config BR2_sparc_sparchfleon
+@@ -19,22 +15,6 @@ config BR2_sparc_sparcsfleon
+ 	bool "sfleon"
+ config BR2_sparc_sparcsfleonv8
+ 	bool "sfleonv8"
+-config BR2_sparc_supersparc
+-	bool "supersparc"
+-config BR2_sparc_sparclite
+-	bool "sparclite"
+-config BR2_sparc_f930
+-	bool "f930"
+-config BR2_sparc_f934
+-	bool "f934"
+-config BR2_sparc_hypersparc
+-	bool "hypersparc"
+-config BR2_sparc_sparclite86x
+-	bool "sparclite86x"
+-config BR2_sparc_sparclet
+-	bool "sparclet"
+-config BR2_sparc_tsc701
+-	bool "tsc701"
+ endchoice
+ 
+ config BR2_ARCH
+@@ -44,17 +24,7 @@ config BR2_ENDIAN
+ 	default "BIG"
+ 
+ config BR2_GCC_TARGET_TUNE
+-	default "v7"		if BR2_sparc_v7
+-	default "cypress"	if BR2_sparc_cypress
+ 	default "v8"		if BR2_sparc_v8
+-	default "supersparc"	if BR2_sparc_supersparc
+-	default "hypersparc"	if BR2_sparc_hypersparc
+-	default "sparclite"	if BR2_sparc_sparclite
+-	default "f930"		if BR2_sparc_f930
+-	default "f934"		if BR2_sparc_f934
+-	default "sparclite86x"	if BR2_sparc_sparclite86x
+-	default "sparclet"	if BR2_sparc_sparclet
+-	default "tsc701"	if BR2_sparc_tsc701
+ 	default "v9"		if BR2_sparc_v9
+ 	default "v9"		if BR2_sparc_v9a
+ 	default "v9"		if BR2_sparc_v9b
