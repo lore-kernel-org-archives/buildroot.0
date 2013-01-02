@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Jan 2013 12:26:51 +0100
-Subject: [Buildroot] [PATCH 16/20] xdriver_xf86-video-suntcx: remove package
+Date: Wed,  2 Jan 2013 12:26:52 +0100
+Subject: [Buildroot] [PATCH 17/20] xdriver_xf86-video-tseng: remove package
 In-Reply-To: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2278ccde9b4cac71d4811365b37f11568b08254e.1357125961.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f0617493d002c714fcb7d09e1ec45e87cf7f2065.1357125961.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,55 +17,57 @@ in a Buildroot context.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/x11r7/Config.in                            |    1 -
- package/x11r7/xdriver_xf86-video-suntcx/Config.in  |    9 ---------
- .../xdriver_xf86-video-suntcx.mk                   |   12 ------------
- 3 files changed, 22 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-suntcx/Config.in
- delete mode 100644 package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+ package/x11r7/xdriver_xf86-video-tseng/Config.in   |   11 -----------
+ .../xdriver_xf86-video-tseng.mk                    |   12 ------------
+ 3 files changed, 24 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-video-tseng/Config.in
+ delete mode 100644 package/x11r7/xdriver_xf86-video-tseng/xdriver_xf86-video-tseng.mk
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index dd04781..b03531e 100644
+index b03531e..0649086 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -201,7 +201,6 @@ endmenu
- 		source package/x11r7/xdriver_xf86-video-sis/Config.in
- 		source package/x11r7/xdriver_xf86-video-suncg6/Config.in
- 		source package/x11r7/xdriver_xf86-video-sunffb/Config.in
--		source package/x11r7/xdriver_xf86-video-suntcx/Config.in
+@@ -204,7 +204,6 @@ endmenu
  		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
  		source package/x11r7/xdriver_xf86-video-tga/Config.in
  		source package/x11r7/xdriver_xf86-video-trident/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-suntcx/Config.in b/package/x11r7/xdriver_xf86-video-suntcx/Config.in
+-		source package/x11r7/xdriver_xf86-video-tseng/Config.in
+ 		source package/x11r7/xdriver_xf86-video-v4l/Config.in
+ 		source package/x11r7/xdriver_xf86-video-vesa/Config.in
+ 		source package/x11r7/xdriver_xf86-video-vmware/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-tseng/Config.in b/package/x11r7/xdriver_xf86-video-tseng/Config.in
 deleted file mode 100644
-index 3c82739..0000000
---- a/package/x11r7/xdriver_xf86-video-suntcx/Config.in
+index f72b87b..0000000
+--- a/package/x11r7/xdriver_xf86-video-tseng/Config.in
 +++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNTCX
--	bool "xf86-video-suntcx"
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TSENG
+-	bool "xf86-video-tseng"
 -	select BR2_PACKAGE_XSERVER_XORG_SERVER
 -	select BR2_PACKAGE_XPROTO_FONTSPROTO
 -	select BR2_PACKAGE_XPROTO_RANDRPROTO
 -	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+-	select BR2_PACKAGE_XPROTO_XEXTPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 -	help
--	  TCX video driver
-diff --git a/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk b/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+-	  Tseng Labs video driver
+diff --git a/package/x11r7/xdriver_xf86-video-tseng/xdriver_xf86-video-tseng.mk b/package/x11r7/xdriver_xf86-video-tseng/xdriver_xf86-video-tseng.mk
 deleted file mode 100644
-index edca7fe..0000000
---- a/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+index 8127c7d..0000000
+--- a/package/x11r7/xdriver_xf86-video-tseng/xdriver_xf86-video-tseng.mk
 +++ /dev/null
 @@ -1,12 +0,0 @@
 -################################################################################
 -#
--# xdriver_xf86-video-suntcx -- TCX video driver
+-# xdriver_xf86-video-tseng -- Tseng Labs video driver
 -#
 -################################################################################
 -
--XDRIVER_XF86_VIDEO_SUNTCX_VERSION = 1.1.1
--XDRIVER_XF86_VIDEO_SUNTCX_SOURCE = xf86-video-suntcx-$(XDRIVER_XF86_VIDEO_SUNTCX_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SUNTCX_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_SUNTCX_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto
+-XDRIVER_XF86_VIDEO_TSENG_VERSION = 1.2.4
+-XDRIVER_XF86_VIDEO_TSENG_SOURCE = xf86-video-tseng-$(XDRIVER_XF86_VIDEO_TSENG_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_TSENG_SITE = http://xorg.freedesktop.org/releases/individual/driver
+-XDRIVER_XF86_VIDEO_TSENG_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
 -
 -$(eval $(autotools-package))
 -- 
