@@ -1,28 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 02 Jan 2013 16:15:43 -0300
-Subject: [Buildroot] [PATCH 10/20] xdriver_xf86-video-s3: remove package
-In-Reply-To: <20130102200144.5ed56106@skate>
-References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
- <44205c6a9db9d3496db982f686d29fe9d096a088.1357125961.git.thomas.petazzoni@free-electrons.com>
- <50E43558.2000003@petroprogram.com> <20130102175740.359fc5ce@skate>
- <50E48268.401@zacarias.com.ar> <20130102200144.5ed56106@skate>
-Message-ID: <50E4875F.6090305@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Jan 2013 20:36:41 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	graph-depends-improvements
+In-Reply-To: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 2 Jan 2013 18:08:47 +0100")
+References: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87txqzpeba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/02/2013 04:01 PM, Thomas Petazzoni wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Here I'm really only removing things that the X.org project considers
-> as unmaintained. So I would prefer if you could raise the fact that the
-> SiS driver is still useful to the X.org people, so that they keep this
-> driver. I don't think we can reasonably keep an unmaintained X.org
-> driver in Buildroot if we want to easily continue to upgrade the other
-> X.org packages.
+ Thomas> Hello,
+ Thomas> Here are a few improvements to the graph-depends script. The most
+ Thomas> important improvements are:
 
-Hmm?
-I'm just pointing to the fact that i can test the sis (not sisusb....
-completely different monster) driver, which is supported.
-Regards.
+ Thomas>  * Removal of useless dependencies for the meta "all" package to many
+ Thomas>    packages. This makes the dependency graphs a lot more readable.
+
+ Thomas>  * Drastic optimization of the execution speed: on a given
+ Thomas>    configuration, it used to take 5 minutes 14 seconds to generate the
+ Thomas>    graph, now it takes 33 seconds.
+
+Nice! Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
