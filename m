@@ -1,39 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Jan 2013 15:52:49 +0100
-Subject: [Buildroot] [git commit] gnutls: fix build failure related to
-	pthreads
-Message-ID: <20130102145306.C72B39A5BD@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 2 Jan 2013 17:18:15 +0100
+Subject: [Buildroot] inittab for different systems
+In-Reply-To: <50E3D5B5.9020903@mind.be>
+References: <CAGm1_kucdX-CyXwmxN_A_pBO0qqX5+Z2gS=CrsiYsJ-f4XsxAQ@mail.gmail.com>
+ <50E3D5B5.9020903@mind.be>
+Message-ID: <CAGm1_ks6DUZXODpYHAkLismCqoeJVGhNzwLget1en7wfZN5yYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50e562bc4ab83128f093f44b34327f8c23782b06
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Jan 2, 2013 at 7:37 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 12/21/12 16:36, Yegor Yefremov wrote:
+>>
+>> I have two systems that use DT and thus can share one uImage. I'd like
+>> to use one rootfs image for both. How do I configure console in
+>> inittab, so that it can deal with different systems (one has ttyO2 the
+>> other ttyO3 as console)?
+>
+>
+>  I think the simplest way is to have a custom inittab that opens a getty on
+> both ttyO2 and ttyO3.
+>
+>  I _think_ you can also use /dev/console (assuming console is set up in your
+> DT) - but I guess strange things will happen if you have multiple consoles.
+>
+>  Regards,
+>  Arnout
 
-The pthreads autodetection poisons the linkpath thus making other
-distribution libraries to take precedence over the cross ones.
-Leading to failures such as:
-http://autobuild.buildroot.net/results/tmp/3f979d4e2186ee31012c332fedec9591890b0b77
+/dev/console has just once small drawback: you can't login as root
+AFAIK, But with this patch (tty_io.c)
+http://svn.visionsystems.de/cgi-bin/viewvc.cgi/trunk/buildroot-2011.08/board/vscom/linux-3.0/linux-0013-dev-console-fix.patch?revision=26&root=buildroot&view=markup
+one can fix this. But I would like the "official" way. By the way why
+this /dev/console restriction?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gnutls/gnutls.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 0166a74..1cbcf70 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -17,6 +17,9 @@ GNUTLS_CONF_ENV = gl_cv_socket_ipv6=$(if $(BR2_INET_IPV6),yes,no) \
- 	gt_cv_c_wint_t=$(if $(BR2_USE_WCHAR),yes,no)
- GNUTLS_INSTALL_STAGING = YES
- 
-+# libpthread autodetection poisons the linkpath
-+GNUTLS_CONF_OPT += $(if $(BR2_TOOLCHAIN_HAS_THREADS),--with-libpthread-prefix=$(STAGING_DIR)/usr)
-+
- # Some examples in doc/examples use wchar
- define GNUTLS_DISABLE_DOCS
- 	$(SED) 's/ doc / /' $(@D)/Makefile.in
+Yegor
