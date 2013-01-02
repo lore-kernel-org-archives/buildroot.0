@@ -1,54 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  2 Jan 2013 18:08:47 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	graph-depends-improvements
-Message-ID: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
+Date: Wed,  2 Jan 2013 18:08:48 +0100
+Subject: [Buildroot] [PATCH 1/6] graph-depends: remove redundant dependencies
+In-Reply-To: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1357146432.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fcb1779bc395e8fecbe3e2f6a7cc4448d10b8ec1.1357146432.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When doing a full graph of the dependencies, graph-depends starts by
+doing a "make show-targets", which lists all the packages registered
+in the $(TARGETS) variable. This variable contains all packages that
+are enabled according to the .config file. Then, for each of those
+packages, we used to create a "all" -> "package" dependency, even if
+in fact most of some packages are already dependencies of other
+packages. This creates a needlessly complex dependency graph.
 
-Here are a few improvements to the graph-depends script. The most
-important improvements are:
+This patch modifies graph-depends so that it filters out the unneeded
+"all" -> "package" dependencies when "package" is already the
+dependency of another package.
 
- * Removal of useless dependencies for the meta "all" package to many
-   packages. This makes the dependency graphs a lot more readable.
+For example, if you have a configuration with libpng (which selects
+zlib), "make show-targets" displays "libpng zlib", so graph-depends
+used to create the following dependencies: (all -> libpng, all ->
+zlib, libpng -> zlib). However, the (all -> zlib) dependency is not
+really needed, as zlib is already the dependency of libpng. Those
+dependencies are now filtered out.
 
- * Drastic optimization of the execution speed: on a given
-   configuration, it used to take 5 minutes 14 seconds to generate the
-   graph, now it takes 33 seconds.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+For an example of the difference on a bigger configuration, see:
+  http://free-electrons.com/~thomas/pub/buildroot/graph-depends-before-redundant-removal.pdf
+  http://free-electrons.com/~thomas/pub/buildroot/graph-depends-after-redundant-removal.pdf
+---
+ support/scripts/graph-depends |   33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-Best regards,
-
-Thomas
-
-The following changes since commit f1d44593a04ff3be981c8a3b01a502f0b18193ee:
-
-  docs/manual: small fixes and enhancements to adding generic packages (2012-12-30 22:39:13 +0100)
-
-are available in the git repository at:
-
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git graph-depends-improvements
-
-for you to fetch changes up to 99c288aaaa42b38f2c841abbf2db0fff1e228656:
-
-  graph-depends: remove support for "unknown" packages (2013-01-02 18:06:12 +0100)
-
-----------------------------------------------------------------
-Thomas Petazzoni (6):
-      graph-depends: remove redundant dependencies
-      graph-depends: use a separate TARGET_EXCEPTIONS variable
-      graph-depends: optimize execution speed
-      graph-depends: fix comment
-      graph-depends: update copyright
-      graph-depends: remove support for "unknown" packages
-
- support/scripts/graph-depends |  169 ++++++++++++++++++++++++++---------------
- 1 file changed, 108 insertions(+), 61 deletions(-)
-
-Thanks,
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 409c123..c80a65a 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -119,6 +119,37 @@ def get_all_depends(pkg):
+ def pkg_node_name(pkg):
+     return pkg.replace("-","")
+ 
++# Helper function for remove_redundant_deps(). This function tells
++# whether package "pkg" is the dependency of another package that is
++# not the special "all" package.
++def has_redundant_deps(deps, pkg):
++    for dep in deps:
++        if dep[0] != "all" and dep[1] == pkg:
++            return True
++    return False
++
++# This function removes redundant dependencies of the special "all"
++# package. This "all" package is created to reflect the origin of the
++# selection for all packages that are not themselves selected by any
++# other package. So for example if you enable libpng, zlib is enabled
++# as a dependency. But zlib being selected by libpng, it also appears
++# as a dependency of the "all" package. This needlessly complicates
++# the generated dependency graph. So when we have the dependency list
++# (all -> zlib, all -> libpn, libpng -> zlib), we get rid of the 'all
++# -> zlib' dependency, because zlib is already a dependency of a
++# regular package.
++def remove_redundant_deps(deps):
++    newdeps = []
++    for dep in deps:
++        if dep[0] != "all":
++            newdeps.append(dep)
++            continue
++        if not has_redundant_deps(deps, dep[1]):
++            newdeps.append(dep)
++            continue
++        sys.stderr.write("Removing redundant dep all -> %s\n" % dep[1])
++    return newdeps
++
+ # In full mode, start with the result of get_targets() to get the main
+ # targets and then use get_all_depends() for each individual target.
+ if mode == FULL_MODE:
+@@ -144,6 +175,8 @@ if mode == FULL_MODE:
+ elif mode == PKG_MODE:
+     dependencies = get_all_depends(rootpkg)
+ 
++dependencies = remove_redundant_deps(dependencies)
++
+ # Start printing the graph data
+ print "digraph G {"
+ 
 -- 
-Thomas Petazzoni
+1.7.9.5
