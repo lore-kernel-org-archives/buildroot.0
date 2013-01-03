@@ -1,37 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 03 Jan 2013 14:11:18 -0300
-Subject: [Buildroot] Building For 486
-In-Reply-To: <AC90E66A6CD74D73BE3BEFF9E6A04249@beraninstruments.com.local>
-References: <000301cde9cd$7b4bb8e0$71e32aa0$@co.uk>
- <AC90E66A6CD74D73BE3BEFF9E6A04249@beraninstruments.com.local>
-Message-ID: <50E5BBB6.5020708@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 3 Jan 2013 18:33:43 +0100
+Subject: [Buildroot] [RFC] How to handle targets that need more than one
+	file system to boot?
+In-Reply-To: <CAKvQZ_0r6DyEt=1XZWZ5RwFYg-LaU1xvyJcYTVn0sje+696nkA@mail.gmail.com>
+References: <201212240100.17473.yann.morin.1998@free.fr>
+ <CAJJ6jxudS63P58imQ6nPn=_AA9JoBMZp3i=Dq2As1c9EiCDZxg@mail.gmail.com>
+ <CAKvQZ_0r6DyEt=1XZWZ5RwFYg-LaU1xvyJcYTVn0sje+696nkA@mail.gmail.com>
+Message-ID: <201301031833.44543.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/03/2013 01:59 PM, Will Moore wrote:
-> You need to ensure you use "an appropriate" kernel configuration for the
-> vortex86dx and correctly configure buildroot to build the kernel with it, let me
-> know if this makes no sense and you need more details...
-> 
-> IMHO a good starting place is the 2.6.29.6 kernel config provided by DM&P in
-> their X-Linux distribution.  I say a good starting place as I have had no end of
-> problems moving to more recent kernels.  (OT: I have had no end of problems with
-> this CPU full-stop, I have a deep seated suspicion that the FPU is "broken" or
-> at least both Linux and QNX kernels don't like it much, I run with it turned off
-> and use the Linux FPE. YMMV).
+Willy, All,
 
-I've got one of those "nice" ebox2300 boxes that use the original
-Vortex86 (AKA SiS 550).
-They're something like a 486-586 depending on how you look at it.
-I don't know how much they carried over to the newer SX/DX/MX variants
-but i vividly remember that the linux kernel configuration must be
-almost perfect to boot on these.
-I also recall that some kernel versions flat out don't like them, so
-trying is the best option until you find a suitable one.
-If you're interested i might be able to dig a kernel .config, but
-remember it's a different beast from the newer variants and it might not
-help at all.
-Regards.
+On Thursday 03 January 2013 Willy Lambert wrote:
+> 2013/1/3 Steve Calfee <stevecalfee@gmail.com>:
+[--SNIP--]
+> > Maybe we are talking about different things. I think there is a config
+> > option in buildroot that allows you to build multiple output
+> > filesystems, I believe I have created ext4 and a tar.gz as outputs. I
+> > think there are also various flash file systems you can create.
+> 
+> I'm curious to know how you do ext4 from BR. I did not found that, and
+> ASAIK, there is no documentation about outputs (and it's a real pain
+> for new comers like me)
+
+Indeed, not sure about ext4. But it's doable for ext3:
+  - first create an ext2 filesystem with genext2fs
+  - then add the ext3 feature with something like tune2fs -j
+
+As for ext4, it is probably not possible, as it is really different from
+an ext2/3 filesystem.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
