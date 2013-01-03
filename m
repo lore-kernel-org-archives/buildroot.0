@@ -1,50 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 Jan 2013 21:43:39 +0100
-Subject: [Buildroot] [git commit branch/2012.11.x] Update for 2012.11.1
-Message-ID: <20130103204416.D68629A5DD@busybox.osuosl.org>
+Date: Thu, 03 Jan 2013 21:58:10 +0100
+Subject: [Buildroot] Buildroot 2012.11.1 released
+Message-ID: <87obh6nfvh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1264adda0ec0ec5edaff5e372b97972cee6ae33c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/2012.11.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES  |   10 ++++++++++
- Makefile |    2 +-
- 2 files changed, 11 insertions(+), 1 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.net).
 
-diff --git a/CHANGES b/CHANGES
-index 2c357eb..0287cff 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,13 @@
-+2012.11.1, Released January 3rd, 2013:
-+
-+	Toolchain: Fixed non-largefile builds on recent Ubuntu
-+	versions.
-+
-+	Arch: fix missing x86/generic handling, Build for Xtensa with
-+	longcalls option.
-+
-+	Updated/fixed packages: dosfstools, qt
-+
- 2012.11, Released December 2nd, 2012:
- 
- 	Git shallow clone fix for older git version.
-diff --git a/Makefile b/Makefile
-index 9d9985f..692dbba 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2012.11
-+export BR2_VERSION:=2012.11.1
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
+Buildroot 2012.11.1 is released - Go download it at:
+
+http://buildroot.net/downloads/buildroot-2012.11.1.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2012.11.1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Buildroot 2012.11.1 is a bugfix release, fixing critical issues
+discovered since the 2012.11 release - Most importantly with
+non-largefile builds on recent Ubuntu releases.
+
+See the changes file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.11.1
+
+Many thanks to all the people contributing to this release:
+
+Chris Zankel (1):
+      xtensa: add -mlongcalls to CFLAGS for xtensa
+
+Frank Hunleth (1):
+      qt: fix qconfig configure parameter
+
+Mikhail Boiko (1):
+      dosfstools: fix download link
+
+Peter Korsgaard (2):
+      toolchain/gcc: also disable largefile for pass 1/2 if needed
+      Update for 2012.11.1
+
+Richard Braun (1):
+      arch: fix BR2_ARCH for generic target variant
+
+-- 
+Bye, Peter Korsgaard
