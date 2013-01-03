@@ -1,40 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2013 19:08:07 +0100
-Subject: [Buildroot] [RFC] How to handle targets that need more than one
-	file system to boot?
-In-Reply-To: <CAEYzJUFB5qbQBguXNoux=kqMHhqpj0pKDFhBi6j0FHAF7QU8Mw@mail.gmail.com>
-References: <201212240100.17473.yann.morin.1998@free.fr>
- <201301031833.44543.yann.morin.1998@free.fr>
- <CAEYzJUFB5qbQBguXNoux=kqMHhqpj0pKDFhBi6j0FHAF7QU8Mw@mail.gmail.com>
-Message-ID: <201301031908.07247.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Jan 2013 21:38:40 +0100
+Subject: [Buildroot] [PATCH 2/8] fluxbox: fix build against imlib2
+In-Reply-To: <d7aa4b5c9cd9aefcb9670572007dac718155df9b.1356907750.git.s.martin49@gmail.com>
+ (Samuel Martin's message of "Sun, 30 Dec 2012 23:54:09 +0100")
+References: <cover.1356907750.git.s.martin49@gmail.com>
+ <cover.1356907750.git.s.martin49@gmail.com>
+ <d7aa4b5c9cd9aefcb9670572007dac718155df9b.1356907750.git.s.martin49@gmail.com>
+Message-ID: <87sj6ingrz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bj?rn, All,
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-On Thursday 03 January 2013 Bj?rn Forsman wrote:
-> On 3 January 2013 18:33, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > As for ext4, it is probably not possible, as it is really different from
-> > an ext2/3 filesystem.
-> 
-> You can also convert ext3 to ext4:
-> 
-> https://ext4.wiki.kernel.org/index.php/Ext4_Howto#Converting_an_ext3_filesystem_to_ext4
+ Samuel> * fix configure.in to take care of the given imlib2-prefix
+ Samuel> * disable imlib2 support if imlib2 is not part of the selection
 
-Ah, good to know! Thank you! :-)
-So, we now know how to generate filesystems for all the ext familly. Yeah!
+ Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Regarfds,
-Yann E. MORIN.
+ Samuel> +++ b/package/fluxbox/fluxbox.mk
+ Samuel> @@ -10,11 +10,19 @@ FLUXBOX_SITE = http://downloads.sourceforge.net/project/fluxbox/fluxbox/$(FLUXBO
+ Samuel>  FLUXBOX_LICENSE = MIT
+ Samuel>  FLUXBOX_LICENSE_FILES = COPYING
+ 
+ Samuel> +FLUXBOX_AUTORECONF = YES
+ Samuel> +
+ Samuel>  FLUXBOX_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ Samuel>  		   --x-libraries=$(STAGING_DIR)/usr/lib
+ Samuel> -
+ Samuel>  FLUXBOX_DEPENDENCIES = xlib_libX11 $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+ Samuel> +ifeq ($(BR2_PACKAGE_IMLIB2),y)
+ Samuel> +FLUXBOX_CONF_OPT += --enable-imlib2 --with-imlib2-prefix=$(STAGING_DIR)/usr
+
+Imlib2 needs to be built with X11 support, otherwise linking fails, so
+I've updated the test to handle this and committed, thanks.
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
