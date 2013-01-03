@@ -1,51 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2013 22:46:28 +0100
-Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages to
-	create users
-In-Reply-To: <201301012332.08643.yann.morin.1998@free.fr>
-References: <cover.1357070939.git.yann.morin.1998@free.fr>
- <CAHXCMMKP7WNGQV5xvmjf9gB_FOtxmvDZhYAMTSun2w=_ZOn9vA@mail.gmail.com>
- <201301012332.08643.yann.morin.1998@free.fr>
-Message-ID: <201301032246.28934.yann.morin.1998@free.fr>
+Date: Thu,  3 Jan 2013 22:47:21 +0100
+Subject: [Buildroot] [pull request v3] Pull request for branch
+	yem-package-create-user
+Message-ID: <cover.1357248864.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Hello All!
 
-On Tuesday 01 January 2013 Yann E. MORIN wrote:
-> On Tuesday 01 January 2013 Samuel Martin wrote:
-> > 2013/1/1 Yann E. MORIN <yann.morin.1998@free.fr>:
-[--SNIP--]
-> > > +- +password+ is the crypt(3)-encrypted password. If prefixed with +=+,
-> > > +  then it is interpreted as clear-text, and will be cypt-encoded. If
-> > > +  prefixed with +!+, then login is disabled. If set to +*+, then login
-> > > +  is not allowed.
-> > Multiple prefix is allowed/supported; it could be explicitly mentioned.
-> > Is the prefix order important?
-> > 
-> > So, the clear-text password itself should not starts with any prefix character?
-[--SNIP--]
-> So, valid combinations are:
->     *           no password, login not allowed
->     XXXX        crypt-encoded password
->     !XXXX       crypt-encoded password, login disabled
->     =1234       clear-text password
->     !=1234      clear-text password, login disabled
+Here is a series that allows packages to create users.
 
-And of course, '!' and '=' are not in the set of characters that crypt can
-emit for an encoded password, so it is legit to write:
-    =           empty password
-    =!foo       clear-text password starts with a '!'
-    ==bar       clear-text password starts with a '='
-    !=          empty password                       , login is disabled
-    !=!foo      clear-text password starts with a '!', login is disabled
-    !==bar      clear-text password starts with a '=', login is disabled
+Packages that install daemons may well want to run those daemons as
+non-root users to avoid security issues. Currently, there are two users
+of choice to run 'generic' daemons: root or daemon (although there are
+a few dedicated users to run a few services: mail, sshd, ftp...).
+
+This series builds upon both the package infrastrucutre to define the
+user(s) a package may want to create, and the filesystem infrastructure
+to actually generate these users, and chown their ${HOME}s.
+
+Documentation is updated accordingly.
+
+Note: for now, users' passwords are md5-encrypted. Once the pending
+change to introduce alternative password-encryption schemes is applied,
+we can use that to encode users' passwords, too.
+
+As a proof of concept, the package tvheadend has been updated to use
+a dedicated user to run its daemon as (call me stubborn! ;-] ).
+
+
+Changes v2 -> v3:
+  - clarify password prefixes (Samuel)
+  - move makeuser syntax doc to its own file (Samuel)
+  - use awk instead of sed to parse /etc/passwd et al. (Cam, Thomas)
+  - sanitise use of grep (Cam)
+  - enhancements and fixes to makuser syntax doc (Cam)
+
+Changes v1 -> v2:
+  - drop the gshadow patch (Thomas, Peter)
+  - tvheadend user is now part of the video secondary group
+
+
+The following changes since commit 31ff7b5eac3883a11faf60d9af0b47bfc2d903f3:
+
+  docs: 2012.11.1 is out (2013-01-03 22:02:10 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-package-create-user
+
+Yann E. MORIN (2):
+      packages: add ability for packages to create users
+      package/tvheadend: use a non-root user to run the daemon
+
+ docs/manual/adding-packages-generic.txt |   16 ++-
+ docs/manual/appendix.txt                |    1 +
+ docs/manual/makeusers-syntax.txt        |   87 ++++++++
+ fs/common.mk                            |    5 +-
+ package/pkg-generic.mk                  |    1 +
+ package/tvheadend/etc.default.tvheadend |    5 +-
+ package/tvheadend/tvheadend.mk          |   10 +-
+ support/scripts/mkusers                 |  359 +++++++++++++++++++++++++++++++
+ 8 files changed, 476 insertions(+), 8 deletions(-)
+ create mode 100644 docs/manual/makeusers-syntax.txt
+ create mode 100755 support/scripts/mkusers
 
 Regards,
-Yann E. MORIN.
+Yann E. MORIN
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
