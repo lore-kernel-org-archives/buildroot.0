@@ -1,54 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jan 2013 11:23:06 +0100
-Subject: [Buildroot] [PATCH 2/3] Add Perf tools support
-In-Reply-To: <CAPDLWs-otw90dvsw7oVra=-+oNJZ0-SeiXE1CoXh1WUxNhq2vQ@mail.gmail.com>
-References: <CAPDLWs-otw90dvsw7oVra=-+oNJZ0-SeiXE1CoXh1WUxNhq2vQ@mail.gmail.com>
-Message-ID: <20130103112306.0d0ef1c6@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Jan 2013 11:30:02 +0100
+Subject: [Buildroot] [RFC] How to handle targets that need more than one
+	file system to boot?
+In-Reply-To: <201301030940.07495.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 3 Jan 2013 09:40:07 +0100")
+References: <201212240100.17473.yann.morin.1998@free.fr>
+ <201301030056.01956.yann.morin.1998@free.fr>
+ <CAJJ6jxudS63P58imQ6nPn=_AA9JoBMZp3i=Dq2As1c9EiCDZxg@mail.gmail.com>
+ <201301030940.07495.yann.morin.1998@free.fr>
+Message-ID: <87wqvuo8yd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kaiwan Billimoria,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Thu, 3 Jan 2013 13:20:39 +0530, Kaiwan Billimoria wrote:
+Hi,
 
-> + # FIXME: Where should we place the perf kernel patch? Online?
-> + # Temporarily, at least, it's under linux/
-> + BR2_LINUX_KERNEL_PATCH += "$(HOST_DIR)/../../linux/perf.patch"
+ Yann> The reason for wanting to include such a feature in Buildroot is to
+ Yann> keep Buildroot ximple to use for the *end-user*, not necessarily for
+ Yann> the Buildroot developpers. A little bit of complexity in the Buildroot
+ Yann> Makefiles and script is OK if it makes for an smoother user experience.
 
-No, we don't modify BR2 variables.
+ Yann> And if you have those files in images/ :
+ Yann>   - images/boot-vfat.img
+ Yann>   - images/root-squahfs.img
+ Yann>   - images/home-ext2.img
 
-> +all:
+ Yann> Then it is a matter of running (/dev/sdX is the sd-card):
+ Yann>   - dd if=images/boot-vfat.img of=/dev/sdX1
+ Yann>   - dd if=images/root-squashfs.img of=/dev/sdX2
+ Yann>   - dd if=images/home-ext2.img of=/dev/sdX3
 
-Arggh, this is *horrible*. Why do you believe you are allowed to
-overload the "all" target?
+Except this doesn't take care of resizing the filesystems to span the
+entire partition.
 
-> +	$(info Building Perf...)
-> +	$(TARGET_MAKE_ENV) $(MAKE) ARCH=$(ARCH)
-> CROSS_COMPILE=$(TARGET_CROSS) NO_LIBELF=1 -C $(LINUX_DIR)/tools/perf
-
-This should be part of LINUX_BUILD_CMDS
-
-> +	# Perf: Copy the perf binary executable to the target rootfs
-> +	cp -f $(LINUX_DIR)/tools/perf/perf $(TARGET_DIR)/usr/sbin
-
-This should be part of LINUX_INSTALL_TARGET_CMDS
-
-And doing that will help you solve the problem you mentioned in your
-cover letter ("the 'perf' binary executable is being built after the
-root filesystem is tar-red").
-
-That said, I am not sure we want this thing in linux/linux.mk. Maybe
-I'd prefer a package/perf/perf.mk, which depends on BR2_LINUX_KERNEL
-and re-uses the source code extracted in $(LINUX_DIR).
-
-Best regards,
-
-Thomas
+The linaro people afaik have a linaro-media-create tool to automate
+something like this, perhaps we could use it?
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
