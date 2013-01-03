@@ -1,58 +1,41 @@
-From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
-Date: Thu, 3 Jan 2013 15:40:38 +0530
-Subject: [Buildroot] [PATCH 3/3] Add perf tools support: kernel patch
-Message-ID: <CAPDLWs-NL7sYwDKw-9J+e31Zf027h8KtwPpv3WAQA2mA3wUspg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Jan 2013 11:16:34 +0100
+Subject: [Buildroot] [PATCH 3/3] Add perf tools support: this is the
+ kernel patch to be applied to the kernel for kernel compile to go through;
+ it basically adds a typedef.
+In-Reply-To: <CAPDLWs-2Jdyj5F_XaVyGW3kciq2Qmpz0ivbgBAvacXeNZSWy2w@mail.gmail.com>
+References: <CAPDLWs99Xx5ncxuCuFErsGzOnbs1br3VDcCFZooozWrHU+B=SQ@mail.gmail.com>
+ <50E54257.8050201@googlemail.com>
+ <CAPDLWs-2Jdyj5F_XaVyGW3kciq2Qmpz0ivbgBAvacXeNZSWy2w@mail.gmail.com>
+Message-ID: <20130103111634.1338bb49@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add perf tools support: this is the kernel patch.
+Dear Kaiwan Billimoria,
 
-This is the kernel patch to be applied to the kernel in order for the
-kernel compile to go through; it basically adds a typedef.
+On Thu, 3 Jan 2013 15:37:09 +0530, Kaiwan Billimoria wrote:
 
+> Also, AFAIK, the Sub line has the phrase [PATCH n/3]; where n is 0, 1,
+> 2 & 3, thus subject is unique (this is how git generated them). If
+> this is not sufficient, pl let me know..
 
-Signed-off-by: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
----
- linux/perf.patch |   26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 linux/perf.patch
+This is not sufficient. Everything between [...] is ignored when the
+patch is applied. Each of your patches should have a different commit
+message.
 
-diff --git a/linux/perf.patch b/linux/perf.patch
-new file mode 100644
-index 0000000..0fba468
---- /dev/null
-+++ b/linux/perf.patch
-@@ -0,0 +1,26 @@
-+--- linux-3.2.21.orig//tools/perf/util/gelf.h 2013-01-01
-16:01:11.736902336 +0530
-++++ linux-3.2.21/tools/perf/util/gelf.h	2013-01-01 16:03:58.076895032 +0530
-+@@ -0,0 +1,10 @@
-++#ifndef __GELF_NHDR__
-++#include <libelf.h>
-++#include <gelf.h>
-++
-++#if __LIBELF64
-++typedef Elf64_Nhdr GElf_Nhdr;
-++#else
-++typedef Elf32_Nhdr GElf_Nhdr;
-++#endif
-++#endif
-+Index: linux-3.2.21/tools/perf/util/symbol.h
-+======================================================
-+--- linux-3.2.21.orig//tools/perf/util/symbol.h	2013-01-01
-16:01:11.836902336 +0530
-++++ linux-3.2.21/tools/perf/util/symbol.h 2013-01-01 16:03:58.176895032 +0530
-+@@ -7,6 +7,7 @@
-+ #include "map.h"
-+ #include <linux/list.h>
-+ #include <linux/rbtree.h>
-++#include "gelf.h"
-+ #include <stdio.h>
-+
-+ #ifdef HAVE_CPLUS_DEMANGLE
-+
+That said, there is no reason for those 3 patches to be separate. If
+you apply patch 1 alone, you have a config option that does nothing. If
+you apply patches 1 and 2, then things break because it will try to
+apply perf.patch which does not exist.
+
+So basically, you should merge all your patches.
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
