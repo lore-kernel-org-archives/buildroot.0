@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Jan 2013 00:22:14 +0100
-Subject: [Buildroot] [PATCH] perf: new package
-In-Reply-To: <50E5A2B4.6090405@petroprogram.com>
-References: <1357225671-18101-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <50E5A2B4.6090405@petroprogram.com>
-Message-ID: <20130104002214.7a112fdf@skate>
+Date: Fri, 4 Jan 2013 00:25:27 +0100
+Subject: [Buildroot] [PATCH v2 1/2] rxvt-unicode: new package
+In-Reply-To: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20130104002527.416c342d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +12,77 @@ To: buildroot@busybox.net
 
 Dear Stefan Fr?berg,
 
-On Thu, 03 Jan 2013 17:24:36 +0200, Stefan Fr?berg wrote:
-
-> Here is an elfutils 0.155 (which contains libelf) for buildroot that I
-> posted some time ago.
-> Patch #4 is missing from that list because it was too big to submit to
-> this list.
+On Thu, 27 Dec 2012 20:45:17 +0200, Stefan Fr?berg wrote:
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+> ---
+>  package/Config.in                    |    1 +
+>  package/rxvt-unicode/Config.in       |    9 +++++++++
+>  package/rxvt-unicode/rxvt-unicode.mk |   12 ++++++++++++
+>  3 files changed, 22 insertions(+), 0 deletions(-)
+>  create mode 100644 package/rxvt-unicode/Config.in
+>  create mode 100644 package/rxvt-unicode/rxvt-unicode.mk
 > 
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063855.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063856.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063864.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063858.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063857.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063859.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063861.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063860.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063863.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063862.html
-> http://lists.busybox.net/pipermail/buildroot/2012-December/063865.html
+> diff --git a/package/Config.in b/package/Config.in
+> index 66445ff..73bab6e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -169,6 +169,7 @@ source "package/leafpad/Config.in"
+>  source "package/midori/Config.in"
+>  source "package/pcmanfm/Config.in"
+>  source "package/rdesktop/Config.in"
+> +source "package/rxvt-unicode/Config.in"
+>  source "package/sylpheed/Config.in"
+>  source "package/synergy/Config.in"
+>  source "package/torsmo/Config.in"
+> diff --git a/package/rxvt-unicode/Config.in b/package/rxvt-unicode/Config.in
+> new file mode 100644
+> index 0000000..3d819ce
+> --- /dev/null
+> +++ b/package/rxvt-unicode/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_RXVT_UNICODE
+> +	bool "rxvt-unicode"
+> +	select BR2_PACKAGE_FONTCONFIG
+> +	select BR2_PACKAGE_NCURSES
+> +	depends on BR2_PACKAGE_XORG7
 
-I've started having a real look at this, and started refactoring your
-patch series.
+Please add:
 
-Could you point me to the missing PATCH #4, so that I can see your
-entire series? At least send it by private e-mail to me, so that we
-don't get limited by the list.
+	select BR2_PACKAGE_XLIB_LIBX11
+	select BR2_PACKAGE_XLIB_LIBXRENDER
 
-Thanks,
+> +	help
+> +	  rxvt clone with xft and unicode support
+
+You're saying it uses Xft, but xlib_libXft is not part of your
+dependencies. Is this normal?
+
+> --- /dev/null
+> +++ b/package/rxvt-unicode/rxvt-unicode.mk
+> @@ -0,0 +1,12 @@
+> +#############################################################
+> +#
+> +# rxvt-unicode
+> +#
+> +#############################################################
+> +RXVT_UNICODE_VERSION = 9.15
+> +RXVT_UNICODE_SOURCE = rxvt-unicode-$(RXVT_UNICODE_VERSION).tar.bz2
+> +RXVT_UNICODE_SITE = http://dist.schmorp.de/rxvt-unicode
+> +RXVT_UNICODE_DEPENDENCIES = fontconfig ncurses xlib_libX11 xlib_libXrender
+> +RXVT_UNICODE_CONF_OPT += --enable-everything --disable-perl --with-x --with-terminfo=/usr/share/terminfo
+
+Please cut this line:
+
+RXVT_UNICODE_CONF_OPT += \
+	--enable-everything \
+	--disable-perl \
+	--with-x \
+	--with-terminfo=/usr/share/terminfo
+
+Also, please add the RXVT_UNICODE_LICENSE and
+RXVT_UNICODE_LICENSE_FILES variables.
+
+Thanks!
 
 Thomas
 -- 
