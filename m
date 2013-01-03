@@ -1,22 +1,36 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Thu, 03 Jan 2013 09:54:14 +0100 (CET)
-Subject: [Buildroot] [PATCH] [RFC] new target: live filesystem
-In-Reply-To: <50E470B2.9010508@mind.be>
-Message-ID: <051c80a7-ab84-42e3-a018-7a472c8dde51@zimbra2.corp.accelance.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Jan 2013 09:57:02 +0100
+Subject: [Buildroot] [RFC] How to handle targets that need more than one
+ file system to boot?
+In-Reply-To: <50E54714.8060602@mind.be>
+References: <201212240100.17473.yann.morin.1998@free.fr>
+ <201301030056.01956.yann.morin.1998@free.fr>
+ <CAJJ6jxudS63P58imQ6nPn=_AA9JoBMZp3i=Dq2As1c9EiCDZxg@mail.gmail.com>
+ <201301030940.07495.yann.morin.1998@free.fr>
+ <50E54714.8060602@mind.be>
+Message-ID: <20130103095702.68dd064c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-unfortunately I had the final word and this patch won't be included in master...
+Dear Arnout Vandecappelle,
 
-I'd still be interested in your changes if they make sense to add in my patch,
+On Thu, 03 Jan 2013 09:53:40 +0100, Arnout Vandecappelle wrote:
 
-I might post that patch one last time if you are interested though...
+>   AFAIK there is no equivalent of genext2fs for FAT, so it would be 
+> rather difficult to make a boot-vfat.img in buildroot (use sudo?
+> fuse? pmount?).
 
-    Regards
+You have the mtools, see http://www.gnu.org/software/mtools/.
 
-    J?r?my Rosen
+Also, see the genimage tool from Pengutronix people:
+http://www.pengutronix.de/software/genimage/download/.
 
-fight key loggers : write some perl using vim
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
