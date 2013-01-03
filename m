@@ -1,61 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 Jan 2013 22:02:10 +0100
-Subject: [Buildroot] [git commit] docs: 2012.11.1 is out
-Message-ID: <20130103210208.230E69A5EE@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  3 Jan 2013 22:18:56 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem-firmware
+Message-ID: <cover.1357247755.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=31ff7b5eac3883a11faf60d9af0b47bfc2d903f3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/download.html |    6 +++---
- docs/news.html     |   11 +++++++++++
- 2 files changed, 14 insertions(+), 3 deletions(-)
+Here is a little series to rework the firmware packages in a consistent
+way (or so I think).
 
-diff --git a/docs/download.html b/docs/download.html
-index 4cb01c9..2b1bb80 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -6,12 +6,12 @@
- 
- <p>
- 
--The latest stable release is <b>2012.11</b>, which can be downloaded
-+The latest stable release is <b>2012.11.1</b>, which can be downloaded
- here:<p>
- 
--<a href="/downloads/buildroot-2012.11.tar.gz">buildroot-2012.11.tar.gz</a>
-+<a href="/downloads/buildroot-2012.11.1.tar.gz">buildroot-2012.11.1.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.11.tar.bz2">buildroot-2012.11.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.11.1.tar.bz2">buildroot-2012.11.1.tar.bz2</a>.
- <!--
- <p>
- The latest release candidate is <b>2012.11-rc2</b>, which can be
-diff --git a/docs/news.html b/docs/news.html
-index 7e791be..343690f 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,17 @@
- <p>
- 
- <ul>
-+  <li><b>3 January 2013 -- 2012.11.1 released</b>
-+
-+    <p>The 2012.11.1 bugfix release is out - Thanks to everyone
-+    contributing. This release fixes critical issues discovered since
-+    the 2012.11 release, most importantly with non-largefile builds on
-+    recent Ubuntu versions. See the
-+    <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.11.1">CHANGES</a>
-+    file for more details,
-+    and go to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2012.11.1.tar.bz2">2012.11.1 release</a>.</p>
-+
-   <li><b>2 December 2012 -- 2012.11 released</b>
- 
-     <p>The stable 2012.11 release is out - Thanks to everyone
+This moves all packages providing firmware files (and only providing
+firmware files) to their own sub-menu, so that:
+  - they are easier to spot
+  - it is more convenient to add new ones in the future
+
+Also, new firmware files (for DVB tunners) can be installed from the
+linux-firmware package.
+
+
+The following changes since commit 31ff7b5eac3883a11faf60d9af0b47bfc2d903f3:
+
+  docs: 2012.11.1 is out (2013-01-03 22:02:10 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-firmware
+
+Yann E. MORIN (3):
+      firmwares: add a new package category to locate all firmwares
+      package/linux-firmware: reorganise config menus
+      linux-firmware: add options for DVB firmware files
+
+ package/Config.in                        |    8 +++--
+ package/b43-firmware/Config.in           |    2 +-
+ package/linux-firmware/Config.in         |   45 ++++++++++++++---------------
+ package/linux-firmware/linux-firmware.mk |    9 ++++++
+ 4 files changed, 37 insertions(+), 27 deletions(-)
+
+Regards,
+Yann E. MORIN
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
