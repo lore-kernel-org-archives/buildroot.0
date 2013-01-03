@@ -1,36 +1,33 @@
-From: =?UTF-8?q?Stefan=20Fr=C3=B6berg?= <stefan.froberg@petroprogram.com>
-Date: Fri,  4 Jan 2013 00:09:05 +0200
-Subject: [Buildroot] [PATCH] neon: fix neon-config
-In-Reply-To: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <1357250947-23296-6-git-send-email-stefan.froberg@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Jan 2013 00:17:28 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem-firmware
+In-Reply-To: <cover.1357247755.git.yann.morin.1998@free.fr>
+References: <cover.1357247755.git.yann.morin.1998@free.fr>
+Message-ID: <20130104001728.3ddfdc51@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Yann E. MORIN,
 
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
----
- package/neon/neon.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+On Thu,  3 Jan 2013 22:18:56 +0100, Yann E. MORIN wrote:
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index c2e4949..5e92853 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -52,4 +52,11 @@ ifneq ($(BR2_HAVE_DEVFILES),y)
- NEON_POST_INSTALL_TARGET_HOOKS += NEON_REMOVE_CONFIG_SCRIPTS
- endif
- 
-+define NEON_STAGING_NEON_CONFIG_FIXUP
-+	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/neon-config
-+	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/neon-config
-+endef
-+
-+NEON_POST_INSTALL_STAGING_HOOKS += NEON_STAGING_NEON_CONFIG_FIXUP
-+
- $(eval $(autotools-package))
+> Yann E. MORIN (3):
+>       firmwares: add a new package category to locate all firmwares
+>       package/linux-firmware: reorganise config menus
+>       linux-firmware: add options for DVB firmware files
+
+For the three patches:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+(untested, visual inspection only).
+
+Thomas
 -- 
-1.7.7.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
