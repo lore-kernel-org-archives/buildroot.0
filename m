@@ -1,54 +1,40 @@
 From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
-Date: Thu, 3 Jan 2013 13:19:20 +0530
-Subject: [Buildroot] [PATCH 0/3] Add Perf tools support
-Message-ID: <CAPDLWs9E97zpsf4MnrR=61MRY08CShQz5AK+r8W2BP0dXpv=ag@mail.gmail.com>
+Date: Thu, 3 Jan 2013 13:20:01 +0530
+Subject: [Buildroot] [PATCH 1/3] Add Perf tools support
+Message-ID: <CAPDLWs8Qt07H1Y+ECrJjUMUHWhNd=tP__yFwNLkPA78n86E2HA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks,
-
-As mentioned in an earlier email, am looking to add Perf tools support to
-Buildroot.
-Thomas P mentioned 3 approaches to this, I feel going with the first one
-(i.e. integrating the patches into the 'Kernel' menu of BR) works best (as
-of now).
-
-Of course, things will evolve..
-
-Also, pl understand that my current patch-set is definitely not perfect;
-for eg., one issue I am currently facing:
-the way i've got the Makefile (linux/linux.mk) running, the 'perf' binary
-executable is being built after the root filesystem is tar-red. How do I
-solve this? Pl help, as I don't (yet) understand all finer details of the
-BR mechanics..
-
-Anyhow, I hope this is a positive start in getting the perf tools into BR..
-
-I have formatted this patch-set such that this email is the "cover letter";
-subsequent emails contain the actual patches. Hope this is all right..
-
-TIA!
-Kaiwan.
-
+Signed-off-by: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
 ---
-Kaiwan Billimoria (3):
-  Add Perf tools support
-  Add Perf tools support
-  Add perf tools support: this is the kernel patch to be applied to the
-    kernel      for kernel compile to go through; it basically adds a
-    typedef.
+ linux/Config.in |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
- linux/Config.in  |   11 +++++++++++
- linux/linux.mk   |   21 +++++++++++++++++++++
- linux/perf.patch |   26 ++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 linux/perf.patch
+diff --git a/linux/Config.in b/linux/Config.in
+index 9ebe0c9..cb52ecf 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -284,6 +284,17 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	  /boot in the target root filesystem, as is typically done on
+ 	  x86/x86_64 systems.
 
++config BR2_LINUX_KERNEL_USERMODE_TOOLS_PERF
++	bool "perf"
++	help
++	  perf (aka "Perf Events" or perf tools, originally "Performance Counters
++	  for Linux") - is a performance analyzing tool in Linux. The user-space
++	  controlling utility, called 'perf' has a git-like interface with
+subcommands.
++	  It is capable of statistical profiling of entire system (both kernel and
++	  user code), single CPU or severals threads.
++
++	  https://perf.wiki.kernel.org/index.php/Main_Page
++
+
+ # Linux extensions
+ source "linux/Config.ext.in"
 -- 
 1.7.10.4
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130103/04c95a7c/attachment.html>
