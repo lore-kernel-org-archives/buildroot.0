@@ -1,54 +1,124 @@
-From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
-Date: Thu, 3 Jan 2013 18:24:41 +0530
-Subject: [Buildroot] [PATCH 2/3] Add Perf tools support
-In-Reply-To: <20130103112306.0d0ef1c6@skate>
-References: <CAPDLWs-otw90dvsw7oVra=-+oNJZ0-SeiXE1CoXh1WUxNhq2vQ@mail.gmail.com>
- <20130103112306.0d0ef1c6@skate>
-Message-ID: <CAPDLWs-9uZdAQd0gefq3G+8RPgLBRYFZXDK=RK9xtJcPPP__Ww@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  3 Jan 2013 16:07:50 +0100
+Subject: [Buildroot] [PATCH] perf: new package
+Message-ID: <1357225671-18101-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+This patch adds a new package that allows to build the 'perf'
+userspace tool that comes in the tools/perf directory of the kernel
+sources.
 
-Excuse my silly stuff & poor knowledge of the 'make'/build system !  :-p
-Pl see more qs below..
+It is an alternative proposal to the one done by Kaiwan Billimoria
+<kaiwan.billimoria@gmail.com>, in that it creates the package in
+package/perf/. It therefore properly integrates with the Buildroot
+package infrastructure.
 
->> + # FIXME: Where should we place the perf kernel patch? Online?
->> + # Temporarily, at least, it's under linux/
->> + BR2_LINUX_KERNEL_PATCH += "$(HOST_DIR)/../../linux/perf.patch"
->
-> No, we don't modify BR2 variables.
+Of course, the package depends on the Linux kernel to be built by
+Buildroot, in order to get Perf sources matching the version of the
+kernel that will be executed.
 
-So, how exactly do we do this then?
+One remaining issue is that this package only builds properly with
+kernel >= v3.7 (but it was the same with Kaiwan proposal) : the
+NO_LIBELF variable, which allows to get rid of the libelf dependency,
+has only been introduced between 3.6 and 3.7. If we want to support
+older kernel versions, we'll have to create a package for libelf.
 
->> +all:
->
-> Arggh, this is *horrible*. Why do you believe you are allowed to
-> overload the "all" target?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in      |    1 +
+ package/perf/Config.in |   22 ++++++++++++++++++++++
+ package/perf/perf.mk   |   38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
+ create mode 100644 package/perf/Config.in
+ create mode 100644 package/perf/perf.mk
 
-Right. Forgive my basic qs, but what's the right approach?
-
->
-> That said, I am not sure we want this thing in linux/linux.mk. Maybe
-> I'd prefer a package/perf/perf.mk, which depends on BR2_LINUX_KERNEL
-> and re-uses the source code extracted in $(LINUX_DIR).
-
-Ok, will try working on this approach as well.
-Not free now for a bit, will come back to this soon & keep you posted..
-
-Thanks again for all valuable inputs..
-Best,
-Kaiwan.
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 7860f3f..9e392d8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -35,6 +35,7 @@ source "package/ltrace/Config.in"
+ source "package/memstat/Config.in"
+ source "package/netperf/Config.in"
+ source "package/oprofile/Config.in"
++source "package/perf/Config.in"
+ source "package/ramspeed/Config.in"
+ source "package/rt-tests/Config.in"
+ source "package/strace/Config.in"
+diff --git a/package/perf/Config.in b/package/perf/Config.in
+new file mode 100644
+index 0000000..54b24fe
+--- /dev/null
++++ b/package/perf/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_PERF
++	bool "perf"
++	depends on BR2_LINUX_KERNEL
++	depends on BR2_LARGEFILE
++	help
++	  perf (sometimes "Perf Events" or perf tools, originally
++	  "Performance Counters for Linux") - is a performance
++	  analyzing tool in Linux, available from kernel version
++	  2.6.31. User-space controlling utility, called 'perf' has
++	  git-like interface with subcommands. It is capable of
++	  statistical profiling of entire system (both kernel and user
++	  code), single CPU or severals threads.
++
++	  This package builds and install the userspace 'perf'
++	  command. It is up to the user to ensure that the kernel
++	  configuration has all suitable options enable to allow a
++	  proper operation of 'perf'.
++
++	  https://perf.wiki.kernel.org/
++
++comment "perf only available if Linux kernel is enabled, and requires largefile support"
++	depends on !BR2_LINUX_KERNEL || !BR2_LARGEFILE
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+new file mode 100644
+index 0000000..7774dae
+--- /dev/null
++++ b/package/perf/perf.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# perf
++#
++#############################################################
++
++# Source taken from the Linux kernel tree
++PERF_SOURCE =
++PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++
++PERF_DEPENDENCIES = linux
++
++PERF_MAKE_FLAGS = \
++	$(LINUX_MAKE_FLAGS) \
++	NO_LIBELF=1 \
++	NO_DWARF=1 \
++	NO_LIBAUDIT=1 \
++	NO_NEWT=1 \
++	NO_GTK2=1 \
++	NO_LIBPERL=1 \
++	NO_LIBPYTHON=1 \
++	DESTDIR=$(TARGET_DIR) \
++	prefix=/usr
++
++define PERF_BUILD_CMDS
++	$(MAKE) -C $(LINUX_DIR)/tools/perf \
++		$(PERF_MAKE_FLAGS) O=$(@D)
++endef
++
++# After installation, we remove the Perl and Python scripts from the
++# target.
++define PERF_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(LINUX_DIR)/tools/perf \
++		$(PERF_MAKE_FLAGS) O=$(@D) install
++	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.9.5
