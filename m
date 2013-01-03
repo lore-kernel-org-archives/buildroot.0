@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jan 2013 09:57:02 +0100
-Subject: [Buildroot] [RFC] How to handle targets that need more than one
- file system to boot?
-In-Reply-To: <50E54714.8060602@mind.be>
-References: <201212240100.17473.yann.morin.1998@free.fr>
- <201301030056.01956.yann.morin.1998@free.fr>
- <CAJJ6jxudS63P58imQ6nPn=_AA9JoBMZp3i=Dq2As1c9EiCDZxg@mail.gmail.com>
- <201301030940.07495.yann.morin.1998@free.fr>
- <50E54714.8060602@mind.be>
-Message-ID: <20130103095702.68dd064c@skate>
+Date: Thu, 3 Jan 2013 09:58:50 +0100
+Subject: [Buildroot] [PATCH] graph-depends: add to exclusion list
+In-Reply-To: <1357158963-3251-1-git-send-email-yann.morin.1998@free.fr>
+References: <201301022128.33543.yann.morin.1998@free.fr>
+ <1357158963-3251-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20130103095850.4e96c47a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Yann E. MORIN,
 
-On Thu, 03 Jan 2013 09:53:40 +0100, Arnout Vandecappelle wrote:
+On Wed,  2 Jan 2013 21:36:03 +0100, Yann E. MORIN wrote:
+> Add the root-password internal target to the exclusion list.
+> 
+> Fixes failures like:
+>     Getting dependencies for [... 'target-root-passwd' ...]
+>     Error getting dependencies [... 'target-root-passwd' ...]
+> 
+> Which is easily singled out with:
+>     $ make target-root-passwd-show-depends
+>     make[1]: *** No rule to make target
+> `target-root-passwd-show-depends'.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
->   AFAIK there is no equivalent of genext2fs for FAT, so it would be 
-> rather difficult to make a boot-vfat.img in buildroot (use sudo?
-> fuse? pmount?).
+Thanks, indeed. I was in the train, and my master was not fully
+up-to-date with the latest root password related changes.
 
-You have the mtools, see http://www.gnu.org/software/mtools/.
-
-Also, see the genimage tool from Pengutronix people:
-http://www.pengutronix.de/software/genimage/download/.
+Ideally, the script should parse the make output a bit better and be
+capable of showing the error, but well...
 
 Thomas
 -- 
