@@ -1,51 +1,45 @@
-From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
-Date: Thu, 3 Jan 2013 15:37:09 +0530
-Subject: [Buildroot] [PATCH 3/3] Add perf tools support: this is the
- kernel patch to be applied to the kernel for kernel compile to go through;
- it basically adds a typedef.
-In-Reply-To: <50E54257.8050201@googlemail.com>
-References: <CAPDLWs99Xx5ncxuCuFErsGzOnbs1br3VDcCFZooozWrHU+B=SQ@mail.gmail.com>
- <50E54257.8050201@googlemail.com>
-Message-ID: <CAPDLWs-2Jdyj5F_XaVyGW3kciq2Qmpz0ivbgBAvacXeNZSWy2w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Jan 2013 11:08:19 +0100
+Subject: [Buildroot] Buildroot and PTXDist
+In-Reply-To: <CAKvQZ_3=JY06hrgjn2ivcZonpmQ7sHgYX1vwEdda7HPU9k=Bbg@mail.gmail.com>
+References: <CAKvQZ_3=JY06hrgjn2ivcZonpmQ7sHgYX1vwEdda7HPU9k=Bbg@mail.gmail.com>
+Message-ID: <20130103110819.77f4326f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carsten,
+Dear Willy Lambert,
 
-Thanks for your inputs.
-I don't have git send-email working, yet...
-So, will resend the 3rd patch (3/3) with a shorter subject line.
+On Thu, 3 Jan 2013 10:06:35 +0100, Willy Lambert wrote:
 
-Also, AFAIK, the Sub line has the phrase [PATCH n/3]; where n is 0, 1,
-2 & 3, thus subject is unique (this is how git generated them). If
-this is not sufficient, pl let me know..
+> could someone help me in finding what's different between Buildroot
+> and PtxDist ? Both project seems active and both projects seems to do
+> the same thing (creating the rootfs from scratch) and AFAIK PTXDist in
+> a fork from buildroot.
 
-Thanks,
-Kaiwan.
+I don't know enough of PTXdist to make an objective and honest
+comparison being both projects.
 
-On Thu, Jan 3, 2013 at 2:03 PM, Carsten Schoenert <c.schoenert@gmail.com> wrote:
-> Hello Kaiwan,
->
-> Am 03.01.2013 08:51, schrieb Kaiwan Billimoria:
->> Add perf tools support: this is the kernel patch to be applied to the
->> kernel for kernel  compile to go through; it basically adds a typedef.
->>
->> Signed-off-by: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
->
-> [SNIPP]
-> your subject is a little bit to long.
-> The first line shout idealy not longer than 50 characters be. The second
-> line is always empty.
-> After that there is more space for explanations.
->
-> All your other patches are named the same, that can't be right. :)
->
-> Why don't you use git-email? This make it a lot easier to send patches.
->
-> --
-> Regards
-> Carsten Schoenert
->
+However, I am not sure PTXdist is really a fork of Buildroot. It
+certainly uses the same kconfig interface, and also uses make, but
+besides that, I am not sure that the PTXdist developers started off
+from Buildroot.
+
+In term of activity:
+
+ * In 2011, 1093 commits in PTXdist, 1422 commits in Buildroot
+ * In 2012, 1383 commits in PTXdist, 2645 commits in Buildroot
+
+A difference is that Buildroot is very community-driven, while PTXdist
+is driven by Pengutronix, and the vast majority of the contributions are
+done by Pengutronix engineers. In the 2476 commits of the last two years
+of development, 2116 were done by Pengutronix engineers.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
