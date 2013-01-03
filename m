@@ -1,48 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jan 2013 12:20:53 +0100
-Subject: [Buildroot] [PATCH 10/20] xdriver_xf86-video-s3: remove package
-In-Reply-To: <50E561BB.9060102@zacarias.com.ar>
-References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
- <44205c6a9db9d3496db982f686d29fe9d096a088.1357125961.git.thomas.petazzoni@free-electrons.com>
- <50E43558.2000003@petroprogram.com> <20130102175740.359fc5ce@skate>
- <50E48268.401@zacarias.com.ar> <20130102200144.5ed56106@skate>
- <50E4875F.6090305@zacarias.com.ar> <20130103114252.18661c1e@skate>
- <50E561BB.9060102@zacarias.com.ar>
-Message-ID: <20130103122053.02304910@skate>
+From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
+Date: Thu, 3 Jan 2013 18:24:41 +0530
+Subject: [Buildroot] [PATCH 2/3] Add Perf tools support
+In-Reply-To: <20130103112306.0d0ef1c6@skate>
+References: <CAPDLWs-otw90dvsw7oVra=-+oNJZ0-SeiXE1CoXh1WUxNhq2vQ@mail.gmail.com>
+ <20130103112306.0d0ef1c6@skate>
+Message-ID: <CAPDLWs-9uZdAQd0gefq3G+8RPgLBRYFZXDK=RK9xtJcPPP__Ww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas Petazzoni,
 
-On Thu, 03 Jan 2013 07:47:23 -0300, Gustavo Zacarias wrote:
-> On 01/03/2013 07:42 AM, Thomas Petazzoni wrote:
-> 
-> > Since you were replying to a patch removing a X.org driver because
-> > the driver has been removed from X.org releases, I thought your SiS
-> > driver was in this case, but it's not.
-> > 
-> > So, your point was that beyond the driver I removed, a bunch of
-> > others could be removed, because even though X.org still has those
-> > drivers in their releases, the hardware is so ancient that it
-> > doesn't make sense to keep the drivers?
-> 
-> Yes, that exactly.
+Excuse my silly stuff & poor knowledge of the 'make'/build system !  :-p
+Pl see more qs below..
 
-Ok, understood.
+>> + # FIXME: Where should we place the perf kernel patch? Online?
+>> + # Temporarily, at least, it's under linux/
+>> + BR2_LINUX_KERNEL_PATCH += "$(HOST_DIR)/../../linux/perf.patch"
+>
+> No, we don't modify BR2 variables.
 
-Indeed, a lot more drivers could be removed. For now, I just limited
-myself to the drivers that have been removed from X.org releases, since
-those ones shouldn't raise a lot of discussion. It's only a first step,
-obviously.
+So, how exactly do we do this then?
 
-Best regards,
+>> +all:
+>
+> Arggh, this is *horrible*. Why do you believe you are allowed to
+> overload the "all" target?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Right. Forgive my basic qs, but what's the right approach?
+
+>
+> That said, I am not sure we want this thing in linux/linux.mk. Maybe
+> I'd prefer a package/perf/perf.mk, which depends on BR2_LINUX_KERNEL
+> and re-uses the source code extracted in $(LINUX_DIR).
+
+Ok, will try working on this approach as well.
+Not free now for a bit, will come back to this soon & keep you posted..
+
+Thanks again for all valuable inputs..
+Best,
+Kaiwan.
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
