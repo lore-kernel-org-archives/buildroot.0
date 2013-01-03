@@ -1,72 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2013 00:56:01 +0100
-Subject: [Buildroot] [RFC] How to handle targets that need more than one
-	file system to boot?
-In-Reply-To: <50E3DA74.6080303@mind.be>
-References: <201212240100.17473.yann.morin.1998@free.fr>
- <CAJJ6jxuKWz3-que3MYwBSrLh_F2-L_XhMvE-+oUog+kL_2mobA@mail.gmail.com>
- <50E3DA74.6080303@mind.be>
-Message-ID: <201301030056.01956.yann.morin.1998@free.fr>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Thu, 03 Jan 2013 02:03:00 +0200
+Subject: [Buildroot] [PATCH 10/20] xdriver_xf86-video-s3: remove package
+In-Reply-To: <20130102200144.5ed56106@skate>
+References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <44205c6a9db9d3496db982f686d29fe9d096a088.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <50E43558.2000003@petroprogram.com> <20130102175740.359fc5ce@skate>
+ <50E48268.401@zacarias.com.ar> <20130102200144.5ed56106@skate>
+Message-ID: <50E4CAB4.3010908@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Steve, All,
+Hi Thomas
 
-On Wednesday 02 January 2013 Arnout Vandecappelle wrote:
-> On 12/25/12 04:52, Steve Calfee wrote:
-> > On Sun, Dec 23, 2012 at 4:00 PM, Yann E. MORIN<yann.morin.1998@free.fr>  wrote:
-[--SNIP--]
-> >> For now, buildroot can build a single filesystem image. This is not useable
-> >> for these systems. The only possibility as of today is to configure BR to
-> >> generate a tarball, and have a custom script that does the required split up
-> >> of the different components.
-> 
->   That's not really true, is it? Buildroot generates the ext2fs and the 
-> boot loader and kernel images, you only have to create the partitions and 
-> the fatfs and pull everything together into a single image.
+2.1.2013 21:01, Thomas Petazzoni kirjoitti:
+> Hello,
+>
+> On Wed, 02 Jan 2013 15:54:32 -0300, Gustavo Zacarias wrote:
+>
+>> All of the xf86-video-sun* drivers can be safely removed, even the
+>> cg6, they're Sun workstation (SPARC) specific. And they're SBUS or
+>> UPA which is a propietary Sun bus.
+>> C&T, Rendition and Tseng haven't produced any video chip like for ages
+>> now (10+ years). They don't even exist anymore.
+>> For SiS (non-USB) i think i still got one ebox2300 (mini pc) that uses
+>> one of those if it needs testing - though it was working last time i
+>> tried with buildroot so no reason to think it broke.
+> Here I'm really only removing things that the X.org project considers
+> as unmaintained. So I would prefer if you could raise the fact that the
+> SiS driver is still useful to the X.org people, so that they keep this
+> driver. I don't think we can reasonably keep an unmaintained X.org
+> driver in Buildroot if we want to easily continue to upgrade the other
+> X.org packages.
 
-So, you said the same as me: Buildroot (without external tools) can
-not generate more than one *filesystem* image (ext2, tar, whatever).
+I happen to have old (from 2005) laptop with integrated SiS inside it,
+gathering dust.
 
-Then, _after_ Buildroot finishes, you can do whatever you want to build
-additional images. But that's not Buildroot doing it.
+Does that count ?
+:-)
 
-> >> 0) Keep as-is
-> >>
-> >> Buildroot can not handle all possibilities, we can't even *think* about
-> >> all such possibilities. This is the easiest for buildroot, and pushes the
-> >> complexity down to the users.
-> >>
-> > This is my favorite. There are no known situations that cannot be
-> > handled by buildroot. Quit adding to the makefile. It adds
-> > complexities, and only fixes the one, current users complaint. Keep
-> > mechanism separate from policy. Buildroot should be a simple
-> > consistent way to build a root file system. People who have weird
-> > build/target desires can do that in an external script.
-> 
-> 
->   +1
-> 
->   On the other hand, if an external package would exist that implements 
-> the fully monty (your option 2), then I would have no problem with 
-> integrating that package and running it automatically post-build.
+Last time I tried it with my buildroot build linux distro it worked like
+a charm.
+Actually better than that. For all the various linux distros and flavors
+I have
+stuffed into that crappy lil laptop, this was the fastest :-)
 
-The problem doing it after Buildroot finishes, is that you loose all the
-_PERMISSIONS and _DEVICES variables (unless you also fakeroot the
-whole process).
 
-Well, I'm a bit out of time now, so don't hold your breath...
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Stefan
