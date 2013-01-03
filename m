@@ -1,22 +1,14 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Thu, 3 Jan 2013 17:23:15 +0100
+From: Ted Wood <ted@fgh.co.uk>
+Date: Thu, 3 Jan 2013 16:28:46 -0000
 Subject: [Buildroot] Building For 486
-In-Reply-To: <000301cde9cd$7b4bb8e0$71e32aa0$@co.uk>
+In-Reply-To: <20130103162315.GA14023@mail.sceen.net>
 References: <000301cde9cd$7b4bb8e0$71e32aa0$@co.uk>
-Message-ID: <20130103162315.GA14023@mail.sceen.net>
+ <20130103162315.GA14023@mail.sceen.net>
+Message-ID: <001301cde9cf$6e7732a0$4b6597e0$@co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 03, 2013 at 04:14:59PM -0000, Ted Wood wrote:
-> Even if I set the processor options to 486 using  menuconfig, when I try to
-> run it, the built kernel comes up with the message 
-
-Just in case: use make linux-menuconfig and make sure the *kernel*
-configuration (in addition to the buildroot configuration) matches the
-target hardware.
-
--- 
-Richard Braun
+Kernel Config is i386
