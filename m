@@ -1,43 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2013 10:13:38 +0100
-Subject: [Buildroot] [RFC] How to handle targets that need more than one
-	file system to boot?
-In-Reply-To: <20130103095702.68dd064c@skate>
-References: <201212240100.17473.yann.morin.1998@free.fr>
- <50E54714.8060602@mind.be> <20130103095702.68dd064c@skate>
-Message-ID: <201301031013.38636.yann.morin.1998@free.fr>
+From: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
+Date: Thu, 3 Jan 2013 15:37:09 +0530
+Subject: [Buildroot] [PATCH 3/3] Add perf tools support: this is the
+ kernel patch to be applied to the kernel for kernel compile to go through;
+ it basically adds a typedef.
+In-Reply-To: <50E54257.8050201@googlemail.com>
+References: <CAPDLWs99Xx5ncxuCuFErsGzOnbs1br3VDcCFZooozWrHU+B=SQ@mail.gmail.com>
+ <50E54257.8050201@googlemail.com>
+Message-ID: <CAPDLWs-2Jdyj5F_XaVyGW3kciq2Qmpz0ivbgBAvacXeNZSWy2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Carsten,
 
-On Thursday 03 January 2013 09:57:02 Thomas Petazzoni wrote:
-> On Thu, 03 Jan 2013 09:53:40 +0100, Arnout Vandecappelle wrote:
-> 
-> >   AFAIK there is no equivalent of genext2fs for FAT, so it would be 
-> > rather difficult to make a boot-vfat.img in buildroot (use sudo?
-> > fuse? pmount?).
-> 
-> You have the mtools, see http://www.gnu.org/software/mtools/.
-> 
-> Also, see the genimage tool from Pengutronix people:
-> http://www.pengutronix.de/software/genimage/download/.
+Thanks for your inputs.
+I don't have git send-email working, yet...
+So, will resend the 3rd patch (3/3) with a shorter subject line.
 
-And genpart, too:
-    http://www.pengutronix.de/software/genpart/index_en.html
+Also, AFAIK, the Sub line has the phrase [PATCH n/3]; where n is 0, 1,
+2 & 3, thus subject is unique (this is how git generated them). If
+this is not sufficient, pl let me know..
 
-Whoohoo! :-)
+Thanks,
+Kaiwan.
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+On Thu, Jan 3, 2013 at 2:03 PM, Carsten Schoenert <c.schoenert@gmail.com> wrote:
+> Hello Kaiwan,
+>
+> Am 03.01.2013 08:51, schrieb Kaiwan Billimoria:
+>> Add perf tools support: this is the kernel patch to be applied to the
+>> kernel for kernel  compile to go through; it basically adds a typedef.
+>>
+>> Signed-off-by: Kaiwan Billimoria <kaiwan.billimoria@gmail.com>
+>
+> [SNIPP]
+> your subject is a little bit to long.
+> The first line shout idealy not longer than 50 characters be. The second
+> line is always empty.
+> After that there is more space for explanations.
+>
+> All your other patches are named the same, that can't be right. :)
+>
+> Why don't you use git-email? This make it a lot easier to send patches.
+>
+> --
+> Regards
+> Carsten Schoenert
+>
