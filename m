@@ -1,38 +1,31 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jan 2013 18:33:43 +0100
-Subject: [Buildroot] [RFC] How to handle targets that need more than one
-	file system to boot?
-In-Reply-To: <CAKvQZ_0r6DyEt=1XZWZ5RwFYg-LaU1xvyJcYTVn0sje+696nkA@mail.gmail.com>
-References: <201212240100.17473.yann.morin.1998@free.fr>
- <CAJJ6jxudS63P58imQ6nPn=_AA9JoBMZp3i=Dq2As1c9EiCDZxg@mail.gmail.com>
- <CAKvQZ_0r6DyEt=1XZWZ5RwFYg-LaU1xvyJcYTVn0sje+696nkA@mail.gmail.com>
-Message-ID: <201301031833.44543.yann.morin.1998@free.fr>
+Date: Thu, 3 Jan 2013 18:35:51 +0100
+Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages to
+	create users
+In-Reply-To: <20130103113110.621c0e92@skate>
+References: <cover.1357070939.git.yann.morin.1998@free.fr>
+ <606d.50e4ee64.b8dde@xionine.xdna.net> <20130103113110.621c0e92@skate>
+Message-ID: <201301031835.51403.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Willy, All,
+Thomas, All,
 
-On Thursday 03 January 2013 Willy Lambert wrote:
-> 2013/1/3 Steve Calfee <stevecalfee@gmail.com>:
-[--SNIP--]
-> > Maybe we are talking about different things. I think there is a config
-> > option in buildroot that allows you to build multiple output
-> > filesystems, I believe I have created ext4 and a tar.gz as outputs. I
-> > think there are also various flash file systems you can create.
+On Thursday 03 January 2013 Thomas Petazzoni wrote:
+> On Thu, 03 Jan 2013 02:35:16 -0000, Cam Hutchison wrote:
+> > Another +1 for awk here - processing record-oriented files is what
+> > awk is good at, but I can understand not wanting to introduce that
+> > dependency.
 > 
-> I'm curious to know how you do ext4 from BR. I did not found that, and
-> ASAIK, there is no documentation about outputs (and it's a real pain
-> for new comers like me)
+> We already depend on awk:
+>   http://git.buildroot.net/buildroot/tree/support/dependencies/dependencies.sh#n133
 
-Indeed, not sure about ext4. But it's doable for ext3:
-  - first create an ext2 filesystem with genext2fs
-  - then add the ext3 feature with something like tune2fs -j
+OK, I'll update the script, then.
 
-As for ext4, it is probably not possible, as it is really different from
-an ext2/3 filesystem.
+Thanks!
 
 Regards,
 Yann E. MORIN.
