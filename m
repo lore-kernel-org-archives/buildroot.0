@@ -1,55 +1,99 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Jan 2013 12:13:46 -0300
-Subject: [Buildroot] [PATCH] configs/at91rm9200df: update and fix
-Message-ID: <1357312426-9544-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Jan 2013 16:15:49 +0100
+Subject: [Buildroot] [PATCH] gnuplot : new package
+In-Reply-To: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
+References: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <20130104161549.718b1c19@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to the latest maxim.org.za kernel 2.6.38
-Lock down headers version, otherwise we were building a toolchain with
-3.7 headers for a 2.6.33 kernel - not too wise.
-Also the AT91RM9200 is an ARM920T so enable that target.
+Dear Anthony Viallard,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/at91rm9200df_defconfig |   10 ++++++++--
- 1 files changed, 8 insertions(+), 2 deletions(-)
+Thanks for submitting this package. It looks almost good.
 
-diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
-index 4229155..74b5a6f 100644
---- a/configs/at91rm9200df_defconfig
-+++ b/configs/at91rm9200df_defconfig
-@@ -1,5 +1,6 @@
- # Architecture
- BR2_arm=y
-+BR2_arm920t=y
- 
- # Filesystem
- BR2_TARGET_ROOTFS_JFFS2=y
-@@ -9,6 +10,11 @@ BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x2100
- BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
- BR2_TARGET_ROOTFS_JFFS2_LE=y
- 
-+# Lock down headers to avoid breaking with new defaults
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="2.6.38.8"
-+BR2_DEFAULT_KERNEL_HEADERS="2.6.38.8"
-+
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="at91rm9200ek"
-@@ -17,7 +23,7 @@ BR2_TARGET_UBOOT_2010_06=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.33"
--BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.33-at91.patch.gz"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
-+BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="at91rm9200ek"
+On Fri,  4 Jan 2013 15:53:13 +0100, Anthony Viallard wrote:
+> 
+> Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+> ---
+>  package/Config.in             |    1 +
+>  package/gnuplot/Config.in     |    7 +++++++
+>  package/gnuplot/gnuplot.mk    |   13 +++++++++++++
+>  package/gnuplot/gnuplot.patch |   26 ++++++++++++++++++++++++++
+>  4 files changed, 57 insertions(+), 0 deletion(-)
+>  create mode 100644 package/gnuplot/Config.in
+>  create mode 100644 package/gnuplot/gnuplot.mk
+>  create mode 100644 package/gnuplot/gnuplot.patch
+> 
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -70,6 +70,7 @@ endif
+>  source "toolchain/gcc/Config.in.2"
+>  source "package/gettext/Config.in"
+>  source "package/gmp/Config.in"
+> +source "package/gnuplot/Config.in"
+
+Hum, why in "Development tools" ? Maybe Graphic libraries and
+applications would make more sense here ?
+
+> +GNUPLOT_VERSION = 4.6.0
+> +GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
+> +GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+> +GNUPLOT_INSTALL_STAGING = YES
+> +GNUPLOT_INSTALL_TARGET = YES
+
+This line is not needed.
+
+Please also add the GNUPLOT_LICENSE and GNUPLOT_LICENSE_FILES variables.
+
+> +GNUPLOT_CONF_OPT = --without-x \
+> +		--disable-raise-console \
+> +		--disable-mouse \
+> +	        --without-tutorial \
+> +		--without-demo --disable-demo \
+> +	        --without-row-help \
+> +		--disable-history-file \
+> +	        --without-lisp-files \
+> +	        --disable-wxwidgets \
+> +	        --without-lua \
+> +		--without-latex \
+> +	        --without-cairo
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
+> new file mode 100644
+> index 0000000..7053a46
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.patch
+> @@ -0,0 +1,26 @@
+
+All patches in Buildroot should have a description and a Signed-off-by
+line. See
+http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
+
+> +diff --git a/Makefile.am b/Makefile.am
+> +index bc0f2b2..5c00fe5 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -1,7 +1,7 @@
+> + ## Process this file with automake to produce Makefile.in -*-Makefile-*-
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> + 
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+
+Could you cook a patch for upstream gnuplot that adds a
+--{enable,disable}-demo to enable/disable the build of the demos, so
+that ultimately we can drop your patch? This is not mandatory to get
+your package in Buildroot, but would be nice to have.
+
+Thanks,
+
+Thomas
 -- 
-1.7.8.6
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
