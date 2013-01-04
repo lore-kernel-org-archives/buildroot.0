@@ -1,38 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 4 Jan 2013 22:33:34 +0100
-Subject: [Buildroot] [git commit] libgcrypt: fix libgcrypt-config
-Message-ID: <20130104214903.68C5B9A619@busybox.osuosl.org>
+Date: Fri, 4 Jan 2013 22:13:46 +0100
+Subject: [Buildroot] [git commit] qemu/sh4-r2d: update to use kernel 3.2.36
+Message-ID: <20130104214902.AB6319A619@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=857413845eac7f00a9219d7ed45177ae1d271f65
+commit: http://git.buildroot.net/buildroot/commit/?id=ca041bfe53752eee09445eb018fe6093c2f0f462
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: use a single sed invocation]
-Signed-off-by: Stefan Fr??berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libgcrypt/libgcrypt.mk |    8 ++++++++
- 1 files changed, 8 insertions(+), 0 deletions(-)
+ configs/qemu_sh4_r2d_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 3aa60c6..b0a8a73 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -25,5 +25,13 @@ endef
- 
- LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
- 
-+define LIBGCRYPT_STAGING_LIBGCRYPT_CONFIG_FIXUP
-+	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
-+		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
-+		$(STAGING_DIR)/usr/bin/libgcrypt-config
-+endef
-+
-+LIBGCRYPT_POST_INSTALL_STAGING_HOOKS += LIBGCRYPT_STAGING_LIBGCRYPT_CONFIG_FIXUP
-+
- 
- $(eval $(autotools-package))
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index 746dc0b..e7dba9b 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.35"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.36"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
