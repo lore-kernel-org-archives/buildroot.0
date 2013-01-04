@@ -1,24 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Jan 2013 08:02:01 -0300
-Subject: [Buildroot] [PATCH] zd1211-firmware: new package
-Message-ID: <1357297321-7895-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 4 Jan 2013 12:08:06 +0100
+Subject: [Buildroot] [git commit] zd1211-firmware: new package
+Message-ID: <20130104110755.DCD509A604@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=b16f37b03c383f70c6cc50582f6b3ee4cf5aa037
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/Config.in                          |    1 +
  package/zd1211-firmware/Config.in          |    4 ++++
  package/zd1211-firmware/zd1211-firmware.mk |   19 +++++++++++++++++++
  3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/zd1211-firmware/Config.in
- create mode 100644 package/zd1211-firmware/zd1211-firmware.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 142efa0..bde9fa4 100644
+index 2cbadf4..11ff82d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -203,6 +203,7 @@ menu "Misc devices firmwares"
@@ -64,5 +66,3 @@ index 0000000..afea0e9
 +endef
 +
 +$(eval $(generic-package))
--- 
-1.7.8.6
