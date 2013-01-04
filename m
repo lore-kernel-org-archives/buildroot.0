@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jan 2013 22:11:46 +0100
-Subject: [Buildroot] [PATCH 1/2] mpfr: bump to 3.1.1-p2
-In-Reply-To: <1357319567-32479-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Jan 2013 14:12:46 -0300")
-References: <1357319567-32479-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zk0olkkt.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jan 2013 22:12:35 +0100
+Subject: [Buildroot] [PATCH] configs/at91rm9200df: update and fix
+In-Reply-To: <1357312426-9544-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 4 Jan 2013 12:13:46 -0300")
+References: <1357312426-9544-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vcbclkjg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> Update to the latest maxim.org.za kernel 2.6.38
+ Gustavo> Lock down headers version, otherwise we were building a toolchain with
+ Gustavo> 3.7 headers for a 2.6.33 kernel - not too wise.
+ Gustavo> Also the AT91RM9200 is an ARM920T so enable that target.
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
