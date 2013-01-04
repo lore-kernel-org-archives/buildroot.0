@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 4 Jan 2013 22:13:46 +0100
-Subject: [Buildroot] [git commit] qemu/sh4-r2d: update to use kernel 3.2.36
-Message-ID: <20130104214902.AB6319A619@busybox.osuosl.org>
+Date: Fri, 4 Jan 2013 22:46:51 +0100
+Subject: [Buildroot] [git commit] libnspr: fix nspr-config
+Message-ID: <20130104214903.BD50A9A500@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ca041bfe53752eee09445eb018fe6093c2f0f462
+commit: http://git.buildroot.net/buildroot/commit/?id=89e642ff4807268eed15873a03af7c1d07936f6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Peter: use a single sed invocation]
+Signed-off-by: Stefan Fr??berg <stefan.froberg@petroprogram.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_sh4_r2d_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libnspr/libnspr.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 746dc0b..e7dba9b 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.35"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.36"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index a9d5812..590a755 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -38,4 +38,12 @@ define LIBNSPR_INSTALL_TARGET_PC
+ endef
+ LIBNSPR_POST_INSTALL_TARGET_HOOKS += LIBNSPR_INSTALL_TARGET_PC
+ 
++define LIBNSPR_STAGING_LIBNSPR_CONFIG_FIXUP
++	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
++		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
++		$(STAGING_DIR)/usr/bin/nspr-config
++endef
++
++LIBNSPR_POST_INSTALL_STAGING_HOOKS += LIBNSPR_STAGING_LIBNSPR_CONFIG_FIXUP
++
+ $(eval $(autotools-package))
