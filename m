@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Jan 2013 17:23:12 +0100
-Subject: [Buildroot] [PATCH v2 2/2] rxvt-unicode: new package
-In-Reply-To: <50E6F52F.5040204@petroprogram.com>
-References: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
- <1356633918-16114-2-git-send-email-stefan.froberg@petroprogram.com>
- <20130104002721.0a0e5e30@skate> <50E6EA65.6090001@petroprogram.com>
- <20130104160340.73e41cd2@skate> <50E6F52F.5040204@petroprogram.com>
-Message-ID: <20130104172312.5237b902@skate>
+Date: Fri, 4 Jan 2013 17:26:43 +0100
+Subject: [Buildroot] [PATCH] gnuplot : new package
+In-Reply-To: <50E6F604.4000401@relinux.de>
+References: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
+ <50E6F604.4000401@relinux.de>
+Message-ID: <20130104172643.72321640@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Dear Stephan Hoffmann,
 
-On Fri, 04 Jan 2013 17:28:47 +0200, Stefan Fr?berg wrote:
+On Fri, 04 Jan 2013 16:32:20 +0100, Stephan Hoffmann wrote:
 
-> So for example in this elfutils case it should have been one big patch
-> (because all those individual
-> *.patch files are really needed to make it build).
->  
-> And any extra patches in that series would just add features
-> (like BR2_PACKAGE_ELFUTILS_ZLiB_SUPPORT) or fix something ?
-> 
-> In other words, first patch is the buildable core and everything else
-> optional ?
+> > +GNUPLOT_CONF_OPT = --without-x \
+> is there a special reason for this? Why not build with x, when X11 is
+> configured in buildroot?
 
-Yes, we could summarize it this way.
+I guess because Anthony didn't need X support. It is not because a
+given software component can potentially support feature Y or Z that we
+require the package submitter to support all those features Y or Z. It
+would put way too much load on the initial package submitter.
 
-Or, as I said, since the biggest problem with elfutils is uClibc
-support, the first patch could have added a glibc-only elfutils (which
-proper depends on) and then a second patch could add the necessary
-additional crap to make it uClibc friendly.
+Instead, we prefer having small packages that only support the features
+that have been tested by the submitter, and that carefully disables all
+the unsupported features. And then, as features are needed by other
+people, they can submit additional patches to make those additional
+features work.
+
+Anthony: a gnuplot patch without the X support is perfectly acceptable.
 
 Best regards,
 
