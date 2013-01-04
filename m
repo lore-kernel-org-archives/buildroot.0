@@ -1,79 +1,44 @@
-From: Viallard Anthony <viallard@syscom-instruments.com>
-Date: Fri, 04 Jan 2013 16:38:57 +0100
-Subject: [Buildroot] [PATCH] gnuplot : new package
-In-Reply-To: <20130104161549.718b1c19@skate>
-References: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
- <20130104161549.718b1c19@skate>
-Message-ID: <50E6F791.20105@syscom-instruments.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Jan 2013 17:23:12 +0100
+Subject: [Buildroot] [PATCH v2 2/2] rxvt-unicode: new package
+In-Reply-To: <50E6F52F.5040204@petroprogram.com>
+References: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1356633918-16114-2-git-send-email-stefan.froberg@petroprogram.com>
+ <20130104002721.0a0e5e30@skate> <50E6EA65.6090001@petroprogram.com>
+ <20130104160340.73e41cd2@skate> <50E6F52F.5040204@petroprogram.com>
+Message-ID: <20130104172312.5237b902@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04. 01. 13 16:15, Thomas Petazzoni wrote:
-> Hum, why in "Development tools" ? Maybe Graphic libraries and
-> applications would make more sense here ?
+Dear Stefan Fr?berg,
 
-Doh ! Yes, indeed. Under "Graphic application", it's better.
+On Fri, 04 Jan 2013 17:28:47 +0200, Stefan Fr?berg wrote:
 
->> +GNUPLOT_VERSION = 4.6.0
->> +GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
->> +GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
->> +GNUPLOT_INSTALL_STAGING = YES
->> +GNUPLOT_INSTALL_TARGET = YES
-> This line is not needed.
->
-> Please also add the GNUPLOT_LICENSE and GNUPLOT_LICENSE_FILES variables.
+> So for example in this elfutils case it should have been one big patch
+> (because all those individual
+> *.patch files are really needed to make it build).
+>  
+> And any extra patches in that series would just add features
+> (like BR2_PACKAGE_ELFUTILS_ZLiB_SUPPORT) or fix something ?
+> 
+> In other words, first patch is the buildable core and everything else
+> optional ?
 
-Ok.
+Yes, we could summarize it this way.
 
->
->> +GNUPLOT_CONF_OPT = --without-x \
->> +		--disable-raise-console \
->> +		--disable-mouse \
->> +	        --without-tutorial \
->> +		--without-demo --disable-demo \
->> +	        --without-row-help \
->> +		--disable-history-file \
->> +	        --without-lisp-files \
->> +	        --disable-wxwidgets \
->> +	        --without-lua \
->> +		--without-latex \
->> +	        --without-cairo
->> +
->> +$(eval $(autotools-package))
->> diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
->> new file mode 100644
->> index 0000000..7053a46
->> --- /dev/null
->> +++ b/package/gnuplot/gnuplot.patch
->> @@ -0,0 +1,26 @@
-> All patches in Buildroot should have a description and a Signed-off-by
-> line. See
-> http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches.
->
+Or, as I said, since the biggest problem with elfutils is uClibc
+support, the first patch could have added a glibc-only elfutils (which
+proper depends on) and then a second patch could add the necessary
+additional crap to make it uClibc friendly.
 
-Doh. I forgot the description. I use dvorak keyboard for few days now. 
-I'm looking for laziness.
+Best regards,
 
->> +diff --git a/Makefile.am b/Makefile.am
->> +index bc0f2b2..5c00fe5 100644
->> +--- a/Makefile.am
->> ++++ b/Makefile.am
->> +@@ -1,7 +1,7 @@
->> + ## Process this file with automake to produce Makefile.in -*-Makefile-*-
->> + AUTOMAKE_OPTIONS = foreign 1.2h
->> +
->> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
->> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
-> Could you cook a patch for upstream gnuplot that adds a
-> --{enable,disable}-demo to enable/disable the build of the demos, so
-> that ultimately we can drop your patch? This is not mandatory to get
-> your package in Buildroot, but would be nice to have.
-
-Ok, i do that.
-
-Thanks,
-
-avd.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
