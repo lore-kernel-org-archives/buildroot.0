@@ -1,53 +1,52 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 4 Jan 2013 15:17:42 +0100
-Subject: [Buildroot] [PATCH] divine: fix divine-config
-In-Reply-To: <50E6BFE2.2090405@zacarias.com.ar>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
- <50E6BFE2.2090405@zacarias.com.ar>
-Message-ID: <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Fri, 04 Jan 2013 16:25:38 +0200
+Subject: [Buildroot] [PATCH] perf: new package
+In-Reply-To: <20130104002214.7a112fdf@skate>
+References: <1357225671-18101-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <50E5A2B4.6090405@petroprogram.com> <20130104002214.7a112fdf@skate>
+Message-ID: <50E6E662.9040901@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan, Gustavo, all,
-
-2013/1/4 Gustavo Zacarias <gustavo@zacarias.com.ar>:
-> On 01/03/2013 07:09 PM, Stefan Fr?berg wrote:
+4.1.2013 1:22, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
 >
->> +define DIVINE_STAGING_DIVINE_CONFIG_FIXUP
->> +     $(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/divine-config
->> +     $(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/divine-config
->> +endef
->> +
->> +DIVINE_POST_INSTALL_STAGING_HOOKS += DIVINE_STAGING_DIVINE_CONFIG_FIXUP
->> +
+> On Thu, 03 Jan 2013 17:24:36 +0200, Stefan Fr?berg wrote:
 >
-> This could be handled in a generic way for all the packages that ship a
-> *-config file.
-> Something like:
+>> Here is an elfutils 0.155 (which contains libelf) for buildroot that I
+>> posted some time ago.
+>> Patch #4 is missing from that list because it was too big to submit to
+>> this list.
+>>
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063855.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063856.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063864.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063858.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063857.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063859.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063861.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063860.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063863.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063862.html
+>> http://lists.busybox.net/pipermail/buildroot/2012-December/063865.html
+> I've started having a real look at this, and started refactoring your
+> patch series.
 >
-> DIVINE_CONFIG_FIXUP = divine-config
+> Could you point me to the missing PATCH #4, so that I can see your
+> entire series? At least send it by private e-mail to me, so that we
+> don't get limited by the list.
+Link to that patch #4
+
+http://www.micro-os.com/elfutils.001-gnulib.patch
+
+(some day I have to get my lazy ass up and make a real web page ... )
+
+Stefan
+
+
+> Thanks,
 >
-> And then do the generic sed magic in package/pkg-generic.mk
-> How about that?
-
-We quickly talked about this during the last Buildroot Dev. Days.
-
-IIRC, Thomas and Peter were not very fond of this kind of solution.
-(guys, feel free to correct me if I speak with my ass ;)).
-
-btw, afaics:
-- *-config provided by the imagemagick package wrap some calls to pkg-config;
-- many packages in BR install handwritten scripts like this, as well
-as some *.pc files.
-So what about just use pkgconf since it's properly handled in BR?
-(I agree it may mean patching many packages that only search for
-*-config scripts)
-- in this patch serie, only libgcrypt does not provide a *.pc file :-(
-
-Regards,
-
--- 
-Samuel
+> Thomas
