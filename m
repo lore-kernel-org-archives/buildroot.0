@@ -1,7 +1,7 @@
 From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Fri,  4 Jan 2013 15:47:35 +0100
-Subject: [Buildroot] [PATCH] libgd : new package
-Message-ID: <1357310855-31818-1-git-send-email-viallard@syscom-instruments.com>
+Date: Fri,  4 Jan 2013 15:53:13 +0100
+Subject: [Buildroot] [PATCH] gnuplot : new package
+Message-ID: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,52 +11,99 @@ To: buildroot@busybox.net
 
 Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
 ---
- package/Config.in       |    1 +
- package/libgd/Config.in |    6 ++++++
- package/libgd/libgd.mk  |   10 ++++++++++
- 3 files changed, 17 insertions(+), 0 deletion(-)
- create mode 100644 package/libgd/Config.in
- create mode 100644 package/libgd/libgd.mk
+ package/Config.in             |    1 +
+ package/gnuplot/Config.in     |    7 +++++++
+ package/gnuplot/gnuplot.mk    |   13 +++++++++++++
+ package/gnuplot/gnuplot.patch |   26 ++++++++++++++++++++++++++
+ 4 files changed, 57 insertions(+), 0 deletion(-)
+ create mode 100644 package/gnuplot/Config.in
+ create mode 100644 package/gnuplot/gnuplot.mk
+ create mode 100644 package/gnuplot/gnuplot.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 2633997..eb18543 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -394,6 +394,7 @@ source "package/libdrm/Config.in"
- source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
-+source "package/libgd/Config.in"
- source "package/libglade/Config.in"
- source "package/gdk-pixbuf/Config.in"
- source "package/libgtk2/Config.in"
-diff --git a/package/libgd/Config.in b/package/libgd/Config.in
+@@ -70,6 +70,7 @@ endif
+ source "toolchain/gcc/Config.in.2"
+ source "package/gettext/Config.in"
+ source "package/gmp/Config.in"
++source "package/gnuplot/Config.in"
+ source "package/gperf/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/grep/Config.in"
+diff --git a/package/gnuplot/Config.in b/package/gnuplot/Config.in
 new file mode 100644
-index 0000000..7049b42
+index 0000000..281bb65
 --- /dev/null
-+++ b/package/libgd/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBGD
-+	bool "libgd"
++++ b/package/gnuplot/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_GNUPLOT
++	bool "gnuplot"
 +	help
-+	  A graphics library for fast image creation
++	  A portable command-line driven graphing utility.
 +
-+	   https://bitbucket.org/pierrejoye/gd-libgd
-diff --git a/package/libgd/libgd.mk b/package/libgd/libgd.mk
++	  http://www.gnuplot.info/
++
+diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
 new file mode 100644
-index 0000000..02b6f3a
+index 0000000..2f05624
 --- /dev/null
-+++ b/package/libgd/libgd.mk
-@@ -0,0 +1,10 @@
-+LIBGD_VERSION = 2.0.33
-+LIBGD_SOURCE = GD_2_0_33.tar.gz
-+LIBGD_SITE = https://bitbucket.org/pierrejoye/gd-libgd/get
-+
-+LIBGD_INSTALL_STAGING = YES
-+LIBGD_INSTALL_TARGET = YES
-+LIBGD_CONF_OPT = 
-+LIBGD_SUBDIR = src
++++ b/package/gnuplot/gnuplot.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# gnuplot
++#
++#############################################################
++GNUPLOT_VERSION = 4.6.0
++GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
++GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
++GNUPLOT_INSTALL_STAGING = YES
++GNUPLOT_INSTALL_TARGET = YES
++GNUPLOT_CONF_OPT = --without-x \
++		--disable-raise-console \
++		--disable-mouse \
++	        --without-tutorial \
++		--without-demo --disable-demo \
++	        --without-row-help \
++		--disable-history-file \
++	        --without-lisp-files \
++	        --disable-wxwidgets \
++	        --without-lua \
++		--without-latex \
++	        --without-cairo
 +
 +$(eval $(autotools-package))
+diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
+new file mode 100644
+index 0000000..7053a46
+--- /dev/null
++++ b/package/gnuplot/gnuplot.patch
+@@ -0,0 +1,26 @@
++diff --git a/Makefile.am b/Makefile.am
++index bc0f2b2..5c00fe5 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,7 +1,7 @@
++ ## Process this file with automake to produce Makefile.in -*-Makefile-*-
++ AUTOMAKE_OPTIONS = foreign 1.2h
++ 
++-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
++ 
++ EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
++ Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
++diff --git a/Makefile.in b/Makefile.in
++index 71118bc..86df133 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -250,7 +250,7 @@ top_build_prefix = @top_build_prefix@
++ top_builddir = @top_builddir@
++ top_srcdir = @top_srcdir@
++ AUTOMAKE_OPTIONS = foreign 1.2h
++-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
++ EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
++ Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
++ VERSION configure.vms pm3d win
 -- 
 1.7.10.4
