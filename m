@@ -1,29 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jan 2013 22:10:25 +0100
-Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.17
-In-Reply-To: <50E74129.5050105@zacarias.com.ar> (Gustavo Zacarias's message of
- "Fri, 04 Jan 2013 17:52:57 -0300")
-References: <1357332135-3087-1-git-send-email-gustavo@zacarias.com.ar>
- <87hamwn0br.fsf@dell.be.48ers.dk> <50E74129.5050105@zacarias.com.ar>
-Message-ID: <878v88mz7i.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jan 2013 22:11:06 +0100
+Subject: [Buildroot] [PATCH] libnl: add support of old kernel
+In-Reply-To: <1356621073-6242-1-git-send-email-plagnioj@jcrosoft.com>
+ (Jean-Christophe PLAGNIOL-VILLARD's message of "Thu, 27 Dec 2012
+ 16:11:13 +0100")
+References: <1356621073-6242-1-git-send-email-plagnioj@jcrosoft.com>
+Message-ID: <874niwmz6d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
- >> Could you have a look at http://patchwork.ozlabs.org/patch/208318/ ?
+ Jean-Christophe> without those patches libnl will not compile on old kernel
 
- Gustavo> Yes, it's no longer required, part of 3.2.17
- Gustavo> Seems many people had issues with old enough headers and upstream
- Gustavo> decided to release .17 with those patches to fit it.
- Gustavo> Also fixes our previous autobuild errors which i assume went away when
- Gustavo> Thomas probably upgraded to new toolchain versions.
- Gustavo> We are talking about <2.6.32 headers IIRC.
-
-Ok, thanks - I'll mark that patch as superseeded then.
+Thanks, but shouldn't be needed after the version bump to 3.2.17.
 
 -- 
 Bye, Peter Korsgaard
