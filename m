@@ -1,21 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jan 2013 12:08:29 +0100
-Subject: [Buildroot] [PATCH] zd1211-firmware: new package
-In-Reply-To: <1357297321-7895-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Jan 2013 08:02:01 -0300")
-References: <1357297321-7895-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y5g9mcia.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 04 Jan 2013 08:41:22 -0300
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <50E6BFE2.2090405@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 01/03/2013 07:09 PM, Stefan Fr?berg wrote:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> +define DIVINE_STAGING_DIVINE_CONFIG_FIXUP
+> +	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/divine-config
+> +	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/divine-config
+> +endef
+> +
+> +DIVINE_POST_INSTALL_STAGING_HOOKS += DIVINE_STAGING_DIVINE_CONFIG_FIXUP
+> +
 
-Committed, thanks.
+This could be handled in a generic way for all the packages that ship a
+*-config file.
+Something like:
 
--- 
-Bye, Peter Korsgaard
+DIVINE_CONFIG_FIXUP = divine-config
+
+And then do the generic sed magic in package/pkg-generic.mk
+How about that?
+Regards.
