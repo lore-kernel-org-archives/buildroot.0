@@ -1,46 +1,95 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 04 Jan 2013 11:29:43 -0300
-Subject: [Buildroot] [PATCH] divine: fix divine-config
-In-Reply-To: <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
- <50E6BFE2.2090405@zacarias.com.ar>
- <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
-Message-ID: <50E6E757.10809@zacarias.com.ar>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Fri, 04 Jan 2013 16:31:19 +0200
+Subject: [Buildroot] [PATCH v2 1/2] rxvt-unicode: new package
+In-Reply-To: <20130104002527.416c342d@skate>
+References: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
+ <20130104002527.416c342d@skate>
+Message-ID: <50E6E7B7.4040200@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/04/2013 11:17 AM, Samuel Martin wrote:
+Hi Thomas
 
-> We quickly talked about this during the last Buildroot Dev. Days.
-> 
-> IIRC, Thomas and Peter were not very fond of this kind of solution.
-> (guys, feel free to correct me if I speak with my ass ;)).
-> 
-> btw, afaics:
-> - *-config provided by the imagemagick package wrap some calls to pkg-config;
-> - many packages in BR install handwritten scripts like this, as well
-> as some *.pc files.
-> So what about just use pkgconf since it's properly handled in BR?
-> (I agree it may mean patching many packages that only search for
-> *-config scripts)
-> - in this patch serie, only libgcrypt does not provide a *.pc file :-(
-> 
-> Regards,
+4.1.2013 1:25, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
+>
+> On Thu, 27 Dec 2012 20:45:17 +0200, Stefan Fr?berg wrote:
+>> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+>> ---
+>>  package/Config.in                    |    1 +
+>>  package/rxvt-unicode/Config.in       |    9 +++++++++
+>>  package/rxvt-unicode/rxvt-unicode.mk |   12 ++++++++++++
+>>  3 files changed, 22 insertions(+), 0 deletions(-)
+>>  create mode 100644 package/rxvt-unicode/Config.in
+>>  create mode 100644 package/rxvt-unicode/rxvt-unicode.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 66445ff..73bab6e 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -169,6 +169,7 @@ source "package/leafpad/Config.in"
+>>  source "package/midori/Config.in"
+>>  source "package/pcmanfm/Config.in"
+>>  source "package/rdesktop/Config.in"
+>> +source "package/rxvt-unicode/Config.in"
+>>  source "package/sylpheed/Config.in"
+>>  source "package/synergy/Config.in"
+>>  source "package/torsmo/Config.in"
+>> diff --git a/package/rxvt-unicode/Config.in b/package/rxvt-unicode/Config.in
+>> new file mode 100644
+>> index 0000000..3d819ce
+>> --- /dev/null
+>> +++ b/package/rxvt-unicode/Config.in
+>> @@ -0,0 +1,9 @@
+>> +config BR2_PACKAGE_RXVT_UNICODE
+>> +	bool "rxvt-unicode"
+>> +	select BR2_PACKAGE_FONTCONFIG
+>> +	select BR2_PACKAGE_NCURSES
+>> +	depends on BR2_PACKAGE_XORG7
+> Please add:
+>
+> 	select BR2_PACKAGE_XLIB_LIBX11
+> 	select BR2_PACKAGE_XLIB_LIBXRENDER
+>
+>> +	help
+>> +	  rxvt clone with xft and unicode support
+> You're saying it uses Xft, but xlib_libXft is not part of your
+> dependencies. Is this normal?
+Ach! I forgot to add that...
 
-I agree *-config files aren't nice, but they are still here and quite used.
-When the scenario is a "not very standard" *-config file that can't be
-easily fixed, one could just avoid the autopatcher and do it the old
-fashion way.
-It's a good goal to get rid of them, but realistically it won't happen
-anytime soon - you'll need to get *.pc files for *-config packages that
-don't provide them, and you'll also need to patch a lot to get them to
-use said pc files (with the added dep to host-pkgconf which is now small
-given my migration away from pkg-config hehe).
-Long story short, they're still here, so why not do it nicely until we
-get rid of them all?
-Just for fun, try to autoreconfigure PHP and see what happens. It's a
-heavy user of *-config scripts :)
-Regards.
+>> --- /dev/null
+>> +++ b/package/rxvt-unicode/rxvt-unicode.mk
+>> @@ -0,0 +1,12 @@
+>> +#############################################################
+>> +#
+>> +# rxvt-unicode
+>> +#
+>> +#############################################################
+>> +RXVT_UNICODE_VERSION = 9.15
+>> +RXVT_UNICODE_SOURCE = rxvt-unicode-$(RXVT_UNICODE_VERSION).tar.bz2
+>> +RXVT_UNICODE_SITE = http://dist.schmorp.de/rxvt-unicode
+>> +RXVT_UNICODE_DEPENDENCIES = fontconfig ncurses xlib_libX11 xlib_libXrender
+>> +RXVT_UNICODE_CONF_OPT += --enable-everything --disable-perl --with-x --with-terminfo=/usr/share/terminfo
+> Please cut this line:
+>
+> RXVT_UNICODE_CONF_OPT += \
+> 	--enable-everything \
+> 	--disable-perl \
+> 	--with-x \
+> 	--with-terminfo=/usr/share/terminfo
+>
+> Also, please add the RXVT_UNICODE_LICENSE and
+> RXVT_UNICODE_LICENSE_FILES variables.
+
+Ok, I will.
+
+Thanks Thomas!
+
+Stefan
+
+> Thanks!
+>
+> Thomas
