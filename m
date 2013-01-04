@@ -1,54 +1,30 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Fri, 4 Jan 2013 13:07:59 +0100
-Subject: [Buildroot] [PATCH] packages: add tzdata
-In-Reply-To: <20130104125447.04031e67@skate>
-References: <1357300124-7011-1-git-send-email-rbraun@sceen.net>
- <20130104125447.04031e67@skate>
-Message-ID: <20130104120759.GA10338@mail.sceen.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Jan 2013 09:17:43 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bmp 3.2.x stable version
+Message-ID: <1357301864-15781-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 04, 2013 at 12:54:47PM +0100, Thomas Petazzoni wrote:
-> Please split in two patches. One for zic, one for tzdata.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-OK.
-
-> depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc
-
-This would prevent other applications with support for the format from
-using it (in other words, although I'm not aware of other such
-applications, glibc might not be the only user). The time zone database
-itself has no real dependency. Do you still think I should add these,
-and change them when needed only ?
-
-> How about making it possible to configure which time zone data gets
-> installed? From what I remember, the entire size of the tzdata database
-> was quite large. Could be something like:
-
-Indeed.
-
-> > +define TZDATA_EXTRACT_CMDS
-> > +	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
-> > +		| $(TAR) --strip-components=0 -C $(@D) -xf -
-> > +endef
-> 
-> A short comment above to explain that the need to override the extract
-> step is the strip-components=0 would be useful.
-
-OK.
-
-> > +Subject: [PATCH] fix zic dependencies
-> > +
-> > +---
-> 
-> A better patch description is needed.
-
-OK.
-
-I'll resubmit soon. Thanks.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index a8a8a2b..4f7a6d9 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,7 +60,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.57"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.35"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.36"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.24"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
 -- 
-Richard Braun
+1.7.8.6
