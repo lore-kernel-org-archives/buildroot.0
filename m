@@ -1,52 +1,72 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Jan 2013 09:22:43 +0100
-Subject: [Buildroot] [PATCH] perf: new package
-In-Reply-To: <CAPDLWs_+GNS6EtzWVt98wwDiDwnqVc+BvAQm31+5ib62-bGQ4A@mail.gmail.com>
-References: <1357225671-18101-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAPDLWs_+GNS6EtzWVt98wwDiDwnqVc+BvAQm31+5ib62-bGQ4A@mail.gmail.com>
-Message-ID: <20130104092243.47bb447e@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  4 Jan 2013 09:43:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 5846] New: Extra slash added to last slash in URL
+Message-ID: <bug-5846-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kaiwan Billimoria,
+https://bugs.busybox.net/show_bug.cgi?id=5846
 
-On Fri, 4 Jan 2013 11:35:56 +0530, Kaiwan Billimoria wrote:
+           Summary: Extra slash added to last slash in URL
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: g at maral.me
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> Just checking / asking:
-> 1. what about the kernel patch to be applied such that kernel build
-> for perf is successful (i sent in the patch yesterday)
 
-It apparently wasn't needed to build perf on a 3.7 kernel.
+This happens in 2012.11, I dunno about the older versions.
 
-> 2. In my patch (linux.mk), I make a validity check to confirm that the
-> kernel version is >= 2.6.31 (as perf is only supported from that ver
-> onward). Should we keep that check?
+I noticed this with a few of my packages, but most recently with a custom
+kernel tar file url.
 
-For now, I did not introduce it, due to the fact that the kernel
-versions for which perf is usable are not clear yet. According to you,
-it's 2.6.31, according to me it's 3.7. Once we figure that out, we can
-introduce a version check if needed.
+For example, I have the following URL in my .config file:
 
-> 3. You mention :
-> > the NO_LIBELF variable, which allows to get rid of the libelf dependency,
-> > has only been introduced between 3.6 and 3.7.
-> I did test my patches on the 3.2.21 vanilla kernel and it seems to work okay..
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/raspberrypi/linux/archive/rpi-3.6.y.tar.gz"
 
-Here is the tools/perf/Makefile from 3.2.21 :
-https://git.kernel.org/?p=linux/kernel/git/bwh/linux-3.2.y.git;a=blob;f=tools/perf/Makefile;h=b98e3075646b43f8f3218f45289f65068ea7ef31;hb=8499e79e9ee4c946ae38fd12e5d3afe8b68f2dfd
+While make-ing, buildroot adds an extra slash to the URL and tries to download 
+"https://github.com/raspberrypi/linux/archive//rpi-3.6.y.tar.gz" instead; this
+results in an error (at least if the target server does some redirection
+kung-fu like github does).
 
-As you can see, it does not understand the NO_LIBELF variable, but
-requires the libelf library to be present. So I'm not sure how you
-manage to build perf without libelf with 3.2.21.
+Example Output:
 
-Best regards,
+>>> linux custom Downloading
+--2013-01-04 01:30:29-- 
+https://github.com/raspberrypi/linux/archive//rpi-3.6.y.tar.gz
+Resolving github.com... 207.97.227.239
+Connecting to github.com|207.97.227.239|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://nodeload.github.com/raspberrypi/linux/tar.gz//rpi-3.6.y
+[following]
+--2013-01-04 01:30:30-- 
+https://nodeload.github.com/raspberrypi/linux/tar.gz//rpi-3.6.y
+Resolving nodeload.github.com... 207.97.227.252
+Connecting to nodeload.github.com|207.97.227.252|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2013-01-04 01:30:30 ERROR 404: Not Found.
 
-Thomas
+--2013-01-04 01:30:30--  http://sources.buildroot.net//rpi-3.6.y.tar.gz
+Resolving sources.buildroot.net... 176.9.16.109
+Connecting to sources.buildroot.net|176.9.16.109|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2013-01-04 01:30:31 ERROR 404: Not Found.
+
+make: ***
+[/home/gamaral/development/mm-buildroot/output/build/linux-custom/.stamp_downloaded]
+Error 1
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
