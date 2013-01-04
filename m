@@ -1,41 +1,87 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 04 Jan 2013 12:00:59 -0300
-Subject: [Buildroot] [PATCH] divine: fix divine-config
-In-Reply-To: <50E6EDB5.9070004@petroprogram.com>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
- <50E6BFE2.2090405@zacarias.com.ar>
- <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
- <50E6E757.10809@zacarias.com.ar> <50E6EDB5.9070004@petroprogram.com>
-Message-ID: <50E6EEAB.4020001@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Jan 2013 16:03:40 +0100
+Subject: [Buildroot] [PATCH v2 2/2] rxvt-unicode: new package
+In-Reply-To: <50E6EA65.6090001@petroprogram.com>
+References: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1356633918-16114-2-git-send-email-stefan.froberg@petroprogram.com>
+ <20130104002721.0a0e5e30@skate> <50E6EA65.6090001@petroprogram.com>
+Message-ID: <20130104160340.73e41cd2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/04/2013 11:56 AM, Stefan Fr?berg wrote:
+Dear Stefan Fr?berg,
 
-> So should I continue patching correct buildroot prefixes to all those
-> *-config files that
-> are in $(STAGING_DIR)/usr/bin or not ?
+On Fri, 04 Jan 2013 16:42:45 +0200, Stefan Fr?berg wrote:
+
+> Yeah, Im still confused when to break it to pieces.
 > 
-> From my $(STAGING_DIR)/usr/bin/*-config files only libpng and libxml2
-> and few others
-> do the right thing and give the buildroot prefix and not the host system
-> prefix.
-> (It took a long time for me to figure why wireshark that im trying to
-> compile here did not
-> work out with libpcap, untill I found out that the
-> $(STAGING_DIR)/usr/bin/pcap-config spit a
-> wrong prefix all the time...)
+> But Isn't it much more easier to drop some patches if I wrap them to
+> individual,
+> isolated patches ??
+> 
+> I mean, for example that elfutils patch set that I posted, it has 12
+> files and if
+> one of those files (except #1 and #2 ofcourse) seems to not work out
+> then isn't it
+> much more easier to just drop that one problematic patch than to
+> remodify one huge patch again and again? Right?
+> 
+> And I would never have submitted that firefox patch in one huge chunk
+> because
+> it would have been too much work for poor reviewer(s)
+> (thanks a million about reviewing it Arnout! i haven't forgotted about
+> those fixes you mentioned
+> and will kick new patch series out soon)
+> 
+> So for small packages single patch is kosher but for large (where does
+> the line go?) it is acceptable
+> to break it (like what Yan and others do) ???
 
-That's because libpng & libxml2 are doing what your patches do, fixing
-up the *-config files.
-What Samuel said (correct me if i'm wrong) is the developers meeting
-kind of agreed on just dropping the *-config files in favour of
-pkgconfig-based (*.pc) solutions, and patch wherever necessary.
-What i say is let's fix the dreaded *-config files but in a generic way,
-just declaring the relevant files to be fixed as the original mail i
-replied to you said until we can properly move to a pkgconfig-only
-solution, which i think won't be fast or easy.
-Regards.
+What you have to realize is that a patch applied to Buildroot must not
+break the build. So it must be fully self-contained.
+
+This is not the case with your elfutils patch set: the first patch adds
+the package, and later patches add patches to make the package build
+properly under certain conditions. This is not correct, as if we apply
+only the first patch, then the build is broken.
+
+So of course, for large packages, you can split things in several
+pieces, but each piece should work on its own. So for example, you can
+submit a first patch adding the package in a minimal way (supporting
+only few features and options), and then gradually add more things.
+
+See Yann's patches with Qemu: he adds a minimal support for Qemu (but
+something that *builds*), and then in followup patches add more
+features.
+
+Splitting patches is *NOT* about the size of the patches. It is about
+each patch carrying a logical change, that has a meaning on its own,
+and that preserves the "buildability" of Buildroot.
+
+For example, in your elfutils case, what I may end up doing is
+splitting things like this:
+
+ * One patch adds the elfutils package, with a dependency on glibc, so
+   that I don't need all the uClibc specific fixes.
+
+ * A second patch adds the uClibc specific fixes, and removes the
+   dependency on glibc.
+
+The first patch on its own works and builds. It doesn't need anything
+from the second patch. The second patch simply improves things.
+
+None of this discussion is specific to Buildroot. Is it exactly the
+same story if you do Linux kernel development, U-Boot development or
+anything else.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
