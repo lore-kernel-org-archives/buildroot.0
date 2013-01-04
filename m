@@ -1,109 +1,67 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Fri,  4 Jan 2013 15:53:13 +0100
-Subject: [Buildroot] [PATCH] gnuplot : new package
-Message-ID: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Fri, 04 Jan 2013 16:56:53 +0200
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <50E6E757.10809@zacarias.com.ar>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+ <50E6BFE2.2090405@zacarias.com.ar>
+ <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+ <50E6E757.10809@zacarias.com.ar>
+Message-ID: <50E6EDB5.9070004@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Gustavo, all
 
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
----
- package/Config.in             |    1 +
- package/gnuplot/Config.in     |    7 +++++++
- package/gnuplot/gnuplot.mk    |   13 +++++++++++++
- package/gnuplot/gnuplot.patch |   26 ++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+), 0 deletion(-)
- create mode 100644 package/gnuplot/Config.in
- create mode 100644 package/gnuplot/gnuplot.mk
- create mode 100644 package/gnuplot/gnuplot.patch
+4.1.2013 16:29, Gustavo Zacarias kirjoitti:
+> On 01/04/2013 11:17 AM, Samuel Martin wrote:
+>
+>> We quickly talked about this during the last Buildroot Dev. Days.
+>>
+>> IIRC, Thomas and Peter were not very fond of this kind of solution.
+>> (guys, feel free to correct me if I speak with my ass ;)).
+>>
+>> btw, afaics:
+>> - *-config provided by the imagemagick package wrap some calls to pkg-config;
+>> - many packages in BR install handwritten scripts like this, as well
+>> as some *.pc files.
+>> So what about just use pkgconf since it's properly handled in BR?
+>> (I agree it may mean patching many packages that only search for
+>> *-config scripts)
+>> - in this patch serie, only libgcrypt does not provide a *.pc file :-(
+>>
+>> Regards,
+> I agree *-config files aren't nice, but they are still here and quite used.
+> When the scenario is a "not very standard" *-config file that can't be
+> easily fixed, one could just avoid the autopatcher and do it the old
+> fashion way.
+> It's a good goal to get rid of them, but realistically it won't happen
+> anytime soon - you'll need to get *.pc files for *-config packages that
+> don't provide them, and you'll also need to patch a lot to get them to
+> use said pc files (with the added dep to host-pkgconf which is now small
+> given my migration away from pkg-config hehe).
+> Long story short, they're still here, so why not do it nicely until we
+> get rid of them all?
+> Just for fun, try to autoreconfigure PHP and see what happens. It's a
+> heavy user of *-config scripts :)
+> Regards.
+>
 
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -70,6 +70,7 @@ endif
- source "toolchain/gcc/Config.in.2"
- source "package/gettext/Config.in"
- source "package/gmp/Config.in"
-+source "package/gnuplot/Config.in"
- source "package/gperf/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/grep/Config.in"
-diff --git a/package/gnuplot/Config.in b/package/gnuplot/Config.in
-new file mode 100644
-index 0000000..281bb65
---- /dev/null
-+++ b/package/gnuplot/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_GNUPLOT
-+	bool "gnuplot"
-+	help
-+	  A portable command-line driven graphing utility.
-+
-+	  http://www.gnuplot.info/
-+
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-new file mode 100644
-index 0000000..2f05624
---- /dev/null
-+++ b/package/gnuplot/gnuplot.mk
-@@ -0,0 +1,24 @@
-+#############################################################
-+#
-+# gnuplot
-+#
-+#############################################################
-+GNUPLOT_VERSION = 4.6.0
-+GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
-+GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
-+GNUPLOT_INSTALL_STAGING = YES
-+GNUPLOT_INSTALL_TARGET = YES
-+GNUPLOT_CONF_OPT = --without-x \
-+		--disable-raise-console \
-+		--disable-mouse \
-+	        --without-tutorial \
-+		--without-demo --disable-demo \
-+	        --without-row-help \
-+		--disable-history-file \
-+	        --without-lisp-files \
-+	        --disable-wxwidgets \
-+	        --without-lua \
-+		--without-latex \
-+	        --without-cairo
-+
-+$(eval $(autotools-package))
-diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
-new file mode 100644
-index 0000000..7053a46
---- /dev/null
-+++ b/package/gnuplot/gnuplot.patch
-@@ -0,0 +1,26 @@
-+diff --git a/Makefile.am b/Makefile.am
-+index bc0f2b2..5c00fe5 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,7 +1,7 @@
-+ ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-+ AUTOMAKE_OPTIONS = foreign 1.2h
-+ 
-+-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
-++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
-+ 
-+ EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
-+ Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
-+diff --git a/Makefile.in b/Makefile.in
-+index 71118bc..86df133 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -250,7 +250,7 @@ top_build_prefix = @top_build_prefix@
-+ top_builddir = @top_builddir@
-+ top_srcdir = @top_srcdir@
-+ AUTOMAKE_OPTIONS = foreign 1.2h
-+-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
-++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
-+ EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
-+ Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
-+ VERSION configure.vms pm3d win
--- 
-1.7.10.4
+So should I continue patching correct buildroot prefixes to all those
+*-config files that
+are in $(STAGING_DIR)/usr/bin or not ?
+
+From my $(STAGING_DIR)/usr/bin/*-config files only libpng and libxml2
+and few others
+do the right thing and give the buildroot prefix and not the host system
+prefix.
+(It took a long time for me to figure why wireshark that im trying to
+compile here did not
+work out with libpcap, untill I found out that the
+$(STAGING_DIR)/usr/bin/pcap-config spit a
+wrong prefix all the time...)
+
+Regards
+Stefan
