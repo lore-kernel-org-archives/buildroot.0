@@ -1,99 +1,124 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Fri, 04 Jan 2013 17:28:47 +0200
-Subject: [Buildroot] [PATCH v2 2/2] rxvt-unicode: new package
-In-Reply-To: <20130104160340.73e41cd2@skate>
-References: <1356633918-16114-1-git-send-email-stefan.froberg@petroprogram.com>
- <1356633918-16114-2-git-send-email-stefan.froberg@petroprogram.com>
- <20130104002721.0a0e5e30@skate> <50E6EA65.6090001@petroprogram.com>
- <20130104160340.73e41cd2@skate>
-Message-ID: <50E6F52F.5040204@petroprogram.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Fri, 04 Jan 2013 16:32:20 +0100
+Subject: [Buildroot] [PATCH] gnuplot : new package
+In-Reply-To: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
+References: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <50E6F604.4000401@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Hello Anthony,
 
-4.1.2013 17:03, Thomas Petazzoni kirjoitti:
-> Dear Stefan Fr?berg,
+Am 04.01.2013 15:53, schrieb Anthony Viallard:
+> Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+> ---
+>  package/Config.in             |    1 +
+>  package/gnuplot/Config.in     |    7 +++++++
+>  package/gnuplot/gnuplot.mk    |   13 +++++++++++++
+>  package/gnuplot/gnuplot.patch |   26 ++++++++++++++++++++++++++
+>  4 files changed, 57 insertions(+), 0 deletion(-)
+>  create mode 100644 package/gnuplot/Config.in
+>  create mode 100644 package/gnuplot/gnuplot.mk
+>  create mode 100644 package/gnuplot/gnuplot.patch
 >
-> On Fri, 04 Jan 2013 16:42:45 +0200, Stefan Fr?berg wrote:
->
->> Yeah, Im still confused when to break it to pieces.
->>
->> But Isn't it much more easier to drop some patches if I wrap them to
->> individual,
->> isolated patches ??
->>
->> I mean, for example that elfutils patch set that I posted, it has 12
->> files and if
->> one of those files (except #1 and #2 ofcourse) seems to not work out
->> then isn't it
->> much more easier to just drop that one problematic patch than to
->> remodify one huge patch again and again? Right?
->>
->> And I would never have submitted that firefox patch in one huge chunk
->> because
->> it would have been too much work for poor reviewer(s)
->> (thanks a million about reviewing it Arnout! i haven't forgotted about
->> those fixes you mentioned
->> and will kick new patch series out soon)
->>
->> So for small packages single patch is kosher but for large (where does
->> the line go?) it is acceptable
->> to break it (like what Yan and others do) ???
-> What you have to realize is that a patch applied to Buildroot must not
-> break the build. So it must be fully self-contained.
->
-> This is not the case with your elfutils patch set: the first patch adds
-> the package, and later patches add patches to make the package build
-> properly under certain conditions. This is not correct, as if we apply
-> only the first patch, then the build is broken.
->
-> So of course, for large packages, you can split things in several
-> pieces, but each piece should work on its own. So for example, you can
-> submit a first patch adding the package in a minimal way (supporting
-> only few features and options), and then gradually add more things.
->
-> See Yann's patches with Qemu: he adds a minimal support for Qemu (but
-> something that *builds*), and then in followup patches add more
-> features.
->
-> Splitting patches is *NOT* about the size of the patches. It is about
-> each patch carrying a logical change, that has a meaning on its own,
-> and that preserves the "buildability" of Buildroot.
->
-> For example, in your elfutils case, what I may end up doing is
-> splitting things like this:
->
->  * One patch adds the elfutils package, with a dependency on glibc, so
->    that I don't need all the uClibc specific fixes.
->
->  * A second patch adds the uClibc specific fixes, and removes the
->    dependency on glibc.
->
-> The first patch on its own works and builds. It doesn't need anything
-> from the second patch. The second patch simply improves things.
->
-> None of this discussion is specific to Buildroot. Is it exactly the
-> same story if you do Linux kernel development, U-Boot development or
-> anything else.
->
-> Best regards,
->
-> Thomas
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -70,6 +70,7 @@ endif
+>  source "toolchain/gcc/Config.in.2"
+>  source "package/gettext/Config.in"
+>  source "package/gmp/Config.in"
+> +source "package/gnuplot/Config.in"
+>  source "package/gperf/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/grep/Config.in"
+> diff --git a/package/gnuplot/Config.in b/package/gnuplot/Config.in
+> new file mode 100644
+> index 0000000..281bb65
+> --- /dev/null
+> +++ b/package/gnuplot/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_GNUPLOT
+> +	bool "gnuplot"
+> +	help
+> +	  A portable command-line driven graphing utility.
+> +
+> +	  http://www.gnuplot.info/
+> +
+> diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+> new file mode 100644
+> index 0000000..2f05624
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.mk
+> @@ -0,0 +1,24 @@
+> +#############################################################
+> +#
+> +# gnuplot
+> +#
+> +#############################################################
+> +GNUPLOT_VERSION = 4.6.0
+> +GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
+> +GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+> +GNUPLOT_INSTALL_STAGING = YES
+> +GNUPLOT_INSTALL_TARGET = YES
+> +GNUPLOT_CONF_OPT = --without-x \
+is there a special reason for this? Why not build with x, when X11 is
+configured in buildroot?
 
-Ah, I see.
+Kind regards
 
-So for example in this elfutils case it should have been one big patch
-(because all those individual
-*.patch files are really needed to make it build).
- 
-And any extra patches in that series would just add features
-(like BR2_PACKAGE_ELFUTILS_ZLiB_SUPPORT) or fix something ?
+Stephan
+> +		--disable-raise-console \
+> +		--disable-mouse \
+> +	        --without-tutorial \
+> +		--without-demo --disable-demo \
+> +	        --without-row-help \
+> +		--disable-history-file \
+> +	        --without-lisp-files \
+> +	        --disable-wxwidgets \
+> +	        --without-lua \
+> +		--without-latex \
+> +	        --without-cairo
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
+> new file mode 100644
+> index 0000000..7053a46
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.patch
+> @@ -0,0 +1,26 @@
+> +diff --git a/Makefile.am b/Makefile.am
+> +index bc0f2b2..5c00fe5 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -1,7 +1,7 @@
+> + ## Process this file with automake to produce Makefile.in -*-Makefile-*-
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> + 
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+> + 
+> + EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+> + Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> +diff --git a/Makefile.in b/Makefile.in
+> +index 71118bc..86df133 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
+> +@@ -250,7 +250,7 @@ top_build_prefix = @top_build_prefix@
+> + top_builddir = @top_builddir@
+> + top_srcdir = @top_srcdir@
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+> + EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+> + Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> + VERSION configure.vms pm3d win
 
-In other words, first patch is the buildable core and everything else
-optional ?
 
-Stefan
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
