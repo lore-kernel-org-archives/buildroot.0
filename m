@@ -1,34 +1,57 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 4 Jan 2013 21:48:29 +0100
-Subject: [Buildroot] [git commit] gmp: bump to version 5.1.0
-Message-ID: <20130104211238.DC0079A60C@busybox.osuosl.org>
+Date: Fri, 4 Jan 2013 22:12:10 +0100
+Subject: [Buildroot] [git commit] configs/at91rm9200df: update and fix
+Message-ID: <20130104211239.13F4A9A60C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=25c03d89f1556218f0d907cce0e6f0613f6bc711
+commit: http://git.buildroot.net/buildroot/commit/?id=ea1160d494a0e0ae57ec03190f73c8cc37d91a9c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Update to the latest maxim.org.za kernel 2.6.38
+Lock down headers version, otherwise we were building a toolchain with
+3.7 headers for a 2.6.33 kernel - not too wise.
+Also the AT91RM9200 is an ARM920T so enable that target.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gmp/gmp.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ configs/at91rm9200df_defconfig |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 72673c7..093d60c 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
+diff --git a/configs/at91rm9200df_defconfig b/configs/at91rm9200df_defconfig
+index 4229155..74b5a6f 100644
+--- a/configs/at91rm9200df_defconfig
++++ b/configs/at91rm9200df_defconfig
+@@ -1,5 +1,6 @@
+ # Architecture
+ BR2_arm=y
++BR2_arm920t=y
  
--GMP_VERSION = 5.0.5
--GMP_SITE = $(BR2_GNU_MIRROR)/gmp
-+GMP_VERSION = 5.1.0
-+GMP_SITE = ftp://ftp.gmplib.org/pub/gmp-$(GMP_VERSION)
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
- GMP_INSTALL_STAGING = YES
- GMP_LICENSE = LGPLv3+
+ # Filesystem
+ BR2_TARGET_ROOTFS_JFFS2=y
+@@ -9,6 +10,11 @@ BR2_TARGET_ROOTFS_JFFS2_EBSIZE=0x2100
+ BR2_TARGET_ROOTFS_JFFS2_NOCLEANMARKER=y
+ BR2_TARGET_ROOTFS_JFFS2_LE=y
+ 
++# Lock down headers to avoid breaking with new defaults
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="2.6.38.8"
++BR2_DEFAULT_KERNEL_HEADERS="2.6.38.8"
++
+ # Bootloader
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="at91rm9200ek"
+@@ -17,7 +23,7 @@ BR2_TARGET_UBOOT_2010_06=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.33"
+-BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.33-at91.patch.gz"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
++BR2_LINUX_KERNEL_PATCH="http://maxim.org.za/AT91RM9200/2.6/2.6.38-at91.patch.gz"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="at91rm9200ek"
