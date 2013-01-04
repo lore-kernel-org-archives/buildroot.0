@@ -1,28 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jan 2013 21:47:05 +0100
-Subject: [Buildroot] [PATCH] libgd : new package
-In-Reply-To: <50E6F3E1.3010202@syscom-instruments.com> (Viallard Anthony's
- message of "Fri, 04 Jan 2013 16:23:13 +0100")
-References: <1357310855-31818-1-git-send-email-viallard@syscom-instruments.com>
- <20130104161210.13d97d82@skate>
- <50E6F3E1.3010202@syscom-instruments.com>
-Message-ID: <87d2xkn0ae.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 04 Jan 2013 17:52:57 -0300
+Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.17
+In-Reply-To: <87hamwn0br.fsf@dell.be.48ers.dk>
+References: <1357332135-3087-1-git-send-email-gustavo@zacarias.com.ar>
+ <87hamwn0br.fsf@dell.be.48ers.dk>
+Message-ID: <50E74129.5050105@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Viallard" == Viallard Anthony <viallard@syscom-instruments.com> writes:
+On 01/04/2013 05:46 PM, Peter Korsgaard wrote:
+>  Gustavo> -LIBNL_VERSION = 3.2.16
+>  Gustavo> +LIBNL_VERSION = 3.2.17
+> 
+> Committed, thanks.
+> 
+> Could you have a look at http://patchwork.ozlabs.org/patch/208318/ ?
 
-Hi,
-
- Viallard> Oh my god ! I work with 2012.11 version and when i check the
- Viallard> trunk, i look for "libgd", not "gd". Humm.
-
- Viallard> Good work Peter Korsgaard ! :)
-
-Thanks ;)
-
--- 
-Bye, Peter Korsgaard
+Yes, it's no longer required, part of 3.2.17
+Seems many people had issues with old enough headers and upstream
+decided to release .17 with those patches to fit it.
+Also fixes our previous autobuild errors which i assume went away when
+Thomas probably upgraded to new toolchain versions.
+We are talking about <2.6.32 headers IIRC.
+Regards.
