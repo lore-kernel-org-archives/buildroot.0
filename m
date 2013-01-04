@@ -1,22 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jan 2013 22:11:06 +0100
-Subject: [Buildroot] [PATCH] libnl: add support of old kernel
-In-Reply-To: <1356621073-6242-1-git-send-email-plagnioj@jcrosoft.com>
- (Jean-Christophe PLAGNIOL-VILLARD's message of "Thu, 27 Dec 2012
- 16:11:13 +0100")
-References: <1356621073-6242-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <874niwmz6d.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jan 2013 22:11:46 +0100
+Subject: [Buildroot] [PATCH 1/2] mpfr: bump to 3.1.1-p2
+In-Reply-To: <1357319567-32479-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 4 Jan 2013 14:12:46 -0300")
+References: <1357319567-32479-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zk0olkkt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Jean-Christophe> without those patches libnl will not compile on old kernel
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Thanks, but shouldn't be needed after the version bump to 3.2.17.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
