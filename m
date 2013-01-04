@@ -1,52 +1,114 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 04 Jan 2013 18:44:15 +0100
+Date: Fri, 04 Jan 2013 19:01:53 +0100
 Subject: [Buildroot] [PATCH] gnuplot : new package
-In-Reply-To: <20130104172643.72321640@skate>
+In-Reply-To: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
 References: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
- <50E6F604.4000401@relinux.de> <20130104172643.72321640@skate>
-Message-ID: <50E714EF.4090102@relinux.de>
+Message-ID: <50E71911.301@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 04.01.2013 17:26, schrieb Thomas Petazzoni:
-> Dear Stephan Hoffmann,
+Am 04.01.2013 15:53, schrieb Anthony Viallard:
+> Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+Tested-by: Stephan Hoffmann <sho@relinux.de>
+> ---
+Built and made simple functional test on beaglebone
+>  package/Config.in             |    1 +
+>  package/gnuplot/Config.in     |    7 +++++++
+>  package/gnuplot/gnuplot.mk    |   13 +++++++++++++
+>  package/gnuplot/gnuplot.patch |   26 ++++++++++++++++++++++++++
+>  4 files changed, 57 insertions(+), 0 deletion(-)
+>  create mode 100644 package/gnuplot/Config.in
+>  create mode 100644 package/gnuplot/gnuplot.mk
+>  create mode 100644 package/gnuplot/gnuplot.patch
 >
-> On Fri, 04 Jan 2013 16:32:20 +0100, Stephan Hoffmann wrote:
->
->>> +GNUPLOT_CONF_OPT = --without-x \
->> is there a special reason for this? Why not build with x, when X11 is
->> configured in buildroot?
-> I guess because Anthony didn't need X support. It is not because a
-> given software component can potentially support feature Y or Z that we
-> require the package submitter to support all those features Y or Z. It
-> would put way too much load on the initial package submitter.
-Hello Thomas,
-
-maybe my question was not clear enough. I just wanted to know if this
-option is really required.
-> Instead, we prefer having small packages that only support the features
-> that have been tested by the submitter, and that carefully disables all
-> the unsupported features. And then, as features are needed by other
-> people, they can submit additional patches to make those additional
-> features work.
-O.K., I didn't realize that even when configure finds out that no X11 is
-present --without-x is needed for this reason.
-
-For the records: I made a quick test without X11 and it fails to compile
-without this option.
-> Anthony: a gnuplot patch without the X support is perfectly acceptable.
-Of course, this is my opinion, too! I really like seeing it included!
-
-Kind regards
-
-Stephan
->
-> Best regards,
->
-> Thomas
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -70,6 +70,7 @@ endif
+>  source "toolchain/gcc/Config.in.2"
+>  source "package/gettext/Config.in"
+>  source "package/gmp/Config.in"
+> +source "package/gnuplot/Config.in"
+>  source "package/gperf/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/grep/Config.in"
+> diff --git a/package/gnuplot/Config.in b/package/gnuplot/Config.in
+> new file mode 100644
+> index 0000000..281bb65
+> --- /dev/null
+> +++ b/package/gnuplot/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_GNUPLOT
+> +	bool "gnuplot"
+> +	help
+> +	  A portable command-line driven graphing utility.
+> +
+> +	  http://www.gnuplot.info/
+> +
+> diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+> new file mode 100644
+> index 0000000..2f05624
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.mk
+> @@ -0,0 +1,24 @@
+> +#############################################################
+> +#
+> +# gnuplot
+> +#
+> +#############################################################
+> +GNUPLOT_VERSION = 4.6.0
+> +GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
+> +GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
+> +GNUPLOT_INSTALL_STAGING = YES
+> +GNUPLOT_INSTALL_TARGET = YES
+> +GNUPLOT_CONF_OPT = --without-x \
+> +		--disable-raise-console \
+> +		--disable-mouse \
+> +	        --without-tutorial \
+> +		--without-demo --disable-demo \
+> +	        --without-row-help \
+> +		--disable-history-file \
+> +	        --without-lisp-files \
+> +	        --disable-wxwidgets \
+> +	        --without-lua \
+> +		--without-latex \
+> +	        --without-cairo
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
+> new file mode 100644
+> index 0000000..7053a46
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.patch
+> @@ -0,0 +1,26 @@
+> +diff --git a/Makefile.am b/Makefile.am
+> +index bc0f2b2..5c00fe5 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -1,7 +1,7 @@
+> + ## Process this file with automake to produce Makefile.in -*-Makefile-*-
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> + 
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+> + 
+> + EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+> + Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> +diff --git a/Makefile.in b/Makefile.in
+> +index 71118bc..86df133 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
+> +@@ -250,7 +250,7 @@ top_build_prefix = @top_build_prefix@
+> + top_builddir = @top_builddir@
+> + top_srcdir = @top_srcdir@
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+> + EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+> + Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> + VERSION configure.vms pm3d win
 
 
 -- 
