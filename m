@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Jan 2013 17:26:43 +0100
-Subject: [Buildroot] [PATCH] gnuplot : new package
-In-Reply-To: <50E6F604.4000401@relinux.de>
-References: <1357311193-31887-1-git-send-email-viallard@syscom-instruments.com>
- <50E6F604.4000401@relinux.de>
-Message-ID: <20130104172643.72321640@skate>
+Date: Fri, 4 Jan 2013 17:29:45 +0100
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+ <50E6BFE2.2090405@zacarias.com.ar>
+ <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+Message-ID: <20130104172945.50d8efd8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stephan Hoffmann,
+Dear Samuel Martin,
 
-On Fri, 04 Jan 2013 16:32:20 +0100, Stephan Hoffmann wrote:
+On Fri, 4 Jan 2013 15:17:42 +0100, Samuel Martin wrote:
 
-> > +GNUPLOT_CONF_OPT = --without-x \
-> is there a special reason for this? Why not build with x, when X11 is
-> configured in buildroot?
+> We quickly talked about this during the last Buildroot Dev. Days.
+> 
+> IIRC, Thomas and Peter were not very fond of this kind of solution.
+> (guys, feel free to correct me if I speak with my ass ;)).
 
-I guess because Anthony didn't need X support. It is not because a
-given software component can potentially support feature Y or Z that we
-require the package submitter to support all those features Y or Z. It
-would put way too much load on the initial package submitter.
+I might remember wrong, but I think the solution I did not like was
+blindly patching *ALL* the files matching *-config.
 
-Instead, we prefer having small packages that only support the features
-that have been tested by the submitter, and that carefully disables all
-the unsupported features. And then, as features are needed by other
-people, they can submit additional patches to make those additional
-features work.
-
-Anthony: a gnuplot patch without the X support is perfectly acceptable.
-
-Best regards,
+The solution proposed by Gustavo, where the foo-config files to be
+patched are explicitly listed in a package variable sounds fine to me,
+as long as the common thing is only to patch prefix and exec_prefix,
+the other more specialized fixes (if any) have to be left to the
+package specific .mk file.
 
 Thomas
 -- 
