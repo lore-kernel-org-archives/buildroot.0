@@ -1,37 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Jan 2013 14:17:30 +0100
-Subject: [Buildroot] [PATCH 20/20] support/scripts: add xorg-release.py
-	script
-In-Reply-To: <87vcbbiyqr.fsf@dell.be.48ers.dk>
-References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
- <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
- <41c1bc2b4f8953280e305deada0b52e432974b58.1357125961.git.thomas.petazzoni@free-electrons.com>
- <87vcbbiyqr.fsf@dell.be.48ers.dk>
-Message-ID: <20130105141730.0cd197bf@skate>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat,  5 Jan 2013 15:10:51 +0100
+Subject: [Buildroot] [pull request] Pull request for branch rpi-support
+Message-ID: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Hello All!
 
-On Sat, 05 Jan 2013 13:46:20 +0100, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  Thomas> This script generates a report on the packaging status of X.org
->  Thomas> releases in Buildroot. It does so by downloading the list of tarballs
->  Thomas> that are part of a given X.org release, and compare that with the
->  Thomas> packages that are available in Buildroot.
-> 
-> I've dropped the .py suffix to match the other scripts and made it
-> executable and committed, thanks.
+A short series to add some needed RaspberryPi specific packages in order to
+build a rootfs for this board.
 
-Indeed, good modifications. Thanks!
+The following changes since commit 66bfe1d4fe2de50aef6ac3fc836a710fa577cdef:
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+  xdriver_xf86-video-sunffb: remove package (2013-01-05 14:34:48 +0100)
+
+are available in the git repository at:
+
+  http://github.com/maximeh/buildroot.git rpi-support
+
+for you to fetch changes up to 0a82214a34f519691ff795260820907a7a8b4cfc:
+
+  rpi-fw: New package (2013-01-05 14:59:15 +0100)
+
+----------------------------------------------------------------
+Maxime Hadjinlian (3):
+      libcofi: new package
+      rpi-userland: new package
+      rpi-fw: New package
+
+ package/Config.in                    |    3 +++
+ package/libcofi/Config.in            |    8 ++++++++
+ package/libcofi/libcofi.mk           |   17 +++++++++++++++++
+ package/rpi-fw/Config.in             |    9 +++++++++
+ package/rpi-fw/cmdline.txt           |    1 +
+ package/rpi-fw/config.txt            |    7 +++++++
+ package/rpi-fw/rpi-fw.mk             |   22 ++++++++++++++++++++++
+ package/rpi-userland/Config.in       |   12 ++++++++++++
+ package/rpi-userland/rpi-userland.mk |   25 +++++++++++++++++++++++++
+ 9 files changed, 104 insertions(+)
+ create mode 100644 package/libcofi/Config.in
+ create mode 100644 package/libcofi/libcofi.mk
+ create mode 100644 package/rpi-fw/Config.in
+ create mode 100644 package/rpi-fw/cmdline.txt
+ create mode 100644 package/rpi-fw/config.txt
+ create mode 100644 package/rpi-fw/rpi-fw.mk
+ create mode 100644 package/rpi-userland/Config.in
+ create mode 100644 package/rpi-userland/rpi-userland.mk
+
+Regards,
+Maxime Hadjinlian
+
+--
