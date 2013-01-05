@@ -1,43 +1,24 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 5 Jan 2013 16:18:34 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Jan 2013 16:23:39 +0100
 Subject: [Buildroot] [PATCH 2/3] rpi-userland: new package
 In-Reply-To: <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
 References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
  <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
-Message-ID: <CAHXCMMJi+pFKA8O9MvWMu83WR0dpqRFZ2RUxx6Hjs-hxyaskdA@mail.gmail.com>
+Message-ID: <201301051623.39522.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Maxime, All,
 
-2013/1/5 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
+On Saturday 05 January 2013 Maxime Hadjinlian wrote:
 > Introducing a package to build the userland part of the Raspberry,
 > needed by anyone who would want to build a rootfs for a RaspberryPi.
->
+> 
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/Config.in                    |    1 +
->  package/rpi-userland/Config.in       |   12 ++++++++++++
->  package/rpi-userland/rpi-userland.mk |   25 +++++++++++++++++++++++++
->  3 files changed, 38 insertions(+)
->  create mode 100644 package/rpi-userland/Config.in
->  create mode 100644 package/rpi-userland/rpi-userland.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index a3530d7..604ed1b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -579,6 +579,7 @@ source "package/collectd/Config.in"
->  source "package/empty/Config.in"
->  source "package/googlefontdirectory/Config.in"
->  source "package/mobile-broadband-provider-info/Config.in"
-> +source "package/rpi-userland/Config.in"
->  source "package/shared-mime-info/Config.in"
->  source "package/snowball-init/Config.in"
->  source "package/sound-theme-borealis/Config.in"
+[--SNIP--]
 > diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
 > new file mode 100644
 > index 0000000..3d4585f
@@ -45,17 +26,19 @@ Hi Maxime,
 > +++ b/package/rpi-userland/Config.in
 > @@ -0,0 +1,12 @@
 > +config BR2_PACKAGE_RPI_USERLAND
-> +       bool "rpi-userland"
-> +       select BR2_PACKAGE_LIBCOFI
-> +       help
-> +         Raspberry Pi Userland contains the necessary library to use the
-> +         VideoCore driver.
-> +
-> +         Includes source for the ARM side code to interface to:
-> +         EGL, mmal, GLESv2, vcos, openmaxil, vchiq_arm, bcm_host, WFC, OpenVG.
-> +
-> +         https://github.com/raspberrypi/userland/
-> +
+> +	bool "rpi-userland"
+> +	select BR2_PACKAGE_LIBCOFI
+
+Do not forget to add this dependency in the .mk (see below)
+
+> +	help
+> +	  Raspberry Pi Userland contains the necessary library to use the
+> +	  VideoCore driver.
+
+Then, what about calling this package something like 'videocore'.
+I guess there areaother boards out there that use this GPU.
+
+[--SNIP--]
 > diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
 > new file mode 100644
 > index 0000000..5bae06d
@@ -72,7 +55,12 @@ Hi Maxime,
 > +RPI_USERLAND_LICENSE = FOSS
 > +RPI_USERLAND_LICENSE_FILE = LICENCE
 > +RPI_USERLAND_INSTALL_STAGING = YES
-> +
+
+RPI_USERLAND_DPENDENCIES = libcofi
+
+Although, is libcofi really required? I just greped for 'cofi', and found
+no occurence, so I'd say it is not.
+
 > +define RPI_USERLAND_POST_TARGET_CLEANUP
 > +    rm -Rf $(TARGET_DIR)/opt/vc/include
 > +    rm -Rf $(TARGET_DIR)/opt/vc/share
@@ -80,31 +68,23 @@ Hi Maxime,
 > +    rm -f  $(TARGET_DIR)/etc/init.d/vcfiled
 > +    rm -f  $(TARGET_DIR)/opt/vc/lib/*.a
 > +    rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/etc/init.d || true
-Since you use the --ignore-fail-on-non-empty option, i think "|| true"
-is useless.
-
 > +    mv $(TARGET_DIR)/opt/vc/lib/* $(TARGET_DIR)/usr/lib/
 > +    rm -Rf $(TARGET_DIR)/opt/vc/
 > +endef
-
-Also, since you set RPI_USERLAND_INSTALL_STAGING = YES, don't you need
-to do some cleanup/fixup hook for the staging area as well?
-
 > +
 > +RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
-
-BTW, it is possible to avoid this cleanup hook  (or at least reduce it
-to the example source) with this patch:
-http://code.bulix.org/3fo6ye-82780
-and by adding "-DVMCS_INSTALL_PREFIX=/usr" to the
-RPI_USERLAND_CONF_OPT variable.
-
 > +
 > +$(eval $(cmake-package))
-> --
-> 1.7.10.4
+
+Untested so far, will do shortly.
 
 Regards,
+Yann E. MORIN.
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
