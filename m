@@ -1,196 +1,153 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 13:45:14 +0100
-Subject: [Buildroot] [git commit] support/scripts: add xorg-release.py script
-Message-ID: <20130105124713.4828B9A63B@busybox.osuosl.org>
+Date: Sat, 5 Jan 2013 13:26:14 +0100
+Subject: [Buildroot] [git commit] pthread-stubs: rename to
+	xlib_libpthread-stubs
+Message-ID: <20130105124707.668AD9A64B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8afc3e684e1a2a28c552fead367d334aabfd514f
+commit: http://git.buildroot.net/buildroot/commit/?id=5bd41d165e12a2e3e5b776cb4079077cac995bfc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This script generates a report on the packaging status of X.org
-releases in Buildroot. It does so by downloading the list of tarballs
-that are part of a given X.org release, and compare that with the
-packages that are available in Buildroot.
+In upstream X.org releases, pthread-stubs is named libpthread-stubs,
+so for consistency reasons, we rename the Buildroot package
+accordingly. Also, while we're at it, we add a xlib_ prefix to the
+package to match other X.org libraries in Buildroot.
 
-[Peter: drop .py suffix, make executable]
+The necessary Config.in.legacy code is added to ensure that users
+having .config files using the old configuration option name get a
+warning.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- support/scripts/xorg-release |  165 ++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 165 insertions(+), 0 deletions(-)
+ Config.in.legacy                                   |    8 ++++++++
+ package/libdrm/libdrm.mk                           |    2 +-
+ package/x11r7/Config.in                            |    2 +-
+ package/x11r7/libxcb/libxcb.mk                     |    2 +-
+ package/x11r7/pthread-stubs/pthread-stubs.mk       |   14 --------------
+ .../Config.in                                      |    4 ++--
+ .../xlib_libpthread-stubs/xlib_libpthread-stubs.mk |   14 ++++++++++++++
+ 7 files changed, 27 insertions(+), 19 deletions(-)
 
-diff --git a/support/scripts/xorg-release b/support/scripts/xorg-release
-new file mode 100755
-index 0000000..8055658
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7ddc6ea..4770c94 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -70,4 +70,12 @@ config BR2_PACKAGE_INPUT_TOOLS_EVTEST
+ 	help
+ 	  The evtest program from input-tools is now a separate package.
+ 
++config BR2_PACKAGE_PTHREAD_STUBS
++	bool "pthread-stubs option has been renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
++	help
++	  For consistency reason, the pthread-stubs package has been
++	  renamed to xlib_libpthread-stubs.
++
+ endif
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index fbfc95e..4ccfa52 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -14,7 +14,7 @@ LIBDRM_DEPENDENCIES = \
+ 	xlib_libXxf86vm \
+ 	xlib_libXmu \
+ 	xproto_dri2proto \
+-	pthread-stubs \
++	xlib_libpthread-stubs \
+ 	host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 6881d4e..9e08e3f 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -37,7 +37,6 @@ endmenu
+ 	menu "X11R7 Libraries"
+ 		source package/x11r7/libxcb/Config.in
+ 		source package/x11r7/mesa3d/Config.in
+-		source package/x11r7/pthread-stubs/Config.in
+ 		source package/x11r7/xcb-util/Config.in
+ 		source package/x11r7/xcb-util-keysyms/Config.in
+ 		source package/x11r7/xlib_libFS/Config.in
+@@ -79,6 +78,7 @@ endmenu
+ 		source package/x11r7/xlib_libxkbui/Config.in
+ 		source package/x11r7/xlib_xtrans/Config.in
+ 		source package/x11r7/xlib_libpciaccess/Config.in
++		source package/x11r7/xlib_libpthread-stubs/Config.in
+ 	endmenu
+ 	menu "X11R7 Applications"
+ 		source package/x11r7/xapp_appres/Config.in
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index f7b1945..15eeeef 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -10,7 +10,7 @@ LIBXCB_SITE = http://xcb.freedesktop.org/dist/
+ LIBXCB_INSTALL_STAGING = YES
+ 
+ LIBXCB_DEPENDENCIES = \
+-	host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
++	host-libxslt xlib_libpthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
+ 	host-xcb-proto host-python host-pkgconf
+ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
+ LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
+diff --git a/package/x11r7/pthread-stubs/pthread-stubs.mk b/package/x11r7/pthread-stubs/pthread-stubs.mk
+deleted file mode 100644
+index e7032de..0000000
+--- a/package/x11r7/pthread-stubs/pthread-stubs.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#############################################################
+-#
+-# pthread-stubs
+-#
+-#############################################################
+-PTHREAD_STUBS_VERSION = 0.3
+-PTHREAD_STUBS_SOURCE = libpthread-stubs-$(PTHREAD_STUBS_VERSION).tar.bz2
+-PTHREAD_STUBS_SITE = http://xcb.freedesktop.org/dist/
+-
+-PTHREAD_STUBS_INSTALL_STAGING = YES
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
+-
+diff --git a/package/x11r7/pthread-stubs/Config.in b/package/x11r7/xlib_libpthread-stubs/Config.in
+similarity index 70%
+rename from package/x11r7/pthread-stubs/Config.in
+rename to package/x11r7/xlib_libpthread-stubs/Config.in
+index c17f7da..fb53585 100644
+--- a/package/x11r7/pthread-stubs/Config.in
++++ b/package/x11r7/xlib_libpthread-stubs/Config.in
+@@ -1,5 +1,5 @@
+-config BR2_PACKAGE_PTHREAD_STUBS
+-	bool "pthread-stubs"
++config BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
++	bool "libpthread-stubs"
+ 	help
+ 	  This library provides weak aliases for pthread functions not
+ 	  provided in libc or otherwise available by default.
+diff --git a/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+new file mode 100644
+index 0000000..909253c
 --- /dev/null
-+++ b/support/scripts/xorg-release
-@@ -0,0 +1,165 @@
-+#!/usr/bin/python
-+
-+# This script generates a report on the packaging status of X.org
-+# releases in Buildroot. It does so by downloading the list of
-+# tarballs that are part of a given X.org release, and compare that
-+# with the packages that are available in Buildroot.
-+
-+import BeautifulSoup
-+import re
-+import os
-+import urllib
-+
-+# This can be customized
-+XORG_VERSION = "X11R7.7"
-+
-+# Key names in dictionaries
-+XORG_VERSION_KEY = "xorg-version"
-+BR_VERSION_KEY = "br-version"
-+BR_NAME_KEY = "br-name"
-+
-+# Get the list of tarballs of a X.org release, parse it, and return a
-+# dictionary of dictionaries, of the form:
++++ b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
+@@ -0,0 +1,14 @@
++#############################################################
 +#
-+#   { <name_of_package> : { XORG_VERSION_KEY: <version_of_package> },
-+#     <name_of_package2> : { XORG_VERSION_KEY: <version_of_package2> }}
++# xlib_libpthread-stubs
 +#
-+def get_xorg_release_pkgs():
-+    u = urllib.URLopener().open("http://www.x.org/releases/%s/src/everything/" % XORG_VERSION)
-+    b = BeautifulSoup.BeautifulSoup()
-+    b.feed(u.read())
-+    links = b.findAll("a")
-+    packages = {}
-+    r = re.compile("(.*)-([0-9\.]*).tar.bz2")
-+    # We now have a list of all links.
-+    for link in links:
-+        href = link.get("href")
-+        # Skip everything but tarballs
-+        if not href.endswith(".tar.bz2"):
-+            continue
-+        # Separate the name and the version
-+        groups = r.match(href)
-+        if not groups:
-+            continue
-+        name = groups.group(1)
-+        version = groups.group(2)
-+        packages[name] = { XORG_VERSION_KEY : version }
-+    return packages
++#############################################################
++XLIB_LIBPTHREAD_STUBS_VERSION = 0.3
++XLIB_LIBPTHREAD_STUBS_SOURCE = libpthread-stubs-$(XLIB_LIBPTHREAD_STUBS_VERSION).tar.bz2
++XLIB_LIBPTHREAD_STUBS_SITE = http://xcb.freedesktop.org/dist/
 +
-+# Files and directories in package/x11r7/ that should be ignored in
-+# our processing.
-+BUILDROOT_EXCEPTIONS = [
-+    "mcookie", # Code is directly in package directory
-+    "x11r7.mk",
-+    "Config.in",
-+    "xdriver_xf86-input-tslib", # From Pengutronix, not part of X.org releases
-+]
++XLIB_LIBPTHREAD_STUBS_INSTALL_STAGING = YES
 +
-+# Prefixes of directories in package/x11r7/ that must be stripped
-+# before trying to match Buildroot package names with X.org tarball
-+# names.
-+BUILDROOT_PREFIXES = [
-+    "xapp",
-+    "xdriver",
-+    "xfont",
-+    "xlib",
-+    "xserver",
-+    "xutil",
-+    "xproto",
-+]
-+
-+# From a Buildroot package name, try to see if a prefix should be
-+# stripped from it. For example, passing "xapp_xlsfonts" as argument
-+# to this function will return "xlsfonts".
-+def buildroot_strip_prefix(dirname):
-+    for prefix in BUILDROOT_PREFIXES:
-+        if dirname.startswith(prefix + "_"):
-+            return dirname[len(prefix) + 1:]
-+    return dirname
-+
-+# From a Buildroot package name, parse its .mk file to find the
-+# Buildroot version of the package by looking at the <foo>_VERSION
-+# line.
-+def buildroot_get_version(dirname):
-+    f = open(os.path.join("package", "x11r7", dirname, dirname + ".mk"))
-+    r = re.compile("^([A-Z0-9_]*)_VERSION = ([0-9\.]*)$")
-+    for l in f.readlines():
-+        m = r.match(l)
-+        if m:
-+            return m.group(2)
-+    return None
-+
-+# Augment the informations of the X.org list of packages (given as
-+# argument) by details about their packaging in Buildroot. Those
-+# details are found by looking at the contents of package/x11r7/.
-+def get_buildroot_pkgs(packages):
-+    dirs = os.listdir(os.path.join(os.getcwd(), "package", "x11r7"))
-+    for d in dirs:
-+        # Skip exceptions
-+        if d in BUILDROOT_EXCEPTIONS:
-+            continue
-+        pkgname = buildroot_strip_prefix(d)
-+        version = buildroot_get_version(d)
-+        if packages.has_key(pkgname):
-+            # There is a X.org package of the same name, so we just
-+            # add informations to the existing dict entry.
-+            packages[pkgname]['br-version'] = version
-+            packages[pkgname]['br-name'] = d
-+        else:
-+            # There is no X.org package with this name, so we add a
-+            # new dict entry.
-+            packages[pkgname] = { BR_VERSION_KEY: version,
-+                                  BR_NAME_KEY : d }
-+    return packages
-+
-+def show_summary(packages):
-+    FORMAT_STRING = "%40s | %15s | %15s | %-30s"
-+    print FORMAT_STRING % ("Package name", "Vers in BR", "Vers in X.org", "Action")
-+    print FORMAT_STRING % ("-" * 40, "-" * 15, "-" * 15, "-" * 30)
-+    pkgs = packages.keys()
-+    pkgs.sort()
-+    total_pkgs = 0
-+    upgrade_pkgs = 0
-+    add_pkgs = 0
-+    remove_pkgs = 0
-+    nothing_todo_pkgs = 0
-+    for pkgname in pkgs:
-+        pkg = packages[pkgname]
-+        total_pkgs += 1
-+        if pkg.has_key(XORG_VERSION_KEY) and not pkg.has_key(BR_VERSION_KEY):
-+            xorg_version = pkg[XORG_VERSION_KEY]
-+            br_version = "N/A"
-+            action = "Add to Buildroot"
-+            add_pkgs += 1
-+        elif not pkg.has_key(XORG_VERSION_KEY) and pkg.has_key(BR_VERSION_KEY):
-+            br_version = pkg[BR_VERSION_KEY]
-+            xorg_version = "N/A"
-+            action = "Remove from Buildroot"
-+            remove_pkgs += 1
-+        # For now, we assume that if a package version is different,
-+        # it's because an upgrade is needed.
-+        elif pkg[XORG_VERSION_KEY] != pkg[BR_VERSION_KEY]:
-+            br_version = pkg[BR_VERSION_KEY]
-+            xorg_version = pkg[XORG_VERSION_KEY]
-+            action = "Upgrade"
-+            upgrade_pkgs += 1
-+        else:
-+            br_version = pkg[BR_VERSION_KEY]
-+            xorg_version = pkg[XORG_VERSION_KEY]
-+            action = "-"
-+            nothing_todo_pkgs += 1
-+
-+        print FORMAT_STRING % (pkgname, br_version.center(15), xorg_version.center(15), action)
-+    print FORMAT_STRING % ("-" * 40, "-" * 15, "-" * 15, "-" * 30)
-+    STAT_FORMAT_STRING = "%40s : %3d"
-+    print STAT_FORMAT_STRING % ("Total number of packages", total_pkgs)
-+    print STAT_FORMAT_STRING % ("Packages to upgrade", upgrade_pkgs)
-+    print STAT_FORMAT_STRING % ("Packages to add", add_pkgs)
-+    print STAT_FORMAT_STRING % ("Packages to remove", remove_pkgs)
-+    print STAT_FORMAT_STRING % ("Packages with nothing to do", nothing_todo_pkgs)
-+
-+packages = get_xorg_release_pkgs()
-+packages = get_buildroot_pkgs(packages)
-+# print packages
-+show_summary(packages)
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 +
