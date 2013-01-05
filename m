@@ -1,46 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 12:44:06 +0100
-Subject: [Buildroot] [git commit] alsa-lib: fix build failures for nommu
-Message-ID: <20130105114948.795319A63B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 Jan 2013 12:56:41 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-base: make alsa plug-in
+	configurable
+In-Reply-To: <1356000566-32423-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Thu, 20 Dec 2012 11:49:26 +0100")
+References: <1356000566-32423-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87bod3kfly.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77c70467154c8349ea4af8cf0aa4ff6b79b3af68
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Disable the pcm_shm plugin (aserver) and alisp for nommu systems since
-they use fork()
-Fixes
-http://autobuild.buildroot.net/results/7e59e73e516579045538e7cc0efbc22744a45d75
+ Sven> It may be desirable not to use the alsa sink for playback
+ Sven> even though alsa-lib is installed. So make this a configuration
+ Sven> option. This also takes care of selecting the proper options
+ Sven> for alsa-lib
+ Sven> (BR2_PACKAGE_ALSA_LIB_MIXER and BR2_PACKAGE_ALSA_LIB_PCM).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/alsa-lib/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+ Sven> ---
+ Sven>  package/multimedia/gst-plugins-base/Config.in           |    6 ++++++
+ Sven>  package/multimedia/gst-plugins-base/gst-plugins-base.mk |    3 +--
+ Sven>  2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
-index ca063d8..2ba6886 100644
---- a/package/alsa-lib/Config.in
-+++ b/package/alsa-lib/Config.in
-@@ -37,7 +37,8 @@ config BR2_PACKAGE_ALSA_LIB_DEVDIR
+ Sven> diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
+ Sven> index 5d82533..70d664d 100644
+ Sven> --- a/package/multimedia/gst-plugins-base/Config.in
+ Sven> +++ b/package/multimedia/gst-plugins-base/Config.in
+ Sven> @@ -73,6 +73,12 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VOLUME
  
- config BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS
- 	string "built PCM plugins"
--	default "all"
-+	default "all" if BR2_USE_MMU
-+	default "copy linear route mulaw alaw adpcm rate plug multi file null empty share meter hooks lfloat ladspa dmix dshare dsnoop asym iec958 softvol extplug ioplug mmap_emul" if !BR2_MMU
+ Sven>  comment "plugins with external dependencies (there may be more available)"
  
- config BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS
- 	string "built control plugins"
-@@ -69,6 +70,7 @@ config BR2_PACKAGE_ALSA_LIB_SEQ
- 
- config BR2_PACKAGE_ALSA_LIB_ALISP
- 	bool "alisp"
-+	depends on BR2_USE_MMU
- 	default y
- 
- config BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS
+ Sven> +config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA
+ Sven> +	bool "alsa (mandatory for audio playback)"
+ Sven> +        select BR2_PACKAGE_ALSA_LIB
+ Sven> +        select BR2_PACKAGE_ALSA_LIB_MIXER
+ Sven> +        select BR2_PACKAGE_ALSA_LIB_PCM
+
+select lines should also be indented with <tab>. I've fixed that and
+committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
