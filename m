@@ -1,114 +1,122 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Jan 2013 15:52:03 +0100
-Subject: [Buildroot] [PATCH 2/2] target: add different methods to encode
-	passwords
-In-Reply-To: <cover.1357397453.git.yann.morin.1998@free.fr>
-References: <cover.1357397453.git.yann.morin.1998@free.fr>
-Message-ID: <72dbc53320e890cc9e5f3838a9d93186656964af.1357397453.git.yann.morin.1998@free.fr>
+Date: Sat,  5 Jan 2013 16:00:22 +0100
+Subject: [Buildroot] [PATCH] package/dvb-apps: add option to install
+	utilities
+Message-ID: <1357398022-29518-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Passwords can be encoded in different ways (from the weakest
-to the strongest): des, md5, sha-256, sha-512
+Previously, dvb-apps was a 'blind' package that would install
+only the transponders data files for use by external packages
+(namely tvheadend).
 
-Add a choice entry to select the method, defaulting to 'md5'.
+Now, we add an option to also install the DVB utilities.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
 ---
-Previously, this was specific to encode the root password.
-I have made it generic (ie. not root-specific), in case
-buildroot needs to encode other passwords in the future
-(eg. when packages can create users, for which I've just
-sent an RFC)
----
- system/Config.in |   54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- system/system.mk |    3 ++-
- 2 files changed, 56 insertions(+), 1 deletions(-)
+ package/Config.in                                  |    1 +
+ package/dvb-apps/Config.in                         |   17 +++++++++++++++++
+ package/dvb-apps/dvb-apps.mk                       |   19 +++++++++++++++++--
+ package/tvheadend/Config.in                        |    1 +
+ .../tvheadend-no-auto-download-dvbscans.patch      |    2 +-
+ 5 files changed, 37 insertions(+), 3 deletions(-)
+ create mode 100644 package/dvb-apps/Config.in
 
-diff --git a/system/Config.in b/system/Config.in
-index 19bdd2d..69863c4 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -13,6 +13,60 @@ config BR2_TARGET_GENERIC_ISSUE
-          Select system banner (/etc/issue) to be displayed at login.
- 
- choice
-+	bool "Passwords encoding"
-+	default BR2_TARGET_GENERIC_PASSWD_MD5
-+	help
-+	  Choose the password encoding scheme to use when Buildroot
-+	  needs to encode a password (eg. the root password, below).
-+	  
-+	  Note: this is used at build-time, and *not* at runtime.
-+
-+config BR2_TARGET_GENERIC_PASSWD_DES
-+	bool "des"
-+	help
-+	  Use standard 56-bit DES-based crypt(3) to encode passwords.
-+	  
-+	  Old, wildly available, but also the weakest, very susceptible to
-+	  brute-force attacks.
-+
-+config BR2_TARGET_GENERIC_PASSWD_MD5
-+	bool "md5"
-+	help
-+	  Use MD5 to encode passwords.
-+	  
-+	  The default. Wildly available, and pretty good.
-+	  Although pretty strong, MD5 is now an old hash function, and
-+	  suffers from some weaknesses, which makes it susceptible to
-+	  brute-force attacks.
-+
-+config BR2_TARGET_GENERIC_PASSWD_SHA256
-+	bool "sha-256"
-+	help
-+	  Use SHA256 to encode passwords.
-+	  
-+	  Very strong, but not ubiquitous, although available in glibc
-+	  for some time now. Choose only if you are sure your C library
-+	  understands SHA256 passwords.
-+
-+config BR2_TARGET_GENERIC_PASSWD_SHA512
-+	bool "sha-512"
-+	help
-+	  Use SHA512 to encode passwords.
-+	  
-+	  Extremely strong, but not ubiquitous, although available in glibc
-+	  for some time now. Choose only if you are sure your C library
-+	  understands SHA512 passwords.
-+
-+endchoice # Passwd encoding
-+
-+config BR2_TARGET_GENERIC_PASSWD_METHOD
-+	string
-+	default "des"       if BR2_TARGET_GENERIC_PASSWD_DES
-+	default "md5"       if BR2_TARGET_GENERIC_PASSWD_MD5
-+	default "sha-256"   if BR2_TARGET_GENERIC_PASSWD_SHA256
-+	default "sha-512"   if BR2_TARGET_GENERIC_PASSWD_SHA512
-+
-+choice
- 	prompt "/dev management"
- 	default BR2_ROOTFS_DEVICE_CREATION_STATIC
- 
-diff --git a/system/system.mk b/system/system.mk
-index 651f7df..4e131b0 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -1,8 +1,9 @@
- TARGET_GENERIC_HOSTNAME:=$(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
- TARGET_GENERIC_ISSUE:=$(call qstrip,$(BR2_TARGET_GENERIC_ISSUE))
- TARGET_GENERIC_ROOT_PASSWD:=$(call qstrip,$(BR2_TARGET_GENERIC_ROOT_PASSWD))
-+TARGET_GENERIC_PASSWD_METHOD:=$(call qstrip,$(BR2_TARGET_GENERIC_PASSWD_METHOD))
- ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
--TARGET_GENERIC_ROOT_PASSWD_HASH=$(shell mkpasswd -m md5 "$(TARGET_GENERIC_ROOT_PASSWD)")
-+TARGET_GENERIC_ROOT_PASSWD_HASH=$(shell mkpasswd -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)")
+diff --git a/package/Config.in b/package/Config.in
+index 11ff82d..5146553 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -215,6 +215,7 @@ source "package/devmem2/Config.in"
  endif
- TARGET_GENERIC_GETTY:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
- TARGET_GENERIC_GETTY_BAUDRATE:=$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+ source "package/dmidecode/Config.in"
+ source "package/dmraid/Config.in"
++source "package/dvb-apps/Config.in"
+ source "package/eeprog/Config.in"
+ source "package/evtest/Config.in"
+ source "package/flashrom/Config.in"
+diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+new file mode 100644
+index 0000000..5d0b6f5
+--- /dev/null
++++ b/package/dvb-apps/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_DVB_APPS
++	bool "dvb-apps (transponders data)"
++	help
++	  Install the DVB-C, DVB-S, DVB-T and ATSC transponders data.
++	  
++	  http://linuxtv.org/projects.php
++	  http://linuxtv.org/hg/dvb-apps
++
++if BR2_PACKAGE_DVB_APPS
++
++config BR2_PACKAGE_DVB_APPS_UTILS
++	bool "dvb-apps utilities"
++	help
++	  A small number of DVB test and utility programs,
++	  including szap and dvbscan.
++
++endif
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index 5db8148..32a58e7 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -18,11 +18,26 @@ DVB_APPS_SITE_METHOD    = hg
+ # apply to us.
+ DVB_APPS_LICENSE        = unknown (probably public domain)
+ 
++ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
++# Utilitiess are selected, build and install everything
++DVB_APPS_INSTALL_STAGING = YES
++
++define DVB_APPS_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) V=1
++endef
++
++define DVB_APPS_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
++endef
++
++else
++# Utilities are not selected, just install the scan files
+ define DVB_APPS_INSTALL_TARGET_CMDS
+ 	for i in atsc dvb-c dvb-s dvb-t; do \
+-		mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/$$i; \
+-		$(INSTALL) $(@D)/util/scan/$$i/* $(TARGET_DIR)/usr/share/dvb-apps/scan/$$i; \
++		mkdir -p $(TARGET_DIR)/usr/share/dvb/$$i; \
++		$(INSTALL) $(@D)/util/scan/$$i/* $(TARGET_DIR)/usr/share/dvb/$$i; \
+ 	done
+ endef
++endif
+ 
+ $(eval $(generic-package))
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 944e31e..e6dee3a 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -4,6 +4,7 @@ comment "tvheadend requires a toolchain with LARGEFILE support"
+ config BR2_PACKAGE_TVHEADEND
+ 	bool "tvheadend"
+ 	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_DVB_APPS
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Tvheadend is a TV streaming server for Linux supporting DVB-S,
+diff --git a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+index 50bc4b6..963d4f2 100644
+--- a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
++++ b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
+@@ -54,7 +54,7 @@ diff -durN tvheadend-v3.3.orig//support/posix.mk tvheadend-v3.3/support/posix.mk
+  	done
+ -
+ +	mkdir -p ${DESTDIR}${datadir}/tvheadend/data
+-+	ln -s /usr/share/dvb-apps/scan ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+++	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+  
+  uninstall:
+  	rm -f ${DESTDIR}${bindir)/tvheadend
 -- 
 1.7.2.5
