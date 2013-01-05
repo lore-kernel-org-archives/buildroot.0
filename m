@@ -1,75 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Jan 2013 23:40:33 +0100
-Subject: [Buildroot] [PATCH] pacakge/tvheadend: fix failures due to -Werror
-Message-ID: <1357425633-11040-1-git-send-email-yann.morin.1998@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat,  5 Jan 2013 23:55:13 +0100
+Subject: [Buildroot] [pull request] Pull request for branch rpi-support
+Message-ID: <cover.1357426077.git.maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(Partially) apply upstream patch 1334869bf0ea668e58e1c72daa3c09c1a95b5d81
-to properly protect code-paths depending on execinfo.h (for backtrace(3)).
+Hello All!
 
-Fixes:
-    http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/
+This is the second version of this series adding some specific RaspberryPi
+packages.
+The following changes were applied :
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
----
- package/tvheadend/tvheadend-fix-Werror.patch |   44 ++++++++++++++++++++++++++
- 1 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/tvheadend/tvheadend-fix-Werror.patch
+    - rpi-fw -> rpi-firmware
+        - Now appears in Hardware Handling -> Misc devices fimwares
+        - License fixed
+        - cmdline.txt files has been merged with config.txt
+    - rpi-userland
+        - License fixed
+        - Applied Samuel Martin's patch to remove most of the cleanup hooks
+        - Removed libcofi as a dependency
 
-diff --git a/package/tvheadend/tvheadend-fix-Werror.patch b/package/tvheadend/tvheadend-fix-Werror.patch
-new file mode 100644
-index 0000000..5f6dbad
---- /dev/null
-+++ b/package/tvheadend/tvheadend-fix-Werror.patch
-@@ -0,0 +1,44 @@
-+commit 1334869bf0ea668e58e1c72daa3c09c1a95b5d81
-+Author: Alexey I. Froloff <raorn@raorn.name>
-+Date:   Wed Oct 24 21:10:15 2012 +0400
-+
-+    [PR-172] Fix compilatioin issues on OpenWRT
-+    
-+    Fix SHA1_* function names
-+    Fix unused variables and functions
-+
-+---
-+"Yann E. MORIN" <yann.morin.1998@free.fr>:
-+    For buildroot, I removed the SHA_* fixes, as we're not affected.
-+    No point in fixing something that does not bug us.
-+
-+diff --git a/src/trap.c b/src/trap.c
-+index bd76118..b0fe543 100644
-+--- a/src/trap.c
-++++ b/src/trap.c
-+@@ -67,6 +67,7 @@ sappend(char *buf, size_t l, const char *fmt, ...)
-+ /**
-+  *
-+  */
-++#if ENABLE_EXECINFO
-+ static int
-+ add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
-+ {
-+@@ -126,6 +127,7 @@ add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
-+   close(fd[0]);
-+   return 0;
-+ }
-++#endif /* ENABLE_EXECINFO */
-+ 
-+ 
-+ 
-+@@ -133,8 +135,8 @@ static void
-+ traphandler(int sig, siginfo_t *si, void *UC)
-+ {
-+   ucontext_t *uc = UC;
-+-  char buf[200];
-+ #if ENABLE_EXECINFO
-++  char buf[200];
-+   static void *frames[MAXFRAMES];
-+   int nframes = backtrace(frames, MAXFRAMES);
-+   Dl_info dli;
--- 
-1.7.2.5
+The following changes since commit 00e1e2aaa881b32f388ddcfcc71224b3c574c0b8:
+
+  xorg-release: ignore some X.org packages (2013-01-05 23:46:52 +0100)
+
+are available in the git repository at:
+
+  http://github.com/maximeh/buildroot.git rpi-support
+
+for you to fetch changes up to 033a0b8264805de1fb670bf727c756b94d4eb34b:
+
+  rpi-firmware: New package (2013-01-05 23:46:52 +0100)
+
+----------------------------------------------------------------
+Maxime Hadjinlian (3):
+      libcofi: new package
+      rpi-userland: new package
+      rpi-firmware: New package
+
+ package/Config.in                                  |    3 +++
+ package/libcofi/Config.in                          |    8 ++++++
+ package/libcofi/libcofi.mk                         |   17 +++++++++++++
+ package/rpi-firmware/Config.in                     |    9 +++++++
+ package/rpi-firmware/config.txt                    |   13 ++++++++++
+ package/rpi-firmware/rpi-firmware.mk               |   21 ++++++++++++++++
+ package/rpi-userland/Config.in                     |   11 +++++++++
+ ...make-vmcs.cmake-allow-to-override-VMCS_IN.patch |   26 ++++++++++++++++++++
+ package/rpi-userland/rpi-userland.mk               |   19 ++++++++++++++
+ 9 files changed, 127 insertions(+)
+ create mode 100644 package/libcofi/Config.in
+ create mode 100644 package/libcofi/libcofi.mk
+ create mode 100644 package/rpi-firmware/Config.in
+ create mode 100644 package/rpi-firmware/config.txt
+ create mode 100644 package/rpi-firmware/rpi-firmware.mk
+ create mode 100644 package/rpi-userland/Config.in
+ create mode 100644 package/rpi-userland/rpi-userland-makefiles-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
+ create mode 100644 package/rpi-userland/rpi-userland.mk
+
+Regards,
+Maxime Hadjinlian
+
+--
