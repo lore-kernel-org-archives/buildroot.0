@@ -1,122 +1,110 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Jan 2013 16:00:22 +0100
-Subject: [Buildroot] [PATCH] package/dvb-apps: add option to install
-	utilities
-Message-ID: <1357398022-29518-1-git-send-email-yann.morin.1998@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 5 Jan 2013 16:18:34 +0100
+Subject: [Buildroot] [PATCH 2/3] rpi-userland: new package
+In-Reply-To: <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
+References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
+ <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
+Message-ID: <CAHXCMMJi+pFKA8O9MvWMu83WR0dpqRFZ2RUxx6Hjs-hxyaskdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously, dvb-apps was a 'blind' package that would install
-only the transponders data files for use by external packages
-(namely tvheadend).
+Hi Maxime,
 
-Now, we add an option to also install the DVB utilities.
+2013/1/5 Maxime Hadjinlian <maxime.hadjinlian@gmail.com>:
+> Introducing a package to build the userland part of the Raspberry,
+> needed by anyone who would want to build a rootfs for a RaspberryPi.
+>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/Config.in                    |    1 +
+>  package/rpi-userland/Config.in       |   12 ++++++++++++
+>  package/rpi-userland/rpi-userland.mk |   25 +++++++++++++++++++++++++
+>  3 files changed, 38 insertions(+)
+>  create mode 100644 package/rpi-userland/Config.in
+>  create mode 100644 package/rpi-userland/rpi-userland.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index a3530d7..604ed1b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -579,6 +579,7 @@ source "package/collectd/Config.in"
+>  source "package/empty/Config.in"
+>  source "package/googlefontdirectory/Config.in"
+>  source "package/mobile-broadband-provider-info/Config.in"
+> +source "package/rpi-userland/Config.in"
+>  source "package/shared-mime-info/Config.in"
+>  source "package/snowball-init/Config.in"
+>  source "package/sound-theme-borealis/Config.in"
+> diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
+> new file mode 100644
+> index 0000000..3d4585f
+> --- /dev/null
+> +++ b/package/rpi-userland/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_RPI_USERLAND
+> +       bool "rpi-userland"
+> +       select BR2_PACKAGE_LIBCOFI
+> +       help
+> +         Raspberry Pi Userland contains the necessary library to use the
+> +         VideoCore driver.
+> +
+> +         Includes source for the ARM side code to interface to:
+> +         EGL, mmal, GLESv2, vcos, openmaxil, vchiq_arm, bcm_host, WFC, OpenVG.
+> +
+> +         https://github.com/raspberrypi/userland/
+> +
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> new file mode 100644
+> index 0000000..5bae06d
+> --- /dev/null
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -0,0 +1,25 @@
+> +#############################################################
+> +#
+> +# rpi-userland
+> +#
+> +#############################################################
+> +RPI_USERLAND_VERSION = 9852ce28826889e50c4d6786b942f51bccccac54
+> +RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/master
+> +RPI_USERLAND_LICENSE = FOSS
+> +RPI_USERLAND_LICENSE_FILE = LICENCE
+> +RPI_USERLAND_INSTALL_STAGING = YES
+> +
+> +define RPI_USERLAND_POST_TARGET_CLEANUP
+> +    rm -Rf $(TARGET_DIR)/opt/vc/include
+> +    rm -Rf $(TARGET_DIR)/opt/vc/share
+> +    rm -Rf $(TARGET_DIR)/opt/vc/src
+> +    rm -f  $(TARGET_DIR)/etc/init.d/vcfiled
+> +    rm -f  $(TARGET_DIR)/opt/vc/lib/*.a
+> +    rmdir -p --ignore-fail-on-non-empty $(TARGET_DIR)/etc/init.d || true
+Since you use the --ignore-fail-on-non-empty option, i think "|| true"
+is useless.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in                                  |    1 +
- package/dvb-apps/Config.in                         |   17 +++++++++++++++++
- package/dvb-apps/dvb-apps.mk                       |   19 +++++++++++++++++--
- package/tvheadend/Config.in                        |    1 +
- .../tvheadend-no-auto-download-dvbscans.patch      |    2 +-
- 5 files changed, 37 insertions(+), 3 deletions(-)
- create mode 100644 package/dvb-apps/Config.in
+> +    mv $(TARGET_DIR)/opt/vc/lib/* $(TARGET_DIR)/usr/lib/
+> +    rm -Rf $(TARGET_DIR)/opt/vc/
+> +endef
 
-diff --git a/package/Config.in b/package/Config.in
-index 11ff82d..5146553 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -215,6 +215,7 @@ source "package/devmem2/Config.in"
- endif
- source "package/dmidecode/Config.in"
- source "package/dmraid/Config.in"
-+source "package/dvb-apps/Config.in"
- source "package/eeprog/Config.in"
- source "package/evtest/Config.in"
- source "package/flashrom/Config.in"
-diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
-new file mode 100644
-index 0000000..5d0b6f5
---- /dev/null
-+++ b/package/dvb-apps/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_DVB_APPS
-+	bool "dvb-apps (transponders data)"
-+	help
-+	  Install the DVB-C, DVB-S, DVB-T and ATSC transponders data.
-+	  
-+	  http://linuxtv.org/projects.php
-+	  http://linuxtv.org/hg/dvb-apps
-+
-+if BR2_PACKAGE_DVB_APPS
-+
-+config BR2_PACKAGE_DVB_APPS_UTILS
-+	bool "dvb-apps utilities"
-+	help
-+	  A small number of DVB test and utility programs,
-+	  including szap and dvbscan.
-+
-+endif
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 5db8148..32a58e7 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -18,11 +18,26 @@ DVB_APPS_SITE_METHOD    = hg
- # apply to us.
- DVB_APPS_LICENSE        = unknown (probably public domain)
- 
-+ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
-+# Utilitiess are selected, build and install everything
-+DVB_APPS_INSTALL_STAGING = YES
-+
-+define DVB_APPS_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) V=1
-+endef
-+
-+define DVB_APPS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+else
-+# Utilities are not selected, just install the scan files
- define DVB_APPS_INSTALL_TARGET_CMDS
- 	for i in atsc dvb-c dvb-s dvb-t; do \
--		mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/$$i; \
--		$(INSTALL) $(@D)/util/scan/$$i/* $(TARGET_DIR)/usr/share/dvb-apps/scan/$$i; \
-+		mkdir -p $(TARGET_DIR)/usr/share/dvb/$$i; \
-+		$(INSTALL) $(@D)/util/scan/$$i/* $(TARGET_DIR)/usr/share/dvb/$$i; \
- 	done
- endef
-+endif
- 
- $(eval $(generic-package))
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 944e31e..e6dee3a 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -4,6 +4,7 @@ comment "tvheadend requires a toolchain with LARGEFILE support"
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Tvheadend is a TV streaming server for Linux supporting DVB-S,
-diff --git a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
-index 50bc4b6..963d4f2 100644
---- a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
-+++ b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
-@@ -54,7 +54,7 @@ diff -durN tvheadend-v3.3.orig//support/posix.mk tvheadend-v3.3/support/posix.mk
-  	done
- -
- +	mkdir -p ${DESTDIR}${datadir}/tvheadend/data
--+	ln -s /usr/share/dvb-apps/scan ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
-++	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
-  
-  uninstall:
-  	rm -f ${DESTDIR}${bindir)/tvheadend
+Also, since you set RPI_USERLAND_INSTALL_STAGING = YES, don't you need
+to do some cleanup/fixup hook for the staging area as well?
+
+> +
+> +RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+
+BTW, it is possible to avoid this cleanup hook  (or at least reduce it
+to the example source) with this patch:
+http://code.bulix.org/3fo6ye-82780
+and by adding "-DVMCS_INSTALL_PREFIX=/usr" to the
+RPI_USERLAND_CONF_OPT variable.
+
+> +
+> +$(eval $(cmake-package))
+> --
+> 1.7.10.4
+
+Regards,
+
 -- 
-1.7.2.5
+Samuel
