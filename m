@@ -1,153 +1,91 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 13:26:14 +0100
-Subject: [Buildroot] [git commit] pthread-stubs: rename to
-	xlib_libpthread-stubs
-Message-ID: <20130105124707.668AD9A64B@busybox.osuosl.org>
+Date: Sat, 5 Jan 2013 13:43:22 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-xgixp: remove package
+Message-ID: <20130105124713.1A1E29A63B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5bd41d165e12a2e3e5b776cb4079077cac995bfc
+commit: http://git.buildroot.net/buildroot/commit/?id=c02a49ce19095b5e039abd37a7e2dbe6024f17b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In upstream X.org releases, pthread-stubs is named libpthread-stubs,
-so for consistency reasons, we rename the Buildroot package
-accordingly. Also, while we're at it, we add a xlib_ prefix to the
-package to match other X.org libraries in Buildroot.
-
-The necessary Config.in.legacy code is added to ensure that users
-having .config files using the old configuration option name get a
-warning.
+This X.org driver has been removed from upstream X.org releases and is
+related to a very specific type of hardware that isn't likely to be used
+in a Buildroot context.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in.legacy                                   |    8 ++++++++
- package/libdrm/libdrm.mk                           |    2 +-
- package/x11r7/Config.in                            |    2 +-
- package/x11r7/libxcb/libxcb.mk                     |    2 +-
- package/x11r7/pthread-stubs/pthread-stubs.mk       |   14 --------------
- .../Config.in                                      |    4 ++--
- .../xlib_libpthread-stubs/xlib_libpthread-stubs.mk |   14 ++++++++++++++
- 7 files changed, 27 insertions(+), 19 deletions(-)
+ package/x11r7/xdriver_xf86-video-xgixp/Config.in   |   11 ---------
+ .../xdriver_xf86-video-xgixp-cross-compile.patch   |   24 --------------------
+ .../xdriver_xf86-video-xgixp.mk                    |   13 ----------
+ 3 files changed, 0 insertions(+), 48 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7ddc6ea..4770c94 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -70,4 +70,12 @@ config BR2_PACKAGE_INPUT_TOOLS_EVTEST
- 	help
- 	  The evtest program from input-tools is now a separate package.
- 
-+config BR2_PACKAGE_PTHREAD_STUBS
-+	bool "pthread-stubs option has been renamed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
-+	help
-+	  For consistency reason, the pthread-stubs package has been
-+	  renamed to xlib_libpthread-stubs.
-+
- endif
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index fbfc95e..4ccfa52 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -14,7 +14,7 @@ LIBDRM_DEPENDENCIES = \
- 	xlib_libXxf86vm \
- 	xlib_libXmu \
- 	xproto_dri2proto \
--	pthread-stubs \
-+	xlib_libpthread-stubs \
- 	host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL),y)
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 6881d4e..9e08e3f 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -37,7 +37,6 @@ endmenu
- 	menu "X11R7 Libraries"
- 		source package/x11r7/libxcb/Config.in
- 		source package/x11r7/mesa3d/Config.in
--		source package/x11r7/pthread-stubs/Config.in
- 		source package/x11r7/xcb-util/Config.in
- 		source package/x11r7/xcb-util-keysyms/Config.in
- 		source package/x11r7/xlib_libFS/Config.in
-@@ -79,6 +78,7 @@ endmenu
- 		source package/x11r7/xlib_libxkbui/Config.in
- 		source package/x11r7/xlib_xtrans/Config.in
- 		source package/x11r7/xlib_libpciaccess/Config.in
-+		source package/x11r7/xlib_libpthread-stubs/Config.in
- 	endmenu
- 	menu "X11R7 Applications"
- 		source package/x11r7/xapp_appres/Config.in
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index f7b1945..15eeeef 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -10,7 +10,7 @@ LIBXCB_SITE = http://xcb.freedesktop.org/dist/
- LIBXCB_INSTALL_STAGING = YES
- 
- LIBXCB_DEPENDENCIES = \
--	host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
-+	host-libxslt xlib_libpthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
- 	host-xcb-proto host-python host-pkgconf
- LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
- LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
-diff --git a/package/x11r7/pthread-stubs/pthread-stubs.mk b/package/x11r7/pthread-stubs/pthread-stubs.mk
+diff --git a/package/x11r7/xdriver_xf86-video-xgixp/Config.in b/package/x11r7/xdriver_xf86-video-xgixp/Config.in
 deleted file mode 100644
-index e7032de..0000000
---- a/package/x11r7/pthread-stubs/pthread-stubs.mk
+index 8d466f4..0000000
+--- a/package/x11r7/xdriver_xf86-video-xgixp/Config.in
 +++ /dev/null
-@@ -1,14 +0,0 @@
--#############################################################
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_XGIXP
+-	bool "xf86-video-xgixp"
+-	select BR2_PACKAGE_MESA3D
+-	select BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XEXTPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	help
+-	  XGIXP based chips video driver
+diff --git a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp-cross-compile.patch b/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp-cross-compile.patch
+deleted file mode 100644
+index 9736252..0000000
+--- a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp-cross-compile.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+---- xdriver_xf86-video-xgixp-1.7.99.4/configure.ac.orig	2009-09-07 08:09:14.000000000 +0300
+-+++ xdriver_xf86-video-xgixp-1.7.99.4/configure.ac	2010-02-04 00:12:22.159108635 +0200
+-@@ -63,12 +63,18 @@ sdkdir=$(pkg-config --variable=sdkdir xo
+- # Checks for header files.
+- AC_HEADER_STDC
+- 
+--AC_CHECK_FILE([${sdkdir}/dri.h],
+-+if test "$cross_compiling" = "no" ; then
+-+        AC_CHECK_FILE([${sdkdir}/dri.h],
+-               [have_dri_h="yes"], [have_dri_h="no"])
+--AC_CHECK_FILE([${sdkdir}/sarea.h],
+-+        AC_CHECK_FILE([${sdkdir}/sarea.h],
+-               [have_sarea_h="yes"], [have_sarea_h="no"])
+--AC_CHECK_FILE([${sdkdir}/dristruct.h],
+-+        AC_CHECK_FILE([${sdkdir}/dristruct.h],
+-               [have_dristruct_h="yes"], [have_dristruct_h="no"])
+-+else
+-+        have_dri_h="yes"
+-+        have_sarea_h="yes"
+-+        have_dristruct_h="yes"
+-+fi
+- 
+- AC_DEFINE(XF86DRI_DEVEL,1,[Enable developmental DRI driver support])
+- 
+diff --git a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk b/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
+deleted file mode 100644
+index 4a9a2a2..0000000
+--- a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
 -#
--# pthread-stubs
+-# xdriver_xf86-video-xgixp -- XGIXP video driver
 -#
--#############################################################
--PTHREAD_STUBS_VERSION = 0.3
--PTHREAD_STUBS_SOURCE = libpthread-stubs-$(PTHREAD_STUBS_VERSION).tar.bz2
--PTHREAD_STUBS_SITE = http://xcb.freedesktop.org/dist/
+-################################################################################
 -
--PTHREAD_STUBS_INSTALL_STAGING = YES
+-XDRIVER_XF86_VIDEO_XGIXP_VERSION = 1.8.0
+-XDRIVER_XF86_VIDEO_XGIXP_SOURCE = xf86-video-xgixp-$(XDRIVER_XF86_VIDEO_XGIXP_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_XGIXP_SITE = http://xorg.freedesktop.org/releases/individual/driver
+-XDRIVER_XF86_VIDEO_XGIXP_AUTORECONF = YES
+-XDRIVER_XF86_VIDEO_XGIXP_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
 -
 -$(eval $(autotools-package))
--$(eval $(host-autotools-package))
--
-diff --git a/package/x11r7/pthread-stubs/Config.in b/package/x11r7/xlib_libpthread-stubs/Config.in
-similarity index 70%
-rename from package/x11r7/pthread-stubs/Config.in
-rename to package/x11r7/xlib_libpthread-stubs/Config.in
-index c17f7da..fb53585 100644
---- a/package/x11r7/pthread-stubs/Config.in
-+++ b/package/x11r7/xlib_libpthread-stubs/Config.in
-@@ -1,5 +1,5 @@
--config BR2_PACKAGE_PTHREAD_STUBS
--	bool "pthread-stubs"
-+config BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
-+	bool "libpthread-stubs"
- 	help
- 	  This library provides weak aliases for pthread functions not
- 	  provided in libc or otherwise available by default.
-diff --git a/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
-new file mode 100644
-index 0000000..909253c
---- /dev/null
-+++ b/package/x11r7/xlib_libpthread-stubs/xlib_libpthread-stubs.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# xlib_libpthread-stubs
-+#
-+#############################################################
-+XLIB_LIBPTHREAD_STUBS_VERSION = 0.3
-+XLIB_LIBPTHREAD_STUBS_SOURCE = libpthread-stubs-$(XLIB_LIBPTHREAD_STUBS_VERSION).tar.bz2
-+XLIB_LIBPTHREAD_STUBS_SITE = http://xcb.freedesktop.org/dist/
-+
-+XLIB_LIBPTHREAD_STUBS_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-+
