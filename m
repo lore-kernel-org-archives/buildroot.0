@@ -1,14 +1,14 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 13:43:12 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-suntcx: remove package
-Message-ID: <20130105124711.75F5A9A36D@busybox.osuosl.org>
+Date: Sat, 5 Jan 2013 13:26:48 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-apm: remove package
+Message-ID: <20130105124708.04B2A9A63B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d34c909f8edb94dfa03407bd53a90ca291a886b
+commit: http://git.buildroot.net/buildroot/commit/?id=cd09ff8da0092a2b4aafe3397b44d929b1d74e8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This X.org driver has been removed from upstream X.org releases and is
@@ -19,52 +19,55 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/x11r7/Config.in                            |    1 -
- package/x11r7/xdriver_xf86-video-suntcx/Config.in  |    9 ---------
- .../xdriver_xf86-video-suntcx.mk                   |   12 ------------
- 3 files changed, 0 insertions(+), 22 deletions(-)
+ package/x11r7/xdriver_xf86-video-apm/Config.in     |   12 ------------
+ .../xdriver_xf86-video-apm.mk                      |   12 ------------
+ 3 files changed, 0 insertions(+), 25 deletions(-)
 
 diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index dd04781..b03531e 100644
+index 985b72f..7a7666e 100644
 --- a/package/x11r7/Config.in
 +++ b/package/x11r7/Config.in
-@@ -201,7 +201,6 @@ endmenu
- 		source package/x11r7/xdriver_xf86-video-sis/Config.in
- 		source package/x11r7/xdriver_xf86-video-suncg6/Config.in
- 		source package/x11r7/xdriver_xf86-video-sunffb/Config.in
--		source package/x11r7/xdriver_xf86-video-suntcx/Config.in
- 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
- 		source package/x11r7/xdriver_xf86-video-tga/Config.in
- 		source package/x11r7/xdriver_xf86-video-trident/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-suntcx/Config.in b/package/x11r7/xdriver_xf86-video-suntcx/Config.in
+@@ -178,7 +178,6 @@ endmenu
+ 		source package/x11r7/xdriver_xf86-input-tslib/Config.in
+ 		source package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+ 		source package/x11r7/xdriver_xf86-input-void/Config.in
+-		source package/x11r7/xdriver_xf86-video-apm/Config.in
+ 		source package/x11r7/xdriver_xf86-video-ark/Config.in
+ 		source package/x11r7/xdriver_xf86-video-ast/Config.in
+ 		source package/x11r7/xdriver_xf86-video-ati/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-apm/Config.in b/package/x11r7/xdriver_xf86-video-apm/Config.in
 deleted file mode 100644
-index 3c82739..0000000
---- a/package/x11r7/xdriver_xf86-video-suntcx/Config.in
+index dea5258..0000000
+--- a/package/x11r7/xdriver_xf86-video-apm/Config.in
 +++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNTCX
--	bool "xf86-video-suntcx"
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_APM
+-	bool "xf86-video-apm"
 -	select BR2_PACKAGE_XSERVER_XORG_SERVER
 -	select BR2_PACKAGE_XPROTO_FONTSPROTO
 -	select BR2_PACKAGE_XPROTO_RANDRPROTO
 -	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_VIDEOPROTO
+-	select BR2_PACKAGE_XPROTO_XEXTPROTO
+-	select BR2_PACKAGE_XPROTO_XF86RUSHPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 -	help
--	  TCX video driver
-diff --git a/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk b/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+-	  Alliance ProMotion video driver
+diff --git a/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk b/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
 deleted file mode 100644
-index edca7fe..0000000
---- a/package/x11r7/xdriver_xf86-video-suntcx/xdriver_xf86-video-suntcx.mk
+index d0317f5..0000000
+--- a/package/x11r7/xdriver_xf86-video-apm/xdriver_xf86-video-apm.mk
 +++ /dev/null
 @@ -1,12 +0,0 @@
 -################################################################################
 -#
--# xdriver_xf86-video-suntcx -- TCX video driver
+-# xdriver_xf86-video-apm -- Alliance ProMotion video driver
 -#
 -################################################################################
 -
--XDRIVER_XF86_VIDEO_SUNTCX_VERSION = 1.1.1
--XDRIVER_XF86_VIDEO_SUNTCX_SOURCE = xf86-video-suntcx-$(XDRIVER_XF86_VIDEO_SUNTCX_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SUNTCX_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_SUNTCX_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto
+-XDRIVER_XF86_VIDEO_APM_VERSION = 1.2.3
+-XDRIVER_XF86_VIDEO_APM_SOURCE = xf86-video-apm-$(XDRIVER_XF86_VIDEO_APM_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_APM_SITE = http://xorg.freedesktop.org/releases/individual/driver
+-XDRIVER_XF86_VIDEO_APM_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86rushproto xproto_xproto
 -
 -$(eval $(autotools-package))
