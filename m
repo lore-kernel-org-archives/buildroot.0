@@ -1,57 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 Jan 2013 20:26:45 +0100
-Subject: [Buildroot] [PATCH] xorg-release: ignore some X.org packages
-Message-ID: <1357414005-9612-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Jan 2013 21:00:54 +0100
+Subject: [Buildroot] [PATCH 3/3] rpi-fw: New package
+In-Reply-To: <20130105185834.2f1fb7bc@skate>
+References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
+ <201301051636.51883.yann.morin.1998@free.fr> <20130105185834.2f1fb7bc@skate>
+Message-ID: <201301052100.54349.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following Gustavo's removal of two X.org drivers for old hardware
-unlikely to be used in embedded contexts, the xorg-release script now
-reports those two X.org packages as "to be added": they exist in
-X.org, but not in Buildroot.
+Maxime, Thomas, All,
 
-So, we add a small list, XORG_EXCEPTIONS, in our xorg-release script,
-to list the X.org packages we don't want to hear about. Of course,
-packages that exist in X.org, and that are not part of this exception
-list, and are not packaged in Buildroot are still listed as "to be
-added".
+On Saturday 05 January 2013 Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+> 
+> On Sat, 5 Jan 2013 16:36:51 +0100, Yann E. MORIN wrote:
+> 
+> > > +++ b/package/rpi-fw/Config.in
+> > > @@ -0,0 +1,9 @@
+> > > +config BR2_PACKAGE_RPI_FW
+> > > +	bool "RaspberryPi Firmware"
+> > 
+> > Today, this package is only used fior the RPI. But that GPU is not specific
+> > to the RPI, so what about calling that package "VideoCore bootloader" ?
+> 
+> I am quite sure the start.elf code is Rasberry Pi specific, so I don't
+> think this package is just a "VideoCore bootloader".
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/xorg-release |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+Right.
 
-diff --git a/support/scripts/xorg-release b/support/scripts/xorg-release
-index 8055658..70ba41c 100755
---- a/support/scripts/xorg-release
-+++ b/support/scripts/xorg-release
-@@ -18,6 +18,14 @@ XORG_VERSION_KEY = "xorg-version"
- BR_VERSION_KEY = "br-version"
- BR_NAME_KEY = "br-name"
- 
-+# Packages part of X.org releases that we do not want to package in
-+# Buildroot (old drivers for hardware unlikely to be used in embedded
-+# contexts).
-+XORG_EXCEPTIONS = [
-+    'xf86-video-suncg6',
-+    'xf86-video-sunffb',
-+]
-+
- # Get the list of tarballs of a X.org release, parse it, and return a
- # dictionary of dictionaries, of the form:
- #
-@@ -43,6 +51,9 @@ def get_xorg_release_pkgs():
-             continue
-         name = groups.group(1)
-         version = groups.group(2)
-+        # Skip packages we don't want to hear about
-+        if name in XORG_EXCEPTIONS:
-+            continue
-         packages[name] = { XORG_VERSION_KEY : version }
-     return packages
- 
+> > > +++ b/package/rpi-fw/cmdline.txt
+> > > @@ -0,0 +1 @@
+> > > +dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait
+> > 
+> > This is typically a reason why I'd like to have a generic way to expressing
+> > the different filesystems tht form a sinlge firmware. Here, my root partition
+> > is *not* mmcblk0p2, it's p3. And the rootfstype is *not* ext4, it's ext2.
+> > 
+> > But, I guess we'll have to live with that commandline for now... :-/
+> > 
+> > Maybe you could just omit the root settings (or replace them with place-
+> > holders: root=/dev/XXXX rootfstype=XXXX). Of course, that will depend on
+> > the maintainer's opinion. ;-)
+> 
+> I would like to see a comment added in this file, which mentions this
+> is only a sample command line, and we recommend to override it on a
+> per-project basis using a post-build script.
+
+I am not sure the bootloader knows how to parse comments in this file.
+Instead of installing it as 'cmdline.txt', what about installing it as
+'cmdline-sample.txt' with the comment?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
