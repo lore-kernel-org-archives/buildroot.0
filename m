@@ -1,70 +1,27 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 5 Jan 2013 17:27:09 +0100
-Subject: [Buildroot] [PATCH 2/3] rpi-userland: new package
-In-Reply-To: <CA+wH297Tm9-wx0ezB8Jvfc5ChCbDi2ivpfXLg6QbC0cP5H8cVw@mail.gmail.com>
+From: Alex Bradbury <asb@asbradbury.org>
+Date: Sat, 5 Jan 2013 16:28:12 +0000
+Subject: [Buildroot] [PATCH 3/3] rpi-fw: New package
+In-Reply-To: <CAGduivxnhxFMp9Vtz01Xt46+qKRD7xOcXBAq3ck-gXppYzqATA@mail.gmail.com>
 References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
- <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
- <CA+wH297Tm9-wx0ezB8Jvfc5ChCbDi2ivpfXLg6QbC0cP5H8cVw@mail.gmail.com>
-Message-ID: <CAGduivwDC8FxYDZJrLR6fAq3rukoCMo-=cD-fOgeQHxrt07k=Q@mail.gmail.com>
+ <0a82214a34f519691ff795260820907a7a8b4cfc.1357394983.git.maxime.hadjinlian@gmail.com>
+ <CA+wH2971Nbf8TJJOHiP5gCFTGqtc=b2YkxLEs9m1Mo2LVEkbgQ@mail.gmail.com>
+ <CAGduivxnhxFMp9Vtz01Xt46+qKRD7xOcXBAq3ck-gXppYzqATA@mail.gmail.com>
+Message-ID: <CA+wH296DQzLhAczxaUx+D81DEQRY=TSo5tu1V9RAW+e9tyXwsg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 5, 2013 at 4:41 PM, Alex Bradbury <asb@asbradbury.org> wrote:
-> On 5 January 2013 14:10, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
->> Introducing a package to build the userland part of the Raspberry,
->> needed by anyone who would want to build a rootfs for a RaspberryPi.
->>
->> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> ---
->>  package/Config.in                    |    1 +
->>  package/rpi-userland/Config.in       |   12 ++++++++++++
->>  package/rpi-userland/rpi-userland.mk |   25 +++++++++++++++++++++++++
->>  3 files changed, 38 insertions(+)
->>  create mode 100644 package/rpi-userland/Config.in
->>  create mode 100644 package/rpi-userland/rpi-userland.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index a3530d7..604ed1b 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -579,6 +579,7 @@ source "package/collectd/Config.in"
->>  source "package/empty/Config.in"
->>  source "package/googlefontdirectory/Config.in"
->>  source "package/mobile-broadband-provider-info/Config.in"
->> +source "package/rpi-userland/Config.in"
->>  source "package/shared-mime-info/Config.in"
->>  source "package/snowball-init/Config.in"
->>  source "package/sound-theme-borealis/Config.in"
->> diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
->> new file mode 100644
->> index 0000000..3d4585f
->> --- /dev/null
->> +++ b/package/rpi-userland/Config.in
->> @@ -0,0 +1,12 @@
->> +config BR2_PACKAGE_RPI_USERLAND
->> +       bool "rpi-userland"
->> +       select BR2_PACKAGE_LIBCOFI
->
-> Libcofi is not required, and honestly using it via LD_PRELOAD is too
-> ugly to pull in to buildroot I would think. It would be better
-> integrated as a glibc patch, which is how it should eventually be
-> included in Raspbian.
-It's true that libcofi is not required, but I didn't want to add it an
-independent package, although maybe that would be the best solution.
-Also, as you said, it's really ugly but as far as I can tell, really
-useful for a RaspberryPi.
->
->> +#
->> +#############################################################
->> +RPI_USERLAND_VERSION = 9852ce28826889e50c4d6786b942f51bccccac54
->> +RPI_USERLAND_SITE = http://github.com/raspberrypi/userland/tarball/master
->> +RPI_USERLAND_LICENSE = FOSS
->> +RPI_USERLAND_LICENSE_FILE = LICENCE
->
-> The license is standard 3-clause BSD.
-Thanks, I'll fix it
->
-> Alex
+On 5 January 2013 16:09, Maxime Hadjinlian <maxime.hadjinlian@gmail.com> wrote:
+> On Sat, Jan 5, 2013 at 4:52 PM, Alex Bradbury <asb@asbradbury.org> wrote:
+>> It's not clear to me that you want a config.txt at all, but if you are
+>> going to add one I'm not sure it's appropriate to overclock the sdram
+>> by default.
+> The sdram is not over clocked, according to this page :
+> http://elinux.org/RPiconfig
+> The default is 400Mhz.
+
+You are of course correct, my bad.
+
+Alex
