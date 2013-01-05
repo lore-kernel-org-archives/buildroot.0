@@ -1,39 +1,30 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Jan 2013 22:49:39 +0100
-Subject: [Buildroot] [PATCH 1/1] new package: libfribidi
-In-Reply-To: <1356507838-9090-1-git-send-email-mikhailboiko85@gmail.com>
- (Mikhail Boiko's message of "Wed, 26 Dec 2012 09:43:58 +0200")
-References: <1356507838-9090-1-git-send-email-mikhailboiko85@gmail.com>
-Message-ID: <87ehhzi9l8.fsf@dell.be.48ers.dk>
+Date: Sat, 05 Jan 2013 22:51:45 +0100
+Subject: [Buildroot] [PATCH] xorg-release: ignore some X.org packages
+In-Reply-To: <1357414005-9612-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 5 Jan 2013 20:26:45 +0100")
+References: <1357414005-9612-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a9sni9hq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mikhail" == Mikhail Boiko <mikhailboiko85@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Mikhail> Signed-off-by: Mikhail Boiko <mikhailboiko85@gmail.com>
- Mikhail> ---
- Mikhail>  package/Config.in                |    1 +
- Mikhail>  package/libfribidi/Config.in     |    7 +++++++
- Mikhail>  package/libfribidi/libfribidi.mk |   13 +++++++++++++
- Mikhail>  3 files changed, 21 insertions(+)
- Mikhail>  create mode 100644 package/libfribidi/Config.in
- Mikhail>  create mode 100644 package/libfribidi/libfribidi.mk
+ Thomas> Following Gustavo's removal of two X.org drivers for old hardware
+ Thomas> unlikely to be used in embedded contexts, the xorg-release script now
+ Thomas> reports those two X.org packages as "to be added": they exist in
+ Thomas> X.org, but not in Buildroot.
 
- Mikhail> diff --git a/package/Config.in b/package/Config.in
- Mikhail> index 3d556b2..e60f22e 100644
- Mikhail> --- a/package/Config.in
- Mikhail> +++ b/package/Config.in
- Mikhail> @@ -519,6 +519,7 @@ source "package/libelf/Config.in"
- Mikhail>  source "package/libevent/Config.in"
- Mikhail>  source "package/libev/Config.in"
- Mikhail>  source "package/libffi/Config.in"
- Mikhail> +source "package/libfribidi/Config.in"
+ Thomas> So, we add a small list, XORG_EXCEPTIONS, in our xorg-release script,
+ Thomas> to list the X.org packages we don't want to hear about. Of course,
+ Thomas> packages that exist in X.org, and that are not part of this exception
+ Thomas> list, and are not packaged in Buildroot are still listed as "to be
+ Thomas> added".
 
-As it deals with text I think it makes more sense to put it under 'Text
-and terminal handling. Committed with that change, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
