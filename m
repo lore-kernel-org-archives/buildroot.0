@@ -1,45 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  5 Jan 2013 12:15:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 5852] New: [2012.11] usb_modeswitch should depends
- of "BR2_PACKAGE_TCL_SHLIB_ONLY is not set"
-Message-ID: <bug-5852-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 Jan 2013 13:46:20 +0100
+Subject: [Buildroot] [PATCH 20/20] support/scripts: add xorg-release.py
+	script
+In-Reply-To: <41c1bc2b4f8953280e305deada0b52e432974b58.1357125961.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 2 Jan 2013 12:26:55 +0100")
+References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <41c1bc2b4f8953280e305deada0b52e432974b58.1357125961.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87vcbbiyqr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5852
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-           Summary: [2012.11] usb_modeswitch should depends of
-                    "BR2_PACKAGE_TCL_SHLIB_ONLY is not set"
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: a_s_y at sama.ru
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Thomas> This script generates a report on the packaging status of X.org
+ Thomas> releases in Buildroot. It does so by downloading the list of tarballs
+ Thomas> that are part of a given X.org release, and compare that with the
+ Thomas> packages that are available in Buildroot.
 
-
-usb_modeswitch_dispatcher is a tcl-script:
-
-#!/usr/bin/tclsh
-
-# Wrapper (tcl) for usb_modeswitch, called from
-# /lib/udev/rules.d/40-usb_modeswitch.rules
-# (part of data pack "usb-modeswitch-data") via
-# /lib/udev/usb_modeswitch
-
-Symlink /usr/bin/tclsh -> tclsh8.4 (or other current tclsh) should be create
-also.
+I've dropped the .py suffix to match the other scripts and made it
+executable and committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
