@@ -1,59 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 22:51:30 +0100
-Subject: [Buildroot] [git commit] xorg-release: ignore some X.org packages
-Message-ID: <20130105215230.B80659A5BB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Jan 2013 22:57:57 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-01-03
+In-Reply-To: <8738yhnsus.fsf@dell.be.48ers.dk>
+References: <20130104073440.E230952C0FD@lolut.humanoidz.org>
+ <8738yhnsus.fsf@dell.be.48ers.dk>
+Message-ID: <201301052257.57485.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7dde090f4a9b20ae25cf3743d364f24bc8f1c9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Following Gustavo's removal of two X.org drivers for old hardware
-unlikely to be used in embedded contexts, the xorg-release script now
-reports those two X.org packages as "to be added": they exist in
-X.org, but not in Buildroot.
+On Friday 04 January 2013 Peter Korsgaard wrote:
+>  Thomas> Status         : NOK
+>  Thomas> Failure reason : tvheadend-v3.3
+>  Thomas> Architecture   : i686
+>  Thomas> Submitted by   : Thomas Petazzoni (Free Electrons build server)
+>  Thomas> Submitted at   : 2013-01-03 00:13:22
+>  Thomas> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=d946a1af93741a7ae22ec69be865a6c14a37fcf1
+>  Thomas> End of log     : http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/build-end.log
+>  Thomas> Complete log   : http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/build.log.bz2
+>  Thomas> Configuration  : http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/config
+>  Thomas> Defconfig      : http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/defconfig
+> 
+> Yann, it looks like we should patch out the -Werror from the
+> Makefile. Care to take a look?
 
-So, we add a small list, XORG_EXCEPTIONS, in our xorg-release script,
-to list the X.org packages we don't want to hear about. Of course,
-packages that exist in X.org, and that are not part of this exception
-list, and are not packaged in Buildroot are still listed as "to be
-added".
+There's a patch upstream that fixes this. I'll backport it rather than
+disable -Werror.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- support/scripts/xorg-release |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/support/scripts/xorg-release b/support/scripts/xorg-release
-index 8055658..70ba41c 100755
---- a/support/scripts/xorg-release
-+++ b/support/scripts/xorg-release
-@@ -18,6 +18,14 @@ XORG_VERSION_KEY = "xorg-version"
- BR_VERSION_KEY = "br-version"
- BR_NAME_KEY = "br-name"
- 
-+# Packages part of X.org releases that we do not want to package in
-+# Buildroot (old drivers for hardware unlikely to be used in embedded
-+# contexts).
-+XORG_EXCEPTIONS = [
-+    'xf86-video-suncg6',
-+    'xf86-video-sunffb',
-+]
-+
- # Get the list of tarballs of a X.org release, parse it, and return a
- # dictionary of dictionaries, of the form:
- #
-@@ -43,6 +51,9 @@ def get_xorg_release_pkgs():
-             continue
-         name = groups.group(1)
-         version = groups.group(2)
-+        # Skip packages we don't want to hear about
-+        if name in XORG_EXCEPTIONS:
-+            continue
-         packages[name] = { XORG_VERSION_KEY : version }
-     return packages
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
