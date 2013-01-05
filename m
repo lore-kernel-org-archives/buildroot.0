@@ -1,24 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 Jan 2013 12:44:15 +0100
-Subject: [Buildroot] [PATCH] alsa-lib: fix build failures for nommu
-In-Reply-To: <1357385443-31702-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 5 Jan 2013 08:30:43 -0300")
-References: <1357385443-31702-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lic7kg6o.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 5 Jan 2013 12:44:06 +0100
+Subject: [Buildroot] [git commit] alsa-lib: fix build failures for nommu
+Message-ID: <20130105114948.795319A63B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=77c70467154c8349ea4af8cf0aa4ff6b79b3af68
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Disable the pcm_shm plugin (aserver) and alisp for nommu systems since
- Gustavo> they use fork()
- Gustavo> Fixes
- Gustavo> http://autobuild.buildroot.net/results/7e59e73e516579045538e7cc0efbc22744a45d75
+Disable the pcm_shm plugin (aserver) and alisp for nommu systems since
+they use fork()
+Fixes
+http://autobuild.buildroot.net/results/7e59e73e516579045538e7cc0efbc22744a45d75
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/alsa-lib/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/alsa-lib/Config.in b/package/alsa-lib/Config.in
+index ca063d8..2ba6886 100644
+--- a/package/alsa-lib/Config.in
++++ b/package/alsa-lib/Config.in
+@@ -37,7 +37,8 @@ config BR2_PACKAGE_ALSA_LIB_DEVDIR
+ 
+ config BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS
+ 	string "built PCM plugins"
+-	default "all"
++	default "all" if BR2_USE_MMU
++	default "copy linear route mulaw alaw adpcm rate plug multi file null empty share meter hooks lfloat ladspa dmix dshare dsnoop asym iec958 softvol extplug ioplug mmap_emul" if !BR2_MMU
+ 
+ config BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS
+ 	string "built control plugins"
+@@ -69,6 +70,7 @@ config BR2_PACKAGE_ALSA_LIB_SEQ
+ 
+ config BR2_PACKAGE_ALSA_LIB_ALISP
+ 	bool "alisp"
++	depends on BR2_USE_MMU
+ 	default y
+ 
+ config BR2_PACKAGE_ALSA_LIB_OLD_SYMBOLS
