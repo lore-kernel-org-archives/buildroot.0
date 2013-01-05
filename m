@@ -1,91 +1,70 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 13:43:22 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-xgixp: remove package
-Message-ID: <20130105124713.1A1E29A63B@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  5 Jan 2013 09:57:08 -0300
+Subject: [Buildroot] [PATCH 1/2] xdriver_xf86-video-suncg6: remove package
+Message-ID: <1357390629-597-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c02a49ce19095b5e039abd37a7e2dbe6024f17b3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The CG6 was an old SBUS video card used in Sun SPARC workstations from
+the 90s.
+Highly unlikely a target for buildroot.
 
-This X.org driver has been removed from upstream X.org releases and is
-related to a very specific type of hardware that isn't likely to be used
-in a Buildroot context.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/x11r7/xdriver_xf86-video-xgixp/Config.in   |   11 ---------
- .../xdriver_xf86-video-xgixp-cross-compile.patch   |   24 --------------------
- .../xdriver_xf86-video-xgixp.mk                    |   13 ----------
- 3 files changed, 0 insertions(+), 48 deletions(-)
+ package/x11r7/Config.in                            |    1 -
+ package/x11r7/xdriver_xf86-video-suncg6/Config.in  |    9 ---------
+ .../xdriver_xf86-video-suncg6.mk                   |   12 ------------
+ 3 files changed, 0 insertions(+), 22 deletions(-)
+ delete mode 100644 package/x11r7/xdriver_xf86-video-suncg6/Config.in
+ delete mode 100644 package/x11r7/xdriver_xf86-video-suncg6/xdriver_xf86-video-suncg6.mk
 
-diff --git a/package/x11r7/xdriver_xf86-video-xgixp/Config.in b/package/x11r7/xdriver_xf86-video-xgixp/Config.in
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 184afd2..fccf33f 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -199,7 +199,6 @@ endmenu
+ 		source package/x11r7/xdriver_xf86-video-savage/Config.in
+ 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
+ 		source package/x11r7/xdriver_xf86-video-sis/Config.in
+-		source package/x11r7/xdriver_xf86-video-suncg6/Config.in
+ 		source package/x11r7/xdriver_xf86-video-sunffb/Config.in
+ 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
+ 		source package/x11r7/xdriver_xf86-video-tga/Config.in
+diff --git a/package/x11r7/xdriver_xf86-video-suncg6/Config.in b/package/x11r7/xdriver_xf86-video-suncg6/Config.in
 deleted file mode 100644
-index 8d466f4..0000000
---- a/package/x11r7/xdriver_xf86-video-xgixp/Config.in
+index 9496f8d..0000000
+--- a/package/x11r7/xdriver_xf86-video-suncg6/Config.in
 +++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_XGIXP
--	bool "xf86-video-xgixp"
--	select BR2_PACKAGE_MESA3D
+@@ -1,9 +0,0 @@
+-config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNCG6
+-	bool "xf86-video-suncg6"
 -	select BR2_PACKAGE_XSERVER_XORG_SERVER
 -	select BR2_PACKAGE_XPROTO_FONTSPROTO
 -	select BR2_PACKAGE_XPROTO_RANDRPROTO
 -	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 -	help
--	  XGIXP based chips video driver
-diff --git a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp-cross-compile.patch b/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp-cross-compile.patch
+-	  GX/Turbo GX video driver
+diff --git a/package/x11r7/xdriver_xf86-video-suncg6/xdriver_xf86-video-suncg6.mk b/package/x11r7/xdriver_xf86-video-suncg6/xdriver_xf86-video-suncg6.mk
 deleted file mode 100644
-index 9736252..0000000
---- a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp-cross-compile.patch
+index 1314fea..0000000
+--- a/package/x11r7/xdriver_xf86-video-suncg6/xdriver_xf86-video-suncg6.mk
 +++ /dev/null
-@@ -1,24 +0,0 @@
----- xdriver_xf86-video-xgixp-1.7.99.4/configure.ac.orig	2009-09-07 08:09:14.000000000 +0300
--+++ xdriver_xf86-video-xgixp-1.7.99.4/configure.ac	2010-02-04 00:12:22.159108635 +0200
--@@ -63,12 +63,18 @@ sdkdir=$(pkg-config --variable=sdkdir xo
-- # Checks for header files.
-- AC_HEADER_STDC
-- 
---AC_CHECK_FILE([${sdkdir}/dri.h],
--+if test "$cross_compiling" = "no" ; then
--+        AC_CHECK_FILE([${sdkdir}/dri.h],
--               [have_dri_h="yes"], [have_dri_h="no"])
---AC_CHECK_FILE([${sdkdir}/sarea.h],
--+        AC_CHECK_FILE([${sdkdir}/sarea.h],
--               [have_sarea_h="yes"], [have_sarea_h="no"])
---AC_CHECK_FILE([${sdkdir}/dristruct.h],
--+        AC_CHECK_FILE([${sdkdir}/dristruct.h],
--               [have_dristruct_h="yes"], [have_dristruct_h="no"])
--+else
--+        have_dri_h="yes"
--+        have_sarea_h="yes"
--+        have_dristruct_h="yes"
--+fi
-- 
-- AC_DEFINE(XF86DRI_DEVEL,1,[Enable developmental DRI driver support])
-- 
-diff --git a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk b/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
-deleted file mode 100644
-index 4a9a2a2..0000000
---- a/package/x11r7/xdriver_xf86-video-xgixp/xdriver_xf86-video-xgixp.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
+@@ -1,12 +0,0 @@
 -################################################################################
 -#
--# xdriver_xf86-video-xgixp -- XGIXP video driver
+-# xdriver_xf86-video-suncg6 -- GX/Turbo GX video driver
 -#
 -################################################################################
 -
--XDRIVER_XF86_VIDEO_XGIXP_VERSION = 1.8.0
--XDRIVER_XF86_VIDEO_XGIXP_SOURCE = xf86-video-xgixp-$(XDRIVER_XF86_VIDEO_XGIXP_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_XGIXP_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_XGIXP_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_XGIXP_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
+-XDRIVER_XF86_VIDEO_SUNCG6_VERSION = 1.1.1
+-XDRIVER_XF86_VIDEO_SUNCG6_SOURCE = xf86-video-suncg6-$(XDRIVER_XF86_VIDEO_SUNCG6_VERSION).tar.bz2
+-XDRIVER_XF86_VIDEO_SUNCG6_SITE = http://xorg.freedesktop.org/releases/individual/driver
+-XDRIVER_XF86_VIDEO_SUNCG6_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto
 -
 -$(eval $(autotools-package))
+-- 
+1.7.8.6
