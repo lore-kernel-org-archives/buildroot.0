@@ -1,73 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 Jan 2013 14:34:48 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-sunffb: remove package
-Message-ID: <20130105133450.85C4899ED6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Jan 2013 14:17:30 +0100
+Subject: [Buildroot] [PATCH 20/20] support/scripts: add xorg-release.py
+	script
+In-Reply-To: <87vcbbiyqr.fsf@dell.be.48ers.dk>
+References: <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <cover.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <41c1bc2b4f8953280e305deada0b52e432974b58.1357125961.git.thomas.petazzoni@free-electrons.com>
+ <87vcbbiyqr.fsf@dell.be.48ers.dk>
+Message-ID: <20130105141730.0cd197bf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=66bfe1d4fe2de50aef6ac3fc836a710fa577cdef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-The FFB was an old SBUS video card used in Sun SPARC workstations
-from the 90s.
-Highly unlikely a target for buildroot.
+On Sat, 05 Jan 2013 13:46:20 +0100, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+> 
+>  Thomas> This script generates a report on the packaging status of X.org
+>  Thomas> releases in Buildroot. It does so by downloading the list of tarballs
+>  Thomas> that are part of a given X.org release, and compare that with the
+>  Thomas> packages that are available in Buildroot.
+> 
+> I've dropped the .py suffix to match the other scripts and made it
+> executable and committed, thanks.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/Config.in                            |    1 -
- package/x11r7/xdriver_xf86-video-sunffb/Config.in  |   12 ------------
- .../xdriver_xf86-video-sunffb.mk                   |   12 ------------
- 3 files changed, 0 insertions(+), 25 deletions(-)
+Indeed, good modifications. Thanks!
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index fccf33f..2aac5a2 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -199,7 +199,6 @@ endmenu
- 		source package/x11r7/xdriver_xf86-video-savage/Config.in
- 		source package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
- 		source package/x11r7/xdriver_xf86-video-sis/Config.in
--		source package/x11r7/xdriver_xf86-video-sunffb/Config.in
- 		source package/x11r7/xdriver_xf86-video-tdfx/Config.in
- 		source package/x11r7/xdriver_xf86-video-tga/Config.in
- 		source package/x11r7/xdriver_xf86-video-trident/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-sunffb/Config.in b/package/x11r7/xdriver_xf86-video-sunffb/Config.in
-deleted file mode 100644
-index 76f5b9a..0000000
---- a/package/x11r7/xdriver_xf86-video-sunffb/Config.in
-+++ /dev/null
-@@ -1,12 +0,0 @@
--config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SUNFFB
--	bool "xf86-video-sunffb"
--	select BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	help
--	  SUNFFB video driver
-diff --git a/package/x11r7/xdriver_xf86-video-sunffb/xdriver_xf86-video-sunffb.mk b/package/x11r7/xdriver_xf86-video-sunffb/xdriver_xf86-video-sunffb.mk
-deleted file mode 100644
-index a3e1d7c..0000000
---- a/package/x11r7/xdriver_xf86-video-sunffb/xdriver_xf86-video-sunffb.mk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--################################################################################
--#
--# xdriver_xf86-video-sunffb -- SUNFFB video driver
--#
--################################################################################
--
--XDRIVER_XF86_VIDEO_SUNFFB_VERSION = 1.2.1
--XDRIVER_XF86_VIDEO_SUNFFB_SOURCE = xf86-video-sunffb-$(XDRIVER_XF86_VIDEO_SUNFFB_VERSION).tar.bz2
--XDRIVER_XF86_VIDEO_SUNFFB_SITE = http://xorg.freedesktop.org/releases/individual/driver
--XDRIVER_XF86_VIDEO_SUNFFB_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xf86driproto xproto_xproto
--
--$(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
