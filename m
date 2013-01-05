@@ -1,126 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  5 Jan 2013 22:39:10 +0100
-Subject: [Buildroot] [PATCH] package/dvb-apps: add option to install
-	utilities
-Message-ID: <1357421950-16251-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 Jan 2013 22:49:39 +0100
+Subject: [Buildroot] [PATCH 1/1] new package: libfribidi
+In-Reply-To: <1356507838-9090-1-git-send-email-mikhailboiko85@gmail.com>
+ (Mikhail Boiko's message of "Wed, 26 Dec 2012 09:43:58 +0200")
+References: <1356507838-9090-1-git-send-email-mikhailboiko85@gmail.com>
+Message-ID: <87ehhzi9l8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously, dvb-apps was a 'blind' package that would install
-only the transponders data files for use by external packages
-(namely tvheadend).
+>>>>> "Mikhail" == Mikhail Boiko <mikhailboiko85@gmail.com> writes:
 
-Now, we add an option to also install the DVB utilities.
+ Mikhail> Signed-off-by: Mikhail Boiko <mikhailboiko85@gmail.com>
+ Mikhail> ---
+ Mikhail>  package/Config.in                |    1 +
+ Mikhail>  package/libfribidi/Config.in     |    7 +++++++
+ Mikhail>  package/libfribidi/libfribidi.mk |   13 +++++++++++++
+ Mikhail>  3 files changed, 21 insertions(+)
+ Mikhail>  create mode 100644 package/libfribidi/Config.in
+ Mikhail>  create mode 100644 package/libfribidi/libfribidi.mk
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/Config.in                                  |    1 +
- package/dvb-apps/Config.in                         |   17 ++++++++++++++
- package/dvb-apps/dvb-apps.mk                       |   23 ++++++++++++++++++-
- package/tvheadend/Config.in                        |    1 +
- .../tvheadend-no-auto-download-dvbscans.patch      |    2 +-
- 5 files changed, 41 insertions(+), 3 deletions(-)
- create mode 100644 package/dvb-apps/Config.in
+ Mikhail> diff --git a/package/Config.in b/package/Config.in
+ Mikhail> index 3d556b2..e60f22e 100644
+ Mikhail> --- a/package/Config.in
+ Mikhail> +++ b/package/Config.in
+ Mikhail> @@ -519,6 +519,7 @@ source "package/libelf/Config.in"
+ Mikhail>  source "package/libevent/Config.in"
+ Mikhail>  source "package/libev/Config.in"
+ Mikhail>  source "package/libffi/Config.in"
+ Mikhail> +source "package/libfribidi/Config.in"
 
-diff --git a/package/Config.in b/package/Config.in
-index 11ff82d..5146553 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -215,6 +215,7 @@ source "package/devmem2/Config.in"
- endif
- source "package/dmidecode/Config.in"
- source "package/dmraid/Config.in"
-+source "package/dvb-apps/Config.in"
- source "package/eeprog/Config.in"
- source "package/evtest/Config.in"
- source "package/flashrom/Config.in"
-diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
-new file mode 100644
-index 0000000..5d0b6f5
---- /dev/null
-+++ b/package/dvb-apps/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_DVB_APPS
-+	bool "dvb-apps (transponders data)"
-+	help
-+	  Install the DVB-C, DVB-S, DVB-T and ATSC transponders data.
-+	  
-+	  http://linuxtv.org/projects.php
-+	  http://linuxtv.org/hg/dvb-apps
-+
-+if BR2_PACKAGE_DVB_APPS
-+
-+config BR2_PACKAGE_DVB_APPS_UTILS
-+	bool "dvb-apps utilities"
-+	help
-+	  A small number of DVB test and utility programs,
-+	  including szap and dvbscan.
-+
-+endif
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 5db8148..f914799 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -18,11 +18,30 @@ DVB_APPS_SITE_METHOD    = hg
- # apply to us.
- DVB_APPS_LICENSE        = unknown (probably public domain)
- 
-+ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
-+# Utilitiess are selected, build and install everything
-+DVB_APPS_INSTALL_STAGING = YES
-+
-+define DVB_APPS_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) V=1
-+endef
-+
-+define DVB_APPS_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) V=1 DESTDIR=$(STAGING_DIR) install
-+endef
-+
-+define DVB_APPS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+else
-+# Utilities are not selected, just install the scan files
- define DVB_APPS_INSTALL_TARGET_CMDS
- 	for i in atsc dvb-c dvb-s dvb-t; do \
--		mkdir -p $(TARGET_DIR)/usr/share/dvb-apps/scan/$$i; \
--		$(INSTALL) $(@D)/util/scan/$$i/* $(TARGET_DIR)/usr/share/dvb-apps/scan/$$i; \
-+		mkdir -p $(TARGET_DIR)/usr/share/dvb/$$i; \
-+		$(INSTALL) $(@D)/util/scan/$$i/* $(TARGET_DIR)/usr/share/dvb/$$i; \
- 	done
- endef
-+endif
- 
- $(eval $(generic-package))
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 944e31e..e6dee3a 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -4,6 +4,7 @@ comment "tvheadend requires a toolchain with LARGEFILE support"
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Tvheadend is a TV streaming server for Linux supporting DVB-S,
-diff --git a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
-index 50bc4b6..963d4f2 100644
---- a/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
-+++ b/package/tvheadend/tvheadend-no-auto-download-dvbscans.patch
-@@ -54,7 +54,7 @@ diff -durN tvheadend-v3.3.orig//support/posix.mk tvheadend-v3.3/support/posix.mk
-  	done
- -
- +	mkdir -p ${DESTDIR}${datadir}/tvheadend/data
--+	ln -s /usr/share/dvb-apps/scan ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
-++	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
-  
-  uninstall:
-  	rm -f ${DESTDIR}${bindir)/tvheadend
+As it deals with text I think it makes more sense to put it under 'Text
+and terminal handling. Committed with that change, thanks.
+
 -- 
-1.7.2.5
+Bye, Peter Korsgaard
