@@ -1,64 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Jan 2013 12:29:18 +0100
-Subject: [Buildroot] [PATCH] Fix installation of crosstool-ng libraries
-	to target
-In-Reply-To: <87hamuh8by.fsf@dell.be.48ers.dk>
-References: <1357449105-14780-1-git-send-email-bos@je-eigen-domein.nl>
- <201301061206.37057.yann.morin.1998@free.fr>
- <87hamuh8by.fsf@dell.be.48ers.dk>
-Message-ID: <201301061229.18437.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Jan 2013 13:39:08 +0100
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <20130106083433.GH13545@sapphire.tkos.co.il>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+ <50E6BFE2.2090405@zacarias.com.ar>
+ <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+ <50E6E757.10809@zacarias.com.ar>
+ <50E6EDB5.9070004@petroprogram.com>
+ <20130106054113.GD13545@sapphire.tkos.co.il>
+ <CAHXCMM+fy_WvvDgQfYTcyoiHAaSvbPuLv8P5p9em_=RRHMQ8rQ@mail.gmail.com>
+ <20130106083433.GH13545@sapphire.tkos.co.il>
+Message-ID: <20130106133908.6223837b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Dear Baruch Siach,
 
-On Sunday 06 January 2013 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  >> -	$(Q)CTNG_TUPLE="$$( $(call ctng,show-tuple) )";                     \
->  >> +	$(Q)CTNG_TUPLE="$$( $(call ctng,show-tuple 2>&1) )";                \
-> 
->  Yann> Indeed, that's going to stderr. That's a but in crostool-NG, it
->  Yann> should go to stdout. Will fix in ct-ng.
-> 
->  Yann> In the meantime:
->  Yann> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Thanks. Does this mean the internal ctng backend has never worked at runtime?
+On Sun, 6 Jan 2013 10:34:35 +0200, Baruch Siach wrote:
 
-Nope, it's only since the last update.
+> So is local build directories in RPATH currently a fact of life? If so can my 
+> wireshark package (linked above) be merged as is? Peter?
 
-Long story made short:
-  - ct-ng uses some fd redirection for its log
-  - previously, fd #7 was not used for this
-  - showtuple redirected fd #7 to stdout, and it worked
-  - last ct-ng version introduced the 'debug-shell' feature
-  - the debug-shell redirects fd #7 to stderr
-  - and it breaks now.
+We currently have packages that carry on the target a RPATH to the
+build directory. It is not nice, but harmless since it is highly
+unlikely that this path is going to exist on the target.
 
-I did not catch this, as I did not do the update to ct-ng in Buildroot,
-so did not run any test. Also, I'm currently using pre-built toolchains
-for my current experiments, so it slipped through...
+Therefore, I wouldn't say that having the build directory as a RPATH in
+the final binary is a show-stopper to get the package included.
 
-I've already fixed it in ct-ng right now, and I'm testing integration
-in Buildroot (first test just finished OK).
-
-I will push an updated patch later today.
-
-It also means that people seldom use the ct-ng backend, and people either
-use the internal backend, or external toolchains. So, a couple of questions:
-  - should we finally switch over to using the ct-ng backend by default?
-  - is it worth maintaing the ct-ng backend at all?
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
