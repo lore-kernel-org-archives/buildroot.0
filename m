@@ -1,35 +1,39 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun,  6 Jan 2013 06:11:45 +0100
-Subject: [Buildroot] [PATCH] Fix installation of crosstool-ng libraries to
-	target
-Message-ID: <1357449105-14780-1-git-send-email-bos@je-eigen-domein.nl>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 6 Jan 2013 07:41:13 +0200
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <50E6EDB5.9070004@petroprogram.com>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+ <50E6BFE2.2090405@zacarias.com.ar>
+ <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+ <50E6E757.10809@zacarias.com.ar>
+ <50E6EDB5.9070004@petroprogram.com>
+Message-ID: <20130106054113.GD13545@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using the crosstool-ng toolchain option, the libc libraries were not installed to target.
-Buildroot calls the show-tuple function to determine the directory to copy from, and it seems
-that outputs the result to stderr instead of stdout
+Hi Stefan,
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
----
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Jan 04, 2013 at 04:56:53PM +0200, Stefan Fr?berg wrote:
+> Hello Gustavo, all
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-index 6f81e30..553c9ee 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
-@@ -66,7 +66,7 @@ endif
- # Actual copy
- $(STAMP_DIR)/ct-ng-toolchain-installed: $(STAMP_DIR)/ct-ng-toolchain-built
- 	$(Q)mkdir -p $(TARGET_DIR)/lib
--	$(Q)CTNG_TUPLE="$$( $(call ctng,show-tuple) )";                     \
-+	$(Q)CTNG_TUPLE="$$( $(call ctng,show-tuple 2>&1) )";                \
- 	    CTNG_SYSROOT="$(HOST_DIR)/usr/$${CTNG_TUPLE}/sysroot";          \
- 	    echo "CTNG_TUPLE='$${CTNG_TUPLE}'";                             \
- 	    echo "CTNG_SYSROOT='$${CTNG_SYSROOT}'";                         \
+[...]
+
+> (It took a long time for me to figure why wireshark that im trying to
+> compile here did not
+> work out with libpcap, untill I found out that the
+> $(STAGING_DIR)/usr/bin/pcap-config spit a
+> wrong prefix all the time...)
+
+Good to see work on wireshark. Did you fix the RPATH problem I encountered 
+while trying to build tshark 
+(http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/48053) ?
+
+baruch
+
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
