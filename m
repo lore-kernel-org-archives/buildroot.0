@@ -1,23 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 17:44:00 +0100
-Subject: [Buildroot] [PATCH] gstreamer: provide necessary config value
-	for AArch64
-In-Reply-To: <1357488842-22491-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Jan 2013 17:14:02 +0100")
-References: <1357488842-22491-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878v86gt2n.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Jan 2013 17:44:22 +0100
+Subject: [Buildroot] [PATCH] package/crosstool-ng: fix show-tuple stdout
+In-Reply-To: <1357477588-18425-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 6 Jan 2013 14:06:28 +0100")
+References: <1357477588-18425-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <874niugt21.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- Thomas> Provide the as_cv_unaligned_access value for the AArch64 architecture.
- Thomas> Fixes:
-
- Thomas>   http://autobuild.buildroot.net/results/5d6d76451a00d79e1bdfe87b6ced61807666cc48/build-end.log
+ Yann> Upstream changeset d8bd17248789.
+ Yann> Reported-by: Floris Bos <bos@je-eigen-domein.nl>
+ Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
