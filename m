@@ -1,56 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jan 2013 22:29:21 +0100
-Subject: [Buildroot] [PATCH 09/28] xlib_libX11: do not depend on
-	bigreqsproto nor xcmiscproto
-In-Reply-To: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <486cd706eb60bff58da00f26470d07495b998385.1357507764.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Jan 2013 22:42:06 +0100
+Subject: [Buildroot] [PATCH] nspr version update 4.9.2 old patch removed
+In-Reply-To: <1352465342-23297-1-git-send-email-alexander@mezon.ru> (Alexander
+ Khryukin's message of "Fri, 9 Nov 2012 16:49:02 +0400")
+References: <1352465342-23297-1-git-send-email-alexander@mezon.ru>
+Message-ID: <87r4lyc7kh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_PACKAGE_XPROTO_BIGREQSPROTO option was selected by
-xlib_libX11, but xlib_libX11 does not have this protocol package in
-its DEPENDENCIES. In some builds, it leads to xproto_bigreqsproto to
-be built as the last package, with no other package depending on it,
-which doesn't make sense.
+>>>>> "Alexander" == Alexander Khryukin <alexander@mezon.ru> writes:
 
-xproto_xcmiscproto was selected and part of DEPENDENCIES, but an
-inspection of libX11 configure.ac and libX11 source code shows that it
-does not depend on xcmiscproto at all.
+ Alexander> Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xlib_libX11/Config.in      |    2 --
- package/x11r7/xlib_libX11/xlib_libX11.mk |    2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Committed, thanks.
 
-diff --git a/package/x11r7/xlib_libX11/Config.in b/package/x11r7/xlib_libX11/Config.in
-index e1189ff..3ad8d00 100644
---- a/package/x11r7/xlib_libX11/Config.in
-+++ b/package/x11r7/xlib_libX11/Config.in
-@@ -10,7 +10,5 @@ config BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XPROTO_XEXTPROTO
- 	select BR2_PACKAGE_XPROTO_INPUTPROTO
- 	select BR2_PACKAGE_XPROTO_XF86BIGFONTPROTO
--	select BR2_PACKAGE_XPROTO_BIGREQSPROTO
--	select BR2_PACKAGE_XPROTO_XCMISCPROTO
- 	help
- 	  X.Org X11 library
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 75d172c..94107b2 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -8,7 +8,7 @@ XLIB_LIBX11_VERSION = 1.4.2
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBX11_INSTALL_STAGING = YES
--XLIB_LIBX11_DEPENDENCIES = libxcb xutil_util-macros xlib_xtrans xlib_libXau xlib_libXdmcp xproto_kbproto xproto_xproto xproto_xextproto xproto_inputproto xproto_xf86bigfontproto xproto_xcmiscproto host-xproto_xproto
-+XLIB_LIBX11_DEPENDENCIES = libxcb xutil_util-macros xlib_xtrans xlib_libXau xlib_libXdmcp xproto_kbproto xproto_xproto xproto_xextproto xproto_inputproto xproto_xf86bigfontproto host-xproto_xproto
- XLIB_LIBX11_CONF_OPT = \
- 	--disable-malloc0returnsnull \
- 	--with-xcb \
+I also removed our nspr.pc, as upstream now provides one.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
