@@ -1,244 +1,228 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 Jan 2013 21:32:54 +0100
-Subject: [Buildroot] [git commit] toolchain-external: add dependency on
-	BR2_HOST_ARCH
-Message-ID: <20130106204312.0E8B49A631@busybox.osuosl.org>
+Date: Sun, 6 Jan 2013 21:37:23 +0100
+Subject: [Buildroot] [git commit] toolchain-external: use
+	BR2_HOSTARCH_NEEDS_IA32_LIBS where needed
+Message-ID: <20130106204312.9A7949A631@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4eff1f206416a2ade7f5d88375cfd271a4c425c5
+commit: http://git.buildroot.net/buildroot/commit/?id=2d16ba916254291ddbcbe9995fa1b40e66e71c45
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The pre-build external toolchains are all built for x86, so they are
-only available if the build machine is a x86 or x86-64 machine.
+All supported pre-built external toolchains are built for x86 Linux,
+so we add the BR2_HOSTARCH_NEEDS_IA32_LIBS select.
 
 [Peter: microblaze toolchains are 64bit]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in |   27 +++++++++++++++++++++++++++
- 1 files changed, 27 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in |   25 +++++++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index eeb40a3..0da88ef 100644
+index 0da88ef..2e79052 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -7,6 +7,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
- 	bool "Linaro 2012.12"
- 	depends on BR2_arm
- 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -11,6 +11,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_12
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_INSTALL_LIBSTDCPP
-@@ -24,6 +25,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
- 	bool "Linaro 2012.11"
- 	depends on BR2_arm
- 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -41,6 +43,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
- 	bool "Linaro 2012.10"
- 	depends on BR2_arm
- 	depends on BR2_cortex_a5 || BR2_cortex_a8 || BR2_cortex_a9 || BR2_cortex_a15
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -61,6 +64,7 @@ comment "Linaro toolchains available for Cortex-A{5,8,9,15}"
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- 	bool "Sourcery CodeBench ARM 2012.03"
- 	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -83,6 +87,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	bool "Sourcery CodeBench ARM 2011.09"
- 	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -105,6 +110,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	bool "Sourcery CodeBench MIPS 2012.09"
- 	depends on BR2_mips || BR2_mipsel
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -173,6 +179,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- 	bool "Sourcery CodeBench MIPS 2012.03"
- 	depends on BR2_mips || BR2_mipsel
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -241,6 +248,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	bool "Sourcery CodeBench ARM 2011.03"
- 	depends on BR2_arm
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -263,6 +271,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- 	bool "Sourcery CodeBench MIPS 2011.09"
- 	depends on BR2_mips || BR2_mipsel
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -331,6 +340,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -359,6 +369,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	bool "Sourcery CodeBench PowerPC 2010.09"
- 	depends on BR2_powerpc
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -387,6 +398,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
- 	bool "Sourcery CodeBench SH 2012.09"
- 	depends on BR2_sh4a || BR2_sh4aeb
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -407,6 +419,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- 	bool "Sourcery CodeBench SH 2012.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
-@@ -426,6 +439,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	bool "Sourcery CodeBench SH 2011.03"
- 	depends on BR2_sh4a || BR2_sh4aeb
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+ 	  GCC 2012.12 (based on gcc 4.7), Linaro GDB 2012.12 (based on
+@@ -29,6 +30,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_11
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_INSTALL_LIBSTDCPP
-@@ -446,6 +460,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	bool "Sourcery CodeBench SH 2011.03"
- 	depends on BR2_sh2a
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_LARGEFILE
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -463,6 +478,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	bool "Sourcery CodeBench SH 2010.09"
- 	depends on BR2_sh2a
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_LARGEFILE
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -480,6 +496,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- 	bool "Sourcery CodeBench x86/x86_64 2012.09"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-@@ -502,6 +519,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- 	bool "Sourcery CodeBench x86/x86_64 2012.03"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
-@@ -523,6 +541,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	bool "Sourcery CodeBench x86/x86_64 2011.09"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+ 	  GCC 2012.11 (based on gcc 4.7), Linaro GDB 2012.10 (based on
+@@ -47,6 +49,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_10
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_INSTALL_LIBSTDCPP
-@@ -545,6 +564,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
- 	bool "Blackfin.uclinux.org 2012R1-BETA1"
- 	depends on BR2_bfin
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_LARGEFILE
-@@ -560,6 +580,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
- 	bool "Blackfin.uclinux.org 2011R1-RC4"
- 	depends on BR2_bfin
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_LARGEFILE
-@@ -575,6 +596,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
- 	bool "Blackfin.uclinux.org 2010RC1"
- 	depends on BR2_bfin
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_LARGEFILE
-@@ -590,6 +612,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
- config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	bool "Xilinx Little Endian Microblaze GNU Tools"
- 	depends on BR2_microblazeel
-+	depends on BR2_HOSTARCH = "x86_64"
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Linaro toolchain for the ARM architecture. It uses Linaro
+ 	  GCC 2012.10 (based on gcc 4.7), Linaro GDB 2012.10 (based on
+@@ -68,6 +71,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
-@@ -599,6 +622,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	bool "Xilinx Big Endian Microblaze GNU Tools"
- 	depends on BR2_microblazebe
-+	depends on BR2_HOSTARCH = "x86_64"
+ 	  Sourcery CodeBench toolchain for the ARM architecture, from
+ 	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
+@@ -91,6 +95,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
-@@ -608,6 +632,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_12
- 	bool "Linaro AArch64 12.12"
- 	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	  Sourcery CodeBench toolchain for the ARM architecture, from
+ 	  Mentor Graphics. It uses gcc 4.6.1, binutils 2.21.53, glibc
+@@ -114,6 +119,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+ 	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
+@@ -183,6 +189,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201203
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+ 	  Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53, glibc
+@@ -252,6 +259,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the ARM architecture, from
+ 	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
+@@ -275,6 +283,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201109
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+ 	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.21.53, glibc
+@@ -344,6 +353,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the PowerPC architecture,
+ 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51,
+@@ -373,6 +383,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the PowerPC architecture,
+ 	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+@@ -402,6 +413,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the SuperH architecture,
+ 	  from Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51,
+@@ -422,6 +434,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
-@@ -617,6 +642,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_12
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_11
- 	bool "Linaro AArch64 12.11"
- 	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	  Sourcery CodeBench toolchain for the SuperH architecture,
+ 	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
+@@ -443,6 +456,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the SuperH architecture,
+ 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+@@ -468,6 +482,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the SuperH architecture,
+ 	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+@@ -486,6 +501,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the SuperH architecture,
+ 	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+@@ -500,6 +516,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the x86/x86_64
+ 	  architectures, from Mentor Graphics. It uses gcc 4.7.2,
+@@ -522,6 +539,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
-@@ -626,6 +652,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_11
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_10
- 	bool "Linaro AArch64 12.10"
- 	depends on BR2_aarch64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	  Sourcery CodeBench toolchain for the x86/x86_64
+ 	  architectures, from Mentor Graphics. It uses gcc 4.6.3,
+@@ -545,6 +563,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Sourcery CodeBench toolchain for the x86/x86_64
+ 	  architectures, from Mentor Graphics. It uses gcc 4.6.1,
+@@ -573,6 +592,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+@@ -589,6 +609,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+@@ -605,6 +626,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
+ 	select BR2_USE_WCHAR
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+@@ -635,6 +657,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_12
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
  	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
  	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
  	help
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
+@@ -645,6 +668,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_11
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
+@@ -655,6 +679,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_12_10
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	help
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
