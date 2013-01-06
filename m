@@ -1,42 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 Jan 2013 21:52:18 +0100
-Subject: [Buildroot] [git commit] system: simplify
-	BR2_ROOTFS_SKELETON_DEFAULT handling
-Message-ID: <20130106205645.881B49A630@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Jan 2013 22:02:00 +0100
+Subject: [Buildroot] [PATCH 1/3] libcofi: new package
+In-Reply-To: <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 6 Jan 2013 21:56:20 +0100")
+References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
+ <cover.1357505417.git.maxime.hadjinlian@gmail.com>
+ <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
+Message-ID: <877gnqf2k7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b2a40b6d7d6ce9a892c6230e3b41e8e0b252896
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
-No functional change.
+ Maxime> replacement for memcpy and memset functionality
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- system/system.mk |    8 +-------
- 1 files changed, 1 insertions(+), 7 deletions(-)
+ Maxime> This package was originally found at :
+ Maxime> https://github.com/huceke/buildroot-rbp By gimli
+ Maxime> <ebsi4711@gmail.com>
 
-diff --git a/system/system.mk b/system/system.mk
-index 4e131b0..44a33ae 100644
---- a/system/system.mk
-+++ b/system/system.mk
-@@ -50,15 +50,9 @@ endif
- 
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
- TARGETS += target-root-passwd
--endif
- 
- ifneq ($(TARGET_GENERIC_GETTY),)
--ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
--ifeq ($(BR2_PACKAGE_SYSVINIT),y)
--TARGETS += target-generic-getty-sysvinit
--else
--TARGETS += target-generic-getty-busybox
--endif
-+TARGETS += target-generic-getty-$(if $(BR2_PACKAGE_SYSVINIT),sysvinit,busybox)
- endif
- 
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+The package looks ok from a quick look, but how is it supposed to be
+used? I wouldn't like to see patches to a bunch of packages to link
+against this.
+
+It isn't really rpi specific either.
+
+-- 
+Bye, Peter Korsgaard
