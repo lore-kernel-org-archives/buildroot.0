@@ -1,31 +1,25 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 22:02:00 +0100
-Subject: [Buildroot] [PATCH 1/3] libcofi: new package
-In-Reply-To: <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 6 Jan 2013 21:56:20 +0100")
-References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
- <cover.1357505417.git.maxime.hadjinlian@gmail.com>
- <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
-Message-ID: <877gnqf2k7.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Jan 2013 22:07:50 +0100
+Subject: [Buildroot] [PATCH] libdvdnav: requires thread support in
+	toolchain
+In-Reply-To: <1355956450-7421-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 19 Dec 2012 23:34:10 +0100")
+References: <1355956450-7421-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8738yef2ah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Maxime> replacement for memcpy and memset functionality
+ Thomas> libdvdnav requires thread support. The only package that depends on
+ Thomas> libdvdnav is mplayer, and it is an optional dependency, only activated
+ Thomas> when libdvdnav is enabled. So we don't have to push this thread
+ Thomas> support dependency to any other package.
 
- Maxime> This package was originally found at :
- Maxime> https://github.com/huceke/buildroot-rbp By gimli
- Maxime> <ebsi4711@gmail.com>
-
-The package looks ok from a quick look, but how is it supposed to be
-used? I wouldn't like to see patches to a bunch of packages to link
-against this.
-
-It isn't really rpi specific either.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
