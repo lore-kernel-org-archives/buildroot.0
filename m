@@ -1,77 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jan 2013 22:29:24 +0100
-Subject: [Buildroot] [PATCH 12/28] xserver_xorg-server: provide more options
-	for SHA1 library
+Date: Sun,  6 Jan 2013 22:29:25 +0100
+Subject: [Buildroot] [PATCH 13/28] cairo: do not depend on
+	xserver-xorg_server, but on the right library
 In-Reply-To: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <089f2d9cb8d7b83db4f512f3a62b1d98fc5693e3.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <d47c9dfcd7cb9ea156e84cc5493e0b1ef075215d.1357507764.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, the X.org server was forcefully selecting OpenSSL, just to
-have a SHA1 implementation. However, in fact, the X.org server is
-capable of using a SHA1 implementation from multiple libraries:
-OpenSSL, libgcrypt and libsha1 amongst others.
-
-So, this patch changes the X.org server package so that we use the
-SHA1 functions from OpenSSL is OpenSSL is already available, or the
-SHA1 functions from libgcrypt is libgcrypt is already available, or if
-neither OpenSSL nor libgcrypt are enabled in the configuration, we
-select the much smaller libsha1, that has been specifically written to
-fulfill the X.org server requirements.
+cairo is a X client library, so there is no reason for it to build
+depend on the X.org server. What Cairo needs is the xlib_libX11
+library.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xserver_xorg-server/Config.in        |    5 ++++-
- .../xserver_xorg-server/xserver_xorg-server.mk     |   12 +++++++++++-
- 2 files changed, 15 insertions(+), 2 deletions(-)
+ package/cairo/Config.in |    1 +
+ package/cairo/cairo.mk  |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 6c70196..de601e9 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -2,7 +2,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	bool "xorg-server"
- 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
- 	select BR2_PACKAGE_MCOOKIE
--	select BR2_PACKAGE_OPENSSL
-+	# We need a SHA1 implementation. If either openssl or
-+	# libgcrypt are already part of the build, we'll use one of
-+	# them, otherwise, use the small libsha1 library.
-+	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
+diff --git a/package/cairo/Config.in b/package/cairo/Config.in
+index 398e47f..4a2078e 100644
+--- a/package/cairo/Config.in
++++ b/package/cairo/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_CAIRO
+ 	bool "cairo"
  	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
- 	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 552d8e8..f6c6cab 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -51,7 +51,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xproto_xproto 			\
- 	xkeyboard-config		\
- 	pixman 				\
--	openssl 			\
- 	mcookie 			\
- 	host-pkgconf
+ 	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	help
+ 	  Cairo is a 2D graphics library with support for multiple
+ 	  output devices. Currently supported output targets include
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 59a032a..41e876a 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -49,7 +49,7 @@ endif
  
-@@ -178,4 +177,15 @@ else
- XSERVER_XORG_SERVER_CONF_OPT += --disable-glx
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ 	CAIRO_CONF_OPT += --enable-xlib --with-x
+-	CAIRO_DEPENDENCIES += xserver_xorg-server
++	CAIRO_DEPENDENCIES += xlib_libX11
+ else
+ 	CAIRO_CONF_OPT += --disable-xlib --without-x
  endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libcrypto
-+XSERVER_XORG_SERVER_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libgcrypt
-+XSERVER_XORG_SERVER_DEPENDENCIES += libgcrypt
-+else
-+XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libsha1
-+XSERVER_XORG_SERVER_DEPENDENCIES += libsha1
-+endif
-+
- $(eval $(autotools-package))
 -- 
 1.7.9.5
