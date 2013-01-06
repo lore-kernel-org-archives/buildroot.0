@@ -1,68 +1,77 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 6 Jan 2013 21:39:55 +0100
-Subject: [Buildroot] [PATCH 1/3] libcofi: new package
-In-Reply-To: <20130106212655.78c04f0d@skate>
-References: <cover.1357426077.git.maxime.hadjinlian@gmail.com>
- <323f2db72c57aff2b31b2b7a5eb7f06d74775eda.1357426077.git.maxime.hadjinlian@gmail.com>
- <20130106212655.78c04f0d@skate>
-Message-ID: <CAGduivwy0n=E6KqapcD1ie7i58mBTa6xU7gNBKmF35C9yb0N8A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 Jan 2013 21:17:20 +0100
+Subject: [Buildroot] [git commit] pacakge/tvheadend: fix failures due to
+	-Werror
+Message-ID: <20130106204311.C0DCA9A631@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 6, 2013 at 9:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
->
-> On Sat,  5 Jan 2013 23:55:14 +0100, Maxime Hadjinlian wrote:
->> diff --git a/package/libcofi/libcofi.mk b/package/libcofi/libcofi.mk
->> new file mode 100644
->> index 0000000..4872d1c
->> --- /dev/null
->> +++ b/package/libcofi/libcofi.mk
->> @@ -0,0 +1,17 @@
->> +#############################################################
->> +#
->> +# libcofi
->> +#
->> +#############################################################
->> +LIBCOFI_VERSION = 7313fbe12b0593034d0a1b606bf33c7cf4ababce
->
-> One new line between the first variable line and the #### line.
->
->> +LIBCOFI_SITE = http://github.com/simonjhall/copies-and-fills/tarball/master
->
-> LIBCOFI_LICENSE ?
-There is absolutely no information whatsoever about license that I
-could find, so I really did knew what to put there.
->
->> +define LIBCOFI_BUILD_CMDS
->> +    $(MAKE1) AS="$(TARGET_AS)" CC="$(TARGET_CC)" -C $(@D) libcofi_rpi.so
->> +endef
->
-> Seeing the Makefile, I don't see any obvious dependency problem, so I
-> guess you could use $(MAKE) instead of $(MAKE1).
->
-> Also, please use $(TARGET_CONFIGURE_OPTS). And you don't need to
-> specify the libcofi_rpi.so target since this is the first target of the
-> Makefile (and hence the default one). So:
->
->         $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
->
->> +define LIBCOFI_INSTALL_TARGET_CMDS
->> +    $(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so* $(TARGET_DIR)/usr/lib
->> +endef
->
-> Only libcofi_rpi.so is built, so:
->
->         $(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so $(TARGET_DIR)/usr/lib/libcofi_rpi.so
->
-Ok
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+commit: http://git.buildroot.net/buildroot/commit/?id=81faecdb9b43ab9f31b7b2a443238c7c78915129
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+(Partially) apply upstream patch 1334869bf0ea668e58e1c72daa3c09c1a95b5d81
+to properly protect code-paths depending on execinfo.h (for backtrace(3)).
+
+Fixes:
+    http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/tvheadend/tvheadend-fix-Werror.patch |   44 ++++++++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
+
+diff --git a/package/tvheadend/tvheadend-fix-Werror.patch b/package/tvheadend/tvheadend-fix-Werror.patch
+new file mode 100644
+index 0000000..5f6dbad
+--- /dev/null
++++ b/package/tvheadend/tvheadend-fix-Werror.patch
+@@ -0,0 +1,44 @@
++commit 1334869bf0ea668e58e1c72daa3c09c1a95b5d81
++Author: Alexey I. Froloff <raorn@raorn.name>
++Date:   Wed Oct 24 21:10:15 2012 +0400
++
++    [PR-172] Fix compilatioin issues on OpenWRT
++    
++    Fix SHA1_* function names
++    Fix unused variables and functions
++
++---
++"Yann E. MORIN" <yann.morin.1998@free.fr>:
++    For buildroot, I removed the SHA_* fixes, as we're not affected.
++    No point in fixing something that does not bug us.
++
++diff --git a/src/trap.c b/src/trap.c
++index bd76118..b0fe543 100644
++--- a/src/trap.c
+++++ b/src/trap.c
++@@ -67,6 +67,7 @@ sappend(char *buf, size_t l, const char *fmt, ...)
++ /**
++  *
++  */
+++#if ENABLE_EXECINFO
++ static int
++ add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
++ {
++@@ -126,6 +127,7 @@ add2lineresolve(const char *binary, void *addr, char *buf0, size_t buflen)
++   close(fd[0]);
++   return 0;
++ }
+++#endif /* ENABLE_EXECINFO */
++ 
++ 
++ 
++@@ -133,8 +135,8 @@ static void
++ traphandler(int sig, siginfo_t *si, void *UC)
++ {
++   ucontext_t *uc = UC;
++-  char buf[200];
++ #if ENABLE_EXECINFO
+++  char buf[200];
++   static void *frames[MAXFRAMES];
++   int nframes = backtrace(frames, MAXFRAMES);
++   Dl_info dli;
