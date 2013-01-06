@@ -1,62 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 Jan 2013 22:11:37 +0100
-Subject: [Buildroot] [git commit] oprofile: bump to version 0.9.8
-Message-ID: <20130106211201.2ACD19A59C@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 6 Jan 2013 22:13:59 +0100
+Subject: [Buildroot] [PATCH 1/3] libcofi: new package
+In-Reply-To: <877gnqf2k7.fsf@dell.be.48ers.dk>
+References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
+ <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
+ <877gnqf2k7.fsf@dell.be.48ers.dk>
+Message-ID: <CAGduivzsNvuYaaFAa8M=y5WJXS_vA4V46nyC2dM5ak5t2T8H=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8c40f7278ac680c0be4b54d1517699b627cf48b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: J??r??my Rosen <jeremy.rosen@openwide.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/oprofile/oprofile.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
-
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 75f8407..f3ea23f 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,13 +4,14 @@
- #
- #############################################################
- 
--OPROFILE_VERSION = 0.9.7
-+OPROFILE_VERSION = 0.9.8
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPLv2+
- OPROFILE_LICENSE_FILES = COPYING
- OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
- OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
- OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
-+OPROFILE_BINARIES += utils/op-check-perfevents pe_profiling/operf libabi/opimport
- 
- ifeq ($(BR2_i386),y)
- OPROFILE_ARCH = i386
-@@ -33,6 +34,7 @@ OPROFILE_DEPENDENCIES = popt binutils
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
-+	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/lib/oprofile
- 	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
- 		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
- 			$(TARGET_DIR)/usr/share/oprofile; \
-@@ -40,12 +42,14 @@ define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
- 	$(INSTALL) -m 755 $(@D)/utils/opcontrol $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
-+	$(INSTALL) -m 755 $(@D)/libopagent/.libs/*.so* $(TARGET_DIR)/usr/lib/oprofile
- endef
- 
- define OPROFILE_UNINSTALL_TARGET_CMDS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/, $(notdir $(OPROFILE_BINARIES)))
- 	rm -f $(TARGET_DIR)/usr/bin/opcontrol
- 	rm -rf $(TARGET_DIR)/usr/share/oprofile
-+	rm -rf $(TARGET_DIR)/usr/lib/oprofile
- endef
- 
- $(eval $(autotools-package))
+On Sun, Jan 6, 2013 at 10:02 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>
+>  Maxime> replacement for memcpy and memset functionality
+>
+>  Maxime> This package was originally found at :
+>  Maxime> https://github.com/huceke/buildroot-rbp By gimli
+>  Maxime> <ebsi4711@gmail.com>
+>
+> The package looks ok from a quick look, but how is it supposed to be
+> used? I wouldn't like to see patches to a bunch of packages to link
+> against this.
+As the author of the package says, the library is used using
+LD_PRELOAD on the target.
+So no patch should be needed for any packages.
+>
+> It isn't really rpi specific either.
+I don't know about that, the author says it's rpi specific.
+>
+> --
+> Bye, Peter Korsgaard
