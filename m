@@ -1,40 +1,102 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 21:43:13 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	pre-built-packages
-In-Reply-To: <cover.1356797653.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 29 Dec 2012 17:14:47 +0100")
-References: <cover.1356797653.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mwwmf3fi.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 Jan 2013 21:46:47 +0100
+Subject: [Buildroot] [git commit] system: set root password only for default
+	skeleton
+Message-ID: <20130106205645.3A5FA9A632@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b98b191b5cb628ed8dd32236c4b08d025b65941f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Recently, we have had a number of users having issues with external
- Thomas> toolchains because those are built for 32 bits Linux, and most
- Thomas> developers know use 64 bits build machines. The error message such
- Thomas> users get so far is very cryptic "Cannot execute cross-compiler".
+In case one is using a custom skeleton, the root pasword might already be
+set in this case, and should not be overriden.
 
- Thomas> So, this set of patches adds a small infrastructure in the form of a
- Thomas> Kconfig option and a check in dependencies.sh. The Kconfig option
- Thomas> allows packages to tell whether they need 32 bits compatibility
- Thomas> libraries, and the check in dependencies.sh verifies that those
- Thomas> libraries are installed (simply by checking the presence of the 32
- Thomas> bits dynamic loader).
+Just ask for (and set) the root password only for the default skeleton.
 
- Thomas> Then, all pre-built external toolchains as well as the sam-ba tool are
- Thomas> modified to use this mechanism.
+Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ system/Config.in |   42 +++++++++++++++++++++---------------------
+ system/system.mk |    2 ++
+ 2 files changed, 23 insertions(+), 21 deletions(-)
 
- Thomas> As a preliminary patch, all the pre-built external toolchains are
- Thomas> changed to be visible only if the host architecture is x86 or x86-64.
-
-The microblaze ext toolchains are 64bit, so I've fixed that up and
-committed the series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/system/Config.in b/system/Config.in
+index 5b66ac0..19bdd2d 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -12,27 +12,6 @@ config BR2_TARGET_GENERIC_ISSUE
+        help
+          Select system banner (/etc/issue) to be displayed at login.
+ 
+-config BR2_TARGET_GENERIC_ROOT_PASSWD
+-	string "Root password"
+-	default ""
+-	help
+-	  Set the initial root password (in clear). It will be md5-encrypted.
+-	  
+-	  If set to empty (the default), then no root password will be set,
+-	  and root will need no password to log in.
+-	  
+-	  WARNING! WARNING!
+-	  Although pretty strong, MD5 is now an old hash function, and
+-	  suffers from some weaknesses, which makes it susceptible to attacks.
+-	  It is showing its age, so this root password should not be trusted
+-	  to properly secure any product that can be shipped to the wide,
+-	  hostile world.
+-	  
+-	  WARNING! WARNING!
+-	  The password appears in clear in the .config file, and may appear
+-	  in the build log! Avoid using a valuable password if either the
+-	  .config file or the build log may be distributed!
+-
+ choice
+ 	prompt "/dev management"
+ 	default BR2_ROOTFS_DEVICE_CREATION_STATIC
+@@ -140,6 +119,27 @@ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
++config BR2_TARGET_GENERIC_ROOT_PASSWD
++	string "Root password"
++	default ""
++	help
++	  Set the initial root password (in clear). It will be md5-encrypted.
++	  
++	  If set to empty (the default), then no root password will be set,
++	  and root will need no password to log in.
++	  
++	  WARNING! WARNING!
++	  Although pretty strong, MD5 is now an old hash function, and
++	  suffers from some weaknesses, which makes it susceptible to attacks.
++	  It is showing its age, so this root password should not be trusted
++	  to properly secure any product that can be shipped to the wide,
++	  hostile world.
++	  
++	  WARNING! WARNING!
++	  The password appears in clear in the .config file, and may appear
++	  in the build log! Avoid using a valuable password if either the
++	  .config file or the build log may be distributed!
++
+ config BR2_TARGET_GENERIC_GETTY_PORT
+ 	string "Port to run a getty (login prompt) on"
+ 	default "ttyS0"
+diff --git a/system/system.mk b/system/system.mk
+index 3c4d06e..651f7df 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -47,7 +47,9 @@ ifneq ($(TARGET_GENERIC_ISSUE),)
+ TARGETS += target-generic-issue
+ endif
+ 
++ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+ TARGETS += target-root-passwd
++endif
+ 
+ ifneq ($(TARGET_GENERIC_GETTY),)
+ ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
