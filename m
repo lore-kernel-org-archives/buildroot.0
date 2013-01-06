@@ -1,74 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jan 2013 22:29:30 +0100
-Subject: [Buildroot] [PATCH 18/28] libgtk2: add support for some optional X
-	dependencies
+Date: Sun,  6 Jan 2013 22:29:32 +0100
+Subject: [Buildroot] [PATCH 20/28] atk: remove unused host variant
 In-Reply-To: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f81b3c2a5b24ca73365e9b40c83c83cd04f544ca.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fef01e5a74239111bcc590fa096f376fe51cc2ae.1357507764.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libgtk2 can optionally use a number of features from additional X
-extensions, so we add support for those, to ensure that Gtk gets built
-after those extensions if they have been enabled in the Buildroot
-configuration.
+The atk package is used as a dependency in the libglade and libgtk2
+packages.
 
-The extensions are Xinerama, Xinput, Xrandr, Xcursor, Xfixes,
-Xcomposite and Xdamage.
+The libglade package has no host variant, and does not depend on
+host-atk.
+
+The libgtk2 package depends on atk, and has a host variant, but the
+host variant of libgtk2 overrides HOST_LIBGTK2_DEPENDENCIES to limit
+the number of dependencies, and host-atk is not amongst those
+dependencies.
+
+Therefore, host-atk is useless and can be removed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk |   35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/atk/atk.mk |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 3dcecbf..e6a9d84 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -84,6 +84,41 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
- 		--with-gdktarget=x11
- 	LIBGTK2_DEPENDENCIES += xlib_libXcomposite fontconfig xlib_libX11 \
- 		xlib_libXext xlib_libXrender
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+	LIBGTK2_CONF_OPT += --enable-xinerama
-+	LIBGTK2_DEPENDENCIES += xlib_libXinerama
-+else
-+	LIBGTK2_CONF_OPT += --disable-xinerama
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
-+	LIBGTK2_CONF_OPT += --with-xinput=yes
-+	LIBGTK2_DEPENDENCIES += xlib_libXi
-+else
-+	LIBGTK2_CONF_OPT += --with-xinput=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXrandr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXcursor
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXfixes
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXcomposite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXdamage
-+endif
-+
- else
- 	LIBGTK2_CONF_OPT += --without-x
- endif
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 0453acb..2a85edd 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -43,8 +43,4 @@ ATK_CONF_OPT =  --disable-glibtest --enable-explicit-deps=no \
+ 
+ ATK_DEPENDENCIES = libglib2 host-pkgconf
+ 
+-HOST_ATK_CONF_OPT = \
+-		--disable-glibtest
+-
+ $(eval $(autotools-package))
+-$(eval $(host-autotools-package))
 -- 
 1.7.9.5
