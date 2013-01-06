@@ -1,121 +1,119 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jan 2013 16:22:43 +0100
-Subject: [Buildroot] [PATCH 03/15] elfutils: new package
+Date: Sun,  6 Jan 2013 16:22:44 +0100
+Subject: [Buildroot] [PATCH 04/15] elfutils: make it possible to only
+	install the libraries
 In-Reply-To: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b1daff88e90abc6858c5a834c590860ed3c1b01f.1357485747.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <261dc8522b7cf032cd18f5432fce1ffc50d6b635.1357485747.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+Add and use a --{enable,disable}-progs configuration option to
+selectively enable or disable the elfutils programs. Generally, on an
+embedded system, the libraries are more useful than the programs, and
+being able to not build the programs will make it easier to build the
+elfutils libraries on uClibc.
 
-This patch adds a a package for elfutils. For now, the package is
-glibc specific, as adding uClibc support for this package is quite
-tedious, and will therefore be done through followup patches.
-
-Heavily based from work done by Stefan Fr?berg, but with many further
-modifications by Thomas Petazzoni.
-
-Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |    1 +
- package/elfutils/Config.in   |   15 +++++++++++++
- package/elfutils/elfutils.mk |   49 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
- create mode 100644 package/elfutils/Config.in
- create mode 100644 package/elfutils/elfutils.mk
+ package/elfutils/Config.in                       |   13 ++++++
+ package/elfutils/elfutils-01-disable-progs.patch |   47 ++++++++++++++++++++++
+ package/elfutils/elfutils.mk                     |    6 +++
+ 3 files changed, 66 insertions(+)
+ create mode 100644 package/elfutils/elfutils-01-disable-progs.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 11ff82d..0cf0a2b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -512,6 +512,7 @@ menu "Other"
- source "package/apr/Config.in"
- source "package/apr-util/Config.in"
- source "package/classpath/Config.in"
-+source "package/elfutils/Config.in"
- source "package/fftw/Config.in"
- source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
 diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-new file mode 100644
-index 0000000..836ce4c
---- /dev/null
+index 836ce4c..87744b5 100644
+--- a/package/elfutils/Config.in
 +++ b/package/elfutils/Config.in
-@@ -0,0 +1,15 @@
-+comment "elfutils requires a glibc toolchain"
-+	depends on !(BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
-+		     BR2_TOOLCHAIN_CTNG_glibc     || \
-+		     BR2_TOOLCHAIN_CTNG_eglibc)
+@@ -12,4 +12,17 @@ config BR2_PACKAGE_ELFUTILS
+ 	  Libraries/utilities to handle ELF objects (drop in
+ 	  replacement for libelf).
+ 
++	  Note that this option only installs the libraries, and not
++	  the programs.
 +
-+config BR2_PACKAGE_ELFUTILS
-+	bool "elfutils"
-+	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || \
-+		   BR2_TOOLCHAIN_CTNG_glibc     || \
-+		   BR2_TOOLCHAIN_CTNG_eglibc
+ 	  https://fedorahosted.org/elfutils
++
++if BR2_PACKAGE_ELFUTILS
++
++config BR2_PACKAGE_ELFUTILS_PROGS
++	bool "Install programs"
 +	help
-+	  Libraries/utilities to handle ELF objects (drop in
-+	  replacement for libelf).
++	  This option tells elfutils to not only install the libelf
++	  libraries, but also the elfutils programs.
 +
-+	  https://fedorahosted.org/elfutils
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
++endif
+diff --git a/package/elfutils/elfutils-01-disable-progs.patch b/package/elfutils/elfutils-01-disable-progs.patch
 new file mode 100644
-index 0000000..2750060
+index 0000000..462de89
 --- /dev/null
++++ b/package/elfutils/elfutils-01-disable-progs.patch
+@@ -0,0 +1,47 @@
++Add a --{enable,disable}-progs configure option
++
++Add a --{enable,disable}-progs configuration option to elfutils. This
++allows to selectively disable the compilation of the elfutils programs
++(in which case only the libraries are built and installed). This is
++useful because the programs are often not needed, and also because
++building the programs against uClibc causes several issues (lack of
++obstack_printf() in uClibc for example).
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile.am
++===================================================================
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -22,9 +22,13 @@
++ 
++ pkginclude_HEADERS = version.h
++ 
+++if ENABLE_PROGS
+++PROGS_SUBDIR = src
+++endif
+++
++ # Add doc back when we have some real content.
++ SUBDIRS = config m4 lib libelf libebl libdwfl libdw libcpu libasm backends \
++-	  src po tests
+++	  $(PROGS_SUBDIR) po tests
++ 
++ EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
++ 	     COPYING COPYING-GPLV2 COPYING-LGPLV3
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -263,6 +263,12 @@
++ AC_DEFINE_UNQUOTED(LIBEBL_SUBDIR, "$LIBEBL_SUBDIR")
++ AH_TEMPLATE([LIBEBL_SUBDIR], [$libdir subdirectory containing libebl modules.])
++ 
+++AC_ARG_ENABLE([progs],
+++	AS_HELP_STRING([--enable-progs], [enable progs]),
+++	enable_progs=$enableval,
+++	enable_progs=yes)
+++AM_CONDITIONAL(ENABLE_PROGS, test "$enable_progs" = yes)
+++
++ dnl Test for zlib and bzlib, gives ZLIB/BZLIB .am
++ dnl conditional and config.h USE_ZLIB/USE_BZLIB #define.
++ save_LIBS="$LIBS"
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 2750060..f8a4e85 100644
+--- a/package/elfutils/elfutils.mk
 +++ b/package/elfutils/elfutils.mk
-@@ -0,0 +1,49 @@
-+#############################################################
-+#
-+# elfutils
-+#
-+#############################################################
-+ELFUTILS_VERSION = 0.155
-+ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
-+ELFUTILS_SITE = https://fedorahosted.org/releases/e/l/elfutils/$(ELFUTILS_VERSION)
-+ELFUTILS_LICENSE = GPLv3 GPLv2 LGPLv3
-+ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
-+
-+# The tarball does not have a generated configure script
-+ELFUTILS_AUTORECONF = YES
-+ELFUTILS_CONF_OPT += --disable-werror
-+ELFUTILS_PATCH = \
-+	elfutils-portability.patch \
-+	elfutils-robustify.patch
-+
-+ELFUTILS_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_LARGEFILE),y)
-+# elfutils gets confused when lfs mode is forced, so don't
-+ELFUTILS_CONF_ENV += \
-+        CFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-+        CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+ ELFUTILS_DEPENDENCIES += zlib
-+ ELFUTILS_CONF_OPT += --with-zlib
+@@ -46,4 +46,10 @@ else
+  ELFUTILS_CONF_OPT += --without-lzma
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ELFUTILS_PROGS),y)
++ ELFUTILS_CONF_OPT += --enable-progs
 +else
-+ ELFUTILS_CONF_OPT += --without-zlib
++ ELFUTILS_CONF_OPT += --disable-progs
 +endif
 +
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+ ELFUTILS_DEPENDENCIES += bzip2
-+ ELFUTILS_CONF_OPT += --with-bzlib
-+else
-+ ELFUTILS_CONF_OPT += --without-bzlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+ ELFUTILS_DEPENDENCIES += xz
-+ ELFUTILS_CONF_OPT += --with-lzma
-+else
-+ ELFUTILS_CONF_OPT += --without-lzma
-+endif
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
 -- 
 1.7.9.5
