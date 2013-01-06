@@ -1,63 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 Jan 2013 17:43:33 +0100
-Subject: [Buildroot] [git commit] package/crosstool-ng: fix show-tuple stdout
-Message-ID: <20130106164433.A17089A5E5@busybox.osuosl.org>
+Date: Sun, 6 Jan 2013 17:43:51 +0100
+Subject: [Buildroot] [git commit] gstreamer: provide necessary config value
+	for AArch64
+Message-ID: <20130106164433.D60069A5E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e6d2363e02a7c905e7141174d778756a129fa8e
+commit: http://git.buildroot.net/buildroot/commit/?id=d3210cbac3cce63ae74fd2936849937b90c35cfb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream changeset d8bd17248789.
+Provide the as_cv_unaligned_access value for the AArch64 architecture.
 
-Reported-by: Floris Bos <bos@je-eigen-domein.nl>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
+
+  http://autobuild.buildroot.net/results/5d6d76451a00d79e1bdfe87b6ced61807666cc48/build-end.log
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../crosstool-ng-001-fix-showtuple-stdout.patch    |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
+ package/multimedia/gstreamer/gstreamer.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-new file mode 100644
-index 0000000..416ef76
---- /dev/null
-+++ b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-@@ -0,0 +1,35 @@
-+changeset:   3141:d8bd17248789
-+tag:         tip
-+user:        "Yann E. MORIN" <yann.morin.1998@free.fr>
-+date:        Sun Jan 06 12:08:33 2013 +0100
-+files:       scripts/showTuple.sh.in
-+description:
-+scripts/showTuple: fix stdout
-+
-+Since we've had the debug shell feature, fd #7 is now used to
-+redirect stderr, while it was previously unused.
-+
-+Use fd #9 to redirect stdout.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+
-+diff --git a/scripts/showTuple.sh.in b/scripts/showTuple.sh.in
-+--- a/scripts/showTuple.sh.in
-++++ b/scripts/showTuple.sh.in
-+@@ -7,7 +7,7 @@
-+ . "${CT_LIB_DIR}/paths.sh"
-+ 
-+ # We'll need the stdout later, save it
-+-exec 7>&1
-++exec 9>&1
-+ 
-+ # Parse the common functions
-+ . "${CT_LIB_DIR}/scripts/functions"
-+@@ -27,4 +27,4 @@
-+ CT_DoBuildTargetTuple
-+ 
-+ # All this for this single echo... :-( Sigh, I'll have to re-arrange things...
-+-echo "${CT_TARGET}" >&7
-++echo "${CT_TARGET}" >&9
-+
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index b87f029..3fb913e 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -15,6 +15,9 @@ GSTREAMER_INSTALL_STAGING = YES
+ ifeq ($(BR2_avr32),y)
+ GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
+ endif
++ifeq ($(BR2_aarch64),y)
++GSTREAMER_CONF_ENV = as_cv_unaligned_access=yes
++endif
+ 
+ GSTREAMER_CONF_OPT = \
+ 		--disable-examples \
