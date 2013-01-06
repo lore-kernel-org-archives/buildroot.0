@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Jan 2013 16:43:03 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
- pre-built-packages
-In-Reply-To: <cover.1356797653.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1356797653.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <20130106164303.390d1235@skate>
+Date: Sun,  6 Jan 2013 17:14:02 +0100
+Subject: [Buildroot] [PATCH] gstreamer: provide necessary config value for
+	AArch64
+Message-ID: <1357488842-22491-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Provide the as_cv_unaligned_access value for the AArch64 architecture.
 
-On Sat, 29 Dec 2012 17:14:47 +0100, Thomas Petazzoni wrote:
+Fixes:
 
-> Recently, we have had a number of users having issues with external
-> toolchains because those are built for 32 bits Linux, and most
-> developers know use 64 bits build machines. The error message such
-> users get so far is very cryptic "Cannot execute cross-compiler".
-> 
-> So, this set of patches adds a small infrastructure in the form of a
-> Kconfig option and a check in dependencies.sh. The Kconfig option
-> allows packages to tell whether they need 32 bits compatibility
-> libraries, and the check in dependencies.sh verifies that those
-> libraries are installed (simply by checking the presence of the 32
-> bits dynamic loader).
-> 
-> Then, all pre-built external toolchains as well as the sam-ba tool are
-> modified to use this mechanism.
-> 
-> As a preliminary patch, all the pre-built external toolchains are
-> changed to be visible only if the host architecture is x86 or x86-64.
+  http://autobuild.buildroot.net/results/5d6d76451a00d79e1bdfe87b6ced61807666cc48/build-end.log
 
-Ping? Any problem with this?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/multimedia/gstreamer/gstreamer.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-Thanks,
-
-Thomas
+diff --git a/package/multimedia/gstreamer/gstreamer.mk b/package/multimedia/gstreamer/gstreamer.mk
+index b87f029..3fb913e 100644
+--- a/package/multimedia/gstreamer/gstreamer.mk
++++ b/package/multimedia/gstreamer/gstreamer.mk
+@@ -15,6 +15,9 @@ GSTREAMER_INSTALL_STAGING = YES
+ ifeq ($(BR2_avr32),y)
+ GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
+ endif
++ifeq ($(BR2_aarch64),y)
++GSTREAMER_CONF_ENV = as_cv_unaligned_access=yes
++endif
+ 
+ GSTREAMER_CONF_OPT = \
+ 		--disable-examples \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
