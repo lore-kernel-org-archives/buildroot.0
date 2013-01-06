@@ -1,37 +1,58 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 22:44:22 +0100
-Subject: [Buildroot] [PATCH] make version update 3.82
-In-Reply-To: <1352464803-23068-1-git-send-email-alexander@mezon.ru> (Alexander
- Khryukin's message of "Fri, 9 Nov 2012 16:40:03 +0400")
-References: <1352464803-23068-1-git-send-email-alexander@mezon.ru>
-Message-ID: <87mwwmc7gp.fsf@dell.be.48ers.dk>
+Date: Sun, 06 Jan 2013 23:02:43 +0100
+Subject: [Buildroot] [PATCH 1/3] libcofi: new package
+In-Reply-To: <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Sun, 6 Jan 2013 21:56:20 +0100")
+References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
+ <cover.1357505417.git.maxime.hadjinlian@gmail.com>
+ <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
+Message-ID: <87ip7ac6m4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexander" == Alexander Khryukin <alexander@mezon.ru> writes:
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
- Alexander> Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
- Alexander> ---
- Alexander>  package/make/make.mk | 2 +-
- Alexander>  1 file changed, 1 insertion(+), 1 deletion(-)
+ Maxime> replacement for memcpy and memset functionality
+ Maxime> This package was originally found at : https://github.com/huceke/buildroot-rbp
+ Maxime> By gimli <ebsi4711@gmail.com>
 
- Alexander> diff --git a/package/make/make.mk b/package/make/make.mk
- Alexander> index 02b2741..cfb53f1 100644
- Alexander> --- a/package/make/make.mk
- Alexander> +++ b/package/make/make.mk
- Alexander> @@ -3,7 +3,7 @@
- Alexander>  # make
- Alexander>  #
- Alexander>  #############################################################
- Alexander> -MAKE_VERSION:=3.81
- Alexander> +MAKE_VERSION:=3.82
+ Maxime> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ Maxime> ---
+ Maxime>  package/Config.in          |    1 +
+ Maxime>  package/libcofi/Config.in  |    8 ++++++++
+ Maxime>  package/libcofi/libcofi.mk |   20 ++++++++++++++++++++
+ Maxime>  3 files changed, 29 insertions(+)
+ Maxime>  create mode 100644 package/libcofi/Config.in
+ Maxime>  create mode 100644 package/libcofi/libcofi.mk
 
-The version bump is fine, but may I ask what you are using make on the
-target for? We have deprecated the target development tools packages and
-plan on removing them soon.
+ Maxime> diff --git a/package/Config.in b/package/Config.in
+ Maxime> index 047af8d..9b50f4b 100644
+ Maxime> --- a/package/Config.in
+ Maxime> +++ b/package/Config.in
+ Maxime> @@ -511,6 +511,7 @@ endmenu
+ Maxime>  menu "Other"
+ Maxime>  source "package/apr/Config.in"
+ Maxime>  source "package/apr-util/Config.in"
+ Maxime> +source "package/libcofi/Config.in"
+ Maxime>  source "package/classpath/Config.in"
+ Maxime>  source "package/fftw/Config.in"
+ Maxime>  source "package/libargtable2/Config.in"
+ Maxime> diff --git a/package/libcofi/Config.in b/package/libcofi/Config.in
+ Maxime> new file mode 100644
+ Maxime> index 0000000..b900b69
+ Maxime> --- /dev/null
+ Maxime> +++ b/package/libcofi/Config.in
+ Maxime> @@ -0,0 +1,8 @@
+ Maxime> +config BR2_PACKAGE_LIBCOFI
+ Maxime> +	bool "libcofi"
+ Maxime> +	depends on BR2_arm
+ Maxime> +	help
+ Maxime> +	  A replacement for memcpy and memset functionality for the Raspberry Pi
+
+I've word wrapped this and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
