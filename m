@@ -1,39 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Jan 2013 13:39:08 +0100
-Subject: [Buildroot] [PATCH] divine: fix divine-config
-In-Reply-To: <20130106083433.GH13545@sapphire.tkos.co.il>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
- <50E6BFE2.2090405@zacarias.com.ar>
- <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
- <50E6E757.10809@zacarias.com.ar>
- <50E6EDB5.9070004@petroprogram.com>
- <20130106054113.GD13545@sapphire.tkos.co.il>
- <CAHXCMM+fy_WvvDgQfYTcyoiHAaSvbPuLv8P5p9em_=RRHMQ8rQ@mail.gmail.com>
- <20130106083433.GH13545@sapphire.tkos.co.il>
-Message-ID: <20130106133908.6223837b@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  6 Jan 2013 14:06:28 +0100
+Subject: [Buildroot] [PATCH] package/crosstool-ng: fix show-tuple stdout
+Message-ID: <1357477588-18425-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Upstream changeset d8bd17248789.
 
-On Sun, 6 Jan 2013 10:34:35 +0200, Baruch Siach wrote:
+Reported-by: Floris Bos <bos@je-eigen-domein.nl>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../crosstool-ng-001-fix-showtuple-stdout.patch    |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
 
-> So is local build directories in RPATH currently a fact of life? If so can my 
-> wireshark package (linked above) be merged as is? Peter?
-
-We currently have packages that carry on the target a RPATH to the
-build directory. It is not nice, but harmless since it is highly
-unlikely that this path is going to exist on the target.
-
-Therefore, I wouldn't say that having the build directory as a RPATH in
-the final binary is a show-stopper to get the package included.
-
-Thomas
+diff --git a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
+new file mode 100644
+index 0000000..416ef76
+--- /dev/null
++++ b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
+@@ -0,0 +1,35 @@
++changeset:   3141:d8bd17248789
++tag:         tip
++user:        "Yann E. MORIN" <yann.morin.1998@free.fr>
++date:        Sun Jan 06 12:08:33 2013 +0100
++files:       scripts/showTuple.sh.in
++description:
++scripts/showTuple: fix stdout
++
++Since we've had the debug shell feature, fd #7 is now used to
++redirect stderr, while it was previously unused.
++
++Use fd #9 to redirect stdout.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++
++diff --git a/scripts/showTuple.sh.in b/scripts/showTuple.sh.in
++--- a/scripts/showTuple.sh.in
+++++ b/scripts/showTuple.sh.in
++@@ -7,7 +7,7 @@
++ . "${CT_LIB_DIR}/paths.sh"
++ 
++ # We'll need the stdout later, save it
++-exec 7>&1
+++exec 9>&1
++ 
++ # Parse the common functions
++ . "${CT_LIB_DIR}/scripts/functions"
++@@ -27,4 +27,4 @@
++ CT_DoBuildTargetTuple
++ 
++ # All this for this single echo... :-( Sigh, I'll have to re-arrange things...
++-echo "${CT_TARGET}" >&7
+++echo "${CT_TARGET}" >&9
++
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.5
