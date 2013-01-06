@@ -1,71 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 23:12:22 +0100
-Subject: [Buildroot] [PATCH 3/3] rpi-firmware: New package
-In-Reply-To: <5460810c1bece1a398cf9a97e7ee521d75cf05f2.1357505417.git.maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Sun, 6 Jan 2013 21:56:22 +0100")
-References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
- <cover.1357505417.git.maxime.hadjinlian@gmail.com>
- <5460810c1bece1a398cf9a97e7ee521d75cf05f2.1357505417.git.maxime.hadjinlian@gmail.com>
-Message-ID: <87623ac661.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 Jan 2013 22:56:15 +0100
+Subject: [Buildroot] [git commit] libcofi: new package
+Message-ID: <20130106221238.A1A379A550@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8bc34206c2ed03f24db1ed196a2fb7c5015acfb8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Introducing a package to install pre-built binaries for the bootloader and the
- Maxime> GPU firmware for the RaspberryPi board.
+replacement for memcpy and memset functionality
+This package was originally found at : https://github.com/huceke/buildroot-rbp
+By gimli <ebsi4711@gmail.com>
 
- Maxime> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- Maxime> ---
- Maxime>  package/Config.in                    |    1 +
- Maxime>  package/rpi-firmware/Config.in       |    9 +++++++++
- Maxime>  package/rpi-firmware/config.txt      |   13 +++++++++++++
- Maxime>  package/rpi-firmware/rpi-firmware.mk |   21 +++++++++++++++++++++
- Maxime>  4 files changed, 44 insertions(+)
- Maxime>  create mode 100644 package/rpi-firmware/Config.in
- Maxime>  create mode 100644 package/rpi-firmware/config.txt
- Maxime>  create mode 100644 package/rpi-firmware/rpi-firmware.mk
+[Peter: wrap help text]
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in          |    1 +
+ package/libcofi/Config.in  |    8 ++++++++
+ package/libcofi/libcofi.mk |   20 ++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
- Maxime> diff --git a/package/Config.in b/package/Config.in
- Maxime> index 17205fe..30c39ac 100644
- Maxime> --- a/package/Config.in
- Maxime> +++ b/package/Config.in
- Maxime> @@ -202,6 +202,7 @@ menu "Hardware handling"
- Maxime>  menu "Misc devices firmwares"
- Maxime>  source "package/b43-firmware/Config.in"
- Maxime>  source "package/linux-firmware/Config.in"
- Maxime> +source "package/rpi-firmware/Config.in"
- Maxime>  source "package/ux500-firmware/Config.in"
- Maxime>  source "package/zd1211-firmware/Config.in"
- Maxime>  endmenu
- Maxime> diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
- Maxime> new file mode 100644
- Maxime> index 0000000..5723dea
- Maxime> --- /dev/null
- Maxime> +++ b/package/rpi-firmware/Config.in
- Maxime> @@ -0,0 +1,9 @@
- Maxime> +config BR2_PACKAGE_RPI_FIRMWARE
- Maxime> +	bool "RaspberryPi Firmware"
-
-Same as for userland, I've renamed this to 'rpi-firmware'
-
- Maxime> +++ b/package/rpi-firmware/config.txt
- Maxime> @@ -0,0 +1,13 @@
- Maxime> +# Please note that this is only a sample, we recommend you to change it to fit
- Maxime> +# your needs.
- Maxime> +# You should override this file using a post-build script.
- Maxime> +# See http://buildroot.uclibc.org/downloads/manual/manual.html#rootfs-custom 
-
-Trailing spaces. I've changed it to buildroot.org to have a bit shorter
-URL and added a comment explaining that the config.txt format is
-described at http://elinux.org/RPiconfig
-
-Committed with those changes, thanks.
-
-It would be good to see a rpi_defconfig as well.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index c25ade2..3681dd3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -512,6 +512,7 @@ endmenu
+ menu "Other"
+ source "package/apr/Config.in"
+ source "package/apr-util/Config.in"
++source "package/libcofi/Config.in"
+ source "package/classpath/Config.in"
+ source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+diff --git a/package/libcofi/Config.in b/package/libcofi/Config.in
+new file mode 100644
+index 0000000..e9914d6
+--- /dev/null
++++ b/package/libcofi/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBCOFI
++	bool "libcofi"
++	depends on BR2_arm
++	help
++	  A replacement for memcpy and memset functionality for the
++	  Raspberry Pi with the intention of gaining greater performance.
++
++	  https://github.com/simonjhall/copies-and-fills
+diff --git a/package/libcofi/libcofi.mk b/package/libcofi/libcofi.mk
+new file mode 100644
+index 0000000..e2ce702
+--- /dev/null
++++ b/package/libcofi/libcofi.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# libcofi
++#
++#############################################################
++
++LIBCOFI_VERSION = 7313fbe12b0593034d0a1b606bf33c7cf4ababce
++LIBCOFI_SITE = http://github.com/simonjhall/copies-and-fills/tarball/master
++LIBCOFI_LICENSE = LGPLv2.1
++LIBCOFI_LICENSE_FILES = README.md
++
++define LIBCOFI_BUILD_CMDS
++    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define LIBCOFI_INSTALL_TARGET_CMDS
++    $(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so $(TARGET_DIR)/usr/lib/libcofi_rpi.so
++endef
++
++$(eval $(generic-package))
