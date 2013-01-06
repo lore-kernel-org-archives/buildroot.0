@@ -1,60 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jan 2013 16:22:52 +0100
-Subject: [Buildroot] [PATCH 12/15] elfutils: towards uClibc support: gettext
+Date: Sun,  6 Jan 2013 16:22:54 +0100
+Subject: [Buildroot] [PATCH 14/15] elfutils: towards uClibc support: disable
+	po build
 In-Reply-To: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8ca2d6bdaaafedc9dc20c5e38c91d3b6a7b6faa0.1357485747.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2d302462f56af537d3e358dd73eb8529eaaf6c07.1357485747.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-elfutils is annoying: it needs gettext even if locale support is
-disabled...
+Building the po/ directory complains that the scripts in there have
+been generated with gettext 0.17, while we use gettext 0.18 in
+Buildroot. Since we don't care that much about po files anyway, just
+disable the build of this directory.
 
 Heavily based from work done by Stefan Fr?berg, but with many further
 modifications by Thomas Petazzoni.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/elfutils/Config.in   |    1 +
- package/elfutils/elfutils.mk |   11 +++++++++++
- 2 files changed, 12 insertions(+)
+ package/elfutils/elfutils-05-disable-po.patch |   22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/elfutils/elfutils-05-disable-po.patch
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 5ec4ca9..78d02a5 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_ELFUTILS
- 	       BR2_TOOLCHAIN_BUILDROOT   || \
- 	       BR2_TOOLCHAIN_CTNG_uClibc || \
- 	       BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	depends on BR2_LARGEFILE
- 	help
- 	  Libraries/utilities to handle ELF objects (drop in
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 9f9de52..39407db 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -25,6 +25,17 @@ ELFUTILS_CONF_ENV += \
-         CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
- endif
- 
-+ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
+diff --git a/package/elfutils/elfutils-05-disable-po.patch b/package/elfutils/elfutils-05-disable-po.patch
+new file mode 100644
+index 0000000..d98da0b
+--- /dev/null
++++ b/package/elfutils/elfutils-05-disable-po.patch
+@@ -0,0 +1,22 @@
++Disable the build of the po/ directory
 +
-+# Unconditionnally requires gettext.
-+ifeq ($(BR2_NEEDS_GETTEXT),y)
-+ELFUTILS_DEPENDENCIES += gettext
-+ELFUTILS_LDFLAGS += -lintl
-+endif
++Building the po/ directory complains that the scripts in there have
++been generated with gettext 0.17, while we use gettext 0.18 in
++Buildroot. Since we don't care that much about po files anyway, just
++disable the build of this directory.
 +
-+ELFUTILS_CONF_ENV += \
-+	LDFLAGS="$(ELFUTILS_LDFLAGS)"
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
-  ELFUTILS_DEPENDENCIES += argp-standalone
- endif
++Index: b/Makefile.am
++===================================================================
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -28,7 +28,7 @@
++ 
++ # Add doc back when we have some real content.
++ SUBDIRS = config m4 lib libelf libebl libdwfl libdw libcpu libasm backends \
++-	  $(PROGS_SUBDIR) po tests
+++	  $(PROGS_SUBDIR) tests
++ 
++ EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
++ 	     COPYING COPYING-GPLV2 COPYING-LGPLV3
 -- 
 1.7.9.5
