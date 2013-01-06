@@ -1,62 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Jan 2013 14:06:28 +0100
-Subject: [Buildroot] [PATCH] package/crosstool-ng: fix show-tuple stdout
-Message-ID: <1357477588-18425-1-git-send-email-yann.morin.1998@free.fr>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sun, 06 Jan 2013 14:50:23 +0100
+Subject: [Buildroot] [PATCH 2/3] rpi-userland: new package
+In-Reply-To: <CAGduivz8-7irbuvtzp_+G4p+jGNDVfUq762KDXmi9_hJL6ckPA@mail.gmail.com>
+References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
+ <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
+ <50E8E0DC.1010206@je-eigen-domein.nl>
+ <CAGduivz8-7irbuvtzp_+G4p+jGNDVfUq762KDXmi9_hJL6ckPA@mail.gmail.com>
+Message-ID: <50E9811F.3020700@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream changeset d8bd17248789.
+On 01/06/2013 11:28 AM, Maxime Hadjinlian wrote:
+> >rpi-userland does not build with the default buildroot uClibc toolchain.
+> Thanks, I builded using eglibc at the moment.
+> Could you push your patch upstream so we won't need to have it ?
 
-Reported-by: Floris Bos <bos@je-eigen-domein.nl>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- .../crosstool-ng-001-fix-showtuple-stdout.patch    |   35 ++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
- create mode 100644 package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
+Send a pull request to upstream a month ago, but did not receive any 
+response.
 
-diff --git a/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-new file mode 100644
-index 0000000..416ef76
---- /dev/null
-+++ b/package/crosstool-ng/crosstool-ng-001-fix-showtuple-stdout.patch
-@@ -0,0 +1,35 @@
-+changeset:   3141:d8bd17248789
-+tag:         tip
-+user:        "Yann E. MORIN" <yann.morin.1998@free.fr>
-+date:        Sun Jan 06 12:08:33 2013 +0100
-+files:       scripts/showTuple.sh.in
-+description:
-+scripts/showTuple: fix stdout
-+
-+Since we've had the debug shell feature, fd #7 is now used to
-+redirect stderr, while it was previously unused.
-+
-+Use fd #9 to redirect stdout.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+
-+diff --git a/scripts/showTuple.sh.in b/scripts/showTuple.sh.in
-+--- a/scripts/showTuple.sh.in
-++++ b/scripts/showTuple.sh.in
-+@@ -7,7 +7,7 @@
-+ . "${CT_LIB_DIR}/paths.sh"
-+ 
-+ # We'll need the stdout later, save it
-+-exec 7>&1
-++exec 9>&1
-+ 
-+ # Parse the common functions
-+ . "${CT_LIB_DIR}/scripts/functions"
-+@@ -27,4 +27,4 @@
-+ CT_DoBuildTargetTuple
-+ 
-+ # All this for this single echo... :-( Sigh, I'll have to re-arrange things...
-+-echo "${CT_TARGET}" >&7
-++echo "${CT_TARGET}" >&9
-+
--- 
-1.7.2.5
+https://github.com/raspberrypi/userland/pull/7
+
+
+Yours sincerely,
+
+Floris Bos
