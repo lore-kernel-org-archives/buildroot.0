@@ -1,50 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 6 Jan 2013 10:34:35 +0200
-Subject: [Buildroot] [PATCH] divine: fix divine-config
-In-Reply-To: <CAHXCMM+fy_WvvDgQfYTcyoiHAaSvbPuLv8P5p9em_=RRHMQ8rQ@mail.gmail.com>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
- <50E6BFE2.2090405@zacarias.com.ar>
- <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
- <50E6E757.10809@zacarias.com.ar>
- <50E6EDB5.9070004@petroprogram.com>
- <20130106054113.GD13545@sapphire.tkos.co.il>
- <CAHXCMM+fy_WvvDgQfYTcyoiHAaSvbPuLv8P5p9em_=RRHMQ8rQ@mail.gmail.com>
-Message-ID: <20130106083433.GH13545@sapphire.tkos.co.il>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 Jan 2013 11:16:23 +0100
+Subject: [Buildroot] [git commit] package: fixup after pthred-stubs rename
+Message-ID: <20130106101746.509719A5E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+commit: http://git.buildroot.net/buildroot/commit/?id=698cd0a0f401b55553766b6effe5dcc2895d4e3c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jan 06, 2013 at 09:27:19AM +0100, Samuel Martin wrote:
-> 2013/1/6 Baruch Siach <baruch@tkos.co.il>:
-> [...]
-> >
-> > Good to see work on wireshark. Did you fix the RPATH problem I encountered
-> > while trying to build tshark
-> > (http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/48053) ?
-> What do you mean by local build path? Paths to some build directories?
+Commit 5bd41d165 (pthread-stubs: rename to xlib_libpthread-stubs) renamed
+the pthread-stubs package but forgot to update the select statements.
 
-Yes.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libdrm/Config.in       |    2 +-
+ package/x11r7/libxcb/Config.in |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> I've already done some work on this, but I lack some time to rebase,
-> cleanup and submit :-/ (hope, I can switch back on it soon...)
-> 
-> If you'd like to have a look at it:
-> https://github.com/tSed/buildroot/commits/sma/rpath-cleanup
-> 
-> especially these commits:
-> 7e74622b02177063c4326aed6345e7920772b44b
-> dbfec772a6b95e51427ebd58f301f2f4ad30296e
-
-So is local build directories in RPATH currently a fact of life? If so can my 
-wireshark package (linked above) be merged as is? Peter?
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index f3dab9a..f1c3358 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_XLIB_LIBXXF86VM
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO
+-	select BR2_PACKAGE_PTHREAD_STUBS
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+ 	# libatomic_ops is only available on a subset of the supported
+ 	# architectures, and we make the assumption that the intel
+ 	# driver can only be used on x86 and x86_64 machines.
+diff --git a/package/x11r7/libxcb/Config.in b/package/x11r7/libxcb/Config.in
+index 9554529..1e1afb4 100644
+--- a/package/x11r7/libxcb/Config.in
++++ b/package/x11r7/libxcb/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBXCB
+ 	bool "libxcb"
+-	select BR2_PACKAGE_PTHREAD_STUBS
++	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
+ 	select BR2_PACKAGE_XCB_PROTO
+ 	select BR2_PACKAGE_XLIB_LIBXDMCP
+ 	select BR2_PACKAGE_XLIB_LIBXAU
