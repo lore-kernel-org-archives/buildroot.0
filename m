@@ -1,145 +1,100 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 Jan 2013 22:33:28 +0100
-Subject: [Buildroot] [git commit] nspr version update 4.9.2 old patch removed
-Message-ID: <20130106221238.856B49A5E5@busybox.osuosl.org>
+Date: Sun, 6 Jan 2013 23:01:50 +0100
+Subject: [Buildroot] [git commit] rpi-firmware: New package
+Message-ID: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94d33410b2ca2b7cf3ce2600d308780326814e20
+commit: http://git.buildroot.net/buildroot/commit/?id=2f511fe31229ab9fd2182aa0ebda0ecf205ab12b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: upstream now provides nspr.pc]
-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+Introducing a package to install pre-built binaries for the bootloader and
+the GPU firmware for the RaspberryPi board.
+
+[Peter: rename to rpi-firmware, add link to http://elinux.org/RPiconfig]
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libnspr/libnspr-fix-flags.patch |   65 -------------------------------
- package/libnspr/libnspr.mk              |   18 +--------
- package/libnspr/nspr.pc.in              |   10 -----
- 3 files changed, 1 insertions(+), 92 deletions(-)
+ package/Config.in                    |    1 +
+ package/rpi-firmware/Config.in       |    9 +++++++++
+ package/rpi-firmware/config.txt      |   14 ++++++++++++++
+ package/rpi-firmware/rpi-firmware.mk |   21 +++++++++++++++++++++
+ 4 files changed, 45 insertions(+), 0 deletions(-)
 
-diff --git a/package/libnspr/libnspr-fix-flags.patch b/package/libnspr/libnspr-fix-flags.patch
-deleted file mode 100644
-index d5ad4fa..0000000
---- a/package/libnspr/libnspr-fix-flags.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--Fix build issues on ARM with certain toolchains
--
--Some gcc/binutils combinations do not like having a space between
--"-Wa," and the following assembler option, so we simply remove those
--spaces.
--
--However, fixing the configure.in is not sufficient, because libnspr
--absolutely requires the prehistoric autoconf 2.13 to re-generate the
--configure script. So, since the patch to the configure script is not
--horrible, we also patch this script directly.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/mozilla/nsprpub/configure.in
--===================================================================
----- a/mozilla/nsprpub/configure.in
--+++ b/mozilla/nsprpub/configure.in
--@@ -925,8 +925,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
---        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
--+        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--+        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--         ASFLAGS="$ASFLAGS -march=armv7-a -mthumb"
--       else
--         AC_MSG_ERROR([--enable-thumb2 is not supported for non-GNU toolchains])
--@@ -940,8 +940,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
---        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
--+       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--+        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--         ASFLAGS="$ASFLAGS -march=armv5te -mthumb-interwork"
--       fi
--       ;;
--Index: b/mozilla/nsprpub/configure
--===================================================================
----- a/mozilla/nsprpub/configure
--+++ b/mozilla/nsprpub/configure
--@@ -3101,8 +3101,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
---        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa, -march=armv7-a -Wa, -mthumb"
--+        CFLAGS="$CFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--+        CXXFLAGS="$CXXFLAGS -march=armv7-a -mthumb -Wa,-march=armv7-a -Wa,-mthumb"
--         ASFLAGS="$ASFLAGS -march=armv7-a -mthumb"
--       else
--         { echo "configure: error: --enable-thumb2 is not supported for non-GNU toolchains" 1>&2; exit 1; }
--@@ -3116,8 +3116,8 @@
--   case "$target_cpu" in
--     arm*)
--       if test "$GNU_CC"; then
---       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
---        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa, -march=armv5te -Wa, -mthumb-interwork"
--+       CFLAGS="$CFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--+        CXXFLAGS="$CXXFLAGS -march=armv5te -mthumb-interwork -Wa,-march=armv5te -Wa,-mthumb-interwork"
--         ASFLAGS="$ASFLAGS -march=armv5te -mthumb-interwork"
--       fi
--       ;;
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 590a755..d7ea4b3 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -3,7 +3,7 @@
- # libnspr
- #
- #############################################################
--LIBNSPR_VERSION = 4.8.7
-+LIBNSPR_VERSION = 4.9.2
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
- LIBNSPR_SUBDIR = mozilla/nsprpub
-@@ -22,22 +22,6 @@ else
- LIBNSPR_CONF_OPT += --disable-thumb2
- endif
- 
--define LIBNSPR_INSTALL_STAGING_PC
--	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnspr/nspr.pc.in \
--		$(STAGING_DIR)/usr/lib/pkgconfig/nspr.pc
--	$(SED) 's/@VERSION@/$(LIBNSPR_VERSION)/g;' \
--		$(STAGING_DIR)/usr/lib/pkgconfig/nspr.pc
--endef
--LIBNSPR_POST_INSTALL_STAGING_HOOKS += LIBNSPR_INSTALL_STAGING_PC
--
--define LIBNSPR_INSTALL_TARGET_PC
--	$(INSTALL) -D -m 0644 $(TOPDIR)/package/libnspr/nspr.pc.in \
--		$(TARGET_DIR)/usr/lib/pkgconfig/nspr.pc
--	$(SED) 's/@VERSION@/$(LIBNSPR_VERSION)/g;' \
--		$(TARGET_DIR)/usr/lib/pkgconfig/nspr.pc
--endef
--LIBNSPR_POST_INSTALL_TARGET_HOOKS += LIBNSPR_INSTALL_TARGET_PC
--
- define LIBNSPR_STAGING_LIBNSPR_CONFIG_FIXUP
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
- 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
-diff --git a/package/libnspr/nspr.pc.in b/package/libnspr/nspr.pc.in
-deleted file mode 100644
-index 44873d2..0000000
---- a/package/libnspr/nspr.pc.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--prefix=/usr
--exec_prefix=${prefix}
--libdir=${exec_prefix}/lib
--includedir=${prefix}/include/nspr
--
--Name: NSPR
--Description: The Netscape Portable Runtime
--Version: @VERSION@
--Libs: -L${exec_prefix}/lib -lplds4 -lplc4 -lnspr4 -lpthread -ldl
--Cflags: -I${prefix}/include/nspr
+diff --git a/package/Config.in b/package/Config.in
+index 69bc254..11e6f3a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -202,6 +202,7 @@ menu "Hardware handling"
+ menu "Misc devices firmwares"
+ source "package/b43-firmware/Config.in"
+ source "package/linux-firmware/Config.in"
++source "package/rpi-firmware/Config.in"
+ source "package/ux500-firmware/Config.in"
+ source "package/zd1211-firmware/Config.in"
+ endmenu
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+new file mode 100644
+index 0000000..eb10a8a
+--- /dev/null
++++ b/package/rpi-firmware/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_RPI_FIRMWARE
++	bool "rpi-firmware"
++	depends on BR2_arm
++	help
++	  RaspberryPi Firmware
++	  Pre-compiled binaries of the current bootloader and GPU firmware
++
++	  https://github.com/raspberrypi/firmware
++
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+new file mode 100644
+index 0000000..2cabd68
+--- /dev/null
++++ b/package/rpi-firmware/config.txt
+@@ -0,0 +1,14 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using a post-build script.
++# See http://buildroot.org/downloads/manual/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++arm_freq=700
++core_freq=250
++disable_overscan=1
++gpu_mem_256=100
++gpu_mem_512=100
++sdram_freq=400
++over_voltage=0
++cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+new file mode 100644
+index 0000000..5a65e34
+--- /dev/null
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# rpi-firmware
++#
++#############################################################
++
++RPI_FIRMWARE_VERSION = 76d0ac38f16b6343c6155c80db1e4758b3a5838a
++RPI_FIRMWARE_SITE = http://github.com/raspberrypi/firmware/tarball/master
++RPI_FIRMWARE_LICENSE = BSD-3c
++RPI_FIRMWARE_LICENSE_FILE = boot/LICENCE.broadcom
++
++define RPI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
++	$(INSTALL) -D -m 0644 $(@D)/boot/start.elf $(BINARIES_DIR)/rpi-firmware/start.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/start_cd.elf $(BINARIES_DIR)/rpi-firmware/start_cd.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup.dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup_cd.dat $(BINARIES_DIR)/rpi-firmware/fixup_cd.dat
++	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
++endef
++
++$(eval $(generic-package))
