@@ -1,29 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 21:17:56 +0100
-Subject: [Buildroot] [PATCH] pacakge/tvheadend: fix failures due to
-	-Werror
-In-Reply-To: <1357425633-11040-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 5 Jan 2013 23:40:33 +0100")
-References: <1357425633-11040-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87r4lyf4ln.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Jan 2013 21:26:55 +0100
+Subject: [Buildroot] [PATCH 1/3] libcofi: new package
+In-Reply-To: <323f2db72c57aff2b31b2b7a5eb7f06d74775eda.1357426077.git.maxime.hadjinlian@gmail.com>
+References: <cover.1357426077.git.maxime.hadjinlian@gmail.com>
+ <323f2db72c57aff2b31b2b7a5eb7f06d74775eda.1357426077.git.maxime.hadjinlian@gmail.com>
+Message-ID: <20130106212655.78c04f0d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Maxime Hadjinlian,
 
- Yann> (Partially) apply upstream patch 1334869bf0ea668e58e1c72daa3c09c1a95b5d81
- Yann> to properly protect code-paths depending on execinfo.h (for backtrace(3)).
+On Sat,  5 Jan 2013 23:55:14 +0100, Maxime Hadjinlian wrote:
+> diff --git a/package/libcofi/libcofi.mk b/package/libcofi/libcofi.mk
+> new file mode 100644
+> index 0000000..4872d1c
+> --- /dev/null
+> +++ b/package/libcofi/libcofi.mk
+> @@ -0,0 +1,17 @@
+> +#############################################################
+> +#
+> +# libcofi
+> +#
+> +#############################################################
+> +LIBCOFI_VERSION = 7313fbe12b0593034d0a1b606bf33c7cf4ababce
 
- Yann> Fixes:
- Yann>     http://autobuild.buildroot.net/results/fe25485bde8894daff5bdf806eb4bb2fa776dc55/
+One new line between the first variable line and the #### line.
 
- Yann> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- Yann> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> +LIBCOFI_SITE = http://github.com/simonjhall/copies-and-fills/tarball/master
 
-Committed, thanks.
+LIBCOFI_LICENSE ?
 
+> +define LIBCOFI_BUILD_CMDS
+> +    $(MAKE1) AS="$(TARGET_AS)" CC="$(TARGET_CC)" -C $(@D) libcofi_rpi.so
+> +endef
+
+Seeing the Makefile, I don't see any obvious dependency problem, so I
+guess you could use $(MAKE) instead of $(MAKE1).
+
+Also, please use $(TARGET_CONFIGURE_OPTS). And you don't need to
+specify the libcofi_rpi.so target since this is the first target of the
+Makefile (and hence the default one). So:
+
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+
+> +define LIBCOFI_INSTALL_TARGET_CMDS
+> +    $(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so* $(TARGET_DIR)/usr/lib
+> +endef
+
+Only libcofi_rpi.so is built, so:
+
+	$(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so $(TARGET_DIR)/usr/lib/libcofi_rpi.so
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
