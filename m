@@ -1,50 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jan 2013 22:29:25 +0100
-Subject: [Buildroot] [PATCH 13/28] cairo: do not depend on
-	xserver-xorg_server, but on the right library
+Date: Sun,  6 Jan 2013 22:29:27 +0100
+Subject: [Buildroot] [PATCH 15/28] docker: depend on xlib_libX11 and not the
+	X.org server
 In-Reply-To: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d47c9dfcd7cb9ea156e84cc5493e0b1ef075215d.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3c27991f0c7b1542999f41169a8d968f33c84768.1357507764.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cairo is a X client library, so there is no reason for it to build
-depend on the X.org server. What Cairo needs is the xlib_libX11
-library.
+docker is a X client application, so it doesn't make sense to depend
+on the X.org server. An inspection of docker Makefile and source code
+shows that it only needs the libX11 library, so we replace the X.org
+server dependency by a libX11 dependency.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/Config.in |    1 +
- package/cairo/cairo.mk  |    2 +-
+ package/docker/Config.in |    1 +
+ package/docker/docker.mk |    2 +-
  2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 398e47f..4a2078e 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_CAIRO
- 	bool "cairo"
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+diff --git a/package/docker/Config.in b/package/docker/Config.in
+index 75bf5be..f07739a 100644
+--- a/package/docker/Config.in
++++ b/package/docker/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_WCHAR # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_XLIB_LIBX11
  	help
- 	  Cairo is a 2D graphics library with support for multiple
- 	  output devices. Currently supported output targets include
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 59a032a..41e876a 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -49,7 +49,7 @@ endif
+ 	  a system tray dock for X
  
- ifeq ($(BR2_PACKAGE_XORG7),y)
- 	CAIRO_CONF_OPT += --enable-xlib --with-x
--	CAIRO_DEPENDENCIES += xserver_xorg-server
-+	CAIRO_DEPENDENCIES += xlib_libX11
- else
- 	CAIRO_CONF_OPT += --disable-xlib --without-x
- endif
+diff --git a/package/docker/docker.mk b/package/docker/docker.mk
+index 95799e8..b452386 100644
+--- a/package/docker/docker.mk
++++ b/package/docker/docker.mk
+@@ -16,6 +16,6 @@ DOCKER_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" \
+ 
+ DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
+ 
+-DOCKER_DEPENDENCIES = host-pkgconf libglib2 xserver_xorg-server
++DOCKER_DEPENDENCIES = host-pkgconf libglib2 xlib_libX11
+ 
+ $(eval $(autotools-package))
 -- 
 1.7.9.5
