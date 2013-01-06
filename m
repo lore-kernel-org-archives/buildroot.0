@@ -1,47 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 Jan 2013 11:16:23 +0100
-Subject: [Buildroot] [git commit] package: fixup after pthred-stubs rename
-Message-ID: <20130106101746.509719A5E9@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 6 Jan 2013 11:28:24 +0100
+Subject: [Buildroot] [PATCH 2/3] rpi-userland: new package
+In-Reply-To: <50E8E0DC.1010206@je-eigen-domein.nl>
+References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
+ <0e55a309b9f4a9b8ee175d301d40e7574e9227b0.1357394983.git.maxime.hadjinlian@gmail.com>
+ <50E8E0DC.1010206@je-eigen-domein.nl>
+Message-ID: <CAGduivz8-7irbuvtzp_+G4p+jGNDVfUq762KDXmi9_hJL6ckPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=698cd0a0f401b55553766b6effe5dcc2895d4e3c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Commit 5bd41d165 (pthread-stubs: rename to xlib_libpthread-stubs) renamed
-the pthread-stubs package but forgot to update the select statements.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libdrm/Config.in       |    2 +-
- package/x11r7/libxcb/Config.in |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index f3dab9a..f1c3358 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_XLIB_LIBXXF86VM
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO
--	select BR2_PACKAGE_PTHREAD_STUBS
-+	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
- 	# libatomic_ops is only available on a subset of the supported
- 	# architectures, and we make the assumption that the intel
- 	# driver can only be used on x86 and x86_64 machines.
-diff --git a/package/x11r7/libxcb/Config.in b/package/x11r7/libxcb/Config.in
-index 9554529..1e1afb4 100644
---- a/package/x11r7/libxcb/Config.in
-+++ b/package/x11r7/libxcb/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBXCB
- 	bool "libxcb"
--	select BR2_PACKAGE_PTHREAD_STUBS
-+	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
- 	select BR2_PACKAGE_XCB_PROTO
- 	select BR2_PACKAGE_XLIB_LIBXDMCP
- 	select BR2_PACKAGE_XLIB_LIBXAU
+On Sun, Jan 6, 2013 at 3:26 AM, Floris Bos <bos@je-eigen-domein.nl> wrote:
+> On 01/05/2013 03:10 PM, Maxime Hadjinlian wrote:
+>>
+>> Introducing a package to build the userland part of the Raspberry,
+>> needed by anyone who would want to build a rootfs for a RaspberryPi.
+>
+>
+> rpi-userland does not build with the default buildroot uClibc toolchain.
+>
+> ==
+> [ 25%]
+> /hdd/max/dev/tmp/buildroot/output/build/rpi-userland-9852ce28826889e50c4d6786b942f51bccccac54/interface/vcos/glibc/vcos_backtrace.c:30:22:
+> fatal error: execinfo.h: No such file or directory
+> ==
+>
+> Ran into the same issue a while back.
+> You can borrow my patch:
+> https://github.com/maxnet/userland/commit/93ae1bcd8005216baf7361ba860b53a2cf2e0401
+>
+Thanks, I builded using eglibc at the moment.
+Could you push your patch upstream so we won't need to have it ?
+>
+>
+> Yours sincerely,
+>
+> Floris Bos
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
