@@ -1,79 +1,71 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  6 Jan 2013 21:56:20 +0100
-Subject: [Buildroot] [PATCH 1/3] libcofi: new package
-In-Reply-To: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
-References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
-Message-ID: <ca62bc23d6fea2e485408cce7bfdf1835a4bfb15.1357505417.git.maxime.hadjinlian@gmail.com>
+Date: Sun,  6 Jan 2013 21:56:19 +0100
+Subject: [Buildroot] [pull request] Pull request for branch rpi-support
+Message-ID: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-replacement for memcpy and memset functionality
-This package was originally found at : https://github.com/huceke/buildroot-rbp
-By gimli <ebsi4711@gmail.com>
+Hello All!
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/Config.in          |    1 +
- package/libcofi/Config.in  |    8 ++++++++
- package/libcofi/libcofi.mk |   20 ++++++++++++++++++++
- 3 files changed, 29 insertions(+)
+Version 3 of this series regarding the support of the RaspberryPi board.
+
+    - libcofi :
+        - License added
+        - Fixes of the make option
+        - Fixes of the install
+    - rpi-userland :
+        - Added a patch from Floris Bos so the userland could compile with
+        uClibc
+        - Added the dependency to BR2_INSTALL_LIBSTDCPP and BR2_LARGEFILE
+    - rpi-firmware :
+        - Getting rid of the cmdline.txt files
+        - Add the cmline in config.txt along with a comment encouraging the user
+        to create its own config.txt
+        - Moving all results in BINARIES_DIR instead of TARGET_DIR
+
+The following changes since commit 4ec970246547dce915aaeff8394a3b0303a205db:
+
+  sam-ba: select BR2_HOSTARCH_NEEDS_IA32_LIBS (2013-01-06 21:37:40 +0100)
+
+are available in the git repository at:
+
+  http://github.com/maximeh/buildroot.git rpi-support
+
+for you to fetch changes up to 5460810c1bece1a398cf9a97e7ee521d75cf05f2:
+
+  rpi-firmware: New package (2013-01-06 21:49:27 +0100)
+
+----------------------------------------------------------------
+Maxime Hadjinlian (3):
+      libcofi: new package
+      rpi-userland: new package
+      rpi-firmware: New package
+
+ package/Config.in                                  |    3 +
+ package/libcofi/Config.in                          |    8 +++
+ package/libcofi/libcofi.mk                         |   20 ++++++
+ package/rpi-firmware/Config.in                     |    9 +++
+ package/rpi-firmware/config.txt                    |   13 ++++
+ package/rpi-firmware/rpi-firmware.mk               |   21 ++++++
+ package/rpi-userland/Config.in                     |   18 +++++
+ ...0002-Test-for-the-existence-of-execinfo-h.patch |   69 ++++++++++++++++++++
+ ...make-vmcs.cmake-allow-to-override-VMCS_IN.patch |   26 ++++++++
+ package/rpi-userland/rpi-userland.mk               |   20 ++++++
+ 10 files changed, 207 insertions(+)
  create mode 100644 package/libcofi/Config.in
  create mode 100644 package/libcofi/libcofi.mk
+ create mode 100644 package/rpi-firmware/Config.in
+ create mode 100644 package/rpi-firmware/config.txt
+ create mode 100644 package/rpi-firmware/rpi-firmware.mk
+ create mode 100644 package/rpi-userland/Config.in
+ create mode 100644 package/rpi-userland/rpi-userland-0002-Test-for-the-existence-of-execinfo-h.patch
+ create mode 100644 package/rpi-userland/rpi-userland-makefiles-0001-cmake-vmcs.cmake-allow-to-override-VMCS_IN.patch
+ create mode 100644 package/rpi-userland/rpi-userland.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 047af8d..9b50f4b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -511,6 +511,7 @@ endmenu
- menu "Other"
- source "package/apr/Config.in"
- source "package/apr-util/Config.in"
-+source "package/libcofi/Config.in"
- source "package/classpath/Config.in"
- source "package/fftw/Config.in"
- source "package/libargtable2/Config.in"
-diff --git a/package/libcofi/Config.in b/package/libcofi/Config.in
-new file mode 100644
-index 0000000..b900b69
---- /dev/null
-+++ b/package/libcofi/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBCOFI
-+	bool "libcofi"
-+	depends on BR2_arm
-+	help
-+	  A replacement for memcpy and memset functionality for the Raspberry Pi
-+	  with the intention of gaining greater performance.
-+
-+	  https://github.com/simonjhall/copies-and-fills
-diff --git a/package/libcofi/libcofi.mk b/package/libcofi/libcofi.mk
-new file mode 100644
-index 0000000..e2ce702
---- /dev/null
-+++ b/package/libcofi/libcofi.mk
-@@ -0,0 +1,20 @@
-+#############################################################
-+#
-+# libcofi
-+#
-+#############################################################
-+
-+LIBCOFI_VERSION = 7313fbe12b0593034d0a1b606bf33c7cf4ababce
-+LIBCOFI_SITE = http://github.com/simonjhall/copies-and-fills/tarball/master
-+LIBCOFI_LICENSE = LGPLv2.1
-+LIBCOFI_LICENSE_FILES = README.md
-+
-+define LIBCOFI_BUILD_CMDS
-+    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define LIBCOFI_INSTALL_TARGET_CMDS
-+    $(INSTALL) -D -m 0755 $(@D)/libcofi_rpi.so $(TARGET_DIR)/usr/lib/libcofi_rpi.so
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.10.4
+Regards,
+Maxime Hadjinlian
+
+--
