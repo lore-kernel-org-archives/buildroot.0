@@ -1,49 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 Jan 2013 15:26:04 +0100
-Subject: [Buildroot] [PATCH 3/3] rpi-fw: New package
-In-Reply-To: <50E8E406.60407@je-eigen-domein.nl> (Floris Bos's message of
- "Sun, 06 Jan 2013 03:40:06 +0100")
-References: <cover.1357394983.git.maxime.hadjinlian@gmail.com>
- <0a82214a34f519691ff795260820907a7a8b4cfc.1357394983.git.maxime.hadjinlian@gmail.com>
- <50E8E406.60407@je-eigen-domein.nl>
-Message-ID: <87d2xigzgj.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Jan 2013 15:41:52 +0100
+Subject: [Buildroot] [PATCH] Fix installation of crosstool-ng libraries
+ to target
+In-Reply-To: <201301061229.18437.yann.morin.1998@free.fr>
+References: <1357449105-14780-1-git-send-email-bos@je-eigen-domein.nl>
+ <201301061206.37057.yann.morin.1998@free.fr>
+ <87hamuh8by.fsf@dell.be.48ers.dk>
+ <201301061229.18437.yann.morin.1998@free.fr>
+Message-ID: <20130106154152.123e9eef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Floris" == Floris Bos <bos@je-eigen-domein.nl> writes:
+Dear Yann E. MORIN,
 
-Hi,
+On Sun, 6 Jan 2013 12:29:18 +0100, Yann E. MORIN wrote:
 
- Floris> Fails to install.
- Floris> You need to create the target/boot directory first.
+> It also means that people seldom use the ct-ng backend, and people either
+> use the internal backend, or external toolchains. So, a couple of questions:
+>   - should we finally switch over to using the ct-ng backend by default?
+>   - is it worth maintaing the ct-ng backend at all?
 
- Floris> ==
+As far as autobuilders are concerned, the ct-ng backend is tested, but
+this bug was apparently not breaking the build, but only the execution.
+Therefore, it was not detected by the autobuilders.
 
- Floris> /usr/bin/install -D -m 0644
- Floris> /hdd/max/dev/tmp/buildroot/output/build/rpi-fw-76d0ac38f16b6343c6155c80db1e4758b3a5838a/boot/bootcode.bin
- Floris> /hdd/max/dev/tmp/buildroot/output/target/boot/
- Floris> /usr/bin/install: target
- Floris> /hdd/max/dev/tmp/buildroot/output/target/boot/' is not a directory: No
- Floris> such file or directory
- Floris> make: ***
- Floris> [/hdd/max/dev/tmp/buildroot/output/build/rpi-fw-76d0ac38f16b6343c6155c80db1e4758b3a5838a/.stamp_target_installed]
- Floris> Error 1
- Floris> ==
-
-That's the point of using install -D (create dest dirs as needed), but
-you need to provide it with the destination file name as well - E.G
-$(TARGET_DIR)/boot/bootcode.bin
-
- Floris> But another question would be if bootloader files really should be
- Floris> installed under target.
- Floris> Keep in mind that the Raspberry Pi boot files are normally kept on a
- Floris> FAT partition seperate from the root file system.
-
-Indeed, it probably makes more sense to just put it in IMAGES_DIR
-instead.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
