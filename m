@@ -1,42 +1,114 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 Jan 2013 09:11:44 +0100
-Subject: [Buildroot] [git commit] libnspr: only pass --{enable,
-	disable}-thumb2 on ARM
-Message-ID: <20130107081309.41C229A684@busybox.osuosl.org>
+From: Richard Braun <rbraun@sceen.net>
+Date: Mon,  7 Jan 2013 10:20:12 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/tzdata: new package
+In-Reply-To: <87mwwolkdx.fsf@dell.be.48ers.dk>
+References: <87mwwolkdx.fsf@dell.be.48ers.dk>
+Message-ID: <1357550412-25660-1-git-send-email-rbraun@sceen.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13a9fc901f637a1534baa4f08322f3b29ba66b0d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This is the time zone database, used by glibc for translations between
+UTC and local time.
 
-Fixes http://autobuild.buildroot.net/results/dff3f851ee4c62067a0b231c683383ce8692b8b3
-
-libnspr adds -marm to CFLAGS when passed --disable-thumb2, which is only
-recognized by ARM cross compilers, so only use when building for ARM.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Richard Braun <rbraun@sceen.net>
 ---
- package/libnspr/libnspr.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/Config.in        |    1 +
+ package/tzdata/Config.in |   20 ++++++++++++++++++++
+ package/tzdata/tzdata.mk |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 65 insertions(+), 0 deletions(-)
+ create mode 100644 package/tzdata/Config.in
+ create mode 100644 package/tzdata/tzdata.mk
 
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index d7ea4b3..a5307fa 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -16,11 +16,13 @@ LIBNSPR_CONF_OPT  = --host=$(GNU_HOST_NAME)
- LIBNSPR_CONF_OPT += --$(if $(BR2_ARCH_IS_64),en,dis)able-64bit
- LIBNSPR_CONF_OPT += --$(if $(BR2_INET_IPV6),en,dis)able-ipv6
+diff --git a/package/Config.in b/package/Config.in
+index 11e6f3a..75a64af 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -545,6 +545,7 @@ source "package/protobuf/Config.in"
+ source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+ source "package/liblog4c-localtime/Config.in"
++source "package/tzdata/Config.in"
+ endmenu
  
-+ifeq ($(BR2_arm),y)
- ifeq ($(BR2_cortex_a8)$(BR2_cortex_a9),y)
- LIBNSPR_CONF_OPT += --enable-thumb2
- else
- LIBNSPR_CONF_OPT += --disable-thumb2
- endif
+ menu "Text and terminal handling"
+diff --git a/package/tzdata/Config.in b/package/tzdata/Config.in
+new file mode 100644
+index 0000000..4e68a97
+--- /dev/null
++++ b/package/tzdata/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_TZDATA
++	bool "tzdata"
++	depends on BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_glibc
++	help
++	  Time zone database
++
++	  http://www.iana.org/time-zones/repository/tz-link.html
++
++config BR2_PACKAGE_TZDATA_ZONELIST
++	string "Time zone list"
++	depends on BR2_PACKAGE_TZDATA
++	default "default"
++	help
++	  Space-separated list of time zones to compile.
++
++	  The value "default" includes all commonly used time zones. Note
++	  that this set consumes around 5.5M.
++
++	  The full list is the list of files in the time zone database source,
++	  not including the build and .tab files.
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+new file mode 100644
+index 0000000..5bcee85
+--- /dev/null
++++ b/package/tzdata/tzdata.mk
+@@ -0,0 +1,44 @@
++#############################################################
++#
++# tzdata
++#
++#############################################################
++
++TZDATA_VERSION = 2012j
++TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
++TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
++TZDATA_DEPENDENCIES = host-zic
++TZDATA_LICENSE = Public domain
++
++TZDATA_ZIC = $(HOST_DIR)/usr/sbin/zic
++TZDATA_DEFAULT_ZONELIST = africa antarctica asia australasia backward etcetera \
++			europe factory northamerica pacificnew southamerica
++
++ifeq ($(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST)),default)
++TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
++else
++TZDATA_ZONELIST = $(call qstrip,$(BR2_PACKAGE_TZDATA_ZONELIST))
 +endif
- 
- define LIBNSPR_STAGING_LIBNSPR_CONFIG_FIXUP
- 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
++
++# Don't strip any path components during extraction.
++define TZDATA_EXTRACT_CMDS
++	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
++		| $(TAR) --strip-components=0 -C $(@D) -xf -
++endef
++
++define TZDATA_BUILD_CMDS
++	(cd $(@D); \
++		for zone in $(TZDATA_ZONELIST); do \
++			$(TZDATA_ZIC) -d _output -y yearistype.sh $$zone; \
++			$(TZDATA_ZIC) -d _output/posix -y yearistype.sh $$zone; \
++			$(TZDATA_ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
++		done; \
++	)
++endef
++
++define TZDATA_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
++	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.2.5
