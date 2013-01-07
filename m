@@ -1,29 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 13:36:53 +0100
-Subject: [Buildroot] [PATCH 2/2] barebox: needs host-lzop
-In-Reply-To: <1355396382-14652-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1355396382-14652-1-git-send-email-fabio.porcedda@gmail.com>
- <1355396382-14652-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20130107133653.6e132264@skate>
+From: Anthony Viallard <viallard@syscom-instruments.com>
+Date: Mon,  7 Jan 2013 14:30:15 +0100
+Subject: [Buildroot] [PATCH 3/5] gnuplot : move under "Graphic applications"
+	section
+In-Reply-To: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
+References: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <1357565417-16782-3-git-send-email-viallard@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Gnuplot isn't a "Development tools".
 
-On Thu, 13 Dec 2012 11:59:42 +0100, Fabio Porcedda wrote:
-> Add host-lzop dependency.
-> Use $(TARGET_MAKE_ENV) when calling $(MAKE)
-> to able to use binaries built for host.
+Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+---
+ package/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Does Barebox always need lzop? If not, under what conditions does it
-need lzop?
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index eb18543..63d8ecb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -70,7 +70,6 @@ endif
+ source "toolchain/gcc/Config.in.2"
+ source "package/gettext/Config.in"
+ source "package/gmp/Config.in"
+-source "package/gnuplot/Config.in"
+ source "package/gperf/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/grep/Config.in"
+@@ -109,6 +108,7 @@ menu "Graphic libraries and applications (graphic/text)"
+ 
+ comment "Graphic applications"
+ source "package/rrdtool/Config.in"
++source "package/gnuplot/Config.in"
+ 
+ comment "graphic libraries"
+ source "package/directfb/Config.in"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
