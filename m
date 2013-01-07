@@ -1,65 +1,35 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Tue, 08 Jan 2013 00:27:18 +0200
-Subject: [Buildroot] new <pkg>_CONFIG_FIXUP variable
-In-Reply-To: <201301072310.10765.yann.morin.1998@free.fr>
-References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
- <201301072310.10765.yann.morin.1998@free.fr>
-Message-ID: <50EB4BC6.6020807@petroprogram.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Jan 2013 23:32:56 +0100
+Subject: [Buildroot] [pull request] Pull request for branch perf-elfutils
+In-Reply-To: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Jan 2013 16:22:40 +0100")
+References: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ip78bp47.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-8.1.2013 0:10, Yann E. MORIN kirjoitti:
-> Stefan, All,
->
-> On Monday 07 January 2013 Stefan Fr?berg wrote:
->> This patch provides new variable called <pkg>_CONFIG_FIXUP.
->> It's purpose is to fix wrong prefixes of $(STAGING_DIR)/usr/bin/*-config file(s)
->> that many library packages install after staging installation phase.
->>
->> Some packages provide multible *-config files.
->>
->> So as suggested by Thomas Petazzoni and Gustavo Zacarias this 
->> variable can be feeded multible files.
->>
->> All filenames are relative to $(STAGING_DIR)/usr/bin
->>
->> Example:
->>
->> DIVINE_CONFIG_FIXUP = divine-config
->>
->> or:
->>
->> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
-> Please, put this explanation in the commit message.
->
-> Also, add this variable to the documentation:
->     docs/manual/adding-packages-generic.txt
->
-> Next time, also add a snall changelog to your message, so we know there
-> was prior discussion and to help Peter to apply the correct patch series.
-> I do something like:
->   Changes v1 -> v2:
->     - accept multiple files (Thomas, Gustavo)
->     - use paths relative to $(STAGING)/usr/bin
->
-> And keep this changelog in each iteration. Add the version of the iteration
-> in your mail subject.
->
-> Thank you! :-)
->
-> Regards,
-> Yann E. MORIN.
->
-God...
-It seems that doing documentation for all these things is going to take
-more work than the actual patch itself
-;-)
+ Thomas> Hello,
+ Thomas> Here is a set of patches that add the elfutils and perf packages in
+ Thomas> Buildroot, based on previous efforts from Stefan Fr?berg and Kaiwan
+ Thomas> Billimoria (thanks !).
 
-Thanks!
+ Thomas> These packages are not trivial because:
+ Thomas>  1) perf is part of the kernel sources
+ Thomas>  2) elfutils is a nightmare to build against uClibc
 
-Stefan
+ Thomas> I've been working on this for about two days, trying different
+ Thomas> solutions, the one proposed here appeared to be the most reasonable
+ Thomas> one in terms of patch size, and maintenability.
+
+Thanks everyone, committed series.
+
+Thomas, please don't forget to (try to) send these patches upstream so
+we don't have to maintain them ourselves in the future.
+
+-- 
+Bye, Peter Korsgaard
