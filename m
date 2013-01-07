@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 22:26:15 +0100
-Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
-In-Reply-To: <1357591399-3566-2-git-send-email-marek.belisko@open-nandra.com>
+Date: Mon, 7 Jan 2013 22:26:54 +0100
+Subject: [Buildroot] [PATCH v2 2/6] polkit: new package
+In-Reply-To: <1357591399-3566-3-git-send-email-marek.belisko@open-nandra.com>
 References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <1357591399-3566-2-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20130107222615.36bd70ab@skate>
+ <1357591399-3566-3-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20130107222654.35096281@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,15 @@ To: buildroot@busybox.net
 
 Dear Marek Belisko,
 
-On Mon,  7 Jan 2013 21:43:14 +0100, Marek Belisko wrote:
+On Mon,  7 Jan 2013 21:43:15 +0100, Marek Belisko wrote:
 
-> +config BR2_PACKAGE_SG3_UTILS
-> +	bool "sgutils"
-> +	depends on BR2_LARGEFILE
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +	  Low level utilities for devices that use a SCSI command set.
-> +
+> +POLKIT_LICENCE = GPL
 
-You should mention here that this option only installs the library
-(libraries?), but not the programs.
+LICENSE, not LICENCE. And be more specific than GPL.
 
-> +SG3_UTILS_LICENSE = BSD GPL
+> +POLKIT_LICENCE_FILES = COPYING
 
-You should be work specific than just BSD and GPL. Like BSD-3c or
-BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
-
-Otherwise, looks good.
+LICENSE_FILES.
 
 Thomas
 -- 
