@@ -1,114 +1,56 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 7 Jan 2013 22:52:08 +0100
-Subject: [Buildroot] [PATCH v2 3/6] libatasmart: new package.
-In-Reply-To: <20130107223046.74aa74a4@skate>
-References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <1357591399-3566-4-git-send-email-marek.belisko@open-nandra.com>
- <20130107223046.74aa74a4@skate>
-Message-ID: <CAAfyv37Cd6NzPHTQmWXUS2bWB70UhA47CyWnNxD6R6igKp4Agw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  7 Jan 2013 22:52:02 +0100
+Subject: [Buildroot] [pull request] Pull request for branch yem-misc-fixes
+Message-ID: <cover.1357595083.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello All!
 
-On Mon, Jan 7, 2013 at 10:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Marek Belisko,
->
-> On Mon,  7 Jan 2013 21:43:16 +0100, Marek Belisko wrote:
->
->> diff --git a/package/Config.in b/package/Config.in
->> index c889d8a..53bb5be 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -239,6 +239,8 @@ source "package/iostat/Config.in"
->>  source "package/irda-utils/Config.in"
->>  source "package/kbd/Config.in"
->>  source "package/lcdproc/Config.in"
->> +source "package/libatasmart/Config.in"
->> +source "package/linux-firmware/Config.in"
->
-> Seems like a mismerge. You shouldn't be adding a
-> linux-firmware/Config.in include.
-Right. I did rebase to actual master and make wrong config resolve.
-Will fix that.
->
->> +config BR2_PACKAGE_LIBATASMART
->> +     bool "libatasmart"
->> +     depends on BR2_PACKAGE_UDEV
->> +     help
->> +       Reading and Parsing Library.
->
-> This description sounds odd. Reading and Parsing Library for what?
->
->> +       As the name suggests libatasmart only does ATA S.M.A.R.T.
->> +
->> +       http://www.linuxfromscratch.org/blfs/view/svn/general/libatasmart.html
->> +
->> +comment "libatasmart requires udev to be enabled"
->> +     depends on !BR2_PACKAGE_UDEV
->
-> Could you detail a little why udev is a dependency. Is libudev a
-> dependency? Something else? We need to understand if it's a build
-> dependency, a runtime dependency, the requirement for the system to
-> actually use and run udev, etc.
-libudev is dependency for libatasmart.
->
->> diff --git a/package/libatasmart/libatasmart.mk b/package/libatasmart/libatasmart.mk
->> new file mode 100644
->> index 0000000..3f8e36b
->> --- /dev/null
->> +++ b/package/libatasmart/libatasmart.mk
->> @@ -0,0 +1,17 @@
->> +#############################################################
->> +#
->> +# libatasmart
->> +#
->> +#############################################################
->> +LIBATASMART_VERSION = 0.19
->> +LIBATASMART_SOURCE = libatasmart-$(LIBATASMART_VERSION).tar.xz
->> +LIBATASMART_SITE    = http://0pointer.de/public
->> +LIBATASMART_LICENCE = LGPL
->
-> LICENSE. Be more specific that LGPL.
->
->> +LIBATASMART_LICELCE_FILE = LGPL
->
-> LICENSE_FILES
->
->> +LIBATASMART_INSTALL_STAGING = YES
->> +
->> +LIBATASMART_AUTORECONF = YES
->
-> Please add a comment here that explains why AUTORECONF = YES is needed.
->
->> +
->> +LIBATASMART_DEPENDENCIES = udev
->> +
->> +$(eval $(autotools-package))
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+This series introduces exporting a variable, $(BR2_CONFIG_FILE), that
+contains the fully-qualified path to out .config.
 
-Thanks,
+In some cases, scripts in support/ need to parse our .config (eg. the
+dependency-checking script needs to check the conformity of rxternal
+toolchain features).
 
-mbe
+Also, some Makefile fragments (eg. the crosstool-Ng backend) need to
+refer to this config file for make-dependency-checking.
+
+This was currently done in different ad-hoc manners, and is not scalable.
+
+I'll also use it later to retrieve the password encoding scheme when
+creating users from packages.
+
+
+The following changes since commit 13a9fc901f637a1534baa4f08322f3b29ba66b0d:
+
+  libnspr: only pass --{enable,disable}-thumb2 on ARM (2013-01-07 09:11:44 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-misc-fixes
+
+Yann E. MORIN (3):
+      Makefile: export BR2_CONFIG_FILE, pointing to our .config
+      support/dependencies: use globally-exported BR2_CONFIG_FILE
+      toolchain/crostool-ng: use globally-exported CONFIG_FILE
+
+ Makefile                                         |    4 ++++
+ support/dependencies/dependencies.mk             |    1 -
+ support/dependencies/dependencies.sh             |   10 +++++-----
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    4 ++--
+ 4 files changed, 11 insertions(+), 8 deletions(-)
+
+Regards,
+Yann E. MORIN
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
