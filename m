@@ -1,47 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Jan 2013 22:56:26 +0100
-Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
-In-Reply-To: <20130107225223.10cdf4e6@skate>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Mon, 7 Jan 2013 22:58:04 +0100
+Subject: [Buildroot] [PATCH v2 5/6] lvm2: Compile and install
+	application library.
+In-Reply-To: <20130107223802.26215d46@skate>
 References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
- <20130107225223.10cdf4e6@skate>
-Message-ID: <201301072256.26160.yann.morin.1998@free.fr>
+ <1357591399-3566-6-git-send-email-marek.belisko@open-nandra.com>
+ <20130107223802.26215d46@skate>
+Message-ID: <CAAfyv34ArN+YjJ08ikAC46dAXM-6PEusdAyew_f2StaOChnUdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Belisko, All,
+Hi Thomas,
 
-On Monday 07 January 2013 Thomas Petazzoni wrote:
-> On Mon, 7 Jan 2013 22:45:50 +0100, Belisko Marek wrote:
-> > > You should be work specific than just BSD and GPL. Like BSD-3c or
-> > > BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
-> > After proper reading of COPYING file it seems it GPLv2+
-> > "Some of the older utilities are covered by the GPL. More precisely:
-> > You are free to distribute this software under the terms of the
-> > GNU General Public License either version 2, or (at your option)
-> > any later version." but in same file there is no mention about BSD
-> > license version.
-> 
-> There is a BSD_LICENSE file that contains a BSD three clause license,
-
-Actually, what matters in the content of the source files. Do some of
-them refer to either license?
-  - if the files only refer to GPLv2+, then the BSD-3c does not apply,
-  - if the files only refer to BSD-3c, then the GPLv2+ does not apply,
-  - if some file refer to one or two of the licenses, then both apply.
-
-(/me likes how he managed to line up the above! ;-) )
+On Mon, Jan 7, 2013 at 10:38 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Marek Belisko,
+>
+> On Mon,  7 Jan 2013 21:43:18 +0100, Marek Belisko wrote:
+>
+>> +config BR2_PACKAGE_LVM2_APP_LIBRARY
+>> +     bool "install application library"
+>> +     depends on BR2_PACKAGE_LVM2
+>> +     help
+>> +       Install application library (liblvm2app2).
+>> +
+>
+>> +ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY),y)
+>> +LVM2_MAKE_OPT += liblvm
+>> +LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
+>> +LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+>> +endif
+>
+> I am not quite sure this is correct. Currently, the package works as
+> follows (if I understand correctly):
+>
+>  * if BR2_PACKAGE_LVM2=y but BR2_PACKAGE_LVM2_DMSETUP_ONLY is not
+>    enabled, then LVM2_MAKE_OPT is empty, so it just runs the default
+>    make target, which presumably builds everything.
+>
+>  * if BR2_PACKAGE_LVM2=y and BR2_PACKAGE_LVM2_DMSETUP_ONLY=y, then
+>    LVM2_MAKE_OPT is set to device-mapper, in which case it only builds
+>    the device mapper code.
+>
+> So now, you add a third BR2_PACKAGE_LVM2_APP_LIBRARY option. But if I
+> do BR2_PACKAGE_LVM2=y and BR2_PACKAGE_LVM2_APP_LIBRARY=y, it will only
+> build the library and not the rest, which is not what we expect.
+>
+> I'd say that the DMSETUP_ONLY thing is a bad idea from the beginning,
+> so I'm not sure what's the best way moving forward.
+>
+> Are you sure liblvm doesn't get build and installed by the default
+> BR2_PACKAGE_LVM2=y configuration?
+Nope and this was intention of this patch to add ability to build also library.
+lvm app library is necessary as dependency for udisk (if enabled lvm2
+support - disabled by default).
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
 Regards,
-Yann E. MORIN.
+
+mbe
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
