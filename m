@@ -1,63 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 Jan 2013 21:30:56 +0100
-Subject: [Buildroot] [git commit] package: support multiple patches
-Message-ID: <20130107212529.EDE9B9A691@busybox.osuosl.org>
+Date: Mon, 7 Jan 2013 21:31:07 +0100
+Subject: [Buildroot] [git commit] docs/manual: update to mention the
+	multiple patches support
+Message-ID: <20130107212530.25B4C9A691@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e260a2d9b39ecbdaa6738ac76bd48548746da9d8
+commit: http://git.buildroot.net/buildroot/commit/?id=b6009b94ca5721b0601b689fc350e1713f342239
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this commit, we extend the behaviour of the <pkg>_PATCH variable
-so that it now allows to list several patches to be downloaded and
-applied, and no longer just one patch.
-
-This will be useful for the elfutils package, and should anyway not
-break the existing behaviour for packages using just one patch.
+After the modification of the <pkg>_PATCH semantic, let's update the
+documentation accordingly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-generic.mk |   17 ++++++++++++-----
- 1 files changed, 12 insertions(+), 5 deletions(-)
+ docs/manual/adding-packages-generic.txt |   17 ++++++++++-------
+ 1 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a570ad7..59de0f0 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -28,12 +28,19 @@
- $(BUILD_DIR)/%/.stamp_downloaded:
- ifeq ($(DL_MODE),DOWNLOAD)
- # Only show the download message if it isn't already downloaded
--	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
--		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
--		$(call MESSAGE,"Downloading")
-+	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-+		$(call MESSAGE,"Downloading") ; \
-+	else \
-+		for p in $($(PKG)_PATCH) ; do \
-+			if test ! -e $(DL_DIR)/$$p ; then \
-+				$(call MESSAGE,"Downloading") ; \
-+				break ; \
-+			fi ; \
-+		done ; \
-+	fi
- endif
- 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
--	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_PATCH)))
-+	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$(p))$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- ifeq ($(DL_MODE),DOWNLOAD)
- 	$(Q)mkdir -p $(@D)
-@@ -78,7 +85,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
--	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
-+	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
- 	$(Q)( \
- 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
- 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 0759d4f..7b8561a 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -156,14 +156,17 @@ information is (assuming the package name is +libfoo+) :
+   +packagename-$(LIBFOO_VERSION).tar.gz+. +
+   Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
+ 
+-* +LIBFOO_PATCH+ may contain the name of a patch, that will be
+-  downloaded from the same location as the tarball indicated in
+-  +LIBFOO_SOURCE+. If +HOST_LIBFOO_PATCH+ is not specified, it
+-  defaults to +LIBFOO_PATCH+. Note that patches that are included
+-  in Buildroot itself use a different mechanism: all files of the
+-  form +<packagename>-*.patch+ present in the package directory inside
++* +LIBFOO_PATCH+ may contain a space-separated list of patch file
++  names, that will be downloaded from the same location as the tarball
++  indicated in +LIBFOO_SOURCE+, and then applied to the package source
++  code. If +HOST_LIBFOO_PATCH+ is not specified, it defaults to
++  +LIBFOO_PATCH+. Note that patches that are included in Buildroot
++  itself use a different mechanism: all files of the form
++  +<packagename>-*.patch+ present in the package directory inside
+   Buildroot will be applied to the package after extraction (see
+-  xref:patch-policy[patching a package]).
++  xref:patch-policy[patching a package]). Finally, patches listed in
++  the +LIBFOO_PATCH+ variable are applied _before_ the patches stored
++  in the Buildroot package directory.
+ 
+ * +LIBFOO_SITE+ provides the location of the package, which can be a
+   URL or a local filesystem path. HTTP, FTP and SCP are supported URL
