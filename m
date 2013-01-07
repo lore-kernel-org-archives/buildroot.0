@@ -1,119 +1,60 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 Jan 2013 21:37:57 +0100
-Subject: [Buildroot] [git commit] perf: new package
-Message-ID: <20130107212530.E0ADB9A691@busybox.osuosl.org>
+Date: Mon, 7 Jan 2013 21:44:56 +0100
+Subject: [Buildroot] [git commit] elfutils: towards uClibc support: gettext
+Message-ID: <20130107212532.B15529A691@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d82f5cb94a163774eb9e0c689d246e2a7e15ca62
+commit: http://git.buildroot.net/buildroot/commit/?id=f282139807a7d10cc496b6ede23a4c16e587e0be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds a new package that allows to build the 'perf'
-userspace tool that comes in the tools/perf directory of the kernel
-sources.
+elfutils is annoying: it needs gettext even if locale support is
+disabled...
 
-It is an alternative proposal to the one done by Kaiwan Billimoria
-<kaiwan.billimoria@gmail.com>, in that it creates the package in
-package/perf/. It therefore properly integrates with the Buildroot
-package infrastructure.
-
-Of course, the package depends on the Linux kernel to be built by
-Buildroot, in order to get Perf sources matching the version of the
-kernel that will be executed.
+Heavily based from work done by Stefan Fr??berg, but with many further
+modifications by Thomas Petazzoni.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in      |    1 +
- package/perf/Config.in |   22 ++++++++++++++++++++++
- package/perf/perf.mk   |   39 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+), 0 deletions(-)
+ package/elfutils/Config.in   |    1 +
+ package/elfutils/elfutils.mk |   11 +++++++++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d9255ab..49db380 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -35,6 +35,7 @@ source "package/ltrace/Config.in"
- source "package/memstat/Config.in"
- source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
-+source "package/perf/Config.in"
- source "package/ramspeed/Config.in"
- source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
-diff --git a/package/perf/Config.in b/package/perf/Config.in
-new file mode 100644
-index 0000000..54b24fe
---- /dev/null
-+++ b/package/perf/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_PERF
-+	bool "perf"
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_LARGEFILE
-+	help
-+	  perf (sometimes "Perf Events" or perf tools, originally
-+	  "Performance Counters for Linux") - is a performance
-+	  analyzing tool in Linux, available from kernel version
-+	  2.6.31. User-space controlling utility, called 'perf' has
-+	  git-like interface with subcommands. It is capable of
-+	  statistical profiling of entire system (both kernel and user
-+	  code), single CPU or severals threads.
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 5ec4ca9..78d02a5 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_ELFUTILS
+ 	       BR2_TOOLCHAIN_BUILDROOT   || \
+ 	       BR2_TOOLCHAIN_CTNG_uClibc || \
+ 	       BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  Libraries/utilities to handle ELF objects (drop in
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 9f9de52..39407db 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -25,6 +25,17 @@ ELFUTILS_CONF_ENV += \
+         CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
+ endif
+ 
++ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
 +
-+	  This package builds and install the userspace 'perf'
-+	  command. It is up to the user to ensure that the kernel
-+	  configuration has all suitable options enable to allow a
-+	  proper operation of 'perf'.
++# Unconditionnally requires gettext.
++ifeq ($(BR2_NEEDS_GETTEXT),y)
++ELFUTILS_DEPENDENCIES += gettext
++ELFUTILS_LDFLAGS += -lintl
++endif
 +
-+	  https://perf.wiki.kernel.org/
++ELFUTILS_CONF_ENV += \
++	LDFLAGS="$(ELFUTILS_LDFLAGS)"
 +
-+comment "perf only available if Linux kernel is enabled, and requires largefile support"
-+	depends on !BR2_LINUX_KERNEL || !BR2_LARGEFILE
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-new file mode 100644
-index 0000000..2aef900
---- /dev/null
-+++ b/package/perf/perf.mk
-@@ -0,0 +1,39 @@
-+#############################################################
-+#
-+# perf
-+#
-+#############################################################
-+
-+# Source taken from the Linux kernel tree
-+PERF_SOURCE =
-+PERF_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+
-+PERF_DEPENDENCIES = linux
-+
-+PERF_MAKE_FLAGS = \
-+	$(LINUX_MAKE_FLAGS) \
-+	NO_LIBELF=1 \
-+	NO_DWARF=1 \
-+	NO_LIBAUDIT=1 \
-+	NO_NEWT=1 \
-+	NO_GTK2=1 \
-+	NO_LIBPERL=1 \
-+	NO_LIBPYTHON=1 \
-+	DESTDIR=$(TARGET_DIR) \
-+	prefix=/usr \
-+	WERROR=0
-+
-+define PERF_BUILD_CMDS
-+	$(MAKE) -C $(LINUX_DIR)/tools/perf \
-+		$(PERF_MAKE_FLAGS) O=$(@D)
-+endef
-+
-+# After installation, we remove the Perl and Python scripts from the
-+# target.
-+define PERF_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(LINUX_DIR)/tools/perf \
-+		$(PERF_MAKE_FLAGS) O=$(@D) install
-+	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
+  ELFUTILS_DEPENDENCIES += argp-standalone
+ endif
