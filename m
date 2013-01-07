@@ -1,38 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 Jan 2013 21:41:30 +0100
-Subject: [Buildroot] [git commit] argp-standlone: build position independent
-	code
-Message-ID: <20130107212531.AF23B9A691@busybox.osuosl.org>
+Date: Mon, 7 Jan 2013 21:59:56 +0100
+Subject: [Buildroot] [git commit] elfutils: needs wchar
+Message-ID: <20130107212533.D61C49A27C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb6cf3003366864aa29cc56eab88c26c3d8baedf
+commit: http://git.buildroot.net/buildroot/commit/?id=3b595d512f52dccfa03105d83cd2a8656804cc8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though argp-standalone is built as a static library, it might get
-linked in a shared library, so we must built it as
-position-independent code.
+elfutils contains a call to wmempcpy, which is only available when the
+toolchain has wchar support, so add the dependency.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Also display a comment if the toolchain dependencies are not met.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/argp-standalone/argp-standalone.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/elfutils/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/argp-standalone/argp-standalone.mk b/package/argp-standalone/argp-standalone.mk
-index 47c09b2..ba7f757 100644
---- a/package/argp-standalone/argp-standalone.mk
-+++ b/package/argp-standalone/argp-standalone.mk
-@@ -8,6 +8,9 @@ ARGP_STANDALONE_VERSION = 1.3
- ARGP_STANDALONE_SITE = http://www.lysator.liu.se/~nisse/archive
- ARGP_STANDALONE_INSTALL_STAGING = YES
- 
-+ARGP_STANDALONE_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -fPIC"
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index b107a97..914eec6 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -1,3 +1,6 @@
++comment "elfutils requires a toolchain with LARGEFILE and WCHAR support"
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
 +
- define ARGP_STANDALONE_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D $(@D)/libargp.a $(STAGING_DIR)/usr/lib/libargp.a
- 	$(INSTALL) -D $(@D)/argp.h $(STAGING_DIR)/usr/include/argp.h
+ config BR2_PACKAGE_ELFUTILS
+ 	bool "elfutils"
+ 	select BR2_PACKAGE_ARGP_STANDALONE if \
+@@ -6,6 +9,7 @@ config BR2_PACKAGE_ELFUTILS
+ 	       BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
+ 	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  Libraries/utilities to handle ELF objects (drop in
+ 	  replacement for libelf).
