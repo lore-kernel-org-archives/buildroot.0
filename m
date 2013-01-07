@@ -1,148 +1,68 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Mon,  7 Jan 2013 17:58:53 +0100
-Subject: [Buildroot] [PATCH 2/2] gnuplot : use new --without-doc and
-	--without-demo configure options
-In-Reply-To: <1357577933-26446-1-git-send-email-viallard@syscom-instruments.com>
-References: <1357577933-26446-1-git-send-email-viallard@syscom-instruments.com>
-Message-ID: <1357577933-26446-2-git-send-email-viallard@syscom-instruments.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  7 Jan 2013 15:12:58 -0300
+Subject: [Buildroot] [PATCH 1/3] libmhash: new package
+Message-ID: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-create a generic patch to disable compilation/installation of docs and demo
-with configure options.
-
-use theses options and remove basic old patch.
-
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...ot-0001-configure-add-without-demo-option.patch |   59 ++++++++++++++++++++
- package/gnuplot/gnuplot.mk                         |    4 +-
- package/gnuplot/gnuplot.patch                      |   26 ---------
- 3 files changed, 62 insertions(+), 27 deletions(-)
- create mode 100644 package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch
- delete mode 100644 package/gnuplot/gnuplot.patch
+ package/Config.in            |    1 +
+ package/libmhash/Config.in   |    9 +++++++++
+ package/libmhash/libmhash.mk |   14 ++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/libmhash/Config.in
+ create mode 100644 package/libmhash/libmhash.mk
 
-diff --git a/package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch b/package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch
+diff --git a/package/Config.in b/package/Config.in
+index 0f397d6..942e62c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -370,6 +370,7 @@ source "package/beecrypt/Config.in"
+ source "package/gnutls/Config.in"
+ source "package/libgcrypt/Config.in"
+ source "package/libgpg-error/Config.in"
++source "package/libmhash/Config.in"
+ source "package/libnss/Config.in"
+ source "package/nettle/Config.in"
+ source "package/ocf-linux/Config.in"
+diff --git a/package/libmhash/Config.in b/package/libmhash/Config.in
 new file mode 100644
-index 0000000..acdc91d
+index 0000000..82b544f
 --- /dev/null
-+++ b/package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch
-@@ -0,0 +1,59 @@
-+Index: gnuplot-4.6.0/configure.in
-+===================================================================
-+--- gnuplot-4.6.0.orig/configure.in	2012-03-08 05:34:42.000000000 +0100
-++++ gnuplot-4.6.0/configure.in	2013-01-07 11:50:03.003804463 +0100
-+@@ -748,6 +748,16 @@
-+ AC_ARG_WITH(lisp-files,dnl
-+ [  --without-lisp-files    do not build emacs lisp files])
-+ 
-++dnl Whether we want to build the demo files
-++dnl Does nothing here, is passed on to the demo subdir
-++AC_ARG_WITH(demo,dnl
-++[  --without-demo    do not build demo files])
-++
-++dnl Whether we want to build the doc files
-++dnl Does nothing here, is passed on to the doc subdir
-++AC_ARG_WITH(doc,dnl
-++[  --without-doc    do not build doc files])
-++
-+ dnl Sort help/subtopic tables by row or column
-+ AC_ARG_WITH(row-help,dnl
-+ [  --with-row-help         format help and subtopic tables by row (default)
-+@@ -1200,6 +1210,24 @@
-+ fi
-+ AC_SUBST(LISPDIR)
-+ 
-++dnl build demo files
-++if test "$with_demo" != no; then
-++  AC_CONFIG_SUBDIRS(demo)
-++  DEMODIR=demo
-++else
-++  DEMODIR=
-++fi
-++AC_SUBST(DEMODIR)
-++
-++dnl build doc files
-++if test "$with_doc" != no; then
-++  AC_CONFIG_SUBDIRS(docs)
-++  DOCDIR=docs
-++else
-++  DOCDIR=
-++fi
-++AC_SUBST(DOCDIR)
-++
-+ dnl Substitute variables
-+ AC_SUBST(PACKAGE)
-+ AC_SUBST(VERSION_MAJOR)
-+Index: gnuplot-4.6.0/Makefile.am
-+===================================================================
-+--- gnuplot-4.6.0.orig/Makefile.am	2013-01-04 14:07:02.239120935 +0100
-++++ gnuplot-4.6.0/Makefile.am	2013-01-07 11:51:12.034846363 +0100
-+@@ -1,7 +1,7 @@
-+ ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-+ AUTOMAKE_OPTIONS = foreign 1.2h
-+ 
-+-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
-++SUBDIRS = config m4 term src $(DOCDIR) $(LISPDIR) $(DEMODIR) man tutorial share
-+ 
-+ EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
-+ Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index 40c3021..98e4a72 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
-@@ -7,6 +7,7 @@ GNUPLOT_VERSION = 4.6.0
- GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
- GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
- 
-+GNUPLOT_AUTORECONF = YES
- GNUPLOT_INSTALL_STAGING = YES
- 
- GNUPLOT_LICENSE = gnuplot license (open source)
-@@ -16,7 +17,8 @@ GNUPLOT_CONF_OPT = --without-x \
- 		--disable-raise-console \
- 		--disable-mouse \
- 	        --without-tutorial \
--		--without-demo --disable-demo \
-+		--without-demo \
-+		--without-doc \
- 	        --without-row-help \
- 		--disable-history-file \
- 	        --without-lisp-files \
-diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
-deleted file mode 100644
-index 7053a46..0000000
---- a/package/gnuplot/gnuplot.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--diff --git a/Makefile.am b/Makefile.am
--index bc0f2b2..5c00fe5 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -1,7 +1,7 @@
-- ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-- AUTOMAKE_OPTIONS = foreign 1.2h
-- 
---SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
--+SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
-- 
-- EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
-- Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
--diff --git a/Makefile.in b/Makefile.in
--index 71118bc..86df133 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -250,7 +250,7 @@ top_build_prefix = @top_build_prefix@
-- top_builddir = @top_builddir@
-- top_srcdir = @top_srcdir@
-- AUTOMAKE_OPTIONS = foreign 1.2h
---SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
--+SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
-- EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
-- Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
-- VERSION configure.vms pm3d win
++++ b/package/libmhash/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBMHASH
++	bool "libmhash"
++	help
++	  Mhash is a free (under GNU Lesser GPL) library which provides
++	  a uniform interface to a large number of hash algorithms.
++	  These algorithms can be used to compute checksums, message digests,
++	  and other signatures. 
++
++	  http://mhash.sourceforge.net/
+diff --git a/package/libmhash/libmhash.mk b/package/libmhash/libmhash.mk
+new file mode 100644
+index 0000000..aa05f93
+--- /dev/null
++++ b/package/libmhash/libmhash.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libmhash
++#
++#############################################################
++
++LIBMHASH_VERSION = 0.9.9.9
++LIBMHASH_SITE = http://downloads.sourceforge.net/project/mhash/mhash/$(LIBMHASH_VERSION)
++LIBMHASH_SOURCE = mhash-$(LIBMHASH_VERSION).tar.bz2
++LIBMHASH_INSTALL_STAGING = YES
++LIBMHASH_LICENSE = LGPLv2
++LIBMHASH_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
-1.7.10.4
+1.7.8.6
