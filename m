@@ -1,41 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 17:10:10 +0100
-Subject: [Buildroot] [PATCH 1/5] gnuplot : new package
-In-Reply-To: <50EAF1AC.8090907@syscom-instruments.com>
-References: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
- <20130107144800.29eb11ca@skate>
- <50EAF1AC.8090907@syscom-instruments.com>
-Message-ID: <20130107171010.36ca678d@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 7 Jan 2013 17:16:50 +0100
+Subject: [Buildroot] build hangs when building kernel
+Message-ID: <FB5BA32813A44818B6499769D61985DF@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Viallard Anthony,
+Hi
+ 
+Using the latest pull:
+ 
+The build hangs when it is building the kernel 
+ 
+snip....
+ 
+  LD [M]  fs/fuse/cuse.ko
+  LD [M]  fs/fuse/fuse.ko
+  LD [M]  lib/crc-ccitt.ko
+  LD [M]  fs/nls/nls_iso8859-15.ko
+make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
+local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
+PERLLIB="/home/buildroot12git/output/host/usr/lib/perl" /usr/bin/make -j8 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+INSTALL_MOD_PATH=/home/buildroot12git/output/target CROSS_COMPILE="
+/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-" DEPMOD=/home/buildroot12git/output/host/usr/sbin/depmod
+-C /home/buildroot12git/output/build/linux-3.4.24 tx53.dtb
+make[1]: Entering directory `/home/buildroot12git/output/build/linux-3.4.24'
+  DTC     arch/arm/boot/tx53.dtb
+DTC: dts->dtb  on file "arch/arm/boot/dts/tx53.dts"
+make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+# dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
+cat  >> /home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/zImage
+ 
+ 
+ 
+It looks like the missing cat parameter is causing this.
 
-On Mon, 07 Jan 2013 17:02:52 +0100, Viallard Anthony wrote:
 
-> Sorry, i knew my post is not very sexy. This is because my git 
-> repository is very dirty and i don't known how clean my work.
+When I break (ctrl-c) and restart make then the cat parameter is present :
 
-All you need to learn is how to use "interactive rebase".
+Snip..
 
-See
-http://elinux.org/Buildroot_how_to_contribute#In_case_of_mistakes_in_my_branch
-for a very basic introduction. 
+ LD      arch/arm/boot/compressed/vmlinux
+  OBJCOPY arch/arm/boot/zImage
+  Kernel: arch/arm/boot/zImage is ready
+make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+make[1]: Entering directory `/home/buildroot12git/output/build/linux-3.4.24'
+  CHK     include/linux/version.h
+  CHK     include/generated/utsrelease.h
+make[2]: `include/generated/mach-types.h' is up to date.
+  CALL    scripts/checksyscalls.sh
+  Building modules, stage 2.
+  MODPOST 93 modules
+make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
+local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
+PERLLIB="/home/buildroot12git/output/host/usr/lib/perl" /usr/bin/make -j8 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+INSTALL_MOD_PATH=/home/buildroot12git/output/target CROSS_COMPILE="
+/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-" DEPMOD=/home/buildroot12git/output/host/usr/sbin/depmod
+-C /home/buildroot12git/output/build/linux-3.4.24 tx53.dtb
+make[1]: Entering directory `/home/buildroot12git/output/build/linux-3.4.24'
+make[2]: `arch/arm/boot/tx53.dtb' is up to date.
+make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+# dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
+####----------->>>>>>>>>  cat /home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/tx53.dtb >>
+/home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/zImage      
+rm -f targetkernel
+ln -s /home/buildroot12git/output/build/linux-3.4.24 targetkernel
+>>> linux 3.4.24 Installing to target
+install -m 0644 -D /home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/zImage
+/home/buildroot12git/output/target/boot/zImage
+# dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
+cp /home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/tx53.dtb /home/buildroot12git/output/images/
+# Install modules and remove symbolic links pointing to build
+# directories, not relevant on the target
+make[1]: Entering directory `/home/buildroot12git/output/build/linux-3.4.24'
+  INSTALL crypto/aead.ko
+  INSTALL crypto/aes_generic.ko
+  INSTALL crypto/ansi_cprng.ko
 
-For more details, see
-http://git-scm.com/book/en/Git-Tools-Rewriting-History#Changing-Multiple-Commit-Messages.
+Snip 
+ 
 
-Once you know how to use interactive rebase, you can prepare very nice
-patch series.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+ 
+Regards johan
