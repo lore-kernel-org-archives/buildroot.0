@@ -1,38 +1,45 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Mon, 07 Jan 2013 00:37:25 +0100
-Subject: [Buildroot] [PATCH 2/3] rpi-userland: new package
-In-Reply-To: <CAGduivxwksjePX5pyFrSDggHC+u2pNydA6nDqZJ1x5MNsFEdzA@mail.gmail.com>
-References: <cover.1357505417.git.maxime.hadjinlian@gmail.com>
- <175bbe60c696b921f074714aac68427ae0561b22.1357505417.git.maxime.hadjinlian@gmail.com>
- <87ehhyc6al.fsf@dell.be.48ers.dk>
- <CAGduivxwksjePX5pyFrSDggHC+u2pNydA6nDqZJ1x5MNsFEdzA@mail.gmail.com>
-Message-ID: <50EA0AB5.7010507@je-eigen-domein.nl>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Sun, 6 Jan 2013 18:46:15 -0800
+Subject: [Buildroot] [PATCH 1/2] system: set root password only for
+ default skeleton
+In-Reply-To: <1f2432a8027f1e1c780a45b488be8be03f1b1b93.1357397453.git.yann.morin.1998@free.fr>
+References: <cover.1357397453.git.yann.morin.1998@free.fr>
+ <1f2432a8027f1e1c780a45b488be8be03f1b1b93.1357397453.git.yann.morin.1998@free.fr>
+Message-ID: <CAJJ6jxsFL2Su1Jpxavk6zh7qw8b31gFbFEHyaKUvKLZ9Xtp1pQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-On 01/06/2013 11:13 PM, Maxime Hadjinlian wrote:
->   Maxime> Introducing a package to build the userland part of the Raspberry,
->   Maxime> needed by anyone who would want to build a rootfs for a RaspberryPi.
+On Sat, Jan 5, 2013 at 6:52 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> In case one is using a custom skeleton, the root pasword might already be
+> set in this case, and should not be overriden.
 >
-> Presumably it isn't REALLY needed, right? Only if you want to use the
-> GPU?
-> I actually don't know if you could do without it since the rpi only
-> video output is the HDMI.
-> I'll have to check about that.
+> Just ask for (and set) the root password only for the default skeleton.
+>
+> Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-You can do fine without.
-Normal unaccelerated framebuffer output does not require those userland 
-libraries at all.
+Hi Yann, all,
 
-Only needed for applications that require GPU accelerated OpenGL ES, 
-OpenMAX, OpenVG libraries, or if you want to play with HDMI CEC (using a 
-normal TV remote as input device).
+This is another change that in my opinion goes against the philosophy
+of buildroot. It is another change that tries to make BR a swiss army
+knife, (can do anything, nothing well). I would prefer a stiletto or
+Bowie Knife - good for one thing, but very good at that.
 
+Why do we need yet another change to enable something easily done with
+the post build patch script? An easily built bsp skeleton with an
+etc/shadow file handles this beautifully. This kind of creeping
+feature requires maintenance, documentation etc. Why?
 
-Yours sincerely,
+We need to separate people who build things using buildroot and end
+users that use those things. Is it real to think an end user will
+build from scratch with buildroot? There are full featured
+distributions for most popular platforms that contain this kind of
+stuff. For true embedded developers, adding more things like this just
+complicate things, does not make it easier.
 
-Floris Bos
+I guess this is the sort of thing it would be good for the European
+Buildrooters to discuss at their next conference.
+
+Regards, Steve
