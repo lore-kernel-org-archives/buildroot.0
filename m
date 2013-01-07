@@ -1,66 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 7 Jan 2013 23:10:37 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
-	pointing to our .config
-In-Reply-To: <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
- <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
-Message-ID: <201301072310.37077.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH] new variable <pkg>_CONFIG_FIXUP
+In-Reply-To: <1357596078-7762-2-git-send-email-stefan.froberg@petroprogram.com>
+References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1357596078-7762-2-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <20130107231037.39a798cf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+Dear Stefan Fr?berg,
 
-On Monday 07 January 2013 Yann E. MORIN wrote:
-> Support scripts (in support/) may need to parse the .config file,
-> so give them an easy access to it, by exporting CONFIG_FILE with
-> the fully-qualified path to .config.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Tue,  8 Jan 2013 00:01:18 +0200, Stefan Fr?berg wrote:
+> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+
+Please add more details to your commit log. I.e, basically, most of your
+introduction e-mail contents should go here.
+
+Remember: the contents of your introduction e-mail are not preserved in
+the Git history. On the opposite, the commit log is preserved forever
+in the Git history, so we want the details to be here.
+
 > ---
->  Makefile |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
+>  package/pkg-generic.mk |    8 ++++++++
+>  1 files changed, 8 insertions(+), 0 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 4b09437..7a2902d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -91,6 +91,10 @@ EXTRAMAKEARGS = O=$(O)
->  NEED_WRAPPER=y
->  endif
->  
-> +# Scripts in support/ may need to parse out .config, so give
-> +# them easy access
-> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config
-> +
->  # Pull in the user's configuration file
->  ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
->  -include $(CONFIG_DIR)/.config
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index a570ad7..a410ad1 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -121,6 +121,14 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+>  	@$(call MESSAGE,"Installing to staging directory")
+>  	$($(PKG)_INSTALL_STAGING_CMDS)
+>  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+> +	@$(call MESSAGE,"Fixing package configuration files")
 
-There are a few other places in this file where we use:
-    $(CONFIG_DIR)/.config
+Please show the message only if there are actually files to fixup. Or
+maybe just don't display any message at all. Fixing those files is kind
+of a detail.
 
-I was not sure how to handle these, especially since they are associated
-with:
-    $(CONFIG_DIR)/.config.nopkg
+> +	for file in $($(PKG)_CONFIG_FIXUP); do \
+> +		if [ -e $(STAGING_DIR)/usr/bin/$${file} ]; then \
 
-Using $(BR2_CONFIG_FILE).nopkg looks a bit ugly to me. Instead, I went to
-reason that we're in the top-level Makefile, and that we know what we're
-doing. BR2_CONFIG_FILE is our /API/ and although it would be nice to use
-it internally too, it does not fit properly, so I did not change it.
+No, we should not silently error out if the file doesn't exist, because
+it's hiding a mistake of package .mk file. Instead, if the file doesn't
+exist, we should loudly error out.
 
-Comments welcome. ;-)
+Also, please include an update to the Buildroot manual, either as part
+of this patch, or as a separate patch.
 
-Regards,
-Yann E. MORIN.
+Thanks for your work!
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
