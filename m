@@ -1,39 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  7 Jan 2013 22:52:03 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
-	pointing to our .config
-In-Reply-To: <cover.1357595083.git.yann.morin.1998@free.fr>
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
-Message-ID: <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Jan 2013 22:52:23 +0100
+Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
+In-Reply-To: <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
+References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
+ <1357591399-3566-2-git-send-email-marek.belisko@open-nandra.com>
+ <20130107222615.36bd70ab@skate>
+ <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
+Message-ID: <20130107225223.10cdf4e6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support scripts (in support/) may need to parse the .config file,
-so give them an easy access to it, by exporting CONFIG_FILE with
-the fully-qualified path to .config.
+Dear Belisko Marek,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- Makefile |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+On Mon, 7 Jan 2013 22:45:50 +0100, Belisko Marek wrote:
 
-diff --git a/Makefile b/Makefile
-index 4b09437..7a2902d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -91,6 +91,10 @@ EXTRAMAKEARGS = O=$(O)
- NEED_WRAPPER=y
- endif
- 
-+# Scripts in support/ may need to parse out .config, so give
-+# them easy access
-+export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config
-+
- # Pull in the user's configuration file
- ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(CONFIG_DIR)/.config
+> > You should be work specific than just BSD and GPL. Like BSD-3c or
+> > BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
+> After proper reading of COPYING file it seems it GPLv2+
+> "Some of the older utilities are covered by the GPL. More precisely:
+> You are free to distribute this software under the terms of the
+> GNU General Public License either version 2, or (at your option)
+> any later version." but in same file there is no mention about BSD
+> license version.
+
+There is a BSD_LICENSE file that contains a BSD three clause license,
+so I would say:
+
+SG3_UTILS_LICENSE = GPLv2+ BSD-3c
+SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
+
+Thomas
 -- 
-1.7.2.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
