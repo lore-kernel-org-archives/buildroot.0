@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 22:52:23 +0100
-Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
-In-Reply-To: <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
+Date: Mon, 7 Jan 2013 22:53:19 +0100
+Subject: [Buildroot] [PATCH v2 3/6] libatasmart: new package.
+In-Reply-To: <CAAfyv37Cd6NzPHTQmWXUS2bWB70UhA47CyWnNxD6R6igKp4Agw@mail.gmail.com>
 References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <1357591399-3566-2-git-send-email-marek.belisko@open-nandra.com>
- <20130107222615.36bd70ab@skate>
- <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
-Message-ID: <20130107225223.10cdf4e6@skate>
+ <1357591399-3566-4-git-send-email-marek.belisko@open-nandra.com>
+ <20130107223046.74aa74a4@skate>
+ <CAAfyv37Cd6NzPHTQmWXUS2bWB70UhA47CyWnNxD6R6igKp4Agw@mail.gmail.com>
+Message-ID: <20130107225319.0223451f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,22 +15,18 @@ To: buildroot@busybox.net
 
 Dear Belisko Marek,
 
-On Mon, 7 Jan 2013 22:45:50 +0100, Belisko Marek wrote:
+On Mon, 7 Jan 2013 22:52:08 +0100, Belisko Marek wrote:
 
-> > You should be work specific than just BSD and GPL. Like BSD-3c or
-> > BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
-> After proper reading of COPYING file it seems it GPLv2+
-> "Some of the older utilities are covered by the GPL. More precisely:
-> You are free to distribute this software under the terms of the
-> GNU General Public License either version 2, or (at your option)
-> any later version." but in same file there is no mention about BSD
-> license version.
+> > Could you detail a little why udev is a dependency. Is libudev a
+> > dependency? Something else? We need to understand if it's a build
+> > dependency, a runtime dependency, the requirement for the system to
+> > actually use and run udev, etc.
+> libudev is dependency for libatasmart.
 
-There is a BSD_LICENSE file that contains a BSD three clause license,
-so I would say:
+Ok, then maybe put a comment on top of the "depends on
+BR2_PACKAGE_UDEV".
 
-SG3_UTILS_LICENSE = GPLv2+ BSD-3c
-SG3_UTILS_LICENSE_FILES = COPYING BSD_LICENSE
+Thanks,
 
 Thomas
 -- 
