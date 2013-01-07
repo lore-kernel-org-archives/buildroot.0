@@ -1,294 +1,124 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 Jan 2013 15:13:00 -0300
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_3/3=5D_mcrypt=3A_new_package?=
-In-Reply-To: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1357582380-22332-3-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Jan 2013 19:47:43 +0100
+Subject: [Buildroot] [PATCH 1/2] system: set root password only for
+	default skeleton
+In-Reply-To: <CAJJ6jxsFL2Su1Jpxavk6zh7qw8b31gFbFEHyaKUvKLZ9Xtp1pQ@mail.gmail.com>
+References: <cover.1357397453.git.yann.morin.1998@free.fr>
+ <1f2432a8027f1e1c780a45b488be8be03f1b1b93.1357397453.git.yann.morin.1998@free.fr>
+ <CAJJ6jxsFL2Su1Jpxavk6zh7qw8b31gFbFEHyaKUvKLZ9Xtp1pQ@mail.gmail.com>
+Message-ID: <201301071947.43714.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                         |    1 +
- package/mcrypt/Config.in                  |   13 ++++
- package/mcrypt/mcrypt-CVE-2012-4409.patch |   25 +++++++
- package/mcrypt/mcrypt-CVE-2012-4426.patch |   35 +++++++++
- package/mcrypt/mcrypt-CVE-2012-4527.patch |  108 +++++++++++++++++++++++++++++
- package/mcrypt/mcrypt-no-rpath.patch      |   17 +++++
- package/mcrypt/mcrypt.mk                  |   17 +++++
- 7 files changed, 216 insertions(+), 0 deletions(-)
- create mode 100644 package/mcrypt/Config.in
- create mode 100644 package/mcrypt/mcrypt-CVE-2012-4409.patch
- create mode 100644 package/mcrypt/mcrypt-CVE-2012-4426.patch
- create mode 100644 package/mcrypt/mcrypt-CVE-2012-4527.patch
- create mode 100644 package/mcrypt/mcrypt-no-rpath.patch
- create mode 100644 package/mcrypt/mcrypt.mk
+Steve, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index ca5136f..9d3577e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -585,6 +585,7 @@ menu "Miscellaneous"
- source "package/collectd/Config.in"
- source "package/empty/Config.in"
- source "package/googlefontdirectory/Config.in"
-+source "package/mcrypt/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
- source "package/snowball-init/Config.in"
-diff --git a/package/mcrypt/Config.in b/package/mcrypt/Config.in
-new file mode 100644
-index 0000000..58567cd
---- /dev/null
-+++ b/package/mcrypt/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_MCRYPT
-+	bool "mcrypt"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBMCRYPT
-+	select BR2_PACKAGE_LIBMHASH
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	help
-+	  MCrypt is a replacement for the old crypt() package and crypt(1)
-+	  command, with extensions.
-+	  It allows developers to use a wide range of encryption functions,
-+	  without making drastic changes to their code.
-+
-+	  http://mcrypt.sourceforge.net/
-diff --git a/package/mcrypt/mcrypt-CVE-2012-4409.patch b/package/mcrypt/mcrypt-CVE-2012-4409.patch
-new file mode 100644
-index 0000000..97c658b
---- /dev/null
-+++ b/package/mcrypt/mcrypt-CVE-2012-4409.patch
-@@ -0,0 +1,25 @@
-+From 3efb40e17ce4f76717ae17a1ce1e1f747ddf59fd Mon Sep 17 00:00:00 2001
-+From: Alon Bar-Lev <alon.barlev@gmail.com>
-+Date: Sat, 22 Dec 2012 22:37:06 +0200
-+Subject: [PATCH] cleanup: buffer overflow
-+
-+---
-+ src/extra.c |    2 ++
-+ 1 files changed, 2 insertions(+), 0 deletions(-)
-+
-+diff --git a/src/extra.c b/src/extra.c
-+index 3082f82..c7a1ac0 100644
-+--- a/src/extra.c
-++++ b/src/extra.c
-+@@ -241,6 +241,8 @@ int check_file_head(FILE * fstream, char *algorithm, char *mode,
-+ 		if (m_getbit(6, flags) == 1) { /* if the salt bit is set */
-+ 			if (m_getbit(0, sflag) != 0) { /* if the first bit is set */
-+ 				*salt_size = m_setbit(0, sflag, 0);
-++				if (*salt_size > sizeof(tmp_buf))
-++					err_quit(_("Salt is too long\n"));
-+ 				if (*salt_size > 0) {
-+ 					fread(tmp_buf, 1, *salt_size,
-+ 					      fstream);
-+-- 
-+1.7.8.6
-+
-diff --git a/package/mcrypt/mcrypt-CVE-2012-4426.patch b/package/mcrypt/mcrypt-CVE-2012-4426.patch
-new file mode 100644
-index 0000000..708d4a5
---- /dev/null
-+++ b/package/mcrypt/mcrypt-CVE-2012-4426.patch
-@@ -0,0 +1,35 @@
-+Patch taken from gentoo.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/src/errors.c
-++++ b/src/errors.c
-+@@ -25,24 +25,24 @@
-+ 
-+ void err_quit(char *errmsg)
-+ {
-+-	fprintf(stderr, errmsg);
-++	fprintf(stderr, "%s", errmsg);
-+ 	exit(-1);
-+ }
-+ 
-+ void err_warn(char *errmsg)
-+ {
-+ 	if (quiet <= 1)
-+-		fprintf(stderr, errmsg);
-++		fprintf(stderr, "%s", errmsg);
-+ }
-+ 
-+ void err_info(char *errmsg)
-+ {
-+ 	if (quiet == 0)
-+-		fprintf(stderr, errmsg);
-++		fprintf(stderr, "%s", errmsg);
-+ }
-+ 
-+ void err_crit(char *errmsg)
-+ {
-+ 	if (quiet <= 2)
-+-		fprintf(stderr, errmsg);
-++		fprintf(stderr, "%s", errmsg);
-+ }
-diff --git a/package/mcrypt/mcrypt-CVE-2012-4527.patch b/package/mcrypt/mcrypt-CVE-2012-4527.patch
-new file mode 100644
-index 0000000..a287680
---- /dev/null
-+++ b/package/mcrypt/mcrypt-CVE-2012-4527.patch
-@@ -0,0 +1,108 @@
-+Description: [CVE-2012-4527] Stack-based buffer overflow with long file names
-+ .
-+ A buffer overflow in mcrypt version 2.6.8 and earlier due to long filenames.
-+ If a user were tricked into attempting to encrypt/decrypt specially crafted
-+ long filename(s), this flaw would cause a stack-based buffer overflow that
-+ could potentially lead to arbitrary code execution.
-+ .
-+ Note that this is caught by FORTIFY_SOURCE, which makes this a crash-only
-+ bug on wheezy.
-+Author: Attila Bogar, Jean-Michel Vourg?re <jmv_deb@nirgal.com>
-+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-4527
-+Bug: CVE-2012-4527
-+Bug-Debian: http://bugs.debian.org/690924
-+Forwarded: no
-+Last-Update: 2012-11-01
-+Index: mcrypt-2.6.8/src/mcrypt.c
-+===================================================================
-+--- mcrypt-2.6.8.orig/src/mcrypt.c
-++++ mcrypt-2.6.8/src/mcrypt.c
-+@@ -41,4 +41,6 @@
-+ 
-++/* Temporary error message can contain one file name and 1k of text */
-++#define ERRWIDTH ((PATH_MAX)+1024)
-+-char tmperr[128];
-++char tmperr[ERRWIDTH];
-+ unsigned int stream_flag = FALSE;
-+ char *keymode = NULL;
-+ char *mode = NULL;
-+@@ -482,7 +485,7 @@
-+ #ifdef HAVE_STAT
-+       if (stream_flag == FALSE) {
-+ 	 if (is_normal_file(file[i]) == FALSE) {
-+-	    sprintf(tmperr,
-++	    snprintf(tmperr, ERRWIDTH,
-+ 		    _
-+ 		    ("%s: %s is not a regular file. Skipping...\n"),
-+ 		    program_name, file[i]);
-+@@ -501,7 +504,7 @@
-+ 	    dinfile = file[i];
-+ 	 if ((isatty(fileno((FILE *) (stdin))) == 1)
-+ 	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
-+-	    sprintf(tmperr,
-++	    snprintf(tmperr, ERRWIDTH,
-+ 		    _
-+ 		    ("%s: Encrypted data will not be read from a terminal.\n"),
-+ 		    program_name);
-+@@ -520,7 +523,7 @@
-+ 	    einfile = file[i];
-+ 	 if ((isatty(fileno((FILE *) (stdout))) == 1)
-+ 	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
-+-	    sprintf(tmperr,
-++	    snprintf(tmperr, ERRWIDTH,
-+ 		    _
-+ 		    ("%s: Encrypted data will not be written to a terminal.\n"),
-+ 		    program_name);
-+@@ -544,7 +547,7 @@
-+ 	    strcpy(outfile, einfile);
-+ 	    /* if file has already the .nc ignore it */
-+ 	    if (strstr(outfile, ".nc") != NULL) {
-+-	       sprintf(tmperr,
-++	       snprintf(tmperr, ERRWIDTH,
-+ 		       _
-+ 		       ("%s: file %s has the .nc suffix... skipping...\n"),
-+ 		       program_name, outfile);
-+@@ -590,10 +593,10 @@
-+ 
-+ 	 if (x == 0) {
-+ 	    if (stream_flag == FALSE) {
-+-	       sprintf(tmperr, _("File %s was decrypted.\n"), dinfile);
-++	       snprintf(tmperr, ERRWIDTH, _("File %s was decrypted.\n"), dinfile);
-+ 	       err_warn(tmperr);
-+ 	    } else {
-+-	       sprintf(tmperr, _("Stdin was decrypted.\n"));
-++	       snprintf(tmperr, ERRWIDTH, _("Stdin was decrypted.\n"));
-+ 	       err_warn(tmperr);
-+ 	    }
-+ #ifdef HAVE_STAT
-+@@ -610,7 +613,7 @@
-+ 
-+ 	 } else {
-+ 	    if (stream_flag == FALSE) {
-+-	       sprintf(tmperr,
-++	       snprintf(tmperr, ERRWIDTH,
-+ 		       _
-+ 		       ("File %s was NOT decrypted successfully.\n"),
-+ 		       dinfile);
-+@@ -636,10 +639,10 @@
-+ 
-+ 	 if (x == 0) {
-+ 	    if (stream_flag == FALSE) {
-+-	       sprintf(tmperr, _("File %s was encrypted.\n"), einfile);
-++	       snprintf(tmperr, ERRWIDTH, _("File %s was encrypted.\n"), einfile);
-+ 	       err_warn(tmperr);
-+ 	    } else {
-+-	       sprintf(tmperr, _("Stdin was encrypted.\n"));
-++	       snprintf(tmperr, ERRWIDTH, _("Stdin was encrypted.\n"));
-+ 	       err_warn(tmperr);
-+ 	    }
-+ #ifdef HAVE_STAT
-+@@ -655,7 +658,7 @@
-+ 
-+ 	 } else {
-+ 	    if (stream_flag == FALSE) {
-+-	       sprintf(tmperr,
-++	       snprintf(tmperr, ERRWIDTH,
-+ 		       _
-+ 		       ("File %s was NOT encrypted successfully.\n"),
-+ 		       einfile);
-diff --git a/package/mcrypt/mcrypt-no-rpath.patch b/package/mcrypt/mcrypt-no-rpath.patch
-new file mode 100644
-index 0000000..a0813bc
---- /dev/null
-+++ b/package/mcrypt/mcrypt-no-rpath.patch
-@@ -0,0 +1,17 @@
-+Patch out rpath hardcoding since it completely ignores --disable-rpath
-+and other configure ways.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura mcrypt-2.6.8.orig/config.rpath mcrypt-2.6.8/config.rpath
-+--- mcrypt-2.6.8.orig/config.rpath	2013-01-07 13:05:22.626883480 -0300
-++++ mcrypt-2.6.8/config.rpath	2013-01-07 13:12:47.196090608 -0300
-+@@ -153,7 +153,7 @@
-+   # here allows them to be overridden if necessary.
-+   # Unlike libtool, we use -rpath here, not --rpath, since the documented
-+   # option of GNU ld is called -rpath, not --rpath.
-+-  hardcode_libdir_flag_spec='${wl}-rpath ${wl}$libdir'
-++  hardcode_libdir_flag_spec=
-+   case "$host_os" in
-+     aix3* | aix4* | aix5*)
-+       # On AIX/PPC, the GNU linker is very broken
-diff --git a/package/mcrypt/mcrypt.mk b/package/mcrypt/mcrypt.mk
-new file mode 100644
-index 0000000..5bd5816
---- /dev/null
-+++ b/package/mcrypt/mcrypt.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# mcrypt
-+#
-+#############################################################
-+
-+MCRYPT_VERSION = 2.6.8
-+MCRYPT_SITE = http://downloads.sourceforge.net/project/mcrypt/MCrypt/$(MCRYPT_VERSION)
-+MCRYPT_DEPENDENCIES = libmcrypt libmhash \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib) \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
-+MCRYPT_CONF_OPT = --with-libmcrypt-prefix=$(STAGING_DIR)/usr
-+MCRYPT_LICENSE = GPLv3
-+MCRYPT_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+On Monday 07 January 2013 Steve Calfee wrote:
+> On Sat, Jan 5, 2013 at 6:52 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > In case one is using a custom skeleton, the root pasword might already be
+> > set in this case, and should not be overriden.
+> >
+> > Just ask for (and set) the root password only for the default skeleton.
+> >
+> > Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> 
+> Hi Yann, all,
+> 
+> This is another change that in my opinion goes against the philosophy
+> of buildroot.
+
+IIRC, there have been some complaints on the list by users that just
+wondered what was the root password:
+    https://bugs.busybox.net/show_bug.cgi?id=5366
+    http://lists.busybox.net/pipermail/buildroot/2012-August/057017.html
+
+Having this prompt in the menuconfig makes it clear to the user that
+Buildroot does not use a hard-coded secret password.
+
+> Why do we need yet another change to enable something easily done with
+> the post build patch script? An easily built bsp skeleton with an
+> etc/shadow file handles this beautifully. This kind of creeping
+> feature requires maintenance, documentation etc. Why?
+
+Well, that's basically where our view diverges:
+  - first, it is not trivial for everybody. It is for me, and I understand
+    it is for you. But many people come to buildroot with little previous
+    knowledge of Linux in general, and often even less about embdded Linux
+    in particular;
+  - second, it makes it clear to the user what the root password is (see
+    above).
+
+> We need to separate people who build things using buildroot and end
+> users that use those things. Is it real to think an end user will
+> build from scratch with buildroot?
+
+I am not sure what you mean by:
+  - people who build things with Buildroot,
+  - end users.
+
+To me there are:
+  A) Buildroot developpers, who change Buildroot code,
+  B) Buildroot users, who build appliances,
+  C) users of appliances built with Buildroot.
+
+Where:
+  - {A} ? {B}
+  - {A} ? {C} ? {?}
+  - {B} ? {C} ? {?}
+
+IMHO, Buildroot should *not* take {C} into account, except for the list
+of packages to include in Buildroot, which is fact of matter to {B}.
+
+Buildroot, however, should catter for {B}, the users of Buildroot. And
+this is achieved by having people in {A} implement some changes, and even
+better, people moving from {B} to {A} to do the job. ;-)
+
+What I mean is: some Buildroot users have complained that the root pasword
+was not known (people in {B}). And the answer was to:
+  - put it in the doc (IIRC), done by people in {A},
+  - propose this change, also by people in {A},
+so that people in {B} are no longer puzzled what to enter when prompted
+for the root pasword.
+
+Also, people in {A} may think of a whole new feature, and implement it,
+without anything being asked for by people in {B} (but probably because
+people in {A} are also in {B}, they have a need for that change).
+
+In the end, if a change is deemed not fit for use by people in {B},
+there is always the solution to revert that change (if enough of them
+complain! ;-) )
+
+> There are full featured
+> distributions for most popular platforms that contain this kind of
+> stuff. For true embedded developers, adding more things like this just
+> complicate things, does not make it easier.
+
+Well, true embedded developpers use their own skeleton, right? ;-)
+(Just kidding).
+
+Well, true embedded developpers (and I've been one for the ~14 past
+years, now), know how to overcome what you see as a limitation. At least,
+I (and it seems a few others as well) see it as an enhancement.
+
+> I guess this is the sort of thing it would be good for the European
+> Buildrooters to discuss at their next conference.
+
+Yes. But this series has been floating for quite some time now:
+    http://lists.busybox.net/pipermail/buildroot/2012-September/058583.html
+
+But I'm afraid that it is in the end the role of the maintainer to decide
+whether or not this feature is fit for inclusion or not. In this case,
+it seems it was! ;-) (which does not mean it can't be reverted, either).
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.8.6
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
