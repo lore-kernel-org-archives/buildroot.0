@@ -1,108 +1,56 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Mon,  7 Jan 2013 21:43:19 +0100
-Subject: [Buildroot] [PATCH v2 6/6] udisks: new package
-In-Reply-To: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1357591399-3566-7-git-send-email-marek.belisko@open-nandra.com>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Mon, 7 Jan 2013 21:47:35 +0100
+Subject: [Buildroot] [RFC 0/2] Add support for building barebox xloader.
+In-Reply-To: <1356217460-20232-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1356217460-20232-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <CAAfyv35ZMbYENmUjJcmZOQF5zYctM0ZqriY3y65VJC9=JiQPVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
----
- package/Config.in        |    1 +
- package/udisks/Config.in |   32 ++++++++++++++++++++++++++++++++
- package/udisks/udisks.mk |   28 ++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 package/udisks/Config.in
- create mode 100644 package/udisks/udisks.mk
+ping
 
-diff --git a/package/Config.in b/package/Config.in
-index 53bb5be..5968282 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -272,6 +272,7 @@ source "package/sysstat/Config.in"
- source "package/ti-utils/Config.in"
- source "package/uboot-tools/Config.in"
- source "package/udev/Config.in"
-+source "package/udisks/Config.in"
- source "package/usb_modeswitch/Config.in"
- source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
-diff --git a/package/udisks/Config.in b/package/udisks/Config.in
-new file mode 100644
-index 0000000..bdc99b3
---- /dev/null
-+++ b/package/udisks/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_UDISKS
-+	bool "udisks"
-+	depends on BR2_PACKAGE_UDEV
-+	depends on BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_SG3_UTILS
-+	select BR2_PACKAGE_UDEV_ALL_EXTRAS
-+	select BR2_PACKAGE_DBUS_GLIB
-+	select BR2_PACKAGE_POLKIT
-+	select BR2_PACKAGE_PARTED #select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_DMSETUP_ONLY #devmapper library
-+	select BR2_PACKAGE_LIBATASMART
-+	help
-+	  The udisks project provides
-+
-+	   o A storage daemon that implements well-defined D-Bus
-+	     interfaces that can be used to query and manipulate
-+	     storage devices.
-+
-+	   o a command-line tool, udisks(1), that can be used to query
-+	     and use the daemon
-+
-+	  http://www.freedesktop.org/wiki/Software/udisks
-+
-+config BR2_PACKAGE_UDISKS_LVM2
-+	bool "lvm2 support"
-+	depends on BR2_PACKAGE_UDISKS
-+	depends on BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_LVM2_APP_LIBRARY
-+	default n
-+
-+comment "udisks requires udev and dbus to be enabled"
-+	depends on !BR2_PACKAGE_UDEV || !BR2_PACKAGE_DBUS
-diff --git a/package/udisks/udisks.mk b/package/udisks/udisks.mk
-new file mode 100644
-index 0000000..19f9da4
---- /dev/null
-+++ b/package/udisks/udisks.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# udisks
-+#
-+#############################################################
-+UDISKS_VERSION = 1.0.4
-+UDISKS_SITE    = http://hal.freedesktop.org/releases/
-+UDISKS_LICENCE = GPLv2+
-+UDISKS_LICENCE_FILES = COPYING
-+
-+UDISKS_DEPENDENCIES = 	\
-+	sg3_utils	\
-+	host-pkgconf	\
-+	udev		\
-+	dbus		\
-+	dbus-glib	\
-+	polkit		\
-+	parted		\
-+	lvm2		\
-+	libatasmart
-+
-+UDISKS_CONF_OPT = --disable-remote-access --disable-gtk-doc
-+
-+ifeq ($(BR2_PACKAGE_UDISKS_LVM2),y)
-+UDISKS_CONF_OPT += --enable-lvm2
-+endif
-+
-+$(eval $(autotools-package))
+On Sun, Dec 23, 2012 at 12:04 AM, Marek Belisko
+<marek.belisko@open-nandra.com> wrote:
+> Reposting-> first time was sent to wrong mailing list.
+>
+> Currently Buildroot have support to build barebox only. For some board there is possibility
+> to build also xloader (first stage bootloader) based on barebox. Following patches add
+> support for building barebox + xloader (aka MLO) by once if user specify configuration for
+> xloader.
+>
+> First patch move building barebox to separate directory. Second patch add support for building
+> xloader. Both binaries are build in separate directories to avoid problems with not clean tree.
+>
+> With this patches we can build complete image for e.g. pandaboard (which is my case) without building
+> anything by hand.
+>
+> Marek Belisko (2):
+>   barebox: Build barebox in separate directory.
+>   barebox: Add possibility to build also barebox xloader (MLO).
+>
+>  boot/barebox/Config.in  |   28 ++++++++++++++++++++++++++++
+>  boot/barebox/barebox.mk |   45 ++++++++++++++++++++++++++++++++++++++-------
+>  2 files changed, 66 insertions(+), 7 deletions(-)
+>
+> --
+> 1.7.10.4
+>
+
+Cheers,
+
+marek
+
 -- 
-1.7.10.4
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
