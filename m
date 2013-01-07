@@ -1,69 +1,93 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 7 Jan 2013 22:45:50 +0100
-Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
-In-Reply-To: <20130107222615.36bd70ab@skate>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Jan 2013 22:47:30 +0100
+Subject: [Buildroot] [PATCH v2 6/6] udisks: new package
+In-Reply-To: <1357591399-3566-7-git-send-email-marek.belisko@open-nandra.com>
 References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <1357591399-3566-2-git-send-email-marek.belisko@open-nandra.com>
- <20130107222615.36bd70ab@skate>
-Message-ID: <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
+ <1357591399-3566-7-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20130107224730.0b135a42@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Marek Belisko,
 
-On Mon, Jan 7, 2013 at 10:26 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Marek Belisko,
->
-> On Mon,  7 Jan 2013 21:43:14 +0100, Marek Belisko wrote:
->
->> +config BR2_PACKAGE_SG3_UTILS
->> +     bool "sgutils"
->> +     depends on BR2_LARGEFILE
->> +     depends on BR2_TOOLCHAIN_HAS_THREADS
->> +     help
->> +       Low level utilities for devices that use a SCSI command set.
->> +
->
-> You should mention here that this option only installs the library
-> (libraries?), but not the programs.
-OK.
->
->> +SG3_UTILS_LICENSE = BSD GPL
->
-> You should be work specific than just BSD and GPL. Like BSD-3c or
-> BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
-After proper reading of COPYING file it seems it GPLv2+
-"Some of the older utilities are covered by the GPL. More precisely:
-You are free to distribute this software under the terms of the
-GNU General Public License either version 2, or (at your option)
-any later version." but in same file there is no mention about BSD
-license version.
->
-> Otherwise, looks good.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+On Mon,  7 Jan 2013 21:43:19 +0100, Marek Belisko wrote:
 
-Thanks,
+> --- /dev/null
+> +++ b/package/udisks/Config.in
+> @@ -0,0 +1,32 @@
+> +config BR2_PACKAGE_UDISKS
+> +	bool "udisks"
+> +	depends on BR2_PACKAGE_UDEV
+> +	depends on BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_SG3_UTILS
+> +	select BR2_PACKAGE_UDEV_ALL_EXTRAS
+> +	select BR2_PACKAGE_DBUS_GLIB
+> +	select BR2_PACKAGE_POLKIT
+> +	select BR2_PACKAGE_PARTED #select BR2_PACKAGE_LVM2
+> +	select BR2_PACKAGE_LVM2_DMSETUP_ONLY #devmapper library
 
-mbe
+If you select BR2_PACKAGE_LVM2_DMSETUP_ONLY, then you also have to
+select BR2_PACKAGE_LVM2.
 
+> +	select BR2_PACKAGE_LIBATASMART
+
+Also, you're doing a lot of select here. Please verify that all the
+configuration options you're selecting don't have depends on
+dependencies that aren't already brought through the dependency on dbus
+and udev here.
+
+> +	help
+> +	  The udisks project provides
+> +
+> +	   o A storage daemon that implements well-defined D-Bus
+> +	     interfaces that can be used to query and manipulate
+> +	     storage devices.
+> +
+> +	   o a command-line tool, udisks(1), that can be used to query
+> +	     and use the daemon
+> +
+> +	  http://www.freedesktop.org/wiki/Software/udisks
+> +
+> +config BR2_PACKAGE_UDISKS_LVM2
+> +	bool "lvm2 support"
+> +	depends on BR2_PACKAGE_UDISKS
+> +	depends on BR2_PACKAGE_LVM2
+> +	select BR2_PACKAGE_LVM2_APP_LIBRARY
+> +	default n
+
+BR2_PACKAGE_LVM2 is necessarily defined if
+BR2_PACKAGE_LVM2_DMSETUP_ONLY is selected by the main
+BR2_PACKAGE_UDISKS option.
+
+If I understand correctly, you can build:
+
+ * udisks without the lvm2 library, but it needs the dmsetup binary
+   unconditionally (which sounds strange, isn't capable of supporting
+   setups without LVM stuff)
+
+ * udisks with the lvm2 library
+
+Not sure how to handle that properly with the current BR2_PACKAGE_LVM2
+options. Needs more thought.
+
+> +#############################################################
+> +#
+> +# udisks
+> +#
+> +#############################################################
+> +UDISKS_VERSION = 1.0.4
+> +UDISKS_SITE    = http://hal.freedesktop.org/releases/
+> +UDISKS_LICENCE = GPLv2+
+> +UDISKS_LICENCE_FILES = COPYING
+
+LICENSE.
+
+Thomas
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
