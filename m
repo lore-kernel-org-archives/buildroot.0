@@ -1,18 +1,19 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 Jan 2013 21:44:56 +0100
-Subject: [Buildroot] [git commit] elfutils: towards uClibc support: gettext
-Message-ID: <20130107212532.B15529A691@busybox.osuosl.org>
+Date: Mon, 7 Jan 2013 21:43:06 +0100
+Subject: [Buildroot] [git commit] elfutils: towards uClibc support: solve
+	memcpy problem
+Message-ID: <20130107212532.3A6FF9A691@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f282139807a7d10cc496b6ede23a4c16e587e0be
+commit: http://git.buildroot.net/buildroot/commit/?id=a64632e44728450e6fa814ce95fbb67161c8971a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-elfutils is annoying: it needs gettext even if locale support is
-disabled...
+elfutils uses some strange internal alias of memcpy in glibc, so
+workaround this when building with uClibc.
 
 Heavily based from work done by Stefan Fr??berg, but with many further
 modifications by Thomas Petazzoni.
@@ -20,41 +21,36 @@ modifications by Thomas Petazzoni.
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/elfutils/Config.in   |    1 +
- package/elfutils/elfutils.mk |   11 +++++++++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+ package/elfutils/elfutils-03-memcpy-def.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
-index 5ec4ca9..78d02a5 100644
---- a/package/elfutils/Config.in
-+++ b/package/elfutils/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_ELFUTILS
- 	       BR2_TOOLCHAIN_BUILDROOT   || \
- 	       BR2_TOOLCHAIN_CTNG_uClibc || \
- 	       BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
- 	depends on BR2_LARGEFILE
- 	help
- 	  Libraries/utilities to handle ELF objects (drop in
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 9f9de52..39407db 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -25,6 +25,17 @@ ELFUTILS_CONF_ENV += \
-         CPPFLAGS="$(filter-out -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))"
- endif
- 
-+ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS)
+diff --git a/package/elfutils/elfutils-03-memcpy-def.patch b/package/elfutils/elfutils-03-memcpy-def.patch
+new file mode 100644
+index 0000000..eb50cf6
+--- /dev/null
++++ b/package/elfutils/elfutils-03-memcpy-def.patch
+@@ -0,0 +1,24 @@
++Provide a compatibility alias __memcpy
 +
-+# Unconditionnally requires gettext.
-+ifeq ($(BR2_NEEDS_GETTEXT),y)
-+ELFUTILS_DEPENDENCIES += gettext
-+ELFUTILS_LDFLAGS += -lintl
-+endif
++For some reason, libelf uses the internal glibc alias __memcpy, which
++doesn't exist in uClibc. Add a manual alias so that the build can
++proceed with uClibc.
 +
-+ELFUTILS_CONF_ENV += \
-+	LDFLAGS="$(ELFUTILS_LDFLAGS)"
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
-  ELFUTILS_DEPENDENCIES += argp-standalone
- endif
++Index: b/libelf/libelf.h
++===================================================================
++--- a/libelf/libelf.h
+++++ b/libelf/libelf.h
++@@ -34,6 +34,11 @@
++ /* Get the ELF types.  */
++ #include <elf.h>
++ 
+++#ifndef _LIBC
+++#ifndef __mempcpy
+++#define __mempcpy mempcpy
+++#endif
+++#endif
++ 
++ /* Known translation types.  */
++ typedef enum
