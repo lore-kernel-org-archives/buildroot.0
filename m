@@ -1,52 +1,67 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 08 Jan 2013 00:30:15 +0100
-Subject: [Buildroot] [git commit] rpi-firmware: New package
-In-Reply-To: <CAGduivwPW82QJ20SmF-ki=YydwWgiOWG1jc6LQ41c0qwzP+kLg@mail.gmail.com>
-References: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
- <50EB4F1F.7070202@mind.be>
- <CAGduivwPW82QJ20SmF-ki=YydwWgiOWG1jc6LQ41c0qwzP+kLg@mail.gmail.com>
-Message-ID: <50EB5A87.906@je-eigen-domein.nl>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 08 Jan 2013 00:34:15 +0100
+Subject: [Buildroot] build hangs when building kernel
+In-Reply-To: <FB5BA32813A44818B6499769D61985DF@JohanW7>
+References: <FB5BA32813A44818B6499769D61985DF@JohanW7>
+Message-ID: <50EB5B77.3010800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/08/2013 12:06 AM, Maxime Hadjinlian wrote:
-> On Mon, Jan 7, 2013 at 11:41 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 06/01/13 23:01, Peter Korsgaard wrote:
->>> +RPI_FIRMWARE_LICENSE = BSD-3c
->>> +RPI_FIRMWARE_LICENSE_FILE = boot/LICENCE.broadcom
->>
->>   As Thomas pointed out, this is not BSD-3c but "Broadcom proprietary
->> license".
->>
->>   Maybe it should also get
->>
->> RPI_FIRMWARE_REDISTRIBUTE = NO
->>
-> So, even the binary are not free from redistributing ? I'm sorry, I
-> lack absolute knowledge in license... I should study this.
-> I will patch to add this.
+On 07/01/13 17:16, Sagaert Johan wrote:
+> Hi
+>
+> Using the latest pull:
+>
+> The build hangs when it is building the kernel
+>
+> snip....
+>
+>    LD [M]  fs/fuse/cuse.ko
+>    LD [M]  fs/fuse/fuse.ko
+>    LD [M]  lib/crc-ccitt.ko
+>    LD [M]  fs/nls/nls_iso8859-15.ko
+> make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+> PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
+> local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
+> PERLLIB="/home/buildroot12git/output/host/usr/lib/perl" /usr/bin/make -j8 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
+> INSTALL_MOD_PATH=/home/buildroot12git/output/target CROSS_COMPILE="
+> /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-" DEPMOD=/home/buildroot12git/output/host/usr/sbin/depmod
+> -C /home/buildroot12git/output/build/linux-3.4.24 tx53.dtb
+> make[1]: Entering directory `/home/buildroot12git/output/build/linux-3.4.24'
+>    DTC     arch/arm/boot/tx53.dtb
+> DTC: dts->dtb  on file "arch/arm/boot/dts/tx53.dts"
+> make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
+> # dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
+> cat>>  /home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/zImage
+>
+>
+>
+> It looks like the missing cat parameter is causing this.
 
-Perhaps also copy the boot/LICENCE.broadcom file to the directory 
-holding the boot files?
-Right now you are leaving it out.
+  Peter,
 
-==
-+    $(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin 
-$(BINARIES_DIR)/rpi-firmware/bootcode.bin
-+    $(INSTALL) -D -m 0644 $(@D)/boot/start.elf 
-$(BINARIES_DIR)/rpi-firmware/start.elf
-+    $(INSTALL) -D -m 0644 $(@D)/boot/start_cd.elf 
-$(BINARIES_DIR)/rpi-firmware/start_cd.elf
-+    $(INSTALL) -D -m 0644 $(@D)/boot/fixup.dat 
-$(BINARIES_DIR)/rpi-firmware/fixup.dat
-+    $(INSTALL) -D -m 0644 $(@D)/boot/fixup_cd.dat 
-$(BINARIES_DIR)/rpi-firmware/fixup_cd.dat
-==
+  The $(wildcard ) doesn't work for LINUX_APPEND_DTB, because the .dtb 
+doesn't exist yet at that point.
+
+  It works for LINUX_INSTALL_DTB because that one is only expanded after 
+the kernel (and the .dtb) has already been built.
+
+  Simplest option is to change it into a shell condition. Untested patch 
+follows.
+
+  Regards,
+  Arnout
+
+[snip]
 
 
-Yours sincerely,
-
-Floris Bos
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
