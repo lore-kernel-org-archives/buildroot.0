@@ -1,117 +1,61 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 7 Jan 2013 23:03:10 +0100
-Subject: [Buildroot] [PATCH v2 6/6] udisks: new package
-In-Reply-To: <20130107224730.0b135a42@skate>
-References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <1357591399-3566-7-git-send-email-marek.belisko@open-nandra.com>
- <20130107224730.0b135a42@skate>
-Message-ID: <CAAfyv34HwgoO7dEW6edbqaczPOh+zuM-sHw5_5ZUs_bmyw6RiQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Jan 2013 23:10:10 +0100
+Subject: [Buildroot] new <pkg>_CONFIG_FIXUP variable
+In-Reply-To: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
+References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
+Message-ID: <201301072310.10765.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Stefan, All,
 
-On Mon, Jan 7, 2013 at 10:47 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Marek Belisko,
->
-> On Mon,  7 Jan 2013 21:43:19 +0100, Marek Belisko wrote:
->
->> --- /dev/null
->> +++ b/package/udisks/Config.in
->> @@ -0,0 +1,32 @@
->> +config BR2_PACKAGE_UDISKS
->> +     bool "udisks"
->> +     depends on BR2_PACKAGE_UDEV
->> +     depends on BR2_PACKAGE_DBUS
->> +     select BR2_PACKAGE_SG3_UTILS
->> +     select BR2_PACKAGE_UDEV_ALL_EXTRAS
->> +     select BR2_PACKAGE_DBUS_GLIB
->> +     select BR2_PACKAGE_POLKIT
->> +     select BR2_PACKAGE_PARTED #select BR2_PACKAGE_LVM2
->> +     select BR2_PACKAGE_LVM2_DMSETUP_ONLY #devmapper library
->
-> If you select BR2_PACKAGE_LVM2_DMSETUP_ONLY, then you also have to
-> select BR2_PACKAGE_LVM2.
-This is selected conditionally when LVM2 support if selected.
->
->> +     select BR2_PACKAGE_LIBATASMART
->
-> Also, you're doing a lot of select here. Please verify that all the
-> configuration options you're selecting don't have depends on
-> dependencies that aren't already brought through the dependency on dbus
-> and udev here.
->
->> +     help
->> +       The udisks project provides
->> +
->> +        o A storage daemon that implements well-defined D-Bus
->> +          interfaces that can be used to query and manipulate
->> +          storage devices.
->> +
->> +        o a command-line tool, udisks(1), that can be used to query
->> +          and use the daemon
->> +
->> +       http://www.freedesktop.org/wiki/Software/udisks
->> +
->> +config BR2_PACKAGE_UDISKS_LVM2
->> +     bool "lvm2 support"
->> +     depends on BR2_PACKAGE_UDISKS
->> +     depends on BR2_PACKAGE_LVM2
->> +     select BR2_PACKAGE_LVM2_APP_LIBRARY
->> +     default n
->
-> BR2_PACKAGE_LVM2 is necessarily defined if
-> BR2_PACKAGE_LVM2_DMSETUP_ONLY is selected by the main
-> BR2_PACKAGE_UDISKS option.
->
-> If I understand correctly, you can build:
->
->  * udisks without the lvm2 library, but it needs the dmsetup binary
->    unconditionally (which sounds strange, isn't capable of supporting
->    setups without LVM stuff)
-It is weird but configure phase require devmapper library (otherwise
-fails) in both case (udisks with/without lvm2 support)
->
->  * udisks with the lvm2 library
->
-> Not sure how to handle that properly with the current BR2_PACKAGE_LVM2
-> options. Needs more thought.
->
->> +#############################################################
->> +#
->> +# udisks
->> +#
->> +#############################################################
->> +UDISKS_VERSION = 1.0.4
->> +UDISKS_SITE    = http://hal.freedesktop.org/releases/
->> +UDISKS_LICENCE = GPLv2+
->> +UDISKS_LICENCE_FILES = COPYING
->
-> LICENSE.
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+On Monday 07 January 2013 Stefan Fr?berg wrote:
+> This patch provides new variable called <pkg>_CONFIG_FIXUP.
+> It's purpose is to fix wrong prefixes of $(STAGING_DIR)/usr/bin/*-config file(s)
+> that many library packages install after staging installation phase.
+> 
+> Some packages provide multible *-config files.
+> 
+> So as suggested by Thomas Petazzoni and Gustavo Zacarias this 
+> variable can be feeded multible files.
+> 
+> All filenames are relative to $(STAGING_DIR)/usr/bin
+> 
+> Example:
+> 
+> DIVINE_CONFIG_FIXUP = divine-config
+> 
+> or:
+> 
+> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
+
+Please, put this explanation in the commit message.
+
+Also, add this variable to the documentation:
+    docs/manual/adding-packages-generic.txt
+
+Next time, also add a snall changelog to your message, so we know there
+was prior discussion and to help Peter to apply the correct patch series.
+I do something like:
+  Changes v1 -> v2:
+    - accept multiple files (Thomas, Gustavo)
+    - use paths relative to $(STAGING)/usr/bin
+
+And keep this changelog in each iteration. Add the version of the iteration
+in your mail subject.
+
+Thank you! :-)
 
 Regards,
-
-mbe
+Yann E. MORIN.
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
