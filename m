@@ -1,89 +1,49 @@
-From: Anthony Viallard <viallard@syscom-instruments.com>
-Date: Mon,  7 Jan 2013 14:30:16 +0100
-Subject: [Buildroot] [PATCH 4/5] gnuplot : add --without-doc and
-	--without-demo options
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Jan 2013 14:48:00 +0100
+Subject: [Buildroot] [PATCH 1/5] gnuplot : new package
 In-Reply-To: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
 References: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
-Message-ID: <1357565417-16782-4-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <20130107144800.29eb11ca@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create a generic patch to disable compilation/installation
-of docs and demo with configure options.
+Dear Anthony Viallard,
 
-Signed-off-by: Anthony Viallard <viallard@syscom-instruments.com>
----
- ...ot-0001-configure-add-without-demo-option.patch |   59 ++++++++++++++++++++
- 1 file changed, 59 insertions(+), 0 deletion(-)
- create mode 100644 package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch
+On Mon,  7 Jan 2013 14:30:13 +0100, Anthony Viallard wrote:
 
-diff --git a/package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch b/package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch
-new file mode 100644
-index 0000000..acdc91d
---- /dev/null
-+++ b/package/gnuplot/gnuplot-0001-configure-add-without-demo-option.patch
-@@ -0,0 +1,59 @@
-+Index: gnuplot-4.6.0/configure.in
-+===================================================================
-+--- gnuplot-4.6.0.orig/configure.in	2012-03-08 05:34:42.000000000 +0100
-++++ gnuplot-4.6.0/configure.in	2013-01-07 11:50:03.003804463 +0100
-+@@ -748,6 +748,16 @@
-+ AC_ARG_WITH(lisp-files,dnl
-+ [  --without-lisp-files    do not build emacs lisp files])
-+ 
-++dnl Whether we want to build the demo files
-++dnl Does nothing here, is passed on to the demo subdir
-++AC_ARG_WITH(demo,dnl
-++[  --without-demo    do not build demo files])
-++
-++dnl Whether we want to build the doc files
-++dnl Does nothing here, is passed on to the doc subdir
-++AC_ARG_WITH(doc,dnl
-++[  --without-doc    do not build doc files])
-++
-+ dnl Sort help/subtopic tables by row or column
-+ AC_ARG_WITH(row-help,dnl
-+ [  --with-row-help         format help and subtopic tables by row (default)
-+@@ -1200,6 +1210,24 @@
-+ fi
-+ AC_SUBST(LISPDIR)
-+ 
-++dnl build demo files
-++if test "$with_demo" != no; then
-++  AC_CONFIG_SUBDIRS(demo)
-++  DEMODIR=demo
-++else
-++  DEMODIR=
-++fi
-++AC_SUBST(DEMODIR)
-++
-++dnl build doc files
-++if test "$with_doc" != no; then
-++  AC_CONFIG_SUBDIRS(docs)
-++  DOCDIR=docs
-++else
-++  DOCDIR=
-++fi
-++AC_SUBST(DOCDIR)
-++
-+ dnl Substitute variables
-+ AC_SUBST(PACKAGE)
-+ AC_SUBST(VERSION_MAJOR)
-+Index: gnuplot-4.6.0/Makefile.am
-+===================================================================
-+--- gnuplot-4.6.0.orig/Makefile.am	2013-01-04 14:07:02.239120935 +0100
-++++ gnuplot-4.6.0/Makefile.am	2013-01-07 11:51:12.034846363 +0100
-+@@ -1,7 +1,7 @@
-+ ## Process this file with automake to produce Makefile.in -*-Makefile-*-
-+ AUTOMAKE_OPTIONS = foreign 1.2h
-+ 
-+-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
-++SUBDIRS = config m4 term src $(DOCDIR) $(LISPDIR) $(DEMODIR) man tutorial share
-+ 
-+ EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
-+ Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> +GNUPLOT_INSTALL_TARGET = YES
+
+This line is not needed.
+
+Also, please make your 1/5, 2/5, 3/5 and the LICENSE part of 5/5 a
+single patch.
+
+And then, a second patch containing your 4/5 and and the part of 5/5
+that disables the documentation and the demos.
+
+There has already been some discussion with Stefan about how to split
+patches, and it seems that it is still not clear. Each patch should be
+a logical change that works on its own.
+
+So for example, in the same series, putting a package in section "Foo",
+and then moving it to section "Bar" is very strange. Since you can
+rebase your patches, why don't you put the package in section "Bar" in
+the first place, so that we can believe you did everything perfectly
+from the very beginning? :-)
+
+You don't need to show to the whole world the gazillions of steps you
+followed to create a package. You need to show the whole world a nice,
+clean set of commits, where each commit is a logical change, that keeps
+the "buildability" of Buildroot.
+
+Does that make sense?
+
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
