@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 23:42:06 +0100
-Subject: [Buildroot] [PATCH] new variable <pkg>_CONFIG_FIXUP
-In-Reply-To: <50EB4AE5.7070407@petroprogram.com>
-References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
- <1357596078-7762-2-git-send-email-stefan.froberg@petroprogram.com>
- <20130107231037.39a798cf@skate> <50EB4AE5.7070407@petroprogram.com>
-Message-ID: <20130107234206.1487aa87@skate>
+Date: Mon, 7 Jan 2013 23:49:23 +0100
+Subject: [Buildroot] [PATCH v2 6/6] udisks: new package
+In-Reply-To: <CAAfyv35587HVKu5+-3dCS9MDDjSCH8YNqO4hiJn6dOM3=SS5SA@mail.gmail.com>
+References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
+ <1357591399-3566-7-git-send-email-marek.belisko@open-nandra.com>
+ <20130107224730.0b135a42@skate>
+ <CAAfyv34HwgoO7dEW6edbqaczPOh+zuM-sHw5_5ZUs_bmyw6RiQ@mail.gmail.com>
+ <20130107231821.428885d0@skate>
+ <CAAfyv35587HVKu5+-3dCS9MDDjSCH8YNqO4hiJn6dOM3=SS5SA@mail.gmail.com>
+Message-ID: <20130107234923.70e64039@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Dear Belisko Marek,
 
-On Tue, 08 Jan 2013 00:23:33 +0200, Stefan Fr?berg wrote:
+On Mon, 7 Jan 2013 23:25:30 +0100, Belisko Marek wrote:
 
-> You mean checking first in if-statement if  $($(PKG)_CONFIG_FIXUP exist ?
-> What is the best way to detect if it exist ?
+> > The select of BR2_PACKAGE_LVM2 is commented.
+> No this is comment that BR2_PACKAGE_PARTED select also BR2_PACKAGE_LVM2.
+> Maybe this is wrong approach but it works :).
 
-Just test if the variable is not empty, i.e test -n.
+Ah, ok. Then please make the "select BR2_PACKAGE_LVM2" explicit, since
+udisks needs it directly.
 
-Like (untested):
+But then, you can get rid of your "depends on BR2_PACKAGE_LVM2" in
+BR2_PACKAGE_UDISKS_LVM2, because the lvm2 package is surely already
+enabled, since it gets selected by udisks.
 
-	if test -n $($(PKG)_CONFIG_FIXUP) ; then \
-		$(call MESSAGE, "Blabla") ; \
-		for file in ...
-			...
-		done
-	fi
+I still don't like those lvm2 configuration options that much, though...
 
 Thomas
 -- 
