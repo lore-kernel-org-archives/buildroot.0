@@ -1,56 +1,63 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 7 Jan 2013 21:47:35 +0100
-Subject: [Buildroot] [RFC 0/2] Add support for building barebox xloader.
-In-Reply-To: <1356217460-20232-1-git-send-email-marek.belisko@open-nandra.com>
-References: <1356217460-20232-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <CAAfyv35ZMbYENmUjJcmZOQF5zYctM0ZqriY3y65VJC9=JiQPVg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 7 Jan 2013 21:30:56 +0100
+Subject: [Buildroot] [git commit] package: support multiple patches
+Message-ID: <20130107212529.EDE9B9A691@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping
+commit: http://git.buildroot.net/buildroot/commit/?id=e260a2d9b39ecbdaa6738ac76bd48548746da9d8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Dec 23, 2012 at 12:04 AM, Marek Belisko
-<marek.belisko@open-nandra.com> wrote:
-> Reposting-> first time was sent to wrong mailing list.
->
-> Currently Buildroot have support to build barebox only. For some board there is possibility
-> to build also xloader (first stage bootloader) based on barebox. Following patches add
-> support for building barebox + xloader (aka MLO) by once if user specify configuration for
-> xloader.
->
-> First patch move building barebox to separate directory. Second patch add support for building
-> xloader. Both binaries are build in separate directories to avoid problems with not clean tree.
->
-> With this patches we can build complete image for e.g. pandaboard (which is my case) without building
-> anything by hand.
->
-> Marek Belisko (2):
->   barebox: Build barebox in separate directory.
->   barebox: Add possibility to build also barebox xloader (MLO).
->
->  boot/barebox/Config.in  |   28 ++++++++++++++++++++++++++++
->  boot/barebox/barebox.mk |   45 ++++++++++++++++++++++++++++++++++++++-------
->  2 files changed, 66 insertions(+), 7 deletions(-)
->
-> --
-> 1.7.10.4
->
+With this commit, we extend the behaviour of the <pkg>_PATCH variable
+so that it now allows to list several patches to be downloaded and
+applied, and no longer just one patch.
 
-Cheers,
+This will be useful for the elfutils package, and should anyway not
+break the existing behaviour for packages using just one patch.
 
-marek
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pkg-generic.mk |   17 ++++++++++++-----
+ 1 files changed, 12 insertions(+), 5 deletions(-)
 
--- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index a570ad7..59de0f0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -28,12 +28,19 @@
+ $(BUILD_DIR)/%/.stamp_downloaded:
+ ifeq ($(DL_MODE),DOWNLOAD)
+ # Only show the download message if it isn't already downloaded
+-	$(Q)(test -e $(DL_DIR)/$($(PKG)_SOURCE) && \
+-		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
+-		$(call MESSAGE,"Downloading")
++	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
++		$(call MESSAGE,"Downloading") ; \
++	else \
++		for p in $($(PKG)_PATCH) ; do \
++			if test ! -e $(DL_DIR)/$$p ; then \
++				$(call MESSAGE,"Downloading") ; \
++				break ; \
++			fi ; \
++		done ; \
++	fi
+ endif
+ 	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
+-	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_PATCH)))
++	$(foreach p,$($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$(p))$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+@@ -78,7 +85,7 @@ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+-	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
++	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(p)$(sep))
+ 	$(Q)( \
+ 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+ 	  if test "$(wildcard $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
