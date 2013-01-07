@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 23:39:24 +0100
-Subject: [Buildroot] [pull request] Pull request for branch perf-elfutils
-In-Reply-To: <87ip78bp47.fsf@dell.be.48ers.dk>
-References: <cover.1357485747.git.thomas.petazzoni@free-electrons.com>
- <87ip78bp47.fsf@dell.be.48ers.dk>
-Message-ID: <20130107233924.35c4d87f@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 07 Jan 2013 23:41:35 +0100
+Subject: [Buildroot] [git commit] rpi-firmware: New package
+In-Reply-To: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
+References: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
+Message-ID: <50EB4F1F.7070202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+On 06/01/13 23:01, Peter Korsgaard wrote:
+> +RPI_FIRMWARE_LICENSE = BSD-3c
+> +RPI_FIRMWARE_LICENSE_FILE = boot/LICENCE.broadcom
 
-On Mon, 07 Jan 2013 23:32:56 +0100, Peter Korsgaard wrote:
+  As Thomas pointed out, this is not BSD-3c but "Broadcom proprietary 
+license".
 
-> Thanks everyone, committed series.
+  Maybe it should also get
 
-Thanks for merging them. Hopefully, it won't make the autobuilders
-explode too much.
+RPI_FIRMWARE_REDISTRIBUTE = NO
 
-> Thomas, please don't forget to (try to) send these patches upstream so
-> we don't have to maintain them ourselves in the future.
 
-Which ones exactly? The big fat patches we are downloading from
-fedorahosted.org? Our patches?
-
-All our patches are really specific to uClibc support, and seeing the
-number of glibc-isms in elfutils, I am not sure the maintainers will be
-interested in making it uClibc friendly. But it's maybe worth trying.
-
-One nice thing that could be done is migrate the linux-kernel-module.c
-thing to use nftw(), so we could drop the fts() mess.
-
-Thomas
+  Regards,
+  Arnout
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
