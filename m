@@ -1,33 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 07 Jan 2013 23:41:35 +0100
-Subject: [Buildroot] [git commit] rpi-firmware: New package
-In-Reply-To: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
-References: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
-Message-ID: <50EB4F1F.7070202@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Jan 2013 23:42:06 +0100
+Subject: [Buildroot] [PATCH] new variable <pkg>_CONFIG_FIXUP
+In-Reply-To: <50EB4AE5.7070407@petroprogram.com>
+References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
+ <1357596078-7762-2-git-send-email-stefan.froberg@petroprogram.com>
+ <20130107231037.39a798cf@skate> <50EB4AE5.7070407@petroprogram.com>
+Message-ID: <20130107234206.1487aa87@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/01/13 23:01, Peter Korsgaard wrote:
-> +RPI_FIRMWARE_LICENSE = BSD-3c
-> +RPI_FIRMWARE_LICENSE_FILE = boot/LICENCE.broadcom
+Dear Stefan Fr?berg,
 
-  As Thomas pointed out, this is not BSD-3c but "Broadcom proprietary 
-license".
+On Tue, 08 Jan 2013 00:23:33 +0200, Stefan Fr?berg wrote:
 
-  Maybe it should also get
+> You mean checking first in if-statement if  $($(PKG)_CONFIG_FIXUP exist ?
+> What is the best way to detect if it exist ?
 
-RPI_FIRMWARE_REDISTRIBUTE = NO
+Just test if the variable is not empty, i.e test -n.
 
+Like (untested):
 
-  Regards,
-  Arnout
+	if test -n $($(PKG)_CONFIG_FIXUP) ; then \
+		$(call MESSAGE, "Blabla") ; \
+		for file in ...
+			...
+		done
+	fi
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
