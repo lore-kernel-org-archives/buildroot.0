@@ -1,58 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jan 2013 22:38:02 +0100
-Subject: [Buildroot] [PATCH v2 5/6] lvm2: Compile and install
- application library.
-In-Reply-To: <1357591399-3566-6-git-send-email-marek.belisko@open-nandra.com>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Mon, 7 Jan 2013 22:45:50 +0100
+Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
+In-Reply-To: <20130107222615.36bd70ab@skate>
 References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <1357591399-3566-6-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <20130107223802.26215d46@skate>
+ <1357591399-3566-2-git-send-email-marek.belisko@open-nandra.com>
+ <20130107222615.36bd70ab@skate>
+Message-ID: <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marek Belisko,
+Hi Thomas,
 
-On Mon,  7 Jan 2013 21:43:18 +0100, Marek Belisko wrote:
+On Mon, Jan 7, 2013 at 10:26 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Marek Belisko,
+>
+> On Mon,  7 Jan 2013 21:43:14 +0100, Marek Belisko wrote:
+>
+>> +config BR2_PACKAGE_SG3_UTILS
+>> +     bool "sgutils"
+>> +     depends on BR2_LARGEFILE
+>> +     depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +     help
+>> +       Low level utilities for devices that use a SCSI command set.
+>> +
+>
+> You should mention here that this option only installs the library
+> (libraries?), but not the programs.
+OK.
+>
+>> +SG3_UTILS_LICENSE = BSD GPL
+>
+> You should be work specific than just BSD and GPL. Like BSD-3c or
+> BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
+After proper reading of COPYING file it seems it GPLv2+
+"Some of the older utilities are covered by the GPL. More precisely:
+You are free to distribute this software under the terms of the
+GNU General Public License either version 2, or (at your option)
+any later version." but in same file there is no mention about BSD
+license version.
+>
+> Otherwise, looks good.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
 
-> +config BR2_PACKAGE_LVM2_APP_LIBRARY
-> +	bool "install application library"
-> +	depends on BR2_PACKAGE_LVM2
-> +	help
-> +	  Install application library (liblvm2app2).
-> +
+Thanks,
 
-> +ifeq ($(BR2_PACKAGE_LVM2_APP_LIBRARY),y)
-> +LVM2_MAKE_OPT += liblvm
-> +LVM2_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install
-> +LVM2_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
-> +endif
+mbe
 
-I am not quite sure this is correct. Currently, the package works as
-follows (if I understand correctly):
-
- * if BR2_PACKAGE_LVM2=y but BR2_PACKAGE_LVM2_DMSETUP_ONLY is not
-   enabled, then LVM2_MAKE_OPT is empty, so it just runs the default
-   make target, which presumably builds everything.
-
- * if BR2_PACKAGE_LVM2=y and BR2_PACKAGE_LVM2_DMSETUP_ONLY=y, then
-   LVM2_MAKE_OPT is set to device-mapper, in which case it only builds
-   the device mapper code.
-
-So now, you add a third BR2_PACKAGE_LVM2_APP_LIBRARY option. But if I
-do BR2_PACKAGE_LVM2=y and BR2_PACKAGE_LVM2_APP_LIBRARY=y, it will only
-build the library and not the rest, which is not what we expect.
-
-I'd say that the DMSETUP_ONLY thing is a bad idea from the beginning,
-so I'm not sure what's the best way moving forward.
-
-Are you sure liblvm doesn't get build and installed by the default
-BR2_PACKAGE_LVM2=y configuration?
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
