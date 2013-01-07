@@ -1,67 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 00:34:15 +0100
-Subject: [Buildroot] build hangs when building kernel
-In-Reply-To: <FB5BA32813A44818B6499769D61985DF@JohanW7>
-References: <FB5BA32813A44818B6499769D61985DF@JohanW7>
-Message-ID: <50EB5B77.3010800@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  8 Jan 2013 00:35:24 +0100
+Subject: [Buildroot] [PATCH] linux: fix appended dtb handling of pre/post
+	v3.8-rc1
+In-Reply-To: <50EB5B77.3010800@mind.be>
+References: <50EB5B77.3010800@mind.be>
+Message-ID: <1357601724-3781-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/13 17:16, Sagaert Johan wrote:
-> Hi
->
-> Using the latest pull:
->
-> The build hangs when it is building the kernel
->
-> snip....
->
->    LD [M]  fs/fuse/cuse.ko
->    LD [M]  fs/fuse/fuse.ko
->    LD [M]  lib/crc-ccitt.ko
->    LD [M]  fs/nls/nls_iso8859-15.ko
-> make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
-> PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin/:/usr/
-> local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/buildroot12git/output/host/usr/bin"
-> PERLLIB="/home/buildroot12git/output/host/usr/lib/perl" /usr/bin/make -j8 HOSTCC="/usr/bin/gcc" HOSTCFLAGS="" ARCH=arm
-> INSTALL_MOD_PATH=/home/buildroot12git/output/target CROSS_COMPILE="
-> /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-" DEPMOD=/home/buildroot12git/output/host/usr/sbin/depmod
-> -C /home/buildroot12git/output/build/linux-3.4.24 tx53.dtb
-> make[1]: Entering directory `/home/buildroot12git/output/build/linux-3.4.24'
->    DTC     arch/arm/boot/tx53.dtb
-> DTC: dts->dtb  on file "arch/arm/boot/dts/tx53.dts"
-> make[1]: Leaving directory `/home/buildroot12git/output/build/linux-3.4.24'
-> # dtbs moved from arch/RCH/boot to arch/RCH/boot/dts since 3.8-rc1
-> cat>>  /home/buildroot12git/output/build/linux-3.4.24/arch/arm/boot/zImage
->
->
->
-> It looks like the missing cat parameter is causing this.
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-  Peter,
+Also fix duplication of 'define LINUX_APPEND_DTB' line, and refactor
+the common part out.
 
-  The $(wildcard ) doesn't work for LINUX_APPEND_DTB, because the .dtb 
-doesn't exist yet at that point.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ linux/linux.mk |   28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
-  It works for LINUX_INSTALL_DTB because that one is only expanded after 
-the kernel (and the .dtb) has already been built.
-
-  Simplest option is to change it into a shell condition. Untested patch 
-follows.
-
-  Regards,
-  Arnout
-
-[snip]
-
-
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7ec9cd2..61d4267 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -201,24 +201,20 @@ endef
+ endif
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+-define LINUX_APPEND_DTB
+-define LINUX_APPEND_DTB
+-	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+-	cat $(wildcard $(addprefix $(KERNEL_ARCH_PATH)/boot/,\
+-		$(KERNEL_DTS_NAME).dtb dts/$(KERNEL_DTS_NAME).dtb)) \
+-		>> $(KERNEL_ARCH_PATH)/boot/zImage
+-	# We need to generate the uImage here after that so that the uImage is
+-	# generated with the right image size.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
+-endef
+-else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
++# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+ define LINUX_APPEND_DTB
+-	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+-	cat $(wildcard $(addprefix $(KERNEL_ARCH_PATH)/boot/,\
+-		$(KERNEL_DTS_NAME).dtb dts/$(KERNEL_DTS_NAME).dtb)) \
+-		>> $(KERNEL_ARCH_PATH)/boot/zImage
++	if [ -e $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb ]; then \
++		cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb; \
++	else \
++		cat $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb; \
++	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
+ endef
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
++# We need to generate the uImage here after that so that the uImage is
++# generated with the right image size.
++LINUX_APPEND_DTB += $(sep)$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
++endif
+ endif
+ 
+ # Compilation. We make sure the kernel gets rebuilt when the
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
