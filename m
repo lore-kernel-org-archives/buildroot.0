@@ -1,90 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 07 Jan 2013 18:11:18 +0100
-Subject: [Buildroot] tokyocabinet: new package
-In-Reply-To: <CALvuzg5L=Hjzm3p0p1gYUE7GNeiFxwLiApO92YOt_fGAk7n95Q@mail.gmail.com>
-References: <CALvuzg5L=Hjzm3p0p1gYUE7GNeiFxwLiApO92YOt_fGAk7n95Q@mail.gmail.com>
-Message-ID: <50EB01B6.6000106@mind.be>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Mon,  7 Jan 2013 21:43:13 +0100
+Subject: [Buildroot] [PATCH v2 0/6] Add support for udisks package.
+Message-ID: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Jon,
+Changes from v1:
+- fix various problems in sg3_utils and polkit packages (Thomas Petazzoni)
 
-On 21/12/12 15:45, Jon Diekema wrote:
-> tokyocabinet: new package
->
-> Signed-off-by: Jon Diekema<jon.diekema@gmail.com>
+This patches add support for udisks and dependencies + fixes.
 
-  Your patch is still line-wrapped. Also, it has to be modified manually 
-in order to be processed with git-am, otherwise all the text below will 
-be included in the commit message. Please send your patch with
-git send-email.
+Patches for sg3_utils, polkit and udisks was done by
+Thomas Petazzoni and overtaken from
+http://free-electrons.com/~thomas/pub/udisks-buildroot/.
+They were fixed to work with latest buildroot.
 
-  Also, it is useful for the review if you include in the message a 
-changelog of what you modified compared to your previous submission.
+udisks with lvm2 support (default n) have dependency on devmapper
+and lvm2 application library. There are two fixes:
 
-[snip]
-> diff --git a/package/tokyocabinet/Config.in b/package/tokyocabinet/Config.in
-> new file mode 100644
-> index 0000000..66ff02e
-> --- /dev/null
-> +++ b/package/tokyocabinet/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_TOKYOCABINET
-> +        bool "Tokyo Cabinet"
-> +        help
+- correctly install devmapper.pc to staging/target
+- add support for application library
 
-  The config attributes should be indented with 1 TAB.
+Marek Belisko (6):
+  sg3_utils: new package
+  polkit: new package
+  libatasmart: new package.
+  lvm2: Install devmapper.pc to staging/target pkgconfig directory.
+  lvm2: Compile and install application library.
+  udisks: new package
 
-> +  A modern reimplementation of QDBM, also released under the LGPL
-> +  by Mikio Hirabayashi in 2007.
-> +
-> +  http://www.igvita.com/2009/02/13/tokyo-cabinet-beyond-key-value-store/
-
-  The help text should be indented with 1 TAB + 2 spaces.
-
-[snip]
-> diff --git a/package/tokyocabinet/tokyocabinet.mk
-> b/package/tokyocabinet/tokyocabinet.mk
-> new file mode 100644
-> index 0000000..a5fa21d
-> --- /dev/null
-> +++ b/package/tokyocabinet/tokyocabinet.mk
-> @@ -0,0 +1,42 @@
-> +#############################################################
-> +#
-> +# Tokyo Cabinet
-> +#
-> +#############################################################
-> +
-> +TOKYOCABINET_VERSION = 1.4.47
-> +TOKYOCABINET_SOURCE = tokyocabinet-$(TOKYOCABINET_VERSION).tar.gz
-> +TOKYOCABINET_SITE = http://httpsqs.googlecode.com/files
-> +TOKYOCABINET_INSTALL_STAGING = YES
-> +TOKYOCABINET_LICENSE = LGPLv2.1
-
-  LGPLv2.1+, actually.
-
-> +TOKYOCABINET_LICENSE_FILES = COPYING
-[snip]
-
-  I tried this with an internal toolchain with all features disabled, and 
-it barfed in tcucodec.c, which tries to print out the size and range of 
-wchar_t. Simplest solution is to make tokyocabinet depend on 
-BR2_USE_WCHAR, but perhaps better is a patch that removes the useless 
-wchar stuff from tcucodec.c...
-
-
-  Regards,
-  Arnout
-
+ package/Config.in                  |    5 +++++
+ package/libatasmart/Config.in      |   11 +++++++++++
+ package/libatasmart/libatasmart.mk |   17 +++++++++++++++++
+ package/lvm2/Config.in             |    6 ++++++
+ package/lvm2/lvm2.mk               |    8 +++++++-
+ package/polkit/Config.in           |   10 ++++++++++
+ package/polkit/polkit.mk           |   20 ++++++++++++++++++++
+ package/sg3_utils/Config.in        |   15 +++++++++++++++
+ package/sg3_utils/sg3_utils.mk     |   35 +++++++++++++++++++++++++++++++++++
+ package/udisks/Config.in           |   32 ++++++++++++++++++++++++++++++++
+ package/udisks/udisks.mk           |   28 ++++++++++++++++++++++++++++
+ 11 files changed, 186 insertions(+), 1 deletion(-)
+ create mode 100644 package/libatasmart/Config.in
+ create mode 100644 package/libatasmart/libatasmart.mk
+ create mode 100644 package/polkit/Config.in
+ create mode 100644 package/polkit/polkit.mk
+ create mode 100644 package/sg3_utils/Config.in
+ create mode 100644 package/sg3_utils/sg3_utils.mk
+ create mode 100644 package/udisks/Config.in
+ create mode 100644 package/udisks/udisks.mk
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
