@@ -1,53 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 7 Jan 2013 23:10:10 +0100
-Subject: [Buildroot] new <pkg>_CONFIG_FIXUP variable
-In-Reply-To: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <201301072310.10765.yann.morin.1998@free.fr>
+Date: Mon, 7 Jan 2013 23:10:37 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
+	pointing to our .config
+In-Reply-To: <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
+References: <cover.1357595083.git.yann.morin.1998@free.fr>
+ <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
+Message-ID: <201301072310.37077.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+Hello All,
 
-On Monday 07 January 2013 Stefan Fr?berg wrote:
-> This patch provides new variable called <pkg>_CONFIG_FIXUP.
-> It's purpose is to fix wrong prefixes of $(STAGING_DIR)/usr/bin/*-config file(s)
-> that many library packages install after staging installation phase.
+On Monday 07 January 2013 Yann E. MORIN wrote:
+> Support scripts (in support/) may need to parse the .config file,
+> so give them an easy access to it, by exporting CONFIG_FILE with
+> the fully-qualified path to .config.
 > 
-> Some packages provide multible *-config files.
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  Makefile |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
 > 
-> So as suggested by Thomas Petazzoni and Gustavo Zacarias this 
-> variable can be feeded multible files.
-> 
-> All filenames are relative to $(STAGING_DIR)/usr/bin
-> 
-> Example:
-> 
-> DIVINE_CONFIG_FIXUP = divine-config
-> 
-> or:
-> 
-> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
+> diff --git a/Makefile b/Makefile
+> index 4b09437..7a2902d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -91,6 +91,10 @@ EXTRAMAKEARGS = O=$(O)
+>  NEED_WRAPPER=y
+>  endif
+>  
+> +# Scripts in support/ may need to parse out .config, so give
+> +# them easy access
+> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config
+> +
+>  # Pull in the user's configuration file
+>  ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+>  -include $(CONFIG_DIR)/.config
 
-Please, put this explanation in the commit message.
+There are a few other places in this file where we use:
+    $(CONFIG_DIR)/.config
 
-Also, add this variable to the documentation:
-    docs/manual/adding-packages-generic.txt
+I was not sure how to handle these, especially since they are associated
+with:
+    $(CONFIG_DIR)/.config.nopkg
 
-Next time, also add a snall changelog to your message, so we know there
-was prior discussion and to help Peter to apply the correct patch series.
-I do something like:
-  Changes v1 -> v2:
-    - accept multiple files (Thomas, Gustavo)
-    - use paths relative to $(STAGING)/usr/bin
+Using $(BR2_CONFIG_FILE).nopkg looks a bit ugly to me. Instead, I went to
+reason that we're in the top-level Makefile, and that we know what we're
+doing. BR2_CONFIG_FILE is our /API/ and although it would be nice to use
+it internally too, it does not fit properly, so I did not change it.
 
-And keep this changelog in each iteration. Add the version of the iteration
-in your mail subject.
-
-Thank you! :-)
+Comments welcome. ;-)
 
 Regards,
 Yann E. MORIN.
