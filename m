@@ -1,56 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Jan 2013 15:31:24 +0100
-Subject: [Buildroot] Dropbear/SFTP
-In-Reply-To: <324F5873D88A41258846A0BE8F0F4556@beraninstruments.com.local>
-References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
- <20130108130618.4991dff7@skate>
- <CAKvQZ_0f=ka=G_66J4kt_mqn_CvnjqpHMUyv-tBa7SQ-LMtMRw@mail.gmail.com>
- <324F5873D88A41258846A0BE8F0F4556@beraninstruments.com.local>
-Message-ID: <20130108153124.658fe4e5@skate>
+Date: Tue, 8 Jan 2013 15:38:50 +0100
+Subject: [Buildroot] [PATCH 1/1] added infozip package
+In-Reply-To: <1357652308-20027-1-git-send-email-jp@jp-embedded.com>
+References: <1357652308-20027-1-git-send-email-jp@jp-embedded.com>
+Message-ID: <20130108153850.2b463304@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Moore,
+Dear Jan Pedersen,
 
-On Tue, 8 Jan 2013 14:15:01 -0000, Will Moore wrote:
+Thanks for contributing this package!
 
-> I currently configure the eclipse project to pick up the buildroot built cross
-> tools, built my executables in eclipse, run Dropbear on the target, scp my
-> executables to the target, in a ssh connection run gdbserver, and configure
-> eclipse to remote debug using the builtroot built cross tools.  I know from QNX
-> Momentics there are much slicker ways ...
+On Tue,  8 Jan 2013 14:38:28 +0100, Jan Pedersen wrote:
 
-Indeed, what we have now is much better. Thanks to the developments
-done by M?lanie (Cc'ed), we have an Eclipse plug-in that:
+> diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
+> new file mode 100644
+> index 0000000..996a709
+> --- /dev/null
+> +++ b/package/infozip/infozip.mk
+> @@ -0,0 +1,43 @@
+> +#############################################################
+> +#
+> +# infozip
+> +#
+> +#############################################################
+> +INFOZIP_VERSION:=30
+> +INFOZIP_SOURCE:=zip$(INFOZIP_VERSION).tgz
+> +INFOZIP_SITE:=ftp://ftp.info-zip.org/pub/infozip/src/
 
- * Automatically detects the Buildroot toolchains that are available on
-   your system, and allows you to select between them. It will
-   automatically adjust the compiler/flags used for compiling your
-   programs (if you're using the "managed build" mechanism of Eclipse,
-   which is the mechanism where Eclipse builds your application for
-   you, as opposed to using external Makefile, CMake or something like
-   that).
+Please use = instead of :=. So, something like:
 
- * Can automatically copy your application over SSH when you hit the
-   "Run" button, or copy the application + start gdbserver
-   automatically if you hit the "Debug" button.
+INFOZIP_VERSION = 30
+INFOZIP_SOURCE = zip$(INFOZIP_VERSION).tgz
+INFOZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src/
 
- * Provides a nice list of libraries that are compiled in your
-   Buildroot project (and providing a pkg-config .pc file). You just
-   have to click on a particular library to make your application link
-   against this library. That's the newest feature that has been
-   integrated :-)
+Also, please add the INFOZIP_LICENSE and INFOZIP_LICENSE_FILES fields
+(see the Buildroot manual for details).
 
-M?lanie will work on polishing the update site to make it easy to
-install all this, and in writing the necessary tutorials. We'll keep
-you posted once it is ready, but we are definitely looking forward for
-your tests and experimentations in order to get feedback and be able to
-do further improvements on this plug-in.
+> +INFOZIP_DIR = $(BUILD_DIR)/zip$(INFOZIP_VERSION)
+> +
+> +$(DL_DIR)/$(INFOZIP_SOURCE):
+> +	$(call DOWNLOAD,$(INFOZIP_SITE)/$(INFOZIP_SOURCE))
+> +
+> +$(INFOZIP_DIR)/.source: $(DL_DIR)/$(INFOZIP_SOURCE)
+> +	$(ZCAT) $(DL_DIR)/$(INFOZIP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> +	touch $@
 
-Best regards,
+[...]
+
+Snip. Arggh, this is a manual .mk file. This is something we have
+deprecated since a long time. Please use the generic-package
+infrastructure instead.
+
+See
+http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems
+for details on how to use this infrastructure, and the many examples
+available in Buildroot.
+
+Could you rework this package to use the generic-package infrastructure?
+
+Thanks!
 
 Thomas
 -- 
