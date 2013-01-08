@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Jan 2013 18:09:57 +0100
-Subject: [Buildroot] [PATCH] new package: proxychains
-In-Reply-To: <1356222029-6290-1-git-send-email-stefan.froberg@petroprogram.com>
-References: <1356222029-6290-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <20130108180957.30c9f629@skate>
+Date: Tue, 8 Jan 2013 18:15:48 +0100
+Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.17
+In-Reply-To: <1357332135-3087-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1357332135-3087-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20130108181548.113e00bb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Dear Gustavo Zacarias,
 
-On Sun, 23 Dec 2012 02:20:29 +0200, Stefan Fr?berg wrote:
-> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+On Fri,  4 Jan 2013 17:42:15 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/Config.in                  |    1 +
->  package/proxychains/Config.in      |    7 +++++++
->  package/proxychains/proxychains.mk |   10 ++++++++++
->  3 files changed, 18 insertions(+), 0 deletions(-)
->  create mode 100644 package/proxychains/Config.in
->  create mode 100644 package/proxychains/proxychains.mk
+>  package/libnl/libnl.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-This new package generates the following build failure:
+libnl is causing a recurrent build failure:
 
-  http://autobuild.buildroot.org/results/7364b557c1fea642a3631c4735dd93f02ba70dd5/build-end.log
+  CC     netfilter/exp_obj.lo
+netfilter/exp_obj.c: In function 'exp_dump_details':
+netfilter/exp_obj.c:271:23: error: 'NF_CT_EXPECT_PERMANENT' undeclared (first use in this function)
+netfilter/exp_obj.c:271:23: note: each undeclared identifier is reported only once for each function it appears in
+netfilter/exp_obj.c:273:23: error: 'NF_CT_EXPECT_INACTIVE' undeclared (first use in this function)
+netfilter/exp_obj.c:275:23: error: 'NF_CT_EXPECT_USERSPACE' undeclared (first use in this function)
 
-Can you try to investigate and see if you can provide a patch to fix it?
+See:
 
-Thanks!
+  http://autobuild.buildroot.org/results/28f23910e2c2090e6f37e8d6a26cdb5adf9615c2/
+  http://autobuild.buildroot.org/results/b8d0b9e7d5ea3a8f3c4ba29faeee0434ea5a1111/
+
+Could you have a look?
+
+Thanks a lot!
 
 Thomas
 -- 
