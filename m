@@ -1,7 +1,11 @@
-From: Jan Pedersen <jp@jp-embedded.com>
-Date: Tue,  8 Jan 2013 14:38:28 +0100
-Subject: [Buildroot] [PATCH 1/1] added infozip package
-Message-ID: <1357652308-20027-1-git-send-email-jp@jp-embedded.com>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Tue, 8 Jan 2013 14:15:01 -0000
+Subject: [Buildroot] Dropbear/SFTP
+In-Reply-To: <CAKvQZ_0f=ka=G_66J4kt_mqn_CvnjqpHMUyv-tBa7SQ-LMtMRw@mail.gmail.com>
+References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
+ <20130108130618.4991dff7@skate>
+ <CAKvQZ_0f=ka=G_66J4kt_mqn_CvnjqpHMUyv-tBa7SQ-LMtMRw@mail.gmail.com>
+Message-ID: <324F5873D88A41258846A0BE8F0F4556@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,91 +13,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Signed-off-by: Jan Pedersen <jp@jp-embedded.com>
----
- package/Config.in          |    1 +
- package/infozip/Config.in  |   10 ++++++++++
- package/infozip/infozip.mk |   43 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 54 insertions(+)
- create mode 100644 package/infozip/Config.in
- create mode 100644 package/infozip/infozip.mk
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
+> Behalf Of Willy Lambert
+> Sent: 08 January 2013 12:59
+> To: Thomas Petazzoni
+> 
+> 2013/1/8 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> > Dear Ted Wood,
+> >
+> > On Tue, 8 Jan 2013 11:54:25 -0000, Ted Wood wrote:
+> >> I am attempting to remotely debug application code on  my i586 system from
+> >> Eclipse.
+> >>
+-- snip --
+> >
+> > If you're interested, notice that we are currently developing a Eclipse
+> > plugin for Buildroot, which will help to build, remote execute and
+> > remote debug applications in the context of Buildroot. The
+> > documentation has not yet been fully written, but if you're interested,
+> > please let me know so that we can give you the initial starting points.
+> > We are very interested in getting some user feedback about those
+> > developments.
+> >
+> 
+> Even if not concerned by the thread, I'm interested to have a look at
+> this plugin.
 
-diff --git a/package/Config.in b/package/Config.in
-index 49db380..9cf29f4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -14,6 +14,7 @@ endif
- source "package/lzop/Config.in"
- source "package/lzma/Config.in"
- source "package/xz/Config.in"
-+source "package/infozip/Config.in"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-diff --git a/package/infozip/Config.in b/package/infozip/Config.in
-new file mode 100644
-index 0000000..1a4b756
---- /dev/null
-+++ b/package/infozip/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_INFOZIP
-+	bool "infozip"
-+	help
-+	  Zip is a compression and file packaging/archive utility. 
-+	  Although highly compatible both with PKWARE's PKZIP and 
-+	  PKUNZIP utilities for MS-DOS and with Info-ZIP's own UnZip, 
-+ 	  our primary objectives have been portability and other-than-MSDOS 
-+	  functionality. 
-+
-+	  http://infozip.sourceforge.net/Zip.html
-diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-new file mode 100644
-index 0000000..996a709
---- /dev/null
-+++ b/package/infozip/infozip.mk
-@@ -0,0 +1,43 @@
-+#############################################################
-+#
-+# infozip
-+#
-+#############################################################
-+INFOZIP_VERSION:=30
-+INFOZIP_SOURCE:=zip$(INFOZIP_VERSION).tgz
-+INFOZIP_SITE:=ftp://ftp.info-zip.org/pub/infozip/src/
-+INFOZIP_DIR = $(BUILD_DIR)/zip$(INFOZIP_VERSION)
-+
-+$(DL_DIR)/$(INFOZIP_SOURCE):
-+	$(call DOWNLOAD,$(INFOZIP_SITE)/$(INFOZIP_SOURCE))
-+
-+$(INFOZIP_DIR)/.source: $(DL_DIR)/$(INFOZIP_SOURCE)
-+	$(ZCAT) $(DL_DIR)/$(INFOZIP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $@
-+
-+$(INFOZIP_DIR)/.build: $(INFOZIP_DIR)/.source
-+	make -C $(INFOZIP_DIR) -f unix/Makefile generic CC=$(TARGET_CC)
-+	touch $@
-+
-+$(INFOZIP_DIR)/.install: $(INFOZIP_DIR)/.build
-+	make -C $(INFOZIP_DIR) -f unix/Makefile install prefix=$(TARGET_DIR)/usr CC=$(TARGET_CC)
-+	touch $@
-+
-+infozip: $(INFOZIP_DIR)/.install
-+
-+infozip-source: $(DL_DIR)/$(INFOZIP_SOURCE)
-+
-+infozip-clean:
-+	rm -rf $(INFOZIP_DIR)
-+
-+infozip-dirclean:
-+	rm -rf $(INFOZIP_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(BR2_PACKAGE_INFOZIP),y)
-+TARGETS += infozip
-+endif
--- 
-1.7.10.4
++1
+
+I currently configure the eclipse project to pick up the buildroot built cross
+tools, built my executables in eclipse, run Dropbear on the target, scp my
+executables to the target, in a ssh connection run gdbserver, and configure
+eclipse to remote debug using the builtroot built cross tools.  I know from QNX
+Momentics there are much slicker ways ...
+
+> 
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, Free Electrons
+> > Kernel, drivers, real-time and embedded Linux
+> > development, consulting, training and support.
+> > http://free-electrons.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
