@@ -1,58 +1,57 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 07:50:51 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
- pointing to our .config
-In-Reply-To: <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
- <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
-Message-ID: <50EBC1CB.8030900@mind.be>
+Date: Tue, 08 Jan 2013 08:48:18 +0100
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <50EB4DAD.6040409@petroprogram.com>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+ <50E6BFE2.2090405@zacarias.com.ar>
+ <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+ <50E6E757.10809@zacarias.com.ar> <50E6EDB5.9070004@petroprogram.com>
+ <20130106054113.GD13545@sapphire.tkos.co.il>
+ <50E9BE9A.4030703@petroprogram.com> <50EB496B.60301@mind.be>
+ <50EB4DAD.6040409@petroprogram.com>
+Message-ID: <50EBCF42.3000505@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Yann,
-
-On 07/01/13 22:52, Yann E. MORIN wrote:
-> Support scripts (in support/) may need to parse the .config file,
-> so give them an easy access to it, by exporting CONFIG_FILE with
-> the fully-qualified path to .config.
-
-  Good idea!
-
+On 07/01/13 23:35, Stefan Fr?berg wrote:
+> Hi Arnout
 >
-> Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
-> ---
->   Makefile |    4 ++++
->   1 files changed, 4 insertions(+), 0 deletions(-)
+> 8.1.2013 0:17, Arnout Vandecappelle kirjoitti:
+>> On 06/01/13 19:12, Stefan Fr?berg wrote:
+[snip]
+>>> ui/libui.a codecs/libcodec.a wiretap/.libs/libwiretap.a
+>>> epan/.libs/libwireshark.a -lgnutls -L/usr/lib
+>>                                       ^^^^^^^^^^
+>>   Here's your culprit.
+>>
+>>   Probably one of the .la files incorrectly adds /usr/lib.
+>>
+>>   Question is why libtool adds it, of course...
+>>
 >
-> diff --git a/Makefile b/Makefile
-> index 4b09437..7a2902d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -91,6 +91,10 @@ EXTRAMAKEARGS = O=$(O)
->   NEED_WRAPPER=y
->   endif
->
-> +# Scripts in support/ may need to parse out .config, so give
-> +# them easy access
-> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config.
+> Bug in libtool ?
+> I tried checking all my $(STAGING_DIR)/usr/lib/*.la files but so far
+> everything seems fine...
 
-  Convention is that BR2_* is set by Kconfig. I kind of like that, it 
-helps us developers to understand a variable's meaning.
+  I expect it will be one of the *.la files in wireshark itself. Or it 
+could be one of the -lfoo link arguments - IIRC, libtool hard-codes 
+searching in /usr/lib for libraries.
 
-  [Yes, BR2_DEFCONFIG which I introduced myself is an exception. However, 
-I have a pending patch that moves it into the .config :-)]
+  Looking a bit more in detail, I see that autoconf's AC_PROG_LIBTOOL 
+expands into a hard-coded
+sys_lib_dlsearch_path_spec="/lib /usr/lib \$lt_ld_extra"
 
-> +
->   # Pull in the user's configuration file
->   ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
->   -include $(CONFIG_DIR)/.config
+(sys_lib_search_path_spec is computed based on the compiler's search 
+path.) So we actually risk running into this problem for any 
+libtool-based package... Maybe we should globally patch the configure 
+scripts to make sys_lib_dlsearch_path_spec empty.
 
-  I would replace the occurences of the plain config file with 
-$(CONFIG_FILE). $(CONFIG_FILE).nopkg does indeed look stupid, so that one 
-should be left alone.
+  But anyway, Stefan, for wireshark you should try to find out which host 
+library is found by configure. Because making sys_lib_dlsearch_path_spec 
+empty would just change the error into a slightly better 'cannot find -lfoo'.
 
   Regards,
   Arnout
