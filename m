@@ -1,50 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Jan 2013 09:15:34 +0100
-Subject: [Buildroot] [git commit] perf: add kernel version checks
-In-Reply-To: <50EBBFA8.1070503@mind.be>
-References: <20130107212531.5E07E9A691@busybox.osuosl.org>
- <50EBBFA8.1070503@mind.be>
-Message-ID: <20130108091534.38d07446@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 08 Jan 2013 09:24:06 +0100
+Subject: [Buildroot] [PATCH] divine: fix divine-config
+In-Reply-To: <20130108091028.042e824b@skate>
+References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
+ <50E6BFE2.2090405@zacarias.com.ar>
+ <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
+ <50E6E757.10809@zacarias.com.ar> <50E6EDB5.9070004@petroprogram.com>
+ <20130106054113.GD13545@sapphire.tkos.co.il>
+ <50E9BE9A.4030703@petroprogram.com> <50EB496B.60301@mind.be>
+ <50EB4DAD.6040409@petroprogram.com> <50EBCF42.3000505@mind.be>
+ <20130108091028.042e824b@skate>
+Message-ID: <50EBD7A6.109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On 08/01/13 09:10, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
+>
+> On Tue, 08 Jan 2013 08:48:18 +0100, Arnout Vandecappelle wrote:
+>
+>> (sys_lib_search_path_spec is computed based on the compiler's search
+>> path.) So we actually risk running into this problem for any
+>> libtool-based package... Maybe we should globally patch the configure
+>> scripts to make sys_lib_dlsearch_path_spec empty.
+>
+> I thought the libtool issues were long sorted out thanks to the patches
+> from support/libtool/. Are we talking about new issues here?
 
-On Tue, 08 Jan 2013 07:41:44 +0100, Arnout Vandecappelle wrote:
+  Sorry, I didn't look carefully enough. The sys_lib_dlsearch_path_spec 
+is only used to decide if an rpath should be added. It's still incorrect 
+because it uses /etc/ld.so.conf to find the runtime search paths, but 
+it's mostly harmless.
 
->   There are a number of packages that would benefit from kernel version 
-> checks. For instance, the native driver implementations of igh-ethercat 
-> are specific for a certain kernel version. Would it be a good idea to 
-> make the kernel version user-configurable, and add a check for its 
-> correctness similar to the external toolchains?
+  Regards,
+  Arnout
 
-Huh? The kernel version is already user configurable, thanks to the
-BR2_LINUX_KERNEL_3_7, BR2_LINUX_KERNEL_SAME_AS_HEADERS,
-BR2_LINUX_KERNEL_CUSTOM_VERSION, BR2_LINUX_KERNEL_CUSTOM_TARBALL,
-BR2_LINUX_KERNEL_CUSTOM_GIT configuration options.
-
-The thing is that when the BR2_LINUX_KERNEL_CUSTOM_TARBALL or
-BR2_LINUX_KERNEL_CUSTOM_GIT options are used, you don't know (at the
-Kconfig level), the kernel version that will be used.
-
-And I don't think we should ask the user to tell us, through a separate
-option, what kernel version his/her Git tree actually contains.
-
-Or maybe I'm missing what you're proposing here?
-
-Regarding the kernel and the autobuilders, my plan was to modify the
-autobuilders script to randomly enable the kernel build. The script of
-course knows, per-architecture, of a known-working kernel defconfig
-file that it would use in the Buildroot configuration.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
