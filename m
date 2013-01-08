@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 23:56:35 +0100
-Subject: [Buildroot] [PATCH 05/28] xserver_xorg-server: rename
- server-style configuration options
-In-Reply-To: <76ec7a633a6ad539eb9a2c06fcf54d6c622febfe.1357507764.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 09 Jan 2013 00:01:01 +0100
+Subject: [Buildroot] [PATCH 06/28] xserver_xorg-server: option to build
+ KDrive input drivers
+In-Reply-To: <9b6d564efd282b2d5d7119ffc4a5e1842f1e72ff.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <76ec7a633a6ad539eb9a2c06fcf54d6c622febfe.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50ECA423.5080004@mind.be>
+ <9b6d564efd282b2d5d7119ffc4a5e1842f1e72ff.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50ECA52D.90900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,103 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/06/13 22:29, Thomas Petazzoni wrote:
-> The BR2_PACKAGE_XSERVER_xorg and BR2_PACKAGE_XSERVER_tinyx options
-> used to select the style of X.org server to use are not named
-> consistently with the rest of the Buildroot options (in capital
-> letters and prefixed with the package name).
+> When the Kdrive variant of the X server is selected, the drivers are
+> directly built into the X server. The X server therefore provides
+> options to enable or disable certain drivers, especially input
+> drivers.
 >
-> Therefore, we rename those options, and we take care to add the old
-> option names in the BR2_LEGACY infrastructure.
+> This patch adds options to be able to enable or disable the evdev, kbd
+> and mouse drivers of Kdrive.
 >
 > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> ---
+>   package/x11r7/xserver_xorg-server/Config.in        |   29 ++++++++++++++++++++
+>   .../xserver_xorg-server/xserver_xorg-server.mk     |   19 +++++++++++++
+>   2 files changed, 48 insertions(+)
+>
+> diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+> index 4ac0ec7..2382786 100644
+> --- a/package/x11r7/xserver_xorg-server/Config.in
+> +++ b/package/x11r7/xserver_xorg-server/Config.in
+> @@ -87,6 +87,35 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX
+>       help
+>           Enable/Use AIGLX extension.
+>
+> +if BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE
+> +
+> +config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV
+> +       bool "Enable KDrive/TinyX evdev input driver"
+> +       help
+> +         Enable evdev input driver in KDrive. This allows KDrive to
+> +         use input devices that are integrated in the Linux input
+> +         subsystem, i.e have a /dev/input/eventX device file. This is
+> +         most likely the input driver you want to use.
+> +
+> +	 This driver can then be enabled by running the X server
+> +         using:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  (untested)
+  Indentation seems to be screwed up a bit here... Actually, there are 
+not tabs at all!
+
+> +
+> +           Xfbdev -keybd evdev,,device=/dev/input/eventX -mouse evdev,,device=/dev/input/eventY.
+> +
+> +config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD
+> +       bool "Enable KDrive/TinyX kbd input driver"
+> +       help
+> +         Enable kbd input driver in KDrive. It uses the console
+> +         keyboard as input device.
+> +
+> +config BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE
+> +       bool "Enable KDrive/TinyX mouse input driver"
+> +       help
+> +         Enable mouse input driver in KDrive. It supports PS/2 mice
+> +         and serial port mice.
+> +
+> +endif
+> +
+>   comment "Optional Servers"
+>
+>   config BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index 623b25d..552d8e8 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> @@ -76,6 +76,25 @@ define XSERVER_CREATE_X_SYMLINK
+>    ln -f -s Xfbdev $(TARGET_DIR)/usr/bin/X
+>   endef
+>   XSERVER_XORG_SERVER_POST_INSTALL_TARGET_HOOKS += XSERVER_CREATE_X_SYMLINK
+> +
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_EVDEV),y)
+> +XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive-evdev
+> +else
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive-evdev
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_KBD),y)
+> +XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive-kbd
+> +else
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive-kbd
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_KDRIVE_MOUSE),y)
+> +XSERVER_XORG_SERVER_CONF_OPT += --enable-kdrive-mouse
+> +else
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive-mouse
+> +endif
+> +
+>   else
+
+  With your addition this else is moving very far from the if, so a 
+comment would be useful.
 
   Regards,
   Arnout
+
+
+>   XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
+>   endif
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
