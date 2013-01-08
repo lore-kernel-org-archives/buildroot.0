@@ -1,46 +1,73 @@
-From: Viallard Anthony <viallard@syscom-instruments.com>
-Date: Tue, 08 Jan 2013 09:57:00 +0100
-Subject: [Buildroot] [PATCH 1/5] gnuplot : new package
-In-Reply-To: <20130107171010.36ca678d@skate>
-References: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
- <20130107144800.29eb11ca@skate> <50EAF1AC.8090907@syscom-instruments.com>
- <20130107171010.36ca678d@skate>
-Message-ID: <50EBDF5C.9000409@syscom-instruments.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue, 8 Jan 2013 10:06:41 +0100
+Subject: [Buildroot] [git commit] rpi-firmware: New package
+In-Reply-To: <50EB6F5D.4040202@je-eigen-domein.nl>
+References: <20130106221239.2F44D9A5E5@busybox.osuosl.org>
+ <50EB4F1F.7070202@mind.be>
+ <CAGduivwPW82QJ20SmF-ki=YydwWgiOWG1jc6LQ41c0qwzP+kLg@mail.gmail.com>
+ <50EB5A87.906@je-eigen-domein.nl> <50EB5C6A.4010301@mind.be>
+ <50EB6F5D.4040202@je-eigen-domein.nl>
+Message-ID: <CAGduivwpUVA5+NxT-_OsZF2-+1ZLGfN3r99DFwc_LUn+e7my6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07. 01. 13 17:10, Thomas Petazzoni wrote:
-> Dear Viallard Anthony,
+On Tue, Jan 8, 2013 at 1:59 AM, Floris Bos <bos@je-eigen-domein.nl> wrote:
+> On 01/08/2013 12:38 AM, Arnout Vandecappelle wrote:
+>>
+>> On 08/01/13 00:30, Floris Bos wrote:
+>>>
+>>> On 01/08/2013 12:06 AM, Maxime Hadjinlian wrote:
+>>>>
+>>>> On Mon, Jan 7, 2013 at 11:41 PM, Arnout Vandecappelle <arnout@mind.be>
+>>>> wrote:
+>>>>>
+>>>>> On 06/01/13 23:01, Peter Korsgaard wrote:
+>>>>>>
+>>>>>> +RPI_FIRMWARE_LICENSE = BSD-3c
+>>>>>> +RPI_FIRMWARE_LICENSE_FILE = boot/LICENCE.broadcom
+>>>>>
+>>>>>
+>>>>> As Thomas pointed out, this is not BSD-3c but "Broadcom proprietary
+>>>>> license".
+>>>>>
+>>>>> Maybe it should also get
+>>>>>
+>>>>> RPI_FIRMWARE_REDISTRIBUTE = NO
+>>>>>
+>>>> So, even the binary are not free from redistributing ? I'm sorry, I
+>>>> lack absolute knowledge in license... I should study this.
+>>>> I will patch to add this.
+>>>
+>>>
+>>> Perhaps also copy the boot/LICENCE.broadcom file to the directory holding
+>>> the boot files?
+>>
+>>
+>>  Why? Usually when the device is redistributed, the end user doesn't even
+>> have access to the filesystem. So putting license files in the root
+>> filesystem is quite redundant.
+>>
 >
-> On Mon, 07 Jan 2013 17:02:52 +0100, Viallard Anthony wrote:
+> In the case of the Raspberry, the bootloader files are always stored on the
+> FAT partition of a removable SD card.
+> Even inside an enclosure, they are quite more accessible to end-users than
+> with other devices.
+I agree with Arnout, as said Yann E. Morin in this mail :
+http://lists.busybox.net/pipermail/buildroot/2013-January/064966.html,
+I don't think we should worry about people using system build with
+buildroot, it's the responsibility of people distributing theses
+systems to inform their users about licenses, that's why the make
+legal-info is for IMHO.
 >
->> Sorry, i knew my post is not very sexy. This is because my git
->> repository is very dirty and i don't known how clean my work.
-> All you need to learn is how to use "interactive rebase".
 >
-> See
-> http://elinux.org/Buildroot_how_to_contribute#In_case_of_mistakes_in_my_branch
-> for a very basic introduction.
 >
-> For more details, see
-> http://git-scm.com/book/en/Git-Tools-Rewriting-History#Changing-Multiple-Commit-Messages.
+> Yours sincerely,
 >
-> Once you know how to use interactive rebase, you can prepare very nice
-> patch series.
->
-> Best regards,
->
-> Thomas
-Dear Petazzoni Thomas,
-
-Thanks for the links. I already knew this command but i didn't realize 
-it was so powerful !
-
-I've commited better patches, it is good for you ?
-
-Best regards,
-
-avd.
+> Floris Bos
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
