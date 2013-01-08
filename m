@@ -1,54 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 22:37:10 +0100
-Subject: [Buildroot] [git commit] pthread-stubs: rename to
-	xlib_libpthread-stubs
-In-Reply-To: <20130105124707.668AD9A64B@busybox.osuosl.org>
-References: <20130105124707.668AD9A64B@busybox.osuosl.org>
-Message-ID: <50EC9186.7050802@mind.be>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 8 Jan 2013 23:21:16 +0100
+Subject: [Buildroot] [PATCH] linux: fix appended dtb handling of
+	pre/postv3.8-rc1
+In-Reply-To: <1357601724-3781-1-git-send-email-arnout@mind.be>
+References: <50EB5B77.3010800@mind.be>
+ <1357601724-3781-1-git-send-email-arnout@mind.be>
+Message-ID: <10225438FF80469BB7C9CB5E373EC190@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Peter, Thomas,
+ 
+Hi Arnout;
 
-On 01/05/13 13:26, Peter Korsgaard wrote:
-[snip]
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 7ddc6ea..4770c94 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -70,4 +70,12 @@ config BR2_PACKAGE_INPUT_TOOLS_EVTEST
->   	help
->   	  The evtest program from input-tools is now a separate package.
->
-> +config BR2_PACKAGE_PTHREAD_STUBS
-> +	bool "pthread-stubs option has been renamed"
-> +	select BR2_LEGACY
-> +	select BR2_PACKAGE_XLIB_LIBPTHREAD_STUBS
-> +	help
-> +	  For consistency reason, the pthread-stubs package has been
-> +	  renamed to xlib_libpthread-stubs.
-> +
->   endif
+Just did a new build with this patch and it did'nt hang on the cat when the kernel was build.
 
-  The intention was that:
+Thanks.
 
-- There would be a comment that this is a legacy option from 2011.11;
+Johan
 
-- The BR2_LEGACY_CHECK_2012_11 is updated to BR2_LEGACY_CHECK_2013_02 so 
-that it is re-enabled (but this can be done just prior to the release, of 
-course).
 
-  Regards,
-  Arnout
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Arnout Vandecappelle (Essensium/Mind)
+Verzonden: dinsdag 8 januari 2013 0:35
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] [PATCH] linux: fix appended dtb handling of pre/postv3.8-rc1
 
-[snip]
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+
+Also fix duplication of 'define LINUX_APPEND_DTB' line, and refactor the common part out.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ linux/linux.mk |   28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk index 7ec9cd2..61d4267 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -201,24 +201,20 @@ endef
+ endif
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+-define LINUX_APPEND_DTB
+-define LINUX_APPEND_DTB
+-	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+-	cat $(wildcard $(addprefix $(KERNEL_ARCH_PATH)/boot/,\
+-		$(KERNEL_DTS_NAME).dtb dts/$(KERNEL_DTS_NAME).dtb)) \
+-		>> $(KERNEL_ARCH_PATH)/boot/zImage
+-	# We need to generate the uImage here after that so that the uImage is
+-	# generated with the right image size.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) uImage
+-endef
+-else ifeq ($(BR2_LINUX_KERNEL_APPENDED_ZIMAGE),y)
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
++# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+ define LINUX_APPEND_DTB
+-	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
+-	cat $(wildcard $(addprefix $(KERNEL_ARCH_PATH)/boot/,\
+-		$(KERNEL_DTS_NAME).dtb dts/$(KERNEL_DTS_NAME).dtb)) \
+-		>> $(KERNEL_ARCH_PATH)/boot/zImage
++	if [ -e $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb ]; then \
++		cat $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb; \
++	else \
++		cat $(KERNEL_ARCH_PATH)/boot/dts/$(KERNEL_DTS_NAME).dtb; \
++	fi >> $(KERNEL_ARCH_PATH)/boot/zImage
+ endef
++ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
++# We need to generate the uImage here after that so that the uImage is 
++# generated with the right image size.
++LINUX_APPEND_DTB += $(sep)$(TARGET_MAKE_ENV) $(MAKE) 
++$(LINUX_MAKE_FLAGS) -C $(@D) uImage endif
+ endif
+ 
+ # Compilation. We make sure the kernel gets rebuilt when the
+--
+1.7.10.4
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
