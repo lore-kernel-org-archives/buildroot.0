@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 23:55:35 +0100
-Subject: [Buildroot] [PATCH 04/28] xserver-xorg_server: Mention that
- TinyX is also known as Kdrive
-In-Reply-To: <d11ab0741ba6dc77f04f5f29a283691f43e45b1a.1357507764.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 08 Jan 2013 23:56:35 +0100
+Subject: [Buildroot] [PATCH 05/28] xserver_xorg-server: rename
+ server-style configuration options
+In-Reply-To: <76ec7a633a6ad539eb9a2c06fcf54d6c622febfe.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <d11ab0741ba6dc77f04f5f29a283691f43e45b1a.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50ECA3E7.4040900@mind.be>
+ <76ec7a633a6ad539eb9a2c06fcf54d6c622febfe.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50ECA423.5080004@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,13 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/06/13 22:29, Thomas Petazzoni wrote:
-> Since several years, the TinyX name has been somewhat deprecated in
-> favor of Kdrive, so mention the "Kdrive" wording in our configuration
-> interface.
+> The BR2_PACKAGE_XSERVER_xorg and BR2_PACKAGE_XSERVER_tinyx options
+> used to select the style of X.org server to use are not named
+> consistently with the rest of the Buildroot options (in capital
+> letters and prefixed with the package name).
+>
+> Therefore, we rename those options, and we take care to add the old
+> option names in the BR2_LEGACY infrastructure.
 >
 > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
