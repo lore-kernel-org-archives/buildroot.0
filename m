@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 23:55:01 +0100
-Subject: [Buildroot] [PATCH 02/28] x11r7: remove useless depends on of
- X.org drivers
-In-Reply-To: <20d29fed0daf0228d11c9cfca4c3b692d80343a4.1357507764.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 08 Jan 2013 23:55:15 +0100
+Subject: [Buildroot] [PATCH 03/28] x11r7: fix indentation
+In-Reply-To: <53d5ff556761cb3adf7740bd6f16671bb18418c4.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <20d29fed0daf0228d11c9cfca4c3b692d80343a4.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50ECA3C5.8040206@mind.be>
+ <53d5ff556761cb3adf7740bd6f16671bb18418c4.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50ECA3D3.5010407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +12,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/06/13 22:29, Thomas Petazzoni wrote:
-> All X.org server drivers are already enclosed in a if
-> BR2_PACKAGE_XSERVER_xorg .. endif block. Now that this option is only
-> set if a X.org server is enabled, there is no need for each individual
-> driver to depend on BR2_PACKAGE_XSERVER_XORG.
+> Fixup the indentation when including the X.org server Config.in to
+> match all the other inclusions in x11r7/Config.in.
 >
 > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
@@ -25,7 +22,6 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
