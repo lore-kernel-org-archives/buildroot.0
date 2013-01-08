@@ -1,72 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 15:27:44 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
- pointing to our .config
-In-Reply-To: <201301081446.01172.yann.morin.1998@free.fr>
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
- <201301081351.38832.yann.morin.1998@free.fr> <50EC1A1B.5080804@mind.be>
- <201301081446.01172.yann.morin.1998@free.fr>
-Message-ID: <50EC2CE0.2050106@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Jan 2013 15:31:24 +0100
+Subject: [Buildroot] Dropbear/SFTP
+In-Reply-To: <324F5873D88A41258846A0BE8F0F4556@beraninstruments.com.local>
+References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
+ <20130108130618.4991dff7@skate>
+ <CAKvQZ_0f=ka=G_66J4kt_mqn_CvnjqpHMUyv-tBa7SQ-LMtMRw@mail.gmail.com>
+ <324F5873D88A41258846A0BE8F0F4556@beraninstruments.com.local>
+Message-ID: <20130108153124.658fe4e5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/01/13 14:46, Yann E. MORIN wrote:
-> Arnout, All,
->
-> On Tuesday 08 January 2013 14:07:39 Arnout Vandecappelle wrote:
->> On 08/01/13 13:51, Yann E. MORIN wrote:
->>> On Tuesday 08 January 2013 07:50:51 Arnout Vandecappelle wrote:
->>>> On 07/01/13 22:52, Yann E. MORIN wrote:
->>> [--SNIP--]
->>>>> +# Scripts in support/ may need to parse out .config, so give
->>>>> +# them easy access
->>>>> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config.
->>>>
->>>>     Convention is that BR2_* is set by Kconfig. I kind of like that, it
->>>> helps us developers to understand a variable's meaning.
->>>
->>> I am afraid CONFIG_FILE as is could clash with some packages.
->>> Maybe DOT_CONFIG instead? I'll use that.
->>
->>    DOT_CONFIG is equally likely to conflict.
->>
->>    (None of our own files use CONFIG_FILE, cfr. 'git grep -w CONFIG_FILE').
->
-> I was not referring to our .mk files, but rather to the packages themselves.
-> I did a quick survey in 110+ packages, and:
->    - kconfig-based packages are not affected: kernel, uClibc, busybox, ct-ng
->    - packages using CONFIG_FILE:
->      - gdb:     gdb/sim/ppc/Makefile.in:CONFIG_FILE = @sim_config@
->      - xbmc:    xbmc/lib/freetype/builds/detect.mk:ifndef CONFIG_FILE
->    - no package uses DOT_CONFIG
->    - openbricks is using DOT_CONFIG, too
+Dear Will Moore,
 
-  But if you anyway change the name, BUILDROOT_CONFIG is better than the 
-non-specific DOT_CONFIG.
+On Tue, 8 Jan 2013 14:15:01 -0000, Will Moore wrote:
 
-  How long can we discuss about a name? :-)
+> I currently configure the eclipse project to pick up the buildroot built cross
+> tools, built my executables in eclipse, run Dropbear on the target, scp my
+> executables to the target, in a ssh connection run gdbserver, and configure
+> eclipse to remote debug using the builtroot built cross tools.  I know from QNX
+> Momentics there are much slicker ways ...
 
+Indeed, what we have now is much better. Thanks to the developments
+done by M?lanie (Cc'ed), we have an Eclipse plug-in that:
 
-  Regards,
-  Arnout
+ * Automatically detects the Buildroot toolchains that are available on
+   your system, and allows you to select between them. It will
+   automatically adjust the compiler/flags used for compiling your
+   programs (if you're using the "managed build" mechanism of Eclipse,
+   which is the mechanism where Eclipse builds your application for
+   you, as opposed to using external Makefile, CMake or something like
+   that).
 
->
-> List of tested packages in attached file, searched for with:
->      grep --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn  \
->           -r -E '\<(CONFIG_FILE|DOT_CONFIG)\>' * 2>/dev/null
->
-> Regards,
-> Yann E. MORIN.
->
+ * Can automatically copy your application over SSH when you hit the
+   "Run" button, or copy the application + start gdbserver
+   automatically if you hit the "Debug" button.
 
+ * Provides a nice list of libraries that are compiled in your
+   Buildroot project (and providing a pkg-config .pc file). You just
+   have to click on a particular library to make your application link
+   against this library. That's the newest feature that has been
+   integrated :-)
 
+M?lanie will work on polishing the update site to make it easy to
+install all this, and in writing the necessary tutorials. We'll keep
+you posted once it is ready, but we are definitely looking forward for
+your tests and experimentations in order to get feedback and be able to
+do further improvements on this plug-in.
+
+Best regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
