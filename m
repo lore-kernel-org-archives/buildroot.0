@@ -1,34 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue,  8 Jan 2013 09:47:25 +0100
-Subject: [Buildroot] [PATCH] linux: fix handle new dtb location since
-	3.8-rc1 for appended dtbs
-Message-ID: <1357634845-16507-1-git-send-email-fabio.porcedda@gmail.com>
+From: Viallard Anthony <viallard@syscom-instruments.com>
+Date: Tue, 08 Jan 2013 09:57:00 +0100
+Subject: [Buildroot] [PATCH 1/5] gnuplot : new package
+In-Reply-To: <20130107171010.36ca678d@skate>
+References: <1357565417-16782-1-git-send-email-viallard@syscom-instruments.com>
+ <20130107144800.29eb11ca@skate> <50EAF1AC.8090907@syscom-instruments.com>
+ <20130107171010.36ca678d@skate>
+Message-ID: <50EBDF5C.9000409@syscom-instruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove a duplicated line to fix the following error:
+On 07. 01. 13 17:10, Thomas Petazzoni wrote:
+> Dear Viallard Anthony,
+>
+> On Mon, 07 Jan 2013 17:02:52 +0100, Viallard Anthony wrote:
+>
+>> Sorry, i knew my post is not very sexy. This is because my git
+>> repository is very dirty and i don't known how clean my work.
+> All you need to learn is how to use "interactive rebase".
+>
+> See
+> http://elinux.org/Buildroot_how_to_contribute#In_case_of_mistakes_in_my_branch
+> for a very basic introduction.
+>
+> For more details, see
+> http://git-scm.com/book/en/Git-Tools-Rewriting-History#Changing-Multiple-Commit-Messages.
+>
+> Once you know how to use interactive rebase, you can prepare very nice
+> patch series.
+>
+> Best regards,
+>
+> Thomas
+Dear Petazzoni Thomas,
 
-linux/linux.mk:205: *** missing `endef', unterminated `define'.  Stop.
+Thanks for the links. I already knew this command but i didn't realize 
+it was so powerful !
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- linux/linux.mk | 1 -
- 1 file changed, 1 deletion(-)
+I've commited better patches, it is good for you ?
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7ec9cd2..fe5f738 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -203,7 +203,6 @@ endif
- 
- ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
- define LINUX_APPEND_DTB
--define LINUX_APPEND_DTB
- 	# dtbs moved from arch/$ARCH/boot to arch/$ARCH/boot/dts since 3.8-rc1
- 	cat $(wildcard $(addprefix $(KERNEL_ARCH_PATH)/boot/,\
- 		$(KERNEL_DTS_NAME).dtb dts/$(KERNEL_DTS_NAME).dtb)) \
--- 
-1.8.0.3
+Best regards,
+
+avd.
