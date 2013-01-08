@@ -1,46 +1,64 @@
-From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Tue, 08 Jan 2013 21:31:15 +0200
-Subject: [Buildroot] [PATCH] new package: proxychains
-In-Reply-To: <20130108201808.7ee86751@skate>
-References: <1356222029-6290-1-git-send-email-stefan.froberg@petroprogram.com>
- <20130108180957.30c9f629@skate> <50EC6C03.2040504@petroprogram.com>
- <20130108201808.7ee86751@skate>
-Message-ID: <50EC7403.9010309@petroprogram.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 08 Jan 2013 21:18:30 +0100
+Subject: [Buildroot] Error when adding media-ctl as package
+In-Reply-To: <50EC1EBF.80807@yahoo.fr>
+References: <50EC1EBF.80807@yahoo.fr>
+Message-ID: <50EC7F16.3090008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+On 01/08/13 14:27, Patrick wrote:
+> Dear mailing list,
+>
+> I am working with buildroot 2012.11 and I need to add the media-ctl tool
+> (http://git.ideasonboard.org/media-ctl.git).
+>
+> I have added this tool in buildroot as a package following the buildroot
+> user manual and this:
+> https://github.com/MaxGalemin/buildroot/commit/2ac3323f9d40c2610128d3a22fee8dd195979dc9
+>
+>
+> The Config.in and media-ctl.mk files I have added are attached to this mail.
+>
+> When doing "make media-ctl" I have the following error when buildroot do
+> the configure step :
+>
+> checking if libtool supports shared libraries... yes
+> checking whether to build shared libraries... yes
+> checking whether to build static libraries... yes
+> ./configure: 10676: ./configure.lineno: Syntax error: word unexpected
+> (expecting ")")
+> make: ***
+> [/home/pgerber/imusba/buildroot/output/build/media-ctl-36a1357c9c879092fe2e36c82187f1d35b1efe13/.stamp_configured]
+> Error 2
+>
+> As anyone have any idea why I have this and how to fix it ?
+> Any help is welcome.
 
-8.1.2013 21:18, Thomas Petazzoni kirjoitti:
-> Dear Stefan Fr?berg,
->
-> On Tue, 08 Jan 2013 20:57:07 +0200, Stefan Fr?berg wrote:
->
->> Hmmm... could this be a some weird parallel compiling problem ????
-> No. proxychains is a program that LD_PRELOAD a library to overload some
-> of the C library functions. So it reimplements some functions of the C
-> library, but in this case, it reimplements getnameinfo() with a
-> prototype that doesn't match the one of the C library.
+  Can you
 
-That's really strange because it did match my headers and I had no problem.
+- post the way that configure is called (just after "media-ctl 36a... 
+Configuring");
 
-> Maybe an idea would be to upgrade to proxychains 4.4:
-> http://sourceforge.net/projects/proxychains/forums/forum/644747/topic/6519406.
->
-> The main page of proxychains mentions 3.1 as the latest version, but it
-> is not the case. The official Git repo at
-> https://github.com/rofl0r/proxychains contains many more recent
-> versions. Most likely the problem is already fixed in a more recent
-> version than 3.1.
->
-> Could you test a more recent version and submit the corresponding patch?
->
-> Thanks!
->
-> Thomas
-Ok, Ill take a look and try a newer version.
+- look at line 10676 of output/build/media-ctl-36a*/configure and see if 
+there's anything suspicious;
 
-Stefan
+- perhaps add some additional echo's before line 10676 to see what might 
+go wrong.
+
+  Note that it works fine for me.
+
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
