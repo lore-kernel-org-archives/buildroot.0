@@ -1,44 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 07:41:44 +0100
-Subject: [Buildroot] [git commit] perf: add kernel version checks
-In-Reply-To: <20130107212531.5E07E9A691@busybox.osuosl.org>
-References: <20130107212531.5E07E9A691@busybox.osuosl.org>
-Message-ID: <50EBBFA8.1070503@mind.be>
+Date: Tue, 08 Jan 2013 09:05:16 +0100
+Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
+In-Reply-To: <201301072256.26160.yann.morin.1998@free.fr>
+References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
+ <CAAfyv36e2Yk2kHFAq+p_BOpdz56Wa6qQaBW4zYJrq=4bnUf01Q@mail.gmail.com>
+ <20130107225223.10cdf4e6@skate> <201301072256.26160.yann.morin.1998@free.fr>
+Message-ID: <50EBD33C.1090603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/13 21:40, Peter Korsgaard wrote:
-> perf is only available since kernel 2.6.31, so if we can't find
-> tools/perf/Makefile, error out and tell the user about this.
+On 07/01/13 22:56, Yann E. MORIN wrote:
+> Thomas, Belisko, All,
 >
-> perf without libelf can only be built since kernel 3.7, so error out
-> and tell the user about this if he's trying to build perf from a<  3.7
-> kernel without libelf.
+> On Monday 07 January 2013 Thomas Petazzoni wrote:
+>> On Mon, 7 Jan 2013 22:45:50 +0100, Belisko Marek wrote:
+>>>> You should be work specific than just BSD and GPL. Like BSD-3c or
+>>>> BSD-4c, GPLv2, GPLv2+, GPLv3, GPLv3+, etc.
+>>> After proper reading of COPYING file it seems it GPLv2+
+>>> "Some of the older utilities are covered by the GPL. More precisely:
+>>> You are free to distribute this software under the terms of the
+>>> GNU General Public License either version 2, or (at your option)
+>>> any later version." but in same file there is no mention about BSD
+>>> license version.
+>>
+>> There is a BSD_LICENSE file that contains a BSD three clause license,
 >
-> Unfortunately, those tests can only be build-time checks as we either
-> need to know the real kernel version (i.e, using LINUX_VERSION would
-> not be correct as it can be a Git commit ID, or Git tag), or have
-> access to the kernel sources themselves. So we can't prevent those
-> invalid situations at the configuration, we can only nicely tell the
-> user at build time.
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
+> Actually, what matters in the content of the source files. Do some of
+> them refer to either license?
+>    - if the files only refer to GPLv2+, then the BSD-3c does not apply,
+>    - if the files only refer to BSD-3c, then the GPLv2+ does not apply,
+>    - if some file refer to one or two of the licenses, then both apply.
 
-  There are a number of packages that would benefit from kernel version 
-checks. For instance, the native driver implementations of igh-ethercat 
-are specific for a certain kernel version. Would it be a good idea to 
-make the kernel version user-configurable, and add a check for its 
-correctness similar to the external toolchains?
+      - if all files refer to GPLv2+ and BSD-3c, then either applies.
 
-  This would allow us to add a kernel build to the autobuilders, and thus 
-autobuild the 5 packages that depend on BR2_LINUX_KERNEL.
+Putting GPLv2+ BSD-3c implies that parts are GPLv2+, other parts and 
+BSD-3c. But it's also possible (and likely) that either applies.  BTW, 
+it's not possible that both apply because they have conflicting terms.
 
   Regards,
   Arnout
+
+>
+> (/me likes how he managed to line up the above! ;-) )
+>
+> Regards,
+> Yann E. MORIN.
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
