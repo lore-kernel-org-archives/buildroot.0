@@ -1,57 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 08:48:18 +0100
-Subject: [Buildroot] [PATCH] divine: fix divine-config
-In-Reply-To: <50EB4DAD.6040409@petroprogram.com>
-References: <1357250947-23296-1-git-send-email-stefan.froberg@petroprogram.com>
- <50E6BFE2.2090405@zacarias.com.ar>
- <CAHXCMMKhDpanjesHYjMSh-dcAHKt-84B3gEgyzs6UgN_8VRZvQ@mail.gmail.com>
- <50E6E757.10809@zacarias.com.ar> <50E6EDB5.9070004@petroprogram.com>
- <20130106054113.GD13545@sapphire.tkos.co.il>
- <50E9BE9A.4030703@petroprogram.com> <50EB496B.60301@mind.be>
- <50EB4DAD.6040409@petroprogram.com>
-Message-ID: <50EBCF42.3000505@mind.be>
+Date: Tue, 08 Jan 2013 07:41:44 +0100
+Subject: [Buildroot] [git commit] perf: add kernel version checks
+In-Reply-To: <20130107212531.5E07E9A691@busybox.osuosl.org>
+References: <20130107212531.5E07E9A691@busybox.osuosl.org>
+Message-ID: <50EBBFA8.1070503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/13 23:35, Stefan Fr?berg wrote:
-> Hi Arnout
+On 07/01/13 21:40, Peter Korsgaard wrote:
+> perf is only available since kernel 2.6.31, so if we can't find
+> tools/perf/Makefile, error out and tell the user about this.
 >
-> 8.1.2013 0:17, Arnout Vandecappelle kirjoitti:
->> On 06/01/13 19:12, Stefan Fr?berg wrote:
-[snip]
->>> ui/libui.a codecs/libcodec.a wiretap/.libs/libwiretap.a
->>> epan/.libs/libwireshark.a -lgnutls -L/usr/lib
->>                                       ^^^^^^^^^^
->>   Here's your culprit.
->>
->>   Probably one of the .la files incorrectly adds /usr/lib.
->>
->>   Question is why libtool adds it, of course...
->>
+> perf without libelf can only be built since kernel 3.7, so error out
+> and tell the user about this if he's trying to build perf from a<  3.7
+> kernel without libelf.
 >
-> Bug in libtool ?
-> I tried checking all my $(STAGING_DIR)/usr/lib/*.la files but so far
-> everything seems fine...
+> Unfortunately, those tests can only be build-time checks as we either
+> need to know the real kernel version (i.e, using LINUX_VERSION would
+> not be correct as it can be a Git commit ID, or Git tag), or have
+> access to the kernel sources themselves. So we can't prevent those
+> invalid situations at the configuration, we can only nicely tell the
+> user at build time.
+>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
 
-  I expect it will be one of the *.la files in wireshark itself. Or it 
-could be one of the -lfoo link arguments - IIRC, libtool hard-codes 
-searching in /usr/lib for libraries.
+  There are a number of packages that would benefit from kernel version 
+checks. For instance, the native driver implementations of igh-ethercat 
+are specific for a certain kernel version. Would it be a good idea to 
+make the kernel version user-configurable, and add a check for its 
+correctness similar to the external toolchains?
 
-  Looking a bit more in detail, I see that autoconf's AC_PROG_LIBTOOL 
-expands into a hard-coded
-sys_lib_dlsearch_path_spec="/lib /usr/lib \$lt_ld_extra"
-
-(sys_lib_search_path_spec is computed based on the compiler's search 
-path.) So we actually risk running into this problem for any 
-libtool-based package... Maybe we should globally patch the configure 
-scripts to make sys_lib_dlsearch_path_spec empty.
-
-  But anyway, Stefan, for wireshark you should try to find out which host 
-library is found by configure. Because making sys_lib_dlsearch_path_spec 
-empty would just change the error into a slightly better 'cannot find -lfoo'.
+  This would allow us to add a kernel build to the autobuilders, and thus 
+autobuild the 5 packages that depend on BR2_LINUX_KERNEL.
 
   Regards,
   Arnout
