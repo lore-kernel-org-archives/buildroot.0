@@ -1,49 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 14:07:39 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
- pointing to our .config
-In-Reply-To: <201301081351.38832.yann.morin.1998@free.fr>
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
- <fd01d05b62a384b43722e790e3e491f87c818797.1357595083.git.yann.morin.1998@free.fr>
- <50EBC1CB.8030900@mind.be> <201301081351.38832.yann.morin.1998@free.fr>
-Message-ID: <50EC1A1B.5080804@mind.be>
+From: Patrick <kpa_info@yahoo.fr>
+Date: Tue, 08 Jan 2013 14:27:27 +0100
+Subject: [Buildroot] Error when adding media-ctl as package
+Message-ID: <50EC1EBF.80807@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/01/13 13:51, Yann E. MORIN wrote:
-> Arnout,, All,
->
-> On Tuesday 08 January 2013 07:50:51 Arnout Vandecappelle wrote:
->> On 07/01/13 22:52, Yann E. MORIN wrote:
-> [--SNIP--]
->>> +# Scripts in support/ may need to parse out .config, so give
->>> +# them easy access
->>> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config.
->>
->>    Convention is that BR2_* is set by Kconfig. I kind of like that, it
->> helps us developers to understand a variable's meaning.
->
-> I am afraid CONFIG_FILE as is could clash with some packages.
-> Maybe DOT_CONFIG instead? I'll use that.
+Dear mailing list,
 
-  DOT_CONFIG is equally likely to conflict.
+I am working with buildroot 2012.11 and I need to add the media-ctl tool 
+(http://git.ideasonboard.org/media-ctl.git).
 
-  (None of our own files use CONFIG_FILE, cfr. 'git grep -w CONFIG_FILE').
+I have added this tool in buildroot as a package following the buildroot 
+user manual and this: 
+https://github.com/MaxGalemin/buildroot/commit/2ac3323f9d40c2610128d3a22fee8dd195979dc9
 
+The Config.in and media-ctl.mk files I have added are attached to this mail.
 
+When doing "make media-ctl" I have the following error when buildroot 
+do the configure step :
 
-  Regards,
-  Arnout
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+./configure: 10676: ./configure.lineno: Syntax error: word unexpected 
+(expecting ")")
+make: *** 
+[/home/pgerber/imusba/buildroot/output/build/media-ctl-36a1357c9c879092fe2e36c82187f1d35b1efe13/.stamp_configured] 
+Error 2
 
-[snip]
+As anyone have any idea why I have this and how to fix it ?
+Any help is welcome.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks in advance
+
+Patrick
+-------------- next part --------------
+config BR2_PACKAGE_MEDIA_CTL
+	bool "media-ctl"
+	help
+	  Media controller control application
+-------------- next part --------------
+#############################################################
+#
+# media-ctl
+#
+#############################################################
+
+#MEDIA_CTL_VERSION = ac40b79f002a2315f909548614ccd2d408da25b7
+MEDIA_CTL_VERSION = 36a1357c9c879092fe2e36c82187f1d35b1efe13
+MEDIA_CTL_SITE = git://git.ideasonboard.org/media-ctl.git
+MEDIA_CTL_INSTALL_STAGING = YES
+MEDIA_CTL_LICENSE = GPLv2
+MEDIA_CTL_LICENSE_FILES = COPYING.LIB
+MEDIA_CTL_AUTORECONF = YES
+MEDIA_CTL_AUTORECONF_OPT = --install
+MEDIA_CTL_CONF_OPT = --with-kernel-headers=$(STAGING_DIR)/usr/include
+
+$(eval $(autotools-package))
