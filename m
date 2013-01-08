@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 08 Jan 2013 23:55:15 +0100
-Subject: [Buildroot] [PATCH 03/28] x11r7: fix indentation
-In-Reply-To: <53d5ff556761cb3adf7740bd6f16671bb18418c4.1357507764.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 08 Jan 2013 23:55:35 +0100
+Subject: [Buildroot] [PATCH 04/28] xserver-xorg_server: Mention that
+ TinyX is also known as Kdrive
+In-Reply-To: <d11ab0741ba6dc77f04f5f29a283691f43e45b1a.1357507764.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <53d5ff556761cb3adf7740bd6f16671bb18418c4.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50ECA3D3.5010407@mind.be>
+ <d11ab0741ba6dc77f04f5f29a283691f43e45b1a.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50ECA3E7.4040900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +13,9 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/06/13 22:29, Thomas Petazzoni wrote:
-> Fixup the indentation when including the X.org server Config.in to
-> match all the other inclusions in x11r7/Config.in.
+> Since several years, the TinyX name has been somewhat deprecated in
+> favor of Kdrive, so mention the "Kdrive" wording in our configuration
+> interface.
 >
 > Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
