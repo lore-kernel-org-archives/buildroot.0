@@ -1,182 +1,99 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jan 2013 14:46:01 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
-	pointing to our .config
-In-Reply-To: <50EC1A1B.5080804@mind.be>
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
- <201301081351.38832.yann.morin.1998@free.fr> <50EC1A1B.5080804@mind.be>
-Message-ID: <201301081446.01172.yann.morin.1998@free.fr>
+From: Jan Pedersen <jp@jp-embedded.com>
+Date: Tue,  8 Jan 2013 14:38:28 +0100
+Subject: [Buildroot] [PATCH 1/1] added infozip package
+Message-ID: <1357652308-20027-1-git-send-email-jp@jp-embedded.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
 
-On Tuesday 08 January 2013 14:07:39 Arnout Vandecappelle wrote:
-> On 08/01/13 13:51, Yann E. MORIN wrote:
-> > On Tuesday 08 January 2013 07:50:51 Arnout Vandecappelle wrote:
-> >> On 07/01/13 22:52, Yann E. MORIN wrote:
-> > [--SNIP--]
-> >>> +# Scripts in support/ may need to parse out .config, so give
-> >>> +# them easy access
-> >>> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config.
-> >>
-> >>    Convention is that BR2_* is set by Kconfig. I kind of like that, it
-> >> helps us developers to understand a variable's meaning.
-> >
-> > I am afraid CONFIG_FILE as is could clash with some packages.
-> > Maybe DOT_CONFIG instead? I'll use that.
-> 
->   DOT_CONFIG is equally likely to conflict.
-> 
->   (None of our own files use CONFIG_FILE, cfr. 'git grep -w CONFIG_FILE').
+Signed-off-by: Jan Pedersen <jp@jp-embedded.com>
+---
+ package/Config.in          |    1 +
+ package/infozip/Config.in  |   10 ++++++++++
+ package/infozip/infozip.mk |   43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 package/infozip/Config.in
+ create mode 100644 package/infozip/infozip.mk
 
-I was not referring to our .mk files, but rather to the packages themselves.
-I did a quick survey in 110+ packages, and:
-  - kconfig-based packages are not affected: kernel, uClibc, busybox, ct-ng
-  - packages using CONFIG_FILE:
-    - gdb:     gdb/sim/ppc/Makefile.in:CONFIG_FILE = @sim_config@
-    - xbmc:    xbmc/lib/freetype/builds/detect.mk:ifndef CONFIG_FILE
-  - no package uses DOT_CONFIG
-  - openbricks is using DOT_CONFIG, too
-
-List of tested packages in attached file, searched for with:
-    grep --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn  \
-         -r -E '\<(CONFIG_FILE|DOT_CONFIG)\>' * 2>/dev/null
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 49db380..9cf29f4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -14,6 +14,7 @@ endif
+ source "package/lzop/Config.in"
+ source "package/lzma/Config.in"
+ source "package/xz/Config.in"
++source "package/infozip/Config.in"
+ endmenu
+ 
+ menu "Debugging, profiling and benchmark"
+diff --git a/package/infozip/Config.in b/package/infozip/Config.in
+new file mode 100644
+index 0000000..1a4b756
+--- /dev/null
++++ b/package/infozip/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_INFOZIP
++	bool "infozip"
++	help
++	  Zip is a compression and file packaging/archive utility. 
++	  Although highly compatible both with PKWARE's PKZIP and 
++	  PKUNZIP utilities for MS-DOS and with Info-ZIP's own UnZip, 
++ 	  our primary objectives have been portability and other-than-MSDOS 
++	  functionality. 
++
++	  http://infozip.sourceforge.net/Zip.html
+diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
+new file mode 100644
+index 0000000..996a709
+--- /dev/null
++++ b/package/infozip/infozip.mk
+@@ -0,0 +1,43 @@
++#############################################################
++#
++# infozip
++#
++#############################################################
++INFOZIP_VERSION:=30
++INFOZIP_SOURCE:=zip$(INFOZIP_VERSION).tgz
++INFOZIP_SITE:=ftp://ftp.info-zip.org/pub/infozip/src/
++INFOZIP_DIR = $(BUILD_DIR)/zip$(INFOZIP_VERSION)
++
++$(DL_DIR)/$(INFOZIP_SOURCE):
++	$(call DOWNLOAD,$(INFOZIP_SITE)/$(INFOZIP_SOURCE))
++
++$(INFOZIP_DIR)/.source: $(DL_DIR)/$(INFOZIP_SOURCE)
++	$(ZCAT) $(DL_DIR)/$(INFOZIP_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
++	touch $@
++
++$(INFOZIP_DIR)/.build: $(INFOZIP_DIR)/.source
++	make -C $(INFOZIP_DIR) -f unix/Makefile generic CC=$(TARGET_CC)
++	touch $@
++
++$(INFOZIP_DIR)/.install: $(INFOZIP_DIR)/.build
++	make -C $(INFOZIP_DIR) -f unix/Makefile install prefix=$(TARGET_DIR)/usr CC=$(TARGET_CC)
++	touch $@
++
++infozip: $(INFOZIP_DIR)/.install
++
++infozip-source: $(DL_DIR)/$(INFOZIP_SOURCE)
++
++infozip-clean:
++	rm -rf $(INFOZIP_DIR)
++
++infozip-dirclean:
++	rm -rf $(INFOZIP_DIR)
++
++#############################################################
++#
++# Toplevel Makefile options
++#
++#############################################################
++ifeq ($(BR2_PACKAGE_INFOZIP),y)
++TARGETS += infozip
++endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
--------------- next part --------------
-aboriginal
-Android
-aports
-Archipel
-autoconf
-automake
-bencode-tools
-binutils
-bitfield
-bizou
-btrfs-progs
-buildroot
-buildroot-test
-busybox
-CEGUI
-ceph
-cloog
-cloog-ppl
-config
-curl
-debtree
-ditaa
-dokuwiki
-dpkg-repack
-dtc
-dvb-apps
-dvcs-autosync
-e2fsprogs
-eglibc
-fakeroot
-fakerootng
-fast-export
-feh
-firefox-sync-server
-force_bind
-freelan-all
-gcc
-gdb
-gentoo
-giblib
-git
-gitdm
-glibc
-gmailfs
-Gource
-hg
-infobot
-irker
-kexec-tools
-klibc
-kmod
-libiscsi
-LibLime-Koha
-libmtp
-libseccomp
-libssh2
-libtirpc
-libtool
-libvirt
-lighttpd
-lima
-linux
-linux-firmware
-liquidprompt
-ltrace
-mpfr
-mplayer2
-nilfs2-utils
-oe
-openbricks
-openocd
-openwrt
-owncloud
-pam_usb
-paperwork
-patchelf
-patchwork
-petitboot
-PhotoShow
-pkgxx
-ppl
-python-virtinst
-qcontrol
-qemu
-raspberrypi-firmware
-retroshare
-rofs
-rpi-userland
-sane-backends
-sane-frontends
-sd
-send-patches-org
-shim
-showtime
-sim1
-smbnetfs
-smem
-snipmate.vim
-socat
-spice
-squashfs-tools
-sshuttle
-stgit
-synergy
-tinyproxy
-toybox
-tslib
-tvheadend
-tz
-tz-history-scripts
-u-boot
-uClibc
-uClibc++
-unetbootin
-unionfs-fuse
-vash
-virt-manager
-virt-viewer
-weird-compiler
-xbmc
-Xpra
-xz
-zbar
+1.7.10.4
