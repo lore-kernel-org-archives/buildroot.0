@@ -1,67 +1,72 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Tue, 8 Jan 2013 14:15:01 -0000
-Subject: [Buildroot] Dropbear/SFTP
-In-Reply-To: <CAKvQZ_0f=ka=G_66J4kt_mqn_CvnjqpHMUyv-tBa7SQ-LMtMRw@mail.gmail.com>
-References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
- <20130108130618.4991dff7@skate>
- <CAKvQZ_0f=ka=G_66J4kt_mqn_CvnjqpHMUyv-tBa7SQ-LMtMRw@mail.gmail.com>
-Message-ID: <324F5873D88A41258846A0BE8F0F4556@beraninstruments.com.local>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 08 Jan 2013 15:27:44 +0100
+Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
+ pointing to our .config
+In-Reply-To: <201301081446.01172.yann.morin.1998@free.fr>
+References: <cover.1357595083.git.yann.morin.1998@free.fr>
+ <201301081351.38832.yann.morin.1998@free.fr> <50EC1A1B.5080804@mind.be>
+ <201301081446.01172.yann.morin.1998@free.fr>
+Message-ID: <50EC2CE0.2050106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 08/01/13 14:46, Yann E. MORIN wrote:
+> Arnout, All,
+>
+> On Tuesday 08 January 2013 14:07:39 Arnout Vandecappelle wrote:
+>> On 08/01/13 13:51, Yann E. MORIN wrote:
+>>> On Tuesday 08 January 2013 07:50:51 Arnout Vandecappelle wrote:
+>>>> On 07/01/13 22:52, Yann E. MORIN wrote:
+>>> [--SNIP--]
+>>>>> +# Scripts in support/ may need to parse out .config, so give
+>>>>> +# them easy access
+>>>>> +export BR2_CONFIG_FILE=$(CONFIG_DIR)/.config.
+>>>>
+>>>>     Convention is that BR2_* is set by Kconfig. I kind of like that, it
+>>>> helps us developers to understand a variable's meaning.
+>>>
+>>> I am afraid CONFIG_FILE as is could clash with some packages.
+>>> Maybe DOT_CONFIG instead? I'll use that.
+>>
+>>    DOT_CONFIG is equally likely to conflict.
+>>
+>>    (None of our own files use CONFIG_FILE, cfr. 'git grep -w CONFIG_FILE').
+>
+> I was not referring to our .mk files, but rather to the packages themselves.
+> I did a quick survey in 110+ packages, and:
+>    - kconfig-based packages are not affected: kernel, uClibc, busybox, ct-ng
+>    - packages using CONFIG_FILE:
+>      - gdb:     gdb/sim/ppc/Makefile.in:CONFIG_FILE = @sim_config@
+>      - xbmc:    xbmc/lib/freetype/builds/detect.mk:ifndef CONFIG_FILE
+>    - no package uses DOT_CONFIG
+>    - openbricks is using DOT_CONFIG, too
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
-> Behalf Of Willy Lambert
-> Sent: 08 January 2013 12:59
-> To: Thomas Petazzoni
-> 
-> 2013/1/8 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
-> > Dear Ted Wood,
-> >
-> > On Tue, 8 Jan 2013 11:54:25 -0000, Ted Wood wrote:
-> >> I am attempting to remotely debug application code on  my i586 system from
-> >> Eclipse.
-> >>
--- snip --
-> >
-> > If you're interested, notice that we are currently developing a Eclipse
-> > plugin for Buildroot, which will help to build, remote execute and
-> > remote debug applications in the context of Buildroot. The
-> > documentation has not yet been fully written, but if you're interested,
-> > please let me know so that we can give you the initial starting points.
-> > We are very interested in getting some user feedback about those
-> > developments.
-> >
-> 
-> Even if not concerned by the thread, I'm interested to have a look at
-> this plugin.
+  But if you anyway change the name, BUILDROOT_CONFIG is better than the 
+non-specific DOT_CONFIG.
 
-+1
+  How long can we discuss about a name? :-)
 
-I currently configure the eclipse project to pick up the buildroot built cross
-tools, built my executables in eclipse, run Dropbear on the target, scp my
-executables to the target, in a ssh connection run gdbserver, and configure
-eclipse to remote debug using the builtroot built cross tools.  I know from QNX
-Momentics there are much slicker ways ...
 
-> 
-> > Best regards,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, Free Electrons
-> > Kernel, drivers, real-time and embedded Linux
-> > development, consulting, training and support.
-> > http://free-electrons.com
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  Regards,
+  Arnout
+
+>
+> List of tested packages in attached file, searched for with:
+>      grep --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn  \
+>           -r -E '\<(CONFIG_FILE|DOT_CONFIG)\>' * 2>/dev/null
+>
+> Regards,
+> Yann E. MORIN.
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
