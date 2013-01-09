@@ -1,85 +1,40 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  9 Jan 2013 23:12:44 +0100
-Subject: [Buildroot] [PATCH] linux, uboot, mxs-bootlets,
-	barebox: avoid double slash in CUSTOM_TARBALL
-Message-ID: <1357769564-11514-1-git-send-email-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  9 Jan 2013 23:22:50 +0100
+Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: be more explicit in the
+	config file help
+Message-ID: <1357770170-30858-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Some users seem to interpret:
+    make ctng-menuconfig
 
-The $(dir ...) function leaves a slash at the end, so that the LINUX_SITE
-variable for a custom tarball ends in a slash. The DOWNLOAD macro adds
-another slash between SITE and SOURCE, which results in a double slash in
-the download URL.
+as being a value that can be fit for the ct-ng config file.
 
-Fix this by stripping off the final slash from the _SITE in all packages that
-have a custom tarball.
+Clarify that it is a command to run, not a possible value.
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=5846
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- boot/barebox/barebox.mk           |    2 +-
- boot/mxs-bootlets/mxs-bootlets.mk |    2 +-
- boot/uboot/uboot.mk               |    2 +-
- linux/linux.mk                    |    2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ toolchain/toolchain-crosstool-ng/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 6cc4976..211e06e 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -9,7 +9,7 @@ BAREBOX_VERSION    = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
- ifeq ($(BAREBOX_VERSION),custom)
- # Handle custom Barebox tarballs as specified by the configuration
- BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
--BAREBOX_SITE    = $(dir $(BAREBOX_TARBALL))
-+BAREBOX_SITE    = $(patsubst %/,%,$(dir $(BAREBOX_TARBALL)))
- BAREBOX_SOURCE  = $(notdir $(BAREBOX_TARBALL))
- else ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
- BAREBOX_SITE        = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
-diff --git a/boot/mxs-bootlets/mxs-bootlets.mk b/boot/mxs-bootlets/mxs-bootlets.mk
-index 1975d47..f93ff81 100644
---- a/boot/mxs-bootlets/mxs-bootlets.mk
-+++ b/boot/mxs-bootlets/mxs-bootlets.mk
-@@ -6,7 +6,7 @@
+diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+index d80f547..68061f0 100644
+--- a/toolchain/toolchain-crosstool-ng/Config.in
++++ b/toolchain/toolchain-crosstool-ng/Config.in
+@@ -44,7 +44,8 @@ config BR2_TOOLCHAIN_CTNG_CONFIG
+ 	default "toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc"  if BR2_TOOLCHAIN_CTNG_glibc
+ 	help
+ 	  Enter here the crosstool-NG's .config file to use.
+-	  To fine-tune your toolchain, you can also call:
++	  To fine-tune your toolchain, you may also run (from the
++	  command line) this command:
+ 	    make ctng-menuconfig
  
- ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL),y)
- 	MXS_BOOTLETS_TARBALL = $(call qstrip,$(BR2_TARGET_MXS_BOOTLETS_CUSTOM_TARBALL_URL))
--	MXS_BOOTLETS_SITE = $(dir $(MXS_BOOTLETS_TARBALL))
-+	MXS_BOOTLETS_SITE = $(patsubst %/,%,$(dir $(MXS_BOOTLETS_TARBALL)))
- 	MXS_BOOTLETS_SOURCE  = $(notdir $(MXS_BOOTLETS_TARBALL))
- else ifeq ($(BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT),y)
- 	MXS_BOOTLETS_SITE = $(BR2_TARGET_MXS_BOOTLETS_CUSTOM_GIT_URL)
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 619f2e1..ea77259 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -14,7 +14,7 @@ UBOOT_INSTALL_IMAGES = YES
- ifeq ($(UBOOT_VERSION),custom)
- # Handle custom U-Boot tarballs as specified by the configuration
- UBOOT_TARBALL = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION))
--UBOOT_SITE    = $(dir $(UBOOT_TARBALL))
-+UBOOT_SITE    = $(patsubst %/,%,$(dir $(UBOOT_TARBALL)))
- UBOOT_SOURCE  = $(notdir $(UBOOT_TARBALL))
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
- UBOOT_SITE        = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL))
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 61d4267..91a9f50 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -10,7 +10,7 @@ LINUX_LICENSE_FILES = COPYING
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(LINUX_VERSION),custom)
- LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
--LINUX_SITE = $(dir $(LINUX_TARBALL))
-+LINUX_SITE = $(patsubst %/,%,$(dir $(LINUX_TARBALL)))
- LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+ 	  If unsure, keep the default value.
 -- 
-1.7.10.4
+1.7.2.5
