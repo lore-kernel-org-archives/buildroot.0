@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Jan 2013 16:59:05 +0100
-Subject: [Buildroot] [PATCH 1/2] Adding yavta (Yet Another V4L2 Test
- Application) as a package
-In-Reply-To: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
+Date: Wed, 9 Jan 2013 17:02:39 +0100
+Subject: [Buildroot] [PATCH 2/2] Adding media-ctl as a package
+In-Reply-To: <1357734594-8211-2-git-send-email-kpa_info@yahoo.fr>
 References: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <20130109165905.1fccde74@skate>
+ <1357734594-8211-2-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <20130109170239.56a4e727@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,78 +13,50 @@ To: buildroot@busybox.net
 
 Dear kpa_info at yahoo.fr,
 
-It looks pretty good! I have a few comments below.
-
-On Wed,  9 Jan 2013 13:29:53 +0100, kpa_info at yahoo.fr wrote:
-> From: Patrick Gerber <kpa_info@yahoo.fr>
-> 
-> 
-> Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
-> ---
->  package/multimedia/Config.in       |    1 +
->  package/multimedia/yavta/Config.in |    4 ++++
->  package/multimedia/yavta/yavta.mk  |   21 +++++++++++++++++++++
->  3 files changed, 26 insertions(+)
->  create mode 100644 package/multimedia/yavta/Config.in
->  create mode 100644 package/multimedia/yavta/yavta.mk
-> 
-> diff --git a/package/multimedia/Config.in
-> b/package/multimedia/Config.in index 273d9bc..da558ca 100644
-> --- a/package/multimedia/Config.in
-> +++ b/package/multimedia/Config.in
-> @@ -24,4 +24,5 @@ source "package/multimedia/pulseaudio/Config.in"
->  source "package/multimedia/tidsp-binaries/Config.in"
->  source "package/multimedia/vorbis-tools/Config.in"
->  source "package/multimedia/wavpack/Config.in"
-> +source "package/multimedia/yavta/Config.in"
->  endmenu
-> diff --git a/package/multimedia/yavta/Config.in
-> b/package/multimedia/yavta/Config.in new file mode 100644
-> index 0000000..3cca5c1
-> --- /dev/null
-> +++ b/package/multimedia/yavta/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_YAVTA
-> +	bool "yavta"
+On Wed,  9 Jan 2013 13:29:54 +0100, kpa_info at yahoo.fr wrote:
+> +config BR2_PACKAGE_MEDIA_CTL
+> +	bool "media-ctl"
 > +	help
-> +	  Yet Another V4L2 Test Application
+> +	  Media controller control application
 
-Here, we want a empty line, and then the upstream URL of the
-corresponding project.
+One empty newline + upstream URL of the project (even if it's just a
+http link to the Git repository). And also the description seems a bit
+short, since it does not only contains an application, but also a
+library, no?
 
-See
-http://buildroot.org/downloads/manual/manual.html#_literal_config_in_literal_file.
-
-
-> +YAVTA_VERSION = 82ff2efdb9787737b9f21b6f4759f077c827b238
-> +YAVTA_SITE = git://git.ideasonboard.org/yavta.git
-> +YAVTA_LICENSE = GPLv2
-> +YAVTA_LICENSE_FILES = COPYING.GPL
+> diff --git a/package/media-ctl/media-ctl.mk
+> b/package/media-ctl/media-ctl.mk new file mode 100644
+> index 0000000..3c35278
+> --- /dev/null
+> +++ b/package/media-ctl/media-ctl.mk
+> @@ -0,0 +1,18 @@
+> +#############################################################
+> +#
+> +# media-ctl
+> +#
+> +#############################################################
 > +
-> +define YAVTA_BUILD_CMDS
-> +$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
+> +MEDIA_CTL_VERSION = ac40b79f002a2315f909548614ccd2d408da25b7
+> +MEDIA_CTL_SITE = git://git.ideasonboard.org/media-ctl.git
+> +MEDIA_CTL_INSTALL_STAGING = YES
+> +MEDIA_CTL_LICENSE = GPLv2
 
-This line could be intended with one tab, and could be written as
-follows:
+The license is LGPLv2.1+.
 
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-
-TARGET_CONFIGURE_OPTS contains the proper CC and CFLAGS definitions.
-
-> +endef
+> +MEDIA_CTL_LICENSE_FILES = COPYING.LIB
 > +
-> +define YAVTA_INSTALL_TARGET_CMDS
-> +install -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
+> +MEDIA_CTL_AUTORECONF = YES
+> +MEDIA_CTL_AUTORECONF_OPT = --install
 
-Indentation, and install -> $(INSTALL)
+Are you sure this AUTORECONF_OPT is needed? If so, then please add a
+comment before this line that explains why.
 
-	$(INSTALL) -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
-
-> +endef
+> +MEDIA_CTL_CONF_OPT = --with-kernel-headers=$(STAGING_DIR)/usr/include
+> +MEDIA_CTL_DEPENDENCIES = host-pkgconf
 > +
-> +$(eval $(generic-package)) 
+> +$(eval $(autotools-package))
 
-Otherwise, looks good!
+Otherwise, looks good, thanks!
 
 Thomas
 -- 
