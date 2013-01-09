@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Jan 2013 09:14:27 +0100
-Subject: [Buildroot] [git commit] enlightenment: fix efl dependency
-Message-ID: <20130109081812.014439A6F7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Jan 2013 09:27:22 +0100
+Subject: [Buildroot] Error when adding media-ctl as package
+In-Reply-To: <50ED24FE.3070703@yahoo.fr>
+References: <50EC1EBF.80807@yahoo.fr> <50EC7F16.3090008@mind.be>
+ <50ED24FE.3070703@yahoo.fr>
+Message-ID: <20130109092722.7cb8409b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8cc76ff19d7d9482592881bfdeb802a23e810c26
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Patrick,
 
-The efl libraries depends on BR2_PACKAGE_EFL, so ensure enlightenment
-selects it as well, otherwise kconfig complains.
+On Wed, 09 Jan 2013 09:06:22 +0100, Patrick wrote:
+> The line 10964 is the following:
+> 
+>    PKG_CHECK_MODULES(libudev, libudev, have_libudev=yes, have_libudev=no)
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/enlightenment/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+This macro should have been expanded during the autoreconf. So there is
+some .m4 file missing with the definition of this PKG_CHECK_MODULES()
+macro.
 
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index c2944b9..357c72b 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ENLIGHTENMENT
- 	bool "enlightenment"
-+	select BR2_PACKAGE_EFL
- 	select BR2_PACKAGE_LIBECORE
- 	select BR2_PACKAGE_LIBECORE_X
- 	select BR2_PACKAGE_LIBEINA
+Could you add:
+
+MEDIA_CTL_DEPENDENCIES = host-pkgconf
+
+in your media-ctl.mk file?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
