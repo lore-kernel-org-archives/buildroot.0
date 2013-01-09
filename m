@@ -1,104 +1,94 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Wed, 09 Jan 2013 17:21:55 +0200
-Subject: [Buildroot] new <pkg>_CONFIG_FIXUP variable
-In-Reply-To: <20130109085412.3ec3662c@skate>
-References: <1357596078-7762-1-git-send-email-stefan.froberg@petroprogram.com>
- <201301072310.10765.yann.morin.1998@free.fr>
- <50EB4BC6.6020807@petroprogram.com>
- <201301090021.28343.yann.morin.1998@free.fr> <20130109085412.3ec3662c@skate>
-Message-ID: <50ED8B13.7040701@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Jan 2013 16:59:05 +0100
+Subject: [Buildroot] [PATCH 1/2] Adding yavta (Yet Another V4L2 Test
+ Application) as a package
+In-Reply-To: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
+References: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <20130109165905.1fccde74@skate>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Dear kpa_info at yahoo.fr,
 
-I tried that empty variable checking example you gave but it won't work.
-If I remove DIVINE_CONFIG_FIXUP from divine.mk it will still spit the
-"Fixing package configuration files" message
+It looks pretty good! I have a few comments below.
 
-This is what it looks so far. Added your variable checking and removed
-redundant '\ from sed line as Arnout said.
+On Wed,  9 Jan 2013 13:29:53 +0100, kpa_info at yahoo.fr wrote:
+> From: Patrick Gerber <kpa_info@yahoo.fr>
+> 
+> 
+> Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
+> ---
+>  package/multimedia/Config.in       |    1 +
+>  package/multimedia/yavta/Config.in |    4 ++++
+>  package/multimedia/yavta/yavta.mk  |   21 +++++++++++++++++++++
+>  3 files changed, 26 insertions(+)
+>  create mode 100644 package/multimedia/yavta/Config.in
+>  create mode 100644 package/multimedia/yavta/yavta.mk
+> 
+> diff --git a/package/multimedia/Config.in
+> b/package/multimedia/Config.in index 273d9bc..da558ca 100644
+> --- a/package/multimedia/Config.in
+> +++ b/package/multimedia/Config.in
+> @@ -24,4 +24,5 @@ source "package/multimedia/pulseaudio/Config.in"
+>  source "package/multimedia/tidsp-binaries/Config.in"
+>  source "package/multimedia/vorbis-tools/Config.in"
+>  source "package/multimedia/wavpack/Config.in"
+> +source "package/multimedia/yavta/Config.in"
+>  endmenu
+> diff --git a/package/multimedia/yavta/Config.in
+> b/package/multimedia/yavta/Config.in new file mode 100644
+> index 0000000..3cca5c1
+> --- /dev/null
+> +++ b/package/multimedia/yavta/Config.in
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_YAVTA
+> +	bool "yavta"
+> +	help
+> +	  Yet Another V4L2 Test Application
 
-    if test -n $($(PKG)_CONFIG_FIXUP) ; then \
-        $(call MESSAGE,"Fixing package configuration files") ;\
-        for file in $($(PKG)_CONFIG_FIXUP); do \
-            if [ -e $(STAGING_DIR)/usr/bin/$${file} ]; then \
-                $(SED) "s,^prefix=.*,prefix=$(STAGING_DIR)/usr,g" \
-                    -e
-"s,^exec_prefix=.*,exec_prefix=$(STAGING_DIR)/usr,g" \
-                    $(STAGING_DIR)/usr/bin/$${file} ;\
-            fi \
-        done \
-    fi
-    $(Q)touch $@
+Here, we want a empty line, and then the upstream URL of the
+corresponding project.
 
-And this is what happens:
-
-test -z "/usr/bin" || /bin/mkdir -p
-"/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/bin"
-test -z "/usr/lib/pkgconfig" || /bin/mkdir -p
-"/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/lib/pkgconfig"
- /usr/bin/install -c 'divine-config'
-'/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/bin/divine-config'
- /usr/bin/install -c -m 644 'divine.pc'
-'/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/lib/pkgconfig/divine.pc'
-make[3]: Poistutaan hakemistosta
-"/mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0"
-make[2]: Poistutaan hakemistosta
-"/mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0"
-make[1]: Poistutaan hakemistosta
-"/mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0"
-for i in $(find
-/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/lib*
--name "*.la"); do cp -f $i $i~; /bin/sed -i -e "s:\(['=
-]\)/usr:\\1/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr:g"
-$i; done
-if test -n  ; then \
-    echo "[7m>>> divine 0.4.0 "Fixing package configuration files"[27m" ;\
-    for file in ; do \
-        if [ -e
-/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/bin/${file}
-]; then \
-            /bin/sed -i -e
-"s,^prefix=.*,prefix=/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr,g"
-\
-                -e
-"s,^exec_prefix=.*,exec_prefix=/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr,g"
-\
-               
-/mnt/hee/new/buildroot-2012.08/output/host/usr/i586-unknown-linux-uclibc/sysroot/usr/bin/${file}
-;\
-        fi \
-    done \
-fi
-[7m>>> divine 0.4.0 Fixing package configuration files[27m
-[7m>>> divine 0.4.0 Installing to target[27m
-PATH="/mnt/hee/new/buildroot-2012.08/output/host/bin:/mnt/hee/new/buildroot-2012.08/output/host/usr/bin:/mnt/hee/new/buildroot-2012.08/output/host/usr/sbin/:/root/perl5/bin:/root/perl5/bin:/root/perl5/bin:/usr/lib/ccache:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
-PERLLIB="/mnt/hee/new/buildroot-2012.08/output/host/usr/lib/perl" 
-/usr/bin/make -j4 DESTDIR=/mnt/hee/new/buildroot-2012.08/output/target 
-install -C /mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0/
-make[1]: Siirryt??n hakemistoon
-"/mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0"
-Making install in include
-make[2]: Siirryt??n hakemistoon
-"/mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0/include"
-make[3]: Siirryt??n hakemistoon
-"/mnt/hee/new/buildroot-2012.08/output/build/divine-0.4.0/include"
+See
+http://buildroot.org/downloads/manual/manual.html#_literal_config_in_literal_file.
 
 
-9.1.2013 9:54, Thomas Petazzoni kirjoitti:
-> Dear Yann E. MORIN,
->
-> On Wed, 9 Jan 2013 00:21:28 +0100, Yann E. MORIN wrote:
->
->> All in all, in my experience, that's roughly split in those four fourths.
->> Comunity work like here, and professional work alike.
-> Agreed. In this specific case, I'd say about 5 lines of documentation
-> are probably needed. I'm willing to provide the patch if needed.
->
-> Thomas
+> +YAVTA_VERSION = 82ff2efdb9787737b9f21b6f4759f077c827b238
+> +YAVTA_SITE = git://git.ideasonboard.org/yavta.git
+> +YAVTA_LICENSE = GPLv2
+> +YAVTA_LICENSE_FILES = COPYING.GPL
+> +
+> +define YAVTA_BUILD_CMDS
+> +$(MAKE) -C $(@D) CC="$(TARGET_CC) $(TARGET_CFLAGS)"
 
-That would be great!
+This line could be intended with one tab, and could be written as
+follows:
 
-Regards
-Stefan
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+
+TARGET_CONFIGURE_OPTS contains the proper CC and CFLAGS definitions.
+
+> +endef
+> +
+> +define YAVTA_INSTALL_TARGET_CMDS
+> +install -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
+
+Indentation, and install -> $(INSTALL)
+
+	$(INSTALL) -m 0755 -D $(@D)/yavta $(TARGET_DIR)/usr/bin/yavta
+
+> +endef
+> +
+> +$(eval $(generic-package)) 
+
+Otherwise, looks good!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
