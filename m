@@ -1,35 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Jan 2013 21:07:28 +0100
-Subject: [Buildroot] [PATCH] dvbsnoop: new package dvbsnoop
-In-Reply-To: <1357757772-10661-2-git-send-email-c.schoenert@gmail.com>
-References: <201301091834.38893.yann.morin.1998@free.fr>
- <1357757772-10661-1-git-send-email-c.schoenert@gmail.com>
- <1357757772-10661-2-git-send-email-c.schoenert@gmail.com>
-Message-ID: <20130109210728.6a51c9c9@skate>
+Date: Wed, 9 Jan 2013 21:12:26 +0100
+Subject: [Buildroot] Interesting "bug" with the Crosstool-NG backend
+Message-ID: <20130109211226.12888f5d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carsten Schoenert,
+Hello,
 
-On Wed,  9 Jan 2013 19:56:12 +0100, Carsten Schoenert wrote:
+This afternoon, I helped an user on the #buildroot IRC channel. He was
+trying to use the Crosstool-NG backend, and had the following build
+failure:
 
-> +	  DVB analyzer / MPEG analyzer program to monitor, analyze, debug,
-> +	  dump or view dvb/mpeg/dsm-cc/mhp stream information (TS, PES,
-> +	  SECTION) (e.g. digital television) send via satellite, cable or
-> +	  terrestrial.
+  http://pastebin.com/KPRj7XVU
 
-Could you include a bit more details here? You have a lot of nice
-details in your commit log, what about copy/pasting them here?
+So, it's trying to build the "make" package before anything else...
 
+So I asked whether he was mistakenly running "make make", but he was
+not.
 
-> +DVBSNOOP_LICENSE_FILE   = COPYING
+I asked him to put online his configuration file:
 
-Should be _LICENSE_FILES even if there is only one file.
+  http://pastebin.com/srLmgkwy
 
-Thanks,
+As you can see BR2_PACKAGE_MAKE is not enabled.
+
+So, I was wondering what could happen. And then, I saw:
+
+BR2_TOOLCHAIN_CTNG_CONFIG="make ctng-menuconfig"
+
+That's obviously wrong, it should be a configuration file. But in the
+Crosstool-NG backend code, we have:
+
+CTNG_CONFIG_FILE:=$(call qstrip,$(BR2_TOOLCHAIN_CTNG_CONFIG))
+[...]
+$(CTNG_DIR)/.config: $(CTNG_CONFIG_FILE) $(CONFIG_DIR)/.config
+        $(Q)if [ ! -f $@ ];
+[...]
+
+So, the contents of $(BR2_TOOLCHAIN_CTNG_CONFIG) is used as a
+dependency. So this gets expanded to:
+
+<somelocation>/.config: make ctng-menuconfig <someotherlocation>/.config
+
+And Buildroot tries to build the "make" package as a prerequisite of
+building $(CTNG_DIR)/.config :-)
+
+Fun, no?
+
+I'm not sure we can/should do something about this, but I thought it
+was interesting to tell you the story :-)
 
 Thomas
 -- 
