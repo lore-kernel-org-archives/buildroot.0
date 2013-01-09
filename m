@@ -1,26 +1,39 @@
-From: tallu <tallubko@yahoo.com>
-Date: Wed, 9 Jan 2013 11:57:04 -0800 (PST)
-Subject: [Buildroot] compressed file system
-In-Reply-To: <20130109203326.4cc1fabb@jl-desk-LL>
-References: <1357754022866-38293.post@n4.nabble.com>
- <20130109185725.7b568bb6@skate> <1357758922954-38297.post@n4.nabble.com>
- <20130109203326.4cc1fabb@jl-desk-LL>
-Message-ID: <1357761424333-38299.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Jan 2013 21:07:28 +0100
+Subject: [Buildroot] [PATCH] dvbsnoop: new package dvbsnoop
+In-Reply-To: <1357757772-10661-2-git-send-email-c.schoenert@gmail.com>
+References: <201301091834.38893.yann.morin.1998@free.fr>
+ <1357757772-10661-1-git-send-email-c.schoenert@gmail.com>
+ <1357757772-10661-2-git-send-email-c.schoenert@gmail.com>
+Message-ID: <20130109210728.6a51c9c9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Julian
+Dear Carsten Schoenert,
 
-How can I do it if it is the rootfs?
+On Wed,  9 Jan 2013 19:56:12 +0100, Carsten Schoenert wrote:
 
-BR
-Tal
+> +	  DVB analyzer / MPEG analyzer program to monitor, analyze, debug,
+> +	  dump or view dvb/mpeg/dsm-cc/mhp stream information (TS, PES,
+> +	  SECTION) (e.g. digital television) send via satellite, cable or
+> +	  terrestrial.
+
+Could you include a bit more details here? You have a lot of nice
+details in your commit log, what about copy/pasting them here?
 
 
+> +DVBSNOOP_LICENSE_FILE   = COPYING
 
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/compressed-file-system-tp38293p38299.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Should be _LICENSE_FILES even if there is only one file.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
