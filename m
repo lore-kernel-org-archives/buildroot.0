@@ -1,42 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Jan 2013 23:39:17 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: be more explicit in
- the config file help
-In-Reply-To: <1357770170-30858-1-git-send-email-yann.morin.1998@free.fr>
-References: <1357770170-30858-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20130109233917.73776253@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed,  9 Jan 2013 23:52:12 +0100
+Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: be more explicit in the
+	config file help
+Message-ID: <1357771932-25006-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Some users seem to interpret:
+    make ctng-menuconfig
 
-On Wed,  9 Jan 2013 23:22:50 +0100, Yann E. MORIN wrote:
+as being a value that can be fit for the ct-ng config file.
 
->  	default "toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc"  if BR2_TOOLCHAIN_CTNG_glibc
->  	help
->  	  Enter here the crosstool-NG's .config file to use.
+Clarify that it is a command to run, not a possible value.
 
-Enter here the path to the crosstool-NG .config file to use.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> -	  To fine-tune your toolchain, you can also call:
-> +	  To fine-tune your toolchain, you may also run (from the
-> +	  command line) this command:
->  	    make ctng-menuconfig
->  
->  	  If unsure, keep the default value.
+---
+Changes v1 -> v2:
+  - rework the whole help text with content suggested by Thomas
+---
+ toolchain/toolchain-crosstool-ng/Config.in |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
-I would insist a bit more here, something along the lines of:
-
- "Generally, the default crosstool-NG configuration files bundled with
- Buildroot work fine in most situations. Use 'make ctng-menuconfig'
- only for expert customization of your toolchain".
-
-Thomas
+diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+index d80f547..df4e9b1 100644
+--- a/toolchain/toolchain-crosstool-ng/Config.in
++++ b/toolchain/toolchain-crosstool-ng/Config.in
+@@ -43,10 +43,12 @@ config BR2_TOOLCHAIN_CTNG_CONFIG
+ 	default "toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc" if BR2_TOOLCHAIN_CTNG_eglibc
+ 	default "toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc"  if BR2_TOOLCHAIN_CTNG_glibc
+ 	help
+-	  Enter here the crosstool-NG's .config file to use.
+-	  To fine-tune your toolchain, you can also call:
+-	    make ctng-menuconfig
+-
++	  Enter here the path to the crosstool-NG .config file to use.
++	  
++	  Generally, the default crosstool-NG configuration files bundled with
++	  Buildroot work fine in most situations. Use 'make ctng-menuconfig'
++	  from the command line, for expert customization of your toolchain.
++	  
+ 	  If unsure, keep the default value.
+ 
+ if BR2_TOOLCHAIN_CTNG_uClibc
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.5
