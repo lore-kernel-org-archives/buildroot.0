@@ -1,42 +1,72 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Jan 2013 13:20:05 +0100
-Subject: [Buildroot] [git commit] Makefile: system.mk rootfs modifications
-	should be done before target-finalize
-Message-ID: <20130109122336.F19269A6E5@busybox.osuosl.org>
+From: kpa_info at yahoo.fr <kpa_info@yahoo.fr>
+Date: Wed,  9 Jan 2013 13:29:54 +0100
+Subject: [Buildroot] [PATCH 2/2] Adding media-ctl as a package
+In-Reply-To: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
+References: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <1357734594-8211-2-git-send-email-kpa_info@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec100c7e2108d3e174ec082c62e3f8d73ed33a92
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Patrick Gerber <kpa_info@yahoo.fr>
 
-So they don't override E.G. changes done in post build scripts
-(E.G. password settings).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Patrick Gerber <kpa_info@yahoo.fr>
 ---
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in              |    1 +
+ package/media-ctl/Config.in    |    4 ++++
+ package/media-ctl/media-ctl.mk |   18 ++++++++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/media-ctl/Config.in
+ create mode 100644 package/media-ctl/media-ctl.mk
 
-diff --git a/Makefile b/Makefile
-index 4b09437..074674a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -322,6 +322,7 @@ include package/*/*.mk
- 
- include boot/common.mk
- include linux/linux.mk
-+include system/system.mk
- 
- TARGETS+=target-finalize
- 
-@@ -335,7 +336,6 @@ TARGETS+=target-generatelocales
- endif
- endif
- 
--include system/system.mk
- include fs/common.mk
- 
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+diff --git a/package/Config.in b/package/Config.in
+index bd1db6b..2f3b601 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -245,6 +245,7 @@ source "package/lshw/Config.in"
+ source "package/lsuio/Config.in"
+ source "package/lvm2/Config.in"
+ source "package/mdadm/Config.in"
++source "package/media-ctl/Config.in"
+ source "package/memtester/Config.in"
+ source "package/minicom/Config.in"
+ source "package/nanocom/Config.in"
+diff --git a/package/media-ctl/Config.in b/package/media-ctl/Config.in
+new file mode 100644
+index 0000000..9fb888c
+--- /dev/null
++++ b/package/media-ctl/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_MEDIA_CTL
++	bool "media-ctl"
++	help
++	  Media controller control application
+diff --git a/package/media-ctl/media-ctl.mk b/package/media-ctl/media-ctl.mk
+new file mode 100644
+index 0000000..3c35278
+--- /dev/null
++++ b/package/media-ctl/media-ctl.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# media-ctl
++#
++#############################################################
++
++MEDIA_CTL_VERSION = ac40b79f002a2315f909548614ccd2d408da25b7
++MEDIA_CTL_SITE = git://git.ideasonboard.org/media-ctl.git
++MEDIA_CTL_INSTALL_STAGING = YES
++MEDIA_CTL_LICENSE = GPLv2
++MEDIA_CTL_LICENSE_FILES = COPYING.LIB
++
++MEDIA_CTL_AUTORECONF = YES
++MEDIA_CTL_AUTORECONF_OPT = --install
++MEDIA_CTL_CONF_OPT = --with-kernel-headers=$(STAGING_DIR)/usr/include
++MEDIA_CTL_DEPENDENCIES = host-pkgconf
++
++$(eval $(autotools-package))
+-- 
+1.7.9.5
