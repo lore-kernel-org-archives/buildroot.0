@@ -1,66 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Jan 2013 17:02:39 +0100
-Subject: [Buildroot] [PATCH 2/2] Adding media-ctl as a package
-In-Reply-To: <1357734594-8211-2-git-send-email-kpa_info@yahoo.fr>
-References: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
- <1357734594-8211-2-git-send-email-kpa_info@yahoo.fr>
-Message-ID: <20130109170239.56a4e727@skate>
+From: Patrick <kpa_info@yahoo.fr>
+Date: Wed, 09 Jan 2013 17:08:32 +0100
+Subject: [Buildroot] Error when adding media-ctl as package
+In-Reply-To: <50ED3A00.3060907@yahoo.fr>
+References: <50EC1EBF.80807@yahoo.fr> <50EC7F16.3090008@mind.be>
+ <50ED24FE.3070703@yahoo.fr> <20130109092722.7cb8409b@skate>
+ <50ED2E18.8070502@yahoo.fr> <20130109095119.39ad1ee9@skate>
+ <50ED3A00.3060907@yahoo.fr>
+Message-ID: <50ED9600.1000700@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear kpa_info at yahoo.fr,
+On 01/09/2013 10:36 AM, Patrick wrote:
+> On 01/09/2013 09:51 AM, Thomas Petazzoni wrote:
+>> Dear Patrick,
+>>
+>> However, if your toolchain is too old, it may not contain sufficiently
+>> up-to-date kernel headers. The simplest option is to try to update your
+>> toolchain to a slightly more recent one, so that media.h is provided
+>> directly with your toolchain, and we have nothing to do.
+>>
+>> Thomas
+>>
+> Ok I updated to a more recent toolchain and it works.
+>
 
-On Wed,  9 Jan 2013 13:29:54 +0100, kpa_info at yahoo.fr wrote:
-> +config BR2_PACKAGE_MEDIA_CTL
-> +	bool "media-ctl"
-> +	help
-> +	  Media controller control application
+After changing the toolchain I have a really annoying side effect: my 
+kernel do not boot anymore !
 
-One empty newline + upstream URL of the project (even if it's just a
-http link to the Git repository). And also the description seems a bit
-short, since it does not only contains an application, but also a
-library, no?
+My previous toolchain was Sourcery G++ Lite 2009q1-203 GCC 4.3.3, my new 
+toolchain is Sourcery CodeBench ARM 2012.03. I run Linux 3.0 on a Ti 
+DM3730 processor.
 
-> diff --git a/package/media-ctl/media-ctl.mk
-> b/package/media-ctl/media-ctl.mk new file mode 100644
-> index 0000000..3c35278
-> --- /dev/null
-> +++ b/package/media-ctl/media-ctl.mk
-> @@ -0,0 +1,18 @@
-> +#############################################################
-> +#
-> +# media-ctl
-> +#
-> +#############################################################
-> +
-> +MEDIA_CTL_VERSION = ac40b79f002a2315f909548614ccd2d408da25b7
-> +MEDIA_CTL_SITE = git://git.ideasonboard.org/media-ctl.git
-> +MEDIA_CTL_INSTALL_STAGING = YES
-> +MEDIA_CTL_LICENSE = GPLv2
+With both toolchain I do not change the kernel configuration. With the 
+old toolchain the kernel boot nicelly, with the new toolchain the kernel 
+do not boot after u-boot message "Starting kernel ...". I use the same 
+version of u-boot in both case with the same rootfs...
 
-The license is LGPLv2.1+.
+Any idea why changing the toolchain could result in this issue ?
 
-> +MEDIA_CTL_LICENSE_FILES = COPYING.LIB
-> +
-> +MEDIA_CTL_AUTORECONF = YES
-> +MEDIA_CTL_AUTORECONF_OPT = --install
+Thanks in advance for any help
 
-Are you sure this AUTORECONF_OPT is needed? If so, then please add a
-comment before this line that explains why.
-
-> +MEDIA_CTL_CONF_OPT = --with-kernel-headers=$(STAGING_DIR)/usr/include
-> +MEDIA_CTL_DEPENDENCIES = host-pkgconf
-> +
-> +$(eval $(autotools-package))
-
-Otherwise, looks good, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Patrick
