@@ -1,51 +1,158 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Jan 2013 23:52:12 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-ng: be more explicit in the
-	config file help
-Message-ID: <1357771932-25006-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 10 Jan 2013 00:40:16 +0100
+Subject: [Buildroot] [PATCH 1/2] gnuplot : new package
+In-Reply-To: <1357577933-26446-1-git-send-email-viallard@syscom-instruments.com>
+References: <1357577933-26446-1-git-send-email-viallard@syscom-instruments.com>
+Message-ID: <50EDFFE0.20604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some users seem to interpret:
-    make ctng-menuconfig
+  Hi Anthony,
 
-as being a value that can be fit for the ct-ng config file.
+  Thank you for your patch. Looks good, a few remarks below.
 
-Clarify that it is a command to run, not a possible value.
+On 01/07/13 17:58, Anthony Viallard wrote:
+>
+> Signed-off-by: Anthony Viallard<viallard@syscom-instruments.com>
+> ---
+>   package/Config.in             |    1 +
+>   package/gnuplot/Config.in     |    6 ++++++
+>   package/gnuplot/gnuplot.mk    |   28 ++++++++++++++++++++++++++++
+>   package/gnuplot/gnuplot.patch |   26 ++++++++++++++++++++++++++
+>   4 files changed, 61 insertions(+)
+>   create mode 100644 package/gnuplot/Config.in
+>   create mode 100644 package/gnuplot/gnuplot.mk
+>   create mode 100644 package/gnuplot/gnuplot.patch
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index b312a3e..90cfb5e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -108,6 +108,7 @@ menu "Graphic libraries and applications (graphic/text)"
+>
+>   comment "Graphic applications"
+>   source "package/rrdtool/Config.in"
+> +source "package/gnuplot/Config.in"
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  The menus should be sorted alphabetically, so gnuplot should come 
+before rrdtool.
 
----
-Changes v1 -> v2:
-  - rework the whole help text with content suggested by Thomas
----
- toolchain/toolchain-crosstool-ng/Config.in |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+>
+>   comment "graphic libraries"
+>   source "package/directfb/Config.in"
+> diff --git a/package/gnuplot/Config.in b/package/gnuplot/Config.in
+> new file mode 100644
+> index 0000000..603c194
+> --- /dev/null
+> +++ b/package/gnuplot/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_GNUPLOT
+> +	bool "gnuplot"
+> +	help
+> +	  A portable command-line driven graphing utility.
+> +
+> +	  http://www.gnuplot.info/
+> diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
+> new file mode 100644
+> index 0000000..40c3021
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.mk
+> @@ -0,0 +1,28 @@
+> +#############################################################
+> +#
+> +# gnuplot
+> +#
+> +#############################################################
+> +GNUPLOT_VERSION = 4.6.0
+> +GNUPLOT_SOURCE = gnuplot-$(GNUPLOT_VERSION).tar.gz
+> +GNUPLOT_SITE = http://superb-dca2.dl.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
 
-diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
-index d80f547..df4e9b1 100644
---- a/toolchain/toolchain-crosstool-ng/Config.in
-+++ b/toolchain/toolchain-crosstool-ng/Config.in
-@@ -43,10 +43,12 @@ config BR2_TOOLCHAIN_CTNG_CONFIG
- 	default "toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc" if BR2_TOOLCHAIN_CTNG_eglibc
- 	default "toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc"  if BR2_TOOLCHAIN_CTNG_glibc
- 	help
--	  Enter here the crosstool-NG's .config file to use.
--	  To fine-tune your toolchain, you can also call:
--	    make ctng-menuconfig
--
-+	  Enter here the path to the crosstool-NG .config file to use.
-+	  
-+	  Generally, the default crosstool-NG configuration files bundled with
-+	  Buildroot work fine in most situations. Use 'make ctng-menuconfig'
-+	  from the command line, for expert customization of your toolchain.
-+	  
- 	  If unsure, keep the default value.
- 
- if BR2_TOOLCHAIN_CTNG_uClibc
+  sourceforge URLs should use the automatic mirror selection:
+http://downloads.sourceforge.net/project/gnuplot/gnuplot/
+
+> +
+> +GNUPLOT_INSTALL_STAGING = YES
+> +
+> +GNUPLOT_LICENSE = gnuplot license (open source)
+> +GNUPLOT_LICENSE_FILES = Copyright
+> +
+> +GNUPLOT_CONF_OPT = --without-x \
+> +		--disable-raise-console \
+
+  Why is this option set?
+
+> +		--disable-mouse \
+> +	        --without-tutorial \
+> +		--without-demo --disable-demo \
+
+  These don't exist (yet)
+
+> +	        --without-row-help \
+
+  Why is this option set?
+
+> +		--disable-history-file \
+> +	        --without-lisp-files \
+> +	        --disable-wxwidgets \
+> +	        --without-lua \
+> +		--without-latex \
+> +	        --without-cairo
+> +
+> +$(eval $(autotools-package))
+> diff --git a/package/gnuplot/gnuplot.patch b/package/gnuplot/gnuplot.patch
+> new file mode 100644
+> index 0000000..7053a46
+> --- /dev/null
+> +++ b/package/gnuplot/gnuplot.patch
+
+  Patch files should be named something like:
+
+gnuplot-0001-disable-demo-and-tutorial.patch
+
+but your second patch does that correctly already. I think you can safely 
+merge that into a single commit.
+
+
+  Regards,
+  Arnout
+
+
+> @@ -0,0 +1,26 @@
+> +diff --git a/Makefile.am b/Makefile.am
+> +index bc0f2b2..5c00fe5 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -1,7 +1,7 @@
+> + ## Process this file with automake to produce Makefile.in -*-Makefile-*-
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> +
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+> +
+> + EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+> + Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> +diff --git a/Makefile.in b/Makefile.in
+> +index 71118bc..86df133 100644
+> +--- a/Makefile.in
+> ++++ b/Makefile.in
+> +@@ -250,7 +250,7 @@ top_build_prefix = @top_build_prefix@
+> + top_builddir = @top_builddir@
+> + top_srcdir = @top_srcdir@
+> + AUTOMAKE_OPTIONS = foreign 1.2h
+> +-SUBDIRS = config m4 term src docs $(LISPDIR) man demo tutorial share
+> ++SUBDIRS = config m4 term src $(LISPDIR) man tutorial share
+> + EXTRA_DIST = BUGS CodeStyle Copyright FAQ.pdf GNUmakefile INSTALL INSTALL.gnu \
+> + Makefile.maint PATCHLEVEL PGPKEYS PORTING README README.1ST \
+> + VERSION configure.vms pm3d win
+
+
 -- 
-1.7.2.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
