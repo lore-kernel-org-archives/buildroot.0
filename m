@@ -1,33 +1,42 @@
-From: Patrick <kpa_info@yahoo.fr>
-Date: Wed, 09 Jan 2013 12:17:32 +0100
-Subject: [Buildroot] Error when adding media-ctl as package
-In-Reply-To: <20130109105231.768190ba@skate>
-References: <50EC1EBF.80807@yahoo.fr> <50EC7F16.3090008@mind.be>
- <50ED24FE.3070703@yahoo.fr> <20130109092722.7cb8409b@skate>
- <50ED2E18.8070502@yahoo.fr> <20130109095119.39ad1ee9@skate>
- <50ED3A00.3060907@yahoo.fr> <20130109105231.768190ba@skate>
-Message-ID: <50ED51CC.6070806@yahoo.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 9 Jan 2013 13:20:05 +0100
+Subject: [Buildroot] [git commit] Makefile: system.mk rootfs modifications
+	should be done before target-finalize
+Message-ID: <20130109122336.F19269A6E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/09/2013 10:52 AM, Thomas Petazzoni wrote:
-> Dear Patrick,
->
-> On Wed, 09 Jan 2013 10:36:00 +0100, Patrick wrote:
->
->> Ok I updated to a more recent toolchain and it works.
->
-> Good. Could you submit a proper patch adding the media-ctl package in
-> Buildroot?
->
-> Thanks!
->
-> Thomas
->
+commit: http://git.buildroot.net/buildroot/commit/?id=ec100c7e2108d3e174ec082c62e3f8d73ed33a92
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ok I will did it !
+So they don't override E.G. changes done in post build scripts
+(E.G. password settings).
 
-Patrick
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 4b09437..074674a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -322,6 +322,7 @@ include package/*/*.mk
+ 
+ include boot/common.mk
+ include linux/linux.mk
++include system/system.mk
+ 
+ TARGETS+=target-finalize
+ 
+@@ -335,7 +336,6 @@ TARGETS+=target-generatelocales
+ endif
+ endif
+ 
+-include system/system.mk
+ include fs/common.mk
+ 
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
