@@ -1,49 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Jan 2013 12:15:11 +0100
-Subject: [Buildroot] [PATCH 1/1] infozip: new package
-In-Reply-To: <1357814466-3728-1-git-send-email-jp@jp-embedded.com>
-References: <1357814466-3728-1-git-send-email-jp@jp-embedded.com>
-Message-ID: <20130110121511.0d25e449@skate>
+Date: Thu, 10 Jan 2013 12:16:48 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Adding yavta (Yet Another V4L2 Test
+ Application) as a package
+In-Reply-To: <1357815520-4461-1-git-send-email-kpa_info@yahoo.fr>
+References: <1357815520-4461-1-git-send-email-kpa_info@yahoo.fr>
+Message-ID: <20130110121648.299b35d7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jan Pedersen,
+Dear kpa_info at yahoo.fr,
 
-On Thu, 10 Jan 2013 11:41:06 +0100, Jan Pedersen wrote:
+On Thu, 10 Jan 2013 11:58:39 +0100, kpa_info at yahoo.fr wrote:
 
-> +INFOZIP_LICENSE_FILES = LICENCE
-
-This is not correct, the file is called LICENSE.
-
-You should run "make legal-info" when you create a new package, to
-verify that the LICENSE_FILES field is correct.
-
-> +define INFOZIP_BUILD_CMDS
-> +	$(MAKE) -C $(@D) -f unix/Makefile generic CC=$(TARGET_CC)
-> +endef
+> +config BR2_PACKAGE_YAVTA
+> +	bool "yavta"
+> +	help
+> +	  Yet Another V4L2 Test Application
 > +
-> +define INFOZIP_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) -f unix/Makefile install prefix=$(TARGET_DIR)/usr CC=$(TARGET_CC)
-> +endef
+> +     http://git.ideasonboard.org/yavta.git  
 
-Even though the package does not allow to override CFLAGS, I would
-prefer if $(TARGET_CONFIGURE_OPTS) was used. It avoids for example the
-mistake of forgetting the quotes around $(TARGET_CC). So, something
-like:
+The indentation is wrong for the URL, and it confuses menuconfig, which
+does not even start. Can you fix this indentation? I.e:
 
-define INFOZIP_BUILD_CMDS
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile generic
-endef
+-     http://git.ideasonboard.org/media-ctl.git 
++         http://git.ideasonboard.org/media-ctl.git
 
-define INFOZIP_INSTALL_TARGET_CMDS
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f unix/Makefile install prefix=$(TARGET_DIR)/usr
-endef
+Also, your URL line had trailing spaces.
 
-Once this is fixed, you get my Acked-by and Tested-by, as I tested this
-package.
+Same problem on your media-ctl package.
+
+Once this is fixed, for both packages:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thanks!
 
