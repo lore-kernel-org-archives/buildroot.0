@@ -1,66 +1,79 @@
 From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
-Date: Thu, 10 Jan 2013 23:01:56 +0200
+Date: Thu, 10 Jan 2013 23:15:02 +0200
 Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
  *-config files
-In-Reply-To: <20130110211926.564113ba@skate>
+In-Reply-To: <201301102147.12993.yann.morin.1998@free.fr>
 References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
  <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
- <20130110211926.564113ba@skate>
-Message-ID: <50EF2C44.8050508@petroprogram.com>
+ <20130110211926.564113ba@skate> <201301102147.12993.yann.morin.1998@free.fr>
+Message-ID: <50EF2F56.80304@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Hi Yann
 
-10.1.2013 22:19, Thomas Petazzoni kirjoitti:
-> Dear Stefan Fr?berg,
+10.1.2013 22:47, Yann E. MORIN kirjoitti:
+> Stefan, All,
 >
-> On Thu, 10 Jan 2013 21:52:39 +0200, Stefan Fr?berg wrote:
->
->> For example:
+> On Thursday 10 January 2013 Thomas Petazzoni wrote:
+>> On Thu, 10 Jan 2013 21:52:39 +0200, Stefan Fr?berg wrote:
+>>> For example:
+>>>
+>>> DIVINE_CONFIG_FIXUP = divine-config
+>>>
+>>> or for multiple files:
+>>>
+>>> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
+>> I personally still believe that it is wrong to give just the filename
+>> here and not the full path, i.e:
 >>
->> DIVINE_CONFIG_FIXUP = divine-config
+>> IMAGEMAGICK_CONFIG_FIXUP = \
+>> 	$(STAGING_DIR)/usr/bin/Magick-config \
+>> 	$(SATGING_DIR)/usr/bin/Wand-config
 >>
->> or for multiple files:
->>
->> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
-> I personally still believe that it is wrong to give just the filename
-> here and not the full path, i.e:
+>> With just the filename, my impression is that it is just too much magic
+>> happening behind the scene.
+> Agreed. But I'd leave away the $(STAGING_DIR), and give full paths relative
+> to the staging dir:
 >
 > IMAGEMAGICK_CONFIG_FIXUP = \
-> 	$(STAGING_DIR)/usr/bin/Magick-config \
-> 	$(SATGING_DIR)/usr/bin/Wand-config
+> 	/usr/bin/Magick-config \
+> 	/usr/bin/Wand-config
 >
-> With just the filename, my impression is that it is just too much magic
-> happening behind the scene.
+> And the infrastructure automatically adds it, instead of adding
+> $(STAGING_DIR)/usr/bin as it does in this patch.
 >
-> That said, I would not oppose to the current solution being integrated.
-> I'm just sharing a preference, not a strong opposition here.
+> Also, I find the _FIXUP suffix to be misleading. 'fixup' conveys the
+> meaning that the flaws are fixed, so I'd naturally expect that the
+> *-config scripts are fixed, while this implementation removes them.
+> With _FIXUP, the developper may incorrectly conclude that some sed/awk/..
+> magic is done on these scripts.
+Well, uh... there *is* some sed magic done to those scripts. Almost half
+of the those files in my
+installation provide wrong prefix, wrong exec_prefix, and worst of all,
+sometimes just
+prefix and nothing else, not even includedir and libdir (but that's
+another story, another patch).
+
+
+> I'd suggest FOO_CONFIG_SCRIPTS which is neutral, and does not say what
+> is done with these scripts, so reading the documentation is mandatory to
+> understand what is done.
+Good, but im not doing that documentation patch. Like I said to Thomas,
+I really suck in this
+documentation department.
+
+> But, as Thomas, I don't have a strong opinion either. The current situation
+> is OK, if not the "best in my eyes". ;-)
 >
-> Thanks!
+> Regards,
+> Yann E. MORIN.
 >
-> Thomas
-
-But this is much more less typing this way ;-)
-
-And there really is no other place for these files than in
-$(STAGING_DIR)/usr/bin in buildroot.
-
-Granted, maybe the variable name could be a more descriptive, like maybe
-<pkg>_STAGING_DIR_CONFIG_FIXUP
-or something like that.
-
-It's terse, it's ugly but hey at least it works! :-)
-
-there are, however, still some problems with those
-$(STAGING_DIR)/usr/bin/*-config files that I noticed that even this
-patch won't fix.
-I will investigate it further and report my findings later...
-
-Thank for your help Thomas!
+Nice, two Ok votes sofar.
+Can the father (Gustavo) of this <pkg>_CONFIG_FIXUP  also give his vote ?
 
 Regards
 Stefan
