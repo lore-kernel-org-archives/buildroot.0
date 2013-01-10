@@ -1,79 +1,34 @@
-From: Jan Pedersen <jp@jp-embedded.com>
-Date: Thu, 10 Jan 2013 11:41:06 +0100
-Subject: [Buildroot] [PATCH 1/1] infozip: new package
-Message-ID: <1357814466-3728-1-git-send-email-jp@jp-embedded.com>
+From: Patrick <kpa_info@yahoo.fr>
+Date: Thu, 10 Jan 2013 11:43:39 +0100
+Subject: [Buildroot] [PATCH 1/2] Adding yavta (Yet Another V4L2 Test
+ Application) as a package
+In-Reply-To: <20130110112815.3644dd79@skate>
+References: <1357734594-8211-1-git-send-email-kpa_info@yahoo.fr>
+ <20130109165905.1fccde74@skate> <50EE9625.1080603@yahoo.fr>
+ <20130110112815.3644dd79@skate>
+Message-ID: <50EE9B5B.60607@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a package for infozip, compression and file
-packaging/archive utility.
+On 01/10/2013 11:28 AM, Thomas Petazzoni wrote:
+> Dear Patrick,
+>
+> On Thu, 10 Jan 2013 11:21:25 +0100, Patrick wrote:
+>
+>> Please find below the new version of the patch according to your comments.
+>
+> Thanks. Can you send them "for real", as you did for the initial
+> version? This way, the maintainer will be able to take them. Ideally,
+> change the patch title:
+>
+> git send-email --to buildroot at uclibc.org --subject-prefix="PATCH v2" HEAD~2
+>
+> Thanks,
+>
+> Thomas
+>
 
-Signed-off-by: Jan Pedersen <jp@jp-embedded.com>
----
- package/Config.in          |    1 +
- package/infozip/Config.in  |   10 ++++++++++
- package/infozip/infozip.mk |   21 +++++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/infozip/Config.in
- create mode 100644 package/infozip/infozip.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index bd1db6b..1c2b228 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -14,6 +14,7 @@ endif
- source "package/lzop/Config.in"
- source "package/lzma/Config.in"
- source "package/xz/Config.in"
-+source "package/infozip/Config.in"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-diff --git a/package/infozip/Config.in b/package/infozip/Config.in
-new file mode 100644
-index 0000000..1a4b756
---- /dev/null
-+++ b/package/infozip/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_INFOZIP
-+	bool "infozip"
-+	help
-+	  Zip is a compression and file packaging/archive utility. 
-+	  Although highly compatible both with PKWARE's PKZIP and 
-+	  PKUNZIP utilities for MS-DOS and with Info-ZIP's own UnZip, 
-+ 	  our primary objectives have been portability and other-than-MSDOS 
-+	  functionality. 
-+
-+	  http://infozip.sourceforge.net/Zip.html
-diff --git a/package/infozip/infozip.mk b/package/infozip/infozip.mk
-new file mode 100644
-index 0000000..ce6e88f
---- /dev/null
-+++ b/package/infozip/infozip.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# infozip
-+#
-+#############################################################
-+INFOZIP_VERSION = 30
-+INFOZIP_SOURCE = zip$(INFOZIP_VERSION).tgz
-+INFOZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
-+INFOZIP_LICENSE = Info-ZIP
-+INFOZIP_LICENSE_FILES = LICENCE
-+
-+define INFOZIP_BUILD_CMDS
-+	$(MAKE) -C $(@D) -f unix/Makefile generic CC=$(TARGET_CC)
-+endef
-+
-+define INFOZIP_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) -f unix/Makefile install prefix=$(TARGET_DIR)/usr CC=$(TARGET_CC)
-+endef
-+
-+$(eval $(generic-package))
-+
--- 
-1.7.10.4
+Yep !
