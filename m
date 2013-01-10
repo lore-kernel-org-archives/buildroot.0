@@ -1,70 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Jan 2013 21:47:12 +0100
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Thu, 10 Jan 2013 23:01:56 +0200
 Subject: [Buildroot] [PATCH v2] pkg-infra: add <pkg>_CONFIG_FIXUP to fix
-	*-config files
+ *-config files
 In-Reply-To: <20130110211926.564113ba@skate>
 References: <1357847559-31530-1-git-send-email-stefan.froberg@petroprogram.com>
  <1357847559-31530-2-git-send-email-stefan.froberg@petroprogram.com>
  <20130110211926.564113ba@skate>
-Message-ID: <201301102147.12993.yann.morin.1998@free.fr>
+Message-ID: <50EF2C44.8050508@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+Hi Thomas
 
-On Thursday 10 January 2013 Thomas Petazzoni wrote:
+10.1.2013 22:19, Thomas Petazzoni kirjoitti:
+> Dear Stefan Fr?berg,
+>
 > On Thu, 10 Jan 2013 21:52:39 +0200, Stefan Fr?berg wrote:
-> > For example:
-> > 
-> > DIVINE_CONFIG_FIXUP = divine-config
-> > 
-> > or for multiple files:
-> > 
-> > IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
-> 
+>
+>> For example:
+>>
+>> DIVINE_CONFIG_FIXUP = divine-config
+>>
+>> or for multiple files:
+>>
+>> IMAGEMAGICK_CONFIG_FIXUP = Magick-config Wand-config
 > I personally still believe that it is wrong to give just the filename
 > here and not the full path, i.e:
-> 
+>
 > IMAGEMAGICK_CONFIG_FIXUP = \
 > 	$(STAGING_DIR)/usr/bin/Magick-config \
 > 	$(SATGING_DIR)/usr/bin/Wand-config
-> 
+>
 > With just the filename, my impression is that it is just too much magic
 > happening behind the scene.
+>
+> That said, I would not oppose to the current solution being integrated.
+> I'm just sharing a preference, not a strong opposition here.
+>
+> Thanks!
+>
+> Thomas
 
-Agreed. But I'd leave away the $(STAGING_DIR), and give full paths relative
-to the staging dir:
+But this is much more less typing this way ;-)
 
-IMAGEMAGICK_CONFIG_FIXUP = \
-	/usr/bin/Magick-config \
-	/usr/bin/Wand-config
+And there really is no other place for these files than in
+$(STAGING_DIR)/usr/bin in buildroot.
 
-And the infrastructure automatically adds it, instead of adding
-$(STAGING_DIR)/usr/bin as it does in this patch.
+Granted, maybe the variable name could be a more descriptive, like maybe
+<pkg>_STAGING_DIR_CONFIG_FIXUP
+or something like that.
 
-Also, I find the _FIXUP suffix to be misleading. 'fixup' conveys the
-meaning that the flaws are fixed, so I'd naturally expect that the
-*-config scripts are fixed, while this implementation removes them.
-With _FIXUP, the developper may incorrectly conclude that some sed/awk/..
-magic is done on these scripts.
+It's terse, it's ugly but hey at least it works! :-)
 
-I'd suggest FOO_CONFIG_SCRIPTS which is neutral, and does not say what
-is done with these scripts, so reading the documentation is mandatory to
-understand what is done.
+there are, however, still some problems with those
+$(STAGING_DIR)/usr/bin/*-config files that I noticed that even this
+patch won't fix.
+I will investigate it further and report my findings later...
 
-But, as Thomas, I don't have a strong opinion either. The current situation
-is OK, if not the "best in my eyes". ;-)
+Thank for your help Thomas!
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards
+Stefan
