@@ -1,64 +1,50 @@
-From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Thu, 10 Jan 2013 20:27:03 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Jan 2013 20:45:16 +0100
 Subject: [Buildroot] [PATCH] dvbsnoop: new package dvbsnoop
-In-Reply-To: <20130109210728.6a51c9c9@skate>
+In-Reply-To: <50EF1607.5010806@googlemail.com>
 References: <201301091834.38893.yann.morin.1998@free.fr>
  <1357757772-10661-1-git-send-email-c.schoenert@gmail.com>
  <1357757772-10661-2-git-send-email-c.schoenert@gmail.com>
- <20130109210728.6a51c9c9@skate>
-Message-ID: <50EF1607.5010806@googlemail.com>
+ <20130109210728.6a51c9c9@skate> <50EF1607.5010806@googlemail.com>
+Message-ID: <20130110204516.709ff02f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Carsten Schoenert,
 
-Am 09.01.2013 21:07, schrieb Thomas Petazzoni:
->> +	  DVB analyzer / MPEG analyzer program to monitor, analyze, debug,
->> +	  dump or view dvb/mpeg/dsm-cc/mhp stream information (TS, PES,
->> +	  SECTION) (e.g. digital television) send via satellite, cable or
->> +	  terrestrial.
-> 
-> Could you include a bit more details here? You have a lot of nice
-> details in your commit log, what about copy/pasting them here?
+On Thu, 10 Jan 2013 20:27:03 +0100, Carsten Schoenert wrote:
 
-I don't know what you exactly mean. Do you want more details in the
-commit message or more explanation here on the mailing list?
+> I don't know what you exactly mean. Do you want more details in the
+> commit message or more explanation here on the mailing list?
 
-I thought while everybody can read the commit message I don't have to
-explain it twice. :-/
-And the webpage of dvbsnoop is written very well and the author can
-explain it's work better than me (I think).
+Sorry, I explained improperly my request. Your commit log is absolutely
+perfect and gives a very nice description of what dvbsnoop is.
 
-So what is dvbsnoop?
-Dvbsnoop is just a simple tool to analyze, view or debug a transport
-stream (TS), program elementary stream (PES) or even a program stream
-(PS). This input comes mostly direct from a frontend (satellite or cable
-tuner inside a set-top box for example) via DVB APIv3 to view into a TS,
-a demux to view PES or PS (also mostly inside the set-top box or even
-PCI Card) or even from a file (recorded TS).
-The device files are differ from hardware to hardware this can be given
-as parameter to dvbsnoop.
+The only minor comment I had is that the help text of your
+BR2_PACKAGE_DVBSNOOP option (which corresponds to the package you're
+adding) doesn't have as many details as your commit log as.
 
-Dvbsnoop itself doesn?t do the tuning on the frontend, this has to be
-done by external helpers or manually driver call. It just takes the data
-from it an do the parsing.
+So I was simply suggesting to copy/paste a few more details from your
+commit log into the help text of the BR2_PACKAGE_DVBSNOOP option.
+That's all!
 
-The dvbsnoop tool was written while developing the software Neutrino on
-the set-top box DBox2 [1]. It was useful to see if the GUI Neutrino was
-working correct with the digital data from the frontend or from a NFS Share.
-In the last time Rainer Scherg doesn't has worked on dvbsnoop because
-it's doing what it should. Some parts are re workable, the complete
-latest standards for integrating the MPEG4 standards (DVB-[S,C,T]*2*)
-are just "it works". Some flags for this dvbsnoop don?t know right now.
+> I thought while everybody can read the commit message I don't have to
+> explain it twice. :-/
 
-> Should be _LICENSE_FILES even if there is only one file.
+Sure, sure. See my explanation above. I was probably unclear in my
+previous e-mail.
 
-O.K. Will rework this.
+Thanks a lot for your contribution, and sorry for my previous unclear
+e-mail.
 
-[1] http://en.wikipedia.org/wiki/DBox2
+Best regards,
 
-Regards
-Carsten
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
