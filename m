@@ -1,44 +1,64 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 10 Jan 2013 18:58:00 +0000
-Subject: [Buildroot] pkg-generic.mk question
-Message-ID: <F9C551623D2CBB4C9488801D14F864C610B9E3A3@ex-mb1.corp.adtran.com>
+From: Carsten Schoenert <c.schoenert@gmail.com>
+Date: Thu, 10 Jan 2013 20:27:03 +0100
+Subject: [Buildroot] [PATCH] dvbsnoop: new package dvbsnoop
+In-Reply-To: <20130109210728.6a51c9c9@skate>
+References: <201301091834.38893.yann.morin.1998@free.fr>
+ <1357757772-10661-1-git-send-email-c.schoenert@gmail.com>
+ <1357757772-10661-2-git-send-email-c.schoenert@gmail.com>
+ <20130109210728.6a51c9c9@skate>
+Message-ID: <50EF1607.5010806@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hello Thomas,
 
-Consider the following (from pkg-generic.mk):
+Am 09.01.2013 21:07, schrieb Thomas Petazzoni:
+>> +	  DVB analyzer / MPEG analyzer program to monitor, analyze, debug,
+>> +	  dump or view dvb/mpeg/dsm-cc/mhp stream information (TS, PES,
+>> +	  SECTION) (e.g. digital television) send via satellite, cable or
+>> +	  terrestrial.
+> 
+> Could you include a bit more details here? You have a lot of nice
+> details in your commit log, what about copy/pasting them here?
 
-define inner-generic-package
+I don't know what you exactly mean. Do you want more details in the
+commit message or more explanation here on the mailing list?
 
-<snip>
+I thought while everybody can read the commit message I don't have to
+explain it twice. :-/
+And the webpage of dvbsnoop is written very well and the author can
+explain it's work better than me (I think).
 
-$(2)_TYPE                       =  $(5)
+So what is dvbsnoop?
+Dvbsnoop is just a simple tool to analyze, view or debug a transport
+stream (TS), program elementary stream (PES) or even a program stream
+(PS). This input comes mostly direct from a frontend (satellite or cable
+tuner inside a set-top box for example) via DVB APIv3 to view into a TS,
+a demux to view PES or PS (also mostly inside the set-top box or even
+PCI Card) or even from a file (recorded TS).
+The device files are differ from hardware to hardware this can be given
+as parameter to dvbsnoop.
 
-<snip>
+Dvbsnoop itself doesn?t do the tuning on the frontend, this has to be
+done by external helpers or manually driver call. It just takes the data
+from it an do the parsing.
 
-$(2)_DIR        =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+The dvbsnoop tool was written while developing the software Neutrino on
+the set-top box DBox2 [1]. It was useful to see if the GUI Neutrino was
+working correct with the digital data from the frontend or from a NFS Share.
+In the last time Rainer Scherg doesn't has worked on dvbsnoop because
+it's doing what it should. Some parts are re workable, the complete
+latest standards for integrating the MPEG4 standards (DVB-[S,C,T]*2*)
+are just "it works". Some flags for this dvbsnoop don?t know right now.
 
+> Should be _LICENSE_FILES even if there is only one file.
 
-The <PKG>_TYPE is set to "$" (5), however, the <PKG>_DIR is set to
-"$$" (BUILD_DIR)/$$<the rest>.  My question is why the need for the $$
-for BUILD_DIR?  I THINK I understand the reason for the
-$$($(2)_BASE_NAME):  The eval will boil this down to $(<PKG>_BASE_NAME),
-which will the get POST interrupted AFTER <PKG>_BASE_NAME is assigned
-LATER, right?
+O.K. Will rework this.
 
-But, I'm confused as to the reason for the $$(BUILD_DIR).  It is
-assigned well before the reading of this file and is essentially a
-static variable.
+[1] http://en.wikipedia.org/wiki/DBox2
 
-NOTE:  This question is for my own edification and learning.  I'm not
-questioning the ability/logic of this Makefile as I know it works
-perfectly.  I'm attempting to do something similar in a Makefile of my
-own.
-
-Thanks in advance for the information!
-
-Andy
+Regards
+Carsten
