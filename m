@@ -1,51 +1,52 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 11 Jan 2013 10:48:28 +0100
-Subject: [Buildroot] [PATCH] mtd: add options to build flash_otp_unlock and
-	flash_otp_write
-Message-ID: <1357897708-20616-1-git-send-email-arnout@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 11 Jan 2013 10:55:25 +0100
+Subject: [Buildroot] [PATCH] configs: add RaspberryPi defconfig
+Message-ID: <1357898125-29197-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+This is a default configuration for the RaspberryPi, tested and functionnal.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The kernel used is the one developped by the RaspberryPi foundation as it's not
+supported currently in mainline kernel.
+The configuration used for the kernel is the default bcmrpi.
+
+Note that the kernel generated is a zImage but it must be renamed to kernel.img
+to work.
+
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/mtd/Config.in |    6 ++++++
- package/mtd/mtd.mk    |    2 ++
- 2 files changed, 8 insertions(+)
+ configs/rpi_defconfig |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 configs/rpi_defconfig
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 7330dd5..ddc3737 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -30,6 +30,12 @@ config BR2_PACKAGE_MTD_FLASH_OTP_DUMP
- config BR2_PACKAGE_MTD_FLASH_OTP_INFO
- 	bool "flash_otp_info"
- 
-+config BR2_PACKAGE_MTD_FLASH_OTP_LOCK
-+	bool "flash_otp_lock"
+diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+new file mode 100644
+index 0000000..8c73d0e
+--- /dev/null
++++ b/configs/rpi_defconfig
+@@ -0,0 +1,19 @@
++BR2_arm=y
++BR2_arm1176jzf_s=y
 +
-+config BR2_PACKAGE_MTD_FLASH_OTP_WRITE
-+	bool "flash_otp_write"
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
 +
- config BR2_PACKAGE_MTD_FLASH_UNLOCK
- 	bool "flash_unlock"
- 	default y
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index aef478f..c48b59f 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -38,6 +38,8 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_ERASE)	+= flash_erase
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_LOCK)	+= flash_lock
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_DUMP)	+= flash_otp_dump
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_INFO)	+= flash_otp_info
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_INFO)	+= flash_otp_lock
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_INFO)	+= flash_otp_write
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_UNLOCK)	+= flash_unlock
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_CHECK)	+= ftl_check
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT)	+= ftl_format
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_USERLAND=y
++BR2_PACKAGE_LIBCOFI=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="31a951046155b27361127d9cf85a1f58719fe9b3"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
++BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 1.7.10.4
