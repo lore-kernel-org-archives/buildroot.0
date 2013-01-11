@@ -1,39 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 Jan 2013 00:22:40 +0100
-Subject: [Buildroot] [PATCH v2] configs: add RaspberryPi defconfig
-In-Reply-To: <50F08131.1080208@je-eigen-domein.nl>
-References: <1357910250-31110-1-git-send-email-maxime.hadjinlian@gmail.com>
- <50F046F7.3060607@je-eigen-domein.nl> <50F072D9.3010808@mind.be>
- <50F08131.1080208@je-eigen-domein.nl>
-Message-ID: <50F09EC0.6070906@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 12 Jan 2013 00:45:28 +0100
+Subject: [Buildroot] [PATCH] libelementary: depends on libethumb
+Message-ID: <1357947928-10549-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/01/13 22:16, Floris Bos wrote:
-> The bootloader does support loading separate initrd files through a
-> config.txt option.
-> But the standard bcmrpi_defconfig Raspberry kernel does not, because
-> CONFIG_BLK_DEV_INITRD isn't enabled in the default configuration.
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-  Bummer.
+This was exposed because I still had an old libethumb in my staging
+directory so it was detected by configure, but because of the missing
+dependency it was still the (incompatible) version from before the
+1.7.4 bump.
 
-> If you cannot use the standard kernel, and have to compile your own
-> anyway, it is easier to use the buildroot "initramfs" option, and have
-> the initramfs integrated into zImage.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/efl/libelementary/libelementary.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-  It's just that that increases compile time, with little real benefit 
-over a separate initramfs.
-
-  Regards,
-  Arnout
-
+diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+index 81289ff..f63f0dc 100644
+--- a/package/efl/libelementary/libelementary.mk
++++ b/package/efl/libelementary/libelementary.mk
+@@ -18,4 +18,11 @@ LIBELEMENTARY_DEPENDENCIES = libeina libevas libecore libedje host-libedje \
+ LIBELEMENTARY_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet
+ 
++ifeq ($(BR2_PACKAGE_LIBETHUMB),y)
++LIBELEMENTARY_DEPENDENCIES += libethumb
++LIBELEMENTARY_CONF_OPT += --enable-ethumb
++else
++LIBELEMENTARY_CONF_OPT += --disable-ethumb
++endif
++
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10.4
