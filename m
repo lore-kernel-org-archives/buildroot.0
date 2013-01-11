@@ -1,80 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Jan 2013 13:53:02 +0100
-Subject: [Buildroot] pkg-generic.mk question
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C610B9E3A3@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C610B9E3A3@ex-mb1.corp.adtran.com>
-Message-ID: <50F00B2E.5080900@mind.be>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Fri, 11 Jan 2013 14:17:30 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_v2=5D_configs=3A_add_RaspberryPi_d?=
+	=?utf-8?q?efconfig?=
+Message-ID: <1357910250-31110-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/10/13 19:58, ANDY KENNEDY wrote:
-> All,
->
-> Consider the following (from pkg-generic.mk):
->
-> define inner-generic-package
->
-> <snip>
->
-> $(2)_TYPE                       =  $(5)
->
-> <snip>
->
-> $(2)_DIR        =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
->
->
-> The<PKG>_TYPE is set to "$" (5), however, the<PKG>_DIR is set to
-> "$$" (BUILD_DIR)/$$<the rest>.  My question is why the need for the $$
-> for BUILD_DIR?  I THINK I understand the reason for the
-> $$($(2)_BASE_NAME):  The eval will boil this down to $(<PKG>_BASE_NAME),
-> which will the get POST interrupted AFTER<PKG>_BASE_NAME is assigned
-> LATER, right?
->
-> But, I'm confused as to the reason for the $$(BUILD_DIR).  It is
-> assigned well before the reading of this file and is essentially a
-> static variable.
+This is a default configuration for the RaspberryPi, tested and functionnal.
 
-  AFAICS, there is no specific reason to do that, except for consistency. 
-It is quite difficult to understand what is hapening with these make 
-functions, and things become easier if you just follow the rule: 
-everything should be $$(...), except for the function arguments.
+The kernel used is the one developped by the RaspberryPi foundation as it's not
+fully supported currently in mainline kernel.
+The configuration used for the kernel is the default bcmrpi.
 
-  Note that the real question should be: why is $$(...) used for 
-BUILD_DIR, but $(...) for the patsubst in $(2)_RAWNAME? Because that 
-really is inconsistent.
+Note that the kernel generated is a zImage but to work you should :
+    - Rename it to kernel.img
+    - Add 'kernel=zImage' in config.txt (without quotes).
 
-  A potential reason to really use $$ instead of $ is to allow for late 
-evaluation. It makes it possible, for instance, to override the BUILD_DIR 
-in a rule variable.
+For more info, please find board/raspberrypi/README.txt
 
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ board/raspberrypi/README.txt |   35 +++++++++++++++++++++++++++++++++++
+ configs/rpi_defconfig        |   19 +++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 board/raspberrypi/README.txt
+ create mode 100644 configs/rpi_defconfig
 
-  Regards,
-  Arnout
-
-
->
-> NOTE:  This question is for my own edification and learning.  I'm not
-> questioning the ability/logic of this Makefile as I know it works
-> perfectly.  I'm attempting to do something similar in a Makefile of my
-> own.
->
-> Thanks in advance for the information!
->
-> Andy
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/board/raspberrypi/README.txt b/board/raspberrypi/README.txt
+new file mode 100644
+index 0000000..5ddc5c5
+--- /dev/null
++++ b/board/raspberrypi/README.txt
+@@ -0,0 +1,35 @@
++## RaspberryPi
++
++When you use the rpi_defconfig to build a rootfs for your RaspberryPi, a few
++items are created in output/images :
++
++	output/images/
++	??? rootfs.tar
++	??? rpi-firmware
++	??? ??? bootcode.bin
++	??? ??? config.txt
++	??? ??? fixup_cd.dat
++	??? ??? fixup.dat
++	??? ??? start_cd.elf
++	??? ??? start.elf
++	??? zImage
++
++In order to have a working SDCard, you should have at least two partitions :
++
++    - First partition :
++	This will be the boot partition (It must be formated in fat32 and have
++        bootable flags).
++	It should contains the *content* of output/images/rpi-firmware/.
++        It will also contain the kernel binary.
++        For the kernel to be found, you have two choices :
++	    1 - Rename zImage to kernel.img since it's the default kernel file
++                name here.
++            2 - Add 'kernel=zImage' to config.txt (without the quotes).
++
++    - Second partition :
++        This will contains the rootfs and should be formated in ext4.
++	If you chose another filesystem, you should modify the cmdline in
++        config.txt.
++        Then simply extract rootfs.tar to this partition.
++
++Finally, a good source of information is http://elinux.org/R-Pi_Hub
+diff --git a/configs/rpi_defconfig b/configs/rpi_defconfig
+new file mode 100644
+index 0000000..8c73d0e
+--- /dev/null
++++ b/configs/rpi_defconfig
+@@ -0,0 +1,19 @@
++BR2_arm=y
++BR2_arm1176jzf_s=y
++
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_USERLAND=y
++BR2_PACKAGE_LIBCOFI=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/raspberrypi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="31a951046155b27361127d9cf85a1f58719fe9b3"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
++BR2_LINUX_KERNEL_ZIMAGE=y
+--
+1.7.10.4
