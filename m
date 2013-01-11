@@ -1,33 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jan 2013 17:16:20 +0100
-Subject: [Buildroot] CANBUs Quesetion
-In-Reply-To: <20130111171429.79490168@skate>
-References: <001b01cdf015$9b34ca40$d19e5ec0$@co.uk>
- <20130111171429.79490168@skate>
-Message-ID: <20130111171620.2ab18a76@skate>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Fri, 11 Jan 2013 18:08:07 +0100
+Subject: [Buildroot] [PATCH v2] configs: add RaspberryPi defconfig
+In-Reply-To: <1357910250-31110-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1357910250-31110-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <50F046F7.3060607@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 01/11/2013 02:17 PM, Maxime Hadjinlian wrote:
+> In order to have a working SDCard, you should have at least two partitions :
 
-On Fri, 11 Jan 2013 17:14:29 +0100, Thomas Petazzoni wrote:
+Might also be worth mentioning that for use cases that do not require 
+file changes to persist across reboots you can go the initramfs route, 
+and let the bootloader load the entire rootfs to memory at boot.
 
-> What is PCAN ? Is it a family of hardware ? Without more details, hard
-> to help you.
+- "make menuconfig" -> select "Filesystem images" -> "initramfs for 
+intial ramdisk of linux kernel"
+- After build simply copy the files from target to a FAT formatted SD card.
 
-Ok, after a bit of googling (I should also do my homework before
-replying too fast), I guess you're talking about
-http://www.phytec.com/products/can/pc-can-interfaces/peakusb.html.
+No need to mess with extra partitions that way, and you are less 
+affected by the glitches the Pi's SD card kernel module has from time to 
+time.
 
-So, it's known in the kernel as peak_usb, driver in
-drivers/net/can/usb/peak_usb. Config option to enable is
-CONFIG_CAN_PEAK_USB.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yours sincerely,
+
+Floris Bos
