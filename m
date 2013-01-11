@@ -1,44 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jan 2013 11:02:31 +0100
-Subject: [Buildroot] [PATCH] configs: add RaspberryPi defconfig
-In-Reply-To: <1357898125-29197-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1357898125-29197-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20130111110231.3846ab95@skate>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 11 Jan 2013 11:43:53 +0100
+Subject: [Buildroot] [PATCH v2] mtd: add options to build flash_otp_unlock
+	and flash_otp_write
+In-Reply-To: <20130111095711.GD4162@tarshish>
+References: <20130111095711.GD4162@tarshish>
+Message-ID: <1357901033-8084-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-On Fri, 11 Jan 2013 10:55:25 +0100, Maxime Hadjinlian wrote:
-> This is a default configuration for the RaspberryPi, tested and
-> functionnal.
-> 
-> The kernel used is the one developped by the RaspberryPi foundation
-> as it's not supported currently in mainline kernel.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v2: use correct config variables in .mk file
+---
+ package/mtd/Config.in |    6 ++++++
+ package/mtd/mtd.mk    |    2 ++
+ 2 files changed, 8 insertions(+)
 
-Technically speaking, there is a beginning of support in mainline for
-the RasberryPi. But very few peripherals are supported as of today, so
-I agree that a Buildroot defconfig for RasberryPi should use the
-out-of-tree kernel for now.
-
-> The configuration used for the kernel is the default bcmrpi.
-> 
-> Note that the kernel generated is a zImage but it must be renamed to
-> kernel.img to work.
-
-Could you add a board/rasberrypi/README.txt that explains a few things
-like how the different images in output/images/ should be layed out in
-a SD card, that the kernel image needs to be renamed, etc. If a good
-online resource is available, you can just put a link to it.
-
-Thanks!
-
-Thomas
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 7330dd5..ddc3737 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -30,6 +30,12 @@ config BR2_PACKAGE_MTD_FLASH_OTP_DUMP
+ config BR2_PACKAGE_MTD_FLASH_OTP_INFO
+ 	bool "flash_otp_info"
+ 
++config BR2_PACKAGE_MTD_FLASH_OTP_LOCK
++	bool "flash_otp_lock"
++
++config BR2_PACKAGE_MTD_FLASH_OTP_WRITE
++	bool "flash_otp_write"
++
+ config BR2_PACKAGE_MTD_FLASH_UNLOCK
+ 	bool "flash_unlock"
+ 	default y
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index aef478f..eafce45 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -38,6 +38,8 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_ERASE)	+= flash_erase
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_LOCK)	+= flash_lock
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_DUMP)	+= flash_otp_dump
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_INFO)	+= flash_otp_info
++MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_LOCK)	+= flash_otp_lock
++MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_WRITE)	+= flash_otp_write
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_UNLOCK)	+= flash_unlock
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_CHECK)	+= ftl_check
+ MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT)	+= ftl_format
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.4
