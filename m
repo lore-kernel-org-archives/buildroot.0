@@ -1,39 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Jan 2013 18:25:54 +0100
-Subject: [Buildroot] [git commit] package/dvb-apps: requires largefiles
-Message-ID: <20130111180851.8D12D9703E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Jan 2013 21:15:21 +0100
+Subject: [Buildroot] [PATCH v2] configs: add RaspberryPi defconfig
+In-Reply-To: <50F046F7.3060607@je-eigen-domein.nl>
+References: <1357910250-31110-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <50F046F7.3060607@je-eigen-domein.nl>
+Message-ID: <50F072D9.3010808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc06757bed3fb41ff57b5fb05d53f7bcf79414b7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/01/13 18:08, Floris Bos wrote:
+> On 01/11/2013 02:17 PM, Maxime Hadjinlian wrote:
+>> In order to have a working SDCard, you should have at least two
+>> partitions :
+>
+> Might also be worth mentioning that for use cases that do not require
+> file changes to persist across reboots you can go the initramfs route,
+> and let the bootloader load the entire rootfs to memory at boot.
+>
+> - "make menuconfig" -> select "Filesystem images" -> "initramfs for
+> intial ramdisk of linux kernel"
+> - After build simply copy the files from target to a FAT formatted SD card.
+>
+> No need to mess with extra partitions that way, and you are less affected
+> by the glitches the Pi's SD card kernel module has from time to time.
 
-Fixes (for example):
-    http://autobuild.buildroot.net/results/5e12820c6537b176c49671a65afcbdb86c5154c9
+  Does the RPi bootloader support initrd loading? In that case, maybe 
+it's better to default to rootfs.cpio.gz (or .lzma) and adapt the 
+config.txt accordingly. That way, creating a bootable is a lot simpler: 
+just chuck the entire images directory on a FAT-formatted SD card...
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dvb-apps/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
-index 5d0b6f5..ca8dc54 100644
---- a/package/dvb-apps/Config.in
-+++ b/package/dvb-apps/Config.in
-@@ -8,8 +8,12 @@ config BR2_PACKAGE_DVB_APPS
- 
- if BR2_PACKAGE_DVB_APPS
- 
-+comment "dvb-apps utils needs LARGEFILE support in the toolchain"
-+	depends on !BR2_LARGEFILE
-+
- config BR2_PACKAGE_DVB_APPS_UTILS
- 	bool "dvb-apps utilities"
-+	depends on BR2_LARGEFILE
- 	help
- 	  A small number of DVB test and utility programs,
- 	  including szap and dvbscan.
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
