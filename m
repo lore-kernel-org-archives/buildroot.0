@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 22:35:52 +0100
-Subject: [Buildroot] [PATCH 09/28] xlib_libX11: do not depend on
-	bigreqsproto nor xcmiscproto
-In-Reply-To: <486cd706eb60bff58da00f26470d07495b998385.1357507764.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:21 +0100")
+Date: Sat, 12 Jan 2013 22:36:20 +0100
+Subject: [Buildroot] [PATCH 10/28] xlib_libX11: split the DEPENDENCIES
+	variable on multiple lines
+In-Reply-To: <4b66e0b0fbda91a2852bfcd0ab64235e23d27f6a.1357507764.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:22 +0100")
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
  <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <486cd706eb60bff58da00f26470d07495b998385.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fw263wzr.fsf@dell.be.48ers.dk>
+ <4b66e0b0fbda91a2852bfcd0ab64235e23d27f6a.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87bocu3wyz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,15 +16,7 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The BR2_PACKAGE_XPROTO_BIGREQSPROTO option was selected by
- Thomas> xlib_libX11, but xlib_libX11 does not have this protocol package in
- Thomas> its DEPENDENCIES. In some builds, it leads to xproto_bigreqsproto to
- Thomas> be built as the last package, with no other package depending on it,
- Thomas> which doesn't make sense.
-
- Thomas> xproto_xcmiscproto was selected and part of DEPENDENCIES, but an
- Thomas> inspection of libX11 configure.ac and libX11 source code shows that it
- Thomas> does not depend on xcmiscproto at all.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
