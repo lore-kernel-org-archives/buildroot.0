@@ -1,50 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:41:48 +0100
-Subject: [Buildroot] [git commit] docker: depend on xlib_libX11 and not the
-	X.org server
-Message-ID: <20130112215437.4F02E996EA@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:45:20 +0100
+Subject: [Buildroot] [git commit] libgtk2: add support for some optional X
+	dependencies
+Message-ID: <20130112215437.B1E56996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61062f97c2d74b1e2229c013f5511b4542b06bb8
+commit: http://git.buildroot.net/buildroot/commit/?id=7c8cd9f55469ad3121f282ab30caf72d5218e401
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-docker is a X client application, so it doesn't make sense to depend
-on the X.org server. An inspection of docker Makefile and source code
-shows that it only needs the libX11 library, so we replace the X.org
-server dependency by a libX11 dependency.
+libgtk2 can optionally use a number of features from additional X
+extensions, so we add support for those, to ensure that Gtk gets built
+after those extensions if they have been enabled in the Buildroot
+configuration.
+
+The extensions are Xinerama, Xinput, Xrandr, Xcursor, Xfixes,
+Xcomposite and Xdamage.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/docker/Config.in |    1 +
- package/docker/docker.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/libgtk2/libgtk2.mk |   35 +++++++++++++++++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/docker/Config.in b/package/docker/Config.in
-index 75bf5be..f07739a 100644
---- a/package/docker/Config.in
-+++ b/package/docker/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DOCKER
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_WCHAR # glib2
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_XLIB_LIBX11
- 	help
- 	  a system tray dock for X
- 
-diff --git a/package/docker/docker.mk b/package/docker/docker.mk
-index 95799e8..b452386 100644
---- a/package/docker/docker.mk
-+++ b/package/docker/docker.mk
-@@ -16,6 +16,6 @@ DOCKER_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" \
- 
- DOCKER_INSTALL_TARGET_OPT = PREFIX=$(TARGET_DIR)/usr install
- 
--DOCKER_DEPENDENCIES = host-pkgconf libglib2 xserver_xorg-server
-+DOCKER_DEPENDENCIES = host-pkgconf libglib2 xlib_libX11
- 
- $(eval $(autotools-package))
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 3dcecbf..e6a9d84 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -84,6 +84,41 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+ 		--with-gdktarget=x11
+ 	LIBGTK2_DEPENDENCIES += xlib_libXcomposite fontconfig xlib_libX11 \
+ 		xlib_libXext xlib_libXrender
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
++	LIBGTK2_CONF_OPT += --enable-xinerama
++	LIBGTK2_DEPENDENCIES += xlib_libXinerama
++else
++	LIBGTK2_CONF_OPT += --disable-xinerama
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
++	LIBGTK2_CONF_OPT += --with-xinput=yes
++	LIBGTK2_DEPENDENCIES += xlib_libXi
++else
++	LIBGTK2_CONF_OPT += --with-xinput=no
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
++	LIBGTK2_DEPENDENCIES += xlib_libXrandr
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++	LIBGTK2_DEPENDENCIES += xlib_libXcursor
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++	LIBGTK2_DEPENDENCIES += xlib_libXfixes
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
++	LIBGTK2_DEPENDENCIES += xlib_libXcomposite
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
++	LIBGTK2_DEPENDENCIES += xlib_libXdamage
++endif
++
+ else
+ 	LIBGTK2_CONF_OPT += --without-x
+ endif
