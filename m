@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 22:50:24 +0100
-Subject: [Buildroot] [PATCH 22/28] metacity: fix X.org dependencies
-In-Reply-To: <c5bc9e78b820037000023382ff4cd79758dbc501.1357507764.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:34 +0100")
+Date: Sat, 12 Jan 2013 22:50:46 +0100
+Subject: [Buildroot] [PATCH 23/28] rubix: fix X.org dependency
+In-Reply-To: <c95ceaed63276203a2217bba51d1d51ad60d125c.1357507764.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:35 +0100")
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
  <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <c5bc9e78b820037000023382ff4cd79758dbc501.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87sj66136n.fsf@dell.be.48ers.dk>
+ <c95ceaed63276203a2217bba51d1d51ad60d125c.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87obgu1361.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,7 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Metacity is a X client application, so there is no reason to depend on
- Thomas> the X.org server. Instead, depend on the appropriate X libraries.
-
- Thomas> In addition to the X.org related dependencies, we also add the
- Thomas> host-libxml-parser-perl dependency, otherwise:
-
- Thomas>   checking for XML::Parser... configure: error: XML::Parser perl module is required for intltool
- Thomas>   make[1]: *** [/home/test/outputs/xorg/build/metacity-2.25.1/.stamp_configured] Error 1
- Thomas>   make: *** [all] Error 2
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
