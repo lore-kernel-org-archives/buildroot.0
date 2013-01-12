@@ -1,27 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 08:48:11 +0100
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 4,
-	7}.x stable versions
-In-Reply-To: <1357949064-2057-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 11 Jan 2013 21:04:23 -0300")
-References: <1357949064-2057-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fw26970k.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 12 Jan 2013 08:47:53 +0100
+Subject: [Buildroot] [git commit] linux: bump 3.7.x stable version
+Message-ID: <20130112074801.24D2897300@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ec394d648acc2e4bcbd89214bfe66710086c5174
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  toolchain/kernel-headers/Config.in                                  | 6 +++---
- Gustavo>  ...0.58-headers_install-fix-__packed-in-exported-kernel-head.patch} | 0
- Gustavo>  2 files changed, 3 insertions(+), 3 deletions(-)
- Gustavo>  rename toolchain/kernel-headers/{linux-3.0.57-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.58-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 9ebe0c9..d636269 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_3_7
+-	bool "3.7.1"
++	bool "3.7.2"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -76,7 +76,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.7.1" if BR2_LINUX_KERNEL_3_7
++	default "3.7.2" if BR2_LINUX_KERNEL_3_7
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
