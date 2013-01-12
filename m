@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 22:51:50 +0100
-Subject: [Buildroot] [PATCH 25/28] xvkbd: fix X.org dependencies
-In-Reply-To: <9cd5652426d94c1e64d34ac861e312092483c7b5.1357507764.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:37 +0100")
+Date: Sat, 12 Jan 2013 22:52:32 +0100
+Subject: [Buildroot] [PATCH 26/28] xvkbd: turn into a generic-package
+In-Reply-To: <ce7075376884a3a306aa0df7b35d1f47cb5f72b3.1357507764.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:38 +0100")
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
  <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <9cd5652426d94c1e64d34ac861e312092483c7b5.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87fw261349.fsf@dell.be.48ers.dk>
+ <ce7075376884a3a306aa0df7b35d1f47cb5f72b3.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87bocu1333.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +15,13 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> xvkbd is a X.org client application, so there is no reason to depend
- Thomas> on the X.org server. Instead, depend on the X.org client libraries
- Thomas> that xvkbd actually links against.
+ Thomas> xvkbd was integrated has an autotools package, but it does not have a
+ Thomas> ./configure script. And to avoid executing the ./configure, the
+ Thomas> xvkbd-2.8-makefile.patch was creating a dummy .stamp_configured stamp
+ Thomas> file... Ugly.
+
+ Thomas> So, make xvkbd a normal generic package, with BUILD_CMDS and
+ Thomas> INSTALL_TARGET_CMDS, and get rid of the crappy part of the patch.
 
 Committed, thanks.
 
