@@ -1,71 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:52:01 +0100
-Subject: [Buildroot] [git commit] xvkbd: turn into a generic-package
-Message-ID: <20130112215439.85DEE88DBE@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:48:24 +0100
+Subject: [Buildroot] [git commit] pango: fix X.org dependencies
+Message-ID: <20130112215438.453C0996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ed3b69efe6e85bc599571c7af058c2d6ffffe53
+commit: http://git.buildroot.net/buildroot/commit/?id=3ba6d3815d51405454d475fbe1400ee93609a152
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xvkbd was integrated has an autotools package, but it does not have a
-./configure script. And to avoid executing the ./configure, the
-xvkbd-2.8-makefile.patch was creating a dummy .stamp_configured stamp
-file... Ugly.
-
-So, make xvkbd a normal generic package, with BUILD_CMDS and
-INSTALL_TARGET_CMDS, and get rid of the crappy part of the patch.
+pango is a X client library, so it does not need to depend on the
+X.org server. So, we replace the server dependency by dependencies on
+the appropriate libraries.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xvkbd/xvkbd-2.8-makefile.patch |    5 -----
- package/xvkbd/xvkbd.mk                 |   14 +++++++++++---
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ package/pango/Config.in |    3 +++
+ package/pango/pango.mk  |   13 +++++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/xvkbd/xvkbd-2.8-makefile.patch b/package/xvkbd/xvkbd-2.8-makefile.patch
-index e0ac21a..a8f6577 100644
---- a/package/xvkbd/xvkbd-2.8-makefile.patch
-+++ b/package/xvkbd/xvkbd-2.8-makefile.patch
-@@ -1,8 +1,3 @@
----- a/.stamp_configured	2008-03-04 06:14:55.425005441 -0500
--+++ b/.stamp_configured	2008-03-05 08:42:53.000000000 -0500
--@@ -0,0 +1 @@
--+dummy
--\ No newline at end of file
- --- a/Makefile	2008-03-04 06:14:55.425005441 -0500
- +++ b/Makefile	2008-03-05 08:40:50.000000000 -0500
- @@ -0,0 +1,2397 @@
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index ae81f84..59085bf 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -7,8 +7,16 @@ XVKBD_VERSION = 3.2
- XVKBD_SOURCE = xvkbd-$(XVKBD_VERSION).tar.gz
- XVKBD_SITE = http://homepage3.nifty.com/tsato/xvkbd
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+index 60e9931..6c8a160 100644
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -5,7 +5,10 @@ config BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_CAIRO
++	select BR2_PACKAGE_FONTCONFIG
++	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	help
+ 	  Pango is a library for laying out and rendering of text, with an
+ 	  emphasis on internationalization. Pango can be used anywhere that
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 7ba53ee..8e0444e 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -41,17 +41,26 @@ PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
  
--XVKBD_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_CC)" \
--				CFLAGS="-O2 -I$(STAGING_DIR)/usr/include" USRLIBDIR="$(STAGING_DIR)/usr/lib"
-+# Passing USRLIBDIR ensures that the stupid Makefile doesn't add
-+# /usr/lib to the library search path.
-+define XVKBD_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-+		USRLIBDIR="$(STAGING_DIR)/usr/lib"
-+endef
+ PANGO_CONF_OPT = --enable-explicit-deps=no --disable-debug
+ 
+-PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-pkgconf libglib2 cairo
++PANGO_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
++	host-pkgconf \
++	libglib2 \
++	cairo \
++	fontconfig \
++	freetype
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+         PANGO_CONF_OPT += --with-x \
+ 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--x-libraries=$(STAGING_DIR)/usr/lib --disable-glibtest
+-	PANGO_DEPENDENCIES += xserver_xorg-server
++	PANGO_DEPENDENCIES += xlib_libX11
+ else
+         PANGO_CONF_OPT += --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXRENDER),yy)
++	PANGO_DEPENDENCIES += xlib_libXft xlib_libXrender
++endif
 +
-+define XVKBD_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
- 
- XVKBD_DEPENDENCIES = \
- 	xlib_libICE \
-@@ -21,5 +29,5 @@ XVKBD_DEPENDENCIES = \
- 	xlib_libXt \
- 	xlib_libXtst
- 
--$(eval $(autotools-package))
-+$(eval $(generic-package))
- 
+ define PANGO_INSTALL_INITSCRIPT
+ 	$(INSTALL) -m 755 -D package/pango/S25pango \
+ 		$(TARGET_DIR)/etc/init.d/S25pango
