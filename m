@@ -1,74 +1,59 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:45:20 +0100
-Subject: [Buildroot] [git commit] libgtk2: add support for some optional X
-	dependencies
-Message-ID: <20130112215437.B1E56996EA@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:44:51 +0100
+Subject: [Buildroot] [git commit] libgtk2: replace dependency on X.org
+	server by dependency on libraries
+Message-ID: <20130112215437.8E443996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c8cd9f55469ad3121f282ab30caf72d5218e401
+commit: http://git.buildroot.net/buildroot/commit/?id=0e55b8dc8ac082ab8adb48dc790a4105a7630304
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libgtk2 can optionally use a number of features from additional X
-extensions, so we add support for those, to ensure that Gtk gets built
-after those extensions if they have been enabled in the Buildroot
-configuration.
+libgtk2 is a X client library, so it doesn't make sense for it to
+depend on the X.org server. Instead, it should depend on the X client
+libraries.
 
-The extensions are Xinerama, Xinput, Xrandr, Xcursor, Xfixes,
-Xcomposite and Xdamage.
+This patch therefore replaces the dependency on the X server by a
+dependency on libX11, libXext, libXrender and fontconfig, that are the
+mandatory requirements to build the X backend of Gtk.
 
+[Peter: don't add an empty line before gtk demo help text]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libgtk2/libgtk2.mk |   35 +++++++++++++++++++++++++++++++++++
- 1 files changed, 35 insertions(+), 0 deletions(-)
+ package/libgtk2/Config.in  |    4 ++++
+ package/libgtk2/libgtk2.mk |    3 ++-
+ 2 files changed, 6 insertions(+), 1 deletions(-)
 
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index efaf12f..3e8cf75 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -8,6 +8,10 @@ config BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_GDK_PIXBUF
++	select BR2_PACKAGE_FONTCONFIG if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
 diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 3dcecbf..e6a9d84 100644
+index 9adb6b9..3dcecbf 100644
 --- a/package/libgtk2/libgtk2.mk
 +++ b/package/libgtk2/libgtk2.mk
-@@ -84,6 +84,41 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+@@ -82,7 +82,8 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+ 		--x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--x-libraries=$(STAGING_DIR)/usr/lib \
  		--with-gdktarget=x11
- 	LIBGTK2_DEPENDENCIES += xlib_libXcomposite fontconfig xlib_libX11 \
- 		xlib_libXext xlib_libXrender
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+	LIBGTK2_CONF_OPT += --enable-xinerama
-+	LIBGTK2_DEPENDENCIES += xlib_libXinerama
-+else
-+	LIBGTK2_CONF_OPT += --disable-xinerama
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
-+	LIBGTK2_CONF_OPT += --with-xinput=yes
-+	LIBGTK2_DEPENDENCIES += xlib_libXi
-+else
-+	LIBGTK2_CONF_OPT += --with-xinput=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXrandr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXcursor
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXfixes
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXcomposite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
-+	LIBGTK2_DEPENDENCIES += xlib_libXdamage
-+endif
-+
+-	LIBGTK2_DEPENDENCIES += xlib_libXcomposite xserver_xorg-server
++	LIBGTK2_DEPENDENCIES += xlib_libXcomposite fontconfig xlib_libX11 \
++		xlib_libXext xlib_libXrender
  else
  	LIBGTK2_CONF_OPT += --without-x
  endif
