@@ -1,51 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Jan 2013 14:36:46 +0100
-Subject: [Buildroot] [PATCH] package/dvb-apps: requires iconv
-In-Reply-To: <874nim8r7e.fsf@dell.be.48ers.dk>
-References: <1357995215-26554-1-git-send-email-yann.morin.1998@free.fr>
- <874nim8r7e.fsf@dell.be.48ers.dk>
-Message-ID: <201301121436.46822.yann.morin.1998@free.fr>
+From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
+Date: Sat, 12 Jan 2013 15:44:04 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2013-01-11
+In-Reply-To: <20130112073425.EE2C852C090@lolut.humanoidz.org>
+References: <20130112073425.EE2C852C090@lolut.humanoidz.org>
+Message-ID: <50F168A4.7080607@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hi Thomas
 
-On Saturday 12 January 2013 Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  Yann> +++ b/package/dvb-apps/dvb-apps.mk
->  Yann> @@ -20,10 +20,16 @@ DVB_APPS_LICENSE        = unknown (probably public domain)
->  
->  Yann>  ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
->  Yann>  # Utilitiess are selected, build and install everything
->  Yann> +
->  Yann> +ifeq ($(BR2_ENABLE_LOCALE),)
->  Yann> +DVB_APPS_DEPENDENCIES    = libiconv
->  Yann> +DVB_APPS_LDFLAGS         = $(TARGET_LDFLAGS) -liconv
->  Yann> +endif
->  Yann> +
->  Yann>  DVB_APPS_INSTALL_STAGING = YES
->  
->  Yann>  define DVB_APPS_BUILD_CMDS
->  Yann> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) V=1
->  Yann> +	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" $(MAKE) -C $(@D) V=1
-> 
-> Ehh, so if you have locale you pass an empty LDFLAGS?
+12.1.2013 9:34, Thomas Petazzoni kirjoitti:
+> Hello,
+>
+> On 2013-01-11, 144 random build tests have been done and
+> submitted on autobuild.buildroot.net.
+>  98 builds have been successful
+>  46 builds have failed
+>
+> Below the results of the failed builds. Successful builds are omitted.
+>
+>
+> Build 9d1efa77f742863e41de3a172d2041657b523be6
+> ==============================================
+>
+> Status         : NOK
+> Failure reason : proxychains-3.1
+> Architecture   : arm
+> Submitted by   : Thomas Petazzoni (Free Electrons build server)
+> Submitted at   : 2013-01-11 22:25:57
+> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=cc06757bed3fb41ff57b5fb05d53f7bcf79414b7
+> End of log     : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/build-end.log
+> Complete log   : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/build.log.bz2
+> Configuration  : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/config
+> Defconfig      : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/defconfig
+>
 
-Strangely enough, this build fine with a toolchain with or without
-locales. :-(
+Did you manage to compile that newer version of proxychains (4.4) for arm ?
 
-OK, break, will come back to this later... :-/
+http://lists.busybox.net/pipermail/buildroot/2013-January/065081.html
 
-Regards,
-Yann E. MORIN.
+In x86 both 3.1 and 4.4 build without problem.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards
+Stefan
