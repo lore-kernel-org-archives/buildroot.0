@@ -1,41 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 19:57:13 +0100
-Subject: [Buildroot] [PATCH] website: Announce the upcoming Buildroot
-	Developers Meeting
-In-Reply-To: <1358004000-24817-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 12 Jan 2013 16:20:00 +0100")
-References: <1358004000-24817-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87r4lq6xh2.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 12 Jan 2013 19:54:10 +0100
+Subject: [Buildroot] [git commit] package/dvb-apps: requires iconv
+Message-ID: <20130112185703.5C16C99848@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6abd7864fbcdaeb82074f46b23ad6d7fc7321852
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  docs/news.html |   18 ++++++++++++++++++
- Thomas>  1 file changed, 18 insertions(+)
+Use libiconv if the toolchain does not have locales.
 
- Thomas> diff --git a/docs/news.html b/docs/news.html
- Thomas> index 343690f..2c0c6fc 100644
- Thomas> --- a/docs/news.html
- Thomas> +++ b/docs/news.html
- Thomas> @@ -5,6 +5,24 @@
- Thomas>  <p>
+Fixes (for example):
+    http://autobuild.buildroot.net/results/c5776c95ac128f7c7eadc2fe746ad89f8c1ef49a
+
+[Peter: fixup LDFLAGS for BR2_ENABLE_LOCALE=y builds]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dvb-apps/Config.in   |    1 +
+ package/dvb-apps/dvb-apps.mk |   10 +++++++++-
+ 2 files changed, 10 insertions(+), 1 deletions(-)
+
+diff --git a/package/dvb-apps/Config.in b/package/dvb-apps/Config.in
+index ca8dc54..7f76330 100644
+--- a/package/dvb-apps/Config.in
++++ b/package/dvb-apps/Config.in
+@@ -14,6 +14,7 @@ comment "dvb-apps utils needs LARGEFILE support in the toolchain"
+ config BR2_PACKAGE_DVB_APPS_UTILS
+ 	bool "dvb-apps utilities"
+ 	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  A small number of DVB test and utility programs,
+ 	  including szap and dvbscan.
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index f914799..ee4aadb 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -20,10 +20,18 @@ DVB_APPS_LICENSE        = unknown (probably public domain)
  
- Thomas>  <ul>
- Thomas> +  <li><b>12 January 2013 -- Next Buildroot Developers Meeting next to FOSDEM, Brussels</b>
- Thomas> +
- Thomas> +    <p>The next Buildroot Developers Meeting will take place on Monday
- Thomas> +    4th February 2013 and Tuesday 5th February 2013 in Brussels,
- Thomas> +    Belgium. Those dates have been chosen to immediatly follow the
-
-s/immediatly/immediately/
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_PACKAGE_DVB_APPS_UTILS),y)
+ # Utilitiess are selected, build and install everything
++
++DVB_APPS_LDFLAGS = $(TARGET_LDFLAGS)
++
++ifeq ($(BR2_ENABLE_LOCALE),)
++DVB_APPS_DEPENDENCIES    = libiconv
++DVB_APPS_LDFLAGS        += -liconv
++endif
++
+ DVB_APPS_INSTALL_STAGING = YES
+ 
+ define DVB_APPS_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) V=1
++	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" $(MAKE) -C $(@D) V=1
+ endef
+ 
+ define DVB_APPS_INSTALL_STAGING_CMDS
