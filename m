@@ -1,24 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 21:00:07 +0100
-Subject: [Buildroot] [PATCH] empty: needs MMU
-In-Reply-To: <1357890528-3005-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Fri, 11 Jan 2013 07:48:48 +0000")
-References: <1357890528-3005-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87ip726uk8.fsf@dell.be.48ers.dk>
+Date: Sat, 12 Jan 2013 21:02:20 +0100
+Subject: [Buildroot] [PATCHv2] arptables: bump to version 0.0.4
+In-Reply-To: <1357993124-13197-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 12 Jan 2013 09:18:44 -0300")
+References: <1357993124-13197-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ehhq6ugj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> The empty package uses the fork() system call, and so requires MMU.
-
- spdawson> Fixed autobuilder failures such as the following.
-
- spdawson>   http://autobuild.buildroot.net/results/4ad23e07b1bfe7bfd622aed8d54fa243b72eed59/build-end.log
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/arptables/arptables.mk | 6 +++---
+ Gustavo>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Committed, thanks.
 
