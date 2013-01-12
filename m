@@ -1,50 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:39:37 +0100
-Subject: [Buildroot] [git commit] cairo: do not depend on
-	xserver-xorg_server, but on the right library
-Message-ID: <20130112215437.0A622996EA@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:41:07 +0100
+Subject: [Buildroot] [git commit] cairo: always enable XCB support when X
+	backend is enabled
+Message-ID: <20130112215437.30798996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=90c3150d5f4c732385f3fe0c25c8cddd150da685
+commit: http://git.buildroot.net/buildroot/commit/?id=d5d2f36367f02f8df4deae952ba3fbc8b1b3f2da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cairo is a X client library, so there is no reason for it to build
-depend on the X.org server. What Cairo needs is the xlib_libX11
-library.
+cairo depends on xlib_libX11 for its Xlib backend. But xlib_libX11
+depends on XCB, so the XCB support can always be built into Cairo.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cairo/Config.in |    1 +
- package/cairo/cairo.mk  |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+ package/cairo/cairo.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 398e47f..4a2078e 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_CAIRO
- 	bool "cairo"
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	help
- 	  Cairo is a 2D graphics library with support for multiple
- 	  output devices. Currently supported output targets include
 diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 59a032a..41e876a 100644
+index 41e876a..6cf910a 100644
 --- a/package/cairo/cairo.mk
 +++ b/package/cairo/cairo.mk
-@@ -49,7 +49,7 @@ endif
+@@ -48,10 +48,10 @@ else
+ endif
  
  ifeq ($(BR2_PACKAGE_XORG7),y)
- 	CAIRO_CONF_OPT += --enable-xlib --with-x
--	CAIRO_DEPENDENCIES += xserver_xorg-server
-+	CAIRO_DEPENDENCIES += xlib_libX11
+-	CAIRO_CONF_OPT += --enable-xlib --with-x
++	CAIRO_CONF_OPT += --enable-xlib --enable-xcb --with-x
+ 	CAIRO_DEPENDENCIES += xlib_libX11
  else
- 	CAIRO_CONF_OPT += --disable-xlib --without-x
+-	CAIRO_CONF_OPT += --disable-xlib --without-x
++	CAIRO_CONF_OPT += --disable-xlib --disable-xcb --without-x
  endif
+ 
+ ifeq ($(BR2_PACKAGE_CAIRO_PS),y)
