@@ -1,69 +1,77 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:37:02 +0100
-Subject: [Buildroot] [git commit] libsha1: new package
-Message-ID: <20130112215436.862BF996EA@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:39:27 +0100
+Subject: [Buildroot] [git commit] xserver_xorg-server: provide more options
+	for SHA1 library
+Message-ID: <20130112215436.D6142996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4f83232e8d307f6184900c6e4a99a5f76dc66fa4
+commit: http://git.buildroot.net/buildroot/commit/?id=cb8895ceffc8140b9d40fca7eba318a49bc7da20
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Until now, the X.org server was forcefully selecting OpenSSL, just to
+have a SHA1 implementation. However, in fact, the X.org server is
+capable of using a SHA1 implementation from multiple libraries:
+OpenSSL, libgcrypt and libsha1 amongst others.
+
+So, this patch changes the X.org server package so that we use the
+SHA1 functions from OpenSSL is OpenSSL is already available, or the
+SHA1 functions from libgcrypt is libgcrypt is already available, or if
+neither OpenSSL nor libgcrypt are enabled in the configuration, we
+select the much smaller libsha1, that has been specifically written to
+fulfill the X.org server requirements.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in          |    1 +
- package/libsha1/Config.in  |    9 +++++++++
- package/libsha1/libsha1.mk |   15 +++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in        |    5 ++++-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |   12 +++++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bd1db6b..fcc2480 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -371,6 +371,7 @@ source "package/gnutls/Config.in"
- source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
- source "package/libnss/Config.in"
-+source "package/libsha1/Config.in"
- source "package/nettle/Config.in"
- source "package/ocf-linux/Config.in"
- source "package/openssl/Config.in"
-diff --git a/package/libsha1/Config.in b/package/libsha1/Config.in
-new file mode 100644
-index 0000000..5467a6c
---- /dev/null
-+++ b/package/libsha1/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBSHA1
-+	bool "libsha1"
-+	help
-+	  libsha1 is a tiny library providing SHA1 implementation,
-+	  created for facilitating X server compilation on devices
-+	  when larger libraries containing SHA1 implementations
-+	  (OpenSSL, Mozilla NSS) are not needed.
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index c192ef4..5b60398 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -2,7 +2,10 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	bool "xorg-server"
+ 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR
+ 	select BR2_PACKAGE_MCOOKIE
+-	select BR2_PACKAGE_OPENSSL
++	# We need a SHA1 implementation. If either openssl or
++	# libgcrypt are already part of the build, we'll use one of
++	# them, otherwise, use the small libsha1 library.
++	select BR2_PACKAGE_LIBSHA1 if (!BR2_PACKAGE_OPENSSL && !BR2_PACKAGE_LIBGCRYPT)
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_XFONT_FONT_ALIAS if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+ 	select BR2_PACKAGE_XFONT_FONT_MISC_MISC if !BR2_PACKAGE_XSERVER_XORG_SERVER_BUILTIN_FONTS
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 92aa4b3..140cb8b 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -51,7 +51,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xproto_xproto 			\
+ 	xkeyboard-config		\
+ 	pixman 				\
+-	openssl 			\
+ 	mcookie 			\
+ 	host-pkgconf
+ 
+@@ -178,4 +177,15 @@ else
+ XSERVER_XORG_SERVER_CONF_OPT += --disable-glx
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libcrypto
++XSERVER_XORG_SERVER_DEPENDENCIES += openssl
++else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libgcrypt
++XSERVER_XORG_SERVER_DEPENDENCIES += libgcrypt
++else
++XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libsha1
++XSERVER_XORG_SERVER_DEPENDENCIES += libsha1
++endif
 +
-+	  https://github.com/dottedmag/libsha1
-diff --git a/package/libsha1/libsha1.mk b/package/libsha1/libsha1.mk
-new file mode 100644
-index 0000000..e9658af
---- /dev/null
-+++ b/package/libsha1/libsha1.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# libsha1
-+#
-+#############################################################
-+
-+LIBSHA1_VERSION = 0.3
-+LIBSHA1_SITE = http://github.com/dottedmag/libsha1/tarball/$(LIBSHA1_VERSION)
-+LIBSHA1_INSTALL_STAGING = YES
-+
-+# We're getting the source code from Github, so there is no generated
-+# configure script in the tarball.
-+LIBSHA1_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+ $(eval $(autotools-package))
