@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 22:39:16 +0100
-Subject: [Buildroot] [PATCH 12/28] xserver_xorg-server: provide more
-	options for SHA1 library
-In-Reply-To: <089f2d9cb8d7b83db4f512f3a62b1d98fc5693e3.1357507764.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:24 +0100")
+Date: Sat, 12 Jan 2013 22:40:23 +0100
+Subject: [Buildroot] [PATCH 13/28] cairo: do not depend on
+	xserver-xorg_server, but on the right library
+In-Reply-To: <d47c9dfcd7cb9ea156e84cc5493e0b1ef075215d.1357507764.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:25 +0100")
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
  <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <089f2d9cb8d7b83db4f512f3a62b1d98fc5693e3.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8738y63wu3.fsf@dell.be.48ers.dk>
+ <d47c9dfcd7cb9ea156e84cc5493e0b1ef075215d.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87y5fy2i7s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,17 +16,9 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Until now, the X.org server was forcefully selecting OpenSSL, just to
- Thomas> have a SHA1 implementation. However, in fact, the X.org server is
- Thomas> capable of using a SHA1 implementation from multiple libraries:
- Thomas> OpenSSL, libgcrypt and libsha1 amongst others.
-
- Thomas> So, this patch changes the X.org server package so that we use the
- Thomas> SHA1 functions from OpenSSL is OpenSSL is already available, or the
- Thomas> SHA1 functions from libgcrypt is libgcrypt is already available, or if
- Thomas> neither OpenSSL nor libgcrypt are enabled in the configuration, we
- Thomas> select the much smaller libsha1, that has been specifically written to
- Thomas> fulfill the X.org server requirements.
+ Thomas> cairo is a X client library, so there is no reason for it to build
+ Thomas> depend on the X.org server. What Cairo needs is the xlib_libX11
+ Thomas> library.
 
 Committed, thanks.
 
