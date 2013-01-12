@@ -1,42 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:34:37 +0100
-Subject: [Buildroot] [git commit] x11r7: do not globally select libraries
-Message-ID: <20130112215435.E5EFD9001F@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:35:32 +0100
+Subject: [Buildroot] [git commit] xlib_libX11: do not depend on bigreqsproto
+	nor xcmiscproto
+Message-ID: <20130112215436.1FBC99001F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3679abe0a32e2559c81a9f47820c9af47ee1f84f
+commit: http://git.buildroot.net/buildroot/commit/?id=0a0330a582b58fd3d874a56d3a2ce57fc4fc4445
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It doesn't make sense for BR2_PACKAGE_XORG7 to globally select
-libraries such as libpng, zlib, expat or fontconfig. For example, if
-you do a build with just xlib_libX11, then libpng gets built as the
-last package, without anybody actually depending on it, even if it was
-selected by BR2_PACKAGE_XORG7.
+The BR2_PACKAGE_XPROTO_BIGREQSPROTO option was selected by
+xlib_libX11, but xlib_libX11 does not have this protocol package in
+its DEPENDENCIES. In some builds, it leads to xproto_bigreqsproto to
+be built as the last package, with no other package depending on it,
+which doesn't make sense.
 
-The individual x11r7 packages should select the libraries they need,
-and add them in their DEPENDENCIES variable.
+xproto_xcmiscproto was selected and part of DEPENDENCIES, but an
+inspection of libX11 configure.ac and libX11 source code shows that it
+does not depend on xcmiscproto at all.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libX11/Config.in      |    2 --
+ package/x11r7/xlib_libX11/xlib_libX11.mk |    2 +-
+ 2 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 6940725..706574c 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -1,9 +1,5 @@
- menuconfig BR2_PACKAGE_XORG7
- 	bool "X.org X Window System"
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_FONTCONFIG
- 	depends on BR2_USE_WCHAR
+diff --git a/package/x11r7/xlib_libX11/Config.in b/package/x11r7/xlib_libX11/Config.in
+index e1189ff..3ad8d00 100644
+--- a/package/x11r7/xlib_libX11/Config.in
++++ b/package/x11r7/xlib_libX11/Config.in
+@@ -10,7 +10,5 @@ config BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86BIGFONTPROTO
+-	select BR2_PACKAGE_XPROTO_BIGREQSPROTO
+-	select BR2_PACKAGE_XPROTO_XCMISCPROTO
  	help
- 	  Support for X11R7 libraries, servers, drivers, and/or
+ 	  X.Org X11 library
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 75d172c..94107b2 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -8,7 +8,7 @@ XLIB_LIBX11_VERSION = 1.4.2
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBX11_INSTALL_STAGING = YES
+-XLIB_LIBX11_DEPENDENCIES = libxcb xutil_util-macros xlib_xtrans xlib_libXau xlib_libXdmcp xproto_kbproto xproto_xproto xproto_xextproto xproto_inputproto xproto_xf86bigfontproto xproto_xcmiscproto host-xproto_xproto
++XLIB_LIBX11_DEPENDENCIES = libxcb xutil_util-macros xlib_xtrans xlib_libXau xlib_libXdmcp xproto_kbproto xproto_xproto xproto_xextproto xproto_inputproto xproto_xf86bigfontproto host-xproto_xproto
+ XLIB_LIBX11_CONF_OPT = \
+ 	--disable-malloc0returnsnull \
+ 	--with-xcb \
