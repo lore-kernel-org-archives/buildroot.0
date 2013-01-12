@@ -1,50 +1,73 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:42:24 +0100
-Subject: [Buildroot] [git commit] fltk: replace dependency on X.org server
-	with dependency on libraries
-Message-ID: <20130112215437.6DD57996EA@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:50:05 +0100
+Subject: [Buildroot] [git commit] metacity: fix X.org dependencies
+Message-ID: <20130112215438.6739D996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e28272314b3e014e780ac44b9015da24292966a4
+commit: http://git.buildroot.net/buildroot/commit/?id=bfee0ba5dde011f44bcca9e08d35e244e35d0fe4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fltk is a X client library, so it doesn't make sense for it to depend
-on the X.org server. Instead, it depends on libX11, libXext and libXt,
-so we use those libraries as fltk dependencies.
+Metacity is a X client application, so there is no reason to depend on
+the X.org server. Instead, depend on the appropriate X libraries.
+
+In addition to the X.org related dependencies, we also add the
+host-libxml-parser-perl dependency, otherwise:
+
+  checking for XML::Parser... configure: error: XML::Parser perl module is required for intltool
+  make[1]: *** [/home/test/outputs/xorg/build/metacity-2.25.1/.stamp_configured] Error 1
+  make: *** [all] Error 2
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/fltk/Config.in |    2 ++
- package/fltk/fltk.mk   |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/metacity/Config.in   |   10 ++++++++++
+ package/metacity/metacity.mk |   12 +++++++++++-
+ 2 files changed, 21 insertions(+), 1 deletions(-)
 
-diff --git a/package/fltk/Config.in b/package/fltk/Config.in
-index eff72b5..2085192 100644
---- a/package/fltk/Config.in
-+++ b/package/fltk/Config.in
-@@ -3,6 +3,8 @@ config BR2_PACKAGE_FLTK
- 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/metacity/Config.in b/package/metacity/Config.in
+index c483c44..833a091 100644
+--- a/package/metacity/Config.in
++++ b/package/metacity/Config.in
+@@ -2,5 +2,15 @@ config BR2_PACKAGE_METACITY
+ 	bool "metacity"
+ 	depends on BR2_PACKAGE_LIBGTK2
  	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXT
 +	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
++	# Metacity configure.ac pretends it can be built without
++	# Composite, but in reality, it doesn't build.
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
++	select BR2_PACKAGE_XLIB_LIBXFIXES
++	select BR2_PACKAGE_XLIB_LIBXRENDER
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	# We do not directly depend on Xft, but they are needed to get
++	# Xft support in Pango, which we require.
++	select BR2_PACKAGE_XLIB_LIBXFT
  	help
- 	  A cross-platform C++ GUI toolkit for UNIX/Linux (X11),
- 	  Microsoft Windows, and MacOS X.
-diff --git a/package/fltk/fltk.mk b/package/fltk/fltk.mk
-index a5dac37..3f192cd 100644
---- a/package/fltk/fltk.mk
-+++ b/package/fltk/fltk.mk
-@@ -11,6 +11,6 @@ FLTK_INSTALL_STAGING = YES
- FLTK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) STRIP=$(TARGET_STRIP) install
- FLTK_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) install
- FLTK_CONF_OPT = --enable-threads --with-x
--FLTK_DEPENDENCIES = xserver_xorg-server xlib_libXt
-+FLTK_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt
+ 	  Metacity is a window manager for the X Window System.
+diff --git a/package/metacity/metacity.mk b/package/metacity/metacity.mk
+index 990ec9f..aa78a7a 100644
+--- a/package/metacity/metacity.mk
++++ b/package/metacity/metacity.mk
+@@ -17,7 +17,17 @@ METACITY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+ 		--disable-dependency-tracking \
+ 		--disable-sm --disable-startup-notification
  
- $(eval $(autotools-package))
+-METACITY_DEPENDENCIES = libgtk2 xserver_xorg-server
++METACITY_DEPENDENCIES = libgtk2 \
++	xlib_libX11 \
++	host-libxml-parser-perl \
++	xlib_libXcomposite \
++	xlib_libXfixes \
++	xlib_libXrender \
++	xlib_libXdamage
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++METACITY_DEPENDENCIES += xlib_libXcursor
++endif
+ 
+ define METACITY_INSTALL_XSESSION
+ 	install -D package/metacity/Xsession $(TARGET_DIR)/etc/X11/Xsession
