@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 12 Jan 2013 22:36:20 +0100
-Subject: [Buildroot] [PATCH 10/28] xlib_libX11: split the DEPENDENCIES
-	variable on multiple lines
-In-Reply-To: <4b66e0b0fbda91a2852bfcd0ab64235e23d27f6a.1357507764.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:22 +0100")
+Date: Sat, 12 Jan 2013 22:37:53 +0100
+Subject: [Buildroot] [PATCH 11/28] libsha1: new package
+In-Reply-To: <9d9598b93027b4ca36e4e4d9bc463c748757d636.1357507764.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Jan 2013 22:29:23 +0100")
 References: <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
  <cover.1357507764.git.thomas.petazzoni@free-electrons.com>
- <4b66e0b0fbda91a2852bfcd0ab64235e23d27f6a.1357507764.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bocu3wyz.fsf@dell.be.48ers.dk>
+ <9d9598b93027b4ca36e4e4d9bc463c748757d636.1357507764.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <877gni3wwe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
