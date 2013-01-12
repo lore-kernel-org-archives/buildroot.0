@@ -1,34 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jan 2013 12:58:53 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 12 Jan 2013 09:07:14 -0300
 Subject: [Buildroot] [PATCH 2/2] arptables: bump to version 0.0.4
-In-Reply-To: <1357990675-12863-2-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <20130112125853.5cd7eba1@skate>
 References: <1357990675-12863-1-git-send-email-gustavo@zacarias.com.ar>
  <1357990675-12863-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20130112125853.5cd7eba1@skate>
+ <20130112125853.5cd7eba1@skate>
+Message-ID: <50F151F2.6020703@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 01/12/2013 08:58 AM, Thomas Petazzoni wrote:
 
-On Sat, 12 Jan 2013 08:37:55 -0300, Gustavo Zacarias wrote:
+> Could you add LICENSE and LICENSE_FILES while you're at it? :-)
 
-> -ARPTABLES_VERSION = 0.0.3
-> -ARPTABLES_VERSION_MINOR = 4
-> -ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION)-$(ARPTABLES_VERSION_MINOR).tar.gz
-> +ARPTABLES_VERSION = 0.0.4
-> +ARPTABLES_SOURCE = arptables-v$(ARPTABLES_VERSION).tar.gz
->  ARPTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/arptables/arptables-v$(ARPTABLES_VERSION)
+Unfortunately it's not clear cut which license it's placed on.
+Presumably it's GPL since a quick search says:
 
-Could you add LICENSE and LICENSE_FILES while you're at it? :-)
+arptables-v0.0.4 $ find . -type f -exec grep --with-filename GPL {} \;
+./libarptc/libarptc.c:/* (C)1999 Paul ``Rusty'' Russell - Placed under
+the GNU GPL (See
+./libarptc/libarptc_incl.c:/* (C)1999 Paul ``Rusty'' Russell - Placed
+under the GNU GPL (See
+./include/linux/netfilter_arp.h: * (C)2002 Rusty Russell IBM -- This
+code is GPL.
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+But there's nothing else indicating so, and no detail as to which
+version of the GPL (presumably v2 because of the date, but no license
+files included).
+Should we go with v2 or just leave it be for the license experts?
+Regards.
