@@ -1,45 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 12 Jan 2013 22:47:42 +0100
-Subject: [Buildroot] [git commit] atk: remove unused host variant
-Message-ID: <20130112215438.13276996EA@busybox.osuosl.org>
+Date: Sat, 12 Jan 2013 22:51:18 +0100
+Subject: [Buildroot] [git commit] xvkbd: fix X.org dependencies
+Message-ID: <20130112215439.268C7996EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b19ee5cbdf8978d593805483a92b4c9d00c0da76
+commit: http://git.buildroot.net/buildroot/commit/?id=ab0e905aaf440374b5059962ca8591197b2cbc54
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The atk package is used as a dependency in the libglade and libgtk2
-packages.
-
-The libglade package has no host variant, and does not depend on
-host-atk.
-
-The libgtk2 package depends on atk, and has a host variant, but the
-host variant of libgtk2 overrides HOST_LIBGTK2_DEPENDENCIES to limit
-the number of dependencies, and host-atk is not amongst those
-dependencies.
-
-Therefore, host-atk is useless and can be removed.
+xvkbd is a X.org client application, so there is no reason to depend
+on the X.org server. Instead, depend on the X.org client libraries
+that xvkbd actually links against.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/atk/atk.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/xvkbd/Config.in |    7 +++++++
+ package/xvkbd/xvkbd.mk  |   11 ++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletions(-)
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 0453acb..2a85edd 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -43,8 +43,4 @@ ATK_CONF_OPT =  --disable-glibtest --enable-explicit-deps=no \
+diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in
+index a75687d..bd3f2aa 100644
+--- a/package/xvkbd/Config.in
++++ b/package/xvkbd/Config.in
+@@ -1,7 +1,14 @@
+ config BR2_PACKAGE_XVKBD
+ 	bool "xvkbd"
+ 	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBICE
++	select BR2_PACKAGE_XLIB_LIBSM
++	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXAW
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XLIB_LIBXPM
++	select BR2_PACKAGE_XLIB_LIBXT
+ 	select BR2_PACKAGE_XLIB_LIBXTST
+ 	help
+ 	  on-screen keyboard for X
+diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
+index ec63027..ae81f84 100644
+--- a/package/xvkbd/xvkbd.mk
++++ b/package/xvkbd/xvkbd.mk
+@@ -10,7 +10,16 @@ XVKBD_SITE = http://homepage3.nifty.com/tsato/xvkbd
+ XVKBD_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" LD="$(TARGET_CC)" \
+ 				CFLAGS="-O2 -I$(STAGING_DIR)/usr/include" USRLIBDIR="$(STAGING_DIR)/usr/lib"
  
- ATK_DEPENDENCIES = libglib2 host-pkgconf
+-XVKBD_DEPENDENCIES = xserver_xorg-server xlib_libXaw xlib_libXtst
++XVKBD_DEPENDENCIES = \
++	xlib_libICE \
++	xlib_libSM \
++	xlib_libX11 \
++	xlib_libXaw \
++	xlib_libXext \
++	xlib_libXmu \
++	xlib_libXpm \
++	xlib_libXt \
++	xlib_libXtst
  
--HOST_ATK_CONF_OPT = \
--		--disable-glibtest
--
  $(eval $(autotools-package))
--$(eval $(host-autotools-package))
+ 
