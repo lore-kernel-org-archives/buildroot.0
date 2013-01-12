@@ -1,49 +1,50 @@
-From: =?ISO-8859-1?Q?Stefan_Fr=F6berg?= <stefan.froberg@petroprogram.com>
-Date: Sat, 12 Jan 2013 15:44:04 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-01-11
-In-Reply-To: <20130112073425.EE2C852C090@lolut.humanoidz.org>
-References: <20130112073425.EE2C852C090@lolut.humanoidz.org>
-Message-ID: <50F168A4.7080607@petroprogram.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Jan 2013 16:19:48 +0100
+Subject: [Buildroot] Next Buildroot Developers Meeting hosted by Google
+Message-ID: <20130112161948.6cbbcef8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Dear Buildroot developers and contributors,
 
-12.1.2013 9:34, Thomas Petazzoni kirjoitti:
-> Hello,
->
-> On 2013-01-11, 144 random build tests have been done and
-> submitted on autobuild.buildroot.net.
->  98 builds have been successful
->  46 builds have failed
->
-> Below the results of the failed builds. Successful builds are omitted.
->
->
-> Build 9d1efa77f742863e41de3a172d2041657b523be6
-> ==============================================
->
-> Status         : NOK
-> Failure reason : proxychains-3.1
-> Architecture   : arm
-> Submitted by   : Thomas Petazzoni (Free Electrons build server)
-> Submitted at   : 2013-01-11 22:25:57
-> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=cc06757bed3fb41ff57b5fb05d53f7bcf79414b7
-> End of log     : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/build-end.log
-> Complete log   : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/build.log.bz2
-> Configuration  : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/config
-> Defconfig      : http://autobuild.buildroot.net/results/9d1efa77f742863e41de3a172d2041657b523be6/defconfig
->
+I am proud to announce that the upcoming Buildroot Developers Meeting
+(taking place February 4-5th in Brussels, Belgium) will be hosted by
+Google.
 
-Did you manage to compile that newer version of proxychains (4.4) for arm ?
+Google is currently using Buildroot to build the embedded Linux systems
+in some of the embedded devices used for their Google Fiber [1]
+project. The source code of their modified Buildroot is available [2].
 
-http://lists.busybox.net/pipermail/buildroot/2013-January/065081.html
+Thanks to this, one of the Google developer located in Brussels
+contacted me this week, proposing to host the upcoming Buildroot
+Developers Meeting. After discussion with Peter, we decided to accept
+the proposal.
 
-In x86 both 3.1 and 4.4 build without problem.
+Therefore, Google will be offering the meeting room, Internet
+connection (which, supposedly, should work a lot better than the one of
+Hotel Grumps in Barcelona, for those who remember), free lunch and
+refreshments for the participants.
 
-Regards
-Stefan
+The meeting location will therefore be the Google Brussels office,
+located Chauss?e d'Etterbeek 180, 1040 Brussels. This is only a 5-10
+minutes walk for the original location, and is still located in
+Brussels center, easily reachable by common transportation.
+
+I hereby would like to thank Google for hosting this meeting, and
+therefore providing a nice place for Buildroot developers to work and
+discuss on our project.
+
+Best regards,
+
+Thomas
+
+[1] https://fiber.google.com/about/
+[2] https://gfiber.googlesource.com/buildroot/+/master
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
