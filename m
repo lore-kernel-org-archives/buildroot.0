@@ -1,44 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 21:45:42 +0100
-Subject: [Buildroot] [PATCH 1/3] Makefile: export BR2_CONFIG_FILE,
-	pointing to our .config
-In-Reply-To: <50EC2CE0.2050106@mind.be> (Arnout Vandecappelle's message of
- "Tue, 08 Jan 2013 15:27:44 +0100")
-References: <cover.1357595083.git.yann.morin.1998@free.fr>
- <201301081351.38832.yann.morin.1998@free.fr>
- <50EC1A1B.5080804@mind.be>
- <201301081446.01172.yann.morin.1998@free.fr>
- <50EC2CE0.2050106@mind.be>
-Message-ID: <87d2x8x155.fsf@dell.be.48ers.dk>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 13 Jan 2013 22:28:41 +0100
+Subject: [Buildroot] [PATCH v2 0/2] Makefile: add toolchain target
+In-Reply-To: <CAHXCMM+DeOJgvU4iOuJ1RnBcHsdg465xVFNRiJpWndP5gBB2YQ@mail.gmail.com>
+References: <1356086190-906-1-git-send-email-fabio.porcedda@gmail.com>
+ <CAHkwnC9sKsQYLaV5teV7zhtCyyvAHee=ZmS+3ytarg-oCnucpA@mail.gmail.com>
+ <CAHXCMM+DeOJgvU4iOuJ1RnBcHsdg465xVFNRiJpWndP5gBB2YQ@mail.gmail.com>
+Message-ID: <CAHkwnC-M-DCCzY2DUw7XPqFBu9y3r5xgp7uC1-7SSV-pnHLbEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Sun, Jan 13, 2013 at 3:14 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Fabio, all,
 
-Hi,
+Hi Samuel,
 
- >> I was not referring to our .mk files, but rather to the packages themselves.
- >> I did a quick survey in 110+ packages, and:
- >> - kconfig-based packages are not affected: kernel, uClibc, busybox, ct-ng
- >> - packages using CONFIG_FILE:
- >> - gdb:     gdb/sim/ppc/Makefile.in:CONFIG_FILE = @sim_config@
- >> - xbmc:    xbmc/lib/freetype/builds/detect.mk:ifndef CONFIG_FILE
- >> - no package uses DOT_CONFIG
- >> - openbricks is using DOT_CONFIG, too
+> 2013/1/7 Fabio Porcedda <fabio.porcedda@gmail.com>:
+>> On Fri, Dec 21, 2012 at 11:36 AM, Fabio Porcedda
+>> <fabio.porcedda@gmail.com> wrote:
+>>> Hi all,
+>>> this patch set is to add a toolchain target to be able
+>>> to build only the toolchain right after a defconfig or a clean.
+>>>
+>>> Best regards
+>>>
+>>> Fabio Porcedda (2):
+>>>   Makefile: rename cross target -> toolchain
+>>>   Makefile: use toolchain target in the world target
+>>>
+> Though it makes sense to me to squash these 2 patches into a single
+> one, you have my ack for the whole serie:
+> Acked-by: Samuel Martin <s.martin49@gmail.com>
 
- Arnout>  But if you anyway change the name, BUILDROOT_CONFIG is better than
- Arnout> the non-specific DOT_CONFIG.
+Thanks for reviewing the patch set.
 
- Arnout>  How long can we discuss about a name? :-)
+Now i think too that is better to squash them.
+I will send a updated patch.
 
-Long ;)
-
-I like BUILDROOT_CONFIG. It's unique and it's meaning is very
-obvious. Yann, care to rework the series to use BUILDROOT_CONFIG
-instead?
-
--- 
-Bye, Peter Korsgaard
+Best regards
+--
+Fabio Porcedda
