@@ -1,40 +1,86 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 23:16:04 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	yem-export-vars
-In-Reply-To: <cover.1358113846.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 13 Jan 2013 22:52:19 +0100")
-References: <cover.1358113846.git.yann.morin.1998@free.fr>
-Message-ID: <8738y4vie3.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 13 Jan 2013 23:09:05 +0100
+Subject: [Buildroot] [git commit] Makefile: export a few variables to help
+	support scripts
+Message-ID: <20130113221602.3C91A99E9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2b0f455254149bd0c41c463a58c00d218922f002
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> Hello All!
- Yann> This series introduces exporting a variable, $(BUILDROOT_CONFIG), that
- Yann> contains the fully-qualified path to out .config.
+Support scripts (in support/) may need to parse the .config file, so give
+them an easy access to it, by exporting BUILDROOT_CONFIG with the fully-
+qualified path to .config.
 
- Yann> In some cases, scripts in support/ need to parse our .config (eg. the
- Yann> dependency-checking script needs to check the conformity of rxternal
- Yann> toolchain features).
+Also, post-build scripts may need to reference a few locations, so export
+those, too.
 
- Yann> Also, some Makefile fragments (eg. the crosstool-Ng backend) need to
- Yann> refer to this config file for make-dependency-checking.
+Note: we export both O and BASE_DIR. Although they are the same, BASE_DIR
+is used internally, while O is used on the command line, which makes it a
+bit ambiguous to know which to use. As users use O= on the command line,
+they will probably tend to use that in their post-build scripts.
 
- Yann> This was currently done in different ad-hoc manners, and is not scalable.
+Update doc accordingly.
 
- Yann> I'll also use it later to retrieve the password encoding scheme when
- Yann> creating users from packages.
+[Peter: fixed typo]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile                         |   11 +++++++++++
+ docs/manual/customize-rootfs.txt |    7 +++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
- Yann> Changes v1 -> v2:
- Yann>   - rename BR2_CONFIG_FILE -> BUILDROOT_CONFIG (Arnout)
- Yann>   - use $(BUILDROOT_CONFIG) in top-level Makefile, too (Arnout)
-
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index 074674a..5a83251 100644
+--- a/Makefile
++++ b/Makefile
+@@ -91,6 +91,8 @@ EXTRAMAKEARGS = O=$(O)
+ NEED_WRAPPER=y
+ endif
+ 
++BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
++
+ # Pull in the user's configuration file
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(CONFIG_DIR)/.config
+@@ -282,6 +284,15 @@ HOSTCC  := $(CCACHE) $(HOSTCC)
+ HOSTCXX := $(CCACHE) $(HOSTCXX)
+ endif
+ 
++# Scripts in support/ or post-build scripts may need to reference
++# these locations, so export them so it is easier to use
++export BUILDROOT_CONFIG
++export TARGET_DIR
++export STAGING_DIR
++export HOST_DIR
++export BINARIES_DIR
++export BASE_DIR O   # O and BASE_DIR are the same
++
+ #############################################################
+ #
+ # You should probably leave this stuff alone unless you know
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index a1a556b..4d3b559 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -37,6 +37,13 @@ there are a few ways to customize the resulting target filesystem.
+   certain package generates wrong or unneeded files, you should fix
+   that package rather than work around it with a post-build cleanup
+   script. _Among these first 3 methods, this one should be preferred_.
++  You may also use these variables in your post-build script:
++    - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
++    - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
++      xref:generic-package-reference[]
++    - +BINARIES_DIR+: the place where all binary files (aka images) are
++      stored
++    - +BASE_DIR+ (or +O+): the base output directory
+ 
+ * A special package, 'customize', stored in +package/customize+ can be
+   used. You can put all the files that you want to see in the final
