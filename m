@@ -1,27 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 17:31:20 +0100
-Subject: [Buildroot] [PATCH 1/1] pixman : bump version
-In-Reply-To: <1358081723-14990-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Sun, 13 Jan 2013 13:55:23 +0100")
-References: <1358081723-14990-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <876231yrhj.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Jan 2013 17:33:06 +0100
+Subject: [Buildroot] Release 1.0.0 of the Buildroot/Eclipse integration
+In-Reply-To: <CAKvQZ_1fR8xF0ckkOUMXJu-4O6bDPBq799JAFcME-JeO4duHjw@mail.gmail.com>
+References: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAKvQZ_1fR8xF0ckkOUMXJu-4O6bDPBq799JAFcME-JeO4duHjw@mail.gmail.com>
+Message-ID: <20130113173306.5f784221@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Dear Willy Lambert,
 
- Sagaert> pixman : bump version
- Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+On Sun, 13 Jan 2013 17:28:18 +0100, Willy Lambert wrote:
 
-Committed, thanks.
+> Do the patches miss ?
 
-In the future, please annotate your patches. This seems to be a resend
-of the patch you sent on 19/12 without any changes, so please mention
-that (under the --- line). Similar, if you made any change call it v2
-and mention what you have changed.
+Hum, not sure to understand. The two patches were sent as a reply to
+the introduction e-mail announcing the Buildroot/Eclipse integration
+release, like for all patch series.
 
+See:
+
+ http://lists.busybox.net/pipermail/buildroot/2013-January/065340.html
+ http://lists.busybox.net/pipermail/buildroot/2013-January/065341.html
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
