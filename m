@@ -1,34 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Jan 2013 20:54:13 +0100
-Subject: [Buildroot] [git commit] package/dvb-apps: bump version
-Message-ID: <20130113195429.C2CDA7FDE0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Jan 2013 21:04:00 +0100
+Subject: [Buildroot] [PATCH] dvbsnoop: new package dvbsnoop
+In-Reply-To: <1358082003-16009-2-git-send-email-c.schoenert@gmail.com>
+ (Carsten Schoenert's message of "Sun, 13 Jan 2013 14:00:03 +0100")
+References: <1358082003-16009-1-git-send-email-c.schoenert@gmail.com>
+ <1358082003-16009-2-git-send-email-c.schoenert@gmail.com>
+Message-ID: <8738y4yhn3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0295258dadea23b21eb0890b94e59b6258759268
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Carsten" == Carsten Schoenert <c.schoenert@gmail.com> writes:
 
-The new version has new transponders data for CZ.
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dvb-apps/dvb-apps.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Carsten> From: Carsten Schoenert <c.schoenert@t-online.de>
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 86af824..31a4ff8 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--DVB_APPS_VERSION        = 3fc7dfa68484
-+DVB_APPS_VERSION        = 83c746462ccb
- DVB_APPS_SITE           = http://linuxtv.org/hg/dvb-apps
- DVB_APPS_SITE_METHOD    = hg
- 
+ Carsten> dvbsnoop is a DVB/MPEG stream analyzer. It's designed to
+ Carsten> debug, dump or view the digital stream info available via
+
+ Carsten>     satellite   -> DVB-S, DVB-S2
+ Carsten>     cable       -> DVB-C, DVB-C2
+ Carsten>     terrestrial -> DVB-T, DVB-T2
+
+
+ Carsten> +config BR2_PACKAGE_DVBSNOOP
+ Carsten> +	bool "dvbsnoop"
+
+It needs largefile support, so I've added the needed dependency /
+comment on BR2_LARGEFILE.
+
+
+ Carsten> +	  Dvbsnoop itself doesn?t do the tuning on the frontend, this has to be
+
+Please stick to ascii for Config.in, menuconfig doesn't like utf-8.
+
+Committed with those fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
