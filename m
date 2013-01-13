@@ -1,18 +1,104 @@
 From: Carsten Schoenert <c.schoenert@gmail.com>
-Date: Sun, 13 Jan 2013 14:00:02 +0100
-Subject: [Buildroot] [PATCH v3] dvbsnoop: new package
-Message-ID: <1358082003-16009-1-git-send-email-c.schoenert@gmail.com>
+Date: Sun, 13 Jan 2013 14:00:03 +0100
+Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_dvbsnoop=3A_new_package_dvbsnoo?=
+	=?utf-8?q?p?=
+In-Reply-To: <1358082003-16009-1-git-send-email-c.schoenert@gmail.com>
+References: <1358082003-16009-1-git-send-email-c.schoenert@gmail.com>
+Message-ID: <1358082003-16009-2-git-send-email-c.schoenert@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Carsten Schoenert <c.schoenert@t-online.de>
 
-this is the 3rd version of the new package dvbsnoop. I've done more
-rework as suggested by Thomas. If still something wron just let me
-know.
+dvbsnoop is a DVB/MPEG stream analyzer. It's designed to debug, dump or
+view the digital stream info available via
 
-Regards
-Carsten
+    satellite   -> DVB-S, DVB-S2
+    cable       -> DVB-C, DVB-C2
+    terrestrial -> DVB-T, DVB-T2
+
+dvbsnoop can be used on any digital settopbox that running on linux and
+provides the DVB APIv3. It's also usable on classical PCs that contains
+a DVB hardware (PCI Card or USB Plug).
+
+Signed-off-by: Carsten Schoenert <c.schoenert@gmail.com>
+---
+Changes for v3: 
+    - reworking the helping text for the package as requested by
+      Thomas Petazzoni
+    - change _LICENSE_FILE -> _LICENSE_FILES
+
+Changes for v2: 
+    - moved from 'Audio and video ...' to 'Hardware Handling' as  
+      suggested by Yann E. Morin
+    - removing _SITE_METHOD from the Makefile
+
+ package/Config.in            |    1 +
+ package/dvbsnoop/Config.in   |   21 +++++++++++++++++++++
+ package/dvbsnoop/dvbsnoop.mk |   12 ++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/dvbsnoop/Config.in
+ create mode 100644 package/dvbsnoop/dvbsnoop.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index fcc2480..126f450 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -218,6 +218,7 @@ endif
+ source "package/dmidecode/Config.in"
+ source "package/dmraid/Config.in"
+ source "package/dvb-apps/Config.in"
++source "package/dvbsnoop/Config.in"
+ source "package/eeprog/Config.in"
+ source "package/evtest/Config.in"
+ source "package/flashrom/Config.in"
+diff --git a/package/dvbsnoop/Config.in b/package/dvbsnoop/Config.in
+new file mode 100644
+index 0000000..a0ba834
+--- /dev/null
++++ b/package/dvbsnoop/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_DVBSNOOP
++	bool "dvbsnoop"
++	help
++	  Dvbsnoop is just a simple tool to analyze, view or debug a transport
++	  stream (TS), program elementary stream (PES) or even a program stream
++	  (PS). Dvbsnoop is trying to get input mostly direct from a frontend
++	  (satellite or cable tuner inside a set-top box for example) via DVB
++	  APIv3 to view into a TS, or a demux to view PES or PS (also mostly
++	  inside the set-top box or even PCI Card or USB Plug) but also from a
++	  file (recorded TS).
++	  Dvbsnoop is working well on SD transport streams but may have some
++	  limited functionality on HD transport streams (DVB-{C,S,T}2 because
++	  of missing knowledge how to handle it.
++
++	  Dvbsnoop itself doesn?t do the tuning on the frontend, this has to be
++	  done by external helpers or manually driver call.
++	  The dvbsnoop tool was written while developing the software Neutrino on
++	  the set-top box DBox2.
++
++	  http://dvbsnoop.sourceforge.net
++	  http://en.wikipedia.org/wiki/DBox2
+diff --git a/package/dvbsnoop/dvbsnoop.mk b/package/dvbsnoop/dvbsnoop.mk
+new file mode 100644
+index 0000000..dd62e8c
+--- /dev/null
++++ b/package/dvbsnoop/dvbsnoop.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# dvbsnoop
++#
++#############################################################
++
++DVBSNOOP_VERSION        = 1.4.50
++DVBSNOOP_SITE           = http://downloads.sourceforge.net/project/dvbsnoop/dvbsnoop/dvbsnoop-$(DVBSNOOP_VERSION)
++DVBSNOOP_LICENSE        = GPLv2
++DVBSNOOP_LICENSE_FILES  = COPYING
++
++$(eval $(autotools-package))
+--
+1.7.10.4
