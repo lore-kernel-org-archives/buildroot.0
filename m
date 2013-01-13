@@ -1,64 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jan 2013 22:52:19 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	yem-export-vars
-Message-ID: <cover.1358113846.git.yann.morin.1998@free.fr>
+Date: Sun, 13 Jan 2013 22:52:20 +0100
+Subject: [Buildroot] [PATCH 1/4] Makefile: export a few variables to help
+	support scripts
+In-Reply-To: <cover.1358113846.git.yann.morin.1998@free.fr>
+References: <cover.1358113846.git.yann.morin.1998@free.fr>
+Message-ID: <d9e98990b22abeb96d52d72687ccf52883521e69.1358113846.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Support scripts (in support/) may need to parse the .config file, so give
+them an easy access to it, by exporting BUILDROOT_CONFIG with the fully-
+qualified path to .config.
 
-This series introduces exporting a variable, $(BUILDROOT_CONFIG), that
-contains the fully-qualified path to out .config.
+Also, post-build scripts may need to reference a few locations, so export
+those, too.
 
-In some cases, scripts in support/ need to parse our .config (eg. the
-dependency-checking script needs to check the conformity of rxternal
-toolchain features).
+Note: we export both O and BASE_DIR. Although they are the same, BASE_DIR
+is used internally, while O is used on the command line, which makes it a
+bit ambiguous to know which to use. As users use O= on the command line,
+they will probably tend to use that in their post-build scripts.
 
-Also, some Makefile fragments (eg. the crosstool-Ng backend) need to
-refer to this config file for make-dependency-checking.
+Update doc accordingly.
 
-This was currently done in different ad-hoc manners, and is not scalable.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+cc: Peter Korsgaard <jacmet@uclibc.org>
+---
+ Makefile                         |   11 +++++++++++
+ docs/manual/customize-rootfs.txt |    7 +++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-I'll also use it later to retrieve the password encoding scheme when
-creating users from packages.
-
-
-Changes v1 -> v2:
-  - rename BR2_CONFIG_FILE -> BUILDROOT_CONFIG (Arnout)
-  - use $(BUILDROOT_CONFIG) in top-level Makefile, too (Arnout)
-
-
-The following changes since commit 766862434b728c3d647b5544844d305edd5f541a:
-
-  qwt: bump version (2013-01-13 22:43:23 +0100)
-
-are available in the git repository at:
-  git://gitorious.org/buildroot/buildroot.git yem-export-vars
-
-Yann E. MORIN (4):
-      Makefile: export a few variables to help support scripts
-      Makefile: use newly-introduced BUILDROOT_CONFIG
-      support/dependencies: use newly-introduced BUILDROOT_CONFIG
-      toolchain/crostool-ng: use newly-introduced BUILDROOT_CONFIG
-
- Makefile                                         |   27 ++++--
- docs/manual/customize-rootfs.txt                 |    7 ++
- support/dependencies/dependencies.mk             |    1 -
- support/dependencies/dependencies.sh             |   10 +-
- toolchain/toolchain-crosstool-ng/crosstool-ng.mk |  114 +++++++++++-----------
- 5 files changed, 88 insertions(+), 71 deletions(-)
-
-Regards,
-Yann E. MORIN
-
+diff --git a/Makefile b/Makefile
+index 074674a..5a83251 100644
+--- a/Makefile
++++ b/Makefile
+@@ -91,6 +91,8 @@ EXTRAMAKEARGS = O=$(O)
+ NEED_WRAPPER=y
+ endif
+ 
++BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
++
+ # Pull in the user's configuration file
+ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+ -include $(CONFIG_DIR)/.config
+@@ -282,6 +284,15 @@ HOSTCC  := $(CCACHE) $(HOSTCC)
+ HOSTCXX := $(CCACHE) $(HOSTCXX)
+ endif
+ 
++# Scripts in support/ or post-build scripts may need to reference
++# these locations, so export them so it is easier to use
++export BUILDROOT_CONFIG
++export TARGET_DIR
++export STAGING_DIR
++export HOST_DIR
++export BINARIES_DIR
++export BASE_DIR O   # O and BASE_DIR are the same
++
+ #############################################################
+ #
+ # You should probably leave this stuff alone unless you know
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index a1a556b..fe3ea7e 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -37,6 +37,13 @@ there are a few ways to customize the resulting target filesystem.
+   certain package generates wrong or unneeded files, you should fix
+   that package rather than work around it with a post-build cleanup
+   script. _Among these first 3 methods, this one should be preferred_.
++  You may also use these variables in your post-build script:
++    - +BUILDROOT_CONFIG+: the path to the Buildroot .config file
++    - +HOST_DIR+, +STAGING_DIR+, +TARGET_DIR+: see
++      xref:generic-package-reference[]
++    - +BINARIES_DIR+: the place were all binary files (aka images) are
++      stored
++    - +BASE_DIR+ (or +O+): the base output directory
+ 
+ * A special package, 'customize', stored in +package/customize+ can be
+   used. You can put all the files that you want to see in the final
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
