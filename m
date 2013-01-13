@@ -1,162 +1,64 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Jan 2013 22:41:31 +0100
-Subject: [Buildroot] [git commit] libqwt: new package
-Message-ID: <20130113214508.D6DE499E9A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Jan 2013 22:52:19 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	yem-export-vars
+Message-ID: <cover.1358113846.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=afba84d1fcec911094ba54e1777155fa76913fe1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-Patch initially written by Thomas Petazzoni, then reworked and updated
-by Laurent Gonzalez, and finally cleaned up by Thomas again.
+This series introduces exporting a variable, $(BUILDROOT_CONFIG), that
+contains the fully-qualified path to out .config.
 
-[Peter: generic-package, deps, download, rename to qwt, move under Qt]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                            |    1 +
- package/qwt/Config.in                        |   22 +++++++++++
- package/qwt/qwt-remove-installed-check.patch |   32 ++++++++++++++++
- package/qwt/qwt.mk                           |   52 ++++++++++++++++++++++++++
- 4 files changed, 107 insertions(+), 0 deletions(-)
+In some cases, scripts in support/ need to parse our .config (eg. the
+dependency-checking script needs to check the conformity of rxternal
+toolchain features).
 
-diff --git a/package/Config.in b/package/Config.in
-index ea0586b..4f05665 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -143,6 +143,7 @@ comment "QT libraries and helper libraries"
- source "package/grantlee/Config.in"
- source "package/qextserialport/Config.in"
- source "package/qtuio/Config.in"
-+source "package/qwt/Config.in"
- endif
- 
- source "package/x11r7/Config.in"
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-new file mode 100644
-index 0000000..d72b30e
---- /dev/null
-+++ b/package/qwt/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_QWT
-+	bool "qwt"
-+	depends on BR2_PACKAGE_QT_GUI_MODULE
-+	help
-+	  Qwt is a graphics extension to the Qt GUI application
-+	  framework. It provides a 2D plotting widget and more.
-+
-+	  http://http://sourceforge.net/projects/qwt
-+
-+if BR2_PACKAGE_QWT
-+
-+config BR2_PACKAGE_QWT_SVG
-+	bool "SVG support"
-+	select BR2_PACKAGE_QT_SVG
-+
-+config BR2_PACKAGE_QWT_MATHML
-+	bool "MathML support"
-+
-+endif
-+
-+comment "qwt depends on QT gui module"
-+	depends on !BR2_PACKAGE_QT_GUI_MODULE
-diff --git a/package/qwt/qwt-remove-installed-check.patch b/package/qwt/qwt-remove-installed-check.patch
-new file mode 100644
-index 0000000..7490a7b
---- /dev/null
-+++ b/package/qwt/qwt-remove-installed-check.patch
-@@ -0,0 +1,32 @@
-+Remove useless check at build time
-+
-+At build time, Qwt looks whether the Qwt libraries are already
-+installed in the destination directory, to avoid confusion between
-+libraries installed system-wide and locally-built shared
-+libraries. However, this behaviour conflicts with how Buildroot builds
-+and installs libraries, so get rid of it.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: qwt-6.0.0/qwtbuild.pri
-+===================================================================
-+--- qwt-6.0.0.orig/qwtbuild.pri	2011-09-12 19:37:35.663275952 +0200
-++++ qwt-6.0.0/qwtbuild.pri	2011-09-12 19:37:41.913275949 +0200
-+@@ -53,17 +53,3 @@
-+ !debug_and_release {
-+     OBJECTS_DIR       = obj
-+ }
-+-
-+-unix {
-+-
-+-    exists( $${QMAKE_LIBDIR_QT}/libqwt.* ) {
-+-
-+-        # On some Linux distributions the Qwt libraries are installed 
-+-        # in the same directory as the Qt libraries. Unfortunately
-+-        # qmake always adds QMAKE_LIBDIR_QT at the beginning of the 
-+-        # linker path, so that the installed libraries will be
-+-        # used instead of the local ones.
-+-
-+-        error( "local build will conflict with $${QMAKE_LIBDIR_QT}/libqwt.*" )
-+-    }
-+-}
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-new file mode 100644
-index 0000000..1560ea4
---- /dev/null
-+++ b/package/qwt/qwt.mk
-@@ -0,0 +1,52 @@
-+#############################################################
-+#
-+# qwt
-+#
-+#############################################################
-+
-+QWT_VERSION = 6.0.1
-+QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
-+QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
-+QWT_INSTALL_STAGING = YES
-+QWT_DEPENDENCIES = qt
-+
-+QWT_CONFIG  =    's%QWT_INSTALL_PREFIX.*/usr/local/.*%QWT_INSTALL_PREFIX = /usr%'
-+QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtDesigner.*$$/\# QWT_CONFIG += QwtDesigner/'
-+QWT_CONFIG += -e 's%/features%/mkspecs/features%'
-+
-+ifeq ($(BR2_PACKAGE_QWT_SVG),y)
-+	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/QWT_CONFIG += QwtSvg/'
-+else
-+	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtSvg.*$$/\# QWT_CONFIG += QwtSvg/'
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QWT_MATHML),y)
-+	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtMathML.*$$/QWT_CONFIG += QwtMathML/'
-+else
-+	QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtMathML.*$$/\# QWT_CONFIG += QwtMathML/'
-+endif
-+
-+define QWT_CONFIGURE_CMDS
-+	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
-+	(cd $(@D); $(QT_QMAKE))
-+endef
-+
-+define QWT_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+# After installation, we fixup the INSTALL_PREFIX in qwtconfig.pri so
-+# that when building with qmake, -L$(STAGING_DIR)/usr/lib is used and
-+# not -L/usr/lib.
-+define QWT_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) install INSTALL_ROOT=$(STAGING_DIR)
-+	$(SED) "s%QWT_INSTALL_PREFIX = .*%QWT_INSTALL_PREFIX = $(STAGING_DIR)/usr%" \
-+		$(STAGING_DIR)/usr/mkspecs/features/qwtconfig.pri
-+endef
-+
-+define QWT_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install INSTALL_ROOT=$(TARGET_DIR)
-+	rm -Rf $(TARGET_DIR)/usr/mkspecs
-+endef
-+
-+$(eval $(generic-package))
+Also, some Makefile fragments (eg. the crosstool-Ng backend) need to
+refer to this config file for make-dependency-checking.
+
+This was currently done in different ad-hoc manners, and is not scalable.
+
+I'll also use it later to retrieve the password encoding scheme when
+creating users from packages.
+
+
+Changes v1 -> v2:
+  - rename BR2_CONFIG_FILE -> BUILDROOT_CONFIG (Arnout)
+  - use $(BUILDROOT_CONFIG) in top-level Makefile, too (Arnout)
+
+
+The following changes since commit 766862434b728c3d647b5544844d305edd5f541a:
+
+  qwt: bump version (2013-01-13 22:43:23 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-export-vars
+
+Yann E. MORIN (4):
+      Makefile: export a few variables to help support scripts
+      Makefile: use newly-introduced BUILDROOT_CONFIG
+      support/dependencies: use newly-introduced BUILDROOT_CONFIG
+      toolchain/crostool-ng: use newly-introduced BUILDROOT_CONFIG
+
+ Makefile                                         |   27 ++++--
+ docs/manual/customize-rootfs.txt                 |    7 ++
+ support/dependencies/dependencies.mk             |    1 -
+ support/dependencies/dependencies.sh             |   10 +-
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |  114 +++++++++++-----------
+ 5 files changed, 88 insertions(+), 71 deletions(-)
+
+Regards,
+Yann E. MORIN
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
