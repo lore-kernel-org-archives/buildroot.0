@@ -1,66 +1,22 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 13 Jan 2013 19:39:59 +0100
-Subject: [Buildroot] [PATCH 1/1 v2] Hide issue and hostname menu when using
-	a custom skeleton.
-Message-ID: <1358102400-9628-1-git-send-email-sagaert.johan@skynet.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Jan 2013 19:55:50 +0100
+Subject: [Buildroot] [PATCH 1/1] Qt : bump version to latest 4.8.4
+In-Reply-To: <1358081260-14635-1-git-send-email-sagaert.johan@skynet.be>
+ (Sagaert Johan's message of "Sun, 13 Jan 2013 13:47:40 +0100")
+References: <1358081260-14635-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <871udozzd5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Only show hostname and issue options when the default skeleton is selected.
-Moved the menu sections so that when a custom skeleton is selected the 
-issue and hostname options are hidden.
+ Sagaert> Qt : bump verson to latest release of QT 4
+ Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- v2 : Only hide issue and hostname menu when a custom skeleton is selected.
+Committed, thanks (with a tweaked commit message)
 
- system/Config.in | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/system/Config.in b/system/Config.in
-index 69863c4..5b38cae 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -1,17 +1,5 @@
- menu "System configuration"
- 
--config BR2_TARGET_GENERIC_HOSTNAME
--       string "System hostname"
--       default "buildroot"
--       help
--         Select system hostname to be stored in /etc/hostname.
--
--config BR2_TARGET_GENERIC_ISSUE
--       string "System banner"
--       default "Welcome to Buildroot"
--       help
--         Select system banner (/etc/issue) to be displayed at login.
--
- choice
- 	bool "Passwords encoding"
- 	default BR2_TARGET_GENERIC_PASSWD_MD5
-@@ -173,6 +161,18 @@ endif
- 
- if BR2_ROOTFS_SKELETON_DEFAULT
- 
-+config BR2_TARGET_GENERIC_HOSTNAME
-+       string "System hostname"
-+       default "buildroot"
-+       help
-+         Select system hostname to be stored in /etc/hostname.
-+
-+config BR2_TARGET_GENERIC_ISSUE
-+       string "System banner"
-+       default "Welcome to Buildroot"
-+       help
-+         Select system banner (/etc/issue) to be displayed at login.
-+
- config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	string "Root password"
- 	default ""
 -- 
-1.8.0.1
+Bye, Peter Korsgaard
