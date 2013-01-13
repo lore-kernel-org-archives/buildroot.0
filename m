@@ -1,70 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jan 2013 18:59:28 +0100
-Subject: [Buildroot] [PATCH 1/1 v3] New package : GNU SASL Library -
- libgsasl
-In-Reply-To: <1358098580-8796-1-git-send-email-sagaert.johan@skynet.be>
-References: <1358098580-8796-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20130113185928.6e6c1a87@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun, 13 Jan 2013 19:39:59 +0100
+Subject: [Buildroot] [PATCH 1/1 v2] Hide issue and hostname menu when using
+	a custom skeleton.
+Message-ID: <1358102400-9628-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
 
-On Sun, 13 Jan 2013 18:36:20 +0100, Sagaert Johan wrote:
-> 
-> GNU SASL is an implementation of the Simple Authentication and Security Layer framework
-> and a few common SASL mechanisms.
-> SASL is used by network servers (e.g., IMAP, SMTP) to request authentication from clients,
-> and in clients to authenticate against servers.
+Only show hostname and issue options when the default skeleton is selected.
+Moved the menu sections so that when a custom skeleton is selected the 
+issue and hostname options are hidden.
 
-Commit logs must be wrapped to ~75-80 columns.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ v2 : Only hide issue and hostname menu when a custom skeleton is selected.
 
-> libgsasl will be used in future versions of libesmtp.
-> 
-> Patch v3 : corrected license information in libgsasl.mk
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+ system/Config.in | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-The changelog must be after the "---" marker. The last paragraph of the
-commit log should be separated with the Signed-off-by line by one
-empty new line.
-
-> --- /dev/null
-> +++ b/package/libgsasl/libgsasl.mk
-> @@ -0,0 +1,18 @@
-> +#############################################################
-> +#
-> +# libgsasl
-> +#
-> +#############################################################
-> +LIBGSASL_VERSION = 1.8.0
-> +LIBGSASL_SOURCE = libgsasl-$(LIBGSASL_VERSION).tar.gz
-> +LIBGSASL_SITE = ftp://ftp.gnu.org/gnu/gsasl
-
-Please use BR2_GNU_MIRROR. So:
-
-LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
-
-> +LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
-> +LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
-> +LIBGSASL_INSTALL_STAGING = YES
-> +LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
-> +
-> +$(eval $(autotools-package))
-> +
-> +
-> +  
-> +
-
-Please remove those last empty lines.
-
-Thanks!
-
-Thomas
+diff --git a/system/Config.in b/system/Config.in
+index 69863c4..5b38cae 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -1,17 +1,5 @@
+ menu "System configuration"
+ 
+-config BR2_TARGET_GENERIC_HOSTNAME
+-       string "System hostname"
+-       default "buildroot"
+-       help
+-         Select system hostname to be stored in /etc/hostname.
+-
+-config BR2_TARGET_GENERIC_ISSUE
+-       string "System banner"
+-       default "Welcome to Buildroot"
+-       help
+-         Select system banner (/etc/issue) to be displayed at login.
+-
+ choice
+ 	bool "Passwords encoding"
+ 	default BR2_TARGET_GENERIC_PASSWD_MD5
+@@ -173,6 +161,18 @@ endif
+ 
+ if BR2_ROOTFS_SKELETON_DEFAULT
+ 
++config BR2_TARGET_GENERIC_HOSTNAME
++       string "System hostname"
++       default "buildroot"
++       help
++         Select system hostname to be stored in /etc/hostname.
++
++config BR2_TARGET_GENERIC_ISSUE
++       string "System banner"
++       default "Welcome to Buildroot"
++       help
++         Select system banner (/etc/issue) to be displayed at login.
++
+ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	string "Root password"
+ 	default ""
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.8.0.1
