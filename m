@@ -1,32 +1,55 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 13 Jan 2013 14:42:14 +0100
-Subject: [Buildroot] [PATCH 1/1] ofono : bump version
-Message-ID: <1358084534-16502-1-git-send-email-sagaert.johan@skynet.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Jan 2013 15:07:09 +0100
+Subject: [Buildroot] [PATCH 1/1] cairo : bump version
+In-Reply-To: <1358084194-16226-1-git-send-email-sagaert.johan@skynet.be>
+References: <1358084194-16226-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20130113150709.76356160@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Sagaert Johan,
 
-ofono : bump version
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/ofono/ofono.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 13 Jan 2013 14:36:34 +0100, Sagaert Johan wrote:
+> 
+> cairo : bump version
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 6e6849b..e552eac 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -3,7 +3,7 @@
- # ofono
- #
- #############################################################
--OFONO_VERSION = 1.6
-+OFONO_VERSION = 1.7
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_DEPENDENCIES = \
- 	host-pkgconf \
+Thanks for all those version bump patches. Unfortunately, the commit
+log is wrong: you repeat two times the same thing.
+
+If you put "cairo: bump version" in the first line of your commit log,
+then don't put it again, otherwise it appears twice!
+
+And it is also customary to mention the version to which the package is
+being bumped in the commit title.
+
+So, your commit logs should be:
+
+===
+cairo: bump version to 1.12.8
+
+Signed-off-by: ...
+===
+
+If there are more details to be provided:
+
+===
+cairo: bump version to 1.12.8
+
+The patch foobar.patch has become useless due to upstream changes. A
+new patch barfoo.patch is introduced in order to fix problem blabla.
+
+Signed-off-by: ...
+===
+
+Thanks,
+
+Thomas
 -- 
-1.8.0.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
