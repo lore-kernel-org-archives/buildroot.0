@@ -1,38 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Jan 2013 20:31:40 +0100
-Subject: [Buildroot] [git commit] hiawatha: needs threads
-Message-ID: <20130113193536.F06A299347@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Jan 2013 20:39:42 +0100
+Subject: [Buildroot] [PATCH] linux, uboot, mxs-bootlets,
+	barebox: avoid double slash in CUSTOM_TARBALL
+In-Reply-To: <1357769564-11514-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 9 Jan 2013 23:12:44 +0100")
+References: <1357769564-11514-1-git-send-email-arnout@mind.be>
+Message-ID: <87fw24yirl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6649d6da3f36e973e87d8a73c9618b3215e16253
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/9bb3bdb9de43fc6bab119674885df2a28e5559ee/
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> The $(dir ...) function leaves a slash at the end, so that the LINUX_SITE
+ Arnout> variable for a custom tarball ends in a slash. The DOWNLOAD macro adds
+ Arnout> another slash between SITE and SOURCE, which results in a double slash in
+ Arnout> the download URL.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/hiawatha/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Arnout> Fix this by stripping off the final slash from the _SITE in all packages that
+ Arnout> have a custom tarball.
 
-diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
-index ac0aa10..fbed1bc 100644
---- a/package/hiawatha/Config.in
-+++ b/package/hiawatha/Config.in
-@@ -1,7 +1,11 @@
-+comment "hiawatha requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
- config BR2_PACKAGE_HIAWATHA
- 	bool "hiawatha"
- 	# needs fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Hiawatha is a webserver for Unix and has been built with
- 	  security in mind. This resulted in a highly secure
+ Arnout> Fixes https://bugs.busybox.net/show_bug.cgi?id=5846
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
