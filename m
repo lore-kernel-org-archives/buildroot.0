@@ -1,38 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 11:01:01 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2013-01-12
-In-Reply-To: <20130113073451.7234252C0FD@lolut.humanoidz.org> (Thomas
- Petazzoni's message of "Sun, 13 Jan 2013 08:34:51 +0100 (CET)")
-References: <20130113073451.7234252C0FD@lolut.humanoidz.org>
-Message-ID: <87mwwdz9k2.fsf@dell.be.48ers.dk>
+Date: Sun, 13 Jan 2013 11:03:13 +0100
+Subject: [Buildroot] Unknown key while verifying
+	buildroot-2012.11.1.tar.bz2
+In-Reply-To: <1358055731.573.YahooMailNeo@web163001.mail.bf1.yahoo.com>
+ (KianVine Chin's message of "Sat, 12 Jan 2013 21:42:11 -0800 (PST)")
+References: <1358055731.573.YahooMailNeo@web163001.mail.bf1.yahoo.com>
+Message-ID: <87ip71z9ge.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "KianVine" == KianVine Chin <kianvinechin@yahoo.com> writes:
 
 Hi,
 
- Thomas> Build 14ef98da6b0632e24514fef696fae9a650c90c96
- Thomas> ==============================================
+ KianVine> I have been searching around, but I just couldn't seem to be
+ KianVine> able to find the public key to verify
+ KianVine> buildroot-2012.11.1.tar.bz2.  Could someone help?  The key
+ KianVine> that is supposedly use to sign it is "DSA key ID 59C36319".
 
- Thomas> Status         : NOK
- Thomas> Failure reason : libelementary-1.7.4
- Thomas> Architecture   : i686
- Thomas> Submitted by   : Peter Korsgaard (gcc110)
- Thomas> Submitted at   : 2013-01-12 23:21:42
- Thomas> Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=83b716a23ad764a5571d7590ab6d38d64d8be13e
- Thomas> End of log     : http://autobuild.buildroot.net/results/14ef98da6b0632e24514fef696fae9a650c90c96/build-end.log
- Thomas> Complete log   : http://autobuild.buildroot.net/results/14ef98da6b0632e24514fef696fae9a650c90c96/build.log.bz2
- Thomas> Configuration  : http://autobuild.buildroot.net/results/14ef98da6b0632e24514fef696fae9a650c90c96/config
- Thomas> Defconfig      : http://autobuild.buildroot.net/results/14ef98da6b0632e24514fef696fae9a650c90c96/defconfig
+It's a key I made in early 2009 before the 2009.02 release. I was
+convinced that I had atleast sent it to the mit keyserver, but I also
+don't find it anywhere now.
 
-Seems like there's a problem with the recent ethumb/elementary
-change. Arout, any idea? libelementary doesn't explictly depend on
-host-pkgconf, but it should have gotten pulled in by E.G. ecore already.
+I've now sent it to subkeys.pgp.net / php.mit.edu / pool.sks-keyservers.net
+
+Thanks for letting us know.
 
 -- 
 Bye, Peter Korsgaard
