@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 21:24:51 +0100
-Subject: [Buildroot] [PATCH 1/3] libmhash: new package
-In-Reply-To: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 7 Jan 2013 15:12:58 -0300")
+Date: Sun, 13 Jan 2013 21:28:39 +0100
+Subject: [Buildroot] [PATCH 2/3] libmcrypt: new package
+In-Reply-To: <1357582380-22332-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 7 Jan 2013 15:12:59 -0300")
 References: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pq18x23w.fsf@dell.be.48ers.dk>
+ <1357582380-22332-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87libwx1xk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +16,36 @@ To: buildroot@busybox.net
 
  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  Gustavo> ---
- Gustavo>  package/Config.in            |    1 +
- Gustavo>  package/libmhash/Config.in   |    9 +++++++++
- Gustavo>  package/libmhash/libmhash.mk |   14 ++++++++++++++
- Gustavo>  3 files changed, 24 insertions(+), 0 deletions(-)
- Gustavo>  create mode 100644 package/libmhash/Config.in
- Gustavo>  create mode 100644 package/libmhash/libmhash.mk
+ Gustavo>  package/Config.in                       |    1 +
+ Gustavo>  package/libmcrypt/Config.in             |    7 +++++++
+ Gustavo>  package/libmcrypt/libmcrypt-nocxx.patch |   15 +++++++++++++++
+ Gustavo>  package/libmcrypt/libmcrypt.mk          |   21 +++++++++++++++++++++
+ Gustavo>  4 files changed, 44 insertions(+), 0 deletions(-)
+ Gustavo>  create mode 100644 package/libmcrypt/Config.in
+ Gustavo>  create mode 100644 package/libmcrypt/libmcrypt-nocxx.patch
+ Gustavo>  create mode 100644 package/libmcrypt/libmcrypt.mk
 
- Gustavo> diff --git a/package/Config.in b/package/Config.in
- Gustavo> index 0f397d6..942e62c 100644
- Gustavo> --- a/package/Config.in
- Gustavo> +++ b/package/Config.in
- Gustavo> @@ -370,6 +370,7 @@ source "package/beecrypt/Config.in"
- Gustavo>  source "package/gnutls/Config.in"
- Gustavo>  source "package/libgcrypt/Config.in"
- Gustavo>  source "package/libgpg-error/Config.in"
- Gustavo> +source "package/libmhash/Config.in"
- Gustavo>  source "package/libnss/Config.in"
- Gustavo>  source "package/nettle/Config.in"
- Gustavo>  source "package/ocf-linux/Config.in"
- Gustavo> diff --git a/package/libmhash/Config.in b/package/libmhash/Config.in
- Gustavo> new file mode 100644
- Gustavo> index 0000000..82b544f
- Gustavo> --- /dev/null
- Gustavo> +++ b/package/libmhash/Config.in
- Gustavo> @@ -0,0 +1,9 @@
- Gustavo> +config BR2_PACKAGE_LIBMHASH
- Gustavo> +	bool "libmhash"
- Gustavo> +	help
- Gustavo> +	  Mhash is a free (under GNU Lesser GPL) library which provides
- Gustavo> +	  a uniform interface to a large number of hash algorithms.
- Gustavo> +	  These algorithms can be used to compute checksums, message digests,
- Gustavo> +	  and other signatures. 
+ Gustavo> +++ b/package/libmcrypt/libmcrypt.mk
+ Gustavo> @@ -0,0 +1,21 @@
+ Gustavo> +#############################################################
+ Gustavo> +#
+ Gustavo> +# libmcrypt
+ Gustavo> +#
+ Gustavo> +#############################################################
+ Gustavo> +
+ Gustavo> +LIBMCRYPT_VERSION = 2.5.8
+ Gustavo> +LIBMCRYPT_SITE = http://downloads.sourceforge.net/project/mcrypt/Libmcrypt/$(LIBMCRYPT_VERSION)
+ Gustavo> +LIBMCRYPT_AUTORECONF = YES
+ Gustavo> +LIBMCRYPT_INSTALL_STAGING = YES
+ Gustavo> +LIBMCRYPT_LICENSE = LGPLv2.1
+ Gustavo> +LIBMCRYPT_LICENSE_FILES = COPYING.LIB
+ Gustavo> +
+ Gustavo> +define LIBMCRYPT_STAGING_LIBMCRYPT_CONFIG_FIXUP
+ Gustavo> +	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/libmcrypt-config
+ Gustavo> +	$(SED) "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" $(STAGING_DIR)/usr/bin/libmcrypt-config
 
-Trailing space. Committed with that fixed, thanks.
+I rewrote this to change both in a single sed invocation similar to
+other scripts and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
