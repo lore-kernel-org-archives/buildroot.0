@@ -1,97 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jan 2013 12:05:00 +0100
-Subject: [Buildroot] [PATCH 1/1] httping: new package
-In-Reply-To: <1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
-References: <y>
-	<1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
-Message-ID: <20130113120500.0ad7be3a@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 13 Jan 2013 08:25:15 -0300
+Subject: [Buildroot] [PATCH] hiawatha: needs threads
+Message-ID: <1358076315-25117-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gilles Talis,
+Fixes
+http://autobuild.buildroot.net/results/9bb3bdb9de43fc6bab119674885df2a28e5559ee/
 
-On Sat, 12 Jan 2013 16:29:32 -0800, Gilles Talis wrote:
-> Httping is like 'ping' but for http-requests.
-> 
-> Fixed commit following review
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/hiawatha/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Do not put such a comment in the commit. If you want to put a changelog
-with the differences since the first posting, it should go...
-
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> ---
-
-... here. I.e, after the "---" sign.
-
-That's because we don't want the changelog to end up forever in the
-Buildroot commit history.
-
-> +if BR2_PACKAGE_HTTPING
-> +
-> +config BR2_PACKAGE_HTTPING_OPENSSL
-> +	bool "OpenSSL support"
-> +	depends on BR2_PACKAGE_OPENSSL
-> +	default y
-> +	help
-> +	  Adds openSSL support to httping
-
-I'd say it should rather be:
-
-config BR2_PACKAGE_HTTPING_OPENSSL
-	bool "OpenSSL support"
-	select BR2_PACKAGE_OPENSSL
-	help
-	  Adds OpenSSL support to httping
-
-When we have sub-options to enable more features, we generally use
-"select" to make sure that the needed libraries are brought in.
-
-> +HTTPING_VERSION = 1.5.6
-
-Any reason not to use 1.5.7.
-
-> +HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
-> +HTTPING_SITE = http://www.vanheusden.com/httping
-> +HTTPING_LICENSE = GPLv3
-> +HTTPING_LICENSE_FILES = license.txt
-
-Actually, the license seems to be GPLv2. If you look at this
-license.txt file, it says:
-
-The license of this program can be obtained from:
-http://www.vanheusden.com/license.txt
-
-And if you look at this other license.txt file, it contains the text of
-GPLv2.
-
-> +define HTTPING_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" \
-> +		LD="$(TARGET_LD)" \
-> +		STRIP="$(TARGET_STRIP)" \
-> +		SSL=$(HTTPING_SSL) \
-> +		DEBUG=no \
-> +		TFO=$(HTTPING_TFO) -C $(@D)
-> +endef
-
-I saw your e-mail with your issues using TARGET_CONFIGURE_OPTS. But
-there shouldn't be any issue doing:
-
-define HTTPING_BUILD_CMDS
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
-		SSL=$(HTTPING_SSL) \
-		DEBUG=no \
-		TFO=$(HTTPING_TFO) -C $(@D)
-endef
-
-Thanks!
-
-Thomas
+diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
+index ac0aa10..fbed1bc 100644
+--- a/package/hiawatha/Config.in
++++ b/package/hiawatha/Config.in
+@@ -1,7 +1,11 @@
++comment "hiawatha requires a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
+ config BR2_PACKAGE_HIAWATHA
+ 	bool "hiawatha"
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Hiawatha is a webserver for Unix and has been built with
+ 	  security in mind. This resulted in a highly secure
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.12.4
