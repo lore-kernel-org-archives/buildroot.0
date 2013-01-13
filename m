@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jan 2013 18:56:34 +0100
-Subject: [Buildroot] [PATCH 1/1 V2] cairo : bump version to 1.12.8
-In-Reply-To: <1358097082-24212-1-git-send-email-sagaert.johan@skynet.be>
-References: <1358097082-24212-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20130113185634.08a6f635@skate>
+Date: Sun, 13 Jan 2013 18:59:28 +0100
+Subject: [Buildroot] [PATCH 1/1 v3] New package : GNU SASL Library -
+ libgsasl
+In-Reply-To: <1358098580-8796-1-git-send-email-sagaert.johan@skynet.be>
+References: <1358098580-8796-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20130113185928.6e6c1a87@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +13,52 @@ To: buildroot@busybox.net
 
 Dear Sagaert Johan,
 
-On Sun, 13 Jan 2013 18:11:22 +0100, Sagaert Johan wrote:
+On Sun, 13 Jan 2013 18:36:20 +0100, Sagaert Johan wrote:
 > 
-> Patch v2 : The patch for 1.10.2 is no longer needed with cairo version 1.12.8.
+> GNU SASL is an implementation of the Simple Authentication and Security Layer framework
+> and a few common SASL mechanisms.
+> SASL is used by network servers (e.g., IMAP, SMTP) to request authentication from clients,
+> and in clients to authenticate against servers.
 
-Why? Has it been merged upstream?
+Commit logs must be wrapped to ~75-80 columns.
 
-Also, your commit log is still improperly formatted. Please look
-*carefully*:
+> libgsasl will be used in future versions of libesmtp.
+> 
+> Patch v3 : corrected license information in libgsasl.mk
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-==
-cairo: bump to version 1.12.8
+The changelog must be after the "---" marker. The last paragraph of the
+commit log should be separated with the Signed-off-by line by one
+empty new line.
 
-The patch for 1.10.2 is no longer needed with cairo version 1.12.8
+> --- /dev/null
+> +++ b/package/libgsasl/libgsasl.mk
+> @@ -0,0 +1,18 @@
+> +#############################################################
+> +#
+> +# libgsasl
+> +#
+> +#############################################################
+> +LIBGSASL_VERSION = 1.8.0
+> +LIBGSASL_SOURCE = libgsasl-$(LIBGSASL_VERSION).tar.gz
+> +LIBGSASL_SITE = ftp://ftp.gnu.org/gnu/gsasl
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
-Changes since v1:
- - Explain why patch is no longer needed
-==
+Please use BR2_GNU_MIRROR. So:
 
-So:
+LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
 
- * There must be *ONE* and only *ONE* empty line between the commit
-   title ("cairo: bump ...") and the core of the commit log. You always
-   put two newlines, this is useless.
+> +LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
+> +LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
+> +LIBGSASL_INSTALL_STAGING = YES
+> +LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
+> +
+> +$(eval $(autotools-package))
+> +
+> +
+> +  
+> +
 
- * There must be *ONE* and only *ONE* empty line between the last
-   paragraph of the commit log and the Signed-off-by line.
-
- * The changelog (which explain the change since the previous versions
-   of your patch) must be after the --- marker so that the contents of
-   the changelog is not kept in history.
-
-Please look carefully at how other do patches, and try to do the same.
-This will avoid you the need to send gazillions of versions of the same
-patch just because of basic formatting problems.
+Please remove those last empty lines.
 
 Thanks!
 
