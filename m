@@ -1,56 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jan 2013 15:20:21 +0100
-Subject: [Buildroot] [PATCH 1/1] Only show hostname,
-	issue and password options when default skeleton is selected.
-In-Reply-To: <1358086424-17961-1-git-send-email-sagaert.johan@skynet.be>
-References: <1358086424-17961-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <201301131520.21864.yann.morin.1998@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 13 Jan 2013 15:23:53 +0100
+Subject: [Buildroot] [PATCH 1/2] rpi-firmware: Fixup config.txt
+Message-ID: <1358087034-2706-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert, All,
+The default name of the kernel binary for the RaspberryPi is kernel.img, it's a
+only a zImage kernel renamed.
+Since Buildroot will build a zImage, the default config uses that should use it
+instead of forcing the user to rename a file.
 
-On Sunday 13 January 2013 Sagaert Johan wrote:
-> Only show hostname, issue and password options when the default skeleton is selected.
-> Moved the menu sections so that when a custom skeleton is selected the issue, hostname
-> and default password options are hidden.
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  system/Config.in | 132 +++++++++++++++++++++++++++----------------------------
->  1 file changed, 66 insertions(+), 66 deletions(-)
-> 
-> diff --git a/system/Config.in b/system/Config.in
-> index 69863c4..066f1d2 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -1,71 +1,5 @@
-[--SNIP-]
-> -choice
-> -	bool "Passwords encoding"
-> -	default BR2_TARGET_GENERIC_PASSWD_MD5
-> -	help
-> -	  Choose the password encoding scheme to use when Buildroot
-> -	  needs to encode a password (eg. the root password, below).
-> -	  
-> -	  Note: this is used at build-time, and *not* at runtime.
+Also, remove the cmdline argument rootfstype, as ext4 is a builtin driver,
+there is no need to specify it on the cmdline.
 
-Not for pasword encoding. There is a pending patch to add the ability for
-packages to create users (eg. to run daemon as). For example, a package
-that installs an FTP server may want to create a ftp user.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/rpi-firmware/config.txt |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-So, even with a custom skeleton, we'll need to know how to encode the
-passwords.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/rpi-firmware/config.txt b/package/rpi-firmware/config.txt
+index 2cabd68..a818762 100644
+--- a/package/rpi-firmware/config.txt
++++ b/package/rpi-firmware/config.txt
+@@ -6,9 +6,10 @@
+ 
+ arm_freq=700
+ core_freq=250
++kernel=zImage
+ disable_overscan=1
+ gpu_mem_256=100
+ gpu_mem_512=100
+ sdram_freq=400
+ over_voltage=0
+-cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait"
++cmdline="dwc_otg.fiq_fix_enable=1 sdhci-bcm2708.sync_after_dma=0 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootwait"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
