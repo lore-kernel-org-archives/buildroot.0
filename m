@@ -1,82 +1,59 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 13 Jan 2013 18:36:20 +0100
-Subject: [Buildroot] [PATCH 1/1 v3] New package : GNU SASL Library - libgsasl
-Message-ID: <1358098580-8796-1-git-send-email-sagaert.johan@skynet.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Jan 2013 18:56:34 +0100
+Subject: [Buildroot] [PATCH 1/1 V2] cairo : bump version to 1.12.8
+In-Reply-To: <1358097082-24212-1-git-send-email-sagaert.johan@skynet.be>
+References: <1358097082-24212-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20130113185634.08a6f635@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Sagaert Johan,
 
-GNU SASL is an implementation of the Simple Authentication and Security Layer framework
-and a few common SASL mechanisms.
-SASL is used by network servers (e.g., IMAP, SMTP) to request authentication from clients,
-and in clients to authenticate against servers.
+On Sun, 13 Jan 2013 18:11:22 +0100, Sagaert Johan wrote:
+> 
+> Patch v2 : The patch for 1.10.2 is no longer needed with cairo version 1.12.8.
 
-libgsasl will be used in future versions of libesmtp.
+Why? Has it been merged upstream?
 
-Patch v3 : corrected license information in libgsasl.mk
+Also, your commit log is still improperly formatted. Please look
+*carefully*:
+
+==
+cairo: bump to version 1.12.8
+
+The patch for 1.10.2 is no longer needed with cairo version 1.12.8
+
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/Config.in            |  1 +
- package/libgsasl/Config.in   | 10 ++++++++++
- package/libgsasl/libgsasl.mk | 18 ++++++++++++++++++
- 3 files changed, 29 insertions(+)
- create mode 100644 package/libgsasl/Config.in
- create mode 100644 package/libgsasl/libgsasl.mk
+Changes since v1:
+ - Explain why patch is no longer needed
+==
 
-diff --git a/package/Config.in b/package/Config.in
-index fcc2480..427b4db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -481,6 +481,7 @@ source "package/libdnet/Config.in"
- source "package/libesmtp/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libfcgi/Config.in"
-+source "package/libgsasl/Config.in"
- source "package/libidn/Config.in"
- source "package/libiscsi/Config.in"
- source "package/liboauth/Config.in"
-diff --git a/package/libgsasl/Config.in b/package/libgsasl/Config.in
-new file mode 100644
-index 0000000..b6fe02b
---- /dev/null
-+++ b/package/libgsasl/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBGSASL
-+	bool "libgsasl"
-+	help
-+	  Simple Authentication and Security Layer framework Library.
-+	  GNU SASL is an implementation of the Simple Authentication and 
-+	  Security Layer framework and a few common SASL mechanisms.
-+	  SASL is used by network servers (e.g., IMAP, SMTP) to request 
-+	  authentication from clients, and in clients to authenticate against servers.
-+
-+	  http://www.gnu.org/software/gsasl
-diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
-new file mode 100644
-index 0000000..8df9fcb
---- /dev/null
-+++ b/package/libgsasl/libgsasl.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# libgsasl
-+#
-+#############################################################
-+LIBGSASL_VERSION = 1.8.0
-+LIBGSASL_SOURCE = libgsasl-$(LIBGSASL_VERSION).tar.gz
-+LIBGSASL_SITE = ftp://ftp.gnu.org/gnu/gsasl
-+LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
-+LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
-+LIBGSASL_INSTALL_STAGING = YES
-+LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
-+
-+$(eval $(autotools-package))
-+
-+
-+  
-+
+So:
+
+ * There must be *ONE* and only *ONE* empty line between the commit
+   title ("cairo: bump ...") and the core of the commit log. You always
+   put two newlines, this is useless.
+
+ * There must be *ONE* and only *ONE* empty line between the last
+   paragraph of the commit log and the Signed-off-by line.
+
+ * The changelog (which explain the change since the previous versions
+   of your patch) must be after the --- marker so that the contents of
+   the changelog is not kept in history.
+
+Please look carefully at how other do patches, and try to do the same.
+This will avoid you the need to send gazillions of versions of the same
+patch just because of basic formatting problems.
+
+Thanks!
+
+Thomas
 -- 
-1.8.0.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
