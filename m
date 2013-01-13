@@ -1,19 +1,20 @@
-From: Vadim Malenboim <vadim@tangotec.com>
-Date: Sun, 13 Jan 2013 07:18:02 +0200
-Subject: [Buildroot] Error when building the kernel when using the latest
- 2012.11 buildroot version.
-Message-ID: <CAJH6qSft-_wOWfwyidoXRprAHkrCQL-bwemDb3d2PqYRoEED6A@mail.gmail.com>
+From: KianVine Chin <kianvinechin@yahoo.com>
+Date: Sat, 12 Jan 2013 21:42:11 -0800 (PST)
+Subject: [Buildroot] Unknown key while verifying buildroot-2012.11.1.tar.bz2
+Message-ID: <1358055731.573.YahooMailNeo@web163001.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When trying to build the 2.6.29-amp kernel with buildroot 2012.11 compiled
-toolchain I receive the following error
-"Invalid register ATOMCTL for wsr instruction".
+Hello All,
 
-This error doesn't happens when using the 2012.11-rc11 buildroot toolchain.
+I have been searching around, but I just couldn't seem to be able to find the public key to verify buildroot-2012.11.1.tar.bz2. ?Could someone help?
+The key that is supposedly use to sign it is "DSA key ID 59C36319".
+
+Thanks.
+KianVine
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130113/b20636c0/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130112/013c56dd/attachment.html>
