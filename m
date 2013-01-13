@@ -1,70 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jan 2013 15:52:14 +0100
-Subject: [Buildroot] [PATCH 2/2] docs/manual: mention the Eclipse integration
-In-Reply-To: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358088734-23460-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Jan 2013 16:03:13 +0100
+Subject: [Buildroot] Dropbear/SFTP
+In-Reply-To: <20130108130618.4991dff7@skate>
+References: <002401cded96$e8b13fa0$ba13bee0$@co.uk>
+ <20130108130618.4991dff7@skate>
+Message-ID: <20130113160313.0baa59d1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/eclipse-integration.txt |   30 ++++++++++++++++++++++++++++++
- docs/manual/working-with.txt        |    2 ++
- 2 files changed, 32 insertions(+)
- create mode 100644 docs/manual/eclipse-integration.txt
+Hello,
 
-diff --git a/docs/manual/eclipse-integration.txt b/docs/manual/eclipse-integration.txt
-new file mode 100644
-index 0000000..3d8179f
---- /dev/null
-+++ b/docs/manual/eclipse-integration.txt
-@@ -0,0 +1,30 @@
-+// -*- mode:doc; -*-
-+
-+Integration with Eclipse
-+------------------------
-+
-+While a part of the embedded Linux developers like classical text
-+editors like Vim or Emacs, and command-line based interfaces, a number
-+of other embedded Linux developers like richer graphical interfaces to
-+do their development work. Eclipse being one of the most popular
-+Integrated Development Environment, Buildroot integrates with Eclipse
-+in order to ease the development work of Eclipse users.
-+
-+Our integration with Eclipse simplifies the compilation, remote
-+execution and remote debugging of applications and libraries that are
-+built on top of a Buildroot system. It does not integrate the
-+Buildroot configuration and build processes themselves with
-+Eclipse. Therefore, the typical usage model of our Eclipse integration
-+would be:
-+
-+* Configure your Buildroot system with +make menuconfig+, +make
-+  xconfig+ or any other configuration interface provided with
-+  Buildroot.
-+* Build your Buildroot system by running +make+.
-+* Start Eclipse to develop, execute and debug your own custom
-+  applications and libraries, that will rely on the libraries built
-+  and installed by Buildroot.
-+
-+The Buildroot Eclipse integration installation process and usage is
-+described in detail at
-+https://github.com/mbats/eclipse-buildroot-bundle/wiki.
-diff --git a/docs/manual/working-with.txt b/docs/manual/working-with.txt
-index b62bacd..fb6bc40 100644
---- a/docs/manual/working-with.txt
-+++ b/docs/manual/working-with.txt
-@@ -14,6 +14,8 @@ include::customize.txt[]
- 
- include::common-usage.txt[]
- 
-+include::eclipse-integration.txt[]
-+
- Hacking Buildroot
- -----------------
- 
+On Tue, 8 Jan 2013 13:06:18 +0100, Thomas Petazzoni wrote:
+
+> If you're interested, notice that we are currently developing a Eclipse
+> plugin for Buildroot, which will help to build, remote execute and
+> remote debug applications in the context of Buildroot. The
+> documentation has not yet been fully written, but if you're interested,
+> please let me know so that we can give you the initial starting points.
+> We are very interested in getting some user feedback about those
+> developments.
+
+We have released the first version of the Eclipse/Buildroot
+integration. See the announcement at
+http://lists.busybox.net/pipermail/buildroot/2013-January/065339.html.
+
+We are definitely interested in receiving feedback from users, so do
+not hesitate to test and report back!
+
+Thanks,
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
