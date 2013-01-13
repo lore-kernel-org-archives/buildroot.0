@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 19:56:20 +0100
-Subject: [Buildroot] [PATCH 1/1] qtextserialport : bump version
-In-Reply-To: <1358081168-14572-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Sun, 13 Jan 2013 13:46:08 +0100")
-References: <1358081168-14572-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87wqvgykrv.fsf@dell.be.48ers.dk>
+From: Marc Gauthier <marc@tensilica.com>
+Date: Sun, 13 Jan 2013 10:33:02 -0800
+Subject: [Buildroot] [Linux-Xtensa] Error when building the kernel when
+ using the latest 2012.11 buildroot version.
+In-Reply-To: <CAJH6qSft-_wOWfwyidoXRprAHkrCQL-bwemDb3d2PqYRoEED6A@mail.gmail.com>
+References: <CAJH6qSft-_wOWfwyidoXRprAHkrCQL-bwemDb3d2PqYRoEED6A@mail.gmail.com>
+Message-ID: <522C1DF17AF50042AD8AE87F7887BD3D0B618091AF@exch.hq.tensilica.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Hi Vadim,
 
- Sagaert> qtextserialport : bump version
+Are you using the same Xtensa core config overlay in both cases?  The ATOMCTL register appeared in RC-2009.0, so is processor-config dependent, your toolchain might not recognize it if not built properly.  Or, perhaps the issue relates to how the core config overlay is installed under buildroot.
 
-The package is called qextserialport. Committed with a tweaked commit
-message, thanks.
+-Marc
 
--- 
-Bye, Peter Korsgaard
+
+
+________________________________
+From: linux-xtensa-bounces@linux-xtensa.org [mailto:linux-xtensa-bounces at linux-xtensa.org] On Behalf Of Vadim Malenboim
+Sent: Saturday, January 12, 2013 21:18
+To: linux-xtensa at linux-xtensa.org; buildroot
+Subject: [Linux-Xtensa] Error when building the kernel when using the latest 2012.11 buildroot version.
+
+
+When trying to build the 2.6.29<tel:2.6.29>-amp kernel with buildroot 2012.11 compiled toolchain I receive the following error
+"Invalid register ATOMCTL for wsr instruction".
+
+This error doesn't happens when using the 2012.11-rc11 buildroot toolchain.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130113/72fff2d4/attachment-0001.html>
