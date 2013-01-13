@@ -1,51 +1,110 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Jan 2013 21:14:14 +0100
-Subject: [Buildroot] [git commit] mtd: add options to build flash_otp_unlock
-	and flash_otp_write
-Message-ID: <20130113201423.9EA4A999A9@busybox.osuosl.org>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun, 13 Jan 2013 12:21:24 -0800
+Subject: [Buildroot] [PATCH 1/1] httping: new package
+In-Reply-To: <20130113120500.0ad7be3a@skate>
+References: <1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
+ <20130113120500.0ad7be3a@skate>
+Message-ID: <CAKcgs2yTBz557xM36bexhN1Cqh-rx9Kqme0mLZA_reG4_ovVqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97a3493c51f4163957adef686addcde749f98aa8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
+Thanks again for the reviews. I'll go and fix the remaining issues.
+I'll also go and use v1.5.7. I actually just found out today that this
+version was released.
+Thanks
+Gilles
+ On Jan 13, 2013 3:05 AM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/mtd/Config.in |    6 ++++++
- package/mtd/mtd.mk    |    2 ++
- 2 files changed, 8 insertions(+), 0 deletions(-)
-
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 7330dd5..ddc3737 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -30,6 +30,12 @@ config BR2_PACKAGE_MTD_FLASH_OTP_DUMP
- config BR2_PACKAGE_MTD_FLASH_OTP_INFO
- 	bool "flash_otp_info"
- 
-+config BR2_PACKAGE_MTD_FLASH_OTP_LOCK
-+	bool "flash_otp_lock"
-+
-+config BR2_PACKAGE_MTD_FLASH_OTP_WRITE
-+	bool "flash_otp_write"
-+
- config BR2_PACKAGE_MTD_FLASH_UNLOCK
- 	bool "flash_unlock"
- 	default y
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index aef478f..eafce45 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -38,6 +38,8 @@ MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_ERASE)	+= flash_erase
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_LOCK)	+= flash_lock
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_DUMP)	+= flash_otp_dump
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_INFO)	+= flash_otp_info
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_LOCK)	+= flash_otp_lock
-+MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_OTP_WRITE)	+= flash_otp_write
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FLASH_UNLOCK)	+= flash_unlock
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_CHECK)	+= ftl_check
- MTD_TARGETS_$(BR2_PACKAGE_MTD_FTL_FORMAT)	+= ftl_format
+> Dear Gilles Talis,
+>
+> On Sat, 12 Jan 2013 16:29:32 -0800, Gilles Talis wrote:
+> > Httping is like 'ping' but for http-requests.
+> >
+> > Fixed commit following review
+>
+> Do not put such a comment in the commit. If you want to put a changelog
+> with the differences since the first posting, it should go...
+>
+> >
+> > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+> > ---
+>
+> ... here. I.e, after the "---" sign.
+>
+> That's because we don't want the changelog to end up forever in the
+> Buildroot commit history.
+>
+> > +if BR2_PACKAGE_HTTPING
+> > +
+> > +config BR2_PACKAGE_HTTPING_OPENSSL
+> > +     bool "OpenSSL support"
+> > +     depends on BR2_PACKAGE_OPENSSL
+> > +     default y
+> > +     help
+> > +       Adds openSSL support to httping
+>
+> I'd say it should rather be:
+>
+> config BR2_PACKAGE_HTTPING_OPENSSL
+>         bool "OpenSSL support"
+>         select BR2_PACKAGE_OPENSSL
+>         help
+>           Adds OpenSSL support to httping
+>
+> When we have sub-options to enable more features, we generally use
+> "select" to make sure that the needed libraries are brought in.
+>
+> > +HTTPING_VERSION = 1.5.6
+>
+> Any reason not to use 1.5.7.
+>
+> > +HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
+> > +HTTPING_SITE = http://www.vanheusden.com/httping
+> > +HTTPING_LICENSE = GPLv3
+> > +HTTPING_LICENSE_FILES = license.txt
+>
+> Actually, the license seems to be GPLv2. If you look at this
+> license.txt file, it says:
+>
+> The license of this program can be obtained from:
+> http://www.vanheusden.com/license.txt
+>
+> And if you look at this other license.txt file, it contains the text of
+> GPLv2.
+>
+> > +define HTTPING_BUILD_CMDS
+> > +     $(MAKE) CC="$(TARGET_CC)" \
+> > +             LD="$(TARGET_LD)" \
+> > +             STRIP="$(TARGET_STRIP)" \
+> > +             SSL=$(HTTPING_SSL) \
+> > +             DEBUG=no \
+> > +             TFO=$(HTTPING_TFO) -C $(@D)
+> > +endef
+>
+> I saw your e-mail with your issues using TARGET_CONFIGURE_OPTS. But
+> there shouldn't be any issue doing:
+>
+> define HTTPING_BUILD_CMDS
+>         $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+>                 SSL=$(HTTPING_SSL) \
+>                 DEBUG=no \
+>                 TFO=$(HTTPING_TFO) -C $(@D)
+> endef
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130113/86e948ac/attachment.html>
