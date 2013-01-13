@@ -1,35 +1,82 @@
-From: Marc Gauthier <marc@tensilica.com>
-Date: Sun, 13 Jan 2013 10:33:02 -0800
-Subject: [Buildroot] [Linux-Xtensa] Error when building the kernel when
- using the latest 2012.11 buildroot version.
-In-Reply-To: <CAJH6qSft-_wOWfwyidoXRprAHkrCQL-bwemDb3d2PqYRoEED6A@mail.gmail.com>
-References: <CAJH6qSft-_wOWfwyidoXRprAHkrCQL-bwemDb3d2PqYRoEED6A@mail.gmail.com>
-Message-ID: <522C1DF17AF50042AD8AE87F7887BD3D0B618091AF@exch.hq.tensilica.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun, 13 Jan 2013 19:58:43 +0100
+Subject: [Buildroot] [PATCH 1/1 v4] New package : GNU SASL Library - libgsasl
+Message-ID: <1358103523-30951-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vadim,
 
-Are you using the same Xtensa core config overlay in both cases?  The ATOMCTL register appeared in RC-2009.0, so is processor-config dependent, your toolchain might not recognize it if not built properly.  Or, perhaps the issue relates to how the core config overlay is installed under buildroot.
+GNU SASL is an implementation of the Simple Authentication and Security Layer framework
+and a few common SASL mechanisms.
+SASL is used by network servers (e.g., IMAP, SMTP) to request authentication from clients,
+and in clients to authenticate against servers.
 
--Marc
+libgsasl will be used in future versions of libesmtp.
 
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ v2: Added more information in the help section of Config.in
+ v3: Fix license information
+ v4: Use the BR2_GNU_MIRROR
 
+ package/Config.in            |  1 +
+ package/libgsasl/Config.in   | 10 ++++++++++
+ package/libgsasl/libgsasl.mk | 14 ++++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/libgsasl/Config.in
+ create mode 100644 package/libgsasl/libgsasl.mk
 
-________________________________
-From: linux-xtensa-bounces@linux-xtensa.org [mailto:linux-xtensa-bounces at linux-xtensa.org] On Behalf Of Vadim Malenboim
-Sent: Saturday, January 12, 2013 21:18
-To: linux-xtensa at linux-xtensa.org; buildroot
-Subject: [Linux-Xtensa] Error when building the kernel when using the latest 2012.11 buildroot version.
-
-
-When trying to build the 2.6.29<tel:2.6.29>-amp kernel with buildroot 2012.11 compiled toolchain I receive the following error
-"Invalid register ATOMCTL for wsr instruction".
-
-This error doesn't happens when using the 2012.11-rc11 buildroot toolchain.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130113/72fff2d4/attachment-0001.html>
+diff --git a/package/Config.in b/package/Config.in
+index fcc2480..427b4db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -481,6 +481,7 @@ source "package/libdnet/Config.in"
+ source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
++source "package/libgsasl/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libiscsi/Config.in"
+ source "package/liboauth/Config.in"
+diff --git a/package/libgsasl/Config.in b/package/libgsasl/Config.in
+new file mode 100644
+index 0000000..b6fe02b
+--- /dev/null
++++ b/package/libgsasl/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGSASL
++	bool "libgsasl"
++	help
++	  Simple Authentication and Security Layer framework Library.
++	  GNU SASL is an implementation of the Simple Authentication and 
++	  Security Layer framework and a few common SASL mechanisms.
++	  SASL is used by network servers (e.g., IMAP, SMTP) to request 
++	  authentication from clients, and in clients to authenticate against servers.
++
++	  http://www.gnu.org/software/gsasl
+diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
+new file mode 100644
+index 0000000..785fab0
+--- /dev/null
++++ b/package/libgsasl/libgsasl.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libgsasl
++#
++#############################################################
++LIBGSASL_VERSION = 1.8.0
++LIBGSASL_SOURCE = libgsasl-$(LIBGSASL_VERSION).tar.gz
++LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
++LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
++LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
++LIBGSASL_INSTALL_STAGING = YES
++LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
++
++$(eval $(autotools-package))
+\ No newline at end of file
+-- 
+1.8.0.1
