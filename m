@@ -1,110 +1,54 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 13 Jan 2013 12:21:24 -0800
-Subject: [Buildroot] [PATCH 1/1] httping: new package
-In-Reply-To: <20130113120500.0ad7be3a@skate>
-References: <1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
- <20130113120500.0ad7be3a@skate>
-Message-ID: <CAKcgs2yTBz557xM36bexhN1Cqh-rx9Kqme0mLZA_reG4_ovVqA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Jan 2013 21:24:51 +0100
+Subject: [Buildroot] [PATCH 1/3] libmhash: new package
+In-Reply-To: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 7 Jan 2013 15:12:58 -0300")
+References: <1357582380-22332-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pq18x23w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-Thanks again for the reviews. I'll go and fix the remaining issues.
-I'll also go and use v1.5.7. I actually just found out today that this
-version was released.
-Thanks
-Gilles
- On Jan 13, 2013 3:05 AM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Dear Gilles Talis,
->
-> On Sat, 12 Jan 2013 16:29:32 -0800, Gilles Talis wrote:
-> > Httping is like 'ping' but for http-requests.
-> >
-> > Fixed commit following review
->
-> Do not put such a comment in the commit. If you want to put a changelog
-> with the differences since the first posting, it should go...
->
-> >
-> > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> > ---
->
-> ... here. I.e, after the "---" sign.
->
-> That's because we don't want the changelog to end up forever in the
-> Buildroot commit history.
->
-> > +if BR2_PACKAGE_HTTPING
-> > +
-> > +config BR2_PACKAGE_HTTPING_OPENSSL
-> > +     bool "OpenSSL support"
-> > +     depends on BR2_PACKAGE_OPENSSL
-> > +     default y
-> > +     help
-> > +       Adds openSSL support to httping
->
-> I'd say it should rather be:
->
-> config BR2_PACKAGE_HTTPING_OPENSSL
->         bool "OpenSSL support"
->         select BR2_PACKAGE_OPENSSL
->         help
->           Adds OpenSSL support to httping
->
-> When we have sub-options to enable more features, we generally use
-> "select" to make sure that the needed libraries are brought in.
->
-> > +HTTPING_VERSION = 1.5.6
->
-> Any reason not to use 1.5.7.
->
-> > +HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
-> > +HTTPING_SITE = http://www.vanheusden.com/httping
-> > +HTTPING_LICENSE = GPLv3
-> > +HTTPING_LICENSE_FILES = license.txt
->
-> Actually, the license seems to be GPLv2. If you look at this
-> license.txt file, it says:
->
-> The license of this program can be obtained from:
-> http://www.vanheusden.com/license.txt
->
-> And if you look at this other license.txt file, it contains the text of
-> GPLv2.
->
-> > +define HTTPING_BUILD_CMDS
-> > +     $(MAKE) CC="$(TARGET_CC)" \
-> > +             LD="$(TARGET_LD)" \
-> > +             STRIP="$(TARGET_STRIP)" \
-> > +             SSL=$(HTTPING_SSL) \
-> > +             DEBUG=no \
-> > +             TFO=$(HTTPING_TFO) -C $(@D)
-> > +endef
->
-> I saw your e-mail with your issues using TARGET_CONFIGURE_OPTS. But
-> there shouldn't be any issue doing:
->
-> define HTTPING_BUILD_CMDS
->         $(MAKE) $(TARGET_CONFIGURE_OPTS) \
->                 SSL=$(HTTPING_SSL) \
->                 DEBUG=no \
->                 TFO=$(HTTPING_TFO) -C $(@D)
-> endef
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130113/86e948ac/attachment.html>
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/Config.in            |    1 +
+ Gustavo>  package/libmhash/Config.in   |    9 +++++++++
+ Gustavo>  package/libmhash/libmhash.mk |   14 ++++++++++++++
+ Gustavo>  3 files changed, 24 insertions(+), 0 deletions(-)
+ Gustavo>  create mode 100644 package/libmhash/Config.in
+ Gustavo>  create mode 100644 package/libmhash/libmhash.mk
+
+ Gustavo> diff --git a/package/Config.in b/package/Config.in
+ Gustavo> index 0f397d6..942e62c 100644
+ Gustavo> --- a/package/Config.in
+ Gustavo> +++ b/package/Config.in
+ Gustavo> @@ -370,6 +370,7 @@ source "package/beecrypt/Config.in"
+ Gustavo>  source "package/gnutls/Config.in"
+ Gustavo>  source "package/libgcrypt/Config.in"
+ Gustavo>  source "package/libgpg-error/Config.in"
+ Gustavo> +source "package/libmhash/Config.in"
+ Gustavo>  source "package/libnss/Config.in"
+ Gustavo>  source "package/nettle/Config.in"
+ Gustavo>  source "package/ocf-linux/Config.in"
+ Gustavo> diff --git a/package/libmhash/Config.in b/package/libmhash/Config.in
+ Gustavo> new file mode 100644
+ Gustavo> index 0000000..82b544f
+ Gustavo> --- /dev/null
+ Gustavo> +++ b/package/libmhash/Config.in
+ Gustavo> @@ -0,0 +1,9 @@
+ Gustavo> +config BR2_PACKAGE_LIBMHASH
+ Gustavo> +	bool "libmhash"
+ Gustavo> +	help
+ Gustavo> +	  Mhash is a free (under GNU Lesser GPL) library which provides
+ Gustavo> +	  a uniform interface to a large number of hash algorithms.
+ Gustavo> +	  These algorithms can be used to compute checksums, message digests,
+ Gustavo> +	  and other signatures. 
+
+Trailing space. Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
