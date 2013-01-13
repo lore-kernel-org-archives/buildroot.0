@@ -1,7 +1,7 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 13 Jan 2013 18:11:22 +0100
-Subject: [Buildroot] [PATCH 1/1 V2] cairo : bump version to 1.12.8
-Message-ID: <1358097082-24212-1-git-send-email-sagaert.johan@skynet.be>
+Date: Sun, 13 Jan 2013 18:36:20 +0100
+Subject: [Buildroot] [PATCH 1/1 v3] New package : GNU SASL Library - libgsasl
+Message-ID: <1358098580-8796-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,72 +9,74 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Patch v2 : The patch for 1.10.2 is no longer needed with cairo version 1.12.8.
+GNU SASL is an implementation of the Simple Authentication and Security Layer framework
+and a few common SASL mechanisms.
+SASL is used by network servers (e.g., IMAP, SMTP) to request authentication from clients,
+and in clients to authenticate against servers.
+
+libgsasl will be used in future versions of libesmtp.
+
+Patch v3 : corrected license information in libgsasl.mk
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/cairo/cairo-1.10.2-directfb.patch | 36 -------------------------------
- package/cairo/cairo.mk                    |  6 ++----
- 2 files changed, 2 insertions(+), 40 deletions(-)
- delete mode 100644 package/cairo/cairo-1.10.2-directfb.patch
+ package/Config.in            |  1 +
+ package/libgsasl/Config.in   | 10 ++++++++++
+ package/libgsasl/libgsasl.mk | 18 ++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/libgsasl/Config.in
+ create mode 100644 package/libgsasl/libgsasl.mk
 
-diff --git a/package/cairo/cairo-1.10.2-directfb.patch b/package/cairo/cairo-1.10.2-directfb.patch
-deleted file mode 100644
-index 8b4c6f7..0000000
---- a/package/cairo/cairo-1.10.2-directfb.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
----- cairo-1.10.2/src/cairo-directfb-surface.c	2010-06-18 12:47:12.000000000 +0100
--+++ cairo-1.10.2.mod/src/cairo-directfb-surface.c	2012-02-02 11:40:57.835273391 +0000
--@@ -700,6 +700,7 @@
-- 	surface->dfbsurface->Blit (surface->dfbsurface,
-- 				   buffer, NULL,
-- 				   image_rect->x, image_rect->y);
--+        surface->dfbsurface->ReleaseSource (surface->dfbsurface);
--     }
-- 
--     cairo_surface_destroy (&image->base);
--@@ -928,6 +929,9 @@
--                             cairo_surface_attributes_t *src_attr)
-- {
--     _cairo_pattern_release_surface (src_pattern, src, src_attr);
--+
--+    if (dst->dfbsurface)
--+        dst->dfbsurface->ReleaseSource (dst->dfbsurface);
-- }
-- #endif /* DFB_COMPOSITE || DFB_COMPOSITE_TRAPEZOIDS */
-- 
--@@ -1584,6 +1588,7 @@
-- 
-- 	    new_cache->dfbsurface->Blit (new_cache->dfbsurface,
-- 					 cache->dfbsurface, NULL, 0, 0);
--+            new_cache->dfbsurface->ReleaseSource (new_cache->dfbsurface);
-- 
-- 	    _directfb_destroy_font_cache (cache);
-- 	    scaled_font->surface_private = cache = new_cache;
--@@ -1809,6 +1814,7 @@
--     RUN_CLIPPED (dst, clip_region, NULL,
-- 		 dst->dfbsurface->BatchBlit (dst->dfbsurface,
-- 					     cache->dfbsurface, rects, points, num));
--+    dst->dfbsurface->ReleaseSource (dst->dfbsurface);
-- 
--     return CAIRO_STATUS_SUCCESS;
-- }
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index bd670d9..6cf910a 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -3,10 +3,8 @@
- # cairo
- #
- #############################################################
--CAIRO_VERSION = 1.12.8
--CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
--CAIRO_LICENSE = LGPLv2.1+
--CAIRO_LICENSE_FILES = COPYING
-+CAIRO_VERSION = 1.10.2
-+CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.gz
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- 
+diff --git a/package/Config.in b/package/Config.in
+index fcc2480..427b4db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -481,6 +481,7 @@ source "package/libdnet/Config.in"
+ source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
++source "package/libgsasl/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libiscsi/Config.in"
+ source "package/liboauth/Config.in"
+diff --git a/package/libgsasl/Config.in b/package/libgsasl/Config.in
+new file mode 100644
+index 0000000..b6fe02b
+--- /dev/null
++++ b/package/libgsasl/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGSASL
++	bool "libgsasl"
++	help
++	  Simple Authentication and Security Layer framework Library.
++	  GNU SASL is an implementation of the Simple Authentication and 
++	  Security Layer framework and a few common SASL mechanisms.
++	  SASL is used by network servers (e.g., IMAP, SMTP) to request 
++	  authentication from clients, and in clients to authenticate against servers.
++
++	  http://www.gnu.org/software/gsasl
+diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
+new file mode 100644
+index 0000000..8df9fcb
+--- /dev/null
++++ b/package/libgsasl/libgsasl.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# libgsasl
++#
++#############################################################
++LIBGSASL_VERSION = 1.8.0
++LIBGSASL_SOURCE = libgsasl-$(LIBGSASL_VERSION).tar.gz
++LIBGSASL_SITE = ftp://ftp.gnu.org/gnu/gsasl
++LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
++LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
++LIBGSASL_INSTALL_STAGING = YES
++LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
++
++$(eval $(autotools-package))
++
++
++  
++
 -- 
 1.8.0.1
