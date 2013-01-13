@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 13 Jan 2013 19:56:46 +0100
-Subject: [Buildroot] [git commit] ofono: bump version
-Message-ID: <20130113192104.0156C99900@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt: bump version to latest 4.8.4
+Message-ID: <20130113192103.8D1BF99900@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=98c69143c48eb7eb720f8ad47fc3aa6715f6fa45
+commit: http://git.buildroot.net/buildroot/commit/?id=8586b63ed38156578e7f6618d0ad871ad090e227
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ofono/ofono.mk |    2 +-
+ package/qt/qt.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 6e6849b..e552eac 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -3,7 +3,7 @@
- # ofono
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index b09d0ed..b436ad8 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -11,7 +11,7 @@
  #
- #############################################################
--OFONO_VERSION = 1.6
-+OFONO_VERSION = 1.7
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_DEPENDENCIES = \
- 	host-pkgconf \
+ ######################################################################
+ 
+-QT_VERSION = 4.8.3
++QT_VERSION = 4.8.4
+ QT_SOURCE  = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
+ QT_SITE    = http://releases.qt-project.org/qt4/source
+ QT_DEPENDENCIES = host-pkgconf
