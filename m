@@ -1,599 +1,237 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jan 2013 23:50:04 +0100
-Subject: [Buildroot] [PATCH 1/2] packages: add ability for packages to
-	create users
-In-Reply-To: <cover.1358117168.git.yann.morin.1998@free.fr>
-References: <cover.1358117168.git.yann.morin.1998@free.fr>
-Message-ID: <897f6ec4e58a6a6eb732556b04264a058b981739.1358117168.git.yann.morin.1998@free.fr>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 14 Jan 2013 00:15:06 +0100
+Subject: [Buildroot] [git commit] Makefile: use
+	newly-introducedBUILDROOT_CONFIG breaks build
+In-Reply-To: <20130113221602.6AFBD99C29@busybox.osuosl.org>
+References: <20130113221602.6AFBD99C29@busybox.osuosl.org>
+Message-ID: <9C8E62D5EF05422F9C541B3F67D72768@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Packages that install daemons may need those daemons to run as a non-root,
-or an otherwise non-system (eg. 'daemon'), user.
+Hi
 
-Add infrastructure for packages to create users, by declaring the FOO_USERS
-variable that contain a makedev-syntax-like description of the user(s) to
-add.
+This changes seem to break the build.
+
+Snip ...
+
+rm -rf /home/buildroot12git/output/toolchain/uClibc-0.9.33.2
+bzcat /home/johan/dl/uClibc-0.9.33.2.tar.bz2 | tar -C /home/buildroot12git/output/toolchain  -xf -
+touch /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.unpacked
+support/scripts/apply-patches.sh /home/buildroot12git/output/toolchain/uClibc-0.9.33.2 toolchain/uClibc/ \
+		uClibc-0.9.33.2-\*.patch \
+		uClibc-0.9.33.2-\*.patch.arm
+
+Applying uClibc-0.9.33.2-define-MSG_CMSG_CLOEXEC.patch using patch: 
+patching file libc/sysdeps/linux/common/bits/socket.h
+
+Applying uClibc-0.9.33.2-dup3.patch using patch: 
+patching file include/unistd.h
+patching file libc/sysdeps/linux/common/dup3.c
+touch /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.patched
+cp -f /home/buildroot12git/board/karo/uClibc-0.9.33.config /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e
+'s,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-",g'
+\
+		-e 's,# TARGET_arm is not set,TARGET_arm=y,g' \
+		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"arm\",g' \
+		-e 's,^KERNEL_SOURCE=.*,KERNEL_SOURCE=\"/home/buildroot12git/output/toolchain/linux\",g' \
+		-e 's,^KERNEL_HEADERS=.*,KERNEL_HEADERS=\"/home/buildroot12git/output/toolchain/linux/include\",g' \
+		-e 's,^RUNTIME_PREFIX=.*,RUNTIME_PREFIX=\"/\",g' \
+		-e 's,^DEVEL_PREFIX=.*,DEVEL_PREFIX=\"/usr/\",g' \
+		-e 's,^SHARED_LIB_LOADER_PREFIX=.*,SHARED_LIB_LOADER_PREFIX=\"/lib\",g' \
+		/home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+(/bin/echo "# CONFIG_GENERIC_ARM is not set"; \
+	 /bin/echo "# CONFIG_ARM610 is not set"; \
+	 /bin/echo "# CONFIG_ARM710 is not set"; \
+	 /bin/echo "# CONFIG_ARM7TDMI is not set"; \
+	 /bin/echo "# CONFIG_ARM720T is not set"; \
+	 /bin/echo "# CONFIG_ARM920T is not set"; \
+	 /bin/echo "# CONFIG_ARM922T is not set"; \
+	 /bin/echo "# CONFIG_ARM926T is not set"; \
+	 /bin/echo "# CONFIG_ARM10T is not set"; \
+	 /bin/echo "# CONFIG_ARM1136JF_S is not set"; \
+	 /bin/echo "# CONFIG_ARM1176JZ_S is not set"; \
+	 /bin/echo "# CONFIG_ARM1176JZF_S is not set"; \
+	 /bin/echo "# CONFIG_ARM_SA110 is not set"; \
+	 /bin/echo "# CONFIG_ARM_SA1100 is not set"; \
+	 /bin/echo "# CONFIG_ARM_XSCALE is not set"; \
+	 /bin/echo "# CONFIG_ARM_IWMMXT is not set"; \
+	) >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's/^\(CONFIG_[^_]*[_]*ARM[^=]*\)=.*/# \1 is not set/g' \
+		 /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's/^.*CONFIG_ARM_CORTEXA8.*/CONFIG_ARM_CORTEXA8=y/g' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/CONFIG_ARM_.ABI/d' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/echo "# CONFIG_ARM_OABI is not set" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/echo "CONFIG_ARM_EABI=y" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+# The above doesn't work for me, so redo
+/bin/sed -i -e 's/.*\(ARCH_BIG_ENDIAN\).*/# \1 is not set/g' \
+		-e 's/.*\(ARCH_WANTS_BIG_ENDIAN\).*/# \1 is not set/g' \
+		-e 's/.*\(ARCH_LITTLE_ENDIAN\).*/\1=y/g' \
+		-e 's/.*\(ARCH_WANTS_LITTLE_ENDIAN\).*/\1=y/g' \
+		/home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's,.*UCLIBC_HAS_LFS.*,UCLIBC_HAS_LFS=y,g' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's,^.*UCLIBC_HAS_IPV6.*,UCLIBC_HAS_IPV6=y,g' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's,^.*UCLIBC_HAS_RPC.*,UCLIBC_HAS_RPC=y,g' \
+		-e 's,^.*UCLIBC_HAS_FULL_RPC.*,UCLIBC_HAS_FULL_RPC=y,g' \
+		-e 's,^.*UCLIBC_HAS_REENTRANT_RPC.*,UCLIBC_HAS_REENTRANT_RPC=y,g' \
+		/home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/UCLIBC_HAS_FLOATS/d' \
+		-e 's,.*UCLIBC_HAS_FPU.*,UCLIBC_HAS_FPU=y\nHAS_FPU=y\nUCLIBC_HAS_FLOATS=y\n,g' \
+		/home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's,^.*UCLIBC_HAS_SSP[^_].*,UCLIBC_HAS_SSP=n,g' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/UCLIBC_HAS_THREADS/d' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/LINUXTHREADS/d' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/LINUXTHREADS_OLD/d' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/PTHREADS_DEBUG_SUPPORT/d' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e '/UCLIBC_HAS_THREADS_NATIVE/d' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+echo "UCLIBC_HAS_THREADS=y" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+echo "# LINUXTHREADS is not set" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+echo "# LINUXTHREADS_NEW is not set" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+echo "# LINUXTHREADS_OLD is not set" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+echo "UCLIBC_HAS_THREADS_NATIVE=y" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+echo "PTHREADS_DEBUG_SUPPORT=y" >> /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's,^.*UCLIBC_HAS_LOCALE.*,UCLIBC_HAS_LOCALE=y\n# UCLIBC_BUILD_ALL_LOCALE is not
+set\nUCLIBC_BUILD_MINIMAL_LOCALE=y\nUCLIBC_BUILD_MINIMAL_LOCALES="en_US"\nUCLIBC_PREGENERATED_LOCALE_DATA=n\nUCLIBC_DOWNLOAD_PREGENE
+RATED_LOCALE_DATA=n\nUCLIBC_HAS_XLOCALE=y\nUCLIBC_HAS_GLIBC_DIGIT_GROUPING=n\n,g'
+/home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+/bin/sed -i -e 's,^.*UCLIBC_HAS_WCHAR.*,UCLIBC_HAS_WCHAR=y,g' /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig
+cp -f /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.oldconfig /home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.config
+mkdir -p /home/buildroot12git/output/toolchain/uClibc_dev/usr/include
+mkdir -p /home/buildroot12git/output/toolchain/uClibc_dev/usr/lib
+mkdir -p /home/buildroot12git/output/toolchain/uClibc_dev/lib
+/usr/bin/make -j1 -C /home/buildroot12git/output/toolchain/uClibc-0.9.33.2 \
+		ARCH="arm" \
+		PREFIX=/home/buildroot12git/output/toolchain/uClibc_dev/ \
+		DEVEL_PREFIX=/usr/ \
+		RUNTIME_PREFIX=/home/buildroot12git/output/toolchain/uClibc_dev/ \
+		CROSS_COMPILE="/home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-" \
+		UCLIBC_EXTRA_CFLAGS="" \
+		HOSTCC="/usr/bin/gcc" \
+		oldconfig
+make[1]: Entering directory `/home/buildroot12git/output/toolchain/uClibc-0.9.33.2'
+Makefile.in:425: target `output/libm' given more than once in the same rule.
+Makefile.in:425: target `output/libubacktrace' given more than once in the same rule.
+  MKDIR include/config
+  MKDIR extra/config/lxdialog
+/bin/sh: line 0: cd: output/extra/config: No such file or directory
+  HOSTCC-o extra/config/conf.o
+Assembler messages:
+Fatal error: can't create output/extra/config/conf.o: No such file or directory
+make[2]: *** [output/extra/config/conf.o] Error 1
+make[1]: *** [output/extra/config/conf] Error 2
+make[1]: Leaving directory `/home/buildroot12git/output/toolchain/uClibc-0.9.33.2'
+make: *** [/home/buildroot12git/output/toolchain/uClibc-0.9.33.2/.config] Error 2
+
+Snip...
+
+I attached my configuratiuon file.
+
+Regards johan 
+
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Peter Korsgaard
+Verzonden: zondag 13 januari 2013 23:14
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] [git commit] Makefile: use newly-introducedBUILDROOT_CONFIG
+
+commit: http://git.buildroot.net/buildroot/commit/?id=dcb79995aaaa6f1aa9a7d782df8bbccbda1ff409
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Cam Hutchison <camh@xdna.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-generic.txt |   16 ++-
- docs/manual/appendix.txt                |    1 +
- docs/manual/makeusers-syntax.txt        |   87 +++++++
- fs/common.mk                            |    5 +-
- package/pkg-generic.mk                  |    1 +
- support/scripts/mkusers                 |  371 +++++++++++++++++++++++++++++++
- 6 files changed, 478 insertions(+), 3 deletions(-)
- create mode 100644 docs/manual/makeusers-syntax.txt
- create mode 100755 support/scripts/mkusers
+ Makefile |   16 ++++++++--------
+ 1 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 7b8561a..19e5a32 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -50,7 +50,11 @@ system is based on hand-written Makefiles or shell scripts.
- 34:	/bin/foo  f  4755  0  0	 -  -  -  -  -
- 35: endef
- 36:
--37: $(eval $(generic-package))
-+37: define LIBFOO_USERS
-+38:	foo -1 libfoo -1 * - - - LibFoo daemon
-+39: endef
-+40
-+41: $(eval $(generic-package))
- --------------------------------
+diff --git a/Makefile b/Makefile
+index 5a83251..16b5ef4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -95,7 +95,7 @@ BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
  
- The Makefile begins on line 6 to 10 with metadata information: the
-@@ -95,7 +99,10 @@ On line 29..31, we define a device-node file used by this package
- On line 33..35, we define the permissions to set to specific files
- installed by this package (+LIBFOO_PERMISSIONS+).
- 
--Finally, on line 37, we call the +generic-package+ function, which
-+On lines 37..39, we define a user that is used by this package (eg.
-+to run a daemon as non-root) (+LIBFOO_USERS+).
-+
-+Finally, on line 41, we call the +generic-package+ function, which
- generates, according to the variables defined previously, all the
- Makefile code necessary to make your package working.
- 
-@@ -255,6 +262,11 @@ information is (assuming the package name is +libfoo+) :
-   You can find some documentation for this syntax in the xref:makedev-syntax[].
-   This variable is optional.
- 
-+* +LIBFOO_USERS+ lists the users to create for this package, if it installs
-+  a program you want to run as a specific user (eg. as a daemon, or as a
-+  cron-job). The syntax is similar in spirit to the makedevs one, and is
-+  described in the xref:makeuser-syntax[]. This variable is optional.
-+
- * +LIBFOO_LICENSE+ defines the license (or licenses) under which the package
-   is released.
-   This name will appear in the manifest file produced by +make legal-info+.
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index 6f1e9f3..63b172b 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -4,6 +4,7 @@ Appendix
- ========
- 
- include::makedev-syntax.txt[]
-+include::makeusers-syntax.txt[]
- 
- [[package-list]]
- Available packages
-diff --git a/docs/manual/makeusers-syntax.txt b/docs/manual/makeusers-syntax.txt
-new file mode 100644
-index 0000000..2199654
---- /dev/null
-+++ b/docs/manual/makeusers-syntax.txt
-@@ -0,0 +1,87 @@
-+// -*- mode:doc -*- ;
-+
-+[[makeuser-syntax]]
-+Makeuser syntax documentation
-+-----------------------------
-+
-+The syntax to create users is inspired by the makedev syntax, above, but
-+is specific to Buildroot.
-+
-+The syntax for adding a user is a space-separated list of fields, one
-+user per line; the fields are:
-+
-+|=================================================================
-+|username |uid |group |gid |password |home |shell |groups |comment
-+|=================================================================
-+
-+Where:
-+
-+- +username+ is the desired user name (aka login name) for the user.
-+  It can not be +root+, and must be unique.
-+- +uid+ is the desired UID for the user. It must be unique, and not
-+  +0+. If set to +-1+, then a unique UID will be computed by Buildroot
-+  in the range [1000...1999]
-+- +group+ is the desired name for the user's main group. It can not
-+  be +root+. If the group does not exist, it will be created.
-+- +gid+ is the desired GID for the user's main group. It must be unique,
-+  and not +0+. If set to +-1+, and the group does not already exist, then
-+  a unique GID will be computed by Buildroot in the range [1000..1999]
-+- +password+ is the crypt(3)-encoded password. If prefixed with +!+,
-+  then login is disabled. If prefixed with +=+, then it is interpreted
-+  as clear-text, and will be crypt-encoded (using MD5). If prefixed with
-+  +!=+, then the password will be crypt-encoded (using MD5) and login
-+  will be disabled. If set to +*+, then login is not allowed.
-+- +home+ is the desired home directory for the user. If set to '-', no
-+  home directory will be created, and the user's home will be +/+.
-+  Explicitly setting +home+ to +/+ is not allowed.
-+- +shell+ is the desired shell for the user. If set to +-+, then
-+  +/bin/false+ is set as the user's shell.
-+- +groups+ is the comma-separated list of additional groups the user
-+  should be part of. If set to +-+, then the user will be a member of
-+  no additional group. Missing groups will be created with an arbitrary
-+  +gid+.
-+- +comment+ (aka https://en.wikipedia.org/wiki/Gecos_field[GECOS]
-+  field) is an almost-free-form text.
-+
-+There are a few restrictions on the content of each field:
-+
-+* except for +comment+, all fields are mandatory.
-+* except for +comment+, fields may not contain spaces.
-+* no field may contain a colon (+:+).
-+
-+If +home+ is not +-+, then the home directory, and all files below,
-+will belong to the user and its main group.
-+
-+Examples:
-+
-+----
-+foo -1 bar -1 !=blabla /home/foo /bin/sh alpha,bravo Foo user
-+----
-+
-+This will create this user:
-+
-+- +username+ (aka login name) is: +foo+
-+- +uid+ is computed by Buildroot
-+- main +group+ is: +bar+
-+- main group +gid+ is computed by Buildroot
-+- clear-text +password+ is: +blabla+, will be crypt(3)-encoded, and login is disabled.
-+- +home+ is: +/home/foo+
-+- +shell+ is: +/bin/sh+
-+- +foo+ is also a member of +groups+: +alpha+ and +bravo+
-+- +comment+ is: +Foo user+
-+
-+----
-+test 8000 wheel -1 = - /bin/sh - Test user
-+----
-+
-+This will create this user:
-+
-+- +username+ (aka login name) is: +test+
-+- +uid+ is : +8000+
-+- main +group+ is: +wheel+
-+- main group +gid+ is computed by Buildroot, and will use the value defined in the rootfs skeleton
-+- +password+ is empty (aka no password).
-+- +home+ is +/+ but will not belong to +test+
-+- +shell+ is: +/bin/sh+
-+- +test+ is not a member of any additional +groups+
-+- +comment+ is: +Test user+
-diff --git a/fs/common.mk b/fs/common.mk
-index b1512dd..b5a7950 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -35,6 +35,7 @@ FAKEROOT_SCRIPT = $(BUILD_DIR)/_fakeroot.fs
- FULL_DEVICE_TABLE = $(BUILD_DIR)/_device_table.txt
- ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE)) \
- 	$(call qstrip,$(BR2_ROOTFS_STATIC_DEVICE_TABLE))
-+USERS_TABLE = $(BUILD_DIR)/_users_table.txt
- 
- define ROOTFS_TARGET_INTERNAL
- 
-@@ -55,11 +56,13 @@ endif
- 	printf '$(subst $(sep),\n,$(PACKAGES_PERMISSIONS_TABLE))' >> $(FULL_DEVICE_TABLE)
- 	echo "$(HOST_DIR)/usr/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ # Pull in the user's configuration file  ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
+--include $(CONFIG_DIR)/.config
++-include $(BUILDROOT_CONFIG)
  endif
-+	printf '$(subst $(sep),\n,$(PACKAGES_USERS))' > $(USERS_TABLE)
-+	$(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
- 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
- 	chmod a+x $(FAKEROOT_SCRIPT)
- 	$(HOST_DIR)/usr/bin/fakeroot -- $(FAKEROOT_SCRIPT)
- 	cp support/misc/target-dir-warning.txt $(TARGET_DIR_WARNING_FILE)
--	- at rm -f $(FAKEROOT_SCRIPT) $(FULL_DEVICE_TABLE)
-+	- at rm -f $(FAKEROOT_SCRIPT) $(FULL_DEVICE_TABLE) $(USERS_TABLE)
- 	$(foreach hook,$(ROOTFS_$(2)_POST_GEN_HOOKS),$(call $(hook))$(sep))
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- 	gzip -9 -c $$@ > $$@.gz
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 59de0f0..b39782a 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -517,6 +517,7 @@ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
- TARGETS += $(1)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
- PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
-+PACKAGES_USERS += $$($(2)_USERS)$$(sep)
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-new file mode 100755
-index 0000000..d98714c
---- /dev/null
-+++ b/support/scripts/mkusers
-@@ -0,0 +1,371 @@
-+#!/bin/bash
-+set -e
-+myname="${0##*/}"
-+
-+#----------------------------------------------------------------------------
-+# Configurable items
-+MIN_UID=1000
-+MAX_UID=1999
-+MIN_GID=1000
-+MAX_GID=1999
-+# No more is configurable below this point
-+#----------------------------------------------------------------------------
-+
-+#----------------------------------------------------------------------------
-+error() {
-+    local fmt="${1}"
-+    shift
-+
-+    printf "%s: " "${myname}" >&2
-+    printf "${fmt}" "${@}" >&2
-+}
-+fail() {
-+    error "$@"
-+    exit 1
-+}
-+
-+#----------------------------------------------------------------------------
-+if [ ${#} -ne 2 ]; then
-+    fail "usage: %s USERS_TBLE TARGET_DIR\n"
-+fi
-+USERS_TABLE="${1}"
-+TARGET_DIR="${2}"
-+shift 2
-+PASSWD="${TARGET_DIR}/etc/passwd"
-+SHADOW="${TARGET_DIR}/etc/shadow"
-+GROUP="${TARGET_DIR}/etc/group"
-+# /etc/gsahdow is not part of the standard skeleton, so not everybody
-+# will have it, but some may hav it, and its content must be in sync
-+# with /etc/group, so any use of gshadow must be conditional.
-+GSHADOW="${TARGET_DIR}/etc/gshadow"
-+PASSWD_METHOD="$( sed -r -e '/^BR2_TARGET_GENERIC_PASSWD_METHOD="(.)*"$/!d' \
-+                         -e 's//\1/;'                                       \
-+                         "${BUILDROOT_CONFIG}"                              \
-+                )"
-+
-+#----------------------------------------------------------------------------
-+get_uid() {
-+    local username="${1}"
-+
-+    awk -F: '$1=="'"${username}"'" { printf( "%d\n", $3 ); }' "${PASSWD}"
-+}
-+
-+#----------------------------------------------------------------------------
-+get_ugid() {
-+    local username="${1}"
-+
-+    awk -F: '$1=="'"${username}"'" { printf( "%d\n", $4 ); }' "${PASSWD}"
-+}
-+
-+#----------------------------------------------------------------------------
-+get_gid() {
-+    local group="${1}"
-+
-+    awk -F: '$1=="'"${group}"'" { printf( "%d\n", $3 ); }' "${GROUP}"
-+}
-+
-+#----------------------------------------------------------------------------
-+get_username() {
-+    local uid="${1}"
-+
-+    awk -F: '$3=="'"${uid}"'" { printf( "%s\n", $1 ); }' "${PASSWD}"
-+}
-+
-+#----------------------------------------------------------------------------
-+get_group() {
-+    local gid="${1}"
-+
-+    awk -F: '$3=="'"${gid}"'" { printf( "%s\n", $1 ); }' "${GROUP}"
-+}
-+
-+#----------------------------------------------------------------------------
-+get_ugroup() {
-+    local username="${1}"
-+    local ugid
-+
-+    ugid="$( get_ugid "${username}" )"
-+    if [ -n "${ugid}" ]; then
-+        get_group "${ugid}"
-+    fi
-+}
-+
-+#----------------------------------------------------------------------------
-+# Sanity-check the new user/group:
-+#   - check the gid is not already used for another group
-+#   - check the group does not already exist with another gid
-+#   - check the user does not already exist with another gid
-+#   - check the uid is not already used for another user
-+#   - check the user does not already exist with another uid
-+#   - check the user does not already exist in another group
-+check_user_validity() {
-+    local username="${1}"
-+    local uid="${2}"
-+    local group="${3}"
-+    local gid="${4}"
-+    local _uid _ugid _gid _username _group _ugroup
-+
-+    _group="$( get_group "${gid}" )"
-+    _gid="$( get_gid "${group}" )"
-+    _ugid="$( get_ugid "${username}" )"
-+    _username="$( get_username "${uid}" )"
-+    _uid="$( get_uid "${username}" )"
-+    _ugroup="$( get_ugroup "${username}" )"
-+
-+    if [ "${username}" = "root" ]; then
-+        fail "invalid username '%s\n'" "${username}"
-+    fi
-+
-+    if [ ${gid} -lt -1 -o ${gid} -eq 0 ]; then
-+        fail "invalid gid '%d'\n" ${gid}
-+    elif [ ${gid} -ne -1 ]; then
-+        # check the gid is not already used for another group
-+        if [ -n "${_group}" -a "${_group}" != "${group}" ]; then
-+            fail "gid is already used by group '${_group}'\n"
-+        fi
-+
-+        # check the group does not already exists with another gid
-+        if [ -n "${_gid}" -a ${_gid} -ne ${gid} ]; then
-+            fail "group already exists with gid '${_gid}'\n"
-+        fi
-+
-+        # check the user does not already exists with another gid
-+        if [ -n "${_ugid}" -a ${_ugid} -ne ${gid} ]; then
-+            fail "user already exists with gid '${_ugid}'\n"
-+        fi
-+    fi
-+
-+    if [ ${uid} -lt -1 -o ${uid} -eq 0 ]; then
-+        fail "invalid uid '%d'\n" ${uid}
-+    elif [ ${uid} -ne -1 ]; then
-+        # check the uid is not already used for another user
-+        if [ -n "${_username}" -a "${_username}" != "${username}" ]; then
-+            fail "uid is already used by user '${_username}'\n"
-+        fi
-+
-+        # check the user does not already exists with another uid
-+        if [ -n "${_uid}" -a ${_uid} -ne ${uid} ]; then
-+            fail "user already exists with uid '${_uid}'\n"
-+        fi
-+    fi
-+
-+    # check the user does not already exist in another group
-+    if [ -n "${_ugroup}" -a "${_ugroup}" != "${group}" ]; then
-+        fail "user already exists with group '${_ugroup}'\n"
-+    fi
-+
-+    return 0
-+}
-+
-+#----------------------------------------------------------------------------
-+# Generate a unique GID for given group. If the group already exists,
-+# then simply report its current GID. Otherwise, generate the lowest GID
-+# that is:
-+#   - not 0
-+#   - comprised in [MIN_GID..MAX_GID]
-+#   - not already used by a group
-+generate_gid() {
-+    local group="${1}"
-+    local gid
-+
-+    gid="$( get_gid "${group}" )"
-+    if [ -z "${gid}" ]; then
-+        for(( gid=MIN_GID; gid<=MAX_GID; gid++ )); do
-+            if [ -z "$( get_group "${gid}" )" ]; then
-+                break
-+            fi
-+        done
-+        if [ ${gid} -gt ${MAX_GID} ]; then
-+            fail "can not allocate a GID for group '%s'\n" "${group}"
-+        fi
-+    fi
-+    printf "%d\n" "${gid}"
-+}
-+
-+#----------------------------------------------------------------------------
-+# Add a group; if it does already exist, remove it first
-+add_one_group() {
-+    local group="${1}"
-+    local gid="${2}"
-+    local _f
-+
-+    # Generate a new GID if needed
-+    if [ ${gid} -eq -1 ]; then
-+        gid="$( generate_gid "${group}" )"
-+    fi
-+
-+    # Remove any previous instance of this group
-+    for _f in "${GROUP}" "${GSHADOW}"; do
-+        [ -f "${_f}" ] || continue
-+        sed -r -i -e '/^'"${group}"':.*/d;' "${_f}"
-+    done
-+
-+    printf "%s:x:%d:\n" "${group}" "${gid}" >>"${GROUP}"
-+    if [ -f "${GSHADOW}" ]; then
-+        printf "%s:*::\n" "${group}" >>"${GSHADOW}"
-+    fi
-+}
-+
-+#----------------------------------------------------------------------------
-+# Generate a unique UID for given username. If the username already exists,
-+# then simply report its current UID. Otherwise, generate the lowest UID
-+# that is:
-+#   - not 0
-+#   - comprised in [MIN_UID..MAX_UID]
-+#   - not already used by a user
-+generate_uid() {
-+    local username="${1}"
-+    local uid
-+
-+    uid="$( get_uid "${username}" )"
-+    if [ -z "${uid}" ]; then
-+        for(( uid=MIN_UID; uid<=MAX_UID; uid++ )); do
-+            if [ -z "$( get_username "${uid}" )" ]; then
-+                break
-+            fi
-+        done
-+        if [ ${uid} -gt ${MAX_UID} ]; then
-+            fail "can not allocate a UID for user '%s'\n" "${username}"
-+        fi
-+    fi
-+    printf "%d\n" "${uid}"
-+}
-+
-+#----------------------------------------------------------------------------
-+# Add given user to given group, if not already the case
-+add_user_to_group() {
-+    local username="${1}"
-+    local group="${2}"
-+    local _f
-+
-+    for _f in "${GROUP}" "${GSHADOW}"; do
-+        [ -f "${_f}" ] || continue
-+        sed -r -i -e 's/^('"${group}"':.*:)(([^:]+,)?)'"${username}"'(,[^:]+*)?$/\1\2\4/;'  \
-+                  -e 's/^('"${group}"':.*)$/\1,'"${username}"'/;'                           \
-+                  -e 's/,+/,/'                                                              \
-+                  -e 's/:,/:/'                                                              \
-+                  "${_f}"
-+    done
-+}
-+
-+#----------------------------------------------------------------------------
-+# Encode a password
-+encode_password() {
-+    local passwd="${1}"
-+
-+    mkpasswd -m "${BR2_TARGET_GENERIC_PASSWD_METHOD}" "${passwd}"
-+}
-+
-+#----------------------------------------------------------------------------
-+# Add a user; if it does already exist, remove it first
-+add_one_user() {
-+    local username="${1}"
-+    local uid="${2}"
-+    local group="${3}"
-+    local gid="${4}"
-+    local passwd="${5}"
-+    local home="${6}"
-+    local shell="${7}"
-+    local groups="${8}"
-+    local comment="${9}"
-+    local nb_days="$((($(date +%s)+(24*60*60-1))/(24*60*60)))"
-+    local _f _group _home _shell _gid _passwd
-+
-+    # First, sanity-check the user
-+    check_user_validity "${username}" "${uid}" "${group}" "${gid}"
-+
-+    # Generate a new UID if needed
-+    if [ ${uid} -eq -1 ]; then
-+        uid="$( generate_uid "${username}" )"
-+    fi
-+
-+    # Remove any previous instance of this user
-+    for _f in "${PASSWD}" "${SHADOW}"; do
-+        sed -r -i -e '/^'"${username}"':.*/d;' "${_f}"
-+    done
-+
-+    _gid="$( get_gid "${group}" )"
-+    _shell="${shell}"
-+    if [ "${shell}" = "-" ]; then
-+        _shell="/bin/false"
-+    fi
-+    case "${home}" in
-+        -)  _home="/";;
-+        /)  fail "home can not explicitly be '/'\n";;
-+        /*) _home="${home}";;
-+        *)  fail "home must be an absolute path\n";;
-+    esac
-+    case "${passwd}" in
-+        !=*)
-+            _passwd='!'"$( encode_passwd "${passwd#!=}" )"
-+            ;;
-+        =*)
-+            _passwd="$( encode_passwd "${passwd#=}" )"
-+            ;;
-+        *)
-+            _passwd="${passwd}"
-+            ;;
-+    esac
-+
-+    printf "%s:x:%d:%d:%s:%s:%s\n"              \
-+           "${username}" "${uid}" "${_gid}"     \
-+           "${comment}" "${_home}" "${_shell}"  \
-+           >>"${PASSWD}"
-+    printf "%s:%s:%d:0:99999:7:::\n"                \
-+           "${username}" "${_passwd}" "${nb_days}"  \
-+           >>"${SHADOW}"
-+
-+    # Add the user to its additional groups
-+    if [ "${groups}" != "-" ]; then
-+        for _group in ${groups//,/ }; do
-+            add_user_to_group "${username}" "${_group}"
-+        done
-+    fi
-+
-+    # If the user has a home, chown it
-+    # (Note: stdout goes to the fakeroot-script)
-+    if [ "${home}" != "-" ]; then
-+        mkdir -p "${TARGET_DIR}/${home}"
-+        printf "chown -R %d:%d '%s'\n" "${uid}" "${_gid}" "${TARGET_DIR}/${home}"
-+    fi
-+}
-+
-+#----------------------------------------------------------------------------
-+main() {
-+    local username uid group gid passwd home shell groups comment
-+
-+    # Some sanity checks
-+    if [ ${MIN_UID} -le 0 ]; then
-+        fail "MIN_UID must be >0 (currently %d)\n" ${MIN_UID}
-+    fi
-+    if [ ${MIN_GID} -le 0 ]; then
-+        fail "MIN_GID must be >0 (currently %d)\n" ${MIN_GID}
-+    fi
-+
-+    # First, create all the main groups
-+    while read username uid group gid passwd home shell groups comment; do
-+        [ -n "${username}" ] || continue    # Package with no user
-+        add_one_group "${group}" "${gid}"
-+    done <"${USERS_TABLE}"
-+
-+    # Then, create all the additional groups
-+    # If any additional group is already a main group, we should use
-+    # the gid of that main group; otherwise, we can use any gid
-+    while read username uid group gid passwd home shell groups comment; do
-+        [ -n "${username}" ] || continue    # Package with no user
-+        if [ "${groups}" != "-" ]; then
-+            for g in ${groups//,/ }; do
-+                add_one_group "${g}" -1
-+            done
-+        fi
-+    done <"${USERS_TABLE}"
-+
-+    # Finally, add users
-+    while read username uid group gid passwd home shell groups comment; do
-+        [ -n "${username}" ] || continue    # Package with no user
-+        add_one_user "${username}" "${uid}" "${group}" "${gid}" "${passwd}" \
-+                     "${home}" "${shell}" "${groups}" "${comment}"
-+    done <"${USERS_TABLE}"
-+}
-+
-+#----------------------------------------------------------------------------
-+main "${@}"
--- 
-1.7.2.5
+ # To put more focus on warnings, be less verbose as default @@ -383,7 +383,7 @@ dirs: $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR)
+$(TARGET_DIR) \
+ 
+ $(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+ 
+-$(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
++$(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
+ 	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+ 
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+@@ -557,7 +557,7 @@ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@$(call legal-warning,the toolchain has not been saved)
+-	@cp $(CONFIG_DIR)/.config $(LEGAL_INFO_DIR)/buildroot.config
++	@cp $(BUILDROOT_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+ legal-info: dirs legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
+ 		$(TARGETS_LEGAL_INFO)
+@@ -590,7 +590,7 @@ COMMON_CONFIG_ENV = \
+ 	KCONFIG_AUTOCONFIG=$(BUILD_DIR)/buildroot-config/auto.conf \
+ 	KCONFIG_AUTOHEADER=$(BUILD_DIR)/buildroot-config/autoconf.h \
+ 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
+-	BUILDROOT_CONFIG=$(CONFIG_DIR)/.config
++	BUILDROOT_CONFIG=$(BUILDROOT_CONFIG)
+ 
+ xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config @@ -630,7 +630,7 @@ allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-	@grep -v BR2_PACKAGE_ $(CONFIG_DIR)/.config > $(CONFIG_DIR)/.config.nopkg
++	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > 
++$(CONFIG_DIR)/.config.nopkg
+ 	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
+ 		while read config pkg; do \
+ 		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done @@ -641,7 +641,7 @@ randpackageconfig:
+$(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ allyespackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-	@grep -v BR2_PACKAGE_ $(CONFIG_DIR)/.config > $(CONFIG_DIR)/.config.nopkg
++	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > 
++$(CONFIG_DIR)/.config.nopkg
+ 	@grep '^config BR2_PACKAGE_' Config.in.legacy | \
+ 		while read config pkg; do \
+ 		echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done @@ -652,7 +652,7 @@ allyespackageconfig:
+$(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-	@grep -v BR2_PACKAGE_ $(CONFIG_DIR)/.config > $(CONFIG_DIR)/.config.nopkg
++	@grep -v BR2_PACKAGE_ $(BUILDROOT_CONFIG) > 
++$(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+ 		$< --allnoconfig $(CONFIG_CONFIG_IN)
+@@ -706,7 +706,7 @@ endif
+ ifeq ($(O),output)
+ 	rm -rf $(O)
+ endif
+-	rm -rf $(CONFIG_DIR)/.config $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/.auto.deps
++	rm -rf $(BUILDROOT_CONFIG) $(CONFIG_DIR)/.config.old 
++$(CONFIG_DIR)/.auto.deps
+ 
+ cross: $(BASE_TARGETS)
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: myconfig
+Type: application/octet-stream
+Size: 38919 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130114/52266c95/attachment-0001.obj>
