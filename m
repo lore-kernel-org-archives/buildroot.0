@@ -1,96 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 20:48:58 +0100
-Subject: [Buildroot] [PATCH 1/1 v4] New package : GNU SASL Library -
-	libgsasl
-In-Reply-To: <1358103523-30951-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Sun, 13 Jan 2013 19:58:43 +0100")
-References: <1358103523-30951-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87bocsyic5.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 13 Jan 2013 20:49:07 +0100
+Subject: [Buildroot] [git commit] New package : GNU SASL Library - libgsasl
+Message-ID: <20130113194912.6982F8018A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2b7074cfa1c75b58249e1a65d940c4cc30f28f3d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sagaert> GNU SASL is an implementation of the Simple Authentication and Security Layer framework
- Sagaert> and a few common SASL mechanisms.
- Sagaert> SASL is used by network servers (e.g., IMAP, SMTP) to request authentication from clients,
- Sagaert> and in clients to authenticate against servers.
+GNU SASL is an implementation of the Simple Authentication and Security
+Layer framework and a few common SASL mechanisms.  SASL is used by network
+servers (e.g., IMAP, SMTP) to request authentication from clients, and in
+clients to authenticate against servers.
 
- Sagaert> libgsasl will be used in future versions of libesmtp.
+libgsasl will be used in future versions of libesmtp.
 
- Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
- Sagaert> ---
- Sagaert>  v2: Added more information in the help section of Config.in
- Sagaert>  v3: Fix license information
- Sagaert>  v4: Use the BR2_GNU_MIRROR
+[Peter: Misc minor fixes]
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in            |    1 +
+ package/libgsasl/Config.in   |   11 +++++++++++
+ package/libgsasl/libgsasl.mk |   14 ++++++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
 
- Sagaert>  package/Config.in            |  1 +
- Sagaert>  package/libgsasl/Config.in   | 10 ++++++++++
- Sagaert>  package/libgsasl/libgsasl.mk | 14 ++++++++++++++
- Sagaert>  3 files changed, 25 insertions(+)
- Sagaert>  create mode 100644 package/libgsasl/Config.in
- Sagaert>  create mode 100644 package/libgsasl/libgsasl.mk
-
- Sagaert> diff --git a/package/Config.in b/package/Config.in
- Sagaert> index fcc2480..427b4db 100644
- Sagaert> --- a/package/Config.in
- Sagaert> +++ b/package/Config.in
- Sagaert> @@ -481,6 +481,7 @@ source "package/libdnet/Config.in"
- Sagaert>  source "package/libesmtp/Config.in"
- Sagaert>  source "package/libeXosip2/Config.in"
- Sagaert>  source "package/libfcgi/Config.in"
- Sagaert> +source "package/libgsasl/Config.in"
- Sagaert>  source "package/libidn/Config.in"
- Sagaert>  source "package/libiscsi/Config.in"
- Sagaert>  source "package/liboauth/Config.in"
- Sagaert> diff --git a/package/libgsasl/Config.in b/package/libgsasl/Config.in
- Sagaert> new file mode 100644
- Sagaert> index 0000000..b6fe02b
- Sagaert> --- /dev/null
- Sagaert> +++ b/package/libgsasl/Config.in
- Sagaert> @@ -0,0 +1,10 @@
- Sagaert> +config BR2_PACKAGE_LIBGSASL
- Sagaert> +	bool "libgsasl"
- Sagaert> +	help
- Sagaert> +	  Simple Authentication and Security Layer framework Library.
- Sagaert> +	  GNU SASL is an implementation of the Simple Authentication and 
- Sagaert> +	  Security Layer framework and a few common SASL mechanisms.
- Sagaert> +	  SASL is used by network servers (e.g., IMAP, SMTP) to request 
- Sagaert> +	  authentication from clients, and in clients to authenticate against servers.
-
-Trailing spaces and too long lines. The help text should be visible in
-make menuconfig without sideways scrolling on a normal 80 col terminal.
-
- Sagaert> +++ b/package/libgsasl/libgsasl.mk
- Sagaert> @@ -0,0 +1,14 @@
- Sagaert> +#############################################################
- Sagaert> +#
- Sagaert> +# libgsasl
- Sagaert> +#
- Sagaert> +#############################################################
- Sagaert> +LIBGSASL_VERSION = 1.8.0
-
-We normally add an empty line after the header.
-
- Sagaert> +LIBGSASL_SOURCE = libgsasl-$(LIBGSASL_VERSION).tar.gz
-
-This is default, so it can be removed.
-
- Sagaert> +LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
- Sagaert> +LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
- Sagaert> +LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
- Sagaert> +LIBGSASL_INSTALL_STAGING = YES
- Sagaert> +LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
- Sagaert> +
- Sagaert> +$(eval $(autotools-package))
- Sagaert> \ No newline at end of file
-
-You forgot the final newline.
-
-Committed with these fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index fcc2480..427b4db 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -481,6 +481,7 @@ source "package/libdnet/Config.in"
+ source "package/libesmtp/Config.in"
+ source "package/libeXosip2/Config.in"
+ source "package/libfcgi/Config.in"
++source "package/libgsasl/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libiscsi/Config.in"
+ source "package/liboauth/Config.in"
+diff --git a/package/libgsasl/Config.in b/package/libgsasl/Config.in
+new file mode 100644
+index 0000000..5181386
+--- /dev/null
++++ b/package/libgsasl/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBGSASL
++	bool "libgsasl"
++	help
++	  Simple Authentication and Security Layer framework Library.
++	  GNU SASL is an implementation of the Simple Authentication and
++	  Security Layer framework and a few common SASL mechanisms.
++	  SASL is used by network servers (e.g., IMAP, SMTP) to request
++	  authentication from clients, and in clients to authenticate
++	  against servers.
++
++	  http://www.gnu.org/software/gsasl
+diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
+new file mode 100644
+index 0000000..8f9a510
+--- /dev/null
++++ b/package/libgsasl/libgsasl.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libgsasl
++#
++#############################################################
++
++LIBGSASL_VERSION = 1.8.0
++LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
++LIBGSASL_LICENSE = LGPLv2.1+ (library), GPLv3+ (programs)
++LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
++LIBGSASL_INSTALL_STAGING = YES
++LIBGSAS_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBIDN),libidn)
++
++$(eval $(autotools-package))
