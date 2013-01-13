@@ -1,31 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Jan 2013 20:39:42 +0100
-Subject: [Buildroot] [PATCH] linux, uboot, mxs-bootlets,
-	barebox: avoid double slash in CUSTOM_TARBALL
-In-Reply-To: <1357769564-11514-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Wed, 9 Jan 2013 23:12:44 +0100")
-References: <1357769564-11514-1-git-send-email-arnout@mind.be>
-Message-ID: <87fw24yirl.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 13 Jan 2013 19:40:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 5846] Extra slash added to last slash in URL
+In-Reply-To: <bug-5846-163@https.bugs.busybox.net/>
+References: <bug-5846-163@https.bugs.busybox.net/>
+Message-ID: <20130113194054.63F49999A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5846
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> The $(dir ...) function leaves a slash at the end, so that the LINUX_SITE
- Arnout> variable for a custom tarball ends in a slash. The DOWNLOAD macro adds
- Arnout> another slash between SITE and SOURCE, which results in a double slash in
- Arnout> the download URL.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- Arnout> Fix this by stripping off the final slash from the _SITE in all packages that
- Arnout> have a custom tarball.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
- Arnout> Fixes https://bugs.busybox.net/show_bug.cgi?id=5846
-
-Committed, thanks.
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2013-01-13 19:41:16 UTC ---
+Fixed by Arnout in git (579fea227394d), thanks.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
