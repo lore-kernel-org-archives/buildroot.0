@@ -1,7 +1,7 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 13 Jan 2013 14:38:42 +0100
-Subject: [Buildroot] [PATCH 1/1] cairo : bump version
-Message-ID: <1358084322-16330-1-git-send-email-sagaert.johan@skynet.be>
+Date: Sun, 13 Jan 2013 14:42:14 +0100
+Subject: [Buildroot] [PATCH 1/1] ofono : bump version
+Message-ID: <1358084534-16502-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-cairo : bump version
+ofono : bump version
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/cairo/cairo.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/ofono/ofono.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 6cf910a..bd670d9 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -3,8 +3,10 @@
- # cairo
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index 6e6849b..e552eac 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -3,7 +3,7 @@
+ # ofono
  #
  #############################################################
--CAIRO_VERSION = 1.10.2
--CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.gz
-+CAIRO_VERSION = 1.12.8
-+CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
-+CAIRO_LICENSE = LGPLv2.1+
-+CAIRO_LICENSE_FILES = COPYING
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
- 
+-OFONO_VERSION = 1.6
++OFONO_VERSION = 1.7
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
 1.8.0.1
