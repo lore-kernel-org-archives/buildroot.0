@@ -1,51 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Jan 2013 15:07:09 +0100
-Subject: [Buildroot] [PATCH 1/1] cairo : bump version
-In-Reply-To: <1358084194-16226-1-git-send-email-sagaert.johan@skynet.be>
-References: <1358084194-16226-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20130113150709.76356160@skate>
+Date: Sun, 13 Jan 2013 15:08:32 +0100
+Subject: [Buildroot] [PATCH 03/10] libxmlrpc: new package
+In-Reply-To: <87mwwe5f6u.fsf@dell.be.48ers.dk>
+References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+ <d6e101fca46d16dbd2ebd312240f6b7de6bda48a.1338653505.git.thomas.petazzoni@free-electrons.com>
+ <4FCD4B6D.3080506@mind.be> <20120605232646.0367dff5@skate>
+ <87mwwe5f6u.fsf@dell.be.48ers.dk>
+Message-ID: <20130113150832.48d701b9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+Dear Peter Korsgaard,
 
-On Sun, 13 Jan 2013 14:36:34 +0100, Sagaert Johan wrote:
+On Sat, 12 Jan 2013 21:17:29 +0100, Peter Korsgaard wrote:
+
+>  >> A simpler solution would be to just use the svn download method, from
+>  >> https://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/stable/
 > 
-> cairo : bump version
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+>  Thomas> Sure, I'll look into that.
+> 
+> Any news on this?
 
-Thanks for all those version bump patches. Unfortunately, the commit
-log is wrong: you repeat two times the same thing.
+At this point, I am no longer that much interested by xmlrpc. It was
+for a project on which I'm no longer working, and I don't expect many
+people to use this stuff, so I don't want to spend too much time
+packaging this.
 
-If you put "cairo: bump version" in the first line of your commit log,
-then don't put it again, otherwise it appears twice!
+I'd say you can discard the patch in patchwork, and be done with it :)
 
-And it is also customary to mention the version to which the package is
-being bumped in the commit title.
-
-So, your commit logs should be:
-
-===
-cairo: bump version to 1.12.8
-
-Signed-off-by: ...
-===
-
-If there are more details to be provided:
-
-===
-cairo: bump version to 1.12.8
-
-The patch foobar.patch has become useless due to upstream changes. A
-new patch barfoo.patch is introduced in order to fix problem blabla.
-
-Signed-off-by: ...
-===
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
