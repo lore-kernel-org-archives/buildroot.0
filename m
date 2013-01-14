@@ -1,29 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Jan 2013 13:59:41 +0100
-Subject: [Buildroot] [PATCH 1/1] Added new package ncdu
-In-Reply-To: <50CF9E11.5070808@mind.be> (Arnout Vandecappelle's message of
- "Mon, 17 Dec 2012 23:34:57 +0100")
-References: <1355774648.20811.YahooMailNeo@web120305.mail.ne1.yahoo.com>
- <50CF9E11.5070808@mind.be>
-Message-ID: <87ip6zudhe.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Jan 2013 14:02:10 +0100
+Subject: [Buildroot] [PATCH 1/1] httping: new package
+In-Reply-To: <CAKcgs2wLk-cOK7qUDJ23TidHSyESJF-vCoL+JezDSL2q0H1c0w@mail.gmail.com>
+ (Gilles Talis's message of "Sun, 13 Jan 2013 16:47:50 -0800")
+References: <1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
+ <20130113120500.0ad7be3a@skate>
+ <CAKcgs2xk-=iG-3Ezmc1upEPBjhSGcmgg9WSwn=1E3+OKDT05fg@mail.gmail.com>
+ <CAKcgs2wLk-cOK7qUDJ23TidHSyESJF-vCoL+JezDSL2q0H1c0w@mail.gmail.com>
+Message-ID: <87ehhnudd9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-Hi Bogdan,
+ Gilles> I forgot to copy mailing list.
+ Gilles> Sorry about that and thanks for your help.
+ Gilles> Gilles.
 
- Arnout>  We prefer generally prefer patches to be sent in-line with the
- Arnout> correct spacing - using git send-email is the easiest way to send a
- Arnout> patch.
+ Gilles> 2013/1/13 Gilles Talis <gilles.talis@gmail.com>
 
- Arnout>  Some additional comments below.
+ Gilles>     Dear Thomas,
 
-Could you please send an updated patch taking Arnout's comment into
-consideration?
+ Gilles>     I thought I knew Makefiles better than that. Well, I was wrong :-).
+ Gilles>     The reason why TARGET_CONFIGURE_OPTS does not work in this case is because
+ Gilles>     it overrides the original Makefile's CFLAGS variable (that should be kept
+ Gilles>     in order for target to compile). Apart from adding "override" in the
+ Gilles>     package Makefile, I actually do not see how to use TARGET_CONFIGURE_OPTS
+ Gilles>     and still keep Makefile CFLAGS. Any hint?
+ Gilles>     This will surely help me for future patches/projects.
+
+That's indeed how it is normally done.
+
+override CFLAGS += ..
 
 -- 
 Bye, Peter Korsgaard
