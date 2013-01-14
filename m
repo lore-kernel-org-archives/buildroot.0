@@ -1,109 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Jan 2013 16:33:30 +0100
-Subject: [Buildroot] [git commit] Integration with Buildroot Toolchain
-	Eclipse plugin
-Message-ID: <20130114153605.8B6D69A108@busybox.osuosl.org>
+Date: Mon, 14 Jan 2013 16:32:40 +0100
+Subject: [Buildroot] [git commit] libelementary: only use libethumb if
+	libedbus is available.
+Message-ID: <20130114153605.54E549A0E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=217ef08a9768221ae02540498ae58e7436801f93
+commit: http://git.buildroot.net/buildroot/commit/?id=dfe780994bb7fac4418a931478f732b29a09c34a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The Eclipse plugin at
-https://github.com/mbats/eclipse-buildroot-toolchain-plugin allows
-users of Eclipse to easily use the toolchain available in
-Buildroot. To do so, this plugin reads
-~/.buildroot-eclipse.toolchains, which contains the list of Buildroot
-toolchains available on the system, and then offer those toolchains to
-compile Eclipse projects.
+libelementary uses the ethumb_client library, but that one is only built
+if libedbus is available. So fixup the --enable/disable-ethumb according
+to the selection of BR2_PACKAGE_LIBEDBUS.
 
-In order to interface with this plugin, this commit adds an option
-that allows the user to tell whether (s)he wants the Buildroot project
-toolchain to be visible under this Eclipse plugin. It simply adds a
-line in this ~/.buildroot-eclipse.toolchains file.
+Fixes e.g.
+http://autobuild.buildroot.net/results/14ef98da6b0632e24514fef696fae9a650c90c96
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                                   |    7 +++++++
- support/scripts/eclipse-register-toolchain |   28 ++++++++++++++++++++++++++++
- toolchain/toolchain-common.in              |    7 +++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
+ package/efl/libelementary/libelementary.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index f408632..1fc51e9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -347,6 +347,10 @@ TARGETS+=target-generatelocales
- endif
- endif
+diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
+index f63f0dc..f20a35d 100644
+--- a/package/efl/libelementary/libelementary.mk
++++ b/package/efl/libelementary/libelementary.mk
+@@ -18,7 +18,9 @@ LIBELEMENTARY_DEPENDENCIES = libeina libevas libecore libedje host-libedje \
+ LIBELEMENTARY_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
+ 			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet
  
-+ifeq ($(BR2_ECLIPSE_REGISTER),y)
-+TARGETS+=toolchain-eclipse-register
-+endif
-+
- include fs/common.mk
- 
- TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
-@@ -542,6 +546,9 @@ target-generatelocales: host-localedef
- 	done
- endif
- 
-+toolchain-eclipse-register:
-+	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
-+
- source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
- 
- external-deps:
-diff --git a/support/scripts/eclipse-register-toolchain b/support/scripts/eclipse-register-toolchain
-new file mode 100755
-index 0000000..dd9f158
---- /dev/null
-+++ b/support/scripts/eclipse-register-toolchain
-@@ -0,0 +1,28 @@
-+#!/bin/sh
-+
-+project_directory=$1
-+toolchain_prefix=$2
-+architecture=$3
-+
-+TOOLCHAIN_ECLIPSE_FILE=${HOME}/.buildroot-eclipse.toolchains
-+
-+if test -f ${TOOLCHAIN_ECLIPSE_FILE} ; then
-+    mv ${TOOLCHAIN_ECLIPSE_FILE} ${TOOLCHAIN_ECLIPSE_FILE}.tmp
-+    cat ${TOOLCHAIN_ECLIPSE_FILE}.tmp | while read toolchain ; do
-+	path=$(echo ${toolchain} | cut -f1 -d ':')
-+        # Filter lines corresponding to still existing projects
-+	echo "Testing ${path} ..."
-+	if ! test -d ${path} ; then
-+	    continue
-+	fi
-+	# .. and the current project
-+	if test ${path} = ${project_directory} ; then
-+	    continue
-+	fi
-+	echo ${toolchain} >> ${TOOLCHAIN_ECLIPSE_FILE}
-+    done
-+    rm ${TOOLCHAIN_ECLIPSE_FILE}.tmp
-+fi
-+
-+# Add the toolchain
-+echo "${project_directory}:${toolchain_prefix}:${architecture}" >> ${TOOLCHAIN_ECLIPSE_FILE}
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 9f11a39..f6905ae 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -131,3 +131,10 @@ config BR2_TARGET_LDFLAGS
- 	string "Target linker options"
- 	help
- 	  Extra options to pass to the linker when building for the target.
-+
-+config BR2_ECLIPSE_REGISTER
-+	bool "Register toolchain within Eclipse Buildroot plug-in"
-+	help
-+	  This options tells Buildroot to generate the necessary
-+	  configuration files to make your toolchain appear within
-+	  Eclipse, through the Eclipse Buildroot plugin.
+-ifeq ($(BR2_PACKAGE_LIBETHUMB),y)
++# libethumb_client is only built when ethumbd is built.
++# ethumbd is only built if edbus is built.
++ifeq ($(BR2_PACKAGE_LIBETHUMB)$(BR2_PACKAGE_LIBEDBUS),yy)
+ LIBELEMENTARY_DEPENDENCIES += libethumb
+ LIBELEMENTARY_CONF_OPT += --enable-ethumb
+ else
