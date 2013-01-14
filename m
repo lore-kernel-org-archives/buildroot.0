@@ -1,50 +1,98 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Jan 2013 16:24:53 +0100
-Subject: [Buildroot] [PATCH RFC 3/6] firmware-imx: new package
-In-Reply-To: <1355960256-10786-4-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Thu, 20 Dec 2012 00:37:33 +0100")
-References: <1355960256-10786-1-git-send-email-arnout@mind.be>
- <1355960256-10786-4-git-send-email-arnout@mind.be>
-Message-ID: <87obgrss6y.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Jan 2013 15:04:05 +0100
+Subject: [Buildroot] [git commit] firmware-imx: new package
+Message-ID: <20130114152701.0BEE89A0E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=22001201ded95850f0f9388f26333c077230b6c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout>  package/Config.in                    |    1 +
- Arnout>  package/firmware-imx/Config.in       |   13 ++++++++++++
- Arnout>  package/firmware-imx/firmware-imx.mk |   38 ++++++++++++++++++++++++++++++++++
- Arnout>  3 files changed, 52 insertions(+)
- Arnout>  create mode 100644 package/firmware-imx/Config.in
- Arnout>  create mode 100644 package/firmware-imx/firmware-imx.mk
+[Peter: ensure lib/firmware exists, move under 'Misc devices firmware']
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                    |    1 +
+ package/firmware-imx/Config.in       |   13 +++++++++++
+ package/firmware-imx/firmware-imx.mk |   39 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 53 insertions(+), 0 deletions(-)
 
- Arnout> diff --git a/package/Config.in b/package/Config.in
- Arnout> index ac2488e..52bb408 100644
- Arnout> --- a/package/Config.in
- Arnout> +++ b/package/Config.in
- Arnout> @@ -213,6 +213,7 @@ source "package/eeprog/Config.in"
- Arnout>  source "package/evtest/Config.in"
- Arnout>  source "package/flashrom/Config.in"
- Arnout>  source "package/fconfig/Config.in"
- Arnout> +source "package/firmware-imx/Config.in"
-
-I moved this under the new Misc devices firmware menu.
-
-
- Arnout> +define FIRMWARE_IMX_INSTALL_TARGET_CMDS
- Arnout> +	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
- Arnout> +		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
- Arnout> +	done
- Arnout> +endef
-
-And stuck a mkdir -p $(TARGET_DIR)/lib/firmware here to ensure it's
-available.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index f891b49..f87e143 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -203,6 +203,7 @@ endmenu
+ menu "Hardware handling"
+ menu "Misc devices firmwares"
+ source "package/b43-firmware/Config.in"
++source "package/firmware-imx/Config.in"
+ source "package/linux-firmware/Config.in"
+ source "package/rpi-firmware/Config.in"
+ source "package/ux500-firmware/Config.in"
+diff --git a/package/firmware-imx/Config.in b/package/firmware-imx/Config.in
+new file mode 100644
+index 0000000..dd96d88
+--- /dev/null
++++ b/package/firmware-imx/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_FIRMWARE_IMX
++	bool "firmware-imx"
++	depends on BR2_arm # Only relevant for i.MX
++	help
++	  Firmware blobs for the Freescale i.MX SoCs.
++
++	  It contains blobs for Atheros AR6003, SDMA and VPU.
++
++	  Note: it also contains a blob for ar3k/30101 but upstream
++	  linux-firmware has that as well.
++
++	  This library is provided by Freescale as-is and doesn't have
++	  an upstream.
+diff --git a/package/firmware-imx/firmware-imx.mk b/package/firmware-imx/firmware-imx.mk
+new file mode 100644
+index 0000000..3b43bef
+--- /dev/null
++++ b/package/firmware-imx/firmware-imx.mk
+@@ -0,0 +1,39 @@
++#############################################################
++#
++# buildroot makefile for firmware-imx
++#
++#############################################################
++
++FIRMWARE_IMX_VERSION = 12.09.01
++# No official download site from freescale, just this mirror
++FIRMWARE_IMX_SITE = http://download.ossystems.com.br/bsp/freescale/source
++FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
++FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
++	Atheros license (ath6k)
++FIRMWARE_IMX_LICENSE_FILES = licenses/vpu/EULA licenses/ath6k/AR6102/License.txt
++# This is a legal minefield: the EULA specifies that
++# the Board Support Package includes software and hardware (sic!)
++# for which a separate license is needed...
++FIRMWARE_IMX_REDISTRIBUTE = NO
++
++FIRMWARE_IMX_BLOBS = ath6k sdma vpu
++
++# The archive is a shell-self-extractor of a bzipped tar. It happens
++# to extract in the correct directory (firmware-imx-x.y.z)
++# The --force makes sure it doesn't fail if the source dir already exists.
++# The --auto-accept skips the license check - not needed for us
++# because we have legal-info.
++define FIRMWARE_IMX_EXTRACT_CMDS
++	cd $(BUILD_DIR); \
++	sh $(DL_DIR)/$(FIRMWARE_IMX_SOURCE) --force --auto-accept
++endef
++
++
++define FIRMWARE_IMX_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/lib/firmware
++	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
++		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
++	done
++endef
++
++$(eval $(generic-package))
