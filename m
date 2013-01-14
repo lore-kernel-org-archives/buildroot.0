@@ -1,46 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Jan 2013 11:17:22 +0100
-Subject: [Buildroot] [git commit] cairo: script backend needs png
-Message-ID: <20130114101736.1458E9A0A4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jan 2013 11:55:15 +0100
+Subject: [Buildroot] x86-64 toolchain without threads does not build
+Message-ID: <20130114115515.106bce7e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a5ae24549afa4f374770b58b3008bb5a32e2b9a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes http://autobuild.buildroot.org/results/7b21c60d7ba1a8df8910d104e21d4545cb37a4c6
+For some reason, it seems that building a x86-64 toolchain without
+thread support is not possible. Trying to build the following
+defconfig:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/cairo/Config.in |    2 +-
- package/cairo/cairo.mk  |    1 -
- 2 files changed, 1 insertions(+), 2 deletions(-)
+BR2_x86_64=y
+BR2_x86_atom=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PTHREADS_NONE=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 3a3fb88..89bd315 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -30,7 +30,7 @@ config BR2_PACKAGE_CAIRO_PNG
- 
- config BR2_PACKAGE_CAIRO_SCRIPT
- 	bool "script support"
--	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_CAIRO_PNG
- 
- config BR2_PACKAGE_CAIRO_SVG
- 	bool "svg support"
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 8885ab0..b3fc438 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -86,7 +86,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_CAIRO_SCRIPT),y)
- 	CAIRO_CONF_OPT += --enable-script
--	CAIRO_DEPENDENCIES += zlib
- else
- 	CAIRO_CONF_OPT += --disable-script
- endif
+leads to:
+
+/opt/toolchain-build/toolchain/gcc-4.6.3/libgcc/generic-morestack-thread.c:39:21: fatal error: pthread.h: No such file or directory
+compilation terminated.
+make[2]: *** [generic-morestack-thread.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory `/opt/toolchain-build/toolchain/gcc-4.6.3-intermediate/x86_64-buildroot-linux-uclibc/libgcc'
+make[1]: *** [all-target-libgcc] Error 2
+make[1]: Leaving directory `/opt/toolchain-build/toolchain/gcc-4.6.3-intermediate'
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
