@@ -1,39 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jan 2013 14:10:45 +0100
-Subject: [Buildroot] Currently packaging Qt5
-In-Reply-To: <741030A2814B43C7A9DC318DDB3B4397@JohanW7>
-References: <20130114105802.1199d10e@skate> <50F3EDF8.6010203@lucaceresoli.net>
- <20130114124521.1671c93e@skate>
- <741030A2814B43C7A9DC318DDB3B4397@JohanW7>
-Message-ID: <20130114141045.039ec839@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Jan 2013 14:07:45 +0100
+Subject: [Buildroot] [git commit] gst-plugins-bad: sort suboptions
+	alphabetically
+Message-ID: <20130114132041.315A982B33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+commit: http://git.buildroot.net/buildroot/commit/?id=ae3e9e05de56a620165653b6c31710e717b60806
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Jan 2013 13:48:12 +0100, Sagaert Johan wrote:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gst-plugins-bad/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-> Just a hint : 
-> 
-> https://github.com/nezticle/RaspberryPi-BuildRoot has the QT5 integrated
-> with the squask toolchain in buildroot.
-> Maintained by Andy Nichols [nezticle at gmail.com]
-
-Yes, that's what I'm using as an inspiration, even though I'm making
-things a bit more configurable (provide more options for graphical
-backends, etc.).
-
-I'm still wondering why so many people are doing Buildroot forks
-without contributing back the valuable work they are doing.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index 9dd2daa..2a386f2 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -82,12 +82,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FESTIVAL
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FIELDANALYSIS
+ 	bool "fieldanalysis"
+ 
+-config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
+-	bool "freeze"
+-
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEVERB
+ 	bool "freeverb"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREEZE
++	bool "freeze"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_FREI0R
+ 	bool "frei0r"
+ 
+@@ -211,12 +211,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SMOOTH
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED
+ 	bool "speed"
+ 
+-config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
+-	bool "subenc"
+-
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO
+ 	bool "stereo"
+ 
++config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SUBENC
++	bool "subenc"
++
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_TTA
+ 	bool "tta"
+ 
