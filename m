@@ -1,22 +1,19 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Jan 2013 12:24:01 +0100
-Subject: [Buildroot] [PATCH] links: needs mmu
-In-Reply-To: <1358161940-28777-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 14 Jan 2013 08:12:20 -0300")
-References: <1358161940-28777-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mwwct3ce.fsf@dell.be.48ers.dk>
+From: Ted Wood <ted@fgh.co.uk>
+Date: Mon, 14 Jan 2013 11:26:30 -0000
+Subject: [Buildroot] CANBUs Quesetion
+In-Reply-To: <20130111171429.79490168@skate>
+References: <001b01cdf015$9b34ca40$d19e5ec0$@co.uk>
+ <20130111171429.79490168@skate>
+Message-ID: <004501cdf24a$009f6440$01de2cc0$@co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+OK. I'll rephrase my original question...
 
- Gustavo> Fixes
- Gustavo> http://autobuild.buildroot.net/results/1c1456b19d7483475430b390291240733dbbf21b
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+I have an  XXX CPU Board. I have fitted a YYY I/O board to it, which is
+supplied with open source Linux drivers.
+How do I incorporate the YYY drivers into my Linux kernel build?
