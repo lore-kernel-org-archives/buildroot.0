@@ -1,24 +1,2306 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 14 Jan 2013 05:24:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 5864] buildroot make shows following error
-In-Reply-To: <bug-5864-163@https.bugs.busybox.net/>
-References: <bug-5864-163@https.bugs.busybox.net/>
-Message-ID: <20130114052459.2D3B09A050@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jan 2013 08:33:43 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2013-01-13
+Message-ID: <20130114073343.DEFE952C104@lolut.humanoidz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5864
 
-zubair <mohammedzubair2007@yahoo.com> changed:
+Hello,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|---                         |2012.08
+On 2013-01-13, 163 random build tests have been done and
+submitted on autobuild.buildroot.net.
+ 0 builds have been successful
+ 163 builds have failed
+
+Below the results of the failed builds. Successful builds are omitted.
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 16:46:37.000000000
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : www-data 1544192
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results/16:46:37.000000000/build-end.log
+Complete log   : http://autobuild.buildroot.net/results/16:46:37.000000000/build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results/16:46:37.000000000/config
+Defconfig      : http://autobuild.buildroot.net/results/16:46:37.000000000/defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+Build 
+==============================================
+
+Status         : 
+Failure reason : unknown
+Architecture   : 
+Submitted by   : 
+Submitted at   : 2 www-data
+Git commit ID  : http://git.buildroot.net/buildroot/commit/?id=
+End of log     : http://autobuild.buildroot.net/results//build-end.log
+Complete log   : http://autobuild.buildroot.net/results//build.log.bz2
+Configuration  : http://autobuild.buildroot.net/results//config
+Defconfig      : http://autobuild.buildroot.net/results//defconfig
+
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+http://autobuild.buildroot.net
