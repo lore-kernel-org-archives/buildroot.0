@@ -1,71 +1,174 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Jan 2013 23:51:00 +0100
-Subject: [Buildroot] [git commit] webkit: fix compilation without X11
-Message-ID: <20130114225131.3EB169A12B@busybox.osuosl.org>
+From: gilles.talis at gmail.com <gilles.talis@gmail.com>
+Date: Mon, 14 Jan 2013 15:32:07 -0800
+Subject: [Buildroot] [PATCH 1/1] httping: new package
+In-Reply-To: <y>
+References: <y>
+Message-ID: <1358206327-28381-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9fce375dfc7d2040d10925e78286708576334f93
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Gilles Talis <gilles.talis@gmail.com>
 
-Fixes:
- http://autobuild.buildroot.net/results/86534588d192fe1515ce520c109e884864871d94/
-and others.
+Httping is like 'ping' but for http-requests.
+Give it an url, and it'll show you how long it takes to connect,
+send a request and retrieve the reply (only the headers)
 
-Webkit includes X11 headers even when configuerd for DirecfFB, because
-the test within GNUmakefile.in does not work properly. Autoreconfigure
-fails because of incompatibility with buildroot's autotools version.
-
-For now a patch for GNUmakefile.in fixes this problem.
-
-Since webkit release is quite old it doesn't seem to be worth doing more,
-on the long run we should bump the version.
-
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- .../webkit-fix-compilation-on-DirectFB-2.patch     |   33 ++++++++++++++++++++
- 1 files changed, 33 insertions(+), 0 deletions(-)
+ package/Config.in                             |    1 +
+ package/httping/Config.in                     |   23 +++++++++++
+ package/httping/httping-override-cflags.patch |   53 +++++++++++++++++++++++++
+ package/httping/httping.mk                    |   37 +++++++++++++++++
+ 4 files changed, 114 insertions(+), 0 deletions(-)
+ create mode 100644 package/httping/Config.in
+ create mode 100644 package/httping/httping-override-cflags.patch
+ create mode 100644 package/httping/httping.mk
 
-diff --git a/package/webkit/webkit-fix-compilation-on-DirectFB-2.patch b/package/webkit/webkit-fix-compilation-on-DirectFB-2.patch
+diff --git a/package/Config.in b/package/Config.in
+index 42cde07..c59f342 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -631,6 +631,7 @@ source "package/ethtool/Config.in"
+ source "package/heirloom-mailx/Config.in"
+ source "package/hiawatha/Config.in"
+ source "package/hostapd/Config.in"
++source "package/httping/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/ifplugd/Config.in"
+ endif
+diff --git a/package/httping/Config.in b/package/httping/Config.in
 new file mode 100644
-index 0000000..a15226e
+index 0000000..aa1550a
 --- /dev/null
-+++ b/package/webkit/webkit-fix-compilation-on-DirectFB-2.patch
-@@ -0,0 +1,33 @@
-+From ef45c7ce5325d85ca924502b1b0a929fecd6581d Mon Sep 17 00:00:00 2001
-+From: Stephan Hoffmann <sho@relinux.de>
-+Date: Thu, 27 Dec 2012 18:08:29 +0100
-+Subject: [PATCH] Fix test for presence of X11
++++ b/package/httping/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_HTTPING
++       bool "httping"
++       help
++         Httping is like 'ping' but for http-requests.
++         Give it an url, and it'll show you how long it takes to connect,
++         send a request and retrieve the reply (only the headers).
++         Be aware that the transmission across the network also takes time!
++         So it measures the latency of the webserver + network.
 +
-+The test in GNUmakefile.in checking for presence of X11 and
-+enabling the XP_UNIX define succeeds even when X11 is not
-+present and Webkit is built for DirectFB.
++         http://www.vanheusden.com/httping/
 +
-+Because of this X11-headers are included and the build fails.
++if BR2_PACKAGE_HTTPING
 +
-+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
++config BR2_PACKAGE_HTTPING_OPENSSL
++       bool "OpenSSL support"
++       select BR2_PACKAGE_OPENSSL
++       help
++         Adds openSSL support to httping
++
++config BR2_PACKAGE_HTTPING_TFO
++       bool "TCP Fast Open (TFO) support"
++
++endif
+diff --git a/package/httping/httping-override-cflags.patch b/package/httping/httping-override-cflags.patch
+new file mode 100644
+index 0000000..a3cf59d
+--- /dev/null
++++ b/package/httping/httping-override-cflags.patch
+@@ -0,0 +1,53 @@
++From 66f5811dd45fa27a7bfacf946dfefd16d765bb4d Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Mon, 14 Jan 2013 11:48:00 -0800
++Subject: [PATCH] allow CFLAGS/LDFLAGS to be overriden from command line
++
++Ensure required CFLAGS/LDFLAGS are appended to those provided in command line
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 +---
-+ GNUmakefile.in |    3 ++-
-+ 1 files changed, 2 insertions(+), 1 deletions(-)
++ Makefile |   12 ++++++------
++ 1 files changed, 6 insertions(+), 6 deletions(-)
 +
-+diff --git a/GNUmakefile.in b/GNUmakefile.in
-+index f14f27b..3ac811f 100644
-+--- a/GNUmakefile.in
-++++ b/GNUmakefile.in
-+@@ -88,7 +88,8 @@ noinst_PROGRAMS = Programs/minidom$(EXEEXT) \
-+ 	$(am__EXEEXT_1)
-+ 
-+ # For the Gtk port we want to use XP_UNIX both in X11 and Mac
-+- at TARGET_WIN32_FALSE@am__append_1 = -DXP_UNIX
-++ at TARGET_X11_TRUE@am__append_1 = -DXP_UNIX
-++ at TARGET_QUARTZ_TRUE@am__append_1 = -DXP_UNIX
-+ @USE_ICU_UNICODE_TRUE at am__append_2 = \
-+ @USE_ICU_UNICODE_TRUE@	-DWTF_USE_ICU_UNICODE=1
-+ 
-+-- 
-+1.7.0.4
++diff --git a/Makefile b/Makefile
++index 4c4f6a8..fdbb4cb 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -19,7 +19,7 @@ TARGET=httping
++ DEBUG=yes
++ WFLAGS=-Wall -W
++ OFLAGS=-O3
++-CFLAGS+=$(WFLAGS) $(OFLAGS) -DVERSION=\"$(VERSION)\"
+++override CFLAGS+=$(WFLAGS) $(OFLAGS) -DVERSION=\"$(VERSION)\"
 +
++ PACKAGE=$(TARGET)-$(VERSION)
++ PREFIX=/usr
++@@ -48,19 +48,19 @@ DOCS=license.txt license.OpenSSL readme.txt
++ # TFO=yes
++
++ ifeq ($(SSL),no)
++-CFLAGS+=-DNO_SSL
+++override CFLAGS+=-DNO_SSL
++ else
++ OBJS+=mssl.o
++-LDFLAGS+=-lssl -lcrypto
+++override LDFLAGS+=-lssl -lcrypto
++ endif
++
++ ifeq ($(TFO),yes)
++-CFLAGS+=-DTCP_TFO
+++override CFLAGS+=-DTCP_TFO
++ endif
++
++ ifeq ($(DEBUG),yes)
++-CFLAGS+=-D_DEBUG -ggdb
++-LDFLAGS+=-g
+++override CFLAGS+=-D_DEBUG -ggdb
+++override LDFLAGS+=-g
++ endif
++
++ ifeq ($(ARM),yes)
++--
++1.7.4.1
++
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+new file mode 100644
+index 0000000..bec65f3
+--- /dev/null
++++ b/package/httping/httping.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# httping
++#
++#############################################################
++HTTPING_VERSION = 1.5.7
++HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
++HTTPING_SITE = http://www.vanheusden.com/httping
++HTTPING_LICENSE = GPLv2
++HTTPING_LICENSE_FILES = license.txt
++
++ifeq ($(BR2_PACKAGE_HTTPING_OPENSSL),y)
++       HTTPING_DEPENDENCIES = openssl
++else
++       HTTPING_SSL = no
++endif
++
++ifeq ($(BR2_PACKAGE_HTTPING_TFO),y)
++       HTTPING_TFO = yes
++endif
++
++define HTTPING_BUILD_CMDS
++       $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++               SSL=$(HTTPING_SSL) \
++               DEBUG=no \
++               TFO=$(HTTPING_TFO) -C $(@D)
++endef
++
++define HTTPING_INSTALL_TARGET_CMDS
++       $(INSTALL) -D -m 0755 $(@D)/httping $(TARGET_DIR)/usr/bin/httping
++endef
++
++define HTTPING_CLEAN_CMDS
++       $(MAKE) -C $(@D) clean
++endef
++
++$(eval $(generic-package))
+-- 
+1.7.4.1
