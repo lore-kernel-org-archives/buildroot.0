@@ -1,39 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jan 2013 19:51:01 +0100
-Subject: [Buildroot] CANBUs Quesetion
-In-Reply-To: <004b01cdf26d$ea1d2cb0$be578610$@co.uk>
-References: <001b01cdf015$9b34ca40$d19e5ec0$@co.uk>
- <20130111171429.79490168@skate>
- <004501cdf24a$009f6440$01de2cc0$@co.uk>
- <50F40BF3.5080106@relinux.de>
- <004b01cdf26d$ea1d2cb0$be578610$@co.uk>
-Message-ID: <20130114195101.12914c2d@skate>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Mon, 14 Jan 2013 18:51:51 +0000
+Subject: [Buildroot] [PATCH][poke] BR2_PREFER_STATIC_LIB and LDFLAGS+=
+	-static
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C610BB3983@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ted Wood,
+All,
 
-On Mon, 14 Jan 2013 15:43:34 -0000, Ted Wood wrote:
+I just pulled the latest snapshot (buildroot-20130114.tar.bz2), did a
+quick grep to see if the patch was applied:
 
-> Sorry, I failed to make the distinction between Open Source and GPL. 
+buildroot/package# grep static *
+Makefile.in:SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+Makefile.in:TARGET_LDFLAGS += -static
+Makefile.in:SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+pkg-autotools.mk:               --enable-shared --disable-static \
+
+and see that it wasn't.  Is it on anyone's tree right now or did it
+get lost in the shuffle?
+
+Thanks!
+Andy
+
+> -----Original Message-----
+> From: ANDY KENNEDY
+> Sent: Monday, November 05, 2012 10:55 AM
+> To: 'buildroot at busybox.net'
+> Subject: [PATCH] BR2_PREFER_STATIC_LIB and LDFLAGS+= -static
 > 
-> The drivers are GPL. Could you point me at some information on how to do
-> this?
-
-How to do what? Sorry but your question is far from being precise
-enough to be understood.
-
-So the best reference I have for now is
-http://www.catb.org/esr/faqs/smart-questions.html#beprecise.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> The following changes LDFLAGS from += -static to += --static if building
+> with BR2_PREFER_STATIC_LIB so that various components actually build
+> statically.
+> 
+> Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> diff -Naur a/package/Makefile.in b/package/Makefile.in
+> --- a/package/Makefile.in       2012-08-31 03:49:41.000000000 -0500
+> +++ b/package/Makefile.in       2012-11-05 10:45:45.000000000 -0600
+> @@ -299,7 +299,7 @@
+> 
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>  SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+> -TARGET_LDFLAGS += -static
+> +TARGET_LDFLAGS += --static
+>  else
+>  SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+>  endif
+> 
