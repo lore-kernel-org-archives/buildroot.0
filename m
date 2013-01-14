@@ -1,128 +1,86 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Jan 2013 20:46:21 +0100
-Subject: [Buildroot] [git commit] wpa-supplicant: add options to enable the
-	new DBus interface
-Message-ID: <20130114201754.9C2919A0E4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jan 2013 21:37:12 +0100
+Subject: [Buildroot] [PATCH] eclipse support: document script and add checks
+Message-ID: <1358195832-2674-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6b9d86a3e96601aef02f0f1c8d26acd5372954b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As requested by Peter, add a bit of documentation in the
+eclipse-register-toolchain script, and add a few more checks (even
+though this script is not intended to be executed manually, which is
+also now mentionned in the documentation).
 
-Allow to configure the DBus interfaces that the wpa_supplicant
-binary should support (old or new or both). Also allow to
-enable introspection support on the new DBus interface.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (build-test with all features enabled)
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wpa_supplicant/Config.in         |   19 +++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk |   42 ++++++++++++++++++++++++++---
- 2 files changed, 56 insertions(+), 5 deletions(-)
+ support/scripts/eclipse-register-toolchain |   48 ++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index d7cefe3..8b0b366 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -30,6 +30,25 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	  (optionally, with WPS); this links in parts of hostapd functionality
- 	  into wpa_supplicant.
+diff --git a/support/scripts/eclipse-register-toolchain b/support/scripts/eclipse-register-toolchain
+index dd9f158..6f91998 100755
+--- a/support/scripts/eclipse-register-toolchain
++++ b/support/scripts/eclipse-register-toolchain
+@@ -1,11 +1,59 @@
+ #!/bin/sh
  
-+config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD
-+	bool "Enable support for old DBus control interface"
-+	depends on BR2_PACKAGE_DBUS
-+	help
-+	  Enable support for old DBus control interface
-+	  (fi.epitest.hostap.WPASupplicant).
++# This script registers the toolchain of a Buildroot project into the
++# Eclipse plugin. To do so, it adds a new line for the Buildroot
++# toolchain into the $HOME/.buildroot-eclipse.toolchains file, which
++# the Eclipse Buildroot plugin reads to discover automatically the
++# available Buildroot toolchains on the system.
++#
++# This script should typically not be called manually. Instead, one
++# should enable the BR2_ECLIPSE_REGISTER configuration option, which
++# will lead Buildroot to automatically call this script with the
++# appropriate arguments.
++#
++# Usage:
++#  eclipse-register-toolchain project-directory toolchain-prefix architecture
++#
++#   project-directory is the absolute path to the Buildroot project
++#   output directory (which contains the host/, target/, build/,
++#   images/, etc. subdirectories). It should be an absolute and
++#   canonical path.
++#
++#   toolchain-prefix is the prefix of the cross-compilation tools, i.e
++#   'arm-linux-' if the cross-compiler executable is 'arm-linux-gcc'.
++#
++#   architecture is the lower-cased name of the architecture targetted
++#   by the Buildroot project.
 +
-+config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
-+	bool "Enable support for new DBus control interface"
-+	depends on BR2_PACKAGE_DBUS
-+	help
-+	  Enable support for new DBus control interface (fi.w1.wpa_supplicant1).
++if test $# -ne 3; then
++    echo "Invalid number of arguments."
++    echo "Usage: $0 project-directory toolchain-prefix architecture"
++    exit 1
++fi
 +
-+config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
-+	bool "Introspection support"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW
-+	help
-+	  Add introspection support for new DBus control interface.
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_WPS
- 	bool "Enable support for WPS"
- 	help
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 3830d65..02ca125 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -10,7 +10,8 @@ WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
- WPA_SUPPLICANT_LICENSE_FILES = README
- WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
- WPA_SUPPLICANT_SUBDIR = wpa_supplicant
--WPA_SUPPLICANT_DBUS_SERVICE = fi.epitest.hostap.WPASupplicant
-+WPA_SUPPLICANT_DBUS_OLD_SERVICE = fi.epitest.hostap.WPASupplicant
-+WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ project_directory=$1
+ toolchain_prefix=$2
+ architecture=$3
  
-@@ -77,9 +78,41 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 	WPA_SUPPLICANT_MAKE_ENV = \
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)"	\
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
--define WPA_SUPPLICANT_DBUS_CONFIG
++if test ! -d ${project_directory} ; then
++    echo "Non-existing project directory ${project_directory}"
++    exit 1
++fi
 +
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),y)
-+define WPA_SUPPLICANT_DBUS_OLD_CONFIG
- 	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- endef
-+define WPA_SUPPLICANT_INSTALL_DBUS_OLD
-+	$(INSTALL) -D \
-+	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service \
-+	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE).service
-+endef
-+endif
++if test ! -d ${project_directory}/host ; then
++    echo "Your project directory does not look like a Buildroot output"
++    exit 1
++fi
 +
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_NEW),y)
-+define WPA_SUPPLICANT_DBUS_NEW_CONFIG
-+	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_NEW=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+endef
-+define WPA_SUPPLICANT_INSTALL_DBUS_NEW
-+	$(INSTALL) -D \
-+	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
-+	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
-+endef
-+endif
++if test ! -e ${project_directory}/host/usr/bin/${toolchain_prefix}gcc ; then
++    echo "Cannot find the cross-compiler in the project directory"
++    exit 1
++fi
 +
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
-+define WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG
-+	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS_INTRO=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+endef
-+endif
-+
-+define WPA_SUPPLICANT_DBUS_CONFIG
-+	$(WPA_SUPPLICANT_DBUS_OLD_CONFIG)
-+	$(WPA_SUPPLICANT_DBUS_NEW_CONFIG)
-+	$(WPA_SUPPLICANT_DBUS_INTROSPECTION_CONFIG)
-+endef
-+
- endif
+ TOOLCHAIN_ECLIPSE_FILE=${HOME}/.buildroot-eclipse.toolchains
  
- define WPA_SUPPLICANT_CONFIGURE_CMDS
-@@ -124,9 +157,8 @@ define WPA_SUPPLICANT_INSTALL_DBUS
- 	$(INSTALL) -D \
- 	  $(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
- 	  $(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
--	$(INSTALL) -D \
--	  $(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_SERVICE).service \
--	  $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
-+	$(WPA_SUPPLICANT_INSTALL_DBUS_OLD)
-+	$(WPA_SUPPLICANT_INSTALL_DBUS_NEW)
- endef
- endif
- 
++# First, we remove all lines from the ${TOOLCHAIN_ECLISPE_FILE} that
++# correspond to toolchains that no longer exist.
+ if test -f ${TOOLCHAIN_ECLIPSE_FILE} ; then
+     mv ${TOOLCHAIN_ECLIPSE_FILE} ${TOOLCHAIN_ECLIPSE_FILE}.tmp
+     cat ${TOOLCHAIN_ECLIPSE_FILE}.tmp | while read toolchain ; do
+-- 
+1.7.9.5
