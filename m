@@ -1,92 +1,138 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jan 2013 23:43:19 +0100
-Subject: [Buildroot] Fw: [yocto] [ANOUNCEMENT] bmaptool
-Message-ID: <20130114234319.358c5eda@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Jan 2013 23:47:49 +0100
+Subject: [Buildroot] [git commit] mcrypt: rediff CVE-2012-4527 to fix issue
+	with old patch versions
+Message-ID: <20130114224827.DA3779A126@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=6ff753f2a8f3f716eb338eb4070fb936118dc129
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This might be interesting for the whole "generating images" discussion.
+Fixes http://autobuild.buildroot.org/results/e648bfb37051c3b73712d2c7881193e9376f2812/
 
-Best regards,
+patch 2.5.9 (but not E.G. 2.6.1) had problems with the upstream CVE patch,
+so rediff it to make it work.
 
-Thomas
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mcrypt/mcrypt-CVE-2012-4527.patch |   49 ++++++++++++-----------------
+ 1 files changed, 20 insertions(+), 29 deletions(-)
 
------ Message Transf?r? -----
-
-Date: Mon, 14 Jan 2013 14:46:33 +0200
-De: Artem Bityutskiy <dedekind1@gmail.com>
-?: yocto at yoctoproject.org
-Sujet: [yocto] [ANOUNCEMENT] bmaptool
-
-
-Hi Yocto people,
-
-I would like to announce the bmap-tools project here, because I think it
-may be very useful for Yocto and some of the people who are using Yocto.
-
-The bmap-tools project is about disk images, like direct HDD images, or
-Virtual-machine images like vdmk or qcow2, etc. The project uses simple
-ideas in a clever way to copy/flash these kind of images quickly.
-
-Please, read all the details in the project wiki page:
-https://source.tizen.org/documentation/reference/bmaptool
-
-The project was created for Tizen IVI, but it is generic and is not
-bounded to Tizen in any way.
-
-I do not want to duplicate the bmap-tools documentation here, but
-instead, let me just describe how we use it in Tizen IVI.
-
-1. We produce raw images of 4GB in size.
-2. Images have 3 partitions inside.
-3. Images are rather sparse, we have only 1.2GB of data inside (total)
-4. We publish compressed images, they take 300MiB
-5. We also publish bmap file for the image, e.g., see the ".bmap" file
-   here:
-http://download.tizen.org/snapshots/2.0alpha/ivi/tizen-2.0_20130111.3/images/ivi-2.0-alpha/
-
-Now the key point: when users flash the 4GiB images using bmaptool, they
-actually copy only 1.1GiB of data. E.g, when flashing to slow USB
-sticks, it reducing writing time from 20Min to 4Min.
-
-The other key point here: if we or others decide to produce 64GiB or
-1TiB images instead, with the same amount of data (1.2GiB), the flashing
-time will be almost the same.
-
-The third key point here: images are compressed, and rather small, which
-saves space and network traffic. When/if we make images 64GiB or 1TiB,
-their .bz2 files will still be almost as small, because zeroes compress
-very well.
-
-If you think about a production factory case, you may see a lot of
-benefits of using bmap.
-
-Anyway, for the Yocto project, it would probably be nice if in the
-window where you select the type of image to generate and its size,
-there was a "generate bmap" check-box (on by default :-)).
-
-Comments, questions?
-
-Thanks,
-Artem.
-
--- 
-Best Regards,
-Artem Bityutskiy
-
-
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-_______________________________________________
-yocto mailing list
-yocto at yoctoproject.org
-https://lists.yoctoproject.org/listinfo/yocto
+diff --git a/package/mcrypt/mcrypt-CVE-2012-4527.patch b/package/mcrypt/mcrypt-CVE-2012-4527.patch
+index a287680..a8cf6f4 100644
+--- a/package/mcrypt/mcrypt-CVE-2012-4527.patch
++++ b/package/mcrypt/mcrypt-CVE-2012-4527.patch
+@@ -1,32 +1,23 @@
+-Description: [CVE-2012-4527] Stack-based buffer overflow with long file names
+- .
+- A buffer overflow in mcrypt version 2.6.8 and earlier due to long filenames.
+- If a user were tricked into attempting to encrypt/decrypt specially crafted
+- long filename(s), this flaw would cause a stack-based buffer overflow that
+- could potentially lead to arbitrary code execution.
+- .
+- Note that this is caught by FORTIFY_SOURCE, which makes this a crash-only
+- bug on wheezy.
+-Author: Attila Bogar, Jean-Michel Vourg??re <jmv_deb@nirgal.com>
+-Origin: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-4527
+-Bug: CVE-2012-4527
+-Bug-Debian: http://bugs.debian.org/690924
+-Forwarded: no
+-Last-Update: 2012-11-01
+-Index: mcrypt-2.6.8/src/mcrypt.c
+-===================================================================
+---- mcrypt-2.6.8.orig/src/mcrypt.c
+-+++ mcrypt-2.6.8/src/mcrypt.c
+-@@ -41,4 +41,6 @@
++Fix for CVE-2012-4527.
++Authored by Attila Bogar and Jean-Michel Vourg??re <jmv_deb@nirgal.com>
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura mcrypt-2.6.8.orig/src/mcrypt.c mcrypt-2.6.8/src/mcrypt.c
++--- mcrypt-2.6.8.orig/src/mcrypt.c	2013-01-14 19:15:49.465925072 -0300
+++++ mcrypt-2.6.8/src/mcrypt.c	2013-01-14 19:28:13.711478000 -0300
++@@ -44,7 +44,9 @@
++ static char rcsid[] =
++     "$Id: mcrypt.c,v 1.2 2007/11/07 17:10:21 nmav Exp $";
+  
++-char tmperr[128];
+ +/* Temporary error message can contain one file name and 1k of text */
+ +#define ERRWIDTH ((PATH_MAX)+1024)
+--char tmperr[128];
+ +char tmperr[ERRWIDTH];
+  unsigned int stream_flag = FALSE;
+  char *keymode = NULL;
+  char *mode = NULL;
+-@@ -482,7 +485,7 @@
++@@ -482,7 +484,7 @@
+  #ifdef HAVE_STAT
+        if (stream_flag == FALSE) {
+  	 if (is_normal_file(file[i]) == FALSE) {
+@@ -35,7 +26,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  		    _
+  		    ("%s: %s is not a regular file. Skipping...\n"),
+  		    program_name, file[i]);
+-@@ -501,7 +504,7 @@
++@@ -501,7 +503,7 @@
+  	    dinfile = file[i];
+  	 if ((isatty(fileno((FILE *) (stdin))) == 1)
+  	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
+@@ -44,7 +35,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  		    _
+  		    ("%s: Encrypted data will not be read from a terminal.\n"),
+  		    program_name);
+-@@ -520,7 +523,7 @@
++@@ -520,7 +522,7 @@
+  	    einfile = file[i];
+  	 if ((isatty(fileno((FILE *) (stdout))) == 1)
+  	     && (stream_flag == TRUE) && (force == 0)) {	/* not a tty */
+@@ -53,7 +44,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  		    _
+  		    ("%s: Encrypted data will not be written to a terminal.\n"),
+  		    program_name);
+-@@ -544,7 +547,7 @@
++@@ -544,7 +546,7 @@
+  	    strcpy(outfile, einfile);
+  	    /* if file has already the .nc ignore it */
+  	    if (strstr(outfile, ".nc") != NULL) {
+@@ -62,7 +53,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  		       _
+  		       ("%s: file %s has the .nc suffix... skipping...\n"),
+  		       program_name, outfile);
+-@@ -590,10 +593,10 @@
++@@ -590,10 +592,10 @@
+  
+  	 if (x == 0) {
+  	    if (stream_flag == FALSE) {
+@@ -75,7 +66,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  	       err_warn(tmperr);
+  	    }
+  #ifdef HAVE_STAT
+-@@ -610,7 +613,7 @@
++@@ -610,7 +612,7 @@
+  
+  	 } else {
+  	    if (stream_flag == FALSE) {
+@@ -84,7 +75,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  		       _
+  		       ("File %s was NOT decrypted successfully.\n"),
+  		       dinfile);
+-@@ -636,10 +639,10 @@
++@@ -636,10 +638,10 @@
+  
+  	 if (x == 0) {
+  	    if (stream_flag == FALSE) {
+@@ -97,7 +88,7 @@ Index: mcrypt-2.6.8/src/mcrypt.c
+  	       err_warn(tmperr);
+  	    }
+  #ifdef HAVE_STAT
+-@@ -655,7 +658,7 @@
++@@ -655,7 +657,7 @@
+  
+  	 } else {
+  	    if (stream_flag == FALSE) {
