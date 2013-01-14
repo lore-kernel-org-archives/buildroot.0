@@ -1,31 +1,45 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Jan 2013 16:33:18 +0100
-Subject: [Buildroot] [PATCH] libelementary: only use libethumb if
-	libedbus is available.
-In-Reply-To: <1358171105-8786-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Mon, 14 Jan 2013 14:45:05 +0100")
-References: <87mwwdz9k2.fsf@dell.be.48ers.dk>
- <1358171105-8786-1-git-send-email-arnout@mind.be>
-Message-ID: <87hamjsrsx.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Jan 2013 16:35:53 +0100
+Subject: [Buildroot] [PATCH 1/2] Integration with Buildroot Toolchain
+	Eclipse plugin
+In-Reply-To: <1358088734-23460-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 13 Jan 2013 15:52:13 +0100")
+References: <1358088734-23460-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1358088734-23460-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d2x7srom.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Thomas> The Eclipse plugin at
+ Thomas> https://github.com/mbats/eclipse-buildroot-toolchain-plugin allows
+ Thomas> users of Eclipse to easily use the toolchain available in
+ Thomas> Buildroot. To do so, this plugin reads
+ Thomas> ~/.buildroot-eclipse.toolchains, which contains the list of Buildroot
+ Thomas> toolchains available on the system, and then offer those toolchains to
+ Thomas> compile Eclipse projects.
 
- Arnout> libelementary uses the ethumb_client library, but that one is
- Arnout> only built if libedbus is available. So fixup the
- Arnout> --enable/disable-ethumb according to the selection of
- Arnout> BR2_PACKAGE_LIBEDBUS.
+ Thomas> In order to interface with this plugin, this commit adds an option
+ Thomas> that allows the user to tell whether (s)he wants the Buildroot project
+ Thomas> toolchain to be visible under this Eclipse plugin. It simply adds a
+ Thomas> line in this ~/.buildroot-eclipse.toolchains file.
 
- Arnout> Fixes e.g.
- Arnout> http://autobuild.buildroot.net/results/14ef98da6b0632e24514fef696fae9a650c90c96
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed, thanks.
+ Thomas> +++ b/support/scripts/eclipse-register-toolchain
+ Thomas> @@ -0,0 +1,28 @@
+ Thomas> +#!/bin/sh
+ Thomas> +
+ Thomas> +project_directory=$1
+ Thomas> +toolchain_prefix=$2
+ Thomas> +architecture=$3
+
+Committed, thanks. I know this is an internal script, but a bit of
+documentation / argument checking could have been good.
 
 -- 
 Bye, Peter Korsgaard
