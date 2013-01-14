@@ -1,27 +1,44 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 14 Jan 2013 19:39:27 +0000
-Subject: [Buildroot] [PATCH][poke] BR2_PREFER_STATIC_LIB and LDFLAGS+=
-	-static
-In-Reply-To: <87vcazr1z6.fsf@dell.be.48ers.dk>
-References: <F9C551623D2CBB4C9488801D14F864C628A986@ex-mb1.corp.adtran.com>
- <F9C551623D2CBB4C9488801D14F864C610BB3983@ex-mb1.corp.adtran.com>
- <87vcazr1z6.fsf@dell.be.48ers.dk>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C610BB8ECD@ex-mb1.corp.adtran.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Jan 2013 20:40:26 +0100
+Subject: [Buildroot] [git commit] Pass --static rather than -static in
+	LDFLAGS when BR2_PREFER_STATIC_LIB
+Message-ID: <20130114194106.3B6D69A11C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Committed now with Arnout's explanation about why it is needed. Please
-> consider documenting WHY a change is needed rather than just what the
-> change is to get this kind of patches merged faster in the future.
+commit: http://git.buildroot.net/buildroot/commit/?id=0a4bd19f4a136930c611027942ce43124a81c5cb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My bad.  I'll try to be more verbose next time!
+The following changes LDFLAGS from -static to --static if building
+with BR2_PREFER_STATIC_LIB so that various components actually build
+statically.
 
-Andy
+Libtool interpret -static as linking statically with libraries that will not
+be installed to the libdir; you have to pass it -all-static to force static
+linking.  Or, pass --static, which libtool passes on blindly to gcc.  gcc
+and (GNU) ld both interpret --static the same as -static (although this
+isn't documented).
 
-> 
-> --
-> Bye, Peter Korsgaard
+Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index cc8f320..038bd9c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -319,7 +319,7 @@ endif
+ 
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+-TARGET_LDFLAGS += -static
++TARGET_LDFLAGS += --static
+ else
+ SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+ endif
