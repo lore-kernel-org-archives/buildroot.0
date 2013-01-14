@@ -1,40 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Jan 2013 14:02:10 +0100
-Subject: [Buildroot] [PATCH 1/1] httping: new package
-In-Reply-To: <CAKcgs2wLk-cOK7qUDJ23TidHSyESJF-vCoL+JezDSL2q0H1c0w@mail.gmail.com>
- (Gilles Talis's message of "Sun, 13 Jan 2013 16:47:50 -0800")
-References: <1358036972-10406-1-git-send-email-gilles.talis@gmail.com>
- <20130113120500.0ad7be3a@skate>
- <CAKcgs2xk-=iG-3Ezmc1upEPBjhSGcmgg9WSwn=1E3+OKDT05fg@mail.gmail.com>
- <CAKcgs2wLk-cOK7qUDJ23TidHSyESJF-vCoL+JezDSL2q0H1c0w@mail.gmail.com>
-Message-ID: <87ehhnudd9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jan 2013 14:10:45 +0100
+Subject: [Buildroot] Currently packaging Qt5
+In-Reply-To: <741030A2814B43C7A9DC318DDB3B4397@JohanW7>
+References: <20130114105802.1199d10e@skate> <50F3EDF8.6010203@lucaceresoli.net>
+ <20130114124521.1671c93e@skate>
+ <741030A2814B43C7A9DC318DDB3B4397@JohanW7>
+Message-ID: <20130114141045.039ec839@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+Dear Sagaert Johan,
 
- Gilles> I forgot to copy mailing list.
- Gilles> Sorry about that and thanks for your help.
- Gilles> Gilles.
+On Mon, 14 Jan 2013 13:48:12 +0100, Sagaert Johan wrote:
 
- Gilles> 2013/1/13 Gilles Talis <gilles.talis@gmail.com>
+> Just a hint : 
+> 
+> https://github.com/nezticle/RaspberryPi-BuildRoot has the QT5 integrated
+> with the squask toolchain in buildroot.
+> Maintained by Andy Nichols [nezticle at gmail.com]
 
- Gilles>     Dear Thomas,
+Yes, that's what I'm using as an inspiration, even though I'm making
+things a bit more configurable (provide more options for graphical
+backends, etc.).
 
- Gilles>     I thought I knew Makefiles better than that. Well, I was wrong :-).
- Gilles>     The reason why TARGET_CONFIGURE_OPTS does not work in this case is because
- Gilles>     it overrides the original Makefile's CFLAGS variable (that should be kept
- Gilles>     in order for target to compile). Apart from adding "override" in the
- Gilles>     package Makefile, I actually do not see how to use TARGET_CONFIGURE_OPTS
- Gilles>     and still keep Makefile CFLAGS. Any hint?
- Gilles>     This will surely help me for future patches/projects.
+I'm still wondering why so many people are doing Buildroot forks
+without contributing back the valuable work they are doing.
 
-That's indeed how it is normally done.
+Best regards,
 
-override CFLAGS += ..
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
