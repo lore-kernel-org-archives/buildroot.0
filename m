@@ -1,44 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Jan 2013 22:29:00 +0100
-Subject: [Buildroot] [PATCH v2 1/6] sg3_utils: new package
-In-Reply-To: <CAAfyv36XKECoCh4+Dx-revgX_hF9N7A94DqD=5zaNdo=4scm3g@mail.gmail.com>
-References: <1357591399-3566-1-git-send-email-marek.belisko@open-nandra.com>
- <201301152159.17888.yann.morin.1998@free.fr>
- <CAAfyv36XKECoCh4+Dx-revgX_hF9N7A94DqD=5zaNdo=4scm3g@mail.gmail.com>
-Message-ID: <201301152229.00798.yann.morin.1998@free.fr>
+From: =?UTF-8?B?U3RlZmFuIEZyw7ZiZXJn?= <stefan.froberg@petroprogram.com>
+Date: Tue, 15 Jan 2013 23:52:35 +0200
+Subject: [Buildroot] [PATCH] proxychains: bump to version 4.4
+In-Reply-To: <87txqikuuy.fsf@dell.be.48ers.dk>
+References: <1358254286-5057-1-git-send-email-stefan.froberg@petroprogram.com>
+ <87y5fukwa7.fsf@dell.be.48ers.dk> <50F5C5AC.3050105@petroprogram.com>
+ <87txqikuuy.fsf@dell.be.48ers.dk>
+Message-ID: <50F5CFA3.8070605@petroprogram.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Belisko, All,
+15.1.2013 23:19, Peter Korsgaard kirjoitti:
+>>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+> Hi,
+>
+>  Stefan> AFAIK, this proxychains-ng 4.4 is suppose to replace that old
+>  Stefan> 3.1 version.
+>
+>  Stefan> I also followed to github from the link Thomas gave me in
+>  Stefan> http://lists.busybox.net/pipermail/buildroot/2013-January/065078.html
+>  Stefan> And that tarball location I grapped by googling proxychains and rofl0r
+>  Stefan> (the maintainer of this new proxychains version).
+>
+>  Stefan> But now I see that I was blind and could have just easily clicked
+>  Stefan> http://sourceforge.net/projects/proxychains-ng/files from that
+>  Stefan> same github page and find the same files there...
+>
+>  Stefan> I'll rename proxychain -> proxychain-ng,  fix that URL to point
+>  Stefan> http://downloads.sourceforge.net/project/proxychains-ng/proxychains-4.4.tar.bz2
+>  Stefan> and resubmit.
+>
+> Ok, great. The tarballs are also available on github:
+>
+> https://github.com/rofl0r/proxychains/tags
+>
+>
 
-On Tuesday 15 January 2013 Belisko Marek wrote:
-> On Tue, Jan 15, 2013 at 9:59 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > SG3_UTILS_LICENCE = LGPLv2.1+ BSD-3c
-> > ifneq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
-> > SG3_UTILS_LICENCE += GPLV2+ BSD-3c
-> > endif
-> It's bit complicated. All library files are BSD only but utils files
-> are mixed (BSD + GPLv2).
-
-Then: 
-
-SG3_UTILS_LICENSE = BSD-3c
-ifneq ($(BR2_PACKAGE_SG3_UTILS_PROGS),)
-SG3_UTILS_LICENSE += GPLV2+
-endif
-
-(Note: LICENSE with a 'S', not LICENCE, my bad...)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ok, but I will use sourceforge because it has that nice auto mirror
+selection feature.
