@@ -1,56 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jan 2013 11:45:27 +0100
-Subject: [Buildroot] [PATCH 2/3] boost: slightly reduce the verbosity of the
-	build
-In-Reply-To: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1358246728-5141-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jan 2013 11:45:26 +0100
+Subject: [Buildroot] [PATCH 1/3] boost: fix build problem by always building
+	a threaded version
+Message-ID: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the moment, the boost build is very verbose, it gives both the
-Jam-level command being executed, and the underlying system command
-being executed, with lots of newlines. Makes it hard to see where the
-failure is when there is one.
+Boost normally allows to build a non-threaded variant by passing
+threading=single or a multi-threaded variant by passing
+threading=multi.
 
-So, we reduce the verbosity level to -d+1, which only gives the
-Jam-level command. So now, it looks like:
+Unfortunately, the build of threading=single doesn't seem to work any
+more, due to bizarre things in the build system. We get "duplicate
+target" errors, that according to
+http://lists.boost.org/boost-build/2012/11/26582.php should appear if
+we ask for both threading=single,multi. But it seems to happen even in
+the threading=single case.
 
-common.copy /home/test/outputs/e/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/boost/geometry/multi/multi.hpp
-common.mkdir /home/test/outputs/e/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/boost/geometry/strategies
-gcc.compile.c++ bin.v2/libs/regex/build/gcc-4.7.3/release/threading-multi/icu.o
-gcc.compile.c++ bin.v2/libs/regex/build/gcc-4.7.3/release/threading-multi/regex_debug.o
-gcc.compile.c++ bin.v2/libs/regex/build/gcc-4.7.3/release/threading-multi/regex_raw_buffer.o
+Since Boost is such a big C++ beast, it probably doesn't make much
+sense to try to support it on toolchains that don't have thread
+support. So, we make the boost package depend on thread support. If
+someone cares enough in getting Boost to work in a non-threaded
+environment, then we can always revert back.
+
+Note that the boost package has no reverse dependencies in Buildroot,
+so we don't need to propagate this new dependency anywhere.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/439e72ac74c8058f30977e6abc39acd6379a17d3/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/boost/boost.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/boost/Config.in |   15 ++++++---------
+ package/boost/boost.mk  |    4 ++--
+ 2 files changed, 8 insertions(+), 11 deletions(-)
 
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index fb5360e..19dcc60 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -1,10 +1,14 @@
+-comment "boost requires a toolchain with C++ and large file support enabled"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
++comment "boost requires a toolchain with C++, large file and thread support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_BOOST
+ 	bool "boost"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
++	# Boost could theorically be built with threading=single, but
++	# that unfortunately doesn't work. Until someone fixes that,
++	# let's depend on threads.
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -14,12 +18,6 @@ config BR2_PACKAGE_BOOST
+ 
+ if BR2_PACKAGE_BOOST
+ 
+-config BR2_PACKAGE_BOOST_MULTITHREADED
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	bool "boost-multithreaded"
+-	help
+-	  Build the boost libraries as multithreaded
+-
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 
+@@ -76,7 +74,6 @@ config BR2_PACKAGE_BOOST_TEST
+ 	bool "boost-test"
+ 
+ config BR2_PACKAGE_BOOST_THREAD
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	bool "boost-thread"
+ 
+ config BR2_PACKAGE_BOOST_TIMER
 diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 62226ba..5e1bb4e 100644
+index 005c7ca..62226ba 100644
 --- a/package/boost/boost.mk
 +++ b/package/boost/boost.mk
-@@ -70,7 +70,7 @@ define BOOST_CONFIGURE_CMDS
- endef
+@@ -46,10 +46,10 @@ BOOST_FLAGS += --without-icu
+ endif
  
- define BOOST_INSTALL_TARGET_CMDS
--	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+2 \
-+	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(TARGET_DIR)/usr \
-@@ -78,7 +78,7 @@ define BOOST_INSTALL_TARGET_CMDS
- endef
+ BOOST_OPT += toolset=gcc \
++	     threading=multi \
+ 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 	     link=$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
+-	     runtime-link=$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
+-	     threading=$(if $(BR2_PACKAGE_BOOST_MULTITHREADED),multi,single)
++	     runtime-link=$(if $(BR2_PREFER_STATIC_LIB),static,shared)
  
- define BOOST_INSTALL_STAGING_CMDS
--	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+2 \
-+	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(STAGING_DIR)/usr \
+ ifeq ($(BR2_PACKAGE_BOOST_LOCALE),y)
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
 -- 
 1.7.9.5
