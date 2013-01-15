@@ -1,37 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Jan 2013 00:55:37 +0100
-Subject: [Buildroot] [PATCH] package/tvheadend: requires IPv6
-Message-ID: <1358207737-6188-1-git-send-email-yann.morin.1998@free.fr>
+From: Przemyslaw Wrzos <przemyslaw.wrzos@calyptech.com>
+Date: Tue, 15 Jan 2013 12:12:54 +1100
+Subject: [Buildroot] New kernel source mode [Proposal]
+Message-ID: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autobuild failure:
-    http://autobuild.buildroot.org/results/40cc7428b25afe3cddae50ec2098ee43127a2f41/
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/tvheadend/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index e6dee3a..67badce 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,9 +1,9 @@
--comment "tvheadend requires a toolchain with LARGEFILE support"
--    depends on !BR2_LARGEFILE
-+comment "tvheadend requires a toolchain with LARGEFILE and IPv6 support"
-+    depends on !BR2_LARGEFILE || !BR2_INET_IPV6
  
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
--	depends on BR2_LARGEFILE
-+	depends on BR2_LARGEFILE && BR2_INET_IPV6
- 	select BR2_PACKAGE_DVB_APPS
- 	select BR2_PACKAGE_OPENSSL
- 	help
--- 
-1.7.2.5
+
+I'd like to get some feedback on a feature I'd like to contribute to the
+buildroot project. I'm not quite sure what the process is so I thought
+I'd start on the mailing list.
+
+ 
+
+ 
+
+PROPOSAL:  Allow a directory (containing the source tree) to be used as
+the source for the kernel build. The source isn't copied to the output
+directory but instead the kernel's outputmakfile wrapper facility is
+used.
+
+ 
+
+RATIONALE:  In my project, changes to the kernel are frequent enough
+that it is ideal to be able to update the kernel source tree and then
+build directly from it.
+
+ 
+
+IMPLEMENTATION:  In addition to providing a new source for the linux
+build process itself, some package makefiles will need to be updated as
+they currently don't differentiate between the kernel source tree and
+build tree.
+
+ 
+
+ 
+
+I have this working already though I still need to update some of the
+packages as mentioned above. I wanted to ask if there would be any
+interest in rolling this into the buildroot project upstream.
+
+ 
+
+Thanks for your feedback.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20130115/2bcaf14f/attachment.html>
