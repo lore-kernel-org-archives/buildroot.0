@@ -1,52 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jan 2013 18:01:30 +0100
-Subject: [Buildroot] CANBUs Quesetion
-In-Reply-To: <F3FEF4CEAF2D432EB1B98EB89DC2CBBF@beraninstruments.com.local>
-References: <001b01cdf015$9b34ca40$d19e5ec0$@co.uk>
- <20130111171429.79490168@skate>
- <004501cdf24a$009f6440$01de2cc0$@co.uk>
- <50F40BF3.5080106@relinux.de>
- <004b01cdf26d$ea1d2cb0$be578610$@co.uk>
- <20130114195101.12914c2d@skate>
- <002d01cdf30f$46f45890$d4dd09b0$@co.uk>
- <50F5568C.8060007@relinux.de>
- <000e01cdf338$69da6150$3d8f23f0$@co.uk>
- <20130115171413.5d2b64ab@skate>
- <F3FEF4CEAF2D432EB1B98EB89DC2CBBF@beraninstruments.com.local>
-Message-ID: <20130115180130.121b22be@skate>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 15 Jan 2013 10:23:36 -0800
+Subject: [Buildroot] New kernel source mode [Proposal]
+In-Reply-To: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
+References: <EE5E77B503DE9A478B63A89AAD2585EDB66A2F@vpane.excalyptech.com>
+Message-ID: <CAJJ6jxsbtr92TvkAfhz5m_Jxxp1DTA7_cmtnY5NKYMkJFYgHoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Moore,
+On Mon, Jan 14, 2013 at 5:12 PM, Przemyslaw Wrzos
+<przemyslaw.wrzos@calyptech.com> wrote:
+> Hi,
+>
+> I?d like to get some feedback on a feature I?d like to contribute to the
+> buildroot project. I?m not quite sure what the process is so I thought I?d
+> start on the mailing list.
+>
+> PROPOSAL:  Allow a directory (containing the source tree) to be used as the
+> source for the kernel build. The source isn?t copied to the output directory
+> but instead the kernel?s outputmakfile wrapper facility is used.
+>
+> RATIONALE:  In my project, changes to the kernel are frequent enough that it
+> is ideal to be able to update the kernel source tree and then build directly
+> from it.
+>
+> IMPLEMENTATION:  In addition to providing a new source for the linux build
+> process itself, some package makefiles will need to be updated as they
+> currently don?t differentiate between the kernel source tree and build tree.
+>
+> I have this working already though I still need to update some of the
+> packages as mentioned above. I wanted to ask if there would be any interest
+> in rolling this into the buildroot project upstream.
+>
 
-On Tue, 15 Jan 2013 16:58:11 -0000, Will Moore wrote:
+Hi, I am not opposed to a simple integration of kernel development
+into buildroot.
 
-> I think CAN network support is mainline but
-> http://www.linuxdriverproject.org/mediawiki/index.php/Out_Of_Tree_Drivers#Contro
-> ller_Area_Network_.28CAN.2C_ISO_11898.29 suggests that the peak
-> system drivers are out of tree?  Or did I miss something?
+However, the last time I did kernel hacking a few years ago with
+buildroot, we just did not build the kernel with BR. The greatly
+speeds up a BR build after a clean (If you also use an external
+toolchain).
 
-I don't know exactly what the mainline driver supports, but:
+We had the kernel tree in an external git tree where we did standard
+cross builds using the same compilers used by the BR. A simple script
+to copy uImage and the modules to the nfs filesystem where BR was
+extracted made a testable system.
 
-$ ls drivers/net/can/usb/peak_usb/
-Makefile  pcan_usb.c  pcan_usb_core.c  pcan_usb_core.h  pcan_usb_pro.c  pcan_usb_pro.h
+So until Thomas gets his generic external package development working,
+this is a handy way to split kernel development from rootfs
+development.
 
-$ cat drivers/net/can/usb/Kconfig
-[...]
-config CAN_PEAK_USB
-	tristate "PEAK PCAN-USB/USB Pro interfaces"
-	---help---
-	  This driver supports the PCAN-USB and PCAN-USB Pro adapters
-	  from PEAK-System Technik (http://www.peak-system.com).
-
-(This is a 3.8-rc2 or -rc3 kernel, don't remember)
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Regards, Steve
