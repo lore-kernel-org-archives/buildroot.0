@@ -1,32 +1,94 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 Jan 2013 23:17:11 +0100
-Subject: [Buildroot] [git commit] ltp-testsuite: add license info
-Message-ID: <20130115230053.B84809A1DB@busybox.osuosl.org>
+Date: Tue, 15 Jan 2013 23:20:06 +0100
+Subject: [Buildroot] [git commit] proxychains updated to proxychains-ng 4.4
+Message-ID: <20130115230054.433F48257D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dbeeaef3a2ae8b03923c26436d3a4f445531e404
+commit: http://git.buildroot.net/buildroot/commit/?id=a391d2ed5153c29ae5bcf250c316c46cc1d14ba6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: GPLv2 / GPLv2+ mix as pointed out by Arnout]
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Stefan Fr??berg <stefan.froberg@petroprogram.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ltp-testsuite/ltp-testsuite.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/Config.in                        |    2 +-
+ package/proxychains-ng/Config.in         |    7 +++++++
+ package/proxychains-ng/proxychains-ng.mk |   10 ++++++++++
+ package/proxychains/Config.in            |    7 -------
+ package/proxychains/proxychains.mk       |   10 ----------
+ 5 files changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index c6b34f0..d0276f2 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -6,5 +6,7 @@
- LTP_TESTSUITE_VERSION = 20101031
- LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
- LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
-+LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
-+LTP_TESTSUITE_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+diff --git a/package/Config.in b/package/Config.in
+index c59f342..ba03b3c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -682,7 +682,7 @@ source "package/portmap/Config.in"
+ source "package/pppd/Config.in"
+ source "package/pptp-linux/Config.in"
+ source "package/proftpd/Config.in"
+-source "package/proxychains/Config.in"
++source "package/proxychains-ng/Config.in"
+ source "package/quagga/Config.in"
+ source "package/radvd/Config.in"
+ source "package/rp-pppoe/Config.in"
+diff --git a/package/proxychains-ng/Config.in b/package/proxychains-ng/Config.in
+new file mode 100644
+index 0000000..6fcebde
+--- /dev/null
++++ b/package/proxychains-ng/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PROXYCHAINS_NG
++	bool "proxychains-ng"
++	help
++	  force any tcp connections to flow through a proxy (or proxy chain)
++
++	  https://github.com/rofl0r/proxychains
++
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+new file mode 100644
+index 0000000..9cf24bf
+--- /dev/null
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -0,0 +1,10 @@
++#############################################################
++#
++# proxychains-ng
++#
++#############################################################
++PROXYCHAINS_NG_VERSION = 4.4
++PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
++PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
++
++$(eval $(autotools-package))
+diff --git a/package/proxychains/Config.in b/package/proxychains/Config.in
+deleted file mode 100644
+index 332aa3b..0000000
+--- a/package/proxychains/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_PROXYCHAINS
+-	bool "proxychains"
+-	help
+-	  force any tcp connections to flow through a proxy (or proxy chain)
+-
+-	  http://proxychains.sourceforge.net
+-
+diff --git a/package/proxychains/proxychains.mk b/package/proxychains/proxychains.mk
+deleted file mode 100644
+index 7c4500d..0000000
+--- a/package/proxychains/proxychains.mk
++++ /dev/null
+@@ -1,10 +0,0 @@
+-#############################################################
+-#
+-# ProxyChains
+-#
+-#############################################################
+-PROXYCHAINS_VERSION = 3.1
+-PROXYCHAINS_SOURCE = proxychains-$(PROXYCHAINS_VERSION).tar.gz
+-PROXYCHAINS_SITE = http://downloads.sourceforge.net/project/proxychains/proxychains/version%20$(PROXYCHAINS_VERSION)
+-
+-$(eval $(autotools-package))
