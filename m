@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 Jan 2013 23:21:10 +0100
-Subject: [Buildroot] [PATCH] proxychains updated to proxychains-ng 4.4
-In-Reply-To: <1358286589-9672-1-git-send-email-stefan.froberg@petroprogram.com>
- ("Stefan =?utf-8?Q?Fr=C3=B6berg=22's?= message of "Tue, 15 Jan 2013
- 23:49:49 +0200")
-References: <1358286589-9672-1-git-send-email-stefan.froberg@petroprogram.com>
-Message-ID: <87sj62jdex.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 Jan 2013 23:17:11 +0100
+Subject: [Buildroot] [git commit] ltp-testsuite: add license info
+Message-ID: <20130115230053.B84809A1DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=dbeeaef3a2ae8b03923c26436d3a4f445531e404
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Stefan> Signed-off-by: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+[Peter: GPLv2 / GPLv2+ mix as pointed out by Arnout]
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ltp-testsuite/ltp-testsuite.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index c6b34f0..d0276f2 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -6,5 +6,7 @@
+ LTP_TESTSUITE_VERSION = 20101031
+ LTP_TESTSUITE_SOURCE  = ltp-full-$(LTP_TESTSUITE_VERSION).bz2
+ LTP_TESTSUITE_SITE    = http://downloads.sourceforge.net/project/ltp/LTP%20Source/ltp-$(LTP_TESTSUITE_VERSION)
++LTP_TESTSUITE_LICENSE = GPLv2 GPLv2+
++LTP_TESTSUITE_LICENSE_FILES = COPYING
+ 
+ $(eval $(autotools-package))
