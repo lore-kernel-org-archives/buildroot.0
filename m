@@ -1,64 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 Jan 2013 09:44:30 +0100
-Subject: [Buildroot] [git commit] Makefile: rename cross target -> toolchain
-Message-ID: <20130115093359.7FC6F998CA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jan 2013 11:45:27 +0100
+Subject: [Buildroot] [PATCH 2/3] boost: slightly reduce the verbosity of the
+	build
+In-Reply-To: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358246728-5141-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a78641583aa396dce64c00e1a3009796295d23c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+At the moment, the boost build is very verbose, it gives both the
+Jam-level command being executed, and the underlying system command
+being executed, with lots of newlines. Makes it hard to see where the
+failure is when there is one.
 
-- Use a more descriptive name, the same of the "toolchain" directory.
-- Add missing dependencies to be able to successfully use the target
-  right after the configuration.
-- Move to a better position.
-- Documentation it in the help target.
-- Use toolchain target in the world target
+So, we reduce the verbosity level to -d+1, which only gives the
+Jam-level command. So now, it looks like:
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+common.copy /home/test/outputs/e/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/boost/geometry/multi/multi.hpp
+common.mkdir /home/test/outputs/e/host/usr/aarch64-buildroot-linux-gnu/sysroot/usr/include/boost/geometry/strategies
+gcc.compile.c++ bin.v2/libs/regex/build/gcc-4.7.3/release/threading-multi/icu.o
+gcc.compile.c++ bin.v2/libs/regex/build/gcc-4.7.3/release/threading-multi/regex_debug.o
+gcc.compile.c++ bin.v2/libs/regex/build/gcc-4.7.3/release/threading-multi/regex_raw_buffer.o
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ package/boost/boost.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 1fc51e9..6f8ed0e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -392,9 +392,11 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BUILDROOT_CONFIG)
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 62226ba..5e1bb4e 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -70,7 +70,7 @@ define BOOST_CONFIGURE_CMDS
+ endef
  
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ define BOOST_INSTALL_TARGET_CMDS
+-	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+2 \
++	(cd $(@D) && ./b2 -j$(PARALLEL_JOBS) -q -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(TARGET_DIR)/usr \
+@@ -78,7 +78,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ endef
  
--world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
-+toolchain: prepare dirs dependencies $(BASE_TARGETS)
- 
--.PHONY: all world dirs clean distclean source outputmakefile \
-+world: toolchain $(TARGETS_ALL)
-+
-+.PHONY: all world toolchain dirs clean distclean source outputmakefile \
- 	legal-info legal-info-prepare legal-info-clean \
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
-@@ -715,8 +717,6 @@ ifeq ($(O),output)
- endif
- 	rm -rf $(BUILDROOT_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/.auto.deps
- 
--cross: $(BASE_TARGETS)
--
- help:
- 	@echo 'Cleaning:'
- 	@echo '  clean                  - delete all files created by build'
-@@ -724,6 +724,7 @@ help:
- 	@echo
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
-+	@echo '  toolchain              - build toolchain'
- 	@echo '  <package>-rebuild      - force recompile <package>'
- 	@echo '  <package>-reconfigure  - force reconfigure <package>'
- 	@echo
+ define BOOST_INSTALL_STAGING_CMDS
+-	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+2 \
++	(cd $(@D) && ./bjam -j$(PARALLEL_JOBS) -d+1 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(STAGING_DIR)/usr \
+-- 
+1.7.9.5
