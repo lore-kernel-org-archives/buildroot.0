@@ -1,54 +1,32 @@
-From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 15 Jan 2013 10:27:21 +0100 (CET)
-Subject: [Buildroot] New kernel source mode [Proposal]
-In-Reply-To: <20130115102403.469d756d@skate>
-Message-ID: <570d0031-f552-4545-9ddc-2cec752943c8@zimbra2.corp.accelance.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 Jan 2013 10:34:03 +0100
+Subject: [Buildroot] [PATCH v3] Makefile: rename cross target ->
+	toolchain
+In-Reply-To: <1358236920-14210-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Tue, 15 Jan 2013 09:02:00 +0100")
+References: <1358236920-14210-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87wqven62c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-well, I just checked on my main debian system and apparently host is a standard DNS lookup utility...
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-oh well, as you said it's enough of a border case not to worry too much....
+ Fabio> - Use a more descriptive name, the same of the "toolchain" directory.
+ Fabio> - Add missing dependencies to be able to successfully use the target
+ Fabio>   right after the configuration.
+ Fabio> - Move to a better position.
+ Fabio> - Documentation it in the help target.
+ Fabio> - Use toolchain target in the world target
 
-    Cordialement
+ Fabio> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ Fabio> Reviewed-by: Markos Chandras <markos.chandras@imgtec.com>
+ Fabio> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Fabio> Acked-by: Samuel Martin <s.martin49@gmail.com>
 
-    J?r?my Rosen
+Committed, thanks.
 
-fight key loggers : write some perl using vim
-
------ Mail original -----
-> Dear Jeremy Rosen,
-> 
-> On Tue, 15 Jan 2013 10:13:08 +0100 (CET), Jeremy Rosen wrote:
-> 
-> > > Hum? I didn't suggest a host/ part. My proposal, in terms of
-> > > build
-> > > directories, do not change anything compared to what we have
-> > > today:
-> > > 
-> > > 	output/build/host-foo-1.0/ for the host version of package foo
-> > > 	output/build/foo-1.0/ for the target version of package foo
-> > 
-> > oh, my bad then I misread it as:
-> > 
-> > 
-> >  	output/build/host/foo-1.0/ for the host version of package foo
-> >  	output/build/foo-1.0/ for the target version of package foo
-> > 
-> > nevermind my comment then....
-> 
-> Ok. That said, your comment still stands in that if we have a package
-> named "host", things will be confusing. But it will already be
-> confusing as things are today, and I'm not sure we want to fix this
-> potential corner case anyway.
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> 
+-- 
+Bye, Peter Korsgaard
