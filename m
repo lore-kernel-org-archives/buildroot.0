@@ -1,102 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jan 2013 11:45:26 +0100
-Subject: [Buildroot] [PATCH 1/3] boost: fix build problem by always building
-	a threaded version
-Message-ID: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jan 2013 11:45:28 +0100
+Subject: [Buildroot] [PATCH 3/3] gmp: fix build on AArch64
+In-Reply-To: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1358246728-5141-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1358246728-5141-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Boost normally allows to build a non-threaded variant by passing
-threading=single or a multi-threaded variant by passing
-threading=multi.
-
-Unfortunately, the build of threading=single doesn't seem to work any
-more, due to bizarre things in the build system. We get "duplicate
-target" errors, that according to
-http://lists.boost.org/boost-build/2012/11/26582.php should appear if
-we ask for both threading=single,multi. But it seems to happen even in
-the threading=single case.
-
-Since Boost is such a big C++ beast, it probably doesn't make much
-sense to try to support it on toolchains that don't have thread
-support. So, we make the boost package depend on thread support. If
-someone cares enough in getting Boost to work in a non-threaded
-environment, then we can always revert back.
-
-Note that the boost package has no reverse dependencies in Buildroot,
-so we don't need to propagate this new dependency anywhere.
+Include an upstream patch to fix the build problem on AArch64.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/439e72ac74c8058f30977e6abc39acd6379a17d3/build-end.log
+ http://autobuild.buildroot.org/results/1fb1b3678277e6b0cef220405c54ffb8299c9da1/build-end.log
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/boost/Config.in |   15 ++++++---------
- package/boost/boost.mk  |    4 ++--
- 2 files changed, 8 insertions(+), 11 deletions(-)
+ ...e-add_ssaaaa-and-sub_ddmmss-actually-work.patch |   46 ++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/gmp/gmp-aarch64-make-add_ssaaaa-and-sub_ddmmss-actually-work.patch
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index fb5360e..19dcc60 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -1,10 +1,14 @@
--comment "boost requires a toolchain with C++ and large file support enabled"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
-+comment "boost requires a toolchain with C++, large file and thread support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
- 
- config BR2_PACKAGE_BOOST
- 	bool "boost"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
-+	# Boost could theorically be built with threading=single, but
-+	# that unfortunately doesn't work. Until someone fixes that,
-+	# let's depend on threads.
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_ZLIB
- 	help
-@@ -14,12 +18,6 @@ config BR2_PACKAGE_BOOST
- 
- if BR2_PACKAGE_BOOST
- 
--config BR2_PACKAGE_BOOST_MULTITHREADED
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	bool "boost-multithreaded"
--	help
--	  Build the boost libraries as multithreaded
--
- config BR2_PACKAGE_BOOST_CHRONO
- 	bool "boost-chrono"
- 
-@@ -76,7 +74,6 @@ config BR2_PACKAGE_BOOST_TEST
- 	bool "boost-test"
- 
- config BR2_PACKAGE_BOOST_THREAD
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	bool "boost-thread"
- 
- config BR2_PACKAGE_BOOST_TIMER
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 005c7ca..62226ba 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -46,10 +46,10 @@ BOOST_FLAGS += --without-icu
- endif
- 
- BOOST_OPT += toolset=gcc \
-+	     threading=multi \
- 	     variant=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 	     link=$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
--	     runtime-link=$(if $(BR2_PREFER_STATIC_LIB),static,shared) \
--	     threading=$(if $(BR2_PACKAGE_BOOST_MULTITHREADED),multi,single)
-+	     runtime-link=$(if $(BR2_PREFER_STATIC_LIB),static,shared)
- 
- ifeq ($(BR2_PACKAGE_BOOST_LOCALE),y)
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
+diff --git a/package/gmp/gmp-aarch64-make-add_ssaaaa-and-sub_ddmmss-actually-work.patch b/package/gmp/gmp-aarch64-make-add_ssaaaa-and-sub_ddmmss-actually-work.patch
+new file mode 100644
+index 0000000..1b835a5
+--- /dev/null
++++ b/package/gmp/gmp-aarch64-make-add_ssaaaa-and-sub_ddmmss-actually-work.patch
+@@ -0,0 +1,46 @@
++# HG changeset patch
++# User Torbjorn Granlund <tege@gmplib.org>
++# Date 1357413121 -3600
++# Node ID 187b7b1646ee0ace782768bb36117b62c8408bb6
++# Parent  87a24013e9ee2cabf74e32282c18584a2c669009
++(aarch64): Make add_ssaaaa and sub_ddmmss actually work.
++
++Taken upstream from http://gmplib.org:8000/gmp/rev/187b7b1646ee.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++diff -r 87a24013e9ee -r 187b7b1646ee longlong.h
++--- a/longlong.h	Fri Jan 04 16:32:01 2013 +0100
+++++ b/longlong.h	Sat Jan 05 20:12:01 2013 +0100
++@@ -530,23 +530,16 @@
++ #endif /* __arm__ */
++ 
++ #if defined (__aarch64__) && W_TYPE_SIZE == 64
+++/* FIXME: Extend the immediate range for the low word by using both
+++   ADDS and SUBS, since they set carry in the same way.  */
++ #define add_ssaaaa(sh, sl, ah, al, bh, bl) \
++-  __asm__ ("adds\t%1, %4, %5\n\tadc\t%0, %2, %3"			\
+++  __asm__ ("adds\t%1, %x4, %5\n\tadc\t%0, %x2, %x3"			\
++ 	   : "=r" (sh), "=&r" (sl)					\
++-	   : "r" (ah), "rZ" (bh), "%r" (al), "rI" (bl) __CLOBBER_CC)
+++	   : "rZ" (ah), "rZ" (bh), "%r" (al), "rI" (bl) __CLOBBER_CC)
++ #define sub_ddmmss(sh, sl, ah, al, bh, bl) \
++-  do {									\
++-    if (__builtin_constant_p (bl))					\
++-      {									\
++-	__asm__ ("subs\t%1, %4, %5\n\tsbc\t%0, %2, %3"			\
++-		 : "=r" (sh), "=&r" (sl)				\
++-		 : "r" (ah), "r" (bh), "r" (al), "rI" (bl) __CLOBBER_CC); \
++-      }									\
++-    else /* only bh might be a constant */				\
++-      __asm__ ("subs\t%1, %4, %5\n\tsbc\t%0, %2, %3"			\
++-	       : "=r" (sh), "=&r" (sl)					\
++-	       : "r" (ah), "rZ" (bh), "r" (al), "rI" (bl) __CLOBBER_CC);\
++-    } while (0)
+++  __asm__ ("subs\t%1, %x4, %5\n\tsbc\t%0, %x2, %x3"			\
+++	   : "=r,r" (sh), "=&r,&r" (sl)					\
+++	   : "rZ,rZ" (ah), "rZ,rZ" (bh), "r,Z" (al), "rI,r" (bl) __CLOBBER_CC)
++ #define umul_ppmm(ph, pl, m0, m1) \
++   do {									\
++     UDItype __m0 = (m0), __m1 = (m1);					\
++
 -- 
 1.7.9.5
