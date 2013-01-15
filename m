@@ -1,17 +1,17 @@
 From: Jeremy Rosen <jeremy.rosen@openwide.fr>
-Date: Tue, 15 Jan 2013 10:25:52 +0100 (CET)
-Subject: [Buildroot] Release 1.0.0 of the Buildroot/Eclipse integration
-In-Reply-To: <20130115102146.75673bf9@skate>
-Message-ID: <faef2969-e7df-47d7-88d0-1d0290ed4c18@zimbra2.corp.accelance.fr>
+Date: Tue, 15 Jan 2013 10:27:21 +0100 (CET)
+Subject: [Buildroot] New kernel source mode [Proposal]
+In-Reply-To: <20130115102403.469d756d@skate>
+Message-ID: <570d0031-f552-4545-9ddc-2cec752943c8@zimbra2.corp.accelance.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'll keep that in mind when I do some testing of the plugins... 
-I'm not doing buildroot work right now but it comes back often enough that you can expect feedback from me at some point...
+well, I just checked on my main debian system and apparently host is a standard DNS lookup utility...
 
+oh well, as you said it's enough of a border case not to worry too much....
 
     Cordialement
 
@@ -22,28 +22,28 @@ fight key loggers : write some perl using vim
 ----- Mail original -----
 > Dear Jeremy Rosen,
 > 
-> On Tue, 15 Jan 2013 10:15:25 +0100 (CET), Jeremy Rosen wrote:
+> On Tue, 15 Jan 2013 10:13:08 +0100 (CET), Jeremy Rosen wrote:
 > 
-> > Let me just say that this is just awesome....
+> > > Hum? I didn't suggest a host/ part. My proposal, in terms of
+> > > build
+> > > directories, do not change anything compared to what we have
+> > > today:
+> > > 
+> > > 	output/build/host-foo-1.0/ for the host version of package foo
+> > > 	output/build/foo-1.0/ for the target version of package foo
 > > 
-> > I am not an eclipse user myself,  but we regularly have request for
-> > providing a BSP based on buildroot and a compatible
-> > developement environement. This plugin is going to make things way
-> > more easier for us...
+> > oh, my bad then I misread it as:
 > > 
-> > keep up the great work
+> > 
+> >  	output/build/host/foo-1.0/ for the host version of package foo
+> >  	output/build/foo-1.0/ for the target version of package foo
+> > 
+> > nevermind my comment then....
 > 
-> Thanks for the kind words. At this point, it is really a first
-> release,
-> and there are certainly many improvements to be made to make it more
-> useful. However, to achieve this, we really need some feedback from
-> potential users. The best would be users who are used to do embedded
-> development with IDEs, so that they can compare with what they are
-> used
-> to have, and we can see how to improve this integration to fill the
-> missing gaps if any.
-> 
-> Thanks!
+> Ok. That said, your comment still stands in that if we have a package
+> named "host", things will be confusing. But it will already be
+> confusing as things are today, and I'm not sure we want to fix this
+> potential corner case anyway.
 > 
 > Thomas
 > --
