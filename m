@@ -1,54 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jan 2013 00:00:37 +0100
-Subject: [Buildroot] RTLD_DEEPBIND and uClibc
-In-Reply-To: <50F6A26D.4030607@petroprogram.com>
-References: <50F6A26D.4030607@petroprogram.com>
-Message-ID: <20130117000037.39ccc628@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Jan 2013 00:41:34 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem-instrument-build
+Message-ID: <cover.1358379198.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stefan Fr?berg,
+Hello All!
 
-On Wed, 16 Jan 2013 14:51:57 +0200, Stefan Fr?berg wrote:
+This series adds some intrumentation to the pkg-infra so that it is easier
+for the autobuilders to extract meaningfull information about the reason
+of failures.
 
-> Yesterday evening I managed to compile cairo-dock-core and
-> cairo-dock-plugins
-> version 3.1.2 for buildroot 2012.08.
-> 
-> It's a nice, lightweight (made with C), Mac OSX feeling application
-> dock.
-> 
-> The problem is that cairo-dock-core has the following line in it's
-> code:
-> 
-> pCairoDockModule->handle = dlopen (pCairoDockModule->cSoFilePath,
-> RTLD_LAZY | RTLD_LOCAL | RTLD_DEEPBIND);
-> 
-> And uClibc does not have RTLD_DEEPBIND. Removing it will allow
-> cairo-dock to compile but the result is
-> that cairo-dock plugins won't work.
+It does so by:
+  - logging all messages displayed with calls to MESSAGE to a time-stamped
+    log file
+  - log the last such mesage to a file
+  - add calls to MESSAGE in the non-package steps of the external toolchain
+    backend
+  - add calls to MESSAGE in the non-package steps of the crosstool-NG
+    toolchain backend
+  - add calls to MESAGE in the non-package steps of the internal toolchain
+    backend (gcc, kernel headers, and uClibc)
 
-Strange, from a quick look, it seems that it is used to get a single
-symbol, called "pre_init" from each plugin. I don't see how pre_init
-may conflict with some other global symbol, which is what RTLD_DEEPBIND
-is all about. But I've only done a 5 minutes look at cairo-dock code,
-so I might have missed the point.
+Although I've tested it with external and internal toolchain backends (not
+crosstool-NG for now), and although it does work, I expect some polishing
+to be required. For example, the date is not displayed for the file system
+images steps (I suspect it's due to second expansion being needed for
+images, which is not for packages).
 
-> Is there any workaround to this RTLD_DEEPBIND stuff ?
+So, take this series as a kind of RFC, rather than a final series.
 
-Since you're using a big stuff like X.org, why do you persist in using
-uClibc? Using glibc or eglibc would make a very small size difference,
-and would avoid the hassle of all those small, but annoying, uClibc
-limitations.
 
-Best regards,
+The following changes since commit 10e058b0ee7fd8135fef35bcf24ae985707078c2:
 
-Thomas
+  proxychains-ng: copy proxychains.conf to target dir (2013-01-16 13:24:54 +0100)
+
+are available in the git repository at:
+  git://gitorious.org/buildroot/buildroot.git yem-instrument-build
+
+Yann E. MORIN (6):
+      pkg-infra: log current message
+      toolchain/external: sprinkle with some calls to MESSAGE
+      toolchain/crosstool-ng: sprinkle with some calls to MESSAGE
+      toolchain/gcc: sprinkle with some calls to MESSAGE
+      toolchain/kernel-headers: sprinkle with some calls to MESSAGE
+      toolchain/uClibc: sprinkle with some calls to MESSAGE
+
+ package/pkg-utils.mk                             |    9 ++++++++-
+ toolchain/gcc/gcc-uclibc-4.x.mk                  |   15 +++++++++++++++
+ toolchain/kernel-headers/kernel-headers.mk       |    3 +++
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk |    3 ++-
+ toolchain/toolchain-external/ext-tool.mk         |    8 +++++---
+ toolchain/uClibc/uclibc.mk                       |   12 ++++++++++++
+ 6 files changed, 45 insertions(+), 5 deletions(-)
+
+Regards,
+Yann E. MORIN
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
