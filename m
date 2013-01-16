@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jan 2013 21:06:06 +0100
-Subject: [Buildroot] [PATCH 2/5] docs/manual: mention the new post-image
-	mechanism
-In-Reply-To: <1358363393-29977-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Jan 2013 21:10:14 +0100
+Subject: [Buildroot] [PATCH 4/5] docs/manual: no longer mention the
+	package/customize thing
+In-Reply-To: <1358363393-29977-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1358363393-29977-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1358363393-29977-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <201301162106.06305.yann.morin.1998@free.fr>
+ <1358363393-29977-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <201301162110.14881.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,13 +17,10 @@ Thomas, All,
 On Wednesday 16 January 2013 Thomas Petazzoni wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  docs/manual/customize-rootfs.txt |   15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+>  docs/manual/customize-rootfs.txt |    6 ------
+>  1 file changed, 6 deletions(-)
 
-Why did you split the doc-patch out of the feature-patch?
-
-I would expect that documentation is committed in the same changeset as
-the feature (or bug-fix) it relates to.
+Ditto. This should be folded with the previous cset.
 
 Regards,
 Yann E. MORIN.
