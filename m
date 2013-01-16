@@ -1,36 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Jan 2013 18:35:54 -0300
-Subject: [Buildroot] need help adding apache to buildroot
-In-Reply-To: <2DD0B9C711CDFC45A3A266C78966CE7F40E3A14E@G4W3291.americas.hpqcorp.net>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F40E3A14E@G4W3291.americas.hpqcorp.net>
-Message-ID: <50F71D3A.2010906@zacarias.com.ar>
+Date: Wed, 16 Jan 2013 18:40:20 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.2.x stable version
+Message-ID: <1358372420-30083-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/16/2013 06:30 PM, Jenkins, Lee (ISS Houston) wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Hello. I?m adding apache httpd to my buildroot project but I?m stuck and
-> need some help.
-> 
-> Here?s what I?ve done so far:
-> 
-> 7.       ran ?make apache-source? as a test, but make replies: ?No rule
-> to make target `apache-source?. Stop.?
-> 
->  
-> 
-> I expected make to pick up the new package, but that?s clearly not
-> happening. What am I missing?
-> 
-> $(eval $(call AUTOTARGETS))
-
-If you're using latest git buildroot this has changed to:
-
-$(eval $(autotools-package))
-
-So the package infrastructure isn't evaluating (parsing) your package at
-all.
-Regards.
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index cdaab3b..14e83b4 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,7 +60,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.58"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.36"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.37"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.25"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.5.7"		if BR2_KERNEL_HEADERS_3_5
+-- 
+1.7.12.4
