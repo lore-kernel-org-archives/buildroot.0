@@ -1,138 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jan 2013 22:54:40 +0100
-Subject: [Buildroot] need help adding apache to buildroot
-In-Reply-To: <2DD0B9C711CDFC45A3A266C78966CE7F40E3A14E@G4W3291.americas.hpqcorp.net>
-References: <2DD0B9C711CDFC45A3A266C78966CE7F40E3A14E@G4W3291.americas.hpqcorp.net>
-Message-ID: <20130116225440.1d45f78c@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 16 Jan 2013 23:06:02 +0100
+Subject: [Buildroot] [PATCH 1/5] Add a post-image script mechanism
+In-Reply-To: <20130116224159.774f3f70@skate>
+References: <1358363393-29977-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <201301162103.43793.yann.morin.1998@free.fr> <20130116224159.774f3f70@skate>
+Message-ID: <201301162306.02062.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jenkins, Lee (ISS Houston),
+Thomas, All,
 
-On Wed, 16 Jan 2013 21:30:31 +0000, Jenkins, Lee (ISS Houston) wrote:
-
-> I expected make to pick up the new package, but that's clearly not
-> happening. What am I missing?
-
-Gustavo gave the explanation for this.
-
-I'm however going to add a few more comments below, as I hope you'll be
-submitting this package to Buildroot once it works.
-
-> ----- buildroot/package/apache/Config.in -----
+On Wednesday 16 January 2013 Thomas Petazzoni wrote:
+> On Wed, 16 Jan 2013 21:03:43 +0100, Yann E. MORIN wrote:
+> > No need to pass $(BINARIES_DIR) as it now is in the environment.
+> I'd prefer to pass $(BINARIES_DIR) as argument, in order to keep a
+> symmetry with what we do for the post-build script.
 > 
-> config BR2_PACKAGE_APACHE
->      bool "apache"
->      help
->        Apache web server software
+> > Would it make sense to run this under fakeroot?
+> Why?
 
-You should add the upstream URL of the project here, separated from the
-main description by an empty newline. (See how other packages do it).
+For example, I need to create multiple partitions for my device, so I
+need one file system image per partition:
+  - vfat on /boot
+  - squashfs on /
+  - ext2 on /home
 
+So I would :
+  - configure Buildroot to build only a tarball
+  - configure Buildroot to run my post-image script
+  - extract the tarball
+  - generate each file system images
+
+But the untar would loose the device nodes and the files UIDs and GIDs,
+forcing me do run fakeroot inside the script, saving/loading the fakeroot
+DB, for every commands in my script.
+
+Having Buildroot do the fakeroot would ensure this consistency.
+
+> > Also, I wonder if we could instead call these scripts for each image
+> > we generate, so it will already be run under fakeroot.
 > 
-> ----- buildroot/package/apache/apache.mk -----
-> 
-> #############################################################
-> #
-> # apache
-> #
-> #############################################################
-> APACHE_VERSION    = 2.2.19
+> No, I don't think it's a good idea. For example, in my use-case, it was
+> used to create a firmware image that bundles multiple images generated
+> by Buildroot. So getting called on a per-image basis doesn't make sense.
 
-We usually put an empty new line between the header and the first
-variable declaration.
+OK, so it makes sense to run the scripts only once at the end. Agreed.
 
-> #APACHE_SITE       = http://mir2.ovh.net/ftp.apache.org/dist/httpd/
+[--SNIP--]
+> I really don't see the point of putting more complexity into this.
+> Let's have something nicely symmetric between the post-build script
+> feature and the post-image script feature.
 
-Please remove unneeded comments if you want to submit this package to
-Buildroot.
+Right, agreed.
 
-> APACHE_SITE       = http://archive.apache.org/dist/httpd/
-> APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
-> APACHE_INSTALL_STAGING = YES
-> APACHE_INSTALL_TARGET = YES
+Regards,
+Yann E. MORIN.
 
-This line is not needed, as it is the default.
-
-> APACHE_AUTORECONF = YES
-
-This is generally not needed, as releases shipped as tarballs usually
-have the configure script and the Makefile.in pre-generated. So there
-should be a comment above this line that explains why it is needed.
-
-> 
-> APACHE_CONF_ENV += \
->         ac_cv_file__dev_zero=yes \
->         ac_cv_func_setpgrp_void=yes \
->         apr_cv_tcp_nodelay_with_cork=yes \
->         ac_cv_sizeof_struct_iovec=8 \
->         apr_cv_process_shared_works=yes \
->         apr_cv_mutex_robust_shared=no \
->         ac_cv_struct_rlimit=yes \
->         ap_cv_void_ptr_lt_long=no \
->         CC="$(TARGET_CC)" \
->         CFLAGS="$(TARGET_CFLAGS)" \
->         LDFLAGS="$(TARGET_LDFLAGS)" \
-
-The CC, CFLAGS and LDFLAGS are not needed here, they are already passed
-by the Buildroot autotools infrastructure.
-
-> APACHE_CONF_OPT += \
->         --host="$(REAL_GNU_TARGET_NAME)" \
-
---host is already passed by Buildroot.
-
->         --prefix="/apacheSW/" \
-
---prefix is already passed by Buildroot (and /apacheSW/ is not a
-standard and appropriate location).
-
->         --enable-so \
->         --enable-module=all
-> 
-> 
-> 
-> 
-> 
-
-Please remove useless empty lines.
-
-> define APACHE_CONFIGURE_CMDS
->         (cd $(@D) && rm -rf config.cache; \
->                 $(APACHE_CONF_ENV) \
->                 ./configure \
->                 $(APACHE_CONF_OPT) \
->         )
-> endef
-
-This is not needed, Buildroot already has a default
-<pkg>_CONFIGURE_CMDS for autotools packages that does the right thing.
-If it doesn't then please add a comment above that explains why we need
-to override the CONFIGURE_CMDS.
-
-> define ADD_INIT_SCRIPT
-> 	$(INSTALL) -m 0755 -D $(APACHE_DIR_PREFIX)/$(APACHE_NAME)/Apache_InitScript $(TARGET_DIR)/etc/init.d/S90Apache;
-> endef
-> APACHE_POST_INSTALL_STAGING_HOOKS += ADD_INIT_SCRIPT
-
-You should use APACHE_INSTALL_INIT_SYSV to install an init script. See
-package/lighttpd/lighttpd.mk for an example. Also, please name your
-script S90apache in package/apache/. So in the end, it should look like:
-
-define APACHE_INSTALL_INIT_SYSV
-	[ -f $(TARGET_DIR)/etc/init.d/S50apache ] || \
-		$(INSTALL) -D -m 755 package/apache/S50apache \
-			$(TARGET_DIR)/etc/init.d/S50apache
-endef
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
